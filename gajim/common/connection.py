@@ -30,7 +30,6 @@
 
 import sys
 import random
-import socket
 import operator
 
 import time
@@ -40,8 +39,6 @@ import logging
 import base64
 import ssl
 from functools import partial
-import string
-from string import Template
 from urllib.request import urlopen
 from urllib.error import URLError
 
@@ -101,7 +98,7 @@ class CommonConnection:
         self.connection = None # xmpppy ClientCommon instance
         self.is_zeroconf = False
         self.password = None
-        self.server_resource = self._compute_resource()
+        self.server_resource = helpers.get_resource(self.name)
         self.status = ''
         self.old_show = ''
         self.priority = app.get_priority(name, 'offline')
@@ -147,18 +144,6 @@ class CommonConnection:
                 handler = handler[:4]
             con.UnregisterHandler(*handler)
         self.handlers_registered = False
-
-    def _compute_resource(self):
-        resource = app.config.get_per('accounts', self.name, 'resource')
-        # All valid resource substitution strings should be added to this hash.
-        if resource:
-            rand = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-            resource = Template(resource).safe_substitute({
-                    'hostname': socket.gethostname(),
-                    'rand': rand
-            })
-            app.config.set_per('accounts', self.name, 'resource', resource)
-        return resource
 
     def dispatch(self, event, data):
         """
@@ -397,7 +382,7 @@ class CommonConnection:
             # set old_show to requested 'show' in case we need to
             # recconect before we auth to server
             self.old_show = show
-            self.server_resource = self._compute_resource()
+            self.server_resource = helpers.get_resource(self.name)
             self.connect_and_init(show, msg)
             return
 

@@ -45,11 +45,13 @@ import logging
 import json
 import shutil
 import collections
+import random
+import string
+from string import Template
 from io import StringIO
 from datetime import datetime, timedelta
 from distutils.version import LooseVersion as V
 from encodings.punycode import punycode_encode
-from string import Template
 from functools import wraps
 
 import nbxmpp
@@ -511,10 +513,10 @@ def reduce_chars_newlines(text, max_chars=0, max_lines=0):
     If any of the params is not present (None or 0) the action on it is not
     performed
     """
-    def _cut_if_long(string):
-        if len(string) > max_chars:
-            string = string[:max_chars - 3] + '…'
-        return string
+    def _cut_if_long(string_):
+        if len(string_) > max_chars:
+            string_ = string_[:max_chars - 3] + '…'
+        return string_
 
     if max_lines == 0:
         lines = text.split('\n')
@@ -571,13 +573,13 @@ def datetime_tuple(timestamp):
         tim = tim.timetuple()
     return tim
 
-def convert_bytes(string):
+def convert_bytes(string_):
     suffix = ''
     # IEC standard says KiB = 1024 bytes KB = 1000 bytes
     # but do we use the standard?
     use_kib_mib = app.config.get('use_kib_mib')
     align = 1024.
-    bytes_ = float(string)
+    bytes_ = float(string_)
     if bytes_ >= align:
         bytes_ = round(bytes_/align, 1)
         if bytes_ >= align:
@@ -846,10 +848,10 @@ def get_auth_sha(sid, initiator, target):
     return hashlib.sha1(("%s%s%s" % (sid, initiator, target)).encode('utf-8')).\
         hexdigest()
 
-def remove_invalid_xml_chars(string):
-    if string:
-        string = re.sub(app.interface.invalid_XML_chars_re, '', string)
-    return string
+def remove_invalid_xml_chars(string_):
+    if string_:
+        string_ = re.sub(app.interface.invalid_XML_chars_re, '', string_)
+    return string_
 
 def get_random_string_16():
     """
@@ -1569,3 +1571,16 @@ def open_uri_with_custom(config_app, uri):
 def geo_provider_from_location(lat, lon):
     return ('https://www.openstreetmap.org/?'
             'mlat=%s&mlon=%s&zoom=16') % (lat, lon)
+
+
+def get_resource(account):
+    resource = app.config.get_per('accounts', account, 'resource')
+    # All valid resource substitution strings should be added to this hash.
+    if resource:
+        rand = ''.join(random.choice(
+            string.ascii_uppercase + string.digits) for _ in range(8))
+        resource = Template(resource).safe_substitute(
+            {'hostname': socket.gethostname(),
+             'rand': rand})
+        app.config.set_per('accounts', account, 'resource', resource)
+    return resource
