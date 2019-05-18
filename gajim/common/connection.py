@@ -1638,9 +1638,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection = con
         nbxmpp.features.getRegInfo(con, self._hostname)
 
-    def getRoster(self):
-        return self.get_module('Roster')
-
     def send_agent_status(self, agent, ptype):
         if not app.account_is_connected(self.name):
             return

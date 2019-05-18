@@ -33,7 +33,7 @@ class Gateway(BaseModule):
 
         self._con.connection.SendAndCallForResponse(
             iq, self._on_unsubscribe_result)
-        self._con.getRoster().del_item(agent)
+        self._con.get_module('Roster').del_item(agent)
 
     def _on_unsubscribe_result(self, stanza):
         if not nbxmpp.isResultNode(stanza):
