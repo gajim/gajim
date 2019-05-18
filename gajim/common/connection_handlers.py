@@ -217,9 +217,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         # try to find another way to register handlers in each class
         # that defines handlers
 
-        con.RegisterHandler('iq', self._siSetCB, 'set', nbxmpp.NS_SI)
-        con.RegisterHandler('iq', self._siErrorCB, 'error', nbxmpp.NS_SI)
-        con.RegisterHandler('iq', self._siResultCB, 'result', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._bytestreamSetCB, 'set',
             nbxmpp.NS_BYTESTREAM)
         con.RegisterHandler('iq', self._bytestreamResultCB, 'result',

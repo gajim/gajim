@@ -34,7 +34,6 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import ged
 from gajim.common import jingle_xtls
 from gajim.common.file_props import FilesProp
 from gajim.common.socks5 import Socks5SenderClient
@@ -76,10 +75,6 @@ def is_transfer_stopped(file_props):
 
 class ConnectionBytestream:
 
-    def __init__(self):
-        app.ged.register_event_handler('file-request-received', ged.GUI1,
-                                       self._nec_file_request_received)
-
     def pass_bytestream_disco(self, from_, identities, features, data, node):
         if nbxmpp.NS_BYTESTREAM not in features:
             return
@@ -92,10 +87,6 @@ class ConnectionBytestream:
                 from_, self.connection, str(our_fjid),
                 default=self.name, testit=testit)
             raise nbxmpp.NodeProcessed
-
-    def cleanup(self):
-        app.ged.remove_event_handler('file-request-received', ged.GUI1,
-            self._nec_file_request_received)
 
     def _ft_get_our_jid(self):
         our_jid = app.get_jid_from_account(self.name)
@@ -111,35 +102,6 @@ class ConnectionBytestream:
     def _ft_get_streamhost_jid_attr(self, streamhost):
         return helpers.parse_jid(streamhost.getAttr('jid'))
 
-    def send_file_request(self, file_props):
-        """
-        Send iq for new FT request
-        """
-        if not self.connection or self.connected < 2:
-            return
-        file_props.sender = self._ft_get_our_jid()
-        fjid = self._ft_get_receiver_jid(file_props)
-        iq = nbxmpp.Iq(to=fjid, typ='set')
-        iq.setID(file_props.sid)
-        si = iq.setTag('si', namespace=nbxmpp.NS_SI)
-        si.setAttr('profile', nbxmpp.NS_FILE)
-        si.setAttr('id', file_props.sid)
-        file_tag = si.setTag('file', namespace=nbxmpp.NS_FILE)
-        file_tag.setAttr('name', file_props.name)
-        file_tag.setAttr('size', file_props.size)
-        desc = file_tag.setTag('desc')
-        if file_props.desc:
-            desc.setData(file_props.desc)
-        file_tag.setTag('range')
-        feature = si.setTag('feature', namespace=nbxmpp.NS_FEATURE)
-        _feature = nbxmpp.DataForm(typ='form')
-        feature.addChild(node=_feature)
-        field = _feature.setField('stream-method')
-        field.setAttr('type', 'list-single')
-        field.addOption(nbxmpp.NS_BYTESTREAM)
-        field.addOption(nbxmpp.NS_IBB)
-        self.connection.send(iq)
-
     def send_file_approval(self, file_props):
         """
         Send iq, confirming that we want to download the file
@@ -150,53 +112,33 @@ class ConnectionBytestream:
 
         # file transfer initiated by a jingle session
         log.info("send_file_approval: jingle session accept")
-        if file_props.session_type == 'jingle':
-            session = self.get_jingle_session(file_props.sender,
-                file_props.sid)
-            if not session:
-                return
-            content = None
-            for c in session.contents.values():
-                if c.transport.sid == file_props.transport_sid:
-                    content = c
-                    break
-            if not content:
-                return
-            if not session.accepted:
-                content = session.get_content('file', content.name)
-                if content.use_security:
-                    fingerprint = content.x509_fingerprint
-                    if not jingle_xtls.check_cert(
-                    app.get_jid_without_resource(file_props.sender),
-                    fingerprint):
-                        id_ = jingle_xtls.send_cert_request(self,
-                            file_props.sender)
-                        jingle_xtls.key_exchange_pend(id_,
-                            content.on_cert_received, [])
-                        return
-                session.approve_session()
 
-            session.approve_content('file', content.name)
+        session = self.get_jingle_session(file_props.sender,
+            file_props.sid)
+        if not session:
             return
+        content = None
+        for c in session.contents.values():
+            if c.transport.sid == file_props.transport_sid:
+                content = c
+                break
+        if not content:
+            return
+        if not session.accepted:
+            content = session.get_content('file', content.name)
+            if content.use_security:
+                fingerprint = content.x509_fingerprint
+                if not jingle_xtls.check_cert(
+                app.get_jid_without_resource(file_props.sender),
+                fingerprint):
+                    id_ = jingle_xtls.send_cert_request(self,
+                        file_props.sender)
+                    jingle_xtls.key_exchange_pend(id_,
+                        content.on_cert_received, [])
+                    return
+            session.approve_session()
 
-        iq = nbxmpp.Iq(to=file_props.sender, typ='result')
-        iq.setAttr('id', file_props.request_id)
-        si = iq.setTag('si', namespace=nbxmpp.NS_SI)
-        if file_props.offset:
-            file_tag = si.setTag('file', namespace=nbxmpp.NS_FILE)
-            range_tag = file_tag.setTag('range')
-            range_tag.setAttr('offset', file_props.offset)
-        feature = si.setTag('feature', namespace=nbxmpp.NS_FEATURE)
-        _feature = nbxmpp.DataForm(typ='submit')
-        feature.addChild(node=_feature)
-        field = _feature.setField('stream-method')
-        field.delAttr('type')
-        if nbxmpp.NS_BYTESTREAM in file_props.stream_methods:
-            field.setValue(nbxmpp.NS_BYTESTREAM)
-        else:
-            file_props.transport_sid = file_props.sid
-            field.setValue(nbxmpp.NS_IBB)
-        self.connection.send(iq)
+        session.approve_content('file', content.name)
 
     def send_file_rejection(self, file_props, code='403', typ=None):
         """
@@ -208,87 +150,12 @@ class ConnectionBytestream:
         # user response to ConfirmationDialog may come after we've disconnected
         if not self.connection or self.connected < 2:
             return
-        if file_props.session_type == 'jingle':
-            if file_props.sid in self._sessions:
-                jingle = self._sessions[file_props.sid]
-                jingle.cancel_session()
-            return
-        iq = nbxmpp.Iq(to=file_props.sender, typ='error')
-        iq.setAttr('id', file_props.request_id)
-        if code == '400' and typ in ('stream', 'profile'):
-            name = 'bad-request'
-            text = ''
-        else:
-            name = 'forbidden'
-            text = 'Offer Declined'
-        err = nbxmpp.ErrorNode(code=code, typ='cancel', name=name, text=text)
-        if code == '400' and typ in ('stream', 'profile'):
-            if typ == 'stream':
-                err.setTag('no-valid-streams', namespace=nbxmpp.NS_SI)
-            else:
-                err.setTag('bad-profile', namespace=nbxmpp.NS_SI)
-        iq.addChild(node=err)
-        self.connection.send(iq)
 
-    def _siResultCB(self, con, iq_obj):
-        file_props = FilesProp.getFileProp(self.name, iq_obj.getAttr('id'))
-        if not file_props:
-            return
-        if file_props.request_id:
-            # we have already sent streamhosts info
-            return
-        file_props.receiver = self._ft_get_from(iq_obj)
-        si = iq_obj.getTag('si')
-        file_tag = si.getTag('file')
-        range_tag = None
-        if file_tag:
-            range_tag = file_tag.getTag('range')
-        if range_tag:
-            offset = range_tag.getAttr('offset')
-            if offset:
-                file_props.offset = int(offset)
-            length = range_tag.getAttr('length')
-            if length:
-                file_props.length = int(length)
-        feature = si.setTag('feature')
-        if feature.getNamespace() != nbxmpp.NS_FEATURE:
-            return
-        form_tag = feature.getTag('x')
-        form = nbxmpp.DataForm(node=form_tag)
-        field = form.getField('stream-method')
-        if field.getValue() == nbxmpp.NS_BYTESTREAM:
-            self._send_socks5_info(file_props)
-            raise nbxmpp.NodeProcessed
-        if field.getValue() == nbxmpp.NS_IBB:
-            sid = file_props.sid
-            file_props.transport_sid = sid
-            fp = open(file_props.file_name, 'rb')
-            self.OpenStream(sid, file_props.receiver, fp)
-            raise nbxmpp.NodeProcessed
+        if file_props.sid in self._sessions:
+            jingle = self._sessions[file_props.sid]
+            jingle.cancel_session()
+        return
 
-    def _siSetCB(self, con, iq_obj):
-        from gajim.common.connection_handlers_events import FileRequestReceivedEvent
-        app.nec.push_incoming_event(FileRequestReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_file_request_received(self, obj):
-        pass
-
-    def _siErrorCB(self, con, iq_obj):
-        si = iq_obj.getTag('si')
-        profile = si.getAttr('profile')
-        if profile != nbxmpp.NS_FILE:
-            return
-        file_props = FilesProp.getFileProp(self.name, iq_obj.getAttr('id'))
-        if not file_props:
-            return
-        jid = self._ft_get_from(iq_obj)
-        file_props.error = -3
-        from gajim.common.connection_handlers_events import FileRequestErrorEvent
-        app.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
-            jid=jid, file_props=file_props, error_msg=''))
-        raise nbxmpp.NodeProcessed
 
 class ConnectionSocks5Bytestream(ConnectionBytestream):
 

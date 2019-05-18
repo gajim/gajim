@@ -147,7 +147,6 @@ gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 
 gajim_common_features = [
     nbxmpp.NS_BYTESTREAM,
-    nbxmpp.NS_SI,
     nbxmpp.NS_FILE,
     nbxmpp.NS_MUC,
     nbxmpp.NS_COMMANDS,
