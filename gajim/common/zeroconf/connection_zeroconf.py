@@ -107,7 +107,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         else:
             self.username = app.config.get_per('accounts',
                 app.ZEROCONF_ACC_NAME, 'name')
-    # END __init__
 
     def check_jid(self, jid):
         return jid
@@ -469,4 +468,5 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     error_msg=error_message, msg=None, time_=None,
                     session=session, zeroconf=True))
 
-# END ConnectionZeroconf
+    def cleanup(self):
+        pass
