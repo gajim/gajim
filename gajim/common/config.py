@@ -185,6 +185,7 @@ class Config:
         'remote_control': [opt_bool, False, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
         'autodetect_browser_mailer': [opt_bool, True, '', True],
         'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
+        'confirm_paste_image': [opt_bool, True, _('Ask before pasting an image.')],
         'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
         'confirm_close_muc_rooms': [opt_str, '', _('Always ask for confirmation before closing groupchats with any of the JIDs on this space separated list.')],
         'noconfirm_close_muc_rooms': [opt_str, '', _('Never ask for confirmation before closing groupchats with any of the JIDs on this space separated list.')],

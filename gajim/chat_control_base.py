@@ -26,6 +26,7 @@
 import os
 import re
 import time
+from tempfile import TemporaryDirectory
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -297,6 +298,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         hbox = self.xml.get_object('hbox')
         hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
 
+        id_ = self.msg_textview.connect('paste-clipboard',
+            self._on_message_textview_paste_event)
+        self.handlers[id_] = self.msg_textview
         id_ = self.msg_textview.connect('key_press_event',
             self._on_message_textview_key_press_event)
         self.handlers[id_] = self.msg_textview
@@ -578,6 +582,62 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         self.parent_win.notebook.event(event)
         return Gdk.EVENT_STOP
+
+    def _on_message_textview_paste_event(self, texview):
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        image = clipboard.wait_for_image()
+        if image is not None:
+            if not app.config.get('confirm_paste_image'):
+                self._paste_event_confirmed(image)
+                return
+            NewConfirmationDialog(
+                _('Warning'),
+                _('You are trying to paste an image'),
+                _('Are you sure you want to paste your '
+                  'clipboard image in the chat?'),
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('OK',
+                                   callback=lambda: self._paste_event_confirmed(image))],
+                ).show()
+
+    def _paste_event_confirmed(self, image):
+        tmp_dir = TemporaryDirectory()
+        dir_ = tmp_dir.name
+
+        # get file transfer preference
+        ft_pref = app.config.get_per('accounts', self.account,
+                                     'filetransfer_preference')
+        path = os.path.join(dir_, '0.png')
+        image.savev(path, 'png', [], [])
+        con = app.connections[self.account]
+        win = self.parent_win.window
+        httpupload = win.lookup_action(
+            'send-file-httpupload-%s' % self.control_id)
+        jingle = win.lookup_action('send-file-jingle-%s' % self.control_id)
+
+        if self.type_id == message_control.TYPE_GC:
+            # groupchat only supports httpupload on drag and drop
+            if httpupload.get_enabled():
+                # use httpupload
+                con.get_module('HTTPUpload').check_file_before_transfer(
+                    path, self.encryption, self.contact,
+                    self.session, groupchat=True)
+        else:
+            if httpupload.get_enabled() and jingle.get_enabled():
+                if ft_pref == 'httpupload':
+                    con.get_module('HTTPUpload').check_file_before_transfer(
+                        path, self.encryption, self.contact, self.session)
+                else:
+                    ft = app.interface.instances['file_transfers']
+                    ft.send_file(self.account, self.contact, path)
+            elif httpupload.get_enabled():
+                con.get_module('HTTPUpload').check_file_before_transfer(
+                    path, self.encryption, self.contact, self.session)
+            elif jingle.get_enabled():
+                ft = app.interface.instances['file_transfers']
+                ft.send_file(self.account, self.contact, path)
+
+        tmp_dir.cleanup()
 
     def _on_message_textview_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_space:
