@@ -882,7 +882,7 @@ class FileTransfersWindow:
         con = app.connections[account]
         # Check if we are in a IBB transfer
         if file_props.direction:
-            con.CloseIBBStream(file_props)
+            con.get_module('IBB').send_close(file_props)
         con.disconnect_transfer(file_props)
         self.set_status(file_props, 'stop')
 

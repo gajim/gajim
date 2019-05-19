@@ -74,6 +74,7 @@ MODULES = [
     'vcard_avatars',
     'vcard_temp',
     'announce',
+    'ibb',
 ]
 
 _imported_modules = []  # type: List[tuple]

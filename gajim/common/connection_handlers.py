@@ -34,7 +34,6 @@ from gajim.common import helpers
 from gajim.common import jingle_xtls
 from gajim.common.jingle import ConnectionJingle
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
-from gajim.common.protocol.bytestream import ConnectionIBBytestream
 from gajim.common.connection_handlers_events import StreamReceivedEvent
 from gajim.common.connection_handlers_events import PresenceReceivedEvent
 from gajim.common.connection_handlers_events import StreamConflictReceivedEvent
@@ -185,10 +184,9 @@ class ConnectionHandlersBase:
 
 class ConnectionHandlers(ConnectionSocks5Bytestream,
                          ConnectionHandlersBase,
-                         ConnectionJingle, ConnectionIBBytestream):
+                         ConnectionJingle):
     def __init__(self):
         ConnectionSocks5Bytestream.__init__(self)
-        ConnectionIBBytestream.__init__(self)
         ConnectionJingle.__init__(self)
         ConnectionHandlersBase.__init__(self)
 
@@ -223,10 +221,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
             nbxmpp.NS_BYTESTREAM)
         con.RegisterHandler('iq', self._bytestreamErrorCB, 'error',
             nbxmpp.NS_BYTESTREAM)
-        con.RegisterHandlerOnce('iq', self.IBBAllIqHandler)
-        con.RegisterHandler('iq', self.IBBIqHandler, ns=nbxmpp.NS_IBB)
-        con.RegisterHandler('message', self.IBBMessageHandler, ns=nbxmpp.NS_IBB)
-
         con.RegisterHandler('iq', self._JingleCB, 'result')
         con.RegisterHandler('iq', self._JingleCB, 'error')
         con.RegisterHandler('iq', self._JingleCB, 'set', nbxmpp.NS_JINGLE)

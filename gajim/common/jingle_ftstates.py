@@ -146,8 +146,9 @@ class StateTransfering(JingleFileTransferStates):
     def _start_ibb_transfer(self, con):
         self.jft.file_props.transport_sid = self.jft.transport.sid
         fp = open(self.jft.file_props.file_name, 'rb')
-        con.OpenStream(self.jft.file_props.sid, self.jft.session.peerjid, fp,
-                       blocksize=4096)
+        con.get_module('IBB').send_open(self.jft.session.peerjid,
+                                        self.jft.file_props.sid,
+                                        fp)
 
     def _start_sock5_transfer(self):
         # It tells wether we start the transfer as client or server
