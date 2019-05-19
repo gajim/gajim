@@ -742,8 +742,8 @@ class Interface:
                     file_props.sid, file_props.received_len)
 
     def __compare_hashes(self, account, file_props):
-        session = app.connections[account].get_jingle_session(jid=None,
-            sid=file_props.sid)
+        session = app.connections[account].get_module('Jingle').get_jingle_session(
+            jid=None, sid=file_props.sid)
         ft_win = self.instances['file_transfers']
         h = Hashes2()
         try:
@@ -794,8 +794,8 @@ class Interface:
                     self.popup_ft_result(account, jid, file_props)
                     if file_props.error == 0:
                         ft.set_status(file_props, 'ok')
-                    session = app.connections[account].get_jingle_session(jid=None,
-                        sid=file_props.sid)
+                    session = app.connections[account].get_module('Jingle').get_jingle_session(
+                        jid=None, sid=file_props.sid)
                     # End jingle session
                     # TODO: only if there are no other parallel downloads in this session
                     if session:

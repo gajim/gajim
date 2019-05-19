@@ -189,7 +189,7 @@ class StandardCommonChatCommands(CommandContainer):
         for tone in sequence:
             if not (tone in ("*", "#") or tone.isdigit()):
                 raise CommandError(_("%s is not a valid tone") % tone)
-        gjs = self.connection.get_jingle_session
+        gjs = self.connection.get_module('Jingle').get_jingle_session
         session = gjs(self.full_jid, self.audio_sid)
         content = session.get_content("audio")
         content.batch_dtmf(sequence)

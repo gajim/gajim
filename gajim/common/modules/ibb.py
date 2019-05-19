@@ -174,7 +174,7 @@ class IBB(BaseModule):
                 peerjid = file_props.receiver
             else:
                 peerjid = file_props.sender
-            session = self._con.get_jingle_session(
+            session = self._con.get_module('Jingle').get_jingle_session(
                 peerjid, file_props.sid, 'file')
             # According to the xep, the initiator also cancels
             # the jingle session if there are no more files to send using IBB

@@ -31,24 +31,40 @@ Handles the jingle signalling protocol
 import logging
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
+
 from gajim.common import helpers
 from gajim.common import app
+from gajim.common.modules.base import BaseModule
 
-from gajim.common.jingle_session import JingleSession, JingleStates
+from gajim.common.jingle_session import JingleSession
+from gajim.common.jingle_session import JingleStates
 from gajim.common.jingle_ft import JingleFileTransfer
-from gajim.common.jingle_transport import JingleTransportSocks5, JingleTransportIBB
+from gajim.common.jingle_transport import JingleTransportSocks5
+from gajim.common.jingle_transport import JingleTransportIBB
 if app.is_installed('FARSTREAM'):
     from gajim.common.jingle_rtp import JingleAudio, JingleVideo
 
-logger = logging.getLogger('gajim.c.jingle')
+logger = logging.getLogger('gajim.c.m.jingle')
 
 
-class ConnectionJingle:
-    """
-    This object depends on that it is a part of Connection class.
-    """
+class Jingle(BaseModule):
+    def __init__(self, con):
+        BaseModule.__init__(self, con)
 
-    def __init__(self):
+        self.handlers = [
+            StanzaHandler(name='iq',
+                          typ='result',
+                          callback=self._on_jingle_iq),
+            StanzaHandler(name='iq',
+                          typ='error',
+                          callback=self._on_jingle_iq),
+            StanzaHandler(name='iq',
+                          typ='set',
+                          ns=nbxmpp.NS_JINGLE,
+                          callback=self._on_jingle_iq),
+        ]
+
         # dictionary: sessionid => JingleSession object
         self._sessions = {}
 
@@ -68,7 +84,7 @@ class ConnectionJingle:
             self._sessions[sid].callbacks = []
             del self._sessions[sid]
 
-    def _JingleCB(self, con, stanza):
+    def _on_jingle_iq(self, con, stanza):
         """
         The jingle stanza dispatcher
 
@@ -103,7 +119,7 @@ class ConnectionJingle:
         # do we need to create a new jingle object
         if sid not in self._sessions:
             #TODO: tie-breaking and other things...
-            newjingle = JingleSession(con=self, weinitiate=False, jid=jid,
+            newjingle = JingleSession(self._con, weinitiate=False, jid=jid,
                                       iq_id=id_, sid=sid)
             self._sessions[sid] = newjingle
         # we already have such session in dispatcher...
@@ -122,7 +138,7 @@ class ConnectionJingle:
         if jingle:
             jingle.add_content('voice', JingleAudio(jingle))
         else:
-            jingle = JingleSession(self, weinitiate=True, jid=jid)
+            jingle = JingleSession(self._con, weinitiate=True, jid=jid)
             self._sessions[jingle.sid] = jingle
             jingle.add_content('voice', JingleAudio(jingle))
             jingle.start_session()
@@ -136,7 +152,7 @@ class ConnectionJingle:
             jingle.add_content('video', JingleVideo(jingle, in_xid=in_xid,
                                                     out_xid=out_xid))
         else:
-            jingle = JingleSession(self, weinitiate=True, jid=jid)
+            jingle = JingleSession(self._con, weinitiate=True, jid=jid)
             self._sessions[jingle.sid] = jingle
             jingle.add_content('video', JingleVideo(jingle, in_xid=in_xid,
                                                     out_xid=out_xid))
@@ -145,16 +161,16 @@ class ConnectionJingle:
 
     def start_file_transfer(self, jid, file_props, request=False):
         logger.info("start file transfer with file: %s", file_props)
-        contact = app.contacts.get_contact_with_highest_priority(self.name,
-                                                                   app.get_jid_without_resource(jid))
-        if app.contacts.is_gc_contact(self.name, jid):
+        contact = app.contacts.get_contact_with_highest_priority(
+            self._account, app.get_jid_without_resource(jid))
+        if app.contacts.is_gc_contact(self._account, jid):
             gcc = jid.split('/')
             if len(gcc) == 2:
-                contact = app.contacts.get_gc_contact(self.name, gcc[0], gcc[1])
+                contact = app.contacts.get_gc_contact(self._account, gcc[0], gcc[1])
         if contact is None:
             return
         use_security = contact.supports(nbxmpp.NS_JINGLE_XTLS)
-        jingle = JingleSession(self, weinitiate=True, jid=jid, werequest=request)
+        jingle = JingleSession(self._con, weinitiate=True, jid=jid, werequest=request)
         # this is a file transfer
         jingle.session_type_ft = True
         self._sessions[jingle.sid] = jingle
@@ -233,3 +249,7 @@ class ConnectionJingle:
                 if session.peerjid == jid and session.get_content(media):
                     return session
         return None
+
+
+def get_instance(*args, **kwargs):
+    return Jingle(*args, **kwargs), 'Jingle'

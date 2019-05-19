@@ -111,8 +111,8 @@ class ConnectionBytestream:
         # file transfer initiated by a jingle session
         log.info("send_file_approval: jingle session accept")
 
-        session = self.get_jingle_session(file_props.sender,
-            file_props.sid)
+        session = self.get_module('Jingle').get_jingle_session(
+            file_props.sender, file_props.sid)
         if not session:
             return
         content = None

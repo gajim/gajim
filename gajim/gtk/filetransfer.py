@@ -310,9 +310,8 @@ class FileTransfersWindow:
             new_file_props.date = file_props.date
             new_file_props.hash_ = file_props.hash_
             new_file_props.type_ = 'r'
-            tsid = app.connections[account].start_file_transfer(fjid,
-                                                            new_file_props,
-                                                                True)
+            tsid = app.connections[account].get_module('Jingle').start_file_transfer(
+                fjid, new_file_props, True)
             new_file_props.transport_sid = tsid
             self.add_transfer(account, contact, new_file_props)
 
@@ -352,8 +351,8 @@ class FileTransfersWindow:
         if file_props is None:
             return False
 
-        app.connections[account].start_file_transfer(contact.get_full_jid(),
-                                                       file_props)
+        app.connections[account].get_module('Jingle').start_file_transfer(
+            contact.get_full_jid(), file_props)
         self.add_transfer(account, contact, file_props)
         return True
 

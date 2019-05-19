@@ -538,7 +538,7 @@ class JingleSession:
         # If we are not receiving a file
         # Check if there's already a session with this user:
         if contents[0].media != 'file':
-            for session in self.connection.iter_jingle_sessions(self.peerjid):
+            for session in self.connection.get_module('Jingle').iter_jingle_sessions(self.peerjid):
                 if session is not self:
                     reason = nbxmpp.Node('reason')
                     alternative_session = reason.setTag('alternative-session')
@@ -557,8 +557,8 @@ class JingleSession:
                 n = request.getTag('file').getTag('name')
                 n = n.getData() if n else None
                 pjid = app.get_jid_without_resource(self.peerjid)
-                file_info = self.connection.get_file_info(pjid, hash_data, n,
-                                                          self.connection.name)
+                file_info = self.connection.get_module('Jingle').get_file_info(
+                    pjid, hash_data, n, self.connection.name)
                 if not file_info:
                     log.warning('The peer %s is requesting a ' \
                                 'file that we dont have or ' \
@@ -598,7 +598,7 @@ class JingleSession:
             cn.on_stanza(stanza, content, error, action)
 
     def __on_session_terminate(self, stanza, jingle, error, action):
-        self.connection.delete_jingle_session(self.sid)
+        self.connection.get_module('Jingle').delete_jingle_session(self.sid)
         reason, text = self.__reason_from_stanza(jingle)
         if reason not in ('success', 'cancel', 'decline'):
             self.__dispatch_error(reason, text)
@@ -776,7 +776,7 @@ class JingleSession:
             text = '%s (%s)' % (reason, text)
         else:
             text = reason
-        self.connection.delete_jingle_session(self.sid)
+        self.connection.get_module('Jingle').delete_jingle_session(self.sid)
         app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
                                                                       conn=self.connection,
                                                                       jingle_session=self,

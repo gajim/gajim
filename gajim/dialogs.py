@@ -1344,8 +1344,8 @@ class VoIPCallReceivedDialog:
 
     def on_voip_call_received_messagedialog_response(self, dialog, response):
         # we've got response from user, either stop connecting or accept the call
-        session = app.connections[self.account].get_jingle_session(self.fjid,
-            self.sid)
+        session = app.connections[self.account].get_module('Jingle').get_jingle_session(
+            self.fjid, self.sid)
         if not session:
             dialog.destroy()
             return

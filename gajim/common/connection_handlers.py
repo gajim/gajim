@@ -32,7 +32,6 @@ import nbxmpp
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import jingle_xtls
-from gajim.common.jingle import ConnectionJingle
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.connection_handlers_events import StreamReceivedEvent
 from gajim.common.connection_handlers_events import PresenceReceivedEvent
@@ -183,11 +182,9 @@ class ConnectionHandlersBase:
         return sess
 
 class ConnectionHandlers(ConnectionSocks5Bytestream,
-                         ConnectionHandlersBase,
-                         ConnectionJingle):
+                         ConnectionHandlersBase):
     def __init__(self):
         ConnectionSocks5Bytestream.__init__(self)
-        ConnectionJingle.__init__(self)
         ConnectionHandlersBase.__init__(self)
 
         app.nec.register_incoming_event(PresenceReceivedEvent)
@@ -221,9 +218,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
             nbxmpp.NS_BYTESTREAM)
         con.RegisterHandler('iq', self._bytestreamErrorCB, 'error',
             nbxmpp.NS_BYTESTREAM)
-        con.RegisterHandler('iq', self._JingleCB, 'result')
-        con.RegisterHandler('iq', self._JingleCB, 'error')
-        con.RegisterHandler('iq', self._JingleCB, 'set', nbxmpp.NS_JINGLE)
         con.RegisterHandler('iq', self._ResultCB, 'result')
         con.RegisterHandler('unknown', self._StreamCB,
             nbxmpp.NS_XMPP_STREAMS, xmlns=nbxmpp.NS_STREAMS)

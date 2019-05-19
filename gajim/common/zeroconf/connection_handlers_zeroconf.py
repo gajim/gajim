@@ -57,11 +57,9 @@ class DecryptedMessageReceivedEvent(NetworkIncomingEvent):
 
 
 class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
-                                 connection_handlers.ConnectionHandlersBase,
-                                 connection_handlers.ConnectionJingle):
+                                 connection_handlers.ConnectionHandlersBase):
     def __init__(self):
         ConnectionSocks5BytestreamZeroconf.__init__(self)
-        connection_handlers.ConnectionJingle.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)
 
     def _messageCB(self, con, stanza, properties):

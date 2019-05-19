@@ -326,8 +326,8 @@ class JingleTransportSocks5(JingleTransport):
         self._add_candidates(proxy_cand)
 
     def get_content(self):
-        sesn = self.connection.get_jingle_session(self.ourjid,
-                                                  self.file_props.sid)
+        sesn = self.connection.get_module('Jingle').get_jingle_session(
+            self.ourjid, self.file_props.sid)
         for content in sesn.contents.values():
             if content.transport == self:
                 return content
@@ -337,8 +337,8 @@ class JingleTransportSocks5(JingleTransport):
         # send activate request to proxy, send activated confirmation to peer
         if not self.connection:
             return
-        sesn = self.connection.get_jingle_session(self.ourjid,
-                                                  self.file_props.sid)
+        sesn = self.connection.get_module('Jingle').get_jingle_session(
+            self.ourjid, self.file_props.sid)
         if sesn is None:
             return
 

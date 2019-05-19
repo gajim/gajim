@@ -594,7 +594,7 @@ class ChatControl(ChatControlBase):
         self._set_jingle_state('video', state, sid=sid, reason=reason)
 
     def _get_audio_content(self):
-        session = app.connections[self.account].get_jingle_session(
+        session = app.connections[self.account].get_module('Jingle').get_jingle_session(
                 self.contact.get_full_jid(), self.audio_sid)
         return session.get_content('audio')
 
@@ -757,8 +757,8 @@ class ChatControl(ChatControlBase):
             return
         setattr(self, jingle_type + '_sid', None)
         setattr(self, jingle_type + '_state', self.JINGLE_STATE_NULL)
-        session = app.connections[self.account].get_jingle_session(
-                self.contact.get_full_jid(), sid)
+        session = app.connections[self.account].get_module('Jingle').get_jingle_session(
+            self.contact.get_full_jid(), sid)
         if session:
             content = session.get_content(jingle_type)
             if content:
@@ -790,7 +790,7 @@ class ChatControl(ChatControlBase):
                     in_da = self.xml.get_object('incoming_drawingarea')
                     in_da.realize()
                     in_xid = in_da.get_window().get_xid()
-                    sid = app.connections[self.account].start_video(
+                    sid = app.connections[self.account].get_module('Jingle').start_video(
                         self.contact.get_full_jid(), in_xid, out_xid)
                 else:
                     sid = getattr(app.connections[self.account],
