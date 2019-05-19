@@ -35,6 +35,7 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import helpers
 from gajim.common import app
+from gajim.common import jingle_xtls
 from gajim.common.modules.base import BaseModule
 
 from gajim.common.jingle_session import JingleSession
@@ -63,6 +64,14 @@ class Jingle(BaseModule):
                           typ='set',
                           ns=nbxmpp.NS_JINGLE,
                           callback=self._on_jingle_iq),
+            StanzaHandler(name='iq',
+                          typ='get',
+                          ns=nbxmpp.NS_PUBKEY_PUBKEY,
+                          callback=self._on_pubkey_request),
+            StanzaHandler(name='iq',
+                          typ='result',
+                          ns=nbxmpp.NS_PUBKEY_PUBKEY,
+                          callback=self._pubkey_result_received),
         ]
 
         # dictionary: sessionid => JingleSession object
@@ -84,7 +93,19 @@ class Jingle(BaseModule):
             self._sessions[sid].callbacks = []
             del self._sessions[sid]
 
-    def _on_jingle_iq(self, con, stanza):
+    def _on_pubkey_request(self, con, stanza, _properties):
+        jid_from = helpers.get_full_jid_from_iq(stanza)
+        self._log.info('Pubkey request from %s', jid_from)
+        sid = stanza.getAttr('id')
+        jingle_xtls.send_cert(con, jid_from, sid)
+        raise nbxmpp.NodeProcessed
+
+    def _pubkey_result_received(self, con, stanza, _properties):
+        jid_from = helpers.get_full_jid_from_iq(stanza)
+        self._log.info('Pubkey result from %s', jid_from)
+        jingle_xtls.handle_new_cert(con, stanza, jid_from)
+
+    def _on_jingle_iq(self, con, stanza, properties):
         """
         The jingle stanza dispatcher
 

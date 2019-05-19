@@ -26,7 +26,6 @@ import nbxmpp
 
 from gajim.common import app
 
-from gajim.common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
 from gajim.common import connection_handlers
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
@@ -56,10 +55,8 @@ class DecryptedMessageReceivedEvent(NetworkIncomingEvent):
 
 
 
-class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
-                                 connection_handlers.ConnectionHandlersBase):
+class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
     def __init__(self):
-        ConnectionSocks5BytestreamZeroconf.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)
 
     def _messageCB(self, con, stanza, properties):

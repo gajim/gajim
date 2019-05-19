@@ -1470,7 +1470,7 @@ class ChatControl(ChatControlBase):
             app.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _on_cancel_file_request(self, widget, file_props):
-        app.connections[self.account].send_file_rejection(file_props)
+        app.connections[self.account].get_module('Bytestream').send_file_rejection(file_props)
         ev = self._get_file_props_event(file_props, 'file-request')
         if ev:
             app.events.remove_events(self.account, self.contact.jid, event=ev)

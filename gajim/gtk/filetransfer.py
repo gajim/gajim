@@ -36,7 +36,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.file_props import FilesProp
-from gajim.common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
+from gajim.common.modules.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
 
 from gajim.gtk.dialogs import HigDialog
@@ -363,7 +363,7 @@ class FileTransfersWindow:
         file_props.file_name = file_path
         file_props.type_ = 'r'
         self.add_transfer(account, contact, file_props)
-        app.connections[account].send_file_approval(file_props)
+        app.connections[account].get_module('Bytestream').send_file_approval(file_props)
 
     def on_file_request_accepted(self, account, contact, file_props):
         def on_ok(account, contact, file_props, file_path):
@@ -410,7 +410,7 @@ class FileTransfersWindow:
 
         con = app.connections[account]
         accept_cb = partial(on_ok, account, contact, file_props)
-        cancel_cb = partial(con.send_file_rejection, file_props)
+        cancel_cb = partial(con.get_module('Bytestream').send_file_rejection, file_props)
         FileSaveDialog(accept_cb,
                        cancel_cb,
                        path=app.config.get('last_save_dir'),
@@ -439,7 +439,7 @@ class FileTransfersWindow:
             self.on_file_request_accepted(account, contact, file_props)
 
         def on_response_cancel(account, file_props):
-            app.connections[account].send_file_rejection(file_props)
+            app.connections[account].get_module('Bytestream').send_file_rejection(file_props)
 
         dialog = NonModalConfirmationDialog(prim_text, sec_text,
                 on_response_ok=(on_response_ok, account, contact, file_props),
@@ -552,7 +552,7 @@ class FileTransfersWindow:
             account = file_props.tt_account
             if account in app.connections:
                 # there is a connection to the account
-                app.connections[account].remove_transfer(file_props)
+                app.connections[account].get_module('Bytestream').remove_transfer(file_props)
             if file_props.type_ == 'r': # we receive a file
                 other = file_props.sender
             else: # we send a file
@@ -882,7 +882,7 @@ class FileTransfersWindow:
         # Check if we are in a IBB transfer
         if file_props.direction:
             con.get_module('IBB').send_close(file_props)
-        con.disconnect_transfer(file_props)
+        con.get_module('Bytestream').disconnect_transfer(file_props)
         self.set_status(file_props, 'stop')
 
     def on_notify_ft_complete_checkbox_toggled(self, widget):

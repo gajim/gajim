@@ -327,12 +327,6 @@ class P2PClient(IdleObject):
         self.RegisterHandler(*StanzaHandler(name='message',
                                             callback=self._caller._messageCB))
 
-        self.RegisterHandler('iq', self._caller._bytestreamSetCB, 'set',
-            nbxmpp.NS_BYTESTREAM)
-        self.RegisterHandler('iq', self._caller._bytestreamResultCB, 'result',
-            nbxmpp.NS_BYTESTREAM)
-        self.RegisterHandler('iq', self._caller._bytestreamErrorCB, 'error',
-            nbxmpp.NS_BYTESTREAM)
         self._caller._register_new_handlers(self)
 
 

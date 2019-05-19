@@ -76,6 +76,7 @@ MODULES = [
     'announce',
     'ibb',
     'jingle',
+    'bytestream',
 ]
 
 _imported_modules = []  # type: List[tuple]

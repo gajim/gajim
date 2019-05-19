@@ -2435,7 +2435,7 @@ class RosterWindow:
                 on_continue3(message, pep_dict)
                 return
             # check if there is an active file transfer
-            from gajim.common.protocol.bytestream import is_transfer_active
+            from gajim.common.modules.bytestream import is_transfer_active
             files_props = app.interface.instances['file_transfers'].\
                 files_props
             transfer_active = False

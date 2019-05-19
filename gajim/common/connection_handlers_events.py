@@ -170,7 +170,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.id_ = self.stanza.getID()
-        self.fjid = self.conn._ft_get_from(self.stanza)
+        self.fjid = self.conn.get_module('Bytestream')._ft_get_from(self.stanza)
         self.jid = app.get_jid_without_resource(self.fjid)
         if self.jingle_content:
             secu = self.jingle_content.getTag('security')
@@ -201,7 +201,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
             if self.jingle_content.getAttr('creator') == 'initiator':
                 file_tag = desc.getTag('file')
                 self.file_props.sender = self.fjid
-                self.file_props.receiver = self.conn._ft_get_our_jid()
+                self.file_props.receiver = self.conn.get_module('Bytestream')._ft_get_our_jid()
             else:
                 file_tag = desc.getTag('file')
                 h = file_tag.getTag('hash')
@@ -212,7 +212,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
                 file_info = self.conn.get_module('Jingle').get_file_info(
                     pjid, hash_=h, name=n, account=self.conn.name)
                 self.file_props.file_name = file_info['file-name']
-                self.file_props.sender = self.conn._ft_get_our_jid()
+                self.file_props.sender = self.conn.get_module('Bytestream')._ft_get_our_jid()
                 self.file_props.receiver = self.fjid
                 self.file_props.type_ = 's'
             for child in file_tag.getChildren():
@@ -236,7 +236,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
             self.file_props.transport_sid = self.file_props.sid
             profile = si.getAttr('profile')
             if profile != nbxmpp.NS_FILE:
-                self.conn.send_file_rejection(self.file_props, code='400',
+                self.conn.get_module('Bytestream').send_file_rejection(self.file_props, code='400',
                     typ='profile')
                 raise nbxmpp.NodeProcessed
             feature_tag = si.getTag('feature', namespace=nbxmpp.NS_FEATURE)
@@ -254,7 +254,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
                     nbxmpp.NS_IBB in values:
                         break
             else:
-                self.conn.send_file_rejection(self.file_props, code='400',
+                self.conn.get_module('Bytestream').send_file_rejection(self.file_props, code='400',
                     typ='stream')
                 raise nbxmpp.NodeProcessed
             file_tag = si.getTag('file')
@@ -269,7 +269,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
             if mime_type is not None:
                 self.file_props.mime_type = mime_type
             self.file_props.sender = self.fjid
-            self.file_props.receiver = self.conn._ft_get_our_jid()
+            self.file_props.receiver = self.conn.get_module('Bytestream')._ft_get_our_jid()
         self.file_props.request_id = self.id_
         file_desc_tag = file_tag.getTag('desc')
         if file_desc_tag is not None:

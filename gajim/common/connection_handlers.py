@@ -30,9 +30,6 @@ import operator
 import nbxmpp
 
 from gajim.common import app
-from gajim.common import helpers
-from gajim.common import jingle_xtls
-from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.connection_handlers_events import StreamReceivedEvent
 from gajim.common.connection_handlers_events import PresenceReceivedEvent
 from gajim.common.connection_handlers_events import StreamConflictReceivedEvent
@@ -181,27 +178,13 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionSocks5Bytestream,
-                         ConnectionHandlersBase):
+class ConnectionHandlers(ConnectionHandlersBase):
     def __init__(self):
-        ConnectionSocks5Bytestream.__init__(self)
         ConnectionHandlersBase.__init__(self)
 
         app.nec.register_incoming_event(PresenceReceivedEvent)
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
-
-    def _PubkeyGetCB(self, con, iq_obj):
-        log.info('PubkeyGetCB')
-        jid_from = helpers.get_full_jid_from_iq(iq_obj)
-        sid = iq_obj.getAttr('id')
-        jingle_xtls.send_cert(con, jid_from, sid)
-        raise nbxmpp.NodeProcessed
-
-    def _PubkeyResultCB(self, con, iq_obj):
-        log.info('PubkeyResultCB')
-        jid_from = helpers.get_full_jid_from_iq(iq_obj)
-        jingle_xtls.handle_new_cert(con, iq_obj, jid_from)
 
     def _StreamCB(self, con, obj):
         log.debug('StreamCB')
@@ -212,16 +195,5 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         # try to find another way to register handlers in each class
         # that defines handlers
 
-        con.RegisterHandler('iq', self._bytestreamSetCB, 'set',
-            nbxmpp.NS_BYTESTREAM)
-        con.RegisterHandler('iq', self._bytestreamResultCB, 'result',
-            nbxmpp.NS_BYTESTREAM)
-        con.RegisterHandler('iq', self._bytestreamErrorCB, 'error',
-            nbxmpp.NS_BYTESTREAM)
-        con.RegisterHandler('iq', self._ResultCB, 'result')
         con.RegisterHandler('unknown', self._StreamCB,
             nbxmpp.NS_XMPP_STREAMS, xmlns=nbxmpp.NS_STREAMS)
-        con.RegisterHandler('iq', self._PubkeyGetCB, 'get',
-            nbxmpp.NS_PUBKEY_PUBKEY)
-        con.RegisterHandler('iq', self._PubkeyResultCB, 'result',
-            nbxmpp.NS_PUBKEY_PUBKEY)

@@ -588,7 +588,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         app.proxy65_manager.disconnect(self.connection)
         self.terminate_sessions()
-        self.remove_all_transfers()
+        self.get_module('Bytestream').remove_all_transfers()
         self._unregister_new_handlers(self.connection)
         self.connection = None
 
@@ -1348,7 +1348,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
         if self.connected > 1 and self.get_module('PrivacyLists').supported:
-            self.remove_all_transfers()
+            self.get_module('Bytestream').remove_all_transfers()
             self.get_module('Presence').send_presence(
                 typ='unavailable',
                 status=msg,

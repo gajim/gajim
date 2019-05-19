@@ -305,7 +305,7 @@ class JingleTransportSocks5(JingleTransport):
         priority = (2**16) * type_preference
         proxy_cand = []
         socks5conn = self.connection
-        proxyhosts = socks5conn._get_file_transfer_proxies_from_config(self.file_props)
+        proxyhosts = socks5conn.get_module('Bytestream')._get_file_transfer_proxies_from_config(self.file_props)
 
         if proxyhosts:
             self.file_props.proxyhosts = proxyhosts

@@ -201,7 +201,7 @@ class Presence(BaseModule):
         if properties.type.is_unavailable:
             # TODO: This causes problems when another
             # resource signs off!
-            self._con.stop_all_active_file_transfers(contact)
+            self._con.get_module('Bytestream').stop_all_active_file_transfers(contact)
         self._log_presence(properties)
 
     @staticmethod

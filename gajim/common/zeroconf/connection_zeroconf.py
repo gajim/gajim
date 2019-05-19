@@ -233,7 +233,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         if event.ptype == 'unavailable':
             # TODO: This causes problems when another
             # resource signs off!
-            self.stop_all_active_file_transfers(contact)
+            self.get_module('Bytestream').stop_all_active_file_transfers(contact)
 
     def _on_name_conflictCB(self, alt_name):
         self.disconnect()

@@ -162,7 +162,7 @@ class Discovery(BaseModule):
         try:
             self._con.get_module('MUC').pass_disco(from_, *args)
             self._con.get_module('HTTPUpload').pass_disco(from_, *args)
-            self._con.pass_bytestream_disco(from_, *args)
+            self._con.get_module('Bytestream').pass_disco(from_, *args)
         except nbxmpp.NodeProcessed:
             pass
 
