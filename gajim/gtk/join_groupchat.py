@@ -187,8 +187,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         account = self.account_combo.get_active_id()
         nickname = self.nick_entry.get_text()
 
-        invisible_show = app.SHOW_LIST.index('invisible')
-        if app.connections[account].connected == invisible_show:
+        if app.is_invisible(account):
             app.interface.raise_dialog('join-while-invisible')
             return
 

@@ -224,7 +224,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 app.newly_added[self.name].append(jid)
             if jid in app.to_be_removed[self.name]:
                 app.to_be_removed[self.name].remove(jid)
-        elif event.old_show > 1 and event.new_show == 0 and self.connected > 1:
+        elif event.old_show > 1 and event.new_show == 0 and self.is_connected:
             if not jid in app.to_be_removed[self.name]:
                 app.to_be_removed[self.name].append(jid)
             if jid in app.newly_added[self.name]:

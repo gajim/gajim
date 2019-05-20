@@ -128,7 +128,7 @@ class StandardCommonCommands(CommandContainer):
             if not app.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue
-            if connection.connected < 2:
+            if not connection.is_connected:
                 continue
             connection.change_status(status, message)
 
@@ -142,7 +142,7 @@ class StandardCommonCommands(CommandContainer):
             if not app.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue
-            if connection.connected < 2:
+            if not connection.is_connected:
                 continue
             connection.change_status('away', message)
 
@@ -156,7 +156,7 @@ class StandardCommonCommands(CommandContainer):
             if not app.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue
-            if connection.connected < 2:
+            if not connection.is_connected:
                 continue
             connection.change_status('online', message)
 

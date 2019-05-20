@@ -783,7 +783,7 @@ class SynchroniseSelectAccountDialog:
             return
         remote_account = model.get_value(iter_, 0)
 
-        if app.connections[remote_account].connected < 2:
+        if not app.account_is_connected(remote_account):
             ErrorDialog(_('This account is not connected to the server'),
                 _('You cannot synchronize with an account unless it is connected.'))
             return

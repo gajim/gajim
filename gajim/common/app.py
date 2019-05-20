@@ -453,7 +453,7 @@ def account_is_connected(account):
     if account not in connections:
         return False
     # 0 is offline, 1 is connecting
-    return connections[account].connected > 1
+    return connections[account].is_connected
 
 def is_invisible(account):
     return SHOW_LIST[connections[account].connected] == 'invisible'

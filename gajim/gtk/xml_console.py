@@ -148,7 +148,7 @@ class XMLConsoleWindow(Gtk.Window):
             self._ui.input_entry.grab_focus()
 
     def on_send(self, *args):
-        if app.connections[self.account].connected <= 1:
+        if not app.account_is_connected(self.account):
             # if offline or connecting
             ErrorDialog(
                 _('Connection not available'),

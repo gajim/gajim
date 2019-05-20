@@ -651,5 +651,5 @@ class ChangePasswordSetting(DialogSetting):
         activatable = False
         if self.account in app.connections:
             con = app.connections[self.account]
-            activatable = con.connected >= 2 and con.register_supported
+            activatable = con.is_connected and con.register_supported
         self.set_activatable(activatable)

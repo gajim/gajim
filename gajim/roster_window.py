@@ -2063,7 +2063,7 @@ class RosterWindow:
                 app.config.set_per('accounts', account, 'last_status', status)
                 app.config.set_per('accounts', account, 'last_status_msg',
                         helpers.to_one_line(txt))
-            if app.connections[account].connected < 2:
+            if not app.account_is_connected(account):
                 self.set_connecting_state(account)
 
         self.send_status_continue(account, status, txt, auto, to)
@@ -2112,8 +2112,7 @@ class RosterWindow:
         else:
             if status in ('invisible', 'offline'):
                 self.delete_pep(app.get_jid_from_account(account), account)
-            was_invisible = app.connections[account].connected == \
-                    app.SHOW_LIST.index('invisible')
+            was_invisible = app.is_invisible(account)
             app.connections[account].change_status(status, txt, auto)
 
             for gc_control in app.interface.msg_win_mgr.get_controls(
@@ -2409,7 +2408,7 @@ class RosterWindow:
         accounts = list(app.connections.keys())
         get_msg = False
         for acct in accounts:
-            if app.connections[acct].connected:
+            if app.account_is_connected(acct):
                 get_msg = True
                 break
 
@@ -2417,7 +2416,7 @@ class RosterWindow:
             self.quit_on_next_offline = 0
             accounts_to_disconnect = []
             for acct in accounts:
-                if app.connections[acct].connected > 1:
+                if app.account_is_connected(acct):
                     self.quit_on_next_offline += 1
                     accounts_to_disconnect.append(acct)
 
@@ -2505,7 +2504,7 @@ class RosterWindow:
                     GLib.timeout_add_seconds(5, self.remove_newly_added, jid,
                         account)
                 elif obj.old_show > 1 and obj.new_show == 0 and \
-                obj.conn.connected > 1:
+                obj.conn.is_connected:
                     GLib.timeout_add_seconds(5, self.remove_to_be_removed,
                         jid, account)
 
@@ -2868,7 +2867,7 @@ class RosterWindow:
             return
 
         # account is offline, don't allow to rename
-        if app.connections[account].connected < 2:
+        if not app.account_is_connected(account):
             return
         if row_type in ('contact', 'agent'):
             # it's jid
@@ -3225,8 +3224,7 @@ class RosterWindow:
             elif type_ == 'account':
                 account = model[path][Column.ACCOUNT]
                 if account != 'all':
-                    show = app.connections[account].connected
-                    if show > 1: # We are connected
+                    if app.account_is_connected(account):
                         self.on_change_status_message_activate(widget, account)
                     return True
                 show = helpers.get_global_show()
@@ -4202,7 +4200,7 @@ class RosterWindow:
         if account_dest == 'all':
             return
         # nothing can be done, if destination account is offline
-        if app.connections[account_dest].connected < 2:
+        if not app.account_is_connected(account_dest):
             return
 
         # A file got dropped on the roster
@@ -4748,7 +4746,7 @@ class RosterWindow:
                 item = Gtk.MenuItem.new_with_mnemonic(uf_show)
                 sub_menu.append(item)
                 con = app.connections[account]
-                if show == 'invisible' and con.connected > 1 and \
+                if show == 'invisible' and con.is_connected and \
                 not con.get_module('PrivacyLists').supported:
                     item.set_sensitive(False)
                 else:
@@ -4761,7 +4759,7 @@ class RosterWindow:
             sub_menu.append(item)
             item.connect('activate', self.on_change_status_message_activate,
                 account)
-            if app.connections[account].connected < 2:
+            if not app.account_is_connected(account):
                 item.set_sensitive(False)
 
             item = Gtk.SeparatorMenuItem.new()
@@ -4831,7 +4829,7 @@ class RosterWindow:
             self.add_bookmarks_list(gc_sub_menu, account)
 
             # make some items insensitive if account is offline
-            if app.connections[account].connected < 2:
+            if not app.account_is_connected(account):
                 for widget in (add_contact_menuitem, service_discovery_menuitem,
                 join_group_chat_menuitem, execute_command_menuitem,
                 pep_menuitem):
@@ -4859,7 +4857,7 @@ class RosterWindow:
             sub_menu.append(item)
             item.connect('activate', self.on_change_status_message_activate,
                 account)
-            if app.connections[account].connected < 2:
+            if not app.account_is_connected(account):
                 item.set_sensitive(False)
 
             uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
@@ -4969,7 +4967,7 @@ class RosterWindow:
             if app.config.get_per('accounts', account, 'is_zeroconf'):
                 send_group_message_item.set_sensitive(False)
 
-            if app.connections[account].connected < 2:
+            if not app.account_is_connected(account):
                 send_group_message_item.set_sensitive(False)
                 invite_menuitem.set_sensitive(False)
 
@@ -5012,7 +5010,7 @@ class RosterWindow:
                 group, account)
 
             # unsensitive if account is not connected
-            if app.connections[account].connected < 2:
+            if not app.account_is_connected(account):
                 rename_item.set_sensitive(False)
 
             # General group cannot be changed
@@ -5052,7 +5050,7 @@ class RosterWindow:
         for titer in iters:
             jid = model[titer][Column.JID]
             account = model[titer][Column.ACCOUNT]
-            if app.connections[account].connected < 2:
+            if not app.account_is_connected(account):
                 one_account_offline = True
             if not app.connections[account].get_module('PrivacyLists').supported:
                 privacy_rules_supported = False

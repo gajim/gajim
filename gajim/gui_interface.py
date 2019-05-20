@@ -933,9 +933,8 @@ class Interface:
         if obj.conn.get_module('MAM').available:
             obj.conn.get_module('MAM').request_archive_on_signin()
 
-        invisible_show = app.SHOW_LIST.index('invisible')
         # We cannot join rooms if we are invisible
-        if connected == invisible_show:
+        if app.is_invisible(account):
             return
         # send currently played music
         if (pep_supported and sys.platform not in ('win32', 'darwin') and
@@ -1626,8 +1625,7 @@ class Interface:
                 self.roster.on_groupchat_maximized(None, room_jid, account)
             return
 
-        invisible_show = app.SHOW_LIST.index('invisible')
-        if app.connections[account].connected == invisible_show:
+        if app.is_invisible(account):
             ErrorDialog(
                 _('You cannot join a group chat while you are invisible'))
             return
@@ -2179,7 +2177,7 @@ class Interface:
                     GLib.timeout_add_seconds(2, connection.reconnect)
         else:
             for connection in app.connections.values():
-                if connection.connected > 1:
+                if connection.is_connected:
                     log.info('Disconnect %s', connection.name)
                     connection.disconnect(immediately=True)
 

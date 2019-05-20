@@ -437,7 +437,7 @@ class GajimRemote(Server):
         if not account and len(accounts) == 1:
             account = accounts[0]
         if account:
-            if app.connections[account].connected > 1:  # account is connected
+            if app.account_is_connected(account):  # account is connected
                 connected_account = account
                 contact = app.contacts.get_contact_with_highest_priority(
                     account, jid)
@@ -445,7 +445,7 @@ class GajimRemote(Server):
             for account_ in accounts:
                 contact = app.contacts.get_contact_with_highest_priority(
                     account, jid)
-                if contact and app.connections[account_].connected > 1:
+                if contact and app.account_is_connected(account_):
                     # account is connected
                     connected_account = account_
                     break
@@ -466,14 +466,14 @@ class GajimRemote(Server):
         if not account and len(accounts) == 1:
             account = accounts[0]
         if account:
-            if app.connections[account].connected > 1 and \
+            if app.account_is_connected(account) and \
                     room_jid in app.gc_connected[account] and \
                     app.gc_connected[account][room_jid]:
                 # account and groupchat are connected
                 connected_account = account
         else:
             for account_ in accounts:
-                if app.connections[account_].connected > 1 and \
+                if app.account_is_connected(account_) and \
                         room_jid in app.gc_connected[account_] and \
                         app.gc_connected[account_][room_jid]:
                     # account and groupchat are connected
@@ -590,7 +590,7 @@ class GajimRemote(Server):
         connected_account = None
         first_connected_acct = None
         for acct in accounts:
-            if app.connections[acct].connected > 1:  # account is  online
+            if app.account_is_connected(acct):  # account is  online
                 contact = app.contacts.get_first_contact_from_jid(acct, jid)
                 if app.interface.msg_win_mgr.has_window(jid, acct):
                     connected_account = acct
@@ -790,8 +790,7 @@ class GajimRemote(Server):
 
     def add_contact(self, jid, account):
         if account:
-            if account in app.connections and \
-                    app.connections[account].connected > 1:
+            if app.account_is_connected(account):
                 # if given account is active, use it
                 AddNewContactWindow(account=account, jid=jid)
             else:

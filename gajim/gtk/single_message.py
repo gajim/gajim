@@ -269,7 +269,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
             _('Characters typed: %s') % str(characters_no))
 
     def send_single_message(self):
-        if app.connections[self.account].connected <= 1:
+        if not app.account_is_connected(self.account):
             # if offline or connecting
             ErrorDialog(_('Connection not available'),
                 _('Please make sure you are connected with "%s".') % self.account)

@@ -127,6 +127,10 @@ class CommonConnection:
 
         self.get_config_values_or_default()
 
+    @property
+    def is_connected(self):
+        return self.connected > 1
+
     def _register_new_handlers(self, con):
         for handler in modules.get_handlers(self):
             if len(handler) == 5:
@@ -176,7 +180,7 @@ class CommonConnection:
 
     def _prepare_message(self, obj):
 
-        if not self.connection or self.connected < 2:
+        if not self.connection or not self.is_connected:
             return 1
 
         if isinstance(obj.jid, list):
@@ -511,7 +515,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def reconnect(self):
         # Do not try to reco while we are already trying
         self.time_to_reconnect = None
-        if self.connected < 2: # connection failed
+        if not self.is_connected: # connection failed
             log.info('Reconnect')
             self.connected = 1
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
@@ -1347,7 +1351,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
-        if self.connected > 1 and self.get_module('PrivacyLists').supported:
+        if self.is_connected and self.get_module('PrivacyLists').supported:
             self.get_module('Bytestream').remove_all_transfers()
             self.get_module('Presence').send_presence(
                 typ='unavailable',
@@ -1780,7 +1784,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Account may have been disabled
             return
         if self.time_to_reconnect:
-            if self.connected < 2:
+            if not self.is_connected:
                 self.reconnect()
             else:
                 self.time_to_reconnect = None

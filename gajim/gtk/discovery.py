@@ -488,7 +488,7 @@ class ServiceDiscoveryWindow:
         self.reloading = False
 
         # Check connection
-        if app.connections[account].connected < 2:
+        if not app.account_is_connected(account):
             ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not browse available services'))
             raise RuntimeError('You must be connected to browse services')
