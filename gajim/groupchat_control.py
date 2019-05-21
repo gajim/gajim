@@ -71,7 +71,7 @@ from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputTextDialog
 from gajim.gtk.dialogs import ConfirmationDialogCheck
-from gajim.gtk.dialogs import DoubleInputDialog
+from gajim.gtk.dialogs import DestroyMucDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import ChangeNickDialog
 from gajim.gtk.single_message import SingleMessageWindow
@@ -643,7 +643,7 @@ class GroupchatControl(ChatControlBase):
         self.force_non_minimizable = False
 
     def _on_destroy_room(self, action, param):
-        def on_ok(reason, jid):
+        def _on_confirm(reason, jid):
             if jid:
                 # Test jid
                 try:
@@ -658,12 +658,8 @@ class GroupchatControl(ChatControlBase):
             con = app.connections[self.account]
             con.get_module('MUC').destroy(self.room_jid, reason, jid)
 
-        # Ask for a reason
-        DoubleInputDialog(_('Destroying %s') % '\u200E' + \
-            self.room_jid, _('You are going to remove this room permanently.'
-            '\nYou may specify a reason below:'),
-            _('You may also enter an alternate venue:'), ok_handler=on_ok,
-            transient_for=self.parent_win.window)
+        # Ask for a reason (and an alternate venue)
+        DestroyMucDialog(self.room_jid, destroy_handler=_on_confirm)
 
     def _on_configure_room(self, _action, _param):
         contact = app.contacts.get_gc_contact(

@@ -814,72 +814,48 @@ class InputTextDialog(CommonInputDialog):
         return self.input_buffer.get_text(start_iter, end_iter, True)
 
 
-class DoubleInputDialog:
+class DestroyMucDialog:
     """
-    Class for Double Input dialog
+    Class for Destroy MUC Dialog
     """
+    def __init__(self, room_jid, destroy_handler=None):
+        self._ui = get_builder('destroy_muc_dialog.ui')
+        self._ui.destroy_muc_dialog.set_transient_for(
+            app.app.get_active_window())
 
-    def __init__(self, title, label_str1, label_str2, input_str1=None,
-    input_str2=None, is_modal=True, ok_handler=None, cancel_handler=None,
-    transient_for=None):
-        self.xml = get_builder('dubbleinput_dialog.ui')
-        self.dialog = self.xml.get_object('dubbleinput_dialog')
-        label1 = self.xml.get_object('label1')
-        self.input_entry1 = self.xml.get_object('input_entry1')
-        label2 = self.xml.get_object('label2')
-        self.input_entry2 = self.xml.get_object('input_entry2')
-        self.dialog.set_title(title)
-        label1.set_markup(label_str1)
-        label2.set_markup(label_str2)
-        self.cancel_handler = cancel_handler
-        if input_str1:
-            self.input_entry1.set_text(input_str1)
-            self.input_entry1.select_region(0, -1) # select all
-        if input_str2:
-            self.input_entry2.set_text(input_str2)
-            self.input_entry2.select_region(0, -1) # select all
-        if transient_for is None:
-            transient_for = app.app.get_active_window()
-        self.dialog.set_transient_for(transient_for)
+        self.destroy_handler = destroy_handler
 
-        self.dialog.set_modal(is_modal)
+        title = _('Destroy %s') % room_jid
+        self._ui.destroy_muc_dialog.set_title(title)
+        label_header = _('Destroy this group chat permanently?')
+        self._ui.label_header.set_markup(label_header)
+        label_alt_venue = _('Where participants should go (optional)')
+        self._ui.alt_venue_label.set_markup(label_alt_venue)
 
-        self.ok_handler = ok_handler
-        okbutton = self.xml.get_object('okbutton')
-        okbutton.connect('clicked', self.on_okbutton_clicked)
-        cancelbutton = self.xml.get_object('cancelbutton')
-        cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
-        self.xml.connect_signals(self)
-        self.dialog.show_all()
+        self._ui.reason_entry.connect('activate', self._on_entry_activate)
+        self._ui.alt_venue_entry.connect('activate', self._on_entry_activate)
 
-    def on_dubbleinput_dialog_destroy(self, widget):
-        if not self.cancel_handler:
-            return False
-        if isinstance(self.cancel_handler, tuple):
-            self.cancel_handler[0](*self.cancel_handler[1:])
-        else:
-            self.cancel_handler()
+        self._ui.destroy_button.connect(
+            'clicked', self._on_destroy_button_clicked)
+        self._ui.cancel_button.connect(
+            'clicked', self._on_cancel_button_clicked)
+        self._ui.connect_signals(self)
+        self._ui.destroy_muc_dialog.show_all()
 
-    def on_okbutton_clicked(self, widget):
-        user_input1 = self.input_entry1.get_text()
-        user_input2 = self.input_entry2.get_text()
-        self.cancel_handler = None
-        self.dialog.destroy()
-        if not self.ok_handler:
-            return
-        if isinstance(self.ok_handler, tuple):
-            self.ok_handler[0](user_input1, user_input2, *self.ok_handler[1:])
-        else:
-            self.ok_handler(user_input1, user_input2)
+    def _on_entry_activate(self, widget, *args):
+        self._ui.destroy_button.set_active(True)
 
-    def on_cancelbutton_clicked(self, widget):
-        self.dialog.destroy()
-        if not self.cancel_handler:
-            return
-        if isinstance(self.cancel_handler, tuple):
-            self.cancel_handler[0](*self.cancel_handler[1:])
-        else:
-            self.cancel_handler()
+    def _on_reason_mnemonic_activate(self, widget, group_cycling=False):
+        self._ui.reason_expander.set_expanded(True)
+
+    def _on_destroy_button_clicked(self, widget):
+        user_input_reason = self._ui.reason_entry.get_text()
+        user_input_alt_venue = self._ui.alt_venue_entry.get_text()
+        self._ui.destroy_muc_dialog.destroy()
+        self.destroy_handler(user_input_reason, user_input_alt_venue)
+
+    def _on_cancel_button_clicked(self, widget):
+        self._ui.destroy_muc_dialog.destroy()
 
 
 class CertificateDialog(Gtk.ApplicationWindow):
