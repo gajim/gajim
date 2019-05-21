@@ -242,6 +242,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _select_new_match(self, entry, direction):
         selected_row = self.listbox.get_selected_row()
+        if selected_row is None:
+            return
+
         index = selected_row.get_index()
 
         if direction == 'next':
@@ -440,6 +443,7 @@ class ContactRow(Gtk.Grid):
         self.jid_label.set_xalign(0)
         self.jid_label.set_width_chars(25)
         self.jid_label.set_halign(Gtk.Align.START)
+        self.jid_label.get_style_context().add_class('dim-label')
         middle_box.add(self.jid_label)
 
         self.add(middle_box)
