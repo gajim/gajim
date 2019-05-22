@@ -48,6 +48,8 @@ class UserNickname(BaseModule):
                                                  str(properties.jid)):
             contact.contact_name = nick
 
+        self._log.info('Nickname for %s: %s', properties.jid, nick)
+
         app.nec.push_incoming_event(
             NetworkEvent('nickname-received',
                          account=self._account,
