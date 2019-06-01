@@ -24,20 +24,16 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">18</property>
-            <property name="margin_right">18</property>
-            <property name="margin_top">18</property>
-            <property name="margin_bottom">18</property>
+            <property name="border_width">18</property>
             <property name="spacing">18</property>
             <child>
-              <object class="GtkBox" id="vbox6">
+              <object class="GtkBox">
                 <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">never</property>
@@ -71,10 +67,10 @@
                       <object class="GtkToolButton" id="install_plugin_button">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Install Plugin from File</property>
+                        <property name="tooltip_text" translatable="yes">Install Plugin from ZIP-File</property>
                         <property name="label" translatable="yes">Install from File…</property>
                         <property name="use_underline">True</property>
-                        <property name="icon_name">document-open-symbolic</property>
+                        <property name="icon_name">system-software-install-symbolic</property>
                         <signal name="clicked" handler="on_install_plugin_button_clicked" swapped="no"/>
                       </object>
                       <packing>
@@ -88,7 +84,7 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Uninstall Plugin</property>
                         <property name="use_underline">True</property>
-                        <property name="icon_name">list-remove-symbolic</property>
+                        <property name="icon_name">edit-delete-symbolic</property>
                         <signal name="clicked" handler="on_uninstall_plugin_button_clicked" swapped="no"/>
                       </object>
                       <packing>
@@ -250,7 +246,7 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="label5">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
@@ -282,7 +278,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label4">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
@@ -315,7 +311,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label6">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
@@ -362,7 +358,7 @@
           </object>
         </child>
         <child type="tab">
-          <object class="GtkLabel" id="label1">
+          <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Installed</property>
