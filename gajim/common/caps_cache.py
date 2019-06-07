@@ -504,3 +504,21 @@ class MucCapsCache:
                 except KeyError:
                     pass
         return allowed
+
+    def get_room_infos(self, jid):
+        room_info = {}
+        if jid in self.cache:
+            for form in self.cache[jid].data:
+                try:
+                    room_info['name'] = form['muc#roomconfig_roomname'].value
+                except KeyError:
+                    room_info['name'] = None
+                try:
+                    room_info['desc'] = form['muc#roominfo_description'].value
+                except KeyError:
+                    room_info['desc'] = None
+                try:
+                    room_info['lang'] = form['muc#roominfo_lang'].value
+                except KeyError:
+                    room_info['lang'] = None
+        return room_info or None
