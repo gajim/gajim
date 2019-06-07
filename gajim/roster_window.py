@@ -4252,6 +4252,10 @@ class RosterWindow:
             dialog.popup()
             return
 
+        # Check if something is selected
+        if treeview.get_selection().count_selected_rows() == 0:
+            return
+
         # a roster entry was dragged and dropped somewhere in the roster
 
         # source: the row that was dragged
