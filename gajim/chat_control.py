@@ -947,9 +947,9 @@ class ChatControl(ChatControlBase):
         return app.nicks[self.account]
 
     def add_message(self, text, frm='', tim=None, encrypted=None,
-    subject=None, xhtml=None, xep0184_id=None,
-    displaymarking=None, msg_log_id=None, correct_id=None,
-    message_id=None, additional_data=None):
+                    subject=None, xhtml=None, xep0184_id=None,
+                    displaymarking=None, msg_log_id=None, correct_id=None,
+                    message_id=None, additional_data=None):
         """
         Print a line in the conversation
 

@@ -1277,8 +1277,8 @@ class GroupchatControl(ChatControlBase):
         return self.model.get_iter(path)
 
     def add_message(self, text, contact='', tim=None, xhtml=None,
-    graphics=True, displaymarking=None, correct_id=None, message_id=None,
-    encrypted=None, additional_data=None):
+                    displaymarking=None, correct_id=None, message_id=None,
+                    encrypted=None, additional_data=None):
         """
         Add message to the ConversationsTextview
 
@@ -1319,7 +1319,7 @@ class GroupchatControl(ChatControlBase):
 
         ChatControlBase.add_message(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
-            graphics=graphics, displaymarking=displaymarking,
+            displaymarking=displaymarking,
             correct_id=correct_id, message_id=message_id, encrypted=encrypted,
             additional_data=additional_data)
 
