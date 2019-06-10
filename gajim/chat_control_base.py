@@ -923,14 +923,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.received_history_pos = pos
 
     def add_info_message(self, text):
-        jid = self.contact.jid
         self.conv_textview.print_conversation_line(
-            text, jid, 'info', '', None, graphics=False)
+            text, 'info', '', None, graphics=False)
 
     def add_status_message(self, text):
-        jid = self.contact.jid
         self.conv_textview.print_conversation_line(
-            text, jid, 'status', '', None)
+            text, 'status', '', None)
 
     def add_message(self, text, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
@@ -958,7 +956,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        textview.print_conversation_line(text, jid, kind, name, tim,
+        textview.print_conversation_line(text, kind, name, tim,
             other_tags_for_name, other_tags_for_time, other_tags_for_text,
             subject, old_kind, xhtml, simple=simple, graphics=graphics,
             displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,

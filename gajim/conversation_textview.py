@@ -936,7 +936,7 @@ class ConversationTextview(GObject.GObject):
         # Should not happen, but who knows
         return None, None
 
-    def print_conversation_line(self, text, jid, kind, name, tim,
+    def print_conversation_line(self, text, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     subject=None, old_kind=None, xhtml=None, simple=False, graphics=True,
     displaymarking=None, msg_stanza_id=None, correct_id=None, additional_data=None,
