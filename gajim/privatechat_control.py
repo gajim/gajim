@@ -114,7 +114,7 @@ class PrivateChatControl(ChatControl):
             message = _('{nick} is now known '
                         'as {new_nick}').format(nick=nick, new_nick=new_nick)
 
-        self.print_conversation(message, 'info')
+        self.add_info_message(message)
 
         self.draw_banner()
         app.interface.msg_win_mgr.change_key(str(event.properties.jid),
@@ -140,14 +140,14 @@ class PrivateChatControl(ChatControl):
         if event.properties.is_muc_self_presence:
             message = _('You are now {show}{status}').format(show=show,
                                                              status=status)
-            self.print_conversation(message, 'info')
+            self.add_status_message(message)
 
         elif app.config.get_per('rooms', self.room_name,
                                 'print_status', status_default):
             message = _('{nick} is now {show}{status}').format(nick=nick,
                                                                show=show,
                                                                status=status)
-            self.print_conversation(message, 'info')
+            self.add_status_message(message)
 
         self.parent_win.redraw_tab(self)
         self.update_ui()

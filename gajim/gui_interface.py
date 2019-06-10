@@ -206,7 +206,7 @@ class Interface:
         ctrl = self.msg_win_mgr.get_control(event.properties.jid.getBare(),
                                             event.account)
         if ctrl and ctrl.type_id == message_control.TYPE_GC:
-            ctrl.print_conversation('Error: %s' % event.properties.error)
+            ctrl.add_info_message('Error: %s' % event.properties.error)
 
     @staticmethod
     def handle_event_connection_lost(obj):
@@ -360,12 +360,12 @@ class Interface:
                         account=account, name=nick, show=show)
                     ctrl = self.new_private_chat(gc_c, account, session)
 
-                ctrl.print_conversation(_('Error %(code)s: %(msg)s') % {
-                    'code': obj.error_code, 'msg': obj.error_msg}, 'status')
+                ctrl.add_info_message(_('Error %(code)s: %(msg)s') % {
+                    'code': obj.error_code, 'msg': obj.error_msg})
                 return
 
-            gc_control.print_conversation(_('Error %(code)s: %(msg)s') % {
-                'code': obj.error_code, 'msg': obj.error_msg}, 'status')
+            gc_control.add_info_message(_('Error %(code)s: %(msg)s') % {
+                'code': obj.error_code, 'msg': obj.error_msg})
             if gc_control.parent_win and \
             gc_control.parent_win.get_active_jid() == jid:
                 gc_control.set_subject(gc_control.subject)
@@ -509,9 +509,9 @@ class Interface:
                     gc_control = self.msg_win_mgr.get_gc_control(obj.jid,
                         account)
                     if gc_control:
-                        gc_control.print_conversation(
+                        gc_control.add_info_message(
                             _('%(jid)s has been invited in this room') % {
-                            'jid': jid}, graphics=False)
+                            'jid': jid})
             del app.automatic_rooms[account][obj.jid]
         else:
             win = app.get_app_window('GroupchatConfig', account, obj.jid)
@@ -525,14 +525,13 @@ class Interface:
                                                      event.account)
         if gc_control:
             if event.reason:
-                gc_control.print_conversation(
+                gc_control.add_info_message(
                     _('%(jid)s declined the invitation: %(reason)s') % {
-                        'jid': event.from_, 'reason': event.reason},
-                    graphics=False)
+                        'jid': event.from_, 'reason': event.reason})
             else:
-                gc_control.print_conversation(
+                gc_control.add_info_message(
                     _('%(jid)s declined the invitation') % {
-                        'jid': event.from_}, graphics=False)
+                        'jid': event.from_})
 
     def handle_event_gc_invitation(self, event):
         if helpers.allow_popup_window(event.account) or not self.systray_enabled:

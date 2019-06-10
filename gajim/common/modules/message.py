@@ -226,7 +226,7 @@ class Message(BaseModule):
             if not event.msgtxt:
                 event.msgtxt = _('message')
             if event.gc_control:
-                event.gc_control.print_conversation(event.msgtxt)
+                event.gc_control.add_info_message(event.msgtxt)
             else:
                 self._log_error_message(event)
                 error_msg = event.stanza.getErrorMsg() or event.msgtxt

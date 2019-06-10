@@ -560,7 +560,7 @@ class ChatControl(ChatControlBase):
         if state in ('connecting', 'connected', 'stop', 'error') and reason:
             info = _('%(type)s state : %(state)s, reason: %(reason)s') % {
                     'type': jingle_type.capitalize(), 'state': state, 'reason': reason}
-            self.print_conversation(info, 'info')
+            self.add_info_message(info)
 
         states = {'connecting': self.JINGLE_STATE_CONNECTING,
                 'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
@@ -967,16 +967,8 @@ class ChatControl(ChatControlBase):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        if frm == 'status':
-            if not app.config.get('print_status_in_chats'):
-                return
-            kind = 'status'
-            name = ''
-        elif frm == 'error':
+        if frm == 'error':
             kind = 'error'
-            name = ''
-        elif frm == 'info':
-            kind = 'info'
             name = ''
         else:
             if not frm:
@@ -1217,12 +1209,12 @@ class ChatControl(ChatControlBase):
         if self.contact != obj.contact:
             return
         if obj.name == 'ping-sent':
-            self.print_conversation(_('Ping?'), 'status')
+            self.add_info_message(_('Ping?'))
         elif obj.name == 'ping-reply':
-            self.print_conversation(
-                _('Pong! (%s seconds)') % obj.seconds, 'status')
+            self.add_info_message(
+                _('Pong! (%s seconds)') % obj.seconds)
         elif obj.name == 'ping-error':
-            self.print_conversation(_('Error.'), 'status')
+            self.add_info_message(_('Error.'))
 
     def show_avatar(self):
         if not app.config.get('show_avatar_in_chat'):
@@ -1422,11 +1414,14 @@ class ChatControl(ChatControlBase):
         self.update_ui()
         self.parent_win.redraw_tab(self)
 
+        if not app.config.get('print_status_in_chats'):
+            return
+
         if status:
             status = '- %s' % status
         status_line = _('%(name)s is now %(show)s %(status)s') % {
             'name': name, 'show': uf_show, 'status': status or ''}
-        self.print_conversation(status_line, 'status')
+        self.add_status_message(status_line)
 
     def _info_bar_show_message(self):
         if self.info_bar.get_visible():

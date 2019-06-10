@@ -1325,19 +1325,14 @@ class GroupchatControl(ChatControlBase):
             additional_data = AdditionalDataDict()
         other_tags_for_name = []
         other_tags_for_text = []
-        if contact:
-            if contact == self.nick: # it's us
-                kind = 'outgoing'
-            elif contact == 'info':
-                kind = 'info'
-                contact = None
-            else:
-                kind = 'incoming'
-                # muc-specific chatstate
-                if self.parent_win:
-                    self.parent_win.redraw_tab(self, 'newmsg')
+
+        if contact == self.nick: # it's us
+            kind = 'outgoing'
         else:
-            kind = 'status'
+            kind = 'incoming'
+            # muc-specific chatstate
+            if self.parent_win:
+                self.parent_win.redraw_tab(self, 'newmsg')
 
         if kind == 'incoming': # it's a message NOT from us
             # highlighting and sounds
@@ -1476,7 +1471,7 @@ class GroupchatControl(ChatControlBase):
 
         just_joined = self.join_time > time.time() - 10
         if app.config.get('show_subject_on_join') or not just_joined:
-            self.print_conversation(text)
+            self.add_info_message(text)
 
         if event.subject == '':
             self.subject_button.hide()
@@ -1517,7 +1512,7 @@ class GroupchatControl(ChatControlBase):
             self.is_anonymous = True
 
         for change in changes:
-            self.print_conversation(change)
+            self.add_info_message(change)
 
     def _nec_signed_in(self, obj):
         if obj.conn.name != self.account:
@@ -1552,13 +1547,13 @@ class GroupchatControl(ChatControlBase):
 
         nick = obj.contact.get_shown_name()
         if obj.name == 'ping-sent':
-            self.print_conversation(_('Ping? (%s)') % nick)
+            self.add_info_message(_('Ping? (%s)') % nick)
         elif obj.name == 'ping-reply':
-            self.print_conversation(
+            self.add_info_message(
                 _('Pong! (%(nick)s %(delay)s s.)') % {'nick': nick,
                 'delay': obj.seconds})
         elif obj.name == 'ping-error':
-            self.print_conversation(_('Error.'))
+            self.add_info_message(_('Error.'))
 
     @property
     def is_connected(self) -> bool:
@@ -1769,8 +1764,7 @@ class GroupchatControl(ChatControlBase):
 
         if not self.is_connected:
             # We just joined the room
-            self.print_conversation(_('You (%s) joined the room') % nick,
-                                    'info', graphics=False)
+            self.add_info_message(_('You (%s) joined the room') % nick)
             self.add_contact_to_roster(nick)
             self.got_connected()
 
@@ -1788,27 +1782,26 @@ class GroupchatControl(ChatControlBase):
                     # We just need to invite contacts
                     for jid in app.automatic_rooms[self.account][self.room_jid]['invities']:
                         con.get_module('MUC').invite(self.room_jid, jid)
-                        self.print_conversation(
+                        self.add_info_message(
                             _('%(jid)s has been '
-                              'invited in this room') % {'jid': jid},
-                            graphics=False)
+                              'invited in this room') % {'jid': jid})
 
         if StatusCode.NON_ANONYMOUS in status_codes:
-            self.print_conversation(
+            self.add_info_message(
                 _('Any occupant is allowed to see your full JID'))
             self.is_anonymous = False
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
-            self.print_conversation(_('Room logging is enabled'))
+            self.add_info_message(_('Room logging is enabled'))
 
         if StatusCode.NICKNAME_MODIFIED in status_codes:
-            self.print_conversation(\
+            self.add_info_message(\
                 _('The server has assigned or modified your roomnick'))
 
         if event.properties.is_new_room:
             app.connections[self.account].get_module('Discovery').disco_muc(
                 self.room_jid, self._on_room_created, update=True)
-            self.print_conversation(_('A new room has been created'))
+            self.add_info_message(_('A new room has been created'))
             con = app.connections[self.account]
             con.get_module('MUC').request_config(self.room_jid)
 
@@ -1831,7 +1824,7 @@ class GroupchatControl(ChatControlBase):
                         'as {new_nick}').format(nick=nick, new_nick=new_nick)
             self._nick_completion.contact_renamed(nick, new_nick)
 
-        self.print_conversation(message, 'info', graphics=False)
+        self.add_info_message(message)
 
         tv = self.conv_textview
         if nick in tv.last_received_message_id:
@@ -1858,14 +1851,14 @@ class GroupchatControl(ChatControlBase):
         if event.properties.is_muc_self_presence:
             message = _('You are now {show}{status}').format(show=show,
                                                              status=status)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_status_message(message)
 
         elif app.config.get_per('rooms', self.room_jid,
                                 'print_status', status_default):
             message = _('{nick} is now {show}{status}').format(nick=nick,
                                                                show=show,
                                                                status=status)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_status_message(message)
 
         self.draw_contact(nick)
 
@@ -1899,7 +1892,7 @@ class GroupchatControl(ChatControlBase):
                             actor=actor,
                             reason=reason)
 
-        self.print_conversation(message, graphics=False)
+        self.add_info_message(message)
         self.draw_contact(nick)
         self.update_actions()
 
@@ -1930,7 +1923,7 @@ class GroupchatControl(ChatControlBase):
                                                         actor=actor,
                                                         reason=reason)
 
-        self.print_conversation(message, graphics=False)
+        self.add_info_message(message)
         self.remove_contact(nick)
         self.add_contact_to_roster(nick)
         self.update_actions()
@@ -1960,39 +1953,39 @@ class GroupchatControl(ChatControlBase):
             #Group Chat: Server kicked us because of an server error
             message = _('You have left due '
                         'to an error{reason}').format(reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif StatusCode.REMOVED_KICKED in status_codes:
             #Group Chat: We have been kicked by Alice: reason
             message = _('You have been '
                         'kicked{actor}{reason}').format(actor=actor,
                                                         reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif StatusCode.REMOVED_BANNED in status_codes:
             #Group Chat: We have been banned by Alice: reason
             message = _('You have been '
                         'banned{actor}{reason}').format(actor=actor,
                                                         reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
             #Group Chat: We were removed because of an affiliation change
             reason = _(': Affiliation changed')
             message = message.format(actor=actor, reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
             #Group Chat: Room configuration changed
             reason = _(': Room configuration changed to members-only')
             message = message.format(actor=actor, reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
             #Group Chat: Kicked because of server shutdown
             reason = ': System shutdown'
             message = message.format(actor=actor, reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
             self.autorejoin = True
 
         self.got_disconnected()
@@ -2029,7 +2022,7 @@ class GroupchatControl(ChatControlBase):
                 #Group Chat: User was kicked because of an server error: reason
                 message = _('{nick} has left due to '
                             'an error{reason}').format(nick=nick, reason=reason)
-                self.print_conversation(message, 'info', graphics=False)
+                self.add_info_message(message)
 
         elif StatusCode.REMOVED_KICKED in status_codes:
             #Group Chat: User was kicked by Alice: reason
@@ -2037,7 +2030,7 @@ class GroupchatControl(ChatControlBase):
                         'kicked{actor}{reason}').format(nick=nick,
                                                         actor=actor,
                                                         reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif StatusCode.REMOVED_BANNED in status_codes:
             #Group Chat: User was banned by Alice: reason
@@ -2045,22 +2038,22 @@ class GroupchatControl(ChatControlBase):
                         'banned{actor}{reason}').format(nick=nick,
                                                         actor=actor,
                                                         reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
             reason = _(': Affiliation changed')
             message = message.format(nick=nick, actor=actor, reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
             reason = _(': Room configuration changed to members-only')
             message = message.format(nick=nick, actor=actor, reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         elif print_join_left:
             message = _('{nick} has left{reason}').format(nick=nick,
                                                           reason=reason)
-            self.print_conversation(message, 'info', graphics=False)
+            self.add_info_message(message)
 
         self.remove_contact(nick)
         self.draw_all_roles()
@@ -2079,8 +2072,7 @@ class GroupchatControl(ChatControlBase):
         self.add_contact_to_roster(nick)
 
         if self.is_connected and print_join_left:
-            self.print_conversation(_('%s has joined the group chat') % nick,
-                                    graphics=False)
+            self.add_info_message(_('%s has joined the group chat') % nick)
 
     def _on_presence_error(self, event):
         if event.account != self.account:
@@ -2135,7 +2127,7 @@ class GroupchatControl(ChatControlBase):
                 self.account, self.room_jid, win)
 
         else:
-            self.print_conversation(
+            self.add_info_message(
                 'Error %s: %s' % (error_type.value, error_message))
 
         self.autorejoin = False
@@ -2192,13 +2184,13 @@ class GroupchatControl(ChatControlBase):
         reason = '' if reason is None else ': %s' % reason
 
         message = _('Room has been destroyed')
-        self.print_conversation(message, 'info', graphics=False)
+        self.add_info_message(message)
 
         alternate = destroyed.alternate
         if alternate is not None:
             join_message = _('You can join this room '
                              'instead: xmpp:%s?join') % alternate
-            self.print_conversation(join_message, 'info', graphics=False)
+            self.add_info_message(join_message)
 
         self.autorejoin = False
         self.got_disconnected()
@@ -2492,8 +2484,8 @@ class GroupchatControl(ChatControlBase):
 
             con = app.connections[self.account]
             con.get_module('MUC').invite(self.room_jid, contact_jid)
-            self.print_conversation(_('%(jid)s has been invited in this room') %
-                                    {'jid': contact_jid}, graphics=False)
+            self.add_info_message(_('%(jid)s has been invited in this room') %
+                                    {'jid': contact_jid})
 
     def _jid_not_blocked(self, bare_jid: str) -> bool:
         fjid = self.room_jid + '/' + bare_jid

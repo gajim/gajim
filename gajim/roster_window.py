@@ -3013,9 +3013,9 @@ class RosterWindow:
             gc_control = app.interface.msg_win_mgr.get_gc_control(room_jid,
                 room_account)
             if gc_control:
-                gc_control.print_conversation(
+                gc_control.add_info_message(
                     _('%(jid)s has been invited in this room') % {
-                    'jid': contact_jid}, graphics=False)
+                    'jid': contact_jid})
 
     def on_all_groupchat_maximized(self, widget, group_list):
         for (contact, account) in group_list:
