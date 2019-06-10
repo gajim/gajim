@@ -1199,7 +1199,7 @@ class GroupchatControl(ChatControlBase):
             return
         if obj.archive_jid != self.room_jid:
             return
-        self.print_conversation(
+        self.add_message(
             obj.msgtxt, contact=obj.nick,
             tim=obj.timestamp, correct_id=obj.correct_id,
             encrypted=obj.encrypted,
@@ -1212,7 +1212,7 @@ class GroupchatControl(ChatControlBase):
 
         if not obj.nick:
             # message from server
-            self.print_conversation(
+            self.add_message(
                 obj.msgtxt, tim=obj.timestamp,
                 xhtml=obj.xhtml_msgtxt, displaymarking=obj.displaymarking,
                 additional_data=obj.additional_data)
@@ -1221,7 +1221,7 @@ class GroupchatControl(ChatControlBase):
             if obj.delayed:
                 # don't print xhtml if it's an old message.
                 # Like that xhtml messages are grayed too.
-                self.print_old_conversation(
+                self.add_delayed_message(
                     obj.msgtxt, contact=obj.nick,
                     tim=obj.timestamp, xhtml=None, encrypted=obj.encrypted,
                     displaymarking=obj.displaymarking, msg_stanza_id=obj.id_,
@@ -1229,7 +1229,7 @@ class GroupchatControl(ChatControlBase):
             else:
                 if obj.nick == self.nick:
                     self.last_sent_txt = obj.msgtxt
-                self.print_conversation(
+                self.add_message(
                     obj.msgtxt, contact=obj.nick,
                     tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
                     displaymarking=obj.displaymarking, encrypted=obj.encrypted,
@@ -1288,7 +1288,7 @@ class GroupchatControl(ChatControlBase):
         return self.model.get_iter(path)
 
 
-    def print_old_conversation(self, text, contact='', tim=None, xhtml=None,
+    def add_delayed_message(self, text, contact='', tim=None, xhtml=None,
     displaymarking=None, msg_stanza_id=None, encrypted=None, additional_data=None):
         if additional_data is None:
             additional_data = AdditionalDataDict()
@@ -1305,13 +1305,13 @@ class GroupchatControl(ChatControlBase):
         else:
             small_attr = []
 
-        ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
+        ChatControlBase.add_message(self, text, kind, contact, tim,
             small_attr, small_attr + ['restored_message'],
             small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml,
             displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,
             encrypted=encrypted, additional_data=additional_data)
 
-    def print_conversation(self, text, contact='', tim=None, xhtml=None,
+    def add_message(self, text, contact='', tim=None, xhtml=None,
     graphics=True, displaymarking=None, correct_id=None, msg_stanza_id=None,
     encrypted=None, additional_data=None):
         """
@@ -1351,7 +1351,7 @@ class GroupchatControl(ChatControlBase):
 
             self.check_and_possibly_add_focus_out_line()
 
-        ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
+        ChatControlBase.add_message(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
             graphics=graphics, displaymarking=displaymarking,
             correct_id=correct_id, msg_stanza_id=msg_stanza_id, encrypted=encrypted,
@@ -1531,7 +1531,7 @@ class GroupchatControl(ChatControlBase):
                 frm = ''
                 if obj.sent:
                     frm = 'out'
-                obj.session.control.print_conversation(obj.msgtxt, frm,
+                obj.session.control.add_message(obj.msgtxt, frm,
                     tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
                     displaymarking=obj.displaymarking, msg_stanza_id=obj.id_,
                     correct_id=obj.correct_id)

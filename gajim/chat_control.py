@@ -855,7 +855,7 @@ class ChatControl(ChatControlBase):
         if obj.kind == KindConstant.CHAT_MSG_SENT:
             kind = 'outgoing'
 
-        self.print_conversation(
+        self.add_message(
             obj.msgtxt, kind, tim=obj.timestamp,
             encrypted=obj.encrypted, correct_id=obj.correct_id,
             msg_stanza_id=obj.message_id, additional_data=obj.additional_data)
@@ -878,7 +878,7 @@ class ChatControl(ChatControlBase):
             typ = 'out'
             if obj.jid != app.get_jid_from_account(obj.conn.name):
                 xep0184_id = obj.id_
-        self.print_conversation(obj.msgtxt, typ,
+        self.add_message(obj.msgtxt, typ,
             tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
             xhtml=obj.xhtml, displaymarking=obj.displaymarking,
             msg_log_id=obj.msg_log_id, msg_stanza_id=obj.id_, correct_id=obj.correct_id,
@@ -913,7 +913,7 @@ class ChatControl(ChatControlBase):
             gtkgui_helpers.remove_css_class(
                 self.msg_textview, 'gajim-msg-correcting')
 
-        self.print_conversation(obj.message, self.contact.jid, tim=obj.timestamp,
+        self.add_message(obj.message, self.contact.jid, tim=obj.timestamp,
             encrypted=obj.encrypted, xep0184_id=xep0184_id, xhtml=obj.xhtml,
             displaymarking=displaymarking, msg_stanza_id=id_,
             correct_id=obj.correct_id,
@@ -946,7 +946,7 @@ class ChatControl(ChatControlBase):
     def get_our_nick(self):
         return app.nicks[self.account]
 
-    def print_conversation(self, text, frm='', tim=None, encrypted=None,
+    def add_message(self, text, frm='', tim=None, encrypted=None,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
     displaymarking=None, msg_log_id=None, correct_id=None,
     msg_stanza_id=None, additional_data=None):
@@ -986,7 +986,7 @@ class ChatControl(ChatControlBase):
                     xhtml = create_xhtml(text)
                     if xhtml:
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
-        ChatControlBase.print_conversation_line(self, text, kind, name, tim,
+        ChatControlBase.add_message(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
             simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
             msg_log_id=msg_log_id, msg_stanza_id=msg_stanza_id,
@@ -1318,7 +1318,7 @@ class ChatControl(ChatControlBase):
             if row.subject:
                 msg = _('Subject: %(subject)s\n%(message)s') % \
                     {'subject': row.subject, 'message': msg}
-            ChatControlBase.print_conversation_line(self, msg, kind, name,
+            ChatControlBase.add_message(self, msg, kind, name,
                 tim, small_attr, small_attr + ['restored_message'],
                 small_attr + ['restored_message'], False,
                 old_kind=local_old_kind, xhtml=xhtml, additional_data=additional_data)
@@ -1350,7 +1350,7 @@ class ChatControl(ChatControlBase):
                 kind = 'print_queue'
             if event.sent_forwarded:
                 kind = 'out'
-            self.print_conversation(event.message, kind, tim=event.time,
+            self.add_message(event.message, kind, tim=event.time,
                 encrypted=event.encrypted, subject=event.subject,
                 xhtml=event.xhtml, displaymarking=event.displaymarking,
                 correct_id=event.correct_id, additional_data=event.additional_data)

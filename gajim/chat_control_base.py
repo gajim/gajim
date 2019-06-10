@@ -932,7 +932,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.conv_textview.print_conversation_line(
             text, jid, 'status', '', None)
 
-    def print_conversation_line(self, text, kind, name, tim,
+    def add_message(self, text, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
