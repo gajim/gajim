@@ -858,7 +858,7 @@ class ChatControl(ChatControlBase):
         self.add_message(
             obj.msgtxt, kind, tim=obj.timestamp,
             encrypted=obj.encrypted, correct_id=obj.correct_id,
-            msg_stanza_id=obj.message_id, additional_data=obj.additional_data)
+            message_id=obj.message_id, additional_data=obj.additional_data)
 
     def _nec_decrypted_message_received(self, obj):
         if not obj.msgtxt:
@@ -881,7 +881,7 @@ class ChatControl(ChatControlBase):
         self.add_message(obj.msgtxt, typ,
             tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
             xhtml=obj.xhtml, displaymarking=obj.displaymarking,
-            msg_log_id=obj.msg_log_id, msg_stanza_id=obj.id_, correct_id=obj.correct_id,
+            msg_log_id=obj.msg_log_id, message_id=obj.message_id, correct_id=obj.correct_id,
             xep0184_id=xep0184_id, additional_data=obj.additional_data)
         if obj.msg_log_id:
             pw = self.parent_win
@@ -899,11 +899,11 @@ class ChatControl(ChatControlBase):
             return
 
         self.last_sent_msg = obj.stanza_id
-        id_ = obj.msg_iq.getID()
+        message_id = obj.msg_iq.getID()
         xep0184_id = None
         if self.contact.jid != app.get_jid_from_account(self.account):
             if app.config.get_per('accounts', self.account, 'request_receipt'):
-                xep0184_id = id_
+                xep0184_id = message_id
         if obj.label:
             displaymarking = obj.label.getTag('displaymarking')
         else:
@@ -915,7 +915,7 @@ class ChatControl(ChatControlBase):
 
         self.add_message(obj.message, self.contact.jid, tim=obj.timestamp,
             encrypted=obj.encrypted, xep0184_id=xep0184_id, xhtml=obj.xhtml,
-            displaymarking=displaymarking, msg_stanza_id=id_,
+            displaymarking=displaymarking, message_id=message_id,
             correct_id=obj.correct_id,
             additional_data=obj.additional_data)
 
@@ -949,7 +949,7 @@ class ChatControl(ChatControlBase):
     def add_message(self, text, frm='', tim=None, encrypted=None,
     subject=None, xhtml=None, xep0184_id=None,
     displaymarking=None, msg_log_id=None, correct_id=None,
-    msg_stanza_id=None, additional_data=None):
+    message_id=None, additional_data=None):
         """
         Print a line in the conversation
 
@@ -989,7 +989,7 @@ class ChatControl(ChatControlBase):
         ChatControlBase.add_message(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
             xep0184_id=xep0184_id, displaymarking=displaymarking,
-            msg_log_id=msg_log_id, msg_stanza_id=msg_stanza_id,
+            msg_log_id=msg_log_id, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
             encrypted=encrypted)
         if text.startswith('/me ') or text.startswith('/me\n'):

@@ -206,9 +206,9 @@ class ConversationTextview(GObject.GObject):
         self.handlers = {}
         self.image_cache = {}
         self.xep0184_marks = {}
-        # self.last_sent_message_id = msg_stanza_id
+        # self.last_sent_message_id = message_id
         self.last_sent_message_id = None
-        # last_received_message_id[name] = (msg_stanza_id, line_start_mark)
+        # last_received_message_id[name] = (message_id, line_start_mark)
         self.last_received_message_id = {}
         self.autoscroll = True
         # connect signals
@@ -894,9 +894,9 @@ class ConversationTextview(GObject.GObject):
         buffer_.insert_with_tags_by_name(iter_, '\n', 'eol')
         self.just_cleared = False
 
-    def get_end_mark(self, msg_stanza_id, start_mark):
+    def get_end_mark(self, message_id, start_mark):
         for index, msg in enumerate(self.message_list):
-            if msg[2] == msg_stanza_id and msg[1] == start_mark:
+            if msg[2] == message_id and msg[1] == start_mark:
                 try:
                     end_mark = self.message_list[index + 1][1]
                     end_mark_name = end_mark.get_name()
@@ -914,7 +914,7 @@ class ConversationTextview(GObject.GObject):
         return None, None
 
     def get_insert_mark(self, timestamp):
-        # message_list = [(timestamp, line_start_mark, msg_stanza_id)]
+        # message_list = [(timestamp, line_start_mark, message_id)]
         # We check if this is a new Message
         try:
             if self.message_list[-1][0] <= timestamp:
@@ -935,7 +935,7 @@ class ConversationTextview(GObject.GObject):
     def print_conversation_line(self, text, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     subject=None, old_kind=None, xhtml=None, graphics=True,
-    displaymarking=None, msg_stanza_id=None, correct_id=None, additional_data=None,
+    displaymarking=None, message_id=None, correct_id=None, additional_data=None,
     encrypted=None):
         """
         Print 'chat' type messages
@@ -962,12 +962,12 @@ class ConversationTextview(GObject.GObject):
                 index, insert_mark, old_txt = \
                     self.correct_message(correct_id, kind, name)
                 if correct_id in self.corrected_text_list:
-                    self.corrected_text_list[msg_stanza_id] = \
+                    self.corrected_text_list[message_id] = \
                         self.corrected_text_list[correct_id] + '\n{}' \
                         .format(GLib.markup_escape_text(old_txt))
                     del self.corrected_text_list[correct_id]
                 else:
-                    self.corrected_text_list[msg_stanza_id] = \
+                    self.corrected_text_list[message_id] = \
                         _('<b>Message corrected. Original message:</b>\n{}') \
                         .format(GLib.markup_escape_text(old_txt))
                 corrected = True
@@ -985,7 +985,7 @@ class ConversationTextview(GObject.GObject):
             'Printed Line: %s, %s, %s, inserted after: %s'
             ', stanza-id: %s, correct-id: %s',
             self.line, text, tim, insert_mark_name,
-            msg_stanza_id, correct_id)
+            message_id, correct_id)
 
         if not insert_mark:  # Texview is empty or Message is new
             iter_ = buffer_.get_end_iter()
@@ -1054,14 +1054,14 @@ class ConversationTextview(GObject.GObject):
 
         if corrected:
             # Show Correction Icon
-            buffer_.create_tag(tag_name=msg_stanza_id)
+            buffer_.create_tag(tag_name=message_id)
             buffer_.insert(iter_, ' ')
             icon = load_icon('document-edit-symbolic', self.tv, pixbuf=True)
             buffer_.insert_pixbuf(
                 iter_, icon)
             tag_start_iter = iter_.copy()
             tag_start_iter.backward_chars(2)
-            buffer_.apply_tag_by_name(msg_stanza_id, tag_start_iter, iter_)
+            buffer_.apply_tag_by_name(message_id, tag_start_iter, iter_)
 
         # If we inserted a Line we add a new line at the end
         if insert_mark:
@@ -1075,18 +1075,18 @@ class ConversationTextview(GObject.GObject):
 
         if index is None:
             # New Message
-            self.message_list.append((tim, new_mark, msg_stanza_id))
+            self.message_list.append((tim, new_mark, message_id))
         elif corrected:
             # Replace the corrected message
-            self.message_list[index] = (tim, new_mark, msg_stanza_id)
+            self.message_list[index] = (tim, new_mark, message_id)
         else:
             # We insert the message at index
-            self.message_list.insert(index, (tim, new_mark, msg_stanza_id))
+            self.message_list.insert(index, (tim, new_mark, message_id))
 
         if kind == 'incoming':
-            self.last_received_message_id[name] = (msg_stanza_id, new_mark)
+            self.last_received_message_id[name] = (message_id, new_mark)
         elif kind == 'outgoing':
-            self.last_sent_message_id = (msg_stanza_id, new_mark)
+            self.last_sent_message_id = (message_id, new_mark)
 
         if not insert_mark:
             if self.autoscroll or kind == 'outgoing':

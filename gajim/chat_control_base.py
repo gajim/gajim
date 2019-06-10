@@ -934,7 +934,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     restored=False, subject=None, old_kind=None, xhtml=None,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
-    msg_stanza_id=None, correct_id=None, additional_data=None,
+    message_id=None, correct_id=None, additional_data=None,
     encrypted=None):
         """
         Print 'chat' type messages
@@ -959,7 +959,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         textview.print_conversation_line(text, kind, name, tim,
             other_tags_for_name, other_tags_for_time, other_tags_for_text,
             subject, old_kind, xhtml, graphics=graphics,
-            displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,
+            displaymarking=displaymarking, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
             encrypted=encrypted)
 

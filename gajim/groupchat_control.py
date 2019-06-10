@@ -1202,7 +1202,7 @@ class GroupchatControl(ChatControlBase):
             obj.msgtxt, contact=obj.nick,
             tim=obj.timestamp, correct_id=obj.correct_id,
             encrypted=obj.encrypted,
-            msg_stanza_id=obj.message_id,
+            message_id=obj.message_id,
             additional_data=obj.additional_data)
 
     def _nec_gc_message_received(self, obj):
@@ -1222,7 +1222,7 @@ class GroupchatControl(ChatControlBase):
                 obj.msgtxt, contact=obj.nick,
                 tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
                 displaymarking=obj.displaymarking, encrypted=obj.encrypted,
-                correct_id=obj.correct_id, msg_stanza_id=obj.id_,
+                correct_id=obj.correct_id, message_id=obj.message_id,
                 additional_data=obj.additional_data)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
@@ -1277,7 +1277,7 @@ class GroupchatControl(ChatControlBase):
         return self.model.get_iter(path)
 
     def add_message(self, text, contact='', tim=None, xhtml=None,
-    graphics=True, displaymarking=None, correct_id=None, msg_stanza_id=None,
+    graphics=True, displaymarking=None, correct_id=None, message_id=None,
     encrypted=None, additional_data=None):
         """
         Add message to the ConversationsTextview
@@ -1320,7 +1320,7 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.add_message(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
             graphics=graphics, displaymarking=displaymarking,
-            correct_id=correct_id, msg_stanza_id=msg_stanza_id, encrypted=encrypted,
+            correct_id=correct_id, message_id=message_id, encrypted=encrypted,
             additional_data=additional_data)
 
     def get_nb_unread(self):
@@ -1499,7 +1499,7 @@ class GroupchatControl(ChatControlBase):
                     frm = 'out'
                 obj.session.control.add_message(obj.msgtxt, frm,
                     tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
-                    displaymarking=obj.displaymarking, msg_stanza_id=obj.id_,
+                    displaymarking=obj.displaymarking, message_id=obj.message_id,
                     correct_id=obj.correct_id)
             else:
                 # otherwise pass it off to the control to be queued
