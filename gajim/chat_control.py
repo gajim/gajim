@@ -947,7 +947,7 @@ class ChatControl(ChatControlBase):
         return app.nicks[self.account]
 
     def add_message(self, text, frm='', tim=None, encrypted=None,
-    subject=None, xhtml=None, simple=False, xep0184_id=None,
+    subject=None, xhtml=None, xep0184_id=None,
     displaymarking=None, msg_log_id=None, correct_id=None,
     msg_stanza_id=None, additional_data=None):
         """
@@ -988,7 +988,7 @@ class ChatControl(ChatControlBase):
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
         ChatControlBase.add_message(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
-            simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
+            xep0184_id=xep0184_id, displaymarking=displaymarking,
             msg_log_id=msg_log_id, msg_stanza_id=msg_stanza_id,
             correct_id=correct_id, additional_data=additional_data,
             encrypted=encrypted)

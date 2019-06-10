@@ -938,7 +938,7 @@ class ConversationTextview(GObject.GObject):
 
     def print_conversation_line(self, text, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
-    subject=None, old_kind=None, xhtml=None, simple=False, graphics=True,
+    subject=None, old_kind=None, xhtml=None, graphics=True,
     displaymarking=None, msg_stanza_id=None, correct_id=None, additional_data=None,
     encrypted=None):
         """
@@ -1017,8 +1017,8 @@ class ConversationTextview(GObject.GObject):
             self.print_encryption_status(iter_, additional_data)
 
         # print the time stamp
-        self.print_time(text, kind, tim, simple, direction_mark,
-            other_tags_for_time, iter_)
+        self.print_time(text, kind, tim, direction_mark,
+                        other_tags_for_time, iter_)
 
         # If there's a displaymarking, print it here.
         if displaymarking:
@@ -1189,12 +1189,12 @@ class ConversationTextview(GObject.GObject):
         trust = additional_data.get_value('encrypted', 'trust')
         return name, fingerprint, trust
 
-    def print_time(self, text, kind, tim, simple, direction_mark, other_tags_for_time, iter_):
+    def print_time(self, text, kind, tim, direction_mark, other_tags_for_time, iter_):
         local_tim = time.localtime(tim)
         buffer_ = self.tv.get_buffer()
         current_print_time = app.config.get('print_time')
 
-        if current_print_time == 'always' and not simple:
+        if current_print_time == 'always':
             timestamp_str = self.get_time_to_show(local_tim, direction_mark)
             timestamp = time.strftime(timestamp_str, local_tim)
             timestamp = direction_mark + timestamp + direction_mark
@@ -1203,7 +1203,7 @@ class ConversationTextview(GObject.GObject):
                     *other_tags_for_time)
             else:
                 buffer_.insert(iter_, timestamp)
-        elif current_print_time == 'sometimes' and not simple:
+        elif current_print_time == 'sometimes':
             every_foo_seconds = 60 * app.config.get(
                 'print_ichat_every_foo_minutes')
             seconds_passed = tim - self.last_time_printout
