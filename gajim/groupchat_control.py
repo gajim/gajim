@@ -56,7 +56,6 @@ from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import open_uri
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common import contacts
@@ -1287,8 +1286,7 @@ class GroupchatControl(ChatControlBase):
         (contact = 'info' in such a case).
         If contact is not set: it's a message from the server or help.
         """
-        if additional_data is None:
-            additional_data = AdditionalDataDict()
+
         other_tags_for_name = []
         other_tags_for_text = []
 
