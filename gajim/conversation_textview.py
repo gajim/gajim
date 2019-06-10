@@ -1097,7 +1097,9 @@ class ConversationTextview(GObject.GObject):
         buffer_.end_user_action()
 
         self.line += 1
-        return iter_
+
+        if kind == 'outgoing' and message_id is not None:
+            self.add_xep0184_mark(message_id)
 
     def get_time_to_show(self, tim, direction_mark=''):
         """

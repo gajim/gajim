@@ -933,7 +933,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def add_message(self, text, kind, name, tim,
                     other_tags_for_name=None, other_tags_for_time=None,
                     other_tags_for_text=None, restored=False, subject=None,
-                    old_kind=None, xhtml=None, xep0184_id=None,
+                    old_kind=None, xhtml=None,
                     displaymarking=None, msg_log_id=None,
                     message_id=None, correct_id=None, additional_data=None,
                     encrypted=None):
@@ -963,9 +963,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             displaymarking=displaymarking, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
             encrypted=encrypted)
-
-        if xep0184_id is not None:
-            textview.add_xep0184_mark(xep0184_id)
 
         if restored:
             return

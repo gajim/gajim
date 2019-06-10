@@ -871,18 +871,16 @@ class ChatControl(ChatControlBase):
             return
 
         typ = ''
-        xep0184_id = None
         if obj.mtype == 'error':
             typ = 'error'
         if obj.forwarded and obj.sent:
             typ = 'out'
-            if obj.jid != app.get_jid_from_account(obj.conn.name):
-                xep0184_id = obj.id_
+
         self.add_message(obj.msgtxt, typ,
             tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
             xhtml=obj.xhtml, displaymarking=obj.displaymarking,
             msg_log_id=obj.msg_log_id, message_id=obj.message_id, correct_id=obj.correct_id,
-            xep0184_id=xep0184_id, additional_data=obj.additional_data)
+            additional_data=obj.additional_data)
         if obj.msg_log_id:
             pw = self.parent_win
             end = self.conv_textview.autoscroll
@@ -900,10 +898,7 @@ class ChatControl(ChatControlBase):
 
         self.last_sent_msg = obj.stanza_id
         message_id = obj.msg_iq.getID()
-        xep0184_id = None
-        if self.contact.jid != app.get_jid_from_account(self.account):
-            if app.config.get_per('accounts', self.account, 'request_receipt'):
-                xep0184_id = message_id
+
         if obj.label:
             displaymarking = obj.label.getTag('displaymarking')
         else:
@@ -914,7 +909,7 @@ class ChatControl(ChatControlBase):
                 self.msg_textview, 'gajim-msg-correcting')
 
         self.add_message(obj.message, self.contact.jid, tim=obj.timestamp,
-            encrypted=obj.encrypted, xep0184_id=xep0184_id, xhtml=obj.xhtml,
+            encrypted=obj.encrypted, xhtml=obj.xhtml,
             displaymarking=displaymarking, message_id=message_id,
             correct_id=obj.correct_id,
             additional_data=obj.additional_data)
@@ -947,7 +942,7 @@ class ChatControl(ChatControlBase):
         return app.nicks[self.account]
 
     def add_message(self, text, frm='', tim=None, encrypted=None,
-                    subject=None, xhtml=None, xep0184_id=None,
+                    subject=None, xhtml=None,
                     displaymarking=None, msg_log_id=None, correct_id=None,
                     message_id=None, additional_data=None):
         """
@@ -988,7 +983,7 @@ class ChatControl(ChatControlBase):
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
         ChatControlBase.add_message(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
-            xep0184_id=xep0184_id, displaymarking=displaymarking,
+            displaymarking=displaymarking,
             msg_log_id=msg_log_id, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
             encrypted=encrypted)
