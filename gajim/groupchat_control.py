@@ -1289,7 +1289,10 @@ class GroupchatControl(ChatControlBase):
         other_tags_for_name = []
         other_tags_for_text = []
 
-        if contact == self.nick: # it's us
+        if not contact:
+            # Message from the server
+            kind = 'status'
+        elif contact == self.nick: # it's us
             kind = 'outgoing'
         else:
             kind = 'incoming'
