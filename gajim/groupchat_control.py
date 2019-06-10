@@ -1217,24 +1217,14 @@ class GroupchatControl(ChatControlBase):
                 xhtml=obj.xhtml_msgtxt, displaymarking=obj.displaymarking,
                 additional_data=obj.additional_data)
         else:
-            # message from someone
-            if obj.delayed:
-                # don't print xhtml if it's an old message.
-                # Like that xhtml messages are grayed too.
-                self.add_delayed_message(
-                    obj.msgtxt, contact=obj.nick,
-                    tim=obj.timestamp, xhtml=None, encrypted=obj.encrypted,
-                    displaymarking=obj.displaymarking, msg_stanza_id=obj.id_,
-                    additional_data=obj.additional_data)
-            else:
-                if obj.nick == self.nick:
-                    self.last_sent_txt = obj.msgtxt
-                self.add_message(
-                    obj.msgtxt, contact=obj.nick,
-                    tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
-                    displaymarking=obj.displaymarking, encrypted=obj.encrypted,
-                    correct_id=obj.correct_id, msg_stanza_id=obj.id_,
-                    additional_data=obj.additional_data)
+            if obj.nick == self.nick:
+                self.last_sent_txt = obj.msgtxt
+            self.add_message(
+                obj.msgtxt, contact=obj.nick,
+                tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
+                displaymarking=obj.displaymarking, encrypted=obj.encrypted,
+                correct_id=obj.correct_id, msg_stanza_id=obj.id_,
+                additional_data=obj.additional_data)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
     def on_private_message(self, nick, sent, msg, tim, xhtml, session, msg_log_id=None,
@@ -1286,30 +1276,6 @@ class GroupchatControl(ChatControlBase):
         if path is None:
             return None
         return self.model.get_iter(path)
-
-
-    def add_delayed_message(self, text, contact='', tim=None, xhtml=None,
-    displaymarking=None, msg_stanza_id=None, encrypted=None, additional_data=None):
-        if additional_data is None:
-            additional_data = AdditionalDataDict()
-
-        if contact:
-            if contact == self.nick: # it's us
-                kind = 'outgoing'
-            else:
-                kind = 'incoming'
-        else:
-            kind = 'status'
-        if app.config.get('restored_messages_small'):
-            small_attr = ['small']
-        else:
-            small_attr = []
-
-        ChatControlBase.add_message(self, text, kind, contact, tim,
-            small_attr, small_attr + ['restored_message'],
-            small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml,
-            displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,
-            encrypted=encrypted, additional_data=additional_data)
 
     def add_message(self, text, contact='', tim=None, xhtml=None,
     graphics=True, displaymarking=None, correct_id=None, msg_stanza_id=None,

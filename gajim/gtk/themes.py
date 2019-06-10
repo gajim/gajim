@@ -153,10 +153,6 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-msg-correcting text',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Restored Message Color'),
-                '.gajim-restored-message',
-                StyleAttr.COLOR),
-
     StyleOption(_('Contact Disconnected Background'),
                 '.gajim-roster-disconnected',
                 StyleAttr.BACKGROUND),

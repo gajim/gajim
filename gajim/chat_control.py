@@ -1308,20 +1308,21 @@ class ChatControl(ChatControlBase):
 
             tim = float(row.time)
 
-            if app.config.get('restored_messages_small'):
-                small_attr = ['small']
-            else:
-                small_attr = []
             xhtml = None
             if msg.startswith('<body '):
                 xhtml = msg
             if row.subject:
                 msg = _('Subject: %(subject)s\n%(message)s') % \
                     {'subject': row.subject, 'message': msg}
-            ChatControlBase.add_message(self, msg, kind, name,
-                tim, small_attr, small_attr + ['restored_message'],
-                small_attr + ['restored_message'], False,
-                old_kind=local_old_kind, xhtml=xhtml, additional_data=additional_data)
+            ChatControlBase.add_message(self,
+                                        msg,
+                                        kind,
+                                        name,
+                                        tim,
+                                        restored=True,
+                                        old_kind=local_old_kind,
+                                        xhtml=xhtml,
+                                        additional_data=additional_data)
             if row.message.startswith('/me ') or row.message.startswith('/me\n'):
                 local_old_kind = None
             else:

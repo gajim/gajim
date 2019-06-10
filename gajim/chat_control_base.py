@@ -932,7 +932,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def add_message(self, text, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
-    count_as_new=True, subject=None, old_kind=None, xhtml=None,
+    restored=False, subject=None, old_kind=None, xhtml=None,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
     msg_stanza_id=None, correct_id=None, additional_data=None,
     encrypted=None):
@@ -966,8 +966,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if xep0184_id is not None:
             textview.add_xep0184_mark(xep0184_id)
 
-        if not count_as_new:
+        if restored:
             return
+
         if kind == 'incoming':
             if not self.type_id == message_control.TYPE_GC or \
             app.config.notify_for_muc(jid) or \

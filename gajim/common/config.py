@@ -236,7 +236,6 @@ class Config:
         'print_status_muc_default': [opt_bool, False, _('Default Setting: Show a status message for all status (away, dnd, etc.) changes of users in a group chat')],
         'log_contact_status_changes': [opt_bool, False],
         'log_xhtml_messages': [opt_bool, False, _('Log XHTML messages instead of plain text messages.')],
-        'restored_messages_small': [opt_bool, True, _('If true, restored messages will use a smaller font than the default one.')],
         'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
         'roster_window_skip_taskbar': [opt_bool, False, _('Don\'t show roster in the system taskbar.')],
         'use_urgency_hint': [opt_bool, True, _('If true, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],

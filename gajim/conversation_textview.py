@@ -285,10 +285,6 @@ class ConversationTextview(GObject.GObject):
         #Pango.SCALE_SMALL
         tag.set_property('scale', 0.8333333333333)
 
-        tag = buffer_.create_tag('restored_message')
-        color = app.css_config.get_value('.gajim-restored-message', StyleAttr.COLOR)
-        tag.set_property('foreground', color)
-
         self.tv.create_tags()
 
         tag = buffer_.create_tag('bold')
