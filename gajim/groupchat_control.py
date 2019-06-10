@@ -1280,10 +1280,9 @@ class GroupchatControl(ChatControlBase):
     graphics=True, displaymarking=None, correct_id=None, msg_stanza_id=None,
     encrypted=None, additional_data=None):
         """
-        Print a line in the conversation
+        Add message to the ConversationsTextview
 
-        If contact is set: it's a message from someone or an info message
-        (contact = 'info' in such a case).
+        If contact is set: it's a message from someone
         If contact is not set: it's a message from the server or help.
         """
 
