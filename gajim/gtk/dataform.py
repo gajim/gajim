@@ -178,6 +178,9 @@ class SizeAdjustment:
 class Title:
     def __init__(self, title):
         self._label = Gtk.Label(label=title)
+        self._label.set_line_wrap(True)
+        self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
+        self._label.set_justify(Gtk.Justification.CENTER)
         self._label.get_style_context().add_class('data-form-title')
 
     def add(self, form_grid, row_number):
@@ -189,6 +192,7 @@ class Instructions:
         self._label = Gtk.Label(label=instructions)
         self._label.set_line_wrap(True)
         self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
+        self._label.set_justify(Gtk.Justification.CENTER)
 
     def add(self, form_grid, row_number):
         form_grid.attach(self._label, 0, row_number, 2, 1)
