@@ -36,8 +36,6 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gdk
 
-from nbxmpp.util import text_to_colour
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
@@ -50,6 +48,7 @@ from gajim.gtk import util
 from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_cursor
 from gajim.gtk.util import format_fingerprint
+from gajim.gtk.util import text_to_color
 from gajim.gtk.emoji_data import emoji_pixbufs
 from gajim.gtk.emoji_data import is_emoji
 from gajim.gtk.emoji_data import get_emoji_pixbuf
@@ -1254,7 +1253,7 @@ class ConversationTextview(GObject.GObject):
     def _add_new_colour_tags(self, tag, name):
         if self._buffer.get_tag_table().lookup(tag) is not None:
             return
-        gdk_color = Gdk.Color.from_floats(*text_to_colour(name))
+        gdk_color = Gdk.Color.from_floats(*text_to_color(name))
         self._buffer.create_tag(tag, foreground_gdk=gdk_color)
 
     def print_subject(self, subject, iter_=None):

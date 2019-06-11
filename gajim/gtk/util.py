@@ -32,6 +32,7 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
+import nbxmpp
 import cairo
 
 from gajim.common import app
@@ -641,3 +642,11 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
         if minimum_width > self._max_width:
             minimum_width = self._max_width
         return minimum_width, natural_width
+
+
+def text_to_color(text):
+    if app.css_config.prefer_dark:
+        background = (1, 1, 1)
+    else:
+        background = (0, 0, 0)
+    return nbxmpp.util.text_to_color(text, background)
