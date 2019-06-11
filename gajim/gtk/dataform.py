@@ -285,6 +285,7 @@ class BooleanField(Field):
             self._widget = Gtk.CheckButton()
             self._widget.set_active(field.value)
             self._widget.connect('toggled', self._toggled)
+        self._widget.set_valign(Gtk.Align.CENTER)
 
     def _toggled(self, _widget):
         self._field.value = self._widget.get_active()
@@ -315,6 +316,7 @@ class ListSingleField(Field):
         Field.__init__(self, field, form_grid, options)
 
         self._widget = Gtk.ComboBoxText()
+        self._widget.set_valign(Gtk.Align.CENTER)
         for value, label in field.iter_options():
             if not label:
                 label = value
@@ -497,6 +499,7 @@ class TextSingleField(Field):
             self._widget = Gtk.Entry()
             self._widget.set_text(field.value)
             self._widget.connect('changed', self._changed)
+        self._widget.set_valign(Gtk.Align.CENTER)
 
     def _changed(self, _widget):
         self._field.value = self._widget.get_text()
