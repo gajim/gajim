@@ -232,7 +232,8 @@ class Field:
                                  'jid-multi',
                                  'text-single',
                                  'text-private',
-                                 'text-multi'):
+                                 'text-multi',
+                                 'list-multi'):
             form_grid.attach_next_to(self._warning_box,
                                      self._widget,
                                      Gtk.PositionType.RIGHT, 1, 1)
@@ -327,7 +328,7 @@ class ListMultiField(Field):
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
-        self._treeview = ListMutliTreeView(field)
+        self._treeview = ListMutliTreeView(field, self)
 
         self._widget = Gtk.ScrolledWindow()
         self._widget.set_propagate_natural_height(True)
@@ -335,12 +336,16 @@ class ListMultiField(Field):
         self._widget.set_max_content_height(300)
         self._widget.add(self._treeview)
 
+    def validate(self):
+        self._validate()
+
 
 class ListMutliTreeView(Gtk.TreeView):
-    def __init__(self, field):
+    def __init__(self, field, multi_field):
         Gtk.TreeView.__init__(self)
 
         self._field = field
+        self._multi_field = multi_field
 
         self._store = Gtk.ListStore(str, str, bool)
 
@@ -374,6 +379,7 @@ class ListMutliTreeView(Gtk.TreeView):
         current_value = self._store[iter_][2]
         self._store.set_value(iter_, 2, not current_value)
         self._set_values()
+        self._multi_field.validate()
 
     def _set_values(self):
         values = []
