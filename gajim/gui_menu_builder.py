@@ -427,11 +427,11 @@ control=None, gc_contact=None, is_anonymous=True):
     con = app.connections[account]
     if con and (con.get_module('PrivacyLists').supported or
                 con.get_module('Blocking').supported):
+        transport = app.get_transport_name_from_jid(jid, use_config_setting=False)
         if helpers.jid_is_blocked(account, jid):
             block_menuitem.set_no_show_all(True)
             block_menuitem.hide()
-            if app.get_transport_name_from_jid(jid, use_config_setting=False)\
-            and transport != 'jabber':
+            if transport != 'jabber':
                 unblock_menuitem.set_no_show_all(True)
                 unblock_menuitem.hide()
                 unignore_menuitem.set_no_show_all(False)
@@ -443,8 +443,7 @@ control=None, gc_contact=None, is_anonymous=True):
         else:
             unblock_menuitem.set_no_show_all(True)
             unblock_menuitem.hide()
-            if app.get_transport_name_from_jid(jid, use_config_setting=False)\
-            and transport != 'jabber':
+            if transport != 'jabber':
                 block_menuitem.set_no_show_all(True)
                 block_menuitem.hide()
                 ignore_menuitem.set_no_show_all(False)
