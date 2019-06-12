@@ -314,6 +314,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.msg_textview.drag_dest_set(Gtk.DestDefaults.MOTION |
             Gtk.DestDefaults.HIGHLIGHT, self.dnd_list, Gdk.DragAction.COPY)
 
+        self._overlay = self.xml.get_object('overlay')
+
         # the following vars are used to keep history of user's messages
         self.sent_history = []
         self.sent_history_pos = 0

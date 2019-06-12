@@ -264,8 +264,6 @@ class GroupchatControl(ChatControlBase):
 
         self.setup_seclabel()
 
-        self.form_widget = None
-
         # Send file
         self.sendfile_button = self.xml.get_object('sendfile_button')
         self.sendfile_button.set_action_name('win.send-file-' + \
@@ -298,6 +296,9 @@ class GroupchatControl(ChatControlBase):
         self.subject_button.set_no_show_all(True)
         self.banner_actionbar.pack_end(self.hide_roster_button)
         self.banner_actionbar.pack_start(self.subject_button)
+
+        # Holds CaptchaRequest widget
+        self._captcha_request = None
 
         # GC Roster tooltip
         self.gc_tooltip = GCTooltip()
@@ -1155,41 +1156,30 @@ class GroupchatControl(ChatControlBase):
         if event.jid != self.room_jid:
             return
 
-        if self.form_widget:
-            self.form_widget.hide()
-            self.form_widget.destroy()
-            self.btn_box.destroy()  # pylint: disable=access-member-before-definition
+        self._remove_captcha_request()
 
-        self.form_widget = DataFormWidget(event.form)
-
-        def on_send_dataform_clicked(widget):
-            if not self.form_widget:
-                return
-            form_node = self.form_widget.get_submit_form()
+        def on_send_dataform_clicked(*args):
+            form_node = self._captcha_request.get_submit_form()
             con = app.connections[self.account]
             con.get_module('MUC').send_captcha(self.room_jid, form_node)
-            self.form_widget.hide()
-            self.form_widget.destroy()
-            self.btn_box.destroy()
-            self.form_widget = None
-            del self.btn_box
+            self._remove_captcha_request()
 
-        # self.form_widget.connect('validated', on_send_dataform_clicked)
-        self.form_widget.show_all()
-        vbox = self.xml.get_object('gc_textviews_vbox')
-        vbox.pack_start(self.form_widget, False, True, 0)
+        self._captcha_request = CaptchaRequest(event.form,
+                                               on_send_dataform_clicked)
+        self._overlay.add_overlay(self._captcha_request)
 
-        valid_button = Gtk.Button(stock=Gtk.STOCK_OK)
-        valid_button.connect('clicked', on_send_dataform_clicked)
-        self.btn_box = Gtk.HButtonBox()
-        self.btn_box.set_layout(Gtk.ButtonBoxStyle.END)
-        self.btn_box.pack_start(valid_button, True, True, 0)
-        self.btn_box.show_all()
-        vbox.pack_start(self.btn_box, False, False, 0)
         if self.parent_win:
             self.parent_win.redraw_tab(self, 'attention')
         else:
             self.attention_flag = True
+
+    def _remove_captcha_request(self):
+        if self._captcha_request is None:
+            return
+        if self._captcha_request in self._overlay.get_children():
+            self._overlay.remove(self._captcha_request)
+        self._captcha_request.destroy()
+        self._captcha_request = None
 
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
@@ -3062,3 +3052,27 @@ class SubjectPopover(Gtk.Popover):
         # is not cross-platform compatible
         open_uri(uri)
         return Gdk.EVENT_STOP
+
+
+class CaptchaRequest(Gtk.Box):
+    def __init__(self, form, callback):
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+
+        options = {'no-scrolling': True}
+        self._form_widget = DataFormWidget(form, options=options)
+        self._form_widget.set_valign(Gtk.Align.START)
+
+        send_button = Gtk.Button(label='Send')
+        send_button.connect('clicked', callback)
+        send_button.set_halign(Gtk.Align.CENTER)
+
+        self.add(self._form_widget)
+        self.add(send_button)
+
+        self.set_valign(Gtk.Align.START)
+        self.set_margin_top(100)
+
+        self.show_all()
+
+    def get_submit_form(self):
+        return self._form_widget.get_submit_form()

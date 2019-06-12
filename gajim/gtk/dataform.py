@@ -38,10 +38,13 @@ class DataFormWidget(Gtk.ScrolledWindow):
         self.get_style_context().add_class('data-form-widget')
         self.set_overlay_scrolling(False)
 
-        self._form_node = form_node
-
         if options is None:
             options = {}
+
+        if options.get('no-scrolling', False):
+            self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
+
+        self._form_node = form_node
         self._form_grid = FormGrid(form_node, options)
 
         self.add(self._form_grid)
