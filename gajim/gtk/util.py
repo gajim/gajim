@@ -623,7 +623,7 @@ def find_widget(name, container):
 @lru_cache(maxsize=1024)
 def generate_avatar(letters, color, size, scale):
     # Get color for nickname with XEP-0392
-    color_r, color_b, color_g = color
+    color_r, color_g, color_b = color
 
     # Set up colors and size
     if scale is not None:
