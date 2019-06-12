@@ -159,7 +159,7 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
         app.config.set('last_save_dir', os.path.dirname(file_path))
         if isinstance(avatar, str):
             # We got a SHA
-            pixbuf = app.interface.get_avatar(avatar)
+            pixbuf = app.interface.get_avatar_from_storage(avatar)
         else:
             # We got a pixbuf
             pixbuf = avatar

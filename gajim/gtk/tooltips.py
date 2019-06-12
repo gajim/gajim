@@ -232,13 +232,12 @@ class GCTooltip():
         if contact.avatar_sha is not None:
             app.log('avatar').debug(
                 'Load GCTooltip: %s %s', contact.name, contact.avatar_sha)
-            scale = self._ui.tooltip_grid.get_scale_factor()
-            surface = app.interface.get_avatar(
-                contact.avatar_sha, AvatarSize.TOOLTIP, scale)
-            if surface is not None:
-                self._ui.avatar.set_from_surface(surface)
-                self._ui.avatar.show()
-                self._ui.fillelement.show()
+        scale = self._ui.tooltip_grid.get_scale_factor()
+        surface = app.interface.get_avatar(
+            contact, AvatarSize.TOOLTIP, scale)
+        self._ui.avatar.set_from_surface(surface)
+        self._ui.avatar.show()
+        self._ui.fillelement.show()
 
         app.plugin_manager.gui_extension_point(
             'gc_tooltip_populate', self, contact, self._ui.tooltip_grid)
@@ -442,9 +441,8 @@ class RosterTooltip(StatusTable):
         scale = self._ui.tooltip_grid.get_scale_factor()
         surface = app.contacts.get_avatar(
             account, self.prim_contact.jid, AvatarSize.TOOLTIP, scale)
-        if surface is not None:
-            self._ui.avatar.set_from_surface(surface)
-            self._ui.avatar.show()
+        self._ui.avatar.set_from_surface(surface)
+        self._ui.avatar.show()
 
         app.plugin_manager.gui_extension_point(
             'roster_tooltip_populate', self, contacts, self._ui.tooltip_grid)

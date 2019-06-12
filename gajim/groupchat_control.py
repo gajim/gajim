@@ -746,7 +746,7 @@ class GroupchatControl(ChatControlBase):
                     transient_for=self.parent_win.window)
                 return
 
-            publish = app.interface.get_avatar(sha, publish=True)
+            publish = app.interface.get_avatar_from_storage(sha, publish=True)
             avatar = base64.b64encode(publish).decode('utf-8')
             con = app.connections[self.account]
             con.get_module('VCardTemp').upload_room_avatar(
@@ -1074,7 +1074,7 @@ class GroupchatControl(ChatControlBase):
         banner_status_img = self.xml.get_object('gc_banner_status_image')
         if self.is_connected:
             if self.contact.avatar_sha:
-                surface = app.interface.get_avatar(self.contact.avatar_sha,
+                surface = app.interface.get_avatar(self.contact,
                                                    AvatarSize.ROSTER,
                                                    self.scale_factor)
                 banner_status_img.set_from_surface(surface)
@@ -1694,7 +1694,7 @@ class GroupchatControl(ChatControlBase):
             return
 
         surface = app.interface.get_avatar(
-            gc_contact.avatar_sha, AvatarSize.ROSTER, self.scale_factor)
+            gc_contact, AvatarSize.ROSTER, self.scale_factor)
         image = Gtk.Image.new_from_surface(surface)
         self.model[iter_][Column.AVATAR_IMG] = image
 
@@ -2119,7 +2119,7 @@ class GroupchatControl(ChatControlBase):
         image = None
         if app.config.get('show_avatars_in_roster'):
             surface = app.interface.get_avatar(
-                contact.avatar_sha, AvatarSize.ROSTER, self.scale_factor)
+                contact, AvatarSize.ROSTER, self.scale_factor)
             image = Gtk.Image.new_from_surface(surface)
 
         # Add to model

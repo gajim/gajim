@@ -135,7 +135,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
                 return
 
             scale = self.get_scale_factor()
-            surface = app.interface.get_avatar(sha, AvatarSize.VCARD, scale)
+            surface = app.interface.get_avatar_from_storage(sha, AvatarSize.VCARD, scale)
 
             button = self.xml.get_object('PHOTO_button')
             image = self.xml.get_object('PHOTO_image')
@@ -145,7 +145,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
             text_button.hide()
 
             self.avatar_sha = sha
-            publish = app.interface.get_avatar(sha, publish=True)
+            publish = app.interface.get_avatar_from_storage(sha, publish=True)
             self.avatar_encoded = base64.b64encode(publish).decode('utf-8')
             self.avatar_mime_type = 'image/png'
 
@@ -212,7 +212,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
                     self.avatar_mime_type = vcard_[i]['TYPE']
 
                 scale = self.get_scale_factor()
-                surface = app.interface.get_avatar(
+                surface = app.interface.get_avatar_from_storage(
                     self.avatar_sha, AvatarSize.VCARD, scale)
                 if surface is None:
                     pixbuf = gtkgui_helpers.scale_pixbuf_from_data(

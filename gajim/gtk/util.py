@@ -26,7 +26,9 @@ import logging
 import textwrap
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from functools import lru_cache
 from functools import wraps
+from math import pi
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -616,6 +618,87 @@ def find_widget(name, container):
             return child
         if isinstance(child, Gtk.Box):
             return find_widget(name, child)
+
+
+@lru_cache(maxsize=1024)
+def generate_avatar(letters, color, size, scale):
+    # Get color for nickname with XEP-0392
+    color_r, color_b, color_g = color
+
+    # Set up colors and size
+    if scale is not None:
+        size = size * scale
+
+    width = size
+    height = size
+    font_size = size * 0.5
+
+    # Set up surface
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+    context = cairo.Context(surface)
+
+    context.set_source_rgb(color_r, color_g, color_b)
+    context.rectangle(0, 0, width, height)
+    context.fill()
+
+    # Draw letters
+    context.select_font_face('sans-serif',
+                             cairo.FONT_SLANT_NORMAL,
+                             cairo.FONT_WEIGHT_NORMAL)
+    context.set_font_size(font_size)
+    extends = context.text_extents(letters)
+    x_pos = width / 2 - (extends.width / 2 + extends.x_bearing)
+    y_pos = height / 2 - (extends.height / 2 + extends.y_bearing)
+    context.move_to(x_pos, y_pos)
+    context.set_source_rgb(0.95, 0.95, 0.95)
+    context.set_operator(cairo.Operator.OVER)
+    context.show_text(letters)
+
+    return context.get_target()
+
+
+def clip_circle(surface):
+    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+                                     surface.get_width(),
+                                     surface.get_height())
+    context = cairo.Context(new_surface)
+    context.set_source_surface(surface, 0, 0)
+
+    width = surface.get_width()
+    height = surface.get_height()
+    radius = width / 2
+
+    context.arc(width / 2, height / 2, radius, 0, 2 * pi)
+
+    context.clip()
+    context.paint()
+
+    return context.get_target()
+
+
+def clip_rounded_corners(surface):
+    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+                                     surface.get_width(),
+                                     surface.get_height())
+    context = cairo.Context(new_surface)
+    context.set_source_surface(surface, 0, 0)
+
+    width = surface.get_width()
+    height = surface.get_height()
+    radius = width * 0.1
+    deg = pi / 180.0
+
+    context.new_sub_path()
+    context.arc(width - radius, radius, radius, -90 * deg, 0)
+    context.arc(width - radius, height - radius, radius, 0, 90 * deg)
+    context.arc(radius, height - radius, radius, 90 * deg, 180 * deg)
+    context.arc(radius, radius, radius, 180 * deg, 270 * deg)
+    context.close_path()
+
+    context.clip()
+    context.paint()
+
+    return context.get_target()
 
 
 class MultiLineLabel(Gtk.Label):

@@ -251,7 +251,7 @@ class GC_Contact(CommonContact):
         return self.name
 
     def get_avatar(self, *args, **kwargs):
-        return common.app.interface.get_avatar(self.avatar_sha, *args, **kwargs)
+        return common.app.interface.get_avatar(self, *args, **kwargs)
 
     def as_contact(self):
         """
@@ -599,10 +599,8 @@ class Contacts():
             return None
 
         for resource in self._contacts[jid]:
-            if resource.avatar_sha is None:
-                continue
             avatar = common.app.interface.get_avatar(
-                resource.avatar_sha, size, scale)
+                resource, size, scale)
             if avatar is None:
                 self.set_avatar(jid, None)
             return avatar

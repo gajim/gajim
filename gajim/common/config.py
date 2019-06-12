@@ -294,6 +294,7 @@ class Config:
         'show_chatstate_in_banner': [opt_bool, True, _('Shows a text in the banner that describes the current chatstate of the contact')],
         'send_chatstate_default': [opt_str, 'composing_only', _('Chat state notifications that are sent to contacts. Possible values: all, composing_only, disabled')],
         'send_chatstate_muc_default': [opt_str, 'composing_only', _('Chat state notifications that are sent to the group chat. Possible values: all, composing_only, disabled')],
+        'avatar_clipping': [opt_str, 'rounded_corners', _('How to display avatars:\n\'rounded_corners\' - Display avatars with cropped corners.\n\'circle\' - Display round avatars.\n\'no_clipping\' - Display avatar as-is.')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {

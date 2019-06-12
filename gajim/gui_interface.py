@@ -124,6 +124,10 @@ from gajim.gtk.filetransfer import FileTransfersWindow
 from gajim.gtk.subscription_request import SubscriptionRequestWindow
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
+from gajim.gtk.util import generate_avatar
+from gajim.gtk.util import clip_circle
+from gajim.gtk.util import clip_rounded_corners
+from gajim.gtk.util import text_to_color
 
 
 parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
@@ -2044,8 +2048,37 @@ class Interface:
 
         return sha
 
-    @staticmethod
-    def get_avatar(filename, size=None, scale=None, publish=False):
+    def get_avatar(self, contact, size=None, scale=None, publish=False):
+        surface = self.get_avatar_from_storage(contact.avatar_sha,
+                                               size,
+                                               scale,
+                                               publish)
+
+        if surface is None:
+            # No avatar found, generate one
+
+            # Get initial from name
+            name = contact.get_shown_name()
+            letter = name[0].capitalize()
+
+            # Use nickname for group chats and bare JID for single contacts
+            if contact.is_gc_contact:
+                color_string = contact.name
+            else:
+                color_string = contact.jid
+            color = text_to_color(color_string)
+            surface = generate_avatar(letter, color, size, scale)
+
+        # Clip avatar
+        clip_setting = app.config.get('avatar_clipping')
+        if clip_setting == 'circle':
+            return clip_circle(surface)
+        if clip_setting == 'rounded_corners':
+            return clip_rounded_corners(surface)
+
+        return surface
+
+    def get_avatar_from_storage(self, filename, size=None, scale=None, publish=False):
         if filename is None or '':
             return
 

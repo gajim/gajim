@@ -231,7 +231,7 @@ class PrivateChatControl(ChatControl):
 
         scale = self.parent_win.window.get_scale_factor()
         surface = app.interface.get_avatar(
-            self.gc_contact.avatar_sha, AvatarSize.CHAT, scale)
+            self.gc_contact, AvatarSize.CHAT, scale)
         image = self.xml.get_object('avatar_image')
         if surface is None:
             image.set_from_icon_name('avatar-default', Gtk.IconSize.DIALOG)

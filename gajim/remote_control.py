@@ -918,7 +918,7 @@ class GajimRemote(Server):
             if sha is None:
                 return
             app.config.set_per('accounts', self.name, 'avatar_sha', sha)
-            data = app.interface.get_avatar(sha, publish=True)
+            data = app.interface.get_avatar_from_storage(sha, publish=True)
             avatar = base64.b64encode(data).decode('utf-8')
             avatar_mime_type = mimetypes.guess_type(picture)[0]
             vcard = {}

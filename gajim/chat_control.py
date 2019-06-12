@@ -1220,10 +1220,7 @@ class ChatControl(ChatControlBase):
             self.account, self.contact.jid, AvatarSize.CHAT, scale)
 
         image = self.xml.get_object('avatar_image')
-        if surface is None:
-            image.set_from_icon_name('avatar-default', Gtk.IconSize.DIALOG)
-        else:
-            image.set_from_surface(surface)
+        image.set_from_surface(surface)
 
     def _nec_update_avatar(self, obj):
         if obj.account != self.account:
