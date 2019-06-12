@@ -646,7 +646,7 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
 
 def text_to_color(text):
     if app.css_config.prefer_dark:
-        background = (1, 1, 1)
+        background = (0, 0, 0)  # RGB (0, 0, 0) black
     else:
-        background = (0, 0, 0)
+        background = (1, 1, 1)  # RGB (255, 255, 255) white
     return nbxmpp.util.text_to_color(text, background)
