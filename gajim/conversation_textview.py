@@ -1253,8 +1253,8 @@ class ConversationTextview(GObject.GObject):
     def _add_new_colour_tags(self, tag, name):
         if self._buffer.get_tag_table().lookup(tag) is not None:
             return
-        gdk_color = Gdk.Color.from_floats(*text_to_color(name))
-        self._buffer.create_tag(tag, foreground_gdk=gdk_color)
+        rgba = Gdk.RGBA(*text_to_color(name))
+        self._buffer.create_tag(tag, foreground_rgba=rgba)
 
     def print_subject(self, subject, iter_=None):
         if subject: # if we have subject, show it too!

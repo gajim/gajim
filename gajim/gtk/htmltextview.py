@@ -193,10 +193,11 @@ for _name in BLOCK_HEAD:
         ('font-weight: bold', 'font-style: oblique')[_weight])
 
 def _parse_css_color(color):
-    if color.startswith('rgb(') and color.endswith(')'):
-        red, green, blue = [int(c)*257 for c in color[4:-1].split(',')]
-        return Gdk.Color(red, green, blue)
-    return Gdk.color_parse(color)
+    rgba = Gdk.RGBA()
+    success = rgba.parse(color)
+    if not success:
+        log.warning('Can\'t parse color: %s', color)
+    return rgba
 
 def style_iter(style):
     return ([x.strip() for x in item.split(':', 1)] for item in style.split(';')\
@@ -237,13 +238,13 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     @staticmethod
     def _parse_style_color(tag, value):
         color = _parse_css_color(value)
-        tag.set_property('foreground-gdk', color)
+        tag.set_property('foreground-rgba', color)
 
     @staticmethod
     def _parse_style_background_color(tag, value):
         color = _parse_css_color(value)
-        tag.set_property('background-gdk', color)
-        tag.set_property('paragraph-background-gdk', color)
+        tag.set_property('background-rgba', color)
+        tag.set_property('paragraph-background-rgba', color)
 
     @staticmethod
     def __parse_length_frac_size_allocate(_textview, allocation, frac,
