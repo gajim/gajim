@@ -505,6 +505,9 @@ class MucCapsCache:
                     pass
         return allowed
 
+    def is_anonymous(self, jid):
+        return 'muc_nonanonymous' not in self.cache[jid].features
+
     def get_room_infos(self, jid):
         room_info = {}
         if jid in self.cache:
