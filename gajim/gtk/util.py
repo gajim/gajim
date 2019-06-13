@@ -647,8 +647,17 @@ def generate_avatar(letters, color, size, scale):
                              cairo.FONT_WEIGHT_NORMAL)
     context.set_font_size(font_size)
     extends = context.text_extents(letters)
-    x_pos = width / 2 - (extends.width / 2 + extends.x_bearing)
-    y_pos = height / 2 - (extends.height / 2 + extends.y_bearing)
+    if isinstance(extends, tuple):
+        # For cairo < 1.15
+        x_bearing, y_bearing, ex_width, ex_height = extends[0:4]
+    else:
+        x_bearing = extends.x_bearing
+        y_bearing = extends.y_bearing
+        ex_width = extends.width
+        ex_height = extends.height
+
+    x_pos = width / 2 - (ex_width / 2 + x_bearing)
+    y_pos = height / 2 - (ex_height / 2 + y_bearing)
     context.move_to(x_pos, y_pos)
     context.set_source_rgb(0.95, 0.95, 0.95)
     context.set_operator(cairo.Operator.OVER)
