@@ -32,7 +32,6 @@ import sys
 import re
 import os
 import subprocess
-import urllib
 import webbrowser
 import errno
 import select
@@ -48,6 +47,8 @@ import collections
 import random
 import string
 from string import Template
+import urllib
+from urllib.parse import unquote
 from io import StringIO
 from datetime import datetime, timedelta
 from distutils.version import LooseVersion as V
@@ -1480,20 +1481,38 @@ def delay_execution(milliseconds):
     return delay_execution_decorator
 
 
+def parse_uri_actions(uri):
+    uri = uri[5:]
+    if '?' not in uri:
+        return 'message', {'jid': uri}
+
+    jid, action = uri.split('?', 1)
+    data = {'jid': jid}
+    if ';' in action:
+        action, keys = action.split(';', 1)
+        action_keys = keys.split(';')
+        for key in action_keys:
+            if key.startswith('subject='):
+                data['subject'] = unquote(key[8:])
+
+            elif key.startswith('body='):
+                data['body'] = unquote(key[5:])
+
+            elif key.startswith('thread='):
+                data['thread'] = key[7:]
+    return action, data
+
+
 def parse_uri(uri):
     if uri.startswith('xmpp:'):
-        uri = uri[5:]
-        if '?' in uri:
-            jid, action = uri.split('?')
-            try:
-                return URI(type=URIType.XMPP,
-                           action=URIAction(action),
-                           data=jid)
-            except ValueError:
-                # Unknown action
-                pass
-
-        return URI(type=URIType.XMPP, action=URIAction.MESSAGE, data=uri)
+        action, data = parse_uri_actions(uri)
+        try:
+            return URI(type=URIType.XMPP,
+                       action=URIAction(action),
+                       data=data)
+        except ValueError:
+            # Unknown action
+            return URI(type=URIType.UNKNOWN)
 
     if uri.startswith('mailto:'):
         uri = uri[7:]
@@ -1548,7 +1567,8 @@ def open_uri(uri, account=None):
         if uri.action == URIAction.JOIN:
             app.interface.join_gc_minimal(account, uri.data)
         elif uri.action == URIAction.MESSAGE:
-            app.interface.new_chat_from_jid(account, uri.data)
+            app.interface.new_chat_from_jid(account, uri.data['jid'],
+                                            message=uri.data.get('body'))
         else:
             log.warning('Cant open URI: %s', uri)
 
