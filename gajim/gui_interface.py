@@ -121,6 +121,7 @@ from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.filetransfer import FileTransfersWindow
+from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gtk.subscription_request import SubscriptionRequestWindow
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
@@ -1127,8 +1128,8 @@ class Interface:
     @staticmethod
     def handle_event_roster_item_exchange(obj):
         # data = (action in [add, delete, modify], exchange_list, jid_from)
-        dialogs.RosterItemExchangeWindow(obj.conn.name, obj.action,
-            obj.exchange_items_list, obj.fjid)
+        RosterItemExchangeWindow(obj.conn.name, obj.action,
+                                 obj.exchange_items_list, obj.fjid)
 
     def handle_event_ssl_error(self, obj):
         account = obj.conn.name
