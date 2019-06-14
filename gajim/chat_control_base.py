@@ -244,35 +244,48 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         # Init DND
         self.TARGET_TYPE_URI_LIST = 80
-        self.dnd_list = [Gtk.TargetEntry.new('text/uri-list', 0,
-            self.TARGET_TYPE_URI_LIST), Gtk.TargetEntry.new('MY_TREE_MODEL_ROW',
-            Gtk.TargetFlags.SAME_APP, 0)]
+        uri_entry = Gtk.TargetEntry.new(
+            'text/uri-list',
+            Gtk.TargetFlags.OTHER_APP,
+            self.TARGET_TYPE_URI_LIST)
+        dst_targets = Gtk.TargetList.new([uri_entry])
+        dst_targets.add_text_targets(0)
+        self.dnd_list = [uri_entry,
+                         Gtk.TargetEntry.new(
+                             'MY_TREE_MODEL_ROW',
+                             Gtk.TargetFlags.SAME_APP,
+                             0)]
         id_ = self.widget.connect('drag_data_received',
-            self._on_drag_data_received)
+                                  self._on_drag_data_received)
         self.handlers[id_] = self.widget
-        self.widget.drag_dest_set(Gtk.DestDefaults.MOTION |
-            Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
-            self.dnd_list, Gdk.DragAction.COPY)
+        self.widget.drag_dest_set(
+            Gtk.DestDefaults.ALL,
+            self.dnd_list,
+            Gdk.DragAction.COPY)
+        self.widget.drag_dest_set_target_list(dst_targets)
 
         # Create textviews and connect signals
         self.conv_textview = ConversationTextview(self.account)
         id_ = self.conv_textview.connect('quote', self.on_quote)
         self.handlers[id_] = self.conv_textview.tv
-        id_ = self.conv_textview.tv.connect('key_press_event',
-            self._conv_textview_key_press_event)
+        id_ = self.conv_textview.tv.connect(
+            'key_press_event', self._conv_textview_key_press_event)
         self.handlers[id_] = self.conv_textview.tv
+
         # FIXME: DND on non editable TextView, find a better way
         self.drag_entered = False
         id_ = self.conv_textview.tv.connect('drag_data_received',
-            self._on_drag_data_received)
+                                            self._on_drag_data_received)
         self.handlers[id_] = self.conv_textview.tv
         id_ = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
         self.handlers[id_] = self.conv_textview.tv
         id_ = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
         self.handlers[id_] = self.conv_textview.tv
-        self.conv_textview.tv.drag_dest_set(Gtk.DestDefaults.MOTION |
-            Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
-            self.dnd_list, Gdk.DragAction.COPY)
+        self.conv_textview.tv.drag_dest_set(
+            Gtk.DestDefaults.ALL,
+            self.dnd_list,
+            Gdk.DragAction.COPY)
+        self.conv_textview.tv.drag_dest_set_target_list(dst_targets)
 
         self.conv_scrolledwindow = self.xml.get_object(
             'conversation_scrolledwindow')
@@ -307,12 +320,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = self.msg_textview.connect('populate_popup',
             self.on_msg_textview_populate_popup)
         self.handlers[id_] = self.msg_textview
+
         # Setup DND
         id_ = self.msg_textview.connect('drag_data_received',
-            self._on_drag_data_received)
+                                        self._on_drag_data_received)
         self.handlers[id_] = self.msg_textview
-        self.msg_textview.drag_dest_set(Gtk.DestDefaults.MOTION |
-            Gtk.DestDefaults.HIGHLIGHT, self.dnd_list, Gdk.DragAction.COPY)
+        self.msg_textview.drag_dest_set(
+            Gtk.DestDefaults.ALL,
+            self.dnd_list,
+            Gdk.DragAction.COPY)
 
         self._overlay = self.xml.get_object('overlay')
 

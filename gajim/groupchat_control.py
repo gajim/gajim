@@ -2420,27 +2420,26 @@ class GroupchatControl(ChatControlBase):
         if not selection.get_data():
             return
 
-        # get contact info
+        # Get contact info
         contact = contacts.Contact(jid=self.room_jid, account=self.account)
-
         if target_type == self.TARGET_TYPE_URI_LIST:
-            # file drag and drop (handled in chat_control_base)
+            # File drag and drop (handled in chat_control_base)
             self.drag_data_file_transfer(contact, selection, self)
         else:
             # Invite contact to groupchat
             treeview = app.interface.roster.tree
             model = treeview.get_model()
-            data = selection.get_data()
+            data = selection.get_data().decode()
             path = treeview.get_selection().get_selected_rows()[1][0]
             iter_ = model.get_iter(path)
             type_ = model[iter_][2]
-            if type_ != 'contact': # source is not a contact
+            if type_ != 'contact':  # Source is not a contact
                 return
             contact_jid = data
 
             con = app.connections[self.account]
             con.get_module('MUC').invite(self.room_jid, contact_jid)
-            self.add_info_message(_('%(jid)s has been invited in this room') %
+            self.add_info_message(_('%(jid)s has been invited to this group chat') %
                                     {'jid': contact_jid})
 
     def _jid_not_blocked(self, bare_jid: str) -> bool:

@@ -1241,17 +1241,17 @@ class ChatControl(ChatControlBase):
             c = self.contact
 
         if target_type == self.TARGET_TYPE_URI_LIST:
-            # file drag and drop (handled in chat_control_base)
+            # File drag and drop (handled in chat_control_base)
             self.drag_data_file_transfer(c, selection, self)
         else:
-            # chat2muc
+            # Convert single chat to MUC
             treeview = app.interface.roster.tree
             model = treeview.get_model()
-            data = selection.get_data()
+            data = selection.get_data().decode()
             path = treeview.get_selection().get_selected_rows()[1][0]
             iter_ = model.get_iter(path)
             type_ = model[iter_][2]
-            if type_ != 'contact': # source is not a contact
+            if type_ != 'contact':  # Source is not a contact
                 return
             dropped_jid = data
 
