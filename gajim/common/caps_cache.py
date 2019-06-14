@@ -505,8 +505,17 @@ class MucCapsCache:
                     pass
         return allowed
 
+    def is_open(self, jid):
+        return 'muc_membersonly' not in self.cache[jid].features
+
+    def is_password_protected(self, jid):
+        return 'muc_unsecured' not in self.cache[jid].features
+
     def is_anonymous(self, jid):
         return 'muc_nonanonymous' not in self.cache[jid].features
+
+    def is_persistent(self, jid):
+        return 'muc_temporary' not in self.cache[jid].features
 
     def get_room_infos(self, jid):
         room_info = {}
