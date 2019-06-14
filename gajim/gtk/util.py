@@ -660,7 +660,9 @@ def generate_avatar(letters, color, size, scale):
     y_pos = height / 2 - (ex_height / 2 + y_bearing)
     context.move_to(x_pos, y_pos)
     context.set_source_rgb(0.95, 0.95, 0.95)
-    context.set_operator(cairo.Operator.OVER)
+    # use cairo.OPERATOR_OVER legacy constant because its
+    # compatible with cairo < 1.13
+    context.set_operator(cairo.OPERATOR_OVER)
     context.show_text(letters)
 
     return context.get_target()
