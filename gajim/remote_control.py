@@ -23,8 +23,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import base64
-import mimetypes
 import logging
 
 from gi.repository import GLib
@@ -131,10 +129,6 @@ class GajimRemote(Server):
                 <arg name='jid' type='s' />
                 <arg name='account' type='s' />
                 <arg direction='out' type='b' />
-            </method>
-            <method name='change_avatar'>
-                <arg name='picture' type='s' />
-                <arg name='account' type='s' />
             </method>
             <method name='change_status'>
                 <arg name='status' type='s' />
@@ -903,35 +897,6 @@ class GajimRemote(Server):
         else:
             for acc in app.contacts.get_accounts():
                 app.connections[acc].send_stanza(str(xml))
-
-    def change_avatar(self, picture, account):
-        filesize = os.path.getsize(picture)
-        invalid_file = False
-        if os.path.isfile(picture):
-            stat = os.stat(picture)
-            if stat[6] == 0:
-                invalid_file = True
-        else:
-            invalid_file = True
-        if not invalid_file and filesize < 16384:
-            sha = app.interface.save_avatar(picture, publish=True)
-            if sha is None:
-                return
-            app.config.set_per('accounts', self.name, 'avatar_sha', sha)
-            data = app.interface.get_avatar_from_storage(sha, publish=True)
-            avatar = base64.b64encode(data).decode('utf-8')
-            avatar_mime_type = mimetypes.guess_type(picture)[0]
-            vcard = {}
-            vcard['PHOTO'] = {'BINVAL': avatar}
-            if avatar_mime_type:
-                vcard['PHOTO']['TYPE'] = avatar_mime_type
-            if account:
-                app.connections[account].get_module('VCardTemp').send_vcard(
-                    vcard, sha)
-            else:
-                for acc in app.connections:
-                    app.connections[acc].get_module('VCardTemp').send_vcard(
-                        vcard, sha)
 
     def join_room(self, room_jid, nick, password, account):
         if not account:

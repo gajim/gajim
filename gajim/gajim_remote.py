@@ -224,15 +224,6 @@ class GajimRemote:
                                                 False)
                                 ]
                         ],
-                'change_avatar': [
-                                _('Change the avatar'),
-                                [
-                                        ('picture', _('Picture to use'), True),
-                                        ('account', _('Account in which the avatar will be set; '
-                                        'if not specified, the avatar will be set for all accounts'),
-                                                False)
-                                ]
-                        ],
 
                 'check_gajim_running': [
                                 _('Check if Gajim is running'),
