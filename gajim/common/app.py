@@ -314,6 +314,20 @@ def detect_dependencies():
 
     log('gajim').info('Used language: %s', LANG)
 
+def detect_desktop_env():
+    if sys.platform in ('win32', 'darwin'):
+        return sys.platform
+
+    desktop = os.environ.get('XDG_CURRENT_DESKTOP')
+    if desktop is None:
+        return None
+
+    if 'gnome' in desktop.lower():
+        return 'gnome'
+    return desktop
+
+desktop_env = detect_desktop_env()
+
 def get_an_id():
     return str(uuid.uuid4())
 

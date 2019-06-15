@@ -42,7 +42,6 @@ from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_monitor_scale_factor
 from gajim.gtk.util import get_total_screen_geometry
-from gajim.gtk.util import load_icon
 
 log = logging.getLogger('gajim.gtk.notification')
 
@@ -142,7 +141,7 @@ class Notification:
         """
 
         if icon_name is None:
-            icon_name = 'gajim-chat_msg_recv'
+            icon_name = 'mail-message-new'
 
         if timeout < 0:
             timeout = app.config.get('notification_timeout')
@@ -158,8 +157,7 @@ class Notification:
         if not self._dbus_available:
             return
 
-        scale = get_monitor_scale_factor()
-        icon_pixbuf = load_icon(icon_name, size=48, pixbuf=True, scale=scale)
+        icon = Gio.ThemedIcon.new(icon_name)
 
         notification = Gio.Notification()
         if title is not None:
@@ -202,15 +200,22 @@ class Notification:
                                 _('New Single Message'),
                                 _('New Private Message'),
                                 _('New Group Chat Message')):
-                avatar = app.contacts.get_avatar(account, jid)
-                if avatar:
-                    icon_pixbuf = avatar
+                if app.desktop_env == 'gnome':
+                    icon = self._get_avatar_for_notification(account, jid)
                 notif_id = self._make_id('new-message', account, jid)
 
-        notification.set_icon(icon_pixbuf)
+        notification.set_icon(icon)
         notification.set_priority(Gio.NotificationPriority.NORMAL)
 
         app.app.send_notification(notif_id, notification)
+
+    @staticmethod
+    def _get_avatar_for_notification(account, jid):
+        scale = get_monitor_scale_factor()
+        contact = app.contacts.get_contact(account, jid)
+        if contact is None:
+            return None
+        return app.interface.get_avatar(contact, 16, scale, pixbuf=True)
 
     def _on_popup_destroy(self, *args):
         self._win32_active_popup = None
