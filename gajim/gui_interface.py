@@ -35,25 +35,17 @@ import os
 import sys
 import re
 import time
-import hashlib
 import logging
 from functools import partial
 from threading import Thread
 
 from gi.repository import Gtk
-from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gio
-from gi.repository import Gdk
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
 from nbxmpp.structs import TuneData
 import OpenSSL
-
-try:
-    from PIL import Image
-except Exception:
-    pass
 
 from gajim.common import app
 from gajim.common import events
@@ -62,7 +54,6 @@ from gajim.common.dbus import location
 from gajim.common.dbus import music_track
 from gajim.common.dbus import logind
 
-from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import dialogs
 from gajim import message_control
@@ -94,7 +85,6 @@ from gajim.common.connection_handlers_events import (
 from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
-from gajim.common.const import AvatarSize
 from gajim.common.const import SSLError
 
 from gajim import roster_window
@@ -103,6 +93,7 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import configpaths
 from gajim.common import optparser
 
+from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.notification import Notification
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
@@ -125,10 +116,6 @@ from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gtk.subscription_request import SubscriptionRequestWindow
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
-from gajim.gtk.util import generate_avatar
-from gajim.gtk.util import clip_circle
-from gajim.gtk.util import clip_rounded_corners
-from gajim.gtk.util import text_to_color
 
 
 parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
@@ -1988,8 +1975,9 @@ class Interface:
             _('Could not save your settings and preferences'))
         error_dialog.run()
 
-    @staticmethod
-    def update_avatar(account=None, jid=None, contact=None, room_avatar=False):
+    def update_avatar(self, account=None, jid=None,
+                      contact=None, room_avatar=False):
+        self.avatar_storage.invalidate_cache(jid or contact.jid)
         if room_avatar:
             app.nec.push_incoming_event(
                 NetworkEvent('update-room-avatar', account=account, jid=jid))
@@ -2000,157 +1988,16 @@ class Interface:
             app.nec.push_incoming_event(
                 NetworkEvent('update-gc-avatar', contact=contact))
 
-    def save_avatar(self, data, publish=False):
-        """
-        Save an avatar to the harddisk
+    def save_avatar(self, data):
+        return self.avatar_storage.save_avatar(data)
 
-        :param data:    publish=False data must be bytes
-                        publish=True data must be a path to a file
+    def get_avatar(self, contact, size, scale, pixbuf=False):
+        if pixbuf:
+            return self.avatar_storage.get_pixbuf(contact, size, scale)
+        return self.avatar_storage.get_surface(contact, size, scale)
 
-        :param publish: If publish is True, the method scales the file
-                        to AvatarSize.PUBLISH size before saving
-
-        returns SHA1 value of the avatar or None on error
-        """
-        if data is None:
-            return
-
-        if publish:
-            with open(data, 'rb') as file:
-                data = file.read()
-            pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
-            if pixbuf is None:
-                return
-
-            width = pixbuf.get_width()
-            height = pixbuf.get_height()
-            if width > AvatarSize.PUBLISH or height > AvatarSize.PUBLISH:
-                # Scale only down, never up
-                width, height = gtkgui_helpers.scale_with_ratio(
-                    AvatarSize.PUBLISH, width, height)
-                pixbuf = pixbuf.scale_simple(width,
-                                             height,
-                                             GdkPixbuf.InterpType.BILINEAR)
-            publish_path = os.path.join(
-                configpaths.get('AVATAR'), 'temp_publish')
-            pixbuf.savev(publish_path, 'png', [], [])
-            with open(publish_path, 'rb') as file:
-                data = file.read()
-            return self.save_avatar(data)
-
-        sha = hashlib.sha1(data).hexdigest()
-        path = os.path.join(configpaths.get('AVATAR'), sha)
-        try:
-            with open(path, "wb") as output_file:
-                output_file.write(data)
-        except Exception:
-            app.log('avatar').error('Saving avatar failed', exc_info=True)
-            return
-
-        return sha
-
-    def get_avatar(self, contact, size=None, scale=None, publish=False):
-        surface = self.get_avatar_from_storage(contact.avatar_sha,
-                                               size,
-                                               scale,
-                                               publish)
-
-        if surface is None:
-            # No avatar found, generate one
-
-            # Get initial from name
-            name = contact.get_shown_name()
-            letter = name[0].capitalize()
-
-            # Use nickname for group chats and bare JID for single contacts
-            if contact.is_gc_contact:
-                color_string = contact.name
-            else:
-                color_string = contact.jid
-            color = text_to_color(color_string)
-            surface = generate_avatar(letter, color, size, scale)
-
-        # Clip avatar
-        clip_setting = app.config.get('avatar_clipping')
-        if clip_setting == 'circle':
-            return clip_circle(surface)
-        if clip_setting == 'rounded_corners':
-            return clip_rounded_corners(surface)
-
-        return surface
-
-    def get_avatar_from_storage(self, filename, size=None, scale=None, publish=False):
-        if filename is None or '':
-            return
-
-        if size is None and scale is not None:
-            raise ValueError
-
-        if scale is not None:
-            size = size * scale
-
-        if publish:
-            path = os.path.join(configpaths.get('AVATAR'), filename)
-            with open(path, 'rb') as file:
-                data = file.read()
-            return data
-
-        try:
-            pixbuf = app.avatar_cache[filename][size]
-            if scale is None:
-                return pixbuf
-            return Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
-        except KeyError:
-            pass
-
-        path = os.path.join(configpaths.get('AVATAR'), filename)
-        if not os.path.isfile(path):
-            return
-
-        pixbuf = None
-        try:
-            if size is not None:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                    path, size, size, True)
-            else:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
-        except GLib.GError:
-            app.log('avatar').info(
-                'loading avatar %s failed. Try to convert '
-                'avatar image using pillow', filename)
-            try:
-                with open(path, 'rb') as im_handle:
-                    img = Image.open(im_handle)
-                    avatar = img.convert("RGBA")
-            except (NameError, OSError):
-                app.log('avatar').warning('Pillow convert failed: %s', filename)
-                app.log('avatar').debug('Error', exc_info=True)
-                return
-            array = GLib.Bytes.new(avatar.tobytes())
-            width, height = avatar.size
-            pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
-                array, GdkPixbuf.Colorspace.RGB, True,
-                8, width, height, width * 4)
-            if size:
-                width, height = gtkgui_helpers.scale_with_ratio(
-                    size, width, height)
-                pixbuf = pixbuf.scale_simple(
-                    width, height, GdkPixbuf.InterpType.BILINEAR)
-
-        if filename not in app.avatar_cache:
-            app.avatar_cache[filename] = {}
-        app.avatar_cache[filename][size] = pixbuf
-
-        if scale is None:
-            return pixbuf
-        return Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
-
-    @staticmethod
-    def avatar_exists(filename):
-        path = os.path.join(configpaths.get('AVATAR'), filename)
-        if not os.path.isfile(path):
-            return False
-        return True
+    def avatar_exists(self, filename):
+        return self.avatar_storage.get_avatar_path(filename) is not None
 
     # does JID exist only within a groupchat?
     def is_pm_contact(self, fjid, account):
@@ -2310,6 +2157,8 @@ class Interface:
         self.basic_pattern = None
         self.emot_and_basic = None
         self.sth_at_sth_dot_sth = None
+
+        self.avatar_storage = AvatarStorage()
 
         cfg_was_read = parser.read()
 

@@ -594,7 +594,7 @@ class Contacts():
             if contacts[0].is_groupchat():
                 return contacts[0]
 
-    def get_avatar(self, jid, size=None, scale=None):
+    def get_avatar(self, jid, size, scale):
         if jid not in self._contacts:
             return None
 

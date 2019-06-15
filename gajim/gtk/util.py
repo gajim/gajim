@@ -26,14 +26,18 @@ import logging
 import textwrap
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from functools import lru_cache
 from functools import wraps
-from math import pi
+
+try:
+    from PIL import Image
+except Exception:
+    pass
 
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
+from gi.repository import GdkPixbuf
 import nbxmpp
 import cairo
 
@@ -620,98 +624,6 @@ def find_widget(name, container):
             return find_widget(name, child)
 
 
-@lru_cache(maxsize=1024)
-def generate_avatar(letters, color, size, scale):
-    # Get color for nickname with XEP-0392
-    color_r, color_g, color_b = color
-
-    # Set up colors and size
-    if scale is not None:
-        size = size * scale
-
-    width = size
-    height = size
-    font_size = size * 0.5
-
-    # Set up surface
-    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
-    context = cairo.Context(surface)
-
-    context.set_source_rgb(color_r, color_g, color_b)
-    context.rectangle(0, 0, width, height)
-    context.fill()
-
-    # Draw letters
-    context.select_font_face('sans-serif',
-                             cairo.FONT_SLANT_NORMAL,
-                             cairo.FONT_WEIGHT_NORMAL)
-    context.set_font_size(font_size)
-    extends = context.text_extents(letters)
-    if isinstance(extends, tuple):
-        # For cairo < 1.15
-        x_bearing, y_bearing, ex_width, ex_height = extends[0:4]
-    else:
-        x_bearing = extends.x_bearing
-        y_bearing = extends.y_bearing
-        ex_width = extends.width
-        ex_height = extends.height
-
-    x_pos = width / 2 - (ex_width / 2 + x_bearing)
-    y_pos = height / 2 - (ex_height / 2 + y_bearing)
-    context.move_to(x_pos, y_pos)
-    context.set_source_rgb(0.95, 0.95, 0.95)
-    # use cairo.OPERATOR_OVER legacy constant because its
-    # compatible with cairo < 1.13
-    context.set_operator(cairo.OPERATOR_OVER)
-    context.show_text(letters)
-
-    return context.get_target()
-
-
-def clip_circle(surface):
-    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
-                                     surface.get_width(),
-                                     surface.get_height())
-    context = cairo.Context(new_surface)
-    context.set_source_surface(surface, 0, 0)
-
-    width = surface.get_width()
-    height = surface.get_height()
-    radius = width / 2
-
-    context.arc(width / 2, height / 2, radius, 0, 2 * pi)
-
-    context.clip()
-    context.paint()
-
-    return context.get_target()
-
-
-def clip_rounded_corners(surface):
-    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
-                                     surface.get_width(),
-                                     surface.get_height())
-    context = cairo.Context(new_surface)
-    context.set_source_surface(surface, 0, 0)
-
-    width = surface.get_width()
-    height = surface.get_height()
-    radius = width * 0.1
-    deg = pi / 180.0
-
-    context.new_sub_path()
-    context.arc(width - radius, radius, radius, -90 * deg, 0)
-    context.arc(width - radius, height - radius, radius, 0, 90 * deg)
-    context.arc(radius, height - radius, radius, 90 * deg, 180 * deg)
-    context.arc(radius, radius, radius, 180 * deg, 270 * deg)
-    context.close_path()
-
-    context.clip()
-    context.paint()
-
-    return context.get_target()
-
-
 class MultiLineLabel(Gtk.Label):
     def __init__(self, *args, **kwargs):
         Gtk.Label.__init__(self, *args, **kwargs)
@@ -744,3 +656,45 @@ def text_to_color(text):
     else:
         background = (1, 1, 1)  # RGB (255, 255, 255) white
     return nbxmpp.util.text_to_color(text, background)
+
+
+def scale_with_ratio(size, width, height):
+    if height == width:
+        return size, size
+    if height > width:
+        ratio = height / float(width)
+        return int(size / ratio), size
+
+    ratio = width / float(height)
+    return size, int(size / ratio)
+
+
+def load_pixbuf(path, size=None):
+    try:
+        if size is None:
+            return GdkPixbuf.Pixbuf.new_from_file(path)
+        return GdkPixbuf.Pixbuf.new_from_file_at_scale(path, size, size, True)
+
+    except GLib.GError:
+        log.warning('loading pixbuf failed. Try to convert '
+                    'image with pillow: %s', path)
+        try:
+            with open(path, 'rb') as im_handle:
+                img = Image.open(im_handle)
+                avatar = img.convert("RGBA")
+        except (NameError, OSError):
+            log.warning('Pillow convert failed: %s', path)
+            log.debug('Error', exc_info=True)
+            return None
+
+        array = GLib.Bytes.new(avatar.tobytes())
+        width, height = avatar.size
+        pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
+            array, GdkPixbuf.Colorspace.RGB, True,
+            8, width, height, width * 4)
+        if size is not None:
+            width, height = scale_with_ratio(size, width, height)
+            return pixbuf.scale_simple(width,
+                                       height,
+                                       GdkPixbuf.InterpType.BILINEAR)
+        return pixbuf

@@ -740,15 +740,15 @@ class GroupchatControl(ChatControlBase):
 
     def _on_upload_avatar(self, action, param):
         def _on_accept(filename):
-            sha = app.interface.save_avatar(filename, publish=True)
+            data, sha = app.interface.avatar_storage.prepare_for_publish(
+                filename)
             if sha is None:
                 ErrorDialog(
                     _('Could not load image'),
                     transient_for=self.parent_win.window)
                 return
 
-            publish = app.interface.get_avatar_from_storage(sha, publish=True)
-            avatar = base64.b64encode(publish).decode('utf-8')
+            avatar = base64.b64encode(data).decode('utf-8')
             con = app.connections[self.account]
             con.get_module('VCardTemp').upload_room_avatar(
                 self.room_jid, avatar)
