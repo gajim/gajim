@@ -523,8 +523,7 @@ class ComboSetting(GenericSetting):
 
         self.combo = MaxWidthComboBoxText()
         self.combo.set_valign(Gtk.Align.CENTER)
-        text_renderer = self.combo.get_cells()[0]
-        text_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
+
         for index, value in enumerate(combo_items):
             if isinstance(value, tuple):
                 value, label = value
@@ -563,8 +562,6 @@ class ProxyComboSetting(GenericSetting):
 
         self.combo = MaxWidthComboBoxText()
         self.combo.set_valign(Gtk.Align.CENTER)
-        text_renderer = self.combo.get_cells()[0]
-        text_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
 
         self._signal_id = None
         self.update_values()
