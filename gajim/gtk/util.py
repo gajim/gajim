@@ -636,6 +636,8 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
     def __init__(self, *args, **kwargs):
         Gtk.ComboBoxText.__init__(self, *args, **kwargs)
         self._max_width = 100
+        text_renderer = self.get_cells()[0]
+        text_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
 
     def set_max_size(self, size):
         self._max_width = size

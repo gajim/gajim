@@ -25,6 +25,7 @@ from gajim.common.helpers import open_uri
 from gajim.common.modules.dataforms import extend_form
 
 from gajim.gtk.util import MultiLineLabel
+from gajim.gtk.util import MaxWidthComboBoxText
 
 
 class DataFormWidget(Gtk.ScrolledWindow):
@@ -318,7 +319,7 @@ class ListSingleField(Field):
     def __init__(self, field, form_grid, options):
         Field.__init__(self, field, form_grid, options)
 
-        self._widget = Gtk.ComboBoxText()
+        self._widget = MaxWidthComboBoxText()
         self._widget.set_valign(Gtk.Align.CENTER)
         for value, label in field.iter_options():
             if not label:
