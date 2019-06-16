@@ -1638,35 +1638,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             show=show,
             caps=ptype != 'unavailable')
 
-    def join_gc(self, nick, room_jid, password, change_nick=False,
-    rejoin=False):
-        # FIXME: This room JID needs to be normalized; see #1364
-        if not app.account_is_connected(self.name):
-            return
-        show = helpers.get_xmpp_show(app.SHOW_LIST[self.connected])
-        if show == 'invisible':
-            # Never join a room when invisible
-            return
-
-        self.get_module('Discovery').disco_muc(
-            room_jid, partial(self._join_gc, nick, show, room_jid,
-                              password, change_nick, rejoin))
-
-    def _join_gc(self, nick, show, room_jid, password, change_nick, rejoin):
-        if change_nick:
-            self.get_module('Presence').send_presence(
-                '%s/%s' % (room_jid, nick),
-                show=show,
-                status=self.status)
-        else:
-            self.get_module('MUC').send_muc_join_presence(
-                '%s/%s' % (room_jid, nick),
-                show=show,
-                status=self.status,
-                room_jid=room_jid,
-                password=password,
-                rejoin=rejoin)
-
     def _nec_gc_message_outgoing(self, obj):
         if obj.account != self.name:
             return

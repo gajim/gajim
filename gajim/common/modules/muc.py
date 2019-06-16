@@ -17,6 +17,7 @@
 
 import time
 import logging
+from functools import partial
 
 import nbxmpp
 from nbxmpp.const import InviteType
@@ -108,12 +109,20 @@ class MUC(BaseModule):
                 self._con.muc_jid['jabber'] = from_
                 raise nbxmpp.NodeProcessed
 
-    def send_muc_join_presence(self, *args, room_jid=None, password=None,
-                               rejoin=False, **kwargs):
+    def join(self, room_jid, nick, password, rejoin=False):
         if not app.account_is_connected(self._account):
             return
+
+        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
+        self._con.get_module('Discovery').disco_muc(
+            room_jid, partial(self._join, room_jid, nick,
+                              show, password, rejoin))
+
+    def _join(self, room_jid, nick, show, password, rejoin):
         presence = self._con.get_module('Presence').get_presence(
-            *args, **kwargs)
+            '%s/%s' % (room_jid, nick),
+            show=show,
+            status=self._con.status)
 
         muc_x = presence.setTag(nbxmpp.NS_MUC + ' x')
         if room_jid is not None:
@@ -122,9 +131,15 @@ class MUC(BaseModule):
         if password is not None:
             muc_x.setTagData('password', password)
 
-        self._log.debug('Send MUC join presence:\n%s', presence)
-
+        self._log.info('Join MUC: %s', room_jid)
         self._con.connection.send(presence)
+
+    def change_nick(self, room_jid, new_nick):
+        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
+        self._con.get_module('Presence').send_presence(
+            '%s/%s' % (room_jid, new_nick),
+            show=show,
+            status=self._con.status)
 
     def _add_history_query(self, muc_x, room_jid, rejoin):
         last_date = app.logger.get_room_last_message_time(

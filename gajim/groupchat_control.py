@@ -1474,7 +1474,8 @@ class GroupchatControl(ChatControlBase):
         if obj.conn.name != self.account:
             return
         password = app.gc_passwords.get(self.room_jid, '')
-        obj.conn.join_gc(self.nick, self.room_jid, password, rejoin=True)
+        obj.conn.get_module('MUC').join(self.room_jid, self.nick, password,
+                                        rejoin=True)
 
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
@@ -1610,8 +1611,8 @@ class GroupchatControl(ChatControlBase):
         if not self.autorejoin:
             return False
         password = app.gc_passwords.get(self.room_jid, '')
-        app.connections[self.account].join_gc(self.nick, self.room_jid,
-            password, rejoin=True)
+        app.connections[self.account].get_module('MUC').join(
+            self.room_jid, self.nick, password, rejoin=True)
         return True
 
     def draw_roster(self):

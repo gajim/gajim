@@ -270,7 +270,8 @@ class Interface:
 
     def handle_gc_password_required(self, account, room_jid, nick):
         def on_ok(text):
-            app.connections[account].join_gc(nick, room_jid, text)
+            app.connections[account].get_module('MUC').join(
+                room_jid, nick, text)
             app.gc_passwords[room_jid] = text
             gc_control.error_dialog = None
 
@@ -1644,7 +1645,8 @@ class Interface:
             gc_control.parent_win.set_active_tab(gc_control)
 
         # Connect
-        app.connections[account].join_gc(nick, room_jid, password)
+        app.connections[account].get_module('MUC').join(
+            room_jid, nick, password)
         if password:
             app.gc_passwords[room_jid] = password
 

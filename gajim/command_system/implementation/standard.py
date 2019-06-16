@@ -258,7 +258,9 @@ class StandardGroupChatCommands(CommandContainer):
             new_nick = helpers.parse_resource(new_nick)
         except Exception:
             raise CommandError(_("Invalid nickname"))
-        self.connection.join_gc(new_nick, self.room_jid, None, change_nick=True)
+        # FIXME: Check state of MUC
+        self.connection.get_module('MUC').change_nick(
+            self.room_jid, new_nick)
         self.new_nick = new_nick
 
     @command('query', raw=True)
