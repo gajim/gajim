@@ -678,8 +678,6 @@ def load_pixbuf(path, size=None):
         return GdkPixbuf.Pixbuf.new_from_file_at_scale(path, size, size, True)
 
     except GLib.GError:
-        log.warning('loading pixbuf failed. Try to convert '
-                    'image with pillow: %s', path)
         try:
             with open(path, 'rb') as im_handle:
                 img = Image.open(im_handle)
