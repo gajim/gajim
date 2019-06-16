@@ -229,7 +229,7 @@ class Chatstate(BaseModule):
         if self._get_chatstate_setting(contact) == 'disabled':
             return None
 
-        if not contact.is_groupchat():
+        if not contact.is_groupchat:
             # Dont send chatstates to ourself
             if self._con.get_own_jid().bareMatch(contact.jid):
                 return None
@@ -283,7 +283,7 @@ class Chatstate(BaseModule):
                                'jid': contact.jid,
                                'chatstate': str(State.ACTIVE)}
 
-                if contact.is_groupchat():
+                if contact.is_groupchat:
                     if contact.is_connected:
                         app.nec.push_outgoing_event(
                             GcMessageOutgoingEvent(None, **event_attrs))
@@ -296,7 +296,7 @@ class Chatstate(BaseModule):
             self._last_keyboard_activity.pop(contact.jid, None)
             return
 
-        if not contact.is_groupchat():
+        if not contact.is_groupchat:
             # Dont leak presence to contacts
             # which are not allowed to see our status
             if not contact.is_pm_contact:
@@ -328,7 +328,7 @@ class Chatstate(BaseModule):
                        'jid': contact.jid,
                        'chatstate': str(state)}
 
-        if contact.is_groupchat():
+        if contact.is_groupchat:
             if contact.is_connected:
                 app.nec.push_outgoing_event(
                     GcMessageOutgoingEvent(None, **event_attrs))
@@ -355,7 +355,7 @@ class Chatstate(BaseModule):
 
     @staticmethod
     def _get_chatstate_setting(contact):
-        if contact.is_groupchat():
+        if contact.is_groupchat:
             default = app.config.get('send_chatstate_muc_default')
             return app.config.get_per(
                 'rooms', contact.jid, 'send_chatstate', default)

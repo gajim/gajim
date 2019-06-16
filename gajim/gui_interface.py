@@ -1591,7 +1591,7 @@ class Interface:
         """
 
         if app.contacts.get_contact(account, room_jid) and \
-        not app.contacts.get_contact(account, room_jid).is_groupchat():
+        not app.contacts.get_contact(account, room_jid).is_groupchat:
             ErrorDialog(
                 _('This is not a group chat'),
                 _('%(room_jid)s is already in your roster. Please check '

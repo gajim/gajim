@@ -108,6 +108,10 @@ class CommonContact(XMPPEntity):
     def is_pm_contact(self):
         return self._is_pm_contact
 
+    @property
+    def is_groupchat(self):
+        return False
+
     def get_full_jid(self):
         raise NotImplementedError
 
@@ -178,7 +182,7 @@ class Contact(CommonContact):
     def get_shown_groups(self):
         if self.is_observer():
             return [_('Observers')]
-        if self.is_groupchat():
+        if self.is_groupchat:
             return [_('Groupchats')]
         if self.is_transport():
             return [_('Transports')]
@@ -211,6 +215,7 @@ class Contact(CommonContact):
             is_observer = True
         return is_observer
 
+    @property
     def is_groupchat(self):
         return self._is_groupchat
 
@@ -524,7 +529,7 @@ class Contacts():
         self._contacts = {}
 
     def add_contact(self, contact):
-        if contact.jid not in self._contacts or contact.is_groupchat():
+        if contact.jid not in self._contacts or contact.is_groupchat:
             self._contacts[contact.jid] = [contact]
             return
         contacts = self._contacts[contact.jid]
@@ -591,7 +596,7 @@ class Contacts():
     def get_groupchat_contact(self, jid):
         if jid in self._contacts:
             contacts = self._contacts[jid]
-            if contacts[0].is_groupchat():
+            if contacts[0].is_groupchat:
                 return contacts[0]
 
     def get_avatar(self, jid, size, scale):
@@ -630,7 +635,7 @@ class Contacts():
 
     def get_contacts_jid_list(self):
         return [jid for jid, contact in self._contacts.items() if not
-                contact[0].is_groupchat()]
+                contact[0].is_groupchat]
 
     def get_contact_from_full_jid(self, fjid):
         """

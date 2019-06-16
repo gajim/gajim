@@ -424,7 +424,7 @@ class RosterWindow:
 
                 if contact.is_transport():
                     typestr = 'agent'
-                elif contact.is_groupchat():
+                elif contact.is_groupchat:
                     typestr = 'groupchat'
                 else:
                     typestr = 'contact'
@@ -836,7 +836,7 @@ class RosterWindow:
         Remove groupchat from roster and redraw account and group
         """
         contact = app.contacts.get_contact_with_highest_priority(account, jid)
-        if contact.is_groupchat():
+        if contact.is_groupchat:
             if jid in app.interface.minimized_controls[account]:
                 del app.interface.minimized_controls[account][jid]
             self.remove_contact(jid, account, force=True, backend=True, maximize=maximize)
@@ -2179,7 +2179,7 @@ class RosterWindow:
         keep_pep = any(c.show not in ('error', 'offline') for c in
             contact_instances)
         if not keep_pep and contact.jid != app.get_jid_from_account(account) \
-        and not contact.is_groupchat():
+        and not contact.is_groupchat:
             self.delete_pep(contact.jid, account)
 
         # Redraw everything and select the sender
@@ -3622,7 +3622,7 @@ class RosterWindow:
         resource = None
         contact = app.contacts.get_contact_with_highest_priority(account, jid)
         titer = model.get_iter(path)
-        if contact.is_groupchat():
+        if contact.is_groupchat:
             first_ev = app.events.get_first_event(account, jid)
             if first_ev and self.open_event(account, jid, first_ev):
                 # We are invited to a GC

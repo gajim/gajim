@@ -145,7 +145,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
         if not c:
             # Groupchat is maybe already destroyed
             return
-        if c.is_groupchat() and self.from_whom not in \
+        if c.is_groupchat and self.from_whom not in \
         app.interface.minimized_controls[self.account] and self.action == \
         'receive' and app.events.get_nb_roster_events(self.account,
         self.from_whom, types=['chat', 'normal']) == 0:
