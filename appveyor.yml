@@ -20,6 +20,10 @@ clone_depth: 1
 build_script:
   - del C:\Windows\System32\libssl-*.dll C:\Windows\system32\libcrypto-*.dll
   - del C:\Windows\SysWOW64\libssl-*.dll C:\Windows\SysWOW64\libcrypto-*.dll
+  # Temporary fix until appveyor updates its msys build https://github.com/msys2/MINGW-packages/issues/5437
+  - C:\msys64\usr\bin\pacman -Rdd mingw-w64-i686-ncurses mingw-w64-i686-termcap mingw-w64-i686-gcc-ada mingw-w64-i686-gcc-objc --noconfirm --noprogressbar
+  - C:\msys64\usr\bin\pacman -Rdd mingw-w64-x86_64-ncurses mingw-w64-x86_64-termcap mingw-w64-x86_64-gcc-ada mingw-w64-x86_64-gcc-objc --noconfirm --noprogressbar
+  
   - C:\msys64\usr\bin\pacman -Syuu --needed --noconfirm --noprogressbar --overwrite \\*
   - ps: |
         $env:TIME_STRING=(get-date -UFormat "%Y-%m-%d").ToString()
