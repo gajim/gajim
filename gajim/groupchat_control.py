@@ -2078,11 +2078,6 @@ class GroupchatControl(ChatControlBase):
                 _('You are not in the members '
                   'list in groupchat %s.') % self.room_jid)
 
-        elif error_type == Error.CONFLICT:
-            win = None if self.parent_win is None else self.parent_win.window
-            app.interface.handle_ask_new_nick(
-                self.account, self.room_jid, win)
-
         else:
             self.add_info_message(
                 'Error %s: %s' % (error_type.value, error_message))

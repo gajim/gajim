@@ -771,8 +771,8 @@ class ChangeNickDialog(InputDialogCheck):
         self.on_ok(nick, self.is_checked())
 
     def on_ok(self, nick, is_checked):
-        app.connections[self.account].join_gc(nick, self.room_jid, None,
-            change_nick=self.change_nick)
+        app.connections[self.account].get_module('MUC').change_nick(
+            self.room_jid, nick)
         if app.gc_connected[self.account][self.room_jid]:
             # We are changing nick, we will change self.nick when we receive
             # presence that inform that it works

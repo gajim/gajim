@@ -103,7 +103,6 @@ from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import PlainConnectionDialog
 from gajim.gtk.dialogs import SSLErrorDialog
-from gajim.gtk.dialogs import ChangeNickDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.profile import ProfileWindow
 from gajim.gtk.join_groupchat import JoinGroupchatWindow
@@ -159,19 +158,6 @@ class Interface:
     @staticmethod
     def raise_dialog(name, *args, **kwargs):
         get_dialog(name, *args, **kwargs)
-
-    def handle_ask_new_nick(self, account, room_jid, parent_win):
-        title = _('Unable to join group chat')
-        prompt = _('Your desired nickname in group chat\n'
-                   '<b>%s</b>\n'
-                   'is in use or registered by another occupant.\n'
-                   'Please specify another nickname below:') % room_jid
-        if 'change_nick_dialog' in self.instances:
-            self.instances['change_nick_dialog'].add_room(
-                account, room_jid, prompt)
-        else:
-            self.instances['change_nick_dialog'] = ChangeNickDialog(
-                account, room_jid, title, prompt, transient_for=parent_win)
 
     @staticmethod
     def handle_event_http_auth(obj):

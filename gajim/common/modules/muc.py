@@ -22,6 +22,7 @@ from functools import partial
 import nbxmpp
 from nbxmpp.const import InviteType
 from nbxmpp.const import PresenceType
+from nbxmpp.const import Error
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
@@ -68,6 +69,7 @@ class MUC(BaseModule):
                           priority=49),
             StanzaHandler(name='presence',
                           callback=self._on_muc_presence,
+                          typ='error',
                           ns=nbxmpp.NS_MUC,
                           priority=49),
             StanzaHandler(name='message',
@@ -194,9 +196,15 @@ class MUC(BaseModule):
                 muc_x.setTag('history', tags)
 
     def _on_muc_presence(self, _con, _stanza, properties):
-        if properties.type == PresenceType.ERROR:
-            self._raise_muc_event('muc-presence-error', properties)
+        muc = self._get_muc_data(properties.jid.getBare())
+        if (properties.error.type == Error.CONFLICT and
+                muc.state == MUCJoinedState.JOINING):
+            muc.nick += '_'
+            self._log.info('Nickname conflict: %s change to %s',
+                           muc.jid, muc.nick)
+            self._join(muc.jid)
             return
+        self._raise_muc_event('muc-presence-error', properties)
 
     def _on_muc_user_presence(self, _con, stanza, properties):
         if properties.type == PresenceType.ERROR:
