@@ -4271,8 +4271,12 @@ class RosterWindow:
             return
 
         if type_dest == 'groupchat':
-            # drop on a minimized groupchat
-            # TODO: Invite to groupchat if type_dest = contact
+            # Drop on a minimized groupchat
+            if type_source != 'contact':
+                return
+            contact_jid = data
+            con = app.connections[account_dest]
+            con.get_module('MUC').invite(jid_dest, contact_jid)
             return
 
         if type_source == 'group':
@@ -4287,6 +4291,9 @@ class RosterWindow:
                 new_grp = grp_source_list[-1]
             elif type_dest == 'group':
                 grp_dest = model[iter_dest][Column.JID]
+                # Don't allow to drop on e.g. Groupchats group
+                if grp_dest in helpers.special_groups:
+                    return
                 grp_dest_list = grp_dest.split(delimiter)
                 # Do not allow to drop on a subgroup of source group
                 if grp_source_list[0] != grp_dest_list[0]:
