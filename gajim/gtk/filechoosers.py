@@ -21,7 +21,7 @@ from pathlib import Path
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
-from gi.repository import GObject
+from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -76,7 +76,7 @@ class BaseFileChooser:
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
                 path_to_file, *self._preivew_size)
-        except GObject.GError:
+        except GLib.GError:
             preview.clear()
             return
         filechooser.get_preview_widget().set_from_pixbuf(pixbuf)
@@ -173,9 +173,11 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
             self,
             title=self._title,
             action=self._action,
-            buttons=[Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                     Gtk.STOCK_OPEN, Gtk.ResponseType.ACCEPT],
             transient_for=transient_for)
+
+        self.add_button(_('_Cancel'), Gtk.ResponseType.CANCEL)
+        open_button = self.add_button(_('_Open'), Gtk.ResponseType.ACCEPT)
+        open_button.get_style_context().add_class('suggested-action')
 
         self.set_current_folder(path or str(Path.home()))
         if file_name is not None:
