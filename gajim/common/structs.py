@@ -14,5 +14,48 @@
 
 from collections import namedtuple
 
+from gajim.common.const import MUCJoinedState
+
 URI = namedtuple('URI', 'type action data')
 URI.__new__.__defaults__ = (None, None)  # type: ignore
+
+
+class MUCData:
+    def __init__(self, room_jid, nick, password, rejoin):
+        self._room_jid = room_jid
+        self._nick = nick
+        self._password = password
+        self._rejoin = rejoin
+        self._state = MUCJoinedState.NOT_JOINED
+
+    @property
+    def jid(self):
+        return self._room_jid
+
+    @property
+    def nick(self):
+        return self._nick
+
+    @nick.setter
+    def nick(self, value):
+        self._nick = value
+
+    @property
+    def password(self):
+        return self._password
+
+    @property
+    def state(self):
+        return self._state
+
+    @state.setter
+    def state(self, value):
+        self._state = value
+
+    @property
+    def rejoin(self):
+        return self._rejoin
+
+    @rejoin.setter
+    def rejoin(self, value):
+        self._rejoin = value

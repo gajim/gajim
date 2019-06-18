@@ -28,6 +28,8 @@ from nbxmpp.util import is_error_result
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import KindConstant
+from gajim.common.const import MUCJoinedState
+from gajim.common.structs import MUCData
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
@@ -97,6 +99,8 @@ class MUC(BaseModule):
 
         self._register_callback('request_config', self._config_received)
 
+        self._muc_data = {}
+
     def pass_disco(self, from_, identities, features, _data, _node):
         for identity in identities:
             if identity.get('category') != 'conference':
@@ -109,29 +113,45 @@ class MUC(BaseModule):
                 self._con.muc_jid['jabber'] = from_
                 raise nbxmpp.NodeProcessed
 
+    def _get_muc_data(self, room_jid):
+        return self._muc_data[room_jid]
+
+    def _set_muc_state(self, room_jid, state):
+        if self._muc_data[room_jid].state == state:
+            return
+        self._log.info('Set MUC state: %s %s', room_jid, state)
+        self._muc_data[room_jid].state = state
+
+    def _get_muc_state(self, room_jid):
+        return self._muc_data[room_jid].state
+
     def join(self, room_jid, nick, password, rejoin=False):
         if not app.account_is_connected(self._account):
             return
 
-        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
-        self._con.get_module('Discovery').disco_muc(
-            room_jid, partial(self._join, room_jid, nick,
-                              show, password, rejoin))
+        self._muc_data[room_jid] = MUCData(room_jid, nick, password, rejoin)
 
-    def _join(self, room_jid, nick, show, password, rejoin):
+        self._con.get_module('Discovery').disco_muc(
+            room_jid, partial(self._join, room_jid))
+
+    def _join(self, room_jid):
+        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
+        muc = self._get_muc_data(room_jid)
+
         presence = self._con.get_module('Presence').get_presence(
-            '%s/%s' % (room_jid, nick),
+            '%s/%s' % (room_jid, muc.nick),
             show=show,
             status=self._con.status)
 
         muc_x = presence.setTag(nbxmpp.NS_MUC + ' x')
         if room_jid is not None:
-            self._add_history_query(muc_x, room_jid, rejoin)
+            self._add_history_query(muc_x, room_jid, muc.rejoin)
 
-        if password is not None:
-            muc_x.setTagData('password', password)
+        if muc.password is not None:
+            muc_x.setTagData('password', muc.password)
 
         self._log.info('Join MUC: %s', room_jid)
+        self._set_muc_state(room_jid, MUCJoinedState.JOINING)
         self._con.connection.send(presence)
 
     def change_nick(self, room_jid, new_nick):
@@ -178,15 +198,22 @@ class MUC(BaseModule):
             self._raise_muc_event('muc-presence-error', properties)
             return
 
-    def _on_muc_user_presence(self, _con, _stanza, properties):
+    def _on_muc_user_presence(self, _con, stanza, properties):
         if properties.type == PresenceType.ERROR:
+            return
+
+        room_jid = properties.jid.getBare()
+        if room_jid not in self._muc_data:
+            self._log.warning('Presence from unknown MUC')
+            self._log.warning(stanza)
             return
 
         if properties.is_muc_destroyed:
             for contact in app.contacts.get_gc_contact_list(
-                    self._account, properties.jid.getBare()):
+                    self._account, room_jid):
                 contact.presence = PresenceType.UNAVAILABLE
-            self._log.info('MUC destroyed: %s', properties.jid.getBare())
+            self._log.info('MUC destroyed: %s', room_jid)
+            self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             self._raise_muc_event('muc-destroyed', properties)
             return
 
@@ -201,6 +228,7 @@ class MUC(BaseModule):
             self._log.info('Nickname changed: %s to %s',
                            properties.jid,
                            properties.muc_user.nick)
+            self._get_muc_data(room_jid).nick = properties.muc_user.nick
             self._raise_muc_event('muc-nickname-changed', properties)
             return
 
@@ -215,6 +243,7 @@ class MUC(BaseModule):
             return
 
         if properties.is_muc_self_presence and properties.is_kicked:
+            self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             self._raise_muc_event('muc-self-kicked', properties)
             return
 
@@ -352,6 +381,10 @@ class MUC(BaseModule):
                          subject=properties.subject,
                          nickname=properties.muc_nickname,
                          user_timestamp=properties.user_timestamp))
+
+        if self._get_muc_state(jid) == MUCJoinedState.JOINING:
+            self._set_muc_state(jid, MUCJoinedState.JOINED)
+
         raise nbxmpp.NodeProcessed
 
     def _on_voice_request(self, _con, _stanza, properties):

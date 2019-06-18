@@ -200,6 +200,15 @@ class URIAction(Enum):
     SUBSCRIBE = 'subscribe'
 
 
+class MUCJoinedState(Enum):
+    JOINED = 'joined'
+    NOT_JOINED = 'not joined'
+    JOINING = 'joining'
+
+    def __str__(self):
+        return self.name
+
+
 EME_MESSAGES = {
     'urn:xmpp:otr:0':
         _('This message was encrypted with OTR '
