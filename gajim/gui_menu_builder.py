@@ -97,7 +97,7 @@ show_bookmarked=False, force_resource=False):
     if len(contact_list) > 1: # several resources
         invite_to_new_room_menuitem.set_submenu(build_resources_submenu(
             contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
-    elif len(list_) == 1 and contact.supports(NS_MUC):
+    elif len(list_) == 1:
         invite_menuitem.set_sensitive(True)
         # use resource if it's self contact
         if contact.jid == app.get_jid_from_account(account) or force_resource:
