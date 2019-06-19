@@ -3488,12 +3488,12 @@ class RosterWindow:
 
         helpers.update_optional_features(account)
 
-    def on_pep_services_menuitem_activate(self, widget, account):
-        if 'pep_services' in app.interface.instances[account]:
-            app.interface.instances[account]['pep_services'].window.present()
+    def _on_pep_services_menuitem_activate(self, widget, account):
+        window = app.get_app_window(ManagePEPServicesWindow, account)
+        if window is None:
+            ManagePEPServicesWindow(account)
         else:
-            app.interface.instances[account]['pep_services'] = \
-                ManagePEPServicesWindow(account)
+            window.present()
 
     def on_add_new_contact(self, widget, account):
         AddNewContactWindow(account)
@@ -4814,7 +4814,7 @@ class RosterWindow:
                 pep_config.set_sensitive(True)
                 pep_submenu.append(pep_config)
                 pep_config.connect('activate',
-                    self.on_pep_services_menuitem_activate, account)
+                    self._on_pep_services_menuitem_activate, account)
 
             else:
                 pep_menuitem.set_sensitive(False)

@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -24,46 +25,57 @@ from gajim.gtk.dataform import DataFormDialog
 from gajim.gtk.util import get_builder
 
 
-class ManagePEPServicesWindow:
+class ManagePEPServicesWindow(Gtk.ApplicationWindow):
     def __init__(self, account):
-        self.xml = get_builder('manage_pep_services_window.ui')
-        self.window = self.xml.get_object('manage_pep_services_window')
-        self.window.set_transient_for(app.interface.roster.window)
-        self.xml.get_object('configure_button').set_sensitive(False)
-        self.xml.get_object('delete_button').set_sensitive(False)
-        self.xml.connect_signals(self)
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_show_menubar(False)
+        self.set_name('ManagePEPServicesWindow')
+        self.set_default_size(300, 350)
+        self.set_resizable(True)
+        self.set_transient_for(app.interface.roster.window)
+
+        self._ui = get_builder('manage_pep_services_window.ui')
+        self.add(self._ui.manage_pep_services)
+
         self.account = account
+        self.set_title(_('PEP Service Configuration (%s)') % self.account)
         self._con = app.connections[self.account]
 
-        self.init_services()
-        self.xml.get_object('services_treeview').get_selection().connect(
-            'changed', self.on_services_selection_changed)
+        self._init_services()
+        self._ui.services_treeview.get_selection().connect(
+            'changed', self._on_services_selection_changed)
 
         app.ged.register_event_handler(
             'pubsub-config-received', ged.GUI1, self._nec_pep_config_received)
 
-        self.window.show_all()
+        self.show_all()
+        self.connect('key-press-event', self._on_key_press_event)
+        self.connect('destroy', self._on_destroy)
+        self._ui.connect_signals(self)
 
-    def on_manage_pep_services_window_destroy(self, widget):
-        del app.interface.instances[self.account]['pep_services']
+    def _on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
+
+    def _on_destroy(self, *args):
         app.ged.remove_event_handler(
             'pubsub-config-received', ged.GUI1, self._nec_pep_config_received)
 
-    def on_close_button_clicked(self, widget):
-        self.window.destroy()
+    def _on_services_selection_changed(self, sel):
+        self._ui.configure_button.set_sensitive(True)
+        self._ui.delete_button.set_sensitive(True)
 
-    def on_services_selection_changed(self, sel):
-        self.xml.get_object('configure_button').set_sensitive(True)
-        self.xml.get_object('delete_button').set_sensitive(True)
-
-    def init_services(self):
-        self.treeview = self.xml.get_object('services_treeview')
+    def _init_services(self):
         # service, access_model, group
         self.treestore = Gtk.ListStore(str)
-        self.treeview.set_model(self.treestore)
+        self.treestore.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+        self._ui.services_treeview.set_model(self.treestore)
 
-        col = Gtk.TreeViewColumn('Service')
-        self.treeview.append_column(col)
+        col = Gtk.TreeViewColumn(_('Service'))
+        col.set_sort_column_id(0)
+        self._ui.services_treeview.append_column(col)
 
         cellrenderer_text = Gtk.CellRendererText()
         col.pack_start(cellrenderer_text, True)
@@ -71,7 +83,9 @@ class ManagePEPServicesWindow:
 
         jid = self._con.get_own_jid().getStripped()
         self._con.get_module('Discovery').disco_items(
-            jid, success_cb=self._items_received, error_cb=self._items_error)
+            jid,
+            success_cb=self._items_received,
+            error_cb=self._items_error)
 
     def _items_received(self, from_, node, items):
         jid = self._con.get_own_jid().getStripped()
@@ -82,10 +96,10 @@ class ManagePEPServicesWindow:
     def _items_error(self, from_, error):
         ErrorDialog('Error', error)
 
-    def node_removed(self, jid, node):
+    def _node_removed(self, jid, node):
         if jid != app.get_jid_from_account(self.account):
             return
-        model = self.treeview.get_model()
+        model = self._ui.services_treeview.get_model()
         iter_ = model.get_iter_first()
         while iter_:
             if model[iter_][0] == node:
@@ -93,16 +107,16 @@ class ManagePEPServicesWindow:
                 break
             iter_ = model.iter_next(iter_)
 
-    def node_not_removed(self, jid, node, msg):
+    def _node_not_removed(self, jid, node, msg):
         if jid != app.get_jid_from_account(self.account):
             return
         WarningDialog(
             _('PEP node was not removed'),
-            _('PEP node %(node)s was not removed: %(message)s') % {
+            _('PEP node %(node)s was not removed:\n%(message)s') % {
                 'node': node, 'message': msg})
 
-    def on_delete_button_clicked(self, widget):
-        selection = self.treeview.get_selection()
+    def _on_delete_button_clicked(self, widget):
+        selection = self._ui.services_treeview.get_selection()
         if not selection:
             return
         model, iter_ = selection.get_selected()
@@ -110,11 +124,11 @@ class ManagePEPServicesWindow:
         our_jid = app.get_jid_from_account(self.account)
         con = app.connections[self.account]
         con.get_module('PubSub').send_pb_delete(our_jid, node,
-                                                on_ok=self.node_removed,
-                                                on_fail=self.node_not_removed)
+                                                on_ok=self._node_removed,
+                                                on_fail=self._node_not_removed)
 
-    def on_configure_button_clicked(self, widget):
-        selection = self.treeview.get_selection()
+    def _on_configure_button_clicked(self, widget):
+        selection = self._ui.services_treeview.get_selection()
         if not selection:
             return
         model, iter_ = selection.get_selected()
@@ -130,7 +144,7 @@ class ManagePEPServicesWindow:
 
     def _nec_pep_config_received(self, obj):
         DataFormDialog(_('Configure %s') % obj.node,
-                       self.window,
+                       self,
                        obj.form,
                        obj.node,
                        self._on_config_submit)
