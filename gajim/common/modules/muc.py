@@ -32,6 +32,7 @@ from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
 from gajim.common.structs import MUCData
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common import idle
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.bits_of_binary import store_bob_data
@@ -158,10 +159,40 @@ class MUC(BaseModule):
 
     def leave(self, room_jid):
         self._log.info('Leave MUC: %s', room_jid)
-        nick = self._get_muc_data(room_jid)
+        self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+        muc = self._get_muc_data(room_jid)
         self._con.get_module('Presence').send_presence(
-            '%s/%s' % (room_jid, nick),
+            '%s/%s' % (room_jid, muc.nick),
             typ='unavailable')
+
+    def send_muc_presence(self, room_jid, auto=False):
+        show = app.SHOW_LIST[self._con.connected]
+        if show in ('invisible', 'offline'):
+            # FIXME: Check if this
+            return
+
+        muc = self._get_muc_data(room_jid)
+        status = self._con.status
+
+        xmpp_show = helpers.get_xmpp_show(show)
+
+        idle_time = None
+        if auto and app.is_installed('IDLE') and app.config.get('autoaway'):
+            idle_sec = idle.Monitor.get_idle_sec()
+            idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
+                                      time.gmtime(time.time() - idle_sec))
+
+        full_jid = '%s/%s' % (room_jid, muc.nick)
+
+        self._log.info('Send presence: %s, show: %s, status: %s, idle_time: %s',
+                       full_jid, xmpp_show, status, idle_time)
+
+        self._con.get_module('Presence').send_presence(
+            full_jid,
+            show=xmpp_show,
+            status=status,
+            caps=True,
+            idle_time=idle_time)
 
     def change_nick(self, room_jid, new_nick):
         show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])

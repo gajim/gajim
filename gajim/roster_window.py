@@ -2120,9 +2120,8 @@ class RosterWindow:
             list(app.interface.minimized_controls[account].values()):
                 if gc_control.account == account:
                     if app.gc_connected[account][gc_control.room_jid]:
-                        app.connections[account].send_gc_status(
-                            gc_control.nick, gc_control.room_jid, status, txt,
-                            auto=auto)
+                        app.connections[account].get_module('MUC').send_muc_presence(
+                            gc_control.room_jid, auto=auto)
             if was_invisible and status != 'offline':
                 # We come back from invisible, join bookmarks
                 con = app.connections[account]

@@ -1123,9 +1123,8 @@ class GroupchatControl(ChatControlBase):
     def _nec_vcard_published(self, obj):
         if obj.conn.name != self.account:
             return
-        show = app.SHOW_LIST[obj.conn.connected]
-        status = obj.conn.status
-        obj.conn.send_gc_status(self.nick, self.room_jid, show, status)
+
+        obj.conn.get_module('MUC').send_muc_presence(self.room_jid)
 
     def _nec_update_avatar(self, obj):
         if obj.contact.room_jid != self.room_jid:

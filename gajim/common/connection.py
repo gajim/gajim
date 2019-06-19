@@ -1690,30 +1690,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             automatic_message=obj.automatic_message,
             stanza_id=obj.stanza_id, additional_data=obj.additional_data))
 
-    def send_gc_status(self, nick, jid, show, status, auto=False):
-        if not app.account_is_connected(self.name):
-            return
-        if show == 'invisible':
-            show = 'offline'
-        ptype = None
-        if show == 'offline':
-            ptype = 'unavailable'
-        xmpp_show = helpers.get_xmpp_show(show)
-
-        idle_time = None
-        if auto and app.is_installed('IDLE') and app.config.get('autoaway'):
-            idle_sec = idle.Monitor.get_idle_sec()
-            idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
-                                      time.gmtime(time.time() - idle_sec))
-
-        self.get_module('Presence').send_presence(
-            '%s/%s' % (jid, nick),
-            typ=ptype,
-            show=xmpp_show,
-            status=status,
-            caps=ptype != 'unavailable',
-            idle_time=idle_time)
-
     def unregister_account(self, on_remove_success):
         self._unregister_account = True
         self._unregister_account_cb = on_remove_success
