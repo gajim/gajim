@@ -156,6 +156,13 @@ class MUC(BaseModule):
         self._set_muc_state(room_jid, MUCJoinedState.JOINING)
         self._con.connection.send(presence)
 
+    def leave(self, room_jid):
+        self._log.info('Leave MUC: %s', room_jid)
+        nick = self._get_muc_data(room_jid)
+        self._con.get_module('Presence').send_presence(
+            '%s/%s' % (room_jid, nick),
+            typ='unavailable')
+
     def change_nick(self, room_jid, new_nick):
         show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
         self._con.get_module('Presence').send_presence(

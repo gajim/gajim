@@ -2293,8 +2293,7 @@ class GroupchatControl(ChatControlBase):
             app.ged.remove_event_handler(*handler)
 
         if self.is_connected:
-            app.connections[self.account].send_gc_status(self.nick,
-                self.room_jid, show='offline', status=status)
+            app.connections[self.account].get_module('MUC').leave(self.room_jid)
 
         nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
         for nick in nick_list:
