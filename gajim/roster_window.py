@@ -64,15 +64,14 @@ from gajim.common.dbus import location
 from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
 
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import ConfirmationDialogCheck
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NonModalConfirmationDialog
-from gajim.gtk.dialogs import NewConfirmationCheckDialog
-from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.single_message import SingleMessageWindow
@@ -2249,7 +2248,7 @@ class RosterWindow:
         dlg.dialog.present() # show it on current workspace
 
     def change_status(self, widget, account, status):
-        def change(account, status):
+        def _change(account, status):
             def on_response(message, pep_dict):
                 if message is None:
                     # user pressed Cancel to change status message dialog
@@ -2259,13 +2258,20 @@ class RosterWindow:
             self.get_status_message(status, on_response)
 
         if status == 'invisible' and self.connected_rooms(account):
-            ConfirmationDialog(
+            NewConfirmationDialog(
+                _('Disconnect for Invisibility'),
                 _('You are participating in one or more group chats'),
                 _('Changing your status to invisible will result in '
-                'disconnection from those group chats. Are you sure you want '
-                'to go invisible?'), on_response_ok=(change, account, status))
+                  'disconnection from those group chats.\n'
+                  'Are you sure you want to go invisible?'),
+                  [DialogButton.make('Cancel'),
+                   DialogButton.make('Remove',
+                                     text=_('_Disconnect'),
+                                     callback=_change,
+                                     args=[account,
+                                           status])]).show()
         else:
-            change(account, status)
+            _change(account, status)
 
     def update_status_combobox(self):
         # table to change index in connection.connected to index in combobox
@@ -2351,14 +2357,20 @@ class RosterWindow:
         elif app.config.get('quit_on_roster_x_button'):
             self.on_quit_request()
         else:
-            def on_ok(checked):
-                if checked:
+            def _on_ok(is_checked):
+                if is_checked:
                     app.config.set('quit_on_roster_x_button', True)
                 self.on_quit_request()
-            ConfirmationDialogCheck(_('Really quit Gajim?'),
-                    _('Are you sure you want to quit Gajim?'),
-                    _('Always close Gajim'), on_response_ok=on_ok)
-        return True # do NOT destroy the window
+            NewConfirmationCheckDialog(
+                _('Quit Gajim'),
+                _('You are about to quit Gajim'),
+                _('Are you sure you want to quit Gajim?'),
+                _('_Always quit when closing Gajim'),
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('Remove',
+                                   text=_('_Quit'),
+                                   callback=_on_ok)]).show()
+        return True #  Do NOT destroy the window
 
     def prepare_quit(self):
         if self.save_done:
@@ -2444,10 +2456,18 @@ class RosterWindow:
                         break
 
             if transfer_active:
-                ConfirmationDialog(_('You have running file transfers'),
-                        _('If you quit now, the file(s) being transferred will '
-                        'be stopped. Do you still want to quit?'),
-                        on_response_ok=(on_continue3, message, pep_dict))
+                NewConfirmationDialog(
+                    _('Stop File Transfers'),
+                    _('You still have running file transfers'),
+                    _('If you quit now, the file(s) being transferred will '
+                      'be lost.\n'
+                      'Do you still want to quit?'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       text=_('_Quit'),
+                                       callback=on_continue3,
+                                       args=[message,
+                                             pep_dict])]).show()
                 return
             on_continue3(message, pep_dict)
 
@@ -2476,11 +2496,18 @@ class RosterWindow:
                     break
 
             if unread or recent:
-                ConfirmationDialog(_('You have unread messages'),
+                NewConfirmationDialog(
+                    _('Unread Messages'),
+                    _('You still have unread messages'),
                     _('Messages will only be available for reading them later '
-                    'if you have history enabled and contact is in your '
-                    'roster.'), on_response_ok=(on_continue2,
-                    message, pep_dict))
+                      'if storing chat history is enabled and if the contact '
+                      'is in your contact list.'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       text=_('_Quit'),
+                                       callback=on_continue2,
+                                       args=[message,
+                                             pep_dict])]).show()
                 return
             on_continue2(message, pep_dict)
 
@@ -2726,7 +2753,7 @@ class RosterWindow:
                 self.remove_contact(contact.jid, account, backend=True)
                 return
 
-        def remove(list_):
+        def remove():
             for (contact, account) in list_:
                 full_jid = contact.get_full_jid()
                 app.connections[account].get_module('Gateway').unsubscribe(full_jid)
@@ -2741,13 +2768,14 @@ class RosterWindow:
                     has_unread_events = True
                     break
         if has_unread_events:
-            ErrorDialog(_('You have unread messages'),
-                    _('You must read them before removing this transport.'))
+            ErrorDialog(
+                _('You have unread messages'),
+                _('You must read them before removing this transport.'))
             return
         if len(list_) == 1:
-            pritext = _('Transport "%s" will be removed') % list_[0][0].jid
+            pritext = _('Transport \'%s\' will be removed') % list_[0][0].jid
             sectext = _('You will no longer be able to send and receive '
-                'messages from contacts using this transport.')
+                        'messages from and to contacts using this transport.')
         else:
             pritext = _('Transports will be removed')
             jids = ''
@@ -2755,9 +2783,16 @@ class RosterWindow:
                 jids += '\n  ' + contact.get_shown_name() + ','
             jids = jids[:-1] + '.'
             sectext = _('You will no longer be able to send and receive '
-                'messages to contacts from these transports: %s') % jids
-        ConfirmationDialog(pritext, sectext,
-            on_response_ok=(remove, list_), transient_for=self.window)
+                        'messages from and to contacts using these '
+                        'transports:\n%s') % jids
+        NewConfirmationDialog(
+            _('Remove Transport'),
+            pritext,
+            sectext,
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               callback=remove)],
+            transient_for=self.window).show()
 
     def _nec_blocking(self, obj):
         for jid in obj.changed:
@@ -2817,17 +2852,17 @@ class RosterWindow:
         if confirm_block == 'no':
             _block_it()
             return
-        NewConfirmationCheckDialog(_('Block Contact'),
-                                   _('Really block this contact?'),
-                                   _('This contact will see you offline and '
-                                     'you will not receive messages sent to '
-                                     'you by this contact.'),
-                                   _('_Do not ask me again'),
-                                   [DialogButton.make('Cancel'),
-                                    DialogButton.make('Remove',
-                                                      text=_('Block Contact'),
-                                                      callback=_block_it)],
-                                    modal=False).show()
+        NewConfirmationCheckDialog(
+            _('Block Contact'),
+            _('Really block this contact?'),
+            _('This contact will see you offline and you will not receive '
+              'any messages sent to you by this contact.'),
+            _('_Do not ask me again'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               text=_('_Block Contact'),
+                               callback=_block_it)],
+            modal=False).show()
 
     def on_unblock(self, widget, list_, group=None):
         """
@@ -2915,20 +2950,25 @@ class RosterWindow:
             old_text), on_canceled, transient_for=self.window)
 
     def on_remove_group_item_activated(self, widget, group, account):
-        def on_ok(checked):
+        def _on_ok(is_checked):
             for contact in app.contacts.get_contacts_from_group(account,
             group):
-                if not checked:
+                if not is_checked:
                     self.remove_contact_from_groups(contact.jid, account,
                         [group])
                 else:
-                    app.connections[account].get_module('Presence').unsubscribe(contact.jid)
+                    app.connections[account].get_module(
+                        'Presence').unsubscribe(contact.jid)
                     self.remove_contact(contact.jid, account, backend=True)
 
-        ConfirmationDialogCheck(_('Remove Group'),
-            _('Do you want to remove group %s from the roster?') % group,
-            _('Also remove all contacts in this group from your roster'),
-            on_response_ok=on_ok)
+        NewConfirmationCheckDialog(
+            _('Remove Group'),
+            _('Remove Group'),
+            _('Do you want to remove %s from the contact list?') % group,
+            _('_Also remove all contacts of this group from contact list'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               callback=_on_ok)]).show()
 
     def on_edit_groups(self, widget, list_):
         dialogs.EditGroupsDialog(list_)
@@ -3322,42 +3362,62 @@ class RosterWindow:
 
         if len(list_) == 1:
             contact = list_[0][0]
-            pritext = _('Contact "%s" will be removed from your roster') % \
-                contact.get_shown_name()
-            sectext = _('You are about to remove "%(name)s" (%(jid)s) from '
-                'your roster.\n') % {'name': contact.get_shown_name(),
-                'jid': contact.jid}
+            title = _('Remove Contact')
+            pritext = _('Remove contact from contact list')
+            sectext = _('You are about to remove \'%(name)s\' (%(jid)s) from '
+                        'your contact list.\n') % {
+                            'name': contact.get_shown_name(),
+                            'jid': contact.jid}
             if contact.sub == 'to':
-                ConfirmationDialog(pritext, sectext + \
-                    _('By removing this contact you also remove authorization '
-                    'resulting in them always seeing you as offline.'),
-                    on_response_ok=on_ok2)
+                NewConfirmationDialog(
+                    title,
+                    pritext,
+                    sectext + \
+                    _('By removing this contact you also remove authorization. '
+                      'This means the contact will see you as offline.'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       callback=on_ok2)]).show()
             elif _('Not in Roster') in contact.get_shown_groups():
                 # Contact is not in roster
-                ConfirmationDialog(pritext, sectext + \
-                    _('Do you want to continue?'), on_response_ok=on_ok2)
+                NewConfirmationDialog(
+                    title,
+                    pritext,
+                    sectext + \
+                    _('Do you want to continue?'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       callback=on_ok2)]).show()
             else:
                 NewConfirmationCheckDialog(
-                    _('Remove'),
-                    pritext, sectext + \
-                    _('By removing this contact you also by default remove '
-                      'authorization resulting in them always seeing you as'
-                      ' offline.'),
+                    title,
+                    pritext,
+                    sectext + \
+                    _('By removing this contact you also remove authorization. '
+                      'This means the contact will see you as offline.'),
                     _('_I want this contact to know my status after removal'),
                     [DialogButton.make('Cancel'),
-                     DialogButton.make('Remove', callback=on_ok)],
-                     modal=False).show()
+                     DialogButton.make('Remove',
+                                       callback=on_ok)],
+                    modal=False).show()
         else:
             # several contact to remove at the same time
-            pritext = _('Contacts will be removed from your roster')
+            pritext = _('Remove contacts from contact list')
             jids = ''
             for contact, _account in list_:
-                jids += '\n  ' + contact.get_shown_name() + ' (%s)' % \
-                contact.jid + ','
-            sectext = _('By removing these contacts:%s\nyou also remove '
-                'authorization resulting in them always seeing you as '
-                'offline.') % jids
-            ConfirmationDialog(pritext, sectext, on_response_ok=on_ok2)
+                jids += '%(name)s (%(jid)s)\n' % {
+                    'name': contact.get_shown_name(),
+                    'jid': contact.jid}
+            sectext = _('By removing the following contacts, you will also '
+                        'remove authorization. This means they will see you '
+                        'as offline:\n\n%s') % jids
+            NewConfirmationDialog(
+                _('Remove Contacts'),
+                pritext,
+                sectext,
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('Remove',
+                                   callback=on_ok2)]).show()
 
     def on_status_combobox_changed(self, widget):
         """
@@ -3452,12 +3512,17 @@ class RosterWindow:
                 def on_cancel():
                     self.update_status_combobox()
 
-                ConfirmationDialog(
+                NewConfirmationDialog(
+                    _('Disconnect for Invisibility'),
                     _('You are participating in one or more group chats'),
                     _('Changing your status to invisible will result in '
-                    'disconnection from those group chats. Are you sure you '
-                    'want to go invisible?'), on_response_ok=on_ok,
-                    on_response_cancel=on_cancel)
+                      'disconnection from those group chats.\n'
+                      'Are you sure you want to go invisible?'),
+                    [DialogButton.make('Cancel',
+                                       callback=on_cancel),
+                     DialogButton.make('Remove',
+                                       text=_('_Disconnect'),
+                                       callback=on_ok)]).show()
                 return
 
         self.get_status_message(status, on_continue)
@@ -4103,15 +4168,19 @@ class RosterWindow:
         if confirm_metacontacts == 'no' or dest_family == source_family:
             merge_contacts()
             return
-        pritext = _('You are about to create a metacontact. Are you sure you '
-            'want to continue?')
-        sectext = _('Metacontacts are a way to regroup several contacts in one '
-            'line. Generally it is used when the same person has several '
-            'XMPP- or transport -accounts.')
-        dlg = ConfirmationDialogCheck(pritext, sectext,
-            _('_Do not ask me again'), on_response_ok=merge_contacts)
-        if not confirm_metacontacts: # First time we see this window
-            dlg.checkbutton.set_active(True)
+        pritext = _('You are about to create a metacontact')
+        sectext = _('Metacontacts are a way to regroup several contacts in '
+                    'one single contact. Generally it is used when the same '
+                    'person has several XMPP- or Transport-Accounts.')
+        NewConfirmationCheckDialog(
+            _('Create Metacontact'),
+            pritext,
+            sectext,
+            _('_Do not ask me again'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('OK',
+                               text=_('_Create'),
+                               callback=merge_contacts)]).show()
 
     def on_drop_in_group(self, widget, account, c_source, grp_dest,
     is_big_brother, context, etime, grp_source=None):

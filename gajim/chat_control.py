@@ -56,8 +56,8 @@ from gajim import gui_menu_builder
 from gajim import message_control
 from gajim import dialogs
 
-from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_cursor
@@ -1155,15 +1155,15 @@ class ChatControl(ChatControlBase):
         time_ = app.last_message_time[self.account][self.get_full_jid()]
         if time.time() - time_ < 2:
             # 2 seconds
-
             NewConfirmationDialog(
                 _('Close'),
-                _('You just received a new message from %s') % self.contact.jid,
-                _('If you close this tab and you have history disabled, '
+                _('You just received a new message '
+                  'from %s') % self.contact.jid,
+                _('If you close this tab while having chat history disabled, '
                   'this message will be lost.'),
                 [DialogButton.make('Cancel',
                                    callback=lambda: on_no(self)),
-                 DialogButton.make('OK',
+                 DialogButton.make('Remove',
                                    text=_('Close'),
                                    callback=lambda: on_yes(self))],
                 transient_for=self.parent_win.window).show()

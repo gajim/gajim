@@ -67,9 +67,10 @@ from gajim.chat_control_base import ChatControlBase
 from gajim.command_system.implementation.hosts import GroupChatCommands
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputTextDialog
-from gajim.gtk.dialogs import ConfirmationDialogCheck
 from gajim.gtk.dialogs import DestroyMucDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import ChangeNickDialog
@@ -2352,27 +2353,30 @@ class GroupchatControl(ChatControlBase):
         and self.is_connected and self.room_jid \
         not in excludes:
 
-            def on_ok(clicked):
-                if clicked:
-                    # user does not want to be asked again
+            def on_ok(is_checked):
+                if is_checked:
+                    # User does not want to be asked again
                     app.config.set('confirm_close_muc', False)
                 on_yes(self)
 
-            def on_cancel(clicked):
-                if clicked:
-                    # user does not want to be asked again
+            def on_cancel(is_checked):
+                if is_checked:
+                    # User does not want to be asked again
                     app.config.set('confirm_close_muc', False)
                 on_no(self)
 
-            pritext = _('Are you sure you want to leave group chat "%s"?')\
-                % self.name
-            sectext = _('If you close this window, you will be disconnected '
-                'from this group chat.')
-
-            ConfirmationDialogCheck(pritext, sectext,
-                _('_Do not ask me again'), on_response_ok=on_ok,
-                on_response_cancel=on_cancel,
-                transient_for=self.parent_win.window)
+            NewConfirmationCheckDialog(
+                _('Leave Group Chat'),
+                _('Are you sure you want to leave this group chat?'),
+                _('If you close this window, you will be disconnected '
+                  'from \'%s\'.') % self.name,
+                _('_Do not ask me again'),
+                [DialogButton.make('Cancel',
+                                   callback=on_cancel),
+                 DialogButton.make('OK',
+                                   text=_('_Leave'),
+                                   callback=on_ok)],
+                transient_for=self.parent_win.window).show()
             return
 
         on_yes(self)

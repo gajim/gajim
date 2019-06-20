@@ -568,11 +568,12 @@ class HistoryManager:
             _('Delete'),
             ngettext('Delete Conversation', 'Delete Conversations', paths_len),
             ngettext('Do you want to permanently delete this '
-                     'conversation with <b>%s</b>',
-                     'Do you want to permanently delete these Conversations',
+                     'conversation with <b>%s</b>?',
+                     'Do you want to permanently delete these conversations?',
                      paths_len, liststore[list_of_paths[0]][0]),
             [DialogButton.make('Cancel'),
-             DialogButton.make('Delete', callback=on_ok)],
+             DialogButton.make('Delete',
+                               callback=on_ok)],
             transient_for=self._ui.history_manager_window).show()
 
     def _delete_logs(self, liststore, list_of_paths):
@@ -609,7 +610,8 @@ class HistoryManager:
                      'Do you want to permanently delete these messages',
                      paths_len),
             [DialogButton.make('Cancel'),
-             DialogButton.make('Delete', callback=on_ok)],
+             DialogButton.make('Delete',
+                               callback=on_ok)],
             transient_for=self._ui.history_manager_window).show()
 
     def on_search_db_button_clicked(self, widget):

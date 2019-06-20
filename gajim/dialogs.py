@@ -47,8 +47,9 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.exceptions import GajimGeneralException
 
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_icon_name
@@ -675,7 +676,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
             if not msg_name: # msg_name was ''
                 msg_name = msg_text_1l
 
-            def on_ok2():
+            def _on_ok2():
                 self.preset_messages_dict[msg_name] = [
                     msg_text, self.pep_dict.get('activity'),
                     self.pep_dict.get('subactivity'),
@@ -694,12 +695,19 @@ class ChangeStatusMessageDialog(TimeoutDialog):
                 app.config.set_per('statusmsg', msg_name, 'mood_text',
                     self.pep_dict.get('mood_text'))
             if msg_name in self.preset_messages_dict:
-                ConfirmationDialog(_('Overwrite Status Message?'),
-                    _('This name is already used. Do you want to overwrite this '
-                    'status message?'), on_response_ok=on_ok2, transient_for=self.dialog)
+                NewConfirmationDialog(
+                    _('Overwrite'),
+                    _('Overwrite Status Message?'),
+                    _('Preset name is already in use. '
+                      'Do you want to overwrite this preset?'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       text=_('_Overwrite'),
+                                       callback=_on_ok2)],
+                    transient_for=self.dialog).show()
                 return
             app.config.add_per('statusmsg', msg_name)
-            on_ok2()
+            _on_ok2()
             iter_ = self.message_liststore.append((msg_name,))
             # select in combobox the one we just saved
             self.message_combobox.set_active_iter(iter_)

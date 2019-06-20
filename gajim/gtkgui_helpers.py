@@ -147,11 +147,14 @@ def scale_pixbuf_from_data(data, size):
     pixbuf = get_pixbuf_from_data(data)
     return scale_pixbuf(pixbuf, size)
 
+
 def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
+    from gajim.gtk.dialogs import DialogButton
     from gajim.gtk.dialogs import ErrorDialog
-    from gajim.gtk.dialogs import ConfirmationDialog
+    from gajim.gtk.dialogs import NewConfirmationDialog
     from gajim.gtk.dialogs import FTOverwriteConfirmationDialog
     from gajim.gtk.filechoosers import AvatarSaveDialog
+
     def on_continue(response, file_path):
         if response < 0:
             return
@@ -169,7 +172,7 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
             image_format = 'png'
             file_path += '.png'
         else:
-            image_format = extension[1:] # remove leading dot
+            image_format = extension[1:]  # remove leading dot
 
         # Save image
         try:
@@ -179,13 +182,23 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
             if os.path.exists(file_path):
                 os.remove(file_path)
             new_file_path = '.'.join(file_path.split('.')[:-1]) + '.png'
-            def on_ok(file_path, pixbuf):
+
+            def _on_ok(file_path, pixbuf):
                 pixbuf.savev(file_path, 'png', [], [])
-            ConfirmationDialog(_('Extension not supported'),
-                _('Image cannot be saved in %(type)s format. Save as '
-                '%(new_filename)s?') % {'type': image_format,
-                'new_filename': new_file_path},
-                on_response_ok=(on_ok, new_file_path, pixbuf))
+
+            NewConfirmationDialog(
+                _('Error While Saving'),
+                _('Extension not supported'),
+                _('Image cannot be saved in %(type)s format.\n'
+                  'Save as %(new_filename)s?') % {
+                      'type': image_format,
+                      'new_filename': new_file_path},
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('OK',
+                                   text=_('_Save'),
+                                   callback=_on_ok,
+                                   args=[new_file_path,
+                                         pixbuf])]).show()
 
     def on_ok(file_path):
         if os.path.exists(file_path):

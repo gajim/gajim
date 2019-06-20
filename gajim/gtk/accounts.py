@@ -32,19 +32,18 @@ from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
 
 from gajim import gui_menu_builder
 
-from gajim.gtk.settings import SettingsDialog
-from gajim.gtk.settings import SettingsBox
-from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import YesNoDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
-from gajim.gtk.util import get_builder
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
+from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.settings import SettingsBox
+from gajim.gtk.util import get_builder
 
 
 log = logging.getLogger('gajim.gtk.accounts')
@@ -180,7 +179,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
         # Detect if we have opened windows for this account
 
-        def remove(account):
+        def remove():
             if (account in app.interface.instances and
                     'remove_account' in app.interface.instances[account]):
                 dialog = app.interface.instances[account]['remove_account']
@@ -191,14 +190,17 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 app.interface.instances[account]['remove_account'] = \
                     RemoveAccountWindow(account)
         if win_opened:
-            ConfirmationDialog(
-                _('You have opened chat in account %s') % account,
-                _('All chat and groupchat windows will be closed. '
+            NewConfirmationDialog(
+                _('Remove Account'),
+                _('You still have open chats in your account %s') % account,
+                _('All chat and group chat windows will be closed.\n'
                   'Do you want to continue?'),
-                on_response_ok=(remove, account),
-                transient_for=self)
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('Remove',
+                                   callback=remove)],
+                transient_for=self).show()
         else:
-            remove(account)
+            remove()
 
     def remove_account(self, account):
         del self._need_relogin[account]
@@ -649,7 +651,7 @@ class AccountRow(Gtk.ListBoxRow):
                 [DialogButton.make('Cancel',
                                    callback=lambda: switch.set_active(True)),
                  DialogButton.make('Remove',
-                                   text=_('Disable Account'),
+                                   text=_('_Disable Account'),
                                    callback=_disable)],
                 transient_for=self.get_toplevel()).show()
             return Gdk.EVENT_STOP
@@ -1047,11 +1049,15 @@ class RemoveAccountWindow:
 
         if self.account in app.connections and \
         app.connections[self.account].connected:
-            ConfirmationDialog(
-                _('Account "%s" is connected to the server') % self.account,
+            NewConfirmationDialog(
+                _('Remove Account'),
+                _('Account \'%s\' is still connected to the '
+                  'server') % self.account,
                 _('If you remove it, the connection will be lost.'),
-                on_response_ok=remove,
-                transient_for=self._ui.remove_account_window)
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('Remove',
+                                   callback=remove)],
+                transient_for=self._ui.remove_account_window).show()
         else:
             remove()
 

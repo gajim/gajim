@@ -52,8 +52,9 @@ from gajim.message_control import MessageControl
 from gajim.conversation_textview import ConversationTextview
 from gajim.message_textview import MessageTextView
 
-from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk import util
 from gajim.gtk.util import convert_rgb_to_hex
 from gajim.gtk.util import at_the_end
@@ -606,23 +607,27 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         image = clipboard.wait_for_image()
         if image is not None:
             if not app.config.get('confirm_paste_image'):
-                self._paste_event_confirmed(image)
+                self._paste_event_confirmed(True, image)
                 return
-            NewConfirmationDialog(
-                _('Warning'),
+            NewConfirmationCheckDialog(
+                _('Paste Image'),
                 _('You are trying to paste an image'),
                 _('Are you sure you want to paste your '
-                  'clipboard image in the chat?'),
+                  'clipboard\'s image into the chat window?'),
+                _('_Do not ask me again'),
                 [DialogButton.make('Cancel'),
                  DialogButton.make('OK',
-                                   callback=lambda: self._paste_event_confirmed(image))],
-                ).show()
+                                   text=_('_Paste'),
+                                   callback=self._paste_event_confirmed,
+                                   args=[image])]).show()
 
-    def _paste_event_confirmed(self, image):
+    def _paste_event_confirmed(self, is_checked, image):
+        if is_checked:
+            app.config.set('confirm_paste_image', False)
         tmp_dir = TemporaryDirectory()
         dir_ = tmp_dir.name
 
-        # get file transfer preference
+        # Get file transfer preference
         ft_pref = app.config.get_per('accounts', self.account,
                                      'filetransfer_preference')
         path = os.path.join(dir_, '0.png')
