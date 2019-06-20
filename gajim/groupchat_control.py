@@ -56,6 +56,7 @@ from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import open_uri
+from gajim.common.helpers import event_filter
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common import contacts
@@ -1139,23 +1140,16 @@ class GroupchatControl(ChatControlBase):
             return
         self._update_banner_state_image()
 
+    @event_filter(['account', 'room_jid'])
     def _on_voice_approval(self, event):
-        if event.account != self.account:
-            return
-        if event.jid != self.room_jid:
-            return
         SingleMessageWindow(self.account,
                             self.room_jid,
                             action='receive',
                             from_whom=self.room_jid,
                             form_node=event.form)
 
+    @event_filter(['account', 'room_jid'])
     def _on_captcha_challenge(self, event):
-        if event.account != self.account:
-            return
-        if event.jid != self.room_jid:
-            return
-
         self._remove_captcha_request()
 
         def on_send_dataform_clicked(*args):
@@ -1181,9 +1175,8 @@ class GroupchatControl(ChatControlBase):
         self._captcha_request.destroy()
         self._captcha_request = None
 
+    @event_filter(['account'])
     def _nec_mam_decrypted_message_received(self, obj):
-        if obj.conn.name != self.account:
-            return
         if not obj.groupchat:
             return
         if obj.archive_jid != self.room_jid:
@@ -1195,10 +1188,8 @@ class GroupchatControl(ChatControlBase):
             message_id=obj.message_id,
             additional_data=obj.additional_data)
 
+    @event_filter(['account', 'room_jid'])
     def _nec_gc_message_received(self, obj):
-        if obj.room_jid != self.room_jid or obj.conn.name != self.account:
-            return
-
         if not obj.nick:
             # message from server
             self.add_message(
@@ -1408,11 +1399,8 @@ class GroupchatControl(ChatControlBase):
         self.subject = subject
         self.draw_banner_text()
 
+    @event_filter(['account', 'room_jid'])
     def _on_subject(self, event):
-        if event.account != self.account:
-            return
-        if event.jid != self.room_jid:
-            return
         if self.subject == event.subject:
             # Probably a rejoin, we already showed that subject
             return
@@ -1434,35 +1422,37 @@ class GroupchatControl(ChatControlBase):
         else:
             self.subject_button.show()
 
+    @event_filter(['account', 'room_jid'])
     def _on_config_changed(self, event):
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
-        if event.account != self.account:
-            return
-
-        if event.jid != self.room_jid:
-            return
-
         changes = []
         if StatusCode.SHOWING_UNAVAILABLE in event.status_codes:
             changes.append(_('Room now shows unavailable members'))
+
         if StatusCode.NOT_SHOWING_UNAVAILABLE in event.status_codes:
             changes.append(_('Room now does not show unavailable members'))
+
         if StatusCode.CONFIG_NON_PRIVACY_RELATED in event.status_codes:
             changes.append(_('A setting not related to privacy has been '
                              'changed'))
             app.connections[self.account].get_module('Discovery').disco_muc(
                 self.room_jid, self.update_actions, update=True)
+
         if StatusCode.CONFIG_ROOM_LOGGING in event.status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Room logging is now enabled'))
+
         if StatusCode.CONFIG_NO_ROOM_LOGGING in event.status_codes:
             changes.append(_('Room logging is now disabled'))
+
         if StatusCode.CONFIG_NON_ANONYMOUS in event.status_codes:
             changes.append(_('Room is now non-anonymous'))
             self.is_anonymous = False
+
         if StatusCode.CONFIG_SEMI_ANONYMOUS in event.status_codes:
             changes.append(_('Room is now semi-anonymous'))
             self.is_anonymous = True
+
         if StatusCode.CONFIG_FULL_ANONYMOUS in event.status_codes:
             changes.append(_('Room is now fully anonymous'))
             self.is_anonymous = True
@@ -1708,12 +1698,8 @@ class GroupchatControl(ChatControlBase):
         self.nick = new_nick
         self._nick_completion.change_nick(new_nick)
 
+    @event_filter(['account', 'room_jid'])
     def _on_self_presence(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         nick = event.properties.muc_nickname
         affiliation = event.properties.affiliation
         jid = str(event.properties.jid)
@@ -1765,12 +1751,8 @@ class GroupchatControl(ChatControlBase):
         # Update Actions
         self.update_actions()
 
+    @event_filter(['account', 'room_jid'])
     def _on_nickname_changed(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         nick = event.properties.muc_nickname
         new_nick = event.properties.muc_user.nick
         if event.properties.is_muc_self_presence:
@@ -1792,12 +1774,8 @@ class GroupchatControl(ChatControlBase):
         self.remove_contact(nick)
         self.add_contact_to_roster(new_nick)
 
+    @event_filter(['account', 'room_jid'])
     def _on_status_show_changed(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         nick = event.properties.muc_nickname
         status = event.properties.status
         status = '' if status is None else ' - %s' % status
@@ -1819,12 +1797,8 @@ class GroupchatControl(ChatControlBase):
 
         self.draw_contact(nick)
 
+    @event_filter(['account', 'room_jid'])
     def _on_affiliation_changed(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         affiliation = helpers.get_uf_affiliation(
             event.properties.affiliation)
         nick = event.properties.muc_nickname
@@ -1853,12 +1827,8 @@ class GroupchatControl(ChatControlBase):
         self.draw_contact(nick)
         self.update_actions()
 
+    @event_filter(['account', 'room_jid'])
     def _on_role_changed(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         role = helpers.get_uf_role(event.properties.role)
         nick = event.properties.muc_nickname
         reason = event.properties.muc_user.reason
@@ -1885,12 +1855,8 @@ class GroupchatControl(ChatControlBase):
         self.add_contact_to_roster(nick)
         self.update_actions()
 
+    @event_filter(['account', 'room_jid'])
     def _on_self_kicked(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         self.autorejoin = False
 
         status_codes = event.properties.muc_status_codes or []
@@ -1950,12 +1916,8 @@ class GroupchatControl(ChatControlBase):
         # Update Actions
         self.update_actions()
 
+    @event_filter(['account', 'room_jid'])
     def _on_user_left(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         status_codes = event.properties.muc_status_codes or []
         nick = event.properties.muc_nickname
 
@@ -2015,12 +1977,8 @@ class GroupchatControl(ChatControlBase):
         self.remove_contact(nick)
         self.draw_all_roles()
 
+    @event_filter(['account', 'room_jid'])
     def _on_user_joined(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         nick = event.properties.muc_nickname
         join_default = app.config.get('print_join_left_default')
         print_join_left = app.config.get_per(
@@ -2031,12 +1989,8 @@ class GroupchatControl(ChatControlBase):
         if self.is_connected and print_join_left:
             self.add_info_message(_('%s has joined the group chat') % nick)
 
+    @event_filter(['account', 'room_jid'])
     def _on_presence_error(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         nick = event.properties.muc_nickname
         error_type = event.properties.error.type
         error_message = event.properties.error.message
@@ -2124,12 +2078,8 @@ class GroupchatControl(ChatControlBase):
         if self.is_continued:
             self.draw_banner_text()
 
+    @event_filter(['account', 'room_jid'])
     def _on_destroyed(self, event):
-        if event.account != self.account:
-            return
-        if event.room_jid != self.room_jid:
-            return
-
         destroyed = event.properties.muc_destroyed
 
         reason = destroyed.reason
@@ -2186,10 +2136,9 @@ class GroupchatControl(ChatControlBase):
             del self._role_refs[Role(role)]
             self.model.remove(parent_iter)
 
+    @event_filter(['account'])
     def _message_sent(self, obj):
         if not obj.message:
-            return
-        if obj.account != self.account:
             return
         if obj.jid != self.room_jid:
             return

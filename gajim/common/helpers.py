@@ -1481,6 +1481,18 @@ def delay_execution(milliseconds):
     return delay_execution_decorator
 
 
+def event_filter(filter_):
+    def event_filter_decorator(func):
+        @wraps(func)
+        def func_wrapper(self, event, *args, **kwargs):
+            for attr in filter_:
+                if getattr(event, attr) != getattr(self, attr):
+                    return
+            return func(self, event, *args, **kwargs)
+        return func_wrapper
+    return event_filter_decorator
+
+
 def parse_uri_actions(uri):
     uri = uri[5:]
     if '?' not in uri:

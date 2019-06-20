@@ -423,7 +423,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-subject',
                          account=self._account,
-                         jid=jid,
+                         room_jid=jid,
                          subject=properties.subject,
                          nickname=properties.muc_nickname,
                          user_timestamp=properties.user_timestamp))
@@ -445,6 +445,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-voice-approval',
                          account=self._account,
+                         room_jid=room_jid,
                          jid=jid,
                          form=properties.voice_request.form))
         raise nbxmpp.NodeProcessed
@@ -464,7 +465,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-captcha-challenge',
                          account=self._account,
-                         jid=properties.jid,
+                         room_jid=properties.jid.getBare(),
                          form=properties.captcha.form))
         raise nbxmpp.NodeProcessed
 
@@ -472,12 +473,13 @@ class MUC(BaseModule):
         if not properties.is_muc_config_change:
             return
 
+        room_jid = properties.jid.getBare()
         self._log.info('Received config change: %s %s',
-                       properties.jid, properties.muc_status_codes)
+                       room_jid, properties.muc_status_codes)
         app.nec.push_incoming_event(
             NetworkEvent('muc-config-changed',
                          account=self._account,
-                         jid=properties.jid,
+                         room_jid=room_jid,
                          status_codes=properties.muc_status_codes))
         raise nbxmpp.NodeProcessed
 

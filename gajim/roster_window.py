@@ -2643,7 +2643,7 @@ class RosterWindow:
         self.draw_avatar(obj.jid, obj.account)
 
     def _nec_muc_subject_received(self, event):
-        self.draw_contact(event.jid, event.account)
+        self.draw_contact(event.room_jid, event.account)
 
     def _nec_metacontacts_received(self, obj):
         self.redraw_metacontacts(obj.conn.name)

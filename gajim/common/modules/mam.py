@@ -149,6 +149,7 @@ class MAM(BaseModule):
 
         event_attrs.update(
             {'conn': self._con,
+             'account': self._account,
              'additional_data': additional_data,
              'encrypted': False,
              'timestamp': properties.mam.timestamp,
