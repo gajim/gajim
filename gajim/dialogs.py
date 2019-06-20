@@ -997,48 +997,6 @@ class TransformChatToMUC:
     def on_cancel_button_clicked(self, widget):
         self.window.destroy()
 
-class Dialog(Gtk.Dialog):
-    def __init__(self, parent, title, buttons, default=None,
-    on_response_ok=None, on_response_cancel=None):
-        super().__init__(title=title,
-                         transient_for=parent,
-                         destroy_with_parent=True)
-
-        self.user_response_ok = on_response_ok
-        self.user_response_cancel = on_response_cancel
-        self.set_border_width(6)
-        self.get_content_area().set_spacing(12)
-        self.set_resizable(False)
-
-        for stock, response in buttons:
-            self.add_button(stock, response)
-
-        if default is not None:
-            self.set_default_response(default)
-        else:
-            self.set_default_response(buttons[-1][1])
-
-        self.connect('response', self.on_response)
-
-    def on_response(self, widget, response_id):
-        if response_id == Gtk.ResponseType.OK:
-            if self.user_response_ok:
-                if isinstance(self.user_response_ok, tuple):
-                    self.user_response_ok[0](*self.user_response_ok[1:])
-                else:
-                    self.user_response_ok()
-            self.destroy()
-        elif response_id == Gtk.ResponseType.CANCEL:
-            if self.user_response_cancel:
-                if isinstance(self.user_response_cancel, tuple):
-                    self.user_response_cancel[0](*self.user_response_ok[1:])
-                else:
-                    self.user_response_cancel()
-            self.destroy()
-
-    def just_destroy(self, widget):
-        self.destroy()
-
 
 class ResourceConflictDialog(TimeoutDialog, InputDialog):
     def __init__(self, title, text, resource, ok_handler):
@@ -1050,7 +1008,6 @@ class ResourceConflictDialog(TimeoutDialog, InputDialog):
 
     def on_timeout(self):
         self.on_okbutton_clicked(None)
-
 
 
 class VoIPCallReceivedDialog:
