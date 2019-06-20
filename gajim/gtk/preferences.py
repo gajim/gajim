@@ -148,15 +148,15 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('show_subject_on_join')
         self._ui.subject_on_join_checkbutton.set_active(st)
 
-
         # Group chat settings
         threshold_model = self._ui.sync_threshold_combobox.get_model()
-        for day in app.config.get_options('threshold_options'):
-            if day == '0':
+        days = app.config.get_options('threshold_options', return_type=int)
+        for day in days:
+            if day == 0:
                 label = _('No threshold')
             else:
-                label = ngettext('%s day' % day, '%s days' % day, int(day))
-            threshold_model.append([day, label])
+                label = ngettext('%i day', '%i days', day, day, day)
+            threshold_model.append([str(day), label])
         public_threshold = app.config.get('public_room_sync_threshold')
         self._ui.sync_threshold_combobox.set_id_column(0)
         self._ui.sync_threshold_combobox.set_active_id(str(public_threshold))

@@ -207,7 +207,7 @@ class FeatureItem(Gtk.Grid):
                 self.box.pack_start(self.feature_dependency_u, True, True, 0)
 
         self.icon = Gtk.Image()
-        self.label_disabled = Gtk.Label(label='Disabled in Preferences')
+        self.label_disabled = Gtk.Label(label=_('Disabled in Preferences'))
         self.label_disabled.get_style_context().add_class('dim-label')
         self.set_feature(feature.available, feature.enabled)
 

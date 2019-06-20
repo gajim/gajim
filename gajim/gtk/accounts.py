@@ -670,7 +670,7 @@ class AddNewAccountPage(Gtk.Box):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.set_vexpand(True)
         self.set_hexpand(True)
-        button = Gtk.Button(label='Add Account')
+        button = Gtk.Button(label=_('Add Account'))
         button.get_style_context().add_class('suggested-action')
         button.set_action_name('app.add-account')
         button.set_halign(Gtk.Align.CENTER)

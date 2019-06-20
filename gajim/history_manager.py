@@ -105,7 +105,7 @@ class HistoryManager:
         log_db_path = configpaths.get('LOG_DB')
         if not os.path.exists(log_db_path):
             ErrorDialog(_('Cannot find history logs database'),
-                        '%s does not exist.' % log_db_path)
+                        _('%s does not exist.') % log_db_path)
             sys.exit()
 
         self._ui = get_builder('history_manager.ui')
@@ -246,11 +246,11 @@ class HistoryManager:
 
         dialog = YesNoDialog(
             _('Do you want to clean up the database? '
-            '(STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)'),
+              '(STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)'),
             _('Normally allocated database size will not be freed, '
-                'it will just become reusable. If you really want to reduce '
-                'database filesize, click YES, else click NO.'
-                '\n\nIn case you click YES, please wait…'),
+              'it will just become reusable. If you really want to reduce '
+              'database filesize, click YES, else click NO.'
+              '\n\nIn case you click YES, please wait…'),
             on_response_yes=on_yes, on_response_no=on_no)
         dialog.set_title(_('Database Cleanup'))
         button_box = dialog.get_children()[0].get_children()[1]
