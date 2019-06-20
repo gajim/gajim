@@ -40,12 +40,12 @@ from gajim.common.modules.bytestream import (is_transfer_active,
                                              is_transfer_paused,
                                              is_transfer_stopped)
 
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import HigDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import FTOverwriteConfirmationDialog
-from gajim.gtk.dialogs import NonModalConfirmationDialog
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.tooltips import FileTransfersTooltip
@@ -220,8 +220,8 @@ class FileTransfersWindow:
             (file_path, file_name) = os.path.split(file_props.file_name)
         else:
             file_name = file_props.name
-        sectext = '\t' + _('Filename: %s') % GLib.markup_escape_text(file_name)
-        sectext += '\n\t' + _('Size: %s') % helpers.convert_bytes(
+        sectext = _('File name: %s') % GLib.markup_escape_text(file_name)
+        sectext += '\n' + _('Size: %s') % helpers.convert_bytes(
             file_props.size)
         if file_props.type_ == 'r':
             jid = file_props.sender.split('/')[0]
@@ -231,8 +231,8 @@ class FileTransfersWindow:
         else:
             # You is a reply of who sent a file
             sender = _('You')
-        sectext += '\n\t' + _('Sender: %s') % sender
-        sectext += '\n\t' + _('Recipient: ')
+        sectext += '\n' + _('Sender: %s') % sender
+        sectext += '\n' + _('Recipient: ')
         if file_props.type_ == 's':
             jid = file_props.receiver.split('/')[0]
             receiver_name = app.contacts.get_first_contact_from_jid(
@@ -243,14 +243,15 @@ class FileTransfersWindow:
             recipient = _('You')
         sectext += recipient
         if file_props.type_ == 'r':
-            sectext += '\n\t' + _('Saved in: %s') % file_path
+            sectext += '\n' + _('Saved in: %s') % file_path
+
         dialog = HigDialog(app.interface.roster.window,
                            Gtk.MessageType.INFO,
                            Gtk.ButtonsType.NONE,
                            _('File transfer completed'),
                            sectext)
         if file_props.type_ == 'r':
-            button = Gtk.Button.new_with_mnemonic(_('Open _Containing Folder'))
+            button = Gtk.Button.new_with_mnemonic(_('Open _Folder'))
             button.connect('clicked', on_open, file_props)
             dialog.action_area.pack_start(button, True, True, 0)
         ok_button = dialog.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
@@ -375,52 +376,68 @@ class FileTransfersWindow:
             file_props)
 
     def on_file_request_accepted(self, account, contact, file_props):
-        def on_ok(account, contact, file_props, file_path):
+        def _on_accepted(account, contact, file_props, file_path):
             if os.path.exists(file_path):
                 app.config.set('last_save_dir', os.path.dirname(file_path))
-                # check if we have write permissions
+
+                # Check if we have write permissions
                 if not os.access(file_path, os.W_OK):
                     file_name = GLib.markup_escape_text(
                         os.path.basename(file_path))
                     ErrorDialog(
-                        _('Cannot overwrite existing file "%s"' % file_name),
+                        _('Cannot overwrite existing file \'%s\'' % file_name),
                         _('A file with this name already exists and you do '
                           'not have permission to overwrite it.'))
                     return
+
                 stat = os.stat(file_path)
                 dl_size = stat.st_size
                 file_size = file_props.size
                 dl_finished = dl_size >= file_size
 
-                def on_response(response):
-                    if response < 0:
-                        return
-                    if response == 100:
+                def _on_resume():
+                    if not dl_finished:
                         file_props.offset = dl_size
-                    self._start_receive(file_path, account, contact, file_props)
+                    self._start_receive(
+                        file_path, account, contact, file_props)
 
-                dialog = FTOverwriteConfirmationDialog(
+                def _on_replace():
+                    self._start_receive(
+                        file_path, account, contact, file_props)
+
+                def _on_cancel():
+                    con.get_module('Bytestream').send_file_rejection(
+                        file_props)
+
+                NewConfirmationDialog(
+                    _('File Transfer Conflict'),
                     _('This file already exists'),
-                    _('What do you want to do?'),
-                    propose_resume=not dl_finished,
-                    on_response=on_response)
-                dialog.set_destroy_with_parent(True)
-                return
+                    _('Resume download or replace file?'),
+                    [DialogButton.make('Cancel',
+                                       callback=_on_cancel),
+                     DialogButton.make('OK',
+                                       text=_('Replace _File'),
+                                       callback=_on_replace),
+                     DialogButton.make('OK',
+                                       text=_('Resume _Download'),
+                                       callback=_on_resume)]).show()
 
+            # File does not exist yet
             dirname = os.path.dirname(file_path)
             if not os.access(dirname, os.W_OK) and os.name != 'nt':
                 # read-only bit is used to mark special folder under
                 # windows, not to mark that a folder is read-only.
                 # See ticket #3587
                 ErrorDialog(
-                    _('Directory "%s" is not writable') % dirname,
-                    _('You do not have permission to create files '
+                    _('Directory \'%s\' is not writable') % dirname,
+                    _('You do not have permissions to create files '
                       'in this directory.'))
                 return
             self._start_receive(file_path, account, contact, file_props)
 
+        # Show file save as dialog
         con = app.connections[account]
-        accept_cb = partial(on_ok, account, contact, file_props)
+        accept_cb = partial(_on_accepted, account, contact, file_props)
         cancel_cb = partial(con.get_module('Bytestream').send_file_rejection,
                             file_props)
         FileSaveDialog(accept_cb,
@@ -435,33 +452,33 @@ class FileTransfersWindow:
         """
         if not file_props or not file_props.name:
             return
-        sec_text = '\t' + _('File: %s') % GLib.markup_escape_text(
+
+        sectext = _('File: %s') % GLib.markup_escape_text(
             file_props.name)
         if file_props.size:
-            sec_text += '\n\t' + _('Size: %s') % \
-                helpers.convert_bytes(file_props.size)
+            sectext += '\n' + _('Size: %s') % helpers.convert_bytes(
+                file_props.size)
         if file_props.mime_type:
-            sec_text += '\n\t' + _('Type: %s') % file_props.mime_type
+            sectext += '\n' + _('Type: %s') % file_props.mime_type
         if file_props.desc:
-            sec_text += '\n\t' + _('Description: %s') % file_props.desc
-        prim_text = _('%s wants to send you a file:') % contact.jid
-        dialog = None
+            sectext += '\n' + _('Description: %s') % file_props.desc
 
-        def on_response_ok(account, contact, file_props):
+        def _on_ok():
             self.on_file_request_accepted(account, contact, file_props)
 
-        def on_response_cancel(account, file_props):
+        def _on_cancel():
             app.connections[account].get_module(
                 'Bytestream').send_file_rejection(file_props)
 
-        dialog = NonModalConfirmationDialog(
-            prim_text,
-            sec_text,
-            on_response_ok=(on_response_ok, account, contact, file_props),
-            on_response_cancel=(on_response_cancel, account, file_props))
-        dialog.connect('delete-event', lambda widget, event:
-                       on_response_cancel(account, file_props))
-        dialog.popup()
+        NewConfirmationDialog(
+            _('File Transfer Request'),
+            _('%s wants to send you a file') % contact.jid,
+            sectext,
+            [DialogButton.make('Cancel',
+                               callback=_on_cancel),
+             DialogButton.make('OK',
+                               text=_('_Accept'),
+                               callback=_on_ok)]).show()
 
     def set_status(self, file_props, status):
         """

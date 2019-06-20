@@ -152,12 +152,18 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
     from gajim.gtk.dialogs import DialogButton
     from gajim.gtk.dialogs import ErrorDialog
     from gajim.gtk.dialogs import NewConfirmationDialog
-    from gajim.gtk.dialogs import FTOverwriteConfirmationDialog
     from gajim.gtk.filechoosers import AvatarSaveDialog
 
-    def on_continue(response, file_path):
-        if response < 0:
-            return
+    def _on_save_avatar(file_path):
+        if os.path.exists(file_path):
+            # Check if we have write permissions
+            if not os.access(file_path, os.W_OK):
+                file_name = os.path.basename(file_path)
+                ErrorDialog(
+                    _('Cannot overwrite existing file \'%s\'' % file_name),
+                    _('A file with this name already exists and you do '
+                      'not have permission to overwrite it.'))
+                return
 
         app.config.set('last_save_dir', os.path.dirname(file_path))
         if isinstance(avatar, str):
@@ -200,34 +206,11 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
                                    args=[new_file_path,
                                          pixbuf])]).show()
 
-    def on_ok(file_path):
-        if os.path.exists(file_path):
-            # check if we have write permissions
-            if not os.access(file_path, os.W_OK):
-                file_name = os.path.basename(file_path)
-                ErrorDialog(_('Cannot overwrite existing file "%s"') % \
-                    file_name, _('A file with this name already exists and you '
-                    'do not have permission to overwrite it.'))
-                return
-            dialog2 = FTOverwriteConfirmationDialog(
-                _('This file already exists'), _('What do you want to do?'),
-                propose_resume=False, on_response=(on_continue, file_path))
-            dialog2.set_destroy_with_parent(True)
-        else:
-            dirname = os.path.dirname(file_path)
-            if not os.access(dirname, os.W_OK):
-                ErrorDialog(_('Directory "%s" is not writable') % \
-                    dirname, _('You do not have permission to create files in '
-                    'this directory.'))
-                return
-
-        on_continue(0, file_path)
-
-    transient = app.app.get_active_window()
-    AvatarSaveDialog(on_ok,
+    AvatarSaveDialog(_on_save_avatar,
                      path=app.config.get('last_save_dir'),
                      file_name='%s.png' % default_name,
-                     transient_for=transient)
+                     transient_for=app.app.get_active_window())
+
 
 def create_combobox(value_list, selected_value=None):
     """
