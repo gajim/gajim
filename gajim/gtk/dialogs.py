@@ -541,48 +541,6 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
             is_checked_2 = False
         return [is_checked_1, is_checked_2]
 
-class FTOverwriteConfirmationDialog(ConfirmationDialog):
-    """
-    HIG compliant confirmation dialog to overwrite or resume a file transfert
-    """
-    def __init__(self, pritext, sectext='', propose_resume=True,
-    on_response=None, transient_for=None):
-        if transient_for is None:
-            transient_for = app.app.get_active_window()
-        HigDialog.__init__(self, transient_for, Gtk.MessageType.QUESTION,
-            Gtk.ButtonsType.CANCEL, pritext, sectext)
-
-        self.on_response = on_response
-
-        if propose_resume:
-            b = Gtk.Button(label='', stock=Gtk.STOCK_REFRESH)
-            align = b.get_children()[0]
-            hbox = align.get_children()[0]
-            label = hbox.get_children()[1]
-            label.set_text(_('_Resume'))
-            label.set_use_underline(True)
-            self.add_action_widget(b, 100)
-
-        b = Gtk.Button(label='', stock=Gtk.STOCK_SAVE_AS)
-        align = b.get_children()[0]
-        hbox = align.get_children()[0]
-        label = hbox.get_children()[1]
-        label.set_text(_('Re_place'))
-        label.set_use_underline(True)
-        self.add_action_widget(b, 200)
-
-        self.connect('response', self.on_dialog_response)
-        self.show_all()
-
-    def on_dialog_response(self, dialog, response):
-        if self.on_response:
-            if isinstance(self.on_response, tuple):
-                self.on_response[0](response, *self.on_response[1:])
-            else:
-                self.on_response(response)
-        self.call_cancel_on_destroy = False
-        self.destroy()
-
 
 class CommonInputDialog:
     """
