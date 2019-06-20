@@ -1,61 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.12"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-jump-to</property>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name item -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkWindow" id="service_discovery_window">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
     <property name="role">Service Discovery</property>
+    <property name="window_position">center-always</property>
     <property name="default_width">550</property>
-    <property name="default_height">420</property>
-    <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_service_discovery_window_destroy" swapped="no"/>
-    <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
+    <property name="default_height">550</property>
+    <signal name="destroy" handler="_on_service_discovery_window_destroy" swapped="no"/>
+    <signal name="key-press-event" handler="_on_key_press_event" swapped="no"/>
     <child>
-      <object class="GtkBox" id="vbox11">
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkBox" id="service_discovery">
+        <property name="width_request">400</property>
+        <property name="height_request">400</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="border_width">18</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkEventBox" id="banner_agent_eventbox">
-            <property name="name">Discovery-BannerEventBox</property>
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkBox" id="banner_agent_hbox">
+              <object class="GtkImage" id="banner_agent_icon">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">6</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="banner_agent_label">
-                    <property name="name">Discovery-BannerLabel</property>
+                  <object class="GtkLabel" id="banner_agent_header">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="ypad">6</property>
-                    <property name="label">&lt;span weight="heavy" size="large"&gt;Agent name&lt;/span&gt;
-Agent JID - node</property>
-                    <property name="use_markup">True</property>
-                    <property name="xalign">0.05000000074505806</property>
+                    <property name="halign">start</property>
+                    <property name="label">Agent name</property>
+                    <property name="ellipsize">end</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="large-header"/>
+                    </style>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="banner_agent_icon">
+                  <object class="GtkLabel" id="banner_agent_subheader">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">6</property>
-                    <property name="ypad">6</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Agent JID - node</property>
+                    <property name="ellipsize">end</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -64,28 +86,34 @@ Agent JID - node</property>
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
-            <style>
-              <class name="gajim-banner"/>
-            </style>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="address_table">
+          <object class="GtkBox" id="address_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">6</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkLabel" id="label224">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Address:</property>
+                <property name="label" translatable="yes">_Address</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">address_comboboxtext_entry</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -99,8 +127,9 @@ Agent JID - node</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
                 <property name="has_entry">True</property>
+                <signal name="changed" handler="_on_address_comboboxtext_changed" swapped="no"/>
                 <child internal-child="entry">
-                  <object class="GtkEntry" id="address_entry">
+                  <object class="GtkEntry" id="address_comboboxtext_entry">
                     <property name="can_focus">True</property>
                     <property name="has_focus">True</property>
                     <signal name="key-press-event" handler="_on_entry_key_press_event" swapped="no"/>
@@ -115,15 +144,24 @@ Agent JID - node</property>
             </child>
             <child>
               <object class="GtkButton" id="browse_button">
-                <property name="label" translatable="yes">G_o</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="image">image1</property>
+                <property name="tooltip_text" translatable="yes">Go</property>
                 <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_go_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="_on_go_button_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon_name">go-next-symbolic</property>
+                  </object>
+                </child>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -139,6 +177,20 @@ Agent JID - node</property>
           </packing>
         </child>
         <child>
+          <object class="GtkProgressBar" id="services_progressbar">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="halign">center</property>
+            <property name="show_text">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkScrolledWindow" id="services_scrollwin">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -148,7 +200,6 @@ Agent JID - node</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="headers_visible">False</property>
-                <signal name="row-activated" handler="on_services_treeview_row_activated" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection1"/>
                 </child>
@@ -158,83 +209,26 @@ Agent JID - node</property>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="hbox2994">
+          <object class="GtkBox" id="action_buttonbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkProgressBar" id="services_progressbar">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="pulse_step">0.10000000149</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label363">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="action_buttonbox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkButton" id="close_button">
-                    <property name="label">gtk-close</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="has_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="padding">2</property>
-            <property name="position">3</property>
+            <property name="pack_type">end</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>

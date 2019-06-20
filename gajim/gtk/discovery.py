@@ -37,8 +37,8 @@
 # - def _update_error(self, iter_, jid, node)
 #
 # * Should call the super class for this method.
-# All others do not have to call back to the super class. (but can if they want
-# the functionality)
+# All others do not have to call back to the super class (but can if they want
+# the functionality).
 # There are more methods, of course, but this is a basic set.
 
 import types
@@ -46,33 +46,36 @@ import weakref
 import uuid
 
 import nbxmpp
+
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common import helpers
+from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 
+from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.search import Search
-from gajim.gtk.adhoc import AdHocCommand
+from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.util import icon_exists
 from gajim.gtk.util import get_builder
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),
     2: _('This service could not respond with detailed information.\n'
-         'It is most likely legacy or broken'),
+         'It is most likely a legacy service or broken.'),
 }
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
 # For the browser class, None means that the service will only be browsable
 # when it advertises disco as it's feature, False means it's never browsable.
+
+
 def _gen_agent_type_info():
     return {
         # Defaults
@@ -93,7 +96,7 @@ def _gen_agent_type_info():
         ('directory', 'user'):          (None, 'jud'),
         ('pubsub', 'generic'):          (PubSubBrowser, 'pubsub'),
         ('pubsub', 'service'):          (PubSubBrowser, 'pubsub'),
-        ('proxy', 'bytestreams'):       (None, 'bytestreams'), # Socks5 FT proxy
+        ('proxy', 'bytestreams'):       (None, 'bytestreams'),  # Socks5 FT proxy
         ('headline', 'newmail'):        (ToplevelAgentBrowser, 'mail'),
 
         # Transports
@@ -116,13 +119,14 @@ def _gen_agent_type_info():
         ('gateway', 'twitter'):         (False, 'twitter'),
     }
 
+
 # Category type to "human-readable" description string
+# Conference is a category for listing mostly groupchats in service discovery
 _cat_to_descr = {
-        'other':                _('Others'),
-        'gateway':              _('Transports'),
-        '_jid':                 _('Transports'),
-        #conference is a category for listing mostly groupchats in service discovery
-        'conference':           _('Conference'),
+    'other': _('Others'),
+    'gateway': _('Transports'),
+    '_jid': _('Transports'),
+    'conference': _('Conference'),
 }
 
 
@@ -172,7 +176,8 @@ class CacheDictionary:
         if item.source:
             GLib.source_remove(item.source)
         if self.lifetime:
-            source = GLib.timeout_add_seconds(int(self.lifetime/1000), self._expire_timeout, key)
+            source = GLib.timeout_add_seconds(
+                int(self.lifetime / 1000), self._expire_timeout, key)
             item.source = source
 
     def __getitem__(self, key):
@@ -195,7 +200,9 @@ class CacheDictionary:
     def __contains__(self, key):
         return key in self.cache
 
+
 _icon_cache = CacheDictionary(15)
+
 
 def get_agent_address(jid, node=None):
     """
@@ -204,6 +211,7 @@ def get_agent_address(jid, node=None):
     if node:
         return '%s@%s' % (node, str(jid))
     return str(jid)
+
 
 class Closure:
     """
@@ -318,7 +326,7 @@ class ServicesCache:
             if browser and browser == ToplevelAgentBrowser:
                 return browser
 
-        # second pass, we haven't found a ToplevelAgentBrowser
+        # Second pass, we haven't found a ToplevelAgentBrowser
         for identity in identities:
             try:
                 cat, type_ = identity['category'], identity['type']
@@ -353,7 +361,7 @@ class ServicesCache:
         # Create a closure object
         cbkey = ('info', addr)
         cb = Closure(cb, userargs=args, remove=self._clean_closure,
-            removeargs=cbkey)
+                     removeargs=cbkey)
         # Are we already fetching this?
         if cbkey in self._cbs:
             self._cbs[cbkey].append(cb)
@@ -471,9 +479,8 @@ class ServiceDiscoveryWindow:
     """
     Class that represents the Services Discovery window
     """
-
     def __init__(self, account, jid='', node='', address_entry=False,
-    parent=None, initial_identities=None):
+                 parent=None, initial_identities=None):
         self._account = account
         self.parent = parent
         if not jid:
@@ -490,7 +497,8 @@ class ServiceDiscoveryWindow:
         # Check connection
         if not app.account_is_connected(account):
             ErrorDialog(_('You are not connected to the server'),
-_('Without a connection, you can not browse available services'))
+                        _('Without a connection, you can not browse '
+                          'available services'))
             raise RuntimeError('You must be connected to browse services')
 
         # Get a ServicesCache object.
@@ -502,31 +510,28 @@ _('Without a connection, you can not browse available services'))
 
         if initial_identities:
             self.cache._on_agent_info(jid, node, initial_identities, [], None)
-        self.xml = get_builder('service_discovery_window.ui')
-        self.window = self.xml.get_object('service_discovery_window')
-        self.services_treeview = self.xml.get_object('services_treeview')
+        self._ui = get_builder('service_discovery_window.ui')
+        self.window = self._ui.service_discovery_window
+        self.services_treeview = self._ui.services_treeview
         self.model = None
         # This is more reliable than the cursor-changed signal.
         selection = self.services_treeview.get_selection()
-        selection.connect_after('changed',
-                self.on_services_treeview_selection_changed)
-        self.services_scrollwin = self.xml.get_object('services_scrollwin')
-        self.progressbar = self.xml.get_object('services_progressbar')
-        self.banner = self.xml.get_object('banner_agent_label')
-        self.banner_icon = self.xml.get_object('banner_agent_icon')
-        self.banner_eventbox = self.xml.get_object('banner_agent_eventbox')
+        selection.connect_after(
+            'changed', self._on_services_treeview_selection_changed)
+        self.services_treeview.connect(
+            'row-activated', self._on_services_treeview_row_activated)
+        self.services_scrollwin = self._ui.services_scrollwin
+        self.progressbar = self._ui.services_progressbar
+        self.banner_header = self._ui.banner_agent_header
+        self.banner_subheader = self._ui.banner_agent_subheader
+        self.banner_icon = self._ui.banner_agent_icon
         self.style_event_id = 0
-        self.banner.realize()
-        self.action_buttonbox = self.xml.get_object('action_buttonbox')
+        self.action_buttonbox = self._ui.action_buttonbox
 
         # Address combobox
         self.address_comboboxtext = None
-        address_table = self.xml.get_object('address_table')
         if address_entry:
-            self.address_comboboxtext = self.xml.get_object(
-                'address_comboboxtext')
-            self.address_comboboxtext_entry = self.xml.get_object(
-                'address_entry')
+            self.address_comboboxtext = self._ui.address_comboboxtext
 
             self.latest_addresses = app.config.get(
                 'latest_disco_addresses').split()
@@ -540,17 +545,17 @@ _('Without a connection, you can not browse available services'))
             self.address_comboboxtext.get_child().set_text(jid)
         else:
             # Don't show it at all if we didn't ask for it
-            address_table.set_no_show_all(True)
-            address_table.hide()
+            self._ui.address_box.set_no_show_all(True)
+            self._ui.address_box.hide()
 
         accel_group = Gtk.AccelGroup()
         keyval, mod = Gtk.accelerator_parse('<Control>r')
         accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,
-            self.accel_group_func)
+                            self.accel_group_func)
         self.window.add_accel_group(accel_group)
 
         self._initial_state()
-        self.xml.connect_signals(self)
+        self._ui.connect_signals(self)
         self.travel(jid, node)
         self.window.show_all()
 
@@ -565,7 +570,7 @@ _('Without a connection, you can not browse available services'))
         if self.browser:
             self.browser.account = value
 
-    def on_key_press_event(self, widget, event):
+    def _on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
 
@@ -583,15 +588,17 @@ _('Without a connection, you can not browse available services'))
         self.window.set_title(title_text)
         self._set_window_banner_text(_('Service Discovery'))
         self.banner_icon.clear()
-        self.banner_icon.hide() # Just clearing it doesn't work
+        self.banner_icon.hide()  # Just clearing it doesn't work
 
     def _set_window_banner_text(self, text, text_after=None):
-        markup = '<span>%s</span>' % (text)
+        self.banner_header.set_text(text)
         if text_after is not None:
-            markup += '\n<span size="x-small">%s</span>' % text_after
-        self.banner.set_markup(markup)
+            self.banner_subheader.show()
+            self.banner_subheader.set_text(text_after)
+        else:
+            self.banner_subheader.hide()
 
-    def destroy(self, chain=False):
+    def _destroy(self, chain=False):
         """
         Close the browser. This can optionally close its children and propagate
         to the parent. This should happen on actions like register, or join to
@@ -660,7 +667,7 @@ _('Without a connection, you can not browse available services'))
         if not identities:
             if not self.address_comboboxtext:
                 # We can't travel anywhere else.
-                self.destroy()
+                self._destroy()
             ErrorDialog(
                 _('The service could not be found'),
                 _('There is no service at the address you entered, or it is '
@@ -686,8 +693,8 @@ _('Without a connection, you can not browse available services'))
         Open an agent. By default, this happens in a new window
         """
         try:
-            win = app.interface.instances[self.account]['disco']\
-                    [get_agent_address(jid, node)]
+            win = app.interface.instances[
+                self.account]['disco'][get_agent_address(jid, node)]
             win.window.present()
             return
         except KeyError:
@@ -699,34 +706,30 @@ _('Without a connection, you can not browse available services'))
             return
         self.children.append(win)
 
-    def on_service_discovery_window_destroy(self, widget):
-        self.destroy()
+    def _on_service_discovery_window_destroy(self, widget):
+        self._destroy()
 
-    def on_close_button_clicked(self, widget):
-        self.destroy()
-
-    def on_address_comboboxtext_changed(self, widget):
+    def _on_address_comboboxtext_changed(self, widget):
         if self.address_comboboxtext.get_active() != -1:
-            # user selected one of the entries so do auto-visit
-            jid = self.address_comboboxtext_entry.get_text()
+            # User selected one of the entries so do auto-visit
+            jid = self._ui.address_comboboxtext_entry.get_text()
             try:
                 jid = helpers.parse_jid(jid)
             except helpers.InvalidFormat as s:
-                pritext = _('Invalid Server Name')
-                ErrorDialog(pritext, str(s))
+                ErrorDialog(_('Invalid Server Name'), str(s))
                 return
             self.travel(jid, '')
 
-    def on_go_button_clicked(self, widget):
-        jid = self.address_comboboxtext_entry.get_text()
+    def _on_go_button_clicked(self, widget):
+        jid = self._ui.address_comboboxtext_entry.get_text()
         try:
             jid = helpers.parse_jid(jid)
         except helpers.InvalidFormat as s:
-            pritext = _('Invalid Server Name')
-            ErrorDialog(pritext, str(s),
-                transient_for=self.window)
+            ErrorDialog(_('Invalid Server Name'),
+                        str(s),
+                        transient_for=self.window)
             return
-        if jid == self.jid: # jid has not changed
+        if jid == self.jid:  # jid has not changed
             return
         if jid in self.latest_addresses:
             self.latest_addresses.remove(jid)
@@ -737,20 +740,20 @@ _('Without a connection, you can not browse available services'))
         for j in self.latest_addresses:
             self.address_comboboxtext.append_text(j)
         app.config.set('latest_disco_addresses',
-                ' '.join(self.latest_addresses))
+                       ' '.join(self.latest_addresses))
         self.travel(jid, '')
 
-    def on_services_treeview_row_activated(self, widget, path, col=0):
+    def _on_services_treeview_row_activated(self, widget, path, col=0):
         if self.browser:
             self.browser.default_action()
 
-    def on_services_treeview_selection_changed(self, widget):
+    def _on_services_treeview_selection_changed(self, widget):
         if self.browser:
             self.browser.update_actions()
 
     def _on_entry_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Return or event.keyval == Gdk.KEY_KP_Enter:
-            self.on_go_button_clicked(widget)
+            self._on_go_button_clicked(widget)
 
 
 class AgentBrowser:
@@ -780,8 +783,9 @@ class AgentBrowser:
         """
         Set the initial window title based on agent address
         """
-        self.window.window.set_title(_('Browsing %(address)s using account '
-                '%(account)s') % {'address': self._get_agent_address(),
+        self.window.window.set_title(
+            _('Browsing %(address)s using account %(account)s') % {
+                'address': self._get_agent_address(),
                 'account': self.account})
         self.window._set_window_banner_text(self._get_agent_address())
 
@@ -825,10 +829,7 @@ class AgentBrowser:
         self.browse_button = Gtk.Button()
         self.browse_button.connect('clicked', self.on_browse_button_clicked)
         self.window.action_buttonbox.add(self.browse_button)
-        image = Gtk.Image.new_from_icon_name("document-open", Gtk.IconSize.BUTTON)
-        self.browse_button.set_image(image)
-        label = _('Browse')
-        self.browse_button.set_label(label)
+        self.browse_button.set_label(_('Browse'))
         self.browse_button.show_all()
 
     def _clean_actions(self):
@@ -860,7 +861,8 @@ class AgentBrowser:
         # Add an icon to the banner.
         icon_name = self.cache.get_icon(identities,
                                         addr=self._get_agent_address())
-        self.window.banner_icon.set_from_icon_name(icon_name, Gtk.IconSize.DND)
+        self.window.banner_icon.set_from_icon_name(icon_name,
+                                                   Gtk.IconSize.DIALOG)
         self.window.banner_icon.show()
 
     def _clean_title(self):
@@ -879,13 +881,6 @@ class AgentBrowser:
         self._set_initial_title()
         self._create_treemodel()
         self._add_actions()
-
-        # This is a hack. The buttonbox apparently doesn't care about pack_start
-        # or pack_end, so we repack the close button here to make sure it's last
-        close_button = self.window.xml.get_object('close_button')
-        self.window.action_buttonbox.remove(close_button)
-        self.window.action_buttonbox.pack_end(close_button, True, True, 0)
-        close_button.show_all()
 
         self.update_actions()
 
@@ -914,7 +909,8 @@ class AgentBrowser:
         When we want to browse an agent: open a new services window with a
         browser for the agent type
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         jid = model[iter_][0]
@@ -928,7 +924,8 @@ class AgentBrowser:
         """
         if self.browse_button:
             self.browse_button.set_sensitive(False)
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         jid = model[iter_][0]
@@ -951,7 +948,8 @@ class AgentBrowser:
         When we double-click a row: perform the default action on the selected
         item
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         jid = model[iter_][0]
@@ -978,7 +976,7 @@ class AgentBrowser:
         self.window.progressbar.show()
         self._pulse_timeout = GLib.timeout_add(250, self._pulse_timeout_cb)
         self.cache.get_items(self.jid, self.node, self._agent_items,
-                force=force, args=(force,))
+                             force=force, args=(force,))
 
     def _pulse_timeout_cb(self, *args):
         """
@@ -1023,9 +1021,11 @@ class AgentBrowser:
                 # We can't travel anywhere else.
                 self.window.destroy()
             ErrorDialog(_('The service is not browsable'),
-                _('This service does not contain any items to browse.'),
-                transient_for=self.window.window)
+                        _('This service does not contain any items '
+                          'to browse.'),
+                        transient_for=self.window.window)
             return
+
         # We got a list of items
         def fill_partial_rows(items):
             '''Generator to fill the listmodel of a treeview progressively.'''
@@ -1045,7 +1045,7 @@ class AgentBrowser:
                     yield True
                     self.window.services_treeview.freeze_child_notify()
             self.window.services_treeview.thaw_child_notify()
-            #stop idle_add()
+            # Stop idle_add()
             yield False
         loader = fill_partial_rows(items)
         GLib.idle_add(next, loader)
@@ -1072,7 +1072,7 @@ class AgentBrowser:
         disco#items query
         """
         self.model.append((jid, node, item.get('name', ''),
-                get_agent_address(jid, node)))
+                          get_agent_address(jid, node)))
         self.cache.get_info(jid, node, self._agent_info, force=force)
 
     def _update_item(self, iter_, jid, node, item):
@@ -1117,11 +1117,11 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def add_self_line(self):
         addr = get_agent_address(self.jid, self.node)
-        descr = "<b>%s</b>" % addr
+        descr = '<b>%s</b>' % addr
         # Guess which kind of service this is
         identities = []
         type_ = app.get_transport_name_from_jid(self.jid,
-            use_config_setting=False)
+                                                use_config_setting=False)
         if type_:
             identity = {'category': '_jid', 'type': type_}
             identities.append(identity)
@@ -1161,7 +1161,8 @@ class ToplevelAgentBrowser(AgentBrowser):
                 # Normal/success
                 cell.set_property('foreground_set', False)
         else:
-            bgcolor = app.css_config.get_value('.gajim-group-row', StyleAttr.BACKGROUND)
+            bgcolor = app.css_config.get_value('.gajim-group-row',
+                                               StyleAttr.BACKGROUND)
             if bgcolor:
                 cell.set_property('cell_background_set', True)
             cell.set_property('foreground_set', False)
@@ -1230,35 +1231,35 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _add_actions(self):
         AgentBrowser._add_actions(self)
-        self.execute_button = Gtk.Button()
-        self.execute_button.connect('clicked', self.on_execute_button_clicked)
-        self.window.action_buttonbox.add(self.execute_button)
-        image = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.BUTTON)
+        self.execute_button = Gtk.Button(label=_('_Command'),
+                                         use_underline=True)
+        self.execute_button.connect('clicked', self._on_execute_button_clicked)
+        image = Gtk.Image.new_from_icon_name(
+            'utilities-terminal-symbolic', Gtk.IconSize.BUTTON)
         self.execute_button.set_image(image)
-        label = _('Execute Command')
-        self.execute_button.set_label(label)
+        self.window.action_buttonbox.add(self.execute_button)
         self.execute_button.show_all()
 
-        self.register_button = Gtk.Button(label=_("Re_gister"),
-                use_underline=True)
-        self.register_button.connect('clicked', self.on_register_button_clicked)
+        self.register_button = Gtk.Button(label=_('Re_gister'),
+                                          use_underline=True)
+        self.register_button.connect(
+            'clicked', self._on_register_button_clicked)
         self.window.action_buttonbox.add(self.register_button)
         self.register_button.show_all()
 
-        self.join_button = Gtk.Button()
-        self.join_button.connect('clicked', self.on_join_button_clicked)
+        self.join_button = Gtk.Button(label=_('Join'),
+                                      use_underline=True)
+        self.join_button.connect('clicked', self._on_join_button_clicked)
         self.window.action_buttonbox.add(self.join_button)
-        label = _('Join')
-        self.join_button.set_label(label)
         self.join_button.show_all()
 
-        self.search_button = Gtk.Button()
+        self.search_button = Gtk.Button(label=_('_Search'),
+                                        use_underline=True)
         self.search_button.connect('clicked', self.on_search_button_clicked)
-        self.window.action_buttonbox.add(self.search_button)
-        image = Gtk.Image.new_from_icon_name("edit-find", Gtk.IconSize.BUTTON)
+        image = Gtk.Image.new_from_icon_name('edit-find-symbolic',
+                                             Gtk.IconSize.BUTTON)
         self.search_button.set_image(image)
-        label = _('Search')
-        self.search_button.set_label(label)
+        self.window.action_buttonbox.add(self.search_button)
         self.search_button.show_all()
 
     def _clean_actions(self):
@@ -1280,7 +1281,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         """
         When we want to search something: open search window
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         service = model[iter_][0]
@@ -1290,27 +1292,30 @@ class ToplevelAgentBrowser(AgentBrowser):
         AgentBrowser.cleanup(self)
 
     def update_theme(self):
-        bgcolor = app.css_config.get_value('.gajim-group-row', StyleAttr.BACKGROUND)
+        bgcolor = app.css_config.get_value('.gajim-group-row',
+                                           StyleAttr.BACKGROUND)
         if bgcolor:
             self._renderer.set_property('cell-background', bgcolor)
         self.window.services_treeview.queue_draw()
 
-    def on_execute_button_clicked(self, widget=None):
+    def _on_execute_button_clicked(self, widget=None):
         """
         When we want to execute a command: open adhoc command window
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         service = model[iter_][0]
         AdHocCommand(self.account, service)
 
-    def on_register_button_clicked(self, widget=None):
+    def _on_register_button_clicked(self, widget=None):
         """
         When we want to register an agent: request information about registering
         with the agent and close the window
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         jid = model[iter_][0]
@@ -1318,17 +1323,18 @@ class ToplevelAgentBrowser(AgentBrowser):
             ServiceRegistration(self.account, jid)
             self.window.destroy(chain=True)
 
-    def on_join_button_clicked(self, widget):
+    def _on_join_button_clicked(self, widget):
         """
         When we want to join an IRC room or create a new MUC room: Opens the
         join_groupchat_window
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         service = model[iter_][0]
         app.interface.join_gc_minimal(self.account, service,
-            transient_for=self.window.window)
+                                      transient_for=self.window.window)
 
     def update_actions(self):
         if self.execute_button:
@@ -1341,7 +1347,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             self.join_button.set_sensitive(False)
         if self.search_button:
             self.search_button.set_sensitive(False)
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         if not model[iter_][0]:
@@ -1349,7 +1356,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             return
         if model[iter_][4] is not None:
             # We don't have the info (yet)
-            # It's either unknown or a transport, register button should be active
+            # It's either unknown or a transport:
+            # Register button should be active
             if self.register_button:
                 self.register_button.set_sensitive(True)
             # Guess what kind of service we're dealing with
@@ -1370,7 +1378,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             AgentBrowser.update_actions(self)
 
     def _update_actions(self, jid, node, identities, features, data):
-        AgentBrowser._update_actions(self, jid, node, identities, features, data)
+        AgentBrowser._update_actions(
+            self, jid, node, identities, features, data)
         if self.execute_button and nbxmpp.NS_COMMANDS in features:
             self.execute_button.set_sensitive(True)
         if self.search_button and nbxmpp.NS_SEARCH in features:
@@ -1383,7 +1392,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             jid_list = app.contacts.get_jid_list(self.account)
             for jid_ in jid_list:
                 contact = app.contacts.get_first_contact_from_jid(
-                        self.account, jid_)
+                    self.account, jid_)
                 if _('Transports') in contact.groups:
                     registered_transports.append(jid_)
             registered_transports.append(self.jid)
@@ -1396,11 +1405,12 @@ class ToplevelAgentBrowser(AgentBrowser):
             self.join_button.set_sensitive(True)
 
     def _default_action(self, jid, node, identities, features, data):
-        if AgentBrowser._default_action(self, jid, node, identities, features, data):
+        if AgentBrowser._default_action(self, jid, node, identities,
+                                        features, data):
             return True
         if nbxmpp.NS_REGISTER in features:
             # Register if we can't browse
-            self.on_register_button_clicked()
+            self._on_register_button_clicked()
             return True
         return False
 
@@ -1412,13 +1422,6 @@ class ToplevelAgentBrowser(AgentBrowser):
         """
         Expand all items in the treeview
         """
-        # GTK apparently screws up here occasionally. :/
-        #def expand_all(*args):
-        #       self.window.services_treeview.expand_all()
-        #       self.expanding = False
-        #       return False
-        #self.expanding = True
-        #GLib.idle_add(expand_all)
         self.window.services_treeview.expand_all()
 
     def _update_progressbar(self):
@@ -1431,8 +1434,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 
         fraction = 0
         if self._total_items:
-            self.window.progressbar.set_text(_("Scanning %(current)d / %(total)d.."
-                    ) % {'current': self._progress, 'total': self._total_items})
+            self.window.progressbar.set_text(
+                _('Scanning %(current)d / %(total)d ...') % {
+                    'current': self._progress,
+                    'total': self._total_items + 1})
             fraction = float(self._progress) / float(self._total_items)
             if self._progress >= self._total_items:
                 # We show the progressbar for just a bit before hiding it.
@@ -1664,7 +1669,7 @@ class MucBrowser(AgentBrowser):
         self.vadj_cbid = self.vadj.connect('value-changed', self.on_scroll)
         # And to size changes
         self.size_cbid = self.window.services_scrollwin.connect(
-                'size-allocate', self.on_scroll)
+            'size-allocate', self.on_scroll)
 
     def _clean_treemodel(self):
         if self.size_cbid:
@@ -1676,12 +1681,17 @@ class MucBrowser(AgentBrowser):
         AgentBrowser._clean_treemodel(self)
 
     def _add_actions(self):
-        self.bookmark_button = Gtk.Button(label=_('_Bookmark'), use_underline=True)
-        self.bookmark_button.connect('clicked', self.on_bookmark_button_clicked)
+        self.bookmark_button = Gtk.Button(label=_('_Bookmark'),
+                                          use_underline=True)
+        self.bookmark_button.connect(
+            'clicked', self._on_bookmark_button_clicked)
+        image = Gtk.Image.new_from_icon_name(
+            'bookmark-new-symbolic', Gtk.IconSize.BUTTON)
+        self.bookmark_button.set_image(image)
         self.window.action_buttonbox.add(self.bookmark_button)
         self.bookmark_button.show_all()
         self.join_button = Gtk.Button(label=_('_Join'), use_underline=True)
-        self.join_button.connect('clicked', self.on_join_button_clicked)
+        self.join_button.connect('clicked', self._on_join_button_clicked)
         self.window.action_buttonbox.add(self.join_button)
         self.join_button.show_all()
 
@@ -1693,9 +1703,10 @@ class MucBrowser(AgentBrowser):
             self.join_button.destroy()
             self.join_button = None
 
-    def on_bookmark_button_clicked(self, *args):
+    def _on_bookmark_button_clicked(self, *args):
         con = app.connections[self.account]
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
 
@@ -1703,7 +1714,7 @@ class MucBrowser(AgentBrowser):
         if con.get_module('Bookmarks').is_bookmark(room_jid):
             ErrorDialog(
                 _('Bookmark already set'),
-                _('Group Chat "%s" is already in your bookmarks.') % room_jid,
+                _('Group Chat \'%s\' is already in your bookmarks.') % room_jid,
                 transient_for=self.window.window)
             return
 
@@ -1715,15 +1726,17 @@ class MucBrowser(AgentBrowser):
 
         InformationDialog(
             _('Bookmark has been added successfully'),
-            _('You can manage your bookmarks via Actions menu in your roster.'),
+            _('You can manage your bookmarks by clicking the Bookmarks menu '
+              'item in your contact list.'),
             transient_for=self.window.window)
 
-    def on_join_button_clicked(self, *args):
+    def _on_join_button_clicked(self, *args):
         """
         When we want to join a conference: ask specific informations about the
         selected agent and close the window
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         service = model[iter_][0]
@@ -1736,14 +1749,15 @@ class MucBrowser(AgentBrowser):
             self.window.destroy()
 
     def update_actions(self):
-        sens = self.window.services_treeview.get_selection().count_selected_rows()
+        sens = \
+            self.window.services_treeview.get_selection().count_selected_rows()
         if self.bookmark_button:
             self.bookmark_button.set_sensitive(sens > 0)
         if self.join_button:
             self.join_button.set_sensitive(sens > 0)
 
     def default_action(self):
-        self.on_join_button_clicked()
+        self._on_join_button_clicked()
 
     def _start_info_query(self):
         """
@@ -1791,8 +1805,9 @@ class MucBrowser(AgentBrowser):
 
     def _channel_altinfo(self, jid, node, items, name=None):
         """
-        Callback for the alternate disco#items query. We try to at least get the
-        amount of users in the room if the service does not support MUC dataforms
+        Callback for the alternate disco#items query. We try to at least get
+        the amount of users in the room if the service does not support MUC
+        dataforms
         """
         if items == 0:
             # The server returned an error
@@ -1812,8 +1827,8 @@ class MucBrowser(AgentBrowser):
             if iter_:
                 if name:
                     self.model[iter_][2] = name
-                self.model[iter_][3] = len(items) # The number of users
-                self.model[iter_][4] = str(len(items)) # The number of users
+                self.model[iter_][3] = len(items)  # The number of users
+                self.model[iter_][4] = str(len(items))  # The number of users
                 self.model[iter_][6] = True
         self._fetch_source = None
         self._query_visible()
@@ -1852,8 +1867,9 @@ class MucBrowser(AgentBrowser):
         self._query_visible()
 
     def _update_error(self, iter_, jid, node):
-        # switch to alternate query mode
+        # Switch to alternate query mode
         self.cache.get_items(jid, node, self._channel_altinfo)
+
 
 def PubSubBrowser(account, jid, node):
     """
@@ -1861,9 +1877,10 @@ def PubSubBrowser(account, jid, node):
     particular pubsub service. Different pubsub services may need to present
     different data during browsing
     """
-    # for now, only discussion groups are supported...
+    # For now, only discussion groups are supported...
     # TODO: check if it has appropriate features to be such kind of service
     return DiscussionGroupsBrowser(account, jid, node)
+
 
 class DiscussionGroupsBrowser(AgentBrowser):
     """
@@ -1873,11 +1890,11 @@ class DiscussionGroupsBrowser(AgentBrowser):
     def __init__(self, account, jid, node):
         AgentBrowser.__init__(self, account, jid, node)
 
-        # this will become set object when we get subscriptions; None means
+        # This will become set object when we get subscriptions; None means
         # we don't know yet which groups are subscribed
         self.subscriptions = None
 
-        # this will become our action widgets when we create them; None means
+        # This will become our action widgets when we create them; None means
         # we don't have them yet (needed for check in callback)
         self.subscribe_button = None
         self.unsubscribe_button = None
@@ -1890,9 +1907,10 @@ class DiscussionGroupsBrowser(AgentBrowser):
         """
         Create treemodel for the window
         """
-        # JID, node, name (with description) - pango markup, don't have info?, subscribed?
+        # JID, node, name (with description) - pango markup,
+        # don't have info?, subscribed?
         self.model = Gtk.TreeStore(str, str, str, bool, bool)
-        # sort by name
+        # Sort by name
         self.model.set_sort_column_id(2, Gtk.SortType.ASCENDING)
         self.window.services_treeview.set_model(self.model)
 
@@ -1977,6 +1995,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
     def _get_iter(self, node):
         ''' Look for an iter with the given node '''
         self.found_iter = None
+
         def is_node(model, path, iter_, node):
             if model[iter_][1] == node:
                 self.found_iter = iter_
@@ -1985,21 +2004,28 @@ class DiscussionGroupsBrowser(AgentBrowser):
         return self.found_iter
 
     def _add_actions(self):
-        self.post_button = Gtk.Button(label=_('New post'), use_underline=True)
+        self.post_button = Gtk.Button(label=_('_New post'), use_underline=True)
         self.post_button.set_sensitive(False)
-        self.post_button.connect('clicked', self.on_post_button_clicked)
+        self.post_button.connect('clicked', self._on_post_button_clicked)
+        image = Gtk.Image.new_from_icon_name(
+            'mail-message-new-symbolic', Gtk.IconSize.BUTTON)
+        self.post_button.set_image(image)
         self.window.action_buttonbox.add(self.post_button)
         self.post_button.show_all()
 
-        self.subscribe_button = Gtk.Button(label=_('_Subscribe'), use_underline=True)
+        self.subscribe_button = Gtk.Button(label=_('_Subscribe'),
+                                           use_underline=True)
         self.subscribe_button.set_sensitive(False)
-        self.subscribe_button.connect('clicked', self.on_subscribe_button_clicked)
+        self.subscribe_button.connect(
+            'clicked', self._on_subscribe_button_clicked)
         self.window.action_buttonbox.add(self.subscribe_button)
         self.subscribe_button.show_all()
 
-        self.unsubscribe_button = Gtk.Button(label=_('_Unsubscribe'), use_underline=True)
+        self.unsubscribe_button = Gtk.Button(label=_('_Unsubscribe'),
+                                             use_underline=True)
         self.unsubscribe_button.set_sensitive(False)
-        self.unsubscribe_button.connect('clicked', self.on_unsubscribe_button_clicked)
+        self.unsubscribe_button.connect(
+            'clicked', self._on_unsubscribe_button_clicked)
         self.window.action_buttonbox.add(self.unsubscribe_button)
         self.unsubscribe_button.show_all()
 
@@ -2021,27 +2047,30 @@ class DiscussionGroupsBrowser(AgentBrowser):
         Called when user selected a row. Make subscribe/unsubscribe buttons
         sensitive appropriately
         """
-        # we have nothing to do if we don't have buttons...
+        # We have nothing to do if we don't have buttons...
         if self.subscribe_button is None:
             return
 
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if not iter_ or self.subscriptions is None:
-            # no item selected or no subscriptions info, all buttons are insensitive
+            # No item selected or no subscriptions info, all buttons are
+            # insensitive
             self.post_button.set_sensitive(False)
             self.subscribe_button.set_sensitive(False)
             self.unsubscribe_button.set_sensitive(False)
         else:
-            subscribed = model.get_value(iter_, 4) # 4 = subscribed?
+            subscribed = model.get_value(iter_, 4)  # 4 = subscribed?
             self.post_button.set_sensitive(subscribed)
             self.subscribe_button.set_sensitive(not subscribed)
             self.unsubscribe_button.set_sensitive(subscribed)
 
-    def on_post_button_clicked(self, widget):
+    def _on_post_button_clicked(self, widget):
         """
         Called when 'post' button is pressed. Open window to create post
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if iter_ is None:
             return
 
@@ -2049,11 +2078,12 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         GroupsPostWindow(self.account, self.jid, groupnode)
 
-    def on_subscribe_button_clicked(self, widget):
+    def _on_subscribe_button_clicked(self, widget):
         """
         Called when 'subscribe' button is pressed. Send subscribtion request
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if iter_ is None:
             return
 
@@ -2063,15 +2093,16 @@ class DiscussionGroupsBrowser(AgentBrowser):
         con.get_module('PubSub').send_pb_subscribe(
             self.jid, node, self._on_pep_subscribe, groupnode=node)
 
-    def on_unsubscribe_button_clicked(self, widget):
+    def _on_unsubscribe_button_clicked(self, widget):
         """
         Called when 'unsubscribe' button is pressed. Send unsubscription request
         """
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        model, iter_ = \
+            self.window.services_treeview.get_selection().get_selected()
         if iter_ is None:
             return
 
-        node = model.get_value(iter_, 1) # 1 = groupnode
+        node = model.get_value(iter_, 1)  # 1 = groupnode
 
         con = app.connections[self.account]
         con.get_module('PubSub').send_pb_unsubscribe(
@@ -2093,7 +2124,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         self.subscriptions = groups_
 
-        # try to setup existing items in model
+        # Try to setup existing items in model
         model = self.window.services_treeview.get_model()
         for row in model:
             # 1 = group node
@@ -2114,7 +2145,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         model = self.window.services_treeview.get_model()
         for row in model:
-            if row[1] == groupnode: # 1 = groupnode
+            if row[1] == groupnode:  # 1 = groupnode
                 row[4] = True
                 break
 
@@ -2128,11 +2159,12 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         model = self.window.services_treeview.get_model()
         for row in model:
-            if row[1] == groupnode: # 1 = groupnode
+            if row[1] == groupnode:  # 1 = groupnode
                 row[4] = False
                 break
 
         self.update_actions()
+
 
 # Fill the global agent type info dictionary
 _agent_type_info = _gen_agent_type_info()
@@ -2141,8 +2173,8 @@ _agent_type_info = _gen_agent_type_info()
 class GroupsPostWindow:
     def __init__(self, account, servicejid, groupid):
         """
-        Open new 'create post' window to create message for groupid on servicejid
-        service
+        Open new 'create post' window to create message for groupid on
+        servicejid service
         """
         assert isinstance(servicejid, str)
         assert isinstance(groupid, str)
@@ -2151,38 +2183,38 @@ class GroupsPostWindow:
         self.servicejid = servicejid
         self.groupid = groupid
 
-        self.xml = get_builder('groups_post_window.ui')
-        self.window = self.xml.get_object('groups_post_window')
-        for name in ('from_entry', 'subject_entry', 'contents_textview'):
-            self.__dict__[name] = self.xml.get_object(name)
+        self._ui = get_builder('groups_post_window.ui')
+        self.window = self._ui.groups_post_window
 
-        self.xml.connect_signals(self)
+        self._ui.connect_signals(self)
         self.window.show_all()
 
-    def on_cancel_button_clicked(self, w):
-        """
-        Close window
-        """
-        self.window.destroy()
+    def _on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
 
-    def on_send_button_clicked(self, w):
+    def _on_send_button_clicked(self, w):
         """
         Gather info from widgets and send it as a message
         """
-        # constructing item to publish... that's atom:entry element
-        item = nbxmpp.Node('entry', {'xmlns':'http://www.w3.org/2005/Atom'})
+        # Constructing item to publish... that's atom:entry element
+        item = nbxmpp.Node('entry', {'xmlns': 'http://www.w3.org/2005/Atom'})
         author = item.addChild('author')
-        author.addChild('name', {}, [self.from_entry.get_text()])
+        author.addChild('name', {}, [self._ui.from_entry.get_text()])
         item.addChild('generator', {}, ['Gajim'])
-        item.addChild('title', {}, [self.subject_entry.get_text()])
+        item.addChild('title', {}, [self._ui.subject_entry.get_text()])
 
-        buf = self.contents_textview.get_buffer()
-        item.addChild('content', {}, [buf.get_text(buf.get_start_iter(), buf.get_end_iter(), True)])
+        buf = self._ui.contents_textview.get_buffer()
+        item.addChild('content',
+                      {},
+                      [buf.get_text(buf.get_start_iter(),
+                       buf.get_end_iter(),
+                       True)])
 
-        # publish it to node
+        # Publish it to node
         con = app.connections[self.account]
         con.get_module('PubSub').send_pb_publish(
             self.servicejid, self.groupid, item, str(uuid.uuid4()))
 
-        # close the window
+        # Close the window
         self.window.destroy()
