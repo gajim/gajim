@@ -538,7 +538,7 @@ class JingleSession:
         # If we are not receiving a file
         # Check if there's already a session with this user:
         if contents[0].media != 'file':
-            for session in self.connection.get_module('Jingle').iter_jingle_sessions(self.peerjid):
+            for session in self.connection.get_module('Jingle').get_jingle_sessions(self.peerjid):
                 if session is not self:
                     reason = nbxmpp.Node('reason')
                     alternative_session = reason.setTag('alternative-session')

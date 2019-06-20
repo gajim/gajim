@@ -179,10 +179,9 @@ class Bytestream(BaseModule):
         if not app.account_is_connected(self._account):
             return
 
-        if file_props.sid in self._sessions:
-            jingle = self._sessions[file_props.sid]
-            jingle.cancel_session()
-        return
+        for session in self._con.get_module('Jingle').get_jingle_sessions(
+                None, file_props.sid):
+            session.cancel_session()
 
     def send_success_connect_reply(self, streamhost):
         """

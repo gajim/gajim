@@ -230,16 +230,16 @@ class Jingle(BaseModule):
                 return 'sha-256'
         return None
 
-    def iter_jingle_sessions(self, jid, sid=None, media=None):
+    def get_jingle_sessions(self, jid, sid=None, media=None):
         if sid:
-            return (session for session in self._sessions.values() if \
-                session.sid == sid)
-        sessions = (session for session in self._sessions.values() if \
-            session.peerjid == jid)
+            return [session for session in self._sessions.values() if \
+                session.sid == sid]
+        sessions = [session for session in self._sessions.values() if \
+            session.peerjid == jid]
         if media:
             if media not in ('audio', 'video', 'file'):
-                return tuple()
-            return (session for session in sessions if session.get_content(media))
+                return []
+            return [session for session in sessions if session.get_content(media)]
         return sessions
 
     def set_file_info(self, file_):
