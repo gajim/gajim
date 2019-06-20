@@ -23,7 +23,6 @@ import nbxmpp
 from gajim.common import app
 from gajim.common.const import RequestAvatar
 from gajim.common.nec import NetworkEvent
-from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import InformationEvent
 
@@ -158,12 +157,13 @@ class VCardTemp(BaseModule):
                 self._con.get_module('VCardAvatars').send_avatar_presence(
                     after_publish=True)
             self._log.info('%s: Published: %s', self._account, sha)
+            self._con.get_module('MUC').update_presence()
             app.nec.push_incoming_event(
-                VcardPublishedEvent(None, conn=self._con))
+                NetworkEvent('vcard-published', account=self._account))
 
         elif stanza.getType() == 'error':
             app.nec.push_incoming_event(
-                VcardNotPublishedEvent(None, conn=self._con))
+                NetworkEvent('vcard-not-published', account=self._account))
 
     def _get_vcard_photo(self, vcard, jid):
         try:
@@ -216,10 +216,10 @@ class VCardTemp(BaseModule):
             elif 'FN' in vcard:
                 app.nicks[self._account] = vcard['FN']
 
-        app.nec.push_incoming_event(
-            VcardReceivedEvent(None, conn=self._con,
-                               vcard_dict=vcard,
-                               jid=jid))
+        app.nec.push_incoming_event(NetworkEvent('vcard-received',
+                                                 account=self._account,
+                                                 jid=jid,
+                                                 vcard_dict=vcard))
 
         callback(jid, resource, room, vcard, expected_sha)
 
@@ -307,18 +307,6 @@ class VCardTemp(BaseModule):
         if not name and 'FN' in vcard:
             name = vcard['FN']
         return name
-
-
-class VcardPublishedEvent(NetworkIncomingEvent):
-    name = 'vcard-published'
-
-
-class VcardNotPublishedEvent(NetworkIncomingEvent):
-    name = 'vcard-not-published'
-
-
-class VcardReceivedEvent(NetworkIncomingEvent):
-    name = 'vcard-received'
 
 
 def get_instance(*args, **kwargs):

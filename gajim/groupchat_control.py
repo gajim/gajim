@@ -328,7 +328,6 @@ class GroupchatControl(ChatControlBase):
             ('muc-voice-approval', ged.GUI1, self._on_voice_approval),
             ('gc-message-received', ged.GUI1, self._nec_gc_message_received),
             ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
-            ('vcard-published', ged.GUI1, self._nec_vcard_published),
             ('update-gc-avatar', ged.GUI1, self._nec_update_avatar),
             ('update-room-avatar', ged.GUI1, self._nec_update_room_avatar),
             ('signed-in', ged.GUI1, self._nec_signed_in),
@@ -1121,12 +1120,6 @@ class GroupchatControl(ChatControlBase):
             subject = GLib.markup_escape_text(self.subject)
             subject_text = self.urlfinder.sub(self.make_href, subject)
             self.subject_button.get_popover().set_text(subject_text)
-
-    def _nec_vcard_published(self, obj):
-        if obj.conn.name != self.account:
-            return
-
-        obj.conn.get_module('MUC').send_muc_presence(self.room_jid)
 
     def _nec_update_avatar(self, obj):
         if obj.contact.room_jid != self.room_jid:

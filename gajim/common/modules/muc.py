@@ -128,6 +128,9 @@ class MUC(BaseModule):
     def _get_muc_state(self, room_jid):
         return self._muc_data[room_jid].state
 
+    def get_mucs_with_state(self, states):
+        return [muc for muc in self._muc_data.values() if muc.state in states]
+
     def join(self, room_jid, nick, password, rejoin=False):
         if not app.account_is_connected(self._account):
             return
@@ -165,7 +168,13 @@ class MUC(BaseModule):
             '%s/%s' % (room_jid, muc.nick),
             typ='unavailable')
 
-    def send_muc_presence(self, room_jid, auto=False):
+    def update_presence(self, auto=False):
+        mucs = self.get_mucs_with_state([MUCJoinedState.JOINED,
+                                         MUCJoinedState.JOINING])
+        for muc in mucs:
+            self._send_presence(muc.jid, auto)
+
+    def _send_presence(self, room_jid, auto):
         show = app.SHOW_LIST[self._con.connected]
         if show in ('invisible', 'offline'):
             # FIXME: Check if this

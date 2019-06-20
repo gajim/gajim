@@ -386,7 +386,7 @@ class GajimRemote(Server):
         self.raise_signal('NewAccount', (obj.conn.name, obj.account_info))
 
     def on_vcard_received(self, obj):
-        self.raise_signal('VcardInfo', (obj.conn.name, obj.vcard_dict))
+        self.raise_signal('VcardInfo', (obj.account, obj.vcard_dict))
 
     def raise_signal(self, event_name, data):
         log.info('Send event %s', event_name)

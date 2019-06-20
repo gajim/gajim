@@ -29,6 +29,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
+from gajim.common.helpers import event_filter
 
 from gajim import gtkgui_helpers
 from gajim.gui_menu_builder import show_save_as_menu
@@ -338,17 +339,15 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self.update_progressbar_timeout_id = GLib.timeout_add(
             100, self.update_progressbar)
 
-    def _nec_vcard_published(self, obj):
-        if obj.conn.name != self.account:
-            return
+    @event_filter(['account'])
+    def _nec_vcard_published(self, _event):
         if self.update_progressbar_timeout_id is not None:
             GLib.source_remove(self.update_progressbar_timeout_id)
             self.update_progressbar_timeout_id = None
         self.destroy()
 
-    def _nec_vcard_not_published(self, obj):
-        if obj.conn.name != self.account:
-            return
+    @event_filter(['account'])
+    def _nec_vcard_not_published(self, _event):
         if self.message_id:
             self.statusbar.remove(self.context_id, self.message_id)
         self.message_id = self.statusbar.push(

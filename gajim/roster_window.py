@@ -2109,14 +2109,7 @@ class RosterWindow:
             self.delete_pep(app.get_jid_from_account(account), account)
         was_invisible = app.is_invisible(account)
         app.connections[account].change_status(status, txt, auto)
-
-        for gc_control in app.interface.msg_win_mgr.get_controls(
-        message_control.TYPE_GC) + \
-        list(app.interface.minimized_controls[account].values()):
-            if gc_control.account == account:
-                if app.gc_connected[account][gc_control.room_jid]:
-                    app.connections[account].get_module('MUC').send_muc_presence(
-                        gc_control.room_jid, auto=auto)
+        app.connections[account].get_module('MUC').update_presence(auto)
         if was_invisible and status != 'offline':
             # We come back from invisible, join bookmarks
             con = app.connections[account]
