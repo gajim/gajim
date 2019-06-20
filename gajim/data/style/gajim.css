@@ -114,6 +114,9 @@ list.settings > row > box {
     margin: 6px 18px;
 }
 
+/*SendFileDialog*/
+#SendFileDialog grid list > row { padding: 10px 20px 10px 10px; }
+
 /* Preferences Window */
 .PreferencesWindow { background-color: @theme_base_color; }
 .PreferencesStack { background-color: @theme_bg_color; }
@@ -230,10 +233,6 @@ button.flat.link { padding: 0; border: 0; }
 
 /*MessageWindow Notebook*/
 .notebook-tab-label {min-width: 80px}
-
-/*SendFileDialog*/
-#SendFileDialog grid {padding: 12px}
-#SendFileDialog grid list { background-color: @theme_bg_color}
 
 /*Icon colors*/
 .success-color { color: @success_color; }

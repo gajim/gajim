@@ -549,16 +549,19 @@ class FileTransfersTooltip():
         return False, self.widget
 
     def _create_tooltip(self, file_props, _sid):
-        ft_table = Gtk.Table(2, 1)
-        ft_table.set_property('column-spacing', 2)
-        current_row = 1
+        ft_grid = Gtk.Grid.new()
+        ft_grid.insert_column(0)
+        ft_grid.set_row_spacing(6)
+        ft_grid.set_column_spacing(12)
+        current_row = 0
         properties = []
         name = file_props.name
         if file_props.type_ == 'r':
             file_name = os.path.split(file_props.file_name)[1]
         else:
             file_name = file_props.name
-        properties.append((_('Name: '), GLib.markup_escape_text(file_name)))
+        properties.append((_('File Name: '),
+                           GLib.markup_escape_text(file_name)))
         if file_props.type_ == 'r':
             type_ = Q_('?Noun:Download')
             actor = _('Sender: ')
@@ -573,58 +576,55 @@ class FileTransfersTooltip():
                 name = receiver.get_shown_name()
             else:
                 name = receiver.split('/')[0]
-        properties.append((_('Type: '), type_))
+        properties.append((Q_('?transfer type:Type: '), type_))
         properties.append((actor, GLib.markup_escape_text(name)))
 
         transfered_len = file_props.received_len
         if not transfered_len:
             transfered_len = 0
-        properties.append((_('Transferred: '), helpers.convert_bytes(transfered_len)))
+        properties.append((Q_('?transfer status:Transferred: '),
+                           helpers.convert_bytes(transfered_len)))
         status = self._get_current_status(file_props)
-        properties.append((_('Status: '), status))
+        properties.append((Q_('?transfer status:Status: '), status))
         file_desc = file_props.desc or ''
-        properties.append((_('Description: '), GLib.markup_escape_text(
-            file_desc)))
+        properties.append((_('Description: '),
+                           GLib.markup_escape_text(file_desc)))
+
         while properties:
             property_ = properties.pop(0)
-            current_row += 1
             label = Gtk.Label()
-            label.set_halign(Gtk.Align.START)
-            label.set_valign(Gtk.Align.START)
+            label.set_halign(Gtk.Align.END)
+            label.set_valign(Gtk.Align.CENTER)
             label.set_markup(property_[0])
-            ft_table.attach(
-                label, 1, 2, current_row, current_row + 1,
-                Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
+            ft_grid.attach(label, 0, current_row, 1, 1)
             label = Gtk.Label()
             label.set_halign(Gtk.Align.START)
             label.set_valign(Gtk.Align.START)
             label.set_line_wrap(True)
             label.set_markup(property_[1])
-            ft_table.attach(
-                label, 2, 3, current_row, current_row + 1,
-                Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL,
-                Gtk.AttachOptions.FILL, 0, 0)
+            ft_grid.attach(label, 1, current_row, 1, 1)
+            current_row += 1
 
-        ft_table.show_all()
-        return ft_table
+        ft_grid.show_all()
+        return ft_grid
 
     @staticmethod
     def _get_current_status(file_props):
         if file_props.stopped:
-            return _('Aborted')
+            return Q_('?transfer status:Aborted')
         if file_props.completed:
-            return _('Completed')
+            return Q_('?transfer status:Completed')
         if file_props.paused:
             return Q_('?transfer status:Paused')
         if file_props.stalled:
             # stalled is not paused. it is like 'frozen' it stopped alone
-            return _('Stalled')
+            return Q_('?transfer status:Stalled')
 
         if file_props.connected:
             if file_props.started:
-                return _('Transferring')
-            return _('Not started')
-        return _('Not started')
+                return Q_('?transfer status:Transferring')
+            return Q_('?transfer status:Not started')
+        return Q_('?transfer status:Not started')
 
 
 def colorize_status(status):
