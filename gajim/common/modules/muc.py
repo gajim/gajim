@@ -445,8 +445,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-voice-approval',
                          account=self._account,
-                         room_jid=room_jid,
-                         jid=jid,
+                         room_jid=properties.jid.getBare(),
                          form=properties.voice_request.form))
         raise nbxmpp.NodeProcessed
 
