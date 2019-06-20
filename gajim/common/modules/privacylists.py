@@ -294,7 +294,8 @@ class PrivacyLists(BaseModule):
         for contact in contact_list:
             self._log.info('Block contacts: %s', contact.jid)
             contact.show = 'offline'
-            self._con.send_custom_status('offline', message, contact.jid)
+            self._con.get_module('Presence').send_presence(contact.jid,
+                                                           typ='unavailable')
             max_order = self._get_max_blocked_list_order()
             new_rule = {'order': str(max_order + 1),
                         'type': 'jid',
@@ -364,7 +365,8 @@ class PrivacyLists(BaseModule):
         if show == 'invisible':
             return
         for contact in contact_list:
-            self._con.send_custom_status(show, self._con.status, contact.jid)
+            self._con.get_module('Presence').send_presence(
+                contact.jid, show=show, status=self._con.status)
             self._presence_probe(contact.jid)
 
     def block_group(self, group, contact_list, message):
@@ -380,7 +382,8 @@ class PrivacyLists(BaseModule):
             self.default_list = 'block'
 
         for contact in contact_list:
-            self._con.send_custom_status('offline', message, contact.jid)
+            self._con.get_module('Presence').send_presence(
+                contact.jid, typ='unavailable')
 
         max_order = self._get_max_blocked_list_order()
         new_rule = {'order': str(max_order + 1),
@@ -424,7 +427,8 @@ class PrivacyLists(BaseModule):
         if show == 'invisible':
             return
         for contact in contact_list:
-            self._con.send_custom_status(show, self._con.status, contact.jid)
+            self._con.get_module('Presence').send_presence(
+                contact.jid, show=show, status=self._con.status)
 
     def _presence_probe(self, jid):
         self._log.info('Presence probe: %s', jid)

@@ -1496,29 +1496,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         modules.send_stored_publish(self.name)
         self.continue_connect_info = None
 
-    def send_custom_status(self, show, msg, jid):
-        if show not in app.SHOW_LIST:
-            return -1
-        if not app.account_is_connected(self.name):
-            return
-        sshow = helpers.get_xmpp_show(show)
-        if not msg:
-            msg = ''
-        if show == 'offline':
-            self.get_module('Presence').send_presence(
-                jid,
-                'unavailable',
-                caps=False,
-                status=msg)
-
-        else:
-            priority = app.get_priority(self.name, sshow)
-            self.get_module('Presence').send_presence(
-                jid,
-                priority=priority,
-                show=sshow,
-                status=msg)
-
     def _change_to_invisible(self, msg):
         self.send_invisible_presence(msg)
 

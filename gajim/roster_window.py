@@ -2056,16 +2056,15 @@ class RosterWindow:
     def set_connecting_state(self, account):
         self.set_state(account, 'connecting')
 
-    def send_status(self, account, status, txt, auto=False, to=None):
+    def send_status(self, account, status, txt, auto=False):
         if status != 'offline':
-            if to is None:
-                app.config.set_per('accounts', account, 'last_status', status)
-                app.config.set_per('accounts', account, 'last_status_msg',
-                        helpers.to_one_line(txt))
+            app.config.set_per('accounts', account, 'last_status', status)
+            app.config.set_per('accounts', account, 'last_status_msg',
+                    helpers.to_one_line(txt))
             if not app.account_is_connected(account):
                 self.set_connecting_state(account)
 
-        self.send_status_continue(account, status, txt, auto, to)
+        self.send_status_continue(account, status, txt, auto)
 
     def send_pep(self, account, pep_dict):
         connection = app.connections[account]
@@ -2098,34 +2097,30 @@ class RosterWindow:
         if ctrl:
             ctrl.update_all_pep_types()
 
-    def send_status_continue(self, account, status, txt, auto, to):
-        if app.account_is_connected(account) and not to:
+    def send_status_continue(self, account, status, txt, auto):
+        if app.account_is_connected(account):
             if status == 'online' and not idle.Monitor.is_unknown():
                 app.sleeper_state[account] = 'online'
             elif app.sleeper_state[account] not in ('autoaway', 'autoxa') or \
             status == 'offline':
                 app.sleeper_state[account] = 'off'
 
-        if to:
-            app.connections[account].send_custom_status(status, txt, to)
-        else:
-            if status in ('invisible', 'offline'):
-                self.delete_pep(app.get_jid_from_account(account), account)
-            was_invisible = app.is_invisible(account)
-            app.connections[account].change_status(status, txt, auto)
+        if status in ('invisible', 'offline'):
+            self.delete_pep(app.get_jid_from_account(account), account)
+        was_invisible = app.is_invisible(account)
+        app.connections[account].change_status(status, txt, auto)
 
-            for gc_control in app.interface.msg_win_mgr.get_controls(
-            message_control.TYPE_GC) + \
-            list(app.interface.minimized_controls[account].values()):
-                if gc_control.account == account:
-                    if app.gc_connected[account][gc_control.room_jid]:
-                        app.connections[account].get_module('MUC').send_muc_presence(
-                            gc_control.room_jid, auto=auto)
-            if was_invisible and status != 'offline':
-                # We come back from invisible, join bookmarks
-                con = app.connections[account]
-                con.get_module('Bookmarks').auto_join_bookmarks()
-
+        for gc_control in app.interface.msg_win_mgr.get_controls(
+        message_control.TYPE_GC) + \
+        list(app.interface.minimized_controls[account].values()):
+            if gc_control.account == account:
+                if app.gc_connected[account][gc_control.room_jid]:
+                    app.connections[account].get_module('MUC').send_muc_presence(
+                        gc_control.room_jid, auto=auto)
+        if was_invisible and status != 'offline':
+            # We come back from invisible, join bookmarks
+            con = app.connections[account]
+            con.get_module('Bookmarks').auto_join_bookmarks()
 
     def chg_contact_status(self, contact, show, status, account):
         """
