@@ -32,13 +32,11 @@ from typing import Tuple  # pylint: disable=unused-import
 import os
 import uuid
 import logging
-import time
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 
-from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.const import ACTIVITIES
 from gajim.common.const import MOODS
@@ -1146,79 +1144,3 @@ class VoIPCallReceivedDialog:
                     session.reject_content(content)
 
         dialog.destroy()
-
-class ProgressWindow(Gtk.ApplicationWindow):
-    def __init__(self, file):
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('HTTPUploadProgressWindow')
-        self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
-        self.set_title(_('File Transfer'))
-
-        self.event = file.event
-        self.file = file
-        self._ui = get_builder('httpupload_progress_dialog.ui')
-        file_name = os.path.basename(file.path)
-        self._ui.file_name_label.set_text(file_name)
-        self._start_time = time.time()
-
-        self.add(self._ui.grid)
-
-        self.pulse = GLib.timeout_add(100, self._pulse_progressbar)
-        self.show_all()
-
-        self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
-        app.ged.register_event_handler('httpupload-progress', ged.CORE,
-                                       self._on_httpupload_progress)
-
-    def _on_httpupload_progress(self, obj):
-        if self.file != obj.file:
-            return
-
-        if obj.status == 'request':
-            self._ui.label.set_text(_('Requesting HTTP File Upload Slot…'))
-        elif obj.status == 'close':
-            self.destroy()
-        elif obj.status == 'upload':
-            self._ui.label.set_text(_('Uploading via HTTP File Upload…'))
-        elif obj.status == 'update':
-            self.update_progress(obj.seen, obj.total)
-        elif obj.status == 'encrypt':
-            self._ui.label.set_text(_('Encrypting file…'))
-
-    def _pulse_progressbar(self):
-        self._ui.progressbar.pulse()
-        return True
-
-    def on_cancel_upload_button_clicked(self, widget):
-        self.destroy()
-
-    def _on_destroy(self, *args):
-        self.event.set()
-        if self.pulse:
-            GLib.source_remove(self.pulse)
-        app.ged.remove_event_handler('httpupload-progress', ged.CORE,
-                                     self._on_httpupload_progress)
-
-    def update_progress(self, seen, total):
-        if self.event.isSet():
-            return
-        if self.pulse:
-            GLib.source_remove(self.pulse)
-            self.pulse = None
-
-        size_total = round(total / (1024 * 1024), 1)
-        size_progress = round(seen / (1024 * 1024), 1)
-
-        time_now = time.time()
-        mbytes_sec = round(size_progress / (time_now - self._start_time), 1)
-
-        self._ui.progressbar.set_fraction(float(seen) / total)
-
-        self._ui.progress_label.set_text(
-            _('%(progress)s of %(total)s MiB sent (%(speed)s MiB/s)') % \
-            {'progress': str(size_progress),
-             'total': str(size_total),
-             'speed': str(mbytes_sec)})

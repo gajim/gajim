@@ -58,7 +58,6 @@ from gajim import gui_menu_builder
 from gajim import dialogs
 from gajim import message_control
 from gajim.dialog_messages import get_dialog
-from gajim.dialogs import ProgressWindow
 
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
@@ -111,6 +110,7 @@ from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.filetransfer import FileTransfersWindow
+from gajim.gtk.http_upload_progress import HTTPUploadProgressWindow
 from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gtk.subscription_request import SubscriptionRequestWindow
 from gajim.gtk.util import get_show_in_roster
@@ -928,7 +928,7 @@ class Interface:
 
     @staticmethod
     def show_httpupload_progress(file):
-        ProgressWindow(file)
+        HTTPUploadProgressWindow(file)
 
     def send_httpupload(self, chat_control):
         accept_cb = partial(self.on_file_dialog_ok, chat_control)
