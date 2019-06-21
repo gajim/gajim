@@ -647,7 +647,7 @@ class Interface:
             event_type = _('File Transfer Error')
             app.notification.popup(
                 event_type, event.jid, event.account,
-                'file-send-error', 'gajim-ft_error',
+                'file-send-error', 'dialog-error',
                 event_type, event.file_props.name)
 
     def handle_event_file_request_error(self, obj):
@@ -678,7 +678,7 @@ class Interface:
             event_type = _('File Transfer Error')
             app.notification.popup(
                 event_type, obj.jid, obj.conn.name,
-                msg_type, 'gajim-ft_error',
+                msg_type, 'dialog-error',
                 title=event_type, text=obj.file_props.name)
 
     def handle_event_file_request(self, obj):
@@ -709,7 +709,7 @@ class Interface:
             event_type = _('File Transfer Request')
             app.notification.popup(
                 event_type, obj.jid, account, 'file-request',
-                icon_name='gajim-ft_request', title=event_type, text=txt)
+                icon_name='document-send', title=event_type, text=txt)
 
     @staticmethod
     def handle_event_file_error(title, message):
@@ -843,15 +843,15 @@ class Interface:
                 if event_type == _('File Transfer Completed'):
                     txt = _('%(filename)s received from %(name)s.')\
                     	% {'filename': filename, 'name': name}
-                    icon_name = 'gajim-ft_done'
+                    icon_name = 'emblem-default'
                 elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s from %(name)s '
                         'stopped.') % {'filename': filename, 'name': name}
-                    icon_name = 'gajim-ft_stopped'
+                    icon_name = 'process-stop'
                 else: # ft hash error
                     txt = _('File transfer of %(filename)s from %(name)s '
                         'failed.') % {'filename': filename, 'name': name}
-                    icon_name = 'gajim-ft_stopped'
+                    icon_name = 'process-stop'
             else:
                 receiver = file_props.receiver
                 if hasattr(receiver, 'jid'):
@@ -864,15 +864,15 @@ class Interface:
                 if event_type == _('File Transfer Completed'):
                     txt = _('You successfully sent %(filename)s to %(name)s.')\
                         % {'filename': filename, 'name': name}
-                    icon_name = 'gajim-ft_done'
+                    icon_name = 'emblem-default'
                 elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s to %(name)s '
                         'stopped.') % {'filename': filename, 'name': name}
-                    icon_name = 'gajim-ft_stopped'
+                    icon_name = 'process-stop'
                 else: # ft hash error
                     txt = _('File transfer of %(filename)s to %(name)s '
                         'failed.') % {'filename': filename, 'name': name}
-                    icon_name = 'gajim-ft_stopped'
+                    icon_name = 'process-stop'
         else:
             txt = ''
             icon_name = None
