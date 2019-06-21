@@ -19,13 +19,29 @@
 # Copyright (c) 2007, IBM Corporation
 # All rights reserved.
 
-## Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
 
-## * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-## * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-## * Neither the name of the IBM Corporation nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+# * Redistributions of source code must retain the above copyright notice,
+#   this list of conditions and the following disclaimer.
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+# * Neither the name of the IBM Corporation nor the names of its contributors
+#   may be used to endorse or promote products derived from this software
+#   without specific prior written permission.
 
-## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
 
 """
 Provides IPython console widget
@@ -45,6 +61,7 @@ import sys
 import os
 from io import StringIO
 from functools import reduce
+from pkg_resources import parse_version
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -76,6 +93,7 @@ try:
             self.view.write(tokens)
 except Exception:
     HAS_IPYTHON5 = False
+
 
 class IterableIPShell:
     """
@@ -118,9 +136,11 @@ class IterableIPShell:
         io = IPython.utils.io
         if input_func:
             if IPython.version_info[0] >= 1:
-                IPython.terminal.interactiveshell.raw_input_original = input_func
+                IPython.terminal.interactiveshell.raw_input_original = \
+                    input_func
             else:
-                IPython.frontend.terminal.interactiveshell.raw_input_original = input_func
+                IPython.frontend.terminal.interactiveshell.raw_input_original = \
+                    input_func
         if cin:
             io.stdin = io.IOStream(cin)
         if cout:
@@ -149,38 +169,48 @@ class IterableIPShell:
         sys.stdout, sys.stderr = io.stdout.stream, io.stderr.stream
 
         # InteractiveShell inherits from SingletonConfigurable so use instance()
-        if IPython.version_info[0] >= 1:
-            self.IP = IPython.terminal.embed.InteractiveShellEmbed.instance(config=cfg, user_ns=user_ns, user_module=user_global_ns)
+        if parse_version(IPython.release.version) >= parse_version("1.2.1"):
+            self.IP = IPython.terminal.embed.InteractiveShellEmbed.instance(
+                config=cfg, user_ns=user_ns, user_module=user_global_ns)
         else:
-            self.IP = IPython.frontend.terminal.embed.InteractiveShellEmbed.instance(config=cfg, user_ns=user_ns)
+            self.IP = \
+                IPython.frontend.terminal.embed.InteractiveShellEmbed.instance(
+                    config=cfg, user_ns=user_ns)
 
         sys.stdout, sys.stderr = old_stdout, old_stderr
 
         self.IP.system = lambda cmd: self.shell(self.IP.var_expand(cmd),
                                                 header='IPython system call: ',
                                                 local_ns=user_ns)
-                                                #global_ns=user_global_ns)
-                                                #verbose=self.IP.rc.system_verbose)
 
         self.IP.raw_input = input_func
         sys.excepthook = excepthook
         self.iter_more = 0
         self.history_level = 0
         self.complete_sep = re.compile(r'[\s\{\}\[\]\(\)]')
-        self.updateNamespace({'exit':lambda: None})
-        self.updateNamespace({'quit':lambda: None})
-        #self.IP.readline_startup_hook(self.IP.pre_readline)
+        self.updateNamespace({'exit': lambda: None})
+        self.updateNamespace({'quit': lambda: None})
+        if parse_version(IPython.release.version) < parse_version("5.0.0"):
+            self.IP.readline_startup_hook(self.IP.pre_readline)
+
         # Workaround for updating namespace with sys.modules
         #
         self.__update_namespace()
+
+        # Avoid using input splitter when not really needed.
+        # Perhaps it could work even before 5.8.0
+        # But it definitely does not work any more with >= 7.0.0
+        self.no_input_splitter = parse_version(IPython.release.version) >= \
+            parse_version('5.8.0')
+        self.lines = []
 
     def __update_namespace(self):
         '''
         Update self.IP namespace for autocompletion with sys.modules
         '''
         for k, v in sys.modules.items():
-            if not '.' in k:
-                self.IP.user_ns.update({k:v})
+            if '.' not in k:
+                self.IP.user_ns.update({k: v})
 
     def execute(self):
         """
@@ -211,11 +241,21 @@ class IterableIPShell:
         except Exception:
             self.IP.showtraceback()
         else:
-            self.IP.input_splitter.push(line)
-            self.iter_more = self.IP.input_splitter.push_accepts_more()
+            if self.no_input_splitter:
+                self.lines.append(self.IP.raw_input(self.prompt))
+                self.iter_more = self.IP.check_complete(
+                    '\n'.join(self.lines))[0] == 'incomplete'
+            else:
+                self.IP.input_splitter.push(line)
+                self.iter_more = self.IP.input_splitter.push_accepts_more()
+
             self.prompt = self.generatePrompt(self.iter_more)
             if not self.iter_more:
-                if IPython.version_info[0] >= 2:
+                if self.no_input_splitter:
+                    source_raw = '\n'.join(self.lines)
+                    self.lines = []
+                elif parse_version(IPython.release.version) >= \
+                    parse_version("2.0.0-dev"):
                     source_raw = self.IP.input_splitter.raw_reset()
                 else:
                     source_raw = self.IP.input_splitter.source_raw_reset()[1]
@@ -243,21 +283,16 @@ class IterableIPShell:
         # Backwards compatibility with ipyton-0.11
         #
         ver = IPython.__version__
-        if '0.11' in ver:
+        if ver[0:4] == '0.11':
             prompt = self.IP.hooks.generate_prompt(is_continuation)
+        elif parse_version(IPython.release.version) < parse_version("5.0.0"):
+            if is_continuation:
+                prompt = self.IP.prompt_manager.render('in2')
+            else:
+                prompt = self.IP.prompt_manager.render('in')
         else:
-            # Prompt for IPython >=5.0:
-            if hasattr(self.IP, 'prompts'):
-                if is_continuation:
-                    prompt = self.IP.prompts.continuation_prompt_tokens(self.IP.prompts)
-                else:
-                    prompt = self.IP.prompts.in_prompt_tokens(self.IP.prompts)
-            # Prompt for IPython < 5.0
-            elif hasattr(self.IP, 'prompt_manager'):
-                if is_continuation:
-                    prompt = self.IP.prompt_manager.render('in2')
-                else:
-                    prompt = self.IP.prompt_manager.render('in')
+            # TODO: Update to IPython 5.x and later
+            prompt = "In [%d]: " % self.IP.execution_count
 
         return prompt
 
@@ -340,8 +375,9 @@ class IterableIPShell:
                 return str1
 
             if possibilities[1]:
-                common_prefix = reduce(_commonPrefix, possibilities[1]) or line[-1]
-                completed = line[:-len(split_line[-1])]+common_prefix
+                common_prefix = \
+                    reduce(_commonPrefix, possibilities[1]) or line[-1]
+                completed = line[:-len(split_line[-1])] + common_prefix
             else:
                 completed = line
         else:
@@ -383,9 +419,10 @@ class ConsoleView(Gtk.TextView):
         self.override_font(Pango.FontDescription('Mono'))
         self.set_cursor_visible(True)
         self.text_buffer = self.get_buffer()
-        self.mark = self.text_buffer.create_mark('scroll_mark',
-                                                 self.text_buffer.get_end_iter(),
-                                                 False)
+        self.mark = self.text_buffer.create_mark(
+            'scroll_mark',
+            self.text_buffer.get_end_iter(),
+            False)
         for code in self.ANSI_COLORS:
             self.text_buffer.create_tag(code,
                                         foreground=self.ANSI_COLORS[code],
@@ -395,14 +432,15 @@ class ConsoleView(Gtk.TextView):
         self.color_pat = re.compile(r'\x01?\x1b\[(.*?)m\x02?')
         if HAS_IPYTHON5:
             self.style_dict = {
-                Token.Prompt:        '0;32',
-                Token.PromptNum:     '1;32',
-                Token.OutPrompt:     '0;31',
-                Token.OutPromptNum:  '1;31',
+                Token.Prompt: '0;32',
+                Token.PromptNum: '1;32',
+                Token.OutPrompt: '0;31',
+                Token.OutPromptNum: '1;31',
             }
         self.line_start = \
             self.text_buffer.create_mark('line_start',
-                                         self.text_buffer.get_end_iter(), True)
+                                         self.text_buffer.get_end_iter(),
+                                         True)
         self.connect('key-press-event', self.onKeyPress)
 
     def write(self, text, editable=False):
@@ -420,18 +458,18 @@ class ConsoleView(Gtk.TextView):
         @param editable: If true, added text is editable.
         @type editable: boolean
         """
-        start_mark = self.text_buffer.create_mark(None,
-                                                  self.text_buffer.get_end_iter(),
-                                                  True)
+        start_mark = self.text_buffer.create_mark(
+            None, self.text_buffer.get_end_iter(), True)
 
         for token, segment in text:
             tag = self.style_dict[token]
-            self.text_buffer.insert_with_tags_by_name(self.text_buffer.get_end_iter(),
-                                                      segment, tag)
+            self.text_buffer.insert_with_tags_by_name(
+                self.text_buffer.get_end_iter(), segment, tag)
         if not editable:
-            self.text_buffer.apply_tag_by_name('notouch',
-                                               self.text_buffer.get_iter_at_mark(start_mark),
-                                               self.text_buffer.get_end_iter())
+            self.text_buffer.apply_tag_by_name(
+                'notouch',
+                self.text_buffer.get_iter_at_mark(start_mark),
+                self.text_buffer.get_end_iter())
         self.text_buffer.delete_mark(start_mark)
         self.scroll_mark_onscreen(self.mark)
 
@@ -449,25 +487,25 @@ class ConsoleView(Gtk.TextView):
             return
         segments = self.color_pat.split(text)
         segment = segments.pop(0)
-        start_mark = self.text_buffer.create_mark(None,
-                                                  self.text_buffer.get_end_iter(),
-                                                  True)
+        start_mark = self.text_buffer.create_mark(
+            None, self.text_buffer.get_end_iter(), True)
         self.text_buffer.insert(self.text_buffer.get_end_iter(), segment)
 
         if segments:
             ansi_tags = self.color_pat.findall(text)
             for tag in ansi_tags:
                 i = segments.index(tag)
-                self.text_buffer.insert_with_tags_by_name(self.text_buffer.get_end_iter(),
-                                                          segments[i+1], str(tag))
+                self.text_buffer.insert_with_tags_by_name(
+                    self.text_buffer.get_end_iter(), segments[i+1], str(tag))
                 segments.pop(i)
         if not editable:
-            self.text_buffer.apply_tag_by_name('notouch',
-                                               self.text_buffer.get_iter_at_mark(start_mark),
-                                               self.text_buffer.get_end_iter())
+            self.text_buffer.apply_tag_by_name(
+                'notouch',
+                self.text_buffer.get_iter_at_mark(start_mark),
+                self.text_buffer.get_end_iter())
+
         self.text_buffer.delete_mark(start_mark)
         self.scroll_mark_onscreen(self.mark)
-
 
     def showPrompt(self, prompt):
         GLib.idle_add(self._showPrompt, prompt)
@@ -495,7 +533,8 @@ class ConsoleView(Gtk.TextView):
         """
         iter_ = self.text_buffer.get_iter_at_mark(self.line_start)
         iter_.forward_to_line_end()
-        self.text_buffer.delete(self.text_buffer.get_iter_at_mark(self.line_start), iter_)
+        self.text_buffer.delete(
+            self.text_buffer.get_iter_at_mark(self.line_start), iter_)
         self._write(text, True)
 
     def getCurrentLine(self):
@@ -530,7 +569,8 @@ class ConsoleView(Gtk.TextView):
         if text:
             self._write('\n')
         self._showPrompt(self.prompt)
-        self.text_buffer.move_mark(self.line_start, self.text_buffer.get_end_iter())
+        self.text_buffer.move_mark(
+            self.line_start, self.text_buffer.get_end_iter())
         self.text_buffer.place_cursor(self.text_buffer.get_end_iter())
 
         if self.IP.rl_do_indent:
@@ -588,6 +628,7 @@ class ConsoleView(Gtk.TextView):
         For some reason we can't extend onKeyPress directly (bug #500900)
         """
 
+
 class IPythonView(ConsoleView, IterableIPShell):
     '''
     Sub-class of both modified IPython shell and L{ConsoleView} this makes
@@ -644,7 +685,8 @@ class IPythonView(ConsoleView, IterableIPShell):
         @return: True if event should not trickle.
         @rtype: boolean
         """
-        if event.get_state() & Gdk.ModifierType.CONTROL_MASK and event.keyval == 99:
+        if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
+            event.keyval == 99:
             self.interrupt = True
             self._processLine()
             return True
