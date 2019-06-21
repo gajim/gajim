@@ -38,6 +38,7 @@ import time
 import logging
 from functools import partial
 from threading import Thread
+from importlib.util import find_spec
 
 from gi.repository import Gtk
 from gi.repository import GLib
@@ -2074,6 +2075,13 @@ class Interface:
 
     @staticmethod
     def create_ipython_window():
+        # Check if IPython is installed
+        ipython = find_spec('IPython')
+        is_installed = ipython is not None
+        if not is_installed:
+            # Abort early to avoid tracebacks
+            print('IPython is not installed')
+            return
         try:
             from gajim.dev.ipython_view import IPythonView
         except ImportError:
