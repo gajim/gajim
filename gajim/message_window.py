@@ -1031,10 +1031,8 @@ class MessageWindowMgr(GObject.GObject):
             size = (app.config.get('msgwin-width'),
                     app.config.get('msgwin-height'))
             if self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
-                # Need to add the size of the now visible paned handle, otherwise
-                # the saved width of the message window decreases by this amount
-                handle_size = win.parent_paned.style_get_property('handle-size')
-                size = (hpaned + size[0] + handle_size, size[1])
+                # Add the hpaned position to our message window's size
+                size = (hpaned + size[0], size[1])
         elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
             size = (app.config.get_per('accounts', acct, 'msgwin-width'),
                     app.config.get_per('accounts', acct, 'msgwin-height'))
@@ -1245,8 +1243,10 @@ class MessageWindowMgr(GObject.GObject):
             size_width_key = type_ + '-msgwin-width'
             size_height_key = type_ + '-msgwin-height'
         elif self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
-            # Ignore any hpaned width
-            width = msg_win.notebook.get_allocation().width
+            # Ignore hpaned separator's width and calculate width ourselves
+            win_width = msg_win.window.get_allocation().width
+            hpaned_position = app.config.get('roster_hpaned_position')
+            width = win_width - hpaned_position
 
         if acct:
             app.config.set_per('accounts', acct, size_width_key, width)
