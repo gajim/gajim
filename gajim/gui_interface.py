@@ -1892,6 +1892,81 @@ class Interface:
                 app.sleeper_state[account] = 'autoxa'
         return True # renew timeout (loop for ever)
 
+    def enable_account(self, account):
+        if account == app.ZEROCONF_ACC_NAME:
+            app.connections[account] = connection_zeroconf.ConnectionZeroconf(
+                account)
+        else:
+            app.connections[account] = Connection(account)
+
+        app.plugin_manager.register_modules_for_account(
+            app.connections[account])
+
+        # update variables
+        self.instances[account] = {
+            'infos': {}, 'disco': {}, 'gc_config': {}, 'search': {},
+            'online_dialog': {}, 'sub_request': {}}
+        self.minimized_controls[account] = {}
+        app.connections[account].connected = 0
+        app.groups[account] = {}
+        app.contacts.add_account(account)
+        app.gc_connected[account] = {}
+        app.automatic_rooms[account] = {}
+        app.newly_added[account] = []
+        app.to_be_removed[account] = []
+        if account == app.ZEROCONF_ACC_NAME:
+            app.nicks[account] = app.ZEROCONF_ACC_NAME
+        else:
+            app.nicks[account] = app.config.get_per(
+                'accounts', account, 'name')
+        app.block_signed_in_notifications[account] = True
+        app.sleeper_state[account] = 'off'
+        app.last_message_time[account] = {}
+        app.status_before_autoaway[account] = ''
+        app.gajim_optional_features[account] = []
+        app.caps_hash[account] = ''
+        helpers.update_optional_features(account)
+        # refresh roster
+        if len(app.connections) >= 2:
+            # Do not merge accounts if only one exists
+            self.roster.regroup = app.config.get('mergeaccounts')
+        else:
+            self.roster.regroup = False
+        self.roster.setup_and_draw_roster()
+        gui_menu_builder.build_accounts_menu()
+        self.roster.send_status(account, 'online', '')
+
+    def disable_account(self, account):
+        self.roster.close_all(account)
+        if account == app.ZEROCONF_ACC_NAME:
+            app.connections[account].disable_account()
+        app.connections[account].cleanup()
+        del app.connections[account]
+        del self.instances[account]
+        del self.minimized_controls[account]
+        del app.nicks[account]
+        del app.block_signed_in_notifications[account]
+        del app.groups[account]
+        app.contacts.remove_account(account)
+        del app.gc_connected[account]
+        del app.automatic_rooms[account]
+        del app.to_be_removed[account]
+        del app.newly_added[account]
+        del app.sleeper_state[account]
+        del app.last_message_time[account]
+        del app.status_before_autoaway[account]
+        del app.gajim_optional_features[account]
+        del app.caps_hash[account]
+        if len(app.connections) >= 2:
+            # Do not merge accounts if only one exists
+            self.roster.regroup = app.config.get('mergeaccounts')
+        else:
+            self.roster.regroup = False
+        app.config.set_per(
+            'accounts', account, 'roster_version', '')
+        self.roster.setup_and_draw_roster()
+        gui_menu_builder.build_accounts_menu()
+
     def autoconnect(self):
         """
         Auto connect at startup
