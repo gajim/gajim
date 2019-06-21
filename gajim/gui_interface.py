@@ -1937,7 +1937,10 @@ class Interface:
         self.roster.send_status(account, 'online', '')
 
     def disable_account(self, account):
-        self.roster.close_all(account)
+        self.roster.close_all(account, force=True)
+        for jid in self.minimized_controls[account]:
+            ctrl = self.minimized_controls[account][jid]
+            ctrl.shutdown()
         if account == app.ZEROCONF_ACC_NAME:
             app.connections[account].disable_account()
         app.connections[account].cleanup()
