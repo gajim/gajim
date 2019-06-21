@@ -74,7 +74,7 @@ try:
 except ImportError:
     IPython = None
 
-HAS_IPYTHON5 = True
+HAS_IPYTHON_5 = True
 try:
     from pygments.token import Token
     # pylint: disable=ungrouped-imports
@@ -92,7 +92,7 @@ try:
             self.view.write('\n')
             self.view.write(tokens)
 except Exception:
-    HAS_IPYTHON5 = False
+    HAS_IPYTHON_5 = False
 
 
 class IterableIPShell:
@@ -255,7 +255,7 @@ class IterableIPShell:
                     source_raw = '\n'.join(self.lines)
                     self.lines = []
                 elif parse_version(IPython.release.version) >= \
-                    parse_version("2.0.0-dev"):
+                        parse_version("2.0.0-dev"):
                     source_raw = self.IP.input_splitter.raw_reset()
                 else:
                     source_raw = self.IP.input_splitter.source_raw_reset()[1]
@@ -370,7 +370,7 @@ class IterableIPShell:
                 @rtype: string
                 '''
                 for i in range(len(str1)):
-                    if not str2.startswith(str1[:i+1]):
+                    if not str2.startswith(str1[:i + 1]):
                         return str1[:i]
                 return str1
 
@@ -430,7 +430,7 @@ class ConsoleView(Gtk.TextView):
         self.text_buffer.create_tag('0')
         self.text_buffer.create_tag('notouch', editable=False)
         self.color_pat = re.compile(r'\x01?\x1b\[(.*?)m\x02?')
-        if HAS_IPYTHON5:
+        if HAS_IPYTHON_5:
             self.style_dict = {
                 Token.Prompt: '0;32',
                 Token.PromptNum: '1;32',
@@ -496,7 +496,7 @@ class ConsoleView(Gtk.TextView):
             for tag in ansi_tags:
                 i = segments.index(tag)
                 self.text_buffer.insert_with_tags_by_name(
-                    self.text_buffer.get_end_iter(), segments[i+1], str(tag))
+                    self.text_buffer.get_end_iter(), segments[i + 1], str(tag))
                 segments.pop(i)
         if not editable:
             self.text_buffer.apply_tag_by_name(
@@ -565,7 +565,7 @@ class ConsoleView(Gtk.TextView):
             'notouch',
             self.text_buffer.get_iter_at_mark(self.line_start),
             iter_)
-        self._write('\n'+text)
+        self._write('\n' + text)
         if text:
             self._write('\n')
         self._showPrompt(self.prompt)
@@ -610,11 +610,11 @@ class ConsoleView(Gtk.TextView):
                 return True
         elif not event.string:
             pass
-        elif start_iter.compare(insert_iter) <= 0 and \
-              start_iter.compare(selection_iter) <= 0:
+        elif (start_iter.compare(insert_iter) <= 0 and
+                start_iter.compare(selection_iter) <= 0):
             pass
-        elif start_iter.compare(insert_iter) > 0 and \
-              start_iter.compare(selection_iter) > 0:
+        elif (start_iter.compare(insert_iter) > 0 and
+                start_iter.compare(selection_iter) > 0):
             self.text_buffer.place_cursor(start_iter)
         elif insert_iter.compare(selection_iter) < 0:
             self.text_buffer.move_mark(insert_mark, start_iter)
@@ -642,11 +642,11 @@ class IPythonView(ConsoleView, IterableIPShell):
         self.cout = StringIO()
         IterableIPShell.__init__(self, cout=self.cout, cerr=self.cout,
                                  input_func=self.raw_input)
-        if HAS_IPYTHON5:
+        if HAS_IPYTHON_5:
             displayhook = MyPromptDisplayHook(shell=self.IP, view=self)
             self.IP.displayhook = displayhook
             self.IP.display_trap = DisplayTrap(hook=displayhook)
-#    self.connect('key_press_event', self.keyPress)
+
         self.interrupt = False
         self.execute()
         self.prompt = self.generatePrompt(False)
@@ -685,8 +685,8 @@ class IPythonView(ConsoleView, IterableIPShell):
         @return: True if event should not trickle.
         @rtype: boolean
         """
-        if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
-            event.keyval == 99:
+        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
+                event.keyval == 99):
             self.interrupt = True
             self._processLine()
             return True
@@ -707,7 +707,7 @@ class IPythonView(ConsoleView, IterableIPShell):
                 slice_ = self.getCurrentLine()
                 self.write('\n')
                 for symbol in possibilities:
-                    self.write(symbol+'\n')
+                    self.write(symbol + '\n')
                 self.showPrompt(self.prompt)
             self.changeLine(completed or slice_)
             return True
