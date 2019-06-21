@@ -732,25 +732,14 @@ class MessageWindow:
     def get_origin(self):
         return self.window.get_window().get_origin()
 
-    def get_control(self, key, acct):
+    def get_control(self, jid, acct):
         """
-        Return the MessageControl for jid or n, where n is a notebook page index.
-        When key is an int index acct may be None
+        Return the MessageControl for jid
         """
-
-        if isinstance(key, str):
-            jid = key
-            try:
-                return self._controls[acct][jid]
-            except Exception:
-                return None
-        else:
-            page_num = key
-            notebook = self.notebook
-            if page_num is None:
-                page_num = notebook.get_current_page()
-            nth_child = notebook.get_nth_page(page_num)
-            return self._widget_to_control(nth_child)
+        try:
+            return self._controls[acct][jid]
+        except Exception:
+            return None
 
     def has_control(self, jid, acct):
         return acct in self._controls and jid in self._controls[acct]
@@ -801,7 +790,9 @@ class MessageWindow:
                 ind = ind - 1
                 if ind < 0:
                     ind = self.notebook.get_n_pages() - 1
-            ctrl = self.get_control(ind, None)
+
+            nth_child = self.notebook.get_nth_page(ind)
+            ctrl = self._widget_to_control(nth_child)
             if ctrl.get_nb_unread() > 0:
                 found = True
                 break # found
