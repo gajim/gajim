@@ -2095,6 +2095,7 @@ class Interface:
             font = 'Luxi Mono 10'
 
         window = Gtk.Window()
+        window.set_title(_('Gajim: IPython Console'))
         window.set_size_request(750, 550)
         window.set_resizable(True)
         sw = Gtk.ScrolledWindow()
