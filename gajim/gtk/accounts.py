@@ -25,10 +25,7 @@ from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import passwords
-from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.connection import Connection
-from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
 
 from gajim import gui_menu_builder
 
