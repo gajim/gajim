@@ -428,14 +428,12 @@ class ConversationTextview(GObject.GObject):
             return
 
         buffer_ = self.tv.get_buffer()
-        buffer_.begin_user_action()
 
         if app.config.get('positive_184_ack'):
             begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
             buffer_.insert_with_tags_by_name(begin_iter, ' ✓',
                 'xep0184-received')
 
-        buffer_.end_user_action()
         del self.xep0184_marks[id_]
 
     def show_focus_out_line(self):
