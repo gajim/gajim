@@ -76,11 +76,6 @@ function download_install_dep () {
 }
 
 function install_deps {
-    # Downgrade GLIB, resolver is broken on Windows 7
-    download_install_dep glib2-2.56.2-1
-    # Downgrade Gtk, Gtk 24.2 has broken keyboard layout change
-    download_install_dep gtk3-3.24.1-1
-
     build_pacman --noconfirm -S mingw-w64-"${ARCH}"-"${PYTHON_ID}" \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-gobject \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pip \
