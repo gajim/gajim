@@ -98,7 +98,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             for jid in app.contacts.get_jid_list(account):
                 contact = app.contacts.get_contact_with_highest_priority(
                     account, jid)
-                if contact.is_groupchat():
+                if contact.is_groupchat:
                     continue
                 row = ContactRow(account, contact, jid,
                                  contact.get_shown_name(), show_account)
