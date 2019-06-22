@@ -22,7 +22,9 @@ from gajim.common import ged
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
-from gajim.gtk.dialogs import HigDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import InformationDialog
 
 log = logging.getLogger('gajim.gtk.mam_preferences')
 
@@ -41,14 +43,11 @@ class MamPreferences(Gtk.ApplicationWindow):
         self.account = account
         self._con = app.connections[account]
 
-        self._builder = get_builder('mam_preferences.ui')
-        self.add(self._builder.get_object('preferences_grid'))
+        self._ui = get_builder('mam_preferences.ui')
+        self.add(self._ui.get_object('mam_box'))
 
-        self._default = self._builder.get_object('default_cb')
-        self._pref_store = self._builder.get_object('preferences_store')
-        self._overlay = self._builder.get_object('overlay')
         self._spinner = Gtk.Spinner()
-        self._overlay.add_overlay(self._spinner)
+        self._ui.overlay.add_overlay(self._spinner)
 
         app.ged.register_event_handler('mam-prefs-received', ged.GUI1,
                                        self._mam_prefs_received)
@@ -57,8 +56,8 @@ class MamPreferences(Gtk.ApplicationWindow):
         app.ged.register_event_handler('mam-prefs-error', ged.GUI1,
                                        self._mam_prefs_error)
 
-        self._set_grid_state(False)
-        self._builder.connect_signals(self)
+        self._set_mam_box_state(False)
+        self._ui.connect_signals(self)
         self.show_all()
 
         self._activate_spinner()
@@ -69,12 +68,12 @@ class MamPreferences(Gtk.ApplicationWindow):
         if obj.conn.name != self.account:
             return
         self._disable_spinner()
-        self._set_grid_state(True)
+        self._set_mam_box_state(True)
 
-        self._default.set_active_id(obj.default)
-        self._pref_store.clear()
+        self._ui.default_combo.set_active_id(obj.default)
+        self._ui.preferences_store.clear()
         for item in obj.rules:
-            self._pref_store.append(item)
+            self._ui.preferences_store.append(item)
 
     def _mam_prefs_saved(self, obj):
         if obj.conn.name != self.account:
@@ -82,13 +81,15 @@ class MamPreferences(Gtk.ApplicationWindow):
 
         self._disable_spinner()
 
-        def on_ok(dialog):
+        def _on_ok():
             self.destroy()
-        dialog = HigDialog(
-            self, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
-            _('Success!'), _('Your Archiving Preferences have been saved!'),
-            on_response_ok=on_ok, on_response_cancel=on_ok)
-        dialog.popup()
+
+        NewConfirmationDialog(
+            _('Archiving Preferences'),
+            _('Archiving Preferences Saved'),
+            _('Your archiving preferences have successfully been saved.'),
+            [DialogButton.make('OK',
+                               callback=_on_ok)]).show()
 
     def _mam_prefs_error(self, obj=None):
         if obj and obj.conn.name != self.account:
@@ -101,40 +102,37 @@ class MamPreferences(Gtk.ApplicationWindow):
         else:
             msg = _('Error received: {}').format(obj.error_msg)
 
-        dialog = HigDialog(
-            self, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
-            _('Error!'), msg)
-        dialog.popup()
-        self._set_grid_state(True)
+        InformationDialog(_('Archiving Preferences Error'), msg)
 
-    def _set_grid_state(self, state):
-        self._builder.get_object('preferences_grid').set_sensitive(state)
+        self._set_mam_box_state(True)
+
+    def _set_mam_box_state(self, state):
+        self._ui.mam_box.set_sensitive(state)
 
     def _jid_edited(self, renderer, path, new_text):
-        iter_ = self._pref_store.get_iter(path)
-        self._pref_store.set_value(iter_, 0, new_text)
+        iter_ = self._ui.preferences_store.get_iter(path)
+        self._ui.preferences_store.set_value(iter_, 0, new_text)
 
     def _pref_toggled(self, renderer, path):
-        iter_ = self._pref_store.get_iter(path)
-        current_value = self._pref_store[iter_][1]
-        self._pref_store.set_value(iter_, 1, not current_value)
+        iter_ = self._ui.preferences_store.get_iter(path)
+        current_value = self._ui.preferences_store[iter_][1]
+        self._ui.preferences_store.set_value(iter_, 1, not current_value)
 
     def _on_add(self, button):
-        self._pref_store.append(['', False])
+        self._ui.preferences_store.append(['', False])
 
     def _on_remove(self, button):
-        pref_view = self._builder.get_object('pref_view')
-        mod, paths = pref_view.get_selection().get_selected_rows()
+        mod, paths = self._ui.pref_view.get_selection().get_selected_rows()
         for path in paths:
             iter_ = mod.get_iter(path)
-            self._pref_store.remove(iter_)
+            self._ui.preferences_store.remove(iter_)
 
     def _on_save(self, button):
         self._activate_spinner()
-        self._set_grid_state(False)
+        self._set_mam_box_state(False)
         items = []
-        default = self._default.get_active_id()
-        for item in self._pref_store:
+        default = self._ui.default_combo.get_active_id()
+        for item in self._ui.preferences_store:
             items.append((item[0].lower(), item[1]))
         self._con.get_module('MAM').set_mam_preferences(items, default)
 
