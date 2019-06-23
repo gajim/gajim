@@ -38,6 +38,7 @@ from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
 from nbxmpp.const import Error
 from nbxmpp.const import PresenceType
+from nbxmpp.util import is_error_result
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -326,6 +327,8 @@ class GroupchatControl(ChatControlBase):
             ('muc-subject', ged.GUI1, self._on_subject),
             ('muc-captcha-challenge', ged.GUI1, self._on_captcha_challenge),
             ('muc-voice-approval', ged.GUI1, self._on_voice_approval),
+            ('muc-disco-update', ged.GUI1, self._on_disco_update),
+            ('muc-configuration-finished', ged.GUI1, self._on_configuration_finished),
             ('gc-message-received', ged.GUI1, self._nec_gc_message_received),
             ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
             ('update-gc-avatar', ged.GUI1, self._nec_update_avatar),
@@ -593,8 +596,8 @@ class GroupchatControl(ChatControlBase):
             desc = app.css_config.get_font('.gajim-group-row')
             renderer.set_property('font-desc', desc)
 
-
-    def _on_room_created(self):
+    @event_filter(['account', 'room_jid'])
+    def _on_disco_update(self, _event):
         if self.parent_win is None:
             return
         win = self.parent_win.window
@@ -663,20 +666,27 @@ class GroupchatControl(ChatControlBase):
         DestroyMucDialog(self.room_jid, destroy_handler=_on_confirm)
 
     def _on_configure_room(self, _action, _param):
+        win = app.get_app_window('GroupchatConfig', self.account, self.room_jid)
+        if win is not None:
+            win.present()
+            return
+
         contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
         if contact.affiliation.is_owner:
             con = app.connections[self.account]
-            con.get_module('MUC').request_config(self.room_jid)
+            con.get_module('MUC').request_config(
+                self.room_jid, callback=self._on_configure_form_received)
         elif contact.affiliation.is_admin:
-            win = app.get_app_window(
-                'GroupchatConfig', self.account, self.room_jid)
-            if win is not None:
-                win.present()
-            else:
-                GroupchatConfig(self.account,
-                                self.room_jid,
-                                contact.affiliation.value)
+            GroupchatConfig(self.account,
+                            self.room_jid,
+                            contact.affiliation.value)
+
+    def _on_configure_form_received(self, result):
+        if is_error_result(result):
+            log.info('Error %s %s', result.jid, result)
+            return
+        GroupchatConfig(self.account, result.jid, 'owner', result.form)
 
     def _on_print_join_left(self, action, param):
         action.set_state(param)
@@ -1694,8 +1704,6 @@ class GroupchatControl(ChatControlBase):
     @event_filter(['account', 'room_jid'])
     def _on_self_presence(self, event):
         nick = event.properties.muc_nickname
-        affiliation = event.properties.affiliation
-        jid = str(event.properties.jid)
         status_codes = event.properties.muc_status_codes or []
 
         if not self.is_connected:
@@ -1703,24 +1711,6 @@ class GroupchatControl(ChatControlBase):
             self.add_info_message(_('You (%s) joined the room') % nick)
             self.add_contact_to_roster(nick)
             self.got_connected()
-
-        if self.room_jid in app.automatic_rooms[self.account] and \
-        app.automatic_rooms[self.account][self.room_jid]['invities']:
-            if self.room_jid not in app.interface.instances[self.account]['gc_config']:
-                con = app.connections[self.account]
-                if affiliation.is_owner:
-                    # We need to configure the room if it's a new one.
-                    # We cannot know it's a new one. Status 201 is not
-                    # sent by all servers.
-                    con.get_module('MUC').request_config(self.room_jid)
-
-                elif 'continue_tag' in app.automatic_rooms[self.account][self.room_jid]:
-                    # We just need to invite contacts
-                    for jid in app.automatic_rooms[self.account][self.room_jid]['invities']:
-                        con.get_module('MUC').invite(self.room_jid, jid)
-                        self.add_info_message(
-                            _('%(jid)s has been '
-                              'invited in this room') % {'jid': jid})
 
         if StatusCode.NON_ANONYMOUS in status_codes:
             self.add_info_message(
@@ -1734,15 +1724,12 @@ class GroupchatControl(ChatControlBase):
             self.add_info_message(\
                 _('The server has assigned or modified your roomnick'))
 
-        if event.properties.is_new_room:
-            app.connections[self.account].get_module('Discovery').disco_muc(
-                self.room_jid, self._on_room_created, update=True)
-            self.add_info_message(_('A new room has been created'))
-            con = app.connections[self.account]
-            con.get_module('MUC').request_config(self.room_jid)
-
         # Update Actions
         self.update_actions()
+
+    @event_filter(['account', 'room_jid'])
+    def _on_configuration_finished(self, _event):
+        self.add_info_message(_('A new room has been created'))
 
     @event_filter(['account', 'room_jid'])
     def _on_nickname_changed(self, event):

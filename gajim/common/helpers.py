@@ -1616,3 +1616,23 @@ def get_resource(account):
              'rand': rand})
         app.config.set_per('accounts', account, 'resource', resource)
     return resource
+
+
+def get_default_muc_config():
+    return {
+        # XEP-0045 options
+        'muc#roomconfig_allowinvites': True,
+        'muc#roomconfig_publicroom': False,
+        'muc#roomconfig_membersonly': True,
+        'muc#roomconfig_persistentroom': True,
+        'muc#roomconfig_whois': 'anyone',
+        'muc#roomconfig_moderatedroom': False,
+
+        # Ejabberd options
+        'allow_voice_requests': False,
+        'public_list': False,
+
+        # Prosody options
+        '{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites': True,
+        'muc#roomconfig_enablearchiving': True,
+    }

@@ -108,7 +108,6 @@ from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
-from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.filetransfer import FileTransfersWindow
 from gajim.gtk.http_upload_progress import HTTPUploadProgressWindow
 from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
@@ -455,52 +454,6 @@ class Interface:
                 event_type, obj.jid, account,
                 'unsubscribed', 'gajim-unsubscribed',
                 event_type, obj.jid)
-
-    def handle_event_gc_config(self, obj):
-        #('GC_CONFIG', account, (jid, form_node))  config is a dict
-        account = obj.conn.name
-        if obj.jid in app.automatic_rooms[account]:
-            if 'continue_tag' in app.automatic_rooms[account][obj.jid]:
-                # We're converting chat to muc. allow participants to invite
-                for f in obj.dataform.iter_fields():
-                    if f.var == 'muc#roomconfig_allowinvites':
-                        f.value = True
-                    elif f.var == 'muc#roomconfig_publicroom':
-                        f.value = False
-                    elif f.var == 'muc#roomconfig_membersonly':
-                        f.value = True
-                    elif f.var == 'public_list':
-                        f.value = False
-                obj.conn.get_module('MUC').set_config(obj.jid, obj.dataform.get_purged())
-                user_list = {}
-                for jid in app.automatic_rooms[account][obj.jid]['invities']:
-                    user_list[jid] = {'affiliation': 'member'}
-                obj.conn.get_module('MUC').set_affiliation(obj.jid, user_list)
-            else:
-                # use default configuration
-                obj.conn.get_module('MUC').set_config(obj.jid, obj.form_node)
-            # invite contacts
-            # check if it is necessary to add <continue />
-            continue_tag = False
-            if 'continue_tag' in app.automatic_rooms[account][obj.jid]:
-                continue_tag = True
-            if 'invities' in app.automatic_rooms[account][obj.jid]:
-                for jid in app.automatic_rooms[account][obj.jid]['invities']:
-                    obj.conn.get_module('MUC').invite(
-                        obj.jid, jid, continue_=continue_tag)
-                    gc_control = self.msg_win_mgr.get_gc_control(obj.jid,
-                        account)
-                    if gc_control:
-                        gc_control.add_info_message(
-                            _('%(jid)s has been invited in this room') % {
-                            'jid': jid})
-            del app.automatic_rooms[account][obj.jid]
-        else:
-            win = app.get_app_window('GroupchatConfig', account, obj.jid)
-            if win is not None:
-                win.present()
-            else:
-                GroupchatConfig(account, obj.jid, 'owner', obj.dataform)
 
     def handle_event_gc_decline(self, event):
         gc_control = self.msg_win_mgr.get_gc_control(str(event.muc),
@@ -1275,7 +1228,6 @@ class Interface:
             'message-not-sent': [self.handle_event_msgnotsent],
             'message-sent': [self.handle_event_msgsent],
             'metacontacts-received': [self.handle_event_metacontacts],
-            'muc-config': [self.handle_event_gc_config],
             'our-show': [self.handle_event_status],
             'password-required': [self.handle_event_password_required],
             'plain-connection': [self.handle_event_plain_connection],

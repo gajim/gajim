@@ -32,6 +32,7 @@ from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
 from gajim.common.structs import MUCData
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import get_default_muc_config
 from gajim.common import idle
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
@@ -100,8 +101,6 @@ class MUC(BaseModule):
                           priority=49)
         ]
 
-        self._register_callback('request_config', self._config_received)
-
         self._muc_data = {}
 
     def pass_disco(self, from_, identities, features, _data, _node):
@@ -167,6 +166,77 @@ class MUC(BaseModule):
         self._con.get_module('Presence').send_presence(
             '%s/%s' % (room_jid, muc.nick),
             typ='unavailable')
+
+    def configure_room(self, room_jid):
+        self._nbxmpp('MUC').request_config(room_jid,
+                                           callback=self._on_room_config)
+
+    def _on_room_config(self, result):
+        if is_error_result(result):
+            self._log.info('Error: %s', result)
+            app.nec.push_incoming_event(NetworkEvent(
+                'muc-configuration-failed',
+                account=self._account,
+                room_jid=result.jid,
+                error=result))
+            return
+
+        self._log.info('Configure room: %s', result.jid)
+        self._apply_config(result.form)
+        self.set_config(result.jid,
+                        result.form,
+                        callback=self._on_config_result)
+
+    @staticmethod
+    def _apply_config(form, config=None):
+        if config is None:
+            config = get_default_muc_config()
+        for var, value in config.items():
+            try:
+                field = form[var]
+            except KeyError:
+                pass
+            else:
+                field.value = value
+
+    def _on_config_result(self, result):
+        if is_error_result(result):
+            self._log.info('Error: %s', result)
+            app.nec.push_incoming_event(NetworkEvent(
+                'muc-configuration-failed',
+                account=self._account,
+                room_jid=result.jid,
+                error=result))
+            return
+
+        self._log.info('Configuration finished: %s', result.jid)
+        app.nec.push_incoming_event(NetworkEvent(
+            'muc-configuration-finished',
+            account=self._account,
+            room_jid=result.jid))
+
+        self._con.get_module('Discovery').disco_muc(
+            result.jid, partial(self._on_disco_update, result.jid), update=True)
+
+        # If this is an automatic room creation
+        try:
+            invites = app.automatic_rooms[self._account][result.jid]['invities']
+        except KeyError:
+            return
+
+        user_list = {}
+        for jid in invites:
+            user_list[jid] = {'affiliation': 'member'}
+        self.set_affiliation(result.jid, user_list)
+
+        for jid in invites:
+            self.invite(result.jid, jid)
+
+    def _on_disco_update(self, room_jid):
+        app.nec.push_incoming_event(NetworkEvent(
+            'muc-disco-update',
+            account=self._account,
+            room_jid=room_jid))
 
     def update_presence(self, auto=False):
         mucs = self.get_mucs_with_state([MUCJoinedState.JOINED,
@@ -292,6 +362,8 @@ class MUC(BaseModule):
             if properties.is_muc_self_presence:
                 self._log.info('Self presence: %s', properties.jid)
                 self._raise_muc_event('muc-self-presence', properties)
+                if properties.is_new_room:
+                    self.configure_room(room_jid)
             else:
                 self._log.info('User joined: %s', properties.jid)
                 self._raise_muc_event('muc-user-joined', properties)
@@ -531,17 +603,8 @@ class MUC(BaseModule):
             type_ = InviteType.DIRECT
 
         password = app.gc_passwords.get(room, None)
+        self._log.info('Inivte %s to %s', to, room)
         self._nbxmpp('MUC').invite(room, to, reason, password, continue_, type_)
-
-    def _config_received(self, result):
-        if is_error_result(result):
-            return
-
-        app.nec.push_incoming_event(NetworkEvent(
-            'muc-config',
-            conn=self._con,
-            dataform=result.form,
-            jid=result.jid))
 
 
 def get_instance(*args, **kwargs):
