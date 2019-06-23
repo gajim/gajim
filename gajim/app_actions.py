@@ -34,7 +34,6 @@ from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.start_chat import StartChatDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.single_message import SingleMessageWindow
-from gajim.gtk.xml_console import XMLConsoleWindow
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.privacy_list import PrivacyListsWindow
 from gajim.gtk.bookmarks import ManageBookmarksWindow
@@ -45,7 +44,7 @@ from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.proxies import ManageProxies
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.blocking import BlockingList
-
+from gajim.gtk.xml_console import XMLConsoleWindow
 
 # General Actions
 
@@ -245,11 +244,11 @@ def on_server_info(action, param):
 
 def on_xml_console(action, param):
     account = param.get_string()
-    if 'xml_console' in interface.instances[account]:
-        interface.instances[account]['xml_console'].present()
+    window = app.get_app_window(XMLConsoleWindow, account)
+    if window is None:
+        XMLConsoleWindow(account)
     else:
-        interface.instances[account]['xml_console'] = \
-            XMLConsoleWindow(account)
+        window.present()
 
 
 def on_manage_proxies(action, param):

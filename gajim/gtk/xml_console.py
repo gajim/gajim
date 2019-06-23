@@ -37,9 +37,16 @@ from gajim.gtk.const import SettingType
 UNDECLARED = 'http://www.gajim.org/xmlns/undeclared'
 
 
-class XMLConsoleWindow(Gtk.Window):
+class XMLConsoleWindow(Gtk.ApplicationWindow):
     def __init__(self, account):
-        Gtk.Window.__init__(self)
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_default_size(600, 600)
+        self.set_resizable(True)
+        self.set_show_menubar(False)
+        self.set_name('XMLConsoleWindow')
+
         self.account = account
         self.enabled = True
         self.presence = True
@@ -52,47 +59,48 @@ class XMLConsoleWindow(Gtk.Window):
         self.last_stanza = None
 
         self._ui = get_builder('xml_console_window.ui')
-        self.set_titlebar(self._ui.headerbar)
+
         jid = app.get_jid_from_account(account)
+        self.set_titlebar(self._ui.headerbar)
         self._ui.headerbar.set_subtitle(jid)
-        self.set_default_size(600, 600)
+
         self.add(self._ui.box)
 
         self._ui.paned.set_position(self._ui.paned.get_property('max-position'))
 
         button = get_image_button(
             'edit-clear-all-symbolic', _('Clear'))
-        button.connect('clicked', self.on_clear)
+        button.connect('clicked', self._on_clear)
         self._ui.actionbar.pack_start(button)
 
         button = get_image_button(
             'applications-system-symbolic', _('Filter'))
-        button.connect('clicked', self.on_filter_options)
+        button.connect('clicked', self._on_filter_options)
         self._ui.actionbar.pack_start(button)
 
         button = get_image_button(
             'document-edit-symbolic', _('XML Input'), toggle=True)
-        button.connect('toggled', self.on_input)
+        button.connect('toggled', self._on_input)
         self._ui.actionbar.pack_start(button)
 
         button = get_image_button('insert-text-symbolic', _('Paste Last Input'))
-        button.connect('clicked', self.on_paste_last)
+        button.connect('clicked', self._on_paste_last)
         self._ui.actionbar.pack_start(button)
 
         button = get_image_button('mail-send-symbolic', _('Send'))
-        button.connect('clicked', self.on_send)
+        button.connect('clicked', self._on_send)
         self._ui.actionbar.pack_end(button)
 
         self._ui.actionbar.pack_start(self._ui.menubutton)
 
-        self.create_tags()
+        self._create_tags()
         self.show_all()
 
         self._ui.scrolled_input.hide()
         self._ui.menubutton.hide()
 
-        self.connect("destroy", self.on_destroy)
-        self.connect('key_press_event', self.on_key_press_event)
+        self.connect('destroy', self._on_destroy)
+        self.connect('key_press_event', self._on_key_press_event)
         self._ui.connect_signals(self)
 
         app.ged.register_event_handler(
@@ -100,7 +108,7 @@ class XMLConsoleWindow(Gtk.Window):
         app.ged.register_event_handler(
             'stanza-sent', ged.GUI1, self._nec_stanza_sent)
 
-    def create_tags(self):
+    def _create_tags(self):
         buffer_ = self._ui.textview.get_buffer()
         in_color = app.css_config.get_value(
             '.gajim-incoming-nickname', StyleAttr.COLOR)
@@ -117,18 +125,18 @@ class XMLConsoleWindow(Gtk.Window):
         for tag_name in tags:
             buffer_.create_tag(tag_name)
 
-    def on_key_press_event(self, widget, event):
+    def _on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
         if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Return or
                 event.keyval == Gdk.KEY_KP_Enter):
-            self.on_send()
+            self._on_send()
         if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Up):
-            self.on_paste_last()
+            self._on_paste_last()
 
-    def on_row_activated(self, listbox, row):
+    def _on_row_activated(self, listbox, row):
         text = row.get_child().get_text()
         input_text = None
         if text == 'Presence':
@@ -154,12 +162,12 @@ class XMLConsoleWindow(Gtk.Window):
             buffer_.set_text(input_text)
             self._ui.input_entry.grab_focus()
 
-    def on_send(self, *args):
+    def _on_send(self, *args):
         if not app.account_is_connected(self.account):
-            # if offline or connecting
+            # If offline or connecting
             ErrorDialog(
                 _('Connection not available'),
-                _('Please make sure you are connected with "%s".') %
+                _('Please make sure you are connected with \'%s\'.') %
                 self.account)
             return
         buffer_ = self._ui.input_entry.get_buffer()
@@ -177,13 +185,13 @@ class XMLConsoleWindow(Gtk.Window):
             self.last_stanza = stanza
             buffer_.set_text('')
 
-    def on_paste_last(self, *args):
+    def _on_paste_last(self, *args):
         buffer_ = self._ui.input_entry.get_buffer()
         if buffer_ is not None and self.last_stanza is not None:
             buffer_.set_text(self.last_stanza)
         self._ui.input_entry.grab_focus()
 
-    def on_input(self, button, *args):
+    def _on_input(self, button, *args):
         if button.get_active():
             self._ui.paned.get_child2().show()
             self._ui.menubutton.show()
@@ -192,55 +200,54 @@ class XMLConsoleWindow(Gtk.Window):
             self._ui.paned.get_child2().hide()
             self._ui.menubutton.hide()
 
-    def on_filter_options(self, *args):
+    def _on_filter_options(self, *args):
         if self.filter_dialog:
             self.filter_dialog.present()
             return
         options = [
             Setting(SettingKind.SWITCH, 'Presence',
                     SettingType.VALUE, self.presence,
-                    callback=self.on_option, data='presence'),
+                    callback=self._on_option, data='presence'),
 
             Setting(SettingKind.SWITCH, 'Message',
                     SettingType.VALUE, self.message,
-                    callback=self.on_option, data='message'),
+                    callback=self._on_option, data='message'),
 
-            Setting(SettingKind.SWITCH, 'Iq', SettingType.VALUE, self.iq,
-                    callback=self.on_option, data='iq'),
+            Setting(SettingKind.SWITCH, 'IQ', SettingType.VALUE, self.iq,
+                    callback=self._on_option, data='iq'),
 
-            Setting(SettingKind.SWITCH, 'Stream\nManagement',
+            Setting(SettingKind.SWITCH, 'Stream Management',
                     SettingType.VALUE, self.stream,
-                    callback=self.on_option, data='stream'),
+                    callback=self._on_option, data='stream'),
 
             Setting(SettingKind.SWITCH, 'In', SettingType.VALUE, self.incoming,
-                    callback=self.on_option, data='incoming'),
+                    callback=self._on_option, data='incoming'),
 
             Setting(SettingKind.SWITCH, 'Out', SettingType.VALUE, self.outgoing,
-                    callback=self.on_option, data='outgoing'),
+                    callback=self._on_option, data='outgoing'),
         ]
 
         self.filter_dialog = SettingsDialog(self, 'Filter',
                                             Gtk.DialogFlags.DESTROY_WITH_PARENT,
                                             options, self.account)
-        self.filter_dialog.connect('destroy', self.on_filter_destroyed)
+        self.filter_dialog.connect('destroy', self._on_filter_destroyed)
 
-    def on_filter_destroyed(self, win):
+    def _on_filter_destroyed(self, win):
         self.filter_dialog = None
 
-    def on_clear(self, *args):
+    def _on_clear(self, *args):
         self._ui.textview.get_buffer().set_text('')
 
-    def on_destroy(self, *args):
-        del app.interface.instances[self.account]['xml_console']
+    def _on_destroy(self, *args):
         app.ged.remove_event_handler(
             'stanza-received', ged.GUI1, self._nec_stanza_received)
         app.ged.remove_event_handler(
             'stanza-sent', ged.GUI1, self._nec_stanza_sent)
 
-    def on_enable(self, switch, param):
+    def _on_enable(self, switch, param):
         self.enabled = switch.get_active()
 
-    def on_option(self, value, data):
+    def _on_option(self, value, data):
         setattr(self, data, value)
         value = not value
         table = self._ui.textview.get_buffer().get_tag_table()
@@ -255,15 +262,15 @@ class XMLConsoleWindow(Gtk.Window):
     def _nec_stanza_received(self, obj):
         if obj.conn.name != self.account:
             return
-        self.print_stanza(obj.stanza_str, 'incoming')
+        self._print_stanza(obj.stanza_str, 'incoming')
 
     def _nec_stanza_sent(self, obj):
         if obj.conn.name != self.account:
             return
-        self.print_stanza(obj.stanza_str, 'outgoing')
+        self._print_stanza(obj.stanza_str, 'outgoing')
 
-    def print_stanza(self, stanza, kind):
-        # kind must be 'incoming' or 'outgoing'
+    def _print_stanza(self, stanza, kind):
+        # Kind must be 'incoming' or 'outgoing'
         if not self.enabled:
             return
         if not stanza:
