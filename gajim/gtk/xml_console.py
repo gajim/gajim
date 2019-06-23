@@ -120,6 +120,13 @@ class XMLConsoleWindow(Gtk.Window):
     def on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
+        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
+                event.keyval == Gdk.KEY_Return or
+                event.keyval == Gdk.KEY_KP_Enter):
+            self.on_send()
+        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
+                event.keyval == Gdk.KEY_Up):
+            self.on_paste_last()
 
     def on_row_activated(self, listbox, row):
         text = row.get_child().get_text()
@@ -170,7 +177,7 @@ class XMLConsoleWindow(Gtk.Window):
             self.last_stanza = stanza
             buffer_.set_text('')
 
-    def on_paste_last(self, button):
+    def on_paste_last(self, *args):
         buffer_ = self._ui.input_entry.get_buffer()
         if buffer_ is not None and self.last_stanza is not None:
             buffer_.set_text(self.last_stanza)
