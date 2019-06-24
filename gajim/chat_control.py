@@ -179,6 +179,7 @@ class ChatControl(ChatControlBase):
         self.info_bar_label.set_use_markup(True)
         self.info_bar_label.set_halign(Gtk.Align.START)
         self.info_bar_label.set_valign(Gtk.Align.START)
+        self.info_bar_label.set_ellipsize(Pango.EllipsizeMode.END)
         content_area.add(self.info_bar_label)
         self.info_bar.set_no_show_all(True)
         widget = self.xml.get_object('vbox2')
