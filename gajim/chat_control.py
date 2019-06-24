@@ -1440,7 +1440,7 @@ class ChatControl(ChatControlBase):
         self.info_bar.show_all()
 
     def _add_info_bar_message(self, markup, buttons, args,
-    type_=Gtk.MessageType.INFO):
+                              type_=Gtk.MessageType.INFO):
         self.info_bar_queue.append((markup, buttons, args, type_))
         self._info_bar_show_message()
 
@@ -1468,16 +1468,19 @@ class ChatControl(ChatControlBase):
         """
         Show an InfoBar on top of control
         """
-        markup = '<b>%s:</b> %s' % (_('File transfer'), file_props.name)
+        markup = '<b>%s</b>\n%s' % (_('File Transfer'), file_props.name)
         if file_props.desc:
-            markup += ' (%s)' % file_props.desc
+            markup += '\n(%s)' % file_props.desc
         markup += '\n%s: %s' % (_('Size'), helpers.convert_bytes(
             file_props.size))
-        b1 = Gtk.Button(_('Accept'))
+        b1 = Gtk.Button.new_with_mnemonic(_('_Accept'))
         b1.connect('clicked', self._on_accept_file_request, file_props)
-        b2 = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+        b2 = Gtk.Button.new_with_mnemonic(_('_Decline'))
         b2.connect('clicked', self._on_cancel_file_request, file_props)
-        self._add_info_bar_message(markup, [b1, b2], file_props,
+        self._add_info_bar_message(
+            markup,
+            [b1, b2],
+            file_props,
             Gtk.MessageType.QUESTION)
 
     def _on_open_ft_folder(self, widget, file_props):
@@ -1494,21 +1497,28 @@ class ChatControl(ChatControlBase):
             app.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _got_file_completed(self, file_props):
-        markup = '<b>%s:</b> %s' % (_('File transfer completed'),
+        markup = '<b>%s</b>\n%s' % (_('File Transfer Completed'),
             file_props.name)
         if file_props.desc:
-            markup += ' (%s)' % file_props.desc
-        b1 = Gtk.Button.new_with_mnemonic(_('Open _Containing Folder'))
+            markup += '\n(%s)' % file_props.desc
+        b1 = Gtk.Button.new_with_mnemonic(_('Open _Folder'))
         b1.connect('clicked', self._on_open_ft_folder, file_props)
-        b2 = Gtk.Button(stock=Gtk.STOCK_OK)
+        b2 = Gtk.Button.new_with_mnemonic(_('_Close'))
         b2.connect('clicked', self._on_ok, file_props, 'file-completed')
-        self._add_info_bar_message(markup, [b1, b2], file_props)
+        self._add_info_bar_message(
+            markup,
+            [b1, b2],
+            file_props)
 
     def _got_file_error(self, file_props, type_, pri_txt, sec_txt):
-        markup = '<b>%s:</b> %s' % (pri_txt, sec_txt)
-        b = Gtk.Button(stock=Gtk.STOCK_OK)
+        markup = '<b>%s</b>\n%s' % (pri_txt, sec_txt)
+        b = Gtk.Button.new_with_mnemonic(_('_Close'))
         b.connect('clicked', self._on_ok, file_props, type_)
-        self._add_info_bar_message(markup, [b], file_props, Gtk.MessageType.ERROR)
+        self._add_info_bar_message(
+            markup,
+            [b],
+            file_props,
+            Gtk.MessageType.ERROR)
 
     def _on_accept_gc_invitation(self, widget, event):
         if event.continued:
@@ -1524,15 +1534,18 @@ class ChatControl(ChatControlBase):
         app.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _get_gc_invitation(self, event):
-        markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), event.muc)
+        markup = '<b>%s</b>\n%s' % (_('Groupchat Invitation'), event.muc)
         if event.reason:
-            markup += ' (%s)' % event.reason
-        b1 = Gtk.Button.new_with_mnemonic(_('_Join'))
+            markup += '\n(%s)' % event.reason
+        b1 = Gtk.Button.new_with_mnemonic(_('_Accept'))
         b1.connect('clicked', self._on_accept_gc_invitation, event)
-        b2 = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+        b2 = Gtk.Button.new_with_mnemonic(_('_Decline'))
         b2.connect('clicked', self._on_cancel_gc_invitation, event)
-        self._add_info_bar_message(markup, [b1, b2], (event.muc,
-            event.reason), Gtk.MessageType.QUESTION)
+        self._add_info_bar_message(
+            markup,
+            [b1, b2],
+            (event.muc, event.reason),
+            Gtk.MessageType.QUESTION)
 
     def on_event_added(self, event):
         if event.account != self.account:
