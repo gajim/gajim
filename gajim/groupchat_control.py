@@ -2197,6 +2197,14 @@ class GroupchatControl(ChatControlBase):
         win.notebook.remove_page(ctrl_page)
         control.unparent()
         ctrl.parent_win = None
+
+        # Stop correcting message when we minimize
+        if self.correcting:
+            self.correcting = False
+            gtkgui_helpers.remove_css_class(
+                self.msg_textview, 'gajim-msg-correcting')
+            self.msg_textview.get_buffer().set_text('')
+
         con = app.connections[self.account]
         con.get_module('Chatstate').set_chatstate(self.contact, Chatstate.INACTIVE)
 
