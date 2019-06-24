@@ -29,6 +29,7 @@ class UserAvatar(BaseModule):
         'request_avatar_metadata',
         'request_avatar_data',
         'set_avatar',
+        'set_access_model'
     ]
 
     def __init__(self, con):

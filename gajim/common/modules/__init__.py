@@ -71,6 +71,7 @@ MODULES = [
     'user_mood',
     'user_nickname',
     'user_tune',
+    'vcard4',
     'vcard_avatars',
     'vcard_temp',
     'announce',

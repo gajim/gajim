@@ -85,6 +85,8 @@ class AvatarSelector(Gtk.Box):
         self._helper_label.get_style_context().add_class('bold')
         self._helper_label.get_style_context().add_class('dim-label')
         self._helper_label.set_vexpand(True)
+        self._helper_label.set_no_show_all(True)
+        self._helper_label.show()
         self.add(self._helper_label)
 
         self.show_all()
@@ -129,24 +131,25 @@ class AvatarSelector(Gtk.Box):
             pixbuf = pixbuf.scale_simple(width,
                                          height,
                                          GdkPixbuf.InterpType.BILINEAR)
-        return pixbuf
+        return pixbuf, width, height
 
     def get_avatar_surface(self):
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return None
-        scaled = self._scale_for_publish(pixbuf)
+        scaled, width, height = self._scale_for_publish(pixbuf)
 
         return Gdk.cairo_surface_create_from_pixbuf(
-            scaled, self.get_scale_factor())
+            scaled, self.get_scale_factor()), width, height
 
     def get_avatar_bytes(self):
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return None
-        scaled = self._scale_for_publish(pixbuf)
+        scaled, width, height = self._scale_for_publish(pixbuf)
 
-        return scaled.save_to_bufferv('png', [], [])
+        success, data = scaled.save_to_bufferv('png', [], [])
+        return success, data, width, height
 
 
 class CropArea(Gtk.DrawingArea):

@@ -30,6 +30,7 @@ class UserNickname(BaseModule):
     _nbxmpp_extends = 'Nickname'
     _nbxmpp_methods = [
         'set_nickname',
+        'set_access_model',
     ]
 
     def __init__(self, con):

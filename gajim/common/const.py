@@ -194,6 +194,7 @@ class URIType(Enum):
     WEB = 'web'
     FILE = 'file'
     AT = 'at'
+    TEL = 'tel'
 
 
 class URIAction(Enum):

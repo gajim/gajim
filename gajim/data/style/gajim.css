@@ -35,6 +35,34 @@
 /* VCardWindow */
 .VCard-GtkLinkButton { padding-left: 5px; border-left: none; }
 
+#NicknameEntry:disabled {
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
+    padding: 0px 0px 0px 0px;
+    background-color: @theme_unfocused_bg_color;
+    color: @theme_fg_color;
+}
+
+#ProfileWindow grid { padding: 18px; }
+#ProfileWindow grid > button {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+#ProfileWindow popover { padding: 6px; }
+#ProfileWindow actionbar box  {
+    padding: 0px;
+}
+#ProfileWindow actionbar button {
+   margin-top: 12px;
+}
+
+.profile-scrolled {
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: @borders;
+}
+
 /* Emoticon Popover */
 popover#EmoticonPopover button { background: none; border: none; box-shadow:none; padding: 0px;}
 popover#EmoticonPopover button > label { font-size: 24px; }
@@ -265,6 +293,7 @@ infobar.error > revealer > box {
 .insensitive-fg-color {color: @insensitive_fg_color;}
 
 /* Padding/Margins */
+.margin-right18 { margin-right: 18px; }
 .margin-top6 { margin-top: 6px; }
 .margin-top12 { margin-top: 12px; }
 .margin-3 { margin: 3px; }

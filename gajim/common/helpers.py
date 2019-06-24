@@ -1063,6 +1063,10 @@ def parse_uri(uri):
         uri = uri[7:]
         return URI(type=URIType.MAIL, data=uri)
 
+    if uri.startswith('tel:'):
+        uri = uri[4:]
+        return URI(type=URIType.TEL, data=uri)
+
     if app.interface.sth_at_sth_dot_sth_re.match(uri):
         return URI(type=URIType.AT, data=uri)
 
@@ -1091,6 +1095,9 @@ def open_uri(uri, account=None):
 
     if uri.type == URIType.FILE:
         open_file(uri.data)
+
+    elif uri.type == URIType.TEL:
+        Gio.AppInfo.launch_default_for_uri(f'tel:{uri.data}')
 
     elif uri.type == URIType.MAIL:
         Gio.AppInfo.launch_default_for_uri(f'mailto:{uri.data}')

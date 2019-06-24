@@ -198,25 +198,26 @@ class AvatarStorage(metaclass=Singleton):
     def invalidate_cache(self, jid):
         self._cache.pop(jid, None)
 
-    def get_pixbuf(self, contact, size, scale, show=None):
-        surface = self.get_surface(contact, size, scale, show)
+    def get_pixbuf(self, contact, size, scale, show=None, default=False):
+        surface = self.get_surface(contact, size, scale, show, default)
         return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
-    def get_surface(self, contact, size, scale, show=None):
+    def get_surface(self, contact, size, scale, show=None, default=False):
         jid = contact.jid
         if contact.is_gc_contact:
             jid = contact.get_full_jid()
 
-        surface = self._cache[jid].get((size, scale, show))
-        if surface is not None:
-            return surface
+        if not default:
+            surface = self._cache[jid].get((size, scale, show))
+            if surface is not None:
+                return surface
 
-        surface = self._get_avatar_from_storage(contact, size, scale)
-        if surface is not None:
-            if show is not None:
-                surface = add_status_to_avatar(surface, show)
-            self._cache[jid][(size, scale, show)] = surface
-            return surface
+            surface = self._get_avatar_from_storage(contact, size, scale)
+            if surface is not None:
+                if show is not None:
+                    surface = add_status_to_avatar(surface, show)
+                self._cache[jid][(size, scale, show)] = surface
+                return surface
 
         name = contact.get_shown_name()
         # Use nickname for group chats and bare JID for single contacts
@@ -233,19 +234,20 @@ class AvatarStorage(metaclass=Singleton):
         self._cache[jid][(size, scale, show)] = surface
         return surface
 
-    def get_muc_surface(self, account, jid, size, scale):
-        surface = self._cache[jid].get((size, scale))
-        if surface is not None:
-            return surface
+    def get_muc_surface(self, account, jid, size, scale, default=False):
+        if not default:
+            surface = self._cache[jid].get((size, scale))
+            if surface is not None:
+                return surface
 
-        avatar_sha = app.storage.cache.get_muc_avatar_sha(jid)
-        if avatar_sha is not None:
-            surface = self.surface_from_filename(avatar_sha, size, scale)
-            if surface is None:
-                return None
-            surface = clip_circle(surface)
-            self._cache[jid][(size, scale)] = surface
-            return surface
+            avatar_sha = app.storage.cache.get_muc_avatar_sha(jid)
+            if avatar_sha is not None:
+                surface = self.surface_from_filename(avatar_sha, size, scale)
+                if surface is None:
+                    return None
+                surface = clip_circle(surface)
+                self._cache[jid][(size, scale)] = surface
+                return surface
 
         con = app.connections[account]
         name = get_groupchat_name(con, jid)

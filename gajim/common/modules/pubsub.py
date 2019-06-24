@@ -35,6 +35,7 @@ class PubSub(BaseModule):
         'delete',
         'set_node_configuration',
         'get_node_configuration',
+        'get_access_model',
     ]
 
     def __init__(self, con):
