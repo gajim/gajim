@@ -141,12 +141,6 @@ class IterableIPShell:
             else:
                 IPython.frontend.terminal.interactiveshell.raw_input_original = \
                     input_func
-        if cin:
-            io.stdin = io.IOStream(cin)
-        if cout:
-            io.stdout = io.IOStream(cout)
-        if cerr:
-            io.stderr = io.IOStream(cerr)
 
         # This is to get rid of the blockage that accurs during
         # IPython.Shell.InteractiveShell.user_setup()
@@ -163,10 +157,10 @@ class IterableIPShell:
         cfg = Config()
         cfg.InteractiveShell.colors = "Linux"
 
-        # InteractiveShell's __init__ overwrites io.stdout,io.stderr with
-        # sys.stdout, sys.stderr, this makes sure they are right
+        # InteractiveShell's __init__ gets a reference of stdout and stderr
+        # so we save the standard here to revert it after init
         old_stdout, old_stderr = sys.stdout, sys.stderr
-        sys.stdout, sys.stderr = io.stdout.stream, io.stderr.stream
+        sys.stdout, sys.stderr = cout, cerr
 
         # InteractiveShell inherits from SingletonConfigurable so use instance()
         if parse_version(IPython.release.version) >= parse_version("1.2.1"):
@@ -177,6 +171,7 @@ class IterableIPShell:
                 IPython.frontend.terminal.embed.InteractiveShellEmbed.instance(
                     config=cfg, user_ns=user_ns)
 
+        # Set back stdout and stderr to what it was before
         sys.stdout, sys.stderr = old_stdout, old_stderr
 
         self.IP.system = lambda cmd: self.shell(self.IP.var_expand(cmd),
