@@ -69,30 +69,24 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Pango
 
-try:
-    import IPython
-except ImportError:
-    IPython = None
+import IPython
 
-HAS_IPYTHON_5 = True
-try:
-    from pygments.token import Token
-    # pylint: disable=ungrouped-imports
-    from IPython.core.displayhook import DisplayHook
-    from IPython.core.display_trap import DisplayTrap
-    # pylint: enable=ungrouped-imports
+from pygments.token import Token
+# pylint: disable=ungrouped-imports
+from IPython.core.displayhook import DisplayHook
+from IPython.core.display_trap import DisplayTrap
+# pylint: enable=ungrouped-imports
 
-    class MyPromptDisplayHook(DisplayHook):
-        def __init__(self, shell, view):
-            DisplayHook.__init__(self, shell=shell)
-            self.view = view
 
-        def write_output_prompt(self):
-            tokens = self.shell.prompts.out_prompt_tokens()
-            self.view.write('\n')
-            self.view.write(tokens)
-except Exception:
-    HAS_IPYTHON_5 = False
+class MyPromptDisplayHook(DisplayHook):
+    def __init__(self, shell, view):
+        DisplayHook.__init__(self, shell=shell)
+        self.view = view
+
+    def write_output_prompt(self):
+        tokens = self.shell.prompts.out_prompt_tokens()
+        self.view.write('\n')
+        self.view.write(tokens)
 
 
 class IterableIPShell:
@@ -135,12 +129,8 @@ class IterableIPShell:
 
         io = IPython.utils.io
         if input_func:
-            if IPython.version_info[0] >= 1:
-                IPython.terminal.interactiveshell.raw_input_original = \
-                    input_func
-            else:
-                IPython.frontend.terminal.interactiveshell.raw_input_original = \
-                    input_func
+            IPython.terminal.interactiveshell.raw_input_original = input_func
+
 
         # This is to get rid of the blockage that accurs during
         # IPython.Shell.InteractiveShell.user_setup()
@@ -149,10 +139,7 @@ class IterableIPShell:
         os.environ['TERM'] = 'dumb'
         excepthook = sys.excepthook
 
-        if IPython.version_info[0] >= 5:
-            from traitlets.config.loader import Config
-        else:
-            from IPython.config.loader import Config
+        from traitlets.config.loader import Config
 
         cfg = Config()
         cfg.InteractiveShell.colors = "Linux"
@@ -163,13 +150,8 @@ class IterableIPShell:
         sys.stdout, sys.stderr = cout, cerr
 
         # InteractiveShell inherits from SingletonConfigurable so use instance()
-        if parse_version(IPython.release.version) >= parse_version("1.2.1"):
-            self.IP = IPython.terminal.embed.InteractiveShellEmbed.instance(
-                config=cfg, user_ns=user_ns, user_module=user_global_ns)
-        else:
-            self.IP = \
-                IPython.frontend.terminal.embed.InteractiveShellEmbed.instance(
-                    config=cfg, user_ns=user_ns)
+        self.IP = IPython.terminal.embed.InteractiveShellEmbed.instance(
+            config=cfg, user_ns=user_ns, user_module=user_global_ns)
 
         # Set back stdout and stderr to what it was before
         sys.stdout, sys.stderr = old_stdout, old_stderr
@@ -185,8 +167,6 @@ class IterableIPShell:
         self.complete_sep = re.compile(r'[\s\{\}\[\]\(\)]')
         self.updateNamespace({'exit': lambda: None})
         self.updateNamespace({'quit': lambda: None})
-        if parse_version(IPython.release.version) < parse_version("5.0.0"):
-            self.IP.readline_startup_hook(self.IP.pre_readline)
 
         # Workaround for updating namespace with sys.modules
         #
@@ -249,11 +229,9 @@ class IterableIPShell:
                 if self.no_input_splitter:
                     source_raw = '\n'.join(self.lines)
                     self.lines = []
-                elif parse_version(IPython.release.version) >= \
-                        parse_version("2.0.0-dev"):
-                    source_raw = self.IP.input_splitter.raw_reset()
                 else:
-                    source_raw = self.IP.input_splitter.source_raw_reset()[1]
+                    source_raw = self.IP.input_splitter.raw_reset()
+
                 self.IP.run_cell(source_raw, store_history=True)
                 self.IP.rl_do_indent = False
             else:
@@ -275,19 +253,8 @@ class IterableIPShell:
         @rtype: string
 
         '''
-        # Backwards compatibility with ipyton-0.11
-        #
-        ver = IPython.__version__
-        if ver[0:4] == '0.11':
-            prompt = self.IP.hooks.generate_prompt(is_continuation)
-        elif parse_version(IPython.release.version) < parse_version("5.0.0"):
-            if is_continuation:
-                prompt = self.IP.prompt_manager.render('in2')
-            else:
-                prompt = self.IP.prompt_manager.render('in')
-        else:
-            # TODO: Update to IPython 5.x and later
-            prompt = "In [%d]: " % self.IP.execution_count
+        # TODO: Update to IPython 5.x and later
+        prompt = "In [%d]: " % self.IP.execution_count
 
         return prompt
 
@@ -425,13 +392,14 @@ class ConsoleView(Gtk.TextView):
         self.text_buffer.create_tag('0')
         self.text_buffer.create_tag('notouch', editable=False)
         self.color_pat = re.compile(r'\x01?\x1b\[(.*?)m\x02?')
-        if HAS_IPYTHON_5:
-            self.style_dict = {
-                Token.Prompt: '0;32',
-                Token.PromptNum: '1;32',
-                Token.OutPrompt: '0;31',
-                Token.OutPromptNum: '1;31',
-            }
+
+        self.style_dict = {
+            Token.Prompt: '0;32',
+            Token.PromptNum: '1;32',
+            Token.OutPrompt: '0;31',
+            Token.OutPromptNum: '1;31',
+        }
+
         self.line_start = \
             self.text_buffer.create_mark('line_start',
                                          self.text_buffer.get_end_iter(),
@@ -441,7 +409,7 @@ class ConsoleView(Gtk.TextView):
     def write(self, text, editable=False):
         if isinstance(text, str):
             GLib.idle_add(self._write, text, editable)
-        elif IPython.version_info[0] >= 5:
+        else:
             GLib.idle_add(self._write5, text, editable)
 
     def _write5(self, text, editable=False):
@@ -477,7 +445,7 @@ class ConsoleView(Gtk.TextView):
         @param editable: If true, added text is editable.
         @type editable: boolean
         """
-        if isinstance(text, list) and IPython.version_info[0] >= 5:
+        if isinstance(text, list):
             self._write5(text, editable)
             return
         segments = self.color_pat.split(text)
@@ -637,10 +605,10 @@ class IPythonView(ConsoleView, IterableIPShell):
         self.cout = StringIO()
         IterableIPShell.__init__(self, cout=self.cout, cerr=self.cout,
                                  input_func=self.raw_input)
-        if HAS_IPYTHON_5:
-            displayhook = MyPromptDisplayHook(shell=self.IP, view=self)
-            self.IP.displayhook = displayhook
-            self.IP.display_trap = DisplayTrap(hook=displayhook)
+
+        displayhook = MyPromptDisplayHook(shell=self.IP, view=self)
+        self.IP.displayhook = displayhook
+        self.IP.display_trap = DisplayTrap(hook=displayhook)
 
         self.interrupt = False
         self.execute()
