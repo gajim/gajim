@@ -38,11 +38,13 @@ class Pages(IntEnum):
 class HistorySyncAssistant(Gtk.Assistant):
     def __init__(self, account, parent):
         Gtk.Assistant.__init__(self)
-        # self.set_title(_('Synchronise History'))
-        self.set_resizable(False)
-        self.set_default_size(300, -1)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_name('HistorySyncAssistant')
+        self.set_default_size(300, -1)
+        self.set_resizable(False)
         self.set_transient_for(parent)
+
         self.account = account
         self.con = app.connections[self.account]
         self.timedelta = None
@@ -51,7 +53,8 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.start = None
         self.end = None
         self.next = None
-        self.hide_buttons()
+
+        self._hide_buttons()
 
         own_jid = self.con.get_own_jid().getStripped()
 
@@ -92,18 +95,19 @@ class HistorySyncAssistant(Gtk.Assistant):
                                        ged.PRECORE,
                                        self._nec_mam_message_received)
 
-        self.connect('prepare', self.on_page_change)
-        self.connect('destroy', self.on_destroy)
-        self.connect("cancel", self.on_close_clicked)
-        self.connect("close", self.on_close_clicked)
+        self.connect('prepare', self._on_page_change)
+        self.connect('destroy', self._on_destroy)
+        self.connect('cancel', self._on_close_clicked)
+        self.connect('close', self._on_close_clicked)
 
         if mam_start == ArchiveState.ALL:
             self.set_current_page(Pages.SUMMARY)
             self.summary.nothing_to_do()
 
         self.show_all()
+        self.set_title(_('Synchronise History'))
 
-    def hide_buttons(self):
+    def _hide_buttons(self):
         '''
         Hide some of the standard buttons that are included in Gtk.Assistant
         '''
@@ -125,15 +129,15 @@ class HistorySyncAssistant(Gtk.Assistant):
     def _on_show_button(button):
         button.hide()
 
-    def prepare_query(self):
+    def _prepare_query(self):
         if self.timedelta:
             self.start = self.now - self.timedelta
         self.end = self.current_start
 
-        log.info('get mam_start_date: %s', self.current_start)
-        log.info('now: %s', self.now)
-        log.info('start: %s', self.start)
-        log.info('end: %s', self.end)
+        log.info('Get mam_start_date: %s', self.current_start)
+        log.info('Now: %s', self.now)
+        log.info('Start: %s', self.start)
+        log.info('End: %s', self.end)
 
         self.query_id = self.con.get_module('MAM').request_archive_count(
             self.start, self.end)
@@ -151,7 +155,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         if event.query_id != self.query_id:
             return
         self.query_id = None
-        log.info('query finished')
+        log.info('Query finished')
         GLib.idle_add(self.download_history.finished)
         self.set_current_page(Pages.SUMMARY)
         self.summary.finished()
@@ -165,7 +169,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         if queryid != self.query_id:
             return
 
-        log.debug('received message')
+        log.debug('Received message')
         GLib.idle_add(self.download_history.set_fraction)
 
     def on_row_selected(self, listbox, row):
@@ -175,12 +179,13 @@ class HistorySyncAssistant(Gtk.Assistant):
         else:
             self.set_page_complete(self.select_time, False)
 
-    def on_page_change(self, assistant, page):
+    def _on_page_change(self, assistant, page):
         if page == self.download_history:
             self.next.hide()
-            self.prepare_query()
+            self._prepare_query()
+        self.set_title(_('Synchronise History'))
 
-    def on_destroy(self, *args):
+    def _on_destroy(self, *args):
         app.ged.remove_event_handler('archiving-count-received',
                                      ged.GUI1,
                                      self._received_count)
@@ -190,9 +195,8 @@ class HistorySyncAssistant(Gtk.Assistant):
         app.ged.remove_event_handler('raw-mam-message-received',
                                      ged.PRECORE,
                                      self._nec_mam_message_received)
-        del app.interface.instances[self.account]['history_sync']
 
-    def on_close_clicked(self, *args):
+    def _on_close_clicked(self, *args):
         self.destroy()
 
 
@@ -201,7 +205,8 @@ class SelectTimePage(Gtk.Box):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.set_spacing(18)
         self.assistant = assistant
-        label = Gtk.Label(label=_('How far back do you want to go?'))
+        label = Gtk.Label(
+            label=_('How far back do you want to synchronize chat history?'))
 
         listbox = Gtk.ListBox()
         listbox.set_hexpand(False)

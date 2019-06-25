@@ -218,11 +218,11 @@ def on_blocking_list(action, param):
 
 def on_history_sync(action, param):
     account = param.get_string()
-    if 'history_sync' in interface.instances[account]:
-        interface.instances[account]['history_sync'].present()
+    window = app.get_app_window(HistorySyncAssistant, account)
+    if window is None:
+        HistorySyncAssistant(account, interface.roster.window)
     else:
-        interface.instances[account]['history_sync'] = \
-            HistorySyncAssistant(account, interface.roster.window)
+        window.present()
 
 
 def on_privacy_lists(action, param):

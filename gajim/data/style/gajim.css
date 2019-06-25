@@ -61,8 +61,9 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 .emoji-modifier-chooser-flowbox { padding-left: 5px; }
 
 /* HistorySyncAssistant */
-#HistorySyncAssistant list { border: 1px solid; border-color: @borders; }
+#HistorySyncAssistant notebook { padding: 18px; }
 #HistorySyncAssistant progressbar text { color: #000; font-size: 18px; padding: 10px;}
+#HistorySyncAssistant list { border: 1px solid; border-color: @borders; }
 #HistorySyncAssistant list > row { padding: 10px 30px 10px 30px; }
 #HistorySyncAssistant list > row > label { color: @insensitive_fg_color }
 #HistorySyncAssistant list > row.activatable > label { color: @theme_text_color; }
