@@ -83,12 +83,13 @@ class HTTPUpload(BaseModule):
         self._log.info('Discovered component: %s', info.jid)
 
         for form in info.dataforms:
-            form_dict = form.asDict()
-            if form_dict.get('FORM_TYPE') != self.httpupload_namespace:
+            form_type = form.vars.get('FORM_TYPE')
+            if (form_type is None or
+                    form_type.value != self.httpupload_namespace):
                 continue
-            size = form_dict.get('max-file-size')
+            size = form.vars.get('max-file-size')
             if size is not None:
-                self.max_file_size = int(size)
+                self.max_file_size = int(size.value)
                 break
 
         if self.max_file_size is None:
