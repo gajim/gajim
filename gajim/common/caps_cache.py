@@ -105,9 +105,6 @@ def create_suitable_client_caps(node, caps_hash, hash_method, fjid=None):
 def compute_caps_hash(identities, features, dataforms=None, hash_method='sha-1'):
     """
     Compute caps hash according to XEP-0115, V1.5
-
-    dataforms are nbxmpp.DataForms objects as common.dataforms don't allow several
-    values without a field type list-multi
     """
     if dataforms is None:
         dataforms = []
