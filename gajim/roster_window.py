@@ -5366,34 +5366,38 @@ class RosterWindow:
         return value
 
     def add_actions(self):
-        action = Gio.SimpleAction.new_stateful(
-            "show-roster", None,
-            GLib.Variant.new_boolean(
-                not self.xml.get_object('roster_vbox2').get_no_show_all()))
-        action.connect("change-state",
-                       self.on_show_roster_action)
-        self.window.add_action(action)
 
-        action = Gio.SimpleAction.new_stateful(
-            "show-offline", None,
-            GLib.Variant.new_boolean(app.config.get('showoffline')))
-        action.connect("change-state",
-                       self.on_show_offline_contacts_action)
-        self.window.add_action(action)
+        actions = [
+            ('show-roster',
+             not self.xml.get_object('roster_vbox2').get_no_show_all(),
+             self.on_show_roster_action,
+             ['<Primary>R']),
 
-        action = Gio.SimpleAction.new_stateful(
-            "show-active", None,
-            GLib.Variant.new_boolean(
-                app.config.get('show_only_chat_and_online')))
-        action.connect("change-state",
-                       self.on_show_active_contacts_action)
-        self.window.add_action(action)
+            ('show-offline',
+             app.config.get('showoffline'),
+             self.on_show_offline_contacts_action,
+             ['<Primary>O']),
 
-        action = Gio.SimpleAction.new_stateful(
-            "show-transports", None,
-            GLib.Variant.new_boolean(app.config.get('show_transports_group')))
-        action.connect("change-state", self.on_show_transports_action)
-        self.window.add_action(action)
+            ('show-active',
+             app.config.get('show_only_chat_and_online'),
+             self.on_show_active_contacts_action,
+             ['<Primary>Y']),
+
+            ('show-transports',
+             app.config.get('show_transports_group'),
+             self.on_show_transports_action,
+             None),
+        ]
+
+        for action in actions:
+            action_name, variant, func, accel = action
+            act = Gio.SimpleAction.new_stateful(
+                action_name, None, GLib.Variant.new_boolean(variant))
+            act.connect('change-state', func)
+            if accel:
+                full_action_name = 'win.%s' % action_name
+                app.app.set_accels_for_action(full_action_name, accel)
+            self.window.add_action(act)
 
 ################################################################################
 ###

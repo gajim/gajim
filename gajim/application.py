@@ -430,67 +430,54 @@ class GajimApplication(Gtk.Application):
         # General Actions
 
         general_actions = [
-            ('quit', app_actions.on_quit),
-            ('add-account', app_actions.on_add_account),
-            ('manage-proxies', app_actions.on_manage_proxies),
-            ('history-manager', app_actions.on_history_manager),
-            ('preferences', app_actions.on_preferences),
-            ('plugins', app_actions.on_plugins),
-            ('xml-console', app_actions.on_xml_console),
-            ('file-transfer', app_actions.on_file_transfers),
-            ('history', app_actions.on_history),
-            ('shortcuts', app_actions.on_keyboard_shortcuts),
-            ('features', app_actions.on_features),
-            ('content', app_actions.on_contents),
-            ('about', app_actions.on_about),
-            ('faq', app_actions.on_faq),
-            ('ipython', app_actions.toggle_ipython),
-            ('show-next-pending-event', app_actions.show_next_pending_event),
+            ('quit', app_actions.on_quit, ['<Primary>Q']),
+            ('add-account', app_actions.on_add_account, None),
+            ('manage-proxies', app_actions.on_manage_proxies, None),
+            ('history-manager', app_actions.on_history_manager, None),
+            ('preferences', app_actions.on_preferences, ['<Primary>P']),
+            ('plugins', app_actions.on_plugins, ['<Primary>E']),
+            ('xml-console', app_actions.on_xml_console, ['<Primary><Shift>X']),
+            ('file-transfer', app_actions.on_file_transfers, ['<Primary>T']),
+            ('history', app_actions.on_history, ['<Primary>H']),
+            ('shortcuts', app_actions.on_keyboard_shortcuts, None),
+            ('features', app_actions.on_features, None),
+            ('content', app_actions.on_contents, None),
+            ('about', app_actions.on_about, None),
+            ('faq', app_actions.on_faq, None),
+            ('ipython', app_actions.toggle_ipython, ['<Primary><Alt>I']),
+            ('show-next-pending-event', app_actions.show_next_pending_event,
+             None),
         ]
 
-        act = Gio.SimpleAction.new('start-chat', GLib.VariantType.new('s'))
-        act.connect("activate", app_actions.on_new_chat)
-        self.add_action(act)
-
-        act = Gio.SimpleAction.new('accounts', GLib.VariantType.new('s'))
-        act.connect("activate", app_actions.on_accounts)
-        self.add_action(act)
-        self.set_accels_for_action('app.accounts::', ['<Alt>A'])
-
-        act = Gio.SimpleAction.new('add-contact', GLib.VariantType.new('s'))
-        act.connect("activate", app_actions.on_add_contact_jid)
-        self.add_action(act)
-
-        act = Gio.SimpleAction.new('copy-text', GLib.VariantType.new('s'))
-        act.connect("activate", app_actions.copy_text)
-        self.add_action(act)
-
-        act = Gio.SimpleAction.new('open-link', GLib.VariantType.new('as'))
-        act.connect("activate", app_actions.open_link)
-        self.add_action(act)
-
-        act = Gio.SimpleAction.new('open-mail', GLib.VariantType.new('s'))
-        act.connect("activate", app_actions.open_mail)
-        self.add_action(act)
-
-        act = Gio.SimpleAction.new('create-groupchat', GLib.VariantType.new('s'))
-        act.connect("activate", app_actions.on_create_gc)
-        self.add_action(act)
-
-        act = Gio.SimpleAction.new('browse-history',
-                                   GLib.VariantType.new('a{sv}'))
-        act.connect("activate", app_actions.on_browse_history)
-        self.add_action(act)
-
-        act = Gio.SimpleAction.new('groupchat-join',
-                                   GLib.VariantType.new('as'))
-        act.connect("activate", app_actions.on_groupchat_join)
-        self.add_action(act)
+        additional_actions = [
+            ('start-chat', 's', app_actions.on_new_chat, ['<Primary>N']),
+            ('accounts', 's', app_actions.on_accounts, ['<Alt>A']),
+            ('add-contact', 's', app_actions.on_add_contact_jid, None),
+            ('copy-text', 's', app_actions.copy_text, None),
+            ('open-link', 'as', app_actions.open_link, None),
+            ('open-mail', 's', app_actions.open_mail, None),
+            ('create-groupchat', 's', app_actions.on_create_gc, ['<Primary>G']),
+            ('browse-history', 'a{sv}', app_actions.on_browse_history, None),
+            ('groupchat-join', 'as', app_actions.on_groupchat_join, None),
+        ]
 
         for action in general_actions:
-            action_name, func = action
+            action_name, func, accel = action
             act = Gio.SimpleAction.new(action_name, None)
-            act.connect("activate", func)
+            act.connect('activate', func)
+            if accel:
+                full_action_name = 'app.%s' % action_name
+                self.set_accels_for_action(full_action_name, accel)
+            self.add_action(act)
+
+        for action in additional_actions:
+            action_name, variant, func, accel = action
+            act = Gio.SimpleAction.new(
+                action_name, GLib.VariantType.new(variant))
+            act.connect('activate', func)
+            if accel:
+                full_action_name = 'app.%s::' % action_name
+                self.set_accels_for_action(full_action_name, accel)
             self.add_action(act)
 
         accounts_list = sorted(app.config.get_per('accounts'))

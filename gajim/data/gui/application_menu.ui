@@ -10,17 +10,14 @@
         <item>
           <attribute name="label" translatable="yes">Show Contact List</attribute>
           <attribute name="action">win.show-roster</attribute>
-          <attribute name="accel">&lt;Primary&gt;R</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Show Offline Contacts</attribute>
           <attribute name="action">win.show-offline</attribute>
-          <attribute name="accel">&lt;Primary&gt;O</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Show Active Contacts</attribute>
           <attribute name="action">win.show-active</attribute>
-          <attribute name="accel">&lt;Primary&gt;Y</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Show Transports</attribute>
@@ -31,12 +28,10 @@
         <item>
           <attribute name="label" translatable="yes">XML Console</attribute>
           <attribute name="action">app.xml-console</attribute>
-          <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;X</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">File Transfer</attribute>
           <attribute name="action">app.file-transfer</attribute>
-          <attribute name="accel">&lt;Primary&gt;T</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">History</attribute>
@@ -75,13 +70,11 @@
       <item>
         <attribute name="label" translatable="yes">Start Chat</attribute>
         <attribute name="action">app.start-chat</attribute>
-        <attribute name="accel">&lt;Primary&gt;N</attribute>
         <attribute name="target"></attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Create Group Chat</attribute>
         <attribute name="action">app.create-groupchat</attribute>
-        <attribute name="accel">&lt;Primary&gt;G</attribute>
         <attribute name="target"></attribute>
       </item>
       <item>
@@ -95,12 +88,10 @@
       <item>
         <attribute name="label" translatable="yes">Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
-        <attribute name="accel">&lt;Primary&gt;P</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Quit</attribute>
         <attribute name="action">app.quit</attribute>
-        <attribute name="accel">&lt;Primary&gt;Q</attribute>
       </item>
     </section>
   </menu>
