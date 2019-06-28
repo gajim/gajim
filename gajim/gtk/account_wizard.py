@@ -18,13 +18,14 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 
+from nbxmpp.modules import dataforms
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import helpers
 from gajim.common import connection
 from gajim.common.i18n import _
-from gajim.common.modules import dataforms
 
 from gajim import dataforms_widget
 from gajim import gui_menu_builder

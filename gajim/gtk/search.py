@@ -20,11 +20,11 @@ from enum import IntEnum
 
 from gi.repository import Gtk
 
+from nbxmpp.modules import dataforms
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
-
-from gajim.common.modules import dataforms
 
 from gajim.gui_menu_builder import SearchMenu
 

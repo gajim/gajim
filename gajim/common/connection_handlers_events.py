@@ -21,6 +21,7 @@ import logging
 
 import OpenSSL.crypto
 import nbxmpp
+from nbxmpp.modules import dataforms
 
 from gajim.common import nec
 from gajim.common import helpers
@@ -28,7 +29,6 @@ from gajim.common import app
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.modules import dataforms
 from gajim.common.const import KindConstant, SSLError
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp

@@ -21,9 +21,9 @@
 # XEP-0060: Publish-Subscribe
 
 import nbxmpp
+from nbxmpp.modules import dataforms
 
 from gajim.common import app
-from gajim.common.modules import dataforms
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.modules.base import BaseModule
 

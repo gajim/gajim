@@ -17,8 +17,9 @@ from enum import IntEnum
 
 from gi.repository import Gtk
 
+from nbxmpp.modules import dataforms
+
 from gajim.common import app
-from gajim.common.modules import dataforms
 from gajim.common.i18n import _
 
 from gajim.gtk.dataform import DataFormWidget

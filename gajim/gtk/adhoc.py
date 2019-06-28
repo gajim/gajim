@@ -16,13 +16,13 @@ import logging
 from enum import IntEnum
 
 from gi.repository import Gtk
+
 from nbxmpp.util import is_error_result
 from nbxmpp.const import AdHocAction
+from nbxmpp.modules import dataforms
 
 from gajim.common import app
 from gajim.common.i18n import _
-
-from gajim.common.modules import dataforms
 
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import ensure_not_destroyed

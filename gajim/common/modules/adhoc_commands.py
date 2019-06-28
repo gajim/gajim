@@ -21,12 +21,12 @@
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.modules import dataforms
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
-from gajim.common.modules import dataforms
 from gajim.common.modules.base import BaseModule
 
 

@@ -30,8 +30,9 @@ from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
 
+from nbxmpp.modules import dataforms
+
 from gajim import gtkgui_helpers
-from gajim.common.modules import dataforms
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common.i18n import _

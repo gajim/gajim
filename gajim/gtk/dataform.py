@@ -17,12 +17,13 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
 
+from nbxmpp.modules.dataforms import extend_form
+
 from gajim.gtkgui_helpers import scale_pixbuf_from_data
 
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import open_uri
-from gajim.common.modules.dataforms import extend_form
 
 from gajim.gtk.util import MultiLineLabel
 from gajim.gtk.util import MaxWidthComboBoxText
