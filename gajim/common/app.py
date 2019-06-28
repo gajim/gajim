@@ -38,6 +38,7 @@ from pathlib import Path
 from collections import namedtuple
 
 import nbxmpp
+from nbxmpp.structs import DiscoIdentity
 from gi.repository import Gdk
 
 import gajim
@@ -143,7 +144,9 @@ socks5queue = None
 
 gupnp_igd = None
 
-gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
+gajim_identity = DiscoIdentity(category='client',
+                               type='pc',
+                               name='Gajim')
 
 gajim_common_features = [
     nbxmpp.NS_BYTESTREAM,

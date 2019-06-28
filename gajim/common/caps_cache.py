@@ -30,7 +30,6 @@ through ClientCaps objects which are hold by contact instances.
 import base64
 import hashlib
 import logging
-from collections import namedtuple
 
 import nbxmpp
 from nbxmpp.const import Affiliation
@@ -114,19 +113,18 @@ def compute_caps_hash(identities, features, dataforms=None, hash_method='sha-1')
         dataforms = []
 
     def sort_identities_key(i):
-        return (i['category'], i.get('type', ''), i.get('xml:lang', ''))
+        return (i.category, i.type, i.lang or '')
 
     def sort_dataforms_key(dataform):
-        f = dataform.getField('FORM_TYPE')
-        return (bool(f), f.getValue())
+        return dataform['FORM_TYPE'].value
 
     S = ''
     identities.sort(key=sort_identities_key)
     for i in identities:
-        c = i['category']
-        type_ = i.get('type', '')
-        lang = i.get('xml:lang', '')
-        name = i.get('name', '')
+        c = i.category
+        type_ = i.type
+        lang = i.lang or ''
+        name = i.name or ''
         S += '%s/%s/%s/%s<' % (c, type_, lang, name)
     features.sort()
     for f in features:
@@ -135,15 +133,16 @@ def compute_caps_hash(identities, features, dataforms=None, hash_method='sha-1')
     for dataform in dataforms:
         # fields indexed by var
         fields = {}
-        for f in dataform.getChildren():
-            fields[f.getVar()] = f
+        for f in dataform.iter_fields():
+            values = f.getTags('value')
+            fields[f.var] = [value.getData() for value in values]
         form_type = fields.get('FORM_TYPE')
         if form_type:
-            S += form_type.getValue() + '<'
+            S += form_type[0] + '<'
             del fields['FORM_TYPE']
         for var in sorted(fields.keys()):
             S += '%s<' % var
-            values = sorted(fields[var].getValues())
+            values = sorted(fields[var])
             for value in values:
                 S += '%s<' % value
 
@@ -331,27 +330,10 @@ class CapsCache:
             features = property(_get_features, _set_features)
 
             def _get_identities(self):
-                list_ = []
-                for i in self._identities:
-                    # transforms it back in a dict
-                    d = dict()
-                    d['category'] = i[0]
-                    if i[1]:
-                        d['type'] = i[1]
-                    if i[2]:
-                        d['xml:lang'] = i[2]
-                    if i[3]:
-                        d['name'] = i[3]
-                    list_.append(d)
-                return list_
+                return self._identities
 
             def _set_identities(self, value):
-                self._identities = []
-                for identity in value:
-                    # dict are not hashable, so transform it into a tuple
-                    t = (identity['category'], identity.get('type'),
-                            identity.get('xml:lang'), identity.get('name'))
-                    self._identities.append(self.__names.setdefault(t, t))
+                self._identities = value
 
             identities = property(_get_identities, _set_identities)
 
@@ -432,37 +414,15 @@ class CapsCache:
 
 class MucCapsCache:
 
-    DiscoInfo = namedtuple('DiscoInfo', ['identities', 'features', 'data'])
-
     def __init__(self):
         self.cache = {}
 
-    def append(self, stanza):
-        jid = stanza.getFrom()
-        identities, features, data = [], [], []
-        query_childs = stanza.getQueryChildren()
-        if not query_childs:
-            log.warning('%s returned empty disco info', jid)
-            return
-
-        for child in query_childs:
-            if child.getName() == 'identity':
-                attr = {}
-                for key in child.getAttrs().keys():
-                    attr[key] = child.getAttr(key)
-                identities.append(attr)
-            elif child.getName() == 'feature':
-                features.append(child.getAttr('var'))
-            elif child.getName() == 'x':
-                if child.getNamespace() == nbxmpp.NS_DATA:
-                    from gajim.common.modules import dataforms
-                    data.append(dataforms.extend_form(node=child))
-
-        if nbxmpp.NS_MUC not in features:
+    def append(self, info):
+        if nbxmpp.NS_MUC not in info.features:
             # Not a MUC, don't cache info
             return
 
-        self.cache[jid] = self.DiscoInfo(identities, features, data)
+        self.cache[info.jid] = info
 
     def is_cached(self, jid):
         return jid in self.cache
@@ -498,7 +458,7 @@ class MucCapsCache:
             return allowed
 
         if jid in self.cache:
-            for form in self.cache[jid].data:
+            for form in self.cache[jid].dataforms:
                 try:
                     allowed = form['muc#roominfo_changesubject'].value
                 except KeyError:
@@ -520,7 +480,7 @@ class MucCapsCache:
     def get_room_infos(self, jid):
         room_info = {}
         if jid in self.cache:
-            for form in self.cache[jid].data:
+            for form in self.cache[jid].dataforms:
                 try:
                     room_info['name'] = form['muc#roomconfig_roomname'].value
                 except KeyError:

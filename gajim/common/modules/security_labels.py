@@ -28,12 +28,12 @@ class SecLabels(BaseModule):
         self._catalogs = {}
         self.supported = False
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_SECLABEL not in features:
+    def pass_disco(self, info):
+        if nbxmpp.NS_SECLABEL not in info.features:
             return
 
         self.supported = True
-        self._log.info('Discovered security labels: %s', from_)
+        self._log.info('Discovered security labels: %s', info.jid)
 
     def request_catalog(self, jid):
         server = app.get_jid_from_account(self._account).split("@")[1]

@@ -46,6 +46,8 @@ import weakref
 import uuid
 
 import nbxmpp
+from nbxmpp.util import is_error_result
+from nbxmpp.structs import DiscoIdentity
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -290,7 +292,7 @@ class ServicesCache:
         # Grab the first identity with an icon
         for identity in identities:
             try:
-                cat, type_ = identity['category'], identity['type']
+                cat, type_ = identity.category, identity.type
                 info = _agent_type_info[(cat, type_)]
             except KeyError:
                 continue
@@ -318,7 +320,7 @@ class ServicesCache:
         # First pass, we try to find a ToplevelAgentBrowser
         for identity in identities:
             try:
-                cat, type_ = identity['category'], identity['type']
+                cat, type_ = identity.category, identity.type
                 info = _agent_type_info[(cat, type_)]
             except KeyError:
                 continue
@@ -329,7 +331,7 @@ class ServicesCache:
         # Second pass, we haven't found a ToplevelAgentBrowser
         for identity in identities:
             try:
-                cat, type_ = identity['category'], identity['type']
+                cat, type_ = identity.category, identity.type
                 info = _agent_type_info[(cat, type_)]
             except KeyError:
                 continue
@@ -369,7 +371,7 @@ class ServicesCache:
             self._cbs[cbkey] = [cb]
             con = app.connections[self.account]
             con.get_module('Discovery').disco_info(
-                jid, node, self._disco_info_received, self._disco_info_error)
+                jid, node, callback=self._disco_info_received)
 
     def get_items(self, jid, node, cb, force=False, nofetch=False, args=()):
         """
@@ -395,56 +397,73 @@ class ServicesCache:
             self._cbs[cbkey] = [cb]
             con = app.connections[self.account]
             con.get_module('Discovery').disco_items(
-                jid, node, self._disco_items_received, self._disco_items_error)
+                jid, node, callback=self._disco_items_received)
 
-    def _disco_info_received(self, from_, identities, features, data, node):
+    def _disco_info_received(self, result):
         """
         Callback for when we receive an agent's info
         array is (agent, node, identities, features, data)
         """
+
+        if is_error_result(result):
+            self._disco_info_error(result)
+            return
+
+        identities = result.identities
         if not identities:
             # Ejabberd doesn't send identities when using admin nodes
-            identities = [{'category': 'server', 'type': 'im', 'name': node}]
+            identities = [DiscoIdentity(category='server',
+                                        type='im',
+                                        name=result.node)]
 
-        self._on_agent_info(str(from_), node, identities, features, data)
+        self._on_agent_info(str(result.jid), result.node, result.identities,
+                            result.features, result.dataforms)
 
-    def _disco_info_error(self, from_, error):
+    def _disco_info_error(self, result):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
-        addr = get_agent_address(from_)
+        addr = get_agent_address(result.jid)
 
         # Call callbacks
         cbkey = ('info', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(str(from_), '', 0, 0, 0)
+                cb(str(result.jid), '', 0, 0, 0)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def _on_agent_info(self, fjid, node, identities, features, data):
+    def _on_agent_info(self, fjid, node, identities, features, dataforms):
         addr = get_agent_address(fjid, node)
 
         # Store in cache
-        self._info[addr] = (identities, features, data)
+        self._info[addr] = (identities, features, dataforms)
 
         # Call callbacks
         cbkey = ('info', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(fjid, node, identities, features, data)
+                cb(fjid, node, identities, features, dataforms)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def _disco_items_received(self, from_, node, items):
+    def _disco_items_received(self, result):
         """
         Callback for when we receive an agent's items
         array is (agent, node, items)
         """
-        addr = get_agent_address(from_, node)
+        if is_error_result(result):
+            self._disco_items_error(result)
+            return
+
+        addr = get_agent_address(result.jid, result.node)
+
+        items = []
+        for item in result.items:
+            items.append(item._asdict())
 
         # Store in cache
         self._items[addr] = items
@@ -453,23 +472,23 @@ class ServicesCache:
         cbkey = ('items', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(str(from_), node, items)
+                cb(str(result.jid), result.node, items)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def _disco_items_error(self, from_, error):
+    def _disco_items_error(self, result):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
-        addr = get_agent_address(from_)
+        addr = get_agent_address(result.jid)
 
         # Call callbacks
         cbkey = ('items', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(str(from_), '', 0)
+                cb(str(result.jid), '', 0)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
@@ -479,13 +498,13 @@ class ServiceDiscoveryWindow:
     """
     Class that represents the Services Discovery window
     """
-    def __init__(self, account, jid='', node='', address_entry=False,
+    def __init__(self, account, jid='', node=None, address_entry=False,
                  parent=None, initial_identities=None):
         self._account = account
         self.parent = parent
         if not jid:
             jid = app.config.get_per('accounts', account, 'hostname')
-            node = ''
+            node = None
 
         self.jid = None
         self.browser = None
@@ -718,7 +737,7 @@ class ServiceDiscoveryWindow:
             except helpers.InvalidFormat as s:
                 ErrorDialog(_('Invalid Server Name'), str(s))
                 return
-            self.travel(jid, '')
+            self.travel(jid, None)
 
     def _on_go_button_clicked(self, widget):
         jid = self._ui.address_comboboxtext_entry.get_text()
@@ -741,7 +760,7 @@ class ServiceDiscoveryWindow:
             self.address_comboboxtext.append_text(j)
         app.config.set('latest_disco_addresses',
                        ' '.join(self.latest_addresses))
-        self.travel(jid, '')
+        self.travel(jid, None)
 
     def _on_services_treeview_row_activated(self, widget, path, col=0):
         if self.browser:
@@ -849,11 +868,11 @@ class AgentBrowser:
         if len(identities) > 1:
             # Check if an identity with server category is present
             for _index, identity in enumerate(identities):
-                if identity['category'] == 'server' and 'name' in identity:
-                    name = identity['name']
+                if identity.category == 'server' and identity.name is not None:
+                    name = identity.name
                     break
-                elif 'name' in identities[0]:
-                    name = identities[0]['name']
+                elif identities[0].name is not None:
+                    name = identities[0].name
 
         if name:
             self.window._set_window_banner_text(self._get_agent_address(), name)
@@ -1016,7 +1035,7 @@ class AgentBrowser:
         GLib.source_remove(self._pulse_timeout)
         self.window.progressbar.hide()
         # The server returned an error
-        if items == 0:
+        if not items:
             if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.window.destroy()
@@ -1088,7 +1107,7 @@ class AgentBrowser:
         Called when an item should be updated in the model with further info.
         The result of a disco#info query
         """
-        name = identities[0].get('name', '')
+        name = identities[0].name or ''
         if name:
             self.model[iter_][2] = name
 
@@ -1123,7 +1142,9 @@ class ToplevelAgentBrowser(AgentBrowser):
         type_ = app.get_transport_name_from_jid(self.jid,
                                                 use_config_setting=False)
         if type_:
-            identity = {'category': '_jid', 'type': type_}
+            identity = DiscoIdentity(category='_jid',
+                                     type=type_,
+                                     name=None)
             identities.append(identity)
         # Set the pixmap for the row
         icon_name = self.cache.get_icon(identities, addr=addr)
@@ -1321,7 +1342,6 @@ class ToplevelAgentBrowser(AgentBrowser):
         jid = model[iter_][0]
         if jid:
             ServiceRegistration(self.account, jid)
-            self.window.destroy(chain=True)
 
     def _on_join_button_clicked(self, widget):
         """
@@ -1366,7 +1386,7 @@ class ToplevelAgentBrowser(AgentBrowser):
                 type_ = app.get_transport_name_from_jid(
                     jid, use_config_setting=False)
                 if type_:
-                    identity = {'category': '_jid', 'type': type_}
+                    identity = DiscoIdentity(category='_jid', type=type_)
                     klass = self.cache.get_browser([identity])
                     if klass:
                         self.browse_button.set_sensitive(True)
@@ -1530,7 +1550,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         type_ = app.get_transport_name_from_jid(
             jid, use_config_setting=False)
         if type_:
-            identity = {'category': '_jid', 'type': type_}
+            identity = DiscoIdentity(category='_jid', type=type_)
             identities.append(identity)
             cat_args = ('_jid', type_)
         else:
@@ -1561,7 +1581,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not identities:
             descr = "<b>%s</b>" % addr
         else:
-            name = identities[0].get('name', '')
+            name = identities[0].name or ''
             if name:
                 descr = "<b>%s</b>\n%s" % (name, addr)
             else:
@@ -1576,7 +1596,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         cat, type_ = None, None
         for identity in identities:
             try:
-                cat, type_ = identity['category'], identity['type']
+                cat, type_ = identity.category, identity.type
             except KeyError:
                 continue
             break
@@ -1839,19 +1859,19 @@ class MucBrowser(AgentBrowser):
             self._fetch_source = GLib.idle_add(self._start_info_query)
 
     def _update_info(self, iter_, jid, node, identities, features, data):
-        name = identities[0].get('name', '')
+        name = identities[0].name or ''
         for form in data:
-            typefield = form.getField('FORM_TYPE')
-            if typefield and typefield.getValue() == \
+            typefield = form.vars.get('FORM_TYPE')
+            if typefield and typefield.value == \
             'http://jabber.org/protocol/muc#roominfo':
                 # Fill model row from the form's fields
-                users = form.getField('muc#roominfo_occupants')
-                descr = form.getField('muc#roominfo_description')
+                users = form.vars.get('muc#roominfo_occupants')
+                descr = form.vars.get('muc#roominfo_description')
                 if users:
-                    self.model[iter_][3] = int(users.getValue())
-                    self.model[iter_][4] = users.getValue()
-                if descr and descr.getValue():
-                    self.model[iter_][5] = descr.getValue()
+                    self.model[iter_][3] = int(users.value)
+                    self.model[iter_][4] = users.value
+                if descr and descr.value:
+                    self.model[iter_][5] = descr.value
                 # Only set these when we find a form with additional info
                 # Some servers don't support forms and put extra info in
                 # the name attribute, so we preserve it in that case.
@@ -1963,7 +1983,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         Called when we got basic information about new node from query. Show the
         item
         """
-        name = item.get('name', '')
+
+        name = item['name'] or ''
 
         if self.subscriptions is not None:
             dunno = False

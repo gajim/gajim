@@ -14,6 +14,7 @@
 
 from gi.repository import Gdk
 from gi.repository import Gtk
+from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common import ged
@@ -83,18 +84,17 @@ class ManagePEPServicesWindow(Gtk.ApplicationWindow):
 
         jid = self._con.get_own_jid().getStripped()
         self._con.get_module('Discovery').disco_items(
-            jid,
-            success_cb=self._items_received,
-            error_cb=self._items_error)
+            jid, callback=self._items_received)
 
-    def _items_received(self, from_, node, items):
-        jid = self._con.get_own_jid().getStripped()
-        for item in items:
-            if item['jid'] == jid and 'node' in item:
-                self.treestore.append([item['node']])
+    def _items_received(self, result):
+        if is_error_result(result):
+            ErrorDialog('Error', str(result))
+            return
 
-    def _items_error(self, from_, error):
-        ErrorDialog('Error', error)
+        jid = result.jid.getBare()
+        for item in result.items:
+            if item.jid == jid and item.node is not None:
+                self.treestore.append([item.node])
 
     def _node_removed(self, jid, node):
         if jid != app.get_jid_from_account(self.account):

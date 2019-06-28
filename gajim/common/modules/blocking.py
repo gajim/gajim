@@ -50,8 +50,8 @@ class Blocking(BaseModule):
 
         self.supported = False
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_BLOCKING not in features:
+    def pass_disco(self, info):
+        if nbxmpp.NS_BLOCKING not in info.features:
             return
 
         self.supported = True
@@ -60,7 +60,7 @@ class Blocking(BaseModule):
                          account=self._account,
                          feature=nbxmpp.NS_BLOCKING))
 
-        self._log.info('Discovered blocking: %s', from_)
+        self._log.info('Discovered blocking: %s', info.jid)
 
     def _blocking_list_received(self, result):
         if is_error_result(result):

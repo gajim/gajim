@@ -19,6 +19,7 @@
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.util import is_error_result
 
 from gajim.common import caps_cache
 from gajim.common import app
@@ -94,16 +95,21 @@ class Caps(BaseModule):
                 self._account, room_jid, resource)
         return contact
 
-    def contact_info_received(self, from_, identities, features, data, node):
+    def contact_info_received(self, info):
         """
         callback to update our caps cache with queried information after
         we have retrieved an unknown caps hash via a disco
         """
-        bare_jid = from_.getStripped()
 
-        contact = self._get_contact_or_gc_contact_for_jid(from_)
+        if is_error_result(info):
+            self._log.info(info)
+            return
+
+        bare_jid = info.jid.getBare()
+
+        contact = self._get_contact_or_gc_contact_for_jid(info.jid)
         if not contact:
-            self._log.info('Received Disco from unknown contact %s', from_)
+            self._log.info('Received Disco from unknown contact %s', info.jid)
             return
 
         lookup = contact.client_caps.get_cache_lookup_strategy()
@@ -115,10 +121,10 @@ class Caps(BaseModule):
             return
 
         validate = contact.client_caps.get_hash_validation_strategy()
-        hash_is_valid = validate(identities, features, data)
+        hash_is_valid = validate(info.identities, info.features, info.dataforms)
 
         if hash_is_valid:
-            cache_item.set_and_store(identities, features)
+            cache_item.set_and_store(info.identities, info.features)
         else:
             node = caps_hash = hash_method = None
             contact.client_caps = self._create_suitable_client_caps(
@@ -126,11 +132,10 @@ class Caps(BaseModule):
             self._log.warning(
                 'Computed and retrieved caps hash differ. Ignoring '
                 'caps of contact %s', contact.get_full_jid())
-
         app.nec.push_incoming_event(
             NetworkEvent('caps-update',
                          conn=self._con,
-                         fjid=str(from_),
+                         fjid=str(info.jid),
                          jid=bare_jid))
 
 

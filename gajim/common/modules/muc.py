@@ -103,16 +103,16 @@ class MUC(BaseModule):
 
         self._muc_data = {}
 
-    def pass_disco(self, from_, identities, features, _data, _node):
-        for identity in identities:
-            if identity.get('category') != 'conference':
+    def pass_disco(self, info):
+        for identity in info.identities:
+            if identity.category != 'conference':
                 continue
-            if identity.get('type') != 'text':
+            if identity.type != 'text':
                 continue
-            if nbxmpp.NS_MUC in features:
-                self._log.info('Discovered MUC: %s', from_)
+            if nbxmpp.NS_MUC in info.features:
+                self._log.info('Discovered MUC: %s', info.jid)
                 # TODO: make this nicer
-                self._con.muc_jid['jabber'] = from_
+                self._con.muc_jid['jabber'] = str(info.jid)
                 raise nbxmpp.NodeProcessed
 
     def _get_muc_data(self, room_jid):

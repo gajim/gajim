@@ -71,22 +71,22 @@ class HTTPUpload(BaseModule):
                                      ged.OUT_PREGUI,
                                      self.handle_outgoing_stanza)
 
-    def pass_disco(self, from_, _identities, features, data, _node):
-        if NS_HTTPUPLOAD_0 in features:
+    def pass_disco(self, info):
+        if NS_HTTPUPLOAD_0 in info.features:
             self.httpupload_namespace = NS_HTTPUPLOAD_0
-        elif NS_HTTPUPLOAD in features:
+        elif NS_HTTPUPLOAD in info.features:
             self.httpupload_namespace = NS_HTTPUPLOAD
         else:
             return
 
-        self.component = from_
-        self._log.info('Discovered component: %s', from_)
+        self.component = info.jid
+        self._log.info('Discovered component: %s', info.jid)
 
-        for form in data:
+        for form in info.dataforms:
             form_dict = form.asDict()
-            if form_dict.get('FORM_TYPE', None) != self.httpupload_namespace:
+            if form_dict.get('FORM_TYPE') != self.httpupload_namespace:
                 continue
-            size = form_dict.get('max-file-size', None)
+            size = form_dict.get('max-file-size')
             if size is not None:
                 self.max_file_size = int(size)
                 break

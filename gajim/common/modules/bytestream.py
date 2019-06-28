@@ -95,16 +95,16 @@ class Bytestream(BaseModule):
                           callback=self._ResultCB),
         ]
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_BYTESTREAM not in features:
+    def pass_disco(self, info):
+        if nbxmpp.NS_BYTESTREAM not in info.features:
             return
         if app.config.get_per('accounts', self._account, 'use_ft_proxies'):
-            log.info('Discovered proxy: %s', from_)
+            log.info('Discovered proxy: %s', info.jid)
             our_fjid = self._con.get_own_jid()
             testit = app.config.get_per(
                 'accounts', self._account, 'test_ft_proxies_on_startup')
             app.proxy65_manager.resolve(
-                from_, self._con.connection, str(our_fjid),
+                info.jid, self._con.connection, str(our_fjid),
                 default=self._account, testit=testit)
             raise nbxmpp.NodeProcessed
 

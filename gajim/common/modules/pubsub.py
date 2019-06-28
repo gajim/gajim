@@ -34,12 +34,12 @@ class PubSub(BaseModule):
 
         self.publish_options = False
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS not in features:
+    def pass_disco(self, info):
+        if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS not in info.features:
             # Remove stored bookmarks accessible to everyone.
             self._con.get_module('Bookmarks').purge_pubsub_bookmarks()
             return
-        self._log.info('Discovered Pubsub publish options: %s', from_)
+        self._log.info('Discovered Pubsub publish options: %s', info.jid)
         self.publish_options = True
 
     def send_pb_subscription_query(self, jid, cb, **kwargs):

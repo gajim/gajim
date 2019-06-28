@@ -2,14 +2,16 @@
 Tests for capabilities and the capabilities cache
 '''
 import unittest
+import weakref
 
 from unittest.mock import MagicMock, Mock
 from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM, Iq
+from nbxmpp.structs import DiscoIdentity
+from nbxmpp.modules.discovery import Discovery
 from gajim.common import caps_cache as caps
-from gajim.common.modules.discovery import Discovery
 
 EXAMPLES = [
-'''<iq>
+'''<iq type='result'>
 <query xmlns='http://jabber.org/protocol/disco#info' node='http://psi-im.org#q07IKJEyjvHSyhy//CH0CxmKi8w='>
 <identity xml:lang='en' category='client' name='Psi 0.11' type='pc'/>
 <identity xml:lang='el' category='client' name='Ψ 0.11' type='pc'/>
@@ -42,7 +44,7 @@ EXAMPLES = [
 </iq>
 ''',
 
-'''<iq>
+'''<iq type='result'>
 <query node="http://bombusmod.net.ru/caps#tbBQGBMv8g8U7kW55TEZZRnMCJ4=" xmlns="http://jabber.org/protocol/disco#info">
 <identity category="client" name="BombusMod" type="mobile"/>
 <feature var="http://jabber.org/protocol/chatstates"/>
@@ -62,7 +64,7 @@ EXAMPLES = [
 </iq>
 ''',
 
-'''<iq>
+'''<iq type='result'>
 <query node="http://jappix.org/#qRsaGbKTz8EwAOakYO00InkZUxM=" xmlns="http://jabber.org/protocol/disco#info">
     <identity category="client" name="Jappix" type="web"/>
     <feature var="http://jabber.org/protocol/activity"/>
@@ -137,10 +139,12 @@ class CommonCapsTest(unittest.TestCase):
         self.client_caps = (self.caps_method, self.caps_hash)
 
         self.node = "http://gajim.org"
-        self.identity = {'category': 'client', 'type': 'pc', 'name':'Gajim'}
+        self.identity = DiscoIdentity(category='client',
+                                      type='pc',
+                                      name='Gajim')
 
         self.identities = [self.identity]
-        self.features = [NS_MUC, NS_XHTML_IM] # NS_MUC not supported!
+        self.features = [NS_MUC, NS_XHTML_IM]
 
         # Simulate a filled db
         db_caps_cache = [
@@ -169,8 +173,8 @@ class TestCapsCache(CommonCapsTest):
         self.assertEqual(1, len(identities))
 
         identity = identities[0]
-        self.assertEqual('client', identity['category'])
-        self.assertEqual('pc', identity['type'])
+        self.assertEqual('client', identity.category)
+        self.assertEqual('pc', identity.type)
 
     def test_set_and_store(self):
         ''' Test client_caps update gets logged into db '''
@@ -214,10 +218,14 @@ class TestCapsCache(CommonCapsTest):
         '''tests the hash computation'''
         for example in EXAMPLES:
             stanza = Iq(node=example)
-            identities, features, data, node = Discovery.parse_info_response(stanza)
-            computed_hash = caps.compute_caps_hash(identities, features, data)
-            hash_ = node.split('#')[1]
-            self.assertEqual(hash_, computed_hash)
+            disco_module = Discovery(None)
+            weak_callback = weakref.WeakMethod(self.disco_info_received)
+            disco_module._disco_info_received(None, stanza, callback=weak_callback)
+
+    def disco_info_received(self, info):
+        computed_hash = caps.compute_caps_hash(info.identities, info.features, info.dataforms)
+        hash_ = info.node.split('#')[1]
+        self.assertEqual(hash_, computed_hash)
 
 
 class TestClientCaps(CommonCapsTest):

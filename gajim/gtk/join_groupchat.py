@@ -12,9 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import nbxmpp
+
 from gi.repository import Gtk
 from gi.repository import Gdk
+
+import nbxmpp
+from nbxmpp.util import is_error_result
+from nbxmpp.structs import DiscoIdentity
 
 from gajim.common import app
 from gajim.common import helpers
@@ -272,23 +276,26 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         server = self.server_combo.get_active_text().strip()
         con = app.connections[self.account]
         con.get_module('Discovery').disco_info(
-            server,
-            success_cb=self._disco_info_received,
-            error_cb=self._disco_info_error)
+            server, callback=self._disco_info_received)
 
     def _disco_info_error(self, from_, error):
         ErrorDialog(_('Wrong server'),
                     _('%s is not a groupchat server') % from_,
                     transient_for=self)
 
-    def _disco_info_received(self, from_, identities, features, data, node):
-        if nbxmpp.NS_MUC not in features:
+    def _disco_info_received(self, result):
+        if is_error_result(result):
             ErrorDialog(_('Wrong server'),
-                        _('%s is not a groupchat server') % from_,
+                        _('%s is not a groupchat server') % result.jid,
+                        transient_for=self)
+            return
+        if nbxmpp.NS_MUC not in result.features:
+            ErrorDialog(_('Wrong server'),
+                        _('%s is not a groupchat server') % result.jid,
                         transient_for=self)
             return
 
-        jid = str(from_)
+        jid = str(result.jid)
         if jid in app.interface.instances[self.account]['disco']:
             app.interface.instances[self.account]['disco'][jid].window.\
                 present()
@@ -297,7 +304,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
                 # Object will add itself to the window dict
                 ServiceDiscoveryWindow(
                     self.account, jid,
-                    initial_identities=[{'category': 'conference',
-                                         'type': 'text'}])
+                    initial_identities=[DiscoIdentity(category='conference',
+                                                      type='text',
+                                                      name=None)])
             except GajimGeneralException:
                 pass

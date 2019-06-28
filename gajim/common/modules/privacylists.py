@@ -45,12 +45,12 @@ class PrivacyLists(BaseModule):
 
         self.supported = False
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_PRIVACY not in features:
+    def pass_disco(self, info):
+        if nbxmpp.NS_PRIVACY not in info.features:
             return
 
         self.supported = True
-        self._log.info('Discovered XEP-0016: Privacy Lists: %s', from_)
+        self._log.info('Discovered XEP-0016: Privacy Lists: %s', info.jid)
 
         app.nec.push_incoming_event(
             NetworkEvent('feature-discovered',

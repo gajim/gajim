@@ -15,11 +15,7 @@
 # XEP-0163: Personal Eventing Protocol
 
 from typing import Any
-from typing import Dict
-from typing import List
 from typing import Tuple
-
-import nbxmpp
 
 from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
@@ -31,16 +27,11 @@ class PEP(BaseModule):
 
         self.supported = False
 
-    def pass_disco(self,
-                   from_: nbxmpp.JID,
-                   identities: List[Dict[str, str]],
-                   _features: List[str],
-                   _data: List[nbxmpp.DataForm],
-                   _node: str) -> None:
-        for identity in identities:
-            if identity['category'] == 'pubsub':
-                if identity.get('type') == 'pep':
-                    self._log.info('Discovered PEP support: %s', from_)
+    def pass_disco(self, info):
+        for identity in info.identities:
+            if identity.category == 'pubsub':
+                if identity.type == 'pep':
+                    self._log.info('Discovered PEP support: %s', info.jid)
                     self.supported = True
 
 

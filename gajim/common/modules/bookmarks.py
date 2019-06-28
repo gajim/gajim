@@ -82,11 +82,11 @@ class Bookmarks(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_BOOKMARK_CONVERSION not in features:
+    def pass_disco(self, info):
+        if nbxmpp.NS_BOOKMARK_CONVERSION not in info.features:
             return
         self._conversion = True
-        self._log.info('Discovered Bookmarks Conversion: %s', from_)
+        self._log.info('Discovered Bookmarks Conversion: %s', info.jid)
 
     def _act_on_changed_bookmarks(self, old_bookmarks):
         new_bookmarks = self._convert_to_set(self._bookmarks)

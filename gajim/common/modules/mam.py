@@ -52,16 +52,17 @@ class MAM(BaseModule):
         # Holds archive jids where catch up was successful
         self._catch_up_finished = []
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_MAM_2 in features:
+    def pass_disco(self, info):
+        if nbxmpp.NS_MAM_2 in info.features:
             self.archiving_namespace = nbxmpp.NS_MAM_2
-        elif nbxmpp.NS_MAM_1 in features:
+        elif nbxmpp.NS_MAM_1 in info.features:
             self.archiving_namespace = nbxmpp.NS_MAM_1
         else:
             return
 
         self.available = True
-        self._log.info('Discovered MAM %s: %s', self.archiving_namespace, from_)
+        self._log.info('Discovered MAM %s: %s',
+                       self.archiving_namespace, info.jid)
 
         app.nec.push_incoming_event(
             NetworkEvent('feature-discovered',

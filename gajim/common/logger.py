@@ -38,6 +38,8 @@ from gzip import GzipFile
 from io import BytesIO
 from gi.repository import GLib
 
+from nbxmpp.structs import DiscoIdentity
+
 from gajim.common import exceptions
 from gajim.common import app
 from gajim.common import configpaths
@@ -1027,8 +1029,10 @@ class Logger:
                 type_ = data[i + 1]
                 lang = data[i + 2]
                 name = data[i + 3]
-                identities.append({'category': category, 'type': type_,
-                                   'xml:lang': lang, 'name': name})
+                identities.append(DiscoIdentity(category=category,
+                                                type=type_,
+                                                lang=lang,
+                                                name=name))
                 i += 4
             i += 1
             while i < len(data):
@@ -1046,10 +1050,12 @@ class Logger:
         data = []
         for identity in identities:
             # there is no FEAT category
-            if identity['category'] == 'FEAT':
+            if identity.category == 'FEAT':
                 return
-            data.extend((identity.get('category'), identity.get('type', ''),
-                    identity.get('xml:lang', ''), identity.get('name', '')))
+            data.extend((identity.category,
+                         identity.type,
+                         identity.lang or '',
+                         identity.name or ''))
         data.append('FEAT')
         data.extend(features)
         data = '\0'.join(data)

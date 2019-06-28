@@ -36,12 +36,12 @@ class VCardTemp(BaseModule):
         self.room_jids = []
         self.supported = False
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_VCARD not in features:
+    def pass_disco(self, info):
+        if nbxmpp.NS_VCARD not in info.features:
             return
 
         self.supported = True
-        self._log.info('Discovered vcard-temp: %s', from_)
+        self._log.info('Discovered vcard-temp: %s', info.jid)
 
         app.nec.push_incoming_event(NetworkEvent('feature-discovered',
                                                  account=self._account,
