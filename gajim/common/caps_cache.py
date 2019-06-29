@@ -27,8 +27,6 @@ CapsCache caches features to hash relationships. The cache is queried
 through ClientCaps objects which are hold by contact instances.
 """
 
-import base64
-import hashlib
 import logging
 
 import nbxmpp
@@ -102,55 +100,6 @@ def create_suitable_client_caps(node, caps_hash, hash_method, fjid=None):
         client_caps = ClientCaps(caps_hash, node, hash_method)
     return client_caps
 
-def compute_caps_hash(identities, features, dataforms=None, hash_method='sha-1'):
-    """
-    Compute caps hash according to XEP-0115, V1.5
-    """
-    if dataforms is None:
-        dataforms = []
-
-    def sort_identities_key(i):
-        return (i.category, i.type, i.lang or '')
-
-    def sort_dataforms_key(dataform):
-        return dataform['FORM_TYPE'].value
-
-    S = ''
-    identities.sort(key=sort_identities_key)
-    for i in identities:
-        c = i.category
-        type_ = i.type
-        lang = i.lang or ''
-        name = i.name or ''
-        S += '%s/%s/%s/%s<' % (c, type_, lang, name)
-    features.sort()
-    for f in features:
-        S += '%s<' % f
-    dataforms.sort(key=sort_dataforms_key)
-    for dataform in dataforms:
-        # fields indexed by var
-        fields = {}
-        for f in dataform.iter_fields():
-            values = f.getTags('value')
-            fields[f.var] = [value.getData() for value in values]
-        form_type = fields.get('FORM_TYPE')
-        if form_type:
-            S += form_type[0] + '<'
-            del fields['FORM_TYPE']
-        for var in sorted(fields.keys()):
-            S += '%s<' % var
-            values = sorted(fields[var])
-            for value in values:
-                S += '%s<' % value
-
-    if hash_method == 'sha-1':
-        hash_ = hashlib.sha1(S.encode('utf-8'))
-    elif hash_method == 'md5':
-        hash_ = hashlib.md5(S.encode('utf-8'))
-    else:
-        return ''
-    return base64.b64encode(hash_.digest()).decode('utf-8')
-
 
 ################################################################################
 ### Internal classes of this module
@@ -184,15 +133,6 @@ class AbstractClientCaps:
         """
         raise NotImplementedError
 
-    def get_hash_validation_strategy(self):
-        return self._is_hash_valid
-
-    def _is_hash_valid(self, identities, features, dataforms):
-        """
-        To be implemented by subclasses
-        """
-        raise NotImplementedError
-
 
 class ClientCaps(AbstractClientCaps):
     """
@@ -210,12 +150,6 @@ class ClientCaps(AbstractClientCaps):
         connection.get_module('Discovery').disco_contact(
             jid, '%s#%s' % (self._node, self._hash))
 
-    def _is_hash_valid(self, identities, features, dataforms):
-        computed_hash = compute_caps_hash(
-            identities, features, dataforms=dataforms,
-            hash_method=self._hash_method)
-        return computed_hash == self._hash
-
 
 class OldClientCaps(AbstractClientCaps):
     """
@@ -231,8 +165,6 @@ class OldClientCaps(AbstractClientCaps):
     def _discover(self, connection, jid):
         connection.get_module('Discovery').disco_contact(jid)
 
-    def _is_hash_valid(self, identities, features, dataforms):
-        return True
 
 class NoClientCaps(AbstractClientCaps):
     """
@@ -248,8 +180,6 @@ class NoClientCaps(AbstractClientCaps):
     def _discover(self, connection, jid):
         connection.get_module('Discovery').disco_contact(jid)
 
-    def _is_hash_valid(self, identities, features, dataforms):
-        return True
 
 class NullClientCaps(AbstractClientCaps):
     """
@@ -281,9 +211,6 @@ class NullClientCaps(AbstractClientCaps):
 
     def _discover(self, connection, jid):
         pass
-
-    def _is_hash_valid(self, identities, features, dataforms):
-        return False
 
 
 class CapsCache:

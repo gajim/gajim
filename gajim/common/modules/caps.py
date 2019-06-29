@@ -20,6 +20,7 @@
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
+from nbxmpp.util import compute_caps_hash
 
 from gajim.common import caps_cache
 from gajim.common import app
@@ -120,18 +121,18 @@ class Caps(BaseModule):
             # the identities and features
             return
 
-        validate = contact.client_caps.get_hash_validation_strategy()
-        hash_is_valid = validate(info.identities, info.features, info.dataforms)
-
-        if hash_is_valid:
-            cache_item.set_and_store(info.identities, info.features)
-        else:
+        try:
+            compute_caps_hash(info)
+        except Exception as error:
+            self._log.warning('Disco info malformed: %s %s',
+                              contact.get_full_jid(), error)
+            self._log.warning(info)
             node = caps_hash = hash_method = None
             contact.client_caps = self._create_suitable_client_caps(
                 node, caps_hash, hash_method)
-            self._log.warning(
-                'Computed and retrieved caps hash differ. Ignoring '
-                'caps of contact %s', contact.get_full_jid())
+        else:
+            cache_item.set_and_store(info.identities, info.features)
+
         app.nec.push_incoming_event(
             NetworkEvent('caps-update',
                          conn=self._con,

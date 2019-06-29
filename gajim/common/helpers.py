@@ -56,7 +56,9 @@ from encodings.punycode import punycode_encode
 from functools import wraps
 
 import nbxmpp
+from nbxmpp.util import compute_caps_hash
 from nbxmpp.stringprepare import nameprep
+from nbxmpp.structs import DiscoInfo
 from gi.repository import GLib
 import precis_i18n.codec  # pylint: disable=unused-import
 
@@ -1117,9 +1119,10 @@ def update_optional_features(account=None):
         # Give plugins the possibility to add their features
         app.plugin_manager.extension_point('update_caps', account_)
 
-        app.caps_hash[account_] = caps_cache.compute_caps_hash(
-            [app.gajim_identity],
-            app.gajim_common_features + features)
+        app.caps_hash[account_] = compute_caps_hash(DiscoInfo(
+            None, None, [app.gajim_identity],
+            app.gajim_common_features + features,
+            []), compare=False)
         # re-send presence with new hash
         connected = app.connections[account_].connected
         if connected > 1 and app.SHOW_LIST[connected] != 'invisible':
