@@ -6,7 +6,9 @@ from unittest.mock import MagicMock, Mock
 
 from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM
 from nbxmpp.structs import DiscoIdentity
+from nbxmpp.structs import DiscoInfo
 from gajim.common import caps_cache as caps
+from gajim.common.structs import CapsData
 
 
 class CommonCapsTest(unittest.TestCase):
@@ -25,11 +27,13 @@ class CommonCapsTest(unittest.TestCase):
         self.features = [NS_MUC, NS_XHTML_IM]
 
         # Simulate a filled db
-        db_caps_cache = [
-                        (self.caps_method, self.caps_hash, self.identities, self.features),
-                        ('old', self.node + '#' + self.caps_hash, self.identities, self.features)]
+        db_caps_cache = {
+            (self.caps_method, self.caps_hash): CapsData(self.identities, self.features, []),
+            ('old', self.node + '#' + self.caps_hash): CapsData(self.identities, self.features, [])
+        }
+
         self.logger = Mock()
-        self.logger.iter_caps_data = Mock(return_value=db_caps_cache)
+        self.logger.load_caps_data = Mock(return_value=db_caps_cache)
 
         self.cc = caps.CapsCache(self.logger)
         caps.capscache = self.cc
@@ -57,13 +61,14 @@ class TestCapsCache(CommonCapsTest):
     def test_set_and_store(self):
         ''' Test client_caps update gets logged into db '''
 
+        disco_info = DiscoInfo(None, None, self.identities, self.features, [])
+
         item = self.cc[self.client_caps]
-        item.set_and_store(self.identities, self.features)
+        item.set_and_store(disco_info)
 
         self.logger.add_caps_entry.assert_called_once_with(self.caps_method,
                                                            self.caps_hash,
-                                                           self.identities,
-                                                           self.features)
+                                                           disco_info)
 
     def test_initialize_from_db(self):
         ''' Read cashed dummy data from db '''
