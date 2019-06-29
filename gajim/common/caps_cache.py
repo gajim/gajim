@@ -261,12 +261,11 @@ class CapsCache:
 
             identities = property(_get_identities, _set_identities)
 
-            def set_and_store(self, identities, features):
-                self.identities = identities
-                self.features = features
+            def set_and_store(self, info):
+                self.identities = info.identities
+                self.features = info.features
                 if self.hash_method != 'no':
-                    self._logger.add_caps_entry(self.hash_method, self.hash,
-                        identities, features)
+                    self._logger.add_caps_entry(self.hash_method, self.hash, info)
                 self.status = CACHED
 
             def update_last_seen(self):
@@ -288,11 +287,11 @@ class CapsCache:
 
     def initialize_from_db(self):
         self._remove_outdated_caps()
-        for hash_method, hash_, identities, features in \
-        self.logger.iter_caps_data():
-            x = self[(hash_method, hash_)]
-            x.identities = identities
-            x.features = features
+        data = self.logger.load_caps_data()
+        for key, item in data.items():
+            x = self[key]
+            x.identities = item.identities
+            x.features = item.features
             x.status = CACHED
 
     def _remove_outdated_caps(self):

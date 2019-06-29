@@ -34,11 +34,12 @@ import json
 import logging
 import sqlite3 as sqlite
 from collections import namedtuple
-from gzip import GzipFile
-from io import BytesIO
+
 from gi.repository import GLib
 
-from nbxmpp.structs import DiscoIdentity
+from nbxmpp.protocol import Node
+from nbxmpp.structs import DiscoInfo
+from nbxmpp.modules.dataforms import extend_form
 
 from gajim.common import exceptions
 from gajim.common import app
@@ -48,6 +49,8 @@ from gajim.common.i18n import _
 from gajim.common.const import (
     JIDConstant, KindConstant, ShowConstant, TypeConstant,
     SubscriptionConstant)
+from gajim.common.structs import CapsData
+from gajim.common.structs import CapsIdentity
 
 
 LOGS_SQL_STATEMENT = '''
@@ -99,7 +102,7 @@ CACHE_SQL_STATEMENT = '''
     CREATE TABLE caps_cache (
             hash_method TEXT,
             hash TEXT,
-            data BLOB,
+            data TEXT,
             last_seen INTEGER);
     CREATE TABLE rooms_last_message_time(
             jid_id INTEGER PRIMARY KEY UNIQUE,
@@ -120,10 +123,54 @@ CACHE_SQL_STATEMENT = '''
             group_name TEXT,
             PRIMARY KEY (account_jid_id, jid_id, group_name)
     );
-    PRAGMA user_version=1;
+    PRAGMA user_version=2;
     '''
 
 log = logging.getLogger('gajim.c.logger')
+
+
+
+class CapsEncoder(json.JSONEncoder):
+    def encode(self, obj):
+        if isinstance(obj, DiscoInfo):
+            identities = []
+            for identity in obj.identities:
+                identities.append(
+                    {'category': identity.category,
+                     'type': identity.type,
+                     'name': identity.name,
+                     'lang': identity.lang})
+
+            dataforms = []
+            for dataform in obj.dataforms:
+                # Filter out invalid forms according to XEP-0115
+                form_type = dataform.vars.get('FORM_TYPE')
+                if form_type is None or form_type.type_ != 'hidden':
+                    continue
+                dataforms.append(str(dataform))
+
+            obj = {'identities': identities,
+                   'features': obj.features,
+                   'dataforms': dataforms}
+        return json.JSONEncoder.encode(self, obj)
+
+
+def caps_decoder(dict_):
+    if 'identities' not in dict_:
+        return dict_
+
+    identities = []
+    for identity in dict_['identities']:
+        identities.append(CapsIdentity(**identity))
+
+    features = dict_['features']
+
+    dataforms = []
+    for dataform in dict_['dataforms']:
+        dataforms.append(extend_form(node=Node(node=dataform)))
+    return CapsData(identities=identities,
+                    features=features,
+                    dataforms=dataforms)
 
 
 class Logger:
@@ -248,7 +295,12 @@ class Logger:
             self._execute_multiple(con, statements)
 
         if self._get_user_version(con) < 2:
-            pass
+            statements = [
+                'DROP TABLE IF EXISTS caps_cache',
+                'CREATE TABLE caps_cache (hash_method TEXT, hash TEXT, data TEXT, last_seen INTEGER)',
+                'PRAGMA user_version=2'
+                ]
+            self._execute_multiple(con, statements)
 
     @staticmethod
     def _execute_multiple(con, statements):
@@ -983,108 +1035,45 @@ class Logger:
                     result.type)
         return answer
 
-    # A longer note here:
-    # The database contains a blob field. Pysqlite seems to need special care for
-    # such fields.
-    # When storing, we need to convert string into buffer object (1).
-    # When retrieving, we need to convert it back to a string to decompress it.
-    # (2)
-    # GzipFile needs a file-like object, StringIO emulates file for plain strings
-    def iter_caps_data(self):
-        """
-        Iterate over caps cache data stored in the database
+    def load_caps_data(self):
+        '''
+        Load caps cache data
+        '''
+        rows = self._con.execute(
+            'SELECT hash_method, hash, data FROM caps_cache')
 
-        The iterator values are pairs of (node, ver, ext, identities, features):
-        identities == {'category':'foo', 'type':'bar', 'name':'boo'},
-        features being a list of feature namespaces.
-        """
-        # get data from table
-        # the data field contains binary object (gzipped data), this is a hack
-        # to get that data without trying to convert it to unicode
-        try:
-            rows = self._con.execute('SELECT hash_method, hash, data FROM caps_cache;')
-        except sqlite.OperationalError:
-            # might happen when there's no caps_cache table yet
-            # -- there's no data to read anyway then
-            return
-
-        # list of corrupted entries that will be removed
-        to_be_removed = []
+        cache = {}
         for row in rows:
-            # for each row: unpack the data field
-            # (format: (category, type, name, category, type, name, ...
-            #   ..., 'FEAT', feature1, feature2, ...).join(' '))
-            # NOTE: if there's a need to do more gzip, put that to a function
             try:
-                data = GzipFile(fileobj=BytesIO(row.data)).read().decode('utf-8').split('\0')
-            except IOError:
-                # This data is corrupted. It probably contains non-ascii chars
-                to_be_removed.append((row.hash_method, row.hash))
+                data = json.loads(row.data, object_hook=caps_decoder)
+            except Exception:
+                log.exception('')
                 continue
-            i = 0
-            identities = list()
-            features = list()
-            while i < (len(data) - 3) and data[i] != 'FEAT':
-                category = data[i]
-                type_ = data[i + 1]
-                lang = data[i + 2]
-                name = data[i + 3]
-                identities.append(DiscoIdentity(category=category,
-                                                type=type_,
-                                                lang=lang,
-                                                name=name))
-                i += 4
-            i += 1
-            while i < len(data):
-                features.append(data[i])
-                i += 1
+            cache[(row.hash_method, row.hash)] = data
+        return cache
 
-            # yield the row
-            yield row.hash_method, row.hash, identities, features
-        for hash_method, hash_ in to_be_removed:
-            sql = '''DELETE FROM caps_cache WHERE hash_method = "%s" AND
-                    hash = "%s"''' % (hash_method, hash_)
-            self.simple_commit(sql)
-
-    def add_caps_entry(self, hash_method, hash_, identities, features):
-        data = []
-        for identity in identities:
-            # there is no FEAT category
-            if identity.category == 'FEAT':
-                return
-            data.extend((identity.category,
-                         identity.type,
-                         identity.lang or '',
-                         identity.name or ''))
-        data.append('FEAT')
-        data.extend(features)
-        data = '\0'.join(data)
-        # if there's a need to do more gzip, put that to a function
-        string = BytesIO()
-        gzip = GzipFile(fileobj=string, mode='w')
-        gzip.write(data.encode('utf-8'))
-        gzip.close()
-        data = string.getvalue()
+    def add_caps_entry(self, hash_method, hash_, caps_data):
+        serialized = json.dumps(caps_data, cls=CapsEncoder)
         self._con.execute('''
-                INSERT INTO caps_cache ( hash_method, hash, data, last_seen )
-                VALUES (?, ?, ?, ?);
-                ''', (hash_method, hash_, memoryview(data), int(time.time())))
-        # (1) -- note above
+                INSERT INTO caps_cache (hash_method, hash, data, last_seen)
+                VALUES (?, ?, ?, ?)
+                ''', (hash_method, hash_, serialized, int(time.time())))
         self._timeout_commit()
 
     def update_caps_time(self, method, hash_):
-        sql = '''UPDATE caps_cache SET last_seen = %d
-                WHERE hash_method = "%s" and hash = "%s"''' % \
-                (int(time.time()), method, hash_)
-        self.simple_commit(sql)
+        sql = '''UPDATE caps_cache SET last_seen = ?
+                 WHERE hash_method = ? and hash = ?'''
+        self._con.execute(sql, (int(time.time()), method, hash_))
+        self._timeout_commit()
 
     def clean_caps_table(self):
         """
         Remove caps which was not seen for 3 months
         """
-        sql = '''DELETE FROM caps_cache WHERE last_seen < %d''' % \
-                int(time.time() - 3*30*24*3600)
-        self.simple_commit(sql)
+        timestamp = int(time.time()) - 3 * 30 * 24 * 3600
+        self._con.execute('DELETE FROM caps_cache WHERE last_seen < ?',
+                          (timestamp,))
+        self._timeout_commit()
 
     def replace_roster(self, account_name, roster_version, roster):
         """

@@ -19,6 +19,9 @@ from gajim.common.const import MUCJoinedState
 URI = namedtuple('URI', 'type action data')
 URI.__new__.__defaults__ = (None, None)  # type: ignore
 
+CapsData = namedtuple('CapsData', 'identities features dataforms')
+CapsIdentity = namedtuple('CapsIdentity', 'category type name lang')
+
 
 class MUCData:
     def __init__(self, room_jid, nick, password, rejoin):

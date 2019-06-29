@@ -126,12 +126,11 @@ class Caps(BaseModule):
         except Exception as error:
             self._log.warning('Disco info malformed: %s %s',
                               contact.get_full_jid(), error)
-            self._log.warning(info)
             node = caps_hash = hash_method = None
             contact.client_caps = self._create_suitable_client_caps(
                 node, caps_hash, hash_method)
         else:
-            cache_item.set_and_store(info.identities, info.features)
+            cache_item.set_and_store(info)
 
         app.nec.push_incoming_event(
             NetworkEvent('caps-update',
