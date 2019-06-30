@@ -576,44 +576,6 @@ def datetime_tuple(timestamp):
         tim = tim.timetuple()
     return tim
 
-def convert_bytes(string_):
-    suffix = ''
-    # IEC standard says KiB = 1024 bytes KB = 1000 bytes
-    # but do we use the standard?
-    use_kib_mib = app.config.get('use_kib_mib')
-    align = 1024.
-    bytes_ = float(string_)
-    if bytes_ >= align:
-        bytes_ = round(bytes_/align, 1)
-        if bytes_ >= align:
-            bytes_ = round(bytes_/align, 1)
-            if bytes_ >= align:
-                bytes_ = round(bytes_/align, 1)
-                if use_kib_mib:
-                    #GiB means gibibyte
-                    suffix = _('%s GiB')
-                else:
-                    #GB means gigabyte
-                    suffix = _('%s GB')
-            else:
-                if use_kib_mib:
-                    #MiB means mibibyte
-                    suffix = _('%s MiB')
-                else:
-                    #MB means megabyte
-                    suffix = _('%s MB')
-        else:
-            if use_kib_mib:
-                #KiB means kibibyte
-                suffix = _('%s KiB')
-            else:
-                #KB means kilo bytes
-                suffix = _('%s KB')
-    else:
-        #B means bytes
-        suffix = _('%s B')
-    return suffix % str(bytes_)
-
 def get_contact_dict_for_account(account):
     """
     Create a dict of jid, nick -> contact with all contacts of account.
