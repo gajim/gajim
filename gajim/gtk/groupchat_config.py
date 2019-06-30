@@ -368,7 +368,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
             if affiliation == 'outcast':
                 reason = attrs.get('reason')
                 self._ui.outcast_store.append(
-                    [jid,
+                    [str(jid),
                      reason,
                      None,
                      affiliation,
@@ -381,7 +381,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
                 nick = attrs.get('nick')
                 role = attrs.get('role')
                 self._ui.affiliation_store.append(
-                    [jid,
+                    [str(jid),
                      nick,
                      role,
                      affiliation,

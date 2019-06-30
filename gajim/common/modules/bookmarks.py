@@ -203,7 +203,7 @@ class Bookmarks(BaseModule):
                     minimize = app.config.get_per('rooms', bookmark.jid,
                                                   'minimize_on_autojoin', True)
                     app.interface.join_gc_room(
-                        self._account, bookmark.jid, bookmark.nick,
+                        self._account, str(bookmark.jid), bookmark.nick,
                         bookmark.password, minimize=minimize)
 
     def add_bookmark(self, name, jid, autojoin, password, nick):

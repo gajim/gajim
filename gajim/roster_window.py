@@ -2687,7 +2687,7 @@ class RosterWindow:
 
     def on_bookmark_menuitem_activate(self, widget, account, bookmark):
         app.interface.join_gc_room(
-            account, bookmark.jid, bookmark.nick, bookmark.password)
+            account, str(bookmark.jid), bookmark.nick, bookmark.password)
 
     def on_info(self, widget, contact, account):
         """

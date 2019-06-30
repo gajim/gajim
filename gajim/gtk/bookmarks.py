@@ -61,7 +61,7 @@ class ManageBookmarksWindow:
             for bookmark in bookmarks:
                 self.treestore.append(iter_, [account,
                                               bookmark.name,
-                                              bookmark.jid,
+                                              str(bookmark.jid),
                                               bookmark.autojoin,
                                               bookmark.password,
                                               bookmark.nick,
