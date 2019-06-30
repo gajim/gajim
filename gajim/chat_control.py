@@ -1468,11 +1468,17 @@ class ChatControl(ChatControlBase):
         """
         Show an InfoBar on top of control
         """
+        if app.config.get('use_kib_mib'):
+            units = GLib.FormatSizeFlags.IEC_UNITS
+        else:
+            units = GLib.FormatSizeFlags.DEFAULT
+
         markup = '<b>%s</b>\n%s' % (_('File Transfer'), file_props.name)
         if file_props.desc:
             markup += '\n(%s)' % file_props.desc
-        markup += '\n%s: %s' % (_('Size'), helpers.convert_bytes(
-            file_props.size))
+        markup += '\n%s: %s' % (
+            _('Size'),
+            GLib.format_size_full(file_props.size, units))
         b1 = Gtk.Button.new_with_mnemonic(_('_Accept'))
         b1.connect('clicked', self._on_accept_file_request, file_props)
         b2 = Gtk.Button.new_with_mnemonic(_('_Decline'))

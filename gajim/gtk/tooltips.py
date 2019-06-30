@@ -535,6 +535,10 @@ class FileTransfersTooltip():
     def __init__(self):
         self.sid = None
         self.widget = None
+        if app.config.get('use_kib_mib'):
+            self.units = GLib.FormatSizeFlags.IEC_UNITS
+        else:
+            self.units = GLib.FormatSizeFlags.DEFAULT
 
     def clear_tooltip(self):
         self.sid = None
@@ -583,7 +587,7 @@ class FileTransfersTooltip():
         if not transfered_len:
             transfered_len = 0
         properties.append((Q_('?transfer status:Transferred: '),
-                           helpers.convert_bytes(transfered_len)))
+                           GLib.format_size_full(transfered_len, self.units)))
         status = self._get_current_status(file_props)
         properties.append((Q_('?transfer status:Status: '), status))
         file_desc = file_props.desc or ''

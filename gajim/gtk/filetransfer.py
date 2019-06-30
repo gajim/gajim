@@ -70,8 +70,8 @@ class FileTransfersWindow:
     def __init__(self):
         self.files_props = {'r': {}, 's': {}}
         self.height_diff = 0
-        self._ui = get_builder('filetransfers.ui')
 
+        self._ui = get_builder('filetransfers.ui')
         self.window = self._ui.file_transfers_window
         show_notification = app.config.get('notify_on_file_complete')
         self._ui.notify_ft_complete.set_active(show_notification)
@@ -141,6 +141,11 @@ class FileTransfersWindow:
             'computing': 'system-run-symbolic',
             'hash_error': 'network-error-symbolic',
         }
+
+        if app.config.get('use_kib_mib'):
+            self.units = GLib.FormatSizeFlags.IEC_UNITS
+        else:
+            self.units = GLib.FormatSizeFlags.DEFAULT
 
         self._ui.transfers_list.get_selection().set_mode(
             Gtk.SelectionMode.SINGLE)
@@ -221,8 +226,8 @@ class FileTransfersWindow:
         else:
             file_name = file_props.name
         sectext = _('File name: %s') % GLib.markup_escape_text(file_name)
-        sectext += '\n' + _('Size: %s') % helpers.convert_bytes(
-            file_props.size)
+        sectext += '\n' + _('Size: %s') % GLib.format_size_full(
+            file_props.size, self.units)
         if file_props.type_ == 'r':
             jid = file_props.sender.split('/')[0]
             sender_name = app.contacts.get_first_contact_from_jid(
@@ -456,8 +461,8 @@ class FileTransfersWindow:
         sectext = _('File: %s') % GLib.markup_escape_text(
             file_props.name)
         if file_props.size:
-            sectext += '\n' + _('Size: %s') % helpers.convert_bytes(
-                file_props.size)
+            sectext += '\n' + _('Size: %s') % GLib.format_size_full(
+                file_props.size, self.units)
         if file_props.mime_type:
             sectext += '\n' + _('Type: %s') % file_props.mime_type
         if file_props.desc:
@@ -493,19 +498,19 @@ class FileTransfersWindow:
         elif status == 'ok':
             file_props.completed = True
             text = self._format_percent(100)
-            received_size = int(file_props.received_len)
-            full_size = file_props.size
-            text += helpers.convert_bytes(received_size) + '/' + \
-                helpers.convert_bytes(full_size)
+            received_size = GLib.format_size_full(
+                int(file_props.received_len), self.units)
+            full_size = GLib.format_size_full(file_props.size, self.units)
+            text += received_size + '/' + full_size
             self.model.set(iter_, Column.PROGRESS, text)
             self.model.set(iter_, Column.PULSE, GLib.MAXINT32)
         elif status == 'computing':
             self.model.set(iter_, Column.PULSE, 1)
             text = _('Checking file…') + '\n'
-            received_size = int(file_props.received_len)
-            full_size = file_props.size
-            text += helpers.convert_bytes(received_size) + '/' + \
-                helpers.convert_bytes(full_size)
+            received_size = GLib.format_size_full(
+                int(file_props.received_len), self.units)
+            full_size = GLib.format_size_full(file_props.size, self.units)
+            text += received_size + '/' + full_size
             self.model.set(iter_, Column.PROGRESS, text)
 
             def pulse():
@@ -517,10 +522,10 @@ class FileTransfersWindow:
             GLib.timeout_add(100, pulse)
         elif status == 'hash_error':
             text = _('File error') + '\n'
-            received_size = int(file_props.received_len)
-            full_size = file_props.size
-            text += helpers.convert_bytes(received_size) + '/' + \
-                helpers.convert_bytes(full_size)
+            received_size = GLib.format_size_full(
+                int(file_props.received_len), self.units)
+            full_size = GLib.format_size_full(file_props.size, self.units)
+            text += received_size + '/' + full_size
             self.model.set(iter_, Column.PROGRESS, text)
             self.model.set(iter_, Column.PULSE, GLib.MAXINT32)
         self.model.set(iter_, Column.IMAGE, self.icons[status])
@@ -626,8 +631,8 @@ class FileTransfersWindow:
             if transfered_size == 0:
                 text += '0'
             else:
-                text += helpers.convert_bytes(transfered_size)
-            text += '/' + helpers.convert_bytes(full_size)
+                text += GLib.format_size_full(transfered_size, self.units)
+            text += '/' + GLib.format_size_full(full_size, self.units)
             # Kb/s
 
             # remaining time
@@ -647,11 +652,11 @@ class FileTransfersWindow:
             self.model.set(iter_, Column.PERCENT, int(percent))
             text = self._format_time(eta)
             text += '\n'
-            # This should make the string Kb/s,
-            # where 'Kb' part is taken from %s.
+            # This should make the string KB/s,
+            # where 'KB' part is taken from %s.
             # Only the 's' after / (which means second) should be translated.
             text += _('(%(filesize_unit)s/s)') % {
-                'filesize_unit': helpers.convert_bytes(speed)}
+                'filesize_unit': GLib.format_size_full(speed, self.units)}
             self.model.set(iter_, Column.TIME, text)
 
             # try to guess what should be the status image
