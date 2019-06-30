@@ -43,6 +43,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label">&lt;file name&gt;</property>
+        <property name="ellipsize">end</property>
+        <property name="max_width_chars">40</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -172,7 +174,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="halign">center</property>
-        <property name="margin_top">6</property>
+        <property name="margin_top">12</property>
         <property name="use_underline">True</property>
         <signal name="clicked" handler="_on_cancel_upload_button_clicked" swapped="no"/>
         <style>

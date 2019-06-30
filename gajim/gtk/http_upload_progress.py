@@ -36,11 +36,17 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow):
 
         self.event = file.event
         self.file = file
-        self._ui = get_builder('httpupload_progress_dialog.ui')
+
+        if app.config.get('use_kib_mib'):
+            self.units = GLib.FormatSizeFlags.IEC_UNITS
+        else:
+            self.units = GLib.FormatSizeFlags.DEFAULT
         file_name = os.path.basename(file.path)
-        self._ui.file_name_label.set_text(file_name)
+
         self._start_time = time.time()
 
+        self._ui = get_builder('httpupload_progress_dialog.ui')
+        self._ui.file_name_label.set_text(file_name)
         self.add(self._ui.box)
 
         self.pulse = GLib.timeout_add(100, self._pulse_progressbar)
@@ -48,6 +54,7 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow):
 
         self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
+
         app.ged.register_event_handler('httpupload-progress', ged.CORE,
                                        self._on_httpupload_progress)
 
@@ -87,23 +94,27 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow):
             GLib.source_remove(self.pulse)
             self.pulse = None
 
-        size_total = round(total / (1024 * 1024), 1)
-        size_progress = round(seen / (1024 * 1024), 1)
-
         time_now = time.time()
-        mbytes_sec = round(size_progress / (time_now - self._start_time), 1)
-        eta = self._format_eta(
-            round((size_total - size_progress) / mbytes_sec))
+        bytes_sec = round(seen / (time_now - self._start_time), 1)
 
-        self._ui.progressbar.set_fraction(float(seen) / total)
+        size_progress = GLib.format_size_full(seen, self.units)
+        size_total = GLib.format_size_full(total, self.units)
+        speed = '%s/s' % GLib.format_size_full(bytes_sec, self.units)
+
+        if bytes_sec == 0:
+            eta = '∞'
+        else:
+            eta = self._format_eta(
+                round((total - seen) / bytes_sec))
 
         self._ui.progress_label.set_text(
-            _('%(progress)s of %(total)s MiB') % {
-                'progress': str(size_progress),
-                'total': str(size_total)})
+            _('%(progress)s of %(total)s') % {
+                'progress': size_progress,
+                'total': size_total})
 
-        self._ui.speed_label.set_text(_('%s MiB/s') % str(mbytes_sec))
-        self._ui.eta_label.set_text(str(eta))
+        self._ui.speed_label.set_text(speed)
+        self._ui.eta_label.set_text(eta)
+        self._ui.progressbar.set_fraction(float(seen) / total)
 
     def _format_eta(self, time_):
         times = {'minutes': 0, 'seconds': 0}
@@ -111,6 +122,6 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow):
         times['seconds'] = time_ % 60
         if time_ >= 60:
             time_ /= 60
-            times['minutes'] = time_ % 60
+            times['minutes'] = round(time_ % 60)
 
         return _('%(minutes)s min %(seconds)s sec') % times
