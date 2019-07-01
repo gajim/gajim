@@ -48,7 +48,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_title(_('Start new Conversation'))
+        self.set_title(_('Start New Conversation'))
         self.set_default_size(-1, 400)
         self.ready_to_destroy = False
         self._parameter_form = None
@@ -419,9 +419,9 @@ class ContactRow(Gtk.Grid):
 
         if self.name is None:
             if self.groupchat:
-                self.name = _('New Groupchat')
+                self.name = _('Join Group Chat')
             else:
-                self.name = _('New Contact')
+                self.name = _('Add Contact')
 
         self.name_label = Gtk.Label(label=self.name)
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
