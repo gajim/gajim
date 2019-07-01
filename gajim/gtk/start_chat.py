@@ -404,14 +404,14 @@ class ContactRow(Gtk.Grid):
         else:
             scale = self.get_scale_factor()
             avatar = app.contacts.get_avatar(
-                account, jid, AvatarSize.ROSTER, scale)
+                account, jid, AvatarSize.CHAT, scale)
             if avatar is None:
                 image = Gtk.Image.new_from_icon_name(
                     'avatar-default', Gtk.IconSize.DND)
             else:
                 image = Gtk.Image.new_from_surface(avatar)
 
-        image.set_size_request(AvatarSize.ROSTER, AvatarSize.ROSTER)
+        image.set_size_request(AvatarSize.CHAT, AvatarSize.CHAT)
         self.add(image)
 
         middle_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
