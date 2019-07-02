@@ -1568,7 +1568,7 @@ class Interface:
 ################################################################################
 
     def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-                     is_continued=False):
+                     is_continued=False, config=None):
         """
         Join the room immediately
         """
@@ -1628,7 +1628,7 @@ class Interface:
 
         # Connect
         app.connections[account].get_module('MUC').join(
-            room_jid, nick, password)
+            room_jid, nick, password, config=config)
         if password:
             app.gc_passwords[room_jid] = password
 

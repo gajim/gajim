@@ -130,11 +130,12 @@ class MUC(BaseModule):
     def get_mucs_with_state(self, states):
         return [muc for muc in self._muc_data.values() if muc.state in states]
 
-    def join(self, room_jid, nick, password, rejoin=False):
+    def join(self, room_jid, nick, password, rejoin=False, config=None):
         if not app.account_is_connected(self._account):
             return
 
-        self._muc_data[room_jid] = MUCData(room_jid, nick, password, rejoin)
+        self._muc_data[room_jid] = MUCData(room_jid, nick,
+                                           password, rejoin, config)
 
         self._con.get_module('Discovery').disco_muc(
             room_jid, partial(self._join, room_jid))
@@ -182,16 +183,19 @@ class MUC(BaseModule):
             return
 
         self._log.info('Configure room: %s', result.jid)
-        self._apply_config(result.form)
+
+        muc = self._get_muc_data(result.jid)
+        self._apply_config(result.form, muc.config)
         self.set_config(result.jid,
                         result.form,
                         callback=self._on_config_result)
 
     @staticmethod
     def _apply_config(form, config=None):
-        if config is None:
-            config = get_default_muc_config()
-        for var, value in config.items():
+        default_config = get_default_muc_config()
+        if config is not None:
+            default_config.update(config)
+        for var, value in default_config.items():
             try:
                 field = form[var]
             except KeyError:
