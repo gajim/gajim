@@ -252,10 +252,11 @@ def on_xml_console(action, param):
 
 
 def on_manage_proxies(action, param):
-    if 'manage_proxies' in app.interface.instances:
-        app.interface.instances['manage_proxies'].window.present()
+    window = app.get_app_window(ManageProxies)
+    if window is None:
+        ManageProxies()
     else:
-        app.interface.instances['manage_proxies'] = ManageProxies()
+        window.present()
 
 # Admin Actions
 

@@ -972,11 +972,12 @@ class Preferences(Gtk.ApplicationWindow):
             proxy = ''
         app.config.set('global_proxy', proxy)
 
-    def on_manage_proxies_button_clicked(self, widget):
-        if 'manage_proxies' in app.interface.instances:
-            app.interface.instances['manage_proxies'].window.present()
+    def on_manage_proxies_button_clicked(self, _widget):
+        window = app.get_app_window(ManageProxies)
+        if window is None:
+            ManageProxies()
         else:
-            app.interface.instances['manage_proxies'] = ManageProxies()
+            window.present()
 
     def update_proxy_list(self):
         our_proxy = app.config.get('global_proxy')

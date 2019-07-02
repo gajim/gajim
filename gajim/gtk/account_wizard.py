@@ -347,11 +347,12 @@ class AccountCreationWizard:
             model.append([proxy])
         proxies_combobox.set_active(0)
 
-    def on_manage_proxies_button_clicked(self, widget):
-        if 'manage_proxies' in app.interface.instances:
-            app.interface.instances['manage_proxies'].window.present()
+    def on_manage_proxies_button_clicked(self, _widget):
+        window = app.get_app_window(ManageProxies)
+        if window is None:
+            ManageProxies()
         else:
-            app.interface.instances['manage_proxies'] = ManageProxies()
+            window.present()
 
     def on_custom_host_port_checkbutton_toggled(self, widget):
         self.xml.get_object('custom_host_hbox').set_sensitive(
