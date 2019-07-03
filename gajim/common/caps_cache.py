@@ -80,8 +80,8 @@ def get_client_identity(client_caps):
     cache_item = lookup_item(capscache)
 
     for identity in cache_item.identities:
-        if identity.get('category') == 'client':
-            return identity.get('type')
+        if identity.category == 'client':
+            return identity.type
 
 def create_suitable_client_caps(node, caps_hash, hash_method, fjid=None):
     """
