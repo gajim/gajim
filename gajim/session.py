@@ -71,8 +71,10 @@ class ChatControlSession:
                                      self.jid.getStripped())
 
     def get_to(self):
-        to = str(self.jid)
-        return app.get_jid_without_resource(to) + '/' + self.resource
+        bare_jid = self.jid.getBare()
+        if not self.resource:
+            return bare_jid
+        return bare_jid + '/' + self.resource
 
     def _nec_decrypted_message_received(self, obj):
         """
