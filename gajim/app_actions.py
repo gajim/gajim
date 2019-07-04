@@ -31,6 +31,7 @@ from gajim.gtk.server_info import ServerInfoDialog
 from gajim.gtk.mam_preferences import MamPreferences
 from gajim.gtk.preferences import Preferences
 from gajim.gtk.join_groupchat import JoinGroupchatWindow
+from gajim.gtk.groupchat_creation import CreateGroupchatWindow
 from gajim.gtk.start_chat import StartChatDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.single_message import SingleMessageWindow
@@ -147,6 +148,14 @@ def on_join_gc(_action, param):
     window = app.get_app_window(JoinGroupchatWindow)
     if window is None:
         JoinGroupchatWindow(account, jid)
+    else:
+        window.present()
+
+
+def on_create_gc(_action, param):
+    window = app.get_app_window(CreateGroupchatWindow)
+    if window is None:
+        CreateGroupchatWindow(param.get_string() or None)
     else:
         window.present()
 

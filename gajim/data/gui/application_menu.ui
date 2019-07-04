@@ -78,6 +78,12 @@
         <attribute name="accel">&lt;Primary&gt;N</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Create Group Chat</attribute>
+        <attribute name="action">app.create-groupchat</attribute>
+        <attribute name="accel">&lt;Primary&gt;G</attribute>
+        <attribute name="target"></attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Bookmarks</attribute>
         <attribute name="action">app.bookmarks</attribute>
         <attribute name="accel">&lt;Primary&gt;B</attribute>

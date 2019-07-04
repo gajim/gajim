@@ -424,6 +424,10 @@ class GajimApplication(Gtk.Application):
         act.connect("activate", app_actions.open_link)
         self.add_action(act)
 
+        act = Gio.SimpleAction.new('create-groupchat', GLib.VariantType.new('s'))
+        act.connect("activate", app_actions.on_create_gc)
+        self.add_action(act)
+
         act = Gio.SimpleAction.new('browse-history',
                                    GLib.VariantType.new('a{sv}'))
         act.connect("activate", app_actions.on_browse_history)

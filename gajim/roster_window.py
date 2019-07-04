@@ -3558,6 +3558,13 @@ class RosterWindow:
         app.app.activate_action('%s-join-groupchat' % account,
                                 GLib.Variant('as', [account, '']))
 
+    def on_create_gc_activate(self, widget, account):
+        """
+        When the create gc menuitem is clicked, show the create gc window
+        """
+        app.app.activate_action('create-groupchat',
+                                GLib.Variant('s', account))
+
     def on_show_transports_action(self, action, param):
         app.config.set('show_transports_group', param.get_boolean())
         action.set_state(param)
@@ -5342,7 +5349,9 @@ class RosterWindow:
         """
         item = Gtk.MenuItem.new_with_mnemonic(_('_Join New Group Chat'))
         item.connect('activate', self.on_join_gc_activate, account)
-
+        gc_sub_menu.append(item)
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Create Group Chat'))
+        item.connect('activate', self.on_create_gc_activate, account)
         gc_sub_menu.append(item)
 
         # User has at least one bookmark.

@@ -2,6 +2,7 @@ from enum import IntEnum, Enum, unique
 from collections import namedtuple
 
 from gajim.common.i18n import _
+from gajim.common.i18n import Q_
 
 EncryptionData = namedtuple('EncryptionData', 'additional_data')
 EncryptionData.__new__.__defaults__ = (None,)  # type: ignore
@@ -207,6 +208,25 @@ class MUCJoinedState(Enum):
 
     def __str__(self):
         return self.name
+
+
+MUC_CREATION_EXAMPLES = [
+    (Q_('?Group chat name:Team'),
+     Q_('?Group chat description:Project discussion'),
+     Q_('?Group chat address:team')),
+    (Q_('?Group chat name:Family'),
+     Q_('?Group chat description:Spring gathering'),
+     Q_('?Group chat address:family')),
+    (Q_('?Group chat name:Vacation'),
+     Q_('?Group chat description:Trip planning'),
+     Q_('?Group chat address:vacation')),
+    (Q_('?Group chat name:Repairs'),
+     Q_('?Group chat description:Local help group'),
+     Q_('?Group chat address:repairs')),
+    (Q_('?Group chat name:News'),
+     Q_('?Group chat description:Local news and reports'),
+     Q_('?Group chat address:news')),
+]
 
 
 EME_MESSAGES = {
