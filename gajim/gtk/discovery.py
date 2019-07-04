@@ -342,8 +342,9 @@ class ServicesCache:
         # Some services list it in features and respond to
         # NS_DISCO_ITEMS anyways.
         # Allow browsing for unknown types as well.
-        if (not features and not identities) or \
-        nbxmpp.NS_DISCO_ITEMS in features or nbxmpp.NS_BROWSE in features:
+        if ((not features and not identities) or
+                nbxmpp.NS_DISCO_ITEMS in features or
+                nbxmpp.NS_BROWSE in features):
             return ToplevelAgentBrowser
         return None
 
@@ -1038,7 +1039,7 @@ class AgentBrowser:
         if not items:
             if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.
-                self.window.destroy()
+                self.window.window.destroy()
             ErrorDialog(_('The service is not browsable'),
                         _('This service does not contain any items '
                           'to browse.'),
@@ -1405,8 +1406,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         if self.search_button and nbxmpp.NS_SEARCH in features:
             self.search_button.set_sensitive(True)
         # Don't authorize to register with a server via disco
-        if self.register_button and nbxmpp.NS_REGISTER in features and \
-        jid != self.jid:
+        if (self.register_button and nbxmpp.NS_REGISTER in features and
+                jid != self.jid):
             # We can register this agent
             registered_transports = []
             jid_list = app.contacts.get_jid_list(self.account)
@@ -1766,7 +1767,7 @@ class MucBrowser(AgentBrowser):
         else:
             window.set_room(service)
             window.present()
-            self.window.destroy()
+            self.window.window.destroy()
 
     def update_actions(self):
         sens = \
@@ -1862,8 +1863,8 @@ class MucBrowser(AgentBrowser):
         name = identities[0].name or ''
         for form in data:
             typefield = form.vars.get('FORM_TYPE')
-            if typefield and typefield.value == \
-            'http://jabber.org/protocol/muc#roominfo':
+            if (typefield and typefield.value ==
+                    'http://jabber.org/protocol/muc#roominfo'):
                 # Fill model row from the form's fields
                 users = form.vars.get('muc#roominfo_occupants')
                 descr = form.vars.get('muc#roominfo_description')
