@@ -63,8 +63,8 @@ LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Ga
 
 
 ; German
-LangString NAME_Emoticons ${LANG_GERMAN} "Emoticons"
-LangString NAME_Iconsets ${LANG_GERMAN} "Symbolsets"
+LangString NAME_Emoticons ${LANG_GERMAN} "Emojis"
+LangString NAME_Iconsets ${LANG_GERMAN} "Iconsets"
 LangString NAME_Languages ${LANG_GERMAN} "Sprachen"
 LangString NAME_SecLanguagesOther ${LANG_GERMAN} "Sonstige"
 LangString NAME_Themes ${LANG_GERMAN} "Designs"

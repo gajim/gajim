@@ -85,19 +85,19 @@ LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancé.$\n\
 		Fermez-le et redémarrez le désinstallateur."
 
 ; German
-LangString NAME_Emoticons ${LANG_GERMAN} "Emoticons"
-LangString NAME_Iconsets ${LANG_GERMAN} "Symbolsets"
+LangString NAME_Emoticons ${LANG_GERMAN} "Emojis"
+LangString NAME_Iconsets ${LANG_GERMAN} "Iconsets"
 LangString NAME_Languages ${LANG_GERMAN} "Sprachen"
 LangString NAME_SecLanguagesOther ${LANG_GERMAN} "Sonstige"
 LangString NAME_Themes ${LANG_GERMAN} "Designs"
 LangString NAME_SecDesktopIcon ${LANG_GERMAN} "Desktop-Icon erstellen"
 LangString NAME_SecAutostart ${LANG_GERMAN} "Gajim mit Windows starten"
 LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim."
-LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon für Gajim auf dem Desktop erstellt."
-LangString DESC_SecAutostart ${LANG_GERMAN} "Gajim wird automatisch gestartet, sowie Windows startet, wenn dies aktivier wird."
-LangString STR_Installed ${LANG_GERMAN} "Gajim is apparently already installed. Uninstall it?"
-LangString STR_Running ${LANG_GERMAN} "Es scheint, dass Gajim bereits läuft.$\n\
-		Bitte beenden Sie es und starten Sie den Installer erneut.."
+LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Falls aktiviert, wird ein Icon für Gajim auf dem Desktop erstellt."
+LangString DESC_SecAutostart ${LANG_GERMAN} "Falls aktiviert, wird Gajim beim Start von Windows automatisch gestartet."
+LangString STR_Installed ${LANG_GERMAN} "Gajim ist anscheinend bereits installiert. Wollen Sie Gajim deinstallieren?"
+LangString STR_Running ${LANG_GERMAN} "Gajim läuft zurzeit.$\n\
+		Bitte beenden Sie Gajim und starten Sie das Setup erneut."
 
 ; Italian
 LangString NAME_Emoticons ${LANG_ITALIAN} "Emoticons"
