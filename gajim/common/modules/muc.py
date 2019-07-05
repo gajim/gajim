@@ -167,6 +167,8 @@ class MUC(BaseModule):
         self._con.get_module('Presence').send_presence(
             '%s/%s' % (room_jid, muc.nick),
             typ='unavailable')
+        # We leave a group chat, disable bookmark autojoin
+        self._con.get_module('Bookmarks').set_autojoin(room_jid, False)
 
     def configure_room(self, room_jid):
         self._nbxmpp('MUC').request_config(room_jid,
@@ -513,8 +515,13 @@ class MUC(BaseModule):
                          nickname=properties.muc_nickname,
                          user_timestamp=properties.user_timestamp))
 
-        if self._get_muc_state(jid) == MUCJoinedState.JOINING:
+        muc_data = self._get_muc_data(jid)
+        if muc_data.state == MUCJoinedState.JOINING:
             self._set_muc_state(jid, MUCJoinedState.JOINED)
+            # We successfully joined a MUC, set autojoin bookmark
+            self._con.get_module('Bookmarks').add_bookmark(
+                None, properties.muc_jid,
+                True, muc_data.password, muc_data.nick)
 
         raise nbxmpp.NodeProcessed
 

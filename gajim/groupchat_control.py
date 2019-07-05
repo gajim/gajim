@@ -643,6 +643,7 @@ class GroupchatControl(ChatControlBase):
                 prompt, change_nick=True, transient_for=self.parent_win.window)
 
     def _on_disconnect(self, action, param):
+        app.connections[self.account].get_module('MUC').leave(self.room_jid)
         self.force_non_minimizable = True
         self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
         self.force_non_minimizable = False
@@ -2229,9 +2230,6 @@ class GroupchatControl(ChatControlBase):
         # Unregister handlers
         for handler in self._event_handlers:
             app.ged.remove_event_handler(*handler)
-
-        if self.is_connected:
-            app.connections[self.account].get_module('MUC').leave(self.room_jid)
 
         nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
         for nick in nick_list:

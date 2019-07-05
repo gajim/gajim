@@ -214,13 +214,26 @@ class Bookmarks(BaseModule):
                      password: str,
                      nick: str) -> None:
 
-        if self.is_bookmark(jid):
+        bookmark = self.get_bookmark_from_jid(jid)
+        if bookmark is None:
+            bookmark = BookmarkData(jid=jid,
+                                    name=name,
+                                    autojoin=autojoin,
+                                    password=password,
+                                    nick=nick)
+            self._bookmarks.append(bookmark)
+            self.store_bookmarks()
+
+        elif not bookmark.autojoin:
+            self.set_autojoin(jid, True)
+
+    def set_autojoin(self, jid, enabled):
+        bookmark = self.get_bookmark_from_jid(jid)
+        if bookmark is None:
             return
-        bookmark = BookmarkData(jid=jid,
-                                name=name,
-                                autojoin=autojoin,
-                                password=password,
-                                nick=nick)
+        self._log.info('Set autojoin for: %s to %s', jid, enabled)
+        self._bookmarks.remove(bookmark)
+        bookmark = bookmark._replace(autojoin=enabled)
         self._bookmarks.append(bookmark)
         self.store_bookmarks()
 
