@@ -72,6 +72,7 @@ from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NonModalConfirmationDialog
+from gajim.gtk.dialogs import CertificateDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.single_message import SingleMessageWindow
@@ -3585,6 +3586,11 @@ class RosterWindow:
             jid = jid + '/' + resource
         AdHocCommand(account, jid)
 
+    def on_view_certificate(self, widget, account):
+        con = app.connections[account]
+        cert = con.connection.Connection.ssl_certificate
+        CertificateDialog(self.window, account, cert)
+
     def on_roster_window_focus_in_event(self, widget, event):
         # roster received focus, so if we had urgency REMOVE IT
         # NOTE: we do not have to read the message to remove urgency
@@ -4812,6 +4818,8 @@ class RosterWindow:
                 'service_discovery_menuitem')
             execute_command_menuitem = xml.get_object(
                 'execute_command_menuitem')
+            view_certificate_menuitem = xml.get_object(
+                'view_certificate_menuitem')
             edit_account_menuitem = xml.get_object('edit_account_menuitem')
             sub_menu = Gtk.Menu()
             status_menuitem.set_submenu(sub_menu)
@@ -4898,6 +4906,8 @@ class RosterWindow:
                 account=account) # Fake contact
             execute_command_menuitem.connect('activate',
                 self.on_execute_command, contact, account)
+            view_certificate_menuitem.connect('activate',
+                self.on_view_certificate, account)
 
             gc_sub_menu = Gtk.Menu() # gc is always a submenu
             join_group_chat_menuitem.set_submenu(gc_sub_menu)
@@ -4907,7 +4917,7 @@ class RosterWindow:
             if not app.account_is_connected(account):
                 for widget in (add_contact_menuitem, service_discovery_menuitem,
                 join_group_chat_menuitem, execute_command_menuitem,
-                pep_menuitem):
+                view_certificate_menuitem, pep_menuitem):
                     widget.set_sensitive(False)
         else:
             xml = get_builder('zeroconf_context_menu.ui')
