@@ -1003,8 +1003,9 @@ class Preferences(Gtk.ApplicationWindow):
         app.set_win_debug_mode(widget.get_active())
 
     # Advanced Config Editor (ACE)
-    def on_open_advanced_editor_button_clicked(self, widget, data=None):
-        if 'advanced_config' in app.interface.instances:
-            app.interface.instances['advanced_config'].window.present()
+    def on_open_advanced_editor_button_clicked(self, _widget):
+        window = app.get_app_window(AdvancedConfig)
+        if window is None:
+            AdvancedConfig()
         else:
-            app.interface.instances['advanced_config'] = AdvancedConfig(self)
+            window.present()
