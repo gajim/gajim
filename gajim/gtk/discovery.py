@@ -46,6 +46,7 @@ import weakref
 import uuid
 
 import nbxmpp
+from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import DiscoIdentity
 
@@ -1740,7 +1741,7 @@ class MucBrowser(AgentBrowser):
             return
 
         con.get_module('Bookmarks').add_bookmark(room_jid.split('@')[0],
-                                                 room_jid,
+                                                 JID(room_jid),
                                                  False,
                                                  '',
                                                  '')

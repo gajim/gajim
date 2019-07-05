@@ -21,6 +21,7 @@ from typing import Optional
 import copy
 
 import nbxmpp
+from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import BookmarkData
 from nbxmpp.const import BookmarkStoreType
@@ -129,7 +130,7 @@ class Bookmarks(BaseModule):
             if not bookmark_copy.name:
                 # No name was given for this bookmark
                 # Use the first part of JID instead
-                name = bookmark_copy.jid.split("@")[0]
+                name = bookmark_copy.jid.getNode()
                 bookmark_copy = bookmark_copy._replace(name=name)
 
             if short_name:
@@ -206,7 +207,15 @@ class Bookmarks(BaseModule):
                         self._account, str(bookmark.jid), bookmark.nick,
                         bookmark.password, minimize=minimize)
 
-    def add_bookmark(self, name, jid, autojoin, password, nick):
+    def add_bookmark(self,
+                     name: str,
+                     jid: JID,
+                     autojoin: bool,
+                     password: str,
+                     nick: str) -> None:
+
+        if self.is_bookmark(jid):
+            return
         bookmark = BookmarkData(jid=jid,
                                 name=name,
                                 autojoin=autojoin,

@@ -17,6 +17,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 import nbxmpp
+from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import DiscoIdentity
 
@@ -267,7 +268,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         # Add as bookmark, with autojoin and not minimized
         name = app.get_nick_from_jid(self.room_jid)
         con.get_module('Bookmarks').add_bookmark(name,
-                                                 self.room_jid,
+                                                 JID(self.room_jid),
                                                  autojoin,
                                                  password,
                                                  nickname)

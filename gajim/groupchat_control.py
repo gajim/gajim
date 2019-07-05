@@ -33,6 +33,7 @@ import logging
 from enum import IntEnum, unique
 
 import nbxmpp
+from nbxmpp.protocol import JID
 from nbxmpp.const import StatusCode
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
@@ -705,7 +706,7 @@ class GroupchatControl(ChatControlBase):
         password = app.gc_passwords.get(self.room_jid, '')
         con = app.connections[self.account]
         con.get_module('Bookmarks').add_bookmark(self.name,
-                                                 self.room_jid,
+                                                 JID(self.room_jid),
                                                  True,
                                                  password,
                                                  self.nick)
