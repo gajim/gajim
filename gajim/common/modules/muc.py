@@ -134,38 +134,36 @@ class MUC(BaseModule):
         if not app.account_is_connected(self._account):
             return
 
-        self._muc_data[room_jid] = MUCData(room_jid, nick,
-                                           password, rejoin, config)
+        muc_data = MUCData(room_jid, nick, password, rejoin, config)
+        self._muc_data[room_jid] = muc_data
 
         self._con.get_module('Discovery').disco_muc(
-            room_jid, partial(self._join, room_jid))
+            room_jid, partial(self._join, muc_data))
 
-    def _join(self, room_jid):
+    def _join(self, muc_data):
         show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
-        muc = self._get_muc_data(room_jid)
 
         presence = self._con.get_module('Presence').get_presence(
-            '%s/%s' % (room_jid, muc.nick),
+            muc_data.occupant_jid,
             show=show,
             status=self._con.status)
 
         muc_x = presence.setTag(nbxmpp.NS_MUC + ' x')
-        if room_jid is not None:
-            self._add_history_query(muc_x, room_jid, muc.rejoin)
+        self._add_history_query(muc_x, str(muc_data.jid), muc_data.rejoin)
 
-        if muc.password is not None:
-            muc_x.setTagData('password', muc.password)
+        if muc_data.password is not None:
+            muc_x.setTagData('password', muc_data.password)
 
-        self._log.info('Join MUC: %s', room_jid)
-        self._set_muc_state(room_jid, MUCJoinedState.JOINING)
+        self._log.info('Join MUC: %s', muc_data.jid)
+        self._set_muc_state(muc_data.jid, MUCJoinedState.JOINING)
         self._con.connection.send(presence)
 
     def leave(self, room_jid):
         self._log.info('Leave MUC: %s', room_jid)
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
-        muc = self._get_muc_data(room_jid)
+        muc_data = self._get_muc_data(room_jid)
         self._con.get_module('Presence').send_presence(
-            '%s/%s' % (room_jid, muc.nick),
+            muc_data.occupant_jid,
             typ='unavailable')
         # We leave a group chat, disable bookmark autojoin
         self._con.get_module('Bookmarks').set_autojoin(room_jid, False)
@@ -186,8 +184,8 @@ class MUC(BaseModule):
 
         self._log.info('Configure room: %s', result.jid)
 
-        muc = self._get_muc_data(result.jid)
-        self._apply_config(result.form, muc.config)
+        muc_data = self._get_muc_data(result.jid)
+        self._apply_config(result.form, muc_data.config)
         self.set_config(result.jid,
                         result.form,
                         callback=self._on_config_result)
@@ -247,16 +245,15 @@ class MUC(BaseModule):
     def update_presence(self, auto=False):
         mucs = self.get_mucs_with_state([MUCJoinedState.JOINED,
                                          MUCJoinedState.JOINING])
-        for muc in mucs:
-            self._send_presence(muc.jid, auto)
+        for muc_data in mucs:
+            self._send_presence(muc_data, auto)
 
-    def _send_presence(self, room_jid, auto):
+    def _send_presence(self, muc_data, auto):
         show = app.SHOW_LIST[self._con.connected]
         if show in ('invisible', 'offline'):
             # FIXME: Check if this
             return
 
-        muc = self._get_muc_data(room_jid)
         status = self._con.status
 
         xmpp_show = helpers.get_xmpp_show(show)
@@ -267,13 +264,11 @@ class MUC(BaseModule):
             idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                                       time.gmtime(time.time() - idle_sec))
 
-        full_jid = '%s/%s' % (room_jid, muc.nick)
-
         self._log.info('Send presence: %s, show: %s, status: %s, idle_time: %s',
-                       full_jid, xmpp_show, status, idle_time)
+                       muc_data.occupant_jid, xmpp_show, status, idle_time)
 
         self._con.get_module('Presence').send_presence(
-            full_jid,
+            muc_data.occupant_jid,
             show=xmpp_show,
             status=status,
             caps=True,
@@ -319,13 +314,13 @@ class MUC(BaseModule):
                 muc_x.setTag('history', tags)
 
     def _on_muc_presence(self, _con, _stanza, properties):
-        muc = self._get_muc_data(properties.jid.getBare())
+        muc_data = self._get_muc_data(properties.muc_jid)
         if (properties.error.type == Error.CONFLICT and
-                muc.state == MUCJoinedState.JOINING):
-            muc.nick += '_'
+                muc_data.state == MUCJoinedState.JOINING):
+            muc_data.nick += '_'
             self._log.info('Nickname conflict: %s change to %s',
-                           muc.jid, muc.nick)
-            self._join(muc.jid)
+                           muc_data.jid, muc_data.nick)
+            self._join(muc_data)
             return
         self._raise_muc_event('muc-presence-error', properties)
 
@@ -333,7 +328,7 @@ class MUC(BaseModule):
         if properties.type == PresenceType.ERROR:
             return
 
-        room_jid = properties.jid.getBare()
+        room_jid = str(properties.muc_jid)
         if room_jid not in self._muc_data:
             self._log.warning('Presence from unknown MUC')
             self._log.warning(stanza)
@@ -349,7 +344,7 @@ class MUC(BaseModule):
             return
 
         contact = app.contacts.get_gc_contact(self._account,
-                                              properties.jid.getBare(),
+                                              room_jid,
                                               properties.muc_nickname)
 
         if properties.is_nickname_changed:
@@ -500,7 +495,7 @@ class MUC(BaseModule):
         if not properties.is_muc_subject:
             return
 
-        jid = properties.jid.getBare()
+        jid = str(properties.muc_jid)
         contact = app.contacts.get_groupchat_contact(self._account, jid)
         if contact is None:
             return
@@ -519,9 +514,11 @@ class MUC(BaseModule):
         if muc_data.state == MUCJoinedState.JOINING:
             self._set_muc_state(jid, MUCJoinedState.JOINED)
             # We successfully joined a MUC, set autojoin bookmark
-            self._con.get_module('Bookmarks').add_bookmark(
-                None, properties.muc_jid,
-                True, muc_data.password, muc_data.nick)
+            self._con.get_module('Bookmarks').add_bookmark(None,
+                                                           muc_data.jid,
+                                                           True,
+                                                           muc_data.password,
+                                                           muc_data.nick)
 
         raise nbxmpp.NodeProcessed
 
@@ -537,7 +534,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-voice-approval',
                          account=self._account,
-                         room_jid=properties.jid.getBare(),
+                         room_jid=str(properties.muc_jid),
                          form=properties.voice_request.form))
         raise nbxmpp.NodeProcessed
 
@@ -564,7 +561,7 @@ class MUC(BaseModule):
         if not properties.is_muc_config_change:
             return
 
-        room_jid = properties.jid.getBare()
+        room_jid = str(properties.muc_jid)
         self._log.info('Received config change: %s %s',
                        room_jid, properties.muc_status_codes)
         app.nec.push_incoming_event(

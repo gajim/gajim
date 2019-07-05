@@ -14,6 +14,8 @@
 
 from collections import namedtuple
 
+from nbxmpp.protocol import JID
+
 from gajim.common.const import MUCJoinedState
 
 URI = namedtuple('URI', 'type action data')
@@ -25,7 +27,7 @@ CapsIdentity = namedtuple('CapsIdentity', 'category type name lang')
 
 class MUCData:
     def __init__(self, room_jid, nick, password, rejoin, config=None):
-        self._room_jid = room_jid
+        self._room_jid = JID(room_jid)
         self._nick = nick
         self._password = password
         self._rejoin = rejoin
@@ -35,6 +37,12 @@ class MUCData:
     @property
     def jid(self):
         return self._room_jid
+
+    @property
+    def occupant_jid(self):
+        jid = self._room_jid.copy()
+        jid.setResource(self._nick)
+        return jid
 
     @property
     def nick(self):
