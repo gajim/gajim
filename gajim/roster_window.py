@@ -82,7 +82,6 @@ from gajim.gtk.bookmarks import ManageBookmarksWindow
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery import ServiceDiscoveryWindow
-from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.tooltips import RosterTooltip
 from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.subscription_request import SubscriptionRequestWindow
