@@ -84,7 +84,7 @@
       <object class="GtkMenuItem" id="edit_account_menuitem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Modify Account...</property>
+        <property name="label" translatable="yes">_Modify Account…</property>
         <property name="use_underline">True</property>
       </object>
     </child>

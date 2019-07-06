@@ -807,18 +807,27 @@ def build_accounts_menu():
 
     acc_menu = menubar.get_item_link(menu_position, 'submenu')
     acc_menu.remove_all()
+
     accounts_list = sorted(app.contacts.get_accounts())
     if not accounts_list:
-        no_accounts = _('No Accounts available')
-        acc_menu.append_item(Gio.MenuItem.new(no_accounts, None))
+        modify_account_item = Gio.MenuItem.new(_('_Add Account…'),
+                                               'app.accounts::')
+        acc_menu.append_item(modify_account_item)
         return
+
     if len(accounts_list) > 1:
+        modify_account_item = Gio.MenuItem.new(_('_Modify Accounts…'),
+                                               'app.accounts::')
+        acc_menu.append_item(modify_account_item)
         for acc in accounts_list:
             label = escape_mnemonic(app.get_account_label(acc))
             acc_menu.append_submenu(
                 label, get_account_menu(acc))
     else:
         acc_menu = get_account_menu(accounts_list[0])
+        modify_account_item = Gio.MenuItem.new(_('_Modify Account…'),
+                                               'app.accounts::')
+        acc_menu.insert_item(0, modify_account_item)
         menubar.remove(menu_position)
         menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
 
@@ -837,19 +846,21 @@ def build_bookmark_menu(account):
     acc_menu = menubar.get_item_link(menu_position, 'submenu')
 
     # We have more than one Account active
-    if acc_menu.get_item_link(0, 'submenu'):
+    if acc_menu.get_item_link(1, 'submenu'):
         for i in range(acc_menu.get_n_items()):
             label = acc_menu.get_item_attribute_value(i, 'label')
             account_label = escape_mnemonic(
                 app.config.get_per('accounts', account, 'account_label'))
             if label.get_string() in (account_label, account):
                 menu = acc_menu.get_item_link(i, 'submenu')
+                bookmark_position = 1
     else:
         # We have only one Account active
         menu = acc_menu
+        bookmark_position = 2
     label = menu.get_item_attribute_value(1, 'label').get_string()
-    menu.remove(1)
-    menu.insert_submenu(1, label, bookmark_menu)
+    menu.remove(bookmark_position)
+    menu.insert_submenu(bookmark_position, label, bookmark_menu)
 
 
 def get_encryption_menu(control_id, type_id, zeroconf=False):

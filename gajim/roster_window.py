@@ -3076,14 +3076,6 @@ class RosterWindow:
         mw.set_active_tab(ctrl)
         self.remove_groupchat(jid, account, maximize=True)
 
-    def on_edit_account(self, widget, account):
-        window = app.get_app_window(AccountsWindow)
-        if window is None:
-            window = AccountsWindow()
-        else:
-            window.present()
-        window.select_account(account)
-
     def on_change_status_message_activate(self, widget, account):
         show = app.SHOW_LIST[app.connections[account].connected]
         def on_response(message, pep_dict):
@@ -4892,8 +4884,8 @@ class RosterWindow:
             else:
                 pep_menuitem.set_sensitive(False)
 
-            edit_account_menuitem.connect('activate', self.on_edit_account,
-                account)
+            edit_account_menuitem.set_detailed_action_name(
+                'app.accounts::%s' % account)
             if app.connections[account].roster_supported:
                 add_contact_menuitem.connect('activate',
                     self.on_add_new_contact, account)
@@ -4950,8 +4942,8 @@ class RosterWindow:
             sub_menu.append(item)
             item.connect('activate', self.change_status, account, 'offline')
 
-            zeroconf_properties_menuitem.connect('activate',
-                self.on_edit_account, account)
+            zeroconf_properties_menuitem.set_detailed_action_name(
+                'app.accounts::%s' % account)
 
         return account_context_menu
 

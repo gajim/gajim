@@ -392,7 +392,6 @@ class GajimApplication(Gtk.Application):
 
         general_actions = [
             ('quit', app_actions.on_quit),
-            ('accounts', app_actions.on_accounts),
             ('add-account', app_actions.on_add_account),
             ('join-groupchat', app_actions.on_join_gc),
             ('manage-proxies', app_actions.on_manage_proxies),
@@ -411,6 +410,11 @@ class GajimApplication(Gtk.Application):
             ('ipython', app_actions.toggle_ipython),
             ('show-next-pending-event', app_actions.show_next_pending_event),
         ]
+
+        act = Gio.SimpleAction.new('accounts', GLib.VariantType.new('s'))
+        act.connect("activate", app_actions.on_accounts)
+        self.add_action(act)
+        self.set_accels_for_action('app.accounts::', ['<Alt>A'])
 
         act = Gio.SimpleAction.new('add-contact', GLib.VariantType.new('s'))
         act.connect("activate", app_actions.on_add_contact_jid)

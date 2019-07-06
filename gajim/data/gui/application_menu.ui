@@ -68,11 +68,6 @@
   <menu id="appmenu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">Accounts</attribute>
-        <attribute name="action">app.accounts</attribute>
-        <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;A</attribute>
-      </item>
-      <item>
         <attribute name="label" translatable="yes">Start Chat</attribute>
         <attribute name="action">app.start-chat</attribute>
         <attribute name="accel">&lt;Primary&gt;N</attribute>

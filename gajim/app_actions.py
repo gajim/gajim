@@ -73,9 +73,13 @@ def on_plugins(action, param):
 def on_accounts(action, param):
     window = app.get_app_window(AccountsWindow)
     if window is None:
-        AccountsWindow()
+        window = AccountsWindow()
     else:
         window.present()
+
+    account = param.get_string()
+    if account:
+        window.select_account(account)
 
 
 def on_history_manager(action, param):
