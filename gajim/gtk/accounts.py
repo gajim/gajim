@@ -34,7 +34,6 @@ from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import PassphraseDialog
-from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
@@ -134,12 +133,16 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 account, 'offline', _('Be right back.'))
             GLib.timeout_add(500, login, account, show_before, status_before)
 
-        YesNoDialog(
-            _('Relogin now?'),
-            _('If you want all the changes to apply instantly, '
-              'you must relogin.'),
-            transient_for=self,
-            on_response_yes=lambda *args: relog(account))
+        NewConfirmationDialog(
+            _('Re-Login'),
+            _('Re-Login now?'),
+            _('To apply all changes instantly, you have to re-login.'),
+            [DialogButton.make('Cancel',
+                               text=_('_Later')),
+             DialogButton.make('OK',
+                               text=_('_Re-Login'),
+                               callback=lambda *args: relog(account))],
+            transient_for=self).show()
 
     @staticmethod
     def _get_relogin_settings(account):

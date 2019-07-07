@@ -82,7 +82,6 @@ if is_standalone():
 
 # pylint: disable=C0413
 from gajim.common import helpers
-from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
@@ -234,27 +233,27 @@ class HistoryManager:
                 Gtk.main_quit()
             return
 
-        def on_yes(clicked):
+        def _on_yes():
             self.cur.execute('VACUUM')
             self.con.commit()
             if is_standalone():
                 Gtk.main_quit()
 
-        def on_no():
+        def _on_no():
             if is_standalone():
                 Gtk.main_quit()
 
-        dialog = YesNoDialog(
+        NewConfirmationDialog(
+            _('Database Cleanup'),
             _('Do you want to clean up the database? '
               '(STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)'),
-            _('Normally allocated database size will not be freed, '
-              'it will just become reusable. If you really want to reduce '
-              'database filesize, click YES, else click NO.'
-              '\n\nIn case you click YES, please wait…'),
-            on_response_yes=on_yes, on_response_no=on_no)
-        dialog.set_title(_('Database Cleanup'))
-        button_box = dialog.get_children()[0].get_children()[1]
-        button_box.get_children()[0].grab_focus()
+            _('Normally, the allocated database size will not be freed, it '
+              'will just become reusable. This operation may take a while.'),
+            [DialogButton.make('Cancel',
+                               callback=_on_no),
+             DialogButton.make('Remove',
+                               text=_('_Cleanup'),
+                               callback=_on_yes)]).show()
 
     def _fill_jids_listview(self):
         # get those jids that have at least one entry in logs
@@ -581,7 +580,7 @@ class HistoryManager:
         if paths_len == 0:  # nothing is selected
             return
 
-        def on_ok(liststore, list_of_paths):
+        def on_ok():
             # delete rows from db that match log_line_id
             list_of_rowrefs = []
             for path in list_of_paths:  # make them treerowrefs (it's needed)

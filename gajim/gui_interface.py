@@ -98,8 +98,9 @@ from gajim.gtk.notification import Notification
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import PlainConnectionDialog
 from gajim.gtk.dialogs import SSLErrorDialog
@@ -161,24 +162,35 @@ class Interface:
 
     @staticmethod
     def handle_event_http_auth(obj):
-        #('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
-        def response(account, answer):
+        # ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
+        def _response(account, answer):
             obj.conn.get_module('HTTPAuth').build_http_auth_answer(
                 obj.stanza, answer)
 
-        def on_yes(is_checked, obj):
-            response(obj, 'yes')
-
         account = obj.conn.name
+        pri_msg = _('HTTP (%(method)s) Authorization '
+                    'for %(url)s (ID: %(id)s)') % {
+                        'method': obj.method,
+                        'url': obj.url,
+                        'id': obj.iq_id}
         sec_msg = _('Do you accept this request?')
         if app.get_number_of_connected_accounts() > 1:
-            sec_msg = _('Do you accept this request on account %s?') % account
+            sec_msg = _('Do you accept this request (account: %s)?') % account
         if obj.msg:
             sec_msg = obj.msg + '\n' + sec_msg
-        YesNoDialog(_('HTTP (%(method)s) Authorization for '
-            '%(url)s (ID: %(id)s)') % {'method': obj.method, 'url': obj.url,
-            'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
-            on_response_no=(response, obj, 'no'))
+
+        NewConfirmationDialog(
+            _('Authorization'),
+            pri_msg,
+            sec_msg,
+            [DialogButton.make('Cancel',
+                               text=_('_No'),
+                               callback=_response,
+                               args=[obj, 'yes']),
+             DialogButton.make('OK',
+                               text=_('_Accept'),
+                               callback=_response,
+                               args=[obj, 'no'])]).show()
 
     def handle_event_iq_error(self, event):
         ctrl = self.msg_win_mgr.get_control(event.properties.jid.getBare(),
@@ -424,16 +436,22 @@ class Interface:
             % obj.jid)
 
     def show_unsubscribed_dialog(self, account, contact):
-        def on_yes(is_checked, list_):
+        def _remove(list_):
             self.roster.on_req_usub(None, list_)
         list_ = [(contact, account)]
-        YesNoDialog(
-                _('Contact "%s" removed subscription from you') % contact.jid,
-                _('You will always see them as offline.\nDo you want to '
-                        'remove them from your contact list?'),
-                on_response_yes=(on_yes, list_))
-            # FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does
-            # not show deny
+
+        NewConfirmationDialog(
+            _('Subscription Removed'),
+            _('Contact \'%s\' removed subscription from you') % contact.jid,
+            _('You will always see this contact as offline.\n'
+              'Do you want to remove them from your contact list?'),
+            [DialogButton.make('Cancel',
+                               text=_('_No')),
+             DialogButton.make('Remove',
+                               callback=_remove(list_))]).show()
+
+        # FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does
+        # not show deny
 
     def handle_event_unsubscribed_presence(self, obj):
         #('UNSUBSCRIBED', account, jid)

@@ -44,7 +44,6 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import HigDialog
 from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.filechoosers import FileChooserDialog
@@ -329,14 +328,20 @@ class FileTransfersWindow:
             file_name = os.path.basename(file_props.file_name)
         else:
             file_name = file_props.name
-        YesNoDialog(
-            _('File transfer error'),
-            _('The file %(file)s has been received, but it seems to have '
+        NewConfirmationDialog(
+            _('File Transfer Error'),
+            _('File Transfer Error'),
+            _('The file %s has been received, but it seems to have '
               'been damaged along the way.\n'
-              'Do you want to download it again?') %
-            {'file': file_name},
-            on_response_yes=(on_yes, jid, file_props, account),
-            type_=Gtk.MessageType.ERROR)
+              'Do you want to download it again?') % file_name,
+            [DialogButton.make('Cancel',
+                               text=_('_No')),
+             DialogButton.make('OK',
+                               text=_('_Download Again'),
+                               callback=on_yes,
+                               args=[jid,
+                                     file_props,
+                                     account])]).show()
 
     def show_file_send_request(self, account, contact):
         send_callback = partial(self.send_file, account, contact)

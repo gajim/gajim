@@ -40,7 +40,8 @@ from gajim import message_control
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
 
-from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
@@ -231,7 +232,7 @@ class MessageWindow:
                 number_of_closed_control += 1
 
         if number_of_closed_control > 1:
-            def on_yes1(checked):
+            def _on_yes1(checked):
                 if checked:
                     app.config.set('confirm_close_multiple_tabs', False)
                 self.dont_warn_on_delete = True
@@ -246,11 +247,16 @@ class MessageWindow:
                         ctrl.minimize()
                 # destroy window
                 return False
-            YesNoDialog(
+
+            NewConfirmationCheckDialog(
+                _('Close Tabs'),
                 _('You are going to close several tabs'),
                 _('Do you really want to close them all?'),
-                checktext=_('_Do not ask me again'), on_response_yes=on_yes1,
-                transient_for=self.window)
+                _('_Do not ask me again'),
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('OK',
+                                   callback=_on_yes1)],
+                transient_for=self.window).show()
             return True
 
         def on_yes(ctrl):

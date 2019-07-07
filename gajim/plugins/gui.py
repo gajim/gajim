@@ -39,7 +39,8 @@ from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _
 
 from gajim.gtk.dialogs import WarningDialog
-from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.filechoosers import ArchiveChooserDialog
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import load_icon
@@ -260,9 +261,9 @@ class PluginsWindow:
             dialog.popup()
 
         def _on_plugin_exists(zip_filename):
-            def on_yes(is_checked):
+            def _on_yes():
                 plugin = app.plugin_manager.install_from_zip(zip_filename,
-                    True)
+                                                             True)
                 if not plugin:
                     show_warn_dialog()
                     return
@@ -273,13 +274,24 @@ class PluginsWindow:
                         model.remove(row.iter)
                         break
 
-                iter_ = model.append([plugin, plugin.name, False,
-                    plugin.activatable, self.get_plugin_icon(plugin)])
+                iter_ = model.append([
+                    plugin,
+                    plugin.name,
+                    False,
+                    plugin.activatable,
+                    self.get_plugin_icon(plugin)])
                 sel = self.installed_plugins_treeview.get_selection()
                 sel.select_iter(iter_)
 
-            YesNoDialog(_('Plugin already exists'), sectext=_('Overwrite?'),
-                on_response_yes=on_yes, transient_for=self.window)
+            NewConfirmationDialog(
+                _('Overwrite Plugin?'),
+                _('Plugin already exists'),
+                _('Do you want to overwrite the currently installed version?'),
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('Remove',
+                                   text=_('_Overwrite'),
+                                   callback=_on_yes)],
+                transient_for=self.window).show()
 
         def _try_install(zip_filename):
             try:
