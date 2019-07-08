@@ -46,6 +46,7 @@ from gajim.gtk.proxies import ManageProxies
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.blocking import BlockingList
 from gajim.gtk.xml_console import XMLConsoleWindow
+from gajim.gtk.groupchat_join import GroupchatJoin
 
 # General Actions
 
@@ -395,3 +396,12 @@ def on_browse_history(_action, param):
         window.present()
         if jid is not None and account is not None:
             window.open_history(jid, account)
+
+
+def on_groupchat_join(_action, param):
+    account, jid = param.get_strv()
+    window = app.get_app_window(GroupchatJoin, account=account, jid=jid)
+    if window is None:
+        GroupchatJoin(account, jid)
+    else:
+        window.present()

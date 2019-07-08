@@ -1542,7 +1542,9 @@ def open_uri(uri, account=None):
             return
 
         if uri.action == URIAction.JOIN:
-            app.interface.join_gc_minimal(account, uri.data)
+            app.app.activate_action(
+                'groupchat-join',
+                GLib.Variant('as', [account, uri.data['jid']]))
         elif uri.action == URIAction.MESSAGE:
             app.interface.new_chat_from_jid(account, uri.data['jid'],
                                             message=uri.data.get('body'))

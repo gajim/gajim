@@ -45,6 +45,8 @@
 
 #SubjectPopover box { padding: 10px; }
 
+.link-button { min-height: 0px }
+
 /* VCardWindow */
 .VCard-GtkLinkButton { padding-left: 5px; border-left: none; }
 
@@ -263,3 +265,6 @@ button.flat.link { padding: 0; border: 0; }
 /* Search Dialog */
 .search-treeview { padding: 5px; }
 .search-scrolled { border: 1px solid; border-color:@unfocused_borders; }
+
+
+#GroupchatJoin > box {padding: 18px; }
