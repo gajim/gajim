@@ -108,7 +108,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             bookmarks = con.get_module('Bookmarks').bookmarks
             groupchats = {}
             for bookmark in bookmarks:
-                groupchats[bookmark.jid] = bookmark.name
+                groupchats[str(bookmark.jid)] = bookmark.name
 
             for jid in app.contacts.get_gc_list(account):
                 if jid in groupchats:
