@@ -24,6 +24,7 @@ from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.const import MUC_CREATION_EXAMPLES
+from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.i18n import _
 
 from gajim.gtk.dialogs import ErrorDialog
@@ -47,16 +48,6 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self.add(self._ui.create_group_chat)
 
         self._destroyed = False
-
-        not_muc_error = _('Address does not belong to a group chat server')
-        self._error_messages = {
-            'remote-server-not-found': _('Remote server not found'),
-            'remote-server-timeout': _('Remote server timeout'),
-            'service-unavailable': not_muc_error,
-            'subscription-required': not_muc_error,
-            'not-muc-service': not_muc_error,
-            'already-exists': _('Group chat already exists')
-        }
 
         self._account = self._fill_account_combo(account)
 
@@ -168,11 +159,11 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self._ui.create_button.set_sensitive(False)
 
     def _set_warning_from_error(self, error):
-        text = self._error_messages.get(error.type, str(error))
+        text = MUC_DISCO_ERRORS.get(error.type, str(error))
         self._set_warning(text)
 
     def _set_warning_from_error_code(self, error_code):
-        self._set_warning(self._error_messages[error_code])
+        self._set_warning(MUC_DISCO_ERRORS[error_code])
 
     def _on_address_entry_changed(self, entry):
         text = entry.get_text()
