@@ -267,9 +267,9 @@ class GajimApplication(Gtk.Application):
                 if len(accounts) == 1:
                     app.interface.new_chat_from_jid(accounts[0], jid, message)
                 else:
-                    self.activate_action('start-chat')
-                    start_chat_window = app.interface.instances['start_chat']
-                    start_chat_window.search_entry.set_text(jid)
+                    self.activate_action('start-chat', GLib.Variant('s', ''))
+                    start_chat = app.get_app_window('StartChatDialog')
+                    start_chat.set_search_text(jid)
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
@@ -395,7 +395,6 @@ class GajimApplication(Gtk.Application):
             ('add-account', app_actions.on_add_account),
             ('join-groupchat', app_actions.on_join_gc),
             ('manage-proxies', app_actions.on_manage_proxies),
-            ('start-chat', app_actions.on_new_chat),
             ('bookmarks', app_actions.on_manage_bookmarks),
             ('history-manager', app_actions.on_history_manager),
             ('preferences', app_actions.on_preferences),
@@ -410,6 +409,10 @@ class GajimApplication(Gtk.Application):
             ('ipython', app_actions.toggle_ipython),
             ('show-next-pending-event', app_actions.show_next_pending_event),
         ]
+
+        act = Gio.SimpleAction.new('start-chat', GLib.VariantType.new('s'))
+        act.connect("activate", app_actions.on_new_chat)
+        self.add_action(act)
 
         act = Gio.SimpleAction.new('accounts', GLib.VariantType.new('s'))
         act.connect("activate", app_actions.on_accounts)

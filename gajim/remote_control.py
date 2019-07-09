@@ -888,7 +888,7 @@ class GajimRemote(Server):
         if not account:
             # error is shown in gajim-remote check_arguments(..)
             return False
-        app.app.activate_action('start-chat')
+        app.app.activate_action('start-chat', GLib.Variant('s', ''))
         return True
 
     def send_xml(self, xml, account):

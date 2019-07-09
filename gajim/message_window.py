@@ -199,9 +199,9 @@ class MessageWindow:
         # again. if destroy() is called from the StartChat Dialog, this
         # Window is not yet focused, because present() seems to be asynchron
         # at least on KDE, and takes time.
-        if 'start_chat' in app.interface.instances:
-            if app.interface.instances['start_chat'].ready_to_destroy:
-                app.interface.instances['start_chat'].destroy()
+        start_chat = app.get_app_window('StartChatDialog')
+        if start_chat is not None and start_chat.ready_to_destroy:
+            start_chat.destroy()
 
         # window received focus, so if we had urgency REMOVE IT
         # NOTE: we do not have to read the message (it maybe in a bg tab)

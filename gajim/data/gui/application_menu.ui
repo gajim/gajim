@@ -71,6 +71,7 @@
         <attribute name="label" translatable="yes">Start Chat</attribute>
         <attribute name="action">app.start-chat</attribute>
         <attribute name="accel">&lt;Primary&gt;N</attribute>
+        <attribute name="target"></attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Create Group Chat</attribute>

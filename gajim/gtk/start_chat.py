@@ -87,6 +87,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.select_first_row()
         self.show_all()
 
+    def set_search_text(self, text):
+        self._ui.search_entry.set_text(text)
+
     def add_contacts(self):
         show_account = len(self.accounts) > 1
         for account in self.accounts:
@@ -379,7 +382,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _destroy(self, *args):
         self._destroyed = True
-        del app.interface.instances['start_chat']
 
 
 class ContactRow(Gtk.Grid):

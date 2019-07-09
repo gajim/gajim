@@ -96,11 +96,17 @@ def on_quit(action, param):
     interface.roster.on_quit_request()
 
 
-def on_new_chat(action, param):
-    if 'start_chat' in app.interface.instances:
-        app.interface.instances['start_chat'].present()
+def on_new_chat(_action, param):
+    search_text = param.get_string()
+    window = app.get_app_window(StartChatDialog)
+    if window is None:
+        window = StartChatDialog()
     else:
-        app.interface.instances['start_chat'] = StartChatDialog()
+        window.present()
+
+    if search_text:
+        window.set_search_text(search_text)
+
 
 # Accounts Actions
 

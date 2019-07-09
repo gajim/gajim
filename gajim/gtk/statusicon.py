@@ -22,6 +22,7 @@
 import os
 
 from gi.repository import Gtk
+from gi.repository import GLib
 
 from gajim import dialogs
 
@@ -170,7 +171,7 @@ class StatusIcon:
         SingleMessageWindow(account, action='send')
 
     def on_new_chat(self, widget, account):
-        app.app.activate_action('start-chat')
+        app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
     def make_menu(self, event_button, event_time):
         """
