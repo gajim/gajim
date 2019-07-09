@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -14,11 +14,12 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="chat_with_menuitem">
+      <object class="GtkMenuItem" id="start_chat_menuitem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">_Start Chat...</property>
         <property name="use_underline">True</property>
+        <signal name="activate" handler="on_new_chat" swapped="no"/>
       </object>
     </child>
     <child>

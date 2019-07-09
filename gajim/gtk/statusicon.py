@@ -46,7 +46,6 @@ class StatusIcon:
     def __init__(self):
         self.single_message_handler_id = None
         self.show_roster_handler_id = None
-        self.new_chat_handler_id = None
         # click somewhere else does not popdown menu. workaround this.
         self.added_hide_menuitem = False
         self.status = 'offline'
@@ -170,7 +169,7 @@ class StatusIcon:
     def on_single_message_menuitem_activate(self, widget, account):
         SingleMessageWindow(account, action='send')
 
-    def on_new_chat(self, widget, account):
+    def on_new_chat(self, _widget):
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
     def make_menu(self, event_button, event_time):
@@ -180,7 +179,7 @@ class StatusIcon:
         for m in self.popup_menus:
             m.destroy()
 
-        chat_with_menuitem = self._ui.chat_with_menuitem
+        start_chat_menuitem = self._ui.start_chat_menuitem
         single_message_menuitem = self._ui.single_message_menuitem
         status_menuitem = self._ui.status_menu
         join_gc_menuitem = self._ui.join_gc_menuitem
@@ -191,9 +190,6 @@ class StatusIcon:
             single_message_menuitem.handler_disconnect(
                     self.single_message_handler_id)
             self.single_message_handler_id = None
-        if self.new_chat_handler_id:
-            chat_with_menuitem.disconnect(self.new_chat_handler_id)
-            self.new_chat_handler_id = None
 
         sub_menu = Gtk.Menu()
         self.popup_menus.append(sub_menu)
@@ -229,34 +225,11 @@ class StatusIcon:
 
         iskey = connected_accounts > 0 and not (connected_accounts == 1 and
             app.zeroconf_is_connected())
-        chat_with_menuitem.set_sensitive(iskey)
+        start_chat_menuitem.set_sensitive(iskey)
         single_message_menuitem.set_sensitive(iskey)
         join_gc_menuitem.set_sensitive(iskey)
 
         accounts_list = sorted(app.contacts.get_accounts())
-        # items that get shown whether an account is zeroconf or not
-        if connected_accounts > 1: # 2 or more connections? make submenus
-            account_menu_for_chat_with = Gtk.Menu()
-            chat_with_menuitem.set_submenu(account_menu_for_chat_with)
-            self.popup_menus.append(account_menu_for_chat_with)
-
-            for account in accounts_list:
-                account_label = app.get_account_label(account)
-                if app.account_is_connected(account):
-                    # for chat_with
-                    item = Gtk.MenuItem.new_with_label(
-                        _('using account %s') % account_label)
-                    account_menu_for_chat_with.append(item)
-                    item.connect('activate', self.on_new_chat, account)
-
-        elif connected_accounts == 1: # one account
-            # one account connected, no need to show 'as jid'
-            for account in app.connections:
-                if app.connections[account].connected > 1:
-                    # for start chat
-                    self.new_chat_handler_id = chat_with_menuitem.connect(
-                            'activate', self.on_new_chat, account)
-                    break # No other connected account
 
         # menu items that don't apply to zeroconf connections
         if connected_accounts == 1 or (connected_accounts == 2 and \
