@@ -37,12 +37,12 @@ MUC_FEATURES = {
         'feather-hard-drive-symbolic',
         Q_('?Group chat feature:Persistent'),
         _('This group chat persists '
-          'even if it\'s unoccupied')),
+          'even if there are no participants')),
     'muc_temporary': (
         'feather-clock-symbolic',
         Q_('?Group chat feature:Temporary'),
         _('This group chat will be destroyed '
-          'once the last occupant left')),
+          'once the last participant left')),
     'muc_moderated': (
         'feather-mic-off-symbolic',
         Q_('?Group chat feature:Moderated'),
@@ -51,8 +51,8 @@ MUC_FEATURES = {
     'muc_unmoderated': (
         'feather-mic-symbolic',
         Q_('?Group chat feature:Not Moderated'),
-        _('Participants entering this group chat can '
-          'write messages to all participants')),
+        _('Participants entering this group chat are '
+          'allowed to send messages')),
     'muc_open': (
         'feather-globe-symbolic',
         Q_('?Group chat feature:Open'),
@@ -73,7 +73,7 @@ MUC_FEATURES = {
     'muc_nonanonymous': (
         'feather-shield-off-symbolic',
         Q_('?Group chat feature:Not Anonymous'),
-        _('All other group chat occupants '
+        _('All other group chat participants '
           'can see your XMPP address')),
     'muc_semianonymous': (
         'feather-shield-symbolic',
