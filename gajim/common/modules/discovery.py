@@ -141,7 +141,7 @@ class Discovery(BaseModule):
                 continue
 
             self._log.info('Found transport: %s %s %s',
-                           info.jid, info.category, identity.type)
+                           info.jid, identity.category, identity.type)
 
             jid = str(info.jid)
             if jid not in app.transport_type:
