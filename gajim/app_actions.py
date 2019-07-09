@@ -376,12 +376,6 @@ def start_chat(_action, param):
     app.interface.new_chat_from_jid(account, jid)
 
 
-def join_groupchat(_action, param):
-    account, jid = param.get_strv()
-    room_jid = jid.split('?')[0]
-    app.interface.join_gc_minimal(account, room_jid)
-
-
 def on_browse_history(_action, param):
     jid, account = None, None
     if param is not None:
