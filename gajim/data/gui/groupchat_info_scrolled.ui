@@ -191,8 +191,8 @@
     </child>
     <child>
       <object class="GtkLabel" id="lang">
-        <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
       </object>
@@ -238,9 +238,9 @@
     </child>
     <child>
       <object class="GtkImage" id="users_image">
-        <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Occupants</property>
+        <property name="no_show_all">True</property>
+        <property name="tooltip_text" translatable="yes">Participants</property>
         <property name="halign">end</property>
         <property name="valign">center</property>
         <property name="icon_name">system-users-symbolic</property>
@@ -255,8 +255,8 @@
     </child>
     <child>
       <object class="GtkImage" id="lang_image">
-        <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
         <property name="tooltip_text" translatable="yes">Group Chat Language</property>
         <property name="halign">end</property>
         <property name="valign">center</property>
