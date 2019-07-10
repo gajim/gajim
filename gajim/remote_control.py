@@ -221,7 +221,7 @@ class GajimRemote(Server):
             <method name='show_next_pending_event' />
             <method name='show_roster' />
             <method name='start_chat'>
-                <arg name='account' type='s' />
+                <arg name='jid' type='s' />
                 <arg direction='out' type='b' />
             </method>
             <method name='toggle_ipython' />
@@ -884,11 +884,8 @@ class GajimRemote(Server):
                 unread -= 1
         return str(unread)
 
-    def start_chat(self, account):
-        if not account:
-            # error is shown in gajim-remote check_arguments(..)
-            return False
-        app.app.activate_action('start-chat', GLib.Variant('s', ''))
+    def start_chat(self, jid=''):
+        app.app.activate_action('start-chat', GLib.Variant('s', jid))
         return True
 
     def send_xml(self, xml, account):
