@@ -1441,7 +1441,7 @@ class Interface:
             bookmark = con.get_module('Bookmarks').get_bookmark_from_jid(room_jid)
             if bookmark is not None:
                 app.interface.join_gc_room(
-                    account, bookmark.jid, bookmark.nick, bookmark.password)
+                    account, str(bookmark.jid), bookmark.nick, bookmark.password)
                 return
 
         try:
