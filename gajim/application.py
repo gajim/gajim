@@ -39,6 +39,8 @@ from pathlib import Path
 from urllib.parse import unquote
 
 import nbxmpp
+from nbxmpp import JID
+from nbxmpp.protocol import InvalidJid
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -236,6 +238,10 @@ class GajimApplication(Gtk.Application):
                                        self._on_feature_discovered)
 
     def _open_uris(self, uris):
+        accounts = list(app.connections.keys())
+        if not accounts:
+            return
+
         for uri in uris:
             app.log('uri_handler').info('open %s', uri)
             if not uri.startswith('xmpp:'):
@@ -247,10 +253,30 @@ class GajimApplication(Gtk.Application):
             except ValueError:
                 # No query argument
                 jid, cmd = uri, 'message'
+
+            try:
+                jid = JID(jid)
+            except InvalidJid as error:
+                app.log('uri_handler').warning('Invalid JID %s: %s', uri, error)
+                continue
+
+            if cmd == 'join' and jid.getResource():
+                app.log('uri_handler').warning('Invalid MUC JID %s', uri)
+                continue
+
+            jid = str(jid)
+
             if cmd == 'join':
-                self.interface.join_gc_minimal(None, jid)
+                if len(accounts) == 1:
+                    self.activate_action(
+                        'groupchat-join',
+                        GLib.Variant('as', [accounts[0], jid]))
+                else:
+                    self.activate_action('start-chat', GLib.Variant('s', jid))
+
             elif cmd == 'roster':
                 self.activate_action('add-contact', GLib.Variant('s', jid))
+
             elif cmd.startswith('message'):
                 attributes = cmd.split(';')
                 message = None
@@ -261,9 +287,7 @@ class GajimApplication(Gtk.Application):
                         message = unquote(key.split('=')[1])
                     except Exception:
                         app.log('uri_handler').error('Invalid URI: %s', cmd)
-                accounts = list(app.connections.keys())
-                if not accounts:
-                    continue
+
                 if len(accounts) == 1:
                     app.interface.new_chat_from_jid(accounts[0], jid, message)
                 else:
