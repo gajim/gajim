@@ -93,9 +93,10 @@ MUC_FEATURES = {
 
 
 class GroupChatInfoScrolled(Gtk.ScrolledWindow):
-    def __init__(self, account):
+    def __init__(self, account=None):
         Gtk.ScrolledWindow.__init__(self)
         self.set_size_request(400, -1)
+        self.set_vexpand(True)
         self.set_min_content_height(400)
         self.set_policy(Gtk.PolicyType.NEVER,
                         Gtk.PolicyType.AUTOMATIC)
@@ -104,6 +105,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self.add(self._ui.info_grid)
         self._ui.connect_signals(self)
         self.show_all()
+
+    def set_account(self, account):
+        self._account = account
 
     def set_author(self, author, epoch_timestamp=None):
         if not author:
@@ -181,6 +185,11 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
     def _add_features(self, features):
         grid = self._ui.info_grid
+        for row in range(30, 9, -1):
+            # Remove everything from row 30 to 10
+            # We probably will never have 30 rows and
+            # there is no method to count grid rows
+            grid.remove_row(row)
         features = list(features)
 
         has_mam = NS_MAM_2 in features or NS_MAM_1 in features

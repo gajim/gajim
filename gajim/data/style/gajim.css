@@ -227,6 +227,7 @@ list.settings > row > box {
 /* Padding/Margins */
 .margin-top6 { margin-top: 6px; }
 .margin-12 { margin: 12px; }
+.margin-18 { margin: 18px; }
 
 /* Treeview */
 treeview.space { padding: 6px; }

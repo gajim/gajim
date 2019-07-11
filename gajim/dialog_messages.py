@@ -27,11 +27,6 @@ from gajim.gtk.dialogs import InformationDialog
 Message = namedtuple('Message', ['title', 'text', 'dialog'])
 
 messages = {
-    'start-chat-not-connected': Message(
-        _('You are not connected to the server'),
-        _('You can not start a new conversation unless you are connected.'),
-        ErrorDialog),
-
     'invalid-jid-with-error': Message(
         _('Invalid JID'),
         '%s',

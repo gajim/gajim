@@ -20,6 +20,8 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
 
+from nbxmpp.protocol import InvalidJid
+from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 from nbxmpp.const import AnonymityMode
 
@@ -27,7 +29,9 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
+from gajim.common.const import MUC_DISCO_ERRORS
 
+from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import ensure_not_destroyed
@@ -56,7 +60,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._search_stopped = False
 
         self._ui = get_builder('start_chat_dialog.ui')
-        self.add(self._ui.box)
+        self.add(self._ui.stack)
 
         self.new_contact_row_visible = False
         self.new_contact_rows = {}
@@ -81,10 +85,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._muc_search_listbox = MUCSearch()
         self._current_listbox = self._ui.listbox
 
+        self._muc_info_box = GroupChatInfoScrolled()
+        self._ui.info_box.add(self._muc_info_box)
+
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._destroy)
 
         self.select_first_row()
+        self._ui.connect_signals(self)
         self.show_all()
 
     def set_search_text(self, text):
@@ -131,58 +139,125 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._start_new_chat(row)
 
     def _on_key_press(self, widget, event):
+        is_search = self._ui.stack.get_visible_child_name() == 'search'
         if event.keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
-            self._ui.search_entry.emit('next-match')
-            return True
+            if is_search:
+                self._ui.search_entry.emit('next-match')
+                return Gdk.EVENT_STOP
+            return Gdk.EVENT_PROPAGATE
 
         if (event.state == Gdk.ModifierType.SHIFT_MASK and
                 event.keyval == Gdk.KEY_ISO_Left_Tab):
-            self._ui.search_entry.emit('previous-match')
-            return True
+            if is_search:
+                self._ui.search_entry.emit('previous-match')
+                return Gdk.EVENT_STOP
+            return Gdk.EVENT_PROPAGATE
 
         if event.keyval == Gdk.KEY_Up:
-            self._ui.search_entry.emit('previous-match')
-            return True
+            if is_search:
+                self._ui.search_entry.emit('previous-match')
+                return Gdk.EVENT_STOP
+            return Gdk.EVENT_PROPAGATE
 
         if event.keyval == Gdk.KEY_Escape:
+            if self._ui.stack.get_visible_child_name() == 'progress':
+                self.destroy()
+                return Gdk.EVENT_STOP
+
+            if self._ui.stack.get_visible_child_name() in ('error', 'info'):
+                self._ui.stack.set_visible_child_name('search')
+                return Gdk.EVENT_STOP
+
             self._search_stopped = True
             self._muc_search_listbox.remove_all()
             if self._ui.search_entry.get_text() != '':
                 self._ui.search_entry.emit('stop-search')
             else:
                 self.destroy()
-            return True
+            return Gdk.EVENT_STOP
 
         if event.keyval == Gdk.KEY_Return:
+            if self._ui.stack.get_visible_child_name() == 'progress':
+                return Gdk.EVENT_STOP
+
+            if self._ui.stack.get_visible_child_name() == 'error':
+                self._ui.stack.set_visible_child_name('search')
+                return Gdk.EVENT_STOP
+
+            if self._ui.stack.get_visible_child_name() == 'info':
+                self._on_join_clicked()
+                return Gdk.EVENT_STOP
+
             if self._current_listbox_is(Search.MUC):
                 self._muc_search_listbox.remove_all()
                 self._start_search()
-                return True
+                return Gdk.EVENT_STOP
 
             row = self._ui.listbox.get_selected_row()
             if row is not None:
                 row.emit('activate')
-            return True
+            return Gdk.EVENT_STOP
 
-        self._ui.search_entry.grab_focus_without_selecting()
+        if is_search:
+            self._ui.search_entry.grab_focus_without_selecting()
+        return Gdk.EVENT_PROPAGATE
 
     def _start_new_chat(self, row):
         if row.new:
-            if not app.account_is_connected(row.account):
-                app.interface.raise_dialog('start-chat-not-connected')
-                return
             try:
-                helpers.parse_jid(row.jid)
-            except helpers.InvalidFormat as e:
-                app.interface.raise_dialog('invalid-jid-with-error', str(e))
+                JID(row.jid)
+            except InvalidJid as error:
+                self._show_error_page(str(error))
                 return
 
         if row.groupchat:
-            app.interface.join_gc_minimal(row.account, row.jid)
+            if not app.account_is_connected(row.account):
+                self._show_error_page(_('You can not join a group chat '
+                                        'unless you are connected.'))
+                return
+            self._disco_muc(row.account, row.jid)
         else:
             app.interface.new_chat_from_jid(row.account, row.jid)
 
         self.ready_to_destroy = True
+
+    def _disco_muc(self, account, jid):
+        self._ui.stack.set_visible_child_name('progress')
+        con = app.connections[account]
+        con.get_module('Discovery').disco_info(
+            jid, callback=self._disco_info_received, user_data=account)
+
+    @ensure_not_destroyed
+    def _disco_info_received(self, result, account):
+        if is_error_result(result):
+            self._set_error(result)
+
+        elif result.is_muc:
+            self._muc_info_box.set_account(account)
+            self._muc_info_box.set_from_disco_info(result)
+            self._ui.stack.set_visible_child_name('info')
+
+        else:
+            self._set_error_from_code('not-muc-service')
+
+    def _set_error(self, error):
+        text = MUC_DISCO_ERRORS.get(error.type, str(error))
+        self._show_error_page(text)
+
+    def _set_error_from_code(self, error_code):
+        self._show_error_page(MUC_DISCO_ERRORS[error_code])
+
+    def _show_error_page(self, text):
+        self._ui.error_label.set_text(text)
+        self._ui.stack.set_visible_child_name('error')
+
+    def _on_join_clicked(self, _button=None):
+        row = self._ui.listbox.get_selected_row().get_child()
+        app.interface.join_gc_minimal(row.account, row.jid)
+        self.ready_to_destroy = True
+
+    def _on_back_clicked(self, _button):
+        self._ui.stack.set_visible_child_name('search')
 
     def _set_listbox(self, listbox):
         if self._current_listbox == listbox:
