@@ -134,11 +134,11 @@ class StartChatDialog(Gtk.ApplicationWindow):
                                  show_account, True)
                 self._ui.listbox.add(row)
 
-    def _on_row_activated(self, listbox, row):
+    def _on_row_activated(self, _listbox, row):
         row = row.get_child()
         self._start_new_chat(row)
 
-    def _on_key_press(self, widget, event):
+    def _on_key_press(self, _widget, event):
         is_search = self._ui.stack.get_visible_child_name() == 'search'
         if event.keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
             if is_search:
@@ -316,7 +316,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self.new_contact_rows[account].update_jid(search_text)
             self.new_groupchat_rows[account].update_jid(search_text)
 
-    def _select_new_match(self, entry, direction):
+    def _select_new_match(self, _entry, direction):
         selected_row = self._ui.listbox.get_selected_row()
         if selected_row is None:
             return
@@ -345,19 +345,19 @@ class StartChatDialog(Gtk.ApplicationWindow):
         first_row = self._ui.listbox.get_row_at_y(0)
         self._ui.listbox.select_row(first_row)
 
-    def _filter_func(self, row, user_data):
+    def _filter_func(self, row, _user_data):
         search_text = self._ui.search_entry.get_text().lower()
         search_text_list = search_text.split()
         row_text = row.get_child().get_search_text().lower()
         for text in search_text_list:
             if text not in row_text:
                 GLib.timeout_add(50, self.select_first_row)
-                return
+                return None
         GLib.timeout_add(50, self.select_first_row)
         return True
 
     @staticmethod
-    def _sort_func(row1, row2, user_data):
+    def _sort_func(row1, row2, _user_data):
         name1 = row1.get_child().get_search_text()
         name2 = row2.get_child().get_search_text()
         account1 = row1.get_child().account
@@ -614,7 +614,8 @@ class MUCSearch(Gtk.ListBox):
         self._ui.tooltip_name.hide()
         self._ui.tooltip_name_label.hide()
 
-    def _on_row_activated(self, _listbox, row):
+    @staticmethod
+    def _on_row_activated(_listbox, row):
         app.interface.join_gc_minimal(None, row.item.jid)
 
 
