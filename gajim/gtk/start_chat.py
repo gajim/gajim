@@ -37,9 +37,6 @@ from gajim.gtk.util import get_builder
 from gajim.gtk.util import ensure_not_destroyed
 
 
-SERVICE_JID = 'rodrigo.de.mucobedo@dreckshal.de'
-
-
 class Search(IntEnum):
     CONTACT = 0
     MUC = 1
@@ -399,14 +396,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         if self._parameter_form is None:
             con.get_module('Muclumbus').request_parameters(
-                SERVICE_JID,
+                app.config.get('muclumbus_api_jid'),
                 callback=self._parameters_received,
                 user_data=(con, text))
         else:
             self._parameter_form.vars['q'].value = text
 
             con.get_module('Muclumbus').set_search(
-                SERVICE_JID,
+                app.config.get('muclumbus_api_jid'),
                 self._parameter_form,
                 callback=self._on_search_result,
                 user_data=con)
@@ -423,7 +420,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._parameter_form.vars['q'].value = text
 
         con.get_module('Muclumbus').set_search(
-            SERVICE_JID,
+            app.config.get('muclumbus_api_jid'),
             self._parameter_form,
             callback=self._on_search_result,
             user_data=con)
@@ -445,7 +442,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return
 
         con.get_module('Muclumbus').set_search(
-            SERVICE_JID,
+            app.config.get('muclumbus_api_jid'),
             self._parameter_form,
             items_per_page=result.max,
             after=result.last,
