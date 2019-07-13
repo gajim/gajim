@@ -135,12 +135,10 @@ list.settings > row > box {
     font-weight: bold;
     color: @insensitive_fg_color;}
 
-/* StartChatListBox */
-#StartChatListBox > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
-#StartChatListBox > row:last-child { border-bottom: 0px}
-#StartChatListBox > row.activatable:active { box-shadow: none; }
-#StartChatListBox > row { padding: 10px 20px 10px 10px; }
-#StartChatListBox > row:not(.activatable) label { color: @insensitive_fg_color }
+/* Start Chat Accounts Treeview */
+.start-chat-treeview { padding: 5px; }
+.start-chat-treeview:focus {outline: none; }
+.start-chat-scrolled { border: 1px solid; border-color:@unfocused_borders; }
 
 /* StartChatListBox */
 .start-chat-row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
@@ -257,7 +255,6 @@ button.flat.link { padding: 0; border: 0; }
 
 /*Image Preview*/
 .preview-image { box-shadow: 0px 0px 3px 0px alpha(@theme_text_color, 0.2); }
-
 
 /* Treeview */
 .adhoc-treeview { padding: 5px; }

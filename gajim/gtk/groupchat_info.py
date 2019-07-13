@@ -101,13 +101,20 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self.set_policy(Gtk.PolicyType.NEVER,
                         Gtk.PolicyType.AUTOMATIC)
         self._account = account
+        self._info = None
         self._ui = get_builder('groupchat_info_scrolled.ui')
         self.add(self._ui.info_grid)
         self._ui.connect_signals(self)
         self.show_all()
 
+    def get_account(self):
+        return self._account
+
     def set_account(self, account):
         self._account = account
+
+    def get_jid(self):
+        return self._info.jid
 
     def set_author(self, author, epoch_timestamp=None):
         if not author:
@@ -129,6 +136,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.subject_label.set_visible(True)
 
     def set_from_disco_info(self, info):
+        self._info = info
         # Set name
         has_name = bool(info.muc_name)
         self._ui.name.set_text(info.muc_name or '')
