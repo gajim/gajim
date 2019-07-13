@@ -87,14 +87,17 @@ def clip_circle(surface):
     new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
                                      surface.get_width(),
                                      surface.get_height())
+
+    new_surface.set_device_scale(*surface.get_device_scale())
     context = cairo.Context(new_surface)
     context.set_source_surface(surface, 0, 0)
 
     width = surface.get_width()
     height = surface.get_height()
-    radius = width / 2
+    scale = surface.get_device_scale()[0]
+    radius = width / 2 / scale
 
-    context.arc(width / 2, height / 2, radius, 0, 2 * pi)
+    context.arc(width / 2 / scale, height / 2 / scale, radius, 0, 2 * pi)
 
     context.clip()
     context.paint()
@@ -239,4 +242,6 @@ class AvatarStorage(metaclass=Singleton):
             color_string = contact.jid
         color = text_to_color(color_string)
         surface = generate_avatar(letter, color, size, scale)
-        return clip_circle(surface)
+        surface = clip_circle(surface)
+        surface.set_device_scale(scale, scale)
+        return surface
