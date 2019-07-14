@@ -34,6 +34,8 @@ from enum import IntEnum, unique
 
 import nbxmpp
 from nbxmpp.protocol import JID
+from nbxmpp.protocol import InvalidJid
+from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
@@ -76,7 +78,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputTextDialog
 from gajim.gtk.dialogs import DestroyMucDialog
 from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.dialogs import ChangeNickDialog
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.add_contact import AddNewContactWindow
@@ -346,8 +347,13 @@ class GroupchatControl(ChatControlBase):
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
 
+        # Stack
+        self.xml.stack.show_all()
+        self.xml.stack.set_visible_child_name('groupchat')
+
         self.update_ui()
         self.widget.show_all()
+
 
         if app.config.get('hide_groupchat_occupants_list'):
             # Roster is shown by default, so toggle the roster button to hide it
@@ -537,6 +543,12 @@ class GroupchatControl(ChatControlBase):
         win = self.parent_win.window
         return win.lookup_action(name + self.control_id)
 
+    def _show_page(self, name):
+        transition = Gtk.StackTransitionType.SLIDE_DOWN
+        if name == 'groupchat':
+            transition = Gtk.StackTransitionType.SLIDE_UP
+        self.xml.stack.set_visible_child_full(name, transition)
+
     def _cell_data_func(self, column, renderer, model, iter_, user_data):
         # Background color has to be rendered for all cells
         theme = app.config.get('roster_theme')
@@ -631,16 +643,6 @@ class GroupchatControl(ChatControlBase):
         InputTextDialog(_('Changing Subject'),
             _('Please specify the new subject:'), input_str=self.subject,
             ok_handler=on_ok, transient_for=self.parent_win.window)
-
-    def _on_change_nick(self, action, param):
-        if 'change_nick_dialog' in app.interface.instances:
-            app.interface.instances['change_nick_dialog'].dialog.present()
-        else:
-            title = _('Changing Nickname')
-            prompt = _('Please specify the new nickname you want to use:')
-            app.interface.instances['change_nick_dialog'] = \
-                ChangeNickDialog(self.account, self.room_jid, title,
-                prompt, change_nick=True, transient_for=self.parent_win.window)
 
     def _on_disconnect(self, action, param):
         app.connections[self.account].get_module('MUC').leave(self.room_jid)
@@ -2940,6 +2942,32 @@ class GroupchatControl(ChatControlBase):
             self.grant_owner(widget, jid)
         else:
             self.revoke_owner(widget, jid)
+
+    def _on_change_nick(self, _action, _param):
+        self.xml.nickname_entry.set_text(self.nick)
+        self.xml.nickname_entry.grab_focus()
+        self._show_page('nickname')
+
+    def _on_nickname_text_changed(self, entry, _param):
+        text = entry.get_text()
+        if not text or text == self.nick:
+            self.xml.nickname_change_button.set_sensitive(False)
+        else:
+            try:
+                validate_resourcepart(text)
+            except InvalidJid:
+                self.xml.nickname_change_button.set_sensitive(False)
+            else:
+                self.xml.nickname_change_button.set_sensitive(True)
+
+    def _on_nickname_change_clicked(self, _button):
+        new_nick = self.xml.nickname_entry.get_text()
+        app.connections[self.account].get_module('MUC').change_nick(
+            self.room_jid, new_nick)
+        self._show_page('groupchat')
+
+    def _on_nickname_cancel_clicked(self, _button):
+        self._show_page('groupchat')
 
 
 class SubjectPopover(Gtk.Popover):

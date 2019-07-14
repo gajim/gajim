@@ -22,7 +22,6 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.const import ButtonAction
 
@@ -524,91 +523,6 @@ class InputDialogCheck(InputDialog):
         except Exception:
             # There is no checkbutton
             return False
-
-
-class ChangeNickDialog(InputDialogCheck):
-    """
-    Class for changing room nickname in case of conflict
-    """
-
-    def __init__(self, account, room_jid, title, prompt, check_text=None,
-                 change_nick=False, transient_for=None):
-        """
-        change_nick must be set to True when we are already occupant of the room
-        and we are changing our nick
-        """
-        InputDialogCheck.__init__(self, title, '',
-                                  input_str='', is_modal=True, ok_handler=None,
-                                  cancel_handler=None,
-                                  transient_for=transient_for)
-        self.room_queue = [(account, room_jid, prompt, change_nick)]
-        self.check_next()
-
-    def on_input_dialog_delete_event(self, widget, event):
-        self.on_cancelbutton_clicked(widget)
-        return True
-
-    def setup_dialog(self):
-        self.gc_control = app.interface.msg_win_mgr.get_gc_control(
-                self.room_jid, self.account)
-        if not self.gc_control and \
-        self.room_jid in app.interface.minimized_controls[self.account]:
-            self.gc_control = \
-                app.interface.minimized_controls[self.account][self.room_jid]
-        if not self.gc_control:
-            self.check_next()
-            return
-        label = self.xml.get_object('label')
-        label.set_markup(self.prompt)
-        self.set_entry(self.gc_control.nick + \
-                app.config.get('gc_proposed_nick_char'))
-
-    def check_next(self):
-        if not self.room_queue:
-            self.cancel_handler = None
-            self.dialog.destroy()
-            if 'change_nick_dialog' in app.interface.instances:
-                del app.interface.instances['change_nick_dialog']
-            return
-        self.account, self.room_jid, self.prompt, self.change_nick = \
-            self.room_queue.pop(0)
-        self.setup_dialog()
-        self.dialog.show()
-
-    def on_okbutton_clicked(self, widget):
-        nick = self.get_text()
-        if nick:
-            nick = nick
-        # send presence to room
-        try:
-            nick = helpers.parse_resource(nick)
-        except Exception:
-            # invalid char
-            ErrorDialog(_('Invalid nickname'),
-                    _('The nickname contains invalid characters.'))
-            return
-        self.on_ok(nick, self.is_checked())
-
-    def on_ok(self, nick, is_checked):
-        app.connections[self.account].get_module('MUC').change_nick(
-            self.room_jid, nick)
-        if app.gc_connected[self.account][self.room_jid]:
-            # We are changing nick, we will change self.nick when we receive
-            # presence that inform that it works
-            self.gc_control.new_nick = nick
-        else:
-            # We are connecting, we will not get a changed nick presence so
-            # change it NOW. We don't already have a nick so it's harmless
-            self.gc_control.nick = nick
-        self.check_next()
-
-    def on_cancelbutton_clicked(self, widget):
-        self.gc_control.new_nick = ''
-        self.check_next()
-
-    def add_room(self, account, room_jid, prompt, change_nick=False):
-        if (account, room_jid, prompt, change_nick) not in self.room_queue:
-            self.room_queue.append((account, room_jid, prompt, change_nick))
 
 
 class InputTextDialog(CommonInputDialog):
