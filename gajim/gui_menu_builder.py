@@ -15,12 +15,11 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk, Gio, GLib
-from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
+from nbxmpp.protocol import NS_COMMANDS, NS_FILE
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
 
 from gajim import gtkgui_helpers
 from gajim import message_control
-from gajim.gtkgui_helpers import get_action
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import ngettext
@@ -47,8 +46,6 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
         if action == roster.on_invite_to_room:  # pylint: disable=comparison-with-callable
             item.connect('activate', action, [(c, account)], room_jid,
                     room_account, c.resource)
-        elif action == roster.on_invite_to_new_room:  # pylint: disable=comparison-with-callable
-            item.connect('activate', action, [(c, account)], c.resource)
         else: # start_chat, execute_command, send_file
             item.connect('activate', action, c, account, c.resource)
 
@@ -92,42 +89,7 @@ show_bookmarked=False, force_resource=False):
         return
     invite_to_submenu = Gtk.Menu()
     invite_menuitem.set_submenu(invite_to_submenu)
-    invite_to_new_room_menuitem = Gtk.MenuItem.new_with_mnemonic(_(
-        '_New Group Chat'))
-    if len(contact_list) > 1: # several resources
-        invite_to_new_room_menuitem.set_submenu(build_resources_submenu(
-            contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
-    elif len(list_) == 1:
-        invite_menuitem.set_sensitive(True)
-        # use resource if it's self contact
-        if contact.jid == app.get_jid_from_account(account) or force_resource:
-            resource = contact.resource
-        else:
-            resource = None
-        invite_to_new_room_menuitem.connect('activate',
-            roster.on_invite_to_new_room, list_, resource)
-    elif len(list_) > 1:
-        list2 = []
-        for (c, a) in list_:
-            if c.supports(NS_MUC):
-                list2.append((c, a))
-        if list2:
-            invite_to_new_room_menuitem.connect('activate',
-                roster.on_invite_to_new_room, list2, None)
-        else:
-            invite_menuitem.set_sensitive(False)
-    else:
-        invite_menuitem.set_sensitive(False)
-    # transform None in 'jabber'
-    c_t = contacts_transport or 'jabber'
-    muc_jid = {}
-    for account in connected_accounts:
-        for t in app.connections[account].muc_jid:
-            muc_jid[t] = app.connections[account].muc_jid[t]
-    if c_t not in muc_jid:
-        invite_to_new_room_menuitem.set_sensitive(False)
     rooms = [] # a list of (room_jid, account) tuple
-    invite_to_submenu.append(invite_to_new_room_menuitem)
     minimized_controls = []
     for account in connected_accounts:
         minimized_controls += \
@@ -698,43 +660,6 @@ def get_groupchat_menu(control_id, account, jid):
     return build_menu(groupchat_menu)
 
 
-def get_bookmarks_menu(account, rebuild=False):
-    con = app.connections[account]
-    bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks(short_name=True)
-
-    menu = Gio.Menu()
-
-    # Build Join Groupchat
-    action = 'app.{}-join-groupchat'.format(account)
-    menuitem = Gio.MenuItem.new(_('Join Group Chat'), action)
-    variant = GLib.Variant('as', [account, ''])
-    menuitem.set_action_and_target_value(action, variant)
-    menu.append_item(menuitem)
-
-    # Build Bookmarks
-    section = Gio.Menu()
-    for bookmark in bookmarks:
-        action = 'app.{}-activate-bookmark'.format(account)
-        menuitem = Gio.MenuItem.new(bookmark.name, action)
-
-        # Create Variant Dict
-        dict_ = {'account': GLib.Variant('s', account),
-                 'jid': GLib.Variant('s', str(bookmark.jid))}
-        if bookmark.nick:
-            dict_['nick'] = GLib.Variant('s', bookmark.nick)
-        if bookmark.password:
-            dict_['password'] = GLib.Variant('s', bookmark.password)
-        variant_dict = GLib.Variant('a{sv}', dict_)
-
-        menuitem.set_action_and_target_value(action, variant_dict)
-        section.append_item(menuitem)
-    menu.append_section(None, section)
-    if not rebuild:
-        get_action(account + '-activate-bookmark').set_enabled(True)
-
-    return menu
-
-
 def get_account_menu(account):
     '''
     [(action, label/sub_menu)]
@@ -744,7 +669,6 @@ def get_account_menu(account):
     '''
     account_menu = [
         ('-add-contact', _('Add Contact…')),
-        ('-join-groupchat', _('Join Group Chat')),
         ('-profile', _('Profile')),
         ('-services', _('Discover Services')),
         ('-start-single-chat', _('Send Single Message…')),
@@ -773,11 +697,6 @@ def get_account_menu(account):
         for item in preset:
             if isinstance(item[1], str):
                 action, label = item
-                if action == '-join-groupchat':
-                    bookmark_menu = get_bookmarks_menu(account, True)
-                    if bookmark_menu:
-                        menu.append_submenu(label, bookmark_menu)
-                        continue
                 action = 'app.{}{}'.format(account, action)
                 menuitem = Gio.MenuItem.new(label, action)
                 if 'add-contact' in action:
@@ -830,37 +749,6 @@ def build_accounts_menu():
         acc_menu.insert_item(0, modify_account_item)
         menubar.remove(menu_position)
         menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
-
-
-def build_bookmark_menu(account):
-    menubar = app.app.get_menubar()
-    bookmark_menu = get_bookmarks_menu(account)
-    if not bookmark_menu:
-        return
-
-    menu_position = 1
-    if app.prefers_app_menu():
-        menu_position = 0
-
-    # Accounts Submenu
-    acc_menu = menubar.get_item_link(menu_position, 'submenu')
-
-    # We have more than one Account active
-    if acc_menu.get_item_link(1, 'submenu'):
-        for i in range(acc_menu.get_n_items()):
-            label = acc_menu.get_item_attribute_value(i, 'label')
-            account_label = escape_mnemonic(
-                app.config.get_per('accounts', account, 'account_label'))
-            if label.get_string() in (account_label, account):
-                menu = acc_menu.get_item_link(i, 'submenu')
-                bookmark_position = 1
-    else:
-        # We have only one Account active
-        menu = acc_menu
-        bookmark_position = 2
-    label = menu.get_item_attribute_value(1, 'label').get_string()
-    menu.remove(bookmark_position)
-    menu.insert_submenu(bookmark_position, label, bookmark_menu)
 
 
 def get_encryption_menu(control_id, type_id, zeroconf=False):

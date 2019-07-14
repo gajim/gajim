@@ -601,9 +601,6 @@ class Interface:
         'from', 'both'):
             self.instances[account]['sub_request'][obj.jid].destroy()
 
-    def handle_event_bookmarks(self, obj):
-        gui_menu_builder.build_bookmark_menu(obj.account)
-
     def handle_event_file_send_error(self, event):
         ft = self.instances['file_transfers']
         ft.set_status(event.file_props, 'stop')
@@ -1226,7 +1223,6 @@ class Interface:
         self.handlers = {
             'DB_ERROR': [self.handle_event_db_error],
             'file-send-error': [self.handle_event_file_send_error],
-            'bookmarks-received': [self.handle_event_bookmarks],
             'client-cert-passphrase': [
                 self.handle_event_client_cert_passphrase],
             'connection-lost': [self.handle_event_connection_lost],

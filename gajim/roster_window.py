@@ -74,7 +74,6 @@ from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NonModalConfirmationDialog
 from gajim.gtk.dialogs import CertificateDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
-from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.pep_config import ManagePEPServicesWindow
@@ -2998,34 +2997,6 @@ class RosterWindow:
         app.interface.instances['file_transfers'].show_file_send_request(
             account, contact)
 
-    def on_invite_to_new_room(self, widget, list_, resource=None):
-        """
-        Resource parameter MUST NOT be used if more than one contact in list
-        """
-        account_list = []
-        jid_list = []
-        for (contact, account) in list_:
-            if contact.jid not in jid_list:
-                if resource: # we MUST have one contact only in list_
-                    fjid = contact.jid + '/' + resource
-                    jid_list.append(fjid)
-                else:
-                    jid_list.append(contact.jid)
-            if account not in account_list:
-                account_list.append(account)
-        # transform None in 'jabber'
-        type_ = app.get_transport_name_from_jid(jid_list[0]) or 'jabber'
-        for account in account_list:
-            if app.connections[account].muc_jid[type_]:
-                # create the room on this muc server
-                if 'join_gc' in app.interface.instances[account]:
-                    app.interface.instances[account]['join_gc'].destroy()
-                else:
-                    app.interface.instances[account]['join_gc'] = \
-                        JoinGroupchatWindow(
-                            account, None, automatic={'invities': jid_list})
-                break
-
     def on_invite_to_room(self, widget, list_, room_jid, room_account,
     resource=None):
         """
@@ -3543,13 +3514,6 @@ class RosterWindow:
 
     def on_add_new_contact(self, widget, account):
         AddNewContactWindow(account)
-
-    def on_join_gc_activate(self, widget, account):
-        """
-        When the join gc menuitem is clicked, show the join gc window
-        """
-        app.app.activate_action('%s-join-groupchat' % account,
-                                GLib.Variant('as', [account, '']))
 
     def on_create_gc_activate(self, widget, account):
         """
@@ -4802,8 +4766,6 @@ class RosterWindow:
             account_context_menu = xml.get_object('account_context_menu')
 
             status_menuitem = xml.get_object('status_menuitem')
-            join_group_chat_menuitem = xml.get_object(
-                'join_group_chat_menuitem')
             add_contact_menuitem = xml.get_object('add_contact_menuitem')
             service_discovery_menuitem = xml.get_object(
                 'service_discovery_menuitem')
@@ -4900,14 +4862,10 @@ class RosterWindow:
             view_certificate_menuitem.connect('activate',
                 self.on_view_certificate, account)
 
-            gc_sub_menu = Gtk.Menu() # gc is always a submenu
-            join_group_chat_menuitem.set_submenu(gc_sub_menu)
-            self.add_bookmarks_list(gc_sub_menu, account)
-
             # make some items insensitive if account is offline
             if not app.account_is_connected(account):
                 for widget in (add_contact_menuitem, service_discovery_menuitem,
-                join_group_chat_menuitem, execute_command_menuitem,
+                execute_command_menuitem,
                 view_certificate_menuitem, pep_menuitem):
                     widget.set_sensitive(False)
         else:
@@ -5345,34 +5303,6 @@ class RosterWindow:
         menu.append(item)
         item.connect('activate', self.on_history_manager_menuitem_activate)
 
-    def add_bookmarks_list(self, gc_sub_menu, account):
-        """
-        Show join new group chat item and bookmarks list for an account
-        """
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Join New Group Chat'))
-        item.connect('activate', self.on_join_gc_activate, account)
-        gc_sub_menu.append(item)
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Create Group Chat'))
-        item.connect('activate', self.on_create_gc_activate, account)
-        gc_sub_menu.append(item)
-
-        # User has at least one bookmark.
-        con = app.connections[account]
-        if con.get_module('Bookmarks').bookmarks:
-            item = Gtk.SeparatorMenuItem.new()
-            gc_sub_menu.append(item)
-
-        bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks(
-            short_name=True)
-        for bookmark in bookmarks:
-            # Do not use underline.
-            item = Gtk.MenuItem.new_with_label(bookmark.name)
-            item.set_use_underline(False)
-            item.connect(
-                'activate', self.on_bookmark_menuitem_activate,
-                account, bookmark)
-            gc_sub_menu.append(item)
-
     def show_appropriate_context_menu(self, event, iters):
         # iters must be all of the same type
         model = self.modelfilter
@@ -5411,19 +5341,6 @@ class RosterWindow:
             iters = [model.get_iter(path)]
         self.show_appropriate_context_menu(event, iters)
 
-        return True
-
-    def on_ctrl_j(self, accel_group, acceleratable, keyval, modifier):
-        """
-        Bring up the conference join dialog, when CTRL+J accelerator is being
-        activated
-        """
-        # find a connected account:
-        for account in app.connections:
-            if account == 'Local':
-                continue
-            if app.account_is_connected(account):
-                self.on_join_gc_activate(None, account)
         return True
 
     def fill_column(self, col):
@@ -5730,12 +5647,6 @@ class RosterWindow:
             # Open wizard only after roster is created, so we can make it
             # transient for the roster window
             GLib.idle_add(_open_wizard)
-
-        # Setting CTRL+J to be the shortcut for bringing up the dialog to join a
-        # conference.
-        accel_group = Gtk.accel_groups_from_object(self.window)[0]
-        accel_group.connect(Gdk.KEY_j, Gdk.ModifierType.CONTROL_MASK,
-                Gtk.AccelFlags.MASK, self.on_ctrl_j)
 
         # Setting CTRL+S to be the shortcut to change status message
         accel_group = Gtk.AccelGroup()

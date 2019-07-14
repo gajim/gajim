@@ -29,14 +29,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="join_group_chat_menuitem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Join _Group Chat</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="seperator">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
