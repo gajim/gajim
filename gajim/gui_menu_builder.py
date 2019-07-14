@@ -595,7 +595,6 @@ def get_groupchat_menu(control_id, account, jid):
         ]),
         (_('Sync Threshold'), ['sync']),
         ('win.change-nick-', _('Change Nick')),
-        ('win.bookmark-', _('Bookmark Room')),
         ('win.request-voice-', _('Request Voice')),
         ('win.execute-command-', _('Execute command')),
         ('app.browse-history', _('History')),
