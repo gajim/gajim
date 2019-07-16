@@ -367,7 +367,7 @@ class GroupchatControl(ChatControlBase):
         super().add_actions()
         actions = [
             ('change-subject-', self._on_change_subject),
-            ('change-nick-', self._on_change_nick),
+            ('change-nickname-', self._on_change_nick),
             ('disconnect-', self._on_disconnect),
             ('destroy-', self._on_destroy_room),
             ('configure-', self._on_configure_room),
@@ -492,7 +492,7 @@ class GroupchatControl(ChatControlBase):
                                                         subject)
 
         # Change Nick
-        self._get_action('change-nick-').set_enabled(self.is_connected)
+        self._get_action('change-nickname-').set_enabled(self.is_connected)
 
         # Execute command
         self._get_action('execute-command-').set_enabled(self.is_connected)
@@ -548,6 +548,9 @@ class GroupchatControl(ChatControlBase):
         if name == 'groupchat':
             transition = Gtk.StackTransitionType.SLIDE_UP
         self.xml.stack.set_visible_child_full(name, transition)
+
+    def _get_current_page(self):
+        return self.xml.stack.get_visible_child_name()
 
     def _cell_data_func(self, column, renderer, model, iter_, user_data):
         # Background color has to be rendered for all cells
@@ -2502,6 +2505,29 @@ class GroupchatControl(ChatControlBase):
                 widget.get_selection().unselect_all()
                 return True
 
+    def delegate_action(self, action):
+        res = super().delegate_action(action)
+        if res == Gdk.EVENT_STOP:
+            return res
+
+        if action == 'change-nickname':
+            control_action = '%s-%s' % (action, self.control_id)
+            self.parent_win.window.lookup_action(control_action).activate()
+            return Gdk.EVENT_STOP
+
+        if action == 'escape':
+            if self._get_current_page() == 'groupchat':
+                return Gdk.EVENT_PROPAGATE
+            self._show_page('groupchat')
+            return Gdk.EVENT_STOP
+
+        if action == 'change-subject':
+            control_action = '%s-%s' % (action, self.control_id)
+            self.parent_win.window.lookup_action(control_action).activate()
+            return Gdk.EVENT_STOP
+
+        return Gdk.EVENT_PROPAGATE
+
     def on_list_treeview_row_expanded(self, widget, iter_, path):
         """
         When a row is expanded: change the icon of the arrow
@@ -2946,6 +2972,7 @@ class GroupchatControl(ChatControlBase):
     def _on_change_nick(self, _action, _param):
         self.xml.nickname_entry.set_text(self.nick)
         self.xml.nickname_entry.grab_focus()
+        self.xml.nickname_change_button.grab_default()
         self._show_page('nickname')
 
     def _on_nickname_text_changed(self, entry, _param):

@@ -23,12 +23,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import time
+import logging
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import GLib
+from gi.repository import Gio
 
 from gajim import common
 from gajim.common import app
@@ -48,6 +49,9 @@ from gajim.gtk.util import move_window
 from gajim.gtk.util import get_app_icon_list
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import set_urgency_hint
+
+
+log = logging.getLogger('gajim.message_window')
 
 ####################
 
@@ -119,19 +123,7 @@ class MessageWindow:
         id_ = self.window.connect('focus-in-event', self._on_window_focus)
         self.handlers[id_] = self.window
 
-        keys = ['<Control>f', '<Control>g', '<Control>h', '<Control>i',
-                '<Control>l', '<Control>L', '<Control><Shift>n', '<Control>u',
-                '<Control>b', '<Control>F4',
-                '<Control><Shift>Page_Up', '<Control><Shift>Page_Down',
-                '<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
-                '<Alt>Left', '<Alt>d', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
-                ['<Alt>'+str(i) for i in range(10)]
-        accel_group = Gtk.AccelGroup()
-        for key in keys:
-            keyval, mod = Gtk.accelerator_parse(key)
-            accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,
-                self.accel_group_func)
-        self.window.add_accel_group(accel_group)
+        self._add_actions()
 
         # gtk+ doesn't make use of the motion notify on gtkwindow by default
         # so this line adds that
@@ -163,6 +155,118 @@ class MessageWindow:
             self.notebook.set_show_tabs(False)
         self.notebook.set_show_border(app.config.get('tabs_border'))
         self.show_icon()
+
+    def _add_actions(self):
+        actions = [
+            ('change-nickname', ['<Control><Shift>n']),
+            ('change-subject', ['<Alt>t']),
+            ('escape', ['Escape']),
+            ('browse-history', ['<Control>h']),
+            ('send-file', ['<Control>f']),
+            ('show-contact-info', ['<Control>i']),
+            ('show-emoji-chooser', ['<Alt>m']),
+            ('clear-chat', ['<Control>l']),
+            ('delete-line', ['<Control>u']),
+            ('close-tab', ['<Control>w']),
+            ('move-tab-up', ['<Control><Shift>Page_Up']),
+            ('move-tab-down', ['<Control><Shift>Page_Down']),
+            ('switch-next-tab', ['<Alt>Right']),
+            ('switch-prev-tab', ['<Alt>Left']),
+            ('switch-next-unread-tab-right', ['<Control>Tab',
+                                              '<Control>Page_Down']),
+            ('switch-next-unread-tab-left', ['<Control>ISO_Left_Tab',
+                                             '<Control>Page_Up']),
+        ]
+
+        disabled_for_emacs = (
+            'browse-history',
+            'send-file',
+            'close-tab'
+        )
+
+        key_theme = Gtk.Settings.get_default().get_property(
+            'gtk-key-theme-name')
+
+        for action, keys in actions:
+            if key_theme == 'Emacs' and action in disabled_for_emacs:
+                continue
+            act = Gio.SimpleAction.new(action, None)
+            act.connect('activate', self._on_action)
+            self.window.add_action(act)
+            app.app.set_accels_for_action('win.%s' % action, keys)
+
+    def _on_action(self, action, _param):
+        control = self.get_active_control()
+        if not control:
+            # No more control in this window
+            return
+
+        log.info('Activate action: %s, active control: %s',
+                 action.get_name(), control.contact.jid)
+
+        action = action.get_name()
+
+        # Pass the event to the control
+        res = control.delegate_action(action)
+        if res != Gdk.EVENT_PROPAGATE:
+            return res
+
+        if action == 'escape' and app.config.get('escape_key_closes'):
+            self.remove_tab(control, self.CLOSE_ESC)
+            return
+
+        if action == 'close-tab':
+            self.remove_tab(control, self.CLOSE_CTRL_KEY)
+            return
+
+        if action == 'move-tab-up':
+            old_position = self.notebook.get_current_page()
+            self.notebook.reorder_child(control.widget,
+                                        old_position - 1)
+            return
+
+        if action == 'move-tab-down':
+            old_position = self.notebook.get_current_page()
+            total_pages = self.notebook.get_n_pages()
+            if old_position == total_pages - 1:
+                self.notebook.reorder_child(control.widget, 0)
+            else:
+                self.notebook.reorder_child(control.widget,
+                                            old_position + 1)
+            return
+
+        if action == 'switch-next-tab':
+            new = self.notebook.get_current_page() + 1
+            if new >= self.notebook.get_n_pages():
+                new = 0
+            self.notebook.set_current_page(new)
+            return
+
+        if action == 'switch-prev-tab':
+            new = self.notebook.get_current_page() - 1
+            if new < 0:
+                new = self.notebook.get_n_pages() - 1
+            self.notebook.set_current_page(new)
+            return
+
+        if action == 'switch-next-unread-tab-right':
+            self.move_to_next_unread_tab(True)
+            return
+
+        if action == 'switch-next-unread-tab-left':
+            self.move_to_next_unread_tab(False)
+            return
+
+    def _on_notebook_key_press(self, _widget, event):
+        control = self.get_active_control()
+        if control is None:
+            return
+
+        if isinstance(control, ChatControlBase):
+            # we forwarded it to message textview
+            control.msg_textview.remove_placeholder()
+            control.msg_textview.event(event)
+            control.msg_textview.grab_focus()
 
     def change_account_name(self, old_name, new_name):
         if old_name in self._controls:
@@ -352,141 +456,6 @@ class MessageWindow:
         else:
             ctrl = self._widget_to_control(child)
             GLib.idle_add(ctrl.msg_textview.grab_focus)
-
-    def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
-        st = '1234567890' # alt+1 means the first tab (tab 0)
-        control = self.get_active_control()
-        if not control:
-            # No more control in this window
-            return
-
-        # CTRL mask
-        if modifier & Gdk.ModifierType.CONTROL_MASK:
-            if keyval == Gdk.KEY_h: # CTRL + h
-                if Gtk.Settings.get_default().get_property(
-                'gtk-key-theme-name') != 'Emacs':
-                    dict_ = {'jid': GLib.Variant('s', control.contact.jid),
-                             'account': GLib.Variant('s', control.account)}
-                    variant = GLib.Variant('a{sv}', dict_)
-                    app.app.activate_action('browse-history', variant)
-                    return True
-            elif control.type_id == message_control.TYPE_CHAT and \
-            keyval == Gdk.KEY_f: # CTRL + f
-                # CTRL + f moves cursor one char forward when user uses Emacs
-                # theme
-                if not Gtk.Settings.get_default().get_property(
-                'gtk-key-theme-name') == 'Emacs':
-                    if app.interface.msg_win_mgr.mode == \
-                    app.interface.msg_win_mgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
-                        app.interface.roster.tree.grab_focus()
-                        return False
-                    self.window.lookup_action(
-                        'send-file-%s' % control.control_id).activate()
-                    return True
-            elif control.type_id == message_control.TYPE_CHAT and \
-            keyval == Gdk.KEY_g: # CTRL + g
-                control._on_convert_to_gc_menuitem_activate(None)
-                return True
-            elif control.type_id in (message_control.TYPE_CHAT,
-            message_control.TYPE_PM) and keyval == Gdk.KEY_i: # CTRL + i
-                self.window.lookup_action(
-                    'information-%s' % control.control_id).activate()
-                return True
-            elif keyval in (Gdk.KEY_l, Gdk.KEY_L): # CTRL + l|L
-                control.conv_textview.clear()
-                return True
-            elif keyval == Gdk.KEY_u: # CTRL + u: emacs style clear line
-                control.clear(control.msg_textview)
-                return True
-            elif control.type_id == message_control.TYPE_GC and \
-            keyval == Gdk.KEY_b: # CTRL + b
-                # CTRL + b moves cursor one char backward when user uses Emacs
-                # theme
-                if not Gtk.Settings.get_default().get_property(
-                'gtk-key-theme-name') == 'Emacs':
-                    self.window.lookup_action(
-                        'bookmark-%s' % control.control_id).activate()
-                    return True
-            # Tab switch bindings
-            elif keyval == Gdk.KEY_F4: # CTRL + F4
-                self.remove_tab(control, self.CLOSE_CTRL_KEY)
-                return True
-            elif keyval == Gdk.KEY_w: # CTRL + w
-                # CTRL + w removes latest word before cursor when User uses emacs
-                # theme
-                if not Gtk.Settings.get_default().get_property(
-                'gtk-key-theme-name') == 'Emacs':
-                    self.remove_tab(control, self.CLOSE_CTRL_KEY)
-                    return True
-            elif keyval in (Gdk.KEY_Page_Up, Gdk.KEY_Page_Down) and not \
-                modifier & Gdk.ModifierType.SHIFT_MASK:
-                # CTRL + PageUp | PageDown
-                # Create event and send it to notebook
-                event = Gdk.Event.new(Gdk.EventType.KEY_PRESS)
-                event.window = self.window.get_window()
-                event.time = int(time.time())
-                event.state = Gdk.ModifierType.CONTROL_MASK
-                event.keyval = int(keyval)
-                self.notebook.event(event)
-                return True
-
-            if modifier & Gdk.ModifierType.SHIFT_MASK:
-                # CTRL + SHIFT
-                if control.type_id == message_control.TYPE_GC and \
-                keyval == Gdk.KEY_n:  # CTRL + SHIFT + n
-                    self.window.lookup_action(
-                        'change-nick-%s' % control.control_id).activate()
-                    return True
-                # CTRL + SHIFT + PageUp | PageDown
-                old_position = self.notebook.get_current_page()
-                total_pages = self.notebook.get_n_pages()
-                if keyval == Gdk.KEY_Page_Up:
-                    self.notebook.reorder_child(control.widget,
-                                                old_position - 1)
-                    return True
-                if keyval == Gdk.KEY_Page_Down:
-                    if old_position == total_pages - 1:
-                        self.notebook.reorder_child(control.widget, 0)
-                        return True
-                    self.notebook.reorder_child(control.widget,
-                                                old_position + 1)
-                    return True
-        # MOD1 (ALT) mask
-        elif modifier & Gdk.ModifierType.MOD1_MASK:
-            # Tab switch bindings
-            if keyval == Gdk.KEY_Right: # ALT + RIGHT
-                new = self.notebook.get_current_page() + 1
-                if new >= self.notebook.get_n_pages():
-                    new = 0
-                self.notebook.set_current_page(new)
-                return True
-
-            if keyval == Gdk.KEY_Left: # ALT + LEFT
-                new = self.notebook.get_current_page() - 1
-                if new < 0:
-                    new = self.notebook.get_n_pages() - 1
-                self.notebook.set_current_page(new)
-                return True
-
-            if chr(keyval) in st: # ALT + 1,2,3..
-                self.notebook.set_current_page(st.index(chr(keyval)))
-                return True
-
-            if keyval == Gdk.KEY_m: # ALT + M show emoticons menu
-                control.emoticons_button.get_popover().show()
-                return True
-
-            if (control.type_id == message_control.TYPE_GC and
-                    keyval == Gdk.KEY_t): # ALT + t
-                self.window.lookup_action(
-                    'change-subject-%s' % control.control_id).activate()
-                return True
-
-        # Close tab bindings
-        elif keyval == Gdk.KEY_Escape and \
-        app.config.get('escape_key_closes'): # Escape
-            self.remove_tab(control, self.CLOSE_ESC)
-            return True
 
     def _on_close_button_clicked(self, button, control):
         """
@@ -848,50 +817,6 @@ class MessageWindow:
 
         control = self.get_active_control()
         if isinstance(control, ChatControlBase):
-            control.msg_textview.grab_focus()
-
-    def _on_notebook_key_press(self, widget, event):
-        # when tab itself is selected,
-        # make sure <- and -> are allowed for navigating between tabs
-        if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
-            return False
-
-        control = self.get_active_control()
-
-        if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
-            # CTRL + SHIFT + TAB
-            if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
-            event.keyval == Gdk.KEY_ISO_Left_Tab:
-                self.move_to_next_unread_tab(False)
-                return True
-            # SHIFT + PAGE_[UP|DOWN]: send to conv_textview
-            if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
-                control.conv_textview.tv.event(event)
-                return True
-
-        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
-            if event.keyval == Gdk.KEY_Tab: # CTRL + TAB
-                self.move_to_next_unread_tab(True)
-                return True
-            # Ctrl+PageUP / DOWN has to be handled by notebook
-            if event.keyval == Gdk.KEY_Page_Down:
-                self.move_to_next_unread_tab(True)
-                return True
-            if event.keyval == Gdk.KEY_Page_Up:
-                self.move_to_next_unread_tab(False)
-                return True
-
-        if event.keyval in (Gdk.KEY_Shift_L, Gdk.KEY_Shift_R,
-        Gdk.KEY_Control_L, Gdk.KEY_Control_R, Gdk.KEY_Caps_Lock,
-        Gdk.KEY_Shift_Lock, Gdk.KEY_Meta_L, Gdk.KEY_Meta_R,
-        Gdk.KEY_Alt_L, Gdk.KEY_Alt_R, Gdk.KEY_Super_L,
-        Gdk.KEY_Super_R, Gdk.KEY_Hyper_L, Gdk.KEY_Hyper_R):
-            return True
-
-        if isinstance(control, ChatControlBase):
-            # we forwarded it to message textview
-            control.msg_textview.remove_placeholder()
-            control.msg_textview.event(event)
             control.msg_textview.grab_focus()
 
     def get_tab_at_xy(self, x, y):

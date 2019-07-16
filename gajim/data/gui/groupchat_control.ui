@@ -519,6 +519,7 @@
                     <property name="width_request">200</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="caps_lock_warning">False</property>
                     <property name="show_emoji_icon">True</property>
                     <signal name="notify::text" handler="_on_nickname_text_changed" swapped="no"/>
@@ -556,6 +557,7 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
+                        <property name="can_default">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">end</property>
                         <property name="valign">start</property>

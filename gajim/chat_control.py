@@ -33,6 +33,7 @@ from gi.repository import Gtk
 from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GLib
+from gi.repository import Gdk
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
 from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
@@ -357,6 +358,28 @@ class ChatControl(ChatControlBase):
         # Information
         win.lookup_action(
             'information-' + self.control_id).set_enabled(online)
+
+    def delegate_action(self, action):
+        res = super().delegate_action(action)
+        if res == Gdk.EVENT_STOP:
+            return res
+
+        if action == 'show-contact-info':
+            self.parent_win.window.lookup_action(
+                'information-%s' % self.control_id).activate()
+            return Gdk.EVENT_STOP
+
+        if action == 'send-file':
+            if app.interface.msg_win_mgr.mode == \
+            app.interface.msg_win_mgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+                app.interface.roster.tree.grab_focus()
+                return Gdk.EVENT_PROPAGATE
+
+            self.parent_win.window.lookup_action(
+                'send-file-%s' % self.control_id).activate()
+            return Gdk.EVENT_STOP
+
+        return Gdk.EVENT_PROPAGATE
 
     def _on_add_to_roster(self, action, param):
         AddNewContactWindow(self.account, self.contact.jid)

@@ -109,7 +109,7 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;alt&gt;Left  &lt;ctrl&gt;Page_Up</property>
+                <property name="accelerator">&lt;alt&gt;Left &lt;ctrl&gt;Page_Up</property>
                 <property name="title" translatable="yes">Switch to the previous tab</property>
               </object>
             </child>
@@ -121,13 +121,6 @@
               </object>
             </child>
             <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;Alt&gt;1...9</property>
-                <property name="title" translatable="yes">Switch to the first - ninth tab</property>
-              </object>
-            </child>
-              <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;Tab</property>
@@ -158,7 +151,7 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">Escape &lt;ctrl&gt;w &lt;ctrl&gt;F4</property>
+                <property name="accelerator">Escape &lt;ctrl&gt;w</property>
                 <property name="title" translatable="yes">Close chat</property>
               </object>
             </child>

@@ -390,6 +390,28 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
 
+    def delegate_action(self, action):
+        if action == 'browse-history':
+            dict_ = {'jid': GLib.Variant('s', self.contact.jid),
+                     'account': GLib.Variant('s', self.account)}
+            variant = GLib.Variant('a{sv}', dict_)
+            app.app.activate_action('browse-history', variant)
+            return Gdk.EVENT_STOP
+
+        if action == 'clear-chat':
+            self.conv_textview.clear()
+            return Gdk.EVENT_STOP
+
+        if action == 'delete-line':
+            self.clear(self.msg_textview)
+            return Gdk.EVENT_STOP
+
+        if action == 'show-emoji-chooser':
+            self.emoticons_button.get_popover().show()
+            return Gdk.EVENT_STOP
+
+        return Gdk.EVENT_PROPAGATE
+
     def add_actions(self):
         action = Gio.SimpleAction.new_stateful(
             "set-encryption-%s" % self.control_id,
