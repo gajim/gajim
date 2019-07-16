@@ -33,7 +33,6 @@ import logging
 from enum import IntEnum, unique
 
 import nbxmpp
-from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
@@ -371,7 +370,6 @@ class GroupchatControl(ChatControlBase):
             ('disconnect-', self._on_disconnect),
             ('destroy-', self._on_destroy_room),
             ('configure-', self._on_configure_room),
-            ('bookmark-', self._on_bookmark_room),
             ('request-voice-', self._on_request_voice),
             ('execute-command-', self._on_execute_command),
             ('upload-avatar-', self._on_upload_avatar),
@@ -471,12 +469,6 @@ class GroupchatControl(ChatControlBase):
         self._get_action('configure-').set_enabled(
             self.is_connected and contact.affiliation in (Affiliation.ADMIN,
                                                           Affiliation.OWNER))
-
-        # Bookmarks
-        con = app.connections[self.account]
-        bookmarked = con.get_module('Bookmarks').is_bookmark(self.room_jid)
-        self._get_action('bookmark-').set_enabled(self.is_connected and
-                                                  not bookmarked)
 
         # Request Voice
         role = self.get_role(self.nick)
@@ -704,19 +696,6 @@ class GroupchatControl(ChatControlBase):
         action.set_state(param)
         app.config.set_per('rooms', self.contact.jid,
                            'print_status', param.get_boolean())
-
-    def _on_bookmark_room(self, action, param):
-        """
-        Bookmark the room, without autojoin and not minimized
-        """
-        password = app.gc_passwords.get(self.room_jid, '')
-        con = app.connections[self.account]
-        con.get_module('Bookmarks').add_bookmark(self.name,
-                                                 JID(self.room_jid),
-                                                 True,
-                                                 password,
-                                                 self.nick)
-        self.update_actions()
 
     def _on_request_voice(self, action, param):
         """
