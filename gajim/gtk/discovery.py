@@ -46,7 +46,6 @@ import weakref
 import uuid
 
 import nbxmpp
-from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import DiscoIdentity
 
@@ -61,7 +60,6 @@ from gajim.common.const import StyleAttr
 
 from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.search import Search
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.util import icon_exists
@@ -1637,7 +1635,6 @@ class MucBrowser(AgentBrowser):
     def __init__(self, *args, **kwargs):
         AgentBrowser.__init__(self, *args, **kwargs)
         self.join_button = None
-        self.bookmark_button = None
 
     def _create_treemodel(self):
         # JID, node, name, users_int, users_str, description, fetched
@@ -1703,54 +1700,15 @@ class MucBrowser(AgentBrowser):
         AgentBrowser._clean_treemodel(self)
 
     def _add_actions(self):
-        self.bookmark_button = Gtk.Button(label=_('_Bookmark'),
-                                          use_underline=True)
-        self.bookmark_button.connect(
-            'clicked', self._on_bookmark_button_clicked)
-        image = Gtk.Image.new_from_icon_name(
-            'bookmark-new-symbolic', Gtk.IconSize.BUTTON)
-        self.bookmark_button.set_image(image)
-        self.window.action_buttonbox.add(self.bookmark_button)
-        self.bookmark_button.show_all()
         self.join_button = Gtk.Button(label=_('_Join'), use_underline=True)
         self.join_button.connect('clicked', self._on_join_button_clicked)
         self.window.action_buttonbox.add(self.join_button)
         self.join_button.show_all()
 
     def _clean_actions(self):
-        if self.bookmark_button:
-            self.bookmark_button.destroy()
-            self.bookmark_button = None
         if self.join_button:
             self.join_button.destroy()
             self.join_button = None
-
-    def _on_bookmark_button_clicked(self, *args):
-        con = app.connections[self.account]
-        model, iter_ = \
-            self.window.services_treeview.get_selection().get_selected()
-        if not iter_:
-            return
-
-        room_jid = model[iter_][0]
-        if con.get_module('Bookmarks').is_bookmark(room_jid):
-            ErrorDialog(
-                _('Bookmark already set'),
-                _('Group Chat \'%s\' is already in your bookmarks.') % room_jid,
-                transient_for=self.window.window)
-            return
-
-        con.get_module('Bookmarks').add_bookmark(room_jid.split('@')[0],
-                                                 JID(room_jid),
-                                                 False,
-                                                 '',
-                                                 '')
-
-        InformationDialog(
-            _('Bookmark has been added successfully'),
-            _('You can manage your bookmarks by clicking the Bookmarks menu '
-              'item in your contact list.'),
-            transient_for=self.window.window)
 
     def _on_join_button_clicked(self, *args):
         """
@@ -1773,8 +1731,6 @@ class MucBrowser(AgentBrowser):
     def update_actions(self):
         sens = \
             self.window.services_treeview.get_selection().count_selected_rows()
-        if self.bookmark_button:
-            self.bookmark_button.set_sensitive(sens > 0)
         if self.join_button:
             self.join_button.set_sensitive(sens > 0)
 
