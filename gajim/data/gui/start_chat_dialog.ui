@@ -320,7 +320,6 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">icon</property>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="icon_pixbuf"/>
                       <attributes>
@@ -331,7 +330,6 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">account</property>
                     <child>
                       <object class="GtkCellRendererText" id="account_text"/>
                       <attributes>
