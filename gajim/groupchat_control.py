@@ -74,7 +74,6 @@ from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import InputTextDialog
 from gajim.gtk.dialogs import DestroyMucDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.single_message import SingleMessageWindow
