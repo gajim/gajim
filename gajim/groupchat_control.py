@@ -2927,6 +2927,8 @@ class GroupchatControl(ChatControlBase):
             self.revoke_owner(widget, jid)
 
     def _on_change_nick(self, _action, _param):
+        if self._get_current_page() == 'nickname':
+            return
         self.xml.nickname_entry.set_text(self.nick)
         self.xml.nickname_entry.grab_focus()
         self.xml.nickname_change_button.grab_default()
