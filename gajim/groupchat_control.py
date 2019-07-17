@@ -171,7 +171,6 @@ class GroupchatControl(ChatControlBase):
 
         self.room_jid = self.contact.jid
         self.nick = nick
-        self.new_nick = ''
 
         bm_module = app.connections[self.account].get_module('Bookmarks')
         self.name = bm_module.get_name_from_bookmark(self.room_jid)
