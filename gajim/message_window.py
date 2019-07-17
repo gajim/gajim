@@ -132,9 +132,6 @@ class MessageWindow:
         id_ = self.notebook.connect('switch-page',
             self._on_notebook_switch_page)
         self.handlers[id_] = self.notebook
-        id_ = self.notebook.connect('key-press-event',
-            self._on_notebook_key_press)
-        self.handlers[id_] = self.notebook
 
         # Tab customizations
         pref_pos = app.config.get('tabs_position')
@@ -256,17 +253,6 @@ class MessageWindow:
         if action == 'switch-next-unread-tab-left':
             self.move_to_next_unread_tab(False)
             return
-
-    def _on_notebook_key_press(self, _widget, event):
-        control = self.get_active_control()
-        if control is None:
-            return
-
-        if isinstance(control, ChatControlBase):
-            # we forwarded it to message textview
-            control.msg_textview.remove_placeholder()
-            control.msg_textview.event(event)
-            control.msg_textview.grab_focus()
 
     def change_account_name(self, old_name, new_name):
         if old_name in self._controls:
