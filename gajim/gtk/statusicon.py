@@ -182,7 +182,6 @@ class StatusIcon:
         start_chat_menuitem = self._ui.start_chat_menuitem
         single_message_menuitem = self._ui.single_message_menuitem
         status_menuitem = self._ui.status_menu
-        join_gc_menuitem = self._ui.join_gc_menuitem
         sounds_mute_menuitem = self._ui.sounds_mute_menuitem
         show_roster_menuitem = self._ui.show_roster_menuitem
 
@@ -194,9 +193,6 @@ class StatusIcon:
         sub_menu = Gtk.Menu()
         self.popup_menus.append(sub_menu)
         status_menuitem.set_submenu(sub_menu)
-
-        gc_sub_menu = Gtk.Menu() # gc is always a submenu
-        join_gc_menuitem.set_submenu(gc_sub_menu)
 
         for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
             uf_show = helpers.get_uf_show(show, use_mnemonic=True)
@@ -227,7 +223,6 @@ class StatusIcon:
             app.zeroconf_is_connected())
         start_chat_menuitem.set_sensitive(iskey)
         single_message_menuitem.set_sensitive(iskey)
-        join_gc_menuitem.set_sensitive(iskey)
 
         accounts_list = sorted(app.contacts.get_accounts())
 
@@ -245,9 +240,6 @@ class StatusIcon:
                     self.single_message_handler_id = single_message_menuitem.\
                             connect('activate',
                             self.on_single_message_menuitem_activate, account)
-                    # join gc
-                    app.interface.roster.add_bookmarks_list(gc_sub_menu,
-                            account)
                     break # No other account connected
         else:
             # 2 or more 'real' accounts are connected, make submenus
@@ -267,28 +259,6 @@ class StatusIcon:
                 item.connect('activate',
                         self.on_single_message_menuitem_activate, account)
                 account_menu_for_single_message.append(item)
-
-                # join gc
-                gc_item = Gtk.MenuItem.new_with_label(
-                    _('using account %s') % account_label)
-                gc_sub_menu.append(gc_item)
-                gc_menuitem_menu = Gtk.Menu()
-                app.interface.roster.add_bookmarks_list(gc_menuitem_menu,
-                        account)
-                gc_item.set_submenu(gc_menuitem_menu)
-                gc_sub_menu.show_all()
-
-        newitem = Gtk.SeparatorMenuItem.new() # separator
-        gc_sub_menu.append(newitem)
-        newitem = Gtk.MenuItem.new_with_mnemonic(_('_Manage Bookmarks…'))
-        newitem.connect('activate',
-            app.interface.roster.on_manage_bookmarks_menuitem_activate)
-        newitem.set_sensitive(False)
-        gc_sub_menu.append(newitem)
-        for account in accounts_list:
-            if app.account_supports_private_storage(account):
-                newitem.set_sensitive(True)
-                break
 
         sounds_mute_menuitem.set_active(not app.config.get('sounds_on'))
 

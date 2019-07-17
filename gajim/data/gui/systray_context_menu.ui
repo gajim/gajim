@@ -23,14 +23,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="join_gc_menuitem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Join _Group Chat</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="single_message_menuitem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
