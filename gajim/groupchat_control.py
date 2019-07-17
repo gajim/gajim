@@ -627,17 +627,6 @@ class GroupchatControl(ChatControlBase):
 
     # Actions
 
-    def _on_change_subject(self, action, param):
-        def on_ok(subject):
-            # Note, we don't update self.subject since we don't know whether it
-            # will work yet
-            con = app.connections[self.account]
-            con.get_module('MUC').set_subject(self.room_jid, subject)
-
-        InputTextDialog(_('Changing Subject'),
-            _('Please specify the new subject:'), input_str=self.subject,
-            ok_handler=on_ok, transient_for=self.parent_win.window)
-
     def _on_disconnect(self, action, param):
         app.connections[self.account].get_module('MUC').leave(self.room_jid)
         self.force_non_minimizable = True
@@ -2322,17 +2311,6 @@ class GroupchatControl(ChatControlBase):
             # gc can only have messages as event
         return nb
 
-    def _on_change_subject_menuitem_activate(self, widget):
-        def on_ok(subject):
-            # Note, we don't update self.subject since we don't know whether it
-            # will work yet
-            con = app.connections[self.account]
-            con.get_module('MUC').set_subject(self.room_jid, subject)
-
-        InputTextDialog(_('Changing Subject'),
-            _('Please specify the new subject:'), input_str=self.subject,
-            ok_handler=on_ok, transient_for=self.parent_win.window)
-
     def _on_drag_data_received(self, widget, context, x, y, selection,
                                target_type, timestamp):
         if not selection.get_data():
@@ -2972,7 +2950,23 @@ class GroupchatControl(ChatControlBase):
             self.room_jid, new_nick)
         self._show_page('groupchat')
 
-    def _on_nickname_cancel_clicked(self, _button):
+    def _on_change_subject(self, _action, _param):
+        if self._get_current_page() == 'subject':
+            return
+        self.xml.subject_textview.get_buffer().set_text(self.subject)
+        self.xml.subject_textview.grab_focus()
+        self._show_page('subject')
+
+    def _on_subject_change_clicked(self, _button):
+        buffer_ = self.xml.subject_textview.get_buffer()
+        subject = buffer_.get_text(buffer_.get_start_iter(),
+                                   buffer_.get_end_iter(),
+                                   False)
+        con = app.connections[self.account]
+        con.get_module('MUC').set_subject(self.room_jid, subject)
+        self._show_page('groupchat')
+
+    def _on_page_cancel_clicked(self, _button):
         self._show_page('groupchat')
 
 
