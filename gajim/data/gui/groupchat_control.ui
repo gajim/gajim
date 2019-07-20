@@ -781,6 +781,7 @@
                     <property name="can_focus">True</property>
                     <property name="visibility">False</property>
                     <property name="invisible_char">*</property>
+                    <property name="activates_default">True</property>
                     <property name="input_purpose">password</property>
                     <signal name="notify::text" handler="_on_password_changed" swapped="no"/>
                   </object>
