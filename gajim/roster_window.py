@@ -3537,7 +3537,7 @@ class RosterWindow:
         callback
         """
         jid = contact.jid
-        if resource is not None:
+        if resource:
             jid = jid + '/' + resource
         AdHocCommand(account, jid)
 
