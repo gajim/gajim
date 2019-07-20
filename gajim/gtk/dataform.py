@@ -272,6 +272,7 @@ class Field:
         self._warning_image.set_visible(not is_valid)
 
     def _validate(self):
+        self._form_grid.validate(False)
         if self._validate_source_id is not None:
             GLib.source_remove(self._validate_source_id)
 
