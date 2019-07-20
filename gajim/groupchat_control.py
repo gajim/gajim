@@ -1125,33 +1125,6 @@ class GroupchatControl(ChatControlBase):
                             from_whom=self.room_jid,
                             form_node=event.form)
 
-    @event_filter(['account', 'room_jid'])
-    def _on_captcha_challenge(self, event):
-        self._remove_captcha_request()
-
-        def on_send_dataform_clicked(*args):
-            form_node = self._captcha_request.get_submit_form()
-            con = app.connections[self.account]
-            con.get_module('MUC').send_captcha(self.room_jid, form_node)
-            self._remove_captcha_request()
-
-        self._captcha_request = CaptchaRequest(event.form,
-                                               on_send_dataform_clicked)
-        self._overlay.add_overlay(self._captcha_request)
-
-        if self.parent_win:
-            self.parent_win.redraw_tab(self, 'attention')
-        else:
-            self.attention_flag = True
-
-    def _remove_captcha_request(self):
-        if self._captcha_request is None:
-            return
-        if self._captcha_request in self._overlay.get_children():
-            self._overlay.remove(self._captcha_request)
-        self._captcha_request.destroy()
-        self._captcha_request = None
-
     @event_filter(['account'])
     def _nec_mam_decrypted_message_received(self, obj):
         if not obj.groupchat:
@@ -2477,6 +2450,8 @@ class GroupchatControl(ChatControlBase):
 
             if self._get_current_page() == 'password':
                 self._on_password_cancel_clicked()
+            elif self._get_current_page() == 'captcha':
+                self._on_captcha_cancel_clicked()
             else:
                 self._show_page('groupchat')
             return Gdk.EVENT_STOP
@@ -2935,6 +2910,8 @@ class GroupchatControl(ChatControlBase):
             self.xml.password_entry.set_text('')
             self.xml.password_entry.grab_focus()
             self.xml.password_set_button.grab_default()
+        elif page_name == 'captcha':
+            self.xml.captcha_set_button.grab_default()
 
     def _on_change_nick(self, _action, _param):
         if self._get_current_page() == 'nickname':
@@ -2993,6 +2970,50 @@ class GroupchatControl(ChatControlBase):
         self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
         self.force_non_minimizable = False
 
+    @event_filter(['account', 'room_jid'])
+    def _on_captcha_challenge(self, event):
+        self._remove_captcha_request()
+
+        options = {'no-scrolling': True,
+                   'entry-activates-default': True}
+        self._captcha_request = DataFormWidget(event.form, options=options)
+        self._captcha_request.connect('is-valid', self._on_captcha_changed)
+        self._captcha_request.set_valign(Gtk.Align.START)
+        self._captcha_request.show_all()
+        self.xml.captcha_box.add(self._captcha_request)
+
+        if self.parent_win:
+            self.parent_win.redraw_tab(self, 'attention')
+        else:
+            self.attention_flag = True
+
+        self._show_page('captcha')
+        self._captcha_request.focus_first_entry()
+
+    def _remove_captcha_request(self):
+        if self._captcha_request is None:
+            return
+        if self._captcha_request in self.xml.captcha_box.get_children():
+            self.xml.captcha_box.remove(self._captcha_request)
+        self._captcha_request.destroy()
+        self._captcha_request = None
+
+    def _on_captcha_changed(self, _widget, is_valid):
+        self.xml.captcha_set_button.set_sensitive(is_valid)
+
+    def _on_captcha_set_clicked(self, _button):
+        form_node = self._captcha_request.get_submit_form()
+        con = app.connections[self.account]
+        con.get_module('MUC').send_captcha(self.room_jid, form_node)
+        self._remove_captcha_request()
+        self._show_page('groupchat')
+
+    def _on_captcha_cancel_clicked(self, _button=None):
+        self._remove_captcha_request()
+        self.force_non_minimizable = True
+        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
+        self.force_non_minimizable = False
+
     def _on_page_cancel_clicked(self, _button):
         self._show_page('groupchat')
 
@@ -3040,27 +3061,3 @@ class SubjectPopover(Gtk.Popover):
         # is not cross-platform compatible
         open_uri(uri)
         return Gdk.EVENT_STOP
-
-
-class CaptchaRequest(Gtk.Box):
-    def __init__(self, form, callback):
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
-
-        options = {'no-scrolling': True}
-        self._form_widget = DataFormWidget(form, options=options)
-        self._form_widget.set_valign(Gtk.Align.START)
-
-        send_button = Gtk.Button(label='Send')
-        send_button.connect('clicked', callback)
-        send_button.set_halign(Gtk.Align.CENTER)
-
-        self.add(self._form_widget)
-        self.add(send_button)
-
-        self.set_valign(Gtk.Align.START)
-        self.set_margin_top(100)
-
-        self.show_all()
-
-    def get_submit_form(self):
-        return self._form_widget.get_submit_form()

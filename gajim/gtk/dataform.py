@@ -66,6 +66,12 @@ class DataFormWidget(Gtk.ScrolledWindow):
         self._form_node.type_ = 'submit'
         return self._form_node
 
+    def focus_first_entry(self):
+        for widget in self._form_grid.get_children():
+            if isinstance(widget, Gtk.Entry):
+                widget.grab_focus()
+                break
+
 
 class FormGrid(Gtk.Grid):
     def __init__(self, form_node, options):
@@ -504,6 +510,8 @@ class TextSingleField(Field):
             self._widget = Gtk.Entry()
             self._widget.set_text(field.value)
             self._widget.connect('changed', self._changed)
+            if options.get('entry-activates-default', False):
+                self._widget.set_activates_default(True)
         self._widget.set_valign(Gtk.Align.CENTER)
 
     def _changed(self, _widget):
