@@ -266,34 +266,6 @@ class Interface:
                 d.set_transient_for(gc_control.parent_win.window)
             d.set_modal(False)
 
-    def handle_gc_password_required(self, account, room_jid, nick):
-        def on_ok(text):
-            app.connections[account].get_module('MUC').join(
-                room_jid, nick, text)
-            app.gc_passwords[room_jid] = text
-            gc_control.error_dialog = None
-
-        def on_cancel():
-            # get and destroy window
-            if room_jid in app.interface.minimized_controls[account]:
-                self.roster.on_disconnect(None, room_jid, account)
-            else:
-                win = self.msg_win_mgr.get_window(room_jid, account)
-                ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
-                win.remove_tab(ctrl, 3)
-            gc_control.error_dialog = None
-
-        gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
-        if gc_control:
-            if gc_control.error_dialog:
-                gc_control.error_dialog.destroy()
-
-            gc_control.error_dialog = InputDialog(_('Password Required'),
-                _('A Password is required to join the group chat %s. Please type it.') % \
-                room_jid, is_modal=False, ok_handler=on_ok,
-                cancel_handler=on_cancel)
-            gc_control.error_dialog.input_entry.set_visibility(False)
-
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
         # priority, timestamp))

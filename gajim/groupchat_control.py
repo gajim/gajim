@@ -1951,8 +1951,7 @@ class GroupchatControl(ChatControlBase):
         error_message = event.properties.error.message
 
         if error_type == Error.NOT_AUTHORIZED:
-            app.interface.handle_gc_password_required(
-                self.account, self.room_jid, nick)
+            self._show_page('password')
 
         elif error_type == Error.FORBIDDEN:
             # we are banned
@@ -2475,7 +2474,11 @@ class GroupchatControl(ChatControlBase):
         if action == 'escape':
             if self._get_current_page() == 'groupchat':
                 return Gdk.EVENT_PROPAGATE
-            self._show_page('groupchat')
+
+            if self._get_current_page() == 'password':
+                self._on_password_cancel_clicked()
+            else:
+                self._show_page('groupchat')
             return Gdk.EVENT_STOP
 
         if action == 'change-subject':
@@ -2926,6 +2929,13 @@ class GroupchatControl(ChatControlBase):
         else:
             self.revoke_owner(widget, jid)
 
+    def _on_page_change(self, stack, _param):
+        page_name = stack.get_visible_child_name()
+        if page_name == 'password':
+            self.xml.password_entry.set_text('')
+            self.xml.password_entry.grab_focus()
+            self.xml.password_set_button.grab_default()
+
     def _on_change_nick(self, _action, _param):
         if self._get_current_page() == 'nickname':
             return
@@ -2967,6 +2977,21 @@ class GroupchatControl(ChatControlBase):
         con = app.connections[self.account]
         con.get_module('MUC').set_subject(self.room_jid, subject)
         self._show_page('groupchat')
+
+    def _on_password_set_clicked(self, _button):
+        password = self.xml.password_entry.get_text()
+        app.gc_passwords[self.room_jid] = password
+        app.connections[self.account].get_module('MUC').join(
+            self.room_jid, self.nick, password)
+        self._show_page('groupchat')
+
+    def _on_password_changed(self, entry, _param):
+        self.xml.password_set_button.set_sensitive(bool(entry.get_text()))
+
+    def _on_password_cancel_clicked(self, _button=None):
+        self.force_non_minimizable = True
+        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
+        self.force_non_minimizable = False
 
     def _on_page_cancel_clicked(self, _button):
         self._show_page('groupchat')
