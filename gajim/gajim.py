@@ -28,6 +28,7 @@ from gajim.common import i18n
 
 _MIN_NBXMPP_VER = "0.9.91"
 _MIN_GTK_VER = "3.22.0"
+_MIN_CAIRO_VER = "1.14.0"
 
 
 def _check_required_deps():
@@ -40,6 +41,22 @@ def _check_required_deps():
     if V(nbxmpp.__version__) < V(_MIN_NBXMPP_VER):
         print('Gajim needs python-nbxmpp >= %s to run. '
               'Quitting...' % _MIN_NBXMPP_VER)
+        sys.exit(1)
+
+    try:
+        import cairo
+    except ImportError:
+        print('Gajim needs python-cairo to run. Quitting…')
+        sys.exit(1)
+
+    if V(cairo.cairo_version_string()) < V(_MIN_CAIRO_VER):
+        print('Gajim needs libcairo >= %s to run. '
+              'Quitting...' % _MIN_CAIRO_VER)
+        sys.exit(1)
+
+    if V(cairo.version) < V(_MIN_CAIRO_VER):
+        print('Gajim needs python-cairo >= %s to run. '
+              'Quitting...' % _MIN_CAIRO_VER)
         sys.exit(1)
 
 
