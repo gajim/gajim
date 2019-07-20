@@ -1919,7 +1919,6 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_presence_error(self, event):
-        nick = event.properties.muc_nickname
         error_type = event.properties.error.type
         error_message = event.properties.error.message
 
