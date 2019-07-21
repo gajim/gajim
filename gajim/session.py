@@ -139,8 +139,11 @@ class ChatControlSession:
                 stanza_id=obj.unique_id,
                 message_id=obj.message_id)
 
-        self.conn.get_module('MAM').save_archive_id(
-            None, obj.stanza_id, obj.timestamp)
+        jid = self.conn.get_own_jid().getStripped()
+        if self.conn.get_module('MAM').is_catchup_finished(jid):
+            app.logger.set_archive_infos(jid,
+                                         last_mam_id=obj.stanza_id,
+                                         last_muc_timestamp=obj.timestamp)
 
         if obj.muc_pm and not obj.gc_control:
             # This is a carbon of a PM from a MUC we are not currently

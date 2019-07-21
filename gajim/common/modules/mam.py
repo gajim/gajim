@@ -73,6 +73,9 @@ class MAM(BaseModule):
         self._mam_query_ids.clear()
         self._catch_up_finished.clear()
 
+    def is_catch_up_finished(self, jid):
+        return jid in self._catch_up_finished
+
     def _from_valid_archive(self, _stanza, properties):
         if properties.type.is_groupchat:
             expected_archive = properties.jid
@@ -530,20 +533,6 @@ class MAM(BaseModule):
             set_.setTagData('after', after)
         query.setAttr('queryid', query_id)
         return iq
-
-    def save_archive_id(self, jid, stanza_id, timestamp):
-        if jid is None:
-            jid = self._con.get_own_jid().getStripped()
-        if jid not in self._catch_up_finished:
-            return
-        self._log.info('Save: %s: %s, %s', jid, stanza_id, timestamp)
-        if stanza_id is None:
-            # mam:1
-            app.logger.set_archive_infos(jid, last_muc_timestamp=timestamp)
-        else:
-            # mam:2
-            app.logger.set_archive_infos(
-                jid, last_mam_id=stanza_id, last_muc_timestamp=timestamp)
 
     def request_mam_preferences(self):
         self._log.info('Request MAM preferences')

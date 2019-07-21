@@ -293,12 +293,15 @@ class Message(BaseModule):
                                         stanza_id=event.stanza_id,
                                         message_id=event.message_id)
 
-            if muc_caps_cache.has_mam(event.room_jid):
-                self._con.get_module('MAM').save_archive_id(
-                    event.room_jid, event.stanza_id, event.timestamp)
-            else:
-                app.logger.set_archive_infos(event.room_jid,
-                                             last_muc_timestamp=event.timestamp)
+        if muc_caps_cache.has_mam(event.room_jid):
+            finished = self._con.get_module('MAM').is_catchup_finished(
+                event.room_jid)
+            if not finished:
+                return
+
+        app.logger.set_archive_infos(event.room_jid,
+                                     last_mam_id=event.stanza_id,
+                                     last_muc_timestamp=event.timestamp)
 
     def _check_for_mam_compliance(self, room_jid, stanza_id):
         namespace = caps_cache.muc_caps_cache.get_mam_namespace(room_jid)

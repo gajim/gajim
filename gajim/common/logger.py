@@ -1455,6 +1455,10 @@ class Logger:
                 kwargs.get('sync_threshold', None)
             ))
         else:
+            for key, value in list(kwargs.items()):
+                if value is None:
+                    del kwargs[key]
+
             args = ' = ?, '.join(kwargs.keys()) + ' = ?'
             sql = '''UPDATE last_archive_message SET {}
                      WHERE jid_id = ?'''.format(args)
