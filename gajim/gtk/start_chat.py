@@ -259,7 +259,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 self._show_error_page(_('You can not join a group chat '
                                         'unless you are connected.'))
                 return
+
+            self.ready_to_destroy = True
+            if app.interface.show_groupchat(row.account, row.jid):
+                return
+
+            self.ready_to_destroy = False
             self._disco_muc(row.account, row.jid)
+
         else:
             app.interface.new_chat_from_jid(row.account, row.jid)
             self.ready_to_destroy = True
