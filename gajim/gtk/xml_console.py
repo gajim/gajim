@@ -34,9 +34,6 @@ from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 
 
-UNDECLARED = 'http://www.gajim.org/xmlns/undeclared'
-
-
 class XMLConsoleWindow(Gtk.ApplicationWindow):
     def __init__(self, account):
         Gtk.ApplicationWindow.__init__(self)
@@ -141,19 +138,19 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         input_text = None
         if text == 'Presence':
             input_text = (
-                '<presence>\n'
+                '<presence xmlns="jabber:client">\n'
                 '<show></show>\n'
                 '<status></status>\n'
                 '<priority></priority>\n'
                 '</presence>')
         elif text == 'Message':
             input_text = (
-                '<message to="" type="">\n'
+                '<message to="" type="" xmlns="jabber:client">\n'
                 '<body></body>\n'
                 '</message>')
         elif text == 'Iq':
             input_text = (
-                '<iq to="" type="">\n'
+                '<iq to="" type="" xmlns="jabber:client">\n'
                 '<query xmlns=""></query>\n'
                 '</iq>')
 
@@ -176,8 +173,6 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         if stanza:
             try:
                 node = nbxmpp.Protocol(node=stanza)
-                if node.getNamespace() == UNDECLARED:
-                    node.setNamespace(nbxmpp.NS_CLIENT)
             except Exception as error:
                 ErrorDialog(_('Invalid Node'), str(error))
                 return
