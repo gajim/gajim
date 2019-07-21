@@ -17,6 +17,8 @@
 
 import time
 import logging
+from datetime import datetime
+from datetime import timedelta
 from functools import partial
 
 import nbxmpp
@@ -30,9 +32,11 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
+from gajim.common.const import SyncThreshold
 from gajim.common.structs import MUCData
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
+from gajim.common.helpers import get_sync_threshold
 from gajim.common import idle
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
@@ -130,11 +134,11 @@ class MUC(BaseModule):
     def get_mucs_with_state(self, states):
         return [muc for muc in self._muc_data.values() if muc.state in states]
 
-    def join(self, room_jid, nick, password, rejoin=False, config=None):
+    def join(self, room_jid, nick, password, config=None):
         if not app.account_is_connected(self._account):
             return
 
-        muc_data = MUCData(room_jid, nick, password, rejoin, config)
+        muc_data = MUCData(room_jid, nick, password, config)
         self._muc_data[room_jid] = muc_data
 
         self._con.get_module('Discovery').disco_muc(
@@ -149,7 +153,7 @@ class MUC(BaseModule):
             status=self._con.status)
 
         muc_x = presence.setTag(nbxmpp.NS_MUC + ' x')
-        self._add_history_query(muc_x, str(muc_data.jid), muc_data.rejoin)
+        self._add_history_query(muc_x, str(muc_data.jid))
 
         if muc_data.password is not None:
             muc_x.setTagData('password', muc_data.password)
@@ -281,37 +285,27 @@ class MUC(BaseModule):
             show=show,
             status=self._con.status)
 
-    def _add_history_query(self, muc_x, room_jid, rejoin):
-        last_date = app.logger.get_room_last_message_time(
-            self._account, room_jid)
-        if not last_date:
-            last_date = 0
-
+    def _add_history_query(self, muc_x, room_jid):
         if muc_caps_cache.has_mam(room_jid):
             # The room is MAM capable dont get MUC History
             muc_x.setTag('history', {'maxchars': '0'})
         else:
             # Request MUC History (not MAM)
-            tags = {}
-            timeout = app.config.get_per('rooms', room_jid,
-                                         'muc_restore_timeout')
-            if timeout is None or timeout == -2:
-                timeout = app.config.get('muc_restore_timeout')
-            if last_date == 0 and timeout >= 0:
-                last_date = time.time() - timeout * 60
-            elif not rejoin and timeout >= 0:
-                last_date = max(last_date, time.time() - timeout * 60)
-            last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
-                last_date))
-            tags['since'] = last_date
+            archive = app.logger.get_archive_infos(room_jid)
+            threshold = get_sync_threshold(room_jid, archive)
 
-            nb = app.config.get_per('rooms', room_jid, 'muc_restore_lines')
-            if nb is None or nb == -2:
-                nb = app.config.get('muc_restore_lines')
-            if nb >= 0:
-                tags['maxstanzas'] = nb
-            if tags:
-                muc_x.setTag('history', tags)
+            since_epoch = 0
+            if archive is not None and archive.last_muc_timestamp is not None:
+                since_epoch = float(archive.last_muc_timestamp)
+
+            since_date = datetime.utcfromtimestamp(since_epoch)
+            if threshold != SyncThreshold.NO_THRESHOLD:
+                threshold_date = datetime.utcnow() - timedelta(days=threshold)
+                since_date = max(threshold_date, since_date)
+
+            date_string = since_date.strftime('%Y-%m-%dT%H:%M:%SZ')
+            muc_x.setTag('history', {'since': date_string})
+            self._log.info('Threshold for %s: %s', room_jid, threshold)
 
     def _on_muc_presence(self, _con, _stanza, properties):
         muc_data = self._get_muc_data(properties.muc_jid)

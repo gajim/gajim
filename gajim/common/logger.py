@@ -103,10 +103,7 @@ CACHE_SQL_STATEMENT = '''
             hash_method TEXT,
             hash TEXT,
             data TEXT,
-            last_seen INTEGER);
-    CREATE TABLE rooms_last_message_time(
-            jid_id INTEGER PRIMARY KEY UNIQUE,
-            time INTEGER
+            last_seen INTEGER
     );
     CREATE TABLE roster_entry(
             account_jid_id INTEGER,
@@ -961,45 +958,6 @@ class Logger:
 
         return self._con.execute(
             sql, tuple(jids) + (start, end)).fetchone()
-
-    def get_room_last_message_time(self, account, jid):
-        """
-        Get the timestamp of the last message we received in a room.
-
-        :param account: The account
-
-        :param jid:     The jid for which we request the last timestamp
-
-        returns a timestamp or None
-        """
-        sql = '''
-            SELECT time FROM rooms_last_message_time
-            NATURAL JOIN jids WHERE jid = ?
-            '''
-
-        row = self._con.execute(sql, (jid,)).fetchone()
-        if not row:
-            return self.get_last_date_that_has_logs(account, jid)
-        return row.time
-
-    def set_room_last_message_time(self, jid, timestamp):
-        """
-        Set the timestamp of the last message we received in a room.
-
-        :param jid:         The jid
-
-        :param timestamp:   The timestamp in epoch
-
-        """
-
-        jid_id = self.get_jid_id(jid, type_=JIDConstant.ROOM_TYPE)
-        sql = '''REPLACE INTO rooms_last_message_time
-                 VALUES (:jid_id, COALESCE(
-                 (SELECT time FROM rooms_last_message_time
-                  WHERE jid_id = :jid_id AND time >= :time), :time))'''
-
-        self._con.execute(sql, {"jid_id": jid_id, "time": timestamp})
-        self._timeout_commit()
 
     def save_transport_type(self, jid, type_):
         """

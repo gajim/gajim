@@ -26,11 +26,10 @@ CapsIdentity = namedtuple('CapsIdentity', 'category type name lang')
 
 
 class MUCData:
-    def __init__(self, room_jid, nick, password, rejoin, config=None):
+    def __init__(self, room_jid, nick, password, config=None):
         self._room_jid = JID(room_jid)
         self._nick = nick
         self._password = password
-        self._rejoin = rejoin
         self._config = config
         self._state = MUCJoinedState.NOT_JOINED
 
@@ -63,14 +62,6 @@ class MUCData:
     @state.setter
     def state(self, value):
         self._state = value
-
-    @property
-    def rejoin(self):
-        return self._rejoin
-
-    @rejoin.setter
-    def rejoin(self, value):
-        self._rejoin = value
 
     @property
     def config(self):

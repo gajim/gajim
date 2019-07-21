@@ -170,8 +170,6 @@ class Config:
         'change_roster_title': [opt_bool, True, _('If enabled, Gajim will add * and [n] in contact list window title.')],
         'restore_lines': [opt_int, 10, _('Number of messages from chat history to be restored when a chat tab/window is reopened.')],
         'restore_timeout': [opt_int, -1, _('How far back in time (minutes) chat history is restored. -1 means no limit.')],
-        'muc_restore_lines': [opt_int, 100, _('How many lines to request from server when entering a group chat. -1 means no limit.')],
-        'muc_restore_timeout': [opt_int, -1, _('Minutes of backlog to request when entering a group chat. -1 means no limit.')],
         'muc_autorejoin_timeout': [opt_int, 1, _('How many seconds to wait before trying to automatically rejoin a group chat you were disconnected from. Set to 0 to disable automatic rejoining.')],
         'muc_autorejoin_on_kick': [opt_bool, False, _('Should automatic rejoin be activated when you were kicked from a group chat?')],
         'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and make a new line with Enter.')],
@@ -429,8 +427,6 @@ class Config:
         }, {}),
         'rooms': ({
             'speller_language': [opt_str, '', _('Language used for spell checking.')],
-            'muc_restore_lines': [opt_int, -2, _('How many lines to request from server when entering a group chat. -1 means no limit, -2 means global value.')],
-            'muc_restore_timeout': [opt_int, -2, _('Minutes of backlog to request when entering a group chat. -1 means no limit, -2 means global value.')],
             'notify_on_all_messages': [opt_bool, False, _('If enabled, a notification is created for every message in this group chat.')],
             'print_status': [opt_bool, False, _('Show a status message for all status changes (away, dnd, etc.) of users in a group chat.')],
             'print_join_left': [opt_bool, False, _('Show a status message for every join or leave in a group chat.')],

@@ -26,6 +26,7 @@ from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
@@ -251,7 +252,6 @@ class Message(BaseModule):
             event.nickname = event.resource
             event.xhtml_msgtxt = event.xhtml
             event.nick = event.resource or ''
-
             app.nec.push_incoming_event(NetworkEvent('gc-message-received',
                                                      **vars(event)))
             # TODO: Some plugins modify msgtxt in the GUI event
@@ -292,9 +292,13 @@ class Message(BaseModule):
                                         additional_data=event.additional_data,
                                         stanza_id=event.stanza_id,
                                         message_id=event.message_id)
-            app.logger.set_room_last_message_time(event.room_jid, event.timestamp)
-            self._con.get_module('MAM').save_archive_id(
-                event.room_jid, event.stanza_id, event.timestamp)
+
+            if muc_caps_cache.has_mam(event.room_jid):
+                self._con.get_module('MAM').save_archive_id(
+                    event.room_jid, event.stanza_id, event.timestamp)
+            else:
+                app.logger.set_archive_infos(event.room_jid,
+                                             last_muc_timestamp=event.timestamp)
 
     def _check_for_mam_compliance(self, room_jid, stanza_id):
         namespace = caps_cache.muc_caps_cache.get_mam_namespace(room_jid)

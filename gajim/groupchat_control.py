@@ -511,10 +511,6 @@ class GroupchatControl(ChatControlBase):
             vcard_support and
             contact.affiliation.is_owner)
 
-        # Sync Threshold
-        has_mam = muc_caps_cache.has_mam(self.room_jid)
-        self._get_action('choose-sync-').set_enabled(has_mam)
-
         # Print join/left
         join_default = app.config.get('print_join_left_default')
         value = app.config.get_per('rooms', self.contact.jid,
@@ -1414,8 +1410,7 @@ class GroupchatControl(ChatControlBase):
         if obj.conn.name != self.account:
             return
         password = app.gc_passwords.get(self.room_jid, '')
-        obj.conn.get_module('MUC').join(self.room_jid, self.nick, password,
-                                        rejoin=True)
+        obj.conn.get_module('MUC').join(self.room_jid, self.nick, password)
 
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
@@ -1552,7 +1547,7 @@ class GroupchatControl(ChatControlBase):
             return False
         password = app.gc_passwords.get(self.room_jid, '')
         app.connections[self.account].get_module('MUC').join(
-            self.room_jid, self.nick, password, rejoin=True)
+            self.room_jid, self.nick, password)
         return True
 
     def draw_roster(self):
