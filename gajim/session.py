@@ -140,7 +140,7 @@ class ChatControlSession:
                 message_id=obj.message_id)
 
         jid = self.conn.get_own_jid().getStripped()
-        if self.conn.get_module('MAM').is_catchup_finished(jid):
+        if self.conn.get_module('MAM').is_catch_up_finished(jid):
             app.logger.set_archive_infos(jid,
                                          last_mam_id=obj.stanza_id,
                                          last_muc_timestamp=obj.timestamp)

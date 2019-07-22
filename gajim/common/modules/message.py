@@ -294,7 +294,7 @@ class Message(BaseModule):
                                         message_id=event.message_id)
 
         if muc_caps_cache.has_mam(event.room_jid):
-            finished = self._con.get_module('MAM').is_catchup_finished(
+            finished = self._con.get_module('MAM').is_catch_up_finished(
                 event.room_jid)
             if not finished:
                 return
