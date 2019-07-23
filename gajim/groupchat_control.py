@@ -1640,10 +1640,6 @@ class GroupchatControl(ChatControlBase):
         for role in (Role.VISITOR, Role.PARTICIPANT, Role.MODERATOR):
             self.draw_role(role)
 
-    def _change_nick(self, new_nick: str) -> None:
-        self.nick = new_nick
-        self._nick_completion.change_nick(new_nick)
-
     @event_filter(['account', 'room_jid'])
     def _on_self_presence(self, event):
         nick = event.properties.muc_nickname
@@ -1680,7 +1676,7 @@ class GroupchatControl(ChatControlBase):
         nick = event.properties.muc_nickname
         new_nick = event.properties.muc_user.nick
         if event.properties.is_muc_self_presence:
-            self._change_nick(new_nick)
+            self._nick_completion.change_nick(new_nick)
             message = _('You are now known as %s') % new_nick
         else:
             message = _('{nick} is now known '
