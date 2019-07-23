@@ -30,7 +30,6 @@ from gajim.gtk.history_sync import HistorySyncAssistant
 from gajim.gtk.server_info import ServerInfoDialog
 from gajim.gtk.mam_preferences import MamPreferences
 from gajim.gtk.preferences import Preferences
-from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.groupchat_creation import CreateGroupchatWindow
 from gajim.gtk.start_chat import StartChatDialog
 from gajim.gtk.add_contact import AddNewContactWindow
@@ -145,23 +144,6 @@ def on_service_disco(action, param):
             ServiceDiscoveryWindow(account, address_entry=True)
         except GajimGeneralException:
             pass
-
-
-def on_join_gc(_action, param):
-    account, jid = None, None
-    if param is None:
-        if not app.get_connected_accounts():
-            return
-    else:
-        account, jid = param.get_strv()
-        if not jid:
-            jid = None
-    window = app.get_app_window(JoinGroupchatWindow)
-    if window is None:
-        JoinGroupchatWindow(account, jid)
-    else:
-        window.present()
-
 
 def on_create_gc(_action, param):
     window = app.get_app_window(CreateGroupchatWindow)
