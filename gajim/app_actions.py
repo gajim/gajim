@@ -114,17 +114,6 @@ def on_profile(action, param):
     interface.edit_own_details(param.get_string())
 
 
-def on_activate_bookmark(action, param):
-    dict_ = param.unpack()
-    account, jid, nick, password = \
-        dict_['account'], dict_['jid'], None, None
-    if 'nick' in dict_:
-        nick = dict_['nick']
-    if 'password' in dict_:
-        password = dict_['password']
-    interface.join_gc_room(account, jid, nick, password)
-
-
 def on_send_server_message(action, param):
     account = param.get_string()
     server = app.config.get_per('accounts', account, 'hostname')

@@ -2684,10 +2684,6 @@ class RosterWindow:
 ### FIXME: order callbacks in itself...
 ################################################################################
 
-    def on_bookmark_menuitem_activate(self, widget, account, bookmark):
-        app.interface.join_gc_room(
-            account, str(bookmark.jid), bookmark.nick, bookmark.password)
-
     def on_info(self, widget, contact, account):
         """
         Call vcard_information_window class to display contact's information
