@@ -1550,13 +1550,9 @@ class ChatControl(ChatControlBase):
             Gtk.MessageType.ERROR)
 
     def _on_accept_gc_invitation(self, widget, event):
-        if event.continued:
-            app.interface.join_gc_room(self.account, str(event.muc),
-                app.nicks[self.account], event.password,
-                is_continued=True)
-        else:
-            app.interface.join_gc_minimal(self.account, str(event.muc))
-
+        app.interface.show_or_join_groupchat(self.account,
+                                             str(event.muc),
+                                             password=event.password)
         app.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _on_cancel_gc_invitation(self, widget, event):

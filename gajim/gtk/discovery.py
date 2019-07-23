@@ -1352,8 +1352,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        app.interface.join_gc_minimal(self.account, service,
-                                      transient_for=self.window.window)
+        app.interface.show_or_join_groupchat(self.account, service)
 
     def update_actions(self):
         if self.execute_button:
@@ -1719,13 +1718,7 @@ class MucBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        window = app.get_app_window('JoinGroupchatWindow')
-        if window is None:
-            app.interface.join_gc_minimal(self.account, service)
-        else:
-            window.set_room(service)
-            window.present()
-            self.window.window.destroy()
+        app.interface.show_or_join_groupchat(self.account, service)
 
     def update_actions(self):
         sens = \

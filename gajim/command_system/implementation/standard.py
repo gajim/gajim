@@ -20,6 +20,8 @@ Provides an actual implementation for the standard commands.
 from time import localtime, strftime
 from datetime import date
 
+from gi.repository import GLib
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
@@ -303,7 +305,9 @@ class StandardGroupChatCommands(CommandContainer):
         if '@' not in jid:
             jid = jid + '@' + app.get_server_from_jid(self.room_jid)
 
-        app.interface.join_gc_minimal(self.account, room_jid=jid)
+        app.app.activate_action(
+            'groupchat-join',
+            GLib.Variant('as', [self.account, jid]))
 
     @command('part', 'close', raw=True, empty=True)
     @doc(_("Leave the group chat, optionally giving a reason, and close tab or window"))

@@ -107,7 +107,7 @@ class GroupchatControl(ChatControlBase):
     # will be processed with this command host.
     COMMAND_HOST = GroupChatCommands
 
-    def __init__(self, parent_win, contact, nick, acct, is_continued=False):
+    def __init__(self, parent_win, contact, muc_data, acct, is_continued=False):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
             'groupchat_control', contact, acct)
 
@@ -169,7 +169,7 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = widget
 
         self.room_jid = self.contact.jid
-        self.nick = nick
+        self._muc_data = muc_data
 
         bm_module = app.connections[self.account].get_module('Bookmarks')
         self.name = bm_module.get_name_from_bookmark(self.room_jid)
@@ -189,7 +189,7 @@ class GroupchatControl(ChatControlBase):
         # sorted list of nicks who mentioned us (last at the end)
         self.attention_list = []
         self.nick_hits = []
-        self._nick_completion = NickCompletionGenerator(self.nick)
+        self._nick_completion = NickCompletionGenerator(muc_data.nick)
         self.last_key_tabs = False
 
         self.subject = ''
@@ -359,6 +359,10 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         app.plugin_manager.gui_extension_point('groupchat_control', self)
+
+    @property
+    def nick(self):
+        return self._muc_data.nick
 
     def add_actions(self):
         super().add_actions()
@@ -1409,8 +1413,7 @@ class GroupchatControl(ChatControlBase):
     def _nec_signed_in(self, obj):
         if obj.conn.name != self.account:
             return
-        password = app.gc_passwords.get(self.room_jid, '')
-        obj.conn.get_module('MUC').join(self.room_jid, self.nick, password)
+        obj.conn.get_module('MUC').join(self._muc_data)
 
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
@@ -1545,9 +1548,7 @@ class GroupchatControl(ChatControlBase):
     def rejoin(self):
         if not self.autorejoin:
             return False
-        password = app.gc_passwords.get(self.room_jid, '')
-        app.connections[self.account].get_module('MUC').join(
-            self.room_jid, self.nick, password)
+        app.connections[self.account].get_module('MUC').join(self._muc_data)
         return True
 
     def draw_roster(self):
@@ -2951,9 +2952,8 @@ class GroupchatControl(ChatControlBase):
 
     def _on_password_set_clicked(self, _button):
         password = self.xml.password_entry.get_text()
-        app.gc_passwords[self.room_jid] = password
-        app.connections[self.account].get_module('MUC').join(
-            self.room_jid, self.nick, password)
+        self._muc_data.password = password
+        app.connections[self.account].get_module('MUC').join(self._muc_data)
         self._show_page('groupchat')
 
     def _on_password_changed(self, entry, _param):

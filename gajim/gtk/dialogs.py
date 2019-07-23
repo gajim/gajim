@@ -791,16 +791,9 @@ class InvitationReceivedDialog(Gtk.ApplicationWindow):
         self._ui.message_expander.set_expanded(True)
 
     def on_accept_button_clicked(self, widget):
-        if self.is_continued:
-            app.interface.join_gc_room(self.account,
-                                       self.room_jid,
-                                       app.nicks[self.account],
-                                       self.password,
-                                       is_continued=True)
-        else:
-            app.interface.join_gc_minimal(self.account,
-                                          self.room_jid,
-                                          password=self.password)
+        app.interface.show_or_join_groupchat(self.account,
+                                             self.jid,
+                                             password=self.password)
         self.destroy()
 
     def on_decline_button_clicked(self, widget):

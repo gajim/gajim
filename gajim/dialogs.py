@@ -988,8 +988,7 @@ class TransformChatToMUC:
         app.automatic_rooms[self.account][room_jid] = {}
         app.automatic_rooms[self.account][room_jid]['invities'] = guest_list
         app.automatic_rooms[self.account][room_jid]['continue_tag'] = True
-        app.interface.join_gc_room(self.account, room_jid,
-            app.nicks[self.account], None, is_continued=True)
+        app.interface.create_groupchat(self.account, room_jid)
         self.window.destroy()
 
     def on_cancel_button_clicked(self, widget):

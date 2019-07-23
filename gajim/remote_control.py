@@ -149,7 +149,6 @@ class GajimRemote(Server):
             </method>
             <method name='join_room'>
                 <arg name='room_jid' type='s' />
-                <arg name='nick' type='s' />
                 <arg name='password' type='s' />
                 <arg name='account' type='s' />
             </method>
@@ -895,7 +894,7 @@ class GajimRemote(Server):
             for acc in app.contacts.get_accounts():
                 app.connections[acc].send_stanza(str(xml))
 
-    def join_room(self, room_jid, nick, password, account):
+    def join_room(self, room_jid, password, account):
         if not account:
             # get the first connected account
             accounts = app.connections.keys()
@@ -911,10 +910,9 @@ class GajimRemote(Server):
             # zeroconf not support groupchats
             return
 
-        if not nick:
-            app.interface.join_gc_minimal(account, room_jid)
-        else:
-            app.interface.join_gc_room(account, room_jid, nick, password)
+        app.interface.show_or_join_groupchat(account,
+                                             room_jid,
+                                             password=password)
 
     def Introspect(self):
         return self.__doc__

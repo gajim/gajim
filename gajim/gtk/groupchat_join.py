@@ -107,7 +107,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self._show_error_page(MUC_DISCO_ERRORS[error_code])
 
     def _on_join(self, _button):
-        app.interface.join_gc_room(self.account, self.jid, None, None)
+        app.interface.show_or_join_groupchat(self.account, self.jid)
         self.destroy()
 
     def _on_destroy(self, *args):

@@ -223,11 +223,9 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         }
 
         # Create new group chat by joining
-        app.interface.join_gc_room(
+        app.interface.create_groupchat(
             self._account,
             str(room_jid),
-            app.nicks[self._account],
-            None,
             config=config)
 
         self.destroy()

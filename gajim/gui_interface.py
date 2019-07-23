@@ -77,6 +77,7 @@ from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common import logging_helpers
+from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.connection_handlers_events import (
@@ -89,7 +90,6 @@ from gajim.common.const import SSLError
 
 from gajim import roster_window
 from gajim.common import ged
-from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import configpaths
 from gajim.common import optparser
 
@@ -106,7 +106,6 @@ from gajim.gtk.dialogs import PlainConnectionDialog
 from gajim.gtk.dialogs import SSLErrorDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.profile import ProfileWindow
-from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
@@ -1396,51 +1395,6 @@ class Interface:
             if isinstance(ctrl, ChatControlBase):
                 ctrl.scroll_to_end()
 
-    def join_gc_minimal(self, account, room_jid, password=None,
-    transient_for=None):
-        if account is not None:
-            if app.in_groupchat(account, room_jid):
-                # If we already in the groupchat, join_gc_room will bring
-                # it to front
-                app.interface.join_gc_room(account, room_jid, '', '')
-                return
-
-            con = app.connections[account]
-            bookmark = con.get_module('Bookmarks').get_bookmark_from_jid(room_jid)
-            if bookmark is not None:
-                app.interface.join_gc_room(
-                    account, str(bookmark.jid), bookmark.nick, bookmark.password)
-                return
-
-        try:
-            room_jid = helpers.parse_jid(room_jid)
-        except helpers.InvalidFormat:
-            ErrorDialog(_('Invalid XMPP Address'),
-                                transient_for=app.app.get_active_window())
-            return
-
-        connected_accounts = app.get_connected_accounts()
-        if account is not None and account not in connected_accounts:
-            connected_accounts = None
-        if not connected_accounts:
-            ErrorDialog(
-                _('You are not connected to the server'),
-                _('You can not join a group chat unless you are connected.'),
-                transient_for=app.app.get_active_window())
-            return
-
-        def _on_discover_result():
-            if not muc_caps_cache.is_cached(room_jid):
-                ErrorDialog(_('XMPP Address is not a group chat'),
-                                    transient_for=app.app.get_active_window())
-                return
-            JoinGroupchatWindow(account, room_jid, password=password,
-                transient_for=transient_for)
-
-        disco_account = connected_accounts[0] if account is None else account
-        app.connections[disco_account].get_module('Discovery').disco_muc(
-            room_jid, _on_discover_result)
-
 ################################################################################
 ### Methods dealing with emoticons
 ################################################################################
@@ -1566,85 +1520,71 @@ class Interface:
             return True
         return False
 
-    def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-                     is_continued=False, config=None):
-        """
-        Join the room immediately
-        """
+    def create_groupchat_control(self, account, room_jid, muc_data,
+                                 minimize=False):
+        contact = app.contacts.create_contact(jid=room_jid,
+                                              account=account,
+                                              groups=[_('Group chats')],
+                                              sub='none',
+                                              groupchat=True)
+        app.contacts.add_contact(account, contact)
 
-        if app.contacts.get_contact(account, room_jid) and \
-        not app.contacts.get_contact(account, room_jid).is_groupchat:
-            ErrorDialog(
-                _('This is not a group chat'),
-                _('%(room_jid)s is already in your contact list. Please check '
-                  'if %(room_jid)s is a correct group chat name. If it is, '
-                  'delete it from your contact list and try joining the group '
-                  'chat again.') % {'room_jid': room_jid})
+        if minimize:
+            control = GroupchatControl(None, contact, muc_data, account)
+            app.interface.minimized_controls[account][room_jid] = control
+            self.roster.add_groupchat(room_jid, account)
+
+        else:
+            mw = self.msg_win_mgr.get_window(room_jid, account)
+            if not mw:
+                mw = self.msg_win_mgr.create_window(contact,
+                                                    account,
+                                                    GroupchatControl.TYPE_ID)
+            control = GroupchatControl(mw, contact, muc_data, account)
+            mw.new_tab(control)
+            mw.set_active_tab(control)
+
+    @staticmethod
+    def _create_muc_data(account, room_jid, password, config):
+        nick = app.nicks[account]
+        password = password
+
+        # Fetch data from bookmarks
+        con = app.connections[account]
+        bookmark = con.get_module('Bookmarks').get_bookmark_from_jid(room_jid)
+        if bookmark is not None:
+            if bookmark.nick is not None:
+                nick = bookmark.nick
+
+            if bookmark.password is not None:
+                password = bookmark.password
+
+        return MUCData(room_jid, nick, password, config)
+
+    def create_groupchat(self, account, room_jid, config=None):
+        muc_data = self._create_muc_data(account, room_jid, None, config)
+        self.create_groupchat_control(account, room_jid, muc_data)
+        app.connections[account].get_module('MUC').join(muc_data)
+
+    def show_or_join_groupchat(self, account, room_jid, **kwargs):
+        if self.show_groupchat(account, room_jid):
             return
+        self.join_groupchat(account, room_jid, **kwargs)
 
-        if not nick:
-            nick = app.nicks[account]
-
-        minimized_control = app.interface.minimized_controls[account].get(
-            room_jid, None)
-
-        if (self.msg_win_mgr.has_window(room_jid, account) or \
-        minimized_control) and app.gc_connected[account][room_jid]:
-            if self.msg_win_mgr.has_window(room_jid, account):
-                gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
-                win = gc_ctrl.parent_win
-                win.set_active_tab(gc_ctrl)
-            else:
-                self.roster.on_groupchat_maximized(None, room_jid, account)
-            return
-
+    def join_groupchat(self, account, room_jid, password=None, minimized=False):
         if app.is_invisible(account):
             ErrorDialog(
                 _('You cannot join a group chat while you are invisible'))
             return
 
-        if minimized_control is None and not self.msg_win_mgr.has_window(
-        room_jid, account):
-            # Join new groupchat
-            if minimize:
-                # GCMIN
-                contact = app.contacts.create_contact(jid=room_jid,
-                    account=account, groups=[_('Group chats')], sub='none',
-                    groupchat=True)
-                app.contacts.add_contact(account, contact)
-                gc_control = GroupchatControl(None, contact, nick, account)
-                app.interface.minimized_controls[account][room_jid] = \
-                    gc_control
-                self.roster.add_groupchat(room_jid, account)
-            else:
-                self.new_room(room_jid, nick, account,
-                    is_continued=is_continued)
-        elif minimized_control is None:
-            # We are already in that groupchat
-            gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
-            gc_control.nick = nick
-            gc_control.parent_win.set_active_tab(gc_control)
+        if not app.account_is_connected(account):
+            return
 
-        # Connect
-        app.connections[account].get_module('MUC').join(
-            room_jid, nick, password, config=config)
-        if password:
-            app.gc_passwords[room_jid] = password
+        muc_data = self._create_muc_data(account, room_jid, password, None)
+        self.create_groupchat_control(
+            account, room_jid, muc_data, minimize=minimized)
 
-    def new_room(self, room_jid, nick, account, is_continued=False):
-        # Get target window, create a control, and associate it with the window
-        # GCMIN
-        contact = app.contacts.create_contact(jid=room_jid, account=account,
-            groups=[_('Group chats')], sub='none', groupchat=True)
-        app.contacts.add_contact(account, contact)
-        mw = self.msg_win_mgr.get_window(contact.jid, account)
-        if not mw:
-            mw = self.msg_win_mgr.create_window(contact, account,
-                GroupchatControl.TYPE_ID)
-        gc_control = GroupchatControl(mw, contact, nick, account,
-            is_continued=is_continued)
-        mw.new_tab(gc_control)
-        mw.set_active_tab(gc_control)
+        app.connections[account].get_module('MUC').join(muc_data)
 
     def new_private_chat(self, gc_contact, account, session=None):
         conn = app.connections[account]

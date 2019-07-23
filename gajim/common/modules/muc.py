@@ -33,7 +33,6 @@ from gajim.common import helpers
 from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import SyncThreshold
-from gajim.common.structs import MUCData
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import get_sync_threshold
@@ -134,15 +133,14 @@ class MUC(BaseModule):
     def get_mucs_with_state(self, states):
         return [muc for muc in self._muc_data.values() if muc.state in states]
 
-    def join(self, room_jid, nick, password, config=None):
+    def join(self, muc_data):
         if not app.account_is_connected(self._account):
             return
 
-        muc_data = MUCData(room_jid, nick, password, config)
-        self._muc_data[room_jid] = muc_data
+        self._muc_data[muc_data.jid] = muc_data
 
         self._con.get_module('Discovery').disco_muc(
-            room_jid, partial(self._join, muc_data))
+            muc_data.jid, partial(self._join, muc_data))
 
     def _join(self, muc_data):
         show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])

@@ -203,9 +203,9 @@ class Bookmarks(BaseModule):
                     self._log.info('Autojoin Bookmark: %s', bookmark.jid)
                     minimize = app.config.get_per('rooms', bookmark.jid,
                                                   'minimize_on_autojoin', True)
-                    app.interface.join_gc_room(
-                        self._account, str(bookmark.jid), bookmark.nick,
-                        bookmark.password, minimize=minimize)
+                    app.interface.join_groupchat(self._account,
+                                                 str(bookmark.jid),
+                                                 minimized=minimize)
 
     def add_bookmark(self,
                      name: str,
