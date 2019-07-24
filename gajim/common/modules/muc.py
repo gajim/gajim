@@ -28,6 +28,8 @@ from nbxmpp.const import Error
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
+from gi.repository import GLib
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import KindConstant
@@ -105,6 +107,7 @@ class MUC(BaseModule):
         ]
 
         self._muc_data = {}
+        self._join_timeouts = {}
 
     def pass_disco(self, info):
         for identity in info.identities:
@@ -162,6 +165,7 @@ class MUC(BaseModule):
 
     def leave(self, room_jid):
         self._log.info('Leave MUC: %s', room_jid)
+        self._remove_join_timeout(room_jid)
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
         muc_data = self._get_muc_data(room_jid)
         self._con.get_module('Presence').send_presence(
@@ -326,11 +330,14 @@ class MUC(BaseModule):
             self._log.warning(stanza)
             return
 
+        muc_data = self._get_muc_data(room_jid)
+
         if properties.is_muc_destroyed:
             for contact in app.contacts.get_gc_contact_list(
                     self._account, room_jid):
                 contact.presence = PresenceType.UNAVAILABLE
             self._log.info('MUC destroyed: %s', room_jid)
+            self._remove_join_timeout(room_jid)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             self._raise_muc_event('muc-destroyed', properties)
             return
@@ -346,7 +353,7 @@ class MUC(BaseModule):
             self._log.info('Nickname changed: %s to %s',
                            properties.jid,
                            properties.muc_user.nick)
-            self._get_muc_data(room_jid).nick = properties.muc_user.nick
+            muc_data.nick = properties.muc_user.nick
             self._raise_muc_event('muc-nickname-changed', properties)
             return
 
@@ -355,6 +362,8 @@ class MUC(BaseModule):
             if properties.is_muc_self_presence:
                 self._log.info('Self presence: %s', properties.jid)
                 self._raise_muc_event('muc-self-presence', properties)
+                if muc_data.state == MUCJoinedState.JOINING:
+                    self._start_join_timeout(room_jid)
                 if properties.is_new_room:
                     self.configure_room(room_jid)
             else:
@@ -425,6 +434,20 @@ class MUC(BaseModule):
                            properties.show)
             self._raise_muc_event('muc-user-status-show-changed', properties)
 
+    def _start_join_timeout(self, room_jid):
+        self._remove_join_timeout(room_jid)
+        self._log.info('Start join timeout for: %s', room_jid)
+        id_ = GLib.timeout_add_seconds(
+            10, self._fake_subject_change, room_jid)
+        self._join_timeouts[room_jid] = id_
+
+    def _remove_join_timeout(self, room_jid):
+        id_ = self._join_timeouts.get(room_jid)
+        if id_ is not None:
+            self._log.info('Remove join timeout for: %s', room_jid)
+            GLib.source_remove(id_)
+            del self._join_timeouts[room_jid]
+
     def _raise_muc_event(self, event_name, properties):
         app.nec.push_incoming_event(
             NetworkEvent(event_name,
@@ -487,32 +510,46 @@ class MUC(BaseModule):
         if not properties.is_muc_subject:
             return
 
-        jid = str(properties.muc_jid)
-        contact = app.contacts.get_groupchat_contact(self._account, jid)
+        self._handle_subject_change(str(properties.muc_jid),
+                                    properties.subject,
+                                    properties.muc_nickname,
+                                    properties.user_timestamp)
+
+        raise nbxmpp.NodeProcessed
+
+    def _fake_subject_change(self, room_jid):
+        # This is for servers which dont send empty subjects as part of the
+        # event order on joining a MUC. For example jabber.ru
+        self._log.warning('Fake subject received for %s', room_jid)
+        del self._join_timeouts[room_jid]
+        self._handle_subject_change(room_jid, None, None, None)
+
+    def _handle_subject_change(self, room_jid, subject, nickname, timestamp):
+        contact = app.contacts.get_groupchat_contact(self._account, room_jid)
         if contact is None:
             return
 
-        contact.status = properties.subject
+        contact.status = subject
 
         app.nec.push_incoming_event(
             NetworkEvent('muc-subject',
                          account=self._account,
-                         room_jid=jid,
-                         subject=properties.subject,
-                         nickname=properties.muc_nickname,
-                         user_timestamp=properties.user_timestamp))
+                         room_jid=room_jid,
+                         subject=subject,
+                         nickname=nickname,
+                         user_timestamp=timestamp,
+                         is_fake=subject is None))
 
-        muc_data = self._get_muc_data(jid)
+        muc_data = self._get_muc_data(room_jid)
         if muc_data.state == MUCJoinedState.JOINING:
-            self._set_muc_state(jid, MUCJoinedState.JOINED)
+            self._remove_join_timeout(room_jid)
+            self._set_muc_state(room_jid, MUCJoinedState.JOINED)
             # We successfully joined a MUC, set autojoin bookmark
             self._con.get_module('Bookmarks').add_bookmark(None,
                                                            muc_data.jid,
                                                            True,
                                                            muc_data.password,
                                                            muc_data.nick)
-
-        raise nbxmpp.NodeProcessed
 
     def _on_voice_request(self, _con, _stanza, properties):
         if not properties.is_voice_request:
@@ -605,6 +642,10 @@ class MUC(BaseModule):
         password = app.gc_passwords.get(room, None)
         self._log.info('Inivte %s to %s', to, room)
         self._nbxmpp('MUC').invite(room, to, reason, password, continue_, type_)
+
+    def cleanup(self):
+        for room_jid in list(self._join_timeouts.keys()):
+            self._remove_join_timeout(room_jid)
 
 
 def get_instance(*args, **kwargs):

@@ -65,6 +65,7 @@ from gajim.common.i18n import _
 from gajim.common import contacts
 from gajim.common.const import StyleAttr
 from gajim.common.const import Chatstate
+from gajim.common.const import MUCJoinedState
 
 from gajim.chat_control_base import ChatControlBase
 
@@ -114,7 +115,6 @@ class GroupchatControl(ChatControlBase):
         self.force_non_minimizable = False
         self.is_continued = is_continued
         self.is_anonymous = True
-        self.join_time = 0
 
         # Controls the state of autorejoin.
         # None - autorejoin is neutral.
@@ -1351,7 +1351,7 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_subject(self, event):
-        if self.subject == event.subject:
+        if self.subject == event.subject or event.is_fake:
             # Probably a rejoin, we already showed that subject
             return
         self.set_subject(event.subject)
@@ -1363,11 +1363,11 @@ class GroupchatControl(ChatControlBase):
                                  time.localtime(event.user_timestamp))
             text = '%s - %s' % (text, date)
 
-        just_joined = self.join_time > time.time() - 10
-        if app.config.get('show_subject_on_join') or not just_joined:
+        if (app.config.get('show_subject_on_join') or
+                self._muc_data.state != MUCJoinedState.JOINED):
             self.add_info_message(text)
 
-        if event.subject == '':
+        if not event.subject:
             self.subject_button.hide()
         else:
             self.subject_button.show()
@@ -1474,7 +1474,6 @@ class GroupchatControl(ChatControlBase):
         self.model.clear()
 
     def got_connected(self):
-        self.join_time = time.time()
         # Make autorejoin stop.
         if self.autorejoin:
             GLib.source_remove(self.autorejoin)
