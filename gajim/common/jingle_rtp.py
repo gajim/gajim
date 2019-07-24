@@ -412,11 +412,8 @@ class JingleAudio(JingleRTPContent):
 
 
 class JingleVideo(JingleRTPContent):
-    def __init__(self, session, transport=None, in_xid=0, out_xid=0):
+    def __init__(self, session, transport=None):
         JingleRTPContent.__init__(self, session, 'video', transport)
-        self.in_xid = in_xid
-        self.out_xid = out_xid
-        self.out_xid_set = False
         self.setup_stream()
 
     def setup_stream(self):
@@ -426,42 +423,24 @@ class JingleVideo(JingleRTPContent):
         JingleRTPContent.setup_stream(self, self._on_src_pad_added)
         bus = self.pipeline.get_bus()
         bus.enable_sync_message_emission()
-        bus.connect('sync-message::element', self._on_sync_message)
 
-        # the local parts
-        if app.config.get('video_framerate'):
-            framerate = 'videorate ! video/x-raw,framerate=%s ! ' % \
-                app.config.get('video_framerate')
-        else:
-            framerate = ''
-        try:
-            w, h = app.config.get('video_size').split('x')
-        except Exception:
-            w = h = None
-        if w and h:
-            video_size = 'video/x-raw,width=%s,height=%s ! ' % (w, h)
-        else:
-            video_size = ''
+    def do_setup(self, self_display_sink, other_sink):
         if app.config.get('video_see_self'):
-            tee = '! tee name=t ! queue ! videoscale ! ' + \
-                'video/x-raw,width=160,height=120 ! videoconvert ! ' + \
-                '%s t. ! queue ' % app.config.get(
-                    'video_output_device')
+            tee = '! tee name=split ! queue name=self-display-queue split. ! queue name=network-queue'
         else:
             tee = ''
 
         self.src_bin = self.make_bin_from_config('video_input_device',
-                                                 '%%s %s! %svideoscale ! %svideoconvert' %
-                                                 (tee, framerate, video_size),
+                                                 '%%s %s' % tee,
                                                  _("video input"))
-
         self.pipeline.add(self.src_bin)
+        if app.config.get('video_see_self'):
+            self.pipeline.add(self_display_sink)
+            self_display_queue = self.src_bin.get_by_name('self-display-queue')
+            self_display_queue.get_static_pad('src').link_maybe_ghosting(self_display_sink.get_static_pad('sink'))
         self.pipeline.set_state(Gst.State.PLAYING)
 
-        self.sink = self.make_bin_from_config('video_output_device',
-                                              'videoscale ! videoconvert ! %s',
-                                              _("video output"))
-
+        self.sink = other_sink
         self.pipeline.add(self.sink)
 
         self.src_bin.get_static_pad('src').link(self.p2psession.get_property(
@@ -469,27 +448,12 @@ class JingleVideo(JingleRTPContent):
 
         # The following is needed for farstream to process ICE requests:
         self.pipeline.set_state(Gst.State.PLAYING)
-
-    def _on_sync_message(self, bus, message):
-        if message.get_structure() is None:
-            return False
-        if message.get_structure().get_name() == 'prepare-window-handle':
-            message.src.set_property('force-aspect-ratio', True)
-            imagesink = message.src
-            if app.config.get('video_see_self') and not self.out_xid_set:
-                imagesink.set_window_handle(self.out_xid)
-                self.out_xid_set = True
-            else:
-                imagesink.set_window_handle(self.in_xid)
+        Gst.debug_bin_to_dot_file(self.pipeline, Gst.DebugGraphDetails.ALL, 'video-graph')
 
     def get_fallback_src(self):
         # TODO: Use avatar?
         pipeline = 'videotestsrc is-live=true ! video/x-raw,framerate=10/1 ! videoconvert'
         return Gst.parse_bin_from_description(pipeline, True)
-
-    def destroy(self):
-        JingleRTPContent.destroy(self)
-        self.pipeline.get_bus().disconnect_by_func(self._on_sync_message)
 
 def get_content(desc):
     if desc['media'] == 'audio':

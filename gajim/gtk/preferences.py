@@ -38,6 +38,7 @@ from gajim.gtk.util import open_window
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.sounds import ManageSounds
 from gajim.gtk.const import ControlType
+from gajim.gtk import gstreamer
 
 try:
     from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
@@ -384,7 +385,7 @@ class Preferences(Gtk.ApplicationWindow):
 
             def on_av_map(tab):
                 label = self._ui.selected_video_output
-                sink, widget, name = self.setup_video_output()
+                sink, widget, name = gstreamer.create_gtk_widget()
                 if sink is None:
                     log.error('Failed to obtain a working Gstreamer GTK+ sink, '
                               'video support will be disabled')
@@ -507,27 +508,6 @@ class Preferences(Gtk.ApplicationWindow):
     def _on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
-
-    @staticmethod
-    def setup_video_output():
-        gtkglsink = Gst.ElementFactory.make('gtkglsink', None)
-        if gtkglsink is not None:
-            glsinkbin = Gst.ElementFactory.make('glsinkbin', None)
-            if glsinkbin is None:
-                return None, None, None
-            glsinkbin.set_property('sink', gtkglsink)
-            sink = glsinkbin
-            widget = gtkglsink.get_property('widget')
-            name = 'gtkglsink'
-        else:
-            sink = Gst.ElementFactory.make('gtksink', None)
-            if sink is None:
-                return None, None, None
-            widget = sink.get_property('widget')
-            name = 'gtksink'
-        widget.set_visible(True)
-        widget.set_property('expand', True)
-        return sink, widget, name
 
     def get_per_account_option(self, opt):
         """

@@ -942,16 +942,13 @@ microphone-sensitivity-high-symbolic</property>
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <child>
-                  <object class="GtkViewport" id="viewport1">
+                  <object class="GtkViewport" id="outgoing_viewport">
                     <property name="width_request">160</property>
                     <property name="height_request">120</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkDrawingArea" id="outgoing_drawingarea">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -968,16 +965,11 @@ microphone-sensitivity-high-symbolic</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkViewport" id="viewport2">
+                  <object class="GtkViewport" id="incoming_viewport">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkDrawingArea" id="incoming_drawingarea">
-                        <property name="width_request">320</property>
-                        <property name="height_request">240</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>

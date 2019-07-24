@@ -29,7 +29,6 @@ from typing import Dict  # pylint: disable=unused-import
 from typing import List  # pylint: disable=unused-import
 from typing import Tuple  # pylint: disable=unused-import
 
-import os
 import uuid
 import logging
 
@@ -54,6 +53,7 @@ from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_activity_icon_name
 from gajim.gtk.util import get_app_window
+from gajim.gtk import gstreamer
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
@@ -1100,34 +1100,12 @@ class VoIPCallReceivedDialog:
                     fixed = ctrl.xml.get_object('outgoing_fixed')
                     fixed.set_no_show_all(False)
                 video_hbox.show_all()
-                ctrl.xml.get_object('incoming_drawingarea').realize()
-                if os.name == 'nt':
-                    in_xid = ctrl.xml.get_object('incoming_drawingarea').\
-                        get_window().handle
-                else:
-                    in_xid = ctrl.xml.get_object('incoming_drawingarea').\
-                        get_property('window').get_xid()
                 content = session.get_content('video')
-                # move outgoing stream to chat window
-                if app.config.get('video_see_self'):
-                    ctrl.xml.get_object('outgoing_drawingarea').realize()
-                    if os.name == 'nt':
-                        out_xid = ctrl.xml.get_object('outgoing_drawingarea').\
-                            get_window().handle
-                    else:
-                        out_xid = ctrl.xml.get_object('outgoing_drawingarea').\
-                            get_property('window').get_xid()
-                    b = content.src_bin
-                    for e in b.children:
-                        if not e.get_name().startswith('autovideosink'):
-                            continue
-                        for f in e.children:
-                            if f.get_name().startswith('autovideosink'):
-                                f.set_window_handle(out_xid)
-                                content.out_xid = out_xid
-                                break
-                        break
-                content.in_xid = in_xid
+                sink_other, widget_other, _ = gstreamer.create_gtk_widget()
+                sink_self, widget_self, _ = gstreamer.create_gtk_widget()
+                ctrl.xml.incoming_viewport.add(widget_other)
+                ctrl.xml.outgoing_viewport.add(widget_self)
+                content.do_setup(sink_self, sink_other)
                 ctrl.set_video_state('connecting', self.sid)
             # Now, accept the content/sessions.
             # This should be done after the chat control is running

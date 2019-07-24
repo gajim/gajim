@@ -702,7 +702,7 @@ class ChatControl(ChatControlBase):
         # update MessageWindow._controls
         self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
 
-    def stop_jingle(self, sid=None, _reason=None):
+    def stop_jingle(self, sid=None, reason=None):
         audio_sid = self.jingle['audio'].sid
         video_sid = self.jingle['video'].sid
         if audio_sid and sid in (audio_sid, None):
@@ -913,20 +913,9 @@ class ChatControl(ChatControlBase):
                         fixed = self.xml.outgoing_fixed
                         fixed.set_no_show_all(False)
                         video_hbox.show_all()
-                        out_da = self.xml.outgoing_drawingarea
-                        out_da.realize()
-                        if os.name == 'nt':
-                            out_xid = out_da.get_window().handle
-                        else:
-                            out_xid = out_da.get_window().get_xid()
-                    else:
-                        out_xid = None
                     video_hbox.show_all()
-                    in_da = self.xml.incoming_drawingarea
-                    in_da.realize()
-                    in_xid = in_da.get_window().get_xid()
                     sid = con.get_module('Jingle').start_video(
-                        self.contact.get_full_jid(), in_xid, out_xid)
+                        self.contact.get_full_jid())
 
                 else:
                     sid = con.get_module('Jingle').start_audio(

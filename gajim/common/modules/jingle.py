@@ -165,18 +165,18 @@ class Jingle(BaseModule):
             jingle.start_session()
         return jingle.sid
 
-    def start_video(self, jid, in_xid, out_xid):
+    def start_video(self, jid):
         if self.get_jingle_session(jid, media='video'):
             return self.get_jingle_session(jid, media='video').sid
         jingle = self.get_jingle_session(jid, media='audio')
         if jingle:
-            jingle.add_content('video', JingleVideo(jingle, in_xid=in_xid,
-                                                    out_xid=out_xid))
+            video = JingleVideo(jingle)
+            jingle.add_content('video', video)
         else:
             jingle = JingleSession(self._con, weinitiate=True, jid=jid)
             self._sessions[jingle.sid] = jingle
-            jingle.add_content('video', JingleVideo(jingle, in_xid=in_xid,
-                                                    out_xid=out_xid))
+            video = JingleVideo(jingle)
+            jingle.add_content('video', video)
             jingle.start_session()
         return jingle.sid
 
