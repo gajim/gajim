@@ -544,6 +544,12 @@ class MUC(BaseModule):
         if muc_data.state == MUCJoinedState.JOINING:
             self._remove_join_timeout(room_jid)
             self._set_muc_state(room_jid, MUCJoinedState.JOINED)
+
+            app.nec.push_incoming_event(
+                NetworkEvent('muc-joined',
+                             account=self._account,
+                             room_jid=room_jid))
+
             # We successfully joined a MUC, set autojoin bookmark
             self._con.get_module('Bookmarks').add_bookmark(None,
                                                            muc_data.jid,

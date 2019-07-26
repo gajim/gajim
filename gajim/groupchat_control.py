@@ -312,6 +312,7 @@ class GroupchatControl(ChatControlBase):
         settings_menu.set_menu_model(self.control_menu)
 
         self._event_handlers = [
+            ('muc-joined', ged.GUI1, self._on_joined),
             ('muc-user-joined', ged.GUI1, self._on_user_joined),
             ('muc-user-left', ged.GUI1, self._on_user_left),
             ('muc-nickname-changed', ged.GUI1, self._on_nickname_changed),
@@ -1648,7 +1649,6 @@ class GroupchatControl(ChatControlBase):
             # We just joined the room
             self.add_info_message(_('You (%s) joined the group chat') % nick)
             self.add_contact_to_roster(nick)
-            self.got_connected()
 
         if StatusCode.NON_ANONYMOUS in status_codes:
             self.add_info_message(
@@ -1895,6 +1895,10 @@ class GroupchatControl(ChatControlBase):
 
         self.remove_contact(nick)
         self.draw_all_roles()
+
+    @event_filter(['account', 'room_jid'])
+    def _on_joined(self, _event):
+        self.got_connected()
 
     @event_filter(['account', 'room_jid'])
     def _on_user_joined(self, event):
