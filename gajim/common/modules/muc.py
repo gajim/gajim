@@ -75,9 +75,8 @@ class MUC(BaseModule):
                           ns=nbxmpp.NS_MUC_USER,
                           priority=49),
             StanzaHandler(name='presence',
-                          callback=self._on_muc_presence,
+                          callback=self._on_error_presence,
                           typ='error',
-                          ns=nbxmpp.NS_MUC,
                           priority=49),
             StanzaHandler(name='message',
                           callback=self._on_subject_change,
@@ -309,16 +308,26 @@ class MUC(BaseModule):
             muc_x.setTag('history', {'since': date_string})
             self._log.info('Threshold for %s: %s', room_jid, threshold)
 
-    def _on_muc_presence(self, _con, _stanza, properties):
-        muc_data = self._get_muc_data(properties.muc_jid)
-        if (properties.error.type == Error.CONFLICT and
-                muc_data.state == MUCJoinedState.JOINING):
-            muc_data.nick += '_'
-            self._log.info('Nickname conflict: %s change to %s',
-                           muc_data.jid, muc_data.nick)
-            self._join(muc_data)
+    def _on_error_presence(self, _con, _stanza, properties):
+        room_jid = properties.jid.getBare()
+        muc_data = self._muc_data.get(room_jid)
+        if muc_data is None:
             return
-        self._raise_muc_event('muc-presence-error', properties)
+
+        if muc_data.state == MUCJoinedState.JOINING:
+            if properties.error.type == Error.CONFLICT:
+                muc_data.nick += '_'
+                self._log.info('Nickname conflict: %s change to %s',
+                               muc_data.jid, muc_data.nick)
+                self._join(muc_data)
+            elif properties.error.type == Error.NOT_AUTHORIZED:
+                self._raise_muc_event('muc-password-required', properties)
+            else:
+                self._raise_muc_event('muc-join-failed', properties)
+                self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+
+        else:
+            self._raise_muc_event('muc-presence-error', properties)
 
     def _on_muc_user_presence(self, _con, stanza, properties):
         if properties.type == PresenceType.ERROR:

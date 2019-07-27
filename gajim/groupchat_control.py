@@ -38,7 +38,6 @@ from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
-from nbxmpp.const import Error
 from nbxmpp.const import PresenceType
 from nbxmpp.util import is_error_result
 
@@ -313,6 +312,7 @@ class GroupchatControl(ChatControlBase):
 
         self._event_handlers = [
             ('muc-joined', ged.GUI1, self._on_joined),
+            ('muc-join-failed', ged.GUI1, self._on_muc_join_failed),
             ('muc-user-joined', ged.GUI1, self._on_user_joined),
             ('muc-user-left', ged.GUI1, self._on_user_left),
             ('muc-nickname-changed', ged.GUI1, self._on_nickname_changed),
@@ -323,6 +323,7 @@ class GroupchatControl(ChatControlBase):
             ('muc-user-role-changed', ged.GUI1, self._on_role_changed),
             ('muc-destroyed', ged.GUI1, self._on_destroyed),
             ('muc-presence-error', ged.GUI1, self._on_presence_error),
+            ('muc-password-required', ged.GUI1, self._on_password_required),
             ('muc-config-changed', ged.GUI1, self._on_config_changed),
             ('muc-subject', ged.GUI1, self._on_subject),
             ('muc-captcha-challenge', ged.GUI1, self._on_captcha_challenge),
@@ -1913,51 +1914,22 @@ class GroupchatControl(ChatControlBase):
             self.add_info_message(_('%s has joined the group chat') % nick)
 
     @event_filter(['account', 'room_jid'])
+    def _on_password_required(self, _event):
+        self._show_page('password')
+
+    @event_filter(['account', 'room_jid'])
+    def _on_muc_join_failed(self, event):
+        self.xml.error_label.set_text(event.properties.error.message)
+        self._show_page('error')
+        self.autorejoin = False
+
+    @event_filter(['account', 'room_jid'])
     def _on_presence_error(self, event):
         error_type = event.properties.error.type
         error_message = event.properties.error.message
 
-        if error_type == Error.NOT_AUTHORIZED:
-            self._show_page('password')
-
-        elif error_type == Error.FORBIDDEN:
-            # we are banned
-            ErrorDialog(
-                _('Unable to join group chat'),
-                _('You are banned from group chat <b>%s</b>.') % self.room_jid)
-
-        elif error_type == Error.REMOTE_SERVER_NOT_FOUND:
-            ErrorDialog(
-                _('Unable to join group chat'),
-                _('Remote server <b>%s</b> does not exist.') % self.room_jid)
-
-        elif error_type == Error.ITEM_NOT_FOUND:
-            ErrorDialog(
-                _('Unable to join group chat'),
-                _('Group chat <b>%s</b> does not exist.') % self.room_jid)
-
-        elif error_type == Error.NOT_ALLOWED:
-            ErrorDialog(
-                _('Unable to join group chat'),
-                _('Group chat creation is not permitted.'))
-
-        elif error_type == Error.NOT_ACCEPTABLE:
-            ErrorDialog(
-                _('Unable to join group chat'),
-                _('You must use your registered '
-                  'nickname in <b>%s</b>.') % self.room_jid)
-
-        elif error_type == Error.REGISTRATION_REQUIRED:
-            ErrorDialog(
-                _('Unable to join group chat'),
-                _('You are not in the members '
-                  'list in group chat %s.') % self.room_jid)
-
-        else:
-            self.add_info_message(
-                'Error %s: %s' % (error_type.value, error_message))
-
-        self.autorejoin = False
+        self.add_info_message(
+            'Error %s: %s' % (error_type.value, error_message))
 
     def add_contact_to_roster(self, nick):
         contact = app.contacts.get_gc_contact(self.account,
@@ -2446,6 +2418,8 @@ class GroupchatControl(ChatControlBase):
                 self._on_password_cancel_clicked()
             elif self._get_current_page() == 'captcha':
                 self._on_captcha_cancel_clicked()
+            elif self._get_current_page() == 'error':
+                self._on_page_close_clicked()
             else:
                 self._show_page('groupchat')
             return Gdk.EVENT_STOP
@@ -2906,6 +2880,8 @@ class GroupchatControl(ChatControlBase):
             self.xml.password_set_button.grab_default()
         elif page_name == 'captcha':
             self.xml.captcha_set_button.grab_default()
+        elif page_name == 'error':
+            self.xml.close_button.grab_default()
 
     def _on_change_nick(self, _action, _param):
         if self._get_current_page() == 'nickname':
@@ -3009,6 +2985,11 @@ class GroupchatControl(ChatControlBase):
 
     def _on_page_cancel_clicked(self, _button):
         self._show_page('groupchat')
+
+    def _on_page_close_clicked(self, _button=None):
+        self.force_non_minimizable = True
+        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
+        self.force_non_minimizable = False
 
 
 class SubjectPopover(Gtk.Popover):
