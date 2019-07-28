@@ -28,10 +28,10 @@ CapsIdentity = namedtuple('CapsIdentity', 'category type name lang')
 class MUCData:
     def __init__(self, room_jid, nick, password, config=None):
         self._room_jid = JID(room_jid)
-        self._nick = nick
-        self._password = password
         self._config = config
-        self._state = MUCJoinedState.NOT_JOINED
+        self.nick = nick
+        self.password = password
+        self.state = MUCJoinedState.NOT_JOINED
 
     @property
     def jid(self):
@@ -40,28 +40,8 @@ class MUCData:
     @property
     def occupant_jid(self):
         jid = self._room_jid.copy()
-        jid.setResource(self._nick)
+        jid.setResource(self.nick)
         return jid
-
-    @property
-    def nick(self):
-        return self._nick
-
-    @nick.setter
-    def nick(self, value):
-        self._nick = value
-
-    @property
-    def password(self):
-        return self._password
-
-    @property
-    def state(self):
-        return self._state
-
-    @state.setter
-    def state(self, value):
-        self._state = value
 
     @property
     def config(self):
