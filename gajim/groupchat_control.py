@@ -311,7 +311,7 @@ class GroupchatControl(ChatControlBase):
         settings_menu.set_menu_model(self.control_menu)
 
         self._event_handlers = [
-            ('muc-joined', ged.GUI1, self._on_joined),
+            ('muc-joined', ged.GUI1, self._on_muc_joined),
             ('muc-join-failed', ged.GUI1, self._on_muc_join_failed),
             ('muc-user-joined', ged.GUI1, self._on_user_joined),
             ('muc-user-left', ged.GUI1, self._on_user_left),
@@ -348,11 +348,11 @@ class GroupchatControl(ChatControlBase):
 
         # Stack
         self.xml.stack.show_all()
-        self.xml.stack.set_visible_child_name('groupchat')
+        self.xml.stack.set_visible_child_name('progress')
+        self.xml.progress_spinner.start()
 
         self.update_ui()
         self.widget.show_all()
-
 
         if app.config.get('hide_groupchat_occupants_list'):
             # Roster is shown by default, so toggle the roster button to hide it
@@ -1898,8 +1898,9 @@ class GroupchatControl(ChatControlBase):
         self.draw_all_roles()
 
     @event_filter(['account', 'room_jid'])
-    def _on_joined(self, _event):
+    def _on_muc_joined(self, _event):
         self.got_connected()
+        self._show_page('groupchat')
 
     @event_filter(['account', 'room_jid'])
     def _on_user_joined(self, event):
@@ -2874,7 +2875,11 @@ class GroupchatControl(ChatControlBase):
 
     def _on_page_change(self, stack, _param):
         page_name = stack.get_visible_child_name()
-        if page_name == 'password':
+        if page_name == 'groupchat':
+            self.xml.progress_spinner.stop()
+        elif page_name == 'progress':
+            self.xml.progress_spinner.start()
+        elif page_name == 'password':
             self.xml.password_entry.set_text('')
             self.xml.password_entry.grab_focus()
             self.xml.password_set_button.grab_default()
@@ -2929,7 +2934,7 @@ class GroupchatControl(ChatControlBase):
         password = self.xml.password_entry.get_text()
         self._muc_data.password = password
         app.connections[self.account].get_module('MUC').join(self._muc_data)
-        self._show_page('groupchat')
+        self._show_page('progress')
 
     def _on_password_changed(self, entry, _param):
         self.xml.password_set_button.set_sensitive(bool(entry.get_text()))
@@ -2975,7 +2980,7 @@ class GroupchatControl(ChatControlBase):
         con = app.connections[self.account]
         con.get_module('MUC').send_captcha(self.room_jid, form_node)
         self._remove_captcha_request()
-        self._show_page('groupchat')
+        self._show_page('progress')
 
     def _on_captcha_cancel_clicked(self, _button=None):
         self._remove_captcha_request()
@@ -2990,6 +2995,10 @@ class GroupchatControl(ChatControlBase):
         self.force_non_minimizable = True
         self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
         self.force_non_minimizable = False
+
+    def _on_abort_button_clicked(self, _button):
+        self.parent_win.window.lookup_action(
+            'disconnect-%s' % self.control_id).activate()
 
 
 class SubjectPopover(Gtk.Popover):
