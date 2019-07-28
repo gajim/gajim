@@ -631,9 +631,7 @@ class GroupchatControl(ChatControlBase):
 
     def _on_disconnect(self, action, param):
         app.connections[self.account].get_module('MUC').leave(self.room_jid)
-        self.force_non_minimizable = True
-        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
-        self.force_non_minimizable = False
+        self._close_control()
 
     def _on_destroy_room(self, action, param):
         def _on_confirm(reason, jid):
@@ -1995,9 +1993,7 @@ class GroupchatControl(ChatControlBase):
         con.get_module('Bookmarks').remove(self.room_jid)
 
         if self._wait_for_destruction:
-            self.force_non_minimizable = True
-            self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
-            self.force_non_minimizable = False
+            self._close_control()
 
     def get_role_iter(self, role: str) -> Optional[Gtk.TreeIter]:
         try:
@@ -2228,6 +2224,9 @@ class GroupchatControl(ChatControlBase):
             return
 
         on_yes(self)
+
+    def _close_control(self):
+        self.parent_win.remove_tab(self, None, force=True)
 
     def set_control_active(self, state):
         self.conv_textview.allow_focus_out_line = True
@@ -2940,9 +2939,7 @@ class GroupchatControl(ChatControlBase):
         self.xml.password_set_button.set_sensitive(bool(entry.get_text()))
 
     def _on_password_cancel_clicked(self, _button=None):
-        self.force_non_minimizable = True
-        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
-        self.force_non_minimizable = False
+        self._close_control()
 
     @event_filter(['account', 'room_jid'])
     def _on_captcha_challenge(self, event):
@@ -2984,17 +2981,13 @@ class GroupchatControl(ChatControlBase):
 
     def _on_captcha_cancel_clicked(self, _button=None):
         self._remove_captcha_request()
-        self.force_non_minimizable = True
-        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
-        self.force_non_minimizable = False
+        self._close_control()
 
     def _on_page_cancel_clicked(self, _button):
         self._show_page('groupchat')
 
     def _on_page_close_clicked(self, _button=None):
-        self.force_non_minimizable = True
-        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
-        self.force_non_minimizable = False
+        self._close_control()
 
     def _on_abort_button_clicked(self, _button):
         self.parent_win.window.lookup_action(
