@@ -59,6 +59,8 @@ import nbxmpp
 from nbxmpp.util import compute_caps_hash
 from nbxmpp.stringprepare import nameprep
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.protocol import JID
+from nbxmpp.protocol import InvalidJid
 from gi.repository import GLib
 import precis_i18n.codec  # pylint: disable=unused-import
 
@@ -1484,6 +1486,7 @@ def parse_uri(uri):
     if uri.startswith('xmpp:'):
         action, data = parse_uri_actions(uri)
         try:
+            validate_jid(data['jid'])
             return URI(type=URIType.XMPP,
                        action=URIAction(action),
                        data=data)
@@ -1603,3 +1606,10 @@ def get_default_muc_config():
         '{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites': True,
         'muc#roomconfig_enablearchiving': True,
     }
+
+
+def validate_jid(jid):
+    try:
+        return JID(str(jid))
+    except InvalidJid as error:
+        raise ValueError(error)
