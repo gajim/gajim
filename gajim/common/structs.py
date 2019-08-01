@@ -32,6 +32,8 @@ class MUCData:
         self.nick = nick
         self.password = password
         self.state = MUCJoinedState.NOT_JOINED
+        # Message id of the captcha challenge
+        self.captcha_id = None
 
     @property
     def jid(self):

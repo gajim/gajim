@@ -205,6 +205,8 @@ class MUCJoinedState(Enum):
     JOINED = 'joined'
     NOT_JOINED = 'not joined'
     JOINING = 'joining'
+    CAPTCHA_REQUEST = 'captcha in progress'
+    CAPTCHA_FAILED = 'captcha failed'
 
     def __str__(self):
         return self.name

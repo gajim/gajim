@@ -59,6 +59,7 @@ class MUC(BaseModule):
         'set_subject',
         'cancel_config',
         'send_captcha',
+        'cancel_captcha',
         'decline',
         'invite',
         'request_config',
@@ -326,6 +327,18 @@ class MUC(BaseModule):
                 self._raise_muc_event('muc-join-failed', properties)
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
+        elif muc_data.state == MUCJoinedState.CAPTCHA_REQUEST:
+            app.nec.push_incoming_event(
+                NetworkEvent('muc-captcha-error',
+                             account=self._account,
+                             room_jid=room_jid,
+                             error_text=properties.error.message))
+            self._set_muc_state(room_jid, MUCJoinedState.CAPTCHA_FAILED)
+            self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+
+        elif muc_data.state == MUCJoinedState.CAPTCHA_FAILED:
+            self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+
         else:
             self._raise_muc_event('muc-presence-error', properties)
 
@@ -586,6 +599,15 @@ class MUC(BaseModule):
         if not properties.is_captcha_challenge:
             return
 
+        muc_data = self._muc_data.get(properties.jid)
+        if muc_data is None:
+            return
+
+        if muc_data.state != MUCJoinedState.JOINING:
+            self._log.warning('Received captcha request but state != %s',
+                              MUCJoinedState.JOINING)
+            return
+
         contact = app.contacts.get_groupchat_contact(self._account,
                                                      str(properties.jid))
         if contact is None:
@@ -593,6 +615,9 @@ class MUC(BaseModule):
 
         self._log.info('Captcha challenge received from %s', properties.jid)
         store_bob_data(properties.captcha.bob_data)
+        muc_data.captcha_id = properties.id
+
+        self._set_muc_state(properties.jid, MUCJoinedState.CAPTCHA_REQUEST)
 
         app.nec.push_incoming_event(
             NetworkEvent('muc-captcha-challenge',
@@ -600,6 +625,38 @@ class MUC(BaseModule):
                          room_jid=properties.jid.getBare(),
                          form=properties.captcha.form))
         raise nbxmpp.NodeProcessed
+
+    def cancel_captcha(self, room_jid):
+        muc_data = self._muc_data.get(room_jid)
+        if muc_data is None:
+            return
+
+        if muc_data.captcha_id is None:
+            self._log.warning('No captcha message id available')
+            return
+        self._nbxmpp('MUC').cancel_captcha(room_jid, muc_data.captcha_id)
+        self._set_muc_state(room_jid, MUCJoinedState.CAPTCHA_FAILED)
+        self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+
+    def send_captcha(self, room_jid, form_node):
+        self._set_muc_state(room_jid, MUCJoinedState.JOINING)
+        self._nbxmpp('MUC').send_captcha(room_jid,
+                                         form_node,
+                                         callback=self._on_captcha_result)
+
+    def _on_captcha_result(self, result):
+        if not is_error_result(result):
+            return
+
+        muc_data = self._muc_data.get(result.jid)
+        if muc_data is None:
+            return
+        self._set_muc_state(result.jid, MUCJoinedState.CAPTCHA_FAILED)
+        app.nec.push_incoming_event(
+            NetworkEvent('muc-captcha-error',
+                         account=self._account,
+                         room_jid=str(result.jid),
+                         error_text=result.message))
 
     def _on_config_change(self, _con, _stanza, properties):
         if not properties.is_muc_config_change:

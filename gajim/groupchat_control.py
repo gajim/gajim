@@ -327,6 +327,7 @@ class GroupchatControl(ChatControlBase):
             ('muc-config-changed', ged.GUI1, self._on_config_changed),
             ('muc-subject', ged.GUI1, self._on_subject),
             ('muc-captcha-challenge', ged.GUI1, self._on_captcha_challenge),
+            ('muc-captcha-error', ged.GUI1, self._on_captcha_error),
             ('muc-voice-approval', ged.GUI1, self._on_voice_approval),
             ('muc-disco-update', ged.GUI1, self._on_disco_update),
             ('muc-configuration-finished', ged.GUI1, self._on_configuration_finished),
@@ -2418,7 +2419,7 @@ class GroupchatControl(ChatControlBase):
                 self._on_password_cancel_clicked()
             elif self._get_current_page() == 'captcha':
                 self._on_captcha_cancel_clicked()
-            elif self._get_current_page() == 'error':
+            elif self._get_current_page() in ('error', 'captcha-error'):
                 self._on_page_close_clicked()
             else:
                 self._show_page('groupchat')
@@ -2884,6 +2885,8 @@ class GroupchatControl(ChatControlBase):
             self.xml.password_set_button.grab_default()
         elif page_name == 'captcha':
             self.xml.captcha_set_button.grab_default()
+        elif page_name == 'captcha-error':
+            self.xml.captcha_try_again_button.grab_default()
         elif page_name == 'error':
             self.xml.close_button.grab_default()
 
@@ -2961,6 +2964,11 @@ class GroupchatControl(ChatControlBase):
         self._show_page('captcha')
         self._captcha_request.focus_first_entry()
 
+    @event_filter(['account', 'room_jid'])
+    def _on_captcha_error(self, event):
+        self.xml.captcha_error_label.set_text(event.error_text)
+        self._show_page('captcha-error')
+
     def _remove_captcha_request(self):
         if self._captcha_request is None:
             return
@@ -2980,8 +2988,14 @@ class GroupchatControl(ChatControlBase):
         self._show_page('progress')
 
     def _on_captcha_cancel_clicked(self, _button=None):
+        con = app.connections[self.account]
+        con.get_module('MUC').cancel_captcha(self.room_jid)
         self._remove_captcha_request()
         self._close_control()
+
+    def _on_captcha_try_again_clicked(self, _button=None):
+        app.connections[self.account].get_module('MUC').join(self._muc_data)
+        self._show_page('progress')
 
     def _on_page_cancel_clicked(self, _button):
         self._show_page('groupchat')
