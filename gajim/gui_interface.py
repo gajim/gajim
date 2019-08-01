@@ -1496,7 +1496,7 @@ class Interface:
         self.emot_and_basic = '%s|%s' % (basic_pattern, emoticons)
 
         # at least one character in 3 parts (before @, after @, after .)
-        self.sth_at_sth_dot_sth = r'\S+@\S+\.\S*[^\s)?]'
+        self.sth_at_sth_dot_sth = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
 
         # Invalid XML chars
         self.invalid_XML_chars = '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
