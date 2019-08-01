@@ -18,14 +18,13 @@ import random
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from nbxmpp.protocol import InvalidJid
-from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.const import MUC_CREATION_EXAMPLES
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.i18n import _
+from gajim.common.helpers import validate_jid
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
@@ -126,11 +125,11 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
             return
 
         try:
-            jid = JID(text)
+            jid = validate_jid(text)
             if jid.getResource():
-                raise InvalidJid
+                raise ValueError
 
-        except InvalidJid:
+        except ValueError:
             self._set_warning(_('Invalid Address'))
         else:
             self._set_warning_icon(False)

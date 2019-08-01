@@ -20,12 +20,11 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
 
-from nbxmpp.protocol import InvalidJid
-from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
@@ -249,8 +248,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _start_new_chat(self, row):
         if row.new:
             try:
-                JID(row.jid)
-            except InvalidJid as error:
+                validate_jid(row.jid)
+            except ValueError as error:
                 self._show_error_page(error)
                 return
 
