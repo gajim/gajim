@@ -792,7 +792,7 @@ class InvitationReceivedDialog(Gtk.ApplicationWindow):
 
     def on_accept_button_clicked(self, widget):
         app.interface.show_or_join_groupchat(self.account,
-                                             self.jid,
+                                             self.room_jid,
                                              password=self.password)
         self.destroy()
 
