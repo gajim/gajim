@@ -680,7 +680,7 @@ def load_css_config():
     from gajim.gtk.css_config import CSSConfig
     css_config = CSSConfig()
 
-def set_win_debug_mode(enable: bool) -> None:
+def set_debug_mode(enable: bool) -> None:
     debug_folder = Path(configpaths.get('DEBUG'))
     debug_enabled = debug_folder / 'debug-enabled'
     if enable:
@@ -689,9 +689,7 @@ def set_win_debug_mode(enable: bool) -> None:
         if debug_enabled.exists():
             debug_enabled.unlink()
 
-def get_win_debug_mode() -> bool:
-    if sys.platform != 'win32':
-        return False
+def get_debug_mode() -> bool:
     debug_folder = Path(configpaths.get('DEBUG'))
     debug_enabled = debug_folder / 'debug-enabled'
     return debug_enabled.exists()

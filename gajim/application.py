@@ -357,7 +357,7 @@ class GajimApplication(Gtk.Application):
 
         configpaths.init()
 
-        if app.get_win_debug_mode():
+        if app.get_debug_mode():
             # Redirect has to happen before logging init
             self._redirect_output()
             logging_helpers.init()

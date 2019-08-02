@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import sys
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -410,10 +409,8 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('log_contact_status_changes')
         self._ui.log_show_changes_checkbutton.set_active(st)
 
-        # Enable debug logging
-        if sys.platform == 'win32':
-            self._ui.enable_logging.set_active(app.get_win_debug_mode())
-            self._ui.enable_logging.show()
+        self._ui.enable_logging.set_active(app.get_debug_mode())
+        self._ui.enable_logging.show()
 
         self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
@@ -1000,7 +997,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     # Enable debug logging
     def on_enable_logging_toggled(self, widget):
-        app.set_win_debug_mode(widget.get_active())
+        app.set_debug_mode(widget.get_active())
 
     # Advanced Config Editor (ACE)
     def on_open_advanced_editor_button_clicked(self, _widget):
