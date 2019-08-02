@@ -1544,8 +1544,9 @@ class GroupchatControl(ChatControlBase):
 
         self.update_actions()
 
-    def leave(self):
-        app.connections[self.account].get_module('MUC').leave(self.room_jid)
+    def leave(self, reason=None):
+        app.connections[self.account].get_module('MUC').leave(self.room_jid,
+                                                              reason=reason)
         self.got_disconnected()
         self._close_control()
 

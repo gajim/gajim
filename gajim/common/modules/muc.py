@@ -163,14 +163,15 @@ class MUC(BaseModule):
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINING)
         self._con.connection.send(presence)
 
-    def leave(self, room_jid):
+    def leave(self, room_jid, reason=None):
         self._log.info('Leave MUC: %s', room_jid)
         self._remove_join_timeout(room_jid)
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
         muc_data = self._get_muc_data(room_jid)
         self._con.get_module('Presence').send_presence(
             muc_data.occupant_jid,
-            typ='unavailable')
+            typ='unavailable',
+            status=reason)
         # We leave a group chat, disable bookmark autojoin
         self._con.get_module('Bookmarks').set_autojoin(room_jid, False)
 
