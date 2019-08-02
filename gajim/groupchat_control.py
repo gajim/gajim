@@ -631,8 +631,7 @@ class GroupchatControl(ChatControlBase):
     # Actions
 
     def _on_disconnect(self, action, param):
-        app.connections[self.account].get_module('MUC').leave(self.room_jid)
-        self._close_control()
+        self.leave()
 
     def _on_destroy_room(self, action, param):
         def _on_confirm(reason, jid):
@@ -1545,6 +1544,11 @@ class GroupchatControl(ChatControlBase):
 
         self.update_actions()
 
+    def leave(self):
+        app.connections[self.account].get_module('MUC').leave(self.room_jid)
+        self.got_disconnected()
+        self._close_control()
+
     def rejoin(self):
         if not self.autorejoin:
             return False
@@ -2227,7 +2231,10 @@ class GroupchatControl(ChatControlBase):
         on_yes(self)
 
     def _close_control(self):
-        self.parent_win.remove_tab(self, None, force=True)
+        if self.parent_win is None:
+            self.shutdown()
+        else:
+            self.parent_win.remove_tab(self, None, force=True)
 
     def set_control_active(self, state):
         self.conv_textview.allow_focus_out_line = True

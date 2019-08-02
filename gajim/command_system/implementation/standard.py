@@ -312,8 +312,7 @@ class StandardGroupChatCommands(CommandContainer):
     @command('part', 'close', raw=True, empty=True)
     @doc(_("Leave the group chat, optionally giving a reason, and close tab or window"))
     def leave(self, reason):
-        self.connection.get_module('MUC').leave(self.room_jid)
-        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND, reason)
+        self.leave()
 
     @command(raw=True, empty=True)
     @doc(_("""

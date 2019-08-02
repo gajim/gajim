@@ -2960,11 +2960,9 @@ class RosterWindow:
         """
         When disconnect menuitem is activated: disconnect from room
         """
-        app.connections[account].get_module('MUC').leave(jid)
         if jid in app.interface.minimized_controls[account]:
             ctrl = app.interface.minimized_controls[account][jid]
-            ctrl.shutdown()
-            ctrl.got_disconnected()
+            ctrl.leave()
         self.remove_groupchat(jid, account)
 
     def on_reconnect(self, widget, jid, account):
