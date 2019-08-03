@@ -51,6 +51,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.set_default_size(-1, 400)
         self.ready_to_destroy = False
         self._parameter_form = None
+        self._keywords = []
         self._destroyed = False
         self._search_stopped = False
 
@@ -470,6 +471,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
         text = self._ui.search_entry.get_text().strip()
         self._global_search_listbox.start_search()
 
+        if app.config.get('muclumbus_api_pref') == 'http':
+            self._start_http_search(con, text)
+        else:
+            self._start_iq_search(con, text)
+
+    def _start_iq_search(self, con, text):
         if self._parameter_form is None:
             con.get_module('Muclumbus').request_parameters(
                 app.config.get('muclumbus_api_jid'),
@@ -482,7 +489,15 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 app.config.get('muclumbus_api_jid'),
                 self._parameter_form,
                 callback=self._on_search_result,
-                user_data=con)
+                user_data=(con, False))
+
+    def _start_http_search(self, con, text):
+        self._keywords = text.split(' ')
+        con.get_module('Muclumbus').set_http_search(
+            app.config.get('muclumbus_api_http_uri'),
+            self._keywords,
+            callback=self._on_search_result,
+            user_data=(con, True))
 
     @ensure_not_destroyed
     def _parameters_received(self, result, user_data):
@@ -494,16 +509,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
         con, text = user_data
         self._parameter_form = result
         self._parameter_form.type_ = 'submit'
-        self._parameter_form.vars['q'].value = text
-
-        con.get_module('Muclumbus').set_search(
-            app.config.get('muclumbus_api_jid'),
-            self._parameter_form,
-            callback=self._on_search_result,
-            user_data=con)
+        self._start_iq_search(con, text)
 
     @ensure_not_destroyed
-    def _on_search_result(self, result, con):
+    def _on_search_result(self, result, user_data):
         if self._search_stopped:
             return
 
@@ -519,10 +528,25 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._global_search_listbox.end_search()
             return
 
+        con, http = user_data
+        if http:
+            self._continue_http_search(result, con)
+        else:
+            self._continue_iq_search(result, con)
+
+    def _continue_iq_search(self, result, con):
         con.get_module('Muclumbus').set_search(
             app.config.get('muclumbus_api_jid'),
             self._parameter_form,
             items_per_page=result.max,
+            after=result.last,
+            callback=self._on_search_result,
+            user_data=con)
+
+    def _continue_http_search(self, result, con):
+        con.get_module('Muclumbus').set_http_search(
+            app.config.get('muclumbus_api_http_uri'),
+            self._keywords,
             after=result.last,
             callback=self._on_search_result,
             user_data=con)
