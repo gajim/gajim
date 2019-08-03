@@ -544,7 +544,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             items_per_page=result.max,
             after=result.last,
             callback=self._on_search_result,
-            user_data=con)
+            user_data=(con, False))
 
     def _continue_http_search(self, result, con):
         con.get_module('Muclumbus').set_http_search(
@@ -552,7 +552,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._keywords,
             after=result.last,
             callback=self._on_search_result,
-            user_data=con)
+            user_data=(con, True))
 
     def _destroy(self, *args):
         self._destroyed = True
