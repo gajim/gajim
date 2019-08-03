@@ -315,6 +315,7 @@
                 <property name="headers_visible">False</property>
                 <property name="enable_search">False</property>
                 <property name="show_expanders">False</property>
+                <signal name="row-activated" handler="_on_select_clicked" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>

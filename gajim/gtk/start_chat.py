@@ -310,7 +310,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _on_back_clicked(self, _button=None):
         self._ui.stack.set_visible_child_name('search')
 
-    def _on_select_clicked(self, _button=None):
+    def _on_select_clicked(self, *args):
         model, iter_ = self._ui.account_view.get_selection().get_selected()
         if iter_ is not None:
             account = model[iter_][1]
