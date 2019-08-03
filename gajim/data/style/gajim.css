@@ -241,6 +241,7 @@ button.flat.link { padding: 0; border: 0; }
 .success-color { color: @success_color; }
 .error-color { color: @error_color; }
 .warning-color { color: @warning_color; }
+.selected-color { color: @theme_selected_bg_color; }
 
 /*Encryption*/
 .encrypted-color { color: rgb(75, 181, 67) }
