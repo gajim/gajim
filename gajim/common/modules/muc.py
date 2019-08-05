@@ -371,13 +371,14 @@ class MUC(BaseModule):
                                               properties.muc_nickname)
 
         if properties.is_nickname_changed:
+            if properties.is_muc_self_presence:
+                muc_data.nick = properties.muc_user.nick
             app.contacts.remove_gc_contact(self._account, contact)
             contact.name = properties.muc_user.nick
             app.contacts.add_gc_contact(self._account, contact)
             self._log.info('Nickname changed: %s to %s',
                            properties.jid,
                            properties.muc_user.nick)
-            muc_data.nick = properties.muc_user.nick
             self._raise_muc_event('muc-nickname-changed', properties)
             return
 
