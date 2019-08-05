@@ -21,7 +21,6 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.const import MessageType
 
 from gajim.common import app
-from gajim.common import caps_cache
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
@@ -294,7 +293,7 @@ class Message(BaseModule):
                                         message_id=event.message_id)
 
     def _check_for_mam_compliance(self, room_jid, stanza_id):
-        namespace = caps_cache.muc_caps_cache.get_mam_namespace(room_jid)
+        namespace = muc_caps_cache.get_mam_namespace(room_jid)
         if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
             self._log.warning('%s announces mam:2 without stanza-id', room_jid)
 
@@ -307,7 +306,7 @@ class Message(BaseModule):
             return None, None
 
         if properties.type.is_groupchat:
-            namespace = caps_cache.muc_caps_cache.get_mam_namespace(
+            namespace = muc_caps_cache.get_mam_namespace(
                 properties.jid.getBare())
             archive = properties.jid
         else:
