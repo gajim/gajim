@@ -313,8 +313,7 @@ class Message(BaseModule):
             # Deduplicate self message with message-id
             return None, properties.id
 
-        if properties.stanza_id.by is None:
-            # We can not verify who sent this stanza-id, ignore it.
+        if properties.stanza_id is None:
             return None, None
 
         if properties.type.is_groupchat:
