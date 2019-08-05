@@ -293,16 +293,6 @@ class Message(BaseModule):
                                         stanza_id=event.stanza_id,
                                         message_id=event.message_id)
 
-        if muc_caps_cache.has_mam(event.room_jid):
-            finished = self._con.get_module('MAM').is_catch_up_finished(
-                event.room_jid)
-            if not finished:
-                return
-
-        app.logger.set_archive_infos(event.room_jid,
-                                     last_mam_id=event.stanza_id,
-                                     last_muc_timestamp=event.timestamp)
-
     def _check_for_mam_compliance(self, room_jid, stanza_id):
         namespace = caps_cache.muc_caps_cache.get_mam_namespace(room_jid)
         if stanza_id is None and namespace == nbxmpp.NS_MAM_2:

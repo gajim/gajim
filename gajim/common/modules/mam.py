@@ -41,6 +41,9 @@ class MAM(BaseModule):
 
         self.handlers = [
             StanzaHandler(name='message',
+                          callback=self._set_message_archive_info,
+                          priority=41),
+            StanzaHandler(name='message',
                           callback=self._mam_message_received,
                           priority=51),
         ]
@@ -100,6 +103,42 @@ class MAM(BaseModule):
 
         # A message we received
         return properties.mam.id, None
+
+    def _set_message_archive_info(self, _con, _stanza, properties):
+        if (properties.is_mam_message or
+                properties.is_pubsub or
+                properties.is_muc_subject):
+            return
+
+        if properties.type.is_groupchat:
+            archive_jid = properties.jid.getBare()
+            namespace = muc_caps_cache.get_mam_namespace(archive_jid)
+            timestamp = properties.timestamp
+            if namespace is None:
+                # MUC History
+                app.logger.set_archive_infos(
+                    archive_jid,
+                    last_muc_timestamp=timestamp)
+                return
+
+        else:
+            archive_jid = self._con.get_own_jid().getBare()
+            namespace = self._con.get_module('MAM').archiving_namespace
+            timestamp = None
+
+        if properties.stanza_id is None or namespace != nbxmpp.NS_MAM_2:
+            return
+
+        if not archive_jid == properties.stanza_id.by:
+            return
+
+        if not self._con.get_module('MAM').is_catch_up_finished(
+                archive_jid):
+            return
+
+        app.logger.set_archive_infos(archive_jid,
+                                     last_mam_id=properties.stanza_id.id,
+                                     last_muc_timestamp=timestamp)
 
     def _mam_message_received(self, _con, stanza, properties):
         if not properties.is_mam_message:
