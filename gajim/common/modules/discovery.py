@@ -212,7 +212,7 @@ class Discovery(BaseModule):
 
     def _muc_info_response(self, result, callback):
         if is_error_result(result):
-            if result.type == 'item-not-found':
+            if result.condition == 'item-not-found':
                 # Groupchat does not exist
                 self._log.info('MUC does not exist: %s', result.jid)
                 callback()

@@ -25,6 +25,7 @@ from gajim.common.const import MUC_CREATION_EXAMPLES
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.i18n import _
 from gajim.common.helpers import validate_jid
+from gajim.common.helpers import to_user_string
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
@@ -158,7 +159,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self._ui.create_button.set_sensitive(False)
 
     def _set_warning_from_error(self, error):
-        text = MUC_DISCO_ERRORS.get(error.type, str(error))
+        text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
         self._set_warning(text)
 
     def _set_warning_from_error_code(self, error_code):
@@ -192,7 +193,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
     @ensure_not_destroyed
     def _disco_info_received(self, result):
         if is_error_result(result):
-            if result.type == 'item-not-found':
+            if result.condition == 'item-not-found':
                 self._create_muc(result.jid)
                 return
             self._set_warning_from_error(result)

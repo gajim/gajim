@@ -70,6 +70,7 @@ from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
+from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.const import ShowConstant
 from gajim.common.const import Display
 from gajim.common.const import URIType
@@ -1613,3 +1614,14 @@ def validate_jid(jid):
         return JID(str(jid))
     except InvalidJid as error:
         raise ValueError(error)
+
+
+def to_user_string(error):
+    text = error.get_text(get_rfc5646_lang())
+    if text:
+        return text
+
+    condition = error.condition
+    if error.app_condition is not None:
+        return '%s (%s)' % (condition, error.app_condition)
+    return condition

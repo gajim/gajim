@@ -671,7 +671,7 @@ class GroupchatControl(ChatControlBase):
 
     def _on_configure_form_received(self, result):
         if is_error_result(result):
-            log.info('Error %s %s', result.jid, result)
+            log.info(result)
             return
         GroupchatConfig(self.account, result.jid, 'owner', result.form)
 

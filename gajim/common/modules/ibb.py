@@ -22,6 +22,7 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
+from gajim.common.helpers import to_user_string
 from gajim.common.modules.base import BaseModule
 from gajim.common.file_props import FilesProp
 
@@ -149,8 +150,8 @@ class IBB(BaseModule):
 
     def _on_open_result(self, result, file_props):
         if is_error_result(result):
-            app.socks5queue.error_cb('Error', str(result))
-            self._log.warning('Error: %s', result)
+            app.socks5queue.error_cb('Error', to_user_string(result))
+            self._log.warning(result)
             return
         self.send_data(file_props)
 
@@ -183,8 +184,8 @@ class IBB(BaseModule):
 
     def _on_close_result(self, result):
         if is_error_result(result):
-            app.socks5queue.error_cb('Error', str(result))
-            self._log.warning('Error: %s', result)
+            app.socks5queue.error_cb('Error', to_user_string(result))
+            self._log.warning(result)
             return
 
     def send_data(self, file_props):
@@ -217,8 +218,8 @@ class IBB(BaseModule):
 
     def _on_data_result(self, result, file_props):
         if is_error_result(result):
-            app.socks5queue.error_cb('Error', str(result))
-            self._log.warning('Error: %s', result)
+            app.socks5queue.error_cb('Error', to_user_string(result))
+            self._log.warning(result)
             return
         self.send_data(file_props)
 

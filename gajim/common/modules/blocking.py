@@ -64,7 +64,7 @@ class Blocking(BaseModule):
 
     def _blocking_list_received(self, result):
         if is_error_result(result):
-            self._log.info('Error: %s', result)
+            self._log.info(result)
             return
 
         self.blocked = result.blocking_list

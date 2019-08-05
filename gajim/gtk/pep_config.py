@@ -19,6 +19,7 @@ from nbxmpp.util import is_error_result
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
+from gajim.common.helpers import to_user_string
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
@@ -88,7 +89,7 @@ class ManagePEPServicesWindow(Gtk.ApplicationWindow):
 
     def _items_received(self, result):
         if is_error_result(result):
-            ErrorDialog('Error', str(result))
+            ErrorDialog('Error', to_user_string(result))
             return
 
         jid = result.jid.getBare()

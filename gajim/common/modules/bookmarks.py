@@ -161,7 +161,7 @@ class Bookmarks(BaseModule):
 
     def _bookmarks_received(self, bookmarks):
         if is_error_result(bookmarks):
-            self._log.info('Error: %s', bookmarks)
+            self._log.info(bookmarks)
             bookmarks = []
 
         self._request_in_progress = False

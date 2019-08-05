@@ -38,6 +38,7 @@ from gajim.common.const import SyncThreshold
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import get_sync_threshold
+from gajim.common.helpers import to_user_string
 from gajim.common import idle
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
@@ -181,7 +182,7 @@ class MUC(BaseModule):
 
     def _on_room_config(self, result):
         if is_error_result(result):
-            self._log.info('Error: %s', result)
+            self._log.info(result)
             app.nec.push_incoming_event(NetworkEvent(
                 'muc-configuration-failed',
                 account=self._account,
@@ -212,7 +213,7 @@ class MUC(BaseModule):
 
     def _on_config_result(self, result):
         if is_error_result(result):
-            self._log.info('Error: %s', result)
+            self._log.info(result)
             app.nec.push_incoming_event(NetworkEvent(
                 'muc-configuration-failed',
                 account=self._account,
@@ -657,7 +658,7 @@ class MUC(BaseModule):
             NetworkEvent('muc-captcha-error',
                          account=self._account,
                          room_jid=str(result.jid),
-                         error_text=result.message))
+                         error_text=to_user_string(result)))
 
     def _on_config_change(self, _con, _stanza, properties):
         if not properties.is_muc_config_change:

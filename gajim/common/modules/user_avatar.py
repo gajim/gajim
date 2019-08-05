@@ -63,7 +63,7 @@ class UserAvatar(BaseModule):
 
     def _avatar_received(self, result):
         if is_error_result(result):
-            self._log.info('Error: %s', result)
+            self._log.info(result)
             return
 
         self._log.info('Received Avatar: %s %s', result.jid, result.sha)

@@ -23,6 +23,7 @@ from nbxmpp.modules import dataforms
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.helpers import to_user_string
 
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import ensure_not_destroyed
@@ -189,7 +190,7 @@ class AdHocCommand(Gtk.Assistant):
     def _received_command_list(self, commands):
         error_text = None
         if is_error_result(commands):
-            error_text = str(commands)
+            error_text = to_user_string(commands)
 
         elif not commands:
             error_text = _('No commands available')
@@ -206,7 +207,7 @@ class AdHocCommand(Gtk.Assistant):
     @ensure_not_destroyed
     def _received_stage(self, stage):
         if is_error_result(stage):
-            self.get_nth_page(Page.ERROR).set_text(str(stage))
+            self.get_nth_page(Page.ERROR).set_text(to_user_string(stage))
             self.get_nth_page(Page.ERROR).show_command_button = True
             self.set_current_page(Page.ERROR)
             return

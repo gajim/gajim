@@ -21,6 +21,7 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.helpers import to_user_string
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.dialogs import HigDialog
@@ -69,7 +70,7 @@ class BlockingList(Gtk.ApplicationWindow):
         dialog = HigDialog(
             self, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
             _('Error!'),
-            GLib.markup_escape_text(str(error)))
+            GLib.markup_escape_text(error))
         dialog.popup()
 
     def _on_blocking_list_received(self, result):
@@ -78,7 +79,7 @@ class BlockingList(Gtk.ApplicationWindow):
         self._set_grid_state(not is_error)
 
         if is_error:
-            self._show_error(result)
+            self._show_error(to_user_string(result))
 
         else:
             self._prev_blocked_jids = set(result.blocking_list)
@@ -89,7 +90,7 @@ class BlockingList(Gtk.ApplicationWindow):
     def _on_save_result(self, result):
         self._await_results -= 1
         if is_error_result(result) and not self._received_errors:
-            self._show_error(result)
+            self._show_error(to_user_string(result))
             self._received_errors = True
 
         if not self._await_results:

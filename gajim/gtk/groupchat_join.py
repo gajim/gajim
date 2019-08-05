@@ -20,6 +20,7 @@ from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.helpers import to_user_string
 from gajim.common.const import MUC_DISCO_ERRORS
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
@@ -100,7 +101,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self._stack.set_visible_child_name('error')
 
     def _set_error(self, error):
-        text = MUC_DISCO_ERRORS.get(error.type, str(error))
+        text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
         self._show_error_page(text)
 
     def _set_error_from_code(self, error_code):

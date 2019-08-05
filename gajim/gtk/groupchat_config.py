@@ -357,7 +357,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
     def _on_affiliations_received(self, result, affiliation):
         if is_error_result(result):
             log.info('Error while requesting %s affiliations: %s',
-                     affiliation, result)
+                     affiliation, result.condition)
             return
 
         if affiliation == 'outcast':

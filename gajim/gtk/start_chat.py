@@ -25,6 +25,7 @@ from nbxmpp.util import is_error_result
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import validate_jid
+from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
@@ -291,7 +292,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._set_error_from_code('not-muc-service')
 
     def _set_error(self, error):
-        text = MUC_DISCO_ERRORS.get(error.type, str(error))
+        text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
         self._show_error_page(text)
 
     def _set_error_from_code(self, error_code):
@@ -506,7 +507,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _parameters_received(self, result, user_data):
         if is_error_result(result):
             self._global_search_listbox.remove_progress()
-            self._show_error_page(result.message)
+            self._show_error_page(to_user_string(result))
             return
 
         con, text = user_data
@@ -521,7 +522,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         if is_error_result(result):
             self._global_search_listbox.remove_progress()
-            self._show_error_page(result.message)
+            self._show_error_page(to_user_string(result))
             return
 
         for item in result.items:
