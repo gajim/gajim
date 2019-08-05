@@ -19,6 +19,7 @@ import time
 import logging
 from datetime import datetime
 from datetime import timedelta
+from datetime import timezone
 from functools import partial
 
 import nbxmpp
@@ -302,13 +303,16 @@ class MUC(BaseModule):
             if archive is not None and archive.last_muc_timestamp is not None:
                 since_epoch = float(archive.last_muc_timestamp)
 
-            since_date = datetime.utcfromtimestamp(since_epoch)
+            since_date = datetime.fromtimestamp(since_epoch, timezone.utc)
             if threshold != SyncThreshold.NO_THRESHOLD:
-                threshold_date = datetime.utcnow() - timedelta(days=threshold)
+                now = datetime.now(timezone.utc)
+                threshold_date = now - timedelta(days=threshold)
                 since_date = max(threshold_date, since_date)
 
             date_string = since_date.strftime('%Y-%m-%dT%H:%M:%SZ')
             muc_x.setTag('history', {'since': date_string})
+            self._log.info('Request MUC history since: %s (%s)',
+                           date_string, since_date.timestamp())
             self._log.info('Threshold for %s: %s', room_jid, threshold)
 
     def _on_error_presence(self, _con, _stanza, properties):
