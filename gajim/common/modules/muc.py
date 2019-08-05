@@ -602,6 +602,11 @@ class MUC(BaseModule):
         if not properties.is_captcha_challenge:
             return
 
+        if properties.is_mam_message:
+            # Some servers store captcha challenges in MAM, dont process them
+            self._log.warning('Ignore captcha challenge received from MAM')
+            raise nbxmpp.NodeProcessed
+
         muc_data = self._muc_data.get(properties.jid)
         if muc_data is None:
             return
