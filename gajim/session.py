@@ -339,7 +339,7 @@ class ChatControlSession:
             if msg_type == 'error':
                 typ = 'error'
 
-            self.control.print_conversation(msg, typ, tim=tim, encrypted=encrypted,
+            self.control.add_message(msg, typ, tim=tim, encrypted=encrypted,
                     subject=subject, xhtml=xhtml, displaymarking=displaymarking,
                     additional_data=additional_data)
 
