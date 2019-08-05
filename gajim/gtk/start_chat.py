@@ -389,9 +389,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return
         for account in self.new_contact_rows:
             self._ui.listbox.remove(
-                self.new_contact_rows[account].get_parent())
+                self.new_contact_rows[account])
             self._ui.listbox.remove(
-                self.new_groupchat_rows[account].get_parent())
+                self.new_groupchat_rows[account])
         self.new_contact_row_visible = False
 
     def _update_new_jid_rows(self, search_text):
