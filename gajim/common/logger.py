@@ -1463,5 +1463,5 @@ class Logger:
             sql = '''UPDATE last_archive_message SET {}
                      WHERE jid_id = ?'''.format(args)
             self._con.execute(sql, tuple(kwargs.values()) + (jid_id,))
-        log.info('Save archive infos: %s', kwargs)
+        log.info('Set message archive info: %s %s', jid, kwargs)
         self._timeout_commit()
