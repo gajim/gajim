@@ -123,7 +123,7 @@ class MAM(BaseModule):
 
         else:
             archive_jid = self._con.get_own_jid().getBare()
-            namespace = self._con.get_module('MAM').archiving_namespace
+            namespace = self.archiving_namespace
             timestamp = None
 
         if properties.stanza_id is None or namespace != nbxmpp.NS_MAM_2:
@@ -132,8 +132,7 @@ class MAM(BaseModule):
         if not archive_jid == properties.stanza_id.by:
             return
 
-        if not self._con.get_module('MAM').is_catch_up_finished(
-                archive_jid):
+        if not self.is_catch_up_finished(archive_jid):
             return
 
         app.logger.set_archive_infos(archive_jid,
