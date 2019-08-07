@@ -1496,6 +1496,9 @@ class GroupchatControl(ChatControlBase):
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
+        # Update Roster
+        app.interface.roster.draw_contact(self.room_jid, self.account)
+
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(True)
 
@@ -1524,10 +1527,8 @@ class GroupchatControl(ChatControlBase):
         con = app.connections[self.account]
         con.get_module('Chatstate').remove_delay_timeout(self.contact)
 
-        contact = app.contacts.get_groupchat_contact(self.account,
-                                                     self.room_jid)
-        if contact is not None:
-            app.interface.roster.draw_contact(self.room_jid, self.account)
+        # Update Roster
+        app.interface.roster.draw_contact(self.room_jid, self.account)
 
         # We don't redraw the whole banner here, because only icon change
         self._update_banner_state_image()
