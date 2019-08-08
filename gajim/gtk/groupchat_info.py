@@ -15,6 +15,7 @@
 import time
 
 from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from nbxmpp.protocol import NS_MAM_1
@@ -26,6 +27,7 @@ from gajim.common.helpers import open_uri
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import make_href_markup
 
 
 MUC_FEATURES = {
@@ -130,7 +132,8 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
     def set_subject(self, subject):
         has_subject = bool(subject)
-        self._ui.subject.set_text(subject or '')
+        subject = GLib.markup_escape_text(subject or '')
+        self._ui.subject.set_markup(make_href_markup(subject))
         self._ui.subject.set_visible(has_subject)
         self._ui.subject_label.set_visible(has_subject)
 
