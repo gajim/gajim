@@ -57,7 +57,6 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.helpers import open_uri
 from gajim.common.helpers import event_filter
 from gajim.common import ged
 from gajim.common.i18n import _
@@ -88,7 +87,6 @@ from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_affiliation_surface
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import make_href_markup
 
 
 log = logging.getLogger('gajim.groupchat_control')
@@ -193,8 +191,6 @@ class GroupchatControl(ChatControlBase):
         self._nick_completion = NickCompletionGenerator(muc_data.nick)
         self.last_key_tabs = False
 
-        self.subject = ''
-
         self.name_label = self.xml.get_object('banner_name_label')
         self.event_box = self.xml.get_object('banner_eventbox')
 
@@ -292,13 +288,7 @@ class GroupchatControl(ChatControlBase):
             'go-next-symbolic', Gtk.IconSize.MENU)
         self.hide_roster_button.connect('clicked',
                                         lambda *args: self.show_roster())
-        self.subject_button = Gtk.MenuButton()
-        self.subject_button.set_image(Gtk.Image.new_from_icon_name(
-            'go-down-symbolic', Gtk.IconSize.MENU))
-        self.subject_button.set_popover(SubjectPopover())
-        self.subject_button.set_no_show_all(True)
         self.banner_actionbar.pack_end(self.hide_roster_button)
-        self.banner_actionbar.pack_start(self.subject_button)
 
         # Holds CaptchaRequest widget
         self._captcha_request = None
@@ -373,6 +363,12 @@ class GroupchatControl(ChatControlBase):
     @property
     def nick(self):
         return self._muc_data.nick
+
+    @property
+    def subject(self):
+        if self._subject_data is None:
+            return ''
+        return self._subject_data.subject
 
     def add_actions(self):
         super().add_actions()
@@ -1107,7 +1103,7 @@ class GroupchatControl(ChatControlBase):
     def draw_banner_text(self):
         """
         Draw the text in the fat line at the top of the window that houses the
-        room jid, subject
+        room jid
         """
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
         if self.is_continued:
@@ -1116,11 +1112,6 @@ class GroupchatControl(ChatControlBase):
             name = self.room_jid
 
         self.name_label.set_text(name)
-
-        if self.subject:
-            subject = GLib.markup_escape_text(self.subject)
-            subject_text = make_href_markup(subject)
-            self.subject_button.get_popover().set_text(subject_text)
 
     def _nec_update_avatar(self, obj):
         if obj.contact.room_jid != self.room_jid:
@@ -1362,16 +1353,14 @@ class GroupchatControl(ChatControlBase):
                 found_here = text.find(special_word, start)
         return False
 
-    def set_subject(self, subject):
-        self.subject = subject
-        self.draw_banner_text()
-
     @event_filter(['account', 'room_jid'])
     def _on_subject(self, event):
         if self.subject == event.subject or event.is_fake:
             # Probably a rejoin, we already showed that subject
             return
-        self.set_subject(event.subject)
+
+        self._subject_data = event
+
         text = _('%(nick)s has set the subject to %(subject)s') % {
             'nick': event.nickname, 'subject': event.subject}
 
@@ -1383,13 +1372,6 @@ class GroupchatControl(ChatControlBase):
         if (app.config.get('show_subject_on_join') or
                 self._muc_data.state != MUCJoinedState.JOINED):
             self.add_info_message(text)
-
-        if not event.subject:
-            self.subject_button.hide()
-        else:
-            self.subject_button.show()
-
-        self._subject_data = event
 
     @event_filter(['account', 'room_jid'])
     def _on_config_changed(self, event):
@@ -3038,48 +3020,3 @@ class GroupchatControl(ChatControlBase):
     def _on_abort_button_clicked(self, _button):
         self.parent_win.window.lookup_action(
             'disconnect-%s' % self.control_id).activate()
-
-
-class SubjectPopover(Gtk.Popover):
-    def __init__(self):
-        Gtk.Popover.__init__(self)
-        self.set_name('SubjectPopover')
-
-        scrolledwindow = Gtk.ScrolledWindow()
-        scrolledwindow.set_max_content_height(250)
-        scrolledwindow.set_propagate_natural_height(True)
-        scrolledwindow.set_propagate_natural_width(True)
-        scrolledwindow.set_policy(Gtk.PolicyType.NEVER,
-                                  Gtk.PolicyType.AUTOMATIC)
-
-        self.label = Gtk.Label()
-        self.label.set_line_wrap(True)
-        self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
-        self.label.set_max_width_chars(80)
-        self.label.connect('activate-link', self._on_activate_link)
-
-        scrolledwindow.add(self.label)
-
-        box = Gtk.Box()
-        box.add(scrolledwindow)
-        box.show_all()
-        self.add(box)
-
-        self.connect_after('show', self._after_show)
-
-    def set_text(self, text):
-        self.label.set_markup(text)
-
-    def _after_show(self, *args):
-        # Gtk Bug: If we set selectable True, on show
-        # everything inside the Label is selected.
-        # So we switch after show to False and again to True
-        self.label.set_selectable(False)
-        self.label.set_selectable(True)
-
-    @staticmethod
-    def _on_activate_link(_label, uri):
-        # We have to use this, because the default GTK handler
-        # is not cross-platform compatible
-        open_uri(uri)
-        return Gdk.EVENT_STOP
