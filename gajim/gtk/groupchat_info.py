@@ -93,9 +93,11 @@ MUC_FEATURES = {
 
 
 class GroupChatInfoScrolled(Gtk.ScrolledWindow):
-    def __init__(self, account=None):
+    def __init__(self, account=None, options=None):
         Gtk.ScrolledWindow.__init__(self)
-        self.set_size_request(400, -1)
+        if options is None:
+            options = {}
+        self.set_size_request(options.get('width', 400), -1)
         self.set_vexpand(True)
         self.set_min_content_height(400)
         self.set_policy(Gtk.PolicyType.NEVER,
@@ -117,23 +119,20 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         return self._info.jid
 
     def set_author(self, author, epoch_timestamp=None):
-        if not author:
-            return
-
-        if epoch_timestamp is not None:
+        has_author = bool(author)
+        if has_author and epoch_timestamp is not None:
             time_ = time.strftime('%c', time.localtime(epoch_timestamp))
             author = '{} - {}'.format(author, time_)
 
-        self._ui.author.set_text(author)
-        self._ui.author.set_visible(True)
-        self._ui.author_label.set_visible(True)
+        self._ui.author.set_text(author or '')
+        self._ui.author.set_visible(has_author)
+        self._ui.author_label.set_visible(has_author)
 
     def set_subject(self, subject):
-        if not subject:
-            return
-        self._ui.subject.set_text(subject)
-        self._ui.subject.set_visible(True)
-        self._ui.subject_label.set_visible(True)
+        has_subject = bool(subject)
+        self._ui.subject.set_text(subject or '')
+        self._ui.subject.set_visible(has_subject)
+        self._ui.subject_label.set_visible(has_subject)
 
     def set_from_disco_info(self, info):
         self._info = info
@@ -150,10 +149,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.description_label.set_visible(has_desc)
 
         # Set subject
-        has_subject = bool(info.muc_subject)
-        self._ui.subject.set_text(info.muc_subject or '')
-        self._ui.subject.set_visible(has_subject)
-        self._ui.subject_label.set_visible(has_subject)
+        self.set_subject(info.muc_subject)
 
         # Set user
         has_users = info.muc_users is not None
@@ -165,6 +161,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.address.set_text(str(info.jid))
 
         # Set contacts
+        self._ui.contact_box.foreach(self._ui.contact_box.remove)
         has_contacts = bool(info.muc_contacts)
         if has_contacts:
             for contact in info.muc_contacts:
