@@ -298,6 +298,7 @@
         <property name="wrap_mode">word-char</property>
         <property name="selectable">True</property>
         <property name="xalign">0</property>
+        <signal name="activate-link" handler="_on_activate_subject_link" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">1</property>

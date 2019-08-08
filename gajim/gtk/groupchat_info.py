@@ -224,6 +224,13 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         return Gdk.EVENT_STOP
 
     @staticmethod
+    def _on_activate_subject_link(_label, uri):
+        # We have to use this, because the default GTK handler
+        # is not cross-platform compatible
+        open_uri(uri)
+        return Gdk.EVENT_STOP
+
+    @staticmethod
     def _get_feature_icon(icon, tooltip):
         image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
         image.set_valign(Gtk.Align.CENTER)
