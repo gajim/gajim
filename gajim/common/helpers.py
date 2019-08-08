@@ -85,6 +85,9 @@ log = logging.getLogger('gajim.c.helpers')
 
 special_groups = (_('Transports'), _('Not in contact list'), _('Observers'), _('Group chats'))
 
+URL_REGEX = re.compile(
+    r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
+
 
 class InvalidFormat(Exception):
     pass

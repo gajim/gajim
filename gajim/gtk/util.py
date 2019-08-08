@@ -45,10 +45,12 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.helpers import URL_REGEX
 from gajim.common.const import MOODS
 from gajim.common.const import ACTIVITIES
 from gajim.common.const import LOCATION_DATA
 from gajim.common.const import Display
+from gajim.common.const import StyleAttr
 
 from gajim.gtk.const import GajimIconSet
 
@@ -698,3 +700,17 @@ def load_pixbuf(path, size=None):
                                        height,
                                        GdkPixbuf.InterpType.BILINEAR)
         return pixbuf
+
+
+def make_href_markup(string):
+    url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
+    color = convert_rgb_to_hex(url_color)
+
+    def _to_href(match):
+        url = match.group()
+        if '://' not in url:
+            url = 'https://' + url
+        return '<a href="%s"><span foreground="%s">%s</span></a>' % (
+            url, color, match.group())
+
+    return URL_REGEX.sub(_to_href, string)

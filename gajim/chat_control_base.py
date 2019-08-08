@@ -24,7 +24,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import re
 import time
 from tempfile import TemporaryDirectory
 
@@ -42,7 +41,6 @@ from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
-from gajim.common.const import StyleAttr
 from gajim.common.const import Chatstate
 
 from gajim import gtkgui_helpers
@@ -56,7 +54,6 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk import util
-from gajim.gtk.util import convert_rgb_to_hex
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
@@ -92,15 +89,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     # So we match hardware keycodes instead of keyvals.
     # Multiple hardware keycodes can trigger a keyval like Gdk.KEY_c.
     keycodes_c = get_hardware_key_codes(Gdk.KEY_c)
-
-    def make_href(self, match):
-        url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
-        color = convert_rgb_to_hex(url_color)
-        url = match.group()
-        if '://' not in url:
-            url = 'https://' + url
-        return '<a href="%s"><span foreground="%s">%s</span></a>' % (
-            url, color, match.group())
 
     def get_nb_unread(self):
         jid = self.contact.jid
@@ -233,9 +221,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             id_ = widget.connect('button-press-event',
                 self._on_banner_eventbox_button_press_event)
             self.handlers[id_] = widget
-
-        self.urlfinder = re.compile(
-            r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
         self.banner_status_label = self.xml.get_object('banner_label')
         if self.banner_status_label is not None:

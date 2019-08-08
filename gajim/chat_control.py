@@ -68,6 +68,7 @@ from gajim.gtk.util import format_activity
 from gajim.gtk.util import format_tune
 from gajim.gtk.util import format_location
 from gajim.gtk.util import get_activity_icon_name
+from gajim.gtk.util import make_href_markup
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
@@ -760,7 +761,7 @@ class ChatControl(ChatControlBase):
             label_tooltip = '%s%s' % (name, acct_info)
 
         if status_escaped:
-            status_text = self.urlfinder.sub(self.make_href, status_escaped)
+            status_text = make_href_markup(status_escaped)
             status_text = '<span size="x-small" weight="light">%s</span>' % status_text
             self.banner_status_label.set_tooltip_text(status)
             self.banner_status_label.set_no_show_all(False)

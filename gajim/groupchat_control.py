@@ -88,6 +88,7 @@ from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_affiliation_surface
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import make_href_markup
 
 
 log = logging.getLogger('gajim.groupchat_control')
@@ -1118,7 +1119,7 @@ class GroupchatControl(ChatControlBase):
 
         if self.subject:
             subject = GLib.markup_escape_text(self.subject)
-            subject_text = self.urlfinder.sub(self.make_href, subject)
+            subject_text = make_href_markup(subject)
             self.subject_button.get_popover().set_text(subject_text)
 
     def _nec_update_avatar(self, obj):
