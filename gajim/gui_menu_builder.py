@@ -579,6 +579,7 @@ def get_singlechat_menu(control_id, account, jid):
 
 def get_groupchat_menu(control_id, account, jid):
     groupchat_menu = [
+        ('win.information-', _('Information')),
         (_('Manage Group Chat'), [
             ('win.change-subject-', _('Change Subject')),
             ('win.configure-', _('Configure Group Chat')),

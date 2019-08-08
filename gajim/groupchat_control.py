@@ -83,6 +83,7 @@ from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_affiliation_surface
@@ -301,6 +302,11 @@ class GroupchatControl(ChatControlBase):
         # Holds CaptchaRequest widget
         self._captcha_request = None
 
+        # MUC Info
+        self._subject_data = None
+        self._muc_info_box = GroupChatInfoScrolled(self.account, {'width': 600})
+        self.xml.info_grid.attach(self._muc_info_box, 0, 0, 1, 1)
+
         # GC Roster tooltip
         self.gc_tooltip = GCTooltip()
 
@@ -378,6 +384,7 @@ class GroupchatControl(ChatControlBase):
             ('request-voice-', self._on_request_voice),
             ('execute-command-', self._on_execute_command),
             ('upload-avatar-', self._on_upload_avatar),
+            ('information-', self._on_information),
         ]
 
         for action in actions:
@@ -632,6 +639,15 @@ class GroupchatControl(ChatControlBase):
 
     def _on_disconnect(self, action, param):
         self.leave()
+
+    def _on_information(self, action, param):
+        disco_info = muc_caps_cache.cache[self.contact.jid]
+        self._muc_info_box.set_from_disco_info(disco_info)
+        if self._subject_data is not None:
+            self._muc_info_box.set_subject(self._subject_data.subject)
+            self._muc_info_box.set_author(self._subject_data.nickname,
+                                          self._subject_data.user_timestamp)
+        self._show_page('muc-info')
 
     def _on_destroy_room(self, action, param):
         def _on_confirm(reason, jid):
@@ -1371,6 +1387,8 @@ class GroupchatControl(ChatControlBase):
             self.subject_button.hide()
         else:
             self.subject_button.show()
+
+        self._subject_data = event
 
     @event_filter(['account', 'room_jid'])
     def _on_config_changed(self, event):
@@ -2428,6 +2446,8 @@ class GroupchatControl(ChatControlBase):
                 self._on_password_cancel_clicked()
             elif self._get_current_page() == 'captcha':
                 self._on_captcha_cancel_clicked()
+            elif self._get_current_page() == 'muc-info':
+                self._on_page_cancel_clicked()
             elif self._get_current_page() in ('error', 'captcha-error'):
                 self._on_page_close_clicked()
             else:
@@ -2888,6 +2908,8 @@ class GroupchatControl(ChatControlBase):
             self.xml.progress_spinner.stop()
         elif page_name == 'progress':
             self.xml.progress_spinner.start()
+        elif page_name == 'muc-info':
+            self.xml.info_close_button.grab_default()
         elif page_name == 'password':
             self.xml.password_entry.set_text('')
             self.xml.password_entry.grab_focus()
@@ -3006,7 +3028,7 @@ class GroupchatControl(ChatControlBase):
         app.connections[self.account].get_module('MUC').join(self._muc_data)
         self._show_page('progress')
 
-    def _on_page_cancel_clicked(self, _button):
+    def _on_page_cancel_clicked(self, _button=None):
         self._show_page('groupchat')
 
     def _on_page_close_clicked(self, _button=None):
