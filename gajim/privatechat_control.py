@@ -142,7 +142,7 @@ class PrivateChatControl(ChatControl):
                                                              status=status)
             self.add_status_message(message)
 
-        elif app.config.get_per('rooms', self.room_name,
+        elif app.config.get_per('rooms', self.gc_contact.room_jid,
                                 'print_status', status_default):
             message = _('{nick} is now {show}{status}').format(nick=nick,
                                                                show=show,
