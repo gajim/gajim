@@ -173,10 +173,26 @@ class Contact(CommonContact):
         return self.jid
 
     def get_shown_name(self):
+        if self._is_groupchat:
+            return self._get_groupchat_name()
         if self.name:
             return self.name
         if self.contact_name:
             return self.contact_name
+        return self.jid.split('@')[0]
+
+    def _get_groupchat_name(self):
+        from gajim.common import app
+        con = app.connections[self.account.name]
+        name = con.get_module('Bookmarks').get_name_from_bookmark(self.jid)
+        if name:
+            return name
+
+        cache = caps_cache.muc_caps_cache.cache
+        if self.jid in cache:
+            name = cache[self.jid].muc_room_name
+            if name:
+                return name
         return self.jid.split('@')[0]
 
     def get_shown_groups(self):

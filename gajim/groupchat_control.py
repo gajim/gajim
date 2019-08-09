@@ -110,7 +110,6 @@ class GroupchatControl(ChatControlBase):
     def __init__(self, parent_win, contact, muc_data, acct, is_continued=False):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
             'groupchat_control', contact, acct)
-
         self.force_non_minimizable = False
         self.is_continued = is_continued
         self.is_anonymous = True
@@ -169,11 +168,6 @@ class GroupchatControl(ChatControlBase):
 
         self.room_jid = self.contact.jid
         self._muc_data = muc_data
-
-        bm_module = app.connections[self.account].get_module('Bookmarks')
-        self.name = bm_module.get_name_from_bookmark(self.room_jid)
-
-        self.contact.name = self.name
 
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
             app.config.get('hide_groupchat_banner'))
@@ -369,6 +363,10 @@ class GroupchatControl(ChatControlBase):
         if self._subject_data is None:
             return ''
         return self._subject_data.subject
+
+    @property
+    def room_name(self):
+        return self.contact.get_shown_name()
 
     def add_actions(self):
         super().add_actions()
@@ -998,7 +996,7 @@ class GroupchatControl(ChatControlBase):
             # if this is a continued conversation
             label_str = self.get_continued_conversation_name()
         else:
-            label_str = self.name
+            label_str = self.room_name
         label_str = GLib.markup_escape_text(label_str)
 
         # count waiting highlighted messages
@@ -1106,12 +1104,7 @@ class GroupchatControl(ChatControlBase):
         room jid
         """
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
-        if self.is_continued:
-            name = self.get_continued_conversation_name()
-        else:
-            name = self.room_jid
-
-        self.name_label.set_text(name)
+        self.name_label.set_text(self.room_name)
 
     def _nec_update_avatar(self, obj):
         if obj.contact.room_jid != self.room_jid:
@@ -2221,7 +2214,7 @@ class GroupchatControl(ChatControlBase):
                 _('Leave Group Chat'),
                 _('Are you sure you want to leave this group chat?'),
                 _('If you close this window, you will leave '
-                  '\'%s\'.') % self.name,
+                  '\'%s\'.') % self.room_name,
                 _('_Do not ask me again'),
                 [DialogButton.make('Cancel',
                                    callback=on_cancel),

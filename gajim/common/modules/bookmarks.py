@@ -246,11 +246,10 @@ class Bookmarks(BaseModule):
             self.store_bookmarks()
 
     def get_name_from_bookmark(self, jid: str) -> str:
-        fallback = jid.split('@')[0]
         bookmark = self.get_bookmark_from_jid(jid)
         if bookmark is None:
-            return fallback
-        return bookmark.name or fallback
+            return
+        return bookmark.name
 
     def is_bookmark(self, jid: str) -> bool:
         return self.get_bookmark_from_jid(jid) is not None
