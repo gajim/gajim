@@ -54,10 +54,7 @@ class PrivateChatControl(ChatControl):
             room_jid, account)
         if room_jid in app.interface.minimized_controls[account]:
             self.room_ctrl = app.interface.minimized_controls[account][room_jid]
-        if self.room_ctrl:
-            self.room_name = self.room_ctrl.name
-        else:
-            self.room_name = room_jid
+
         self.gc_contact = gc_contact
         ChatControl.__init__(self, parent_win, contact, account, session)
         self.TYPE_ID = 'pm'
@@ -85,6 +82,12 @@ class PrivateChatControl(ChatControl):
     def contact(self, _value):
         # TODO: remove all code that sets the contact here
         return
+
+    @property
+    def room_name(self):
+        if self.room_ctrl is not None:
+            return self.room_ctrl.room_name
+        return self.gc_contact.room_jid
 
     def get_our_nick(self):
         return self.room_ctrl.nick
