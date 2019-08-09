@@ -36,7 +36,7 @@ from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.privacy_list import PrivacyListsWindow
-from gajim.gtk.bookmarks import ManageBookmarksWindow
+from gajim.gtk.bookmarks import Bookmarks
 from gajim.gtk.features import FeaturesDialog
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.history import HistoryWindow
@@ -87,8 +87,13 @@ def on_history_manager(action, param):
     HistoryManager()
 
 
-def on_manage_bookmarks(action, param):
-    ManageBookmarksWindow()
+def on_bookmarks(action, param):
+    account = param.get_string()
+    window = app.get_app_window(Bookmarks, account=account)
+    if window is None:
+        window = Bookmarks(account)
+    else:
+        window.present()
 
 
 def on_quit(action, param):

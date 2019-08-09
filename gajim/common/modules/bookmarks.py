@@ -18,8 +18,6 @@ from typing import Any
 from typing import List
 from typing import Optional
 
-import copy
-
 import nbxmpp
 from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
@@ -121,27 +119,6 @@ class Bookmarks(BaseModule):
         for bookmark in self._bookmarks:
             if bookmark.jid == jid:
                 return bookmark
-
-    def get_sorted_bookmarks(self, short_name=False):
-        # This returns a sorted by name copy of the bookmarks
-        sorted_bookmarks = []
-        for bookmark in self._bookmarks:
-            bookmark_copy = copy.deepcopy(bookmark)
-            if not bookmark_copy.name:
-                # No name was given for this bookmark
-                # Use the first part of JID instead
-                name = bookmark_copy.jid.getNode()
-                bookmark_copy = bookmark_copy._replace(name=name)
-
-            if short_name:
-                name = bookmark_copy.name
-                name = (name[:42] + '..') if len(name) > 42 else name
-                bookmark_copy = bookmark_copy._replace(name=name)
-
-            sorted_bookmarks.append(bookmark_copy)
-
-        sorted_bookmarks.sort(key=lambda x: x.name.lower())
-        return sorted_bookmarks
 
     def _pubsub_support(self) -> bool:
         return (self._con.get_module('PEP').supported and

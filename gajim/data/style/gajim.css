@@ -227,6 +227,7 @@ list.settings > row > box {
 .margin-top12 { margin-top: 12px; }
 .margin-12 { margin: 12px; }
 .margin-18 { margin: 18px; }
+.padding-18 { margin: 18px; }
 
 /* Treeview */
 treeview.space { padding: 6px; }
@@ -265,6 +266,10 @@ button.flat.link { padding: 0; border: 0; }
 /* Search Dialog */
 .search-treeview { padding: 5px; }
 .search-scrolled { border: 1px solid; border-color:@unfocused_borders; }
+
+.gajim-treeview { padding: 4px; }
+.gajim-treeview check { padding: 0px; }
+.gajim-scrolled { border: 1px solid; border-color:@unfocused_borders; }
 
 
 #GroupchatJoin > box {padding: 18px; }

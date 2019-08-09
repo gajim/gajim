@@ -77,7 +77,6 @@ from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.pep_config import ManagePEPServicesWindow
-from gajim.gtk.bookmarks import ManageBookmarksWindow
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery import ServiceDiscoveryWindow
@@ -3520,9 +3519,6 @@ class RosterWindow:
         app.config.set('show_transports_group', param.get_boolean())
         action.set_state(param)
         self.refilter_shown_roster_items()
-
-    def on_manage_bookmarks_menuitem_activate(self, widget):
-        ManageBookmarksWindow()
 
     def on_execute_command(self, widget, contact, account, resource=None):
         """

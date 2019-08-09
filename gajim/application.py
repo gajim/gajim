@@ -428,7 +428,6 @@ class GajimApplication(Gtk.Application):
             ('quit', app_actions.on_quit),
             ('add-account', app_actions.on_add_account),
             ('manage-proxies', app_actions.on_manage_proxies),
-            ('bookmarks', app_actions.on_manage_bookmarks),
             ('history-manager', app_actions.on_history_manager),
             ('preferences', app_actions.on_preferences),
             ('plugins', app_actions.on_plugins),
@@ -502,6 +501,7 @@ class GajimApplication(Gtk.Application):
             ]
 
         return [
+            ('-bookmarks', a.on_bookmarks, 'online', 's'),
             ('-start-single-chat', a.on_single_message, 'online', 's'),
             ('-start-chat', a.start_chat, 'online', 'as'),
             ('-add-contact', a.on_add_contact, 'online', 'as'),

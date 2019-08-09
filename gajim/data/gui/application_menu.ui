@@ -80,11 +80,6 @@
         <attribute name="target"></attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Bookmarks</attribute>
-        <attribute name="action">app.bookmarks</attribute>
-        <attribute name="accel">&lt;Primary&gt;B</attribute>
-      </item>
-      <item>
         <attribute name="label" translatable="yes">History Manager</attribute>
         <attribute name="action">app.history-manager</attribute>
       </item>
