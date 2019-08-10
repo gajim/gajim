@@ -76,7 +76,6 @@ from gajim.gtk.dialogs import CertificateDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
-from gajim.gtk.pep_config import ManagePEPServicesWindow
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery import ServiceDiscoveryWindow
@@ -3498,13 +3497,6 @@ class RosterWindow:
 
         helpers.update_optional_features(account)
 
-    def _on_pep_services_menuitem_activate(self, widget, account):
-        window = app.get_app_window(ManagePEPServicesWindow, account)
-        if window is None:
-            ManagePEPServicesWindow(account)
-        else:
-            window.present()
-
     def on_add_new_contact(self, widget, account):
         AddNewContactWindow(account)
 
@@ -4821,15 +4813,6 @@ class RosterWindow:
                     item.set_active(activ)
                     item.connect('toggled', self.on_publish_location_toggled,
                                  account)
-
-                pep_config = Gtk.MenuItem.new_with_label(
-                    _('Configure Services…'))
-                item = Gtk.SeparatorMenuItem.new()
-                pep_submenu.append(item)
-                pep_config.set_sensitive(True)
-                pep_submenu.append(pep_config)
-                pep_config.connect('activate',
-                    self._on_pep_services_menuitem_activate, account)
 
             else:
                 pep_menuitem.set_sensitive(False)

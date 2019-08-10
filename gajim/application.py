@@ -510,6 +510,7 @@ class GajimApplication(Gtk.Application):
             ('-xml-console', a.on_xml_console, 'always', 's'),
             ('-server-info', a.on_server_info, 'online', 's'),
             ('-archive', a.on_mam_preferences, 'feature', 's'),
+            ('-pep-config', a.on_pep_config, 'online', 's'),
             ('-sync-history', a.on_history_sync, 'online', 's'),
             ('-privacylists', a.on_privacy_lists, 'feature', 's'),
             ('-blocking', a.on_blocking_list, 'feature', 's'),

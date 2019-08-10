@@ -46,6 +46,7 @@ from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.blocking import BlockingList
 from gajim.gtk.xml_console import XMLConsoleWindow
 from gajim.gtk.groupchat_join import GroupchatJoin
+from gajim.gtk.pep_config import ManagePEPServicesWindow
 
 # General Actions
 
@@ -190,7 +191,16 @@ def on_import_contacts(action, param):
         app.interface.instances['import_contacts'] = \
             dialogs.SynchroniseSelectAccountDialog(account)
 
+
 # Advanced Actions
+
+def on_pep_config(action, param):
+    account = param.get_string()
+    window = app.get_app_window(ManagePEPServicesWindow, account=account)
+    if window is None:
+        ManagePEPServicesWindow(account)
+    else:
+        window.present()
 
 
 def on_mam_preferences(action, param):

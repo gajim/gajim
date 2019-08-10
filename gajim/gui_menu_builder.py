@@ -677,6 +677,7 @@ def get_account_menu(account):
             ('-archive', _('Archiving Preferences')),
             ('-blocking', _('Blocking List')),
             ('-bookmarks', _('Bookmarks')),
+            ('-pep-config', _('PEP Configuration')),
             ('-sync-history', _('Synchronise History')),
             ('-privacylists', _('Privacy Lists')),
             ('-server-info', _('Server Info')),
