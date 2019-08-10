@@ -225,7 +225,7 @@ class Bookmarks(BaseModule):
     def get_name_from_bookmark(self, jid: str) -> str:
         bookmark = self.get_bookmark_from_jid(jid)
         if bookmark is None:
-            return
+            return ''
         return bookmark.name
 
     def is_bookmark(self, jid: str) -> bool:
