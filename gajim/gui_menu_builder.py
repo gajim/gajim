@@ -671,8 +671,9 @@ def get_account_menu(account):
     account_menu = [
         ('-add-contact', _('Add Contact…')),
         ('-profile', _('Profile')),
-        ('-services', _('Discover Services')),
         ('-start-single-chat', _('Send Single Message…')),
+        ('-services', _('Discover Services')),
+        ('-server-info', _('Server Info')),
         (_('Advanced'), [
             ('-archive', _('Archiving Preferences')),
             ('-blocking', _('Blocking List')),
@@ -680,7 +681,7 @@ def get_account_menu(account):
             ('-pep-config', _('PEP Configuration')),
             ('-sync-history', _('Synchronise History')),
             ('-privacylists', _('Privacy Lists')),
-            ('-server-info', _('Server Info')),
+
             ('-xml-console', _('XML Console'))
         ]),
         (_('Admin'), [
