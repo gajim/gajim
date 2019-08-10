@@ -2898,7 +2898,7 @@ class GroupchatControl(ChatControlBase):
             self.xml.close_button.grab_default()
 
     def _on_change_nick(self, _action, _param):
-        if self._get_current_page() == 'nickname':
+        if self._get_current_page() != 'groupchat':
             return
         self.xml.nickname_entry.set_text(self.nick)
         self.xml.nickname_entry.grab_focus()
@@ -2924,7 +2924,7 @@ class GroupchatControl(ChatControlBase):
         self._show_page('groupchat')
 
     def _on_change_subject(self, _action, _param):
-        if self._get_current_page() == 'subject':
+        if self._get_current_page() != 'groupchat':
             return
         self.xml.subject_textview.get_buffer().set_text(self.subject)
         self.xml.subject_textview.grab_focus()
