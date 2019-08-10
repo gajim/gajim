@@ -173,6 +173,15 @@ class MessageWindow:
                                               '<Control>Page_Down']),
             ('switch-next-unread-tab-left', ['<Control>ISO_Left_Tab',
                                              '<Control>Page_Up']),
+            ('switch-tab-1', ['<Alt>1', '<Alt>KP_1']),
+            ('switch-tab-2', ['<Alt>2', '<Alt>KP_2']),
+            ('switch-tab-3', ['<Alt>3', '<Alt>KP_3']),
+            ('switch-tab-4', ['<Alt>4', '<Alt>KP_4']),
+            ('switch-tab-5', ['<Alt>5', '<Alt>KP_5']),
+            ('switch-tab-6', ['<Alt>6', '<Alt>KP_6']),
+            ('switch-tab-7', ['<Alt>7', '<Alt>KP_7']),
+            ('switch-tab-8', ['<Alt>8', '<Alt>KP_8']),
+            ('switch-tab-9', ['<Alt>9', '<Alt>KP_9']),
         ]
 
         disabled_for_emacs = (
@@ -252,6 +261,11 @@ class MessageWindow:
 
         if action == 'switch-next-unread-tab-left':
             self.move_to_next_unread_tab(False)
+            return
+
+        if action.startswith('switch-tab-'):
+            number = int(action[-1])
+            self.notebook.set_current_page(number - 1)
             return
 
     def change_account_name(self, old_name, new_name):
