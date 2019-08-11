@@ -31,6 +31,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
+from gi.repository import GObject
 
 from gajim.common import events
 from gajim.common import app
@@ -272,6 +273,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.dnd_list,
             Gdk.DragAction.COPY)
         self.conv_textview.tv.drag_dest_set_target_list(dst_targets)
+
+        id_ = self.conv_textview.tv.connect('grab-focus',
+                                            self._on_html_textview_grab_focus)
+        self.handlers[id_] = self.conv_textview.tv
 
         self.conv_scrolledwindow = self.xml.get_object(
             'conversation_scrolledwindow')
@@ -515,6 +520,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             app.config.add_per(per_type, self.contact.jid)
         app.config.set_per(per_type, self.contact.jid,
                            'speller_language', gspell_lang.get_code())
+
+    def _on_html_textview_grab_focus(self, textview):
+        # Abort signal so the textview does not get focused
+        # Focus the MessageTextView instead
+        GObject.signal_stop_emission_by_name(textview, 'grab-focus')
+        self.msg_textview.grab_focus()
+        return Gdk.EVENT_STOP
 
     def on_banner_label_populate_popup(self, label, menu):
         """
