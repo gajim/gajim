@@ -144,7 +144,6 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         has_name = bool(info.muc_name)
         self._ui.name.set_text(info.muc_name or '')
         self._ui.name.set_visible(has_name)
-        self._ui.name_label.set_visible(has_name)
 
         # Set description
         has_desc = bool(info.muc_description)

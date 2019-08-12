@@ -9,22 +9,6 @@
     <property name="row_spacing">6</property>
     <property name="column_spacing">12</property>
     <child>
-      <object class="GtkLabel" id="name_label">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Name</property>
-        <style>
-          <class name="dim-label"/>
-        </style>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkLabel" id="address_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -86,22 +70,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">4</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="name">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="selectable">True</property>
-        <property name="ellipsize">end</property>
-        <property name="single_line_mode">True</property>
-        <property name="max_width_chars">40</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
@@ -206,16 +174,17 @@
       <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="halign">end</property>
+        <property name="halign">center</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Configuration</property>
         <style>
-          <class name="dim-label"/>
+          <class name="bold16"/>
         </style>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">9</property>
+        <property name="width">2</property>
       </packing>
     </child>
     <child>
@@ -307,7 +276,24 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkLabel" id="name">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">center</property>
+        <property name="valign">start</property>
+        <property name="selectable">True</property>
+        <property name="ellipsize">end</property>
+        <property name="single_line_mode">True</property>
+        <property name="max_width_chars">40</property>
+        <style>
+          <class name="large-header"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">2</property>
+      </packing>
     </child>
   </object>
 </interface>
