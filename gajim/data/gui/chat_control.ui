@@ -364,15 +364,14 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkBox" id="hbox3004">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkEventBox" id="avatar_eventbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_top">5</property>
-                        <property name="margin_bottom">5</property>
                         <property name="visible_window">False</property>
                         <child>
                           <object class="GtkImage" id="avatar_image">
@@ -395,17 +394,22 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="margin_left">5</property>
                         <property name="hexpand">True</property>
-                        <property name="row_spacing">2</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">3</property>
                         <child>
                           <object class="GtkLabel" id="banner_name_label">
                             <property name="name">ChatControl-BannerNameLabel</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label">&lt;span weight="heavy" size="large"&gt;Contact name&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="halign">start</property>
+                            <property name="hexpand">True</property>
+                            <property name="label">Contact name</property>
+                            <property name="ellipsize">end</property>
                             <property name="xalign">0</property>
+                            <style>
+                              <class name="large-header"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -418,12 +422,16 @@
                             <property name="name">ChatControl-BannerLabel</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="hexpand">True</property>
                             <property name="label">label</property>
-                            <property name="use_markup">True</property>
                             <property name="selectable">True</property>
+                            <property name="ellipsize">end</property>
                             <property name="xalign">0</property>
                             <signal name="populate-popup" handler="on_banner_label_populate_popup" swapped="no"/>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

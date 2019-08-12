@@ -9,11 +9,6 @@
 .gajim-state-tab-muc-msg {
     color: rgb(0, 0, 205)
     }
-.gajim-banner {
-    font-size: 13pt;
-    font-weight: 700
-    }
-
 
 .chatcontrol-actionbar-button { 
 	padding: 0px 5px 0px 5px;
@@ -42,8 +37,6 @@
 .chatcontrol-separator-top {margin-top: 5px;}
 
 .chatcontrol-separator {margin-bottom: 5px;}
-
-#SubjectPopover box { padding: 10px; }
 
 .link-button { min-height: 0px }
 

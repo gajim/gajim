@@ -280,6 +280,7 @@ class GroupchatControl(ChatControlBase):
         self.banner_actionbar = self.xml.get_object('banner_actionbar')
         self.hide_roster_button = Gtk.Button.new_from_icon_name(
             'go-next-symbolic', Gtk.IconSize.MENU)
+        self.hide_roster_button.set_valign(Gtk.Align.CENTER)
         self.hide_roster_button.connect('clicked',
                                         lambda *args: self.show_roster())
         self.banner_actionbar.pack_end(self.hide_roster_button)
@@ -1072,7 +1073,7 @@ class GroupchatControl(ChatControlBase):
         if self.is_connected:
             if self.contact.avatar_sha:
                 surface = app.interface.get_avatar(self.contact,
-                                                   AvatarSize.ROSTER,
+                                                   AvatarSize.CHAT,
                                                    self.scale_factor)
                 banner_status_img.set_from_surface(surface)
                 return
@@ -1103,7 +1104,6 @@ class GroupchatControl(ChatControlBase):
         Draw the text in the fat line at the top of the window that houses the
         room jid
         """
-        self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
         self.name_label.set_text(self.room_name)
 
     def _nec_update_avatar(self, obj):

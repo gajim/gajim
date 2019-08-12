@@ -732,8 +732,6 @@ class ChatControl(ChatControlBase):
 
         status = contact.status
         if status is not None:
-            banner_name_label.set_ellipsize(Pango.EllipsizeMode.END)
-            self.banner_status_label.set_ellipsize(Pango.EllipsizeMode.END)
             status_reduced = helpers.reduce_chars_newlines(status, max_lines=1)
         else:
             status_reduced = ''
