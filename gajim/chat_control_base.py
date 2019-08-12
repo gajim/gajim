@@ -58,7 +58,6 @@ from gajim.gtk import util
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
-from gajim.gtk.util import get_primary_accel_mod
 from gajim.gtk.util import get_hardware_key_codes
 from gajim.gtk.emoji_chooser import emoji_chooser
 
@@ -254,9 +253,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # Create textviews and connect signals
         self.conv_textview = ConversationTextview(self.account)
         id_ = self.conv_textview.connect('quote', self.on_quote)
-        self.handlers[id_] = self.conv_textview.tv
-        id_ = self.conv_textview.tv.connect(
-            'key_press_event', self._conv_textview_key_press_event)
         self.handlers[id_] = self.conv_textview.tv
 
         # FIXME: DND on non editable TextView, find a better way
@@ -607,19 +603,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         if event.button == 3:  # right click
             self.parent_win.popup_menu(event)
-
-    def _conv_textview_key_press_event(self, _widget, event):
-        if (event.get_state() & get_primary_accel_mod() and
-                event.hardware_keycode in self.keycodes_c):
-            return Gdk.EVENT_PROPAGATE
-
-        if (event.get_state() & Gdk.ModifierType.SHIFT_MASK and
-                event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up)):
-            self._on_scroll(None, event.keyval)
-            return Gdk.EVENT_PROPAGATE
-
-        self.parent_win.notebook.event(event)
-        return Gdk.EVENT_STOP
 
     def _on_message_textview_paste_event(self, texview):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
