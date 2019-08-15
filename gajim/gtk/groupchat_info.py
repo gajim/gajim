@@ -100,6 +100,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         if options is None:
             options = {}
         self.set_size_request(options.get('width', 400), -1)
+        self.set_halign(Gtk.Align.CENTER)
         self.set_vexpand(True)
         self.set_min_content_height(400)
         self.set_policy(Gtk.PolicyType.NEVER,

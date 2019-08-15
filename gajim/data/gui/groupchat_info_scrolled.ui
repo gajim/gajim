@@ -5,6 +5,7 @@
   <object class="GtkGrid" id="info_grid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="halign">center</property>
     <property name="row_spacing">6</property>
     <property name="column_spacing">12</property>
     <child>
