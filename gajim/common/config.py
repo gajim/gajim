@@ -295,6 +295,7 @@ class Config:
         'muclumbus_api_jid': [opt_str, 'rodrigo.de.mucobedo@dreckshal.de'],
         'muclumbus_api_http_uri': [opt_str, 'https://search.jabbercat.org/api/1.0/search'],
         'muclumbus_api_pref': [opt_str, 'http', _('API Preferences. Possible values: \'http\', \'iq\'')],
+        'auto_copy': [opt_bool, True, _('Selecting text will copy it to the clipboard')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {

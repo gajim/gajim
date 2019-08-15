@@ -182,6 +182,7 @@ class MessageWindow:
             ('switch-tab-7', ['<Alt>7', '<Alt>KP_7']),
             ('switch-tab-8', ['<Alt>8', '<Alt>KP_8']),
             ('switch-tab-9', ['<Alt>9', '<Alt>KP_9']),
+            ('copy-text', ['<Control><Shift>c']),
         ]
 
         disabled_for_emacs = (

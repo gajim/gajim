@@ -831,9 +831,25 @@ class HtmlTextView(Gtk.TextView):
         self.plugin_modified = False
         self._cursor_changed = False
 
+        self.connect('button-release-event', self._on_button_release)
         if standalone:
             self.connect('query-tooltip', self._query_tooltip)
             self.create_tags()
+
+    @staticmethod
+    def _on_button_release(textview, event):
+        if event.button == 1:
+            # Left Mouse button
+
+            if not app.config.get('auto_copy'):
+                return Gdk.EVENT_PROPAGATE
+
+            if not textview.get_buffer().get_has_selection():
+                return Gdk.EVENT_PROPAGATE
+            selected = textview.get_selected_text()
+            clipboard = textview.get_clipboard(Gdk.SELECTION_CLIPBOARD)
+            clipboard.set_text(selected, -1)
+        return Gdk.EVENT_PROPAGATE
 
     def create_tags(self):
         color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)

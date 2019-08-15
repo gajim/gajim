@@ -396,6 +396,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.emoticons_button.get_popover().show()
             return Gdk.EVENT_STOP
 
+        if action == 'copy-text':
+            self.conv_textview.tv.emit('copy-clipboard')
+
         return Gdk.EVENT_PROPAGATE
 
     def add_actions(self):

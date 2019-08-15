@@ -123,6 +123,12 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.sort_by_show_in_muc_checkbutton.set_active(st)
 
         ### Chat tab ###
+        ## General Settings
+
+        # Enable auto copy
+        st = app.config.get('auto_copy')
+        self._ui.auto_copy.set_active(st)
+
         ## Chat Settings
         # Use speller
         if app.is_installed('GSPELL'):
@@ -539,6 +545,9 @@ class Preferences(Gtk.ApplicationWindow):
             ctrl.draw_roster()
 
     ### Chat tab ###
+    def on_auto_copy_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'auto_copy')
+
     def on_speller_checkbutton_toggled(self, widget):
         active = widget.get_active()
         app.config.set('use_speller', active)
