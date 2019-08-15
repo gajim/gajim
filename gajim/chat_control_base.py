@@ -398,6 +398,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         if action == 'copy-text':
             self.conv_textview.tv.emit('copy-clipboard')
+            return Gdk.EVENT_STOP
 
         return Gdk.EVENT_PROPAGATE
 
