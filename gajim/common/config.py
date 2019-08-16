@@ -334,7 +334,6 @@ class Config:
             'custom_host': [opt_str, '', '', True],
             'sync_with_global_status': [opt_bool, False, ],
             'no_log_for': [opt_str, '', _('List of XMPP Addresses (space separated) for which you do not want to store chat history. You can also add the name of an account to disable storing chat history for this account.')],
-            'allow_no_log_for': [opt_str, '', _('List of XMPP Addresses (space separated) for which you accept to not store chat history if your contact does not want to.')],
             'attached_gpg_keys': [opt_str, ''],
             'keep_alives_enabled': [opt_bool, True, _('If enabled, a whitespace is sent after inactivity (keep alive).')],
             'ping_alives_enabled': [opt_bool, True, _('If enabled, an XMPP ping is sent after inactivity (ping alive).')],
