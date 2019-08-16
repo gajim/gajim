@@ -252,7 +252,6 @@ class Config:
         'ctrl_tab_go_to_next_composing': [opt_bool, True, _('Ctrl+Tab switches to the next composing tab when there are no tabs with messages pending.')],
         'confirm_metacontacts': [opt_str, '', _('Show a confirmation dialog to create metacontacts? Empty string means never show the dialog.')],
         'confirm_block': [opt_str, '', _('Show a confirmation dialog to block a contact? Empty string means never show the dialog.')],
-        'confirm_custom_status': [opt_str, '', _('Show a confirmation dialog for a custom status? Empty string means never show the dialog.')],
         'enable_negative_priority': [opt_bool, False, _('If enabled, you will be able to set a negative priority to your account in the Accounts window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server.')],
         'show_contacts_number': [opt_bool, True, _('If enabled, Gajim will show both the number of online and total contacts in account rows as well as in group rows.')],
         'treat_incoming_messages': [opt_str, 'chat', _('Can be empty, \'chat\' or \'normal\'. If not empty, all incoming messages are treated as if they were of this type.')],
