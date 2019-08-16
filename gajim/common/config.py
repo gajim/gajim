@@ -343,7 +343,6 @@ class Config:
             # try for 1 minutes before giving up (aka. timeout after those seconds)
             'try_connecting_for_foo_secs': [opt_int, 60],
             'http_auth': [opt_str, 'ask'], # yes, no, ask
-            'dont_ack_subscription': [opt_bool, False, _('Jabberd2 workaround.')],
             # proxy65 for FT
             'file_transfer_proxies': [opt_str, ''],
             'use_ft_proxies': [opt_bool, False, _('If enabled, Gajim will use your IP and proxies defined in \'file_transfer_proxies\' option for file transfers.'), True],
