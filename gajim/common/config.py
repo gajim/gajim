@@ -231,7 +231,6 @@ class Config:
         'print_status_muc_default': [opt_bool, False, _('Default Setting: Show a status message for all status changes (away, dnd, etc.) of users in a group chat.')],
         'log_contact_status_changes': [opt_bool, False],
         'log_xhtml_messages': [opt_bool, False, _('Store XHTML messages in chat history instead of plain text messages.')],
-        'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
         'roster_window_skip_taskbar': [opt_bool, False, _('Don\'t show contact list window in the system taskbar.')],
         'use_urgency_hint': [opt_bool, True, _('If enabled, Gajim makes the window flash (the default behaviour in most Window Managers) when holding pending events.')],
         'notification_timeout': [opt_int, 5],
