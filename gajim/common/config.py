@@ -171,7 +171,6 @@ class Config:
         'restore_lines': [opt_int, 10, _('Number of messages from chat history to be restored when a chat tab/window is reopened.')],
         'restore_timeout': [opt_int, -1, _('How far back in time (minutes) chat history is restored. -1 means no limit.')],
         'muc_autorejoin_timeout': [opt_int, 1, _('How many seconds to wait before trying to automatically rejoin a group chat you were disconnected from. Set to 0 to disable automatic rejoining.')],
-        'muc_autorejoin_on_kick': [opt_bool, False, _('Should automatic rejoin be activated when you were kicked from a group chat?')],
         'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and make a new line with Enter.')],
         'last_roster_visible': [opt_bool, True],
         'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP (previously sent messages).')],
