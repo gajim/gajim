@@ -330,7 +330,7 @@ class StandardGroupChatCommands(CommandContainer):
                    'reason': reason}})
 
     @command(raw=True, empty=True)
-    @doc(_("Kick user by a nick from a group chat"))
+    @doc(_("Kick user from group chat by nickname"))
     def kick(self, who, reason):
         if not who in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))

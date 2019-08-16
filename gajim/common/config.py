@@ -321,7 +321,7 @@ class Config:
             'autoconnect': [opt_bool, False, '', True],
             'autoconnect_as': [opt_str, 'online', _('Status to be used automatically when connecting. Can be \'online\', \'chat\', \'away\', \'xa\', \'dnd\' or \'invisible\'. NOTE: This option is used only if \'restore_last_status\' is disabled.'), True],
             'restore_last_status': [opt_bool, False, _('If enabled, the last status will be restored.')],
-            'autoauth': [opt_bool, False, _('If enabled, Contacts requesting authorization will be accepted automatically.')],
+            'autoauth': [opt_bool, False, _('If enabled, contacts requesting authorization will be accepted automatically.')],
             'active': [opt_bool, True, _('If disabled, this account will be disabled and will not appear in the contact list window.'), True],
             'proxy': [opt_str, '', '', True],
             'keyid': [opt_str, '', '', True],
@@ -477,7 +477,7 @@ class Config:
         'contact_connected': [False, 'connected.wav'],
         'contact_disconnected': [False, 'disconnected.wav'],
         'message_sent': [False, 'sent.wav'],
-        'muc_message_highlight': [True, 'gc_message1.wav', _('Sound to play when a group chat message contains one of the words in \'muc_highlight_words\' your nickname is mentioned.')],
+        'muc_message_highlight': [True, 'gc_message1.wav', _('Sound to play when a group chat message contains one of the words in \'muc_highlight_words\' or your nickname is mentioned.')],
         'muc_message_received': [True, 'gc_message2.wav', _('Sound to play when any group chat message arrives.')],
     }
 
