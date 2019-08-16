@@ -257,6 +257,8 @@ class GroupchatControl(ChatControlBase):
 
         self.setup_seclabel()
 
+        self.list_treeview.set_search_equal_func(self._search_func)
+
         # Send file
         self.sendfile_button = self.xml.get_object('sendfile_button')
         self.sendfile_button.set_action_name('win.send-file-' + \
@@ -608,6 +610,10 @@ class GroupchatControl(ChatControlBase):
             renderer.set_property('foreground', color)
             desc = app.css_config.get_font('.gajim-group-row')
             renderer.set_property('font-desc', desc)
+
+    @staticmethod
+    def _search_func(model, _column, search_text, iter_):
+        return search_text.lower() not in model[iter_][1].lower()
 
     @event_filter(['account', 'room_jid'])
     def _on_disco_update(self, _event):
