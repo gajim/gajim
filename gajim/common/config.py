@@ -195,7 +195,6 @@ class Config:
         'trayicon_notification_on_events': [opt_bool, True, _('Notify of events in the notification area.')],
         'last_save_dir': [opt_str, ''],
         'last_send_dir': [opt_str, ''],
-        'last_emoticons_dir': [opt_str, ''],
         'last_sounds_dir': [opt_str, ''],
         'tabs_position': [opt_str, 'top'],
         'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
