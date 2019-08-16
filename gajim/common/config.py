@@ -326,7 +326,6 @@ class Config:
             'authentication_mechanisms': [opt_str, '', _('List of authentication mechanisms to try (space separated). Can contain \'ANONYMOUS\', \'EXTERNAL\', \'GSSAPI\', \'SCRAM-SHA-1-PLUS\', \'SCRAM-SHA-1\', \'DIGEST-MD5\', \'PLAIN\', \'X-MESSENGER-OAUTH2\' or \'XEP-0078\'.')],
             'action_when_plaintext_connection': [opt_str, 'warn', _('Show a warning dialog before sending password on an plaintext connection. Can be \'warn\', \'connect\' or \'disconnect\'.')],
             'warn_when_insecure_ssl_connection': [opt_bool, True, _('Show a warning dialog before using standard SSL library.')],
-            'warn_when_insecure_password': [opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain connection.')],
             'ignore_ssl_errors': [opt_str, '', _('List of SSL errors to ignore (space separated).')],
             'use_srv': [opt_bool, True, '', True],
             'use_custom_host': [opt_bool, False, '', True],
