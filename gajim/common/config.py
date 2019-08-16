@@ -193,7 +193,6 @@ class Config:
         'use_kib_mib': [opt_bool, False, _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.')],
         'notify_on_all_muc_messages': [opt_bool, False],
         'trayicon_notification_on_events': [opt_bool, True, _('Notify of events in the notification area.')],
-        'trayicon_blink': [opt_bool, True, _('If disabled, Gajim will display a static event icon instead of the blinking status icon in the notification area when notifying about an event.')],
         'last_save_dir': [opt_str, ''],
         'last_send_dir': [opt_str, ''],
         'last_emoticons_dir': [opt_str, ''],
