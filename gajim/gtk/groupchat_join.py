@@ -73,16 +73,13 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self.add(self._main_box)
         self.show_all()
 
-        self._disco_muc(jid)
+        con = app.connections[self.account]
+        con.get_module('Discovery').disco_muc(
+            jid, callback=self._disco_info_received)
 
     def _on_page_changed(self, stack, _param):
         name = stack.get_visible_child_name()
         self._join_button.set_sensitive(name == 'info')
-
-    def _disco_muc(self, jid):
-        con = app.connections[self.account]
-        con.get_module('Discovery').disco_info(
-            jid, callback=self._disco_info_received)
 
     @ensure_not_destroyed
     def _disco_info_received(self, result):

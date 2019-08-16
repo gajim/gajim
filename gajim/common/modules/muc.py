@@ -20,7 +20,6 @@ import logging
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
-from functools import partial
 
 import nbxmpp
 from nbxmpp.const import InviteType
@@ -144,7 +143,20 @@ class MUC(BaseModule):
         self._muc_data[muc_data.jid] = muc_data
 
         self._con.get_module('Discovery').disco_muc(
-            muc_data.jid, partial(self._join, muc_data))
+            muc_data.jid,
+            callback=self._on_disco_result)
+
+    def _on_disco_result(self, result):
+        if is_error_result(result):
+            self._log.info('Disco %s failed: %s', result.jid, result.get_text())
+            app.nec.push_incoming_event(
+                NetworkEvent('muc-join-failed',
+                             account=self._account,
+                             room_jid=result.jid.getBare(),
+                             error=result))
+            return
+
+        self._join(self._get_muc_data(result.jid))
 
     def _join(self, muc_data):
         show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
@@ -227,8 +239,7 @@ class MUC(BaseModule):
             account=self._account,
             room_jid=result.jid))
 
-        self._con.get_module('Discovery').disco_muc(
-            result.jid, partial(self._on_disco_update, result.jid), update=True)
+        self._con.get_module('Discovery').disco_muc(result.jid)
 
         # If this is an automatic room creation
         try:
@@ -243,12 +254,6 @@ class MUC(BaseModule):
 
         for jid in invites:
             self.invite(result.jid, jid)
-
-    def _on_disco_update(self, room_jid):
-        app.nec.push_incoming_event(NetworkEvent(
-            'muc-disco-update',
-            account=self._account,
-            room_jid=room_jid))
 
     def update_presence(self, auto=False):
         mucs = self.get_mucs_with_state([MUCJoinedState.JOINED,
@@ -330,8 +335,12 @@ class MUC(BaseModule):
             elif properties.error.type == Error.NOT_AUTHORIZED:
                 self._raise_muc_event('muc-password-required', properties)
             else:
-                self._raise_muc_event('muc-join-failed', properties)
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+                app.nec.push_incoming_event(
+                    NetworkEvent('muc-join-failed',
+                                 account=self._account,
+                                 room_jid=room_jid,
+                                 error=properties.error))
 
         elif muc_data.state == MUCJoinedState.CAPTCHA_REQUEST:
             app.nec.push_incoming_event(

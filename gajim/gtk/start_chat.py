@@ -14,6 +14,7 @@
 
 import locale
 from enum import IntEnum
+from functools import partial
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -275,11 +276,11 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _disco_muc(self, account, jid):
         self._ui.stack.set_visible_child_name('progress')
         con = app.connections[account]
-        con.get_module('Discovery').disco_info(
-            jid, callback=self._disco_info_received, user_data=account)
+        con.get_module('Discovery').disco_muc(
+            jid, callback=partial(self._disco_info_received, account))
 
     @ensure_not_destroyed
-    def _disco_info_received(self, result, account):
+    def _disco_info_received(self, account, result):
         if is_error_result(result):
             self._set_error(result)
 

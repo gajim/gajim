@@ -21,7 +21,7 @@ from nbxmpp.util import is_error_result
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.modules.base import BaseModule
-from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.nec import NetworkEvent
 
 
 class Discovery(BaseModule):
@@ -196,40 +196,27 @@ class Discovery(BaseModule):
         self._con.connection.send(iq)
         raise nbxmpp.NodeProcessed
 
-    def disco_muc(self, jid, callback, update=False):
+    def disco_muc(self, jid, callback=None):
         if not app.account_is_connected(self._account):
             return
-        disco_info = app.logger.get_last_disco_info(jid)
-        if disco_info is not None and not update:
-            callback()
-            return
 
-        self._log.info('Request MUC info %s', jid)
+        self._log.info('Request MUC info for %s', jid)
 
         self.disco_info(jid,
-                        callback=self._muc_info_response,
+                        callback=self._muc_info_received,
                         user_data=callback)
 
-    def _muc_info_response(self, result, callback):
-        if is_error_result(result):
-            if result.condition == 'item-not-found':
-                # Groupchat does not exist
-                self._log.info('MUC does not exist: %s', result.jid)
-                callback()
-            else:
-                self._log.info('MUC disco error: %s', result)
-                app.nec.push_incoming_event(
-                    InformationEvent(
-                        None,
-                        dialog_name='unable-join-groupchat',
-                        kwargs={
-                            'server': result.jid,
-                            'error': str(result)}))
-            return
-
+    def _muc_info_received(self, result, callback):
         self._log.info('MUC info received: %s', result.jid)
-        app.logger.set_last_disco_info(result.jid, result)
-        callback()
+        if not is_error_result(result):
+            app.logger.set_last_disco_info(result.jid, result)
+            app.nec.push_incoming_event(NetworkEvent(
+                'muc-disco-update',
+                account=self._account,
+                room_jid=result.jid))
+
+        if callback is not None:
+            callback(result)
 
 
 def get_instance(*args, **kwargs):

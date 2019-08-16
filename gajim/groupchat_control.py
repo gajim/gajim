@@ -647,7 +647,6 @@ class GroupchatControl(ChatControlBase):
             win.change_action_state('choose-sync-%s' % self.control_id,
                                     GLib.Variant('s', str(threshold)))
 
-
     def _connect_window_state_change(self, parent_win):
         if self._state_change_handler_id is None:
             id_ = parent_win.window.connect('notify::is-maximized',
@@ -1402,7 +1401,7 @@ class GroupchatControl(ChatControlBase):
             changes.append(_('A setting not related to privacy has been '
                              'changed'))
             app.connections[self.account].get_module('Discovery').disco_muc(
-                self.room_jid, self.update_actions, update=True)
+                self.room_jid)
 
         if StatusCode.CONFIG_ROOM_LOGGING in event.status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
@@ -1941,7 +1940,7 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_muc_join_failed(self, event):
-        self.xml.error_label.set_text(event.properties.error.message)
+        self.xml.error_label.set_text(event.error.get_text())
         self._show_page('error')
         self.autorejoin = False
 

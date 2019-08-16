@@ -104,11 +104,6 @@ messages = {
           '%(error_msg)s'),
         ErrorDialog),
 
-    'unable-join-groupchat': Message(
-        _('Unable to Join Group Chat'),
-        '%(server)s\n%(error)s',
-        ErrorDialog),
-
     'gstreamer-error': Message(
         _('GStreamer Error'),
         _('Error: %(error)s\nDebug: %(debug)s'),
