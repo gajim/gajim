@@ -188,11 +188,10 @@ class Contact(CommonContact):
         if name:
             return name
 
-        cache = caps_cache.muc_caps_cache.cache
-        if self.jid in cache:
-            name = cache[self.jid].muc_room_name
-            if name:
-                return name
+        disco_info = app.logger.get_last_disco_info(self.jid)
+        if disco_info is not None:
+            if disco_info.muc_room_name:
+                return disco_info.muc_room_name
         return self.jid.split('@')[0]
 
     def get_shown_groups(self):

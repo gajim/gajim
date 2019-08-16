@@ -22,7 +22,6 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.const import MUCUser
-from gajim.common.caps_cache import muc_caps_cache
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dataform import DataFormWidget
@@ -53,7 +52,8 @@ class GroupchatConfig(Gtk.ApplicationWindow):
             self._ui.add_button.set_sensitive(True)
             self._ui.add_button.set_tooltip_text('')
 
-        visible = muc_caps_cache.supports(jid, nbxmpp.NS_REGISTER)
+        disco_info = app.logger.get_last_disco_info(self.jid)
+        visible = disco_info.supports(nbxmpp.NS_REGISTER)
         self._ui.reserved_name_column.set_visible(visible)
         self._ui.info_button.set_sensitive(False)
 

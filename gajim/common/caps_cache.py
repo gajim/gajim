@@ -29,8 +29,6 @@ through ClientCaps objects which are hold by contact instances.
 
 import logging
 
-import nbxmpp
-from nbxmpp.const import Affiliation
 from nbxmpp import (NS_XHTML_IM, NS_ESESSION, NS_CHATSTATES,
     NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO,
     NS_JINGLE_FILE_TRANSFER_5)
@@ -52,15 +50,13 @@ FAKED = 3 # allow NullClientCaps to behave as it has a cached item
 ################################################################################
 
 capscache = None
-muc_caps_cache = None
+
 def initialize(logger):
     """
     Initialize this module
     """
     global capscache
-    global muc_caps_cache
     capscache = CapsCache(logger)
-    muc_caps_cache = MucCapsCache()
 
 def client_supports(client_caps, requested_feature):
     lookup_item = client_caps.get_cache_lookup_strategy()
@@ -333,87 +329,3 @@ class CapsCache:
         key = (hash_method, hash_)
         if key in self.__cache:
             del self.__cache[key]
-
-
-class MucCapsCache:
-
-    def __init__(self):
-        self.cache = {}
-
-    def append(self, info):
-        if nbxmpp.NS_MUC not in info.features:
-            # Not a MUC, don't cache info
-            return
-
-        self.cache[info.jid] = info
-
-    def is_cached(self, jid):
-        return jid in self.cache
-
-    def supports(self, jid, feature):
-        if jid in self.cache:
-            if feature in self.cache[jid].features:
-                return True
-        return False
-
-    def has_mam(self, jid):
-        try:
-            if nbxmpp.NS_MAM_2 in self.cache[jid].features:
-                return True
-            if nbxmpp.NS_MAM_1 in self.cache[jid].features:
-                return True
-            return False
-        except (KeyError, AttributeError):
-            return False
-
-    def get_mam_namespace(self, jid):
-        try:
-            if nbxmpp.NS_MAM_2 in self.cache[jid].features:
-                return nbxmpp.NS_MAM_2
-            if nbxmpp.NS_MAM_1 in self.cache[jid].features:
-                return nbxmpp.NS_MAM_1
-        except (KeyError, AttributeError):
-            return
-
-    def is_subject_change_allowed(self, jid, affiliation):
-        allowed = True
-        if affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
-            return allowed
-
-        if jid in self.cache:
-            for form in self.cache[jid].dataforms:
-                try:
-                    allowed = form['muc#roominfo_changesubject'].value
-                except KeyError:
-                    pass
-        return allowed
-
-    def is_open(self, jid):
-        return 'muc_membersonly' not in self.cache[jid].features
-
-    def is_password_protected(self, jid):
-        return 'muc_unsecured' not in self.cache[jid].features
-
-    def is_anonymous(self, jid):
-        return 'muc_nonanonymous' not in self.cache[jid].features
-
-    def is_persistent(self, jid):
-        return 'muc_temporary' not in self.cache[jid].features
-
-    def get_room_infos(self, jid):
-        room_info = {}
-        if jid in self.cache:
-            for form in self.cache[jid].dataforms:
-                try:
-                    room_info['name'] = form['muc#roomconfig_roomname'].value
-                except KeyError:
-                    room_info['name'] = None
-                try:
-                    room_info['desc'] = form['muc#roominfo_description'].value
-                except KeyError:
-                    room_info['desc'] = None
-                try:
-                    room_info['lang'] = form['muc#roominfo_lang'].value
-                except KeyError:
-                    room_info['lang'] = None
-        return room_info or None

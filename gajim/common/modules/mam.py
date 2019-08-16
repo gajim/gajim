@@ -26,7 +26,6 @@ from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.const import ArchiveState
 from gajim.common.const import KindConstant
 from gajim.common.const import SyncThreshold
-from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.helpers import get_sync_threshold
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.misc import parse_oob
@@ -112,7 +111,8 @@ class MAM(BaseModule):
 
         if properties.type.is_groupchat:
             archive_jid = properties.jid.getBare()
-            namespace = muc_caps_cache.get_mam_namespace(archive_jid)
+            disco_info = app.logger.get_last_disco_info(archive_jid)
+            namespace = disco_info.mam_namespace
             timestamp = properties.timestamp
             if namespace is None:
                 # MUC History
@@ -536,10 +536,12 @@ class MAM(BaseModule):
     def _get_archive_query(self, query_id, jid=None, start=None, end=None,
                            with_=None, after=None, max_=70):
         # Muc archive query?
-        namespace = muc_caps_cache.get_mam_namespace(jid)
-        if namespace is None:
+        disco_info = app.logger.get_last_disco_info(jid)
+        if disco_info is None:
             # Query to our own archive
             namespace = self.archiving_namespace
+        else:
+            namespace = disco_info.mam_namespace
 
         iq = nbxmpp.Iq('set', to=jid)
         query = iq.addChild('query', namespace=namespace)

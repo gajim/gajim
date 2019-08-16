@@ -25,7 +25,6 @@ from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
@@ -293,8 +292,8 @@ class Message(BaseModule):
                                         message_id=event.message_id)
 
     def _check_for_mam_compliance(self, room_jid, stanza_id):
-        namespace = muc_caps_cache.get_mam_namespace(room_jid)
-        if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
+        disco_info = app.logger.get_last_disco_info(room_jid)
+        if stanza_id is None and disco_info.mam_namespace == nbxmpp.NS_MAM_2:
             self._log.warning('%s announces mam:2 without stanza-id', room_jid)
 
     def _get_unique_id(self, properties):
@@ -306,8 +305,9 @@ class Message(BaseModule):
             return None, None
 
         if properties.type.is_groupchat:
-            namespace = muc_caps_cache.get_mam_namespace(
+            disco_info = app.logger.get_last_disco_info(
                 properties.jid.getBare())
+            namespace = disco_info.mam_namespace
             archive = properties.jid
         else:
             namespace = self._con.get_module('MAM').archiving_namespace

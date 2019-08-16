@@ -19,7 +19,6 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
-from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import InformationEvent
@@ -200,7 +199,8 @@ class Discovery(BaseModule):
     def disco_muc(self, jid, callback, update=False):
         if not app.account_is_connected(self._account):
             return
-        if muc_caps_cache.is_cached(jid) and not update:
+        disco_info = app.logger.get_last_disco_info(jid)
+        if disco_info is not None and not update:
             callback()
             return
 
@@ -228,7 +228,7 @@ class Discovery(BaseModule):
             return
 
         self._log.info('MUC info received: %s', result.jid)
-        muc_caps_cache.append(result)
+        app.logger.set_last_disco_info(result.jid, result)
         callback()
 
 

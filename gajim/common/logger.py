@@ -38,8 +38,10 @@ from collections import namedtuple
 from gi.repository import GLib
 
 from nbxmpp.protocol import Node
+from nbxmpp.protocol import Iq
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.modules.dataforms import extend_form
+from nbxmpp.modules.discovery import parse_disco_info
 
 from gajim.common import exceptions
 from gajim.common import app
@@ -105,6 +107,11 @@ CACHE_SQL_STATEMENT = '''
             data TEXT,
             last_seen INTEGER
     );
+    CREATE TABLE last_seen_disco_info(
+            jid TEXT PRIMARY KEY UNIQUE,
+            disco_info TEXT,
+            last_seen INTEGER
+    );
     CREATE TABLE roster_entry(
             account_jid_id INTEGER,
             jid_id INTEGER,
@@ -120,7 +127,7 @@ CACHE_SQL_STATEMENT = '''
             group_name TEXT,
             PRIMARY KEY (account_jid_id, jid_id, group_name)
     );
-    PRAGMA user_version=2;
+    PRAGMA user_version=3;
     '''
 
 log = logging.getLogger('gajim.c.logger')
@@ -170,6 +177,17 @@ def caps_decoder(dict_):
                     dataforms=dataforms)
 
 
+def _convert_disco_info(disco_info):
+    return parse_disco_info(Iq(node=disco_info))
+
+def _adapt_disco_info(disco_info):
+    return str(disco_info.stanza)
+
+sqlite.register_converter('disco_info', _convert_disco_info)
+
+sqlite.register_adapter(DiscoInfo, _adapt_disco_info)
+
+
 class Logger:
     def __init__(self):
         self._jid_ids = {}
@@ -178,6 +196,8 @@ class Logger:
         self._commit_timout_id = None
         self._log_db_path = configpaths.get('LOG_DB')
         self._cache_db_path = configpaths.get('CACHE_DB')
+
+        self._disco_info_cache = {}
 
         self._create_databases()
         self._migrate_databases()
@@ -299,6 +319,16 @@ class Logger:
                 ]
             self._execute_multiple(con, statements)
 
+        if self._get_user_version(con) < 3:
+            statements = [
+                '''CREATE TABLE last_seen_disco_info(
+                    jid TEXT PRIMARY KEY UNIQUE,
+                    disco_info TEXT,
+                    last_seen INTEGER)''',
+                'PRAGMA user_version=3'
+                ]
+            self._execute_multiple(con, statements)
+
     @staticmethod
     def _execute_multiple(con, statements):
         """
@@ -341,8 +371,10 @@ class Logger:
         app.ged.raise_event(event, None, str(error))
 
     def _connect_databases(self):
-        self._con = self._connect(
-            self._log_db_path, timeout=20.0, isolation_level='IMMEDIATE')
+        self._con = self._connect(self._log_db_path,
+                                  timeout=20.0,
+                                  isolation_level='IMMEDIATE',
+                                  detect_types=sqlite.PARSE_COLNAMES)
 
         self._con.row_factory = self.namedtuple_factory
 
@@ -1464,4 +1496,56 @@ class Logger:
                      WHERE jid_id = ?'''.format(args)
             self._con.execute(sql, tuple(kwargs.values()) + (jid_id,))
         log.info('Set message archive info: %s %s', jid, kwargs)
+        self._timeout_commit()
+
+    def get_last_disco_info(self, jid):
+        """
+        Get last disco info from jid
+
+        :param jid:     The jid
+
+        """
+
+        if jid in self._disco_info_cache:
+            return self._disco_info_cache[jid]
+
+        sql = '''SELECT disco_info as "disco_info [disco_info]", last_seen FROM
+                 last_seen_disco_info
+                 WHERE jid = ?'''
+        row = self._con.execute(sql, (str(jid),)).fetchone()
+        if row is None:
+            return None
+
+        disco_info = row.disco_info._replace(timestamp=row.last_seen)
+        self._disco_info_cache[jid] = disco_info
+        return disco_info
+
+    def set_last_disco_info(self, jid, disco_info):
+        """
+        Get last disco info from jid
+
+        :param jid:          The jid
+
+        :param disco_info:   A DiscoInfo object
+
+        """
+
+        log.info('Save disco info from %s', jid)
+
+        disco_exists = self.get_last_disco_info(jid) is not None
+        if disco_exists:
+            sql = '''UPDATE last_seen_disco_info SET
+                     disco_info = ?, last_seen = ?
+                     WHERE jid = ?'''
+
+            self._con.execute(sql, (disco_info, disco_info.timestamp, str(jid)))
+
+        else:
+            sql = '''INSERT INTO last_seen_disco_info
+                     (jid, disco_info, last_seen)
+                     VALUES (?, ?, ?)'''
+
+            self._con.execute(sql, (str(jid), disco_info, disco_info.timestamp))
+
+        self._disco_info_cache[jid] = disco_info
         self._timeout_commit()

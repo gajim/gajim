@@ -53,7 +53,6 @@ from gajim import message_control
 from gajim import vcard
 
 from gajim.common.const import AvatarSize
-from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
@@ -371,6 +370,10 @@ class GroupchatControl(ChatControlBase):
     def room_name(self):
         return self.contact.get_shown_name()
 
+    @property
+    def disco_info(self):
+        return app.logger.get_last_disco_info(self.contact.jid)
+
     def add_actions(self):
         super().add_actions()
         actions = [
@@ -421,8 +424,10 @@ class GroupchatControl(ChatControlBase):
         self.parent_win.window.add_action(act)
 
         # Enable notify on all for private rooms
-        members_only = muc_caps_cache.supports(self.contact.jid,
-                                               'muc#roomconfig_membersonly')
+        members_only = False
+        if self.disco_info is not None:
+            members_only = self.disco_info.muc_is_members_only
+
         value = app.config.get_per(
             'rooms', self.contact.jid, 'notify_on_all_messages', members_only)
 
@@ -486,12 +491,9 @@ class GroupchatControl(ChatControlBase):
                                                        role.is_visitor)
 
         # Change Subject
-        subject = False
-        if contact is not None:
-            subject = muc_caps_cache.is_subject_change_allowed(
-                self.room_jid, contact.affiliation)
+        subject_change = self._is_subject_change_allowed()
         self._get_action('change-subject-').set_enabled(self.is_connected and
-                                                        subject)
+                                                        subject_change)
 
         # Change Nick
         self._get_action('change-nickname-').set_enabled(self.is_connected)
@@ -517,7 +519,9 @@ class GroupchatControl(ChatControlBase):
         self.sendfile_button.set_tooltip_text(tooltip_text)
 
         # Upload Avatar
-        vcard_support = muc_caps_cache.supports(self.room_jid, nbxmpp.NS_VCARD)
+        vcard_support = False
+        if self.disco_info is not None:
+            vcard_support = self.disco_info.supports(nbxmpp.NS_VCARD)
         self._get_action('upload-avatar-').set_enabled(
             self.is_connected and
             vcard_support and
@@ -536,6 +540,19 @@ class GroupchatControl(ChatControlBase):
                                    'print_status', status_default)
         self._get_action('print-status-').set_state(
             GLib.Variant.new_boolean(value))
+
+    def _is_subject_change_allowed(self):
+        contact = app.contacts.get_gc_contact(
+            self.account, self.room_jid, self.nick)
+        if contact is None:
+            return False
+
+        if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
+            return True
+
+        if self.disco_info is None:
+            return False
+        return self.disco_info.muc_subjectmod
 
     def _get_action(self, name):
         win = self.parent_win.window
@@ -623,7 +640,7 @@ class GroupchatControl(ChatControlBase):
         self.update_actions()
 
         # After the room has been created, reevaluate threshold
-        if muc_caps_cache.has_mam(self.contact.jid):
+        if self.disco_info.has_mam:
             archive_info = app.logger.get_archive_infos(self.contact.jid)
             threshold = helpers.get_sync_threshold(self.contact.jid,
                                                    archive_info)
@@ -643,8 +660,7 @@ class GroupchatControl(ChatControlBase):
         self.leave()
 
     def _on_information(self, action, param):
-        disco_info = muc_caps_cache.cache[self.contact.jid]
-        self._muc_info_box.set_from_disco_info(disco_info)
+        self._muc_info_box.set_from_disco_info(self.disco_info)
         if self._subject_data is not None:
             self._muc_info_box.set_subject(self._subject_data.subject)
             self._muc_info_box.set_author(self._subject_data.nickname,
@@ -1479,7 +1495,7 @@ class GroupchatControl(ChatControlBase):
             GLib.source_remove(self.autorejoin)
         self.autorejoin = None
 
-        if muc_caps_cache.has_mam(self.room_jid):
+        if self.disco_info.has_mam:
             # Request MAM
             con = app.connections[self.account]
             con.get_module('MAM').request_archive_on_muc_join(

@@ -65,7 +65,6 @@ from gi.repository import GLib
 import precis_i18n.codec  # pylint: disable=unused-import
 
 from gajim.common import app
-from gajim.common import caps_cache
 from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
@@ -1087,10 +1086,11 @@ def update_optional_features(account=None):
         # Give plugins the possibility to add their features
         app.plugin_manager.extension_point('update_caps', account_)
 
-        app.caps_hash[account_] = compute_caps_hash(DiscoInfo(
-            None, None, [app.gajim_identity],
-            app.gajim_common_features + features,
-            []), compare=False)
+        disco_info = DiscoInfo(None,
+                               [app.gajim_identity],
+                               app.gajim_common_features + features,
+                               [])
+        app.caps_hash[account_] = compute_caps_hash(disco_info, compare=False)
         # re-send presence with new hash
         connected = app.connections[account_].connected
         if connected > 1 and app.SHOW_LIST[connected] != 'invisible':
@@ -1334,9 +1334,9 @@ def call_counter(func):
     return helper
 
 def get_sync_threshold(jid, archive_info):
-    cache = caps_cache.muc_caps_cache
+    disco_info = app.logger.get_last_disco_info(jid)
     if archive_info is None or archive_info.sync_threshold is None:
-        if cache.supports(jid, 'muc#roomconfig_membersonly'):
+        if disco_info is not None and disco_info.muc_is_members_only:
             threshold = app.config.get('private_room_sync_threshold')
         else:
             threshold = app.config.get('public_room_sync_threshold')

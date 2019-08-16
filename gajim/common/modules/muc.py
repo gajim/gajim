@@ -41,7 +41,6 @@ from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import get_sync_threshold
 from gajim.common.helpers import to_user_string
 from gajim.common import idle
-from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.base import BaseModule
@@ -291,7 +290,8 @@ class MUC(BaseModule):
             status=self._con.status)
 
     def _add_history_query(self, muc_x, room_jid):
-        if muc_caps_cache.has_mam(room_jid):
+        disco_info = app.logger.get_last_disco_info(room_jid)
+        if disco_info.has_mam:
             # The room is MAM capable dont get MUC History
             muc_x.setTag('history', {'maxchars': '0'})
         else:

@@ -61,7 +61,7 @@ class TestCapsCache(CommonCapsTest):
     def test_set_and_store(self):
         ''' Test client_caps update gets logged into db '''
 
-        disco_info = DiscoInfo(None, None, self.identities, self.features, [])
+        disco_info = DiscoInfo(None, self.identities, self.features, [])
 
         item = self.cc[self.client_caps]
         item.set_and_store(disco_info)
