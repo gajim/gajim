@@ -206,7 +206,7 @@ class Discovery(BaseModule):
                         callback=self._muc_info_received,
                         user_data=callback)
 
-    def _muc_info_received(self, result, callback):
+    def _muc_info_received(self, result, callback=None):
         self._log.info('MUC info received: %s', result.jid)
         if not is_error_result(result):
             app.logger.set_last_disco_info(result.jid, result)
