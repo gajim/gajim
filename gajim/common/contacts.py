@@ -301,13 +301,6 @@ class LegacyContactsAPI:
         self._metacontact_manager = MetacontactManager(self)
         self._accounts = {}
 
-    def change_account_name(self, old_name, new_name):
-        self._accounts[new_name] = self._accounts[old_name]
-        self._accounts[new_name].name = new_name
-        del self._accounts[old_name]
-
-        self._metacontact_manager.change_account_name(old_name, new_name)
-
     def add_account(self, account_name):
         self._accounts[account_name] = Account(account_name, Contacts(),
                 GC_Contacts())
@@ -778,10 +771,6 @@ class MetacontactManager():
     def __init__(self, contacts):
         self._metacontacts_tags = {}
         self._contacts = contacts
-
-    def change_account_name(self, old_name, new_name):
-        self._metacontacts_tags[new_name] = self._metacontacts_tags[old_name]
-        del self._metacontacts_tags[old_name]
 
     def add_account(self, account):
         if account not in self._metacontacts_tags:

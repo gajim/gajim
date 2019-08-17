@@ -269,17 +269,6 @@ class MessageWindow:
             self.notebook.set_current_page(number - 1)
             return
 
-    def change_account_name(self, old_name, new_name):
-        if old_name in self._controls:
-            self._controls[new_name] = self._controls[old_name]
-            del self._controls[old_name]
-
-        for ctrl in self.controls():
-            if ctrl.account == old_name:
-                ctrl.account = new_name
-        if self.account == old_name:
-            self.account = new_name
-
     def change_jid(self, account, old_jid, new_jid):
         """
         Called when the full jid of the control is changed
@@ -904,10 +893,6 @@ class MessageWindowMgr(GObject.GObject):
         self.parent_paned = parent_paned
 
         Gtk.Window.set_default_icon_list(get_app_icon_list(parent_window))
-
-    def change_account_name(self, old_name, new_name):
-        for win in self.windows():
-            win.change_account_name(old_name, new_name)
 
     def _new_window(self, acct, type_):
         parent_win = None

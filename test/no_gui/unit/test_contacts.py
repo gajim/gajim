@@ -99,7 +99,6 @@ class TestContacts(unittest.TestCase):
         self.contacts.add_account("one")
         self.contacts.add_account("two")
 
-        self.contacts.change_account_name("two", "old")
         self.contacts.remove_account("one")
 
         self.assertEqual(["old"], self.contacts.get_accounts())

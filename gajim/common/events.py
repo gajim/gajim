@@ -215,11 +215,6 @@ class Events:
         for listener in self._event_removed_listeners:
             listener(event_list)
 
-    def change_account_name(self, old_name, new_name):
-        if old_name in self._events:
-            self._events[new_name] = self._events[old_name]
-            del self._events[old_name]
-
     def add_account(self, account):
         self._events[account] = {}
 
