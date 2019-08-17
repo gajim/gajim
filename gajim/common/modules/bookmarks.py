@@ -192,17 +192,16 @@ class Bookmarks(BaseModule):
                      nick: str) -> None:
 
         bookmark = self.get_bookmark_from_jid(jid)
-        if bookmark is None:
-            bookmark = BookmarkData(jid=jid,
-                                    name=name,
-                                    autojoin=autojoin,
-                                    password=password,
-                                    nick=nick)
-            self._bookmarks.append(bookmark)
-            self.store_bookmarks()
+        if bookmark is not None:
+            self._bookmarks.remove(bookmark)
 
-        elif not bookmark.autojoin:
-            self.set_autojoin(jid, True)
+        bookmark = BookmarkData(jid=jid,
+                                name=name,
+                                autojoin=autojoin,
+                                password=password,
+                                nick=nick)
+        self._bookmarks.append(bookmark)
+        self.store_bookmarks()
 
     def set_autojoin(self, jid, enabled):
         bookmark = self.get_bookmark_from_jid(jid)
@@ -211,6 +210,26 @@ class Bookmarks(BaseModule):
         self._log.info('Set autojoin for: %s to %s', jid, enabled)
         self._bookmarks.remove(bookmark)
         bookmark = bookmark._replace(autojoin=enabled)
+        self._bookmarks.append(bookmark)
+        self.store_bookmarks()
+
+    def set_nickname(self, jid, nick):
+        bookmark = self.get_bookmark_from_jid(jid)
+        if bookmark is None:
+            return
+        self._log.info('Set nick for: %s to %s', jid, nick)
+        self._bookmarks.remove(bookmark)
+        bookmark = bookmark._replace(nick=nick)
+        self._bookmarks.append(bookmark)
+        self.store_bookmarks()
+
+    def set_name(self, jid, name):
+        bookmark = self.get_bookmark_from_jid(jid)
+        if bookmark is None:
+            return
+        self._log.info('Set name for: %s to %s', jid, name)
+        self._bookmarks.remove(bookmark)
+        bookmark = bookmark._replace(name=name)
         self._bookmarks.append(bookmark)
         self.store_bookmarks()
 

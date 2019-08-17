@@ -389,6 +389,8 @@ class MUC(BaseModule):
         if properties.is_nickname_changed:
             if properties.is_muc_self_presence:
                 muc_data.nick = properties.muc_user.nick
+                self._con.get_module('Bookmarks').set_nickname(muc_data.jid,
+                                                               muc_data.nick)
             app.contacts.remove_gc_contact(self._account, contact)
             contact.name = properties.muc_user.nick
             app.contacts.add_gc_contact(self._account, contact)
