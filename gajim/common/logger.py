@@ -1498,22 +1498,34 @@ class Logger:
         log.info('Set message archive info: %s %s', jid, kwargs)
         self._timeout_commit()
 
-    def get_last_disco_info(self, jid):
+    def get_last_disco_info(self, jid, max_age=0):
         """
         Get last disco info from jid
 
-        :param jid:     The jid
+        :param jid:         The jid
+
+        :param max_age:     max age in seconds of the DiscoInfo record
 
         """
 
-        if jid in self._disco_info_cache:
-            return self._disco_info_cache[jid]
+        max_timestamp = time.time() - max_age if max_age else 0
 
+        # Try the cache
+        disco_info = self._disco_info_cache.get(jid)
+        if disco_info is not None:
+            if max_timestamp > disco_info.timestamp:
+                return None
+            return disco_info
+
+        # Try the database
         sql = '''SELECT disco_info as "disco_info [disco_info]", last_seen FROM
                  last_seen_disco_info
                  WHERE jid = ?'''
         row = self._con.execute(sql, (str(jid),)).fetchone()
         if row is None:
+            return None
+
+        if max_timestamp > row.last_seen:
             return None
 
         disco_info = row.disco_info._replace(timestamp=row.last_seen)
