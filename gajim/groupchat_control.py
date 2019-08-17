@@ -642,6 +642,7 @@ class GroupchatControl(ChatControlBase):
             return
         win = self.parent_win.window
         self.update_actions()
+        self.draw_banner_text()
 
         # After the room has been created, reevaluate threshold
         if self.disco_info.has_mam:

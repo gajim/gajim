@@ -2635,6 +2635,9 @@ class RosterWindow:
     def _nec_muc_subject_received(self, event):
         self.draw_contact(event.room_jid, event.account)
 
+    def _on_muc_disco_update(self, event):
+        self.draw_contact(str(event.room_jid), event.account)
+
     def _nec_metacontacts_received(self, obj):
         self.redraw_metacontacts(obj.conn.name)
 
@@ -5679,3 +5682,5 @@ class RosterWindow:
             self._style_changed)
         app.ged.register_event_handler('chatstate-received', ged.GUI1,
                                        self._nec_chatstate_received)
+        app.ged.register_event_handler('muc-disco-update', ged.GUI1,
+                                       self._on_muc_disco_update)

@@ -33,6 +33,7 @@ from gi.repository import Gio
 
 from gajim import common
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 
@@ -152,6 +153,9 @@ class MessageWindow:
             self.notebook.set_show_tabs(False)
         self.notebook.set_show_border(app.config.get('tabs_border'))
         self.show_icon()
+
+        app.ged.register_event_handler('muc-disco-update', ged.GUI1,
+                                       self._on_muc_disco_update)
 
     def _add_actions(self):
         actions = [
@@ -287,6 +291,16 @@ class MessageWindow:
 
     def resize(self, width, height):
         resize_window(self.window, width, height)
+
+    def _on_muc_disco_update(self, event):
+        # If there is only one control in a window,
+        # the name is shown in the window title
+        if self.get_num_controls() != 1:
+            return
+        ctrl = self.get_active_control()
+        if ctrl.contact.jid != event.room_jid:
+            return
+        self.show_title()
 
     def _on_window_focus(self, widget, event):
         # on destroy() the window that was last focused gets the focus
@@ -489,7 +503,7 @@ class MessageWindow:
             urgent = False
 
         if control.type_id == message_control.TYPE_GC:
-            name = control.room_jid.split('@')[0]
+            name = control.contact.get_shown_name()
             urgent = (control.attention_flag or
                       app.config.notify_for_muc(control.room_jid))
         else:
