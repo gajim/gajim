@@ -1388,7 +1388,7 @@ class GroupchatControl(ChatControlBase):
             text = '%s - %s' % (text, date)
 
         if (app.config.get('show_subject_on_join') or
-                self._muc_data.state != MUCJoinedState.JOINED):
+                self._muc_data.state != MUCJoinedState.JOINING):
             self.add_info_message(text)
 
     @event_filter(['account', 'room_jid'])
