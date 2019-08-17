@@ -15,7 +15,6 @@
 # Iq handler
 
 import nbxmpp
-from nbxmpp.const import Error
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -37,13 +36,13 @@ class Iq(BaseModule):
 
     def _iq_error_received(self, _con, _stanza, properties):
         self._log.info('Error: %s', properties.error)
-        if properties.error.type in (Error.JID_MALFORMED,
-                                     Error.FORBIDDEN,
-                                     Error.NOT_ACCEPTABLE):
+        if properties.error.condition in ('jid-malformed',
+                                          'forbidden',
+                                          'not-acceptable'):
             sid = self._get_sid(properties.id)
             file_props = FilesProp.getFileProp(self._account, sid)
             if file_props:
-                if properties.error.type == Error.JID_MALFORMED:
+                if properties.error.condition == 'jid-malformed':
                     file_props.error = -3
                 else:
                     file_props.error = -4
@@ -52,11 +51,11 @@ class Iq(BaseModule):
                                  conn=self._con,
                                  jid=properties.jid.getBare(),
                                  file_props=file_props,
-                                 error_msg=properties.error.message))
+                                 error_msg=properties.error.get_text()))
                 self._con.get_module('Bytestream').disconnect_transfer(file_props)
                 raise nbxmpp.NodeProcessed
 
-        if properties.error.type == Error.ITEM_NOT_FOUND:
+        if properties.error.condition == 'item-not-found':
             sid = self._get_sid(properties.id)
             file_props = FilesProp.getFileProp(self._account, sid)
             if file_props:

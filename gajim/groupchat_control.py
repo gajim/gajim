@@ -1946,11 +1946,8 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_presence_error(self, event):
-        error_type = event.properties.error.type
-        error_message = event.properties.error.message
-
-        self.add_info_message(
-            'Error %s: %s' % (error_type.value, error_message))
+        error_message = event.properties.error.get_text()
+        self.add_info_message('Error: %s' % error_message)
 
     def add_contact_to_roster(self, nick):
         contact = app.contacts.get_gc_contact(self.account,

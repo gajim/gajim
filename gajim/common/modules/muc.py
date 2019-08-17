@@ -24,7 +24,6 @@ from datetime import timezone
 import nbxmpp
 from nbxmpp.const import InviteType
 from nbxmpp.const import PresenceType
-from nbxmpp.const import Error
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
@@ -327,12 +326,12 @@ class MUC(BaseModule):
             return
 
         if muc_data.state == MUCJoinedState.JOINING:
-            if properties.error.type == Error.CONFLICT:
+            if properties.error.condition == 'conflict':
                 muc_data.nick += '_'
                 self._log.info('Nickname conflict: %s change to %s',
                                muc_data.jid, muc_data.nick)
                 self._join(muc_data)
-            elif properties.error.type == Error.NOT_AUTHORIZED:
+            elif properties.error.condition == 'not-authorized':
                 self._raise_muc_event('muc-password-required', properties)
             else:
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
@@ -347,7 +346,7 @@ class MUC(BaseModule):
                 NetworkEvent('muc-captcha-error',
                              account=self._account,
                              room_jid=room_jid,
-                             error_text=properties.error.message))
+                             error_text=properties.error.get_text()))
             self._set_muc_state(room_jid, MUCJoinedState.CAPTCHA_FAILED)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
