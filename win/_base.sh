@@ -85,6 +85,7 @@ function install_deps {
         mingw-w64-"${ARCH}"-goocanvas \
         mingw-w64-"${ARCH}"-gspell \
         mingw-w64-"${ARCH}"-hunspell \
+        mingw-w64-"${ARCH}"-goocanvas \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-setuptools \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pillow \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-setuptools-scm \
