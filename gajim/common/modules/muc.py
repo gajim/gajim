@@ -141,9 +141,13 @@ class MUC(BaseModule):
 
         self._muc_data[muc_data.jid] = muc_data
 
-        self._con.get_module('Discovery').disco_muc(
-            muc_data.jid,
-            callback=self._on_disco_result)
+        disco_info = app.logger.get_last_disco_info(muc_data.jid, max_age=60)
+        if disco_info is None:
+            self._con.get_module('Discovery').disco_muc(
+                muc_data.jid,
+                callback=self._on_disco_result)
+        else:
+            self._join(muc_data)
 
     def _on_disco_result(self, result):
         if is_error_result(result):
