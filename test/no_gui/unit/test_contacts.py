@@ -95,14 +95,6 @@ class TestContacts(unittest.TestCase):
         # Not yet implemented to remain backwart compatible
         # self.assertEqual(contact, copy, msg="Must be equal")
 
-    def test_legacy_accounts_handling(self):
-        self.contacts.add_account("one")
-        self.contacts.add_account("two")
-
-        self.contacts.remove_account("one")
-
-        self.assertEqual(["old"], self.contacts.get_accounts())
-
     def test_legacy_contacts_from_groups(self):
         jid1 = "test1@gajim.org"
         jid2 = "test2@gajim.org"
