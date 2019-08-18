@@ -394,7 +394,9 @@ class MUC(BaseModule):
             app.contacts.remove_gc_contact(self._account, contact)
             contact.name = properties.muc_user.nick
             app.contacts.add_gc_contact(self._account, contact)
-            self._log.info('Nickname changed: %s to %s',
+            initiator = 'Server' if properties.is_nickname_modified else 'User'
+            self._log.info('%s nickname changed: %s to %s',
+                           initiator,
                            properties.jid,
                            properties.muc_user.nick)
             self._raise_muc_event('muc-nickname-changed', properties)
@@ -404,9 +406,14 @@ class MUC(BaseModule):
             self._add_new_muc_contact(properties)
             if properties.is_muc_self_presence:
                 self._log.info('Self presence: %s', properties.jid)
-                self._raise_muc_event('muc-self-presence', properties)
                 if muc_data.state == MUCJoinedState.JOINING:
                     self._start_join_timeout(room_jid)
+                    if (properties.is_nickname_modified or
+                            muc_data.nick != properties.muc_nickname):
+                        muc_data.nick = properties.muc_nickname
+                        self._log.info('Server modified nickname to: %s',
+                                       properties.muc_nickname)
+                self._raise_muc_event('muc-self-presence', properties)
                 if properties.is_new_room:
                     self.configure_room(room_jid)
             else:
