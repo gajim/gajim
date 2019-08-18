@@ -552,7 +552,7 @@ class GroupchatControl(ChatControlBase):
 
         if self.disco_info is None:
             return False
-        return self.disco_info.muc_subjectmod
+        return self.disco_info.muc_subjectmod or False
 
     def _get_action(self, name):
         win = self.parent_win.window
