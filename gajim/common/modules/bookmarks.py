@@ -60,8 +60,20 @@ class Bookmarks(BaseModule):
         self._bookmarks = value
 
     @event_node(nbxmpp.NS_BOOKMARKS)
-    def _bookmark_event_received(self, _con, _stanza, properties):
+    def _bookmark_event_received(self, _con, stanza, properties):
+        if properties.pubsub_event.retracted:
+            # Unsure how to handle that
+            return
+
         bookmarks = properties.pubsub_event.data
+        if properties.pubsub_event.deleted:
+            self._log.info('Bookmark node deleted')
+            bookmarks = []
+
+        elif properties.pubsub_event.data is None:
+            self._log.warning('Invalid bookmark data')
+            self._log.warning(stanza)
+            return
 
         if not properties.is_self_message:
             self._log.warning('%s has an open access bookmarks node',
