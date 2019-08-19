@@ -18,6 +18,7 @@ import nbxmpp
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
+from gajim.common.helpers import to_user_string
 from gajim.common.nec import NetworkEvent
 from gajim.common.file_props import FilesProp
 from gajim.common.modules.base import BaseModule
@@ -51,7 +52,7 @@ class Iq(BaseModule):
                                  conn=self._con,
                                  jid=properties.jid.getBare(),
                                  file_props=file_props,
-                                 error_msg=properties.error.get_text()))
+                                 error_msg=to_user_string(properties.error)))
                 self._con.get_module('Bytestream').disconnect_transfer(file_props)
                 raise nbxmpp.NodeProcessed
 

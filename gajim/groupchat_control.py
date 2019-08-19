@@ -57,6 +57,7 @@ from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import event_filter
+from gajim.common.helpers import to_user_string
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common import contacts
@@ -1945,13 +1946,13 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_muc_join_failed(self, event):
-        self.xml.error_label.set_text(event.error.get_text())
+        self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
         self.autorejoin = False
 
     @event_filter(['account', 'room_jid'])
     def _on_presence_error(self, event):
-        error_message = event.properties.error.get_text()
+        error_message = to_user_string(event.properties.error)
         self.add_info_message('Error: %s' % error_message)
 
     def add_contact_to_roster(self, nick):

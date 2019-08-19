@@ -350,7 +350,7 @@ class MUC(BaseModule):
                 NetworkEvent('muc-captcha-error',
                              account=self._account,
                              room_jid=room_jid,
-                             error_text=properties.error.get_text()))
+                             error_text=to_user_string(properties.error)))
             self._set_muc_state(room_jid, MUCJoinedState.CAPTCHA_FAILED)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
