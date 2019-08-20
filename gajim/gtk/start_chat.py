@@ -27,6 +27,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
+from gajim.common.helpers import get_groupchat_name
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
@@ -125,21 +126,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self.new_groupchat_rows[account] = None
             con = app.connections[account]
             bookmarks = con.get_module('Bookmarks').bookmarks
-            groupchats = {}
             for bookmark in bookmarks:
-                groupchats[str(bookmark.jid)] = bookmark.name
-
-            for jid in app.contacts.get_gc_list(account):
-                if jid in groupchats:
-                    continue
-                groupchats[jid] = None
-
-            for jid in groupchats:
-                name = groupchats[jid]
-                if not name:
-                    name = app.get_nick_from_jid(jid)
-                row = ContactRow(account, None, jid, name,
-                                 show_account, True)
+                jid = str(bookmark.jid)
+                name = get_groupchat_name(con, jid)
+                row = ContactRow(account, None, jid, name, show_account, True)
                 self._ui.listbox.add(row)
 
     def _on_page_changed(self, stack, _param):

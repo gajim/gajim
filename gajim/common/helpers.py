@@ -1628,3 +1628,19 @@ def to_user_string(error):
     if error.app_condition is not None:
         return '%s (%s)' % (condition, error.app_condition)
     return condition
+
+
+def get_groupchat_name(con, jid):
+    name = con.get_module('Bookmarks').get_name_from_bookmark(jid)
+    if name:
+        return name
+
+    disco_info = app.logger.get_last_disco_info(jid)
+    if disco_info is not None:
+        if disco_info.muc_room_name:
+            return disco_info.muc_room_name
+
+        if disco_info.muc_identity_name:
+            return disco_info.muc_identity_name
+
+    return jid.split('@')[0]

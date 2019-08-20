@@ -183,16 +183,9 @@ class Contact(CommonContact):
 
     def _get_groupchat_name(self):
         from gajim.common import app
+        from gajim.common.helpers import get_groupchat_name
         con = app.connections[self.account.name]
-        name = con.get_module('Bookmarks').get_name_from_bookmark(self.jid)
-        if name:
-            return name
-
-        disco_info = app.logger.get_last_disco_info(self.jid)
-        if disco_info is not None:
-            if disco_info.muc_room_name:
-                return disco_info.muc_room_name
-        return self.jid.split('@')[0]
+        return get_groupchat_name(con, self.jid)
 
     def get_shown_groups(self):
         if self.is_observer():
