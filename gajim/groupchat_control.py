@@ -1702,7 +1702,7 @@ class GroupchatControl(ChatControlBase):
         self.add_info_message(_('A new group chat has been created'))
 
     @event_filter(['account', 'room_jid'])
-    def _on_configuration_failed(self, _event):
+    def _on_configuration_failed(self, event):
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
 
