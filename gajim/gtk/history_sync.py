@@ -206,7 +206,7 @@ class SelectTimePage(Gtk.Box):
         self.set_spacing(18)
         self.assistant = assistant
         label = Gtk.Label(
-            label=_('How far back do you want to synchronize chat history?'))
+            label=_('How far back should the chat history be synchronised?'))
 
         listbox = Gtk.ListBox()
         listbox.set_hexpand(False)
@@ -258,7 +258,7 @@ class DownloadHistoryPage(Gtk.Box):
                 'received': self.received, 'max': self.count}))
         else:
             self.progress.pulse()
-            self.progress.set_text(_('Downloaded %s Messages' % self.received))
+            self.progress.set_text(_('Downloaded %s messages' % self.received))
 
     def finished(self):
         self.progress.set_fraction(1)
@@ -278,25 +278,15 @@ class SummaryPage(Gtk.Box):
 
     def finished(self):
         received = self.assistant.download_history.received
-        finished = _('''
-        Finished synchronising your History.
-        {received} Messages downloaded.
-        '''.format(received=received))
-        self.label.set_text(finished)
+        self.label.set_text(_('Finished synchronising chat history:\n'
+                              '%s messages downloaded' % received))
 
     def nothing_to_do(self):
-        nothing_to_do = _('''
-        Gajim is fully synchronised
-        with the Archive.
-        ''')
-        self.label.set_text(nothing_to_do)
+        self.label.set_text(_('Gajim is fully synchronised with the archive.'))
 
     def query_already_running(self):
-        already_running = _('''
-        There is already a synchronisation in
-        progress. Please try later.
-        ''')
-        self.label.set_text(already_running)
+        self.label.set_text(_('There is already a synchronisation in '
+                              'progress. Please try again later.'))
 
 
 class TimeOption(Gtk.Label):
