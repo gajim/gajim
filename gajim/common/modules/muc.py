@@ -189,7 +189,7 @@ class MUC(BaseModule):
             typ='unavailable',
             status=reason)
         # We leave a group chat, disable bookmark autojoin
-        self._con.get_module('Bookmarks').set_autojoin(room_jid, False)
+        self._con.get_module('Bookmarks').modify(room_jid, autojoin=False)
 
     def configure_room(self, room_jid):
         self._nbxmpp('MUC').request_config(room_jid,
@@ -389,8 +389,8 @@ class MUC(BaseModule):
         if properties.is_nickname_changed:
             if properties.is_muc_self_presence:
                 muc_data.nick = properties.muc_user.nick
-                self._con.get_module('Bookmarks').set_nickname(muc_data.jid,
-                                                               muc_data.nick)
+                self._con.get_module('Bookmarks').modify(muc_data.jid,
+                                                         nick=muc_data.nick)
             app.contacts.remove_gc_contact(self._account, contact)
             contact.name = properties.muc_user.nick
             app.contacts.add_gc_contact(self._account, contact)
@@ -600,12 +600,11 @@ class MUC(BaseModule):
                              account=self._account,
                              room_jid=room_jid))
 
-            # We successfully joined a MUC, set autojoin bookmark
-            self._con.get_module('Bookmarks').add_bookmark(None,
-                                                           muc_data.jid,
-                                                           True,
-                                                           muc_data.password,
-                                                           muc_data.nick)
+            # We successfully joined a MUC, set add bookmark with autojoin
+            self._con.get_module('Bookmarks').modify(muc_data.jid,
+                                                     autojoin=True,
+                                                     password=muc_data.password,
+                                                     nick=muc_data.nick)
 
     def _on_voice_request(self, _con, _stanza, properties):
         if not properties.is_voice_request:

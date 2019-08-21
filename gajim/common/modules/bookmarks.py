@@ -16,10 +16,10 @@
 
 from typing import Any
 from typing import List
+from typing import Dict
 from typing import Optional
 
 import nbxmpp
-from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import BookmarkData
 from nbxmpp.const import BookmarkStoreType
@@ -196,52 +196,16 @@ class Bookmarks(BaseModule):
                                                  str(bookmark.jid),
                                                  minimized=minimize)
 
-    def add_bookmark(self,
-                     name: str,
-                     jid: JID,
-                     autojoin: bool,
-                     password: str,
-                     nick: str) -> None:
-
+    def modify(self, jid: str, **kwargs: Dict[str, str]) -> None:
         bookmark = self.get_bookmark_from_jid(jid)
-        if bookmark is not None:
+        if bookmark is None:
+            bookmark = BookmarkData(jid=jid, **kwargs)
+            self._log.info('Add new bookmark: %s', bookmark)
+        else:
+            self._log.info('Modify bookmark: %s %s', jid, kwargs)
             self._bookmarks.remove(bookmark)
+            bookmark = bookmark._replace(**kwargs)
 
-        bookmark = BookmarkData(jid=jid,
-                                name=name,
-                                autojoin=autojoin,
-                                password=password,
-                                nick=nick)
-        self._bookmarks.append(bookmark)
-        self.store_bookmarks()
-
-    def set_autojoin(self, jid, enabled):
-        bookmark = self.get_bookmark_from_jid(jid)
-        if bookmark is None:
-            return
-        self._log.info('Set autojoin for: %s to %s', jid, enabled)
-        self._bookmarks.remove(bookmark)
-        bookmark = bookmark._replace(autojoin=enabled)
-        self._bookmarks.append(bookmark)
-        self.store_bookmarks()
-
-    def set_nickname(self, jid, nick):
-        bookmark = self.get_bookmark_from_jid(jid)
-        if bookmark is None:
-            return
-        self._log.info('Set nick for: %s to %s', jid, nick)
-        self._bookmarks.remove(bookmark)
-        bookmark = bookmark._replace(nick=nick)
-        self._bookmarks.append(bookmark)
-        self.store_bookmarks()
-
-    def set_name(self, jid, name):
-        bookmark = self.get_bookmark_from_jid(jid)
-        if bookmark is None:
-            return
-        self._log.info('Set name for: %s to %s', jid, name)
-        self._bookmarks.remove(bookmark)
-        bookmark = bookmark._replace(name=name)
         self._bookmarks.append(bookmark)
         self.store_bookmarks()
 
