@@ -1637,10 +1637,7 @@ def get_groupchat_name(con, jid):
 
     disco_info = app.logger.get_last_disco_info(jid)
     if disco_info is not None:
-        if disco_info.muc_room_name:
-            return disco_info.muc_room_name
-
-        if disco_info.muc_identity_name:
-            return disco_info.muc_identity_name
+        if disco_info.muc_name:
+            return disco_info.muc_name
 
     return jid.split('@')[0]

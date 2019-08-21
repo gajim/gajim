@@ -21,9 +21,11 @@ from gi.repository import Gtk
 from nbxmpp.protocol import NS_MAM_1
 from nbxmpp.protocol import NS_MAM_2
 
+from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 from gajim.common.helpers import open_uri
+from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
 
 from gajim.gtk.util import get_builder
@@ -141,9 +143,13 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
     def set_from_disco_info(self, info):
         self._info = info
         # Set name
-        has_name = bool(info.muc_name)
-        self._ui.name.set_text(info.muc_name or '')
-        self._ui.name.set_visible(has_name)
+        if self._account is None:
+            name = info.muc_name
+        else:
+            con = app.connections[self._account]
+            name = get_groupchat_name(con, info.jid)
+        self._ui.name.set_text(name)
+        self._ui.name.set_visible(True)
 
         # Set description
         has_desc = bool(info.muc_description)
