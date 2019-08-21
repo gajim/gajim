@@ -205,6 +205,7 @@ class MUCJoinedState(Enum):
     JOINED = 'joined'
     NOT_JOINED = 'not joined'
     JOINING = 'joining'
+    CREATING = 'creating'
     CAPTCHA_REQUEST = 'captcha in progress'
     CAPTCHA_FAILED = 'captcha failed'
 

@@ -112,6 +112,11 @@ class MAM(BaseModule):
         if properties.type.is_groupchat:
             archive_jid = properties.jid.getBare()
             disco_info = app.logger.get_last_disco_info(archive_jid)
+            if disco_info is None:
+                # This is the case on MUC creation
+                # After MUC configuration we receive a configuration change
+                # message before we had the chance to disco the new MUC
+                return
             namespace = disco_info.mam_namespace
             timestamp = properties.timestamp
             if namespace is None:

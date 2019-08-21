@@ -149,6 +149,13 @@ class MUC(BaseModule):
         else:
             self._join(muc_data)
 
+    def create(self, muc_data):
+        if not app.account_is_connected(self._account):
+            return
+
+        self._muc_data[muc_data.jid] = muc_data
+        self._create(muc_data)
+
     def _on_disco_result(self, result):
         if is_error_result(result):
             self._log.info('Disco %s failed: %s', result.jid, result.get_text())
@@ -177,6 +184,20 @@ class MUC(BaseModule):
 
         self._log.info('Join MUC: %s', muc_data.jid)
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINING)
+        self._con.connection.send(presence)
+
+    def _create(self, muc_data):
+        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
+
+        presence = self._con.get_module('Presence').get_presence(
+            muc_data.occupant_jid,
+            show=show,
+            status=self._con.status)
+
+        presence.setTag(nbxmpp.NS_MUC + ' x')
+
+        self._log.info('Create MUC: %s', muc_data.jid)
+        self._set_muc_state(muc_data.jid, MUCJoinedState.CREATING)
         self._con.connection.send(presence)
 
     def leave(self, room_jid, reason=None):
@@ -236,13 +257,8 @@ class MUC(BaseModule):
                 error=result))
             return
 
-        self._log.info('Configuration finished: %s', result.jid)
-        app.nec.push_incoming_event(NetworkEvent(
-            'muc-configuration-finished',
-            account=self._account,
-            room_jid=result.jid))
-
-        self._con.get_module('Discovery').disco_muc(result.jid)
+        self._con.get_module('Discovery').disco_muc(
+            result.jid, callback=self._on_disco_result_after_config)
 
         # If this is an automatic room creation
         try:
@@ -257,6 +273,19 @@ class MUC(BaseModule):
 
         for jid in invites:
             self.invite(result.jid, jid)
+
+    def _on_disco_result_after_config(self, result):
+        if is_error_result(result):
+            self._log.info('Disco %s failed: %s', result.jid, result.get_text())
+            return
+
+        self._room_join_complete(self._get_muc_data(result.jid))
+
+        self._log.info('Configuration finished: %s', result.jid)
+        app.nec.push_incoming_event(NetworkEvent(
+            'muc-configuration-finished',
+            account=self._account,
+            room_jid=result.jid))
 
     def update_presence(self, auto=False):
         mucs = self.get_mucs_with_state([MUCJoinedState.JOINED,
@@ -345,6 +374,14 @@ class MUC(BaseModule):
                                  room_jid=room_jid,
                                  error=properties.error))
 
+        elif muc_data.state == MUCJoinedState.CREATING:
+            self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+            app.nec.push_incoming_event(
+                NetworkEvent('muc-creation-failed',
+                             account=self._account,
+                             room_jid=room_jid,
+                             error=properties.error))
+
         elif muc_data.state == MUCJoinedState.CAPTCHA_REQUEST:
             app.nec.push_incoming_event(
                 NetworkEvent('muc-captcha-error',
@@ -407,15 +444,19 @@ class MUC(BaseModule):
             if properties.is_muc_self_presence:
                 self._log.info('Self presence: %s', properties.jid)
                 if muc_data.state == MUCJoinedState.JOINING:
-                    self._start_join_timeout(room_jid)
                     if (properties.is_nickname_modified or
                             muc_data.nick != properties.muc_nickname):
                         muc_data.nick = properties.muc_nickname
                         self._log.info('Server modified nickname to: %s',
                                        properties.muc_nickname)
+
+                elif muc_data.state == MUCJoinedState.CREATING:
+                    if properties.is_new_room:
+                        self.configure_room(room_jid)
+
+                self._start_join_timeout(room_jid)
                 self._raise_muc_event('muc-self-presence', properties)
-                if properties.is_new_room:
-                    self.configure_room(room_jid)
+
             else:
                 self._log.info('User joined: %s', properties.jid)
                 self._raise_muc_event('muc-user-joined', properties)
@@ -592,19 +633,21 @@ class MUC(BaseModule):
 
         muc_data = self._get_muc_data(room_jid)
         if muc_data.state == MUCJoinedState.JOINING:
-            self._remove_join_timeout(room_jid)
-            self._set_muc_state(room_jid, MUCJoinedState.JOINED)
-
+            self._room_join_complete(muc_data)
             app.nec.push_incoming_event(
                 NetworkEvent('muc-joined',
                              account=self._account,
-                             room_jid=room_jid))
+                             room_jid=muc_data.jid))
 
-            # We successfully joined a MUC, set add bookmark with autojoin
-            self._con.get_module('Bookmarks').modify(muc_data.jid,
-                                                     autojoin=True,
-                                                     password=muc_data.password,
-                                                     nick=muc_data.nick)
+    def _room_join_complete(self, muc_data):
+        self._remove_join_timeout(muc_data.jid)
+        self._set_muc_state(muc_data.jid, MUCJoinedState.JOINED)
+
+        # We successfully joined a MUC, set add bookmark with autojoin
+        self._con.get_module('Bookmarks').modify(muc_data.jid,
+                                                 autojoin=True,
+                                                 password=muc_data.password,
+                                                 nick=muc_data.nick)
 
     def _on_voice_request(self, _con, _stanza, properties):
         if not properties.is_voice_request:

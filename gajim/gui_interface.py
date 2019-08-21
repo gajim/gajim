@@ -1564,7 +1564,7 @@ class Interface:
     def create_groupchat(self, account, room_jid, config=None):
         muc_data = self._create_muc_data(account, room_jid, None, config)
         self.create_groupchat_control(account, room_jid, muc_data)
-        app.connections[account].get_module('MUC').join(muc_data)
+        app.connections[account].get_module('MUC').create(muc_data)
 
     def show_or_join_groupchat(self, account, room_jid, **kwargs):
         if self.show_groupchat(account, room_jid):

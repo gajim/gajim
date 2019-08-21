@@ -305,6 +305,7 @@ class GroupchatControl(ChatControlBase):
         settings_menu.set_menu_model(self.control_menu)
 
         self._event_handlers = [
+            ('muc-creation-failed', ged.GUI1, self._on_muc_creation_failed),
             ('muc-joined', ged.GUI1, self._on_muc_joined),
             ('muc-join-failed', ged.GUI1, self._on_muc_join_failed),
             ('muc-user-joined', ged.GUI1, self._on_user_joined),
@@ -325,6 +326,7 @@ class GroupchatControl(ChatControlBase):
             ('muc-voice-approval', ged.GUI1, self._on_voice_approval),
             ('muc-disco-update', ged.GUI1, self._on_disco_update),
             ('muc-configuration-finished', ged.GUI1, self._on_configuration_finished),
+            ('muc-configuration-failed', ged.GUI1, self._on_configuration_failed),
             ('gc-message-received', ged.GUI1, self._nec_gc_message_received),
             ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
             ('update-gc-avatar', ged.GUI1, self._nec_update_avatar),
@@ -1695,7 +1697,14 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_configuration_finished(self, _event):
+        self.got_connected()
+        self._show_page('groupchat')
         self.add_info_message(_('A new group chat has been created'))
+
+    @event_filter(['account', 'room_jid'])
+    def _on_configuration_failed(self, _event):
+        self.xml.error_label.set_text(to_user_string(event.error))
+        self._show_page('error')
 
     @event_filter(['account', 'room_jid'])
     def _on_nickname_changed(self, event):
@@ -1949,6 +1958,11 @@ class GroupchatControl(ChatControlBase):
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
         self.autorejoin = False
+
+    @event_filter(['account', 'room_jid'])
+    def _on_muc_creation_failed(self, event):
+        self.xml.error_label.set_text(to_user_string(event.error))
+        self._show_page('error')
 
     @event_filter(['account', 'room_jid'])
     def _on_presence_error(self, event):
