@@ -89,7 +89,11 @@ class HTTPUpload(BaseModule):
                 continue
             size = form.vars.get('max-file-size')
             if size is not None:
-                self.max_file_size = int(size.value)
+                try:
+                    self.max_file_size = float(size.value)
+                except Exception:
+                    self._log.info('Invalid file size: %s', size.value)
+                    size = None
                 break
 
         if self.max_file_size is None:
@@ -205,7 +209,7 @@ class HTTPUpload(BaseModule):
         tmp = stanza.getTag('error').getTag('file-too-large')
 
         if tmp is not None:
-            max_file_size = int(tmp.getTag('max-file-size').getData())
+            max_file_size = float(tmp.getTag('max-file-size').getData())
             return _('File is too large, maximum allowed file size is: %s') % \
                 GLib.format_size_full(max_file_size,
                                       GLib.FormatSizeFlags.IEC_UNITS)
