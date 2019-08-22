@@ -200,13 +200,17 @@ class Bookmarks(BaseModule):
         bookmark = self.get_bookmark_from_jid(jid)
         if bookmark is None:
             bookmark = BookmarkData(jid=jid, **kwargs)
+            self._bookmarks.append(bookmark)
             self._log.info('Add new bookmark: %s', bookmark)
         else:
+            modified_bookmark = bookmark._replace(**kwargs)
+            if modified_bookmark == bookmark:
+                # No change happened
+                return
             self._log.info('Modify bookmark: %s %s', jid, kwargs)
             self._bookmarks.remove(bookmark)
-            bookmark = bookmark._replace(**kwargs)
+            self._bookmarks.append(modified_bookmark)
 
-        self._bookmarks.append(bookmark)
         self.store_bookmarks()
 
     def remove(self, jid: str, publish: bool = True) -> None:
