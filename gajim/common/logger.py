@@ -127,7 +127,11 @@ CACHE_SQL_STATEMENT = '''
             group_name TEXT,
             PRIMARY KEY (account_jid_id, jid_id, group_name)
     );
-    PRAGMA user_version=3;
+    CREATE TABLE muc_avatars(
+            jid TEXT PRIMARY KEY UNIQUE,
+            avatar_sha TEXT,
+    );
+    PRAGMA user_version=4;
     '''
 
 log = logging.getLogger('gajim.c.logger')
@@ -326,6 +330,15 @@ class Logger:
                     disco_info TEXT,
                     last_seen INTEGER)''',
                 'PRAGMA user_version=3'
+                ]
+            self._execute_multiple(con, statements)
+
+        if self._get_user_version(con) < 4:
+            statements = [
+                '''CREATE TABLE muc_avatars(
+                   jid TEXT PRIMARY KEY UNIQUE,
+                   avatar_sha TEXT)''',
+                'PRAGMA user_version=4'
                 ]
             self._execute_multiple(con, statements)
 
@@ -1442,6 +1455,40 @@ class Logger:
             '''
         self._con.execute(sql, (sha, account_jid_id, jid_id))
         self._timeout_commit()
+
+    def set_muc_avatar_sha(self, jid, sha=None):
+        """
+        Set the avatar sha of a MUC
+
+        :param jid:         The MUC jid that belongs to the avatar
+
+        :param sha:         The sha of the avatar
+
+        """
+
+        sql = '''INSERT INTO muc_avatars (jid, avatar_sha)
+                 VALUES (?, ?)'''
+
+        try:
+            self._con.execute(sql, (jid, sha))
+        except sqlite.IntegrityError:
+            sql = 'UPDATE muc_avatars SET avatar_sha = ? WHERE jid = ?'
+            self._con.execute(sql, (jid, sha))
+
+        self._timeout_commit()
+
+    def get_muc_avatar_sha(self, jid):
+        """
+        Get the avatar sha of a MUC
+
+        :param jid:         The MUC jid that belongs to the avatar
+
+        """
+
+        sql = '''SELECT avatar_sha FROM muc_avatars WHERE jid = ?'''
+        row = self._con.execute(sql, (jid,)).fetchone()
+        if row is not None:
+            return row.avatar_sha
 
     def get_archive_infos(self, jid):
         """

@@ -265,6 +265,7 @@ class VCardTemp(BaseModule):
         app.interface.save_avatar(photo_decoded)
 
         self._log.info('Received: %s %s', jid, avatar_sha)
+        app.logger.set_muc_avatar_sha(jid, avatar_sha)
         app.contacts.set_avatar(self._account, jid, avatar_sha)
         app.interface.update_avatar(self._account, jid, room_avatar=True)
 
