@@ -23,8 +23,10 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 import cairo
 
+from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import Singleton
+from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import AvatarSize
 
 from gajim.gtk.util import load_pixbuf
@@ -130,7 +132,34 @@ class AvatarStorage(metaclass=Singleton):
             self._cache[jid][(size, scale)] = surface
             return surface
 
-        surface = self._generate_default_avatar(contact, size, scale)
+        name = contact.get_shown_name()
+        # Use nickname for group chats and bare JID for single contacts
+        if contact.is_gc_contact:
+            color_string = contact.name
+        else:
+            color_string = contact.jid
+
+        surface = self._generate_default_avatar(name, color_string, size, scale)
+        self._cache[jid][(size, scale)] = surface
+        return surface
+
+    def get_muc_surface(self, account, jid, size, scale):
+        surface = self._cache[jid].get((size, scale))
+        if surface is not None:
+            return surface
+
+        avatar_sha = app.logger.get_muc_avatar_sha(jid)
+        if avatar_sha is not None:
+            surface = self.surface_from_filename(avatar_sha, size, scale)
+            if surface is None:
+                return None
+            surface = clip_circle(surface)
+            self._cache[jid][(size, scale)] = surface
+            return surface
+
+        con = app.connections[account]
+        name = get_groupchat_name(con, jid)
+        surface = self._generate_default_avatar(name, jid, size, scale)
         self._cache[jid][(size, scale)] = surface
         return surface
 
@@ -230,16 +259,14 @@ class AvatarStorage(metaclass=Singleton):
         return clip_circle(surface)
 
     @staticmethod
-    def _generate_default_avatar(contact, size, scale):
-        # Get initial from name
-        name = contact.get_shown_name()
-        letter = name[0].capitalize()
+    def _generate_letter(name):
+        for letter in name:
+            if letter.isalpha():
+                return letter.capitalize()
+        return name[0].capitalize()
 
-        # Use nickname for group chats and bare JID for single contacts
-        if contact.is_gc_contact:
-            color_string = contact.name
-        else:
-            color_string = contact.jid
+    def _generate_default_avatar(self, name, color_string, size, scale):
+        letter = self._generate_letter(name)
         color = text_to_color(color_string)
         surface = generate_avatar(letter, color, size, scale)
         surface = clip_circle(surface)
