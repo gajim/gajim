@@ -1098,18 +1098,13 @@ class GroupchatControl(ChatControlBase):
         self.change_roster_style()
 
     def _update_banner_state_image(self):
-        banner_status_img = self.xml.get_object('gc_banner_status_image')
-        if self.is_connected:
-            if self.contact.avatar_sha:
-                surface = app.interface.get_avatar(self.contact,
-                                                   AvatarSize.CHAT,
-                                                   self.scale_factor)
-                banner_status_img.set_from_surface(surface)
-                return
-            icon = get_icon_name('muc-active')
-        else:
-            icon = get_icon_name('muc-inactive')
-        banner_status_img.set_from_icon_name(icon, Gtk.IconSize.DND)
+        surface = app.interface.avatar_storage.get_muc_surface(
+            self.account,
+            self.contact.jid,
+            AvatarSize.CHAT,
+            self.scale_factor)
+
+        self.xml.gc_banner_status_image.set_from_surface(surface)
 
     def get_continued_conversation_name(self):
         """
