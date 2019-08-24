@@ -33,7 +33,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import ensure_not_destroyed
 
@@ -569,20 +568,7 @@ class ContactRow(Gtk.ListBoxRow):
         grid.set_column_spacing(12)
         grid.set_size_request(260, -1)
 
-        if self.groupchat:
-            muc_icon = get_icon_name(
-                'muc-inactive' if self.new else 'muc-active')
-            image = Gtk.Image.new_from_icon_name(muc_icon, Gtk.IconSize.DND)
-        else:
-            scale = self.get_scale_factor()
-            avatar = app.contacts.get_avatar(
-                account, jid, AvatarSize.CHAT, scale)
-            if avatar is None:
-                image = Gtk.Image.new_from_icon_name(
-                    'avatar-default', Gtk.IconSize.DND)
-            else:
-                image = Gtk.Image.new_from_surface(avatar)
-
+        image = self._get_avatar_image(account, jid)
         image.set_size_request(AvatarSize.CHAT, AvatarSize.CHAT)
         grid.add(image)
 
@@ -630,6 +616,18 @@ class ContactRow(Gtk.ListBoxRow):
 
         self.add(grid)
         self.show_all()
+
+    def _get_avatar_image(self, account, jid):
+        scale = self.get_scale_factor()
+
+        if self.groupchat:
+            surface = app.interface.avatar_storage.get_muc_surface(
+                account, jid, AvatarSize.CHAT, scale)
+            return Gtk.Image.new_from_surface(surface)
+
+        avatar = app.contacts.get_avatar(
+            account, jid, AvatarSize.CHAT, scale)
+        return Gtk.Image.new_from_surface(avatar)
 
     def update_jid(self, jid):
         self.jid = jid
