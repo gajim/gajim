@@ -23,6 +23,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.const import ArchiveState
+from gajim.common.helpers import event_filter
 
 from gajim.gtk.util import load_icon
 
@@ -91,7 +92,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         app.ged.register_event_handler('archiving-interval-finished',
                                        ged.GUI1,
                                        self._received_finished)
-        app.ged.register_event_handler('raw-mam-message-received',
+        app.ged.register_event_handler('mam-message-received',
                                        ged.PRECORE,
                                        self._nec_mam_message_received)
 
@@ -160,13 +161,9 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.set_current_page(Pages.SUMMARY)
         self.summary.finished()
 
+    @event_filter(['account'])
     def _nec_mam_message_received(self, event):
-        if event.conn.name != self.account:
-            return
-
-        result = event.stanza.getTag('result')
-        queryid = result.getAttr('queryid')
-        if queryid != self.query_id:
+        if self.query_id != event.properties.mam.query_id:
             return
 
         log.debug('Received message')
@@ -192,7 +189,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         app.ged.remove_event_handler('archiving-interval-finished',
                                      ged.GUI1,
                                      self._received_finished)
-        app.ged.remove_event_handler('raw-mam-message-received',
+        app.ged.remove_event_handler('mam-message-received',
                                      ged.PRECORE,
                                      self._nec_mam_message_received)
 

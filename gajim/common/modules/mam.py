@@ -149,9 +149,10 @@ class MAM(BaseModule):
             return
 
         app.nec.push_incoming_event(
-            NetworkIncomingEvent('raw-mam-message-received',
-                                 conn=self._con,
-                                 stanza=stanza))
+            NetworkIncomingEvent('mam-message-received',
+                                 account=self._account,
+                                 stanza=stanza,
+                                 properties=properties))
 
         if not self._from_valid_archive(stanza, properties):
             self._log.warning('Message from invalid archive %s',
