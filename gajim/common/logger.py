@@ -129,7 +129,7 @@ CACHE_SQL_STATEMENT = '''
     );
     CREATE TABLE muc_avatars(
             jid TEXT PRIMARY KEY UNIQUE,
-            avatar_sha TEXT,
+            avatar_sha TEXT
     );
     PRAGMA user_version=4;
     '''
