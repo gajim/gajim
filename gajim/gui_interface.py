@@ -1522,10 +1522,12 @@ class Interface:
 
     def create_groupchat_control(self, account, room_jid, muc_data,
                                  minimize=False):
+        avatar_sha = app.logger.get_muc_avatar_sha(room_jid)
         contact = app.contacts.create_contact(jid=room_jid,
                                               account=account,
                                               groups=[_('Group chats')],
                                               sub='none',
+                                              avatar_sha=avatar_sha,
                                               groupchat=True)
         app.contacts.add_contact(account, contact)
 
