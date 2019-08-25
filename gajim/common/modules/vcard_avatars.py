@@ -123,7 +123,7 @@ class VCardAvatars(BaseModule):
 
         avatar_sha = disco_info.get_field_value(nbxmpp.NS_MUC_INFO, field_var)
         state = AvatarState.EMPTY if not avatar_sha else AvatarState.ADVERTISED
-        self._process_update(disco_info.jid, state, avatar_sha, True)
+        self._process_update(str(disco_info.jid), state, avatar_sha, True)
 
     def _update_received(self, properties, room=False):
         self._process_update(properties.jid.getBare(),
