@@ -210,6 +210,7 @@ class Discovery(BaseModule):
         self._log.info('MUC info received: %s', result.jid)
         if not is_error_result(result):
             app.logger.set_last_disco_info(result.jid, result)
+            self._con.get_module('VCardAvatars').muc_disco_info_update(result)
             app.nec.push_incoming_event(NetworkEvent(
                 'muc-disco-update',
                 account=self._account,
