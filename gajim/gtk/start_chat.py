@@ -35,6 +35,7 @@ from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util import get_icon_name
 
 
 class Search(IntEnum):
@@ -618,8 +619,13 @@ class ContactRow(Gtk.ListBoxRow):
         self.show_all()
 
     def _get_avatar_image(self, account, jid):
-        scale = self.get_scale_factor()
+        if self.new:
+            icon_name = 'avatar-default'
+            if self.groupchat:
+                icon_name = get_icon_name('muc-inactive')
+            return Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DND)
 
+        scale = self.get_scale_factor()
         if self.groupchat:
             surface = app.interface.avatar_storage.get_muc_surface(
                 account, jid, AvatarSize.CHAT, scale)
