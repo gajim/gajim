@@ -14,7 +14,6 @@
 
 # XEP-0153: vCard-Based Avatars
 
-import os
 from pathlib import Path
 
 import nbxmpp
@@ -113,6 +112,7 @@ class VCardAvatars(BaseModule):
 
     def _update_received(self, properties, room=False):
         jid = properties.jid.getBare()
+        acc_jid = self._con.get_own_jid().getStripped()
         if properties.avatar_state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', properties.jid)
@@ -120,8 +120,10 @@ class VCardAvatars(BaseModule):
             # Remove avatar
             self._log.debug('Remove: %s', jid)
             app.contacts.set_avatar(self._account, jid, None)
-            acc_jid = self._con.get_own_jid().getStripped()
-            if not room:
+
+            if room:
+                app.logger.set_muc_avatar_sha(jid, None)
+            else:
                 app.logger.set_avatar_sha(acc_jid, jid, None)
             app.interface.update_avatar(
                 self._account, jid, room_avatar=room)
@@ -135,16 +137,21 @@ class VCardAvatars(BaseModule):
                                jid, properties.avatar_sha)
                 return
 
-            if room:
-                # We dont save the room avatar hash in our DB, so check
-                # if we previously downloaded it
-                if app.interface.avatar_exists(properties.avatar_sha):
-                    app.contacts.set_avatar(self._account,
-                                            jid,
-                                            properties.avatar_sha)
-                    app.interface.update_avatar(
-                        self._account, jid, room_avatar=room)
-                    return
+            if app.interface.avatar_exists(properties.avatar_sha):
+                # Check if the avatar is already in storage
+                self._log.info('Found avatar in storage')
+                if room:
+                    app.logger.set_muc_avatar_sha(jid, properties.avatar_sha)
+                else:
+                    app.logger.set_avatar_sha(acc_jid,
+                                              jid,
+                                              properties.avatar_sha)
+                app.contacts.set_avatar(self._account,
+                                        jid,
+                                        properties.avatar_sha)
+                app.interface.update_avatar(
+                    self._account, jid, room_avatar=room)
+                return
 
             if properties.avatar_sha not in self._requested_shas:
                 self._requested_shas.append(properties.avatar_sha)
@@ -173,9 +180,7 @@ class VCardAvatars(BaseModule):
             app.interface.update_avatar(contact=gc_contact)
         else:
             self._log.info('Update: %s %s', nick, properties.avatar_sha)
-            path = os.path.join(configpaths.get('AVATAR'),
-                                properties.avatar_sha)
-            if not os.path.isfile(path):
+            if not app.interface.avatar_exists(properties.avatar_sha):
                 if properties.avatar_sha not in self._requested_shas:
                     app.log('avatar').info('Request: %s', nick)
                     self._requested_shas.append(properties.avatar_sha)
