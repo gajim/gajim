@@ -1473,7 +1473,7 @@ class Logger:
             self._con.execute(sql, (jid, sha))
         except sqlite.IntegrityError:
             sql = 'UPDATE muc_avatars SET avatar_sha = ? WHERE jid = ?'
-            self._con.execute(sql, (jid, sha))
+            self._con.execute(sql, (sha, jid))
 
         self._timeout_commit()
 
