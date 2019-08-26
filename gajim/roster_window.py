@@ -2638,6 +2638,11 @@ class RosterWindow:
     def _on_muc_disco_update(self, event):
         self.draw_contact(str(event.room_jid), event.account)
 
+    def _on_bookmarks_received(self, event):
+        con = app.connections[event.account]
+        for bookmark in con.get_module('Bookmarks').bookmarks:
+            self.draw_contact(str(bookmark.jid), event.account)
+
     def _nec_metacontacts_received(self, obj):
         self.redraw_metacontacts(obj.conn.name)
 
@@ -5684,3 +5689,5 @@ class RosterWindow:
                                        self._nec_chatstate_received)
         app.ged.register_event_handler('muc-disco-update', ged.GUI1,
                                        self._on_muc_disco_update)
+        app.ged.register_event_handler('bookmarks-received', ged.GUI2,
+                                       self._on_bookmarks_received)

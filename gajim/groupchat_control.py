@@ -334,6 +334,7 @@ class GroupchatControl(ChatControlBase):
             ('signed-in', ged.GUI1, self._nec_signed_in),
             ('decrypted-message-received', ged.GUI2, self._nec_decrypted_message_received),
             ('gc-stanza-message-outgoing', ged.OUT_POSTCORE, self._message_sent),
+            ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
         ]
 
         for handler in self._event_handlers:
@@ -799,6 +800,7 @@ class GroupchatControl(ChatControlBase):
         self.update_actions()
         self.set_lock_image()
         self._connect_window_state_change(self.parent_win)
+        self.draw_banner_text()
 
     def set_tooltip(self):
         widget = self.xml.get_object('list_treeview')
@@ -1141,6 +1143,13 @@ class GroupchatControl(ChatControlBase):
         if obj.jid != self.room_jid:
             return
         self._update_banner_state_image()
+
+    @event_filter(['account'])
+    def _on_bookmarks_received(self, _event):
+        if self.parent_win is None:
+            return
+        self.parent_win.redraw_tab(self)
+        self.draw_banner_text()
 
     @event_filter(['account', 'room_jid'])
     def _on_voice_approval(self, event):
