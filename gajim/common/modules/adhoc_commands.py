@@ -197,104 +197,6 @@ def find_current_groupchats(account):
     return rooms
 
 
-class LeaveGroupchatsCommand(AdHocCommand):
-    commandnode = 'leave-groupchats'
-    commandname = _('Leave Group Chats')
-
-    def __init__(self, conn, jid, sessionid):
-        AdHocCommand.__init__(self, conn, jid, sessionid)
-        self._callback = self.first_step
-
-    @staticmethod
-    def is_visible_for(samejid):
-        """
-        Leave groupchats is visible only if the entity has the same bare jid
-        """
-        return samejid
-
-    def execute(self, request):
-        return self._callback(request)
-
-    def first_step(self, request):
-        # first query...
-        response, cmd = self.build_response(request,
-                                            defaultaction='execute',
-                                            actions=['execute'])
-        options = []
-        account = self.connection.name
-        for gc in find_current_groupchats(account):
-            options.append(
-                ('%s' % gc[0],
-                 _('%(nickname)s on %(room_jid)s') % {'nickname': gc[1],
-                                                      'room_jid': gc[0]}))
-        if not options:
-            response, cmd = self.build_response(request, status='completed')
-            cmd.addChild('note', {}, _('You have not joined a group chat.'))
-
-            self.connection.connection.send(response)
-            return False
-
-        cmd.addChild(
-            node=dataforms.SimpleDataForm(
-                title=_('Leave Group Chats'),
-                instructions=_('Choose the group chats you want to leave'),
-                fields=[
-                    dataforms.create_field(
-                        'list-multi',
-                        var='groupchats',
-                        label=_('Group chats'),
-                        options=options,
-                        required=True)
-                ]
-            )
-        )
-
-        self.connection.connection.send(response)
-
-        # for next invocation
-        self._callback = self.second_step
-
-        return True     # keep the session
-
-    def second_step(self, request):
-        # check if the data is correct
-        try:
-            form = dataforms.SimpleDataForm(
-                extend=request.getTag('command').getTag('x'))
-        except Exception:
-            self.bad_request(request)
-            return False
-
-        try:
-            gc = form['groupchats'].values
-        except Exception:       # KeyError if there's no groupchats in form
-            self.bad_request(request)
-            return False
-        account = self.connection.name
-        try:
-            for room_jid in gc:
-                gc_control = app.interface.msg_win_mgr.get_gc_control(
-                    room_jid, account)
-                if not gc_control:
-                    minimized_controls = app.interface.minimized_controls
-                    gc_control = minimized_controls[account][room_jid]
-                    gc_control.shutdown()
-                    app.interface.roster.remove_groupchat(room_jid, account)
-                    continue
-                gc_control.parent_win.remove_tab(gc_control, None, force=True)
-        except Exception:       # KeyError if there's no such room opened
-            self.bad_request(request)
-            return False
-        response, cmd = self.build_response(request, status='completed')
-        note = _('You left the following group chats:')
-        for room_jid in gc:
-            note += '\n\t' + room_jid
-        cmd.addChild('note', {}, note)
-
-        self.connection.connection.send(response)
-        return False
-
-
 class AdHocCommands(BaseModule):
 
     _nbxmpp_extends = 'AdHoc'
@@ -316,7 +218,7 @@ class AdHocCommands(BaseModule):
         # a list of all commands exposed: node -> command class
         self._commands = {}
         if app.config.get('remote_commands'):
-            for cmdobj in (ChangeStatusCommand, LeaveGroupchatsCommand):
+            for cmdobj in (ChangeStatusCommand,):
                 self._commands[cmdobj.commandnode] = cmdobj
 
         # a list of sessions; keys are tuples (jid, sessionid, node)
