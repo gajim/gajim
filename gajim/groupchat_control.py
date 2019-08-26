@@ -2215,11 +2215,8 @@ class GroupchatControl(ChatControlBase):
     def safe_shutdown(self):
         if self.minimizable():
             return True
-        includes = app.config.get('confirm_close_muc_rooms').split(' ')
-        excludes = app.config.get('noconfirm_close_muc_rooms').split(' ')
         # whether to ask for confirmation before closing muc
-        if (app.config.get('confirm_close_muc') or self.room_jid in includes)\
-        and self.is_connected and self.room_jid not in excludes:
+        if app.config.get('confirm_close_muc') and self.is_connected:
             return False
         return True
 
@@ -2233,13 +2230,9 @@ class GroupchatControl(ChatControlBase):
                 self.list_treeview.get_selection().unselect_all()
                 on_no(self)
                 return
-        includes = app.config.get('confirm_close_muc_rooms').split(' ')
-        excludes = app.config.get('noconfirm_close_muc_rooms').split(' ')
-        # whether to ask for confirmation before closing muc
-        if (app.config.get('confirm_close_muc') or self.room_jid in includes)\
-        and self.is_connected and self.room_jid \
-        not in excludes:
 
+        # whether to ask for confirmation before closing muc
+        if app.config.get('confirm_close_muc') and self.is_connected:
             def on_ok(is_checked):
                 if is_checked:
                     # User does not want to be asked again

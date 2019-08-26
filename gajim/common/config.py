@@ -184,8 +184,6 @@ class Config:
         'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (\'print_time\'==sometimes), print it every x minutes.')],
         'confirm_paste_image': [opt_bool, True, _('Ask before pasting an image.')],
         'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
-        'confirm_close_muc_rooms': [opt_str, '', _('Always ask for confirmation before closing group chats with any of the XMPP Addresses on this list (space separated).')],
-        'noconfirm_close_muc_rooms': [opt_str, '', _('Never ask for confirmation before closing group chats with any of the XMPP Addresses on this list (space separated).')],
         'confirm_close_multiple_tabs': [opt_bool, True, _('Ask before closing tabbed chat window if there are chats that can lose data (chat, private chat, group chat that will not be minimized).')],
         'notify_on_file_complete': [opt_bool, True],
         'file_transfers_port': [opt_int, 28011],
