@@ -670,13 +670,13 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         status_message_to_save_as_preset = self.message_buffer.get_text(
             start_iter, finish_iter, True)
 
-        def on_ok(msg_name):
+        def _on_save_preset(msg_name):
             msg_text = status_message_to_save_as_preset
             msg_text_1l = helpers.to_one_line(msg_text)
             if not msg_name:  # msg_name was ''
                 msg_name = msg_text_1l
 
-            def _on_ok2():
+            def _on_overwrite_preset():
                 self.preset_messages_dict[msg_name] = [
                     msg_text, self.pep_dict.get('activity'),
                     self.pep_dict.get('subactivity'),
@@ -694,6 +694,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
                                    self.pep_dict.get('mood'))
                 app.config.set_per('statusmsg', msg_name, 'mood_text',
                                    self.pep_dict.get('mood_text'))
+
             if msg_name in self.preset_messages_dict:
                 NewConfirmationDialog(
                     _('Overwrite'),
@@ -703,17 +704,26 @@ class ChangeStatusMessageDialog(TimeoutDialog):
                     [DialogButton.make('Cancel'),
                      DialogButton.make('Remove',
                                        text=_('_Overwrite'),
-                                       callback=_on_ok2)],
+                                       callback=_on_overwrite_preset)],
                     transient_for=self.dialog).show()
                 return
+
             app.config.add_per('statusmsg', msg_name)
-            _on_ok2()
+            _on_overwrite_preset()
             iter_ = self.message_liststore.append((msg_name,))
-            # select in combobox the one we just saved
+            # Select the one we just saved in combobox
             self.message_combobox.set_active_iter(iter_)
-        InputDialog(_('Save as Preset Status Message'),
-            _('Please type a name for this status message'), is_modal=False,
-            ok_handler=on_ok)
+
+        InputDialog(
+            _('Status Preset'),
+            _('Save status as preset'),
+            _('Please assign a name to this status message preset'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Accept',
+                               text=_('_Save'),
+                               callback=_on_save_preset)],
+            input_str=_('New Status'),
+            transient_for=self.dialog).show()
 
     def on_activity_button_clicked(self, widget):
         self.countdown_enabled = False
@@ -1007,6 +1017,7 @@ class ResourceConflictDialog(TimeoutDialog, InputDialog):
 
     def on_timeout(self):
         self.on_okbutton_clicked(None)
+    # FIXME: Adapt to new InputDialog
 
 
 class VoIPCallReceivedDialog:

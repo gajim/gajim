@@ -2893,31 +2893,30 @@ class RosterWindow:
                 del app.interface.instances[acct]['privacy_list_block']
 
     def on_rename(self, widget, row_type, jid, account):
-        # this function is called either by F2 or by Rename menuitem
+        # This function is called either by F2 or by Rename menuitem
         if 'rename' in app.interface.instances:
             app.interface.instances['rename'].dialog.present()
             return
 
-        # account is offline, don't allow to rename
+        # Account is offline, don't allow to rename
         if not app.account_is_connected(account):
             return
         if row_type in ('contact', 'agent'):
-            # it's jid
+            # It's jid
             title = _('Rename Contact')
-            message = _('Enter a new nickname for contact %s') % jid
+            text = _('Rename contact %s?') % jid
+            sec_text = _('Please enter a new nickname')
             old_text = app.contacts.get_contact_with_highest_priority(account,
-                    jid).name
+                                                                      jid).name
         elif row_type == 'group':
             if jid in helpers.special_groups + (_('General'),):
                 return
             old_text = jid
             title = _('Rename Group')
-            message = _('Enter a new name for group %s') % \
-                GLib.markup_escape_text(jid)
+            text = _('Rename group %s?') % GLib.markup_escape_text(jid)
+            sec_text = _('Please enter a new name')
 
-        def on_renamed(new_text, account, row_type, jid, old_text):
-            if 'rename' in app.interface.instances:
-                del app.interface.instances['rename']
+        def _on_renamed(new_text, account, row_type, jid, old_text):
             if row_type in ('contact', 'agent'):
                 if old_text == new_text:
                     return
@@ -2936,16 +2935,23 @@ class RosterWindow:
                     win.redraw_tab(ctrl)
                     win.show_title()
             elif row_type == 'group':
-                # in Column.JID column, we hold the group name (which is not escaped)
+                # In Column.JID column, we hold the group name (which is not escaped)
                 self.rename_group(old_text, new_text, account)
 
-        def on_canceled():
-            if 'rename' in app.interface.instances:
-                del app.interface.instances['rename']
-
-        app.interface.instances['rename'] = InputDialog(title,
-            message, old_text, False, (on_renamed, account, row_type, jid,
-            old_text), on_canceled, transient_for=self.window)
+        InputDialog(
+            title,
+            text,
+            sec_text,
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Accept',
+                               text=_('_Rename'),
+                               callback=_on_renamed,
+                               args=[account,
+                                     row_type,
+                                     jid,
+                                     old_text])],
+            input_str=old_text,
+            transient_for=self.window).show()
 
     def on_remove_group_item_activated(self, widget, group, account):
         def _on_ok(is_checked):

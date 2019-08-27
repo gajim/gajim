@@ -276,151 +276,6 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
         return [is_checked_1, is_checked_2]
 
 
-class CommonInputDialog:
-    """
-    Common Class for Input dialogs
-    """
-
-    def __init__(self, title, label_str, is_modal, ok_handler, cancel_handler,
-                 transient_for=None):
-        self.dialog = self.xml.get_object('input_dialog')
-        label = self.xml.get_object('label')
-        self.dialog.set_title(title)
-        label.set_markup(label_str)
-        self.cancel_handler = cancel_handler
-        self.vbox = self.xml.get_object('vbox')
-        if transient_for is None:
-            transient_for = app.app.get_active_window()
-        self.dialog.set_transient_for(transient_for)
-
-        self.ok_handler = ok_handler
-        okbutton = self.xml.get_object('okbutton')
-        okbutton.connect('clicked', self.on_okbutton_clicked)
-        cancelbutton = self.xml.get_object('cancelbutton')
-        cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
-        self.xml.connect_signals(self)
-        self.dialog.show_all()
-
-    def on_input_dialog_destroy(self, widget):
-        if self.cancel_handler:
-            self.cancel_handler()
-
-    def on_okbutton_clicked(self, widget):
-        user_input = self.get_text()
-        if user_input:
-            user_input = user_input
-        self.cancel_handler = None
-        self.dialog.destroy()
-        if isinstance(self.ok_handler, tuple):
-            self.ok_handler[0](user_input, *self.ok_handler[1:])
-        else:
-            self.ok_handler(user_input)
-
-    def on_cancelbutton_clicked(self, widget):
-        self.dialog.destroy()
-
-    def destroy(self):
-        self.dialog.destroy()
-
-
-class InputDialog(CommonInputDialog):
-    """
-    Class for Input dialog
-    """
-
-    def __init__(self, title, label_str, input_str=None, is_modal=True,
-                 ok_handler=None, cancel_handler=None, transient_for=None):
-        self.xml = get_builder('input_dialog.ui')
-        CommonInputDialog.__init__(self, title, label_str, is_modal,
-                                   ok_handler, cancel_handler,
-                                   transient_for=transient_for)
-        self.input_entry = self.xml.get_object('input_entry')
-        if input_str:
-            self.set_entry(input_str)
-
-    def on_input_dialog_delete_event(self, widget, event):
-        '''
-        may be implemented by subclasses
-        '''
-
-    def set_entry(self, value):
-        self.input_entry.set_text(value)
-        self.input_entry.select_region(0, -1) # select all
-
-    def get_text(self):
-        return self.input_entry.get_text()
-
-
-class InputDialogCheck(InputDialog):
-    """
-    Class for Input dialog
-    """
-
-    def __init__(self, title, label_str, checktext='', input_str=None,
-                 is_modal=True, ok_handler=None, cancel_handler=None,
-                 transient_for=None):
-        self.xml = get_builder('input_dialog.ui')
-        InputDialog.__init__(self, title, label_str, input_str=input_str,
-                             is_modal=is_modal, ok_handler=ok_handler,
-                             cancel_handler=cancel_handler,
-                             transient_for=transient_for)
-        self.input_entry = self.xml.get_object('input_entry')
-        if input_str:
-            self.input_entry.set_text(input_str)
-            self.input_entry.select_region(0, -1) # select all
-
-        if checktext:
-            self.checkbutton = Gtk.CheckButton.new_with_mnemonic(checktext)
-            self.vbox.pack_start(self.checkbutton, False, True, 0)
-            self.checkbutton.show()
-
-    def on_okbutton_clicked(self, widget):
-        user_input = self.get_text()
-        if user_input:
-            user_input = user_input
-        self.cancel_handler = None
-        self.dialog.destroy()
-        if isinstance(self.ok_handler, tuple):
-            self.ok_handler[0](user_input, self.is_checked(), *self.ok_handler[1:])
-        else:
-            self.ok_handler(user_input, self.is_checked())
-
-    def get_text(self):
-        return self.input_entry.get_text()
-
-    def is_checked(self):
-        """
-        Get active state of the checkbutton
-        """
-        try:
-            return self.checkbutton.get_active()
-        except Exception:
-            # There is no checkbutton
-            return False
-
-
-class InputTextDialog(CommonInputDialog):
-    """
-    Class for multilines Input dialog (more place than InputDialog)
-    """
-
-    def __init__(self, title, label_str, input_str=None, is_modal=True,
-                 ok_handler=None, cancel_handler=None, transient_for=None):
-        self.xml = get_builder('input_text_dialog.ui')
-        CommonInputDialog.__init__(self, title, label_str, is_modal,
-                                   ok_handler, cancel_handler,
-                                   transient_for=transient_for)
-        self.input_buffer = self.xml.get_object('input_textview').get_buffer()
-        if input_str:
-            self.input_buffer.set_text(input_str)
-            start_iter, end_iter = self.input_buffer.get_bounds()
-            self.input_buffer.select_range(start_iter, end_iter) # select all
-
-    def get_text(self):
-        start_iter, end_iter = self.input_buffer.get_bounds()
-        return self.input_buffer.get_text(start_iter, end_iter, True)
-
-
 class CertificateDialog(Gtk.ApplicationWindow):
     def __init__(self, transient_for, account, cert):
         Gtk.ApplicationWindow.__init__(self)
@@ -745,6 +600,35 @@ class NewConfirmationCheckDialog(NewConfirmationDialog):
         button = self._buttons.get(response)
         if button is not None:
             button.args.insert(0, self._checkbutton.get_active())
+        super()._on_response(_dialog, response)
+
+
+class InputDialog(NewConfirmationDialog):
+    def __init__(self, title, text, sec_text, buttons, input_str=None,
+                 transient_for=None, modal=True):
+        NewConfirmationDialog.__init__(self,
+                                       title,
+                                       text,
+                                       sec_text,
+                                       buttons,
+                                       transient_for=transient_for,
+                                       modal=modal)
+
+        self._entry = Gtk.Entry()
+        self._entry.set_activates_default(True)
+        self._entry.set_margin_start(50)
+        self._entry.set_margin_end(50)
+
+        if input_str:
+            self._entry.set_text(input_str)
+            self._entry.select_region(0, -1)  # select all
+
+        self.get_content_area().add(self._entry)
+
+    def _on_response(self, _dialog, response):
+        button = self._buttons.get(response)
+        if button is not None:
+            button.args.insert(0, self._entry.get_text())
         super()._on_response(_dialog, response)
 
 

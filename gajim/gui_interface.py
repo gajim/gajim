@@ -91,12 +91,12 @@ from gajim.common import optparser
 
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.notification import Notification
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import NewConfirmationCheckDialog
-from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
@@ -878,19 +878,27 @@ class Interface:
         app.contacts.define_metacontacts(obj.conn.name, obj.meta_list)
 
     def handle_event_zc_name_conflict(self, obj):
-        def on_ok(new_name):
+        def _on_ok(new_name):
             app.config.set_per('accounts', obj.conn.name, 'name', new_name)
             show = obj.conn.old_show
             status = obj.conn.status
             obj.conn.username = new_name
             obj.conn.change_status(show, status)
-        def on_cancel():
+
+        def _on_cancel(*args):
             obj.conn.change_status('offline', '')
 
-        InputDialog(_('Username Conflict'),
-            _('Please type a new username for your local account'),
-            input_str=obj.alt_name, is_modal=True, ok_handler=on_ok,
-            cancel_handler=on_cancel, transient_for=self.roster.window)
+        InputDialog(
+            _('Username Conflict'),
+            _('Username Conflict'),
+            _('Please enter a new username for your local account'),
+            [DialogButton.make('Cancel',
+                               callback=_on_cancel),
+             DialogButton.make('Accept',
+                               text=_('_OK'),
+                               callback=_on_ok)],
+            input_str=obj.alt_name,
+            transient_for=self.roster.window).show()
 
     def handle_event_resource_conflict(self, obj):
         # ('RESOURCE_CONFLICT', account, ())
