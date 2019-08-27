@@ -787,7 +787,7 @@ class MUC(BaseModule):
             type_ = InviteType.DIRECT
 
         password = app.gc_passwords.get(room, None)
-        self._log.info('Inivte %s to %s', to, room)
+        self._log.info('Invite %s to %s', to, room)
         self._nbxmpp('MUC').invite(room, to, reason, password, continue_, type_)
 
     def cleanup(self):
