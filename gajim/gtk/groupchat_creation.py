@@ -159,7 +159,10 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self._ui.create_button.set_sensitive(False)
 
     def _set_warning_from_error(self, error):
-        text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
+        condition = error.condition
+        if condition == 'gone':
+            condition = 'already-exists'
+        text = MUC_DISCO_ERRORS.get(condition, to_user_string(error))
         self._set_warning(text)
 
     def _set_warning_from_error_code(self, error_code):
