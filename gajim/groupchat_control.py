@@ -64,6 +64,7 @@ from gajim.common import contacts
 from gajim.common.const import StyleAttr
 from gajim.common.const import Chatstate
 from gajim.common.const import MUCJoinedState
+from gajim.common.const import ButtonAction
 
 from gajim.chat_control_base import ChatControlBase
 
@@ -75,7 +76,7 @@ from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import DestroyMucDialog
 from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.single_message import SingleMessageWindow
+from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.tooltips import GCTooltip
@@ -323,7 +324,7 @@ class GroupchatControl(ChatControlBase):
             ('muc-subject', ged.GUI1, self._on_subject),
             ('muc-captcha-challenge', ged.GUI1, self._on_captcha_challenge),
             ('muc-captcha-error', ged.GUI1, self._on_captcha_error),
-            ('muc-voice-approval', ged.GUI1, self._on_voice_approval),
+            ('muc-voice-request', ged.GUI1, self._on_voice_request),
             ('muc-disco-update', ged.GUI1, self._on_disco_update),
             ('muc-configuration-finished', ged.GUI1, self._on_configuration_finished),
             ('muc-configuration-failed', ged.GUI1, self._on_configuration_failed),
@@ -1152,12 +1153,22 @@ class GroupchatControl(ChatControlBase):
         self.draw_banner_text()
 
     @event_filter(['account', 'room_jid'])
-    def _on_voice_approval(self, event):
-        SingleMessageWindow(self.account,
-                            self.room_jid,
-                            action='receive',
-                            from_whom=self.room_jid,
-                            form_node=event.form)
+    def _on_voice_request(self, event):
+        def on_approve():
+            con = app.connections[self.account]
+            con.get_module('MUC').approve_voice_request(self.room_jid,
+                                                        event.voice_request)
+        NewConfirmationDialog(
+            _('Voice Request'),
+            _('Voice Request'),
+            _('<b>%s</b> from <b>%s</b> requests voice') % (
+                event.voice_request.nick, self.room_name),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('OK',
+                               text=_('Approve'),
+                               action=ButtonAction.SUGGESTED,
+                               callback=on_approve)],
+            modal=False).show()
 
     @event_filter(['account'])
     def _nec_mam_decrypted_message_received(self, obj):

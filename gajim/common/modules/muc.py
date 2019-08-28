@@ -63,6 +63,7 @@ class MUC(BaseModule):
         'invite',
         'request_config',
         'request_voice',
+        'approve_voice_request',
         'destroy',
     ]
 
@@ -659,10 +660,10 @@ class MUC(BaseModule):
             return
 
         app.nec.push_incoming_event(
-            NetworkEvent('muc-voice-approval',
+            NetworkEvent('muc-voice-request',
                          account=self._account,
                          room_jid=str(properties.muc_jid),
-                         form=properties.voice_request.form))
+                         voice_request=properties.voice_request))
         raise nbxmpp.NodeProcessed
 
     def _on_captcha_challenge(self, _con, _stanza, properties):
