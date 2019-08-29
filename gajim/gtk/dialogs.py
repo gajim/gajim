@@ -547,50 +547,6 @@ class InputTextDialog(CommonInputDialog):
         return self.input_buffer.get_text(start_iter, end_iter, True)
 
 
-class DestroyMucDialog:
-    """
-    Class for Destroy MUC Dialog
-    """
-    def __init__(self, room_jid, destroy_handler=None):
-        self._ui = get_builder('destroy_muc_dialog.ui')
-        self._ui.destroy_muc_dialog.set_transient_for(
-            app.app.get_active_window())
-
-        self.destroy_handler = destroy_handler
-
-        title = _('Destroy %s') % room_jid
-        self._ui.destroy_muc_dialog.set_title(title)
-        label_header = _('Destroy this group chat permanently?')
-        self._ui.label_header.set_markup(label_header)
-        label_alt_venue = _('Where participants should go (optional)')
-        self._ui.alt_venue_label.set_markup(label_alt_venue)
-
-        self._ui.reason_entry.connect('activate', self._on_entry_activate)
-        self._ui.alt_venue_entry.connect('activate', self._on_entry_activate)
-
-        self._ui.destroy_button.connect(
-            'clicked', self._on_destroy_button_clicked)
-        self._ui.cancel_button.connect(
-            'clicked', self._on_cancel_button_clicked)
-        self._ui.connect_signals(self)
-        self._ui.destroy_muc_dialog.show_all()
-
-    def _on_entry_activate(self, widget, *args):
-        self._ui.destroy_button.set_active(True)
-
-    def _on_reason_mnemonic_activate(self, widget, group_cycling=False):
-        self._ui.reason_expander.set_expanded(True)
-
-    def _on_destroy_button_clicked(self, widget):
-        user_input_reason = self._ui.reason_entry.get_text()
-        user_input_alt_venue = self._ui.alt_venue_entry.get_text()
-        self._ui.destroy_muc_dialog.destroy()
-        self.destroy_handler(user_input_reason, user_input_alt_venue)
-
-    def _on_cancel_button_clicked(self, widget):
-        self._ui.destroy_muc_dialog.destroy()
-
-
 class CertificateDialog(Gtk.ApplicationWindow):
     def __init__(self, transient_for, account, cert):
         Gtk.ApplicationWindow.__init__(self)

@@ -74,8 +74,6 @@ from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import DestroyMucDialog
-from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.add_contact import AddNewContactWindow
@@ -676,24 +674,36 @@ class GroupchatControl(ChatControlBase):
                                           self._subject_data.user_timestamp)
         self._show_page('muc-info')
 
-    def _on_destroy_room(self, action, param):
-        def _on_confirm(reason, jid):
-            if jid:
-                # Test jid
-                try:
-                    jid = helpers.parse_jid(jid)
-                except Exception:
-                    ErrorDialog(
-                        _('Invalid group chat XMPP Address'),
-                        _('The group chat XMPP Address has not allowed characters.'))
-                    return
+    def _on_destroy_room(self, _action, _param):
+        self.xml.destroy_reason_entry.grab_focus()
+        self.xml.destroy_button.grab_default()
+        self._show_page('destroy')
 
-            self._wait_for_destruction = True
-            con = app.connections[self.account]
-            con.get_module('MUC').destroy(self.room_jid, reason, jid)
+    def _on_destroy_alternate_changed(self, entry, _param):
+        jid = entry.get_text()
+        if jid:
+            try:
+                jid = helpers.validate_jid(jid)
+            except Exception:
+                icon = 'dialog-warning-symbolic'
+                text = _('Invalid XMPP Address')
+                self.xml.destroy_alternate_entry.set_icon_from_icon_name(
+                    Gtk.EntryIconPosition.SECONDARY, icon)
+                self.xml.destroy_alternate_entry.set_icon_tooltip_text(
+                    Gtk.EntryIconPosition.SECONDARY, text)
+                self.xml.destroy_button.set_sensitive(False)
+                return
+        self.xml.destroy_alternate_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, None)
+        self.xml.destroy_button.set_sensitive(True)
 
-        # Ask for a reason (and an alternate venue)
-        DestroyMucDialog(self.room_jid, destroy_handler=_on_confirm)
+    def _on_destroy_confirm(self, _button):
+        reason = self.xml.destroy_reason_entry.get_text()
+        jid = self.xml.destroy_alternate_entry.get_text()
+        self._wait_for_destruction = True
+        con = app.connections[self.account]
+        con.get_module('MUC').destroy(self.room_jid, reason, jid)
+        self._show_page('groupchat')
 
     def _on_configure_room(self, _action, _param):
         win = app.get_app_window('GroupchatConfig', self.account, self.room_jid)
@@ -2497,19 +2507,6 @@ class GroupchatControl(ChatControlBase):
         model = widget.get_model()
         model[iter_][Column.IMG] = get_icon_name('closed')
 
-    def kick(self, widget, nick):
-        """
-        Kick a user
-        """
-        def on_ok(reason):
-            con = app.connections[self.account]
-            con.get_module('MUC').set_role(self.room_jid, nick, 'none', reason)
-
-        # ask for reason
-        InputDialog(_('Kicking %s') % nick,
-            _('You may specify a reason below:'), ok_handler=on_ok,
-            transient_for=self.parent_win.window)
-
     def mk_menu(self, event, iter_):
         """
         Make contact's popup menu
@@ -2537,7 +2534,7 @@ class GroupchatControl(ChatControlBase):
         (user_affiliation.is_member and target_affiliation in (Affiliation.ADMIN,
         Affiliation.OWNER)) or (user_affiliation.is_none and not target_affiliation.is_none):
             item.set_sensitive(False)
-        id_ = item.connect('activate', self.kick, nick)
+        id_ = item.connect('activate', self._on_kick_participant, nick)
         self.handlers[id_] = item
 
         item = xml.get_object('voice_checkmenuitem')
@@ -2565,7 +2562,7 @@ class GroupchatControl(ChatControlBase):
         (target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) and\
         not user_affiliation.is_owner):
             item.set_sensitive(False)
-        id_ = item.connect('activate', self.ban, jid)
+        id_ = item.connect('activate', self._on_ban_participant, jid)
         self.handlers[id_] = item
 
         item = xml.get_object('member_checkmenuitem')
@@ -2793,23 +2790,35 @@ class GroupchatControl(ChatControlBase):
         con = app.connections[self.account]
         con.get_module('MUC').set_role(self.room_jid, nick, 'participant')
 
-    def ban(self, widget, jid):
-        """
-        Ban a user
-        """
-        def on_ok(reason):
-            con = app.connections[self.account]
-            con.get_module('MUC').set_affiliation(
-                self.room_jid,
-                {jid: {'affiliation': 'outcast',
-                       'reason': reason}})
+    def _on_kick_participant(self, _widget, nick):
+        self._kick_nick = nick
+        self.xml.kick_label.set_text(_('Kick %s' % nick))
+        self.xml.kick_reason_entry.grab_focus()
+        self.xml.kick_participant_button.grab_default()
+        self._show_page('kick')
 
-        # to ban we know the real jid. so jid is not fakejid
+    def _on_kick_participant_clicked(self, _button):
+        reason = self.xml.kick_reason_entry.get_text()
+        con = app.connections[self.account]
+        con.get_module('MUC').set_role(
+            self.room_jid, self._kick_nick, 'none', reason)
+        self._show_page('groupchat')
+
+    def _on_ban_participant(self, _widget, jid):
+        self._ban_jid = jid
         nick = app.get_nick_from_jid(jid)
-        # ask for reason
-        InputDialog(_('Banning %s') % nick,
-            _('You may specify a reason below:'), ok_handler=on_ok,
-            transient_for=self.parent_win.window)
+        self.xml.ban_label.set_text(_('Ban %s' % nick))
+        self.xml.ban_reason_entry.grab_focus()
+        self.xml.ban_participant_button.grab_default()
+        self._show_page('ban')
+
+    def _on_ban_participant_clicked(self, _button):
+        reason = self.xml.ban_reason_entry.get_text()
+        con = app.connections[self.account]
+        con.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {self._ban_jid: {'affiliation': 'outcast', 'reason': reason}})
+        self._show_page('groupchat')
 
     def grant_membership(self, widget, jid):
         """
