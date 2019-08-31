@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim
 runtime: org.gnome.Platform
-runtime-version: 3.32
+runtime-version: '3.32'
 sdk: org.gnome.Sdk
 command: gajim
 tags: nightly
@@ -66,8 +66,8 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/64/7c/27367b38e6cc3e1f49f193deb761fe75cda9f95da37b67b422e62281fcac/cffi-1.12.2.tar.gz
-        sha256: e113878a446c6228669144ae8a56e268c91b7f1fafae927adc4879d9849e0ea7
+        url: https://files.pythonhosted.org/packages/93/1a/ab8c62b5838722f29f3daffcc8d4bd61844aa9b5f437341cc890ceee483b/cffi-1.12.3.tar.gz
+        sha256: 041c81822e9f84b1d9c401182e174996f0bae9991f33725d059b771744290774
 
   - name: python3-asn1crypto
     buildsystem: simple
@@ -93,8 +93,8 @@ modules:
       - python3 setup.py install --prefix=/app
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/07/ca/bc827c5e55918ad223d59d299fff92f3563476c3b00d0a9157d9c0217449/cryptography-2.6.1.tar.gz
-        sha256: 26c821cbeb683facb966045e2064303029d572a87ee69ca5a1bf54bf55f93ca6
+        url: https://files.pythonhosted.org/packages/c2/95/f43d02315f4ec074219c6e3124a87eba1d2d12196c2767fadfdc07a83884/cryptography-2.7.tar.gz
+        sha256: e6347742ac8f35ded4a46ff835c60e68c22a536a8ae5c4422966d06946b6d4c6
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -117,11 +117,11 @@ modules:
   - name: python3-jeepney
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app jeepney-0.4-py3-none-any.whl
+      - pip3 install --prefix=/app jeepney-0.4.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/2b/f7/ff23b9b59534f501d47c327576aadda59da5b83d76ff837e6075bc325b9f/jeepney-0.4-py3-none-any.whl
-        sha256: f6f8b1428403b4afad04b6b82f9ab9fc426c253d7504c9031c41712a2c01dc74
+        url: https://files.pythonhosted.org/packages/0a/4c/ef880713a6c6d628869596703167eab2edf8e0ec2d870d1089dcb0901b81/jeepney-0.4.1-py3-none-any.whl
+        sha256: f6a3f93464a0cf052f4e87da3c8b3ed1e27696758fb9739c63d3a74d9a1b6774
 
   - name: python3-secretstorage
     buildsystem: simple
@@ -144,13 +144,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-18.0.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app keyring-19.0.2-py2.py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/a1/28/0058032477bfdf2003e605d175629963759220661615443e20711446bfa7/keyring-18.0.0-py2.py3-none-any.whl
-        sha256: ca33f5ccc542b9ffaa196ee9a33488069e5e7eac77d5b81969f8a3ce74d0230c
+        url: https://files.pythonhosted.org/packages/6e/b3/b4d443d2e30c00cdb73612426222172182e54359545cfb17774792619e49/keyring-19.0.2-py2.py3-none-any.whl
+        sha256: afbfe7bc9bdba69d25c551b0c738adde533d87e0b51ad6bbe332cbea19ad8476
 
   - name: python3-cssutils
     buildsystem: simple
@@ -166,11 +166,11 @@ modules:
   - name: python3-precis_i18n
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app precis_i18n-1.0.0-py3-none-any.whl
+      - pip3 install --prefix=/app precis_i18n-1.0.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/08/9d/d32f1b7c6d280c82a786b629ba89bd9e3e8409b9e23a7309f76a78e46971/precis_i18n-1.0.0-py3-none-any.whl
-        sha256: f6942bbffec698d0d7e30c42f589f3f6da13e723d047997d0761a41facf2986f
+        url: https://files.pythonhosted.org/packages/b6/ec/9abe8377d9819fc0383992aaa1b8ce263b45a2371f9f30204abf61029937/precis_i18n-1.0.1-py3-none-any.whl
+        sha256: dc9f9fb0c080af9454adce9cc1ddcd718309f3a99ca05186f65e9f6b0654dcd9
 
   - name: gspell
     cleanup:
