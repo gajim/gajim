@@ -28,7 +28,9 @@ from gajim.common import helpers
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_groupchat_name
+from gajim.common.helpers import get_alternative_venue
 from gajim.common.i18n import _
+from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
 
@@ -57,6 +59,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._keywords = []
         self._destroyed = False
         self._search_stopped = False
+        self._redirected = False
 
         self._ui = get_builder('start_chat_dialog.ui')
         self.add(self._ui.stack)
@@ -257,6 +260,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 return
 
             self.ready_to_destroy = False
+            self._redirected = False
             self._disco_muc(row.account, row.jid)
 
         else:
@@ -272,7 +276,13 @@ class StartChatDialog(Gtk.ApplicationWindow):
     @ensure_not_destroyed
     def _disco_info_received(self, account, result):
         if is_error_result(result):
-            self._set_error(result)
+            jid = get_alternative_venue(result)
+            if jid is None or self._redirected:
+                self._set_error(result)
+                return
+
+            self._redirected = True
+            self._disco_muc(account, jid)
 
         elif result.is_muc:
             self._muc_info_box.set_account(account)
@@ -284,6 +294,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _set_error(self, error):
         text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
+        if error.condition == 'gone':
+            reason = error.get_text(get_rfc5646_lang())
+            if reason:
+                text = '%s:\n%s' % (text, reason)
         self._show_error_page(text)
 
     def _set_error_from_code(self, error_code):
@@ -319,6 +333,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._show_error_page(_('You can not join a group chat '
                                     'unless you are connected.'))
             return
+
+        self._redirected = False
         self._disco_muc(account, selected_row.jid)
 
     def _set_listbox(self, listbox):
