@@ -334,6 +334,8 @@ class CSSConfig():
                     self._add_to_cache(selector, 'fontdescription', desc)
                 return desc
 
+        self._add_to_cache(selector, 'fontdescription', None)
+
     def _get_description_from_css(self, family, size, style, weight):
         if family is None:
             return
@@ -398,9 +400,9 @@ class CSSConfig():
         # search in default theme
         if not pre:
             rule = self._get_default_rule(selector, attr)
-            if rule is not None:
-                self._add_to_cache(selector, attr, rule.style[attr])
-                return rule.style[attr]
+            value = rule if rule is None else rule.style[attr]
+            self._add_to_cache(selector, attr, value)
+            return value
 
     def remove_value(self, selector, attr, pre=False):
         if attr == StyleAttr.FONT:
