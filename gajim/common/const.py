@@ -240,6 +240,7 @@ MUC_DISCO_ERRORS = {
     'not-muc-service': _('Address does not belong to a group chat server'),
     'already-exists': _('Group chat already exists'),
     'item-not-found': _('Group chat does not exist'),
+    'gone': _('Group chat is closed'),
 }
 
 

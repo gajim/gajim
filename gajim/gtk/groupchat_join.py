@@ -20,7 +20,9 @@ from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.helpers import to_user_string
+from gajim.common.helpers import get_alternative_venue
 from gajim.common.const import MUC_DISCO_ERRORS
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
@@ -40,6 +42,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self._destroyed = False
         self.account = account
         self.jid = jid
+        self._redirected = False
 
         self._main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,
                                  spacing=18)
@@ -84,7 +87,16 @@ class GroupchatJoin(Gtk.ApplicationWindow):
     @ensure_not_destroyed
     def _disco_info_received(self, result):
         if is_error_result(result):
-            self._set_error(result)
+            jid = get_alternative_venue(result)
+            if jid is None or self._redirected:
+                self._set_error(result)
+                return
+
+            self.jid = jid
+            self._redirected = True
+            con = app.connections[self.account]
+            con.get_module('Discovery').disco_muc(
+                jid, callback=self._disco_info_received)
 
         elif result.is_muc:
             self._muc_info_box.set_from_disco_info(result)
@@ -99,6 +111,10 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
     def _set_error(self, error):
         text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
+        if error.condition == 'gone':
+            reason = error.get_text(get_rfc5646_lang())
+            if reason:
+                text = '%s:\n%s' % (text, reason)
         self._show_error_page(text)
 
     def _set_error_from_code(self, error_code):
@@ -128,6 +144,7 @@ class ErrorPage(Gtk.Box):
         error_icon.set_valign(Gtk.Align.END)
 
         self._error_label = Gtk.Label()
+        self._error_label.set_justify(Gtk.Justification.CENTER)
         self._error_label.set_valign(Gtk.Align.START)
         self._error_label.get_style_context().add_class('bold16')
         self._error_label.set_line_wrap(True)

@@ -1641,3 +1641,10 @@ def get_groupchat_name(con, jid):
             return disco_info.muc_name
 
     return jid.split('@')[0]
+
+
+def get_alternative_venue(error):
+    if error.condition == 'gone' and error.condition_data is not None:
+        uri = parse_uri(error.condition_data)
+        if uri.type == URIType.XMPP and uri.action == URIAction.JOIN:
+            return uri.data['jid']
