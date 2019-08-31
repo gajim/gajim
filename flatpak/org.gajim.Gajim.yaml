@@ -15,11 +15,6 @@ finish-args:
   - --talk-name=org.mpris.MediaPlayer2.*
   # Keyring
   - --talk-name=org.freedesktop.secrets
-  # dconf
-  - --filesystem=xdg-run/dconf
-  - --filesystem=~/.config/dconf:ro
-  - --talk-name=ca.desrt.dconf
-  - --env=DCONF_USER_CONFIG_DIR=.config/dconf
   # GnuPG
   - --filesystem=~/.gnupg
   # extensions
