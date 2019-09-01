@@ -366,6 +366,7 @@ class MUC(BaseModule):
                                muc_data.jid, muc_data.nick)
                 self._join(muc_data)
             elif properties.error.condition == 'not-authorized':
+                self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
                 self._raise_muc_event('muc-password-required', properties)
             else:
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
