@@ -1594,10 +1594,8 @@ class GroupchatControl(ChatControlBase):
         self.update_actions()
 
     def leave(self, reason=None):
-        app.connections[self.account].get_module('MUC').leave(self.room_jid,
-                                                              reason=reason)
         self.got_disconnected()
-        self._close_control()
+        self._close_control(reason=reason)
 
     def rejoin(self):
         if not self.autorejoin:
@@ -2187,7 +2185,16 @@ class GroupchatControl(ChatControlBase):
 
         del win._controls[self.account][self.contact.jid]
 
-    def shutdown(self, status='offline'):
+    def shutdown(self, reason=None):
+        # Preventing autorejoin from being activated
+        self.autorejoin = False
+
+        # Leave MUC if we are still joined
+        if self._muc_data.state != MUCJoinedState.NOT_JOINED:
+            self.got_disconnected()
+            app.connections[self.account].get_module('MUC').leave(
+                self.room_jid, reason=reason)
+
         # PluginSystem: calling shutdown of super class (ChatControlBase)
         # to let it remove it's GUI extension points
         super(GroupchatControl, self).shutdown()
@@ -2195,9 +2202,6 @@ class GroupchatControl(ChatControlBase):
         # GrouphatControl instance object
         app.plugin_manager.remove_gui_extension_point('groupchat_control',
             self)
-
-        # Preventing autorejoin from being activated
-        self.autorejoin = False
 
         # Unregister handlers
         for handler in self._event_handlers:
@@ -2282,11 +2286,11 @@ class GroupchatControl(ChatControlBase):
 
         on_yes(self)
 
-    def _close_control(self):
+    def _close_control(self, reason=None):
         if self.parent_win is None:
-            self.shutdown()
+            self.shutdown(reason)
         else:
-            self.parent_win.remove_tab(self, None, force=True)
+            self.parent_win.remove_tab(self, None, reason=reason, force=True)
 
     def set_control_active(self, state):
         self.conv_textview.allow_focus_out_line = True
