@@ -37,7 +37,6 @@ from gajim.gtk.util import scale_with_ratio
 log = logging.getLogger('gajim.gtk.avatar')
 
 
-@lru_cache(maxsize=1024)
 def generate_avatar(letters, color, size, scale):
     # Get color for nickname with XEP-0392
     color_r, color_g, color_b = color
@@ -139,7 +138,9 @@ class AvatarStorage(metaclass=Singleton):
         else:
             color_string = contact.jid
 
-        surface = self._generate_default_avatar(name, color_string, size, scale)
+        letter = self._generate_letter(name)
+        surface = self._generate_default_avatar(
+            letter, color_string, size, scale)
         self._cache[jid][(size, scale)] = surface
         return surface
 
@@ -159,7 +160,8 @@ class AvatarStorage(metaclass=Singleton):
 
         con = app.connections[account]
         name = get_groupchat_name(con, jid)
-        surface = self._generate_default_avatar(name, jid, size, scale)
+        letter = self._generate_letter(name)
+        surface = self._generate_default_avatar(letter, jid, size, scale)
         self._cache[jid][(size, scale)] = surface
         return surface
 
@@ -265,8 +267,9 @@ class AvatarStorage(metaclass=Singleton):
                 return letter.capitalize()
         return name[0].capitalize()
 
-    def _generate_default_avatar(self, name, color_string, size, scale):
-        letter = self._generate_letter(name)
+    @staticmethod
+    @lru_cache(maxsize=2048)
+    def _generate_default_avatar(letter, color_string, size, scale):
         color = text_to_color(color_string)
         surface = generate_avatar(letter, color, size, scale)
         surface = clip_circle(surface)
