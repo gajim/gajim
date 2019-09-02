@@ -52,6 +52,11 @@ class DialogButton(namedtuple('DialogButton', ('response text callback args '
                 default_kwargs['response'] = Gtk.ResponseType.CANCEL
                 default_kwargs['text'] = _('Cancel')
 
+            elif type_ == 'Accept':
+                default_kwargs['response'] = Gtk.ResponseType.OK
+                default_kwargs['text'] = _('Accept')
+                default_kwargs['action'] = ButtonAction.SUGGESTED
+
             elif type_ == 'Delete':
                 default_kwargs['response'] = Gtk.ResponseType.OK
                 default_kwargs['text'] = _('Delete')
