@@ -600,13 +600,13 @@ class Contacts():
             if contacts[0].is_groupchat:
                 return contacts[0]
 
-    def get_avatar(self, jid, size, scale):
+    def get_avatar(self, jid, size, scale, show=None):
         if jid not in self._contacts:
             return None
 
         for resource in self._contacts[jid]:
             avatar = common.app.interface.get_avatar(
-                resource, size, scale)
+                resource, size, scale, show)
             if avatar is None:
                 self.set_avatar(jid, None)
             return avatar

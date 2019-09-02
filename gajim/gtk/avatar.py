@@ -32,6 +32,7 @@ from gajim.common.const import AvatarSize
 from gajim.gtk.util import load_pixbuf
 from gajim.gtk.util import text_to_color
 from gajim.gtk.util import scale_with_ratio
+from gajim.gtk.const import SHOW_COLORS
 
 
 log = logging.getLogger('gajim.gtk.avatar')
@@ -84,6 +85,40 @@ def generate_avatar(letters, color, size, scale):
     return context.get_target()
 
 
+def add_status_to_avatar(surface, show):
+    width = surface.get_width()
+    height = surface.get_height()
+
+    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+    new_surface.set_device_scale(*surface.get_device_scale())
+
+    scale = surface.get_device_scale()[0]
+
+    context = cairo.Context(new_surface)
+    context.set_source_surface(surface, 0, 0)
+    context.paint()
+
+    # Correct height and width for scale
+    width = width / scale
+    height = height / scale
+
+    clip_size = width / 5
+    context.set_source_rgb(255, 255, 255)
+    context.set_operator(cairo.Operator.CLEAR)
+    context.arc(width - clip_size, height - clip_size, clip_size, 0, 2 * pi)
+    context.fill()
+
+    color = SHOW_COLORS[show]
+    show_size = width / 5
+    show_radius = show_size * 0.80
+    context.set_source_rgb(*color)
+    context.set_operator(cairo.Operator.OVER)
+    context.arc(width - show_size, height - show_size, show_radius, 0, 2 * pi)
+    context.fill()
+
+    return context.get_target()
+
+
 def clip_circle(surface):
     new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
                                      surface.get_width(),
@@ -113,22 +148,24 @@ class AvatarStorage(metaclass=Singleton):
     def invalidate_cache(self, jid):
         self._cache.pop(jid, None)
 
-    def get_pixbuf(self, contact, size, scale):
-        surface = self.get_surface(contact, size, scale)
+    def get_pixbuf(self, contact, size, scale, show=None):
+        surface = self.get_surface(contact, size, scale, show)
         return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
-    def get_surface(self, contact, size, scale):
+    def get_surface(self, contact, size, scale, show=None):
         jid = contact.jid
         if contact.is_gc_contact:
             jid = contact.get_full_jid()
 
-        surface = self._cache[jid].get((size, scale))
+        surface = self._cache[jid].get((size, scale, show))
         if surface is not None:
             return surface
 
         surface = self._get_avatar_from_storage(contact, size, scale)
         if surface is not None:
-            self._cache[jid][(size, scale)] = surface
+            if show is not None:
+                surface = add_status_to_avatar(surface, show)
+            self._cache[jid][(size, scale, show)] = surface
             return surface
 
         name = contact.get_shown_name()
@@ -141,7 +178,9 @@ class AvatarStorage(metaclass=Singleton):
         letter = self._generate_letter(name)
         surface = self._generate_default_avatar(
             letter, color_string, size, scale)
-        self._cache[jid][(size, scale)] = surface
+        if show is not None:
+            surface = add_status_to_avatar(surface, show)
+        self._cache[jid][(size, scale, show)] = surface
         return surface
 
     def get_muc_surface(self, account, jid, size, scale):

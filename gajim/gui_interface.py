@@ -1994,10 +1994,10 @@ class Interface:
     def save_avatar(self, data):
         return self.avatar_storage.save_avatar(data)
 
-    def get_avatar(self, contact, size, scale, pixbuf=False):
+    def get_avatar(self, contact, size, scale, show=None, pixbuf=False):
         if pixbuf:
-            return self.avatar_storage.get_pixbuf(contact, size, scale)
-        return self.avatar_storage.get_surface(contact, size, scale)
+            return self.avatar_storage.get_pixbuf(contact, size, scale, show)
+        return self.avatar_storage.get_surface(contact, size, scale, show)
 
     def avatar_exists(self, filename):
         return self.avatar_storage.get_avatar_path(filename) is not None
