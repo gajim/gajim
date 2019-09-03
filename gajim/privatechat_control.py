@@ -233,22 +233,11 @@ class PrivateChatControl(ChatControl):
             return
 
         scale = self.parent_win.window.get_scale_factor()
-        surface = app.interface.get_avatar(
-            self.gc_contact, AvatarSize.CHAT, scale)
-        image = self.xml.get_object('avatar_image')
-        if surface is None:
-            image.set_from_icon_name('avatar-default', Gtk.IconSize.DIALOG)
-        else:
-            image.set_from_surface(surface)
+        surface = self.gc_contact.get_avatar(AvatarSize.CHAT,
+                                             scale,
+                                             self.gc_contact.show.value)
 
-    def _update_banner_state_image(self):
-        # Set banner image
-        if self.gc_contact.presence.is_unavailable:
-            icon = get_icon_name('offline')
-        else:
-            icon = get_icon_name(self.gc_contact.show.value)
-        banner_status_img = self.xml.get_object('banner_status_image')
-        banner_status_img.set_from_icon_name(icon, Gtk.IconSize.DND)
+        self.xml.avatar_image.set_from_surface(surface)
 
     def get_tab_image(self, count_unread=True):
         jid = self.gc_contact.get_full_jid()
