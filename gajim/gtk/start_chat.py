@@ -24,7 +24,6 @@ from gi.repository import Pango
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_groupchat_name
@@ -580,12 +579,13 @@ class ContactRow(Gtk.ListBoxRow):
         self.groupchat = groupchat
         self.new = jid == ''
 
+        show = contact.show if contact else 'offline'
 
         grid = Gtk.Grid()
         grid.set_column_spacing(12)
         grid.set_size_request(260, -1)
 
-        image = self._get_avatar_image(account, jid)
+        image = self._get_avatar_image(account, jid, show)
         image.set_size_request(AvatarSize.CHAT, AvatarSize.CHAT)
         grid.add(image)
 
@@ -604,11 +604,6 @@ class ContactRow(Gtk.ListBoxRow):
         self.name_label.set_width_chars(25)
         self.name_label.set_halign(Gtk.Align.START)
         self.name_label.get_style_context().add_class('bold16')
-
-        status = contact.show if contact else 'offline'
-        css_class = helpers.get_css_show_color(status)
-        if css_class is not None:
-            self.name_label.get_style_context().add_class(css_class)
         middle_box.add(self.name_label)
 
         self.jid_label = Gtk.Label(label=jid)
@@ -634,7 +629,7 @@ class ContactRow(Gtk.ListBoxRow):
         self.add(grid)
         self.show_all()
 
-    def _get_avatar_image(self, account, jid):
+    def _get_avatar_image(self, account, jid, show):
         if self.new:
             icon_name = 'avatar-default'
             if self.groupchat:
@@ -648,7 +643,7 @@ class ContactRow(Gtk.ListBoxRow):
             return Gtk.Image.new_from_surface(surface)
 
         avatar = app.contacts.get_avatar(
-            account, jid, AvatarSize.CHAT, scale)
+            account, jid, AvatarSize.CHAT, scale, show)
         return Gtk.Image.new_from_surface(avatar)
 
     def update_jid(self, jid):
