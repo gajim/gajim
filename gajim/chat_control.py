@@ -678,19 +678,7 @@ class ChatControl(ChatControlBase):
         # The name banner is drawn here
         ChatControlBase.update_ui(self)
         self.update_toolbar()
-
-    def _update_banner_state_image(self):
-        contact = app.contacts.get_contact_with_highest_priority(
-            self.account, self.contact.jid)
-        if not contact or self.resource:
-            # For transient contacts
-            contact = self.contact
-        show = contact.show
-
-        # Set banner image
-        icon = get_icon_name(show)
-        banner_status_img = self.xml.get_object('banner_status_image')
-        banner_status_img.set_from_icon_name(icon, Gtk.IconSize.DND)
+        self.show_avatar()
 
     def draw_banner_text(self):
         """
@@ -1239,11 +1227,13 @@ class ChatControl(ChatControlBase):
             return
 
         scale = self.parent_win.window.get_scale_factor()
-        surface = app.contacts.get_avatar(
-            self.account, self.contact.jid, AvatarSize.CHAT, scale)
+        surface = app.contacts.get_avatar(self.account,
+                                          self.contact.jid,
+                                          AvatarSize.CHAT,
+                                          scale,
+                                          self.contact.show)
 
-        image = self.xml.get_object('avatar_image')
-        image.set_from_surface(surface)
+        self.xml.avatar_image.set_from_surface(surface)
 
     def _nec_update_avatar(self, obj):
         if obj.account != self.account:
