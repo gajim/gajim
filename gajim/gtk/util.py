@@ -356,10 +356,12 @@ def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
     return liststore
 
 
-def get_cursor(attr: str) -> Gdk.Cursor:
+def get_cursor(name: str) -> Gdk.Cursor:
     display = Gdk.Display.get_default()
-    cursor = getattr(Gdk.CursorType, attr)
-    return Gdk.Cursor.new_for_display(display, cursor)
+    cursor = Gdk.Cursor.new_from_name(display, name)
+    if cursor is not None:
+        return cursor
+    return Gdk.Cursor.new_from_name(display, 'default')
 
 
 def scroll_to_end(widget: Gtk.ScrolledWindow) -> bool:

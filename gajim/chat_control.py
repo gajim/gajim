@@ -667,11 +667,11 @@ class ChatControl(ChatControlBase):
         """
         Just moved the mouse so show the cursor
         """
-        cursor = get_cursor('LEFT_PTR')
+        cursor = get_cursor('default')
         self.parent_win.window.get_window().set_cursor(cursor)
 
     def on_location_eventbox_enter_notify_event(self, widget, event):
-        cursor = get_cursor('HAND2')
+        cursor = get_cursor('pointer')
         self.parent_win.window.get_window().set_cursor(cursor)
 
     def update_ui(self):

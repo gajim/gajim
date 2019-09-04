@@ -881,18 +881,18 @@ class HtmlTextView(Gtk.TextView):
                     if len(text) > 50:
                         text = text[:47] + '…'
                     tooltip.set_text(text)
-                    window.set_cursor(get_cursor('HAND2'))
+                    window.set_cursor(get_cursor('pointer'))
                     self._cursor_changed = True
                     return True
 
             tag_name = tag.get_property('name')
             if tag_name in ('url', 'mail', 'xmpp', 'sth_at_sth'):
-                window.set_cursor(get_cursor('HAND2'))
+                window.set_cursor(get_cursor('pointer'))
                 self._cursor_changed = True
                 return False
 
         if self._cursor_changed:
-            window.set_cursor(get_cursor('XTERM'))
+            window.set_cursor(get_cursor('text'))
             self._cursor_changed = False
         return False
 
