@@ -24,8 +24,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk
-
 from gajim import message_control
 
 from gajim.common import app
