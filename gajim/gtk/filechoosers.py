@@ -144,12 +144,6 @@ class FileSaveDialog(NativeFileChooserDialog):
     _action = Gtk.FileChooserAction.SAVE
 
 
-class AvatarSaveDialog(FileSaveDialog):
-
-    if sys.platform == 'win32':
-        _filters = [Filter(_('Images'), '*.png;*.jpg;*.jpeg;*.svg', True)]
-
-
 class NativeFileOpenDialog(BaseFileOpenDialog, NativeFileChooserDialog):
     pass
 

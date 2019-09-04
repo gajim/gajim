@@ -32,7 +32,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.helpers import event_filter
 
 from gajim import gtkgui_helpers
-from gajim.gui_menu_builder import show_save_as_menu
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
@@ -127,7 +126,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self.avatar_sha = None
         self.avatar_mime_type = None
 
-    def on_set_avatar_button_clicked(self, widget):
+    def _on_set_avatar_clicked(self, _button):
         def on_ok(path_to_file):
             data, sha = app.interface.avatar_storage.prepare_for_publish(
                 path_to_file)
@@ -152,20 +151,6 @@ class ProfileWindow(Gtk.ApplicationWindow):
             self.avatar_mime_type = 'image/png'
 
         AvatarChooserDialog(on_ok, transient_for=self)
-
-    def on_PHOTO_button_press_event(self, widget, event):
-        """
-        If right-clicked, show popup
-        """
-        if event.button == 3:
-            # right click
-            nick = app.config.get_per('accounts', self.account, 'name')
-            if self.avatar_sha is None:
-                return
-            show_save_as_menu(self.avatar_sha, nick)
-
-        elif event.button == 1:  # left click
-            self.on_set_avatar_button_clicked(widget)
 
     def on_BDAY_entry_focus_out_event(self, widget, event):
         txt = widget.get_text()

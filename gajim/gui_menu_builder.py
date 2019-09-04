@@ -509,18 +509,6 @@ def get_transport_menu(contact, account):
     return menu
 
 
-def show_save_as_menu(sha, name):
-    menu = Gtk.Menu()
-    menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
-    menuitem.connect(
-        'activate',
-        gtkgui_helpers.on_avatar_save_as_menuitem_activate, sha, name)
-    menu.append(menuitem)
-    menu.connect('selection-done', lambda w: w.destroy())
-    menu.show_all()
-    menu.popup_at_pointer()
-
-
 def get_singlechat_menu(control_id, account, jid):
     singlechat_menu = [
         (_('Send File…'), [

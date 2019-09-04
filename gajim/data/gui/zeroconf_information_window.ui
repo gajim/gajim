@@ -179,7 +179,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="visible_window">False</property>
-                        <signal name="button-press-event" handler="on_PHOTO_eventbox_button_press_event" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="PHOTO_image">
                             <property name="visible">True</property>

@@ -39,7 +39,6 @@ try:
 except Exception:
     pass
 
-from gajim.common.i18n import _
 from gajim.common import app
 
 HAS_PYWIN32 = True
@@ -146,70 +145,6 @@ def scale_pixbuf(pixbuf, size):
 def scale_pixbuf_from_data(data, size):
     pixbuf = get_pixbuf_from_data(data)
     return scale_pixbuf(pixbuf, size)
-
-
-def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
-    from gajim.gtk.dialogs import DialogButton
-    from gajim.gtk.dialogs import ErrorDialog
-    from gajim.gtk.dialogs import NewConfirmationDialog
-    from gajim.gtk.filechoosers import AvatarSaveDialog
-
-    def _on_save_avatar(file_path):
-        if os.path.exists(file_path):
-            # Check if we have write permissions
-            if not os.access(file_path, os.W_OK):
-                file_name = os.path.basename(file_path)
-                ErrorDialog(
-                    _('Cannot overwrite existing file \'%s\'' % file_name),
-                    _('A file with this name already exists and you do '
-                      'not have permission to overwrite it.'))
-                return
-
-        app.config.set('last_save_dir', os.path.dirname(file_path))
-        if isinstance(avatar, str):
-            # We got a SHA
-            pixbuf = app.interface.avatar_storage.pixbuf_from_filename(avatar)
-        else:
-            # We got a pixbuf
-            pixbuf = avatar
-        extension = os.path.splitext(file_path)[1]
-        if not extension:
-            # Silently save as Jpeg image
-            image_format = 'png'
-            file_path += '.png'
-        else:
-            image_format = extension[1:]  # remove leading dot
-
-        # Save image
-        try:
-            pixbuf.savev(file_path, image_format, [], [])
-        except Exception as error:
-            log.error('Error saving avatar: %s', error)
-            if os.path.exists(file_path):
-                os.remove(file_path)
-            new_file_path = '.'.join(file_path.split('.')[:-1]) + '.png'
-
-            def _on_ok(file_path, pixbuf):
-                pixbuf.savev(file_path, 'png', [], [])
-
-            NewConfirmationDialog(
-                _('Error While Saving'),
-                _('Extension not supported'),
-                _('Image cannot be saved in %(type)s format.\n'
-                  'Save as %(new_filename)s?') % {
-                      'type': image_format,
-                      'new_filename': new_file_path},
-                [DialogButton.make('Cancel'),
-                 DialogButton.make('OK',
-                                   text=_('_Save'),
-                                   callback=_on_ok,
-                                   args=[new_file_path,
-                                         pixbuf])]).show()
-
-    AvatarSaveDialog(_on_save_avatar,
-                     path=app.config.get('last_save_dir'),
-                     file_name='%s.png' % default_name,
-                     transient_for=app.app.get_active_window())
 
 
 def create_combobox(value_list, selected_value=None):

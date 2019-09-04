@@ -142,13 +142,6 @@ class ChatControl(ChatControlBase):
         self.show_avatar()
 
         # Hook up signals
-        widget = self.xml.get_object('avatar_eventbox')
-        widget.set_property('height-request', AvatarSize.CHAT)
-
-        id_ = widget.connect('button-press-event',
-            self.on_avatar_eventbox_button_press_event)
-        self.handlers[id_] = widget
-
         widget = self.xml.get_object('location_eventbox')
         id_ = widget.connect('button-release-event',
             self.on_location_eventbox_button_release_event)
@@ -638,22 +631,6 @@ class ChatControl(ChatControlBase):
         self._get_audio_content().set_out_volume(value / 100)
         # Save volume to config
         app.config.set('audio_output_volume', value)
-
-    def on_avatar_eventbox_button_press_event(self, widget, event):
-        """
-        If right-clicked, show popup
-        """
-        if event.button == 3: # right click
-            if self.TYPE_ID == message_control.TYPE_CHAT:
-                sha = app.contacts.get_avatar_sha(
-                    self.account, self.contact.jid)
-                name = self.contact.get_shown_name()
-            else:
-                sha = self.gc_contact.avatar_sha
-                name = self.gc_contact.get_shown_name()
-            if sha is not None:
-                gui_menu_builder.show_save_as_menu(sha, name)
-        return True
 
     def on_location_eventbox_button_release_event(self, widget, event):
         if 'geoloc' in self.contact.pep:

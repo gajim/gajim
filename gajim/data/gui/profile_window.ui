@@ -43,7 +43,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <signal name="button-press-event" handler="on_PHOTO_button_press_event" swapped="no"/>
+                        <signal name="clicked" handler="_on_set_avatar_clicked" swapped="no"/>
                         <child>
                           <object class="GtkOverlay">
                             <property name="visible">True</property>
@@ -108,7 +108,7 @@
                         <property name="halign">start</property>
                         <property name="valign">start</property>
                         <property name="use_underline">True</property>
-                        <signal name="button-press-event" handler="on_PHOTO_button_press_event" swapped="no"/>
+                        <signal name="clicked" handler="_on_set_avatar_clicked" swapped="no"/>
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>

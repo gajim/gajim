@@ -37,7 +37,6 @@ from nbxmpp.util import is_error_result
 from nbxmpp.protocol import JID
 
 from gajim import gtkgui_helpers
-from gajim.gui_menu_builder import show_save_as_menu
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import ged
@@ -157,22 +156,6 @@ class VcardWindow:
 
     def on_information_notebook_switch_page(self, widget, page, page_num):
         GLib.idle_add(self.xml.get_object('close_button').grab_focus)
-
-    def on_PHOTO_eventbox_button_press_event(self, widget, event):
-        """
-        If right-clicked, show popup
-        """
-        if event.button == 3: # right click
-            if self.gc_contact:
-                sha = self.gc_contact.avatar_sha
-                name = self.gc_contact.get_shown_name()
-            else:
-                sha = app.contacts.get_avatar_sha(
-                    self.account, self.contact.jid)
-                name = self.contact.get_shown_name()
-            if sha is None:
-                sha = self.avatar
-            show_save_as_menu(sha, name)
 
     def set_value(self, entry_name, value):
         try:
@@ -498,14 +481,6 @@ class ZeroconfVcardWindow:
     def on_zeroconf_information_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
-
-    def on_PHOTO_eventbox_button_press_event(self, widget, event):
-        """
-        If right-clicked, show popup
-        """
-        if event.button == 3: # right click
-            show_save_as_menu(self.contact.avatar_sha,
-                              self.contact.get_shown_name())
 
     def set_value(self, entry_name, value):
         try:
