@@ -102,14 +102,14 @@ def add_status_to_avatar(surface, show):
     width = width / scale
     height = height / scale
 
-    clip_size = width / 5
+    clip_size = width / 6.5
     context.set_source_rgb(255, 255, 255)
     context.set_operator(cairo.Operator.CLEAR)
     context.arc(width - clip_size, height - clip_size, clip_size, 0, 2 * pi)
     context.fill()
 
     color = SHOW_COLORS[show]
-    show_size = width / 5
+    show_size = width / 6.5
     show_radius = show_size * 0.80
     context.set_source_rgb(*color)
     context.set_operator(cairo.Operator.OVER)
