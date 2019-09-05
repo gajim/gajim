@@ -37,9 +37,14 @@ from os.path import expanduser
 
 from gi.repository import GLib
 
+from gajim.common import app
 from gajim.common.i18n import _
-from gajim.command_system.framework import CommandContainer, command, doc
-from gajim.command_system.implementation.hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+from gajim.command_system.framework import CommandContainer
+from gajim.command_system.framework import command
+from gajim.command_system.framework import doc
+from gajim.command_system.implementation.hosts import ChatCommands
+from gajim.command_system.implementation.hosts import PrivateChatCommands
+from gajim.command_system.implementation.hosts import GroupChatCommands
 
 class Execute(CommandContainer):
     AUTOMATIC = True
@@ -57,10 +62,18 @@ class Execute(CommandContainer):
 
     @classmethod
     def spawn(cls, processor, expression):
-        pipes = dict(stdout=PIPE, stderr=PIPE)
-        directory = expanduser(cls.DIRECTORY)
-        popen = Popen(expression, shell=True, cwd=directory, **pipes)
-        cls.monitor(processor, popen)
+        command_system_execute = app.config.get('command_system_execute')
+        if command_system_execute:
+            pipes = dict(stdout=PIPE, stderr=PIPE)
+            directory = expanduser(cls.DIRECTORY)
+            popen = Popen(expression, shell=True, cwd=directory, **pipes)
+            cls.monitor(processor, popen)
+        else:
+            processor.echo_error(
+                _('Command disabled. This command can be enabled by '
+                  'setting \'command_system_execute\' to True in ACE '
+                  '(Advanced Configuration Editor).'))
+            return
 
     @classmethod
     def monitor(cls, processor, popen):
