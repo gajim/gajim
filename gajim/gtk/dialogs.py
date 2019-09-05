@@ -319,31 +319,6 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
         return [is_checked_1, is_checked_2]
 
 
-class PlainConnectionDialog(ConfirmationDialogDoubleCheck):
-    """
-    Dialog that is shown when using an insecure connection
-    """
-    def __init__(self, account, on_ok, on_cancel):
-        pritext = _('Insecure connection')
-        sectext = _('You are about to connect to the account %(account)s '
-            '(%(server)s) insecurely. This means conversations will not be '
-            'encrypted, and is strongly discouraged.\nAre you sure you want '
-            'to do that?') % {'account': account,
-            'server': app.get_hostname_from_account(account)}
-        checktext1 = _('Yes, I really want to connect insecurely')
-        tooltip1 = _('Gajim will NOT connect unless you check this box')
-        checktext2 = _('_Do not ask me again')
-        ConfirmationDialogDoubleCheck.__init__(self, pritext, sectext,
-            checktext1, checktext2, tooltip1=tooltip1, on_response_ok=on_ok,
-            on_response_cancel=on_cancel, is_modal=False)
-        self.ok_button = self.get_widget_for_response(Gtk.ResponseType.OK)
-        self.ok_button.set_sensitive(False)
-        self.checkbutton1.connect('clicked', self.on_checkbutton_clicked)
-        self.set_title(_('Insecure connection'))
-
-    def on_checkbutton_clicked(self, widget):
-        self.ok_button.set_sensitive(widget.get_active())
-
 class ConfirmationDialogDoubleRadio(ConfirmationDialog):
     """
     HIG compliant confirmation dialog with 2 radios
