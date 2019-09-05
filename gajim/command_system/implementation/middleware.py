@@ -39,7 +39,9 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.command_system.framework import CommandProcessor
-from gajim.command_system.errors import CommandError, NoCommandError
+from gajim.command_system.errors import CommandError
+from gajim.command_system.errors import NoCommandError
+
 
 class ChatCommandProcessor(CommandProcessor):
     """
@@ -95,11 +97,13 @@ class ChatCommandProcessor(CommandProcessor):
             self.echo(help_(self, name))
             return True
 
-    def command_postprocessor(self, command, name, arguments, args, kwargs, value):
+    def command_postprocessor(self, command, name, arguments, args, kwargs,
+                              value):
         # If command returns a string - print it to a user. A convenient
         # and sufficient in most simple cases shortcut to a using echo.
         if value and isinstance(value, str):
             self.echo(value)
+
 
 class CommandTools:
     """

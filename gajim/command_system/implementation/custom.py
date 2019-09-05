@@ -35,8 +35,13 @@ detected.
 """
 
 from gajim.common.i18n import _
-from gajim.command_system.framework import CommandContainer, command, doc
-from gajim.command_system.implementation.hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+from gajim.command_system.framework import CommandContainer
+from gajim.command_system.framework import command
+from gajim.command_system.framework import doc
+from gajim.command_system.implementation.hosts import ChatCommands
+from gajim.command_system.implementation.hosts import PrivateChatCommands
+from gajim.command_system.implementation.hosts import GroupChatCommands
+
 
 class CustomCommonCommands(CommandContainer):
     """
@@ -69,6 +74,7 @@ class CustomCommonCommands(CommandContainer):
         """
         return "I don't dance."
 
+
 class CustomChatCommands(CommandContainer):
     """
     This command container bounds only to the ChatCommands command host.
@@ -92,6 +98,7 @@ class CustomChatCommands(CommandContainer):
         """
         return "Buy yourself a stereo."
 
+
 class CustomPrivateChatCommands(CommandContainer):
     """
     This command container bounds only to the PrivateChatCommands
@@ -107,6 +114,7 @@ class CustomPrivateChatCommands(CommandContainer):
     @doc(_("The same as using a doc-string, except it supports translation"))
     def make_coffee(self):
         return "I'm not a coffee machine!"
+
 
 class CustomGroupChatCommands(CommandContainer):
     """

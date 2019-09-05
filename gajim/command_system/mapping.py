@@ -27,7 +27,8 @@ from operator import itemgetter
 
 from gajim.common.i18n import _
 
-from gajim.command_system.errors import DefinitionError, CommandError
+from gajim.command_system.errors import DefinitionError
+from gajim.command_system.errors import CommandError
 
 # Quite complex piece of regular expression logic to parse options and
 # arguments. Might need some tweaking along the way.
@@ -42,6 +43,7 @@ KEY_ENCODING = 'UTF-8'
 # Defines how complete representation of command usage (generated based
 # on command handler argument specification) will be rendered.
 USAGE_PATTERN = 'Usage: %s %s'
+
 
 def parse_arguments(arguments):
     """
@@ -109,6 +111,7 @@ def parse_arguments(arguments):
             opts.remove((key, value, position))
 
     return args, opts
+
 
 def adapt_arguments(command, arguments, args, opts):
     """
@@ -268,7 +271,8 @@ def adapt_arguments(command, arguments, args, opts):
         initial = norm_kwargs.get(key)
         if isinstance(initial, bool):
             if not isinstance(value, bool):
-                raise CommandError("%s: Switch can not take an argument" % key, command)
+                raise CommandError(
+                    "%s: Switch can not take an argument" % key, command)
 
     # Inject the source arguments as a string as a first argument, if
     # command has enabled the corresponding option.
@@ -278,6 +282,7 @@ def adapt_arguments(command, arguments, args, opts):
     # Return *args and **kwargs in the form suitable for passing to a
     # command handler and being expanded.
     return tuple(args), dict(opts)
+
 
 def generate_usage(command, complete=True):
     """
@@ -323,7 +328,8 @@ def generate_usage(command, complete=True):
         if spec_args:
             args += '<%s>' % ', '.join(spec_args)
         if var_args or sp_extra:
-            args += (' ' if spec_args else str()) + '<<%s>>' % (var_args or sp_extra)
+            args += (' ' if spec_args else str()) + '<<%s>>' % (
+                var_args or sp_extra)
 
     usage += args
 

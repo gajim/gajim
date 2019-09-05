@@ -22,10 +22,16 @@ declarative way.
 from types import FunctionType
 from inspect import getargspec, getdoc
 
-from gajim.command_system.dispatcher import Host, Container
-from gajim.command_system.dispatcher import get_command, list_commands
-from gajim.command_system.mapping import parse_arguments, adapt_arguments
-from gajim.command_system.errors import DefinitionError, CommandError, NoCommandError
+from gajim.command_system.dispatcher import Host
+from gajim.command_system.dispatcher import Container
+from gajim.command_system.dispatcher import get_command
+from gajim.command_system.dispatcher import list_commands
+from gajim.command_system.mapping import parse_arguments
+from gajim.command_system.mapping import adapt_arguments
+from gajim.command_system.errors import DefinitionError
+from gajim.command_system.errors import CommandError
+from gajim.command_system.errors import NoCommandError
+
 
 class CommandHost(metaclass=Host):
     """
@@ -38,6 +44,7 @@ class CommandHost(metaclass=Host):
     dispatched and enabled by the dispatcher or not.
     """
     __metaclass__ = Host
+
 
 class CommandContainer(metaclass=Container):
     """
@@ -54,6 +61,7 @@ class CommandContainer(metaclass=Container):
     sequence of hosts to bound to, as a tuple or list.
     """
     __metaclass__ = Container
+
 
 class CommandProcessor:
     """
@@ -142,6 +150,7 @@ class CommandProcessor:
         commands = dict(commands)
         return sorted(set(commands.values()), key=lambda k: k.__repr__())
 
+
 class Command:
 
     def __init__(self, handler, *names, **properties):
@@ -217,7 +226,8 @@ class Command:
         # Behavior of this code need to be checked. Might yield
         # incorrect results on some rare occasions.
         spec_args = names[:-len(defaults) if defaults else len(names)]
-        spec_kwargs = list(zip(names[-len(defaults):], defaults)) if defaults else {}
+        spec_kwargs = list(
+            zip(names[-len(defaults):], defaults)) if defaults else {}
 
         # Removing self from arguments specification. Command handler
         # should receive the processors as a first argument, which
@@ -226,6 +236,7 @@ class Command:
             raise DefinitionError("First argument must be self", self)
 
         return spec_args, spec_kwargs, var_args, var_kwargs
+
 
 def command(*names, **properties):
     """
@@ -287,7 +298,8 @@ def command(*names, **properties):
         raise DefinitionError("Empty option can be used only with raw commands")
 
     if extra and overlap:
-        raise DefinitionError("Extra and overlap options can not be used together")
+        raise DefinitionError("Extra and overlap options can not be used "
+                              "together")
 
     properties = {
         'usage': usage,
@@ -322,6 +334,7 @@ def command(*names, **properties):
         return decorator(names.pop(0))
 
     return decorator
+
 
 def doc(text):
     """

@@ -17,7 +17,8 @@
 Provides an actual implementation for the standard commands.
 """
 
-from time import localtime, strftime
+from time import localtime
+from time import strftime
 from datetime import date
 
 from gi.repository import GLib
@@ -28,10 +29,14 @@ from gajim.common.i18n import _
 from gajim.common.const import KindConstant
 
 from gajim.command_system.errors import CommandError
-from gajim.command_system.framework import CommandContainer, command, doc
+from gajim.command_system.framework import CommandContainer
+from gajim.command_system.framework import command
+from gajim.command_system.framework import doc
 from gajim.command_system.mapping import generate_usage
 
-from gajim.command_system.implementation.hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+from gajim.command_system.implementation.hosts import ChatCommands
+from gajim.command_system.implementation.hosts import PrivateChatCommands
+from gajim.command_system.implementation.hosts import GroupChatCommands
 
 
 class StandardCommonCommands(CommandContainer):
@@ -44,7 +49,8 @@ class StandardCommonCommands(CommandContainer):
     HOSTS = ChatCommands, PrivateChatCommands, GroupChatCommands
 
     @command(overlap=True)
-    @doc(_("Show help on a given command or a list of available commands if -a is given"))
+    @doc(_("Show help on a given command or a list of available commands if "
+           "-a is given"))
     def help(self, cmd=None, all_=False):
         if cmd:
             cmd = self.get_command(cmd)
@@ -111,12 +117,13 @@ class StandardCommonCommands(CommandContainer):
             if date_obj == date.today():
                 formatted = "[%s] %s: %s" % (time_, contact, row.message)
             else:
-                formatted = "[%s, %s] %s: %s" % (date_, time_, contact, row.message)
+                formatted = "[%s, %s] %s: %s" % (
+                    date_, time_, contact, row.message)
 
             self.echo(formatted)
 
     @command(raw=True, empty=True)
-    #Do not translate online, away, chat, xa, dnd
+    # Do not translate online, away, chat, xa, dnd
     @doc(_("""
     Set the current status
 
@@ -128,7 +135,7 @@ class StandardCommonCommands(CommandContainer):
             raise CommandError("Invalid status given")
         for connection in app.connections.values():
             if not app.config.get_per('accounts', connection.name,
-            'sync_with_global_status'):
+                                      'sync_with_global_status'):
                 continue
             if not connection.is_connected:
                 continue
@@ -142,7 +149,7 @@ class StandardCommonCommands(CommandContainer):
 
         for connection in app.connections.values():
             if not app.config.get_per('accounts', connection.name,
-            'sync_with_global_status'):
+                                      'sync_with_global_status'):
                 continue
             if not connection.is_connected:
                 continue
@@ -156,11 +163,12 @@ class StandardCommonCommands(CommandContainer):
 
         for connection in app.connections.values():
             if not app.config.get_per('accounts', connection.name,
-            'sync_with_global_status'):
+                                      'sync_with_global_status'):
                 continue
             if not connection.is_connected:
                 continue
             connection.change_status('online', message)
+
 
 class StandardCommonChatCommands(CommandContainer):
     """
@@ -180,7 +188,8 @@ class StandardCommonChatCommands(CommandContainer):
     @doc(_("Send a ping to the contact"))
     def ping(self):
         if self.account == app.ZEROCONF_ACC_NAME:
-            raise CommandError(_('Command is not supported for zeroconf accounts'))
+            raise CommandError(
+                _('Command is not supported for zeroconf accounts'))
         app.connections[self.account].get_module('Ping').send_ping(self.contact)
 
     @command
@@ -221,6 +230,7 @@ class StandardCommonChatCommands(CommandContainer):
     def attention(self, message):
         self.send_message(message, process_commands=False, attention=True)
 
+
 class StandardChatCommands(CommandContainer):
     """
     This command container contains standard commands which are unique
@@ -230,6 +240,7 @@ class StandardChatCommands(CommandContainer):
     AUTOMATIC = True
     HOSTS = (ChatCommands,)
 
+
 class StandardPrivateChatCommands(CommandContainer):
     """
     This command container contains standard commands which are unique
@@ -238,6 +249,7 @@ class StandardPrivateChatCommands(CommandContainer):
 
     AUTOMATIC = True
     HOSTS = (PrivateChatCommands,)
+
 
 class StandardGroupChatCommands(CommandContainer):
     """
@@ -275,7 +287,8 @@ class StandardGroupChatCommands(CommandContainer):
             raise CommandError(_("Nickname not found"))
 
     @command('msg', raw=True)
-    @doc(_("Open a private chat window with a specified participant and send him a message"))
+    @doc(_("Open a private chat window with a specified participant and send "
+           "him a message"))
     def message(self, nick, a_message):
         nicks = app.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
@@ -296,7 +309,8 @@ class StandardGroupChatCommands(CommandContainer):
     @doc(_("Invite a user to a group chat for a reason"))
     def invite(self, jid, reason):
         self.connection.get_module('MUC').invite(self.room_jid, jid, reason)
-        return _("Invited %(jid)s to %(room_jid)s") % {'jid': jid,
+        return _("Invited %(jid)s to %(room_jid)s") % {
+            'jid': jid,
             'room_jid': self.room_jid}
 
     @command(raw=True, empty=True)
@@ -310,7 +324,8 @@ class StandardGroupChatCommands(CommandContainer):
             GLib.Variant('as', [self.account, jid]))
 
     @command('part', 'close', raw=True, empty=True)
-    @doc(_("Leave the group chat, optionally giving a reason, and close tab or window"))
+    @doc(_("Leave the group chat, optionally giving a reason, and close tab or "
+           "window"))
     def leave(self, reason):
         self.leave(reason=reason)
 
@@ -322,7 +337,8 @@ class StandardGroupChatCommands(CommandContainer):
     """))
     def ban(self, who, reason=''):
         if who in app.contacts.get_nick_list(self.account, self.room_jid):
-            contact = app.contacts.get_gc_contact(self.account, self.room_jid, who)
+            contact = app.contacts.get_gc_contact(
+                self.account, self.room_jid, who)
             who = contact.jid
         self.connection.get_module('MUC').set_affiliation(
             self.room_jid,
@@ -332,25 +348,25 @@ class StandardGroupChatCommands(CommandContainer):
     @command(raw=True, empty=True)
     @doc(_("Kick user from group chat by nickname"))
     def kick(self, who, reason):
-        if not who in app.contacts.get_nick_list(self.account, self.room_jid):
+        if who not in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         self.connection.get_module('MUC').set_role(
             self.room_jid, who, 'none', reason or str())
 
     @command(raw=True)
-    #Do not translate moderator, participant, visitor, none
+    # Do not translate moderator, participant, visitor, none
     @doc(_("""Set participant role in group chat.
     Role can be given as one of the following values:
     moderator, participant, visitor, none"""))
     def role(self, who, role):
         if role not in ('moderator', 'participant', 'visitor', 'none'):
             raise CommandError(_("Invalid role given"))
-        if not who in app.contacts.get_nick_list(self.account, self.room_jid):
+        if who not in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         self.connection.get_module('MUC').set_role(self.room_jid, who, role)
 
     @command(raw=True)
-    #Do not translate owner, admin, member, outcast, none
+    # Do not translate owner, admin, member, outcast, none
     @doc(_("""Set participant affiliation in group chat.
     Affiliation can be given as one of the following values:
     owner, admin, member, outcast, none"""))
@@ -401,6 +417,7 @@ class StandardGroupChatCommands(CommandContainer):
     @doc(_("Send a ping to the contact"))
     def ping(self, nick):
         if self.account == app.ZEROCONF_ACC_NAME:
-            raise CommandError(_('Command is not supported for zeroconf accounts'))
+            raise CommandError(
+                _('Command is not supported for zeroconf accounts'))
         gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
         app.connections[self.account].get_module('Ping').send_ping(gc_c)

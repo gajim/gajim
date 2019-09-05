@@ -20,6 +20,7 @@ different command processors, which are the source of commands.
 
 from gajim.command_system.framework import CommandHost
 
+
 class ChatCommands(CommandHost):
     """
     This command host is bound to the command processor which processes
@@ -27,12 +28,14 @@ class ChatCommands(CommandHost):
     """
     AUTOMATIC = True
 
+
 class PrivateChatCommands(CommandHost):
     """
     This command host is bound to the command processor which processes
     commands from a private chat.
     """
     AUTOMATIC = True
+
 
 class GroupChatCommands(CommandHost):
     """

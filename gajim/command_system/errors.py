@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 class BaseError(Exception):
     """
     Common base for errors which relate to a specific command.
@@ -34,15 +35,18 @@ class BaseError(Exception):
     def __str__(self):
         return self.message
 
+
 class DefinitionError(BaseError):
     """
     Used to indicate errors occurred on command definition.
     """
 
+
 class CommandError(BaseError):
     """
     Used to indicate errors occurred during command execution.
     """
+
 
 class NoCommandError(BaseError):
     """

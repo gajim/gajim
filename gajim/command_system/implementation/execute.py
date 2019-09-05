@@ -46,6 +46,7 @@ from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 from gajim.command_system.implementation.hosts import GroupChatCommands
 
+
 class Execute(CommandContainer):
     AUTOMATIC = True
     HOSTS = ChatCommands, PrivateChatCommands, GroupChatCommands
@@ -116,6 +117,7 @@ class Execute(CommandContainer):
     def clean(text):
         strip = chr(10) + chr(32)
         return text.decode().strip(strip)
+
 
 class Show(Execute):
 
