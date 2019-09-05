@@ -99,10 +99,10 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import PassphraseDialog
-from gajim.gtk.dialogs import PlainConnectionDialog
 from gajim.gtk.dialogs import SSLErrorDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.profile import ProfileWindow
@@ -1161,34 +1161,38 @@ class Interface:
 
     def handle_event_plain_connection(self, obj):
         # ('PLAIN_CONNECTION', account, (connection))
-        def on_ok(is_checked):
-            if not is_checked[0]:
-                if is_checked[1]:
-                    app.config.set_per('accounts', obj.conn.name,
-                        'action_when_plaintext_connection', 'disconnect')
-                on_cancel()
-                return
-            # On cancel call del self.instances, so don't call it another time
-            # before
-            del self.instances[obj.conn.name]['online_dialog']\
-                ['plain_connection']
-            if is_checked[1]:
+        def _on_connect_anyway(is_checked):
+            if is_checked:
                 app.config.set_per('accounts', obj.conn.name,
-                    'action_when_plaintext_connection', 'connect')
+                                   'action_when_plaintext_connection',
+                                   'connect')
             obj.conn.connection_accepted(obj.xmpp_client, 'plain')
 
-        def on_cancel():
-            del self.instances[obj.conn.name]['online_dialog']\
-                ['plain_connection']
+        def _on_abort(is_checked):
+            if is_checked:
+                app.config.set_per('accounts', obj.conn.name,
+                                   'action_when_plaintext_connection',
+                                   'disconnect')
             obj.conn.disconnect(reconnect=False)
             app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
-                show='offline'))
+                                                     show='offline'))
 
-        if 'plain_connection' in self.instances[obj.conn.name]['online_dialog']:
-            self.instances[obj.conn.name]['online_dialog']['plain_connection'].\
-                destroy()
-        self.instances[obj.conn.name]['online_dialog']['plain_connection'] = \
-            PlainConnectionDialog(obj.conn.name, on_ok, on_cancel)
+        NewConfirmationCheckDialog(
+            _('Insecure Connection'),
+            _('Insecure Connection'),
+            _('You are about to connect to the account %(account)s '
+              '(%(server)s) using an insecure connection method. This means '
+              'conversations will not be encrypted. Connecting PLAIN is '
+              'strongly discouraged.') % {
+                  'account': obj.conn.name,
+                  'server': app.get_hostname_from_account(obj.conn.name)},
+            _('_Do not ask me again'),
+            [DialogButton.make('Cancel',
+                               text=_('_Abort'),
+                               callback=_on_abort),
+             DialogButton.make('Remove',
+                               text=_('_Connect Anyway'),
+                               callback=_on_connect_anyway)]).show()
 
     def create_core_handlers_list(self):
         self.handlers = {
