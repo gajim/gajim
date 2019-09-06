@@ -284,12 +284,6 @@ class AvatarStorage(metaclass=Singleton):
             return None
         return path
 
-    def pixbuf_from_filename(self, filename):
-        path = self.get_avatar_path(filename)
-        if path is None:
-            return None
-        return load_pixbuf(path)
-
     def surface_from_filename(self, filename, size, scale):
         size = size * scale
         path = self.get_avatar_path(filename)
