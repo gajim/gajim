@@ -622,8 +622,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                   'clipboard\'s image into the chat window?'),
                 _('_Do not ask me again'),
                 [DialogButton.make('Cancel'),
-                 DialogButton.make('OK',
+                 DialogButton.make('Accept',
                                    text=_('_Paste'),
+                                   is_default=True,
                                    callback=self._paste_event_confirmed,
                                    args=[image])]).show()
 
