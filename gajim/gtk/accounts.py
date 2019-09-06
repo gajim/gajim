@@ -139,7 +139,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
             _('To apply all changes instantly, you have to re-login.'),
             [DialogButton.make('Cancel',
                                text=_('_Later')),
-             DialogButton.make('OK',
+             DialogButton.make('Accept',
                                text=_('_Re-Login'),
                                callback=lambda *args: relog(account))],
             transient_for=self).show()
@@ -193,8 +193,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
             NewConfirmationDialog(
                 _('Remove Account'),
                 _('You still have open chats in your account %s') % account,
-                _('All chat and group chat windows will be closed.\n'
-                  'Do you want to continue?'),
+                _('All chat and group chat windows will be closed.'),
                 [DialogButton.make('Cancel'),
                  DialogButton.make('Remove',
                                    callback=remove)],
@@ -571,8 +570,7 @@ class AccountRow(Gtk.ListBoxRow):
             NewConfirmationDialog(
                 _('Disable Account'),
                 _('Account %s is still connected') % account,
-                _('All chat and group chat windows will be closed. '
-                  'Do you want to continue?'),
+                _('All chat and group chat windows will be closed.'),
                 [DialogButton.make('Cancel',
                                    callback=lambda: switch.set_active(True)),
                  DialogButton.make('Remove',
@@ -972,13 +970,13 @@ class RemoveAccountWindow:
             else:
                 self._on_remove_success(True)
 
-        if self.account in app.connections and \
-        app.connections[self.account].connected:
+        if (self.account in app.connections and
+                app.connections[self.account].connected):
             NewConfirmationDialog(
                 _('Remove Account'),
-                _('Account \'%s\' is still connected to the '
-                  'server') % self.account,
-                _('If you remove it, the connection will be lost.'),
+                _('Still connected to the server'),
+                _('Account \'%s\' is still connected to the server. If you '
+                  'remove it, the connection will be lost.') % self.account,
                 [DialogButton.make('Cancel'),
                  DialogButton.make('Remove',
                                    callback=remove)],

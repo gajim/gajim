@@ -358,11 +358,13 @@ class MessageWindow:
 
             NewConfirmationCheckDialog(
                 _('Close Tabs'),
-                _('You are going to close several tabs'),
-                _('Do you really want to close them all?'),
+                _('You are about to close several tabs'),
+                _('Do you really want to close all of them?'),
                 _('_Do not ask me again'),
                 [DialogButton.make('Cancel'),
-                 DialogButton.make('OK',
+                 DialogButton.make('Accept',
+                                   text=_('_Close'),
+                                   is_default=True,
                                    callback=_on_yes1)],
                 transient_for=self.window).show()
             return True

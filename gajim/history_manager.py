@@ -245,9 +245,9 @@ class HistoryManager:
 
         NewConfirmationDialog(
             _('Database Cleanup'),
-            _('Do you want to clean up the database? '
-              '(STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)'),
-            _('Normally, the allocated database size will not be freed, it '
+            _('Clean up the database?'),
+            _('This is STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING.\n'
+              'Normally, the allocated database size will not be freed, it '
               'will just become reusable. This operation may take a while.'),
             [DialogButton.make('Cancel',
                                callback=_on_no),

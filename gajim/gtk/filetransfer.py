@@ -336,7 +336,7 @@ class FileTransfersWindow:
               'Do you want to download it again?') % file_name,
             [DialogButton.make('Cancel',
                                text=_('_No')),
-             DialogButton.make('OK',
+             DialogButton.make('Accept',
                                text=_('_Download Again'),
                                callback=on_yes,
                                args=[jid,
@@ -421,16 +421,17 @@ class FileTransfersWindow:
 
                 NewConfirmationDialog(
                     _('File Transfer Conflict'),
-                    _('This file already exists'),
+                    _('File already exists'),
                     _('Resume download or replace file?'),
                     [DialogButton.make('Cancel',
                                        callback=_on_cancel),
                      DialogButton.make('OK',
-                                       text=_('Replace _File'),
-                                       callback=_on_replace),
-                     DialogButton.make('OK',
                                        text=_('Resume _Download'),
-                                       callback=_on_resume)]).show()
+                                       callback=_on_resume),
+                     DialogButton.make('Accept',
+                                       text=_('Replace _File'),
+                                       is_default=True,
+                                       callback=_on_replace)]).show()
 
             # File does not exist yet
             dirname = os.path.dirname(file_path)
@@ -486,8 +487,7 @@ class FileTransfersWindow:
             sectext,
             [DialogButton.make('Cancel',
                                callback=_on_cancel),
-             DialogButton.make('OK',
-                               text=_('_Accept'),
+             DialogButton.make('Accept',
                                callback=_on_ok)]).show()
 
     def set_status(self, file_props, status):

@@ -167,7 +167,7 @@ class Interface:
                 obj.stanza, answer)
 
         account = obj.conn.name
-        pri_msg = _('HTTP (%(method)s) Authorization '
+        message = _('HTTP (%(method)s) Authorization '
                     'for %(url)s (ID: %(id)s)') % {
                         'method': obj.method,
                         'url': obj.url,
@@ -177,17 +177,17 @@ class Interface:
             sec_msg = _('Do you accept this request (account: %s)?') % account
         if obj.msg:
             sec_msg = obj.msg + '\n' + sec_msg
+        message = message + '\n' + sec_msg
 
         NewConfirmationDialog(
-            _('Authorization'),
-            pri_msg,
-            sec_msg,
+            _('Authorization Request'),
+            _('HTTP Authorization Request'),
+            message,
             [DialogButton.make('Cancel',
                                text=_('_No'),
                                callback=_response,
                                args=[obj, 'yes']),
-             DialogButton.make('OK',
-                               text=_('_Accept'),
+             DialogButton.make('Accept',
                                callback=_response,
                                args=[obj, 'no'])]).show()
 

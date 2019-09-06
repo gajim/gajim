@@ -1168,12 +1168,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 NewConfirmationDialog(
                     _('Privacy'),
                     _('Warning'),
-                    _('If you send a file to <b>%s</b>, '
-                      'your real JID will be revealed.' % gc_contact.name),
+                    _('If you send a file to <b>%s</b>, your real XMPP '
+                      'address will be revealed.' % gc_contact.name),
                     [DialogButton.make('Cancel'),
                      DialogButton.make(
                          'OK',
-                         text=_('Continue'),
+                         text=_('_Continue'),
                          callback=lambda: _on_ok(gc_contact))]).show()
                 return
         _on_ok(gc_contact)

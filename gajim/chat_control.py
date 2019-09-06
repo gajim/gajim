@@ -1152,7 +1152,7 @@ class ChatControl(ChatControlBase):
                 [DialogButton.make('Cancel',
                                    callback=lambda: on_no(self)),
                  DialogButton.make('Remove',
-                                   text=_('Close'),
+                                   text=_('_Close'),
                                    callback=lambda: on_yes(self))],
                 transient_for=self.parent_win.window).show()
             return

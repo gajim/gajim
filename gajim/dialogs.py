@@ -667,11 +667,12 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         self.countdown_enabled = False
         start_iter, finish_iter = self.message_buffer.get_bounds()
         status_message_to_save_as_preset = self.message_buffer.get_text(
-                start_iter, finish_iter, True)
+            start_iter, finish_iter, True)
+
         def on_ok(msg_name):
             msg_text = status_message_to_save_as_preset
             msg_text_1l = helpers.to_one_line(msg_text)
-            if not msg_name: # msg_name was ''
+            if not msg_name:  # msg_name was ''
                 msg_name = msg_text_1l
 
             def _on_ok2():
@@ -681,23 +682,23 @@ class ChangeStatusMessageDialog(TimeoutDialog):
                     self.pep_dict.get('activity_text'),
                     self.pep_dict.get('mood'), self.pep_dict.get('mood_text')]
                 app.config.set_per('statusmsg', msg_name, 'message',
-                    msg_text_1l)
+                                   msg_text_1l)
                 app.config.set_per('statusmsg', msg_name, 'activity',
-                    self.pep_dict.get('activity'))
+                                   self.pep_dict.get('activity'))
                 app.config.set_per('statusmsg', msg_name, 'subactivity',
-                    self.pep_dict.get('subactivity'))
+                                   self.pep_dict.get('subactivity'))
                 app.config.set_per('statusmsg', msg_name, 'activity_text',
-                    self.pep_dict.get('activity_text'))
+                                   self.pep_dict.get('activity_text'))
                 app.config.set_per('statusmsg', msg_name, 'mood',
-                    self.pep_dict.get('mood'))
+                                   self.pep_dict.get('mood'))
                 app.config.set_per('statusmsg', msg_name, 'mood_text',
-                    self.pep_dict.get('mood_text'))
+                                   self.pep_dict.get('mood_text'))
             if msg_name in self.preset_messages_dict:
                 NewConfirmationDialog(
                     _('Overwrite'),
                     _('Overwrite Status Message?'),
-                    _('Preset name is already in use. '
-                      'Do you want to overwrite this preset?'),
+                    _('This name is already in use. Do you want to '
+                      'overwrite this preset?'),
                     [DialogButton.make('Cancel'),
                      DialogButton.make('Remove',
                                        text=_('_Overwrite'),

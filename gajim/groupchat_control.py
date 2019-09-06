@@ -64,7 +64,6 @@ from gajim.common import contacts
 from gajim.common.const import StyleAttr
 from gajim.common.const import Chatstate
 from gajim.common.const import MUCJoinedState
-from gajim.common.const import ButtonAction
 
 from gajim.chat_control_base import ChatControlBase
 
@@ -1174,9 +1173,8 @@ class GroupchatControl(ChatControlBase):
             _('<b>%s</b> from <b>%s</b> requests voice') % (
                 event.voice_request.nick, self.room_name),
             [DialogButton.make('Cancel'),
-             DialogButton.make('OK',
-                               text=_('Approve'),
-                               action=ButtonAction.SUGGESTED,
+             DialogButton.make('Accept',
+                               text=_('_Approve'),
                                callback=on_approve)],
             modal=False).show()
 
@@ -2278,8 +2276,9 @@ class GroupchatControl(ChatControlBase):
                 _('_Do not ask me again'),
                 [DialogButton.make('Cancel',
                                    callback=on_cancel),
-                 DialogButton.make('OK',
+                 DialogButton.make('Accept',
                                    text=_('_Leave'),
+                                   is_default=True,
                                    callback=on_ok)],
                 transient_for=self.parent_win.window).show()
             return

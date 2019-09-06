@@ -4125,8 +4125,9 @@ class RosterWindow:
             sectext,
             _('_Do not ask me again'),
             [DialogButton.make('Cancel'),
-             DialogButton.make('OK',
+             DialogButton.make('Accept',
                                text=_('_Create'),
+                               is_default=True,
                                callback=merge_contacts)]).show()
 
     def on_drop_in_group(self, widget, account, c_source, grp_dest,
