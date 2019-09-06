@@ -119,6 +119,30 @@ def add_status_to_avatar(surface, show):
     return context.get_target()
 
 
+def square(surface, size):
+    width = surface.get_width()
+    height = surface.get_height()
+    if width == height:
+        return surface
+
+    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
+    new_surface.set_device_scale(*surface.get_device_scale())
+    context = cairo.Context(new_surface)
+
+    scale = surface.get_device_scale()[0]
+
+    if width == size:
+        x_pos = 0
+        y_pos = (size - height) / 2 / scale
+    else:
+        y_pos = 0
+        x_pos = (size - width) / 2 / scale
+
+    context.set_source_surface(surface, x_pos, y_pos)
+    context.paint()
+    return context.get_target()
+
+
 def clip_circle(surface):
     new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
                                      surface.get_width(),
@@ -276,7 +300,8 @@ class AvatarStorage(metaclass=Singleton):
         if pixbuf is None:
             return None
 
-        return Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
+        surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
+        return square(surface, size)
 
     def _load_surface_from_storage(self, contact, size, scale):
         filename = contact.avatar_sha
@@ -288,7 +313,8 @@ class AvatarStorage(metaclass=Singleton):
         pixbuf = load_pixbuf(path, size)
         if pixbuf is None:
             return None
-        return Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
+        surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
+        return square(surface, size)
 
     def _get_avatar_from_storage(self, contact, size, scale):
         if contact.avatar_sha is None:
