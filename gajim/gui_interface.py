@@ -405,9 +405,8 @@ class Interface:
             % obj.jid)
 
     def show_unsubscribed_dialog(self, account, contact):
-        def _remove(list_):
-            self.roster.on_req_usub(None, list_)
-        list_ = [(contact, account)]
+        def _remove():
+            self.roster.on_req_usub(None, [(contact, account)])
 
         NewConfirmationDialog(
             _('Subscription Removed'),
@@ -417,7 +416,7 @@ class Interface:
             [DialogButton.make('Cancel',
                                text=_('_No')),
              DialogButton.make('Remove',
-                               callback=_remove(list_))]).show()
+                               callback=_remove)]).show()
 
         # FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does
         # not show deny
