@@ -186,10 +186,10 @@ class Interface:
             [DialogButton.make('Cancel',
                                text=_('_No'),
                                callback=_response,
-                               args=[obj, 'yes']),
+                               args=[obj, 'no']),
              DialogButton.make('Accept',
                                callback=_response,
-                               args=[obj, 'no'])]).show()
+                               args=[obj, 'yes'])]).show()
 
     def handle_event_iq_error(self, event):
         ctrl = self.msg_win_mgr.get_control(event.properties.jid.getBare(),
