@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-
 from collections import namedtuple
 
 from gi.repository import GLib
@@ -536,6 +535,7 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title(_('Certificate'))
+        self.account = account
 
         self._ui = get_builder('certificate_dialog.ui')
         self.add(self._ui.certificate_box)
@@ -601,25 +601,6 @@ class CertificateDialog(Gtk.ApplicationWindow):
             _('SHA-256:') + '\n' + \
             self._sha256 + '\n'
         self._clipboard.set_text(clipboard_text, -1)
-
-
-class SSLErrorDialog(ConfirmationDialogDoubleCheck):
-    def __init__(self, account, certificate, pritext, sectext, checktext1,
-                 checktext2, on_response_ok=None, on_response_cancel=None):
-        self.account = account
-        self.cert = certificate
-        ConfirmationDialogDoubleCheck.__init__(
-            self, pritext, sectext,
-            checktext1, checktext2, on_response_ok=on_response_ok,
-            on_response_cancel=on_response_cancel, is_modal=False)
-        b = Gtk.Button(_('View certificate…'))
-        b.connect('clicked', self.on_cert_clicked)
-        b.show_all()
-        area = self.get_action_area()
-        area.pack_start(b, True, True, 0)
-
-    def on_cert_clicked(self, button):
-        CertificateDialog(self, self.account, self.cert)
 
 
 class ChangePasswordDialog(Gtk.Dialog):

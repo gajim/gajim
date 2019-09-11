@@ -46,7 +46,6 @@ from gi.repository import Gio
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
 from nbxmpp.structs import TuneData
-import OpenSSL
 
 from gajim.common import app
 from gajim.common import events
@@ -86,7 +85,6 @@ from gajim.common.connection_handlers_events import (
 from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
-from gajim.common.const import SSLError
 
 from gajim import roster_window
 from gajim.common import ged
@@ -103,7 +101,6 @@ from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import PassphraseDialog
-from gajim.gtk.dialogs import SSLErrorDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.profile import ProfileWindow
 from gajim.gtk.filechoosers import FileChooserDialog
@@ -113,6 +110,7 @@ from gajim.gtk.filetransfer import FileTransfersWindow
 from gajim.gtk.http_upload_progress import HTTPUploadProgressWindow
 from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gtk.subscription_request import SubscriptionRequestWindow
+from gajim.gtk.ssl_error_dialog import SSLErrorDialog
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 
@@ -1090,74 +1088,15 @@ class Interface:
 
     def handle_event_ssl_error(self, obj):
         account = obj.conn.name
-        server = app.config.get_per('accounts', account, 'hostname')
+        connection = obj.conn
+        cert = obj.cert
+        error_num = obj.error_num
 
-        def on_ok(is_checked):
-            del self.instances[account]['online_dialog']['ssl_error']
-            if is_checked[0]:
-
-                pem = OpenSSL.crypto.dump_certificate(
-                    OpenSSL.crypto.FILETYPE_PEM, obj.cert).decode('utf-8')
-
-                # Check if cert is already in file
-                certs = ''
-                my_ca_certs = configpaths.get('MY_CACERTS')
-                if os.path.isfile(my_ca_certs):
-                    with open(my_ca_certs, encoding='utf-8') as f:
-                        certs = f.read()
-                if pem in certs:
-                    ErrorDialog(_('Certificate Already in File'),
-                        _('This certificate is already in file %s, so it\'s '
-                        'not added again.') % my_ca_certs)
-                else:
-                    with open(my_ca_certs, 'a', encoding='utf-8') as f:
-                        f.write(server + '\n')
-                        f.write(pem + '\n\n')
-
-            if is_checked[1]:
-                ignore_ssl_errors = app.config.get_per('accounts', account,
-                    'ignore_ssl_errors').split()
-                ignore_ssl_errors.append(str(obj.error_num))
-                app.config.set_per('accounts', account, 'ignore_ssl_errors',
-                    ' '.join(ignore_ssl_errors))
-            obj.conn.process_ssl_errors()
-
-        def on_cancel():
-            del self.instances[account]['online_dialog']['ssl_error']
-            obj.conn.disconnect(reconnect=False)
-            app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
-                show='offline'))
-
-        text = _('The authenticity of the %s '
-                 'certificate could be invalid') % server
-
-        default_text = _('\nUnknown SSL error: %d') % obj.error_num
-        ssl_error_text = SSLError.get(obj.error_num, default_text)
-        text += _('\nSSL Error: <b>%s</b>') % ssl_error_text
-
-        fingerprint_sha1 = obj.cert.digest('sha1').decode('utf-8')
-        fingerprint_sha256 = obj.cert.digest('sha256').decode('utf-8')
-
-        pritext = _('Error verifying SSL certificate')
-        sectext = _('There was an error verifying the SSL certificate of your '
-            'XMPP server: %(error)s\nDo you still want to connect to this '
-            'server?') % {'error': text}
-        if obj.error_num in (18, 27):
-            checktext1 = _('Add this certificate to the list of trusted '
-            'certificates.\nSHA-1 fingerprint of the certificate:\n%(sha1)s'
-            '\nSHA-256 fingerprint of the certificate:\n%(sha256)s') % \
-            {'sha1': fingerprint_sha1, 'sha256': fingerprint_sha256}
+        window = app.get_app_window(SSLErrorDialog, account)
+        if window is None:
+            SSLErrorDialog(account, connection, cert, error_num)
         else:
-            checktext1 = ''
-        checktext2 = _('Ignore this error for this certificate.')
-        if 'ssl_error' in self.instances[account]['online_dialog']:
-            self.instances[account]['online_dialog']['ssl_error'].destroy()
-        self.instances[account]['online_dialog']['ssl_error'] = \
-            SSLErrorDialog(obj.conn.name, obj.cert, pritext,
-            sectext, checktext1, checktext2, on_response_ok=on_ok,
-            on_response_cancel=on_cancel)
-        self.instances[account]['online_dialog']['ssl_error'].set_title(
-            _('SSL Certificate Verification for %s') % account)
+            window.present()
 
     def handle_event_plain_connection(self, obj):
         # ('PLAIN_CONNECTION', account, (connection))
