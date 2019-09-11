@@ -698,6 +698,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if event.keyval == Gdk.KEY_Page_Down or \
                             event.keyval == Gdk.KEY_Page_Up:
                 self.conv_textview.tv.event(event)
+                self._on_scroll(None, event.keyval)
                 return True
         if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab:  # CTRL + TAB
