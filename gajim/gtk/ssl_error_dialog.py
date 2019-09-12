@@ -102,5 +102,5 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
                     f.write(self._server + '\n')
                     f.write(pem + '\n\n')
 
-        self._con.process_ssl_errors()
         self.destroy()
+        self._con.process_ssl_errors()
