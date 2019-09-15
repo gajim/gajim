@@ -1937,12 +1937,12 @@ class GroupchatControl(ChatControlBase):
 
         elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
             reason = _(': Affiliation changed')
-            message = message.format(nick=nick, actor=actor, reason=reason)
+            message = message.format(nick=nick, by=actor, reason=reason)
             self.add_info_message(message)
 
         elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
             reason = _(': Group chat configuration changed to members-only')
-            message = message.format(nick=nick, actor=actor, reason=reason)
+            message = message.format(nick=nick, by=actor, reason=reason)
             self.add_info_message(message)
 
         elif print_join_left:
