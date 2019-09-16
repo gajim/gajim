@@ -45,6 +45,9 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
         self.account = account
         self.adding_jid = False
 
+        if jid is not None:
+            jid = app.get_jid_without_resource(jid)
+
         # fill accounts with active accounts
         accounts = app.get_enabled_accounts_with_labels()
 
