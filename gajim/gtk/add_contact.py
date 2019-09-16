@@ -137,6 +137,9 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
             else:
                 uid, transport = app.get_name_and_server_from_jid(jid)
                 self.uid_entry.set_text(uid.replace('%', '@', 1))
+
+            self.show_contact_info_button.set_sensitive(True)
+
             # set protocol_combobox
             model = self.protocol_combobox.get_model()
             iter_ = model.get_iter_first()
