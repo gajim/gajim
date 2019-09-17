@@ -172,10 +172,18 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         stanza = buffer_.get_text(begin_iter, end_iter, True)
         if stanza:
             try:
-                node = nbxmpp.Protocol(node=stanza)
+                node = nbxmpp.Node(node=stanza)
             except Exception as error:
                 ErrorDialog(_('Invalid Node'), str(error))
                 return
+
+            if node.getName() in ('message', 'presence', 'iq'):
+                # Parse stanza again if its a message, presence or iq and
+                # set jabber:client as toplevel namespace
+                # Use type Protocol so nbxmpp counts the stanza for
+                # stream management
+                node = nbxmpp.Protocol(node=stanza,
+                                       attrs={'xmlns': 'jabber:client'})
             app.connections[self.account].connection.send(node)
             self.last_stanza = stanza
             buffer_.set_text('')
