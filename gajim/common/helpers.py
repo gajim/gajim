@@ -59,6 +59,8 @@ import nbxmpp
 from nbxmpp.util import compute_caps_hash
 from nbxmpp.stringprepare import nameprep
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.const import Affiliation
+from nbxmpp.const import Role
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
 from gi.repository import GLib
@@ -356,37 +358,50 @@ def get_uf_ask(ask):
 
 def get_uf_role(role, plural=False):
     ''' plural determines if you get Moderators or Moderator'''
-    if role.value == 'none':
+    if not isinstance(role, str):
+        role = role.value
+
+    if role == 'none':
         role_name = Q_('?Group Chat Contact Role:None')
-    elif role.value == 'moderator':
+    elif role == 'moderator':
         if plural:
             role_name = _('Moderators')
         else:
             role_name = _('Moderator')
-    elif role.value == 'participant':
+    elif role == 'participant':
         if plural:
             role_name = _('Participants')
         else:
             role_name = _('Participant')
-    elif role.value == 'visitor':
+    elif role == 'visitor':
         if plural:
             role_name = _('Visitors')
         else:
             role_name = _('Visitor')
     return role_name
 
-def get_uf_affiliation(affiliation):
+def get_uf_affiliation(affiliation, plural=False):
     '''Get a nice and translated affilition for muc'''
-    if affiliation.value == 'none':
+    if not isinstance(affiliation, str):
+        affiliation = affiliation.value
+
+    if affiliation == 'none':
         affiliation_name = Q_('?Group Chat Contact Affiliation:None')
-    elif affiliation.value == 'owner':
-        affiliation_name = _('Owner')
-    elif affiliation.value == 'admin':
-        affiliation_name = _('Administrator')
-    elif affiliation.value == 'member':
-        affiliation_name = _('Member')
-    else: # Argl ! An unknown affiliation !
-        affiliation_name = affiliation.capitalize()
+    elif affiliation == 'owner':
+        if plural:
+            affiliation_name = _('Owners')
+        else:
+            affiliation_name = _('Owner')
+    elif affiliation == 'admin':
+        if plural:
+            affiliation_name = _('Administrators')
+        else:
+            affiliation_name = _('Administrator')
+    elif affiliation == 'member':
+        if plural:
+            affiliation_name = _('Members')
+        else:
+            affiliation_name = _('Member')
     return affiliation_name
 
 def get_sorted_keys(adict):
@@ -1648,3 +1663,15 @@ def get_alternative_venue(error):
         uri = parse_uri(error.condition_data)
         if uri.type == URIType.XMPP and uri.action == URIAction.JOIN:
             return uri.data['jid']
+
+
+def is_affiliation_change_allowed(self_contact, contact):
+    if self_contact.affiliation < Affiliation.ADMIN:
+        return False
+    return self_contact.affiliation >= contact.affiliation
+
+
+def is_role_change_allowed(self_contact, contact):
+    if self_contact.role < Role.MODERATOR:
+        return False
+    return self_contact.affiliation >= contact.affiliation
