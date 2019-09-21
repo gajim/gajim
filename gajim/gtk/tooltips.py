@@ -262,6 +262,9 @@ class GCTooltip():
             affiliation = formatted % (color, affiliation)
         return affiliation
 
+    def destroy(self):
+        self._ui.tooltip_grid.destroy()
+
 class RosterTooltip(StatusTable):
     def __init__(self):
         StatusTable.__init__(self)
