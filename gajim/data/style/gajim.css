@@ -141,6 +141,10 @@ list.settings > row > box {
 .start-chat-row:not(.activatable) label { color: @insensitive_fg_color }
 .start-chat-row:focus { outline: none; }
 
+/* GroupChatRoster */
+.groupchat-roster { border-left: 1px solid;
+                    border-color: @borders; }
+.groupchat-roster treeview { padding-left: 4px; }
 
 /* GroupchatConfig */
 #GroupchatConfig > box > buttonbox { margin: 0px 12px 12px 12px; }

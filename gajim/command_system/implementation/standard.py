@@ -282,17 +282,17 @@ class StandardGroupChatCommands(CommandContainer):
     def chat(self, nick):
         nicks = app.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
-            self.on_send_pm(nick=nick)
+            self.send_pm(nick)
         else:
             raise CommandError(_("Nickname not found"))
 
     @command('msg', raw=True)
     @doc(_("Open a private chat window with a specified participant and send "
            "him a message"))
-    def message(self, nick, a_message):
+    def message(self, nick, message):
         nicks = app.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
-            self.on_send_pm(nick=nick, msg=a_message)
+            self.send_pm(nick, message)
         else:
             raise CommandError(_("Nickname not found"))
 

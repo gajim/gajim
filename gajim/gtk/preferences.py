@@ -22,6 +22,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import config as c_config
 from gajim.common import idle
+from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 
@@ -517,15 +518,12 @@ class Preferences(Gtk.ApplicationWindow):
     def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
         app.interface.roster.setup_and_draw_roster()
-        # Redraw groupchats (in an ugly way)
-        for ctrl in self._get_all_muc_controls():
-            ctrl.draw_roster()
 
     def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
         app.interface.roster.setup_and_draw_roster()
         for ctrl in self._get_all_muc_controls():
-            ctrl.update_ui()
+            ctrl.roster.draw_contacts()
 
     def on_show_pep_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_mood_in_roster')
@@ -542,7 +540,7 @@ class Preferences(Gtk.ApplicationWindow):
         self.on_checkbutton_toggled(widget, 'sort_by_show_in_muc')
         # Redraw groupchats
         for ctrl in self._get_all_muc_controls():
-            ctrl.draw_roster()
+            ctrl.roster.invalidate_sort()
 
     ### Chat tab ###
     def on_auto_copy_toggled(self, widget):
@@ -860,6 +858,7 @@ class Preferences(Gtk.ApplicationWindow):
         theme = combobox.get_active_id()
         app.config.set('roster_theme', theme)
         app.css_config.change_theme(theme)
+        app.nec.push_incoming_event(NetworkEvent('theme-update'))
 
         # Begin repainting themed widgets throughout
         app.interface.roster.repaint_themed_widgets()

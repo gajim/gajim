@@ -467,22 +467,6 @@ def get_metacontact_surface(icon_name, expanded, scale):
     return state_surface
 
 
-def get_affiliation_surface(icon_name, affiliation, scale):
-    surface = _icon_theme.load_surface(
-        icon_name, 16, scale, None, 0)
-
-    ctx = cairo.Context(surface)
-    ctx.rectangle(16 - 4, 16 - 4, 4, 4)
-    if affiliation == 'owner':
-        ctx.set_source_rgb(204/255, 0, 0)
-    elif affiliation == 'admin':
-        ctx.set_source_rgb(255/255, 140/255, 0)
-    elif affiliation == 'member':
-        ctx.set_source_rgb(0, 255/255, 0)
-    ctx.fill()
-    return surface
-
-
 def get_show_in_roster(event, session=None):
     """
     Return True if this event must be shown in roster, else False

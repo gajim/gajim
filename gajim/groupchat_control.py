@@ -24,26 +24,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
-
 import time
-import locale
 import base64
 import logging
-from enum import IntEnum, unique
 
 import nbxmpp
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
 from nbxmpp.const import Affiliation
-from nbxmpp.const import Role
 from nbxmpp.const import PresenceType
 from nbxmpp.util import is_error_result
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gio
 
@@ -61,7 +55,6 @@ from gajim.common.helpers import to_user_string
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common import contacts
-from gajim.common.const import StyleAttr
 from gajim.common.const import Chatstate
 from gajim.common.const import MUCJoinedState
 
@@ -75,27 +68,16 @@ from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
-from gajim.gtk.add_contact import AddNewContactWindow
-from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import get_affiliation_surface
-from gajim.gtk.util import get_builder
 
 
 log = logging.getLogger('gajim.groupchat_control')
-
-@unique
-class Column(IntEnum):
-    IMG = 0 # image to show state (online, new message etc)
-    NICK = 1 # contact nickname or ROLE name
-    TYPE = 2 # type of the row ('contact' or 'role')
-    TEXT = 3 # text shown in the cellrenderer
-    AVATAR_IMG = 4 # avatar of the contact
 
 
 class GroupchatControl(ChatControlBase):
@@ -132,40 +114,28 @@ class GroupchatControl(ChatControlBase):
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
 
-        self._state_change_handler_id = None
+        self.room_jid = self.contact.jid
+        self._muc_data = muc_data
+
+        # Stores nickname we want to kick
+        self._kick_nick = None
+
+        # Stores nickname we want to ban
+        self._ban_jid = None
+
+        self.roster = GroupchatRoster(self.account, self.room_jid, self)
+        self.xml.roster_revealer.add(self.roster)
+        self.roster.connect('row-activated', self._on_roster_row_activated)
+
         if parent_win is not None:
             # On AutoJoin with minimize Groupchats are created without parent
             # Tooltip Window and Actions have to be created with parent
-            self.set_tooltip()
+            self.roster.enable_tooltips()
             self.add_actions()
             GLib.idle_add(self.update_actions)
             self.scale_factor = parent_win.window.get_scale_factor()
-            self._connect_window_state_change(parent_win)
         else:
             self.scale_factor = app.interface.roster.scale_factor
-
-        widget = self.xml.get_object('list_treeview')
-        id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
-        self.handlers[id_] = widget
-
-        id_ = widget.connect('row_collapsed',
-            self.on_list_treeview_row_collapsed)
-        self.handlers[id_] = widget
-
-        id_ = widget.connect('row_activated',
-            self.on_list_treeview_row_activated)
-        self.handlers[id_] = widget
-
-        id_ = widget.connect('button_press_event',
-            self.on_list_treeview_button_press_event)
-        self.handlers[id_] = widget
-
-        id_ = widget.connect('key_press_event',
-            self.on_list_treeview_key_press_event)
-        self.handlers[id_] = widget
-
-        self.room_jid = self.contact.jid
-        self._muc_data = muc_data
 
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
             app.config.get('hide_groupchat_banner'))
@@ -186,76 +156,7 @@ class GroupchatControl(ChatControlBase):
         self.name_label = self.xml.get_object('banner_name_label')
         self.event_box = self.xml.get_object('banner_eventbox')
 
-        self.list_treeview = self.xml.get_object('list_treeview')
-        id_ = self.list_treeview.connect('style-set',
-                                         self.on_list_treeview_style_set)
-        self.handlers[id_] = self.list_treeview
-
-        # flag that stops hpaned position event
-        # when the handle gets resized in another control
-        self._resize_from_another_muc = False
-
-        self.hpaned = self.xml.get_object('hpaned')
-
-        # set the position of the current hpaned
-        hpaned_position = app.config.get('gc-hpaned-position')
-        self.hpaned.set_position(hpaned_position)
-
-        # Holds the Gtk.TreeRowReference for each contact
-        self._contact_refs = {}
-        # Holds the Gtk.TreeRowReference for each role
-        self._role_refs = {}
-
-        #status_image, shown_nick, type, nickname, avatar
-        self.columns = [str, str, str, str, Gtk.Image]
-        self.model = Gtk.TreeStore(*self.columns)
-        self.model.set_sort_func(Column.NICK, self.tree_compare_iters)
-
-        # columns
-        column = Gtk.TreeViewColumn()
-        # list of renderers with attributes / properties in the form:
-        # (name, renderer_object, expand?, attribute_name, attribute_value,
-        # cell_data_func, func_arg)
-        self.renderers_list = []
-        # Number of renderers plugins added
-        self.nb_ext_renderers = 0
-        self.renderers_propertys = {}
-        renderer_text = Gtk.CellRendererText()
-        self.renderers_propertys[renderer_text] = ('ellipsize',
-            Pango.EllipsizeMode.END)
-
-        self.renderers_list += (
-            # status img
-            ('icon', Gtk.CellRendererPixbuf(), False,
-            'icon_name', Column.IMG, self._cell_data_func, 'status'),
-            # contact name
-            ('name', renderer_text, True,
-            'markup', Column.TEXT, self._cell_data_func, 'name'))
-
-        # avatar img
-        avatar_renderer = ('avatar', Gtk.CellRendererPixbuf(),
-            False, None, Column.AVATAR_IMG,
-            self._cell_data_func, 'avatar')
-
-        if app.config.get('avatar_position_in_roster') == 'right':
-            self.renderers_list.append(avatar_renderer)
-        else:
-            self.renderers_list.insert(0, avatar_renderer)
-
-        self.fill_column(column)
-        self.list_treeview.append_column(column)
-
-        # workaround to avoid gtk arrows to be shown
-        column = Gtk.TreeViewColumn() # 2nd COLUMN
-        renderer = Gtk.CellRendererPixbuf()
-        column.pack_start(renderer, False)
-        self.list_treeview.append_column(column)
-        column.set_visible(False)
-        self.list_treeview.set_expander_column(column)
-
         self.setup_seclabel()
-
-        self.list_treeview.set_search_equal_func(self._search_func)
 
         # Send file
         self.sendfile_button = self.xml.get_object('sendfile_button')
@@ -293,9 +194,6 @@ class GroupchatControl(ChatControlBase):
         self._muc_info_box = GroupChatInfoScrolled(self.account, {'width': 600})
         self.xml.info_grid.attach(self._muc_info_box, 0, 0, 1, 1)
 
-        # GC Roster tooltip
-        self.gc_tooltip = GCTooltip()
-
         self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id,
                                                                 self.account,
                                                                 self.room_jid)
@@ -327,7 +225,6 @@ class GroupchatControl(ChatControlBase):
             ('muc-configuration-failed', ged.GUI1, self._on_configuration_failed),
             ('gc-message-received', ged.GUI1, self._nec_gc_message_received),
             ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
-            ('update-gc-avatar', ged.GUI1, self._nec_update_avatar),
             ('update-room-avatar', ged.GUI1, self._nec_update_room_avatar),
             ('signed-in', ged.GUI1, self._nec_signed_in),
             ('decrypted-message-received', ged.GUI2, self._nec_decrypted_message_received),
@@ -379,20 +276,29 @@ class GroupchatControl(ChatControlBase):
     def add_actions(self):
         super().add_actions()
         actions = [
-            ('change-subject-', self._on_change_subject),
-            ('change-nickname-', self._on_change_nick),
-            ('disconnect-', self._on_disconnect),
-            ('destroy-', self._on_destroy_room),
-            ('configure-', self._on_configure_room),
-            ('request-voice-', self._on_request_voice),
-            ('execute-command-', self._on_execute_command),
-            ('upload-avatar-', self._on_upload_avatar),
-            ('information-', self._on_information),
+            ('change-subject-', None, self._on_change_subject),
+            ('change-nickname-', None, self._on_change_nick),
+            ('disconnect-', None, self._on_disconnect),
+            ('destroy-', None, self._on_destroy_room),
+            ('configure-', None, self._on_configure_room),
+            ('request-voice-', None, self._on_request_voice),
+            ('upload-avatar-', None, self._on_upload_avatar),
+            ('information-', None, self._on_information),
+            ('contact-information-', 's', self._on_contact_information),
+            ('execute-command-', 's', self._on_execute_command),
+            ('block-', 's', self._on_block),
+            ('unblock-', 's', self._on_unblock),
+            ('ban-', 's', self._on_ban),
+            ('kick-', 's', self._on_kick),
+            ('change-role-', 'as', self._on_change_role),
+            ('change-affiliation-', 'as', self._on_change_affiliation),
         ]
 
         for action in actions:
-            action_name, func = action
-            act = Gio.SimpleAction.new(action_name + self.control_id, None)
+            action_name, variant, func = action
+            if variant is not None:
+                variant = GLib.VariantType.new(variant)
+            act = Gio.SimpleAction.new(action_name + self.control_id, variant)
             act.connect("activate", func)
             self.parent_win.window.add_action(act)
 
@@ -487,10 +393,8 @@ class GroupchatControl(ChatControlBase):
             self.is_connected and contact.affiliation in (Affiliation.ADMIN,
                                                           Affiliation.OWNER))
 
-        # Request Voice
-        role = self.get_role(self.nick)
         self._get_action('request-voice-').set_enabled(self.is_connected and
-                                                       role.is_visitor)
+                                                       contact.role.is_visitor)
 
         # Change Subject
         subject_change = self._is_subject_change_allowed()
@@ -543,6 +447,21 @@ class GroupchatControl(ChatControlBase):
         self._get_action('print-status-').set_state(
             GLib.Variant.new_boolean(value))
 
+        self._get_action('contact-information-').set_enabled(self.is_connected)
+
+        self._get_action('execute-command-').set_enabled(self.is_connected)
+
+        block_supported = con.get_module('PrivacyLists').supported
+        self._get_action('block-').set_enabled(self.is_connected and
+                                               block_supported)
+
+        self._get_action('unblock-').set_enabled(self.is_connected and
+                                                 block_supported)
+
+        self._get_action('ban-').set_enabled(self.is_connected)
+
+        self._get_action('kick-').set_enabled(self.is_connected)
+
     def _is_subject_change_allowed(self):
         contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
@@ -574,70 +493,6 @@ class GroupchatControl(ChatControlBase):
     def _get_current_page(self):
         return self.xml.stack.get_visible_child_name()
 
-    def _cell_data_func(self, column, renderer, model, iter_, user_data):
-        # Background color has to be rendered for all cells
-        theme = app.config.get('roster_theme')
-        has_parent = bool(model.iter_parent(iter_))
-        if has_parent:
-            bgcolor = app.css_config.get_value('.gajim-contact-row', StyleAttr.BACKGROUND)
-            renderer.set_property('cell-background', bgcolor)
-        else:
-            bgcolor = app.css_config.get_value('.gajim-group-row', StyleAttr.BACKGROUND)
-            renderer.set_property('cell-background', bgcolor)
-
-        if user_data == 'status':
-            self._status_cell_data_func(column, renderer, model, iter_, has_parent)
-        elif user_data == 'name':
-            self._text_cell_data_func(column, renderer, model, iter_, has_parent, theme)
-        elif user_data == 'avatar':
-            self._avatar_cell_data_func(column, renderer, model, iter_, has_parent)
-
-    def _status_cell_data_func(self, column, renderer, model, iter_, has_parent):
-        renderer.set_property('width', 26)
-        icon_name = model[iter_][Column.IMG]
-        if ':' in icon_name:
-            icon_name, affiliation = icon_name.split(':')
-            surface = get_affiliation_surface(
-                icon_name, affiliation, self.scale_factor)
-            renderer.set_property('icon_name', None)
-            renderer.set_property('surface', surface)
-        else:
-            renderer.set_property('surface', None)
-            renderer.set_property('icon_name', icon_name)
-
-    def _avatar_cell_data_func(self, column, renderer, model, iter_, has_parent):
-        image = model[iter_][Column.AVATAR_IMG]
-        if image is None:
-            renderer.set_property('surface', None)
-        else:
-            surface = image.get_property('surface')
-            renderer.set_property('surface', surface)
-
-        renderer.set_property('xalign', 0.5)
-        if has_parent:
-            renderer.set_property('visible', True)
-            renderer.set_property('width', AvatarSize.ROSTER)
-        else:
-            renderer.set_property('visible', False)
-
-    def _text_cell_data_func(self, column, renderer, model, iter_, has_parent, theme):
-        # cell data func is global, because we don't want it to keep
-        # reference to GroupchatControl instance (self)
-        if has_parent:
-            color = app.css_config.get_value('.gajim-contact-row', StyleAttr.COLOR)
-            renderer.set_property('foreground', color)
-            desc = app.css_config.get_font('.gajim-contact-row')
-            renderer.set_property('font-desc', desc)
-        else:
-            color = app.css_config.get_value('.gajim-group-row', StyleAttr.COLOR)
-            renderer.set_property('foreground', color)
-            desc = app.css_config.get_font('.gajim-group-row')
-            renderer.set_property('font-desc', desc)
-
-    @staticmethod
-    def _search_func(model, _column, search_text, iter_):
-        return search_text.lower() not in model[iter_][1].lower()
-
     @event_filter(['account', 'room_jid'])
     def _on_disco_update(self, _event):
         if self.parent_win is None:
@@ -653,12 +508,6 @@ class GroupchatControl(ChatControlBase):
                                                    archive_info)
             win.change_action_state('choose-sync-%s' % self.control_id,
                                     GLib.Variant('s', str(threshold)))
-
-    def _connect_window_state_change(self, parent_win):
-        if self._state_change_handler_id is None:
-            id_ = parent_win.window.connect('notify::is-maximized',
-                                            self._on_window_state_change)
-            self._state_change_handler_id = id_
 
     # Actions
 
@@ -769,11 +618,12 @@ class GroupchatControl(ChatControlBase):
         action.set_state(param)
         app.logger.set_archive_infos(self.contact.jid, sync_threshold=threshold)
 
-    def _on_execute_command(self, action, param):
-        """
-        Execute AdHoc commands on the current room
-        """
-        AdHocCommand(self.account, self.room_jid)
+    def _on_execute_command(self, _action, param):
+        jid = self.room_jid
+        nick = param.get_string()
+        if nick:
+            jid += '/' + nick
+        AdHocCommand(self.account, jid)
 
     def _on_upload_avatar(self, action, param):
         def _on_accept(filename):
@@ -794,114 +644,83 @@ class GroupchatControl(ChatControlBase):
                             transient_for=self.parent_win.window,
                             modal=True)
 
-    def show_roster(self):
-        new_state = not self.hpaned.get_child2().is_visible()
-        image = self.hide_roster_button.get_image()
-        if new_state:
-            self.hpaned.get_child2().show()
-            image.set_from_icon_name('go-next-symbolic', Gtk.IconSize.MENU)
+    def _on_contact_information(self, _action, param):
+        nick = param.get_string()
+        gc_contact = app.contacts.get_gc_contact(self.account,
+                                                 self.room_jid,
+                                                 nick)
+        contact = gc_contact.as_contact()
+        if contact.jid in app.interface.instances[self.account]['infos']:
+            app.interface.instances[self.account]['infos'][contact.jid].\
+                window.present()
         else:
-            self.hpaned.get_child2().hide()
-            image.set_from_icon_name('go-previous-symbolic', Gtk.IconSize.MENU)
+            app.interface.instances[self.account]['infos'][contact.jid] = \
+                vcard.VcardWindow(contact, self.account, gc_contact)
+
+    def _on_block(self, _action, param):
+        nick = param.get_string()
+        fjid = self.room_jid + '/' + nick
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').block_gc_contact(fjid)
+        self.roster.draw_contact(nick)
+
+    def _on_unblock(self, _action, param):
+        nick = param.get_string()
+        fjid = self.room_jid + '/' + nick
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').unblock_gc_contact(fjid)
+        self.roster.draw_contact(nick)
+
+    def _on_kick(self, _action, param):
+        nick = param.get_string()
+        self._kick_nick = nick
+        self.xml.kick_label.set_text(_('Kick %s' % nick))
+        self.xml.kick_reason_entry.grab_focus()
+        self.xml.kick_participant_button.grab_default()
+        self._show_page('kick')
+
+    def _on_ban(self, _action, param):
+        jid = param.get_string()
+        self._ban_jid = jid
+        nick = app.get_nick_from_jid(jid)
+        self.xml.ban_label.set_text(_('Ban %s' % nick))
+        self.xml.ban_reason_entry.grab_focus()
+        self.xml.ban_participant_button.grab_default()
+        self._show_page('ban')
+
+    def _on_change_role(self, _action, param):
+        nick, role = param.get_strv()
+        con = app.connections[self.account]
+        con.get_module('MUC').set_role(self.room_jid, nick, role)
+
+    def _on_change_affiliation(self, _action, param):
+        jid, affiliation = param.get_strv()
+        con = app.connections[self.account]
+        con.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {jid: {'affiliation': affiliation}})
+
+    def show_roster(self):
+        show = not self.xml.roster_revealer.get_reveal_child()
+        icon = 'go-next-symbolic' if show else 'go-previous-symbolic'
+        image = self.hide_roster_button.get_image()
+        image.set_from_icon_name(icon, Gtk.IconSize.MENU)
+
+        transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
+        if show:
+            transition = Gtk.RevealerTransitionType.SLIDE_LEFT
+        self.xml.roster_revealer.set_transition_type(transition)
+        self.xml.roster_revealer.set_reveal_child(show)
 
     def on_groupchat_maximize(self):
-        self.set_tooltip()
+        self.roster.enable_tooltips()
         self.add_actions()
         self.update_actions()
         self.set_lock_image()
-        self._connect_window_state_change(self.parent_win)
         self.draw_banner_text()
 
-    def set_tooltip(self):
-        widget = self.xml.get_object('list_treeview')
-        if widget.get_tooltip_window():
-            return
-        widget.set_has_tooltip(True)
-        id_ = widget.connect('query-tooltip', self.query_tooltip)
-        self.handlers[id_] = widget
-
-    def query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
-        try:
-            row = self.list_treeview.get_path_at_pos(x_pos, y_pos)[0]
-        except TypeError:
-            self.gc_tooltip.clear_tooltip()
-            return False
-        if not row:
-            self.gc_tooltip.clear_tooltip()
-            return False
-
-        iter_ = None
-        try:
-            iter_ = self.model.get_iter(row)
-        except Exception:
-            self.gc_tooltip.clear_tooltip()
-            return False
-
-        typ = self.model[iter_][Column.TYPE]
-        nick = self.model[iter_][Column.NICK]
-
-        if typ != 'contact':
-            self.gc_tooltip.clear_tooltip()
-            return False
-
-        contact = app.contacts.get_gc_contact(
-            self.account, self.room_jid, nick)
-        if not contact:
-            self.gc_tooltip.clear_tooltip()
-            return False
-
-        value, widget = self.gc_tooltip.get_tooltip(contact)
-        tooltip.set_custom(widget)
-        return value
-
-    def fill_column(self, col):
-        for rend in self.renderers_list:
-            col.pack_start(rend[1], rend[2])
-            if rend[0] not in ('avatar', 'icon'):
-                col.add_attribute(rend[1], rend[3], rend[4])
-            col.set_cell_data_func(rend[1], rend[5], rend[6])
-        # set renderers properties
-        for renderer in self.renderers_propertys:
-            renderer.set_property(self.renderers_propertys[renderer][0],
-                self.renderers_propertys[renderer][1])
-
-    def tree_compare_iters(self, model, iter1, iter2, data=None):
-        """
-        Compare two iterators to sort them
-        """
-        type1 = model[iter1][Column.TYPE]
-        type2 = model[iter2][Column.TYPE]
-        if not type1 or not type2:
-            return 0
-        nick1 = model[iter1][Column.NICK]
-        nick2 = model[iter2][Column.NICK]
-        if not nick1 or not nick2:
-            return 0
-        if type1 == 'role':
-            return locale.strcoll(nick1, nick2)
-        if type1 == 'contact':
-            gc_contact1 = app.contacts.get_gc_contact(self.account,
-                    self.room_jid, nick1)
-            if not gc_contact1:
-                return 0
-        if type2 == 'contact':
-            gc_contact2 = app.contacts.get_gc_contact(self.account,
-                    self.room_jid, nick2)
-            if not gc_contact2:
-                return 0
-        if type1 == 'contact' and type2 == 'contact' and \
-        app.config.get('sort_by_show_in_muc'):
-            cshow = {'chat':0, 'online': 1, 'away': 2, 'xa': 3, 'dnd': 4}
-            show1 = cshow[gc_contact1.show.value]
-            show2 = cshow[gc_contact2.show.value]
-            if show1 < show2:
-                return -1
-            if show1 > show2:
-                return 1
-        # We compare names
-        name1 = gc_contact1.get_shown_name()
-        name2 = gc_contact2.get_shown_name()
-        return locale.strcoll(name1.lower(), name2.lower())
+    def _on_roster_row_activated(self, _roster, nick):
+        self._start_private_message(nick)
 
     def on_msg_textview_populate_popup(self, textview, menu):
         """
@@ -927,91 +746,6 @@ class GroupchatControl(ChatControlBase):
             self.handlers[id_] = item
 
         menu.show_all()
-
-    def resize_occupant_treeview(self, position):
-        if self.hpaned.get_position() == position:
-            return
-        self._resize_from_another_muc = True
-        self.hpaned.set_position(position)
-        def _reset_flag():
-            self._resize_from_another_muc = False
-        # Reset the flag when everything will be redrawn, and in particular when
-        # on_treeview_size_allocate will have been called.
-        GLib.timeout_add(500, _reset_flag)
-
-    def _on_window_state_change(self, win, param):
-        # Add with timeout, because state change happens before
-        # the hpaned notifys us about a new handle position
-        GLib.timeout_add(100, self._check_for_resize)
-
-    def _on_hpaned_release_button(self, hpaned, event):
-        if event.get_button()[1] != 1:
-            # We want only to catch the left mouse button
-            return
-        self._check_for_resize()
-
-    def _check_for_resize(self):
-        # Check if we have a new position
-        pos = self.hpaned.get_position()
-        if pos == app.config.get('gc-hpaned-position'):
-            return
-
-        # Save new position
-        self._remove_handle_timeout()
-        app.config.set('gc-hpaned-position', pos)
-        # Resize other MUC rosters
-        for account in app.gc_connected:
-            for room_jid in [i for i in app.gc_connected[account] if \
-            app.gc_connected[account][i] and i != self.room_jid]:
-                ctrl = app.interface.msg_win_mgr.get_gc_control(room_jid,
-                    account)
-                if not ctrl and room_jid in \
-                app.interface.minimized_controls[account]:
-                    ctrl = app.interface.minimized_controls[account][room_jid]
-                if ctrl and app.config.get('one_message_window') != 'never':
-                    ctrl.resize_occupant_treeview(pos)
-
-    def _on_hpaned_handle_change(self, hpaned, param):
-        if self._resize_from_another_muc:
-            return
-        # Window was resized, save new handle pos
-        pos = hpaned.get_position()
-        if pos != app.config.get('gc-hpaned-position'):
-            self._remove_handle_timeout(renew=True)
-
-    def _remove_handle_timeout(self, renew=False):
-        if self._handle_timeout_id is not None:
-            GLib.source_remove(self._handle_timeout_id)
-            self._handle_timeout_id = None
-        if renew:
-            pos = self.hpaned.get_position()
-            self._handle_timeout_id = GLib.timeout_add_seconds(
-                2, self._save_handle_position, pos)
-
-    def _save_handle_position(self, pos):
-        self._handle_timeout_id = None
-        app.config.set('gc-hpaned-position', pos)
-
-    def iter_contact_rows(self):
-        """
-        Iterate over all contact rows in the tree model
-        """
-        role_iter = self.model.get_iter_first()
-        while role_iter:
-            contact_iter = self.model.iter_children(role_iter)
-            while contact_iter:
-                yield self.model[contact_iter]
-                contact_iter = self.model.iter_next(contact_iter)
-            role_iter = self.model.iter_next(role_iter)
-
-    def on_list_treeview_style_set(self, treeview, style):
-        """
-        When style (theme) changes, redraw all contacts
-        """
-        # Get the room_jid from treeview
-        for contact in self.iter_contact_rows():
-            nick = contact[Column.NICK]
-            self.draw_contact(nick)
 
     def get_tab_label(self, chatstate):
         """
@@ -1059,11 +793,6 @@ class GroupchatControl(ChatControlBase):
             tab_image = get_icon_name('muc-inactive')
         return tab_image
 
-    def update_ui(self):
-        ChatControlBase.update_ui(self)
-        for nick in app.contacts.get_nick_list(self.account, self.room_jid):
-            self.draw_contact(nick)
-
     def set_lock_image(self):
         encryption_state = {'visible': self.encryption is not None,
                             'enc_type': self.encryption,
@@ -1099,16 +828,6 @@ class GroupchatControl(ChatControlBase):
         app.plugin_manager.extension_point(
             'encryption_dialog' + self.encryption, self)
 
-    def _change_style(self, model, path, iter_, option):
-        model[iter_][Column.NICK] = model[iter_][Column.NICK]
-
-    def change_roster_style(self):
-        self.model.foreach(self._change_style, None)
-
-    def repaint_themed_widgets(self):
-        ChatControlBase.repaint_themed_widgets(self)
-        self.change_roster_style()
-
     def _update_banner_state_image(self):
         surface = app.interface.avatar_storage.get_muc_surface(
             self.account,
@@ -1141,13 +860,6 @@ class GroupchatControl(ChatControlBase):
         room jid
         """
         self.name_label.set_text(self.room_name)
-
-    def _nec_update_avatar(self, obj):
-        if obj.contact.room_jid != self.room_jid:
-            return
-        app.log('avatar').debug('Draw Groupchat Avatar: %s %s',
-                                obj.contact.name, obj.contact.avatar_sha)
-        self.draw_avatar(obj.contact)
 
     def _nec_update_room_avatar(self, obj):
         if obj.jid != self.room_jid:
@@ -1214,7 +926,6 @@ class GroupchatControl(ChatControlBase):
     encrypted=False, displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
-        no_queue = len(app.events.get_events(self.account, fjid)) == 0
 
         event = events.PmEvent(msg, '', 'incoming', tim, encrypted, '',
             msg_log_id, xhtml=xhtml, session=session, form_node=None,
@@ -1223,42 +934,19 @@ class GroupchatControl(ChatControlBase):
 
         autopopup = app.config.get('autopopup')
         autopopupaway = app.config.get('autopopupaway')
-        iter_ = self.get_contact_iter(nick)
-        path = self.model.get_path(iter_)
         if not autopopup or (not autopopupaway and \
         app.connections[self.account].connected > 2):
-            if no_queue: # We didn't have a queue: we change icons
-                transport = None
-                if app.jid_is_transport(self.room_jid):
-                    transport = app.get_transport_name_from_jid(self.room_jid)
-                self.model[iter_][Column.IMG] = get_icon_name(
-                    'event', transport=transport)
+            self.roster.draw_contact(nick)
             if self.parent_win:
                 self.parent_win.show_title()
                 self.parent_win.redraw_tab(self)
         else:
             self._start_private_message(nick)
-        # Scroll to line
-        path_ = path.copy()
-        path_.up()
-        self.list_treeview.expand_row(path_, False)
-        self.list_treeview.scroll_to_cell(path)
-        self.list_treeview.set_cursor(path)
+
         contact = app.contacts.get_contact_with_highest_priority(
             self.account, self.room_jid)
         if contact:
             app.interface.roster.draw_contact(self.room_jid, self.account)
-
-    def get_contact_iter(self, nick: str) -> Optional[Gtk.TreeIter]:
-        try:
-            ref = self._contact_refs[nick]
-        except KeyError:
-            return None
-
-        path = ref.get_path()
-        if path is None:
-            return None
-        return self.model.get_iter(path)
 
     def add_message(self, text, contact='', tim=None, xhtml=None,
                     displaymarking=None, correct_id=None, message_id=None,
@@ -1504,22 +1192,8 @@ class GroupchatControl(ChatControlBase):
     def is_connected(self, value: bool) -> None:
         app.gc_connected[self.account][self.room_jid] = value
 
-    def _disable_roster_sort(self):
-        self.model.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
-                                      Gtk.SortType.ASCENDING)
-        self.list_treeview.set_model(None)
-
-    def _enable_roster_sort(self):
-        self.model.set_sort_column_id(Column.NICK, Gtk.SortType.ASCENDING)
-        self.list_treeview.set_model(self.model)
-        self.list_treeview.expand_all()
-
-    def _reset_roster(self):
-        self._contact_refs = {}
-        self._role_refs = {}
-        self.model.clear()
-
     def got_connected(self):
+        self.roster.draw()
         # Make autorejoin stop.
         if self.autorejoin:
             GLib.source_remove(self.autorejoin)
@@ -1533,9 +1207,6 @@ class GroupchatControl(ChatControlBase):
 
         self.is_connected = True
         ChatControlBase.got_connected(self)
-
-        # Sort model and assign it to treeview
-        self._enable_roster_sort()
 
         # We don't redraw the whole banner here, because only icon change
         self._update_banner_state_image()
@@ -1554,8 +1225,8 @@ class GroupchatControl(ChatControlBase):
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
 
-        self._reset_roster()
-        self._disable_roster_sort()
+        self.roster.enable_sort(False)
+        self.roster.clear()
 
         for contact in app.contacts.get_gc_contact_list(
                 self.account, self.room_jid):
@@ -1601,94 +1272,10 @@ class GroupchatControl(ChatControlBase):
         app.connections[self.account].get_module('MUC').join(self._muc_data)
         return True
 
-    def draw_roster(self):
-        self._reset_roster()
-        self._disable_roster_sort()
-
-        for nick in app.contacts.get_nick_list(self.account, self.room_jid):
-            self.add_contact_to_roster(nick)
-
-        self._enable_roster_sort()
-        self.draw_all_roles()
-        # Recalculate column width for ellipsizin
-        self.list_treeview.columns_autosize()
-
-    def on_send_pm(self, widget=None, model=None, iter_=None, nick=None,
-    msg=None):
-        """
-        Open a chat window and if msg is not None - send private message to a
-        contact in a room
-        """
-        if nick is None:
-            nick = model[iter_][Column.NICK]
-
+    def send_pm(self, nick, message=None):
         ctrl = self._start_private_message(nick)
-        if ctrl and msg:
-            ctrl.send_message(msg)
-
-    def draw_contact(self, nick):
-        iter_ = self.get_contact_iter(nick)
-        if not iter_:
-            return
-
-        gc_contact = app.contacts.get_gc_contact(
-            self.account, self.room_jid, nick)
-
-        if app.events.get_events(self.account, self.room_jid + '/' + nick):
-            icon_name = get_icon_name('event')
-        else:
-            icon_name = get_icon_name(gc_contact.show.value)
-
-        name = GLib.markup_escape_text(gc_contact.name)
-
-        # Strike name if blocked
-        fjid = self.room_jid + '/' + nick
-        if helpers.jid_is_blocked(self.account, fjid):
-            name = '<span strikethrough="true">%s</span>' % name
-
-        status = gc_contact.status
-        # add status msg, if not empty, under contact name in the treeview
-        if status and app.config.get('show_status_msgs_in_roster'):
-            status = status.strip()
-            if status != '':
-                status = helpers.reduce_chars_newlines(status, max_lines=1)
-                # escape markup entities and make them small italic and fg color
-                name += ('\n<span size="small" style="italic" alpha="70%">'
-                         '{}</span>'.format(GLib.markup_escape_text(status)))
-
-        if (not gc_contact.affiliation.is_none and
-                app.config.get('show_affiliation_in_groupchat')):
-            icon_name += ':%s' % gc_contact.affiliation.value
-
-        self.model[iter_][Column.IMG] = icon_name
-        self.model[iter_][Column.TEXT] = name
-
-    def draw_avatar(self, gc_contact):
-        if not app.config.get('show_avatars_in_roster'):
-            return
-        iter_ = self.get_contact_iter(gc_contact.name)
-        if not iter_:
-            return
-
-        surface = app.interface.get_avatar(
-            gc_contact, AvatarSize.ROSTER, self.scale_factor)
-        image = Gtk.Image.new_from_surface(surface)
-        self.model[iter_][Column.AVATAR_IMG] = image
-
-    def draw_role(self, role):
-        role_iter = self.get_role_iter(role)
-        if not role_iter:
-            return
-        role_name = helpers.get_uf_role(role, plural=True)
-        if app.config.get('show_contacts_number'):
-            nbr_role, nbr_total = app.contacts.get_nb_role_total_gc_contacts(
-                self.account, self.room_jid, role)
-            role_name += ' (%s/%s)' % (repr(nbr_role), repr(nbr_total))
-        self.model[role_iter][Column.TEXT] = role_name
-
-    def draw_all_roles(self):
-        for role in (Role.VISITOR, Role.PARTICIPANT, Role.MODERATOR):
-            self.draw_role(role)
+        if message is not None:
+            ctrl.send_message(message)
 
     @event_filter(['account', 'room_jid'])
     def _on_self_presence(self, event):
@@ -1698,7 +1285,7 @@ class GroupchatControl(ChatControlBase):
         if not self.is_connected:
             # We just joined the room
             self.add_info_message(_('You (%s) joined the group chat') % nick)
-            self.add_contact_to_roster(nick)
+            self.roster.add_contact(nick)
 
         if StatusCode.NON_ANONYMOUS in status_codes:
             self.add_info_message(
@@ -1747,8 +1334,8 @@ class GroupchatControl(ChatControlBase):
                 tv.last_received_message_id[nick]
             del tv.last_received_message_id[nick]
 
-        self.remove_contact(nick)
-        self.add_contact_to_roster(new_nick)
+        self.roster.remove_contact(nick)
+        self.roster.add_contact(new_nick)
 
     @event_filter(['account', 'room_jid'])
     def _on_status_show_changed(self, event):
@@ -1771,7 +1358,7 @@ class GroupchatControl(ChatControlBase):
                                                                status=status)
             self.add_status_message(message)
 
-        self.draw_contact(nick)
+        self.roster.draw_contact(nick)
 
     @event_filter(['account', 'room_jid'])
     def _on_affiliation_changed(self, event):
@@ -1800,7 +1387,8 @@ class GroupchatControl(ChatControlBase):
                             reason=reason)
 
         self.add_info_message(message)
-        self.draw_contact(nick)
+        self.roster.remove_contact(nick)
+        self.roster.add_contact(nick)
         self.update_actions()
 
     @event_filter(['account', 'room_jid'])
@@ -1827,8 +1415,8 @@ class GroupchatControl(ChatControlBase):
                                                         reason=reason)
 
         self.add_info_message(message)
-        self.remove_contact(nick)
-        self.add_contact_to_roster(nick)
+        self.roster.remove_contact(nick)
+        self.roster.add_contact(nick)
         self.update_actions()
 
     @event_filter(['account', 'room_jid'])
@@ -1950,8 +1538,8 @@ class GroupchatControl(ChatControlBase):
                                                           reason=reason)
             self.add_info_message(message)
 
-        self.remove_contact(nick)
-        self.draw_all_roles()
+        self.roster.remove_contact(nick)
+        self.roster.draw_groups()
 
     @event_filter(['account', 'room_jid'])
     def _on_muc_joined(self, _event):
@@ -1965,7 +1553,7 @@ class GroupchatControl(ChatControlBase):
         print_join_left = app.config.get_per(
             'rooms', self.room_jid, 'print_join_left', join_default)
 
-        self.add_contact_to_roster(nick)
+        self.roster.add_contact(nick)
 
         if self.is_connected and print_join_left:
             self.add_info_message(_('%s has joined the group chat') % nick)
@@ -1989,46 +1577,6 @@ class GroupchatControl(ChatControlBase):
     def _on_presence_error(self, event):
         error_message = to_user_string(event.properties.error)
         self.add_info_message('Error: %s' % error_message)
-
-    def add_contact_to_roster(self, nick):
-        contact = app.contacts.get_gc_contact(self.account,
-                                              self.room_jid,
-                                              nick)
-        role_name = helpers.get_uf_role(contact.role, plural=True)
-
-        # Create Role
-        role_iter = self.get_role_iter(contact.role)
-        if not role_iter:
-            icon_name = get_icon_name('closed')
-            ext_columns = [None] * self.nb_ext_renderers
-            row = [icon_name, contact.role.value,
-                   'role', role_name, None] + ext_columns
-            role_iter = self.model.append(None, row)
-            self._role_refs[contact.role] = Gtk.TreeRowReference(
-                self.model, self.model.get_path(role_iter))
-
-        # Avatar
-        image = None
-        if app.config.get('show_avatars_in_roster'):
-            surface = app.interface.get_avatar(
-                contact, AvatarSize.ROSTER, self.scale_factor)
-            image = Gtk.Image.new_from_surface(surface)
-
-        # Add to model
-        ext_columns = [None] * self.nb_ext_renderers
-        row = [None, nick, 'contact', nick, image] + ext_columns
-        iter_ = self.model.append(role_iter, row)
-        self._contact_refs[nick] = Gtk.TreeRowReference(
-            self.model, self.model.get_path(iter_))
-
-        self.draw_all_roles()
-        self.draw_contact(nick)
-
-        if self.list_treeview.get_model():
-            self.list_treeview.expand_row(
-                (self.model.get_path(role_iter)), False)
-        if self.is_continued:
-            self.draw_banner_text()
 
     @event_filter(['account', 'room_jid'])
     def _on_destroyed(self, event):
@@ -2054,37 +1602,6 @@ class GroupchatControl(ChatControlBase):
 
         if self._wait_for_destruction:
             self._close_control()
-
-    def get_role_iter(self, role: str) -> Optional[Gtk.TreeIter]:
-        try:
-            ref = self._role_refs[role]
-        except KeyError:
-            return None
-
-        path = ref.get_path()
-        if path is None:
-            return None
-        return self.model.get_iter(path)
-
-
-    def remove_contact(self, nick):
-        """
-        Remove a user from the contacts_list
-        """
-        iter_ = self.get_contact_iter(nick)
-        if not iter_:
-            return
-
-        parent_iter = self.model.iter_parent(iter_)
-        if parent_iter is None:
-            # This is not a child, should never happen
-            return
-        self.model.remove(iter_)
-        del self._contact_refs[nick]
-        if self.model.iter_n_children(parent_iter) == 0:
-            role = self.model[parent_iter][Column.NICK]
-            del self._role_refs[Role(role)]
-            self.model.remove(parent_iter)
 
     @event_filter(['account'])
     def _message_sent(self, obj):
@@ -2142,12 +1659,6 @@ class GroupchatControl(ChatControlBase):
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 
-    def get_role(self, nick):
-        gc_contact = app.contacts.get_gc_contact(
-            self.account, self.room_jid, nick)
-        if gc_contact:
-            return gc_contact.role
-        return Role.VISITOR
 
     def minimizable(self):
         if self.force_non_minimizable:
@@ -2224,8 +1735,9 @@ class GroupchatControl(ChatControlBase):
             app.contacts.remove_room(self.account, self.room_jid)
             del app.gc_connected[self.account][self.room_jid]
 
-        # Save hpaned position
-        app.config.set('gc-hpaned-position', self.hpaned.get_position())
+        self.roster.destroy()
+        self.roster = None
+
         # remove all register handlers on wigets, created by self.xml
         # to prevent circular references among objects
         for i in list(self.handlers.keys()):
@@ -2247,12 +1759,6 @@ class GroupchatControl(ChatControlBase):
         if self.minimizable():
             on_minimize(self)
             return
-        if method == self.parent_win.CLOSE_ESC:
-            iter_ = self.list_treeview.get_selection().get_selected()[1]
-            if iter_:
-                self.list_treeview.get_selection().unselect_all()
-                on_no(self)
-                return
 
         # whether to ask for confirmation before closing muc
         if app.config.get('confirm_close_muc') and self.is_connected:
@@ -2455,14 +1961,6 @@ class GroupchatControl(ChatControlBase):
                 return True
             self.last_key_tabs = False
 
-    def on_list_treeview_key_press_event(self, widget, event):
-        if event.keyval == Gdk.KEY_Escape:
-            selection = widget.get_selection()
-            iter_ = selection.get_selected()[1]
-            if iter_:
-                widget.get_selection().unselect_all()
-                return True
-
     def delegate_action(self, action):
         res = super().delegate_action(action)
         if res == Gdk.EVENT_STOP:
@@ -2496,175 +1994,6 @@ class GroupchatControl(ChatControlBase):
 
         return Gdk.EVENT_PROPAGATE
 
-    def on_list_treeview_row_expanded(self, widget, iter_, path):
-        """
-        When a row is expanded: change the icon of the arrow
-        """
-        model = widget.get_model()
-        model[iter_][Column.IMG] = get_icon_name('opened')
-
-    def on_list_treeview_row_collapsed(self, widget, iter_, path):
-        """
-        When a row is collapsed: change the icon of the arrow
-        """
-        model = widget.get_model()
-        model[iter_][Column.IMG] = get_icon_name('closed')
-
-    def mk_menu(self, event, iter_):
-        """
-        Make contact's popup menu
-        """
-        nick = self.model[iter_][Column.NICK]
-        c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
-        fjid = self.room_jid + '/' + nick
-        jid = c.jid
-        target_affiliation = c.affiliation
-        target_role = c.role
-
-        # looking for user's affiliation and role
-        user_nick = self.nick
-        user_affiliation = app.contacts.get_gc_contact(self.account,
-            self.room_jid, user_nick).affiliation
-        user_role = self.get_role(user_nick)
-
-        # making menu from gtk builder
-        xml = get_builder('gc_occupants_menu.ui')
-
-        # these conditions were taken from JEP 0045
-        item = xml.get_object('kick_menuitem')
-        if not user_role.is_moderator or \
-        (user_affiliation.is_admin and target_affiliation.is_owner) or \
-        (user_affiliation.is_member and target_affiliation in (Affiliation.ADMIN,
-        Affiliation.OWNER)) or (user_affiliation.is_none and not target_affiliation.is_none):
-            item.set_sensitive(False)
-        id_ = item.connect('activate', self._on_kick_participant, nick)
-        self.handlers[id_] = item
-
-        item = xml.get_object('voice_checkmenuitem')
-        item.set_active(not target_role.is_visitor)
-        if not user_role.is_moderator or \
-        user_affiliation.is_none or \
-        (user_affiliation.is_member and not target_affiliation.is_none) or \
-        target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER):
-            item.set_sensitive(False)
-        id_ = item.connect('activate', self.on_voice_checkmenuitem_activate,
-            nick)
-        self.handlers[id_] = item
-
-        item = xml.get_object('moderator_checkmenuitem')
-        item.set_active(target_role.is_moderator)
-        if not user_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) or \
-        target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER):
-            item.set_sensitive(False)
-        id_ = item.connect('activate', self.on_moderator_checkmenuitem_activate,
-            nick)
-        self.handlers[id_] = item
-
-        item = xml.get_object('ban_menuitem')
-        if not user_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) or \
-        (target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) and\
-        not user_affiliation.is_owner):
-            item.set_sensitive(False)
-        id_ = item.connect('activate', self._on_ban_participant, jid)
-        self.handlers[id_] = item
-
-        item = xml.get_object('member_checkmenuitem')
-        item.set_active(not target_affiliation.is_none)
-        if not user_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) or \
-        (not user_affiliation.is_owner and target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER)):
-            item.set_sensitive(False)
-        id_ = item.connect('activate', self.on_member_checkmenuitem_activate,
-            jid)
-        self.handlers[id_] = item
-
-        item = xml.get_object('admin_checkmenuitem')
-        item.set_active(target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER))
-        if not user_affiliation.is_owner:
-            item.set_sensitive(False)
-        id_ = item.connect('activate', self.on_admin_checkmenuitem_activate,
-            jid)
-        self.handlers[id_] = item
-
-        item = xml.get_object('owner_checkmenuitem')
-        item.set_active(target_affiliation.is_owner)
-        if not user_affiliation.is_owner:
-            item.set_sensitive(False)
-        id_ = item.connect('activate', self.on_owner_checkmenuitem_activate,
-            jid)
-        self.handlers[id_] = item
-
-        item = xml.get_object('invite_menuitem')
-        if jid and c.name != self.nick:
-            bookmarked = False
-            contact = app.contacts.get_contact(self.account, jid, c.resource)
-            if contact and contact.supports(nbxmpp.NS_CONFERENCE):
-                bookmarked = True
-            gui_menu_builder.build_invite_submenu(item, ((c, self.account),),
-                ignore_rooms=[self.room_jid], show_bookmarked=bookmarked)
-        else:
-            item.set_sensitive(False)
-
-        item = xml.get_object('information_menuitem')
-        id_ = item.connect('activate', self.on_info, nick)
-        self.handlers[id_] = item
-
-        item = xml.get_object('history_menuitem')
-        item.set_action_name('app.browse-history')
-        dict_ = {'jid': GLib.Variant('s', fjid),
-                 'account': GLib.Variant('s', self.account)}
-        variant = GLib.Variant('a{sv}', dict_)
-        item.set_action_target_value(variant)
-
-        item = xml.get_object('add_to_roster_menuitem')
-        our_jid = app.get_jid_from_account(self.account)
-        if not jid or jid == our_jid or not app.connections[self.account].\
-        roster_supported:
-            item.set_sensitive(False)
-        else:
-            id_ = item.connect('activate', self.on_add_to_roster, jid)
-            self.handlers[id_] = item
-
-        item = xml.get_object('execute_command_menuitem')
-        id_ = item.connect('activate', self._on_execute_command_occupant, nick)
-        self.handlers[id_] = item
-
-        item = xml.get_object('block_menuitem')
-        item2 = xml.get_object('unblock_menuitem')
-        if not app.connections[self.account].get_module('PrivacyLists').supported:
-            item2.set_no_show_all(True)
-            item.set_no_show_all(True)
-            item.hide()
-            item2.hide()
-        elif helpers.jid_is_blocked(self.account, fjid):
-            item.set_no_show_all(True)
-            item.hide()
-            id_ = item2.connect('activate', self.on_unblock, nick)
-            self.handlers[id_] = item2
-        else:
-            id_ = item.connect('activate', self.on_block, nick)
-            self.handlers[id_] = item
-            item2.set_no_show_all(True)
-            item2.hide()
-
-        item = xml.get_object('send_private_message_menuitem')
-        id_ = item.connect('activate', self.on_send_pm, self.model, iter_)
-        self.handlers[id_] = item
-
-        item = xml.get_object('send_file_menuitem')
-        if not c.jid:
-            item.set_sensitive(False)
-        else:
-            item.set_sensitive(True)
-            # ToDo: integrate HTTP File Upload
-            id_ = item.connect('activate', lambda x: self._on_send_file_jingle(c))
-            self.handlers[id_] = item
-
-        # show the popup now!
-        menu = xml.get_object('gc_occupants_menu')
-        menu.show_all()
-        menu.attach_to_widget(app.interface.roster.window, None)
-        menu.popup(None, None, None, None, event.button, event.time)
-
     def _start_private_message(self, nick):
         gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
         nick_jid = gc_c.get_full_jid()
@@ -2677,76 +2006,6 @@ class GroupchatControl(ChatControlBase):
             ctrl.parent_win.set_active_tab(ctrl)
 
         return ctrl
-
-    def _on_execute_command_occupant(self, widget, nick):
-        jid = self.room_jid + '/' + nick
-        AdHocCommand(self.account, jid)
-
-    def on_row_activated(self, widget, path):
-        """
-        When an iter is activated (double click or single click if gnome
-        is set this way)
-        """
-        if path.get_depth() == 1: # It's a group
-            if widget.row_expanded(path):
-                widget.collapse_row(path)
-            else:
-                widget.expand_row(path, False)
-        else: # We want to send a private message
-            nick = self.model[path][Column.NICK]
-            self._start_private_message(nick)
-
-    def on_list_treeview_row_activated(self, widget, path, col=0):
-        """
-        When an iter is double clicked: open the chat window
-        """
-        if not app.single_click:
-            self.on_row_activated(widget, path)
-
-    def on_list_treeview_button_press_event(self, widget, event):
-        """
-        Popup user's group's or agent menu
-        """
-        try:
-            pos = widget.get_path_at_pos(int(event.x), int(event.y))
-            path, x = pos[0], pos[2]
-        except TypeError:
-            widget.get_selection().unselect_all()
-            return
-        if event.button == 3: # right click
-            widget.get_selection().select_path(path)
-            iter_ = self.model.get_iter(path)
-            if path.get_depth() == 2:
-                self.mk_menu(event, iter_)
-            return True
-
-        if event.button == 2: # middle click
-            widget.get_selection().select_path(path)
-            iter_ = self.model.get_iter(path)
-            if path.get_depth() == 2:
-                nick = self.model[iter_][Column.NICK]
-                self._start_private_message(nick)
-            return True
-
-        if event.button == 1: # left click
-            if app.single_click and not event.get_state() & Gdk.ModifierType.SHIFT_MASK:
-                self.on_row_activated(widget, path)
-                return True
-
-            iter_ = self.model.get_iter(path)
-            nick = self.model[iter_][Column.NICK]
-            if not nick in app.contacts.get_nick_list(
-                    self.account, self.room_jid):
-                # it's a group
-                if x < 27:
-                    if widget.row_expanded(path):
-                        widget.collapse_row(path)
-                    else:
-                        widget.expand_row(path, False)
-            elif event.get_state() & Gdk.ModifierType.SHIFT_MASK:
-                self.append_nick_in_msg_textview(self.msg_textview, nick)
-                self.msg_textview.grab_focus()
-                return True
 
     def append_nick_in_msg_textview(self, widget, nick):
         self.msg_textview.remove_placeholder()
@@ -2765,55 +2024,12 @@ class GroupchatControl(ChatControlBase):
             add = gc_refer_to_nick_char + ' '
         message_buffer.insert_at_cursor(start + nick + add)
 
-    def grant_voice(self, widget, nick):
-        """
-        Grant voice privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_role(self.room_jid, nick, 'participant')
-
-    def revoke_voice(self, widget, nick):
-        """
-        Revoke voice privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_role(self.room_jid, nick, 'visitor')
-
-    def grant_moderator(self, widget, nick):
-        """
-        Grant moderator privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_role(self.room_jid, nick, 'moderator')
-
-    def revoke_moderator(self, widget, nick):
-        """
-        Revoke moderator privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_role(self.room_jid, nick, 'participant')
-
-    def _on_kick_participant(self, _widget, nick):
-        self._kick_nick = nick
-        self.xml.kick_label.set_text(_('Kick %s' % nick))
-        self.xml.kick_reason_entry.grab_focus()
-        self.xml.kick_participant_button.grab_default()
-        self._show_page('kick')
-
     def _on_kick_participant_clicked(self, _button):
         reason = self.xml.kick_reason_entry.get_text()
         con = app.connections[self.account]
         con.get_module('MUC').set_role(
             self.room_jid, self._kick_nick, 'none', reason)
         self._show_page('groupchat')
-
-    def _on_ban_participant(self, _widget, jid):
-        self._ban_jid = jid
-        nick = app.get_nick_from_jid(jid)
-        self.xml.ban_label.set_text(_('Ban %s' % nick))
-        self.xml.ban_reason_entry.grab_focus()
-        self.xml.ban_participant_button.grab_default()
-        self._show_page('ban')
 
     def _on_ban_participant_clicked(self, _button):
         reason = self.xml.ban_reason_entry.get_text()
@@ -2822,119 +2038,6 @@ class GroupchatControl(ChatControlBase):
             self.room_jid,
             {self._ban_jid: {'affiliation': 'outcast', 'reason': reason}})
         self._show_page('groupchat')
-
-    def grant_membership(self, widget, jid):
-        """
-        Grant membership privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_affiliation(
-            self.room_jid,
-            {jid: {'affiliation': 'member'}})
-
-    def revoke_membership(self, widget, jid):
-        """
-        Revoke membership privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_affiliation(
-            self.room_jid,
-            {jid: {'affiliation': 'none'}})
-
-    def grant_admin(self, widget, jid):
-        """
-        Grant administrative privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_affiliation(
-            self.room_jid,
-            {jid: {'affiliation': 'admin'}})
-
-    def revoke_admin(self, widget, jid):
-        """
-        Revoke administrative privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_affiliation(
-            self.room_jid,
-            {jid: {'affiliation': 'member'}})
-
-    def grant_owner(self, widget, jid):
-        """
-        Grant owner privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_affiliation(
-            self.room_jid,
-            {jid: {'affiliation': 'owner'}})
-
-    def revoke_owner(self, widget, jid):
-        """
-        Revoke owner privilege to a user
-        """
-        con = app.connections[self.account]
-        con.get_module('MUC').set_affiliation(
-            self.room_jid,
-            {jid: {'affiliation': 'admin'}})
-
-    def on_info(self, widget, nick):
-        """
-         Call vcard_information_window class to display user's information
-        """
-        gc_contact = app.contacts.get_gc_contact(self.account, self.room_jid,
-            nick)
-        contact = gc_contact.as_contact()
-        if contact.jid in app.interface.instances[self.account]['infos']:
-            app.interface.instances[self.account]['infos'][contact.jid].\
-                window.present()
-        else:
-            app.interface.instances[self.account]['infos'][contact.jid] = \
-                vcard.VcardWindow(contact, self.account, gc_contact)
-
-    def on_add_to_roster(self, widget, jid):
-        AddNewContactWindow(self.account, jid)
-
-    def on_block(self, widget, nick):
-        fjid = self.room_jid + '/' + nick
-        con = app.connections[self.account]
-        con.get_module('PrivacyLists').block_gc_contact(fjid)
-        self.draw_contact(nick)
-
-    def on_unblock(self, widget, nick):
-        fjid = self.room_jid + '/' + nick
-        con = app.connections[self.account]
-        con.get_module('PrivacyLists').unblock_gc_contact(fjid)
-        self.draw_contact(nick)
-
-    def on_voice_checkmenuitem_activate(self, widget, nick):
-        if widget.get_active():
-            self.grant_voice(widget, nick)
-        else:
-            self.revoke_voice(widget, nick)
-
-    def on_moderator_checkmenuitem_activate(self, widget, nick):
-        if widget.get_active():
-            self.grant_moderator(widget, nick)
-        else:
-            self.revoke_moderator(widget, nick)
-
-    def on_member_checkmenuitem_activate(self, widget, jid):
-        if widget.get_active():
-            self.grant_membership(widget, jid)
-        else:
-            self.revoke_membership(widget, jid)
-
-    def on_admin_checkmenuitem_activate(self, widget, jid):
-        if widget.get_active():
-            self.grant_admin(widget, jid)
-        else:
-            self.revoke_admin(widget, jid)
-
-    def on_owner_checkmenuitem_activate(self, widget, jid):
-        if widget.get_active():
-            self.grant_owner(widget, jid)
-        else:
-            self.revoke_owner(widget, jid)
 
     def _on_page_change(self, stack, _param):
         page_name = stack.get_visible_child_name()

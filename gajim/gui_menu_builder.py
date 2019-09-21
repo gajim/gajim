@@ -22,6 +22,8 @@ from gajim import gtkgui_helpers
 from gajim import message_control
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.helpers import is_affiliation_change_allowed
+from gajim.common.helpers import is_role_change_allowed
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import _
 from gajim.common.const import URIType
@@ -604,6 +606,13 @@ def get_groupchat_menu(control_id, account, jid):
                     menuitem.set_action_and_target_value(action_name,
                                                          variant_dict)
                     menu.append_item(menuitem)
+
+                elif action_name == 'win.execute-command-':
+                    action_name = action_name + control_id
+                    menuitem = Gio.MenuItem.new(label, action_name)
+                    menuitem.set_action_and_target_value(action_name,
+                                                         GLib.Variant('s', ''))
+                    menu.append_item(menuitem)
                 else:
                     menu.append(label, action_name + control_id)
             else:
@@ -831,6 +840,127 @@ def get_conv_context_menu(account, uri):
         menuitem.set_action_target_value(value)
         menuitem.show()
         menu.append(menuitem)
+    return menu
+
+
+def get_groupchat_roster_menu(account, control_id, self_contact, contact):
+    menu = Gtk.Menu()
+
+    item = Gtk.MenuItem(label=_('Information'))
+    action = 'win.contact-information-%s::%s' % (control_id, contact.name)
+    item.set_detailed_action_name(action)
+    menu.append(item)
+
+    item = Gtk.MenuItem(label=_('Add to Contact List'))
+    action = 'app.{account}-add-contact(["{account}", "{jid}"])'.format(
+        account=account, jid=contact.jid or '')
+    if contact.jid is None:
+        item.set_sensitive(False)
+    else:
+        item.set_detailed_action_name(action)
+    menu.append(item)
+
+    item = Gtk.MenuItem(label=_('Invite'))
+    if contact.jid is not None:
+        build_invite_submenu(item,
+                             ((contact, account),),
+                             show_bookmarked=True)
+    else:
+        item.set_sensitive(False)
+    menu.append(item)
+
+    item = Gtk.MenuItem(label=_('Execute command'))
+    action = 'win.execute-command-%s::%s' % (control_id, contact.name)
+    item.set_detailed_action_name(action)
+    menu.append(item)
+
+    menu.append(Gtk.SeparatorMenuItem())
+
+    if helpers.jid_is_blocked(account, contact.get_full_jid()):
+        action = 'win.unblock-%s::%s' % (control_id, contact.name)
+        label = _('Unblock')
+    else:
+        action = 'win.block-%s::%s' % (control_id, contact.name)
+        label = _('Block')
+
+    item = Gtk.MenuItem(label=label)
+    item.set_detailed_action_name(action)
+    menu.append(item)
+
+    item = Gtk.MenuItem(label=_('Kick'))
+    action = 'win.kick-%s::%s' % (control_id, contact.name)
+    if is_role_change_allowed(self_contact, contact):
+        item.set_detailed_action_name(action)
+    else:
+        item.set_sensitive(False)
+    menu.append(item)
+
+    item = Gtk.MenuItem(label=_('Ban'))
+    action = 'win.ban-%s::%s' % (control_id, contact.jid or '')
+    if is_affiliation_change_allowed(self_contact, contact):
+        item.set_detailed_action_name(action)
+    else:
+        item.set_sensitive(False)
+    menu.append(item)
+
+    menu.append(Gtk.SeparatorMenuItem())
+
+    item = Gtk.MenuItem(label=_('Make Owner'))
+    action = 'win.change-affiliation-%s(["%s", "owner"])' % (control_id,
+                                                             contact.jid)
+    if (is_affiliation_change_allowed(self_contact, contact) and
+            not contact.affiliation.is_owner):
+        item.set_detailed_action_name(action)
+    else:
+        item.set_sensitive(False)
+    menu.append(item)
+
+    item = Gtk.MenuItem(label=_('Make Admin'))
+    action = 'win.change-affiliation-%s(["%s", "admin"])' % (control_id,
+                                                             contact.jid)
+    if (is_affiliation_change_allowed(self_contact, contact) and
+            not contact.affiliation.is_admin):
+        item.set_detailed_action_name(action)
+    else:
+        item.set_sensitive(False)
+    menu.append(item)
+
+    if contact.affiliation.is_none:
+        label = _('Make Member')
+        affiliation = 'member'
+    else:
+        label = _('Revoke Member')
+        affiliation = 'none'
+
+    item = Gtk.MenuItem(label=label)
+    action = 'win.change-affiliation-%s(["%s", "%s"])' % (control_id,
+                                                          contact.jid,
+                                                          affiliation)
+    if (is_affiliation_change_allowed(self_contact, contact) and
+            contact.affiliation.value != affiliation):
+        item.set_detailed_action_name(action)
+    else:
+        item.set_sensitive(False)
+    menu.append(item)
+
+    if contact.role.is_visitor:
+        label = _('Grant Voice')
+        role = 'participant'
+    else:
+        label = _('Revoke Voice')
+        role = 'visitor'
+
+    item = Gtk.MenuItem(label=label)
+    action = 'win.change-role-%s(["%s", "%s"])' % (control_id,
+                                                   contact.name,
+                                                   role)
+    if is_role_change_allowed(self_contact, contact):
+        item.set_detailed_action_name(action)
+    else:
+        item.set_sensitive(False)
+    menu.append(item)
+
+    menu.show_all()
     return menu
 
 

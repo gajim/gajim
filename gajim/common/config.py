@@ -128,7 +128,6 @@ class Config:
         'custombrowser': [opt_str, DEFAULT_BROWSER],
         'custommailapp': [opt_str, DEFAULT_MAILAPP],
         'custom_file_manager': [opt_str, DEFAULT_FILE_MANAGER],
-        'gc-hpaned-position': [opt_int, 430],
         'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nickname completion (tab) in group chat.')],
         'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when nickname is already used in group chat.')],
         'msgwin-max-state': [opt_bool, False],
@@ -289,6 +288,7 @@ class Config:
         'muclumbus_api_pref': [opt_str, 'http', _('API Preferences. Possible values: \'http\', \'iq\'')],
         'auto_copy': [opt_bool, True, _('Selecting text will copy it to the clipboard')],
         'command_system_execute': [opt_bool, False, _('If enabled, Gajim will execute commands (/show, /sh, /execute, /exec).')],
+        'groupchat_roster_width': [opt_int, 210, _('Width of group chat roster in pixel')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {

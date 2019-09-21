@@ -1320,7 +1320,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if contact:
                 app.interface.roster.draw_contact(room_jid, self.account)
             if groupchat_control:
-                groupchat_control.draw_contact(nick)
+                groupchat_control.roster.draw_contact(nick)
                 if groupchat_control.parent_win:
                     groupchat_control.parent_win.redraw_tab(groupchat_control)
         else:
