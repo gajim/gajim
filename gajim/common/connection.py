@@ -595,6 +595,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.get_module('Bytestream').remove_all_transfers()
         self._unregister_new_handlers(self.connection)
         self.connection = None
+        app.nec.push_incoming_event(NetworkEvent('account-disconnected',
+                                                 account=self.name))
 
     def _set_reconnect_timer(self):
         self.connected = -1
