@@ -59,7 +59,6 @@ import nbxmpp
 from nbxmpp.util import compute_caps_hash
 from nbxmpp.stringprepare import nameprep
 from nbxmpp.structs import DiscoInfo
-from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
