@@ -94,14 +94,6 @@ class GroupchatControl(ChatControlBase):
         self.is_continued = is_continued
         self.is_anonymous = True
 
-        # Controls the state of autorejoin.
-        # None - autorejoin is neutral.
-        # False - autorejoin is to be prevented (gets reset to initial state in
-        #         got_connected()).
-        # int - autorejoin is being active and working (gets reset to initial
-        #       state in got_connected()).
-        self.autorejoin = None
-
         # Keep error dialog instance to be sure to have only once at a time
         self.error_dialog = None
 
@@ -1194,10 +1186,6 @@ class GroupchatControl(ChatControlBase):
 
     def got_connected(self):
         self.roster.draw()
-        # Make autorejoin stop.
-        if self.autorejoin:
-            GLib.source_remove(self.autorejoin)
-        self.autorejoin = None
 
         if self.disco_info.has_mam:
             # Request MAM
@@ -1252,14 +1240,6 @@ class GroupchatControl(ChatControlBase):
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
-        # Autorejoin stuff goes here.
-        # Notice that we don't need to activate autorejoin if connection is lost
-        # or in progress.
-        if self.autorejoin is None and app.account_is_connected(self.account):
-            ar_to = app.config.get('muc_autorejoin_timeout')
-            if ar_to:
-                self.autorejoin = GLib.timeout_add_seconds(ar_to, self.rejoin)
-
         self.update_actions()
 
     def leave(self, reason=None):
@@ -1267,10 +1247,7 @@ class GroupchatControl(ChatControlBase):
         self._close_control(reason=reason)
 
     def rejoin(self):
-        if not self.autorejoin:
-            return False
         app.connections[self.account].get_module('MUC').join(self._muc_data)
-        return True
 
     def send_pm(self, nick, message=None):
         ctrl = self._start_private_message(nick)
@@ -1421,8 +1398,6 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_self_kicked(self, event):
-        self.autorejoin = False
-
         status_codes = event.properties.muc_status_codes or []
 
         reason = event.properties.muc_user.reason
@@ -1473,7 +1448,6 @@ class GroupchatControl(ChatControlBase):
             reason = ': System shutdown'
             message = message.format(actor=actor, reason=reason)
             self.add_info_message(message)
-            self.autorejoin = True
 
         self.got_disconnected()
 
@@ -1566,7 +1540,6 @@ class GroupchatControl(ChatControlBase):
     def _on_muc_join_failed(self, event):
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
-        self.autorejoin = False
 
     @event_filter(['account', 'room_jid'])
     def _on_muc_creation_failed(self, event):
@@ -1594,7 +1567,6 @@ class GroupchatControl(ChatControlBase):
                              'instead: xmpp:%s?join') % alternate
             self.add_info_message(join_message)
 
-        self.autorejoin = False
         self.got_disconnected()
 
         con = app.connections[self.account]
@@ -1695,9 +1667,6 @@ class GroupchatControl(ChatControlBase):
         del win._controls[self.account][self.contact.jid]
 
     def shutdown(self, reason=None):
-        # Preventing autorejoin from being activated
-        self.autorejoin = False
-
         # Leave MUC if we are still joined
         if self._muc_data.state != MUCJoinedState.NOT_JOINED:
             self.got_disconnected()

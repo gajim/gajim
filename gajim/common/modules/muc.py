@@ -24,6 +24,7 @@ from datetime import timezone
 import nbxmpp
 from nbxmpp.const import InviteType
 from nbxmpp.const import PresenceType
+from nbxmpp.const import StatusCode
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
@@ -31,6 +32,7 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common import ged
 from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import SyncThreshold
@@ -38,6 +40,7 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import get_sync_threshold
 from gajim.common.helpers import to_user_string
+from gajim.common.helpers import event_filter
 from gajim.common import idle
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.bits_of_binary import store_bob_data
@@ -106,8 +109,17 @@ class MUC(BaseModule):
                           priority=49)
         ]
 
+        self._event_handlers = [
+            ('account-disconnected', ged.CORE, self._on_account_disconnected),
+        ]
+
+        for handler in self._event_handlers:
+            app.ged.register_event_handler(*handler)
+
         self._muc_data = {}
+        self._rejoin_muc = set()
         self._join_timeouts = {}
+        self._rejoin_timeouts = {}
 
     def pass_disco(self, info):
         for identity in info.identities:
@@ -187,6 +199,13 @@ class MUC(BaseModule):
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINING)
         self._con.connection.send(presence)
 
+    def _rejoin(self, room_jid):
+        muc_data = self._get_muc_data(room_jid)
+        if muc_data.state == MUCJoinedState.NOT_JOINED:
+            self._log.info('Rejoin %s', room_jid)
+            self._join(muc_data)
+        return True
+
     def _create(self, muc_data):
         show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
 
@@ -204,6 +223,7 @@ class MUC(BaseModule):
     def leave(self, room_jid, reason=None):
         self._log.info('Leave MUC: %s', room_jid)
         self._remove_join_timeout(room_jid)
+        self._remove_rejoin_timeout(room_jid)
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
         muc_data = self._get_muc_data(room_jid)
         self._con.get_module('Presence').send_presence(
@@ -361,20 +381,23 @@ class MUC(BaseModule):
 
         if muc_data.state == MUCJoinedState.JOINING:
             if properties.error.condition == 'conflict':
+                self._remove_rejoin_timeout(room_jid)
                 muc_data.nick += '_'
                 self._log.info('Nickname conflict: %s change to %s',
                                muc_data.jid, muc_data.nick)
                 self._join(muc_data)
             elif properties.error.condition == 'not-authorized':
+                self._remove_rejoin_timeout(room_jid)
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
                 self._raise_muc_event('muc-password-required', properties)
             else:
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
-                app.nec.push_incoming_event(
-                    NetworkEvent('muc-join-failed',
-                                 account=self._account,
-                                 room_jid=room_jid,
-                                 error=properties.error))
+                if room_jid not in self._rejoin_muc:
+                    app.nec.push_incoming_event(
+                        NetworkEvent('muc-join-failed',
+                                     account=self._account,
+                                     room_jid=room_jid,
+                                     error=properties.error))
 
         elif muc_data.state == MUCJoinedState.CREATING:
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
@@ -467,6 +490,9 @@ class MUC(BaseModule):
         if properties.is_muc_self_presence and properties.is_kicked:
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             self._raise_muc_event('muc-self-kicked', properties)
+            status_codes = properties.muc_status_codes or []
+            if StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
+                self._start_rejoin_timeout(room_jid)
             return
 
         if properties.is_muc_self_presence and properties.type.is_unavailable:
@@ -526,6 +552,21 @@ class MUC(BaseModule):
                            properties.status,
                            properties.show)
             self._raise_muc_event('muc-user-status-show-changed', properties)
+
+    def _start_rejoin_timeout(self, room_jid):
+        self._remove_rejoin_timeout(room_jid)
+        self._rejoin_muc.add(room_jid)
+        self._log.info('Start rejoin timeout for: %s', room_jid)
+        id_ = GLib.timeout_add_seconds(2, self._rejoin, room_jid)
+        self._rejoin_timeouts[room_jid] = id_
+
+    def _remove_rejoin_timeout(self, room_jid):
+        self._rejoin_muc.discard(room_jid)
+        id_ = self._rejoin_timeouts.get(room_jid)
+        if id_ is not None:
+            self._log.info('Remove rejoin timeout for: %s', room_jid)
+            GLib.source_remove(id_)
+            del self._rejoin_timeouts[room_jid]
 
     def _start_join_timeout(self, room_jid):
         self._remove_join_timeout(room_jid)
@@ -644,6 +685,7 @@ class MUC(BaseModule):
     def _room_join_complete(self, muc_data):
         self._remove_join_timeout(muc_data.jid)
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINED)
+        self._remove_rejoin_timeout(muc_data.jid)
 
         # We successfully joined a MUC, set add bookmark with autojoin
         self._con.get_module('Bookmarks').modify(muc_data.jid,
@@ -695,6 +737,7 @@ class MUC(BaseModule):
         muc_data.captcha_id = properties.id
 
         self._set_muc_state(properties.jid, MUCJoinedState.CAPTCHA_REQUEST)
+        self._remove_rejoin_timeout(properties.jid)
 
         app.nec.push_incoming_event(
             NetworkEvent('muc-captcha-challenge',
@@ -792,9 +835,17 @@ class MUC(BaseModule):
         self._log.info('Invite %s to %s', to, room)
         self._nbxmpp('MUC').invite(room, to, reason, password, continue_, type_)
 
-    def cleanup(self):
+    @event_filter(['account'])
+    def _on_account_disconnected(self, event):
+        for room_jid in list(self._rejoin_timeouts.keys()):
+            self._remove_rejoin_timeout(room_jid)
+
         for room_jid in list(self._join_timeouts.keys()):
             self._remove_join_timeout(room_jid)
+
+    def cleanup(self):
+        for handler in self._event_handlers:
+            app.ged.remove_event_handler(*handler)
 
 
 def get_instance(*args, **kwargs):
