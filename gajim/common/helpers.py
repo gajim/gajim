@@ -1665,10 +1665,21 @@ def get_alternative_venue(error):
             return uri.data['jid']
 
 
-def is_affiliation_change_allowed(self_contact, contact):
-    if self_contact.affiliation < Affiliation.ADMIN:
+def is_affiliation_change_allowed(self_contact, contact, target_aff):
+    if contact.affiliation.value == target_aff:
+        # Contact has already the target affiliation
         return False
-    return self_contact.affiliation >= contact.affiliation
+
+    if self_contact.affiliation.is_owner:
+        return True
+
+    if not self_contact.affiliation.is_admin:
+        return False
+
+    if target_aff in ('admin', 'owner'):
+        # Admin cant edit admin/owner list
+        return False
+    return self_contact.affiliation > contact.affiliation
 
 
 def is_role_change_allowed(self_contact, contact):

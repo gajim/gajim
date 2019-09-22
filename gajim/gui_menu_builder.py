@@ -897,7 +897,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
 
     item = Gtk.MenuItem(label=_('Ban'))
     action = 'win.ban-%s::%s' % (control_id, contact.jid or '')
-    if is_affiliation_change_allowed(self_contact, contact):
+    if is_affiliation_change_allowed(self_contact, contact, 'outcast'):
         item.set_detailed_action_name(action)
     else:
         item.set_sensitive(False)
@@ -908,8 +908,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     item = Gtk.MenuItem(label=_('Make Owner'))
     action = 'win.change-affiliation-%s(["%s", "owner"])' % (control_id,
                                                              contact.jid)
-    if (is_affiliation_change_allowed(self_contact, contact) and
-            not contact.affiliation.is_owner):
+    if is_affiliation_change_allowed(self_contact, contact, 'owner'):
         item.set_detailed_action_name(action)
     else:
         item.set_sensitive(False)
@@ -918,8 +917,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     item = Gtk.MenuItem(label=_('Make Admin'))
     action = 'win.change-affiliation-%s(["%s", "admin"])' % (control_id,
                                                              contact.jid)
-    if (is_affiliation_change_allowed(self_contact, contact) and
-            not contact.affiliation.is_admin):
+    if is_affiliation_change_allowed(self_contact, contact, 'admin'):
         item.set_detailed_action_name(action)
     else:
         item.set_sensitive(False)
@@ -936,8 +934,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     action = 'win.change-affiliation-%s(["%s", "%s"])' % (control_id,
                                                           contact.jid,
                                                           affiliation)
-    if (is_affiliation_change_allowed(self_contact, contact) and
-            contact.affiliation.value != affiliation):
+    if is_affiliation_change_allowed(self_contact, contact, affiliation):
         item.set_detailed_action_name(action)
     else:
         item.set_sensitive(False)
