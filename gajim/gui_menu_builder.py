@@ -923,18 +923,19 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
         item.set_sensitive(False)
     menu.append(item)
 
-    if contact.affiliation.is_none:
-        label = _('Make Member')
-        affiliation = 'member'
+    item = Gtk.MenuItem(label=_('Make Member'))
+    action = 'win.change-affiliation-%s(["%s", "member"])' % (control_id,
+                                                              contact.jid)
+    if is_affiliation_change_allowed(self_contact, contact, 'member'):
+        item.set_detailed_action_name(action)
     else:
-        label = _('Revoke Member')
-        affiliation = 'none'
+        item.set_sensitive(False)
+    menu.append(item)
 
-    item = Gtk.MenuItem(label=label)
-    action = 'win.change-affiliation-%s(["%s", "%s"])' % (control_id,
-                                                          contact.jid,
-                                                          affiliation)
-    if is_affiliation_change_allowed(self_contact, contact, affiliation):
+    item = Gtk.MenuItem(label=_('Revoke Member'))
+    action = 'win.change-affiliation-%s(["%s", "none"])' % (control_id,
+                                                            contact.jid)
+    if is_affiliation_change_allowed(self_contact, contact, 'none'):
         item.set_detailed_action_name(action)
     else:
         item.set_sensitive(False)
