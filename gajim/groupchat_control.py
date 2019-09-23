@@ -1615,7 +1615,7 @@ class GroupchatControl(ChatControlBase):
         return app.config.get_per('rooms', self.contact.jid,
                                   'minimize_on_close', True)
 
-    def minimize(self, status='offline'):
+    def minimize(self):
         # Minimize it
         win = app.interface.msg_win_mgr.get_window(self.contact.jid,
                 self.account)
