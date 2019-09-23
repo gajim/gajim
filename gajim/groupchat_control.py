@@ -87,11 +87,10 @@ class GroupchatControl(ChatControlBase):
     # will be processed with this command host.
     COMMAND_HOST = GroupChatCommands
 
-    def __init__(self, parent_win, contact, muc_data, acct, is_continued=False):
+    def __init__(self, parent_win, contact, muc_data, acct):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-            'groupchat_control', contact, acct)
+                                 'groupchat_control', contact, acct)
         self.force_non_minimizable = False
-        self.is_continued = is_continued
         self.is_anonymous = True
 
         # Keep error dialog instance to be sure to have only once at a time
@@ -760,12 +759,7 @@ class GroupchatControl(ChatControlBase):
         and not self.attention_flag:
             color = 'tab-muc-msg'
 
-        if self.is_continued:
-            # if this is a continued conversation
-            label_str = self.get_continued_conversation_name()
-        else:
-            label_str = self.room_name
-        label_str = GLib.markup_escape_text(label_str)
+        label_str = GLib.markup_escape_text(self.room_name)
 
         # count waiting highlighted messages
         unread = ''
@@ -828,23 +822,6 @@ class GroupchatControl(ChatControlBase):
             self.scale_factor)
 
         self.xml.gc_banner_status_image.set_from_surface(surface)
-
-    def get_continued_conversation_name(self):
-        """
-        Get the name of a continued conversation.  Will return Continued
-        Conversation if there isn't any other contact in the room
-        """
-        nicks = []
-        for nick in app.contacts.get_nick_list(self.account,
-        self.room_jid):
-            if nick != self.nick:
-                nicks.append(nick)
-        if nicks != []:
-            title = ', '
-            title = _('Conversation with ') + title.join(nicks)
-        else:
-            title = _('Continued conversation')
-        return title
 
     def draw_banner_text(self):
         """

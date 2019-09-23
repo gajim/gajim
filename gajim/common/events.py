@@ -44,7 +44,7 @@ class Event:
                 printed_chat: [message, subject, control, msg_log_id]
                 printed_*: None
                         messages that are already printed in chat, but not read
-                gc-invitation: [room_jid, reason, password, is_continued, jid_from]
+                gc-invitation: [room_jid, reason, password, jid_from]
                 subscription_request: [text, nick]
                 unsubscribed: contact
                 jingle-incoming: (fulljid, sessionid, content_types)

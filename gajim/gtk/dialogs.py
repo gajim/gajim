@@ -603,7 +603,6 @@ class InvitationReceivedDialog(Gtk.ApplicationWindow):
         self.room_jid = str(event.muc)
         self.from_ = str(event.from_)
         self.password = event.password
-        self.is_continued = event.continued
 
         if event.from_.bareMatch(event.muc):
             contact_text = event.from_.getResource()
@@ -615,15 +614,10 @@ class InvitationReceivedDialog(Gtk.ApplicationWindow):
             else:
                 contact_text = contact.get_shown_name()
 
-        # is_continued when invited from 1:1 chat
-        if self.is_continued:
-            invitation_label = _('<b>%s</b> has invited you to join '
-                                 'a discussion') % contact_text
-        else:
-            invitation_label = _('<b>%(contact)s</b> has invited you to the '
-                                 'group chat <b>%(room_jid)s</b>') % \
-                                {'contact': contact_text,
-                                 'room_jid': self.room_jid}
+        invitation_label = _('<b>%(contact)s</b> has invited you to the '
+                             'group chat <b>%(room_jid)s</b>') % \
+                            {'contact': contact_text,
+                             'room_jid': self.room_jid}
         self._ui.invitation_label.set_markup(invitation_label)
 
         if event.reason:
