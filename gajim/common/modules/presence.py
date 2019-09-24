@@ -250,6 +250,8 @@ class Presence(BaseModule):
 
         if auto_auth or is_transport or jid in self.jids_for_auto_auth:
             self.send_presence(fjid, 'subscribed')
+            self._log.info('Auto respond with subscribed: %s', jid)
+            return
 
         status = (properties.status or
                   _('I would like to add you to my roster.'))
