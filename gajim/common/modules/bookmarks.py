@@ -43,6 +43,7 @@ class Bookmarks(BaseModule):
     def __init__(self, con):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._bookmark_event_received)
+        self._register_pubsub_handler(self._bookmark_2_event_received)
         self._conversion = False
         self._conversion_2 = False
         self._bookmarks = []
@@ -108,7 +109,7 @@ class Bookmarks(BaseModule):
             NetworkEvent('bookmarks-received', account=self._account))
 
     @event_node(nbxmpp.NS_BOOKMARKS_2)
-    def _bookmark_event_received(self, _con, stanza, properties):
+    def _bookmark_2_event_received(self, _con, stanza, properties):
         if not properties.is_self_message:
             self._log.warning('%s has an open access bookmarks node',
                               properties.jid)
