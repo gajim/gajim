@@ -19,6 +19,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from nbxmpp.structs import BookmarkData
 from nbxmpp.protocol import validate_resourcepart
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common.helpers import validate_jid
@@ -142,7 +143,8 @@ class Bookmarks(Gtk.ApplicationWindow):
         for row in self._ui.bookmarks_store:
             if not row[Column.ADDRESS]:
                 continue
-            bookmark = BookmarkData(jid=row[Column.ADDRESS],
+
+            bookmark = BookmarkData(jid=JID(row[Column.ADDRESS]),
                                     name=row[Column.NAME],
                                     autojoin=row[Column.AUTOJOIN],
                                     password=row[Column.PASSWORD],
@@ -150,8 +152,7 @@ class Bookmarks(Gtk.ApplicationWindow):
             bookmarks.append(bookmark)
 
         con = app.connections[self.account]
-        con.get_module('Bookmarks').bookmarks = bookmarks
-        con.get_module('Bookmarks').store_bookmarks()
+        con.get_module('Bookmarks').store_difference(bookmarks)
         self.destroy()
 
     @staticmethod

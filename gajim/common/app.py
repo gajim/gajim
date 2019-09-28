@@ -181,7 +181,6 @@ gajim_common_features = [
     nbxmpp.NS_JINGLE_BYTESTREAM,
     nbxmpp.NS_JINGLE_IBB,
     nbxmpp.NS_AVATAR_METADATA + '+notify',
-    nbxmpp.NS_BOOKMARKS + '+notify',
 ]
 
 # Optional features gajim supports per account

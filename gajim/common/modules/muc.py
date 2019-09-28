@@ -688,10 +688,11 @@ class MUC(BaseModule):
         self._remove_rejoin_timeout(muc_data.jid)
 
         # We successfully joined a MUC, set add bookmark with autojoin
-        self._con.get_module('Bookmarks').modify(muc_data.jid,
-                                                 autojoin=True,
-                                                 password=muc_data.password,
-                                                 nick=muc_data.nick)
+        self._con.get_module('Bookmarks').add_or_modify(
+            muc_data.jid,
+            autojoin=True,
+            password=muc_data.password,
+            nick=muc_data.nick)
 
     def _on_voice_request(self, _con, _stanza, properties):
         if not properties.is_voice_request:

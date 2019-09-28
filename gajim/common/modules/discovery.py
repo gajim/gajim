@@ -20,8 +20,9 @@ from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
-from gajim.common.modules.base import BaseModule
 from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
+from gajim.common.helpers import update_optional_features
 
 
 class Discovery(BaseModule):
@@ -105,6 +106,8 @@ class Discovery(BaseModule):
 
         if 'urn:xmpp:pep-vcard-conversion:0' in result.features:
             self._con.avatar_conversion = True
+
+        update_optional_features()
 
     def discover_server_info(self):
         # Calling this method starts the connect_maschine()
