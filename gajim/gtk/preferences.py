@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import logging
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -41,13 +42,16 @@ from gajim.gtk.sounds import ManageSounds
 
 try:
     from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
-    from gajim.common.multimedia_helpers import VideoInputManager, VideoOutputManager
+    from gajim.common.multimedia_helpers import VideoInputManager
+    from gi.repository import Gst  # pylint: disable=ungrouped-imports
     HAS_GST = True
 except (ImportError, ValueError):
     HAS_GST = False
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
+
+log = logging.getLogger('gajim.gtk.preferences')
 
 
 class Preferences(Gtk.ApplicationWindow):
@@ -333,7 +337,8 @@ class Preferences(Gtk.ApplicationWindow):
 
         ### Audio/Video tab ###
         def create_av_combobox(opt_name, device_dict, config_name=None,
-        key=None):
+                               # This key is there to give the first index to autovideosrc and co.
+                               key=lambda x: '' if x[1].startswith('auto') else x[0].lower()):
             combobox = self._ui.get_object(opt_name + '_combobox')
             cell = Gtk.CellRendererText()
             cell.set_property('ellipsize', Pango.EllipsizeMode.END)
@@ -348,33 +353,109 @@ class Preferences(Gtk.ApplicationWindow):
                 config = app.config.get(opt_name + '_device')
 
             for index, (name, value) in enumerate(sorted(device_dict.items(),
-            key=key)):
+                                                         key=key)):
                 model.append((name, value))
                 if config == value:
                     combobox.set_active(index)
 
         if HAS_GST and app.is_installed('FARSTREAM'):
             create_av_combobox('audio_input', AudioInputManager().get_devices())
-            create_av_combobox('audio_output', AudioOutputManager().get_devices(
-                ))
+            create_av_combobox('audio_output', AudioOutputManager().get_devices())
             create_av_combobox('video_input', VideoInputManager().get_devices())
-            create_av_combobox('video_output', VideoOutputManager().get_devices(
-                ))
 
-            create_av_combobox('video_framerate', {_('Default'): '',
-                '15fps': '15/1', '10fps': '10/1', '5fps': '5/1',
-                '2.5fps': '5/2'}, 'video_framerate', key=lambda x: -1 if \
-                not x[1] else float(x[0][:-3]))
-            create_av_combobox('video_size', {_('Default'): '',
-                '800x600': '800x600', '640x480': '640x480',
-                '320x240': '320x240'}, 'video_size', key=lambda x: -1 if \
-                not x[1] else int(x[0][:3]))
+            create_av_combobox(
+                'video_framerate',
+                {_('Default'): '',
+                 '15fps': '15/1',
+                 '10fps': '10/1',
+                 '5fps': '5/1',
+                 '2.5fps': '5/2'},
+                'video_framerate',
+                key=lambda x: -1 if not x[1] else float(x[0][:-3]))
+            create_av_combobox(
+                'video_size',
+                {_('Default'): '',
+                 '800x600': '800x600',
+                 '640x480': '640x480',
+                 '320x240': '320x240'},
+                'video_size',
+                key=lambda x: -1 if not x[1] else int(x[0][:3]))
             st = app.config.get('video_see_self')
             self._ui.video_see_self_checkbutton.set_active(st)
 
+            def on_av_map(tab):
+                label = self._ui.selected_video_output
+                sink, widget, name = self.setup_video_output()
+                if sink is None:
+                    log.error('Failed to obtain a working Gstreamer GTK+ sink, '
+                              'video support will be disabled')
+                    self._ui.video_input_combobox.set_sensitive(False)
+                    label.set_markup(
+                        _('<span color="red" font-weight="bold">'
+                          'Unavailable</span>, video support will be disabled'))
+                    return
+
+                text = ''
+                if name == 'gtkglsink':
+                    text = _('<span color="green" font-weight="bold">'
+                             'OpenGL</span> accelerated')
+                elif name == 'gtksink':
+                    text = _('<span color="yellow" font-weight="bold">'
+                             'Unaccelerated</span>')
+                label.set_markup(text)
+                if self.av_pipeline is None:
+                    self.av_pipeline = Gst.Pipeline.new('preferences-pipeline')
+                else:
+                    self.av_pipeline.set_state(Gst.State.NULL)
+                self.av_pipeline.add(sink)
+                self.av_sink = sink
+                if self.av_widget is not None:
+                    tab.remove(self.av_widget)
+                tab.add(widget)
+                self.av_widget = widget
+
+                src_name = app.config.get('video_input_device')
+                self.av_src = Gst.parse_bin_from_description(src_name, True)
+                if self.av_src is not None:
+                    self.av_pipeline.add(self.av_src)
+                    self.av_src.link(self.av_sink)
+                    self.av_pipeline.set_state(Gst.State.PLAYING)
+                else:
+                    # Parsing the pipeline stored in video_input_device failed,
+                    # let’s try the default one.
+                    self.av_src = Gst.ElementFactory.make('autovideosrc', None)
+                    if self.av_src is None:
+                        log.error('Failed to obtain a working Gstreamer source,'
+                                  ' video will be disabled.')
+                        self._ui.video_input_combobox.set_sensitive(False)
+                        return
+                    # Great, this succeeded, let’s store it back into the
+                    # config and use it. We’ve made autovideosrc the first
+                    # element in the combobox so we can pick index 0 without
+                    # worry.
+                    combobox = self._ui.video_input_combobox
+                    combobox.set_active(0)
+
+            def on_av_unmap(tab):
+                self.av_pipeline.set_state(Gst.State.NULL)
+                self.av_pipeline.remove(self.av_src)
+                self.av_src = None
+                self.av_pipeline.remove(self.av_sink)
+                self.av_sink = None
+                tab.remove(self.av_widget)
+                self.av_widget = None
+
+            self.av_pipeline = None
+            self.av_src = None
+            self.av_sink = None
+            self.av_widget = None
+            tab = self._ui.audio_video_tab
+            tab.connect('map', on_av_map)
+            tab.connect('unmap', on_av_unmap)
+
         else:
             for opt_name in ('audio_input', 'audio_output', 'video_input',
-            'video_output', 'video_framerate', 'video_size'):
+                             'video_framerate', 'video_size'):
                 combobox = self._ui.get_object(opt_name + '_combobox')
                 combobox.set_sensitive(False)
 
@@ -437,6 +518,27 @@ class Preferences(Gtk.ApplicationWindow):
     def _on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
+
+    @staticmethod
+    def setup_video_output():
+        gtkglsink = Gst.ElementFactory.make('gtkglsink', None)
+        if gtkglsink is not None:
+            glsinkbin = Gst.ElementFactory.make('glsinkbin', None)
+            if glsinkbin is None:
+                return None, None, None
+            glsinkbin.set_property('sink', gtkglsink)
+            sink = glsinkbin
+            widget = gtkglsink.get_property('widget')
+            name = 'gtkglsink'
+        else:
+            sink = Gst.ElementFactory.make('gtksink', None)
+            if sink is None:
+                return None, None, None
+            widget = sink.get_property('widget')
+            name = 'gtksink'
+        widget.set_visible(True)
+        widget.set_property('expand', True)
+        return sink, widget, name
 
     def get_per_account_option(self, opt):
         """
@@ -919,6 +1021,7 @@ class Preferences(Gtk.ApplicationWindow):
         active = combobox.get_active()
         device = model[active][1]
         app.config.set(config_name, device)
+        return device
 
     def on_audio_input_combobox_changed(self, widget):
         self.on_av_combobox_changed(widget, 'audio_input_device')
@@ -927,10 +1030,19 @@ class Preferences(Gtk.ApplicationWindow):
         self.on_av_combobox_changed(widget, 'audio_output_device')
 
     def on_video_input_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'video_input_device')
+        device = self.on_av_combobox_changed(widget, 'video_input_device')
 
-    def on_video_output_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'video_output_device')
+        src = Gst.parse_bin_from_description(device, True)
+        if src is None:
+            return
+
+        self.av_pipeline.set_state(Gst.State.NULL)
+        if self.av_src is not None:
+            self.av_pipeline.remove(self.av_src)
+        self.av_pipeline.add(src)
+        src.link(self.av_sink)
+        self.av_src = src
+        self.av_pipeline.set_state(Gst.State.PLAYING)
 
     def on_video_framerate_combobox_changed(self, widget):
         self.on_av_combobox_changed(widget, 'video_framerate')

@@ -2232,9 +2232,8 @@ $T will be replaced by auto-not-available timeout.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">V_ideo output device</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">video_output_combobox</property>
+                    <property name="label" translatable="yes">Video output</property>
+                    <property name="mnemonic_widget">selected_video_output</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -2245,10 +2244,10 @@ $T will be replaced by auto-not-available timeout.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="video_output_combobox">
+                  <object class="GtkLabel" id="selected_video_output">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <signal name="changed" handler="on_video_output_combobox_changed" swapped="no"/>
+                    <property name="halign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

@@ -97,24 +97,16 @@ class VideoInputManager(DeviceManager):
         self.devices = {}
         # Test src
         self.detect_element('videotestsrc', _('Video test'),
-            '%s is-live=true ! video/x-raw,framerate=10/1')
+            '%s is-live=true ! video/x-raw,framerate=10/1 ! videoconvert')
         # Auto src
         self.detect_element('autovideosrc', _('Autodetect'))
-        # V4L2 src
+        # Best source on Linux, for both camera and screen sharing
+        self.detect_element('pipewiresrc', _('Pipewire'))
+        # Camera source on Linux
         self.detect_element('v4l2src', _('V4L2: %s'))
-        # Funny things, just to test...
-        # self.devices['GOOM'] = 'audiotestsrc ! goom'
-        self.detect_element('ximagesrc', _('Screen'), '%s ! ffmpegcolorspace')
-
-
-class VideoOutputManager(DeviceManager):
-    def detect(self):
-        self.devices = {}
-        # Fake video output
-        self.detect_element('fakesink', _('Fake video output'))
-        # Auto sink
-        self.detect_element('xvimagesink',
-            _('X Window System (X11/XShm/Xv): %s'))
-        # ximagesink
-        self.detect_element('ximagesink', _('X Window System (without Xv)'))
-        self.detect_element('autovideosink', _('Autodetect'))
+        # X11 screen sharing on Linux
+        self.detect_element('ximagesrc', _('X11'), '%s ! ffmpegcolorspace')
+        # Recommended source on Windows
+        self.detect_element('ksvideosrc', _('Windows'))
+        # Recommended source on OS X
+        self.detect_element('avfvideosrc', _('macOS'))
