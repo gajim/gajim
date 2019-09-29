@@ -678,8 +678,6 @@ def get_account_menu(account):
             ('-pep-config', _('PEP Configuration')),
             ('-sync-history', _('Synchronise History')),
             ('-privacylists', _('Privacy Lists')),
-
-            ('-xml-console', _('XML Console'))
         ]),
         (_('Admin'), [
             ('-send-server-message', _('Send Server Message…')),
@@ -687,10 +685,6 @@ def get_account_menu(account):
             ('-update-motd', _('Update MOTD…')),
             ('-delete-motd', _('Delete MOTD…'))
         ]),
-    ]
-
-    zeroconf_menu = [
-        ('-xml-console', _('XML Console')),
     ]
 
     def build_menu(preset):
@@ -713,8 +707,6 @@ def get_account_menu(account):
                 menu.append_submenu(label, submenu)
         return menu
 
-    if account == 'Local':
-        return build_menu(zeroconf_menu)
     return build_menu(account_menu)
 
 
@@ -741,8 +733,9 @@ def build_accounts_menu():
         acc_menu.append_item(modify_account_item)
         for acc in accounts_list:
             label = escape_mnemonic(app.get_account_label(acc))
-            acc_menu.append_submenu(
-                label, get_account_menu(acc))
+            if acc != 'Local':
+                acc_menu.append_submenu(
+                    label, get_account_menu(acc))
     else:
         acc_menu = get_account_menu(accounts_list[0])
         modify_account_item = Gio.MenuItem.new(_('_Modify Account…'),

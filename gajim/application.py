@@ -431,6 +431,7 @@ class GajimApplication(Gtk.Application):
             ('history-manager', app_actions.on_history_manager),
             ('preferences', app_actions.on_preferences),
             ('plugins', app_actions.on_plugins),
+            ('xml-console', app_actions.on_xml_console),
             ('file-transfer', app_actions.on_file_transfers),
             ('history', app_actions.on_history),
             ('shortcuts', app_actions.on_keyboard_shortcuts),
@@ -496,9 +497,7 @@ class GajimApplication(Gtk.Application):
         from gajim import app_actions as a
 
         if account == 'Local':
-            return [
-                ('-xml-console', a.on_xml_console, 'always', 's')
-            ]
+            return []
 
         return [
             ('-bookmarks', a.on_bookmarks, 'online', 's'),
@@ -507,7 +506,6 @@ class GajimApplication(Gtk.Application):
             ('-add-contact', a.on_add_contact, 'online', 'as'),
             ('-services', a.on_service_disco, 'online', 's'),
             ('-profile', a.on_profile, 'feature', 's'),
-            ('-xml-console', a.on_xml_console, 'always', 's'),
             ('-server-info', a.on_server_info, 'online', 's'),
             ('-archive', a.on_mam_preferences, 'feature', 's'),
             ('-pep-config', a.on_pep_config, 'online', 's'),

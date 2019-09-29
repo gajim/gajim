@@ -249,12 +249,8 @@ def on_server_info(action, param):
 
 
 def on_xml_console(action, param):
-    account = param.get_string()
-    window = app.get_app_window(XMLConsoleWindow, account)
-    if window is None:
-        XMLConsoleWindow(account)
-    else:
-        window.present()
+    XMLConsoleWindow()
+
 
 
 def on_manage_proxies(action, param):

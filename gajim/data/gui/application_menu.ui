@@ -29,6 +29,11 @@
       </section>
       <section>
         <item>
+          <attribute name="label" translatable="yes">XML Console</attribute>
+          <attribute name="action">app.xml-console</attribute>
+          <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;X</attribute>
+        </item>
+        <item>
           <attribute name="label" translatable="yes">File Transfer</attribute>
           <attribute name="action">app.file-transfer</attribute>
           <attribute name="accel">&lt;Primary&gt;T</attribute>

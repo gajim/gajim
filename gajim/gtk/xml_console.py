@@ -35,7 +35,7 @@ from gajim.gtk.const import SettingType
 
 
 class XMLConsoleWindow(Gtk.ApplicationWindow):
-    def __init__(self, account):
+    def __init__(self):
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -44,8 +44,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         self.set_show_menubar(False)
         self.set_name('XMLConsoleWindow')
 
-        self.account = account
-        self.enabled = True
+        self.selected_account = None
         self.presence = True
         self.message = True
         self.iq = True
@@ -55,24 +54,21 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         self.filter_dialog = None
         self.last_stanza = None
 
-        self._ui = get_builder('xml_console_window.ui')
-
-        jid = app.get_jid_from_account(account)
+        self._ui = get_builder('xml_console.ui')
         self.set_titlebar(self._ui.headerbar)
-        self._ui.headerbar.set_subtitle(jid)
-
+        self._set_titlebar()
         self.add(self._ui.box)
 
         self._ui.paned.set_position(self._ui.paned.get_property('max-position'))
 
         button = get_image_button(
-            'edit-clear-all-symbolic', _('Clear'))
-        button.connect('clicked', self._on_clear)
+            'applications-system-symbolic', _('Filter'))
+        button.connect('clicked', self._on_filter_options)
         self._ui.actionbar.pack_start(button)
 
         button = get_image_button(
-            'applications-system-symbolic', _('Filter'))
-        button.connect('clicked', self._on_filter_options)
+            'edit-clear-symbolic', _('Clear'))
+        button.connect('clicked', self._on_clear)
         self._ui.actionbar.pack_start(button)
 
         button = get_image_button(
@@ -84,7 +80,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         button.connect('clicked', self._on_paste_last)
         self._ui.actionbar.pack_start(button)
 
-        button = get_image_button('mail-send-symbolic', _('Send'))
+        button = Gtk.Button.new_with_mnemonic(_('_Send'))
         button.connect('clicked', self._on_send)
         self._ui.actionbar.pack_end(button)
 
@@ -104,6 +100,13 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
             'stanza-received', ged.GUI1, self._nec_stanza_received)
         app.ged.register_event_handler(
             'stanza-sent', ged.GUI1, self._nec_stanza_sent)
+
+    def _set_titlebar(self):
+        if self.selected_account is None:
+            title = _('All Accounts')
+        else:
+            title = app.get_jid_from_account(self.selected_account)
+        self._ui.headerbar.set_subtitle(title)
 
     def _create_tags(self):
         buffer_ = self._ui.textview.get_buffer()
@@ -160,12 +163,12 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
             self._ui.input_entry.grab_focus()
 
     def _on_send(self, *args):
-        if not app.account_is_connected(self.account):
+        if not app.account_is_connected(self.selected_account):
             # If offline or connecting
             ErrorDialog(
                 _('Connection not available'),
                 _('Please make sure you are connected with \'%s\'.') %
-                self.account)
+                self.selected_account)
             return
         buffer_ = self._ui.input_entry.get_buffer()
         begin_iter, end_iter = buffer_.get_bounds()
@@ -184,7 +187,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
                 # stream management
                 node = nbxmpp.Protocol(node=stanza,
                                        attrs={'xmlns': 'jabber:client'})
-            app.connections[self.account].connection.send(node)
+            app.connections[self.selected_account].connection.send(node)
             self.last_stanza = stanza
             buffer_.set_text('')
 
@@ -207,32 +210,46 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         if self.filter_dialog:
             self.filter_dialog.present()
             return
-        options = [
+
+        # Get all accounts for settings combobox
+        accounts = app.get_accounts_sorted()
+        combo_accounts = []
+        for account in accounts:
+            label = app.get_account_label(account)
+            combo_accounts.append((account, label))
+        combo_accounts.insert(0, (None, _('All Accounts')))
+
+        settings = [
+            Setting(SettingKind.COMBO, _('Account'),
+                    SettingType.VALUE, self.selected_account,
+                    callback=self._set_account,
+                    props={'combo_items': combo_accounts}),
+
             Setting(SettingKind.SWITCH, 'Presence',
                     SettingType.VALUE, self.presence,
-                    callback=self._on_option, data='presence'),
+                    callback=self._on_setting, data='presence'),
 
             Setting(SettingKind.SWITCH, 'Message',
                     SettingType.VALUE, self.message,
-                    callback=self._on_option, data='message'),
+                    callback=self._on_setting, data='message'),
 
             Setting(SettingKind.SWITCH, 'IQ', SettingType.VALUE, self.iq,
-                    callback=self._on_option, data='iq'),
+                    callback=self._on_setting, data='iq'),
 
             Setting(SettingKind.SWITCH, 'Stream Management',
                     SettingType.VALUE, self.stream,
-                    callback=self._on_option, data='stream'),
+                    callback=self._on_setting, data='stream'),
 
             Setting(SettingKind.SWITCH, 'In', SettingType.VALUE, self.incoming,
-                    callback=self._on_option, data='incoming'),
+                    callback=self._on_setting, data='incoming'),
 
             Setting(SettingKind.SWITCH, 'Out', SettingType.VALUE, self.outgoing,
-                    callback=self._on_option, data='outgoing'),
+                    callback=self._on_setting, data='outgoing'),
         ]
 
-        self.filter_dialog = SettingsDialog(self, 'Filter',
+        self.filter_dialog = SettingsDialog(self, _('Filter'),
                                             Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                                            options, self.account)
+                                            settings, self.selected_account)
         self.filter_dialog.connect('destroy', self._on_filter_destroyed)
 
     def _on_filter_destroyed(self, win):
@@ -247,10 +264,11 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         app.ged.remove_event_handler(
             'stanza-sent', ged.GUI1, self._nec_stanza_sent)
 
-    def _on_enable(self, switch, param):
-        self.enabled = switch.get_active()
+    def _set_account(self, value, data):
+        self.selected_account = value
+        self._set_titlebar()
 
-    def _on_option(self, value, data):
+    def _on_setting(self, value, data):
         setattr(self, data, value)
         value = not value
         table = self._ui.textview.get_buffer().get_tag_table()
@@ -263,19 +281,21 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         tag.set_property('invisible', value)
 
     def _nec_stanza_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-        self._print_stanza(obj.stanza_str, 'incoming')
+        if self.selected_account is not None:
+            if obj.conn.name != self.selected_account:
+                return
+        self._print_stanza(obj, 'incoming')
 
     def _nec_stanza_sent(self, obj):
-        if obj.conn.name != self.account:
-            return
-        self._print_stanza(obj.stanza_str, 'outgoing')
+        if self.selected_account is not None:
+            if obj.conn.name != self.selected_account:
+                return
+        self._print_stanza(obj, 'outgoing')
 
-    def _print_stanza(self, stanza, kind):
+    def _print_stanza(self, obj, kind):
+        account = app.get_jid_from_account(obj.conn.name)
+        stanza = obj.stanza_str
         # Kind must be 'incoming' or 'outgoing'
-        if not self.enabled:
-            return
         if not stanza:
             return
 
@@ -294,9 +314,10 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         elif stanza.startswith('<r') or stanza.startswith('<a'):
             type_ = 'stream'
 
-        stanza = '<!-- {kind} {time} -->\n{stanza}\n\n'.format(
+        stanza = '<!-- {kind} {time} ({account}) -->\n{stanza}\n\n'.format(
             kind=kind.capitalize(),
             time=time.strftime('%c'),
+            account=account,
             stanza=stanza.replace('><', '>\n<'))
         buffer_.insert_with_tags_by_name(end_iter, stanza, type_, kind)
 
