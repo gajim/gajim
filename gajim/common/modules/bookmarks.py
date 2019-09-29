@@ -48,7 +48,7 @@ class Bookmarks(BaseModule):
         self._conversion_2 = False
         self._bookmarks = []
         self._join_timeouts = []
-        self._request_in_progress = False
+        self._request_in_progress = True
 
     @property
     def conversion(self):
