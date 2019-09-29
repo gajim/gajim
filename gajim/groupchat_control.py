@@ -149,12 +149,6 @@ class GroupchatControl(ChatControlBase):
                                              self.control_id)
 
         # Encryption
-        self.lock_image = self.xml.get_object('lock_image')
-        self.authentication_button = self.xml.get_object(
-            'authentication_button')
-        id_ = self.authentication_button.connect('clicked',
-            self._on_authentication_button_clicked)
-        self.handlers[id_] = self.authentication_button
         self.set_lock_image()
 
         self.encryption_menu = self.xml.get_object('encryption_menu')
@@ -772,41 +766,6 @@ class GroupchatControl(ChatControlBase):
         else:
             tab_image = get_icon_name('muc-inactive')
         return tab_image
-
-    def set_lock_image(self):
-        encryption_state = {'visible': self.encryption is not None,
-                            'enc_type': self.encryption,
-                            'authenticated': False}
-
-        if self.encryption:
-            app.plugin_manager.extension_point(
-                'encryption_state' + self.encryption, self, encryption_state)
-
-        self._show_lock_image(**encryption_state)
-
-    def _show_lock_image(self, visible, enc_type='', authenticated=False):
-        """
-        Set lock icon visibility and create tooltip
-        """
-        if authenticated:
-            authenticated_string = _('and authenticated')
-            self.lock_image.set_from_icon_name(
-                'security-high-symbolic', Gtk.IconSize.MENU)
-        else:
-            authenticated_string = _('and NOT authenticated')
-            self.lock_image.set_from_icon_name(
-                'security-low-symbolic', Gtk.IconSize.MENU)
-
-        tooltip = _('%(type)s encryption is active %(authenticated)s.') % {
-            'type': enc_type, 'authenticated': authenticated_string}
-
-        self.authentication_button.set_tooltip_text(tooltip)
-        self.widget_set_visible(self.authentication_button, not visible)
-        self.lock_image.set_sensitive(visible)
-
-    def _on_authentication_button_clicked(self, widget):
-        app.plugin_manager.extension_point(
-            'encryption_dialog' + self.encryption, self)
 
     def _update_banner_state_image(self):
         surface = app.interface.avatar_storage.get_muc_surface(

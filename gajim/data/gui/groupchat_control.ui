@@ -263,6 +263,7 @@
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="no_show_all">True</property>
                         <property name="relief">none</property>
+                        <signal name="clicked" handler="_on_authentication_button_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="lock_image">
                             <property name="visible">True</property>

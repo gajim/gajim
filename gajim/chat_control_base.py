@@ -448,6 +448,37 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.set_encryption_menu_icon()
         self.set_lock_image()
 
+    def set_lock_image(self):
+        encryption_state = {'visible': self.encryption is not None,
+                            'enc_type': self.encryption,
+                            'authenticated': False}
+
+        if self.encryption:
+            app.plugin_manager.extension_point(
+                'encryption_state' + self.encryption, self, encryption_state)
+
+        visible, enc_type, authenticated = encryption_state.values()
+
+        if authenticated:
+            authenticated_string = _('and authenticated')
+            self.xml.lock_image.set_from_icon_name(
+                'security-high-symbolic', Gtk.IconSize.MENU)
+        else:
+            authenticated_string = _('and NOT authenticated')
+            self.xml.lock_image.set_from_icon_name(
+                'security-low-symbolic', Gtk.IconSize.MENU)
+
+        tooltip = _('%(type)s encryption is active %(authenticated)s.') % {
+            'type': enc_type, 'authenticated': authenticated_string}
+
+        self.xml.authentication_button.set_tooltip_text(tooltip)
+        self.xml.authentication_button.set_visible(visible)
+        self.xml.lock_image.set_sensitive(visible)
+
+    def _on_authentication_button_clicked(self, _button):
+        app.plugin_manager.extension_point(
+            'encryption_dialog' + self.encryption, self)
+
     def set_encryption_state(self, encryption):
         config_key = '%s-%s' % (self.account, self.contact.jid)
         self.encryption = encryption

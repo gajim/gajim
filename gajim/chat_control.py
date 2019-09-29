@@ -109,18 +109,9 @@ class ChatControl(ChatControlBase):
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
             app.config.get('hide_chat_banner'))
 
-        self.authentication_button = self.xml.get_object(
-            'authentication_button')
-        id_ = self.authentication_button.connect('clicked',
-            self._on_authentication_button_clicked)
-        self.handlers[id_] = self.authentication_button
-
         self.sendfile_button = self.xml.get_object('sendfile_button')
         self.sendfile_button.set_action_name('win.send-file-' + \
                                              self.control_id)
-
-        # Add lock image to show chat encryption
-        self.lock_image = self.xml.get_object('lock_image')
 
         # Menu for the HeaderBar
         self.control_menu = gui_menu_builder.get_singlechat_menu(
@@ -791,42 +782,6 @@ class ChatControl(ChatControlBase):
             fixed = self.xml.get_object('outgoing_fixed')
             fixed.set_no_show_all(True)
             self.close_jingle_content(jingle_type)
-
-    def set_lock_image(self):
-        encryption_state = {'visible': self.encryption is not None,
-                            'enc_type': self.encryption,
-                            'authenticated': False}
-
-        if self.encryption:
-            app.plugin_manager.extension_point(
-                'encryption_state' + self.encryption, self, encryption_state)
-
-        self._show_lock_image(**encryption_state)
-
-    def _show_lock_image(self, visible, enc_type='', authenticated=False):
-        """
-        Set lock icon visibility and create tooltip
-        """
-        if authenticated:
-            authenticated_string = _('and authenticated')
-            self.lock_image.set_from_icon_name(
-                'security-high-symbolic', Gtk.IconSize.MENU)
-        else:
-            authenticated_string = _('and NOT authenticated')
-            self.lock_image.set_from_icon_name(
-                'security-low-symbolic', Gtk.IconSize.MENU)
-
-        tooltip = _('%(type)s encryption is active %(authenticated)s') % \
-            {'type': enc_type, 'authenticated': authenticated_string}
-
-        self.authentication_button.set_tooltip_text(tooltip)
-        self.widget_set_visible(self.authentication_button, not visible)
-        self.lock_image.set_sensitive(visible)
-
-    def _on_authentication_button_clicked(self, widget):
-        if self.encryption:
-            app.plugin_manager.extension_point(
-                'encryption_dialog' + self.encryption, self)
 
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
