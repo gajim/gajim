@@ -245,7 +245,7 @@ class Jingle(BaseModule):
         if media:
             if media not in ('audio', 'video', 'file'):
                 return []
-            return [se for se in sessions if session.get_content(media)]
+            return [se for se in sessions if se.get_content(media)]
         return sessions
 
     def set_file_info(self, file_):
