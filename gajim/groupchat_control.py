@@ -1769,7 +1769,7 @@ class GroupchatControl(ChatControlBase):
         if res:
             return True
 
-        if event.keyval != Gdk.KEY_Tab: # TAB
+        if event.keyval == Gdk.KEY_Tab: # TAB
             message_buffer = widget.get_buffer()
             start_iter, end_iter = message_buffer.get_bounds()
             cursor_position = message_buffer.get_insert()
