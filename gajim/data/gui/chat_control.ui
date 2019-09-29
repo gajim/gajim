@@ -361,8 +361,8 @@
             <child>
               <object class="GtkEventBox" id="banner_eventbox">
                 <property name="name">ChatControl-BannerEventBox</property>
-                <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>

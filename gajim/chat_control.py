@@ -104,8 +104,8 @@ class ChatControl(ChatControlBase):
 
         self.toggle_emoticons()
 
-        self.widget_set_visible(self.xml.banner_eventbox,
-                                app.config.get('hide_chat_banner'))
+        if not app.config.get('hide_chat_banner'):
+            self.xml.banner_eventbox.set_no_show_all(False)
 
         self.xml.sendfile_button.set_action_name(
             'win.send-file-%s' % self.control_id)
