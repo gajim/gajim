@@ -102,25 +102,21 @@ class ChatControl(ChatControlBase):
         self.last_recv_message_marks = None
         self.last_message_timestamp = None
 
-        self._formattings_button = self.xml.get_object('formattings_button')
-        self.emoticons_button = self.xml.get_object('emoticons_button')
         self.toggle_emoticons()
 
-        self.widget_set_visible(self.xml.get_object('banner_eventbox'),
-            app.config.get('hide_chat_banner'))
+        self.widget_set_visible(self.xml.banner_eventbox,
+                                app.config.get('hide_chat_banner'))
 
-        self.sendfile_button = self.xml.get_object('sendfile_button')
-        self.sendfile_button.set_action_name('win.send-file-' + \
-                                             self.control_id)
+        self.xml.sendfile_button.set_action_name(
+            'win.send-file-%s' % self.control_id)
 
         # Menu for the HeaderBar
         self.control_menu = gui_menu_builder.get_singlechat_menu(
             self.control_id, self.account, self.contact.jid)
-        settings_menu = self.xml.get_object('settings_menu')
-        settings_menu.set_menu_model(self.control_menu)
 
-        self._audio_banner_image = self.xml.get_object('audio_banner_image')
-        self._video_banner_image = self.xml.get_object('video_banner_image')
+        # Settings menu
+        self.xml.settings_menu.set_menu_model(self.control_menu)
+
         self.audio_sid = None
         self.audio_state = self.JINGLE_STATE_NULL
         self.audio_available = False
@@ -133,7 +129,7 @@ class ChatControl(ChatControlBase):
         self.show_avatar()
 
         # Hook up signals
-        widget = self.xml.get_object('location_eventbox')
+        widget = self.xml.location_eventbox
         id_ = widget.connect('button-release-event',
             self.on_location_eventbox_button_release_event)
         self.handlers[id_] = widget
@@ -151,11 +147,11 @@ class ChatControl(ChatControlBase):
             id_ = widget.connect('released', self.on_num_button_released)
             self.handlers[id_] = widget
 
-        widget = self.xml.get_object('mic_hscale')
+        widget = self.xml.mic_hscale
         id_ = widget.connect('value_changed', self.on_mic_hscale_value_changed)
         self.handlers[id_] = widget
 
-        widget = self.xml.get_object('sound_hscale')
+        widget = self.xml.sound_hscale
         id_ = widget.connect('value_changed', self.on_sound_hscale_value_changed)
         self.handlers[id_] = widget
 
@@ -168,9 +164,9 @@ class ChatControl(ChatControlBase):
         self.info_bar_label.set_ellipsize(Pango.EllipsizeMode.END)
         content_area.add(self.info_bar_label)
         self.info_bar.set_no_show_all(True)
-        widget = self.xml.get_object('vbox2')
-        widget.pack_start(self.info_bar, False, True, 5)
-        widget.reorder_child(self.info_bar, 1)
+
+        self.xml.vbox2.pack_start(self.info_bar, False, True, 5)
+        self.xml.vbox2.reorder_child(self.info_bar, 1)
 
         # List of waiting infobar messages
         self.info_bar_queue = []
@@ -196,8 +192,7 @@ class ChatControl(ChatControlBase):
         self.update_ui()
         self.set_lock_image()
 
-        self.encryption_menu = self.xml.get_object('encryption_menu')
-        self.encryption_menu.set_menu_model(
+        self.xml.encryption_menu.set_menu_model(
             gui_menu_builder.get_encryption_menu(
                 self.control_id, self.type_id, self.account == 'Local'))
         self.set_encryption_menu_icon()
@@ -326,7 +321,7 @@ class ChatControl(ChatControlBase):
             tooltip_text = _('Send File…')
         else:
             tooltip_text = _('No File Transfer available')
-        self.sendfile_button.set_tooltip_text(tooltip_text)
+        self.xml.sendfile_button.set_tooltip_text(tooltip_text)
 
         # Convert to GC
         if app.config.get_per('accounts', self.account, 'is_zeroconf'):
@@ -411,12 +406,12 @@ class ChatControl(ChatControlBase):
         # Formatting
         # TODO: find out what encryption allows for xhtml and which not
         if self.contact.supports(NS_XHTML_IM):
-            self._formattings_button.set_sensitive(True)
-            self._formattings_button.set_tooltip_text(_(
+            self.xml.formattings_button.set_sensitive(True)
+            self.xml.formattings_button.set_tooltip_text(_(
                 'Show a list of formattings'))
         else:
-            self._formattings_button.set_sensitive(False)
-            self._formattings_button.set_tooltip_text(
+            self.xml.formattings_button.set_sensitive(False)
+            self.xml.formattings_button.set_tooltip_text(
                 _('This contact does not support HTML'))
 
         # Jingle detection
@@ -462,13 +457,13 @@ class ChatControl(ChatControlBase):
 
     def _get_pep_widget(self, type_):
         if type_ == PEPEventType.MOOD:
-            return self.xml.get_object('mood_image')
+            return self.xml.mood_image
         if type_ == PEPEventType.ACTIVITY:
-            return self.xml.get_object('activity_image')
+            return self.xml.activity_image
         if type_ == PEPEventType.TUNE:
-            return self.xml.get_object('tune_image')
+            return self.xml.tune_image
         if type_ == PEPEventType.LOCATION:
-            return self.xml.get_object('location_image')
+            return self.xml.location_image
 
     @ensure_proper_control
     def _on_mood_received(self, _event):
@@ -498,7 +493,7 @@ class ChatControl(ChatControlBase):
             self.account, event.jid, event.resource)
         if contact is None:
             return
-        self.xml.get_object('phone_image').set_visible(contact.uses_phone)
+        self.xml.phone_image.set_visible(contact.uses_phone)
 
     def _update_jingle(self, jingle_type):
         if jingle_type not in ('audio', 'video'):
@@ -525,15 +520,15 @@ class ChatControl(ChatControlBase):
 
     def update_audio(self):
         self._update_jingle('audio')
-        hbox = self.xml.get_object('audio_buttons_hbox')
+        hbox = self.xml.audio_buttons_hbox
         if self.audio_state == self.JINGLE_STATE_CONNECTED:
             # Set volume from config
             input_vol = app.config.get('audio_input_volume')
             output_vol = app.config.get('audio_output_volume')
             input_vol = max(min(input_vol, 100), 0)
             output_vol = max(min(output_vol, 100), 0)
-            self.xml.get_object('mic_hscale').set_value(input_vol)
-            self.xml.get_object('sound_hscale').set_value(output_vol)
+            self.xml.mic_hscale.set_value(input_vol)
+            self.xml.sound_hscale.set_value(output_vol)
             # Show vbox
             hbox.set_no_show_all(False)
             hbox.show_all()
@@ -656,8 +651,6 @@ class ChatControl(ChatControlBase):
         contact = self.contact
         jid = contact.jid
 
-        banner_name_label = self.xml.get_object('banner_name_label')
-
         name = contact.get_shown_name()
         if self.resource:
             name += '/' + self.resource
@@ -717,18 +710,18 @@ class ChatControl(ChatControlBase):
         if status_escaped:
             status_text = make_href_markup(status_escaped)
             status_text = '<span size="x-small" weight="light">%s</span>' % status_text
-            self.banner_status_label.set_tooltip_text(status)
-            self.banner_status_label.set_no_show_all(False)
-            self.banner_status_label.show()
+            self.xml.banner_label.set_tooltip_text(status)
+            self.xml.banner_label.set_no_show_all(False)
+            self.xml.banner_label.show()
         else:
             status_text = ''
-            self.banner_status_label.hide()
-            self.banner_status_label.set_no_show_all(True)
+            self.xml.banner_label.hide()
+            self.xml.banner_label.set_no_show_all(True)
 
-        self.banner_status_label.set_markup(status_text)
+        self.xml.banner_label.set_markup(status_text)
         # setup the label that holds name and jid
-        banner_name_label.set_markup(label_text)
-        banner_name_label.set_tooltip_text(label_tooltip)
+        self.xml.banner_name_label.set_markup(label_text)
+        self.xml.banner_name_label.set_tooltip_text(label_tooltip)
 
     def close_jingle_content(self, jingle_type):
         sid = getattr(self, jingle_type + '_sid')
@@ -751,13 +744,13 @@ class ChatControl(ChatControlBase):
             if getattr(self, jingle_type + '_state') == \
             self.JINGLE_STATE_NULL:
                 if jingle_type == 'video':
-                    video_hbox = self.xml.get_object('video_hbox')
+                    video_hbox = self.xml.video_hbox
                     video_hbox.set_no_show_all(False)
                     if app.config.get('video_see_self'):
-                        fixed = self.xml.get_object('outgoing_fixed')
+                        fixed = self.xml.outgoing_fixed
                         fixed.set_no_show_all(False)
                         video_hbox.show_all()
-                        out_da = self.xml.get_object('outgoing_drawingarea')
+                        out_da = self.xml.outgoing_drawingarea
                         out_da.realize()
                         if os.name == 'nt':
                             out_xid = out_da.get_window().handle
@@ -766,7 +759,7 @@ class ChatControl(ChatControlBase):
                     else:
                         out_xid = None
                     video_hbox.show_all()
-                    in_da = self.xml.get_object('incoming_drawingarea')
+                    in_da = self.xml.incoming_drawingarea
                     in_da.realize()
                     in_xid = in_da.get_window().get_xid()
                     sid = app.connections[self.account].get_module('Jingle').start_video(
@@ -776,10 +769,10 @@ class ChatControl(ChatControlBase):
                         'start_' + jingle_type)(self.contact.get_full_jid())
                 getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)
         else:
-            video_hbox = self.xml.get_object('video_hbox')
+            video_hbox = self.xml.video_hbox
             video_hbox.set_no_show_all(True)
             video_hbox.hide()
-            fixed = self.xml.get_object('outgoing_fixed')
+            fixed = self.xml.outgoing_fixed
             fixed.set_no_show_all(True)
             self.close_jingle_content(jingle_type)
 

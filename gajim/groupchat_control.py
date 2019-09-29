@@ -93,11 +93,7 @@ class GroupchatControl(ChatControlBase):
         self.force_non_minimizable = False
         self.is_anonymous = True
 
-        self.emoticons_button = self.xml.get_object('emoticons_button')
         self.toggle_emoticons()
-
-        formattings_button = self.xml.get_object('formattings_button')
-        formattings_button.set_sensitive(False)
 
         self.room_jid = self.contact.jid
         self._muc_data = muc_data
@@ -138,32 +134,26 @@ class GroupchatControl(ChatControlBase):
         self._nick_completion = NickCompletionGenerator(muc_data.nick)
         self.last_key_tabs = False
 
-        self.name_label = self.xml.get_object('banner_name_label')
-        self.event_box = self.xml.get_object('banner_eventbox')
-
         self.setup_seclabel()
 
         # Send file
-        self.sendfile_button = self.xml.get_object('sendfile_button')
-        self.sendfile_button.set_action_name('win.send-file-' + \
-                                             self.control_id)
+        self.xml.sendfile_button.set_action_name(
+            'win.send-file-%s' % self.control_id)
 
         # Encryption
         self.set_lock_image()
 
-        self.encryption_menu = self.xml.get_object('encryption_menu')
-        self.encryption_menu.set_menu_model(
+        self.xml.encryption_menu.set_menu_model(
             gui_menu_builder.get_encryption_menu(self.control_id, self.type_id))
         self.set_encryption_menu_icon()
 
         # Banner
-        self.banner_actionbar = self.xml.get_object('banner_actionbar')
         self.hide_roster_button = Gtk.Button.new_from_icon_name(
             'go-next-symbolic', Gtk.IconSize.MENU)
         self.hide_roster_button.set_valign(Gtk.Align.CENTER)
         self.hide_roster_button.connect('clicked',
                                         lambda *args: self.show_roster())
-        self.banner_actionbar.pack_end(self.hide_roster_button)
+        self.xml.banner_actionbar.pack_end(self.hide_roster_button)
 
         # Holds CaptchaRequest widget
         self._captcha_request = None
@@ -176,8 +166,8 @@ class GroupchatControl(ChatControlBase):
         self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id,
                                                                 self.account,
                                                                 self.room_jid)
-        settings_menu = self.xml.get_object('settings_menu')
-        settings_menu.set_menu_model(self.control_menu)
+
+        self.xml.settings_menu.set_menu_model(self.control_menu)
 
         self._event_handlers = [
             ('muc-creation-failed', ged.GUI1, self._on_muc_creation_failed),
@@ -401,7 +391,7 @@ class GroupchatControl(ChatControlBase):
                 tooltip_text = _('Send File (max. %s MiB)…') % max_file_size
         else:
             tooltip_text = _('No File Transfer available')
-        self.sendfile_button.set_tooltip_text(tooltip_text)
+        self.xml.sendfile_button.set_tooltip_text(tooltip_text)
 
         # Upload Avatar
         vcard_support = False
@@ -781,7 +771,7 @@ class GroupchatControl(ChatControlBase):
         Draw the text in the fat line at the top of the window that houses the
         room jid
         """
-        self.name_label.set_text(self.room_name)
+        self.xml.banner_name_label.set_text(self.room_name)
 
     def _nec_update_room_avatar(self, obj):
         if obj.jid != self.room_jid:
@@ -1134,14 +1124,12 @@ class GroupchatControl(ChatControlBase):
         # Update Roster
         app.interface.roster.draw_contact(self.room_jid, self.account)
 
-        formattings_button = self.xml.get_object('formattings_button')
-        formattings_button.set_sensitive(True)
+        self.xml.formattings_button.set_sensitive(True)
 
         self.update_actions()
 
     def got_disconnected(self):
-        formattings_button = self.xml.get_object('formattings_button')
-        formattings_button.set_sensitive(False)
+        self.xml.formattings_button.set_sensitive(False)
 
         self.roster.enable_sort(False)
         self.roster.clear()

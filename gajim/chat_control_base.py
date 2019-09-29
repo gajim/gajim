@@ -158,15 +158,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.parent_win.redraw_tab(self)
 
     def setup_seclabel(self):
-        self.seclabel_combo.hide()
-        self.seclabel_combo.set_no_show_all(True)
+        self.xml.label_selector.hide()
+        self.xml.label_selector.set_no_show_all(True)
         lb = Gtk.ListStore(str)
-        self.seclabel_combo.set_model(lb)
+        self.xml.label_selector.set_model(lb)
         cell = Gtk.CellRendererText()
         cell.set_property('xpad', 5)  # padding for status text
-        self.seclabel_combo.pack_start(cell, True)
+        self.xml.label_selector.pack_start(cell, True)
         # text to show is in in first column of liststore
-        self.seclabel_combo.add_attribute(cell, 'text', 0)
+        self.xml.label_selector.add_attribute(cell, 'text', 0)
         con = app.connections[self.account]
         jid = self.contact.jid
         if self.TYPE_ID == 'pm':
@@ -184,7 +184,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         if event.jid != jid:
             return
-        model = self.seclabel_combo.get_model()
+        model = self.xml.label_selector.get_model()
         model.clear()
 
         sel = 0
@@ -194,9 +194,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if label == default:
                 sel = index
 
-        self.seclabel_combo.set_active(sel)
-        self.seclabel_combo.set_no_show_all(False)
-        self.seclabel_combo.show_all()
+        self.xml.label_selector.set_active(sel)
+        self.xml.label_selector.set_no_show_all(False)
+        self.xml.label_selector.show_all()
 
     def __init__(self, type_id, parent_win, widget_name, contact, acct,
     resource=None):
@@ -217,16 +217,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         if self.TYPE_ID != message_control.TYPE_GC:
             # Create banner and connect signals
-            widget = self.xml.get_object('banner_eventbox')
-            id_ = widget.connect('button-press-event',
+            id_ = self.xml.banner_eventbox.connect(
+                'button-press-event',
                 self._on_banner_eventbox_button_press_event)
-            self.handlers[id_] = widget
+            self.handlers[id_] = self.xml.banner_eventbox
 
-        self.banner_status_label = self.xml.get_object('banner_label')
-        if self.banner_status_label is not None:
-            id_ = self.banner_status_label.connect('populate_popup',
+        if self.xml.banner_label is not None:
+            id_ = self.xml.banner_label.connect(
+                'populate_popup',
                 self.on_banner_label_populate_popup)
-            self.handlers[id_] = self.banner_status_label
+            self.handlers[id_] = self.xml.banner_label
 
         # Init DND
         self.TARGET_TYPE_URI_LIST = 80
@@ -274,8 +274,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                                             self._on_html_textview_grab_focus)
         self.handlers[id_] = self.conv_textview.tv
 
-        self.conv_scrolledwindow = self.xml.get_object(
-            'conversation_scrolledwindow')
+        self.conv_scrolledwindow = self.xml.conversation_scrolledwindow
         self.conv_scrolledwindow.add(self.conv_textview.tv)
         widget = self.conv_scrolledwindow.get_vadjustment()
         id_ = widget.connect('changed',
@@ -295,8 +294,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.add(self.msg_textview)
 
-        hbox = self.xml.get_object('hbox')
-        hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
+        self.xml.hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
 
         id_ = self.msg_textview.connect('paste-clipboard',
             self._on_message_textview_paste_event)
@@ -317,8 +315,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.dnd_list,
             Gdk.DragAction.COPY)
 
-        self._overlay = self.xml.get_object('overlay')
-
         # the following vars are used to keep history of user's messages
         self.sent_history = []
         self.sent_history_pos = 0
@@ -337,9 +333,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         self.command_hits = []
         self.last_key_tabs = False
-
-        # Security Labels
-        self.seclabel_combo = self.xml.get_object('label_selector')
 
         con = app.connections[self.account]
         con.get_module('Chatstate').set_active(self.contact)
@@ -393,7 +386,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return Gdk.EVENT_STOP
 
         if action == 'show-emoji-chooser':
-            self.emoticons_button.get_popover().show()
+            self.xml.emoticons_button.get_popover().show()
             return Gdk.EVENT_STOP
 
         if action == 'copy-text':
@@ -497,10 +490,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return state
 
     def set_encryption_menu_icon(self):
-        image = self.encryption_menu.get_image()
+        image = self.xml.encryption_menu.get_image()
         if image is None:
             image = Gtk.Image()
-            self.encryption_menu.set_image(image)
+            self.xml.encryption_menu.set_image(image)
         if not self.encryption:
             image.set_from_icon_name('channel-insecure-symbolic',
                                      Gtk.IconSize.MENU)
@@ -878,7 +871,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     ft.send_file(self.account, contact, path)
 
     def get_seclabel(self):
-        idx = self.seclabel_combo.get_active()
+        idx = self.xml.label_selector.get_active()
         if idx == -1:
             return
 
@@ -1098,11 +1091,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         Hide show emoticons_button
         """
         if app.config.get('emoticons_theme'):
-            self.emoticons_button.set_no_show_all(False)
-            self.emoticons_button.show()
+            self.xml.emoticons_button.set_no_show_all(False)
+            self.xml.emoticons_button.show()
         else:
-            self.emoticons_button.set_no_show_all(True)
-            self.emoticons_button.hide()
+            self.xml.emoticons_button.set_no_show_all(True)
+            self.xml.emoticons_button.hide()
 
     def set_emoticon_popover(self):
         if not app.config.get('emoticons_theme'):
@@ -1112,8 +1105,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
 
         emoji_chooser.text_widget = self.msg_textview
-        emoticons_button = self.xml.get_object('emoticons_button')
-        emoticons_button.set_popover(emoji_chooser)
+        self.xml.emoticons_button.set_popover(emoji_chooser)
 
     def on_color_menuitem_activate(self, widget):
         color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)

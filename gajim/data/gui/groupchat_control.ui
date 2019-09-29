@@ -356,6 +356,7 @@
                     <child>
                       <object class="GtkMenuButton" id="formattings_button">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
