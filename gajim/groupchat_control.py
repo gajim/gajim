@@ -46,13 +46,14 @@ from gajim import gui_menu_builder
 from gajim import message_control
 from gajim import vcard
 
-from gajim.common.const import AvatarSize
 from gajim.common import events
 from gajim.common import app
+from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.helpers import event_filter
 from gajim.common.helpers import to_user_string
-from gajim.common import ged
+from gajim.common.const import AvatarSize
+
 from gajim.common.i18n import _
 from gajim.common import contacts
 from gajim.common.const import Chatstate
@@ -103,6 +104,12 @@ class GroupchatControl(ChatControlBase):
 
         # Stores nickname we want to ban
         self._ban_jid = None
+
+        # Last sent message text
+        self.last_sent_txt = ''
+
+        # Attribute, encryption plugins use to signal the message can be sent
+        self.sendmessage = False
 
         self.roster = GroupchatRoster(self.account, self.room_jid, self)
         self.xml.roster_revealer.add(self.roster)
@@ -169,6 +176,7 @@ class GroupchatControl(ChatControlBase):
 
         self.xml.settings_menu.set_menu_model(self.control_menu)
 
+        # pylint: disable=line-too-long
         self._event_handlers = [
             ('muc-creation-failed', ged.GUI1, self._on_muc_creation_failed),
             ('muc-joined', ged.GUI1, self._on_muc_joined),
@@ -200,6 +208,7 @@ class GroupchatControl(ChatControlBase):
             ('gc-stanza-message-outgoing', ged.OUT_POSTCORE, self._message_sent),
             ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
         ]
+        # pylint: enable=line-too-long
 
         for handler in self._event_handlers:
             app.ged.register_event_handler(*handler)
@@ -454,8 +463,9 @@ class GroupchatControl(ChatControlBase):
             transition = Gtk.StackTransitionType.SLIDE_UP
             self.msg_textview.grab_focus()
         if name == 'muc-info':
-            # Set focus on the close button, otherwise one of the selectable labels
-            # of the GroupchatInfo box gets focus, which means it is fully selected
+            # Set focus on the close button, otherwise one of
+            # the selectable labels of the GroupchatInfo box gets focus,
+            # which means it is fully selected
             self.xml.info_close_button.grab_focus()
         self.xml.stack.set_visible_child_full(name, transition)
 
@@ -480,10 +490,10 @@ class GroupchatControl(ChatControlBase):
 
     # Actions
 
-    def _on_disconnect(self, action, param):
+    def _on_disconnect(self, _action, _param):
         self.leave()
 
-    def _on_information(self, action, param):
+    def _on_information(self, _action, _param):
         self._muc_info_box.set_from_disco_info(self.disco_info)
         if self._subject_data is not None:
             self._muc_info_box.set_subject(self._subject_data.subject)
@@ -555,7 +565,7 @@ class GroupchatControl(ChatControlBase):
         app.config.set_per('rooms', self.contact.jid,
                            'print_status', param.get_boolean())
 
-    def _on_request_voice(self, action, param):
+    def _on_request_voice(self, _action, _param):
         """
         Request voice in the current room
         """
@@ -594,7 +604,7 @@ class GroupchatControl(ChatControlBase):
             jid += '/' + nick
         AdHocCommand(self.account, jid)
 
-    def _on_upload_avatar(self, action, param):
+    def _on_upload_avatar(self, _action, _param):
         def _on_accept(filename):
             data, sha = app.interface.avatar_storage.prepare_for_publish(
                 filename)
@@ -705,13 +715,14 @@ class GroupchatControl(ChatControlBase):
         submenu = Gtk.Menu()
         item.set_submenu(submenu)
 
-        for nick in sorted(app.contacts.get_nick_list(self.account,
-        self.room_jid)):
+        nicks = app.contacts.get_nick_list(self.account, self.room_jid)
+        nicks.sort()
+        for nick in nicks:
             item = Gtk.MenuItem.new_with_label(nick)
             item.set_use_underline(False)
             submenu.append(item)
-            id_ = item.connect('activate', self.append_nick_in_msg_textview,
-                nick)
+            id_ = item.connect('activate',
+                               self.append_nick_in_msg_textview, nick)
             self.handlers[id_] = item
 
         menu.show_all()
@@ -834,14 +845,24 @@ class GroupchatControl(ChatControlBase):
                 additional_data=obj.additional_data)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
-    def on_private_message(self, nick, sent, msg, tim, xhtml, session, msg_log_id=None,
-    encrypted=False, displaymarking=None):
+    def on_private_message(self, nick, sent, msg, tim, xhtml, session,
+                           msg_log_id=None, encrypted=False,
+                           displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
 
-        event = events.PmEvent(msg, '', 'incoming', tim, encrypted, '',
-            msg_log_id, xhtml=xhtml, session=session, form_node=None,
-            displaymarking=displaymarking, sent_forwarded=sent)
+        event = events.PmEvent(msg,
+                               '',
+                               'incoming',
+                               tim,
+                               encrypted,
+                               '',
+                               msg_log_id,
+                               xhtml=xhtml,
+                               session=session,
+                               form_node=None,
+                               displaymarking=displaymarking,
+                               sent_forwarded=sent)
         app.events.add_event(self.account, fjid, event)
 
         autopopup = app.config.get('autopopup')
@@ -899,9 +920,10 @@ class GroupchatControl(ChatControlBase):
 
             self._nick_completion.record_message(contact, highlight)
 
-            self.check_and_possibly_add_focus_out_line()
+            self.check_focus_out_line()
 
-        ChatControlBase.add_message(self, text, kind, contact, tim,
+        ChatControlBase.add_message(
+            self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
             displaymarking=displaymarking,
             correct_id=correct_id, message_id=message_id, encrypted=encrypted,
@@ -911,8 +933,9 @@ class GroupchatControl(ChatControlBase):
         type_events = ['printed_marked_gc_msg']
         if app.config.notify_for_muc(self.room_jid):
             type_events.append('printed_gc_msg')
-        nb = len(app.events.get_events(self.account, self.room_jid,
-            type_events))
+        nb = len(app.events.get_events(self.account,
+                                       self.room_jid,
+                                       type_events))
         nb += self.get_nb_unread_pm()
         return nb
 
@@ -953,14 +976,13 @@ class GroupchatControl(ChatControlBase):
 
         return highlight, sound
 
-    def check_and_possibly_add_focus_out_line(self):
+    def check_focus_out_line(self):
         """
         Check and possibly add focus out line for room_jid if it needs it and
         does not already have it as last event. If it goes to add this line
         - remove previous line first
         """
-        win = app.interface.msg_win_mgr.get_window(self.room_jid,
-            self.account)
+        win = app.interface.msg_win_mgr.get_window(self.room_jid, self.account)
         if win and self.room_jid == win.get_active_jid() and\
         win.window.get_property('has-toplevel-focus') and\
         self.parent_win.get_active_control() == self:
@@ -1026,7 +1048,8 @@ class GroupchatControl(ChatControlBase):
             changes.append(_('Group chat now shows unavailable members'))
 
         if StatusCode.NOT_SHOWING_UNAVAILABLE in event.status_codes:
-            changes.append(_('Group chat now does not show unavailable members'))
+            changes.append(_('Group chat now does not show '
+                             'unavailable members'))
 
         if StatusCode.CONFIG_NON_PRIVACY_RELATED in event.status_codes:
             changes.append(_('A setting not related to privacy has been '
@@ -1072,13 +1095,16 @@ class GroupchatControl(ChatControlBase):
                 frm = ''
                 if obj.sent:
                     frm = 'out'
-                obj.session.control.add_message(obj.msgtxt, frm,
+                obj.session.control.add_message(
+                    obj.msgtxt, frm,
                     tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
-                    displaymarking=obj.displaymarking, message_id=obj.message_id,
+                    displaymarking=obj.displaymarking,
+                    message_id=obj.message_id,
                     correct_id=obj.correct_id)
             else:
                 # otherwise pass it off to the control to be queued
-                self.on_private_message(nick, obj.sent, obj.msgtxt, obj.timestamp,
+                self.on_private_message(
+                    nick, obj.sent, obj.msgtxt, obj.timestamp,
                     obj.xhtml, self.session, msg_log_id=obj.msg_log_id,
                     encrypted=obj.encrypted, displaymarking=obj.displaymarking)
 
@@ -1092,7 +1118,7 @@ class GroupchatControl(ChatControlBase):
         elif obj.name == 'ping-reply':
             self.add_info_message(
                 _('Pong! (%(nick)s %(delay)s s.)') % {'nick': nick,
-                'delay': obj.seconds})
+                                                      'delay': obj.seconds})
         elif obj.name == 'ping-error':
             self.add_info_message(_('Error.'))
 
@@ -1517,7 +1543,7 @@ class GroupchatControl(ChatControlBase):
         if self.encryption:
             self.sendmessage = True
             app.plugin_manager.extension_point(
-                    'send_message' + self.encryption, self)
+                'send_message' + self.encryption, self)
             if not self.sendmessage:
                 return
 
@@ -1559,7 +1585,7 @@ class GroupchatControl(ChatControlBase):
     def minimize(self):
         # Minimize it
         win = app.interface.msg_win_mgr.get_window(self.contact.jid,
-                self.account)
+                                                   self.account)
         ctrl = win.get_control(self.contact.jid, self.account)
 
         ctrl_page = win.notebook.page_num(ctrl.widget)
@@ -1577,7 +1603,8 @@ class GroupchatControl(ChatControlBase):
             self.msg_textview.get_buffer().set_text('')
 
         con = app.connections[self.account]
-        con.get_module('Chatstate').set_chatstate(self.contact, Chatstate.INACTIVE)
+        con.get_module('Chatstate').set_chatstate(self.contact,
+                                                  Chatstate.INACTIVE)
 
         app.interface.roster.minimize_groupchat(
             self.account, self.contact.jid, status=self.subject)
@@ -1596,8 +1623,8 @@ class GroupchatControl(ChatControlBase):
         super(GroupchatControl, self).shutdown()
         # PluginSystem: removing GUI extension points connected with
         # GrouphatControl instance object
-        app.plugin_manager.remove_gui_extension_point('groupchat_control',
-            self)
+        app.plugin_manager.remove_gui_extension_point(
+            'groupchat_control', self)
 
         # Unregister handlers
         for handler in self._event_handlers:
@@ -1607,11 +1634,11 @@ class GroupchatControl(ChatControlBase):
         for nick in nick_list:
             # Update pm chat window
             fjid = self.room_jid + '/' + nick
-            ctrl = app.interface.msg_win_mgr.get_gc_control(fjid,
-                self.account)
+            ctrl = app.interface.msg_win_mgr.get_gc_control(fjid, self.account)
             if ctrl:
                 contact = app.contacts.get_gc_contact(self.account,
-                    self.room_jid, nick)
+                                                      self.room_jid,
+                                                      nick)
                 contact.show = 'offline'
                 contact.status = ''
                 ctrl.update_ui()
@@ -1690,7 +1717,7 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.set_control_active(self, state)
         if not state:
             # add the focus-out line to the tab we are leaving
-            self.check_and_possibly_add_focus_out_line()
+            self.check_focus_out_line()
         # Sending active to undo unread state
         self.parent_win.redraw_tab(self, 'active')
 
@@ -1729,20 +1756,20 @@ class GroupchatControl(ChatControlBase):
 
             con = app.connections[self.account]
             con.get_module('MUC').invite(self.room_jid, contact_jid)
-            self.add_info_message(_('%(jid)s has been invited to this group chat') %
-                                    {'jid': contact_jid})
+            self.add_info_message(_('%(jid)s has been invited to this '
+                                    'group chat') % {'jid': contact_jid})
 
     def _jid_not_blocked(self, bare_jid: str) -> bool:
         fjid = self.room_jid + '/' + bare_jid
         return not helpers.jid_is_blocked(self.account, fjid)
 
     def _on_message_textview_key_press_event(self, widget, event):
-        res = ChatControlBase._on_message_textview_key_press_event(self, widget,
-            event)
+        res = ChatControlBase._on_message_textview_key_press_event(
+            self, widget, event)
         if res:
             return True
 
-        if event.keyval == Gdk.KEY_Tab: # TAB
+        if event.keyval != Gdk.KEY_Tab: # TAB
             message_buffer = widget.get_buffer()
             start_iter, end_iter = message_buffer.get_bounds()
             cursor_position = message_buffer.get_insert()
@@ -1763,8 +1790,8 @@ class GroupchatControl(ChatControlBase):
             after_nick_len = 1 # the space that is printed after we type [Tab]
 
             # first part of this if : works fine even if refer_to_nick_char
-            if gc_refer_to_nick_char and text.endswith(
-            gc_refer_to_nick_char + ' '):
+            if (gc_refer_to_nick_char and
+                    text.endswith(gc_refer_to_nick_char + ' ')):
                 with_refer_to_nick_char = True
                 after_nick_len = len(gc_refer_to_nick_char + ' ')
             if self.nick_hits and self.last_key_tabs and \
@@ -1776,7 +1803,7 @@ class GroupchatControl(ChatControlBase):
                 begin = self.nick_hits.pop(0)
             else:
                 list_nick = app.contacts.get_nick_list(self.account,
-                                                         self.room_jid)
+                                                       self.room_jid)
                 list_nick = list(filter(self._jid_not_blocked, list_nick))
 
                 log.debug("Nicks to be considered for autosuggestions: %s",
@@ -1788,20 +1815,21 @@ class GroupchatControl(ChatControlBase):
 
             if self.nick_hits:
                 if len(splitted_text) < 2 or with_refer_to_nick_char:
-                    # This is the 1st word of the line or no word or we are cycling
-                    # at the beginning, possibly with a space in one nick
+                    # This is the 1st word of the line or no word or we are
+                    # cycling at the beginning, possibly with a space in
+                    # one nick
                     add = gc_refer_to_nick_char + ' '
                 else:
                     add = ' '
                 start_iter = end_iter.copy()
-                if self.last_key_tabs and with_refer_to_nick_char or (text and \
-                                                                      text[-1] == ' '):
+                if (self.last_key_tabs and
+                        with_refer_to_nick_char or (text and text[-1] == ' ')):
                     # have to accommodate for the added space from last
                     # completion
                     # gc_refer_to_nick_char may be more than one char!
                     start_iter.backward_chars(len(begin) + len(add))
-                elif self.last_key_tabs and not app.config.get(
-                    'shell_like_completion'):
+                elif (self.last_key_tabs and
+                      not app.config.get('shell_like_completion')):
                     # have to accommodate for the added space from last
                     # completion
                     start_iter.backward_chars(len(begin) + \
@@ -1842,11 +1870,13 @@ class GroupchatControl(ChatControlBase):
                     completion = self.nick_hits[0]
                 message_buffer.insert_at_cursor(completion + add)
 
-                con.get_module('Chatstate').block_chatstates(self.contact, False)
+                con.get_module('Chatstate').block_chatstates(self.contact,
+                                                             False)
 
                 self.last_key_tabs = True
                 return True
             self.last_key_tabs = False
+        return None
 
     def delegate_action(self, action):
         res = super().delegate_action(action)
@@ -1894,7 +1924,7 @@ class GroupchatControl(ChatControlBase):
 
         return ctrl
 
-    def append_nick_in_msg_textview(self, widget, nick):
+    def append_nick_in_msg_textview(self, _widget, nick):
         self.msg_textview.remove_placeholder()
         message_buffer = self.msg_textview.get_buffer()
         start_iter, end_iter = message_buffer.get_bounds()
