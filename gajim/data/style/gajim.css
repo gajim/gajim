@@ -66,11 +66,11 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 #FinishedLabel { font-size: 14px; font-weight: bold }
 
 /* Server Info */
-#ServerInfoGrid > list { border: 1px solid; border-color: @borders; }
-#ServerInfoGrid > list > row:first-child { border-top: 1px solid; border-color: @borders; }
-#ServerInfoGrid > list > row { padding: 10px 20px 10px 10px; }
-#ServerInfoGrid > list > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
-#ServerInfoGrid > list > row.activatable:active { box-shadow: none; }
+#ServerInfo { border: 1px solid; border-color: @borders; }
+#ServerInfo > row:first-child { border-top: 1px solid; border-color: @borders; }
+#ServerInfo > row { padding: 10px 20px 10px 10px; }
+#ServerInfo > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
+#ServerInfo > row.activatable:active { box-shadow: none; }
 
 /* Features Info */
 #FeaturesInfoGrid > list { border: 1px solid; border-color: @borders; }
@@ -225,6 +225,7 @@ list.settings > row > box {
 .margin-12 { margin: 12px; }
 .margin-18 { margin: 18px; }
 .padding-18 { margin: 18px; }
+.padding-left30 { padding-left: 30px; }
 
 /* Treeview */
 treeview.space { padding: 6px; }

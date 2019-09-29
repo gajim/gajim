@@ -1018,6 +1018,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 msg = '%s over proxy %s:%s' % (msg, self._proxy['host'], self._proxy['port'])
             log.info(msg)
 
+    def get_connection_info(self):
+        return self._current_host, self._proxy
+
     def _connect_failure(self, con_type=None):
         if not con_type:
             # we are not retrying, and not conecting

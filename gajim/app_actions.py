@@ -27,7 +27,7 @@ import gajim.plugins.gui
 
 from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.history_sync import HistorySyncAssistant
-from gajim.gtk.server_info import ServerInfoDialog
+from gajim.gtk.server_info import ServerInfo
 from gajim.gtk.mam_preferences import MamPreferences
 from gajim.gtk.preferences import Preferences
 from gajim.gtk.groupchat_creation import CreateGroupchatWindow
@@ -241,11 +241,11 @@ def on_privacy_lists(action, param):
 
 def on_server_info(action, param):
     account = param.get_string()
-    if 'server_info' in interface.instances[account]:
-        interface.instances[account]['server_info'].present()
+    window = app.get_app_window(ServerInfo, account)
+    if window is None:
+        ServerInfo(account)
     else:
-        interface.instances[account]['server_info'] = \
-            ServerInfoDialog(account)
+        window.present()
 
 
 def on_xml_console(action, param):

@@ -59,10 +59,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="view_certificate_menuitem">
+      <object class="GtkMenuItem" id="view_server_info_menuitem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_View Certificate</property>
+        <property name="label" translatable="yes">_View Server Info</property>
         <property name="use_underline">True</property>
       </object>
     </child>

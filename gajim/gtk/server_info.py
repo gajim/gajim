@@ -20,84 +20,67 @@ import nbxmpp
 from nbxmpp.util import is_error_result
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 
+from gajim.gtk.dialogs import CertificateDialog
 from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util import get_builder
 
-log = logging.getLogger('gajim.gtk.serverinfo')
+log = logging.getLogger('gajim.gtk.server_info')
 
 
-class ServerInfoDialog(Gtk.Dialog):
+class ServerInfo(Gtk.ApplicationWindow):
     def __init__(self, account):
-        super().__init__(title=_('Server Info'),
-                         transient_for=None,
-                         destroy_with_parent=True)
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_name('ServerInfo')
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_default_size(400, 600)
+        self.set_show_menubar(False)
+        self.set_title(_('Server Info'))
 
         self.account = account
         self._destroyed = False
-        self.set_transient_for(app.interface.roster.window)
-        self.set_resizable(True)
-        self.set_size_request(300, 500)
 
-        grid = Gtk.Grid()
-        grid.set_name('ServerInfoGrid')
-        grid.set_row_spacing(10)
-        grid.set_hexpand(True)
+        self._ui = get_builder('server_info.ui')
+        self.add(self._ui.server_info_notebook)
 
-        self.info_listbox = Gtk.ListBox()
-        self.info_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.info_listbox.set_header_func(self.header_func, 'Information')
-        grid.attach(self.info_listbox, 0, 0, 1, 1)
-
-        self.feature_listbox = Gtk.ListBox()
-        self.feature_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.feature_listbox.set_header_func(self.header_func, 'Features')
-        grid.attach(self.feature_listbox, 0, 1, 1, 1)
-
-        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard_button = Gtk.Button(halign=Gtk.Align.END)
-        clp_image = Gtk.Image.new_from_icon_name('edit-copy-symbolic',
-                                                 Gtk.IconSize.BUTTON)
-        clipboard_button.set_image(clp_image)
-        clipboard_button.set_tooltip_text(_('Copy info to clipboard'))
-        clipboard_button.connect('clicked', self.on_clipboard_button_clicked)
-
-        box = self.get_content_area()
-        scrolled = Gtk.ScrolledWindow()
-        scrolled.set_max_content_height(500)
-        scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        scrolled.add(grid)
-        box.pack_start(scrolled, True, True, 0)
-        box.pack_start(clipboard_button, False, True, 0)
-        box.set_property('margin', 12)
-        box.set_spacing(18)
-
-        self.connect('response', self.on_response)
         self.connect('destroy', self.on_destroy)
+        self.connect('key-press-event', self._on_key_press)
+        self._ui.connect_signals(self)
 
         app.ged.register_event_handler('server-disco-received',
                                        ged.GUI1,
                                        self._server_disco_received)
 
         self.version = ''
-        self.uptime = ''
         self.hostname = app.get_hostname_from_account(account)
+        self._ui.server_hostname.set_text(self.hostname)
         con = app.connections[account]
         con.get_module('SoftwareVersion').request_software_version(
             self.hostname, callback=self._software_version_received)
         self.request_last_activity()
 
+        self.cert = con.connection.Connection.ssl_certificate
+        self._add_connection_info()
+
+        self.feature_listbox = Gtk.ListBox()
+        self.feature_listbox.set_name('ServerInfo')
+        self.feature_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.feature_listbox.set_header_func(self.header_func, 'Features')
+        self._ui.features_scrolled.add(self.feature_listbox)
         for feature in self.get_features():
             self.add_feature(feature)
-
-        for info in self.get_infos():
-            self.add_info(info)
+        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
         self.show_all()
+
+    def _on_key_press(self, _widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
 
     @staticmethod
     def header_func(row, before, user_data):
@@ -108,12 +91,48 @@ class ServerInfoDialog(Gtk.Dialog):
             label.set_halign(Gtk.Align.START)
             row.set_header(label)
 
-    @staticmethod
-    def update(func, listbox):
-        for index, item in enumerate(func()):
-            row = listbox.get_row_at_index(index)
-            row.get_child().update(item)
-            row.set_tooltip_text(row.get_child().tooltip)
+    def _add_connection_info(self):
+        ssl_con = app.connections[self.account].connection.get_ssl_connection()
+        ssl_version = None
+        cipher_name = None
+        if ssl_con is not None:
+            ssl_version = ssl_con.get_cipher_version()
+            cipher_name = ssl_con.get_cipher_name()
+
+        host, proxy = app.connections[self.account].get_connection_info()
+        con_type = host['type']
+
+        # Connection type
+        self._ui.connection_type.set_text(con_type.upper())
+        if con_type == 'plain':
+            self._ui.conection_type.get_style_context().add_class(
+                'error-color')
+
+        # Connection security
+        if ssl_version is not None:
+            self._ui.connection_security.set_text(ssl_version)
+
+        # Connection cipher
+        if cipher_name is not None:
+            self._ui.connection_cipher.set_text(cipher_name)
+
+        # Connection proxy
+        if proxy:
+            if proxy['type'] == 'bosh':
+                self._ui.connection_proxy_header.set_text(_('BOSH'))
+                self._ui.connection_proxy.set_text(proxy['bosh_uri'])
+            if proxy['type'] in ['http', 'socks5'] or proxy['bosh_useproxy']:
+                self._ui.connection_proxy.set_text(
+                    proxy['host'] + ':' + proxy['port'])
+
+        self._ui.cert_button.set_sensitive(self.cert)
+
+    def _on_cert_button_clicked(self, button_):
+        window = app.get_app_window(CertificateDialog, self.account)
+        if window is None:
+            CertificateDialog(self, self.account, self.cert)
+        else:
+            window.present()
 
     def request_last_activity(self):
         if not app.account_is_connected(self.account):
@@ -123,7 +142,7 @@ class ServerInfoDialog(Gtk.Dialog):
         con.connection.SendAndCallForResponse(iq, self._on_last_activity)
 
     def _on_last_activity(self, stanza):
-        if 'server_info' not in app.interface.instances[self.account]:
+        if self._destroyed:
             # Window got closed in the meantime
             return
         if not nbxmpp.isResultNode(stanza):
@@ -141,9 +160,9 @@ class ServerInfoDialog(Gtk.Dialog):
             hours = 0
             if seconds >= 3600:
                 hours = delta.seconds // 3600
-            self.uptime = _('%(days)s days, %(hours)s hours') % {
+            uptime = _('%(days)s days, %(hours)s hours') % {
                 'days': delta.days, 'hours': hours}
-            self.update(self.get_infos, self.info_listbox)
+            self._ui.server_uptime.set_text(uptime)
 
     @ensure_not_destroyed
     def _software_version_received(self, result):
@@ -151,7 +170,14 @@ class ServerInfoDialog(Gtk.Dialog):
             self.version = _('Unknown')
         else:
             self.version = '%s %s' % (result.name, result.version)
-        self.update(self.get_infos, self.info_listbox)
+        self._ui.server_software.set_text(self.version)
+
+    @staticmethod
+    def update(func, listbox):
+        for index, item in enumerate(func()):
+            row = listbox.get_row_at_index(index)
+            row.get_child().update(item)
+            row.set_tooltip_text(row.get_child().tooltip)
 
     def _server_disco_received(self, obj):
         self.update(self.get_features, self.feature_listbox)
@@ -209,18 +235,8 @@ class ServerInfoDialog(Gtk.Dialog):
                     con.get_module('Bookmarks').conversion)
         ]
 
-    def add_info(self, info):
-        self.info_listbox.add(ServerInfoItem(info))
-
-    def get_infos(self):
-        Info = namedtuple('Info', ['name', 'value', 'tooltip'])
-        return [
-            Info(_('Hostname'), self.hostname, None),
-            Info(_('Server Software'), self.version, None),
-            Info(_('Server Uptime'), self.uptime, None)]
-
-    def on_clipboard_button_clicked(self, widget):
-        server_software = 'Server Software: %s\n' % self.get_infos()[1].value
+    def _on_clipboard_button_clicked(self, widget):
+        server_software = 'Server Software: %s\n' % self.version
         server_features = ''
 
         for feature in self.get_features():
@@ -232,18 +248,14 @@ class ServerInfoDialog(Gtk.Dialog):
                 tooltip = '(%s)' % feature.tooltip
             else:
                 tooltip = ''
-            server_features += '%s: %s %s\n' % (feature.name, available, tooltip)
+            server_features += '%s: %s %s\n' % (
+                feature.name, available, tooltip)
 
         clipboard_text = server_software + server_features
         self.clipboard.set_text(clipboard_text, -1)
 
-    def on_response(self, dialog, response):
-        if response == Gtk.ResponseType.OK:
-            self.destroy()
-
     def on_destroy(self, *args):
         self._destroyed = True
-        del app.interface.instances[self.account]['server_info']
         app.ged.remove_event_handler('server-disco-received',
                                      ged.GUI1,
                                      self._server_disco_received)
@@ -274,7 +286,7 @@ class FeatureItem(Gtk.Grid):
         elif enabled is False:
             self.icon.set_from_icon_name('dialog-warning-symbolic',
                                          Gtk.IconSize.MENU)
-            self.tooltip += _('\nDisabled in config')
+            self.tooltip += _('\nDisabled in preferences')
             self.icon.get_style_context().add_class('warning-color')
         else:
             self.icon.set_from_icon_name('emblem-ok-symbolic',
@@ -284,28 +296,3 @@ class FeatureItem(Gtk.Grid):
     def update(self, feature):
         self.tooltip = feature.tooltip
         self.set_feature(feature.available, feature.enabled)
-
-
-class ServerInfoItem(Gtk.Grid):
-    def __init__(self, info):
-        super().__init__()
-        self.tooltip = info.tooltip
-        self.insert_column(0)
-
-        self.info = Gtk.Label(label=info.name)
-        self.info.set_halign(Gtk.Align.START)
-        self.info.set_xalign(0)
-        self.info.set_size_request(160, -1)
-        self.value = Gtk.Label(label=info.value)
-        self.value.set_halign(Gtk.Align.START)
-        self.value.set_ellipsize(Pango.EllipsizeMode.END)
-        self.value.set_width_chars(20)
-        self.value.set_xalign(0)
-        self.value.set_hexpand(True)
-        self.value.set_selectable(True)
-
-        self.add(self.info)
-        self.add(self.value)
-
-    def update(self, info):
-        self.value.set_text(info.value)
