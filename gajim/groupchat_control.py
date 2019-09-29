@@ -122,8 +122,8 @@ class GroupchatControl(ChatControlBase):
         else:
             self.scale_factor = app.interface.roster.scale_factor
 
-        self.widget_set_visible(self.xml.get_object('banner_eventbox'),
-            app.config.get('hide_groupchat_banner'))
+        if not app.config.get('hide_groupchat_banner'):
+            self.xml.banner_eventbox.set_no_show_all(False)
 
         # muc attention flag (when we are mentioned in a muc)
         # if True, the room has mentioned us
