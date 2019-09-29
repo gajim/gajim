@@ -1397,20 +1397,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 message = '> %s\n' % message.replace('\n', '\n> ')
         msg_buf.set_text(message)
 
-    def widget_set_visible(self, widget, state):
-        """
-        Show or hide a widget
-        """
-        # make the last message visible, when changing to "full view"
-        if not state:
-            self.scroll_to_end()
-
-        widget.set_no_show_all(state)
-        if state:
-            widget.hide()
-        else:
-            widget.show_all()
-
     def got_connected(self):
         self.msg_textview.set_sensitive(True)
         self.msg_textview.set_editable(True)
