@@ -70,7 +70,10 @@ class UserAvatar(BaseModule):
         app.interface.save_avatar(result.data)
 
         if self._con.get_own_jid().bareMatch(result.jid):
-            app.config.set_per('accounts', self._account, 'avatar_sha', result.sha)
+            app.config.set_per('accounts',
+                               self._account,
+                               'avatar_sha',
+                               result.sha)
         else:
             own_jid = self._con.get_own_jid().getBare()
             app.logger.set_avatar_sha(own_jid, str(result.jid), result.sha)

@@ -48,6 +48,7 @@ def parse_correction(stanza):
         if id_ is not None:
             return id_
         log.warning('No id attr found: %s', stanza)
+    return None
 
 
 # XEP-0224: Attention

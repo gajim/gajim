@@ -104,7 +104,7 @@ class BitsOfBinary(BaseModule):
 def parse_bob_data(stanza):
     data_node = stanza.getTag('data', namespace=nbxmpp.NS_BOB)
     if data_node is None:
-        return
+        return None
 
     cid = data_node.getAttr('cid')
     type_ = data_node.getAttr('type')
@@ -114,51 +114,51 @@ def parse_bob_data(stanza):
             max_age = int(max_age)
         except Exception:
             log.exception(stanza)
-            return
+            return None
 
     if cid is None or type_ is None:
         log.warning('Invalid data node (no cid or type attr): %s', stanza)
-        return
+        return None
 
     try:
         algo_hash = cid.split('@')[0]
         algo, hash_ = algo_hash.split('+')
     except Exception:
         log.exception('Invalid cid: %s', stanza)
-        return
+        return None
 
     bob_data = data_node.getData()
     if not bob_data:
         log.warning('No data found: %s', stanza)
-        return
+        return None
 
     filepath = Path(configpaths.get('BOB')) / algo_hash
     if algo_hash in app.bob_cache or filepath.exists():
         log.info('BoB data already cached')
-        return
+        return None
 
     try:
         bob_data = b64decode(bob_data)
     except Exception:
         log.warning('Unable to decode data')
         log.exception(stanza)
-        return
+        return None
 
     if len(bob_data) > 10000:
         log.warning('%s: data > 10000 bytes', stanza.getFrom())
-        return
+        return None
 
     try:
         sha = hashlib.new(algo)
     except ValueError as error:
         log.warning(stanza)
         log.warning(error)
-        return
+        return None
 
     sha.update(bob_data)
     if sha.hexdigest() != hash_:
         log.warning('Invalid hash: %s', stanza)
-        return
+        return None
 
     if max_age == 0:
         app.bob_cache[algo_hash] = bob_data
@@ -169,21 +169,22 @@ def parse_bob_data(stanza):
         except Exception:
             log.warning('Unable to save data')
             log.exception(stanza)
-            return
+            return None
+
     log.info('BoB data stored: %s', algo_hash)
     return filepath
 
 
 def store_bob_data(bob_data):
     if bob_data is None:
-        return
+        return None
 
     algo_hash = '%s+%s' % (bob_data.algo, bob_data.hash_)
 
     filepath = Path(configpaths.get('BOB')) / algo_hash
     if algo_hash in app.bob_cache or filepath.exists():
         log.info('BoB data already cached')
-        return
+        return None
 
     if bob_data.max_age == 0:
         app.bob_cache[algo_hash] = bob_data.data
@@ -193,7 +194,8 @@ def store_bob_data(bob_data):
                 file.write(bob_data.data)
         except Exception:
             log.exception('Unable to save data')
-            return
+            return None
+
     log.info('BoB data stored: %s', algo_hash)
     return filepath
 

@@ -337,6 +337,7 @@ class Roster(BaseModule):
         """
         if item in self._data:
             return self._data[item]
+        return None
 
     def unsubscribe(self, jid):
         """

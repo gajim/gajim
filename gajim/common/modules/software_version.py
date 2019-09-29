@@ -33,7 +33,9 @@ class SoftwareVersion(BaseModule):
 
     def set_enabled(self, enabled):
         if enabled:
-            if not app.config.get_per('accounts', self._account, 'send_os_info'):
+            if not app.config.get_per('accounts',
+                                      self._account,
+                                      'send_os_info'):
                 return
             self._nbxmpp('SoftwareVersion').set_software_version(
                 'Gajim', app.version, get_os_info())

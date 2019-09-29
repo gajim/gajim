@@ -70,9 +70,10 @@ def event_node(node):
 def store_publish(func):
     @wraps(func)
     def func_wrapper(self, *args, **kwargs):
+        # pylint: disable=protected-access
         if not app.account_is_connected(self._account):
             self._stored_publish = partial(func, self, *args, **kwargs)
-            return
+            return None
         return func(self, *args, **kwargs)
     return func_wrapper
 

@@ -830,7 +830,7 @@ class MUC(BaseModule):
         self._nbxmpp('MUC').invite(room, to, reason, password, continue_, type_)
 
     @event_filter(['account'])
-    def _on_account_disconnected(self, event):
+    def _on_account_disconnected(self, _event):
         for room_jid in list(self._rejoin_timeouts.keys()):
             self._remove_rejoin_timeout(room_jid)
 

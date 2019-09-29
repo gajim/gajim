@@ -71,24 +71,24 @@ class EntityTime(BaseModule):
         time_ = stanza.getTag('time')
         if not time_:
             self._log.warning('No time node: %s', stanza)
-            return
+            return None
 
         tzo = time_.getTag('tzo').getData()
         if not tzo:
             self._log.warning('Wrong tzo node: %s', stanza)
-            return
+            return None
 
         remote_tz = create_tzinfo(tz_string=tzo)
         if remote_tz is None:
             self._log.warning('Wrong tzo node: %s', stanza)
-            return
+            return None
 
         utc_time = time_.getTag('utc').getData()
         date_time = parse_datetime(utc_time, check_utc=True)
         if date_time is None:
             self._log.warning('Wrong timezone defintion: %s %s',
                               utc_time, stanza.getFrom())
-            return
+            return None
 
         date_time = date_time.astimezone(remote_tz)
         return date_time.strftime('%c %Z')

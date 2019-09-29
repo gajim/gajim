@@ -241,7 +241,8 @@ class AdHocCommands(BaseModule):
             jid = helpers.get_full_jid_from_iq(stanza)
         except helpers.InvalidFormat:
             self._log.warning('Invalid JID: %s, ignoring it', stanza.getFrom())
-            return
+            return False
+
         node = stanza.getTagAttr('query', 'node')
 
         if node not in self._commands:
@@ -365,7 +366,8 @@ class AdHocCommands(BaseModule):
         """
         Send the command with data form. Wait for reply
         """
-        self._log.info('Send Command: %s %s %s %s', jid, node, session_id, action)
+        self._log.info('Send Command: %s %s %s %s',
+                       jid, node, session_id, action)
         stanza = nbxmpp.Iq(typ='set', to=jid)
         cmdnode = stanza.addChild('command',
                                   namespace=nbxmpp.NS_COMMANDS,

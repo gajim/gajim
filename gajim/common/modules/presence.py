@@ -87,7 +87,8 @@ class Presence(BaseModule):
             return
 
         contacts = app.contacts.get_jid_list(self._account)
-        if properties.jid.getBare() not in contacts and not properties.is_self_bare:
+        if (properties.jid.getBare() not in contacts and
+                not properties.is_self_bare):
             # Handle only presence from roster contacts
             self._log.warning('Unknown presence received')
             self._log.warning(stanza)
@@ -149,12 +150,14 @@ class Presence(BaseModule):
                                                   properties.jid.getBare(),
                                                   properties.jid.getResource())
         if contact is None:
-            contact = app.contacts.get_first_contact_from_jid(self._account, jid)
+            contact = app.contacts.get_first_contact_from_jid(self._account,
+                                                              jid)
             if contact is None:
                 self._log.warning('First contact not found')
                 return
 
-            if self._is_resource_known(contact_list) and not app.jid_is_transport(jid):
+            if (self._is_resource_known(contact_list) and
+                    not app.jid_is_transport(jid)):
                 # Another resource of an existing contact connected
                 # Add new contact
                 event.old_show = 0
@@ -201,7 +204,8 @@ class Presence(BaseModule):
         if properties.type.is_unavailable:
             # TODO: This causes problems when another
             # resource signs off!
-            self._con.get_module('Bytestream').stop_all_active_file_transfers(contact)
+            self._con.get_module('Bytestream').stop_all_active_file_transfers(
+                contact)
         self._log_presence(properties)
 
     @staticmethod

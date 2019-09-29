@@ -200,6 +200,7 @@ class Bookmarks(BaseModule):
         for bookmark in self._bookmarks:
             if bookmark.jid == jid:
                 return bookmark
+        return None
 
     def _pubsub_support(self) -> bool:
         return (self._con.get_module('PEP').supported and
@@ -281,7 +282,8 @@ class Bookmarks(BaseModule):
         self._join_timeouts.pop(0)
         self.auto_join_bookmarks(bookmarks)
 
-    def auto_join_bookmarks(self, bookmarks: Optional[List[Any]] = None) -> None:
+    def auto_join_bookmarks(self,
+                            bookmarks: Optional[List[Any]] = None) -> None:
         if app.is_invisible(self._account):
             return
 

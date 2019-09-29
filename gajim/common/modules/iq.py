@@ -53,7 +53,8 @@ class Iq(BaseModule):
                                  jid=properties.jid.getBare(),
                                  file_props=file_props,
                                  error_msg=to_user_string(properties.error)))
-                self._con.get_module('Bytestream').disconnect_transfer(file_props)
+                self._con.get_module('Bytestream').disconnect_transfer(
+                    file_props)
                 raise nbxmpp.NodeProcessed
 
         if properties.error.condition == 'item-not-found':
@@ -65,7 +66,8 @@ class Iq(BaseModule):
                                  account=self._account,
                                  jid=str(properties.jid),
                                  file_props=file_props))
-                self._con.get_module('Bytestream').disconnect_transfer(file_props)
+                self._con.get_module('Bytestream').disconnect_transfer(
+                    file_props)
                 raise nbxmpp.NodeProcessed
 
         app.nec.push_incoming_event(

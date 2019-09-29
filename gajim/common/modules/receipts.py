@@ -74,6 +74,7 @@ class Receipts(BaseModule):
         contact = app.contacts.get_contact(self._account, event.jid)
         if contact is not None and contact.sub not in ('to', 'none'):
             return contact
+        return None
 
     @staticmethod
     def _build_answer_receipt(to, receipt_id):

@@ -46,7 +46,7 @@ def ensure_enabled(func):
     @wraps(func)
     def func_wrapper(self, *args, **kwargs):
         if not self.enabled:
-            return
+            return None
         return func(self, *args, **kwargs)
     return func_wrapper
 
@@ -89,7 +89,8 @@ class Chatstate(BaseModule):
     def enabled(self, value):
         if self._enabled == value:
             return
-        self._log.info('Chatstate module %s', 'enabled' if value else 'disabled')
+        self._log.info('Chatstate module %s',
+                       'enabled' if value else 'disabled')
         self._enabled = value
 
         if value:

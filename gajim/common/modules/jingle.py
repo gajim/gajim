@@ -187,11 +187,16 @@ class Jingle(BaseModule):
         if app.contacts.is_gc_contact(self._account, jid):
             gcc = jid.split('/')
             if len(gcc) == 2:
-                contact = app.contacts.get_gc_contact(self._account, gcc[0], gcc[1])
+                contact = app.contacts.get_gc_contact(self._account,
+                                                      gcc[0],
+                                                      gcc[1])
         if contact is None:
-            return
+            return None
         use_security = contact.supports(nbxmpp.NS_JINGLE_XTLS)
-        jingle = JingleSession(self._con, weinitiate=True, jid=jid, werequest=request)
+        jingle = JingleSession(self._con,
+                               weinitiate=True,
+                               jid=jid,
+                               werequest=request)
         # this is a file transfer
         jingle.session_type_ft = True
         self._sessions[jingle.sid] = jingle
@@ -204,17 +209,19 @@ class Jingle(BaseModule):
         senders = 'initiator'
         if request:
             senders = 'responder'
-        c = JingleFileTransfer(jingle, transport=transport,
-                               file_props=file_props,
-                               use_security=use_security,
-                               senders=senders)
+        transfer = JingleFileTransfer(jingle,
+                                      transport=transport,
+                                      file_props=file_props,
+                                      use_security=use_security,
+                                      senders=senders)
         file_props.transport_sid = transport.sid
         file_props.algo = self.__hash_support(contact)
-        jingle.add_content('file' + helpers.get_random_string_16(), c)
+        jingle.add_content('file' + helpers.get_random_string_16(), transfer)
         jingle.start_session()
-        return c.transport.sid
+        return transfer.transport.sid
 
-    def __hash_support(self, contact):
+    @staticmethod
+    def __hash_support(contact):
         if contact.supports(nbxmpp.NS_HASHES_2):
             if contact.supports(nbxmpp.NS_HASHES_BLAKE2B_512):
                 return 'blake2b-512'
@@ -232,31 +239,31 @@ class Jingle(BaseModule):
 
     def get_jingle_sessions(self, jid, sid=None, media=None):
         if sid:
-            return [session for session in self._sessions.values() if \
-                session.sid == sid]
-        sessions = [session for session in self._sessions.values() if \
-            session.peerjid == jid]
+            return [se for se in self._sessions.values() if se.sid == sid]
+
+        sessions = [se for se in self._sessions.values() if se.peerjid == jid]
         if media:
             if media not in ('audio', 'video', 'file'):
                 return []
-            return [session for session in sessions if session.get_content(media)]
+            return [se for se in sessions if session.get_content(media)]
         return sessions
 
     def set_file_info(self, file_):
-        # Saves information about the files we have transferred in case they need
-        # to be requested again.
+        # Saves information about the files we have transferred
+        # in case they need to be requested again.
         self.files.append(file_)
 
-    def get_file_info(self, peerjid, hash_=None, name=None, account=None):
+    def get_file_info(self, peerjid, hash_=None, name=None, _account=None):
         if hash_:
-            for f in self.files: # DEBUG
+            for file in self.files: # DEBUG
                 #if f['hash'] == '1294809248109223':
-                if f['hash'] == hash_ and f['peerjid'] == peerjid:
-                    return f
+                if file['hash'] == hash_ and file['peerjid'] == peerjid:
+                    return file
         elif name:
-            for f in self.files:
-                if f['name'] == name and f['peerjid'] == peerjid:
-                    return f
+            for file in self.files:
+                if file['name'] == name and file['peerjid'] == peerjid:
+                    return file
+        return None
 
     def get_jingle_session(self, jid, sid=None, media=None):
         if sid:

@@ -239,7 +239,8 @@ class PrivacyLists(BaseModule):
         if not nbxmpp.isResultNode(stanza):
             self._log.warning('Operation failed: %s', stanza.getError())
 
-    def _build_invisible_rule(self):
+    @staticmethod
+    def _build_invisible_rule():
         node = nbxmpp.Node('list', {'name': 'invisible'})
         iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, payload=[node])
 
@@ -283,7 +284,7 @@ class PrivacyLists(BaseModule):
         if len(self.blocked_list) == 1:
             self.set_default_list(self.default_list)
 
-    def block_contacts(self, contact_list, message):
+    def block_contacts(self, contact_list, _message):
         if not self.supported:
             jid_list = [contact.jid for contact in contact_list]
             self._con.get_module('Blocking').block(jid_list)
@@ -369,7 +370,7 @@ class PrivacyLists(BaseModule):
                 contact.jid, show=show, status=self._con.status)
             self._presence_probe(contact.jid)
 
-    def block_group(self, group, contact_list, message):
+    def block_group(self, group, contact_list, _message):
         if not self.supported:
             return
         if group in self.blocked_groups:
