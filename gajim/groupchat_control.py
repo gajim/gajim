@@ -93,12 +93,6 @@ class GroupchatControl(ChatControlBase):
         self.force_non_minimizable = False
         self.is_anonymous = True
 
-        # Keep error dialog instance to be sure to have only once at a time
-        self.error_dialog = None
-
-        # Source id for saving the handle position
-        self._handle_timeout_id = None
-
         self.emoticons_button = self.xml.get_object('emoticons_button')
         self.toggle_emoticons()
 
