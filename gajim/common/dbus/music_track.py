@@ -50,6 +50,7 @@ class MusicTrackListener(GObject.GObject):
     def __init__(self):
         super().__init__()
         self.players = {}
+        self.connection = None
 
     def start(self):
         proxy = Gio.DBusProxy.new_for_bus_sync(
@@ -93,11 +94,17 @@ class MusicTrackListener(GObject.GObject):
             if name.startswith(MPRIS_PLAYER_PREFIX):
                 self._remove_player(name)
 
-    def _signal_name_owner_changed(self, connection, sender_name, object_path,
-                         interface_name, signal_name, parameters, *user_data):
-        name, oldOwner, newOwner = parameters
+    def _signal_name_owner_changed(self,
+                                   _connection,
+                                   _sender_name,
+                                   _object_path,
+                                   _interface_name,
+                                   _signal_name,
+                                   parameters,
+                                   *_user_data):
+        name, old_owner, new_owner = parameters
         if name.startswith(MPRIS_PLAYER_PREFIX):
-            if newOwner and not oldOwner:
+            if new_owner and not old_owner:
                 self._add_player(name)
             else:
                 self._remove_player(name)
@@ -132,8 +139,14 @@ class MusicTrackListener(GObject.GObject):
 
             self.emit('music-track-changed', None)
 
-    def _signal_received(self, connection, sender_name, object_path,
-                         interface_name, signal_name, parameters, *user_data):
+    def _signal_received(self,
+                         _connection,
+                         _sender_name,
+                         _object_path,
+                         interface_name,
+                         _signal_name,
+                         parameters,
+                         *user_data):
         '''Signal handler for PropertiesChanged event'''
 
         if 'PlaybackStatus' not in parameters[1]:
@@ -145,7 +158,8 @@ class MusicTrackListener(GObject.GObject):
 
         self.emit('music-track-changed', info)
 
-    def _properties_extract(self, properties):
+    @staticmethod
+    def _properties_extract(properties):
         meta = properties.get('Metadata')
         if meta is None or not meta:
             return None

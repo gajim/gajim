@@ -64,7 +64,8 @@ class ScreensaverListener:
             # Don't go auto away if user disabled the option
             return
         for account in app.connections:
-            if account not in app.sleeper_state or not app.sleeper_state[account]:
+            if (account not in app.sleeper_state or
+                    not app.sleeper_state[account]):
                 continue
             if app.sleeper_state[account] == 'online':
                 if not app.account_is_connected(account):

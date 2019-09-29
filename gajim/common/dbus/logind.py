@@ -55,7 +55,8 @@ class LogindListener:
                               interface_name, signal_name, parameters,
                               *_user_data):
         '''Signal handler for PrepareForSleep event'''
-        log.debug('Received signal %s.%s%s', interface_name, signal_name, parameters)
+        log.debug('Received signal %s.%s%s',
+                  interface_name, signal_name, parameters)
 
         before = parameters[0] # Signal is either before or after sleep occurs
         if before:
@@ -69,7 +70,8 @@ class LogindListener:
                 if app.account_is_connected(name):
                     conn.old_show = app.SHOW_LIST[conn.connected]
                     st = conn.status
-                    conn.change_status('offline', _('Machine is going to sleep'))
+                    conn.change_status('offline',
+                                       _('Machine is going to sleep'))
                     conn.status = st
                     conn.time_to_reconnect = 5
 

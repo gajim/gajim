@@ -39,10 +39,12 @@ class LocationListener:
 
     def __init__(self):
         self._data = {}
+        self.location_info = {}
+        self.simple = None
 
-    # Note: do not remove third parameter `paramSpec`
+    # Note: do not remove third parameter `param`
     #       because notify signal expects three parameters
-    def _on_location_update(self, simple, paramSpec=None):
+    def _on_location_update(self, simple, _param=None):
         location = simple.get_location()
         timestamp = location.get_property("timestamp")[0]
         lat = location.get_property("latitude")
@@ -56,12 +58,12 @@ class LocationListener:
         self._data['timestamp'] = self._timestamp_to_utc(timestamp)
         self._send_location()
 
-    def _on_simple_ready(self, obj, result):
+    def _on_simple_ready(self, _obj, result):
         try:
             self.simple = Geoclue.Simple.new_finish(result)
-        except GLib.Error as e:
-            if e.domain == 'g-dbus-error-quark':
-                log.warning("Could not enable geolocation: %s", e.message)
+        except GLib.Error as error:
+            if error.domain == 'g-dbus-error-quark':
+                log.warning("Could not enable geolocation: %s", error.message)
             else:
                 raise
         else:
@@ -98,7 +100,8 @@ class LocationListener:
                 LocationData(**self._data))
             self.location_info = self._data.copy()
 
-    def _timestamp_to_utc(self, timestamp):
+    @staticmethod
+    def _timestamp_to_utc(timestamp):
         time = datetime.utcfromtimestamp(timestamp)
         return time.strftime('%Y-%m-%dT%H:%MZ')
 
