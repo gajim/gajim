@@ -179,24 +179,6 @@ class ChangeStatusCommand(AdHocCommand):
         return False    # finish the session
 
 
-def find_current_groupchats(account):
-    from gajim import message_control
-    rooms = []
-    for gc_control in app.interface.msg_win_mgr.get_controls(
-            message_control.TYPE_GC) + \
-            app.interface.minimized_controls[account].values():
-        acct = gc_control.account
-        # check if account is the good one
-        if acct != account:
-            continue
-        room_jid = gc_control.room_jid
-        nick = gc_control.nick
-        if (room_jid in app.gc_connected[acct] and
-                app.gc_connected[acct][room_jid]):
-            rooms.append((room_jid, nick,))
-    return rooms
-
-
 class AdHocCommands(BaseModule):
 
     _nbxmpp_extends = 'AdHoc'
