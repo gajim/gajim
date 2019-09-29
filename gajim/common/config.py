@@ -289,6 +289,7 @@ class Config:
         'auto_copy': [opt_bool, True, _('Selecting text will copy it to the clipboard')],
         'command_system_execute': [opt_bool, False, _('If enabled, Gajim will execute commands (/show, /sh, /execute, /exec).')],
         'groupchat_roster_width': [opt_int, 210, _('Width of group chat roster in pixel')],
+        'dev_force_bookmark_2': [opt_bool, False, _('Force Bookmark 2 usage')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {

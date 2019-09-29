@@ -155,7 +155,12 @@ class Bookmarks(BaseModule):
             NetworkEvent('bookmarks-received', account=self._account))
 
     def pass_disco(self, info):
-        if nbxmpp.NS_BOOKMARKS_COMPAT in info.features:
+        if app.config.get('dev_force_bookmark_2'):
+            self._log.info('Forcing Bookmark 2 usage, '
+                           'without server conversion support: %s', info.jid)
+            self._conversion_2 = True
+
+        elif nbxmpp.NS_BOOKMARKS_COMPAT in info.features:
             self._conversion_2 = True
             self._log.info('Discovered Bookmarks Conversion 2: %s', info.jid)
 
