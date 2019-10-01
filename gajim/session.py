@@ -253,7 +253,9 @@ class ChatControlSession:
         if do_event:
             event = event_t(obj.msgtxt, obj.subject, obj.mtype, obj.timestamp,
                 obj.encrypted, obj.resource, obj.msg_log_id,
-                correct_id=(obj.id_, obj.correct_id), xhtml=obj.xhtml,
+                correct_id=obj.correct_id,
+                message_id=obj.message_id,
+                xhtml=obj.xhtml,
                 session=self, form_node=obj.form_node,
                 displaymarking=obj.displaymarking,
                 sent_forwarded=obj.forwarded and obj.sent,

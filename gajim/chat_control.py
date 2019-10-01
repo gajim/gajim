@@ -1284,7 +1284,8 @@ class ChatControl(ChatControlBase):
             self.add_message(event.message, kind, tim=event.time,
                 encrypted=event.encrypted, subject=event.subject,
                 xhtml=event.xhtml, displaymarking=event.displaymarking,
-                correct_id=event.correct_id, additional_data=event.additional_data)
+                correct_id=event.correct_id, message_id=event.message_id,
+                additional_data=event.additional_data)
             if isinstance(event.msg_log_id, int):
                 message_ids.append(event.msg_log_id)
 
