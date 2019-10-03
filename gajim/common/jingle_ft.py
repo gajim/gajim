@@ -312,7 +312,7 @@ class JingleFileTransfer(JingleContent):
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")
 
-        if self.state == State.NOT_STARTED:
+        if self.state in (State.NOT_STARTED, State.CAND_RECEIVED):
             self.__state_changed(State.INITIALIZED)
         elif self.state == State.CAND_SENT_AND_RECEIVED:
             if not self.nominated_cand['our-cand'] and \

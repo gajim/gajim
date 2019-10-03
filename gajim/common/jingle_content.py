@@ -88,7 +88,7 @@ class JingleContent:
             'session-terminate': [],
             'transport-info': [self.__on_transport_info],
             'transport-replace': [self.__on_transport_replace],
-            'transport-accept': [],
+            'transport-accept': [self.__on_transport_replace],
             'transport-reject': [],
             'iq-result': [],
             'iq-error': [],

@@ -140,7 +140,9 @@ class JingleSession:
             'transport-info':       [self.__ack, self.__broadcast],
             'transport-replace':    [self.__ack, self.__broadcast,
                                      self.__on_transport_replace], #TODO
-            'transport-accept':     [self.__ack], #TODO
+            'transport-accept':     [self.__ack, self.__on_session_accept,
+                                     self.__on_content_accept,
+                                     self.__broadcast],
             'transport-reject':     [self.__ack], #TODO
             'iq-result':            [self.__broadcast],
             'iq-error':             [self.__on_error],
@@ -244,8 +246,9 @@ class JingleSession:
         Currently used for transport replacement
         '''
         content = self.contents[(creator, name)]
-        transport.set_sid(content.transport.sid)
-        transport.set_file_props(content.transport.file_props)
+        file_props = content.transport.file_props
+        file_props.transport_sid = transport.sid
+        transport.set_file_props(file_props)
         content.transport = transport
         # The content will have to be resend now that it is modified
         content.sent = False
@@ -410,12 +413,13 @@ class JingleSession:
                     # Anyway, content's transport is not modifiable yet
                     pass
                 elif transport_ns == nbxmpp.NS_JINGLE_IBB:
-                    transport = JingleTransportIBB()
+                    transport = JingleTransportIBB(node=content.getTag(
+                        'transport'))
                     self.modify_content(creator, name, transport)
                     self.state = JingleStates.PENDING
                     self.contents[(creator, name)].state = State.TRANSPORT_REPLACE
                     self.__ack(stanza, jingle, error, action)
-                    self.__session_accept()
+                    self.__transport_accept(transport)
                 else:
                     stanza, jingle = self.__make_jingle('transport-reject')
                     content = jingle.setTag('content', attrs={'creator': creator,
@@ -834,3 +838,12 @@ class JingleSession:
                                                                    conn=self.connection,
                                                                    jingle_session=self,
                                                                    media=media))
+
+    def __transport_accept(self, transport):
+        assert self.state != JingleStates.ENDED
+        stanza, jingle = self.__make_jingle('transport-accept')
+        self.__append_contents(jingle)
+        self.__broadcast(stanza, jingle, None, 'transport-accept')
+        self.connection.connection.send(stanza)
+        self.collect_iq_id(stanza.getID())
+        self.state = JingleStates.ACTIVE
