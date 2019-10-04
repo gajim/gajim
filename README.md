@@ -12,6 +12,7 @@
 - python3-css-parser
 - python3-keyring
 - python3-precis-i18n
+- gir1.2-soup-2.4
 
 ### Optional Runtime Requirements
 
