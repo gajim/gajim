@@ -69,9 +69,7 @@ class Message(BaseModule):
             stanza=stanza,
             account=self._account))
 
-        forwarded = properties.carbon_type is not None
-        sent = properties.carbon_type == 'sent'
-        if sent:
+        if properties.is_carbon_message and properties.carbon.is_sent:
             # Ugly, we treat the from attr as the remote jid,
             # to make that work with sent carbons we have to do this.
             # TODO: Check where in Gajim and plugins we depend on that behavior
@@ -157,8 +155,8 @@ class Message(BaseModule):
             'id_': properties.id,
             'encrypted': False,
             'additional_data': additional_data,
-            'forwarded': forwarded,
-            'sent': sent,
+            'forwarded': properties.is_carbon_message,
+            'sent': properties.is_carbon_message and properties.carbon.is_sent,
             'fjid': fjid,
             'jid': jid,
             'resource': resource,
