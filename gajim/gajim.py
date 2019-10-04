@@ -67,12 +67,16 @@ def _init_gui(gui):
 
 def _init_gtk():
     import gi
-    gi.require_version('GLib', '2.0')
-    gi.require_version('Gio', '2.0')
-    gi.require_version('Gtk', '3.0')
-    gi.require_version('Gdk', '3.0')
-    gi.require_version('GObject', '2.0')
-    gi.require_version('Pango', '1.0')
+    try:
+        gi.require_version('GLib', '2.0')
+        gi.require_version('Gio', '2.0')
+        gi.require_version('Gtk', '3.0')
+        gi.require_version('Gdk', '3.0')
+        gi.require_version('GObject', '2.0')
+        gi.require_version('Pango', '1.0')
+        gi.require_version('Soup', '2.4')
+    except ValueError as error:
+        sys.exit('Missing dependency: %s' % error)
 
     from gi.repository import Gtk
     gtk_ver = '%s.%s.%s' % (Gtk.get_major_version(),
