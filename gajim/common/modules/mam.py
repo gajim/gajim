@@ -174,7 +174,7 @@ class MAM(BaseModule):
         if groupchat:
             event_attrs.update(self._parse_gc_attrs(properties))
         else:
-            event_attrs.update(self._parse_chat_attrs(stanza, properties))
+            event_attrs.update(self._parse_chat_attrs(properties))
 
         stanza_id, message_id = self._get_unique_id(properties)
 
@@ -243,17 +243,13 @@ class MAM(BaseModule):
                 'real_jid': real_jid,
                 'kind': KindConstant.GC_MSG}
 
-    def _parse_chat_attrs(self, stanza, properties):
-        frm = properties.jid
-        to = stanza.getTo()
-        if frm.bareMatch(self._con.get_own_jid()):
-            with_ = to
+    def _parse_chat_attrs(self, properties):
+        if properties.from_.bareMatch(self._con.get_own_jid()):
             kind = KindConstant.CHAT_MSG_SENT
         else:
-            with_ = frm
             kind = KindConstant.CHAT_MSG_RECV
 
-        return {'with_': with_,
+        return {'with_': properties.jid,
                 'nick': None,
                 'kind': kind}
 
