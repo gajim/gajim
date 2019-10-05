@@ -553,10 +553,10 @@ class PluginManager(metaclass=Singleton):
         '''
         for plugin in self.plugins:
             if not plugin.active:
-                return
+                continue
 
             if not hasattr(plugin, 'modules'):
-                return
+                continue
 
             for module in plugin.modules:
                 instance, name = module.get_instance(con)
