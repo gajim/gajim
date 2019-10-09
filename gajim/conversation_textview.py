@@ -368,7 +368,7 @@ class ConversationTextview(GObject.GObject):
 
     def scroll_to_end(self, force=False):
         if self.autoscroll or force:
-            util.scroll_to_end(self.tv.get_parent())
+            GLib.idle_add(util.scroll_to_end, self.tv.get_parent())
 
     def correct_message(self, correct_id, kind, name):
         allowed = True
