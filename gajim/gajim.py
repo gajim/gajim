@@ -65,6 +65,17 @@ def _init_gui(gui):
         _init_gtk()
 
 
+def _disable_csd():
+    if os.name != 'nt':
+        return
+
+    if 'GTK_OSD' in os.environ:
+        # Respect user settings
+        return
+
+    os.environ['GTK_CSD'] = "0"
+
+
 def _init_gtk():
     import gi
     try:
@@ -140,4 +151,5 @@ def main():
 
     _check_required_deps()
     _set_proc_title()
+    _disable_csd()
     _init_gui('GTK')
