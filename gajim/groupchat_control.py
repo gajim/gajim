@@ -1032,8 +1032,7 @@ class GroupchatControl(ChatControlBase):
             'nick': event.nickname, 'subject': event.subject}
 
         if event.user_timestamp:
-            date = time.strftime('%d-%m-%Y %H:%M:%S',
-                                 time.localtime(event.user_timestamp))
+            date = time.strftime('%c', time.localtime(event.user_timestamp))
             text = '%s - %s' % (text, date)
 
         if (app.config.get('show_subject_on_join') or
