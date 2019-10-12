@@ -298,10 +298,8 @@ class CommonConnection:
 
             # XEP-0184
             if obj.jid != app.get_jid_from_account(self.name):
-                request = app.config.get_per('accounts', self.name,
-                                               'request_receipt')
-                if obj.message and request:
-                    msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
+                if obj.message:
+                    msg_iq.setReceiptRequest()
 
             if obj.session:
                 # XEP-0201

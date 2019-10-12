@@ -359,7 +359,6 @@ class Config:
             'zeroconf_email': [opt_str, '', '', True],
             'use_env_http_proxy': [opt_bool, False],
             'answer_receipts': [opt_bool, True, _('If enabled, Gajim will answer to message receipt requests.')],
-            'request_receipt': [opt_bool, True, _('If enabled, Gajim will send message receipt requests.')],
             'publish_tune': [opt_bool, False],
             'publish_location': [opt_bool, False],
             'subscribe_mood': [opt_bool, True],
