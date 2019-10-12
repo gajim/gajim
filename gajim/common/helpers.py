@@ -1093,8 +1093,6 @@ def update_optional_features(account=None):
             features.append(nbxmpp.NS_BOOKMARKS + '+notify')
         if not app.config.get('ignore_incoming_xhtml'):
             features.append(nbxmpp.NS_XHTML_IM)
-        if app.config.get_per('accounts', account_, 'answer_receipts'):
-            features.append(nbxmpp.NS_RECEIPTS)
         if app.is_installed('FARSTREAM'):
             features.append(nbxmpp.NS_JINGLE_RTP)
             features.append(nbxmpp.NS_JINGLE_RTP_AUDIO)

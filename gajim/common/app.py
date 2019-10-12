@@ -159,6 +159,7 @@ gajim_common_features = [
     nbxmpp.NS_ENCRYPTED,
     nbxmpp.NS_PING,
     nbxmpp.NS_CHATSTATES,
+    nbxmpp.NS_RECEIPTS,
     nbxmpp.NS_TIME_REVISED,
     nbxmpp.NS_VERSION,
     nbxmpp.NS_ROSTERX,
