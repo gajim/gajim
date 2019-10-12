@@ -15,9 +15,10 @@
 # XEP-0184: Message Delivery Receipts
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
-from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 
 
@@ -25,81 +26,66 @@ class Receipts(BaseModule):
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
-    def delegate(self, event):
-        request = event.stanza.getTag('request',
-                                      namespace=nbxmpp.NS_RECEIPTS)
-        if request is not None:
-            self._answer_request(event)
+        self.handlers = [
+            StanzaHandler(name='message',
+                          callback=self._process_message_receipt,
+                          ns=nbxmpp.NS_RECEIPTS,
+                          priority=46),
+        ]
+
+    def _process_message_receipt(self, _con, stanza, properties):
+        if not properties.is_receipt:
             return
 
-        received = event.stanza.getTag('received',
-                                       namespace=nbxmpp.NS_RECEIPTS)
-        if received is not None:
-            self._receipt_received(event, received)
+        if (properties.type.is_groupchat or
+                properties.is_self_message or
+                properties.is_mam_message or
+                properties.is_carbon_message and properties.carbon.is_sent):
+
+            if properties.receipt.is_received:
+                # Don't propagate this event further
+                raise nbxmpp.NodeProcessed
+            return
+
+        if properties.receipt.is_request:
+            if not app.config.get_per('accounts', self._account,
+                                      'answer_receipts'):
+                return
+            contact = self._get_contact(properties)
+            if contact is None:
+                return
+            self._log.info('Send receipt: %s', properties.jid)
+            self._con.connection.send(stanza.buildReceipt())
+            return
+
+        if properties.receipt.is_received:
+            self._log.info('Receipt from %s %s',
+                           properties.jid,
+                           properties.receipt.id)
+
+            jid = properties.jid
+            if not properties.is_muc_pm:
+                jid = properties.jid.getBare()
+
+            app.nec.push_incoming_event(
+                NetworkEvent('receipt-received',
+                             conn=self._con,
+                             receipt_id=properties.receipt.id,
+                             jid=jid))
+
             raise nbxmpp.NodeProcessed
 
-    def _answer_request(self, event):
-        if not app.config.get_per('accounts', self._account,
-                                  'answer_receipts'):
-            return
-
-        if event.mtype not in ('chat', 'normal'):
-            return
-
-        if event.sent:
-            # Never answer messages that we sent from another device
-            return
-
-        from_ = event.stanza.getFrom()
-        if self._con.get_own_jid().bareMatch(from_):
-            # Dont answer receipts from our other resources
-            return
-
-        receipt_id = event.stanza.getID()
-
-        contact = self._get_contact(event)
-        if contact is None:
-            return
-
-        receipt = self._build_answer_receipt(from_, receipt_id)
-        self._log.info('Answer %s', receipt_id)
-        self._con.connection.send(receipt)
-
-    def _get_contact(self, event):
-        if event.muc_pm:
+    def _get_contact(self, properties):
+        if properties.is_muc_pm:
             return app.contacts.get_gc_contact(self._account,
-                                               event.jid,
-                                               event.resource)
+                                               properties.jid.getBare(),
+                                               properties.jid.getResource())
 
-        contact = app.contacts.get_contact(self._account, event.jid)
+        contact = app.contacts.get_contact(self._account,
+                                           properties.jid.getBare())
         if contact is not None and contact.sub not in ('to', 'none'):
             return contact
         return None
-
-    @staticmethod
-    def _build_answer_receipt(to, receipt_id):
-        receipt = nbxmpp.Message(to=to, typ='chat')
-        receipt.setTag('received',
-                       namespace='urn:xmpp:receipts',
-                       attrs={'id': receipt_id})
-        return receipt
-
-    def _receipt_received(self, event, received):
-        receipt_id = received.getAttr('id')
-        if receipt_id is None:
-            self._log.warning('Receipt without ID: %s', event.stanza)
-            return
-        self._log.info('Received %s', receipt_id)
-
-        jid = event.jid
-        if event.muc_pm:
-            jid = event.fjid
-
-        app.nec.push_incoming_event(
-            NetworkIncomingEvent('receipt-received',
-                                 conn=self._con,
-                                 receipt_id=receipt_id,
-                                 jid=jid))
 
 
 def get_instance(*args, **kwargs):

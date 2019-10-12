@@ -195,7 +195,6 @@ class Message(BaseModule):
 
     def _on_message_decrypted(self, event):
         try:
-            self._con.get_module('Receipts').delegate(event)
             self._con.get_module('Chatstate').delegate(event)
         except nbxmpp.NodeProcessed:
             return

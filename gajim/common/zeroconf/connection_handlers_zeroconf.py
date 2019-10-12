@@ -129,7 +129,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
 
     def _on_message_decrypted(self, event):
         try:
-            self.get_module('Receipts').delegate(event)
             self.get_module('Chatstate').delegate(event)
         except nbxmpp.NodeProcessed:
             return
