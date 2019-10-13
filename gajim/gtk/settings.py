@@ -541,6 +541,9 @@ class ComboSetting(GenericSetting):
     def on_value_change(self, combo):
         self.set_value(combo.get_active_id())
 
+    def on_row_activated(self):
+        pass
+
 
 class ChatstateComboSetting(ComboSetting):
     def on_value_change(self, combo):
