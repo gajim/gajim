@@ -209,7 +209,7 @@ class MAM(BaseModule):
              'stanza_id': stanza_id,
              'origin_id': message_id,
              'message_id': properties.id,
-             'correct_id': None,
+             'correct_id': parse_correction(properties),
              'archive_jid': properties.mam.archive,
              'msgtxt': properties.body,
              'message': stanza,
@@ -260,8 +260,6 @@ class MAM(BaseModule):
             # For example Chatstates, Receipts, Chatmarkers
             self._log.debug(event.message.getProperties())
             return
-
-        event.correct_id = parse_correction(event.message)
 
         with_ = event.with_.getStripped()
         if event.muc_pm:

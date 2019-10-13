@@ -37,14 +37,10 @@ def parse_oob(properties, additional_data):
 
 # XEP-0308: Last Message Correction
 
-def parse_correction(stanza):
-    replace = stanza.getTag('replace', namespace=nbxmpp.NS_CORRECT)
-    if replace is not None:
-        id_ = replace.getAttr('id')
-        if id_ is not None:
-            return id_
-        log.warning('No id attr found: %s', stanza)
-    return None
+def parse_correction(properties):
+    if not properties.is_correction:
+        return
+    return properties.correction.id
 
 
 # XEP-0224: Attention

@@ -112,6 +112,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'resource': resource,
             'unique_id': id_,
             'message_id': properties.id,
+            'correct_id': parse_correction(properties),
             'mtype': type_,
             'msgtxt': msgtxt,
             'thread_id': thread_id,
@@ -143,7 +144,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'displaymarking': None,
             'form_node': None,
             'attention': parse_attention(event.stanza),
-            'correct_id': parse_correction(event.stanza),
             'user_nick': parse_nickname(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
             'stanza_id': event.unique_id
