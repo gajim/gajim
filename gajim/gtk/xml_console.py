@@ -26,6 +26,7 @@ from gajim.common.const import StyleAttr
 
 from gajim.gtk import util
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.const import Setting
@@ -44,6 +45,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         self.set_name('XMLConsoleWindow')
 
         self.selected_account = None
+        self._selected_send_account = None
         self.presence = True
         self.message = True
         self.iq = True
@@ -60,6 +62,17 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
 
         self._ui.paned.set_position(self._ui.paned.get_property('max-position'))
 
+        self._combo = MaxWidthComboBoxText()
+        self._combo.set_max_size(200)
+        self._combo.set_hexpand(False)
+        self._combo.set_halign(Gtk.Align.END)
+        self._combo.set_no_show_all(True)
+        self._combo.set_visible(False)
+        self._combo.connect('changed', self._on_value_change)
+        for account, label in self._get_accounts():
+            self._combo.append(account, label)
+        self._ui.actionbar.pack_end(self._combo)
+
         self._create_tags()
         self.show_all()
 
@@ -71,6 +84,9 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
             'stanza-received', ged.GUI1, self._nec_stanza_received)
         app.ged.register_event_handler(
             'stanza-sent', ged.GUI1, self._nec_stanza_sent)
+
+    def _on_value_change(self, combo):
+        self._selected_send_account = combo.get_active_id()
 
     def _set_titlebar(self):
         if self.selected_account is None:
@@ -134,12 +150,14 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
             self._ui.input_entry.grab_focus()
 
     def _on_send(self, *args):
-        if not app.account_is_connected(self.selected_account):
+        if not self._selected_send_account:
+            return
+        if not app.account_is_connected(self._selected_send_account):
             # If offline or connecting
             ErrorDialog(
                 _('Connection not available'),
                 _('Please make sure you are connected with \'%s\'.') %
-                self.selected_account)
+                self._selected_send_account)
             return
         buffer_ = self._ui.input_entry.get_buffer()
         begin_iter, end_iter = buffer_.get_bounds()
@@ -158,7 +176,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
                 # stream management
                 node = nbxmpp.Protocol(node=stanza,
                                        attrs={'xmlns': 'jabber:client'})
-            app.connections[self.selected_account].connection.send(node)
+            app.connections[self._selected_send_account].connection.send(node)
             self.last_stanza = stanza
             buffer_.set_text('')
 
@@ -173,25 +191,31 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
             self._ui.paned.get_child2().show()
             self._ui.send.show()
             self._ui.paste.show()
+            self._combo.show()
             self._ui.menubutton.show()
             self._ui.input_entry.grab_focus()
         else:
             self._ui.paned.get_child2().hide()
             self._ui.send.hide()
             self._ui.paste.hide()
+            self._combo.hide()
             self._ui.menubutton.hide()
+
+    @staticmethod
+    def _get_accounts():
+        accounts = app.get_accounts_sorted()
+        combo_accounts = []
+        for account in accounts:
+            label = app.get_account_label(account)
+            combo_accounts.append((account, label))
+        return combo_accounts
 
     def _on_filter_options(self, *args):
         if self.filter_dialog:
             self.filter_dialog.present()
             return
 
-        # Get all accounts for settings combobox
-        accounts = app.get_accounts_sorted()
-        combo_accounts = []
-        for account in accounts:
-            label = app.get_account_label(account)
-            combo_accounts.append((account, label))
+        combo_accounts = self._get_accounts()
         combo_accounts.insert(0, (None, _('All Accounts')))
 
         settings = [
