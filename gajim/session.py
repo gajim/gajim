@@ -256,7 +256,7 @@ class ChatControlSession:
                 correct_id=obj.correct_id,
                 message_id=obj.message_id,
                 xhtml=obj.xhtml,
-                session=self, form_node=obj.form_node,
+                session=self,
                 displaymarking=obj.displaymarking,
                 sent_forwarded=obj.forwarded and obj.sent,
                 show_in_roster=obj.show_in_roster,
@@ -267,7 +267,7 @@ class ChatControlSession:
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
     subject=None, resource='', msg_log_id=None, user_nick='', xhtml=None,
-    form_node=None, displaymarking=None, additional_data=None):
+    displaymarking=None, additional_data=None):
         """
         Display the message or show notification in the roster
         """
@@ -325,7 +325,7 @@ class ChatControlSession:
         if msg_type == 'normal' and popup: # it's single message to be autopopuped
             SingleMessageWindow(self.conn.name, contact.jid,
                     action='receive', from_whom=jid, subject=subject, message=msg,
-                    resource=resource, session=self, form_node=form_node)
+                    resource=resource, session=self)
             return
 
         # We print if window is opened and it's not a single message
@@ -356,7 +356,7 @@ class ChatControlSession:
         show_in_systray = get_show_in_systray(event_type, contact.jid)
 
         event = event_t(msg, subject, msg_type, tim, encrypted, resource,
-            msg_log_id, xhtml=xhtml, session=self, form_node=form_node,
+            msg_log_id, xhtml=xhtml, session=self,
             displaymarking=displaymarking, sent_forwarded=False,
             show_in_roster=show_in_roster, show_in_systray=show_in_systray,
             additional_data=additional_data)

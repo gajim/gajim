@@ -143,7 +143,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'msg_log_id': None,
             'subject': None,
             'displaymarking': None,
-            'form_node': None,
             'user_nick': parse_nickname(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
             'stanza_id': event.unique_id

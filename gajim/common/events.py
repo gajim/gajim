@@ -62,7 +62,7 @@ class Event:
 class ChatEvent(Event):
     type_ = 'chat'
     def __init__(self, message, subject, kind, time_, encrypted, resource,
-    msg_log_id, correct_id=None, message_id=None, xhtml=None, session=None, form_node=None,
+    msg_log_id, correct_id=None, message_id=None, xhtml=None, session=None,
     displaymarking=None, sent_forwarded=False, show_in_roster=False,
     show_in_systray=True, additional_data=None):
         Event.__init__(self, time_, show_in_roster=show_in_roster,
@@ -78,7 +78,6 @@ class ChatEvent(Event):
         self.correct_id = correct_id
         self.xhtml = xhtml
         self.session = session
-        self.form_node = form_node
         self.displaymarking = displaymarking
         self.sent_forwarded = sent_forwarded
         if additional_data is None:

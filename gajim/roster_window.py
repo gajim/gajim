@@ -1928,8 +1928,7 @@ class RosterWindow:
         if event.type_ == 'normal':
             SingleMessageWindow(account, jid,
                 action='receive', from_whom=jid, subject=event.subject,
-                message=event.message, resource=event.resource,
-                session=event.session, form_node=event.form_node)
+                message=event.message, resource=event.resource)
             app.events.remove_events(account, jid, event)
             return True
 
@@ -2659,8 +2658,7 @@ class RosterWindow:
             # it's single message to be autopopuped
             SingleMessageWindow(obj.conn.name, obj.jid,
                 action='receive', from_whom=obj.jid, subject=obj.subject,
-                message=obj.msgtxt, resource=obj.resource, session=obj.session,
-                form_node=obj.form_node)
+                message=obj.msgtxt, resource=obj.resource, session=obj.session)
             return
 
         if obj.popup and obj.mtype == 'chat' and not obj.session.control:

@@ -203,7 +203,7 @@ class CommonConnection:
         'rst_formatting_outgoing_messages'):
             from gajim.common.rst_xhtml_generator import create_xhtml
             obj.xhtml = create_xhtml(obj.message)
-        if not obj.message and obj.chatstate is None and obj.form_node is None:
+        if not obj.message and obj.chatstate is None:
             return
 
         self._build_message_stanza(obj)
@@ -235,8 +235,6 @@ class CommonConnection:
         if obj.message:
             msg_iq.setOriginID(obj.stanza_id)
 
-        if obj.form_node:
-            msg_iq.addChild(node=obj.form_node)
         if obj.label:
             msg_iq.addChild(node=obj.label)
 

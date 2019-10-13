@@ -16,8 +16,6 @@
 
 import logging
 
-import nbxmpp
-
 from gajim.common import app
 
 log = logging.getLogger('gajim.c.m.misc')
@@ -41,12 +39,6 @@ def parse_correction(properties):
     if not properties.is_correction:
         return
     return properties.correction.id
-
-
-# XEP-0004: Data Forms
-
-def parse_form(stanza):
-    return stanza.getTag('x', namespace=nbxmpp.NS_DATA)
 
 
 # XEP-0071: XHTML-IM

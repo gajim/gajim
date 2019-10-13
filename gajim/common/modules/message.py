@@ -31,7 +31,6 @@ from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.misc import parse_correction
-from gajim.common.modules.misc import parse_form
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
 from gajim.common.connection_handlers_events import MessageErrorEvent
@@ -211,7 +210,6 @@ class Message(BaseModule):
             'subject': subject,
             'displaymarking': parse_securitylabel(event.stanza),
             'user_nick': '' if event.sent else parse_nickname(event.stanza),
-            'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
         }
 

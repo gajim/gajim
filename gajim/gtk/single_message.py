@@ -26,7 +26,6 @@ from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
 from gajim.conversation_textview import ConversationTextview
 
-from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_builder
@@ -45,7 +44,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
     action argument which can be 'send' or 'receive'
     """
     def __init__(self, account, to='', action='', from_whom='', subject='',
-            message='', resource='', session=None, form_node=None):
+            message='', resource='', session=None):
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_title(_('Send Single Message'))
@@ -72,19 +71,6 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
         self.conversation_tv_buffer = self.conversation_textview.tv.get_buffer()
         self._ui.conversation_scrolledwindow.add(
             self.conversation_textview.tv)
-
-        self.form_widget = None
-        parent_box = self._ui.conversation_scrolledwindow.get_parent()
-        if form_node:
-            self.form_widget = DataFormWidget(form_node)
-            self.form_widget.show_all()
-            self._ui.conversation_scrolledwindow.hide()
-            self._ui.message_label_received.hide()
-            parent_box.add(self.form_widget)
-            parent_box.child_set_property(self.form_widget, 'top-attach', 2)
-            parent_box.child_set_property(self.form_widget, 'left-attach', 0)
-            parent_box.child_set_property(self.form_widget, 'width', 2)
-            self.action = 'form'
 
         self.message_tv_buffer.connect('changed', self.update_char_counter)
         if isinstance(to, list):
@@ -241,22 +227,6 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
                 fjid += '/' + self.resource # Full jid of sender (with resource)
             self._ui.from_entry_label.set_text(fjid)
 
-        elif action == 'form': # prepare UI for Receiving
-            title = self.form_widget.title
-            title = _('Form: %s') % title
-            self._ui.send_button.hide()
-            self._ui.send_and_close_button.hide()
-            self._ui.reply_button.show()
-            self._ui.close_button.show()
-
-            self._ui.send_grid.hide()
-            self._ui.received_grid.show()
-
-            fjid = self.from_whom
-            if self.resource:
-                fjid += '/' + self.resource # Full jid of sender (with resource)
-            self._ui.from_entry_label.set_text(fjid)
-
         self._ui.single_message_window.set_title(title)
 
     def on_close_button_clicked(self, widget):
@@ -289,11 +259,6 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
         begin, end = self.message_tv_buffer.get_bounds()
         message = self.message_tv_buffer.get_text(begin, end, True)
 
-        if self.form_widget:
-            form_node = self.form_widget.get_submit_form()
-        else:
-            form_node = None
-
         recipient_list = []
 
         for to_whom_jid in sender_list:
@@ -317,7 +282,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
 
         app.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=recipient_list, message=message,
-            type_='normal', subject=subject, form_node=form_node))
+            type_='normal', subject=subject))
 
         self._ui.subject_entry.set_text('') # we sent ok, clear the subject
         self.message_tv_buffer.set_text('') # we sent ok, clear the textview

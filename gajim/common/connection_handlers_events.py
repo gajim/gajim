@@ -605,7 +605,6 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.xhtml = None
         self.label = None
         self.session = None
-        self.form_node = None
         self.delayed = None
         self.callback = None
         self.callback_args = []

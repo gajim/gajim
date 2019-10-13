@@ -860,7 +860,6 @@ class GroupchatControl(ChatControlBase):
                                msg_log_id,
                                xhtml=xhtml,
                                session=session,
-                               form_node=None,
                                displaymarking=displaymarking,
                                sent_forwarded=sent)
         app.events.add_event(self.account, fjid, event)
