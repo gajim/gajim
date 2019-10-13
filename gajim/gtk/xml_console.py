@@ -26,7 +26,6 @@ from gajim.common.const import StyleAttr
 
 from gajim.gtk import util
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_image_button
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.const import Setting
@@ -61,36 +60,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
 
         self._ui.paned.set_position(self._ui.paned.get_property('max-position'))
 
-        button = get_image_button(
-            'applications-system-symbolic', _('Filter'))
-        button.connect('clicked', self._on_filter_options)
-        self._ui.actionbar.pack_start(button)
-
-        button = get_image_button(
-            'edit-clear-symbolic', _('Clear'))
-        button.connect('clicked', self._on_clear)
-        self._ui.actionbar.pack_start(button)
-
-        button = get_image_button(
-            'document-edit-symbolic', _('XML Input'), toggle=True)
-        button.connect('toggled', self._on_input)
-        self._ui.actionbar.pack_start(button)
-
-        button = get_image_button('insert-text-symbolic', _('Paste Last Input'))
-        button.connect('clicked', self._on_paste_last)
-        self._ui.actionbar.pack_start(button)
-
-        button = Gtk.Button.new_with_mnemonic(_('_Send'))
-        button.connect('clicked', self._on_send)
-        self._ui.actionbar.pack_end(button)
-
-        self._ui.actionbar.pack_start(self._ui.menubutton)
-
         self._create_tags()
         self.show_all()
-
-        self._ui.scrolled_input.hide()
-        self._ui.menubutton.hide()
 
         self.connect('destroy', self._on_destroy)
         self.connect('key_press_event', self._on_key_press_event)
@@ -200,10 +171,14 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
     def _on_input(self, button, *args):
         if button.get_active():
             self._ui.paned.get_child2().show()
+            self._ui.send.show()
+            self._ui.paste.show()
             self._ui.menubutton.show()
             self._ui.input_entry.grab_focus()
         else:
             self._ui.paned.get_child2().hide()
+            self._ui.send.hide()
+            self._ui.paste.hide()
             self._ui.menubutton.hide()
 
     def _on_filter_options(self, *args):
