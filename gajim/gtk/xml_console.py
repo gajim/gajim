@@ -96,7 +96,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         for tag_name in tags:
             buffer_.create_tag(tag_name)
 
-    def _on_key_press_event(self, widget, event):
+    def _on_key_press_event(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
         if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
@@ -107,7 +107,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
                 event.keyval == Gdk.KEY_Up):
             self._on_paste_last()
 
-    def _on_row_activated(self, listbox, row):
+    def _on_row_activated(self, _listbox, row):
         text = row.get_child().get_text()
         input_text = None
         if text == 'Presence':
@@ -227,7 +227,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
                                             settings, self.selected_account)
         self.filter_dialog.connect('destroy', self._on_filter_destroyed)
 
-    def _on_filter_destroyed(self, win):
+    def _on_filter_destroyed(self, _win):
         self.filter_dialog = None
 
     def _on_clear(self, *args):
@@ -239,7 +239,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         app.ged.remove_event_handler(
             'stanza-sent', ged.GUI1, self._nec_stanza_sent)
 
-    def _set_account(self, value, data):
+    def _set_account(self, value, _data):
         self.selected_account = value
         self._set_titlebar()
 
