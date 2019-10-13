@@ -94,13 +94,16 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
 
         session.last_receive = time.time()
 
+        additional_data = AdditionalDataDict()
+        parse_oob(properties, additional_data)
+
         event_attr = {
             'conn': self,
             'stanza': stanza,
             'account': self.name,
             'id_': id_,
             'encrypted': False,
-            'additional_data': AdditionalDataDict(),
+            'additional_data': additional_data,
             'forwarded': False,
             'sent': False,
             'timestamp': time.time(),
@@ -145,8 +148,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'xhtml': parse_xhtml(event.stanza),
             'stanza_id': event.unique_id
         }
-
-        parse_oob(event)
 
         for name, value in event_attr.items():
             setattr(event, name, value)

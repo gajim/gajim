@@ -25,18 +25,14 @@ log = logging.getLogger('gajim.c.m.misc')
 
 # XEP-0066: Out of Band Data
 
-def parse_oob(event):
-    oob_node = event.stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
-    if oob_node is None:
+def parse_oob(properties, additional_data):
+    if not properties.is_oob:
         return
 
-    url = oob_node.getTagData('url')
-    if url is not None:
-        event.additional_data.set_value('gajim', 'oob_url', url)
-
-    desc = oob_node.getTagData('desc')
-    if desc is not None:
-        event.additional_data.set_value('gajim', 'oob_desc', desc)
+    additional_data.set_value('gajim', 'oob_url', properties.oob.url)
+    if properties.oob.desc is not None:
+        additional_data.set_value('gajim', 'oob_desc',
+                                  properties.oob.desc)
 
 
 # XEP-0308: Last Message Correction

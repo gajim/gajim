@@ -195,6 +195,8 @@ class MAM(BaseModule):
             additional_data.set_value(
                 'gajim', 'user_timestamp', properties.user_timestamp)
 
+        parse_oob(properties, additional_data)
+
         event_attrs.update(
             {'conn': self._con,
              'account': self._account,
@@ -260,7 +262,6 @@ class MAM(BaseModule):
             return
 
         event.correct_id = parse_correction(event.message)
-        parse_oob(event)
 
         with_ = event.with_.getStripped()
         if event.muc_pm:

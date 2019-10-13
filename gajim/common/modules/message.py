@@ -148,6 +148,8 @@ class Message(BaseModule):
             additional_data.set_value(
                 'gajim', 'user_timestamp', properties.user_timestamp)
 
+        parse_oob(properties, additional_data)
+
         event_attr = {
             'conn': self._con,
             'stanza': stanza,
@@ -213,7 +215,6 @@ class Message(BaseModule):
             'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
         }
-        parse_oob(event)
 
         for name, value in event_attr.items():
             setattr(event, name, value)
