@@ -43,18 +43,6 @@ def parse_correction(properties):
     return properties.correction.id
 
 
-# XEP-0224: Attention
-
-def parse_attention(stanza):
-    attention = stanza.getTag('attention', namespace=nbxmpp.NS_ATTENTION)
-    if attention is None:
-        return False
-    delayed = stanza.getTag('x', namespace=nbxmpp.NS_DELAY2)
-    if delayed is not None:
-        return False
-    return True
-
-
 # XEP-0004: Data Forms
 
 def parse_form(stanza):

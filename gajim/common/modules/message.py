@@ -31,7 +31,6 @@ from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.misc import parse_correction
-from gajim.common.modules.misc import parse_attention
 from gajim.common.modules.misc import parse_form
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
@@ -174,7 +173,8 @@ class Message(BaseModule):
             'timestamp': properties.timestamp,
             'delayed': properties.user_timestamp is not None,
             'muc_pm': properties.is_muc_pm,
-            'gc_control': gc_control
+            'gc_control': gc_control,
+            'attention': properties.attention,
         }
 
         app.nec.push_incoming_event(NetworkEvent('update-client-info',
@@ -210,7 +210,6 @@ class Message(BaseModule):
             'msg_log_id': None,
             'subject': subject,
             'displaymarking': parse_securitylabel(event.stanza),
-            'attention': parse_attention(event.stanza),
             'user_nick': '' if event.sent else parse_nickname(event.stanza),
             'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),

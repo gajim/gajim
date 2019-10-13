@@ -34,7 +34,6 @@ from gajim.common.const import KindConstant
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.misc import parse_correction
-from gajim.common.modules.misc import parse_attention
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
 from gajim.common.connection_handlers_events import MessageErrorEvent
@@ -119,7 +118,9 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'session': session,
             'self_message': False,
             'muc_pm': False,
-            'gc_control': None}
+            'gc_control': None,
+            'attention': properties.attention,
+        }
 
         event = ZeroconfMessageReceivedEvent(None, **event_attr)
         app.nec.push_incoming_event(event)
@@ -143,7 +144,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'subject': None,
             'displaymarking': None,
             'form_node': None,
-            'attention': parse_attention(event.stanza),
             'user_nick': parse_nickname(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
             'stanza_id': event.unique_id
