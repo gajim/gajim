@@ -121,6 +121,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'attention': properties.attention,
             'xhtml': parse_xhtml(properties),
             'user_nick': properties.nickname,
+            'subject': None,
         }
 
         event = ZeroconfMessageReceivedEvent(None, **event_attr)
@@ -142,7 +143,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
         event_attr = {
             'popup': False,
             'msg_log_id': None,
-            'subject': None,
             'displaymarking': None,
             'stanza_id': event.unique_id
         }

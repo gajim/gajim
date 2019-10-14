@@ -175,6 +175,7 @@ class Message(BaseModule):
             'attention': properties.attention,
             'xhtml': parse_xhtml(properties),
             'user_nick': properties.nickname,
+            'subject': properties.subject,
         }
 
         app.nec.push_incoming_event(NetworkEvent('update-client-info',
@@ -202,13 +203,11 @@ class Message(BaseModule):
         except nbxmpp.NodeProcessed:
             return
 
-        subject = event.stanza.getSubject()
         groupchat = event.mtype == 'groupchat'
 
         event_attr = {
             'popup': False,
             'msg_log_id': None,
-            'subject': subject,
             'displaymarking': parse_securitylabel(event.stanza),
         }
 
