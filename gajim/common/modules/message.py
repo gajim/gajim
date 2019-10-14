@@ -174,6 +174,7 @@ class Message(BaseModule):
             'muc_pm': properties.is_muc_pm,
             'gc_control': gc_control,
             'attention': properties.attention,
+            'xhtml': parse_xhtml(properties),
         }
 
         app.nec.push_incoming_event(NetworkEvent('update-client-info',
@@ -210,7 +211,6 @@ class Message(BaseModule):
             'subject': subject,
             'displaymarking': parse_securitylabel(event.stanza),
             'user_nick': '' if event.sent else parse_nickname(event.stanza),
-            'xhtml': parse_xhtml(event.stanza),
         }
 
         for name, value in event_attr.items():

@@ -43,7 +43,7 @@ def parse_correction(properties):
 
 # XEP-0071: XHTML-IM
 
-def parse_xhtml(stanza):
+def parse_xhtml(properties):
     if app.config.get('ignore_incoming_xhtml'):
         return None
-    return stanza.getXHTML()
+    return properties.xhtml

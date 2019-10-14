@@ -120,6 +120,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'muc_pm': False,
             'gc_control': None,
             'attention': properties.attention,
+            'xhtml': parse_xhtml(properties),
         }
 
         event = ZeroconfMessageReceivedEvent(None, **event_attr)
@@ -144,7 +145,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'subject': None,
             'displaymarking': None,
             'user_nick': parse_nickname(event.stanza),
-            'xhtml': parse_xhtml(event.stanza),
             'stanza_id': event.unique_id
         }
 
