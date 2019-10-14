@@ -22,8 +22,6 @@
 import time
 import logging
 
-import nbxmpp
-
 from gajim.common import app
 
 from gajim.common import connection_handlers
@@ -135,11 +133,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             self._on_message_decrypted(event)
 
     def _on_message_decrypted(self, event):
-        try:
-            self.get_module('Chatstate').delegate(event)
-        except nbxmpp.NodeProcessed:
-            return
-
         event_attr = {
             'popup': False,
             'msg_log_id': None,

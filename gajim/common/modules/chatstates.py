@@ -51,17 +51,6 @@ def ensure_enabled(func):
     return func_wrapper
 
 
-def parse_chatstate(stanza: nbxmpp.Message) -> Optional[str]:
-    if stanza.getTag('delay', namespace=nbxmpp.NS_DELAY2) is not None:
-        return None
-
-    children = stanza.getChildren()
-    for child in children:
-        if child.getNamespace() == nbxmpp.NS_CHATSTATES:
-            return child.getName()
-    return None
-
-
 class Chatstate(BaseModule):
     def __init__(self, con: ConnectionT) -> None:
         BaseModule.__init__(self, con)
@@ -69,6 +58,10 @@ class Chatstate(BaseModule):
         self.handlers = [
             StanzaHandler(name='presence',
                           callback=self._presence_received),
+            StanzaHandler(name='message',
+                          callback=self._process_chatstate,
+                          ns=nbxmpp.NS_CHATSTATES,
+                          priority=46),
         ]
 
         # Our current chatstate with a specific contact
@@ -144,34 +137,38 @@ class Chatstate(BaseModule):
                          account=self._account,
                          contact=contact))
 
-    def delegate(self, event: Any) -> None:
-        if self._con.get_own_jid().bareMatch(event.jid) or event.sent:
-            # Dont show chatstates from our own resources
+    def _process_chatstate(self, _con, _stanza, properties):
+        if not properties.has_chatstate:
             return
 
-        if event.mtype == 'groupchat':
-            # Not implemented yet
+        if (properties.is_self_message or
+                properties.type.is_groupchat or
+                properties.is_carbon_message and properties.carbon.is_sent):
+            if properties.chatstate in ('inactive', 'gone',
+                                        'composing', 'paused'):
+                raise nbxmpp.NodeProcessed
             return
 
-        chatstate = parse_chatstate(event.stanza)
-        if chatstate is None:
-            return
-
-        if event.muc_pm:
+        if properties.is_muc_pm:
             contact = app.contacts.get_gc_contact(
-                self._account, event.jid, event.resource)
+                self._account,
+                properties.jid.getBare(),
+                properties.jid.getResource())
         else:
             contact = app.contacts.get_contact_from_full_jid(
-                self._account, event.fjid)
+                self._account, str(properties.jid))
         if contact is None:
             return
 
-        contact.chatstate = chatstate
-        self._log.info('Recv: %-10s - %s', chatstate, event.fjid)
+        contact.chatstate = properties.chatstate
+        self._log.info('Recv: %-10s - %s', properties.chatstate, properties.jid)
         app.nec.push_outgoing_event(
             NetworkEvent('chatstate-received',
                          account=self._account,
                          contact=contact))
+
+        if properties.chatstate in ('inactive', 'gone', 'composing', 'paused'):
+            raise nbxmpp.NodeProcessed
 
     @ensure_enabled
     def _check_last_interaction(self) -> GLib.SOURCE_CONTINUE:

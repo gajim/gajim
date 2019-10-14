@@ -198,11 +198,6 @@ class Message(BaseModule):
                 self._on_message_decrypted(event)
 
     def _on_message_decrypted(self, event):
-        try:
-            self._con.get_module('Chatstate').delegate(event)
-        except nbxmpp.NodeProcessed:
-            return
-
         groupchat = event.mtype == 'groupchat'
 
         event_attr = {
