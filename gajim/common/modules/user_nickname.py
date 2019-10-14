@@ -57,12 +57,5 @@ class UserNickname(BaseModule):
                          nickname=nick))
 
 
-def parse_nickname(stanza: nbxmpp.Node) -> str:
-    nick = stanza.getTag('nick', namespace=nbxmpp.NS_NICK)
-    if nick is None:
-        return ''
-    return nick.getData()
-
-
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[UserNickname, str]:
     return UserNickname(*args, **kwargs), 'UserNickname'

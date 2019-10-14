@@ -31,7 +31,6 @@ from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
 from gajim.common.const import KindConstant
-from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
@@ -121,6 +120,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'gc_control': None,
             'attention': properties.attention,
             'xhtml': parse_xhtml(properties),
+            'user_nick': properties.nickname,
         }
 
         event = ZeroconfMessageReceivedEvent(None, **event_attr)
@@ -144,7 +144,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'msg_log_id': None,
             'subject': None,
             'displaymarking': None,
-            'user_nick': parse_nickname(event.stanza),
             'stanza_id': event.unique_id
         }
 

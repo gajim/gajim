@@ -29,7 +29,6 @@ from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.security_labels import parse_securitylabel
-from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
@@ -175,6 +174,7 @@ class Message(BaseModule):
             'gc_control': gc_control,
             'attention': properties.attention,
             'xhtml': parse_xhtml(properties),
+            'user_nick': properties.nickname,
         }
 
         app.nec.push_incoming_event(NetworkEvent('update-client-info',
@@ -210,7 +210,6 @@ class Message(BaseModule):
             'msg_log_id': None,
             'subject': subject,
             'displaymarking': parse_securitylabel(event.stanza),
-            'user_nick': '' if event.sent else parse_nickname(event.stanza),
         }
 
         for name, value in event_attr.items():
