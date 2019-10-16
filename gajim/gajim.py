@@ -103,11 +103,6 @@ def _init_gtk():
 
     from gajim.application import GajimApplication
 
-    # Fix bug in 3.24.1 with flickering tooltips
-    if sys.platform in ('darwin', 'win32'):
-        settings = Gtk.Settings.get_default()
-        settings.set_property('gtk-cursor-theme-size', 16)
-
     application = GajimApplication()
     _install_sginal_handlers(application)
     application.run(sys.argv)
