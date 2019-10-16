@@ -95,7 +95,6 @@ def _disable_csd():
 
 
 def _init_gtk():
-    from gi.repository import Gtk
     from gajim.gtk import exception
     exception.init()
 
