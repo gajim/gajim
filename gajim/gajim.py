@@ -32,44 +32,50 @@ _MIN_CAIRO_VER = "1.14.0"
 _MIN_PYGOBJECT_VER = "3.32.0"
 
 
+def check_version(dep_name, current_ver, min_ver):
+    if V(current_ver) < V(min_ver):
+        sys.exit('Gajim needs %s >= %s to run. '
+                 'Quitting...' % (dep_name, min_ver))
+
+
 def _check_required_deps():
+    error_message = 'Gajim needs %s to run. Quitting…'
+
     try:
         import nbxmpp
     except ImportError:
-        print('Gajim needs python-nbxmpp to run. Quitting…')
-        sys.exit(1)
-
-    if V(nbxmpp.__version__) < V(_MIN_NBXMPP_VER):
-        print('Gajim needs python-nbxmpp >= %s to run. '
-              'Quitting...' % _MIN_NBXMPP_VER)
-        sys.exit(1)
+        sys.exit(error_message % 'python-nbxmpp')
 
     try:
         import gi
     except ImportError:
-        print('Gajim needs pygobject to run. Quitting…')
-        sys.exit(1)
+        sys.exit(error_message % 'pygobject')
 
-    if V(gi.__version__) < V(_MIN_PYGOBJECT_VER):
-        print('Gajim needs pygobject >= %s to run. '
-              'Quitting...' % _MIN_PYGOBJECT_VER)
-        sys.exit(1)
+    try:
+        gi.require_versions({'GLib': '2.0',
+                             'Gio': '2.0',
+                             'Gtk': '3.0',
+                             'GObject': '2.0',
+                             'Pango': '1.0',
+                             'Soup': '2.4'})
+    except ValueError as error:
+        sys.exit('Missing dependency: %s' % error)
 
     try:
         import cairo
     except ImportError:
-        print('Gajim needs python-cairo to run. Quitting…')
-        sys.exit(1)
+        sys.exit(error_message % 'python-cairo')
 
-    if V(cairo.cairo_version_string()) < V(_MIN_CAIRO_VER):
-        print('Gajim needs libcairo >= %s to run. '
-              'Quitting...' % _MIN_CAIRO_VER)
-        sys.exit(1)
+    from gi.repository import Gtk
+    gtk_ver = '%s.%s.%s' % (Gtk.get_major_version(),
+                            Gtk.get_minor_version(),
+                            Gtk.get_micro_version())
 
-    if V(cairo.version) < V(_MIN_CAIRO_VER):
-        print('Gajim needs python-cairo >= %s to run. '
-              'Quitting...' % _MIN_CAIRO_VER)
-        sys.exit(1)
+    check_version('python-nbxmpp', nbxmpp.__version__, _MIN_NBXMPP_VER)
+    check_version('pygobject', gi.__version__, _MIN_PYGOBJECT_VER)
+    check_version('libcairo', cairo.cairo_version_string(), _MIN_CAIRO_VER)
+    check_version('python-cairo', cairo.version, _MIN_CAIRO_VER)
+    check_version('gtk3', gtk_ver, _MIN_GTK_VER)
 
 
 def _init_gui(gui):
@@ -89,27 +95,7 @@ def _disable_csd():
 
 
 def _init_gtk():
-    import gi
-    try:
-        gi.require_version('GLib', '2.0')
-        gi.require_version('Gio', '2.0')
-        gi.require_version('Gtk', '3.0')
-        gi.require_version('Gdk', '3.0')
-        gi.require_version('GObject', '2.0')
-        gi.require_version('Pango', '1.0')
-        gi.require_version('Soup', '2.4')
-    except ValueError as error:
-        sys.exit('Missing dependency: %s' % error)
-
     from gi.repository import Gtk
-    gtk_ver = '%s.%s.%s' % (Gtk.get_major_version(),
-                            Gtk.get_minor_version(),
-                            Gtk.get_micro_version())
-    if V(gtk_ver) < V(_MIN_GTK_VER):
-        print('Gajim needs GTK >= %s to run. '
-              'Quitting...' % _MIN_GTK_VER)
-        sys.exit(1)
-
     from gajim.gtk import exception
     exception.init()
 
