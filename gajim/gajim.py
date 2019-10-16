@@ -84,7 +84,7 @@ def _init_gui(gui):
 
 
 def _disable_csd():
-    if os.name != 'nt':
+    if sys.platform != 'win32':
         return
 
     if 'GTK_OSD' in os.environ:
@@ -138,7 +138,7 @@ def _install_sginal_handlers(application):
     # ^C exits the application normally
     signal.signal(signal.SIGINT, sigint_cb)
     signal.signal(signal.SIGTERM, sigint_cb)
-    if os.name != 'nt':
+    if sys.platform != 'win32':
         signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 
