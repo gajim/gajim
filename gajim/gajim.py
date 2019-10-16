@@ -29,6 +29,7 @@ from gajim.common import i18n
 _MIN_NBXMPP_VER = "0.9.92"
 _MIN_GTK_VER = "3.22.0"
 _MIN_CAIRO_VER = "1.14.0"
+_MIN_PYGOBJECT_VER = "3.32.0"
 
 
 def _check_required_deps():
@@ -41,6 +42,17 @@ def _check_required_deps():
     if V(nbxmpp.__version__) < V(_MIN_NBXMPP_VER):
         print('Gajim needs python-nbxmpp >= %s to run. '
               'Quitting...' % _MIN_NBXMPP_VER)
+        sys.exit(1)
+
+    try:
+        import gi
+    except ImportError:
+        print('Gajim needs pygobject to run. Quitting…')
+        sys.exit(1)
+
+    if V(gi.__version__) < V(_MIN_PYGOBJECT_VER):
+        print('Gajim needs pygobject >= %s to run. '
+              'Quitting...' % _MIN_PYGOBJECT_VER)
         sys.exit(1)
 
     try:
