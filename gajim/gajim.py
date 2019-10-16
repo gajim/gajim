@@ -26,10 +26,10 @@ from distutils.version import LooseVersion as V
 
 from gajim.common import i18n
 
-_MIN_NBXMPP_VER = "0.9.92"
-_MIN_GTK_VER = "3.22.0"
-_MIN_CAIRO_VER = "1.14.0"
-_MIN_PYGOBJECT_VER = "3.32.0"
+_MIN_NBXMPP_VER = '0.9.92'
+_MIN_GTK_VER = '3.22.0'
+_MIN_CAIRO_VER = '1.14.0'
+_MIN_PYGOBJECT_VER = '3.32.0'
 
 
 def check_version(dep_name, current_ver, min_ver):
@@ -91,7 +91,7 @@ def _disable_csd():
         # Respect user settings
         return
 
-    os.environ['GTK_CSD'] = "0"
+    os.environ['GTK_CSD'] = '0'
 
 
 def _init_gtk():
@@ -145,7 +145,7 @@ def _install_sginal_handlers(application):
 def main():
     if sys.platform != 'win32':
         if os.geteuid() == 0:
-            sys.exit("You must not launch gajim as root, it is insecure.")
+            sys.exit('You must not launch gajim as root, it is insecure.')
 
     _check_required_deps()
     _set_proc_title()
