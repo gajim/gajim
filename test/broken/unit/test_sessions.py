@@ -10,8 +10,6 @@ from gajim.common import app
 from gajim.common import nec
 from gajim.common import ged
 from gajim.common.nec import NetworkEvent
-from gajim.common.modules.message import MessageReceivedEvent
-from gajim.common.modules.message import DecryptedMessageReceivedEvent
 
 from gajim.session import ChatControlSession
 from gajim.roster_window import RosterWindow

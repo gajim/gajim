@@ -27,7 +27,7 @@ from gajim.common import app
 from gajim.common import connection_handlers
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
+from gajim.common.nec import NetworkEvent
 from gajim.common.const import KindConstant
 from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.misc import parse_correction
@@ -40,15 +40,6 @@ log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
                'invisible']
-
-
-class ZeroconfMessageReceivedEvent(NetworkIncomingEvent):
-    name = 'message-received'
-
-
-class DecryptedMessageReceivedEvent(NetworkIncomingEvent):
-    name = 'decrypted-message-received'
-
 
 
 class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
@@ -88,10 +79,36 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
         if thread_id and not session.received_thread_id:
             session.received_thread_id = True
 
-        session.last_receive = time.time()
+        timestamp = time.time()
+        session.last_receive = timestamp
 
         additional_data = AdditionalDataDict()
         parse_oob(properties, additional_data)
+
+        if properties.is_encrypted:
+            additional_data['encrypted'] = properties.encrypted.additional_data
+        else:
+            if properties.eme is not None:
+                msgtxt = get_eme_message(properties.eme)
+
+        if type_ == 'error':
+            if not msgtxt:
+                msgtxt = _('message')
+            self._log_error_message(stanza, msgtxt, jid, timestamp)
+            error_msg = stanza.getErrorMsg() or msgtxt
+            msgtxt = None if error_msg == msgtxt else msgtxt
+            app.nec.push_incoming_event(
+                MessageErrorEvent(None,
+                                  conn=self,
+                                  fjid=fjid,
+                                  error_code=stanza.getErrorCode(),
+                                  error_msg=error_msg,
+                                  msg=msgtxt,
+                                  time_=timestamp,
+                                  session=session,
+                                  stanza=stanza))
+
+            return
 
         event_attr = {
             'conn': self,
@@ -120,57 +137,20 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'xhtml': parse_xhtml(properties),
             'user_nick': properties.nickname,
             'subject': None,
-        }
-
-        event = ZeroconfMessageReceivedEvent(None, **event_attr)
-        app.nec.push_incoming_event(event)
-
-        app.plugin_manager.extension_point(
-            'decrypt', self, event, self._on_message_decrypted)
-        if not event.encrypted:
-            if properties.eme is not None:
-                event.msgtxt = get_eme_message(properties.eme)
-            self._on_message_decrypted(event)
-
-    def _on_message_decrypted(self, event):
-        event_attr = {
             'popup': False,
             'msg_log_id': None,
             'displaymarking': None,
-            'stanza_id': event.unique_id
+            'stanza_id': id_,
         }
 
-        for name, value in event_attr.items():
-            setattr(event, name, value)
-
-        if event.mtype == 'error':
-            if not event.msgtxt:
-                event.msgtxt = _('message')
-            self._log_error_message(event)
-            error_msg = event.stanza.getErrorMsg() or event.msgtxt
-            msgtxt = None if error_msg == event.msgtxt else event.msgtxt
-            app.nec.push_incoming_event(
-                MessageErrorEvent(None,
-                                  conn=self,
-                                  fjid=event.fjid,
-                                  error_code=event.stanza.getErrorCode(),
-                                  error_msg=error_msg,
-                                  msg=msgtxt,
-                                  time_=event.timestamp,
-                                  session=event.session,
-                                  stanza=event.stanza))
-
-            return
-
         app.nec.push_incoming_event(
-            DecryptedMessageReceivedEvent(None, **vars(event)))
+            NetworkEvent('decrypted-message-received', **event_attr))
 
-    def _log_error_message(self, event):
-        error_msg = event.stanza.getErrorMsg() or event.msgtxt
-        if app.config.should_log(self.name, event.jid):
+    def _log_error_message(self, stanza, msgtxt, jid, timestamp):
+        error_msg = stanza.getErrorMsg() or msgtxt
+        if app.config.should_log(self.name, jid):
             app.logger.insert_into_logs(self.name,
-                                        event.jid,
-                                        event.timestamp,
+                                        jid,
+                                        timestamp,
                                         KindConstant.ERROR,
-                                        message=error_msg,
-                                        subject=event.subject)
+                                        message=error_msg)

@@ -197,6 +197,37 @@ class MAM(BaseModule):
 
         parse_oob(properties, additional_data)
 
+        msgtxt = properties.body
+
+        if properties.is_encrypted:
+            additional_data['encrypted'] = properties.encrypted.additional_data
+        else:
+            if properties.eme is not None:
+                msgtxt = get_eme_message(properties.eme)
+
+        if not msgtxt:
+            # For example Chatstates, Receipts, Chatmarkers
+            self._log.debug(stanza.getProperties())
+            return
+
+        with_ = properties.jid.getStripped()
+        if properties.is_muc_pm:
+            # we store the message with the full JID
+            with_ = str(with_)
+
+        if properties.is_self_message:
+            # Self messages can only be deduped with origin-id
+            if message_id is None:
+                self._log.warning('Self message without origin-id found')
+                return
+            stanza_id = message_id
+
+        if properties.mam.namespace == nbxmpp.NS_MAM_1:
+            if app.logger.search_for_duplicate(
+                    self._account, with_, properties.mam.timestamp, msgtxt):
+                self._log.info('Found duplicate with fallback for mam:1')
+                return
+
         event_attrs.update(
             {'conn': self._con,
              'account': self._account,
@@ -217,23 +248,19 @@ class MAM(BaseModule):
              'namespace': properties.mam.namespace,
              })
 
-        if groupchat:
-            event = MamGcMessageReceivedEvent(None, **event_attrs)
-        else:
-            event = MamMessageReceivedEvent(None, **event_attrs)
+        app.logger.insert_into_logs(self._account,
+                                    with_,
+                                    properties.mam.timestamp,
+                                    event_attrs['kind'],
+                                    unread=False,
+                                    message=msgtxt,
+                                    contact_name=event_attrs['nick'],
+                                    additional_data=additional_data,
+                                    stanza_id=stanza_id,
+                                    message_id=properties.id)
 
-        if properties.is_encrypted:
-            event.additional_data['encrypted'] = properties.encrypted.additional_data
-            self._decryption_finished(event)
-        else:
-            app.plugin_manager.extension_point(
-                'decrypt', self._con, event, self._decryption_finished)
-            if not event.encrypted:
-                if properties.eme is not None:
-                    event.msgtxt = get_eme_message(properties.eme)
-                self._decryption_finished(event)
-
-        raise nbxmpp.NodeProcessed
+        app.nec.push_incoming_event(
+            NetworkEvent('mam-decrypted-message-received', **event_attrs))
 
     @staticmethod
     def _parse_gc_attrs(properties):
@@ -254,45 +281,6 @@ class MAM(BaseModule):
         return {'with_': properties.jid,
                 'nick': None,
                 'kind': kind}
-
-    def _decryption_finished(self, event):
-        if not event.msgtxt:
-            # For example Chatstates, Receipts, Chatmarkers
-            self._log.debug(event.message.getProperties())
-            return
-
-        with_ = event.with_.getStripped()
-        if event.muc_pm:
-            # we store the message with the full JID
-            with_ = str(event.with_)
-
-        stanza_id = event.stanza_id
-        if event.self_message:
-            # Self messages can only be deduped with origin-id
-            if event.origin_id is None:
-                self._log.warning('Self message without origin-id found')
-                return
-            stanza_id = event.origin_id
-
-        if event.namespace == nbxmpp.NS_MAM_1:
-            if app.logger.search_for_duplicate(
-                    self._account, with_, event.timestamp, event.msgtxt):
-                self._log.info('Found duplicate with fallback for mam:1')
-                return
-
-        app.logger.insert_into_logs(self._account,
-                                    with_,
-                                    event.timestamp,
-                                    event.kind,
-                                    unread=False,
-                                    message=event.msgtxt,
-                                    contact_name=event.nick,
-                                    additional_data=event.additional_data,
-                                    stanza_id=stanza_id,
-                                    message_id=event.message_id)
-
-        app.nec.push_incoming_event(
-            MamDecryptedMessageReceived(None, **vars(event)))
 
     def _is_valid_request(self, properties):
         valid_id = self._mam_query_ids.get(str(properties.mam.archive), None)
@@ -632,18 +620,6 @@ class MAM(BaseModule):
             self._log.info('Preferences saved')
             app.nec.push_incoming_event(
                 MAMPreferenceSaved(None, conn=self._con))
-
-
-class MamMessageReceivedEvent(NetworkIncomingEvent):
-    name = 'mam-message-received'
-
-
-class MamGcMessageReceivedEvent(NetworkIncomingEvent):
-    name = 'mam-gc-message-received'
-
-
-class MamDecryptedMessageReceived(NetworkIncomingEvent):
-    name = 'mam-decrypted-message-received'
 
 
 class MAMPreferenceError(NetworkIncomingEvent):

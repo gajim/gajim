@@ -22,7 +22,6 @@ from nbxmpp.const import MessageType
 
 from gajim.common import app
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import KindConstant
@@ -146,6 +145,41 @@ class Message(BaseModule):
                 'gajim', 'user_timestamp', properties.user_timestamp)
 
         parse_oob(properties, additional_data)
+        xhtml = parse_xhtml(properties)
+
+        app.nec.push_incoming_event(NetworkEvent('update-client-info',
+                                                 account=self._account,
+                                                 jid=jid,
+                                                 resource=resource))
+
+        if properties.is_encrypted:
+            additional_data['encrypted'] = properties.encrypted.additional_data
+        else:
+            if properties.eme is not None:
+                msgtxt = get_eme_message(properties.eme)
+
+        if type_.is_error:
+            if not msgtxt:
+                msgtxt = _('message')
+            if gc_control:
+                gc_control.add_info_message(msgtxt)
+            else:
+                error_msg = stanza.getErrorMsg() or msgtxt
+                msgtxt = None if error_msg == msgtxt else msgtxt
+                self._log_error_message(error_msg,
+                                        jid,
+                                        properties.timestamp)
+                app.nec.push_incoming_event(
+                    MessageErrorEvent(None,
+                                      conn=self._con,
+                                      fjid=fjid,
+                                      error_code=stanza.getErrorCode(),
+                                      error_msg=error_msg,
+                                      msg=msgtxt,
+                                      time_=properties.timestamp,
+                                      session=session,
+                                      stanza=stanza))
+            return
 
         event_attr = {
             'conn': self._con,
@@ -173,90 +207,40 @@ class Message(BaseModule):
             'muc_pm': properties.is_muc_pm,
             'gc_control': gc_control,
             'attention': properties.attention,
-            'xhtml': parse_xhtml(properties),
+            'xhtml': xhtml,
             'user_nick': properties.nickname,
             'subject': properties.subject,
-        }
-
-        app.nec.push_incoming_event(NetworkEvent('update-client-info',
-                                                 account=self._account,
-                                                 jid=jid,
-                                                 resource=resource))
-
-        event = MessageReceivedEvent(None, **event_attr)
-        app.nec.push_incoming_event(event)
-
-        if properties.is_encrypted:
-            event.additional_data['encrypted'] = properties.encrypted.additional_data
-            self._on_message_decrypted(event)
-        else:
-            app.plugin_manager.extension_point(
-                'decrypt', self._con, event, self._on_message_decrypted)
-            if not event.encrypted:
-                if properties.eme is not None:
-                    event.msgtxt = get_eme_message(properties.eme)
-                self._on_message_decrypted(event)
-
-    def _on_message_decrypted(self, event):
-        groupchat = event.mtype == 'groupchat'
-
-        event_attr = {
             'popup': False,
             'msg_log_id': None,
-            'displaymarking': parse_securitylabel(event.stanza),
+            'displaymarking': parse_securitylabel(stanza),
         }
 
-        for name, value in event_attr.items():
-            setattr(event, name, value)
-
-        if event.mtype == 'error':
-            if not event.msgtxt:
-                event.msgtxt = _('message')
-            if event.gc_control:
-                event.gc_control.add_info_message(event.msgtxt)
-            else:
-                self._log_error_message(event)
-                error_msg = event.stanza.getErrorMsg() or event.msgtxt
-                msgtxt = None if error_msg == event.msgtxt else event.msgtxt
-                app.nec.push_incoming_event(
-                    MessageErrorEvent(None,
-                                      conn=self._con,
-                                      fjid=event.fjid,
-                                      error_code=event.stanza.getErrorCode(),
-                                      error_msg=error_msg,
-                                      msg=msgtxt,
-                                      time_=event.timestamp,
-                                      session=event.session,
-                                      stanza=event.stanza))
-            return
-
-        if groupchat:
-            if not event.msgtxt:
+        if type_.is_groupchat:
+            if not msgtxt:
                 return
 
-            event.room_jid = event.jid
-            event.nickname = event.resource
-            event.xhtml_msgtxt = event.xhtml
-            event.nick = event.resource or ''
-            app.nec.push_incoming_event(NetworkEvent('gc-message-received',
-                                                     **vars(event)))
+            event_attr.update({
+                'room_jid': jid,
+                'nickname': resource,
+                'xhtml_msgtxt': xhtml,
+                'nick': resource or '',
+            })
+            event = NetworkEvent('gc-message-received', **event_attr)
+            app.nec.push_incoming_event(event)
             # TODO: Some plugins modify msgtxt in the GUI event
             self._log_muc_message(event)
             return
 
         app.nec.push_incoming_event(
-            DecryptedMessageReceivedEvent(
-                None, **vars(event)))
+            NetworkEvent('decrypted-message-received', **event_attr))
 
-    def _log_error_message(self, event):
-        error_msg = event.stanza.getErrorMsg() or event.msgtxt
-        if app.config.should_log(self._account, event.jid):
+    def _log_error_message(self, error_msg, jid, timestamp):
+        if app.config.should_log(self._account, jid):
             app.logger.insert_into_logs(self._account,
-                                        event.jid,
-                                        event.timestamp,
+                                        jid,
+                                        timestamp,
                                         KindConstant.ERROR,
-                                        message=error_msg,
-                                        subject=event.subject)
+                                        message=error_msg)
 
     def _log_muc_message(self, event):
         if event.mtype == 'error':
@@ -309,14 +293,6 @@ class Message(BaseModule):
             return properties.stanza_id.id, None
         # stanza-id not added by the archive, ignore it.
         return None, None
-
-
-class MessageReceivedEvent(NetworkIncomingEvent):
-    name = 'message-received'
-
-
-class DecryptedMessageReceivedEvent(NetworkIncomingEvent):
-    name = 'decrypted-message-received'
 
 
 def get_instance(*args, **kwargs):
