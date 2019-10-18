@@ -96,7 +96,7 @@ class MAM(BaseModule):
         if properties.is_muc_pm:
             return properties.mam.id, properties.id
 
-        if self._con.get_own_jid().bareMatch(properties.jid):
+        if self._con.get_own_jid().bareMatch(properties.from_):
             # message we sent
             return properties.mam.id, properties.id
 
