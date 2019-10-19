@@ -45,7 +45,6 @@ from gajim.common.fuzzyclock import FuzzyClock
 from gajim.common.const import StyleAttr, Trust
 
 from gajim.gtk import util
-from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_cursor
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import text_to_color
@@ -185,7 +184,7 @@ class ConversationTextview(GObject.GObject):
         GObject.GObject.__init__(self)
         self.used_in_history_window = used_in_history_window
         self.line = 0
-        self.message_list = []
+        self._message_list = []
         self.corrected_text_list = {}
         self.fc = FuzzyClock()
 
@@ -204,7 +203,6 @@ class ConversationTextview(GObject.GObject):
         self._buffer = self.tv.get_buffer()
         self.handlers = {}
         self.image_cache = {}
-        self.xep0184_marks = {}
         # self.last_sent_message_id = message_id
         self.last_sent_message_id = None
         # last_received_message_id[name] = (message_id, line_start_mark)
@@ -298,9 +296,6 @@ class ConversationTextview(GObject.GObject):
         buffer_.create_tag('focus-out-line', justification=Gtk.Justification.CENTER)
         self.displaymarking_tags = {}
 
-        tag = buffer_.create_tag('xep0184-received')
-        tag.set_property('foreground', '#73d216')
-
         # One mark at the begining then 2 marks between each lines
         size = app.config.get('max_conversation_lines')
         size = 2 * size - 1
@@ -339,12 +334,7 @@ class ConversationTextview(GObject.GObject):
                 window.set_cursor(get_cursor('pointer'))
                 self._cursor_changed = True
                 return False
-            try:
-                text = self.corrected_text_list[tag_name]
-                tooltip.set_markup(text)
-                return True
-            except KeyError:
-                pass
+
         if self._cursor_changed:
             window.set_cursor(get_cursor('text'))
             self._cursor_changed = False
@@ -411,30 +401,11 @@ class ConversationTextview(GObject.GObject):
 
         return index, end_mark, old_txt
 
-    def add_xep0184_mark(self, id_):
-        if id_ in self.xep0184_marks:
+    def show_receipt_icon(self, id_):
+        line = self._get_message_line(id_)
+        if line is None:
             return
-
-        buffer_ = self.tv.get_buffer()
-        buffer_.begin_user_action()
-
-        self.xep0184_marks[id_] = buffer_.create_mark(
-            None, buffer_.get_end_iter(), left_gravity=True)
-
-        buffer_.end_user_action()
-
-    def show_xep0184_ack(self, id_):
-        if id_ not in self.xep0184_marks:
-            return
-
-        buffer_ = self.tv.get_buffer()
-
-        if app.config.get('positive_184_ack'):
-            begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            buffer_.insert_with_tags_by_name(begin_iter, ' ✓',
-                'xep0184-received')
-
-        del self.xep0184_marks[id_]
+        line.show_receipt_icon()
 
     def show_focus_out_line(self):
         if not self.allow_focus_out_line:
@@ -892,10 +863,10 @@ class ConversationTextview(GObject.GObject):
         self.just_cleared = False
 
     def get_end_mark(self, message_id, start_mark):
-        for index, msg in enumerate(self.message_list):
-            if msg[2] == message_id and msg[1] == start_mark:
+        for index, line in enumerate(self._message_list):
+            if line.id == message_id and line.start_mark == start_mark:
                 try:
-                    end_mark = self.message_list[index + 1][1]
+                    end_mark = self._message_list[index + 1].start_mark
                     end_mark_name = end_mark.get_name()
                 except IndexError:
                     # We are at the last message
@@ -914,7 +885,7 @@ class ConversationTextview(GObject.GObject):
         # message_list = [(timestamp, line_start_mark, message_id)]
         # We check if this is a new Message
         try:
-            if self.message_list[-1][0] <= timestamp:
+            if self._message_list[-1].timestamp <= timestamp:
                 return None, None
         except IndexError:
             # We have no Messages in the TextView
@@ -922,12 +893,17 @@ class ConversationTextview(GObject.GObject):
 
         # Not a new Message
         # Search for insertion point
-        for index, msg in enumerate(self.message_list):
-            if msg[0] > timestamp:
-                return msg[1], index
+        for index, line in enumerate(self._message_list):
+            if line.timestamp > timestamp:
+                return line.start_mark, index
 
         # Should not happen, but who knows
         return None, None
+
+    def _get_message_line(self, id_):
+        for message_line in reversed(self._message_list):
+            if message_line.id == id_:
+                return message_line
 
     def print_conversation_line(self, text, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
@@ -1049,16 +1025,8 @@ class ConversationTextview(GObject.GObject):
         iter_ = self.print_real_text(text, text_tags, name, xhtml, graphics=graphics,
             mark=insert_mark, additional_data=additional_data)
 
-        if corrected:
-            # Show Correction Icon
-            buffer_.create_tag(tag_name=message_id)
-            buffer_.insert(iter_, ' ')
-            icon = load_icon('document-edit-symbolic', self.tv, pixbuf=True)
-            buffer_.insert_pixbuf(
-                iter_, icon)
-            tag_start_iter = iter_.copy()
-            tag_start_iter.backward_chars(2)
-            buffer_.apply_tag_by_name(message_id, tag_start_iter, iter_)
+        message_icons = MessageIcons()
+        self._insert_message_icons(iter_, message_icons)
 
         # If we inserted a Line we add a new line at the end
         if insert_mark:
@@ -1070,15 +1038,21 @@ class ConversationTextview(GObject.GObject):
         new_mark = buffer_.create_mark(
             str(self.line), temp_iter, left_gravity=False)
 
+        message_line = MessageLine(message_id, tim, message_icons, new_mark)
+
+        if corrected:
+            message_line.show_correction_icon(
+                self.corrected_text_list[message_id])
+
         if index is None:
             # New Message
-            self.message_list.append((tim, new_mark, message_id))
+            self._message_list.append(message_line)
         elif corrected:
             # Replace the corrected message
-            self.message_list[index] = (tim, new_mark, message_id)
+            self._message_list[index] = message_line
         else:
             # We insert the message at index
-            self.message_list.insert(index, (tim, new_mark, message_id))
+            self._message_list.insert(index, message_line)
 
         if kind == 'incoming':
             self.last_received_message_id[name] = (message_id, new_mark)
@@ -1094,9 +1068,6 @@ class ConversationTextview(GObject.GObject):
         buffer_.end_user_action()
 
         self.line += 1
-
-        if kind == 'outgoing' and message_id is not None:
-            self.add_xep0184_mark(message_id)
 
     def get_time_to_show(self, tim, direction_mark=''):
         """
@@ -1134,6 +1105,18 @@ class ConversationTextview(GObject.GObject):
             return kind
         if text.startswith('/me ') or text.startswith('/me\n'):
             return kind
+
+    def _insert_message_icons(self, iter_, message_icons):
+        temp_mark = self._buffer.create_mark(None, iter_, True)
+        self._buffer.insert(iter_, ' ')
+        anchor = self._buffer.create_child_anchor(iter_)
+        anchor.plaintext = ''
+        self._buffer.insert(iter_, ' ')
+
+        # Apply mark to vertically center the icon
+        start = self._buffer.get_iter_at_mark(temp_mark)
+        self._buffer.apply_tag_by_name('textview-icon', start, iter_)
+        self.tv.add_child_at_anchor(message_icons, anchor)
 
     def print_encryption_status(self, iter_, additional_data):
         details = self._get_encryption_details(additional_data)
@@ -1312,3 +1295,50 @@ class ConversationTextview(GObject.GObject):
         # detect urls formatting and if the user has it on emoticons
         return self.detect_and_print_special_text(text, text_tags, graphics=graphics,
             iter_=iter_, additional_data=additional_data)
+
+
+class MessageLine:
+    def __init__(self, id_, timestamp, message_icons, start_mark):
+        self.id = id_
+        self.timestamp = timestamp
+        self.start_mark = start_mark
+        self._message_icons = message_icons
+
+    def show_receipt_icon(self):
+        self._message_icons.set_receipt_icon_visible(True)
+
+    def show_correction_icon(self, tooltip):
+        self._message_icons.set_correction_icon_visible(True)
+        self._message_icons.set_correction_tooltip(tooltip)
+
+
+class MessageIcons(Gtk.Box):
+    def __init__(self):
+        Gtk.Box.__init__(self,
+                         orientation=Gtk.Orientation.HORIZONTAL)
+
+        self._correction_image = Gtk.Image.new_from_icon_name(
+            'document-edit-symbolic', Gtk.IconSize.MENU)
+        self._correction_image.set_no_show_all(True)
+
+        self._receipt_image = Gtk.Image.new_from_icon_name(
+            'emblem-ok-symbolic', Gtk.IconSize.MENU)
+        self._receipt_image.get_style_context().add_class(
+            'receipt-received-color')
+        self._receipt_image.set_tooltip_text(_('Received'))
+        self._receipt_image.set_no_show_all(True)
+
+        self.add(self._correction_image)
+        self.add(self._receipt_image)
+        self.show_all()
+
+    def set_receipt_icon_visible(self, visible):
+        if not app.config.get('positive_184_ack'):
+            return
+        self._receipt_image.set_visible(visible)
+
+    def set_correction_icon_visible(self, visible):
+        self._correction_image.set_visible(visible)
+
+    def set_correction_tooltip(self, text):
+        self._correction_image.set_tooltip_markup(text)

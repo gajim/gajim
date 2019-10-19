@@ -934,7 +934,7 @@ class ChatControl(ChatControlBase):
         if event.jid != self.contact.jid:
             return
 
-        self.conv_textview.show_xep0184_ack(event.receipt_id)
+        self.conv_textview.show_receipt_icon(event.receipt_id)
 
     def get_tab_label(self):
         unread = ''
