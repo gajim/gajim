@@ -81,9 +81,11 @@ class SecretPasswordStorage(PasswordStorage):
         log.info('Remove password from keyring')
         try:
             return self.keyring.delete_password('gajim', account_name)
+        except keyring.errors.PasswordDeleteError as error:
+            log.warning('Removing password failed: %s', error)
         except Exception:
-            log.exception('Remove password failed')
-            return
+            log.exception('Removing password failed')
+
 
 class PasswordStorageManager(PasswordStorage):
     """Access all the implemented password storage backends, knowing which ones
