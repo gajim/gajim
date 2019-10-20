@@ -42,7 +42,9 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.fuzzyclock import FuzzyClock
-from gajim.common.const import StyleAttr, Trust
+from gajim.common.const import StyleAttr
+from gajim.common.const import Trust
+from gajim.common.helpers import to_user_string
 
 from gajim.gtk import util
 from gajim.gtk.util import get_cursor
@@ -406,6 +408,12 @@ class ConversationTextview(GObject.GObject):
         if line is None:
             return
         line.show_receipt_icon()
+
+    def show_error(self, id_, error):
+        line = self._get_message_line(id_)
+        if line is None:
+            return
+        line.show_error_icon(to_user_string(error))
 
     def show_focus_out_line(self):
         if not self.allow_focus_out_line:
@@ -909,7 +917,7 @@ class ConversationTextview(GObject.GObject):
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     subject=None, old_kind=None, xhtml=None, graphics=True,
     displaymarking=None, message_id=None, correct_id=None, additional_data=None,
-    encrypted=None):
+    encrypted=None, error=None):
         """
         Print 'chat' type messages
         """
@@ -1043,6 +1051,9 @@ class ConversationTextview(GObject.GObject):
         if corrected:
             message_line.show_correction_icon(
                 self.corrected_text_list[message_id])
+
+        if error is not None:
+            message_line.show_error_icon(to_user_string(error))
 
         if index is None:
             # New Message
@@ -1311,6 +1322,10 @@ class MessageLine:
         self._message_icons.set_correction_icon_visible(True)
         self._message_icons.set_correction_tooltip(tooltip)
 
+    def show_error_icon(self, tooltip):
+        self._message_icons.set_error_icon_visible(True)
+        self._message_icons.set_error_tooltip(tooltip)
+
 
 class MessageIcons(Gtk.Box):
     def __init__(self):
@@ -1328,8 +1343,14 @@ class MessageIcons(Gtk.Box):
         self._receipt_image.set_tooltip_text(_('Received'))
         self._receipt_image.set_no_show_all(True)
 
+        self._error_image = Gtk.Image.new_from_icon_name(
+            'dialog-warning-symbolic', Gtk.IconSize.MENU)
+        self._error_image.get_style_context().add_class('warning-color')
+        self._error_image.set_no_show_all(True)
+
         self.add(self._correction_image)
         self.add(self._receipt_image)
+        self.add(self._error_image)
         self.show_all()
 
     def set_receipt_icon_visible(self, visible):
@@ -1342,3 +1363,9 @@ class MessageIcons(Gtk.Box):
 
     def set_correction_tooltip(self, text):
         self._correction_image.set_tooltip_markup(text)
+
+    def set_error_icon_visible(self, visible):
+        self._error_image.set_visible(visible)
+
+    def set_error_tooltip(self, text):
+        self._error_image.set_tooltip_markup(text)

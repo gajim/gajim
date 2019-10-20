@@ -58,30 +58,6 @@ class OurShowEvent(nec.NetworkIncomingEvent):
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
 
-    def generate(self):
-        if not self.automatic_message:
-            self.conn.sent_message_ids.append(self.stanza_id)
-            # only record the last 20000 message ids (should be about 1MB [36 byte per uuid]
-            # and about 24 hours if you send out a message every 5 seconds)
-            self.conn.sent_message_ids = self.conn.sent_message_ids[-20000:]
-        return True
-
-class MessageErrorEvent(nec.NetworkIncomingEvent):
-    name = 'message-error'
-
-    def init(self):
-        self.zeroconf = False
-
-    def generate(self):
-        if self.zeroconf:
-            return True
-        self.id_ = self.stanza.getID()
-        #only alert for errors of explicitly sent messages (see https://trac.gajim.org/ticket/8222)
-        if self.id_ in self.conn.sent_message_ids:
-            self.conn.sent_message_ids.remove(self.id_)
-            return True
-        return False
-
 class JingleRequestReceivedEvent(nec.NetworkIncomingEvent):
     name = 'jingle-request-received'
 

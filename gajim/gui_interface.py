@@ -285,61 +285,6 @@ class Interface:
         if ctrl and ctrl.session and len(obj.contact_list) > 1:
             ctrl.remove_session(ctrl.session)
 
-    def handle_event_msgerror(self, obj):
-        #'MSGERROR' (account, (jid, error_code, error_msg, msg, time[session]))
-        account = obj.conn.name
-        jids = obj.fjid.split('/', 1)
-        jid = jids[0]
-
-        session = obj.session
-
-        gc_control = self.msg_win_mgr.get_gc_control(jid, account)
-        if not gc_control and \
-        jid in self.minimized_controls[account]:
-            gc_control = self.minimized_controls[account][jid]
-        if gc_control and gc_control.type_id != message_control.TYPE_GC:
-            gc_control = None
-        if gc_control:
-            if len(jids) > 1: # it's a pm
-                nick = jids[1]
-
-                if session:
-                    ctrl = session.control
-                else:
-                    ctrl = self.msg_win_mgr.get_control(obj.fjid, account)
-
-                if not ctrl:
-                    tv = gc_control.list_treeview
-                    model = tv.get_model()
-                    iter_ = gc_control.get_contact_iter(nick)
-                    if iter_:
-                        show = model[iter_][3]
-                    else:
-                        show = 'offline'
-                    gc_c = app.contacts.create_gc_contact(room_jid=jid,
-                        account=account, name=nick, show=show)
-                    ctrl = self.new_private_chat(gc_c, account, session)
-
-                ctrl.add_info_message(_('Error %(code)s: %(msg)s') % {
-                    'code': obj.error_code, 'msg': obj.error_msg})
-                return
-
-            gc_control.add_info_message(_('Error %(code)s: %(msg)s') % {
-                'code': obj.error_code, 'msg': obj.error_msg})
-            if gc_control.parent_win and \
-            gc_control.parent_win.get_active_jid() == jid:
-                gc_control.set_subject(gc_control.subject)
-            return
-
-        if app.jid_is_transport(jid):
-            jid = jid.replace('@', '')
-        msg = obj.error_msg
-        if obj.msg:
-            msg = _('error while sending %(message)s ( %(error)s )') % {
-                    'message': obj.msg, 'error': msg}
-        if session:
-            session.roster_message(jid, msg, obj.time_, msg_type='error')
-
     @staticmethod
     def handle_event_msgsent(obj):
         # ('MSGSENT', account, (jid, msg))
@@ -1152,7 +1097,6 @@ class Interface:
             'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
             'jingleFT-cancelled-received': [self.handle_event_jingleft_cancel],
-            'message-error': [self.handle_event_msgerror],
             'message-not-sent': [self.handle_event_msgnotsent],
             'message-sent': [self.handle_event_msgsent],
             'metacontacts-received': [self.handle_event_metacontacts],

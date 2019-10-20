@@ -25,15 +25,12 @@ import logging
 from gajim.common import app
 
 from gajim.common import connection_handlers
-from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.nec import NetworkEvent
-from gajim.common.const import KindConstant
 from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
-from gajim.common.connection_handlers_events import MessageErrorEvent
 
 
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
@@ -50,6 +47,8 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
         """
         Called when we receive a message
         """
+        if properties.is_error:
+            return
         log.info('Zeroconf MessageCB')
 
         # Dont trust from attr set by sender
@@ -91,25 +90,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             if properties.eme is not None:
                 msgtxt = get_eme_message(properties.eme)
 
-        if type_ == 'error':
-            if not msgtxt:
-                msgtxt = _('message')
-            self._log_error_message(stanza, msgtxt, jid, timestamp)
-            error_msg = stanza.getErrorMsg() or msgtxt
-            msgtxt = None if error_msg == msgtxt else msgtxt
-            app.nec.push_incoming_event(
-                MessageErrorEvent(None,
-                                  conn=self,
-                                  fjid=fjid,
-                                  error_code=stanza.getErrorCode(),
-                                  error_msg=error_msg,
-                                  msg=msgtxt,
-                                  time_=timestamp,
-                                  session=session,
-                                  stanza=stanza))
-
-            return
-
         event_attr = {
             'conn': self,
             'stanza': stanza,
@@ -146,11 +126,17 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
         app.nec.push_incoming_event(
             NetworkEvent('decrypted-message-received', **event_attr))
 
-    def _log_error_message(self, stanza, msgtxt, jid, timestamp):
-        error_msg = stanza.getErrorMsg() or msgtxt
-        if app.config.should_log(self.name, jid):
-            app.logger.insert_into_logs(self.name,
-                                        jid,
-                                        timestamp,
-                                        KindConstant.ERROR,
-                                        message=error_msg)
+    def _message_error_received(self, _con, _stanza, properties):
+        log.info(properties.error)
+
+        app.logger.set_message_error(app.get_jid_from_account(self.name),
+                                     properties.jid,
+                                     properties.id,
+                                     properties.error)
+
+        app.nec.push_incoming_event(
+            NetworkEvent('message-error',
+                         account=self.name,
+                         jid=properties.jid,
+                         message_id=properties.id,
+                         error=properties.error))

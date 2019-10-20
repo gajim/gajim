@@ -1573,6 +1573,9 @@ class GroupchatControl(ChatControlBase):
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 
+    @event_filter(['account', 'room_jid'])
+    def _on_message_error(self, event):
+        self.conv_textview.show_error(event.message_id, event.error)
 
     def minimizable(self):
         if self.force_non_minimizable:

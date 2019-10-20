@@ -49,7 +49,6 @@ from gajim.common.connection_handlers_events import OurShowEvent
 from gajim.common.connection_handlers_events import InformationEvent
 from gajim.common.connection_handlers_events import ConnectionLostEvent
 from gajim.common.connection_handlers_events import MessageSentEvent
-from gajim.common.connection_handlers_events import MessageErrorEvent
 
 log = logging.getLogger('gajim.c.connection_zeroconf')
 
@@ -423,9 +422,11 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         def on_send_not_ok(reason):
             reason += ' ' + _('Your message could not be sent.')
-            app.nec.push_incoming_event(MessageErrorEvent(
-                None, conn=self, fjid=obj.jid, error_code=-1, error_msg=reason,
-                msg=None, time_=None, session=obj.session, zeroconf=True))
+            app.nec.push_incoming_event(NetworkEvent(
+                'zeroconf-error',
+                account=self.name,
+                jid=obj.jid,
+                message=reason))
             # Dont propagate event
             return True
 
@@ -438,10 +439,11 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             # Contact Offline
             error_message = _(
                 'Contact is offline. Your message could not be sent.')
-            app.nec.push_incoming_event(MessageErrorEvent(
-                None, conn=self, fjid=obj.jid, error_code=-1,
-                error_msg=error_message, msg=None, time_=None,
-                session=obj.session, zeroconf=True))
+            app.nec.push_incoming_event(NetworkEvent(
+                'zeroconf-error',
+                account=self.name,
+                jid=obj.jid,
+                message=error_message))
             # Dont propagate event
             return True
 
@@ -457,16 +459,15 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         CommonConnection._event_dispatcher(self, realm, event, data)
         if realm == '':
             if event == nbxmpp.transports.DATA_ERROR:
-                thread_id = data[1]
                 frm = data[0]
-                session = self.get_or_create_session(frm, thread_id)
                 error_message = _(
                     'Connection to host could not be established: '
                     'Timeout while sending data.')
-                app.nec.push_incoming_event(MessageErrorEvent(
-                    None, conn=self, fjid=frm, error_code=-1,
-                    error_msg=error_message, msg=None, time_=None,
-                    session=session, zeroconf=True))
+                app.nec.push_incoming_event(NetworkEvent(
+                    'zeroconf-error',
+                    account=self.name,
+                    jid=frm,
+                    message=error_message))
 
     def cleanup(self):
         pass

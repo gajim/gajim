@@ -46,6 +46,7 @@ from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import geo_provider_from_location
+from gajim.common.helpers import event_filter
 from gajim.common.contacts import GC_Contact
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
@@ -231,11 +232,19 @@ class ChatControl(ChatControlBase):
         app.ged.register_event_handler(
             'receipt-received',
             ged.GUI1, self._receipt_received)
+        app.ged.register_event_handler('message-error',
+                                       ged.GUI1, self._on_message_error)
+        app.ged.register_event_handler('zeroconf-error', ged.GUI1,
+                                       self._on_zeroconf_error)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
         app.plugin_manager.gui_extension_point('chat_control', self)
         self.update_actions()
+
+    @property
+    def jid(self):
+        return self.contact.jid
 
     def add_actions(self):
         super().add_actions()
@@ -824,6 +833,10 @@ class ChatControl(ChatControlBase):
             == pw.get_active_control() and pw.is_active() and end):
                 app.logger.set_read_messages([obj.msg_log_id])
 
+    @event_filter(['account', 'jid'])
+    def _on_message_error(self, event):
+        self.conv_textview.show_error(event.message_id, event.error)
+
     def _message_sent(self, obj):
         if obj.conn.name != self.account:
             return
@@ -880,7 +893,7 @@ class ChatControl(ChatControlBase):
     def add_message(self, text, frm='', tim=None, encrypted=None,
                     subject=None, xhtml=None,
                     displaymarking=None, msg_log_id=None, correct_id=None,
-                    message_id=None, additional_data=None):
+                    message_id=None, additional_data=None, error=None):
         """
         Print a line in the conversation
 
@@ -922,7 +935,7 @@ class ChatControl(ChatControlBase):
             displaymarking=displaymarking,
             msg_log_id=msg_log_id, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
-            encrypted=encrypted)
+            encrypted=encrypted, error=error)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
@@ -1252,7 +1265,8 @@ class ChatControl(ChatControlBase):
                                         restored=True,
                                         old_kind=local_old_kind,
                                         xhtml=xhtml,
-                                        additional_data=additional_data)
+                                        additional_data=additional_data,
+                                        error=row.error)
             if row.message.startswith('/me ') or row.message.startswith('/me\n'):
                 local_old_kind = None
             else:
@@ -1354,6 +1368,10 @@ class ChatControl(ChatControlBase):
         status_line = _('%(name)s is now %(show)s %(status)s') % {
             'name': name, 'show': uf_show, 'status': status or ''}
         self.add_status_message(status_line)
+
+    @event_filter(['account', 'jid'])
+    def _on_zeroconf_error(self, event):
+        self.add_status_message(event.message)
 
     def _info_bar_show_message(self):
         if self.info_bar.get_visible():

@@ -18,10 +18,8 @@ import time
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.const import MessageType
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import KindConstant
@@ -31,7 +29,6 @@ from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
-from gajim.common.connection_handlers_events import MessageErrorEvent
 
 
 class Message(BaseModule):
@@ -42,6 +39,10 @@ class Message(BaseModule):
             StanzaHandler(name='message',
                           callback=self._message_received,
                           priority=50),
+            StanzaHandler(name='message',
+                          typ='error',
+                          callback=self._message_error_received,
+                          priority=50),
         ]
 
         # XEPs for which this message module should not be executed
@@ -49,7 +50,9 @@ class Message(BaseModule):
                                         nbxmpp.NS_IBB])
 
     def _message_received(self, _con, stanza, properties):
-        if properties.is_mam_message or properties.is_pubsub:
+        if (properties.is_mam_message or
+                properties.is_pubsub or
+                properties.type.is_error):
             return
         # Check if a child of the message contains any
         # namespaces that we handle in other modules.
@@ -108,19 +111,6 @@ class Message(BaseModule):
         if not gc_control:
             minimized = app.interface.minimized_controls[self._account]
             gc_control = minimized.get(jid)
-
-        if gc_control and jid == fjid:
-            if properties.type.is_error:
-                if msgtxt:
-                    msgtxt = _('error while sending %(message)s ( %(error)s )') % {
-                        'message': msgtxt, 'error': stanza.getErrorMsg()}
-                else:
-                    msgtxt = _('error: %s') % stanza.getErrorMsg()
-                # TODO: why is this here?
-                if stanza.getTag('html'):
-                    stanza.delChild('html')
-            type_ = MessageType.GROUPCHAT
-
         session = None
         if not properties.type.is_groupchat:
             if properties.is_muc_pm and properties.type.is_error:
@@ -157,29 +147,6 @@ class Message(BaseModule):
         else:
             if properties.eme is not None:
                 msgtxt = get_eme_message(properties.eme)
-
-        if type_.is_error:
-            if not msgtxt:
-                msgtxt = _('message')
-            if gc_control:
-                gc_control.add_info_message(msgtxt)
-            else:
-                error_msg = stanza.getErrorMsg() or msgtxt
-                msgtxt = None if error_msg == msgtxt else msgtxt
-                self._log_error_message(error_msg,
-                                        jid,
-                                        properties.timestamp)
-                app.nec.push_incoming_event(
-                    MessageErrorEvent(None,
-                                      conn=self._con,
-                                      fjid=fjid,
-                                      error_code=stanza.getErrorCode(),
-                                      error_msg=error_msg,
-                                      msg=msgtxt,
-                                      time_=properties.timestamp,
-                                      session=session,
-                                      stanza=stanza))
-            return
 
         event_attr = {
             'conn': self._con,
@@ -234,13 +201,25 @@ class Message(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('decrypted-message-received', **event_attr))
 
-    def _log_error_message(self, error_msg, jid, timestamp):
-        if app.config.should_log(self._account, jid):
-            app.logger.insert_into_logs(self._account,
-                                        jid,
-                                        timestamp,
-                                        KindConstant.ERROR,
-                                        message=error_msg)
+    def _message_error_received(self, _con, _stanza, properties):
+        jid = properties.jid
+        if not properties.is_muc_pm:
+            jid.setBare()
+
+        self._log.info(properties.error)
+
+        app.logger.set_message_error(app.get_jid_from_account(self._account),
+                                     jid,
+                                     properties.id,
+                                     properties.error)
+
+        app.nec.push_incoming_event(
+            NetworkEvent('message-error',
+                         account=self._account,
+                         jid=jid,
+                         room_jid=jid,
+                         message_id=properties.id,
+                         error=properties.error))
 
     def _log_muc_message(self, event):
         if event.mtype == 'error':

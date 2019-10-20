@@ -40,6 +40,7 @@ from gi.repository import GLib
 from nbxmpp.protocol import Node
 from nbxmpp.protocol import Iq
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import CommonError
 from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.modules.discovery import parse_disco_info
 
@@ -76,6 +77,7 @@ LOGS_SQL_STATEMENT = '''
             kind INTEGER,
             show INTEGER,
             message TEXT,
+            error TEXT,
             subject TEXT,
             additional_data TEXT,
             stanza_id TEXT,
@@ -93,7 +95,7 @@ LOGS_SQL_STATEMENT = '''
     );
     CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
     CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
-    PRAGMA user_version=2;
+    PRAGMA user_version=4;
     '''
 
 CACHE_SQL_STATEMENT = '''
@@ -187,9 +189,17 @@ def _convert_disco_info(disco_info):
 def _adapt_disco_info(disco_info):
     return str(disco_info.stanza)
 
-sqlite.register_converter('disco_info', _convert_disco_info)
+def _convert_common_error(common_error):
+    return CommonError.from_string(common_error)
 
+def _adapt_common_error(common_error):
+    return common_error.serialize()
+
+sqlite.register_converter('disco_info', _convert_disco_info)
 sqlite.register_adapter(DiscoInfo, _adapt_disco_info)
+
+sqlite.register_converter('common_error', _convert_common_error)
+sqlite.register_adapter(CommonError, _adapt_common_error)
 
 
 class Logger:
@@ -303,6 +313,13 @@ class Logger:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "message_id" TEXT',
                 'PRAGMA user_version=3'
+            ]
+            self._execute_multiple(con, statements)
+
+        if self._get_user_version(con) < 4:
+            statements = [
+                'ALTER TABLE logs ADD COLUMN "error" TEXT',
+                'PRAGMA user_version=4'
             ]
             self._execute_multiple(con, statements)
 
@@ -781,7 +798,8 @@ class Logger:
         jids = self._get_family_jids(account, jid)
 
         sql = '''
-            SELECT time, kind, message, subject, additional_data
+            SELECT time, kind, message, error as "error [common_error]",
+                   subject, additional_data
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids}) AND
             kind IN ({kinds}) AND time > get_timeout()
             ORDER BY time DESC, log_line_id DESC LIMIT ? OFFSET ?
@@ -1433,6 +1451,34 @@ class Logger:
         self._timeout_commit()
 
         return lastrowid
+
+    def set_message_error(self, account_jid, jid, message_id, error):
+        """
+        Update the corresponding message with the error
+
+        :param account_jid: The jid of the account
+
+        :param jid:         The jid that belongs to the avatar
+
+        :param message_id:  The id of the message
+
+        :param error:       The error stanza as string
+
+        """
+
+        account_id = self.get_jid_id(account_jid)
+        try:
+            jid_id = self.get_jid_id(str(jid))
+        except ValueError:
+            # Unknown JID
+            return
+
+        sql = '''
+            UPDATE logs SET error = ?
+            WHERE account_id = ? AND jid_id = ? AND message_id = ?
+            '''
+        self._con.execute(sql, (error, account_id, jid_id, message_id))
+        self._timeout_commit()
 
     def set_avatar_sha(self, account_jid, jid, sha=None):
         """

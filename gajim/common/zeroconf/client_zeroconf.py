@@ -326,6 +326,9 @@ class P2PClient(IdleObject):
 
         self.RegisterHandler(*StanzaHandler(name='message',
                                             callback=self._caller._messageCB))
+        self.RegisterHandler(*StanzaHandler(name='message',
+                                            typ='error',
+                                            callback=self._caller._message_error_received))
 
         self._caller._register_new_handlers(self)
 
