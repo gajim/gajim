@@ -41,7 +41,6 @@ from gajim.common import helpers
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.fuzzyclock import FuzzyClock
 from gajim.common.const import StyleAttr
 from gajim.common.const import Trust
 from gajim.common.helpers import to_user_string
@@ -188,7 +187,6 @@ class ConversationTextview(GObject.GObject):
         self.line = 0
         self._message_list = []
         self.corrected_text_list = {}
-        self.fc = FuzzyClock()
 
         # no need to inherit TextView, use it as atrribute is safer
         self.tv = HtmlTextView(account)
@@ -1198,11 +1196,7 @@ class ConversationTextview(GObject.GObject):
             seconds_passed = tim - self.last_time_printout
             if seconds_passed > every_foo_seconds:
                 self.last_time_printout = tim
-                if app.config.get('print_time_fuzzy') > 0:
-                    tim_format = self.fc.fuzzy_time(
-                        app.config.get('print_time_fuzzy'), local_tim)
-                else:
-                    tim_format = self.get_time_to_show(local_tim, direction_mark)
+                tim_format = self.get_time_to_show(local_tim, direction_mark)
                 buffer_.insert_with_tags_by_name(iter_, tim_format + '\n',
                     'time_sometimes')
 

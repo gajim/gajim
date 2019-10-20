@@ -112,7 +112,6 @@ class Config:
         'ignore_incoming_xhtml': [opt_bool, False, ],
         'speller_language': [opt_str, '', _('Language used for spell checking.')],
         'print_time': [opt_str, 'always', _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
-        'print_time_fuzzy': [opt_int, 0, _('Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable Fuzzy Clock. 1 is the most precise clock, 4 the least precise one. This is used only if \'print_time\' is \'sometimes\'.')],
         'emoticons_theme': [opt_str, 'noto-emoticons', '', True],
         'ascii_emoticons': [opt_bool, True, _('When enabled, ASCII emojis will be converted to graphical emojis.'), True],
         'ascii_formatting': [opt_bool, True,
