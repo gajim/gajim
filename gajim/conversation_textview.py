@@ -401,7 +401,7 @@ class ConversationTextview(GObject.GObject):
 
         return index, end_mark, old_txt
 
-    def show_receipt_icon(self, id_):
+    def show_receipt(self, id_):
         line = self._get_message_line(id_)
         if line is None:
             return
