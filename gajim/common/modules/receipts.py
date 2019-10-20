@@ -16,6 +16,7 @@
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.modules.receipts import build_receipt
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -55,7 +56,7 @@ class Receipts(BaseModule):
             if contact is None:
                 return
             self._log.info('Send receipt: %s', properties.jid)
-            self._con.connection.send(stanza.buildReceipt())
+            self._con.connection.send(build_receipt(stanza))
             return
 
         if properties.receipt.is_received:
