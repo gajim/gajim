@@ -338,6 +338,7 @@ class CommonConnection:
                                     message=obj.message,
                                     subject=obj.subject,
                                     additional_data=obj.additional_data,
+                                    message_id=obj.stanza_id,
                                     stanza_id=obj.stanza_id)
 
     def new_account(self, name, config, sync=False):
