@@ -941,12 +941,8 @@ class ChatControl(ChatControlBase):
         else:
             self.old_msg_kind = kind
 
+    @event_filter(['account', 'jid'])
     def _receipt_received(self, event):
-        if event.conn.name != self.account:
-            return
-        if event.jid != self.contact.jid:
-            return
-
         self.conv_textview.show_receipt(event.receipt_id)
 
     def get_tab_label(self):

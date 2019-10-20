@@ -65,13 +65,13 @@ class Receipts(BaseModule):
 
             jid = properties.jid
             if not properties.is_muc_pm:
-                jid = properties.jid.getBare()
+                jid.setBare()
 
             app.nec.push_incoming_event(
                 NetworkEvent('receipt-received',
-                             conn=self._con,
-                             receipt_id=properties.receipt.id,
-                             jid=jid))
+                             account=self._account,
+                             jid=jid,
+                             receipt_id=properties.receipt.id))
 
             raise nbxmpp.NodeProcessed
 
