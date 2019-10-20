@@ -270,7 +270,7 @@ class ConversationTextview(GObject.GObject):
         self.tagMarked.set_property('weight', Pango.Weight.BOLD)
 
         textview_icon = buffer_.create_tag('textview-icon')
-        textview_icon.set_property('rise', Pango.units_from_double(-4.45))
+        textview_icon.set_property('rise', Pango.units_from_double(-2.45))
 
         tag = buffer_.create_tag('time_sometimes')
         tag.set_property('foreground', 'darkgrey')
