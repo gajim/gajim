@@ -276,6 +276,9 @@ class HistoryWindow(Gtk.ApplicationWindow):
 
     def _on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
+            if self._ui.results_scrolledwindow.get_visible():
+                self._ui.results_scrolledwindow.set_visible(False)
+                return
             self.save_state()
             self.destroy()
 
@@ -294,7 +297,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
 
     def _jid_entry_search(self, jid):
         self._load_history(jid, self.account)
-        self._ui.results_scrolledwindow.set_property('visible', False)
+        self._ui.results_scrolledwindow.set_visible(False)
 
     def _load_history(self, jid_or_name, account=None):
         """
@@ -373,7 +376,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
             self._ui.button_first_day.set_sensitive(False)
             self._ui.button_last_day.set_sensitive(False)
 
-            self._ui.results_scrolledwindow.set_property('visible', False)
+            self._ui.results_scrolledwindow.set_visible(False)
 
     def on_calendar_day_selected(self, widget):
         if not self.jid:
@@ -650,10 +653,10 @@ class HistoryWindow(Gtk.ApplicationWindow):
         self.history_buffer.remove_tag_by_name('highlight', start, end)
 
         if text == '':
-            self._ui.results_scrolledwindow.set_property('visible', False)
+            self._ui.results_scrolledwindow.set_visible(False)
             return
 
-        self._ui.results_scrolledwindow.set_property('visible', True)
+        self._ui.results_scrolledwindow.set_visible(True)
 
         # perform search in preselected jids
         # jids are preselected with the query_entry
@@ -804,7 +807,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
             # Only in that case because it's called by
             # self._fill_completion_dict() otherwise
             self._load_history(jid, account)
-        self._ui.results_scrolledwindow.set_property('visible', False)
+        self._ui.results_scrolledwindow.set_visible(False)
 
     def save_state(self):
         x, y = self.get_window().get_root_origin()
