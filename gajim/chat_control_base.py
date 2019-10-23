@@ -991,7 +991,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     old_kind=None, xhtml=None,
                     displaymarking=None, msg_log_id=None,
                     message_id=None, correct_id=None, additional_data=None,
-                    encrypted=None, error=None):
+                    encrypted=None, marker=None, error=None):
         """
         Print 'chat' type messages
         correct_id = (message_id, correct_id)
@@ -1017,7 +1017,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             subject, old_kind, xhtml,
             displaymarking=displaymarking, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
-            encrypted=encrypted, error=error)
+            encrypted=encrypted, marker=marker, error=error)
 
         if restored:
             return

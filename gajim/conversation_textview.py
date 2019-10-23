@@ -915,7 +915,7 @@ class ConversationTextview(GObject.GObject):
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     subject=None, old_kind=None, xhtml=None, graphics=True,
     displaymarking=None, message_id=None, correct_id=None, additional_data=None,
-    encrypted=None, error=None):
+    encrypted=None, marker=None, error=None):
         """
         Print 'chat' type messages
         """
@@ -1052,6 +1052,9 @@ class ConversationTextview(GObject.GObject):
 
         if error is not None:
             message_line.show_error_icon(to_user_string(error))
+
+        if marker is not None:
+            message_line.show_receipt_icon()
 
         if index is None:
             # New Message
@@ -1307,9 +1310,15 @@ class MessageLine:
         self.id = id_
         self.timestamp = timestamp
         self.start_mark = start_mark
+        self._has_receipt = False
         self._message_icons = message_icons
 
+    @property
+    def has_receipt(self):
+        return self._has_receipt
+
     def show_receipt_icon(self):
+        self._has_receipt = True
         self._message_icons.set_receipt_icon_visible(True)
 
     def show_correction_icon(self, tooltip):

@@ -1262,6 +1262,7 @@ class ChatControl(ChatControlBase):
                                         old_kind=local_old_kind,
                                         xhtml=xhtml,
                                         additional_data=additional_data,
+                                        marker=row.marker,
                                         error=row.error)
             if row.message.startswith('/me ') or row.message.startswith('/me\n'):
                 local_old_kind = None

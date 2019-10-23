@@ -195,11 +195,16 @@ def _convert_common_error(common_error):
 def _adapt_common_error(common_error):
     return common_error.serialize()
 
+def _convert_marker(marker):
+    return 'received' if marker == 0 else 'displayed'
+
 sqlite.register_converter('disco_info', _convert_disco_info)
 sqlite.register_adapter(DiscoInfo, _adapt_disco_info)
 
 sqlite.register_converter('common_error', _convert_common_error)
 sqlite.register_adapter(CommonError, _adapt_common_error)
+
+sqlite.register_converter('marker', _convert_marker)
 
 
 class Logger:
@@ -799,7 +804,7 @@ class Logger:
 
         sql = '''
             SELECT time, kind, message, error as "error [common_error]",
-                   subject, additional_data
+                   subject, additional_data, marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids}) AND
             kind IN ({kinds}) AND time > get_timeout()
             ORDER BY time DESC, log_line_id DESC LIMIT ? OFFSET ?
@@ -1478,6 +1483,38 @@ class Logger:
             WHERE account_id = ? AND jid_id = ? AND message_id = ?
             '''
         self._con.execute(sql, (error, account_id, jid_id, message_id))
+        self._timeout_commit()
+
+    def set_marker(self, account_jid, jid, message_id, state):
+        """
+        Update the marker state of the corresponding message
+
+        :param account_jid: The jid of the account
+
+        :param jid:         The jid that belongs to the avatar
+
+        :param message_id:  The id of the message
+
+        :param state:       The state, 'received' or 'displayed'
+
+        """
+        if state not in ('received', 'displayed'):
+            raise ValueError('Invalid marker state')
+
+        account_id = self.get_jid_id(account_jid)
+        try:
+            jid_id = self.get_jid_id(str(jid))
+        except ValueError:
+            # Unknown JID
+            return
+
+        state = 0 if state == 'received' else 1
+
+        sql = '''
+            UPDATE logs SET marker = ?
+            WHERE account_id = ? AND jid_id = ? AND message_id = ?
+            '''
+        self._con.execute(sql, (state, account_id, jid_id, message_id))
         self._timeout_commit()
 
     def set_avatar_sha(self, account_jid, jid, sha=None):

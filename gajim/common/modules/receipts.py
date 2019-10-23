@@ -68,6 +68,11 @@ class Receipts(BaseModule):
             if not properties.is_muc_pm:
                 jid.setBare()
 
+            app.logger.set_marker(app.get_jid_from_account(self._account),
+                                  jid,
+                                  properties.receipt.id,
+                                  'received')
+
             app.nec.push_incoming_event(
                 NetworkEvent('receipt-received',
                              account=self._account,
