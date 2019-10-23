@@ -405,13 +405,13 @@ class ConversationTextview(GObject.GObject):
         line = self._get_message_line(id_)
         if line is None:
             return
-        line.show_receipt_icon()
+        line.set_receipt()
 
     def show_error(self, id_, error):
         line = self._get_message_line(id_)
         if line is None:
             return
-        line.show_error_icon(to_user_string(error))
+        line.set_error(to_user_string(error))
 
     def show_focus_out_line(self):
         if not self.allow_focus_out_line:
@@ -1047,14 +1047,14 @@ class ConversationTextview(GObject.GObject):
         message_line = MessageLine(message_id, tim, message_icons, new_mark)
 
         if corrected:
-            message_line.show_correction_icon(
+            message_line.set_correction(
                 self.corrected_text_list[message_id])
 
         if error is not None:
-            message_line.show_error_icon(to_user_string(error))
+            message_line.set_error(to_user_string(error))
 
         if marker is not None:
-            message_line.show_receipt_icon()
+            message_line.set_receipt()
 
         if index is None:
             # New Message
@@ -1317,15 +1317,15 @@ class MessageLine:
     def has_receipt(self):
         return self._has_receipt
 
-    def show_receipt_icon(self):
+    def set_receipt(self):
         self._has_receipt = True
         self._message_icons.set_receipt_icon_visible(True)
 
-    def show_correction_icon(self, tooltip):
+    def set_correction(self, tooltip):
         self._message_icons.set_correction_icon_visible(True)
         self._message_icons.set_correction_tooltip(tooltip)
 
-    def show_error_icon(self, tooltip):
+    def set_error(self, tooltip):
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 
