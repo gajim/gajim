@@ -296,7 +296,7 @@ class CommonConnection:
 
             # XEP-0184
             if obj.jid != app.get_jid_from_account(self.name):
-                if obj.message:
+                if obj.message and obj.type_ != 'groupchat':
                     msg_iq.setReceiptRequest()
 
             if obj.session:
