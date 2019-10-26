@@ -147,11 +147,6 @@ class ChatControlSession:
         if not obj.msgtxt: # empty message text
             return True
 
-        if app.config.get_per('accounts', self.conn.name,
-        'ignore_unknown_contacts') and not app.contacts.get_contacts(
-        self.conn.name, obj.jid) and not pm:
-            return True
-
         if not self.control:
             ctrl = app.interface.msg_win_mgr.search_control(obj.jid,
                 obj.conn.name, obj.resource)

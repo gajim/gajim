@@ -37,6 +37,9 @@ class Message(BaseModule):
 
         self.handlers = [
             StanzaHandler(name='message',
+                          callback=self._check_if_unknown_contact,
+                          priority=41),
+            StanzaHandler(name='message',
                           callback=self._message_received,
                           priority=50),
             StanzaHandler(name='message',
@@ -48,6 +51,28 @@ class Message(BaseModule):
         # XEPs for which this message module should not be executed
         self._message_namespaces = set([nbxmpp.NS_ROSTERX,
                                         nbxmpp.NS_IBB])
+
+    def _check_if_unknown_contact(self, _con, stanza, properties):
+        if (properties.type.is_groupchat or
+                properties.is_muc_pm or
+                properties.is_self_message or
+                properties.is_mam_message):
+            return
+
+        if self._con.get_own_jid().getDomain() == str(properties.jid):
+            # Server message
+            return
+
+        if not app.config.get_per('accounts',
+                                  self._account,
+                                  'ignore_unknown_contacts'):
+            return
+
+        jid = properties.jid.getBare()
+        if self._con.get_module('Roster').get_item(jid) is None:
+            self._log.warning('Ignore message from unknown contact: %s', jid)
+            self._log.warning(stanza)
+            raise nbxmpp.NodeProcessed
 
     def _message_received(self, _con, stanza, properties):
         if (properties.is_mam_message or
