@@ -137,16 +137,14 @@ class Chatstate(BaseModule):
                          account=self._account,
                          contact=contact))
 
-    def _process_chatstate(self, _con, stanza, properties):
+    def _process_chatstate(self, _con, _stanza, properties):
         if not properties.has_chatstate:
             return
 
         if (properties.is_self_message or
                 properties.type.is_groupchat or
+                properties.is_mam_message or
                 properties.is_carbon_message and properties.carbon.is_sent):
-            if properties.chatstate in ('inactive', 'gone',
-                                        'composing', 'paused'):
-                raise nbxmpp.NodeProcessed
             return
 
         if properties.is_muc_pm:
@@ -166,15 +164,6 @@ class Chatstate(BaseModule):
             NetworkEvent('chatstate-received',
                          account=self._account,
                          contact=contact))
-
-        if properties.chatstate in ('inactive', 'gone', 'composing', 'paused'):
-            if properties.body is None:
-                # So we dont lose a message if a client implements not
-                # recomended behavior
-                raise nbxmpp.NodeProcessed
-
-            self._log.warning('Chatstate with body received')
-            self._log.warning(stanza)
 
     @ensure_enabled
     def _check_last_interaction(self) -> GLib.SOURCE_CONTINUE:
