@@ -11,13 +11,15 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd "${DIR}"
 
 # CONFIG START
-PYTHON_VERSION="3"
+MAJOR_PY_VERSION="3"
+MINOR_PY_VERSION="8"
+PYTHON_VERSION="${MAJOR_PY_VERSION}.${MINOR_PY_VERSION}"
 BUILD_VERSION="0"
 
 # CONFIG END
 
 MISC="${DIR}"/misc
-PYTHON_ID="python${PYTHON_VERSION}"
+PYTHON_ID="python${MAJOR_PY_VERSION}"
 MINGW="mingw32"
 
 QL_VERSION="0.0.0"
@@ -34,7 +36,7 @@ function set_build_root {
     BUILD_ROOT="${DIR}/_build_root"
     REPO_CLONE="${BUILD_ROOT}/${MINGW}"/gajim
     MINGW_ROOT="${BUILD_ROOT}/${MINGW}"
-    PACKAGE_DIR="${BUILD_ROOT}/${MINGW}/lib/python3.7/site-packages"
+    PACKAGE_DIR="${BUILD_ROOT}/${MINGW}/lib/python${PYTHON_VERSION}/site-packages"
 }
 
 function build_pacman {
@@ -55,7 +57,8 @@ function build_compileall {
 
 function install_pre_deps {
     pacman -S --needed --noconfirm p7zip \
-        mingw-w64-"${ARCH}"-nsis wget intltool mingw-w64-"${ARCH}"-toolchain
+        mingw-w64-"${ARCH}"-nsis wget intltool mingw-w64-"${ARCH}"-toolchain \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"
 }
 
 function create_root {
