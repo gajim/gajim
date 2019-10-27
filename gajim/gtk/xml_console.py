@@ -122,6 +122,13 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Up):
             self._on_paste_last()
+        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
+                event.keyval == Gdk.KEY_f):
+            self._ui.search_toggle.set_active(
+                not self._ui.search_revealer.get_child_revealed())
+        if event.keyval == Gdk.KEY_F3:
+            search_str = self._ui.search_entry.get_text()
+            self._find(search_str, True)
 
     def _on_row_activated(self, _listbox, row):
         text = row.get_child().get_text()
@@ -200,6 +207,51 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
             self._ui.paste.hide()
             self._combo.hide()
             self._ui.menubutton.hide()
+
+    def _on_search_toggled(self, button):
+        self._ui.search_revealer.set_reveal_child(button.get_active())
+        self._ui.search_entry.grab_focus()
+
+    def _on_search_activate(self, _widget):
+        search_str = self._ui.search_entry.get_text()
+        self._find(search_str, True)
+
+    def _on_search_clicked(self, button):
+        forward = bool(button is self._ui.search_forward)
+        search_str = self._ui.search_entry.get_text()
+        self._find(search_str, forward)
+
+    def _find(self, search_str, forward):
+        textbuffer = self._ui.textview.get_buffer()
+        cursor_mark = textbuffer.get_insert()
+        current_pos = textbuffer.get_iter_at_mark(cursor_mark)
+
+        if current_pos.get_offset() == textbuffer.get_char_count():
+            current_pos = textbuffer.get_start_iter()
+
+        last_pos_mark = textbuffer.get_mark('last_pos')
+        if last_pos_mark is not None:
+            current_pos = textbuffer.get_iter_at_mark(last_pos_mark)
+
+        if forward:
+            match = current_pos.forward_search(
+                search_str,
+                Gtk.TextSearchFlags.VISIBLE_ONLY |
+                Gtk.TextSearchFlags.CASE_INSENSITIVE,
+                None)
+        else:
+            current_pos.backward_cursor_position()
+            match = current_pos.backward_search(
+                search_str,
+                Gtk.TextSearchFlags.VISIBLE_ONLY |
+                Gtk.TextSearchFlags.CASE_INSENSITIVE,
+                None)
+
+        if match is not None:
+            match_start, match_end = match
+            textbuffer.select_range(match_start, match_end)
+            mark = textbuffer.create_mark('last_pos', match_end, True)
+            self._ui.textview.scroll_to_mark(mark, 0, True, 0.5, 0.5)
 
     @staticmethod
     def _get_accounts():
