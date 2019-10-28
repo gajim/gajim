@@ -568,29 +568,6 @@ class Logger:
         self._timeout_commit()
         return lastrowid
 
-    def convert_kind_values_to_db_api_values(self, kind):
-        """
-        Convert from string style to constant ints for db
-        """
-        if kind == 'status':
-            kind_col = KindConstant.STATUS
-        elif kind == 'gcstatus':
-            kind_col = KindConstant.GCSTATUS
-        elif kind == 'gc_msg':
-            kind_col = KindConstant.GC_MSG
-        elif kind == 'single_msg_recv':
-            kind_col = KindConstant.SINGLE_MSG_RECV
-        elif kind == 'single_msg_sent':
-            kind_col = KindConstant.SINGLE_MSG_SENT
-        elif kind == 'chat_msg_recv':
-            kind_col = KindConstant.CHAT_MSG_RECV
-        elif kind == 'chat_msg_sent':
-            kind_col = KindConstant.CHAT_MSG_SENT
-        elif kind == 'error':
-            kind_col = KindConstant.ERROR
-
-        return kind_col
-
     def convert_show_values_to_db_api_values(self, show):
         """
         Convert from string style to constant ints for db
