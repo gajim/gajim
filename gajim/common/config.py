@@ -246,7 +246,6 @@ class Config:
         'confirm_block': [opt_str, '', _('Show a confirmation dialog to block a contact? Empty string means never show the dialog.')],
         'enable_negative_priority': [opt_bool, False, _('If enabled, you will be able to set a negative priority to your account in the Accounts window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server.')],
         'show_contacts_number': [opt_bool, True, _('If enabled, Gajim will show both the number of online and total contacts in account rows as well as in group rows.')],
-        'treat_incoming_messages': [opt_str, 'chat', _('Can be empty, \'chat\' or \'normal\'. If not empty, all incoming messages are treated as if they were of this type.')],
         'scroll_roster_to_last_message': [opt_bool, True, _('If enabled, Gajim will scroll and select the contact who sent you the last message, if the chat window is not already opened.')],
         'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
         'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],

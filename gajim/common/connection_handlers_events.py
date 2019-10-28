@@ -367,10 +367,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             # We don't want message preview, do_preview = False
             self.popup_text = ''
 
-        if msg_obj.properties.type.is_normal: # single message
-            self.popup_msg_type = 'normal'
-            self.popup_event_type = _('New Single Message')
-        elif msg_obj.properties.is_muc_pm:
+        if msg_obj.properties.is_muc_pm:
             self.popup_msg_type = 'pm'
             self.popup_event_type = _('New Private Message')
         else: # chat message

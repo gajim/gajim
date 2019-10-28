@@ -125,8 +125,6 @@ class Notification:
         if obj.notif_type == 'msg':
             if obj.base_event.properties.is_muc_pm:
                 return 'gajim-priv_msg_recv'
-            if obj.base_event.properties.type.is_normal:
-                return 'gajim-single_msg_recv'
 
         elif obj.notif_type == 'pres':
             if obj.transport_name is not None:
@@ -167,7 +165,7 @@ class Notification:
         notif_id = None
         if event_type in (
                 _('Contact Signed In'), _('Contact Signed Out'),
-                _('New Message'), _('New Single Message'), _('New Private Message'),
+                _('New Message'), _('New Private Message'),
                 _('New Group Chat Message'),
                 _('Contact Changed Status'), _('File Transfer Request'),
                 _('File Transfer Error'), _('File Transfer Completed'),
@@ -197,7 +195,6 @@ class Notification:
             elif event_type == _('Connection Failed'):
                 notif_id = self._make_id('connection-failed', account)
             elif event_type in (_('New Message'),
-                                _('New Single Message'),
                                 _('New Private Message'),
                                 _('New Group Chat Message')):
                 if app.desktop_env == 'gnome':
@@ -268,7 +265,7 @@ class PopupNotification(Gtk.Window):
             bg_color = app.config.get('notif_signin_color')
         elif event_type == _('Contact Signed Out'):
             bg_color = app.config.get('notif_signout_color')
-        elif event_type in (_('New Message'), _('New Single Message'),
+        elif event_type in (_('New Message'),
                             _('New Private Message'), _('New E-mail')):
             bg_color = app.config.get('notif_message_color')
         elif event_type == _('File Transfer Request'):

@@ -85,9 +85,6 @@ class ChatEvent(Event):
             additional_data = AdditionalDataDict()
         self.additional_data = additional_data
 
-class NormalEvent(ChatEvent):
-    type_ = 'normal'
-
 class PmEvent(ChatEvent):
     type_ = 'pm'
 

@@ -810,8 +810,7 @@ class ChatControl(ChatControlBase):
             return True
         if obj.conn.name != self.account:
             return
-        if not obj.properties.type.is_chat:
-            return
+
         if obj.session.control != self:
             return
 

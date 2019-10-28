@@ -28,7 +28,6 @@ from gajim.common import contacts
 from gajim.common import ged
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import KindConstant
-from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 
@@ -100,21 +99,12 @@ class ChatControlSession:
                 if self.control.resource:
                     self.control.change_resource(self.resource)
 
-        if obj.properties.type.is_chat:
-            if not obj.msgtxt:
-                return
+        if not obj.msgtxt:
+            return
 
-            log_type = KindConstant.CHAT_MSG_RECV
-            if obj.forwarded and obj.sent:
-                log_type = KindConstant.CHAT_MSG_SENT
-        else:
-            log_type = KindConstant.SINGLE_MSG_RECV
-            if obj.forwarded and obj.sent:
-                log_type = KindConstant.SINGLE_MSG_SENT
-
-        treat_as = app.config.get('treat_incoming_messages')
-        if treat_as:
-            obj.mtype = treat_as
+        log_type = KindConstant.CHAT_MSG_RECV
+        if obj.forwarded and obj.sent:
+            log_type = KindConstant.CHAT_MSG_SENT
 
         if self.is_loggable() and obj.msgtxt:
             if obj.xhtml and app.config.get('log_xhtml_messages'):
@@ -211,11 +201,7 @@ class ChatControlSession:
         event_t = events.ChatEvent
         event_type = 'message_received'
 
-        if obj.properties.type.is_normal:
-            event_t = events.NormalEvent
-            event_type = 'single_message_received'
-
-        if self.control and not obj.properties.type.is_normal:
+        if self.control:
             # We have a ChatControl open
             obj.show_in_roster = False
             obj.show_in_systray = False
@@ -236,10 +222,7 @@ class ChatControlSession:
             # Everything else
             obj.show_in_roster = get_show_in_roster(event_type, self)
             obj.show_in_systray = get_show_in_systray(event_type, contact.jid)
-            if obj.properties.type.is_normal and obj.popup:
-                do_event = False
-            else:
-                do_event = True
+            do_event = True
         if do_event:
             kind = obj.properties.type.value
             event = event_t(obj.msgtxt, obj.subject, kind, obj.timestamp,
@@ -313,14 +296,8 @@ class ChatControlSession:
 
         popup = helpers.allow_popup_window(self.conn.name)
 
-        if msg_type == 'normal' and popup: # it's single message to be autopopuped
-            SingleMessageWindow(self.conn.name, contact.jid,
-                    action='receive', from_whom=jid, subject=subject, message=msg,
-                    resource=resource, session=self)
-            return
-
         # We print if window is opened and it's not a single message
-        if self.control and msg_type != 'normal':
+        if self.control:
             typ = ''
 
             if msg_type == 'error':
@@ -338,10 +315,6 @@ class ChatControlSession:
         # We save it in a queue
         event_t = events.ChatEvent
         event_type = 'message_received'
-
-        if msg_type == 'normal':
-            event_t = events.NormalEvent
-            event_type = 'single_message_received'
 
         show_in_roster = get_show_in_roster(event_type, self)
         show_in_systray = get_show_in_systray(event_type, contact.jid)

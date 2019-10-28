@@ -2654,14 +2654,8 @@ class RosterWindow:
             return True
         if obj.properties.type.value not in ('normal', 'chat'):
             return
-        if obj.properties.type.is_normal and obj.popup:
-            # it's single message to be autopopuped
-            SingleMessageWindow(obj.conn.name, obj.jid,
-                action='receive', from_whom=obj.jid, subject=obj.subject,
-                message=obj.msgtxt, resource=obj.resource, session=obj.session)
-            return
 
-        if obj.popup and obj.properties.type.is_chat and not obj.session.control:
+        if obj.popup and not obj.session.control:
             contact = app.contacts.get_contact(obj.conn.name, obj.jid)
             obj.session.control = app.interface.new_chat(contact,
                 obj.conn.name, session=obj.session)

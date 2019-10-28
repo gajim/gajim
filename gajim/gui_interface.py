@@ -1238,7 +1238,7 @@ class Interface:
                 ctrl = self.new_private_chat(gc_contact, account)
 
             w = ctrl.parent_win
-        elif type_ in ('normal', 'file-request', 'file-request-error',
+        elif type_ in ('file-request', 'file-request-error',
         'file-send-error', 'file-error', 'file-stopped', 'file-completed',
         'file-hash-error', 'jingle-incoming'):
             # Get the first single message event
