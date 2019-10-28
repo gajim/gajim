@@ -3137,20 +3137,6 @@ class RosterWindow:
                 self.tree.expand_row(path, False)
                 return True
 
-    def on_roster_treeview_button_release_event(self, widget, event):
-        try:
-            path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]
-        except TypeError:
-            return False
-
-        if event.button == 1: # Left click
-            if app.single_click and not event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
-            not event.get_state() & Gdk.ModifierType.CONTROL_MASK:
-                # Check if button has been pressed on the same row
-                if self.clicked_path == path:
-                    self.on_row_activated(widget, path)
-                self.clicked_path = None
-
     def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
         # CTRL mask
         if modifier & Gdk.ModifierType.CONTROL_MASK:
@@ -3235,23 +3221,6 @@ class RosterWindow:
                 x_min = AvatarSize.ROSTER
             else:
                 x_min = 0
-            if (app.single_click and
-                not event.get_state() & Gdk.ModifierType.SHIFT_MASK and
-                    not event.get_state() & Gdk.ModifierType.CONTROL_MASK):
-                # Don't handle double click if we press icon of a metacontact
-                titer = model.get_iter(path)
-                if x_min < x < x_min + 27 and type_ == 'contact' and \
-                model.iter_has_child(titer):
-                    if self.tree.row_expanded(path):
-                        self.tree.collapse_row(path)
-                    else:
-                        self.tree.expand_row(path, False)
-                    return
-                # We just save on which row we press button, and open chat
-                # window on button release to be able to do DND without opening
-                # chat window
-                self.clicked_path = path
-                return
 
             if type_ == 'group' and x < 27:
                 # first cell in 1st column (the arrow SINGLE clicked)
@@ -3680,8 +3649,7 @@ class RosterWindow:
         """
         When an iter is double clicked: open the first event window
         """
-        if not app.single_click:
-            self.on_row_activated(widget, path)
+        self.on_row_activated(widget, path)
 
     def on_roster_treeview_row_expanded(self, widget, titer, path):
         """

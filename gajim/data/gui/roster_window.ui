@@ -141,7 +141,6 @@
                         <property name="headers_visible">False</property>
                         <property name="reorderable">True</property>
                         <signal name="button-press-event" handler="on_roster_treeview_button_press_event" swapped="no"/>
-                        <signal name="button-release-event" handler="on_roster_treeview_button_release_event" swapped="no"/>
                         <signal name="key-press-event" handler="on_roster_treeview_key_press_event" swapped="no"/>
                         <signal name="row-activated" handler="on_roster_treeview_row_activated" swapped="no"/>
                         <signal name="row-collapsed" handler="on_roster_treeview_row_collapsed" swapped="no"/>

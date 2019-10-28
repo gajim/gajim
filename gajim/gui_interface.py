@@ -2076,17 +2076,7 @@ class Interface:
             if app.config.get_per('accounts', account, 'is_zeroconf'):
                 app.ZEROCONF_ACC_NAME = account
                 break
-        # Is gnome configured to activate row on single click ?
-#        try:
-#            gi.require_version('GConf', '2.0')
-#            from gi.repository import GConf
-#            client = GConf.Client.get_default()
-#            click_policy = client.get_string(
-#                    '/apps/nautilus/preferences/click_policy')
-#            if click_policy == 'single':
-#                app.single_click = True
-#        except Exception:
-#            pass
+
         # add default status messages if there is not in the config file
         if not app.config.get_per('statusmsg'):
             default = app.config.statusmsg_default
