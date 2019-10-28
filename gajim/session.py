@@ -83,7 +83,7 @@ class ChatControlSession:
         if obj.session != self:
             return
 
-        if obj.muc_pm:
+        if obj.properties.is_muc_pm:
             contact = app.contacts.get_gc_contact(
                 self.conn.name, obj.jid, obj.resource)
         else:
@@ -100,7 +100,7 @@ class ChatControlSession:
                 if self.control.resource:
                     self.control.change_resource(self.resource)
 
-        if obj.mtype == 'chat':
+        if obj.properties.type.is_chat:
             if not obj.msgtxt:
                 return
 
@@ -115,11 +115,6 @@ class ChatControlSession:
         treat_as = app.config.get('treat_incoming_messages')
         if treat_as:
             obj.mtype = treat_as
-        pm = False
-        if obj.muc_pm or (obj.gc_control and obj.resource):
-            # It's a Private message
-            pm = True
-            obj.mtype = 'pm'
 
         if self.is_loggable() and obj.msgtxt:
             if obj.xhtml and app.config.get('log_xhtml_messages'):
@@ -128,7 +123,7 @@ class ChatControlSession:
                 msg_to_log = obj.msgtxt
 
             jid = obj.fjid
-            if not pm:
+            if not obj.properties.is_muc_pm:
                 jid = obj.jid
 
             obj.msg_log_id = app.logger.insert_into_logs(
@@ -139,7 +134,7 @@ class ChatControlSession:
                 stanza_id=obj.unique_id,
                 message_id=obj.message_id)
 
-        if obj.muc_pm and not obj.gc_control:
+        if obj.properties.is_muc_pm and not obj.gc_control:
             # This is a carbon of a PM from a MUC we are not currently
             # joined. We log it silently without notification.
             return True
@@ -159,7 +154,7 @@ class ChatControlSession:
                 else:
                     self.control.contact = contact
 
-        if not pm:
+        if not obj.properties.is_muc_pm:
             self.roster_message2(obj)
 
     def roster_message2(self, obj):
@@ -216,11 +211,11 @@ class ChatControlSession:
         event_t = events.ChatEvent
         event_type = 'message_received'
 
-        if obj.mtype == 'normal':
+        if obj.properties.type.is_normal:
             event_t = events.NormalEvent
             event_type = 'single_message_received'
 
-        if self.control and obj.mtype != 'normal':
+        if self.control and not obj.properties.type.is_normal:
             # We have a ChatControl open
             obj.show_in_roster = False
             obj.show_in_systray = False
@@ -241,12 +236,13 @@ class ChatControlSession:
             # Everything else
             obj.show_in_roster = get_show_in_roster(event_type, self)
             obj.show_in_systray = get_show_in_systray(event_type, contact.jid)
-            if obj.mtype == 'normal' and obj.popup:
+            if obj.properties.type.is_normal and obj.popup:
                 do_event = False
             else:
                 do_event = True
         if do_event:
-            event = event_t(obj.msgtxt, obj.subject, obj.mtype, obj.timestamp,
+            kind = obj.properties.type.value
+            event = event_t(obj.msgtxt, obj.subject, kind, obj.timestamp,
                 obj.encrypted, obj.resource, obj.msg_log_id,
                 correct_id=obj.correct_id,
                 message_id=obj.message_id,

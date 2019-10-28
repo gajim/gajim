@@ -789,7 +789,7 @@ class ChatControl(ChatControlBase):
         if obj.conn.name != self.account:
             return
 
-        if obj.muc_pm:
+        if obj.properties.is_muc_pm:
             if not obj.with_ == self.contact.get_full_jid():
                 return
         else:
@@ -810,14 +810,12 @@ class ChatControl(ChatControlBase):
             return True
         if obj.conn.name != self.account:
             return
-        if obj.mtype != 'chat':
+        if not obj.properties.type.is_chat:
             return
         if obj.session.control != self:
             return
 
         typ = ''
-        if obj.mtype == 'error':
-            typ = 'error'
         if obj.forwarded and obj.sent:
             typ = 'out'
 
@@ -1286,10 +1284,7 @@ class ChatControl(ChatControlBase):
         for event in events:
             if event.type_ != self.type_id:
                 continue
-            if event.kind == 'error':
-                kind = 'info'
-            else:
-                kind = 'print_queue'
+            kind = 'print_queue'
             if event.sent_forwarded:
                 kind = 'out'
             self.add_message(event.message, kind, tim=event.time,

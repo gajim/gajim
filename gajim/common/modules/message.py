@@ -189,14 +189,12 @@ class Message(BaseModule):
             'unique_id': stanza_id or message_id,
             'message_id': properties.id,
             'correct_id': parse_correction(properties),
-            'mtype': type_.value,
             'msgtxt': msgtxt,
             'thread_id': thread_id,
             'session': session,
             'self_message': properties.is_self_message,
             'timestamp': properties.timestamp,
             'delayed': properties.user_timestamp is not None,
-            'muc_pm': properties.is_muc_pm,
             'gc_control': gc_control,
             'attention': properties.attention,
             'xhtml': xhtml,
@@ -205,6 +203,7 @@ class Message(BaseModule):
             'popup': False,
             'msg_log_id': None,
             'displaymarking': parse_securitylabel(stanza),
+            'properties': properties,
         }
 
         if type_.is_groupchat:
@@ -247,9 +246,6 @@ class Message(BaseModule):
                          error=properties.error))
 
     def _log_muc_message(self, event):
-        if event.mtype == 'error':
-            return
-
         self._check_for_mam_compliance(event.room_jid, event.stanza_id)
 
         if (app.config.should_log(self._account, event.jid) and

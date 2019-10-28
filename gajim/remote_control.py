@@ -373,9 +373,12 @@ class GajimRemote(Server):
             obj.displaymarking, obj.needs_highlight]))
 
     def _nec_decrypted_message_received(self, obj):
+        event_type = obj.properties.type.value
+        if obj.properties.is_muc_pm:
+            event_type = 'pm'
         self.raise_signal('NewMessage', (
             obj.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
-            obj.encrypted, obj.mtype, obj.subject,
+            obj.encrypted, event_type, obj.subject,
             obj.msg_log_id, obj.user_nick, obj.xhtml]))
 
     def on_our_status(self, obj):

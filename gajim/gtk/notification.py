@@ -123,9 +123,9 @@ class Notification:
     @staticmethod
     def _get_icon_name(obj):
         if obj.notif_type == 'msg':
-            if obj.base_event.mtype == 'pm':
+            if obj.base_event.properties.is_muc_pm:
                 return 'gajim-priv_msg_recv'
-            if obj.base_event.mtype == 'normal':
+            if obj.base_event.properties.type.is_normal:
                 return 'gajim-single_msg_recv'
 
         elif obj.notif_type == 'pres':

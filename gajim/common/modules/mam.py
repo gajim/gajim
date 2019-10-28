@@ -236,7 +236,6 @@ class MAM(BaseModule):
              'timestamp': properties.mam.timestamp,
              'self_message': properties.is_self_message,
              'groupchat': groupchat,
-             'muc_pm': properties.is_muc_pm,
              'stanza_id': stanza_id,
              'origin_id': message_id,
              'message_id': properties.id,

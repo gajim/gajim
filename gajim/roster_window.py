@@ -2652,23 +2652,23 @@ class RosterWindow:
     def _nec_decrypted_message_received(self, obj):
         if not obj.msgtxt:
             return True
-        if obj.mtype not in ('normal', 'chat'):
+        if obj.properties.type.value not in ('normal', 'chat'):
             return
-        if obj.mtype == 'normal' and obj.popup:
+        if obj.properties.type.is_normal and obj.popup:
             # it's single message to be autopopuped
             SingleMessageWindow(obj.conn.name, obj.jid,
                 action='receive', from_whom=obj.jid, subject=obj.subject,
                 message=obj.msgtxt, resource=obj.resource, session=obj.session)
             return
 
-        if obj.popup and obj.mtype == 'chat' and not obj.session.control:
+        if obj.popup and obj.properties.type.is_chat and not obj.session.control:
             contact = app.contacts.get_contact(obj.conn.name, obj.jid)
             obj.session.control = app.interface.new_chat(contact,
                 obj.conn.name, session=obj.session)
             if app.events.get_events(obj.conn.name, obj.fjid):
                 obj.session.control.read_queue()
 
-        if obj.show_in_roster:
+        if not obj.properties.is_muc_pm and obj.show_in_roster:
             self.draw_contact(obj.jid, obj.conn.name)
             self.show_title() # we show the * or [n]
             # Select the big brother contact in roster, it's visible because it

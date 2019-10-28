@@ -330,20 +330,23 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if not msg_obj.msgtxt:
             return
         self.jid = msg_obj.jid
-        if msg_obj.mtype == 'pm':
+        if msg_obj.properties.is_muc_pm:
             self.jid = msg_obj.fjid
 
         self.control = app.interface.msg_win_mgr.search_control(
             msg_obj.jid, self.account, msg_obj.resource)
 
         if self.control is None:
+            event_type = msg_obj.properties.type.value
+            if msg_obj.properties.is_muc_pm:
+                event_type = 'pm'
             if len(app.events.get_events(
-                    self.account, msg_obj.jid, [msg_obj.mtype])) <= 1:
+                    self.account, msg_obj.jid, [event_type])) <= 1:
                 self.first_unread = True
         else:
             self.control_focused = self.control.has_focus()
 
-        if msg_obj.mtype == 'pm':
+        if msg_obj.properties.is_muc_pm:
             nick = msg_obj.resource
         else:
             nick = app.get_name_from_jid(self.conn.name, self.jid)
@@ -364,10 +367,10 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             # We don't want message preview, do_preview = False
             self.popup_text = ''
 
-        if msg_obj.mtype == 'normal': # single message
+        if msg_obj.properties.type.is_normal: # single message
             self.popup_msg_type = 'normal'
             self.popup_event_type = _('New Single Message')
-        elif msg_obj.mtype == 'pm':
+        elif msg_obj.properties.is_muc_pm:
             self.popup_msg_type = 'pm'
             self.popup_event_type = _('New Private Message')
         else: # chat message
