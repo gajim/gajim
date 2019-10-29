@@ -1843,9 +1843,11 @@ class RosterWindow:
         self_jid = app.get_jid_from_account(account)
         if app.connections[account].server_resource:
             self_jid += '/' + app.connections[account].server_resource
-        array[self_jid] = {'name': app.nicks[account],
-            'groups': ['self_contact'], 'subscription': 'both',
-            'ask': 'none'}
+        if account != app.ZEROCONF_ACC_NAME:
+            array[self_jid] = {'name': app.nicks[account],
+                               'groups': ['self_contact'],
+                               'subscription': 'both',
+                               'ask': 'none'}
 
         # .keys() is needed
         for jid in list(array.keys()):
