@@ -240,17 +240,19 @@ class Zeroconf:
 
         elif errorCode == pybonjour.kDNSServiceErr_NameConflict:
             log.error('Error while adding service. %s', errorCode)
-            parts = self.username.split(' ')
-
-            # check if last part is a number and if, increment it
-            try:
-                stripped = str(int(parts[-1]))
-            except Exception:
-                stripped = 1
-            alternative_name = self.username + str(stripped + 1)
-            self.name_conflictCB(alternative_name)
+            self.name_conflictCB(self._get_alternativ_name(self.username))
         else:
             self.error_CB(_('Error while adding service. %s') % str(errorCode))
+
+    @staticmethod
+    def _get_alternativ_name(name):
+        if name[-2] == '-':
+            try:
+                number = int(name[-1])
+            except Exception:
+                return '%s-1' % name
+            return '%s-%s' % (name[:-2], number + 1)
+        return '%s-1' % name
 
     # make zeroconf-valid names
     def replace_show(self, show):
@@ -280,6 +282,7 @@ class Zeroconf:
         self.txt = txt
         try:
             self.service_sdRef = pybonjour.DNSServiceRegister(
+                flags=pybonjour.kDNSServiceFlagsNoAutoRename,
                 name=self.name,
                 regtype=self.stype,
                 port=self.port,
