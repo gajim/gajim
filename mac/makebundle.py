@@ -15,7 +15,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.version:
-        print("args.version:", version)
         version = args.version
     else:
         try:
