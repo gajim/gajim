@@ -245,6 +245,7 @@ class MAM(BaseModule):
              'message': stanza,
              'stanza': stanza,
              'namespace': properties.mam.namespace,
+             'properties': properties,
              })
 
         app.logger.insert_into_logs(self._account,
