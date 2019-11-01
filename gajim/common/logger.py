@@ -789,7 +789,8 @@ class Logger:
 
         sql = '''
             SELECT time, kind, message, error as "error [common_error]",
-                   subject, additional_data, marker as "marker [marker]"
+                   subject, additional_data, marker as "marker [marker]",
+                   message_id
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids}) AND
             kind IN ({kinds}) AND time > get_timeout()
             ORDER BY time DESC, log_line_id DESC LIMIT ? OFFSET ?
