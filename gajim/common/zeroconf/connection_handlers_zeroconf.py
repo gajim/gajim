@@ -47,7 +47,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
         """
         Called when we receive a message
         """
-        if properties.is_error:
+        if properties.type.is_error:
             return
         log.info('Zeroconf MessageCB')
 
@@ -119,6 +119,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'msg_log_id': None,
             'displaymarking': None,
             'stanza_id': id_,
+            'properties': properties,
         }
 
         app.nec.push_incoming_event(
