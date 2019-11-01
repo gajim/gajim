@@ -26,7 +26,22 @@ from gajim.common.zeroconf.zeroconf import Constant
 log = logging.getLogger('gajim.c.z.zeroconf_bonjour')
 
 try:
-    import pybonjour
+    from pybonjour import kDNSServiceErr_NoError
+    from pybonjour import kDNSServiceErr_ServiceNotRunning
+    from pybonjour import kDNSServiceErr_NameConflict
+    from pybonjour import kDNSServiceInterfaceIndexAny
+    from pybonjour import kDNSServiceType_TXT
+    from pybonjour import kDNSServiceFlagsAdd
+    from pybonjour import kDNSServiceFlagsNoAutoRename
+    from pybonjour import BonjourError
+    from pybonjour import TXTRecord
+    from pybonjour import DNSServiceUpdateRecord
+    from pybonjour import DNSServiceResolve
+    from pybonjour import DNSServiceProcessResult
+    from pybonjour import DNSServiceGetAddrInfo
+    from pybonjour import DNSServiceQueryRecord
+    from pybonjour import DNSServiceBrowse
+    from pybonjour import DNSServiceRegister
 except ImportError:
     pass
 
@@ -34,83 +49,86 @@ resolve_timeout = 1
 
 
 class Zeroconf:
-    def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,
-                 disconnected_CB, error_CB, name, host, port):
+    def __init__(self, new_service_cb, remove_service_cb, name_conflict_cb,
+                 _disconnected_cb, error_cb, name, host, port):
         self.stype = '_presence._tcp'
         self.port = port  # listening port that gets announced
         self.username = name
         self.host = host
         self.txt = {}  # service data
+        self.name = None
+
+        self.connected = False
+        self.announced = False
 
         # XXX these CBs should be set to None when we destroy the object
         # (go offline), because they create a circular reference
-        self.new_serviceCB = new_serviceCB
-        self.remove_serviceCB = remove_serviceCB
-        self.name_conflictCB = name_conflictCB
-        self.disconnected_CB = disconnected_CB
-        self.error_CB = error_CB
+        self._new_service_cb = new_service_cb
+        self._remove_service_cb = remove_service_cb
+        self._name_conflict_cb = name_conflict_cb
+        self._error_cb = error_cb
 
-        self.contacts = {}  # all current local contacts with data
-        self.connected = False
-        self.announced = False
-        self.invalid_self_contact = {}
-        self.resolved_contacts = {}
-        self.resolved = []
-        self.queried = []
+        self._service_sdref = None
+        self._browse_sdref = None
 
-    def browse_callback(self, sdRef, flags, interfaceIndex, errorCode,
-                        serviceName, regtype, replyDomain):
+        self._contacts = {}  # all current local contacts with data
+        self._invalid_self_contact = {}
+        self._resolved_hosts = {}
+        self._resolved = []
+        self._queried = []
+
+    def _browse_callback(self, _sdref, flags, interface, error_code,
+                         service_name, regtype, reply_domain):
         log.debug('Found service %s in domain %s on %i(type: %s).',
-                  serviceName, replyDomain, interfaceIndex, regtype)
+                  service_name, reply_domain, interface, regtype)
         if not self.connected:
             return
-        if errorCode != pybonjour.kDNSServiceErr_NoError:
-            log.debug('Error in browse_callback: %s', str(errorCode))
+        if error_code != kDNSServiceErr_NoError:
+            log.debug('Error in browse_callback: %s', str(error_code))
             return
-        if not flags & pybonjour.kDNSServiceFlagsAdd:
-            self.remove_service_callback(serviceName)
+        if not flags & kDNSServiceFlagsAdd:
+            self._remove_service_callback(service_name)
             return
 
         try:
             # asynchronous resolving
-            resolve_sdRef = None
-            resolve_sdRef = pybonjour.DNSServiceResolve(
-                0, interfaceIndex, serviceName,
-                regtype, replyDomain, self.service_resolved_callback)
+            resolve_sdref = None
+            resolve_sdref = DNSServiceResolve(
+                0, interface, service_name,
+                regtype, reply_domain, self._service_resolved_callback)
 
-            while not self.resolved:
-                ready = select.select([resolve_sdRef], [], [], resolve_timeout)
-                if resolve_sdRef not in ready[0]:
+            while not self._resolved:
+                ready = select.select([resolve_sdref], [], [], resolve_timeout)
+                if resolve_sdref not in ready[0]:
                     log.info('Resolve timed out')
                     break
-                pybonjour.DNSServiceProcessResult(resolve_sdRef)
+                DNSServiceProcessResult(resolve_sdref)
             else:
-                self.resolved.pop()
+                self._resolved.pop()
 
-        except pybonjour.BonjourError as error:
+        except BonjourError as error:
             log.info('Error when resolving DNS: %s', error)
 
         finally:
-            if resolve_sdRef:
-                resolve_sdRef.close()
+            if resolve_sdref:
+                resolve_sdref.close()
 
-    def remove_service_callback(self, name):
+    def _remove_service_callback(self, name):
         log.info('Service %s disappeared.', name)
         if not self.connected:
             return
         if name != self.name:
-            for key in list(self.contacts.keys()):
-                if self.contacts[key][Constant.NAME] == name:
-                    del self.contacts[key]
-                    self.remove_serviceCB(key)
+            for key in list(self._contacts.keys()):
+                if self._contacts[key][Constant.NAME] == name:
+                    del self._contacts[key]
+                    self._remove_service_cb(key)
                     return
 
-    def txt_array_to_dict(self, txt):
-        if isinstance(txt, pybonjour.TXTRecord):
-            items = txt._items
-        else:
-            items = pybonjour.TXTRecord.parse(txt)._items
-        return dict((v[0], v[1]) for v in items.values())
+    @staticmethod
+    def txt_array_to_dict(txt):
+        if not isinstance(txt, TXTRecord):
+            txt = TXTRecord.parse(txt)
+        return dict((v[0], v[1]) for v in txt)
 
     @staticmethod
     def _parse_name(fullname):
@@ -138,11 +156,11 @@ class Zeroconf:
 
         return name, bare_name, protocol, domain
 
-    def query_txt_callback(self, sdRef, flags, interfaceIndex, errorCode,
-                           hosttarget, rrtype, rrclass, rdata, ttl):
+    def _query_txt_callback(self, _sdref, _flags, _interface, error_code,
+                            hosttarget, _rrtype, _rrclass, rdata, _ttl):
 
-        if errorCode != pybonjour.kDNSServiceErr_NoError:
-            log.error('Error in query_record_callback: %s', str(errorCode))
+        if error_code != kDNSServiceErr_NoError:
+            log.error('Error in query_record_callback: %s', str(error_code))
             return
 
         name = self._parse_name(hosttarget)[0]
@@ -150,99 +168,102 @@ class Zeroconf:
         if name != self.name:
             # update TXT data only, as intended according to
             # resolve_all comment
-            old_contact = self.contacts[name]
-            self.contacts[name] = old_contact[0:Constant.TXT] + (rdata,) + old_contact[Constant.TXT+1:]
-            log.debug(self.contacts[name])
+            old_contact = self._contacts[name]
+            self._contacts[name] = old_contact[0:Constant.TXT] + (rdata,) + old_contact[Constant.TXT+1:]
+            log.debug(self._contacts[name])
 
-        self.queried.append(True)
+        self._queried.append(True)
 
-    def getaddrinfo_callback(self, sdRef, flags, interfaceIndex, errorCode,
-                             hosttarget, address, ttl):
-        if errorCode != pybonjour.kDNSServiceErr_NoError:
-            log.error('Error in getaddrinfo_callback: %s', str(errorCode))
+    def _getaddrinfo_callback(self, _sdref, _flags, interface, error_code,
+                              hosttarget, address, _ttl):
+        if error_code != kDNSServiceErr_NoError:
+            log.error('Error in getaddrinfo_callback: %s', str(error_code))
             return
 
-        fullname, port, txtRecord = self.resolved_contacts[hosttarget]
+        fullname, port, txt_record = self._resolved_hosts[hosttarget]
 
-        txt = pybonjour.TXTRecord.parse(txtRecord)
+        txt = TXTRecord.parse(txt_record)
         ip = address[1]
 
         name, bare_name, protocol, domain = self._parse_name(fullname)
 
         log.info('Service data for service %s on %i:',
-                 fullname, interfaceIndex)
+                 fullname, interface)
         log.info('Host %s, ip %s, port %i, TXT data: %s',
-                 hosttarget, ip, port, txt._items)
+                 hosttarget, ip, port, txt)
 
         if not self.connected:
             return
 
         # we don't want to see ourselves in the list
         if name != self.name:
-            resolved_info = [(interfaceIndex, protocol, hosttarget, fullname, ip, port)]
-            self.contacts[name] = (name, domain, resolved_info, bare_name, txtRecord)
+            resolved_info = [(interface, protocol, hosttarget,
+                              fullname, ip, port)]
+            self._contacts[name] = (name, domain, resolved_info,
+                                    bare_name, txt_record)
 
-            self.new_serviceCB(name)
+            self._new_service_cb(name)
         else:
             # remember data
             # In case this is not our own record but of another
             # gajim instance on the same machine,
             # it will be used when we get a new name.
-            self.invalid_self_contact[name] = \
+            self._invalid_self_contact[name] = \
                 (name, domain,
-                 (interfaceIndex, protocol, hosttarget, fullname, ip, port),
-                 bare_name, txtRecord)
+                 (interface, protocol, hosttarget, fullname, ip, port),
+                 bare_name, txt_record)
 
-        self.queried.append(True)
+        self._queried.append(True)
 
-    def service_resolved_callback(self, sdRef, flags, interfaceIndex,
-                                  errorCode, fullname, hosttarget, port,
-                                  txtRecord):
-
-        if errorCode != pybonjour.kDNSServiceErr_NoError:
-            log.error('Error in service_resolved_callback: %s', str(errorCode))
+    def _service_resolved_callback(self, _sdref, _flags, interface,
+                                   error_code, fullname, hosttarget, port,
+                                   txt_record):
+        if error_code != kDNSServiceErr_NoError:
+            log.error('Error in service_resolved_callback: %s', str(error_code))
             return
 
-        self.resolved_contacts[hosttarget] = (fullname, port, txtRecord)
+        self._resolved_hosts[hosttarget] = (fullname, port, txt_record)
 
         try:
-            getaddrinfo_sdRef = \
-                pybonjour.DNSServiceGetAddrInfo(
-                    interfaceIndex=interfaceIndex,
+            getaddrinfo_sdref = \
+                DNSServiceGetAddrInfo(
+                    interfaceIndex=interface,
                     hostname=hosttarget,
-                    callBack=self.getaddrinfo_callback)
+                    callBack=self._getaddrinfo_callback)
 
-            while not self.queried:
-                ready = select.select([getaddrinfo_sdRef], [], [], resolve_timeout)
-                if getaddrinfo_sdRef not in ready[0]:
+            while not self._queried:
+                ready = select.select(
+                    [getaddrinfo_sdref], [], [], resolve_timeout)
+                if getaddrinfo_sdref not in ready[0]:
                     log.warning('GetAddrInfo timed out')
                     break
-                pybonjour.DNSServiceProcessResult(getaddrinfo_sdRef)
+                DNSServiceProcessResult(getaddrinfo_sdref)
             else:
-                self.queried.pop()
+                self._queried.pop()
 
-        except pybonjour.BonjourError as error:
-            if error.errorCode == pybonjour.kDNSServiceErr_ServiceNotRunning:
+        except BonjourError as error:
+            if error.error_code == kDNSServiceErr_ServiceNotRunning:
                 log.info('Service not running')
             else:
-                self.error_CB(_('Error while adding service. %s') % error)
+                self._error_cb(_('Error while adding service. %s') % error)
 
         finally:
-            if getaddrinfo_sdRef:
-                getaddrinfo_sdRef.close()
+            if getaddrinfo_sdref:
+                getaddrinfo_sdref.close()
 
-        self.resolved.append(True)
+        self._resolved.append(True)
 
-    def service_added_callback(self, sdRef, flags, errorCode,
-                               name, regtype, domain):
-        if errorCode == pybonjour.kDNSServiceErr_NoError:
+    def service_added_callback(self, _sdref, _flags, error_code,
+                               _name, _regtype, _domain):
+        if error_code == kDNSServiceErr_NoError:
             log.info('Service successfully added')
 
-        elif errorCode == pybonjour.kDNSServiceErr_NameConflict:
-            log.error('Error while adding service. %s', errorCode)
-            self.name_conflictCB(self._get_alternativ_name(self.username))
+        elif error_code == kDNSServiceErr_NameConflict:
+            log.error('Error while adding service. %s', error_code)
+            self._name_conflict_cb(self._get_alternativ_name(self.username))
         else:
-            self.error_CB(_('Error while adding service. %s') % str(errorCode))
+            error = _('Error while adding service. %s') % str(error_code)
+            self._error_cb(error)
 
     @staticmethod
     def _get_alternativ_name(name):
@@ -254,15 +275,15 @@ class Zeroconf:
             return '%s-%s' % (name[:-2], number + 1)
         return '%s-1' % name
 
-    # make zeroconf-valid names
-    def replace_show(self, show):
+    @staticmethod
+    def _replace_show(show):
         if show in ['chat', 'online', '']:
             return 'avail'
         if show == 'xa':
             return 'away'
         return show
 
-    def create_service(self):
+    def _create_service(self):
         txt = {}
 
         # remove empty keys
@@ -276,48 +297,52 @@ class Zeroconf:
 
         # replace gajim's show messages with compatible ones
         if 'status' in self.txt:
-            txt['status'] = self.replace_show(self.txt['status'])
+            txt['status'] = self._replace_show(self.txt['status'])
         else:
             txt['status'] = 'avail'
         self.txt = txt
         try:
-            self.service_sdRef = pybonjour.DNSServiceRegister(
-                flags=pybonjour.kDNSServiceFlagsNoAutoRename,
+            self._service_sdref = DNSServiceRegister(
+                flags=kDNSServiceFlagsNoAutoRename,
                 name=self.name,
                 regtype=self.stype,
                 port=self.port,
-                txtRecord=pybonjour.TXTRecord(self.txt, strict=True),
+                txtRecord=TXTRecord(self.txt, strict=True),
                 callBack=self.service_added_callback)
 
             log.info('Publishing service %s of type %s', self.name, self.stype)
 
-            ready = select.select([self.service_sdRef], [], [])
-            if self.service_sdRef in ready[0]:
-                pybonjour.DNSServiceProcessResult(self.service_sdRef)
+            ready = select.select([self._service_sdref], [], [])
+            if self._service_sdref in ready[0]:
+                DNSServiceProcessResult(self._service_sdref)
 
-        except pybonjour.BonjourError as error:
-            if error.errorCode == pybonjour.kDNSServiceErr_ServiceNotRunning:
+        except BonjourError as error:
+            if error.errorCode == kDNSServiceErr_ServiceNotRunning:
                 log.info('Service not running')
             else:
-                self.error_CB(_('Error while adding service. %s') % error)
+                self._error_cb(_('Error while adding service. %s') % error)
             self.disconnect()
 
     def announce(self):
         if not self.connected:
             return False
 
-        self.create_service()
+        self._create_service()
         self.announced = True
         return True
 
     def remove_announce(self):
         if not self.announced:
             return False
+
+        if self._service_sdref is None:
+            return False
+
         try:
-            self.service_sdRef.close()
+            self._service_sdref.close()
             self.announced = False
             return True
-        except pybonjour.BonjourError as error:
+        except BonjourError as error:
             log.error('Error when removing announce: %s', error)
             return False
 
@@ -336,20 +361,21 @@ class Zeroconf:
     def disconnect(self):
         if self.connected:
             self.connected = False
-            if hasattr(self, 'browse_sdRef'):
-                self.browse_sdRef.close()
+            if self._browse_sdref is not None:
+                self._browse_sdref.close()
+                self._browse_sdref = None
                 self.remove_announce()
 
     def browse_domain(self, domain=None):
         try:
-            self.browse_sdRef = pybonjour.DNSServiceBrowse(
+            self._browse_sdref = DNSServiceBrowse(
                 regtype=self.stype,
                 domain=domain,
-                callBack=self.browse_callback)
+                callBack=self._browse_callback)
             log.info('Starting to browse .local')
             return True
-        except pybonjour.BonjourError as error:
-            if error.errorCode == pybonjour.kDNSServiceErr_ServiceNotRunning:
+        except BonjourError as error:
+            if error.errorCode == kDNSServiceErr_ServiceNotRunning:
                 log.info('Service not running')
             else:
                 log.error('Error while browsing for services. %s', error)
@@ -357,11 +383,11 @@ class Zeroconf:
 
     def browse_loop(self):
         try:
-            ready = select.select([self.browse_sdRef], [], [], 0)
-            if self.browse_sdRef in ready[0]:
-                pybonjour.DNSServiceProcessResult(self.browse_sdRef)
-        except pybonjour.BonjourError as error:
-            if error.errorCode == pybonjour.kDNSServiceErr_ServiceNotRunning:
+            ready = select.select([self._browse_sdref], [], [], 0)
+            if self._browse_sdref in ready[0]:
+                DNSServiceProcessResult(self._browse_sdref)
+        except BonjourError as error:
+            if error.errorCode == kDNSServiceErr_ServiceNotRunning:
                 log.info('Service not running')
                 return False
             log.error('Error while browsing for services. %s', error)
@@ -378,53 +404,55 @@ class Zeroconf:
 
         # Monitor TXT Records with DNSServiceQueryRecord because
         # its more efficient (see pybonjour documentation)
-        for val in self.contacts.values():
-            try:
-                query_sdRef = None
-                query_sdRef = \
-                    pybonjour.DNSServiceQueryRecord(
-                        interfaceIndex=pybonjour.kDNSServiceInterfaceIndexAny,
-                        fullname=val[Constant.RESOLVED_INFO][0][Constant.BARE_NAME],
-                        rrtype=pybonjour.kDNSServiceType_TXT,
-                        callBack=self.query_txt_callback)
+        for val in self._contacts.values():
+            bare_name = val[Constant.RESOLVED_INFO][0][Constant.BARE_NAME]
 
-                while not self.queried:
+            try:
+                query_sdref = None
+                query_sdref = \
+                    DNSServiceQueryRecord(
+                        interfaceIndex=kDNSServiceInterfaceIndexAny,
+                        fullname=bare_name,
+                        rrtype=kDNSServiceType_TXT,
+                        callBack=self._query_txt_callback)
+
+                while not self._queried:
                     ready = select.select(
-                        [query_sdRef], [], [], resolve_timeout)
-                    if query_sdRef not in ready[0]:
+                        [query_sdref], [], [], resolve_timeout)
+                    if query_sdref not in ready[0]:
                         log.info('Query record timed out')
                         break
-                    pybonjour.DNSServiceProcessResult(query_sdRef)
+                    DNSServiceProcessResult(query_sdref)
                 else:
-                    self.queried.pop()
+                    self._queried.pop()
 
-            except pybonjour.BonjourError as error:
-                if error.errorCode == pybonjour.kDNSServiceErr_ServiceNotRunning:
+            except BonjourError as error:
+                if error.errorCode == kDNSServiceErr_ServiceNotRunning:
                     log.info('Service not running')
                     return False
                 log.error('Error in query for TXT records. %s', error)
             finally:
-                if query_sdRef:
-                    query_sdRef.close()
+                if query_sdref:
+                    query_sdref.close()
 
         return True
 
     def get_contacts(self):
-        return self.contacts
+        return self._contacts
 
     def get_contact(self, jid):
-        if jid not in self.contacts:
+        if jid not in self._contacts:
             return None
-        return self.contacts[jid]
+        return self._contacts[jid]
 
     def update_txt(self, show=None):
         if show:
-            self.txt['status'] = self.replace_show(show)
+            self.txt['status'] = self._replace_show(show)
 
-        txt = pybonjour.TXTRecord(self.txt, strict=True)
+        txt = TXTRecord(self.txt, strict=True)
         try:
-            pybonjour.DNSServiceUpdateRecord(self.service_sdRef, None, 0, txt)
-        except pybonjour.BonjourError as e:
-            log.error('Error when updating TXT Record: %s', e)
+            DNSServiceUpdateRecord(self._service_sdref, None, 0, txt)
+        except BonjourError as error:
+            log.error('Error when updating TXT Record: %s', error)
             return False
         return True

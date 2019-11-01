@@ -24,7 +24,7 @@ class Roster:
         self.version = ''
 
     def update_roster(self):
-        for val in self.zeroconf.contacts.values():
+        for val in self.zeroconf.get_contacts().values():
             self.setItem(val[Constant.NAME])
 
     def getRoster(self):
