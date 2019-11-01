@@ -95,7 +95,8 @@ LOGS_SQL_STATEMENT = '''
     );
     CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
     CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
-    PRAGMA user_version=4;
+    CREATE INDEX idx_logs_message_id ON logs (message_id);
+    PRAGMA user_version=5;
     '''
 
 CACHE_SQL_STATEMENT = '''
@@ -325,6 +326,13 @@ class Logger:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "error" TEXT',
                 'PRAGMA user_version=4'
+            ]
+            self._execute_multiple(con, statements)
+
+        if self._get_user_version(con) < 5:
+            statements = [
+                'CREATE INDEX idx_logs_message_id ON logs (message_id)',
+                'PRAGMA user_version=5'
             ]
             self._execute_multiple(con, statements)
 
