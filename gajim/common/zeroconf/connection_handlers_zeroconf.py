@@ -94,7 +94,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'stanza': stanza,
             'account': self.name,
             'additional_data': additional_data,
-            'forwarded': False,
             'timestamp': time.time(),
             'fjid': fjid,
             'jid': jid,

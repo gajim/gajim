@@ -178,7 +178,6 @@ class Message(BaseModule):
             'stanza': stanza,
             'account': self._account,
             'additional_data': additional_data,
-            'forwarded': properties.is_carbon_message,
             'fjid': fjid,
             'jid': jid,
             'resource': resource,
