@@ -804,7 +804,7 @@ class ChatControl(ChatControlBase):
                          kind,
                          tim=obj.properties.mam.timestamp,
                          correct_id=obj.correct_id,
-                         message_id=obj.message_id,
+                         message_id=obj.properties.id,
                          additional_data=obj.additional_data)
 
     def _nec_decrypted_message_received(self, obj):
@@ -827,7 +827,7 @@ class ChatControl(ChatControlBase):
                          xhtml=obj.xhtml,
                          displaymarking=obj.displaymarking,
                          msg_log_id=obj.msg_log_id,
-                         message_id=obj.message_id,
+                         message_id=obj.properties.id,
                          correct_id=obj.correct_id,
                          additional_data=obj.additional_data)
         if obj.msg_log_id:

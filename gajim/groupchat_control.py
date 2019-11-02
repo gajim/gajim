@@ -823,7 +823,7 @@ class GroupchatControl(ChatControlBase):
                          contact=obj.nick,
                          tim=obj.properties.mam.timestamp,
                          correct_id=obj.correct_id,
-                         message_id=obj.message_id,
+                         message_id=obj.properties.id,
                          additional_data=obj.additional_data)
 
     @event_filter(['account', 'room_jid'])
@@ -844,7 +844,7 @@ class GroupchatControl(ChatControlBase):
                              xhtml=obj.xhtml_msgtxt,
                              displaymarking=obj.displaymarking,
                              correct_id=obj.correct_id,
-                             message_id=obj.message_id,
+                             message_id=obj.properties.id,
                              additional_data=obj.additional_data)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
@@ -1101,7 +1101,7 @@ class GroupchatControl(ChatControlBase):
                     tim=obj.properties.timestamp,
                     xhtml=obj.xhtml,
                     displaymarking=obj.displaymarking,
-                    message_id=obj.message_id,
+                    message_id=obj.properties.id,
                     correct_id=obj.correct_id)
             else:
                 # otherwise pass it off to the control to be queued

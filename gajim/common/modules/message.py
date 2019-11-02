@@ -185,7 +185,6 @@ class Message(BaseModule):
             'resource': resource,
             'stanza_id': stanza_id,
             'unique_id': stanza_id or message_id,
-            'message_id': properties.id,
             'correct_id': parse_correction(properties),
             'msgtxt': msgtxt,
             'session': session,
@@ -253,7 +252,7 @@ class Message(BaseModule):
                                         contact_name=event.nick,
                                         additional_data=event.additional_data,
                                         stanza_id=event.stanza_id,
-                                        message_id=event.message_id)
+                                        message_id=event.properties.id)
 
     def _check_for_mam_compliance(self, room_jid, stanza_id):
         disco_info = app.logger.get_last_disco_info(room_jid)

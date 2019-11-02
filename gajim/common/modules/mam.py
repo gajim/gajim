@@ -235,7 +235,6 @@ class MAM(BaseModule):
              'groupchat': groupchat,
              'stanza_id': stanza_id,
              'origin_id': message_id,
-             'message_id': properties.id,
              'correct_id': parse_correction(properties),
              'archive_jid': properties.mam.archive,
              'msgtxt': properties.body,

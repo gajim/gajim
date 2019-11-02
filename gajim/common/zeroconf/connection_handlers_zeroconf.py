@@ -101,7 +101,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'jid': jid,
             'resource': resource,
             'unique_id': id_,
-            'message_id': properties.id,
             'correct_id': parse_correction(properties),
             'msgtxt': msgtxt,
             'session': session,

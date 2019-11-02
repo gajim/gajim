@@ -125,7 +125,7 @@ class ChatControlSession:
                 subject=obj.properties.subject,
                 additional_data=obj.additional_data,
                 stanza_id=obj.unique_id,
-                message_id=obj.message_id)
+                message_id=obj.properties.id)
 
         if obj.properties.is_muc_pm and not obj.gc_control:
             # This is a carbon of a PM from a MUC we are not currently
@@ -236,7 +236,7 @@ class ChatControlSession:
                 obj.resource,
                 obj.msg_log_id,
                 correct_id=obj.correct_id,
-                message_id=obj.message_id,
+                message_id=obj.properties.id,
                 xhtml=obj.xhtml,
                 session=self,
                 displaymarking=obj.displaymarking,
