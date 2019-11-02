@@ -193,7 +193,6 @@ class Message(BaseModule):
             'delayed': properties.user_timestamp is not None,
             'gc_control': gc_control,
             'xhtml': xhtml,
-            'user_nick': properties.nickname,
             'popup': False,
             'msg_log_id': None,
             'displaymarking': parse_securitylabel(stanza),

@@ -379,7 +379,7 @@ class GajimRemote(Server):
         self.raise_signal('NewMessage', (
             obj.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
             event_type, obj.properties.subject,
-            obj.msg_log_id, obj.user_nick, obj.xhtml]))
+            obj.msg_log_id, obj.properties.nickname, obj.xhtml]))
 
     def on_our_status(self, obj):
         self.raise_signal('AccountPresence', (obj.show, obj.conn.name))

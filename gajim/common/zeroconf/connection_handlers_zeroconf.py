@@ -107,7 +107,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'session': session,
             'gc_control': None,
             'xhtml': parse_xhtml(properties),
-            'user_nick': properties.nickname,
             'popup': False,
             'msg_log_id': None,
             'displaymarking': None,

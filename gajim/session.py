@@ -185,7 +185,7 @@ class ChatControlSession:
         if not contact:
             # contact is not in roster
             contact = app.interface.roster.add_to_not_in_the_roster(
-                obj.conn.name, jid, obj.user_nick)
+                obj.conn.name, jid, obj.properties.nickname)
 
         if not self.control:
             ctrl = app.interface.msg_win_mgr.search_control(obj.jid,
