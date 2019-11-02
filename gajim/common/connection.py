@@ -199,10 +199,6 @@ class CommonConnection:
                     None, dialog_name='invalid-jid', args=obj.jid))
                 return
 
-        if obj.message and not obj.xhtml and app.config.get(
-        'rst_formatting_outgoing_messages'):
-            from gajim.common.rst_xhtml_generator import create_xhtml
-            obj.xhtml = create_xhtml(obj.message)
         if not obj.message and obj.chatstate is None:
             return
 
@@ -1622,10 +1618,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         if not app.account_is_connected(self.name):
             return
-
-        if not obj.xhtml and app.config.get('rst_formatting_outgoing_messages'):
-            from gajim.common.rst_xhtml_generator import create_xhtml
-            obj.xhtml = create_xhtml(obj.message)
 
         msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',
                                 xhtml=obj.xhtml)

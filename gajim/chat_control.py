@@ -928,12 +928,7 @@ class ChatControl(ChatControlBase):
             else:
                 kind = 'outgoing'
                 name = self.get_our_nick()
-                if not xhtml and \
-                app.config.get('rst_formatting_outgoing_messages'):
-                    from gajim.common.rst_xhtml_generator import create_xhtml
-                    xhtml = create_xhtml(text)
-                    if xhtml:
-                        xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
+
         ChatControlBase.add_message(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
             displaymarking=displaymarking,

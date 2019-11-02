@@ -118,8 +118,6 @@ class Config:
                 _('Treat * / _ pairs as possible formatting characters.'), True],
         'show_ascii_formatting_chars': [opt_bool, True, _('If enabled, do not '
                 'remove */_ . So *abc* will be bold but with * * not removed.')],
-        'rst_formatting_outgoing_messages': [opt_bool, False,
-                _('Uses ReStructured text markup to send HTML, plus ASCII formatting if selected. Needs docutils installed (for syntax, see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).')],
         'sounds_on': [opt_bool, True],
         # 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
         'soundplayer': [opt_str, ''],

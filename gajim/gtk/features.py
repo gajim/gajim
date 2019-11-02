@@ -112,15 +112,6 @@ class FeaturesDialog(Gtk.Dialog):
                     _('Requires: pybonjour and bonjour SDK running (%(url)s)')
                     % {'url': 'https://developer.apple.com/opensource/)'},
                     None),
-            Feature(_('RST XHTML Generator'),
-                    self.docutils_available(),
-                    _('Enables Gajim to generate XHTML output from RST '
-                      'code (%(url)s)') % {'url':
-                      'http://docutils.sourceforge.net/docs/ref/rst/'
-                      'restructuredtext.html'},
-                    _('Requires: python-docutils'),
-                    _('Requires: python-docutils'),
-                    None),
             Feature(_('Secure Password Storage'),
                     self.some_keyring_available(),
                     _('Enables Gajim to store Passwords securely instead of '
@@ -159,13 +150,6 @@ class FeaturesDialog(Gtk.Dialog):
     def idle_available(self):
         from gajim.common import idle
         return idle.Monitor.is_available()
-
-    def docutils_available(self):
-        try:
-            __import__('docutils')
-        except Exception:
-            return False
-        return True
 
 
 class FeatureItem(Gtk.Grid):
