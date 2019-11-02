@@ -70,12 +70,11 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
 
         jid, resource = app.get_room_and_nick_from_fjid(fjid)
 
-        thread_id = stanza.getThread()
         msgtxt = stanza.getBody()
 
-        session = self.get_or_create_session(fjid, thread_id)
+        session = self.get_or_create_session(fjid, properties.thread)
 
-        if thread_id and not session.received_thread_id:
+        if properties.thread and not session.received_thread_id:
             session.received_thread_id = True
 
         timestamp = time.time()
@@ -105,7 +104,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'message_id': properties.id,
             'correct_id': parse_correction(properties),
             'msgtxt': msgtxt,
-            'thread_id': thread_id,
             'session': session,
             'gc_control': None,
             'attention': properties.attention,

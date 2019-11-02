@@ -127,7 +127,6 @@ class Message(BaseModule):
                                          properties.type.is_groupchat):
                 return
 
-        thread_id = properties.thread
         msgtxt = properties.body
 
         # TODO: remove all control UI stuff
@@ -139,16 +138,17 @@ class Message(BaseModule):
         session = None
         if not properties.type.is_groupchat:
             if properties.is_muc_pm and properties.type.is_error:
-                session = self._con.find_session(fjid, thread_id)
+                session = self._con.find_session(fjid, properties.thread)
                 if not session:
                     session = self._con.get_latest_session(fjid)
                 if not session:
                     session = self._con.make_new_session(
-                        fjid, thread_id, type_='pm')
+                        fjid, properties.thread, type_='pm')
             else:
-                session = self._con.get_or_create_session(fjid, thread_id)
+                session = self._con.get_or_create_session(
+                    fjid, properties.thread)
 
-            if thread_id and not session.received_thread_id:
+            if properties.thread and not session.received_thread_id:
                 session.received_thread_id = True
 
             session.last_receive = time.time()
@@ -188,7 +188,6 @@ class Message(BaseModule):
             'message_id': properties.id,
             'correct_id': parse_correction(properties),
             'msgtxt': msgtxt,
-            'thread_id': thread_id,
             'session': session,
             'timestamp': properties.timestamp,
             'delayed': properties.user_timestamp is not None,
