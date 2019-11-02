@@ -192,7 +192,6 @@ class Message(BaseModule):
             'timestamp': properties.timestamp,
             'delayed': properties.user_timestamp is not None,
             'gc_control': gc_control,
-            'attention': properties.attention,
             'xhtml': xhtml,
             'user_nick': properties.nickname,
             'popup': False,

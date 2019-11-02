@@ -391,14 +391,14 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                     # we're online or chat
                     self.do_popup = True
 
-        if msg_obj.attention and not app.config.get(
+        if msg_obj.properties.attention and not app.config.get(
         'ignore_incoming_attention'):
             self.popup_timeout = 0
             self.do_popup = True
         else:
             self.popup_timeout = app.config.get('notification_timeout')
 
-        if msg_obj.attention and not app.config.get(
+        if msg_obj.properties.attention and not app.config.get(
         'ignore_incoming_attention') and app.config.get_per('soundevents',
         'attention_received', 'enabled'):
             self.sound_event = 'attention_received'
