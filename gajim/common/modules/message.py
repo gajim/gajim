@@ -196,7 +196,6 @@ class Message(BaseModule):
             'attention': properties.attention,
             'xhtml': xhtml,
             'user_nick': properties.nickname,
-            'subject': properties.subject,
             'popup': False,
             'msg_log_id': None,
             'displaymarking': parse_securitylabel(stanza),

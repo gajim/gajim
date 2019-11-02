@@ -819,7 +819,7 @@ class ChatControl(ChatControlBase):
             typ = 'out'
 
         self.add_message(obj.msgtxt, typ,
-            tim=obj.timestamp, subject=obj.subject,
+            tim=obj.timestamp, subject=obj.properties.subject,
             xhtml=obj.xhtml, displaymarking=obj.displaymarking,
             msg_log_id=obj.msg_log_id, message_id=obj.message_id,
             correct_id=obj.correct_id,

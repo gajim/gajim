@@ -119,7 +119,7 @@ class ChatControlSession:
             obj.msg_log_id = app.logger.insert_into_logs(
                 self.conn.name, jid, obj.timestamp, log_type,
                 message=msg_to_log,
-                subject=obj.subject,
+                subject=obj.properties.subject,
                 additional_data=obj.additional_data,
                 stanza_id=obj.unique_id,
                 message_id=obj.message_id)
@@ -225,8 +225,12 @@ class ChatControlSession:
             do_event = True
         if do_event:
             kind = obj.properties.type.value
-            event = event_t(obj.msgtxt, obj.subject, kind, obj.timestamp,
-                obj.resource, obj.msg_log_id,
+            event = event_t(
+                obj.msgtxt,
+                obj.properties.subject,
+                kind, obj.timestamp,
+                obj.resource,
+                obj.msg_log_id,
                 correct_id=obj.correct_id,
                 message_id=obj.message_id,
                 xhtml=obj.xhtml,

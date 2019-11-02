@@ -111,7 +111,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'attention': properties.attention,
             'xhtml': parse_xhtml(properties),
             'user_nick': properties.nickname,
-            'subject': None,
             'popup': False,
             'msg_log_id': None,
             'displaymarking': None,
