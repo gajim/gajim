@@ -225,7 +225,7 @@ class Message(BaseModule):
             NetworkEvent('decrypted-message-received', **event_attr))
 
     def _message_error_received(self, _con, _stanza, properties):
-        jid = properties.jid
+        jid = properties.jid.copy()
         if not properties.is_muc_pm:
             jid.setBare()
 

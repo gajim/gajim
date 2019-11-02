@@ -64,7 +64,7 @@ class Receipts(BaseModule):
                            properties.jid,
                            properties.receipt.id)
 
-            jid = properties.jid
+            jid = properties.jid.copy()
             if not properties.is_muc_pm:
                 jid.setBare()
 
