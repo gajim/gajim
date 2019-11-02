@@ -325,7 +325,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
     def handle_incoming_msg_event(self, msg_obj):
         # don't alert for carbon copied messages from ourselves
-        if msg_obj.sent:
+        if msg_obj.properties.is_sent_carbon:
             return
         if not msg_obj.msgtxt:
             return

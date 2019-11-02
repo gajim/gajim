@@ -1093,7 +1093,7 @@ class GroupchatControl(ChatControlBase):
             if obj.session.control:
                 # print if a control is open
                 frm = ''
-                if obj.sent:
+                if obj.properties.is_sent_carbon:
                     frm = 'out'
                 obj.session.control.add_message(
                     obj.msgtxt,
@@ -1106,7 +1106,7 @@ class GroupchatControl(ChatControlBase):
             else:
                 # otherwise pass it off to the control to be queued
                 self.on_private_message(nick,
-                                        obj.sent,
+                                        obj.properties.is_sent_carbon,
                                         obj.msgtxt,
                                         obj.properties.timestamp,
                                         obj.xhtml,

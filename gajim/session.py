@@ -103,7 +103,7 @@ class ChatControlSession:
             return
 
         log_type = KindConstant.CHAT_MSG_RECV
-        if obj.forwarded and obj.sent:
+        if obj.properties.is_sent_carbon:
             log_type = KindConstant.CHAT_MSG_SENT
 
         if self.is_loggable() and obj.msgtxt:
@@ -209,7 +209,7 @@ class ChatControlSession:
             obj.show_in_roster = False
             obj.show_in_systray = False
             do_event = False
-        elif obj.forwarded and obj.sent:
+        elif obj.properties.is_sent_carbon:
             # Its a Carbon Copied Message we sent
             obj.show_in_roster = False
             obj.show_in_systray = False
@@ -240,7 +240,7 @@ class ChatControlSession:
                 xhtml=obj.xhtml,
                 session=self,
                 displaymarking=obj.displaymarking,
-                sent_forwarded=obj.forwarded and obj.sent,
+                sent_forwarded=obj.properties.is_sent_carbon,
                 show_in_roster=obj.show_in_roster,
                 show_in_systray=obj.show_in_systray,
                 additional_data=obj.additional_data)

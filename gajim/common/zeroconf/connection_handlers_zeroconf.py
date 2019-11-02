@@ -95,7 +95,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'account': self.name,
             'additional_data': additional_data,
             'forwarded': False,
-            'sent': False,
             'timestamp': time.time(),
             'fjid': fjid,
             'jid': jid,

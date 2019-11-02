@@ -817,7 +817,7 @@ class ChatControl(ChatControlBase):
             return
 
         typ = ''
-        if obj.forwarded and obj.sent:
+        if obj.properties.is_sent_carbon:
             typ = 'out'
 
         self.add_message(obj.msgtxt,

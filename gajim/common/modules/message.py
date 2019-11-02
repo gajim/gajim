@@ -179,7 +179,6 @@ class Message(BaseModule):
             'account': self._account,
             'additional_data': additional_data,
             'forwarded': properties.is_carbon_message,
-            'sent': properties.is_carbon_message and properties.carbon.is_sent,
             'fjid': fjid,
             'jid': jid,
             'resource': resource,
