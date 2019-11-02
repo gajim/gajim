@@ -369,7 +369,7 @@ class GajimRemote(Server):
             # event has not been handled at GUI level
             return
         self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
-            obj.timestamp, obj.delayed, obj.xhtml_msgtxt,
+            obj.properties.timestamp, obj.delayed, obj.xhtml_msgtxt,
             obj.displaymarking, obj.needs_highlight]))
 
     def _nec_decrypted_message_received(self, obj):
@@ -377,7 +377,7 @@ class GajimRemote(Server):
         if obj.properties.is_muc_pm:
             event_type = 'pm'
         self.raise_signal('NewMessage', (
-            obj.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
+            obj.conn.name, [obj.fjid, obj.msgtxt, obj.properties.timestamp,
             event_type, obj.properties.subject,
             obj.msg_log_id, obj.properties.nickname, obj.xhtml]))
 

@@ -819,30 +819,33 @@ class GroupchatControl(ChatControlBase):
             return
         if obj.archive_jid != self.room_jid:
             return
-        self.add_message(
-            obj.msgtxt, contact=obj.nick,
-            tim=obj.timestamp,
-            correct_id=obj.correct_id,
-            message_id=obj.message_id,
-            additional_data=obj.additional_data)
+        self.add_message(obj.msgtxt,
+                         contact=obj.nick,
+                         tim=obj.properties.mam.timestamp,
+                         correct_id=obj.correct_id,
+                         message_id=obj.message_id,
+                         additional_data=obj.additional_data)
 
     @event_filter(['account', 'room_jid'])
     def _nec_gc_message_received(self, obj):
         if not obj.nick:
             # message from server
-            self.add_message(
-                obj.msgtxt, tim=obj.timestamp,
-                xhtml=obj.xhtml_msgtxt, displaymarking=obj.displaymarking,
-                additional_data=obj.additional_data)
+            self.add_message(obj.msgtxt,
+                             tim=obj.properties.timestamp,
+                             xhtml=obj.xhtml_msgtxt,
+                             displaymarking=obj.displaymarking,
+                             additional_data=obj.additional_data)
         else:
             if obj.nick == self.nick:
                 self.last_sent_txt = obj.msgtxt
-            self.add_message(
-                obj.msgtxt, contact=obj.nick,
-                tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
-                displaymarking=obj.displaymarking,
-                correct_id=obj.correct_id, message_id=obj.message_id,
-                additional_data=obj.additional_data)
+            self.add_message(obj.msgtxt,
+                             contact=obj.nick,
+                             tim=obj.properties.timestamp,
+                             xhtml=obj.xhtml_msgtxt,
+                             displaymarking=obj.displaymarking,
+                             correct_id=obj.correct_id,
+                             message_id=obj.message_id,
+                             additional_data=obj.additional_data)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
     def on_private_message(self, nick, sent, msg, tim, xhtml, session,
@@ -1093,17 +1096,23 @@ class GroupchatControl(ChatControlBase):
                 if obj.sent:
                     frm = 'out'
                 obj.session.control.add_message(
-                    obj.msgtxt, frm,
-                    tim=obj.timestamp, xhtml=obj.xhtml,
+                    obj.msgtxt,
+                    frm,
+                    tim=obj.properties.timestamp,
+                    xhtml=obj.xhtml,
                     displaymarking=obj.displaymarking,
                     message_id=obj.message_id,
                     correct_id=obj.correct_id)
             else:
                 # otherwise pass it off to the control to be queued
-                self.on_private_message(
-                    nick, obj.sent, obj.msgtxt, obj.timestamp,
-                    obj.xhtml, self.session, msg_log_id=obj.msg_log_id,
-                    displaymarking=obj.displaymarking)
+                self.on_private_message(nick,
+                                        obj.sent,
+                                        obj.msgtxt,
+                                        obj.properties.timestamp,
+                                        obj.xhtml,
+                                        self.session,
+                                        msg_log_id=obj.msg_log_id,
+                                        displaymarking=obj.displaymarking)
 
     def _nec_ping(self, obj):
         if self.contact.jid != obj.contact.room_jid:

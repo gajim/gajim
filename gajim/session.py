@@ -117,7 +117,10 @@ class ChatControlSession:
                 jid = obj.jid
 
             obj.msg_log_id = app.logger.insert_into_logs(
-                self.conn.name, jid, obj.timestamp, log_type,
+                self.conn.name,
+                jid,
+                obj.properties.timestamp,
+                log_type,
                 message=msg_to_log,
                 subject=obj.properties.subject,
                 additional_data=obj.additional_data,
@@ -228,7 +231,8 @@ class ChatControlSession:
             event = event_t(
                 obj.msgtxt,
                 obj.properties.subject,
-                kind, obj.timestamp,
+                kind,
+                obj.properties.timestamp,
                 obj.resource,
                 obj.msg_log_id,
                 correct_id=obj.correct_id,

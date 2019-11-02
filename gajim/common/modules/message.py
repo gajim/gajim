@@ -189,7 +189,6 @@ class Message(BaseModule):
             'correct_id': parse_correction(properties),
             'msgtxt': msgtxt,
             'session': session,
-            'timestamp': properties.timestamp,
             'delayed': properties.user_timestamp is not None,
             'gc_control': gc_control,
             'xhtml': xhtml,
@@ -248,7 +247,7 @@ class Message(BaseModule):
             # so don't store it in logs
             app.logger.insert_into_logs(self._account,
                                         event.jid,
-                                        event.timestamp,
+                                        event.properties.timestamp,
                                         KindConstant.GC_MSG,
                                         message=event.msgtxt,
                                         contact_name=event.nick,

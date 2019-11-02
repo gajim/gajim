@@ -800,10 +800,12 @@ class ChatControl(ChatControlBase):
         if obj.kind == KindConstant.CHAT_MSG_SENT:
             kind = 'outgoing'
 
-        self.add_message(
-            obj.msgtxt, kind, tim=obj.timestamp,
-            correct_id=obj.correct_id,
-            message_id=obj.message_id, additional_data=obj.additional_data)
+        self.add_message(obj.msgtxt,
+                         kind,
+                         tim=obj.properties.mam.timestamp,
+                         correct_id=obj.correct_id,
+                         message_id=obj.message_id,
+                         additional_data=obj.additional_data)
 
     def _nec_decrypted_message_received(self, obj):
         if not obj.msgtxt:
@@ -818,12 +820,16 @@ class ChatControl(ChatControlBase):
         if obj.forwarded and obj.sent:
             typ = 'out'
 
-        self.add_message(obj.msgtxt, typ,
-            tim=obj.timestamp, subject=obj.properties.subject,
-            xhtml=obj.xhtml, displaymarking=obj.displaymarking,
-            msg_log_id=obj.msg_log_id, message_id=obj.message_id,
-            correct_id=obj.correct_id,
-            additional_data=obj.additional_data)
+        self.add_message(obj.msgtxt,
+                         typ,
+                         tim=obj.properties.timestamp,
+                         subject=obj.properties.subject,
+                         xhtml=obj.xhtml,
+                         displaymarking=obj.displaymarking,
+                         msg_log_id=obj.msg_log_id,
+                         message_id=obj.message_id,
+                         correct_id=obj.correct_id,
+                         additional_data=obj.additional_data)
         if obj.msg_log_id:
             pw = self.parent_win
             end = self.conv_textview.autoscroll

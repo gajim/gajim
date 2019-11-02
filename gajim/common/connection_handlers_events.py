@@ -421,7 +421,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             return
         self.jid = msg_obj.jid
         sound = msg_obj.gc_control.highlighting_for_message(
-            msg_obj.msgtxt, msg_obj.timestamp)[1]
+            msg_obj.msgtxt, msg_obj.properties.timestamp)[1]
 
         if msg_obj.nickname != msg_obj.gc_control.nick:
             self.do_sound = True
