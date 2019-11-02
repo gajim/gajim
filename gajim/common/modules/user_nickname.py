@@ -39,7 +39,7 @@ class UserNickname(BaseModule):
     @event_node(nbxmpp.NS_NICK)
     def _nickname_received(self, _con, _stanza, properties):
         nick = properties.pubsub_event.data
-        if properties.self_message:
+        if properties.is_self_message:
             if nick is None:
                 nick = app.config.get_per('accounts', self._account, 'name')
             app.nicks[self._account] = nick
