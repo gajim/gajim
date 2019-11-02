@@ -95,7 +95,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'stanza': stanza,
             'account': self.name,
             'id_': id_,
-            'encrypted': False,
             'additional_data': additional_data,
             'forwarded': False,
             'sent': False,

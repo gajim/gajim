@@ -232,7 +232,6 @@ class MAM(BaseModule):
             {'conn': self._con,
              'account': self._account,
              'additional_data': additional_data,
-             'encrypted': False,
              'timestamp': properties.mam.timestamp,
              'self_message': properties.is_self_message,
              'groupchat': groupchat,

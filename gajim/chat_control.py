@@ -802,7 +802,7 @@ class ChatControl(ChatControlBase):
 
         self.add_message(
             obj.msgtxt, kind, tim=obj.timestamp,
-            encrypted=obj.encrypted, correct_id=obj.correct_id,
+            correct_id=obj.correct_id,
             message_id=obj.message_id, additional_data=obj.additional_data)
 
     def _nec_decrypted_message_received(self, obj):
@@ -819,9 +819,10 @@ class ChatControl(ChatControlBase):
             typ = 'out'
 
         self.add_message(obj.msgtxt, typ,
-            tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
+            tim=obj.timestamp, subject=obj.subject,
             xhtml=obj.xhtml, displaymarking=obj.displaymarking,
-            msg_log_id=obj.msg_log_id, message_id=obj.message_id, correct_id=obj.correct_id,
+            msg_log_id=obj.msg_log_id, message_id=obj.message_id,
+            correct_id=obj.correct_id,
             additional_data=obj.additional_data)
         if obj.msg_log_id:
             pw = self.parent_win
@@ -855,7 +856,7 @@ class ChatControl(ChatControlBase):
                 self.msg_textview, 'gajim-msg-correcting')
 
         self.add_message(obj.message, self.contact.jid, tim=obj.timestamp,
-            encrypted=obj.encrypted, xhtml=obj.xhtml,
+            xhtml=obj.xhtml,
             displaymarking=displaymarking, message_id=message_id,
             correct_id=obj.correct_id,
             additional_data=obj.additional_data)
@@ -887,7 +888,7 @@ class ChatControl(ChatControlBase):
     def get_our_nick(self):
         return app.nicks[self.account]
 
-    def add_message(self, text, frm='', tim=None, encrypted=None,
+    def add_message(self, text, frm='', tim=None,
                     subject=None, xhtml=None,
                     displaymarking=None, msg_log_id=None, correct_id=None,
                     message_id=None, additional_data=None, error=None):
@@ -921,7 +922,7 @@ class ChatControl(ChatControlBase):
             else:
                 kind = 'outgoing'
                 name = self.get_our_nick()
-                if not xhtml and not encrypted and \
+                if not xhtml and \
                 app.config.get('rst_formatting_outgoing_messages'):
                     from gajim.common.rst_xhtml_generator import create_xhtml
                     xhtml = create_xhtml(text)
@@ -932,7 +933,7 @@ class ChatControl(ChatControlBase):
             displaymarking=displaymarking,
             msg_log_id=msg_log_id, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
-            encrypted=encrypted, error=error)
+            error=error)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
@@ -1288,7 +1289,7 @@ class ChatControl(ChatControlBase):
             if event.sent_forwarded:
                 kind = 'out'
             self.add_message(event.message, kind, tim=event.time,
-                encrypted=event.encrypted, subject=event.subject,
+                subject=event.subject,
                 xhtml=event.xhtml, displaymarking=event.displaymarking,
                 correct_id=event.correct_id, message_id=event.message_id,
                 additional_data=event.additional_data)

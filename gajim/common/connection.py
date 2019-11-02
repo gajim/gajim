@@ -1535,7 +1535,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if encryption:
             app.plugin_manager.extension_point(
                 'encrypt' + encryption, self, obj, self.send_message)
-            if not obj.encrypted:
+            if not obj.additional_data.get_value('encrypted', 'name', False):
                 # Dont propagate event
                 return True
         else:

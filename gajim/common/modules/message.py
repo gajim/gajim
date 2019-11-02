@@ -178,7 +178,6 @@ class Message(BaseModule):
             'stanza': stanza,
             'account': self._account,
             'id_': properties.id,
-            'encrypted': False,
             'additional_data': additional_data,
             'forwarded': properties.is_carbon_message,
             'sent': properties.is_carbon_message and properties.carbon.is_sent,

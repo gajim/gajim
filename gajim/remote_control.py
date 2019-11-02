@@ -378,7 +378,7 @@ class GajimRemote(Server):
             event_type = 'pm'
         self.raise_signal('NewMessage', (
             obj.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
-            obj.encrypted, event_type, obj.subject,
+            event_type, obj.subject,
             obj.msg_log_id, obj.user_nick, obj.xhtml]))
 
     def on_our_status(self, obj):

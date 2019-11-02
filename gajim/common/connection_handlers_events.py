@@ -590,8 +590,6 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.attention = False
         self.correct_id = None
         self.automatic_message = True
-        self.encryption = ''
-        self.encrypted = False
 
     def get_full_jid(self):
         if self.resource:

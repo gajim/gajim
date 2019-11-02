@@ -821,8 +821,8 @@ class GroupchatControl(ChatControlBase):
             return
         self.add_message(
             obj.msgtxt, contact=obj.nick,
-            tim=obj.timestamp, correct_id=obj.correct_id,
-            encrypted=obj.encrypted,
+            tim=obj.timestamp,
+            correct_id=obj.correct_id,
             message_id=obj.message_id,
             additional_data=obj.additional_data)
 
@@ -840,13 +840,13 @@ class GroupchatControl(ChatControlBase):
             self.add_message(
                 obj.msgtxt, contact=obj.nick,
                 tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
-                displaymarking=obj.displaymarking, encrypted=obj.encrypted,
+                displaymarking=obj.displaymarking,
                 correct_id=obj.correct_id, message_id=obj.message_id,
                 additional_data=obj.additional_data)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
     def on_private_message(self, nick, sent, msg, tim, xhtml, session,
-                           msg_log_id=None, encrypted=False,
+                           msg_log_id=None,
                            displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
@@ -855,7 +855,6 @@ class GroupchatControl(ChatControlBase):
                                '',
                                'incoming',
                                tim,
-                               encrypted,
                                '',
                                msg_log_id,
                                xhtml=xhtml,
@@ -882,7 +881,7 @@ class GroupchatControl(ChatControlBase):
 
     def add_message(self, text, contact='', tim=None, xhtml=None,
                     displaymarking=None, correct_id=None, message_id=None,
-                    encrypted=None, additional_data=None):
+                    additional_data=None):
         """
         Add message to the ConversationsTextview
 
@@ -925,7 +924,7 @@ class GroupchatControl(ChatControlBase):
             self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
             displaymarking=displaymarking,
-            correct_id=correct_id, message_id=message_id, encrypted=encrypted,
+            correct_id=correct_id, message_id=message_id,
             additional_data=additional_data)
 
     def get_nb_unread(self):
@@ -1095,7 +1094,7 @@ class GroupchatControl(ChatControlBase):
                     frm = 'out'
                 obj.session.control.add_message(
                     obj.msgtxt, frm,
-                    tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
+                    tim=obj.timestamp, xhtml=obj.xhtml,
                     displaymarking=obj.displaymarking,
                     message_id=obj.message_id,
                     correct_id=obj.correct_id)
@@ -1104,7 +1103,7 @@ class GroupchatControl(ChatControlBase):
                 self.on_private_message(
                     nick, obj.sent, obj.msgtxt, obj.timestamp,
                     obj.xhtml, self.session, msg_log_id=obj.msg_log_id,
-                    encrypted=obj.encrypted, displaymarking=obj.displaymarking)
+                    displaymarking=obj.displaymarking)
 
     def _nec_ping(self, obj):
         if self.contact.jid != obj.contact.room_jid:

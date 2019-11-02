@@ -226,7 +226,7 @@ class ChatControlSession:
         if do_event:
             kind = obj.properties.type.value
             event = event_t(obj.msgtxt, obj.subject, kind, obj.timestamp,
-                obj.encrypted, obj.resource, obj.msg_log_id,
+                obj.resource, obj.msg_log_id,
                 correct_id=obj.correct_id,
                 message_id=obj.message_id,
                 xhtml=obj.xhtml,
@@ -239,7 +239,7 @@ class ChatControlSession:
 
             app.events.add_event(self.conn.name, fjid, event)
 
-    def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
+    def roster_message(self, jid, msg, tim, msg_type='',
     subject=None, resource='', msg_log_id=None, user_nick='', xhtml=None,
     displaymarking=None, additional_data=None):
         """
@@ -303,7 +303,7 @@ class ChatControlSession:
             if msg_type == 'error':
                 typ = 'error'
 
-            self.control.add_message(msg, typ, tim=tim, encrypted=encrypted,
+            self.control.add_message(msg, typ, tim=tim,
                     subject=subject, xhtml=xhtml, displaymarking=displaymarking,
                     additional_data=additional_data)
 
@@ -319,7 +319,7 @@ class ChatControlSession:
         show_in_roster = get_show_in_roster(event_type, self)
         show_in_systray = get_show_in_systray(event_type, contact.jid)
 
-        event = event_t(msg, subject, msg_type, tim, encrypted, resource,
+        event = event_t(msg, subject, msg_type, tim, resource,
             msg_log_id, xhtml=xhtml, session=self,
             displaymarking=displaymarking, sent_forwarded=False,
             show_in_roster=show_in_roster, show_in_systray=show_in_systray,

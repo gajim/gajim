@@ -915,7 +915,7 @@ class ConversationTextview(GObject.GObject):
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     subject=None, old_kind=None, xhtml=None, graphics=True,
     displaymarking=None, message_id=None, correct_id=None, additional_data=None,
-    encrypted=None, marker=None, error=None):
+    marker=None, error=None):
         """
         Print 'chat' type messages
         """
