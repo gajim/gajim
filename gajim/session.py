@@ -107,11 +107,6 @@ class ChatControlSession:
             log_type = KindConstant.CHAT_MSG_SENT
 
         if self.is_loggable() and obj.msgtxt:
-            if obj.xhtml and app.config.get('log_xhtml_messages'):
-                msg_to_log = obj.xhtml
-            else:
-                msg_to_log = obj.msgtxt
-
             jid = obj.fjid
             if not obj.properties.is_muc_pm:
                 jid = obj.jid
@@ -121,7 +116,7 @@ class ChatControlSession:
                 jid,
                 obj.properties.timestamp,
                 log_type,
-                message=msg_to_log,
+                message=obj.msgtxt,
                 subject=obj.properties.subject,
                 additional_data=obj.additional_data,
                 stanza_id=obj.unique_id,
@@ -237,7 +232,6 @@ class ChatControlSession:
                 obj.msg_log_id,
                 correct_id=obj.correct_id,
                 message_id=obj.properties.id,
-                xhtml=obj.xhtml,
                 session=self,
                 displaymarking=obj.displaymarking,
                 sent_forwarded=obj.properties.is_sent_carbon,
@@ -248,7 +242,7 @@ class ChatControlSession:
             app.events.add_event(self.conn.name, fjid, event)
 
     def roster_message(self, jid, msg, tim, msg_type='',
-    subject=None, resource='', msg_log_id=None, user_nick='', xhtml=None,
+    subject=None, resource='', msg_log_id=None, user_nick='',
     displaymarking=None, additional_data=None):
         """
         Display the message or show notification in the roster
@@ -311,9 +305,12 @@ class ChatControlSession:
             if msg_type == 'error':
                 typ = 'error'
 
-            self.control.add_message(msg, typ, tim=tim,
-                    subject=subject, xhtml=xhtml, displaymarking=displaymarking,
-                    additional_data=additional_data)
+            self.control.add_message(msg,
+                                     typ,
+                                     tim=tim,
+                                     subject=subject,
+                                     displaymarking=displaymarking,
+                                     additional_data=additional_data)
 
             if msg_log_id:
                 app.logger.set_read_messages([msg_log_id])
@@ -328,7 +325,7 @@ class ChatControlSession:
         show_in_systray = get_show_in_systray(event_type, contact.jid)
 
         event = event_t(msg, subject, msg_type, tim, resource,
-            msg_log_id, xhtml=xhtml, session=self,
+            msg_log_id, session=self,
             displaymarking=displaymarking, sent_forwarded=False,
             show_in_roster=show_in_roster, show_in_systray=show_in_systray,
             additional_data=additional_data)

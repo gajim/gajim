@@ -907,12 +907,22 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         chatstate = con.get_module('Chatstate').get_active_chatstate(
             self.contact)
 
-        app.nec.push_outgoing_event(MessageOutgoingEvent(None,
-            account=self.account, jid=self.contact.jid, message=message,
-            type_=type_, chatstate=chatstate,
-            resource=resource, user_nick=self.user_nick, xhtml=xhtml,
-            label=label, control=self, attention=attention, correct_id=correct_id,
-            automatic_message=False, encryption=self.encryption))
+        event = MessageOutgoingEvent(None,
+                                     account=self.account,
+                                     jid=self.contact.jid,
+                                     message=message,
+                                     type_=type_,
+                                     chatstate=chatstate,
+                                     resource=resource,
+                                     user_nick=self.user_nick,
+                                     label=label,
+                                     control=self,
+                                     attention=attention,
+                                     correct_id=correct_id,
+                                     automatic_message=False,
+                                     encryption=self.encryption)
+        event.additional_data.set_value('gajim', 'xhtml', xhtml)
+        app.nec.push_outgoing_event(event)
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -988,7 +998,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def add_message(self, text, kind, name, tim,
                     other_tags_for_name=None, other_tags_for_time=None,
                     other_tags_for_text=None, restored=False, subject=None,
-                    old_kind=None, xhtml=None,
+                    old_kind=None,
                     displaymarking=None, msg_log_id=None,
                     message_id=None, correct_id=None, additional_data=None,
                     marker=None, error=None):
@@ -1014,7 +1024,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         textview.print_conversation_line(text, kind, name, tim,
             other_tags_for_name, other_tags_for_time, other_tags_for_text,
-            subject, old_kind, xhtml,
+            subject, old_kind,
             displaymarking=displaymarking, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
             marker=marker, error=error)

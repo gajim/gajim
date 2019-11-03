@@ -949,6 +949,13 @@ class HtmlTextView(Gtk.TextView):
         parser = xml.sax.make_parser()
         parser.setContentHandler(HtmlHandler(textview, conv_textview, eob))
         parser.parse(StringIO(html))
+        self._delete_last_char(buffer_, eob)
+
+    @staticmethod
+    def _delete_last_char(buffer_, iter_):
+        start_iter = iter_.copy()
+        start_iter.backward_char()
+        buffer_.delete(start_iter, iter_)
 
     @staticmethod
     def _on_copy_clipboard(textview):

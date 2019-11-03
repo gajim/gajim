@@ -616,21 +616,17 @@ class HistoryWindow(Gtk.ApplicationWindow):
                     buf.insert(end_iter, format_)
         if subject:
             message = _('Subject: %s\n') % subject + message
-        xhtml = None
-        if message.startswith('<body '):
-            xhtml = message
 
         if tag_msg:
             self.history_textview.print_real_text(
-                message, [tag_msg],
+                message,
+                [tag_msg],
                 name=contact_name,
-                xhtml=xhtml,
                 additional_data=additional_data)
         else:
             self.history_textview.print_real_text(
                 message,
                 name=contact_name,
-                xhtml=xhtml,
                 additional_data=additional_data)
         self.history_textview.print_real_text('\n', text_tags=['eol'])
 

@@ -22,6 +22,8 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
 
+from nbxmpp.modules.misc import build_xhtml_body
+
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
@@ -361,7 +363,7 @@ class MessageTextView(Gtk.TextView):
             text += self.end_tags[tag_name]
 
         if modified:
-            return '<p>' + self.make_clickable_urls(text) + '</p>'
+            return build_xhtml_body('<p>%s</p>' % self.make_clickable_urls(text))
         return None
 
     def replace_emojis(self):

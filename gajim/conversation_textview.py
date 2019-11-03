@@ -913,7 +913,7 @@ class ConversationTextview(GObject.GObject):
 
     def print_conversation_line(self, text, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
-    subject=None, old_kind=None, xhtml=None, graphics=True,
+    subject=None, old_kind=None, graphics=True,
     displaymarking=None, message_id=None, correct_id=None, additional_data=None,
     marker=None, error=None):
         """
@@ -1028,7 +1028,7 @@ class ConversationTextview(GObject.GObject):
 
         self.print_subject(subject, iter_=iter_)
 
-        iter_ = self.print_real_text(text, text_tags, name, xhtml, graphics=graphics,
+        iter_ = self.print_real_text(text, text_tags, name, graphics=graphics,
             mark=insert_mark, additional_data=additional_data)
 
         message_icons = MessageIcons()
@@ -1256,7 +1256,7 @@ class ConversationTextview(GObject.GObject):
             buffer_.insert(end_iter, subject)
             self.print_empty_line(end_iter)
 
-    def print_real_text(self, text, text_tags=None, name=None, xhtml=None,
+    def print_real_text(self, text, text_tags=None, name=None,
     graphics=True, mark=None, additional_data=None):
         """
         Add normal and special text. call this to add text
@@ -1270,7 +1270,9 @@ class ConversationTextview(GObject.GObject):
             iter_ = buffer_.get_end_iter()
         else:
             iter_ = buffer_.get_iter_at_mark(mark)
-        if xhtml:
+
+        xhtml = additional_data.get_value('gajim', 'xhtml', False)
+        if xhtml and app.config.get('show_xhtml'):
             try:
                 if name and (text.startswith('/me ') or text.startswith('/me\n')):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)

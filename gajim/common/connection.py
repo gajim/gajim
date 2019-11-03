@@ -210,16 +210,22 @@ class CommonConnection:
         else:
             fjid = obj.get_full_jid()
 
+        xhtml = obj.additional_data.get_value('gajim', 'xhtml', None)
+
         if obj.type_ == 'chat':
-            msg_iq = nbxmpp.Message(body=obj.message, typ=obj.type_,
-                    xhtml=obj.xhtml)
+            msg_iq = nbxmpp.Message(body=obj.message,
+                                    typ=obj.type_,
+                                    xhtml=xhtml)
         else:
             if obj.subject:
-                msg_iq = nbxmpp.Message(body=obj.message, typ='normal',
-                        subject=obj.subject, xhtml=obj.xhtml)
+                msg_iq = nbxmpp.Message(body=obj.message,
+                                        typ='normal',
+                                        subject=obj.subject,
+                                        xhtml=xhtml)
             else:
-                msg_iq = nbxmpp.Message(body=obj.message, typ='normal',
-                        xhtml=obj.xhtml)
+                msg_iq = nbxmpp.Message(body=obj.message,
+                                        typ='normal',
+                                        xhtml=xhtml)
 
         if obj.correct_id:
             msg_iq.setTag('replace', attrs={'id': obj.correct_id},
@@ -324,13 +330,13 @@ class CommonConnection:
         if not app.config.should_log(self.name, jid):
             return
 
-        if obj.xhtml and app.config.get('log_xhtml_messages'):
-            obj.message = '<body xmlns="%s">%s</body>' % (nbxmpp.NS_XHTML,
-                                                          obj.xhtml)
         if obj.message is None:
             return
 
-        app.logger.insert_into_logs(self.name, jid, obj.timestamp, obj.kind,
+        app.logger.insert_into_logs(self.name,
+                                    jid,
+                                    obj.timestamp,
+                                    obj.kind,
                                     message=obj.message,
                                     subject=obj.subject,
                                     additional_data=obj.additional_data,
@@ -1619,8 +1625,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not app.account_is_connected(self.name):
             return
 
-        msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',
-                                xhtml=obj.xhtml)
+        xhtml = obj.additional_data.get_value('gajim', 'xhtml', None)
+        msg_iq = nbxmpp.Message(obj.jid,
+                                obj.message,
+                                typ='groupchat',
+                                xhtml=xhtml)
 
         obj.stanza_id = self.connection.getAnID()
         msg_iq.setID(obj.stanza_id)

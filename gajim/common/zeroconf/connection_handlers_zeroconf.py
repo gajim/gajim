@@ -82,6 +82,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
 
         additional_data = AdditionalDataDict()
         parse_oob(properties, additional_data)
+        parse_xhtml(properties, additional_data)
 
         if properties.is_encrypted:
             additional_data['encrypted'] = properties.encrypted.additional_data
@@ -103,7 +104,6 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             'msgtxt': msgtxt,
             'session': session,
             'gc_control': None,
-            'xhtml': parse_xhtml(properties),
             'popup': False,
             'msg_log_id': None,
             'displaymarking': None,

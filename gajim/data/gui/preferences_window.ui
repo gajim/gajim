@@ -673,11 +673,10 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="xhtml_checkbutton">
-                        <property name="label" translatable="yes">_Ignore formatting of incoming messages</property>
+                        <property name="label" translatable="yes">_Show XHTML formatting</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">Some messages may include rich content (xhtml formatting, colors etc). If checked, Gajim will just display the plain message text.</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>

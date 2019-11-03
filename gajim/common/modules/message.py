@@ -160,7 +160,7 @@ class Message(BaseModule):
                 'gajim', 'user_timestamp', properties.user_timestamp)
 
         parse_oob(properties, additional_data)
-        xhtml = parse_xhtml(properties)
+        parse_xhtml(properties, additional_data)
 
         app.nec.push_incoming_event(NetworkEvent('update-client-info',
                                                  account=self._account,
@@ -188,7 +188,6 @@ class Message(BaseModule):
             'session': session,
             'delayed': properties.user_timestamp is not None,
             'gc_control': gc_control,
-            'xhtml': xhtml,
             'popup': False,
             'msg_log_id': None,
             'displaymarking': parse_securitylabel(stanza),
@@ -202,7 +201,6 @@ class Message(BaseModule):
             event_attr.update({
                 'room_jid': jid,
                 'nickname': resource,
-                'xhtml_msgtxt': xhtml,
                 'nick': resource or '',
             })
             event = NetworkEvent('gc-message-received', **event_attr)

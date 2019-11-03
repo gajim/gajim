@@ -1091,8 +1091,6 @@ def update_optional_features(account=None):
             features.append(nbxmpp.NS_BOOKMARKS_2 + '+notify')
         elif app.connections[account_].get_module('Bookmarks').using_bookmark_1:
             features.append(nbxmpp.NS_BOOKMARKS + '+notify')
-        if not app.config.get('ignore_incoming_xhtml'):
-            features.append(nbxmpp.NS_XHTML_IM)
         if app.is_installed('FARSTREAM'):
             features.append(nbxmpp.NS_JINGLE_RTP)
             features.append(nbxmpp.NS_JINGLE_RTP_AUDIO)

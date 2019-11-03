@@ -16,7 +16,7 @@
 
 import logging
 
-from gajim.common import app
+from gajim.common.i18n import get_rfc5646_lang
 
 log = logging.getLogger('gajim.c.m.misc')
 
@@ -43,7 +43,9 @@ def parse_correction(properties):
 
 # XEP-0071: XHTML-IM
 
-def parse_xhtml(properties):
-    if app.config.get('ignore_incoming_xhtml'):
-        return None
-    return properties.xhtml
+def parse_xhtml(properties, additional_data):
+    if not properties.has_xhtml:
+        return
+
+    body = properties.xhtml.get_body(get_rfc5646_lang())
+    additional_data.set_value('gajim', 'xhtml', body)

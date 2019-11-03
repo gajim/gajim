@@ -4,7 +4,7 @@ Tests for capabilities and the capabilities cache
 import unittest
 from unittest.mock import MagicMock, Mock
 
-from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM
+from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM, NS_JINGLE_FILE_TRANSFER_5
 from nbxmpp.structs import DiscoIdentity
 from nbxmpp.structs import DiscoInfo
 from gajim.common import caps_cache as caps
@@ -24,7 +24,7 @@ class CommonCapsTest(unittest.TestCase):
                                       name='Gajim')
 
         self.identities = [self.identity]
-        self.features = [NS_MUC, NS_XHTML_IM]
+        self.features = [NS_MUC, NS_XHTML_IM, NS_JINGLE_FILE_TRANSFER_5]
 
         # Simulate a filled db
         db_caps_cache = {
@@ -116,7 +116,7 @@ class TestClientCaps(CommonCapsTest):
         self.assertTrue(caps.client_supports(self.client_caps, NS_PING),
                         msg="Assume supported, if we don't have caps")
 
-        self.assertFalse(caps.client_supports(self.client_caps, NS_XHTML_IM),
+        self.assertFalse(caps.client_supports(self.client_caps, NS_JINGLE_FILE_TRANSFER_5),
                 msg="Must not assume blacklisted feature is supported on default")
 
         self.cc.initialize_from_db()

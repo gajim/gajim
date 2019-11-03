@@ -147,7 +147,7 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.positive_184_ack_checkbutton.set_active(st)
 
         # Ignore XHTML
-        st = app.config.get('ignore_incoming_xhtml')
+        st = app.config.get('show_xhtml')
         self._ui.xhtml_checkbutton.set_active(st)
 
         # Print status messages in single chats
@@ -674,8 +674,7 @@ class Preferences(Gtk.ApplicationWindow):
         self.on_checkbutton_toggled(widget, 'positive_184_ack')
 
     def on_xhtml_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
-        helpers.update_optional_features()
+        self.on_checkbutton_toggled(widget, 'show_xhtml')
 
     def on_print_status_in_chats_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'print_status_in_chats')

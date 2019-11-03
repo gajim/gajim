@@ -34,7 +34,7 @@ from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gdk
-from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
+from nbxmpp.protocol import NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
 from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
 
@@ -824,7 +824,6 @@ class ChatControl(ChatControlBase):
                          typ,
                          tim=obj.properties.timestamp,
                          subject=obj.properties.subject,
-                         xhtml=obj.xhtml,
                          displaymarking=obj.displaymarking,
                          msg_log_id=obj.msg_log_id,
                          message_id=obj.properties.id,
@@ -861,11 +860,13 @@ class ChatControl(ChatControlBase):
             gtkgui_helpers.remove_css_class(
                 self.msg_textview, 'gajim-msg-correcting')
 
-        self.add_message(obj.message, self.contact.jid, tim=obj.timestamp,
-            xhtml=obj.xhtml,
-            displaymarking=displaymarking, message_id=message_id,
-            correct_id=obj.correct_id,
-            additional_data=obj.additional_data)
+        self.add_message(obj.message,
+                         self.contact.jid,
+                         tim=obj.timestamp,
+                         displaymarking=displaymarking,
+                         message_id=message_id,
+                         correct_id=obj.correct_id,
+                         additional_data=obj.additional_data)
 
     def send_message(self, message, xhtml=None,
                      process_commands=True, attention=False):
@@ -894,10 +895,17 @@ class ChatControl(ChatControlBase):
     def get_our_nick(self):
         return app.nicks[self.account]
 
-    def add_message(self, text, frm='', tim=None,
-                    subject=None, xhtml=None,
-                    displaymarking=None, msg_log_id=None, correct_id=None,
-                    message_id=None, additional_data=None, error=None):
+    def add_message(self,
+                    text,
+                    frm='',
+                    tim=None,
+                    subject=None,
+                    displaymarking=None,
+                    msg_log_id=None,
+                    correct_id=None,
+                    message_id=None,
+                    additional_data=None,
+                    error=None):
         """
         Print a line in the conversation
 
@@ -930,7 +938,7 @@ class ChatControl(ChatControlBase):
                 name = self.get_our_nick()
 
         ChatControlBase.add_message(self, text, kind, name, tim,
-            subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
+            subject=subject, old_kind=self.old_msg_kind,
             displaymarking=displaymarking,
             msg_log_id=msg_log_id, message_id=message_id,
             correct_id=correct_id, additional_data=additional_data,
@@ -1246,9 +1254,6 @@ class ChatControl(ChatControlBase):
 
             tim = float(row.time)
 
-            xhtml = None
-            if msg.startswith('<body '):
-                xhtml = msg
             if row.subject:
                 msg = _('Subject: %(subject)s\n%(message)s') % \
                     {'subject': row.subject, 'message': msg}
@@ -1259,7 +1264,6 @@ class ChatControl(ChatControlBase):
                                         tim,
                                         restored=True,
                                         old_kind=local_old_kind,
-                                        xhtml=xhtml,
                                         additional_data=additional_data,
                                         message_id=row.message_id,
                                         marker=row.marker,
@@ -1289,11 +1293,14 @@ class ChatControl(ChatControlBase):
             kind = 'print_queue'
             if event.sent_forwarded:
                 kind = 'out'
-            self.add_message(event.message, kind, tim=event.time,
-                subject=event.subject,
-                xhtml=event.xhtml, displaymarking=event.displaymarking,
-                correct_id=event.correct_id, message_id=event.message_id,
-                additional_data=event.additional_data)
+            self.add_message(event.message,
+                             kind,
+                             tim=event.time,
+                             subject=event.subject,
+                             displaymarking=event.displaymarking,
+                             correct_id=event.correct_id,
+                             message_id=event.message_id,
+                             additional_data=event.additional_data)
             if isinstance(event.msg_log_id, int):
                 message_ids.append(event.msg_log_id)
 

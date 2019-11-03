@@ -832,7 +832,6 @@ class GroupchatControl(ChatControlBase):
             # message from server
             self.add_message(obj.msgtxt,
                              tim=obj.properties.timestamp,
-                             xhtml=obj.xhtml_msgtxt,
                              displaymarking=obj.displaymarking,
                              additional_data=obj.additional_data)
         else:
@@ -841,16 +840,14 @@ class GroupchatControl(ChatControlBase):
             self.add_message(obj.msgtxt,
                              contact=obj.nick,
                              tim=obj.properties.timestamp,
-                             xhtml=obj.xhtml_msgtxt,
                              displaymarking=obj.displaymarking,
                              correct_id=obj.correct_id,
                              message_id=obj.properties.id,
                              additional_data=obj.additional_data)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
-    def on_private_message(self, nick, sent, msg, tim, xhtml, session,
-                           msg_log_id=None,
-                           displaymarking=None):
+    def on_private_message(self, nick, sent, msg, tim, session, additional_data,
+                           msg_log_id=None, displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
 
@@ -860,10 +857,10 @@ class GroupchatControl(ChatControlBase):
                                tim,
                                '',
                                msg_log_id,
-                               xhtml=xhtml,
                                session=session,
                                displaymarking=displaymarking,
-                               sent_forwarded=sent)
+                               sent_forwarded=sent,
+                               additional_data=additional_data)
         app.events.add_event(self.account, fjid, event)
 
         autopopup = app.config.get('autopopup')
@@ -882,7 +879,7 @@ class GroupchatControl(ChatControlBase):
         if contact:
             app.interface.roster.draw_contact(self.room_jid, self.account)
 
-    def add_message(self, text, contact='', tim=None, xhtml=None,
+    def add_message(self, text, contact='', tim=None,
                     displaymarking=None, correct_id=None, message_id=None,
                     additional_data=None):
         """
@@ -923,12 +920,18 @@ class GroupchatControl(ChatControlBase):
 
             self.check_focus_out_line()
 
-        ChatControlBase.add_message(
-            self, text, kind, contact, tim,
-            other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
-            displaymarking=displaymarking,
-            correct_id=correct_id, message_id=message_id,
-            additional_data=additional_data)
+        ChatControlBase.add_message(self,
+                                    text,
+                                    kind,
+                                    contact,
+                                    tim,
+                                    other_tags_for_name,
+                                    [],
+                                    other_tags_for_text,
+                                    displaymarking=displaymarking,
+                                    correct_id=correct_id,
+                                    message_id=message_id,
+                                    additional_data=additional_data)
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']
@@ -1099,7 +1102,6 @@ class GroupchatControl(ChatControlBase):
                     obj.msgtxt,
                     frm,
                     tim=obj.properties.timestamp,
-                    xhtml=obj.xhtml,
                     displaymarking=obj.displaymarking,
                     message_id=obj.properties.id,
                     correct_id=obj.correct_id)
@@ -1109,8 +1111,8 @@ class GroupchatControl(ChatControlBase):
                                         obj.properties.is_sent_carbon,
                                         obj.msgtxt,
                                         obj.properties.timestamp,
-                                        obj.xhtml,
                                         self.session,
+                                        obj.additional_data,
                                         msg_log_id=obj.msg_log_id,
                                         displaymarking=obj.displaymarking)
 
@@ -1574,10 +1576,17 @@ class GroupchatControl(ChatControlBase):
                 self.contact)
 
             # Send the message
-            app.nec.push_outgoing_event(GcMessageOutgoingEvent(
-                None, account=self.account, jid=self.room_jid, message=message,
-                xhtml=xhtml, label=label, chatstate=chatstate,
-                correct_id=correct_id, automatic_message=False))
+            event = GcMessageOutgoingEvent(None,
+                                           account=self.account,
+                                           jid=self.room_jid,
+                                           message=message,
+                                           label=label,
+                                           chatstate=chatstate,
+                                           correct_id=correct_id,
+                                           automatic_message=False)
+            event.additional_data.set_value('gajim', 'xhtml', xhtml)
+            app.nec.push_outgoing_event(event)
+
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 

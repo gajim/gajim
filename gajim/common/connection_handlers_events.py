@@ -578,7 +578,6 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.stanza_id = None
         self.resource = None
         self.user_nick = None
-        self.xhtml = None
         self.label = None
         self.session = None
         self.delayed = None
@@ -620,7 +619,6 @@ class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.additional_data = AdditionalDataDict()
         self.message = ''
         self.chatstate = None
-        self.xhtml = None
         self.stanza_id = None
         self.label = None
         self.callback = None
