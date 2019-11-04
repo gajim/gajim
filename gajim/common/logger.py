@@ -183,6 +183,15 @@ def caps_decoder(dict_):
                     features=features,
                     dataforms=dataforms)
 
+def timeit(func):
+    def func_wrapper(self, *args, **kwargs):
+        start = time.monotonic_ns()
+        result = func(self, *args, **kwargs)
+        exec_time = (time.monotonic_ns() - start) / 1000000
+        level = 30 if exec_time > 50 else 10
+        log.log(level, 'Execution time for %s: %s ms', func.__name__, exec_time)
+        return result
+    return func_wrapper
 
 def _convert_disco_info(disco_info):
     return parse_disco_info(Iq(node=disco_info))
@@ -284,6 +293,7 @@ class Logger:
             log.exception('Error')
             sys.exit()
 
+    @timeit
     def _migrate_logs(self, con):
         if self._get_user_version(con) == 0:
             # All migrations from 0.16.9 until 1.0.0
@@ -336,6 +346,7 @@ class Logger:
             ]
             self._execute_multiple(con, statements)
 
+    @timeit
     def _migrate_cache(self, con):
         if self._get_user_version(con) == 0:
             # All migrations from 0.16.9 until 1.0.0
@@ -434,6 +445,7 @@ class Logger:
             self._con.close()
             sys.exit()
 
+    @timeit
     def _set_synchronous(self, sync):
         try:
             if sync:
@@ -459,6 +471,7 @@ class Logger:
     def _like(search_str):
         return '%{}%'.format(search_str)
 
+    @timeit
     def commit(self):
         try:
             self._con.commit()
@@ -472,6 +485,7 @@ class Logger:
             return
         self._commit_timout_id = GLib.timeout_add(500, self.commit)
 
+    @timeit
     def simple_commit(self, sql_to_commit):
         """
         Helper to commit
@@ -479,6 +493,7 @@ class Logger:
         self._con.execute(sql_to_commit)
         self._timeout_commit()
 
+    @timeit
     def _get_jid_ids_from_db(self):
         """
         Load all jid/jid_id tuples into a dict for faster access
@@ -536,6 +551,7 @@ class Logger:
         jid = app.get_jid_from_account(account)
         return self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
 
+    @timeit
     def get_jid_id(self, jid, kind=None, type_=None):
         """
         Get the jid id from a jid.
@@ -692,6 +708,7 @@ class Logger:
         if sub == SubscriptionConstant.BOTH:
             return 'both'
 
+    @timeit
     def insert_unread_events(self, message_id, jid_id):
         """
         Add unread message with id: message_id
@@ -701,6 +718,7 @@ class Logger:
         self._con.execute(sql, (message_id, jid_id))
         self._timeout_commit()
 
+    @timeit
     def set_read_messages(self, message_ids):
         """
         Mark all messages with ids in message_ids as read
@@ -709,6 +727,7 @@ class Logger:
         sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
         self.simple_commit(sql)
 
+    @timeit
     def set_shown_unread_msgs(self, msg_log_id):
         """
         Mark unread message as shown un GUI
@@ -717,6 +736,7 @@ class Logger:
                 msg_log_id
         self.simple_commit(sql)
 
+    @timeit
     def reset_shown_unread_messages(self):
         """
         Set shown field to False in unread_messages table
@@ -724,6 +744,7 @@ class Logger:
         sql = 'UPDATE unread_messages SET shown = 0'
         self.simple_commit(sql)
 
+    @timeit
     def get_unread_msgs(self):
         """
         Get all unread messages
@@ -755,6 +776,7 @@ class Logger:
             all_messages.append((result, shown))
         return all_messages
 
+    @timeit
     def get_last_conversation_lines(self, account, jid, pending):
         """
         Get recent messages
@@ -818,6 +840,7 @@ class Logger:
         start_of_day = int(time.mktime(local_time))
         return start_of_day
 
+    @timeit
     def get_conversation_for_date(self, account, jid, date):
         """
         Load the complete conversation with a given jid on a specific date
@@ -849,6 +872,7 @@ class Logger:
                                       (date.timestamp(),
                                       (date + delta).timestamp())).fetchall()
 
+    @timeit
     def search_log(self, account, jid, query, date=None):
         """
         Search the conversation log for messages containing the `query` string.
@@ -890,6 +914,7 @@ class Logger:
 
         return self._con.execute(sql, tuple(jids) + (query,)).fetchall()
 
+    @timeit
     def get_days_with_logs(self, account, jid, year, month):
         """
         Request the days in a month where we received messages
@@ -930,6 +955,7 @@ class Logger:
                                       (date.timestamp(),
                                       (date + delta).timestamp())).fetchall()
 
+    @timeit
     def get_last_date_that_has_logs(self, account, jid):
         """
         Get the timestamp of the last message we received for the jid.
@@ -956,6 +982,7 @@ class Logger:
         # attributes set to None because of the MAX() function
         return self._con.execute(sql, tuple(jids)).fetchone().time
 
+    @timeit
     def get_first_date_that_has_logs(self, account, jid):
         """
         Get the timestamp of the first message we received for the jid.
@@ -982,6 +1009,7 @@ class Logger:
         # attributes set to None because of the MIN() function
         return self._con.execute(sql, tuple(jids)).fetchone().time
 
+    @timeit
     def get_date_has_logs(self, account, jid, date):
         """
         Get single timestamp of a message we received for the jid
@@ -1013,6 +1041,7 @@ class Logger:
         return self._con.execute(
             sql, tuple(jids) + (start, end)).fetchone()
 
+    @timeit
     def save_transport_type(self, jid, type_):
         """
         Save the type of the transport in DB
@@ -1034,6 +1063,7 @@ class Logger:
         self._con.execute(sql, (jid, type_id))
         self._timeout_commit()
 
+    @timeit
     def get_transports_type(self):
         """
         Return all the type of the transports in DB
@@ -1047,6 +1077,7 @@ class Logger:
                     result.type)
         return answer
 
+    @timeit
     def load_caps_data(self):
         '''
         Load caps cache data
@@ -1064,6 +1095,7 @@ class Logger:
             cache[(row.hash_method, row.hash)] = data
         return cache
 
+    @timeit
     def add_caps_entry(self, hash_method, hash_, caps_data):
         serialized = json.dumps(caps_data, cls=CapsEncoder)
         self._con.execute('''
@@ -1072,12 +1104,14 @@ class Logger:
                 ''', (hash_method, hash_, serialized, int(time.time())))
         self._timeout_commit()
 
+    @timeit
     def update_caps_time(self, method, hash_):
         sql = '''UPDATE caps_cache SET last_seen = ?
                  WHERE hash_method = ? and hash = ?'''
         self._con.execute(sql, (int(time.time()), method, hash_))
         self._timeout_commit()
 
+    @timeit
     def clean_caps_table(self):
         """
         Remove caps which was not seen for 3 months
@@ -1087,6 +1121,7 @@ class Logger:
                           (timestamp,))
         self._timeout_commit()
 
+    @timeit
     def replace_roster(self, account_name, roster_version, roster):
         """
         Replace current roster in DB by a new one
@@ -1120,6 +1155,7 @@ class Logger:
         app.config.set_per('accounts', account_name, 'roster_version',
             roster_version)
 
+    @timeit
     def del_contact(self, account_jid, jid):
         """
         Remove jid from account_jid roster
@@ -1137,6 +1173,7 @@ class Logger:
                 (account_jid_id, jid_id))
         self._timeout_commit()
 
+    @timeit
     def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups,
                               commit=True):
         """
@@ -1176,6 +1213,7 @@ class Logger:
         if commit:
             self._timeout_commit()
 
+    @timeit
     def get_roster(self, account_jid):
         """
         Return the accound_jid roster in NonBlockingRoster format
@@ -1220,6 +1258,7 @@ class Logger:
 
         return data
 
+    @timeit
     def remove_roster(self, account_jid):
         """
         Remove the roster of an account
@@ -1241,6 +1280,7 @@ class Logger:
         self._con.executescript(sql)
         self._timeout_commit()
 
+    @timeit
     def deduplicate_muc_message(self, account, jid, resource,
                                 timestamp, message_id):
         """
@@ -1288,6 +1328,7 @@ class Logger:
             return True
         return False
 
+    @timeit
     def search_for_duplicate(self, account, jid, timestamp, msg):
         """
         Check if a message is already in the `logs` table
@@ -1323,6 +1364,7 @@ class Logger:
             return True
         return False
 
+    @timeit
     def find_stanza_id(self, account, archive_jid, stanza_id, origin_id=None,
                        groupchat=False):
         """
@@ -1395,6 +1437,7 @@ class Logger:
         """
         return self.get_jid_id(jid, kind, type_)
 
+    @timeit
     def insert_into_logs(self, account, jid, time_, kind,
                          unread=True, **kwargs):
         """
@@ -1443,6 +1486,7 @@ class Logger:
 
         return lastrowid
 
+    @timeit
     def set_message_error(self, account_jid, jid, message_id, error):
         """
         Update the corresponding message with the error
@@ -1471,6 +1515,7 @@ class Logger:
         self._con.execute(sql, (error, account_id, jid_id, message_id))
         self._timeout_commit()
 
+    @timeit
     def set_marker(self, account_jid, jid, message_id, state):
         """
         Update the marker state of the corresponding message
@@ -1503,6 +1548,7 @@ class Logger:
         self._con.execute(sql, (state, account_id, jid_id, message_id))
         self._timeout_commit()
 
+    @timeit
     def set_avatar_sha(self, account_jid, jid, sha=None):
         """
         Set the avatar sha of a jid on an account
@@ -1525,6 +1571,7 @@ class Logger:
         self._con.execute(sql, (sha, account_jid_id, jid_id))
         self._timeout_commit()
 
+    @timeit
     def set_muc_avatar_sha(self, jid, sha=None):
         """
         Set the avatar sha of a MUC
@@ -1546,6 +1593,7 @@ class Logger:
 
         self._timeout_commit()
 
+    @timeit
     def get_muc_avatar_sha(self, jid):
         """
         Get the avatar sha of a MUC
@@ -1559,6 +1607,7 @@ class Logger:
         if row is not None:
             return row.avatar_sha
 
+    @timeit
     def get_archive_infos(self, jid):
         """
         Get the archive infos
@@ -1570,6 +1619,7 @@ class Logger:
         sql = '''SELECT * FROM last_archive_message WHERE jid_id = ?'''
         return self._con.execute(sql, (jid_id,)).fetchone()
 
+    @timeit
     def set_archive_infos(self, jid, **kwargs):
         """
         Set archive infos
@@ -1614,6 +1664,7 @@ class Logger:
         log.info('Set message archive info: %s %s', jid, kwargs)
         self._timeout_commit()
 
+    @timeit
     def get_last_disco_info(self, jid, max_age=0):
         """
         Get last disco info from jid
@@ -1648,6 +1699,7 @@ class Logger:
         self._disco_info_cache[jid] = disco_info
         return disco_info
 
+    @timeit
     def set_last_disco_info(self, jid, disco_info):
         """
         Get last disco info from jid
