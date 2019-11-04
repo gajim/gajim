@@ -1,9 +1,10 @@
 app-id: org.gajim.Gajim
 runtime: org.gnome.Platform
-runtime-version: '3.32'
+runtime-version: '3.34'
 sdk: org.gnome.Sdk
 command: gajim
-tags: nightly
+tags:
+  - nightly
 desktop-file-name-prefix: '(Nightly) '
 finish-args:
   - --share=ipc
@@ -61,17 +62,17 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/93/1a/ab8c62b5838722f29f3daffcc8d4bd61844aa9b5f437341cc890ceee483b/cffi-1.12.3.tar.gz
-        sha256: 041c81822e9f84b1d9c401182e174996f0bae9991f33725d059b771744290774
+        url: https://files.pythonhosted.org/packages/2d/bf/960e5a422db3ac1a5e612cb35ca436c3fc985ed4b7ed13a1b4879006f450/cffi-1.13.2.tar.gz
+        sha256: 599a1e8ff057ac530c9ad1778293c665cb81a791421f46922d80a86473c13346
 
   - name: python3-asn1crypto
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app asn1crypto-0.24.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app asn1crypto-1.2.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://pypi.python.org/packages/ea/cd/35485615f45f30a510576f1a56d1e0a7ad7bd8ab5ed7cdc600ef7cd06222/asn1crypto-0.24.0-py2.py3-none-any.whl
-        sha256: 2f1adbb7546ed199e3c90ef23ec95c5cf3585bac7d11fb7eb562a3fe89c64e87
+        url: https://files.pythonhosted.org/packages/6b/8c/ff300484eca90b397d919408619fae479965bdd8a1df3d6d08d58e491da5/asn1crypto-1.2.0-py2.py3-none-any.whl
+        sha256: 7bb1cc02a5620b3d72da4ba070bda2f44f0e61b44dee910a302eddff802b6fb5
 
   - name: python3-idna
     buildsystem: simple
@@ -88,8 +89,8 @@ modules:
       - python3 setup.py install --prefix=/app
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/c2/95/f43d02315f4ec074219c6e3124a87eba1d2d12196c2767fadfdc07a83884/cryptography-2.7.tar.gz
-        sha256: e6347742ac8f35ded4a46ff835c60e68c22a536a8ae5c4422966d06946b6d4c6
+        url: https://files.pythonhosted.org/packages/be/60/da377e1bed002716fb2d5d1d1cab720f298cb33ecff7bf7adea72788e4e4/cryptography-2.8.tar.gz
+        sha256: 3cda1f0ed8747339bbdf71b9f38ca74c7b592f24f65cdb3ab3765e4b02871651
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -139,18 +140,18 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-19.0.2-py2.py3-none-any.whl
+      - pip3 install --prefix=/app keyring-19.2.0-py2.py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/6e/b3/b4d443d2e30c00cdb73612426222172182e54359545cfb17774792619e49/keyring-19.0.2-py2.py3-none-any.whl
-        sha256: afbfe7bc9bdba69d25c551b0c738adde533d87e0b51ad6bbe332cbea19ad8476
+        url: https://files.pythonhosted.org/packages/b1/08/ad1ae7262c8146bee3be360cc766d0261037a90b44872b080a53aaed4e84/keyring-19.2.0-py2.py3-none-any.whl
+        sha256: f5bb20ea6c57c2360daf0c591931c9ea0d7660a8d9e32ca84d63273f131ea605
 
   - name: python3-css-parser
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app css-parser-1.0.4-py3-none-any.whl
+      - pip3 install --prefix=/app css_parser-1.0.4-py3-none-any.whl
     sources:
       - type: file
         url: https://files.pythonhosted.org/packages/py3/c/css_parser/css_parser-1.0.4-py3-none-any.whl
@@ -170,8 +171,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/gspell/1.8/gspell-1.8.1.tar.xz
-        sha256: 819a1d23c7603000e73f5e738bdd284342e0cd345fb0c7650999c31ec741bbe5
+        url: https://download.gnome.org/sources/gspell/1.8/gspell-1.8.2.tar.xz
+        sha256: bb9195c3a95bacf556d0203e9691f7489e0d3bc5ae1e5a440c89b2f2435d3ed6
 
   - name: python3-nbxmpp
     buildsystem: simple
