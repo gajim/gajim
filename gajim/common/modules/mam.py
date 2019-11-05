@@ -250,7 +250,7 @@ class MAM(BaseModule):
                                     event_attrs['kind'],
                                     unread=False,
                                     message=msgtxt,
-                                    contact_name=event_attrs['nick'],
+                                    contact_name=properties.muc_nickname,
                                     additional_data=additional_data,
                                     stanza_id=stanza_id,
                                     message_id=properties.id)
@@ -264,7 +264,6 @@ class MAM(BaseModule):
         if properties.muc_user is not None:
             real_jid = properties.muc_user.jid
         return {'with_': properties.jid,
-                'nick': properties.muc_nickname,
                 'real_jid': real_jid,
                 'kind': KindConstant.GC_MSG}
 
@@ -275,7 +274,6 @@ class MAM(BaseModule):
             kind = KindConstant.CHAT_MSG_RECV
 
         return {'with_': properties.jid,
-                'nick': None,
                 'kind': kind}
 
     def _is_valid_request(self, properties):

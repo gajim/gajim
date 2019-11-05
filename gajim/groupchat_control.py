@@ -820,7 +820,7 @@ class GroupchatControl(ChatControlBase):
         if obj.archive_jid != self.room_jid:
             return
         self.add_message(obj.msgtxt,
-                         contact=obj.nick,
+                         contact=obj.properties.muc_nickname,
                          tim=obj.properties.mam.timestamp,
                          correct_id=obj.correct_id,
                          message_id=obj.properties.id,
