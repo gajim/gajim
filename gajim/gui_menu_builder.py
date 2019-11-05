@@ -790,7 +790,7 @@ def get_conv_context_menu(account, uri):
     elif uri.type == URIType.MAIL:
         context_menu = [
             ('copy-text', _('Copy Email Address')),
-            ('open-link', _('Open Email Composer')),
+            ('open-mail', _('Open Email Composer')),
         ]
 
     elif uri.type == URIType.GEO:
@@ -802,7 +802,7 @@ def get_conv_context_menu(account, uri):
     elif uri.type == URIType.AT:
         context_menu = [
             ('copy-text', _('Copy XMPP Address/Email')),
-            ('open-link', _('Open Email Composer')),
+            ('open-mail', _('Open Email Composer')),
             ('-start-chat', _('Start Chat')),
             ('groupchat-join', _('Join Groupchat')),
             ('-add-contact', _('Add to Contact List…')),
@@ -826,7 +826,7 @@ def get_conv_context_menu(account, uri):
         if uri.type == URIType.XMPP:
             data = uri.data['jid']
 
-        if action in ('app.open-link', 'app.copy-text'):
+        if action in ('app.open-mail', 'app.copy-text'):
             value = GLib.Variant.new_string(data)
         else:
             value = GLib.Variant.new_strv([account, data])

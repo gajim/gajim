@@ -348,9 +348,16 @@ def show_next_pending_event(action, param):
         app.interface.handle_event(account, jid, event.type_)
 
 
-def open_link(_action, param):
+def open_mail(_action, param):
     uri = param.get_string()
+    if not uri.startswith('mailto:'):
+        uri = 'mailto:%s' % uri
     helpers.open_uri(uri)
+
+
+def open_link(_action, param):
+    account, uri = param.get_string()
+    helpers.open_uri(uri, account=account)
 
 
 def copy_text(_action, param):
