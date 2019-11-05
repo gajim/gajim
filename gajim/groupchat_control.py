@@ -828,17 +828,17 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _nec_gc_message_received(self, obj):
-        if not obj.nick:
+        if obj.properties.muc_nickname is None:
             # message from server
             self.add_message(obj.msgtxt,
                              tim=obj.properties.timestamp,
                              displaymarking=obj.displaymarking,
                              additional_data=obj.additional_data)
         else:
-            if obj.nick == self.nick:
+            if obj.properties.muc_nickname == self.nick:
                 self.last_sent_txt = obj.msgtxt
             self.add_message(obj.msgtxt,
-                             contact=obj.nick,
+                             contact=obj.properties.muc_nickname,
                              tim=obj.properties.timestamp,
                              displaymarking=obj.displaymarking,
                              correct_id=obj.correct_id,

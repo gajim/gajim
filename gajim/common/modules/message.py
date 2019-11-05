@@ -200,8 +200,6 @@ class Message(BaseModule):
 
             event_attr.update({
                 'room_jid': jid,
-                'nickname': resource,
-                'nick': resource or '',
             })
             event = NetworkEvent('gc-message-received', **event_attr)
             app.nec.push_incoming_event(event)
@@ -236,19 +234,20 @@ class Message(BaseModule):
         self._check_for_mam_compliance(event.room_jid, event.stanza_id)
 
         if (app.config.should_log(self._account, event.jid) and
-                event.msgtxt and event.nick):
+                event.msgtxt and event.properties.muc_nickname):
             # if not event.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
             # so don't store it in logs
-            app.logger.insert_into_logs(self._account,
-                                        event.jid,
-                                        event.properties.timestamp,
-                                        KindConstant.GC_MSG,
-                                        message=event.msgtxt,
-                                        contact_name=event.nick,
-                                        additional_data=event.additional_data,
-                                        stanza_id=event.stanza_id,
-                                        message_id=event.properties.id)
+            app.logger.insert_into_logs(
+                self._account,
+                event.jid,
+                event.properties.timestamp,
+                KindConstant.GC_MSG,
+                message=event.msgtxt,
+                contact_name=event.properties.muc_nickname,
+                additional_data=event.additional_data,
+                stanza_id=event.stanza_id,
+                message_id=event.properties.id)
 
     def _check_for_mam_compliance(self, room_jid, stanza_id):
         disco_info = app.logger.get_last_disco_info(room_jid)

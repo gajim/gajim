@@ -423,7 +423,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         sound = msg_obj.gc_control.highlighting_for_message(
             msg_obj.msgtxt, msg_obj.properties.timestamp)[1]
 
-        if msg_obj.nickname != msg_obj.gc_control.nick:
+        if msg_obj.properties.muc_nickname != msg_obj.gc_control.nick:
             self.do_sound = True
             if sound == 'received':
                 self.sound_event = 'muc_message_received'
@@ -471,7 +471,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_title = i18n.ngettext(
             'New message from %(nickname)s',
             '%(n_msgs)i unread messages in %(groupchat_name)s',
-            count) % {'nickname': msg_obj.nick,
+            count) % {'nickname': msg_obj.properties.muc_nickname,
                       'n_msgs': count,
                       'groupchat_name': contact.get_shown_name()}
 
