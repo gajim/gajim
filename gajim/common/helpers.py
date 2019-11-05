@@ -625,13 +625,7 @@ def launch_file_manager(path_to_open):
         except Exception:
             pass
     else:
-        if not app.config.get('autodetect_browser_mailer'):
-            command = app.config.get('custom_file_manager')
-            if command == '': # if no app is configured
-                return
-        else:
-            command = 'xdg-open'
-        command = build_command(command, path_to_open)
+        command = build_command('xdg-open', path_to_open)
         try:
             exec_command(command)
         except Exception:
@@ -1547,16 +1541,10 @@ def open_uri(uri, account=None):
 
     elif uri.type == URIType.MAIL:
         uri = 'mailto:%s' % uri.data
-        if not app.config.get('autodetect_browser_mailer'):
-            open_uri_with_custom('custommailapp', 'mailto:%s' % uri)
-        else:
-            webbrowser.open(uri)
+        webbrowser.open(uri)
 
     elif uri.type in (URIType.WEB, URIType.GEO):
-        if not app.config.get('autodetect_browser_mailer'):
-            open_uri_with_custom('custombrowser', uri.data)
-        else:
-            webbrowser.open(uri.data)
+        webbrowser.open(uri.data)
 
     elif uri.type == URIType.AT:
         app.interface.new_chat_from_jid(account, uri.data)
@@ -1578,18 +1566,6 @@ def open_uri(uri, account=None):
 
     else:
         log.warning('Cant open URI: %s', uri)
-
-
-def open_uri_with_custom(config_app, uri):
-    command = app.config.get(config_app)
-    if not command:
-        log.warning('No custom application set')
-        return
-    command = build_command(command, uri)
-    try:
-        exec_command(command)
-    except Exception:
-        pass
 
 
 def geo_provider_from_location(lat, lon):

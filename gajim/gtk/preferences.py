@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import logging
 
 from gi.repository import Gtk
@@ -468,26 +467,6 @@ class Preferences(Gtk.ApplicationWindow):
             self._ui.stun_server_entry.set_sensitive(False)
 
         ### Advanced tab ###
-        ## Applications (open links with)
-        if os.name == 'nt':
-            self._ui.custom_apps_frame.set_no_show_all(True)
-            self._ui.custom_apps_frame.hide()
-        else:
-            self._ui.custom_apps_frame.hide()
-            self._ui.custom_apps_frame.set_no_show_all(True)
-
-            if app.config.get('autodetect_browser_mailer'):
-                self._ui.applications_combobox.set_active(0)
-            else:
-                self._ui.applications_combobox.set_active(1)
-                self._ui.custom_apps_frame.show()
-
-            self._ui.custom_browser_entry.set_text(
-                app.config.get('custombrowser'))
-            self._ui.custom_mail_client_entry.set_text(
-                app.config.get('custommailapp'))
-            self._ui.custom_file_manager_entry.set_text(
-                app.config.get('custom_file_manager'))
 
         ## Miscellaneous
         # Proxy
@@ -1060,24 +1039,6 @@ class Preferences(Gtk.ApplicationWindow):
         app.config.set('stun_server', widget.get_text())
 
     ### Advanced tab ###
-    # Applications
-    def on_applications_combobox_changed(self, widget):
-        if widget.get_active() == 0:
-            app.config.set('autodetect_browser_mailer', True)
-            self._ui.custom_apps_frame.hide()
-        elif widget.get_active() == 1:
-            app.config.set('autodetect_browser_mailer', False)
-            self._ui.custom_apps_frame.show()
-
-    def on_custom_browser_entry_changed(self, widget):
-        app.config.set('custombrowser', widget.get_text())
-
-    def on_custom_mail_client_entry_changed(self, widget):
-        app.config.set('custommailapp', widget.get_text())
-
-    def on_custom_file_manager_entry_changed(self, widget):
-        app.config.set('custom_file_manager', widget.get_text())
-
     # Proxies
     def on_proxies_combobox_changed(self, widget):
         active = widget.get_active()

@@ -64,10 +64,6 @@ class Config:
     DEFAULT_ICONSET = 'dcraven'
     DEFAULT_MOOD_ICONSET = 'default'
     DEFAULT_ACTIVITY_ICONSET = 'default'
-    DEFAULT_OPENWITH = 'xdg-open'
-    DEFAULT_BROWSER = 'firefox'
-    DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
-    DEFAULT_FILE_MANAGER = 'xffm'
 
     __options = ({
         # name: [ type, default_value, help_string ]
@@ -121,10 +117,6 @@ class Config:
         'sounds_on': [opt_bool, True],
         # 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
         'soundplayer': [opt_str, ''],
-        'openwith': [opt_str, DEFAULT_OPENWITH],
-        'custombrowser': [opt_str, DEFAULT_BROWSER],
-        'custommailapp': [opt_str, DEFAULT_MAILAPP],
-        'custom_file_manager': [opt_str, DEFAULT_FILE_MANAGER],
         'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nickname completion (tab) in group chat.')],
         'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when nickname is already used in group chat.')],
         'msgwin-max-state': [opt_bool, False],
@@ -176,7 +168,6 @@ class Config:
         'always_english_wikipedia': [opt_bool, False],
         'always_english_wiktionary': [opt_bool, True],
         'remote_control': [opt_bool, False, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
-        'autodetect_browser_mailer': [opt_bool, True, '', True],
         'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (\'print_time\'==sometimes), print it every x minutes.')],
         'confirm_paste_image': [opt_bool, True, _('Ask before pasting an image.')],
         'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
