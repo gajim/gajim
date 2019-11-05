@@ -260,11 +260,7 @@ class MAM(BaseModule):
 
     @staticmethod
     def _parse_gc_attrs(properties):
-        real_jid = None
-        if properties.muc_user is not None:
-            real_jid = properties.muc_user.jid
         return {'with_': properties.jid,
-                'real_jid': real_jid,
                 'kind': KindConstant.GC_MSG}
 
     def _parse_chat_attrs(self, properties):
