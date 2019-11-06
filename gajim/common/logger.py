@@ -28,6 +28,7 @@ This module allows to access the on-disk database of logs
 import os
 import sys
 import time
+import math
 import datetime
 import calendar
 import json
@@ -185,11 +186,12 @@ def caps_decoder(dict_):
 
 def timeit(func):
     def func_wrapper(self, *args, **kwargs):
-        start = time.monotonic_ns()
+        start = time.time() / 1e9
         result = func(self, *args, **kwargs)
-        exec_time = (time.monotonic_ns() - start) / 1000000
+        exec_time = (time.time() / 1e9 - start)
         level = 30 if exec_time > 50 else 10
-        log.log(level, 'Execution time for %s: %s ms', func.__name__, exec_time)
+        log.log(level, 'Execution time for %s: %s ms',
+                func.__name__, math.ceil(exec_time))
         return result
     return func_wrapper
 
