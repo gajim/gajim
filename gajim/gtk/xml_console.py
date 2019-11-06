@@ -54,6 +54,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         self.outgoing = True
         self.filter_dialog = None
         self.last_stanza = None
+        self.last_search = ''
 
         self._ui = get_builder('xml_console.ui')
         self.set_titlebar(self._ui.headerbar)
@@ -127,8 +128,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
             self._ui.search_toggle.set_active(
                 not self._ui.search_revealer.get_child_revealed())
         if event.keyval == Gdk.KEY_F3:
-            search_str = self._ui.search_entry.get_text()
-            self._find(search_str, True)
+            self._find(True)
 
     def _on_row_activated(self, _listbox, row):
         text = row.get_child().get_text()
@@ -213,15 +213,14 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         self._ui.search_entry.grab_focus()
 
     def _on_search_activate(self, _widget):
-        search_str = self._ui.search_entry.get_text()
-        self._find(search_str, True)
+        self._find(True)
 
     def _on_search_clicked(self, button):
         forward = bool(button is self._ui.search_forward)
-        search_str = self._ui.search_entry.get_text()
-        self._find(search_str, forward)
+        self._find(forward)
 
-    def _find(self, search_str, forward):
+    def _find(self, forward):
+        search_str = self._ui.search_entry.get_text()
         textbuffer = self._ui.textview.get_buffer()
         cursor_mark = textbuffer.get_insert()
         current_pos = textbuffer.get_iter_at_mark(cursor_mark)
@@ -232,6 +231,9 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         last_pos_mark = textbuffer.get_mark('last_pos')
         if last_pos_mark is not None:
             current_pos = textbuffer.get_iter_at_mark(last_pos_mark)
+
+        if search_str != self.last_search:
+            current_pos = textbuffer.get_start_iter()
 
         if forward:
             match = current_pos.forward_search(
@@ -252,6 +254,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
             textbuffer.select_range(match_start, match_end)
             mark = textbuffer.create_mark('last_pos', match_end, True)
             self._ui.textview.scroll_to_mark(mark, 0, True, 0.5, 0.5)
+        self.last_search = search_str
 
     @staticmethod
     def _get_accounts():
