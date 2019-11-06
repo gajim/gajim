@@ -1405,10 +1405,14 @@ class Logger:
             # Stanza ID is only unique within a specific archive.
             # So a Stanza ID could be repeated in different MUCs, so we
             # filter also for the archive JID which is the bare MUC jid.
+
+            # Use Unary-"+" operator for "jid_id", otherwise the
+            # idx_logs_jid_id_time index is used instead of the much better
+            # idx_logs_stanza_id index
             sql = '''
                 SELECT stanza_id FROM logs
                 WHERE stanza_id IN ({values})
-                AND jid_id = ? AND account_id = ? LIMIT 1
+                AND +jid_id = ? AND account_id = ? LIMIT 1
                 '''.format(values=', '.join('?' * len(ids)))
             result = self._con.execute(
                 sql, tuple(ids) + (archive_id, account_id)).fetchone()
