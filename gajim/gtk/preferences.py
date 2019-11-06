@@ -19,6 +19,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.common import helpers
 from gajim.common import config as c_config
 from gajim.common import idle
@@ -1078,6 +1079,10 @@ class Preferences(Gtk.ApplicationWindow):
     # Enable debug logging
     def on_enable_logging_toggled(self, widget):
         app.set_debug_mode(widget.get_active())
+
+    def _on_debug_folder_clicked(self, _widget):
+        debug_folder = configpaths.get('DEBUG')
+        helpers.launch_file_manager(debug_folder)
 
     # Advanced Config Editor (ACE)
     def on_open_advanced_editor_button_clicked(self, _widget):
