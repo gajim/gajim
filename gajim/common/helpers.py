@@ -32,6 +32,7 @@ import sys
 import re
 import os
 import subprocess
+import webbrowser
 import errno
 import select
 import base64
@@ -61,7 +62,6 @@ from nbxmpp.structs import DiscoInfo
 from nbxmpp.const import Role
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
-from gi.repository import Gio
 from gi.repository import GLib
 import precis_i18n.codec  # pylint: disable=unused-import
 
@@ -625,9 +625,11 @@ def launch_file_manager(path_to_open):
         except Exception:
             pass
     else:
-        if not path_to_open.startswith('file://'):
-            path_to_open = 'file://' + path_to_open
-        Gio.AppInfo.launch_default_for_uri(path_to_open)
+        command = build_command('xdg-open', path_to_open)
+        try:
+            exec_command(command)
+        except Exception:
+            pass
 
 def play_sound(event):
     if not app.config.get('sounds_on'):
@@ -1539,10 +1541,10 @@ def open_uri(uri, account=None):
 
     elif uri.type == URIType.MAIL:
         uri = 'mailto:%s' % uri.data
-        Gio.AppInfo.launch_default_for_uri(uri)
+        webbrowser.open(uri)
 
     elif uri.type in (URIType.WEB, URIType.GEO):
-        Gio.AppInfo.launch_default_for_uri(uri.data)
+        webbrowser.open(uri.data)
 
     elif uri.type == URIType.AT:
         app.interface.new_chat_from_jid(account, uri.data)
