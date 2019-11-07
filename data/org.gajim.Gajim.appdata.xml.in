@@ -48,23 +48,23 @@
   </categories>
   <screenshots>
     <screenshot type="default">
-      <image>https://gajim.org/imgs/gajim_single_window_mode.png</image>
-      <caption>Roster, list of contacts</caption>
+      <image>https://gajim.org/img/screenshots/single-window-mode.png</image>
+      <caption>Contact list</caption>
     </screenshot>
     <screenshot>
-      <image>https://gajim.org/imgs/gajim_tabbed_chat.png</image>
+      <image>https://gajim.org/img/screenshots/tabbed-chat.png</image>
       <caption>Tabbed chat window</caption>
     </screenshot>
     <screenshot>
-      <image>https://gajim.org/imgs/groupchat_window.png</image>
+      <image>https://gajim.org/img/screenshots/groupchat-window.png</image>
       <caption>Group chat support</caption>
     </screenshot>
     <screenshot>
-      <image>https://gajim.org/imgs/history_window.png</image>
+      <image>https://gajim.org/img/screenshots/history-window.png</image>
       <caption>Chat history</caption>
     </screenshot>
     <screenshot>
-      <image>https://gajim.org/imgs/gajim_plugins.png</image>
+      <image>https://gajim.org/img/screenshots/plugins.png</image>
       <caption>Plugin manager</caption>
     </screenshot>
   </screenshots>
