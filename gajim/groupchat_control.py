@@ -1090,31 +1090,22 @@ class GroupchatControl(ChatControlBase):
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
             return
-        if obj.gc_control == self and obj.resource:
+
+        if not obj.properties.jid.bareMatch(self.room_jid):
+            return
+
+        if obj.properties.is_muc_pm and not obj.session.control:
             # We got a pm from this room
             nick = obj.resource
-            if obj.session.control:
-                # print if a control is open
-                frm = ''
-                if obj.properties.is_sent_carbon:
-                    frm = 'out'
-                obj.session.control.add_message(
-                    obj.msgtxt,
-                    frm,
-                    tim=obj.properties.timestamp,
-                    displaymarking=obj.displaymarking,
-                    message_id=obj.properties.id,
-                    correct_id=obj.correct_id)
-            else:
-                # otherwise pass it off to the control to be queued
-                self.on_private_message(nick,
-                                        obj.properties.is_sent_carbon,
-                                        obj.msgtxt,
-                                        obj.properties.timestamp,
-                                        self.session,
-                                        obj.additional_data,
-                                        msg_log_id=obj.msg_log_id,
-                                        displaymarking=obj.displaymarking)
+            # otherwise pass it off to the control to be queued
+            self.on_private_message(nick,
+                                    obj.properties.is_sent_carbon,
+                                    obj.msgtxt,
+                                    obj.properties.timestamp,
+                                    self.session,
+                                    obj.additional_data,
+                                    msg_log_id=obj.msg_log_id,
+                                    displaymarking=obj.displaymarking)
 
     def _nec_ping(self, obj):
         if self.contact.jid != obj.contact.room_jid:
