@@ -790,6 +790,9 @@ class ChatControl(ChatControlBase):
         if obj.conn.name != self.account:
             return
 
+        if obj.properties.type.is_groupchat:
+            return
+
         if obj.properties.is_muc_pm:
             if not obj.with_ == self.contact.get_full_jid():
                 return
