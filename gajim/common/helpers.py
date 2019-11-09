@@ -1464,7 +1464,7 @@ def event_filter(filter_):
     return event_filter_decorator
 
 
-def catch_execptions(func):
+def catch_exceptions(func):
     @wraps(func)
     def func_wrapper(self, *args, **kwargs):
         try:
@@ -1532,7 +1532,7 @@ def parse_uri(uri):
     return URI(type=URIType.WEB, data=uri)
 
 
-@catch_execptions
+@catch_exceptions
 def open_uri(uri, account=None):
     if not isinstance(uri, URI):
         uri = parse_uri(uri)
@@ -1575,7 +1575,7 @@ def open_uri(uri, account=None):
         log.warning('Cant open URI: %s', uri)
 
 
-@catch_execptions
+@catch_exceptions
 def open_file(path):
     if os.name == 'nt':
         os.startfile(path)
