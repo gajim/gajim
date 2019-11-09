@@ -619,17 +619,6 @@ def get_contact_dict_for_account(account):
             contacts_dict[name] = contact
     return contacts_dict
 
-def launch_file_manager(path_to_open):
-    if os.name == 'nt':
-        try:
-            os.startfile(path_to_open) # if pywin32 is installed we open
-        except Exception:
-            pass
-    else:
-        if not path_to_open.startswith('file://'):
-            path_to_open = 'file://' + path_to_open
-        Gio.AppInfo.launch_default_for_uri(path_to_open)
-
 def play_sound(event):
     if not app.config.get('sounds_on'):
         return
@@ -1475,6 +1464,18 @@ def event_filter(filter_):
     return event_filter_decorator
 
 
+def catch_execptions(func):
+    @wraps(func)
+    def func_wrapper(self, *args, **kwargs):
+        try:
+            result = func(self, *args, **kwargs)
+        except Exception as error:
+            log.exception(error)
+            return None
+        return result
+    return func_wrapper
+
+
 def parse_uri_actions(uri):
     uri = uri[5:]
     if '?' not in uri:
@@ -1531,12 +1532,13 @@ def parse_uri(uri):
     return URI(type=URIType.WEB, data=uri)
 
 
+@catch_execptions
 def open_uri(uri, account=None):
     if not isinstance(uri, URI):
         uri = parse_uri(uri)
 
     if uri.type == URIType.FILE:
-        launch_file_manager(uri.data)
+        open_file(uri.data)
 
     elif uri.type == URIType.MAIL:
         uri = 'mailto:%s' % uri.data
@@ -1571,6 +1573,16 @@ def open_uri(uri, account=None):
 
     else:
         log.warning('Cant open URI: %s', uri)
+
+
+@catch_execptions
+def open_file(path):
+    if os.name == 'nt':
+        os.startfile(path)
+    else:
+        if not path.startswith('file://'):
+            path = 'file://' + path
+        Gio.AppInfo.launch_default_for_uri(path)
 
 
 def geo_provider_from_location(lat, lon):

@@ -47,6 +47,7 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import geo_provider_from_location
 from gajim.common.helpers import event_filter
+from gajim.common.helpers import open_file
 from gajim.common.contacts import GC_Contact
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
@@ -1449,7 +1450,7 @@ class ChatControl(ChatControlBase):
     def _on_open_ft_folder(self, widget, file_props):
         path = os.path.split(file_props.file_name)[0]
         if os.path.exists(path) and os.path.isdir(path):
-            helpers.launch_file_manager(path)
+            open_file(path)
         ev = self._get_file_props_event(file_props, 'file-completed')
         if ev:
             app.events.remove_events(self.account, self.contact.jid, event=ev)

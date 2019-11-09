@@ -26,6 +26,7 @@ from gajim.common import idle
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
+from gajim.common.helpers import open_file
 
 from gajim import message_control
 
@@ -1081,8 +1082,7 @@ class Preferences(Gtk.ApplicationWindow):
         app.set_debug_mode(widget.get_active())
 
     def _on_debug_folder_clicked(self, _widget):
-        debug_folder = configpaths.get('DEBUG')
-        helpers.launch_file_manager(debug_folder)
+        open_file(configpaths.get('DEBUG'))
 
     # Advanced Config Editor (ACE)
     def on_open_advanced_editor_button_clicked(self, _widget):

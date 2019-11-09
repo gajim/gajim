@@ -36,6 +36,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.file_props import FilesProp
+from gajim.common.helpers import open_file
 from gajim.common.modules.bytestream import (is_transfer_active,
                                              is_transfer_paused,
                                              is_transfer_stopped)
@@ -216,7 +217,7 @@ class FileTransfersWindow:
                 return
             path = os.path.split(file_props.file_name)[0]
             if os.path.exists(path) and os.path.isdir(path):
-                helpers.launch_file_manager(path)
+                open_file(path)
             self._ui.transfers_list.get_selection().unselect_all()
 
         if file_props.type_ == 'r':
@@ -1004,7 +1005,7 @@ class FileTransfersWindow:
             return
         path = os.path.split(file_props.file_name)[0]
         if os.path.exists(path) and os.path.isdir(path):
-            helpers.launch_file_manager(path)
+            open_file(path)
 
     def _on_cancel_menuitem_activate(self, widget):
         self._on_cancel_button_clicked(widget)
