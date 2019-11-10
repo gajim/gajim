@@ -167,8 +167,6 @@ class MAM(BaseModule):
             self._log.debug(stanza)
             raise nbxmpp.NodeProcessed
 
-        event_attrs = {}
-
         is_groupchat = properties.type.is_groupchat
         if is_groupchat:
             kind = KindConstant.GC_MSG
@@ -230,25 +228,10 @@ class MAM(BaseModule):
                 self._log.info('Found duplicate with fallback for mam:1')
                 return
 
-        event_attrs.update(
-            {'conn': self._con,
-             'account': self._account,
-             'additional_data': additional_data,
-             'stanza_id': stanza_id,
-             'origin_id': message_id,
-             'correct_id': parse_correction(properties),
-             'archive_jid': properties.mam.archive,
-             'msgtxt': properties.body,
-             'message': stanza,
-             'stanza': stanza,
-             'properties': properties,
-             'kind': kind,
-             })
-
         app.logger.insert_into_logs(self._account,
                                     with_,
                                     properties.mam.timestamp,
-                                    event_attrs['kind'],
+                                    kind,
                                     unread=False,
                                     message=msgtxt,
                                     contact_name=properties.muc_nickname,
@@ -257,7 +240,21 @@ class MAM(BaseModule):
                                     message_id=properties.id)
 
         app.nec.push_incoming_event(
-            NetworkEvent('mam-decrypted-message-received', **event_attrs))
+            NetworkEvent('mam-decrypted-message-received',
+                         conn=self._con,
+                         account=self._account,
+                         additional_data=additional_data,
+                         stanza_id=stanza_id,
+                         origin_id=message_id,
+                         correct_id=parse_correction(properties),
+                         archive_jid=properties.mam.archive,
+                         msgtxt=properties.body,
+                         message=stanza,
+                         stanza=stanza,
+                         properties=properties,
+                         kind=kind,
+                         )
+        )
 
     def _is_valid_request(self, properties):
         valid_id = self._mam_query_ids.get(str(properties.mam.archive), None)
