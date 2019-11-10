@@ -243,13 +243,9 @@ class MAM(BaseModule):
             NetworkEvent('mam-decrypted-message-received',
                          account=self._account,
                          additional_data=additional_data,
-                         stanza_id=stanza_id,
-                         origin_id=message_id,
                          correct_id=parse_correction(properties),
                          archive_jid=properties.mam.archive,
                          msgtxt=properties.body,
-                         message=stanza,
-                         stanza=stanza,
                          properties=properties,
                          kind=kind,
                          )
