@@ -794,10 +794,10 @@ class ChatControl(ChatControlBase):
             return
 
         if obj.properties.is_muc_pm:
-            if not obj.with_ == self.contact.get_full_jid():
+            if not obj.properties.jid == self.contact.get_full_jid():
                 return
         else:
-            if not obj.with_.bareMatch(self.contact.jid):
+            if not obj.properties.jid.bareMatch(self.contact.jid):
                 return
 
         kind = '' # incoming

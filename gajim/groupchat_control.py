@@ -815,7 +815,7 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account'])
     def _nec_mam_decrypted_message_received(self, obj):
-        if not obj.groupchat:
+        if not obj.properties.type.is_groupchat:
             return
         if obj.archive_jid != self.room_jid:
             return

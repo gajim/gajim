@@ -169,12 +169,14 @@ class MAM(BaseModule):
 
         event_attrs = {}
 
-        groupchat = properties.type.is_groupchat
-
-        if groupchat:
-            event_attrs.update(self._parse_gc_attrs(properties))
+        is_groupchat = properties.type.is_groupchat
+        if is_groupchat:
+            kind = KindConstant.GC_MSG
         else:
-            event_attrs.update(self._parse_chat_attrs(properties))
+            if properties.from_.bareMatch(self._con.get_own_jid()):
+                kind = KindConstant.CHAT_MSG_SENT
+            else:
+                kind = KindConstant.CHAT_MSG_RECV
 
         stanza_id, message_id = self._get_unique_id(properties)
 
@@ -184,7 +186,7 @@ class MAM(BaseModule):
                                          str(properties.mam.archive),
                                          stanza_id,
                                          message_id,
-                                         groupchat=groupchat):
+                                         groupchat=is_groupchat):
                 self._log.info('Found duplicate with stanza-id: %s, '
                                'message-id: %s', stanza_id, message_id)
                 raise nbxmpp.NodeProcessed
@@ -232,7 +234,6 @@ class MAM(BaseModule):
             {'conn': self._con,
              'account': self._account,
              'additional_data': additional_data,
-             'groupchat': groupchat,
              'stanza_id': stanza_id,
              'origin_id': message_id,
              'correct_id': parse_correction(properties),
@@ -242,6 +243,7 @@ class MAM(BaseModule):
              'stanza': stanza,
              'namespace': properties.mam.namespace,
              'properties': properties,
+             'kind': kind,
              })
 
         app.logger.insert_into_logs(self._account,
@@ -257,20 +259,6 @@ class MAM(BaseModule):
 
         app.nec.push_incoming_event(
             NetworkEvent('mam-decrypted-message-received', **event_attrs))
-
-    @staticmethod
-    def _parse_gc_attrs(properties):
-        return {'with_': properties.jid,
-                'kind': KindConstant.GC_MSG}
-
-    def _parse_chat_attrs(self, properties):
-        if properties.from_.bareMatch(self._con.get_own_jid()):
-            kind = KindConstant.CHAT_MSG_SENT
-        else:
-            kind = KindConstant.CHAT_MSG_RECV
-
-        return {'with_': properties.jid,
-                'kind': kind}
 
     def _is_valid_request(self, properties):
         valid_id = self._mam_query_ids.get(str(properties.mam.archive), None)
