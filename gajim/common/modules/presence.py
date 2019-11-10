@@ -63,7 +63,13 @@ class Presence(BaseModule):
 
     def _presence_received(self, _con, stanza, properties):
         if properties.from_muc:
-            # Already handled in MUC module
+            # MUC occupant presences are already handled in MUC module
+            return
+
+        muc = self._con.get_module('MUC').get_manager().get(properties.jid)
+        if muc is not None:
+            # Presence from the MUC itself, used for MUC avatar
+            # handled in VCardAvatars module
             return
 
         self._log.info('Received from %s', properties.jid)
@@ -86,9 +92,9 @@ class Presence(BaseModule):
                              show=properties.show.value))
             return
 
-        contacts = app.contacts.get_jid_list(self._account)
-        if (properties.jid.getBare() not in contacts and
-                not properties.is_self_bare):
+        jid = properties.jid.getBare()
+        roster_item = self._con.get_module('Roster').get_item(jid)
+        if not properties.is_self_bare and roster_item is None:
             # Handle only presence from roster contacts
             self._log.warning('Unknown presence received')
             self._log.warning(stanza)
