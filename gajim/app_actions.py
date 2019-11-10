@@ -356,7 +356,7 @@ def open_mail(_action, param):
 
 
 def open_link(_action, param):
-    account, uri = param.get_string()
+    account, uri = param.get_strv()
     helpers.open_uri(uri, account=account)
 
 
