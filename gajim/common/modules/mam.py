@@ -241,7 +241,6 @@ class MAM(BaseModule):
              'msgtxt': properties.body,
              'message': stanza,
              'stanza': stanza,
-             'namespace': properties.mam.namespace,
              'properties': properties,
              'kind': kind,
              })
