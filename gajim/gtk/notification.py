@@ -67,6 +67,10 @@ class Notification:
         if sys.platform in ('win32', 'darwin'):
             return
 
+        if app.is_flatpak():
+            self._dbus_available = True
+            return
+
         def on_proxy_ready(_source, res, _data=None):
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
