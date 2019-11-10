@@ -786,10 +786,8 @@ class ChatControl(ChatControlBase):
             fixed.set_no_show_all(True)
             self.close_jingle_content(jingle_type)
 
+    @event_filter(['account'])
     def _nec_mam_decrypted_message_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-
         if obj.properties.type.is_groupchat:
             return
 

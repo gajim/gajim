@@ -241,7 +241,6 @@ class MAM(BaseModule):
 
         app.nec.push_incoming_event(
             NetworkEvent('mam-decrypted-message-received',
-                         conn=self._con,
                          account=self._account,
                          additional_data=additional_data,
                          stanza_id=stanza_id,
