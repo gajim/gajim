@@ -443,10 +443,3 @@ class MessageTextView(Gtk.TextView):
         if self.undo_list:
             _buffer.set_text(self.undo_list.pop())
         self.undo_pressed = True
-
-    def get_sensitive(self):
-        # get sensitive is not in GTK < 2.18
-        try:
-            return super(MessageTextView, self).get_sensitive()
-        except AttributeError:
-            return self.get_property('sensitive')
