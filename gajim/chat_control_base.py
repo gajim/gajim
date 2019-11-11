@@ -49,7 +49,7 @@ from gajim import message_control
 
 from gajim.message_control import MessageControl
 from gajim.conversation_textview import ConversationTextview
-from gajim.message_textview import MessageTextView
+from gajim.message_input import MessageInputTextView
 
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
@@ -80,7 +80,7 @@ if app.is_installed('GSPELL'):
 ################################################################################
 class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     """
-    A base class containing a banner, ConversationTextview, MessageTextView
+    A base class containing a banner, ConversationTextview, MessageInputTextView
     """
 
     # This is needed so copying text from the conversation textview
@@ -289,8 +289,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.correcting = False
         self.last_sent_msg = None
 
-        # add MessageTextView to UI and connect signals
-        self.msg_textview = MessageTextView()
+        # add MessageInputTextView to UI and connect signals
+        self.msg_textview = MessageInputTextView()
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.add(self.msg_textview)
 
@@ -547,7 +547,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def _on_html_textview_grab_focus(self, textview):
         # Abort signal so the textview does not get focused
-        # Focus the MessageTextView instead
+        # Focus the MessageInputTextView instead
         GObject.signal_stop_emission_by_name(textview, 'grab-focus')
         self.msg_textview.grab_focus()
         return Gdk.EVENT_STOP

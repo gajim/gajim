@@ -34,7 +34,7 @@ if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
 
-class MessageTextView(Gtk.TextView):
+class MessageInputTextView(Gtk.TextView):
     """
     Class for the message textview (where user writes new messages) for
     chat/groupchat windows
