@@ -90,12 +90,15 @@ class MessageTextView(Gtk.TextView):
         self.begin_tags['italic'] = '<em>'
         self.end_tags['italic'] = '</em>'
         self.other_tags['underline'] = buffer_.create_tag('underline')
-        self.other_tags['underline'].set_property('underline', Pango.Underline.SINGLE)
-        self.begin_tags['underline'] = '<span style="text-decoration: underline;">'
+        self.other_tags['underline'].set_property('underline',
+                                                  Pango.Underline.SINGLE)
+        underline = '<span style="text-decoration: underline;">'
+        self.begin_tags['underline'] = underline
         self.end_tags['underline'] = '</span>'
         self.other_tags['strike'] = buffer_.create_tag('strike')
         self.other_tags['strike'].set_property('strikethrough', True)
-        self.begin_tags['strike'] = '<span style="text-decoration: line-through;">'
+        strike = '<span style="text-decoration: line-through;">'
+        self.begin_tags['strike'] = strike
         self.end_tags['strike'] = '</span>'
 
         self.connect('paste-clipboard', self._paste_clipboard)
@@ -240,13 +243,15 @@ class MessageTextView(Gtk.TextView):
         _buffer = self.get_buffer()
         # Create #aabbcc color string from rgba color
         color_string = '#%02X%02X%02X' % (round(color.red*255),
-            round(color.green*255), round(color.blue*255))
+                                          round(color.green*255),
+                                          round(color.blue*255))
 
         tag_name = 'color' + color_string
         if not tag_name in self.color_tags:
-            tagColor = _buffer.create_tag(tag_name)
-            tagColor.set_property('foreground', color_string)
-            self.begin_tags[tag_name] = '<span style="color: %s;">' % color_string
+            tag_color = _buffer.create_tag(tag_name)
+            tag_color.set_property('foreground', color_string)
+            begin = '<span style="color: %s;">' % color_string
+            self.begin_tags[tag_name] = begin
             self.end_tags[tag_name] = '</span>'
             self.color_tags.append(tag_name)
 
@@ -276,8 +281,8 @@ class MessageTextView(Gtk.TextView):
 
         tag_name = 'font' + font
         if not tag_name in self.fonts_tags:
-            tagFont = _buffer.create_tag(tag_name)
-            tagFont.set_property('font', family + ' ' + str(size))
+            tag_font = _buffer.create_tag(tag_name)
+            tag_font.set_property('font', family + ' ' + str(size))
             self.begin_tags[tag_name] = \
                     '<span style="font-family: ' + family + '; ' + \
                     'font-size: ' + str(size) + 'px">'
@@ -335,7 +340,8 @@ class MessageTextView(Gtk.TextView):
 
             for tag in iter_.get_tags():
                 tag_name = tag.get_property('name')
-                if tag_name not in self.begin_tags or tag_name not in self.end_tags:
+                if (tag_name not in self.begin_tags or
+                        tag_name not in self.end_tags):
                     continue
                 if tag_name not in new_tags:
                     old_tags.append(tag_name)
@@ -355,7 +361,8 @@ class MessageTextView(Gtk.TextView):
             for tag in old_tags:
                 text += self.begin_tags[tag]
 
-        text += xhtml_special(_buffer.get_text(old, _buffer.get_end_iter(), True))
+        buffer_text = _buffer.get_text(old, _buffer.get_end_iter(), True)
+        text += xhtml_special(buffer_text)
         for tag in iter_.get_toggled_tags(False):
             tag_name = tag.get_property('name')
             if tag_name not in self.end_tags:
@@ -363,7 +370,8 @@ class MessageTextView(Gtk.TextView):
             text += self.end_tags[tag_name]
 
         if modified:
-            return build_xhtml_body('<p>%s</p>' % self.make_clickable_urls(text))
+            wrapped_text = '<p>%s</p>' % self.make_clickable_urls(text)
+            return build_xhtml_body(wrapped_text)
         return None
 
     def replace_emojis(self):
@@ -413,7 +421,7 @@ class MessageTextView(Gtk.TextView):
             self.add_child_at_anchor(image, anchor)
         buffer_.insert_at_cursor(' ')
 
-    def clear(self, widget=None):
+    def clear(self, _widget=None):
         """
         Clear text in the textview
         """
@@ -427,7 +435,7 @@ class MessageTextView(Gtk.TextView):
             del self.undo_list[0]
         self.undo_pressed = False
 
-    def undo(self, widget=None):
+    def undo(self, _widget=None):
         """
         Undo text in the textview
         """
