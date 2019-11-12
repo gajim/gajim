@@ -91,117 +91,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     # Multiple hardware keycodes can trigger a keyval like Gdk.KEY_c.
     keycodes_c = get_hardware_key_codes(Gdk.KEY_c)
 
-    def get_nb_unread(self):
-        jid = self.contact.jid
-        if self.resource:
-            jid += '/' + self.resource
-        type_ = self.type_id
-        return len(app.events.get_events(self.account, jid, ['printed_' + type_,
-                type_]))
-
-    def draw_banner(self):
-        """
-        Draw the fat line at the top of the window that houses the icon, jid, etc
-
-        Derived types MAY implement this.
-        """
-        self.draw_banner_text()
-        self._update_banner_state_image()
-        app.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
-            self)
-
-    def update_toolbar(self):
-        """
-        update state of buttons in toolbar
-        """
-        self._update_toolbar()
-        app.plugin_manager.gui_extension_point(
-            'chat_control_base_update_toolbar', self)
-
-    def draw_banner_text(self):
-        """
-        Derived types SHOULD implement this
-        """
-
-    def update_ui(self):
-        """
-        Derived types SHOULD implement this
-        """
-        self.draw_banner()
-
-    def repaint_themed_widgets(self):
-        """
-        Derived types MAY implement this
-        """
-        self.draw_banner()
-
-    def _update_banner_state_image(self):
-        """
-        Derived types MAY implement this
-        """
-
-    def _update_toolbar(self):
-        """
-        Derived types MAY implement this
-        """
-
-    def _nec_our_status(self, obj):
-        if self.account != obj.conn.name:
-            return
-        if obj.show == 'offline' or (obj.show == 'invisible' and \
-        obj.conn.is_zeroconf):
-            self.got_disconnected()
-        else:
-            # Other code rejoins all GCs, so we don't do it here
-            if not self.type_id == message_control.TYPE_GC:
-                self.got_connected()
-        if self.parent_win:
-            self.parent_win.redraw_tab(self)
-
-    def _nec_ping(self, obj):
-        raise NotImplementedError
-
-    def setup_seclabel(self):
-        self.xml.label_selector.hide()
-        self.xml.label_selector.set_no_show_all(True)
-        lb = Gtk.ListStore(str)
-        self.xml.label_selector.set_model(lb)
-        cell = Gtk.CellRendererText()
-        cell.set_property('xpad', 5)  # padding for status text
-        self.xml.label_selector.pack_start(cell, True)
-        # text to show is in in first column of liststore
-        self.xml.label_selector.add_attribute(cell, 'text', 0)
-        con = app.connections[self.account]
-        jid = self.contact.jid
-        if self.TYPE_ID == 'pm':
-            jid = self.gc_contact.room_jid
-        if con.get_module('SecLabels').supported:
-            con.get_module('SecLabels').request_catalog(jid)
-
-    def _sec_labels_received(self, event):
-        if event.account != self.account:
-            return
-
-        jid = self.contact.jid
-        if self.TYPE_ID == 'pm':
-            jid = self.gc_contact.room_jid
-
-        if event.jid != jid:
-            return
-        model = self.xml.label_selector.get_model()
-        model.clear()
-
-        sel = 0
-        _label, labellist, default = event.catalog
-        for index, label in enumerate(labellist):
-            model.append([label])
-            if label == default:
-                sel = index
-
-        self.xml.label_selector.set_active(sel)
-        self.xml.label_selector.set_no_show_all(False)
-        self.xml.label_selector.show_all()
-
     def __init__(self, type_id, parent_win, widget_name, contact, acct,
     resource=None):
         # Undo needs this variable to know if space has been pressed.
@@ -375,6 +264,117 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
+
+    def get_nb_unread(self):
+        jid = self.contact.jid
+        if self.resource:
+            jid += '/' + self.resource
+        type_ = self.type_id
+        return len(app.events.get_events(self.account, jid, ['printed_' + type_,
+                type_]))
+
+    def draw_banner(self):
+        """
+        Draw the fat line at the top of the window that houses the icon, jid, etc
+
+        Derived types MAY implement this.
+        """
+        self.draw_banner_text()
+        self._update_banner_state_image()
+        app.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
+            self)
+
+    def update_toolbar(self):
+        """
+        update state of buttons in toolbar
+        """
+        self._update_toolbar()
+        app.plugin_manager.gui_extension_point(
+            'chat_control_base_update_toolbar', self)
+
+    def draw_banner_text(self):
+        """
+        Derived types SHOULD implement this
+        """
+
+    def update_ui(self):
+        """
+        Derived types SHOULD implement this
+        """
+        self.draw_banner()
+
+    def repaint_themed_widgets(self):
+        """
+        Derived types MAY implement this
+        """
+        self.draw_banner()
+
+    def _update_banner_state_image(self):
+        """
+        Derived types MAY implement this
+        """
+
+    def _update_toolbar(self):
+        """
+        Derived types MAY implement this
+        """
+
+    def _nec_our_status(self, obj):
+        if self.account != obj.conn.name:
+            return
+        if obj.show == 'offline' or (obj.show == 'invisible' and \
+        obj.conn.is_zeroconf):
+            self.got_disconnected()
+        else:
+            # Other code rejoins all GCs, so we don't do it here
+            if not self.type_id == message_control.TYPE_GC:
+                self.got_connected()
+        if self.parent_win:
+            self.parent_win.redraw_tab(self)
+
+    def _nec_ping(self, obj):
+        raise NotImplementedError
+
+    def setup_seclabel(self):
+        self.xml.label_selector.hide()
+        self.xml.label_selector.set_no_show_all(True)
+        lb = Gtk.ListStore(str)
+        self.xml.label_selector.set_model(lb)
+        cell = Gtk.CellRendererText()
+        cell.set_property('xpad', 5)  # padding for status text
+        self.xml.label_selector.pack_start(cell, True)
+        # text to show is in in first column of liststore
+        self.xml.label_selector.add_attribute(cell, 'text', 0)
+        con = app.connections[self.account]
+        jid = self.contact.jid
+        if self.TYPE_ID == 'pm':
+            jid = self.gc_contact.room_jid
+        if con.get_module('SecLabels').supported:
+            con.get_module('SecLabels').request_catalog(jid)
+
+    def _sec_labels_received(self, event):
+        if event.account != self.account:
+            return
+
+        jid = self.contact.jid
+        if self.TYPE_ID == 'pm':
+            jid = self.gc_contact.room_jid
+
+        if event.jid != jid:
+            return
+        model = self.xml.label_selector.get_model()
+        model.clear()
+
+        sel = 0
+        _label, labellist, default = event.catalog
+        for index, label in enumerate(labellist):
+            model.append([label])
+            if label == default:
+                sel = index
+
+        self.xml.label_selector.set_active(sel)
+        self.xml.label_selector.set_no_show_all(False)
+        self.xml.label_selector.show_all()
 
     def delegate_action(self, action):
         if action == 'browse-history':
