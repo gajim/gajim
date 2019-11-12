@@ -14,7 +14,6 @@ finish-args:
   - --socket=pulseaudio
   - --system-talk-name=org.freedesktop.GeoClue2
   - --system-talk-name=org.freedesktop.login1
-  - --talk-name=org.gnome.ScreenSaver
   - --talk-name=org.mpris.MediaPlayer2.*
   - --talk-name=org.freedesktop.portal.Fcitx
   # Automatic status

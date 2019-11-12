@@ -49,7 +49,6 @@ from nbxmpp.structs import TuneData
 
 from gajim.common import app
 from gajim.common import events
-from gajim.common.dbus import screensaver
 from gajim.common.dbus import location
 from gajim.common.dbus import music_track
 from gajim.common.dbus import logind
@@ -2158,10 +2157,8 @@ class Interface:
             app.gajim_optional_features[a] = []
             app.caps_hash[a] = ''
 
-        # Handle screensaver
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
-            screensaver.enable()
 
         self.show_vcard_when_connect = []
 
