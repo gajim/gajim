@@ -158,6 +158,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
+    def _nec_ping(self, obj):
+        raise NotImplementedError
+
     def setup_seclabel(self):
         self.xml.label_selector.hide()
         self.xml.label_selector.set_no_show_all(True)
@@ -353,18 +356,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
         app.plugin_manager.gui_extension_point('chat_control_base', self)
 
-        app.ged.register_event_handler('our-show', ged.GUI1,
-            self._nec_our_status)
-        app.ged.register_event_handler('ping-sent', ged.GUI1,
-            self._nec_ping)
-        app.ged.register_event_handler('ping-reply', ged.GUI1,
-            self._nec_ping)
-        app.ged.register_event_handler('ping-error', ged.GUI1,
-            self._nec_ping)
-        app.ged.register_event_handler('sec-catalog-received', ged.GUI1,
-            self._sec_labels_received)
-        app.ged.register_event_handler('style-changed', ged.GUI1,
-            self._style_changed)
+        # pylint: disable=line-too-long
+        self._base_event_handlers = [
+            ('our-show', ged.GUI1, self._nec_our_status),
+            ('ping-sent', ged.GUI1, self._nec_ping),
+            ('ping-reply', ged.GUI1, self._nec_ping),
+            ('ping-error', ged.GUI1, self._nec_ping),
+            ('sec-catalog-received', ged.GUI1, self._sec_labels_received),
+            ('style-changed', ged.GUI1, self._style_changed),
+        ]
+        # pylint: enable=line-too-long
+
+        for handler in self._base_event_handlers:
+            app.ged.register_event_handler(*handler)
 
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
@@ -578,13 +582,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             'chat_control_base_draw_banner', self)
         app.plugin_manager.remove_gui_extension_point(
             'chat_control_base_update_toolbar', self)
-        app.ged.remove_event_handler('our-show', ged.GUI1,
-            self._nec_our_status)
-        app.ged.remove_event_handler('sec-catalog-received', ged.GUI1,
-            self._sec_labels_received)
-        app.ged.remove_event_handler('style-changed', ged.GUI1,
-            self._style_changed)
 
+        # Unregister handlers
+        for handler in self._base_event_handlers:
+            app.ged.remove_event_handler(*handler)
 
     def on_msg_textview_populate_popup(self, textview, menu):
         """

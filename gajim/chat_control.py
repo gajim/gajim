@@ -202,41 +202,31 @@ class ChatControl(ChatControlBase):
         self.restore_conversation()
         self.msg_textview.grab_focus()
 
-        app.ged.register_event_handler('nickname-received', ged.GUI1,
-            self._on_nickname_received)
-        app.ged.register_event_handler('mood-received', ged.GUI1,
-            self._on_mood_received)
-        app.ged.register_event_handler('activity-received', ged.GUI1,
-            self._on_activity_received)
-        app.ged.register_event_handler('tune-received', ged.GUI1,
-            self._on_tune_received)
-        app.ged.register_event_handler('location-received', ged.GUI1,
-            self._on_location_received)
-        app.ged.register_event_handler('update-client-info', ged.GUI1,
-            self._on_update_client_info)
+        # pylint: disable=line-too-long
+        self._event_handlers = [
+            ('nickname-received', ged.GUI1, self._on_nickname_received),
+            ('mood-received', ged.GUI1, self._on_mood_received),
+            ('activity-received', ged.GUI1, self._on_activity_received),
+            ('tune-received', ged.GUI1, self._on_tune_received),
+            ('location-received', ged.GUI1, self._on_location_received),
+            ('update-client-info', ged.GUI1, self._on_update_client_info),
+            ('chatstate-received', ged.GUI1, self._nec_chatstate_received),
+            ('caps-update', ged.GUI1, self._nec_caps_received),
+            ('message-sent', ged.OUT_POSTCORE, self._message_sent),
+            ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
+            ('decrypted-message-received', ged.GUI1, self._nec_decrypted_message_received),
+            ('receipt-received', ged.GUI1, self._receipt_received),
+            ('message-error', ged.GUI1, self._on_message_error),
+            ('zeroconf-error', ged.GUI1, self._on_zeroconf_error),
+        ]
+
         if self.TYPE_ID == message_control.TYPE_CHAT:
             # Dont connect this when PrivateChatControl is used
-            app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
-                self._nec_update_avatar)
-        app.ged.register_event_handler('chatstate-received', ged.GUI1,
-            self._nec_chatstate_received)
-        app.ged.register_event_handler('caps-update', ged.GUI1,
-            self._nec_caps_received)
-        app.ged.register_event_handler('message-sent', ged.OUT_POSTCORE,
-            self._message_sent)
-        app.ged.register_event_handler(
-            'mam-decrypted-message-received',
-            ged.GUI1, self._nec_mam_decrypted_message_received)
-        app.ged.register_event_handler(
-            'decrypted-message-received',
-            ged.GUI1, self._nec_decrypted_message_received)
-        app.ged.register_event_handler(
-            'receipt-received',
-            ged.GUI1, self._receipt_received)
-        app.ged.register_event_handler('message-error',
-                                       ged.GUI1, self._on_message_error)
-        app.ged.register_event_handler('zeroconf-error', ged.GUI1,
-                                       self._on_zeroconf_error)
+            self._event_handlers.append(('update-roster-avatar', ged.GUI1, self._nec_update_avatar))
+        # pylint: enable=line-too-long
+
+        for handler in self._event_handlers:
+            app.ged.register_event_handler(*handler)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -1030,36 +1020,10 @@ class ChatControl(ChatControlBase):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
         app.plugin_manager.remove_gui_extension_point('chat_control', self)
-        app.ged.remove_event_handler('nickname-received', ged.GUI1,
-            self._on_nickname_received)
-        app.ged.remove_event_handler('mood-received', ged.GUI1,
-            self._on_mood_received)
-        app.ged.remove_event_handler('activity-received', ged.GUI1,
-            self._on_activity_received)
-        app.ged.remove_event_handler('tune-received', ged.GUI1,
-            self._on_tune_received)
-        app.ged.remove_event_handler('location-received', ged.GUI1,
-            self._on_location_received)
-        app.ged.remove_event_handler('update-client-info', ged.GUI1,
-            self._on_update_client_info)
-        if self.TYPE_ID == message_control.TYPE_CHAT:
-            app.ged.remove_event_handler('update-roster-avatar', ged.GUI1,
-                self._nec_update_avatar)
-        app.ged.remove_event_handler('chatstate-received', ged.GUI1,
-            self._nec_chatstate_received)
-        app.ged.remove_event_handler('caps-update', ged.GUI1,
-            self._nec_caps_received)
-        app.ged.remove_event_handler('message-sent', ged.OUT_POSTCORE,
-            self._message_sent)
-        app.ged.remove_event_handler(
-            'mam-decrypted-message-received',
-            ged.GUI1, self._nec_mam_decrypted_message_received)
-        app.ged.remove_event_handler(
-            'decrypted-message-received',
-            ged.GUI1, self._nec_decrypted_message_received)
-        app.ged.remove_event_handler(
-            'receipt-received',
-            ged.GUI1, self._receipt_received)
+
+        # Unregister handlers
+        for handler in self._event_handlers:
+            app.ged.remove_event_handler(*handler)
 
         self.unsubscribe_events()
 
