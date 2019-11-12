@@ -199,8 +199,6 @@ class ChatControl(ChatControlBase):
             session.control = self
             self.session = session
 
-        # Enable encryption if needed
-        self.no_autonegotiation = False
         self.add_actions()
         self.update_ui()
         self.set_lock_image()

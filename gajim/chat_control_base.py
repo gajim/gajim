@@ -838,8 +838,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def _on_drag_motion(self, *args):
         # FIXME: DND on non editable TextView, find a better way
         if not self.drag_entered:
-            # We drag new data over the TextView, make it editable to catch dnd
-            self.drag_entered_conv = True
             self.conv_textview.tv.set_editable(True)
 
     def drag_data_file_transfer(self, contact, selection, _widget):
@@ -1459,7 +1457,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.msg_textview.set_editable(False)
         self.conv_textview.tv.grab_focus()
 
-        self.no_autonegotiation = False
         self.update_toolbar()
 
 
