@@ -34,9 +34,14 @@ from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gdk
-from nbxmpp.protocol import NS_XHTML_IM, NS_FILE, NS_MUC
-from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
-from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
+
+from nbxmpp.protocol import NS_XHTML_IM
+from nbxmpp.protocol import NS_FILE
+from nbxmpp.protocol import NS_MUC
+from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO
+from nbxmpp.protocol import NS_JINGLE_RTP_VIDEO
+from nbxmpp.protocol import NS_JINGLE_ICE_UDP
+from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
 
 from gajim.common import app
 from gajim.common import helpers
@@ -82,11 +87,11 @@ class ChatControl(ChatControlBase):
     A control for standard 1-1 chat
     """
     (
-            JINGLE_STATE_NULL,
-            JINGLE_STATE_CONNECTING,
-            JINGLE_STATE_CONNECTION_RECEIVED,
-            JINGLE_STATE_CONNECTED,
-            JINGLE_STATE_ERROR
+        JINGLE_STATE_NULL,
+        JINGLE_STATE_CONNECTING,
+        JINGLE_STATE_CONNECTION_RECEIVED,
+        JINGLE_STATE_CONNECTED,
+        JINGLE_STATE_ERROR
     ) = range(5)
 
     TYPE_ID = message_control.TYPE_CHAT
@@ -97,8 +102,13 @@ class ChatControl(ChatControlBase):
     COMMAND_HOST = ChatCommands  # type: ClassVar[Type[CommandHost]]
 
     def __init__(self, parent_win, contact, acct, session, resource=None):
-        ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-            'chat_control', contact, acct, resource)
+        ChatControlBase.__init__(self,
+                                 self.TYPE_ID,
+                                 parent_win,
+                                 'chat_control',
+                                 contact,
+                                 acct,
+                                 resource)
 
         self.last_recv_message_id = None
         self.last_recv_message_marks = None
@@ -133,13 +143,13 @@ class ChatControl(ChatControlBase):
         # Hook up signals
         widget = self.xml.location_eventbox
         id_ = widget.connect('button-release-event',
-            self.on_location_eventbox_button_release_event)
+                             self.on_location_eventbox_button_release_event)
         self.handlers[id_] = widget
         id_ = widget.connect('enter-notify-event',
-            self.on_location_eventbox_enter_notify_event)
+                             self.on_location_eventbox_enter_notify_event)
         self.handlers[id_] = widget
         id_ = widget.connect('leave-notify-event',
-            self.on_location_eventbox_leave_notify_event)
+                             self.on_location_eventbox_leave_notify_event)
         self.handlers[id_] = widget
 
         for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
@@ -154,7 +164,8 @@ class ChatControl(ChatControlBase):
         self.handlers[id_] = widget
 
         widget = self.xml.sound_hscale
-        id_ = widget.connect('value_changed', self.on_sound_hscale_value_changed)
+        id_ = widget.connect('value_changed',
+                             self.on_sound_hscale_value_changed)
         self.handlers[id_] = widget
 
         self.info_bar = Gtk.InfoBar()
@@ -307,14 +318,14 @@ class ChatControl(ChatControlBase):
         jingle_conditions = (
             (self.contact.supports(NS_FILE) or
              self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)) and
-             self.contact.show != 'offline')
+            self.contact.show != 'offline')
         jingle = win.lookup_action('send-file-jingle-' + self.control_id)
         jingle.set_enabled(online and jingle_conditions)
 
         # Send file
         win.lookup_action(
             'send-file-' + self.control_id).set_enabled(
-            jingle.get_enabled() or httpupload.get_enabled())
+                jingle.get_enabled() or httpupload.get_enabled())
 
         # Set File Transfer Button tooltip
         if online and (httpupload.get_enabled() or jingle.get_enabled()):
@@ -361,13 +372,13 @@ class ChatControl(ChatControlBase):
 
         return Gdk.EVENT_PROPAGATE
 
-    def _on_add_to_roster(self, action, param):
+    def _on_add_to_roster(self, _action, _param):
         AddNewContactWindow(self.account, self.contact.jid)
 
-    def _on_information(self, action, param):
+    def _on_information(self, _action, _param):
         app.interface.roster.on_info(None, self.contact, self.account)
 
-    def _on_invite_contacts(self, action, param):
+    def _on_invite_contacts(self, _action, _param):
         """
         User wants to invite some friends to chat
         """
@@ -464,6 +475,7 @@ class ChatControl(ChatControlBase):
             return self.xml.tune_image
         if type_ == PEPEventType.LOCATION:
             return self.xml.location_image
+        return None
 
     @ensure_proper_control
     def _on_mood_received(self, _event):
@@ -505,17 +517,17 @@ class ChatControl(ChatControlBase):
         else:
             banner_image.show()
         if state == self.JINGLE_STATE_CONNECTING:
-            banner_image.set_from_icon_name(
-                    'network-transmit-symbolic', Gtk.IconSize.MENU)
+            banner_image.set_from_icon_name('network-transmit-symbolic',
+                                            Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_CONNECTION_RECEIVED:
-            banner_image.set_from_icon_name(
-                    'network-receive-symbolic', Gtk.IconSize.MENU)
+            banner_image.set_from_icon_name('network-receive-symbolic',
+                                            Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_CONNECTED:
-            banner_image.set_from_icon_name(
-                    'network-transmit-receive-symbolic', Gtk.IconSize.MENU)
+            banner_image.set_from_icon_name('network-transmit-receive-symbolic',
+                                            Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_ERROR:
-            banner_image.set_from_icon_name(
-                    'network-error-symbolic', Gtk.IconSize.MENU)
+            banner_image.set_from_icon_name('network-error-symbolic',
+                                            Gtk.IconSize.MENU)
         self.update_toolbar()
 
     def update_audio(self):
@@ -552,7 +564,7 @@ class ChatControl(ChatControlBase):
         # update MessageWindow._controls
         self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
 
-    def stop_jingle(self, sid=None, reason=None):
+    def stop_jingle(self, sid=None, _reason=None):
         if self.audio_sid and sid in (self.audio_sid, None):
             self.close_jingle_content('audio')
         if self.video_sid and sid in (self.video_sid, None):
@@ -563,20 +575,24 @@ class ChatControl(ChatControlBase):
             return
         if state in ('connecting', 'connected', 'stop', 'error') and reason:
             info = _('%(type)s state : %(state)s, reason: %(reason)s') % {
-                    'type': jingle_type.capitalize(), 'state': state, 'reason': reason}
+                'type': jingle_type.capitalize(),
+                'state': state,
+                'reason': reason}
             self.add_info_message(info)
 
         states = {'connecting': self.JINGLE_STATE_CONNECTING,
-                'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
-                'connected': self.JINGLE_STATE_CONNECTED,
-                'stop': self.JINGLE_STATE_NULL,
-                'error': self.JINGLE_STATE_ERROR}
+                  'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
+                  'connected': self.JINGLE_STATE_CONNECTED,
+                  'stop': self.JINGLE_STATE_NULL,
+                  'error': self.JINGLE_STATE_ERROR}
 
         jingle_state = states[state]
-        if getattr(self, jingle_type + '_state') == jingle_state or state == 'error':
+        if (getattr(self, jingle_type + '_state') == jingle_state or
+                state == 'error'):
             return
 
-        if state == 'stop' and getattr(self, jingle_type + '_sid') not in (None, sid):
+        if (state == 'stop' and
+                getattr(self, jingle_type + '_sid') not in (None, sid)):
             return
 
         setattr(self, jingle_type + '_state', jingle_state)
@@ -586,8 +602,8 @@ class ChatControl(ChatControlBase):
         if state in ('connection_received', 'connecting'):
             setattr(self, jingle_type + '_sid', sid)
 
-        v = GLib.Variant.new_boolean(jingle_state != self.JINGLE_STATE_NULL)
-        getattr(self, jingle_type + '_action').change_state(v)
+        var = GLib.Variant.new_boolean(jingle_state != self.JINGLE_STATE_NULL)
+        getattr(self, jingle_type + '_action').change_state(var)
 
         getattr(self, 'update_' + jingle_type)()
 
@@ -598,27 +614,28 @@ class ChatControl(ChatControlBase):
         self._set_jingle_state('video', state, sid=sid, reason=reason)
 
     def _get_audio_content(self):
-        session = app.connections[self.account].get_module('Jingle').get_jingle_session(
-                self.contact.get_full_jid(), self.audio_sid)
+        con = app.connections[self.account]
+        session = con.get_module('Jingle').get_jingle_session(
+            self.contact.get_full_jid(), self.audio_sid)
         return session.get_content('audio')
 
-    def on_num_button_pressed(self, widget, num):
+    def on_num_button_pressed(self, _widget, num):
         self._get_audio_content()._start_dtmf(num)
 
-    def on_num_button_released(self, released):
+    def on_num_button_released(self, _released):
         self._get_audio_content()._stop_dtmf()
 
-    def on_mic_hscale_value_changed(self, widget, value):
+    def on_mic_hscale_value_changed(self, _widget, value):
         self._get_audio_content().set_mic_volume(value / 100)
         # Save volume to config
         app.config.set('audio_input_volume', value)
 
-    def on_sound_hscale_value_changed(self, widget, value):
+    def on_sound_hscale_value_changed(self, _widget, value):
         self._get_audio_content().set_out_volume(value / 100)
         # Save volume to config
         app.config.set('audio_output_volume', value)
 
-    def on_location_eventbox_button_release_event(self, widget, event):
+    def on_location_eventbox_button_release_event(self, _widget, _event):
         if 'geoloc' in self.contact.pep:
             location = self.contact.pep['geoloc'].data
             if 'lat' in location and 'lon' in location:
@@ -626,14 +643,14 @@ class ChatControl(ChatControlBase):
                                                  location['lon'])
                 open_uri(uri)
 
-    def on_location_eventbox_leave_notify_event(self, widget, event):
+    def on_location_eventbox_leave_notify_event(self, _widget, _event):
         """
         Just moved the mouse so show the cursor
         """
         cursor = get_cursor('default')
         self.parent_win.window.get_window().set_cursor(cursor)
 
-    def on_location_eventbox_enter_notify_event(self, widget, event):
+    def on_location_eventbox_enter_notify_event(self, _widget, _event):
         cursor = get_cursor('pointer')
         self.parent_win.window.get_window().set_cursor(cursor)
 
@@ -662,7 +679,8 @@ class ChatControl(ChatControlBase):
 
         # We know our contacts nick, but if another contact has the same nick
         # in another account we need to also display the account.
-        # except if we are talking to two different resources of the same contact
+        # except if we are talking to two different resources of the
+        # same contact
         acct_info = ''
         for account in app.contacts.get_accounts():
             if account == self.account:
@@ -729,14 +747,15 @@ class ChatControl(ChatControlBase):
             return
         setattr(self, jingle_type + '_sid', None)
         setattr(self, jingle_type + '_state', self.JINGLE_STATE_NULL)
-        session = app.connections[self.account].get_module('Jingle').get_jingle_session(
+        con = app.connections[self.account]
+        session = con.get_module('Jingle').get_jingle_session(
             self.contact.get_full_jid(), sid)
         if session:
             content = session.get_content(jingle_type)
             if content:
                 session.remove_content(content.creator, content.name)
-        v = GLib.Variant.new_boolean(False)
-        getattr(self, jingle_type + '_action').change_state(v)
+        var = GLib.Variant.new_boolean(False)
+        getattr(self, jingle_type + '_action').change_state(var)
         getattr(self, 'update_' + jingle_type)()
 
     def on_jingle_button_toggled(self, state, jingle_type):
@@ -762,7 +781,8 @@ class ChatControl(ChatControlBase):
                     in_da = self.xml.incoming_drawingarea
                     in_da.realize()
                     in_xid = in_da.get_window().get_xid()
-                    sid = app.connections[self.account].get_module('Jingle').start_video(
+                    con = app.connections[self.account]
+                    sid = con.get_module('Jingle').start_video(
                         self.contact.get_full_jid(), in_xid, out_xid)
                 else:
                     sid = getattr(app.connections[self.account],
@@ -868,14 +888,14 @@ class ChatControl(ChatControlBase):
 
         if self.encryption:
             self.sendmessage = True
-            app.plugin_manager.extension_point(
-                    'send_message' + self.encryption, self)
+            app.plugin_manager.extension_point('send_message' + self.encryption,
+                                               self)
             if not self.sendmessage:
                 return
 
         message = helpers.remove_invalid_xml_chars(message)
         if message in ('', None, '\n'):
-            return None
+            return
 
         ChatControlBase.send_message(self,
                                      message,
@@ -903,8 +923,8 @@ class ChatControl(ChatControlBase):
 
         If frm is set to status: it's a status message.
         if frm is set to error: it's an error message. The difference between
-                status and error is mainly that with error, msg count as a new message
-                (in systray and in control).
+            status and error is mainly that with error, msg count as a new
+            message (in systray and in control).
         If frm is set to info: it's a information message.
         If frm is set to print_queue: it is incoming from queue.
         If frm is set to another value: it's an outgoing message.
@@ -922,19 +942,26 @@ class ChatControl(ChatControlBase):
             if not frm:
                 kind = 'incoming'
                 name = contact.get_shown_name()
-            elif frm == 'print_queue': # incoming message, but do not update time
+            elif frm == 'print_queue':
                 kind = 'incoming_queue'
                 name = contact.get_shown_name()
             else:
                 kind = 'outgoing'
                 name = self.get_our_nick()
 
-        ChatControlBase.add_message(self, text, kind, name, tim,
-            subject=subject, old_kind=self.old_msg_kind,
-            displaymarking=displaymarking,
-            msg_log_id=msg_log_id, message_id=message_id,
-            correct_id=correct_id, additional_data=additional_data,
-            error=error)
+        ChatControlBase.add_message(self,
+                                    text,
+                                    kind,
+                                    name,
+                                    tim,
+                                    subject=subject,
+                                    old_kind=self.old_msg_kind,
+                                    displaymarking=displaymarking,
+                                    msg_log_id=msg_log_id,
+                                    message_id=message_id,
+                                    correct_id=correct_id,
+                                    additional_data=additional_data,
+                                    error=error)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
@@ -950,8 +977,8 @@ class ChatControl(ChatControlBase):
             jid = self.contact.get_full_jid()
         else:
             jid = self.contact.jid
-        num_unread = len(app.events.get_events(self.account, jid,
-                ['printed_' + self.type_id, self.type_id]))
+        num_unread = len(app.events.get_events(
+            self.account, jid, ['printed_' + self.type_id, self.type_id]))
         if num_unread == 1 and not app.config.get('show_unread_tab_icon'):
             unread = '*'
         elif num_unread > 1:
@@ -979,8 +1006,8 @@ class ChatControl(ChatControlBase):
                 return surface
 
         if count_unread:
-            num_unread = len(app.events.get_events(self.account, jid,
-                    ['printed_' + self.type_id, self.type_id]))
+            num_unread = len(app.events.get_events(
+                self.account, jid, ['printed_' + self.type_id, self.type_id]))
         else:
             num_unread = 0
 
@@ -992,7 +1019,7 @@ class ChatControl(ChatControlBase):
             icon_name = get_icon_name('event', transport=transport)
         else:
             contact = app.contacts.get_contact_with_highest_priority(
-                    self.account, self.contact.jid)
+                self.account, self.contact.jid)
             if not contact or self.resource:
                 # For transient contacts
                 contact = self.contact
@@ -1008,11 +1035,15 @@ class ChatControl(ChatControlBase):
         """
         if app.jid_is_transport(self.contact.jid):
             menu = gui_menu_builder.get_transport_menu(self.contact,
-                self.account)
+                                                       self.account)
         else:
-            menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
-                use_multiple_contacts=False, show_start_chat=False,
-                show_encryption=True, control=self,
+            menu = gui_menu_builder.get_contact_menu(
+                self.contact,
+                self.account,
+                use_multiple_contacts=False,
+                show_start_chat=False,
+                show_encryption=True,
+                control=self,
                 show_buttonbar_items=not hide_buttonbar_items)
         return menu
 
@@ -1039,18 +1070,22 @@ class ChatControl(ChatControlBase):
             self.session.control = None
 
         # Clean events
-        app.events.remove_events(self.account, self.get_full_jid(),
-                types=['printed_' + self.type_id, self.type_id])
+        app.events.remove_events(
+            self.account,
+            self.get_full_jid(),
+            types=['printed_' + self.type_id, self.type_id])
         # Remove contact instance if contact has been removed
         key = (self.contact.jid, self.account)
         roster = app.interface.roster
-        if key in roster.contacts_to_be_removed.keys() and \
-        not roster.contact_has_pending_roster_events(self.contact,
-        self.account):
+        has_pending = roster.contact_has_pending_roster_events(self.contact,
+                                                               self.account)
+        if key in roster.contacts_to_be_removed.keys() and not has_pending:
             backend = roster.contacts_to_be_removed[key]['backend']
             del roster.contacts_to_be_removed[key]
-            roster.remove_contact(self.contact.jid, self.account, force=True,
-                backend=backend)
+            roster.remove_contact(self.contact.jid,
+                                  self.account,
+                                  force=True,
+                                  backend=backend)
         # remove all register handlers on widgets, created by self.xml
         # to prevent circular references among objects
         for i in list(self.handlers.keys()):
@@ -1156,13 +1191,13 @@ class ChatControl(ChatControlBase):
 
         # get contact info (check for PM = private chat)
         if self.TYPE_ID == message_control.TYPE_PM:
-            c = self.gc_contact.as_contact()
+            contact = self.gc_contact.as_contact()
         else:
-            c = self.contact
+            contact = self.contact
 
         if target_type == self.TARGET_TYPE_URI_LIST:
             # File drag and drop (handled in chat_control_base)
-            self.drag_data_file_transfer(c, selection, self)
+            self.drag_data_file_transfer(contact, selection, self)
         else:
             # Convert single chat to MUC
             treeview = app.interface.roster.tree
@@ -1176,11 +1211,13 @@ class ChatControl(ChatControlBase):
             dropped_jid = data
 
             dropped_transport = app.get_transport_name_from_jid(dropped_jid)
-            c_transport = app.get_transport_name_from_jid(c.jid)
+            c_transport = app.get_transport_name_from_jid(contact.jid)
             if dropped_transport or c_transport:
                 return # transport contacts cannot be invited
 
-            dialogs.TransformChatToMUC(self.account, [c.jid], [dropped_jid])
+            dialogs.TransformChatToMUC(self.account,
+                                       [contact.jid],
+                                       [dropped_jid])
 
     def restore_conversation(self):
         jid = self.contact.jid
@@ -1190,11 +1227,11 @@ class ChatControl(ChatControlBase):
 
         # number of messages that are in queue and are already logged, we want
         # to avoid duplication
-        pending = len(app.events.get_events(self.account, jid,
-                ['chat', 'pm']))
+        pending = len(app.events.get_events(self.account, jid, ['chat', 'pm']))
         if self.resource:
             pending += len(app.events.get_events(self.account,
-                    self.contact.get_full_jid(), ['chat', 'pm']))
+                                                 self.contact.get_full_jid(),
+                                                 ['chat', 'pm']))
 
         rows = app.logger.get_last_conversation_lines(
             self.account, jid, pending)
@@ -1211,7 +1248,7 @@ class ChatControl(ChatControlBase):
                 kind = 'outgoing'
                 name = self.get_our_nick()
             elif row.kind in (KindConstant.SINGLE_MSG_RECV,
-                            KindConstant.CHAT_MSG_RECV):
+                              KindConstant.CHAT_MSG_RECV):
                 kind = 'incoming'
                 name = self.contact.get_shown_name()
             elif row.kind == KindConstant.ERROR:
@@ -1234,7 +1271,8 @@ class ChatControl(ChatControlBase):
                                         message_id=row.message_id,
                                         marker=row.marker,
                                         error=row.error)
-            if row.message.startswith('/me ') or row.message.startswith('/me\n'):
+            if (row.message.startswith('/me ') or
+                    row.message.startswith('/me\n')):
                 local_old_kind = None
             else:
                 local_old_kind = kind
@@ -1274,8 +1312,9 @@ class ChatControl(ChatControlBase):
                 self.set_session(event.session)
         if message_ids:
             app.logger.set_read_messages(message_ids)
-        app.events.remove_events(self.account, jid_with_resource,
-                types=[self.type_id])
+        app.events.remove_events(self.account,
+                                 jid_with_resource,
+                                 types=[self.type_id])
 
         typ = 'chat' # Is it a normal chat or a pm ?
 
@@ -1283,7 +1322,7 @@ class ChatControl(ChatControlBase):
         # Is it a pm ?
         room_jid, nick = app.get_room_and_nick_from_fjid(jid)
         control = app.interface.msg_win_mgr.get_gc_control(room_jid,
-                self.account)
+                                                           self.account)
         if control and control.type_id == message_control.TYPE_GC:
             control.update_ui()
             control.parent_win.show_title()
@@ -1297,11 +1336,11 @@ class ChatControl(ChatControlBase):
             (not show_offline and typ == 'chat' and \
             len(app.contacts.get_contacts(self.account, jid)) < 2):
                 app.interface.roster.remove_to_be_removed(self.contact.jid,
-                        self.account)
+                                                          self.account)
             elif typ == 'pm':
                 control.remove_contact(nick)
 
-    def _on_convert_to_gc_menuitem_activate(self, widget):
+    def _on_convert_to_gc_menuitem_activate(self, _widget):
         """
         User wants to invite some friends to chat
         """
@@ -1311,7 +1350,7 @@ class ChatControl(ChatControlBase):
         ChatControlBase.got_connected(self)
         # Refreshing contact
         contact = app.contacts.get_contact_with_highest_priority(
-                self.account, self.contact.jid)
+            self.account, self.contact.jid)
         if isinstance(contact, GC_Contact):
             contact = contact.as_contact()
         if contact:
@@ -1351,8 +1390,8 @@ class ChatControl(ChatControlBase):
 
         # Remove old buttons
         area = self.info_bar.get_action_area()
-        for b in area.get_children():
-            area.remove(b)
+        for button in area.get_children():
+            area.remove(button)
 
         # Add new buttons
         for button in buttons:
@@ -1374,15 +1413,16 @@ class ChatControl(ChatControlBase):
                 return ev
         return None
 
-    def _on_accept_file_request(self, widget, file_props):
+    def _on_accept_file_request(self, _widget, file_props):
         app.interface.instances['file_transfers'].on_file_request_accepted(
             self.account, self.contact, file_props)
         ev = self._get_file_props_event(file_props, 'file-request')
         if ev:
             app.events.remove_events(self.account, self.contact.jid, event=ev)
 
-    def _on_cancel_file_request(self, widget, file_props):
-        app.connections[self.account].get_module('Bytestream').send_file_rejection(file_props)
+    def _on_cancel_file_request(self, _widget, file_props):
+        con = app.connections[self.account]
+        con.get_module('Bytestream').send_file_rejection(file_props)
         ev = self._get_file_props_event(file_props, 'file-request')
         if ev:
             app.events.remove_events(self.account, self.contact.jid, event=ev)
@@ -1412,7 +1452,7 @@ class ChatControl(ChatControlBase):
             file_props,
             Gtk.MessageType.QUESTION)
 
-    def _on_open_ft_folder(self, widget, file_props):
+    def _on_open_ft_folder(self, _widget, file_props):
         path = os.path.split(file_props.file_name)[0]
         if os.path.exists(path) and os.path.isdir(path):
             open_file(path)
@@ -1420,14 +1460,14 @@ class ChatControl(ChatControlBase):
         if ev:
             app.events.remove_events(self.account, self.contact.jid, event=ev)
 
-    def _on_ok(self, widget, file_props, type_):
+    def _on_ok(self, _widget, file_props, type_):
         ev = self._get_file_props_event(file_props, type_)
         if ev:
             app.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _got_file_completed(self, file_props):
         markup = '<b>%s</b>\n%s' % (_('File Transfer Completed'),
-            file_props.name)
+                                    file_props.name)
         if file_props.desc:
             markup += '\n(%s)' % file_props.desc
         b1 = Gtk.Button.new_with_mnemonic(_('Open _Folder'))
@@ -1441,21 +1481,21 @@ class ChatControl(ChatControlBase):
 
     def _got_file_error(self, file_props, type_, pri_txt, sec_txt):
         markup = '<b>%s</b>\n%s' % (pri_txt, sec_txt)
-        b = Gtk.Button.new_with_mnemonic(_('_Close'))
-        b.connect('clicked', self._on_ok, file_props, type_)
+        button = Gtk.Button.new_with_mnemonic(_('_Close'))
+        button.connect('clicked', self._on_ok, file_props, type_)
         self._add_info_bar_message(
             markup,
-            [b],
+            [button],
             file_props,
             Gtk.MessageType.ERROR)
 
-    def _on_accept_gc_invitation(self, widget, event):
+    def _on_accept_gc_invitation(self, _widget, event):
         app.interface.show_or_join_groupchat(self.account,
                                              str(event.muc),
                                              password=event.password)
         app.events.remove_events(self.account, self.contact.jid, event=event)
 
-    def _on_cancel_gc_invitation(self, widget, event):
+    def _on_cancel_gc_invitation(self, _widget, event):
         app.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _get_gc_invitation(self, event):
@@ -1488,9 +1528,11 @@ class ChatControl(ChatControlBase):
             elif event.file_props.error == -6:
                 msg_err = _('Error opening file')
             self._got_file_error(event.file_props, event.type_,
-                _('File transfer stopped'), msg_err)
+                                 _('File transfer stopped'), msg_err)
         elif event.type_ in ('file-request-error', 'file-send-error'):
-            self._got_file_error(event.file_props, event.type_,
+            self._got_file_error(
+                event.file_props,
+                event.type_,
                 _('File transfer cancelled'),
                 _('Connection with peer cannot be established.'))
         elif event.type_ == 'gc-invitation':
@@ -1505,9 +1547,13 @@ class ChatControl(ChatControlBase):
                 continue
             if ev.jid != self.contact.jid:
                 continue
-            if ev.type_ not in ('file-request', 'file-completed', 'file-error',
-            'file-stopped', 'file-request-error', 'file-send-error',
-            'gc-invitation'):
+            if ev.type_ not in ('file-request',
+                                'file-completed',
+                                'file-error',
+                                'file-stopped',
+                                'file-request-error',
+                                'file-send-error',
+                                'gc-invitation'):
                 continue
             i = 0
             removed = False

@@ -338,6 +338,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.command_hits = []
         self.last_key_tabs = False
 
+        self.sendmessage = True
+
         con = app.connections[self.account]
         con.get_module('Chatstate').set_active(self.contact)
 
