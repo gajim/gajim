@@ -485,10 +485,10 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ib_org_unit = issuer.organizationalUnitName or ''
         issued = datetime.strptime(cert.get_notBefore().decode('ascii'),
                                    '%Y%m%d%H%M%SZ')
-        self._issued = issued.strftime('%B %d, %Y, %H:%M:%S %z')
+        self._issued = issued.strftime('%c %Z')
         expires = datetime.strptime(cert.get_notAfter().decode('ascii'),
                                     '%Y%m%d%H%M%SZ')
-        self._expires = expires.strftime('%B %d, %Y, %H:%M:%S %z')
+        self._expires = expires.strftime('%c %Z')
         self._sha1 = cert.digest('sha1').decode('utf-8')
         self._sha256 = cert.digest('sha256').decode('utf-8')
 
