@@ -92,7 +92,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     keycodes_c = get_hardware_key_codes(Gdk.KEY_c)
 
     def __init__(self, type_id, parent_win, widget_name, contact, acct,
-    resource=None):
+                 resource=None):
         # Undo needs this variable to know if space has been pressed.
         # Initialize it to True so empty textview is saved in undo list
         self.space_pressed = True
@@ -100,13 +100,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if resource is None:
             # We very likely got a contact with a random resource.
             # This is bad, we need the highest for caps etc.
-            c = app.contacts.get_contact_with_highest_priority(acct,
-                contact.jid)
-            if c and not isinstance(c, GC_Contact):
-                contact = c
+            _contact = app.contacts.get_contact_with_highest_priority(
+                acct, contact.jid)
+            if _contact and not isinstance(_contact, GC_Contact):
+                contact = _contact
 
         MessageControl.__init__(self, type_id, parent_win, widget_name,
-            contact, acct, resource=resource)
+                                contact, acct, resource=resource)
 
         if self.TYPE_ID != message_control.TYPE_GC:
             # Create banner and connect signals
@@ -171,7 +171,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.conv_scrolledwindow.add(self.conv_textview.tv)
         widget = self.conv_scrolledwindow.get_vadjustment()
         id_ = widget.connect('changed',
-            self.on_conversation_vadjustment_changed)
+                             self.on_conversation_vadjustment_changed)
         self.handlers[id_] = widget
 
         vscrollbar = self.conv_scrolledwindow.get_vscrollbar()
@@ -190,13 +190,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.xml.hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
 
         id_ = self.msg_textview.connect('paste-clipboard',
-            self._on_message_textview_paste_event)
+                                        self._on_message_textview_paste_event)
         self.handlers[id_] = self.msg_textview
-        id_ = self.msg_textview.connect('key_press_event',
+        id_ = self.msg_textview.connect(
+            'key_press_event',
             self._on_message_textview_key_press_event)
         self.handlers[id_] = self.msg_textview
         id_ = self.msg_textview.connect('populate_popup',
-            self.on_msg_textview_populate_popup)
+                                        self.on_msg_textview_populate_popup)
         self.handlers[id_] = self.msg_textview
 
         # Setup DND
@@ -233,11 +234,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         con.get_module('Chatstate').set_active(self.contact)
 
         id_ = self.msg_textview.connect('text-changed',
-            self._on_message_tv_buffer_changed)
+                                        self._on_message_tv_buffer_changed)
         self.handlers[id_] = self.msg_textview
         if parent_win is not None:
             id_ = parent_win.window.connect('motion-notify-event',
-                self._on_window_motion_notify)
+                                            self._on_window_motion_notify)
             self.handlers[id_] = parent_win.window
 
         self.encryption = self.get_encryption_state()
@@ -270,19 +271,21 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.resource:
             jid += '/' + self.resource
         type_ = self.type_id
-        return len(app.events.get_events(self.account, jid, ['printed_' + type_,
-                type_]))
+        return len(app.events.get_events(self.account,
+                                         jid,
+                                         ['printed_' + type_, type_]))
 
     def draw_banner(self):
         """
-        Draw the fat line at the top of the window that houses the icon, jid, etc
+        Draw the fat line at the top of the window
+        that houses the icon, jid, etc
 
         Derived types MAY implement this.
         """
         self.draw_banner_text()
         self._update_banner_state_image()
         app.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
-            self)
+                                               self)
 
     def update_toolbar(self):
         """
@@ -542,7 +545,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             gspell_lang = Gspell.language_get_default()
         return gspell_lang
 
-    def on_language_changed(self, checker, param):
+    def on_language_changed(self, checker, _param):
         gspell_lang = checker.get_language()
         per_type = 'contacts'
         if self.type_id == message_control.TYPE_GC:
@@ -559,7 +562,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.msg_textview.grab_focus()
         return Gdk.EVENT_STOP
 
-    def on_banner_label_populate_popup(self, label, menu):
+    def on_banner_label_populate_popup(self, _label, menu):
         """
         Override the default context menu and add our own menuitems
         """
@@ -577,8 +580,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def shutdown(self):
         super(ChatControlBase, self).shutdown()
-        # PluginSystem: removing GUI extension points connected with ChatControlBase
-        # instance object
+        # PluginSystem: removing GUI extension points
+        # connected with ChatControlBase instance object
         app.plugin_manager.remove_gui_extension_point('chat_control_base', self)
         app.plugin_manager.remove_gui_extension_point(
             'chat_control_base_draw_banner', self)
@@ -589,7 +592,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         for handler in self._base_event_handlers:
             app.ged.remove_event_handler(*handler)
 
-    def on_msg_textview_populate_popup(self, textview, menu):
+    def on_msg_textview_populate_popup(self, _textview, menu):
         """
         Override the default context menu and we prepend an option to switch
         languages
@@ -625,18 +628,18 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         text = clipboard.wait_for_text()
         self.insert_as_quote(text)
 
-    def on_quote(self, widget, text):
+    def on_quote(self, _widget, text):
         self.insert_as_quote(text)
 
     # moved from ChatControl
-    def _on_banner_eventbox_button_press_event(self, widget, event):
+    def _on_banner_eventbox_button_press_event(self, _widget, event):
         """
         If right-clicked, show popup
         """
         if event.button == 3:  # right click
             self.parent_win.popup_menu(event)
 
-    def _on_message_textview_paste_event(self, texview):
+    def _on_message_textview_paste_event(self, _texview):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         image = clipboard.wait_for_image()
         if image is not None:
@@ -709,7 +712,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             # pressing Control again (as in ctrl+z)
             _buffer = widget.get_buffer()
             start_iter, end_iter = _buffer.get_bounds()
-            self.msg_textview.save_undo(_buffer.get_text(start_iter, end_iter, True))
+            self.msg_textview.save_undo(_buffer.get_text(start_iter,
+                                                         end_iter,
+                                                         True))
             self.space_pressed = False
 
         # Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
@@ -741,8 +746,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             end = message_buffer.get_iter_at_mark(position)
             text = message_buffer.get_text(start, end, False)
             splitted = text.split()
-            if (text.startswith(self.COMMAND_PREFIX) and not
-            text.startswith(self.COMMAND_PREFIX * 2) and len(splitted) == 1):
+            if (text.startswith(self.COMMAND_PREFIX) and
+                    not text.startswith(self.COMMAND_PREFIX * 2) and
+                    len(splitted) == 1):
                 text = splitted[0]
                 bare = text.lstrip(self.COMMAND_PREFIX)
                 if len(text) == 1:
@@ -819,7 +825,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return False
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
-                    target_type, timestamp):
+                               target_type, timestamp):
         """
         Derived types SHOULD implement this
         """
@@ -836,7 +842,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.drag_entered_conv = True
             self.conv_textview.tv.set_editable(True)
 
-    def drag_data_file_transfer(self, contact, selection, widget):
+    def drag_data_file_transfer(self, contact, selection, _widget):
         # get file transfer preference
         ft_pref = app.config.get_per('accounts', self.account,
                                      'filetransfer_preference')
@@ -877,7 +883,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def get_seclabel(self):
         idx = self.xml.label_selector.get_active()
         if idx == -1:
-            return
+            return None
 
         con = app.connections[self.account]
         jid = self.contact.jid
@@ -889,8 +895,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         label = labels[lname]
         return label
 
-    def send_message(self, message, type_='chat',
-    resource=None, xhtml=None, process_commands=True, attention=False):
+    def send_message(self,
+                     message,
+                     type_='chat',
+                     resource=None,
+                     xhtml=None,
+                     process_commands=True,
+                     attention=False):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -999,13 +1010,24 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.conv_textview.print_conversation_line(
             text, 'status', '', None)
 
-    def add_message(self, text, kind, name, tim,
-                    other_tags_for_name=None, other_tags_for_time=None,
-                    other_tags_for_text=None, restored=False, subject=None,
+    def add_message(self,
+                    text,
+                    kind,
+                    name,
+                    tim,
+                    other_tags_for_name=None,
+                    other_tags_for_time=None,
+                    other_tags_for_text=None,
+                    restored=False,
+                    subject=None,
                     old_kind=None,
-                    displaymarking=None, msg_log_id=None,
-                    message_id=None, correct_id=None, additional_data=None,
-                    marker=None, error=None):
+                    displaymarking=None,
+                    msg_log_id=None,
+                    message_id=None,
+                    correct_id=None,
+                    additional_data=None,
+                    marker=None,
+                    error=None):
         """
         Print 'chat' type messages
         correct_id = (message_id, correct_id)
@@ -1026,12 +1048,21 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        textview.print_conversation_line(text, kind, name, tim,
-            other_tags_for_name, other_tags_for_time, other_tags_for_text,
-            subject, old_kind,
-            displaymarking=displaymarking, message_id=message_id,
-            correct_id=correct_id, additional_data=additional_data,
-            marker=marker, error=error)
+        textview.print_conversation_line(text,
+                                         kind,
+                                         name,
+                                         tim,
+                                         other_tags_for_name,
+                                         other_tags_for_time,
+                                         other_tags_for_text,
+                                         subject,
+                                         old_kind,
+                                         displaymarking=displaymarking,
+                                         message_id=message_id,
+                                         correct_id=correct_id,
+                                         additional_data=additional_data,
+                                         marker=marker,
+                                         error=error)
 
         if restored:
             return
@@ -1078,14 +1109,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 show_in_systray = get_show_in_systray(
                     event_type.type_, self.contact.jid)
 
-                event = event_type(text, subject, self, msg_log_id,
-                    show_in_roster=show_in_roster,
-                    show_in_systray=show_in_systray)
+                event = event_type(text,
+                                   subject,
+                                   self, msg_log_id,
+                                   show_in_roster=show_in_roster,
+                                   show_in_systray=show_in_systray)
                 app.events.add_event(self.account, full_jid, event)
                 # We need to redraw contact if we show in roster
                 if show_in_roster:
                     app.interface.roster.draw_contact(self.contact.jid,
-                        self.account)
+                                                      self.account)
 
         if not self.parent_win:
             return
@@ -1121,13 +1154,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         emoji_chooser.text_widget = self.msg_textview
         self.xml.emoticons_button.set_popover(emoji_chooser)
 
-    def on_color_menuitem_activate(self, widget):
+    def on_color_menuitem_activate(self, _widget):
         color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)
         color_dialog.set_use_alpha(False)
         color_dialog.connect('response', self.msg_textview.color_set)
         color_dialog.show_all()
 
-    def on_font_menuitem_activate(self, widget):
+    def on_font_menuitem_activate(self, _widget):
         font_dialog = Gtk.FontChooserDialog(None, self.parent_win.window)
         start, finish = self.msg_textview.get_active_iters()
         font_dialog.connect('response', self.msg_textview.font_set, start, finish)
@@ -1137,7 +1170,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         tag = widget.get_name()
         self.msg_textview.set_tag(tag)
 
-    def on_clear_formatting_menuitem_activate(self, widget):
+    def on_clear_formatting_menuitem_activate(self, _widget):
         self.msg_textview.clear_tags()
 
     def _style_changed(self, *args):
@@ -1146,12 +1179,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def update_tags(self):
         self.conv_textview.update_tags()
 
-    def clear(self, tv):
+    @staticmethod
+    def clear(tv):
         buffer_ = tv.get_buffer()
         start, end = buffer_.get_bounds()
         buffer_.delete(start, end)
 
-    def _on_send_file(self, action, param):
+    def _on_send_file(self, _action, _param):
         # get file transfer preference
         ft_pref = app.config.get_per('accounts', self.account,
                                      'filetransfer_preference')
@@ -1171,19 +1205,20 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         elif jingle.get_enabled():
             jingle.activate()
 
-    def _on_send_httpupload(self, action, param):
+    def _on_send_httpupload(self, _action, _param):
         app.interface.send_httpupload(self)
 
-    def _on_send_jingle(self, action, param):
+    def _on_send_jingle(self, _action, _param):
         self._on_send_file_jingle()
 
     def _on_send_file_jingle(self, gc_contact=None):
         """
         gc_contact can be set when we are in a groupchat control
         """
-        def _on_ok(c):
+        def _on_ok(_contact):
             app.interface.instances['file_transfers'].show_file_send_request(
-                self.account, c)
+                self.account, _contact)
+
         if self.type_id == message_control.TYPE_PM:
             gc_contact = self.gc_contact
 
@@ -1217,8 +1252,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         _on_ok(gc_contact)
 
     def on_notify_menuitem_toggled(self, widget):
-        app.config.set_per('rooms', self.contact.jid, 'notify_on_all_messages',
-            widget.get_active())
+        app.config.set_per('rooms',
+                           self.contact.jid,
+                           'notify_on_all_messages',
+                           widget.get_active())
 
     def set_control_active(self, state):
         con = app.connections[self.account]
@@ -1230,8 +1267,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 type_ = ['printed_' + self.type_id]
                 if self.type_id == message_control.TYPE_GC:
                     type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
-                if not app.events.remove_events(self.account, self.get_full_jid(),
-                types=type_):
+                if not app.events.remove_events(self.account,
+                                                self.get_full_jid(),
+                                                types=type_):
                     # There were events to remove
                     self.redraw_after_event_removed(jid)
             # send chatstate inactive to the one we're leaving
@@ -1249,7 +1287,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def scroll_to_end(self, force=False):
         self.conv_textview.scroll_to_end(force)
 
-    def _on_edge_reached(self, scrolledwindow, pos):
+    def _on_edge_reached(self, _scrolledwindow, pos):
         if pos != Gtk.PositionType.BOTTOM:
             return
         # Remove all events and set autoscroll True
@@ -1334,7 +1372,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             app.log('autoscroll').info('Autoscroll disabled')
             self.conv_textview.autoscroll = False
 
-    def on_conversation_vadjustment_changed(self, adjustment):
+    def on_conversation_vadjustment_changed(self, _adjustment):
         self.scroll_to_end()
 
     def redraw_after_event_removed(self, jid):
@@ -1348,7 +1386,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.type_id == message_control.TYPE_PM:
             room_jid, nick = app.get_room_and_nick_from_fjid(jid)
             groupchat_control = app.interface.msg_win_mgr.get_gc_control(
-                    room_jid, self.account)
+                room_jid, self.account)
             if room_jid in app.interface.minimized_controls[self.account]:
                 groupchat_control = \
                         app.interface.minimized_controls[self.account][room_jid]
