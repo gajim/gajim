@@ -121,6 +121,29 @@ class NetworkEventsController:
                             new_event_object)
 
 
+class EventHelper:
+    def __init__(self):
+        self.__event_handlers = []
+
+    def register_event(self, event_name, priority, handler):
+        self.__event_handlers.append((event_name, priority, handler))
+        app.ged.register_event_handler(event_name, priority, handler)
+
+    def register_events(self, events):
+        for handler in events:
+            self.__event_handlers.append(handler)
+            app.ged.register_event_handler(*handler)
+
+    def unregister_event(self, event_name, priority, handler):
+        self.__event_handlers.remove((event_name, priority, handler))
+        app.ged.register_event_handler(event_name, priority, handler)
+
+    def unregister_events(self):
+        for handler in self.__event_handlers:
+            app.ged.remove_event_handler(*handler)
+        self.__event_handlers.clear()
+
+
 class NetworkEvent:
     name = ''
 

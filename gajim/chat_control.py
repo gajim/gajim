@@ -210,7 +210,7 @@ class ChatControl(ChatControlBase):
         self.msg_textview.grab_focus()
 
         # pylint: disable=line-too-long
-        self._event_handlers = [
+        self.register_events([
             ('nickname-received', ged.GUI1, self._on_nickname_received),
             ('mood-received', ged.GUI1, self._on_mood_received),
             ('activity-received', ged.GUI1, self._on_activity_received),
@@ -225,15 +225,12 @@ class ChatControl(ChatControlBase):
             ('receipt-received', ged.GUI1, self._receipt_received),
             ('message-error', ged.GUI1, self._on_message_error),
             ('zeroconf-error', ged.GUI1, self._on_zeroconf_error),
-        ]
+        ])
 
         if self._type.is_chat:
             # Dont connect this when PrivateChatControl is used
-            self._event_handlers.append(('update-roster-avatar', ged.GUI1, self._nec_update_avatar))
+            self.register_event('update-roster-avatar', ged.GUI1, self._nec_update_avatar)
         # pylint: enable=line-too-long
-
-        for handler in self._event_handlers:
-            app.ged.register_event_handler(*handler)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -1047,10 +1044,6 @@ class ChatControl(ChatControlBase):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
         app.plugin_manager.remove_gui_extension_point('chat_control', self)
-
-        # Unregister handlers
-        for handler in self._event_handlers:
-            app.ged.remove_event_handler(*handler)
 
         self.unsubscribe_events()
 

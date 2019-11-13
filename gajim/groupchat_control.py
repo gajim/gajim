@@ -181,7 +181,7 @@ class GroupchatControl(ChatControlBase):
         self.xml.settings_menu.set_menu_model(self.control_menu)
 
         # pylint: disable=line-too-long
-        self._event_handlers = [
+        self.register_events([
             ('muc-creation-failed', ged.GUI1, self._on_muc_creation_failed),
             ('muc-joined', ged.GUI1, self._on_muc_joined),
             ('muc-join-failed', ged.GUI1, self._on_muc_join_failed),
@@ -211,11 +211,8 @@ class GroupchatControl(ChatControlBase):
             ('decrypted-message-received', ged.GUI2, self._nec_decrypted_message_received),
             ('gc-stanza-message-outgoing', ged.OUT_POSTCORE, self._message_sent),
             ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
-        ]
+        ])
         # pylint: enable=line-too-long
-
-        for handler in self._event_handlers:
-            app.ged.register_event_handler(*handler)
 
         self.is_connected = False
         # disable win, we are not connected yet
@@ -1638,10 +1635,6 @@ class GroupchatControl(ChatControlBase):
         # GrouphatControl instance object
         app.plugin_manager.remove_gui_extension_point(
             'groupchat_control', self)
-
-        # Unregister handlers
-        for handler in self._event_handlers:
-            app.ged.remove_event_handler(*handler)
 
         nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
         for nick in nick_list:

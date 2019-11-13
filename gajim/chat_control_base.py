@@ -39,6 +39,7 @@ from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
@@ -79,7 +80,8 @@ if app.is_installed('GSPELL'):
 
 
 ################################################################################
-class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
+class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
+                      EventHelper):
     """
     A base class containing a banner, ConversationTextview, MessageInputTextView
     """
@@ -94,6 +96,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def __init__(self, parent_win, widget_name, contact, acct,
                  resource=None):
+        EventHelper.__init__(self)
         # Undo needs this variable to know if space has been pressed.
         # Initialize it to True so empty textview is saved in undo list
         self.space_pressed = True
@@ -255,18 +258,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         app.plugin_manager.gui_extension_point('chat_control_base', self)
 
         # pylint: disable=line-too-long
-        self._base_event_handlers = [
+        self.register_events([
             ('our-show', ged.GUI1, self._nec_our_status),
             ('ping-sent', ged.GUI1, self._nec_ping),
             ('ping-reply', ged.GUI1, self._nec_ping),
             ('ping-error', ged.GUI1, self._nec_ping),
             ('sec-catalog-received', ged.GUI1, self._sec_labels_received),
             ('style-changed', ged.GUI1, self._style_changed),
-        ]
+        ])
         # pylint: enable=line-too-long
-
-        for handler in self._base_event_handlers:
-            app.ged.register_event_handler(*handler)
 
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
@@ -610,9 +610,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         app.plugin_manager.remove_gui_extension_point(
             'chat_control_base_update_toolbar', self)
 
-        # Unregister handlers
-        for handler in self._base_event_handlers:
-            app.ged.remove_event_handler(*handler)
+        self.unregister_events()
 
     def on_msg_textview_populate_popup(self, _textview, menu):
         """

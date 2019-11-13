@@ -57,7 +57,7 @@ class PrivateChatControl(ChatControl):
         ChatControl.__init__(self, parent_win, contact, account, session)
 
         # pylint: disable=line-too-long
-        self.__event_handlers = [
+        self.register_events([
             ('update-gc-avatar', ged.GUI1, self._nec_update_avatar),
             ('caps-update', ged.GUI1, self._nec_caps_received_pm),
             ('muc-user-joined', ged.GUI1, self._on_user_joined),
@@ -67,11 +67,8 @@ class PrivateChatControl(ChatControl):
             ('muc-self-kicked', ged.GUI1, self._on_diconnected),
             ('muc-user-status-show-changed', ged.GUI1, self._on_status_show_changed),
             ('muc-destroyed', ged.GUI1, self._on_diconnected),
-        ]
+        ])
         # pylint: enable=line-too-long
-
-        for handler in self.__event_handlers:
-            app.ged.register_event_handler(*handler)
 
     @property
     def contact(self):
@@ -90,11 +87,6 @@ class PrivateChatControl(ChatControl):
 
     def get_our_nick(self):
         return self.room_ctrl.nick
-
-    def shutdown(self):
-        super(PrivateChatControl, self).shutdown()
-        for handler in self.__event_handlers:
-            app.ged.remove_event_handler(*handler)
 
     def _nec_caps_received_pm(self, obj):
         if obj.conn.name != self.account or \

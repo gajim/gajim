@@ -64,8 +64,7 @@ class MessageControl:
         self.xml.connect_signals(self)
         self.widget = self.xml.get_object('%s_hbox' % widget_name)
 
-        app.ged.register_event_handler('message-outgoing', ged.OUT_GUI1,
-            self._nec_message_outgoing)
+        self.register_event('message-outgoing', ged.OUT_GUI1, self._nec_message_outgoing)
 
     def get_full_jid(self):
         fjid = self.contact.jid
@@ -114,8 +113,6 @@ class MessageControl:
         """
         Derived classes MUST implement this
         """
-        app.ged.remove_event_handler('message-outgoing', ged.OUT_GUI1,
-            self._nec_message_outgoing)
 
     def repaint_themed_widgets(self):
         """

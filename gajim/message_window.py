@@ -36,6 +36,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
+from gajim.common.nec import EventHelper
 
 from gajim import gtkgui_helpers
 from gajim.chat_control_base import ChatControlBase
@@ -56,7 +57,7 @@ log = logging.getLogger('gajim.message_window')
 
 ####################
 
-class MessageWindow:
+class MessageWindow(EventHelper):
     """
     Class for windows which contain message like things; chats, groupchats, etc
     """
@@ -73,6 +74,7 @@ class MessageWindow:
     ) = range(5)
 
     def __init__(self, acct, type_, parent_window=None, parent_paned=None):
+        EventHelper.__init__(self)
         # A dictionary of dictionaries
         # where _contacts[account][jid] == A MessageControl
         self._controls = {}
@@ -154,8 +156,9 @@ class MessageWindow:
         self.notebook.set_show_border(app.config.get('tabs_border'))
         self.show_icon()
 
-        app.ged.register_event_handler('muc-disco-update', ged.GUI1,
-                                       self._on_muc_disco_update)
+        self.register_events([
+            ('muc-disco-update', ged.GUI1, self._on_muc_disco_update),
+        ])
 
     def _add_actions(self):
         actions = [
@@ -403,6 +406,8 @@ class MessageWindow:
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
         del self.handlers
+
+        self.unregister_events()
 
     def new_tab(self, control):
         fjid = control.get_full_jid()
