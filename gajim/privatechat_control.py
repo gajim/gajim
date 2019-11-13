@@ -29,6 +29,7 @@ from gajim.common import helpers
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
+from gajim.common.helpers import event_filter
 
 from gajim.chat_control import ChatControl
 from gajim.command_system.implementation.hosts import PrivateChatCommands
@@ -58,15 +59,15 @@ class PrivateChatControl(ChatControl):
 
         # pylint: disable=line-too-long
         self.register_events([
-            ('update-gc-avatar', ged.GUI1, self._nec_update_avatar),
-            ('caps-update', ged.GUI1, self._nec_caps_received_pm),
+            ('update-gc-avatar', ged.GUI1, self._on_update_gc_avatar),
+            ('caps-update', ged.GUI1, self._on_caps_update),
             ('muc-user-joined', ged.GUI1, self._on_user_joined),
             ('muc-user-left', ged.GUI1, self._on_user_left),
             ('muc-nickname-changed', ged.GUI1, self._on_nickname_changed),
             ('muc-self-presence', ged.GUI1, self._on_self_presence),
-            ('muc-self-kicked', ged.GUI1, self._on_diconnected),
+            ('muc-self-kicked', ged.GUI1, self._on_disconnected),
             ('muc-user-status-show-changed', ged.GUI1, self._on_status_show_changed),
-            ('muc-destroyed', ged.GUI1, self._on_diconnected),
+            ('muc-destroyed', ged.GUI1, self._on_disconnected),
         ])
         # pylint: enable=line-too-long
 
@@ -88,15 +89,14 @@ class PrivateChatControl(ChatControl):
     def get_our_nick(self):
         return self.room_ctrl.nick
 
-    def _nec_caps_received_pm(self, obj):
-        if obj.conn.name != self.account or \
-        obj.fjid != self.gc_contact.get_full_jid():
+    @event_filter(['account'])
+    def _on_caps_update(self, event):
+        if event.fjid != self.gc_contact.get_full_jid():
             return
         self.update_contact()
 
+    @event_filter(['account'])
     def _on_nickname_changed(self, event):
-        if event.account != self.account:
-            return
         if event.properties.new_jid != self.gc_contact.get_full_jid():
             return
 
@@ -118,9 +118,8 @@ class PrivateChatControl(ChatControl):
         self.parent_win.redraw_tab(self)
         self.update_ui()
 
+    @event_filter(['account'])
     def _on_status_show_changed(self, event):
-        if event.account != self.account:
-            return
         if event.properties.jid != self.gc_contact.get_full_jid():
             return
 
@@ -146,25 +145,22 @@ class PrivateChatControl(ChatControl):
         self.parent_win.redraw_tab(self)
         self.update_ui()
 
-    def _on_diconnected(self, event):
-        if event.account != self.account:
-            return
+    @event_filter(['account'])
+    def _on_disconnected(self, event):
         if event.properties.jid != self.gc_contact.get_full_jid():
             return
 
         self.got_disconnected()
 
+    @event_filter(['account'])
     def _on_user_left(self, event):
-        if event.account != self.account:
-            return
         if event.properties.jid != self.gc_contact.get_full_jid():
             return
 
         self.got_disconnected()
 
+    @event_filter(['account'])
     def _on_user_joined(self, event):
-        if event.account != self.account:
-            return
         if event.properties.jid != self.gc_contact.get_full_jid():
             return
 
@@ -173,14 +169,18 @@ class PrivateChatControl(ChatControl):
         self.parent_win.redraw_tab(self)
         self.got_connected()
 
+    @event_filter(['account'])
     def _on_self_presence(self, event):
-        if event.account != self.account:
-            return
         if event.properties.jid != self.gc_contact.get_full_jid():
             return
 
         self.parent_win.redraw_tab(self)
         self.got_connected()
+
+    def _on_update_gc_avatar(self, event):
+        if event.contact != self.gc_contact:
+            return
+        self.show_avatar()
 
     def send_message(self, message, xhtml=None, process_commands=True,
                      attention=False):
@@ -213,11 +213,6 @@ class PrivateChatControl(ChatControl):
             self.got_disconnected()
         else:
             self.got_connected()
-
-    def _nec_update_avatar(self, obj):
-        if obj.contact != self.gc_contact:
-            return
-        self.show_avatar()
 
     def show_avatar(self):
         if not app.config.get('show_avatar_in_chat'):
