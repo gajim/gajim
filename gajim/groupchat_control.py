@@ -204,12 +204,12 @@ class GroupchatControl(ChatControlBase):
             ('muc-disco-update', ged.GUI1, self._on_disco_update),
             ('muc-configuration-finished', ged.GUI1, self._on_configuration_finished),
             ('muc-configuration-failed', ged.GUI1, self._on_configuration_failed),
-            ('gc-message-received', ged.GUI1, self._nec_gc_message_received),
-            ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
-            ('update-room-avatar', ged.GUI1, self._nec_update_room_avatar),
-            ('signed-in', ged.GUI1, self._nec_signed_in),
-            ('decrypted-message-received', ged.GUI2, self._nec_decrypted_message_received),
-            ('gc-stanza-message-outgoing', ged.OUT_POSTCORE, self._message_sent),
+            ('gc-message-received', ged.GUI1, self._on_gc_message_received),
+            ('mam-decrypted-message-received', ged.GUI1, self._on_mam_decrypted_message_received),
+            ('update-room-avatar', ged.GUI1, self._on_update_room_avatar),
+            ('signed-in', ged.GUI1, self._on_signed_in),
+            ('decrypted-message-received', ged.GUI2, self._on_decrypted_message_received),
+            ('gc-stanza-message-outgoing', ged.OUT_POSTCORE, self._on_message_sent),
             ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
         ])
         # pylint: enable=line-too-long
@@ -785,9 +785,8 @@ class GroupchatControl(ChatControlBase):
         """
         self.xml.banner_name_label.set_text(self.room_name)
 
-    def _nec_update_room_avatar(self, obj):
-        if obj.jid != self.room_jid:
-            return
+    @event_filter(['jid=room_jid'])
+    def _on_update_room_avatar(self, event):
         self._update_banner_state_image()
 
     @event_filter(['account'])
@@ -815,37 +814,37 @@ class GroupchatControl(ChatControlBase):
             modal=False).show()
 
     @event_filter(['account'])
-    def _nec_mam_decrypted_message_received(self, obj):
-        if not obj.properties.type.is_groupchat:
+    def _on_mam_decrypted_message_received(self, event):
+        if not event.properties.type.is_groupchat:
             return
-        if obj.archive_jid != self.room_jid:
+        if event.archive_jid != self.room_jid:
             return
-        self.add_message(obj.msgtxt,
-                         contact=obj.properties.muc_nickname,
-                         tim=obj.properties.mam.timestamp,
-                         correct_id=obj.correct_id,
-                         message_id=obj.properties.id,
-                         additional_data=obj.additional_data)
+        self.add_message(event.msgtxt,
+                         contact=event.properties.muc_nickname,
+                         tim=event.properties.mam.timestamp,
+                         correct_id=event.correct_id,
+                         message_id=event.properties.id,
+                         additional_data=event.additional_data)
 
     @event_filter(['account', 'room_jid'])
-    def _nec_gc_message_received(self, obj):
-        if obj.properties.muc_nickname is None:
+    def _on_gc_message_received(self, event):
+        if event.properties.muc_nickname is None:
             # message from server
-            self.add_message(obj.msgtxt,
-                             tim=obj.properties.timestamp,
-                             displaymarking=obj.displaymarking,
-                             additional_data=obj.additional_data)
+            self.add_message(event.msgtxt,
+                             tim=event.properties.timestamp,
+                             displaymarking=event.displaymarking,
+                             additional_data=event.additional_data)
         else:
-            if obj.properties.muc_nickname == self.nick:
-                self.last_sent_txt = obj.msgtxt
-            self.add_message(obj.msgtxt,
-                             contact=obj.properties.muc_nickname,
-                             tim=obj.properties.timestamp,
-                             displaymarking=obj.displaymarking,
-                             correct_id=obj.correct_id,
-                             message_id=obj.properties.id,
-                             additional_data=obj.additional_data)
-        obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
+            if event.properties.muc_nickname == self.nick:
+                self.last_sent_txt = event.msgtxt
+            self.add_message(event.msgtxt,
+                             contact=event.properties.muc_nickname,
+                             tim=event.properties.timestamp,
+                             displaymarking=event.displaymarking,
+                             correct_id=event.correct_id,
+                             message_id=event.properties.id,
+                             additional_data=event.additional_data)
+        event.needs_highlight = self.needs_visual_notification(event.msgtxt)
 
     def on_private_message(self, nick, sent, msg, tim, session, additional_data,
                            msg_log_id=None, displaymarking=None):
@@ -1083,43 +1082,41 @@ class GroupchatControl(ChatControlBase):
         for change in changes:
             self.add_info_message(change)
 
-    def _nec_signed_in(self, obj):
-        if obj.conn.name != self.account:
+    def _on_signed_in(self, event):
+        if event.conn.name != self.account:
             return
-        obj.conn.get_module('MUC').join(self._muc_data)
+        event.conn.get_module('MUC').join(self._muc_data)
 
-    def _nec_decrypted_message_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-
-        if not obj.properties.jid.bareMatch(self.room_jid):
+    @event_filter(['account'])
+    def _on_decrypted_message_received(self, event):
+        if not event.properties.jid.bareMatch(self.room_jid):
             return
 
-        if obj.properties.is_muc_pm and not obj.session.control:
+        if event.properties.is_muc_pm and not event.session.control:
             # We got a pm from this room
-            nick = obj.resource
+            nick = event.resource
             # otherwise pass it off to the control to be queued
             self.on_private_message(nick,
-                                    obj.properties.is_sent_carbon,
-                                    obj.msgtxt,
-                                    obj.properties.timestamp,
+                                    event.properties.is_sent_carbon,
+                                    event.msgtxt,
+                                    event.properties.timestamp,
                                     self.session,
-                                    obj.additional_data,
-                                    msg_log_id=obj.msg_log_id,
-                                    displaymarking=obj.displaymarking)
+                                    event.additional_data,
+                                    msg_log_id=event.msg_log_id,
+                                    displaymarking=event.displaymarking)
 
-    def _nec_ping(self, obj):
-        if self.contact.jid != obj.contact.room_jid:
+    def _nec_ping(self, event):
+        if self.contact.jid != event.contact.room_jid:
             return
 
-        nick = obj.contact.get_shown_name()
-        if obj.name == 'ping-sent':
+        nick = event.contact.get_shown_name()
+        if event.name == 'ping-sent':
             self.add_info_message(_('Ping? (%s)') % nick)
-        elif obj.name == 'ping-reply':
+        elif event.name == 'ping-reply':
             self.add_info_message(
                 _('Pong! (%(nick)s %(delay)s s.)') % {'nick': nick,
-                                                      'delay': obj.seconds})
-        elif obj.name == 'ping-error':
+                                                      'delay': event.seconds})
+        elif event.name == 'ping-error':
             self.add_info_message(_('Error.'))
 
     @property
@@ -1519,15 +1516,13 @@ class GroupchatControl(ChatControlBase):
         if self._wait_for_destruction:
             self._close_control()
 
-    @event_filter(['account'])
-    def _message_sent(self, obj):
-        if not obj.message:
-            return
-        if obj.jid != self.room_jid:
+    @event_filter(['account', 'jid=room_jid'])
+    def _on_message_sent(self, event):
+        if not event.message:
             return
         # we'll save sent message text when we'll receive it in
         # _nec_gc_message_received
-        self.last_sent_msg = obj.stanza_id
+        self.last_sent_msg = event.stanza_id
         if self.correcting:
             self.correcting = False
             gtkgui_helpers.remove_css_class(

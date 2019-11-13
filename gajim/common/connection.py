@@ -1666,9 +1666,14 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_gc_message(self, obj):
         obj.stanza_id = self.connection.send(obj.msg_iq)
         app.nec.push_incoming_event(MessageSentEvent(
-            None, conn=self, jid=obj.jid, message=obj.message,
+            None,
+            conn=self,
+            account=self.name,
+            jid=obj.jid,
+            message=obj.message,
             automatic_message=obj.automatic_message,
-            stanza_id=obj.stanza_id, additional_data=obj.additional_data))
+            stanza_id=obj.stanza_id,
+            additional_data=obj.additional_data))
 
     def unregister_account(self, on_remove_success):
         self._unregister_account = True
