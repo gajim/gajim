@@ -1727,17 +1727,6 @@ class GroupchatControl(ChatControlBase):
         # Sending active to undo unread state
         self.parent_win.redraw_tab(self, 'active')
 
-    def get_specific_unread(self):
-        # returns the number of the number of unread msgs
-        # for room_jid & number of unread private msgs with each contact
-        # that we have
-        nb = 0
-        for nick in app.contacts.get_nick_list(self.account, self.room_jid):
-            fjid = self.room_jid + '/' + nick
-            nb += len(app.events.get_events(self.account, fjid))
-            # gc can only have messages as event
-        return nb
-
     def _on_drag_data_received(self, widget, context, x, y, selection,
                                target_type, timestamp):
         if not selection.get_data():

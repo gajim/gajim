@@ -129,11 +129,6 @@ class MessageControl:
         Derived classes MAY implement this
         """
 
-    def update_font(self):
-        """
-        Derived classes SHOULD implement this
-        """
-
     def update_tags(self):
         """
         Derived classes SHOULD implement this
@@ -166,10 +161,6 @@ class MessageControl:
 
     def got_disconnected(self):
         pass
-
-    def get_specific_unread(self):
-        return len(app.events.get_events(self.account,
-                self.contact.jid))
 
     def set_session(self, session):
         oldsession = None
