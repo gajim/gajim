@@ -1388,12 +1388,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 return
         _on_ok(gc_contact)
 
-    def on_notify_menuitem_toggled(self, widget):
-        app.config.set_per('rooms',
-                           self.contact.jid,
-                           'notify_on_all_messages',
-                           widget.get_active())
-
     def set_control_active(self, state):
         con = app.connections[self.account]
         if state:
