@@ -25,6 +25,7 @@
 
 import os
 import time
+import uuid
 from tempfile import TemporaryDirectory
 
 from gi.repository import Gtk
@@ -47,9 +48,7 @@ from gajim.common.const import Chatstate
 
 from gajim import gtkgui_helpers
 
-from gajim.message_control import MessageControl
 from gajim.conversation_textview import ConversationTextview
-
 
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
@@ -60,6 +59,7 @@ from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import get_hardware_key_codes
+from gajim.gtk.util import get_builder
 from gajim.gtk.const import ControlType  # pylint: disable=unused-import
 from gajim.gtk.emoji_chooser import emoji_chooser
 
@@ -80,8 +80,7 @@ if app.is_installed('GSPELL'):
 
 
 ################################################################################
-class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
-                      EventHelper):
+class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     """
     A base class containing a banner, ConversationTextview, MessageInputTextView
     """
@@ -109,13 +108,22 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
             if _contact and not isinstance(_contact, GC_Contact):
                 contact = _contact
 
-        MessageControl.__init__(self,
-                                self._type,
-                                parent_win,
-                                widget_name,
-                                contact,
-                                acct,
-                                resource=resource)
+        self.handlers = {}
+        self.parent_win = parent_win
+        self.contact = contact
+        self.account = acct
+        self.resource = resource
+
+        # control_id is a unique id for the control,
+        # its used as action name for actions that belong to a control
+        self.control_id = str(uuid.uuid4())
+        self.session = None
+
+        app.last_message_time[self.account][self.get_full_jid()] = 0
+
+        self.xml = get_builder('%s.ui' % widget_name)
+        self.xml.connect_signals(self)
+        self.widget = self.xml.get_object('%s_hbox' % widget_name)
 
         if not self._type.is_groupchat:
             # Create banner and connect signals
@@ -265,6 +273,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
             ('ping-error', ged.GUI1, self._nec_ping),
             ('sec-catalog-received', ged.GUI1, self._sec_labels_received),
             ('style-changed', ged.GUI1, self._style_changed),
+            ('message-outgoing', ged.OUT_GUI1, self._nec_message_outgoing),
         ])
         # pylint: enable=line-too-long
 
@@ -287,6 +296,41 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
     @property
     def is_groupchat(self):
         return self._type.is_groupchat
+
+    def get_full_jid(self):
+        fjid = self.contact.jid
+        if self.resource:
+            fjid += '/' + self.resource
+        return fjid
+
+    def minimizable(self):
+        """
+        Called to check if control can be minimized
+
+        Derived classes MAY implement this.
+        """
+        return False
+
+    def safe_shutdown(self):
+        """
+        Called to check if control can be closed without losing data.
+        returns True if control can be closed safely else False
+
+        Derived classes MAY implement this.
+        """
+        return True
+
+    def allow_shutdown(self, method, on_response_yes, on_response_no,
+                    on_response_minimize):
+        """
+        Called to check is a control is allowed to shutdown.
+        If a control is not in a suitable shutdown state this method
+        should call on_response_no, else on_response_yes or
+        on_response_minimize
+
+        Derived classes MAY implement this.
+        """
+        on_response_yes(self)
 
     def get_nb_unread(self):
         jid = self.contact.jid
@@ -344,6 +388,50 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
         Derived types MAY implement this
         """
 
+    def get_tab_label(self, chatstate):
+        """
+        Return a suitable tab label string. Returns a tuple such as: (label_str,
+        color) either of which can be None if chatstate is given that means we
+        have HE SENT US a chatstate and we want it displayed
+
+        Derivded classes MUST implement this.
+        """
+        # Return a markup'd label and optional Gtk.Color in a tuple like:
+        # return (label_str, None)
+
+    def get_tab_image(self, count_unread=True):
+        # Return a suitable tab image for display.
+        # None clears any current label.
+        return None
+
+    def prepare_context_menu(self, hide_buttonbar_items=False):
+        """
+        Derived classes SHOULD implement this
+        """
+        return None
+
+    def set_session(self, session):
+        oldsession = None
+        if hasattr(self, 'session'):
+            oldsession = self.session
+
+        if oldsession and session == oldsession:
+            return
+
+        self.session = session
+
+        if session:
+            session.control = self
+
+        if session and oldsession:
+            oldsession.control = None
+
+    def remove_session(self, session):
+        if session != self.session:
+            return
+        self.session.control = None
+        self.session = None
+
     def _nec_our_status(self, obj):
         if self.account != obj.conn.name:
             return
@@ -359,6 +447,38 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
 
     def _nec_ping(self, obj):
         raise NotImplementedError
+
+    def _nec_message_outgoing(self, obj):
+        # Send the given message to the active tab.
+        # Doesn't return None if error
+        if obj.control != self:
+            return
+
+        obj.message = helpers.remove_invalid_xml_chars(obj.message)
+
+        conn = app.connections[self.account]
+
+        if not self.session:
+            if (not obj.resource and
+                    obj.jid != app.get_jid_from_account(self.account)):
+                if self.resource:
+                    obj.resource = self.resource
+                else:
+                    obj.resource = self.contact.resource
+            sess = conn.find_controlless_session(obj.jid, resource=obj.resource)
+
+            if self.resource:
+                obj.jid += '/' + self.resource
+
+            if not sess:
+                if self._type.is_privatechat:
+                    sess = conn.make_new_session(obj.jid, type_='pm')
+                else:
+                    sess = conn.make_new_session(obj.jid)
+
+            self.set_session(sess)
+
+        obj.session = self.session
 
     def setup_seclabel(self):
         self.xml.label_selector.hide()
@@ -601,7 +721,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
         menu.show_all()
 
     def shutdown(self):
-        super(ChatControlBase, self).shutdown()
         # PluginSystem: removing GUI extension points
         # connected with ChatControlBase instance object
         app.plugin_manager.remove_gui_extension_point('chat_control_base', self)
@@ -738,7 +857,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
             self.space_pressed = False
 
         # Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
-        if self.widget_name == 'groupchat_control':
+        if self._type.is_groupchat:
             if event.keyval not in (Gdk.KEY_ISO_Left_Tab, Gdk.KEY_Tab):
                 self.last_key_tabs = False
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
@@ -793,7 +912,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools,
                         self.command_hits[0] + ' ')
                     self.last_key_tabs = True
                 return True
-            if self.widget_name != 'groupchat_control':
+            if not self._type.is_groupchat:
                 self.last_key_tabs = False
         if event.keyval == Gdk.KEY_Up:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
