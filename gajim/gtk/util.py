@@ -519,17 +519,6 @@ def ensure_not_destroyed(func):
     return func_wrapper
 
 
-def ensure_proper_control(func):
-    @wraps(func)
-    def func_wrapper(self, event):
-        if event.account != self.account:
-            return
-        if event.jid != self.contact.jid:
-            return
-        return func(self, event)
-    return func_wrapper
-
-
 def format_mood(mood, text):
     if mood is None:
         return ''

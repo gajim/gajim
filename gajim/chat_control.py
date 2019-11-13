@@ -67,7 +67,6 @@ from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_cursor
-from gajim.gtk.util import ensure_proper_control
 from gajim.gtk.util import format_mood
 from gajim.gtk.util import format_activity
 from gajim.gtk.util import format_tune
@@ -468,29 +467,29 @@ class ChatControl(ChatControlBase):
             return self.xml.location_image
         return None
 
-    @ensure_proper_control
+    @event_filter(['account', 'jid'])
     def _on_mood_received(self, _event):
         self._update_pep(PEPEventType.MOOD)
 
-    @ensure_proper_control
+    @event_filter(['account', 'jid'])
     def _on_activity_received(self, _event):
         self._update_pep(PEPEventType.ACTIVITY)
 
-    @ensure_proper_control
+    @event_filter(['account', 'jid'])
     def _on_tune_received(self, _event):
         self._update_pep(PEPEventType.TUNE)
 
-    @ensure_proper_control
+    @event_filter(['account', 'jid'])
     def _on_location_received(self, _event):
         self._update_pep(PEPEventType.LOCATION)
 
-    @ensure_proper_control
+    @event_filter(['account', 'jid'])
     def _on_nickname_received(self, _event):
         self.update_ui()
         self.parent_win.redraw_tab(self)
         self.parent_win.show_title()
 
-    @ensure_proper_control
+    @event_filter(['account', 'jid'])
     def _on_update_client_info(self, event):
         contact = app.contacts.get_contact(
             self.account, event.jid, event.resource)
