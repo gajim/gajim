@@ -51,6 +51,7 @@ from gajim.common.const import ACTIVITIES
 from gajim.common.const import LOCATION_DATA
 from gajim.common.const import Display
 from gajim.common.const import StyleAttr
+from gajim.common.nec import EventHelper as CommonEventHelper
 
 from gajim.gtk.const import GajimIconSet
 
@@ -700,3 +701,15 @@ def make_href_markup(string):
             url, color, match.group())
 
     return URL_REGEX.sub(_to_href, string)
+
+
+class EventHelper(CommonEventHelper):
+    def __init__(self):
+        CommonEventHelper.__init__(self)
+        self.connect('destroy', self.__on_destroy)
+
+    def connect(self, *args):
+        raise NotImplementedError
+
+    def __on_destroy(self, *args):
+        self.unregister_events()
