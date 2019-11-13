@@ -36,15 +36,17 @@ from gajim import gtkgui_helpers
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import EventHelper
 from gajim.gtk.filechoosers import AvatarChooserDialog
 
 
 log = logging.getLogger('gajim.profile')
 
 
-class ProfileWindow(Gtk.ApplicationWindow):
+class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
     def __init__(self, account):
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
@@ -76,10 +78,10 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self.remove_statusbar_timeout_id = None
 
         self.xml.connect_signals(self)
-        app.ged.register_event_handler('vcard-published', ged.GUI1,
-                                       self._nec_vcard_published)
-        app.ged.register_event_handler('vcard-not-published', ged.GUI1,
-                                       self._nec_vcard_not_published)
+        self.register_events([
+            ('vcard-published', ged.GUI1, self._nec_vcard_published),
+            ('vcard-not-published', ged.GUI1, self._nec_vcard_not_published),
+        ])
 
         self.show_all()
         self.xml.get_object('ok_button').grab_focus()
@@ -102,10 +104,6 @@ class ProfileWindow(Gtk.ApplicationWindow):
             GLib.source_remove(self.update_progressbar_timeout_id)
         if self.remove_statusbar_timeout_id is not None:
             GLib.source_remove(self.remove_statusbar_timeout_id)
-        app.ged.remove_event_handler(
-            'vcard-published', ged.GUI1, self._nec_vcard_published)
-        app.ged.remove_event_handler(
-            'vcard-not-published', ged.GUI1, self._nec_vcard_not_published)
 
         if self.dialog:  # Image chooser dialog
             self.dialog.destroy()

@@ -53,23 +53,14 @@ class HTTPUpload(BaseModule):
         self.httpupload_namespace = None
         self._allowed_headers = ['Authorization', 'Cookie', 'Expires']
         self.max_file_size = None  # maximum file size in bytes
-
-        app.ged.register_event_handler('stanza-message-outgoing',
-                                       ged.OUT_PREGUI,
-                                       self.handle_outgoing_stanza)
-        app.ged.register_event_handler('gc-stanza-message-outgoing',
-                                       ged.OUT_PREGUI,
-                                       self.handle_outgoing_stanza)
-
         self.messages = []
 
-    def cleanup(self):
-        app.ged.remove_event_handler('stanza-message-outgoing',
-                                     ged.OUT_PREGUI,
-                                     self.handle_outgoing_stanza)
-        app.ged.remove_event_handler('gc-stanza-message-outgoing',
-                                     ged.OUT_PREGUI,
-                                     self.handle_outgoing_stanza)
+        # pylint: disable=line-too-long
+        self.register_events([
+            ('stanza-message-outgoing', ged.OUT_PREGUI, self.handle_outgoing_stanza),
+            ('gc-stanza-message-outgoing', ged.OUT_PREGUI, self.handle_outgoing_stanza),
+        ])
+        # pylint: enable=line-too-long
 
     def pass_disco(self, info):
         if NS_HTTPUPLOAD_0 in info.features:

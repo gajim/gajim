@@ -44,18 +44,20 @@ from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
+from gajim.common.nec import EventHelper
 
 from gajim.gtk.util import get_builder
 
 # log = logging.getLogger('gajim.vcard')
 
 
-class VcardWindow:
+class VcardWindow(EventHelper):
     """
     Class for contact's information window
     """
 
     def __init__(self, contact, account, gc_contact=None):
+        EventHelper.__init__(self)
         # the contact variable is the jid if vcard is true
         self.xml = get_builder('vcard_information_window.ui')
         self.window = self.xml.get_object('vcard_information_window')
@@ -103,8 +105,9 @@ class VcardWindow:
         self.update_progressbar_timeout_id = GLib.timeout_add(self.update_intervall,
             self.update_progressbar)
 
-        app.ged.register_event_handler('time-result-received', ged.GUI1,
-            self.set_entity_time)
+        self.register_events([
+            ('time-result-received', ged.GUI1, self.set_entity_time),
+        ])
 
         self.fill_jabber_page()
         con = app.connections[self.account]
@@ -147,8 +150,7 @@ class VcardWindow:
         if note is None or new_annotation != note.data:
             new_note = AnnotationNote(jid=self.contact.jid, data=new_annotation)
             con.get_module('Annotations').set_note(new_note)
-        app.ged.remove_event_handler('time-result-received', ged.GUI1,
-            self.set_entity_time)
+        self.unregister_events()
 
     def on_vcard_information_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:

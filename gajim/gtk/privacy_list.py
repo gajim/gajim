@@ -20,15 +20,17 @@ from gi.repository import GObject
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
+from gajim.common.nec import EventHelper
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 
 
-class PrivacyListWindow:
+class PrivacyListWindow(EventHelper):
     def __init__(self, account, privacy_list_name, action):
-        '''action is 'EDIT' or 'NEW' depending on if we create a new priv list
-        or edit an already existing one'''
+        # action is 'EDIT' or 'NEW' depending on if we create a new priv list
+        # or edit an already existing one
+        EventHelper.__init__(self)
         self.account = account
         self.privacy_list_name = privacy_list_name
 
@@ -103,10 +105,12 @@ class PrivacyListWindow:
 
         self.window.set_title(title)
 
-        app.ged.register_event_handler('privacy-list-received', ged.GUI1,
-                                       self._nec_privacy_list_received)
-        app.ged.register_event_handler('privacy-lists-received', ged.GUI1,
-                                       self._nec_privacy_lists_received)
+        # pylint: disable=line-too-long
+        self.register_events([
+            ('privacy-list-received', ged.GUI1, self._nec_privacy_list_received),
+            ('privacy-lists-received', ged.GUI1, self._nec_privacy_lists_received)
+        ])
+        # pylint: enable=line-too-long
 
         self.window.show_all()
         self.add_edit_vbox.hide()
@@ -121,10 +125,7 @@ class PrivacyListWindow:
         key_name = 'privacy_list_%s' % self.privacy_list_name
         if key_name in app.interface.instances[self.account]:
             del app.interface.instances[self.account][key_name]
-        app.ged.remove_event_handler('privacy-list-received', ged.GUI1,
-                                     self._nec_privacy_list_received)
-        app.ged.remove_event_handler('privacy-lists-received', ged.GUI1,
-                                     self._nec_privacy_lists_received)
+        self.unregister_events()
 
     def _nec_privacy_lists_received(self, obj):
         if obj.conn.name != self.account:
@@ -397,12 +398,13 @@ class PrivacyListWindow:
         self.window.destroy()
 
 
-class PrivacyListsWindow:
+class PrivacyListsWindow(EventHelper):
     """
     Window that is the main window for Privacy Lists; we can list there the
     privacy lists and ask to create a new one or edit an already there one
     """
     def __init__(self, account):
+        EventHelper.__init__(self)
         self.account = account
         self.privacy_lists_save = []
 
@@ -428,10 +430,12 @@ class PrivacyListsWindow:
 
         self.window.set_title(title)
 
-        app.ged.register_event_handler('privacy-lists-received', ged.GUI1,
-                                       self._nec_privacy_lists_received)
-        app.ged.register_event_handler('privacy-list-removed', ged.GUI1,
-                                       self._nec_privacy_lists_removed)
+        # pylint: disable=line-too-long
+        self.register_events([
+            ('privacy-lists-received', ged.GUI1, self._nec_privacy_lists_received),
+            ('privacy-list-removed', ged.GUI1, self._nec_privacy_lists_removed),
+        ])
+        # pylint: enable=line-too-long
 
         self.window.show_all()
 
@@ -444,10 +448,7 @@ class PrivacyListsWindow:
     def on_privacy_lists_first_window_destroy(self, widget):
         if 'privacy_lists' in app.interface.instances[self.account]:
             del app.interface.instances[self.account]['privacy_lists']
-        app.ged.remove_event_handler('privacy-lists-received', ged.GUI1,
-                                     self._nec_privacy_lists_received)
-        app.ged.remove_event_handler('privacy-list-removed', ged.GUI1,
-                                     self._nec_privacy_lists_removed)
+        self.unregister_events()
 
     def remove_privacy_list_from_combobox(self, privacy_list):
         if privacy_list not in self.privacy_lists_save:

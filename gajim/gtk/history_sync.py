@@ -26,6 +26,7 @@ from gajim.common.const import ArchiveState
 from gajim.common.helpers import event_filter
 
 from gajim.gtk.util import load_icon
+from gajim.gtk.util import EventHelper
 
 log = logging.getLogger('gajim.gtk.history_sync')
 
@@ -36,9 +37,10 @@ class Pages(IntEnum):
     SUMMARY = 2
 
 
-class HistorySyncAssistant(Gtk.Assistant):
+class HistorySyncAssistant(Gtk.Assistant, EventHelper):
     def __init__(self, account, parent):
         Gtk.Assistant.__init__(self)
+        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_name('HistorySyncAssistant')
@@ -86,18 +88,15 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.set_page_type(self.summary, Gtk.AssistantPageType.SUMMARY)
         self.set_page_complete(self.summary, True)
 
-        app.ged.register_event_handler('archiving-count-received',
-                                       ged.GUI1,
-                                       self._received_count)
-        app.ged.register_event_handler('archiving-interval-finished',
-                                       ged.GUI1,
-                                       self._received_finished)
-        app.ged.register_event_handler('mam-message-received',
-                                       ged.PRECORE,
-                                       self._nec_mam_message_received)
+        # pylint: disable=line-too-long
+        self.register_events([
+            ('archiving-count-received', ged.GUI1, self._received_count),
+            ('archiving-interval-finished', ged.GUI1, self._received_finished),
+            ('mam-message-received', ged.PRECORE, self._nec_mam_message_received),
+        ])
+        # pylint: enable=line-too-long
 
         self.connect('prepare', self._on_page_change)
-        self.connect('destroy', self._on_destroy)
         self.connect('cancel', self._on_close_clicked)
         self.connect('close', self._on_close_clicked)
 
@@ -181,17 +180,6 @@ class HistorySyncAssistant(Gtk.Assistant):
             self.next.hide()
             self._prepare_query()
         self.set_title(_('Synchronise History'))
-
-    def _on_destroy(self, *args):
-        app.ged.remove_event_handler('archiving-count-received',
-                                     ged.GUI1,
-                                     self._received_count)
-        app.ged.remove_event_handler('archiving-interval-finished',
-                                     ged.GUI1,
-                                     self._received_finished)
-        app.ged.remove_event_handler('mam-message-received',
-                                     ged.PRECORE,
-                                     self._nec_mam_message_received)
 
     def _on_close_clicked(self, *args):
         self.destroy()

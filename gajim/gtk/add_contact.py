@@ -23,9 +23,10 @@ from gajim.common.i18n import _
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import EventHelper
 
 
-class AddNewContactWindow(Gtk.ApplicationWindow):
+class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
 
     uid_labels = {'jabber': _('XMPP Address'),
                   'gadu-gadu': _('GG Number'),
@@ -33,13 +34,13 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
 
     def __init__(self, account=None, jid=None, user_nick=None, group=None):
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_resizable(False)
         self.set_title(_('Add Contact'))
 
-        self.connect('destroy', self._on_destroy)
         self.connect('key-press-event', self._on_key_press)
 
         self.account = account
@@ -203,16 +204,10 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
         self.uid_entry.connect('changed', self.on_uid_entry_changed)
         self.show_all()
 
-        app.ged.register_event_handler('gateway-prompt-received', ged.GUI1,
-                                       self._nec_gateway_prompt_received)
-        app.ged.register_event_handler('presence-received', ged.GUI1,
-                                       self._nec_presence_received)
-
-    def _on_destroy(self, widget):
-        app.ged.remove_event_handler('presence-received', ged.GUI1,
-                                     self._nec_presence_received)
-        app.ged.remove_event_handler('gateway-prompt-received', ged.GUI1,
-                                     self._nec_gateway_prompt_received)
+        self.register_events([
+            ('gateway-prompt-received', ged.GUI1, self._nec_gateway_prompt_received),
+            ('presence-received', ged.GUI1, self._nec_presence_received),
+        ])
 
     def on_uid_entry_changed(self, widget):
         is_empty = bool(not self.uid_entry.get_text() == '')

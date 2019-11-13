@@ -24,15 +24,17 @@ import nbxmpp
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
+from gajim.common.nec import EventHelper
 from gajim.common.modules.util import LogAdapter
 
 
-class BaseModule:
+class BaseModule(EventHelper):
 
     _nbxmpp_extends = ''
     _nbxmpp_methods = []  # type: List[str]
 
     def __init__(self, con, *args, plugin=False, **kwargs):
+        EventHelper.__init__(self)
         self._con = con
         self._account = con.name
         self._log = self._set_logger(plugin)
@@ -90,3 +92,6 @@ class BaseModule:
             return
         self._log.info('Send stored publish')
         self._stored_publish()  # pylint: disable=not-callable
+
+    def cleanup(self):
+        self.unregister_events()

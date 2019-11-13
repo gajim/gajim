@@ -23,11 +23,13 @@ from gajim.common import ged
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import EventHelper
 
 
-class HTTPUploadProgressWindow(Gtk.ApplicationWindow):
+class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
     def __init__(self, file):
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_name('HTTPUploadProgressWindow')
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -55,8 +57,9 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow):
         self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
-        app.ged.register_event_handler('httpupload-progress', ged.CORE,
-                                       self._on_httpupload_progress)
+        self.register_events([
+            ('httpupload-progress', ged.CORE, self._on_httpupload_progress),
+        ])
 
     def _on_httpupload_progress(self, obj):
         if self.file != obj.file:
@@ -84,8 +87,6 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow):
         self.event.set()
         if self.pulse:
             GLib.source_remove(self.pulse)
-        app.ged.remove_event_handler('httpupload-progress', ged.CORE,
-                                     self._on_httpupload_progress)
 
     def _update_progress(self, seen, total):
         if self.event.isSet():

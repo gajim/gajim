@@ -31,6 +31,7 @@ from gajim.gui_menu_builder import SearchMenu
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import find_widget
+from gajim.gtk.util import EventHelper
 
 log = logging.getLogger('gajim.gtk.search')
 
@@ -43,9 +44,10 @@ class Page(IntEnum):
     ERROR = 4
 
 
-class Search(Gtk.Assistant):
+class Search(Gtk.Assistant, EventHelper):
     def __init__(self, account, jid, transient_for=None):
         Gtk.Assistant.__init__(self)
+        EventHelper.__init__(self)
 
         self._con = app.connections[account]
         self._account = account
@@ -78,12 +80,10 @@ class Search(Gtk.Assistant):
         self._add_custom_buttons()
 
         self.show()
-        app.ged.register_event_handler('search-form-received',
-                                       ged.GUI1,
-                                       self._search_form_received)
-        app.ged.register_event_handler('search-result-received',
-                                       ged.GUI1,
-                                       self._search_result_received)
+        self.register_events([
+            ('search-form-received', ged.GUI1, self._search_form_received),
+            ('search-result-received', ged.GUI1, self._search_result_received),
+        ])
 
         self._request_search_fields()
 
@@ -164,12 +164,6 @@ class Search(Gtk.Assistant):
         self.set_current_page(Page.ERROR)
 
     def _on_cancel(self, _widget):
-        app.ged.remove_event_handler('search-form-received',
-                                     ged.GUI1,
-                                     self._search_form_received)
-        app.ged.remove_event_handler('search-result-received',
-                                     ged.GUI1,
-                                     self._search_result_received)
         self.destroy()
 
     def _on_destroy(self, *args):

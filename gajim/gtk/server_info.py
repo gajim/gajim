@@ -28,13 +28,15 @@ from gajim.common.i18n import _
 from gajim.gtk.dialogs import CertificateDialog
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import EventHelper
 
 log = logging.getLogger('gajim.gtk.server_info')
 
 
-class ServerInfo(Gtk.ApplicationWindow):
+class ServerInfo(Gtk.ApplicationWindow, EventHelper):
     def __init__(self, account):
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_name('ServerInfo')
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -52,9 +54,9 @@ class ServerInfo(Gtk.ApplicationWindow):
         self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
 
-        app.ged.register_event_handler('server-disco-received',
-                                       ged.GUI1,
-                                       self._server_disco_received)
+        self.register_events([
+            ('server-disco-received', ged.GUI1, self._server_disco_received),
+        ])
 
         self.version = ''
         self.hostname = app.get_hostname_from_account(account)
@@ -256,9 +258,6 @@ class ServerInfo(Gtk.ApplicationWindow):
 
     def on_destroy(self, *args):
         self._destroyed = True
-        app.ged.remove_event_handler('server-disco-received',
-                                     ged.GUI1,
-                                     self._server_disco_received)
 
 
 class FeatureItem(Gtk.Grid):

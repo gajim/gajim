@@ -25,11 +25,13 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dataform import DataFormDialog
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import EventHelper
 
 
-class ManagePEPServicesWindow(Gtk.ApplicationWindow):
+class ManagePEPServicesWindow(Gtk.ApplicationWindow, EventHelper):
     def __init__(self, account):
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
@@ -49,21 +51,17 @@ class ManagePEPServicesWindow(Gtk.ApplicationWindow):
         self._ui.services_treeview.get_selection().connect(
             'changed', self._on_services_selection_changed)
 
-        app.ged.register_event_handler(
-            'pubsub-config-received', ged.GUI1, self._nec_pep_config_received)
+        self.register_events([
+            ('pubsub-config-received', ged.GUI1, self._nec_pep_config_received),
+        ])
 
         self.show_all()
         self.connect('key-press-event', self._on_key_press_event)
-        self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
     def _on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
-
-    def _on_destroy(self, *args):
-        app.ged.remove_event_handler(
-            'pubsub-config-received', ged.GUI1, self._nec_pep_config_received)
 
     def _on_services_selection_changed(self, sel):
         self._ui.configure_button.set_sensitive(True)

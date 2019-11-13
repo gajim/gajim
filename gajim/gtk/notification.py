@@ -37,6 +37,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.common.i18n import _
+from gajim.common.nec import EventHelper
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
@@ -46,21 +47,23 @@ from gajim.gtk.util import get_total_screen_geometry
 log = logging.getLogger('gajim.gtk.notification')
 
 
-class Notification:
+class Notification(EventHelper):
     """
     Handle notifications
     """
     def __init__(self):
+        EventHelper.__init__(self)
         self._dbus_available = False
         self._daemon_capabilities = ['actions']
         self._win32_active_popup = None
 
         self._detect_dbus_caps()
 
-        app.ged.register_event_handler(
-            'notification', ged.GUI2, self._nec_notification)
-        app.ged.register_event_handler(
-            'our-show', ged.GUI2, self._nec_our_status)
+        self.register_events([
+            ('notification', ged.GUI2, self._nec_notification),
+            ('our-show', ged.GUI2, self._nec_our_status),
+        ])
+
         app.events.event_removed_subscribe(self._on_event_removed)
 
     def _detect_dbus_caps(self):

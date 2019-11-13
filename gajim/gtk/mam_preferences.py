@@ -22,6 +22,7 @@ from gajim.common import ged
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import EventHelper
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import InformationDialog
@@ -29,15 +30,15 @@ from gajim.gtk.dialogs import InformationDialog
 log = logging.getLogger('gajim.gtk.mam_preferences')
 
 
-class MamPreferences(Gtk.ApplicationWindow):
+class MamPreferences(Gtk.ApplicationWindow, EventHelper):
     def __init__(self, account):
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('Archiving Preferences for %s') % account)
 
-        self.connect('destroy', self._on_destroy)
         self.connect('key-press-event', self._on_key_press)
 
         self.account = account
@@ -49,12 +50,11 @@ class MamPreferences(Gtk.ApplicationWindow):
         self._spinner = Gtk.Spinner()
         self._ui.overlay.add_overlay(self._spinner)
 
-        app.ged.register_event_handler('mam-prefs-received', ged.GUI1,
-                                       self._mam_prefs_received)
-        app.ged.register_event_handler('mam-prefs-saved', ged.GUI1,
-                                       self._mam_prefs_saved)
-        app.ged.register_event_handler('mam-prefs-error', ged.GUI1,
-                                       self._mam_prefs_error)
+        self.register_events([
+            ('mam-prefs-received', ged.GUI1, self._mam_prefs_received),
+            ('mam-prefs-saved', ged.GUI1, self._mam_prefs_saved),
+            ('mam-prefs-error', ged.GUI1, self._mam_prefs_error),
+        ])
 
         self._set_mam_box_state(False)
         self._ui.connect_signals(self)
@@ -147,11 +147,3 @@ class MamPreferences(Gtk.ApplicationWindow):
     def _on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
-
-    def _on_destroy(self, widget):
-        app.ged.remove_event_handler('mam-prefs-received', ged.GUI1,
-                                     self._mam_prefs_received)
-        app.ged.remove_event_handler('mam-prefs-saved', ged.GUI1,
-                                     self._mam_prefs_saved)
-        app.ged.remove_event_handler('mam-prefs-error', ged.GUI1,
-                                     self._mam_prefs_error)

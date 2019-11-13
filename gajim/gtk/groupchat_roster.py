@@ -35,6 +35,7 @@ from gajim.common.const import StyleAttr
 from gajim.gui_menu_builder import get_groupchat_roster_menu
 from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import EventHelper
 
 
 AffiliationRoleSortOrder = {
@@ -54,7 +55,7 @@ class Column(IntEnum):
     NICK_OR_GROUP = 4
 
 
-class GroupchatRoster(Gtk.ScrolledWindow):
+class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
     __gsignals__ = {
         'row-activated': (
@@ -65,6 +66,7 @@ class GroupchatRoster(Gtk.ScrolledWindow):
 
     def __init__(self, account, room_jid, control):
         Gtk.ScrolledWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.get_style_context().add_class('groupchat-roster')
         self._account = account
@@ -98,13 +100,10 @@ class GroupchatRoster(Gtk.ScrolledWindow):
         self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
-        self._event_handlers = [
+        self.register_events([
             ('theme-update', ged.GUI2, self._on_theme_update),
             ('update-gc-avatar', ged.GUI1, self._on_avatar_update),
-        ]
-
-        for handler in self._event_handlers:
-            app.ged.register_event_handler(*handler)
+        ])
 
     @staticmethod
     def _on_focus_out(treeview, _param):
@@ -473,9 +472,6 @@ class GroupchatRoster(Gtk.ScrolledWindow):
         self._store.clear()
 
     def _on_destroy(self, _roster):
-        for handler in self._event_handlers:
-            app.ged.remove_event_handler(*handler)
-
         for id_ in list(self._handler_ids.keys()):
             if self._handler_ids[id_].handler_is_connected(id_):
                 self._handler_ids[id_].disconnect(id_)

@@ -27,6 +27,7 @@ from gajim.common.const import StyleAttr
 from gajim.gtk import util
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import MaxWidthComboBoxText
+from gajim.gtk.util import EventHelper
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.const import Setting
@@ -34,9 +35,10 @@ from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 
 
-class XMLConsoleWindow(Gtk.ApplicationWindow):
+class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def __init__(self):
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_default_size(600, 600)
@@ -77,14 +79,13 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
         self._create_tags()
         self.show_all()
 
-        self.connect('destroy', self._on_destroy)
         self.connect('key_press_event', self._on_key_press_event)
         self._ui.connect_signals(self)
 
-        app.ged.register_event_handler(
-            'stanza-received', ged.GUI1, self._nec_stanza_received)
-        app.ged.register_event_handler(
-            'stanza-sent', ged.GUI1, self._nec_stanza_sent)
+        self.register_events([
+            ('stanza-received', ged.GUI1, self._nec_stanza_received),
+            ('stanza-sent', ged.GUI1, self._nec_stanza_sent),
+        ])
 
     def _on_value_change(self, combo):
         self._selected_send_account = combo.get_active_id()
@@ -311,12 +312,6 @@ class XMLConsoleWindow(Gtk.ApplicationWindow):
 
     def _on_clear(self, *args):
         self._ui.textview.get_buffer().set_text('')
-
-    def _on_destroy(self, *args):
-        app.ged.remove_event_handler(
-            'stanza-received', ged.GUI1, self._nec_stanza_received)
-        app.ged.remove_event_handler(
-            'stanza-sent', ged.GUI1, self._nec_stanza_sent)
 
     def _set_account(self, value, _data):
         self.selected_account = value

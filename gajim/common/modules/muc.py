@@ -109,12 +109,9 @@ class MUC(BaseModule):
                           priority=49)
         ]
 
-        self._event_handlers = [
+        self.register_events([
             ('account-disconnected', ged.CORE, self._on_account_disconnected),
-        ]
-
-        for handler in self._event_handlers:
-            app.ged.register_event_handler(*handler)
+        ])
 
         self._manager = MUCManager(self._log)
         self._rejoin_muc = set()
@@ -836,10 +833,6 @@ class MUC(BaseModule):
 
         for room_jid in list(self._join_timeouts.keys()):
             self._remove_join_timeout(room_jid)
-
-    def cleanup(self):
-        for handler in self._event_handlers:
-            app.ged.remove_event_handler(*handler)
 
 
 class MUCManager:

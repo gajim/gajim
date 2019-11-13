@@ -26,6 +26,7 @@ from gajim.common import configpaths
 from gajim.common import helpers
 from gajim.common import connection
 from gajim.common.i18n import _
+from gajim.common.nec import EventHelper
 
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
@@ -36,8 +37,9 @@ from gajim.gtk.proxies import ManageProxies
 from gajim.gtk.dataform import FakeDataFormWidget
 
 
-class AccountCreationWizard:
+class AccountCreationWizard(EventHelper):
     def __init__(self):
+        EventHelper.__init__(self)
         self.xml = get_builder('account_creation_wizard_window.ui')
         self.window = self.xml.get_object('account_creation_wizard_window')
         active_window = app.app.get_active_window()
@@ -85,18 +87,13 @@ class AccountCreationWizard:
         self.notebook.set_current_page(0)
         self.xml.connect_signals(self)
         self.window.show_all()
-        app.ged.register_event_handler(
-            'new-account-connected', ged.GUI1,
-            self._nec_new_acc_connected)
-        app.ged.register_event_handler(
-            'new-account-not-connected', ged.GUI1,
-            self._nec_new_acc_not_connected)
-        app.ged.register_event_handler(
-            'account-created', ged.GUI1,
-            self._nec_acc_is_ok)
-        app.ged.register_event_handler(
-            'account-not-created', ged.GUI1,
-            self._nec_acc_is_not_ok)
+
+        self.register_events([
+            ('new-account-connected', ged.GUI1, self._nec_new_acc_connected),
+            ('new-account-not-connected', ged.GUI1, self._nec_new_acc_not_connected),
+            ('account-created', ged.GUI1, self._nec_acc_is_ok),
+            ('account-not-created', ged.GUI1, self._nec_acc_is_not_ok),
+        ])
 
     def on_wizard_window_destroy(self, widget):
         page = self.notebook.get_current_page()
@@ -106,18 +103,7 @@ class AccountCreationWizard:
             del app.connections[self.account]
             if self.account in app.config.get_per('accounts'):
                 app.config.del_per('accounts', self.account)
-        app.ged.remove_event_handler(
-            'new-account-connected', ged.GUI1,
-            self._nec_new_acc_connected)
-        app.ged.remove_event_handler(
-            'new-account-not-connected', ged.GUI1,
-            self._nec_new_acc_not_connected)
-        app.ged.remove_event_handler(
-            'account-created', ged.GUI1,
-            self._nec_acc_is_ok)
-        app.ged.remove_event_handler(
-            'account-not-created', ged.GUI1,
-            self._nec_acc_is_not_ok)
+        self.unregister_events()
         del app.interface.instances['account_creation_wizard']
 
     def on_save_password_checkbutton_toggled(self, widget):
