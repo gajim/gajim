@@ -76,6 +76,7 @@ class Caps(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('caps-update',
                          conn=self._con,
+                         account=self._account,
                          fjid=jid,
                          jid=properties.jid.getBare()))
 
@@ -135,6 +136,7 @@ class Caps(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('caps-update',
                          conn=self._con,
+                         account=self._account,
                          fjid=str(info.jid),
                          jid=bare_jid))
 

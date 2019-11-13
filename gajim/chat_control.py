@@ -216,11 +216,11 @@ class ChatControl(ChatControlBase):
             ('tune-received', ged.GUI1, self._on_tune_received),
             ('location-received', ged.GUI1, self._on_location_received),
             ('update-client-info', ged.GUI1, self._on_update_client_info),
-            ('chatstate-received', ged.GUI1, self._nec_chatstate_received),
-            ('caps-update', ged.GUI1, self._nec_caps_received),
-            ('message-sent', ged.OUT_POSTCORE, self._message_sent),
-            ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
-            ('decrypted-message-received', ged.GUI1, self._nec_decrypted_message_received),
+            ('chatstate-received', ged.GUI1, self._on_chatstate_received),
+            ('caps-update', ged.GUI1, self._on_caps_update),
+            ('message-sent', ged.OUT_POSTCORE, self._on_message_sent),
+            ('mam-decrypted-message-received', ged.GUI1, self._on_mam_decrypted_message_received),
+            ('decrypted-message-received', ged.GUI1, self._on_decrypted_message_received),
             ('receipt-received', ged.GUI1, self._receipt_received),
             ('message-error', ged.GUI1, self._on_message_error),
             ('zeroconf-error', ged.GUI1, self._on_zeroconf_error),
@@ -228,7 +228,7 @@ class ChatControl(ChatControlBase):
 
         if self._type.is_chat:
             # Dont connect this when PrivateChatControl is used
-            self.register_event('update-roster-avatar', ged.GUI1, self._nec_update_avatar)
+            self.register_event('update-roster-avatar', ged.GUI1, self._on_update_roster_avatar)
         # pylint: enable=line-too-long
 
         # PluginSystem: adding GUI extension point for this ChatControl
@@ -496,6 +496,136 @@ class ChatControl(ChatControlBase):
         if contact is None:
             return
         self.xml.phone_image.set_visible(contact.uses_phone)
+
+    @event_filter(['account'])
+    def _on_chatstate_received(self, event):
+        if self._type.is_privatechat:
+            if event.contact != self.gc_contact:
+                return
+        else:
+            if event.contact.jid != self.contact.jid:
+                return
+
+        self.draw_banner_text()
+
+        # update chatstate in tab for this chat
+        if event.contact.is_gc_contact:
+            chatstate = event.contact.chatstate
+        else:
+            chatstate = app.contacts.get_combined_chatstate(
+                self.account, self.contact.jid)
+        self.parent_win.redraw_tab(self, chatstate)
+
+    @event_filter(['account'])
+    def _on_caps_update(self, event):
+        if self._type.is_chat and event.jid != self.contact.jid:
+            return
+        if self._type.is_privatechat and event.fjid != self.contact.jid:
+            return
+        self.update_ui()
+
+    @event_filter(['account'])
+    def _on_mam_decrypted_message_received(self, event):
+        if event.properties.type.is_groupchat:
+            return
+
+        if event.properties.is_muc_pm:
+            if not event.properties.jid == self.contact.get_full_jid():
+                return
+        else:
+            if not event.properties.jid.bareMatch(self.contact.jid):
+                return
+
+        kind = '' # incoming
+        if event.kind == KindConstant.CHAT_MSG_SENT:
+            kind = 'outgoing'
+
+        self.add_message(event.msgtxt,
+                         kind,
+                         tim=event.properties.mam.timestamp,
+                         correct_id=event.correct_id,
+                         message_id=event.properties.id,
+                         additional_data=event.additional_data)
+
+    @event_filter(['account'])
+    def _on_decrypted_message_received(self, event):
+        if not event.msgtxt:
+            return True
+
+        if event.session.control != self:
+            return
+
+        typ = ''
+        if event.properties.is_sent_carbon:
+            typ = 'out'
+
+        self.add_message(event.msgtxt,
+                         typ,
+                         tim=event.properties.timestamp,
+                         subject=event.properties.subject,
+                         displaymarking=event.displaymarking,
+                         msg_log_id=event.msg_log_id,
+                         message_id=event.properties.id,
+                         correct_id=event.correct_id,
+                         additional_data=event.additional_data)
+        if event.msg_log_id:
+            pw = self.parent_win
+            end = self.conv_textview.autoscroll
+            if not pw or (pw.get_active_control() and self \
+            == pw.get_active_control() and pw.is_active() and end):
+                app.logger.set_read_messages([event.msg_log_id])
+
+    @event_filter(['account', 'jid'])
+    def _on_message_error(self, event):
+        self.conv_textview.show_error(event.message_id, event.error)
+
+    @event_filter(['account', 'jid'])
+    def _on_message_sent(self, event):
+        if not event.message:
+            return
+
+        self.last_sent_msg = event.stanza_id
+        message_id = event.msg_iq.getID()
+
+        if event.label:
+            displaymarking = event.label.getTag('displaymarking')
+        else:
+            displaymarking = None
+        if self.correcting:
+            self.correcting = False
+            gtkgui_helpers.remove_css_class(
+                self.msg_textview, 'gajim-msg-correcting')
+
+        self.add_message(event.message,
+                         self.contact.jid,
+                         tim=event.timestamp,
+                         displaymarking=displaymarking,
+                         message_id=message_id,
+                         correct_id=event.correct_id,
+                         additional_data=event.additional_data)
+
+    @event_filter(['account', 'jid'])
+    def _receipt_received(self, event):
+        self.conv_textview.show_receipt(event.receipt_id)
+
+    @event_filter(['account', 'jid'])
+    def _on_zeroconf_error(self, event):
+        self.add_status_message(event.message)
+
+    @event_filter(['account', 'jid'])
+    def _on_update_roster_avatar(self, obj):
+        self.show_avatar()
+
+    def _nec_ping(self, event):
+        if self.contact != event.contact:
+            return
+        if event.name == 'ping-sent':
+            self.add_info_message(_('Ping?'))
+        elif event.name == 'ping-reply':
+            self.add_info_message(
+                _('Pong! (%s seconds)') % event.seconds)
+        elif event.name == 'ping-error':
+            self.add_info_message(_('Error.'))
 
     def _update_jingle(self, jingle_type):
         if jingle_type not in ('audio', 'video'):
@@ -786,90 +916,6 @@ class ChatControl(ChatControlBase):
             fixed.set_no_show_all(True)
             self.close_jingle_content(jingle_type)
 
-    @event_filter(['account'])
-    def _nec_mam_decrypted_message_received(self, obj):
-        if obj.properties.type.is_groupchat:
-            return
-
-        if obj.properties.is_muc_pm:
-            if not obj.properties.jid == self.contact.get_full_jid():
-                return
-        else:
-            if not obj.properties.jid.bareMatch(self.contact.jid):
-                return
-
-        kind = '' # incoming
-        if obj.kind == KindConstant.CHAT_MSG_SENT:
-            kind = 'outgoing'
-
-        self.add_message(obj.msgtxt,
-                         kind,
-                         tim=obj.properties.mam.timestamp,
-                         correct_id=obj.correct_id,
-                         message_id=obj.properties.id,
-                         additional_data=obj.additional_data)
-
-    def _nec_decrypted_message_received(self, obj):
-        if not obj.msgtxt:
-            return True
-        if obj.conn.name != self.account:
-            return
-
-        if obj.session.control != self:
-            return
-
-        typ = ''
-        if obj.properties.is_sent_carbon:
-            typ = 'out'
-
-        self.add_message(obj.msgtxt,
-                         typ,
-                         tim=obj.properties.timestamp,
-                         subject=obj.properties.subject,
-                         displaymarking=obj.displaymarking,
-                         msg_log_id=obj.msg_log_id,
-                         message_id=obj.properties.id,
-                         correct_id=obj.correct_id,
-                         additional_data=obj.additional_data)
-        if obj.msg_log_id:
-            pw = self.parent_win
-            end = self.conv_textview.autoscroll
-            if not pw or (pw.get_active_control() and self \
-            == pw.get_active_control() and pw.is_active() and end):
-                app.logger.set_read_messages([obj.msg_log_id])
-
-    @event_filter(['account', 'jid'])
-    def _on_message_error(self, event):
-        self.conv_textview.show_error(event.message_id, event.error)
-
-    def _message_sent(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if obj.jid != self.contact.jid:
-            return
-        if not obj.message:
-            return
-
-        self.last_sent_msg = obj.stanza_id
-        message_id = obj.msg_iq.getID()
-
-        if obj.label:
-            displaymarking = obj.label.getTag('displaymarking')
-        else:
-            displaymarking = None
-        if self.correcting:
-            self.correcting = False
-            gtkgui_helpers.remove_css_class(
-                self.msg_textview, 'gajim-msg-correcting')
-
-        self.add_message(obj.message,
-                         self.contact.jid,
-                         tim=obj.timestamp,
-                         displaymarking=displaymarking,
-                         message_id=message_id,
-                         correct_id=obj.correct_id,
-                         additional_data=obj.additional_data)
-
     def send_message(self, message, xhtml=None,
                      process_commands=True, attention=False):
         """
@@ -956,10 +1002,6 @@ class ChatControl(ChatControlBase):
             self.old_msg_kind = None
         else:
             self.old_msg_kind = kind
-
-    @event_filter(['account', 'jid'])
-    def _receipt_received(self, event):
-        self.conv_textview.show_receipt(event.receipt_id)
 
     def get_tab_label(self):
         unread = ''
@@ -1111,47 +1153,6 @@ class ChatControl(ChatControlBase):
             return
         on_yes(self)
 
-    def _nec_chatstate_received(self, event):
-        if event.account != self.account:
-            return
-
-        if self._type.is_privatechat:
-            if event.contact != self.gc_contact:
-                return
-        else:
-            if event.contact.jid != self.contact.jid:
-                return
-
-        self.draw_banner_text()
-
-        # update chatstate in tab for this chat
-        if event.contact.is_gc_contact:
-            chatstate = event.contact.chatstate
-        else:
-            chatstate = app.contacts.get_combined_chatstate(
-                self.account, self.contact.jid)
-        self.parent_win.redraw_tab(self, chatstate)
-
-    def _nec_caps_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if self._type.is_chat and obj.jid != self.contact.jid:
-            return
-        if self._type.is_privatechat and obj.fjid != self.contact.jid:
-            return
-        self.update_ui()
-
-    def _nec_ping(self, obj):
-        if self.contact != obj.contact:
-            return
-        if obj.name == 'ping-sent':
-            self.add_info_message(_('Ping?'))
-        elif obj.name == 'ping-reply':
-            self.add_info_message(
-                _('Pong! (%s seconds)') % obj.seconds)
-        elif obj.name == 'ping-error':
-            self.add_info_message(_('Error.'))
-
     def show_avatar(self):
         if not app.config.get('show_avatar_in_chat'):
             return
@@ -1164,13 +1165,6 @@ class ChatControl(ChatControlBase):
                                           self.contact.show)
 
         self.xml.avatar_image.set_from_surface(surface)
-
-    def _nec_update_avatar(self, obj):
-        if obj.account != self.account:
-            return
-        if obj.jid != self.contact.jid:
-            return
-        self.show_avatar()
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
                                target_type, timestamp):
@@ -1362,10 +1356,6 @@ class ChatControl(ChatControlBase):
         status_line = _('%(name)s is now %(show)s %(status)s') % {
             'name': name, 'show': uf_show, 'status': status or ''}
         self.add_status_message(status_line)
-
-    @event_filter(['account', 'jid'])
-    def _on_zeroconf_error(self, event):
-        self.add_status_message(event.message)
 
     def _info_bar_show_message(self):
         if self.info_bar.get_visible():
