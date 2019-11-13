@@ -15,7 +15,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk, Gio, GLib
-from nbxmpp.protocol import NS_COMMANDS, NS_FILE
+from nbxmpp.protocol import NS_COMMANDS
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
 
 from gajim import gtkgui_helpers
@@ -208,14 +208,17 @@ control=None, gc_contact=None, is_anonymous=True):
     if len(contacts) > 1 and use_multiple_contacts: # several resources
         start_chat_menuitem.set_submenu(build_resources_submenu(contacts,
                 account, app.interface.on_open_chat_window))
-        send_file_menuitem.set_submenu(build_resources_submenu(contacts,
-                account, roster.on_send_file_menuitem_activate, cap=NS_FILE))
+        send_file_menuitem.set_submenu(build_resources_submenu(
+            contacts,
+            account,
+            roster.on_send_file_menuitem_activate,
+            cap=NS_JINGLE_FILE_TRANSFER_5))
         execute_command_menuitem.set_submenu(build_resources_submenu(
                 contacts, account, roster.on_execute_command, cap=NS_COMMANDS))
     else:
         start_chat_menuitem.connect('activate',
                 app.interface.on_open_chat_window, contact, account)
-        if contact.supports(NS_FILE) or contact.supports(NS_JINGLE_FILE_TRANSFER_5):
+        if contact.supports(NS_JINGLE_FILE_TRANSFER_5):
             send_file_menuitem.set_sensitive(True)
             send_file_menuitem.connect('activate',
                     roster.on_send_file_menuitem_activate, contact, account)

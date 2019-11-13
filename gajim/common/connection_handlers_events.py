@@ -21,7 +21,6 @@ import logging
 
 import OpenSSL.crypto
 import nbxmpp
-from nbxmpp.modules import dataforms
 
 from gajim.common import nec
 from gajim.common import helpers
@@ -148,104 +147,65 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
         self.id_ = self.stanza.getID()
         self.fjid = self.conn.get_module('Bytestream')._ft_get_from(self.stanza)
         self.jid = app.get_jid_without_resource(self.fjid)
-        if self.jingle_content:
-            secu = self.jingle_content.getTag('security')
-            self.FT_content.use_security = bool(secu)
-            if secu:
-                fingerprint = secu.getTag('fingerprint')
-                if fingerprint:
-                    self.FT_content.x509_fingerprint = fingerprint.getData()
-            if not self.FT_content.transport:
-                self.FT_content.transport = JingleTransportSocks5()
-                self.FT_content.transport.set_our_jid(
-                    self.FT_content.session.ourjid)
-                self.FT_content.transport.set_connection(
-                    self.FT_content.session.connection)
-            sid = self.stanza.getTag('jingle').getAttr('sid')
-            self.file_props = FilesProp.getNewFileProp(self.conn.name, sid)
-            self.file_props.transport_sid = self.FT_content.transport.sid
-            self.FT_content.file_props = self.file_props
-            self.FT_content.transport.set_file_props(self.file_props)
-            self.file_props.streamhosts.extend(
-                    self.FT_content.transport.remote_candidates)
-            for host in self.file_props.streamhosts:
-                host['initiator'] = self.FT_content.session.initiator
-                host['target'] = self.FT_content.session.responder
-            self.file_props.session_type = 'jingle'
-            self.file_props.stream_methods = nbxmpp.NS_BYTESTREAM
-            desc = self.jingle_content.getTag('description')
-            if self.jingle_content.getAttr('creator') == 'initiator':
-                file_tag = desc.getTag('file')
-                self.file_props.sender = self.fjid
-                self.file_props.receiver = self.conn.get_module('Bytestream')._ft_get_our_jid()
-            else:
-                file_tag = desc.getTag('file')
-                h = file_tag.getTag('hash')
-                h = h.getData() if h else None
-                n = file_tag.getTag('name')
-                n = n.getData() if n else None
-                pjid = app.get_jid_without_resource(self.fjid)
-                file_info = self.conn.get_module('Jingle').get_file_info(
-                    pjid, hash_=h, name=n, account=self.conn.name)
-                self.file_props.file_name = file_info['file-name']
-                self.file_props.sender = self.conn.get_module('Bytestream')._ft_get_our_jid()
-                self.file_props.receiver = self.fjid
-                self.file_props.type_ = 's'
-            for child in file_tag.getChildren():
-                name = child.getName()
-                val = child.getData()
-                if val is None:
-                    continue
-                if name == 'name':
-                    self.file_props.name = val
-                if name == 'size':
-                    self.file_props.size = int(val)
-                if name == 'hash':
-                    self.file_props.algo = child.getAttr('algo')
-                    self.file_props.hash_ = val
-                if name == 'date':
-                    self.file_props.date = val
-        else:
-            si = self.stanza.getTag('si')
-            self.file_props = FilesProp.getNewFileProp(self.conn.name,
-                si.getAttr('id'))
-            self.file_props.transport_sid = self.file_props.sid
-            profile = si.getAttr('profile')
-            if profile != nbxmpp.NS_FILE:
-                self.conn.get_module('Bytestream').send_file_rejection(self.file_props, code='400',
-                    typ='profile')
-                raise nbxmpp.NodeProcessed
-            feature_tag = si.getTag('feature', namespace=nbxmpp.NS_FEATURE)
-            if not feature_tag:
-                return
-            form_tag = feature_tag.getTag('x', namespace=nbxmpp.NS_DATA)
-            if not form_tag:
-                return
-            self.dataform = dataforms.extend_form(node=form_tag)
-            for f in self.dataform.iter_fields():
-                if f.var == 'stream-method' and f.type_ == 'list-single':
-                    values = [o[1] for o in f.options]
-                    self.file_props.stream_methods = ' '.join(values)
-                    if nbxmpp.NS_BYTESTREAM in values or \
-                    nbxmpp.NS_IBB in values:
-                        break
-            else:
-                self.conn.get_module('Bytestream').send_file_rejection(self.file_props, code='400',
-                    typ='stream')
-                raise nbxmpp.NodeProcessed
-            file_tag = si.getTag('file')
-            for name, val in file_tag.getAttrs().items():
-                if val is None:
-                    continue
-                if name == 'name':
-                    self.file_props.name = val
-                if name == 'size':
-                    self.file_props.size = int(val)
-            mime_type = si.getAttr('mime-type')
-            if mime_type is not None:
-                self.file_props.mime_type = mime_type
+        if not self.jingle_content:
+            return
+        secu = self.jingle_content.getTag('security')
+        self.FT_content.use_security = bool(secu)
+        if secu:
+            fingerprint = secu.getTag('fingerprint')
+            if fingerprint:
+                self.FT_content.x509_fingerprint = fingerprint.getData()
+        if not self.FT_content.transport:
+            self.FT_content.transport = JingleTransportSocks5()
+            self.FT_content.transport.set_our_jid(
+                self.FT_content.session.ourjid)
+            self.FT_content.transport.set_connection(
+                self.FT_content.session.connection)
+        sid = self.stanza.getTag('jingle').getAttr('sid')
+        self.file_props = FilesProp.getNewFileProp(self.conn.name, sid)
+        self.file_props.transport_sid = self.FT_content.transport.sid
+        self.FT_content.file_props = self.file_props
+        self.FT_content.transport.set_file_props(self.file_props)
+        self.file_props.streamhosts.extend(
+                self.FT_content.transport.remote_candidates)
+        for host in self.file_props.streamhosts:
+            host['initiator'] = self.FT_content.session.initiator
+            host['target'] = self.FT_content.session.responder
+        self.file_props.session_type = 'jingle'
+        self.file_props.stream_methods = nbxmpp.NS_BYTESTREAM
+        desc = self.jingle_content.getTag('description')
+        if self.jingle_content.getAttr('creator') == 'initiator':
+            file_tag = desc.getTag('file')
             self.file_props.sender = self.fjid
             self.file_props.receiver = self.conn.get_module('Bytestream')._ft_get_our_jid()
+        else:
+            file_tag = desc.getTag('file')
+            h = file_tag.getTag('hash')
+            h = h.getData() if h else None
+            n = file_tag.getTag('name')
+            n = n.getData() if n else None
+            pjid = app.get_jid_without_resource(self.fjid)
+            file_info = self.conn.get_module('Jingle').get_file_info(
+                pjid, hash_=h, name=n, account=self.conn.name)
+            self.file_props.file_name = file_info['file-name']
+            self.file_props.sender = self.conn.get_module('Bytestream')._ft_get_our_jid()
+            self.file_props.receiver = self.fjid
+            self.file_props.type_ = 's'
+        for child in file_tag.getChildren():
+            name = child.getName()
+            val = child.getData()
+            if val is None:
+                continue
+            if name == 'name':
+                self.file_props.name = val
+            if name == 'size':
+                self.file_props.size = int(val)
+            if name == 'hash':
+                self.file_props.algo = child.getAttr('algo')
+                self.file_props.hash_ = val
+            if name == 'date':
+                self.file_props.date = val
+
         self.file_props.request_id = self.id_
         file_desc_tag = file_tag.getTag('desc')
         if file_desc_tag is not None:

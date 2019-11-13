@@ -36,7 +36,6 @@ from gi.repository import GLib
 from gi.repository import Gdk
 
 from nbxmpp.protocol import NS_XHTML_IM
-from nbxmpp.protocol import NS_FILE
 from nbxmpp.protocol import NS_MUC
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO
 from nbxmpp.protocol import NS_JINGLE_RTP_VIDEO
@@ -313,10 +312,8 @@ class ChatControl(ChatControlBase):
             online and con.get_module('HTTPUpload').available)
 
         # Send file (Jingle)
-        jingle_conditions = (
-            (self.contact.supports(NS_FILE) or
-             self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)) and
-            self.contact.show != 'offline')
+        jingle_support = self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)
+        jingle_conditions = jingle_support and self.contact.show != 'offline'
         jingle = win.lookup_action('send-file-jingle-' + self.control_id)
         jingle.set_enabled(online and jingle_conditions)
 

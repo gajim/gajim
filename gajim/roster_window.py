@@ -41,7 +41,9 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
-from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
+from nbxmpp.protocol import NS_ROSTERX
+from nbxmpp.protocol import NS_CONFERENCE
+from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
 from nbxmpp.structs import MoodData
 from nbxmpp.structs import ActivityData
 
@@ -4191,7 +4193,7 @@ class RosterWindow:
                 return
             c_dest = app.contacts.get_contact_with_highest_priority(
                 account_dest, jid_dest)
-            if not c_dest.supports(NS_FILE):
+            if not c_dest.supports(NS_JINGLE_FILE_TRANSFER_5):
                 return
             uri = data.strip()
             uri_splitted = uri.split() # we may have more than one file dropped
