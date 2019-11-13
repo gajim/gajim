@@ -60,7 +60,6 @@ from gajim.common.const import PEPEventType
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
-from gajim import message_control
 from gajim import dialogs
 
 from gajim.gtk.dialogs import DialogButton
@@ -75,6 +74,7 @@ from gajim.gtk.util import format_tune
 from gajim.gtk.util import format_location
 from gajim.gtk.util import get_activity_icon_name
 from gajim.gtk.util import make_href_markup
+from gajim.gtk.const import ControlType
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
@@ -93,7 +93,7 @@ class ChatControl(ChatControlBase):
         JINGLE_STATE_ERROR
     ) = range(5)
 
-    TYPE_ID = message_control.TYPE_CHAT
+    _type = ControlType.CHAT
     old_msg_kind = None # last kind of the printed message
 
     # Set a command host to bound to. Every command given through a chat will be
@@ -102,7 +102,6 @@ class ChatControl(ChatControlBase):
 
     def __init__(self, parent_win, contact, acct, session, resource=None):
         ChatControlBase.__init__(self,
-                                 self.TYPE_ID,
                                  parent_win,
                                  'chat_control',
                                  contact,
@@ -204,7 +203,7 @@ class ChatControl(ChatControlBase):
 
         self.xml.encryption_menu.set_menu_model(
             gui_menu_builder.get_encryption_menu(
-                self.control_id, self.type_id, self.account == 'Local'))
+                self.control_id, self._type, self.account == 'Local'))
         self.set_encryption_menu_icon()
         # restore previous conversation
         self.restore_conversation()
@@ -228,7 +227,7 @@ class ChatControl(ChatControlBase):
             ('zeroconf-error', ged.GUI1, self._on_zeroconf_error),
         ]
 
-        if self.TYPE_ID == message_control.TYPE_CHAT:
+        if self._type.is_chat:
             # Dont connect this when PrivateChatControl is used
             self._event_handlers.append(('update-roster-avatar', ged.GUI1, self._nec_update_avatar))
         # pylint: enable=line-too-long
@@ -666,7 +665,7 @@ class ChatControl(ChatControlBase):
         name = contact.get_shown_name()
         if self.resource:
             name += '/' + self.resource
-        if self.TYPE_ID == message_control.TYPE_PM:
+        if self._type.is_privatechat:
             name = i18n.direction_mark +  _(
                 '%(nickname)s from group chat %(room_name)s') % \
                 {'nickname': name, 'room_name': self.room_name}
@@ -699,7 +698,7 @@ class ChatControl(ChatControlBase):
             status_reduced = ''
         status_escaped = GLib.markup_escape_text(status_reduced)
 
-        if self.TYPE_ID == 'pm':
+        if self._type.is_privatechat:
             cs = self.gc_contact.chatstate
         else:
             cs = app.contacts.get_combined_chatstate(
@@ -973,7 +972,7 @@ class ChatControl(ChatControlBase):
         else:
             jid = self.contact.jid
         num_unread = len(app.events.get_events(
-            self.account, jid, ['printed_' + self.type_id, self.type_id]))
+            self.account, jid, ['printed_%s' % self._type, str(self._type)]))
         if num_unread == 1 and not app.config.get('show_unread_tab_icon'):
             unread = '*'
         elif num_unread > 1:
@@ -1002,7 +1001,9 @@ class ChatControl(ChatControlBase):
 
         if count_unread:
             num_unread = len(app.events.get_events(
-                self.account, jid, ['printed_' + self.type_id, self.type_id]))
+                self.account,
+                jid,
+                ['printed_%s' % self._type, str(self._type)]))
         else:
             num_unread = 0
 
@@ -1068,7 +1069,7 @@ class ChatControl(ChatControlBase):
         app.events.remove_events(
             self.account,
             self.get_full_jid(),
-            types=['printed_' + self.type_id, self.type_id])
+            types=['printed_%s' % self._type, str(self._type)])
         # Remove contact instance if contact has been removed
         key = (self.contact.jid, self.account)
         roster = app.interface.roster
@@ -1122,7 +1123,7 @@ class ChatControl(ChatControlBase):
         if event.account != self.account:
             return
 
-        if self.TYPE_ID == 'pm':
+        if self._type.is_privatechat:
             if event.contact != self.gc_contact:
                 return
         else:
@@ -1142,9 +1143,9 @@ class ChatControl(ChatControlBase):
     def _nec_caps_received(self, obj):
         if obj.conn.name != self.account:
             return
-        if self.TYPE_ID == 'chat' and obj.jid != self.contact.jid:
+        if self._type.is_chat and obj.jid != self.contact.jid:
             return
-        if self.TYPE_ID == 'pm' and obj.fjid != self.contact.jid:
+        if self._type.is_privatechat and obj.fjid != self.contact.jid:
             return
         self.update_ui()
 
@@ -1185,7 +1186,7 @@ class ChatControl(ChatControlBase):
             return
 
         # get contact info (check for PM = private chat)
-        if self.TYPE_ID == message_control.TYPE_PM:
+        if self._type.is_privatechat:
             contact = self.gc_contact.as_contact()
         else:
             contact = self.contact
@@ -1287,7 +1288,7 @@ class ChatControl(ChatControlBase):
         # list of message ids which should be marked as read
         message_ids = []
         for event in events:
-            if event.type_ != self.type_id:
+            if event.type_ != str(self._type):
                 continue
             kind = 'print_queue'
             if event.sent_forwarded:
@@ -1309,7 +1310,7 @@ class ChatControl(ChatControlBase):
             app.logger.set_read_messages(message_ids)
         app.events.remove_events(self.account,
                                  jid_with_resource,
-                                 types=[self.type_id])
+                                 types=[str(self._type)])
 
         typ = 'chat' # Is it a normal chat or a pm ?
 
@@ -1318,7 +1319,7 @@ class ChatControl(ChatControlBase):
         room_jid, nick = app.get_room_and_nick_from_fjid(jid)
         control = app.interface.msg_win_mgr.get_gc_control(room_jid,
                                                            self.account)
-        if control and control.type_id == message_control.TYPE_GC:
+        if control and control.is_groupchat:
             control.update_ui()
             control.parent_win.show_title()
             typ = 'pm'

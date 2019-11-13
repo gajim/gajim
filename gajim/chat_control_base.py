@@ -45,7 +45,6 @@ from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.const import Chatstate
 
 from gajim import gtkgui_helpers
-from gajim import message_control
 
 from gajim.message_control import MessageControl
 from gajim.conversation_textview import ConversationTextview
@@ -60,6 +59,7 @@ from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import get_hardware_key_codes
+from gajim.gtk.const import ControlType  # pylint: disable=unused-import
 from gajim.gtk.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
@@ -90,8 +90,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     # So we match hardware keycodes instead of keyvals.
     # Multiple hardware keycodes can trigger a keyval like Gdk.KEY_c.
     keycodes_c = get_hardware_key_codes(Gdk.KEY_c)
+    _type = None  # type: ControlType
 
-    def __init__(self, type_id, parent_win, widget_name, contact, acct,
+    def __init__(self, parent_win, widget_name, contact, acct,
                  resource=None):
         # Undo needs this variable to know if space has been pressed.
         # Initialize it to True so empty textview is saved in undo list
@@ -105,10 +106,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if _contact and not isinstance(_contact, GC_Contact):
                 contact = _contact
 
-        MessageControl.__init__(self, type_id, parent_win, widget_name,
-                                contact, acct, resource=resource)
+        MessageControl.__init__(self,
+                                self._type,
+                                parent_win,
+                                widget_name,
+                                contact,
+                                acct,
+                                resource=resource)
 
-        if self.TYPE_ID != message_control.TYPE_GC:
+        if not self._type.is_groupchat:
             # Create banner and connect signals
             id_ = self.xml.banner_eventbox.connect(
                 'button-press-event',
@@ -266,14 +272,30 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
 
+    @property
+    def type(self):
+        return self._type
+
+    @property
+    def is_chat(self):
+        return self._type.is_chat
+
+    @property
+    def is_privatechat(self):
+        return self._type.is_privatechat
+
+    @property
+    def is_groupchat(self):
+        return self._type.is_groupchat
+
     def get_nb_unread(self):
         jid = self.contact.jid
         if self.resource:
             jid += '/' + self.resource
-        type_ = self.type_id
-        return len(app.events.get_events(self.account,
-                                         jid,
-                                         ['printed_' + type_, type_]))
+        return len(app.events.get_events(
+            self.account,
+            jid,
+            ['printed_%s' % self._type, str(self._type)]))
 
     def draw_banner(self):
         """
@@ -330,7 +352,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.got_disconnected()
         else:
             # Other code rejoins all GCs, so we don't do it here
-            if not self.type_id == message_control.TYPE_GC:
+            if not self._type.is_groupchat:
                 self.got_connected()
         if self.parent_win:
             self.parent_win.redraw_tab(self)
@@ -350,7 +372,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.xml.label_selector.add_attribute(cell, 'text', 0)
         con = app.connections[self.account]
         jid = self.contact.jid
-        if self.TYPE_ID == 'pm':
+        if self._type.is_privatechat:
             jid = self.gc_contact.room_jid
         if con.get_module('SecLabels').supported:
             con.get_module('SecLabels').request_catalog(jid)
@@ -360,7 +382,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
 
         jid = self.contact.jid
-        if self.TYPE_ID == 'pm':
+        if self._type.is_privatechat:
             jid = self.gc_contact.room_jid
 
         if event.jid != jid:
@@ -531,7 +553,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def get_speller_language(self):
         per_type = 'contacts'
-        if self.type_id == 'gc':
+        if self._type.is_groupchat:
             per_type = 'rooms'
         lang = app.config.get_per(
             per_type, self.contact.jid, 'speller_language')
@@ -548,7 +570,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def on_language_changed(self, checker, _param):
         gspell_lang = checker.get_language()
         per_type = 'contacts'
-        if self.type_id == message_control.TYPE_GC:
+        if self._type.is_groupchat:
             per_type = 'rooms'
         if not app.config.get_per(per_type, self.contact.jid):
             app.config.add_per(per_type, self.contact.jid)
@@ -676,7 +698,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             'send-file-httpupload-%s' % self.control_id)
         jingle = win.lookup_action('send-file-jingle-%s' % self.control_id)
 
-        if self.type_id == message_control.TYPE_GC:
+        if self._type.is_groupchat:
             # groupchat only supports httpupload on drag and drop
             if httpupload.get_enabled():
                 # use httpupload
@@ -856,7 +878,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             path = helpers.get_file_path_from_dnd_dropped_uri(uri)
             if not os.path.isfile(path):  # is it a file?
                 continue
-            if self.type_id == message_control.TYPE_GC:
+            if self._type.is_groupchat:
                 # groupchat only supports httpupload on drag and drop
                 if httpupload.get_enabled():
                     # use httpupload
@@ -885,7 +907,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         con = app.connections[self.account]
         jid = self.contact.jid
-        if self.TYPE_ID == 'pm':
+        if self._type.is_privatechat:
             jid = self.gc_contact.room_jid
         catalog = con.get_module('SecLabels').get_catalog(jid)
         labels, label_list, _ = catalog
@@ -1066,9 +1088,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
 
         if kind == 'incoming':
-            if not self.type_id == message_control.TYPE_GC or \
-            app.config.notify_for_muc(jid) or \
-            'marked' in other_tags_for_text:
+            if (not self._type.is_groupchat or
+                    app.config.notify_for_muc(jid) or
+                    'marked' in other_tags_for_text):
                 # it's a normal message, or a muc message with want to be
                 # notified about if quitting just after
                 # other_tags_for_text == ['marked'] --> highlighted gc message
@@ -1080,7 +1102,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         if kind in ('incoming', 'incoming_queue', 'error'):
             gc_message = False
-            if self.type_id == message_control.TYPE_GC:
+            if self._type.is_groupchat:
                 gc_message = True
 
             if ((self.parent_win and (not self.parent_win.get_active_control() or \
@@ -1098,7 +1120,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                         event_type = events.PrintedGcMsgEvent
                     event = 'gc_message_received'
                 else:
-                    if self.type_id == message_control.TYPE_CHAT:
+                    if self._type.is_chat:
                         event_type = events.PrintedChatEvent
                     else:
                         event_type = events.PrintedPmEvent
@@ -1217,7 +1239,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             app.interface.instances['file_transfers'].show_file_send_request(
                 self.account, _contact)
 
-        if self.type_id == message_control.TYPE_PM:
+        if self._type.is_privatechat:
             gc_contact = self.gc_contact
 
         if not gc_contact:
@@ -1262,8 +1284,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             jid = self.contact.jid
             if self.conv_textview.autoscroll:
                 # we are at the end
-                type_ = ['printed_' + self.type_id]
-                if self.type_id == message_control.TYPE_GC:
+                type_ = ['printed_%s' % self._type]
+                if self._type.is_groupchat:
                     type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
                 if not app.events.remove_events(self.account,
                                                 self.get_full_jid(),
@@ -1296,12 +1318,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         else:
             jid = self.contact.jid
         types_list = []
-        type_ = self.type_id
-        if type_ == message_control.TYPE_GC:
-            type_ = 'gc_msg'
-            types_list = ['printed_' + type_, type_, 'printed_marked_gc_msg']
+        if self._type.is_groupchat:
+            types_list = ['printed_gc_msg', 'gc_msg', 'printed_marked_gc_msg']
         else: # Not a GC
-            types_list = ['printed_' + type_, type_]
+            types_list = ['printed_%s' % self._type, str(self._type)]
 
         if not app.events.get_events(self.account, jid, types_list):
             return
@@ -1381,7 +1401,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.parent_win.redraw_tab(self)
         self.parent_win.show_title()
         # TODO : get the contact and check get_show_in_roster()
-        if self.type_id == message_control.TYPE_PM:
+        if self._type.is_privatechat:
             room_jid, nick = app.get_room_and_nick_from_fjid(jid)
             groupchat_control = app.interface.msg_win_mgr.get_gc_control(
                 room_jid, self.account)

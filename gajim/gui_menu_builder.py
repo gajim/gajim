@@ -19,7 +19,6 @@ from nbxmpp.protocol import NS_COMMANDS
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
 
 from gajim import gtkgui_helpers
-from gajim import message_control
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import is_affiliation_change_allowed
@@ -30,6 +29,7 @@ from gajim.common.const import URIType
 from gajim.common.const import URIAction
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.const import ControlType
 
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
@@ -97,7 +97,7 @@ show_bookmarked=False, force_resource=False):
         minimized_controls += \
             list(app.interface.minimized_controls[account].values())
     for gc_control in app.interface.msg_win_mgr.get_controls(
-    message_control.TYPE_GC) + minimized_controls:
+            ControlType.GROUPCHAT) + minimized_controls:
         acct = gc_control.account
         if acct not in connected_accounts:
             continue
@@ -748,15 +748,15 @@ def build_accounts_menu():
         menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
 
 
-def get_encryption_menu(control_id, type_id, zeroconf=False):
+def get_encryption_menu(control_id, control_type, zeroconf=False):
     menu = Gio.Menu()
     menu.append(
         'Disabled', 'win.set-encryption-{}::{}'.format(control_id, 'disabled'))
     for name, plugin in app.plugin_manager.encryption_plugins.items():
-        if type_id == 'gc':
+        if control_type.is_groupchat:
             if not hasattr(plugin, 'allow_groupchat'):
                 continue
-        if type_id == 'pm':
+        if control_type.is_privatechat:
             if not hasattr(plugin, 'allow_privatechat'):
                 continue
         if zeroconf:

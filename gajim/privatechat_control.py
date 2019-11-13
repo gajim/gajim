@@ -24,8 +24,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from gajim import message_control
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
@@ -37,10 +35,12 @@ from gajim.command_system.implementation.hosts import PrivateChatCommands
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.const import ControlType
 
 
 class PrivateChatControl(ChatControl):
-    TYPE_ID = message_control.TYPE_PM
+
+    _type = ControlType.PRIVATECHAT
 
     # Set a command host to bound to. Every command given through a private chat
     # will be processed with this command host.
@@ -55,7 +55,6 @@ class PrivateChatControl(ChatControl):
 
         self.gc_contact = gc_contact
         ChatControl.__init__(self, parent_win, contact, account, session)
-        self.TYPE_ID = 'pm'
 
         # pylint: disable=line-too-long
         self.__event_handlers = [
@@ -250,7 +249,9 @@ class PrivateChatControl(ChatControl):
 
         if count_unread:
             num_unread = len(app.events.get_events(
-                self.account, jid, ['printed_' + self.type_id, self.type_id]))
+                self.account,
+                jid,
+                ['printed_%s' % self._type, str(self._type)]))
         else:
             num_unread = 0
 

@@ -55,7 +55,6 @@ from gajim.common.dbus import logind
 
 from gajim import gui_menu_builder
 from gajim import dialogs
-from gajim import message_control
 from gajim.dialog_messages import get_dialog
 
 from gajim.chat_control_base import ChatControlBase
@@ -112,6 +111,7 @@ from gajim.gtk.subscription_request import SubscriptionRequestWindow
 from gajim.gtk.ssl_error_dialog import SSLErrorDialog
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
+from gajim.gtk.const import ControlType
 
 
 parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
@@ -191,7 +191,7 @@ class Interface:
     def handle_event_iq_error(self, event):
         ctrl = self.msg_win_mgr.get_control(event.properties.jid.getBare(),
                                             event.account)
-        if ctrl and ctrl.type_id == message_control.TYPE_GC:
+        if ctrl and ctrl.is_groupchat:
             ctrl.add_info_message('Error: %s' % event.properties.error)
 
     @staticmethod
@@ -860,14 +860,13 @@ class Interface:
     @staticmethod
     def on_file_dialog_ok(chat_control, paths):
         con = app.connections[chat_control.account]
-        groupchat = chat_control.type_id == message_control.TYPE_GC
         for path in paths:
             con.get_module('HTTPUpload').check_file_before_transfer(
                 path,
                 chat_control.encryption,
                 chat_control.contact,
                 chat_control.session,
-                groupchat)
+                chat_control.is_groupchat)
 
     def encrypt_file(self, file, account, callback):
         app.nec.push_incoming_event(HTTPUploadProgressEvent(
@@ -1426,7 +1425,7 @@ class Interface:
             if not mw:
                 mw = self.msg_win_mgr.create_window(contact,
                                                     account,
-                                                    GroupchatControl.TYPE_ID)
+                                                    ControlType.GROUPCHAT)
             control = GroupchatControl(mw, contact, muc_data, account)
             mw.new_tab(control)
             mw.set_active_tab(control)
@@ -1498,8 +1497,8 @@ class Interface:
             message_window = self.msg_win_mgr.get_window(
                 gc_contact.get_full_jid(), account)
             if not message_window:
-                message_window = self.msg_win_mgr.create_window(contact,
-                    account, message_control.TYPE_PM)
+                message_window = self.msg_win_mgr.create_window(
+                    contact, account, ControlType.PRIVATECHAT)
 
             session.control = PrivateChatControl(message_window, gc_contact,
                 contact, account, session)
@@ -1513,16 +1512,14 @@ class Interface:
 
     def new_chat(self, contact, account, resource=None, session=None):
         # Get target window, create a control, and associate it with the window
-        type_ = message_control.TYPE_CHAT
-
         fjid = contact.jid
         if resource:
             fjid += '/' + resource
 
         mw = self.msg_win_mgr.get_window(fjid, account)
         if not mw:
-            mw = self.msg_win_mgr.create_window(contact, account, type_,
-                resource)
+            mw = self.msg_win_mgr.create_window(
+                contact, account, ControlType.CHAT, resource)
 
         chat_control = ChatControl(mw, contact, account, session, resource)
 
@@ -1898,7 +1895,7 @@ class Interface:
         bare_jid in self.minimized_controls[account]:
             gc_ctrl = self.minimized_controls[account][bare_jid]
 
-        return gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC
+        return gc_ctrl and gc_ctrl.is_groupchat
 
     @staticmethod
     def create_ipython_window():

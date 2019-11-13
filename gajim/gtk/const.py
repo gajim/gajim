@@ -69,6 +69,27 @@ class SettingType(IntEnum):
     DIALOG = 4
 
 
+class ControlType(Enum):
+    CHAT = 'chat'
+    GROUPCHAT = 'gc'
+    PRIVATECHAT = 'pm'
+
+    @property
+    def is_chat(self):
+        return self == ControlType.CHAT
+
+    @property
+    def is_groupchat(self):
+        return self == ControlType.GROUPCHAT
+
+    @property
+    def is_privatechat(self):
+        return self == ControlType.PRIVATECHAT
+
+    def __str__(self):
+        return self.value
+
+
 SHOW_COLORS = {
     'online': (102/255, 191/255, 16/255),
     'offline': (154/255, 154/255, 154/255),

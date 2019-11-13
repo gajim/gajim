@@ -30,12 +30,6 @@ from gajim.common import ged
 
 from gajim.gtk.util import get_builder
 
-# Derived types MUST register their type IDs here if custom behavor is required
-TYPE_CHAT = 'chat'
-TYPE_GC = 'gc'
-TYPE_PM = 'pm'
-
-####################
 
 class MessageControl:
     """
@@ -43,12 +37,17 @@ class MessageControl:
     MessageWindow
     """
 
-    def __init__(self, type_id, parent_win, widget_name, contact, account,
-    resource=None):
+    def __init__(self,
+                 control_type,
+                 parent_win,
+                 widget_name,
+                 contact,
+                 account,
+                 resource=None):
         # dict { cb id : widget}
         # keep all registered callbacks of widgets, created by self.xml
+        self.__control_type = control_type
         self.handlers = {}
-        self.type_id = type_id
         self.parent_win = parent_win
         self.widget_name = widget_name
         self.contact = contact
@@ -220,7 +219,7 @@ class MessageControl:
                 obj.jid += '/' + self.resource
 
             if not sess:
-                if self.type_id == TYPE_PM:
+                if self.__control_type.is_privatechat:
                     sess = conn.make_new_session(obj.jid, type_='pm')
                 else:
                     sess = conn.make_new_session(obj.jid)

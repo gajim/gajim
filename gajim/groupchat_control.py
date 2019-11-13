@@ -43,7 +43,6 @@ from gi.repository import Gio
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
-from gajim import message_control
 from gajim import vcard
 
 from gajim.common import events
@@ -76,21 +75,26 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.const import ControlType
 
 
 log = logging.getLogger('gajim.groupchat_control')
 
 
 class GroupchatControl(ChatControlBase):
-    TYPE_ID = message_control.TYPE_GC
+
+    _type = ControlType.GROUPCHAT
 
     # Set a command host to bound to. Every command given through a group chat
     # will be processed with this command host.
     COMMAND_HOST = GroupChatCommands
 
     def __init__(self, parent_win, contact, muc_data, acct):
-        ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-                                 'groupchat_control', contact, acct)
+        ChatControlBase.__init__(self,
+                                 parent_win,
+                                 'groupchat_control',
+                                 contact,
+                                 acct)
         self.force_non_minimizable = False
         self.is_anonymous = True
 
@@ -151,7 +155,7 @@ class GroupchatControl(ChatControlBase):
         self.set_lock_image()
 
         self.xml.encryption_menu.set_menu_model(
-            gui_menu_builder.get_encryption_menu(self.control_id, self.type_id))
+            gui_menu_builder.get_encryption_menu(self.control_id, self._type))
         self.set_encryption_menu_icon()
 
         # Banner

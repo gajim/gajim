@@ -38,7 +38,6 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 
 from gajim import gtkgui_helpers
-from gajim import message_control
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
 
@@ -50,6 +49,7 @@ from gajim.gtk.util import move_window
 from gajim.gtk.util import get_app_icon_list
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import set_urgency_hint
+from gajim.gtk.const import ControlType
 
 
 log = logging.getLogger('gajim.message_window')
@@ -320,7 +320,7 @@ class MessageWindow:
         if ctrl:
             ctrl.set_control_active(True)
             # Undo "unread" state display, etc.
-            if ctrl.type_id == message_control.TYPE_GC:
+            if ctrl.is_groupchat:
                 self.redraw_tab(ctrl, 'active')
             else:
                 # NOTE: we do not send any chatstate to preserve
@@ -488,9 +488,9 @@ class MessageWindow:
             return
         unread = 0
         for ctrl in self.controls():
-            if (ctrl.type_id == message_control.TYPE_GC and not
-                    app.config.notify_for_muc(ctrl.room_jid) and not
-                    ctrl.attention_flag):
+            if (ctrl.is_groupchat and
+                     not app.config.notify_for_muc(ctrl.room_jid) and
+                     not ctrl.attention_flag):
                 # count only pm messages
                 unread += ctrl.get_nb_unread_pm()
                 continue
@@ -504,7 +504,7 @@ class MessageWindow:
         else:
             urgent = False
 
-        if control.type_id == message_control.TYPE_GC:
+        if control.is_groupchat:
             name = control.contact.get_shown_name()
             urgent = (control.attention_flag or
                       app.config.notify_for_muc(control.room_jid))
@@ -1012,6 +1012,7 @@ class MessageWindowMgr(GObject.GObject):
             return type_
 
     def create_window(self, contact, acct, type_, resource=None):
+        type_ = str(type_)
         win_acct = None
         win_type = None
         win_role = None # X11 window role
@@ -1097,7 +1098,7 @@ class MessageWindowMgr(GObject.GObject):
         win = self.get_window(jid, account)
         if win:
             ctrl = win.get_control(jid, account)
-            if not ctrl.resource and ctrl.type_id != message_control.TYPE_GC:
+            if not ctrl.resource and not ctrl.is_groupchat:
                 return ctrl
         return None
 
@@ -1107,7 +1108,7 @@ class MessageWindowMgr(GObject.GObject):
         some day in the future?
         """
         ctrl = self.get_control(jid, acct)
-        if ctrl and ctrl.type_id == message_control.TYPE_GC:
+        if ctrl and ctrl.is_groupchat:
             return ctrl
         return None
 
@@ -1116,7 +1117,7 @@ class MessageWindowMgr(GObject.GObject):
         for c in self.controls():
             if acct and c.account != acct:
                 continue
-            if not type_ or c.type_id == type_:
+            if not type_ or c.type == type_:
                 ctrls.append(c)
         return ctrls
 
@@ -1238,8 +1239,7 @@ class MessageWindowMgr(GObject.GObject):
         for ctrl in controls:
             mw = self.get_window(ctrl.contact.jid, ctrl.account)
             if not mw:
-                mw = self.create_window(ctrl.contact, ctrl.account,
-                                        ctrl.type_id)
+                mw = self.create_window(ctrl.contact, ctrl.account, ctrl.type)
             ctrl.parent_win = mw
             ctrl.add_actions()
             ctrl.update_actions()
@@ -1251,7 +1251,7 @@ class MessageWindowMgr(GObject.GObject):
         chat_controls = {}
         for acct in app.connections:
             chat_controls[acct] = []
-        for ctrl in self.get_controls(type_=message_control.TYPE_CHAT):
+        for ctrl in self.get_controls(type_=ControlType.CHAT):
             acct = ctrl.account
             if ctrl.contact.jid not in chat_controls[acct]:
                 chat_controls[acct].append(ctrl.contact.jid)

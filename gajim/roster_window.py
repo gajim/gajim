@@ -51,7 +51,6 @@ from gajim import dialogs
 from gajim import vcard
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
-from gajim import message_control
 
 from gajim.common import app
 from gajim.common import helpers
@@ -2151,7 +2150,7 @@ class RosterWindow:
 
         # print status in chat window and update status/GPG image
         ctrl = app.interface.msg_win_mgr.get_control(contact.jid, account)
-        if ctrl and ctrl.type_id != message_control.TYPE_GC:
+        if ctrl and not ctrl.is_groupchat:
             ctrl.contact = app.contacts.get_contact_with_highest_priority(
                 account, contact.jid)
             ctrl.update_status_display(name, uf_show, status)
@@ -3031,8 +3030,8 @@ class RosterWindow:
         ctrl = app.interface.minimized_controls[account][jid]
         mw = app.interface.msg_win_mgr.get_window(jid, account)
         if not mw:
-            mw = app.interface.msg_win_mgr.create_window(ctrl.contact,
-                ctrl.account, ctrl.type_id)
+            mw = app.interface.msg_win_mgr.create_window(
+                ctrl.contact, ctrl.account, ctrl.type)
             id_ = mw.window.connect('motion-notify-event',
                 ctrl._on_window_motion_notify)
             ctrl.handlers[id_] = mw.window

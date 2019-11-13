@@ -28,8 +28,6 @@ from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.helpers import open_file
 
-from gajim import message_control
-
 from gajim.chat_control_base import ChatControlBase
 
 from gajim.gtk.util import get_builder
@@ -40,6 +38,7 @@ from gajim.gtk.themes import Themes
 from gajim.gtk.advanced_config import AdvancedConfig
 from gajim.gtk.proxies import ManageProxies
 from gajim.gtk.sounds import ManageSounds
+from gajim.gtk.const import ControlType
 
 try:
     from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
@@ -563,7 +562,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     def _get_all_muc_controls(self):
         for ctrl in app.interface.msg_win_mgr.get_controls(
-        message_control.TYPE_GC):
+                ControlType.GROUPCHAT):
             yield ctrl
         for account in app.connections:
             for ctrl in app.interface.minimized_controls[account].values():
