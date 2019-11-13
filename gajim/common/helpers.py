@@ -1453,12 +1453,17 @@ def event_filter(filter_):
         @wraps(func)
         def func_wrapper(self, event, *args, **kwargs):
             for attr in filter_:
+                if '=' in attr:
+                    attr1, attr2 = attr.split('=')
+                else:
+                    attr1, attr2 = attr, attr
                 try:
-                    if getattr(event, attr) != getattr(self, attr):
-                        return
+                    if getattr(event, attr1) != getattr(self, attr2):
+                        return None
                 except AttributeError:
-                    if getattr(event, attr) != getattr(self, '_%s' % attr):
-                        return
+                    if getattr(event, attr1) != getattr(self, '_%s' % attr2):
+                        return None
+
             return func(self, event, *args, **kwargs)
         return func_wrapper
     return event_filter_decorator
