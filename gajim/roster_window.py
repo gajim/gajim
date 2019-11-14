@@ -72,7 +72,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.dialogs import NonModalConfirmationDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.server_info import ServerInfo
 from gajim.gtk.single_message import SingleMessageWindow
@@ -4220,17 +4219,25 @@ class RosterWindow:
                         app.interface.instances['file_transfers'].send_file(
                             account, c, path)
             # Popup dialog to confirm sending
-            prim_text = _('Send file?')
-            sec_text = i18n.ngettext('Do you want to send this file to %s:',
-                'Do you want to send these files to %s:', nb_uri) %\
-                c_dest.get_shown_name()
+            text = i18n.ngettext(
+                'Send this file to %s:\n',
+                'Send these files to %s:\n',
+                nb_uri) % c_dest.get_shown_name()
+
             for uri in uri_splitted:
                 path = helpers.get_file_path_from_dnd_dropped_uri(uri)
-                sec_text += '\n' + os.path.basename(path)
-            dialog = NonModalConfirmationDialog(prim_text, sec_text,
-                on_response_ok=(_on_send_files, account_dest, jid_dest,
-                uri_splitted))
-            dialog.popup()
+                text += '\n' + os.path.basename(path)
+            NewConfirmationDialog(
+                _('File Transfer'),
+                _('File Transfer'),
+                text,
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('Accept',
+                                   text=_('_Send'),
+                                   is_default=True,
+                                   callback=_on_send_files,
+                                   args=(account_dest, jid_dest, uri_splitted))],
+                transient_for=self.window).show()
             return
 
         # Check if something is selected
