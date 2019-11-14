@@ -2831,19 +2831,35 @@ class RosterWindow:
                     app.config.set('confirm_block', 'yes')
             self.get_status_message('offline', on_continue, show_pep=False)
 
+        # Check if confirmation is needed for blocking
         confirm_block = app.config.get('confirm_block')
         if confirm_block == 'no':
             _block_it()
             return
+
+        # Set dialog's labels depending on if it is a group or a single contact
+        if group is None:
+            title = _('Block Contact')
+            pritext = _('Really block this contact?')
+            sectext = _('This contact will see you offline and you will not '
+                        'receive any messages sent to you by this contact.')
+            button_text = _('_Block Contact')
+        else:
+            title = _('Block Group')
+            pritext = _('Really block this group?')
+            sectext = _('All contacts of this group will see you as offline '
+                        'and you will not receive any messages sent to you '
+                        'by any one of these contacts.')
+            button_text = _('_Block Group')
+
         NewConfirmationCheckDialog(
-            _('Block Contact'),
-            _('Really block this contact?'),
-            _('This contact will see you offline and you will not receive '
-              'any messages sent to you by this contact.'),
+            title,
+            pritext,
+            sectext,
             _('_Do not ask me again'),
             [DialogButton.make('Cancel'),
              DialogButton.make('Remove',
-                               text=_('_Block Contact'),
+                               text=button_text,
                                callback=_block_it)],
             modal=False).show()
 
