@@ -5541,17 +5541,28 @@ class RosterWindow:
         col.set_visible(False)
         self.tree.set_expander_column(col)
 
-        # signals
-        self.TARGET_TYPE_URI_LIST = 80
-        self.tree.enable_model_drag_source(Gdk.ModifierType.BUTTON1_MASK,
-            [], Gdk.DragAction.DEFAULT | Gdk.DragAction.MOVE | \
+        # Signals
+        # Drag
+        self.tree.enable_model_drag_source(
+            Gdk.ModifierType.BUTTON1_MASK,
+            [],
+            Gdk.DragAction.DEFAULT |
+            Gdk.DragAction.MOVE |
             Gdk.DragAction.COPY)
         self.tree.drag_source_add_text_targets()
+
+        # Drop
         self.tree.enable_model_drag_dest([], Gdk.DragAction.DEFAULT)
-        dst_targets = Gtk.TargetList.new([])
+        self.TARGET_TYPE_URI_LIST = 80
+        uri_entry = Gtk.TargetEntry.new(
+            'text/uri-list',
+            Gtk.TargetFlags.OTHER_APP,
+            self.TARGET_TYPE_URI_LIST)
+        dst_targets = Gtk.TargetList.new([uri_entry])
         dst_targets.add_text_targets(0)
-        dst_targets.add_uri_targets(self.TARGET_TYPE_URI_LIST)
         self.tree.drag_dest_set_target_list(dst_targets)
+
+        # Connect
         self.tree.connect('drag-begin', self.drag_begin)
         self.tree.connect('drag-end', self.drag_end)
         self.tree.connect('drag-drop', self.drag_drop)
