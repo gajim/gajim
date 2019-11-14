@@ -42,7 +42,6 @@ from gi.repository import Gio
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
-from gajim.vcard import VcardWindow
 
 from gajim.common import app
 from gajim.common import ged
@@ -73,6 +72,7 @@ from gajim.gui.groupchat_settings import GroupChatSettings
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.util import NickCompletionGenerator
 from gajim.gui.util import get_app_window
+from gajim.gui.util import open_window
 from gajim.gui.const import ControlType
 
 log = logging.getLogger('gajim.groupchat_control')
@@ -674,15 +674,9 @@ class GroupchatControl(ChatControlBase):
 
     def _on_contact_information(self, _action, param):
         nick = param.get_string()
-
         contact = self.contact.get_resource(nick)
-
-        if contact.jid in app.interface.instances[self.account]['infos']:
-            app.interface.instances[self.account]['infos'][contact.jid].\
-                window.present()
-        else:
-            app.interface.instances[self.account]['infos'][contact.jid] = \
-                VcardWindow(contact, self.account, contact)
+        open_window('ContactInfo', account=self.account, contact=contact,
+                    anonymous=self.is_anonymous)
 
     def _on_kick(self, _action, param):
         nick = param.get_string()

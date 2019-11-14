@@ -26,6 +26,7 @@ class AvatarSize(IntEnum):
     TAB = 16
     SHOW_CIRCLE = 24
     ROSTER = 32
+    VCARD_HEADER = 40
     ACCOUNT_SIDE_BAR = 40
     WORKSPACE = 40
     WORKSPACE_EDIT = 100

@@ -22,10 +22,7 @@ from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.util import get_builder
 from gajim.gui.util import load_icon
 
-from gajim.vcard import VcardWindow
-
 from .util import open_window
-
 
 log = logging.getLogger('gajim.gui.main')
 
@@ -476,13 +473,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def contact_info(account, jid):
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
-
-        # TODO: VcardWindow does not work with new type Contacts
-        info = app.interface.instances[account]['infos']
-        if contact.jid in info:
-            info[contact.jid].window.present()
-        else:
-            info[contact.jid] = VcardWindow(contact, account)
+        open_window('ContactInfo', account=account, contact=contact)
 
     @staticmethod
     def execute_command(account, jid):

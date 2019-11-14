@@ -33,6 +33,20 @@ class SideBarSwitcher(Gtk.ListBox):
 
         self._select_first_row()
 
+    def hide_row(self, name):
+        for row in self.get_children():
+            if row.name == name:
+                row.set_no_show_all(True)
+                row.hide()
+                break
+
+    def set_row(self, name):
+        for row in self.get_children():
+            if row.name == name:
+                self.select_row(row)
+                self._stack.set_visible_child_name(name)
+                break
+
     def _on_row_activated(self, _listbox, row):
         self._stack.set_visible_child_name(row.name)
 

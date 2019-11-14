@@ -15,7 +15,6 @@
 from gi.repository import Gdk
 from gi.repository import Gtk
 
-from gajim import vcard
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
@@ -25,6 +24,7 @@ from .service_registration import ServiceRegistration
 from .dialogs import ErrorDialog
 from .util import get_builder
 from .util import EventHelper
+from .util import open_window
 
 
 class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
@@ -205,21 +205,14 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         is_empty = bool(not self._ui.uid_entry.get_text() == '')
         self._ui.show_contact_info_button.set_sensitive(is_empty)
 
-    def on_show_contact_info_button_clicked(self, widget):
+    def on_show_contact_info_button_clicked(self, _widget):
         """
         Ask for vCard
         """
         jid = self._ui.uid_entry.get_text().strip()
-
-        if jid in app.interface.instances[self.account]['infos']:
-            app.interface.instances[self.account]['infos'][jid].window.present()
-        else:
-            contact = app.contacts.create_contact(jid=jid, account=self.account)
-            app.interface.instances[self.account]['infos'][jid] = \
-                     vcard.VcardWindow(contact, self.account)
-            # Remove xmpp page
-            app.interface.instances[self.account]['infos'][jid].xml.\
-                     get_object('information_notebook').remove_page(0)
+        client = app.get_client(self.account)
+        contact = client.get_module('Contacts').get_contact(jid)
+        open_window('ContactInfo', account=self.account, contact=contact)
 
     def on_register_button_clicked(self, widget):
         model = self._ui.protocol_jid_combobox.get_model()

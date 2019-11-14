@@ -15,13 +15,12 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from gajim import vcard
-
 from gajim.common import app
 from gajim.common.i18n import _
 
 from .add_contact import AddNewContactWindow
 from .util import get_builder
+from .util import open_window
 
 
 class SubscriptionRequest(Gtk.ApplicationWindow):
@@ -81,17 +80,9 @@ class SubscriptionRequest(Gtk.ApplicationWindow):
         """
         Ask for vCard
         """
-        open_windows = app.interface.instances[self.account]['infos']
-        if self.jid in open_windows:
-            open_windows[self.jid].window.present()
-        else:
-            contact = app.contacts.create_contact(jid=self.jid,
-                                                  account=self.account)
-            app.interface.instances[self.account]['infos'][self.jid] = \
-                     vcard.VcardWindow(contact, self.account)
-            # Remove xmpp page
-            app.interface.instances[self.account]['infos'][self.jid].xml.\
-                     get_object('information_notebook').remove_page(0)
+        client = app.get_client(self.account)
+        contact = client.get_module('Contacts').get_contact(self.jid)
+        open_window('ContactInfo', account=self.account, contact=contact)
 
     def _on_start_chat_clicked(self, _widget):
         """
