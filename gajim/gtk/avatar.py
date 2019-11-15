@@ -165,6 +165,23 @@ def clip_circle(surface):
     return context.get_target()
 
 
+def get_avatar_from_pixbuf(pixbuf, scale, show=None):
+    size = max(pixbuf.get_width(), pixbuf.get_height())
+    size *= scale
+    surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
+    if surface is None:
+        return None
+    surface = square(surface, size)
+    if surface is None:
+        return None
+    surface = clip_circle(surface)
+    if surface is None:
+        return None
+    if show is not None:
+        return add_status_to_avatar(surface, show)
+    return surface
+
+
 class AvatarStorage(metaclass=Singleton):
     def __init__(self):
         self._cache = defaultdict(dict)
