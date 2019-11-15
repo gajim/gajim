@@ -162,34 +162,32 @@ class MessageWindow(EventHelper):
 
     def _add_actions(self):
         actions = [
-            ('change-nickname', ['<Control><Shift>n']),
-            ('change-subject', ['<Alt>t']),
-            ('escape', ['Escape']),
-            ('browse-history', ['<Control>h']),
-            ('send-file', ['<Control>f']),
-            ('show-contact-info', ['<Control>i']),
-            ('show-emoji-chooser', ['<Alt>m']),
-            ('clear-chat', ['<Control>l']),
-            ('delete-line', ['<Control>u']),
-            ('close-tab', ['<Control>w']),
-            ('move-tab-up', ['<Control><Shift>Page_Up']),
-            ('move-tab-down', ['<Control><Shift>Page_Down']),
-            ('switch-next-tab', ['<Alt>Right']),
-            ('switch-prev-tab', ['<Alt>Left']),
-            ('switch-next-unread-tab-right', ['<Control>Tab',
-                                              '<Control>Page_Down']),
-            ('switch-next-unread-tab-left', ['<Control>ISO_Left_Tab',
-                                             '<Control>Page_Up']),
-            ('switch-tab-1', ['<Alt>1', '<Alt>KP_1']),
-            ('switch-tab-2', ['<Alt>2', '<Alt>KP_2']),
-            ('switch-tab-3', ['<Alt>3', '<Alt>KP_3']),
-            ('switch-tab-4', ['<Alt>4', '<Alt>KP_4']),
-            ('switch-tab-5', ['<Alt>5', '<Alt>KP_5']),
-            ('switch-tab-6', ['<Alt>6', '<Alt>KP_6']),
-            ('switch-tab-7', ['<Alt>7', '<Alt>KP_7']),
-            ('switch-tab-8', ['<Alt>8', '<Alt>KP_8']),
-            ('switch-tab-9', ['<Alt>9', '<Alt>KP_9']),
-            ('copy-text', ['<Control><Shift>c']),
+            'change-nickname',
+            'change-subject',
+            'escape',
+            'browse-history',
+            'send-file',
+            'show-contact-info',
+            'show-emoji-chooser',
+            'clear-chat',
+            'delete-line',
+            'close-tab',
+            'move-tab-up',
+            'move-tab-down',
+            'switch-next-tab',
+            'switch-prev-tab',
+            'switch-next-unread-tab-right'
+            'switch-next-unread-tab-left',
+            'switch-tab-1',
+            'switch-tab-2',
+            'switch-tab-3',
+            'switch-tab-4',
+            'switch-tab-5',
+            'switch-tab-6',
+            'switch-tab-7',
+            'switch-tab-8',
+            'switch-tab-9',
+            'copy-text',
         ]
 
         disabled_for_emacs = (
@@ -201,13 +199,12 @@ class MessageWindow(EventHelper):
         key_theme = Gtk.Settings.get_default().get_property(
             'gtk-key-theme-name')
 
-        for action, keys in actions:
+        for action in actions:
             if key_theme == 'Emacs' and action in disabled_for_emacs:
                 continue
             act = Gio.SimpleAction.new(action, None)
             act.connect('activate', self._on_action)
             self.window.add_action(act)
-            app.app.set_accels_for_action('win.%s' % action, keys)
 
     def _on_action(self, action, _param):
         control = self.get_active_control()

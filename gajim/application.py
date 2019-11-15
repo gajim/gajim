@@ -236,6 +236,7 @@ class GajimApplication(Gtk.Application):
         self.interface = Interface()
         self.interface.run(self)
         self.add_actions()
+        self._set_shortcuts()
         from gajim import gui_menu_builder
         gui_menu_builder.build_accounts_menu()
 
@@ -427,57 +428,44 @@ class GajimApplication(Gtk.Application):
         act.connect('change-state', app_actions.on_merge_accounts)
         self.add_action(act)
 
-        # General Actions
-
-        general_actions = [
-            ('quit', app_actions.on_quit, ['<Primary>Q']),
-            ('add-account', app_actions.on_add_account, None),
-            ('manage-proxies', app_actions.on_manage_proxies, None),
-            ('history-manager', app_actions.on_history_manager, None),
-            ('preferences', app_actions.on_preferences, ['<Primary>P']),
-            ('plugins', app_actions.on_plugins, ['<Primary>E']),
-            ('xml-console', app_actions.on_xml_console, ['<Primary><Shift>X']),
-            ('file-transfer', app_actions.on_file_transfers, ['<Primary>T']),
-            ('history', app_actions.on_history, ['<Primary>H']),
-            ('shortcuts', app_actions.on_keyboard_shortcuts, None),
-            ('features', app_actions.on_features, None),
-            ('content', app_actions.on_contents, None),
-            ('about', app_actions.on_about, None),
-            ('faq', app_actions.on_faq, None),
-            ('ipython', app_actions.toggle_ipython, ['<Primary><Alt>I']),
-            ('show-next-pending-event', app_actions.show_next_pending_event,
-             None),
+        actions = [
+            ('quit', app_actions.on_quit),
+            ('add-account', app_actions.on_add_account),
+            ('manage-proxies', app_actions.on_manage_proxies),
+            ('history-manager', app_actions.on_history_manager),
+            ('preferences', app_actions.on_preferences),
+            ('plugins', app_actions.on_plugins),
+            ('xml-console', app_actions.on_xml_console),
+            ('file-transfer', app_actions.on_file_transfers),
+            ('history', app_actions.on_history),
+            ('shortcuts', app_actions.on_keyboard_shortcuts),
+            ('features', app_actions.on_features),
+            ('content', app_actions.on_contents),
+            ('about', app_actions.on_about),
+            ('faq', app_actions.on_faq),
+            ('ipython', app_actions.toggle_ipython),
+            ('show-next-pending-event', app_actions.show_next_pending_event),
+            ('start-chat', 's', app_actions.on_new_chat),
+            ('accounts', 's', app_actions.on_accounts),
+            ('add-contact', 's', app_actions.on_add_contact_jid),
+            ('copy-text', 's', app_actions.copy_text),
+            ('open-link', 'as', app_actions.open_link),
+            ('open-mail', 's', app_actions.open_mail),
+            ('create-groupchat', 's', app_actions.on_create_gc),
+            ('browse-history', 'a{sv}', app_actions.on_browse_history),
+            ('groupchat-join', 'as', app_actions.on_groupchat_join),
         ]
 
-        additional_actions = [
-            ('start-chat', 's', app_actions.on_new_chat, ['<Primary>N']),
-            ('accounts', 's', app_actions.on_accounts, ['<Alt>A']),
-            ('add-contact', 's', app_actions.on_add_contact_jid, None),
-            ('copy-text', 's', app_actions.copy_text, None),
-            ('open-link', 'as', app_actions.open_link, None),
-            ('open-mail', 's', app_actions.open_mail, None),
-            ('create-groupchat', 's', app_actions.on_create_gc, ['<Primary>G']),
-            ('browse-history', 'a{sv}', app_actions.on_browse_history, None),
-            ('groupchat-join', 'as', app_actions.on_groupchat_join, None),
-        ]
+        for action in actions:
+            if len(action) == 2:
+                action_name, func = action
+                variant = None
+            else:
+                action_name, variant, func = action
+                variant = GLib.VariantType.new(variant)
 
-        for action in general_actions:
-            action_name, func, accel = action
-            act = Gio.SimpleAction.new(action_name, None)
+            act = Gio.SimpleAction.new(action_name, variant)
             act.connect('activate', func)
-            if accel:
-                full_action_name = 'app.%s' % action_name
-                self.set_accels_for_action(full_action_name, accel)
-            self.add_action(act)
-
-        for action in additional_actions:
-            action_name, variant, func, accel = action
-            act = Gio.SimpleAction.new(
-                action_name, GLib.VariantType.new(variant))
-            act.connect('activate', func)
-            if accel:
-                full_action_name = 'app.%s::' % action_name
-                self.set_accels_for_action(full_action_name, accel)
             self.add_action(act)
 
         accounts_list = sorted(app.config.get_per('accounts'))
@@ -544,6 +532,54 @@ class GajimApplication(Gtk.Application):
             elif new_state and state == 'online':
                 # We go online
                 self.lookup_action(account + action_name).set_enabled(True)
+
+    def _set_shortcuts(self):
+        shortcuts = {
+            'app.quit': ['<Primary>Q'],
+            'app.preferences': ['<Primary>P'],
+            'app.plugins': ['<Primary>E'],
+            'app.xml-console': ['<Primary><Shift>X'],
+            'app.file-transfer': ['<Primary>T'],
+            'app.history': ['<Primary>H'],
+            'app.ipython': ['<Primary><Alt>I'],
+            'app.start-chat::': ['<Primary>N'],
+            'app.accounts::': ['<Alt>A'],
+            'app.create-groupchat::': ['<Primary>G'],
+            'win.show-roster': ['<Primary>R'],
+            'win.show-offline': ['<Primary>O'],
+            'win.show-active': ['<Primary>Y'],
+            'win.change-nickname': ['<Control><Shift>n'],
+            'win.change-subject': ['<Alt>t'],
+            'win.escape': ['Escape'],
+            'win.browse-history': ['<Control>h'],
+            'win.send-file': ['<Control>f'],
+            'win.show-contact-info': ['<Control>i'],
+            'win.show-emoji-chooser': ['<Alt>m'],
+            'win.clear-chat': ['<Control>l'],
+            'win.delete-line': ['<Control>u'],
+            'win.close-tab': ['<Control>w'],
+            'win.move-tab-up': ['<Control><Shift>Page_Up'],
+            'win.move-tab-down': ['<Control><Shift>Page_Down'],
+            'win.switch-next-tab': ['<Alt>Right'],
+            'win.switch-prev-tab': ['<Alt>Left'],
+            'win.switch-next-unread-tab-right': ['<Control>Tab',
+                                                 '<Control>Page_Down'],
+            'win.switch-next-unread-tab-left': ['<Control>ISO_Left_Tab',
+                                                '<Control>Page_Up'],
+            'win.switch-tab-1': ['<Alt>1', '<Alt>KP_1'],
+            'win.switch-tab-2': ['<Alt>2', '<Alt>KP_2'],
+            'win.switch-tab-3': ['<Alt>3', '<Alt>KP_3'],
+            'win.switch-tab-4': ['<Alt>4', '<Alt>KP_4'],
+            'win.switch-tab-5': ['<Alt>5', '<Alt>KP_5'],
+            'win.switch-tab-6': ['<Alt>6', '<Alt>KP_6'],
+            'win.switch-tab-7': ['<Alt>7', '<Alt>KP_7'],
+            'win.switch-tab-8': ['<Alt>8', '<Alt>KP_8'],
+            'win.switch-tab-9': ['<Alt>9', '<Alt>KP_9'],
+            'win.copy-text': ['<Control><Shift>c'],
+        }
+
+        for action, accels in shortcuts.items():
+            self.set_accels_for_action(action, accels)
 
     def _on_feature_discovered(self, event):
         if event.feature == nbxmpp.NS_VCARD:

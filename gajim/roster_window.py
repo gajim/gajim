@@ -5370,33 +5370,26 @@ class RosterWindow:
         actions = [
             ('show-roster',
              not self.xml.get_object('roster_vbox2').get_no_show_all(),
-             self.on_show_roster_action,
-             ['<Primary>R']),
+             self.on_show_roster_action),
 
             ('show-offline',
              app.config.get('showoffline'),
-             self.on_show_offline_contacts_action,
-             ['<Primary>O']),
+             self.on_show_offline_contacts_action),
 
             ('show-active',
              app.config.get('show_only_chat_and_online'),
-             self.on_show_active_contacts_action,
-             ['<Primary>Y']),
+             self.on_show_active_contacts_action),
 
             ('show-transports',
              app.config.get('show_transports_group'),
-             self.on_show_transports_action,
-             None),
+             self.on_show_transports_action),
         ]
 
         for action in actions:
-            action_name, variant, func, accel = action
+            action_name, variant, func = action
             act = Gio.SimpleAction.new_stateful(
                 action_name, None, GLib.Variant.new_boolean(variant))
             act.connect('change-state', func)
-            if accel:
-                full_action_name = 'win.%s' % action_name
-                app.app.set_accels_for_action(full_action_name, accel)
             self.window.add_action(act)
 
 ################################################################################
