@@ -37,6 +37,7 @@ from gajim.common import jingle_xtls
 from gajim.common.file_props import FilesProp
 from gajim.common.socks5 import Socks5SenderClient
 from gajim.common.modules.base import BaseModule
+from gajim.common.connection_handlers_events import FileRequestErrorEvent
 
 
 log = logging.getLogger('gajim.c.m.bytestream')
@@ -81,19 +82,23 @@ class Bytestream(BaseModule):
             StanzaHandler(name='iq',
                           typ='result',
                           ns=nbxmpp.NS_BYTESTREAM,
-                          callback=self._bytestreamResultCB),
+                          callback=self._on_bytestream_result),
             StanzaHandler(name='iq',
                           typ='error',
                           ns=nbxmpp.NS_BYTESTREAM,
-                          callback=self._bytestreamErrorCB),
+                          callback=self._on_bytestream_error),
             StanzaHandler(name='iq',
                           typ='set',
                           ns=nbxmpp.NS_BYTESTREAM,
-                          callback=self._bytestreamSetCB),
+                          callback=self._on_bytestream_set),
             StanzaHandler(name='iq',
                           typ='result',
-                          callback=self._ResultCB),
+                          callback=self._on_result),
         ]
+
+        self.no_gupnp_reply_id = None
+        self.ok_id = None
+        self.fail_id = None
 
     def pass_disco(self, info):
         if nbxmpp.NS_BYTESTREAM not in info.features:
@@ -146,29 +151,31 @@ class Bytestream(BaseModule):
         if not session:
             return
         content = None
-        for c in session.contents.values():
-            if c.transport.sid == file_props.transport_sid:
-                content = c
+        for content_ in session.contents.values():
+            if content_.transport.sid == file_props.transport_sid:
+                content = content_
                 break
+
         if not content:
             return
+
         if not session.accepted:
             content = session.get_content('file', content.name)
             if content.use_security:
                 fingerprint = content.x509_fingerprint
                 if not jingle_xtls.check_cert(
-                app.get_jid_without_resource(file_props.sender),
-                fingerprint):
+                        app.get_jid_without_resource(file_props.sender),
+                        fingerprint):
                     id_ = jingle_xtls.send_cert_request(
                         self._con, file_props.sender)
                     jingle_xtls.key_exchange_pend(id_,
-                        content.on_cert_received, [])
+                                                  content.on_cert_received, [])
                     return
             session.approve_session()
 
         session.approve_content('file', content.name)
 
-    def send_file_rejection(self, file_props, code='403', typ=None):
+    def send_file_rejection(self, file_props):
         """
         Inform sender that we refuse to download the file
 
@@ -190,9 +197,10 @@ class Bytestream(BaseModule):
         if not app.account_is_connected(self._account):
             return
         if streamhost is None:
-            return None
-        iq = nbxmpp.Iq(to=streamhost['initiator'], typ='result',
-                frm=streamhost['target'])
+            return
+        iq = nbxmpp.Iq(to=streamhost['initiator'],
+                       typ='result',
+                       frm=streamhost['target'])
         iq.setAttr('id', streamhost['id'])
         query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
         stream_tag = query.setTag('streamhost-used')
@@ -210,10 +218,11 @@ class Bytestream(BaseModule):
             if contact.get_full_jid() == receiver_jid:
                 file_props.error = -5
                 self.remove_transfer(file_props)
-                from gajim.common.connection_handlers_events import \
-                    FileRequestErrorEvent
-                app.nec.push_incoming_event(FileRequestErrorEvent(None,
-                    conn=self._con, jid=contact.jid, file_props=file_props,
+                app.nec.push_incoming_event(FileRequestErrorEvent(
+                    None,
+                    conn=self._con,
+                    jid=contact.jid,
+                    file_props=file_props,
                     error_msg=''))
             sender_jid = file_props.sender
             if contact.get_full_jid() == sender_jid:
@@ -225,14 +234,15 @@ class Bytestream(BaseModule):
         Stop and remove all active connections from the socks5 pool
         """
         for file_props in FilesProp.getAllFileProp():
-            self.remove_transfer(file_props, remove_from_list=False)
+            self.remove_transfer(file_props)
 
-    def remove_transfer(self, file_props, remove_from_list=True):
+    def remove_transfer(self, file_props):
         if file_props is None:
             return
         self.disconnect_transfer(file_props)
 
-    def disconnect_transfer(self, file_props):
+    @staticmethod
+    def disconnect_transfer(file_props):
         if file_props is None:
             return
         if file_props.hash_:
@@ -257,15 +267,21 @@ class Bytestream(BaseModule):
         file_props.sha_str = sha_str
 
         port = app.config.get('file_transfers_port')
-        listener = app.socks5queue.start_listener(port, sha_str,
-                self._result_socks5_sid, file_props)
+        listener = app.socks5queue.start_listener(
+            port,
+            sha_str,
+            self._result_socks5_sid, file_props)
         if not listener:
             file_props.error = -5
-            from gajim.common.connection_handlers_events import FileRequestErrorEvent
-            app.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self._con,
-                jid=receiver, file_props=file_props, error_msg=''))
-            self._connect_error(file_props.sid, error='not-acceptable',
-                error_type='modify')
+            app.nec.push_incoming_event(FileRequestErrorEvent(
+                None,
+                conn=self._con,
+                jid=receiver,
+                file_props=file_props,
+                error_msg=''))
+            self._connect_error(file_props.sid,
+                                error='not-acceptable',
+                                error_type='modify')
         else:
             iq = nbxmpp.Iq(to=receiver, typ='set')
             file_props.request_id = 'id_' + file_props.sid
@@ -279,7 +295,8 @@ class Bytestream(BaseModule):
             self._add_upnp_igd_as_streamhost_to_query(query, file_props, iq)
             # Upnp-igd is asynchronous, so it will send the iq itself
 
-    def _add_streamhosts_to_query(self, query, sender, port, hosts):
+    @staticmethod
+    def _add_streamhosts_to_query(query, sender, port, hosts):
         for host in hosts:
             streamhost = nbxmpp.Node(tag='streamhost')
             query.addChild(node=streamhost)
@@ -288,13 +305,18 @@ class Bytestream(BaseModule):
             streamhost.setAttr('jid', sender)
 
     def _add_local_ips_as_streamhosts_to_query(self, query, file_props):
-        if not app.config.get_per('accounts', self._account, 'ft_send_local_ips'):
+        if not app.config.get_per('accounts',
+                                  self._account,
+                                  'ft_send_local_ips'):
             return
         try:
-            my_ips = [self._con.peerhost[0]] # The ip we're connected to server with
+            # The ip we're connected to server with
+            my_ips = [self._con.peerhost[0]]
             # all IPs from local DNS
             for addr in socket.getaddrinfo(socket.gethostname(), None):
-                if not addr[4][0] in my_ips and not addr[4][0].startswith('127') and not addr[4][0] == '::1':
+                if (not addr[4][0] in my_ips and
+                        not addr[4][0].startswith('127') and
+                        not addr[4][0] == '::1'):
                     my_ips.append(addr[4][0])
 
             sender = file_props.sender
@@ -309,12 +331,12 @@ class Bytestream(BaseModule):
         sender = file_props.sender
         port = app.config.get('file_transfers_port')
         ft_add_hosts_to_send = app.config.get('ft_add_hosts_to_send')
-        additional_hosts = []
+        add_hosts = []
         if ft_add_hosts_to_send:
-            additional_hosts = [e.strip() for e in ft_add_hosts_to_send.split(',')]
+            add_hosts = [e.strip() for e in ft_add_hosts_to_send.split(',')]
         else:
-            additional_hosts = []
-        self._add_streamhosts_to_query(query, sender, port, additional_hosts)
+            add_hosts = []
+        self._add_streamhosts_to_query(query, sender, port, add_hosts)
 
     def _add_upnp_igd_as_streamhost_to_query(self, query, file_props, iq):
         if not app.is_installed('UPNP'):
@@ -361,27 +383,36 @@ class Bytestream(BaseModule):
             app.gupnp_igd.disconnect(self.ok_id)
             app.gupnp_igd.disconnect(self.fail_id)
 
-        def ok(s, proto, ext_ip, re, ext_port, local_ip, local_port, desc):
+        def success(_gupnp, _proto, ext_ip, _re, ext_port,
+                    local_ip, local_port, _desc):
             log.debug('Got GUPnP-IGD answer: external: %s:%s, internal: %s:%s',
-                ext_ip, ext_port, local_ip, local_port)
+                      ext_ip, ext_port, local_ip, local_port)
             if local_port != app.config.get('file_transfers_port'):
                 sender = file_props.sender
                 receiver = file_props.receiver
-                sha_str = helpers.get_auth_sha(file_props.sid, sender,
-                    receiver)
-                listener = app.socks5queue.start_listener(local_port, sha_str,
-                    self._result_socks5_sid, file_props.sid)
+                sha_str = helpers.get_auth_sha(file_props.sid,
+                                               sender,
+                                               receiver)
+                listener = app.socks5queue.start_listener(
+                    local_port,
+                    sha_str,
+                    self._result_socks5_sid,
+                    file_props.sid)
                 if listener:
-                    self._add_streamhosts_to_query(query, sender, ext_port,
-                        [ext_ip])
+                    self._add_streamhosts_to_query(query,
+                                                   sender,
+                                                   ext_port,
+                                                   [ext_ip])
             else:
-                self._add_streamhosts_to_query(query, file_props.sender,
-                    ext_port, [ext_ip])
+                self._add_streamhosts_to_query(query,
+                                               file_props.sender,
+                                               ext_port,
+                                               [ext_ip])
             self._con.connection.send(iq)
             cleanup_gupnp()
 
-        def fail(s, error, proto, ext_ip, local_ip, local_port, desc):
-            log.debug('Got GUPnP-IGD error')
+        def fail(_gupnp, error, _proto, _ext_ip, _local_ip, _local_port, _desc):
+            log.debug('Got GUPnP-IGD error: %s', error)
             self._con.connection.send(iq)
             cleanup_gupnp()
 
@@ -395,13 +426,17 @@ class Bytestream(BaseModule):
             return False
 
 
-        self.ok_id = app.gupnp_igd.connect('mapped-external-port', ok)
+        self.ok_id = app.gupnp_igd.connect('mapped-external-port', success)
         self.fail_id = app.gupnp_igd.connect('error-mapping-port', fail)
 
         port = app.config.get('file_transfers_port')
         self.no_gupnp_reply_id = GLib.timeout_add_seconds(10, no_upnp_reply)
-        app.gupnp_igd.add_port('TCP', 0, my_ip, port, 3600,
-            'Gajim file transfer')
+        app.gupnp_igd.add_port('TCP',
+                               0,
+                               my_ip,
+                               port,
+                               3600,
+                               'Gajim file transfer')
 
     def _add_proxy_streamhosts_to_query(self, query, file_props):
         proxyhosts = self._get_file_transfer_proxies_from_config(file_props)
@@ -411,20 +446,26 @@ class Bytestream(BaseModule):
             file_props.proxyhosts = proxyhosts
 
             for proxyhost in proxyhosts:
-                self._add_streamhosts_to_query(query, proxyhost['jid'],
-                proxyhost['port'], [proxyhost['host']])
+                self._add_streamhosts_to_query(query,
+                                               proxyhost['jid'],
+                                               proxyhost['port'],
+                                               [proxyhost['host']])
 
     def _get_file_transfer_proxies_from_config(self, file_props):
-        configured_proxies = app.config.get_per('accounts', self._account,
-                'file_transfer_proxies')
-        shall_use_proxies = app.config.get_per('accounts', self._account,
-                'use_ft_proxies')
+        configured_proxies = app.config.get_per('accounts',
+                                                self._account,
+                                                'file_transfer_proxies')
+        shall_use_proxies = app.config.get_per('accounts',
+                                               self._account,
+                                               'use_ft_proxies')
         if shall_use_proxies:
             proxyhost_dicts = []
             proxies = []
             if configured_proxies:
-                proxies = [item.strip() for item in configured_proxies.split(',')]
-            default_proxy = app.proxy65_manager.get_default_for_name(self._account)
+                proxies = [item.strip() for item in
+                           configured_proxies.split(',')]
+            default_proxy = app.proxy65_manager.get_default_for_name(
+                self._account)
             if default_proxy:
                 # add/move default proxy at top of the others
                 if default_proxy in proxies:
@@ -432,25 +473,27 @@ class Bytestream(BaseModule):
                 proxies.insert(0, default_proxy)
 
             for proxy in proxies:
-                (host, _port, jid) = app.proxy65_manager.get_proxy(proxy, self._account)
+                (host, _port, jid) = app.proxy65_manager.get_proxy(
+                    proxy, self._account)
                 if not host:
                     continue
                 host_dict = {
-                        'state': 0,
-                        'target': file_props.receiver,
-                        'id': file_props.sid,
-                        'sid': file_props.sid,
-                        'initiator': proxy,
-                        'host': host,
-                        'port': str(_port),
-                        'jid': jid
+                    'state': 0,
+                    'target': file_props.receiver,
+                    'id': file_props.sid,
+                    'sid': file_props.sid,
+                    'initiator': proxy,
+                    'host': host,
+                    'port': str(_port),
+                    'jid': jid
                 }
                 proxyhost_dicts.append(host_dict)
             return proxyhost_dicts
 
         return []
 
-    def _result_socks5_sid(self, sid, hash_id):
+    @staticmethod
+    def _result_socks5_sid(sid, hash_id):
         """
         Store the result of SHA message from auth
         """
@@ -481,10 +524,12 @@ class Bytestream(BaseModule):
         if msg:
             self.disconnect_transfer(file_props)
             file_props.error = -3
-            from gajim.common.connection_handlers_events import \
-                FileRequestErrorEvent
-            app.nec.push_incoming_event(FileRequestErrorEvent(None,
-                conn=self._con, jid=to, file_props=file_props, error_msg=msg))
+            app.nec.push_incoming_event(FileRequestErrorEvent(
+                None,
+                conn=self._con,
+                jid=to,
+                file_props=file_props,
+                error_msg=msg))
 
     def _proxy_auth_ok(self, proxy):
         """
@@ -503,8 +548,7 @@ class Bytestream(BaseModule):
         iq.setID(auth_id)
         self._con.connection.send(iq)
 
-    # register xmpppy handlers for bytestream and FT stanzas
-    def _bytestreamErrorCB(self, con, iq_obj):
+    def _on_bytestream_error(self, con, iq_obj):
         id_ = iq_obj.getAttr('id')
         frm = helpers.get_full_jid_from_iq(iq_obj)
         query = iq_obj.getTag('query')
@@ -515,12 +559,15 @@ class Bytestream(BaseModule):
         if not file_props:
             return
         file_props.error = -4
-        from gajim.common.connection_handlers_events import FileRequestErrorEvent
-        app.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self._con,
-            jid=jid, file_props=file_props, error_msg=''))
+        app.nec.push_incoming_event(FileRequestErrorEvent(
+            None,
+            conn=self._con,
+            jid=jid,
+            file_props=file_props,
+            error_msg=''))
         raise nbxmpp.NodeProcessed
 
-    def _bytestreamSetCB(self, con, iq_obj):
+    def _on_bytestream_set(self, con, iq_obj):
         target = iq_obj.getAttr('to')
         id_ = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
@@ -530,11 +577,11 @@ class Bytestream(BaseModule):
         for item in query.getChildren():
             if item.getName() == 'streamhost':
                 host_dict = {
-                        'state': 0,
-                        'target': target,
-                        'id': id_,
-                        'sid': sid,
-                        'initiator': self._ft_get_from(iq_obj)
+                    'state': 0,
+                    'target': target,
+                    'id': id_,
+                    'sid': sid,
+                    'initiator': self._ft_get_from(iq_obj)
                 }
                 for attr in item.getAttrs():
                     host_dict[attr] = item.getAttr(attr)
@@ -553,23 +600,32 @@ class Bytestream(BaseModule):
                     file_props.streamhosts.extend(streamhosts)
                 else:
                     file_props.streamhosts = streamhosts
-                app.socks5queue.connect_to_hosts(self._account, sid,
-                        self.send_success_connect_reply, None)
+                app.socks5queue.connect_to_hosts(
+                    self._account,
+                    sid,
+                    self.send_success_connect_reply,
+                    None)
                 raise nbxmpp.NodeProcessed
         else:
-            log.warning('Gajim got streamhosts for unknown transfer. Ignoring it.')
+            log.warning('Gajim got streamhosts for unknown transfer. '
+                        'Ignoring it.')
             raise nbxmpp.NodeProcessed
 
         file_props.streamhosts = streamhosts
         def _connection_error(sid):
-            self._connect_error(sid, 'item-not-found', 'cancel',
-                msg='Could not connect to given hosts')
+            self._connect_error(sid,
+                                'item-not-found',
+                                'cancel',
+                                msg='Could not connect to given hosts')
         if file_props.type_ == 'r':
-            app.socks5queue.connect_to_hosts(self._account, sid,
-                    self.send_success_connect_reply, _connection_error)
+            app.socks5queue.connect_to_hosts(
+                self._account,
+                sid,
+                self.send_success_connect_reply,
+                _connection_error)
         raise nbxmpp.NodeProcessed
 
-    def _ResultCB(self, con, iq_obj):
+    def _on_result(self, _con, iq_obj):
         # if we want to respect xep-0065 we have to check for proxy
         # activation result in any result iq
         real_id = iq_obj.getAttr('id')
@@ -587,7 +643,7 @@ class Bytestream(BaseModule):
                     app.socks5queue.activate_proxy(host['idx'])
                     raise nbxmpp.NodeProcessed
 
-    def _bytestreamResultCB(self, con, iq_obj):
+    def _on_bytestream_result(self, con, iq_obj):
         frm = self._ft_get_from(iq_obj)
         real_id = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
@@ -639,10 +695,15 @@ class Bytestream(BaseModule):
             file_props.streamhosts.append(proxy)
             file_props.is_a_proxy = True
             idx = app.socks5queue.idx
-            sender = Socks5SenderClient(app.idlequeue, idx,
-                app.socks5queue, _sock=None, host=str(proxy['host']),
-                port=int(proxy['port']), fingerprint=None,
-                connected=False, file_props=file_props)
+            sender = Socks5SenderClient(app.idlequeue,
+                                        idx,
+                                        app.socks5queue,
+                                        _sock=None,
+                                        host=str(proxy['host']),
+                                        port=int(proxy['port']),
+                                        fingerprint=None,
+                                        connected=False,
+                                        file_props=file_props)
             sender.streamhost = proxy
             app.socks5queue.add_sockobj(self._account, sender)
             proxy['idx'] = sender.queue_idx

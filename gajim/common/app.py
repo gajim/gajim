@@ -130,6 +130,8 @@ sleeper_state = {}  # type: Dict[str, str]
 
 status_before_autoaway = {}  # type: Dict[str, str]
 
+proxy65_manager = None
+
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
              'invisible', 'error']
 
