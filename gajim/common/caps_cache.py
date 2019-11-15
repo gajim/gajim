@@ -111,6 +111,10 @@ class AbstractClientCaps:
         self._node = node
         self._hash_method = None
 
+    @property
+    def hash_method(self):
+        return self._hash_method
+
     def get_discover_strategy(self):
         return self._discover
 

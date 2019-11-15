@@ -40,7 +40,8 @@ class Caps(BaseModule):
         ]
 
         self._capscache = caps_cache.capscache
-        self._create_suitable_client_caps = caps_cache.create_suitable_client_caps
+        self._create_suitable_client_caps = \
+            caps_cache.create_suitable_client_caps
 
     def _entity_caps(self, _con, _stanza, properties):
         if properties.type.is_error or properties.type.is_unavailable:
@@ -63,7 +64,7 @@ class Caps(BaseModule):
             node, caps_hash, hash_method, jid)
 
         # Type is None means 'available'
-        if properties.type.is_available and client_caps._hash_method == 'no':
+        if properties.type.is_available and client_caps.hash_method == 'no':
             self._capscache.forget_caps(client_caps)
             client_caps = self._create_suitable_client_caps(
                 node, caps_hash, hash_method)
