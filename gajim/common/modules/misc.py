@@ -37,7 +37,7 @@ def parse_oob(properties, additional_data):
 
 def parse_correction(properties):
     if not properties.is_correction:
-        return
+        return None
     return properties.correction.id
 
 
