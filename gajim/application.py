@@ -540,7 +540,6 @@ class GajimApplication(Gtk.Application):
             'app.plugins': ['<Primary>E'],
             'app.xml-console': ['<Primary><Shift>X'],
             'app.file-transfer': ['<Primary>T'],
-            'app.history': ['<Primary>H'],
             'app.ipython': ['<Primary><Alt>I'],
             'app.start-chat::': ['<Primary>N'],
             'app.accounts::': ['<Alt>A'],
