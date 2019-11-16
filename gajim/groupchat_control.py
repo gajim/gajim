@@ -1699,7 +1699,6 @@ class GroupchatControl(ChatControlBase):
                                    callback=on_cancel),
                  DialogButton.make('Accept',
                                    text=_('_Leave'),
-                                   is_default=True,
                                    callback=on_ok)],
                 transient_for=self.parent_win.window).show()
             return

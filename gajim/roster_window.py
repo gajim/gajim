@@ -4107,7 +4107,6 @@ class RosterWindow:
             [DialogButton.make('Cancel'),
              DialogButton.make('Accept',
                                text=_('_Create'),
-                               is_default=True,
                                callback=merge_contacts)]).show()
 
     def on_drop_in_group(self, widget, account, c_source, grp_dest,
@@ -4250,7 +4249,6 @@ class RosterWindow:
                 [DialogButton.make('Cancel'),
                  DialogButton.make('Accept',
                                    text=_('_Send'),
-                                   is_default=True,
                                    callback=_on_send_files,
                                    args=(account_dest, jid_dest, uri_splitted))],
                 transient_for=self.window).show()

@@ -431,7 +431,6 @@ class FileTransfersWindow:
                                        callback=_on_resume),
                      DialogButton.make('Accept',
                                        text=_('Replace _File'),
-                                       is_default=True,
                                        callback=_on_replace)]).show()
 
             # File does not exist yet

@@ -794,7 +794,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 [DialogButton.make('Cancel'),
                  DialogButton.make('Accept',
                                    text=_('_Paste'),
-                                   is_default=True,
                                    callback=self._paste_event_confirmed,
                                    args=[image])]).show()
 

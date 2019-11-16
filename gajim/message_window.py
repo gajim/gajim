@@ -364,7 +364,6 @@ class MessageWindow(EventHelper):
                 [DialogButton.make('Cancel'),
                  DialogButton.make('Accept',
                                    text=_('_Close'),
-                                   is_default=True,
                                    callback=_on_yes1)],
                 transient_for=self.window).show()
             return True
