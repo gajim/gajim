@@ -907,7 +907,7 @@ class Interface:
         conn = obj.conn
         self.roster.send_status(account, 'offline', conn.status)
 
-        def on_ok(new_resource):
+        def _set_resource(new_resource):
             app.config.set_per('accounts', account, 'resource', new_resource)
             self.roster.send_status(account, conn.old_show, conn.status)
 
@@ -915,14 +915,21 @@ class Interface:
         if proposed_resource.startswith('gajim.'):
             # Dont notify the user about resource change if he didn't set
             # a custom resource
-            on_ok('gajim.$rand')
+            _set_resource('gajim.$rand')
             return
 
         proposed_resource += app.config.get('gc_proposed_nick_char')
-        dialogs.ResourceConflictDialog(_('Resource Conflict'),
+
+        InputDialog(
+            _('Resource Conflict'),
+            _('Resource Conflict'),
             _('You are already connected to this account with the same '
-            'resource. Please type a new one'), resource=proposed_resource,
-            ok_handler=on_ok)
+              'resource. Please enter a different one.'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Accept',
+                               text=_('_Connect'),
+                               callback=_set_resource)],
+            input_str=proposed_resource).show()
 
     def handle_event_jingleft_cancel(self, obj):
         ft = self.instances['file_transfers']
