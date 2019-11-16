@@ -1007,19 +1007,6 @@ class TransformChatToMUC:
         self.window.destroy()
 
 
-class ResourceConflictDialog(TimeoutDialog, InputDialog):
-    def __init__(self, title, text, resource, ok_handler):
-        TimeoutDialog.__init__(self, 15)
-        InputDialog.__init__(self, title, text, input_str=resource,
-                is_modal=False, ok_handler=ok_handler)
-        self.title_text = title
-        self.run_timeout()
-
-    def on_timeout(self):
-        self.on_okbutton_clicked(None)
-    # FIXME: Adapt to new InputDialog
-
-
 class VoIPCallReceivedDialog:
     instances = {}   # type: Dict[Tuple[str, str], VoIPCallReceivedDialog]
     def __init__(self, account, contact_jid, sid, content_types):
