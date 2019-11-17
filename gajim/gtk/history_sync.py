@@ -168,14 +168,14 @@ class HistorySyncAssistant(Gtk.Assistant, EventHelper):
         log.debug('Received message')
         GLib.idle_add(self.download_history.set_fraction)
 
-    def on_row_selected(self, listbox, row):
+    def on_row_selected(self, _listbox, row):
         self.timedelta = row.get_child().get_delta()
         if row:
             self.set_page_complete(self.select_time, True)
         else:
             self.set_page_complete(self.select_time, False)
 
-    def _on_page_change(self, assistant, page):
+    def _on_page_change(self, _assistant, page):
         if page == self.download_history:
             self.next.hide()
             self._prepare_query()
