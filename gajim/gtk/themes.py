@@ -185,7 +185,7 @@ class Themes(Gtk.ApplicationWindow):
 
         widgets = ['option_listbox', 'remove_theme_button', 'theme_store',
                    'theme_treeview', 'choose_option_listbox',
-                   'add_option_button']
+                   'add_option_button', 'placeholder', 'option_popover']
         for widget in widgets:
             setattr(self, '_%s' % widget, self.builder.get_object(widget))
 
@@ -193,6 +193,7 @@ class Themes(Gtk.ApplicationWindow):
         self._add_option_button.set_sensitive(False)
 
         self._get_themes()
+        self._option_listbox.set_placeholder(self._placeholder)
 
         self.builder.connect_signals(self)
         self.connect('destroy', self._on_destroy)
@@ -264,6 +265,7 @@ class Themes(Gtk.ApplicationWindow):
                 return
         row = Option(row.option, None)
         self._option_listbox.add(row)
+        self._option_popover.popdown()
 
     def _clear_options(self):
         self._option_listbox.foreach(self._remove_option)
@@ -367,6 +369,7 @@ class Option(Gtk.ListBoxRow):
 
         remove_button = Gtk.Button.new_from_icon_name(
             'list-remove-symbolic', Gtk.IconSize.MENU)
+        remove_button.set_tooltip_text(_('Remove Setting'))
         remove_button.get_style_context().add_class('theme_remove_button')
         remove_button.connect('clicked', self._on_remove)
         self._box.add(remove_button)
