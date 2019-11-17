@@ -59,11 +59,11 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         self.connect('key-press-event', self._on_key_press_event)
         self._ui.connect_signals(self)
 
-    def _on_key_press_event(self, widget, event):
+    def _on_key_press_event(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_services_selection_changed(self, sel):
+    def _on_services_selection_changed(self, _selection):
         self._ui.configure_button.set_sensitive(True)
         self._ui.delete_button.set_sensitive(True)
 
@@ -114,7 +114,7 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
             _('PEP node %(node)s was not removed:\n%(message)s') % {
                 'node': node, 'message': msg})
 
-    def _on_delete_button_clicked(self, widget):
+    def _on_delete_button_clicked(self, _widget):
         selection = self._ui.services_treeview.get_selection()
         if not selection:
             return
@@ -126,7 +126,7 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
                                                 on_ok=self._node_removed,
                                                 on_fail=self._node_not_removed)
 
-    def _on_configure_button_clicked(self, widget):
+    def _on_configure_button_clicked(self, _widget):
         selection = self._ui.services_treeview.get_selection()
         if not selection:
             return
