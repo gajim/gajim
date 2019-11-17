@@ -627,7 +627,7 @@ class GenericSettingPage(Gtk.Box):
         return stack.connect('notify::visible-child',
                              self._on_visible_child_changed)
 
-    def _on_visible_child_changed(self, stack, param):
+    def _on_visible_child_changed(self, stack, _param):
         if self == stack.get_visible_child():
             self.listbox.update_states()
 
@@ -917,7 +917,7 @@ class RemoveAccountWindow:
     then remove the account given
     """
 
-    def on_remove_account_window_destroy(self, _widget):
+    def _on_destroy(self, _widget):
         if self.account in app.interface.instances:
             del app.interface.instances[self.account]['remove_account']
 
@@ -941,7 +941,8 @@ class RemoveAccountWindow:
             not self._ui.remove_and_unregister_radiobutton.get_active():
                 # change status to offline only if we will not
                 # remove this JID from server
-                app.connections[self.account].change_status('offline', 'offline')
+                app.connections[self.account].change_status('offline',
+                                                            'offline')
             if self._ui.remove_and_unregister_radiobutton.get_active():
                 if not self.account in app.connections:
                     ErrorDialog(
