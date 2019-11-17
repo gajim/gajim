@@ -52,41 +52,45 @@ class SubscriptionRequest(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
         self.show_all()
 
-    def on_authorize_button_clicked(self, widget):
+    def _on_authorize_clicked(self, _widget):
         """
         Accept the request
         """
-        app.connections[self.account].get_module('Presence').subscribed(self.jid)
+        con = app.connections[self.account]
+        con.get_module('Presence').subscribed(self.jid)
         self.destroy()
         contact = app.contacts.get_contact(self.account, self.jid)
         if not contact or _('Not in contact list') in contact.groups:
             AddNewContactWindow(self.account, self.jid, self.user_nick)
 
-    def on_contact_info_button_clicked(self, widget):
+    def _on_contact_info_clicked(self, _widget):
         """
         Ask for vCard
         """
-        if self.jid in app.interface.instances[self.account]['infos']:
-            app.interface.instances[self.account]['infos'][self.jid].window.present()
+        open_windows = app.interface.instances[self.account]['infos']
+        if self.jid in open_windows:
+            open_windows[self.jid].window.present()
         else:
-            contact = app.contacts.create_contact(jid=self.jid, account=self.account)
+            contact = app.contacts.create_contact(jid=self.jid,
+                                                  account=self.account)
             app.interface.instances[self.account]['infos'][self.jid] = \
                      vcard.VcardWindow(contact, self.account)
             # Remove xmpp page
             app.interface.instances[self.account]['infos'][self.jid].xml.\
                      get_object('information_notebook').remove_page(0)
 
-    def on_start_chat_button_clicked(self, widget):
+    def _on_start_chat_clicked(self, _widget):
         """
         Open chat
         """
         app.interface.new_chat_from_jid(self.account, self.jid)
 
-    def on_deny_button_clicked(self, widget):
+    def _on_deny_clicked(self, _widget):
         """
         Refuse the request
         """
-        app.connections[self.account].get_module('Presence').unsubscribed(self.jid)
+        con = app.connections[self.account]
+        con.get_module('Presence').unsubscribed(self.jid)
         contact = app.contacts.get_contact(self.account, self.jid)
         if contact and _('Not in contact list') in contact.get_shown_groups():
             app.interface.roster.remove_contact(self.jid, self.account)

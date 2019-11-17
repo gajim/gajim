@@ -91,7 +91,7 @@
             <property name="tooltip_text" translatable="yes">Contact Information</property>
             <property name="valign">center</property>
             <property name="image">image2</property>
-            <signal name="clicked" handler="on_contact_info_button_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_contact_info_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -106,7 +106,7 @@
             <property name="tooltip_text" translatable="yes">Start Chat</property>
             <property name="valign">center</property>
             <property name="image">image1</property>
-            <signal name="clicked" handler="on_start_chat_button_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_start_chat_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -152,7 +152,7 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Deny authorization from contact so the contact cannot know if you are connected</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_deny_button_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_deny_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -170,7 +170,7 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Authorize contact so the contact can know if you are connected</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_authorize_button_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_authorize_clicked" swapped="no"/>
             <style>
               <class name="suggested-action"/>
             </style>
