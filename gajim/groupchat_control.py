@@ -75,6 +75,7 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import get_app_window
 from gajim.gtk.const import ControlType
 
 
@@ -534,7 +535,7 @@ class GroupchatControl(ChatControlBase):
         self._show_page('groupchat')
 
     def _on_configure_room(self, _action, _param):
-        win = app.get_app_window('GroupchatConfig', self.account, self.room_jid)
+        win = get_app_window('GroupchatConfig', self.account, self.room_jid)
         if win is not None:
             win.present()
             return

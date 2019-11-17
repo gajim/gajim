@@ -26,42 +26,28 @@ from gajim import dialogs
 import gajim.plugins.gui
 
 from gajim.gtk.dialogs import ShortcutsWindow
-from gajim.gtk.history_sync import HistorySyncAssistant
-from gajim.gtk.server_info import ServerInfo
-from gajim.gtk.mam_preferences import MamPreferences
-from gajim.gtk.preferences import Preferences
-from gajim.gtk.groupchat_creation import CreateGroupchatWindow
-from gajim.gtk.start_chat import StartChatDialog
-from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.privacy_list import PrivacyListsWindow
-from gajim.gtk.bookmarks import Bookmarks
 from gajim.gtk.features import FeaturesDialog
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.history import HistoryWindow
-from gajim.gtk.accounts import AccountsWindow
-from gajim.gtk.proxies import ManageProxies
 from gajim.gtk.discovery import ServiceDiscoveryWindow
-from gajim.gtk.blocking import BlockingList
-from gajim.gtk.xml_console import XMLConsoleWindow
-from gajim.gtk.groupchat_join import GroupchatJoin
-from gajim.gtk.pep_config import ManagePEPServicesWindow
+from gajim.gtk.util import open_window
+from gajim.gtk.util import get_app_window
 
 # General Actions
 
-def on_add_contact_jid(action, param):
-    AddNewContactWindow(None, param.get_string())
+def on_add_contact_jid(_action, param):
+    contact_jid = param.get_string()
+    open_window('AddNewContactWindow', account=None, contact_jid=contact_jid)
+
 
 # Application Menu Actions
 
 
-def on_preferences(action, param):
-    window = app.get_app_window(Preferences)
-    if window is None:
-        Preferences()
-    else:
-        window.present()
+def on_preferences(_action, _param):
+    open_window('Preferences')
 
 
 def on_plugins(action, param):
@@ -71,30 +57,20 @@ def on_plugins(action, param):
         interface.instances['plugins'] = gajim.plugins.gui.PluginsWindow()
 
 
-def on_accounts(action, param):
-    window = app.get_app_window(AccountsWindow)
-    if window is None:
-        window = AccountsWindow()
-    else:
-        window.present()
-
+def on_accounts(_action, param):
+    window = open_window('AccountsWindow')
     account = param.get_string()
     if account:
         window.select_account(account)
 
 
-def on_history_manager(action, param):
-    from gajim.history_manager import HistoryManager
-    HistoryManager()
+def on_history_manager(_action, _param):
+    open_window('HistoryManager')
 
 
-def on_bookmarks(action, param):
+def on_bookmarks(_action, param):
     account = param.get_string()
-    window = app.get_app_window(Bookmarks, account=account)
-    if window is None:
-        window = Bookmarks(account)
-    else:
-        window.present()
+    open_window('Bookmarks', account=account)
 
 
 def on_quit(action, param):
@@ -102,13 +78,8 @@ def on_quit(action, param):
 
 
 def on_new_chat(_action, param):
+    window = open_window('StartChatDialog')
     search_text = param.get_string()
-    window = app.get_app_window(StartChatDialog)
-    if window is None:
-        window = StartChatDialog()
-    else:
-        window.present()
-
     if search_text:
         window.set_search_text(search_text)
 
@@ -116,8 +87,9 @@ def on_new_chat(_action, param):
 # Accounts Actions
 
 
-def on_profile(action, param):
-    interface.edit_own_details(param.get_string())
+def on_profile(_action, param):
+    account = param.get_string()
+    open_window('ProfileWindow', account=account)
 
 
 def on_send_server_message(action, param):
@@ -141,26 +113,20 @@ def on_service_disco(action, param):
             pass
 
 def on_create_gc(_action, param):
-    window = app.get_app_window(CreateGroupchatWindow)
-    if window is None:
-        CreateGroupchatWindow(param.get_string() or None)
-    else:
-        window.present()
+    account = param.get_string()
+    open_window('CreateGroupchatWindow', account=account or None)
 
 
 def on_add_contact(_action, param):
-    account, jid = param.get_strv()
-    if not jid:
-        jid = None
-    window = app.get_app_window(AddNewContactWindow, account)
-    if window is None:
-        AddNewContactWindow(account, jid)
-    else:
-        window.present()
+    account, contact_jid = param.get_strv()
+    if not contact_jid:
+        contact_jid = None
+    open_window('AddNewContactWindow', account=account, contact_jid=contact_jid)
 
 
-def on_single_message(action, param):
-    SingleMessageWindow(param.get_string(), action='send')
+def on_single_message(_action, param):
+    account = param.get_string()
+    open_window('SingleMessageWindow', account=account, action='send')
 
 
 def on_merge_accounts(action, param):
@@ -194,43 +160,29 @@ def on_import_contacts(action, param):
 
 # Advanced Actions
 
-def on_pep_config(action, param):
+def on_pep_config(_action, param):
     account = param.get_string()
-    window = app.get_app_window(ManagePEPServicesWindow, account=account)
-    if window is None:
-        ManagePEPServicesWindow(account)
-    else:
-        window.present()
+    open_window('ManagePEPServicesWindow', account=account)
 
 
-def on_mam_preferences(action, param):
+def on_mam_preferences(_action, param):
     account = param.get_string()
-    window = app.get_app_window(MamPreferences, account)
-    if window is None:
-        MamPreferences(account)
-    else:
-        window.present()
+    open_window('MamPreferences', account=account)
 
 
-def on_blocking_list(action, param):
+def on_blocking_list(_action, param):
     account = param.get_string()
-    window = app.get_app_window(MamPreferences, account)
-    if window is None:
-        BlockingList(account)
-    else:
-        window.present()
+    open_window('BlockingList', account=account)
 
 
-def on_history_sync(action, param):
+def on_history_sync(_action, param):
     account = param.get_string()
-    window = app.get_app_window(HistorySyncAssistant, account)
-    if window is None:
-        HistorySyncAssistant(account, interface.roster.window)
-    else:
-        window.present()
+    open_window('HistorySyncAssistant',
+                account=account,
+                parent=interface.roster.window)
 
 
-def on_privacy_lists(action, param):
+def on_privacy_lists(_action, param):
     account = param.get_string()
     if 'privacy_lists' in interface.instances[account]:
         interface.instances[account]['privacy_lists'].window.present()
@@ -239,26 +191,18 @@ def on_privacy_lists(action, param):
             PrivacyListsWindow(account)
 
 
-def on_server_info(action, param):
+def on_server_info(_action, param):
     account = param.get_string()
-    window = app.get_app_window(ServerInfo, account)
-    if window is None:
-        ServerInfo(account)
-    else:
-        window.present()
+    open_window('ServerInfo', account=account)
 
 
-def on_xml_console(action, param):
-    XMLConsoleWindow()
+def on_xml_console(_action, _param):
+    open_window('XMLConsoleWindow')
 
 
+def on_manage_proxies(_action, _param):
+    open_window('ManageProxies')
 
-def on_manage_proxies(action, param):
-    window = app.get_app_window(ManageProxies)
-    if window is None:
-        ManageProxies()
-    else:
-        window.present()
 
 # Admin Actions
 
@@ -378,7 +322,7 @@ def on_browse_history(_action, param):
         jid = dict_.get('jid')
         account = dict_.get('account')
 
-    window = app.get_app_window(HistoryWindow)
+    window = get_app_window(HistoryWindow)
     if window is None:
         HistoryWindow(jid, account)
     else:
@@ -389,8 +333,4 @@ def on_browse_history(_action, param):
 
 def on_groupchat_join(_action, param):
     account, jid = param.get_strv()
-    window = app.get_app_window(GroupchatJoin, account=account, jid=jid)
-    if window is None:
-        GroupchatJoin(account, jid)
-    else:
-        window.present()
+    open_window('GroupchatJoin', account=account, jid=jid)

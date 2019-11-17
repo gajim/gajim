@@ -33,10 +33,8 @@ from gajim.chat_control_base import ChatControlBase
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_available_iconsets
+from gajim.gtk.util import open_window
 from gajim.gtk.dialogs import AspellDictError
-from gajim.gtk.themes import Themes
-from gajim.gtk.advanced_config import AdvancedConfig
-from gajim.gtk.proxies import ManageProxies
 from gajim.gtk.sounds import ManageSounds
 from gajim.gtk.const import ControlType
 
@@ -955,11 +953,7 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.theme_combobox.set_active_id(app.config.get('roster_theme'))
 
     def on_manage_theme_button_clicked(self, widget):
-        window = app.get_app_window(Themes)
-        if window is None:
-            Themes(self)
-        else:
-            window.present()
+        open_window('Themes', transient=self)
 
     def on_dark_theme_changed(self, widget):
         app.css_config.set_dark_theme(int(widget.get_active_id()))
@@ -1051,11 +1045,7 @@ class Preferences(Gtk.ApplicationWindow):
         app.config.set('global_proxy', proxy)
 
     def on_manage_proxies_button_clicked(self, _widget):
-        window = app.get_app_window(ManageProxies)
-        if window is None:
-            ManageProxies()
-        else:
-            window.present()
+        app.app.activate_action('manage-proxies')
 
     def update_proxy_list(self):
         our_proxy = app.config.get('global_proxy')
@@ -1083,10 +1073,5 @@ class Preferences(Gtk.ApplicationWindow):
     def _on_debug_folder_clicked(self, _widget):
         open_file(configpaths.get('DEBUG'))
 
-    # Advanced Config Editor (ACE)
     def on_open_advanced_editor_button_clicked(self, _widget):
-        window = app.get_app_window(AdvancedConfig)
-        if window is None:
-            AdvancedConfig()
-        else:
-            window.present()
+        open_window('AdvancedConfig')

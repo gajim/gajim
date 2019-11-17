@@ -19,6 +19,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_app_window
 
 
 class ManageProxies(Gtk.ApplicationWindow):
@@ -48,8 +49,8 @@ class ManageProxies(Gtk.ApplicationWindow):
 
     def _on_destroy(self, *args):
         # Window callbacks for updating proxy comboboxes
-        window_pref = app.get_app_window('Preferences')
-        window_accounts = app.get_app_window('AccountsWindow')
+        window_pref = get_app_window('Preferences')
+        window_accounts = get_app_window('AccountsWindow')
         if window_pref is not None:
             window_pref.update_proxy_list()
         if window_accounts is not None:

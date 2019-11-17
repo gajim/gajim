@@ -25,10 +25,10 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 
-from gajim.gtk.dialogs import CertificateDialog
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import open_window
 
 log = logging.getLogger('gajim.gtk.server_info')
 
@@ -130,11 +130,10 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.cert_button.set_sensitive(self.cert)
 
     def _on_cert_button_clicked(self, button_):
-        window = app.get_app_window(CertificateDialog, self.account)
-        if window is None:
-            CertificateDialog(self, self.account, self.cert)
-        else:
-            window.present()
+        open_window('CertificateDialog',
+                    account=self.account,
+                    transient_for=self,
+                    cert=self.cert)
 
     def request_last_activity(self):
         if not app.account_is_connected(self.account):

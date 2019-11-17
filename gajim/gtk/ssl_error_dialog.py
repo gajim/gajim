@@ -24,8 +24,8 @@ from gajim.common.const import SSLError
 from gajim.common.connection_handlers_events import OurShowEvent
 from gajim.common.i18n import _
 
-from gajim.gtk.dialogs import CertificateDialog
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import open_window
 
 
 class SSLErrorDialog(Gtk.ApplicationWindow):
@@ -72,11 +72,10 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
         self.destroy()
 
     def _on_view_cert_clicked(self, _button):
-        window = app.get_app_window(CertificateDialog, self.account)
-        if window is None:
-            CertificateDialog(self, self.account, self._cert)
-        else:
-            window.present()
+        open_window('CertificateDialog',
+                    account=self.account,
+                    transient_for=self,
+                    cert=self._cert)
 
     def _on_connect_clicked(self, _button):
         # Ignore this error

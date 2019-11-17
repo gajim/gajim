@@ -29,6 +29,7 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_app_window
 
 StyleOption = namedtuple('StyleOption', 'label selector attr')
 
@@ -326,7 +327,7 @@ class Themes(Gtk.ApplicationWindow):
 
     @staticmethod
     def _on_destroy(*args):
-        window = app.get_app_window('Preferences')
+        window = get_app_window('Preferences')
         if window is not None:
             window.update_theme_list()
 

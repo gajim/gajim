@@ -50,6 +50,7 @@ from gajim.gtk.util import move_window
 from gajim.gtk.util import get_app_icon_list
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import set_urgency_hint
+from gajim.gtk.util import get_app_window
 from gajim.gtk.const import ControlType
 
 
@@ -307,7 +308,7 @@ class MessageWindow(EventHelper):
         # again. if destroy() is called from the StartChat Dialog, this
         # Window is not yet focused, because present() seems to be asynchron
         # at least on KDE, and takes time.
-        start_chat = app.get_app_window('StartChatDialog')
+        start_chat = get_app_window('StartChatDialog')
         if start_chat is not None and start_chat.ready_to_destroy:
             start_chat.destroy()
 

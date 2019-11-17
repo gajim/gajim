@@ -100,7 +100,6 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
-from gajim.gtk.profile import ProfileWindow
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
@@ -108,9 +107,9 @@ from gajim.gtk.filetransfer import FileTransfersWindow
 from gajim.gtk.http_upload_progress import HTTPUploadProgressWindow
 from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gtk.subscription_request import SubscriptionRequestWindow
-from gajim.gtk.ssl_error_dialog import SSLErrorDialog
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
+from gajim.gtk.util import open_window
 from gajim.gtk.const import ControlType
 
 
@@ -232,15 +231,9 @@ class Interface:
 
         if account in self.show_vcard_when_connect and obj.show not in (
         'offline', 'error'):
-            self.edit_own_details(account)
+            action = '%s-profile' % account
+            app.app.activate_action(action, GLib.Variant('s', account))
             self.show_vcard_when_connect.remove(account)
-
-    def edit_own_details(self, account):
-        window = app.get_app_window(ProfileWindow)
-        if window is None:
-            ProfileWindow(account)
-        else:
-            window.present()
 
     @staticmethod
     def handle_gc_error(gc_control, pritext, sectext):
@@ -1034,11 +1027,11 @@ class Interface:
         cert = obj.cert
         error_num = obj.error_num
 
-        window = app.get_app_window(SSLErrorDialog, account)
-        if window is None:
-            SSLErrorDialog(account, connection, cert, error_num)
-        else:
-            window.present()
+        open_window('SSLErrorDialog',
+                    account=account,
+                    connection=connection,
+                    cert=cert,
+                    error_num=error_num)
 
     def handle_event_plain_connection(self, obj):
         # ('PLAIN_CONNECTION', account, (connection))

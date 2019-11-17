@@ -24,6 +24,7 @@ import os
 import sys
 import logging
 import textwrap
+from importlib import import_module
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from functools import wraps
@@ -54,6 +55,7 @@ from gajim.common.const import StyleAttr
 from gajim.common.nec import EventHelper as CommonEventHelper
 
 from gajim.gtk.const import GajimIconSet
+from gajim.gtk.const import WINDOW_MODULES
 
 _icon_theme = Gtk.IconTheme.get_default()
 if _icon_theme is not None:
@@ -690,6 +692,35 @@ def make_href_markup(string):
             url, color, match.group())
 
     return URL_REGEX.sub(_to_href, string)
+
+
+def get_app_window(name, account=None, jid=None):
+    for win in app.app.get_windows():
+        if type(win).__name__ != name:
+            continue
+
+        if account is not None:
+            if account != win.account:
+                continue
+
+        if jid is not None:
+            if jid != win.jid:
+                continue
+        return win
+    return None
+
+
+def open_window(name, **kwargs):
+    window = get_app_window(name,
+                            kwargs.get('account'),
+                            kwargs.get('jid'))
+    if window is None:
+        module = import_module(WINDOW_MODULES[name])
+        window_cls = getattr(module, name)
+        window = window_cls(**kwargs)
+    else:
+        window.present()
+    return window
 
 
 class EventHelper(CommonEventHelper):

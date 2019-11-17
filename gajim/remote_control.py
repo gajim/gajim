@@ -788,13 +788,13 @@ class GajimRemote(Server):
         if account:
             if app.account_is_connected(account):
                 # if given account is active, use it
-                AddNewContactWindow(account=account, jid=jid)
+                AddNewContactWindow(account=account, contact_jid=jid)
             else:
                 # wrong account
                 return False
         else:
             # if account is not given, show account combobox
-            AddNewContactWindow(account=None, jid=jid)
+            AddNewContactWindow(account=None, contact_jid=jid)
         return True
 
     def remove_contact(self, jid, account):

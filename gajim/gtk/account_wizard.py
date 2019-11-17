@@ -32,8 +32,8 @@ from gajim import dataforms_widget
 from gajim import gui_menu_builder
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_app_window
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.proxies import ManageProxies
 from gajim.gtk.dataform import FakeDataFormWidget
 
 
@@ -333,11 +333,7 @@ class AccountCreationWizard(EventHelper):
         proxies_combobox.set_active(0)
 
     def on_manage_proxies_button_clicked(self, _widget):
-        window = app.get_app_window(ManageProxies)
-        if window is None:
-            ManageProxies()
-        else:
-            window.present()
+        app.app.activate_action('manage-proxies')
 
     def on_custom_host_port_checkbutton_toggled(self, widget):
         self.xml.get_object('custom_host_hbox').set_sensitive(
@@ -475,13 +471,7 @@ class AccountCreationWizard(EventHelper):
             GLib.source_remove(self.update_progressbar_timeout_id)
 
     def on_advanced_button_clicked(self, widget):
-        from gajim.gtk.accounts import AccountsWindow
-        window = app.get_app_window(AccountsWindow)
-        if window is None:
-            window = AccountsWindow()
-        else:
-            window.present()
-        window.select_account(self.account)
+        app.app.activate_action('accounts', GLib.Variant('s', self.account))
         self.window.destroy()
 
     def on_finish_button_clicked(self, widget):
@@ -580,7 +570,7 @@ class AccountCreationWizard(EventHelper):
         # action must be added before account window is updated
         app.app.add_account_actions(self.account)
         # refresh accounts window
-        window = app.get_app_window('AccountsWindow')
+        window = get_app_window('AccountsWindow')
         if window is not None:
             window.add_account(self.account)
         # refresh roster

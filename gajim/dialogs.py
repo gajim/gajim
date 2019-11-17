@@ -53,6 +53,7 @@ from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_activity_icon_name
+from gajim.gtk.util import get_app_window
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
@@ -744,7 +745,7 @@ class SynchroniseSelectAccountDialog:
         self.account = account
         self.xml = get_builder('synchronise_select_account_dialog.ui')
         self.dialog = self.xml.get_object('synchronise_select_account_dialog')
-        self.dialog.set_transient_for(app.get_app_window('AccountsWindow'))
+        self.dialog.set_transient_for(get_app_window('AccountsWindow'))
         self.accounts_treeview = self.xml.get_object('accounts_treeview')
         model = Gtk.ListStore(str, str, bool)
         self.accounts_treeview.set_model(model)

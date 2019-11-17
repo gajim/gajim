@@ -99,3 +99,33 @@ SHOW_COLORS = {
     'dnd': (230/255, 46/255, 0),
     'xa': (106/255, 0, 242/255)
 }
+
+
+WINDOW_MODULES = {
+    'AccountsWindow': 'gajim.gtk.accounts',
+    'HistorySyncAssistant': 'gajim.gtk.history_sync',
+    'ServerInfo': 'gajim.gtk.server_info',
+    'MamPreferences': 'gajim.gtk.mam_preferences',
+    'Preferences': 'gajim.gtk.preferences',
+    'CreateGroupchatWindow': 'gajim.gtk.groupchat_creation',
+    'StartChatDialog': 'gajim.gtk.start_chat',
+    'AddNewContactWindow': 'gajim.gtk.add_contact',
+    'SingleMessageWindow': 'gajim.gtk.single_message',
+    'PrivacyListsWindow': 'gajim.gtk.privacy_list',
+    'Bookmarks': 'gajim.gtk.bookmarks',
+    'AccountCreationWizard': 'gajim.gtk.account_wizard',
+    'HistoryWindow': 'gajim.gtk.history',
+    'ManageProxies': 'gajim.gtk.proxies',
+    'ServiceDiscoveryWindow': 'gajim.gtk.discovery',
+    'BlockingList': 'gajim.gtk.blocking',
+    'XMLConsoleWindow': 'gajim.gtk.xml_console',
+    'GroupchatJoin': 'gajim.gtk.groupchat_join',
+    'ManagePEPServicesWindow': 'gajim.gtk.pep_config',
+    'HistoryManager': 'gajim.history_manager',
+    'GroupchatConfig': 'gajim.gtk.groupchat_config',
+    'ProfileWindow': 'gajim.gtk.profile',
+    'SSLErrorDialog': 'gajim.gtk.ssl_error_dialog',
+    'Themes': 'gajim.gtk.themes',
+    'AdvancedConfig': 'gajim.gtk.advanced_config',
+    'CertificateDialog': 'gajim.gtk.dialogs',
+}

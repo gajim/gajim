@@ -73,7 +73,6 @@ from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
-from gajim.gtk.server_info import ServerInfo
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.account_wizard import AccountCreationWizard
@@ -3511,11 +3510,8 @@ class RosterWindow:
         AdHocCommand(account, jid)
 
     def on_view_server_info(self, _widget, account):
-        window = app.get_app_window(ServerInfo, account)
-        if window is None:
-            ServerInfo(account)
-        else:
-            window.present()
+        app.app.activate_action('%s-server-info' % account,
+                                GLib.Variant('s', account))
 
     def on_roster_window_focus_in_event(self, widget, event):
         # roster received focus, so if we had urgency REMOVE IT
@@ -4353,7 +4349,7 @@ class RosterWindow:
         if (type_dest == 'account' or not self.regroup) and \
         account_source != account_dest:
             # add to account in specified group
-            AddNewContactWindow(account=account_dest, jid=jid_source,
+            AddNewContactWindow(account=account_dest, contact_jid=jid_source,
                 user_nick=c_source.name, group=grp_dest)
             return
 

@@ -657,24 +657,6 @@ def prefers_app_menu():
         return False
     return app.prefers_app_menu()
 
-def get_app_window(cls, account=None, jid=None):
-    for win in app.get_windows():
-        if isinstance(cls, str):
-            if type(win).__name__ != cls:
-                continue
-        elif not isinstance(win, cls):
-            continue
-
-        if account is not None:
-            if account != win.account:
-                continue
-
-        if jid is not None:
-            if jid != win.jid:
-                continue
-        return win
-    return None
-
 def load_css_config():
     global css_config
     from gajim.gtk.css_config import CSSConfig

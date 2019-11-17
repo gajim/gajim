@@ -40,6 +40,7 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_app_window
 
 
 log = logging.getLogger('gajim.gtk.accounts')
@@ -1035,7 +1036,7 @@ class RemoveAccountWindow:
         app.app.remove_account_actions(self.account)
         gui_menu_builder.build_accounts_menu()
 
-        window = app.get_app_window('AccountsWindow')
+        window = get_app_window('AccountsWindow')
         if window is not None:
             window.remove_account(self.account)
         self._ui.remove_account_window.destroy()

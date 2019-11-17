@@ -32,7 +32,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
                   'gadu-gadu': _('GG Number'),
                   'icq': _('ICQ Number')}
 
-    def __init__(self, account=None, jid=None, user_nick=None, group=None):
+    def __init__(self, account=None, contact_jid=None, user_nick=None, group=None):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
@@ -46,8 +46,8 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         self.account = account
         self.adding_jid = False
 
-        if jid is not None:
-            jid = app.get_jid_without_resource(jid)
+        if contact_jid is not None:
+            contact_jid = app.get_jid_without_resource(contact_jid)
 
         # fill accounts with active accounts
         accounts = app.get_enabled_accounts_with_labels()
@@ -127,16 +127,16 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         self.protocol_combobox.set_active(0)
         self.auto_authorize_checkbutton.show()
 
-        if jid:
+        if contact_jid:
             self.jid_escaped = True
-            type_ = app.get_transport_name_from_jid(jid)
+            type_ = app.get_transport_name_from_jid(contact_jid)
             if not type_:
                 type_ = 'jabber'
             if type_ == 'jabber':
-                self.uid_entry.set_text(jid)
+                self.uid_entry.set_text(contact_jid)
                 transport = None
             else:
-                uid, transport = app.get_name_and_server_from_jid(jid)
+                uid, transport = app.get_name_and_server_from_jid(contact_jid)
                 self.uid_entry.set_text(uid.replace('%', '@', 1))
 
             self.show_contact_info_button.set_sensitive(True)

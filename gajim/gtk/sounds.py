@@ -22,6 +22,7 @@ from gajim.common import helpers
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_app_window
 
 
 class ManageSounds:
@@ -121,6 +122,6 @@ class ManageSounds:
             self.window.destroy()
 
     def _on_destroy(self, *args):
-        window = app.get_app_window('Preferences')
+        window = get_app_window('Preferences')
         if window is not None:
             window.sounds_preferences = None

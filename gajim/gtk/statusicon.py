@@ -34,6 +34,7 @@ from gajim.common.helpers import save_roster_position
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import restore_roster_position
+from gajim.gtk.util import open_window
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.tooltips import NotificationAreaTooltip
 
@@ -304,12 +305,7 @@ class StatusIcon:
         win.hide()
 
     def on_preferences_menuitem_activate(self, widget):
-        from gajim.gtk.preferences import Preferences
-        window = app.get_app_window(Preferences)
-        if window is None:
-            Preferences()
-        else:
-            window.present()
+        open_window('Preferences')
 
     def on_quit_menuitem_activate(self, widget):
         app.interface.roster.on_quit_request()
