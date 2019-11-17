@@ -70,7 +70,7 @@ class FeaturesDialog(Gtk.Dialog):
             label.set_halign(Gtk.Align.START)
             row.set_header(label)
 
-    def on_response(self, dialog, response):
+    def on_response(self, _dialog, response):
         if response == Gtk.ResponseType.OK:
             self.destroy()
 
@@ -82,7 +82,7 @@ class FeaturesDialog(Gtk.Dialog):
     def get_features(self):
         Feature = namedtuple('Feature',
                              ['name', 'available', 'tooltip',
-                             'dependency_u', 'dependency_w', 'enabled'])
+                              'dependency_u', 'dependency_w', 'enabled'])
 
         spell_check_enabled = app.config.get('use_speller')
 
@@ -137,7 +137,8 @@ class FeaturesDialog(Gtk.Dialog):
                     None)
         ]
 
-    def some_keyring_available(self):
+    @staticmethod
+    def some_keyring_available():
         if os.name == 'nt':
             return True
         try:
@@ -147,7 +148,8 @@ class FeaturesDialog(Gtk.Dialog):
             return False
         return True
 
-    def idle_available(self):
+    @staticmethod
+    def idle_available():
         from gajim.common import idle
         return idle.Monitor.is_available()
 
