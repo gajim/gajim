@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+# pylint: disable=too-many-lines
+
 import re
 import weakref
 from enum import IntEnum
@@ -49,7 +51,7 @@ def get_emoji_pixbuf(codepoints):
 
     pixbuf = emoji_pixbufs.get(codepoints, None)
     if pixbuf is None:
-        return
+        return None
     pixbuf = pixbuf.scale_simple(Emoji.TEXT_SIZE,
                                  Emoji.TEXT_SIZE,
                                  GdkPixbuf.InterpType.HYPER)
@@ -177,6 +179,8 @@ class EmojiAsciiData(dict):
 
 
 emoji_pixbufs = EmojiPixbufs()
+
+# pylint: disable=line-too-long
 
 emoji_ascii_data = EmojiAsciiData([
     ("':-D", '\U0001F605'),
