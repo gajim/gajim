@@ -191,7 +191,7 @@ class GajimApplication(Gtk.Application):
         option.short_name = 0
         return [option]
 
-    def _startup(self, application):
+    def _startup(self, _application):
 
         # Create and initialize Application Paths & Databases
         app.detect_dependencies()
@@ -228,7 +228,7 @@ class GajimApplication(Gtk.Application):
             menubar.prepend_submenu('Gajim', appmenu)
         self.set_menubar(menubar)
 
-    def _activate(self, application):
+    def _activate(self, _application):
         if self.interface is not None:
             self.interface.roster.window.present()
             return
@@ -309,7 +309,7 @@ class GajimApplication(Gtk.Application):
         # Commit any outstanding SQL transactions
         app.logger.commit()
 
-    def _handle_remote_options(self, application, command_line):
+    def _handle_remote_options(self, _application, command_line):
         # Parse all options that should be executed on a remote instance
         options = command_line.get_options_dict()
 
@@ -343,7 +343,7 @@ class GajimApplication(Gtk.Application):
         return 0
 
     def _handle_local_options(self,
-                              application: Gtk.Application,
+                              _application: Gtk.Application,
                               options: GLib.VariantDict) -> int:
         # Parse all options that have to be executed before ::startup
         if options.contains('version'):
@@ -385,12 +385,13 @@ class GajimApplication(Gtk.Application):
 
         return -1
 
-    def show_warnings(self):
+    @staticmethod
+    def show_warnings():
         import traceback
         import warnings
 
         def warn_with_traceback(message, category, filename, lineno,
-                                file=None, line=None):
+                                _file=None, line=None):
             traceback.print_stack(file=sys.stderr)
             sys.stderr.write(warnings.formatwarning(message, category,
                                                     filename, lineno, line))
@@ -477,7 +478,8 @@ class GajimApplication(Gtk.Application):
         else:
             self.add_account_actions(accounts_list[0])
 
-    def _get_account_actions(self, account):
+    @staticmethod
+    def _get_account_actions(account):
         from gajim import app_actions as a
 
         if account == 'Local':
@@ -594,7 +596,7 @@ class GajimApplication(Gtk.Application):
             action = '%s-blocking' % event.account
             self.lookup_action(action).set_enabled(True)
 
-    def _screensaver_active(self, application, param):
+    def _screensaver_active(self, _application, _param):
         '''Signal handler for screensaver active change'''
 
         active = self.get_property('screensaver-active')
