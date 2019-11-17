@@ -109,25 +109,25 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
     def _set_mam_box_state(self, state):
         self._ui.mam_box.set_sensitive(state)
 
-    def _jid_edited(self, renderer, path, new_text):
+    def _jid_edited(self, _renderer, path, new_text):
         iter_ = self._ui.preferences_store.get_iter(path)
         self._ui.preferences_store.set_value(iter_, 0, new_text)
 
-    def _pref_toggled(self, renderer, path):
+    def _pref_toggled(self, _renderer, path):
         iter_ = self._ui.preferences_store.get_iter(path)
         current_value = self._ui.preferences_store[iter_][1]
         self._ui.preferences_store.set_value(iter_, 1, not current_value)
 
-    def _on_add(self, button):
+    def _on_add(self, _button):
         self._ui.preferences_store.append(['', False])
 
-    def _on_remove(self, button):
+    def _on_remove(self, _button):
         mod, paths = self._ui.pref_view.get_selection().get_selected_rows()
         for path in paths:
             iter_ = mod.get_iter(path)
             self._ui.preferences_store.remove(iter_)
 
-    def _on_save(self, button):
+    def _on_save(self, _button):
         self._activate_spinner()
         self._set_mam_box_state(False)
         items = []
@@ -144,6 +144,6 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         self._spinner.hide()
         self._spinner.stop()
 
-    def _on_key_press(self, widget, event):
+    def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
