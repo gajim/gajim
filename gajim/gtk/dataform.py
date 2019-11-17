@@ -211,6 +211,7 @@ class Instructions:
 
 class Field:
     def __init__(self, field, form_grid, options):
+        self._widget = None
         self._field = field
         self._form_grid = form_grid
         self._validate_source_id = None
@@ -563,7 +564,7 @@ class TextMultiField(Field):
 
 
 class ImageMediaField():
-    def __init__(self, uri, form_grid, options):
+    def __init__(self, uri, form_grid, _options):
         self._uri = uri
         self._form_grid = form_grid
 
