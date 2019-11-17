@@ -311,11 +311,7 @@ class RosterTooltip(StatusTable):
 
         if account == 'all':
             # Tooltip for merged accounts row
-            accounts = helpers.get_notification_icon_tooltip_dict()
-            self.spacer_label = ''
-            self.fill_table_with_accounts(accounts)
-            self._ui.tooltip_grid.attach(self.table, 1, 3, 2, 1)
-            self.table.show_all()
+            self._show_merged_account_tooltip()
             return
 
         if typ == 'account':
@@ -345,14 +341,16 @@ class RosterTooltip(StatusTable):
             contacts)
         if self.prim_contact is None:
             log.error('No contact for Roster tooltip found')
-            log.error('contacts: %s, typ: %s, account: %s', contacts, typ, account)
+            log.error('contacts: %s, typ: %s, account: %s',
+                      contacts, typ, account)
             return
         self.contact_jid = self.prim_contact.jid
         name = GLib.markup_escape_text(self.prim_contact.get_shown_name())
         name_markup = '<b>{}</b>'.format(name)
         if app.config.get('mergeaccounts'):
             color = app.config.get('tooltip_account_name_color')
-            account_name = GLib.markup_escape_text(self.prim_contact.account.name)
+            account_name = GLib.markup_escape_text(
+                self.prim_contact.account.name)
             name_markup += " <span foreground='{}'>({})</span>".format(
                 color, account_name)
 
@@ -360,7 +358,8 @@ class RosterTooltip(StatusTable):
             name_markup += _(' [blocked]')
 
         try:
-            if self.prim_contact.jid in app.interface.minimized_controls[account]:
+            controls = app.interface.minimized_controls[account]
+            if self.prim_contact.jid in controls:
                 name_markup += _(' [minimized]')
         except KeyError:
             pass
@@ -460,10 +459,17 @@ class RosterTooltip(StatusTable):
             i += 1
         self.last_widget.set_vexpand(True)
 
+    def _show_merged_account_tooltip(self):
+        accounts = helpers.get_notification_icon_tooltip_dict()
+        self.spacer_label = ''
+        self.fill_table_with_accounts(accounts)
+        self._ui.tooltip_grid.attach(self.table, 1, 3, 2, 1)
+        self.table.show_all()
+
     def _append_pep_info(self, contact):
         """
-        Append Tune, Mood, Activity, Location information of the specified contact
-        to the given property list.
+        Append Tune, Mood, Activity, Location information of the
+        specified contact to the given property list.
         """
         if PEPEventType.MOOD in contact.pep:
             mood = format_mood(*contact.pep[PEPEventType.MOOD])
