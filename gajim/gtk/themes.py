@@ -284,6 +284,21 @@ class Themes(Gtk.ApplicationWindow):
         self._remove_theme_button.set_sensitive(True)
         iter_ = self._theme_store.append([name])
         self._select_theme_row(iter_)
+        self._apply_theme(name)
+
+    def _apply_theme(self, theme):
+        app.config.set('roster_theme', theme)
+        app.css_config.change_theme(theme)
+        app.nec.push_incoming_event(NetworkEvent('theme-update'))
+
+        # Begin repainting themed widgets throughout
+        app.interface.roster.repaint_themed_widgets()
+        app.interface.roster.change_roster_style(None)
+
+        # Update Preferences theme combobox
+        window = get_app_window('Preferences')
+        if window is not None:
+            window.update_theme_list()
 
     @staticmethod
     def _create_theme_name():
@@ -298,15 +313,11 @@ class Themes(Gtk.ApplicationWindow):
             return
 
         theme = store[iter_][Column.THEME]
-        if theme == app.config.get('roster_theme'):
-            ErrorDialog(
-                _('Active Theme'),
-                _('You tried to delete the currently active theme. '
-                  'Please switch to a different theme first.'),
-                transient_for=self)
-            return
 
         def _remove_theme():
+            if theme == app.config.get('roster_theme'):
+                self._apply_theme('default')
+
             app.css_config.remove_theme(theme)
             store.remove(iter_)
 
@@ -316,10 +327,15 @@ class Themes(Gtk.ApplicationWindow):
                 self._add_option_button.set_sensitive(False)
                 self._clear_options()
 
+        text = _('Do you want to delete this theme?')
+        if theme == app.config.get('roster_theme'):
+            text = _('This is the theme you are currently using.\n'
+                     'Do you want to delete this theme?')
+
         NewConfirmationDialog(
             _('Delete'),
             _('Delete Theme'),
-            _('Do you want to permanently delete this theme?'),
+            text,
             [DialogButton.make('Cancel'),
              DialogButton.make('Delete',
                                callback=_remove_theme)],
