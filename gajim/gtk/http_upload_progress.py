@@ -80,7 +80,7 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.progressbar.pulse()
         return True
 
-    def _on_cancel_upload_button_clicked(self, widget):
+    def _on_cancel_upload_button_clicked(self, _widget):
         self.destroy()
 
     def _on_destroy(self, *args):
@@ -117,7 +117,8 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.eta_label.set_text(eta)
         self._ui.progressbar.set_fraction(float(seen) / total)
 
-    def _format_eta(self, time_):
+    @staticmethod
+    def _format_eta(time_):
         times = {'minutes': 0, 'seconds': 0}
         time_ = int(time_)
         times['seconds'] = time_ % 60
