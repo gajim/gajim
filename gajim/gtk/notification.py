@@ -137,6 +137,7 @@ class Notification(EventHelper):
             if obj.transport_name is not None:
                 return '%s-%s' % (obj.transport_name, obj.show)
             return get_icon_name(obj.show)
+        return None
 
     def popup(self, event_type, jid, account, type_='', icon_name=None,
               title=None, text=None, timeout=-1, room_jid=None):
@@ -318,7 +319,8 @@ class PopupNotification(Gtk.Window):
         if timeout > 0:
             self._timeout_id = GLib.timeout_add_seconds(timeout, self.destroy)
 
-    def _get_window_pos(self):
+    @staticmethod
+    def _get_window_pos():
         pos_x = app.config.get('notification_position_x')
         screen_w, screen_h = get_total_screen_geometry()
         if pos_x < 0:
