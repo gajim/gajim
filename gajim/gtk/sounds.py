@@ -68,6 +68,7 @@ class ManageSounds:
 
         # NOTE: sounds_ui_names MUST have all items of
         # sounds = app.config.get_per('soundevents') as keys
+        # pylint: disable=line-too-long
         sounds_dict = {
             'attention_received': _('Attention Message Received'),
             'first_message_received': _('First Message Received'),
@@ -79,6 +80,7 @@ class ManageSounds:
             'muc_message_highlight': _('Group Chat Message Highlight'),
             'muc_message_received': _('Group Chat Message Received'),
         }
+        # pylint: enable=line-too-long
 
         for config_name, sound_name in sounds_dict.items():
             enabled = app.config.get_per('soundevents', config_name, 'enabled')
@@ -117,11 +119,12 @@ class ManageSounds:
         snd_event_config_name = model[iter_][3]
         helpers.play_sound(snd_event_config_name)
 
-    def _on_key_press(self, widget, event):
+    def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
 
-    def _on_destroy(self, *args):
+    @staticmethod
+    def _on_destroy(*args):
         window = get_app_window('Preferences')
         if window is not None:
             window.sounds_preferences = None
