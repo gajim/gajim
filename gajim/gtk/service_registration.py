@@ -88,7 +88,7 @@ class ServiceRegistration(Gtk.Assistant):
         form_widget.validate()
         return form_widget
 
-    def _on_page_change(self, assistant, page):
+    def _on_page_change(self, _assistant, _page):
         if self.get_current_page() == Page.REQUEST:
             self._con.get_module('Register').get_register_form(
                 self._agent, self._on_get_success, self._on_error)
@@ -111,14 +111,15 @@ class ServiceRegistration(Gtk.Assistant):
             log.info('Show Form page')
             self._is_form = is_form
             self._data_form_widget = self._build_dataform(form, is_form)
-            self.get_nth_page(Page.FORM).set_form(self._data_form_widget, error_text=error_text)
+            self.get_nth_page(Page.FORM).set_form(self._data_form_widget,
+                                                  error_text=error_text)
             self.set_current_page(Page.FORM)
         else:
             log.info('Show Error page')
             self.get_nth_page(Page.ERROR).set_text(error_text)
             self.set_current_page(Page.ERROR)
 
-    def _on_cancel(self, widget):
+    def _on_cancel(self, _widget):
         self.destroy()
 
     def _register(self):
