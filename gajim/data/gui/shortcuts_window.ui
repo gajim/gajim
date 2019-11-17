@@ -97,7 +97,14 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;l</property>
-                <property name="title" translatable="yes">Clear</property>
+                <property name="title" translatable="yes">Clear chat window</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;h</property>
+                <property name="title" translatable="yes">Show chat history</property>
               </object>
             </child>
           </object>
@@ -178,7 +185,21 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;a</property>
+                <property name="accelerator">&lt;ctrl&gt;n</property>
+                <property name="title" translatable="yes">Start a new chat</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;g</property>
+                <property name="title" translatable="yes">Create new group chat</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;alt&gt;a</property>
                 <property name="title" translatable="yes">Accounts</property>
               </object>
             </child>
@@ -192,6 +213,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;e</property>
+                <property name="title" translatable="yes">Plugins</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;t</property>
                 <property name="title" translatable="yes">File transfers</property>
               </object>
@@ -199,22 +227,15 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;ctrl&gt;n</property>
-                <property name="title" translatable="yes">Start a new chat</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;ctrl&gt;j</property>
-                <property name="title" translatable="yes">Join a group chat</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;s</property>
                 <property name="title" translatable="yes">Set the status message</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;x</property>
+                <property name="title" translatable="yes">Show XML console</property>
               </object>
             </child>
             <child>
@@ -249,6 +270,13 @@
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;k</property>
                 <property name="title" translatable="yes">Enable contact list filtering</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;r</property>
+                <property name="title" translatable="yes">Show / hide contact list</property>
               </object>
             </child>
           </object>
