@@ -80,7 +80,7 @@ from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.tooltips import RosterTooltip
 from gajim.gtk.adhoc import AdHocCommand
-from gajim.gtk.subscription_request import SubscriptionRequestWindow
+from gajim.gtk.subscription_request import SubscriptionRequest
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import restore_roster_position
@@ -1971,7 +1971,7 @@ class RosterWindow:
             return True
 
         if event.type_ == 'subscription_request':
-            SubscriptionRequestWindow(jid, event.text, account, event.nick)
+            SubscriptionRequest(jid, event.text, account, event.nick)
             app.events.remove_events(account, jid, event)
             return True
 

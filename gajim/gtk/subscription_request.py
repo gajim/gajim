@@ -23,7 +23,7 @@ from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_builder
 
 
-class SubscriptionRequestWindow(Gtk.ApplicationWindow):
+class SubscriptionRequest(Gtk.ApplicationWindow):
     def __init__(self, jid, text, account, user_nick=None):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('SubscriptionRequest')

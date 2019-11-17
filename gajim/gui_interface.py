@@ -106,7 +106,7 @@ from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.filetransfer import FileTransfersWindow
 from gajim.gtk.http_upload_progress import HTTPUploadProgressWindow
 from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
-from gajim.gtk.subscription_request import SubscriptionRequestWindow
+from gajim.gtk.subscription_request import SubscriptionRequest
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import open_window
@@ -308,7 +308,7 @@ class Interface:
             if obj.jid in self.instances[account]['sub_request']:
                 self.instances[account]['sub_request'][obj.jid].destroy()
             self.instances[account]['sub_request'][obj.jid] = \
-                SubscriptionRequestWindow(obj.jid, obj.status, account,
+                SubscriptionRequest(obj.jid, obj.status, account,
                                           obj.user_nick)
             return
 
@@ -1270,7 +1270,7 @@ class Interface:
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            SubscriptionRequestWindow(jid, event.text, account, event.nick)
+            SubscriptionRequest(jid, event.text, account, event.nick)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'unsubscribed':
