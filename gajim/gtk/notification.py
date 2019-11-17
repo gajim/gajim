@@ -77,7 +77,7 @@ class Notification(EventHelper):
         def on_proxy_ready(_source, res, _data=None):
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
-                self.daemon_capabilities = proxy.GetCapabilities()
+                self._daemon_capabilities = proxy.GetCapabilities()
             except GLib.Error:
                 log.exception('Notifications D-Bus connection failed')
             else:
