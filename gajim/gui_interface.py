@@ -106,7 +106,6 @@ from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.filetransfer import FileTransfersWindow
 from gajim.gtk.http_upload_progress import HTTPUploadProgressWindow
 from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
-from gajim.gtk.subscription_request import SubscriptionRequest
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import open_window
@@ -305,11 +304,11 @@ class Interface:
         #('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is JEP-0172
         account = obj.conn.name
         if helpers.allow_popup_window(account) or not self.systray_enabled:
-            if obj.jid in self.instances[account]['sub_request']:
-                self.instances[account]['sub_request'][obj.jid].destroy()
-            self.instances[account]['sub_request'][obj.jid] = \
-                SubscriptionRequest(obj.jid, obj.status, account,
-                                          obj.user_nick)
+            open_window('SubscriptionRequest',
+                        account=account,
+                        jid=obj.jid,
+                        text=obj.status,
+                        user_nick=obj.user_nick)
             return
 
         event = events.SubscriptionRequestEvent(obj.status, obj.user_nick)
@@ -1270,7 +1269,11 @@ class Interface:
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            SubscriptionRequest(jid, event.text, account, event.nick)
+            open_window('SubscriptionRequest',
+                        account=account,
+                        jid=jid,
+                        text=event.text,
+                        user_nick=event.nick)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'unsubscribed':

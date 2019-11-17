@@ -128,4 +128,5 @@ WINDOW_MODULES = {
     'Themes': 'gajim.gtk.themes',
     'AdvancedConfig': 'gajim.gtk.advanced_config',
     'CertificateDialog': 'gajim.gtk.dialogs',
+    'SubscriptionRequest': 'gajim.gtk.subscription_request',
 }

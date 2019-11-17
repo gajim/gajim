@@ -24,7 +24,7 @@ from gajim.gtk.util import get_builder
 
 
 class SubscriptionRequest(Gtk.ApplicationWindow):
-    def __init__(self, jid, text, account, user_nick=None):
+    def __init__(self, account, jid, text, user_nick=None):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('SubscriptionRequest')
         self.set_application(app.app)
@@ -51,14 +51,6 @@ class SubscriptionRequest(Gtk.ApplicationWindow):
 
         self._ui.connect_signals(self)
         self.show_all()
-
-    def on_subscription_request_window_destroy(self, widget):
-        """
-        Close window
-        """
-        if self.jid in app.interface.instances[self.account]['sub_request']:
-            # Remove us from open windows
-            del app.interface.instances[self.account]['sub_request'][self.jid]
 
     def on_authorize_button_clicked(self, widget):
         """
