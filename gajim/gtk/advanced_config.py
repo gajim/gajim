@@ -47,7 +47,7 @@ def rate_limit(rate):
     def decorator(func):
         timeout = [None]
 
-        def f(*args, **kwargs):
+        def func_wrapper(*args, **kwargs):
             if timeout[0] is not None:
                 GLib.source_remove(timeout[0])
                 timeout[0] = None
@@ -56,7 +56,7 @@ def rate_limit(rate):
                 func(*args, **kwargs)
                 timeout[0] = None
             timeout[0] = GLib.timeout_add(int(1000.0 / rate), timeout_func)
-        return f
+        return func_wrapper
     return decorator
 
 
@@ -144,7 +144,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         if event.keyval == Gdk.KEY_Escape and not editing:
             self.destroy()
 
-    def _value_column_data_callback(self, col, cell, model, iter_, data):
+    def _value_column_data_callback(self, _col, cell, model, iter_, _data):
         """
         Check if it's boolean or holds password stuff and if yes, make the
         cellrenderertext not editable, else - it's editable
@@ -199,7 +199,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         else:
             self.changed_opts[option] = (oldval, newval)
 
-    def _on_treeview_row_activated(self, treeview, path, column):
+    def _on_treeview_row_activated(self, _treeview, path, _column):
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
         option = modelrow[0]
@@ -242,7 +242,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                     self._ui.restart_warning.show()
                     break
 
-    def _on_config_edited(self, cell, path, text):
+    def _on_config_edited(self, _cell, path, text):
         # Convert modelfilter path to model path
         path = Gtk.TreePath.new_from_string(path)
         modelpath = self.modelfilter.convert_path_to_child_path(path)
@@ -266,7 +266,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         modelrow[1] = text
         self._check_for_restart()
 
-    def _on_reset_button_clicked(self, widget):
+    def _on_reset_button_clicked(self, _widget):
         model, iter_ = self.treeview.get_selection().get_selected()
         # Check for GtkTreeIter
         if iter_:
@@ -330,7 +330,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                             value = option
                 self.model.append(parent, [name, value, type_])
 
-    def _visible_func(self, model, treeiter, data):
+    def _visible_func(self, model, treeiter, _data):
         search_string = self._ui.filter_entry.get_text().lower()
         for it in tree_model_pre_order(model, treeiter):
             if model[it][Column.TYPE] != '':
