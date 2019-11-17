@@ -47,7 +47,8 @@ class ManageProxies(Gtk.ApplicationWindow):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_destroy(self, *args):
+    @staticmethod
+    def _on_destroy(*args):
         # Window callbacks for updating proxy comboboxes
         window_pref = get_app_window('Preferences')
         window_accounts = get_app_window('AccountsWindow')
