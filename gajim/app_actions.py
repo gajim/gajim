@@ -50,7 +50,7 @@ def on_preferences(_action, _param):
     open_window('Preferences')
 
 
-def on_plugins(action, param):
+def on_plugins(_action, _param):
     if 'plugins' in interface.instances:
         interface.instances['plugins'].window.present()
     else:
@@ -73,7 +73,7 @@ def on_bookmarks(_action, param):
     open_window('Bookmarks', account=account)
 
 
-def on_quit(action, param):
+def on_quit(_action, _param):
     interface.roster.on_quit_request()
 
 
@@ -92,14 +92,14 @@ def on_profile(_action, param):
     open_window('ProfileWindow', account=account)
 
 
-def on_send_server_message(action, param):
+def on_send_server_message(_action, param):
     account = param.get_string()
     server = app.config.get_per('accounts', account, 'hostname')
     server += '/announce/online'
     SingleMessageWindow(account, server, 'send')
 
 
-def on_service_disco(action, param):
+def on_service_disco(_action, param):
     account = param.get_string()
     server_jid = app.config.get_per('accounts', account, 'hostname')
     if server_jid in interface.instances[account]['disco']:
@@ -141,7 +141,7 @@ def on_merge_accounts(action, param):
     app.interface.roster.setup_and_draw_roster()
 
 
-def on_add_account(action, param):
+def on_add_account(_action, _param):
     if 'account_creation_wizard' in app.interface.instances:
         app.interface.instances['account_creation_wizard'].window.present()
     else:
@@ -149,7 +149,7 @@ def on_add_account(action, param):
             AccountCreationWizard()
 
 
-def on_import_contacts(action, param):
+def on_import_contacts(_action, param):
     account = param.get_string()
     if 'import_contacts' in app.interface.instances:
         app.interface.instances['import_contacts'].dialog.present()
@@ -207,50 +207,50 @@ def on_manage_proxies(_action, _param):
 # Admin Actions
 
 
-def on_set_motd(action, param):
+def on_set_motd(_action, param):
     account = param.get_string()
     server = app.config.get_per('accounts', account, 'hostname')
     server += '/announce/motd'
     SingleMessageWindow(account, server, 'send')
 
 
-def on_update_motd(action, param):
+def on_update_motd(_action, param):
     account = param.get_string()
     server = app.config.get_per('accounts', account, 'hostname')
     server += '/announce/motd/update'
     SingleMessageWindow(account, server, 'send')
 
 
-def on_delete_motd(action, param):
+def on_delete_motd(_action, param):
     account = param.get_string()
     app.connections[account].get_module('Announce').delete_motd()
 
 # Help Actions
 
 
-def on_contents(action, param):
+def on_contents(_action, _param):
     helpers.open_uri('https://dev.gajim.org/gajim/gajim/wikis')
 
 
-def on_faq(action, param):
+def on_faq(_action, _param):
     helpers.open_uri('https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq')
 
 
-def on_keyboard_shortcuts(action, param):
+def on_keyboard_shortcuts(_action, _param):
     ShortcutsWindow()
 
 
-def on_features(action, param):
+def on_features(_action, _param):
     FeaturesDialog()
 
 
-def on_about(action, param):
+def on_about(_action, _param):
     AboutDialog()
 
 # View Actions
 
 
-def on_file_transfers(action, param):
+def on_file_transfers(_action, _param):
     if interface.instances['file_transfers']. \
             window.get_property('visible'):
         interface.instances['file_transfers'].window.present()
@@ -262,7 +262,7 @@ def on_history(action, param):
     on_browse_history(action, param)
 
 
-def on_open_event(action, param):
+def on_open_event(_action, param):
     dict_ = param.unpack()
     app.interface.handle_event(
         dict_['account'], dict_['jid'], dict_['type_'])
@@ -270,7 +270,7 @@ def on_open_event(action, param):
 
 # Other Actions
 
-def toggle_ipython(action, param):
+def toggle_ipython(_action, _param):
     """
     Show/hide the ipython window
     """
@@ -281,7 +281,7 @@ def toggle_ipython(action, param):
         app.interface.create_ipython_window()
 
 
-def show_next_pending_event(action, param):
+def show_next_pending_event(_action, _param):
     """
     Show the window(s) with next pending event in tabbed/group chats
     """
