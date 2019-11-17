@@ -726,10 +726,7 @@ def open_window(name, **kwargs):
 class EventHelper(CommonEventHelper):
     def __init__(self):
         CommonEventHelper.__init__(self)
-        self.connect('destroy', self.__on_destroy)
-
-    def connect(self, *args):
-        raise NotImplementedError
+        self.connect('destroy', self.__on_destroy)  # pylint: disable=no-member
 
     def __on_destroy(self, *args):
         self.unregister_events()
