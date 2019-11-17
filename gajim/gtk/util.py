@@ -139,7 +139,8 @@ class NickCompletionGenerator:
 
         # handle people who have not posted/mentioned us
         other_nicks = [
-            n for n in nicks if nick_matching(n) and n not in potential_matches_set
+            n for n in nicks
+            if nick_matching(n) and n not in potential_matches_set
         ]
         other_nicks.sort(key=str.lower)
         log.debug('Other matches: %s', other_nicks)
@@ -515,8 +516,8 @@ def get_hardware_key_codes(keyval):
 def ensure_not_destroyed(func):
     @wraps(func)
     def func_wrapper(self, *args, **kwargs):
-        if self._destroyed:
-            return
+        if self._destroyed:  # pylint: disable=protected-access
+            return None
         return func(self, *args, **kwargs)
     return func_wrapper
 
@@ -533,7 +534,7 @@ def format_mood(mood, text):
 
 def format_activity(activity, subactivity, text):
     if activity is None:
-        return
+        return None
 
     if subactivity in ACTIVITIES[activity]:
         subactivity = ACTIVITIES[activity][subactivity]
@@ -555,9 +556,9 @@ def get_activity_icon_name(activity, subactivity=None):
     return icon_name
 
 
-def format_tune(artist, length, rating, source, title, track, uri):
+def format_tune(artist, _length, _rating, source, title, _track, _uri):
     if artist is None and title is None and source is None:
-        return
+        return None
     artist = GLib.markup_escape_text(artist or _('Unknown Artist'))
     title = GLib.markup_escape_text(title or _('Unknown Title'))
     source = GLib.markup_escape_text(source or _('Unknown Source'))
@@ -590,8 +591,8 @@ def format_fingerprint(fingerprint):
     fplen = len(fingerprint)
     wordsize = fplen // 8
     buf = ''
-    for w in range(0, fplen, wordsize):
-        buf += '{0} '.format(fingerprint[w:w + wordsize])
+    for char in range(0, fplen, wordsize):
+        buf += '{0} '.format(fingerprint[char:char + wordsize])
     buf = textwrap.fill(buf, width=36)
     return buf.rstrip().upper()
 
@@ -602,6 +603,7 @@ def find_widget(name, container):
             return child
         if isinstance(child, Gtk.Box):
             return find_widget(name, child)
+    return None
 
 
 class MultiLineLabel(Gtk.Label):
@@ -623,7 +625,8 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
         self._max_width = size
 
     def do_get_preferred_width(self):
-        minimum_width, natural_width = Gtk.ComboBoxText.do_get_preferred_width(self)
+        minimum_width, natural_width = Gtk.ComboBoxText.do_get_preferred_width(
+            self)
 
         if natural_width > self._max_width:
             natural_width = self._max_width
