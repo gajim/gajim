@@ -185,12 +185,9 @@ class Themes(Gtk.ApplicationWindow):
 
         widgets = ['option_listbox', 'remove_theme_button', 'theme_store',
                    'theme_treeview', 'choose_option_listbox',
-                   'add_option_button', 'placeholder', 'option_popover']
+                   'placeholder', 'option_popover']
         for widget in widgets:
             setattr(self, '_%s' % widget, self.builder.get_object(widget))
-
-        # Doesnt work if we set it in Glade
-        self._add_option_button.set_sensitive(False)
 
         self._get_themes()
         self._option_listbox.set_placeholder(self._placeholder)
@@ -243,7 +240,6 @@ class Themes(Gtk.ApplicationWindow):
         theme = store[iter_][Column.THEME]
         app.css_config.change_preload_theme(theme)
 
-        self._add_option_button.set_sensitive(True)
         self._remove_theme_button.set_sensitive(True)
         self._load_options(theme)
 
@@ -260,6 +256,12 @@ class Themes(Gtk.ApplicationWindow):
             self._option_listbox.add(row)
 
     def _add_option(self, listbox, row):
+        # Add theme if there is none
+        store, iter_ = self._theme_treeview.get_selection().get_selected()
+        first = store.get_iter_first()
+        if first is None:
+            self._on_add_new_theme()
+
         for option in self._option_listbox.get_children():
             if option == row:
                 return
@@ -326,7 +328,6 @@ class Themes(Gtk.ApplicationWindow):
             first = store.get_iter_first()
             if first is None:
                 self._remove_theme_button.set_sensitive(False)
-                self._add_option_button.set_sensitive(False)
                 self._clear_options()
 
         text = _('Do you want to delete this theme?')
