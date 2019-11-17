@@ -180,19 +180,13 @@ class Themes(Gtk.ApplicationWindow):
         self.set_resizable(True)
         self.set_default_size(600, 400)
 
-        self.builder = get_builder('themes_window.ui')
-        self.add(self.builder.get_object('theme_grid'))
-
-        widgets = ['option_listbox', 'remove_theme_button', 'theme_store',
-                   'theme_treeview', 'choose_option_listbox',
-                   'placeholder', 'option_popover']
-        for widget in widgets:
-            setattr(self, '_%s' % widget, self.builder.get_object(widget))
+        self._ui = get_builder('themes_window.ui')
+        self.add(self._ui.theme_grid)
 
         self._get_themes()
-        self._option_listbox.set_placeholder(self._placeholder)
+        self._ui.option_listbox.set_placeholder(self._ui.placeholder)
 
-        self.builder.connect_signals(self)
+        self._ui.connect_signals(self)
         self.connect('destroy', self._on_destroy)
         self.show_all()
 
@@ -200,11 +194,11 @@ class Themes(Gtk.ApplicationWindow):
 
     def _get_themes(self):
         for theme in app.css_config.themes:
-            self._theme_store.append([theme])
+            self._ui.theme_store.append([theme])
 
     def _on_theme_name_edit(self, renderer, path, new_name):
-        iter_ = self._theme_store.get_iter(path)
-        old_name = self._theme_store[iter_][Column.THEME]
+        iter_ = self._ui.theme_store.get_iter(path)
+        old_name = self._ui.theme_store[iter_][Column.THEME]
 
         if new_name == 'default':
             ErrorDialog(
@@ -227,10 +221,10 @@ class Themes(Gtk.ApplicationWindow):
         if result is False:
             return
 
-        self._theme_store.set_value(iter_, Column.THEME, new_name)
+        self._ui.theme_store.set_value(iter_, Column.THEME, new_name)
 
     def _select_theme_row(self, iter_):
-        self._theme_treeview.get_selection().select_iter(iter_)
+        self._ui.theme_treeview.get_selection().select_iter(iter_)
 
     def _on_theme_selected(self, tree_selection):
         store, iter_ = tree_selection.get_selected()
@@ -240,11 +234,11 @@ class Themes(Gtk.ApplicationWindow):
         theme = store[iter_][Column.THEME]
         app.css_config.change_preload_theme(theme)
 
-        self._remove_theme_button.set_sensitive(True)
+        self._ui.remove_theme_button.set_sensitive(True)
         self._load_options(theme)
 
     def _load_options(self, name):
-        self._option_listbox.foreach(self._remove_option)
+        self._ui.option_listbox.foreach(self._remove_option)
         for option in CSS_STYLE_OPTIONS:
             value = app.css_config.get_value(
                 option.selector, option.attr, pre=True)
@@ -253,31 +247,31 @@ class Themes(Gtk.ApplicationWindow):
                 continue
 
             row = Option(option, value)
-            self._option_listbox.add(row)
+            self._ui.option_listbox.add(row)
 
     def _add_option(self, listbox, row):
         # Add theme if there is none
-        store, iter_ = self._theme_treeview.get_selection().get_selected()
+        store, iter_ = self._ui.theme_treeview.get_selection().get_selected()
         first = store.get_iter_first()
         if first is None:
             self._on_add_new_theme()
 
-        for option in self._option_listbox.get_children():
+        for option in self._ui.option_listbox.get_children():
             if option == row:
                 return
         row = Option(row.option, None)
-        self._option_listbox.add(row)
-        self._option_popover.popdown()
+        self._ui.option_listbox.add(row)
+        self._ui.option_popover.popdown()
 
     def _clear_options(self):
-        self._option_listbox.foreach(self._remove_option)
+        self._ui.option_listbox.foreach(self._remove_option)
 
     def _fill_choose_listbox(self):
         for option in CSS_STYLE_OPTIONS:
-            self._choose_option_listbox.add(ChooseOption(option))
+            self._ui.choose_option_listbox.add(ChooseOption(option))
 
     def _remove_option(self, row):
-        self._option_listbox.remove(row)
+        self._ui.option_listbox.remove(row)
         row.destroy()
 
     def _on_add_new_theme(self, *args):
@@ -285,8 +279,8 @@ class Themes(Gtk.ApplicationWindow):
         if not app.css_config.add_new_theme(name):
             return
 
-        self._remove_theme_button.set_sensitive(True)
-        iter_ = self._theme_store.append([name])
+        self._ui.remove_theme_button.set_sensitive(True)
+        iter_ = self._ui.theme_store.append([name])
         self._select_theme_row(iter_)
         self._apply_theme(name)
 
@@ -312,7 +306,7 @@ class Themes(Gtk.ApplicationWindow):
         return 'newtheme%s' % i
 
     def _on_remove_theme(self, *args):
-        store, iter_ = self._theme_treeview.get_selection().get_selected()
+        store, iter_ = self._ui.theme_treeview.get_selection().get_selected()
         if iter_ is None:
             return
 
@@ -327,7 +321,7 @@ class Themes(Gtk.ApplicationWindow):
 
             first = store.get_iter_first()
             if first is None:
-                self._remove_theme_button.set_sensitive(False)
+                self._ui.remove_theme_button.set_sensitive(False)
                 self._clear_options()
 
         text = _('Do you want to delete this theme?')
