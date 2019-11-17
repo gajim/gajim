@@ -635,6 +635,7 @@ class CutstomHostnameSetting(DialogSetting):
 class ChangePasswordSetting(DialogSetting):
     def __init__(self, *args, **kwargs):
         DialogSetting.__init__(self, *args, **kwargs)
+        self.change_dialog = None
 
     def show_dialog(self, parent):
         try:
