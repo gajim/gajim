@@ -175,14 +175,15 @@ BLOCK_PHRASAL = set(('address', 'blockquote', 'pre',))
 BLOCK_PRES = set(('hr', )) #not in xhtml-im
 BLOCK_STRUCT = set(('div', 'p', ))
 BLOCK_HACKS = set(('table', 'tr')) # at the very least, they will start line ;)
-BLOCK = BLOCK_HEAD.union(BLOCK_PHRASAL).union(BLOCK_STRUCT).union(BLOCK_PRES).union(BLOCK_HACKS)
+BLOCK = BLOCK_HEAD | BLOCK_PHRASAL | BLOCK_STRUCT | BLOCK_PRES | BLOCK_HACKS
 
-INLINE_PHRASAL = set('abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var'.split(', '))
-INLINE_PRES = set('b, i, u, tt'.split(', ')) #not in xhtml-im
-INLINE_STRUCT = set('br, span'.split(', '))
-INLINE = INLINE_PHRASAL.union(INLINE_PRES).union(INLINE_STRUCT)
+INLINE_PHRASAL = set(['abbr', 'acronym', 'cite', 'code', 'dfn', 'em',
+                      'kbd', 'q', 'samp', 'strong', 'var'])
+INLINE_PRES = set(['b', 'i', 'u', 'tt']) #not in xhtml-im
+INLINE_STRUCT = set(['br', 'span'])
+INLINE = INLINE_PHRASAL | INLINE_PRES | INLINE_STRUCT
 
-LIST_ELEMS = set('dl, ol, ul'.split(', '))
+LIST_ELEMS = set(['dl', 'ol', 'ul'])
 
 for _name in BLOCK_HEAD:
     _num = int(_name[1])
@@ -200,8 +201,9 @@ def _parse_css_color(color):
     return rgba
 
 def style_iter(style):
-    return ([x.strip() for x in item.split(':', 1)] for item in style.split(';')\
-            if len(item.strip()))
+    for item in style.split(';'):
+        if item.strip():
+            yield [x.strip() for x in item.split(':', 1)]
 
 
 class HtmlHandler(xml.sax.handler.ContentHandler):
@@ -499,7 +501,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.href = href
             tag.type_ = type_ # to be used by the URL handler
             tag.connect('event', self.textview.hyperlink_handler, 'url')
-            tag.set_property('foreground', app.css_config.get_value('.gajim-url', StyleAttr.COLOR))
+            tag.set_property('foreground',
+                             app.css_config.get_value('.gajim-url',
+                                                      StyleAttr.COLOR))
             tag.set_property('underline', Pango.Underline.SINGLE)
             tag.is_anchor = True
         if title:
@@ -541,7 +545,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     if alt:
                         alt += '\n'
                     alt += _('Loading')
-                    pixbuf = load_icon('image-missing', self.textview, pixbuf=True)
+                    pixbuf = load_icon('image-missing',
+                                       self.textview,
+                                       pixbuf=True)
             if mem:
                 # Caveat: GdkPixbuf is known not to be safe to load
                 # images from network... this program is now potentially
@@ -624,7 +630,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _begin_span(self, style, tag=None, id_=None):
         if style is None:
             self.styles.append(tag)
-            return None
+            return
         if tag is None:
             if id_:
                 tag = self.textbuf.create_tag(id_)
@@ -911,34 +917,37 @@ class HtmlTextView(Gtk.TextView):
         menu.connect('notify::visible', destroy)
         menu.popup_at_pointer()
 
-    def hyperlink_handler(self, texttag, _widget, event, iter_, kind):
-        if event.type == Gdk.EventType.BUTTON_PRESS:
-            begin_iter = iter_.copy()
-            # we get the beginning of the tag
-            while not begin_iter.starts_tag(texttag):
-                begin_iter.backward_char()
-            end_iter = iter_.copy()
-            # we get the end of the tag
-            while not end_iter.ends_tag(texttag):
-                end_iter.forward_char()
+    def hyperlink_handler(self, texttag, _widget, event, iter_, _kind):
+        if event.type != Gdk.EventType.BUTTON_PRESS:
+            return Gdk.EVENT_PROPAGATE
 
-            # Detect XHTML-IM link
-            word = getattr(texttag, 'href', None)
-            if not word:
-                word = self.get_buffer().get_text(begin_iter, end_iter, True)
+        begin_iter = iter_.copy()
+        # we get the beginning of the tag
+        while not begin_iter.starts_tag(texttag):
+            begin_iter.backward_char()
+        end_iter = iter_.copy()
+        # we get the end of the tag
+        while not end_iter.ends_tag(texttag):
+            end_iter.forward_char()
 
-            uri = parse_uri(word)
-            if event.button.button == 3: # right click
-                self.show_context_menu(uri)
-                return True
+        # Detect XHTML-IM link
+        word = getattr(texttag, 'href', None)
+        if not word:
+            word = self.get_buffer().get_text(begin_iter, end_iter, True)
 
-            self.plugin_modified = False
-            app.plugin_manager.extension_point(
-                'hyperlink_handler', uri, self, self.get_toplevel())
-            if self.plugin_modified:
-                return
+        uri = parse_uri(word)
+        if event.button.button == 3: # right click
+            self.show_context_menu(uri)
+            return Gdk.EVENT_STOP
 
-            open_uri(uri, account=self.account)
+        self.plugin_modified = False
+        app.plugin_manager.extension_point(
+            'hyperlink_handler', uri, self, self.get_toplevel())
+        if self.plugin_modified:
+            return Gdk.EVENT_STOP
+
+        open_uri(uri, account=self.account)
+        return Gdk.EVENT_STOP
 
     def display_html(self, html, textview, conv_textview, iter_=None):
         buffer_ = self.get_buffer()
