@@ -45,8 +45,8 @@ class StatusIcon:
     """
 
     def __init__(self):
-        self.single_message_handler_id = None
-        self.show_roster_handler_id = None
+        self._single_message_handler_id = None
+        self._show_roster_handler_id = None
         # click somewhere else does not popdown menu. workaround this.
         self.added_hide_menuitem = False
         self.status = 'offline'
@@ -56,33 +56,7 @@ class StatusIcon:
         self.popup_menus = []
         self.status_icon = None
         self.tooltip = NotificationAreaTooltip()
-
-    def subscribe_events(self):
-        """
-        Register listeners to the events class
-        """
-        app.events.event_added_subscribe(self.on_event_added)
-        app.events.event_removed_subscribe(self.on_event_removed)
-
-    def unsubscribe_events(self):
-        """
-        Unregister listeners to the events class
-        """
-        app.events.event_added_unsubscribe(self.on_event_added)
-        app.events.event_removed_unsubscribe(self.on_event_removed)
-
-    def on_event_added(self, event):
-        """
-        Called when an event is added to the event list
-        """
-        if event.show_in_systray:
-            self.set_img()
-
-    def on_event_removed(self, event_list):
-        """
-        Called when one or more events are removed from the event list
-        """
-        self.set_img()
+        self._icon_size = '16'
 
     def show_icon(self):
         if not self.status_icon:
@@ -94,37 +68,73 @@ class StatusIcon:
             self.status_icon.connect('size-changed', self.set_img)
 
         self.set_img()
-        self.subscribe_events()
+        self._subscribe_events()
+
+    def hide_icon(self):
+        self.status_icon.set_visible(False)
+        self._unsubscribe_events()
+
+    def change_status(self, global_status):
+        """
+        Set tray image to 'global_status'
+        """
+        # change image and status, only if it is different
+        if global_status is not None and self.status != global_status:
+            self.status = global_status
+        self.set_img()
+
+    def _subscribe_events(self):
+        """
+        Register listeners to the events class
+        """
+        app.events.event_added_subscribe(self._on_event_added)
+        app.events.event_removed_subscribe(self._on_event_removed)
+
+    def _unsubscribe_events(self):
+        """
+        Unregister listeners to the events class
+        """
+        app.events.event_added_unsubscribe(self._on_event_added)
+        app.events.event_removed_unsubscribe(self._on_event_removed)
+
+    def _on_event_added(self, event):
+        """
+        Called when an event is added to the event list
+        """
+        if event.show_in_systray:
+            self.set_img()
+
+    def _on_event_removed(self, _event_list):
+        """
+        Called when one or more events are removed from the event list
+        """
+        self.set_img()
 
     def _on_query_tooltip(self, _status_icon, _x, _y, _keyboard_mode, tooltip):
         tooltip.set_custom(self.tooltip.get_tooltip())
         return True
 
-    def hide_icon(self):
-        self.status_icon.set_visible(False)
-        self.unsubscribe_events()
-
     def _on_popup_menu(self, _status_icon, button, activate_time):
         if button == 1: # Left click
-            self.on_left_click()
+            self._on_left_click()
         elif button == 2: # middle click
-            self.on_middle_click()
+            self._on_middle_click()
         elif button == 3: # right click
-            self.make_menu(button, activate_time)
+            self._make_menu(button, activate_time)
 
     def _on_activate(self, _status_icon):
-        self.on_left_click()
+        self._on_left_click()
 
-    def on_status_icon_size_changed(self, statusicon, size):
+    def on_status_icon_size_changed(self, _statusicon, size):
         if size > 31:
-            self.statusicon_size = '32'
+            self._icon_size = '32'
         elif size > 23:
-            self.statusicon_size = '24'
+            self._icon_size = '24'
         else:
-            self.statusicon_size = '16'
+            self._icon_size = '16'
         if os.environ.get('KDE_FULL_SESSION') == 'true':
         # detect KDE session. see #5476
-            self.statusicon_size = '32'
+            self._icon_size = '32'
         self.set_img()
 
     def set_img(self, *args):
@@ -148,37 +158,20 @@ class StatusIcon:
         icon_name = get_icon_name(self.status)
         self.status_icon.set_from_icon_name(icon_name)
 
-    def change_status(self, global_status):
-        """
-        Set tray image to 'global_status'
-        """
-        # change image and status, only if it is different
-        if global_status is not None and self.status != global_status:
-            self.status = global_status
-        self.set_img()
-
-    def start_chat(self, widget, account, jid):
-        contact = app.contacts.get_first_contact_from_jid(account, jid)
-        if app.interface.msg_win_mgr.has_window(jid, account):
-            app.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
-                    jid, account)
-        elif contact:
-            app.interface.new_chat(contact, account)
-            app.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
-                    jid, account)
-
-    def on_single_message_menuitem_activate(self, widget, account):
+    @staticmethod
+    def _on_single_message(_widget, account):
         SingleMessageWindow(account, action='send')
 
-    def on_new_chat(self, _widget):
+    @staticmethod
+    def _on_new_chat(_widget):
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
-    def make_menu(self, event_button, event_time):
+    def _make_menu(self, _event_button, event_time):
         """
         Create chat with and new message (sub) menus/menuitems
         """
-        for m in self.popup_menus:
-            m.destroy()
+        for menu in self.popup_menus:
+            menu.destroy()
 
         start_chat_menuitem = self._ui.start_chat_menuitem
         single_message_menuitem = self._ui.single_message_menuitem
@@ -186,10 +179,10 @@ class StatusIcon:
         sounds_mute_menuitem = self._ui.sounds_mute_menuitem
         show_roster_menuitem = self._ui.show_roster_menuitem
 
-        if self.single_message_handler_id:
+        if self._single_message_handler_id:
             single_message_menuitem.handler_disconnect(
-                    self.single_message_handler_id)
-            self.single_message_handler_id = None
+                self._single_message_handler_id)
+            self._single_message_handler_id = None
 
         sub_menu = Gtk.Menu()
         self.popup_menus.append(sub_menu)
@@ -199,14 +192,14 @@ class StatusIcon:
             uf_show = helpers.get_uf_show(show, use_mnemonic=True)
             item = Gtk.MenuItem.new_with_mnemonic(uf_show)
             sub_menu.append(item)
-            item.connect('activate', self.on_show_menuitem_activate, show)
+            item.connect('activate', self._on_show, show)
 
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
         item = Gtk.MenuItem.new_with_mnemonic(_('_Change Status Message…'))
         sub_menu.append(item)
-        item.connect('activate', self.on_change_status_message_activate)
+        item.connect('activate', self._on_change_status)
 
         connected_accounts = app.get_number_of_connected_accounts()
         if connected_accounts < 1:
@@ -218,10 +211,10 @@ class StatusIcon:
         uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
         item = Gtk.MenuItem.new_with_mnemonic(uf_show)
         sub_menu.append(item)
-        item.connect('activate', self.on_show_menuitem_activate, 'offline')
+        item.connect('activate', self._on_show, 'offline')
 
-        iskey = connected_accounts > 0 and not (connected_accounts == 1 and
-            app.zeroconf_is_connected())
+        is_zeroconf = connected_accounts == 1 and app.zeroconf_is_connected()
+        iskey = connected_accounts > 0 and not is_zeroconf
         start_chat_menuitem.set_sensitive(iskey)
         single_message_menuitem.set_sensitive(iskey)
 
@@ -238,15 +231,15 @@ class StatusIcon:
 
                     # for single message
                     single_message_menuitem.set_submenu(None)
-                    self.single_message_handler_id = single_message_menuitem.\
+                    self._single_message_handler_id = single_message_menuitem.\
                             connect('activate',
-                            self.on_single_message_menuitem_activate, account)
+                                    self._on_single_message, account)
                     break # No other account connected
         else:
             # 2 or more 'real' accounts are connected, make submenus
             account_menu_for_single_message = Gtk.Menu()
             single_message_menuitem.set_submenu(
-                    account_menu_for_single_message)
+                account_menu_for_single_message)
             self.popup_menus.append(account_menu_for_single_message)
 
             for account in accounts_list:
@@ -258,22 +251,25 @@ class StatusIcon:
                 item = Gtk.MenuItem.new_with_label(
                     _('using account %s') % account_label)
                 item.connect('activate',
-                        self.on_single_message_menuitem_activate, account)
+                             self._on_single_message, account)
                 account_menu_for_single_message.append(item)
 
         sounds_mute_menuitem.set_active(not app.config.get('sounds_on'))
 
         win = app.interface.roster.window
-        if self.show_roster_handler_id:
-            show_roster_menuitem.handler_disconnect(self.show_roster_handler_id)
+        if self._show_roster_handler_id:
+            show_roster_menuitem.handler_disconnect(
+                self._show_roster_handler_id)
         if win.get_property('has-toplevel-focus'):
-            show_roster_menuitem.get_children()[0].set_label(_('Hide _Contact List'))
-            self.show_roster_handler_id = show_roster_menuitem.connect(
-                'activate', self.on_hide_roster_menuitem_activate)
+            show_roster_menuitem.get_children()[0].set_label(
+                _('Hide _Contact List'))
+            self._show_roster_handler_id = show_roster_menuitem.connect(
+                'activate', self._on_hide_roster)
         else:
-            show_roster_menuitem.get_children()[0].set_label(_('Show _Contact List'))
-            self.show_roster_handler_id = show_roster_menuitem.connect(
-                'activate', self.on_show_roster_menuitem_activate)
+            show_roster_menuitem.get_children()[0].set_label(
+                _('Show _Contact List'))
+            self._show_roster_handler_id = show_roster_menuitem.connect(
+                'activate', self._on_show_roster)
 
         if os.name == 'nt':
             if self.added_hide_menuitem is False:
@@ -286,31 +282,37 @@ class StatusIcon:
         self.systray_context_menu.show_all()
         self.systray_context_menu.popup(None, None, None, None, 0, event_time)
 
-    def on_show_all_events_menuitem_activate(self, widget):
+    @staticmethod
+    def _on_show_all_events(_widget):
         events = app.events.get_systray_events()
         for account in events:
             for jid in events[account]:
                 for event in events[account][jid]:
                     app.interface.handle_event(account, jid, event.type_)
 
-    def on_sounds_mute_menuitem_activate(self, widget):
+    @staticmethod
+    def _on_sounds_mute(widget):
         app.config.set('sounds_on', not widget.get_active())
 
-    def on_show_roster_menuitem_activate(self, widget):
+    @staticmethod
+    def _on_show_roster(_widget):
         win = app.interface.roster.window
         win.present()
 
-    def on_hide_roster_menuitem_activate(self, widget):
+    @staticmethod
+    def _on_hide_roster(_widget):
         win = app.interface.roster.window
         win.hide()
 
-    def on_preferences_menuitem_activate(self, widget):
+    @staticmethod
+    def _on_preferences(_widget):
         open_window('Preferences')
 
-    def on_quit_menuitem_activate(self, widget):
+    @staticmethod
+    def _on_quit(_widget):
         app.interface.roster.on_quit_request()
 
-    def on_left_click(self):
+    def _on_left_click(self):
         win = app.interface.roster.window
         if not app.events.get_systray_events():
             # No pending events, so toggle visible/hidden for roster window
@@ -325,9 +327,10 @@ class StatusIcon:
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(Gtk.get_current_event_time())
         else:
-            self.handle_first_event()
+            self._handle_first_event()
 
-    def handle_first_event(self):
+    @staticmethod
+    def _handle_first_event():
         account, jid, event = app.events.get_first_systray_event()
         if not event:
             return
@@ -337,23 +340,26 @@ class StatusIcon:
             restore_roster_position(win)
         app.interface.handle_event(account, jid, event.type_)
 
-    def on_middle_click(self):
+    @staticmethod
+    def _on_middle_click():
         """
         Middle click raises window to have complete focus (fe. get kbd events)
         but if already raised, it hides it
         """
         win = app.interface.roster.window
-        if win.is_active(): # is it fully raised? (eg does it receive kbd events?)
+        if win.is_active():
             win.hide()
         else:
             win.present()
 
-    def on_show_menuitem_activate(self, widget, show):
+    @staticmethod
+    def _on_show(_widget, show):
         # we all add some fake (we cannot select those nor have them as show)
         # but this helps to align with roster's status_combobox index positions
-        l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'SEPARATOR',
-                'CHANGE_STATUS_MSG_MENUITEM', 'SEPARATOR', 'offline']
-        index = l.index(show)
+        status = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
+                  'SEPARATOR', 'CHANGE_STATUS_MSG_MENUITEM', 'SEPARATOR',
+                  'offline']
+        index = status.index(show)
         if not helpers.statuses_unified():
             app.interface.roster.status_combobox.set_active(index + 2)
             return
@@ -361,7 +367,8 @@ class StatusIcon:
         if index != current:
             app.interface.roster.status_combobox.set_active(index)
 
-    def on_change_status_message_activate(self, widget):
+    @staticmethod
+    def _on_change_status(_widget):
         model = app.interface.roster.status_combobox.get_model()
         active = app.interface.roster.status_combobox.get_active()
         status = model[active][2]
@@ -370,8 +377,9 @@ class StatusIcon:
                 return
             accounts = app.connections.keys()
             for acct in accounts:
-                if not app.config.get_per('accounts', acct,
-                        'sync_with_global_status'):
+                if not app.config.get_per('accounts',
+                                          acct,
+                                          'sync_with_global_status'):
                     continue
                 show = app.SHOW_LIST[app.connections[acct].connected]
                 app.interface.roster.send_status(acct, show, message)

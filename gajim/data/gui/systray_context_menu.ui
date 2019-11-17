@@ -19,7 +19,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">_Start Chat...</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_new_chat" swapped="no"/>
+        <signal name="activate" handler="_on_new_chat" swapped="no"/>
       </object>
     </child>
     <child>
@@ -42,7 +42,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Show All Pending _Events</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_show_all_events_menuitem_activate" swapped="no"/>
+        <signal name="activate" handler="_on_show_all_events" swapped="no"/>
       </object>
     </child>
     <child>
@@ -51,7 +51,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Mute Sounds</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_sounds_mute_menuitem_activate" swapped="no"/>
+        <signal name="activate" handler="_on_sounds_mute" swapped="no"/>
       </object>
     </child>
     <child>
@@ -67,7 +67,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">_Preferences</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_preferences_menuitem_activate" swapped="no"/>
+        <signal name="activate" handler="_on_preferences" swapped="no"/>
       </object>
     </child>
     <child>
@@ -82,7 +82,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">_Quit</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_quit_menuitem_activate" swapped="no"/>
+        <signal name="activate" handler="_on_quit" swapped="no"/>
       </object>
     </child>
   </object>
