@@ -162,7 +162,7 @@ def on_import_contacts(_action, param):
 
 def on_pep_config(_action, param):
     account = param.get_string()
-    open_window('ManagePEPServicesWindow', account=account)
+    open_window('PEPConfig', account=account)
 
 
 def on_mam_preferences(_action, param):

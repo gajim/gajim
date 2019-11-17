@@ -120,7 +120,7 @@ WINDOW_MODULES = {
     'BlockingList': 'gajim.gtk.blocking',
     'XMLConsoleWindow': 'gajim.gtk.xml_console',
     'GroupchatJoin': 'gajim.gtk.groupchat_join',
-    'ManagePEPServicesWindow': 'gajim.gtk.pep_config',
+    'PEPConfig': 'gajim.gtk.pep_config',
     'HistoryManager': 'gajim.history_manager',
     'GroupchatConfig': 'gajim.gtk.groupchat_config',
     'ProfileWindow': 'gajim.gtk.profile',

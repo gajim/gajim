@@ -28,14 +28,14 @@ from gajim.gtk.util import get_builder
 from gajim.gtk.util import EventHelper
 
 
-class ManagePEPServicesWindow(Gtk.ApplicationWindow, EventHelper):
+class PEPConfig(Gtk.ApplicationWindow, EventHelper):
     def __init__(self, account):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_name('ManagePEPServicesWindow')
+        self.set_name('PEPConfig')
         self.set_default_size(300, 350)
         self.set_resizable(True)
         self.set_transient_for(app.interface.roster.window)
