@@ -129,7 +129,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.cert_button.set_sensitive(self.cert)
 
-    def _on_cert_button_clicked(self, button_):
+    def _on_cert_button_clicked(self, _button):
         open_window('CertificateDialog',
                     account=self.account,
                     transient_for=self,
@@ -180,7 +180,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
             row.get_child().update(item)
             row.set_tooltip_text(row.get_child().tooltip)
 
-    def _server_disco_received(self, obj):
+    def _server_disco_received(self, _event):
         self.update(self.get_features, self.feature_listbox)
 
     def add_feature(self, feature):
@@ -236,7 +236,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                     con.get_module('Bookmarks').conversion)
         ]
 
-    def _on_clipboard_button_clicked(self, widget):
+    def _on_clipboard_button_clicked(self, _widget):
         server_software = 'Server Software: %s\n' % self.version
         server_features = ''
 
