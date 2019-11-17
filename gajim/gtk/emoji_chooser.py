@@ -94,7 +94,7 @@ class Section(Gtk.Box):
                         continue
 
                     if pixbuf_ == 'font':
-                        if not self._chooser._font_supports_codepoint(
+                        if not self._chooser.font_supports_codepoint(
                                 codepoint_):
                             continue
                     else:
@@ -195,6 +195,7 @@ class EmojiModifierChild(Gtk.FlowBoxChild):
         if event.button == 1:
             self.get_parent().emit('child-activated', self)
             return True
+        return False
 
     def get_emoji(self):
         if self.pixbuf != 'font':
@@ -278,10 +279,10 @@ class EmojiChooser(Gtk.Popover):
         # the ChatControl
         self._text_widget = weakref.ref(value)
 
-    def _key_press(self, widget, event):
+    def _key_press(self, _widget, event):
         return self._search.handle_event(event)
 
-    def _search_changed(self, entry):
+    def _search_changed(self, _entry):
         for section in self._sections.values():
             section.hide()
             section.flowbox.invalidate_filter()
@@ -298,7 +299,8 @@ class EmojiChooser(Gtk.Popover):
                 return
         self._stack.set_visible_child_name('not-found')
 
-    def _get_current_theme(self):
+    @staticmethod
+    def _get_current_theme():
         theme = app.config.get('emoticons_theme')
         themes = helpers.get_available_emoticon_themes()
         if theme not in themes:
@@ -327,6 +329,7 @@ class EmojiChooser(Gtk.Popover):
             return emoticons_user_path
 
         log.warning('Could not find emoji theme: %s', theme)
+        return None
 
     def load(self):
         theme = self._get_current_theme()
@@ -360,7 +363,7 @@ class EmojiChooser(Gtk.Popover):
                 # We dont add these to the UI
                 continue
 
-            if font and not self._font_supports_codepoint(codepoint):
+            if font and not self.font_supports_codepoint(codepoint):
                 continue
 
             section = self._sections[attrs['group']]
@@ -368,7 +371,7 @@ class EmojiChooser(Gtk.Popover):
         self._load_source_id = None
         emoji_pixbufs.complete = True
 
-    def _font_supports_codepoint(self, codepoint):
+    def font_supports_codepoint(self, codepoint):
         self._pango_layout.set_text(codepoint, -1)
         if self._pango_layout.get_unknown_glyphs_count():
             return False
@@ -379,7 +382,8 @@ class EmojiChooser(Gtk.Popover):
                 return False
         return True
 
-    def _get_next_pixbuf(self, path):
+    @staticmethod
+    def _get_next_pixbuf(path):
         src_x = src_y = cur_column = 0
         atlas = GdkPixbuf.Pixbuf.new_from_file(path)
 
