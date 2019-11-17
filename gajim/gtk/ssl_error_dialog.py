@@ -94,12 +94,12 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
             certs = ''
             my_ca_certs = configpaths.get('MY_CACERTS')
             if os.path.isfile(my_ca_certs):
-                with open(my_ca_certs, encoding='utf-8') as f:
-                    certs = f.read()
+                with open(my_ca_certs, encoding='utf-8') as file_:
+                    certs = file_.read()
             if pem not in certs:
-                with open(my_ca_certs, 'a', encoding='utf-8') as f:
-                    f.write(self._server + '\n')
-                    f.write(pem + '\n\n')
+                with open(my_ca_certs, 'a', encoding='utf-8') as file_:
+                    file_.write(self._server + '\n')
+                    file_.write(pem + '\n\n')
 
         self.destroy()
         self._con.process_ssl_errors()
