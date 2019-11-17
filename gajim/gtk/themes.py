@@ -196,7 +196,7 @@ class Themes(Gtk.ApplicationWindow):
         for theme in app.css_config.themes:
             self._ui.theme_store.append([theme])
 
-    def _on_theme_name_edit(self, renderer, path, new_name):
+    def _on_theme_name_edit(self, _renderer, path, new_name):
         iter_ = self._ui.theme_store.get_iter(path)
         old_name = self._ui.theme_store[iter_][Column.THEME]
 
@@ -235,9 +235,9 @@ class Themes(Gtk.ApplicationWindow):
         app.css_config.change_preload_theme(theme)
 
         self._ui.remove_theme_button.set_sensitive(True)
-        self._load_options(theme)
+        self._load_options()
 
-    def _load_options(self, name):
+    def _load_options(self):
         self._ui.option_listbox.foreach(self._remove_option)
         for option in CSS_STYLE_OPTIONS:
             value = app.css_config.get_value(
@@ -249,9 +249,9 @@ class Themes(Gtk.ApplicationWindow):
             row = Option(option, value)
             self._ui.option_listbox.add(row)
 
-    def _add_option(self, listbox, row):
+    def _add_option(self, _listbox, row):
         # Add theme if there is none
-        store, iter_ = self._ui.theme_treeview.get_selection().get_selected()
+        store, _ = self._ui.theme_treeview.get_selection().get_selected()
         first = store.get_iter_first()
         if first is None:
             self._on_add_new_theme()
@@ -284,7 +284,8 @@ class Themes(Gtk.ApplicationWindow):
         self._select_theme_row(iter_)
         self._apply_theme(name)
 
-    def _apply_theme(self, theme):
+    @staticmethod
+    def _apply_theme(theme):
         app.config.set('roster_theme', theme)
         app.css_config.change_theme(theme)
         app.nec.push_incoming_event(NetworkEvent('theme-update'))
@@ -348,7 +349,7 @@ class Themes(Gtk.ApplicationWindow):
 class Option(Gtk.ListBoxRow):
     def __init__(self, option, value):
         Gtk.ListBoxRow.__init__(self)
-        self._option = option
+        self.option = option
         self._box = Gtk.Box(spacing=12)
 
         label = Gtk.Label()
@@ -394,25 +395,25 @@ class Option(Gtk.ListBoxRow):
         color = color_button.get_rgba()
         color_string = color.to_string()
         app.css_config.set_value(
-            self._option.selector, self._option.attr, color_string, pre=True)
+            self.option.selector, self.option.attr, color_string, pre=True)
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
 
     def _on_font_set(self, font_button):
         desc = font_button.get_font_desc()
-        app.css_config.set_font(self._option.selector, desc, pre=True)
+        app.css_config.set_font(self.option.selector, desc, pre=True)
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
 
     def _on_remove(self, *args):
         self.get_parent().remove(self)
         app.css_config.remove_value(
-            self._option.selector, self._option.attr, pre=True)
+            self.option.selector, self.option.attr, pre=True)
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
         self.destroy()
 
     def __eq__(self, other):
         if isinstance(other, ChooseOption):
-            return other.option == self._option
-        return other._option == self._option
+            return other.option == self.option
+        return other.option == self.option
 
 
 class ChooseOption(Gtk.ListBoxRow):
