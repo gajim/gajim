@@ -74,7 +74,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
 
         self.message_tv_buffer.connect('changed', self.update_char_counter)
         if isinstance(to, list):
-            jid = ', '.join([i[0].get_full_jid() for i in to])
+            jid = ', '.join([i[0].jid for i in to])
             self._ui.to_entry.set_text(jid)
         else:
             self._ui.to_entry.set_text(to)
