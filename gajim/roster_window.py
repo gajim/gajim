@@ -3065,6 +3065,25 @@ class RosterWindow:
         mw.set_active_tab(ctrl)
         self.remove_groupchat(jid, account, maximize=True)
 
+    def on_groupchat_rename(self, _widget, jid, account):
+        def _on_rename(new_name):
+            con = app.connections[account]
+            con.get_module('Bookmarks').modify(jid, name=new_name)
+
+        contact = app.contacts.get_first_contact_from_jid(account, jid)
+        name = contact.get_shown_name()
+
+        InputDialog(
+            _('Rename Group Chat'),
+            _('Rename Group Chat'),
+            _('Please enter a new name for this group chat'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Accept',
+                               text=_('_Rename'),
+                               callback=_on_rename)],
+            input_str=name,
+            transient_for=self.window).show()
+
     def on_change_status_message_activate(self, widget, account):
         show = app.SHOW_LIST[app.connections[account].connected]
         def on_response(message, pep_dict):
@@ -5167,6 +5186,13 @@ class RosterWindow:
             maximize_menuitem.connect('activate', self.on_groupchat_maximized, \
                 jid, account)
             menu.append(maximize_menuitem)
+
+            rename_menuitem = Gtk.MenuItem.new_with_mnemonic(_('Re_name'))
+            rename_menuitem.connect('activate',
+                                    self.on_groupchat_rename,
+                                    jid,
+                                    account)
+            menu.append(rename_menuitem)
 
         if not app.gc_connected[account].get(jid, False):
             connect_menuitem = Gtk.MenuItem.new_with_mnemonic(_(
