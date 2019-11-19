@@ -912,25 +912,6 @@ class Preferences(Gtk.ApplicationWindow):
         if event.keyval == Gdk.KEY_Delete:
             self.on_delete_msg_button_clicked(widget)
 
-    ### Privacy tab ###
-    def on_send_idle_time_checkbutton_toggled(self, widget):
-        widget.set_inconsistent(False)
-        self.on_per_account_checkbutton_toggled(widget, 'send_idle_time')
-
-    def on_send_time_info_checkbutton_toggled(self, widget):
-        widget.set_inconsistent(False)
-        self.on_per_account_checkbutton_toggled(widget, 'send_time_info')
-
-    def on_send_os_info_checkbutton_toggled(self, widget):
-        widget.set_inconsistent(False)
-        self.on_per_account_checkbutton_toggled(widget, 'send_os_info')
-        for con in app.connections.values():
-            con.get_module('SoftwareVersion').set_enabled(widget.get_active())
-
-    def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
-        widget.set_inconsistent(False)
-        self.on_per_account_checkbutton_toggled(widget, 'ignore_unknown_contacts')
-
     ### Style ###
     @staticmethod
     def on_theme_combobox_changed(combobox):
