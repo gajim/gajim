@@ -46,7 +46,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Privacy List</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_privacy_list_edit_window_destroy" swapped="no"/>
+    <signal name="destroy" handler="_on_edit_window_destroy" swapped="no"/>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="main_vbox">
@@ -81,7 +81,7 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0.5</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_privacy_list_active_checkbutton_toggled" swapped="no"/>
+                <signal name="toggled" handler="_on_privacy_list_active_toggled" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -98,7 +98,7 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0.5</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_privacy_list_default_checkbutton_toggled" swapped="no"/>
+                <signal name="toggled" handler="_on_privacy_list_default_toggled" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -144,7 +144,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="model">liststore3</property>
-            <signal name="changed" handler="on_list_of_rules_combobox_changed" swapped="no"/>
+            <signal name="changed" handler="_on_list_of_rules_changed" swapped="no"/>
             <child>
               <object class="GtkCellRendererText" id="cellrenderertext3"/>
               <attributes>
@@ -679,7 +679,7 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="_on_close_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

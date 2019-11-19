@@ -14,7 +14,7 @@
     <property name="border_width">12</property>
     <property name="title">window1</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_privacy_lists_first_window_destroy" swapped="no"/>
+    <signal name="destroy" handler="_on_privacy_lists_first_destroy" swapped="no"/>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="vbox1">
@@ -84,7 +84,7 @@
                     <property name="receives_default">False</property>
                     <property name="border_width">5</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_delete_privacy_list_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="_on_delete_privacy_list_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -100,7 +100,7 @@
                     <property name="receives_default">False</property>
                     <property name="border_width">5</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_open_privacy_list_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="_on_open_privacy_list_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -138,7 +138,7 @@
                     <property name="receives_default">False</property>
                     <property name="border_width">5</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_new_privacy_list_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="_on_new_privacy_list_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -173,7 +173,7 @@
                 <property name="receives_default">False</property>
                 <property name="border_width">5</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="_on_close_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
