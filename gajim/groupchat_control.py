@@ -256,6 +256,7 @@ class GroupchatControl(ChatControlBase):
     def add_actions(self):
         super().add_actions()
         actions = [
+            ('rename-groupchat-', None, self._on_rename_groupchat),
             ('change-subject-', None, self._on_change_subject),
             ('change-nickname-', None, self._on_change_nick),
             ('disconnect-', None, self._on_disconnect),
@@ -1989,6 +1990,20 @@ class GroupchatControl(ChatControlBase):
         new_nick = self.xml.nickname_entry.get_text()
         app.connections[self.account].get_module('MUC').change_nick(
             self.room_jid, new_nick)
+        self._show_page('groupchat')
+
+    def _on_rename_groupchat(self, _action, _param):
+        if self._get_current_page() != 'groupchat':
+            return
+        self.xml.name_entry.set_text(self.room_name)
+        self.xml.name_entry.grab_focus()
+        self.xml.rename_button.grab_default()
+        self._show_page('rename')
+
+    def _on_rename_clicked(self, _button):
+        new_name = self.xml.name_entry.get_text()
+        app.connections[self.account].get_module('Bookmarks').modify(
+            self.room_jid, name=new_name)
         self._show_page('groupchat')
 
     def _on_change_subject(self, _action, _param):
