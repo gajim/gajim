@@ -184,14 +184,14 @@ class RosterItemExchangeWindow(Gtk.ApplicationWindow):
 
         self._ui.accept_button.set_label(_('Delete'))
 
-    def _on_accept_button_clicked(self, widget):
+    def _on_accept_button_clicked(self, _widget):
         model = self._ui.items_list_treeview.get_model()
         iter_ = model.get_iter_first()
         if self.action == 'add':
-            a = 0
+            count = 0
             while iter_:
                 if model[iter_][0]:
-                    a += 1
+                    count += 1
                     # It is selected
                     message = _('%s suggested me to add you to my '
                                 'contact list.' % self.jid_from)
@@ -209,20 +209,21 @@ class RosterItemExchangeWindow(Gtk.ApplicationWindow):
                         nickname=model[iter_][2], auto_auth=True)
                 iter_ = model.iter_next(iter_)
             InformationDialog(i18n.ngettext('Added %d contact',
-                                            'Added %d contacts', a, a, a))
+                                            'Added %d contacts',
+                                            count, count, count))
         elif self.action == 'modify':
-            a = 0
+            count = 0
             while iter_:
                 if model[iter_][0]:
-                    a += 1
+                    count += 1
                     # It is selected
                     jid = model[iter_][1]
                     # Keep same groups and same nickname
                     groups = model[iter_][3].split(', ')
                     if groups == ['']:
                         groups = []
-                    for u in app.contacts.get_contact(self.account, jid):
-                        u.name = model[iter_][2]
+                    for contact in app.contacts.get_contact(self.account, jid):
+                        contact.name = model[iter_][2]
                     con = app.connections[self.account]
                     con.get_module('Roster').update_contact(
                         jid, model[iter_][2], groups)
@@ -238,10 +239,10 @@ class RosterItemExchangeWindow(Gtk.ApplicationWindow):
                         win.show_title()
                 iter_ = model.iter_next(iter_)
         elif self.action == 'delete':
-            a = 0
+            count = 0
             while iter_:
                 if model[iter_][0]:
-                    a += 1
+                    count += 1
                     # It is selected
                     jid = model[iter_][1]
                     app.connections[self.account].get_module(
@@ -250,8 +251,9 @@ class RosterItemExchangeWindow(Gtk.ApplicationWindow):
                     app.contacts.remove_jid(self.account, jid)
                 iter_ = model.iter_next(iter_)
             InformationDialog(i18n.ngettext('Removed %d contact',
-                                            'Removed %d contacts', a, a, a))
+                                            'Removed %d contacts',
+                                            count, count, count))
         self.destroy()
 
-    def _on_cancel_button_clicked(self, widget):
+    def _on_cancel_button_clicked(self, _widget):
         self.destroy()
