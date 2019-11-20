@@ -4782,38 +4782,49 @@ class RosterWindow:
         menu.show_all()
         menu.popup(None, None, None, None, event_button, event.time)
 
-    def make_group_menu(self, event, titer):
+    def make_group_menu(self, event, iters):
         """
         Make group's popup menu
         """
         model = self.modelfilter
-        group = model[titer][Column.JID]
-        account = model[titer][Column.ACCOUNT]
+        groups = []
+        accounts = []
 
-        list_ = [] # list of (contact, account) tuples
-        list_online = [] # list of (contact, account) tuples
+        list_ = []  # list of (contact, account) tuples
+        list_online = []  # list of (contact, account) tuples
+
+        for titer in iters:
+            groups.append(model[titer][Column.JID])
+            accounts.append(model[titer][Column.ACCOUNT])
+            # Don't show menu if groups of more than one account are selected
+            if accounts[0] != model[titer][Column.ACCOUNT]:
+                return
+        account = accounts[0]
 
         show_bookmarked = True
-        group = model[titer][Column.JID]
         for jid in app.contacts.get_jid_list(account):
             contact = app.contacts.get_contact_with_highest_priority(account,
                 jid)
-            if group in contact.get_shown_groups():
-                if contact.show not in ('offline', 'error'):
-                    list_online.append((contact, account))
-                    # Check that all contacts support direct NUC invite
-                    if not contact.supports(Namespace.CONFERENCE):
-                        show_bookmarked = False
-                list_.append((contact, account))
+            for group in groups:
+                if group in contact.get_shown_groups():
+                    if contact.show not in ('offline', 'error'):
+                        list_online.append((contact, account))
+                        # Check that all contacts support direct NUC invite
+                        if not contact.supports(Namespace.CONFERENCE):
+                            show_bookmarked = False
+                    list_.append((contact, account))
         menu = Gtk.Menu()
 
         # Make special context menu if group is Groupchats
-        if group == _('Group chats'):
-            maximize_menuitem = Gtk.MenuItem.new_with_mnemonic(_(
-                '_Maximize All'))
-            maximize_menuitem.connect('activate',
-                self.on_all_groupchat_maximized, list_)
-            menu.append(maximize_menuitem)
+        if _('Group chats') in groups:
+            if len(groups) == 1:
+                maximize_menuitem = Gtk.MenuItem.new_with_mnemonic(
+                    _('_Maximize All'))
+                maximize_menuitem.connect('activate',
+                    self.on_all_groupchat_maximized, list_)
+                menu.append(maximize_menuitem)
+            else:
+                return
         else:
             # Send Group Message
             send_group_message_item = Gtk.MenuItem.new_with_mnemonic(
@@ -4838,7 +4849,7 @@ class RosterWindow:
                 self.on_send_single_message_menuitem_activate, account, list_)
 
             # Invite to
-            if group != _('Transports'):
+            if _('Transports') not in groups:
                 invite_menuitem = Gtk.MenuItem.new_with_mnemonic(
                     _('In_vite to'))
 
@@ -4854,7 +4865,14 @@ class RosterWindow:
                 send_group_message_item.set_sensitive(False)
                 invite_menuitem.set_sensitive(False)
 
-        if not group in helpers.special_groups:
+        special_group = False
+        for group in groups:
+            if group in helpers.special_groups:
+                special_group = True
+                break
+
+        if not special_group and len(groups) == 1:
+            group = groups[0]
             item = Gtk.SeparatorMenuItem.new() # separator
             menu.append(item)
 
@@ -5071,8 +5089,8 @@ class RosterWindow:
         for titer in iters[1:]:
             if model[titer][Column.TYPE] != type_:
                 return
-        if type_ == 'group' and len(iters) == 1:
-            self.make_group_menu(event, iters[0])
+        if type_ == 'group':
+            self.make_group_menu(event, iters)
         if type_ == 'groupchat' and len(iters) == 1:
             self.make_groupchat_menu(event, iters[0])
         elif type_ == 'agent' and len(iters) == 1:
