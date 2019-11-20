@@ -206,8 +206,6 @@ control=None, gc_contact=None, is_anonymous=True):
 
     contacts = app.contacts.get_contacts(account, jid)
     if len(contacts) > 1 and use_multiple_contacts: # several resources
-        start_chat_menuitem.set_submenu(build_resources_submenu(contacts,
-                account, app.interface.on_open_chat_window))
         send_file_menuitem.set_submenu(build_resources_submenu(
             contacts,
             account,
@@ -216,8 +214,6 @@ control=None, gc_contact=None, is_anonymous=True):
         execute_command_menuitem.set_submenu(build_resources_submenu(
                 contacts, account, roster.on_execute_command, cap=NS_COMMANDS))
     else:
-        start_chat_menuitem.connect('activate',
-                app.interface.on_open_chat_window, contact, account)
         if contact.supports(NS_JINGLE_FILE_TRANSFER_5):
             send_file_menuitem.set_sensitive(True)
             send_file_menuitem.connect('activate',
@@ -237,6 +233,9 @@ control=None, gc_contact=None, is_anonymous=True):
                     contact.resource)
         else:
             execute_command_menuitem.set_sensitive(False)
+
+    start_chat_menuitem.connect(
+        'activate', app.interface.on_open_chat_window, contact, account)
 
     rename_menuitem.connect('activate', roster.on_rename, 'contact', jid,
         account)
