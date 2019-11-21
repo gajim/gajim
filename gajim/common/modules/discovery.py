@@ -47,6 +47,17 @@ class Discovery(BaseModule):
                           ns=nbxmpp.NS_DISCO_ITEMS),
         ]
 
+        self._account_info = None
+        self._server_info = None
+
+    @property
+    def account_info(self):
+        return self._account_info
+
+    @property
+    def server_info(self):
+        return self._server_info
+
     def disco_contact(self, jid, node=None):
         success_cb = self._con.get_module('Caps').contact_info_received
         self.disco_info(jid, node, callback=success_cb)
@@ -99,6 +110,8 @@ class Discovery(BaseModule):
 
         self._log.info('Account info received: %s', result.jid)
 
+        self._account_info = result
+
         self._con.get_module('MAM').pass_disco(result)
         self._con.get_module('PEP').pass_disco(result)
         self._con.get_module('PubSub').pass_disco(result)
@@ -121,6 +134,8 @@ class Discovery(BaseModule):
             return
 
         self._log.info('Server info received: %s', result.jid)
+
+        self._server_info = result
 
         self._con.get_module('SecLabels').pass_disco(result)
         self._con.get_module('Blocking').pass_disco(result)
