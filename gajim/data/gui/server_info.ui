@@ -9,6 +9,7 @@
       <object class="GtkGrid" id="server">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">center</property>
         <property name="row_spacing">6</property>
         <property name="column_spacing">12</property>
         <child>
@@ -101,18 +102,40 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="spacer1">
-            <property name="width_request">160</property>
+          <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <placeholder/>
-            </child>
+            <property name="margin_top">12</property>
+            <property name="label" translatable="yes">Contact Addresses</property>
+            <style>
+              <class name="bold16"/>
+            </style>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
+            <property name="width">2</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="no_addresses_label">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="label" translatable="yes">No contact addresses published for this server.</property>
+            <property name="wrap">True</property>
+            <property name="max_width_chars">50</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>

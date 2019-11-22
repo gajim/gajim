@@ -20,9 +20,11 @@ import nbxmpp
 from nbxmpp.util import is_error_result
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 
 from gajim.gtk.util import ensure_not_destroyed
@@ -65,6 +67,9 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         con.get_module('SoftwareVersion').request_software_version(
             self.hostname, callback=self._software_version_received)
         self.request_last_activity()
+
+        server_info = con.get_module('Discovery').server_info
+        self._add_contact_addresses(server_info.dataforms)
 
         self.cert = con.connection.Connection.ssl_certificate
         self._add_connection_info()
@@ -141,6 +146,78 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         con = app.connections[self.account]
         iq = nbxmpp.Iq(to=self.hostname, typ='get', queryNS=nbxmpp.NS_LAST)
         con.connection.SendAndCallForResponse(iq, self._on_last_activity)
+
+    def _add_contact_addresses(self, dataforms):
+        fields = {
+            'admin-addresses': _('Admin'),
+            'support-addresses': _('Support'),
+            'security-addresses': _('Security'),
+            'feedback-addresses': _('Feedback'),
+            'abuse-addresses': _('Abuse'),
+            'sales-addresses': _('Sales'),
+        }
+
+        addresses = self._get_addresses(fields, dataforms)
+        if addresses is None:
+            self._ui.no_addresses_label.set_visible(True)
+            return
+
+        row_count = 4
+        for address_type, values in addresses.items():
+            label = self._get_address_type_label(fields[address_type])
+            self._ui.server.attach(label, 0, row_count, 1, 1)
+            for index, value in enumerate(values):
+                last = index == len(values) - 1
+                label = self._get_address_label(value, last=last)
+                self._ui.server.attach(label, 1, row_count, 1, 1)
+                row_count += 1
+
+    @staticmethod
+    def _get_addresses(fields, dataforms):
+        addresses = {}
+        for form in dataforms:
+            type_ = form.vars.get('FORM_TYPE')
+            if type_ == 'http://jabber.org/network/serverinfo':
+                continue
+
+            for address_type in fields:
+                field = form.vars.get(address_type)
+                if field is None:
+                    continue
+
+                if field.type_ != 'list-multi':
+                    continue
+
+                if not field.values:
+                    continue
+                addresses[address_type] = field.values
+
+            return addresses or None
+        return None
+
+    @staticmethod
+    def _get_address_type_label(text):
+        label = Gtk.Label(label=text)
+        label.set_halign(Gtk.Align.END)
+        label.set_valign(Gtk.Align.START)
+        label.get_style_context().add_class('dim-label')
+        return label
+
+    def _get_address_label(self, address, last=False):
+        label = Gtk.Label()
+        label.set_markup('<a href="%s">%s</a>' % (address, address))
+        label.set_ellipsize(Pango.EllipsizeMode.END)
+        label.set_xalign(0)
+        label.set_halign(Gtk.Align.START)
+        label.get_style_context().add_class('link-button')
+        label.connect('activate-link', self._on_activate_link)
+        if last:
+            label.set_margin_bottom(6)
+        return label
+
+    def _on_activate_link(self, label, *args):
+        open_uri(label.get_text(), account=self.account)
+        return Gdk.EVENT_STOP
 
     def _on_last_activity(self, stanza):
         if self._destroyed:
