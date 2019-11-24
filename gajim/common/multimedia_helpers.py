@@ -107,7 +107,7 @@ class VideoInputManager(DeviceManager):
         # Camera source on Linux
         self.detect_element('v4l2src', _('V4L2: %s'))
         # X11 screen sharing on Linux
-        self.detect_element('ximagesrc', _('X11'), '%s ! ffmpegcolorspace')
+        self.detect_element('ximagesrc', _('X11'))
         # Recommended source on Windows
         self.detect_element('ksvideosrc', _('Windows'))
         # Recommended source on OS X

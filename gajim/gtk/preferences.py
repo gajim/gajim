@@ -14,6 +14,7 @@
 
 import logging
 
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
@@ -413,7 +414,12 @@ class Preferences(Gtk.ApplicationWindow):
                 self.av_widget = widget
 
                 src_name = app.config.get('video_input_device')
-                self.av_src = Gst.parse_bin_from_description(src_name, True)
+                try:
+                    self.av_src = Gst.parse_bin_from_description(src_name, True)
+                except GLib.Error:
+                    log.error('Failed to parse "%s" as Gstreamer element,'
+                              ' falling back to autovideosrc', src_name)
+                    self.av_src = None
                 if self.av_src is not None:
                     self.av_pipeline.add(self.av_src)
                     self.av_src.link(self.av_sink)
@@ -435,13 +441,18 @@ class Preferences(Gtk.ApplicationWindow):
                     combobox.set_active(0)
 
             def on_av_unmap(tab):
-                self.av_pipeline.set_state(Gst.State.NULL)
-                self.av_pipeline.remove(self.av_src)
-                self.av_src = None
-                self.av_pipeline.remove(self.av_sink)
-                self.av_sink = None
-                tab.remove(self.av_widget)
-                self.av_widget = None
+                if self.av_pipeline is not None:
+                    self.av_pipeline.set_state(Gst.State.NULL)
+                if self.av_src is not None:
+                    self.av_pipeline.remove(self.av_src)
+                    self.av_src = None
+                if self.av_sink is not None:
+                    self.av_pipeline.remove(self.av_sink)
+                    self.av_sink = None
+                if self.av_widget is not None:
+                    tab.remove(self.av_widget)
+                    self.av_widget = None
+                self.av_pipeline = None
 
             self.av_pipeline = None
             self.av_src = None
@@ -984,10 +995,17 @@ class Preferences(Gtk.ApplicationWindow):
         self.on_av_combobox_changed(widget, 'audio_output_device')
 
     def on_video_input_combobox_changed(self, widget):
-        device = self.on_av_combobox_changed(widget, 'video_input_device')
+        model = widget.get_model()
+        active = widget.get_active()
+        device = model[active][1]
 
-        src = Gst.parse_bin_from_description(device, True)
-        if src is None:
+        try:
+            src = Gst.parse_bin_from_description(device, True)
+        except GLib.Error:
+            # TODO: disable the entry instead of just selecting the default.
+            log.error('Failed to parse "%s" as Gstreamer element,'
+                      ' falling back to autovideosrc', device)
+            widget.set_active(0)
             return
 
         self.av_pipeline.set_state(Gst.State.NULL)
@@ -997,6 +1015,7 @@ class Preferences(Gtk.ApplicationWindow):
         src.link(self.av_sink)
         self.av_src = src
         self.av_pipeline.set_state(Gst.State.PLAYING)
+        app.config.set('video_input_device', device)
 
     def on_video_framerate_combobox_changed(self, widget):
         self.on_av_combobox_changed(widget, 'video_framerate')
