@@ -176,8 +176,8 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
     def _get_addresses(fields, dataforms):
         addresses = {}
         for form in dataforms:
-            type_ = form.vars.get('FORM_TYPE')
-            if type_ == 'http://jabber.org/network/serverinfo':
+            field = form.vars.get('FORM_TYPE')
+            if field.value != 'http://jabber.org/network/serverinfo':
                 continue
 
             for address_type in fields:
