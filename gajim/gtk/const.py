@@ -130,4 +130,5 @@ WINDOW_MODULES = {
     'CertificateDialog': 'gajim.gtk.dialogs',
     'SubscriptionRequest': 'gajim.gtk.subscription_request',
     'RemoveAccount': 'gajim.gtk.remove_account',
+    'ChangePassword': 'gajim.gtk.change_password',
 }

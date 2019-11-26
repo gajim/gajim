@@ -28,9 +28,9 @@ from gajim.common.exceptions import GajimGeneralException
 
 from gajim import gtkgui_helpers
 
-from gajim.gtk.dialogs import ChangePasswordDialog
 from gajim.gtk.util import get_image_button
 from gajim.gtk.util import MaxWidthComboBoxText
+from gajim.gtk.util import open_window
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 
@@ -635,18 +635,10 @@ class CutstomHostnameSetting(DialogSetting):
 class ChangePasswordSetting(DialogSetting):
     def __init__(self, *args, **kwargs):
         DialogSetting.__init__(self, *args, **kwargs)
-        self.change_dialog = None
 
     def show_dialog(self, parent):
-        try:
-            self.change_dialog = ChangePasswordDialog(
-                self.account, self.on_changed, parent)
-        except GajimGeneralException:
-            return
-        self.change_dialog.set_modal(True)
-
-    def on_changed(self, new_password):
-        self.set_value(new_password)
+        parent.destroy()
+        open_window('ChangePassword', account=self.account)
 
     def update_activatable(self, name, value):
         activatable = False
