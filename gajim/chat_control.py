@@ -1136,14 +1136,24 @@ class ChatControl(ChatControlBase):
 
     def allow_shutdown(self, method, on_yes, on_no, _on_minimize):
         time_ = app.last_message_time[self.account][self.get_full_jid()]
+        # 2 seconds
         if time.time() - time_ < 2:
-            # 2 seconds
+            no_log_for = app.config.get_per(
+                'accounts', self.account, 'no_log_for').split()
+            more = ''
+            if self.contact.jid in no_log_for:
+                more = _('Note: Chat history is disabled for this contact.')
+            if self.account in no_log_for:
+                more = _('Note: Chat history is disabled for this account.')
+            text = _('You just received a new message from %s.\n'
+                     'Do you want to close this tab?') % self.contact.get_shown_name()
+            if more:
+                text += '\n' + more
+
             NewConfirmationDialog(
                 _('Close'),
-                _('You just received a new message '
-                  'from %s') % self.contact.jid,
-                _('If you close this tab while having chat history disabled, '
-                  'this message will be lost.'),
+                _('New Message'),
+                text,
                 [DialogButton.make('Cancel',
                                    callback=lambda: on_no(self)),
                  DialogButton.make('Remove',
