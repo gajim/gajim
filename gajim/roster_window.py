@@ -3325,7 +3325,7 @@ class RosterWindow:
             contact = list_[0][0]
             title = _('Remove Contact')
             pritext = _('Remove contact from contact list')
-            sectext = _('You are about to remove \'%(name)s\' (%(jid)s) from '
+            sectext = _('You are about to remove %(name)s (%(jid)s) from '
                         'your contact list.\n') % {
                             'name': contact.get_shown_name(),
                             'jid': contact.jid}

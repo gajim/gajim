@@ -357,9 +357,11 @@ class Interface:
         def _remove():
             self.roster.on_req_usub(None, [(contact, account)])
 
+        name = contact.get_shown_name()
+        jid = contact.jid
         NewConfirmationDialog(
             _('Subscription Removed'),
-            _('Contact \'%s\' removed subscription from you') % contact.jid,
+            _('%s (%s) has removed subscription from you') % (name, jid),
             _('You will always see this contact as offline.\n'
               'Do you want to remove them from your contact list?'),
             [DialogButton.make('Cancel',
