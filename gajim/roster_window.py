@@ -4240,6 +4240,13 @@ class RosterWindow:
 
         # we may not add contacts from special_groups
         if grp_source in helpers.special_groups:
+            if grp_source == _('Not in contact list'):
+                AddNewContactWindow(
+                    account=account_dest,
+                    contact_jid=jid_source,
+                    user_nick=c_source.name,
+                    group=grp_dest)
+                return
             return
 
         # Is the contact we drag a meta contact?
