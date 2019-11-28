@@ -43,11 +43,11 @@
       <attribute name="label" translatable="yes">Help</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">Contents</attribute>
+          <attribute name="label" translatable="yes">Wiki (Online)</attribute>
           <attribute name="action">app.content</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">FAQ</attribute>
+          <attribute name="label" translatable="yes">FAQ (Online)</attribute>
           <attribute name="action">app.faq</attribute>
         </item>
         <item>
