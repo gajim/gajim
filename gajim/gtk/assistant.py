@@ -100,6 +100,8 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
             page = SuccessPage()
         elif name == 'error':
             page = ErrorPage()
+        elif name == 'progress':
+            page = ProgressPage()
         else:
             raise ValueError('Unknown page: %s' % name)
 
@@ -194,3 +196,32 @@ class SuccessPage(Page):
         Page.__init__(self,
                       icon_name='object-select-symbolic',
                       icon_css_class='success-color')
+
+
+class ProgressPage(Gtk.Box):
+    def __init__(self):
+        super().__init__(orientation=Gtk.Orientation.VERTICAL)
+        self.set_spacing(18)
+        self.set_valign(Gtk.Align.CENTER)
+
+        self.title = ''
+
+        self._label = Gtk.Label()
+        self._label.set_max_width_chars(50)
+        self._label.set_line_wrap(True)
+        self._label.set_halign(Gtk.Align.CENTER)
+        self._label.set_justify(Gtk.Justification.CENTER)
+
+        spinner = Gtk.Spinner()
+        spinner.start()
+
+        self.pack_start(spinner, True, True, 0)
+        self.pack_start(self._label, False, True, 0)
+
+        self.show_all()
+
+    def set_text(self, text):
+        self._label.set_text(text)
+
+    def set_title(self, title):
+        self.title = title

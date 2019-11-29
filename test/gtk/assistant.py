@@ -14,8 +14,11 @@ class TestAssistant(Assistant):
     def __init__(self):
         Assistant.__init__(self)
 
-        self.add_pages({'start': Start(),
-                        'progress': Progress()})
+        self.add_pages({'start': Start()})
+
+        progress = self.add_default_page('progress')
+        progress.set_title('Executing...')
+        progress.set_text('Something is in progress...')
 
         error = self.add_default_page('error')
         error.set_title('Error')
@@ -88,26 +91,6 @@ class TestAssistant(Assistant):
 
         elif page_name == 'error':
             self.set_default_button('back')
-
-
-class Progress(Gtk.Box):
-
-    title = 'Progress'
-
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
-        self.set_valign(Gtk.Align.CENTER)
-        label = Gtk.Label(label='Test label...')
-        label.set_max_width_chars(50)
-        label.set_line_wrap(True)
-        label.set_halign(Gtk.Align.CENTER)
-        label.set_justify(Gtk.Justification.CENTER)
-        spinner = Gtk.Spinner()
-        self.pack_start(label, False, True, 0)
-        self.pack_start(spinner, False, True, 0)
-        spinner.start()
-        self.show_all()
 
 
 class Start(Gtk.Box):
