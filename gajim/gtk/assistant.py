@@ -105,6 +105,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
         self._pages[name] = page
         self._ui.stack.add_named(page, name)
+        return page
 
     def get_current_page(self):
         return self._ui.stack.get_visible_child_name()

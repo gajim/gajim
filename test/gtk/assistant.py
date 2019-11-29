@@ -17,18 +17,15 @@ class TestAssistant(Assistant):
         self.add_pages({'start': Start(),
                         'progress': Progress()})
 
-        self.add_default_page('error')
-        self.add_default_page('success')
+        error = self.add_default_page('error')
+        error.set_title('Error')
+        error.set_heading('Error Heading')
+        error.set_text('This is the error text')
 
-        success_page = self.get_page('success')
-        success_page.set_title('Success')
-        success_page.set_heading('Success Heading')
-        success_page.set_text('This is the success text')
-
-        error_page = self.get_page('error')
-        error_page.set_title('Error')
-        error_page.set_heading('Error Heading')
-        error_page.set_text('This is the error text')
+        success = self.add_default_page('success')
+        success.set_title('Success')
+        success.set_heading('Success Heading')
+        success.set_text('This is the success text')
 
         self.add_button('forward', 'Forward', 'suggested-action')
         self.add_button('close', 'Close', 'destructive-action')
