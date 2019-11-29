@@ -35,10 +35,11 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
             (str, )
         ))
 
-    def __init__(self, transient_for=None,
-                       width=550,
-                       height=400,
-                       transition_duration=200):
+    def __init__(self,
+                 transient_for=None,
+                 width=550,
+                 height=400,
+                 transition_duration=200):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(Gio.Application.get_default())
