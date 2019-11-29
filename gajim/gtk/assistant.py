@@ -114,11 +114,8 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         self._set_buttons_visible(buttons)
         self._ui.stack.set_visible_child_full(name, transition)
 
-    def get_error_page(self):
-        return self._pages['error']
-
-    def get_success_page(self):
-        return self._pages['success']
+    def get_page(self, name):
+        return self._pages[name]
 
     def _set_buttons_visible(self, buttons):
         for button in self._buttons.values():
