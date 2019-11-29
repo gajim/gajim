@@ -274,3 +274,6 @@ button.flat.link { padding: 0; border: 0; }
 
 
 #GroupchatJoin > box {padding: 18px; }
+
+.assistant-grid { padding: 18px; margin: 6px;}
+.assistant-grid > box stack  { padding: 18px; }
