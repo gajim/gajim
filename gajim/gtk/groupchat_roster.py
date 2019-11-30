@@ -367,7 +367,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self.enable_sort(False)
         self.enable_sort(True)
 
-    def draw(self):
+    def initial_draw(self):
         self.enable_sort(True)
         self.set_model()
         self._roster.expand_all()

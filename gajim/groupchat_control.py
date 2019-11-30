@@ -1130,7 +1130,7 @@ class GroupchatControl(ChatControlBase):
         app.gc_connected[self.account][self.room_jid] = value
 
     def got_connected(self):
-        self.roster.draw()
+        self.roster.initial_draw()
 
         if self.disco_info.has_mam:
             # Request MAM
