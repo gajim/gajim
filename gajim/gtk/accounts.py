@@ -600,25 +600,6 @@ class GenericSettingPage(Gtk.Box):
     def on_row_activated(_listbox, row):
         row.on_row_activated()
 
-    def set_entry_text(self, toggle, update=False):
-        account_label = app.get_account_label(self.account)
-        if update:
-            self.entry.set_text(account_label)
-            return
-        if toggle.get_active():
-            self.entry.set_sensitive(True)
-            self.entry.grab_focus()
-        else:
-            self.entry.set_sensitive(False)
-            value = self.entry.get_text()
-            if not value:
-                value = account_label
-            app.config.set_per('accounts', self.account,
-                               'account_label', value or self.account)
-            if app.config.get_per('accounts', self.account, 'active'):
-                app.interface.roster.draw_account(self.account)
-                gui_menu_builder.build_accounts_menu()
-
 
 class GeneralPage(GenericSettingPage):
 
