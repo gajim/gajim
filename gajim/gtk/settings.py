@@ -24,8 +24,6 @@ from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
 
-from gajim.common.exceptions import GajimGeneralException
-
 from gajim import gtkgui_helpers
 
 from gajim.gtk.util import get_image_button
