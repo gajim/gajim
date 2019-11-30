@@ -137,39 +137,6 @@ class AspellDictError:
               'Highlighting misspelled words feature will not be used') % lang)
 
 
-class ConfirmationDialog(HigDialog):
-    """
-    HIG compliant confirmation dialog
-    """
-
-    def __init__(self, pritext, sectext='', on_response_ok=None,
-    on_response_cancel=None, transient_for=None):
-        self.user_response_ok = on_response_ok
-        self.user_response_cancel = on_response_cancel
-        HigDialog.__init__(self, transient_for,
-           Gtk.MessageType.QUESTION, Gtk.ButtonsType.OK_CANCEL, pritext, sectext,
-           self.on_response_ok, self.on_response_cancel)
-        self.popup()
-
-    def on_response_ok(self, widget):
-        if self.user_response_ok:
-            if isinstance(self.user_response_ok, tuple):
-                self.user_response_ok[0](*self.user_response_ok[1:])
-            else:
-                self.user_response_ok()
-        self.call_cancel_on_destroy = False
-        self.destroy()
-
-    def on_response_cancel(self, widget):
-        if self.user_response_cancel:
-            if isinstance(self.user_response_cancel, tuple):
-                self.user_response_cancel[0](*self.user_response_ok[1:])
-            else:
-                self.user_response_cancel()
-        self.call_cancel_on_destroy = False
-        self.destroy()
-
-
 class WarningDialog(HigDialog):
     """
     HIG compliant warning dialog
