@@ -5,6 +5,7 @@ from gi.repository import Gtk
 from gajim.common.const import CSSPriority
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import Page
 
 from test.gtk import util
 util.load_style('gajim.css', CSSPriority.APPLICATION)
@@ -30,7 +31,7 @@ class TestAssistant(Assistant):
         success.set_heading('Success Heading')
         success.set_text('This is the success text')
 
-        self.add_button('forward', 'Forward', 'suggested-action')
+        self.add_button('forward', 'Forward', 'suggested-action', complete=True)
         self.add_button('close', 'Close', 'destructive-action')
         self.add_button('back', 'Back')
 
@@ -93,14 +94,13 @@ class TestAssistant(Assistant):
             self.set_default_button('back')
 
 
-class Start(Gtk.Box):
-
-    title = 'Start'
-
+class Start(Page):
     def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
-        self.set_valign(Gtk.Align.CENTER)
+        Page.__init__(self)
+
+        self.title = 'Start'
+        self.complete = False
+
         heading = Gtk.Label(label='Test Assistant')
         heading.get_style_context().add_class('large-header')
 
@@ -111,20 +111,21 @@ class Start(Gtk.Box):
         label1.set_justify(Gtk.Justification.CENTER)
         label1.set_margin_bottom(24)
 
-        label2 = Gtk.Label(label='This is label 2 with some more text')
-        label2.set_max_width_chars(50)
-        label2.set_line_wrap(True)
-        label2.set_halign(Gtk.Align.CENTER)
-        label2.set_justify(Gtk.Justification.CENTER)
+        entry = Gtk.Entry(activates_default=True)
+        entry.connect('changed', self._on_changed)
 
         self._server = Gtk.CheckButton.new_with_mnemonic('A fancy checkbox')
         self._server.set_halign(Gtk.Align.CENTER)
 
         self.pack_start(heading, False, True, 0)
         self.pack_start(label1, False, True, 0)
-        self.pack_start(label2, False, True, 0)
+        self.pack_start(entry, False, True, 0)
         self.pack_start(self._server, False, True, 0)
         self.show_all()
+
+    def _on_changed(self, entry):
+        self.complete = bool(entry.get_text())
+        self.get_toplevel().update_page_complete()
 
 
 win = TestAssistant()
