@@ -74,20 +74,33 @@ class DialogButton(namedtuple('DialogButton', ('response text callback args '
 
 
 class HigDialog(Gtk.MessageDialog):
-    def __init__(self, parent, type_, buttons, pritext, sectext,
-    on_response_ok=None, on_response_cancel=None, on_response_yes=None,
-    on_response_no=None):
+    def __init__(self,
+                 parent,
+                 type_,
+                 buttons,
+                 pritext,
+                 sectext,
+                 on_response_ok=None,
+                 on_response_cancel=None,
+                 on_response_yes=None,
+                 on_response_no=None):
         self.call_cancel_on_destroy = True
-        Gtk.MessageDialog.__init__(self, transient_for=parent,
-           modal=True, destroy_with_parent=True,
-           message_type=type_, buttons=buttons, text=pritext)
+        Gtk.MessageDialog.__init__(self,
+                                   transient_for=parent,
+                                   modal=True,
+                                   destroy_with_parent=True,
+                                   message_type=type_,
+                                   buttons=buttons,
+                                   text=pritext)
 
         self.format_secondary_markup(sectext)
 
-        self.possible_responses = {Gtk.ResponseType.OK: on_response_ok,
+        self.possible_responses = {
+            Gtk.ResponseType.OK: on_response_ok,
             Gtk.ResponseType.CANCEL: on_response_cancel,
             Gtk.ResponseType.YES: on_response_yes,
-            Gtk.ResponseType.NO: on_response_no}
+            Gtk.ResponseType.NO: on_response_no
+        }
 
         self.connect('response', self.on_response)
         self.connect('destroy', self.on_dialog_destroy)
@@ -101,14 +114,14 @@ class HigDialog(Gtk.MessageDialog):
             if len(self.possible_responses[response_id]) == 1:
                 self.possible_responses[response_id][0](dialog)
             else:
-                self.possible_responses[response_id][0](dialog,
-                    *self.possible_responses[response_id][1:])
+                self.possible_responses[response_id][0](
+                    dialog, *self.possible_responses[response_id][1:])
         else:
             self.possible_responses[response_id](dialog)
 
-    def on_dialog_destroy(self, widget):
+    def on_dialog_destroy(self, _widget):
         if not self.call_cancel_on_destroy:
-            return
+            return None
         cancel_handler = self.possible_responses[Gtk.ResponseType.CANCEL]
         if not cancel_handler:
             return False
@@ -116,13 +129,14 @@ class HigDialog(Gtk.MessageDialog):
             cancel_handler[0](None, *cancel_handler[1:])
         else:
             cancel_handler(None)
+        return None
 
     def popup(self):
         """
         Show dialog
         """
         vb = self.get_children()[0].get_children()[0] # Give focus to top vbox
-#        vb.set_flags(Gtk.CAN_FOCUS)
+        # vb.set_flags(Gtk.CAN_FOCUS)
         vb.grab_focus()
         self.show_all()
 
@@ -145,8 +159,12 @@ class WarningDialog(HigDialog):
     def __init__(self, pritext, sectext='', transient_for=None):
         if transient_for is None:
             transient_for = app.app.get_active_window()
-        HigDialog.__init__(self, transient_for, Gtk.MessageType.WARNING,
-            Gtk.ButtonsType.OK, pritext, sectext)
+        HigDialog.__init__(self,
+                           transient_for,
+                           Gtk.MessageType.WARNING,
+                           Gtk.ButtonsType.OK,
+                           pritext,
+                           sectext)
         self.set_modal(False)
         self.popup()
 
@@ -159,8 +177,12 @@ class InformationDialog(HigDialog):
     def __init__(self, pritext, sectext='', transient_for=None):
         if transient_for is None:
             transient_for = app.app.get_active_window()
-        HigDialog.__init__(self, transient_for, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
-            pritext, sectext)
+        HigDialog.__init__(self,
+                           transient_for,
+                           Gtk.MessageType.INFO,
+                           Gtk.ButtonsType.OK,
+                           pritext,
+                           sectext)
         self.set_modal(False)
         self.popup()
 
@@ -170,13 +192,22 @@ class ErrorDialog(HigDialog):
     HIG compliant error dialog
     """
 
-    def __init__(self, pritext, sectext='', on_response_ok=None,
-    on_response_cancel=None, transient_for=None):
+    def __init__(self,
+                 pritext,
+                 sectext='',
+                 on_response_ok=None,
+                 on_response_cancel=None,
+                 transient_for=None):
         if transient_for is None:
             transient_for = app.app.get_active_window()
-        HigDialog.__init__(self, transient_for, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-            pritext, sectext, on_response_ok=on_response_ok,
-            on_response_cancel=on_response_cancel)
+        HigDialog.__init__(self,
+                           transient_for,
+                           Gtk.MessageType.ERROR,
+                           Gtk.ButtonsType.OK,
+                           pritext,
+                           sectext,
+                           on_response_ok=on_response_ok,
+                           on_response_cancel=on_response_cancel)
         self.popup()
 
 
@@ -236,7 +267,7 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
         self.show_all()
 
-    def _on_copy_cert_info_button_clicked(self, widget):
+    def _on_copy_cert_info_button_clicked(self, _widget):
         clipboard_text = \
             self._headline + '\n\n' + \
             _('Issued to\n') + \
@@ -300,16 +331,16 @@ class InvitationReceivedDialog(Gtk.ApplicationWindow):
             self._ui.comment_label.show()
             self._ui.comment_label.set_text(comment)
 
-    def on_message_mnemonic_activate(self, widget, group_cycling=False):
+    def on_message_mnemonic_activate(self, _widget, _group_cycling=False):
         self._ui.message_expander.set_expanded(True)
 
-    def on_accept_button_clicked(self, widget):
+    def on_accept_button_clicked(self, _widget):
         app.interface.show_or_join_groupchat(self.account,
                                              self.room_jid,
                                              password=self.password)
         self.destroy()
 
-    def on_decline_button_clicked(self, widget):
+    def on_decline_button_clicked(self, _widget):
         text = self._ui.decline_message.get_text()
         app.connections[self.account].get_module('MUC').decline(
             self.room_jid, self.from_, text)
@@ -328,7 +359,7 @@ class PassphraseDialog:
         self.window.set_title(titletext)
         self._ui.message_label.set_text(labeltext)
 
-        self.ok = False
+        self._ok = False
 
         self.cancel_handler = cancel_handler
         self.ok_handler = ok_handler
@@ -347,7 +378,7 @@ class PassphraseDialog:
         else:
             self._ui.save_passphrase_checkbutton.hide()
 
-    def on_okbutton_clicked(self, widget):
+    def on_okbutton_clicked(self, _widget):
         if not self.ok_handler:
             return
 
@@ -358,7 +389,7 @@ class PassphraseDialog:
         else:
             checked = False
 
-        self.ok = True
+        self._ok = True
 
         self.window.destroy()
 
@@ -367,11 +398,11 @@ class PassphraseDialog:
         else:
             self.ok_handler(passph, checked)
 
-    def on_cancelbutton_clicked(self, widget):
+    def on_cancelbutton_clicked(self, _widget):
         self.window.destroy()
 
-    def on_passphrase_dialog_destroy(self, widget):
-        if self.cancel_handler and not self.ok:
+    def on_passphrase_dialog_destroy(self, _widget):
+        if self.cancel_handler and not self._ok:
             self.cancel_handler()
 
 
@@ -493,5 +524,5 @@ class ShortcutsWindow:
         self.window.show_all()
         self.window.present()
 
-    def _on_window_destroy(self, widget):
+    def _on_window_destroy(self, _widget):
         self.window = None
