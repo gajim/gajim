@@ -36,7 +36,8 @@ settings = Gtk.Settings.get_default()
 
 class CSSConfig():
     def __init__(self):
-        """CSSConfig handles loading and storing of all relevant Gajim style files
+        """
+        CSSConfig handles loading and storing of all relevant Gajim style files
 
         The order in which CSSConfig loads the styles
 
@@ -138,14 +139,15 @@ class CSSConfig():
     def _load_css_from_file(self, filename, priority):
         path = os.path.join(configpaths.get('STYLE'), filename)
         try:
-            with open(path, "r") as f:
-                css = f.read()
+            with open(path, "r") as file_:
+                css = file_.read()
         except Exception as exc:
             log.error('Error loading css: %s', exc)
             return
         self._activate_css(css, priority)
 
-    def _activate_css(self, css, priority):
+    @staticmethod
+    def _activate_css(css, priority):
         try:
             provider = Gtk.CssProvider()
             provider.load_from_data(bytes(css.encode('utf-8')))
@@ -247,7 +249,7 @@ class CSSConfig():
                 if not pre:
                     self._add_to_cache(selector, attr, value)
                 self._write(pre)
-                return
+                return None
 
         # The rule was not found, so we add it to this theme
         log.info('Set %s %s %s', selector, attr, value)
@@ -255,6 +257,7 @@ class CSSConfig():
         rule.style[attr] = value
         css.add(rule)
         self._write(pre)
+        return None
 
     def set_font(self, selector, description, pre=False):
         css = self._css
@@ -297,13 +300,14 @@ class CSSConfig():
         family = description.get_family()
         return family, size, style, weight
 
-    def _get_default_rule(self, selector, attr):
+    def _get_default_rule(self, selector, _attr):
         for rule in self._default_css:
             if rule.type != rule.STYLE_RULE:
                 continue
             if rule.selectorText == selector:
                 log.info('Get Default Rule %s', selector)
                 return rule
+        return None
 
     def get_font(self, selector, pre=False):
         if pre:
@@ -316,7 +320,7 @@ class CSSConfig():
                 pass
 
         if css is None:
-            return
+            return None
 
         for rule in css:
             if rule.type != rule.STYLE_RULE:
@@ -335,10 +339,11 @@ class CSSConfig():
                 return desc
 
         self._add_to_cache(selector, 'fontdescription', None)
+        return None
 
     def _get_description_from_css(self, family, size, style, weight):
         if family is None:
-            return
+            return None
         desc = Pango.FontDescription()
         desc.set_family(family)
         if weight is not None:
@@ -403,6 +408,7 @@ class CSSConfig():
             value = rule if rule is None else rule.style[attr]
             self._add_to_cache(selector, attr, value)
             return value
+        return None
 
     def remove_value(self, selector, attr, pre=False):
         if attr == StyleAttr.FONT:
@@ -423,6 +429,7 @@ class CSSConfig():
                 rule.style.removeProperty(attr)
                 break
         self._write(pre)
+        return None
 
     def remove_font(self, selector, pre=False):
         css = self._css
