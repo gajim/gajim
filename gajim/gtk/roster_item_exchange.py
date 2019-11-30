@@ -227,7 +227,7 @@ class RosterItemExchangeWindow(Gtk.ApplicationWindow):
                     con = app.connections[self.account]
                     con.get_module('Roster').update_contact(
                         jid, model[iter_][2], groups)
-                    self.draw_contact(jid, self.account)
+                    con.get_module('Roster').draw_contact(jid, self.account)
                     # Update opened chats
                     ctrl = app.interface.msg_win_mgr.get_control(jid,
                                                                  self.account)
