@@ -213,69 +213,6 @@ class ErrorDialog(HigDialog):
         self.popup()
 
 
-class ConfirmationDialogDoubleRadio(ConfirmationDialog):
-    """
-    HIG compliant confirmation dialog with 2 radios
-    """
-    def __init__(self, pritext, sectext='', radiotext1='', radiotext2='',
-    on_response_ok=None, on_response_cancel=None, is_modal=True, transient_for=None):
-        self.user_response_ok = on_response_ok
-        self.user_response_cancel = on_response_cancel
-
-        if transient_for is None:
-            transient_for = app.app.get_active_window()
-        HigDialog.__init__(self, transient_for, Gtk.MessageType.QUESTION,
-                Gtk.ButtonsType.OK_CANCEL, pritext, sectext, self.on_response_ok,
-                self.on_response_cancel)
-
-        self.set_default_response(Gtk.ResponseType.OK)
-
-        ok_button = self.get_widget_for_response(Gtk.ResponseType.OK)
-        ok_button.grab_focus()
-
-        vbox = self.get_content_area()
-        self.radiobutton1 = Gtk.RadioButton(label=radiotext1)
-        vbox.pack_start(self.radiobutton1, False, True, 0)
-
-        self.radiobutton2 = Gtk.RadioButton(group=self.radiobutton1,
-                label=radiotext2)
-        vbox.pack_start(self.radiobutton2, False, True, 0)
-
-        self.set_modal(is_modal)
-        self.popup()
-
-    def on_response_ok(self, widget):
-        if self.user_response_ok:
-            if isinstance(self.user_response_ok, tuple):
-                self.user_response_ok[0](self.is_checked(),
-                        *self.user_response_ok[1:])
-            else:
-                self.user_response_ok(self.is_checked())
-        self.call_cancel_on_destroy = False
-        self.destroy()
-
-    def on_response_cancel(self, widget):
-        if self.user_response_cancel:
-            if isinstance(self.user_response_cancel, tuple):
-                self.user_response_cancel[0](*self.user_response_cancel[1:])
-            else:
-                self.user_response_cancel()
-        self.call_cancel_on_destroy = False
-        self.destroy()
-
-    def is_checked(self):
-        ''' Get active state of the checkbutton '''
-        if self.radiobutton1:
-            is_checked_1 = self.radiobutton1.get_active()
-        else:
-            is_checked_1 = False
-        if self.radiobutton2:
-            is_checked_2 = self.radiobutton2.get_active()
-        else:
-            is_checked_2 = False
-        return [is_checked_1, is_checked_2]
-
-
 class CertificateDialog(Gtk.ApplicationWindow):
     def __init__(self, transient_for, account, cert):
         Gtk.ApplicationWindow.__init__(self)
