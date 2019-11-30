@@ -27,8 +27,6 @@ from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
 
-from gajim import gui_menu_builder
-
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.const import Setting
