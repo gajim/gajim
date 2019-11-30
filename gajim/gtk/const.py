@@ -129,4 +129,5 @@ WINDOW_MODULES = {
     'AdvancedConfig': 'gajim.gtk.advanced_config',
     'CertificateDialog': 'gajim.gtk.dialogs',
     'SubscriptionRequest': 'gajim.gtk.subscription_request',
+    'RemoveAccount': 'gajim.gtk.remove_account',
 }

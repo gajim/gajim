@@ -109,6 +109,7 @@ from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import open_window
+from gajim.gtk.util import get_app_window
 from gajim.gtk.const import ControlType
 
 
@@ -1796,6 +1797,46 @@ class Interface:
             'accounts', account, 'roster_version', '')
         self.roster.setup_and_draw_roster()
         gui_menu_builder.build_accounts_menu()
+
+    def remove_account(self, account):
+        # Close all opened windows
+        self.roster.close_all(account, force=True)
+        if account in app.connections:
+            app.connections[account].disconnect(reconnect=False)
+            app.connections[account].cleanup()
+            del app.connections[account]
+        app.logger.remove_roster(app.get_jid_from_account(account))
+        # Delete password must be before del_per() because it calls set_per()
+        # which would recreate the account with defaults values if not found
+        passwords.delete_password(account)
+        app.config.del_per('accounts', account)
+        del self.instances[account]
+        if account in app.nicks:
+            del self.minimized_controls[account]
+            del app.nicks[account]
+            del app.block_signed_in_notifications[account]
+            del app.groups[account]
+            app.contacts.remove_account(account)
+            del app.gc_connected[account]
+            del app.automatic_rooms[account]
+            del app.to_be_removed[account]
+            del app.newly_added[account]
+            del app.sleeper_state[account]
+            del app.last_message_time[account]
+            del app.status_before_autoaway[account]
+            del app.gajim_optional_features[account]
+            del app.caps_hash[account]
+        if len(app.connections) >= 2: # Do not merge accounts if only one exists
+            self.roster.regroup = app.config.get('mergeaccounts')
+        else:
+            self.roster.regroup = False
+        self.roster.setup_and_draw_roster()
+        app.app.remove_account_actions(account)
+        gui_menu_builder.build_accounts_menu()
+
+        window = get_app_window('AccountsWindow')
+        if window is not None:
+            window.remove_account(account)
 
     def autoconnect(self):
         """

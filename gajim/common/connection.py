@@ -438,9 +438,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.new_account_form = None
         self.last_sent = []
 
-        self._unregister_account = False
-        self._unregister_account_cb = None
-
         self.music_track_info = 0
 
         self.register_supported = False
@@ -541,7 +538,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.info('Starting to disconnect %s', self.name)
         disconnect_cb = partial(self._on_disconnect, reconnect)
         self.connection.disconnect_handlers = [disconnect_cb]
-        if immediately:
+        if immediately or self.removing_account:
             self.connection.disconnect()
         else:
             self.connection.start_disconnect()
@@ -562,7 +559,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         log.info('Disconnect %s, reconnect: %s', self.name, reconnect)
 
-        if reconnect:
+        if reconnect and not self.removing_account:
             if app.account_is_connected(self.name):
                 # we cannot change our status to offline or connecting
                 # after we auth to server
@@ -1263,10 +1260,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self._register_new_handlers(con)
 
     def _on_auth_successful(self):
-        if self._unregister_account:
-            self._on_unregister_account_connect()
-        else:
-            self.connection.bind()
+        self.connection.bind()
 
     def _on_auth_failed(self, reason, text):
         if not app.config.get_per('accounts', self.name, 'savepass'):
@@ -1675,41 +1669,12 @@ class Connection(CommonConnection, ConnectionHandlers):
             stanza_id=obj.stanza_id,
             additional_data=obj.additional_data))
 
-    def unregister_account(self, on_remove_success):
-        self._unregister_account = True
-        self._unregister_account_cb = on_remove_success
-        if self.connected == 0:
-            self.connect_and_auth()
-        else:
-            self._on_unregister_account_connect()
-
-    def _on_unregister_account_connect(self):
-        self.removing_account = True
-        if app.account_is_connected(self.name):
-            hostname = app.config.get_per('accounts', self.name, 'hostname')
-            iq = nbxmpp.Iq(typ='set', to=hostname)
-            id_ = self.connection.getAnID()
-            iq.setID(id_)
-            iq.setTag(nbxmpp.NS_REGISTER + ' query').setTag('remove')
-            def _on_answer(con, result):
-                if result.getID() == id_:
-                    self._on_unregister_finished(True)
-                    return
-                app.nec.push_incoming_event(InformationEvent(
-                    None, dialog_name='unregister-error',
-                    kwargs={'server': hostname, 'error': result.getErrorMsg()}))
-                self._on_unregister_finished(False)
-            self.connection.RegisterHandler(
-                'iq', _on_answer, 'result', system=True)
-            self.connection.SendAndWaitForResponse(iq)
+    def unregister_account(self, callback):
+        if not app.account_is_connected(self.name):
             return
-        self._on_unregister_finished(False)
-        self.removing_account = False
-
-    def _on_unregister_finished(self, result):
-        self._unregister_account_cb(result)
-        self._unregister_account = False
-        self._unregister_account_cb = None
+        self.removing_account = True
+        self.connection.get_module('Register').unregister(
+            callback=callback)
 
     def _reconnect_alarm(self):
         if not app.config.get_per('accounts', self.name, 'active'):

@@ -31,16 +31,12 @@ from gajim import gui_menu_builder
 
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
-from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.settings import SettingsBox
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_app_window
+from gajim.gtk.util import open_window
 
 
 log = logging.getLogger('gajim.gtk.accounts')
@@ -159,7 +155,8 @@ class AccountsWindow(Gtk.ApplicationWindow):
             values.append(app.config.get_per('accounts', account, setting))
         return values
 
-    def on_remove_account(self, account):
+    @staticmethod
+    def on_remove_account(account):
         if app.events.get_events(account):
             app.interface.raise_dialog('unread-events-on-remove-account')
             return
@@ -168,39 +165,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
             # Should never happen as button is insensitive
             return
 
-        win_opened = False
-        if app.interface.msg_win_mgr.get_controls(acct=account):
-            win_opened = True
-        elif account in app.interface.instances:
-            for key in app.interface.instances[account]:
-                if (app.interface.instances[account][key] and
-                        key != 'remove_account'):
-                    win_opened = True
-                    break
-
-        # Detect if we have opened windows for this account
-
-        def remove():
-            if (account in app.interface.instances and
-                    'remove_account' in app.interface.instances[account]):
-                dialog = app.interface.instances[account]['remove_account']
-                dialog.window.present()
-            else:
-                if account not in app.interface.instances:
-                    app.interface.instances[account] = {}
-                app.interface.instances[account]['remove_account'] = \
-                    RemoveAccountWindow(account)
-        if win_opened:
-            NewConfirmationDialog(
-                _('Remove Account'),
-                _('You still have open chats in your account %s') % account,
-                _('All chat and group chat windows will be closed.'),
-                [DialogButton.make('Cancel'),
-                 DialogButton.make('Remove',
-                                   callback=remove)],
-                transient_for=self).show()
-        else:
-            remove()
+        open_window('RemoveAccount', account=account)
 
     def remove_account(self, account):
         del self._need_relogin[account]
@@ -909,138 +874,3 @@ class LoginDialog(SettingsDialog):
         savepass = app.config.get_per('accounts', self.account, 'savepass')
         if not savepass:
             passwords.delete_password(self.account)
-
-
-class RemoveAccountWindow:
-    """
-    Ask whether to remove from gajim only or both from gajim and the server,
-    then remove the account given
-    """
-
-    def _on_destroy(self, _widget):
-        if self.account in app.interface.instances:
-            del app.interface.instances[self.account]['remove_account']
-
-    def on_cancel_button_clicked(self, _widget):
-        self._ui.remove_account_window.destroy()
-
-    def __init__(self, account):
-        self.account = account
-        self._ui = get_builder('remove_account_window.ui')
-        active_window = app.app.get_active_window()
-        self._ui.remove_account_window.set_transient_for(active_window)
-        self._ui.remove_account_window.set_title(
-            _('Removing account %s') % self.account)
-        self._ui.connect_signals(self)
-        self._ui.remove_account_window.show_all()
-
-    def on_remove_button_clicked(self, _widget):
-        def remove():
-            if self.account in app.connections and \
-            app.connections[self.account].connected and \
-            not self._ui.remove_and_unregister_radiobutton.get_active():
-                # change status to offline only if we will not
-                # remove this JID from server
-                app.connections[self.account].change_status('offline',
-                                                            'offline')
-            if self._ui.remove_and_unregister_radiobutton.get_active():
-                if not self.account in app.connections:
-                    ErrorDialog(
-                        _('Account is disabled'),
-                        _('To unregister from a server, the account must be '
-                          'enabled.'),
-                        transient_for=self._ui.remove_account_window)
-                    return
-                if not app.connections[self.account].password:
-                    def on_ok(passphrase, _checked):
-                        if passphrase == -1:
-                            # We don't remove account cause we
-                            # canceled pw window
-                            return
-                        app.connections[self.account].password = passphrase
-                        app.connections[self.account].unregister_account(
-                            self._on_remove_success)
-
-                    PassphraseDialog(
-                        _('Password required'),
-                        _('Enter your password for account %s') % self.account,
-                        _('Save password'), ok_handler=on_ok,
-                        transient_for=self._ui.remove_account_window)
-                    return
-                app.connections[self.account].unregister_account(
-                    self._on_remove_success)
-            else:
-                self._on_remove_success(True)
-
-        if (self.account in app.connections and
-                app.connections[self.account].connected):
-            NewConfirmationDialog(
-                _('Remove Account'),
-                _('Still connected to the server'),
-                _('Account \'%s\' is still connected to the server. If you '
-                  'remove it, the connection will be lost.') % self.account,
-                [DialogButton.make('Cancel'),
-                 DialogButton.make('Remove',
-                                   callback=remove)],
-                transient_for=self._ui.remove_account_window).show()
-        else:
-            remove()
-
-    def on_remove_response_ok(self, is_checked):
-        if is_checked[0]:
-            self._on_remove_success(True)
-
-    def _on_remove_success(self, res):
-        # action of unregistration has failed, we don't remove the account
-        # Error message is send by connect_and_auth()
-        if not res:
-            ConfirmationDialogDoubleRadio(
-                _('Connection to server %s failed') % self.account,
-                _('What would you like to do?'),
-                _('Remove only from Gajim'),
-                _('Don\'t remove anything. I\'ll try again later'),
-                on_response_ok=self.on_remove_response_ok, is_modal=False,
-                transient_for=self._ui.remove_account_window)
-            return
-        # Close all opened windows
-        app.interface.roster.close_all(self.account, force=True)
-        if self.account in app.connections:
-            app.connections[self.account].disconnect(reconnect=False)
-            app.connections[self.account].cleanup()
-            del app.connections[self.account]
-        app.logger.remove_roster(app.get_jid_from_account(self.account))
-        # Delete password must be before del_per() because it calls set_per()
-        # which would recreate the account with defaults values if not found
-        passwords.delete_password(self.account)
-        app.config.del_per('accounts', self.account)
-        del app.interface.instances[self.account]
-        if self.account in app.nicks:
-            del app.interface.minimized_controls[self.account]
-            del app.nicks[self.account]
-            del app.block_signed_in_notifications[self.account]
-            del app.groups[self.account]
-            app.contacts.remove_account(self.account)
-            del app.gc_connected[self.account]
-            del app.automatic_rooms[self.account]
-            del app.to_be_removed[self.account]
-            del app.newly_added[self.account]
-            del app.sleeper_state[self.account]
-            del app.last_message_time[self.account]
-            del app.status_before_autoaway[self.account]
-            del app.gajim_optional_features[self.account]
-            del app.caps_hash[self.account]
-        if len(app.connections) >= 2: # Do not merge accounts if only one exists
-            app.interface.roster.regroup = app.config.get('mergeaccounts')
-        else:
-            app.interface.roster.regroup = False
-        app.interface.roster.setup_and_draw_roster()
-        app.app.remove_account_actions(self.account)
-        gui_menu_builder.build_accounts_menu()
-
-        window = get_app_window('AccountsWindow')
-        if window is not None:
-            window.remove_account(self.account)
-        self._ui.remove_account_window.destroy()
-
-    def destroy(self):
-        self._ui.remove_account_window.destroy()

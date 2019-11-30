@@ -88,11 +88,6 @@ messages = {
         _('This account %s doesn\'t support invisibility.'),
         ErrorDialog),
 
-    'unregister-error': Message(
-        _('Unregister Failed'),
-        _('Unregistration on server %(server)s failed: %(error)s'),
-        ErrorDialog),
-
     'agent-register-success': Message(
         _('Registration Succeeded'),
         _('Registration with agent %s succeeded.'),
