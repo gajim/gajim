@@ -173,9 +173,6 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self._update_entry_completion(entry, text)
         self._validate_jid(text)
 
-    def _on_server_entry_changed(self, _widget):
-        self._update_create_button()
-
     def _on_address_entry_activate(self, _widget):
         self._on_create_clicked()
 
