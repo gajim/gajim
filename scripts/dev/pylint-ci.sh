@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# exit when any command fails
+set -e
+
 PYLINT=${PYLINT:-pylint}
 
 "$PYLINT" --version
