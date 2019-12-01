@@ -105,7 +105,7 @@ class Jingle(BaseModule):
         self._log.info('Pubkey result from %s', jid_from)
         jingle_xtls.handle_new_cert(con, stanza, jid_from)
 
-    def _on_jingle_iq(self, con, stanza, properties):
+    def _on_jingle_iq(self, _con, stanza, _properties):
         """
         The jingle stanza dispatcher
 
