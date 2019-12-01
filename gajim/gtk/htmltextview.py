@@ -638,7 +638,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 tag = self.textbuf.create_tag() # we create anonymous tag
         for attr, val in style_iter(style):
             attr = attr.lower()
-            val = val
             try:
                 getattr(self, self.__style_methods[attr])(tag, val)
             except KeyError:

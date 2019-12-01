@@ -263,8 +263,7 @@ def temp_failure_retry(func, *args, **kwargs):
         except (os.error, IOError, select.error) as ex:
             if ex.errno == errno.EINTR:
                 continue
-            else:
-                raise
+            raise
 
 def get_uf_show(show, use_mnemonic=False):
     """

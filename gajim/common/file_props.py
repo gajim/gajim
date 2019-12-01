@@ -87,7 +87,8 @@ class FilesProp:
     def deleteFileProp(cls, file_prop):
         files_props = cls._files_props
         a = s = None
-        for account, sid in files_props:
+        for key in files_props:
+            account, sid = key
             fp = files_props[account, sid]
             if fp is file_prop:
                 a = account

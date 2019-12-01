@@ -1423,9 +1423,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 '_stun._udp.' + helpers.idn_to_ascii(hostname),
                 self._on_stun_resolved)
 
-    def _on_stun_resolved(self, host, result_array):
+    def _on_stun_resolved(self, _host, result_array):
         if result_array:
-            self._stun_servers = self._hosts = [i for i in result_array]
+            self._stun_servers = self._hosts = result_array
 
     @helpers.call_counter
     def connect_machine(self, restart=False):

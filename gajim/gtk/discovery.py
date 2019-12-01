@@ -870,7 +870,7 @@ class AgentBrowser:
                 if identity.category == 'server' and identity.name is not None:
                     name = identity.name
                     break
-                elif identities[0].name is not None:
+                if identities[0].name is not None:
                     name = identities[0].name
 
         if name:

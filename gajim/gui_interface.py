@@ -1445,7 +1445,6 @@ class Interface:
     @staticmethod
     def _create_muc_data(account, room_jid, password, config):
         nick = app.nicks[account]
-        password = password
 
         # Fetch data from bookmarks
         con = app.connections[account]

@@ -383,7 +383,7 @@ class JingleSession:
             if child.getNamespace() == nbxmpp.NS_JINGLE_ERRORS:
                 error_name = child.getName()
                 break
-            elif child.getNamespace() == nbxmpp.NS_STANZAS:
+            if child.getNamespace() == nbxmpp.NS_STANZAS:
                 error_name = child.getName()
         self.__dispatch_error(error_name, text, error.getAttr('type'))
 

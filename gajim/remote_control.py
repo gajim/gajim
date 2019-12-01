@@ -592,14 +592,14 @@ class GajimRemote(Server):
                     connected_account = acct
                     break
                 # jid is in roster
-                elif contact:
+                if contact:
                     minimized_control = \
                         jid in app.interface.minimized_controls[acct]
                     connected_account = acct
                     break
                 # we send the message to jid not in roster, because account is
                 # specified, or there is only one account
-                elif account:
+                if account:
                     connected_account = acct
                 elif first_connected_acct is None:
                     first_connected_acct = acct

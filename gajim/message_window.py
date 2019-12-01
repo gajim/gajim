@@ -779,7 +779,7 @@ class MessageWindow(EventHelper):
             if ctrl.get_nb_unread() > 0:
                 found = True
                 break # found
-            elif app.config.get('ctrl_tab_go_to_next_composing'):
+            if app.config.get('ctrl_tab_go_to_next_composing'):
                 # Search for a composing contact
                 contact = ctrl.contact
                 if first_composing_ind == -1 and contact.chatstate == 'composing':
