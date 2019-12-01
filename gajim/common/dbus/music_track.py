@@ -32,6 +32,13 @@ MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
 class MusicTrackInfo:
     __slots__ = ['title', 'album', 'artist', 'duration', 'track_number',
                  'paused']
+    def __init__(self):
+        self.title = None
+        self.album = None
+        self.artist = None
+        self.duration = None
+        self.track_number = None
+        self.paused = None
 
 
 class MusicTrackListener(GObject.GObject):
@@ -167,11 +174,7 @@ class MusicTrackListener(GObject.GObject):
         info = MusicTrackInfo()
         info.title = meta.get('xesam:title')
         info.album = meta.get('xesam:album')
-        artist = meta.get('xesam:artist')
-        if artist:
-            info.artist = artist[0]
-        else:
-            info.artist = None
+        info.artist = meta.get('xesam:artist')
         info.duration = float(meta.get('mpris:length', 0))
         info.track_number = meta.get('xesam:trackNumber', 0)
 
