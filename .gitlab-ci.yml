@@ -14,7 +14,7 @@ run-tests:
     - . ./civenv/bin/activate
     - pip3 install mypy
     - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git@master --upgrade
-    - pip3 install pylint==2.3.1
+    - pip3 install pylint==2.4.4
     - /home/gitlab-runner/.local/bin/mypy gajim
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
     - python3 setup.py test -s test.no_gui
