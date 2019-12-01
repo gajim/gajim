@@ -13,7 +13,7 @@ IGNORE_GTK_MODULE_ERRORS=C0103,C0301,C0330,C0415,E0401,E0611,E1101,E1133,E1136,R
 
 "$PYLINT" --disable=$IGNORE_ERRORS --ignore=modules,gtk "$@"
 "$PYLINT" --disable=$IGNORE_GTK_MODULE_ERRORS "$@/gtk"
-"$PYLINT" --disable=E0401 "$@/common/modules"
+"$PYLINT" --disable=E0401,C0415 "$@/common/modules"
 
 # C0103 invalid-name
 # C0301 line-too-long
