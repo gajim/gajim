@@ -548,7 +548,7 @@ class Bytestream(BaseModule):
         iq.setID(auth_id)
         self._con.connection.send(iq)
 
-    def _on_bytestream_error(self, con, iq_obj):
+    def _on_bytestream_error(self, _con, iq_obj):
         id_ = iq_obj.getAttr('id')
         frm = helpers.get_full_jid_from_iq(iq_obj)
         query = iq_obj.getTag('query')
