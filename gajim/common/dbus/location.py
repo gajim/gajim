@@ -23,7 +23,7 @@ from nbxmpp.structs import LocationData
 from gajim.common import app
 
 if app.is_installed('GEOCLUE'):
-    from gi.repository import Geoclue  # pylint: disable=ungrouped-imports
+    from gi.repository import Geoclue  # pylint: disable=ungrouped-imports,no-name-in-module
 
 log = logging.getLogger('gajim.c.dbus.location')
 
