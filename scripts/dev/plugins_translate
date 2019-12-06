@@ -14,13 +14,6 @@ check_args()
 
 init_ln()
 {
-    if [ -e "core_plugins" ] && [ ! -L "core_plugins" ]; then
-        echo "core_plugins must be a symbolic link" >&2
-        exit 1
-    fi
-    if [ ! -e "core_plugins" ]; then
-        ln -s ../../plugins core_plugins
-    fi
     if [ ! -L "community_plugins" ]; then
         echo "community_plugins should be a symbolic link to gajim-plugins repository, else they won't be in po files"
     fi
