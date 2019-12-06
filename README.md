@@ -28,15 +28,17 @@
 
 ### Compile-time Requirements
 
-- python-setuptools
+- python3-setuptools
 
 
 ### Installation Procedure
 
 #### Packages
 
-- [Arch](https://aur.archlinux.org/packages/gajim-git/)
-- [Debian](https://packages.debian.org/stretch-backports/gajim)
+- [Arch Linux](https://www.archlinux.org/packages/community/any/gajim/)
+- [Debian](https://packages.debian.org/stable/gajim)
+- [Fedora](https://apps.fedoraproject.org/packages/gajim)
+- [Ubuntu](https://packages.ubuntu.com/gajim)
 
 #### Snapshots
 
