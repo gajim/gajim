@@ -40,18 +40,19 @@ class UserTune(BaseModule):
 
     @event_node(nbxmpp.NS_TUNE)
     def _tune_received(self, _con, _stanza, properties):
-        data = properties.pubsub_event.data
-        empty = properties.pubsub_event.empty
+        if properties.pubsub_event.retracted:
+            return
 
+        data = properties.pubsub_event.data
         for contact in app.contacts.get_contacts(self._account,
                                                  str(properties.jid)):
-            if not empty:
+            if data is not None:
                 contact.pep[PEPEventType.TUNE] = data
             else:
                 contact.pep.pop(PEPEventType.TUNE, None)
 
         if properties.is_self_message:
-            if not empty:
+            if data is not None:
                 self._con.pep[PEPEventType.TUNE] = data
             else:
                 self._con.pep.pop(PEPEventType.TUNE, None)

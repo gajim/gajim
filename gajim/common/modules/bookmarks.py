@@ -75,19 +75,8 @@ class Bookmarks(BaseModule):
         return self._pubsub_support() and self.conversion_2
 
     @event_node(nbxmpp.NS_BOOKMARKS)
-    def _bookmark_event_received(self, _con, stanza, properties):
+    def _bookmark_event_received(self, _con, _stanza, properties):
         if properties.pubsub_event.retracted:
-            # Unsure how to handle that
-            return
-
-        bookmarks = properties.pubsub_event.data
-        if properties.pubsub_event.deleted or properties.pubsub_event.purged:
-            self._log.info('Bookmark node deleted')
-            bookmarks = []
-
-        elif properties.pubsub_event.data is None:
-            self._log.warning('Invalid bookmark data')
-            self._log.warning(stanza)
             return
 
         if not properties.is_self_message:
@@ -102,6 +91,10 @@ class Bookmarks(BaseModule):
             self._log.info('Ignore update, pubsub request in progress')
             return
 
+        bookmarks = properties.pubsub_event.data
+        if bookmarks is None:
+            bookmarks = []
+
         old_bookmarks = self._convert_to_set(self._bookmarks)
         self._bookmarks = bookmarks
         self._act_on_changed_bookmarks(old_bookmarks)
@@ -109,7 +102,7 @@ class Bookmarks(BaseModule):
             NetworkEvent('bookmarks-received', account=self._account))
 
     @event_node(nbxmpp.NS_BOOKMARKS_2)
-    def _bookmark_2_event_received(self, _con, stanza, properties):
+    def _bookmark_2_event_received(self, _con, _stanza, properties):
         if not properties.is_self_message:
             self._log.warning('%s has an open access bookmarks node',
                               properties.jid)
@@ -125,7 +118,7 @@ class Bookmarks(BaseModule):
         old_bookmarks = self._convert_to_set(self._bookmarks)
 
         if properties.pubsub_event.deleted or properties.pubsub_event.purged:
-            self._log.info('Bookmark node deleted')
+            self._log.info('Bookmark node deleted/purged')
             self._bookmarks = []
 
         elif properties.pubsub_event.retracted:
@@ -137,11 +130,6 @@ class Bookmarks(BaseModule):
                     self._bookmarks.remove(bookmark)
                 except KeyError:
                     pass
-
-        elif properties.pubsub_event.data is None:
-            self._log.warning('Invalid bookmark data')
-            self._log.warning(stanza)
-            return
 
         else:
             new_bookmark = properties.pubsub_event.data

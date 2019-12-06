@@ -35,12 +35,14 @@ class UserAvatar(BaseModule):
 
     @event_node(nbxmpp.NS_AVATAR_METADATA)
     def _avatar_metadata_received(self, _con, _stanza, properties):
+        if properties.pubsub_event.retracted:
+            return
+
         data = properties.pubsub_event.data
-        empty = properties.pubsub_event.empty
         jid = str(properties.jid)
         own_jid = self._con.get_own_jid().getBare()
 
-        if empty:
+        if data is None:
             # Remove avatar
             self._log.info('Remove: %s', jid)
             app.contacts.set_avatar(self._account, jid, None)

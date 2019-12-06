@@ -38,6 +38,9 @@ class UserNickname(BaseModule):
 
     @event_node(nbxmpp.NS_NICK)
     def _nickname_received(self, _con, _stanza, properties):
+        if properties.pubsub_event.retracted:
+            return
+
         nick = properties.pubsub_event.data
         if properties.is_self_message:
             if nick is None:

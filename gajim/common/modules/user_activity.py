@@ -40,18 +40,19 @@ class UserActivity(BaseModule):
 
     @event_node(nbxmpp.NS_ACTIVITY)
     def _activity_received(self, _con, _stanza, properties):
-        data = properties.pubsub_event.data
-        empty = properties.pubsub_event.empty
+        if properties.pubsub_event.retracted:
+            return
 
+        data = properties.pubsub_event.data
         for contact in app.contacts.get_contacts(self._account,
                                                  str(properties.jid)):
-            if not empty:
+            if data is not None:
                 contact.pep[PEPEventType.ACTIVITY] = data
             else:
                 contact.pep.pop(PEPEventType.ACTIVITY, None)
 
         if properties.is_self_message:
-            if not empty:
+            if data is not None:
                 self._con.pep[PEPEventType.ACTIVITY] = data
             else:
                 self._con.pep.pop(PEPEventType.ACTIVITY, None)
