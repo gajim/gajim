@@ -415,12 +415,14 @@ def get_number_of_connected_accounts(accounts_list=None):
             connected_accounts = connected_accounts + 1
     return connected_accounts
 
-def get_connected_accounts():
+def get_connected_accounts(exclude_local=False):
     """
     Returns a list of CONNECTED accounts
     """
     account_list = []
     for account in connections:
+        if account == 'Local' and exclude_local:
+            continue
         if account_is_connected(account):
             account_list.append(account)
     return account_list
