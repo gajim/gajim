@@ -239,6 +239,7 @@ class GajimApplication(Gtk.Application):
         self._set_shortcuts()
         from gajim import gui_menu_builder
         gui_menu_builder.build_accounts_menu()
+        self.update_app_actions_state()
 
         app.ged.register_event_handler('feature-discovered',
                                        ged.CORE,
@@ -534,6 +535,13 @@ class GajimApplication(Gtk.Application):
             elif new_state and state == 'online':
                 # We go online
                 self.lookup_action(account + action_name).set_enabled(True)
+
+    def update_app_actions_state(self):
+        active_accounts = bool(app.get_connected_accounts(exclude_local=True))
+        self.lookup_action('create-groupchat').set_enabled(active_accounts)
+
+        enabled_accounts = app.contacts.get_accounts()
+        self.lookup_action('start-chat').set_enabled(enabled_accounts)
 
     def _set_shortcuts(self):
         shortcuts = {

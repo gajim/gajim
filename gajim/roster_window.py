@@ -2597,6 +2597,7 @@ class RosterWindow:
             if app.get_number_of_connected_accounts() == 0:
                 model[iter_][3] = False
             self.application.set_account_actions_state(obj.conn.name)
+            self.application.update_app_actions_state()
         else:
             # sensitivity for this menuitem
             model[iter_][3] = True
@@ -2652,6 +2653,7 @@ class RosterWindow:
 
     def _nec_signed_in(self, obj):
         self.application.set_account_actions_state(obj.conn.name, True)
+        self.application.update_app_actions_state()
         self.draw_account(obj.conn.name)
 
     def _nec_decrypted_message_received(self, obj):
