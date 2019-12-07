@@ -521,7 +521,6 @@ class AccountRow(Gtk.ListBoxRow):
             app.connections[account].change_status('offline', 'offline')
             app.connections[account].disconnect(reconnect=False)
             app.interface.disable_account(account)
-            app.config.set_per('accounts', account, 'active', False)
             switch.set_state(state)
 
         old_state = app.config.get_per('accounts', account, 'active')
@@ -547,7 +546,6 @@ class AccountRow(Gtk.ListBoxRow):
             app.interface.enable_account(account)
         else:
             app.interface.disable_account(account)
-        app.config.set_per('accounts', account, 'active', state)
 
         return Gdk.EVENT_PROPAGATE
 

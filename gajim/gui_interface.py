@@ -1762,6 +1762,7 @@ class Interface:
         self.roster.setup_and_draw_roster()
         gui_menu_builder.build_accounts_menu()
         self.roster.send_status(account, 'online', '')
+        app.config.set_per('accounts', account, 'active', True)
 
     def disable_account(self, account):
         self.roster.close_all(account, force=True)
@@ -1796,6 +1797,7 @@ class Interface:
             'accounts', account, 'roster_version', '')
         self.roster.setup_and_draw_roster()
         gui_menu_builder.build_accounts_menu()
+        app.config.set_per('accounts', account, 'active', False)
 
     def remove_account(self, account):
         # Close all opened windows
