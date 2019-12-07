@@ -62,7 +62,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self.set_focus(self._ui.address_entry)
 
     def _fill_account_combo(self, account):
-        accounts = app.get_enabled_accounts_with_labels()
+        accounts = app.get_enabled_accounts_with_labels(connected_only=True)
         account_liststore = self._ui.account_combo.get_model()
         for acc in accounts:
             account_liststore.append(acc)
