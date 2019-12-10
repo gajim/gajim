@@ -36,8 +36,8 @@ from gajim.common import helpers
 from gajim.common import jingle_xtls
 from gajim.common.file_props import FilesProp
 from gajim.common.socks5 import Socks5SenderClient
+from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
-from gajim.common.connection_handlers_events import FileRequestErrorEvent
 
 
 log = logging.getLogger('gajim.c.m.bytestream')
@@ -218,12 +218,12 @@ class Bytestream(BaseModule):
             if contact.get_full_jid() == receiver_jid:
                 file_props.error = -5
                 self.remove_transfer(file_props)
-                app.nec.push_incoming_event(FileRequestErrorEvent(
-                    None,
-                    conn=self._con,
-                    jid=contact.jid,
-                    file_props=file_props,
-                    error_msg=''))
+                app.nec.push_incoming_event(
+                    NetworkEvent('file-request-error',
+                                 conn=self._con,
+                                 jid=app.get_jid_without_resource(contact.jid),
+                                 file_props=file_props,
+                                 error_msg=''))
             sender_jid = file_props.sender
             if contact.get_full_jid() == sender_jid:
                 file_props.error = -3
@@ -273,12 +273,12 @@ class Bytestream(BaseModule):
             self._result_socks5_sid, file_props)
         if not listener:
             file_props.error = -5
-            app.nec.push_incoming_event(FileRequestErrorEvent(
-                None,
-                conn=self._con,
-                jid=receiver,
-                file_props=file_props,
-                error_msg=''))
+            app.nec.push_incoming_event(
+                NetworkEvent('file-request-error',
+                             conn=self._con,
+                             jid=app.get_jid_without_resource(receiver),
+                             file_props=file_props,
+                             error_msg=''))
             self._connect_error(file_props.sid,
                                 error='not-acceptable',
                                 error_type='modify')
@@ -524,12 +524,12 @@ class Bytestream(BaseModule):
         if msg:
             self.disconnect_transfer(file_props)
             file_props.error = -3
-            app.nec.push_incoming_event(FileRequestErrorEvent(
-                None,
-                conn=self._con,
-                jid=to,
-                file_props=file_props,
-                error_msg=msg))
+            app.nec.push_incoming_event(
+                NetworkEvent('file-request-error',
+                             conn=self._con,
+                             jid=app.get_jid_without_resource(to),
+                             file_props=file_props,
+                             error_msg=msg))
 
     def _proxy_auth_ok(self, proxy):
         """
@@ -559,12 +559,12 @@ class Bytestream(BaseModule):
         if not file_props:
             return
         file_props.error = -4
-        app.nec.push_incoming_event(FileRequestErrorEvent(
-            None,
-            conn=self._con,
-            jid=jid,
-            file_props=file_props,
-            error_msg=''))
+        app.nec.push_incoming_event(
+            NetworkEvent('file-request-error',
+                         conn=self._con,
+                         jid=app.get_jid_without_resource(jid),
+                         file_props=file_props,
+                         error_msg=''))
         raise nbxmpp.NodeProcessed
 
     def _on_bytestream_set(self, con, iq_obj):

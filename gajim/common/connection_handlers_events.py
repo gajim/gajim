@@ -168,13 +168,6 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
         self.file_props.transfered_size = []
         return True
 
-class FileRequestErrorEvent(nec.NetworkIncomingEvent):
-    name = 'file-request-error'
-
-    def generate(self):
-        self.jid = app.get_jid_without_resource(self.jid)
-        return True
-
 class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
     name = 'file-transfer-completed'
 
