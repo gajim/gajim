@@ -73,29 +73,20 @@ class StatusTable:
         self.text_label = Gtk.Label()
         self.text_label.set_line_wrap(True)
         self.text_label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
-        self.text_label.set_max_width_chars(25)
+        self.text_label.set_lines(3)
+        self.text_label.set_ellipsize(Pango.EllipsizeMode.END)
+        self.text_label.set_max_width_chars(30)
         self.text_label.set_halign(Gtk.Align.START)
         self.text_label.set_valign(Gtk.Align.START)
+        self.text_label.set_xalign(0)
         self.text_label.set_selectable(False)
-        self.text_label.set_markup(text)
+
+        self.text_label.set_text(text)
         self.table.attach(self.text_label, 1 + col_inc,
                           self.current_row,
                           3 - col_inc,
                           1)
         self.current_row += 1
-
-    @staticmethod
-    def get_status_info(resource, priority, _show, status):
-        str_status = resource + ' (' + str(priority) + ')'
-        if status:
-            status = status.strip()
-            if status != '':
-                # reduce to 100 chars, 1 line
-                status = helpers.reduce_chars_newlines(status, 100, 1)
-                str_status = GLib.markup_escape_text(str_status)
-                status = GLib.markup_escape_text(status)
-                str_status += ' - <i>' + status + '</i>'
-        return str_status
 
     def add_status_row(self, show, str_status, show_lock=False,
                        indent=True, transport=None):
@@ -113,10 +104,15 @@ class StatusTable:
             self.table.attach(spacer, 1, self.current_row, 1, 1)
         self.table.attach(image, 2, self.current_row, 1, 1)
         status_label = Gtk.Label()
-        status_label.set_markup(str_status)
+        status_label.set_text(str_status)
         status_label.set_halign(Gtk.Align.START)
         status_label.set_valign(Gtk.Align.START)
+        status_label.set_xalign(0)
         status_label.set_line_wrap(True)
+        status_label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+        status_label.set_lines(3)
+        status_label.set_ellipsize(Pango.EllipsizeMode.END)
+        status_label.set_max_width_chars(30)
         self.table.attach(status_label, 3, self.current_row, 1, 1)
         if show_lock:
             lock_image = Gtk.Image()
@@ -377,21 +373,13 @@ class RosterTooltip(StatusTable):
             for priority in contact_keys:
                 for acontact in contacts_dict[priority]:
                     show = self._get_icon_name_for_tooltip(acontact)
-                    if acontact.status and len(acontact.status) > 25:
-                        status = ''
-                        add_text = True
-                    else:
-                        status = acontact.status
-                        add_text = False
-
-                    status_line = self.get_status_info(
-                        acontact.resource,
-                        acontact.priority,
-                        acontact.show,
-                        status)
-                    self.add_status_row(show, status_line, transport=transport)
-                    if add_text:
-                        self.add_text_row(acontact.status, 2)
+                    status = acontact.status
+                    resource_line = '%s (%s)' % (acontact.resource,
+                                                 str(acontact.priority))
+                    self.add_status_row(
+                        show, resource_line, transport=transport)
+                    if status:
+                        self.add_text_row(status, 2)
 
             self._ui.tooltip_grid.attach(self.table, 1, 3, 2, 1)
             self.table.show_all()
