@@ -346,25 +346,15 @@ class RosterTooltip(StatusTable):
             return
         self.contact_jid = self.prim_contact.jid
         name = GLib.markup_escape_text(self.prim_contact.get_shown_name())
-        name_markup = '<b>{}</b>'.format(name)
+
         if app.config.get('mergeaccounts'):
             color = app.config.get('tooltip_account_name_color')
             account_name = GLib.markup_escape_text(
                 self.prim_contact.account.name)
-            name_markup += " <span foreground='{}'>({})</span>".format(
+            name += " <span foreground='{}'>({})</span>".format(
                 color, account_name)
 
-        if account and helpers.jid_is_blocked(account, self.prim_contact.jid):
-            name_markup += _(' [blocked]')
-
-        try:
-            controls = app.interface.minimized_controls[account]
-            if self.prim_contact.jid in controls:
-                name_markup += _(' [minimized]')
-        except KeyError:
-            pass
-
-        self._ui.name.set_markup(name_markup)
+        self._ui.name.set_markup(name)
         self._ui.name.show()
 
         self.num_resources = 0
