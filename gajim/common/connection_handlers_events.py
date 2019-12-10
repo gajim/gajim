@@ -168,14 +168,6 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
         self.file_props.transfered_size = []
         return True
 
-class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
-    name = 'file-transfer-completed'
-
-    def generate(self):
-        jid = str(self.file_props.receiver)
-        self.jid = app.get_jid_without_resource(jid)
-        return True
-
 class NotificationEvent(nec.NetworkIncomingEvent):
     name = 'notification'
     base_network_events = ['decrypted-message-received',

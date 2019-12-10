@@ -77,8 +77,7 @@ from gajim.common import logging_helpers
 from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
-from gajim.common.connection_handlers_events import (
-    OurShowEvent, FileTransferCompletedEvent)
+from gajim.common.connection_handlers_events import OurShowEvent
 
 from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
@@ -637,8 +636,12 @@ class Interface:
         if file_props.error == 0:
             ft.set_progress(
                 file_props.type_, file_props.sid, file_props.received_len)
+            jid = app.get_jid_without_resource(str(file_props.receiver))
             app.nec.push_incoming_event(
-                FileTransferCompletedEvent(None, file_props=file_props))
+                NetworkEvent('file-transfer-completed',
+                             file_props=file_props,
+                             jid=jid))
+
         else:
             ft.set_status(file_props, 'stop')
         if not file_props.completed and (file_props.stalled or
