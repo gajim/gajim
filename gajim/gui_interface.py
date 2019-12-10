@@ -1102,7 +1102,7 @@ class Interface:
                 self.handle_event_jingle_disconnected],
             'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
-            'jingleFT-cancelled-received': [self.handle_event_jingleft_cancel],
+            'jingle-ft-cancelled-received': [self.handle_event_jingleft_cancel],
             'message-not-sent': [self.handle_event_msgnotsent],
             'message-sent': [self.handle_event_msgsent],
             'metacontacts-received': [self.handle_event_metacontacts],

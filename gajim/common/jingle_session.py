@@ -33,13 +33,13 @@ from enum import Enum, unique
 import nbxmpp
 
 from gajim.common import app
-from gajim.common.jingle_transport import get_jingle_transport, JingleTransportIBB
-from gajim.common.jingle_content import get_jingle_content, JingleContentSetupException
+from gajim.common.jingle_transport import get_jingle_transport
+from gajim.common.jingle_transport import JingleTransportIBB
+from gajim.common.jingle_content import get_jingle_content
+from gajim.common.jingle_content import JingleContentSetupException
 from gajim.common.jingle_ft import State
-from gajim.common.connection_handlers_events import (
-    FilesProp, JingleRequestReceivedEvent, JingleDisconnectedReceivedEvent,
-    JingleTransferCancelledEvent, JingleConnectedReceivedEvent,
-    JingleErrorReceivedEvent)
+from gajim.common.connection_handlers_events import FilesProp
+from gajim.common.nec import NetworkEvent
 
 log = logging.getLogger("app.c.jingle_session")
 
@@ -469,9 +469,9 @@ class JingleSession:
             if (creator, name) in self.contents:
                 content = self.contents[(creator, name)]
                 # TODO: this will fail if content is not an RTP content
-                app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(
-                    None, conn=self.connection, jingle_session=self,
-                    media=content.media, reason='removed'))
+                self._raise_event('jingle-disconnected-received',
+                                  media=content.media,
+                                  reason='removed')
                 content.destroy()
         if not self.contents:
             reason = nbxmpp.Node('reason')
@@ -507,10 +507,7 @@ class JingleSession:
         #     self.add_content(name, content, creator)
         #     self.__content_reject(content)
         #     self.contents[(content.creator, content.name)].destroy()
-        app.nec.push_incoming_event(JingleRequestReceivedEvent(None,
-                                                                 conn=self.connection,
-                                                                 jingle_session=self,
-                                                                 contents=contents))
+        self._raise_event('jingle-request-received', contents=contents)
 
     def __on_session_initiate(self, stanza, jingle, error, action):
         """
@@ -572,10 +569,7 @@ class JingleSession:
 
         self.state = JingleStates.PENDING
         # Send event about starting a session
-        app.nec.push_incoming_event(JingleRequestReceivedEvent(None,
-                                                                 conn=self.connection,
-                                                                 jingle_session=self,
-                                                                 contents=contents[0]))
+        self._raise_event('jingle-ft-cancelled-received', contents=contents[0])
 
     def __broadcast(self, stanza, jingle, error, action):
         """
@@ -612,11 +606,9 @@ class JingleSession:
             # TODO
             text = reason
         if reason == 'cancel' and self.session_type_ft:
-            app.nec.push_incoming_event(JingleTransferCancelledEvent(None,
-                                                                       conn=self.connection,
-                                                                       jingle_session=self,
-                                                                       media=None,
-                                                                       reason=text))
+            self._raise_event('jingle-ft-cancelled-received',
+                              media=None,
+                              reason=text)
 
     def __broadcast_all(self, stanza, jingle, error, action):
         """
@@ -663,10 +655,7 @@ class JingleSession:
         if text:
             text = '%s (%s)' % (error, text)
         if type_ != 'modify':
-            app.nec.push_incoming_event(JingleErrorReceivedEvent(None,
-                                                                   conn=self.connection,
-                                                                   jingle_session=self,
-                                                                   reason=text or error))
+            self._raise_event('jingle-error-received', reason=text or error)
 
     @staticmethod
     def __reason_from_stanza(stanza):
@@ -781,11 +770,9 @@ class JingleSession:
         else:
             text = reason
         self.connection.get_module('Jingle').delete_jingle_session(self.sid)
-        app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
-                                                                      conn=self.connection,
-                                                                      jingle_session=self,
-                                                                      media=None,
-                                                                      reason=text))
+        self._raise_event('jingle-disconnected-received',
+                          media=None,
+                          reason=text)
 
     def __content_add(self, content):
         # TODO: test
@@ -811,11 +798,9 @@ class JingleSession:
         self.__append_content(jingle, content)
         self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content
-        app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
-                                                                      conn=self.connection,
-                                                                      jingle_session=self,
-                                                                      media=content.media,
-                                                                      reason='rejected'))
+        self._raise_event('jingle-disconnected-received',
+                          media=content.media,
+                          reason='rejected')
 
     def __content_modify(self):
         assert self.state != JingleStates.ENDED
@@ -827,17 +812,12 @@ class JingleSession:
             self.__append_content(jingle, content)
             self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content
-        app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
-                                                                      conn=self.connection,
-                                                                      jingle_session=self,
-                                                                      media=content.media,
-                                                                      reason='removed'))
+        self._raise_event('jingle-disconnected-received',
+                          media=content.media,
+                          reason='removed')
 
     def content_negotiated(self, media):
-        app.nec.push_incoming_event(JingleConnectedReceivedEvent(None,
-                                                                   conn=self.connection,
-                                                                   jingle_session=self,
-                                                                   media=media))
+        self._raise_event('jingle-connected-received', media=media)
 
     def __transport_accept(self, transport):
         assert self.state != JingleStates.ENDED
@@ -847,3 +827,15 @@ class JingleSession:
         self.connection.connection.send(stanza)
         self.collect_iq_id(stanza.getID())
         self.state = JingleStates.ACTIVE
+
+    def _raise_event(self, name, **kwargs):
+        jid, resource = app.get_room_and_nick_from_fjid(self.peerjid)
+        app.nec.push_incoming_event(
+            NetworkEvent(name,
+                         conn=self.connection,
+                         fjid=self.peerjid,
+                         jid=jid,
+                         sid=self.sid,
+                         resource=resource,
+                         jingle_session=self,
+                         **kwargs))

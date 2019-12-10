@@ -57,51 +57,6 @@ class OurShowEvent(nec.NetworkIncomingEvent):
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
 
-class JingleRequestReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'jingle-request-received'
-
-    def generate(self):
-        self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
-        self.sid = self.jingle_session.sid
-        return True
-
-class JingleConnectedReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'jingle-connected-received'
-
-    def generate(self):
-        self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
-        self.sid = self.jingle_session.sid
-        return True
-
-class JingleDisconnectedReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'jingle-disconnected-received'
-
-    def generate(self):
-        self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
-        self.sid = self.jingle_session.sid
-        return True
-
-class JingleTransferCancelledEvent(nec.NetworkIncomingEvent):
-    name = 'jingleFT-cancelled-received'
-
-    def generate(self):
-        self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
-        self.sid = self.jingle_session.sid
-        return True
-
-class JingleErrorReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'jingle-error-received'
-
-    def generate(self):
-        self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
-        self.sid = self.jingle_session.sid
-        return True
-
 class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
     name = 'new-account-connected'
 
