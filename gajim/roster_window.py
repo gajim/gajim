@@ -5357,7 +5357,9 @@ class RosterWindow:
 
     def query_tooltip(self, widget, x_pos, y_pos, _keyboard_mode, tooltip):
         try:
-            row = widget.get_path_at_pos(x_pos, y_pos)[0]
+            path = widget.get_path_at_pos(x_pos, y_pos)
+            row = path[0]
+            col = path[1]
         except TypeError:
             self._roster_tooltip.clear_tooltip()
             return False
@@ -5377,6 +5379,15 @@ class RosterWindow:
         account = model[iter_][Column.ACCOUNT]
         jid = model[iter_][Column.JID]
         connected_contacts = []
+
+        if typ == 'group':
+            if jid == _('Observers'):
+                widget.set_tooltip_cell(tooltip, row, col, None)
+                tooltip.set_text(
+                    _('Observers can see your status, but you '
+                      'are not allowed to see theirs'))
+                return True
+            return False
 
         if typ in ('contact', 'self_contact'):
             contacts = app.contacts.get_contacts(account, jid)
