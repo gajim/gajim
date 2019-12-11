@@ -385,7 +385,14 @@ class RosterTooltip(StatusTable):
             self.table.show_all()
 
         else:  # only one resource
-            if contact.show and contact.status:
+            if contact.is_groupchat:
+                disco_info = app.logger.get_last_disco_info(contact.jid)
+                if disco_info is not None:
+                    description = disco_info.muc_description
+                    if description:
+                        self._ui.status.set_text(description)
+                        self._ui.status.show()
+            elif contact.show and contact.status:
                 status = contact.status.strip()
                 if status:
                     self._ui.status.set_text(status)
