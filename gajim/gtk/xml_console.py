@@ -116,6 +116,9 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_key_press_event(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
+            if self._ui.search_revealer.get_child_revealed():
+                self._ui.search_revealer.set_reveal_child(False)
+                return
             self.destroy()
         if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Return or
