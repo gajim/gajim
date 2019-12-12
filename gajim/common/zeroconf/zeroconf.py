@@ -48,9 +48,7 @@ def test_avahi():
 def test_bonjour():
     try:
         import pybonjour  # pylint: disable=unused-import
-    except ImportError:
-        return False
-    except WindowsError: # pylint: disable=undefined-variable
+    except Exception:
         return False
     return True
 
