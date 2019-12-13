@@ -33,20 +33,24 @@ from gajim.gtk.util import make_href_markup
 
 
 MUC_FEATURES = {
-    'mam': (
-        'feather-server-symbolic',
-        Q_('?Group chat feature:Archiving'),
-        _('Messages are archived on the server')),
-    'muc_persistent': (
-        'feather-hard-drive-symbolic',
-        Q_('?Group chat feature:Persistent'),
-        _('This group chat persists '
-          'even if there are no participants')),
-    'muc_temporary': (
-        'feather-clock-symbolic',
-        Q_('?Group chat feature:Temporary'),
-        _('This group chat will be destroyed '
-          'once the last participant left')),
+    'muc_open': (
+        'feather-globe-symbolic',
+        Q_('?Group chat feature:Open'),
+        _('Anyone can join this group chat')),
+    'muc_membersonly': (
+        'feather-user-check-symbolic',
+        Q_('?Group chat feature:Members Only'),
+        _('This group chat is restricted '
+          'to members only')),
+    'muc_nonanonymous': (
+        'feather-shield-off-symbolic',
+        Q_('?Group chat feature:Not Anonymous'),
+        _('All other group chat participants '
+          'can see your XMPP address')),
+    'muc_semianonymous': (
+        'feather-shield-symbolic',
+        Q_('?Group chat feature:Semi-Anonymous'),
+        _('Only moderators can see your XMPP address')),
     'muc_moderated': (
         'feather-mic-off-symbolic',
         Q_('?Group chat feature:Moderated'),
@@ -57,15 +61,6 @@ MUC_FEATURES = {
         Q_('?Group chat feature:Not Moderated'),
         _('Participants entering this group chat are '
           'allowed to send messages')),
-    'muc_open': (
-        'feather-globe-symbolic',
-        Q_('?Group chat feature:Open'),
-        _('Anyone can join this group chat')),
-    'muc_membersonly': (
-        'feather-user-check-symbolic',
-        Q_('?Group chat feature:Members Only'),
-        _('This group chat is restricted '
-          'to members only')),
     'muc_public': (
         'feather-eye-symbolic',
         Q_('?Group chat feature:Public'),
@@ -74,15 +69,6 @@ MUC_FEATURES = {
         'feather-eye-off-symbolic',
         Q_('?Group chat feature:Hidden'),
         _('This group chat can not be found via search')),
-    'muc_nonanonymous': (
-        'feather-shield-off-symbolic',
-        Q_('?Group chat feature:Not Anonymous'),
-        _('All other group chat participants '
-          'can see your XMPP address')),
-    'muc_semianonymous': (
-        'feather-shield-symbolic',
-        Q_('?Group chat feature:Semi-Anonymous'),
-        _('Only moderators can see your XMPP address')),
     'muc_passwordprotected': (
         'feather-lock-symbolic',
         Q_('?Group chat feature:Password Required'),
@@ -93,6 +79,20 @@ MUC_FEATURES = {
         Q_('?Group chat feature:No Password Required'),
         _('This group chat does not require '
           'a password upon entry')),
+    'muc_persistent': (
+        'feather-hard-drive-symbolic',
+        Q_('?Group chat feature:Persistent'),
+        _('This group chat persists '
+          'even if there are no participants')),
+    'muc_temporary': (
+        'feather-clock-symbolic',
+        Q_('?Group chat feature:Temporary'),
+        _('This group chat will be destroyed '
+          'once the last participant left')),
+    'mam': (
+        'feather-server-symbolic',
+        Q_('?Group chat feature:Archiving'),
+        _('Messages are archived on the server')),
 }
 
 
@@ -211,13 +211,16 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
             features.append('mam')
 
         row = 10
-        for feature in features:
-            icon, name, tooltip = MUC_FEATURES.get(feature, (None, None, None))
-            if icon is None:
-                continue
-            grid.attach(self._get_feature_icon(icon, tooltip), 0, row, 1, 1)
-            grid.attach(self._get_feature_label(name), 1, row, 1, 1)
-            row += 1
+
+        for feature in MUC_FEATURES:
+            if feature in features:
+                icon, name, tooltip = MUC_FEATURES.get(feature,
+                                                       (None, None, None))
+                if icon is None:
+                    continue
+                grid.attach(self._get_feature_icon(icon, tooltip), 0, row, 1, 1)
+                grid.attach(self._get_feature_label(name), 1, row, 1, 1)
+                row += 1
         grid.show_all()
 
     @staticmethod
