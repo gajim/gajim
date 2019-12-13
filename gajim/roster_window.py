@@ -1205,17 +1205,23 @@ class RosterWindow:
 
         # add status msg, if not empty, under contact name in
         # the treeview
-        if contact.status and app.config.get('show_status_msgs_in_roster'):
-            status = contact.status.strip()
-            if status != '':
-                status = helpers.reduce_chars_newlines(status,
-                    max_lines=1)
-                # escape markup entities and make them small
-
-                # italic
-                name += ('\n<span size="small" style="italic" '
-                         'alpha="70%">{}</span>'.format(
-                            GLib.markup_escape_text(status)))
+        if app.config.get('show_status_msgs_in_roster'):
+            status_span = '\n<span size="small" style="italic" ' \
+                          'alpha="70%">{}</span>'
+            if contact.is_groupchat:
+                disco_info = app.logger.get_last_disco_info(contact.jid)
+                if disco_info is not None:
+                    description = disco_info.muc_description
+                    if description:
+                        name += status_span.format(
+                            GLib.markup_escape_text(description))
+            elif contact.status:
+                status = contact.status.strip()
+                if status != '':
+                    status = helpers.reduce_chars_newlines(
+                        status, max_lines=1)
+                    name += status_span.format(
+                        GLib.markup_escape_text(status))
 
         icon_name = helpers.get_icon_name_to_show(contact, account)
         # look if another resource has awaiting events
