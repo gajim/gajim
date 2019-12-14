@@ -279,7 +279,6 @@ class Presence(BaseModule):
 
     def _subscribed_received(self, _con, _stanza, properties):
         jid = properties.jid.getBare()
-        resource = properties.jid.getResource()
         self._log.info('Received Subscribed: %s', properties.jid)
         if jid in self.automatically_added:
             self.automatically_added.remove(jid)
@@ -287,7 +286,8 @@ class Presence(BaseModule):
 
         app.nec.push_incoming_event(NetworkEvent(
             'subscribed-presence-received',
-            conn=self._con, jid=jid, resource=resource))
+            account=self._account,
+            jid=properties.jid))
         raise nbxmpp.NodeProcessed
 
     def _unsubscribe_received(self, _con, _stanza, properties):

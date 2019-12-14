@@ -357,9 +357,10 @@ class GajimRemote(Server):
         self.raise_signal('Subscribe', (obj.conn.name, [obj.jid, obj.status,
             obj.user_nick]))
 
-    def on_subscribed_presence_received(self, obj):
-        self.raise_signal('Subscribed', (obj.conn.name, [obj.jid,
-            obj.resource]))
+    def on_subscribed_presence_received(self, event):
+        self.raise_signal('Subscribed', (event.account,
+                                         [event.jid.getBare(),
+                                          event.jid.getResource()]))
 
     def on_unsubscribed_presence_received(self, obj):
         self.raise_signal('Unsubscribed', (obj.conn.name, obj.jid))

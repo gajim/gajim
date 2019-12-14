@@ -320,25 +320,39 @@ class Interface:
                 event_type, obj.jid, account, 'subscription_request',
                 'gajim-subscription_request', event_type, obj.jid)
 
-    def handle_event_subscribed_presence(self, obj):
-        #('SUBSCRIBED', account, (jid, resource))
-        account = obj.conn.name
-        if obj.jid in app.contacts.get_jid_list(account):
-            c = app.contacts.get_first_contact_from_jid(account, obj.jid)
-            c.resource = obj.resource
-            self.roster.remove_contact_from_groups(c.jid, account,
-                [_('Not in contact list'), _('Observers')], update=False)
+    def handle_event_subscribed_presence(self, event):
+        bare_jid = event.jid.getBare()
+        resource = event.jid.getResource()
+        if bare_jid in app.contacts.get_jid_list(event.account):
+            contact = app.contacts.get_first_contact_from_jid(event.account,
+                                                              bare_jid)
+            contact.resource = resource
+            self.roster.remove_contact_from_groups(contact.jid,
+                                                   event.account,
+                                                   [_('Not in contact list'),
+                                                    _('Observers')],
+                                                   update=False)
         else:
-            name = obj.jid.split('@', 1)[0]
+            name = event.jid.getNode()
             name = name.split('%', 1)[0]
-            contact1 = app.contacts.create_contact(jid=obj.jid,
-                account=account, name=name, groups=[], show='online',
-                status='online', ask='to', resource=obj.resource)
-            app.contacts.add_contact(account, contact1)
-            self.roster.add_contact(obj.jid, account)
-        InformationDialog(_('Authorization accepted'),
-            _('The contact "%s" has authorized you to see their status.')
-            % obj.jid)
+            contact = app.contacts.create_contact(jid=bare_jid,
+                                                  account=event.account,
+                                                  name=name,
+                                                  groups=[],
+                                                  show='online',
+                                                  status='online',
+                                                  ask='to',
+                                                  resource=resource)
+            app.contacts.add_contact(event.account, contact)
+            self.roster.add_contact(bare_jid, event.account)
+
+        app.notification.popup(
+            None,
+            bare_jid,
+            event.account,
+            title=_('Authorization accepted'),
+            text=_('The contact "%s" has authorized you'
+                   ' to see their status.') % event.jid)
 
     def show_unsubscribed_dialog(self, account, contact):
         def _remove():
