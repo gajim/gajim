@@ -76,6 +76,7 @@ from gajim.common.const import ShowConstant
 from gajim.common.const import Display
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
+from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.structs import URI
 
 if app.is_installed('PYCURL'):
@@ -1697,3 +1698,10 @@ def is_role_change_allowed(self_contact, contact):
     if self_contact.role < Role.MODERATOR:
         return False
     return self_contact.affiliation >= contact.affiliation
+
+
+def get_tls_error_phrase(tls_error):
+    phrase = GIO_TLS_ERRORS.get(tls_error)
+    if phrase is None:
+        return GIO_TLS_ERRORS.get(Gio.TlsCertificateFlags.GENERIC_ERROR)
+    return phrase

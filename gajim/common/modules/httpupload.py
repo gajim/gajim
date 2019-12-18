@@ -16,30 +16,24 @@
 
 
 import os
-import sys
-import threading
-import ssl
-import urllib
-from urllib.request import Request, urlopen
-from urllib.parse import urlparse
 import io
+from urllib.parse import urlparse
 import mimetypes
 
 import nbxmpp
 from nbxmpp import NS_HTTPUPLOAD
 from gi.repository import GLib
+from gi.repository import Soup
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.helpers import get_tls_error_phrase
 from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import InformationEvent
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
-
-if sys.platform in ('win32', 'darwin'):
-    import certifi
 
 NS_HTTPUPLOAD_0 = NS_HTTPUPLOAD + ':0'
 
@@ -51,14 +45,19 @@ class HTTPUpload(BaseModule):
         self.available = False
         self.component = None
         self.httpupload_namespace = None
-        self._allowed_headers = ['Authorization', 'Cookie', 'Expires']
         self.max_file_size = None  # maximum file size in bytes
-        self.messages = []
+
+        self._allowed_headers = ['Authorization', 'Cookie', 'Expires']
+        self._text = []
+        self._queued_messages = {}
+        self._session = Soup.Session()
+        self._session.props.ssl_strict = False
+        self._session.props.user_agent = 'Gajim %s' % app.version
 
         # pylint: disable=line-too-long
         self.register_events([
-            ('stanza-message-outgoing', ged.OUT_PREGUI, self.handle_outgoing_stanza),
-            ('gc-stanza-message-outgoing', ged.OUT_PREGUI, self.handle_outgoing_stanza),
+            ('stanza-message-outgoing', ged.OUT_PREGUI, self._handle_outgoing_stanza),
+            ('gc-stanza-message-outgoing', ged.OUT_PREGUI, self._handle_outgoing_stanza),
         ])
         # pylint: enable=line-too-long
 
@@ -98,17 +97,17 @@ class HTTPUpload(BaseModule):
         for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
             ctrl.update_actions()
 
-    def handle_outgoing_stanza(self, event):
+    def _handle_outgoing_stanza(self, event):
         if event.conn.name != self._account:
             return
-        message = event.msg_iq.getTagData('body')
-        if message and message in self.messages:
-            self.messages.remove(message)
+        body = event.msg_iq.getTagData('body')
+        if body and body in self._text:
+            self._text.remove(body)
             # Add oob information before sending message to recipient,
             #  to distinguish HTTP File Upload Link from pasted URL
             oob = event.msg_iq.addChild('x', namespace=nbxmpp.NS_X_OOB)
-            oob.addChild('url').setData(message)
-            event.additional_data.set_value('gajim', 'oob_url', message)
+            oob.addChild('url').setData(body)
+            event.additional_data.set_value('gajim', 'oob_url', body)
 
     def check_file_before_transfer(self, path, encryption, contact, session,
                                    groupchat=False):
@@ -135,7 +134,7 @@ class HTTPUpload(BaseModule):
                     'maximum allowed file size is: %s') % size
 
         if invalid_file:
-            self.raise_information_event('open-file-error2', msg)
+            self._raise_information_event('open-file-error2', msg)
             return
 
         mime = mimetypes.MimeTypes().guess_type(path)[0]
@@ -144,13 +143,17 @@ class HTTPUpload(BaseModule):
         self._log.info("Detected MIME type of file: %s", mime)
 
         try:
-            file = File(path, contact, mime=mime, encryption=encryption,
-                        update_progress=self.raise_progress_event,
-                        session=session, groupchat=groupchat)
+            file = File(path,
+                        contact,
+                        self._account,
+                        mime,
+                        encryption,
+                        session,
+                        groupchat)
             app.interface.show_httpupload_progress(file)
         except Exception as error:
             self._log.exception('Error while loading file')
-            self.raise_information_event('open-file-error2', str(error))
+            self._raise_information_event('open-file-error2', str(error))
             return
 
         if encryption is not None:
@@ -158,18 +161,24 @@ class HTTPUpload(BaseModule):
         else:
             self._request_slot(file)
 
+    def cancel_upload(self, file):
+        message = self._queued_messages.get(id(file))
+        if message is None:
+            return
+        self._session.cancel_message(message, Soup.Status.CANCELLED)
+
     @staticmethod
-    def raise_progress_event(status, file, seen=None, total=None):
+    def _raise_progress_event(status, file, seen=None, total=None):
         app.nec.push_incoming_event(HTTPUploadProgressEvent(
             None, status=status, file=file, seen=seen, total=total))
 
     @staticmethod
-    def raise_information_event(dialog_name, args=None):
+    def _raise_information_event(dialog_name, args=None):
         app.nec.push_incoming_event(InformationEvent(
             None, dialog_name=dialog_name, args=args))
 
     def _request_slot(self, file):
-        GLib.idle_add(self.raise_progress_event, 'request', file)
+        GLib.idle_add(self._raise_progress_event, 'request', file)
         iq = self._build_request(file)
         self._log.info("Sending request for slot")
         self._con.connection.SendAndCallForResponse(
@@ -196,7 +205,7 @@ class HTTPUpload(BaseModule):
         return iq
 
     @staticmethod
-    def get_slot_error_message(stanza):
+    def _get_slot_error_message(stanza):
         tmp = stanza.getTag('error').getTag('file-too-large')
 
         if tmp is not None:
@@ -210,20 +219,20 @@ class HTTPUpload(BaseModule):
     def _received_slot(self, _con, stanza, file):
         self._log.info("Received slot")
         if stanza.getType() == 'error':
-            self.raise_progress_event('close', file)
-            self.raise_information_event('request-upload-slot-error',
-                                         self.get_slot_error_message(stanza))
+            self._raise_progress_event('close', file)
+            self._raise_information_event('request-upload-slot-error',
+                                          self._get_slot_error_message(stanza))
             self._log.error(stanza)
             return
 
         try:
             if self.httpupload_namespace == NS_HTTPUPLOAD:
-                file.put = stanza.getTag('slot').getTag('put').getData()
-                file.get = stanza.getTag('slot').getTag('get').getData()
+                file.put_uri = stanza.getTag('slot').getTag('put').getData()
+                file.get_uri = stanza.getTag('slot').getTag('get').getData()
             else:
                 slot = stanza.getTag('slot')
-                file.put = slot.getTagAttr('put', 'url')
-                file.get = slot.getTagAttr('get', 'url')
+                file.put_uri = slot.getTagAttr('put', 'url')
+                file.get_uri = slot.getTagAttr('get', 'url')
                 for header in slot.getTag('put').getTags('header'):
                     name = header.getAttr('name')
                     if name not in self._allowed_headers:
@@ -231,178 +240,228 @@ class HTTPUpload(BaseModule):
                     data = header.getData()
                     if '\n' in data:
                         raise ValueError('Newline in header data')
-                    file.headers[name] = data
+                    file.append_header(name, data)
         except Exception:
             self._log.error("Got invalid stanza: %s", stanza)
             self._log.exception('Error')
-            self.raise_progress_event('close', file)
-            self.raise_information_event('request-upload-slot-error2')
+            self._raise_progress_event('close', file)
+            self._raise_information_event('request-upload-slot-error2')
             return
 
-        if (urlparse(file.put).scheme != 'https' or
-                urlparse(file.get).scheme != 'https'):
-            self.raise_progress_event('close', file)
-            self.raise_information_event('unsecure-error')
+        if (urlparse(file.put_uri).scheme != 'https' or
+                urlparse(file.get_uri).scheme != 'https'):
+            self._raise_progress_event('close', file)
+            self._raise_information_event('unsecure-error')
             return
 
-        try:
-            file.stream = StreamFileWithProgress(file)
-        except Exception:
-            self._log.exception('Error')
-            self.raise_progress_event('close', file)
-            self.raise_information_event('open-file-error')
-            return
+        self._log.info('Uploading file to %s', file.put_uri)
+        self._log.info('Please download from %s', file.get_uri)
 
-        self._log.info('Uploading file to %s', file.put)
-        self._log.info('Please download from %s', file.get)
-
-        thread = threading.Thread(target=self._upload_file, args=(file,))
-        thread.daemon = True
-        thread.start()
+        self._upload_file(file)
 
     def _upload_file(self, file):
-        GLib.idle_add(self.raise_progress_event, 'upload', file)
-        try:
-            file.headers['User-Agent'] = 'Gajim %s' % app.version
-            file.headers['Content-Type'] = file.mime
-            file.headers['Content-Length'] = file.size
+        self._raise_progress_event('upload', file)
 
-            request = Request(
-                file.put, data=file.stream, headers=file.headers, method='PUT')
-            self._log.info("Opening Urllib upload request...")
+        message = Soup.Message.new('PUT', file.put_uri)
+        message.connect('starting', self._check_certificate)
 
-            if not app.config.get_per(
-                    'accounts', self._account, 'httpupload_verify'):
-                context = ssl.create_default_context()
-                context.check_hostname = False
-                context.verify_mode = ssl.CERT_NONE
-                self._log.warning('CERT Verification disabled')
-                transfer = urlopen(request, timeout=30, context=context)
-            else:
-                if sys.platform in ('win32', 'darwin'):
-                    transfer = urlopen(
-                        request, cafile=certifi.where(), timeout=30)
-                else:
-                    transfer = urlopen(request, timeout=30)
-            file.stream.close()
-            self._log.info('Urllib upload request done, response code: %s',
-                           transfer.getcode())
-            GLib.idle_add(self._upload_complete, transfer.getcode(), file)
+        # Set CAN_REBUILD so chunks get discarded after they are beeing
+        # written to the network
+        message.set_flags(Soup.MessageFlags.CAN_REBUILD)
+        message.props.request_body.set_accumulate(False)
+
+        message.props.request_headers.set_content_type(file.mime, None)
+        message.props.request_headers.set_content_length(file.size)
+        for name, value in file.headers:
+            message.props.request_headers.append(name, value)
+
+        message.connect('wrote-headers', self._on_wrote_headers, file)
+        message.connect('wrote-chunk', self._on_wrote_chunk, file)
+
+        self._queued_messages[id(file)] = message
+        self._session.queue_message(message, self._on_finish, file)
+
+    def _check_certificate(self, message):
+        https_used, _tls_certificate, tls_errors = message.get_https_status()
+        if not https_used:
+            self._log.warning('HTTPS was not used for upload')
+            self._session.cancel_message(message, Soup.Status.CANCELLED)
             return
-        except UploadAbortedException as exc:
-            self._log.info(exc)
-            error_msg = exc
-        except urllib.error.URLError as exc:
-            if isinstance(exc.reason, ssl.SSLError):
-                error_msg = exc.reason.reason
-                if error_msg == 'CERTIFICATE_VERIFY_FAILED':
-                    self._log.exception('Certificate verify failed')
-            else:
-                self._log.exception('URLError')
-                error_msg = exc.reason
-        except Exception as exc:
-            self._log.exception("Exception during upload")
-            error_msg = exc
-        GLib.idle_add(self.raise_progress_event, 'close', file)
-        GLib.idle_add(self._on_upload_error, file, error_msg)
 
-    def _upload_complete(self, response_code, file):
-        self.raise_progress_event('close', file)
-        if 200 <= response_code < 300:
-            self._log.info("Upload completed successfully")
-            message = file.get
-            if file.user_data:
-                message += '#' + file.user_data
-                message = self.convert_to_aegscm(message)
-            else:
-                self.messages.append(message)
+        if not app.config.get_per('accounts',
+                                  self._account,
+                                  'httpupload_verify'):
+            return
 
-            if file.groupchat:
+        if tls_errors:
+            phrase = get_tls_error_phrase(tls_errors)
+            self._log.warning('TLS verification failed: %s')
+            self._session.cancel_message(message, Soup.Status.CANCELLED)
+            self._raise_information_event('httpupload-error', phrase)
+            return
+
+    def _on_finish(self, _session, message, file):
+        self._raise_progress_event('close', file)
+
+        self._queued_messages.pop(id(file), None)
+        file.set_finished()
+
+        if message.props.status_code == Soup.Status.CANCELLED:
+            self._log.info('Upload cancelled')
+            return
+
+        if message.props.status_code in (Soup.Status.OK, Soup.Status.CREATED):
+            self._log.info('Upload completed successfully')
+            uri = file.get_transformed_uri()
+            self._text.append(uri)
+
+            if file.is_groupchat:
                 app.nec.push_outgoing_event(GcMessageOutgoingEvent(
                     None, account=self._account, jid=file.contact.jid,
-                    message=message, automatic_message=False,
+                    message=uri, automatic_message=False,
                     session=file.session))
             else:
                 app.nec.push_outgoing_event(MessageOutgoingEvent(
                     None, account=self._account, jid=file.contact.jid,
-                    message=message, type_='chat',
+                    message=uri, type_='chat',
                     automatic_message=False, session=file.session))
 
         else:
+            phrase = Soup.Status.get_phrase(message.props.status_code)
             self._log.error('Got unexpected http upload response code: %s',
-                            response_code)
-            self.raise_information_event('httpupload-response-error',
-                                         response_code)
+                            phrase)
+            self._raise_information_event('httpupload-response-error', phrase)
 
-    def _on_upload_error(self, file, reason):
-        self.raise_progress_event('close', file)
-        self.raise_information_event('httpupload-error', str(reason))
+    def _on_wrote_chunk(self, message, file):
+        self._raise_progress_event('update', file, file.seen, file.size)
+        if file.is_complete:
+            message.props.request_body.complete()
+            return
+
+        bytes_ = file.get_chunk()
+        self._session.pause_message(message)
+        GLib.idle_add(self._append, message, bytes_)
+
+    def _append(self, message, bytes_):
+        if message.props.status_code == Soup.Status.CANCELLED:
+            return
+        self._session.unpause_message(message)
+        message.props.request_body.append(bytes_)
 
     @staticmethod
-    def convert_to_aegscm(url):
-        return 'aesgcm' + url[5:]
+    def _on_wrote_headers(message, file):
+        message.props.request_body.append(file.get_chunk())
 
 
 class File:
-    def __init__(self, path, contact, **kwargs):
-        for key, val in kwargs.items():
-            setattr(self, key, val)
-        self.encrypted = False
-        self.contact = contact
-        self.stream = None
-        self.path = path
-        self.put = None
-        self.get = None
-        self.data = None
-        self.user_data = None
-        self.size = None
-        self.headers = {}
-        self.event = threading.Event()
-        self.load_data()
+    def __init__(self,
+                 path,
+                 contact,
+                 account,
+                 mime,
+                 encryption,
+                 session,
+                 groupchat):
 
-    def load_data(self):
-        with open(self.path, 'rb') as content:
-            self.data = content.read()
-        self.size = len(self.data)
+        self._path = path
+        self._encryption = encryption
+        self._groupchat = groupchat
+        self._contact = contact
+        self._account = account
+        self._mime = mime
+        self._session = session
 
-    def get_data(self, full=False):
-        if full:
-            return io.BytesIO(self.data).getvalue()
-        return io.BytesIO(self.data)
+        self.size = os.stat(path).st_size
+        self.put_uri = None
+        self.get_uri = None
+        self._uri_transform_func = None
 
-
-class StreamFileWithProgress:
-    def __init__(self, file):
-        self.file = file
-        self.event = file.event
-        self.backing = file.get_data()
-        self.backing.seek(0, os.SEEK_END)
-        self._total = self.backing.tell()
-        self.backing.seek(0)
-        self._callback = file.update_progress
+        self._stream = None
+        self._data = None
         self._seen = 0
+        self._headers = {}
 
-    def __len__(self):
-        return self._total
+    @property
+    def account(self):
+        return self._account
 
-    def read(self, size):
-        if self.event.isSet():
-            raise UploadAbortedException
+    @property
+    def mime(self):
+        return self._mime
 
-        data = self.backing.read(size)
+    @property
+    def contact(self):
+        return self._contact
+
+    @property
+    def session(self):
+        return self._session
+
+    @property
+    def is_groupchat(self):
+        return self._groupchat
+
+    @property
+    def encryption(self):
+        return self._encryption
+
+    @property
+    def headers(self):
+        return self._headers
+
+    def get_transformed_uri(self):
+        if self._uri_transform_func is not None:
+            return self._uri_transform_func(self.get_uri)
+        return self.get_uri
+
+    @property
+    def seen(self):
+        return self._seen
+
+    @property
+    def path(self):
+        return self._path
+
+    @property
+    def is_complete(self):
+        return self._seen >= self.size
+
+    def append_header(self, name, value):
+        self._headers[name] = value
+
+    def set_uri_transform_func(self, func):
+        self._uri_transform_func = func
+
+    def set_finished(self):
+        self._close()
+
+    def set_encrypted_data(self, data):
+        self._data = data
+
+    def _close(self):
+        if self._stream is not None:
+            self._stream.close()
+
+    def get_chunk(self):
+        if self._stream is None:
+            if self._encryption is None:
+                self._stream = open(self._path, 'rb')
+            else:
+                self._stream = io.BytesIO(self._data)
+
+        data = self._stream.read(16384)
+        if not data:
+            self._close()
+            return None
         self._seen += len(data)
-        if self._callback:
-            GLib.idle_add(self._callback, 'update',
-                          self.file, self._seen, self._total)
+        if self.is_complete:
+            self._close()
         return data
 
-    def close(self):
-        return self.backing.close()
-
-
-class UploadAbortedException(Exception):
-    def __str__(self):
-        return "Upload Aborted"
+    def get_data(self):
+        with open(self._path, 'rb') as file:
+            data = file.read()
+        return data
 
 
 class HTTPUploadProgressEvent(NetworkIncomingEvent):

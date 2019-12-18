@@ -36,22 +36,22 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_show_menubar(False)
         self.set_title(_('File Transfer'))
 
-        self.event = file.event
-        self.file = file
+        self._destroyed = False
+        self._con = app.connections[file.account]
+        self._file = file
 
         if app.config.get('use_kib_mib'):
-            self.units = GLib.FormatSizeFlags.IEC_UNITS
+            self._units = GLib.FormatSizeFlags.IEC_UNITS
         else:
-            self.units = GLib.FormatSizeFlags.DEFAULT
-        file_name = os.path.basename(file.path)
+            self._units = GLib.FormatSizeFlags.DEFAULT
 
         self._start_time = time.time()
 
         self._ui = get_builder('httpupload_progress_dialog.ui')
-        self._ui.file_name_label.set_text(file_name)
+        self._ui.file_name_label.set_text(os.path.basename(file.path))
         self.add(self._ui.box)
 
-        self.pulse = GLib.timeout_add(100, self._pulse_progressbar)
+        self._pulse = GLib.timeout_add(100, self._pulse_progressbar)
         self.show_all()
 
         self.connect('destroy', self._on_destroy)
@@ -62,7 +62,7 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         ])
 
     def _on_httpupload_progress(self, obj):
-        if self.file != obj.file:
+        if self._file != obj.file:
             return
 
         if obj.status == 'request':
@@ -84,23 +84,25 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self.destroy()
 
     def _on_destroy(self, *args):
-        self.event.set()
-        if self.pulse:
-            GLib.source_remove(self.pulse)
+        self._con.get_module('HTTPUpload').cancel_upload(self._file)
+        self._destroyed = True
+        self._file = None
+        if self._pulse is not None:
+            GLib.source_remove(self._pulse)
 
     def _update_progress(self, seen, total):
-        if self.event.isSet():
+        if self._destroyed:
             return
-        if self.pulse:
-            GLib.source_remove(self.pulse)
-            self.pulse = None
+        if self._pulse is not None:
+            GLib.source_remove(self._pulse)
+            self._pulse = None
 
         time_now = time.time()
         bytes_sec = round(seen / (time_now - self._start_time), 1)
 
-        size_progress = GLib.format_size_full(seen, self.units)
-        size_total = GLib.format_size_full(total, self.units)
-        speed = '%s/s' % GLib.format_size_full(bytes_sec, self.units)
+        size_progress = GLib.format_size_full(seen, self._units)
+        size_total = GLib.format_size_full(total, self._units)
+        speed = '%s/s' % GLib.format_size_full(bytes_sec, self._units)
 
         if bytes_sec == 0:
             eta = '∞'

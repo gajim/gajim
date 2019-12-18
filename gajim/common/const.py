@@ -1,6 +1,8 @@
 from enum import IntEnum, Enum, unique
 from collections import namedtuple
 
+from gi.repository import Gio
+
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
@@ -815,3 +817,15 @@ RFC5646_LANGUAGE_TAGS = {
     'zu': 'Zulu',
     'zu-ZA': 'Zulu (South Africa)'
 }
+
+# pylint: disable=line-too-long
+GIO_TLS_ERRORS = {
+    Gio.TlsCertificateFlags.UNKNOWN_CA: _('The signing certificate authority is not known'),
+    Gio.TlsCertificateFlags.REVOKED: _('The certificate has been revoked'),
+    Gio.TlsCertificateFlags.BAD_IDENTITY: _('The certificate does not match the expected identity of the site'),
+    Gio.TlsCertificateFlags.INSECURE: _('The certificate’s algorithm is insecure'),
+    Gio.TlsCertificateFlags.NOT_ACTIVATED: _('The certificate’s activation time is in the future'),
+    Gio.TlsCertificateFlags.GENERIC_ERROR: _('Unknown validation error'),
+    Gio.TlsCertificateFlags.EXPIRED: _('The certificate has expired'),
+}
+# pylint: enable=line-too-long
