@@ -109,7 +109,7 @@ class HTTPUpload(BaseModule):
             oob.addChild('url').setData(body)
             event.additional_data.set_value('gajim', 'oob_url', body)
 
-    def check_file_before_transfer(self, path, encryption, contact, session,
+    def check_file_before_transfer(self, path, encryption, contact,
                                    groupchat=False):
         if not path or not os.path.exists(path):
             return
@@ -148,7 +148,6 @@ class HTTPUpload(BaseModule):
                         self._account,
                         mime,
                         encryption,
-                        session,
                         groupchat)
             app.interface.show_httpupload_progress(file)
         except Exception as error:
@@ -316,15 +315,20 @@ class HTTPUpload(BaseModule):
             self._text.append(uri)
 
             if file.is_groupchat:
-                app.nec.push_outgoing_event(GcMessageOutgoingEvent(
-                    None, account=self._account, jid=file.contact.jid,
-                    message=uri, automatic_message=False,
-                    session=file.session))
+                app.nec.push_outgoing_event(
+                    GcMessageOutgoingEvent(None,
+                                           account=self._account,
+                                           jid=file.contact.jid,
+                                           message=uri,
+                                           automatic_message=False))
             else:
-                app.nec.push_outgoing_event(MessageOutgoingEvent(
-                    None, account=self._account, jid=file.contact.jid,
-                    message=uri, type_='chat',
-                    automatic_message=False, session=file.session))
+                app.nec.push_outgoing_event(
+                    MessageOutgoingEvent(None,
+                                         account=self._account,
+                                         jid=file.contact.jid,
+                                         message=uri,
+                                         type_='chat',
+                                         automatic_message=False))
 
         else:
             phrase = Soup.Status.get_phrase(message.props.status_code)
@@ -360,7 +364,6 @@ class File:
                  account,
                  mime,
                  encryption,
-                 session,
                  groupchat):
 
         self._path = path
@@ -369,7 +372,6 @@ class File:
         self._contact = contact
         self._account = account
         self._mime = mime
-        self._session = session
 
         self.size = os.stat(path).st_size
         self.put_uri = None
@@ -392,10 +394,6 @@ class File:
     @property
     def contact(self):
         return self._contact
-
-    @property
-    def session(self):
-        return self._session
 
     @property
     def is_groupchat(self):

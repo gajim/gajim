@@ -819,19 +819,18 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             if httpupload.get_enabled():
                 # use httpupload
                 con.get_module('HTTPUpload').check_file_before_transfer(
-                    path, self.encryption, self.contact,
-                    self.session, groupchat=True)
+                    path, self.encryption, self.contact, groupchat=True)
         else:
             if httpupload.get_enabled() and jingle.get_enabled():
                 if ft_pref == 'httpupload':
                     con.get_module('HTTPUpload').check_file_before_transfer(
-                        path, self.encryption, self.contact, self.session)
+                        path, self.encryption, self.contact)
                 else:
                     ft = app.interface.instances['file_transfers']
                     ft.send_file(self.account, self.contact, path)
             elif httpupload.get_enabled():
                 con.get_module('HTTPUpload').check_file_before_transfer(
-                    path, self.encryption, self.contact, self.session)
+                    path, self.encryption, self.contact)
             elif jingle.get_enabled():
                 ft = app.interface.instances['file_transfers']
                 ft.send_file(self.account, self.contact, path)
@@ -999,19 +998,18 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 if httpupload.get_enabled():
                     # use httpupload
                     con.get_module('HTTPUpload').check_file_before_transfer(
-                        path, self.encryption, contact,
-                        self.session, groupchat=True)
+                        path, self.encryption, contact, groupchat=True)
             else:
                 if httpupload.get_enabled() and jingle.get_enabled():
                     if ft_pref == 'httpupload':
                         con.get_module('HTTPUpload').check_file_before_transfer(
-                            path, self.encryption, contact, self.session)
+                            path, self.encryption, contact)
                     else:
                         ft = app.interface.instances['file_transfers']
                         ft.send_file(self.account, contact, path)
                 elif httpupload.get_enabled():
                     con.get_module('HTTPUpload').check_file_before_transfer(
-                        path, self.encryption, contact, self.session)
+                        path, self.encryption, contact)
                 elif jingle.get_enabled():
                     ft = app.interface.instances['file_transfers']
                     ft.send_file(self.account, contact, path)

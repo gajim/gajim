@@ -875,7 +875,6 @@ class Interface:
                 path,
                 chat_control.encryption,
                 chat_control.contact,
-                chat_control.session,
                 chat_control.is_groupchat)
 
     def encrypt_file(self, file, account, callback):
