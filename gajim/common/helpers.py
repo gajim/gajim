@@ -44,7 +44,9 @@ import logging
 import json
 import shutil
 import collections
+from collections import defaultdict
 import random
+import weakref
 import string
 from string import Template
 import urllib
@@ -1705,3 +1707,34 @@ def get_tls_error_phrase(tls_error):
     if phrase is None:
         return GIO_TLS_ERRORS.get(Gio.TlsCertificateFlags.GENERIC_ERROR)
     return phrase
+
+
+class Observable:
+    def __init__(self, log_=None):
+        self._log = log_
+        self._callbacks = defaultdict(list)
+
+    def disconnect_signals(self):
+        self._callbacks = defaultdict(list)
+
+    def disconnect(self, object_):
+        for signal_name, handlers in self._callbacks.items():
+            for handler in list(handlers):
+                func = handler()
+                if func is None or func.__self__ == object_:
+                    self._callbacks[signal_name].remove(handler)
+
+    def connect(self, signal_name, func):
+        weak_func = weakref.WeakMethod(func)
+        self._callbacks[signal_name].append(weak_func)
+
+    def notify(self, signal_name, *args, **kwargs):
+        if self._log is not None:
+            self._log.info('Signal: %s', signal_name)
+
+        callbacks = self._callbacks.get(signal_name, [])
+        for func in list(callbacks):
+            if func() is None:
+                self._callbacks[signal_name].remove(func)
+                continue
+            func()(self, signal_name, *args, **kwargs)

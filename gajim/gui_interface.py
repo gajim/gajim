@@ -79,7 +79,6 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.connection_handlers_events import OurShowEvent
 
-from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 
@@ -858,8 +857,8 @@ class Interface:
             location.enable()
 
     @staticmethod
-    def show_httpupload_progress(file):
-        HTTPUploadProgressWindow(file)
+    def show_httpupload_progress(transfer):
+        HTTPUploadProgressWindow(transfer)
 
     def send_httpupload(self, chat_control):
         accept_cb = partial(self.on_file_dialog_ok, chat_control)
@@ -877,16 +876,13 @@ class Interface:
                 chat_control.contact,
                 chat_control.is_groupchat)
 
-    def encrypt_file(self, file, account, callback):
-        app.nec.push_incoming_event(HTTPUploadProgressEvent(
-            None, status='encrypt', file=file))
-        encryption = file.encryption
-        plugin = app.plugin_manager.encryption_plugins[encryption]
+    def encrypt_file(self, transfer, account, callback):
+        transfer.set_encrypting()
+        plugin = app.plugin_manager.encryption_plugins[transfer.encryption]
         if hasattr(plugin, 'encrypt_file'):
-            plugin.encrypt_file(file, account, callback)
+            plugin.encrypt_file(transfer, account, callback)
         else:
-            app.nec.push_incoming_event(HTTPUploadProgressEvent(
-                None, status='close', file=file))
+            transfer.set_error()
             self.raise_dialog('httpupload-encryption-not-available')
 
     @staticmethod

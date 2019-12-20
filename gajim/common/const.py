@@ -829,3 +829,36 @@ GIO_TLS_ERRORS = {
     Gio.TlsCertificateFlags.EXPIRED: _('The certificate has expired'),
 }
 # pylint: enable=line-too-long
+
+
+class FTState(Enum):
+    PREPARING = 'prepare'
+    ENCRYPTING = 'encrypt'
+    STARTED = 'started'
+    IN_PROGRESS = 'progress'
+    FINISHED = 'finished'
+    ERROR = 'error'
+
+    @property
+    def is_preparing(self):
+        return self == FTState.PREPARING
+
+    @property
+    def is_encrypting(self):
+        return self == FTState.ENCRYPTING
+
+    @property
+    def is_started(self):
+        return self == FTState.STARTED
+
+    @property
+    def is_in_progress(self):
+        return self == FTState.IN_PROGRESS
+
+    @property
+    def is_finished(self):
+        return self == FTState.FINISHED
+
+    @property
+    def is_error(self):
+        return self == FTState.ERROR

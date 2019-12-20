@@ -19,7 +19,6 @@ from gi.repository import Gtk
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
@@ -27,7 +26,7 @@ from gajim.gtk.util import EventHelper
 
 
 class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
-    def __init__(self, file):
+    def __init__(self, transfer):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_name('HTTPUploadProgressWindow')
@@ -37,8 +36,10 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_title(_('File Transfer'))
 
         self._destroyed = False
-        self._con = app.connections[file.account]
-        self._file = file
+        self._con = app.connections[transfer.account]
+        self._transfer = transfer
+        self._transfer.connect('state-changed', self._on_transfer_state_change)
+        self._transfer.connect('progress', self._on_transfer_progress)
 
         if app.config.get('use_kib_mib'):
             self._units = GLib.FormatSizeFlags.IEC_UNITS
@@ -48,7 +49,7 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self._start_time = time.time()
 
         self._ui = get_builder('httpupload_progress_dialog.ui')
-        self._ui.file_name_label.set_text(os.path.basename(file.path))
+        self._ui.file_name_label.set_text(os.path.basename(transfer.path))
         self.add(self._ui.box)
 
         self._pulse = GLib.timeout_add(100, self._pulse_progressbar)
@@ -57,23 +58,17 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
-        self.register_events([
-            ('httpupload-progress', ged.CORE, self._on_httpupload_progress),
-        ])
-
-    def _on_httpupload_progress(self, obj):
-        if self._file != obj.file:
-            return
-
-        if obj.status == 'request':
+    def _on_transfer_state_change(self, _transfer, _signal_name, state):
+        if state.is_preparing:
             self._ui.label.set_text(_('Requesting HTTP File Upload Slot…'))
-        elif obj.status == 'close':
+
+        elif state.is_finished or state.is_error:
             self.destroy()
-        elif obj.status == 'upload':
+
+        elif state.is_started:
             self._ui.label.set_text(_('Uploading via HTTP File Upload…'))
-        elif obj.status == 'update':
-            self._update_progress(obj.seen, obj.total)
-        elif obj.status == 'encrypt':
+
+        elif state.is_encrypting:
             self._ui.label.set_text(_('Encrypting file…'))
 
     def _pulse_progressbar(self):
@@ -84,13 +79,14 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self.destroy()
 
     def _on_destroy(self, *args):
-        self._con.get_module('HTTPUpload').cancel_upload(self._file)
+        self._con.get_module('HTTPUpload').cancel_upload(self._transfer)
         self._destroyed = True
-        self._file = None
+        self._transfer.disconnect(self)
+        self._transfer = None
         if self._pulse is not None:
             GLib.source_remove(self._pulse)
 
-    def _update_progress(self, seen, total):
+    def _on_transfer_progress(self, transfer, _signal_name):
         if self._destroyed:
             return
         if self._pulse is not None:
@@ -98,17 +94,17 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
             self._pulse = None
 
         time_now = time.time()
-        bytes_sec = round(seen / (time_now - self._start_time), 1)
+        bytes_sec = round(transfer.seen / (time_now - self._start_time), 1)
 
-        size_progress = GLib.format_size_full(seen, self._units)
-        size_total = GLib.format_size_full(total, self._units)
+        size_progress = GLib.format_size_full(transfer.seen, self._units)
+        size_total = GLib.format_size_full(transfer.size, self._units)
         speed = '%s/s' % GLib.format_size_full(bytes_sec, self._units)
 
         if bytes_sec == 0:
             eta = '∞'
         else:
             eta = self._format_eta(
-                round((total - seen) / bytes_sec))
+                round((transfer.size - transfer.seen) / bytes_sec))
 
         self._ui.progress_label.set_text(
             _('%(progress)s of %(total)s') % {
@@ -117,7 +113,7 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.speed_label.set_text(speed)
         self._ui.eta_label.set_text(eta)
-        self._ui.progressbar.set_fraction(float(seen) / total)
+        self._ui.progressbar.set_fraction(float(transfer.seen) / transfer.size)
 
     @staticmethod
     def _format_eta(time_):
