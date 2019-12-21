@@ -223,7 +223,9 @@ class HTTPUpload(BaseModule):
 
         # Set CAN_REBUILD so chunks get discarded after they are beeing
         # written to the network
-        message.set_flags(Soup.MessageFlags.CAN_REBUILD)
+        message.set_flags(Soup.MessageFlags.CAN_REBUILD |
+                          Soup.MessageFlags.NO_REDIRECT)
+
         message.props.request_body.set_accumulate(False)
 
         message.props.request_headers.set_content_type(transfer.mime, None)
