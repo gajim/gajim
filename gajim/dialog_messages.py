@@ -119,11 +119,6 @@ messages = {
         '%s',
         ErrorDialog),
 
-    'request-upload-slot-error2': Message(
-        _('Could not request upload slot for HTTP File Upload'),
-        _('Got unexpected response from server (see log).'),
-        ErrorDialog),
-
     'open-file-error': Message(
         _('Could not Open File'),
         _('Exception raised while trying to open file (see log).'),

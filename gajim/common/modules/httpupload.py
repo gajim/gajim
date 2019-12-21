@@ -21,7 +21,8 @@ from urllib.parse import urlparse
 import mimetypes
 
 import nbxmpp
-from nbxmpp import NS_HTTPUPLOAD
+from nbxmpp import NS_HTTPUPLOAD_0
+from nbxmpp.util import is_error_result
 from gi.repository import GLib
 from gi.repository import Soup
 
@@ -35,10 +36,11 @@ from gajim.common.connection_handlers_events import InformationEvent
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
-NS_HTTPUPLOAD_0 = NS_HTTPUPLOAD + ':0'
-
 
 class HTTPUpload(BaseModule):
+
+    _nbxmpp_extends = 'HTTPUpload'
+
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
@@ -47,7 +49,6 @@ class HTTPUpload(BaseModule):
         self.httpupload_namespace = None
         self.max_file_size = None  # maximum file size in bytes
 
-        self._allowed_headers = ['Authorization', 'Cookie', 'Expires']
         self._text = []
         self._queued_messages = {}
         self._session = Soup.Session()
@@ -64,8 +65,6 @@ class HTTPUpload(BaseModule):
     def pass_disco(self, info):
         if NS_HTTPUPLOAD_0 in info.features:
             self.httpupload_namespace = NS_HTTPUPLOAD_0
-        elif NS_HTTPUPLOAD in info.features:
-            self.httpupload_namespace = NS_HTTPUPLOAD
         else:
             return
 
@@ -175,75 +174,35 @@ class HTTPUpload(BaseModule):
 
     def _request_slot(self, transfer):
         transfer.set_preparing()
-        iq = self._build_request(transfer)
-        self._log.info("Sending request for slot")
-        self._con.connection.SendAndCallForResponse(
-            iq, self._received_slot, {'transfer': transfer})
+        self._log.info('Sending request for slot')
+        self._nbxmpp('HTTPUpload').request_slot(
+            jid=self.component,
+            filename=os.path.basename(transfer.path),
+            size=transfer.size,
+            content_type=transfer.mime,
+            callback=self._received_slot,
+            user_data=transfer)
 
-    def _build_request(self, transfer):
-        iq = nbxmpp.Iq(typ='get', to=self.component)
-        id_ = app.get_an_id()
-        iq.setID(id_)
-        if self.httpupload_namespace == NS_HTTPUPLOAD:
-            # experimental namespace
-            request = iq.setTag(name="request",
-                                namespace=self.httpupload_namespace)
-            request.addChild('filename',
-                             payload=os.path.basename(transfer.path))
-            request.addChild('size', payload=transfer.size)
-            request.addChild('content-type', payload=transfer.mime)
-        else:
-            attr = {'filename': os.path.basename(transfer.path),
-                    'size': transfer.size,
-                    'content-type': transfer.mime}
-            iq.setTag(name="request",
-                      namespace=self.httpupload_namespace,
-                      attrs=attr)
-        return iq
-
-    @staticmethod
-    def _get_slot_error_message(stanza):
-        tmp = stanza.getTag('error').getTag('file-too-large')
-
-        if tmp is not None:
-            max_file_size = float(tmp.getTag('max-file-size').getData())
-            return _('File is too large, maximum allowed file size is: %s') % \
-                GLib.format_size_full(max_file_size,
-                                      GLib.FormatSizeFlags.IEC_UNITS)
-
-        return stanza.getErrorMsg()
-
-    def _received_slot(self, _con, stanza, transfer):
-        self._log.info("Received slot")
-        if stanza.getType() == 'error':
+    def _received_slot(self, result, transfer):
+        if is_error_result(result):
             transfer.set_error()
-            self._raise_information_event('request-upload-slot-error',
-                                          self._get_slot_error_message(stanza))
-            self._log.error(stanza)
-            return
 
-        try:
-            if self.httpupload_namespace == NS_HTTPUPLOAD:
-                transfer.put_uri = stanza.getTag('slot').getTag('put').getData()
-                transfer.get_uri = stanza.getTag('slot').getTag('get').getData()
+            if result.app_condition == 'file-too-large':
+                size_text = GLib.format_size_full(
+                    result.get_max_file_size(),
+                    GLib.FormatSizeFlags.IEC_UNITS)
+
+                error_text = _('File is too large, '
+                               'maximum allowed file size is: %s' % size_text)
             else:
-                slot = stanza.getTag('slot')
-                transfer.put_uri = slot.getTagAttr('put', 'url')
-                transfer.get_uri = slot.getTagAttr('get', 'url')
-                for header in slot.getTag('put').getTags('header'):
-                    name = header.getAttr('name')
-                    if name not in self._allowed_headers:
-                        raise ValueError('Not allowed header')
-                    data = header.getData()
-                    if '\n' in data:
-                        raise ValueError('Newline in header data')
-                    transfer.append_header(name, data)
-        except Exception:
-            self._log.error("Got invalid stanza: %s", stanza)
-            self._log.exception('Error')
-            transfer.set_error()
-            self._raise_information_event('request-upload-slot-error2')
+                error_text = str(result)
+                self._log.warning(result)
+
+            self._raise_information_event('request-upload-slot-error',
+                                          error_text)
             return
+
+        transfer.process_result(result)
 
         if (urlparse(transfer.put_uri).scheme != 'https' or
                 urlparse(transfer.get_uri).scheme != 'https'):
@@ -407,9 +366,6 @@ class HTTPFileTransfer(FileTransfer):
     def path(self):
         return self._path
 
-    def append_header(self, name, value):
-        self._headers[name] = value
-
     def set_uri_transform_func(self, func):
         self._uri_transform_func = func
 
@@ -448,6 +404,11 @@ class HTTPFileTransfer(FileTransfer):
         with open(self._path, 'rb') as file:
             data = file.read()
         return data
+
+    def process_result(self, result):
+        self.put_uri = result.put_uri
+        self.get_uri = result.get_uri
+        self._headers = result.headers
 
 
 def get_instance(*args, **kwargs):
