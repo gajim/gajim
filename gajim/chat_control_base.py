@@ -549,31 +549,23 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def add_actions(self):
         action = Gio.SimpleAction.new_stateful(
-            "set-encryption-%s" % self.control_id,
-            GLib.VariantType.new("s"),
-            GLib.Variant("s", self.encryption or 'disabled'))
-        action.connect("change-state", self.change_encryption)
+            'set-encryption-%s' % self.control_id,
+            GLib.VariantType.new('s'),
+            GLib.Variant('s', self.encryption or 'disabled'))
+        action.connect('change-state', self.change_encryption)
         self.parent_win.window.add_action(action)
 
-        action = Gio.SimpleAction.new(
-            'send-file-%s' % self.control_id, None)
-        action.connect('activate', self._on_send_file)
-        action.set_enabled(False)
-        self.parent_win.window.add_action(action)
+        actions = {
+            'send-file-%s': self._on_send_file,
+            'send-file-httpupload-%s': self._on_send_file,
+            'send-file-jingle-%s': self._on_send_file,
+        }
 
-        action = Gio.SimpleAction.new(
-            'send-file-httpupload-%s' % self.control_id, None)
-        action.connect('activate', self._on_send_httpupload)
-        action.set_enabled(False)
-        self.parent_win.window.add_action(action)
-
-        action = Gio.SimpleAction.new(
-            'send-file-jingle-%s' % self.control_id, None)
-        action.connect('activate', self._on_send_jingle)
-        action.set_enabled(False)
-        self.parent_win.window.add_action(action)
-
-    # Actions
+        for name, func in actions.items():
+            action = Gio.SimpleAction.new(name % self.control_id, None)
+            action.connect('activate', func)
+            action.set_enabled(False)
+            self.parent_win.window.add_action(action)
 
     def change_encryption(self, action, param):
         encryption = param.get_string()
@@ -800,42 +792,56 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def _paste_event_confirmed(self, is_checked, image):
         if is_checked:
             app.config.set('confirm_paste_image', False)
+
         tmp_dir = TemporaryDirectory()
         dir_ = tmp_dir.name
-
-        # Get file transfer preference
-        ft_pref = app.config.get_per('accounts', self.account,
-                                     'filetransfer_preference')
         path = os.path.join(dir_, '0.png')
         image.savev(path, 'png', [], [])
-        con = app.connections[self.account]
-        win = self.parent_win.window
-        httpupload = win.lookup_action(
-            'send-file-httpupload-%s' % self.control_id)
-        jingle = win.lookup_action('send-file-jingle-%s' % self.control_id)
 
-        if self._type.is_groupchat:
-            # groupchat only supports httpupload on drag and drop
-            if httpupload.get_enabled():
-                # use httpupload
-                con.get_module('HTTPUpload').check_file_before_transfer(
-                    path, self.encryption, self.contact, groupchat=True)
-        else:
-            if httpupload.get_enabled() and jingle.get_enabled():
-                if ft_pref == 'httpupload':
-                    con.get_module('HTTPUpload').check_file_before_transfer(
-                        path, self.encryption, self.contact)
-                else:
-                    ft = app.interface.instances['file_transfers']
-                    ft.send_file(self.account, self.contact, path)
-            elif httpupload.get_enabled():
-                con.get_module('HTTPUpload').check_file_before_transfer(
-                    path, self.encryption, self.contact)
-            elif jingle.get_enabled():
-                ft = app.interface.instances['file_transfers']
-                ft.send_file(self.account, self.contact, path)
+        self._start_filetransfer(path)
 
         tmp_dir.cleanup()
+
+    def _get_pref_ft_method(self):
+        ft_pref = app.config.get_per('accounts', self.account,
+                                     'filetransfer_preference')
+        httpupload = self.parent_win.window.lookup_action(
+            'send-file-httpupload-%s' % self.control_id)
+        jingle = self.parent_win.window.lookup_action(
+            'send-file-jingle-%s' % self.control_id)
+
+        if self._type.is_groupchat:
+            if httpupload.get_enabled():
+                return 'httpupload'
+            return None
+
+        if httpupload.get_enabled() and jingle.get_enabled():
+            return ft_pref
+
+        if httpupload.get_enabled():
+            return 'httpupload'
+
+        if jingle.get_enabled():
+            return 'jingle'
+        return None
+
+    def _start_filetransfer(self, path):
+        method = self._get_pref_ft_method()
+        if method is None:
+            return
+
+        con = app.connections[self.account]
+
+        if method == 'httpupload':
+            con.get_module('HTTPUpload').check_file_before_transfer(
+                path,
+                self.encryption,
+                self.contact,
+                groupchat=self._type.is_groupchat)
+
+        else:
+            ft = app.interface.instances['file_transfers']
+            ft.send_file(self.account, self.contact, path)
 
     def _on_message_textview_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_space:
@@ -977,42 +983,15 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if not self.drag_entered:
             self.conv_textview.tv.set_editable(True)
 
-    def drag_data_file_transfer(self, contact, selection, _widget):
-        # get file transfer preference
-        ft_pref = app.config.get_per('accounts', self.account,
-                                     'filetransfer_preference')
-        win = self.parent_win.window
-        con = app.connections[self.account]
-        httpupload = win.lookup_action(
-            'send-file-httpupload-%s' % self.control_id)
-        jingle = win.lookup_action('send-file-jingle-%s' % self.control_id)
-
+    def drag_data_file_transfer(self, selection):
         # we may have more than one file dropped
         uri_splitted = selection.get_uris()
         for uri in uri_splitted:
             path = helpers.get_file_path_from_dnd_dropped_uri(uri)
             if not os.path.isfile(path):  # is it a file?
                 continue
-            if self._type.is_groupchat:
-                # groupchat only supports httpupload on drag and drop
-                if httpupload.get_enabled():
-                    # use httpupload
-                    con.get_module('HTTPUpload').check_file_before_transfer(
-                        path, self.encryption, contact, groupchat=True)
-            else:
-                if httpupload.get_enabled() and jingle.get_enabled():
-                    if ft_pref == 'httpupload':
-                        con.get_module('HTTPUpload').check_file_before_transfer(
-                            path, self.encryption, contact)
-                    else:
-                        ft = app.interface.instances['file_transfers']
-                        ft.send_file(self.account, contact, path)
-                elif httpupload.get_enabled():
-                    con.get_module('HTTPUpload').check_file_before_transfer(
-                        path, self.encryption, contact)
-                elif jingle.get_enabled():
-                    ft = app.interface.instances['file_transfers']
-                    ft.send_file(self.account, contact, path)
+
+            self._start_filetransfer(path)
 
     def get_seclabel(self):
         idx = self.xml.label_selector.get_active()
@@ -1319,31 +1298,24 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         start, end = buffer_.get_bounds()
         buffer_.delete(start, end)
 
-    def _on_send_file(self, _action, _param):
-        # get file transfer preference
-        ft_pref = app.config.get_per('accounts', self.account,
-                                     'filetransfer_preference')
+    def _on_send_file(self, action, _param):
+        name = action.get_name()
+        if 'httpupload' in name:
+            app.interface.send_httpupload(self)
+            return
 
-        win = self.parent_win.window
-        httpupload = win.lookup_action(
-            'send-file-httpupload-%s' % self.control_id)
-        jingle = win.lookup_action('send-file-jingle-%s' % self.control_id)
+        if 'jingle' in name:
+            self._on_send_file_jingle()
+            return
 
-        if httpupload.get_enabled() and jingle.get_enabled():
-            if ft_pref == 'httpupload':
-                httpupload.activate()
-            else:
-                jingle.activate()
-        elif httpupload.get_enabled():
-            httpupload.activate()
-        elif jingle.get_enabled():
-            jingle.activate()
+        method = self._get_pref_ft_method()
+        if method is None:
+            return
 
-    def _on_send_httpupload(self, _action, _param):
-        app.interface.send_httpupload(self)
-
-    def _on_send_jingle(self, _action, _param):
-        self._on_send_file_jingle()
+        if method == 'httpupload':
+            app.interface.send_httpupload(self)
+        else:
+            self._on_send_file_jingle()
 
     def _on_send_file_jingle(self, gc_contact=None):
         """

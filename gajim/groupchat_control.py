@@ -54,7 +54,6 @@ from gajim.common.helpers import to_user_string
 from gajim.common.const import AvatarSize
 
 from gajim.common.i18n import _
-from gajim.common import contacts
 from gajim.common.const import Chatstate
 from gajim.common.const import MUCJoinedState
 
@@ -1728,11 +1727,9 @@ class GroupchatControl(ChatControlBase):
         if not selection.get_data():
             return
 
-        # Get contact info
-        contact = contacts.Contact(jid=self.room_jid, account=self.account)
         if target_type == self.TARGET_TYPE_URI_LIST:
             # File drag and drop (handled in chat_control_base)
-            self.drag_data_file_transfer(contact, selection, self)
+            self.drag_data_file_transfer(selection)
         else:
             # Invite contact to groupchat
             treeview = app.interface.roster.tree

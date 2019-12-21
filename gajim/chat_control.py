@@ -1181,15 +1181,9 @@ class ChatControl(ChatControlBase):
         if not selection.get_data():
             return
 
-        # get contact info (check for PM = private chat)
-        if self._type.is_privatechat:
-            contact = self.gc_contact.as_contact()
-        else:
-            contact = self.contact
-
         if target_type == self.TARGET_TYPE_URI_LIST:
             # File drag and drop (handled in chat_control_base)
-            self.drag_data_file_transfer(contact, selection, self)
+            self.drag_data_file_transfer(selection)
         else:
             # Convert single chat to MUC
             treeview = app.interface.roster.tree
@@ -1203,12 +1197,12 @@ class ChatControl(ChatControlBase):
             dropped_jid = data
 
             dropped_transport = app.get_transport_name_from_jid(dropped_jid)
-            c_transport = app.get_transport_name_from_jid(contact.jid)
+            c_transport = app.get_transport_name_from_jid(self.contact.jid)
             if dropped_transport or c_transport:
                 return # transport contacts cannot be invited
 
             dialogs.TransformChatToMUC(self.account,
-                                       [contact.jid],
+                                       [self.contact.jid],
                                        [dropped_jid])
 
     def restore_conversation(self):
