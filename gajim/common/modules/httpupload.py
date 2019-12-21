@@ -63,35 +63,22 @@ class HTTPUpload(BaseModule):
         # pylint: enable=line-too-long
 
     def pass_disco(self, info):
-        if NS_HTTPUPLOAD_0 in info.features:
-            self.httpupload_namespace = NS_HTTPUPLOAD_0
-        else:
+        if not info.has_httpupload:
             return
 
+        self.available = True
+        self.httpupload_namespace = NS_HTTPUPLOAD_0
         self.component = info.jid
-        self._log.info('Discovered component: %s', info.jid)
+        self.max_file_size = info.httpupload_max_file_size
 
-        for form in info.dataforms:
-            form_type = form.vars.get('FORM_TYPE')
-            if (form_type is None or
-                    form_type.value != self.httpupload_namespace):
-                continue
-            size = form.vars.get('max-file-size')
-            if size is not None:
-                try:
-                    self.max_file_size = float(size.value)
-                except Exception:
-                    self._log.info('Invalid file size: %s', size.value)
-                    size = None
-                break
+        self._log.info('Discovered component: %s', info.jid)
 
         if self.max_file_size is None:
             self._log.warning('Component does not provide maximum file size')
         else:
-            self._log.info('Component has a maximum file size of: %s MiB',
-                           self.max_file_size / (1024 * 1024))
-
-        self.available = True
+            size = GLib.format_size_full(self.max_file_size,
+                                         GLib.FormatSizeFlags.IEC_UNITS)
+            self._log.info('Component has a maximum file size of: %s', size)
 
         for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
             ctrl.update_actions()
