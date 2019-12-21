@@ -26,7 +26,7 @@
 import os
 import time
 import uuid
-from tempfile import TemporaryDirectory
+import tempfile
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -793,14 +793,11 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if is_checked:
             app.config.set('confirm_paste_image', False)
 
-        tmp_dir = TemporaryDirectory()
-        dir_ = tmp_dir.name
-        path = os.path.join(dir_, '0.png')
+        dir_ = tempfile.gettempdir()
+        path = os.path.join(dir_, '%s.png' % str(uuid.uuid4()))
         image.savev(path, 'png', [], [])
 
         self._start_filetransfer(path)
-
-        tmp_dir.cleanup()
 
     def _get_pref_ft_method(self):
         ft_pref = app.config.get_per('accounts', self.account,
