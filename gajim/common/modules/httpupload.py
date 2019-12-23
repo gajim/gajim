@@ -240,7 +240,7 @@ class HTTPUpload(BaseModule):
 
         if tls_errors:
             phrase = get_tls_error_phrase(tls_errors)
-            self._log.warning('TLS verification failed: %s')
+            self._log.warning('TLS verification failed: %s', phrase)
             self._session.cancel_message(message, Soup.Status.CANCELLED)
             self._raise_information_event('httpupload-error', phrase)
             return
