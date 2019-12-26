@@ -117,6 +117,9 @@ class MessageInputTextView(Gtk.TextView):
             self.emit('text-changed', self.get_buffer())
             self._last_text = text
 
+    def insert_text(self, text):
+        self.get_buffer().insert_at_cursor(text)
+
     def has_text(self):
         buf = self.get_buffer()
         start, end = buf.get_bounds()
