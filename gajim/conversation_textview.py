@@ -272,6 +272,9 @@ class ConversationTextview(GObject.GObject):
         textview_icon = buffer_.create_tag('textview-icon')
         textview_icon.set_property('rise', Pango.units_from_double(-2.45))
 
+        # To help plugins easily identify the nickname
+        buffer_.create_tag('nickname')
+
         tag = buffer_.create_tag('time_sometimes')
         tag.set_property('foreground', 'darkgrey')
         #Pango.SCALE_SMALL
@@ -1227,6 +1230,7 @@ class ConversationTextview(GObject.GObject):
             if other_tags_for_name:
                 name_tags = other_tags_for_name[:]  # create a new list
             name_tags.append(kind)
+            name_tags.append('nickname')
 
             for tag in name_tags:
                 if tag.startswith('muc_nickname_color_'):
