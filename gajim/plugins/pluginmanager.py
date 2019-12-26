@@ -328,6 +328,13 @@ class PluginManager(metaclass=Singleton):
                     self.gui_extension_points[gui_extpoint_name].remove(
                         ext_point)
 
+        if gui_extpoint_name not in self.gui_extension_points_handlers:
+            return
+
+        for handlers in self.gui_extension_points_handlers[gui_extpoint_name]:
+            disconnect_handler = handlers[1]
+            if disconnect_handler is not None:
+                disconnect_handler(args[0])
 
     @log_calls('PluginManager')
     def _add_gui_extension_point_call_to_list(self, gui_extpoint_name, *args):
