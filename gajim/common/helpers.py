@@ -1587,6 +1587,8 @@ def open_file(path):
     if os.name == 'nt':
         os.startfile(path)
     else:
+        # Call str() to make it work with pathlib.Path
+        path = str(path)
         if not path.startswith('file://'):
             path = 'file://' + path
         Gio.AppInfo.launch_default_for_uri(path)
