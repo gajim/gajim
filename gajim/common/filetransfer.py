@@ -12,13 +12,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict
 
 from gajim.common.helpers import Observable
 from gajim.common.const import FTState
 
 class FileTransfer(Observable):
 
-    _state_descriptions = {}
+    _state_descriptions = {}  # type: Dict[FTState, str]
 
     def __init__(self, account, cancel_func=None):
         Observable.__init__(self)
