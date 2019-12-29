@@ -833,7 +833,8 @@ GIO_TLS_ERRORS = {
 
 class FTState(Enum):
     PREPARING = 'prepare'
-    ENCRYPTING = 'encrypt'
+    ENCRYPTING = 'encrypting'
+    DECRYPTING = 'decrypting'
     STARTED = 'started'
     IN_PROGRESS = 'progress'
     FINISHED = 'finished'
@@ -846,6 +847,10 @@ class FTState(Enum):
     @property
     def is_encrypting(self):
         return self == FTState.ENCRYPTING
+
+    @property
+    def is_decrypting(self):
+        return self == FTState.DECRYPTING
 
     @property
     def is_started(self):

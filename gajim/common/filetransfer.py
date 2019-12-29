@@ -17,10 +17,14 @@ from gajim.common.helpers import Observable
 from gajim.common.const import FTState
 
 class FileTransfer(Observable):
-    def __init__(self, account):
+
+    _state_descriptions = {}
+
+    def __init__(self, account, cancel_func=None):
         Observable.__init__(self)
 
         self._account = account
+        self._cancel_func = cancel_func
 
         self._seen = 0
         self.size = 0
@@ -42,6 +46,17 @@ class FileTransfer(Observable):
             return False
         return self._seen >= self.size
 
+    @property
+    def filename(self):
+        raise NotImplementedError
+
+    def cancel(self):
+        if self._cancel_func is not None:
+            self._cancel_func(self)
+
+    def get_state_description(self):
+        return self._state_descriptions.get(self._state, '')
+
     def set_preparing(self):
         self._state = FTState.PREPARING
         self.notify('state-changed', FTState.PREPARING)
@@ -49,6 +64,10 @@ class FileTransfer(Observable):
     def set_encrypting(self):
         self._state = FTState.ENCRYPTING
         self.notify('state-changed', FTState.ENCRYPTING)
+
+    def set_decrypting(self):
+        self._state = FTState.DECRYPTING
+        self.notify('state-changed', FTState.DECRYPTING)
 
     def set_started(self):
         self._state = FTState.STARTED

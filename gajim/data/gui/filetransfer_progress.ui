@@ -168,15 +168,15 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="cancel_upload_button">
-        <property name="label" translatable="yes">_Cancel Upload</property>
+      <object class="GtkButton" id="cancel_button">
+        <property name="label" translatable="yes">_Cancel</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="halign">center</property>
         <property name="margin_top">12</property>
         <property name="use_underline">True</property>
-        <signal name="clicked" handler="_on_cancel_upload_button_clicked" swapped="no"/>
+        <signal name="clicked" handler="_on_cancel_button_clicked" swapped="no"/>
         <style>
           <class name="destructive-action"/>
         </style>

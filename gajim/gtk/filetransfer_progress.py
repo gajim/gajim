@@ -25,18 +25,17 @@ from gajim.gtk.util import get_builder
 from gajim.gtk.util import EventHelper
 
 
-class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
+class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):
     def __init__(self, transfer):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
-        self.set_name('HTTPUploadProgressWindow')
+        self.set_name('FileTransferProgress')
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('File Transfer'))
 
         self._destroyed = False
-        self._con = app.connections[transfer.account]
         self._transfer = transfer
         self._transfer.connect('state-changed', self._on_transfer_state_change)
         self._transfer.connect('progress', self._on_transfer_progress)
@@ -48,8 +47,8 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._start_time = time.time()
 
-        self._ui = get_builder('httpupload_progress_dialog.ui')
-        self._ui.file_name_label.set_text(os.path.basename(transfer.path))
+        self._ui = get_builder('filetransfer_progress.ui')
+        self._ui.file_name_label.set_text(transfer.filename)
         self.add(self._ui.box)
 
         self._pulse = GLib.timeout_add(100, self._pulse_progressbar)
@@ -58,31 +57,27 @@ class HTTPUploadProgressWindow(Gtk.ApplicationWindow, EventHelper):
         self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
-    def _on_transfer_state_change(self, _transfer, _signal_name, state):
-        if state.is_preparing:
-            self._ui.label.set_text(_('Requesting HTTP File Upload Slot…'))
-
-        elif state.is_finished or state.is_error:
+    def _on_transfer_state_change(self, transfer, _signal_name, state):
+        if state.is_finished or state.is_error:
             self.destroy()
+            return
 
-        elif state.is_started:
-            self._ui.label.set_text(_('Uploading via HTTP File Upload…'))
-
-        elif state.is_encrypting:
-            self._ui.label.set_text(_('Encrypting file…'))
+        description = transfer.get_state_description()
+        if description:
+            self._ui.label.set_text(description)
 
     def _pulse_progressbar(self):
         self._ui.progressbar.pulse()
         return True
 
-    def _on_cancel_upload_button_clicked(self, _widget):
+    def _on_cancel_button_clicked(self, _widget):
         self.destroy()
 
     def _on_destroy(self, *args):
-        self._con.get_module('HTTPUpload').cancel_upload(self._transfer)
-        self._destroyed = True
+        self._transfer.cancel()
         self._transfer.disconnect(self)
         self._transfer = None
+        self._destroyed = True
         if self._pulse is not None:
             GLib.source_remove(self._pulse)
 

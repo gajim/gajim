@@ -30,6 +30,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.helpers import get_tls_error_phrase
+from gajim.common.const import FTState
 from gajim.common.filetransfer import FileTransfer
 from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import InformationEvent
@@ -129,9 +130,10 @@ class HTTPUpload(BaseModule):
         self._log.info("Detected MIME type of file: %s", mime)
 
         try:
-            transfer = HTTPFileTransfer(path,
+            transfer = HTTPFileTransfer(self._account,
+                                        self._cancel_upload,
+                                        path,
                                         contact,
-                                        self._account,
                                         mime,
                                         encryption,
                                         groupchat)
@@ -148,7 +150,7 @@ class HTTPUpload(BaseModule):
         else:
             self._request_slot(transfer)
 
-    def cancel_upload(self, transfer):
+    def _cancel_upload(self, transfer):
         message = self._queued_messages.get(id(transfer))
         if message is None:
             return
@@ -164,7 +166,7 @@ class HTTPUpload(BaseModule):
         self._log.info('Sending request for slot')
         self._nbxmpp('HTTPUpload').request_slot(
             jid=self.component,
-            filename=os.path.basename(transfer.path),
+            filename=transfer.filename,
             size=transfer.size,
             content_type=transfer.mime,
             callback=self._received_slot,
@@ -302,14 +304,22 @@ class HTTPUpload(BaseModule):
 
 
 class HTTPFileTransfer(FileTransfer):
+
+    _state_descriptions = {
+        FTState.ENCRYPTING: _('Encrypting file…'),
+        FTState.PREPARING: _('Requesting HTTP File Upload Slot…'),
+        FTState.STARTED: _('Uploading via HTTP File Upload…'),
+    }
+
     def __init__(self,
+                 account,
+                 cancel_func,
                  path,
                  contact,
-                 account,
                  mime,
                  encryption,
                  groupchat):
-        FileTransfer.__init__(self, account)
+        FileTransfer.__init__(self, account, cancel_func=cancel_func)
 
         self._path = path
         self._encryption = encryption
@@ -346,17 +356,21 @@ class HTTPFileTransfer(FileTransfer):
     def headers(self):
         return self._headers
 
+    @property
+    def path(self):
+        return self._path
+
     def get_transformed_uri(self):
         if self._uri_transform_func is not None:
             return self._uri_transform_func(self.get_uri)
         return self.get_uri
 
-    @property
-    def path(self):
-        return self._path
-
     def set_uri_transform_func(self, func):
         self._uri_transform_func = func
+
+    @property
+    def filename(self):
+        return os.path.basename(self._path)
 
     def set_error(self, text=''):
         self._close()

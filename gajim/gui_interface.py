@@ -102,7 +102,7 @@ from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.filetransfer import FileTransfersWindow
-from gajim.gtk.http_upload_progress import HTTPUploadProgressWindow
+from gajim.gtk.filetransfer_progress import FileTransferProgress
 from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
@@ -858,7 +858,7 @@ class Interface:
 
     @staticmethod
     def show_httpupload_progress(transfer):
-        HTTPUploadProgressWindow(transfer)
+        FileTransferProgress(transfer)
 
     def send_httpupload(self, chat_control):
         accept_cb = partial(self.on_file_dialog_ok, chat_control)
