@@ -1745,10 +1745,10 @@ class Observable:
 def write_file_async(path, data, callback, user_data=None):
     file = Gio.File.new_for_path(str(path))
     file.create_async(Gio.FileCreateFlags.PRIVATE,
-                          GLib.PRIORITY_DEFAULT,
-                          None,
-                          _on_file_created,
-                          (callback, data, user_data))
+                      GLib.PRIORITY_DEFAULT,
+                      None,
+                      _on_file_created,
+                      (callback, data, user_data))
 
 def _on_file_created(file, result, user_data):
     callback, data, user_data = user_data
@@ -1756,16 +1756,18 @@ def _on_file_created(file, result, user_data):
         outputstream = file.create_finish(result)
     except GLib.Error as error:
         callback(False, error, user_data)
-        return
 
+    # Pass data as user_data to the callback, because
+    # write_all_async() takes not reference to the data
+    # and python gc collects it before the data are written
     outputstream.write_all_async(data,
                                  GLib.PRIORITY_DEFAULT,
                                  None,
                                  _on_write_finished,
-                                 (callback, user_data))
+                                 (callback, data, user_data))
 
 def _on_write_finished(outputstream, result, user_data):
-    callback, user_data = user_data
+    callback, _data, user_data = user_data
     try:
         successful, _bytes_written = outputstream.write_all_finish(result)
     except GLib.Error as error:
