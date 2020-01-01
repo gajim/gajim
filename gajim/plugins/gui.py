@@ -31,8 +31,10 @@ from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import ged
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import open_uri
+from gajim.common.nec import EventHelper
 
 from gajim.plugins.helpers import log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
@@ -55,12 +57,12 @@ class Column(IntEnum):
     ICON = 4
 
 
-class PluginsWindow:
-    '''Class for Plugins window'''
+class PluginsWindow(EventHelper):
 
     @log_calls('PluginsWindow')
     def __init__(self):
-        '''Initialize Plugins window'''
+        EventHelper.__init__(self)
+
         builder = get_builder('plugins_window.ui')
         self.window = builder.get_object('plugins_window')
         self.window.set_transient_for(app.interface.roster.window)
@@ -125,6 +127,11 @@ class PluginsWindow:
 
         # Adding GUI extension point for Plugins that want to hook the Plugin Window
         app.plugin_manager.gui_extension_point('plugin_window', self)
+
+        self.register_events([
+            ('plugin-removed', ged.GUI1, self._on_plugin_removed),
+            ('plugin-added', ged.GUI1, self._on_plugin_added),
+        ])
 
         self.window.show_all()
 
@@ -213,6 +220,7 @@ class PluginsWindow:
     @log_calls('PluginsWindow')
     def on_plugins_window_destroy(self, widget):
         '''Close window'''
+        self.unregister_events()
         app.plugin_manager.remove_gui_extension_point('plugin_window', self)
         del app.interface.instances['plugins']
 
@@ -246,7 +254,20 @@ class PluginsWindow:
                 WarningDialog(_('Unable to properly remove the plugin'),
                     str(e), self.window)
                 return
-            model.remove(iter_)
+
+    def _on_plugin_removed(self, event):
+        for row in self.installed_plugins_model:
+            if row[Column.PLUGIN] == event.plugin:
+                self.installed_plugins_model.remove(row.iter)
+                break
+
+    def _on_plugin_added(self, event):
+        icon = self.get_plugin_icon(event.plugin)
+        self.installed_plugins_model.append([event.plugin,
+                                             event.plugin.name,
+                                             False,
+                                             event.plugin.activatable,
+                                             icon])
 
     @log_calls('PluginsWindow')
     def on_install_plugin_button_clicked(self, widget):
@@ -267,21 +288,6 @@ class PluginsWindow:
                 if not plugin:
                     show_warn_dialog()
                     return
-                model = self.installed_plugins_model
-
-                for _index, row in enumerate(model):
-                    if plugin == row[Column.PLUGIN]:
-                        model.remove(row.iter)
-                        break
-
-                iter_ = model.append([
-                    plugin,
-                    plugin.name,
-                    False,
-                    plugin.activatable,
-                    self.get_plugin_icon(plugin)])
-                sel = self.installed_plugins_treeview.get_selection()
-                sel.select_iter(iter_)
 
             NewConfirmationDialog(
                 _('Overwrite Plugin?'),
@@ -307,11 +313,6 @@ class PluginsWindow:
             if not plugin:
                 show_warn_dialog()
                 return
-            model = self.installed_plugins_model
-            iter_ = model.append([plugin, plugin.name, False,
-                plugin.activatable, self.get_plugin_icon(plugin)])
-            sel = self.installed_plugins_treeview.get_selection()
-            sel.select_iter(iter_)
 
         ArchiveChooserDialog(_try_install, transient_for=self.window)
 

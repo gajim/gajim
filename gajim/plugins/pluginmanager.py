@@ -36,6 +36,7 @@ from gajim.common import app
 from gajim.common import nec
 from gajim.common import configpaths
 from gajim.common import modules
+from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import Singleton
@@ -192,6 +193,8 @@ class PluginManager(metaclass=Singleton):
 
             self.plugins.append(plugin)
             plugin.active = False
+            app.nec.push_incoming_event(
+                NetworkEvent('plugin-added', plugin=plugin))
         else:
             log.info('Not loading plugin %s v%s from module %s '
                      '(identified by short name: %s). Plugin already loaded.',
@@ -798,11 +801,16 @@ class PluginManager(metaclass=Singleton):
         '''
         Deactivate and remove plugin from `plugins` list
         '''
-        if plugin:
-            self.remove_plugin(plugin)
-            self.delete_plugin_files(plugin.__path__)
-            if self._plugin_has_entry_in_global_config(plugin):
-                self._remove_plugin_entry_in_global_config(plugin)
+        if not plugin:
+            return
+
+        self.remove_plugin(plugin)
+        self.delete_plugin_files(plugin.__path__)
+        if self._plugin_has_entry_in_global_config(plugin):
+            self._remove_plugin_entry_in_global_config(plugin)
+
+        app.nec.push_incoming_event(
+            NetworkEvent('plugin-removed', plugin=plugin))
 
     def get_plugin_by_path(self, plugin_dir):
         for plugin in self.plugins:
