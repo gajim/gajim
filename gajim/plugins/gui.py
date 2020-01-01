@@ -36,7 +36,6 @@ from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import open_uri
 from gajim.common.nec import EventHelper
 
-from gajim.plugins.helpers import log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _
 
@@ -59,7 +58,6 @@ class Column(IntEnum):
 
 class PluginsWindow(EventHelper):
 
-    @log_calls('PluginsWindow')
     def __init__(self):
         EventHelper.__init__(self)
 
@@ -139,7 +137,6 @@ class PluginsWindow(EventHelper):
         if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
 
-    @log_calls('PluginsWindow')
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
         model, iter_ = treeview_selection.get_selected()
         if iter_:
@@ -181,7 +178,6 @@ class PluginsWindow(EventHelper):
         self.uninstall_plugin_button.set_property('sensitive', False)
         self.configure_plugin_button.set_property('sensitive', False)
 
-    @log_calls('PluginsWindow')
     def fill_installed_plugins_model(self):
         pm = app.plugin_manager
         self.installed_plugins_model.clear()
@@ -200,7 +196,6 @@ class PluginsWindow(EventHelper):
             icon = GdkPixbuf.Pixbuf.new_from_file_at_size(icon_file, 16, 16)
         return icon
 
-    @log_calls('PluginsWindow')
     def installed_plugins_toggled_cb(self, cell, path):
         is_active = self.installed_plugins_model[path][Column.ACTIVE]
         plugin = self.installed_plugins_model[path][Column.PLUGIN]
@@ -217,14 +212,12 @@ class PluginsWindow(EventHelper):
 
         self.installed_plugins_model[path][Column.ACTIVE] = not is_active
 
-    @log_calls('PluginsWindow')
     def on_plugins_window_destroy(self, widget):
         '''Close window'''
         self.unregister_events()
         app.plugin_manager.remove_gui_extension_point('plugin_window', self)
         del app.interface.instances['plugins']
 
-    @log_calls('PluginsWindow')
     def on_configure_plugin_button_clicked(self, widget):
         selection = self.installed_plugins_treeview.get_selection()
         model, iter_ = selection.get_selected()
@@ -242,7 +235,6 @@ class PluginsWindow(EventHelper):
             # XXX: maybe throw exception here?
             pass
 
-    @log_calls('PluginsWindow')
     def on_uninstall_plugin_button_clicked(self, widget):
         selection = self.installed_plugins_treeview.get_selection()
         model, iter_ = selection.get_selected()
@@ -269,7 +261,6 @@ class PluginsWindow(EventHelper):
                                              event.plugin.activatable,
                                              icon])
 
-    @log_calls('PluginsWindow')
     def on_install_plugin_button_clicked(self, widget):
         if app.is_flatpak():
             open_uri('https://dev.gajim.org/gajim/gajim/wikis/help/flathub')
@@ -318,8 +309,6 @@ class PluginsWindow(EventHelper):
 
 
 class GajimPluginConfigDialog(Gtk.Dialog):
-
-    @log_calls('GajimPluginConfigDialog')
     def __init__(self, plugin, **kwargs):
         Gtk.Dialog.__init__(self, title='%s %s'%(plugin.name,
             _('Configuration')), **kwargs)
@@ -338,7 +327,6 @@ class GajimPluginConfigDialog(Gtk.Dialog):
     def on_close_button_clicked(self, widget):
         self.hide()
 
-    @log_calls('GajimPluginConfigDialog')
     def run(self, parent=None):
         self.set_transient_for(parent)
         self.on_run()
