@@ -133,6 +133,10 @@ class PluginsWindow(EventHelper):
 
         self.window.show_all()
 
+    def get_notebook(self):
+        # Used by plugins
+        return self.plugins_notebook
+
     def on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
