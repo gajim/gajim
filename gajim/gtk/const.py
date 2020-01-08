@@ -131,4 +131,5 @@ WINDOW_MODULES = {
     'SubscriptionRequest': 'gajim.gtk.subscription_request',
     'RemoveAccount': 'gajim.gtk.remove_account',
     'ChangePassword': 'gajim.gtk.change_password',
+    'PluginsWindow': 'gajim.plugins.gui',
 }

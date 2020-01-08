@@ -56,35 +56,29 @@ class Column(IntEnum):
     ICON = 4
 
 
-class PluginsWindow(EventHelper):
-
+class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
     def __init__(self):
+        Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
 
-        builder = get_builder('plugins_window.ui')
-        self.window = builder.get_object('plugins_window')
-        self.window.set_transient_for(app.interface.roster.window)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_default_size(650, 500)
+        self.set_show_menubar(False)
+        self.set_title(_('Plugins'))
 
-        widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
-            'plugin_version_label', 'plugin_authors_label',
-            'plugin_homepage_linkbutton', 'install_plugin_button',
-            'uninstall_plugin_button', 'configure_plugin_button',
-            'installed_plugins_treeview', 'available_text',
-            'available_text_label')
-
-        for widget_name in widgets_to_extract:
-            setattr(self, widget_name, builder.get_object(widget_name))
-
-        self.plugin_description_textview = builder.get_object('description')
+        self._ui = get_builder('plugins_window.ui')
+        self.add(self._ui.plugins_notebook)
 
         # Disable 'Install from ZIP' for Flatpak installs
         if app.is_flatpak():
-            self.install_plugin_button.set_tooltip_text(
+            self._ui.install_plugin_button.set_tooltip_text(
                 _('Click to view Gajim\'s wiki page on how to install plugins in Flatpak.'))
 
         self.installed_plugins_model = Gtk.ListStore(object, str, bool, bool,
             GdkPixbuf.Pixbuf)
-        self.installed_plugins_treeview.set_model(self.installed_plugins_model)
+        self._ui.installed_plugins_treeview.set_model(
+            self.installed_plugins_model)
 
         renderer = Gtk.CellRendererText()
         col = Gtk.TreeViewColumn(_('Plugin'))#, renderer, text=Column.NAME)
@@ -94,22 +88,20 @@ class PluginsWindow(EventHelper):
         col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', Column.NAME)
         col.set_property('expand', True)
-        self.installed_plugins_treeview.append_column(col)
+        self._ui.installed_plugins_treeview.append_column(col)
 
         renderer = Gtk.CellRendererToggle()
         renderer.connect('toggled', self.installed_plugins_toggled_cb)
         col = Gtk.TreeViewColumn(_('Active'), renderer, active=Column.ACTIVE,
             activatable=Column.ACTIVATABLE)
-        self.installed_plugins_treeview.append_column(col)
+        self._ui.installed_plugins_treeview.append_column(col)
 
-        self.def_icon = load_icon('preferences-desktop',
-                                  self.window,
-                                  pixbuf=True)
+        self.def_icon = load_icon('preferences-desktop', self, pixbuf=True)
 
         # connect signal for selection change
-        selection = self.installed_plugins_treeview.get_selection()
-        selection.connect('changed',
-            self.installed_plugins_treeview_selection_changed)
+        selection = self._ui.installed_plugins_treeview.get_selection()
+        selection.connect(
+            'changed', self.installed_plugins_treeview_selection_changed)
         selection.set_mode(Gtk.SelectionMode.SINGLE)
 
         self._clear_installed_plugin_info()
@@ -119,9 +111,11 @@ class PluginsWindow(EventHelper):
         if root_iter:
             selection.select_iter(root_iter)
 
-        builder.connect_signals(self)
+        self.connect('destroy', self._on_destroy)
+        self.connect('key-press-event', self._on_key_press)
+        self._ui.connect_signals(self)
 
-        self.plugins_notebook.set_current_page(0)
+        self._ui.plugins_notebook.set_current_page(0)
 
         # Adding GUI extension point for Plugins that want to hook the Plugin Window
         app.plugin_manager.gui_extension_point('plugin_window', self)
@@ -131,15 +125,19 @@ class PluginsWindow(EventHelper):
             ('plugin-added', ged.GUI1, self._on_plugin_added),
         ])
 
-        self.window.show_all()
+        self.show_all()
 
     def get_notebook(self):
         # Used by plugins
-        return self.plugins_notebook
+        return self._ui.plugins_notebook
 
-    def on_key_press_event(self, widget, event):
+    def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
-            self.window.destroy()
+            self.destroy()
+
+    def _on_destroy(self, *args):
+        self.unregister_events()
+        app.plugin_manager.remove_gui_extension_point('plugin_window', self)
 
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
         model, iter_ = treeview_selection.get_selected()
@@ -150,37 +148,37 @@ class PluginsWindow(EventHelper):
             self._clear_installed_plugin_info()
 
     def _display_installed_plugin_info(self, plugin):
-        self.plugin_name_label.set_text(plugin.name)
-        self.plugin_version_label.set_text(plugin.version)
-        self.plugin_authors_label.set_text(plugin.authors)
+        self._ui.plugin_name_label.set_text(plugin.name)
+        self._ui.plugin_version_label.set_text(plugin.version)
+        self._ui.plugin_authors_label.set_text(plugin.authors)
         markup = '<a href="%s">%s</a>' % (plugin.homepage, plugin.homepage)
-        self.plugin_homepage_linkbutton.set_markup(markup)
+        self._ui.plugin_homepage_linkbutton.set_markup(markup)
 
         if plugin.available_text:
             text = _('Warning: %s') % plugin.available_text
-            self.available_text_label.set_text(text)
-            self.available_text.show()
+            self._ui.available_text_label.set_text(text)
+            self._ui.available_text.show()
             # Workaround for https://bugzilla.gnome.org/show_bug.cgi?id=710888
-            self.available_text.queue_resize()
+            self._ui.available_text.queue_resize()
         else:
-            self.available_text.hide()
+            self._ui.available_text.hide()
 
-        self.plugin_description_textview.set_text(plugin.description)
+        self._ui.description.set_text(plugin.description)
 
-        self.uninstall_plugin_button.set_property(
-            'sensitive', configpaths.get('PLUGINS_USER') in plugin.__path__)
-        self.configure_plugin_button.set_property(
-            'sensitive', plugin.config_dialog is not None)
+        self._ui.uninstall_plugin_button.set_sensitive(
+            configpaths.get('PLUGINS_USER') in plugin.__path__)
+        self._ui.configure_plugin_button.set_sensitive(
+            plugin.config_dialog is not None)
 
     def _clear_installed_plugin_info(self):
-        self.plugin_name_label.set_text('')
-        self.plugin_version_label.set_text('')
-        self.plugin_authors_label.set_text('')
-        self.plugin_homepage_linkbutton.set_markup('')
+        self._ui.plugin_name_label.set_text('')
+        self._ui.plugin_version_label.set_text('')
+        self._ui.plugin_authors_label.set_text('')
+        self._ui.plugin_homepage_linkbutton.set_markup('')
 
-        self.plugin_description_textview.set_text('')
-        self.uninstall_plugin_button.set_property('sensitive', False)
-        self.configure_plugin_button.set_property('sensitive', False)
+        self._ui.description.set_text('')
+        self._ui.uninstall_plugin_button.set_sensitive(False)
+        self._ui.configure_plugin_button.set_sensitive(False)
 
     def fill_installed_plugins_model(self):
         pm = app.plugin_manager
@@ -211,27 +209,21 @@ class PluginsWindow(EventHelper):
                 app.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException as e:
                 WarningDialog(_('Plugin failed'), str(e),
-                    transient_for=self.window)
+                    transient_for=self)
                 return
 
         self.installed_plugins_model[path][Column.ACTIVE] = not is_active
 
-    def on_plugins_window_destroy(self, widget):
-        '''Close window'''
-        self.unregister_events()
-        app.plugin_manager.remove_gui_extension_point('plugin_window', self)
-        del app.interface.instances['plugins']
-
     def on_configure_plugin_button_clicked(self, widget):
-        selection = self.installed_plugins_treeview.get_selection()
+        selection = self._ui.installed_plugins_treeview.get_selection()
         model, iter_ = selection.get_selected()
         if iter_:
             plugin = model.get_value(iter_, Column.PLUGIN)
 
             if isinstance(plugin.config_dialog, GajimPluginConfigDialog):
-                plugin.config_dialog.run(self.window)
+                plugin.config_dialog.run(self)
             else:
-                plugin.config_dialog(self.window)
+                plugin.config_dialog(self)
 
         else:
             # No plugin selected. this should never be reached. As configure
@@ -240,7 +232,7 @@ class PluginsWindow(EventHelper):
             pass
 
     def on_uninstall_plugin_button_clicked(self, widget):
-        selection = self.installed_plugins_treeview.get_selection()
+        selection = self._ui.installed_plugins_treeview.get_selection()
         model, iter_ = selection.get_selected()
         if iter_:
             plugin = model.get_value(iter_, Column.PLUGIN)
@@ -248,7 +240,7 @@ class PluginsWindow(EventHelper):
                 app.plugin_manager.uninstall_plugin(plugin)
             except PluginsystemError as e:
                 WarningDialog(_('Unable to properly remove the plugin'),
-                    str(e), self.window)
+                    str(e), self)
                 return
 
     def _on_plugin_removed(self, event):
@@ -272,7 +264,7 @@ class PluginsWindow(EventHelper):
 
         def show_warn_dialog():
             text = _('Archive is malformed')
-            dialog = WarningDialog(text, '', transient_for=self.window)
+            dialog = WarningDialog(text, '', transient_for=self)
             dialog.set_modal(False)
             dialog.popup()
 
@@ -292,7 +284,7 @@ class PluginsWindow(EventHelper):
                  DialogButton.make('Remove',
                                    text=_('_Overwrite'),
                                    callback=_on_yes)],
-                transient_for=self.window).show()
+                transient_for=self).show()
 
         def _try_install(zip_filename):
             try:
@@ -303,13 +295,13 @@ class PluginsWindow(EventHelper):
                     _on_plugin_exists(zip_filename)
                     return
 
-                WarningDialog(error_text, '"%s"' % zip_filename, self.window)
+                WarningDialog(error_text, '"%s"' % zip_filename, self)
                 return
             if not plugin:
                 show_warn_dialog()
                 return
 
-        ArchiveChooserDialog(_try_install, transient_for=self.window)
+        ArchiveChooserDialog(_try_install, transient_for=self)
 
 
 class GajimPluginConfigDialog(Gtk.Dialog):

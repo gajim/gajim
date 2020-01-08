@@ -23,8 +23,6 @@ from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
 
-import gajim.plugins.gui
-
 from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.about import AboutDialog
@@ -51,10 +49,7 @@ def on_preferences(_action, _param):
 
 
 def on_plugins(_action, _param):
-    if 'plugins' in interface.instances:
-        interface.instances['plugins'].window.present()
-    else:
-        interface.instances['plugins'] = gajim.plugins.gui.PluginsWindow()
+    open_window('PluginsWindow')
 
 
 def on_accounts(_action, param):
