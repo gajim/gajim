@@ -2088,9 +2088,10 @@ class Interface:
             from gajim.gtk import statusicon
             self.systray = statusicon.StatusIcon()
 
-        # Init emoji_chooser
-        from gajim.gtk.emoji_chooser import emoji_chooser
-        emoji_chooser.load()
+        if sys.platform in ('win32', 'darwin'):
+            from gajim.gtk.emoji_chooser import emoji_chooser
+            emoji_chooser.load()
+
         self.make_regexps()
 
         # get transports type from DB

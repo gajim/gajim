@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import logging
 import weakref
 from pathlib import Path
@@ -304,13 +303,8 @@ class EmojiChooser(Gtk.Popover):
         theme = app.settings.get('emoticons_theme')
         themes = helpers.get_available_emoticon_themes()
         if theme not in themes:
-            if sys.platform not in ('win32', 'darwin'):
-                app.settings.set('emoticons_theme', 'font')
-                theme = 'font'
-            else:
-                # Win/Mac fallback to noto
-                app.settings.set('emoticons_theme', 'noto')
-                theme = 'noto'
+            app.settings.set('emoticons_theme', 'noto')
+            theme = 'noto'
         return theme
 
     @staticmethod

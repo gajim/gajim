@@ -24,6 +24,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 import time
 import uuid
 import tempfile
@@ -504,7 +505,10 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             return Gdk.EVENT_STOP
 
         if action == 'show-emoji-chooser':
-            self.xml.emoticons_button.get_popover().show()
+            if sys.platform in ('win32', 'darwin'):
+                self.xml.emoticons_button.get_popover().show()
+                return Gdk.EVENT_STOP
+            self.msg_textview.emit('insert-emoji')
             return Gdk.EVENT_STOP
 
         if action == 'copy-text':
@@ -1207,8 +1211,20 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if not self.parent_win:
             return
 
-        emoji_chooser.text_widget = self.msg_textview
-        self.xml.emoticons_button.set_popover(emoji_chooser)
+        if sys.platform in ('win32', 'darwin'):
+            emoji_chooser.text_widget = self.msg_textview
+            self.xml.emoticons_button.set_popover(emoji_chooser)
+            return
+
+        self.xml.emoticons_button.set_sensitive(True)
+        self.xml.emoticons_button.connect('clicked',
+                                          self._on_emoticon_button_clicked)
+
+    def _on_emoticon_button_clicked(self, _widget):
+        self.msg_textview.remove_placeholder()
+        # Present GTK emoji chooser (not cross platform compatible)
+        self.msg_textview.emit('insert-emoji')
+        self.xml.emoticons_button.set_property('active', False)
 
     def on_color_menuitem_activate(self, _widget):
         color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)
