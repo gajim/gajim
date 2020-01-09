@@ -73,15 +73,16 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         # Disable 'Install from ZIP' for Flatpak installs
         if app.is_flatpak():
             self._ui.install_plugin_button.set_tooltip_text(
-                _('Click to view Gajim\'s wiki page on how to install plugins in Flatpak.'))
+                _('Click to view Gajim\'s wiki page on how to install plugins '
+                  'in Flatpak.'))
 
         self.installed_plugins_model = Gtk.ListStore(object, str, bool, bool,
-            GdkPixbuf.Pixbuf)
+                                                     GdkPixbuf.Pixbuf)
         self._ui.installed_plugins_treeview.set_model(
             self.installed_plugins_model)
 
         renderer = Gtk.CellRendererText()
-        col = Gtk.TreeViewColumn(_('Plugin'))#, renderer, text=Column.NAME)
+        col = Gtk.TreeViewColumn(_('Plugin'))  # , renderer, text=Column.NAME)
         cell = Gtk.CellRendererPixbuf()
         col.pack_start(cell, False)
         col.add_attribute(cell, 'pixbuf', Column.ICON)
@@ -91,9 +92,9 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.installed_plugins_treeview.append_column(col)
 
         renderer = Gtk.CellRendererToggle()
-        renderer.connect('toggled', self.installed_plugins_toggled_cb)
+        renderer.connect('toggled', self._installed_plugin_toggled)
         col = Gtk.TreeViewColumn(_('Active'), renderer, active=Column.ACTIVE,
-            activatable=Column.ACTIVATABLE)
+                                 activatable=Column.ACTIVATABLE)
         self._ui.installed_plugins_treeview.append_column(col)
 
         self.def_icon = load_icon('preferences-desktop', self, pixbuf=True)
@@ -101,12 +102,12 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         # connect signal for selection change
         selection = self._ui.installed_plugins_treeview.get_selection()
         selection.connect(
-            'changed', self.installed_plugins_treeview_selection_changed)
+            'changed', self._installed_plugins_treeview_selection_changed)
         selection.set_mode(Gtk.SelectionMode.SINGLE)
 
         self._clear_installed_plugin_info()
 
-        self.fill_installed_plugins_model()
+        self._fill_installed_plugins_model()
         root_iter = self.installed_plugins_model.get_iter_first()
         if root_iter:
             selection.select_iter(root_iter)
@@ -117,7 +118,8 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.plugins_notebook.set_current_page(0)
 
-        # Adding GUI extension point for Plugins that want to hook the Plugin Window
+        # Adding GUI extension point for Plugins that want to hook
+        # the Plugin Window
         app.plugin_manager.gui_extension_point('plugin_window', self)
 
         self.register_events([
@@ -139,7 +141,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         self.unregister_events()
         app.plugin_manager.remove_gui_extension_point('plugin_window', self)
 
-    def installed_plugins_treeview_selection_changed(self, treeview_selection):
+    def _installed_plugins_treeview_selection_changed(self, treeview_selection):
         model, iter_ = treeview_selection.get_selected()
         if iter_:
             plugin = model.get_value(iter_, Column.PLUGIN)
@@ -180,25 +182,30 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.uninstall_plugin_button.set_sensitive(False)
         self._ui.configure_plugin_button.set_sensitive(False)
 
-    def fill_installed_plugins_model(self):
+    def _fill_installed_plugins_model(self):
         pm = app.plugin_manager
         self.installed_plugins_model.clear()
-        self.installed_plugins_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+        self.installed_plugins_model.set_sort_column_id(1,
+                                                        Gtk.SortType.ASCENDING)
 
         for plugin in pm.plugins:
-            icon = self.get_plugin_icon(plugin)
-            self.installed_plugins_model.append([plugin, plugin.name,
-                plugin.active and plugin.activatable, plugin.activatable, icon])
+            icon = self._get_plugin_icon(plugin)
+            self.installed_plugins_model.append(
+                [plugin,
+                 plugin.name,
+                 plugin.active and plugin.activatable,
+                 plugin.activatable,
+                 icon])
 
-    def get_plugin_icon(self, plugin):
+    def _get_plugin_icon(self, plugin):
         icon_file = os.path.join(plugin.__path__, os.path.split(
-                plugin.__path__)[1]) + '.png'
+                                 plugin.__path__)[1]) + '.png'
         icon = self.def_icon
         if os.path.isfile(icon_file):
             icon = GdkPixbuf.Pixbuf.new_from_file_at_size(icon_file, 16, 16)
         return icon
 
-    def installed_plugins_toggled_cb(self, cell, path):
+    def _installed_plugin_toggled(self, _cell, path):
         is_active = self.installed_plugins_model[path][Column.ACTIVE]
         plugin = self.installed_plugins_model[path][Column.PLUGIN]
 
@@ -209,12 +216,12 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                 app.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException as e:
                 WarningDialog(_('Plugin failed'), str(e),
-                    transient_for=self)
+                              transient_for=self)
                 return
 
         self.installed_plugins_model[path][Column.ACTIVE] = not is_active
 
-    def on_configure_plugin_button_clicked(self, widget):
+    def _on_configure_plugin(self, _widget):
         selection = self._ui.installed_plugins_treeview.get_selection()
         model, iter_ = selection.get_selected()
         if iter_:
@@ -231,7 +238,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
             # XXX: maybe throw exception here?
             pass
 
-    def on_uninstall_plugin_button_clicked(self, widget):
+    def _on_uninstall_plugin(self, _widget):
         selection = self._ui.installed_plugins_treeview.get_selection()
         model, iter_ = selection.get_selected()
         if iter_:
@@ -240,7 +247,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                 app.plugin_manager.uninstall_plugin(plugin)
             except PluginsystemError as e:
                 WarningDialog(_('Unable to properly remove the plugin'),
-                    str(e), self)
+                              str(e), self)
                 return
 
     def _on_plugin_removed(self, event):
@@ -250,19 +257,19 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                 break
 
     def _on_plugin_added(self, event):
-        icon = self.get_plugin_icon(event.plugin)
+        icon = self._get_plugin_icon(event.plugin)
         self.installed_plugins_model.append([event.plugin,
                                              event.plugin.name,
                                              False,
                                              event.plugin.activatable,
                                              icon])
 
-    def on_install_plugin_button_clicked(self, widget):
+    def _on_install_plugin(self, _widget):
         if app.is_flatpak():
             open_uri('https://dev.gajim.org/gajim/gajim/wikis/help/flathub')
             return
 
-        def show_warn_dialog():
+        def _show_warn_dialog():
             text = _('Archive is malformed')
             dialog = WarningDialog(text, '', transient_for=self)
             dialog.set_modal(False)
@@ -273,7 +280,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                 plugin = app.plugin_manager.install_from_zip(zip_filename,
                                                              True)
                 if not plugin:
-                    show_warn_dialog()
+                    _show_warn_dialog()
                     return
 
             NewConfirmationDialog(
@@ -298,7 +305,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                 WarningDialog(error_text, '"%s"' % zip_filename, self)
                 return
             if not plugin:
-                show_warn_dialog()
+                _show_warn_dialog()
                 return
 
         ArchiveChooserDialog(_try_install, transient_for=self)
@@ -306,8 +313,8 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
 
 class GajimPluginConfigDialog(Gtk.Dialog):
     def __init__(self, plugin, **kwargs):
-        Gtk.Dialog.__init__(self, title='%s %s'%(plugin.name,
-            _('Configuration')), **kwargs)
+        Gtk.Dialog.__init__(self, title='%s %s' % (plugin.name,
+                            _('Configuration')), **kwargs)
         self.plugin = plugin
         button = self.add_button('gtk-close', Gtk.ResponseType.CLOSE)
         button.connect('clicked', self.on_close_button_clicked)

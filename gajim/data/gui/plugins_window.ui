@@ -56,7 +56,7 @@
                     <property name="label" translatable="yes">Install from File…</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">system-software-install-symbolic</property>
-                    <signal name="clicked" handler="on_install_plugin_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="_on_install_plugin" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -70,7 +70,7 @@
                     <property name="tooltip_text" translatable="yes">Uninstall Plugin</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">edit-delete-symbolic</property>
-                    <signal name="clicked" handler="on_uninstall_plugin_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="_on_uninstall_plugin" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -131,7 +131,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Plugin Settings</property>
-                    <signal name="clicked" handler="on_configure_plugin_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="_on_configure_plugin" swapped="no"/>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
