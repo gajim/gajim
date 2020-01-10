@@ -220,8 +220,7 @@ class GCTooltip():
             uf_affiliation = \
                 _('%(owner_or_admin_or_member)s of this group chat') \
                 % {'owner_or_admin_or_member': uf_affiliation}
-            uf_affiliation = self.colorize_affiliation(uf_affiliation)
-            self._ui.affiliation.set_markup(uf_affiliation)
+            self._ui.affiliation.set_text(uf_affiliation)
             self._ui.affiliation.show()
 
         # Avatar
@@ -238,28 +237,9 @@ class GCTooltip():
         app.plugin_manager.gui_extension_point(
             'gc_tooltip_populate', self, contact, self._ui.tooltip_grid)
 
-    @staticmethod
-    def colorize_affiliation(affiliation):
-        """
-        Color the affiliation of a MUC participant inside the tooltip by
-        it's semantics. Color palette is the Tango.
-        """
-        formatted = "<span foreground='%s'>%s</span>"
-        color = None
-        if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
-            color = app.config.get('tooltip_affiliation_none_color')
-        elif affiliation.startswith(_("Member")):
-            color = app.config.get('tooltip_affiliation_member_color')
-        elif affiliation.startswith(_("Administrator")):
-            color = app.config.get('tooltip_affiliation_administrator_color')
-        elif affiliation.startswith(_("Owner")):
-            color = app.config.get('tooltip_affiliation_owner_color')
-        if color:
-            affiliation = formatted % (color, affiliation)
-        return affiliation
-
     def destroy(self):
         self._ui.tooltip_grid.destroy()
+
 
 class RosterTooltip(StatusTable):
     def __init__(self):
