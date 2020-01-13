@@ -605,8 +605,8 @@ class HistoryManager:
         NewConfirmationDialog(
             _('Delete'),
             ngettext('Delete Message', 'Delete Messages', paths_len),
-            ngettext('Do you want to permanently delete this message',
-                     'Do you want to permanently delete these messages',
+            ngettext('Do you want to permanently delete this message?',
+                     'Do you want to permanently delete these messages?',
                      paths_len),
             [DialogButton.make('Cancel'),
              DialogButton.make('Delete',
