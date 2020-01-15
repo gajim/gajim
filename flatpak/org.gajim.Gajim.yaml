@@ -11,6 +11,7 @@ finish-args:
   - --socket=pulseaudio
   - --system-talk-name=org.freedesktop.GeoClue2
   - --system-talk-name=org.freedesktop.login1
+  - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.gnome.ScreenSaver
   - --talk-name=org.mpris.MediaPlayer2.*
   # Keyring
@@ -57,8 +58,8 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/64/7c/27367b38e6cc3e1f49f193deb761fe75cda9f95da37b67b422e62281fcac/cffi-1.12.2.tar.gz
-        sha256: e113878a446c6228669144ae8a56e268c91b7f1fafae927adc4879d9849e0ea7
+        url: https://files.pythonhosted.org/packages/93/1a/ab8c62b5838722f29f3daffcc8d4bd61844aa9b5f437341cc890ceee483b/cffi-1.12.3.tar.gz
+        sha256: 041c81822e9f84b1d9c401182e174996f0bae9991f33725d059b771744290774
 
   - name: python3-asn1crypto
     buildsystem: simple
@@ -81,7 +82,7 @@ modules:
   - name: python3-cryptography
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app .
+      - python3 setup.py install --prefix=/app
     sources:
       - type: archive
         url: https://files.pythonhosted.org/packages/07/ca/bc827c5e55918ad223d59d299fff92f3563476c3b00d0a9157d9c0217449/cryptography-2.6.1.tar.gz
@@ -135,13 +136,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-18.0.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app keyring-19.0.1-py2.py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/a1/28/0058032477bfdf2003e605d175629963759220661615443e20711446bfa7/keyring-18.0.0-py2.py3-none-any.whl
-        sha256: ca33f5ccc542b9ffaa196ee9a33488069e5e7eac77d5b81969f8a3ce74d0230c
+        url: https://files.pythonhosted.org/packages/29/54/22d12573bae3cccd1fb9ead7f69409257be16f7bdd7281f939b035a76399/keyring-19.0.1-py2.py3-none-any.whl
+        sha256: aae82841a2e170ecf4319df0f5c0df1468a98809e77563174949d8394bb59488
 
   - name: python3-cssutils
     buildsystem: simple
