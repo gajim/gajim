@@ -13,7 +13,7 @@ run-tests:
     - virtualenv --system-site-packages civenv
     - . ./civenv/bin/activate
     - pip3 install mypy
-    - pip3 install nbxmpp
+    - pip3 install -I nbxmpp==0.6.10
     - pip3 install pylint==2.1.1
     - mypy gajim
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
