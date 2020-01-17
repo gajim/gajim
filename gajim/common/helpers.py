@@ -1756,6 +1756,7 @@ def _on_file_created(file, result, user_data):
         outputstream = file.create_finish(result)
     except GLib.Error as error:
         callback(False, error, user_data)
+        return
 
     # Pass data as user_data to the callback, because
     # write_all_async() takes not reference to the data
