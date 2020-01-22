@@ -32,13 +32,17 @@ MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
 class MusicTrackInfo:
     __slots__ = ['title', 'album', 'artist', 'duration', 'track_number',
                  'paused']
-    def __init__(self):
-        self.title = None
-        self.album = None
-        self.artist = None
-        self.duration = None
-        self.track_number = None
-        self.paused = None
+    def __init__(self, meta_info, status):
+        self.title = meta_info.get('xesam:title')
+        self.album = meta_info.get('xesam:album')
+        # xesam:artist is always a list of strings if not None
+        self.artist = meta_info.get('xesam:artist')
+        if self.artist is not None:
+            self.artist = ', '.join(self.artist)
+
+        self.duration = float(meta_info.get('mpris:length', 0))
+        self.track_number = meta_info.get('xesam:trackNumber', 0)
+        self.paused = status == 'Paused'
 
 
 class MusicTrackListener(GObject.GObject):
@@ -166,22 +170,13 @@ class MusicTrackListener(GObject.GObject):
         self.emit('music-track-changed', info)
 
     @staticmethod
-    def _properties_extract(properties):
+    def _get_music_info(properties):
         meta = properties.get('Metadata')
         if meta is None or not meta:
             return None
 
-        info = MusicTrackInfo()
-        info.title = meta.get('xesam:title')
-        info.album = meta.get('xesam:album')
-        info.artist = meta.get('xesam:artist')
-        info.duration = float(meta.get('mpris:length', 0))
-        info.track_number = meta.get('xesam:trackNumber', 0)
-
         status = properties.get('PlaybackStatus')
-        info.paused = status is not None and status == 'Paused'
-
-        return info
+        return MusicTrackInfo(meta, status)
 
     def get_playing_track(self, name):
         '''Return a MusicTrackInfo for the currently playing
@@ -208,9 +203,7 @@ class MusicTrackListener(GObject.GObject):
                 return None
             raise
         else:
-            info = self._properties_extract(result[0])
-            return info
-
+            return self._get_music_info(result[0])
 
 # here we test :)
 if __name__ == '__main__':
