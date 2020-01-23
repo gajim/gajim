@@ -156,7 +156,7 @@ class ProxyResolver:
         else:
             self.state = S_INITIAL
 
-    def _result_received(self, data):
+    def _result_received(self, _nbxmpp_client, data):
         self.disconnect(self.active_connection)
         if data.getType() == 'result':
             self.keep_conf()

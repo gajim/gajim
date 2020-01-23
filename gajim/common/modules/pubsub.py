@@ -164,7 +164,7 @@ class PubSub(BaseModule):
         pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
         pubsub.addChild('delete', {'node': node})
 
-        def response(_con, resp, jid, node):
+        def response(_nbxmpp_client, resp, jid, node):
             if resp.getType() == 'result' and on_ok:
                 on_ok(jid, node)
             elif on_fail:
@@ -218,7 +218,7 @@ class PubSub(BaseModule):
         self._con.connection.SendAndCallForResponse(
             query, self._received_pb_configuration, {'node': node})
 
-    def _received_pb_configuration(self, _con, stanza, node):
+    def _received_pb_configuration(self, _nbxmpp_client, stanza, node):
         if not nbxmpp.isResultNode(stanza):
             self._log.warning('Error: %s', stanza.getError())
             return

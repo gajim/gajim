@@ -219,7 +219,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         open_uri(label.get_text(), account=self.account)
         return Gdk.EVENT_STOP
 
-    def _on_last_activity(self, stanza):
+    def _on_last_activity(self, _nbxmpp_client, stanza):
         if self._destroyed:
             # Window got closed in the meantime
             return

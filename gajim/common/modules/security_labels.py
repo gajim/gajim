@@ -45,7 +45,7 @@ class SecLabels(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._catalog_received)
 
-    def _catalog_received(self, stanza):
+    def _catalog_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Error: %s', stanza.getError())
             return

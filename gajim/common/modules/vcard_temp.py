@@ -135,13 +135,13 @@ class VCardTemp(BaseModule):
             iq, self._upload_room_avatar_result)
 
     @staticmethod
-    def _upload_room_avatar_result(stanza):
+    def _upload_room_avatar_result(_nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             reason = stanza.getErrorMsg() or stanza.getError()
             app.nec.push_incoming_event(InformationEvent(
                 None, dialog_name='avatar-upload-error', args=reason))
 
-    def _avatar_publish_result(self, _con, stanza, sha):
+    def _avatar_publish_result(self, _nbxmpp_client, stanza, sha):
         if stanza.getType() == 'result':
             current_sha = app.config.get_per(
                 'accounts', self._account, 'avatar_sha')
@@ -185,7 +185,7 @@ class VCardTemp(BaseModule):
 
         return avatar_sha, photo_decoded
 
-    def _parse_vcard(self, _con, stanza, callback, expected_sha):
+    def _parse_vcard(self, _nbxmpp_client, stanza, callback, expected_sha):
         frm_jid = stanza.getFrom()
         room = False
         if frm_jid is None:

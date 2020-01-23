@@ -36,7 +36,7 @@ class MetaContacts(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._metacontacts_received)
 
-    def _metacontacts_received(self, stanza):
+    def _metacontacts_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Request error: %s', stanza.getError())
         else:
@@ -93,7 +93,7 @@ class MetaContacts(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._store_response_received)
 
-    def _store_response_received(self, stanza):
+    def _store_response_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Store error: %s', stanza.getError())
 

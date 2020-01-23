@@ -2079,7 +2079,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         con.get_module('PubSub').send_pb_unsubscribe(
             self.jid, node, self._on_pep_unsubscribe, groupnode=node)
 
-    def _on_pep_subscriptions(self, conn, request):
+    def _on_pep_subscriptions(self, _nbxmpp_client, request):
         """
         We got the subscribed groups list stanza. Now, if we already have items
         on the list, we should actualize them
@@ -2108,7 +2108,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         # we now know subscriptions, update button states
         self.update_actions()
 
-    def _on_pep_subscribe(self, conn, request, groupnode):
+    def _on_pep_subscribe(self, _nbxmpp_client, request, groupnode):
         """
         We have just subscribed to a node. Update UI
         """
@@ -2122,7 +2122,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         self.update_actions()
 
-    def _on_pep_unsubscribe(self, conn, request, groupnode):
+    def _on_pep_unsubscribe(self, _nbxmpp_client, request, groupnode):
         """
         We have just unsubscribed from a node. Update UI
         """

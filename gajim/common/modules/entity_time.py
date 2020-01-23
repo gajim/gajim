@@ -53,7 +53,7 @@ class EntityTime(BaseModule):
 
         self._con.connection.SendAndCallForResponse(iq, self._result_received)
 
-    def _result_received(self, stanza):
+    def _result_received(self, _nbxmpp_client, stanza):
         time_info = None
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Error: %s', stanza.getError())

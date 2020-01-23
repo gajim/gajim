@@ -62,7 +62,9 @@ class Ping(BaseModule):
         self._con.connection.SendAndCallForResponse(self._get_ping_iq(to),
                                                     self._keepalive_received)
 
-    def _keepalive_received(self, _stanza: nbxmpp.Iq) -> None:
+    def _keepalive_received(self,
+                            _nbxmpp_client: Any,
+                            _stanza: nbxmpp.Iq) -> None:
         self._log.info('Received keepalive')
         self.remove_timeout()
 
@@ -91,7 +93,7 @@ class Ping(BaseModule):
             PingSentEvent(None, conn=self._con, contact=contact))
 
     def _pong_received(self,
-                       _con: ConnectionT,
+                       _nbxmpp_client: Any,
                        stanza: nbxmpp.Iq,
                        ping_time: int,
                        contact: ContactsT) -> None:

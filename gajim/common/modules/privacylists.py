@@ -76,7 +76,7 @@ class PrivacyLists(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._privacy_lists_received, {'callback': callback})
 
-    def _privacy_lists_received(self, _con, stanza, callback):
+    def _privacy_lists_received(self, _nbxmpp_client, stanza, callback):
         lists = []
         new_default = None
         result = nbxmpp.isResultNode(stanza)
@@ -118,7 +118,7 @@ class PrivacyLists(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._privacy_list_received)
 
-    def _privacy_list_received(self, stanza):
+    def _privacy_list_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.warning('List not available: %s', stanza.getError())
             return
@@ -152,7 +152,7 @@ class PrivacyLists(BaseModule):
     def del_privacy_list(self, name):
         self._log.info('Remove list: %s', name)
 
-        def _del_privacy_list_result(stanza):
+        def _del_privacy_list_result(_nbxmpp_client, stanza):
             if not nbxmpp.isResultNode(stanza):
                 self._log.warning('List deletion failed: %s', stanza.getError())
                 app.nec.push_incoming_event(InformationEvent(
@@ -235,7 +235,7 @@ class PrivacyLists(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._default_result_handler, {})
 
-    def _default_result_handler(self, _con, stanza):
+    def _default_result_handler(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.warning('Operation failed: %s', stanza.getError())
 

@@ -678,7 +678,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     if data[4] != '':
                         helpers.replace_dataform_media(conf, data[4])
                     if self.new_account_form:
-                        def _on_register_result(result):
+                        def _on_register_result(_nbxmpp_client, result):
                             if not nbxmpp.isResultNode(result):
                                 reason = result.getErrorMsg() or result.getError()
                                 app.nec.push_incoming_event(NetworkEvent(
@@ -1362,7 +1362,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             msg=msg,
             initial=initial)
 
-    def _continue_invisible(self, con, iq_obj, msg, signed, initial):
+    def _continue_invisible(self, _nbxmpp_client, iq_obj, msg, signed, initial):
         if iq_obj.getType() == 'error': # server doesn't support privacy lists
             return
         # active the privacy rule

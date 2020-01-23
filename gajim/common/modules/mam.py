@@ -297,7 +297,7 @@ class MAM(BaseModule):
             query, self._received_count, {'query_id': query_id})
         return query_id
 
-    def _received_count(self, _con, stanza, query_id):
+    def _received_count(self, _nbxmpp_client, stanza, query_id):
         try:
             _, set_ = self._parse_iq(stanza)
         except InvalidMamIQ:
@@ -402,7 +402,7 @@ class MAM(BaseModule):
                                            'start_date': start_date,
                                            'groupchat': groupchat})
 
-    def _result_finished(self, _con, stanza, query_id, start_date, groupchat):
+    def _result_finished(self, _nbxmpp_client, stanza, query_id, start_date, groupchat):
         try:
             fin, set_ = self._parse_iq(stanza)
         except InvalidMamIQ:
@@ -458,7 +458,7 @@ class MAM(BaseModule):
                                             'end_date': end_date})
         return query_id
 
-    def _intervall_result(self, _con, stanza, query_id,
+    def _intervall_result(self, _nbxmpp_client, stanza, query_id,
                           start_date, end_date):
         try:
             fin, set_ = self._parse_iq(stanza)
@@ -539,7 +539,7 @@ class MAM(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._preferences_received)
 
-    def _preferences_received(self, stanza):
+    def _preferences_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Error: %s', stanza.getError())
             app.nec.push_incoming_event(MAMPreferenceError(
@@ -580,7 +580,7 @@ class MAM(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._preferences_saved)
 
-    def _preferences_saved(self, stanza):
+    def _preferences_saved(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Error: %s', stanza.getError())
             app.nec.push_incoming_event(MAMPreferenceError(

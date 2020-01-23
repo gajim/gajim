@@ -33,7 +33,7 @@ class Delimiter(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._delimiter_received)
 
-    def _delimiter_received(self, stanza):
+    def _delimiter_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Request error: %s', stanza.getError())
         else:
@@ -56,7 +56,7 @@ class Delimiter(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._set_delimiter_response)
 
-    def _set_delimiter_response(self, stanza):
+    def _set_delimiter_response(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Store error: %s', stanza.getError())
 

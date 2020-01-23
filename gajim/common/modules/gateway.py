@@ -35,7 +35,7 @@ class Gateway(BaseModule):
             iq, self._on_unsubscribe_result)
         self._con.get_module('Roster').del_item(agent)
 
-    def _on_unsubscribe_result(self, stanza):
+    def _on_unsubscribe_result(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Error: %s', stanza.getError())
             return
@@ -69,7 +69,7 @@ class Gateway(BaseModule):
             query.setTagData('prompt', prompt)
         self._con.connection.SendAndCallForResponse(iq, self._on_prompt_result)
 
-    def _on_prompt_result(self, stanza):
+    def _on_prompt_result(self, _nbxmpp_client, stanza):
         jid = str(stanza.getFrom())
         fjid = stanza.getFrom().getBare()
         resource = stanza.getFrom().getResource()

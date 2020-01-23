@@ -46,7 +46,8 @@ class Register(BaseModule):
             iq, self._change_password_response, {'success_cb': weak_success_cb,
                                                  'error_cb': weak_error_cb})
 
-    def _change_password_response(self, _con, stanza, success_cb, error_cb):
+    def _change_password_response(self, _nbxmpp_client, stanza,
+                                  success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
             self._log.info('Error: %s', error)
@@ -81,7 +82,7 @@ class Register(BaseModule):
         self.agent_registrations[agent] = {'roster_push': False,
                                            'sub_received': False}
 
-    def _register_agent_response(self, _con, stanza, agent,
+    def _register_agent_response(self, _nbxmpp_client, stanza, agent,
                                  success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
@@ -114,7 +115,8 @@ class Register(BaseModule):
             iq, self._register_info_response, {'success_cb': weak_success_cb,
                                                'error_cb': weak_error_cb})
 
-    def _register_info_response(self, _con, stanza, success_cb, error_cb):
+    def _register_info_response(self, _nbxmpp_client, stanza,
+                                success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
             self._log.info('Error: %s', error)

@@ -52,7 +52,7 @@ class BitsOfBinary(BaseModule):
         self._con.connection.send(iq)
         raise nbxmpp.NodeProcessed
 
-    def _on_bob_received(self, _con, result, cid):
+    def _on_bob_received(self, _nbxmpp_client, result, cid):
         """
         Called when we receive BoB data
         """

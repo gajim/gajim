@@ -30,7 +30,7 @@ class Search(BaseModule):
         iq = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_SEARCH)
         self._con.connection.SendAndCallForResponse(iq, self._fields_received)
 
-    def _fields_received(self, stanza):
+    def _fields_received(self, _nbxmpp_client, stanza):
         data = None
         is_dataform = False
 
@@ -67,7 +67,7 @@ class Search(BaseModule):
 
         self._con.connection.SendAndCallForResponse(iq, self._received_result)
 
-    def _received_result(self, stanza):
+    def _received_result(self, _nbxmpp_client, stanza):
         data = None
         is_dataform = False
 

@@ -84,7 +84,7 @@ class Roster(BaseModule):
         self._con.connection.SendAndCallForResponse(
             iq, self._roster_received)
 
-    def _roster_received(self, stanza):
+    def _roster_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.warning('Unable to retrive roster: %s', stanza.getError())
         else:

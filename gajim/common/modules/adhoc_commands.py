@@ -383,7 +383,7 @@ class AdHocCommands(BaseModule):
         self._con.connection.SendAndCallForResponse(
             stanza, self._action_response_received)
 
-    def _action_response_received(self, stanza):
+    def _action_response_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Error: %s', stanza.getError())
 
@@ -413,7 +413,7 @@ class AdHocCommands(BaseModule):
         self._con.connection.SendAndCallForResponse(
             stanza, self._cancel_result_received)
 
-    def _cancel_result_received(self, stanza):
+    def _cancel_result_received(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
             self._log.warning('Error: %s', stanza.getError())
         else:
