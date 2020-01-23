@@ -548,7 +548,7 @@ class Bytestream(BaseModule):
         iq.setID(auth_id)
         self._con.connection.send(iq)
 
-    def _on_bytestream_error(self, _con, iq_obj):
+    def _on_bytestream_error(self, _con, iq_obj, _properties):
         id_ = iq_obj.getAttr('id')
         frm = helpers.get_full_jid_from_iq(iq_obj)
         query = iq_obj.getTag('query')
@@ -567,7 +567,7 @@ class Bytestream(BaseModule):
                          error_msg=''))
         raise nbxmpp.NodeProcessed
 
-    def _on_bytestream_set(self, con, iq_obj):
+    def _on_bytestream_set(self, con, iq_obj, _properties):
         target = iq_obj.getAttr('to')
         id_ = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
@@ -625,7 +625,7 @@ class Bytestream(BaseModule):
                 _connection_error)
         raise nbxmpp.NodeProcessed
 
-    def _on_result(self, _con, iq_obj):
+    def _on_result(self, _con, iq_obj, _properties):
         # if we want to respect xep-0065 we have to check for proxy
         # activation result in any result iq
         real_id = iq_obj.getAttr('id')
@@ -643,7 +643,7 @@ class Bytestream(BaseModule):
                     app.socks5queue.activate_proxy(host['idx'])
                     raise nbxmpp.NodeProcessed
 
-    def _on_bytestream_result(self, con, iq_obj):
+    def _on_bytestream_result(self, con, iq_obj, _properties):
         frm = self._ft_get_from(iq_obj)
         real_id = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
