@@ -132,6 +132,8 @@ status_before_autoaway = {}  # type: Dict[str, str]
 
 proxy65_manager = None
 
+cert_store = None
+
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
              'error']
 

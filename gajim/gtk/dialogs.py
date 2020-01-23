@@ -23,6 +23,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.const import ButtonAction
+from gajim.common.helpers import convert_gio_to_openssl_cert
 
 from gajim.gtk.util import get_builder
 
@@ -228,6 +229,7 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self.account = account
         self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
+        cert = convert_gio_to_openssl_cert(cert)
         # Get data for labels and copy button
         issuer = cert.get_issuer()
         subject = cert.get_subject()

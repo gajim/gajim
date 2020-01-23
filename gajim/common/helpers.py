@@ -63,8 +63,12 @@ from nbxmpp.util import compute_caps_hash
 from nbxmpp.stringprepare import nameprep
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.const import Role
+from nbxmpp.const import ConnectionProtocol
+from nbxmpp.const import ConnectionType
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
+from OpenSSL.crypto import load_certificate
+from OpenSSL.crypto import FILETYPE_PEM
 from gi.repository import Gio
 from gi.repository import GLib
 import precis_i18n.codec  # pylint: disable=unused-import
@@ -1771,3 +1775,18 @@ def get_encryption_method(account: str, jid: str) -> Optional[str]:
     config_key = '%s-%s' % (account, jid)
     state = app.config.get_per('encryption', config_key, 'encryption')
     return state or None
+
+
+def convert_gio_to_openssl_cert(cert):
+    cert = load_certificate(FILETYPE_PEM, cert.props.certificate_pem.encode())
+    return cert
+
+
+def get_custom_host(account):
+    if not app.config.get_per('accounts', account, 'use_custom_host'):
+        return
+    host = app.config.get_per('accounts', account, 'custom_host')
+    port = app.config.get_per('accounts', account, 'custom_port')
+    return ('%s:%s' % (host, port),
+            ConnectionProtocol.TCP,
+            ConnectionType.DIRECT_TLS)

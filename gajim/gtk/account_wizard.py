@@ -549,7 +549,7 @@ class AccountCreationWizard(EventHelper):
         # update variables
         app.interface.instances[self.account] = {
             'infos': {}, 'disco': {},
-            'gc_config': {}, 'search': {}, 'online_dialog': {},
+            'gc_config': {}, 'search': {},
             'sub_request': {}}
         app.interface.minimized_controls[self.account] = {}
         app.groups[self.account] = {}

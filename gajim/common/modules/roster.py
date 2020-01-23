@@ -71,8 +71,8 @@ class Roster(BaseModule):
 
     def request_roster(self):
         version = None
-        features = self._con.connection.Dispatcher.Stream.features
-        if features and features.getTag('ver', namespace=nbxmpp.NS_ROSTER_VER):
+        features = self._con.connection.features
+        if features.has_roster_version:
             version = app.config.get_per(
                 'accounts', self._account, 'roster_version')
 

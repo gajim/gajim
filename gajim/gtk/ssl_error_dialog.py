@@ -12,16 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
-
-from OpenSSL import crypto
 
 from gi.repository import Gtk
+from gi.repository import Gio
 
 from gajim.common import app
-from gajim.common import configpaths
-from gajim.common.const import SSLError
-from gajim.common.connection_handlers_events import OurShowEvent
+
+from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
@@ -58,18 +55,11 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
               'certificate of your XMPP server (%s).') % self._server)
 
         unknown_error = _('Unknown SSL error \'%s\'') % self._error_num
-        ssl_error = SSLError.get(self._error_num, unknown_error)
+        ssl_error = GIO_TLS_ERRORS.get(self._error_num, unknown_error)
         self._ui.ssl_error.set_text(ssl_error)
 
-        if self._error_num in (18, 27):
-            # Errors: 18 Self signed certificate; 27 Certificate not trusted
+        if self._error_num == Gio.TlsCertificateFlags.UNKNOWN_CA:
             self._ui.add_certificate_checkbutton.show()
-
-    def _on_abort_clicked(self, _button):
-        self._con.disconnect(reconnect=False)
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self._con,
-                                                 show='offline'))
-        self.destroy()
 
     def _on_view_cert_clicked(self, _button):
         open_window('CertificateDialog',
@@ -82,24 +72,12 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
         if self._ui.ignore_error_checkbutton.get_active():
             ignore_ssl_errors = app.config.get_per(
                 'accounts', self.account, 'ignore_ssl_errors').split()
-            ignore_ssl_errors.append(str(self._error_num))
+            ignore_ssl_errors.append(str(int(self._error_num)))
             app.config.set_per('accounts', self.account, 'ignore_ssl_errors',
                                ' '.join(ignore_ssl_errors))
 
         if self._ui.add_certificate_checkbutton.get_active():
-            pem = crypto.dump_certificate(
-                crypto.FILETYPE_PEM, self._cert).decode('utf-8')
-
-            # Check if cert is already in file
-            certs = ''
-            my_ca_certs = configpaths.get('MY_CACERTS')
-            if os.path.isfile(my_ca_certs):
-                with open(my_ca_certs, encoding='utf-8') as file_:
-                    certs = file_.read()
-            if pem not in certs:
-                with open(my_ca_certs, 'a', encoding='utf-8') as file_:
-                    file_.write(self._server + '\n')
-                    file_.write(pem + '\n\n')
+            app.cert_store.add_certificate(self._cert)
 
         self.destroy()
         self._con.process_ssl_errors()

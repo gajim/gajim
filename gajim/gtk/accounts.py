@@ -519,7 +519,6 @@ class AccountRow(Gtk.ListBoxRow):
     def _on_enable_switch(self, switch, state, account):
         def _disable():
             app.connections[account].change_status('offline', 'offline')
-            app.connections[account].disconnect(reconnect=False)
             app.interface.disable_account(account)
             switch.set_state(state)
 

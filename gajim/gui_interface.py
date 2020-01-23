@@ -78,8 +78,8 @@ from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.connection_handlers_events import OurShowEvent
+from gajim.common.client import Client
 
-from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 
 from gajim import roster_window
@@ -207,16 +207,9 @@ class Interface:
         #('STATUS', account, show)
         account = obj.conn.name
         if obj.show in ('offline', 'error'):
-            for name in list(self.instances[account]['online_dialog'].keys()):
-                # .keys() is needed to not have a dictionary length changed
-                # during iteration error
-                self.instances[account]['online_dialog'][name].destroy()
-                if name in self.instances[account]['online_dialog']:
-                    # destroy handler may have already removed it
-                    del self.instances[account]['online_dialog'][name]
+            # TODO: Close all account windows
+            pass
 
-            if account in self.pass_dialog:
-                self.pass_dialog[account].window.destroy()
         if obj.show == 'offline':
             app.block_signed_in_notifications[account] = True
         else:
@@ -459,7 +452,6 @@ class Interface:
             del self.pass_dialog[account]
 
         def on_cancel():
-            obj.conn.disconnect(reconnect=False, immediately=True)
             del self.pass_dialog[account]
 
         self.pass_dialog[account] = PassphraseDialog(
@@ -1044,18 +1036,6 @@ class Interface:
         RosterItemExchangeWindow(obj.conn.name, obj.action,
                                  obj.exchange_items_list, obj.fjid)
 
-    def handle_event_ssl_error(self, obj):
-        account = obj.conn.name
-        connection = obj.conn
-        cert = obj.cert
-        error_num = obj.error_num
-
-        open_window('SSLErrorDialog',
-                    account=account,
-                    connection=connection,
-                    cert=cert,
-                    error_num=error_num)
-
     def handle_event_plain_connection(self, obj):
         # ('PLAIN_CONNECTION', account, (connection))
         def _on_connect_anyway(is_checked):
@@ -1122,7 +1102,6 @@ class Interface:
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
             'signed-in': [self.handle_event_signed_in],
-            'ssl-error': [self.handle_event_ssl_error],
             'stream-conflict-received': [self.handle_event_resource_conflict],
             'subscribe-presence-received': [
                 self.handle_event_subscribe_presence],
@@ -1727,7 +1706,7 @@ class Interface:
             app.connections[account] = connection_zeroconf.ConnectionZeroconf(
                 account)
         else:
-            app.connections[account] = Connection(account)
+            app.connections[account] = Client(account)
 
         app.plugin_manager.register_modules_for_account(
             app.connections[account])
@@ -1735,7 +1714,7 @@ class Interface:
         # update variables
         self.instances[account] = {
             'infos': {}, 'disco': {}, 'gc_config': {}, 'search': {},
-            'online_dialog': {}, 'sub_request': {}}
+            'sub_request': {}}
         self.minimized_controls[account] = {}
         app.groups[account] = {}
         app.contacts.add_account(account)
@@ -1805,7 +1784,8 @@ class Interface:
 
     def remove_account(self, account):
         if account in app.connections:
-            app.connections[account].disconnect(reconnect=False)
+            app.connections[account].disconnect(gracefully=True,
+                                                reconnect=False)
 
         self.disable_account(account)
 
@@ -1971,23 +1951,19 @@ class Interface:
         view.updateNamespace({'gajim': app})
         app.ipython_window = window
 
-    def network_status_changed(self, monitor, connected):
+    def _network_status_changed(self, monitor, _param):
+        connected = monitor.get_network_available()
         if connected == self.network_state:
-            # This callback gets called a lot from GTK with the
-            # same state, not only on change.
             return
+
         self.network_state = connected
-        log.debug('NetworkMonitor state change: %s', connected)
         if connected:
-            for connection in app.connections.values():
-                if connection.state.is_disconnected and connection.time_to_reconnect:
-                    log.info('Connect %s', connection.name)
-                    GLib.timeout_add_seconds(2, connection.reconnect)
+            log.info('Network connection available')
         else:
+            log.info('Network connection lost')
             for connection in app.connections.values():
                 if connection.state.is_connected:
-                    log.info('Disconnect %s', connection.name)
-                    connection.disconnect(immediately=True)
+                    connection.disconnect(gracefully=False, reconnect=True)
 
     def create_zeroconf_default_config(self):
         if app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'name'):
@@ -2161,18 +2137,17 @@ class Interface:
         and app.is_installed('ZEROCONF'):
             app.connections[app.ZEROCONF_ACC_NAME] = \
                 connection_zeroconf.ConnectionZeroconf(app.ZEROCONF_ACC_NAME)
+
         for account in app.config.get_per('accounts'):
             if not app.config.get_per('accounts', account, 'is_zeroconf') and\
             app.config.get_per('accounts', account, 'active'):
-                app.connections[account] = Connection(account)
+                app.connections[account] = Client(account)
 
         self.instances = {}
 
         for a in app.connections:
             self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
-                'search': {}, 'online_dialog': {}, 'sub_request': {}}
-            # online_dialog contains all dialogs that have a meaning only when
-            # we are not disconnected
+                'search': {}, 'sub_request': {}}
             self.minimized_controls[a] = {}
             app.contacts.add_account(a)
             app.groups[a] = {}
@@ -2213,10 +2188,10 @@ class Interface:
 
         self.music_track_changed_signal = None
 
-        self.network_monitor = Gio.NetworkMonitor.get_default()
-        self.network_monitor.connect('network-changed',
-                                     self.network_status_changed)
-        self.network_state = self.network_monitor.get_network_available()
+        self._network_monitor = Gio.NetworkMonitor.get_default()
+        self._network_monitor.connect('notify::network-available',
+                                     self._network_status_changed)
+        self.network_state = self._network_monitor.get_network_available()
 
 
 class ThreadInterface:

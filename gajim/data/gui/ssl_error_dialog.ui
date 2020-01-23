@@ -110,30 +110,16 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_top">12</property>
+        <property name="hexpand">True</property>
         <property name="spacing">12</property>
-        <child>
-          <object class="GtkButton" id="abort_button">
-            <property name="label" translatable="yes">_Abort</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="hexpand">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_abort_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="homogeneous">True</property>
         <child>
           <object class="GtkButton" id="view_cert_button">
             <property name="label" translatable="yes">_View Certificate</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="halign">center</property>
+            <property name="halign">start</property>
             <property name="use_underline">True</property>
             <signal name="clicked" handler="_on_view_cert_clicked" swapped="no"/>
           </object>
@@ -149,7 +135,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="hexpand">True</property>
+            <property name="halign">end</property>
             <property name="use_underline">True</property>
             <signal name="clicked" handler="_on_connect_clicked" swapped="no"/>
             <style>

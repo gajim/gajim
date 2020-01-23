@@ -28,7 +28,7 @@ from gajim.common.const import PathType, PathLocation
 
 if TYPE_CHECKING:
     # pylint: disable=unused-import
-    from gajim.common.connection import Connection
+    from gajim.common.client import Client
     from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
     from gajim.common.contacts import Contact
     from gajim.common.contacts import GC_Contact
@@ -43,7 +43,7 @@ NetworkEventsControllerT = Union['NetworkEventsController']
 InterfaceT = Union['Interface']
 LoggerT = Union['Logger']
 
-ConnectionT = Union['Connection', 'ConnectionZeroconf']
+ConnectionT = Union['Client', 'ConnectionZeroconf']
 ContactsT = Union['Contact', 'GC_Contact']
 ContactT = Union['Contact']
 

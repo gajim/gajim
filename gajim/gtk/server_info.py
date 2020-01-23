@@ -71,7 +71,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         server_info = con.get_module('Discovery').server_info
         self._add_contact_addresses(server_info.dataforms)
 
-        self.cert = con.connection.Connection.ssl_certificate
+        self.cert = con.certificate
         self._add_connection_info()
 
         self.feature_listbox = Gtk.ListBox()
@@ -295,7 +295,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                     con.get_module('Blocking').supported,
                     nbxmpp.NS_BLOCKING),
             Feature('XEP-0198: Stream Management',
-                    con.connection.sm_enabled, nbxmpp.NS_STREAM_MGMT),
+                    con.features.has_sm, nbxmpp.NS_STREAM_MGMT),
             Feature('XEP-0258: Security Labels in XMPP',
                     con.get_module('SecLabels').supported,
                     nbxmpp.NS_SECLABEL),

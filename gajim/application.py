@@ -216,6 +216,9 @@ class GajimApplication(Gtk.Application):
         from gajim.gtk.util import load_user_iconsets
         load_user_iconsets()
 
+        from gajim.common.cert_store import CertificateStore
+        app.cert_store = CertificateStore()
+
         # Set Application Menu
         app.app = self
         from gajim.gtk.util import get_builder
@@ -227,6 +230,7 @@ class GajimApplication(Gtk.Application):
         if self.interface is not None:
             self.interface.roster.window.present()
             return
+
         from gajim.gui_interface import Interface
         self.interface = Interface()
         self.interface.run(self)

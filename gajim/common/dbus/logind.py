@@ -138,4 +138,5 @@ class LogindListener:
 
 
 def enable():
-    LogindListener.get()
+    return
+    # LogindListener.get()
