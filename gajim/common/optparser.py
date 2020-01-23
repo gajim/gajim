@@ -134,12 +134,6 @@ class OptionsParser:
         while new_version_list:
             new.append(int(new_version_list.pop(0)))
 
-        if old < [0, 14, 0, 1] and new >= [0, 14, 0, 1]:
-            self.update_config_to_01401()
-        if old < [0, 14, 90, 0] and new >= [0, 14, 90, 0]:
-            self.update_config_to_014900()
-        if old < [0, 16, 0, 1] and new >= [0, 16, 0, 1]:
-            self.update_config_to_01601()
         if old < [0, 16, 4, 1] and new >= [0, 16, 4, 1]:
             self.update_config_to_01641()
         if old < [0, 16, 10, 1] and new >= [0, 16, 10, 1]:
@@ -176,30 +170,6 @@ class OptionsParser:
             proxies_str = ', '.join(proxies)
             app.config.set_per('accounts', account, 'file_transfer_proxies',
                     proxies_str)
-
-    def update_config_to_01401(self):
-        if 'autodetect_browser_mailer' not in self.old_values or 'openwith' \
-        not in self.old_values or \
-        (self.old_values['autodetect_browser_mailer'] is False and \
-        self.old_values['openwith'] != 'custom'):
-            app.config.set('autodetect_browser_mailer', True)
-            app.config.set('openwith', app.config.DEFAULT_OPENWITH)
-        app.config.set('version', '0.14.0.1')
-
-    def update_config_to_014900(self):
-        if 'use_stun_server' in self.old_values and self.old_values[
-        'use_stun_server'] and not self.old_values['stun_server']:
-            app.config.set('use_stun_server', False)
-        if os.name == 'nt':
-            app.config.set('autodetect_browser_mailer', True)
-
-    def update_config_to_01601(self):
-        if 'last_mam_id' in self.old_values:
-            last_mam_id = self.old_values['last_mam_id']
-            for account in app.config.get_per('accounts'):
-                app.config.set_per('accounts', account, 'last_mam_id',
-                    last_mam_id)
-        app.config.set('version', '0.16.0.1')
 
     def update_config_to_01641(self):
         for account in self.old_values['accounts'].keys():
