@@ -402,7 +402,8 @@ class MAM(BaseModule):
                                            'start_date': start_date,
                                            'groupchat': groupchat})
 
-    def _result_finished(self, _nbxmpp_client, stanza, query_id, start_date, groupchat):
+    def _result_finished(self, _nbxmpp_client, stanza, query_id,
+                         start_date, groupchat):
         try:
             fin, set_ = self._parse_iq(stanza)
         except InvalidMamIQ:
