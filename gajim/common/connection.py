@@ -48,6 +48,7 @@ import OpenSSL.crypto
 import nbxmpp
 from nbxmpp.const import Realm
 from nbxmpp.const import Event
+from nbxmpp.util import generate_id
 
 from gajim import common
 from gajim.common import helpers
@@ -232,7 +233,7 @@ class CommonConnection:
                           namespace=nbxmpp.NS_CORRECT)
 
         # XEP-0359
-        obj.stanza_id = self.connection.getAnID()
+        obj.stanza_id = generate_id()
         msg_iq.setID(obj.stanza_id)
         if obj.message:
             msg_iq.setOriginID(obj.stanza_id)
@@ -1625,7 +1626,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 typ='groupchat',
                                 xhtml=xhtml)
 
-        obj.stanza_id = self.connection.getAnID()
+        obj.stanza_id = generate_id()
         msg_iq.setID(obj.stanza_id)
         if obj.message:
             msg_iq.setOriginID(obj.stanza_id)

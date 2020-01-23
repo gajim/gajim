@@ -18,6 +18,7 @@ import os
 from OpenSSL import SSL, crypto
 
 import nbxmpp
+from nbxmpp.util import generate_id
 from gajim.common import app
 from gajim.common import configpaths
 
@@ -188,7 +189,7 @@ def check_cert(jid, fingerprint):
 
 def send_cert_request(con, to_jid):
     iq = nbxmpp.Iq('get', to=to_jid)
-    id_ = con.connection.getAnID()
+    id_ = generate_id()
     iq.setAttr('id', id_)
     pubkey = iq.setTag('pubkeys')
     pubkey.setNamespace(nbxmpp.NS_PUBKEY_PUBKEY)

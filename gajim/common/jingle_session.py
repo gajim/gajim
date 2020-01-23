@@ -31,6 +31,7 @@ import logging
 from enum import Enum, unique
 
 import nbxmpp
+from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common.jingle_transport import get_jingle_transport
@@ -103,7 +104,7 @@ class JingleSession:
         # what state is session in? (one from JingleStates)
         self.state = JingleStates.ENDED
         if not sid:
-            sid = con.connection.getAnID()
+            sid = generate_id()
         self.sid = sid # sessionid
         # iq stanza id, used to determine which sessions to summon callback
         # later on when iq-result stanza arrives

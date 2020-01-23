@@ -24,6 +24,7 @@ import socket
 from enum import IntEnum, unique
 
 import nbxmpp
+from nbxmpp.util import generate_id
 
 from gajim.common import app
 
@@ -96,7 +97,7 @@ class JingleTransport:
     def set_connection(self, conn):
         self.connection = conn
         if not self.sid:
-            self.sid = self.connection.connection.getAnID()
+            self.sid = generate_id()
 
     def set_file_props(self, file_props):
         self.file_props = file_props
@@ -198,7 +199,7 @@ class JingleTransportSocks5(JingleTransport):
 
         candidate = {
             'host': self.connection.peerhost[0],
-            'candidate_id': self.connection.connection.getAnID(),
+            'candidate_id': generate_id(),
             'port': port,
             'type': 'direct',
             'jid': self.ourjid,
@@ -214,7 +215,7 @@ class JingleTransportSocks5(JingleTransport):
                 addr != '::1':
                     candidate = {
                         'host': addr,
-                        'candidate_id': self.connection.connection.getAnID(),
+                        'candidate_id': generate_id(),
                         'port': port,
                         'type': 'direct',
                         'jid': self.ourjid,
@@ -238,7 +239,7 @@ class JingleTransportSocks5(JingleTransport):
                             continue
                         candidate = {
                             'host': addr,
-                            'candidate_id': self.connection.connection.getAnID(),
+                            'candidate_id': generate_id(),
                             'port': port,
                             'type': 'direct',
                             'jid': self.ourjid,
@@ -256,7 +257,7 @@ class JingleTransportSocks5(JingleTransport):
                             continue
                         candidate = {
                             'host': addr,
-                            'candidate_id': self.connection.connection.getAnID(),
+                            'candidate_id': generate_id(),
                             'port': port,
                             'type': 'direct',
                             'jid': self.ourjid,
@@ -286,7 +287,7 @@ class JingleTransportSocks5(JingleTransport):
             for host in hosts:
                 candidate = {
                     'host': host,
-                    'candidate_id': self.connection.connection.getAnID(),
+                    'candidate_id': generate_id(),
                     'port': port,
                     'type': 'direct',
                     'jid': self.ourjid,
@@ -313,7 +314,7 @@ class JingleTransportSocks5(JingleTransport):
             for proxyhost in proxyhosts:
                 candidate = {
                     'host': proxyhost['host'],
-                    'candidate_id': self.connection.connection.getAnID(),
+                    'candidate_id': generate_id(),
                     'port': int(proxyhost['port']),
                     'type': 'proxy',
                     'jid': proxyhost['jid'],

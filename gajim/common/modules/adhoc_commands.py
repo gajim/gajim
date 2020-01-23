@@ -22,6 +22,7 @@
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.modules import dataforms
+from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import helpers
@@ -314,7 +315,7 @@ class AdHocCommands(BaseModule):
                 raise nbxmpp.NodeProcessed
 
             # generate new sessionid
-            sessionid = self._con.connection.getAnID()
+            sessionid = generate_id()
 
             # create new instance and run it
             obj = newcmd(conn=self, jid=jid, sessionid=sessionid)

@@ -34,6 +34,7 @@ from nbxmpp.idlequeue import IdleObject
 from nbxmpp.transports import DATA_RECEIVED
 from nbxmpp.transports import DATA_SENT
 from nbxmpp.transports import DATA_ERROR
+from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common.zeroconf import zeroconf
@@ -184,7 +185,7 @@ class P2PClient(IdleObject):
                 thread_id = stanza.getThread()
                 id_ = stanza.getID()
                 if not id_:
-                    id_ = self.Dispatcher.getAnID()
+                    id_ = generate_id()
                 if self.fd in self.conn_holder.ids_of_awaiting_messages:
                     self.conn_holder.ids_of_awaiting_messages[self.fd].append((
                         id_, thread_id))
@@ -209,7 +210,7 @@ class P2PClient(IdleObject):
             thread_id = stanza.getThread()
             id_ = stanza.getID()
             if not id_:
-                id_ = self.Dispatcher.getAnID()
+                id_ = generate_id()
             if self.fd in self.conn_holder.ids_of_awaiting_messages:
                 self.conn_holder.ids_of_awaiting_messages[self.fd].append((id_,
                     thread_id))
@@ -799,12 +800,6 @@ class ClientZeroconf:
             addresses_ += [{'host': address['address'], 'address': address['address'], 'port': address['port']}]
         P2PClient(None, addresses_, self,
             [(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
-
-    def getAnID(self):
-        """
-        Generate a random id
-        """
-        return ''.join(Random().sample(string.ascii_letters + string.digits, 6))
 
     def RegisterDisconnectHandler(self, handler):
         """

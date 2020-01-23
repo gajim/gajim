@@ -18,6 +18,7 @@ import time
 from datetime import datetime, timedelta
 
 import nbxmpp
+from nbxmpp.util import generate_id
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -256,7 +257,7 @@ class MAM(BaseModule):
         return valid_id == properties.mam.query_id
 
     def _get_query_id(self, jid):
-        query_id = self._con.connection.getAnID()
+        query_id = generate_id()
         self._mam_query_ids[jid] = query_id
         return query_id
 
