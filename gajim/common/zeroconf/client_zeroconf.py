@@ -20,9 +20,7 @@ import ssl
 import errno
 import sys
 import os
-import string
 import logging
-from random import Random
 from unittest.mock import Mock
 
 import nbxmpp
