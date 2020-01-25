@@ -152,7 +152,7 @@ class Config:
         'history_window_x-position': [opt_int, 0],
         'history_window_y-position': [opt_int, 0],
         'latest_disco_addresses': [opt_str, ''],
-        'time_stamp': [opt_str, '[%X] ', _('This option lets you customize the timestamp that is printed in conversation. For example \'[%H:%M] \' will show \'[hour:minute] \'. See python doc on strftime for full documentation (https://docs.python.org/3/library/time.html).')],
+        'time_stamp': [opt_str, '%x | %X  ', _('This option lets you customize the timestamp that is printed in conversation. For example \'[%H:%M] \' will show \'[hour:minute] \'. See python doc on strftime for full documentation (https://docs.python.org/3/library/time.html#time.strftime).')],
         'before_nickname': [opt_str, '', _('Characters that are printed before the nickname in conversations.')],
         'after_nickname': [opt_str, ':', _('Characters that are printed after the nickname in conversations.')],
         'change_roster_title': [opt_bool, True, _('If enabled, Gajim will add * and [n] in contact list window title.')],

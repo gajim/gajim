@@ -24,11 +24,9 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import time
-import os
 import queue
 import urllib
 import logging
-from calendar import timegm
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -1084,34 +1082,11 @@ class ConversationTextview(GObject.GObject):
 
         self.line += 1
 
-    def get_time_to_show(self, tim, direction_mark=''):
+    def get_time_to_show(self, tim):
         """
-        Get the time, with the day before if needed and return it. It DOESN'T
-        format a fuzzy time
+        Format the time according to config setting 'time_stamp'
         """
-        format_ = ''
-        # get difference in days since epoch (86400 = 24*3600)
-        # number of days since epoch for current time (in GMT) -
-        # number of days since epoch for message (in GMT)
-        diff_day = int(int(timegm(time.localtime())) / 86400 -\
-                int(timegm(tim)) / 86400)
-        if diff_day == 0.0:
-            day_str = ''
-        else:
-            #%i is day in year (1-365)
-            day_str = i18n.ngettext('Yesterday',
-                '%(nb_days)i days ago', diff_day, {'nb_days': diff_day},
-                {'nb_days': diff_day})
-        if day_str:
-            # strftime Windows bug has problems with Unicode
-            # see: http://bugs.python.org/issue8304
-            if os.name != 'nt':
-                format_ += i18n.direction_mark + day_str + direction_mark + ' '
-            else:
-                format_ += day_str + ' '
-        timestamp_str = app.config.get('time_stamp')
-        timestamp_str = helpers.from_one_line(timestamp_str)
-        format_ += timestamp_str
+        format_ = helpers.from_one_line(app.config.get('time_stamp'))
         tim_format = time.strftime(format_, tim)
         return tim_format
 
@@ -1188,7 +1163,7 @@ class ConversationTextview(GObject.GObject):
         current_print_time = app.config.get('print_time')
 
         if current_print_time == 'always':
-            timestamp_str = self.get_time_to_show(local_tim, direction_mark)
+            timestamp_str = self.get_time_to_show(local_tim)
             timestamp = time.strftime(timestamp_str, local_tim)
             timestamp = direction_mark + timestamp + direction_mark
             if other_tags_for_time:
@@ -1202,7 +1177,7 @@ class ConversationTextview(GObject.GObject):
             seconds_passed = tim - self.last_time_printout
             if seconds_passed > every_foo_seconds:
                 self.last_time_printout = tim
-                tim_format = self.get_time_to_show(local_tim, direction_mark)
+                tim_format = self.get_time_to_show(local_tim)
                 buffer_.insert_with_tags_by_name(iter_, tim_format + '\n',
                     'time_sometimes')
 

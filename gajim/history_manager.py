@@ -364,6 +364,7 @@ class HistoryManager:
             self.nickname_col_for_logs.set_visible(False)
             self.subject_col_for_logs.set_visible(True)
 
+        format_ = helpers.from_one_line(app.config.get('time_stamp'))
         for row in results:
             # exposed in UI (TreeViewColumns) are only
             # time, message, subject, nickname
@@ -372,7 +373,7 @@ class HistoryManager:
             log_line_id, jid_id, time_, kind, message, subject, nickname, \
                 show = row
             try:
-                time_ = time.strftime('%x', time.localtime(float(time_)))
+                time_ = time.strftime(format_, time.localtime(float(time_)))
             except ValueError:
                 pass
             else:
@@ -420,6 +421,7 @@ class HistoryManager:
                 ''', (like_sql, like_sql))
 
         results = self.cur.fetchall()
+        format_ = helpers.from_one_line(app.config.get('time_stamp'))
         for row in results:
             # exposed in UI (TreeViewColumns) are only
             # JID, time, message, subject, nickname
@@ -427,7 +429,7 @@ class HistoryManager:
             # log_line_id, jid (from jid_id), time, message, subject, nickname
             log_line_id, jid_id, time_, message, subject, nickname = row
             try:
-                time_ = time.strftime('%x', time.localtime(float(time_)))
+                time_ = time.strftime(format_, time.localtime(float(time_)))
             except ValueError:
                 pass
             else:

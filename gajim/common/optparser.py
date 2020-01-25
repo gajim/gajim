@@ -146,6 +146,8 @@ class OptionsParser:
             self.update_config_to_016105()
         if old < [0, 98, 3] and new >= [0, 98, 3]:
             self.update_config_to_0983()
+        if old < [1, 1, 93] and new >= [1, 1, 93]:
+            self.update_config_to_1193()
 
         app.config.set('version', new_version)
 
@@ -212,3 +214,9 @@ class OptionsParser:
             elif password == "libsecret:":
                 app.config.set_per('accounts', account, 'password', '')
         app.config.set('version', '0.98.3')
+
+    def update_config_to_1193(self):
+        # add date to time_stamp, if user did not set a custom time_stamp
+        if self.old_values['time_stamp'] == '[%X] ':
+            app.config.set('time_stamp', '%x | %X  ')
+        app.config.set('version', '1.1.93')
