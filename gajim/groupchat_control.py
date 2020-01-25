@@ -56,11 +56,11 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.const import Chatstate
 from gajim.common.const import MUCJoinedState
+from gajim.common.structs import OutgoingMessage
 
 from gajim.chat_control_base import ChatControlBase
 
 from gajim.command_system.implementation.hosts import GroupChatCommands
-from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationCheckDialog
@@ -215,7 +215,7 @@ class GroupchatControl(ChatControlBase):
             ('update-room-avatar', ged.GUI1, self._on_update_room_avatar),
             ('signed-in', ged.GUI1, self._on_signed_in),
             ('decrypted-message-received', ged.GUI2, self._on_decrypted_message_received),
-            ('gc-stanza-message-outgoing', ged.OUT_POSTCORE, self._on_message_sent),
+            ('message-sent', ged.OUT_POSTCORE, self._on_message_sent),
             ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
         ])
         # pylint: enable=line-too-long
@@ -1544,7 +1544,7 @@ class GroupchatControl(ChatControlBase):
             return
         # we'll save sent message text when we'll receive it in
         # _nec_gc_message_received
-        self.last_sent_msg = event.stanza_id
+        self.last_sent_msg = event.message_id
         if self.correcting:
             self.correcting = False
             gtkgui_helpers.remove_css_class(
@@ -1585,16 +1585,15 @@ class GroupchatControl(ChatControlBase):
                 self.contact)
 
             # Send the message
-            event = GcMessageOutgoingEvent(None,
-                                           account=self.account,
-                                           jid=self.room_jid,
-                                           message=message,
-                                           label=label,
-                                           chatstate=chatstate,
-                                           correct_id=correct_id,
-                                           automatic_message=False)
-            event.additional_data.set_value('gajim', 'xhtml', xhtml)
-            app.nec.push_outgoing_event(event)
+            message_ = OutgoingMessage(account=self.account,
+                                       jid=self.room_jid,
+                                       message=message,
+                                       type_='groupchat',
+                                       label=label,
+                                       chatstate=chatstate,
+                                       correct_id=correct_id)
+            message_.additional_data.set_value('gajim', 'xhtml', xhtml)
+            con.send_message(message_)
 
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()

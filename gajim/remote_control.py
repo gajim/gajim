@@ -32,8 +32,8 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.common import ged
-from gajim.common.connection_handlers_events import MessageOutgoingEvent
-from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
+from gajim.common.structs import OutgoingMessage
+
 
 log = logging.getLogger('gajim.remote_control')
 
@@ -329,7 +329,7 @@ class GajimRemote(Server):
             chatstate = obj.chatstate
         except AttributeError:
             chatstate = ''
-        self.raise_signal('MessageSent', (obj.conn.name, [
+        self.raise_signal('MessageSent', (obj.account, [
             obj.jid, obj.message, chatstate]))
 
     def on_time(self, obj):
@@ -520,15 +520,12 @@ class GajimRemote(Server):
             if ctrl:
                 ctrl.send_message(message)
             else:
-                app.nec.push_outgoing_event(
-                    MessageOutgoingEvent(
-                        None,
-                        account=connected_account,
-                        jid=jid,
-                        message=message,
-                        type_=type_,
-                        control=ctrl))
-
+                message_ = OutgoingMessage(account=connected_account,
+                                           jid=jid,
+                                           message=message,
+                                           type_=type_,
+                                           control=ctrl)
+                connection.send_message(message_)
             return True
         return False
 
@@ -554,12 +551,12 @@ class GajimRemote(Server):
             return False
         connected_account = self._get_account_for_groupchat(account, room_jid)
         if connected_account:
-            app.nec.push_outgoing_event(
-                GcMessageOutgoingEvent(
-                    None,
-                    account=connected_account,
-                    jid=room_jid,
-                    message=message))
+            message_ = OutgoingMessage(account=connected_account,
+                                       jid=room_jid,
+                                       message=message,
+                                       type_='groupchat')
+            con = app.connections[connected_account]
+            con.send_message(message_)
             return True
         return False
 

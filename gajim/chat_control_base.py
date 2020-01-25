@@ -43,8 +43,8 @@ from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.contacts import GC_Contact
-from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.const import Chatstate
+from gajim.common.structs import OutgoingMessage
 
 from gajim import gtkgui_helpers
 
@@ -273,7 +273,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             ('ping-error', ged.GUI1, self._nec_ping),
             ('sec-catalog-received', ged.GUI1, self._sec_labels_received),
             ('style-changed', ged.GUI1, self._style_changed),
-            ('message-outgoing', ged.OUT_GUI1, self._nec_message_outgoing),
         ])
         # pylint: enable=line-too-long
 
@@ -450,38 +449,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def _nec_ping(self, obj):
         raise NotImplementedError
-
-    def _nec_message_outgoing(self, obj):
-        # Send the given message to the active tab.
-        # Doesn't return None if error
-        if obj.control != self:
-            return
-
-        obj.message = helpers.remove_invalid_xml_chars(obj.message)
-
-        conn = app.connections[self.account]
-
-        if not self.session:
-            if (not obj.resource and
-                    obj.jid != app.get_jid_from_account(self.account)):
-                if self.resource:
-                    obj.resource = self.resource
-                else:
-                    obj.resource = self.contact.resource
-            sess = conn.find_controlless_session(obj.jid, resource=obj.resource)
-
-            if self.resource:
-                obj.jid += '/' + self.resource
-
-            if not sess:
-                if self._type.is_privatechat:
-                    sess = conn.make_new_session(obj.jid, type_='pm')
-                else:
-                    sess = conn.make_new_session(obj.jid)
-
-            self.set_session(sess)
-
-        obj.session = self.session
 
     def setup_seclabel(self):
         self.xml.label_selector.hide()
@@ -1014,7 +981,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                      resource=None,
                      xhtml=None,
                      process_commands=True,
-                     attention=False):
+                     attention=False,
+                     is_muc_pm=False):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -1035,22 +1003,23 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         chatstate = con.get_module('Chatstate').get_active_chatstate(
             self.contact)
 
-        event = MessageOutgoingEvent(None,
-                                     account=self.account,
-                                     jid=self.contact.jid,
-                                     message=message,
-                                     type_=type_,
-                                     chatstate=chatstate,
-                                     resource=resource,
-                                     user_nick=self.user_nick,
-                                     label=label,
-                                     control=self,
-                                     attention=attention,
-                                     correct_id=correct_id,
-                                     automatic_message=False,
-                                     encryption=self.encryption)
-        event.additional_data.set_value('gajim', 'xhtml', xhtml)
-        app.nec.push_outgoing_event(event)
+        message_ = OutgoingMessage(account=self.account,
+                                   jid=self.contact.jid,
+                                   message=message,
+                                   type_=type_,
+                                   is_muc_pm=is_muc_pm,
+                                   chatstate=chatstate,
+                                   resource=resource,
+                                   user_nick=self.user_nick,
+                                   label=label,
+                                   control=self,
+                                   attention=attention,
+                                   correct_id=correct_id,
+                                   automatic_message=False,
+                                   encryption=self.encryption,
+                                   xhtml=xhtml)
+
+        con.send_message(message_)
 
         # Record the history of sent messages
         self.save_message(message, 'sent')

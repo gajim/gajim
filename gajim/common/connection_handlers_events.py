@@ -27,8 +27,7 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common.i18n import _
-from gajim.common.helpers import AdditionalDataDict
-from gajim.common.const import KindConstant, SSLError
+from gajim.common.const import SSLError
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
 
@@ -463,73 +462,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             if pres_obj.status:
                 self.popup_text = pres_obj.status
             self.popup_event_type = _('Contact Signed Out')
-
-class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
-    name = 'message-outgoing'
-
-    def init(self):
-        self.additional_data = AdditionalDataDict()
-        self.message = None
-        self.type_ = 'chat'
-        self.kind = None
-        self.timestamp = None
-        self.subject = ''
-        self.chatstate = None
-        self.stanza_id = None
-        self.resource = None
-        self.user_nick = None
-        self.label = None
-        self.session = None
-        self.delayed = None
-        self.callback = None
-        self.callback_args = []
-        self.now = False
-        self.is_loggable = True
-        self.control = None
-        self.attention = False
-        self.correct_id = None
-        self.automatic_message = True
-
-    def get_full_jid(self):
-        if self.resource:
-            return self.jid + '/' + self.resource
-        if self.session:
-            return self.session.get_to()
-        return self.jid
-
-    def generate(self):
-        if self.type_ == 'chat':
-            self.kind = KindConstant.CHAT_MSG_SENT
-        else:
-            self.kind = KindConstant.SINGLE_MSG_SENT
-        return True
-
-class StanzaMessageOutgoingEvent(nec.NetworkOutgoingEvent):
-    name = 'stanza-message-outgoing'
-
-
-class GcStanzaMessageOutgoingEvent(nec.NetworkOutgoingEvent):
-    name = 'gc-stanza-message-outgoing'
-
-
-class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
-    name = 'gc-message-outgoing'
-
-    def init(self):
-        self.additional_data = AdditionalDataDict()
-        self.message = ''
-        self.chatstate = None
-        self.stanza_id = None
-        self.label = None
-        self.callback = None
-        self.callback_args = []
-        self.is_loggable = True
-        self.control = None
-        self.correct_id = None
-        self.automatic_message = True
-
-    def generate(self):
-        return True
 
 class InformationEvent(nec.NetworkIncomingEvent):
     name = 'information'

@@ -30,9 +30,8 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.const import Chatstate as State
+from gajim.common.structs import OutgoingMessage
 from gajim.common.modules.base import BaseModule
-from gajim.common.connection_handlers_events import MessageOutgoingEvent
-from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 from gajim.common.types import ContactT
 from gajim.common.types import ConnectionT
@@ -272,17 +271,7 @@ class Chatstate(BaseModule):
                 self._log.info('Send last state: %-10s - %s',
                                State.ACTIVE, contact.jid)
 
-                event_attrs = {'account': self._account,
-                               'jid': contact.jid,
-                               'chatstate': str(State.ACTIVE)}
-
-                if contact.is_groupchat:
-                    if contact.is_connected:
-                        app.nec.push_outgoing_event(
-                            GcMessageOutgoingEvent(None, **event_attrs))
-                else:
-                    app.nec.push_outgoing_event(
-                        MessageOutgoingEvent(None, **event_attrs))
+                self._send_chatstate(contact, str(State.ACTIVE))
 
             self._chatstates.pop(contact.jid, None)
             self._last_mouse_activity.pop(contact.jid, None)
@@ -317,19 +306,19 @@ class Chatstate(BaseModule):
 
         self._log.info('Send: %-10s - %s', state, contact.jid)
 
-        event_attrs = {'account': self._account,
-                       'jid': contact.jid,
-                       'chatstate': str(state)}
-
-        if contact.is_groupchat:
-            if contact.is_connected:
-                app.nec.push_outgoing_event(
-                    GcMessageOutgoingEvent(None, **event_attrs))
-        else:
-            app.nec.push_outgoing_event(
-                MessageOutgoingEvent(None, **event_attrs))
+        self._send_chatstate(contact, str(state))
 
         self._chatstates[contact.jid] = state
+
+    def _send_chatstate(self, contact, chatstate):
+        type_ = 'groupchat' if contact.is_groupchat else 'chat'
+        message = OutgoingMessage(account=self._account,
+                                  jid=contact.jid,
+                                  message=None,
+                                  type_=type_,
+                                  chatstate=chatstate)
+
+        self._con.send_message(message)
 
     @ensure_enabled
     def set_mouse_activity(self, contact: ContactT, was_paused: bool) -> None:

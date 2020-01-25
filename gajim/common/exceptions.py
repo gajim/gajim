@@ -148,3 +148,6 @@ class StanzaMalformed(Exception):
         self._msg = '{}\n{}'.format(message, stanza)
     def __str__(self):
         return self._msg
+
+class SendMessageError(Exception):
+    pass

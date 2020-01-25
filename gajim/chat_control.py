@@ -587,8 +587,8 @@ class ChatControl(ChatControlBase):
         if not event.message:
             return
 
-        self.last_sent_msg = event.stanza_id
-        message_id = event.msg_iq.getID()
+        self.last_sent_msg = event.message_id
+        message_id = event.message_id
 
         if event.label:
             displaymarking = event.label.getTag('displaymarking')
@@ -919,8 +919,12 @@ class ChatControl(ChatControlBase):
             fixed.set_no_show_all(True)
             self.close_jingle_content(jingle_type)
 
-    def send_message(self, message, xhtml=None,
-                     process_commands=True, attention=False):
+    def send_message(self,
+                     message,
+                     xhtml=None,
+                     process_commands=True,
+                     attention=False,
+                     is_muc_pm=False):
         """
         Send a message to contact
         """
@@ -941,7 +945,8 @@ class ChatControl(ChatControlBase):
                                      type_='chat',
                                      xhtml=xhtml,
                                      process_commands=process_commands,
-                                     attention=attention)
+                                     attention=attention,
+                                     is_muc_pm=is_muc_pm)
 
     def get_our_nick(self):
         return app.nicks[self.account]

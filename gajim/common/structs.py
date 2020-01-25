@@ -12,11 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+import time
 from collections import namedtuple
 
 from nbxmpp.protocol import JID
 
 from gajim.common.const import MUCJoinedState
+from gajim.common.const import KindConstant
 
 URI = namedtuple('URI', 'type action data')
 URI.__new__.__defaults__ = (None, None)  # type: ignore
@@ -48,3 +50,122 @@ class MUCData:
     @property
     def config(self):
         return self._config
+
+
+class OutgoingMessage:
+    def __init__(self,
+                 account,
+                 jid,
+                 message,
+                 type_,
+                 subject=None,
+                 is_muc_pm=False,
+                 chatstate=None,
+                 resource=None,
+                 user_nick=None,
+                 label=None,
+                 control=None,
+                 attention=None,
+                 correct_id=None,
+                 automatic_message=False,
+                 encryption=None,
+                 oob_url=None,
+                 xhtml=None):
+
+        if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
+            raise ValueError('Unknown message type: %s' % type_)
+
+        if not message and chatstate is None:
+            raise ValueError('Trying to send message without content')
+
+        self.account = account
+        self.jid = jid
+        self.message = message
+        self.type_ = type_
+
+        if type_ == 'chat':
+            self.kind = KindConstant.CHAT_MSG_SENT
+        elif type_ == 'groupchat':
+            self.kind = KindConstant.GC_MSG
+        elif type_ == 'normal':
+            self.kind = KindConstant.SINGLE_MSG_SENT
+        else:
+            raise ValueError('Unknown message type')
+
+        from gajim.common.helpers import AdditionalDataDict
+        self.additional_data = AdditionalDataDict()
+
+        self.subject = subject
+        self.is_muc_pm = is_muc_pm
+        self.chatstate = chatstate
+        self.resource = resource
+        self.user_nick = user_nick
+        self.label = label
+        self.control = control
+        self.attention = attention
+        self.correct_id = correct_id
+        self.automatic_message = automatic_message
+        self.encryption = encryption
+
+        self.oob_url = oob_url
+
+        if oob_url is not None:
+            self.additional_data.set_value('gajim', 'oob_url', oob_url)
+
+        self.xhtml = xhtml
+
+        if xhtml is not None:
+            self.additional_data.set_value('gajim', 'xhtml', xhtml)
+
+        self.timestamp = None
+        self.message_id = None
+        self.stanza = None
+        self.session = None
+        self.delayed = None # TODO never set
+
+        self.is_loggable = True
+
+    def copy(self):
+        message = OutgoingMessage(self.account,
+                                  self.jid,
+                                  self.message,
+                                  self.type_)
+        for name, value in vars(self).items():
+            setattr(message, name, value)
+        message.additional_data = self.additional_data.copy()
+        return message
+
+    @property
+    def is_groupchat(self):
+        return self.type_ == 'groupchat'
+
+    @property
+    def is_chat(self):
+        return self.type_ == 'chat'
+
+    @property
+    def is_normal(self):
+        return self.type_ == 'normal'
+
+    def set_sent_timestamp(self):
+        if self.is_groupchat:
+            return
+        self.timestamp = time.time()
+
+    @property
+    def is_encrypted(self):
+        return bool(self.additional_data.get_value('encrypted', 'name', False))
+
+    @property
+    def require_encryption(self):
+        return bool(self.encryption)
+
+    @property
+    def msg_iq(self):
+        # Backwards compatibility for plugins
+        return self.stanza
+
+    @msg_iq.setter
+    def msg_iq(self, value):
+        # Backwards compatibility for plugins
+        self.stanza = value

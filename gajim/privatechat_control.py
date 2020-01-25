@@ -206,7 +206,8 @@ class PrivateChatControl(ChatControl):
         ChatControl.send_message(self, message,
                                  xhtml=xhtml,
                                  process_commands=process_commands,
-                                 attention=attention)
+                                 attention=attention,
+                                 is_muc_pm=True)
 
     def update_ui(self):
         if self.gc_contact.presence.is_unavailable:

@@ -22,7 +22,7 @@ from gajim import vcard
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.connection_handlers_events import MessageOutgoingEvent
+from gajim.common.structs import OutgoingMessage
 
 from gajim.conversation_textview import ConversationTextview
 
@@ -250,13 +250,13 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
 
             recipient_list.append(to_whom_jid)
 
-        app.nec.push_outgoing_event(MessageOutgoingEvent(
-            None,
-            account=self.account,
-            jid=recipient_list,
-            message=message,
-            type_='normal',
-            subject=subject))
+        message = OutgoingMessage(account=self.account,
+                                  jid=None,
+                                  message=message,
+                                  type_='normal',
+                                  subject=subject)
+        con = app.connections[self.account]
+        con.send_messages(recipient_list, message)
 
         self._ui.subject_entry.set_text('') # we sent ok, clear the subject
         self._message_tv_buffer.set_text('') # we sent ok, clear the textview

@@ -20,22 +20,19 @@ import io
 from urllib.parse import urlparse
 import mimetypes
 
-import nbxmpp
 from nbxmpp import NS_HTTPUPLOAD_0
 from nbxmpp.util import is_error_result
 from gi.repository import GLib
 from gi.repository import Soup
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.helpers import get_tls_error_phrase
 from gajim.common.const import FTState
 from gajim.common.filetransfer import FileTransfer
 from gajim.common.modules.base import BaseModule
+from gajim.common.structs import OutgoingMessage
 from gajim.common.connection_handlers_events import InformationEvent
-from gajim.common.connection_handlers_events import MessageOutgoingEvent
-from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 
 class HTTPUpload(BaseModule):
@@ -50,18 +47,10 @@ class HTTPUpload(BaseModule):
         self.httpupload_namespace = None
         self.max_file_size = None  # maximum file size in bytes
 
-        self._text = []
         self._queued_messages = {}
         self._session = Soup.Session()
         self._session.props.ssl_strict = False
         self._session.props.user_agent = 'Gajim %s' % app.version
-
-        # pylint: disable=line-too-long
-        self.register_events([
-            ('stanza-message-outgoing', ged.OUT_PREGUI, self._handle_outgoing_stanza),
-            ('gc-stanza-message-outgoing', ged.OUT_PREGUI, self._handle_outgoing_stanza),
-        ])
-        # pylint: enable=line-too-long
 
     def pass_disco(self, info):
         if not info.has_httpupload:
@@ -83,18 +72,6 @@ class HTTPUpload(BaseModule):
 
         for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
             ctrl.update_actions()
-
-    def _handle_outgoing_stanza(self, event):
-        if event.conn.name != self._account:
-            return
-        body = event.msg_iq.getTagData('body')
-        if body and body in self._text:
-            self._text.remove(body)
-            # Add oob information before sending message to recipient,
-            #  to distinguish HTTP File Upload Link from pasted URL
-            oob = event.msg_iq.addChild('x', namespace=nbxmpp.NS_X_OOB)
-            oob.addChild('url').setData(body)
-            event.additional_data.set_value('gajim', 'oob_url', body)
 
     def check_file_before_transfer(self, path, encryption, contact,
                                    groupchat=False):
@@ -258,23 +235,18 @@ class HTTPUpload(BaseModule):
         if message.props.status_code in (Soup.Status.OK, Soup.Status.CREATED):
             self._log.info('Upload completed successfully')
             uri = transfer.get_transformed_uri()
-            self._text.append(uri)
 
+            type_ = 'chat'
             if transfer.is_groupchat:
-                app.nec.push_outgoing_event(
-                    GcMessageOutgoingEvent(None,
-                                           account=self._account,
-                                           jid=transfer.contact.jid,
-                                           message=uri,
-                                           automatic_message=False))
-            else:
-                app.nec.push_outgoing_event(
-                    MessageOutgoingEvent(None,
-                                         account=self._account,
-                                         jid=transfer.contact.jid,
-                                         message=uri,
-                                         type_='chat',
-                                         automatic_message=False))
+                type_ = 'groupchat'
+
+            message = OutgoingMessage(account=self._account,
+                                      jid=transfer.contact.jid,
+                                      message=uri,
+                                      type_=type_,
+                                      oob_url=uri)
+
+            self._con.send_message(message)
 
         else:
             phrase = Soup.Status.get_phrase(message.props.status_code)

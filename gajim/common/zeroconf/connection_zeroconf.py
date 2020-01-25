@@ -36,7 +36,6 @@ import nbxmpp
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import modules
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
@@ -70,11 +69,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         # Register all modules
         modules.register_modules(self)
-
-        app.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
-            self._nec_message_outgoing)
-        app.ged.register_event_handler('stanza-message-outgoing', ged.OUT_CORE,
-            self._nec_stanza_message_outgoing)
 
     def get_config_values_or_default(self):
         """
@@ -407,45 +401,36 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))
 
-    def _nec_message_outgoing(self, obj):
-        if obj.account != self.name:
-            return
-        self._prepare_message(obj)
-
-    def _nec_stanza_message_outgoing(self, obj):
-        if obj.conn.name != self.name:
-            return
-
+    def send_message(self, message):
         def on_send_ok(stanza_id):
-            app.nec.push_incoming_event(MessageSentEvent(None, **vars(obj)))
-            self.log_message(obj, obj.jid)
+            app.nec.push_incoming_event(MessageSentEvent(None, **vars(message)))
+            self.get_module('Message').log_message(message, message.jid)
 
         def on_send_not_ok(reason):
             reason += ' ' + _('Your message could not be sent.')
             app.nec.push_incoming_event(NetworkEvent(
                 'zeroconf-error',
                 account=self.name,
-                jid=obj.jid,
+                jid=message.jid,
                 message=reason))
-            # Dont propagate event
-            return True
 
-        obj.timestamp = time.time()
-        ret = self.connection.send(
-            obj.msg_iq, obj.message is not None,
-            on_ok=on_send_ok, on_not_ok=on_send_not_ok)
+        def _send(message):
+            ret = self.connection.send(
+                message.stanza, message.message is not None,
+                on_ok=on_send_ok, on_not_ok=on_send_not_ok)
+            message.timestamp = time.time()
 
-        if ret == -1:
-            # Contact Offline
-            error_message = _(
-                'Contact is offline. Your message could not be sent.')
-            app.nec.push_incoming_event(NetworkEvent(
-                'zeroconf-error',
-                account=self.name,
-                jid=obj.jid,
-                message=error_message))
-            # Dont propagate event
-            return True
+            if ret == -1:
+                # Contact Offline
+                error_message = _(
+                    'Contact is offline. Your message could not be sent.')
+                app.nec.push_incoming_event(NetworkEvent(
+                    'zeroconf-error',
+                    account=self.name,
+                    jid=message.jid,
+                    message=error_message))
+
+        self.get_module('Message').prepare_message(message, _send)
 
     def send_stanza(self, stanza):
         # send a stanza untouched

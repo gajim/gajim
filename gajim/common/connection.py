@@ -48,7 +48,6 @@ import OpenSSL.crypto
 import nbxmpp
 from nbxmpp.const import Realm
 from nbxmpp.const import Event
-from nbxmpp.util import generate_id
 
 from gajim import common
 from gajim.common import helpers
@@ -56,20 +55,16 @@ from gajim.common import app
 from gajim.common import passwords
 from gajim.common import idle
 from gajim.common import modules
-from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
-from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
 from gajim.common.connection_handlers_events import InformationEvent
-from gajim.common.connection_handlers_events import StanzaMessageOutgoingEvent
-from gajim.common.connection_handlers_events import GcStanzaMessageOutgoingEvent
+from gajim.common.connection_handlers_events import MessageSentEvent
 from gajim.common.connection_handlers_events import ConnectionLostEvent
 from gajim.common.connection_handlers_events import NewAccountConnectedEvent
 from gajim.common.connection_handlers_events import NewAccountNotConnectedEvent
-from gajim.common.connection_handlers_events import MessageSentEvent
 
 if sys.platform in ('win32', 'darwin'):
     import certifi
@@ -178,171 +173,6 @@ class CommonConnection:
         the valid jid, or raise a helpers.InvalidFormat exception
         """
         raise NotImplementedError
-
-    def _prepare_message(self, obj):
-
-        if not self.connection or not self.is_connected:
-            return 1
-
-        if isinstance(obj.jid, list):
-            for jid in obj.jid:
-                try:
-                    self.check_jid(jid)
-                except helpers.InvalidFormat:
-                    app.nec.push_incoming_event(InformationEvent(
-                        None, dialog_name='invalid-jid', args=jid))
-                    return
-        else:
-            try:
-                self.check_jid(obj.jid)
-            except helpers.InvalidFormat:
-                app.nec.push_incoming_event(InformationEvent(
-                    None, dialog_name='invalid-jid', args=obj.jid))
-                return
-
-        if not obj.message and obj.chatstate is None:
-            return
-
-        self._build_message_stanza(obj)
-
-    def _build_message_stanza(self, obj):
-        if obj.jid == app.get_jid_from_account(self.name):
-            fjid = obj.jid
-        else:
-            fjid = obj.get_full_jid()
-
-        xhtml = obj.additional_data.get_value('gajim', 'xhtml', None)
-
-        if obj.type_ == 'chat':
-            msg_iq = nbxmpp.Message(body=obj.message,
-                                    typ=obj.type_,
-                                    xhtml=xhtml)
-        else:
-            if obj.subject:
-                msg_iq = nbxmpp.Message(body=obj.message,
-                                        typ='normal',
-                                        subject=obj.subject,
-                                        xhtml=xhtml)
-            else:
-                msg_iq = nbxmpp.Message(body=obj.message,
-                                        typ='normal',
-                                        xhtml=xhtml)
-
-        if obj.correct_id:
-            msg_iq.setTag('replace', attrs={'id': obj.correct_id},
-                          namespace=nbxmpp.NS_CORRECT)
-
-        # XEP-0359
-        obj.stanza_id = generate_id()
-        msg_iq.setID(obj.stanza_id)
-        if obj.message:
-            msg_iq.setOriginID(obj.stanza_id)
-
-        if obj.label:
-            msg_iq.addChild(node=obj.label)
-
-        # XEP-0172: user_nickname
-        if obj.user_nick:
-            msg_iq.setTag('nick', namespace=nbxmpp.NS_NICK).setData(
-                    obj.user_nick)
-
-        # XEP-0203
-        if obj.delayed:
-            our_jid = app.get_jid_from_account(self.name) + '/' + \
-                    self.server_resource
-            timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(obj.delayed))
-            msg_iq.addChild('delay', namespace=nbxmpp.NS_DELAY2,
-                    attrs={'from': our_jid, 'stamp': timestamp})
-
-        # XEP-0224
-        if obj.attention:
-            msg_iq.setTag('attention', namespace=nbxmpp.NS_ATTENTION)
-
-        if isinstance(obj.jid, list):
-            if self.addressing_supported:
-                msg_iq.setTo(app.config.get_per('accounts', self.name, 'hostname'))
-                addresses = msg_iq.addChild('addresses',
-                    namespace=nbxmpp.NS_ADDRESS)
-                for j in obj.jid:
-                    addresses.addChild('address',
-                                       attrs={'type': 'to', 'jid': j})
-            else:
-                iqs = []
-                for j in obj.jid:
-                    iq = nbxmpp.Message(node=msg_iq)
-                    iq.setTo(j)
-                    iqs.append(iq)
-                msg_iq = iqs
-        else:
-            msg_iq.setTo(fjid)
-            r_ = obj.resource
-            if not r_ and obj.jid != fjid: # Only if we're not in a pm
-                r_ = app.get_resource_from_jid(fjid)
-            if r_:
-                contact = app.contacts.get_contact(self.name, obj.jid, r_)
-            else:
-                contact = app.contacts.get_contact_with_highest_priority(
-                    self.name, obj.jid)
-
-            # Mark Message as MUC PM
-            if isinstance(contact, GC_Contact):
-                msg_iq.setTag('x', namespace=nbxmpp.NS_MUC_USER)
-
-            # chatstates - if peer supports xep85, send chatstates
-            # please note that the only valid tag inside a message containing a
-            # <body> tag is the active event
-            if obj.chatstate is not None:
-                msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
-                if not obj.message:
-                    msg_iq.setTag('no-store',
-                                  namespace=nbxmpp.NS_MSG_HINTS)
-
-            # XEP-0184
-            if obj.jid != app.get_jid_from_account(self.name):
-                if obj.message and obj.type_ != 'groupchat':
-                    msg_iq.setReceiptRequest()
-
-            if obj.session:
-                # XEP-0201
-                obj.session.last_send = time.time()
-                msg_iq.setThread(obj.session.thread_id)
-
-        self._push_stanza_message_outgoing(obj, msg_iq)
-
-    def _push_stanza_message_outgoing(self, obj, msg_iq):
-        obj.conn = self
-        if isinstance(msg_iq, list):
-            for iq in msg_iq:
-                obj.msg_iq = iq
-                app.nec.push_incoming_event(
-                    StanzaMessageOutgoingEvent(None, **vars(obj)))
-        else:
-            obj.msg_iq = msg_iq
-            app.nec.push_incoming_event(
-                StanzaMessageOutgoingEvent(None, **vars(obj)))
-
-    def log_message(self, obj, jid):
-        if not obj.is_loggable:
-            return
-
-        if obj.session and not obj.session.is_loggable():
-            return
-
-        if not app.config.should_log(self.name, jid):
-            return
-
-        if obj.message is None:
-            return
-
-        app.logger.insert_into_logs(self.name,
-                                    jid,
-                                    obj.timestamp,
-                                    obj.kind,
-                                    message=obj.message,
-                                    subject=obj.subject,
-                                    additional_data=obj.additional_data,
-                                    message_id=obj.stanza_id,
-                                    stanza_id=obj.stanza_id)
 
     def new_account(self, name, config, sync=False):
         """
@@ -466,26 +296,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         # Register all modules
         modules.register_modules(self)
 
-        app.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
-            self._nec_message_outgoing)
-        app.ged.register_event_handler('gc-message-outgoing', ged.OUT_CORE,
-            self._nec_gc_message_outgoing)
-        app.ged.register_event_handler('gc-stanza-message-outgoing', ged.OUT_CORE,
-            self._nec_gc_stanza_message_outgoing)
-        app.ged.register_event_handler('stanza-message-outgoing',
-            ged.OUT_CORE, self._nec_stanza_message_outgoing)
-    # END __init__
-
     def cleanup(self):
-        modules.unregister_modules(self)
-        app.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
-            self._nec_message_outgoing)
-        app.ged.remove_event_handler('gc-message-outgoing', ged.OUT_CORE,
-            self._nec_gc_message_outgoing)
-        app.ged.remove_event_handler('gc-stanza-message-outgoing', ged.OUT_CORE,
-            self._nec_gc_stanza_message_outgoing)
-        app.ged.remove_event_handler('stanza-message-outgoing', ged.OUT_CORE,
-            self._nec_stanza_message_outgoing)
+        pass
 
     def get_config_values_or_default(self):
         self.client_cert = app.config.get_per('accounts', self.name,
@@ -1518,41 +1330,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=show))
 
-    def _nec_message_outgoing(self, obj):
-        if obj.account != self.name:
-            return
-
-        self._prepare_message(obj)
-
-    def _nec_stanza_message_outgoing(self, obj):
-        if obj.conn.name != self.name:
-            return
-
-        config_key = '%s-%s' % (self.name, obj.jid)
-        encryption = app.config.get_per('encryption', config_key, 'encryption')
-        if encryption:
-            app.plugin_manager.extension_point(
-                'encrypt' + encryption, self, obj, self.send_message)
-            if not obj.additional_data.get_value('encrypted', 'name', False):
-                # Dont propagate event
-                return True
-        else:
-            self.send_message(obj)
-
-    def send_message(self, obj):
-        obj.timestamp = time.time()
-        obj.stanza_id = self.connection.send(obj.msg_iq, now=obj.now)
-
-        app.nec.push_incoming_event(MessageSentEvent(None, **vars(obj)))
-
-        if isinstance(obj.jid, list):
-            for j in obj.jid:
-                if obj.session is None:
-                    obj.session = self.get_or_create_session(j, '')
-                self.log_message(obj, j)
-        else:
-            self.log_message(obj, obj.jid)
-
     def send_stanza(self, stanza):
         """
         Send a stanza untouched
@@ -1560,6 +1337,54 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not self.connection:
             return
         self.connection.send(stanza)
+
+    def send_message(self, message):
+        if not app.account_is_connected(self.name):
+            log.warning('Trying to send message while offline')
+            return
+
+        stanza = self.get_module('Message').build_message_stanza(message)
+        message.stanza = stanza
+        if message.require_encryption:
+            # TODO: Make extension point return encrypted message
+
+            extension = 'encrypt'
+            if message.is_groupchat:
+                extension = 'gc_encrypt'
+            app.plugin_manager.extension_point(extension + message.encryption,
+                                               self,
+                                               message,
+                                               self._send_message)
+            return
+
+        self._send_message(message)
+
+    def _send_message(self, message):
+        message.set_sent_timestamp()
+        message.message_id = self.connection.send(message.stanza)
+
+        app.nec.push_incoming_event(MessageSentEvent(None, **vars(message)))
+
+        if message.is_groupchat:
+            return
+
+        self.get_module('Message').log_message(message)
+
+    def send_messages(self, jids, message):
+        if not app.account_is_connected(self.name):
+            log.warning('Trying to send message while offline')
+            return
+
+        if message.require_encryption:
+            raise ValueError('Encryption for multi recipient '
+                             'messages not supported')
+
+        for jid in jids:
+            message = message.copy()
+            message.jid = jid
+            stanza = self.get_module('Message').build_message_stanza(message)
+            message.stanza = stanza
+            self._send_message(message)
 
     def send_new_account_infos(self, form, is_form):
         if is_form:
@@ -1614,62 +1439,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             ptype,
             show=show,
             caps=ptype != 'unavailable')
-
-    def _nec_gc_message_outgoing(self, obj):
-        if obj.account != self.name:
-            return
-        if not app.account_is_connected(self.name):
-            return
-
-        xhtml = obj.additional_data.get_value('gajim', 'xhtml', None)
-        msg_iq = nbxmpp.Message(obj.jid,
-                                obj.message,
-                                typ='groupchat',
-                                xhtml=xhtml)
-
-        obj.stanza_id = generate_id()
-        msg_iq.setID(obj.stanza_id)
-        if obj.message:
-            msg_iq.setOriginID(obj.stanza_id)
-
-        if obj.correct_id:
-            msg_iq.setTag('replace', attrs={'id': obj.correct_id},
-                          namespace=nbxmpp.NS_CORRECT)
-
-        if obj.chatstate is not None:
-            msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
-            if not obj.message:
-                msg_iq.setTag('no-store', namespace=nbxmpp.NS_MSG_HINTS)
-        if obj.label is not None:
-            msg_iq.addChild(node=obj.label)
-
-        obj.msg_iq = msg_iq
-        obj.conn = self
-        app.nec.push_incoming_event(GcStanzaMessageOutgoingEvent(None, **vars(obj)))
-
-    def _nec_gc_stanza_message_outgoing(self, obj):
-        if obj.conn.name != self.name:
-            return
-
-        config_key = '%s-%s' % (self.name, obj.jid)
-        encryption = app.config.get_per('encryption', config_key, 'encryption')
-        if encryption:
-            app.plugin_manager.extension_point(
-                'gc_encrypt' + encryption, self, obj, self.send_gc_message)
-        else:
-            self.send_gc_message(obj)
-
-    def send_gc_message(self, obj):
-        obj.stanza_id = self.connection.send(obj.msg_iq)
-        app.nec.push_incoming_event(MessageSentEvent(
-            None,
-            conn=self,
-            account=self.name,
-            jid=obj.jid,
-            message=obj.message,
-            automatic_message=obj.automatic_message,
-            stanza_id=obj.stanza_id,
-            additional_data=obj.additional_data))
 
     def unregister_account(self, callback):
         if not app.account_is_connected(self.name):

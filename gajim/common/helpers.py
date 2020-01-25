@@ -43,6 +43,7 @@ import time
 import logging
 import json
 import shutil
+import copy
 import collections
 from collections import defaultdict
 import random
@@ -1410,6 +1411,9 @@ class AdditionalDataDict(collections.UserDict):
             del _dict[key]
         except KeyError:
             return
+
+    def copy(self):
+        return copy.deepcopy(self)
 
 
 def save_roster_position(window):

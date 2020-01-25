@@ -18,10 +18,12 @@ import time
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import validate_jid
 from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
@@ -29,6 +31,8 @@ from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
+from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.connection_handlers_events import MessageSentEvent
 
 
 class Message(BaseModule):
@@ -279,6 +283,88 @@ class Message(BaseModule):
             return properties.stanza_id.id, None
         # stanza-id not added by the archive, ignore it.
         return None, None
+
+    def build_message_stanza(self, message):
+        own_jid = self._con.get_own_jid()
+
+        stanza = nbxmpp.Message(to=message.jid,
+                                body=message.message,
+                                typ=message.type_,
+                                subject=message.subject,
+                                xhtml=message.xhtml)
+
+        if message.correct_id:
+            stanza.setTag('replace', attrs={'id': message.correct_id},
+                          namespace=nbxmpp.NS_CORRECT)
+
+        # XEP-0359
+        message.message_id = generate_id()
+        stanza.setID(message.message_id)
+        stanza.setOriginID(message.message_id)
+
+        if message.label:
+            stanza.addChild(node=message.label)
+
+        # XEP-0172: user_nickname
+        if message.user_nick:
+            stanza.setTag('nick', namespace=nbxmpp.NS_NICK).setData(
+                message.user_nick)
+
+        # XEP-0203
+        # TODO: Seems delayed is not set anywhere
+        if message.delayed:
+            timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ',
+                                      time.gmtime(message.delayed))
+            stanza.addChild('delay',
+                            namespace=nbxmpp.NS_DELAY2,
+                            attrs={'from': str(own_jid), 'stamp': timestamp})
+
+        # XEP-0224
+        if message.attention:
+            stanza.setTag('attention', namespace=nbxmpp.NS_ATTENTION)
+
+        # XEP-0066
+        if message.oob_url is not None:
+            oob = stanza.addChild('x', namespace=nbxmpp.NS_X_OOB)
+            oob.addChild('url').setData(message.oob_url)
+
+        # XEP-0184
+        if not own_jid.bareMatch(message.jid):
+            if message.message and not message.is_groupchat:
+                stanza.setReceiptRequest()
+
+        # Mark Message as MUC PM
+        if message.is_muc_pm:
+            stanza.setTag('x', namespace=nbxmpp.NS_MUC_USER)
+
+        # XEP-0085
+        if message.chatstate is not None:
+            stanza.setTag(message.chatstate, namespace=nbxmpp.NS_CHATSTATES)
+            if not message.message:
+                stanza.setTag('no-store',
+                              namespace=nbxmpp.NS_MSG_HINTS)
+
+        return stanza
+
+    def log_message(self, message):
+        if not message.is_loggable:
+            return
+
+        if not app.config.should_log(self._account, message.jid):
+            return
+
+        if message.message is None:
+            return
+
+        app.logger.insert_into_logs(self._account,
+                                    message.jid,
+                                    message.timestamp,
+                                    message.kind,
+                                    message=message.message,
+                                    subject=message.subject,
+                                    additional_data=message.additional_data,
+                                    message_id=message.message_id,
+                                    stanza_id=message.message_id)
 
 
 def get_instance(*args, **kwargs):
