@@ -340,6 +340,9 @@ class ChatControl(ChatControlBase):
         win.lookup_action(
             'information-' + self.control_id).set_enabled(online)
 
+    def focus(self):
+        self.msg_textview.grab_focus()
+
     def delegate_action(self, action):
         res = super().delegate_action(action)
         if res == Gdk.EVENT_STOP:

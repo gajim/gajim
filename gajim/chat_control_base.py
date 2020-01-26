@@ -332,6 +332,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         """
         on_response_yes(self)
 
+    def focus(self):
+        raise NotImplementedError
+
     def get_nb_unread(self):
         jid = self.contact.jid
         if self.resource:

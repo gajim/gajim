@@ -451,7 +451,7 @@ class MessageWindow(EventHelper):
         # whether the tab is the active one.
         self.show_title()
         if self.get_num_controls() == 1:
-            GLib.timeout_add(500, control.msg_textview.grab_focus)
+            GLib.timeout_add(500, control.focus)
 
     def on_tab_eventbox_button_press_event(self, widget, event, child):
         if event.button == 3: # right click
@@ -463,7 +463,7 @@ class MessageWindow(EventHelper):
             self.remove_tab(ctrl, self.CLOSE_TAB_MIDDLE_CLICK)
         else:
             ctrl = self._widget_to_control(child)
-            GLib.idle_add(ctrl.msg_textview.grab_focus)
+            GLib.idle_add(ctrl.focus)
 
     def _on_close_button_clicked(self, button, control):
         """
@@ -549,7 +549,7 @@ class MessageWindow(EventHelper):
         ctrl_page = self.notebook.page_num(ctrl.widget)
         self.notebook.set_current_page(ctrl_page)
         self.window.present()
-        GLib.idle_add(ctrl.msg_textview.grab_focus)
+        GLib.idle_add(ctrl.focus)
 
     def remove_tab(self, ctrl, method, reason=None, force=False):
         """
@@ -825,7 +825,7 @@ class MessageWindow(EventHelper):
 
         control = self.get_active_control()
         if isinstance(control, ChatControlBase):
-            control.msg_textview.grab_focus()
+            control.focus()
 
     def get_tab_at_xy(self, x, y):
         """

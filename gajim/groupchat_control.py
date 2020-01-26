@@ -1899,6 +1899,23 @@ class GroupchatControl(ChatControlBase):
 
         return Gdk.EVENT_PROPAGATE
 
+    def focus(self):
+        page_name = self._get_current_page()
+        if page_name == 'groupchat':
+            self.msg_textview.grab_focus()
+        elif page_name == 'password':
+            self.xml.password_entry.grab_focus_without_selecting()
+        elif page_name == 'nickname':
+            self.xml.nickname_entry.grab_focus_without_selecting()
+        elif page_name == 'rename':
+            self.xml.name_entry.grab_focus_without_selecting()
+        elif page_name == 'subject':
+            self.xml.subject_textview.grab_focus()
+        elif page_name == 'captcha':
+            self._captcha_request.focus_first_entry()
+        elif page_name == 'destroy':
+            self.xml.destroy_reason_entry.grab_focus_without_selecting()
+
     def _start_private_message(self, nick):
         gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
         nick_jid = gc_c.get_full_jid()
