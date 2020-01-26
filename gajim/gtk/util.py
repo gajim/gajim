@@ -646,6 +646,12 @@ def text_to_color(text):
     return nbxmpp.util.text_to_color(text, background)
 
 
+def get_color_for_account(account: str) -> str:
+    col_r, col_g, col_b = text_to_color(account)
+    rgba = Gdk.RGBA(red=col_r, green=col_g, blue=col_b)
+    return rgba.to_string()
+
+
 def scale_with_ratio(size, width, height):
     if height == width:
         return size, size

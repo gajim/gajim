@@ -106,6 +106,7 @@ from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import open_window
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import get_app_windows
+from gajim.gtk.util import get_color_for_account
 from gajim.gtk.const import ControlType
 
 
@@ -1669,6 +1670,8 @@ class Interface:
         config['name'] = username
         config['resource'] = 'gajim.%s' % helpers.get_random_string(8)
         config['account_label'] = '%s@%s' % (username, domain)
+        config['account_color'] = get_color_for_account(
+            '%s@%s' % (username, domain))
         config['hostname'] = domain
         config['savepass'] = True
         config['password'] = password

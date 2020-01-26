@@ -270,6 +270,7 @@ class Config:
         'accounts': ({
             'name': [opt_str, '', '', True],
             'account_label': [opt_str, '', '', False],
+            'account_color': [opt_color, 'rgb(85, 85, 85)'],
             'hostname': [opt_str, '', '', True],
             'anonymous_auth': [opt_bool, False],
             'avatar_sha': [opt_str, '', '', False],

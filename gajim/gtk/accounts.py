@@ -604,6 +604,10 @@ class GeneralPage(GenericSettingPage):
                     SettingType.ACCOUNT_CONFIG, 'account_label',
                     callback=self._on_account_name_change),
 
+            Setting(SettingKind.COLOR, _('Color'),
+                    SettingType.ACCOUNT_CONFIG, 'account_color',
+                    desc=_('Recognize your account by color')),
+
             Setting(SettingKind.LOGIN, _('Login'), SettingType.DIALOG,
                     props={'dialog': LoginDialog}),
 
