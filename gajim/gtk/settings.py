@@ -88,6 +88,7 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.SPIN: SpinSetting,
             SettingKind.DIALOG: DialogSetting,
             SettingKind.ENTRY: EntrySetting,
+            SettingKind.COLOR: ColorSetting,
             SettingKind.ACTION: ActionSetting,
             SettingKind.LOGIN: LoginSetting,
             SettingKind.FILECHOOSER: FileChooserSetting,
@@ -98,7 +99,7 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
             SettingKind.COMBO: ComboSetting,
             SettingKind.CHATSTATE_COMBO: ChatstateComboSetting,
-            }
+        }
 
         if extend is not None:
             for setting, callback in extend:
@@ -334,6 +335,36 @@ class EntrySetting(GenericSetting):
 
     def on_row_activated(self):
         self.entry.grab_focus()
+
+
+class ColorSetting(GenericSetting):
+
+    __gproperties__ = {
+        "setting-value": (str, 'Color Value', '', '',
+                          GObject.ParamFlags.READWRITE),
+    }
+
+    def __init__(self, *args):
+        GenericSetting.__init__(self, *args)
+
+        rgba = Gdk.RGBA()
+        rgba.parse(self.setting_value)
+        self.color_button = Gtk.ColorButton()
+        self.color_button.set_rgba(rgba)
+        self.color_button.connect('color-set', self.on_color_set)
+        self.color_button.set_valign(Gtk.Align.CENTER)
+        self.color_button.set_halign(Gtk.Align.END)
+
+        self.setting_box.pack_end(self.color_button, True, True, 0)
+
+        self.show_all()
+
+    def on_color_set(self, button):
+        rgba = button.get_rgba()
+        self.set_value(rgba.to_string())
+
+    def on_row_activated(self):
+        self.color_button.grab_focus()
 
 
 class DialogSetting(GenericSetting):
