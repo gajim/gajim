@@ -149,34 +149,33 @@ class Roster(BaseModule):
 
         for item in query.getTags('item'):
             jid = item.getAttr('jid')
-            self._data[jid] = self._get_item_attrs(item, update=False)
+            self._data[jid] = self._get_item_attrs(item)
             self._log.info('Item %s: %s', jid, self._data[jid])
         return version
 
     @staticmethod
-    def _get_item_attrs(item, update=True):
+    def _get_item_attrs(item, update=False):
         '''
         update: True
-            returns only the attrs that are present in the item
+            Omit avatar_sha from the returned attrs
 
         update: False
-            returns the attrs of the item but fills missing
-            attrs with default values
+            Include the default value fro avatar_sha in the returned attrs
         '''
 
         default_attrs = {'name': None,
                          'ask': None,
                          'subscription': None,
-                         'groups': [],
-                         'avatar_sha': None}
+                         'groups': []}
+
+        if not update:
+            default_attrs['avatar_sha'] = None
 
         attrs = item.getAttrs()
         del attrs['jid']
         groups = {group.getData() for group in item.getTags('group')}
         attrs['groups'] = list(groups)
 
-        if update:
-            return attrs
         default_attrs.update(attrs)
         return default_attrs
 
@@ -196,13 +195,13 @@ class Roster(BaseModule):
 
         if item.getAttr('subscription') == 'remove':
             self._data.pop(jid, None)
-            attrs = self._get_item_attrs(item, update=False)
+            attrs = self._get_item_attrs(item)
             return RosterItem(jid, attrs)
 
         if jid not in self._data:
-            self._data[jid] = self._get_item_attrs(item, update=False)
+            self._data[jid] = self._get_item_attrs(item)
         else:
-            self._data[jid].update(self._get_item_attrs(item))
+            self._data[jid].update(self._get_item_attrs(item, update=True))
 
         return RosterItem(jid, self._data[jid])
 
