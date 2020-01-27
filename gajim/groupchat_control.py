@@ -71,6 +71,7 @@ from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_invite import GroupChatInvite
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
@@ -174,6 +175,11 @@ class GroupchatControl(ChatControlBase):
         self._muc_info_box = GroupChatInfoScrolled(self.account, {'width': 600})
         self.xml.info_grid.attach(self._muc_info_box, 0, 0, 1, 1)
 
+        # Groupchat invite
+        self._invite_box = GroupChatInvite(self.room_jid)
+        self.xml.invite_grid.attach(self._invite_box, 0, 0, 1, 1)
+        self._invite_box.connect('listbox-changed', self._on_invite_ready)
+
         self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id,
                                                                 self.account,
                                                                 self.room_jid)
@@ -264,6 +270,7 @@ class GroupchatControl(ChatControlBase):
             ('request-voice-', None, self._on_request_voice),
             ('upload-avatar-', None, self._on_upload_avatar),
             ('information-', None, self._on_information),
+            ('invite-', None, self._on_invite),
             ('contact-information-', 's', self._on_contact_information),
             ('execute-command-', 's', self._on_execute_command),
             ('block-', 's', self._on_block),
@@ -502,6 +509,20 @@ class GroupchatControl(ChatControlBase):
             self._muc_info_box.set_author(self._subject_data.nickname,
                                           self._subject_data.user_timestamp)
         self._show_page('muc-info')
+
+    def _on_invite(self, _action, _param):
+        self._invite_box.update()
+        self._show_page('invite')
+
+    def _on_invite_ready(self, _, invitable):
+        self.xml.invite_button.set_sensitive(invitable)
+
+    def _on_invite_clicked(self, _button):
+        invitees = self._invite_box.get_invitees()
+        con = app.connections[self.account]
+        for jid in invitees:
+            con.get_module('MUC').invite(self.room_jid, jid)
+        self._show_page('groupchat')
 
     def _on_destroy_room(self, _action, _param):
         self.xml.destroy_reason_entry.grab_focus()
@@ -1913,6 +1934,8 @@ class GroupchatControl(ChatControlBase):
             self.xml.subject_textview.grab_focus()
         elif page_name == 'captcha':
             self._captcha_request.focus_first_entry()
+        elif page_name == 'invite':
+            self._invite_box.focus_search_entry()
         elif page_name == 'destroy':
             self.xml.destroy_reason_entry.grab_focus_without_selecting()
 
