@@ -256,10 +256,16 @@ class Themes(Gtk.ApplicationWindow):
         if first is None:
             self._on_add_new_theme()
 
+        # Don't add an option twice
         for option in self._ui.option_listbox.get_children():
             if option == row:
                 return
-        row = Option(row.option, None)
+
+        # Get default value if it exists
+        value = app.css_config.get_value(
+            row.option.selector, row.option.attr)
+
+        row = Option(row.option, value)
         self._ui.option_listbox.add(row)
         self._ui.option_popover.popdown()
 
