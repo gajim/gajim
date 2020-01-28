@@ -59,6 +59,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._destroyed = False
         self._search_stopped = False
         self._redirected = False
+        self._source_id = None
 
         self._ui = get_builder('start_chat_dialog.ui')
         self.add(self._ui.stack)
@@ -67,9 +68,11 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.new_contact_rows = {}
         self.new_groupchat_rows = {}
         self._accounts = app.get_enabled_accounts_with_labels()
+
+        rows = []
         self._add_accounts()
-        self._add_contacts()
-        self._add_groupchats()
+        self._add_contacts(rows)
+        self._add_groupchats(rows)
 
         self._ui.search_entry.connect('search-changed',
                                       self._on_search_changed)
@@ -81,7 +84,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
             'stop-search', lambda *args: self._ui.search_entry.set_text(''))
 
         self._ui.listbox.set_filter_func(self._filter_func, None)
-        self._ui.listbox.set_sort_func(self._sort_func, None)
         self._ui.listbox.connect('row-activated', self._on_row_activated)
 
         self._global_search_listbox = GlobalSearch()
@@ -99,6 +101,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
         self.show_all()
 
+        if rows:
+            self._load_contacts(rows)
+
     def set_search_text(self, text):
         self._ui.search_entry.set_text(text)
 
@@ -109,7 +114,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         for account in self._accounts:
             self._ui.account_store.append([None, *account])
 
-    def _add_contacts(self):
+    def _add_contacts(self, rows):
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             self.new_contact_rows[account] = None
@@ -118,11 +123,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
                     account, jid)
                 if contact.is_groupchat:
                     continue
-                row = ContactRow(account, contact, jid,
-                                 contact.get_shown_name(), show_account)
-                self._ui.listbox.add(row)
+                rows.append(ContactRow(account, contact, jid,
+                                       contact.get_shown_name(), show_account))
 
-    def _add_groupchats(self):
+    def _add_groupchats(self, rows):
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             self.new_groupchat_rows[account] = None
@@ -131,8 +135,21 @@ class StartChatDialog(Gtk.ApplicationWindow):
             for bookmark in bookmarks:
                 jid = str(bookmark.jid)
                 name = get_groupchat_name(con, jid)
-                row = ContactRow(account, None, jid, name, show_account, True)
-                self._ui.listbox.add(row)
+                rows.append(ContactRow(account, None, jid,
+                                       name, show_account, True))
+
+    def _load_contacts(self, rows):
+        generator = self._incremental_add(rows)
+        self._source_id = GLib.idle_add(lambda: next(generator, False),
+                                        priority=GLib.PRIORITY_LOW)
+
+    def _incremental_add(self, rows):
+        for row in rows:
+            self._ui.listbox.add(row)
+            yield True
+
+        self._ui.listbox.set_sort_func(self._sort_func, None)
+        self._source_id = None
 
     def _on_page_changed(self, stack, _param):
         if stack.get_visible_child_name() == 'account':
@@ -562,6 +579,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
             user_data=(con, True))
 
     def _destroy(self, *args):
+        if self._source_id is not None:
+            GLib.source_remove(self._source_id)
         self._destroyed = True
 
 
