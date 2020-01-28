@@ -87,7 +87,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
         self._ui.scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
         highlight_color = app.css_config.get_value(
-            '.gajim-highlight-message', StyleAttr.COLOR)
+            '.gajim-search-highlight', StyleAttr.COLOR)
         self.history_buffer.create_tag('highlight', background=highlight_color)
         self.history_buffer.create_tag('invisible', invisible=True)
 
