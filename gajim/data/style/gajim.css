@@ -1,15 +1,5 @@
 /* Gajim Application CSS File */
 
-.gajim-msg-correcting text {
-    background: rgb(238, 232, 170)
-    }
-.gajim-state-tab-muc-directed-msg {
-    color: rgb(238, 0, 0)
-    }
-.gajim-state-tab-muc-msg {
-    color: rgb(0, 0, 205)
-    }
-
 .chatcontrol-actionbar-button { 
 	padding: 0px 5px 0px 5px;
 	background-color: @theme_base_color; 
