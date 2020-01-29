@@ -117,6 +117,15 @@ class MUC(BaseModule):
         self._rejoin_muc = set()
         self._join_timeouts = {}
         self._rejoin_timeouts = {}
+        self._muc_service_jid = None
+
+    @property
+    def supported(self):
+        return self._muc_service_jid is not None
+
+    @property
+    def service_jid(self):
+        return self._muc_service_jid
 
     def get_manager(self):
         return self._manager
@@ -129,8 +138,7 @@ class MUC(BaseModule):
                 continue
             if nbxmpp.NS_MUC in info.features:
                 self._log.info('Discovered MUC: %s', info.jid)
-                # TODO: make this nicer
-                self._con.muc_jid['jabber'] = str(info.jid)
+                self._muc_service_jid = info.jid
                 raise nbxmpp.NodeProcessed
 
     def join(self, muc_data):

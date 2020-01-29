@@ -598,8 +598,6 @@ def get_name_from_jid(account, jid):
         actor = jid
     return actor
 
-def get_muc_domain(account):
-    return connections[account].muc_jid.get('jabber', None)
 
 def get_recent_groupchats(account):
     recent_groupchats = config.get_per(

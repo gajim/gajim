@@ -61,6 +61,10 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self.show_all()
         self.set_focus(self._ui.address_entry)
 
+    def _get_muc_service_jid(self):
+        con = app.connections[self._account]
+        return str(con.get_module('MUC').service_jid or 'muc.example.com')
+
     def _fill_account_combo(self, account):
         accounts = app.get_enabled_accounts_with_labels(connected_only=True)
         account_liststore = self._ui.account_combo.get_model()
@@ -91,7 +95,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
 
     def _fill_placeholders(self):
         placeholder = random.choice(MUC_CREATION_EXAMPLES)
-        server = app.get_muc_domain(self._account) or 'muc.example.com'
+        server = self._get_muc_service_jid()
 
         self._ui.name_entry.set_placeholder_text(
             placeholder[0] + _(' (optional)...'))
@@ -116,7 +120,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         model = entry.get_completion().get_model()
         model.clear()
 
-        server = app.get_muc_domain(self._account) or 'muc.example.com'
+        server = self._get_muc_service_jid()
         model.append(['%s@%s' % (text, server)])
 
     def _validate_jid(self, text):

@@ -114,7 +114,6 @@ class CommonConnection:
         self.roster_supported = True
         self.avatar_conversion = False
 
-        self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
 
         # Tracks the calls of the connect_machine() method

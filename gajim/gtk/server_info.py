@@ -283,7 +283,8 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         return [
             Feature('XEP-0016: Privacy Lists',
                     con.get_module('PrivacyLists').supported),
-            Feature('XEP-0045: Multi-User Chat', con.muc_jid),
+            Feature('XEP-0045: Multi-User Chat',
+                    con.get_module('MUC').supported),
             Feature('XEP-0054: vcard-temp',
                     con.get_module('VCardTemp').supported),
             Feature('XEP-0163: Personal Eventing Protocol',
