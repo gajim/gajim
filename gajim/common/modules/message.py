@@ -23,7 +23,6 @@ from nbxmpp.util import generate_id
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import validate_jid
 from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
@@ -31,8 +30,6 @@ from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
-from gajim.common.connection_handlers_events import InformationEvent
-from gajim.common.connection_handlers_events import MessageSentEvent
 
 
 class Message(BaseModule):
