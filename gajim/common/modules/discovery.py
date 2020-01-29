@@ -147,9 +147,6 @@ class Discovery(BaseModule):
         if nbxmpp.NS_REGISTER in result.features:
             self._con.register_supported = True
 
-        if nbxmpp.NS_ADDRESS in result.features:
-            self._con.addressing_supported = True
-
         self._con.connect_machine(restart=True)
 
     def _parse_transports(self, info):

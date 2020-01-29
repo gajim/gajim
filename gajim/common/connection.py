@@ -112,7 +112,6 @@ class CommonConnection:
         self.agent_registrations = {}
 
         self.roster_supported = True
-        self.addressing_supported = False
         self.avatar_conversion = False
 
         self.muc_jid = {} # jid of muc server for each transport type
