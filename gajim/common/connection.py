@@ -165,13 +165,6 @@ class CommonConnection:
     def get_status(self):
         return app.SHOW_LIST[self.connected]
 
-    def check_jid(self, jid):
-        """
-        This function must be implemented by derived classes. It has to return
-        the valid jid, or raise a helpers.InvalidFormat exception
-        """
-        raise NotImplementedError
-
     def new_account(self, name, config, sync=False):
         """
         To be implemented by derived classes
@@ -301,9 +294,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.client_cert = app.config.get_per('accounts', self.name,
             'client_cert')
         self.client_cert_passphrase = ''
-
-    def check_jid(self, jid):
-        return helpers.parse_jid(jid)
 
     def get_own_jid(self, warn=False):
         """

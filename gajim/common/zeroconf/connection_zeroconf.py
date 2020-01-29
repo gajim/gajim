@@ -101,9 +101,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             self.username = app.config.get_per('accounts',
                 app.ZEROCONF_ACC_NAME, 'name')
 
-    def check_jid(self, jid):
-        return jid
-
     def get_own_jid(self, *args, **kwargs):
         return nbxmpp.JID(self.username + '@' + self.host)
 
