@@ -327,7 +327,7 @@ class RosterTooltip(StatusTable):
                 name=account_name,
                 show=connection.get_status(),
                 status=connection.status,
-                resource=connection.server_resource,
+                resource=connection.get_own_jid().getResource(),
                 priority=connection.priority)
 
             contacts.append(contact)

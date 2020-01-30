@@ -88,9 +88,7 @@ class JingleSession:
         self.contents = {} # negotiated contents
         self.connection = con # connection to use
         # our full jid
-        self.ourjid = app.get_jid_from_account(self.connection.name)
-        if con.server_resource:
-            self.ourjid = self.ourjid + '/' + con.server_resource
+        self.ourjid = str(self.connection.get_own_jid())
         self.peerjid = jid # jid we connect to
         # jid we use as the initiator
         self.initiator = self.ourjid if weinitiate else self.peerjid

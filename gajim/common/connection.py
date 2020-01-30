@@ -1247,8 +1247,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         cfg_proxies = app.config.get_per('accounts', self.name,
             'file_transfer_proxies')
-        our_jid = helpers.parse_jid(app.get_jid_from_account(self.name) + \
-            '/' + self.server_resource)
+        our_jid = self.get_own_jid()
         testit = app.config.get_per('accounts', self.name,
             'test_ft_proxies_on_startup')
         if cfg_proxies:

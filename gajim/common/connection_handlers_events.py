@@ -131,7 +131,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
         if self.jingle_content.getAttr('creator') == 'initiator':
             file_tag = desc.getTag('file')
             self.file_props.sender = self.fjid
-            self.file_props.receiver = self.conn.get_module('Bytestream')._ft_get_our_jid()
+            self.file_props.receiver = self.conn.get_own_jid()
         else:
             file_tag = desc.getTag('file')
             h = file_tag.getTag('hash')
@@ -142,7 +142,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
             file_info = self.conn.get_module('Jingle').get_file_info(
                 pjid, hash_=h, name=n, account=self.conn.name)
             self.file_props.file_name = file_info['file-name']
-            self.file_props.sender = self.conn.get_module('Bytestream')._ft_get_our_jid()
+            self.file_props.sender = self.conn.get_own_jid()
             self.file_props.receiver = self.fjid
             self.file_props.type_ = 's'
         for child in file_tag.getChildren():

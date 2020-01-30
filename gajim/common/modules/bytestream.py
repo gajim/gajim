@@ -113,13 +113,6 @@ class Bytestream(BaseModule):
                 default=self._account, testit=testit)
             raise nbxmpp.NodeProcessed
 
-    def _ft_get_our_jid(self):
-        if self._account == 'Local':
-            return app.get_jid_from_account(self._account)
-        our_jid = app.get_jid_from_account(self._account)
-        resource = self._con.server_resource
-        return our_jid + '/' + resource
-
     def _ft_get_receiver_jid(self, file_props):
         if self._account == 'Local':
             return file_props.receiver.jid

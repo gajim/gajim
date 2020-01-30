@@ -1839,9 +1839,7 @@ class RosterWindow:
         if account not in app.groups:
             app.groups[account] = {}
 
-        self_jid = app.get_jid_from_account(account)
-        if app.connections[account].server_resource:
-            self_jid += '/' + app.connections[account].server_resource
+        self_jid = str(app.connections[account].get_own_jid())
         if account != app.ZEROCONF_ACC_NAME:
             array[self_jid] = {'name': app.nicks[account],
                                'groups': ['self_contact'],
@@ -2180,7 +2178,7 @@ class RosterWindow:
         if account not in app.contacts.get_accounts():
             return
         child_iterA = self._get_account_iter(account, self.model)
-        self_resource = app.connections[account].server_resource
+        self_resource = app.connections[account].get_own_jid().getResource()
         self_contact = app.contacts.get_contact(account,
                 app.get_jid_from_account(account), resource=self_resource)
         if self_contact:
@@ -2553,14 +2551,11 @@ class RosterWindow:
             account = obj.conn.name
             self_jid = app.get_jid_from_account(account)
             if self_jid not in app.contacts.get_jid_list(account):
-                resource = ''
-                if app.connections[account].server_resource:
-                    resource = app.connections[account].server_resource
                 sha = app.config.get_per('accounts', account, 'avatar_sha')
                 contact = app.contacts.create_contact(
                     jid=self_jid, account=account, name=app.nicks[account],
                     groups=['self_contact'], show='offline', sub='both',
-                    ask='none', resource=resource, avatar_sha=sha)
+                    ask='none', avatar_sha=sha)
                 app.contacts.add_contact(account, contact)
                 self.add_contact(self_jid, account)
 
