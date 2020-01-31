@@ -2221,8 +2221,6 @@ class Interface:
         # get transports type from DB
         app.transport_type = app.logger.get_transports_type()
 
-        helpers.find_soundplayer()
-
         self.last_ftwindow_update = 0
 
         self.music_track_changed_signal = None

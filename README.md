@@ -25,6 +25,7 @@
 - gir1.2-gupnpigd-1.0 for better NAT traversing
 - gir1.2-networkmanager-1.0 for network lose detection
 - gir1.2-geoclue-2.0 for sharing your location
+- gir1.2-gsound-1.0 for sound on Linux
 
 ### Compile-time Requirements
 

@@ -42,7 +42,6 @@ import socket
 import time
 import logging
 import json
-import shutil
 import copy
 import collections
 from collections import defaultdict
@@ -453,27 +452,6 @@ def get_uf_chatstate(chatstate):
         return _('has closed the chat window or tab')
     return ''
 
-def find_soundplayer():
-    if sys.platform in ('win32', 'darwin'):
-        return
-
-    if app.config.get('soundplayer') != '':
-        return
-
-    commands = ('aucat', 'paplay', 'aplay', 'play', 'ossplay')
-    for command in commands:
-        if shutil.which(command) is not None:
-            if command == 'paplay':
-                command += ' -n gajim --property=media.role=event'
-            elif command in ('aplay', 'play'):
-                command += ' -q'
-            elif command == 'ossplay':
-                command += ' -qq'
-            elif command == 'aucat':
-                command += ' -i'
-            app.config.set('soundplayer', command)
-            break
-
 def exec_command(command, use_shell=False, posix=True):
     """
     execute a command. if use_shell is True, we run the command as is it was
@@ -702,28 +680,11 @@ def play_sound_file(path_to_soundfile):
         sound.initWithContentsOfFile_byReference_(path_to_soundfile, True)
         sound.play()
 
-    elif app.config.get('soundplayer') == '':
+    elif app.is_installed('GSOUND'):
         try:
-            import wave
-            import ossaudiodev
-        except Exception:
-            log.exception('Sound Playback Error')
-            return
-
-        def _oss_play():
-            sndfile = wave.open(path_to_soundfile, 'rb')
-            nc, sw, fr, nf, _comptype, _compname = sndfile.getparams()
-            dev = ossaudiodev.open('/dev/dsp', 'w')
-            dev.setparameters(sw * 8, nc, fr)
-            dev.write(sndfile.readframes(nf))
-            sndfile.close()
-            dev.close()
-        app.thread_interface(_oss_play)
-
-    else:
-        player = app.config.get('soundplayer')
-        command = build_command(player, path_to_soundfile)
-        exec_command(command)
+            app.gsound_ctx.play_simple({'media.filename' : path_to_soundfile})
+        except GLib.Error as error:
+            log.error('Could not play sound: %s', error.message)
 
 def get_global_show():
     maxi = 0

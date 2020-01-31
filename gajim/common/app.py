@@ -144,6 +144,8 @@ socks5queue = None
 
 gupnp_igd = None
 
+gsound_ctx = None
+
 gajim_identity = DiscoIdentity(category='client',
                                type='pc',
                                name='Gajim')
@@ -197,6 +199,7 @@ _dependencies = {
     'GEOCLUE': False,
     'UPNP': False,
     'PYCURL': False,
+    'GSOUND': False,
     'GSPELL': False,
     'IDLE': False,
 }
@@ -296,6 +299,21 @@ def detect_dependencies():
         if idle.Monitor.is_available():
             _dependencies['IDLE'] = True
     except Exception:
+        pass
+
+    # GSOUND
+    try:
+        gi.require_version('GSound', '1.0')
+        from gi.repository import GLib
+        from gi.repository import GSound
+        global gsound_ctx
+        gsound_ctx = GSound.Context()
+        try:
+            gsound_ctx.init()
+            _dependencies['GSOUND'] = True
+        except GLib.Error as error:
+            log('gajim').error(error)
+    except (ImportError, ValueError):
         pass
 
     # GSPELL

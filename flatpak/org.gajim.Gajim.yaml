@@ -166,6 +166,13 @@ modules:
         url: https://files.pythonhosted.org/packages/b6/ec/9abe8377d9819fc0383992aaa1b8ce263b45a2371f9f30204abf61029937/precis_i18n-1.0.1-py3-none-any.whl
         sha256: dc9f9fb0c080af9454adce9cc1ddcd718309f3a99ca05186f65e9f6b0654dcd9
 
+  - name: gsound
+    sources:
+      - type: git
+        url: https://gitlab.gnome.org/GNOME/gsound.git
+        tag: 1.0.2
+        commit: a86946b494aa32782b3f6334344d07b5c11d5219
+
   - name: gspell
     cleanup:
       - /bin

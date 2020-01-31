@@ -115,8 +115,6 @@ class Config:
         'show_ascii_formatting_chars': [opt_bool, True, _('If enabled, do not '
                 'remove */_ . So *abc* will be bold but with * * not removed.')],
         'sounds_on': [opt_bool, True],
-        # 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
-        'soundplayer': [opt_str, ''],
         'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nickname completion (tab) in group chat.')],
         'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when nickname is already used in group chat.')],
         'msgwin-max-state': [opt_bool, False],
