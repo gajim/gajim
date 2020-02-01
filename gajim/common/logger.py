@@ -234,6 +234,7 @@ class Logger:
         self._migrate_databases()
         self._connect_databases()
         self._get_jid_ids_from_db()
+        self._fill_disco_info_cache()
 
     def _create_databases(self):
         if os.path.isdir(self._log_db_path):
@@ -1671,6 +1672,17 @@ class Logger:
         self._timeout_commit()
 
     @timeit
+    def _fill_disco_info_cache(self):
+        sql = '''SELECT disco_info as "disco_info [disco_info]",
+                 jid, last_seen FROM
+                 last_seen_disco_info'''
+        rows = self._con.execute(sql).fetchall()
+        for row in rows:
+            disco_info = row.disco_info._replace(timestamp=row.last_seen)
+            self._disco_info_cache[row.jid] = disco_info
+        log.info('%s DiscoInfo entrys loaded', len(rows))
+
+    @timeit
     def get_last_disco_info(self, jid, max_age=0):
         """
         Get last disco info from jid
@@ -1681,28 +1693,11 @@ class Logger:
 
         """
 
-        max_timestamp = time.time() - max_age if max_age else 0
-
-        # Try the cache
         disco_info = self._disco_info_cache.get(jid)
         if disco_info is not None:
+            max_timestamp = time.time() - max_age if max_age else 0
             if max_timestamp > disco_info.timestamp:
                 return None
-            return disco_info
-
-        # Try the database
-        sql = '''SELECT disco_info as "disco_info [disco_info]", last_seen FROM
-                 last_seen_disco_info
-                 WHERE jid = ?'''
-        row = self._con.execute(sql, (str(jid),)).fetchone()
-        if row is None:
-            return None
-
-        if max_timestamp > row.last_seen:
-            return None
-
-        disco_info = row.disco_info._replace(timestamp=row.last_seen)
-        self._disco_info_cache[jid] = disco_info
         return disco_info
 
     @timeit
