@@ -39,6 +39,7 @@ from gajim.common import app
 from gajim.common import modules
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
+from gajim.common.const import ClientState
 from gajim.common.connection import CommonConnection
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
@@ -116,7 +117,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         self.disconnect()
 
     def _on_resolve_timeout(self):
-        if self.connected:
+        if self._state.is_connected:
             if not self.connection.resolve_all():
                 self.disconnect()
                 return False
@@ -214,7 +215,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 app.newly_added[self.name].append(jid)
             if jid in app.to_be_removed[self.name]:
                 app.to_be_removed[self.name].remove(jid)
-        elif event.old_show > 1 and event.new_show == 0 and self.is_connected:
+        elif event.old_show > 1 and event.new_show == 0 and self._state.is_connected:
             if not jid in app.to_be_removed[self.name]:
                 app.to_be_removed[self.name].append(jid)
             if jid in app.newly_added[self.name]:
@@ -303,6 +304,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             self.time_to_reconnect = None
 
         self.connected = 0
+        self._set_state(ClientState.DISCONNECTED)
         if self.connection:
             self.connection.disconnect()
             self.connection = None
@@ -313,11 +315,12 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
     def _on_disconnect(self):
         self.connected = 0
+        self._set_state(ClientState.DISCONNECTED)
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show='offline'))
 
     def reannounce(self):
-        if self.connected:
+        if self._state.is_connected:
             txt = {}
             txt['1st'] = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
                     'zeroconf_first_name')
@@ -353,15 +356,17 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             check = self.connection.announce()
         else:
             self.connected = STATUS_LIST.index(show)
-        app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
 
         # stay offline when zeroconf does something wrong
         if check:
+            self._set_state(ClientState.CONNECTED)
+            app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=show))
         else:
             # show notification that avahi or system bus is down
             self.connected = 0
+            self._set_state(ClientState.DISCONNECTED)
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
             self.status = 'offline'

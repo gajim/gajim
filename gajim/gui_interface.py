@@ -1748,7 +1748,6 @@ class Interface:
             'infos': {}, 'disco': {}, 'gc_config': {}, 'search': {},
             'online_dialog': {}, 'sub_request': {}}
         self.minimized_controls[account] = {}
-        app.connections[account].connected = 0
         app.groups[account] = {}
         app.contacts.add_account(account)
         app.gc_connected[account] = {}
@@ -1992,12 +1991,12 @@ class Interface:
         log.debug('NetworkMonitor state change: %s', connected)
         if connected:
             for connection in app.connections.values():
-                if connection.connected <= 0 and connection.time_to_reconnect:
+                if connection.state.is_disconnected and connection.time_to_reconnect:
                     log.info('Connect %s', connection.name)
                     GLib.timeout_add_seconds(2, connection.reconnect)
         else:
             for connection in app.connections.values():
-                if connection.is_connected:
+                if connection.state.is_connected:
                     log.info('Disconnect %s', connection.name)
                     connection.disconnect(immediately=True)
 

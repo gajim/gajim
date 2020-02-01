@@ -215,6 +215,24 @@ class MUCJoinedState(Enum):
         return self.name
 
 
+class ClientState(IntEnum):
+    DISCONNECTED = 0
+    CONNECTING = 1
+    CONNECTED = 2
+
+    @property
+    def is_disconnected(self):
+        return self == ClientState.DISCONNECTED
+
+    @property
+    def is_connecting(self):
+        return self == ClientState.CONNECTING
+
+    @property
+    def is_connected(self):
+        return self == ClientState.CONNECTED
+
+
 MUC_CREATION_EXAMPLES = [
     (Q_('?Group chat name:Team'),
      Q_('?Group chat description:Project discussion'),

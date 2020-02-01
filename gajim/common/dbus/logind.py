@@ -79,7 +79,7 @@ class LogindListener:
         else:
             self._inhibit_sleep(connection)
             for conn in app.connections.values():
-                if conn.connected <= 0 and conn.time_to_reconnect:
+                if conn.state.is_disconnected and conn.time_to_reconnect:
                     conn.reconnect()
 
     def _inhibit_sleep(self, connection):

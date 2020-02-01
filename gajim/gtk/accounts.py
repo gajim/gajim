@@ -104,7 +104,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 break
 
     def _relog(self, account):
-        if app.connections[account].connected == 0:
+        if not app.account_is_connected(account):
             return
 
         if account == app.ZEROCONF_ACC_NAME:
@@ -528,7 +528,7 @@ class AccountRow(Gtk.ListBoxRow):
             return Gdk.EVENT_PROPAGATE
 
         if (account in app.connections and
-                app.connections[account].connected > 0):
+                not app.connections[account].state.is_disconnected):
             # Connecting or connected
             NewConfirmationDialog(
                 _('Disable Account'),

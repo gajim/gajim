@@ -59,6 +59,7 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import get_encryption_method
+from gajim.common.const import ClientState
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
 from gajim.common.connection_handlers_events import InformationEvent
@@ -102,6 +103,8 @@ class CommonConnection:
         self.time_to_reconnect = None
         self._reconnect_timer_source = None
 
+        self._state = ClientState.DISCONNECTED
+
         # If handlers have been registered
         self.handlers_registered = False
 
@@ -121,6 +124,14 @@ class CommonConnection:
         self._connect_machine_calls = 0
 
         self.get_config_values_or_default()
+
+    def _set_state(self, state):
+        log.info('State: %s', state)
+        self._state = state
+
+    @property
+    def state(self):
+        return self._state
 
     @property
     def is_connected(self):
@@ -204,7 +215,7 @@ class CommonConnection:
         if show != 'invisible':
             # We save it only when privacy list is accepted
             self.status = msg
-        if show != 'offline' and self.connected < 1:
+        if show != 'offline' and self._state.is_disconnected:
             # set old_show to requested 'show' in case we need to
             # recconect before we auth to server
             self.old_show = show
@@ -223,10 +234,7 @@ class CommonConnection:
             self.disconnect(reconnect=False)
             return
 
-        if show != 'offline' and self.connected > 0:
-            # dont'try to connect, when we are in state 'connecting'
-            if self.connected == 1:
-                return
+        if show != 'offline' and self._state.is_connected:
             if show == 'invisible':
                 self._change_to_invisible(msg)
                 return
@@ -313,7 +321,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def reconnect(self):
         # Do not try to reco while we are already trying
         self.time_to_reconnect = None
-        if not self.is_connected: # connection failed
+        if not self._state.is_connected: # connection failed
             log.info('Reconnect')
             self.connected = 1
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
@@ -383,6 +391,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.info('Set state disconnected')
         self.get_module('Ping').remove_timeout()
         self.connected = 0
+        self._set_state(ClientState.DISCONNECTED)
         self.disable_reconnect_timer()
 
         app.interface.music_track_changed(None, None, self.name)
@@ -612,6 +621,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         # create connection if it doesn't already exist
         self.connected = 1
+        self._set_state(ClientState.CONNECTING)
 
         h = hostname
         p = 5222
@@ -822,7 +832,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _connect_failure(self, con_type=None):
         if not con_type:
             # we are not retrying, and not conecting
-            if not self.retrycount and self.connected != 0:
+            if not self.retrycount and not self._state.is_disconnected:
                 self._disconnect()
                 if self._proxy:
                     pritxt = _('Could not connect to "%(host)s" via proxy "%(proxy)s"') %\
@@ -1092,6 +1102,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self._sm_resume_data = {}
 
         self.connected = 2
+        self._set_state(ClientState.CONNECTED)
         self.retrycount = 0
         self.set_oldst()
         self._set_send_timeouts()
@@ -1117,6 +1128,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                              new_jid=new_jid))
 
         self.connected = 2
+        self._set_state(ClientState.CONNECTED)
         self.retrycount = 0
         self._discover_server()
         self._set_send_timeouts()
@@ -1141,7 +1153,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.connection.send(' ')
 
     def send_invisible_presence(self, msg, initial=False):
-        if not app.account_is_connected(self.name):
+        if not self._state.is_connected:
             return
         if not self.get_module('PrivacyLists').supported:
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
@@ -1151,7 +1163,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
-        if self.is_connected and self.get_module('PrivacyLists').supported:
+        if self.get_module('PrivacyLists').supported:
             self.get_module('Bytestream').remove_all_transfers()
             self.get_module('Presence').send_presence(
                 typ='unavailable',
@@ -1211,9 +1223,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connect_and_auth()
 
     def _discover_server(self):
-        if not app.account_is_connected(self.name):
-            return
-
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()
         self.get_module('Discovery').discover_server_items()
@@ -1258,7 +1267,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     testit=testit)
 
     def send_first_presence(self, signed=''):
-        if self.connected <= 1 or not self.continue_connect_info:
+        if not self._state.is_connected or not self.continue_connect_info:
             return
         show = self.continue_connect_info[0]
         msg = self.continue_connect_info[1]
@@ -1327,7 +1336,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(stanza)
 
     def send_message(self, message):
-        if not app.account_is_connected(self.name):
+        if not self._state.is_connected:
             log.warning('Trying to send message while offline')
             return
 
@@ -1362,7 +1371,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.get_module('Message').log_message(message)
 
     def send_messages(self, jids, message):
-        if not app.account_is_connected(self.name):
+        if not self._state.is_connected:
             log.warning('Trying to send message while offline')
             return
 
@@ -1417,7 +1426,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         nbxmpp.features.getRegInfo(con, self._hostname)
 
     def send_agent_status(self, agent, ptype):
-        if not app.account_is_connected(self.name):
+        if not self._state.is_connected:
             return
         show = helpers.get_xmpp_show(app.SHOW_LIST[self.connected])
 
@@ -1428,7 +1437,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             caps=ptype != 'unavailable')
 
     def unregister_account(self, callback):
-        if not app.account_is_connected(self.name):
+        if not self._state.is_connected:
             return
         self.removing_account = True
         self.connection.get_module('Register').unregister(
@@ -1439,7 +1448,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Account may have been disabled
             return
         if self.time_to_reconnect:
-            if not self.is_connected:
+            if not self._state.is_connected:
                 self.reconnect()
             else:
                 self.time_to_reconnect = None

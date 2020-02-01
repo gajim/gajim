@@ -552,7 +552,6 @@ class AccountCreationWizard(EventHelper):
             'gc_config': {}, 'search': {}, 'online_dialog': {},
             'sub_request': {}}
         app.interface.minimized_controls[self.account] = {}
-        app.connections[self.account].connected = 0
         app.groups[self.account] = {}
         app.contacts.add_account(self.account)
         app.gc_connected[self.account] = {}

@@ -1053,8 +1053,11 @@ def update_optional_features(account=None):
                                [])
         app.caps_hash[account_] = compute_caps_hash(disco_info, compare=False)
         # re-send presence with new hash
+        if not app.account_is_connected(account_):
+            return
+
         connected = app.connections[account_].connected
-        if connected > 1 and app.SHOW_LIST[connected] != 'invisible':
+        if app.SHOW_LIST[connected] != 'invisible':
             app.connections[account_].change_status(
                 app.SHOW_LIST[connected], app.connections[account_].status)
 

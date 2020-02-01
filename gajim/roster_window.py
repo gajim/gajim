@@ -2523,7 +2523,7 @@ class RosterWindow:
                     GLib.timeout_add_seconds(5, self.remove_newly_added, jid,
                         account)
                 elif obj.old_show > 1 and obj.new_show == 0 and \
-                obj.conn.is_connected:
+                obj.conn.state.is_connected:
                     GLib.timeout_add_seconds(5, self.remove_to_be_removed,
                         jid, account)
 
@@ -3450,7 +3450,7 @@ class RosterWindow:
                 # show and status
 
                 if not global_sync_connected_accounts > 0 or \
-                app.connections[account].connected > 0:
+                app.account_is_connected(account):
                     self.send_status(account, status, message)
                     self.send_pep(account, pep_dict)
             self.update_status_combobox()
@@ -4786,7 +4786,7 @@ class RosterWindow:
                 item = Gtk.MenuItem.new_with_mnemonic(uf_show)
                 sub_menu.append(item)
                 con = app.connections[account]
-                if show == 'invisible' and con.is_connected and \
+                if show == 'invisible' and con.state.is_connected and \
                 not con.get_module('PrivacyLists').supported:
                     item.set_sensitive(False)
                 else:
