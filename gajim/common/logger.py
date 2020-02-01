@@ -1682,7 +1682,6 @@ class Logger:
             self._disco_info_cache[row.jid] = disco_info
         log.info('%s DiscoInfo entrys loaded', len(rows))
 
-    @timeit
     def get_last_disco_info(self, jid, max_age=0):
         """
         Get last disco info from jid
