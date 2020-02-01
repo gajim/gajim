@@ -229,12 +229,14 @@ class Logger:
         self._cache_db_path = configpaths.get('CACHE_DB')
 
         self._disco_info_cache = {}
+        self._muc_avatar_sha_cache = {}
 
         self._create_databases()
         self._migrate_databases()
         self._connect_databases()
         self._get_jid_ids_from_db()
         self._fill_disco_info_cache()
+        self._fill_muc_avatar_sha_cache()
 
     def _create_databases(self):
         if os.path.isdir(self._log_db_path):
@@ -1556,6 +1558,14 @@ class Logger:
         self._timeout_commit()
 
     @timeit
+    def _fill_muc_avatar_sha_cache(self):
+        sql = '''SELECT jid, avatar_sha FROM muc_avatars'''
+        rows = self._con.execute(sql).fetchall()
+        for row in rows:
+            self._muc_avatar_sha_cache[row.jid] = row.avatar_sha
+        log.info('%s Avatar SHA entrys loaded', len(rows))
+
+    @timeit
     def set_avatar_sha(self, account_jid, jid, sha=None):
         """
         Set the avatar sha of a jid on an account
@@ -1598,9 +1608,10 @@ class Logger:
             sql = 'UPDATE muc_avatars SET avatar_sha = ? WHERE jid = ?'
             self._con.execute(sql, (sha, jid))
 
+        self._muc_avatar_sha_cache[jid] = sha
+
         self._timeout_commit()
 
-    @timeit
     def get_muc_avatar_sha(self, jid):
         """
         Get the avatar sha of a MUC
@@ -1609,10 +1620,7 @@ class Logger:
 
         """
 
-        sql = '''SELECT avatar_sha FROM muc_avatars WHERE jid = ?'''
-        row = self._con.execute(sql, (jid,)).fetchone()
-        if row is not None:
-            return row.avatar_sha
+        return self._muc_avatar_sha_cache.get(jid)
 
     @timeit
     def get_archive_infos(self, jid):
