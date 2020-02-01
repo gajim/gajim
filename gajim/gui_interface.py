@@ -1462,7 +1462,7 @@ class Interface:
 
         # Fetch data from bookmarks
         con = app.connections[account]
-        bookmark = con.get_module('Bookmarks').get_bookmark_from_jid(room_jid)
+        bookmark = con.get_module('Bookmarks').get_bookmark(room_jid)
         if bookmark is not None:
             if bookmark.nick is not None:
                 nick = bookmark.nick

@@ -17,9 +17,13 @@
 from typing import Any
 from typing import List
 from typing import Dict
+from typing import Set
+from typing import Tuple
+from typing import Union
 from typing import Optional
 
 import nbxmpp
+from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import BookmarkData
 from nbxmpp.const import BookmarkStoreType
@@ -46,32 +50,28 @@ class Bookmarks(BaseModule):
         self._register_pubsub_handler(self._bookmark_2_event_received)
         self._conversion = False
         self._conversion_2 = False
-        self._bookmarks = []
+        self._bookmarks = {}
         self._join_timeouts = []
         self._request_in_progress = True
 
     @property
-    def conversion(self):
+    def conversion(self) -> bool:
         return self._conversion
 
     @property
-    def conversion_2(self):
+    def conversion_2(self) -> bool:
         return self._conversion_2
 
     @property
-    def bookmarks(self):
-        return self._bookmarks
-
-    @bookmarks.setter
-    def bookmarks(self, value):
-        self._bookmarks = value
+    def bookmarks(self) -> List[BookmarkData]:
+        return self._bookmarks.values()
 
     @property
-    def using_bookmark_1(self):
+    def using_bookmark_1(self) -> bool:
         return self._pubsub_support() and self.conversion
 
     @property
-    def using_bookmark_2(self):
+    def using_bookmark_2(self) -> bool:
         return self._pubsub_support() and self.conversion_2
 
     @event_node(nbxmpp.NS_BOOKMARKS)
@@ -91,11 +91,9 @@ class Bookmarks(BaseModule):
             self._log.info('Ignore update, pubsub request in progress')
             return
 
-        bookmarks = properties.pubsub_event.data
-        if bookmarks is None:
-            bookmarks = []
+        bookmarks = self._convert_to_dict(properties.pubsub_event.data)
 
-        old_bookmarks = self._convert_to_set(self._bookmarks)
+        old_bookmarks = self._bookmarks.copy()
         self._bookmarks = bookmarks
         self._act_on_changed_bookmarks(old_bookmarks)
         app.nec.push_incoming_event(
@@ -115,28 +113,22 @@ class Bookmarks(BaseModule):
             self._log.info('Ignore update, pubsub request in progress')
             return
 
-        old_bookmarks = self._convert_to_set(self._bookmarks)
+        old_bookmarks = self._bookmarks.copy()
 
         if properties.pubsub_event.deleted or properties.pubsub_event.purged:
             self._log.info('Bookmark node deleted/purged')
-            self._bookmarks = []
+            self._bookmarks = {}
 
         elif properties.pubsub_event.retracted:
             jid = properties.pubsub_event.id
             self._log.info('Retract: %s', jid)
-            bookmark = self.get_bookmark_from_jid(jid)
+            bookmark = self._bookmarks.get(jid)
             if bookmark is not None:
-                try:
-                    self._bookmarks.remove(bookmark)
-                except KeyError:
-                    pass
+                self._bookmarks.pop(bookmark, None)
 
         else:
             new_bookmark = properties.pubsub_event.data
-            old_bookmark = self.get_bookmark_from_jid(new_bookmark.jid)
-            if old_bookmark is not None:
-                self._bookmarks.remove(old_bookmark)
-            self._bookmarks.append(new_bookmark)
+            self._bookmarks[new_bookmark.jid] = properties.pubsub_event.data
 
         self._act_on_changed_bookmarks(old_bookmarks)
         app.nec.push_incoming_event(
@@ -156,8 +148,11 @@ class Bookmarks(BaseModule):
             self._conversion = True
             self._log.info('Discovered Bookmarks Conversion: %s', info.jid)
 
-    def _act_on_changed_bookmarks(self, old_bookmarks):
+    def _act_on_changed_bookmarks(
+            self, old_bookmarks: Dict[str, BookmarkData]) -> None:
+
         new_bookmarks = self._convert_to_set(self._bookmarks)
+        old_bookmarks = self._convert_to_set(old_bookmarks)
         changed = new_bookmarks - old_bookmarks
         if not changed:
             return
@@ -166,7 +161,7 @@ class Bookmarks(BaseModule):
         bookmarks = []
         for jid in join:
             self._log.info('Schedule autojoin in 10s for: %s', jid)
-            bookmarks.append(self.get_bookmark_from_jid(jid))
+            bookmarks.append(self._bookmarks.get(jid))
         # If another client creates a MUC, the MUC is locked until the
         # configuration is finished. Give the user some time to finish
         # the configuration.
@@ -178,23 +173,32 @@ class Bookmarks(BaseModule):
         # leave = [jid for jid, autojoin in changed if not autojoin]
 
     @staticmethod
-    def _convert_to_set(bookmarks):
+    def _convert_to_set(
+            bookmarks: Dict[str, BookmarkData]) -> Set[Tuple[str, bool]]:
+
         set_ = set()
-        for bookmark in bookmarks:
-            set_.add((bookmark.jid, bookmark.autojoin))
+        for jid, bookmark in bookmarks.items():
+            set_.add((jid, bookmark.autojoin))
         return set_
 
-    def get_bookmark_from_jid(self, jid):
-        for bookmark in self._bookmarks:
-            if bookmark.jid == jid:
-                return bookmark
-        return None
+    @staticmethod
+    def _convert_to_dict(bookmarks: List) -> Dict[str, BookmarkData]:
+        _dict = {}  # type: Dict[str, BookmarkData]
+        if bookmarks is None:
+            return _dict
+
+        for bookmark in bookmarks:
+            _dict[bookmark.jid] = bookmark
+        return _dict
+
+    def get_bookmark(self, jid: Union[str, JID]) -> BookmarkData:
+        return self._bookmarks.get(jid)
 
     def _pubsub_support(self) -> bool:
         return (self._con.get_module('PEP').supported and
                 self._con.get_module('PubSub').publish_options)
 
-    def request_bookmarks(self):
+    def request_bookmarks(self) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -209,34 +213,34 @@ class Bookmarks(BaseModule):
         self._nbxmpp('Bookmarks').request_bookmarks(
             type_, callback=self._bookmarks_received)
 
-    def _bookmarks_received(self, bookmarks):
+    def _bookmarks_received(self, bookmarks: Any) -> None:
         if is_error_result(bookmarks):
             self._log.info(bookmarks)
-            bookmarks = []
+            bookmarks = None
 
         self._request_in_progress = False
-        self._bookmarks = bookmarks
+        self._bookmarks = self._convert_to_dict(bookmarks)
         self.auto_join_bookmarks()
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
 
-    def store_difference(self, bookmarks):
+    def store_difference(self, bookmarks: List) -> None:
         if self.using_bookmark_2:
             retract, add_or_modify = self._determine_changed_bookmarks(
                 bookmarks, self._bookmarks)
 
             for bookmark in retract:
-                self.remove(str(bookmark.jid))
+                self.remove(bookmark.jid)
 
             if add_or_modify:
                 self.store_bookmarks(add_or_modify)
-            self._bookmarks = bookmarks
+            self._bookmarks = self._convert_to_dict(bookmarks)
 
         else:
-            self._bookmarks = bookmarks
+            self._bookmarks = self._convert_to_dict(bookmarks)
             self.store_bookmarks()
 
-    def store_bookmarks(self, bookmarks=None):
+    def store_bookmarks(self, bookmarks: list = None) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -247,13 +251,15 @@ class Bookmarks(BaseModule):
             if self.conversion_2:
                 type_ = BookmarkStoreType.PUBSUB_BOOKMARK_2
 
-        self._nbxmpp('Bookmarks').store_bookmarks(bookmarks or self._bookmarks,
-                                                  type_)
+        if bookmarks is None:
+            bookmarks = self._bookmarks.values()
+
+        self._nbxmpp('Bookmarks').store_bookmarks(bookmarks, type_)
 
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
 
-    def store_bookmark(self, bookmark):
+    def store_bookmark(self, bookmark: BookmarkData) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -276,7 +282,7 @@ class Bookmarks(BaseModule):
             return
 
         if bookmarks is None:
-            bookmarks = self._bookmarks
+            bookmarks = self._bookmarks.values()
 
         for bookmark in bookmarks:
             if bookmark.autojoin:
@@ -292,7 +298,7 @@ class Bookmarks(BaseModule):
                                                  minimized=minimize)
 
     def modify(self, jid: str, **kwargs: Dict[str, str]) -> None:
-        bookmark = self.get_bookmark_from_jid(jid)
+        bookmark = self._bookmarks.get(jid)
         if bookmark is None:
             return
 
@@ -301,8 +307,7 @@ class Bookmarks(BaseModule):
             # No change happened
             return
         self._log.info('Modify bookmark: %s %s', jid, kwargs)
-        self._bookmarks.remove(bookmark)
-        self._bookmarks.append(new_bookmark)
+        self._bookmarks[jid] = new_bookmark
 
         if self.using_bookmark_2:
             self.store_bookmark(new_bookmark)
@@ -310,13 +315,13 @@ class Bookmarks(BaseModule):
             self.store_bookmarks()
 
     def add_or_modify(self, jid: str, **kwargs: Dict[str, str]) -> None:
-        bookmark = self.get_bookmark_from_jid(jid)
+        bookmark = self._bookmarks.get(jid)
         if bookmark is not None:
             self.modify(jid, **kwargs)
             return
 
         new_bookmark = BookmarkData(jid=jid, **kwargs)
-        self._bookmarks.append(new_bookmark)
+        self._bookmarks[jid] = new_bookmark
         self._log.info('Add new bookmark: %s', new_bookmark)
 
         if self.using_bookmark_2:
@@ -324,22 +329,25 @@ class Bookmarks(BaseModule):
         else:
             self.store_bookmarks()
 
-    def remove(self, jid: str, publish: bool = True) -> None:
-        bookmark = self.get_bookmark_from_jid(jid)
-        if bookmark is None:
+    def remove(self, jid: JID, publish: bool = True) -> None:
+        removed = self._bookmarks.pop(jid, False)
+        if not removed:
             return
-        self._bookmarks.remove(bookmark)
         if publish:
             if self.using_bookmark_2:
-                self._nbxmpp('Bookmarks').retract_bookmark(jid)
+                self._nbxmpp('Bookmarks').retract_bookmark(str(jid))
             else:
                 self.store_bookmarks()
 
     @staticmethod
-    def _determine_changed_bookmarks(new_bookmarks, old_bookmarks):
+    def _determine_changed_bookmarks(
+            new_bookmarks: List[BookmarkData],
+            old_bookmarks: Dict[str, BookmarkData]) -> Tuple[
+                List[BookmarkData], List[BookmarkData]]:
+
         new_jids = [bookmark.jid for bookmark in new_bookmarks]
         new_bookmarks = set(new_bookmarks)
-        old_bookmarks = set(old_bookmarks)
+        old_bookmarks = set(old_bookmarks.values())
 
         retract = []
         add_or_modify = []
@@ -353,13 +361,13 @@ class Bookmarks(BaseModule):
         return retract, add_or_modify
 
     def get_name_from_bookmark(self, jid: str) -> str:
-        bookmark = self.get_bookmark_from_jid(jid)
+        bookmark = self._bookmarks.get(jid)
         if bookmark is None:
             return ''
         return bookmark.name
 
     def is_bookmark(self, jid: str) -> bool:
-        return self.get_bookmark_from_jid(jid) is not None
+        return jid in self._bookmarks
 
     def purge_pubsub_bookmarks(self) -> None:
         self._log.info('Purge/Delete Bookmarks on PubSub, '
