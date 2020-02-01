@@ -83,6 +83,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.search_entry.connect(
             'stop-search', lambda *args: self._ui.search_entry.set_text(''))
 
+        self._ui.listbox.set_placeholder(self._ui.placeholder)
         self._ui.listbox.set_filter_func(self._filter_func, None)
         self._ui.listbox.connect('row-activated', self._on_row_activated)
 
@@ -683,7 +684,25 @@ class GlobalSearch(Gtk.ListBox):
         self.set_has_tooltip(True)
         self.set_activate_on_single_click(False)
         self._progress = None
+        self._add_placeholder()
         self.show_all()
+
+    def _add_placeholder(self):
+        placeholder = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        placeholder.set_halign(Gtk.Align.CENTER)
+        placeholder.set_valign(Gtk.Align.CENTER)
+        icon = Gtk.Image.new_from_icon_name('system-search-symbolic',
+                                            Gtk.IconSize.DIALOG)
+        icon.get_style_context().add_class('dim-label')
+        label = Gtk.Label(label=_('Search for group chats globally\n'
+                                  '(press Return to start search)'))
+        label.get_style_context().add_class('dim-label')
+        label.set_justify(Gtk.Justification.CENTER)
+        label.set_max_width_chars(35)
+        placeholder.add(icon)
+        placeholder.add(label)
+        placeholder.show_all()
+        self.set_placeholder(placeholder)
 
     def remove_all(self):
         def remove(row):
