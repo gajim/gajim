@@ -278,9 +278,6 @@ class Bookmarks(BaseModule):
 
     def auto_join_bookmarks(self,
                             bookmarks: Optional[List[Any]] = None) -> None:
-        if app.is_invisible(self._account):
-            return
-
         if bookmarks is None:
             bookmarks = self._bookmarks.values()
 

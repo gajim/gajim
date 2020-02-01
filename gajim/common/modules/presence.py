@@ -140,7 +140,7 @@ class Presence(BaseModule):
         resource = properties.jid.getResource()
 
         status_strings = ['offline', 'error', 'online', 'chat', 'away',
-                          'xa', 'dnd', 'invisible']
+                          'xa', 'dnd']
 
         event.new_show = status_strings.index(event.show)
 

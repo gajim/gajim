@@ -145,7 +145,7 @@ class VCardTemp(BaseModule):
         if stanza.getType() == 'result':
             current_sha = app.config.get_per(
                 'accounts', self._account, 'avatar_sha')
-            if (current_sha != sha and not app.is_invisible(self._account)):
+            if current_sha != sha:
                 if not app.account_is_connected(self._account):
                     return
                 app.config.set_per(

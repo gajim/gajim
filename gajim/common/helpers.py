@@ -312,11 +312,6 @@ def get_uf_show(show, use_mnemonic=False):
             uf_show = _('_Offline')
         else:
             uf_show = _('Offline')
-    elif show == 'invisible':
-        if use_mnemonic:
-            uf_show = _('_Invisible')
-        else:
-            uf_show = _('Invisible')
     elif show == 'not in roster':
         uf_show = _('Not in contact list')
     elif show == 'requested':
@@ -326,7 +321,7 @@ def get_uf_show(show, use_mnemonic=False):
     return uf_show
 
 def get_css_show_color(show):
-    if show in ('online', 'chat', 'invisible'):
+    if show in ('online', 'chat'):
         return 'status-online'
     if show in ('offline', 'not in roster', 'requested'):
         return None
@@ -1057,9 +1052,8 @@ def update_optional_features(account=None):
             return
 
         connected = app.connections[account_].connected
-        if app.SHOW_LIST[connected] != 'invisible':
-            app.connections[account_].change_status(
-                app.SHOW_LIST[connected], app.connections[account_].status)
+        app.connections[account_].change_status(
+            app.SHOW_LIST[connected], app.connections[account_].status)
 
 def jid_is_blocked(account, jid):
     con = app.connections[account]

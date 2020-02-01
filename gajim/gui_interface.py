@@ -846,9 +846,6 @@ class Interface:
         if obj.conn.get_module('MAM').available:
             obj.conn.get_module('MAM').request_archive_on_signin()
 
-        # We cannot join rooms if we are invisible
-        if app.is_invisible(account):
-            return
         # send currently played music
         if (pep_supported and sys.platform not in ('win32', 'darwin') and
                 app.config.get_per('accounts', account, 'publish_tune')):
@@ -1483,11 +1480,6 @@ class Interface:
         self.join_groupchat(account, room_jid, **kwargs)
 
     def join_groupchat(self, account, room_jid, password=None, minimized=False):
-        if app.is_invisible(account):
-            ErrorDialog(
-                _('You cannot join a group chat while you are invisible'))
-            return
-
         if not app.account_is_connected(account):
             return
 
@@ -1613,7 +1605,7 @@ class Interface:
         win.set_active_tab(ctrl)
 
         if app.connections[account].is_zeroconf and \
-        app.connections[account].status in ('offline', 'invisible'):
+        app.connections[account].status == 'offline':
             ctrl = win.get_control(fjid, account)
             if ctrl:
                 ctrl.got_disconnected()

@@ -294,9 +294,8 @@ class Config:
             'autopriority_away': [opt_int, 40],
             'autopriority_xa': [opt_int, 30],
             'autopriority_dnd': [opt_int, 20],
-            'autopriority_invisible': [opt_int, 10],
             'autoconnect': [opt_bool, False, '', True],
-            'autoconnect_as': [opt_str, 'online', _('Status to be used automatically when connecting. Can be \'online\', \'chat\', \'away\', \'xa\', \'dnd\' or \'invisible\'. NOTE: This option is used only if \'restore_last_status\' is disabled.'), True],
+            'autoconnect_as': [opt_str, 'online', _('Status to be used automatically when connecting. Can be \'online\', \'chat\', \'away\', \'xa\' or \'dnd\'. NOTE: This option is used only if \'restore_last_status\' is disabled.'), True],
             'restore_last_status': [opt_bool, False, _('If enabled, the last status will be restored.')],
             'autoauth': [opt_bool, False, _('If enabled, contacts requesting authorization will be accepted automatically.')],
             'active': [opt_bool, True, _('If disabled, this account will be disabled and will not appear in the contact list window.'), True],
@@ -428,7 +427,6 @@ class Config:
         '_last_away': ['', '', '', '', '', ''],
         '_last_xa': ['', '', '', '', '', ''],
         '_last_dnd': ['', '', '', '', '', ''],
-        '_last_invisible': ['', '', '', '', '', ''],
         '_last_offline': ['', '', '', '', '', ''],
     }
 
@@ -438,7 +436,6 @@ class Config:
         'away': [False, _('Be right back.')],
         'xa': [False, _('I\'m not available.')],
         'dnd': [False, _('Do not disturb.')],
-        'invisible': [False, _('Bye!')],
         'offline': [False, _('Bye!')],
     }
 

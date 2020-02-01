@@ -897,7 +897,7 @@ class MetacontactManager():
         Data is {'jid': jid, 'account': account, 'order': order} order is
         optional
         """
-        show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
+        show_list = ['not in roster', 'error', 'offline', 'dnd',
                      'xa', 'away', 'chat', 'online', 'requested', 'message']
 
         jid = data['jid']

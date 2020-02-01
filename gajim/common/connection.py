@@ -212,9 +212,6 @@ class CommonConnection:
         if not msg:
             msg = ''
 
-        if show != 'invisible':
-            # We save it only when privacy list is accepted
-            self.status = msg
         if show != 'offline' and self._state.is_disconnected:
             # set old_show to requested 'show' in case we need to
             # recconect before we auth to server
@@ -235,12 +232,9 @@ class CommonConnection:
             return
 
         if show != 'offline' and self._state.is_connected:
-            if show == 'invisible':
-                self._change_to_invisible(msg)
-                return
             if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
                 return -1
-            was_invisible = self.connected == app.SHOW_LIST.index('invisible')
+
             self.connected = app.SHOW_LIST.index(show)
             idle_time = None
             if auto:
@@ -248,8 +242,7 @@ class CommonConnection:
                     idle_sec = idle.Monitor.get_idle_sec()
                     idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                         time.gmtime(time.time() - idle_sec))
-            if was_invisible:
-                self._change_from_invisible()
+
             self._update_status(show, msg, idle_time=idle_time)
 
 
@@ -1152,66 +1145,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.connection:
             self.connection.send(' ')
 
-    def send_invisible_presence(self, msg, initial=False):
-        if not self._state.is_connected:
-            return
-        if not self.get_module('PrivacyLists').supported:
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show=app.SHOW_LIST[self.connected]))
-            app.nec.push_incoming_event(InformationEvent(
-                None, dialog_name='invisibility-not-supported', args=self.name))
-            return
-        # If we are already connected, and privacy rules are supported, send
-        # offline presence first as it's required by XEP-0126
-        if self.get_module('PrivacyLists').supported:
-            self.get_module('Bytestream').remove_all_transfers()
-            self.get_module('Presence').send_presence(
-                typ='unavailable',
-                status=msg,
-                caps=False)
-
-        # try to set the privacy rule
-        self.get_module('PrivacyLists').set_invisible_rule(
-            callback=self._continue_invisible,
-            msg=msg,
-            initial=initial)
-
-    def _continue_invisible(self, _nbxmpp_client, iq_obj, msg, signed, initial):
-        if iq_obj.getType() == 'error': # server doesn't support privacy lists
-            return
-        # active the privacy rule
-        self.get_module('PrivacyLists').set_active_list('invisible')
-        self.connected = app.SHOW_LIST.index('invisible')
-        self.status = msg
-        priority = app.get_priority(self.name, 'invisible')
-
-        self.get_module('Presence').send_presence(
-            priority=priority,
-            status=msg)
-
-        self.priority = priority
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-            show='invisible'))
-        if initial:
-            if not self.avatar_conversion:
-                # ask our VCard
-                self.get_module('VCardTemp').request_vcard()
-
-            # Get bookmarks
-            self.get_module('Bookmarks').request_bookmarks()
-
-            # Enable Software Version
-            self.get_module('SoftwareVersion').set_enabled(True)
-
-            # Get annotations
-            self.get_module('Annotations').request_annotations()
-
-            # Blocking
-            self.get_module('Blocking').get_blocking_list()
-
-            # Inform GUI we just signed in
-            app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
-
     def connect_and_auth(self):
         self.on_connect_success = self._connect_success
         self.on_connect_failure = self._connect_failure
@@ -1274,9 +1207,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = app.SHOW_LIST.index(show)
         sshow = helpers.get_xmpp_show(show)
         # send our presence
-        if show == 'invisible':
-            self.send_invisible_presence(msg, True)
-            return
         if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
             return
         priority = app.get_priority(self.name, sshow)
@@ -1304,13 +1234,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
         modules.send_stored_publish(self.name)
         self.continue_connect_info = None
-
-    def _change_to_invisible(self, msg):
-        self.send_invisible_presence(msg)
-
-    def _change_from_invisible(self):
-        if self.get_module('PrivacyLists').supported:
-            self.get_module('PrivacyLists').set_active_list(None)
 
     def _update_status(self, show, msg, idle_time=None):
         xmpp_show = helpers.get_xmpp_show(show)

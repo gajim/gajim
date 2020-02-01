@@ -40,9 +40,6 @@ class EntityTime(BaseModule):
     def request_entity_time(self, jid, resource):
         if not app.account_is_connected(self._account):
             return
-        # If we are invisible, do not request
-        if app.is_invisible(self._account):
-            return
 
         if resource:
             jid += '/' + resource

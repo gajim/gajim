@@ -133,7 +133,7 @@ status_before_autoaway = {}  # type: Dict[str, str]
 proxy65_manager = None
 
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-             'invisible', 'error']
+             'error']
 
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
@@ -492,9 +492,6 @@ def account_is_connected(account):
     # 0 is offline, 1 is connecting
     return connections[account].state.is_connected
 
-def is_invisible(account):
-    return SHOW_LIST[connections[account].connected] == 'invisible'
-
 def account_is_disconnected(account):
     return not account_is_connected(account)
 
@@ -652,7 +649,7 @@ def get_priority(account, show):
     if not show:
         show = 'online'
 
-    if show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible') and \
+    if show in ('online', 'chat', 'away', 'xa', 'dnd') and \
     config.get_per('accounts', account, 'adjust_priority_with_status'):
         prio = config.get_per('accounts', account, 'autopriority_' + show)
     else:

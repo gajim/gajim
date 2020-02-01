@@ -314,7 +314,7 @@ class MUC(BaseModule):
 
     def _send_presence(self, muc_data, auto):
         show = app.SHOW_LIST[self._con.connected]
-        if show in ('invisible', 'offline'):
+        if show == 'offline':
             # FIXME: Check if this
             return
 

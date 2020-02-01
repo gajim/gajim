@@ -1751,7 +1751,7 @@ class RosterWindow:
         if type1 == 'contact' and type2 == 'contact' and \
         app.config.get('sort_by_show_in_roster'):
             cshow = {'chat':0, 'online': 1, 'away': 2, 'xa': 3, 'dnd': 4,
-                'invisible': 5, 'offline': 6, 'not in roster': 7, 'error': 8}
+                     'offline': 6, 'not in roster': 7, 'error': 8}
             s = self.get_show(lcontact1)
             show1 = cshow.get(s, 9)
             s = self.get_show(lcontact2)
@@ -2110,15 +2110,11 @@ class RosterWindow:
             status == 'offline':
                 app.sleeper_state[account] = 'off'
 
-        if status in ('invisible', 'offline'):
+        if status == 'offline':
             self.delete_pep(app.get_jid_from_account(account), account)
-        was_invisible = app.is_invisible(account)
+
         app.connections[account].change_status(status, txt, auto)
         app.connections[account].get_module('MUC').update_presence(auto)
-        if was_invisible and status != 'offline':
-            # We come back from invisible, join bookmarks
-            con = app.connections[account]
-            con.get_module('Bookmarks').auto_join_bookmarks()
 
     def chg_contact_status(self, contact, show, status, account):
         """
@@ -2232,7 +2228,7 @@ class RosterWindow:
                 on_response(msg, empty_pep)
                 return
         if not always_ask and ((show == 'online' and not app.config.get(
-        'ask_online_status')) or (show in ('offline', 'invisible') and not \
+        'ask_online_status')) or (show == 'offline' and not \
         app.config.get('ask_offline_status'))):
             on_response('', empty_pep)
             return
@@ -2241,35 +2237,18 @@ class RosterWindow:
         dlg.dialog.present() # show it on current workspace
 
     def change_status(self, widget, account, status):
-        def _change(account, status):
-            def on_response(message, pep_dict):
-                if message is None:
-                    # user pressed Cancel to change status message dialog
-                    return
-                self.send_status(account, status, message)
-                self.send_pep(account, pep_dict)
-            self.get_status_message(status, on_response)
-
-        if status == 'invisible' and self.connected_rooms(account):
-            NewConfirmationDialog(
-                _('Disconnect for Invisibility'),
-                _('You are participating in one or more group chats'),
-                _('Changing your status to invisible will result in '
-                  'you leaving those group chats.\n'
-                  'Are you sure you want to go invisible?'),
-                  [DialogButton.make('Cancel'),
-                   DialogButton.make('Remove',
-                                     text=_('_Disconnect'),
-                                     callback=_change,
-                                     args=[account,
-                                           status])]).show()
-        else:
-            _change(account, status)
+        def on_response(message, pep_dict):
+            if message is None:
+                # user pressed Cancel to change status message dialog
+                return
+            self.send_status(account, status, message)
+            self.send_pep(account, pep_dict)
+        self.get_status_message(status, on_response)
 
     def update_status_combobox(self):
         # table to change index in connection.connected to index in combobox
-        table = {'offline':9, 'connecting':9, 'online':0, 'chat':1, 'away':2,
-            'xa':3, 'dnd':4, 'invisible':5}
+        table = {'offline':8, 'connecting':8, 'online':0, 'chat':1, 'away':2,
+            'xa':3, 'dnd':4}
 
         liststore = self.status_combobox.get_model()
         # we check if there are more options in the combobox that it should
@@ -2592,7 +2571,7 @@ class RosterWindow:
 
     def _nec_our_show(self, obj):
         model = self.status_combobox.get_model()
-        iter_ = model.get_iter_from_string('7')
+        iter_ = model.get_iter_from_string('6')
         if obj.show == 'offline':
             # sensitivity for this menuitem
             if app.get_number_of_connected_accounts() == 0:
@@ -3427,7 +3406,6 @@ class RosterWindow:
         # after user chooses "Change status message" menuitem
         # we can return to this show
         self.previous_status_combobox_active = active
-        connected_accounts = app.get_number_of_connected_accounts()
 
         def on_continue(message, pep_dict):
             if message is None:
@@ -3454,38 +3432,6 @@ class RosterWindow:
                     self.send_status(account, status, message)
                     self.send_pep(account, pep_dict)
             self.update_status_combobox()
-
-        if status == 'invisible':
-            bug_user = False
-            for account in accounts:
-                if connected_accounts < 1 or app.account_is_connected(
-                account):
-                    if not app.config.get_per('accounts', account,
-                    'sync_with_global_status'):
-                        continue
-                    # We're going to change our status to invisible
-                    if self.connected_rooms(account):
-                        bug_user = True
-                        break
-            if bug_user:
-                def on_ok():
-                    self.get_status_message(status, on_continue, show_pep=False)
-
-                def on_cancel():
-                    self.update_status_combobox()
-
-                NewConfirmationDialog(
-                    _('Disconnect for Invisibility'),
-                    _('You are participating in one or more group chats'),
-                    _('Changing your status to invisible will result in '
-                      'you leaving those group chats.\n'
-                      'Are you sure you want to go invisible?'),
-                    [DialogButton.make('Cancel',
-                                       callback=on_cancel),
-                     DialogButton.make('Remove',
-                                       text=_('_Disconnect'),
-                                       callback=on_ok)]).show()
-                return
 
         self.get_status_message(status, on_continue)
 
@@ -4781,16 +4727,11 @@ class RosterWindow:
             sub_menu = Gtk.Menu()
             status_menuitem.set_submenu(sub_menu)
 
-            for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
+            for show in ('online', 'chat', 'away', 'xa', 'dnd'):
                 uf_show = helpers.get_uf_show(show, use_mnemonic=True)
                 item = Gtk.MenuItem.new_with_mnemonic(uf_show)
                 sub_menu.append(item)
-                con = app.connections[account]
-                if show == 'invisible' and con.state.is_connected and \
-                not con.get_module('PrivacyLists').supported:
-                    item.set_sensitive(False)
-                else:
-                    item.connect('activate', self.change_status, account, show)
+                item.connect('activate', self.change_status, account, show)
 
             item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
@@ -4873,7 +4814,7 @@ class RosterWindow:
             sub_menu = Gtk.Menu()
             status_menuitem.set_submenu(sub_menu)
 
-            for show in ('online', 'away', 'dnd', 'invisible'):
+            for show in ('online', 'away', 'dnd'):
                 uf_show = helpers.get_uf_show(show, use_mnemonic=True)
                 item = Gtk.MenuItem.new_with_mnemonic(uf_show)
                 sub_menu.append(item)
@@ -5527,11 +5468,11 @@ class RosterWindow:
             text_renderer, self._status_cell_data_func)
         self.status_combobox.set_row_separator_func(self._iter_is_separator)
 
-        self.status_combobox.set_active(9)
+        self.status_combobox.set_active(8)
         # holds index to previously selected item so if
         # "change status message..." is selected we can fallback to previously
         # selected item and not stay with that item selected
-        self.previous_status_combobox_active = 9
+        self.previous_status_combobox_active = 8
 
         # Enable/Disable checkboxes at start
         if app.config.get('showoffline'):

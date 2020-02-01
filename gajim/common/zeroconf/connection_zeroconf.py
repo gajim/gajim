@@ -189,7 +189,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         jid = event.jid
 
         status_strings = ['offline', 'error', 'online', 'chat', 'away',
-                          'xa', 'dnd', 'invisible']
+                          'xa', 'dnd']
 
         event.new_show = status_strings.index(event.show)
 
@@ -342,8 +342,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 self.disconnect()
                 if not self.connect(self.status, last_msg):
                     return
-                if self.status != 'invisible':
-                    self.connection.announce()
+                self.connection.announce()
             else:
                 self.reannounce()
 
@@ -352,10 +351,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         check = True
         if not self.connect(show, msg):
             return
-        if show != 'invisible':
-            check = self.connection.announce()
-        else:
-            self.connected = STATUS_LIST.index(show)
+
+        check = self.connection.announce()
 
         # stay offline when zeroconf does something wrong
         if check:
@@ -373,22 +370,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))
-
-    def _change_to_invisible(self, msg):
-        if self.connection.remove_announce():
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='invisible'))
-        else:
-            # show notification that avahi or system bus is down
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='offline'))
-            self.status = 'offline'
-            app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
-                title=_('Could not change status of account "%s"') % self.name,
-                msg=_('Please check if avahi-daemon is running.')))
-
-    def _change_from_invisible(self):
-        self.connection.announce()
 
     def _update_status(self, show, msg, idle_time=None):
         if self.connection.set_show_msg(show, msg):

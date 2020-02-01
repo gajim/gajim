@@ -96,8 +96,8 @@ class GajimRemote:
                 'change_status': [
                                 _('Changes the status of account(s)'),
                                 [
-#offline, online, chat, away, xa, dnd, invisible should not be translated
-                                    (Q_('?CLI:status'), _('one of: offline, online, chat, away, xa, dnd, invisible. If not set, use account\'s previous status'), False),
+#offline, online, chat, away, xa, dnd should not be translated
+                                    (Q_('?CLI:status'), _('one of: offline, online, chat, away, xa, dnd. If not set, use account\'s previous status'), False),
                                     (Q_('?CLI:message'), _('status message'), False),
                                     (Q_('?CLI:account'), _('change status of account "account". '
         'If not specified, try to change status of all accounts that have '

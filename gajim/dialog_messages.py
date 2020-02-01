@@ -49,11 +49,6 @@ messages = {
         _('The form is not filled correctly.'),
         ErrorDialog),
 
-    'join-while-invisible': Message(
-        _('Invisible'),
-        _('You cannot join a group chat while being invisible.'),
-        ErrorDialog),
-
     'not-connected-while-sending': Message(
         _('No Connection Available'),
         _('Your message can not be sent until you are connected.'),

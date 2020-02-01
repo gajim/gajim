@@ -632,8 +632,7 @@ class GajimRemote(Server):
         change_status(status, message, account). Account is optional - if not
         specified status is changed for all accounts
         """
-        if status not in ('offline', 'online', 'chat', 'away', 'xa', 'dnd',
-                          'invisible'):
+        if status not in ('offline', 'online', 'chat', 'away', 'xa', 'dnd'):
             status = ''
         if account:
             if not status:

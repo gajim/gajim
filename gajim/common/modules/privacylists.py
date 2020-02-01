@@ -239,23 +239,6 @@ class PrivacyLists(BaseModule):
         if not nbxmpp.isResultNode(stanza):
             self._log.warning('Operation failed: %s', stanza.getError())
 
-    @staticmethod
-    def _build_invisible_rule():
-        node = nbxmpp.Node('list', {'name': 'invisible'})
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, payload=[node])
-
-        item = node.setTag('item', {'action': 'deny', 'order': '3'})
-        item.setTag('presence-out')
-        return iq
-
-    def set_invisible_rule(self, callback=None, **kwargs):
-        self._log.info('Update invisible list')
-        iq = self._build_invisible_rule()
-        if callback is None:
-            callback = self._default_result_handler
-        self._con.connection.SendAndCallForResponse(
-            iq, callback, kwargs)
-
     def _get_max_blocked_list_order(self):
         max_order = 0
         for rule in self.blocked_list:
@@ -363,8 +346,7 @@ class PrivacyLists(BaseModule):
             show = app.SHOW_LIST[self._con.connected]
         else:   # accounts merged
             show = helpers.get_global_show()
-        if show == 'invisible':
-            return
+
         for contact in contact_list:
             self._con.get_module('Presence').send_presence(
                 contact.jid, show=show, status=self._con.status)
@@ -425,8 +407,7 @@ class PrivacyLists(BaseModule):
             show = app.SHOW_LIST[self._con.connected]
         else:   # accounts merged
             show = helpers.get_global_show()
-        if show == 'invisible':
-            return
+
         for contact in contact_list:
             self._con.get_module('Presence').send_presence(
                 contact.jid, show=show, status=self._con.status)
