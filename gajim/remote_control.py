@@ -509,25 +509,24 @@ class GajimRemote(Server):
         if not jid or not message:
             return False
 
-        connected_account = self._get_account_and_contact(account, jid)[0]
-        if connected_account:
-            connection = app.connections[connected_account]
-            sessions = connection.get_sessions(jid)
-            if not sessions:
-                connection.make_new_session(jid)
-            ctrl = app.interface.msg_win_mgr.search_control(
-                jid, connected_account)
-            if ctrl:
-                ctrl.send_message(message)
-            else:
-                message_ = OutgoingMessage(account=connected_account,
-                                           jid=jid,
-                                           message=message,
-                                           type_=type_,
-                                           control=ctrl)
-                connection.send_message(message_)
-            return True
-        return False
+        connected_account, contact = self._get_account_and_contact(account, jid)
+        if not connected_account or contact is None:
+            return False
+
+        connection = app.connections[connected_account]
+        ctrl = app.interface.msg_win_mgr.search_control(
+            jid, connected_account)
+        if ctrl:
+            ctrl.send_message(message)
+        else:
+            message_ = OutgoingMessage(account=connected_account,
+                                       contact=contact,
+                                       message=message,
+                                       type_=type_,
+                                       subject=subject,
+                                       control=ctrl)
+            connection.send_message(message_)
+        return True
 
     def send_chat_message(self, jid, message, account):
         """
@@ -545,20 +544,28 @@ class GajimRemote(Server):
 
     def send_groupchat_message(self, room_jid, message, account):
         """
-        Send 'message' to groupchat 'room_jid', using account (optional) 'account'
+        Send 'message' to groupchat 'room_jid',
+        using account (optional) 'account'
         """
         if not room_jid or not message:
             return False
         connected_account = self._get_account_for_groupchat(account, room_jid)
-        if connected_account:
-            message_ = OutgoingMessage(account=connected_account,
-                                       jid=room_jid,
-                                       message=message,
-                                       type_='groupchat')
-            con = app.connections[connected_account]
-            con.send_message(message_)
-            return True
-        return False
+        if not connected_account:
+            return False
+
+        contact = app.contacts.get_groupchat_contact(connected_account,
+                                                     room_jid)
+        if contact is None:
+            return False
+
+        message_ = OutgoingMessage(account=connected_account,
+                                   contact=contact,
+                                   message=message,
+                                   type_='groupchat')
+        con = app.connections[connected_account]
+        con.send_message(message_)
+        return True
+
 
     def open_chat(self, jid, account, message):
         """

@@ -1353,7 +1353,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         message.set_sent_timestamp()
         message.message_id = self.connection.send(message.stanza)
 
-        app.nec.push_incoming_event(MessageSentEvent(None, **vars(message)))
+        app.nec.push_incoming_event(
+            MessageSentEvent(None, jid=message.jid, **vars(message)))
 
         if message.is_groupchat:
             return
@@ -1367,7 +1368,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         for jid in jids:
             message = message.copy()
-            message.jid = jid
+            message.contact = app.contacts.create_contact(jid, message.account)
             stanza = self.get_module('Message').build_message_stanza(message)
             message.stanza = stanza
             self._send_message(message)

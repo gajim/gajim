@@ -331,7 +331,7 @@ class Message(BaseModule):
                 stanza.setReceiptRequest()
 
         # Mark Message as MUC PM
-        if message.is_muc_pm:
+        if message.contact.is_pm_contact:
             stanza.setTag('x', namespace=nbxmpp.NS_MUC_USER)
 
         # XEP-0085

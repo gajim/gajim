@@ -17,7 +17,6 @@ from collections import namedtuple
 
 from nbxmpp.protocol import JID
 
-from gajim.common import app
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import KindConstant
 
@@ -56,11 +55,10 @@ class MUCData:
 class OutgoingMessage:
     def __init__(self,
                  account,
-                 jid,
+                 contact,
                  message,
                  type_,
                  subject=None,
-                 is_muc_pm=False,
                  chatstate=None,
                  resource=None,
                  user_nick=None,
@@ -79,7 +77,7 @@ class OutgoingMessage:
             raise ValueError('Trying to send message without content')
 
         self.account = account
-        self.jid = jid
+        self.contact = contact
         self.message = message
         self.type_ = type_
 
@@ -96,7 +94,6 @@ class OutgoingMessage:
         self.additional_data = AdditionalDataDict()
 
         self.subject = subject
-        self.is_muc_pm = is_muc_pm
         self.chatstate = chatstate
         self.resource = resource
         self.user_nick = user_nick
@@ -126,13 +123,17 @@ class OutgoingMessage:
 
     def copy(self):
         message = OutgoingMessage(self.account,
-                                  self.jid,
+                                  self.contact,
                                   self.message,
                                   self.type_)
         for name, value in vars(self).items():
             setattr(message, name, value)
         message.additional_data = self.additional_data.copy()
         return message
+
+    @property
+    def jid(self):
+        return self.contact.jid
 
     @property
     def is_groupchat(self):

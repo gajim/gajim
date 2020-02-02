@@ -241,7 +241,7 @@ class HTTPUpload(BaseModule):
                 type_ = 'groupchat'
 
             message = OutgoingMessage(account=self._account,
-                                      jid=transfer.contact.jid,
+                                      contact=transfer.contact,
                                       message=uri,
                                       type_=type_,
                                       oob_url=uri)

@@ -251,7 +251,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
             recipient_list.append(to_whom_jid)
 
         message = OutgoingMessage(account=self.account,
-                                  jid=None,
+                                  contact=None,
                                   message=message,
                                   type_='normal',
                                   subject=subject)

@@ -1586,7 +1586,7 @@ class GroupchatControl(ChatControlBase):
 
             # Send the message
             message_ = OutgoingMessage(account=self.account,
-                                       jid=self.room_jid,
+                                       contact=self.contact,
                                        message=message,
                                        type_='groupchat',
                                        label=label,

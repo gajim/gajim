@@ -313,7 +313,7 @@ class Chatstate(BaseModule):
     def _send_chatstate(self, contact, chatstate):
         type_ = 'groupchat' if contact.is_groupchat else 'chat'
         message = OutgoingMessage(account=self._account,
-                                  jid=contact.jid,
+                                  contact=contact,
                                   message=None,
                                   type_=type_,
                                   chatstate=chatstate)

@@ -981,8 +981,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                      resource=None,
                      xhtml=None,
                      process_commands=True,
-                     attention=False,
-                     is_muc_pm=False):
+                     attention=False):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -1004,10 +1003,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self.contact)
 
         message_ = OutgoingMessage(account=self.account,
-                                   jid=self.contact.jid,
+                                   contact=self.contact,
                                    message=message,
                                    type_=type_,
-                                   is_muc_pm=is_muc_pm,
                                    chatstate=chatstate,
                                    resource=resource,
                                    user_nick=self.user_nick,

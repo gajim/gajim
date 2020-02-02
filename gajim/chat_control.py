@@ -923,8 +923,7 @@ class ChatControl(ChatControlBase):
                      message,
                      xhtml=None,
                      process_commands=True,
-                     attention=False,
-                     is_muc_pm=False):
+                     attention=False):
         """
         Send a message to contact
         """
@@ -945,8 +944,7 @@ class ChatControl(ChatControlBase):
                                      type_='chat',
                                      xhtml=xhtml,
                                      process_commands=process_commands,
-                                     attention=attention,
-                                     is_muc_pm=is_muc_pm)
+                                     attention=attention)
 
     def get_our_nick(self):
         return app.nicks[self.account]
