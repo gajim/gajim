@@ -122,8 +122,8 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 account, show_before, status_before)
 
         def relog(account):
-            show_before = app.SHOW_LIST[app.connections[account].connected]
-            status_before = app.connections[account].status
+            show_before = app.connections[account].status
+            status_before = app.connections[account].status_message
             app.interface.roster.send_status(
                 account, 'offline', _('Be right back.'))
             GLib.timeout_add(500, login, account, show_before, status_before)
@@ -781,8 +781,8 @@ class PriorityDialog(SettingsDialog):
         # Update priority
         if self.account not in app.connections:
             return
-        show = app.SHOW_LIST[app.connections[self.account].connected]
-        status = app.connections[self.account].status
+        show = app.connections[self.account].status
+        status = app.connections[self.account].status_message
         app.connections[self.account].change_status(show, status)
 
 

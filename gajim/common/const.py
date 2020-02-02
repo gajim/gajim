@@ -217,12 +217,17 @@ class MUCJoinedState(Enum):
 
 class ClientState(IntEnum):
     DISCONNECTED = 0
-    CONNECTING = 1
-    CONNECTED = 2
+    RECONNECT_SCHEDULED = 1
+    CONNECTING = 2
+    CONNECTED = 3
 
     @property
     def is_disconnected(self):
         return self == ClientState.DISCONNECTED
+
+    @property
+    def is_reconnect_scheduled(self):
+        return self == ClientState.RECONNECT_SCHEDULED
 
     @property
     def is_connecting(self):

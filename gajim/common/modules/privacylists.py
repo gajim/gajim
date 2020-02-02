@@ -343,13 +343,13 @@ class PrivacyLists(BaseModule):
         else:
             self.set_privacy_list(self.default_list, new_blocked_list)
         if not app.interface.roster.regroup:
-            show = app.SHOW_LIST[self._con.connected]
+            show = self._con.status
         else:   # accounts merged
             show = helpers.get_global_show()
 
         for contact in contact_list:
             self._con.get_module('Presence').send_presence(
-                contact.jid, show=show, status=self._con.status)
+                contact.jid, show=show, status=self._con.status_message)
             self._presence_probe(contact.jid)
 
     def block_group(self, group, contact_list, _message):
@@ -404,13 +404,13 @@ class PrivacyLists(BaseModule):
         else:
             self.set_privacy_list(self.default_list, new_blocked_list)
         if not app.interface.roster.regroup:
-            show = app.SHOW_LIST[self._con.connected]
+            show = self._con.status
         else:   # accounts merged
             show = helpers.get_global_show()
 
         for contact in contact_list:
             self._con.get_module('Presence').send_presence(
-                contact.jid, show=show, status=self._con.status)
+                contact.jid, show=show, status=self._con.status_message)
 
     def _presence_probe(self, jid):
         self._log.info('Presence probe: %s', jid)

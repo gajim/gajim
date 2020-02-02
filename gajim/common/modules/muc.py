@@ -179,12 +179,10 @@ class MUC(BaseModule):
         self._join(muc_data)
 
     def _join(self, muc_data):
-        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
-
         presence = self._con.get_module('Presence').get_presence(
             muc_data.occupant_jid,
-            show=show,
-            status=self._con.status)
+            show=self._con.status,
+            status=self._con.status_message)
 
         muc_x = presence.setTag(nbxmpp.NS_MUC + ' x')
         self._add_history_query(muc_x, str(muc_data.jid))
@@ -204,12 +202,10 @@ class MUC(BaseModule):
         return True
 
     def _create(self, muc_data):
-        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
-
         presence = self._con.get_module('Presence').get_presence(
             muc_data.occupant_jid,
-            show=show,
-            status=self._con.status)
+            show=self._con.status,
+            status=self._con.status_message)
 
         presence.setTag(nbxmpp.NS_MUC + ' x')
 
@@ -313,14 +309,13 @@ class MUC(BaseModule):
             self._send_presence(muc_data, auto)
 
     def _send_presence(self, muc_data, auto):
-        show = app.SHOW_LIST[self._con.connected]
-        if show == 'offline':
+        if self._con.status == 'offline':
             # FIXME: Check if this
             return
 
-        status = self._con.status
+        message = self._con.status_message
 
-        xmpp_show = helpers.get_xmpp_show(show)
+        xmpp_show = helpers.get_xmpp_show(self._con.status)
 
         idle_time = None
         if auto and app.is_installed('IDLE') and app.config.get('autoaway'):
@@ -328,22 +323,22 @@ class MUC(BaseModule):
             idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                                       time.gmtime(time.time() - idle_sec))
 
-        self._log.info('Send presence: %s, show: %s, status: %s, idle_time: %s',
-                       muc_data.occupant_jid, xmpp_show, status, idle_time)
+        self._log.info('Send presence: %s, show: %s, '
+                       'message: %s, idle_time: %s',
+                       muc_data.occupant_jid, xmpp_show, message, idle_time)
 
         self._con.get_module('Presence').send_presence(
             muc_data.occupant_jid,
             show=xmpp_show,
-            status=status,
+            status=self._con.status,
             caps=True,
             idle_time=idle_time)
 
     def change_nick(self, room_jid, new_nick):
-        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
         self._con.get_module('Presence').send_presence(
             '%s/%s' % (room_jid, new_nick),
-            show=show,
-            status=self._con.status)
+            show=self._con.status,
+            status=self._con.status_message)
 
     def _add_history_query(self, muc_x, room_jid):
         disco_info = app.logger.get_last_disco_info(room_jid)

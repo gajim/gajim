@@ -408,8 +408,7 @@ class GajimRemote(Server):
             # If user did not ask for account, returns the global status
             return helpers.get_global_show()
         # return show for the given account
-        index = app.connections[account].connected
-        return app.SHOW_LIST[index]
+        return app.connections[account].status
 
     def get_status_message(self, account):
         """
@@ -417,7 +416,7 @@ class GajimRemote(Server):
         """
         if not account:
             # If user did not ask for account, returns the global status
-            return str(helpers.get_global_status())
+            return str(helpers.get_global_status_message())
         # return show for the given account
         status = app.connections[account].status
         return status
@@ -638,7 +637,7 @@ class GajimRemote(Server):
             if not status:
                 if account not in app.connections:
                     return False
-                status = app.SHOW_LIST[app.connections[account].connected]
+                status = app.connections[account].status
             GLib.idle_add(app.interface.roster.send_status, account, status,
                           message)
         else:
@@ -652,7 +651,7 @@ class GajimRemote(Server):
                 else:
                     if acc not in app.connections:
                         continue
-                    status_ = app.SHOW_LIST[app.connections[acc].connected]
+                    status_ = app.connections[acc].status
                 GLib.idle_add(app.interface.roster.send_status, acc, status_,
                               message)
         return False
@@ -664,8 +663,8 @@ class GajimRemote(Server):
         """
         if account:
             app.config.set_per('accounts', account, 'priority', prio)
-            show = app.SHOW_LIST[app.connections[account].connected]
-            status = app.connections[account].status
+            show = app.connections[account].status
+            status = app.connections[account].status_message
             GLib.idle_add(app.connections[account].change_status, show, status)
         else:
             # account not specified, so change prio of all accounts
@@ -676,8 +675,8 @@ class GajimRemote(Server):
                                           'sync_with_global_status'):
                     continue
                 app.config.set_per('accounts', acc, 'priority', prio)
-                show = app.SHOW_LIST[app.connections[acc].connected]
-                status = app.connections[acc].status
+                show = app.connections[acc].status
+                status = app.connections[acc].status_message
                 GLib.idle_add(app.connections[acc].change_status, show, status)
 
     def show_next_pending_event(self):
@@ -709,11 +708,10 @@ class GajimRemote(Server):
         if account in app.connections:
             # account is valid
             con = app.connections[account]
-            index = con.connected
-            result['status'] = app.SHOW_LIST[index]
+            result['status'] = con.status
             result['name'] = con.name
             result['jid'] = app.get_jid_from_account(con.name)
-            result['message'] = con.status
+            result['message'] = con.status_message
             result['priority'] = str(con.priority)
             result['resource'] = app.config.get_per('accounts', con.name,
                                                     'resource')

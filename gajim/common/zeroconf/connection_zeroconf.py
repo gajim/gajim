@@ -44,7 +44,6 @@ from gajim.common.connection import CommonConnection
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
 from gajim.common.zeroconf.connection_handlers_zeroconf import ConnectionHandlersZeroconf
-from gajim.common.zeroconf.connection_handlers_zeroconf import STATUS_LIST
 from gajim.common.connection_handlers_events import OurShowEvent
 from gajim.common.connection_handlers_events import InformationEvent
 from gajim.common.connection_handlers_events import ConnectionLostEvent
@@ -111,7 +110,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         log.debug('reconnect')
 
         self.disconnect()
-        self.change_status(self.old_show, self.status)
+        self.change_status(self._status, self._status_message)
 
     def disable_account(self):
         self.disconnect()
@@ -246,7 +245,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             if not zeroconf.test_zeroconf():
                 app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
-                self.status = 'offline'
+                self._status = 'offline'
                 app.nec.push_incoming_event(ConnectionLostEvent(None,
                     conn=self, title=_('Could not connect to "%s"') % self.name,
                     msg=_('Please check if Avahi or Bonjour is installed.')))
@@ -256,7 +255,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             if not result:
                 app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
-                self.status = 'offline'
+                self._status = 'offline'
                 if result is False:
                     app.nec.push_incoming_event(ConnectionLostEvent(None,
                         conn=self, title=_('Could not start local service'),
@@ -282,7 +281,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 avatar_sha=None))
             self._on_presence(jid)
 
-        self.connected = STATUS_LIST.index(show)
+        self._status = show
 
         # refresh all contacts data every five seconds
         self.call_resolve_timeout = True
@@ -292,18 +291,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def disconnect(self, reconnect=True, immediately=True):
         log.info('Start disconnecting zeroconf')
         if reconnect:
-            if app.account_is_connected(self.name):
-                # we cannot change our status to offline or connecting
-                # after we auth to server
-                self.old_show = STATUS_LIST[self.connected]
-
-            # random number to show we wait network manager to send
-            # us a reconenct
             self.time_to_reconnect = 5
         else:
             self.time_to_reconnect = None
 
-        self.connected = 0
         self._set_state(ClientState.DISCONNECTED)
         if self.connection:
             self.connection.disconnect()
@@ -314,7 +305,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             show='offline'))
 
     def _on_disconnect(self):
-        self.connected = 0
         self._set_state(ClientState.DISCONNECTED)
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show='offline'))
@@ -340,7 +330,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 self.port = port
                 last_msg = self.connection.last_msg
                 self.disconnect()
-                if not self.connect(self.status, last_msg):
+                if not self.connect(self._status, last_msg):
                     return
                 self.connection.announce()
             else:
@@ -362,11 +352,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 show=show))
         else:
             # show notification that avahi or system bus is down
-            self.connected = 0
             self._set_state(ClientState.DISCONNECTED)
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
-            self.status = 'offline'
+            self._status = 'offline'
             app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))
@@ -379,7 +368,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             # show notification that avahi or system bus is down
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
-            self.status = 'offline'
+            self._status = 'offline'
             app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))

@@ -1127,6 +1127,17 @@ class GroupchatControl(ChatControlBase):
                                     msg_log_id=event.msg_log_id,
                                     displaymarking=event.displaymarking)
 
+    def _nec_our_status(self, event):
+        if self.account != event.conn.name:
+            return
+
+        if (event.show == 'offline' and
+                not event.conn.state.is_reconnect_scheduled):
+            self.got_disconnected()
+
+        if self.parent_win:
+            self.parent_win.redraw_tab(self)
+
     def _nec_ping(self, event):
         if self.contact.jid != event.contact.room_jid:
             return

@@ -68,11 +68,11 @@ class LogindListener:
 
             for name, conn in app.connections.items():
                 if app.account_is_connected(name):
-                    conn.old_show = app.SHOW_LIST[conn.connected]
-                    st = conn.status
+                    st = conn.status_message
                     conn.change_status('offline',
                                        _('Machine is going to sleep'))
-                    conn.status = st
+                    # TODO: Make this nicer
+                    conn._status_message = st  # pylint: disable=protected-access
                     conn.time_to_reconnect = 5
 
             self._disinhibit_sleep()

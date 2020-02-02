@@ -325,8 +325,8 @@ class RosterTooltip(StatusTable):
                 jid=jid,
                 account=account,
                 name=account_name,
-                show=connection.get_status(),
-                status=connection.status,
+                show=connection.status,
+                status=connection.status_message,
                 resource=connection.get_own_jid().getResource(),
                 priority=connection.priority)
 

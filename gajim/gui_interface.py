@@ -806,7 +806,7 @@ class Interface:
 
         if (app.config.get('notify_on_file_complete') and
                 (app.config.get('autopopupaway') or
-                app.connections[account].connected in (2, 3))):
+                app.connections[account].status in ('online', 'chat'))):
             # We want to be notified and we are online/chat or we don't mind
             # to be bugged when away/na/busy
             app.notification.popup(
@@ -829,15 +829,14 @@ class Interface:
         app.logger.insert_jid(obj.conn.get_own_jid().getStripped())
         account = obj.conn.name
         app.block_signed_in_notifications[account] = True
-        connected = obj.conn.connected
 
         pep_supported = obj.conn.get_module('PEP').supported
 
-        if not idle.Monitor.is_unknown() and connected in (2, 3):
+        if not idle.Monitor.is_unknown() and obj.conn.status in ('online', 'chat'):
             # we go online or free for chat, so we activate auto status
             app.sleeper_state[account] = 'online'
-        elif not ((idle.Monitor.is_away() and connected == 4) or \
-        (idle.Monitor.is_xa() and connected == 5)):
+        elif not ((idle.Monitor.is_away() and obj.conn.status == 'away') or \
+        (idle.Monitor.is_xa() and obj.conn.status == 'xa')):
             # If we are autoaway/xa and come back after a disconnection, do
             # nothing
             # Else disable autoaway
@@ -891,10 +890,8 @@ class Interface:
     def handle_event_zc_name_conflict(self, obj):
         def _on_ok(new_name):
             app.config.set_per('accounts', obj.conn.name, 'name', new_name)
-            show = obj.conn.old_show
-            status = obj.conn.status
             obj.conn.username = new_name
-            obj.conn.change_status(show, status)
+            obj.conn.change_status(obj.conn.status, obj.conn.status_message)
 
         def _on_cancel(*args):
             obj.conn.change_status('offline', '')
@@ -916,11 +913,11 @@ class Interface:
         # First we go offline, but we don't overwrite status message
         account = obj.conn.name
         conn = obj.conn
-        self.roster.send_status(account, 'offline', conn.status)
+        self.roster.send_status(account, 'offline', conn.status_message)
 
         def _set_resource(new_resource):
             app.config.set_per('accounts', account, 'resource', new_resource)
-            self.roster.send_status(account, conn.old_show, conn.status)
+            self.roster.send_status(account, conn.status, conn.status_message)
 
         proposed_resource = conn.server_resource
         if proposed_resource.startswith('gajim.'):
@@ -1675,8 +1672,8 @@ class Interface:
                     app.sleeper_state[account] = 'online'
                 if app.sleeper_state[account] == 'idle':
                     # we go to the previous state
-                    connected = app.connections[account].connected
-                    self.roster.send_status(account, app.SHOW_LIST[connected],
+                    status = app.connections[account].status
+                    self.roster.send_status(account, status,
                         app.status_before_autoaway[account])
                     app.status_before_autoaway[account] = ''
                     app.sleeper_state[account] = 'off'
@@ -1684,7 +1681,7 @@ class Interface:
                 if app.sleeper_state[account] == 'online':
                     # we save out online status
                     app.status_before_autoaway[account] = \
-                        app.connections[account].status
+                        app.connections[account].status_message
                     # we go away (no auto status) [we pass True to auto param]
                     auto_message = app.config.get('autoaway_message')
                     if not auto_message:
@@ -1703,8 +1700,8 @@ class Interface:
                     # we save out online status
                     app.status_before_autoaway[account] = \
                         app.connections[account].status
-                    connected = app.connections[account].connected
-                    self.roster.send_status(account, app.SHOW_LIST[connected],
+                    status = app.connections[account].status
+                    self.roster.send_status(account, status,
                         app.status_before_autoaway[account], auto=True)
                     app.sleeper_state[account] = 'idle'
             elif idle.Monitor.is_xa() and \
@@ -1837,7 +1834,7 @@ class Interface:
                         app.config.get_per('accounts', a, 'last_status_msg')))
                     continue
                 show = app.config.get_per('accounts', a, 'autoconnect_as')
-                if show not in app.SHOW_LIST:
+                if show not in ['online', 'chat', 'away', 'xa', 'dnd']:
                     continue
                 if show not in shows:
                     shows[show] = [a]

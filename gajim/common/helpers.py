@@ -682,28 +682,42 @@ def play_sound_file(path_to_soundfile):
         except GLib.Error as error:
             log.error('Could not play sound: %s', error.message)
 
+def get_connection_status(account):
+    con = app.connections[account]
+    if con.state.is_reconnect_scheduled:
+        return 'error'
+
+    if con.state.is_connecting:
+        return 'connecting'
+
+    if con.state.is_disconnected:
+        return 'offline'
+    return con.status
+
 def get_global_show():
     maxi = 0
     for account in app.connections:
         if not app.config.get_per('accounts', account,
-        'sync_with_global_status'):
+                                  'sync_with_global_status'):
             continue
-        connected = app.connections[account].connected
-        if connected > maxi:
-            maxi = connected
+        status = get_connection_status(account)
+        index = app.SHOW_LIST.index(status)
+        if index > maxi:
+            maxi = index
     return app.SHOW_LIST[maxi]
 
-def get_global_status():
+def get_global_status_message():
     maxi = 0
     for account in app.connections:
         if not app.config.get_per('accounts', account,
-        'sync_with_global_status'):
+                                  'sync_with_global_status'):
             continue
-        connected = app.connections[account].connected
-        if connected > maxi:
-            maxi = connected
-            status = app.connections[account].status
-    return status
+        status = app.connections[account].status
+        index = app.SHOW_LIST.index(status)
+        if index > maxi:
+            maxi = index
+            status_message = app.connections[account].status_message
+    return status_message
 
 
 def statuses_unified():
@@ -713,11 +727,11 @@ def statuses_unified():
     reference = None
     for account in app.connections:
         if not app.config.get_per('accounts', account,
-        'sync_with_global_status'):
+                                  'sync_with_global_status'):
             continue
         if reference is None:
-            reference = app.connections[account].connected
-        elif reference != app.connections[account].connected:
+            reference = app.connections[account].status
+        elif reference != app.connections[account].status:
             return False
     return True
 
@@ -818,7 +832,7 @@ is_first_message=True):
         return False
     if app.config.get('autopopupaway'): # always show notification
         return True
-    if app.connections[account].connected in (2, 3): # we're online or chat
+    if app.connections[account].status in ('online', 'chat'): # we're online or chat
         return True
     return False
 
@@ -829,14 +843,14 @@ def allow_popup_window(account):
     autopopup = app.config.get('autopopup')
     autopopupaway = app.config.get('autopopupaway')
     if autopopup and (autopopupaway or \
-    app.connections[account].connected in (2, 3)): # we're online or chat
+    app.connections[account].status in ('online', 'chat')): # we're online or chat
         return True
     return False
 
 def allow_sound_notification(account, sound_event):
-    if app.config.get('sounddnd') or app.connections[account].connected != \
-    app.SHOW_LIST.index('dnd') and app.config.get_per('soundevents',
-    sound_event, 'enabled'):
+    if (app.config.get('sounddnd') or
+            app.connections[account].status != 'dnd' and
+            app.config.get_per('soundevents', sound_event, 'enabled')):
         return True
     return False
 
@@ -984,11 +998,8 @@ def get_accounts_info():
     accounts = []
     accounts_list = sorted(app.contacts.get_accounts())
     for account in accounts_list:
-        status_idx = app.connections[account].connected
-        # uncomment the following to hide offline accounts
-        # if status_idx == 0: continue
-        status = app.SHOW_LIST[status_idx]
-        message = app.connections[account].status
+        status = app.connections[account].status
+        message = app.connections[account].status_message
         single_line = get_uf_show(status)
         if message is None:
             message = ''
@@ -1007,8 +1018,7 @@ def get_accounts_info():
 def get_current_show(account):
     if account not in app.connections:
         return 'offline'
-    status = app.connections[account].connected
-    return app.SHOW_LIST[status]
+    return app.connections[account].status
 
 def update_optional_features(account=None):
     if account is not None:
@@ -1051,9 +1061,9 @@ def update_optional_features(account=None):
         if not app.account_is_connected(account_):
             return
 
-        connected = app.connections[account_].connected
+        status = app.connections[account_].status
         app.connections[account_].change_status(
-            app.SHOW_LIST[connected], app.connections[account_].status)
+            status, app.connections[account_].status_message)
 
 def jid_is_blocked(account, jid):
     con = app.connections[account]

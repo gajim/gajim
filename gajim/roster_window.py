@@ -291,7 +291,7 @@ class RosterWindow:
                 None, None, None, True] + [None] * self.nb_ext_renderers)
             self._iters['MERGED']['account'] = it
         else:
-            show = app.SHOW_LIST[app.connections[account].connected]
+            show = app.connections[account].status
             our_jid = app.get_jid_from_account(account)
 
             tls_pixbuf = None
@@ -2247,7 +2247,7 @@ class RosterWindow:
 
     def update_status_combobox(self):
         # table to change index in connection.connected to index in combobox
-        table = {'offline':8, 'connecting':8, 'online':0, 'chat':1, 'away':2,
+        table = {'offline':8, 'connecting':8, 'error': 8, 'online':0, 'chat':1, 'away':2,
             'xa':3, 'dnd':4}
 
         liststore = self.status_combobox.get_model()
@@ -2695,12 +2695,6 @@ class RosterWindow:
                 return
             info[contact.jid] = vcard.ZeroconfVcardWindow(contact, account)
 
-    def on_agent_logging(self, widget, jid, state, account):
-        """
-        When an agent is requested to log in or off
-        """
-        app.connections[account].send_agent_status(jid, state)
-
     def on_edit_agent(self, widget, contact, account):
         """
         When we want to modify the agent registration
@@ -3067,7 +3061,7 @@ class RosterWindow:
             transient_for=self.window).show()
 
     def on_change_status_message_activate(self, widget, account):
-        show = app.SHOW_LIST[app.connections[account].connected]
+        show = app.connections[account].status
         def on_response(message, pep_dict):
             if message is None: # None is if user pressed Cancel
                 return
@@ -3178,8 +3172,7 @@ class RosterWindow:
                             if not app.config.get_per('accounts', account,
                             'sync_with_global_status'):
                                 continue
-                            current_show = app.SHOW_LIST[
-                                app.connections[account].connected]
+                            current_show = app.connections[account].status
                             self.send_status(account, current_show, message)
                             self.send_pep(account, pep_dict)
                 dialogs.ChangeStatusMessageDialog(on_response, status)
@@ -3234,8 +3227,7 @@ class RosterWindow:
                         if not app.config.get_per('accounts', acct,
                         'sync_with_global_status'):
                             continue
-                        current_show = app.SHOW_LIST[app.connections[acct].\
-                            connected]
+                        current_show = app.connections[acct].status
                         self.send_status(acct, current_show, message)
                         self.send_pep(acct, pep_dict)
                 dialogs.ChangeStatusMessageDialog(on_response, show)
@@ -3392,8 +3384,7 @@ class RosterWindow:
                         if not app.config.get_per('accounts', account,
                         'sync_with_global_status'):
                             continue
-                        current_show = app.SHOW_LIST[
-                            app.connections[account].connected]
+                        current_show = app.connections[account].status
                         self.send_status(account, current_show, message)
                         self.send_pep(account, pep_dict)
                 self.combobox_callback_active = False
@@ -4421,15 +4412,14 @@ class RosterWindow:
         self.update_status_combobox()
 
     def set_account_status_icon(self, account):
-        status = app.connections[account].connected
         child_iterA = self._get_account_iter(account, self.model)
         if not child_iterA:
             return
         if not self.regroup:
-            show = app.SHOW_LIST[status]
+            status = helpers.get_connection_status(account)
         else: # accounts merged
-            show = helpers.get_global_show()
-        self.model[child_iterA][Column.IMG] = get_icon_name(show)
+            status = helpers.get_global_show()
+        self.model[child_iterA][Column.IMG] = get_icon_name(status)
 
 ################################################################################
 ### Style and theme related methods

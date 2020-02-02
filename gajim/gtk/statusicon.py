@@ -381,7 +381,7 @@ class StatusIcon:
                                           acct,
                                           'sync_with_global_status'):
                     continue
-                show = app.SHOW_LIST[app.connections[acct].connected]
+                show = app.connections[acct].status
                 app.interface.roster.send_status(acct, show, message)
                 app.interface.roster.send_pep(acct, pep_dict)
         dlg = dialogs.ChangeStatusMessageDialog(on_response, status)

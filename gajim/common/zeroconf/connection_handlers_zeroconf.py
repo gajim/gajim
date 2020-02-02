@@ -35,8 +35,6 @@ from gajim.common.modules.misc import parse_xhtml
 
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
 
-STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd']
-
 
 class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
     def __init__(self):

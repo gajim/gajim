@@ -86,31 +86,22 @@ class CommonConnection:
     def __init__(self, name):
         self.name = name
         self._modules = {}
-        # self.connected:
-        # 0=>offline,
-        # 1=>connection in progress,
-        # 2=>online
-        # 3=>free for chat
-        # ...
-        self.connected = 0
         self.connection = None # xmpppy ClientCommon instance
         self.is_zeroconf = False
         self.password = None
         self.server_resource = helpers.get_resource(self.name)
-        self.status = ''
-        self.old_show = ''
         self.priority = app.get_priority(name, 'offline')
         self.time_to_reconnect = None
         self._reconnect_timer_source = None
 
         self._state = ClientState.DISCONNECTED
+        self._status = 'offline'
+        self._status_message = ''
 
         # If handlers have been registered
         self.handlers_registered = False
 
         self.pep = {}
-        # Do we continue connection when we get roster (send presence,get vcard..)
-        self.continue_connect_info = None
 
         # Remember where we are in the register agent process
         self.agent_registrations = {}
@@ -134,8 +125,12 @@ class CommonConnection:
         return self._state
 
     @property
-    def is_connected(self):
-        return self.connected > 1
+    def status(self):
+        return self._status
+
+    @property
+    def status_message(self):
+        return self._status_message
 
     def _register_new_handlers(self, con):
         for handler in modules.get_handlers(self):
@@ -174,9 +169,6 @@ class CommonConnection:
         if kill_core and app.account_is_connected(self.name):
             self.disconnect(reconnect=False)
 
-    def get_status(self):
-        return app.SHOW_LIST[self.connected]
-
     def new_account(self, name, config, sync=False):
         """
         To be implemented by derived classes
@@ -184,12 +176,6 @@ class CommonConnection:
         raise NotImplementedError
 
     def _on_new_account(self, con=None, con_type=None):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
-    def send_agent_status(self, agent, ptype):
         """
         To be implemented by derived classes
         """
@@ -212,38 +198,44 @@ class CommonConnection:
         if not msg:
             msg = ''
 
-        if show != 'offline' and self._state.is_disconnected:
-            # set old_show to requested 'show' in case we need to
-            # recconect before we auth to server
-            self.old_show = show
+        self._status = show
+        self._status_message = msg
+
+        if self._state.is_disconnected:
+            if show == 'offline':
+                return
+
             self.server_resource = helpers.get_resource(self.name)
             self.connect_and_init(show, msg)
             return
 
-        if show == 'offline':
-            if self.connection:
-                p = self.get_module('Presence').get_presence(
-                    typ='unavailable',
-                    status=msg,
-                    caps=False)
+        if self._state.is_connecting or self._state.is_reconnect_scheduled:
+            if show == 'offline':
+                self.disconnect(reconnect=False)
+            else:
+                log.warning('Can\'t change status while connecting')
+            return
 
-                self.connection.send(p, now=True)
+        # We are connected
+        if show == 'offline':
+            presence = self.get_module('Presence').get_presence(
+                typ='unavailable',
+                status=msg,
+                caps=False)
+
+            self.connection.send(presence, now=True)
             self.disconnect(reconnect=False)
             return
 
-        if show != 'offline' and self._state.is_connected:
-            if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
-                return -1
+        idle_time = None
+        if auto:
+            if app.is_installed('IDLE') and app.config.get('autoaway'):
+                idle_sec = idle.Monitor.get_idle_sec()
+                idle_time = time.strftime(
+                    '%Y-%m-%dT%H:%M:%SZ',
+                    time.gmtime(time.time() - idle_sec))
 
-            self.connected = app.SHOW_LIST.index(show)
-            idle_time = None
-            if auto:
-                if app.is_installed('IDLE') and app.config.get('autoaway'):
-                    idle_sec = idle.Monitor.get_idle_sec()
-                    idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
-                        time.gmtime(time.time() - idle_sec))
-
-            self._update_status(show, msg, idle_time=idle_time)
+        self._update_status(show, msg, idle_time=idle_time)
 
 
 class Connection(CommonConnection, ConnectionHandlers):
@@ -312,20 +304,15 @@ class Connection(CommonConnection, ConnectionHandlers):
         return nbxmpp.JID(app.get_jid_from_account(self.name))
 
     def reconnect(self):
-        # Do not try to reco while we are already trying
+        if self._state not in (ClientState.DISCONNECTED,
+                               ClientState.RECONNECT_SCHEDULED):
+            # Do not try to reco while we are already trying
+            return
+
         self.time_to_reconnect = None
-        if not self._state.is_connected: # connection failed
-            log.info('Reconnect')
-            self.connected = 1
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='connecting'))
-            self.retrycount += 1
-            self.connect_and_init(self.old_show, self.status)
-        else:
-            log.info('Reconnect successfull')
-            # reconnect succeeded
-            self.time_to_reconnect = None
-            self.retrycount = 0
+        log.info('Reconnect')
+        self.retrycount += 1
+        self.connect_and_init()
 
     def disconnect(self, reconnect=True, immediately=False):
         self.get_module('Ping').remove_timeout()
@@ -346,16 +333,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         else:
             self.connection.start_disconnect()
 
-    def set_oldst(self): # Set old state
-        if self.old_show:
-            self.connected = app.SHOW_LIST.index(self.old_show)
-            app.nec.push_incoming_event(OurShowEvent(
-                None, conn=self, show=self.old_show))
-        else: # we default to online
-            self.connected = 2
-            app.nec.push_incoming_event(OurShowEvent(
-                None, conn=self, show=app.SHOW_LIST[self.connected]))
-
     def _on_disconnect(self, reconnect=True):
         # Clear disconnect handlers
         self.connection.disconnect_handlers = []
@@ -363,11 +340,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.info('Disconnect %s, reconnect: %s', self.name, reconnect)
 
         if reconnect and not self.removing_account:
-            if app.account_is_connected(self.name):
-                # we cannot change our status to offline or connecting
-                # after we auth to server
-                self.old_show = app.SHOW_LIST[self.connected]
-
             if not self._sm_resume_data:
                 self._sm_resume_data = self.connection.get_resume_data()
             self._disconnect()
@@ -383,7 +355,6 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _disconnect(self):
         log.info('Set state disconnected')
         self.get_module('Ping').remove_timeout()
-        self.connected = 0
         self._set_state(ClientState.DISCONNECTED)
         self.disable_reconnect_timer()
 
@@ -399,14 +370,14 @@ class Connection(CommonConnection, ConnectionHandlers):
                                                  account=self.name))
 
     def _set_reconnect_timer(self):
-        self.connected = -1
-        app.nec.push_incoming_event(OurShowEvent(
-            None, conn=self, show='error'))
+        self._set_state(ClientState.RECONNECT_SCHEDULED)
+        app.nec.push_incoming_event(
+            OurShowEvent(None, conn=self, show='offline'))
         if app.status_before_autoaway[self.name]:
             # We were auto away. So go back online
-            self.status = app.status_before_autoaway[self.name]
+            self._status_message = app.status_before_autoaway[self.name]
             app.status_before_autoaway[self.name] = ''
-            self.old_show = 'online'
+            self._status = 'online'
         # this check has moved from reconnect method
         # do exponential backoff until less than 5 minutes
         if self.retrycount < 2 or self.last_time_to_reconnect is None:
@@ -613,8 +584,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     use_custom = False
 
         # create connection if it doesn't already exist
-        self.connected = 1
         self._set_state(ClientState.CONNECTING)
+        app.nec.push_incoming_event(
+            OurShowEvent(None, conn=self, show='connecting'))
 
         h = hostname
         p = 5222
@@ -703,6 +675,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _connect_to_next_host(self, retry=False):
         log.debug('Connection to next host')
         if not self._hosts:
+            self._set_state(ClientState.DISCONNECTED)
             if not retry and self.retrycount == 0:
                 log.debug("Out of hosts, giving up connecting to %s", self.name)
                 self.time_to_reconnect = None
@@ -822,30 +795,30 @@ class Connection(CommonConnection, ConnectionHandlers):
     def get_connection_info(self):
         return self._current_host, self._proxy
 
-    def _connect_failure(self, con_type=None):
-        if not con_type:
-            # we are not retrying, and not conecting
-            if not self.retrycount and not self._state.is_disconnected:
-                self._disconnect()
-                if self._proxy:
-                    pritxt = _('Could not connect to "%(host)s" via proxy "%(proxy)s"') %\
-                        {'host': self._hostname, 'proxy': self._proxy['host']}
-                else:
-                    pritxt = _('Could not connect to "%(host)s"') % {'host': \
-                        self._hostname}
-                sectxt = _('Check your connection or try again later.')
-                if self.streamError:
-                    # show error dialog
-                    key = nbxmpp.NS_XMPP_STREAMS + ' ' + self.streamError
-                    if key in nbxmpp.ERRORS:
-                        sectxt2 = _('Server replied: %s') % nbxmpp.ERRORS[key][2]
-                        app.nec.push_incoming_event(InformationEvent(None,
-                            conn=self, level='error', pri_txt=pritxt,
-                            sec_txt='%s\n%s' % (sectxt2, sectxt)))
-                        return
-                # show popup
-                app.nec.push_incoming_event(ConnectionLostEvent(None,
-                    conn=self, title=pritxt, msg=sectxt))
+    def _connect_failure(self):
+        # we are not retrying, and not conecting
+        if not self.retrycount and not self._state.is_disconnected:
+            self._disconnect()
+
+        if self._proxy:
+            pritxt = _('Could not connect to "%(host)s" via proxy "%(proxy)s"') %\
+                {'host': self._hostname, 'proxy': self._proxy['host']}
+        else:
+            pritxt = _('Could not connect to "%(host)s"') % {'host': \
+                self._hostname}
+        sectxt = _('Check your connection or try again later.')
+        if self.streamError:
+            # show error dialog
+            key = nbxmpp.NS_XMPP_STREAMS + ' ' + self.streamError
+            if key in nbxmpp.ERRORS:
+                sectxt2 = _('Server replied: %s') % nbxmpp.ERRORS[key][2]
+                app.nec.push_incoming_event(InformationEvent(None,
+                    conn=self, level='error', pri_txt=pritxt,
+                    sec_txt='%s\n%s' % (sectxt2, sectxt)))
+                return
+        # show popup
+        app.nec.push_incoming_event(ConnectionLostEvent(None,
+            conn=self, title=pritxt, msg=sectxt))
 
     def on_proxy_failure(self, reason):
         log.error('Connection to proxy failed: %s', reason)
@@ -1094,10 +1067,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         # Connection was successful, reset sm resume data
         self._sm_resume_data = {}
 
-        self.connected = 2
         self._set_state(ClientState.CONNECTED)
         self.retrycount = 0
-        self.set_oldst()
+
+        app.nec.push_incoming_event(
+            OurShowEvent(None, conn=self, show=self._status))
         self._set_send_timeouts()
 
     def _on_connection_active(self):
@@ -1120,7 +1094,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                              old_jid=old_jid,
                              new_jid=new_jid))
 
-        self.connected = 2
         self._set_state(ClientState.CONNECTED)
         self.retrycount = 0
         self._discover_server()
@@ -1150,9 +1123,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.on_connect_failure = self._connect_failure
         self.connect()
 
-    def connect_and_init(self, show, msg):
+    def connect_and_init(self, *args):
         self.disable_reconnect_timer()
-        self.continue_connect_info = [show, msg]
         self.connect_and_auth()
 
     def _discover_server(self):
@@ -1199,27 +1171,21 @@ class Connection(CommonConnection, ConnectionHandlers):
                 app.proxy65_manager.resolve(proxy, self.connection, our_jid,
                     testit=testit)
 
-    def send_first_presence(self, signed=''):
-        if not self._state.is_connected or not self.continue_connect_info:
+    def send_first_presence(self):
+        if not self._state.is_connected:
             return
-        show = self.continue_connect_info[0]
-        msg = self.continue_connect_info[1]
-        self.connected = app.SHOW_LIST.index(show)
-        sshow = helpers.get_xmpp_show(show)
-        # send our presence
-        if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
-            return
-        priority = app.get_priority(self.name, sshow)
+
+        priority = app.get_priority(self.name, self._status)
 
         self.get_module('Presence').send_presence(
             priority=priority,
-            show=sshow,
-            status=msg)
+            show=self._status,
+            status=self._status_message)
 
         if self.connection:
             self.priority = priority
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-            show=show))
+        app.nec.push_incoming_event(
+            OurShowEvent(None, conn=self, show=self._status))
 
         if not self.avatar_conversion:
             # ask our VCard
@@ -1233,22 +1199,20 @@ class Connection(CommonConnection, ConnectionHandlers):
         # Inform GUI we just signed in
         app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
         modules.send_stored_publish(self.name)
-        self.continue_connect_info = None
 
     def _update_status(self, show, msg, idle_time=None):
-        xmpp_show = helpers.get_xmpp_show(show)
-        priority = app.get_priority(self.name, xmpp_show)
+        priority = app.get_priority(self.name, show)
 
         self.get_module('Presence').send_presence(
             priority=priority,
-            show=xmpp_show,
+            show=show,
             status=msg,
             idle_time=idle_time)
 
         if self.connection:
             self.priority = priority
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show=show))
+            app.nec.push_incoming_event(
+                OurShowEvent(None, conn=self, show=show))
 
     def send_stanza(self, stanza):
         """
@@ -1348,17 +1312,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection = con
         nbxmpp.features.getRegInfo(con, self._hostname)
 
-    def send_agent_status(self, agent, ptype):
-        if not self._state.is_connected:
-            return
-        show = helpers.get_xmpp_show(app.SHOW_LIST[self.connected])
-
-        self.get_module('Presence').send_presence(
-            agent,
-            ptype,
-            show=show,
-            caps=ptype != 'unavailable')
-
     def unregister_account(self, callback):
         if not self._state.is_connected:
             return
@@ -1370,8 +1323,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not app.config.get_per('accounts', self.name, 'active'):
             # Account may have been disabled
             return
-        if self.time_to_reconnect:
-            if not self._state.is_connected:
-                self.reconnect()
-            else:
-                self.time_to_reconnect = None
+
+        if self._state.is_reconnect_scheduled:
+            self.reconnect()

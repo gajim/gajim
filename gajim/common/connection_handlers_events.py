@@ -53,6 +53,9 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent):
 class OurShowEvent(nec.NetworkIncomingEvent):
     name = 'our-show'
 
+    def init(self):
+        self.reconnect = False
+
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
 
@@ -286,7 +289,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 if app.config.get('autopopupaway'):
                     # always show notification
                     self.do_popup = True
-                if app.connections[self.conn.name].connected in (2, 3):
+                if app.connections[self.conn.name].status in ('online', 'chat'):
                     # we're online or chat
                     self.do_popup = True
 
@@ -352,7 +355,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 # always show notification
                 self.do_popup = True
 
-            elif app.connections[self.conn.name].connected in (2, 3):
+            elif app.connections[self.conn.name].status in ('online', 'chat'):
                 # we're online or chat
                 self.do_popup = True
 

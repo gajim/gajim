@@ -437,12 +437,14 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def _nec_our_status(self, obj):
         if self.account != obj.conn.name:
             return
+
+        if obj.show == 'connecting':
+            return
+
         if obj.show == 'offline':
             self.got_disconnected()
         else:
-            # Other code rejoins all GCs, so we don't do it here
-            if not self._type.is_groupchat:
-                self.got_connected()
+            self.got_connected()
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 

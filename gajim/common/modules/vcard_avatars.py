@@ -21,7 +21,6 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.const import AvatarState
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common import configpaths
 from gajim.common.const import RequestAvatar
 from gajim.common.modules.base import BaseModule
@@ -221,12 +220,10 @@ class VCardAvatars(BaseModule):
                 self._log.debug('Avatar already advertised')
                 return
 
-        show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
-
         self._con.get_module('Presence').send_presence(
             priority=self._con.priority,
-            show=show,
-            status=self._con.status)
+            show=self._con.status,
+            status=self._con.status_message)
 
         self.avatar_advertised = True
 
