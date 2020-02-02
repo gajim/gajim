@@ -1016,7 +1016,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                                    attention=attention,
                                    correct_id=correct_id,
                                    automatic_message=False,
-                                   encryption=self.encryption,
                                    xhtml=xhtml)
 
         con.send_message(message_)

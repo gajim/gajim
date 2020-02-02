@@ -244,8 +244,7 @@ class HTTPUpload(BaseModule):
                                       jid=transfer.contact.jid,
                                       message=uri,
                                       type_=type_,
-                                      oob_url=uri,
-                                      encryption=transfer.encryption)
+                                      oob_url=uri)
 
             self._con.send_message(message)
 

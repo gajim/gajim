@@ -17,6 +17,7 @@ from collections import namedtuple
 
 from nbxmpp.protocol import JID
 
+from gajim.common import app
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import KindConstant
 
@@ -68,7 +69,6 @@ class OutgoingMessage:
                  attention=None,
                  correct_id=None,
                  automatic_message=False,
-                 encryption=None,
                  oob_url=None,
                  xhtml=None):
 
@@ -105,7 +105,6 @@ class OutgoingMessage:
         self.attention = attention
         self.correct_id = correct_id
         self.automatic_message = automatic_message
-        self.encryption = encryption
 
         self.oob_url = oob_url
 
@@ -155,10 +154,6 @@ class OutgoingMessage:
     @property
     def is_encrypted(self):
         return bool(self.additional_data.get_value('encrypted', 'name', False))
-
-    @property
-    def require_encryption(self):
-        return bool(self.encryption)
 
     @property
     def msg_iq(self):

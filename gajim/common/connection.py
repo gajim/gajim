@@ -58,6 +58,7 @@ from gajim.common import modules
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
+from gajim.common.helpers import get_encryption_method
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
 from gajim.common.connection_handlers_events import InformationEvent
@@ -1332,13 +1333,15 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         stanza = self.get_module('Message').build_message_stanza(message)
         message.stanza = stanza
-        if message.require_encryption:
+
+        method = get_encryption_method(message.account, message.jid)
+        if method is not None:
             # TODO: Make extension point return encrypted message
 
             extension = 'encrypt'
             if message.is_groupchat:
                 extension = 'gc_encrypt'
-            app.plugin_manager.extension_point(extension + message.encryption,
+            app.plugin_manager.extension_point(extension + method,
                                                self,
                                                message,
                                                self._send_message)
@@ -1361,10 +1364,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not app.account_is_connected(self.name):
             log.warning('Trying to send message while offline')
             return
-
-        if message.require_encryption:
-            raise ValueError('Encryption for multi recipient '
-                             'messages not supported')
 
         for jid in jids:
             message = message.copy()

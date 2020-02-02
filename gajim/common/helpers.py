@@ -27,6 +27,7 @@
 
 from typing import Any  # pylint: disable=unused-import
 from typing import Dict  # pylint: disable=unused-import
+from typing import Optional
 
 import sys
 import re
@@ -1748,6 +1749,7 @@ def load_file_async(path, callback, user_data=None):
                              _on_load_finished,
                              (callback, user_data))
 
+
 def _on_load_finished(file, result, user_data):
     callback, user_data = user_data
     try:
@@ -1756,3 +1758,9 @@ def _on_load_finished(file, result, user_data):
         callback(None, error, user_data)
     else:
         callback(contents, None, user_data)
+
+
+def get_encryption_method(account: str, jid: str) -> Optional[str]:
+    config_key = '%s-%s' % (account, jid)
+    state = app.config.get_per('encryption', config_key, 'encryption')
+    return state or None
