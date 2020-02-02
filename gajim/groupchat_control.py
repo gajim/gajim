@@ -1591,7 +1591,8 @@ class GroupchatControl(ChatControlBase):
                                        type_='groupchat',
                                        label=label,
                                        chatstate=chatstate,
-                                       correct_id=correct_id)
+                                       correct_id=correct_id,
+                                       encryption=self.encryption)
             message_.additional_data.set_value('gajim', 'xhtml', xhtml)
             con.send_message(message_)
 
