@@ -40,13 +40,9 @@ run-build:
     - rm plugin_installer.zip
     - tar -uf $GF.tar $GF
     - gzip $GF.tar
-    - rm -rf $GF
-    - export FN="gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA.tar.gz"
-    - mv $GF.tar.gz $FN
-    - scp $FN panoramix:/var/www/gajim/downloads/snap/ci/
 
   artifacts:
     name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
     expire_in: 1 week
     paths:
-      - dist/gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA.tar.gz
+      - dist/gajim-*.tar.gz
