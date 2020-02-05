@@ -1,5 +1,5 @@
 [Desktop Entry]
-Categories=Network;InstantMessaging;GTK;GNOME;
+Categories=Network;InstantMessaging;GTK;Chat;
 Name=Gajim
 GenericName=XMPP IM Client
 Comment=A GTK XMPP client
@@ -8,8 +8,8 @@ Keywords=chat;messaging;im;xmpp;bonjour;voip;
 Exec=gajim %u
 #Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 Icon=org.gajim.Gajim
-StartupNotify=true
-StartupWMClass=Gajim
+StartupNotify=false
+X-GNOME-UsesNotifications=true
 Terminal=false
 Type=Application
 MimeType=x-scheme-handler/xmpp;
