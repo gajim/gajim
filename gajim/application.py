@@ -62,7 +62,8 @@ class GajimApplication(Gtk.Application):
 
     def __init__(self):
         flags = (Gio.ApplicationFlags.HANDLES_COMMAND_LINE |
-                 Gio.ApplicationFlags.HANDLES_OPEN)
+                 Gio.ApplicationFlags.HANDLES_OPEN |
+                 Gio.ApplicationFlags.CAN_OVERRIDE_APP_ID)
         Gtk.Application.__init__(self,
                                  application_id='org.gajim.Gajim',
                                  flags=flags)
