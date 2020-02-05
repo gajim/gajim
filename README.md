@@ -30,6 +30,7 @@
 ### Compile-time Requirements
 
 - python3-setuptools
+- gettext
 
 
 ### Installation Procedure
