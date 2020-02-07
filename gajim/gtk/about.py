@@ -16,6 +16,7 @@ import nbxmpp
 
 from gi.repository import Gdk
 from gi.repository import Gtk
+from gi.repository import GLib
 from gi.repository import GObject
 
 from gajim.common import app
@@ -42,12 +43,15 @@ class AboutDialog(Gtk.AboutDialog):
             Gtk.get_minor_version(),
             Gtk.get_micro_version())
         gobject_ver = '.'.join(map(str, GObject.pygobject_version))
+        glib_ver = '.'.join(map(str, GLib.glib_version))
 
         comments = []
         comments.append(_('A GTK XMPP client'))
         comments.append(_('GTK Version: %s' % gtk_ver))
+        comments.append(_('GLib Version: %s' % glib_ver))
         comments.append(_('PyGObject Version: %s') % gobject_ver)
         comments.append(_('python-nbxmpp Version: %s') % nbxmpp.__version__)
+
         self.set_comments("\n".join(comments))
 
         self.add_credit_section(_('Current Developers'), DEVS_CURRENT)
