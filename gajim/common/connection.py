@@ -212,8 +212,8 @@ class CommonConnection:
         if self._state.is_connecting or self._state.is_reconnect_scheduled:
             if show == 'offline':
                 self.disconnect(reconnect=False)
-            else:
-                log.warning('Can\'t change status while connecting')
+            elif self._state.is_reconnect_scheduled:
+                self.reconnect()
             return
 
         # We are connected
@@ -372,7 +372,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _set_reconnect_timer(self):
         self._set_state(ClientState.RECONNECT_SCHEDULED)
         app.nec.push_incoming_event(
-            OurShowEvent(None, conn=self, show='offline'))
+            OurShowEvent(None, conn=self, show='error'))
         if app.status_before_autoaway[self.name]:
             # We were auto away. So go back online
             self._status_message = app.status_before_autoaway[self.name]
