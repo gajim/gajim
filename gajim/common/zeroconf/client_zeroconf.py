@@ -29,9 +29,6 @@ from nbxmpp import simplexml
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.plugin import PlugIn
 from nbxmpp.idlequeue import IdleObject
-from nbxmpp.transports import DATA_RECEIVED
-from nbxmpp.transports import DATA_SENT
-from nbxmpp.transports import DATA_ERROR
 from nbxmpp.util import generate_id
 
 from gajim.common import app
@@ -454,7 +451,7 @@ class P2PConnection(IdleObject, PlugIn):
         if self.fd in ids and ids[self.fd]:
             for (_id, thread_id) in ids[self.fd]:
                 if hasattr(self._owner, 'Dispatcher'):
-                    self._owner.Dispatcher.Event('', DATA_ERROR, (
+                    self._owner.Dispatcher.Event('', 'DATA ERROR', (
                         self.client.to, thread_id))
                 else:
                     self._owner.on_not_ok('connection timeout')
@@ -541,7 +538,7 @@ class P2PConnection(IdleObject, PlugIn):
             if received.strip():
                 log.debug('received: %s', received)
             if hasattr(self._owner, 'Dispatcher'):
-                self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
+                self._owner.Dispatcher.Event('', 'DATA RECEIVED', received)
             self.on_receive(received)
         else:
             # This should never happed, so we need the debug
@@ -610,7 +607,7 @@ class P2PConnection(IdleObject, PlugIn):
             log.debug('sent: %s', self.sent_data)
             if hasattr(self._owner, 'Dispatcher'):
                 self._owner.Dispatcher.Event(
-                    '', DATA_SENT, self.sent_data.decode('utf-8'))
+                    '', 'DATA SENT', self.sent_data.decode('utf-8'))
         self.sent_data = None
         if self.buff_is_message:
             self._owner.on_message_sent(self.fd)
