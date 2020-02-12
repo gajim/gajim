@@ -113,6 +113,9 @@ class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
                  path=None, file_name=None, select_multiple=False,
                  modal=False):
 
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+
         Gtk.FileChooserNative.__init__(self,
                                        title=self._title,
                                        action=self._action,
@@ -162,6 +165,9 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
     def __init__(self, accept_cb, cancel_cb=None, transient_for=None,
                  path=None, file_name=None, select_multiple=False,
                  preview=True, modal=False):
+
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
 
         Gtk.FileChooserDialog.__init__(
             self,
