@@ -483,7 +483,7 @@ class FileTransfersWindow:
 
         NewConfirmationDialog(
             _('File Transfer Request'),
-            _('%s wants to send you a file') % contact.jid.get_shown_name(),
+            _('%s wants to send you a file') % contact.get_shown_name(),
             sectext,
             [DialogButton.make('Cancel',
                                callback=_on_cancel),
