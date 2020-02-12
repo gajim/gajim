@@ -42,16 +42,16 @@ build_script:
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-deploy:
-    # FTP deployment provider settings
-  - provider: FTP
-    protocol: ftp
-    host: panoramix.gajim.org
-    username:
-      secure: SNcOJDhUtBjfddbKXudE2w==
-    password:
-      secure: tQkYbcUb6nChCp0cdqo4CA==
-    folder: win_snap
-    active_mode: false
-    beta: true      # enable alternative FTP library for 'ftp' and 'ftps' modes
-    debug: true
+# deploy:
+#     # FTP deployment provider settings
+#   - provider: FTP
+#     protocol: ftp
+#     host: panoramix.gajim.org
+#     username:
+#       secure: SNcOJDhUtBjfddbKXudE2w==
+#     password:
+#       secure: tQkYbcUb6nChCp0cdqo4CA==
+#     folder: win_snap
+#     active_mode: false
+#     beta: true      # enable alternative FTP library for 'ftp' and 'ftps' modes
+#     debug: true
