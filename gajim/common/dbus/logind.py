@@ -77,7 +77,11 @@ class LogindListener:
 
             self._disinhibit_sleep()
         else:
-            self._inhibit_sleep(connection)
+            try:
+                self._inhibit_sleep(connection)
+            except GLib.Error as error:
+                log.warning('Inhibit failed: %s', error)
+
             for conn in app.connections.values():
                 if conn.state.is_disconnected and conn.time_to_reconnect:
                     conn.reconnect()
