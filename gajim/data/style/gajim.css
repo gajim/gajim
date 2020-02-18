@@ -10,7 +10,6 @@
 .no-scroll-indicator undershoot.top, undershoot.bottom { background-image: none; }
 .scrollbar-style scrollbar trough {background-color:@theme_base_color; }
 .scrollbar-style scrollbar {border:none; }
-.scrollbar-style slider {min-width: 3px; background-color: #a0a3a4}
 .one-line-scrollbar scrollbar.vertical slider { min-height: 20px; }
 
 .actionbar-no-border box {border: none}
