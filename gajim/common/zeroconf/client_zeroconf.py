@@ -24,7 +24,7 @@ import logging
 from unittest.mock import Mock
 
 import nbxmpp
-from nbxmpp import dispatcher
+from nbxmpp import old_dispatcher as dispatcher
 from nbxmpp import simplexml
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.plugin import PlugIn
