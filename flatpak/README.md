@@ -8,25 +8,33 @@ Make sure to follow the [setup guide](https://flatpak.org/setup/) before install
 
 ### Stable
 
-`flatpak install --user https://flathub.org/repo/appstream/org.gajim.Gajim.flatpakref`
+```bash
+flatpak install --user https://flathub.org/repo/appstream/org.gajim.Gajim.flatpakref
+```
 
 ### Nightly/master
 
-`flatpak install --user https://ftp.gajim.org/flatpak/appstream/org.gajim.Gajim.flatpakref`
+```bash
+flatpak install --user https://ftp.gajim.org/flatpak/appstream/org.gajim.Gajim.flatpakref
+```
 
 ### Install plugins
 
 To list available plugins, run
 
-`flatpak search gajim.plugin`
+```bash
+flatpak search gajim.plugin
+```
 
 To install the stable/nightly version of OMEMO, for example, run
 
-`flatpak install --user flathub org.gajim.Gajim.Plugin.omemo`
-
+```bash
+flatpak install --user flathub org.gajim.Gajim.Plugin.omemo
+```
 or
-
-`flatpak install --user gajim-nightly org.gajim.Gajim.Plugin.omemo`,
+```bash
+flatpak install --user gajim-nightly org.gajim.Gajim.Plugin.omemo
+```
 
 respectively.
 
@@ -43,9 +51,10 @@ You need to have `flatpak` and `flatpak-builder` installed. For this example, we
 In this example, we do a `git clone` of the repository, so you need to have `git` installed.
 Alternatively, you can also download the sources from our Gitlab via web browser.
 
-`git clone https://dev.gajim.org/gajim/gajim.git ~/Gajim`
-
-`cd ~/Gajim`
+```bash
+git clone https://dev.gajim.org/gajim/gajim.git ~/Gajim
+cd ~/Gajim
+```
 
 *Note: Source tarballs and snapshots do _not_ include 'org.gajim.Gajim.yaml', which is necessary for installation via Flatpak.*
 
@@ -56,13 +65,15 @@ Replace install path `~/Gajim/gajim_flatpak` with an install path of your choice
 
 *Note: Remove `--user` if you want a system-wide installation.*
 
-1. `flatpak --user remote-add --from gnome https://sdk.gnome.org/gnome.flatpakrepo`
-2. `flatpak --user install gnome org.gnome.Platform//3.34`
-3. `flatpak --user install gnome org.gnome.Sdk//3.34`
-4. `flatpak-builder --repo=gajim_flatpak_repo ~/Gajim/gajim_flatpak ~/Gajim/flatpak/org.gajim.Gajim.yaml`
-5. `flatpak --user remote-add --no-gpg-verify gajim_flatpak_repo gajim_flatpak_repo`
-6. `flatpak --user install gajim_flatpak_repo org.gajim.Gajim`
-7. `flatpak run org.gajim.Gajim`
+```bash
+flatpak --user remote-add --from gnome https://sdk.gnome.org/gnome.flatpakrepo
+flatpak --user install gnome org.gnome.Platform//3.34
+flatpak --user install gnome org.gnome.Sdk//3.34
+flatpak-builder --repo=gajim_flatpak_repo ~/Gajim/gajim_flatpak ~/Gajim/flatpak/org.gajim.Gajim.yaml
+flatpak --user remote-add --no-gpg-verify gajim_flatpak_repo gajim_flatpak_repo
+flatpak --user install gajim_flatpak_repo org.gajim.Gajim
+flatpak run org.gajim.Gajim
+```
 
 That's it, you are now running Gajim via Flatpak!
 
@@ -73,20 +84,24 @@ That's it, you are now running Gajim via Flatpak!
 
 In this example, we use `git` to update the repository. You can also download the sources from our Gitlab via webbrowser.
 
-`cd ~/Gajim`
-
-`git pull --rebase`
-
+```bash
+cd ~/Gajim
+git pull --rebase
+```
 
 ### Remove previous Flatpak directory
 
-`rm -r ~/Gajim/gajim_flatpak`
+```bash
+rm -r ~/Gajim/gajim_flatpak
+```
 
 
 ### Install and update Gajim
 
-1. `flatpak-builder --repo=gajim_flatpak_repo ~/Gajim/gajim_flatpak ~/Gajim/flatpak/org.gajim.Gajim.yaml`
-2. `flatpak --user update`
-3. `flatpak run org.gajim.Gajim`
+```bash
+flatpak-builder --repo=gajim_flatpak_repo ~/Gajim/gajim_flatpak ~/Gajim/flatpak/org.gajim.Gajim.yaml
+flatpak --user update
+flatpak run org.gajim.Gajim
+```
 
 Gajim is now updated.
