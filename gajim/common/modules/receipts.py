@@ -38,6 +38,10 @@ class Receipts(BaseModule):
         if not properties.is_receipt:
             return
 
+        if properties.type.is_error:
+            # Don't propagate this event further
+            raise nbxmpp.NodeProcessed
+
         if (properties.type.is_groupchat or
                 properties.is_self_message or
                 properties.is_mam_message or
