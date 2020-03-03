@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2017-2020 Gajim Team -->
 <component type="desktop-application">
-  <id>org.gajim.Gajim.desktop</id>
+  <id>org.gajim.Gajim</id>
   <provides>
     <id>gajim.desktop</id>
   </provides>
@@ -42,7 +42,6 @@
     </ul>
   </description>
   <categories>
-    <category>GNOME</category>
     <category>GTK</category>
     <category>InstantMessaging</category>
     <category>Network</category>
