@@ -18,6 +18,8 @@ flatpak install --user https://flathub.org/repo/appstream/org.gajim.Gajim.flatpa
 flatpak install --user https://ftp.gajim.org/flatpak/appstream/org.gajim.Gajim.flatpakref
 ```
 
+[Migrate your profile data](#migrate-your-data) if you like.
+
 ### Install plugins
 
 To list available plugins, run
@@ -31,20 +33,22 @@ To install the stable/nightly version of OMEMO, for example, run
 ```bash
 flatpak install --user flathub org.gajim.Gajim.Plugin.omemo
 ```
+
 or
+
 ```bash
 flatpak install --user gajim-nightly org.gajim.Gajim.Plugin.omemo
 ```
 
 respectively.
 
+Note that **you need to restart Gajim** for Plugins to be enabled.
 
 ## Install from source
 
 **Prerequisites:**
 
 You need to have `flatpak` and `flatpak-builder` installed. For this example, we use `git` for downloading/updating Gajim's sources.
-
 
 ### Download Gajim's sources
 
@@ -57,7 +61,6 @@ cd ~/Gajim
 ```
 
 *Note: Source tarballs and snapshots do _not_ include 'org.gajim.Gajim.yaml', which is necessary for installation via Flatpak.*
-
 
 ### Install Gajim and dependencies
 
@@ -77,6 +80,7 @@ flatpak run org.gajim.Gajim
 
 That's it, you are now running Gajim via Flatpak!
 
+[Migrate your profile data](#migrate-your-data) if you like.
 
 ## How to update
 
@@ -95,7 +99,6 @@ git pull --rebase
 rm -r ~/Gajim/gajim_flatpak
 ```
 
-
 ### Install and update Gajim
 
 ```bash
@@ -105,3 +108,11 @@ flatpak run org.gajim.Gajim
 ```
 
 Gajim is now updated.
+
+## Migrate your data
+
+When switching to Flatpak you might want to migrate your user data (accounts, history, ...) from your previous installation. Just copy your user data from/to the following directories:
+
+Copy `.local/share/gajim` -> `.var/app/org.gajim.Gajim/data/gajim`
+
+Copy `.config/gajim` -> `.var/app/org.gajim.Gajim/config/gajim`
