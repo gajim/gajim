@@ -32,6 +32,7 @@ from gajim.common import modules
 from gajim.common.const import ClientState
 from gajim.common.helpers import get_encryption_method
 from gajim.common.helpers import get_custom_host
+from gajim.common.helpers import get_user_proxy
 
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
@@ -129,6 +130,10 @@ class Client(ConnectionHandlers):
             app.cert_store.get_certificates())
 
         self._client.set_ignored_tls_errors(self._get_ignored_ssl_errors())
+
+        proxy = get_user_proxy(self._account)
+        if proxy is not None:
+            self._client.set_proxy(proxy)
 
         self._client.subscribe('resume-failed', self._on_resume_failed)
         self._client.subscribe('resume-successful', self._on_resume_successful)

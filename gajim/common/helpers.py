@@ -65,6 +65,7 @@ from nbxmpp.structs import DiscoInfo
 from nbxmpp.const import Role
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
+from nbxmpp.structs import ProxyData
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
 from OpenSSL.crypto import load_certificate
@@ -1109,6 +1110,24 @@ def replace_dataform_media(form, stanza):
                             uri.setData(data.getData())
                             found = True
     return found
+
+def get_user_proxy(account):
+    proxy_name = app.config.get_per('accounts', account, 'proxy')
+    if not proxy_name:
+        return None
+
+    proxy = app.config.get_per('proxies', proxy_name)
+    if proxy is None:
+        return None
+
+    username, password = None, None
+    if proxy['useauth']:
+        username, password = proxy['user'], proxy['pass']
+
+    return ProxyData(type=proxy['type'],
+                     host='%s:%s' % (proxy['host'], proxy['port']),
+                     username=username,
+                     password=password)
 
 def get_proxy_info(account):
     p = app.config.get_per('accounts', account, 'proxy')
