@@ -57,21 +57,6 @@ class ManageProxies(Gtk.ApplicationWindow):
         if window_accounts is not None:
             window_accounts.update_proxy_list()
 
-    def _show_bosh_fields(self, show=True):
-        if show:
-            self._ui.boshuri_entry.show()
-            self._ui.boshuri_label.show()
-            self._ui.bosh_useproxy_checkbutton.show()
-            act = self._ui.bosh_useproxy_checkbutton.get_active()
-            self._ui.proxyhost_entry.set_sensitive(act)
-            self._ui.proxyport_entry.set_sensitive(act)
-        else:
-            self._ui.boshuri_entry.hide()
-            self._ui.boshuri_label.hide()
-            self._ui.bosh_useproxy_checkbutton.hide()
-            self._ui.proxyhost_entry.set_sensitive(True)
-            self._ui.proxyport_entry.set_sensitive(True)
-
     def _fill_proxies_treeview(self):
         model = self._ui.proxies_treeview.get_model()
         model.clear()
@@ -127,22 +112,12 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._ui.proxyuser_entry.set_sensitive(act)
         self._ui.proxypass_entry.set_sensitive(act)
 
-    def _on_bosh_useproxy_toggled(self, checkbutton):
-        if self._block_signal:
-            return
-        act = checkbutton.get_active()
-        proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'bosh_useproxy', act)
-        self._ui.proxyhost_entry.set_sensitive(act)
-        self._ui.proxyport_entry.set_sensitive(act)
-
     def _on_proxies_treeview_cursor_changed(self, widget):
         self._block_signal = True
         self._ui.proxyhost_entry.set_text('')
         self._ui.proxyport_entry.set_text('')
         self._ui.proxyuser_entry.set_text('')
         self._ui.proxypass_entry.set_text('')
-        self._ui.boshuri_entry.set_text('')
 
         sel = widget.get_selection()
         if sel:
@@ -160,21 +135,10 @@ class ManageProxies(Gtk.ApplicationWindow):
 
         proxytype = app.config.get_per('proxies', proxy, 'type')
 
-        self._show_bosh_fields(proxytype == 'bosh')
-
         self._ui.remove_proxy_button.set_sensitive(True)
         self._ui.proxyname_entry.set_editable(True)
 
         self._ui.settings_grid.set_sensitive(True)
-
-        self._ui.boshuri_entry.set_text(
-            app.config.get_per('proxies', proxy, 'bosh_uri'))
-        self._ui.bosh_useproxy_checkbutton.set_active(
-            app.config.get_per('proxies', proxy, 'bosh_useproxy'))
-        if proxytype == 'bosh':
-            act = self._ui.bosh_useproxy_checkbutton.get_active()
-            self._ui.proxyhost_entry.set_sensitive(act)
-            self._ui.proxyport_entry.set_sensitive(act)
 
         self._ui.proxyhost_entry.set_text(
             app.config.get_per('proxies', proxy, 'host'))
@@ -185,7 +149,7 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._ui.proxypass_entry.set_text(
             app.config.get_per('proxies', proxy, 'pass'))
 
-        types = ['http', 'socks5', 'bosh']
+        types = ['http', 'socks5']
         self._ui.proxytype_combobox.set_active(types.index(proxytype))
 
         self._ui.useauth_checkbutton.set_active(
@@ -225,20 +189,12 @@ class ManageProxies(Gtk.ApplicationWindow):
     def _on_proxytype_combobox_changed(self, _widget):
         if self._block_signal:
             return
-        types = ['http', 'socks5', 'bosh']
+        types = ['http', 'socks5']
         type_ = self._ui.proxytype_combobox.get_active()
         self._ui.proxyhost_entry.set_sensitive(True)
         self._ui.proxyport_entry.set_sensitive(True)
-        self._show_bosh_fields(types[type_] == 'bosh')
         proxy = self._ui.proxyname_entry.get_text()
         app.config.set_per('proxies', proxy, 'type', types[type_])
-
-    def _on_boshuri_entry_changed(self, entry):
-        if self._block_signal:
-            return
-        value = entry.get_text()
-        proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'bosh_uri', value)
 
     def _on_proxyhost_entry_changed(self, entry):
         if self._block_signal:

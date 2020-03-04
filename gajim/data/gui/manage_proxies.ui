@@ -9,13 +9,10 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes" context="proxy configuration">HTTP Connect</col>
+        <col id="0" translatable="yes" context="proxy configuration">HTTP</col>
       </row>
       <row>
         <col id="0" translatable="yes" context="proxy configuration">SOCKS5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="proxy configuration">BOSH</col>
       </row>
     </data>
   </object>
@@ -123,7 +120,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">10</property>
+            <property name="top_attach">8</property>
           </packing>
         </child>
         <child>
@@ -140,7 +137,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">10</property>
+            <property name="top_attach">8</property>
           </packing>
         </child>
         <child>
@@ -151,7 +148,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">9</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
@@ -168,7 +165,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">8</property>
+            <property name="top_attach">6</property>
           </packing>
         </child>
         <child>
@@ -185,7 +182,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">9</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
@@ -198,7 +195,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">7</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -215,7 +212,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">7</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -229,7 +226,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">6</property>
+            <property name="top_attach">4</property>
           </packing>
         </child>
         <child>
@@ -240,57 +237,6 @@
             <property name="label" translatable="yes">_Host</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">proxyhost_entry</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkCheckButton" id="bosh_useproxy_checkbutton">
-            <property name="label" translatable="yes">Use HTTP prox_y</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="no_show_all">True</property>
-            <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="_on_bosh_useproxy_toggled" swapped="no"/>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="boshuri_entry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="no_show_all">True</property>
-            <property name="margin_bottom">12</property>
-            <property name="placeholder_text" translatable="yes">https://example.org/http-bind/</property>
-            <property name="input_purpose">url</property>
-            <signal name="changed" handler="_on_boshuri_entry_changed" swapped="no"/>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="boshuri_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="halign">end</property>
-            <property name="margin_bottom">12</property>
-            <property name="label" translatable="yes">_BOSH URL</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">boshuri_entry</property>
             <style>
               <class name="dim-label"/>
             </style>
@@ -401,32 +347,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">5</property>
-          </packing>
+          <placeholder/>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">8</property>
-          </packing>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
       <packing>

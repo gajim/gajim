@@ -385,13 +385,6 @@ class Config:
             'useauth': [opt_bool, False],
             'user': [opt_str, ''],
             'pass': [opt_str, ''],
-            'bosh_uri': [opt_str, ''],
-            'bosh_useproxy': [opt_bool, False],
-            'bosh_wait': [opt_int, 30],
-            'bosh_hold': [opt_int, 2],
-            'bosh_content': [opt_str, 'text/xml; charset=utf-8'],
-            'bosh_http_pipelining': [opt_bool, False],
-            'bosh_wait_for_restart_response': [opt_bool, False],
         }, {}),
         'contacts': ({
             'speller_language': [opt_str, '', _('Language used for spell checking.')],

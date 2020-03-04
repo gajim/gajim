@@ -125,10 +125,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
 
         # Connection proxy
         if proxy:
-            if proxy['type'] == 'bosh':
-                self._ui.connection_proxy_header.set_text(_('BOSH'))
-                self._ui.connection_proxy.set_text(proxy['bosh_uri'])
-            if proxy['type'] in ['http', 'socks5'] or proxy['bosh_useproxy']:
+            if proxy['type'] in ['http', 'socks5']:
                 self._ui.connection_proxy.set_text(
                     proxy['host'] + ':' + proxy['port'])
 

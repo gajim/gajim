@@ -148,6 +148,8 @@ class OptionsParser:
             self.update_config_to_0983()
         if old < [1, 1, 93] and new >= [1, 1, 93]:
             self.update_config_to_1193()
+        if old < [1, 1, 94] and new >= [1, 1, 94]:
+            self.update_config_to_1194()
 
         app.config.set('version', new_version)
 
@@ -220,3 +222,14 @@ class OptionsParser:
         if self.old_values['time_stamp'] == '[%X] ':
             app.config.set('time_stamp', '%x | %X  ')
         app.config.set('version', '1.1.93')
+
+    def update_config_to_1194(self):
+        # Delete all BOSH proxies
+        for name in self.old_values['proxies']:
+            if self.old_values['proxies'][name]['type'] == 'bosh':
+                app.config.del_per('proxies', name)
+                for account in self.old_values['accounts']:
+                    if self.old_values['accounts'][account]['proxy'] == name:
+                        app.config.del_per('accounts', account, 'proxy')
+
+        app.config.set('version', '1.1.94')
