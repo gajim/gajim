@@ -675,10 +675,6 @@ class ConnectionPage(GenericSettingPage):
     def __init__(self, account):
 
         settings = [
-            Setting(SettingKind.SWITCH, 'HTTP_PROXY',
-                    SettingType.ACCOUNT_CONFIG, 'use_env_http_proxy',
-                    desc=_('Use environment variable')),
-
             Setting(SettingKind.PROXY, _('Proxy'),
                     SettingType.ACCOUNT_CONFIG, 'proxy', name='proxy'),
 

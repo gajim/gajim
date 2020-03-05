@@ -1132,40 +1132,6 @@ def get_user_proxy(account):
 def get_proxy_info(account):
     p = app.config.get_per('accounts', account, 'proxy')
     if not p:
-        if app.config.get_per('accounts', account, 'use_env_http_proxy'):
-            try:
-                try:
-                    env_http_proxy = os.environ['HTTP_PROXY']
-                except Exception:
-                    env_http_proxy = os.environ['http_proxy']
-                env_http_proxy = env_http_proxy.strip('"')
-                # Dispose of the http:// prefix
-                env_http_proxy = env_http_proxy.split('://')[-1]
-                env_http_proxy = env_http_proxy.split('@')
-
-                if len(env_http_proxy) == 2:
-                    login = env_http_proxy[0].split(':')
-                    addr = env_http_proxy[1].split(':')
-                else:
-                    login = ['', '']
-                    addr = env_http_proxy[0].split(':')
-
-                proxy = {'host': addr[0], 'type' : 'http', 'user':login[0]}
-
-                if len(addr) == 2:
-                    proxy['port'] = addr[1]
-                else:
-                    proxy['port'] = 3128
-
-                if len(login) == 2:
-                    proxy['pass'] = login[1]
-                    proxy['useauth'] = True
-                else:
-                    proxy['pass'] = ''
-                return proxy
-
-            except Exception:
-                proxy = None
         p = app.config.get('global_proxy')
     if p and p in app.config.get_per('proxies'):
         proxy = {}
