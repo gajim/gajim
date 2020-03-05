@@ -1,11 +1,16 @@
-app-id: org.gajim.Gajim
+app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
 runtime-version: '3.34'
 sdk: org.gnome.Sdk
-command: gajim
+command: gajim-devel
 tags:
+  - devel
+  - development
   - nightly
 desktop-file-name-prefix: '(Nightly) '
+rename-icon: org.gajim.Gajim
+rename-desktop-file: org.gajim.Gajim.desktop
+rename-appdata-file: org.gajim.Gajim.appdata.xml
 finish-args:
   - --share=ipc
   - --share=network
@@ -26,7 +31,7 @@ finish-args:
   - --env=PYTHONPATH=/app/plugins/lib/python3.7/site-packages
 
 add-extensions:
-  org.gajim.Gajim.Plugin:
+  org.gajim.Gajim.Devel.Plugin:
     directory: plugins
     merge-dirs: lib/python3.7/site-packages
     subdirectories: true
@@ -194,8 +199,14 @@ modules:
     build-commands:
       - pip3 install --prefix=/app .
       - touch /app/share/run-as-flatpak
+      - echo -e '#!/bin/sh\ngajim --gapplication-app-id=org.gajim.Gajim.Devel "$@"' > /app/bin/gajim-devel
+      - chmod 755 /app/bin/gajim-devel
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
+      - type: shell
+        commands:
+          - sed -i "s+<id>org.gajim.Gajim</id>+<id>org.gajim.Gajim.Devel</id>+" data/org.gajim.Gajim.appdata.xml.in
+          - sed -i "s+<name>Gajim</name>+<name>Gajim (Nightly)</name>+" data/org.gajim.Gajim.appdata.xml.in
     post-install:
       - install -d /app/plugins
