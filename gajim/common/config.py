@@ -302,28 +302,15 @@ class Config:
             'proxy': [opt_str, '', '', True],
             'keyid': [opt_str, '', '', True],
             'keyname': [opt_str, '', '', True],
-            'allow_plaintext_connection': [opt_bool, False, _('Allow plaintext connections.')],
-            'tls_version': [opt_str, '1.2', ''],
-            'cipher_list': [opt_str, 'HIGH:!aNULL', ''],
-            'authentication_mechanisms': [opt_str, '', _('List of authentication mechanisms to try (space separated). Can contain \'ANONYMOUS\', \'EXTERNAL\', \'GSSAPI\', \'SCRAM-SHA-1-PLUS\', \'SCRAM-SHA-1\', \'DIGEST-MD5\', \'PLAIN\', \'X-MESSENGER-OAUTH2\' or \'XEP-0078\'.')],
             'action_when_plaintext_connection': [opt_str, 'warn', _('Show a warning dialog before sending password on an plaintext connection. Can be \'warn\', \'connect\' or \'disconnect\'.')],
-            'warn_when_insecure_ssl_connection': [opt_bool, True, _('Show a warning dialog before using standard SSL library.')],
             'ignore_ssl_errors': [opt_str, '', _('List of SSL errors to ignore (space separated).')],
-            'use_srv': [opt_bool, True, '', True],
             'use_custom_host': [opt_bool, False, '', True],
             'custom_port': [opt_int, 5222, '', True],
             'custom_host': [opt_str, '', '', True],
             'sync_with_global_status': [opt_bool, False, ],
             'no_log_for': [opt_str, '', _('List of XMPP Addresses (space separated) for which you do not want to store chat history. You can also add the name of an account to disable storing chat history for this account.')],
             'attached_gpg_keys': [opt_str, ''],
-            'keep_alives_enabled': [opt_bool, True, _('If enabled, a whitespace is sent after inactivity (keep alive).')],
-            'ping_alives_enabled': [opt_bool, True, _('If enabled, an XMPP ping is sent after inactivity (ping alive).')],
-            # send keepalive every N seconds of inactivity
-            'keep_alive_every_foo_secs': [opt_int, 55],
-            'ping_alive_every_foo_secs': [opt_int, 120],
             'time_for_ping_alive_answer': [opt_int, 60, _('How many seconds to wait for the answer of a ping alive packet before trying to reconnect.')],
-            # try for 1 minutes before giving up (aka. timeout after those seconds)
-            'try_connecting_for_foo_secs': [opt_int, 60],
             'http_auth': [opt_str, 'ask'], # yes, no, ask
             # proxy65 for FT
             'file_transfer_proxies': [opt_str, ''],

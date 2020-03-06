@@ -678,13 +678,6 @@ class ConnectionPage(GenericSettingPage):
             Setting(SettingKind.PROXY, _('Proxy'),
                     SettingType.ACCOUNT_CONFIG, 'proxy', name='proxy'),
 
-            Setting(SettingKind.SWITCH, _('Warn on insecure connection'),
-                    SettingType.ACCOUNT_CONFIG,
-                    'warn_when_insecure_ssl_connection'),
-
-            Setting(SettingKind.SWITCH, _('Send keep-alive packets'),
-                    SettingType.ACCOUNT_CONFIG, 'keep_alives_enabled'),
-
             Setting(SettingKind.HOSTNAME, _('Hostname'), SettingType.DIALOG,
                     desc=_('Manually set the hostname for the server'),
                     props={'dialog': CutstomHostnameDialog}),
