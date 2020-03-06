@@ -77,7 +77,6 @@ from gajim.common import logging_helpers
 from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
-from gajim.common.connection_handlers_events import OurShowEvent
 from gajim.common.client import Client
 
 from gajim.common.file_props import FilesProp
@@ -94,7 +93,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
-from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
@@ -1036,40 +1034,22 @@ class Interface:
         RosterItemExchangeWindow(obj.conn.name, obj.action,
                                  obj.exchange_items_list, obj.fjid)
 
-    def handle_event_plain_connection(self, obj):
-        # ('PLAIN_CONNECTION', account, (connection))
-        def _on_connect_anyway(is_checked):
-            if is_checked:
-                app.config.set_per('accounts', obj.conn.name,
-                                   'action_when_plaintext_connection',
-                                   'connect')
-            obj.conn.connection_accepted(obj.xmpp_client, 'plain')
-
-        def _on_abort(is_checked):
-            if is_checked:
-                app.config.set_per('accounts', obj.conn.name,
-                                   'action_when_plaintext_connection',
-                                   'disconnect')
-            obj.conn.disconnect(reconnect=False)
-            app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
-                                                     show='offline'))
-
-        NewConfirmationCheckDialog(
+    def handle_event_plain_connection(self, event):
+        NewConfirmationDialog(
             _('Insecure Connection'),
             _('Insecure Connection'),
             _('You are about to connect to the account %(account)s '
               '(%(server)s) using an insecure connection method. This means '
               'conversations will not be encrypted. Connecting PLAIN is '
               'strongly discouraged.') % {
-                  'account': obj.conn.name,
-                  'server': app.get_hostname_from_account(obj.conn.name)},
-            _('_Do not ask me again'),
+                  'account': event.account,
+                  'server': app.get_hostname_from_account(event.account)},
             [DialogButton.make('Cancel',
                                text=_('_Abort'),
-                               callback=_on_abort),
+                               callback=event.abort),
              DialogButton.make('Remove',
                                text=_('_Connect Anyway'),
-                               callback=_on_connect_anyway)]).show()
+                               callback=event.connect)]).show()
 
     def create_core_handlers_list(self):
         self.handlers = {

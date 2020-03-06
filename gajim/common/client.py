@@ -18,6 +18,7 @@ import time
 import nbxmpp
 from nbxmpp.client import Client as NBXMPPClient
 from nbxmpp.const import StreamError
+from nbxmpp.const import ConnectionType
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -33,6 +34,7 @@ from gajim.common.const import ClientState
 from gajim.common.helpers import get_encryption_method
 from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
+from gajim.common.helpers import warn_about_plain_connection
 
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
@@ -130,6 +132,9 @@ class Client(ConnectionHandlers):
             app.cert_store.get_certificates())
 
         self._client.set_ignored_tls_errors(self._get_ignored_ssl_errors())
+
+        if app.config.get_per('accounts', self._account, 'use_plain_connection'):
+            self._client.set_connection_types([ConnectionType.PLAIN])
 
         proxy = get_user_proxy(self._account)
         if proxy is not None:
@@ -467,6 +472,14 @@ class Client(ConnectionHandlers):
             self._client.set_ignore_tls_errors(True)
             self._client.connect()
         else:
+            if warn_about_plain_connection(self._account,
+                                           self._client.connection_types):
+                app.nec.push_incoming_event(NetworkEvent(
+                    'plain-connection',
+                    account=self._account,
+                    connect=self._client.connect,
+                    abort=self._abort_reconnect))
+                return
             self._client.connect()
 
     def _schedule_reconnect(self):
