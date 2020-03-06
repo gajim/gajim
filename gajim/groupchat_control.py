@@ -1262,6 +1262,7 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_configuration_failed(self, event):
+        self.xml.error_heading.set_text(_('Failed to Configure Group Chat'))
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
 
@@ -1512,11 +1513,17 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account', 'room_jid'])
     def _on_muc_join_failed(self, event):
+        con = app.connections[self.account]
+        if con.get_module('Bookmarks').is_bookmark(self.room_jid):
+            self.xml.remove_bookmark_button.show()
+
+        self.xml.error_heading.set_text(_('Failed to Join Group Chat'))
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
 
     @event_filter(['account', 'room_jid'])
     def _on_muc_creation_failed(self, event):
+        self.xml.error_heading.set_text(_('Failed to Create Group Chat'))
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
 
@@ -2133,6 +2140,11 @@ class GroupchatControl(ChatControlBase):
     def _on_captcha_try_again_clicked(self, _button=None):
         app.connections[self.account].get_module('MUC').join(self._muc_data)
         self._show_page('progress')
+
+    def _on_remove_bookmark_button_clicked(self, _button=None):
+        con = app.connections[self.account]
+        con.get_module('Bookmarks').remove(self.room_jid)
+        self._close_control()
 
     def _on_page_cancel_clicked(self, _button=None):
         self._show_page('groupchat')
