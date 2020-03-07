@@ -21,7 +21,6 @@ import time
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
@@ -33,7 +32,6 @@ from gajim.common.modules.base import BaseModule
 class Ping(BaseModule):
     def __init__(self, con: ConnectionT) -> None:
         BaseModule.__init__(self, con)
-        self._timeout_id = None
 
         self.handlers = [
             StanzaHandler(name='iq',
@@ -47,34 +45,6 @@ class Ping(BaseModule):
         iq = nbxmpp.Iq('get', to=to)
         iq.addChild(name='ping', namespace=nbxmpp.NS_PING)
         return iq
-
-    def send_keepalive_ping(self) -> None:
-        if not app.account_is_connected(self._account):
-            return
-
-        self._log.info('Send keepalive')
-
-        seconds = app.config.get_per('accounts', self._account,
-                                     'time_for_ping_alive_answer')
-        self._timeout_id = GLib.timeout_add_seconds(seconds, self._reconnect)
-
-        to = app.config.get_per('accounts', self._account, 'hostname')
-        self._con.connection.SendAndCallForResponse(self._get_ping_iq(to),
-                                                    self._keepalive_received)
-
-    def _keepalive_received(self,
-                            _nbxmpp_client: Any,
-                            _stanza: nbxmpp.Iq) -> None:
-        self._log.info('Received keepalive')
-        self.remove_timeout()
-
-    def _reconnect(self) -> None:
-        if not app.account_is_connected(self._account):
-            return
-        # We haven't got the pong in time, disco and reconnect
-        self._log.warning('No reply received for keepalive ping. '
-                          'Reconnecting...')
-        self._con.disconnect(immediately=True)
 
     def send_ping(self, contact: ContactsT) -> None:
         if not app.account_is_connected(self._account):
@@ -121,16 +91,6 @@ class Ping(BaseModule):
         self._con.connection.send(iq)
         self._log.info('Send pong to %s', stanza.getFrom())
         raise nbxmpp.NodeProcessed
-
-    def remove_timeout(self) -> None:
-        if self._timeout_id is None:
-            return
-        self._log.info('Remove ping timeout')
-        GLib.source_remove(self._timeout_id)
-        self._timeout_id = None
-
-    def cleanup(self) -> None:
-        self.remove_timeout()
 
 
 class PingSentEvent(NetworkIncomingEvent):
