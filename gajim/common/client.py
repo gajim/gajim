@@ -111,6 +111,7 @@ class Client(ConnectionHandlers):
         return self._client.features
 
     def _create_client(self):
+        log.info('Create new nbxmpp client')
         self._client = NBXMPPClient()
         self.connection = self._client
         self._client.set_domain(self._hostname)
@@ -178,13 +179,14 @@ class Client(ConnectionHandlers):
         app.nec.push_incoming_event(
             OurShowEvent(None, conn=self, show=self._status))
 
-    def disconnect(self, gracefully, reconnect):
+    def disconnect(self, gracefully, reconnect, destroy_client=False):
         if self._state.is_disconnecting:
             log.warning('Disconnect already in progress')
             return
 
         self._set_state(ClientState.DISCONNECTING)
         self._reconnect = reconnect
+        self._destroy_client = destroy_client
 
         log.info('Starting to disconnect %s', self._account)
         self._client.disconnect(immediate=not gracefully)
@@ -308,8 +310,9 @@ class Client(ConnectionHandlers):
 
         if self._state.is_connecting:
             if show == 'offline':
-                self._destroy_client = True
-                self.disconnect(gracefully=False, reconnect=False)
+                self.disconnect(gracefully=False,
+                                reconnect=False,
+                                destroy_client=True)
             return
 
         if self._state.is_reconnect_scheduled:
@@ -328,8 +331,9 @@ class Client(ConnectionHandlers):
                 caps=False)
 
             self.send_stanza(presence)
-            self._destroy_client = True
-            self.disconnect(gracefully=True, reconnect=False)
+            self.disconnect(gracefully=True,
+                            reconnect=False,
+                            destroy_client=True)
             return
 
         idle_time = None

@@ -19,7 +19,6 @@ from collections import defaultdict
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import Pango
 from gi.repository import GObject
 
@@ -111,22 +110,10 @@ class AccountsWindow(Gtk.ApplicationWindow):
             app.connections[app.ZEROCONF_ACC_NAME].update_details()
             return
 
-        def login(account, show_before, status_before):
-            """
-            Login with previous status
-            """
-            # first make sure connection is really closed,
-            # 0.5 may not be enough
-            app.connections[account].disconnect(True)
-            app.interface.roster.send_status(
-                account, show_before, status_before)
-
-        def relog(account):
-            show_before = app.connections[account].status
-            status_before = app.connections[account].status_message
-            app.interface.roster.send_status(
-                account, 'offline', _('Be right back.'))
-            GLib.timeout_add(500, login, account, show_before, status_before)
+        def relog():
+            app.connections[account].disconnect(gracefully=True,
+                                                reconnect=True,
+                                                destroy_client=True)
 
         NewConfirmationDialog(
             _('Re-Login'),
@@ -136,7 +123,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
                                text=_('_Later')),
              DialogButton.make('Accept',
                                text=_('_Re-Login'),
-                               callback=lambda *args: relog(account))],
+                               callback=relog)],
             transient_for=self).show()
 
     @staticmethod
