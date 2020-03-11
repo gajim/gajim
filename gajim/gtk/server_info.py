@@ -17,6 +17,7 @@ from collections import namedtuple
 from datetime import timedelta
 
 import nbxmpp
+from nbxmpp.const import ConnectionType
 from nbxmpp.util import is_error_result
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -99,35 +100,30 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
             row.set_header(label)
 
     def _add_connection_info(self):
-        ssl_con = app.connections[self.account].connection.get_ssl_connection()
-        ssl_version = None
-        cipher_name = None
-        if ssl_con is not None:
-            ssl_version = ssl_con.get_cipher_version()
-            cipher_name = ssl_con.get_cipher_name()
-
-        host, proxy = app.connections[self.account].get_connection_info()
-        con_type = host['type']
-
         # Connection type
-        self._ui.connection_type.set_text(con_type.upper())
-        if con_type == 'plain':
+        con_type = app.connections[self.account].connection.current_connection_type
+        con_type_short = ''
+        if ConnectionType.DIRECT_TLS:
+            con_type_short = 'DIRECT TLS'
+        elif ConnectionType.START_TLS:
+            con_type_short = 'START TLS'
+        else:
+            con_type_short = 'PLAIN'
+        self._ui.connection_type.set_text(con_type_short)
+        if con_type is ConnectionType.PLAIN:
             self._ui.conection_type.get_style_context().add_class(
                 'error-color')
 
-        # Connection security
-        if ssl_version is not None:
-            self._ui.connection_security.set_text(ssl_version)
+        is_websocket = app.connections[self.account].connection.is_websocket
+        protocol = 'WebSocket' if is_websocket else 'TCP'
+        self._ui.connection_protocol.set_text(protocol)
 
-        # Connection cipher
-        if cipher_name is not None:
-            self._ui.connection_cipher.set_text(cipher_name)
-
+        # host, proxy = app.connections[self.account].get_connection_info()
         # Connection proxy
-        if proxy:
-            if proxy['type'] in ['http', 'socks5']:
-                self._ui.connection_proxy.set_text(
-                    proxy['host'] + ':' + proxy['port'])
+        # if proxy:
+        #    if proxy['type'] in ['http', 'socks5']:
+        #        self._ui.connection_proxy.set_text(
+        #            proxy['host'] + ':' + proxy['port'])
 
         self._ui.cert_button.set_sensitive(self.cert)
 
