@@ -101,16 +101,10 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _add_connection_info(self):
         # Connection type
-        con_type = app.connections[self.account].connection.current_connection_type
-        con_type_short = ''
-        if ConnectionType.DIRECT_TLS:
-            con_type_short = 'DIRECT TLS'
-        elif ConnectionType.START_TLS:
-            con_type_short = 'START TLS'
-        else:
-            con_type_short = 'PLAIN'
-        self._ui.connection_type.set_text(con_type_short)
-        if con_type is ConnectionType.PLAIN:
+        client = app.connections[self.account].connection
+        con_type = client.current_connection_type
+        self._ui.connection_type.set_text(con_type.value)
+        if con_type.is_plain:
             self._ui.conection_type.get_style_context().add_class(
                 'error-color')
 
