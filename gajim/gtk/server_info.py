@@ -17,7 +17,6 @@ from collections import namedtuple
 from datetime import timedelta
 
 import nbxmpp
-from nbxmpp.const import ConnectionType
 from nbxmpp.util import is_error_result
 from gi.repository import Gtk
 from gi.repository import Gdk
