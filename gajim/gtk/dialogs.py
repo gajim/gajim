@@ -226,6 +226,8 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ui = get_builder('certificate_dialog.ui')
         self.add(self._ui.certificate_box)
 
+        self.connect('key-press-event', self._on_key_press)
+
         self.account = account
         self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
@@ -268,6 +270,10 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self.set_transient_for(transient_for)
         self._ui.connect_signals(self)
         self.show_all()
+
+    def _on_key_press(self, _widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
 
     def _on_copy_cert_info_button_clicked(self, _widget):
         clipboard_text = \
