@@ -1767,7 +1767,8 @@ class Interface:
             app.connections[account].disconnect(gracefully=True,
                                                 reconnect=False)
 
-        self.disable_account(account)
+        if app.config.get_per('accounts', account, 'active'):
+            self.disable_account(account)
 
         app.logger.remove_roster(app.get_jid_from_account(account))
         # Delete password must be before del_per() because it calls set_per()

@@ -149,7 +149,7 @@ class RemoveChoice(Page):
         label.set_halign(Gtk.Align.CENTER)
         label.set_justify(Gtk.Justification.CENTER)
 
-        service = app.connections[account].get_own_jid().getDomain()
+        service = app.config.get_per('accounts', account, 'hostname')
         check_label = Gtk.Label()
         check_label.set_markup(
             _('Do you want to unregister your account on <b>%s</b> as '
