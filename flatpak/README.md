@@ -15,18 +15,26 @@ flatpak install --user https://flathub.org/repo/appstream/org.gajim.Gajim.flatpa
 ### Nightly/master
 
 ```bash
-flatpak install --user https://ftp.gajim.org/flatpak/appstream/org.gajim.Gajim.flatpakref
+flatpak install --user https://ftp.gajim.org/flatpak/appstream/org.gajim.Gajim.Devel.flatpakref
 ```
 
 [Migrate your profile data](#migrate-your-data) if you like.
 
 ### Install plugins
 
-To list available plugins, run
+To list available stable/nightly plugins, run
 
 ```bash
 flatpak search gajim.plugin
 ```
+
+or
+
+```bash
+flatpak remote-ls gajim-nightly
+```
+
+respectively.
 
 To install the stable/nightly version of OMEMO, for example, run
 
@@ -37,7 +45,7 @@ flatpak install --user flathub org.gajim.Gajim.Plugin.omemo
 or
 
 ```bash
-flatpak install --user gajim-nightly org.gajim.Gajim.Plugin.omemo
+flatpak install --user gajim-nightly org.gajim.Gajim.Devel.Plugin.omemo
 ```
 
 respectively.
