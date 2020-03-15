@@ -49,11 +49,7 @@
 
 #### Linux
 
-``./setup.py install --root=/``
-
-or
-
-``pip install .`` (python-pip is required)
+    pip install .
 
 #### Mac
 
