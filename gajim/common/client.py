@@ -269,11 +269,14 @@ class Client(ConnectionHandlers):
         self.get_module('MAM').reset_state()
 
     def _on_stanza_sent(self, _client, signal_name, stanza):
-        pass
+        app.nec.push_incoming_event(NetworkEvent('stanza-sent',
+                                                 account=self._account,
+                                                 stanza=stanza))
 
     def _on_stanza_received(self, _client, signal_name, stanza):
-        pass
-
+        app.nec.push_incoming_event(NetworkEvent('stanza-received',
+                                                 account=self._account,
+                                                 stanza=stanza))
     def get_own_jid(self, warn=False):
         """
         Return the last full JID we received on a bind event.

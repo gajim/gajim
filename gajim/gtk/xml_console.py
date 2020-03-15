@@ -332,22 +332,25 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 tag.set_priority(0)
         tag.set_property('invisible', value)
 
-    def _nec_stanza_received(self, obj):
+    def _nec_stanza_received(self, event):
         if self.selected_account is not None:
-            if obj.conn.name != self.selected_account:
+            if event.account != self.selected_account:
                 return
-        self._print_stanza(obj, 'incoming')
+        self._print_stanza(event, 'incoming')
 
-    def _nec_stanza_sent(self, obj):
+    def _nec_stanza_sent(self, event):
         if self.selected_account is not None:
-            if obj.conn.name != self.selected_account:
+            if event.account != self.selected_account:
                 return
-        self._print_stanza(obj, 'outgoing')
+        self._print_stanza(event, 'outgoing')
 
-    def _print_stanza(self, obj, kind):
-        account = app.get_jid_from_account(obj.conn.name)
-        stanza = obj.stanza_str
-        # Kind must be 'incoming' or 'outgoing'
+    def _print_stanza(self, event, kind):
+        account_label = app.get_account_label(event.account)
+
+        stanza = event.stanza
+        if not isinstance(stanza, str):
+            stanza = stanza.__str__(fancy=True)
+
         if not stanza:
             return
 
@@ -369,8 +372,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         stanza = '<!-- {kind} {time} ({account}) -->\n{stanza}\n\n'.format(
             kind=kind.capitalize(),
             time=time.strftime('%c'),
-            account=account,
-            stanza=stanza.replace('><', '>\n<'))
+            account=account_label,
+            stanza=stanza)
         buffer_.insert_with_tags_by_name(end_iter, stanza, type_, kind)
 
         if at_the_end:
