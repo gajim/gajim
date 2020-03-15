@@ -67,7 +67,6 @@ from gajim.session import ChatControlSession
 
 from gajim.common import idle
 from gajim.common.zeroconf import connection_zeroconf
-from gajim.common import resolver
 from gajim.common import caps_cache
 from gajim.common import proxy65_manager
 from gajim.common import socks5
