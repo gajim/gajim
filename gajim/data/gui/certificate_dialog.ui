@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="certificate_box">
@@ -32,7 +32,6 @@
           <object class="GtkLabel" id="label_cert_for_account">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label">&lt;Certificate for account %s&gt;</property>
             <property name="justify">center</property>
             <style>
               <class name="large-header"/>
@@ -63,6 +62,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Common Name (CN)</property>
             <style>
               <class name="dim-label"/>
@@ -91,6 +91,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Organization (O)</property>
             <style>
               <class name="dim-label"/>
@@ -119,6 +120,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Organizational Unit (OU)</property>
             <style>
               <class name="dim-label"/>
@@ -147,6 +149,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Serial Number</property>
             <style>
               <class name="dim-label"/>
@@ -164,10 +167,12 @@
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
             <property name="wrap">True</property>
-            <property name="wrap_mode">char</property>
+            <property name="wrap_mode">word-char</property>
             <property name="selectable">True</property>
-            <property name="max_width_chars">30</property>
             <property name="xalign">0</property>
+            <attributes>
+              <attribute name="font-desc" value="Monospace 8"/>
+            </attributes>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -179,6 +184,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Common Name (CN)</property>
             <style>
               <class name="dim-label"/>
@@ -207,6 +213,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Organization (O)</property>
             <style>
               <class name="dim-label"/>
@@ -235,6 +242,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Organizational Unit (OU)</property>
             <style>
               <class name="dim-label"/>
@@ -263,6 +271,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Issued on</property>
             <style>
               <class name="dim-label"/>
@@ -291,6 +300,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">Expires on</property>
             <style>
               <class name="dim-label"/>
@@ -318,7 +328,8 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">baseline</property>
+            <property name="halign">end</property>
+            <property name="valign">start</property>
             <property name="label" translatable="yes">SHA-1</property>
             <style>
               <class name="dim-label"/>
@@ -327,65 +338,12 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">13</property>
-            <property name="width">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">baseline</property>
-            <property name="margin_top">6</property>
-            <property name="label" translatable="yes">SHA-256</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">15</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="data_sha1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">center</property>
-            <property name="label">&lt;&gt;</property>
-            <property name="wrap">True</property>
-            <property name="wrap_mode">char</property>
-            <property name="selectable">True</property>
-            <property name="max_width_chars">52</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">14</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="data_sha256">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">center</property>
-            <property name="label">&lt;&gt;</property>
-            <property name="wrap">True</property>
-            <property name="wrap_mode">char</property>
-            <property name="selectable">True</property>
-            <property name="max_width_chars">52</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">16</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">baseline</property>
             <property name="margin_top">6</property>
             <property name="label" translatable="yes">Issued to</property>
             <style>
@@ -402,7 +360,6 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">baseline</property>
             <property name="margin_top">12</property>
             <property name="label" translatable="yes">Issued by</property>
             <style>
@@ -419,7 +376,6 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">baseline</property>
             <property name="margin_top">12</property>
             <property name="label" translatable="yes">Validity</property>
             <style>
@@ -436,7 +392,6 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">baseline</property>
             <property name="margin_top">12</property>
             <property name="label" translatable="yes">Fingerprints</property>
             <style>
@@ -447,6 +402,58 @@
             <property name="left_attach">0</property>
             <property name="top_attach">12</property>
             <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="data_sha1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label">&lt;&gt;</property>
+            <property name="wrap">True</property>
+            <property name="wrap_mode">char</property>
+            <property name="selectable">True</property>
+            <attributes>
+              <attribute name="font-desc" value="Monospace 8"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">13</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="valign">start</property>
+            <property name="label" translatable="yes">SHA-256</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">14</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="data_sha256">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label">&lt;&gt;</property>
+            <property name="wrap">True</property>
+            <property name="wrap_mode">char</property>
+            <property name="selectable">True</property>
+            <attributes>
+              <attribute name="font-desc" value="Monospace 8"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">14</property>
           </packing>
         </child>
         <child>
@@ -468,7 +475,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">17</property>
+            <property name="top_attach">15</property>
           </packing>
         </child>
         <child>

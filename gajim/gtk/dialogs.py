@@ -215,20 +215,19 @@ class ErrorDialog(HigDialog):
 class CertificateDialog(Gtk.ApplicationWindow):
     def __init__(self, transient_for, account, cert):
         Gtk.ApplicationWindow.__init__(self)
+        self.account = account
         self.set_name('CertificateDialog')
         self.set_application(app.app)
         self.set_show_menubar(False)
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title(_('Certificate'))
-        self.account = account
 
         self._ui = get_builder('certificate_dialog.ui')
         self.add(self._ui.certificate_box)
 
         self.connect('key-press-event', self._on_key_press)
 
-        self.account = account
         self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
         cert = convert_gio_to_openssl_cert(cert)
@@ -236,11 +235,15 @@ class CertificateDialog(Gtk.ApplicationWindow):
         issuer = cert.get_issuer()
         subject = cert.get_subject()
 
-        self._headline = _('Certificate for account\n%s') % account
+        self._headline = _('Certificate for \n%s') % self.account
         self._it_common_name = subject.commonName or ''
         self._it_organization = subject.organizationName or ''
         self._it_org_unit = subject.organizationalUnitName or ''
-        self._it_serial_number = str(cert.get_serial_number())
+        it_serial_no = str(cert.get_serial_number())
+        it_serial_no_half = int(len(it_serial_no) / 2)
+        self._it_serial_number = '%s\n%s' % (
+            it_serial_no[:it_serial_no_half],
+            it_serial_no[it_serial_no_half:])
         self._ib_common_name = issuer.commonName or ''
         self._ib_organization = issuer.organizationName or ''
         self._ib_org_unit = issuer.organizationalUnitName or ''
@@ -250,8 +253,11 @@ class CertificateDialog(Gtk.ApplicationWindow):
         expires = datetime.strptime(cert.get_notAfter().decode('ascii'),
                                     '%Y%m%d%H%M%SZ')
         self._expires = expires.strftime('%c %Z')
-        self._sha1 = cert.digest('sha1').decode('utf-8')
-        self._sha256 = cert.digest('sha256').decode('utf-8')
+        sha1 = cert.digest('sha1').decode('utf-8')
+        self._sha1 = '%s\n%s' % (sha1[:29], sha1[30:])
+        sha256 = cert.digest('sha256').decode('utf-8')
+        self._sha256 = '%s\n%s\n%s\n%s' % (
+            sha256[:23], sha256[24:47], sha256[48:71], sha256[72:])
 
         # Set labels
         self._ui.label_cert_for_account.set_text(self._headline)
