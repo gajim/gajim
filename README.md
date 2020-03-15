@@ -48,7 +48,7 @@ see [README](./flatpak/README.md)
 
 #### Snapshots
 
-- [Daily Linux](https://www.gajim.org/downloads/snap/?M=D)
+- [Daily Linux](https://www.gajim.org/downloads/snap/)
 - [Daily Windows](https://gajim.org/downloads/snap/win)
 
 #### Linux
@@ -65,7 +65,7 @@ For developing you don't have to install Gajim.
 
 After installing all dependencies execute
 
-``./launch.py``
+    ./launch.py
 
 #### Windows
 
@@ -75,7 +75,7 @@ see [README](./win/README.md)
 
 #### Debugging
 
-Execute gajim with --verbose
+Execute gajim with `--verbose`
 
 #### Links
 
