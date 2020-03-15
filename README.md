@@ -42,6 +42,10 @@
 - [Fedora](https://apps.fedoraproject.org/packages/gajim)
 - [Ubuntu](https://packages.ubuntu.com/gajim)
 
+#### Flatpak
+
+see [README](./flatpak/README.md)
+
 #### Snapshots
 
 - [Daily Linux](https://www.gajim.org/downloads/snap/?M=D)
@@ -62,10 +66,6 @@ For developing you don't have to install Gajim.
 After installing all dependencies execute
 
 ``./launch.py``
-
-#### Flatpak
-
-see [README](./flatpak/README.md)
 
 #### Windows
 
