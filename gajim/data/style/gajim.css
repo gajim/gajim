@@ -118,6 +118,18 @@ list.settings > row > box {
     font-weight: bold;
     color: @insensitive_fg_color;}
 
+/* Account Creation */
+.tls-error-list {
+    border: 1px solid; border-color: @borders;
+}
+.tls-error-list > row {
+    border-bottom: 1px solid; border-color: @theme_unfocused_bg_color;
+    padding: 6px;
+}
+.tls-error-list > row:last-child {
+    border-bottom: 0px
+}
+
 /* Start Chat Accounts Treeview */
 .start-chat-treeview { padding: 5px; }
 .start-chat-treeview:focus {outline: none; }

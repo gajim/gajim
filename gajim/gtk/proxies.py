@@ -52,10 +52,13 @@ class ManageProxies(Gtk.ApplicationWindow):
         # Window callbacks for updating proxy comboboxes
         window_pref = get_app_window('Preferences')
         window_accounts = get_app_window('AccountsWindow')
+        window_account_wizard = get_app_window('AccountWizard')
         if window_pref is not None:
             window_pref.update_proxy_list()
         if window_accounts is not None:
             window_accounts.update_proxy_list()
+        if window_account_wizard is not None:
+            window_account_wizard.update_proxy_list()
 
     def _fill_proxies_treeview(self):
         model = self._ui.proxies_treeview.get_model()

@@ -895,3 +895,18 @@ class FTState(Enum):
     @property
     def is_error(self):
         return self == FTState.ERROR
+
+
+SASL_ERRORS = {
+    'aborted': _('Authentication aborted'),
+    'account-disabled': _('Account disabled'),
+    'credentials-expired': _('Credentials expired'),
+    'encryption-required': _('Encryption required'),
+    'incorrect-encoding': _('Authentication failed'),
+    'invalid-authzid': _('Authentication failed'),
+    'malformed-request': _('Authentication failed'),
+    'invalid-mechanism': _('Authentication mechanism not supported'),
+    'mechanism-too-weak': _('Authentication mechanism too weak'),
+    'not-authorized': _('Authentication failed'),
+    'temporary-auth-failure': _('Authentication currently not possible'),
+}

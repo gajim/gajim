@@ -13,570 +13,704 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import logging
 
-from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import Gtk
+from gi.repository import Gio
 
-from nbxmpp.modules import dataforms
+from nbxmpp.client import Client
+from nbxmpp.protocol import JID
+from nbxmpp.const import Mode
+from nbxmpp.const import StreamError
+from nbxmpp.const import ConnectionProtocol
+from nbxmpp.const import ConnectionType
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import helpers
-from gajim.common import connection
+from gajim.common.helpers import open_uri
+from gajim.common.helpers import validate_jid
+from gajim.common.helpers import get_proxy
 from gajim.common.i18n import _
-from gajim.common.nec import EventHelper
+from gajim.common.const import SASL_ERRORS
+from gajim.common.const import GIO_TLS_ERRORS
 
-from gajim import dataforms_widget
-from gajim import gui_menu_builder
-
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import Page
+from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_app_window
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dataform import FakeDataFormWidget
+from gajim.gtk.util import open_window
+
+log = logging.getLogger('gajim.gtk.account_wizard')
 
 
-class AccountCreationWizard(EventHelper):
+class AccountWizard(Assistant):
     def __init__(self):
-        EventHelper.__init__(self)
-        self.xml = get_builder('account_creation_wizard_window.ui')
-        self.window = self.xml.get_object('account_creation_wizard_window')
-        active_window = app.app.get_active_window()
-        self.window.set_transient_for(active_window)
+        Assistant.__init__(self)
 
-        # Connect events from comboboxtext_entry
-        server_comboboxtext = self.xml.get_object('server_comboboxtext')
-        entry = self.xml.get_object('server_comboboxtext_entry')
-        entry.connect('key_press_event',
-                      self.on_entry_key_press_event, server_comboboxtext)
+        self._destroyed = False
 
-        server_comboboxtext1 = self.xml.get_object('server_comboboxtext1')
+        self.add_button('signup', _('Sign Up'), complete=True,
+                        css_class='suggested-action')
+        self.add_button('connect', _('Connect'), css_class='suggested-action')
+        self.add_button('next', _('Next'), css_class='suggested-action')
+        self.add_button('login', _('Log In'))
+        self.add_button('back', _('Back'))
+
+        self.add_pages({'login': Login(self._on_button_clicked),
+                        'signup': Signup(),
+                        'form': Form(),
+                        'advanced': AdvancedSettings(),
+                        'security-warning': SecurityWarning(),
+                        'success': Success(),
+                        })
+
+        self._progress = self.add_default_page('progress')
+        self._error = self.add_default_page('error')
+        self._error.set_heading(_('An error occurred during account creation'))
+
+        self.set_button_visible_func(self._visible_func)
+
+        self.connect('button-clicked', self._on_button_clicked)
+        self.connect('page-changed', self._on_page_changed)
+        self.connect('destroy', self._on_destroy)
+
+        self.show_all()
 
         self.update_proxy_list()
 
-        # parse servers.json
-        server_file_path = os.path.join(
-            configpaths.get('DATA'), 'other', 'servers.json')
-        servers = helpers.load_json(server_file_path, 'servers', [])
+        self._client = None
+        self._method = 'login'
 
-        servers_model = self.xml.get_object('server_liststore')
-        for server in servers:
-            servers_model.append((server,))
+    def _visible_func(self, _assistant, page_name):
+        if page_name in ('signup', 'form'):
+            return ['back', 'signup']
 
-        server_comboboxtext.set_model(servers_model)
-        server_comboboxtext1.set_model(servers_model)
+        if page_name in ('security-warning', 'advanced'):
+            return ['back', self._method]
 
-        # Generic widgets
-        self.notebook = self.xml.get_object('notebook')
-        self.cancel_button = self.xml.get_object('cancel_button')
-        self.back_button = self.xml.get_object('back_button')
-        self.forward_button = self.xml.get_object('forward_button')
-        self.finish_button = self.xml.get_object('finish_button')
-        self.advanced_button = self.xml.get_object('advanced_button')
-        self.finish_label = self.xml.get_object('finish_label')
-        self.go_online_checkbutton = self.xml.get_object(
-            'go_online_checkbutton')
-        self.show_vcard_checkbutton = self.xml.get_object(
-            'show_vcard_checkbutton')
-        self.progressbar = self.xml.get_object('progressbar')
+        if page_name in ('login', 'progress'):
+            return None
 
-        # some vars
-        self.update_progressbar_timeout_id = None
+        if page_name == 'error':
+            return ['back']
 
-        self.notebook.set_current_page(0)
-        self.xml.connect_signals(self)
-        self.window.show_all()
+        if page_name == 'success':
+            return ['connect']
 
-        self.register_events([
-            ('new-account-connected', ged.GUI1, self._nec_new_acc_connected),
-            ('new-account-not-connected', ged.GUI1, self._nec_new_acc_not_connected),
-            ('account-created', ged.GUI1, self._nec_acc_is_ok),
-            ('account-not-created', ged.GUI1, self._nec_acc_is_not_ok),
-        ])
+        raise ValueError('page %s unknown' % page_name)
 
-    def on_wizard_window_destroy(self, widget):
-        page = self.notebook.get_current_page()
-        if page in (4, 5) and self.account in app.connections:
-            # connection instance is saved in app.connections and we canceled
-            # the addition of the account
-            del app.connections[self.account]
-            if self.account in app.config.get_per('accounts'):
-                app.config.del_per('accounts', self.account)
-        self.unregister_events()
-        del app.interface.instances['account_creation_wizard']
+    def _on_button_clicked(self, _assistant, button_name):
+        page = self.get_current_page()
 
-    def on_save_password_checkbutton_toggled(self, widget):
-        self.xml.get_object('password_entry').grab_focus()
-
-    def on_cancel_button_clicked(self, widget):
-        self.window.destroy()
-
-    def on_back_button_clicked(self, widget):
-        cur_page = self.notebook.get_current_page()
-        self.forward_button.set_sensitive(True)
-        if cur_page in (1, 2):
-            self.notebook.set_current_page(0)
-            self.back_button.set_sensitive(False)
-        elif cur_page == 3:
-            self.xml.get_object('form_vbox').remove(self.data_form_widget)
-            self.notebook.set_current_page(2)  # show server page
-        elif cur_page == 4:
-            if self.account in app.connections:
-                del app.connections[self.account]
-                if self.account in app.config.get_per('accounts'):
-                    app.config.del_per('accounts', self.account)
-            self.notebook.set_current_page(2)
-            self.xml.get_object('form_vbox').remove(self.data_form_widget)
-        elif cur_page == 6:  # finish page
-            self.forward_button.show()
-            if self.modify:
-                self.notebook.set_current_page(1)  # Go to parameters page
-            else:
-                self.notebook.set_current_page(2)  # Go to server page
-
-    def on_anonymous_checkbutton1_toggled(self, widget):
-        active = widget.get_active()
-        self.xml.get_object('username_entry').set_sensitive(not active)
-        self.xml.get_object('password_entry').set_sensitive(not active)
-        self.xml.get_object('save_password_checkbutton').set_sensitive(
-            not active)
-
-    def show_finish_page(self):
-        self.cancel_button.hide()
-        self.back_button.hide()
-        self.forward_button.hide()
-        if self.modify:
-            finish_text = '<big><b>%s</b></big>\n\n%s' % (
-                _('Account has been added successfully'),
-                _('You can set advanced account options by pressing the '
-                  'Advanced button, or later by choosing the Accounts menu item '
-                  'under the Edit menu from the main window.'))
-        else:
-            finish_text = '<big><b>%s</b></big>\n\n%s' % (
-                _('Your new account has been created successfully'),
-                _('You can set advanced account options by pressing the '
-                  'Advanced button, or later by choosing the Accounts menu item '
-                  'under the Edit menu from the main window.'))
-        self.finish_label.set_markup(finish_text)
-        self.finish_button.show()
-        self.finish_button.set_property('has-default', True)
-        self.advanced_button.show()
-        self.go_online_checkbutton.show()
-        img = self.xml.get_object('finish_image')
-        if self.modify:
-            img.set_from_icon_name('emblem-ok-symbolic', Gtk.IconSize.DIALOG)
-            img.get_style_context().add_class('success-color')
-        else:
-            img.set_from_icon_name('org.gajim.Gajim', Gtk.IconSize.DIALOG)
-        self.show_vcard_checkbutton.set_active(not self.modify)
-        self.notebook.set_current_page(6) # show finish page
-
-    def on_forward_button_clicked(self, widget):
-        cur_page = self.notebook.get_current_page()
-
-        if cur_page == 0:
-            widget = self.xml.get_object('use_existing_account_radiobutton')
-            if widget.get_active():
-                self.modify = True
-                self.notebook.set_current_page(1)
-            else:
-                self.modify = False
-                self.notebook.set_current_page(2)
-            self.back_button.set_sensitive(True)
-            return
-
-        if cur_page == 1:
-            # We are adding an existing account
-            anonymous = self.xml.get_object('anonymous_checkbutton1').\
-                get_active()
-            username = self.xml.get_object('username_entry').get_text().strip()
-            if not username and not anonymous:
-                pritext = _('Invalid username')
-                sectext = _(
-                    'You must provide a username to configure this account.')
-                ErrorDialog(pritext, sectext)
-                return
-            server = self.xml.get_object('server_comboboxtext_entry').\
-                get_text().strip()
-            savepass = self.xml.get_object('save_password_checkbutton').\
-                get_active()
-            password = self.xml.get_object('password_entry').get_text()
-
-            if anonymous:
-                jid = ''
-            else:
-                jid = username + '@'
-            jid += server
-            # check if jid is conform to RFC and stringprep it
-            try:
-                jid = helpers.parse_jid(jid)
-            except helpers.InvalidFormat as s:
-                pritext = _('Invalid XMPP Address')
-                ErrorDialog(pritext, str(s))
-                return
-
-            self.account = server
-            i = 1
-            while self.account in app.config.get_per('accounts'):
-                self.account = server + str(i)
-                i += 1
-
-            username, server = app.get_name_and_server_from_jid(jid)
-            if self.xml.get_object('anonymous_checkbutton1').get_active():
-                self.save_account('', server, False, '', anonymous=True)
-            else:
-                self.save_account(username, server, savepass, password)
-            self.show_finish_page()
-        elif cur_page == 2:
-            # We are creating a new account
-            server = self.xml.get_object('server_comboboxtext_entry1').\
-                get_text()
-
-            if not server:
-                ErrorDialog(
-                    _('Invalid server'),
-                    _('Please provide a server on which you want to register.'))
-                return
-            self.account = server
-            i = 1
-            while self.account in app.config.get_per('accounts'):
-                self.account = server + str(i)
-                i += 1
-
-            config = self.get_config('', server, '', '')
-            # Get advanced options
-            proxies_combobox = self.xml.get_object('proxies_combobox')
-            active = proxies_combobox.get_active()
-            proxy = proxies_combobox.get_model()[active][0]
-            if proxy == _('None'):
-                proxy = ''
-            config['proxy'] = proxy
-
-            config['use_custom_host'] = self.xml.get_object(
-                'custom_host_port_checkbutton').get_active()
-            custom_port = self.xml.get_object('custom_port_entry').get_text()
-            try:
-                custom_port = int(custom_port)
-            except Exception:
-                ErrorDialog(
-                    _('Invalid entry'),
-                    _('Custom port must be a port number.'))
-                return
-            config['custom_port'] = custom_port
-            config['custom_host'] = self.xml.get_object(
-                'custom_host_entry').get_text()
-
-            if self.xml.get_object('anonymous_checkbutton2').get_active():
-                self.modify = True
-                self.save_account('', server, False, '', anonymous=True)
-                self.show_finish_page()
-            else:
-                self.notebook.set_current_page(5)  # show creating page
-                self.back_button.hide()
-                self.forward_button.hide()
-                self.update_progressbar_timeout_id = GLib.timeout_add(
-                    100, self.update_progressbar)
-                # Get form from serveur
-                con = connection.Connection(self.account)
-                app.connections[self.account] = con
-                con.new_account(self.account, config)
-        elif cur_page == 3:
-            checked = self.xml.get_object('ssl_checkbutton').get_active()
-            if checked:
-                hostname = app.connections[self.account].new_account_info[
-                    'hostname']
-                # Check if cert is already in file
-                certs = ''
-                my_ca_certs = configpaths.get('MY_CACERTS')
-                if os.path.isfile(my_ca_certs):
-                    with open(my_ca_certs) as f:
-                        certs = f.read()
-                if self.ssl_cert in certs:
-                    ErrorDialog(
-                        _('Certificate Already in File'),
-                        _('This certificate is already in file %s, so it\'s '
-                          'not added again.') % my_ca_certs)
+        if button_name == 'login':
+            if page == 'login':
+                if self.get_page('login').is_advanced():
+                    self.show_page('advanced',
+                                   Gtk.StackTransitionType.SLIDE_LEFT)
                 else:
-                    with open(my_ca_certs, 'a') as f:
-                        f.write(hostname + '\n')
-                        f.write(self.ssl_cert + '\n\n')
-                    app.connections[self.account].new_account_info[
-                        'ssl_fingerprint_sha1'] = self.ssl_fingerprint_sha1
-                    app.connections[self.account].new_account_info[
-                        'ssl_fingerprint_sha256'] = self.ssl_fingerprint_sha256
-            self.notebook.set_current_page(4)  # show fom page
-        elif cur_page == 4:
-            if self.is_form:
-                form = self.data_form_widget.data_form
-            else:
-                form = self.data_form_widget.get_submit_form()
-            app.connections[self.account].send_new_account_infos(
-                form, self.is_form)
-            self.xml.get_object('form_vbox').remove(self.data_form_widget)
-            self.xml.get_object('progressbar_label').set_markup(
-                '<b>Account is being created</b>\n\nPlease wait…')
-            self.notebook.set_current_page(5)  # show creating page
-            self.back_button.hide()
-            self.forward_button.hide()
-            self.update_progressbar_timeout_id = GLib.timeout_add(
-                100, self.update_progressbar)
+                    self._test_credentials()
+
+            elif page == 'advanced':
+                self._test_credentials()
+
+            elif page == 'security-warning':
+                if self.get_page('security-warning').is_add_to_trusted:
+                    app.cert_store.add_certificate(
+                        self.get_page('security-warning').cert)
+                self._test_credentials(ignore_all_errors=True)
+
+        elif button_name == 'signup':
+            if page == 'login':
+                self.show_page('signup', Gtk.StackTransitionType.SLIDE_LEFT)
+
+            elif page == 'signup':
+                if self.get_page('signup').is_advanced():
+                    self.show_page('advanced',
+                                   Gtk.StackTransitionType.SLIDE_LEFT)
+                else:
+                    self._register_with_server()
+
+            elif page == 'advanced':
+                self._register_with_server()
+
+            elif page == 'security-warning':
+                if self.get_page('security-warning').is_add_to_trusted:
+                    app.cert_store.add_certificate(
+                        self.get_page('security-warning').cert)
+                self._register_with_server(ignore_all_errors=True)
+
+            elif page == 'form':
+                self._show_progress_page(_('Creating Account...'),
+                                         _('Trying to create account...'))
+                self._submit_form()
+
+        elif button_name == 'connect':
+            if page == 'success':
+                # if self.get_page('success').is_update():
+                #     app.interface.show_vcard_when_connect.append(self.account)
+                app.interface.enable_account(self.get_page('success').account)
+                self.destroy()
+
+        elif button_name == 'back':
+            if page == 'signup':
+                self.show_page('login', Gtk.StackTransitionType.SLIDE_RIGHT)
+
+            elif page in ('advanced', 'error', 'security-warning'):
+                self.show_page(self._method,
+                               Gtk.StackTransitionType.SLIDE_RIGHT)
+
+            elif page == 'form':
+                # TODO: Disconnect
+                self.get_page('form').remove_form()
+                self.show_page('signup', Gtk.StackTransitionType.SLIDE_RIGHT)
+
+    def _on_page_changed(self, _assistant, page_name):
+        if page_name == 'signup':
+            self._method = page_name
+            self.set_default_button('signup')
+
+        elif page_name == 'login':
+            self._method = page_name
+            self.get_page('login').focus()
+
+        elif page_name == 'security-warning':
+            self.set_default_button('back')
+
+        elif page_name == 'advanced':
+            self.set_default_button(self._method)
+
+        elif page_name == 'success':
+            self.set_default_button('connect')
+
+        elif page_name == 'error':
+            self.set_default_button('back')
 
     def update_proxy_list(self):
-        proxies_combobox = self.xml.get_object('proxies_combobox')
-        model = Gtk.ListStore(str)
-        proxies_combobox.set_model(model)
-        proxies = app.config.get_per('proxies')
-        proxies.insert(0, _('None'))
-        for proxy in proxies:
-            model.append([proxy])
-        proxies_combobox.set_active(0)
+        self.get_page('advanced').update_proxy_list()
 
-    def on_manage_proxies_button_clicked(self, _widget):
+    def _on_destroy(self, *args):
+        self._destroyed = True
+
+    def _get_base_client(self,
+                         domain,
+                         username,
+                         mode,
+                         advanced,
+                         ignore_all_errors):
+
+        client = Client()
+        client.set_domain(domain)
+        client.set_username(username)
+        client.set_mode(Mode.LOGIN_TEST)
+        client.set_ignore_tls_errors(ignore_all_errors)
+        client.set_accepted_certificates(
+            app.cert_store.get_certificates())
+
+        if advanced:
+            custom_host = self.get_page('advanced').get_custom_host()
+            if custom_host is not None:
+                client.set_custom_host(*custom_host)
+
+            proxy_name = self.get_page('advanced').get_proxy()
+            proxy_data = get_proxy(proxy_name)
+            if proxy_data is not None:
+                client.set_proxy(proxy_data)
+
+        client.subscribe('disconnected', self._on_disconnected)
+        client.subscribe('connection-failed', self._on_connection_failed)
+        return client
+
+    def _test_credentials(self, ignore_all_errors=False):
+        self._show_progress_page(_('Connecting...'),
+                                 _('Connecting to server...'))
+        address, password = self.get_page('login').get_data()
+        jid = JID(address)
+        advanced = self.get_page('login').is_advanced()
+
+        self._client = self._get_base_client(
+            jid.getDomain(),
+            jid.getNode(),
+            Mode.LOGIN_TEST,
+            advanced,
+            ignore_all_errors)
+
+        self._client.set_password(password)
+        self._client.subscribe('login-successful', self._on_login_successful)
+
+        self._client.connect()
+
+    def _register_with_server(self, ignore_all_errors=False):
+        self._show_progress_page(_('Connecting...'),
+                                 _('Connecting to server...'))
+        domain = self.get_page('signup').get_server()
+        advanced = self.get_page('signup').is_advanced()
+
+        self._client = self._get_base_client(
+            domain,
+            None,
+            Mode.REGISTER,
+            advanced,
+            ignore_all_errors)
+
+        self._client.subscribe('connected', self._on_connected)
+
+        self._client.connect()
+
+    def _on_login_successful(self, client, _signal_name):
+        account = self._generate_account_name(client.domain)
+        app.interface.create_account(account,
+                                     client.username,
+                                     client.domain,
+                                     client.password)
+        self.get_page('success').set_account(account)
+        self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
+
+    def _on_connected(self, client, _signal_name):
+        client.get_module('Register').request_register_form(
+            callback=self._on_register_form)
+
+    def _on_disconnected(self, client, _signal_name):
+        domain, error, text = client.get_error()
+        if domain == StreamError.SASL:
+            self._show_error_page(_('Authentication failed'),
+                                  SASL_ERRORS.get(error),
+                                  text or '')
+
+        elif domain == StreamError.BAD_CERTIFICATE:
+            self.get_page('security-warning').set_warning(
+                self._client.domain, *self._client.peer_certificate)
+            self.show_page('security-warning',
+                           Gtk.StackTransitionType.SLIDE_LEFT)
+
+        elif domain == StreamError.REGISTER:
+            if error == 'register-not-supported':
+                self._show_error_page(_('Signup not allowed'),
+                                      _('Signup not allowed'),
+                                      _('This server does not all signup'))
+
+        self._client.destroy()
+        self._client = None
+
+    def _on_connection_failed(self, _client, _signal_name):
+        self._show_error_page(_('Connection failed'),
+                              _('Connection failed'),
+                              _('Gajim was not able to reach the server. '
+                                'Make sure your XMPP address is correct'))
+        self._client.destroy()
+        self._client = None
+
+    def _show_error_page(self, title, heading, text):
+        self.get_page('error').set_title(title)
+        self.get_page('error').set_heading(heading)
+        self.get_page('error').set_text(text or '')
+        self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
+
+    def _show_progress_page(self, title, text):
+        self._progress.set_title(title)
+        self._progress.set_text(text)
+        self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
+
+    @staticmethod
+    def _generate_account_name(domain):
+        i = 1
+        while domain in app.config.get_per('accounts'):
+            domain = domain + str(i)
+            i += 1
+        return domain
+
+    def _on_register_form(self, result):
+        if result.form is None:
+            # Invalid form
+            return
+
+        if result.bob_data is not None:
+            algo_hash = result.bob_data.cid.split('@')[0]
+            app.bob_cache[algo_hash] = result.bob_data.data
+        self.get_page('form').add_form(result.form)
+        self.show_page('form', Gtk.StackTransitionType.SLIDE_LEFT)
+
+    def _submit_form(self):
+        pass
+        # if self.is_form:
+        #     form = self.get_page('form').get_data_form()
+        # else:
+        #     form = self.get_page('form').get_submit_form()
+        # app.connections[self.account].send_new_account_infos(
+        #     form, self.is_form)
+        # self.get_page('progress').set_text(_('Account is being created'))
+        # self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
+        # self.get_page('form').remove_form()
+
+
+class Login(Page):
+    def __init__(self, button_callback):
+        Page.__init__(self)
+        self.title = _('Add Account')
+        self._button_callback = button_callback
+
+        self._ui = get_builder('account_wizard.ui')
+        self._ui.log_in_address_entry.connect(
+            'activate', self._on_address_entry_activate)
+        self._ui.log_in_address_entry.connect(
+            'changed', self._on_address_changed)
+        self._ui.log_in_password_entry.connect(
+            'changed', self._set_complete)
+        self._ui.log_in_password_entry.connect(
+            'activate', self._on_password_entry_activate)
+        self._create_server_completion()
+
+        self._ui.log_in_button.connect('clicked', self._on_login)
+        self._ui.sign_up_button.connect('clicked', self._on_signup)
+
+        self.pack_start(self._ui.login_box, True, True, 0)
+        self.show_all()
+
+    def focus(self):
+        self._ui.log_in_address_entry.grab_focus()
+
+    def _on_login(self, *args):
+        self._button_callback(self.get_toplevel(), 'login')
+
+    def _on_signup(self, *args):
+        self._button_callback(self.get_toplevel(), 'signup')
+
+    def _create_server_completion(self):
+        # Parse servers.json
+        server_file_path = os.path.join(
+            configpaths.get('DATA'), 'other', 'servers.json')
+        self._servers = helpers.load_json(server_file_path, 'servers', [])
+
+        # Create a separate model for the address entry, because it will
+        # be updated with our localpart@
+        address_model = Gtk.ListStore(str)
+        for server in self._servers:
+            address_model.append((server,))
+        self._ui.log_in_address_entry.get_completion().set_model(address_model)
+
+    def _on_address_changed(self, entry):
+        self._update_completion(entry)
+        self._set_complete()
+
+    def _update_completion(self, entry):
+        text = entry.get_text()
+        if '@' not in text:
+            self._show_icon(False)
+            return
+        text = text.split('@', 1)[0]
+
+        model = entry.get_completion().get_model()
+        model.clear()
+
+        for server in self._servers:
+            model.append(['%s@%s' % (text, server)])
+
+    def _show_icon(self, show):
+        icon = 'dialog-warning-symbolic' if show else None
+        self._ui.log_in_address_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, icon)
+
+    def _on_address_entry_activate(self, _widget):
+        GLib.idle_add(self._ui.log_in_password_entry.grab_focus)
+
+    def _on_password_entry_activate(self, _widget):
+        if self._ui.log_in_button.get_sensitive():
+            self._ui.log_in_button.activate()
+
+    def _validate_jid(self, address):
+        if not address:
+            self._show_icon(False)
+            return False
+
+        try:
+            jid = validate_jid(address, type_='bare')
+            if jid.getResource():
+                raise ValueError
+        except ValueError:
+            self._show_icon(True)
+            self._ui.log_in_address_entry.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY, _('Invalid Address'))
+            return False
+
+        self._show_icon(False)
+        return True
+
+    def _set_complete(self, *args):
+        address = self._validate_jid(self._ui.log_in_address_entry.get_text())
+        password = self._ui.log_in_password_entry.get_text()
+        self._ui.log_in_button.set_sensitive(address and password)
+
+    def is_advanced(self):
+        return self._ui.login_advanced_checkbutton.get_active()
+
+    def get_data(self):
+        data = (self._ui.log_in_address_entry.get_text(),
+                self._ui.log_in_password_entry.get_text())
+        return data
+
+
+class Signup(Page):
+    def __init__(self):
+        Page.__init__(self)
+        self.complete = False
+        self.title = _('Create New Account')
+
+        # Parse servers.json
+        server_file_path = os.path.join(
+            configpaths.get('DATA'), 'other', 'servers.json')
+        self._servers = helpers.load_json(server_file_path, 'servers', [])
+
+        self._ui = get_builder('account_wizard.ui')
+        self._ui.server_comboboxtext_sign_up_entry.set_activates_default(True)
+        self._create_server_completion()
+
+        self._ui.recommendation_link1.connect(
+            'activate-link', self._on_activate_link)
+        self._ui.recommendation_link2.connect(
+            'activate-link', self._on_activate_link)
+        self._ui.visit_server_button.connect('clicked',
+                                             self._on_visit_server)
+        self._ui.server_comboboxtext_sign_up_entry.connect(
+            'changed', self._set_complete)
+
+        self.pack_start(self._ui.signup_grid, True, True, 0)
+
+        self.show_all()
+
+    def _create_server_completion(self):
+        # Parse servers.json
+        server_file_path = os.path.join(
+            configpaths.get('DATA'), 'other', 'servers.json')
+        self._servers = helpers.load_json(server_file_path, 'servers', [])
+
+        # Create servers_model for comboboxes and entries
+        servers_model = Gtk.ListStore(str)
+        for server in self._servers:
+            servers_model.append((server,))
+
+        # Sign up combobox and entry
+        self._ui.server_comboboxtext_sign_up.set_model(servers_model)
+        self._ui.server_comboboxtext_sign_up_entry.get_completion().set_model(
+            servers_model)
+
+    def _on_visit_server(self, _widget):
+        server = self._ui.server_comboboxtext_sign_up_entry.get_text().strip()
+        server = 'https://' + server
+        open_uri(server)
+        return Gdk.EVENT_STOP
+
+    def _check_port_entry(self):
+        port = self._ui.custom_port_entry.get_text()
+        if port == '':
+            self._show_icon(False)
+            return False
+        try:
+            port = int(port)
+        except Exception:
+            self._show_icon(True)
+            self._ui.custom_port_entry.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY, _('Must be a port number'))
+            return False
+
+        if port not in range(0, 65535):
+            self._show_icon(True)
+            self._ui.custom_port_entry.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                _('Port must be a number between 0 and 65535'))
+            return False
+
+        self._show_icon(False)
+        return True
+
+    def _show_icon(self, show):
+        icon = 'dialog-warning-symbolic' if show else None
+        self._ui.log_in_address_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, icon)
+
+    def _set_complete(self, *args):
+        server = self._ui.server_comboboxtext_sign_up_entry.get_text()
+        self._ui.visit_server_button.set_visible(server)
+        self.complete = server
+        self.get_toplevel().update_page_complete()
+
+    def is_anonymous(self):
+        return self._ui.sign_up_anonymously.get_active()
+
+    def is_advanced(self):
+        return self._ui.sign_up_advanced_checkbutton.get_active()
+
+    def get_server(self):
+        return self._ui.server_comboboxtext_sign_up_entry.get_text()
+
+    @staticmethod
+    def _on_activate_link(_label, uri):
+        # We have to use this, because the default GTK handler
+        # is not cross-platform compatible
+        open_uri(uri)
+        return Gdk.EVENT_STOP
+
+
+class AdvancedSettings(Page):
+    def __init__(self):
+        Page.__init__(self)
+        self.title = _('Advanced settings')
+
+        self._ui = get_builder('account_wizard.ui')
+        self._ui.manage_proxies_button.connect('clicked',
+                                               self._on_proxy_manager)
+        self.pack_start(self._ui.advanced_grid, True, True, 0)
+
+        self.show_all()
+
+    @staticmethod
+    def _on_proxy_manager(_widget):
         app.app.activate_action('manage-proxies')
 
-    def on_custom_host_port_checkbutton_toggled(self, widget):
-        self.xml.get_object('custom_host_hbox').set_sensitive(
-            widget.get_active())
+    def update_proxy_list(self):
+        model = Gtk.ListStore(str)
+        self._ui.proxies_combobox.set_model(model)
+        proxies = app.config.get_per('proxies')
+        proxies.insert(0, _('No Proxy'))
+        for proxy in proxies:
+            model.append([proxy])
+        self._ui.proxies_combobox.set_active(0)
 
-    def update_progressbar(self):
-        self.progressbar.pulse()
-        return True  # loop forever
+    def get_proxy(self):
+        active = self._ui.proxies_combobox.get_active()
+        return self._ui.proxies_combobox.get_model()[active][0]
 
-    def _nec_new_acc_connected(self, obj):
-        """
-        Connection to server succeded, present the form to the user
-        """
-        # We receive events from all accounts from GED
-        if obj.conn.name != self.account:
-            return
-        if self.update_progressbar_timeout_id is not None:
-            GLib.source_remove(self.update_progressbar_timeout_id)
-        self.back_button.show()
-        self.forward_button.show()
-        self.is_form = obj.is_form
-        empty_config = True
-        if obj.is_form:
-            dataform = dataforms.extend_form(node=obj.config)
-            self.data_form_widget = dataforms_widget.DataFormWidget()
-            self.data_form_widget.selectable = True
-            self.data_form_widget.set_data_form(dataform)
-            empty_config = False
-        else:
-            self.data_form_widget = FakeDataFormWidget(obj.config)
-            for field in obj.config:
-                if field in ('key', 'instructions', 'x', 'registered'):
-                    continue
-                empty_config = False
-                break
-        self.data_form_widget.show_all()
-        self.xml.get_object('form_vbox').pack_start(
-            self.data_form_widget, True, True, 0)
-        if empty_config:
-            self.forward_button.set_sensitive(False)
-            self.notebook.set_current_page(4)  # show form page
-            return
-        self.ssl_fingerprint_sha1 = obj.ssl_fingerprint_sha1
-        self.ssl_fingerprint_sha256 = obj.ssl_fingerprint_sha256
-        self.ssl_cert = obj.ssl_cert
-        if obj.ssl_msg:
-            # An SSL warning occured, show it
-            hostname = app.connections[self.account].new_account_info[
-                'hostname']
-            self.xml.get_object('ssl_label').set_markup(_(
-                '<b>Security Warning</b>'
-                '\n\nThe authenticity of the %(hostname)s SSL certificate could'
-                ' be invalid.\nSSL Error: %(error)s\n'
-                'Do you still want to connect to this server?') % {
-                'hostname': hostname, 'error': obj.ssl_msg})
-            if obj.errnum in (18, 27):
-                text = _(
-                    'Add this certificate to the list of trusted '
-                    'certificates.\nSHA-1 fingerprint of the certificate:\n'
-                    '%(sha1)s\nSHA-256 fingerprint of the certificate:\n'
-                    '%(sha256)s') % {'sha1': obj.ssl_fingerprint_sha1,
-                                     'sha256': obj.ssl_fingerprint_sha256}
-                self.xml.get_object('ssl_checkbutton').set_label(text)
-            else:
-                self.xml.get_object('ssl_checkbutton').set_no_show_all(True)
-                self.xml.get_object('ssl_checkbutton').hide()
-            self.notebook.set_current_page(3)  # show SSL page
-        else:
-            self.notebook.set_current_page(4)  # show form page
+    def get_custom_host(self):
+        host = self._ui.custom_host_entry.get_text()
+        port = self._ui.custom_port_entry.get_text()
+        if not host or not port:
+            return None
 
-    def _nec_new_acc_not_connected(self, obj):
-        """
-        Account creation failed: connection to server failed
-        """
-        # We receive events from all accounts from GED
-        if obj.conn.name != self.account:
-            return
-        if self.account not in app.connections:
-            return
-        if self.update_progressbar_timeout_id is not None:
-            GLib.source_remove(self.update_progressbar_timeout_id)
-        del app.connections[self.account]
-        if self.account in app.config.get_per('accounts'):
-            app.config.del_per('accounts', self.account)
-        self.back_button.show()
-        self.cancel_button.show()
-        self.go_online_checkbutton.hide()
-        self.show_vcard_checkbutton.hide()
-        img = self.xml.get_object('finish_image')
-        img.set_from_icon_name("dialog-error", Gtk.IconSize.DIALOG)
-        finish_text = '<big><b>%s</b></big>\n\n%s' % (
-            _('An error occurred during account creation'), obj.reason)
-        self.finish_label.set_markup(finish_text)
-        self.notebook.set_current_page(6)  # show finish page
+        con_type = self._ui.con_type_combo.get_active_text()
 
-    def _nec_acc_is_ok(self, obj):
-        """
-        Account creation succeeded
-        """
-        # We receive events from all accounts from GED
-        if obj.conn.name != self.account:
-            return
-        self.create_vars(obj.account_info)
-        self.show_finish_page()
+        return ('%s:%s' % (host, port),
+                ConnectionProtocol.TCP,
+                ConnectionType(con_type))
 
-        # Register plugin modules after successful registration
-        # Some plugins need the registered JID to function properly
-        app.plugin_manager.register_modules_for_account(obj.conn)
 
-        if self.update_progressbar_timeout_id is not None:
-            GLib.source_remove(self.update_progressbar_timeout_id)
+class SecurityWarning(Page):
+    def __init__(self):
+        Page.__init__(self)
+        self.title = _('Security Warning')
+        self._cert = None
+        self._domain = None
 
-    def _nec_acc_is_not_ok(self, obj):
-        """
-        Account creation failed
-        """
-        # We receive events from all accounts from GED
-        if obj.conn.name != self.account:
-            return
-        self.back_button.show()
-        self.cancel_button.show()
-        self.go_online_checkbutton.hide()
-        self.show_vcard_checkbutton.hide()
-        del app.connections[self.account]
-        if self.account in app.config.get_per('accounts'):
-            app.config.del_per('accounts', self.account)
-        img = self.xml.get_object('finish_image')
-        img.set_from_icon_name("dialog-error", Gtk.IconSize.DIALOG)
-        finish_text = '<big><b>%s</b></big>\n\n%s' % (_(
-            'An error occurred during account creation'), obj.reason)
-        self.finish_label.set_markup(finish_text)
-        self.notebook.set_current_page(6)  # show finish page
+        self._ui = get_builder('account_wizard.ui')
+        self.pack_start(self._ui.security_warning_box, True, True, 0)
+        self._ui.view_cert_button.connect('clicked', self._on_view_cert)
+        self.show_all()
 
-        if self.update_progressbar_timeout_id is not None:
-            GLib.source_remove(self.update_progressbar_timeout_id)
+    @property
+    def cert(self):
+        return self._cert
 
-    def on_advanced_button_clicked(self, widget):
-        app.app.activate_action('accounts', GLib.Variant('s', self.account))
-        self.window.destroy()
+    def set_warning(self, domain, cert, errors):
+        # Clear list
+        self._cert = cert
+        self._domain = domain
+        self._ui.error_list.foreach(self._ui.error_list.remove)
 
-    def on_finish_button_clicked(self, widget):
-        go_online = self.xml.get_object('go_online_checkbutton').get_active()
-        show_vcard = self.xml.get_object('show_vcard_checkbutton').get_active()
-        self.window.destroy()
-        if show_vcard:
-            app.interface.show_vcard_when_connect.append(self.account)
-        if go_online:
-            app.interface.roster.send_status(self.account, 'online', '')
+        unknown_error = _('Unknown TLS error \'%s\'')
+        for error in errors:
+            error_text = GIO_TLS_ERRORS.get(error, unknown_error % error)
+            box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+            image = Gtk.Image.new_from_icon_name('dialog-warning-symbolic',
+                                                 Gtk.IconSize.LARGE_TOOLBAR)
+            image.get_style_context().add_class('warning-color')
+            label = Gtk.Label(label=error_text)
+            label.set_line_wrap(True)
+            label.set_xalign(0)
+            label.set_selectable(True)
+            box.add(image)
+            box.add(label)
+            box.show_all()
+            self._ui.error_list.add(box)
 
-    def on_username_entry_key_press_event(self, widget, event):
-        # Check for pressed @ and jump to combobox if found
-        if event.keyval == Gdk.KEY_at:
-            entry = self.xml.get_object('server_comboboxtext_entry')
-            entry.grab_focus()
-            entry.set_position(-1)
-            return True
+        self._ui.trust_cert_checkbutton.set_visible(
+            Gio.TlsCertificateFlags.UNKNOWN_CA in errors)
 
-    def on_entry_key_press_event(self, widget, event, combobox):
-        # If backspace is pressed in empty field, return to the nick entry field
-        backspace = event.keyval == Gdk.KEY_BackSpace
-        empty = len(combobox.get_active_text()) == 0
-        if backspace and empty and self.modify:
-            username_entry = self.xml.get_object('username_entry')
-            username_entry.grab_focus()
-            username_entry.set_position(-1)
-            return True
+    def _on_view_cert(self, _button):
+        open_window('CertificateDialog',
+                    account=self._domain,
+                    transient_for=self.get_toplevel(),
+                    cert=self._cert)
 
-    def get_config(self, login, server, savepass, password, anonymous=False):
-        config = {}
-        config['name'] = login
-        config['account_label'] = '%s@%s' % (login, server)
-        config['hostname'] = server
-        config['savepass'] = savepass
-        config['password'] = password
-        config['anonymous_auth'] = anonymous
-        config['priority'] = 5
-        config['autoconnect'] = True
-        config['no_log_for'] = ''
-        config['sync_with_global_status'] = True
-        config['proxy'] = ''
-        config['use_custom_host'] = False
-        config['custom_port'] = 0
-        config['custom_host'] = ''
-        return config
+    def is_add_to_trusted(self):
+        return self._ui.trust_cert_checkbutton.get_active()
 
-    def save_account(self, login, server, savepass, password, anonymous=False):
-        if self.account in app.connections:
-            ErrorDialog(
-                _('Account name is in use'),
-                _('You already have an account using this name.'))
-            return
-        con = connection.Connection(self.account)
-        con.password = password
 
-        config = self.get_config(login, server, savepass, password, anonymous)
+class Form(Page):
+    def __init__(self):
+        Page.__init__(self)
+        self.set_valign(Gtk.Align.FILL)
+        self.complete = False
+        self.title = _('Create Account')
+        self._current_form = None
 
-        if not self.modify:
-            con.new_account(self.account, config)
-            return
-        app.connections[self.account] = con
-        self.create_vars(config)
+        heading = Gtk.Label(label=_('Create Account'))
+        heading.get_style_context().add_class('large-header')
+        heading.set_max_width_chars(30)
+        heading.set_line_wrap(True)
+        heading.set_halign(Gtk.Align.CENTER)
+        heading.set_justify(Gtk.Justification.CENTER)
+        self.pack_start(heading, False, True, 0)
 
-    def create_vars(self, config):
-        app.config.add_per('accounts', self.account)
+        self.show_all()
 
-        config['account_label'] = '%s@%s' % (config['name'], config['hostname'])
-        if not config['savepass']:
-            config['password'] = ''
+    def _on_is_valid(self, _widget, is_valid):
+        self.complete = is_valid
+        self.get_toplevel().update_page_complete()
 
-        for opt in config:
-            app.config.set_per('accounts', self.account, opt, config[opt])
+    def add_form(self, form):
+        self.remove_form()
 
-        # update variables
-        app.interface.instances[self.account] = {
-            'infos': {}, 'disco': {},
-            'gc_config': {}, 'search': {},
-            'sub_request': {}}
-        app.interface.minimized_controls[self.account] = {}
-        app.groups[self.account] = {}
-        app.contacts.add_account(self.account)
-        app.gc_connected[self.account] = {}
-        app.automatic_rooms[self.account] = {}
-        app.newly_added[self.account] = []
-        app.to_be_removed[self.account] = []
-        app.nicks[self.account] = config['name']
-        app.block_signed_in_notifications[self.account] = True
-        app.sleeper_state[self.account] = 'off'
-        app.last_message_time[self.account] = {}
-        app.status_before_autoaway[self.account] = ''
-        app.gajim_optional_features[self.account] = []
-        app.caps_hash[self.account] = ''
-        helpers.update_optional_features(self.account)
-        # action must be added before account window is updated
-        app.app.add_account_actions(self.account)
-        # refresh accounts window
-        window = get_app_window('AccountsWindow')
-        if window is not None:
-            window.add_account(self.account)
-        # refresh roster
-        if len(app.connections) >= 2:
-            # Do not merge accounts if only one exists
-            app.interface.roster.regroup = app.config.get('mergeaccounts')
-        else:
-            app.interface.roster.regroup = False
-        app.interface.roster.setup_and_draw_roster()
-        gui_menu_builder.build_accounts_menu()
+        options = {'hide-fallback-fields': True}
+        self._current_form = DataFormWidget(form, options)
+        self._current_form.connect('is-valid', self._on_is_valid)
+        self._current_form.validate()
+        self.pack_start(self._current_form, True, True, 0)
+        self._current_form.show_all()
+
+    def get_submit_form(self):
+        return self._current_form.get_submit_form()
+
+    def remove_form(self):
+        if self._current_form is not None:
+            self.remove(self._current_form)
+            self._current_form.destroy()
+
+
+class Success(Page):
+    def __init__(self):
+        Page.__init__(self)
+        self.title = _('Account Added')
+        self._account = None
+
+        heading = Gtk.Label(label=_('Account has been added successfully'))
+        heading.get_style_context().add_class('large-header')
+        heading.set_max_width_chars(30)
+        heading.set_line_wrap(True)
+        heading.set_halign(Gtk.Align.CENTER)
+        heading.set_justify(Gtk.Justification.CENTER)
+
+        icon = Gtk.Image.new_from_icon_name('object-select-symbolic',
+                                            Gtk.IconSize.DIALOG)
+        icon.get_style_context().add_class('success-color')
+
+        self.pack_start(icon, False, True, 0)
+        self.pack_start(heading, False, True, 0)
+
+        self.show_all()
+
+    def set_account(self, account):
+        self._account = account
+
+    @property
+    def account(self):
+        return self._account

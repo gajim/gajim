@@ -113,7 +113,7 @@ WINDOW_MODULES = {
     'SingleMessageWindow': 'gajim.gtk.single_message',
     'PrivacyListsWindow': 'gajim.gtk.privacy_list',
     'Bookmarks': 'gajim.gtk.bookmarks',
-    'AccountCreationWizard': 'gajim.gtk.account_wizard',
+    'AccountWizard': 'gajim.gtk.account_wizard',
     'HistoryWindow': 'gajim.gtk.history',
     'ManageProxies': 'gajim.gtk.proxies',
     'ServiceDiscoveryWindow': 'gajim.gtk.discovery',

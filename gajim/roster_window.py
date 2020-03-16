@@ -75,7 +75,6 @@ from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
-from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.tooltips import RosterTooltip
@@ -5594,8 +5593,8 @@ class RosterWindow:
         app.config.get_per('accounts', 'Local', 'active'):
         # if we have no account configured or only Local account but not enabled
             def _open_wizard():
-                app.interface.instances['account_creation_wizard'] = \
-                    AccountCreationWizard()
+                open_window('AccountWizard')
+
             # Open wizard only after roster is created, so we can make it
             # transient for the roster window
             GLib.idle_add(_open_wizard)

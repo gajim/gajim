@@ -1115,7 +1115,9 @@ def get_user_proxy(account):
     proxy_name = app.config.get_per('accounts', account, 'proxy')
     if not proxy_name:
         return None
+    return get_proxy(proxy_name)
 
+def get_proxy(proxy_name):
     proxy = app.config.get_per('proxies', proxy_name)
     if proxy is None:
         return None

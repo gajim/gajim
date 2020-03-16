@@ -1680,6 +1680,39 @@ class Interface:
                 app.sleeper_state[account] = 'autoxa'
         return True # renew timeout (loop for ever)
 
+    def create_account(self,
+                       account,
+                       username,
+                       domain,
+                       password,
+                       anonymous=False):
+
+        config = {}
+        config['active'] = False
+        config['name'] = username
+        config['account_label'] = '%s@%s' % (username, domain)
+        config['hostname'] = domain
+        config['savepass'] = True
+        config['password'] = password
+        config['anonymous_auth'] = anonymous
+        config['autoconnect'] = True
+        config['sync_with_global_status'] = True
+        config['proxy'] = ''
+        config['use_custom_host'] = False
+        config['custom_port'] = 0
+        config['custom_host'] = ''
+
+        app.config.add_per('accounts', account)
+        for opt in config:
+            app.config.set_per('accounts', account, opt, config[opt])
+
+        # refresh accounts window
+        # Action must be added before account window is updated
+        app.app.add_account_actions(account)
+        window = get_app_window('AccountsWindow')
+        if window is not None:
+            window.add_account(account)
+
     def enable_account(self, account):
         if account == app.ZEROCONF_ACC_NAME:
             app.connections[account] = connection_zeroconf.ConnectionZeroconf(

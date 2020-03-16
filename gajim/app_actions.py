@@ -28,7 +28,6 @@ from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.privacy_list import PrivacyListsWindow
 from gajim.gtk.features import FeaturesDialog
-from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.util import open_window
@@ -136,12 +135,8 @@ def on_merge_accounts(action, param):
     app.interface.roster.setup_and_draw_roster()
 
 
-def on_add_account(_action, _param):
-    if 'account_creation_wizard' in app.interface.instances:
-        app.interface.instances['account_creation_wizard'].window.present()
-    else:
-        app.interface.instances['account_creation_wizard'] = \
-            AccountCreationWizard()
+def on_add_account(action, _param):
+    open_window('AccountWizard')
 
 
 def on_import_contacts(_action, param):
