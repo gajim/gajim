@@ -142,6 +142,10 @@ class FormGrid(Gtk.Grid):
             if field.type_ == 'hidden':
                 continue
 
+            if options.get('hide-fallback-fields'):
+                if 'fallback' in field.var:
+                    continue
+
             if field.media:
                 if not self._add_media_field(field, options):
                     # We dont understand this media element, ignore it
