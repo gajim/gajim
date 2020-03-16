@@ -111,12 +111,11 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         protocol = 'WebSocket' if is_websocket else 'TCP'
         self._ui.connection_protocol.set_text(protocol)
 
-        # host, proxy = app.connections[self.account].get_connection_info()
         # Connection proxy
-        # if proxy:
-        #    if proxy['type'] in ['http', 'socks5']:
-        #        self._ui.connection_proxy.set_text(
-        #            proxy['host'] + ':' + proxy['port'])
+        proxy = client.proxy
+        if proxy is not None:
+            self._ui.proxy_type.set_text(proxy.type)
+            self._ui.proxy_host.set_text(proxy.host)
 
         self._ui.cert_button.set_sensitive(self.cert)
 
