@@ -448,7 +448,9 @@ class JingleVideo(JingleRTPContent):
 
         # The following is needed for farstream to process ICE requests:
         self.pipeline.set_state(Gst.State.PLAYING)
-        Gst.debug_bin_to_dot_file(self.pipeline, Gst.DebugGraphDetails.ALL, 'video-graph')
+
+        if log.getEffectiveLevel() == logging.DEBUG:
+            Gst.debug_bin_to_dot_file(self.pipeline, Gst.DebugGraphDetails.ALL, 'video-graph')
 
     def get_fallback_src(self):
         # TODO: Use avatar?
