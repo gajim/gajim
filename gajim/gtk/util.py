@@ -28,6 +28,7 @@ from importlib import import_module
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from functools import wraps
+from functools import lru_cache
 
 try:
     from PIL import Image
@@ -650,6 +651,18 @@ def get_color_for_account(account: str) -> str:
     col_r, col_g, col_b = text_to_color(account)
     rgba = Gdk.RGBA(red=col_r, green=col_g, blue=col_b)
     return rgba.to_string()
+
+
+@lru_cache(maxsize=16)
+def get_css_show_class(show):
+    if show in ('online', 'chat'):
+        return '.gajim-status-online'
+    if show in ('away', 'xa'):
+        return '.gajim-status-away'
+    if show == 'dnd':
+        return '.gajim-status-dnd'
+    # 'offline', 'not in roster', 'requested'
+    return '.gajim-status-offline'
 
 
 def scale_with_ratio(size, width, height):
