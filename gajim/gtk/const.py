@@ -91,17 +91,6 @@ class ControlType(Enum):
         return self.value
 
 
-SHOW_COLORS = {
-    'online': (102/255, 191/255, 16/255),
-    'offline': (154/255, 154/255, 154/255),
-    'not in roster': (154/255, 154/255, 154/255),
-    'chat': (102/255, 191/255, 16/255),
-    'away': (255/255, 133/255, 51/255),
-    'dnd': (230/255, 46/255, 0),
-    'xa': (106/255, 0, 242/255)
-}
-
-
 WINDOW_MODULES = {
     'AccountsWindow': 'gajim.gtk.accounts',
     'HistorySyncAssistant': 'gajim.gtk.history_sync',

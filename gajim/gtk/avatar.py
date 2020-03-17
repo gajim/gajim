@@ -28,12 +28,13 @@ from gajim.common import configpaths
 from gajim.common.helpers import Singleton
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import AvatarSize
+from gajim.common.const import StyleAttr
 
 from gajim.gtk.util import load_pixbuf
 from gajim.gtk.util import text_to_color
 from gajim.gtk.util import scale_with_ratio
-from gajim.gtk.const import SHOW_COLORS
-
+from gajim.gtk.util import get_css_show_class
+from gajim.gtk.util import convert_rgb_string_to_float
 
 log = logging.getLogger('gajim.gtk.avatar')
 
@@ -108,7 +109,9 @@ def add_status_to_avatar(surface, show):
     context.arc(width - clip_size, height - clip_size, clip_size, 0, 2 * pi)
     context.fill()
 
-    color = SHOW_COLORS[show]
+    css_color = get_css_show_class(show)
+    color = convert_rgb_string_to_float(
+        app.css_config.get_value(css_color, StyleAttr.COLOR))
     show_size = width / 6.5
     show_radius = show_size * 0.80
     context.set_source_rgb(*color)
