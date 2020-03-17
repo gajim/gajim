@@ -29,9 +29,11 @@ import re
 import logging
 from pathlib import Path
 
+from gi.repository import Gdk
+from nbxmpp.util import text_to_color
+
 from gajim.common import app
 from gajim.common.i18n import _
-
 
 log = logging.getLogger('gajim.c.optparser')
 
@@ -149,6 +151,8 @@ class OptionsParser:
             self.update_config_to_1193()
         if old < [1, 1, 94] and new >= [1, 1, 94]:
             self.update_config_to_1194()
+        if old < [1, 1, 95] and new >= [1, 1, 95]:
+            self.update_config_to_1195()
 
         app.config.set('version', new_version)
 
@@ -230,3 +234,18 @@ class OptionsParser:
                         app.config.del_per('accounts', account, 'proxy')
 
         app.config.set('version', '1.1.94')
+
+    def update_config_to_1195(self):
+        # Add account color for every account
+        for account in self.old_values['accounts'].keys():
+            username = self.old_values['accounts'][account]['name']
+            domain = self.old_values['accounts'][account]['hostname']
+            if not (username is None or domain is None):
+                account_string = '%s@%s' % (username, domain)
+                # We cannot get the preferred theme at this point
+                background = (1, 1, 1)
+                col_r, col_g, col_b = text_to_color(account_string, background)
+                rgba = Gdk.RGBA(red=col_r, green=col_g, blue=col_b)
+                color = rgba.to_string()
+                app.config.set_per('accounts', account, 'account_color', color)
+        app.config.set('version', '1.1.95')
