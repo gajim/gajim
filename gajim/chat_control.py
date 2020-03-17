@@ -882,6 +882,7 @@ class ChatControl(ChatControlBase):
         getattr(self, 'update_' + jingle_type)()
 
     def on_jingle_button_toggled(self, state, jingle_type):
+        con = app.connections[self.account]
         if state:
             if getattr(self, jingle_type + '_state') == \
             self.JINGLE_STATE_NULL:
@@ -904,12 +905,13 @@ class ChatControl(ChatControlBase):
                     in_da = self.xml.incoming_drawingarea
                     in_da.realize()
                     in_xid = in_da.get_window().get_xid()
-                    con = app.connections[self.account]
                     sid = con.get_module('Jingle').start_video(
                         self.contact.get_full_jid(), in_xid, out_xid)
+
                 else:
-                    sid = getattr(app.connections[self.account],
-                        'start_' + jingle_type)(self.contact.get_full_jid())
+                    sid = con.get_module('Jingle').start_audio(
+                        self.contact.get_full_jid())
+
                 getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)
         else:
             video_hbox = self.xml.video_hbox
