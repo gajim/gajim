@@ -217,9 +217,6 @@ list.settings > row > box {
 .bold16 { font-size: 16px; font-weight: bold; }
 .bold24 { font-size: 24px; font-weight: bold; }
 .large-header { font-size: 20px; font-weight: bold; }
-.status-away { color: #ff8533;}
-.status-dnd { color: #e62e00;}
-.status-online { color: #66bf10;}
 .insensitive-fg-color {color: @insensitive_fg_color;}
 
 /* Padding/Margins */
