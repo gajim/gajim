@@ -77,3 +77,15 @@
 .gajim-notify-other {
 	color: rgb(255, 255, 255);
 }
+.gajim-status-online {
+    color: rgb(102, 191, 16);
+}
+.gajim-status-away {
+    color: rgb(255, 133, 51);
+}
+.gajim-status-dnd {
+    color: rgb(230, 46, 0);
+}
+.gajim-status-offline {
+    color: rgb(154, 154, 154);
+}

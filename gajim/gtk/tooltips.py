@@ -39,6 +39,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import PEPEventType
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
+from gajim.gtkgui_helpers import add_css_class
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
@@ -46,6 +47,7 @@ from gajim.gtk.util import format_mood
 from gajim.gtk.util import format_activity
 from gajim.gtk.util import format_tune
 from gajim.gtk.util import format_location
+from gajim.gtk.util import get_css_show_class
 
 
 log = logging.getLogger('gajim.gtk.tooltips')
@@ -206,7 +208,8 @@ class GCTooltip():
 
         # Status
         show = helpers.get_uf_show(contact.show.value)
-        self._ui.user_show.set_markup(colorize_status(show))
+        self._ui.user_show.set_text(show)
+        colorize_status(self._ui.user_show, contact.show)
         self._ui.user_show.show()
 
         # JID
@@ -487,7 +490,8 @@ class RosterTooltip(StatusTable):
                 else:
                     show = _('Disconnected')
 
-            self._ui.user_show.set_markup(colorize_status(show))
+            colorize_status(self._ui.user_show, contact.show)
+            self._ui.user_show.set_text(show)
             self._ui.user_show.show()
 
     @staticmethod
@@ -605,25 +609,9 @@ class FileTransfersTooltip():
         return Q_('?transfer status:Not started')
 
 
-def colorize_status(status):
+def colorize_status(widget, show):
     """
-    Colorize the status message inside the tooltip by it's
-    semantics. Color palette is the Tango.
+    Colorize the status message inside the tooltip by it's semantics.
     """
-    formatted = "<span foreground='%s'>%s</span>"
-    color = None
-    if status.startswith(Q_("?user status:Available")):
-        color = app.config.get('tooltip_status_online_color')
-    elif status.startswith(_("Free for Chat")):
-        color = app.config.get('tooltip_status_free_for_chat_color')
-    elif status.startswith(_("Away")):
-        color = app.config.get('tooltip_status_away_color')
-    elif status.startswith(_("Busy")):
-        color = app.config.get('tooltip_status_busy_color')
-    elif status.startswith(_("Not Available")):
-        color = app.config.get('tooltip_status_na_color')
-    elif status.startswith(_("Offline")):
-        color = app.config.get('tooltip_status_offline_color')
-    if color:
-        status = formatted % (color, status)
-    return status
+    css_class = get_css_show_class(show)[14:]
+    add_css_class(widget, css_class, prefix='gajim-status-')
