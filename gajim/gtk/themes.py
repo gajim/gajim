@@ -161,6 +161,18 @@ CSS_STYLE_OPTIONS = [
     StyleOption(_('Contact Connected Background '),
                 '.gajim-roster-connected',
                 StyleAttr.BACKGROUND),
+    StyleOption(_('Status Online Color'),
+                '.gajim-status-online',
+                StyleAttr.COLOR),
+    StyleOption(_('Status Away Color'),
+                '.gajim-status-away',
+                StyleAttr.COLOR),
+    StyleOption(_('Status DND Color'),
+                '.gajim-status-dnd',
+                StyleAttr.COLOR),
+    StyleOption(_('Status Offline Color'),
+                '.gajim-status-offline',
+                StyleAttr.COLOR),
 ]
 
 
