@@ -444,6 +444,13 @@ def convert_rgb_to_hex(rgb_string: str) -> str:
     return '#%02x%02x%02x' % (red, green, blue)
 
 
+@lru_cache(maxsize=1024)
+def convert_rgb_string_to_float(rgb_string: str) -> Tuple[float, float, float]:
+    rgba = Gdk.RGBA()
+    rgba.parse(rgb_string)
+    return (rgba.red, rgba.green, rgba.blue)
+
+
 def get_monitor_scale_factor() -> int:
     display = Gdk.Display.get_default()
     monitor = display.get_primary_monitor()
