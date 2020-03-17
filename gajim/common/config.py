@@ -174,7 +174,6 @@ class Config:
         'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
         'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
         'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
-        'tooltip_account_name_color': [opt_color, '#888A85'],
         'notification_preview_message': [opt_bool, True, _('Preview new messages in notification popup?')],
         'notification_position_x': [opt_int, -1],
         'notification_position_y': [opt_int, -1],
