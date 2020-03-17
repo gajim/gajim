@@ -465,7 +465,6 @@ class RosterTooltip(StatusTable):
 
     def _set_idle_time(self, contact):
         if contact.idle_time:
-            idle_color = app.config.get('tooltip_idle_color')
             idle_time = contact.idle_time
             idle_time = time.localtime(contact.idle_time)
             idle_time = datetime(*(idle_time[:6]))
@@ -474,9 +473,7 @@ class RosterTooltip(StatusTable):
                 formatted = idle_time.strftime('%X')
             else:
                 formatted = idle_time.strftime('%c')
-            idle_markup = '<span foreground="{}">{}</span>'.format(
-                idle_color, formatted)
-            self._ui.idle_since.set_markup(idle_markup)
+            self._ui.idle_since.set_text(formatted)
             self._ui.idle_since.show()
             self._ui.idle_since_label.show()
 
