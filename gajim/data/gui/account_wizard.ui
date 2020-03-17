@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkGrid" id="advanced_grid">
@@ -30,7 +30,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="width_chars">6</property>
-        <property name="placeholder_text" translatable="yes">5222</property>
+        <property name="placeholder_text">5222</property>
         <property name="input_purpose">number</property>
       </object>
       <packing>
@@ -145,9 +145,9 @@
         <property name="can_focus">False</property>
         <property name="active">0</property>
         <items>
-          <item translatable="yes">START TLS</item>
-          <item translatable="yes">DIRECT TLS</item>
-          <item translatable="yes">PLAIN</item>
+          <item>START TLS</item>
+          <item>DIRECT TLS</item>
+          <item>PLAIN</item>
         </items>
       </object>
       <packing>
@@ -462,7 +462,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">There are plenty of servers to choose from. 
+            <property name="label" translatable="yes">There are plenty of servers to choose from.
 Creating an account on one server allows you to communicate with contacts from other servers as well.</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">40</property>

@@ -289,7 +289,7 @@ class AccountWizard(Assistant):
             if error == 'register-not-supported':
                 self._show_error_page(_('Signup not allowed'),
                                       _('Signup not allowed'),
-                                      _('This server does not all signup'))
+                                      _('This server does not allow signup.'))
 
         self._client.destroy()
         self._client = None
@@ -298,7 +298,7 @@ class AccountWizard(Assistant):
         self._show_error_page(_('Connection failed'),
                               _('Connection failed'),
                               _('Gajim was not able to reach the server. '
-                                'Make sure your XMPP address is correct'))
+                                'Make sure your XMPP address is correct.'))
         self._client.destroy()
         self._client = None
 
