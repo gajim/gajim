@@ -327,11 +327,8 @@ class RosterTooltip(StatusTable):
         name = GLib.markup_escape_text(self.prim_contact.get_shown_name())
 
         if app.config.get('mergeaccounts'):
-            color = app.config.get('tooltip_account_name_color')
-            account_name = GLib.markup_escape_text(
+            name = GLib.markup_escape_text(
                 self.prim_contact.account.name)
-            name += " <span foreground='{}'>({})</span>".format(
-                color, account_name)
 
         self._ui.name.set_markup(name)
         self._ui.name.show()
