@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import os
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -358,7 +359,17 @@ class Preferences(Gtk.ApplicationWindow):
                 if config == value:
                     combobox.set_active(index)
 
+        if os.name == 'nt':
+            self._ui.av_dependencies_label.set_text(
+                _('Feature not available under Windows'))
+        else:
+            self._ui.av_dependencies_label.set_text(
+                _('Missing dependencies for Audio/Video'))
+
         if app.is_installed('AV'):
+            self._ui.av_dependencies_infobar.set_no_show_all(True)
+            self._ui.av_dependencies_infobar.hide()
+
             create_av_combobox('audio_input', AudioInputManager().get_devices())
             create_av_combobox('audio_output', AudioOutputManager().get_devices())
             create_av_combobox('video_input', VideoInputManager().get_devices())
@@ -961,6 +972,9 @@ class Preferences(Gtk.ApplicationWindow):
         self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
 
     ### Audio/Video tab ###
+    def _on_features_button_clicked(self, _button):
+        open_window('Features')
+
     def on_av_combobox_changed(self, combobox, config_name):
         model = combobox.get_model()
         active = combobox.get_active()
