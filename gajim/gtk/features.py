@@ -20,6 +20,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 from collections import namedtuple
 
 import gi
@@ -84,6 +85,9 @@ class FeaturesDialog(Gtk.Dialog):
                              ['name', 'available', 'tooltip',
                               'dependency_u', 'dependency_w', 'enabled'])
 
+        notification_sounds_available = (
+            app.is_installed('GSOUND') or sys.platform in ('win32', 'darwin'))
+        notification_sounds_enabled = app.config.get('sounds_on')
         spell_check_enabled = app.config.get('use_speller')
 
         auto_status = [app.config.get('autoaway'), app.config.get('autoxa')]
@@ -112,6 +116,19 @@ class FeaturesDialog(Gtk.Dialog):
                     _('Requires: pybonjour and bonjour SDK running (%(url)s)')
                     % {'url': 'https://developer.apple.com/opensource/)'},
                     None),
+            Feature(_('Location detection'),
+                    app.is_installed('GEOCLUE'),
+                    _('Enables Gajim to be location-aware, if the user decides '
+                      'to publish the device’s location'),
+                    _('Requires: geoclue'),
+                    _('Feature is not available under Windows'),
+                    None),
+            Feature(_('Notification Sounds'),
+                    notification_sounds_available,
+                    _('Enables Gajim to play sounds for various notifications'),
+                    _('Requires: gsound'),
+                    _('No additional requirements'),
+                    notification_sounds_enabled),
             Feature(_('Secure Password Storage'),
                     self.some_keyring_available(),
                     _('Enables Gajim to store Passwords securely instead of '
