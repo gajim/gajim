@@ -568,7 +568,7 @@ class JingleSession:
 
         self.state = JingleStates.PENDING
         # Send event about starting a session
-        self._raise_event('jingle-ft-cancelled-received', contents=contents[0])
+        self._raise_event('jingle-request-received', contents=contents[0])
 
     def __broadcast(self, stanza, jingle, error, action):
         """
