@@ -27,7 +27,6 @@ from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.privacy_list import PrivacyListsWindow
-from gajim.gtk.features import FeaturesDialog
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.util import open_window
@@ -231,7 +230,7 @@ def on_keyboard_shortcuts(_action, _param):
 
 
 def on_features(_action, _param):
-    FeaturesDialog()
+    open_window('Features')
 
 
 def on_about(_action, _param):

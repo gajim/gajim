@@ -25,19 +25,22 @@ from collections import namedtuple
 
 import gi
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common.i18n import _
 
 
-class FeaturesDialog(Gtk.Dialog):
+class Features(Gtk.ApplicationWindow):
     def __init__(self):
-        super().__init__(title=_('Features'),
-                         transient_for=None,
-                         destroy_with_parent=True)
-
-        self.set_transient_for(app.interface.roster.window)
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_show_menubar(False)
+        self.set_name('Features')
+        self.set_title(_('Features'))
         self.set_resizable(False)
+        self.set_transient_for(app.interface.roster.window)
 
         grid = Gtk.Grid()
         grid.set_name('FeaturesInfoGrid')
@@ -46,24 +49,25 @@ class FeaturesDialog(Gtk.Dialog):
 
         self.feature_listbox = Gtk.ListBox()
         self.feature_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.feature_listbox.set_header_func(self.header_func, _('Features'))
+        self.feature_listbox.set_header_func(self._header_func, _('Features'))
 
         grid.attach(self.feature_listbox, 0, 0, 1, 1)
 
-        box = self.get_content_area()
+        box = Gtk.Box()
         box.pack_start(grid, True, True, 0)
         box.set_property('margin', 12)
         box.set_spacing(18)
+        self.add(box)
 
-        self.connect('response', self.on_response)
+        self.connect('key-press-event', self._on_key_press)
 
-        for feature in self.get_features():
-            self.add_feature(feature)
+        for feature in self._get_features():
+            self._add_feature(feature)
 
         self.show_all()
 
     @staticmethod
-    def header_func(row, before, user_data):
+    def _header_func(row, before, user_data):
         if before:
             row.set_header(None)
         else:
@@ -71,16 +75,16 @@ class FeaturesDialog(Gtk.Dialog):
             label.set_halign(Gtk.Align.START)
             row.set_header(label)
 
-    def on_response(self, _dialog, response):
-        if response == Gtk.ResponseType.OK:
+    def _on_key_press(self, _widget, event):
+        if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def add_feature(self, feature):
+    def _add_feature(self, feature):
         item = FeatureItem(feature)
         self.feature_listbox.add(item)
         item.get_parent().set_tooltip_text(item.tooltip)
 
-    def get_features(self):
+    def _get_features(self):
         Feature = namedtuple('Feature',
                              ['name', 'available', 'tooltip',
                               'dependency_u', 'dependency_w', 'enabled'])
@@ -102,7 +106,7 @@ class FeaturesDialog(Gtk.Dialog):
                     _('Feature not available under Windows'),
                     None),
             Feature(_('Automatic Status'),
-                    self.idle_available(),
+                    self._idle_available(),
                     _('Enables Gajim to measure your computer\'s idle time in '
                       'order to set your Status automatically'),
                     _('Requires: libxss'),
@@ -130,7 +134,7 @@ class FeaturesDialog(Gtk.Dialog):
                     _('No additional requirements'),
                     notification_sounds_enabled),
             Feature(_('Secure Password Storage'),
-                    self.some_keyring_available(),
+                    self._some_keyring_available(),
                     _('Enables Gajim to store Passwords securely instead of '
                       'storing them in plaintext'),
                     _('Requires: libsecret and a provider (such as GNOME '
@@ -155,7 +159,7 @@ class FeaturesDialog(Gtk.Dialog):
         ]
 
     @staticmethod
-    def some_keyring_available():
+    def _some_keyring_available():
         if os.name == 'nt':
             return True
         try:
@@ -166,7 +170,7 @@ class FeaturesDialog(Gtk.Dialog):
         return True
 
     @staticmethod
-    def idle_available():
+    def _idle_available():
         from gajim.common import idle
         return idle.Monitor.is_available()
 
