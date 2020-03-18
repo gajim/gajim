@@ -98,25 +98,25 @@ LangString NAME_Themes ${LANG_HEBREW} "ערכאות נושא"
 LangString DESC_SecGajim ${LANG_HEBREW} "מתקין קבצי Gajim עיקריים."
 
 Section "Gajim" SecGajim
-	SectionIn RO
+    SectionIn RO
 
-	SetOutPath "$INSTDIR"
-	File /r "${ARCH}\*.*"
+    SetOutPath "$INSTDIR"
+    File /r "${ARCH}\*.*"
 
-	SetOutPath "$INSTDIR\bin"
-	CreateShortCut "$INSTDIR\Gajim-Portable.lnk" "$INSTDIR\bin\Gajim.exe" \
-  	"-c ..\UserData" "" "" SW_SHOWNORMAL "" "Gajim Portable"
-  	CreateShortCut "$INSTDIR\Gajim-Portable-Debug.lnk" "$INSTDIR\bin\Gajim-Debug.exe" \
-  	"-c ..\UserData" "" "" SW_SHOWNORMAL "" "Gajim Portable Debug"
+    SetOutPath "$INSTDIR\bin"
+    CreateShortCut "$INSTDIR\Gajim-Portable.lnk" "$INSTDIR\bin\Gajim.exe" \
+    "-c ..\UserData" "" "" SW_SHOWNORMAL "" "Gajim Portable"
+    CreateShortCut "$INSTDIR\Gajim-Portable-Debug.lnk" "$INSTDIR\bin\Gajim-Debug.exe" \
+    "-c ..\UserData" "" "" SW_SHOWNORMAL "" "Gajim Portable Debug"
     FileOpen $0 "is_portable" w
     FileClose $0
 
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecGajim} $(DESC_SecGajim)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecGajim} $(DESC_SecGajim)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit
-  	!insertmacro MUI_LANGDLL_DISPLAY
+    !insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
