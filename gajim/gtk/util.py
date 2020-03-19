@@ -222,6 +222,9 @@ def load_icon(icon_name, widget=None, size=16, pixbuf=False,
     try:
         iconinfo = _icon_theme.lookup_icon_for_scale(
             icon_name, size, scale, flags)
+        if iconinfo is None:
+            log.info('No icon found for %s', icon_name)
+            return
         if pixbuf:
             return iconinfo.load_icon()
         return iconinfo.load_surface(None)
