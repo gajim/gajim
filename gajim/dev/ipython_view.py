@@ -69,13 +69,12 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Pango
 
-import IPython
-
 from pygments.token import Token
-# pylint: disable=ungrouped-imports
+
+import IPython
 from IPython.core.displayhook import DisplayHook
 from IPython.core.display_trap import DisplayTrap
-# pylint: enable=ungrouped-imports
+
 
 
 class MyPromptDisplayHook(DisplayHook):
