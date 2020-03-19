@@ -198,6 +198,8 @@ _dependencies = {
     'AVAHI': False,
     'PYBONJOUR': False,
     'FARSTREAM': False,
+    'GST': False,
+    'AV': False,
     'GEOCLUE': False,
     'UPNP': False,
     'PYCURL': False,
@@ -248,27 +250,27 @@ def detect_dependencies():
     except Exception:
         pass
 
-    # FARSTREAM
     try:
-        if os.name == 'nt':
-            root_path = Path(sys.executable).parents[1]
-            fs_plugin_path = str(root_path / 'lib' / 'farstream-0.2')
-            gst_plugin_path = str(root_path / 'lib' / 'gstreamer-1.0')
-            os.environ['FS_PLUGIN_PATH'] = fs_plugin_path
-            os.environ['GST_PLUGIN_PATH'] = gst_plugin_path
-        gi.require_version('Farstream', '0.2')
-        from gi.repository import Farstream
         gi.require_version('Gst', '1.0')
         from gi.repository import Gst
-        try:
-            Gst.init(None)
-            conference = Gst.ElementFactory.make('fsrtpconference', None)
-            conference.new_session(Farstream.MediaType.AUDIO)
-        except Exception as error:
-            log('gajim').info(error)
-        _dependencies['FARSTREAM'] = True
-    except (ImportError, ValueError):
+        _dependencies['GST'] = True
+    except Exception:
         pass
+
+    try:
+        gi.require_version('Farstream', '0.2')
+        from gi.repository import Farstream
+        _dependencies['FARSTREAM'] = True
+    except Exception:
+        pass
+
+    try:
+        Gst.init(None)
+        conference = Gst.ElementFactory.make('fsrtpconference', None)
+        conference.new_session(Farstream.MediaType.AUDIO)
+        _dependencies['AV'] = True
+    except Exception as error:
+        log('gajim').info(error)
 
     # GEOCLUE
     try:

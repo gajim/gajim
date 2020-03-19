@@ -91,7 +91,7 @@ class FeaturesDialog(Gtk.Dialog):
 
         return [
             Feature(_('Audio / Video'),
-                    app.is_installed('FARSTREAM'),
+                    app.is_installed('AV'),
                     _('Enables Gajim to provide Audio and Video chats'),
                     _('Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, '
                       'gstreamer1.0-libav, gstreamer1.0-plugins-ugly'),

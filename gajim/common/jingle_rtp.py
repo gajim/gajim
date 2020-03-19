@@ -21,9 +21,14 @@ import socket
 from collections import deque
 
 import nbxmpp
-from gi.repository import Farstream
-from gi.repository import Gst
+
 from gi.repository import GLib
+
+try:
+    from gi.repository import Farstream
+    from gi.repository import Gst
+except Exception:
+    pass
 
 from gajim.common import app
 from gajim.common.i18n import _

@@ -19,6 +19,11 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
 
+try:
+    from gi.repository import Gst
+except Exception:
+    pass
+
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
@@ -28,6 +33,9 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.helpers import open_file
+from gajim.common.multimedia_helpers import AudioInputManager
+from gajim.common.multimedia_helpers import AudioOutputManager
+from gajim.common.multimedia_helpers import VideoInputManager
 
 from gajim.chat_control_base import ChatControlBase
 
@@ -39,14 +47,6 @@ from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.sounds import ManageSounds
 from gajim.gtk.const import ControlType
 from gajim.gtk import gstreamer
-
-try:
-    from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
-    from gajim.common.multimedia_helpers import VideoInputManager
-    from gi.repository import Gst  # pylint: disable=ungrouped-imports
-    HAS_GST = True
-except (ImportError, ValueError):
-    HAS_GST = False
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
@@ -358,7 +358,7 @@ class Preferences(Gtk.ApplicationWindow):
                 if config == value:
                     combobox.set_active(index)
 
-        if HAS_GST and app.is_installed('FARSTREAM'):
+        if app.is_installed('AV'):
             create_av_combobox('audio_input', AudioInputManager().get_devices())
             create_av_combobox('audio_output', AudioOutputManager().get_devices())
             create_av_combobox('video_input', VideoInputManager().get_devices())

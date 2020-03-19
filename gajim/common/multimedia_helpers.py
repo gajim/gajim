@@ -16,11 +16,12 @@
 
 import logging
 
-import gi
-gi.require_version('Gst', '1.0')
-from gi.repository import Gst  # pylint: disable=wrong-import-position
+try:
+    from gi.repository import Gst
+except Exception:
+    pass
 
-from gajim.common.i18n import _  # pylint: disable=wrong-import-position
+from gajim.common.i18n import _
 
 log = logging.getLogger('gajim.c.multimedia_helpers')
 
