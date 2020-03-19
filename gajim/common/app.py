@@ -215,8 +215,14 @@ def is_installed(dependency):
         return _dependencies['AVAHI'] or _dependencies['PYBONJOUR']
     return _dependencies[dependency]
 
+
 def is_flatpak():
     return gajim.IS_FLATPAK
+
+
+def is_portable():
+    return gajim.IS_PORTABLE
+
 
 def is_display(display):
     # XWayland reports as Display X11, so try with env var
