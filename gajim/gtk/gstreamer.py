@@ -1,17 +1,10 @@
-from typing import Tuple, Optional
-
-from gi.repository import Gtk
-
 try:
     from gi.repository import Gst
 except Exception:
     pass
 
 
-def create_gtk_widget() -> Tuple[Optional[Gst.Element],
-                                 Optional[Gtk.Widget],
-                                 Optional[str]]:
-
+def create_gtk_widget():
     gtkglsink = Gst.ElementFactory.make('gtkglsink', None)
     if gtkglsink is not None:
         glsinkbin = Gst.ElementFactory.make('glsinkbin', None)
