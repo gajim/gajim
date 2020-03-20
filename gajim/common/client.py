@@ -112,7 +112,7 @@ class Client(ConnectionHandlers):
 
     def _create_client(self):
         log.info('Create new nbxmpp client')
-        self._client = NBXMPPClient()
+        self._client = NBXMPPClient(log_context=self._account)
         self.connection = self._client
         self._client.set_domain(self._hostname)
         self._client.set_username(self._user)
