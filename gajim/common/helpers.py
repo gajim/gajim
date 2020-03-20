@@ -1289,7 +1289,7 @@ def call_counter(func):
         if restart:
             self._connect_machine_calls = 0
         self._connect_machine_calls += 1
-        return func(self, restart=False)
+        return func(self)
     return helper
 
 def get_sync_threshold(jid, archive_info):

@@ -52,7 +52,8 @@ class Client(ConnectionHandlers):
         self._client = None
         self._account = account
         self.name = account
-        self._hostname = app.config.get_per('accounts', self._account, 'hostname')
+        self._hostname = app.config.get_per(
+            'accounts', self._account, 'hostname')
         self._user = app.config.get_per('accounts', self._account, 'name')
         self.password = None
 
@@ -135,7 +136,8 @@ class Client(ConnectionHandlers):
 
         self._client.set_ignored_tls_errors(self._get_ignored_ssl_errors())
 
-        if app.config.get_per('accounts', self._account, 'use_plain_connection'):
+        if app.config.get_per('accounts', self._account,
+                              'use_plain_connection'):
             self._client.set_connection_types([ConnectionType.PLAIN])
 
         proxy = get_user_proxy(self._account)
@@ -270,12 +272,12 @@ class Client(ConnectionHandlers):
         self.get_module('Chatstate').enabled = True
         self.get_module('MAM').reset_state()
 
-    def _on_stanza_sent(self, _client, signal_name, stanza):
+    def _on_stanza_sent(self, _client, _signal_name, stanza):
         app.nec.push_incoming_event(NetworkEvent('stanza-sent',
                                                  account=self._account,
                                                  stanza=stanza))
 
-    def _on_stanza_received(self, _client, signal_name, stanza):
+    def _on_stanza_received(self, _client, _signal_name, stanza):
         app.nec.push_incoming_event(NetworkEvent('stanza-received',
                                                  account=self._account,
                                                  stanza=stanza))
@@ -365,7 +367,7 @@ class Client(ConnectionHandlers):
         return modules.get(self._account, name)
 
     @helpers.call_counter
-    def connect_machine(self, restart=False):
+    def connect_machine(self):
         log.info('Connect machine state: %s', self._connect_machine_calls)
         if self._connect_machine_calls == 1:
             self.get_module('MetaContacts').get_metacontacts()
@@ -506,8 +508,8 @@ class Client(ConnectionHandlers):
     def _abort_reconnect(self):
         self._set_state(ClientState.DISCONNECTED)
         self._disable_reconnect_timer()
-        app.nec.push_incoming_event(OurShowEvent(
-                None, conn=self, show='offline'))
+        app.nec.push_incoming_event(
+            OurShowEvent(None, conn=self, show='offline'))
 
         if self._destroy_client:
             self._client.destroy()
