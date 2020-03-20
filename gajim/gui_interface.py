@@ -897,37 +897,6 @@ class Interface:
             input_str=obj.alt_name,
             transient_for=self.roster.window).show()
 
-    def handle_event_resource_conflict(self, obj):
-        # ('RESOURCE_CONFLICT', account, ())
-        # First we go offline, but we don't overwrite status message
-        account = obj.conn.name
-        conn = obj.conn
-        self.roster.send_status(account, 'offline', conn.status_message)
-
-        def _set_resource(new_resource):
-            app.config.set_per('accounts', account, 'resource', new_resource)
-            self.roster.send_status(account, conn.status, conn.status_message)
-
-        proposed_resource = conn.server_resource
-        if proposed_resource.startswith('gajim.'):
-            # Dont notify the user about resource change if he didn't set
-            # a custom resource
-            _set_resource('gajim.$rand')
-            return
-
-        proposed_resource += app.config.get('gc_proposed_nick_char')
-
-        InputDialog(
-            _('Resource Conflict'),
-            _('Resource Conflict'),
-            _('You are already connected to this account with the same '
-              'resource. Please enter a different one.'),
-            [DialogButton.make('Cancel'),
-             DialogButton.make('Accept',
-                               text=_('_Connect'),
-                               callback=_set_resource)],
-            input_str=proposed_resource).show()
-
     def handle_event_jingleft_cancel(self, obj):
         ft = self.instances['file_transfers']
         file_props = None
@@ -1081,7 +1050,6 @@ class Interface:
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
             'signed-in': [self.handle_event_signed_in],
-            'stream-conflict-received': [self.handle_event_resource_conflict],
             'subscribe-presence-received': [
                 self.handle_event_subscribe_presence],
             'subscribed-presence-received': [

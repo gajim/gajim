@@ -204,13 +204,14 @@ class Client(ConnectionHandlers):
             app.nec.push_incoming_event(OurShowEvent(
                 None, conn=self, show='offline'))
             self.process_ssl_errors()
-            return
 
-        if domain == StreamError.STREAM:
-            if not self._state.is_disconnecting:
-                self._reconnect = True
+        elif domain in (StreamError.STREAM, StreamError.BIND):
+            if error == 'conflict':
+                # Reset resource
+                app.config.set_per('accounts', self._account,
+                                   'resource', 'gajim.$rand')
 
-        if domain == StreamError.SASL:
+        elif domain == StreamError.SASL:
             self._reconnect = False
 
             if error in ('not-authorized', 'no-password'):
