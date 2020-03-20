@@ -36,7 +36,7 @@ from gajim.common.types import PluginExtensionPoints  # pylint: disable=W0611
 from gajim.common.types import EventHandlersDict  # pylint: disable=W0611
 from gajim.common.types import PluginEvents  # pylint: disable=W0611
 
-from gajim.plugins.helpers import log_calls, log
+from gajim.plugins.helpers import log
 from gajim.plugins.gui import GajimPluginConfigDialog
 
 
@@ -161,7 +161,6 @@ class GajimPlugin:
     subclasses.
     '''
 
-    @log_calls('GajimPlugin')
     def __init__(self) -> None:
         self.config = GajimPluginConfig(self)
         '''
@@ -177,11 +176,9 @@ class GajimPlugin:
         self.config_dialog = GajimPluginConfigDialog(self)
         self.init()
 
-    @log_calls('GajimPlugin')
     def save_config(self) -> None:
         self.config.save()
 
-    @log_calls('GajimPlugin')
     def load_config(self) -> None:
         self.config.load()
 
@@ -197,32 +194,26 @@ class GajimPlugin:
 
         return False
 
-    @log_calls('GajimPlugin')
     def local_file_path(self, file_name):
         return os.path.join(self.__path__, file_name)
 
-    @log_calls('GajimPlugin')
     def init(self):
         pass
 
-    @log_calls('GajimPlugin')
     def activate(self):
         pass
 
-    @log_calls('GajimPlugin')
     def deactivate(self):
         pass
 
 
 class GajimPluginConfig():
-    @log_calls('GajimPluginConfig')
     def __init__(self, plugin):
         self.plugin = plugin
         self.FILE_PATH = os.path.join(
             configpaths.get('PLUGINS_CONFIG_DIR'), self.plugin.short_name)
         self.data = {}
 
-    @log_calls('GajimPluginConfig')
     def __getitem__(self, key):
         if not key in self.data:
             self.data[key] = self.plugin.config_default_values[key][0]
@@ -230,17 +221,14 @@ class GajimPluginConfig():
 
         return self.data[key]
 
-    @log_calls('GajimPluginConfig')
     def __setitem__(self, key, value):
         self.data[key] = value
         self.save()
 
-    @log_calls('GajimPluginConfig')
     def __delitem__(self, key):
         del self.data[key]
         self.save()
 
-    @log_calls('GajimPluginConfig')
     def __contains__(self, key):
         return key in self.data
 
@@ -254,13 +242,11 @@ class GajimPluginConfig():
     def items(self):
         return self.data.items()
 
-    @log_calls('GajimPluginConfig')
     def save(self):
         fd = open(self.FILE_PATH, 'wb')
         pickle.dump(self.data, fd)
         fd.close()
 
-    @log_calls('GajimPluginConfig')
     def load(self):
         if os.path.isfile(self.FILE_PATH):
             fd = open(self.FILE_PATH, 'rb')

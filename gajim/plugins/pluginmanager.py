@@ -42,7 +42,7 @@ from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import Singleton
 from gajim.plugins import plugins_i18n
 
-from gajim.plugins.helpers import log, log_calls
+from gajim.plugins.helpers import log
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.gajimplugin import GajimPlugin, GajimPluginException
 
@@ -75,7 +75,6 @@ class PluginManager(metaclass=Singleton):
                'destructors' (classes that register GUI extension points)
     '''
 
-    #@log_calls('PluginManager')
     def __init__(self):
         self.plugins = []
         '''
@@ -115,20 +114,17 @@ class PluginManager(metaclass=Singleton):
             pc = self.scan_dir_for_plugins(path)
             self.add_plugins(pc)
 
-    @log_calls('PluginManager')
     def _plugin_has_entry_in_global_config(self, plugin):
         if app.config.get_per('plugins', plugin.short_name) is None:
             return False
         return True
 
-    @log_calls('PluginManager')
     def _create_plugin_entry_in_global_config(self, plugin):
         app.config.add_per('plugins', plugin.short_name)
 
     def _remove_plugin_entry_in_global_config(self, plugin):
         app.config.del_per('plugins', plugin.short_name)
 
-    @log_calls('PluginManager')
     def update_plugins(self, replace=True, activate=False, plugin_name=None):
         '''
         Move plugins from the downloaded folder to the user plugin folder
@@ -171,11 +167,9 @@ class PluginManager(metaclass=Singleton):
         return updated_plugins
 
 
-    @log_calls('PluginManager')
     def init_plugins(self):
         self._activate_all_plugins_from_global_config()
 
-    @log_calls('PluginManager')
     def add_plugin(self, plugin_class):
         '''
         :todo: what about adding plug-ins that are already added? Module reload
@@ -201,7 +195,6 @@ class PluginManager(metaclass=Singleton):
                      plugin.name, plugin.version,
                      plugin.__module__, plugin.short_name)
 
-    @log_calls('PluginManager')
     def remove_plugin(self, plugin):
         '''
         removes the plugin from the plugin list and deletes all loaded modules
@@ -227,19 +220,16 @@ class PluginManager(metaclass=Singleton):
         for module_to_remove in modules_to_remove:
             del sys.modules[module_to_remove]
 
-    @log_calls('PluginManager')
     def add_plugins(self, plugin_classes):
         for plugin_class in plugin_classes:
             self.add_plugin(plugin_class)
 
-    @log_calls('PluginManager')
     def get_active_plugin(self, plugin_name):
         for plugin in self.active_plugins:
             if plugin.short_name == plugin_name:
                 return plugin
         return None
 
-    @log_calls('PluginManager')
     def extension_point(self, gui_extpoint_name, *args):
         '''
         Invokes all handlers (from plugins) for a particular extension point, but
@@ -259,7 +249,6 @@ class PluginManager(metaclass=Singleton):
         self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name,
             *args)
 
-    @log_calls('PluginManager')
     def gui_extension_point(self, gui_extpoint_name, *args):
         '''
         Invokes all handlers (from plugins) for particular GUI extension point
@@ -289,7 +278,6 @@ class PluginManager(metaclass=Singleton):
         self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name,
             *args)
 
-    @log_calls('PluginManager')
     def remove_gui_extension_point(self, gui_extpoint_name, *args):
         '''
         Removes GUI extension point from collection held by `PluginManager`.
@@ -339,7 +327,6 @@ class PluginManager(metaclass=Singleton):
             if disconnect_handler is not None:
                 disconnect_handler(args[0])
 
-    @log_calls('PluginManager')
     def _add_gui_extension_point_call_to_list(self, gui_extpoint_name, *args):
         '''
         Adds GUI extension point call to list of calls.
@@ -365,7 +352,6 @@ class PluginManager(metaclass=Singleton):
             self.gui_extension_points.setdefault(gui_extpoint_name, []).append(
                 args)
 
-    @log_calls('PluginManager')
     def _execute_all_handlers_of_gui_extension_point(self, gui_extpoint_name,
     *args):
         if gui_extpoint_name in self.gui_extension_points_handlers:
@@ -444,7 +430,6 @@ class PluginManager(metaclass=Singleton):
                             handler = handler[:4]
                         con.connection.unregister_handler(*handler)
 
-    @log_calls('PluginManager')
     def activate_plugin(self, plugin):
         '''
         :param plugin: plugin to be activated
@@ -507,7 +492,6 @@ class PluginManager(metaclass=Singleton):
         for plugin_object in self.active_plugins:
             self.deactivate_plugin(plugin_object)
 
-    @log_calls('PluginManager')
     def _add_gui_extension_points_handlers_from_plugin(self, plugin):
         for gui_extpoint_name, gui_extpoint_handlers in \
         plugin.gui_extension_points.items():
@@ -518,7 +502,6 @@ class PluginManager(metaclass=Singleton):
         if plugin.encryption_name:
             self.encryption_plugins[plugin.encryption_name] = plugin
 
-    @log_calls('PluginManager')
     def _handle_all_gui_extension_points_with_plugin(self, plugin):
         for gui_extpoint_name, gui_extpoint_handlers in \
         plugin.gui_extension_points.items():
@@ -534,7 +517,6 @@ class PluginManager(metaclass=Singleton):
                                         handler, exc_info=True)
 
 
-    @log_calls('PluginManager')
     def _activate_all_plugins(self):
         '''
         Activates all plugins in `plugins`.
@@ -580,7 +562,6 @@ class PluginManager(metaclass=Singleton):
     def _set_plugin_active_in_global_config(self, plugin, active=True):
         app.config.set_per('plugins', plugin.short_name, 'active', active)
 
-    @log_calls('PluginManager')
     def scan_dir_for_plugins(self, path, scan_dirs=True, package=False):
         r'''
         Scans given directory for plugin classes.
