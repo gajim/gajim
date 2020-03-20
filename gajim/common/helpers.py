@@ -1565,14 +1565,15 @@ def geo_provider_from_location(lat, lon):
 
 def get_resource(account):
     resource = app.config.get_per('accounts', account, 'resource')
-    # All valid resource substitution strings should be added to this hash.
-    if resource:
-        rand = ''.join(random.choice(
-            string.ascii_uppercase + string.digits) for _ in range(8))
-        resource = Template(resource).safe_substitute(
-            {'hostname': socket.gethostname(),
-             'rand': rand})
-        app.config.set_per('accounts', account, 'resource', resource)
+    if not resource:
+        return None
+
+    rand = ''.join(random.choice(
+        string.ascii_uppercase + string.digits) for _ in range(8))
+    resource = Template(resource).safe_substitute(
+        {'hostname': socket.gethostname(),
+         'rand': rand})
+    app.config.set_per('accounts', account, 'resource', resource)
     return resource
 
 

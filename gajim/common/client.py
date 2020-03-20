@@ -35,6 +35,7 @@ from gajim.common.helpers import get_encryption_method
 from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
+from gajim.common.helpers import get_resource
 
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
@@ -116,7 +117,7 @@ class Client(ConnectionHandlers):
         self.connection = self._client
         self._client.set_domain(self._hostname)
         self._client.set_username(self._user)
-        self._client.set_resource('test')
+        self._client.set_resource(get_resource(self._account))
 
         custom_host = get_custom_host(self._account)
         if custom_host is not None:
