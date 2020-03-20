@@ -265,12 +265,13 @@ def detect_dependencies():
         pass
 
     try:
-        Gst.init(None)
-        conference = Gst.ElementFactory.make('fsrtpconference', None)
-        conference.new_session(Farstream.MediaType.AUDIO)
-        _dependencies['AV'] = True
+        if _dependencies['GST'] and _dependencies['FARSTREAM']:
+            Gst.init(None)
+            conference = Gst.ElementFactory.make('fsrtpconference', None)
+            conference.new_session(Farstream.MediaType.AUDIO)
+            _dependencies['AV'] = True
     except Exception as error:
-        log('gajim').info(error)
+        log('gajim').warning('AV dependency test failed: %s', error)
 
     # GEOCLUE
     try:
@@ -316,7 +317,7 @@ def detect_dependencies():
             gsound_ctx.init()
             _dependencies['GSOUND'] = True
         except GLib.Error as error:
-            log('gajim').error(error)
+            log('gajim').warning('GSound init failed: %s', error)
     except (ImportError, ValueError):
         pass
 
