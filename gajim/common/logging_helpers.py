@@ -143,7 +143,7 @@ def init():
     consoleloghandler = logging.StreamHandler()
     consoleloghandler.setFormatter(
         FancyFormatter(
-            '%(asctime)s %(levelname)s %(name)s %(message)s',
+            '%(asctime)s %(levelname)s %(name)-35s %(message)s',
             '%x %H:%M:%S',
             use_color
         )
