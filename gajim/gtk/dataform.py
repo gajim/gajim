@@ -257,7 +257,9 @@ class Field:
             form_grid.attach_next_to(self._warning_box,
                                      self._widget,
                                      Gtk.PositionType.RIGHT, 1, 1)
-            self._set_warning(False, '')
+
+            is_valid, error = self._field.is_valid()
+            self._set_warning(is_valid, error)
 
     def _set_warning(self, is_valid, error):
         if not self._field.required and not is_valid and not error:
