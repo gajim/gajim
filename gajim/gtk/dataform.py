@@ -146,7 +146,7 @@ class FormGrid(Gtk.Grid):
                 continue
 
             if options.get('hide-fallback-fields'):
-                if 'fallback' in field.var:
+                if field.var is not None and 'fallback' in field.var:
                     continue
 
             if field.media:
