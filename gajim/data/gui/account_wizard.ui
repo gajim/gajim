@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkGrid" id="advanced_grid">
@@ -313,7 +313,6 @@
       <object class="GtkButton" id="sign_up_button">
         <property name="label" translatable="yes">_Sign Up</property>
         <property name="visible">True</property>
-        <property name="sensitive">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Sign up for a new account on a server of your choice</property>
@@ -331,6 +330,58 @@
     <property name="inline_completion">True</property>
     <property name="popup_completion">False</property>
     <property name="popup_single_match">False</property>
+  </object>
+  <object class="GtkBox" id="redirect_box">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">18</property>
+    <child>
+      <object class="GtkImage">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="icon_name">applications-internet-symbolic</property>
+        <property name="icon_size">6</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="instructions">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="wrap">True</property>
+        <property name="max_width_chars">42</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="link_button">
+        <property name="label" translatable="yes">Visit Website</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="halign">center</property>
+        <property name="use_underline">True</property>
+        <style>
+          <class name="suggested-action"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkBox" id="security_warning_box">
     <property name="visible">True</property>
@@ -650,6 +701,7 @@ Creating an account on one server allows you to communicate with contacts from o
       <object class="GtkCheckButton" id="sign_up_anonymously">
         <property name="label" translatable="yes">Sign up Anonymously</property>
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Note: Anonymous accounts are not possible on all servers</property>

@@ -26,6 +26,7 @@ from nbxmpp.const import Mode
 from nbxmpp.const import StreamError
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
+from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -48,7 +49,7 @@ log = logging.getLogger('gajim.gtk.account_wizard')
 
 class AccountWizard(Assistant):
     def __init__(self):
-        Assistant.__init__(self)
+        Assistant.__init__(self, height=500)
 
         self._destroyed = False
 
@@ -61,9 +62,10 @@ class AccountWizard(Assistant):
 
         self.add_pages({'login': Login(self._on_button_clicked),
                         'signup': Signup(),
-                        'form': Form(),
                         'advanced': AdvancedSettings(),
                         'security-warning': SecurityWarning(),
+                        'form': Form(),
+                        'redirect': Redirect(),
                         'success': Success(),
                         })
 
@@ -94,7 +96,7 @@ class AccountWizard(Assistant):
         if page_name in ('login', 'progress'):
             return None
 
-        if page_name == 'error':
+        if page_name in ('error', 'redirect'):
             return ['back']
 
         if page_name == 'success':
@@ -159,17 +161,26 @@ class AccountWizard(Assistant):
                 self.show_page('login', Gtk.StackTransitionType.SLIDE_RIGHT)
 
             elif page in ('advanced', 'error', 'security-warning'):
-                self.show_page(self._method,
-                               Gtk.StackTransitionType.SLIDE_RIGHT)
+                if (page == 'error' and
+                        self._method == 'signup' and
+                        self.get_page('form').has_form):
+                    self.show_page('form', Gtk.StackTransitionType.SLIDE_RIGHT)
+                else:
+                    self.show_page(self._method,
+                                   Gtk.StackTransitionType.SLIDE_RIGHT)
 
             elif page == 'form':
-                # TODO: Disconnect
-                self.get_page('form').remove_form()
                 self.show_page('signup', Gtk.StackTransitionType.SLIDE_RIGHT)
+                self.get_page('form').remove_form()
+                self._disconnect()
+
+            elif page == 'redirect':
+                self.show_page('login', Gtk.StackTransitionType.SLIDE_RIGHT)
 
     def _on_page_changed(self, _assistant, page_name):
         if page_name == 'signup':
             self._method = page_name
+            self.get_page('signup').focus()
             self.set_default_button('signup')
 
         elif page_name == 'login':
@@ -185,14 +196,14 @@ class AccountWizard(Assistant):
         elif page_name == 'success':
             self.set_default_button('connect')
 
-        elif page_name == 'error':
+        elif page_name in ('error', 'redirect'):
             self.set_default_button('back')
+
+        elif page_name == 'form':
+            self.set_default_button('signup')
 
     def update_proxy_list(self):
         self.get_page('advanced').update_proxy_list()
-
-    def _on_destroy(self, *args):
-        self._destroyed = True
 
     def _get_base_client(self,
                          domain,
@@ -201,10 +212,10 @@ class AccountWizard(Assistant):
                          advanced,
                          ignore_all_errors):
 
-        client = Client()
+        client = Client(log_context='Account Wizard')
         client.set_domain(domain)
         client.set_username(username)
-        client.set_mode(Mode.LOGIN_TEST)
+        client.set_mode(mode)
         client.set_ignore_tls_errors(ignore_all_errors)
         client.set_accepted_certificates(
             app.cert_store.get_certificates())
@@ -223,10 +234,17 @@ class AccountWizard(Assistant):
         client.subscribe('connection-failed', self._on_connection_failed)
         return client
 
+    def _disconnect(self):
+        if self._client is None:
+            return
+        self._client.remove_subscriptions()
+        self._client.disconnect()
+        self._client = None
+
     def _test_credentials(self, ignore_all_errors=False):
         self._show_progress_page(_('Connecting...'),
                                  _('Connecting to server...'))
-        address, password = self.get_page('login').get_data()
+        address, password = self.get_page('login').get_credentials()
         jid = JID(address)
         advanced = self.get_page('login').is_advanced()
 
@@ -291,6 +309,10 @@ class AccountWizard(Assistant):
                                       _('Signup not allowed'),
                                       _('This server does not allow signup.'))
 
+        elif domain == StreamError.STREAM:
+            self._show_error_page(_('Error'), _('Error'), error)
+
+        self.get_page('form').remove_form()
         self._client.destroy()
         self._client = None
 
@@ -322,27 +344,84 @@ class AccountWizard(Assistant):
         return domain
 
     def _on_register_form(self, result):
-        if result.form is None:
-            # Invalid form
+        if is_error_result(result):
+            self._show_error_page(_('Error'),
+                                  _('Error'),
+                                  result.get_text())
+            self._disconnect()
             return
 
         if result.bob_data is not None:
             algo_hash = result.bob_data.cid.split('@')[0]
             app.bob_cache[algo_hash] = result.bob_data.data
-        self.get_page('form').add_form(result.form)
+
+        form = result.form
+        if result.form is None:
+            form = result.fields_form
+
+        if form is not None:
+            self.get_page('form').add_form(form)
+
+        elif result.oob_url is not None:
+            self.get_page('redirect').set_redirect(result.oob_url,
+                                                   result.instructions)
+            self.show_page('redirect', Gtk.StackTransitionType.SLIDE_LEFT)
+            self._disconnect()
+            return
+
         self.show_page('form', Gtk.StackTransitionType.SLIDE_LEFT)
 
     def _submit_form(self):
-        pass
-        # if self.is_form:
-        #     form = self.get_page('form').get_data_form()
-        # else:
-        #     form = self.get_page('form').get_submit_form()
-        # app.connections[self.account].send_new_account_infos(
-        #     form, self.is_form)
-        # self.get_page('progress').set_text(_('Account is being created'))
-        # self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
-        # self.get_page('form').remove_form()
+        self.get_page('progress').set_text(_('Account is being created'))
+        self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
+
+        form = self.get_page('form').get_submit_form()
+        self._client.get_module('Register').submit_register_form(
+            form, callback=self._on_register_result)
+
+    def _on_register_result(self, result):
+        if is_error_result(result):
+            self._on_register_error(result)
+            return
+
+        username, password = self.get_page('form').get_credentials()
+        account = self._generate_account_name(self._client.domain)
+        app.interface.create_account(account,
+                                     username,
+                                     self._client.domain,
+                                     password)
+
+        self.get_page('success').set_account(account)
+        self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
+        self.get_page('form').remove_form()
+        self._disconnect()
+
+    def _on_register_error(self, result):
+        self._show_error_page(_('Error'),
+                              _('Error'),
+                              result.get_text())
+
+        register_data = result.get_date()
+        if register_data is None:
+            # IQ error did not have the payload included
+            self.get_page('form').remove_form()
+            self._disconnect()
+            return
+
+        form = register_data.form
+        if register_data.form is None:
+            form = register_data.fields_form
+
+        if form is not None:
+            self.get_page('form').add_form(form)
+
+        else:
+            self.get_page('form').remove_form()
+            self._disconnect()
+
+    def _on_destroy(self, *args):
+        self._disconnect()
+        self._destroyed = True
 
 
 class Login(Page):
@@ -445,7 +524,7 @@ class Login(Page):
     def is_advanced(self):
         return self._ui.login_advanced_checkbutton.get_active()
 
-    def get_data(self):
+    def get_credentials(self):
         data = (self._ui.log_in_address_entry.get_text(),
                 self._ui.log_in_password_entry.get_text())
         return data
@@ -478,6 +557,9 @@ class Signup(Page):
         self.pack_start(self._ui.signup_grid, True, True, 0)
 
         self.show_all()
+
+    def focus(self):
+        self._ui.server_comboboxtext_sign_up_entry.grab_focus()
 
     def _create_server_completion(self):
         # Parse servers.json
@@ -663,6 +745,10 @@ class Form(Page):
 
         self.show_all()
 
+    @property
+    def has_form(self):
+        return self._current_form is not None
+
     def _on_is_valid(self, _widget, is_valid):
         self.complete = is_valid
         self.get_toplevel().update_page_complete()
@@ -670,20 +756,49 @@ class Form(Page):
     def add_form(self, form):
         self.remove_form()
 
-        options = {'hide-fallback-fields': True}
+        options = {'hide-fallback-fields': True,
+                   'entry-activates-default': True}
         self._current_form = DataFormWidget(form, options)
         self._current_form.connect('is-valid', self._on_is_valid)
         self._current_form.validate()
         self.pack_start(self._current_form, True, True, 0)
         self._current_form.show_all()
 
+    def get_credentials(self):
+        return (self._current_form.get_form()['username'].value,
+                self._current_form.get_form()['password'].value)
+
     def get_submit_form(self):
         return self._current_form.get_submit_form()
 
     def remove_form(self):
-        if self._current_form is not None:
-            self.remove(self._current_form)
-            self._current_form.destroy()
+        if self._current_form is None:
+            return
+
+        self.remove(self._current_form)
+        self._current_form.destroy()
+        self._current_form = None
+
+
+class Redirect(Page):
+    def __init__(self):
+        Page.__init__(self)
+        self.title = _('Redirect')
+        self._link = None
+
+        self._ui = get_builder('account_wizard.ui')
+        self.pack_start(self._ui.redirect_box, True, True, 0)
+        self._ui.link_button.connect('clicked', self._on_link_button)
+        self.show_all()
+
+    def set_redirect(self, link, instructions):
+        if instructions is None:
+            instructions = _('Register on the Website')
+        self._ui.instructions.set_text(instructions)
+        self._link = link
+
+    def _on_link_button(self, _button):
+        open_uri(self._link)
 
 
 class Success(Page):
