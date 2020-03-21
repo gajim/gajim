@@ -1,24 +1,18 @@
 {
    "servers":[
       "0nl1ne.at",
-      "404.city",
       "blabber.im",
-      "brauchen.info",
-      "chatme.im",
-      "comm.unicate.me",
       "creep.im",
       "deshalbfrei.org",
       "draugr.de",
       "im.apinc.org",
       "jabber-hosting.de",
-      "jabber.at",
       "jabber.ccc.de",
       "jabber.cz",
       "jabber.hot-chilli.net",
       "jabber.meta.net.nz",
       "jabber.no",
       "jabber.sk",
-      "jabber.rueckgr.at",
       "jabberes.org",
       "jabbim.com",
       "jabbim.cz",
@@ -28,7 +22,6 @@
       "lightwitch.org",
       "linuxlovers.at",
       "njs.netlab.cz",
-      "pandion.im",
       "richim.org",
       "suchat.org",
       "tigase.im",
@@ -37,7 +30,5 @@
       "verdammung.org",
       "xabber.de",
       "xmpp-hosting.de",
-      "xmpp.jp",
-      "zsim.de"
    ]
 }
