@@ -27,6 +27,8 @@ finish-args:
   - --talk-name=org.freedesktop.secrets
   # GnuPG
   - --filesystem=~/.gnupg
+  # camera access
+  - --device=all
   # extensions
   - --env=PYTHONPATH=/app/plugins/lib/python3.7/site-packages
 
@@ -190,6 +192,12 @@ modules:
       - type: archive
         url: https://download.gnome.org/sources/gspell/1.8/gspell-1.8.3.tar.xz
         sha256: 5ae514dd0216be069176accf6d0049d6a01cfa6a50df4bc06be85f7080b62de8
+
+  - name: farstream
+    sources:
+      - type: archive
+        url: https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
+        sha256: cb7d112433cf7c2e37a8ec918fb24f0ea5cb293cfa1002488e431de26482f47b
 
   - name: python3-nbxmpp
     buildsystem: simple
