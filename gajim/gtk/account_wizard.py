@@ -401,7 +401,7 @@ class AccountWizard(Assistant):
                               _('Error'),
                               result.get_text())
 
-        register_data = result.get_date()
+        register_data = result.get_data()
         if register_data is None:
             # IQ error did not have the payload included
             self.get_page('form').remove_form()
