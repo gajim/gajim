@@ -1648,12 +1648,18 @@ class Interface:
                 app.sleeper_state[account] = 'autoxa'
         return True # renew timeout (loop for ever)
 
-    def create_account(self,
-                       account,
+    @staticmethod
+    def create_account(account,
                        username,
                        domain,
                        password,
                        anonymous=False):
+
+        if not account or not username or not domain:
+            log.error('Creating account failed: '
+                      'account: %s, username: %s, domain: %s',
+                      account, username, domain)
+            return
 
         config = {}
         config['active'] = False
