@@ -62,6 +62,9 @@ class DataFormWidget(Gtk.ScrolledWindow):
     def validate(self):
         return self._form_grid.validate(True)
 
+    def get_form(self):
+        return self._form_node
+
     def get_submit_form(self):
         self._form_node.type_ = 'submit'
         return self._form_node
