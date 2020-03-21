@@ -43,6 +43,8 @@ from gajim.gtk.assistant import Page
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import open_window
+from gajim.gtk.util import ensure_not_destroyed
+
 
 log = logging.getLogger('gajim.gtk.account_wizard')
 
@@ -343,6 +345,7 @@ class AccountWizard(Assistant):
             i += 1
         return domain
 
+    @ensure_not_destroyed
     def _on_register_form(self, result):
         if is_error_result(result):
             self._show_error_page(_('Error'),
@@ -379,6 +382,7 @@ class AccountWizard(Assistant):
         self._client.get_module('Register').submit_register_form(
             form, callback=self._on_register_result)
 
+    @ensure_not_destroyed
     def _on_register_result(self, result):
         if is_error_result(result):
             self._on_register_error(result)
