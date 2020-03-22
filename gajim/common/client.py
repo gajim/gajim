@@ -196,6 +196,7 @@ class Client(ConnectionHandlers):
 
     def _on_disconnected(self, _client, _signal_name):
         log.info('Disconnect %s', self._account)
+        self._set_state(ClientState.DISCONNECTED)
 
         domain, error, _text = self._client.get_error()
         if domain == StreamError.BAD_CERTIFICATE:
@@ -232,14 +233,13 @@ class Client(ConnectionHandlers):
                 OurShowEvent(None, conn=self, show='error'))
 
         else:
+            self._status = 'offline'
             self.get_module('Chatstate').enabled = False
             app.nec.push_incoming_event(OurShowEvent(
                 None, conn=self, show='offline'))
             self._after_disconnect()
 
     def _after_disconnect(self):
-        log.info('Set state disconnected')
-        self._set_state(ClientState.DISCONNECTED)
         self._disable_reconnect_timer()
 
         app.interface.music_track_changed(None, None, self._account)
