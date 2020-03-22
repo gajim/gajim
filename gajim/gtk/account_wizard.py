@@ -282,10 +282,16 @@ class AccountWizard(Assistant):
 
     def _on_login_successful(self, client, _signal_name):
         account = self._generate_account_name(client.domain)
+        proxy_name = None
+        if client.proxy is not None:
+            proxy_name = self.get_page('advanced').get_proxy()
+
         app.interface.create_account(account,
                                      client.username,
                                      client.domain,
-                                     client.password)
+                                     client.password,
+                                     proxy_name,
+                                     client.custom_host)
         self.get_page('success').set_account(account)
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
 
@@ -399,10 +405,17 @@ class AccountWizard(Assistant):
 
         username, password = self.get_page('form').get_credentials()
         account = self._generate_account_name(self._client.domain)
+
+        proxy_name = None
+        if self._client.proxy is not None:
+            proxy_name = self.get_page('advanced').get_proxy()
+
         app.interface.create_account(account,
                                      username,
                                      self._client.domain,
-                                     password)
+                                     password,
+                                     proxy_name,
+                                     self._client.custom_host)
 
         self.get_page('success').set_account(account)
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)

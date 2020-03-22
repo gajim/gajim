@@ -1653,6 +1653,8 @@ class Interface:
                        username,
                        domain,
                        password,
+                       proxy_name,
+                       custom_host,
                        anonymous=False):
 
         if not account or not username or not domain:
@@ -1671,10 +1673,17 @@ class Interface:
         config['anonymous_auth'] = anonymous
         config['autoconnect'] = True
         config['sync_with_global_status'] = True
-        config['proxy'] = ''
-        config['use_custom_host'] = False
-        config['custom_port'] = 0
-        config['custom_host'] = ''
+
+        if proxy_name is not None:
+            config['proxy'] = proxy_name
+
+        use_custom_host = custom_host is not None
+        config['use_custom_host'] = use_custom_host
+        if custom_host:
+            host, _protocol, type_ = custom_host
+            host, port = host.split(':')
+            config['custom_port'] = int(port)
+            config['custom_host'] = host
 
         app.config.add_per('accounts', account)
         for opt in config:
