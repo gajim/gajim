@@ -71,7 +71,7 @@ class Client(ConnectionHandlers):
         self.roster_supported = True
 
         self._state = ClientState.DISCONNECTED
-        self._status = 'offline'
+        self._status = 'online'
         self._status_message = ''
 
         self._reconnect = True
@@ -241,7 +241,6 @@ class Client(ConnectionHandlers):
                 OurShowEvent(None, conn=self, show='error'))
 
         else:
-            self._status = 'offline'
             self.get_module('Chatstate').enabled = False
             app.nec.push_incoming_event(OurShowEvent(
                 None, conn=self, show='offline'))
@@ -307,7 +306,8 @@ class Client(ConnectionHandlers):
         if not msg:
             msg = ''
 
-        self._status = show
+        if show != 'offline':
+            self._status = show
         self._status_message = msg
 
         if self._state.is_disconnecting:
