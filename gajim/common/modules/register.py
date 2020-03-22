@@ -24,6 +24,12 @@ from gajim.common.modules.bits_of_binary import parse_bob_data
 
 
 class Register(BaseModule):
+
+    _nbxmpp_extends = 'Register'
+    _nbxmpp_methods = [
+        'unregister',
+    ]
+
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
