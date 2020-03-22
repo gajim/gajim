@@ -178,6 +178,9 @@ class Client(ConnectionHandlers):
 
     def _on_resume_successful(self, _client, _signal_name):
         self._set_state(ClientState.CONNECTED)
+        app.nec.push_incoming_event(NetworkEvent('account-connected',
+                                                 account=self._account))
+
         app.nec.push_incoming_event(
             OurShowEvent(None, conn=self, show=self._status))
 
@@ -267,6 +270,8 @@ class Client(ConnectionHandlers):
 
     def _on_connected(self, client, _signal_name):
         self._set_state(ClientState.CONNECTED)
+        app.nec.push_incoming_event(NetworkEvent('account-connected',
+                                                 account=self._account))
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()
         self.get_module('Discovery').discover_server_items()
