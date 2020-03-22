@@ -1684,6 +1684,7 @@ class Interface:
             host, port = host.split(':')
             config['custom_port'] = int(port)
             config['custom_host'] = host
+            config['custom_type'] = type_.value
 
         app.config.add_per('accounts', account)
         for opt in config:
