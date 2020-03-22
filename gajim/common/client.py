@@ -36,6 +36,7 @@ from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.helpers import get_resource
+from gajim.common.i18n import _
 
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
@@ -198,7 +199,7 @@ class Client(ConnectionHandlers):
         log.info('Disconnect %s', self._account)
         self._set_state(ClientState.DISCONNECTED)
 
-        domain, error, _text = self._client.get_error()
+        domain, error, text = self._client.get_error()
         if domain == StreamError.BAD_CERTIFICATE:
             self._ssl_errors = self._client.peer_certificate[1]
             self.get_module('Chatstate').enabled = False
@@ -225,6 +226,13 @@ class Client(ConnectionHandlers):
 
                 app.nec.push_incoming_event(NetworkEvent(
                     'password-required', conn=self, on_password=_on_password))
+
+            app.nec.push_incoming_event(
+                NetworkEvent('simple-notification',
+                             account=self._account,
+                             type_='connection-failed',
+                             title=_('Authentication failed'),
+                             text=text or error))
 
         if self._reconnect:
             self._after_disconnect()

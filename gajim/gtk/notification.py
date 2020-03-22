@@ -61,6 +61,7 @@ class Notification(EventHelper):
 
         self.register_events([
             ('notification', ged.GUI2, self._nec_notification),
+            ('simple-notification', ged.GUI2, self._on_notification),
             ('our-show', ged.GUI2, self._nec_our_status),
         ])
 
@@ -113,6 +114,13 @@ class Notification(EventHelper):
                 helpers.exec_command(obj.command, use_shell=True)
             except Exception:
                 pass
+
+    def _on_notification(self, event):
+        self.popup(event.type_,
+                   None,
+                   event.account,
+                   title=event.title,
+                   text=event.text)
 
     def _on_event_removed(self, event_list):
         for event in event_list:
