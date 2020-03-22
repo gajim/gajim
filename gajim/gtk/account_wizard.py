@@ -312,7 +312,13 @@ class AccountWizard(Assistant):
                                       _('This server does not allow signup.'))
 
         elif domain == StreamError.STREAM:
-            self._show_error_page(_('Error'), _('Error'), error)
+            # The credential test often ends with a stream error, because
+            # after auth there should be a stream restart but nbxmpp ends
+            # the stream with </stream> which is considered not-well-formed
+            # by the server. This ignores all stream errors if we already
+            # know that we succeeded.
+            if self.get_current_page() != 'success':
+                self._show_error_page(_('Error'), _('Error'), error)
 
         self.get_page('form').remove_form()
         self._client.destroy()
