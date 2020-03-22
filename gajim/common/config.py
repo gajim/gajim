@@ -66,7 +66,7 @@ class Config:
     DEFAULT_ACTIVITY_ICONSET = 'default'
 
     __options = ({
-        # name: [ type, default_value, help_string ]
+        # name: [ type, default_value, help_string, restart ]
         'verbose': [opt_bool, False, '', True],
         'autopopup': [opt_bool, False],
         'notify_on_signin': [opt_bool, False],
