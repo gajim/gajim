@@ -121,7 +121,7 @@ class AccountWizard(Assistant):
                 self._test_credentials()
 
             elif page == 'security-warning':
-                if self.get_page('security-warning').is_add_to_trusted:
+                if self.get_page('security-warning').trust_certificate:
                     app.cert_store.add_certificate(
                         self.get_page('security-warning').cert)
                 self._test_credentials(ignore_all_errors=True)
@@ -141,7 +141,7 @@ class AccountWizard(Assistant):
                 self._register_with_server()
 
             elif page == 'security-warning':
-                if self.get_page('security-warning').is_add_to_trusted:
+                if self.get_page('security-warning').trust_certificate:
                     app.cert_store.add_certificate(
                         self.get_page('security-warning').cert)
                 self._register_with_server(ignore_all_errors=True)
@@ -727,7 +727,8 @@ class SecurityWarning(Page):
                     transient_for=self.get_toplevel(),
                     cert=self._cert)
 
-    def is_add_to_trusted(self):
+    @property
+    def trust_certificate(self):
         return self._ui.trust_cert_checkbutton.get_active()
 
 
