@@ -308,6 +308,7 @@ class Config:
             'use_custom_host': [opt_bool, False, '', True],
             'custom_port': [opt_int, 5222, '', True],
             'custom_host': [opt_str, '', '', True],
+            'custom_type': [opt_str, 'START TLS', _('ConnectionType: START TLS, DIRECT TLS or PLAIN'), True],
             'sync_with_global_status': [opt_bool, False, ],
             'no_log_for': [opt_str, '', _('List of XMPP Addresses (space separated) for which you do not want to store chat history. You can also add the name of an account to disable storing chat history for this account.')],
             'attached_gpg_keys': [opt_str, ''],

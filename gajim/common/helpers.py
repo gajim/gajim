@@ -1775,9 +1775,10 @@ def get_custom_host(account):
         return
     host = app.config.get_per('accounts', account, 'custom_host')
     port = app.config.get_per('accounts', account, 'custom_port')
+    type_ = app.config.get_per('accounts', account, 'custom_type')
     return ('%s:%s' % (host, port),
             ConnectionProtocol.TCP,
-            ConnectionType.DIRECT_TLS)
+            ConnectionType(type_))
 
 
 def warn_about_plain_connection(account, connection_types):

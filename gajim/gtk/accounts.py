@@ -764,6 +764,8 @@ class PriorityDialog(SettingsDialog):
 class CutstomHostnameDialog(SettingsDialog):
     def __init__(self, account, parent):
 
+        type_values = ('START TLS', 'DIRECT TLS', 'PLAIN')
+
         settings = [
             Setting(SettingKind.SWITCH, _('Enable'),
                     SettingType.ACCOUNT_CONFIG,
@@ -776,6 +778,11 @@ class CutstomHostnameDialog(SettingsDialog):
             Setting(SettingKind.ENTRY, _('Port'),
                     SettingType.ACCOUNT_CONFIG, 'custom_port',
                     enabledif=('custom', True)),
+
+            Setting(SettingKind.COMBO, _('Type'),
+                    SettingType.ACCOUNT_CONFIG, 'custom_type',
+                    enabledif=('custom', True),
+                    props={'combo_items': type_values}),
             ]
 
         SettingsDialog.__init__(self, parent, _('Connection Settings'),
