@@ -60,7 +60,7 @@ class AccountWizard(Assistant):
                         css_class='suggested-action')
         self.add_button('connect', _('Connect'), css_class='suggested-action')
         self.add_button('next', _('Next'), css_class='suggested-action')
-        self.add_button('login', _('Log In'))
+        self.add_button('login', _('Log In'), css_class='suggested-action')
         self.add_button('back', _('Back'))
 
         self.add_pages({'login': Login(self._on_button_clicked),
