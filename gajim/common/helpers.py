@@ -1567,11 +1567,9 @@ def get_resource(account):
     if not resource:
         return None
 
-    rand = ''.join(random.choice(
-        string.ascii_uppercase + string.digits) for _ in range(8))
     resource = Template(resource).safe_substitute(
         {'hostname': socket.gethostname(),
-         'rand': rand})
+         'rand': get_random_string()})
     app.config.set_per('accounts', account, 'resource', resource)
     return resource
 

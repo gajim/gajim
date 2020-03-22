@@ -1666,6 +1666,7 @@ class Interface:
         config = {}
         config['active'] = False
         config['name'] = username
+        config['resource'] = 'gajim.%s' % helpers.get_random_string(8)
         config['account_label'] = '%s@%s' % (username, domain)
         config['hostname'] = domain
         config['savepass'] = True
