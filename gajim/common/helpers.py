@@ -798,15 +798,14 @@ def remove_invalid_xml_chars(string_):
         string_ = re.sub(app.interface.invalid_XML_chars_re, '', string_)
     return string_
 
-def get_random_string_16():
+def get_random_string(count=16):
     """
-    Create random string of length 16
+    Create random string of count length
+
+    WARNING: Don't use this for security purposes
     """
-    rng = list(range(65, 90))
-    rng.extend(range(48, 57))
-    char_sequence = [chr(e) for e in rng]
-    from random import sample
-    return ''.join(sample(char_sequence, 16))
+    allowed = string.ascii_uppercase + string.digits
+    return ''.join(random.choice(allowed) for char in range(count))
 
 def get_os_info():
     if app.os_info:

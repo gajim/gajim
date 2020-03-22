@@ -233,7 +233,7 @@ class ProxyResolver:
         self.jid = None
         self.host = None
         self.port = None
-        self.sid = helpers.get_random_string_16()
+        self.sid = helpers.get_random_string()
         self.sender_jid = sender_jid
         self.testit = testit
 

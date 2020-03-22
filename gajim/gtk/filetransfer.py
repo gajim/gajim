@@ -310,7 +310,7 @@ class FileTransfersWindow:
                     account, jid)
                 fjid = contact.get_full_jid()
             # Request the file to the sender
-            sid = helpers.get_random_string_16()
+            sid = helpers.get_random_string()
             new_file_props = FilesProp.getNewFileProp(account, sid)
             new_file_props.file_name = file_props.file_name
             new_file_props.name = file_props.name
@@ -721,7 +721,7 @@ class FileTransfersWindow:
                 _('It is not possible to send empty files'))
             return None
         file_props = FilesProp.getNewFileProp(
-            account, sid=helpers.get_random_string_16())
+            account, sid=helpers.get_random_string())
         mod_date = os.path.getmtime(file_path)
         file_props.file_name = file_path
         file_props.name = file_name

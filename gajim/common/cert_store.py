@@ -21,7 +21,7 @@ from gi.repository import Gio
 
 from gajim.common import configpaths
 
-from gajim.common.helpers import get_random_string_16
+from gajim.common.helpers import get_random_string
 from gajim.common.helpers import write_file_async
 
 
@@ -36,7 +36,7 @@ class CertificateStore:
         self._load_certificates()
 
     def _get_random_path(self):
-        filename = get_random_string_16()
+        filename = get_random_string()
         path = self._path / filename
         if path.exists():
             return self._get_random_path()

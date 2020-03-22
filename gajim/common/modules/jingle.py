@@ -215,7 +215,7 @@ class Jingle(BaseModule):
                                       senders=senders)
         file_props.transport_sid = transport.sid
         file_props.algo = self.__hash_support(contact)
-        jingle.add_content('file' + helpers.get_random_string_16(), transfer)
+        jingle.add_content('file' + helpers.get_random_string(), transfer)
         jingle.start_session()
         return transfer.transport.sid
 
