@@ -380,7 +380,9 @@ class AccountWizard(Assistant):
 
         form = self.get_page('form').get_submit_form()
         self._client.get_module('Register').submit_register_form(
-            form, callback=self._on_register_result)
+            None,
+            form,
+            callback=self._on_register_result)
 
     @ensure_not_destroyed
     def _on_register_result(self, result):
