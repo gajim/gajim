@@ -28,41 +28,14 @@ class Register(BaseModule):
     _nbxmpp_extends = 'Register'
     _nbxmpp_methods = [
         'unregister',
+        'change_password',
+        'change_password_with_form',
     ]
 
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
         self.agent_registrations = {}
-
-    def change_password(self, password, success_cb, error_cb):
-        if not app.account_is_connected(self._account):
-            return
-        hostname = app.config.get_per('accounts', self._account, 'hostname')
-        username = app.config.get_per('accounts', self._account, 'name')
-        iq = nbxmpp.Iq(typ='set', to=hostname)
-        query = iq.setTag(nbxmpp.NS_REGISTER + ' query')
-        query.setTagData('username', username)
-        query.setTagData('password', password)
-
-        weak_success_cb = weakref.WeakMethod(success_cb)
-        weak_error_cb = weakref.WeakMethod(error_cb)
-        self._log.info('Send password change')
-        self._con.connection.SendAndCallForResponse(
-            iq, self._change_password_response, {'success_cb': weak_success_cb,
-                                                 'error_cb': weak_error_cb})
-
-    def _change_password_response(self, _nbxmpp_client, stanza,
-                                  success_cb, error_cb):
-        if not nbxmpp.isResultNode(stanza):
-            error = stanza.getErrorMsg()
-            self._log.info('Error: %s', error)
-            if error_cb() is not None:
-                error_cb()(error)
-        else:
-            self._log.info('Password changed')
-            if success_cb() is not None:
-                success_cb()()
 
     def register_agent(self, agent, form, is_form, success_cb, error_cb):
         if not app.account_is_connected(self._account):

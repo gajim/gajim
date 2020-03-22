@@ -110,15 +110,14 @@ class ChangePassword(Assistant):
             self.set_default_button('back')
 
     def _on_apply(self, next_stage=False):
-        register = self._con.connection.get_module('Register')
         if next_stage:
             form = self.get_page('next_stage').get_submit_form()
-            register.change_password_with_form(
+            self._con.get_module('Register').change_password_with_form(
                 form, callback=self._on_change_password)
         else:
             password = self.get_page('password').get_password()
-            register.change_password(password,
-                                     callback=self._on_change_password)
+            self._con.get_module('Register').change_password(
+                password, callback=self._on_change_password)
 
     @ensure_not_destroyed
     def _on_change_password(self, result):
