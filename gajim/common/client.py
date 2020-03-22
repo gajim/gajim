@@ -59,8 +59,6 @@ class Client(ConnectionHandlers):
         self.password = None
 
         self.priority = 0
-        self.server_resource = None
-        self.registered_name = None
         self.handlers_registered = False
         self._connect_machine_calls = 0
         self.avatar_conversion = False
@@ -269,10 +267,6 @@ class Client(ConnectionHandlers):
 
     def _on_connected(self, client, _signal_name):
         self._set_state(ClientState.CONNECTED)
-        self.server_resource = 'test'
-        self.registered_name = client.get_bound_jid()
-        log.info('Bound JID: %s', self.registered_name)
-
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()
         self.get_module('Discovery').discover_server_items()
@@ -288,17 +282,16 @@ class Client(ConnectionHandlers):
         app.nec.push_incoming_event(NetworkEvent('stanza-received',
                                                  account=self._account,
                                                  stanza=stanza))
-    def get_own_jid(self, warn=False):
+    def get_own_jid(self):
         """
         Return the last full JID we received on a bind event.
         In case we were never connected it returns the bare JID from config.
         """
-        if self.registered_name:
-            # This returns the full jid we received on the bind event
-            return self.registered_name
+        if self._client is not None:
+            jid = self._client.get_bound_jid()
+            if jid is not None:
+                return jid
 
-        if warn:
-            log.warning('only bare JID available')
         # This returns the bare jid
         return nbxmpp.JID(app.get_jid_from_account(self._account))
 
@@ -319,7 +312,6 @@ class Client(ConnectionHandlers):
             if show == 'offline':
                 return
 
-            self.server_resource = helpers.get_resource(self._account)
             self.connect()
             return
 
