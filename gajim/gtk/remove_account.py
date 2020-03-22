@@ -19,8 +19,10 @@ from gi.repository import Gtk
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
+from gajim.common.helpers import event_filter
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
@@ -36,6 +38,7 @@ class RemoveAccount(Assistant):
         self.account = account
         self._con = app.connections.get(account)
         self._destroyed = False
+        self._account_removed = False
 
         self.add_button('remove', _('Remove'), 'destructive-action')
         self.add_button('close', _('Close'))
@@ -63,7 +66,31 @@ class RemoveAccount(Assistant):
         self.connect('page-changed', self._on_page_changed)
         self.connect('destroy', self._on_destroy)
 
+        self.register_events([
+            ('account-connected', ged.GUI1, self._on_account_connected),
+            ('account-disconnected', ged.GUI1, self._on_account_disconnected),
+        ])
+
+        self._set_remove_from_server_checkbox()
+
         self.show_all()
+
+    @event_filter(['account'])
+    def _on_account_connected(self, event):
+        self._con = app.connections.get(self.account)
+        self._set_remove_from_server_checkbox()
+
+    @event_filter(['account'])
+    def _on_account_disconnected(self, event):
+        self._set_remove_from_server_checkbox()
+
+        if self._account_removed:
+            self.show_page('success')
+            app.interface.remove_account(self.account)
+
+    def _set_remove_from_server_checkbox(self):
+        enabled = self._con is not None and self._con.state.is_connected
+        self.get_page('remove_choice').set_remove_from_server(enabled)
 
     @staticmethod
     def _visible_func(_assistant, page_name):
@@ -108,24 +135,31 @@ class RemoveAccount(Assistant):
             self.set_default_button('back')
 
     def _on_remove(self, *args):
-        if self.get_page('remove_choice').is_remove_from_server():
-            self._con.unregister_account(self._on_remove_response)
-        else:
-            if app.account_is_connected(self.account):
-                self._con.change_status('offline', 'offline')
+        if self.get_page('remove_choice').remove_from_server:
+            self._con.set_remove_account(True)
+            self._con.get_module('Register').unregister(
+                callback=self._on_remove_response)
+            return
+
+        if self._con is None or self._con.state.is_disconnected:
             app.interface.remove_account(self.account)
-            self.destroy()
+            self.show_page('success')
+            return
+
+        self._con.disconnect(gracefully=True, reconnect=False)
+        self._account_removed = True
 
     @ensure_not_destroyed
     def _on_remove_response(self, result):
         if is_error_result(result):
-            self._con.removing_account = False
+            self._con.set_remove_account(False)
+
             error_text = to_user_string(result)
             self.get_page('error').set_text(error_text)
             self.show_page('error')
-        else:
-            app.interface.remove_account(self.account)
-            self.show_page('success')
+            return
+
+        self._account_removed = True
 
     def _on_destroy(self, *args):
         self._destroyed = True
@@ -170,5 +204,14 @@ class RemoveChoice(Page):
         self.pack_start(self._server, False, True, 0)
         self.show_all()
 
-    def is_remove_from_server(self):
+    @property
+    def remove_from_server(self):
         return self._server.get_active()
+
+    def set_remove_from_server(self, enabled):
+        self._server.set_sensitive(enabled)
+        if enabled:
+            self._server.set_tooltip_text('')
+        else:
+            self._server.set_active(False)
+            self._server.set_tooltip_text(_('Account has to be connected'))

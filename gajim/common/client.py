@@ -75,6 +75,7 @@ class Client(ConnectionHandlers):
         self._reconnect = True
         self._reconnect_timer_source = None
         self._destroy_client = False
+        self._remove_account = False
 
         self._ssl_errors = set()
 
@@ -110,6 +111,12 @@ class Client(ConnectionHandlers):
     @property
     def features(self):
         return self._client.features
+
+    def set_remove_account(self, value):
+        # Used by the RemoveAccount Assistant to make the Client
+        # not react to any stream errors that happen while the
+        # account is removed by the server and the connection is killed
+        self._remove_account = value
 
     def _create_client(self):
         log.info('Create new nbxmpp client')
@@ -201,7 +208,12 @@ class Client(ConnectionHandlers):
         self._set_state(ClientState.DISCONNECTED)
 
         domain, error, text = self._client.get_error()
-        if domain == StreamError.BAD_CERTIFICATE:
+
+        if self._remove_account:
+            # Account was removed via RemoveAccount Assistant.
+            self._reconnect = False
+
+        elif domain == StreamError.BAD_CERTIFICATE:
             self._ssl_errors = self._client.peer_certificate[1]
             self.get_module('Chatstate').enabled = False
             self._reconnect = False
