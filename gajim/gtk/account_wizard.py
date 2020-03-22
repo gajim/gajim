@@ -40,6 +40,7 @@ from gajim.common.const import GIO_TLS_ERRORS
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import open_window
@@ -814,27 +815,13 @@ class Redirect(Page):
         open_uri(self._link)
 
 
-class Success(Page):
+class Success(SuccessPage):
     def __init__(self):
-        Page.__init__(self)
-        self.title = _('Account Added')
+        SuccessPage.__init__(self)
+        self.set_title(_('Account Added'))
+        self.set_heading(_('Account has been added successfully'))
+
         self._account = None
-
-        heading = Gtk.Label(label=_('Account has been added successfully'))
-        heading.get_style_context().add_class('large-header')
-        heading.set_max_width_chars(30)
-        heading.set_line_wrap(True)
-        heading.set_halign(Gtk.Align.CENTER)
-        heading.set_justify(Gtk.Justification.CENTER)
-
-        icon = Gtk.Image.new_from_icon_name('object-select-symbolic',
-                                            Gtk.IconSize.DIALOG)
-        icon.get_style_context().add_class('success-color')
-
-        self.pack_start(icon, False, True, 0)
-        self.pack_start(heading, False, True, 0)
-
-        self.show_all()
 
     def set_account(self, account):
         self._account = account
