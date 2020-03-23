@@ -176,6 +176,9 @@ class GroupchatControl(ChatControlBase):
         self.xml.info_grid.attach(self._muc_info_box, 0, 0, 1, 1)
 
         # Groupchat invite
+        self.xml.quick_invite_button.set_action_name(
+            'win.invite-%s' % self.control_id)
+
         self._invite_box = GroupChatInvite(self.room_jid)
         self.xml.invite_grid.attach(self._invite_box, 0, 0, 1, 1)
         self._invite_box.connect('listbox-changed', self._on_invite_ready)
