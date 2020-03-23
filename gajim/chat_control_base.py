@@ -201,6 +201,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         # add MessageInputTextView to UI and connect signals
         self.msg_textview = MessageInputTextView()
+        self.msg_textview.drag_dest_unset()
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.add(self.msg_textview)
 
@@ -216,15 +217,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         id_ = self.msg_textview.connect('populate_popup',
                                         self.on_msg_textview_populate_popup)
         self.handlers[id_] = self.msg_textview
-
-        # Setup DND
-        id_ = self.msg_textview.connect('drag_data_received',
-                                        self._on_drag_data_received)
-        self.handlers[id_] = self.msg_textview
-        self.msg_textview.drag_dest_set(
-            Gtk.DestDefaults.ALL,
-            self.dnd_list,
-            Gdk.DragAction.COPY)
 
         # the following vars are used to keep history of user's messages
         self.sent_history = []
