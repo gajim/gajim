@@ -1780,10 +1780,6 @@ class Interface:
         app.app.update_app_actions_state()
 
     def remove_account(self, account):
-        if account in app.connections:
-            app.connections[account].disconnect(gracefully=True,
-                                                reconnect=False)
-
         if app.config.get_per('accounts', account, 'active'):
             self.disable_account(account)
 
