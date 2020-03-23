@@ -1742,6 +1742,9 @@ class Interface:
         self.roster.send_status(account, 'online', '')
         app.config.set_per('accounts', account, 'active', True)
         app.app.update_app_actions_state()
+        window = get_app_window('AccountsWindow')
+        if window is not None:
+            GLib.idle_add(window.enable_account, account, True)
 
     def disable_account(self, account):
         self.roster.close_all(account, force=True)

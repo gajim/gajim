@@ -169,6 +169,9 @@ class AccountsWindow(Gtk.ApplicationWindow):
             log.warning('select_account() failed, account %s not found',
                         account)
 
+    def enable_account(self, account, state):
+        self._accounts[account].enable_account(state)
+
 
 class Settings(Gtk.ScrolledWindow):
     def __init__(self):
@@ -436,6 +439,9 @@ class Account:
         self._account_row.update_account_label()
         self._menu.update_account_label(self._account)
 
+    def enable_account(self, state):
+        self._account_row.enable_account(state)
+
     @property
     def menu(self):
         return self._menu
@@ -469,14 +475,14 @@ class AccountRow(Gtk.ListBoxRow):
                                                  Gtk.IconSize.MENU)
         next_icon.get_style_context().add_class('insensitive-fg-color')
 
-        switch = Gtk.Switch()
-        switch.set_active(
+        self._switch = Gtk.Switch()
+        self._switch.set_active(
             app.config.get_per('accounts', self._account, 'active'))
-        switch.set_vexpand(False)
+        self._switch.set_vexpand(False)
 
         if (self._account == app.ZEROCONF_ACC_NAME and
                 not app.is_installed('ZEROCONF')):
-            switch.set_active(False)
+            self._switch.set_active(False)
             self.set_activatable(False)
             self.set_sensitive(False)
             if sys.platform in ('win32', 'darwin'):
@@ -485,9 +491,10 @@ class AccountRow(Gtk.ListBoxRow):
                 tooltip = _('Please check if Avahi is installed.')
             self.set_tooltip_text(tooltip)
 
-        switch.connect('state-set', self._on_enable_switch, self._account)
+        self._switch.connect(
+            'state-set', self._on_enable_switch, self._account)
 
-        box.add(switch)
+        box.add(self._switch)
         box.add(self._label)
         box.add(next_icon)
         self.add(box)
@@ -502,6 +509,9 @@ class AccountRow(Gtk.ListBoxRow):
 
     def update_account_label(self):
         self._label.set_text(app.get_account_label(self._account))
+
+    def enable_account(self, state):
+        self._switch.set_state(state)
 
     def _on_enable_switch(self, switch, state, account):
         def _disable():
