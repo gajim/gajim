@@ -54,7 +54,7 @@ class RemoveAccount(Assistant):
         success.set_title(_('Account Removed'))
         success.set_heading(_('Account Removed'))
         success.set_text(
-            _('Your account has has been unregistered successfully.'))
+            _('Your account has has been removed successfully.'))
 
         error = self.add_default_page('error')
         error.set_title(_('Account Removal Failed'))
