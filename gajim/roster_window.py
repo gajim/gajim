@@ -290,7 +290,7 @@ class RosterWindow:
                 None, None, None, True] + [None] * self.nb_ext_renderers)
             self._iters['MERGED']['account'] = it
         else:
-            show = app.connections[account].status
+            show = helpers.get_connection_status(account)
             our_jid = app.get_jid_from_account(account)
 
             tls_pixbuf = None
