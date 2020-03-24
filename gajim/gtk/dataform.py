@@ -29,6 +29,17 @@ from gajim.gtk.util import MultiLineLabel
 from gajim.gtk.util import MaxWidthComboBoxText
 
 
+# Options
+
+#  no-scrolling                 No scrollbars
+#  form-width                   Minimal form width
+#  right-align                  Right align labels
+#  hide-fallback-fields         Hide fallback fields in IBR form (ejabberd)
+#  left-width                   Width for labels
+#  read-only                    Read only mode for fields
+#  entry-activates-default      Form entrys activate the default widget
+
+
 class DataFormWidget(Gtk.ScrolledWindow):
 
     __gsignals__ = {'is-valid': (GObject.SignalFlags.RUN_LAST, None, (bool,))}
