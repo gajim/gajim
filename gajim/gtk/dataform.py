@@ -124,7 +124,7 @@ class FormGrid(Gtk.Grid):
 
     @staticmethod
     def _analyse_fields(form_node, options):
-        if 'right_align' in options:
+        if 'right-align' in options:
             # Dont overwrite option
             return
 
@@ -138,7 +138,7 @@ class FormGrid(Gtk.Grid):
 
             label_lengths.add(len(field.label))
 
-        options['right_align'] = max(label_lengths) < 30
+        options['right-align'] = max(label_lengths) < 30
 
     def _parse_form(self, form_node, options):
         for field in form_node.iter_fields():
@@ -229,7 +229,7 @@ class Field:
         self._label.set_line_wrap(True)
         self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_width_chars(15)
-        self._label.set_xalign(bool(options.get('right_align')))
+        self._label.set_xalign(bool(options.get('right-align')))
         self._label.set_tooltip_text(field.description)
 
         self._warning_image = Gtk.Image.new_from_icon_name(
