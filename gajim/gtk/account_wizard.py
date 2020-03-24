@@ -203,6 +203,7 @@ class AccountWizard(Assistant):
             self.set_default_button('back')
 
         elif page_name == 'form':
+            self.get_page('form').focus()
             self.set_default_button('signup')
 
     def update_proxy_list(self):
@@ -805,6 +806,9 @@ class Form(Page):
         self.remove(self._current_form)
         self._current_form.destroy()
         self._current_form = None
+
+    def focus(self):
+        self._current_form.focus_first_entry()
 
 
 class Redirect(Page):
