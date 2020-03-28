@@ -17,12 +17,14 @@ import logging
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+from nbxmpp.util import is_error_result
+
 from gajim.common import app
-from gajim.common import ged
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import InformationDialog
@@ -43,6 +45,7 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
 
         self.account = account
         self._con = app.connections[account]
+        self._destroyed = False
 
         self._ui = get_builder('mam_preferences.ui')
         self.add(self._ui.get_object('mam_box'))
@@ -50,33 +53,40 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         self._spinner = Gtk.Spinner()
         self._ui.overlay.add_overlay(self._spinner)
 
-        self.register_events([
-            ('mam-prefs-received', ged.GUI1, self._mam_prefs_received),
-            ('mam-prefs-saved', ged.GUI1, self._mam_prefs_saved),
-            ('mam-prefs-error', ged.GUI1, self._mam_prefs_error),
-        ])
-
         self._set_mam_box_state(False)
+        self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
         self.show_all()
 
         self._activate_spinner()
 
-        self._con.get_module('MAM').request_mam_preferences()
+        self._con.get_module('MAM').request_preferences(
+            callback=self._mam_prefs_received)
 
-    def _mam_prefs_received(self, obj):
-        if obj.conn.name != self.account:
+    def _on_destroy(self, *args):
+        self._destroyed = True
+
+    @ensure_not_destroyed
+    def _mam_prefs_received(self, result):
+        if is_error_result(result):
+            self._on_error(result.get_text())
             return
+
         self._disable_spinner()
         self._set_mam_box_state(True)
 
-        self._ui.default_combo.set_active_id(obj.default)
+        self._ui.default_combo.set_active_id(result.default)
         self._ui.preferences_store.clear()
-        for item in obj.rules:
-            self._ui.preferences_store.append(item)
+        for jid in result.always:
+            self._ui.preferences_store.append((str(jid), 'Always'))
 
-    def _mam_prefs_saved(self, obj):
-        if obj.conn.name != self.account:
+        for jid in result.never:
+            self._ui.preferences_store.append((str(jid), 'Never'))
+
+    @ensure_not_destroyed
+    def _mam_prefs_saved(self, result):
+        if is_error_result(result):
+            self._on_error(result.get_text())
             return
 
         self._disable_spinner()
@@ -91,18 +101,11 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
             [DialogButton.make('OK',
                                callback=_on_ok)]).show()
 
-    def _mam_prefs_error(self, obj=None):
-        if obj and obj.conn.name != self.account:
-            return
-
+    def _on_error(self, error):
         self._disable_spinner()
 
-        if not obj:
-            msg = _('No response from the Server')
-        else:
-            msg = _('Error received: {}').format(obj.error_msg)
-
-        InformationDialog(_('Archiving Preferences Error'), msg)
+        InformationDialog(_('Archiving Preferences Error'),
+                          _('Error received: {}').format(error))
 
         self._set_mam_box_state(True)
 
@@ -130,11 +133,17 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
     def _on_save(self, _button):
         self._activate_spinner()
         self._set_mam_box_state(False)
-        items = []
+        always = []
+        never = []
         default = self._ui.default_combo.get_active_id()
         for item in self._ui.preferences_store:
-            items.append((item[0].lower(), item[1]))
-        self._con.get_module('MAM').set_mam_preferences(items, default)
+            jid, type_ = item
+            if type_ == 'Always':
+                always.append(jid)
+            else:
+                never.append(jid)
+        self._con.get_module('MAM').set_preferences(
+            default, always, never, callback=self._mam_prefs_saved)
 
     def _activate_spinner(self):
         self._spinner.show()

@@ -15,10 +15,12 @@
 # XEP-0313: Message Archive Management
 
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 
 import nbxmpp
 from nbxmpp.util import generate_id
+from nbxmpp.util import is_error_result
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -36,6 +38,14 @@ from gajim.common.modules.base import BaseModule
 
 
 class MAM(BaseModule):
+
+    _nbxmpp_extends = 'MAM'
+    _nbxmpp_methods = [
+        'request_preferences',
+        'set_preferences',
+        'make_query',
+    ]
+
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
@@ -75,6 +85,9 @@ class MAM(BaseModule):
     def reset_state(self):
         self._mam_query_ids.clear()
         self._catch_up_finished.clear()
+
+    def _remove_query_id(self, jid):
+        self._mam_query_ids.pop(jid, None)
 
     def is_catch_up_finished(self, jid):
         return jid in self._catch_up_finished
@@ -253,7 +266,7 @@ class MAM(BaseModule):
         )
 
     def _is_valid_request(self, properties):
-        valid_id = self._mam_query_ids.get(str(properties.mam.archive), None)
+        valid_id = self._mam_query_ids.get(properties.mam.archive, None)
         return valid_id == properties.mam.query_id
 
     def _get_query_id(self, jid):
@@ -261,59 +274,8 @@ class MAM(BaseModule):
         self._mam_query_ids[jid] = query_id
         return query_id
 
-    def _parse_iq(self, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.error('Error on MAM query: %s', stanza.getError())
-            raise InvalidMamIQ
-
-        fin = stanza.getTag('fin')
-        if fin is None:
-            self._log.error('Malformed MAM query result received: %s', stanza)
-            raise InvalidMamIQ
-
-        set_ = fin.getTag('set', namespace=nbxmpp.NS_RSM)
-        if set_ is None:
-            self._log.error(
-                'Malformed MAM query result received (no "set" Node): %s',
-                stanza)
-            raise InvalidMamIQ
-        return fin, set_
-
-    def _get_from_jid(self, stanza):
-        jid = stanza.getFrom()
-        if jid is None:
-            # No from means, iq from our own archive
-            jid = self._con.get_own_jid().getStripped()
-        else:
-            jid = jid.getStripped()
-        return jid
-
-    def request_archive_count(self, start_date, end_date):
-        jid = self._con.get_own_jid().getStripped()
-        self._log.info('Request archive count from: %s', jid)
-        query_id = self._get_query_id(jid)
-        query = self._get_archive_query(
-            query_id, start=start_date, end=end_date, max_=0)
-        self._con.connection.SendAndCallForResponse(
-            query, self._received_count, {'query_id': query_id})
-        return query_id
-
-    def _received_count(self, _nbxmpp_client, stanza, query_id):
-        try:
-            _, set_ = self._parse_iq(stanza)
-        except InvalidMamIQ:
-            return
-
-        jid = self._get_from_jid(stanza)
-        self._mam_query_ids.pop(jid)
-
-        count = set_.getTagData('count')
-        self._log.info('Received archive count: %s', count)
-        app.nec.push_incoming_event(ArchivingCountReceived(
-            None, query_id=query_id, count=count))
-
     def request_archive_on_signin(self):
-        own_jid = self._con.get_own_jid().getStripped()
+        own_jid = self._con.get_own_jid().getBare()
 
         if own_jid in self._mam_query_ids:
             self._log.warning('MAM request for %s already running', own_jid)
@@ -331,49 +293,53 @@ class MAM(BaseModule):
                 app.config.del_per('accounts', self._account, 'last_mam_id')
 
         start_date = None
-        query_id = self._get_query_id(own_jid)
+        queryid = self._get_query_id(own_jid)
         if mam_id:
             self._log.info('MAM query after: %s', mam_id)
-            query = self._get_archive_query(query_id, after=mam_id)
+
         else:
             # First Start, we request the last week
             start_date = datetime.utcnow() - timedelta(days=7)
             self._log.info('First start: query archive start: %s', start_date)
-            query = self._get_archive_query(query_id, start=start_date)
+
+        self._nbxmpp('MAM').make_query(own_jid,
+                                       queryid,
+                                       after=mam_id,
+                                       start=start_date,
+                                       callback=self._result_finished,
+                                       user_data={'queryid': queryid,
+                                                  'start': start_date,
+                                                  'groupchat': False})
 
         if own_jid in self._catch_up_finished:
             self._catch_up_finished.remove(own_jid)
-        self._send_archive_query(query, query_id, start_date)
 
     def request_archive_on_muc_join(self, jid):
         archive = app.logger.get_archive_infos(jid)
         threshold = get_sync_threshold(jid, archive)
         self._log.info('Threshold for %s: %s', jid, threshold)
-        query_id = self._get_query_id(jid)
+
+        mam_id = None
         start_date = None
         if archive is None or archive.last_mam_id is None:
-            # First Start, we dont request history
-            # Depending on what a MUC saves, there could be thousands
-            # of Messages even in just one day.
+            # First join
             start_date = datetime.utcnow() - timedelta(days=1)
             self._log.info('First join: query archive %s from: %s',
                            jid, start_date)
-            query = self._get_archive_query(
-                query_id, jid=jid, start=start_date)
 
         elif threshold == SyncThreshold.NO_THRESHOLD:
             # Not our first join and no threshold set
+
+            mam_id = archive.last_mam_id
             self._log.info('Request from archive: %s, after mam-id %s',
                            jid, archive.last_mam_id)
-            query = self._get_archive_query(
-                query_id, jid=jid, after=archive.last_mam_id)
 
         else:
             # Not our first join, check how much time elapsed since our
             # last join and check against threshold
             last_timestamp = archive.last_muc_timestamp
             if last_timestamp is None:
-                self._log.info('No last muc timestamp found ( mam:1? )')
+                self._log.info('No last muc timestamp found')
                 last_timestamp = 0
 
             last = datetime.utcfromtimestamp(float(last_timestamp))
@@ -383,242 +349,138 @@ class MAM(BaseModule):
                 self._log.info('Too much time elapsed since last join, '
                                'request from: %s, threshold: %s',
                                start_date, threshold)
-                query = self._get_archive_query(
-                    query_id, jid=jid, start=start_date)
+
             else:
                 # Request from last mam-id
+                mam_id = archive.last_mam_id
                 self._log.info('Request from archive %s after %s:',
                                jid, archive.last_mam_id)
-                query = self._get_archive_query(
-                    query_id, jid=jid, after=archive.last_mam_id)
 
         if jid in self._catch_up_finished:
             self._catch_up_finished.remove(jid)
-        self._send_archive_query(query, query_id, start_date, groupchat=True)
 
-    def _send_archive_query(self, query, query_id, start_date=None,
-                            groupchat=False):
-        self._con.connection.SendAndCallForResponse(
-            query, self._result_finished, {'query_id': query_id,
-                                           'start_date': start_date,
-                                           'groupchat': groupchat})
+        queryid = self._get_query_id(jid)
+        self._nbxmpp('MAM').make_query(jid,
+                                       queryid,
+                                       after=mam_id,
+                                       start=start_date,
+                                       callback=self._result_finished,
+                                       user_data={'queryid': queryid,
+                                                  'start': start_date,
+                                                  'groupchat': True})
 
-    def _result_finished(self, _nbxmpp_client, stanza, query_id,
-                         start_date, groupchat):
-        try:
-            fin, set_ = self._parse_iq(stanza)
-        except InvalidMamIQ:
+    def _result_finished(self, result, user_data):
+        queryid, start_date, groupchat = user_data.values()
+        self._remove_query_id(result.jid)
+
+        if is_error_result(result):
+            if result.condition == 'item-not-found':
+                app.logger.reset_archive_infos(result.jid)
+                if groupchat:
+                    self.request_archive_on_muc_join(result.jid)
+                else:
+                    self.request_archive_on_signin()
             return
 
-        jid = self._get_from_jid(stanza)
-
-        last = set_.getTagData('last')
-        if last is None:
-            self._log.info('End of MAM query, no items retrieved')
-            self._catch_up_finished.append(jid)
-            self._mam_query_ids.pop(jid)
+        if result.rsm.last is None:
+            self._log.info('MAM catchup finished: %s', result.jid)
+            self._catch_up_finished.append(result.jid)
             return
 
-        complete = fin.getAttr('complete')
-        if complete != 'true':
-            app.logger.set_archive_infos(jid, last_mam_id=last)
-            self._mam_query_ids.pop(jid)
-            query_id = self._get_query_id(jid)
-            query = self._get_archive_query(query_id, jid=jid, after=last)
-            self._send_archive_query(query, query_id, groupchat=groupchat)
+        if not result.complete:
+            app.logger.set_archive_infos(result.jid,
+                                         last_mam_id=result.rsm.last)
+            queryid = self._get_query_id(result.jid)
+
+            self._nbxmpp('MAM').make_query(result.jid,
+                                           queryid,
+                                           after=result.rsm.last,
+                                           callback=self._result_finished,
+                                           user_data={'queryid': queryid,
+                                                      'start': None,
+                                                      'groupchat': groupchat})
+
         else:
-            self._mam_query_ids.pop(jid)
-            app.logger.set_archive_infos(
-                jid, last_mam_id=last, last_muc_timestamp=time.time())
+            app.logger.set_archive_infos(result.jid,
+                                         last_mam_id=result.rsm.last,
+                                         last_muc_timestamp=time.time())
+
             if start_date is not None and not groupchat:
                 # Record the earliest timestamp we request from
                 # the account archive. For the account archive we only
                 # set start_date at the very first request.
                 app.logger.set_archive_infos(
-                    jid, oldest_mam_timestamp=start_date.timestamp())
+                    result.jid,
+                    oldest_mam_timestamp=start_date.timestamp())
 
-            self._catch_up_finished.append(jid)
-            self._log.info('End of MAM query, last mam id: %s', last)
+            self._catch_up_finished.append(result.jid)
+            self._log.info('End of MAM query, last mam id: %s',
+                           result.rsm.last)
 
-    def request_archive_interval(self, start_date, end_date, after=None,
-                                 query_id=None):
-        jid = self._con.get_own_jid().getStripped()
+    def request_archive_interval(self,
+                                 start_date,
+                                 end_date,
+                                 after=None,
+                                 queryid=None):
+
         if after is None:
-            self._log.info('Request intervall from %s to %s from %s',
-                           start_date, end_date, jid)
+            self._log.info('Request interval from %s to %s',
+                           start_date, end_date)
         else:
-            self._log.info('Query page after %s from %s', after, jid)
-        if query_id is None:
-            query_id = self._get_query_id(jid)
-        self._mam_query_ids[jid] = query_id
-        query = self._get_archive_query(query_id, start=start_date,
-                                        end=end_date, after=after, max_=30)
+            self._log.info('Query page after %s', after)
 
-        self._con.connection.SendAndCallForResponse(
-            query, self._intervall_result, {'query_id': query_id,
-                                            'start_date': start_date,
-                                            'end_date': end_date})
-        return query_id
+        jid = self._con.get_own_jid().getBare()
+        if queryid is None:
+            queryid = self._get_query_id(jid)
+        self._mam_query_ids[jid] = queryid
 
-    def _intervall_result(self, _nbxmpp_client, stanza, query_id,
-                          start_date, end_date):
-        try:
-            fin, set_ = self._parse_iq(stanza)
-        except InvalidMamIQ:
+        self._nbxmpp('MAM').make_query(jid,
+                                       queryid,
+                                       after=after,
+                                       start=start_date,
+                                       end=end_date,
+                                       callback=self._on_interval_result,
+                                       user_data={'queryid': queryid,
+                                                  'start_date': start_date,
+                                                  'end_date': end_date})
+        return queryid
+
+    def _on_interval_result(self, result, user_data):
+        queryid, start_date, end_date = user_data.values()
+        self._remove_query_id(result.jid)
+
+        if is_error_result(result):
             return
 
-        jid = self._get_from_jid(stanza)
-        self._mam_query_ids.pop(jid)
         if start_date:
             timestamp = start_date.timestamp()
         else:
             timestamp = ArchiveState.ALL
 
-        last = set_.getTagData('last')
-        if last is None:
-            app.nec.push_incoming_event(ArchivingIntervalFinished(
-                None, query_id=query_id))
-            app.logger.set_archive_infos(
-                jid, oldest_mam_timestamp=timestamp)
+        if result.rsm.last is None:
+            app.nec.push_incoming_event(NetworkEvent(
+                'archiving-interval-finished',
+                account=self._account,
+                query_id=queryid))
+
+            app.logger.set_archive_infos(result.jid,
+                                         oldest_mam_timestamp=timestamp)
             self._log.info('End of MAM request, no items retrieved')
             return
 
-        complete = fin.getAttr('complete')
-        if complete != 'true':
-            self.request_archive_interval(start_date, end_date, last, query_id)
+        if not result.complete:
+            self.request_archive_interval(start_date,
+                                          end_date,
+                                          result.rsm.last,
+                                          queryid)
         else:
             self._log.info('Request finished')
-            app.logger.set_archive_infos(
-                jid, oldest_mam_timestamp=timestamp)
-            app.nec.push_incoming_event(ArchivingIntervalFinished(
-                None, query_id=query_id))
-
-    def _get_archive_query(self, query_id, jid=None, start=None, end=None,
-                           with_=None, after=None, max_=70):
-        # Muc archive query?
-        disco_info = app.logger.get_last_disco_info(jid)
-        if disco_info is None:
-            # Query to our own archive
-            namespace = self.archiving_namespace
-        else:
-            namespace = disco_info.mam_namespace
-
-        iq = nbxmpp.Iq('set', to=jid)
-        query = iq.addChild('query', namespace=namespace)
-        form = query.addChild(node=nbxmpp.DataForm(typ='submit'))
-        field = nbxmpp.DataField(typ='hidden',
-                                 name='FORM_TYPE',
-                                 value=namespace)
-        form.addChild(node=field)
-        if start:
-            field = nbxmpp.DataField(
-                typ='text-single',
-                name='start',
-                value=start.strftime('%Y-%m-%dT%H:%M:%SZ'))
-            form.addChild(node=field)
-        if end:
-            field = nbxmpp.DataField(typ='text-single',
-                                     name='end',
-                                     value=end.strftime('%Y-%m-%dT%H:%M:%SZ'))
-            form.addChild(node=field)
-        if with_:
-            field = nbxmpp.DataField(typ='jid-single',
-                                     name='with',
-                                     value=with_)
-            form.addChild(node=field)
-
-        set_ = query.setTag('set', namespace=nbxmpp.NS_RSM)
-        set_.setTagData('max', max_)
-        if after:
-            set_.setTagData('after', after)
-        query.setAttr('queryid', query_id)
-        return iq
-
-    def request_mam_preferences(self):
-        self._log.info('Request MAM preferences')
-        iq = nbxmpp.Iq('get', self.archiving_namespace)
-        iq.setQuery('prefs')
-        self._con.connection.SendAndCallForResponse(
-            iq, self._preferences_received)
-
-    def _preferences_received(self, _nbxmpp_client, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.info('Error: %s', stanza.getError())
-            app.nec.push_incoming_event(MAMPreferenceError(
-                None, conn=self._con, error=stanza.getError()))
-            return
-
-        self._log.info('Received MAM preferences')
-        prefs = stanza.getTag('prefs', namespace=self.archiving_namespace)
-        if prefs is None:
-            self._log.error('Malformed stanza (no prefs node): %s', stanza)
-            return
-
-        rules = []
-        default = prefs.getAttr('default')
-        for item in prefs.getTag('always').getTags('jid'):
-            rules.append((item.getData(), 'Always'))
-
-        for item in prefs.getTag('never').getTags('jid'):
-            rules.append((item.getData(), 'Never'))
-
-        app.nec.push_incoming_event(MAMPreferenceReceived(
-            None, conn=self._con, rules=rules, default=default))
-
-    def set_mam_preferences(self, rules, default):
-        iq = nbxmpp.Iq(typ='set')
-        prefs = iq.addChild(name='prefs',
-                            namespace=self.archiving_namespace,
-                            attrs={'default': default})
-        always = prefs.addChild(name='always')
-        never = prefs.addChild(name='never')
-        for item in rules:
-            jid, archive = item
-            if archive:
-                always.addChild(name='jid').setData(jid)
-            else:
-                never.addChild(name='jid').setData(jid)
-
-        self._con.connection.SendAndCallForResponse(
-            iq, self._preferences_saved)
-
-    def _preferences_saved(self, _nbxmpp_client, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.info('Error: %s', stanza.getError())
-            app.nec.push_incoming_event(MAMPreferenceError(
-                None, conn=self._con, error=stanza.getError()))
-        else:
-            self._log.info('Preferences saved')
-            app.nec.push_incoming_event(
-                MAMPreferenceSaved(None, conn=self._con))
-
-
-class MAMPreferenceError(NetworkIncomingEvent):
-    name = 'mam-prefs-error'
-
-
-class MAMPreferenceReceived(NetworkIncomingEvent):
-    name = 'mam-prefs-received'
-
-
-class MAMPreferenceSaved(NetworkIncomingEvent):
-    name = 'mam-prefs-saved'
-
-
-class ArchivingCountReceived(NetworkIncomingEvent):
-    name = 'archiving-count-received'
-
-
-class ArchivingIntervalFinished(NetworkIncomingEvent):
-    name = 'archiving-interval-finished'
-
-
-class ArchivingErrorReceived(NetworkIncomingEvent):
-    name = 'archiving-error-received'
-
-
-class InvalidMamIQ(Exception):
-    pass
+            app.logger.set_archive_infos(result.jid,
+                                         oldest_mam_timestamp=timestamp)
+            app.nec.push_incoming_event(NetworkEvent(
+                'archiving-interval-finished',
+                account=self._account,
+                query_id=queryid))
 
 
 def get_instance(*args, **kwargs):

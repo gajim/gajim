@@ -19,6 +19,8 @@ from datetime import datetime, timedelta
 from gi.repository import Gtk
 from gi.repository import GLib
 
+from nbxmpp.util import is_error_result
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
@@ -139,18 +141,25 @@ class HistorySyncAssistant(Gtk.Assistant, EventHelper):
         log.info('Start: %s', self.start)
         log.info('End: %s', self.end)
 
-        self.query_id = self.con.get_module('MAM').request_archive_count(
-            self.start, self.end)
+        jid = self.con.get_own_jid().getBare()
 
-    def _received_count(self, event):
-        if event.query_id != self.query_id:
+        self.con.get_module('MAM').make_query(jid,
+                                              start=self.start,
+                                              end=self.end,
+                                              max_=0,
+                                              callback=self._received_count)
+
+
+    def _received_count(self, result):
+        if is_error_result(result):
             return
 
-        if event.count is not None:
-            self.download_history.count = int(event.count)
+        if result.rsm.count is not None:
+            self.download_history.count = int(result.rsm.count)
         self.query_id = self.con.get_module('MAM').request_archive_interval(
             self.start, self.end)
 
+    @event_filter(['account'])
     def _received_finished(self, event):
         if event.query_id != self.query_id:
             return

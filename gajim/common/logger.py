@@ -1680,6 +1680,23 @@ class Logger:
         self._timeout_commit()
 
     @timeit
+    def reset_archive_infos(self, jid):
+        """
+        Set archive infos
+
+        :param jid:                     The jid of the archive
+
+        """
+        jid_id = self.get_jid_id(jid)
+        sql = '''UPDATE last_archive_message
+                 SET last_mam_id = NULL, oldest_mam_timestamp = NULL,
+                 last_muc_timestamp = NULL
+                 WHERE jid_id = ?'''
+        self._con.execute(sql, (jid_id,))
+        log.info('Reset message archive info: %s', jid)
+        self._timeout_commit()
+
+    @timeit
     def _fill_disco_info_cache(self):
         sql = '''SELECT disco_info as "disco_info [disco_info]",
                  jid, last_seen FROM
