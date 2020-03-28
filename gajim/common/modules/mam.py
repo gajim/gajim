@@ -59,28 +59,22 @@ class MAM(BaseModule):
         ]
 
         self.available = False
-        self.archiving_namespace = None
         self._mam_query_ids = {}
 
         # Holds archive jids where catch up was successful
         self._catch_up_finished = []
 
     def pass_disco(self, info):
-        if nbxmpp.NS_MAM_2 in info.features:
-            self.archiving_namespace = nbxmpp.NS_MAM_2
-        elif nbxmpp.NS_MAM_1 in info.features:
-            self.archiving_namespace = nbxmpp.NS_MAM_1
-        else:
+        if nbxmpp.NS_MAM_2 not in info.features:
             return
 
         self.available = True
-        self._log.info('Discovered MAM %s: %s',
-                       self.archiving_namespace, info.jid)
+        self._log.info('Discovered MAM: %s', info.jid)
 
         app.nec.push_incoming_event(
             NetworkEvent('feature-discovered',
                          account=self._account,
-                         feature=self.archiving_namespace))
+                         feature=nbxmpp.NS_MAM_2))
 
     def reset_state(self):
         self._mam_query_ids.clear()
@@ -125,27 +119,26 @@ class MAM(BaseModule):
 
         if properties.type.is_groupchat:
             archive_jid = properties.jid.getBare()
+            timestamp = properties.timestamp
+
             disco_info = app.logger.get_last_disco_info(archive_jid)
             if disco_info is None:
                 # This is the case on MUC creation
                 # After MUC configuration we receive a configuration change
                 # message before we had the chance to disco the new MUC
                 return
-            namespace = disco_info.mam_namespace
-            timestamp = properties.timestamp
-            if namespace is None:
-                # MUC History
-                app.logger.set_archive_infos(
-                    archive_jid,
-                    last_muc_timestamp=timestamp)
+
+            if disco_info.mam_namespace != nbxmpp.NS_MAM_2:
                 return
 
         else:
+            if not self.available:
+                return
+
             archive_jid = self._con.get_own_jid().getBare()
-            namespace = self.archiving_namespace
             timestamp = None
 
-        if properties.stanza_id is None or namespace != nbxmpp.NS_MAM_2:
+        if properties.stanza_id is None:
             return
 
         if not archive_jid == properties.stanza_id.by:
@@ -192,16 +185,15 @@ class MAM(BaseModule):
 
         stanza_id, message_id = self._get_unique_id(properties)
 
-        if properties.mam.is_ver_2:
-            # Search only with stanza-id for duplicates on mam:2
-            if app.logger.find_stanza_id(self._account,
-                                         str(properties.mam.archive),
-                                         stanza_id,
-                                         message_id,
-                                         groupchat=is_groupchat):
-                self._log.info('Found duplicate with stanza-id: %s, '
-                               'message-id: %s', stanza_id, message_id)
-                raise nbxmpp.NodeProcessed
+        # Search for duplicates
+        if app.logger.find_stanza_id(self._account,
+                                     str(properties.mam.archive),
+                                     stanza_id,
+                                     message_id,
+                                     groupchat=is_groupchat):
+            self._log.info('Found duplicate with stanza-id: %s, '
+                           'message-id: %s', stanza_id, message_id)
+            raise nbxmpp.NodeProcessed
 
         additional_data = AdditionalDataDict()
         if properties.has_user_delay:
@@ -235,12 +227,6 @@ class MAM(BaseModule):
                 self._log.warning('Self message without origin-id found')
                 return
             stanza_id = message_id
-
-        if properties.mam.namespace == nbxmpp.NS_MAM_1:
-            if app.logger.search_for_duplicate(
-                    self._account, with_, properties.mam.timestamp, msgtxt):
-                self._log.info('Found duplicate with fallback for mam:1')
-                return
 
         app.logger.insert_into_logs(self._account,
                                     with_,

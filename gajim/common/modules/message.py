@@ -266,15 +266,16 @@ class Message(BaseModule):
         if properties.type.is_groupchat:
             disco_info = app.logger.get_last_disco_info(
                 properties.jid.getBare())
-            namespace = disco_info.mam_namespace
+
+            if disco_info.mam_namespace != nbxmpp.NS_MAM_2:
+                return None, None
+
             archive = properties.jid
         else:
-            namespace = self._con.get_module('MAM').archiving_namespace
-            archive = self._con.get_own_jid()
+            if not self._con.get_module('MAM').available:
+                return None, None
 
-        if namespace != nbxmpp.NS_MAM_2:
-            # Only mam:2 ensures valid stanza-id
-            return None, None
+            archive = self._con.get_own_jid()
 
         if archive.bareMatch(properties.stanza_id.by):
             return properties.stanza_id.id, None

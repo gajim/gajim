@@ -593,7 +593,7 @@ class GajimApplication(Gtk.Application):
         if event.feature == nbxmpp.NS_VCARD:
             action = '%s-profile' % event.account
             self.lookup_action(action).set_enabled(True)
-        elif event.feature in (nbxmpp.NS_MAM_1, nbxmpp.NS_MAM_2):
+        elif event.feature == nbxmpp.NS_MAM_2:
             action = '%s-archive' % event.account
             self.lookup_action(action).set_enabled(True)
         elif event.feature == nbxmpp.NS_PRIVACY:

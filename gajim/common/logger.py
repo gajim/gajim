@@ -1334,42 +1334,6 @@ class Logger:
         return False
 
     @timeit
-    def search_for_duplicate(self, account, jid, timestamp, msg):
-        """
-        Check if a message is already in the `logs` table
-
-        :param account:     The account
-
-        :param jid:         The jid as string
-
-        :param timestamp:   The timestamp in UTC epoch
-
-        :param msg:         The message text
-        """
-
-        # Add 10 seconds around the timestamp
-        start_time = timestamp - 30
-        end_time = timestamp + 30
-
-        account_id = self.get_account_id(account)
-        log.debug('start: %s, end: %s, jid: %s, message: %s',
-                  start_time, end_time, jid, msg)
-
-        sql = '''
-            SELECT * FROM logs
-            NATURAL JOIN jids WHERE jid = ? AND message = ? AND account_id = ?
-            AND time BETWEEN ? AND ?
-            '''
-
-        result = self._con.execute(
-            sql, (jid, msg, account_id, start_time, end_time)).fetchone()
-
-        if result is not None:
-            log.debug('Message already in DB')
-            return True
-        return False
-
-    @timeit
     def find_stanza_id(self, account, archive_jid, stanza_id, origin_id=None,
                        groupchat=False):
         """
