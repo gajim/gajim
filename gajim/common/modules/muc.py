@@ -17,9 +17,6 @@
 
 import time
 import logging
-from datetime import datetime
-from datetime import timedelta
-from datetime import timezone
 
 import nbxmpp
 from nbxmpp.const import InviteType
@@ -35,10 +32,8 @@ from gajim.common import helpers
 from gajim.common import ged
 from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
-from gajim.common.const import SyncThreshold
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
-from gajim.common.helpers import get_sync_threshold
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import event_filter
 from gajim.common import idle
@@ -185,7 +180,7 @@ class MUC(BaseModule):
             status=self._con.status_message)
 
         muc_x = presence.setTag(nbxmpp.NS_MUC + ' x')
-        self._add_history_query(muc_x, str(muc_data.jid))
+        muc_x.setTag('history', {'maxchars': '0'})
 
         if muc_data.password is not None:
             muc_x.setTagData('password', muc_data.password)
@@ -339,32 +334,6 @@ class MUC(BaseModule):
             '%s/%s' % (room_jid, new_nick),
             show=self._con.status,
             status=self._con.status_message)
-
-    def _add_history_query(self, muc_x, room_jid):
-        disco_info = app.logger.get_last_disco_info(room_jid)
-        if disco_info.has_mam:
-            # The room is MAM capable dont get MUC History
-            muc_x.setTag('history', {'maxchars': '0'})
-        else:
-            # Request MUC History (not MAM)
-            archive = app.logger.get_archive_infos(room_jid)
-            threshold = get_sync_threshold(room_jid, archive)
-
-            since_epoch = 0
-            if archive is not None and archive.last_muc_timestamp is not None:
-                since_epoch = float(archive.last_muc_timestamp)
-
-            since_date = datetime.fromtimestamp(since_epoch, timezone.utc)
-            if threshold != SyncThreshold.NO_THRESHOLD:
-                now = datetime.now(timezone.utc)
-                threshold_date = now - timedelta(days=threshold)
-                since_date = max(threshold_date, since_date)
-
-            date_string = since_date.strftime('%Y-%m-%dT%H:%M:%SZ')
-            muc_x.setTag('history', {'since': date_string})
-            self._log.info('Request MUC history since: %s (%s)',
-                           date_string, since_date.timestamp())
-            self._log.info('Threshold for %s: %s', room_jid, threshold)
 
     def _on_error_presence(self, _con, _stanza, properties):
         room_jid = properties.jid.getBare()
