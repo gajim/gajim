@@ -21,6 +21,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import keyring
 
 from gajim.common import app
 
@@ -29,155 +30,104 @@ __all__ = ['get_password', 'save_password']
 log = logging.getLogger('gajim.password')
 
 
-try:
-    import keyring
-    from keyring.core import recommended
-    KEYRING_AVAILABLE = True
-except ImportError:
-    KEYRING_AVAILABLE = False
-    log.warning('python-keyring missing, falling back to plaintext storage')
+backends = keyring.backend.get_all_keyring()
+for backend in backends:
+    log.info('Found keyring backend: %s', backend)
+
+keyring_backend = keyring.get_keyring()
+log.info('Select %s backend', keyring_backend)
+
+KEYRING_AVAILABLE = any(keyring.core.recommended(backend)
+                        for backend in backends)
 
 
-class PasswordStorage:
-    """Interface for password stores"""
-    def get_password(self, account_name):
-        """Return the password for account_name, or None if not found."""
-        raise NotImplementedError
+class SecretPasswordStorage:
+    """
+    Store password using Keyring
+    """
 
-    def save_password(self, account_name, password):
-        """Save password for account_name. Return a bool indicating success."""
-        raise NotImplementedError
-
-    def delete_password(self, account_name):
-        """Delete password for account_name. Return a bool indicating success."""
-        raise NotImplementedError
-
-class SecretPasswordStorage(PasswordStorage):
-    """ Store password using Keyring """
-    identifier = 'keyring:'
-
-    def __init__(self):
-        self.keyring = keyring.get_keyring()
-        log.info('Select %s backend', self.keyring)
-
-    def save_password(self, account_name, password):
+    @staticmethod
+    def save_password(account_name, password):
+        if not KEYRING_AVAILABLE:
+            log.warning('No recommended keyring backend available.'
+                        'Passwords cannot be stored.')
+            return True
         try:
             log.info('Save password to keyring')
-            self.keyring.set_password('gajim', account_name, password)
+            keyring_backend.set_password('gajim', account_name, password)
             return True
         except Exception:
             log.exception('Save password failed')
             return False
 
-    def get_password(self, account_name):
+    @staticmethod
+    def get_password(account_name):
         log.info('Request password from keyring')
+        if not KEYRING_AVAILABLE:
+            return
         try:
-            return self.keyring.get_password('gajim', account_name)
+            # For security reasons remove clear-text password
+            ConfigPasswordStorage.delete_password(account_name)
+            return keyring_backend.get_password('gajim', account_name)
         except Exception:
             log.exception('Request password failed')
             return
 
-    def delete_password(self, account_name):
+    @staticmethod
+    def delete_password(account_name):
         log.info('Remove password from keyring')
+        if not KEYRING_AVAILABLE:
+            return
         try:
-            return self.keyring.delete_password('gajim', account_name)
+            return keyring_backend.delete_password('gajim', account_name)
         except keyring.errors.PasswordDeleteError as error:
             log.warning('Removing password failed: %s', error)
         except Exception:
             log.exception('Removing password failed')
 
 
-class PasswordStorageManager(PasswordStorage):
-    """Access all the implemented password storage backends, knowing which ones
-    are available and which we prefer to use.
-    Also implements storing directly in gajim config."""
+class ConfigPasswordStorage:
+    """
+    Store password directly in Gajim's config
+    """
 
-    def __init__(self):
-        self.preferred_backend = None
+    @staticmethod
+    def get_password(account_name):
+        return app.config.get_per('accounts', account_name, 'password')
 
-        self.secret = None
-
-        self.connect_backends()
-        self.set_preferred_backend()
-
-    def connect_backends(self):
-        """Initialize backend connections, determining which ones are available.
-        """
-
-        if not app.config.get('use_keyring') or not KEYRING_AVAILABLE:
-            return
-
-        backends = keyring.backend.get_all_keyring()
-        for backend in backends:
-            log.info('Found keyring backend: %s', backend)
-
-        for backend in backends:
-            if recommended(backend):
-                self.secret = SecretPasswordStorage()
-                return
-        log.warning('No recommended keyring backend found, '
-                    'plain storage is used')
-
-    def get_password(self, account_name):
-        pw = app.config.get_per('accounts', account_name, 'password')
-        if not pw:
-            return pw
-        if pw.startswith(SecretPasswordStorage.identifier) and self.secret:
-            backend = self.secret
-        else:
-            backend = None
-
-        if backend:
-            pw = backend.get_password(account_name)
-
-        if backend != self.preferred_backend:
-            # migrate password to preferred_backend
-            self.save_password(account_name, pw)
-        return pw
-
-    def save_password(self, account_name, password):
-        if account_name in app.connections:
-            app.connections[account_name].password = password
-
-        if not app.config.get_per('accounts', account_name, 'savepass'):
-            return True
-
-        if self.preferred_backend:
-            if self.preferred_backend.save_password(account_name, password):
-                app.config.set_per('accounts', account_name, 'password',
-                                   self.preferred_backend.identifier)
-        else:
-            app.config.set_per('accounts', account_name, 'password', password)
+    @staticmethod
+    def save_password(account_name, password):
+        app.config.set_per('accounts', account_name, 'password', password)
         return True
 
-    def delete_password(self, account_name):
-        if account_name in app.connections:
-            app.connections[account_name].password = None
-
-        if self.preferred_backend is not None:
-            self.preferred_backend.delete_password(account_name)
-        app.config.set_per('accounts', account_name, 'password', None)
+    @staticmethod
+    def delete_password(account_name):
+        app.config.set_per('accounts', account_name, 'password', '')
         return True
 
-    def set_preferred_backend(self):
-        if self.secret:
-            self.preferred_backend = self.secret
-        else:
-            self.preferred_backend = None
-
-passwordStorageManager = None
-
-def get_storage():
-    global passwordStorageManager
-    if not passwordStorageManager:
-        passwordStorageManager = PasswordStorageManager()
-    return passwordStorageManager
 
 def get_password(account_name):
-    return get_storage().get_password(account_name)
+    if app.config.get('use_keyring'):
+        return SecretPasswordStorage.get_password(account_name)
+    return ConfigPasswordStorage.get_password(account_name)
 
-def delete_password(account_name):
-    return get_storage().delete_password(account_name)
 
 def save_password(account_name, password):
-    return get_storage().save_password(account_name, password)
+    if account_name in app.connections:
+        app.connections[account_name].password = password
+
+    if not app.config.get_per('accounts', account_name, 'savepass'):
+        return True
+
+    if app.config.get('use_keyring'):
+        return SecretPasswordStorage.save_password(account_name, password)
+    return ConfigPasswordStorage.save_password(account_name, password)
+
+
+def delete_password(account_name):
+    if account_name in app.connections:
+        app.connections[account_name].password = None
+
+    if app.config.get('use_keyring'):
+        return SecretPasswordStorage.delete_password(account_name)
+    return ConfigPasswordStorage.delete_password(account_name)
