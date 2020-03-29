@@ -700,6 +700,15 @@ def make_href_markup(string):
     return URL_REGEX.sub(_to_href, string)
 
 
+def get_app_windows(account):
+    windows = []
+    for win in app.app.get_windows():
+        if hasattr(win, 'account'):
+            if win.account == account:
+                windows.append(win)
+    return windows
+
+
 def get_app_window(name, account=None, jid=None):
     for win in app.app.get_windows():
         if type(win).__name__ != name:

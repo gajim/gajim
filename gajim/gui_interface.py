@@ -105,6 +105,7 @@ from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import open_window
 from gajim.gtk.util import get_app_window
+from gajim.gtk.util import get_app_windows
 from gajim.gtk.const import ControlType
 
 
@@ -1751,6 +1752,11 @@ class Interface:
         for jid in self.minimized_controls[account]:
             ctrl = self.minimized_controls[account][jid]
             ctrl.shutdown()
+
+        for win in get_app_windows(account):
+            # Close all account specific windows
+            win.destroy()
+
         if account == app.ZEROCONF_ACC_NAME:
             app.connections[account].disable_account()
         app.connections[account].cleanup()
