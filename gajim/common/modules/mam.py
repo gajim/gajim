@@ -264,7 +264,7 @@ class MAM(BaseModule):
         own_jid = self._con.get_own_jid().getBare()
 
         if own_jid in self._mam_query_ids:
-            self._log.warning('MAM request for %s already running', own_jid)
+            self._log.warning('Request already running: %s', own_jid)
             return
 
         archive = app.logger.get_archive_infos(own_jid)
@@ -281,12 +281,14 @@ class MAM(BaseModule):
         start_date = None
         queryid = self._get_query_id(own_jid)
         if mam_id:
-            self._log.info('MAM query after: %s', mam_id)
+            self._log.info('Request archive: %s, after mam-id %s',
+                           own_jid, mam_id)
 
         else:
             # First Start, we request the last week
             start_date = datetime.utcnow() - timedelta(days=7)
-            self._log.info('First start: query archive start: %s', start_date)
+            self._log.info('Request archive: %s, after date %s',
+                           own_jid, start_date)
 
         self._nbxmpp('MAM').make_query(own_jid,
                                        queryid,
@@ -310,14 +312,14 @@ class MAM(BaseModule):
         if archive is None or archive.last_mam_id is None:
             # First join
             start_date = datetime.utcnow() - timedelta(days=1)
-            self._log.info('First join: query archive %s from: %s',
+            self._log.info('Request archive: %s, after date %s',
                            jid, start_date)
 
         elif threshold == SyncThreshold.NO_THRESHOLD:
             # Not our first join and no threshold set
 
             mam_id = archive.last_mam_id
-            self._log.info('Request from archive: %s, after mam-id %s',
+            self._log.info('Request archive: %s, after mam-id %s',
                            jid, archive.last_mam_id)
 
         else:
@@ -325,7 +327,7 @@ class MAM(BaseModule):
             # last join and check against threshold
             last_timestamp = archive.last_muc_timestamp
             if last_timestamp is None:
-                self._log.info('No last muc timestamp found')
+                self._log.info('No last muc timestamp found: %s', jid)
                 last_timestamp = 0
 
             last = datetime.utcfromtimestamp(float(last_timestamp))
@@ -333,13 +335,13 @@ class MAM(BaseModule):
                 # To much time has elapsed since last join, apply threshold
                 start_date = datetime.utcnow() - timedelta(days=threshold)
                 self._log.info('Too much time elapsed since last join, '
-                               'request from: %s, threshold: %s',
-                               start_date, threshold)
+                               'request archive: %s, after date %s, '
+                               'threshold: %s', jid, start_date, threshold)
 
             else:
                 # Request from last mam-id
                 mam_id = archive.last_mam_id
-                self._log.info('Request from archive %s after %s:',
+                self._log.info('Request archive: %s, after mam-id %s:',
                                jid, archive.last_mam_id)
 
         if jid in self._catch_up_finished:
@@ -370,7 +372,7 @@ class MAM(BaseModule):
 
         if result.complete:
             self._catch_up_finished.append(result.jid)
-            self._log.info('Catchup finished: %s, last mam id: %s',
+            self._log.info('Request finished: %s, last mam id: %s',
                            result.jid, result.rsm.last)
 
             if result.rsm.last is not None:
@@ -408,13 +410,14 @@ class MAM(BaseModule):
                                  after=None,
                                  queryid=None):
 
-        if after is None:
-            self._log.info('Request interval from %s to %s',
-                           start_date, end_date)
-        else:
-            self._log.info('Query page after %s', after)
-
         jid = self._con.get_own_jid().getBare()
+
+        if after is None:
+            self._log.info('Request interval: %s, from %s to %s',
+                           jid, start_date, end_date)
+        else:
+            self._log.info('Request page: %s, after %s', jid, after)
+
         if queryid is None:
             queryid = self._get_query_id(jid)
         self._mam_query_ids[jid] = queryid
