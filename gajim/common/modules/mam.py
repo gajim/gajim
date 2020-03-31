@@ -368,12 +368,28 @@ class MAM(BaseModule):
                     self.request_archive_on_signin()
             return
 
-        if result.rsm.last is None:
-            self._log.info('MAM catchup finished: %s', result.jid)
+        if result.complete:
             self._catch_up_finished.append(result.jid)
-            return
+            self._log.info('Catchup finished: %s, last mam id: %s',
+                           result.jid, result.rsm.last)
 
-        if not result.complete:
+            if result.rsm.last is not None:
+                # <last> is not provided if the requested page was empty
+                # so this means we did not get anything hence we only need
+                # to update the archive info if <last> is present
+                app.logger.set_archive_infos(result.jid,
+                                             last_mam_id=result.rsm.last,
+                                             last_muc_timestamp=time.time())
+
+            if start_date is not None and not groupchat:
+                # Record the earliest timestamp we request from
+                # the account archive. For the account archive we only
+                # set start_date at the very first request.
+                app.logger.set_archive_infos(
+                    result.jid,
+                    oldest_mam_timestamp=start_date.timestamp())
+
+        else:
             app.logger.set_archive_infos(result.jid,
                                          last_mam_id=result.rsm.last)
             queryid = self._get_query_id(result.jid)
@@ -385,23 +401,6 @@ class MAM(BaseModule):
                                            user_data={'queryid': queryid,
                                                       'start': None,
                                                       'groupchat': groupchat})
-
-        else:
-            app.logger.set_archive_infos(result.jid,
-                                         last_mam_id=result.rsm.last,
-                                         last_muc_timestamp=time.time())
-
-            if start_date is not None and not groupchat:
-                # Record the earliest timestamp we request from
-                # the account archive. For the account archive we only
-                # set start_date at the very first request.
-                app.logger.set_archive_infos(
-                    result.jid,
-                    oldest_mam_timestamp=start_date.timestamp())
-
-            self._catch_up_finished.append(result.jid)
-            self._log.info('End of MAM query, last mam id: %s',
-                           result.rsm.last)
 
     def request_archive_interval(self,
                                  start_date,
