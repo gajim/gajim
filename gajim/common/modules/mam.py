@@ -445,30 +445,21 @@ class MAM(BaseModule):
         else:
             timestamp = ArchiveState.ALL
 
-        if result.rsm.last is None:
+        if result.complete:
+            self._log.info('Request finished: %s, last mam id: %s',
+                           result.jid, result.rsm.last)
+            app.logger.set_archive_infos(result.jid,
+                                         oldest_mam_timestamp=timestamp)
             app.nec.push_incoming_event(NetworkEvent(
                 'archiving-interval-finished',
                 account=self._account,
                 query_id=queryid))
 
-            app.logger.set_archive_infos(result.jid,
-                                         oldest_mam_timestamp=timestamp)
-            self._log.info('End of MAM request, no items retrieved')
-            return
-
-        if not result.complete:
+        else:
             self.request_archive_interval(start_date,
                                           end_date,
                                           result.rsm.last,
                                           queryid)
-        else:
-            self._log.info('Request finished')
-            app.logger.set_archive_infos(result.jid,
-                                         oldest_mam_timestamp=timestamp)
-            app.nec.push_incoming_event(NetworkEvent(
-                'archiving-interval-finished',
-                account=self._account,
-                query_id=queryid))
 
 
 def get_instance(*args, **kwargs):
