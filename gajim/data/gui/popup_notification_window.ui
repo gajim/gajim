@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
-  <requires lib="gtk+" version="3.12"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkEventBox" id="eventbox">
-    <property name="name">PopupNotificationEventBox</property>
+    <property name="name">NotificationPopup</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="border_width">4</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkImage" id="image">
-            <property name="width_request">68</property>
-            <property name="height_request">86</property>
+          <object class="GtkBox" id="color_bar">
+            <property name="width_request">6</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="image">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_size">6</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -36,11 +50,10 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkLabel" id="event_type_label">
+                    <property name="name">NotificationPopupTitle</property>
                     <property name="width_request">196</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Event Type</property>
-                    <property name="use_markup">True</property>
                     <property name="wrap">True</property>
                     <property name="xalign">0</property>
                   </object>
@@ -68,7 +81,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">False</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -82,14 +95,14 @@
             <child>
               <object class="GtkLabel" id="event_description_label">
                 <property name="width_request">218</property>
-                <property name="height_request">64</property>
+                <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Event desc</property>
                 <property name="wrap">True</property>
                 <property name="ellipsize">end</property>
                 <property name="max_width_chars">30</property>
                 <property name="xalign">0</property>
+                <property name="yalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -101,7 +114,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

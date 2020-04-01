@@ -36,6 +36,7 @@ from gajim import gtkgui_helpers
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
+from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 
@@ -252,10 +253,8 @@ class PopupNotification(Gtk.Window):
         self.set_type_hint(Gdk.WindowTypeHint.NOTIFICATION)
         self.set_focus_on_map(False)
         self.set_accept_focus(False)
-        self.set_name('NotificationPopup')
         self.set_skip_taskbar_hint(True)
         self.set_decorated(False)
-        self.set_size_request(312, 95)
 
         self._timeout_id = None
         self.account = account
@@ -265,57 +264,53 @@ class PopupNotification(Gtk.Window):
         self._ui = get_builder('popup_notification_window.ui')
         self.add(self._ui.eventbox)
 
-        if not text:
-            text = app.get_name_from_jid(account, jid)  # default value of text
-        if not title:
-            title = ''
-
-        self._ui.event_type_label.set_markup(
-            '<span foreground="black" weight="bold">%s</span>' %
-            GLib.markup_escape_text(title))
-
-        css = '#NotificationPopup {background-color: black }'
-        gtkgui_helpers.add_css_to_widget(self, css)
-
         if event_type == _('Contact Signed In'):
-            bg_color = app.config.get('notif_signin_color')
+            bg_color = app.css_config.get_value('.gajim-notify-signin',
+                                                StyleAttr.COLOR)
         elif event_type == _('Contact Signed Out'):
-            bg_color = app.config.get('notif_signout_color')
+            bg_color = app.css_config.get_value('.gajim-notify-signout',
+                                                StyleAttr.COLOR)
         elif event_type in (_('New Message'),
-                            _('New Private Message'), _('New E-mail')):
-            bg_color = app.config.get('notif_message_color')
+                            _('New Private Message'),
+                            _('New E-mail')):
+            bg_color = app.css_config.get_value('.gajim-notify-message',
+                                                StyleAttr.COLOR)
         elif event_type == _('File Transfer Request'):
-            bg_color = app.config.get('notif_ftrequest_color')
+            bg_color = app.css_config.get_value('.gajim-notify-ft-request',
+                                                StyleAttr.COLOR)
         elif event_type == _('File Transfer Error'):
-            bg_color = app.config.get('notif_fterror_color')
+            bg_color = app.css_config.get_value('.gajim-notify-ft-error',
+                                                StyleAttr.COLOR)
         elif event_type in (_('File Transfer Completed'),
                             _('File Transfer Stopped')):
-            bg_color = app.config.get('notif_ftcomplete_color')
+            bg_color = app.css_config.get_value('.gajim-notify-ft-complete',
+                                                StyleAttr.COLOR)
         elif event_type == _('Group Chat Invitation'):
-            bg_color = app.config.get('notif_invite_color')
+            bg_color = app.css_config.get_value('.gajim-notify-invite',
+                                                StyleAttr.COLOR)
         elif event_type == _('Contact Changed Status'):
-            bg_color = app.config.get('notif_status_color')
-        else: # Unknown event! Shouldn't happen but deal with it
-            bg_color = app.config.get('notif_other_color')
+            bg_color = app.css_config.get_value('.gajim-notify-status',
+                                                StyleAttr.COLOR)
+        else:  # Unknown event (shouldn't happen, but deal with it)
+            bg_color = app.css_config.get_value('.gajim-notify-other',
+                                                StyleAttr.COLOR)
 
-        background_class = '''
-            .popup-style {
-                border-image: none;
-                background-image: none;
-                background-color: %s }''' % bg_color
+        bar_class = '''
+            .popup-bar {
+                background-color: %s
+            }''' % bg_color
+        gtkgui_helpers.add_css_to_widget(self._ui.color_bar, bar_class)
+        self._ui.color_bar.get_style_context().add_class('popup-bar')
 
-        gtkgui_helpers.add_css_to_widget(self._ui.eventbox, background_class)
-        self._ui.eventbox.get_style_context().add_class('popup-style')
+        if not title:
+            title = ''
+        self._ui.event_type_label.set_markup(title)
 
-        gtkgui_helpers.add_css_to_widget(
-            self._ui.close_button, background_class)
-        self._ui.close_button.get_style_context().add_class('popup-style')
-
+        if not text:
+            text = app.get_name_from_jid(account, jid)  # default value of text
         escaped_text = GLib.markup_escape_text(text)
-        self._ui.event_description_label.set_markup(
-            '<span foreground="black">%s</span>' % escaped_text)
+        self._ui.event_description_label.set_markup(escaped_text)
 
-        # set the image
         self._ui.image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
 
         self.move(*self._get_window_pos())

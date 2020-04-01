@@ -280,3 +280,23 @@ button.flat.link { padding: 0; border: 0; }
 
 .assistant-grid { padding: 18px; margin: 6px;}
 .assistant-grid > box stack  { padding: 18px; }
+
+/* Windows notification */
+#NotificationPopup {
+    background-color: #333333;
+    padding: 4px;
+}
+#NotificationPopup label {
+    color: #FFF;
+}
+#NotificationPopup button {
+    border-width: 0;
+    background-image: none;
+    background-color: inherit;
+    box-shadow: none;
+    text-shadow: none;
+    -gtk-icon-shadow: none;
+}
+#NotificationPopupTitle {
+    font-weight: bold;
+}
