@@ -90,15 +90,6 @@ class Config:
         'allow_hide_roster': [opt_bool, False, _('Allow to hide the contact list window even if the notification area icon is not shown.'), False],
         'iconset': [opt_str, DEFAULT_ICONSET, '', True],
         'use_transports_iconsets': [opt_bool, True, '', True],
-        'notif_signin_color': [opt_color, '#32CD32', _('Notification color for contacts signing in.')], # limegreen
-        'notif_signout_color': [opt_color, '#FF0000', _('Notification color for contacts signing out.')], # red
-        'notif_message_color': [opt_color, '#1E90FF', _('Notification color for new message notification.')], # dodgerblue
-        'notif_ftrequest_color': [opt_color, '#F0E68C', _('Notification color for file transfer request.')], # khaki
-        'notif_fterror_color': [opt_color, '#B22222', _('Notification color for file transfer errors.')], # firebrick
-        'notif_ftcomplete_color': [opt_color, '#9ACD32', _('Notification color for stopped or completed file transfers.')], # yellowgreen
-        'notif_invite_color': [opt_color, '#D2B48C', _('Notification color for group chat invitations.')], # tan1
-        'notif_status_color': [opt_color, '#D8BFD8', _('Notification background color for changed status.')], # thistle2
-        'notif_other_color': [opt_color, '#FFFFFF', _('Notification color for other dialogs.')], # white
         'collapsed_rows': [opt_str, '', _('List of rows (accounts and groups) that are collapsed (space separated).'), True],
         'roster_theme': [opt_str, _('default'), '', True],
         'mergeaccounts': [opt_bool, False, '', True],
