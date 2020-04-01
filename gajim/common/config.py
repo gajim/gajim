@@ -689,6 +689,9 @@ class Config:
         for opt in self.__options[0]:
             self.__options[1][opt] = self.__options[0][opt][Option.VAL]
 
+        if gajim.IS_PORTABLE:
+            self.__options[1]['use_keyring'] = False
+
     def _really_save(self):
         from gajim.common import app
         if app.interface:
