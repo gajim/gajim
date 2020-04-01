@@ -917,8 +917,11 @@ class TransformChatToMUC:
         self.server_list_comboboxentry.add_attribute(cell, 'text', 0)
 
         # get the muc server of our server
-        if 'jabber' in app.connections[account].muc_jid:
-            server_list.append(app.connections[account].muc_jid['jabber'])
+        con = app.connections[account]
+        service_jid = con.get_module('MUC').service_jid
+        if service_jid is not None:
+            server_list.append(str(service_jid))
+
         # add servers or recently joined groupchats
         recently_groupchat = app.config.get_per('accounts', account, 'recent_groupchats').split()
         for g in recently_groupchat:
