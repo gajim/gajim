@@ -58,9 +58,6 @@ class Register(BaseModule):
                                                 'success_cb': weak_success_cb,
                                                 'error_cb': weak_error_cb})
 
-        self.agent_registrations[agent] = {'roster_push': False,
-                                           'sub_received': False}
-
     def _register_agent_response(self, _nbxmpp_client, stanza, agent,
                                  success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
@@ -74,10 +71,6 @@ class Register(BaseModule):
             return
 
         self._con.get_module('Presence').subscribe(agent, auto_auth=True)
-
-        self.agent_registrations[agent]['roster_push'] = True
-        if self.agent_registrations[agent]['sub_received']:
-            self._con.get_module('Presence').subscribed(agent)
 
         if success_cb() is not None:
             success_cb()()

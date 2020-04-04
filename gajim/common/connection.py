@@ -70,9 +70,6 @@ class CommonConnection:
 
         self.pep = {}
 
-        # Remember where we are in the register agent process
-        self.agent_registrations = {}
-
         self.roster_supported = True
         self.avatar_conversion = False
 

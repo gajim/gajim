@@ -252,12 +252,6 @@ class Presence(BaseModule):
                        properties.jid, is_transport,
                        auto_auth, properties.nickname)
 
-        if is_transport and fjid in self._con.agent_registrations:
-            self._con.agent_registrations[fjid]['sub_received'] = True
-            if not self._con.agent_registrations[fjid]['roster_push']:
-                # We'll reply after roster push result
-                raise nbxmpp.NodeProcessed
-
         if auto_auth or jid in self.jids_for_auto_auth:
             self.send_presence(fjid, 'subscribed')
             self._log.info('Auto respond with subscribed: %s', jid)
