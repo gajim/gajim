@@ -37,8 +37,6 @@ class MockConnection(Mock, ConnectionHandlers):
         app.sleeper_state[account] = 0
         app.last_message_time[account] = {}
         app.status_before_autoaway[account] = ''
-        app.gajim_optional_features[account] = []
-        app.caps_hash[account] = ''
 
         app.connections[account] = self
 

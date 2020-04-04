@@ -38,7 +38,6 @@ from pathlib import Path
 from collections import namedtuple
 
 import nbxmpp
-from nbxmpp.structs import DiscoIdentity
 from gi.repository import Gdk
 
 import gajim
@@ -147,52 +146,6 @@ socks5queue = None
 gupnp_igd = None
 
 gsound_ctx = None
-
-gajim_identity = DiscoIdentity(category='client',
-                               type='pc',
-                               name='Gajim')
-
-gajim_common_features = [
-    nbxmpp.NS_BYTESTREAM,
-    nbxmpp.NS_MUC,
-    nbxmpp.NS_COMMANDS,
-    nbxmpp.NS_DISCO_INFO,
-    nbxmpp.NS_LAST,
-    nbxmpp.NS_DATA,
-    nbxmpp.NS_ENCRYPTED,
-    nbxmpp.NS_PING,
-    nbxmpp.NS_CHATSTATES,
-    nbxmpp.NS_RECEIPTS,
-    nbxmpp.NS_TIME_REVISED,
-    nbxmpp.NS_VERSION,
-    nbxmpp.NS_ROSTERX,
-    nbxmpp.NS_SECLABEL,
-    nbxmpp.NS_CONFERENCE,
-    nbxmpp.NS_CORRECT,
-    nbxmpp.NS_EME,
-    nbxmpp.NS_XHTML_IM,
-    nbxmpp.NS_HASHES_2,
-    nbxmpp.NS_HASHES_MD5,
-    nbxmpp.NS_HASHES_SHA1,
-    nbxmpp.NS_HASHES_SHA256,
-    nbxmpp.NS_HASHES_SHA512,
-    nbxmpp.NS_HASHES_SHA3_256,
-    nbxmpp.NS_HASHES_SHA3_512,
-    nbxmpp.NS_HASHES_BLAKE2B_256,
-    nbxmpp.NS_HASHES_BLAKE2B_512,
-    nbxmpp.NS_JINGLE,
-    nbxmpp.NS_JINGLE_FILE_TRANSFER_5,
-    nbxmpp.NS_JINGLE_XTLS,
-    nbxmpp.NS_JINGLE_BYTESTREAM,
-    nbxmpp.NS_JINGLE_IBB,
-    nbxmpp.NS_AVATAR_METADATA + '+notify',
-]
-
-# Optional features gajim supports per account
-gajim_optional_features = {}  # type: Dict[str, List[str]]
-
-# Capabilities hash per account
-caps_hash = {}  # type: Dict[str, List[str]]
 
 _dependencies = {
     'AVAHI': False,

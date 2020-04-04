@@ -3,6 +3,8 @@ from collections import namedtuple
 
 from gi.repository import Gio
 
+import nbxmpp
+
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
@@ -910,3 +912,40 @@ SASL_ERRORS = {
     'not-authorized': _('Authentication failed'),
     'temporary-auth-failure': _('Authentication currently not possible'),
 }
+
+
+COMMON_FEATURES = [
+    nbxmpp.NS_BYTESTREAM,
+    nbxmpp.NS_MUC,
+    nbxmpp.NS_COMMANDS,
+    nbxmpp.NS_DISCO_INFO,
+    nbxmpp.NS_LAST,
+    nbxmpp.NS_DATA,
+    nbxmpp.NS_ENCRYPTED,
+    nbxmpp.NS_PING,
+    nbxmpp.NS_CHATSTATES,
+    nbxmpp.NS_RECEIPTS,
+    nbxmpp.NS_TIME_REVISED,
+    nbxmpp.NS_VERSION,
+    nbxmpp.NS_ROSTERX,
+    nbxmpp.NS_SECLABEL,
+    nbxmpp.NS_CONFERENCE,
+    nbxmpp.NS_CORRECT,
+    nbxmpp.NS_EME,
+    nbxmpp.NS_XHTML_IM,
+    nbxmpp.NS_HASHES_2,
+    nbxmpp.NS_HASHES_MD5,
+    nbxmpp.NS_HASHES_SHA1,
+    nbxmpp.NS_HASHES_SHA256,
+    nbxmpp.NS_HASHES_SHA512,
+    nbxmpp.NS_HASHES_SHA3_256,
+    nbxmpp.NS_HASHES_SHA3_512,
+    nbxmpp.NS_HASHES_BLAKE2B_256,
+    nbxmpp.NS_HASHES_BLAKE2B_512,
+    nbxmpp.NS_JINGLE,
+    nbxmpp.NS_JINGLE_FILE_TRANSFER_5,
+    nbxmpp.NS_JINGLE_XTLS,
+    nbxmpp.NS_JINGLE_BYTESTREAM,
+    nbxmpp.NS_JINGLE_IBB,
+    nbxmpp.NS_AVATAR_METADATA + '+notify',
+]

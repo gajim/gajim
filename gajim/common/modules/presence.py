@@ -371,11 +371,11 @@ class Presence(BaseModule):
             # we add the avatar sha to our presence
             self._con.get_module('VCardAvatars').add_update_node(presence)
 
-        if caps:
-            attrs = {'hash': 'sha-1',
-                     'node': 'http://gajim.org',
-                     'ver': app.caps_hash[self._account]}
-            presence.setTag('c', namespace=nbxmpp.NS_CAPS, attrs=attrs)
+        caps = self._con.get_module('Caps').caps
+        if caps is not None and typ != 'unavailable':
+            presence.setTag('c',
+                            namespace=nbxmpp.NS_CAPS,
+                            attrs=caps._asdict())
 
         return presence
 

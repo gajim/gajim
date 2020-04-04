@@ -67,7 +67,6 @@ from gajim.session import ChatControlSession
 
 from gajim.common import idle
 from gajim.common.zeroconf import connection_zeroconf
-from gajim.common import caps_cache
 from gajim.common import proxy65_manager
 from gajim.common import socks5
 from gajim.common import helpers
@@ -1729,9 +1728,6 @@ class Interface:
         app.sleeper_state[account] = 'off'
         app.last_message_time[account] = {}
         app.status_before_autoaway[account] = ''
-        app.gajim_optional_features[account] = []
-        app.caps_hash[account] = ''
-        helpers.update_optional_features(account)
         # refresh roster
         if len(app.connections) >= 2:
             # Do not merge accounts if only one exists
@@ -1774,8 +1770,6 @@ class Interface:
         del app.sleeper_state[account]
         del app.last_message_time[account]
         del app.status_before_autoaway[account]
-        del app.gajim_optional_features[account]
-        del app.caps_hash[account]
         if len(app.connections) >= 2:
             # Do not merge accounts if only one exists
             self.roster.regroup = app.config.get('mergeaccounts')
@@ -2005,15 +1999,6 @@ class Interface:
         app.plugin_manager = plugins.PluginManager()
         app.plugin_manager.init_plugins()
 
-        helpers.update_optional_features()
-        # prepopulate data which we are sure of; note: we do not log these info
-        for account in app.connections:
-            gajimcaps = caps_cache.capscache[
-                ('sha-1', app.caps_hash[account])]
-            gajimcaps.identities = [app.gajim_identity]
-            gajimcaps.features = app.gajim_common_features + \
-                app.gajim_optional_features[account]
-
         self.roster._before_fill()
         for account in app.connections:
             app.connections[account].get_module('Roster').load_roster()
@@ -2162,8 +2147,6 @@ class Interface:
             app.sleeper_state[a] = 0
             app.last_message_time[a] = {}
             app.status_before_autoaway[a] = ''
-            app.gajim_optional_features[a] = []
-            app.caps_hash[a] = ''
 
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()

@@ -59,9 +59,7 @@ from encodings.punycode import punycode_encode
 from functools import wraps
 
 import nbxmpp
-from nbxmpp.util import compute_caps_hash
 from nbxmpp.stringprepare import nameprep
-from nbxmpp.structs import DiscoInfo
 from nbxmpp.const import Role
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
@@ -1024,50 +1022,31 @@ def get_current_show(account):
         return 'offline'
     return app.connections[account].status
 
-def update_optional_features(account=None):
-    if account is not None:
-        accounts = [account]
-    else:
-        accounts = app.connections.keys()
+def get_optional_features(account):
+    features = []
+    if app.config.get_per('accounts', account, 'subscribe_mood'):
+        features.append(nbxmpp.NS_MOOD + '+notify')
+    if app.config.get_per('accounts', account, 'subscribe_activity'):
+        features.append(nbxmpp.NS_ACTIVITY + '+notify')
+    if app.config.get_per('accounts', account, 'subscribe_tune'):
+        features.append(nbxmpp.NS_TUNE + '+notify')
+    if app.config.get_per('accounts', account, 'subscribe_nick'):
+        features.append(nbxmpp.NS_NICK + '+notify')
+    if app.config.get_per('accounts', account, 'subscribe_location'):
+        features.append(nbxmpp.NS_LOCATION + '+notify')
+    if app.connections[account].get_module('Bookmarks').using_bookmark_2:
+        features.append(nbxmpp.NS_BOOKMARKS_2 + '+notify')
+    elif app.connections[account].get_module('Bookmarks').using_bookmark_1:
+        features.append(nbxmpp.NS_BOOKMARKS + '+notify')
+    if app.is_installed('AV'):
+        features.append(nbxmpp.NS_JINGLE_RTP)
+        features.append(nbxmpp.NS_JINGLE_RTP_AUDIO)
+        features.append(nbxmpp.NS_JINGLE_RTP_VIDEO)
+        features.append(nbxmpp.NS_JINGLE_ICE_UDP)
 
-    for account_ in accounts:
-        features = []
-        app.gajim_optional_features[account_] = features
-        if app.config.get_per('accounts', account_, 'subscribe_mood'):
-            features.append(nbxmpp.NS_MOOD + '+notify')
-        if app.config.get_per('accounts', account_, 'subscribe_activity'):
-            features.append(nbxmpp.NS_ACTIVITY + '+notify')
-        if app.config.get_per('accounts', account_, 'subscribe_tune'):
-            features.append(nbxmpp.NS_TUNE + '+notify')
-        if app.config.get_per('accounts', account_, 'subscribe_nick'):
-            features.append(nbxmpp.NS_NICK + '+notify')
-        if app.config.get_per('accounts', account_, 'subscribe_location'):
-            features.append(nbxmpp.NS_LOCATION + '+notify')
-        if app.connections[account_].get_module('Bookmarks').using_bookmark_2:
-            features.append(nbxmpp.NS_BOOKMARKS_2 + '+notify')
-        elif app.connections[account_].get_module('Bookmarks').using_bookmark_1:
-            features.append(nbxmpp.NS_BOOKMARKS + '+notify')
-        if app.is_installed('AV'):
-            features.append(nbxmpp.NS_JINGLE_RTP)
-            features.append(nbxmpp.NS_JINGLE_RTP_AUDIO)
-            features.append(nbxmpp.NS_JINGLE_RTP_VIDEO)
-            features.append(nbxmpp.NS_JINGLE_ICE_UDP)
-
-        # Give plugins the possibility to add their features
-        app.plugin_manager.extension_point('update_caps', account_)
-
-        disco_info = DiscoInfo(None,
-                               [app.gajim_identity],
-                               app.gajim_common_features + features,
-                               [])
-        app.caps_hash[account_] = compute_caps_hash(disco_info, compare=False)
-        # re-send presence with new hash
-        if not app.account_is_connected(account_):
-            return
-
-        status = app.connections[account_].status
-        app.connections[account_].change_status(
-            status, app.connections[account_].status_message)
+    # Give plugins the possibility to add their features
+    app.plugin_manager.extension_point('update_caps', account, features)
+    return features
 
 def jid_is_blocked(account, jid):
     con = app.connections[account]

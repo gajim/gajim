@@ -22,7 +22,6 @@ from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
-from gajim.common.helpers import update_optional_features
 
 
 class Discovery(BaseModule):
@@ -120,7 +119,7 @@ class Discovery(BaseModule):
         if 'urn:xmpp:pep-vcard-conversion:0' in result.features:
             self._con.avatar_conversion = True
 
-        update_optional_features()
+        self._con.get_module('Caps').update_caps()
 
     def discover_server_info(self):
         # Calling this method starts the connect_maschine()
@@ -193,23 +192,6 @@ class Discovery(BaseModule):
 
         if self._con.get_module('AdHocCommands').command_info_query(stanza):
             raise nbxmpp.NodeProcessed
-
-        node = stanza.getQuerynode()
-        iq = stanza.buildReply('result')
-        query = iq.setQuery()
-        if node:
-            query.setAttr('node', node)
-        query.addChild('identity', attrs=app.gajim_identity._asdict())
-        client_version = 'http://gajim.org#' + app.caps_hash[self._account]
-
-        if node in (None, client_version):
-            for feature in app.gajim_common_features:
-                query.addChild('feature', attrs={'var': feature})
-            for feature in app.gajim_optional_features[self._account]:
-                query.addChild('feature', attrs={'var': feature})
-
-        self._con.connection.send(iq)
-        raise nbxmpp.NodeProcessed
 
     def disco_muc(self, jid, callback=None):
         if not app.account_is_connected(self._account):

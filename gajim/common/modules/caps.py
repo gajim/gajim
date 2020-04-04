@@ -19,16 +19,26 @@
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.structs import DiscoIdentity
 from nbxmpp.util import is_error_result
 from nbxmpp.util import compute_caps_hash
 
 from gajim.common import caps_cache
 from gajim.common import app
+from gajim.common.const import COMMON_FEATURES
+from gajim.common.helpers import get_optional_features
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 
 
 class Caps(BaseModule):
+
+    _nbxmpp_extends = 'EntityCaps'
+    _nbxmpp_methods = [
+        'caps',
+        'set_caps'
+    ]
+
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
@@ -42,6 +52,10 @@ class Caps(BaseModule):
         self._capscache = caps_cache.capscache
         self._create_suitable_client_caps = \
             caps_cache.create_suitable_client_caps
+
+        self._identities = [
+            DiscoIdentity(category='client', type='pc', name='Gajim')
+        ]
 
     def _entity_caps(self, _con, _stanza, properties):
         if properties.type.is_error or properties.type.is_unavailable:
@@ -138,6 +152,19 @@ class Caps(BaseModule):
                          account=self._account,
                          fjid=str(info.jid),
                          jid=bare_jid))
+
+    def update_caps(self):
+        if not app.account_is_connected(self._account):
+            return
+
+        optional_features = get_optional_features(self._account)
+        self.set_caps(self._identities,
+                      COMMON_FEATURES + optional_features,
+                      'https://gajim.org')
+
+        app.connections[self._account].change_status(
+            app.connections[self._account].status,
+            app.connections[self._account].status_message)
 
 
 def get_instance(*args, **kwargs):

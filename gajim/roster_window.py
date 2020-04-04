@@ -3439,7 +3439,7 @@ class RosterWindow:
             else:
                 app.interface.disable_music_listener()
 
-        helpers.update_optional_features(account)
+        app.connections[account].get_module('Caps').update_caps()
 
     def on_publish_location_toggled(self, widget, account):
         active = widget.get_active()
@@ -3449,7 +3449,7 @@ class RosterWindow:
         else:
             app.connections[account].get_module('UserLocation').set_location(None)
 
-        helpers.update_optional_features(account)
+        app.connections[account].get_module('Caps').update_caps()
 
     def on_add_new_contact(self, widget, account):
         AddNewContactWindow(account)
