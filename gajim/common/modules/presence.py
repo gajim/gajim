@@ -342,7 +342,10 @@ class Presence(BaseModule):
             item.addChild('group').setData(group)
         self._con.connection.send(iq)
 
-        self.send_presence(jid, 'subscribe', status=msg)
+        self.send_presence(jid,
+                           'subscribe',
+                           status=msg,
+                           nick=app.nicks[self._account])
 
     def get_presence(self, to=None, typ=None, priority=None,
                      show=None, status=None, nick=None, caps=True,
