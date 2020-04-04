@@ -258,7 +258,7 @@ class Presence(BaseModule):
                 # We'll reply after roster push result
                 raise nbxmpp.NodeProcessed
 
-        if auto_auth or is_transport or jid in self.jids_for_auto_auth:
+        if auto_auth or jid in self.jids_for_auto_auth:
             self.send_presence(fjid, 'subscribed')
             self._log.info('Auto respond with subscribed: %s', jid)
             return
