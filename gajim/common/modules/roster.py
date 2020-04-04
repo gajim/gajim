@@ -49,6 +49,7 @@ class Roster(BaseModule):
         if data:
             self.set_raw(data)
             for jid, item in self._data.items():
+                self._log.debug('%s: %s', jid, item)
                 app.nec.push_incoming_event(NetworkEvent(
                     'roster-info',
                     conn=self._con,
