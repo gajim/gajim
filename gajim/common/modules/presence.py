@@ -334,7 +334,7 @@ class Presence(BaseModule):
         self._log.info('Request Subscription to %s', jid)
 
         if auto_auth:
-            self.jids_for_auto_auth.add(jid)
+            self._jids_for_auto_auth.add(jid)
 
         infos = {'jid': jid}
         if name:
