@@ -59,7 +59,7 @@ class Presence(BaseModule):
         self.automatically_added = []
 
         # list of jid to auto-authorize
-        self.jids_for_auto_auth = []
+        self._jids_for_auto_auth = set()
 
     def _presence_received(self, _con, stanza, properties):
         if properties.from_muc:
@@ -252,8 +252,9 @@ class Presence(BaseModule):
                        properties.jid, is_transport,
                        auto_auth, properties.nickname)
 
-        if auto_auth or jid in self.jids_for_auto_auth:
+        if auto_auth or jid in self._jids_for_auto_auth:
             self.send_presence(fjid, 'subscribed')
+            self._jids_for_auto_auth.discard(jid)
             self._log.info('Auto respond with subscribed: %s', jid)
             return
 
@@ -304,7 +305,9 @@ class Presence(BaseModule):
     def unsubscribed(self, jid):
         if not app.account_is_connected(self._account):
             return
+
         self._log.info('Unsubscribed: %s', jid)
+        self._jids_for_auto_auth.discard(jid)
         self.send_presence(jid, 'unsubscribed')
 
     def unsubscribe(self, jid, remove_auth=True):
@@ -318,6 +321,7 @@ class Presence(BaseModule):
                     app.config.del_per('contacts', j)
         else:
             self._log.info('Unsubscribe from %s', jid)
+            self._jids_for_auto_auth.discard(jid)
             self._con.get_module('Roster').unsubscribe(jid)
             self._con.get_module('Roster').set_item(jid)
 
@@ -330,7 +334,7 @@ class Presence(BaseModule):
         self._log.info('Request Subscription to %s', jid)
 
         if auto_auth:
-            self.jids_for_auto_auth.append(jid)
+            self.jids_for_auto_auth.add(jid)
 
         infos = {'jid': jid}
         if name:
