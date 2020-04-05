@@ -21,7 +21,6 @@ from nbxmpp.const import StreamError
 from nbxmpp.const import ConnectionType
 
 from gi.repository import GLib
-from gi.repository import Gio
 
 from gajim.common import passwords
 from gajim.common.nec import NetworkEvent
@@ -36,6 +35,7 @@ from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.helpers import get_resource
+from gajim.common.helpers import get_ignored_ssl_errors
 from gajim.common.i18n import _
 
 from gajim.common.connection_handlers import ConnectionHandlers
@@ -140,7 +140,8 @@ class Client(ConnectionHandlers):
         self._client.set_accepted_certificates(
             app.cert_store.get_certificates())
 
-        self._client.set_ignored_tls_errors(self._get_ignored_ssl_errors())
+        self._client.set_ignored_tls_errors(
+            get_ignored_ssl_errors(self._account))
 
         if app.config.get_per('accounts', self._account,
                               'use_plain_connection'):
@@ -160,11 +161,6 @@ class Client(ConnectionHandlers):
         self._client.subscribe('stanza-received', self._on_stanza_received)
 
         self._register_new_handlers()
-
-    def _get_ignored_ssl_errors(self):
-        ignore_ssl_errors = app.config.get_per(
-            'accounts', self.name, 'ignore_ssl_errors').split()
-        return {Gio.TlsCertificateFlags(int(err)) for err in ignore_ssl_errors}
 
     def process_ssl_errors(self):
         if not self._ssl_errors:

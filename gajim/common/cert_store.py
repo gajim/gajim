@@ -69,6 +69,17 @@ class CertificateStore:
                          self._on_certificate_write_finished,
                          path)
 
+    def verify(self, certificate, tls_errors):
+        if Gio.TlsCertificateFlags.UNKNOWN_CA in tls_errors:
+            for trusted_certificate in self._certs:
+                if trusted_certificate.is_same(certificate):
+                    tls_errors.remove(Gio.TlsCertificateFlags.UNKNOWN_CA)
+                    break
+
+        if not tls_errors:
+            return True
+        return False
+
     @staticmethod
     def _on_certificate_write_finished(data, error, path):
         if data is None:

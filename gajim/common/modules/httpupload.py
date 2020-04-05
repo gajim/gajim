@@ -22,6 +22,7 @@ import mimetypes
 
 from nbxmpp import NS_HTTPUPLOAD_0
 from nbxmpp.util import is_error_result
+from nbxmpp.util import convert_tls_error_flags
 from gi.repository import GLib
 from gi.repository import Soup
 
@@ -218,23 +219,21 @@ class HTTPUpload(BaseModule):
         self._session.queue_message(message, self._on_finish, transfer)
 
     def _check_certificate(self, message):
-        https_used, _tls_certificate, tls_errors = message.get_https_status()
+        https_used, tls_certificate, tls_errors = message.get_https_status()
         if not https_used:
             self._log.warning('HTTPS was not used for upload')
             self._session.cancel_message(message, Soup.Status.CANCELLED)
             return
 
-        if not app.config.get_per('accounts',
-                                  self._account,
-                                  'httpupload_verify'):
+        tls_errors = convert_tls_error_flags(tls_errors)
+        if app.cert_store.verify(tls_certificate, tls_errors):
             return
 
-        if tls_errors:
-            phrase = get_tls_error_phrase(tls_errors)
+        for error in tls_errors:
+            phrase = get_tls_error_phrase(error)
             self._log.warning('TLS verification failed: %s', phrase)
-            self._session.cancel_message(message, Soup.Status.CANCELLED)
-            self._raise_information_event('httpupload-error', phrase)
-            return
+        self._session.cancel_message(message, Soup.Status.CANCELLED)
+        self._raise_information_event('httpupload-error', phrase)
 
     def _on_finish(self, _session, message, transfer):
         self._queued_messages.pop(id(transfer), None)

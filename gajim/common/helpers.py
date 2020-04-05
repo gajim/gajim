@@ -1764,3 +1764,9 @@ def warn_about_plain_connection(account, connection_types):
         if type_.is_plain and warn:
             return True
     return False
+
+
+def get_ignored_ssl_errors(account):
+    ignore_ssl_errors = app.config.get_per(
+        'accounts', account, 'ignore_ssl_errors').split()
+    return {Gio.TlsCertificateFlags(int(err)) for err in ignore_ssl_errors}

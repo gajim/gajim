@@ -346,7 +346,6 @@ class Config:
             'ft_send_local_ips': [opt_bool, True, _('If enabled, Gajim will send your local IP so your contact can connect to your machine for file transfers.')],
             'opened_chat_controls': [opt_str, '', _('List of XMPP Addresses (space separated) for which the chat window will be re-opened on next startup.')],
             'recent_groupchats': [opt_str, ''],
-            'httpupload_verify': [opt_bool, True, _('HTTP File Upload: Enable HTTPS Verification.')],
             'filetransfer_preference' : [opt_str, 'httpupload', _('Preferred file transfer mechanism for file drag&drop on a chat window. Can be \'httpupload\' (default) or \'jingle\'.')],
             'allow_posh': [opt_bool, True, _('Allow certificate verification with POSH.')],
         }, {}),
