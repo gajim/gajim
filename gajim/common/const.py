@@ -248,7 +248,6 @@ class ClientState(IntEnum):
     @property
     def is_available(self):
         return self == ClientState.AVAILABLE
-    
 
 
 MUC_CREATION_EXAMPLES = [
