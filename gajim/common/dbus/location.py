@@ -83,7 +83,7 @@ class LocationListener:
     def _send_location(self):
         accounts = app.connections.keys()
         for acct in accounts:
-            if not app.account_is_connected(acct):
+            if not app.account_is_available(acct):
                 continue
             if not app.config.get_per('accounts', acct, 'publish_location'):
                 continue

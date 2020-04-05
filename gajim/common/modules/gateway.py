@@ -26,7 +26,7 @@ class Gateway(BaseModule):
         BaseModule.__init__(self, con)
 
     def unsubscribe(self, agent):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         iq = nbxmpp.Iq('set', nbxmpp.NS_REGISTER, to=agent)
         iq.setQuery().setTag('remove')

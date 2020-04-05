@@ -907,7 +907,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 is_ctrl_enter = bool(event_state & Gdk.ModifierType.CONTROL_MASK)
                 send_message = is_ctrl_enter == app.config.get('send_on_ctrl_enter')
 
-            if send_message and not app.account_is_connected(self.account):
+            if send_message and not app.account_is_available(self.account):
                 # we are not connected
                 app.interface.raise_dialog('not-connected-while-sending')
             elif send_message:

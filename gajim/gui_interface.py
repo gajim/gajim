@@ -1403,7 +1403,7 @@ class Interface:
         self.join_groupchat(account, room_jid, **kwargs)
 
     def join_groupchat(self, account, room_jid, password=None, minimized=False):
-        if not app.account_is_connected(account):
+        if not app.account_is_available(account):
             return
 
         muc_data = self._create_muc_data(account, room_jid, password, None)
@@ -1565,7 +1565,7 @@ class Interface:
             title = music_track_info.title
             source = music_track_info.album
         for acct in accounts:
-            if not app.account_is_connected(acct):
+            if not app.account_is_available(acct):
                 continue
             if not app.connections[acct].get_module('PEP').supported:
                 continue

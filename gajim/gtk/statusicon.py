@@ -226,7 +226,7 @@ class StatusIcon:
             # only one 'real' (non-zeroconf) account is connected, don't need
             # submenus
             for account in app.connections:
-                if app.account_is_connected(account) and \
+                if app.account_is_available(account) and \
                 not app.config.get_per('accounts', account, 'is_zeroconf'):
 
                     # for single message
@@ -245,7 +245,7 @@ class StatusIcon:
             for account in accounts_list:
                 account_label = app.get_account_label(account)
                 if app.connections[account].is_zeroconf or \
-                not app.account_is_connected(account):
+                not app.account_is_available(account):
                     continue
                 # for single message
                 item = Gtk.MenuItem.new_with_label(

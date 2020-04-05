@@ -888,7 +888,7 @@ class GroupchatControl(ChatControlBase):
         autopopup = app.config.get('autopopup')
         autopopupaway = app.config.get('autopopupaway')
         if not autopopup or (not autopopupaway and \
-                app.account_is_connected(self.account)):
+                app.account_is_available(self.account)):
             self.roster.draw_contact(nick)
             if self.parent_win:
                 self.parent_win.show_title()

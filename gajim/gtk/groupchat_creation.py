@@ -181,7 +181,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self._on_create_clicked()
 
     def _on_create_clicked(self, *args):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             ErrorDialog(
                 _('Not Connected'),
                 _('You have to be connected to create a group chat.'))

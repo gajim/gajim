@@ -297,13 +297,13 @@ class Presence(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def subscribed(self, jid):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         self._log.info('Subscribed: %s', jid)
         self.send_presence(jid, 'subscribed')
 
     def unsubscribed(self, jid):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         self._log.info('Unsubscribed: %s', jid)
@@ -311,7 +311,7 @@ class Presence(BaseModule):
         self.send_presence(jid, 'unsubscribed')
 
     def unsubscribe(self, jid, remove_auth=True):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         if remove_auth:
             self._con.get_module('Roster').del_item(jid)
@@ -326,7 +326,7 @@ class Presence(BaseModule):
             self._con.get_module('Roster').set_item(jid)
 
     def subscribe(self, jid, msg=None, name='', groups=None, auto_auth=False):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         if groups is None:
             groups = []

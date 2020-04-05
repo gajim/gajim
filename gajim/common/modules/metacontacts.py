@@ -77,7 +77,7 @@ class MetaContacts(BaseModule):
         return meta_list
 
     def store_metacontacts(self, tags_list):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE)
         meta = iq.getQuery().addChild('storage',

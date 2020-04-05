@@ -199,7 +199,7 @@ class Bookmarks(BaseModule):
                 self._con.get_module('PubSub').publish_options)
 
     def request_bookmarks(self) -> None:
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         self._request_in_progress = True
@@ -241,7 +241,7 @@ class Bookmarks(BaseModule):
             self.store_bookmarks()
 
     def store_bookmarks(self, bookmarks: list = None) -> None:
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         type_ = BookmarkStoreType.PRIVATE
@@ -260,7 +260,7 @@ class Bookmarks(BaseModule):
             NetworkEvent('bookmarks-received', account=self._account))
 
     def store_bookmark(self, bookmark: BookmarkData) -> None:
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if not self.using_bookmark_2:

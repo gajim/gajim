@@ -38,7 +38,7 @@ class Register(BaseModule):
         self.agent_registrations = {}
 
     def register_agent(self, agent, form, is_form, success_cb, error_cb):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         weak_success_cb = weakref.WeakMethod(success_cb)
@@ -76,7 +76,7 @@ class Register(BaseModule):
             success_cb()()
 
     def get_register_form(self, jid, success_cb, error_cb):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         weak_success_cb = weakref.WeakMethod(success_cb)

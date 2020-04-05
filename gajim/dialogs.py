@@ -748,7 +748,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
 class SynchroniseSelectAccountDialog:
     def __init__(self, account):
         # 'account' can be None if we are about to create our first one
-        if not app.account_is_connected(account):
+        if not app.account_is_available(account):
             ErrorDialog(_('You are not connected to the server'),
                 _('Without a connection, you can not synchronise your contacts.'))
             raise GajimGeneralException('You are not connected to the server')
@@ -799,7 +799,7 @@ class SynchroniseSelectAccountDialog:
             return
         remote_account = model.get_value(iter_, 0)
 
-        if not app.account_is_connected(remote_account):
+        if not app.account_is_available(remote_account):
             ErrorDialog(_('This account is not connected to the server'),
                 _('You cannot synchronize with an account unless it is connected.'))
             return

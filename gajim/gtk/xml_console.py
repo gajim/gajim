@@ -163,7 +163,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_send(self, *args):
         if not self._selected_send_account:
             return
-        if not app.account_is_connected(self._selected_send_account):
+        if not app.account_is_available(self._selected_send_account):
             # If offline or connecting
             ErrorDialog(
                 _('Connection not available'),

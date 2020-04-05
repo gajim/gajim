@@ -38,7 +38,7 @@ class EntityTime(BaseModule):
         ]
 
     def request_entity_time(self, jid, resource):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if resource:

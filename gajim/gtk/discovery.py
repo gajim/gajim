@@ -513,7 +513,7 @@ class ServiceDiscoveryWindow:
         self.reloading = False
 
         # Check connection
-        if not app.account_is_connected(account):
+        if not app.account_is_available(account):
             ErrorDialog(_('You are not connected to the server'),
                         _('Without a connection, you can not browse '
                           'available services'))

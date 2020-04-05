@@ -300,7 +300,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
             ErrorDialog(pritext, _('You cannot add yourself to your contact list.'))
             return
 
-        if not app.account_is_connected(self.account):
+        if not app.account_is_available(self.account):
             ErrorDialog(
                 _('Account Offline'),
                 _('Your account must be online to add new contacts.')

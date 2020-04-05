@@ -133,7 +133,7 @@ class Bytestream(BaseModule):
         Send iq, confirming that we want to download the file
         """
         # user response to ConfirmationDialog may come after we've disconneted
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         # file transfer initiated by a jingle session
@@ -176,7 +176,7 @@ class Bytestream(BaseModule):
         invalid stream or 'profile' for invalid profile
         """
         # user response to ConfirmationDialog may come after we've disconnected
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         for session in self._con.get_module('Jingle').get_jingle_sessions(
@@ -187,7 +187,7 @@ class Bytestream(BaseModule):
         """
         Send reply to the initiator of FT that we made a connection
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         if streamhost is None:
             return
@@ -251,7 +251,7 @@ class Bytestream(BaseModule):
         """
         Send iq for the present streamhosts and proxies
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         receiver = file_props.receiver
         sender = file_props.sender
@@ -498,7 +498,7 @@ class Bytestream(BaseModule):
         Called when there is an error establishing BS connection, or when
         connection is rejected
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         file_props = FilesProp.getFileProp(self._account, sid)
         if file_props is None:
@@ -528,7 +528,7 @@ class Bytestream(BaseModule):
         """
         Called after authentication to proxy server
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         file_props = FilesProp.getFileProp(self._account, proxy['sid'])
         iq = nbxmpp.Iq(to=proxy['initiator'], typ='set')

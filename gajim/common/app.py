@@ -453,8 +453,13 @@ def account_supports_private_storage(account):
 def account_is_connected(account):
     if account not in connections:
         return False
-    # 0 is offline, 1 is connecting
-    return connections[account].state.is_connected
+    return (connections[account].state.is_connected or
+            connections[account].state.is_available)
+
+def account_is_available(account):
+    if account not in connections:
+        return False
+    return connections[account].state.is_available
 
 def account_is_disconnected(account):
     return not account_is_connected(account)

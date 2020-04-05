@@ -185,6 +185,10 @@ class Client(ConnectionHandlers):
 
     def _on_resume_successful(self, _client, _signal_name):
         self._set_state(ClientState.CONNECTED)
+        self._set_client_available()
+
+    def _set_client_available(self):
+        self._set_state(ClientState.AVAILABLE)
         app.nec.push_incoming_event(NetworkEvent('account-connected',
                                                  account=self._account))
 
@@ -282,8 +286,6 @@ class Client(ConnectionHandlers):
 
     def _on_connected(self, client, _signal_name):
         self._set_state(ClientState.CONNECTED)
-        app.nec.push_incoming_event(NetworkEvent('account-connected',
-                                                 account=self._account))
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()
         self.get_module('Discovery').discover_server_items()
@@ -404,8 +406,8 @@ class Client(ConnectionHandlers):
             status=self._status_message)
 
         self.priority = priority
-        app.nec.push_incoming_event(
-            OurShowEvent(None, conn=self, show=self._status))
+
+        self._set_client_available()
 
         if not self.avatar_conversion:
             # ask our VCard
@@ -542,5 +544,7 @@ class Client(ConnectionHandlers):
         pass
 
     def quit(self, kill_core):
-        if kill_core and app.account_is_connected(self.name):
+        if kill_core and self._state in (ClientState.CONNECTING,
+                                         ClientState.CONNECTED,
+                                         ClientState.AVAILABLE):
             self.disconnect(gracefully=True, reconnect=False)

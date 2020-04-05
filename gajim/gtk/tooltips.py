@@ -319,7 +319,7 @@ class RosterTooltip(StatusTable):
             nbr_on, nbr_total = app.\
                 contacts.get_nb_online_total_contacts(accounts=[account])
             account_name = app.get_account_label(account)
-            if app.account_is_connected(account):
+            if app.account_is_available(account):
                 account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
             contact = app.contacts.create_self_contact(
                 jid=jid,

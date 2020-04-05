@@ -47,7 +47,7 @@ class Ping(BaseModule):
         return iq
 
     def send_ping(self, contact: ContactsT) -> None:
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         to = contact.get_full_jid()

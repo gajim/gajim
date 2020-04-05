@@ -137,7 +137,7 @@ class MUC(BaseModule):
                 raise nbxmpp.NodeProcessed
 
     def join(self, muc_data):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         self._manager.add(muc_data)
@@ -151,7 +151,7 @@ class MUC(BaseModule):
             self._join(muc_data)
 
     def create(self, muc_data):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         self._manager.add(muc_data)

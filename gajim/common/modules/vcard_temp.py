@@ -68,7 +68,7 @@ class VCardTemp(BaseModule):
 
     def request_vcard(self, callback=RequestAvatar.SELF, jid=None,
                       room=False, sha=None):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if isinstance(callback, RequestAvatar):
@@ -98,7 +98,7 @@ class VCardTemp(BaseModule):
             iq, self._parse_vcard, {'callback': callback, 'expected_sha': sha})
 
     def send_vcard(self, vcard, sha):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         iq = nbxmpp.Iq(typ='set')

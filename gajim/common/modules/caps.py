@@ -162,6 +162,9 @@ class Caps(BaseModule):
                       COMMON_FEATURES + optional_features,
                       'https://gajim.org')
 
+        if not app.account_is_available(self._account):
+            return
+
         app.connections[self._account].change_status(
             app.connections[self._account].status,
             app.connections[self._account].status_message)

@@ -612,7 +612,7 @@ class GajimApplication(Gtk.Application):
 
         if not active:
             for account in app.connections:
-                if app.account_is_connected(account) and \
+                if app.account_is_available(account) and \
                         app.sleeper_state[account] == 'autoaway-forced':
                     # We came back online after screensaver autoaway
                     roster.send_status(account, 'online',
@@ -628,7 +628,7 @@ class GajimApplication(Gtk.Application):
                     not app.sleeper_state[account]):
                 continue
             if app.sleeper_state[account] == 'online':
-                if not app.account_is_connected(account):
+                if not app.account_is_available(account):
                     continue
                 # we save our online status
                 app.status_before_autoaway[account] = \

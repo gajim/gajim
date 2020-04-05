@@ -194,7 +194,7 @@ class Discovery(BaseModule):
             raise nbxmpp.NodeProcessed
 
     def disco_muc(self, jid, callback=None):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         self._log.info('Request MUC info for %s', jid)

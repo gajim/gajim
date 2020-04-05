@@ -301,7 +301,7 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
         if self.update_progressbar_timeout_id:
             # Operation in progress
             return
-        if not app.account_is_connected(self.account):
+        if not app.account_is_available(self.account):
             ErrorDialog(
                 _('You are not connected to the server'),
                 _('Without a connection, you can not publish your contact '

@@ -817,7 +817,7 @@ class RosterWindow:
         """
         contact = app.contacts.get_groupchat_contact(account, jid)
         show = 'offline'
-        if app.account_is_connected(account):
+        if app.account_is_available(account):
             show = 'online'
 
         contact.show = show
@@ -1032,7 +1032,7 @@ class RosterWindow:
         self.model.iter_has_child(child_iter):
             account_name = '[%s]' % account_name
 
-        if (app.account_is_connected(account) or (self.regroup and \
+        if (app.account_is_available(account) or (self.regroup and \
         app.get_number_of_connected_accounts())) and app.config.get(
         'show_contacts_number'):
             nbr_on, nbr_total = app.contacts.get_nb_online_total_contacts(
@@ -2065,7 +2065,7 @@ class RosterWindow:
             app.config.set_per('accounts', account, 'last_status', status)
             app.config.set_per('accounts', account, 'last_status_msg',
                     helpers.to_one_line(txt))
-            if not app.account_is_connected(account):
+            if not app.account_is_available(account):
                 self.set_connecting_state(account)
 
         self.send_status_continue(account, status, txt, auto)
@@ -2102,7 +2102,7 @@ class RosterWindow:
             ctrl.update_all_pep_types()
 
     def send_status_continue(self, account, status, txt, auto):
-        if app.account_is_connected(account):
+        if app.account_is_available(account):
             if status == 'online' and not idle.Monitor.is_unknown():
                 app.sleeper_state[account] = 'online'
             elif app.sleeper_state[account] not in ('autoaway', 'autoxa') or \
@@ -2390,7 +2390,7 @@ class RosterWindow:
         accounts = list(app.connections.keys())
         get_msg = False
         for acct in accounts:
-            if app.account_is_connected(acct):
+            if app.account_is_available(acct):
                 get_msg = True
                 break
 
@@ -2398,7 +2398,7 @@ class RosterWindow:
             self.quit_on_next_offline = 0
             accounts_to_disconnect = []
             for acct in accounts:
-                if app.account_is_connected(acct):
+                if app.account_is_available(acct):
                     self.quit_on_next_offline += 1
                     accounts_to_disconnect.append(acct)
 
@@ -2878,7 +2878,7 @@ class RosterWindow:
             return
 
         # Account is offline, don't allow to rename
-        if not app.account_is_connected(account):
+        if not app.account_is_available(account):
             return
         if row_type in ('contact', 'agent'):
             # It's jid
@@ -3108,7 +3108,7 @@ class RosterWindow:
                     return
                 jid = model[path][Column.JID]
                 account = model[path][Column.ACCOUNT]
-                if not app.account_is_connected(account):
+                if not app.account_is_available(account):
                     continue
                 contact = app.contacts.get_contact_with_highest_priority(
                     account, jid)
@@ -3213,7 +3213,7 @@ class RosterWindow:
             elif type_ == 'account':
                 account = model[path][Column.ACCOUNT]
                 if account != 'all':
-                    if app.account_is_connected(account):
+                    if app.account_is_available(account):
                         self.on_change_status_message_activate(widget, account)
                     return True
                 show = helpers.get_global_show()
@@ -3418,7 +3418,7 @@ class RosterWindow:
                 # show and status
 
                 if not global_sync_connected_accounts > 0 or \
-                app.account_is_connected(account):
+                app.account_is_available(account):
                     self.send_status(account, status, message)
                     self.send_pep(account, pep_dict)
             self.update_status_combobox()
@@ -4159,7 +4159,7 @@ class RosterWindow:
         if account_dest == 'all':
             return
         # nothing can be done, if destination account is offline
-        if not app.account_is_connected(account_dest):
+        if not app.account_is_available(account_dest):
             return
 
         # A file got dropped on the roster
@@ -4729,7 +4729,7 @@ class RosterWindow:
             sub_menu.append(item)
             item.connect('activate', self.on_change_status_message_activate,
                 account)
-            if not app.account_is_connected(account):
+            if not app.account_is_available(account):
                 item.set_sensitive(False)
 
             item = Gtk.SeparatorMenuItem.new()
@@ -4788,7 +4788,7 @@ class RosterWindow:
                 self.on_view_server_info, account)
 
             # make some items insensitive if account is offline
-            if not app.account_is_connected(account):
+            if not app.account_is_available(account):
                 for widget in (add_contact_menuitem, service_discovery_menuitem,
                 execute_command_menuitem, view_server_info_menuitem,
                 pep_menuitem):
@@ -4816,7 +4816,7 @@ class RosterWindow:
             sub_menu.append(item)
             item.connect('activate', self.on_change_status_message_activate,
                 account)
-            if not app.account_is_connected(account):
+            if not app.account_is_available(account):
                 item.set_sensitive(False)
 
             uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
@@ -4926,7 +4926,7 @@ class RosterWindow:
             if app.config.get_per('accounts', account, 'is_zeroconf'):
                 send_group_message_item.set_sensitive(False)
 
-            if not app.account_is_connected(account):
+            if not app.account_is_available(account):
                 send_group_message_item.set_sensitive(False)
                 invite_menuitem.set_sensitive(False)
 
@@ -4969,7 +4969,7 @@ class RosterWindow:
                 group, account)
 
             # unsensitive if account is not connected
-            if not app.account_is_connected(account):
+            if not app.account_is_available(account):
                 rename_item.set_sensitive(False)
 
             # General group cannot be changed
@@ -5009,7 +5009,7 @@ class RosterWindow:
         for titer in iters:
             jid = model[titer][Column.JID]
             account = model[titer][Column.ACCOUNT]
-            if not app.account_is_connected(account):
+            if not app.account_is_available(account):
                 one_account_offline = True
             if not app.connections[account].get_module('PrivacyLists').supported:
                 privacy_rules_supported = False

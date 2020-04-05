@@ -94,7 +94,7 @@ class RosterItemExchange(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def send_contacts(self, contacts, fjid, type_='message'):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if type_ == 'message':

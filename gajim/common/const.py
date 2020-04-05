@@ -223,6 +223,7 @@ class ClientState(IntEnum):
     RECONNECT_SCHEDULED = 2
     CONNECTING = 3
     CONNECTED = 4
+    AVAILABLE = 5
 
     @property
     def is_disconnecting(self):
@@ -243,6 +244,11 @@ class ClientState(IntEnum):
     @property
     def is_connected(self):
         return self == ClientState.CONNECTED
+
+    @property
+    def is_available(self):
+        return self == ClientState.AVAILABLE
+    
 
 
 MUC_CREATION_EXAMPLES = [

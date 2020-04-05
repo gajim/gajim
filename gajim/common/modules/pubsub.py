@@ -43,7 +43,7 @@ class PubSub(BaseModule):
         self.publish_options = True
 
     def send_pb_subscription_query(self, jid, cb, **kwargs):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         query = nbxmpp.Iq('get', to=jid)
@@ -53,7 +53,7 @@ class PubSub(BaseModule):
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
     def send_pb_subscribe(self, jid, node, cb, **kwargs):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         our_jid = app.get_jid_from_account(self._account)
@@ -64,7 +64,7 @@ class PubSub(BaseModule):
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
     def send_pb_unsubscribe(self, jid, node, cb, **kwargs):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         our_jid = app.get_jid_from_account(self._account)
@@ -76,7 +76,7 @@ class PubSub(BaseModule):
 
     def send_pb_publish(self, jid, node, item,
                         id_=None, options=None, cb=None, **kwargs):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if cb is None:
@@ -111,7 +111,7 @@ class PubSub(BaseModule):
         """
         Get items from a node
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if cb is None:
@@ -125,7 +125,7 @@ class PubSub(BaseModule):
         """
         Delete item from a node
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if cb is None:
@@ -142,7 +142,7 @@ class PubSub(BaseModule):
         """
         Purge node: Remove all items
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if cb is None:
@@ -158,7 +158,7 @@ class PubSub(BaseModule):
         """
         Delete node
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         query = nbxmpp.Iq('set', to=jid)
         pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
@@ -179,7 +179,7 @@ class PubSub(BaseModule):
         """
         Create a new node
         """
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
         query = nbxmpp.Iq('set', to=jid)
         pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
@@ -192,7 +192,7 @@ class PubSub(BaseModule):
         self._con.connection.SendAndCallForResponse(query, cb)
 
     def send_pb_configure(self, jid, node, form, cb=None, **kwargs):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         if cb is None:
@@ -207,7 +207,7 @@ class PubSub(BaseModule):
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
     def request_pb_configuration(self, jid, node):
-        if not app.account_is_connected(self._account):
+        if not app.account_is_available(self._account):
             return
 
         query = nbxmpp.Iq('get', to=jid)

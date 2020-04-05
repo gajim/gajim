@@ -267,7 +267,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 return
 
         if row.groupchat:
-            if not app.account_is_connected(row.account):
+            if not app.account_is_available(row.account):
                 self._show_error_page(_('You can not join a group chat '
                                         'unless you are connected.'))
                 return
@@ -346,7 +346,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         if selected_row is None:
             return
 
-        if not app.account_is_connected(account):
+        if not app.account_is_available(account):
             self._show_error_page(_('You can not join a group chat '
                                     'unless you are connected.'))
             return
