@@ -198,7 +198,7 @@ class Presence(BaseModule):
                 if jid in app.to_be_removed[self._account]:
                     app.to_be_removed[self._account].remove(jid)
             elif event.old_show > 1 and event.new_show == 0 and \
-            self._con.state.is_connected:
+            self._con.state.is_available:
                 if not jid in app.to_be_removed[self._account]:
                     app.to_be_removed[self._account].append(jid)
                 if jid in app.newly_added[self._account]:

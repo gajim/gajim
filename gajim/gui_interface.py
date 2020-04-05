@@ -1959,7 +1959,8 @@ class Interface:
         else:
             log.info('Network connection lost')
             for connection in app.connections.values():
-                if connection.state.is_connected:
+                if (connection.state.is_connected or
+                        connection.state.is_available):
                     connection.disconnect(gracefully=False, reconnect=True)
 
     def create_zeroconf_default_config(self):

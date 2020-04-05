@@ -2501,7 +2501,7 @@ class RosterWindow:
                     GLib.timeout_add_seconds(5, self.remove_newly_added, jid,
                         account)
                 elif obj.old_show > 1 and obj.new_show == 0 and \
-                obj.conn.state.is_connected:
+                obj.conn.state.is_available:
                     GLib.timeout_add_seconds(5, self.remove_to_be_removed,
                         jid, account)
 

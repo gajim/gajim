@@ -758,7 +758,7 @@ class JingleSession:
     def _session_terminate(self, reason=None):
         stanza, jingle = self.__make_jingle('session-terminate', reason=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
-        if self.connection.connection and self.connection.state.is_connected:
+        if self.connection.connection and self.connection.state.is_available:
             self.connection.connection.send(stanza)
         # TODO: Move to GUI?
         reason, text = self.__reason_from_stanza(jingle)
@@ -806,7 +806,7 @@ class JingleSession:
 
     def __content_remove(self, content, reason=None):
         assert self.state != JingleStates.ENDED
-        if self.connection.connection and self.connection.state.is_connected:
+        if self.connection.connection and self.connection.state.is_available:
             stanza, jingle = self.__make_jingle('content-remove', reason=reason)
             self.__append_content(jingle, content)
             self.connection.connection.send(stanza)

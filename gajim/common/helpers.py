@@ -690,7 +690,7 @@ def get_connection_status(account):
     if con.state.is_reconnect_scheduled:
         return 'error'
 
-    if con.state.is_connecting:
+    if con.state.is_connecting or con.state.is_connected:
         return 'connecting'
 
     if con.state.is_disconnected:

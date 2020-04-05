@@ -442,7 +442,7 @@ class Client(ConnectionHandlers):
         return self._client.send_stanza(stanza)
 
     def send_message(self, message):
-        if not self._state.is_connected:
+        if not self._state.is_available:
             log.warning('Trying to send message while offline')
             return
 
@@ -477,7 +477,7 @@ class Client(ConnectionHandlers):
         self.get_module('Message').log_message(message)
 
     def send_messages(self, jids, message):
-        if not self._state.is_connected:
+        if not self._state.is_available:
             log.warning('Trying to send message while offline')
             return
 

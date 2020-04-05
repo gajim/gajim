@@ -89,7 +89,7 @@ class RemoveAccount(Assistant):
             app.interface.remove_account(self.account)
 
     def _set_remove_from_server_checkbox(self):
-        enabled = self._con is not None and self._con.state.is_connected
+        enabled = self._con is not None and self._con.state.is_available
         self.get_page('remove_choice').set_remove_from_server(enabled)
 
     @staticmethod
