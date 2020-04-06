@@ -699,7 +699,7 @@ class AdvancedSettings(Page):
         con_type = self._ui.con_type_combo.get_active_text()
 
         protocol = ConnectionProtocol.TCP
-        if host.startswith('ws'):
+        if host.startswith('ws://') or host.startswith('wss://'):
             protocol = ConnectionProtocol.WEBSOCKET
 
         return ('%s:%s' % (host, port),

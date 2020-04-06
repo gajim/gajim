@@ -1754,7 +1754,7 @@ def get_custom_host(account):
     type_ = app.config.get_per('accounts', account, 'custom_type')
 
     protocol = ConnectionProtocol.TCP
-    if host.startswith('ws'):
+    if host.startswith('ws://') or host.startswith('wss://'):
         protocol = ConnectionProtocol.WEBSOCKET
 
     return ('%s:%s' % (host, port),
