@@ -1748,12 +1748,17 @@ def convert_gio_to_openssl_cert(cert):
 
 def get_custom_host(account):
     if not app.config.get_per('accounts', account, 'use_custom_host'):
-        return
+        return None
     host = app.config.get_per('accounts', account, 'custom_host')
     port = app.config.get_per('accounts', account, 'custom_port')
     type_ = app.config.get_per('accounts', account, 'custom_type')
+
+    protocol = ConnectionProtocol.TCP
+    if host.startswith('ws'):
+        protocol = ConnectionProtocol.WEBSOCKET
+
     return ('%s:%s' % (host, port),
-            ConnectionProtocol.TCP,
+            protocol,
             ConnectionType(type_))
 
 
