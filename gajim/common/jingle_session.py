@@ -588,7 +588,7 @@ class JingleSession:
             creator = content['creator']
             if (creator, name) not in self.contents:
                 text = 'Content %s (created by %s) does not exist' % (name, creator)
-                self.__send_error(stanza, 'bad-request', text=text, type_='_modify')
+                self.__send_error(stanza, 'bad-request', text=text, type_='modify')
                 raise nbxmpp.NodeProcessed
 
             cn = self.contents[(creator, name)]
