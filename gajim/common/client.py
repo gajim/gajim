@@ -280,7 +280,7 @@ class Client(ConnectionHandlers):
     def _on_connection_failed(self, _client, _signal_name):
         self._schedule_reconnect()
 
-    def _on_connected(self, client, _signal_name):
+    def _on_connected(self, _client, _signal_name):
         self._set_state(ClientState.CONNECTED)
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()
