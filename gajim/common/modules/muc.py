@@ -304,13 +304,7 @@ class MUC(BaseModule):
             self._send_presence(muc_data, auto)
 
     def _send_presence(self, muc_data, auto):
-        if self._con.status == 'offline':
-            # FIXME: Check if this
-            return
-
         message = self._con.status_message
-
-        xmpp_show = helpers.get_xmpp_show(self._con.status)
 
         idle_time = None
         if auto and app.is_installed('IDLE') and app.config.get('autoaway'):
@@ -320,12 +314,13 @@ class MUC(BaseModule):
 
         self._log.info('Send presence: %s, show: %s, '
                        'message: %s, idle_time: %s',
-                       muc_data.occupant_jid, xmpp_show, message, idle_time)
+                       muc_data.occupant_jid, self._con.status,
+                       message, idle_time)
 
         self._con.get_module('Presence').send_presence(
             muc_data.occupant_jid,
-            show=xmpp_show,
-            status=self._con.status,
+            show=self._con.status,
+            status=self._con.status_message,
             caps=True,
             idle_time=idle_time)
 

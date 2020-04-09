@@ -428,6 +428,9 @@ class Client(ConnectionHandlers):
             idle_time=idle_time)
 
         self.priority = priority
+
+        self.get_module('MUC').update_presence()
+
         app.nec.push_incoming_event(
             OurShowEvent(None, conn=self, show=show))
 

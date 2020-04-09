@@ -2113,7 +2113,6 @@ class RosterWindow:
             self.delete_pep(app.get_jid_from_account(account), account)
 
         app.connections[account].change_status(status, txt, auto)
-        app.connections[account].get_module('MUC').update_presence(auto)
 
     def chg_contact_status(self, contact, show, status, account):
         """
