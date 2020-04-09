@@ -385,6 +385,8 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         gc_contact = app.contacts.get_gc_contact(
             self._account, self.room_jid, nick)
 
+        self.draw_avatar(gc_contact)
+
         if app.events.get_events(self._account, self.room_jid + '/' + nick):
             self._store[iter_][Column.EVENT] = True
         else:
