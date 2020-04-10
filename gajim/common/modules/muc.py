@@ -215,7 +215,8 @@ class MUC(BaseModule):
         self._con.get_module('Presence').send_presence(
             muc_data.occupant_jid,
             typ='unavailable',
-            status=reason)
+            status=reason,
+            caps=False)
         # We leave a group chat, disable bookmark autojoin
         self._con.get_module('Bookmarks').modify(room_jid, autojoin=False)
 
@@ -303,7 +304,6 @@ class MUC(BaseModule):
                 muc_data.occupant_jid,
                 show=self._con.status,
                 status=self._con.status_message,
-                caps=True,
                 idle_time=auto)
 
     def change_nick(self, room_jid, new_nick):
