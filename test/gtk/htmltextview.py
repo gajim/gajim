@@ -8,6 +8,7 @@ from gajim.common import app
 from gajim.common import configpaths
 configpaths.init()
 from gajim.common import caps_cache
+from gajim.common.helpers import AdditionalDataDict
 
 from gajim.conversation_textview import ConversationTextview
 from gajim.gui_interface import Interface
@@ -15,6 +16,7 @@ from gajim.gui_interface import Interface
 caps_cache.capscache = MagicMock()
 app.plugin_manager = MagicMock()
 app.logger = MagicMock()
+app.cert_store = MagicMock()
 app.interface = Interface()
 
 
@@ -204,7 +206,10 @@ class TextviewWindow(Gtk.Window):
 
     def _print_xhtml(self):
         for xhtml in XHTML:
-            self._textview.print_real_text(None, xhtml=xhtml)
+            additional_data = AdditionalDataDict()
+            additional_data.set_value('gajim', 'xhtml', xhtml)
+            self._textview.print_real_text(None, additional_data=additional_data)
+            self._textview.print_real_text('\n')
 
 win = TextviewWindow()
 win.connect("destroy", Gtk.main_quit)
