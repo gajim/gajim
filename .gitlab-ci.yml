@@ -18,7 +18,7 @@ run-tests:
     - mypy -V
     - mypy gajim
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
-    - python3 setup.py test -s test.no_gui
+    - python3 -m unittest discover -s test/no_gui -v
     - deactivate
     - rm -rf civenv-master
 
