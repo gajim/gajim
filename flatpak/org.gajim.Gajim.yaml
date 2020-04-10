@@ -7,7 +7,6 @@ tags:
   - devel
   - development
   - nightly
-desktop-file-name-prefix: '(Nightly) '
 rename-icon: org.gajim.Gajim
 rename-desktop-file: org.gajim.Gajim.desktop
 rename-appdata-file: org.gajim.Gajim.appdata.xml
@@ -221,5 +220,6 @@ modules:
         commands:
           - sed -i "s+<id>org.gajim.Gajim</id>+<id>org.gajim.Gajim.Devel</id>+" data/org.gajim.Gajim.appdata.xml.in
           - sed -i "s+<name>Gajim</name>+<name>Gajim (Nightly)</name>+" data/org.gajim.Gajim.appdata.xml.in
+          - mv gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim{.Devel,}.svg
     post-install:
       - install -d /app/plugins
