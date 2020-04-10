@@ -30,6 +30,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+from gi.repository import GLib
+
 import gajim
 from gajim.common.i18n import _
 from gajim.common.const import PathType, PathLocation
@@ -114,19 +116,10 @@ class ConfigPaths:
                 # win9x, in cwd
                 self.config_root = self.cache_root = self.data_root = '.'
         else:
-            expand = os.path.expanduser
-            base = os.getenv('XDG_CONFIG_HOME')
-            if base is None or base[0] != '/':
-                base = expand('~/.config')
-            self.config_root = os.path.join(base, 'gajim')
-            base = os.getenv('XDG_CACHE_HOME')
-            if base is None or base[0] != '/':
-                base = expand('~/.cache')
-            self.cache_root = os.path.join(base, 'gajim')
-            base = os.getenv('XDG_DATA_HOME')
-            if base is None or base[0] != '/':
-                base = expand('~/.local/share')
-            self.data_root = os.path.join(base, 'gajim')
+            self.config_root = os.path.join(GLib.get_user_config_dir(),
+                                            'gajim')
+            self.cache_root = os.path.join(GLib.get_user_cache_dir(), 'gajim')
+            self.data_root = os.path.join(GLib.get_user_data_dir(), 'gajim')
 
         import pkg_resources
         basedir = pkg_resources.resource_filename("gajim", ".")
