@@ -21,6 +21,7 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.const import PresenceType
 
 from gajim.common import app
+from gajim.common import idle
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 from gajim.common.const import KindConstant
@@ -353,7 +354,7 @@ class Presence(BaseModule):
 
     def get_presence(self, to=None, typ=None, priority=None,
                      show=None, status=None, nick=None, caps=True,
-                     idle_time=None):
+                     idle_time=False):
         if show not in ('chat', 'away', 'xa', 'dnd'):
             # Gajim sometimes passes invalid show values here
             # until this is fixed this is a workaround
@@ -363,14 +364,20 @@ class Presence(BaseModule):
             nick_tag = presence.setTag('nick', namespace=nbxmpp.NS_NICK)
             nick_tag.setData(nick)
 
-        if idle_time is not None:
-            idle_node = presence.setTag('idle', namespace=nbxmpp.NS_IDLE)
-            idle_node.setAttr('since', idle_time)
-
         if not self._con.avatar_conversion:
             # XEP-0398 not supported by server so
             # we add the avatar sha to our presence
             self._con.get_module('VCardAvatars').add_update_node(presence)
+
+        if (idle_time and
+                app.is_installed('IDLE') and
+                app.config.get('autoaway')):
+            idle_sec = idle.Monitor.get_idle_sec()
+            time_ = time.strftime('%Y-%m-%dT%H:%M:%SZ',
+                                  time.gmtime(time.time() - idle_sec))
+
+            idle_node = presence.setTag('idle', namespace=nbxmpp.NS_IDLE)
+            idle_node.setAttr('since', time_)
 
         caps = self._con.get_module('Caps').caps
         if caps is not None and typ != 'unavailable':

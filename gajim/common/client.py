@@ -13,7 +13,6 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import time
 
 import nbxmpp
 from nbxmpp.client import Client as NBXMPPClient
@@ -27,7 +26,6 @@ from gajim.common.nec import NetworkEvent
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import idle
 from gajim.common import modules
 from gajim.common.const import ClientState
 from gajim.common.helpers import get_encryption_method
@@ -358,15 +356,20 @@ class Client(ConnectionHandlers):
                             destroy_client=True)
             return
 
-        idle_time = None
-        if auto:
-            if app.is_installed('IDLE') and app.config.get('autoaway'):
-                idle_sec = idle.Monitor.get_idle_sec()
-                idle_time = time.strftime(
-                    '%Y-%m-%dT%H:%M:%SZ',
-                    time.gmtime(time.time() - idle_sec))
+        priority = app.get_priority(self._account, show)
 
-        self._update_status(show, msg, idle_time=idle_time)
+        self.get_module('Presence').send_presence(
+            priority=priority,
+            show=show,
+            status=msg,
+            idle_time=auto)
+
+        self.priority = priority
+
+        self.get_module('MUC').update_presence(auto=auto)
+
+        app.nec.push_incoming_event(
+            OurShowEvent(None, conn=self, show=show))
 
     def _register_new_handlers(self):
         for handler in modules.get_handlers(self):
@@ -417,22 +420,6 @@ class Client(ConnectionHandlers):
         # Inform GUI we just signed in
         app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
         modules.send_stored_publish(self._account)
-
-    def _update_status(self, show, msg, idle_time=None):
-        priority = app.get_priority(self._account, show)
-
-        self.get_module('Presence').send_presence(
-            priority=priority,
-            show=show,
-            status=msg,
-            idle_time=idle_time)
-
-        self.priority = priority
-
-        self.get_module('MUC').update_presence()
-
-        app.nec.push_incoming_event(
-            OurShowEvent(None, conn=self, show=show))
 
     def send_stanza(self, stanza):
         """

@@ -15,7 +15,6 @@
 # XEP-0045: Multi-User Chat
 # XEP-0249: Direct MUC Invitations
 
-import time
 import logging
 
 import nbxmpp
@@ -36,7 +35,6 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import event_filter
-from gajim.common import idle
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.base import BaseModule
@@ -301,28 +299,12 @@ class MUC(BaseModule):
         mucs = self._manager.get_mucs_with_state([MUCJoinedState.JOINED,
                                                   MUCJoinedState.JOINING])
         for muc_data in mucs:
-            self._send_presence(muc_data, auto)
-
-    def _send_presence(self, muc_data, auto):
-        message = self._con.status_message
-
-        idle_time = None
-        if auto and app.is_installed('IDLE') and app.config.get('autoaway'):
-            idle_sec = idle.Monitor.get_idle_sec()
-            idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
-                                      time.gmtime(time.time() - idle_sec))
-
-        self._log.info('Send presence: %s, show: %s, '
-                       'message: %s, idle_time: %s',
-                       muc_data.occupant_jid, self._con.status,
-                       message, idle_time)
-
-        self._con.get_module('Presence').send_presence(
-            muc_data.occupant_jid,
-            show=self._con.status,
-            status=self._con.status_message,
-            caps=True,
-            idle_time=idle_time)
+            self._con.get_module('Presence').send_presence(
+                muc_data.occupant_jid,
+                show=self._con.status,
+                status=self._con.status_message,
+                caps=True,
+                idle_time=auto)
 
     def change_nick(self, room_jid, new_nick):
         self._con.get_module('Presence').send_presence(
