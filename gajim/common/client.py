@@ -56,7 +56,7 @@ class Client(ConnectionHandlers):
         self._user = app.config.get_per('accounts', self._account, 'name')
         self.password = None
 
-        self.priority = 0
+        self._priority = 0
         self.handlers_registered = False
         self._connect_machine_calls = 0
         self.avatar_conversion = False
@@ -101,6 +101,10 @@ class Client(ConnectionHandlers):
     @property
     def status_message(self):
         return self._status_message
+
+    @property
+    def priority(self):
+        return self._priority
 
     @property
     def certificate(self):
@@ -356,15 +360,13 @@ class Client(ConnectionHandlers):
                             destroy_client=True)
             return
 
-        priority = app.get_priority(self._account, show)
+        self._priority = app.get_priority(self._account, show)
 
         self.get_module('Presence').send_presence(
-            priority=priority,
+            priority=self._priority,
             show=show,
             status=msg,
             idle_time=auto)
-
-        self.priority = priority
 
         self.get_module('MUC').update_presence(auto=auto)
 
@@ -397,14 +399,12 @@ class Client(ConnectionHandlers):
             self._send_first_presence()
 
     def _send_first_presence(self):
-        priority = app.get_priority(self._account, self._status)
+        self._priority = app.get_priority(self._account, self._status)
 
         self.get_module('Presence').send_presence(
-            priority=priority,
+            priority=self._priority,
             show=self._status,
             status=self._status_message)
-
-        self.priority = priority
 
         self._set_client_available()
 
