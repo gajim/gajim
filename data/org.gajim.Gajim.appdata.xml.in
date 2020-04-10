@@ -2,9 +2,6 @@
 <!-- Copyright 2017-2020 Gajim Team -->
 <component type="desktop-application">
   <id>org.gajim.Gajim</id>
-  <provides>
-    <id>gajim.desktop</id>
-  </provides>
   <metadata_license>CC-BY-SA-3.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <name>Gajim</name>
