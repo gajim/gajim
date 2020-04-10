@@ -32,6 +32,14 @@ import getopt
 import sqlite3
 from enum import IntEnum, unique
 
+import gi
+
+try:
+    gi.require_versions({'Gtk': '3.0'})
+except ValueError as error:
+    sys.exit('Missing dependency: %s' % error)
+
+# pylint: disable=C0413
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -80,7 +88,6 @@ if is_standalone():
     configpaths.init()
     app.load_css_config()
 
-# pylint: disable=C0413
 from gajim.common import helpers
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
