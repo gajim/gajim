@@ -399,9 +399,10 @@ class MAM(BaseModule):
             self._nbxmpp('MAM').make_query(result.jid,
                                            queryid,
                                            after=result.rsm.last,
+                                           start=start_date,
                                            callback=self._result_finished,
                                            user_data={'queryid': queryid,
-                                                      'start': None,
+                                                      'start': start_date,
                                                       'groupchat': groupchat})
 
     def request_archive_interval(self,
