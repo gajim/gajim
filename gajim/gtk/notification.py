@@ -228,7 +228,7 @@ class Notification(EventHelper):
         contact = app.contacts.get_contact(account, jid)
         if contact is None:
             return None
-        return app.interface.get_avatar(contact, 16, scale, pixbuf=True)
+        return app.interface.get_avatar(contact, 32, scale, pixbuf=True)
 
     def _on_popup_destroy(self, *args):
         self._win32_active_popup = None
