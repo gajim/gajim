@@ -56,6 +56,12 @@ class Receipts(BaseModule):
             if not app.config.get_per('accounts', self._account,
                                       'answer_receipts'):
                 return
+
+            if properties.eme is not None:
+                # Don't send receipt for message which couldn't be decrypted
+                if not properties.is_encrypted:
+                    return
+
             contact = self._get_contact(properties)
             if contact is None:
                 return
