@@ -511,7 +511,7 @@ class GroupchatControl(ChatControlBase):
         self._show_page('muc-info')
 
     def _on_invite(self, _action, _param):
-        self._invite_box.update()
+        self._invite_box.load_contacts()
         self._show_page('invite')
 
     def _on_invite_ready(self, _, invitable):

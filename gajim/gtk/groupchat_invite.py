@@ -54,8 +54,6 @@ class GroupChatInvite(Gtk.Box):
         self._new_contact_row_visible = False
         self._room_jid = room_jid
 
-        self.update()
-
         self._ui.search_entry.connect('search-changed',
                                       self._on_search_changed)
         self._ui.search_entry.connect('next-match',
@@ -254,7 +252,7 @@ class GroupChatInvite(Gtk.Box):
 
         return locale.strcoll(name1.lower(), name2.lower())
 
-    def update(self):
+    def load_contacts(self):
         self._ui.contacts_listbox.foreach(self._ui.contacts_listbox.remove)
         self._ui.invitees_listbox.foreach(self._ui.invitees_listbox.remove)
         self._accounts = app.get_enabled_accounts_with_labels()
