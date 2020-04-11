@@ -39,6 +39,8 @@ class Receipts(BaseModule):
             return
 
         if properties.type.is_error:
+            if properties.receipt.is_request:
+                return
             # Don't propagate this event further
             raise nbxmpp.NodeProcessed
 
