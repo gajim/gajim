@@ -305,15 +305,16 @@ class ContactRow(Gtk.ListBoxRow):
         self.name_label = Gtk.Label(label=self.name)
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
         self.name_label.set_xalign(0)
-        self.name_label.set_width_chars(25)
+        self.name_label.set_width_chars(20)
         self.name_label.set_halign(Gtk.Align.START)
         self.name_label.get_style_context().add_class('bold16')
         middle_box.add(self.name_label)
 
         self.jid_label = Gtk.Label(label=jid)
+        self.jid_label.set_tooltip_text(jid)
         self.jid_label.set_ellipsize(Pango.EllipsizeMode.END)
         self.jid_label.set_xalign(0)
-        self.jid_label.set_width_chars(25)
+        self.jid_label.set_width_chars(22)
         self.jid_label.set_halign(Gtk.Align.START)
         self.jid_label.get_style_context().add_class('dim-label')
         middle_box.add(self.jid_label)
@@ -321,13 +322,16 @@ class ContactRow(Gtk.ListBoxRow):
         grid.add(middle_box)
 
         if show_account:
-            account_label = Gtk.Label(label=self.account_label)
-            account_label.set_halign(Gtk.Align.START)
-            account_label.set_valign(Gtk.Align.START)
+            account_icon = Gtk.Image.new_from_icon_name(
+                'org.gajim.Gajim-symbolic', Gtk.IconSize.MENU)
+            account_icon.set_tooltip_text(
+                _('Account: %s' % self.account_label))
+            account_class = app.css_config.get_dynamic_class(account)
+            account_icon.get_style_context().add_class(account_class)
 
             right_box = Gtk.Box()
             right_box.set_vexpand(True)
-            right_box.add(account_label)
+            right_box.add(account_icon)
             grid.add(right_box)
 
         self.add(grid)
