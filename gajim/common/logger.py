@@ -186,9 +186,9 @@ def caps_decoder(dict_):
 
 def timeit(func):
     def func_wrapper(self, *args, **kwargs):
-        start = time.time() / 1e9
+        start = time.time()
         result = func(self, *args, **kwargs)
-        exec_time = (time.time() / 1e9 - start)
+        exec_time = (time.time() - start) * 1e3
         level = 30 if exec_time > 50 else 10
         log.log(level, 'Execution time for %s: %s ms',
                 func.__name__, math.ceil(exec_time))
