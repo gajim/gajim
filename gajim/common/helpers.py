@@ -59,7 +59,6 @@ from encodings.punycode import punycode_encode
 from functools import wraps
 
 import nbxmpp
-from nbxmpp.stringprepare import nameprep
 from nbxmpp.const import Role
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
@@ -101,48 +100,11 @@ class InvalidFormat(Exception):
     pass
 
 
-def decompose_jid(jidstring):
-    user = None
-    server = None
-    resource = None
-
-    # Search for delimiters
-    user_sep = jidstring.find('@')
-    res_sep = jidstring.find('/')
-
-    if user_sep == -1:
-        if res_sep == -1:
-            # host
-            server = jidstring
-        else:
-            # host/resource
-            server = jidstring[0:res_sep]
-            resource = jidstring[res_sep + 1:]
-    else:
-        if res_sep == -1:
-            # user@host
-            user = jidstring[0:user_sep]
-            server = jidstring[user_sep + 1:]
-        else:
-            if user_sep < res_sep:
-                # user@host/resource
-                user = jidstring[0:user_sep]
-                server = jidstring[user_sep + 1:user_sep + (res_sep - user_sep)]
-                resource = jidstring[res_sep + 1:]
-            else:
-                # server/resource (with an @ in resource)
-                server = jidstring[0:res_sep]
-                resource = jidstring[res_sep + 1:]
-    return user, server, resource
-
 def parse_jid(jidstring):
-    """
-    Perform stringprep on all JID fragments from a string and return the full
-    jid
-    """
-    # This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
-
-    return prep(*decompose_jid(jidstring))
+    try:
+        return validate_jid(jidstring)
+    except Exception as error:
+        raise InvalidFormat(error)
 
 def idn_to_ascii(host):
     """
@@ -192,71 +154,6 @@ def parse_resource(resource):
             return resource.encode('OpaqueString').decode('utf-8')
         except UnicodeError:
             raise InvalidFormat('Invalid character in resource.')
-
-def prep(user, server, resource):
-    """
-    Perform stringprep on all JID fragments and return the full jid
-    """
-    # This function comes from
-    #http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
-
-    ip_address = False
-
-    try:
-        socket.inet_aton(server)
-        ip_address = True
-    except socket.error:
-        pass
-
-    if not ip_address and hasattr(socket, 'inet_pton'):
-        try:
-            socket.inet_pton(socket.AF_INET6, server.strip('[]'))
-            server = '[%s]' % server.strip('[]')
-            ip_address = True
-        except (socket.error, ValueError):
-            pass
-
-    if not ip_address:
-        if server is not None:
-            if server.endswith('.'):  # RFC7622, 3.2
-                server = server[:-1]
-            if not server or len(server.encode('utf-8')) > 1023:
-                raise InvalidFormat(_('Server must be between 1 and 1023 bytes'))
-            try:
-                server = nameprep.prepare(server)
-            except UnicodeError:
-                raise InvalidFormat(_('Invalid character in hostname.'))
-        else:
-            raise InvalidFormat(_('Server address required.'))
-
-    if user is not None:
-        if not user or len(user.encode('utf-8')) > 1023:
-            raise InvalidFormat(_('Username must be between 1 and 1023 bytes'))
-        try:
-            user = user.encode('UsernameCaseMapped').decode('utf-8')
-        except UnicodeError:
-            raise InvalidFormat(_('Invalid character in username.'))
-    else:
-        user = None
-
-    if resource is not None:
-        if not resource or len(resource.encode('utf-8')) > 1023:
-            raise InvalidFormat(_('Resource must be between 1 and 1023 bytes'))
-        try:
-            resource = resource.encode('OpaqueString').decode('utf-8')
-        except UnicodeError:
-            raise InvalidFormat(_('Invalid character in resource.'))
-    else:
-        resource = None
-
-    if user:
-        if resource:
-            return '%s@%s/%s' % (user, server, resource)
-        return '%s@%s' % (user, server)
-
-    if resource:
-        return '%s/%s' % (server, resource)
-    return server
 
 def windowsify(s):
     if os.name == 'nt':
