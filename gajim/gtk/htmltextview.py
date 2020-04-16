@@ -963,7 +963,9 @@ class HtmlTextView(Gtk.TextView):
     def _delete_last_char(buffer_, iter_):
         start_iter = iter_.copy()
         start_iter.backward_char()
-        buffer_.delete(start_iter, iter_)
+        text = buffer_.get_text(start_iter, iter_, True)
+        if text == '\n':
+            buffer_.delete(start_iter, iter_)
 
     @staticmethod
     def _on_copy_clipboard(textview):
