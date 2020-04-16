@@ -957,6 +957,8 @@ class HtmlTextView(Gtk.TextView):
         parser = xml.sax.make_parser()
         parser.setContentHandler(HtmlHandler(textview, conv_textview, eob))
         parser.parse(StringIO(html))
+        # If the xhtml ends with a BLOCK element we have to remove
+        # the \n we add after BLOCK elements
         self._delete_last_char(buffer_, eob)
 
     @staticmethod
