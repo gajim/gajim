@@ -22,10 +22,6 @@ app.interface = Interface()
 
 XHTML = [
     '''
-    <body xmlns='http://www.w3.org/1999/xhtml'><p><span style='font-size: xx-large;'>rexxnor: i nimes chum a...</span></p></body>
-    ''',
-
-    '''
     <div>
         <span style="color: red; text-decoration:underline">Hello</span>
         <br/>\n
@@ -33,7 +29,6 @@ XHTML = [
         <br/>\n
         <span style="font-size: 500%; font-family: serif">World</span>\n
     </div>
-    \n
     ''',
 
     '''
@@ -42,11 +37,15 @@ XHTML = [
 
     '''
     <body xmlns='http://www.w3.org/1999/xhtml'>
-        <p xmlns='http://www.w3.org/1999/xhtml'>a:b 
-            <a href='http://google.com/' xmlns='http://www.w3.org/1999/xhtml'>Google</a>
+        <p xmlns='http://www.w3.org/1999/xhtml'>Look here 
+            <a href='http://google.com/'>Google</a>
         </p>
         <br/>
     </body>
+    ''',
+
+    '''
+    <hr />
     ''',
 
     '''
@@ -54,7 +53,7 @@ XHTML = [
         <p style='font-size:large'>
             <span style='font-style: italic'>O
             <span style='font-size:larger'>M</span>G
-            </span>, I&apos;m <span style='color:green'>green</span>with 
+            </span>, I&apos;m <span style='color:green'>green</span> with 
             <span style='font-weight: bold'>envy</span>!
         </p>
     </body>
@@ -66,18 +65,11 @@ XHTML = [
 
     '''
     <body xmlns='http://www.w3.org/1999/xhtml'>
-        http://test.com/  testing links autolinkifying
-    </body>
-    ''',
-
-    '''
-    <hr />
-    ''',
-
-    '''
-    <body xmlns='http://www.w3.org/1999/xhtml'>
-        <p>As Emerson said in his essay <span style='
-            font-style: italic; background-color:cyan'>Self-Reliance</span>:</p>
+        <p>
+            As Emerson said in his essay 
+            <span style='font-style: italic; background-color:cyan'>
+            Self-Reliance</span>:
+        </p>
         <p style='margin-left: 5px; margin-right: 2%'>
             &quot;A foolish consistency is the hobgoblin of little minds.&quot;
         </p>
@@ -176,7 +168,6 @@ XHTML = [
 
     '''
     <body xmlns='http://www.w3.org/1999/xhtml'>
-        <br/>
         <img src='data:image/png;base64,R0lGODdhMAAwAPAAAAAAAP///ywAAAAAMAAw\
             AAAC8IyPqcvt3wCcDkiLc7C0qwyGHhSWpjQu5yqmCYsapyuvUUlvONmOZtfzgFz\
             ByTB10QgxOR0TqBQejhRNzOfkVJ+5YiUqrXF5Y5lKh/DeuNcP5yLWGsEbtLiOSp\
