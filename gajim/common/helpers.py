@@ -102,7 +102,7 @@ class InvalidFormat(Exception):
 
 def parse_jid(jidstring):
     try:
-        return validate_jid(jidstring)
+        return str(validate_jid(jidstring))
     except Exception as error:
         raise InvalidFormat(error)
 
