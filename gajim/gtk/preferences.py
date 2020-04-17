@@ -690,16 +690,13 @@ class Preferences(Gtk.ApplicationWindow):
         active = widget.get_active()
         if active == 0:
             app.config.set('trayicon', 'never')
-            app.interface.systray_enabled = False
-            app.interface.systray.hide_icon()
+            app.interface.hide_systray()
         elif active == 1:
             app.config.set('trayicon', 'on_event')
-            app.interface.systray_enabled = True
-            app.interface.systray.show_icon()
+            app.interface.show_systray()
         else:
             app.config.set('trayicon', 'always')
-            app.interface.systray_enabled = True
-            app.interface.systray.show_icon()
+            app.interface.show_systray()
 
     def on_event_received_combobox_changed(self, widget):
         active = widget.get_active()

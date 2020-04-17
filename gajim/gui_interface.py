@@ -76,6 +76,7 @@ from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.client import Client
+from gajim.common.const import Display
 
 from gajim.common.file_props import FilesProp
 
@@ -1828,12 +1829,14 @@ class Interface:
         return False
 
     def show_systray(self):
-        self.systray_enabled = True
-        self.systray.show_icon()
+        if not app.is_display(Display.WAYLAND):
+            self.systray_enabled = True
+            self.systray.show_icon()
 
     def hide_systray(self):
-        self.systray_enabled = False
-        self.systray.hide_icon()
+        if not app.is_display(Display.WAYLAND):
+            self.systray_enabled = False
+            self.systray.hide_icon()
 
     def process_connections(self):
         """
@@ -2159,8 +2162,9 @@ class Interface:
 
         self.systray_enabled = False
 
-        from gajim.gtk import statusicon
-        self.systray = statusicon.StatusIcon()
+        if not app.is_display(Display.WAYLAND):
+            from gajim.gtk import statusicon
+            self.systray = statusicon.StatusIcon()
 
         # Init emoji_chooser
         from gajim.gtk.emoji_chooser import emoji_chooser
