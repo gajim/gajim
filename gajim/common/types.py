@@ -32,6 +32,7 @@ if TYPE_CHECKING:
     from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
     from gajim.common.contacts import Contact
     from gajim.common.contacts import GC_Contact
+    from gajim.common.contacts import LegacyContactsAPI
     from gajim.common.nec import NetworkEvent
     from gajim.common.nec import NetworkEventsController
     from gajim.common.logger import Logger
@@ -46,6 +47,7 @@ LoggerT = Union['Logger']
 ConnectionT = Union['Client', 'ConnectionZeroconf']
 ContactsT = Union['Contact', 'GC_Contact']
 ContactT = Union['Contact']
+LegacyContactsAPIT = Union['LegacyContactsAPI']
 
 # PEP
 PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]

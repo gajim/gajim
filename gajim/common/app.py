@@ -51,6 +51,7 @@ from gajim.common.types import NetworkEventsControllerT  # pylint: disable=unuse
 from gajim.common.types import InterfaceT  # pylint: disable=unused-import
 from gajim.common.types import LoggerT  # pylint: disable=unused-import
 from gajim.common.types import ConnectionT  # pylint: disable=unused-import
+from gajim.common.types import LegacyContactsAPIT  # pylint: disable=unused-import
 
 interface = cast(InterfaceT, None)
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
@@ -78,7 +79,7 @@ transport_type = {}  # type: Dict[str, str]
 # {acct1: {jid1: time1, jid2: time2}, }
 last_message_time = {}  # type: Dict[str, Dict[str, float]]
 
-contacts = None
+contacts = cast(LegacyContactsAPIT, None)
 
 # tell if we are connected to the room or not
 # {acct: {room_jid: True}}
