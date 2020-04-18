@@ -38,11 +38,9 @@ from collections import namedtuple
 
 from gi.repository import GLib
 
-from nbxmpp.protocol import Node
 from nbxmpp.protocol import Iq
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import CommonError
-from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.modules.discovery import parse_disco_info
 
 from gajim.common import exceptions
@@ -53,8 +51,6 @@ from gajim.common.i18n import _
 from gajim.common.const import (
     JIDConstant, KindConstant, ShowConstant, TypeConstant,
     SubscriptionConstant)
-from gajim.common.structs import CapsData
-from gajim.common.structs import CapsIdentity
 
 
 LOGS_SQL_STATEMENT = '''
@@ -135,54 +131,11 @@ CACHE_SQL_STATEMENT = '''
             jid TEXT PRIMARY KEY UNIQUE,
             avatar_sha TEXT
     );
-    PRAGMA user_version=4;
+    PRAGMA user_version=5;
     '''
 
 log = logging.getLogger('gajim.c.logger')
 
-
-
-class CapsEncoder(json.JSONEncoder):
-    def encode(self, obj):
-        if isinstance(obj, DiscoInfo):
-            identities = []
-            for identity in obj.identities:
-                identities.append(
-                    {'category': identity.category,
-                     'type': identity.type,
-                     'name': identity.name,
-                     'lang': identity.lang})
-
-            dataforms = []
-            for dataform in obj.dataforms:
-                # Filter out invalid forms according to XEP-0115
-                form_type = dataform.vars.get('FORM_TYPE')
-                if form_type is None or form_type.type_ != 'hidden':
-                    continue
-                dataforms.append(str(dataform))
-
-            obj = {'identities': identities,
-                   'features': obj.features,
-                   'dataforms': dataforms}
-        return json.JSONEncoder.encode(self, obj)
-
-
-def caps_decoder(dict_):
-    if 'identities' not in dict_:
-        return dict_
-
-    identities = []
-    for identity in dict_['identities']:
-        identities.append(CapsIdentity(**identity))
-
-    features = dict_['features']
-
-    dataforms = []
-    for dataform in dict_['dataforms']:
-        dataforms.append(extend_form(node=Node(node=dataform)))
-    return CapsData(identities=identities,
-                    features=features,
-                    dataforms=dataforms)
 
 def timeit(func):
     def func_wrapper(self, *args, **kwargs):
@@ -228,6 +181,7 @@ class Logger:
         self._log_db_path = configpaths.get('LOG_DB')
         self._cache_db_path = configpaths.get('CACHE_DB')
 
+        self._entity_caps_cache = {}
         self._disco_info_cache = {}
         self._muc_avatar_sha_cache = {}
 
@@ -237,6 +191,8 @@ class Logger:
         self._get_jid_ids_from_db()
         self._fill_disco_info_cache()
         self._fill_muc_avatar_sha_cache()
+        self._clean_caps_table()
+        self._load_caps_data()
 
     def _create_databases(self):
         if os.path.isdir(self._log_db_path):
@@ -385,6 +341,13 @@ class Logger:
                    jid TEXT PRIMARY KEY UNIQUE,
                    avatar_sha TEXT)''',
                 'PRAGMA user_version=4'
+                ]
+            self._execute_multiple(con, statements)
+
+        if self._get_user_version(con) < 5:
+            statements = [
+                'DELETE FROM caps_cache',
+                'PRAGMA user_version=5'
                 ]
             self._execute_multiple(con, statements)
 
@@ -1083,31 +1046,31 @@ class Logger:
         return answer
 
     @timeit
-    def load_caps_data(self):
+    def _load_caps_data(self):
         '''
         Load caps cache data
         '''
         rows = self._con.execute(
-            'SELECT hash_method, hash, data FROM caps_cache')
+            'SELECT hash_method, hash, data as "data [disco_info]" '
+            'FROM caps_cache')
 
-        cache = {}
         for row in rows:
-            try:
-                data = json.loads(row.data, object_hook=caps_decoder)
-            except Exception:
-                log.exception('')
-                continue
-            cache[(row.hash_method, row.hash)] = data
-        return cache
+            self._entity_caps_cache[(row.hash_method, row.hash)] = row.data
 
     @timeit
-    def add_caps_entry(self, hash_method, hash_, caps_data):
-        serialized = json.dumps(caps_data, cls=CapsEncoder)
+    def add_caps_entry(self, jid, hash_method, hash_, caps_data):
+        self._entity_caps_cache[(hash_method, hash_)] = caps_data
+
+        self._disco_info_cache[jid] = caps_data
+
         self._con.execute('''
                 INSERT INTO caps_cache (hash_method, hash, data, last_seen)
                 VALUES (?, ?, ?, ?)
-                ''', (hash_method, hash_, serialized, int(time.time())))
+                ''', (hash_method, hash_, caps_data, int(time.time())))
         self._timeout_commit()
+
+    def get_caps_entry(self, hash_method, hash_):
+        return self._entity_caps_cache.get((hash_method, hash_))
 
     @timeit
     def update_caps_time(self, method, hash_):
@@ -1117,7 +1080,7 @@ class Logger:
         self._timeout_commit()
 
     @timeit
-    def clean_caps_table(self):
+    def _clean_caps_table(self):
         """
         Remove caps which was not seen for 3 months
         """
@@ -1689,7 +1652,7 @@ class Logger:
         return disco_info
 
     @timeit
-    def set_last_disco_info(self, jid, disco_info):
+    def set_last_disco_info(self, jid, disco_info, cache_only=False):
         """
         Get last disco info from jid
 
@@ -1700,6 +1663,10 @@ class Logger:
         """
 
         log.info('Save disco info from %s', jid)
+
+        if cache_only:
+            self._disco_info_cache[jid] = disco_info
+            return
 
         disco_exists = self.get_last_disco_info(jid) is not None
         if disco_exists:

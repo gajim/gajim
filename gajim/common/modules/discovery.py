@@ -57,10 +57,6 @@ class Discovery(BaseModule):
     def server_info(self):
         return self._server_info
 
-    def disco_contact(self, jid, node=None):
-        success_cb = self._con.get_module('Caps').contact_info_received
-        self.disco_info(jid, node, callback=success_cb)
-
     def discover_server_items(self):
         server = self._con.get_own_jid().getDomain()
         self.disco_items(server, callback=self._server_items_received)

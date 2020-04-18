@@ -46,7 +46,6 @@ from gajim.common import configpaths
 from gajim.common import ged as ged_module
 from gajim.common.i18n import LANG
 from gajim.common.const import Display
-from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.events import Events
 from gajim.common.types import NetworkEventsControllerT  # pylint: disable=unused-import
 from gajim.common.types import InterfaceT  # pylint: disable=unused-import
@@ -79,7 +78,7 @@ transport_type = {}  # type: Dict[str, str]
 # {acct1: {jid1: time1, jid2: time2}, }
 last_message_time = {}  # type: Dict[str, Dict[str, float]]
 
-contacts = LegacyContactsAPI()
+contacts = None
 
 # tell if we are connected to the room or not
 # {acct: {room_jid: True}}

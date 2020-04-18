@@ -30,7 +30,6 @@ import logging
 from pathlib import Path
 
 from gajim.common import app
-from gajim.common import caps_cache
 from gajim.common.i18n import _
 
 
@@ -152,8 +151,6 @@ class OptionsParser:
             self.update_config_to_1194()
 
         app.config.set('version', new_version)
-
-        caps_cache.capscache.initialize_from_db()
 
     @staticmethod
     def update_ft_proxies(to_remove=None, to_add=None):

@@ -52,9 +52,9 @@ from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
 from gajim.common import exceptions
-from gajim.common import caps_cache
 from gajim.common import logger
 from gajim.common.i18n import _
+from gajim.common.contacts import LegacyContactsAPI
 
 
 class GajimApplication(Gtk.Application):
@@ -199,7 +199,7 @@ class GajimApplication(Gtk.Application):
         configpaths.create_paths()
         try:
             app.logger = logger.Logger()
-            caps_cache.initialize(app.logger)
+            app.contacts = LegacyContactsAPI()
         except exceptions.DatabaseMalformed as error:
             dlg = Gtk.MessageDialog(
                 transient_for=None,
