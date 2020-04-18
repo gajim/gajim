@@ -59,6 +59,9 @@ class Caps(BaseModule):
         if properties.is_self_presence:
             return
 
+        if properties.entity_caps is None:
+            return
+
         jid = str(properties.jid)
 
         hash_method = properties.entity_caps.hash
