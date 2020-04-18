@@ -45,6 +45,8 @@ import logging
 import json
 import copy
 import collections
+import platform
+import functools
 from collections import defaultdict
 import random
 import weakref
@@ -702,21 +704,19 @@ def get_random_string(count=16):
     allowed = string.ascii_uppercase + string.digits
     return ''.join(random.choice(allowed) for char in range(count))
 
+@functools.lru_cache(maxsize=1)
 def get_os_info():
-    if app.os_info:
-        return app.os_info
-    app.os_info = 'N/A'
-    if os.name == 'nt' or sys.platform == 'darwin':
-        import platform
-        app.os_info = platform.system() + " " + platform.release()
-    elif os.name == 'posix':
+    info = 'N/A'
+    if sys.platform in ('win32', 'darwin'):
+        info = f'{platform.system()} {platform.release()}'
+
+    elif sys.platform == 'linux':
         try:
             import distro
-            app.os_info = distro.name(pretty=True)
+            info = distro.name(pretty=True)
         except ImportError:
-            import platform
-            app.os_info = platform.system()
-    return app.os_info
+            info = platform.system()
+    return info
 
 def allow_showing_notification(account, type_='notify_on_new_message',
 is_first_message=True):

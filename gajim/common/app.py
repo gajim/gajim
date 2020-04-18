@@ -71,8 +71,6 @@ logger = cast(LoggerT, None)
 
 css_config = None
 
-os_info = None # used to cache os information
-
 transport_type = {}  # type: Dict[str, str]
 
 # dict of time of the latest incoming message per jid
