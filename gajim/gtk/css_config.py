@@ -52,7 +52,7 @@ class CSSConfig():
 
         # gajim-dark.css
 
-        Has only entrys which we want to override in gajim.css
+        Has only entries which we want to override in gajim.css
 
         # default.css or default-dark.css
 

@@ -529,13 +529,13 @@ def get_singlechat_menu(control_id, account, jid):
 
     def build_chatstate_menu():
         menu = Gio.Menu()
-        entrys = [
+        entries = [
             (_('Disabled'), 'disabled'),
             (_('Composing only'), 'composing_only'),
             (_('All chat states'), 'all')
         ]
 
-        for entry in entrys:
+        for entry in entries:
             label, setting = entry
             action = 'win.send-chatstate-%s::%s' % (control_id, setting)
             menu.append(label, action)
@@ -646,13 +646,13 @@ def get_groupchat_menu(control_id, account, jid):
 
     def build_chatstate_menu():
         menu = Gio.Menu()
-        entrys = [
+        entries = [
             (_('Disabled'), 'disabled'),
             (_('Composing only'), 'composing_only'),
             (_('All chat states'), 'all')
         ]
 
-        for entry in entrys:
+        for entry in entries:
             label, setting = entry
             action = 'win.send-chatstate-%s::%s' % (control_id, setting)
             menu.append(label, action)

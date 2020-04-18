@@ -37,7 +37,7 @@ from gajim.gtk.util import MaxWidthComboBoxText
 #  hide-fallback-fields         Hide fallback fields in IBR form (ejabberd)
 #  left-width                   Width for labels
 #  read-only                    Read only mode for fields
-#  entry-activates-default      Form entrys activate the default widget
+#  entry-activates-default      Form entry activates the default widget
 
 
 class DataFormWidget(Gtk.ScrolledWindow):

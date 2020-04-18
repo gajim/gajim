@@ -1490,7 +1490,7 @@ class Logger:
         rows = self._con.execute(sql).fetchall()
         for row in rows:
             self._muc_avatar_sha_cache[row.jid] = row.avatar_sha
-        log.info('%s Avatar SHA entrys loaded', len(rows))
+        log.info('%d Avatar SHA entries loaded', len(rows))
 
     @timeit
     def set_avatar_sha(self, account_jid, jid, sha=None):
@@ -1632,7 +1632,7 @@ class Logger:
         for row in rows:
             disco_info = row.disco_info._replace(timestamp=row.last_seen)
             self._disco_info_cache[row.jid] = disco_info
-        log.info('%s DiscoInfo entrys loaded', len(rows))
+        log.info('%d DiscoInfo entries loaded', len(rows))
 
     def get_last_disco_info(self, jid, max_age=0):
         """
