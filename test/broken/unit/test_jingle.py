@@ -8,9 +8,12 @@ lib.setup_env()
 
 from mock import Mock
 
-from gajim.common.protocol.bytestream import ConnectionIBBytestream, ConnectionSocks5Bytestream
+
 from nbxmpp import dispatcher
-from nbxmpp import protocol
+from nbxmpp.namespaces import Namespace
+
+from gajim.common.protocol.bytestream import ConnectionIBBytestream
+from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.jingle import ConnectionJingle
 from gajim.common import app
 from gajim.common.socks5 import SocksQueue
@@ -86,7 +89,7 @@ class TestJingle(unittest.TestCase):
         self.client = Connection()
         self.client.__str__ = lambda: 'Mock' # FIXME: why do I need this one?
         self.client._caller = Connection()
-        self.client.defaultNamespace = protocol.NS_CLIENT
+        self.client.defaultNamespace = Namespace.CLIENT
         self.client.Connection = Connection() # mock transport
         self.con = self.client.Connection
         self.con.server_resource = None
@@ -132,7 +135,7 @@ class TestJingle(unittest.TestCase):
     def _simulate_jingle_session(self):
 
         self.dispatcher.RegisterHandler('iq', self.con._JingleCB, 'set',
-                                        protocol.NS_JINGLE)
+                                        Namespace.JINGLE)
         self.dispatcher.ProcessNonBlocking(session_init)
         session = list(self.con._sessions.values())[0] # The only session we have
         jft = list(session.contents.values())[0] # jingleFT object

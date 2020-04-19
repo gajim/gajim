@@ -20,7 +20,7 @@ import io
 from urllib.parse import urlparse
 import mimetypes
 
-from nbxmpp import NS_HTTPUPLOAD_0
+from nbxmpp.namespaces import Namespace
 from nbxmpp.util import is_error_result
 from nbxmpp.util import convert_tls_error_flags
 from gi.repository import GLib
@@ -69,7 +69,7 @@ class HTTPUpload(BaseModule):
             return
 
         self.available = True
-        self.httpupload_namespace = NS_HTTPUPLOAD_0
+        self.httpupload_namespace = Namespace.HTTPUPLOAD_0
         self.component = info.jid
         self.max_file_size = info.httpupload_max_file_size
 

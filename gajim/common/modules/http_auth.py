@@ -16,7 +16,7 @@
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.protocol import NS_HTTP_AUTH
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -30,12 +30,12 @@ class HTTPAuth(BaseModule):
         self.handlers = [
             StanzaHandler(name='message',
                           callback=self._http_auth,
-                          ns=NS_HTTP_AUTH,
+                          ns=Namespace.HTTP_AUTH,
                           priority=45),
             StanzaHandler(name='iq',
                           callback=self._http_auth,
                           typ='get',
-                          ns=NS_HTTP_AUTH,
+                          ns=Namespace.HTTP_AUTH,
                           priority=45)
         ]
 

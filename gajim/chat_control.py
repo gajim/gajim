@@ -35,12 +35,7 @@ from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gdk
 
-from nbxmpp.protocol import NS_XHTML_IM
-from nbxmpp.protocol import NS_MUC
-from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO
-from nbxmpp.protocol import NS_JINGLE_RTP_VIDEO
-from nbxmpp.protocol import NS_JINGLE_ICE_UDP
-from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import helpers
@@ -321,7 +316,7 @@ class ChatControl(ChatControlBase):
             online and con.get_module('HTTPUpload').available)
 
         # Send file (Jingle)
-        jingle_support = self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)
+        jingle_support = self.contact.supports(Namespace.JINGLE_FILE_TRANSFER_5)
         jingle_conditions = jingle_support and self.contact.show != 'offline'
         jingle = win.lookup_action('send-file-jingle-' + self.control_id)
         jingle.set_enabled(online and jingle_conditions)
@@ -343,7 +338,7 @@ class ChatControl(ChatControlBase):
             win.lookup_action(
                 'invite-contacts-' + self.control_id).set_enabled(False)
         else:
-            if self.contact.supports(NS_MUC) and online:
+            if self.contact.supports(Namespace.MUC) and online:
                 win.lookup_action(
                     'invite-contacts-' + self.control_id).set_enabled(True)
             else:
@@ -423,7 +418,7 @@ class ChatControl(ChatControlBase):
     def _update_toolbar(self):
         # Formatting
         # TODO: find out what encryption allows for xhtml and which not
-        if self.contact.supports(NS_XHTML_IM):
+        if self.contact.supports(Namespace.XHTML_IM):
             self.xml.formattings_button.set_sensitive(True)
             self.xml.formattings_button.set_tooltip_text(_(
                 'Show a list of formattings'))
@@ -435,10 +430,12 @@ class ChatControl(ChatControlBase):
         # Jingle detection
         jingle_audio = self.jingle['audio']
         jingle_video = self.jingle['video']
-        if self.contact.supports(NS_JINGLE_ICE_UDP) and \
+        if self.contact.supports(Namespace.JINGLE_ICE_UDP) and \
         app.is_installed('FARSTREAM') and self.contact.resource:
-            jingle_audio.available = self.contact.supports(NS_JINGLE_RTP_AUDIO)
-            jingle_video.available = self.contact.supports(NS_JINGLE_RTP_VIDEO)
+            jingle_audio.available = self.contact.supports(
+                Namespace.JINGLE_RTP_AUDIO)
+            jingle_video.available = self.contact.supports(
+                Namespace.JINGLE_RTP_VIDEO)
         else:
             if jingle_video.available or jingle_audio.available:
                 self.stop_jingle()

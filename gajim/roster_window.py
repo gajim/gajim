@@ -41,9 +41,7 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
-from nbxmpp.protocol import NS_ROSTERX
-from nbxmpp.protocol import NS_CONFERENCE
-from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import MoodData
 from nbxmpp.structs import ActivityData
 
@@ -3947,7 +3945,7 @@ class RosterWindow:
                         c_dest, was_big_brother, context, etime):
         type_ = 'message'
         if (c_dest.show not in ('offline', 'error') and
-                c_dest.supports(NS_ROSTERX)):
+                c_dest.supports(Namespace.ROSTERX)):
             type_ = 'iq'
         con = app.connections[account_dest]
         con.get_module('RosterItemExchange').send_contacts(
@@ -4169,7 +4167,7 @@ class RosterWindow:
                 return
             c_dest = app.contacts.get_contact_with_highest_priority(
                 account_dest, jid_dest)
-            if not c_dest.supports(NS_JINGLE_FILE_TRANSFER_5):
+            if not c_dest.supports(Namespace.JINGLE_FILE_TRANSFER_5):
                 return
             uri = data.strip()
             uri_splitted = uri.split() # we may have more than one file dropped
@@ -4877,7 +4875,7 @@ class RosterWindow:
                 if contact.show not in ('offline', 'error'):
                     list_online.append((contact, account))
                     # Check that all contacts support direct NUC invite
-                    if not contact.supports(NS_CONFERENCE):
+                    if not contact.supports(Namespace.CONFERENCE):
                         show_bookmarked = False
                 list_.append((contact, account))
         menu = Gtk.Menu()
@@ -5029,7 +5027,7 @@ class RosterWindow:
         show_bookmarked = True
         for (contact, current_account) in list_:
             # Check that all contacts support direct NUC invite
-            if not contact.supports(NS_CONFERENCE):
+            if not contact.supports(Namespace.CONFERENCE):
                 show_bookmarked = False
                 break
         if account is not None:

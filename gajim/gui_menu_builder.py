@@ -15,8 +15,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk, Gio, GLib
-from nbxmpp.protocol import NS_COMMANDS
-from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
+from nbxmpp.namespaces import Namespace
 
 from gajim import gtkgui_helpers
 from gajim.common import app
@@ -210,18 +209,18 @@ control=None, gc_contact=None, is_anonymous=True):
             contacts,
             account,
             roster.on_send_file_menuitem_activate,
-            cap=NS_JINGLE_FILE_TRANSFER_5))
+            cap=Namespace.JINGLE_FILE_TRANSFER_5))
         execute_command_menuitem.set_submenu(build_resources_submenu(
-                contacts, account, roster.on_execute_command, cap=NS_COMMANDS))
+                contacts, account, roster.on_execute_command, cap=Namespace.COMMANDS))
     else:
-        if contact.supports(NS_JINGLE_FILE_TRANSFER_5):
+        if contact.supports(Namespace.JINGLE_FILE_TRANSFER_5):
             send_file_menuitem.set_sensitive(True)
             send_file_menuitem.connect('activate',
                     roster.on_send_file_menuitem_activate, contact, account)
         else:
             send_file_menuitem.set_sensitive(False)
 
-        if contact.supports(NS_COMMANDS):
+        if contact.supports(Namespace.COMMANDS):
             execute_command_menuitem.set_sensitive(True)
             if gc_contact and gc_contact.jid and not is_anonymous:
                 execute_command_menuitem.connect('activate',
@@ -321,7 +320,7 @@ control=None, gc_contact=None, is_anonymous=True):
             bookmarked = False
             c_ = app.contacts.get_contact(account, gc_contact.jid,
                 gc_contact.resource)
-            if c_ and c_.supports(NS_CONFERENCE):
+            if c_ and c_.supports(Namespace.CONFERENCE):
                 bookmarked = True
             build_invite_submenu(invite_menuitem, [(gc_contact, account)],
                 show_bookmarked=bookmarked)
@@ -330,7 +329,7 @@ control=None, gc_contact=None, is_anonymous=True):
         if control and control.resource:
             force_resource = True
         build_invite_submenu(invite_menuitem, [(contact, account)],
-            show_bookmarked=contact.supports(NS_CONFERENCE),
+            show_bookmarked=contact.supports(Namespace.CONFERENCE),
             force_resource=force_resource)
 
     if app.account_is_disconnected(account):

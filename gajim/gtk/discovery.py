@@ -337,9 +337,9 @@ class ServicesCache:
             browser = info[0]
             if browser:
                 return browser
-        # NS_BROWSE is deprecated, but we check for it anyways.
+        # Namespace.BROWSE is deprecated, but we check for it anyways.
         # Some services list it in features and respond to
-        # NS_DISCO_ITEMS anyways.
+        # Namespace.DISCO_ITEMS anyways.
         # Allow browsing for unknown types as well.
         if ((not features and not identities) or
                 Namespace.DISCO_ITEMS in features or

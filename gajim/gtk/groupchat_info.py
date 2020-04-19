@@ -18,7 +18,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
-from nbxmpp.protocol import NS_MAM_2
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -205,7 +205,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
             grid.remove_row(row)
         features = list(features)
 
-        if NS_MAM_2 in features:
+        if Namespace.MAM_2 in features:
             features.append('mam')
 
         row = 10
