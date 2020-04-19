@@ -177,7 +177,7 @@ class GajimApplication(Gtk.Application):
 
         self.interface = None
 
-        GLib.set_prgname('gajim')
+        GLib.set_prgname('org.gajim.Gajim')
         if GLib.get_application_name() != 'Gajim':
             GLib.set_application_name('Gajim')
 
