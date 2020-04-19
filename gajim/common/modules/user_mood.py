@@ -17,7 +17,7 @@
 from typing import Any
 from typing import Tuple
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -38,7 +38,7 @@ class UserMood(BaseModule):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._mood_received)
 
-    @event_node(nbxmpp.NS_MOOD)
+    @event_node(Namespace.MOOD)
     def _mood_received(self, _con, _stanza, properties):
         if properties.pubsub_event.retracted:
             return

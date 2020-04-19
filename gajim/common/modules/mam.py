@@ -19,6 +19,7 @@ from datetime import datetime
 from datetime import timedelta
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import StanzaHandler
@@ -65,7 +66,7 @@ class MAM(BaseModule):
         self._catch_up_finished = []
 
     def pass_disco(self, info):
-        if nbxmpp.NS_MAM_2 not in info.features:
+        if Namespace.MAM_2 not in info.features:
             return
 
         self.available = True
@@ -74,7 +75,7 @@ class MAM(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('feature-discovered',
                          account=self._account,
-                         feature=nbxmpp.NS_MAM_2))
+                         feature=Namespace.MAM_2))
 
     def reset_state(self):
         self._mam_query_ids.clear()
@@ -128,7 +129,7 @@ class MAM(BaseModule):
                 # message before we had the chance to disco the new MUC
                 return
 
-            if disco_info.mam_namespace != nbxmpp.NS_MAM_2:
+            if disco_info.mam_namespace != Namespace.MAM_2:
                 return
 
         else:

@@ -19,6 +19,7 @@ import binascii
 import base64
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import RequestAvatar
@@ -37,7 +38,7 @@ class VCardTemp(BaseModule):
         self.supported = False
 
     def pass_disco(self, info):
-        if nbxmpp.NS_VCARD not in info.features:
+        if Namespace.VCARD not in info.features:
             return
 
         self.supported = True
@@ -45,7 +46,7 @@ class VCardTemp(BaseModule):
 
         app.nec.push_incoming_event(NetworkEvent('feature-discovered',
                                                  account=self._account,
-                                                 feature=nbxmpp.NS_VCARD))
+                                                 feature=Namespace.VCARD))
 
     @staticmethod
     def _node_to_dict(node):
@@ -89,7 +90,7 @@ class VCardTemp(BaseModule):
         iq = nbxmpp.Iq(typ='get')
         if jid:
             iq.setTo(jid)
-        iq.setQuery('vCard').setNamespace(nbxmpp.NS_VCARD)
+        iq.setQuery('vCard').setNamespace(Namespace.VCARD)
 
         own_jid = self._con.get_own_jid().getStripped()
         self._log.info('Request: %s, expected sha: %s', jid or own_jid, sha)
@@ -102,7 +103,7 @@ class VCardTemp(BaseModule):
             return
 
         iq = nbxmpp.Iq(typ='set')
-        iq2 = iq.setTag(nbxmpp.NS_VCARD + ' vCard')
+        iq2 = iq.setTag(Namespace.VCARD + ' vCard')
         for i in vcard:
             if i == 'jid':
                 continue
@@ -125,7 +126,7 @@ class VCardTemp(BaseModule):
 
     def upload_room_avatar(self, room_jid, data):
         iq = nbxmpp.Iq(typ='set', to=room_jid)
-        vcard = iq.addChild('vCard', namespace=nbxmpp.NS_VCARD)
+        vcard = iq.addChild('vCard', namespace=Namespace.VCARD)
         photo = vcard.addChild('PHOTO')
         photo.addChild('TYPE', payload='image/png')
         photo.addChild('BINVAL', payload=data)
@@ -203,7 +204,7 @@ class VCardTemp(BaseModule):
             callback(jid, resource, room, {}, expected_sha)
             return
 
-        vcard_node = stanza.getTag('vCard', namespace=nbxmpp.NS_VCARD)
+        vcard_node = stanza.getTag('vCard', namespace=Namespace.VCARD)
         if vcard_node is None:
             self._log.info('vCard not available: %s', frm_jid)
             self._log.debug(stanza)

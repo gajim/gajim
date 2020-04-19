@@ -28,7 +28,7 @@ import time
 import base64
 import logging
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
@@ -414,7 +414,7 @@ class GroupchatControl(ChatControlBase):
         # Upload Avatar
         vcard_support = False
         if self.disco_info is not None:
-            vcard_support = self.disco_info.supports(nbxmpp.NS_VCARD)
+            vcard_support = self.disco_info.supports(Namespace.VCARD)
         self._get_action('upload-avatar-').set_enabled(
             self.is_connected and
             vcard_support and

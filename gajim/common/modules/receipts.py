@@ -16,6 +16,7 @@
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.namespaces import Namespace
 from nbxmpp.modules.receipts import build_receipt
 
 from gajim.common import app
@@ -30,7 +31,7 @@ class Receipts(BaseModule):
         self.handlers = [
             StanzaHandler(name='message',
                           callback=self._process_message_receipt,
-                          ns=nbxmpp.NS_RECEIPTS,
+                          ns=Namespace.RECEIPTS,
                           priority=46),
         ]
 

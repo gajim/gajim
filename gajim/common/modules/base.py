@@ -20,7 +20,7 @@ import logging
 from functools import partial
 from unittest.mock import Mock
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -83,7 +83,7 @@ class BaseModule(EventHelper):
     def _register_pubsub_handler(self, callback):
         handler = StanzaHandler(name='message',
                                 callback=callback,
-                                ns=nbxmpp.NS_PUBSUB_EVENT,
+                                ns=Namespace.PUBSUB_EVENT,
                                 priority=49)
         self.handlers.append(handler)
 

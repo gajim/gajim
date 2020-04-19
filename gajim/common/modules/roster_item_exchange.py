@@ -15,6 +15,7 @@
 # XEP-0144: Roster Item Exchange
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -32,10 +33,10 @@ class RosterItemExchange(BaseModule):
             StanzaHandler(name='iq',
                           callback=self.received_item,
                           typ='set',
-                          ns=nbxmpp.NS_ROSTERX),
+                          ns=Namespace.ROSTERX),
             StanzaHandler(name='message',
                           callback=self.received_item,
-                          ns=nbxmpp.NS_ROSTERX),
+                          ns=Namespace.ROSTERX),
         ]
 
     def received_item(self, _con, stanza, _properties):
@@ -45,7 +46,7 @@ class RosterItemExchange(BaseModule):
 
         exchange_items_list = {}
         items_list = stanza.getTag(
-            'x', namespace=nbxmpp.NS_ROSTERX).getChildren()
+            'x', namespace=Namespace.ROSTERX).getChildren()
         if items_list is None:
             raise nbxmpp.NodeProcessed
 
@@ -111,7 +112,7 @@ class RosterItemExchange(BaseModule):
                                     body=msg)
         elif type_ == 'iq':
             stanza = nbxmpp.Iq(to=fjid, typ='set')
-        xdata = stanza.addChild(name='x', namespace=nbxmpp.NS_ROSTERX)
+        xdata = stanza.addChild(name='x', namespace=Namespace.ROSTERX)
         for contact in contacts:
             name = contact.get_shown_name()
             xdata.addChild(name='item', attrs={'action': 'add',

@@ -18,6 +18,7 @@ from datetime import timedelta
 
 import nbxmpp
 from nbxmpp.util import is_error_result
+from nbxmpp.namespaces import Namespace
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
@@ -129,7 +130,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         if not app.account_is_connected(self.account):
             return
         con = app.connections[self.account]
-        iq = nbxmpp.Iq(to=self.hostname, typ='get', queryNS=nbxmpp.NS_LAST)
+        iq = nbxmpp.Iq(to=self.hostname, typ='get', queryNS=Namespace.LAST)
         con.connection.SendAndCallForResponse(iq, self._on_last_activity)
 
     def _add_contact_addresses(self, dataforms):
@@ -211,7 +212,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         if not nbxmpp.isResultNode(stanza):
             log.warning('Received malformed result: %s', stanza)
             return
-        if stanza.getQueryNS() != nbxmpp.NS_LAST:
+        if stanza.getQueryNS() != Namespace.LAST:
             log.warning('Wrong namespace on result: %s', stanza)
             return
         try:
@@ -278,15 +279,15 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                     con.get_module('PubSub').publish_options),
             Feature('XEP-0191: Blocking Command',
                     con.get_module('Blocking').supported,
-                    nbxmpp.NS_BLOCKING),
+                    Namespace.BLOCKING),
             Feature('XEP-0198: Stream Management',
-                    con.features.has_sm, nbxmpp.NS_STREAM_MGMT),
+                    con.features.has_sm, Namespace.STREAM_MGMT),
             Feature('XEP-0258: Security Labels in XMPP',
                     con.get_module('SecLabels').supported,
-                    nbxmpp.NS_SECLABEL),
+                    Namespace.SECLABEL),
             Feature('XEP-0280: Message Carbons',
                     con.get_module('Carbons').supported,
-                    nbxmpp.NS_CARBONS),
+                    Namespace.CARBONS),
             Feature('XEP-0313: Message Archive Management',
                     con.get_module('MAM').available),
             Feature('XEP-0363: HTTP File Upload',

@@ -21,6 +21,7 @@
 # XEP-0060: Publish-Subscribe
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.modules import dataforms
 
 from gajim.common import app
@@ -35,7 +36,7 @@ class PubSub(BaseModule):
         self.publish_options = False
 
     def pass_disco(self, info):
-        if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS not in info.features:
+        if Namespace.PUBSUB_PUBLISH_OPTIONS not in info.features:
             # Remove stored bookmarks accessible to everyone.
             self._con.get_module('Bookmarks').purge_pubsub_bookmarks()
             return
@@ -47,7 +48,7 @@ class PubSub(BaseModule):
             return
 
         query = nbxmpp.Iq('get', to=jid)
-        pb = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        pb = query.addChild('pubsub', namespace=Namespace.PUBSUB)
         pb.addChild('subscriptions')
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
@@ -58,7 +59,7 @@ class PubSub(BaseModule):
 
         our_jid = app.get_jid_from_account(self._account)
         query = nbxmpp.Iq('set', to=jid)
-        pb = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        pb = query.addChild('pubsub', namespace=Namespace.PUBSUB)
         pb.addChild('subscribe', {'node': node, 'jid': our_jid})
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
@@ -69,7 +70,7 @@ class PubSub(BaseModule):
 
         our_jid = app.get_jid_from_account(self._account)
         query = nbxmpp.Iq('set', to=jid)
-        pb = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        pb = query.addChild('pubsub', namespace=Namespace.PUBSUB)
         pb.addChild('unsubscribe', {'node': node, 'jid': our_jid})
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
@@ -83,7 +84,7 @@ class PubSub(BaseModule):
             cb = self._default_callback
 
         query = nbxmpp.Iq('set', to=jid)
-        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB)
         publish = pubsub.addChild('publish', {'node': node})
         attrs = {}
         if id_:
@@ -101,7 +102,7 @@ class PubSub(BaseModule):
         Get IQ to query items from a node
         """
         query = nbxmpp.Iq('get', to=jid)
-        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB)
         items = pubsub.addChild('items', {'node': node})
         if item_id is not None:
             items.addChild('item', {'id': item_id})
@@ -132,7 +133,7 @@ class PubSub(BaseModule):
             cb = self._default_callback
 
         query = nbxmpp.Iq('set', to=jid)
-        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB)
         retract = pubsub.addChild('retract', {'node': node, 'notify': '1'})
         retract.addChild('item', {'id': id_})
 
@@ -149,7 +150,7 @@ class PubSub(BaseModule):
             cb = self._default_callback
 
         query = nbxmpp.Iq('set', to=jid)
-        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB_OWNER)
         pubsub.addChild('purge', {'node': node})
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
@@ -161,7 +162,7 @@ class PubSub(BaseModule):
         if not app.account_is_available(self._account):
             return
         query = nbxmpp.Iq('set', to=jid)
-        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB_OWNER)
         pubsub.addChild('delete', {'node': node})
 
         def response(_nbxmpp_client, resp, jid, node):
@@ -182,7 +183,7 @@ class PubSub(BaseModule):
         if not app.account_is_available(self._account):
             return
         query = nbxmpp.Iq('set', to=jid)
-        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB)
         create = pubsub.addChild('create', {'node': node})
         if configure:
             conf = create.addChild('configure')
@@ -199,7 +200,7 @@ class PubSub(BaseModule):
             cb = self._default_callback
 
         query = nbxmpp.Iq('set', to=jid)
-        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB_OWNER)
         configure = pubsub.addChild('configure', {'node': node})
         configure.addChild(node=form)
 
@@ -211,7 +212,7 @@ class PubSub(BaseModule):
             return
 
         query = nbxmpp.Iq('get', to=jid)
-        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB_OWNER)
         pubsub.addChild('configure', {'node': node})
 
         self._log.info('Request node config for %s', node)
@@ -223,7 +224,7 @@ class PubSub(BaseModule):
             self._log.warning('Error: %s', stanza.getError())
             return
 
-        pubsub = stanza.getTag('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        pubsub = stanza.getTag('pubsub', namespace=Namespace.PUBSUB_OWNER)
         if pubsub is None:
             self._log.warning('Malformed PubSub configure '
                               'stanza (no pubsub node): %s', stanza)
@@ -240,7 +241,7 @@ class PubSub(BaseModule):
                               'stanza (wrong node): %s', stanza)
             return
 
-        form = configure.getTag('x', namespace=nbxmpp.NS_DATA)
+        form = configure.getTag('x', namespace=Namespace.DATA)
         if form is None:
             self._log.warning('Malformed PubSub configure '
                               'stanza (no form): %s', stanza)

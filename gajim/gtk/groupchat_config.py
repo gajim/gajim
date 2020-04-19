@@ -14,7 +14,7 @@
 
 import logging
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.util import is_error_result
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -53,7 +53,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
             self._ui.add_button.set_tooltip_text('')
 
         disco_info = app.logger.get_last_disco_info(self.jid)
-        visible = disco_info.supports(nbxmpp.NS_REGISTER)
+        visible = disco_info.supports(Namespace.REGISTER)
         self._ui.reserved_name_column.set_visible(visible)
         self._ui.info_button.set_sensitive(False)
 

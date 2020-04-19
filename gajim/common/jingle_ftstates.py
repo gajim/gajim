@@ -15,6 +15,8 @@
 import logging
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
+
 from gajim.common import app
 from gajim.common.jingle_transport import TransportType
 from gajim.common.socks5 import Socks5ReceiverClient
@@ -75,7 +77,7 @@ class StateCandSent(JingleFileTransferStates):
         content.setAttr('creator', 'initiator')
         content.setAttr('name', self.jft.name)
         transport = nbxmpp.Node('transport')
-        transport.setNamespace(nbxmpp.NS_JINGLE_BYTESTREAM)
+        transport.setNamespace(Namespace.JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.jft.transport.sid)
         candidateused = nbxmpp.Node('candidate-used')
         candidateused.setAttr('cid', streamhost['candidate_id'])

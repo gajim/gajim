@@ -22,6 +22,7 @@ import errno
 import logging
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.idlequeue import IdleObject
 
 from gajim.common import app
@@ -142,7 +143,7 @@ class ProxyResolver:
         log.debug('Host successfully connected %s:%s', self.host, self.port)
         iq = nbxmpp.Protocol(name='iq', to=self.jid, typ='set')
         query = iq.setTag('query')
-        query.setNamespace(nbxmpp.NS_BYTESTREAM)
+        query.setNamespace(Namespace.BYTESTREAM)
         query.setAttr('sid', self.sid)
 
         activate = query.setTag('activate')
@@ -217,7 +218,7 @@ class ProxyResolver:
         self.active_connection = connection
         iq = nbxmpp.Protocol(name='iq', to=self.proxy, typ='get')
         query = iq.setTag('query')
-        query.setNamespace(nbxmpp.NS_BYTESTREAM)
+        query.setNamespace(Namespace.BYTESTREAM)
         connection.send(iq)
 
     def __init__(self, proxy, sender_jid, testit):

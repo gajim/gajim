@@ -26,6 +26,7 @@ from unittest.mock import Mock
 import nbxmpp
 from nbxmpp import old_dispatcher as dispatcher
 from nbxmpp import simplexml
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.plugin import PlugIn
 from nbxmpp.idlequeue import IdleObject
@@ -246,7 +247,7 @@ class P2PClient(IdleObject):
         self.Dispatcher._metastream = nbxmpp.Node('stream:stream')
         self.Dispatcher._metastream.setNamespace(self.Namespace)
         self.Dispatcher._metastream.setAttr('version', '1.0')
-        self.Dispatcher._metastream.setAttr('xmlns:stream', nbxmpp.NS_STREAMS)
+        self.Dispatcher._metastream.setAttr('xmlns:stream', Namespace.STREAMS)
         self.Dispatcher._metastream.setAttr('from',
             self.conn_holder.zeroconf.name)
         if self.to:
@@ -255,7 +256,7 @@ class P2PClient(IdleObject):
                 self.Dispatcher._metastream)[:-2])
 
     def _check_stream_start(self, ns, tag, attrs):
-        if ns != nbxmpp.NS_STREAMS or tag != 'stream':
+        if ns != Namespace.STREAMS or tag != 'stream':
             log.error('Incorrect stream start: (%s,%s).Terminating!',
                       tag, ns)
             self.Connection.disconnect()

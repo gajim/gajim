@@ -15,6 +15,7 @@
 # XEP-0055: Jabber Search
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
@@ -27,7 +28,7 @@ class Search(BaseModule):
 
     def request_search_fields(self, jid):
         self._log.info('Request search fields from %s', jid)
-        iq = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_SEARCH)
+        iq = nbxmpp.Iq(typ='get', to=jid, queryNS=Namespace.SEARCH)
         self._con.connection.SendAndCallForResponse(iq, self._fields_received)
 
     def _fields_received(self, _nbxmpp_client, stanza):
@@ -36,12 +37,12 @@ class Search(BaseModule):
 
         if nbxmpp.isResultNode(stanza):
             self._log.info('Received search fields from %s', stanza.getFrom())
-            tag = stanza.getTag('query', namespace=nbxmpp.NS_SEARCH)
+            tag = stanza.getTag('query', namespace=Namespace.SEARCH)
             if tag is None:
                 self._log.info('Invalid stanza: %s', stanza)
                 return
 
-            data = tag.getTag('x', namespace=nbxmpp.NS_DATA)
+            data = tag.getTag('x', namespace=Namespace.DATA)
             if data is not None:
                 is_dataform = True
             else:
@@ -57,7 +58,7 @@ class Search(BaseModule):
                                     data=data))
 
     def send_search_form(self, jid, form, is_form):
-        iq = nbxmpp.Iq(typ='set', to=jid, queryNS=nbxmpp.NS_SEARCH)
+        iq = nbxmpp.Iq(typ='set', to=jid, queryNS=Namespace.SEARCH)
         item = iq.setQuery()
         if is_form:
             item.addChild(node=form)
@@ -73,12 +74,12 @@ class Search(BaseModule):
 
         if nbxmpp.isResultNode(stanza):
             self._log.info('Received result from %s', stanza.getFrom())
-            tag = stanza.getTag('query', namespace=nbxmpp.NS_SEARCH)
+            tag = stanza.getTag('query', namespace=Namespace.SEARCH)
             if tag is None:
                 self._log.info('Invalid stanza: %s', stanza)
                 return
 
-            data = tag.getTag('x', namespace=nbxmpp.NS_DATA)
+            data = tag.getTag('x', namespace=Namespace.DATA)
             if data is not None:
                 is_dataform = True
             else:

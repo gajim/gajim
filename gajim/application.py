@@ -39,7 +39,7 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import unquote
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp import JID
 from nbxmpp.protocol import InvalidJid
 from gi.repository import Gio
@@ -590,16 +590,16 @@ class GajimApplication(Gtk.Application):
             self.set_accels_for_action(action, accels)
 
     def _on_feature_discovered(self, event):
-        if event.feature == nbxmpp.NS_VCARD:
+        if event.feature == Namespace.VCARD:
             action = '%s-profile' % event.account
             self.lookup_action(action).set_enabled(True)
-        elif event.feature == nbxmpp.NS_MAM_2:
+        elif event.feature == Namespace.MAM_2:
             action = '%s-archive' % event.account
             self.lookup_action(action).set_enabled(True)
-        elif event.feature == nbxmpp.NS_PRIVACY:
+        elif event.feature == Namespace.PRIVACY:
             action = '%s-privacylists' % event.account
             self.lookup_action(action).set_enabled(True)
-        elif event.feature == nbxmpp.NS_BLOCKING:
+        elif event.feature == Namespace.BLOCKING:
             action = '%s-blocking' % event.account
             self.lookup_action(action).set_enabled(True)
 

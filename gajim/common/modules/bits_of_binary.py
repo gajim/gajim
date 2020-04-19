@@ -20,6 +20,7 @@ from base64 import b64decode
 from pathlib import Path
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -37,7 +38,7 @@ class BitsOfBinary(BaseModule):
             StanzaHandler(name='iq',
                           callback=self._answer_bob_request,
                           typ='get',
-                          ns=nbxmpp.NS_BOB),
+                          ns=Namespace.BOB),
         ]
 
         # Used to track which cids are in-flight.
@@ -60,7 +61,7 @@ class BitsOfBinary(BaseModule):
             return
 
         if result.getType() == 'result':
-            data = result.getTags('data', namespace=nbxmpp.NS_BOB)
+            data = result.getTags('data', namespace=Namespace.BOB)
             if data.getAttr('cid') == cid:
                 for func in self.awaiting_cids[cid]:
                     cb = func[0]
@@ -96,13 +97,13 @@ class BitsOfBinary(BaseModule):
         else:
             self.awaiting_cids[cid] = [(callback, args, position)]
         iq = nbxmpp.Iq(to=to, typ='get')
-        iq.addChild(name='data', attrs={'cid': cid}, namespace=nbxmpp.NS_BOB)
+        iq.addChild(name='data', attrs={'cid': cid}, namespace=Namespace.BOB)
         self._con.connection.SendAndCallForResponse(
             iq, self._on_bob_received, {'cid': cid})
 
 
 def parse_bob_data(stanza):
-    data_node = stanza.getTag('data', namespace=nbxmpp.NS_BOB)
+    data_node = stanza.getTag('data', namespace=Namespace.BOB)
     if data_node is None:
         return None
 

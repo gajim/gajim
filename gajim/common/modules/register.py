@@ -17,6 +17,7 @@
 import weakref
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.modules.base import BaseModule
@@ -44,7 +45,7 @@ class Register(BaseModule):
         weak_success_cb = weakref.WeakMethod(success_cb)
         weak_error_cb = weakref.WeakMethod(error_cb)
 
-        iq = nbxmpp.Iq('set', nbxmpp.NS_REGISTER, to=agent)
+        iq = nbxmpp.Iq('set', Namespace.REGISTER, to=agent)
         if is_form:
             query = iq.setQuery()
             form.setAttr('type', 'submit')
@@ -82,7 +83,7 @@ class Register(BaseModule):
         weak_success_cb = weakref.WeakMethod(success_cb)
         weak_error_cb = weakref.WeakMethod(error_cb)
 
-        iq = nbxmpp.Iq('get', nbxmpp.NS_REGISTER, to=jid)
+        iq = nbxmpp.Iq('get', Namespace.REGISTER, to=jid)
         self._con.connection.SendAndCallForResponse(
             iq, self._register_info_response, {'success_cb': weak_success_cb,
                                                'error_cb': weak_error_cb})
@@ -104,11 +105,11 @@ class Register(BaseModule):
     @staticmethod
     def _get_register_form(stanza):
         parse_bob_data(stanza.getQuery())
-        form = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_DATA)
+        form = stanza.getQuery().getTag('x', namespace=Namespace.DATA)
         is_form = form is not None
         if not is_form:
             form = {}
-            oob = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_X_OOB)
+            oob = stanza.getQuery().getTag('x', namespace=Namespace.X_OOB)
             if oob is not None:
                 form['redirect-url'] = oob.getTagData('url')
             for field in stanza.getQueryPayload():

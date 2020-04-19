@@ -20,6 +20,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.modules import dataforms
 from nbxmpp.util import generate_id
@@ -34,7 +35,7 @@ from gajim.common.modules.base import BaseModule
 class AdHocCommand:
     commandnode = 'command'
     commandname = 'The Command'
-    commandfeatures = (nbxmpp.NS_DATA,)
+    commandfeatures = (Namespace.DATA,)
 
     @staticmethod
     def is_visible_for(_samejid):
@@ -57,7 +58,7 @@ class AdHocCommand:
         assert status in ('executing', 'completed', 'canceled')
 
         response = request.buildReply('result')
-        cmd = response.getTag('command', namespace=nbxmpp.NS_COMMANDS)
+        cmd = response.getTag('command', namespace=Namespace.COMMANDS)
         cmd.setAttr('sessionid', self.sessionid)
         cmd.setAttr('node', self.commandnode)
         cmd.setAttr('status', status)
@@ -74,7 +75,7 @@ class AdHocCommand:
 
     def bad_request(self, stanza):
         self.connection.connection.send(
-            nbxmpp.Error(stanza, nbxmpp.NS_STANZAS + ' bad-request'))
+            nbxmpp.Error(stanza, Namespace.STANZAS + ' bad-request'))
 
     def cancel(self, request):
         response = self.build_response(request, status='canceled')[0]
@@ -195,7 +196,7 @@ class AdHocCommands(BaseModule):
             StanzaHandler(name='iq',
                           callback=self._execute_command_received,
                           typ='set',
-                          ns=nbxmpp.NS_COMMANDS),
+                          ns=Namespace.COMMANDS),
         ]
 
         # a list of all commands exposed: node -> command class
@@ -221,7 +222,7 @@ class AdHocCommands(BaseModule):
         jid = helpers.get_full_jid_from_iq(stanza)
         query = iq.getTag('query')
         # buildReply don't copy the node attribute. Re-add it
-        query.setAttr('node', nbxmpp.NS_COMMANDS)
+        query.setAttr('node', Namespace.COMMANDS)
 
         for node, cmd in self._commands.items():
             if cmd.is_visible_for(self.is_same_jid(jid)):
@@ -257,7 +258,7 @@ class AdHocCommands(BaseModule):
                            attrs={'type': 'command-node',
                                   'category': 'automation',
                                   'name': cmd.commandname})
-            query.addChild('feature', attrs={'var': nbxmpp.NS_COMMANDS})
+            query.addChild('feature', attrs={'var': Namespace.COMMANDS})
             for feature in cmd.commandfeatures:
                 query.addChild('feature', attrs={'var': feature})
 
@@ -305,7 +306,7 @@ class AdHocCommands(BaseModule):
             if node not in self._commands.keys():
                 self._con.connection.send(
                     nbxmpp.Error(
-                        stanza, nbxmpp.NS_STANZAS + ' item-not-found'))
+                        stanza, Namespace.STANZAS + ' item-not-found'))
                 self._log.warning('Comand %s does not exist: %s', node, jid)
                 raise nbxmpp.NodeProcessed
 
@@ -371,7 +372,7 @@ class AdHocCommands(BaseModule):
                        jid, node, session_id, action)
         stanza = nbxmpp.Iq(typ='set', to=jid)
         cmdnode = stanza.addChild('command',
-                                  namespace=nbxmpp.NS_COMMANDS,
+                                  namespace=Namespace.COMMANDS,
                                   attrs={'node': node,
                                          'action': action})
 
@@ -404,7 +405,7 @@ class AdHocCommands(BaseModule):
         """
         self._log.info('Cancel: %s %s %s', jid, node, session_id)
         stanza = nbxmpp.Iq(typ='set', to=jid)
-        stanza.addChild('command', namespace=nbxmpp.NS_COMMANDS,
+        stanza.addChild('command', namespace=Namespace.COMMANDS,
                         attrs={
                             'node': node,
                             'sessionid': session_id,

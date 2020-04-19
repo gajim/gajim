@@ -31,6 +31,7 @@ Handles the jingle signalling protocol
 import logging
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import helpers
@@ -61,15 +62,15 @@ class Jingle(BaseModule):
                           callback=self._on_jingle_iq),
             StanzaHandler(name='iq',
                           typ='set',
-                          ns=nbxmpp.NS_JINGLE,
+                          ns=Namespace.JINGLE,
                           callback=self._on_jingle_iq),
             StanzaHandler(name='iq',
                           typ='get',
-                          ns=nbxmpp.NS_PUBKEY_PUBKEY,
+                          ns=Namespace.PUBKEY_PUBKEY,
                           callback=self._on_pubkey_request),
             StanzaHandler(name='iq',
                           typ='result',
-                          ns=nbxmpp.NS_PUBKEY_PUBKEY,
+                          ns=Namespace.PUBKEY_PUBKEY,
                           callback=self._pubkey_result_received),
         ]
 
@@ -191,7 +192,7 @@ class Jingle(BaseModule):
                                                       gcc[1])
         if contact is None:
             return None
-        use_security = contact.supports(nbxmpp.NS_JINGLE_XTLS)
+        use_security = contact.supports(Namespace.JINGLE_XTLS)
         jingle = JingleSession(self._con,
                                weinitiate=True,
                                jid=jid,
@@ -200,9 +201,9 @@ class Jingle(BaseModule):
         jingle.session_type_ft = True
         self._sessions[jingle.sid] = jingle
         file_props.sid = jingle.sid
-        if contact.supports(nbxmpp.NS_JINGLE_BYTESTREAM):
+        if contact.supports(Namespace.JINGLE_BYTESTREAM):
             transport = JingleTransportSocks5()
-        elif contact.supports(nbxmpp.NS_JINGLE_IBB):
+        elif contact.supports(Namespace.JINGLE_IBB):
             transport = JingleTransportIBB()
 
         senders = 'initiator'
@@ -221,18 +222,18 @@ class Jingle(BaseModule):
 
     @staticmethod
     def __hash_support(contact):
-        if contact.supports(nbxmpp.NS_HASHES_2):
-            if contact.supports(nbxmpp.NS_HASHES_BLAKE2B_512):
+        if contact.supports(Namespace.HASHES_2):
+            if contact.supports(Namespace.HASHES_BLAKE2B_512):
                 return 'blake2b-512'
-            if contact.supports(nbxmpp.NS_HASHES_BLAKE2B_256):
+            if contact.supports(Namespace.HASHES_BLAKE2B_256):
                 return 'blake2b-256'
-            if contact.supports(nbxmpp.NS_HASHES_SHA3_512):
+            if contact.supports(Namespace.HASHES_SHA3_512):
                 return 'sha3-512'
-            if contact.supports(nbxmpp.NS_HASHES_SHA3_256):
+            if contact.supports(Namespace.HASHES_SHA3_256):
                 return 'sha3-256'
-            if contact.supports(nbxmpp.NS_HASHES_SHA512):
+            if contact.supports(Namespace.HASHES_SHA512):
                 return 'sha-512'
-            if contact.supports(nbxmpp.NS_HASHES_SHA256):
+            if contact.supports(Namespace.HASHES_SHA256):
                 return 'sha-256'
         return None
 

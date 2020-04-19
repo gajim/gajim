@@ -28,6 +28,7 @@ import logging
 import operator
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.connection_handlers_events import StreamReceivedEvent
@@ -193,4 +194,4 @@ class ConnectionHandlers(ConnectionHandlersBase):
         # that defines handlers
 
         con.RegisterHandler('unknown', self._StreamCB,
-            nbxmpp.NS_XMPP_STREAMS, xmlns=nbxmpp.NS_STREAMS)
+            Namespace.XMPP_STREAMS, xmlns=Namespace.STREAMS)

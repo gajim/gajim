@@ -17,6 +17,7 @@
 import time
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.const import PresenceType
 
@@ -340,7 +341,7 @@ class Presence(BaseModule):
         infos = {'jid': jid}
         if name:
             infos['name'] = name
-        iq = nbxmpp.Iq('set', nbxmpp.NS_ROSTER)
+        iq = nbxmpp.Iq('set', Namespace.ROSTER)
         query = iq.setQuery()
         item = query.addChild('item', attrs=infos)
         for group in groups:
@@ -361,7 +362,7 @@ class Presence(BaseModule):
             show = None
         presence = nbxmpp.Presence(to, typ, priority, show, status)
         if nick is not None:
-            nick_tag = presence.setTag('nick', namespace=nbxmpp.NS_NICK)
+            nick_tag = presence.setTag('nick', namespace=Namespace.NICK)
             nick_tag.setData(nick)
 
         if not self._con.avatar_conversion:
@@ -376,13 +377,13 @@ class Presence(BaseModule):
             time_ = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                                   time.gmtime(time.time() - idle_sec))
 
-            idle_node = presence.setTag('idle', namespace=nbxmpp.NS_IDLE)
+            idle_node = presence.setTag('idle', namespace=Namespace.IDLE)
             idle_node.setAttr('since', time_)
 
         caps = self._con.get_module('Caps').caps
         if caps is not None and typ != 'unavailable':
             presence.setTag('c',
-                            namespace=nbxmpp.NS_CAPS,
+                            namespace=Namespace.CAPS,
                             attrs=caps._asdict())
 
         return presence

@@ -21,6 +21,7 @@ import socket
 from collections import deque
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gi.repository import GLib
 
@@ -169,7 +170,7 @@ class JingleRTPContent(JingleContent):
         self.p2psession.stop_telephony_event()
 
     def _fill_content(self, content):
-        content.addChild(nbxmpp.NS_JINGLE_RTP + ' description',
+        content.addChild(Namespace.JINGLE_RTP + ' description',
                          attrs={'media': self.media},
                          payload=list(self.iter_codecs()))
 
@@ -468,4 +469,4 @@ def get_content(desc):
     if desc['media'] == 'video':
         return JingleVideo
 
-contents[nbxmpp.NS_JINGLE_RTP] = get_content
+contents[Namespace.JINGLE_RTP] = get_content

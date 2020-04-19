@@ -60,7 +60,7 @@ from distutils.version import LooseVersion as V
 from encodings.punycode import punycode_encode
 from functools import wraps
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.const import Role
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
@@ -922,24 +922,24 @@ def get_current_show(account):
 def get_optional_features(account):
     features = []
     if app.config.get_per('accounts', account, 'subscribe_mood'):
-        features.append(nbxmpp.NS_MOOD + '+notify')
+        features.append(Namespace.MOOD + '+notify')
     if app.config.get_per('accounts', account, 'subscribe_activity'):
-        features.append(nbxmpp.NS_ACTIVITY + '+notify')
+        features.append(Namespace.ACTIVITY + '+notify')
     if app.config.get_per('accounts', account, 'subscribe_tune'):
-        features.append(nbxmpp.NS_TUNE + '+notify')
+        features.append(Namespace.TUNE + '+notify')
     if app.config.get_per('accounts', account, 'subscribe_nick'):
-        features.append(nbxmpp.NS_NICK + '+notify')
+        features.append(Namespace.NICK + '+notify')
     if app.config.get_per('accounts', account, 'subscribe_location'):
-        features.append(nbxmpp.NS_LOCATION + '+notify')
+        features.append(Namespace.LOCATION + '+notify')
     if app.connections[account].get_module('Bookmarks').using_bookmark_2:
-        features.append(nbxmpp.NS_BOOKMARKS_2 + '+notify')
+        features.append(Namespace.BOOKMARKS_2 + '+notify')
     elif app.connections[account].get_module('Bookmarks').using_bookmark_1:
-        features.append(nbxmpp.NS_BOOKMARKS + '+notify')
+        features.append(Namespace.BOOKMARKS + '+notify')
     if app.is_installed('AV'):
-        features.append(nbxmpp.NS_JINGLE_RTP)
-        features.append(nbxmpp.NS_JINGLE_RTP_AUDIO)
-        features.append(nbxmpp.NS_JINGLE_RTP_VIDEO)
-        features.append(nbxmpp.NS_JINGLE_ICE_UDP)
+        features.append(Namespace.JINGLE_RTP)
+        features.append(Namespace.JINGLE_RTP_AUDIO)
+        features.append(Namespace.JINGLE_RTP_VIDEO)
+        features.append(Namespace.JINGLE_ICE_UDP)
 
     # Give plugins the possibility to add their features
     app.plugin_manager.extension_point('update_caps', account, features)
@@ -980,7 +980,7 @@ def replace_dataform_media(form, stanza):
                 uri_data = uri.getData()
                 if uri_data.startswith('cid:'):
                     uri_data = uri_data[4:]
-                    for data in stanza.getTags('data', namespace=nbxmpp.NS_BOB):
+                    for data in stanza.getTags('data', namespace=Namespace.BOB):
                         if data.getAttr('cid') == uri_data:
                             uri.setData(data.getData())
                             found = True

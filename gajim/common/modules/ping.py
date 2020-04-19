@@ -20,6 +20,7 @@ from typing import Tuple
 import time
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -37,13 +38,13 @@ class Ping(BaseModule):
             StanzaHandler(name='iq',
                           callback=self._answer_request,
                           typ='get',
-                          ns=nbxmpp.NS_PING),
+                          ns=Namespace.PING),
         ]
 
     @staticmethod
     def _get_ping_iq(to: str) -> nbxmpp.Iq:
         iq = nbxmpp.Iq('get', to=to)
-        iq.addChild(name='ping', namespace=nbxmpp.NS_PING)
+        iq.addChild(name='ping', namespace=Namespace.PING)
         return iq
 
     def send_ping(self, contact: ContactsT) -> None:

@@ -15,6 +15,7 @@
 # XEP-0258: Security Labels in XMPP
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
@@ -29,7 +30,7 @@ class SecLabels(BaseModule):
         self.supported = False
 
     def pass_disco(self, info):
-        if nbxmpp.NS_SECLABEL not in info.features:
+        if Namespace.SECLABEL not in info.features:
             return
 
         self.supported = True
@@ -39,7 +40,7 @@ class SecLabels(BaseModule):
         server = app.get_jid_from_account(self._account).split("@")[1]
         iq = nbxmpp.Iq(typ='get', to=server)
         iq.addChild(name='catalog',
-                    namespace=nbxmpp.NS_SECLABEL_CATALOG,
+                    namespace=Namespace.SECLABEL_CATALOG,
                     attrs={'to': jid})
         self._log.info('Request catalog: server: %s, to: %s', server, jid)
         self._con.connection.SendAndCallForResponse(
@@ -50,7 +51,7 @@ class SecLabels(BaseModule):
             self._log.info('Error: %s', stanza.getError())
             return
 
-        query = stanza.getTag('catalog', namespace=nbxmpp.NS_SECLABEL_CATALOG)
+        query = stanza.getTag('catalog', namespace=Namespace.SECLABEL_CATALOG)
         to = query.getAttr('to')
         items = query.getTags('item')
 
@@ -78,7 +79,7 @@ class SecLabels(BaseModule):
 
 
 def parse_securitylabel(stanza):
-    seclabel = stanza.getTag('securitylabel', namespace=nbxmpp.NS_SECLABEL)
+    seclabel = stanza.getTag('securitylabel', namespace=Namespace.SECLABEL)
     if seclabel is None:
         return None
     return seclabel.getTag('displaymarking')

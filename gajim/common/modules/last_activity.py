@@ -15,6 +15,7 @@
 # XEP-0012: Last Activity
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -30,7 +31,7 @@ class LastActivity(BaseModule):
             StanzaHandler(name='iq',
                           typ='get',
                           callback=self._answer_request,
-                          ns=nbxmpp.NS_LAST),
+                          ns=Namespace.LAST),
         ]
 
     def _answer_request(self, _con, stanza, properties):

@@ -14,7 +14,7 @@
 
 # XEP-0084: User Avatar
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
@@ -33,7 +33,7 @@ class UserAvatar(BaseModule):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._avatar_metadata_received)
 
-    @event_node(nbxmpp.NS_AVATAR_METADATA)
+    @event_node(Namespace.AVATAR_METADATA)
     def _avatar_metadata_received(self, _con, _stanza, properties):
         if properties.pubsub_event.retracted:
             return

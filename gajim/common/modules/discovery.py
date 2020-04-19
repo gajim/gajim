@@ -15,6 +15,7 @@
 # XEP-0030: Service Discovery
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
@@ -39,11 +40,11 @@ class Discovery(BaseModule):
             StanzaHandler(name='iq',
                           callback=self._answer_disco_info,
                           typ='get',
-                          ns=nbxmpp.NS_DISCO_INFO),
+                          ns=Namespace.DISCO_INFO),
             StanzaHandler(name='iq',
                           callback=self._answer_disco_items,
                           typ='get',
-                          ns=nbxmpp.NS_DISCO_ITEMS),
+                          ns=Namespace.DISCO_ITEMS),
         ]
 
         self._account_info = None
@@ -139,7 +140,7 @@ class Discovery(BaseModule):
         self._con.get_module('PrivacyLists').pass_disco(result)
         self._con.get_module('HTTPUpload').pass_disco(result)
 
-        if nbxmpp.NS_REGISTER in result.features:
+        if Namespace.REGISTER in result.features:
             self._con.register_supported = True
 
         self._con.connect_machine(restart=True)
@@ -175,7 +176,7 @@ class Discovery(BaseModule):
             self._con.connection.send(result)
             raise nbxmpp.NodeProcessed
 
-        if node == nbxmpp.NS_COMMANDS:
+        if node == Namespace.COMMANDS:
             self._con.get_module('AdHocCommands').command_list_query(stanza)
             raise nbxmpp.NodeProcessed
 

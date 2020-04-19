@@ -22,6 +22,7 @@ from typing import Dict  # pylint: disable=unused-import
 import os
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -185,7 +186,7 @@ class JingleContent:
 
     def _fill_content(self, content):
         description_node = nbxmpp.simplexml.Node(
-            tag=nbxmpp.NS_JINGLE_FILE_TRANSFER_5 + ' description')
+            tag=Namespace.JINGLE_FILE_TRANSFER_5 + ' description')
         file_tag = description_node.setTag('file')
         if self.file_props.name:
             node = nbxmpp.simplexml.Node(tag='name')
@@ -202,7 +203,7 @@ class JingleContent:
         if self.file_props.type_ == 'r':
             if self.file_props.hash_:
                 file_tag.addChild('hash', attrs={'algo': self.file_props.algo},
-                                  namespace=nbxmpp.NS_HASHES_2,
+                                  namespace=Namespace.HASHES_2,
                                   payload=self.file_props.hash_)
         else:
             # if the file is less than 10 mb, then it is small
@@ -225,7 +226,7 @@ class JingleContent:
             desc.setData(self.file_props.desc)
         if self.use_security:
             security = nbxmpp.simplexml.Node(
-                tag=nbxmpp.NS_JINGLE_XTLS + ' security')
+                tag=Namespace.JINGLE_XTLS + ' security')
             certpath = os.path.join(
                 configpaths.get('MY_CERT'), SELF_SIGNED_CERTIFICATE) + '.cert'
             cert = load_cert_file(certpath)

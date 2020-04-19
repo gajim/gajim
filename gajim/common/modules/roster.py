@@ -17,6 +17,7 @@
 from collections import namedtuple
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -34,7 +35,7 @@ class Roster(BaseModule):
             StanzaHandler(name='iq',
                           callback=self._roster_push_received,
                           typ='set',
-                          ns=nbxmpp.NS_ROSTER),
+                          ns=Namespace.ROSTER),
             StanzaHandler(name='presence',
                           callback=self._presence_received),
         ]
@@ -78,7 +79,7 @@ class Roster(BaseModule):
                 'accounts', self._account, 'roster_version')
 
         self._log.info('Requested from server')
-        iq = nbxmpp.Iq('get', nbxmpp.NS_ROSTER)
+        iq = nbxmpp.Iq('get', Namespace.ROSTER)
         if version is not None:
             iq.setTagAttr('query', 'ver', version)
         self._log.info('Request version: %s', version)
@@ -255,7 +256,7 @@ class Roster(BaseModule):
         Delete contact 'jid' from roster
         """
         self._con.connection.send(
-            nbxmpp.Iq('set', nbxmpp.NS_ROSTER, payload=[
+            nbxmpp.Iq('set', Namespace.ROSTER, payload=[
                 nbxmpp.Node('item', {'jid': jid, 'subscription': 'remove'})]))
 
     def get_groups(self, jid):
@@ -285,7 +286,7 @@ class Roster(BaseModule):
         """
         Rename contact 'jid' and sets the groups list that it now belongs to
         """
-        iq = nbxmpp.Iq('set', nbxmpp.NS_ROSTER)
+        iq = nbxmpp.Iq('set', Namespace.ROSTER)
         query = iq.getTag('query')
         attrs = {'jid': jid}
         if name:
@@ -301,7 +302,7 @@ class Roster(BaseModule):
         Rename multiple contacts and sets their group lists
         """
         for i in items:
-            iq = nbxmpp.Iq('set', nbxmpp.NS_ROSTER)
+            iq = nbxmpp.Iq('set', Namespace.ROSTER)
             query = iq.getTag('query')
             attrs = {'jid': i['jid']}
             if i['name']:

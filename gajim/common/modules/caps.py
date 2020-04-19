@@ -17,7 +17,7 @@
 
 # XEP-0115: Entity Capabilities
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import DiscoIdentity
 from nbxmpp.util import is_error_result
@@ -44,7 +44,7 @@ class Caps(BaseModule):
         self.handlers = [
             StanzaHandler(name='presence',
                           callback=self._entity_caps,
-                          ns=nbxmpp.NS_CAPS,
+                          ns=Namespace.CAPS,
                           priority=51),
         ]
 

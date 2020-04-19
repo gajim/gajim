@@ -28,6 +28,7 @@ import socket
 import logging
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from gi.repository import GLib
 
@@ -81,15 +82,15 @@ class Bytestream(BaseModule):
         self.handlers = [
             StanzaHandler(name='iq',
                           typ='result',
-                          ns=nbxmpp.NS_BYTESTREAM,
+                          ns=Namespace.BYTESTREAM,
                           callback=self._on_bytestream_result),
             StanzaHandler(name='iq',
                           typ='error',
-                          ns=nbxmpp.NS_BYTESTREAM,
+                          ns=Namespace.BYTESTREAM,
                           callback=self._on_bytestream_error),
             StanzaHandler(name='iq',
                           typ='set',
-                          ns=nbxmpp.NS_BYTESTREAM,
+                          ns=Namespace.BYTESTREAM,
                           callback=self._on_bytestream_set),
             StanzaHandler(name='iq',
                           typ='result',
@@ -101,7 +102,7 @@ class Bytestream(BaseModule):
         self.fail_id = None
 
     def pass_disco(self, info):
-        if nbxmpp.NS_BYTESTREAM not in info.features:
+        if Namespace.BYTESTREAM not in info.features:
             return
         if app.config.get_per('accounts', self._account, 'use_ft_proxies'):
             log.info('Discovered proxy: %s', info.jid)
@@ -195,7 +196,7 @@ class Bytestream(BaseModule):
                        typ='result',
                        frm=streamhost['target'])
         iq.setAttr('id', streamhost['id'])
-        query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
+        query = iq.setTag('query', namespace=Namespace.BYTESTREAM)
         stream_tag = query.setTag('streamhost-used')
         stream_tag.setAttr('jid', streamhost['jid'])
         self._con.connection.send(iq)
@@ -279,7 +280,7 @@ class Bytestream(BaseModule):
             iq = nbxmpp.Iq(to=receiver, typ='set')
             file_props.request_id = 'id_' + file_props.sid
             iq.setID(file_props.request_id)
-            query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
+            query = iq.setTag('query', namespace=Namespace.BYTESTREAM)
             query.setAttr('sid', file_props.sid)
 
             self._add_addiditional_streamhosts_to_query(query, file_props)
@@ -512,7 +513,7 @@ class Bytestream(BaseModule):
         iq.setAttr('id', file_props.request_id)
         err = iq.setTag('error')
         err.setAttr('type', error_type)
-        err.setTag(error, namespace=nbxmpp.NS_STANZAS)
+        err.setTag(error, namespace=Namespace.STANZAS)
         self._con.connection.send(iq)
         if msg:
             self.disconnect_transfer(file_props)
@@ -534,7 +535,7 @@ class Bytestream(BaseModule):
         iq = nbxmpp.Iq(to=proxy['initiator'], typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
-        query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
+        query = iq.setTag('query', namespace=Namespace.BYTESTREAM)
         query.setAttr('sid', proxy['sid'])
         activate = query.setTag('activate')
         activate.setData(file_props.proxy_receiver)

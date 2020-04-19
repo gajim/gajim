@@ -15,6 +15,7 @@
 # XEP-0083: Nested Roster Groups
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common.modules.base import BaseModule
 
@@ -28,7 +29,7 @@ class Delimiter(BaseModule):
     def get_roster_delimiter(self):
         self._log.info('Request')
         node = nbxmpp.Node('storage', attrs={'xmlns': 'roster:delimiter'})
-        iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVATE, payload=node)
+        iq = nbxmpp.Iq('get', Namespace.PRIVATE, payload=node)
 
         self._con.connection.SendAndCallForResponse(
             iq, self._delimiter_received)
@@ -49,7 +50,7 @@ class Delimiter(BaseModule):
 
     def set_roster_delimiter(self):
         self._log.info('Set delimiter')
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq('set', Namespace.PRIVATE)
         roster = iq.getQuery().addChild('roster', namespace='roster:delimiter')
         roster.setData('::')
 

@@ -24,6 +24,7 @@ import socket
 from enum import IntEnum, unique
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
 
 from gajim.common import app
@@ -143,7 +144,7 @@ class JingleTransportSocks5(JingleTransport):
             transport = JingleTransport.make_transport(self, candidates)
         else:
             transport = nbxmpp.Node('transport')
-        transport.setNamespace(nbxmpp.NS_JINGLE_BYTESTREAM)
+        transport.setNamespace(Namespace.JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.sid)
         if self.file_props.dstaddr:
             transport.setAttr('dstaddr', self.file_props.dstaddr)
@@ -346,7 +347,7 @@ class JingleTransportSocks5(JingleTransport):
         iq = nbxmpp.Iq(to=proxy['jid'], frm=self.ourjid, typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
-        query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
+        query = iq.setTag('query', namespace=Namespace.BYTESTREAM)
         query.setAttr('sid', proxy['sid'])
         activate = query.setTag('activate')
         activate.setData(sesn.peerjid)
@@ -359,7 +360,7 @@ class JingleTransportSocks5(JingleTransport):
         content_object = self.get_content()
         content.setAttr('name', content_object.name)
         transport = nbxmpp.Node('transport')
-        transport.setNamespace(nbxmpp.NS_JINGLE_BYTESTREAM)
+        transport.setNamespace(Namespace.JINGLE_BYTESTREAM)
         transport.setAttr('sid', proxy['sid'])
         activated = nbxmpp.Node('activated')
         cid = None
@@ -400,7 +401,7 @@ class JingleTransportIBB(JingleTransport):
     def make_transport(self):
 
         transport = nbxmpp.Node('transport')
-        transport.setNamespace(nbxmpp.NS_JINGLE_IBB)
+        transport.setNamespace(Namespace.JINGLE_IBB)
         transport.setAttr('block-size', self.block_sz)
         transport.setAttr('sid', self.sid)
         return transport
@@ -443,7 +444,7 @@ class JingleTransportICEUDP(JingleTransport):
 
     def make_transport(self, candidates=None):
         transport = JingleTransport.make_transport(self, candidates)
-        transport.setNamespace(nbxmpp.NS_JINGLE_ICE_UDP)
+        transport.setNamespace(Namespace.JINGLE_ICE_UDP)
         if self.candidates and self.candidates[0].username and \
                 self.candidates[0].password:
             transport.setAttr('ufrag', self.candidates[0].username)
@@ -491,6 +492,6 @@ class JingleTransportICEUDP(JingleTransport):
         self.remote_candidates.extend(candidates)
         return candidates
 
-transports[nbxmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
-transports[nbxmpp.NS_JINGLE_BYTESTREAM] = JingleTransportSocks5
-transports[nbxmpp.NS_JINGLE_IBB] = JingleTransportIBB
+transports[Namespace.JINGLE_ICE_UDP] = JingleTransportICEUDP
+transports[Namespace.JINGLE_BYTESTREAM] = JingleTransportSocks5
+transports[Namespace.JINGLE_IBB] = JingleTransportIBB

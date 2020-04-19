@@ -31,6 +31,7 @@ import logging
 from enum import Enum, unique
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
 
 from gajim.common import app
@@ -379,10 +380,10 @@ class JingleSession:
         text = error.getTagData('text')
         error_name = None
         for child in error.getChildren():
-            if child.getNamespace() == nbxmpp.NS_JINGLE_ERRORS:
+            if child.getNamespace() == Namespace.JINGLE_ERRORS:
                 error_name = child.getName()
                 break
-            if child.getNamespace() == nbxmpp.NS_STANZAS:
+            if child.getNamespace() == Namespace.STANZAS:
                 error_name = child.getName()
         self.__dispatch_error(error_name, text, error.getAttr('type'))
 
@@ -406,12 +407,12 @@ class JingleSession:
             name = content['name']
             if (creator, name) in self.contents:
                 transport_ns = content.getTag('transport').getNamespace()
-                if transport_ns == nbxmpp.NS_JINGLE_ICE_UDP:
+                if transport_ns == Namespace.JINGLE_ICE_UDP:
                     # FIXME: We don't manage anything else than ICE-UDP now...
                     # What was the previous transport?!?
                     # Anyway, content's transport is not modifiable yet
                     pass
-                elif transport_ns == nbxmpp.NS_JINGLE_IBB:
+                elif transport_ns == Namespace.JINGLE_IBB:
                     transport = JingleTransportIBB(node=content.getTag(
                         'transport'))
                     self.modify_content(creator, name, transport)
@@ -447,7 +448,7 @@ class JingleSession:
         for child in payload:
             if child.getName() == 'checksum':
                 hash_ = child.getTag('file').getTag(name='hash',
-                                                    namespace=nbxmpp.NS_HASHES_2)
+                                                    namespace=Namespace.HASHES_2)
                 if hash_ is None:
                     continue
                 algo = hash_.getAttr('algo')
@@ -686,18 +687,18 @@ class JingleSession:
             'initiator' : self.initiator
         }
         jingle = stanza.addChild('jingle', attrs=attrs,
-                                 namespace=nbxmpp.NS_JINGLE)
+                                 namespace=Namespace.JINGLE)
         if reason is not None:
             jingle.addChild(node=reason)
         return stanza, jingle
 
     def __send_error(self, stanza, error, jingle_error=None, text=None, type_=None):
-        err_stanza = nbxmpp.Error(stanza, '%s %s' % (nbxmpp.NS_STANZAS, error))
+        err_stanza = nbxmpp.Error(stanza, '%s %s' % (Namespace.STANZAS, error))
         err = err_stanza.getTag('error')
         if type_:
             err.setAttr('type', type_)
         if jingle_error:
-            err.setTag(jingle_error, namespace=nbxmpp.NS_JINGLE_ERRORS)
+            err.setTag(jingle_error, namespace=Namespace.JINGLE_ERRORS)
         if text:
             err.setTagData('text', text)
         self.connection.connection.send(err_stanza)

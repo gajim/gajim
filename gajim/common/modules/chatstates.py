@@ -24,6 +24,7 @@ import time
 from functools import wraps
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from gi.repository import GLib
 
@@ -59,7 +60,7 @@ class Chatstate(BaseModule):
                           callback=self._presence_received),
             StanzaHandler(name='message',
                           callback=self._process_chatstate,
-                          ns=nbxmpp.NS_CHATSTATES,
+                          ns=Namespace.CHATSTATES,
                           priority=46),
         ]
 
@@ -226,7 +227,7 @@ class Chatstate(BaseModule):
             if self._con.get_own_jid().bareMatch(contact.jid):
                 return None
 
-            if not contact.supports(nbxmpp.NS_CHATSTATES):
+            if not contact.supports(Namespace.CHATSTATES):
                 return None
 
         self.set_active(contact)
@@ -290,7 +291,7 @@ class Chatstate(BaseModule):
                 self._log.info('Contact offline: %s', contact.jid)
                 return
 
-            if not contact.supports(nbxmpp.NS_CHATSTATES):
+            if not contact.supports(Namespace.CHATSTATES):
                 self._log.info('Chatstates not supported: %s', contact.jid)
                 return
 

@@ -18,6 +18,7 @@
 import logging
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.const import InviteType
 from nbxmpp.const import PresenceType
 from nbxmpp.const import StatusCode
@@ -69,7 +70,7 @@ class MUC(BaseModule):
         self.handlers = [
             StanzaHandler(name='presence',
                           callback=self._on_muc_user_presence,
-                          ns=nbxmpp.NS_MUC_USER,
+                          ns=Namespace.MUC_USER,
                           priority=49),
             StanzaHandler(name='presence',
                           callback=self._on_error_presence,
@@ -81,24 +82,24 @@ class MUC(BaseModule):
                           priority=49),
             StanzaHandler(name='message',
                           callback=self._on_config_change,
-                          ns=nbxmpp.NS_MUC_USER,
+                          ns=Namespace.MUC_USER,
                           priority=49),
             StanzaHandler(name='message',
                           callback=self._on_invite_or_decline,
                           typ='normal',
-                          ns=nbxmpp.NS_MUC_USER,
+                          ns=Namespace.MUC_USER,
                           priority=49),
             StanzaHandler(name='message',
                           callback=self._on_invite_or_decline,
-                          ns=nbxmpp.NS_CONFERENCE,
+                          ns=Namespace.CONFERENCE,
                           priority=49),
             StanzaHandler(name='message',
                           callback=self._on_captcha_challenge,
-                          ns=nbxmpp.NS_CAPTCHA,
+                          ns=Namespace.CAPTCHA,
                           priority=49),
             StanzaHandler(name='message',
                           callback=self._on_voice_request,
-                          ns=nbxmpp.NS_DATA,
+                          ns=Namespace.DATA,
                           priority=49)
         ]
 
@@ -129,7 +130,7 @@ class MUC(BaseModule):
                 continue
             if identity.type != 'text':
                 continue
-            if nbxmpp.NS_MUC in info.features:
+            if Namespace.MUC in info.features:
                 self._log.info('Discovered MUC: %s', info.jid)
                 self._muc_service_jid = info.jid
                 raise nbxmpp.NodeProcessed
@@ -177,7 +178,7 @@ class MUC(BaseModule):
             show=self._con.status,
             status=self._con.status_message)
 
-        muc_x = presence.setTag(nbxmpp.NS_MUC + ' x')
+        muc_x = presence.setTag(Namespace.MUC + ' x')
         muc_x.setTag('history', {'maxchars': '0'})
 
         if muc_data.password is not None:
@@ -200,7 +201,7 @@ class MUC(BaseModule):
             show=self._con.status,
             status=self._con.status_message)
 
-        presence.setTag(nbxmpp.NS_MUC + ' x')
+        presence.setTag(Namespace.MUC + ' x')
 
         self._log.info('Create MUC: %s', muc_data.jid)
         self._manager.set_state(muc_data.jid, MUCJoinedState.CREATING)
@@ -768,7 +769,7 @@ class MUC(BaseModule):
     def invite(self, room, to, reason=None, continue_=False):
         type_ = InviteType.MEDIATED
         contact = app.contacts.get_contact_from_full_jid(self._account, to)
-        if contact and contact.supports(nbxmpp.NS_CONFERENCE):
+        if contact and contact.supports(Namespace.CONFERENCE):
             type_ = InviteType.DIRECT
 
         password = app.gc_passwords.get(room, None)

@@ -15,6 +15,7 @@
 # XEP-0100: Gateway Interaction
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -28,7 +29,7 @@ class Gateway(BaseModule):
     def unsubscribe(self, agent):
         if not app.account_is_available(self._account):
             return
-        iq = nbxmpp.Iq('set', nbxmpp.NS_REGISTER, to=agent)
+        iq = nbxmpp.Iq('set', Namespace.REGISTER, to=agent)
         iq.setQuery().setTag('remove')
 
         self._con.connection.SendAndCallForResponse(
@@ -64,7 +65,7 @@ class Gateway(BaseModule):
         if prompt:
             typ_ = 'set'
         iq = nbxmpp.Iq(typ=typ_, to=jid)
-        query = iq.addChild(name='query', namespace=nbxmpp.NS_GATEWAY)
+        query = iq.addChild(name='query', namespace=Namespace.GATEWAY)
         if prompt:
             query.setTagData('prompt', prompt)
         self._con.connection.SendAndCallForResponse(iq, self._on_prompt_result)

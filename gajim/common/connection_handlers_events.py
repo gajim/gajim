@@ -20,7 +20,7 @@
 import logging
 
 import OpenSSL.crypto
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import nec
 from gajim.common import helpers
@@ -129,7 +129,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
             host['initiator'] = self.FT_content.session.initiator
             host['target'] = self.FT_content.session.responder
         self.file_props.session_type = 'jingle'
-        self.file_props.stream_methods = nbxmpp.NS_BYTESTREAM
+        self.file_props.stream_methods = Namespace.BYTESTREAM
         desc = self.jingle_content.getTag('description')
         if self.jingle_content.getAttr('creator') == 'initiator':
             file_tag = desc.getTag('file')

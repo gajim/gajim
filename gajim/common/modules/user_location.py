@@ -14,7 +14,7 @@
 
 # XEP-0080: User Location
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -35,7 +35,7 @@ class UserLocation(BaseModule):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._location_received)
 
-    @event_node(nbxmpp.NS_LOCATION)
+    @event_node(Namespace.LOCATION)
     def _location_received(self, _con, _stanza, properties):
         if properties.pubsub_event.retracted:
             return

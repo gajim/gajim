@@ -15,6 +15,7 @@
 # XEP-0209: Metacontacts
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import helpers
@@ -31,7 +32,7 @@ class MetaContacts(BaseModule):
     def get_metacontacts(self):
         self._log.info('Request')
         node = nbxmpp.Node('storage', attrs={'xmlns': 'storage:metacontacts'})
-        iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVATE, payload=node)
+        iq = nbxmpp.Iq('get', Namespace.PRIVATE, payload=node)
 
         self._con.connection.SendAndCallForResponse(
             iq, self._metacontacts_received)
@@ -79,7 +80,7 @@ class MetaContacts(BaseModule):
     def store_metacontacts(self, tags_list):
         if not app.account_is_available(self._account):
             return
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq('set', Namespace.PRIVATE)
         meta = iq.getQuery().addChild('storage',
                                       namespace='storage:metacontacts')
         for tag in tags_list:

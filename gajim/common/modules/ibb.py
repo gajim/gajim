@@ -17,6 +17,7 @@
 import time
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
@@ -43,7 +44,7 @@ class IBB(BaseModule):
         self.handlers = [
             StanzaHandler(name='iq',
                           callback=self._ibb_received,
-                          ns=nbxmpp.NS_IBB),
+                          ns=Namespace.IBB),
         ]
 
     def _ibb_received(self, _con, stanza, properties):

@@ -15,6 +15,7 @@
 # XEP-0191: Blocking Command
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
@@ -42,7 +43,7 @@ class Blocking(BaseModule):
             StanzaHandler(name='iq',
                           callback=self._blocking_push_received,
                           typ='set',
-                          ns=nbxmpp.NS_BLOCKING),
+                          ns=Namespace.BLOCKING),
         ]
 
         self._register_callback('get_blocking_list',
@@ -51,14 +52,14 @@ class Blocking(BaseModule):
         self.supported = False
 
     def pass_disco(self, info):
-        if nbxmpp.NS_BLOCKING not in info.features:
+        if Namespace.BLOCKING not in info.features:
             return
 
         self.supported = True
         app.nec.push_incoming_event(
             NetworkEvent('feature-discovered',
                          account=self._account,
-                         feature=nbxmpp.NS_BLOCKING))
+                         feature=Namespace.BLOCKING))
 
         self._log.info('Discovered blocking: %s', info.jid)
 
@@ -80,7 +81,7 @@ class Blocking(BaseModule):
 
         changed_list = []
 
-        unblock = stanza.getTag('unblock', namespace=nbxmpp.NS_BLOCKING)
+        unblock = stanza.getTag('unblock', namespace=Namespace.BLOCKING)
         if unblock is not None:
             items = unblock.getTags('item')
             if not items:
@@ -102,7 +103,7 @@ class Blocking(BaseModule):
                 self._presence_probe(jid)
                 self._log.info('Unblock Push: %s', jid)
 
-        block = stanza.getTag('block', namespace=nbxmpp.NS_BLOCKING)
+        block = stanza.getTag('block', namespace=Namespace.BLOCKING)
         if block is not None:
             for item in block.getTags('item'):
                 jid = item.getAttr('jid')

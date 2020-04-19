@@ -21,7 +21,10 @@ import logging
 import os
 import threading
 from enum import IntEnum, unique
+
 import nbxmpp
+from nbxmpp.namespaces import Namespace
+
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import jingle_xtls
@@ -151,7 +154,7 @@ class JingleFileTransfer(JingleContent):
         checksum = nbxmpp.Node(tag='checksum',
                                payload=[nbxmpp.Node(tag='file',
                                                     payload=[self._compute_hash()])])
-        checksum.setNamespace(nbxmpp.NS_JINGLE_FILE_TRANSFER_5)
+        checksum.setNamespace(Namespace.JINGLE_FILE_TRANSFER_5)
         self.session.__session_info(checksum)
         pjid = app.get_jid_without_resource(self.session.peerjid)
         file_info = {'name' : self.file_props.name,
@@ -404,4 +407,4 @@ class JingleFileTransfer(JingleContent):
 def get_content(desc):
     return JingleFileTransfer
 
-contents[nbxmpp.NS_JINGLE_FILE_TRANSFER_5] = get_content
+contents[Namespace.JINGLE_FILE_TRANSFER_5] = get_content

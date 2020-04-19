@@ -15,6 +15,7 @@
 # XEP-0280: Message Carbons
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 
 from gajim.common.modules.base import BaseModule
 
@@ -26,14 +27,14 @@ class Carbons(BaseModule):
         self.supported = False
 
     def pass_disco(self, info):
-        if nbxmpp.NS_CARBONS not in info.features:
+        if Namespace.CARBONS not in info.features:
             return
 
         self.supported = True
         self._log.info('Discovered carbons: %s', info.jid)
 
         iq = nbxmpp.Iq('set')
-        iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
+        iq.setTag('enable', namespace=Namespace.CARBONS)
         self._log.info('Activate')
         self._con.connection.send(iq)
 

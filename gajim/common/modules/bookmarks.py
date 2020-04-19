@@ -22,7 +22,7 @@ from typing import Tuple
 from typing import Union
 from typing import Optional
 
-import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import BookmarkData
@@ -74,7 +74,7 @@ class Bookmarks(BaseModule):
     def using_bookmark_2(self) -> bool:
         return self._pubsub_support() and self.conversion_2
 
-    @event_node(nbxmpp.NS_BOOKMARKS)
+    @event_node(Namespace.BOOKMARKS)
     def _bookmark_event_received(self, _con, _stanza, properties):
         if properties.pubsub_event.retracted:
             return
@@ -99,7 +99,7 @@ class Bookmarks(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
 
-    @event_node(nbxmpp.NS_BOOKMARKS_2)
+    @event_node(Namespace.BOOKMARKS_2)
     def _bookmark_2_event_received(self, _con, _stanza, properties):
         if not properties.is_self_message:
             self._log.warning('%s has an open access bookmarks node',
@@ -140,11 +140,11 @@ class Bookmarks(BaseModule):
                            'without server conversion support: %s', info.jid)
             self._conversion_2 = True
 
-        elif nbxmpp.NS_BOOKMARKS_COMPAT in info.features:
+        elif Namespace.BOOKMARKS_COMPAT in info.features:
             self._conversion_2 = True
             self._log.info('Discovered Bookmarks Conversion 2: %s', info.jid)
 
-        elif nbxmpp.NS_BOOKMARK_CONVERSION in info.features:
+        elif Namespace.BOOKMARK_CONVERSION in info.features:
             self._conversion = True
             self._log.info('Discovered Bookmarks Conversion: %s', info.jid)
 

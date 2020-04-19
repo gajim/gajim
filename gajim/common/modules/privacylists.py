@@ -15,6 +15,7 @@
 # XEP-0016: Privacy Lists
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -40,13 +41,13 @@ class PrivacyLists(BaseModule):
             StanzaHandler(name='iq',
                           callback=self._list_push_received,
                           typ='set',
-                          ns=nbxmpp.NS_PRIVACY),
+                          ns=Namespace.PRIVACY),
         ]
 
         self.supported = False
 
     def pass_disco(self, info):
-        if nbxmpp.NS_PRIVACY not in info.features:
+        if Namespace.PRIVACY not in info.features:
             return
 
         self.supported = True
@@ -55,7 +56,7 @@ class PrivacyLists(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('feature-discovered',
                          account=self._account,
-                         feature=nbxmpp.NS_PRIVACY))
+                         feature=Namespace.PRIVACY))
 
     def _list_push_received(self, _con, stanza, _properties):
         result = stanza.buildReply('result')
@@ -72,7 +73,7 @@ class PrivacyLists(BaseModule):
 
     def get_privacy_lists(self, callback=None):
         self._log.info('Request lists')
-        iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVACY)
+        iq = nbxmpp.Iq('get', Namespace.PRIVACY)
         self._con.connection.SendAndCallForResponse(
             iq, self._privacy_lists_received, {'callback': callback})
 
@@ -114,7 +115,7 @@ class PrivacyLists(BaseModule):
     def get_privacy_list(self, name):
         self._log.info('Request list: %s', name)
         list_ = nbxmpp.Node('list', {'name': name})
-        iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVACY, payload=[list_])
+        iq = nbxmpp.Iq('get', Namespace.PRIVACY, payload=[list_])
         self._con.connection.SendAndCallForResponse(
             iq, self._privacy_list_received)
 
@@ -162,13 +163,13 @@ class PrivacyLists(BaseModule):
                     None, conn=self._con, list_name=name))
 
         node = nbxmpp.Node('list', {'name': name})
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, payload=[node])
+        iq = nbxmpp.Iq('set', Namespace.PRIVACY, payload=[node])
         self._con.connection.SendAndCallForResponse(
             iq, _del_privacy_list_result)
 
     def set_privacy_list(self, name, rules):
         node = nbxmpp.Node('list', {'name': name})
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, payload=[node])
+        iq = nbxmpp.Iq('set', Namespace.PRIVACY, payload=[node])
         for item in rules:
             childs = item.get('child', [])
             for child in childs:
@@ -221,7 +222,7 @@ class PrivacyLists(BaseModule):
         if name:
             attr['name'] = name
         node = nbxmpp.Node('active', attr)
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, payload=[node])
+        iq = nbxmpp.Iq('set', Namespace.PRIVACY, payload=[node])
         self._con.connection.SendAndCallForResponse(
             iq, self._default_result_handler, {})
 
@@ -231,7 +232,7 @@ class PrivacyLists(BaseModule):
         if name:
             attr['name'] = name
         node = nbxmpp.Node('default', attr)
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, payload=[node])
+        iq = nbxmpp.Iq('set', Namespace.PRIVACY, payload=[node])
         self._con.connection.SendAndCallForResponse(
             iq, self._default_result_handler, {})
 
