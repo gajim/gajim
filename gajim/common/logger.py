@@ -876,7 +876,7 @@ class Logger:
                additional_data, log_line_id
         FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
         AND message LIKE like(?) {date_search}
-        ORDER BY time, log_line_id
+        ORDER BY time DESC, log_line_id
         '''.format(jids=', '.join('?' * len(jids)),
                    date_search=between if date else '')
 
