@@ -4849,10 +4849,9 @@ class RosterWindow:
                 self.on_send_single_message_menuitem_activate, account, list_)
 
             # Invite to
+            invite_menuitem = Gtk.MenuItem.new_with_mnemonic(
+                _('In_vite to'))
             if _('Transports') not in groups:
-                invite_menuitem = Gtk.MenuItem.new_with_mnemonic(
-                    _('In_vite to'))
-
                 gui_menu_builder.build_invite_submenu(invite_menuitem,
                     list_online, show_bookmarked=show_bookmarked)
                 menu.append(invite_menuitem)
