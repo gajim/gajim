@@ -138,6 +138,14 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 self.on_banner_label_populate_popup)
             self.handlers[id_] = self.xml.banner_label
 
+        self._accounts = app.get_enabled_accounts_with_labels()
+        if len(self._accounts) > 1:
+            self.xml.account_image.set_tooltip_text(
+                app.get_account_label(self.account))
+            account_class = app.css_config.get_dynamic_class(self.account)
+            self.xml.account_image.get_style_context().add_class(account_class)
+            self.xml.account_image.show()
+
         # Init DND
         self.TARGET_TYPE_URI_LIST = 80
         uri_entry = Gtk.TargetEntry.new(
