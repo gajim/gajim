@@ -776,15 +776,18 @@ class Logger:
                           KindConstant.ERROR])
 
         jids = self._get_family_jids(account, jid)
+        account_id = self.get_account_id(account)
 
         sql = '''
             SELECT time, kind, message, error as "error [common_error]",
                    subject, additional_data, marker as "marker [marker]",
                    message_id
-            FROM logs NATURAL JOIN jids WHERE jid IN ({jids}) AND
-            kind IN ({kinds}) AND time > get_timeout()
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id} AND kind IN ({kinds})
+            AND time > get_timeout()
             ORDER BY time DESC, log_line_id DESC LIMIT ? OFFSET ?
             '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id,
                        kinds=', '.join(kinds))
 
         try:
