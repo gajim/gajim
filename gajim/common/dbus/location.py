@@ -62,10 +62,7 @@ class LocationListener:
         try:
             self.simple = Geoclue.Simple.new_finish(result)
         except GLib.Error as error:
-            if error.domain == 'g-dbus-error-quark':
-                log.warning("Could not enable geolocation: %s", error.message)
-            else:
-                raise
+            log.warning("Could not enable geolocation: %s", error.message)
         else:
             self.simple.connect('notify::location', self._on_location_update)
             self._on_location_update(self.simple)
