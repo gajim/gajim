@@ -2257,7 +2257,7 @@ class RosterWindow:
         liststore = self.status_combobox.get_model()
 
         # Check if a desync'ed status entry and separator is currently
-        # in the liststore remove it. 
+        # in the liststore and remove it.
         while len(liststore) > 9:
             titer = liststore.get_iter_first()
             liststore.remove(titer)
