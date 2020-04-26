@@ -2243,13 +2243,22 @@ class RosterWindow:
 
     def update_status_combobox(self):
         # table to change index in connection.connected to index in combobox
-        table = {'offline':8, 'connecting':8, 'error': 8, 'online':0, 'chat':1, 'away':2,
-            'xa':3, 'dnd':4}
+        table = {
+            'offline':8,
+            'connecting':8,
+            'error': 8,
+            'online':0,
+            'chat':1,
+            'away':2,
+            'xa':3,
+            'dnd':4
+        }
 
         liststore = self.status_combobox.get_model()
-        # we check if there are more options in the combobox that it should
-        # if yes, we remove the first ones
-        while len(liststore) > len(table)+2:
+
+        # Check if a desync'ed status entry and separator is currently
+        # in the liststore remove it. 
+        while len(liststore) > 9:
             titer = liststore.get_iter_first()
             liststore.remove(titer)
 
