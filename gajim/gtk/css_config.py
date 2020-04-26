@@ -85,6 +85,16 @@ class CSSConfig():
         # User Theme CSS Provider
         self._provider = Gtk.CssProvider()
 
+        # Used for dynamic classes like account colors
+        self._dynamic_provider = Gtk.CssProvider()
+        self._dynamic_dict = {}
+        self.refresh()
+
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(),
+            self._dynamic_provider,
+            CSSPriority.APPLICATION)
+
         # Cache of recently requested values
         self._cache = {}
 
@@ -97,6 +107,7 @@ class CSSConfig():
         self._load_default()
         self._load_selected()
         self._activate_theme()
+
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(),
             self._provider,
@@ -520,3 +531,17 @@ class CSSConfig():
 
     def _invalidate_cache(self):
         self._cache = {}
+
+    def refresh(self):
+        css = ''
+        accounts = app.get_accounts_sorted()
+        for index, account in enumerate(accounts):
+            color = app.config.get_per('accounts', account, 'account_color')
+            css_class = 'gajim_class_%s' % index
+            css += '.%s { color: %s }\n' % (css_class, color)
+            self._dynamic_dict[account] = css_class
+
+        self._dynamic_provider.load_from_data(css.encode())
+
+    def get_dynamic_class(self, name):
+        return self._dynamic_dict[name]

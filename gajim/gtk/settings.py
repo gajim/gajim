@@ -362,6 +362,7 @@ class ColorSetting(GenericSetting):
     def on_color_set(self, button):
         rgba = button.get_rgba()
         self.set_value(rgba.to_string())
+        app.css_config.refresh()
 
     def on_row_activated(self):
         self.color_button.grab_focus()

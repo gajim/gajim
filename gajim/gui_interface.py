@@ -1695,6 +1695,7 @@ class Interface:
         for opt in config:
             app.config.set_per('accounts', account, opt, config[opt])
 
+        app.css_config.refresh()
         # refresh accounts window
         # Action must be added before account window is updated
         app.app.add_account_actions(account)
