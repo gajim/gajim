@@ -91,8 +91,8 @@ modules:
       - python3 setup.py install --prefix=/app
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/be/60/da377e1bed002716fb2d5d1d1cab720f298cb33ecff7bf7adea72788e4e4/cryptography-2.8.tar.gz
-        sha256: 3cda1f0ed8747339bbdf71b9f38ca74c7b592f24f65cdb3ab3765e4b02871651
+        url: https://files.pythonhosted.org/packages/56/3b/78c6816918fdf2405d62c98e48589112669f36711e50158a0c15d804c30d/cryptography-2.9.2.tar.gz
+        sha256: a0c30272fb4ddda5f5ffc1089d7405b7a71b0b0f51993cb4e5dbb4590b2fc229
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -142,11 +142,11 @@ modules:
   - name: python3-importlib_metadata
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app importlib_metadata-1.5.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app importlib_metadata-1.6.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/8b/03/a00d504808808912751e64ccf414be53c29cad620e3de2421135fcae3025/importlib_metadata-1.5.0-py2.py3-none-any.whl
-        sha256: b97607a1a18a5100839aec1dc26a1ea17ee0d93b20b0f008d80a5a050afb200b
+        url: https://files.pythonhosted.org/packages/ad/e4/891bfcaf868ccabc619942f27940c77a8a4b45fd8367098955bb7e152fb1/importlib_metadata-1.6.0-py2.py3-none-any.whl
+        sha256: 2a688cbaa90e0cc587f1df48bdc97a6eadccdcd9c35fb3f976a09e3b5016d90f
 
   - name: python3-keyring
     buildsystem: simple
