@@ -21,34 +21,19 @@
 
 import logging
 
-from gi.repository import GObject
-from gi.repository import Gio, GLib
+from gi.repository import Gio
+from gi.repository import GLib
+from nbxmpp.structs import TuneData
+
+from gajim.common import app
+from gajim.common.nec import NetworkEvent
 
 log = logging.getLogger('gajim.c.dbus.music_track')
 
 MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
 
 
-class MusicTrackInfo:
-    __slots__ = ['title', 'album', 'artist', 'duration', 'track_number',
-                 'paused']
-    def __init__(self, meta_info, status):
-        self.title = meta_info.get('xesam:title')
-        self.album = meta_info.get('xesam:album')
-        # xesam:artist is always a list of strings if not None
-        self.artist = meta_info.get('xesam:artist')
-        if self.artist is not None:
-            self.artist = ', '.join(self.artist)
-
-        self.duration = float(meta_info.get('mpris:length', 0))
-        self.track_number = meta_info.get('xesam:trackNumber', 0)
-        self.paused = status == 'Paused'
-
-
-class MusicTrackListener(GObject.GObject):
-    __gsignals__ = {
-        'music-track-changed': (GObject.SignalFlags.RUN_LAST, None, (object,)),
-    }
+class MusicTrackListener:
 
     _instance = None
 
@@ -59,9 +44,18 @@ class MusicTrackListener(GObject.GObject):
         return cls._instance
 
     def __init__(self):
-        super().__init__()
         self.players = {}
         self.connection = None
+        self._current_tune = None
+
+    def _emit(self, info):
+        self._current_tune = info
+        app.nec.push_incoming_event(
+            NetworkEvent('music-track-changed', info=info))
+
+    @property
+    def current_tune(self):
+        return self._current_tune
 
     def start(self):
         proxy = Gio.DBusProxy.new_for_bus_sync(
@@ -100,6 +94,11 @@ class MusicTrackListener(GObject.GObject):
             if name.startswith(MPRIS_PLAYER_PREFIX):
                 self._add_player(name)
 
+        for name in list(self.players):
+            info = self._get_playing_track(name)
+            if info is not None:
+                self._emit(info)
+
     def stop(self):
         for name in list(self.players):
             if name.startswith(MPRIS_PLAYER_PREFIX):
@@ -137,10 +136,6 @@ class MusicTrackListener(GObject.GObject):
             self._signal_received,
             name)
 
-        info = self.get_playing_track(name)
-        if info is not None:
-            self.emit('music-track-changed', info)
-
     def _remove_player(self, name):
         log.info('%s vanished', name)
         if name in self.players:
@@ -148,7 +143,7 @@ class MusicTrackListener(GObject.GObject):
                 self.players[name])
             self.players.pop(name)
 
-            self.emit('music-track-changed', None)
+            self._emit(None)
 
     def _signal_received(self,
                          _connection,
@@ -160,14 +155,11 @@ class MusicTrackListener(GObject.GObject):
                          *user_data):
         '''Signal handler for PropertiesChanged event'''
 
-        if 'PlaybackStatus' not in parameters[1]:
-            return
-
         log.info('Signal received: %s - %s', interface_name, parameters)
 
-        info = self.get_playing_track(user_data[0])
+        info = self._get_playing_track(user_data[0])
 
-        self.emit('music-track-changed', info)
+        self._emit(info)
 
     @staticmethod
     def _get_music_info(properties):
@@ -176,10 +168,19 @@ class MusicTrackListener(GObject.GObject):
             return None
 
         status = properties.get('PlaybackStatus')
-        return MusicTrackInfo(meta, status)
+        if status is None or status == 'Paused':
+            return None
 
-    def get_playing_track(self, name):
-        '''Return a MusicTrackInfo for the currently playing
+        title = meta.get('xesam:title')
+        album = meta.get('xesam:album')
+        # xesam:artist is always a list of strings if not None
+        artist = meta.get('xesam:artist')
+        if artist is not None:
+            artist = ', '.join(artist)
+        return TuneData(artist=artist, title=title, source=album)
+
+    def _get_playing_track(self, name):
+        '''Return a TuneData for the currently playing
         song, or None if no song is playing'''
         proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
@@ -205,14 +206,7 @@ class MusicTrackListener(GObject.GObject):
         else:
             return self._get_music_info(result[0])
 
-# here we test :)
-if __name__ == '__main__':
-    def music_track_change_cb(_listener, music_track_info):
-        if music_track_info is None or music_track_info.paused:
-            print('Stop!')
-        else:
-            print(music_track_info.title)
+
+def enable():
     listener = MusicTrackListener.get()
-    listener.connect('music-track-changed', music_track_change_cb)
     listener.start()
-    GLib.MainLoop().run()

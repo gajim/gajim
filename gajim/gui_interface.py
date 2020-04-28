@@ -45,13 +45,12 @@ from gi.repository import GLib
 from gi.repository import Gio
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
-from nbxmpp.structs import TuneData
 
 from gajim.common import app
 from gajim.common import events
 from gajim.common.dbus import location
-from gajim.common.dbus import music_track
 from gajim.common.dbus import logind
+from gajim.common.dbus import music_track
 
 from gajim import gui_menu_builder
 from gajim import dialogs
@@ -836,10 +835,6 @@ class Interface:
         if obj.conn.get_module('MAM').available:
             obj.conn.get_module('MAM').request_archive_on_signin()
 
-        # send currently played music
-        if (pep_supported and sys.platform not in ('win32', 'darwin') and
-                app.config.get_per('accounts', account, 'publish_tune')):
-            self.enable_music_listener()
         # enable location listener
         if (pep_supported and app.is_installed('GEOCLUE') and
                 app.config.get_per('accounts', account, 'publish_location')):
@@ -1539,46 +1534,6 @@ class Interface:
 ### Other Methods
 ################################################################################
 
-
-    def enable_music_listener(self):
-        listener = music_track.MusicTrackListener.get()
-        if not self.music_track_changed_signal:
-            self.music_track_changed_signal = listener.connect(
-                'music-track-changed', self.music_track_changed)
-            listener.start()
-
-    def disable_music_listener(self):
-        listener = music_track.MusicTrackListener.get()
-        listener.disconnect(self.music_track_changed_signal)
-        self.music_track_changed_signal = None
-        listener.stop()
-
-    @staticmethod
-    def music_track_changed(unused_listener, music_track_info, account=None):
-        if not account:
-            accounts = app.connections.keys()
-        else:
-            accounts = [account]
-
-        if music_track_info is None or music_track_info.paused:
-            artist = title = source = ''
-        else:
-            artist = music_track_info.artist
-            title = music_track_info.title
-            source = music_track_info.album
-        for acct in accounts:
-            if not app.account_is_available(acct):
-                continue
-            if not app.connections[acct].get_module('PEP').supported:
-                continue
-            if not app.config.get_per('accounts', acct, 'publish_tune'):
-                continue
-            if app.connections[acct].music_track_info == music_track_info:
-                continue
-            app.connections[acct].get_module('UserTune').set_tune(
-                TuneData(artist=artist, title=title, source=source))
-            app.connections[acct].music_track_info = music_track_info
-
     def read_sleepy(self):
         """
         Check idle status and change that status if needed
@@ -2158,6 +2113,7 @@ class Interface:
 
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
+            music_track.enable()
 
         self.show_vcard_when_connect = []
 
@@ -2179,8 +2135,6 @@ class Interface:
         app.transport_type = app.logger.get_transports_type()
 
         self.last_ftwindow_update = 0
-
-        self.music_track_changed_signal = None
 
         self._network_monitor = Gio.NetworkMonitor.get_default()
         self._network_monitor.connect('notify::network-available',

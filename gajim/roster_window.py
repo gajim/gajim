@@ -2086,6 +2086,8 @@ class RosterWindow:
         else:
             connection.get_module('UserMood').set_mood(None)
 
+        connection.get_module('UserTune').set_tune(None)
+
     def delete_pep(self, jid, account):
         if jid == app.get_jid_from_account(account):
             app.connections[account].pep = {}
@@ -3431,19 +3433,7 @@ class RosterWindow:
 
     def on_publish_tune_toggled(self, widget, account):
         active = widget.get_active()
-        app.config.set_per('accounts', account, 'publish_tune', active)
-        if active:
-            app.interface.enable_music_listener()
-        else:
-            app.connections[account].get_module('UserTune').set_tune(None)
-            # disable music listener only if no other account uses it
-            for acc in app.connections:
-                if app.config.get_per('accounts', acc, 'publish_tune'):
-                    break
-            else:
-                app.interface.disable_music_listener()
-
-        app.connections[account].get_module('Caps').update_caps()
+        app.connections[account].get_module('UserTune').set_enabled(active)
 
     def on_publish_location_toggled(self, widget, account):
         active = widget.get_active()

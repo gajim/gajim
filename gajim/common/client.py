@@ -264,7 +264,6 @@ class Client(ConnectionHandlers):
     def _after_disconnect(self):
         self._disable_reconnect_timer()
 
-        app.interface.music_track_changed(None, None, self._account)
         self.get_module('VCardAvatars').avatar_advertised = False
 
         app.proxy65_manager.disconnect(self._client)
@@ -418,7 +417,8 @@ class Client(ConnectionHandlers):
         self.get_module('Blocking').get_blocking_list()
 
         # Inform GUI we just signed in
-        app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
+        app.nec.push_incoming_event(NetworkEvent(
+            'signed-in', account=self._account, conn=self))
         modules.send_stored_publish(self._account)
 
     def send_stanza(self, stanza):
