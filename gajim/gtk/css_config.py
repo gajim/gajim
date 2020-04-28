@@ -534,7 +534,7 @@ class CSSConfig():
 
     def refresh(self):
         css = ''
-        accounts = app.get_accounts_sorted()
+        accounts = app.config.get_per('accounts')
         for index, account in enumerate(accounts):
             color = app.config.get_per('accounts', account, 'account_color')
             css_class = 'gajim_class_%s' % index
