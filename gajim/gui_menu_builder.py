@@ -514,13 +514,13 @@ def get_transport_menu(contact, account):
 
 def get_singlechat_menu(control_id, account, jid):
     singlechat_menu = [
-        (_('Send File…'), [
+        (_('Send File'), [
             ('win.send-file-httpupload-', _('Upload File…')),
             ('win.send-file-jingle-', _('Send File Directly…')),
             ]),
         (_('Send Chatstate'), ['chatstate']),
-        ('win.invite-contacts-', _('Invite Contacts')),
-        ('win.add-to-roster-', _('Add to Contact List')),
+        ('win.invite-contacts-', _('Invite Contacts…')),
+        ('win.add-to-roster-', _('Add to Contact List…')),
         ('win.toggle-audio-', _('Voice Chat')),
         ('win.toggle-video-', _('Video Chat')),
         ('win.information-', _('Information')),
@@ -531,8 +531,8 @@ def get_singlechat_menu(control_id, account, jid):
         menu = Gio.Menu()
         entries = [
             (_('Disabled'), 'disabled'),
-            (_('Composing only'), 'composing_only'),
-            (_('All chat states'), 'all')
+            (_('Composing Only'), 'composing_only'),
+            (_('All Chat States'), 'all')
         ]
 
         for entry in entries:
@@ -573,25 +573,25 @@ def get_groupchat_menu(control_id, account, jid):
         ('win.information-', _('Information')),
         ('win.invite-', _('Invite Contact')),
         (_('Manage Group Chat'), [
-            ('win.rename-groupchat-', _('Rename Group Chat')),
-            ('win.change-subject-', _('Change Subject')),
-            ('win.configure-', _('Configure Group Chat')),
+            ('win.rename-groupchat-', _('Rename…')),
+            ('win.change-subject-', _('Change Subject…')),
             ('win.upload-avatar-', _('Upload Avatar…')),
-            ('win.destroy-', _('Destroy Group Chat')),
+            ('win.configure-', _('Configure…')),
+            ('win.destroy-', _('Destroy…')),
         ]),
         (_('Chat Settings'), [
-            ('win.print-join-left-', _('Show join/leave')),
-            ('win.print-status-', _('Show status changes')),
-            ('win.notify-on-message-', _('Notify on all messages')),
-            ('win.minimize-on-close-', _('Minimize on close')),
+            ('win.print-join-left-', _('Show Join/Leave')),
+            ('win.print-status-', _('Show Status Changes')),
+            ('win.notify-on-message-', _('Notify on all Messages')),
+            ('win.minimize-on-close-', _('Minimize on Close')),
             ('win.minimize-on-autojoin-',
-             _('Minimize when joining automatically')),
+             _('Minimize When Joining Automatically')),
             (_('Send Chatstate'), ['chatstate']),
         ]),
         (_('Sync Threshold'), ['sync']),
-        ('win.change-nickname-', _('Change Nickname')),
+        ('win.change-nickname-', _('Change Nickname…')),
         ('win.request-voice-', _('Request Voice')),
-        ('win.execute-command-', _('Execute command')),
+        ('win.execute-command-', _('Execute Command…')),
         ('app.browse-history', _('History')),
         ('win.disconnect-', _('Leave')),
     ]
@@ -672,14 +672,14 @@ def get_account_menu(account):
         ('-add-contact', _('Add Contact…')),
         ('-profile', _('Profile')),
         ('-start-single-chat', _('Send Single Message…')),
-        ('-services', _('Discover Services')),
+        ('-services', _('Discover Services…')),
         ('-server-info', _('Server Info')),
         (_('Advanced'), [
             ('-archive', _('Archiving Preferences')),
             ('-blocking', _('Blocking List')),
             ('-bookmarks', _('Bookmarks')),
             ('-pep-config', _('PEP Configuration')),
-            ('-sync-history', _('Synchronise History')),
+            ('-sync-history', _('Synchronise History…')),
             ('-privacylists', _('Privacy Lists')),
         ]),
         (_('Admin'), [
@@ -845,7 +845,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     item.set_detailed_action_name(action)
     menu.append(item)
 
-    item = Gtk.MenuItem(label=_('Add to Contact List'))
+    item = Gtk.MenuItem(label=_('Add to Contact List…'))
     action = 'app.{account}-add-contact(["{account}", "{jid}"])'.format(
         account=account, jid=contact.jid or '')
     if contact.jid is None:
@@ -863,7 +863,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
         item.set_sensitive(False)
     menu.append(item)
 
-    item = Gtk.MenuItem(label=_('Execute command'))
+    item = Gtk.MenuItem(label=_('Execute Command…'))
     action = 'win.execute-command-%s::%s' % (control_id, contact.name)
     item.set_detailed_action_name(action)
     menu.append(item)
