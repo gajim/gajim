@@ -3375,11 +3375,9 @@ class RosterWindow:
                 'contacts.'))
             self.update_status_combobox()
             return
+
         status = model[active][2]
-        # status "desync'ed" or not
-        statuses_unified = helpers.statuses_unified()
-        if (active == 7 and statuses_unified) or (active == 9 and \
-        not statuses_unified):
+        if status == 'status':
             # 'Change status message' selected:
             # do not change show, just show change status dialog
             status = model[self.previous_status_combobox_active][2]
