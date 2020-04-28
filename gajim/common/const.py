@@ -954,3 +954,15 @@ COMMON_FEATURES = [
     Namespace.JINGLE_IBB,
     Namespace.AVATAR_METADATA + '+notify',
 ]
+
+
+SHOW_LIST = [
+    'offline',
+    'connecting',
+    'online',
+    'chat',
+    'away',
+    'xa',
+    'dnd',
+    'error'
+]

@@ -84,6 +84,7 @@ from gajim.common.const import Display
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.const import GIO_TLS_ERRORS
+from gajim.common.const import SHOW_LIST
 from gajim.common.structs import URI
 
 if app.is_installed('PYCURL'):
@@ -603,10 +604,10 @@ def get_global_show():
                                   'sync_with_global_status'):
             continue
         status = get_connection_status(account)
-        index = app.SHOW_LIST.index(status)
+        index = SHOW_LIST.index(status)
         if index > maxi:
             maxi = index
-    return app.SHOW_LIST[maxi]
+    return SHOW_LIST[maxi]
 
 def get_global_status_message():
     maxi = 0
@@ -615,12 +616,11 @@ def get_global_status_message():
                                   'sync_with_global_status'):
             continue
         status = app.connections[account].status
-        index = app.SHOW_LIST.index(status)
+        index = SHOW_LIST.index(status)
         if index > maxi:
             maxi = index
             status_message = app.connections[account].status_message
     return status_message
-
 
 def statuses_unified():
     """
