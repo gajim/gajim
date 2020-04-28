@@ -39,17 +39,17 @@ def check_version(dep_name, current_ver, min_ver):
 
 
 def _check_required_deps():
-    error_message = 'Gajim needs %s to run. Quitting…'
+    error_message = 'Gajim needs %s to run. Quitting… (Error: %s)'
 
     try:
         import nbxmpp
-    except ImportError:
-        sys.exit(error_message % 'python-nbxmpp')
+    except ImportError as error:
+        sys.exit(error_message % ('python-nbxmpp', error))
 
     try:
         import gi
-    except ImportError:
-        sys.exit(error_message % 'pygobject')
+    except ImportError as error:
+        sys.exit(error_message % ('pygobject', error))
 
     try:
         gi.require_versions({'GLib': '2.0',
@@ -63,8 +63,8 @@ def _check_required_deps():
 
     try:
         import cairo
-    except ImportError:
-        sys.exit(error_message % 'python-cairo')
+    except ImportError as error:
+        sys.exit(error_message % ('python-cairo', error))
 
     from gi.repository import Gtk
     gtk_ver = '%s.%s.%s' % (Gtk.get_major_version(),
