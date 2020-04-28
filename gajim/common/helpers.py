@@ -663,7 +663,7 @@ def get_icon_name_to_show(contact, account=None):
     transport = app.get_transport_name_from_jid(contact.jid)
     if transport:
         return contact.show
-    if contact.show in app.SHOW_LIST:
+    if contact.show in SHOW_LIST:
         return contact.show
     return 'notinroster'
 
