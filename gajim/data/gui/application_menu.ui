@@ -5,12 +5,12 @@
       <attribute name="label">Gajim</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">Start Chat</attribute>
+          <attribute name="label" translatable="yes">Start Chat…</attribute>
           <attribute name="action">app.start-chat</attribute>
           <attribute name="target"></attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">Create Group Chat</attribute>
+          <attribute name="label" translatable="yes">Create Group Chat…</attribute>
           <attribute name="action">app.create-groupchat</attribute>
           <attribute name="target"></attribute>
         </item>
