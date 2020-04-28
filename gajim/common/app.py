@@ -131,9 +131,6 @@ proxy65_manager = None
 
 cert_store = None
 
-SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-             'error']
-
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
 
