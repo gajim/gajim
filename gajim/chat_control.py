@@ -60,7 +60,6 @@ from gajim import dialogs
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.add_contact import AddNewContactWindow
-from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_cursor
 from gajim.gtk.util import format_mood
 from gajim.gtk.util import format_activity
@@ -1025,7 +1024,7 @@ class ChatControl(ChatControlBase):
             jid = self.contact.jid
         num_unread = len(app.events.get_events(
             self.account, jid, ['printed_%s' % self._type, str(self._type)]))
-        if num_unread == 1 and not app.config.get('show_unread_tab_icon'):
+        if num_unread == 1:
             unread = '*'
         elif num_unread > 1:
             unread = '[' + str(num_unread) + ']'
@@ -1038,42 +1037,13 @@ class ChatControl(ChatControlBase):
             label_str = '<b>' + unread + label_str + '</b>'
         return label_str
 
-    def get_tab_image(self, count_unread=True):
-        if self.resource:
-            jid = self.contact.get_full_jid()
-        else:
-            jid = self.contact.jid
-
-        if app.config.get('show_avatar_in_tabs'):
-            scale = self.parent_win.window.get_scale_factor()
-            surface = app.contacts.get_avatar(
-                self.account, jid, AvatarSize.TAB, scale)
-            if surface is not None:
-                return surface
-
-        if count_unread:
-            num_unread = len(app.events.get_events(
-                self.account,
-                jid,
-                ['printed_%s' % self._type, str(self._type)]))
-        else:
-            num_unread = 0
-
-        transport = None
-        if app.jid_is_transport(jid):
-            transport = app.get_transport_name_from_jid(jid)
-
-        if num_unread and app.config.get('show_unread_tab_icon'):
-            icon_name = get_icon_name('event', transport=transport)
-        else:
-            contact = app.contacts.get_contact_with_highest_priority(
-                self.account, self.contact.jid)
-            if not contact or self.resource:
-                # For transient contacts
-                contact = self.contact
-            icon_name = get_icon_name(contact.show, transport=transport)
-
-        return icon_name
+    def get_tab_image(self):
+        scale = self.parent_win.window.get_scale_factor()
+        return app.contacts.get_avatar(self.account,
+                                       self.contact.jid,
+                                       AvatarSize.ROSTER,
+                                       scale,
+                                       self.contact.show)
 
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """

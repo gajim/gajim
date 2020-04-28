@@ -74,7 +74,6 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_invite import GroupChatInvite
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.util import NickCompletionGenerator
-from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_app_window
 from gajim.gtk.const import ControlType
 
@@ -786,13 +785,12 @@ class GroupchatControl(ChatControlBase):
         label_str = unread + label_str
         return (label_str, color)
 
-    def get_tab_image(self, count_unread=True):
-        tab_image = None
-        if self.is_connected:
-            tab_image = get_icon_name('muc-active')
-        else:
-            tab_image = get_icon_name('muc-inactive')
-        return tab_image
+    def get_tab_image(self):
+        return app.interface.avatar_storage.get_muc_surface(
+            self.account,
+            self.contact.jid,
+            AvatarSize.ROSTER,
+            self.scale_factor)
 
     def _update_banner_state_image(self):
         surface = app.interface.avatar_storage.get_muc_surface(

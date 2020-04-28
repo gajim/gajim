@@ -99,10 +99,6 @@ class Preferences(Gtk.ApplicationWindow):
         else: # right
             self._ui.tabs_placement.set_active(3)
 
-        # Show avatar in tabs
-        st = app.config.get('show_avatar_in_tabs')
-        self._ui.show_avatar_in_tabs_checkbutton.set_active(st)
-
         ## Contact List Appearance
         # Display avatars in roster
         st = app.config.get('show_avatars_in_roster')
@@ -593,9 +589,6 @@ class Preferences(Gtk.ApplicationWindow):
             app.config.set('tabs_position', 'left')
         else: # right
             app.config.set('tabs_position', 'right')
-
-    def on_show_avatar_in_tabs_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_avatar_in_tabs')
 
     def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
