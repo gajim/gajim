@@ -307,23 +307,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="show_avatar_in_tabs_checkbutton">
-                        <property name="label" translatable="yes">Show _avatar in chat tabs</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">If checked, the contact's avatar will be shown in chat tabs</property>
-                        <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_show_avatar_in_tabs_checkbutton_toggled" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkComboBox" id="tabs_placement">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>

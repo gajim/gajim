@@ -647,7 +647,6 @@ class MessageWindow(EventHelper):
             close_button.hide()
 
         # Update nick
-        nick_label.set_max_width_chars(10)
         if isinstance(ctrl, ChatControl):
             tab_label_str = ctrl.get_tab_label()
             # Set Label Color

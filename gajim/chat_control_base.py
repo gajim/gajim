@@ -401,9 +401,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # Return a markup'd label and optional Gtk.Color in a tuple like:
         # return (label_str, None)
 
-    def get_tab_image(self, count_unread=True):
+    def get_tab_image(self):
         # Return a suitable tab image for display.
-        # None clears any current label.
         return None
 
     def prepare_context_menu(self, hide_buttonbar_items=False):

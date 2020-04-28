@@ -35,7 +35,6 @@ from gajim.chat_control import ChatControl
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.util import get_icon_name
 from gajim.gtk.const import ControlType
 
 
@@ -225,38 +224,15 @@ class PrivateChatControl(ChatControl):
 
         self.xml.avatar_image.set_from_surface(surface)
 
-    def get_tab_image(self, count_unread=True):
-        jid = self.gc_contact.get_full_jid()
-        if app.config.get('show_avatar_in_tabs'):
-            scale = self.parent_win.window.get_scale_factor()
-            surface = app.contacts.get_avatar(
-                self.account, jid, AvatarSize.TAB, scale)
-            if surface is not None:
-                return surface
-
-        if count_unread:
-            num_unread = len(app.events.get_events(
-                self.account,
-                jid,
-                ['printed_%s' % self._type, str(self._type)]))
-        else:
-            num_unread = 0
-
-        transport = None
-        if app.jid_is_transport(jid):
-            transport = app.get_transport_name_from_jid(jid)
-
+    def get_tab_image(self):
         if self.gc_contact.presence.is_unavailable:
             show = 'offline'
         else:
             show = self.gc_contact.show.value
-
-        if num_unread and app.config.get('show_unread_tab_icon'):
-            icon_name = get_icon_name('event', transport=transport)
-        else:
-            icon_name = get_icon_name(show, transport=transport)
-
-        return icon_name
+        scale = self.parent_win.window.get_scale_factor()
+        return self.gc_contact.get_avatar(AvatarSize.ROSTER,
+                                          scale,
+                                          show)
 
     def update_contact(self):
         self.contact = self.gc_contact.as_contact()
