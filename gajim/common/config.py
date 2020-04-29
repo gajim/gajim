@@ -170,7 +170,7 @@ class Config:
         'last_save_dir': [opt_str, ''],
         'last_send_dir': [opt_str, ''],
         'last_sounds_dir': [opt_str, ''],
-        'tabs_position': [opt_str, 'top'],
+        'tabs_position': [opt_str, 'left'],
         'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
         'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
         'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
