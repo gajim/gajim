@@ -144,7 +144,7 @@ function install_gajim {
         "${QL_VERSION}" "${MINGW_ROOT}"/bin
 
     # Install plugin installer
-    curl -o "${BUILD_ROOT}"/plugin_installer.zip https://ftp.gajim.org/plugins_master_zip/plugin_installer.zip
+    curl -o "${BUILD_ROOT}"/plugin_installer.zip https://ftp.gajim.org/plugins_1.2_zip/plugin_installer.zip
     mkdir "${PACKAGE_DIR}"/gajim/data/plugins
     7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/plugin_installer.zip
 
