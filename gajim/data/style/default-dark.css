@@ -50,6 +50,33 @@
 .gajim-search-highlight {
     color: rgb(30, 80, 80)
 }
+.gajim-notify-message {
+    color: rgb(30, 144, 255);
+}
+.gajim-notify-signin {
+    color: rgb(68, 134, 38);
+}
+.gajim-notify-signout {
+    color: rgb(134, 22, 22);
+}
+.gajim-notify-status {
+    color: rgb(170, 170, 170);
+}
+.gajim-notify-invite {
+    color: rgb(224, 145, 42);
+}
+.gajim-notify-ft-request {
+    color: rgb(240, 230, 140);
+}
+.gajim-notify-ft-error {
+    color: rgb(226, 33, 33);
+}
+.gajim-notify-ft-complete {
+    color: rgb(139, 185, 48);
+}
+.gajim-notify-other {
+    color: rgb(255, 255, 255);
+}
 .gajim-status-online {
     color: rgb(102, 191, 16);
 }
