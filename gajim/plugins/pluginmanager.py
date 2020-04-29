@@ -412,7 +412,7 @@ class PluginManager(metaclass=Singleton):
                 # in connection_handlers._register_handlers()
                 if con.handlers_registered:
                     for handler in instance.handlers:
-                        con.connection.register_handler(*handler)
+                        con.connection.register_handler(handler)
 
     def _unregister_modules_with_handlers(self, plugin):
         if not hasattr(plugin, 'modules'):
@@ -428,7 +428,7 @@ class PluginManager(metaclass=Singleton):
                     for handler in instance.handlers:
                         if len(handler) > 4:
                             handler = handler[:4]
-                        con.connection.unregister_handler(*handler)
+                        con.connection.unregister_handler(handler)
 
     def activate_plugin(self, plugin):
         '''
