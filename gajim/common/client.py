@@ -374,7 +374,7 @@ class Client(ConnectionHandlers):
 
     def _register_new_handlers(self):
         for handler in modules.get_handlers(self):
-            self._client.register_handler(*handler)
+            self._client.register_handler(handler)
         self.handlers_registered = True
 
     def get_module(self, name):
