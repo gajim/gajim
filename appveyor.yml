@@ -10,7 +10,7 @@ environment:
 
 branches:
   only:
-    - master
+    - gajim_1.2
 
 clone_depth: 1
 
