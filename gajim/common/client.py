@@ -374,12 +374,7 @@ class Client(ConnectionHandlers):
 
     def _register_new_handlers(self):
         for handler in modules.get_handlers(self):
-            if len(handler) == 5:
-                name, func, typ, ns, priority = handler
-                self._client.register_handler(
-                    name, func, typ, ns, priority=priority)
-            else:
-                self._client.register_handler(*handler)
+            self._client.register_handler(*handler)
         self.handlers_registered = True
 
     def get_module(self, name):
