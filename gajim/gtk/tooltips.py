@@ -209,7 +209,7 @@ class GCTooltip():
         # Status
         show = helpers.get_uf_show(contact.show.value)
         self._ui.user_show.set_text(show)
-        colorize_status(self._ui.user_show, contact.show)
+        colorize_status(self._ui.user_show, contact.show.value)
         self._ui.user_show.show()
 
         # JID
