@@ -343,6 +343,11 @@ class Message(BaseModule):
                 stanza.setTag('no-store',
                               namespace=Namespace.MSG_HINTS)
 
+        # Add other nodes
+        if message.nodes is not None:
+            for node in message.nodes:
+                stanza.addChild(node=node)
+
         return stanza
 
     def log_message(self, message):
