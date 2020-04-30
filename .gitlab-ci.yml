@@ -15,10 +15,12 @@ run-tests:
     - pip3 install -I mypy
     - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git@master
     - pip3 install -I pylint==2.4.4
+    - pip3 install -I codespell
     - mypy -V
     - mypy gajim
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
     - python3 -m unittest discover -s test/no_gui -v
+    - codespell -I codespell.conf gajim
     - deactivate
     - rm -rf civenv-master
 
