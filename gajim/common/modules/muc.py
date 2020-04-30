@@ -592,7 +592,7 @@ class MUC(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _fake_subject_change(self, room_jid):
-        # This is for servers which dont send empty subjects as part of the
+        # This is for servers which don’t send empty subjects as part of the
         # event order on joining a MUC. For example jabber.ru
         self._log.warning('Fake subject received for %s', room_jid)
         del self._join_timeouts[room_jid]
@@ -655,7 +655,7 @@ class MUC(BaseModule):
             return
 
         if properties.is_mam_message:
-            # Some servers store captcha challenges in MAM, dont process them
+            # Some servers store captcha challenges in MAM, don’t process them
             self._log.warning('Ignore captcha challenge received from MAM')
             raise nbxmpp.NodeProcessed
 

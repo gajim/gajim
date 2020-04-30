@@ -63,7 +63,7 @@ class VCardAvatars(BaseModule):
                 # Initial presence reflection
                 if self._con.avatar_conversion:
                     # XEP-0398: Tells us the current avatar sha on the
-                    # inital presence reflection
+                    # initial presence reflection
                     self._self_update_received(properties)
             else:
                 # Presence from another resource of ours
@@ -115,7 +115,7 @@ class VCardAvatars(BaseModule):
 
         field_var = '{http://modules.prosody.im/mod_vcard_muc}avatar#sha1'
         if not disco_info.has_field(Namespace.MUC_INFO, field_var):
-            # Workaround so we dont delete the avatar for servers that dont
+            # Workaround so we don’t delete the avatar for servers that don’t
             # support sha in disco info. Once there is a accepted XEP this
             # can be removed
             return

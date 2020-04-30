@@ -51,8 +51,8 @@ class State(IntEnum):
     # This also includes any candidate-error received or sent
     CAND_SENT_AND_RECEIVED = 4
     TRANSPORT_REPLACE = 5
-    # We are transfering the file
-    TRANSFERING = 6
+    # We are transferring the file
+    TRANSFERRING = 6
 
 
 class JingleFileTransfer(JingleContent):
@@ -114,7 +114,7 @@ class JingleFileTransfer(JingleContent):
             State.INITIALIZED   : StateInitialized(self),
             State.CAND_SENT     : StateCandSent(self),
             State.CAND_RECEIVED : StateCandReceived(self),
-            State.TRANSFERING   : StateTransfering(self),
+            State.TRANSFERRING  : StateTransfering(self),
             State.TRANSPORT_REPLACE : StateTransportReplace(self),
             State.CAND_SENT_AND_RECEIVED : StateCandSentAndRecv(self)
         }
@@ -167,7 +167,7 @@ class JingleFileTransfer(JingleContent):
         self.session.connection.get_module('Jingle').set_file_info(file_info)
 
     def _compute_hash(self):
-        # Caculates the hash and returns a xep-300 hash stanza
+        # Calculates the hash and returns a xep-300 hash stanza
         if self.file_props.algo is None:
             return
         try:
@@ -181,7 +181,7 @@ class JingleFileTransfer(JingleContent):
         # DEBUG
         #hash_ = '1294809248109223'
         if not hash_:
-            # Hash alogrithm not supported
+            # Hash algorithm not supported
             return
         self.file_props.hash_ = hash_
         h.addHash(hash_, self.file_props.algo)
@@ -218,7 +218,7 @@ class JingleFileTransfer(JingleContent):
             if self.session.werequest:
                 raise nbxmpp.NodeProcessed
             # We send the file
-            self.__state_changed(State.TRANSFERING)
+            self.__state_changed(State.TRANSFERRING)
             raise nbxmpp.NodeProcessed
         self.file_props.streamhosts = self.transport.remote_candidates
         # Calculate file hash in a new thread
@@ -243,7 +243,7 @@ class JingleFileTransfer(JingleContent):
                                                fingerprint=fingerprint,
                                                receiving=False)
             raise nbxmpp.NodeProcessed
-        self.__state_changed(State.TRANSFERING)
+        self.__state_changed(State.TRANSFERRING)
         raise nbxmpp.NodeProcessed
 
     def __on_session_terminate(self, stanza, content, error, action):
@@ -282,7 +282,7 @@ class JingleFileTransfer(JingleContent):
                     response = stanza.buildReply('result')
                     response.delChild(response.getQuery())
                     self.session.connection.connection.send(response)
-                    self.__state_changed(State.TRANSFERING)
+                    self.__state_changed(State.TRANSFERRING)
                     raise nbxmpp.NodeProcessed
             else:
                 args = {'candError' : True}
@@ -300,7 +300,7 @@ class JingleFileTransfer(JingleContent):
                 not app.socks5queue.listener.connections:
                     app.socks5queue.listener.disconnect()
         if content.getTag('transport').getTag('activated'):
-            self.state = State.TRANSFERING
+            self.state = State.TRANSFERRING
             app.socks5queue.send_file(self.file_props,
                                         self.session.connection.name, 'client')
             return
@@ -308,7 +308,7 @@ class JingleFileTransfer(JingleContent):
                 'sendCand': False}
         if self.state == State.CAND_SENT:
             self.__state_changed(State.CAND_SENT_AND_RECEIVED, args)
-            self.__state_changed(State.TRANSFERING)
+            self.__state_changed(State.TRANSFERRING)
             raise nbxmpp.NodeProcessed
         self.__state_changed(State.CAND_RECEIVED, args)
 
@@ -325,14 +325,14 @@ class JingleFileTransfer(JingleContent):
                 self.__state_changed(State.TRANSPORT_REPLACE)
                 return
             # initiate transfer
-            self.__state_changed(State.TRANSFERING)
+            self.__state_changed(State.TRANSFERRING)
 
     def __transport_setup(self, stanza=None, content=None, error=None,
                           action=None):
         # Sets up a few transport specific things for the file transfer
         if self.transport.type_ == TransportType.IBB:
-            # No action required, just set the state to transfering
-            self.state = State.TRANSFERING
+            # No action required, just set the state to transferring
+            self.state = State.TRANSFERRING
         else:
             self._listen_host()
 
@@ -401,7 +401,7 @@ class JingleFileTransfer(JingleContent):
 
     def start_ibb_transfer(self):
         if self.file_props.type_ == 's':
-            self.__state_changed(State.TRANSFERING)
+            self.__state_changed(State.TRANSFERRING)
 
 
 def get_content(desc):

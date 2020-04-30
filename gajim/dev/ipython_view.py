@@ -102,7 +102,7 @@ class IterableIPShell:
     @ivar history_level: The place in history where we currently are
     when pressing up/down.
     @type history_level: integer
-    @ivar complete_sep: Seperation delimeters for completion function.
+    @ivar complete_sep: Separation delimiters for completion function.
     @type complete_sep: _sre.SRE_Pattern
     """
     def __init__(self, argv=None, user_ns=None, user_global_ns=None, cin=None,
@@ -131,7 +131,7 @@ class IterableIPShell:
             IPython.terminal.interactiveshell.raw_input_original = input_func
 
 
-        # This is to get rid of the blockage that accurs during
+        # This is to get rid of the blockage that occurs during
         # IPython.Shell.InteractiveShell.user_setup()
         io.raw_input = lambda x: None
 
@@ -621,7 +621,7 @@ class IPythonView(ConsoleView, IterableIPShell):
 
     def raw_input(self, _prompt=''):
         """
-        Custom raw_input() replacement. Get's current line from console buffer
+        Custom raw_input() replacement. Gets current line from console buffer
 
         @param prompt: Prompt to print. Here for compatibility as replacement.
         @type prompt: string

@@ -1711,7 +1711,7 @@ class MucBrowser(AgentBrowser):
 
     def _on_join_button_clicked(self, *args):
         """
-        When we want to join a conference: ask specific informations about the
+        When we want to join a conference: ask specific information about the
         selected agent and close the window
         """
         model, iter_ = \

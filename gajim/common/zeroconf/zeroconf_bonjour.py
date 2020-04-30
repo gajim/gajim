@@ -393,7 +393,7 @@ class Zeroconf:
             log.error('Error while browsing for services. %s', error)
         return True
 
-    # resolve_all() is called every X seconds and querys for new clients
+    # resolve_all() is called every X seconds and queries for new clients
     # and monitors TXT records for changed status
     def resolve_all(self):
         if not self.connected:

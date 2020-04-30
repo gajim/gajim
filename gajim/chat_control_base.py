@@ -855,11 +855,11 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             position = message_buffer.get_insert()
             end = message_buffer.get_iter_at_mark(position)
             text = message_buffer.get_text(start, end, False)
-            splitted = text.split()
+            split = text.split()
             if (text.startswith(self.COMMAND_PREFIX) and
                     not text.startswith(self.COMMAND_PREFIX * 2) and
-                    len(splitted) == 1):
-                text = splitted[0]
+                    len(split) == 1):
+                text = split[0]
                 bare = text.lstrip(self.COMMAND_PREFIX)
                 if len(text) == 1:
                     self.command_hits = []
@@ -1425,7 +1425,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                         direction = Gdk.ScrollDirection.RIGHT
                 else:
                     app.log('autoscroll').warning(
-                        'Scroll directions cant be determined')
+                        'Scroll directions can’t be determined')
 
             if direction != Gdk.ScrollDirection.UP:
                 return

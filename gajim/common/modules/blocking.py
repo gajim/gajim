@@ -74,8 +74,8 @@ class Blocking(BaseModule):
 
     def _blocking_push_received(self, _con, stanza, _properties):
         reply = stanza.buildReply('result')
-        childs = reply.getChildren()
-        for child in childs:
+        children = reply.getChildren()
+        for child in children:
             reply.delChild(child)
         self._nbxmpp().send(reply)
 

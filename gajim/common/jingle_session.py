@@ -562,7 +562,7 @@ class JingleSession:
                     pjid, hash_data, n, self.connection.name)
                 if not file_info:
                     log.warning('The peer %s is requesting a ' \
-                                'file that we dont have or ' \
+                                'file that we don’t have or ' \
                                 'it is not allowed to request', pjid)
                     self.decline_session()
                     raise nbxmpp.NodeProcessed

@@ -22,7 +22,7 @@ from gajim.common.i18n import _
 
 def parseLogLevel(arg):
     """
-    Eiter numeric value or level name from logging module
+    Either numeric value or level name from logging module
     """
     if arg.isdigit():
         return int(arg)

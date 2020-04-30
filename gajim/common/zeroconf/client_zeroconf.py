@@ -51,7 +51,7 @@ ACTIVITY_TIMEOUT_SECONDS = 30
 class ZeroconfListener(IdleObject):
     def __init__(self, port, conn_holder):
         """
-        Handle all incomming connections on ('0.0.0.0', port)
+        Handle all incoming connections on ('0.0.0.0', port)
         """
         self.port = port
         self.queue_idx = -1
@@ -97,7 +97,7 @@ class ZeroconfListener(IdleObject):
 
     def pollin(self):
         """
-        Accept a new incomming connection and notify queue
+        Accept a new incoming connection and notify queue
         """
         sock = self.accept_conn()
         # loop through roster to find who has connected to us
@@ -162,7 +162,7 @@ class P2PClient(IdleObject):
             self.on_connect, self)
         self.Server = conn.host  # set Server to the last host name / address tried
         if not self.conn_holder:
-            # An error occured, disconnect() has been called
+            # An error occurred, disconnect() has been called
             if on_not_ok:
                 on_not_ok('Connection to host could not be established.')
             return
@@ -426,7 +426,7 @@ class P2PConnection(IdleObject, PlugIn):
                 self.on_receive = None
             return
         _tmp = self.on_receive
-        # make sure this cb is not overriden by recursive calls
+        # make sure this cb is not overridden by recursive calls
         if not recv_handler(None) and _tmp == self.on_receive:
             self.on_receive = recv_handler
 
@@ -518,7 +518,7 @@ class P2PConnection(IdleObject, PlugIn):
             pass
         elif errnum in [errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN]:
             self.pollend()
-            # don't proccess result, cas it will raise error
+            # don’t process result, in case it will raise an error
             return
         elif not received:
             if errnum != ssl.SSL_ERROR_EOF:

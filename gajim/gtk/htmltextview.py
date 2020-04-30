@@ -115,7 +115,7 @@ _supported_style_attrs = [
 #
 #     phrasal
 #        addr, blockquote, pre
-#     Struc
+#     Struct
 #        div,p
 #     Heading
 #        h1, h2, h3, h4, h5, h6
@@ -158,7 +158,7 @@ _supported_style_attrs = [
 # ...
 # block level:
 # Heading    h
-#            ( pres           = h1 | h2 | h3 | h4 | h5 | h6 )
+#            ( head           = h1 | h2 | h3 | h4 | h5 | h6 )
 # Block      ( phrasal        = address | blockquote | pre )
 # NOT           ( presentational = hr )
 #            ( structural     = div | p )

@@ -23,7 +23,7 @@ Handles the jingle signalling protocol
 # * XEP 0177 (raw udp)
 
 # * UI:
-#   - make state and codec informations available to the user
+#   - make state and codec information available to the user
 #   - video integration
 #   * config:
 #     - codecs

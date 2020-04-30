@@ -79,7 +79,7 @@ class BitsOfBinary(BaseModule):
                 del self.awaiting_cids[cid]
                 return
 
-        # An error occured, call callback without modifying data.
+        # An error occurred, call callback without modifying data.
         for func in self.awaiting_cids[cid]:
             cb = func[0]
             args = func[1]

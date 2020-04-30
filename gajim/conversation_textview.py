@@ -186,7 +186,7 @@ class ConversationTextview(GObject.GObject):
         self._message_list = []
         self.corrected_text_list = {}
 
-        # no need to inherit TextView, use it as atrribute is safer
+        # no need to inherit TextView, use it as attribute is safer
         self.tv = HtmlTextView(account)
         self.tv.connect('query-tooltip', self._query_tooltip)
 
@@ -297,7 +297,7 @@ class ConversationTextview(GObject.GObject):
         buffer_.create_tag('focus-out-line', justification=Gtk.Justification.CENTER)
         self.displaymarking_tags = {}
 
-        # One mark at the begining then 2 marks between each lines
+        # One mark at the beginning then 2 marks between each lines
         size = app.config.get('max_conversation_lines')
         size = 2 * size - 1
         self.marks_queue = queue.Queue(size)
@@ -417,7 +417,7 @@ class ConversationTextview(GObject.GObject):
     def show_focus_out_line(self):
         if not self.allow_focus_out_line:
             # if room did not receive focus-in from the last time we added
-            # --- line then do not readd
+            # --- line then do not add again
             return
 
         print_focus_out_line = False

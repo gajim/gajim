@@ -306,7 +306,7 @@ class MessageWindow(EventHelper):
     def _on_window_focus(self, widget, event):
         # on destroy() the window that was last focused gets the focus
         # again. if destroy() is called from the StartChat Dialog, this
-        # Window is not yet focused, because present() seems to be asynchron
+        # Window is not yet focused, because present() seems to be asynchronous
         # at least on KDE, and takes time.
         start_chat = get_app_window('StartChatDialog')
         if start_chat is not None and start_chat.ready_to_destroy:

@@ -173,7 +173,7 @@ class Presence(BaseModule):
                 contact.resource = resource
                 app.contacts.add_contact(self._account, contact)
             else:
-                # Convert the inital roster contact to a contact with resource
+                # Convert the initial roster contact to a contact with resource
                 contact.resource = resource
                 event.old_show = 0
                 if contact.show in status_strings:

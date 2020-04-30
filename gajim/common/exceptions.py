@@ -34,7 +34,7 @@ class PysqliteOperationalError(Exception):
 
 class DatabaseMalformed(Exception):
     """
-    The databas can't be read
+    The database can't be read
     """
 
     def __init__(self, path=''):

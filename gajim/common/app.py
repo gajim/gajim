@@ -87,7 +87,7 @@ gc_connected = {}  # type: Dict[str, Dict[str, bool]]
 # {room_jid: password}
 gc_passwords = {}  # type: Dict[str, str]
 
-# dict of rooms that must be automaticaly configured
+# dict of rooms that must be automatically configured
 # and for which we have a list of invities
 # {account: {room_jid: {'invities': []}}}
 automatic_rooms = {}  # type: Dict[str, Dict[str, Dict[str, List[str]]]]

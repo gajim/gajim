@@ -278,7 +278,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         def _on_plugin_exists(zip_filename):
             def _on_yes():
                 plugin = app.plugin_manager.install_from_zip(zip_filename,
-                                                             True)
+                                                             overwrite=True)
                 if not plugin:
                     _show_warn_dialog()
                     return

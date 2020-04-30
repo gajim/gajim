@@ -432,9 +432,9 @@ def datetime_tuple(timestamp):
 
     Because of various datetime formats are used the following exceptions
     are handled:
-            - Optional milliseconds appened to the string are removed
-            - Optional Z (that means UTC) appened to the string are removed
-            - XEP-082 datetime strings have all '-' cahrs removed to meet
+            - Optional milliseconds appended to the string are removed
+            - Optional Z (that means UTC) appended to the string are removed
+            - XEP-082 datetime strings have all '-' chars removed to meet
               the above format.
     """
     date, tim = timestamp.split('T', 1)
@@ -1518,7 +1518,7 @@ def is_affiliation_change_allowed(self_contact, contact, target_aff):
         return False
 
     if target_aff in ('admin', 'owner'):
-        # Admin cant edit admin/owner list
+        # Admin can’t edit admin/owner list
         return False
     return self_contact.affiliation > contact.affiliation
 

@@ -48,7 +48,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
             return
         log.info('Zeroconf MessageCB')
 
-        # Dont trust from attr set by sender
+        # Don’t trust from attr set by sender
         stanza.setFrom(con._owner.to)
 
         app.nec.push_incoming_event(NetworkEvent(

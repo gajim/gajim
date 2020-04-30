@@ -333,7 +333,7 @@ class SocksQueue:
 
     def isHashInSockObjs(self, sockobjs, hash_):
         '''
-        It tells wether there is a particular hash in sockobjs or not
+        It tells whether there is a particular hash in sockobjs or not
         '''
         for key in sockobjs:
             if hash_ in key:
@@ -1394,7 +1394,7 @@ class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
 class Socks5Listener(IdleObject):
     def __init__(self, idlequeue, port, fp, fingerprint=None):
         """
-        Handle all incomming connections on (0.0.0.0, port)
+        Handle all incoming connections on (0.0.0.0, port)
 
         This class implements IdleObject, but we will expect
         only pollin events though
@@ -1464,7 +1464,7 @@ class Socks5Listener(IdleObject):
 
     def pollin(self):
         """
-        Accept a new incomming connection and notify queue
+        Accept a new incoming connection and notify queue
         """
         sock = self.accept_conn()
         self.queue.on_connection_accepted(sock, self)
@@ -1485,7 +1485,7 @@ class Socks5Listener(IdleObject):
 
     def accept_conn(self):
         """
-        Accept a new incomming connection
+        Accept a new incoming connection
         """
         _sock = self._serv.accept()
         _sock[0].setblocking(False)

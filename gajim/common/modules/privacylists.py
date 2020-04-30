@@ -95,7 +95,7 @@ class PrivacyLists(BaseModule):
 
         self._log.info('Received lists: %s', lists)
 
-        # Download default list if we dont have it
+        # Download default list if we don’t have it
         if self.default_list != new_default:
             self.default_list = new_default
             if new_default is not None:
@@ -132,11 +132,11 @@ class PrivacyLists(BaseModule):
 
             item = child.getAttrs()
 
-            childs = []
+            children = []
             for scnd_child in child.getChildren():
-                childs.append(scnd_child.getName())
+                children.append(scnd_child.getName())
 
-            item['child'] = childs
+            item['child'] = children
             if len(item) not in (3, 5):
                 self._log.warning('Wrong count of attrs: %s', stanza)
                 continue
@@ -171,8 +171,8 @@ class PrivacyLists(BaseModule):
         node = nbxmpp.Node('list', {'name': name})
         iq = nbxmpp.Iq('set', Namespace.PRIVACY, payload=[node])
         for item in rules:
-            childs = item.get('child', [])
-            for child in childs:
+            children = item.get('child', [])
+            for child in children:
                 node.setTag(child)
             item.pop('child', None)
             node.setTag('item', item)

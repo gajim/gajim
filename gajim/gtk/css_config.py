@@ -412,7 +412,7 @@ class CSSConfig():
                         self._add_to_cache(selector, attr, value)
                     return value
 
-        # We didnt find the selector in the selected theme
+        # We didn’t find the selector in the selected theme
         # search in default theme
         if not pre:
             rule = self._get_default_rule(selector, attr)
