@@ -15675,7 +15675,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F45A', {
-        'desc': 'woman�s clothes',
+        'desc': 'woman’s clothes',
         'group': 'Smileys & People',
         'subgroup': 'clothing',
         'fully-qualified': True,
@@ -15734,7 +15734,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F45E', {
-        'desc': 'man�s shoe',
+        'desc': 'man’s shoe',
         'group': 'Smileys & People',
         'subgroup': 'clothing',
         'fully-qualified': True,
@@ -15761,7 +15761,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F97F', {
-        'desc': 'woman�s flat shoe',
+        'desc': 'woman’s flat shoe',
         'group': 'Smileys & People',
         'subgroup': 'clothing',
         'fully-qualified': True,
@@ -15779,7 +15779,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F461', {
-        'desc': 'woman�s sandal',
+        'desc': 'woman’s sandal',
         'group': 'Smileys & People',
         'subgroup': 'clothing',
         'fully-qualified': True,
@@ -15788,7 +15788,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F462', {
-        'desc': 'woman�s boot',
+        'desc': 'woman’s boot',
         'group': 'Smileys & People',
         'subgroup': 'clothing',
         'fully-qualified': True,
@@ -15806,7 +15806,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F452', {
-        'desc': 'woman�s hat',
+        'desc': 'woman’s hat',
         'group': 'Smileys & People',
         'subgroup': 'clothing',
         'fully-qualified': True,
@@ -15842,13 +15842,13 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U000026D1\U0000FE0F', {
-        'desc': 'rescue worker�s helmet',
+        'desc': 'rescue worker’s helmet',
         'group': 'Smileys & People',
         'subgroup': 'clothing',
         'fully-qualified': True
     }),
     ('\U000026D1', {
-        'desc': 'rescue worker�s helmet',
+        'desc': 'rescue worker’s helmet',
         'group': 'Smileys & People',
         'subgroup': 'clothing',
         'fully-qualified': False,
@@ -19362,7 +19362,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F55B', {
-        'desc': 'twelve o�clock',
+        'desc': 'twelve o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19380,7 +19380,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F550', {
-        'desc': 'one o�clock',
+        'desc': 'one o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19398,7 +19398,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F551', {
-        'desc': 'two o�clock',
+        'desc': 'two o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19416,7 +19416,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F552', {
-        'desc': 'three o�clock',
+        'desc': 'three o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19434,7 +19434,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F553', {
-        'desc': 'four o�clock',
+        'desc': 'four o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19452,7 +19452,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F554', {
-        'desc': 'five o�clock',
+        'desc': 'five o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19470,7 +19470,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F555', {
-        'desc': 'six o�clock',
+        'desc': 'six o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19488,7 +19488,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F556', {
-        'desc': 'seven o�clock',
+        'desc': 'seven o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19506,7 +19506,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F557', {
-        'desc': 'eight o�clock',
+        'desc': 'eight o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19524,7 +19524,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F558', {
-        'desc': 'nine o�clock',
+        'desc': 'nine o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19542,7 +19542,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F559', {
-        'desc': 'ten o�clock',
+        'desc': 'ten o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -19560,7 +19560,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F55A', {
-        'desc': 'eleven o�clock',
+        'desc': 'eleven o’clock',
         'group': 'Travel & Places',
         'subgroup': 'time',
         'fully-qualified': True,
@@ -22707,7 +22707,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F6B9', {
-        'desc': 'men�s room',
+        'desc': 'men’s room',
         'group': 'Symbols',
         'subgroup': 'transport-sign',
         'fully-qualified': True,
@@ -22716,7 +22716,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F6BA', {
-        'desc': 'women�s room',
+        'desc': 'women’s room',
         'group': 'Symbols',
         'subgroup': 'transport-sign',
         'fully-qualified': True,
@@ -24534,7 +24534,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F201', {
-        'desc': 'Japanese �here� button',
+        'desc': 'Japanese “here” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24543,13 +24543,13 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F202\U0000FE0F', {
-        'desc': 'Japanese �service charge� button',
+        'desc': 'Japanese “service charge” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True
     }),
     ('\U0001F202', {
-        'desc': 'Japanese �service charge� button',
+        'desc': 'Japanese “service charge” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': False,
@@ -24557,13 +24557,13 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F237\U0000FE0F', {
-        'desc': 'Japanese �monthly amount� button',
+        'desc': 'Japanese “monthly amount” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True
     }),
     ('\U0001F237', {
-        'desc': 'Japanese �monthly amount� button',
+        'desc': 'Japanese “monthly amount” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': False,
@@ -24571,7 +24571,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F236', {
-        'desc': 'Japanese �not free of charge� button',
+        'desc': 'Japanese “not free of charge” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24580,7 +24580,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F22F', {
-        'desc': 'Japanese �reserved� button',
+        'desc': 'Japanese “reserved” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24589,7 +24589,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F250', {
-        'desc': 'Japanese �bargain� button',
+        'desc': 'Japanese “bargain” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24598,7 +24598,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F239', {
-        'desc': 'Japanese �discount� button',
+        'desc': 'Japanese “discount” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24607,7 +24607,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F21A', {
-        'desc': 'Japanese �free of charge� button',
+        'desc': 'Japanese “free of charge” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24616,7 +24616,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F232', {
-        'desc': 'Japanese �prohibited� button',
+        'desc': 'Japanese “prohibited” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24625,7 +24625,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F251', {
-        'desc': 'Japanese �acceptable� button',
+        'desc': 'Japanese “acceptable” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24634,7 +24634,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F238', {
-        'desc': 'Japanese �application� button',
+        'desc': 'Japanese “application” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24643,7 +24643,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F234', {
-        'desc': 'Japanese �passing grade� button',
+        'desc': 'Japanese “passing grade” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24652,7 +24652,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F233', {
-        'desc': 'Japanese �vacancy� button',
+        'desc': 'Japanese “vacancy” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24661,13 +24661,13 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U00003297\U0000FE0F', {
-        'desc': 'Japanese �congratulations� button',
+        'desc': 'Japanese “congratulations” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True
     }),
     ('\U00003297', {
-        'desc': 'Japanese �congratulations� button',
+        'desc': 'Japanese “congratulations” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': False,
@@ -24675,13 +24675,13 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U00003299\U0000FE0F', {
-        'desc': 'Japanese �secret� button',
+        'desc': 'Japanese “secret” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True
     }),
     ('\U00003299', {
-        'desc': 'Japanese �secret� button',
+        'desc': 'Japanese “secret” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': False,
@@ -24689,7 +24689,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F23A', {
-        'desc': 'Japanese �open for business� button',
+        'desc': 'Japanese “open for business” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -24698,7 +24698,7 @@ emoji_data = EmojiData([
         'Extended_Pictographic': True
     }),
     ('\U0001F235', {
-        'desc': 'Japanese �no vacancy� button',
+        'desc': 'Japanese “no vacancy” button',
         'group': 'Symbols',
         'subgroup': 'alphanum',
         'fully-qualified': True,
@@ -25106,7 +25106,7 @@ emoji_data = EmojiData([
         'Emoji_Flag_Sequence': True
     }),
     ('\U0001F1E6\U0001F1FD', {
-        'desc': '�land Islands',
+        'desc': 'Åland Islands',
         'group': 'Flags',
         'subgroup': 'country-flag',
         'fully-qualified': True,
@@ -25183,7 +25183,7 @@ emoji_data = EmojiData([
         'Emoji_Flag_Sequence': True
     }),
     ('\U0001F1E7\U0001F1F1', {
-        'desc': 'St. Barth�lemy',
+        'desc': 'St. Barthélemy',
         'group': 'Flags',
         'subgroup': 'country-flag',
         'fully-qualified': True,
@@ -25309,7 +25309,7 @@ emoji_data = EmojiData([
         'Emoji_Flag_Sequence': True
     }),
     ('\U0001F1E8\U0001F1EE', {
-        'desc': 'C�te d�Ivoire',
+        'desc': 'Côte d’Ivoire',
         'group': 'Flags',
         'subgroup': 'country-flag',
         'fully-qualified': True,
@@ -25379,7 +25379,7 @@ emoji_data = EmojiData([
         'Emoji_Flag_Sequence': True
     }),
     ('\U0001F1E8\U0001F1FC', {
-        'desc': 'Cura�ao',
+        'desc': 'Curaçao',
         'group': 'Flags',
         'subgroup': 'country-flag',
         'fully-qualified': True,
@@ -26352,7 +26352,7 @@ emoji_data = EmojiData([
         'Emoji_Flag_Sequence': True
     }),
     ('\U0001F1F7\U0001F1EA', {
-        'desc': 'R�union',
+        'desc': 'Réunion',
         'group': 'Flags',
         'subgroup': 'country-flag',
         'fully-qualified': True,
@@ -26499,7 +26499,7 @@ emoji_data = EmojiData([
         'Emoji_Flag_Sequence': True
     }),
     ('\U0001F1F8\U0001F1F9', {
-        'desc': 'S�o Tom� & Pr�ncipe',
+        'desc': 'São Tomé & Príncipe',
         'group': 'Flags',
         'subgroup': 'country-flag',
         'fully-qualified': True,
