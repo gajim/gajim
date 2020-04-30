@@ -163,7 +163,7 @@ class AdHocCommand(Gtk.Assistant):
             command = self.get_nth_page(current_page).get_selected_command()
             if command is None:
                 # The commands page should not show if there are no commands,
-                # but if for some reason it does dont fail horribly
+                # but if for some reason it does don’t fail horribly
                 return
         else:
             command, dataform = self.get_nth_page(current_page).stage_data

@@ -233,7 +233,7 @@ class ChatControl(ChatControlBase):
         ])
 
         if self._type.is_chat:
-            # Dont connect this when PrivateChatControl is used
+            # Don’t connect this when PrivateChatControl is used
             self.register_event('update-roster-avatar', ged.GUI1, self._on_update_roster_avatar)
         # pylint: enable=line-too-long
 
@@ -1251,7 +1251,7 @@ class ChatControl(ChatControlBase):
 
     def read_queue(self):
         """
-        Read queue and print messages containted in it
+        Read queue and print messages contained in it
         """
         jid = self.contact.jid
         jid_with_resource = jid

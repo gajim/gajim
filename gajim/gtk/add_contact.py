@@ -483,7 +483,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
             if obj.stanza.getError():
                 ErrorDialog(
                     _('Error while adding transport contact'),
-                    _('This error occured while adding a contact for transport '
+                    _('This error occurred while adding a contact for transport '
                       '%(transport)s:\n\n%(error)s') % {
                         'transport': transport,
                         'error': obj.stanza.getErrorMsg()})

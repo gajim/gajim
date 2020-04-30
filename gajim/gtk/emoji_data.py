@@ -111,7 +111,7 @@ class EmojiPixbufs(dict):
         dict.clear(self)
 
     def append_marks(self, textview, start, end, codepoint):
-        # We have to asign some dummy data to the mark, or else
+        # We have to assign some dummy data to the mark, or else
         # pygobject will not keep the python wrapper alive, which in turn
         # makes the weakref invalid as soon as the method ends
         start.dummy = 'x'
@@ -146,7 +146,7 @@ class EmojiPixbufs(dict):
 
 class EmojiAsciiData(dict):
     def get_regex(self):
-        # When an emoticon is bordered by an alpha-numeric character it
+        # When an emoticon is bordered by an alphanumeric character it
         # is NOT expanded.  e.g., foo:) NO, foo :) YES, (brb) NO,
         # (:)) YES, etc. We still allow multiple emoticons
         # side-by-side like :P:P:P

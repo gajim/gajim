@@ -124,7 +124,7 @@ class CommonContact(XMPPEntity):
         if self.show == 'offline':
             # Unfortunately, if all resources are offline, the contact
             # includes the last resource that was online. Check for its
-            # show, so we can be sure it's existant. Otherwise, we still
+            # show, so we can be sure it's existent. Otherwise, we still
             # return caps for a contact that has no resources left.
             return False
 
@@ -159,7 +159,7 @@ class Contact(CommonContact):
         CommonContact.__init__(self, jid, account, resource, show,
                                None, status, name, chatstate)
 
-        self.contact_name = '' # nick choosen by contact
+        self.contact_name = '' # nick chosen by contact
         self.groups = [i if i else _('General') for i in set(groups)] # filter duplicate values
         self.avatar_sha = avatar_sha
         self._is_groupchat = groupchat

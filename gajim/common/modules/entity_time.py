@@ -84,7 +84,7 @@ class EntityTime(BaseModule):
         utc_time = time_.getTag('utc').getData()
         date_time = parse_datetime(utc_time, check_utc=True)
         if date_time is None:
-            self._log.warning('Wrong timezone defintion: %s %s',
+            self._log.warning('Wrong timezone definition: %s %s',
                               utc_time, stanza.getFrom())
             return None
 

@@ -134,8 +134,8 @@ class JingleRTPContent(JingleContent):
 
     def add_remote_candidates(self, candidates):
         JingleContent.add_remote_candidates(self, candidates)
-        # FIXME: connectivity should not be etablished yet
-        # Instead, it should be etablished after session-accept!
+        # FIXME: connectivity should not be established yet
+        # Instead, it should be established after session-accept!
         if self.sent:
             self.p2pstream.add_remote_candidates(candidates)
 
@@ -347,13 +347,13 @@ class JingleAudio(JingleRTPContent):
 
     def set_mic_volume(self, vol):
         """
-        vol must be between 0 ans 1
+        vol must be between 0 and 1
         """
         self.mic_volume.set_property('volume', vol)
 
     def set_out_volume(self, vol):
         """
-        vol must be between 0 ans 1
+        vol must be between 0 and 1
         """
         self.out_volume.set_property('volume', vol)
 

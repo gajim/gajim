@@ -199,7 +199,7 @@ class HTTPUpload(BaseModule):
         message = Soup.Message.new('PUT', transfer.put_uri)
         message.connect('starting', self._check_certificate)
 
-        # Set CAN_REBUILD so chunks get discarded after they are beeing
+        # Set CAN_REBUILD so chunks get discarded after they have been
         # written to the network
         message.set_flags(Soup.MessageFlags.CAN_REBUILD |
                           Soup.MessageFlags.NO_REDIRECT)

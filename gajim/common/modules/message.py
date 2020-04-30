@@ -112,7 +112,8 @@ class Message(BaseModule):
 
         if properties.type.is_groupchat and properties.has_server_delay:
             # Only for XEP-0045 MUC History
-            # Dont check for message text because the message could be encrypted
+            # Don’t check for message text because the message could be
+            # encrypted.
             if app.logger.deduplicate_muc_message(self._account,
                                                   properties.jid.getBare(),
                                                   properties.jid.getResource(),

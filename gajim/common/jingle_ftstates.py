@@ -35,7 +35,7 @@ class JingleFileTransferStates:
 
     def action(self, args=None):
         '''
-        This method MUST be overriden by a subclass
+        This method MUST be overridden by a subclass
         '''
         raise NotImplementedError('This is an abstract method!')
 
@@ -107,7 +107,7 @@ class StateCandReceived(JingleFileTransferStates):
                 streamhost_used = cand
                 break
         if streamhost_used is None:
-            log.info("unknow streamhost")
+            log.info("unknown streamhost")
             return
         # We save the candidate nominated by peer
         self.jft.nominated_cand['peer-cand'] = streamhost_used
@@ -141,7 +141,7 @@ class StateTransportReplace(JingleFileTransferStates):
 
 class StateTransfering(JingleFileTransferStates):
     '''
-    This state will start the transfer depeding on the type of transport
+    This state will start the transfer depending on the type of transport
     we have.
     '''
 
@@ -153,7 +153,7 @@ class StateTransfering(JingleFileTransferStates):
                                         fp)
 
     def _start_sock5_transfer(self):
-        # It tells wether we start the transfer as client or server
+        # It tells whether we start the transfer as client or server
         mode = None
         if self.jft.is_our_candidate_used():
             mode = 'client'

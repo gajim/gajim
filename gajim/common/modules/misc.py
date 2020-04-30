@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-# All XEPs that dont need their own module
+# All XEPs that don’t need their own module
 
 import logging
 

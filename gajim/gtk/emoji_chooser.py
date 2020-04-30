@@ -124,7 +124,7 @@ class Section(Gtk.Box):
 
                 self.flowbox.add(child)
             else:
-                # We dont have a image for the base codepoint
+                # We don’t have a image for the base codepoint
                 # so skip all modifiers of it
                 for _entry in variations:
                     pixbuf = self._get_next_pixbuf()
@@ -360,7 +360,7 @@ class EmojiChooser(Gtk.Popover):
     def _emoji_factory(self, font):
         for codepoint, attrs in emoji_data.items():
             if not attrs['fully-qualified']:
-                # We dont add these to the UI
+                # We don’t add these to the UI
                 continue
 
             if font and not self.font_supports_codepoint(codepoint):

@@ -133,7 +133,7 @@ class Bytestream(BaseModule):
         """
         Send iq, confirming that we want to download the file
         """
-        # user response to ConfirmationDialog may come after we've disconneted
+        # user response to ConfirmationDialog may come after we've disconnected
         if not app.account_is_available(self._account):
             return
 

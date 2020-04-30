@@ -326,7 +326,7 @@ class HistoryManager:
         If jid is gajim@conf/nkour it's likely a pm one, how we know gajim@conf
         is not a normal guy and nkour is not his resource? We ask if gajim@conf
         is already in jids (with type room jid). This fails if user disables
-        logging for room and only enables for pm (so higly unlikely) and if we
+        logging for room and only enables for pm (so highly unlikely) and if we
         fail we do not go chaos (user will see the first pm as if it was message
         in room's public chat) and after that everything is ok
         """

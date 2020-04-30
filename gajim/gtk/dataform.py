@@ -137,7 +137,7 @@ class FormGrid(Gtk.Grid):
     @staticmethod
     def _analyse_fields(form_node, options):
         if 'right-align' in options:
-            # Dont overwrite option
+            # Don’t overwrite option
             return
 
         label_lengths = set([0])
@@ -163,7 +163,7 @@ class FormGrid(Gtk.Grid):
 
             if field.media:
                 if not self._add_media_field(field, options):
-                    # We dont understand this media element, ignore it
+                    # We don’t understand this media element, ignore it
                     continue
 
             widget = self._fields[field.type_]
@@ -278,7 +278,7 @@ class Field:
 
     def _set_warning(self, is_valid, error):
         if not self._field.required and not is_valid and not error:
-            # If its not valid and no error is given, its the inital call
+            # If its not valid and no error is given, its the initial call
             # to show all icons on required fields.
             return
 
@@ -331,7 +331,7 @@ class FixedField(Field):
 
         self._label.set_text(field.value)
 
-        # If the value is more than 40 chars it proabably isnt
+        # If the value is more than 40 chars it proabably isn’t
         # meant as a section header
         if len(field.value) < 40:
             self._label.get_style_context().add_class('field-fixed')

@@ -51,8 +51,8 @@ class log_calls:
     filter_out_classes = ['GajimPluginConfig', 'PluginManager',
                           'GajimPluginConfigDialog', 'PluginsWindow']
     '''
-    List of classes from which no logs should be emited when methods are called,
-    even though `log_calls` decorator is used.
+    List of classes from which no logs should be emitted when methods are
+    called, even though `log_calls` decorator is used.
     '''
 
     def __init__(self, classname=''):

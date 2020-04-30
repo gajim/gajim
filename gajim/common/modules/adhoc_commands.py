@@ -40,7 +40,7 @@ class AdHocCommand:
     @staticmethod
     def is_visible_for(_samejid):
         """
-        This returns True if that command should be visible and invokable for
+        This returns True if that command should be visible and invocable for
         others
 
         samejid - True when command is invoked by an entity with the same bare

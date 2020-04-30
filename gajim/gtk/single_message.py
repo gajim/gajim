@@ -317,7 +317,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
         # we create a new blank window to send and we preset RE: and to jid
         self._subject = _('RE: %s') % self._subject
         self._message = _('%s wrote:\n') % self._from_whom + self._message
-        # add > at the begining of each line
+        # add > at the beginning of each line
         self._message = self._message.replace('\n', '\n> ') + '\n\n'
         self.destroy()
         SingleMessageWindow(self.account,

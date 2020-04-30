@@ -729,7 +729,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
         if log_jid != self.jid:
             self._load_history(log_jid, None)
 
-        # avoid reruning mark days algo if same month and year!
+        # avoid rerunning mark days algo if same month and year!
         if year != cur_year or gtk_m != cur_month:
             self._ui.calendar.select_month(month, year)
 

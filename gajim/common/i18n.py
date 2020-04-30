@@ -38,7 +38,7 @@ def get_locale_dirs():
     path = gettext.find(DOMAIN)
     if path is not None:
         # gettext can find the location itself
-        # so we dont need the localedir
+        # so we don’t need the localedir
         return
 
     if Path('/app/share/run-as-flatpak').exists():

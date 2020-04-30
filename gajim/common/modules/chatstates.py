@@ -223,7 +223,7 @@ class Chatstate(BaseModule):
             return None
 
         if not contact.is_groupchat:
-            # Dont send chatstates to ourself
+            # Don’t send chatstates to ourself
             if self._con.get_own_jid().bareMatch(contact.jid):
                 return None
 
@@ -255,7 +255,7 @@ class Chatstate(BaseModule):
 
     @ensure_enabled
     def set_chatstate(self, contact: ContactT, state: State) -> None:
-        # Dont send chatstates to ourself
+        # Don’t send chatstates to ourself
         if self._con.get_own_jid().bareMatch(contact.jid):
             return
 
@@ -280,7 +280,7 @@ class Chatstate(BaseModule):
             return
 
         if not contact.is_groupchat:
-            # Dont leak presence to contacts
+            # Don’t leak presence to contacts
             # which are not allowed to see our status
             if not contact.is_pm_contact:
                 if contact and contact.sub in ('to', 'none'):

@@ -358,10 +358,10 @@ class GroupchatControl(ChatControlBase):
         threshold = helpers.get_sync_threshold(self.contact.jid,
                                                archive_info)
 
-        inital = GLib.Variant.new_string(str(threshold))
+        initial = GLib.Variant.new_string(str(threshold))
         act = Gio.SimpleAction.new_stateful(
             'choose-sync-' + self.control_id,
-            inital.get_type(), inital)
+            initial.get_type(), initial)
         act.connect('change-state', self._on_sync_threshold)
         self.parent_win.window.add_action(act)
 

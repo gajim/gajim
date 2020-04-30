@@ -354,7 +354,7 @@ class Logger:
     @staticmethod
     def _execute_multiple(con, statements):
         """
-        Execute mutliple statements with the option to fail on duplicates
+        Execute multiple statements with the option to fail on duplicates
         but still continue
         """
         for sql in statements:
@@ -480,7 +480,7 @@ class Logger:
         If jid is gajim@conf/nkour it's likely a pm one, how we know gajim@conf
         is not a normal guy and nkour is not his resource?  we ask if gajim@conf
         is already in jids (with type room jid) this fails if user disables
-        logging for room and only enables for pm (so higly unlikely) and if we
+        logging for room and only enables for pm (so highly unlikely) and if we
         fail we do not go chaos (user will see the first pm as if it was message
         in room's public chat) and after that all okay
         """
@@ -750,7 +750,7 @@ class Logger:
         Get recent messages
 
         Pending messages are already in queue to be printed when the
-        ChatControl is opened, so we dont want to request those messages.
+        ChatControl is opened, so we don’t want to request those messages.
         How many messages are requested depends on the 'restore_lines'
         config value. How far back in time messages are requested depends on
         _get_timeout().
@@ -759,7 +759,7 @@ class Logger:
 
         :param jid:     The jid from which we request the conversation lines
 
-        :param pending: How many messages are currently pending so we dont
+        :param pending: How many messages are currently pending so we don’t
                         request those messages
 
         returns a list of namedtuples
@@ -849,7 +849,7 @@ class Logger:
         Search the conversation log for messages containing the `query` string.
 
         The search can either span the complete log for the given
-        `account` and `jid` or be restriced to a single day by
+        `account` and `jid` or be restricted to a single day by
         specifying `date`.
 
         :param account: The account
@@ -1192,7 +1192,7 @@ class Logger:
         data = {}
         account_jid_id = self.get_jid_id(account_jid, type_=JIDConstant.NORMAL_TYPE)
 
-        # First we fill data with roster_entry informations
+        # First we fill data with roster_entry information
         rows = self._con.execute('''
                 SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask, re.avatar_sha
                 FROM roster_entry re, jids j

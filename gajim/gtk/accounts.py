@@ -61,7 +61,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.add(box)
 
         for account in app.get_accounts_sorted():
-            self.add_account(account, inital=True)
+            self.add_account(account, initial=True)
 
         self._menu.connect('menu-activated', self._on_menu_activated)
         self.connect('destroy', self._on_destroy)
@@ -156,10 +156,10 @@ class AccountsWindow(Gtk.ApplicationWindow):
         del self._need_relogin[account]
         self._accounts[account].remove()
 
-    def add_account(self, account, inital=False):
+    def add_account(self, account, initial=False):
         self._need_relogin[account] = self._get_relogin_settings(account)
         self._accounts[account] = Account(account, self._menu, self._settings)
-        if not inital:
+        if not initial:
             self._accounts[account].show()
 
     def select_account(self, account):
@@ -657,7 +657,7 @@ class PrivacyPage(GenericSettingPage):
 
             Setting(SettingKind.SWITCH, _('Client / Operating System'),
                     SettingType.ACCOUNT_CONFIG, 'send_os_info',
-                    desc=_('Disclose informations about the client '
+                    desc=_('Disclose information about the client '
                            'and operating system you currently use')),
 
             Setting(SettingKind.SWITCH, _('Ignore Unknown Contacts'),

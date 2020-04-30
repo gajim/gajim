@@ -331,7 +331,7 @@ class ChangeActivityDialog:
 
     def on_ok_button_clicked(self, widget):
         """
-        Return activity and messsage (None if no activity selected)
+        Return activity and message (None if no activity selected)
         """
         if self.checkbutton.get_active():
             self.on_response(
@@ -420,7 +420,7 @@ class ChangeMoodDialog:
         self.mood = data
 
     def on_ok_button_clicked(self, widget):
-        '''Return mood and messsage (None if no mood selected)'''
+        '''Return mood and message (None if no mood selected)'''
         message = self.entry.get_text()
         self.on_response(self.mood, message)
         self.window.destroy()

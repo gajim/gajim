@@ -60,7 +60,7 @@ class ChangePassword(Assistant):
         error.set_title(_('Password Change Failed'))
         error.set_heading(_('Password Change Failed'))
         error.set_text(
-            _('An error occured while trying to change your password.'))
+            _('An error occurred while trying to change your password.'))
 
         self.set_button_visible_func(self._visible_func)
 

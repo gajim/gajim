@@ -360,6 +360,6 @@
     </child>
   </object>
   <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">Plug-in decription should be displayed here. This text will be erased during PluginsWindow initialization.</property>
+    <property name="text" translatable="yes">Plug-in description should be displayed here. This text will be erased during PluginsWindow initialization.</property>
   </object>
 </interface>

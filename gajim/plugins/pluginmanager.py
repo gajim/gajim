@@ -714,7 +714,7 @@ class PluginManager(metaclass=Singleton):
         sys.path.remove(path)
         return plugins_found
 
-    def install_from_zip(self, zip_filename, owerwrite=None):
+    def install_from_zip(self, zip_filename, overwrite=None):
         '''
         Install plugin from zip and return plugin
         '''
@@ -751,7 +751,7 @@ class PluginManager(metaclass=Singleton):
 
         if os.path.isdir(plugin_dir):
         # Plugin dir already exists
-            if not owerwrite:
+            if not overwrite:
                 raise PluginsystemError(_('Plugin already exists'))
             self.uninstall_plugin(self.get_plugin_by_path(plugin_dir))
 

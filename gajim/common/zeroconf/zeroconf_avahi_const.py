@@ -33,7 +33,7 @@ class ServerState(IntEnum):
 
 
 class EntryGroup(IntEnum):
-    UNCOMMITED = 0
+    UNCOMMITTED = 0
     REGISTERING = 1
     ESTABLISHED = 2
     COLLISION = 3

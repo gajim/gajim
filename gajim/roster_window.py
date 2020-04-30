@@ -1426,7 +1426,7 @@ class RosterWindow:
                 if family:
                     # For metacontacts over several accounts:
                     # When we connect a new account existing brothers
-                    # must be redrawn (got removed and readded)
+                    # must be redrawn (got removed and added again)
                     for data in family:
                         self.draw_completely(data['jid'], data['account'])
                 else:
@@ -3969,7 +3969,7 @@ class RosterWindow:
                     app.config.set('confirm_metacontacts', 'yes')
 
             # We might have dropped on a metacontact.
-            # Remove it and readd later with updated family info
+            # Remove it and add it again later with updated family info
             dest_family = app.contacts.get_metacontacts_family(account_dest,
                 c_dest.jid)
             if dest_family:
@@ -3994,7 +3994,7 @@ class RosterWindow:
 
             # Remove old source contact(s)
             if was_big_brother:
-                # We have got little brothers. Readd them all
+                # We have got little brothers. Add them all back
                 self._remove_metacontact_family(old_family, account_source)
             else:
                 # We are only a little brother. Simply remove us from our big
@@ -4744,9 +4744,9 @@ class RosterWindow:
                 if sys.platform in ('win32', 'darwin'):
                     item.set_sensitive(False)
                 else:
-                    activ = app.config.get_per('accounts', account,
-                                               'publish_tune')
-                    item.set_active(activ)
+                    active = app.config.get_per('accounts', account,
+                                                'publish_tune')
+                    item.set_active(active)
                     item.connect('toggled', self.on_publish_tune_toggled,
                                  account)
 
@@ -4755,9 +4755,9 @@ class RosterWindow:
                 if not app.is_installed('GEOCLUE'):
                     item.set_sensitive(False)
                 else:
-                    activ = app.config.get_per('accounts', account,
-                                               'publish_location')
-                    item.set_active(activ)
+                    active = app.config.get_per('accounts', account,
+                                                'publish_location')
+                    item.set_active(active)
                     item.connect('toggled', self.on_publish_location_toggled,
                                  account)
 
