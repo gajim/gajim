@@ -65,7 +65,8 @@ class OutgoingMessage:
                  correct_id=None,
                  automatic_message=False,
                  oob_url=None,
-                 xhtml=None):
+                 xhtml=None,
+                 nodes=None):
 
         if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
             raise ValueError('Unknown message type: %s' % type_)
@@ -109,6 +110,8 @@ class OutgoingMessage:
 
         if xhtml is not None:
             self.additional_data.set_value('gajim', 'xhtml', xhtml)
+
+        self.nodes = nodes
 
         self.timestamp = None
         self.message_id = None
