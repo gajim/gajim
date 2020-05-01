@@ -1013,7 +1013,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                                    control=self,
                                    attention=attention,
                                    correct_id=correct_id,
-                                   automatic_message=False,
                                    xhtml=xhtml)
 
         con.send_message(message_)

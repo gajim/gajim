@@ -63,7 +63,6 @@ class OutgoingMessage:
                  control=None,
                  attention=None,
                  correct_id=None,
-                 automatic_message=False,
                  oob_url=None,
                  xhtml=None,
                  nodes=None):
@@ -99,7 +98,6 @@ class OutgoingMessage:
         self.control = control
         self.attention = attention
         self.correct_id = correct_id
-        self.automatic_message = automatic_message
 
         self.oob_url = oob_url
 
