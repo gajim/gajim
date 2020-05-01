@@ -153,6 +153,8 @@ class OptionsParser:
             self.update_config_to_1194()
         if old < [1, 1, 95] and new >= [1, 1, 95]:
             self.update_config_to_1195()
+        if old < [1, 1, 99, 1] and new >= [1, 1, 99, 1]:
+            self.update_config_to_11991()
 
         app.config.set('version', new_version)
 
@@ -249,3 +251,7 @@ class OptionsParser:
                 color = rgba.to_string()
                 app.config.set_per('accounts', account, 'account_color', color)
         app.config.set('version', '1.1.95')
+
+    def update_config_to_11991(self):
+        app.config.set('tabs_position', 'left')
+        app.config.set('version', '1.1.99.1')
