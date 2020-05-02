@@ -38,11 +38,6 @@
       <li>Even more features via plugins</li>
     </ul>
   </description>
-  <categories>
-    <category>GTK</category>
-    <category>InstantMessaging</category>
-    <category>Network</category>
-  </categories>
   <screenshots>
     <screenshot type="default">
       <image>https://gajim.org/img/screenshots/single-window-mode.png</image>
