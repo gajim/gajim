@@ -325,7 +325,9 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         sound = msg_obj.gc_control.highlighting_for_message(
             msg_obj.msgtxt, msg_obj.properties.timestamp)[1]
 
-        if msg_obj.properties.muc_nickname != msg_obj.gc_control.nick:
+        nick = msg_obj.properties.muc_nickname
+
+        if nick != msg_obj.gc_control.nick:
             self.do_sound = True
             if sound == 'received':
                 self.sound_event = 'muc_message_received'
@@ -364,6 +366,9 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         if app.config.get('notification_preview_message'):
             self.popup_text = msg_obj.msgtxt
+            if self.popup_text and (self.popup_text.startswith('/me ') or
+                                    self.popup_text.startswith('/me\n')):
+                self.popup_text = '* ' + nick + self.popup_text[3:]
 
         type_events = ['printed_marked_gc_msg', 'printed_gc_msg']
         count = len(app.events.get_events(self.account, self.jid, type_events))
@@ -373,7 +378,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_title = i18n.ngettext(
             'New message from %(nickname)s',
             '%(n_msgs)i unread messages in %(groupchat_name)s',
-            count) % {'nickname': msg_obj.properties.muc_nickname,
+            count) % {'nickname': nick,
                       'n_msgs': count,
                       'groupchat_name': contact.get_shown_name()}
 
