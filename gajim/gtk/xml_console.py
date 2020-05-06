@@ -267,6 +267,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         for account in accounts:
             label = app.get_account_label(account)
             combo_accounts.append((account, label))
+        combo_accounts.append(('AccountWizard', 'Account Wizard'))
         return combo_accounts
 
     def _on_filter_options(self, *args):
