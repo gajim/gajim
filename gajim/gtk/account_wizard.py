@@ -439,9 +439,11 @@ class AccountWizard(Assistant):
         self._disconnect()
 
     def _on_register_error(self, result):
-        self._show_error_page(_('Error'),
-                              _('Error'),
-                              result.get_text())
+        error_text = result.get_text()
+        if not error_text:
+            error_text = _('The server rejected the registration '
+                           'without an error message')
+        self._show_error_page(_('Error'), _('Error'), error_text)
 
         register_data = result.get_data()
         if register_data is None:
