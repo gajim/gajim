@@ -31,6 +31,7 @@ from nbxmpp.util import is_error_result
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
+from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import get_proxy
@@ -236,6 +237,8 @@ class AccountWizard(Assistant):
 
         client.subscribe('disconnected', self._on_disconnected)
         client.subscribe('connection-failed', self._on_connection_failed)
+        client.subscribe('stanza-sent', self._on_stanza_sent)
+        client.subscribe('stanza-received', self._on_stanza_received)
         return client
 
     def _disconnect(self):
@@ -244,6 +247,18 @@ class AccountWizard(Assistant):
         self._client.remove_subscriptions()
         self._client.disconnect()
         self._client = None
+
+    @staticmethod
+    def _on_stanza_sent(_client, _signal_name, stanza):
+        app.nec.push_incoming_event(NetworkEvent('stanza-sent',
+                                                 account='AccountWizard',
+                                                 stanza=stanza))
+
+    @staticmethod
+    def _on_stanza_received(_client, _signal_name, stanza):
+        app.nec.push_incoming_event(NetworkEvent('stanza-received',
+                                                 account='AccountWizard',
+                                                 stanza=stanza))
 
     def _test_credentials(self, ignore_all_errors=False):
         self._show_progress_page(_('Connecting...'),
