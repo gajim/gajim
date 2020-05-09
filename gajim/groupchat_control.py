@@ -828,7 +828,7 @@ class GroupchatControl(ChatControlBase):
         NewConfirmationDialog(
             _('Voice Request'),
             _('Voice Request'),
-            _('<b>%s</b> from <b>%s</b> requests voice') % (
+            _('<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice') % (
                 event.voice_request.nick, self.room_name),
             [DialogButton.make('Cancel'),
              DialogButton.make('Accept',

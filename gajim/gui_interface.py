@@ -352,7 +352,7 @@ class Interface:
         jid = contact.jid
         NewConfirmationDialog(
             _('Subscription Removed'),
-            _('%s (%s) has removed subscription from you') % (name, jid),
+            _('%(name)s (%(jid)s) has removed subscription from you') % (name, jid),
             _('You will always see this contact as offline.\n'
               'Do you want to remove them from your contact list?'),
             [DialogButton.make('Cancel',
