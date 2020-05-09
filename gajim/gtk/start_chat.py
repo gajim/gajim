@@ -616,7 +616,7 @@ class ContactRow(Gtk.ListBoxRow):
             if self.groupchat:
                 self.name = _('Join Group Chat')
             else:
-                self.name = _('Add Contact')
+                self.name = _('Start Chat')
 
         self.name_label = Gtk.Label(label=self.name)
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
