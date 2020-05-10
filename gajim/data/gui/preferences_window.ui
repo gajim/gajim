@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment_status_auto_away">
@@ -399,6 +399,24 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
+                      <object class="GtkCheckButton" id="merge_accounts_checkbutton">
+                        <property name="label" translatable="yes">Me_rge accounts</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Displays all your accounts merged into a single one</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_merge_accounts_toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkCheckButton" id="show_avatars_in_roster_checkbutton">
                         <property name="label" translatable="yes">Show a_vatars of contacts in contact list</property>
                         <property name="visible">True</property>
@@ -413,7 +431,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -431,7 +449,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -449,7 +467,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -507,7 +525,7 @@
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
