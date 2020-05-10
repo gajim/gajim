@@ -1,4 +1,57 @@
-Gajim 1.1.0 (TBA)
+Gajim 1.2.0-beta1 / 1.1.99.1 (01 May 2020)
+
+  New
+
+  * Rewritten network code
+  * Support for WebSocket (RFC 7395)
+  * Improved proxy handling
+  * Group chat pages (invite, information, nickname, subject, etc.)
+  * Group chat creation window
+  * Updated account creation assistant
+  * Updated assistants for password changing and account removal
+  * Updated server info window (connection details)
+  * Updated theme manager
+  * Default avatars (XEP-0392)
+  * Paste images from clipboard
+  * Contrast and color improvements for both light and dark themes
+  * Removed 'Invisible' status
+  * Removed FuzzyClock feature
+
+  Bug fixes
+
+  * List of fixed issues https://dev.gajim.org/gajim/gajim/-/issues?scope=all&utf8=%E2%9C%93&state=closed&milestone_title=1.2.0
+
+Gajim 1.1.3-1 (15 January 2020)
+
+  * Flatpak build update
+
+Gajim 1.1.3 (23 April 2019)
+
+  New
+
+  * Add a mobile phone indicator to the chat window
+  * Rework HTTPUpload dialog
+  * Add a "paste as quote" option to the message input
+
+  Bug fixes
+
+  * #8822 Fix memory leak when using spell checker
+  * #9514 Fix jingle filetransfers not working in some circumstances
+  * #9573 Dont leak DNS query when connecting over proxy
+  * #9578 Determine Windows version more reliably
+  * #9622 Fix an error while quitting Gajim
+  * #9633 Fix an error while sending a file
+  * #9637 Restore window size correctly on wayland
+  * #9660 GPG Agent setting is ignored
+  * #9645 Make zeroconf IPV6 compatible
+  * Improve dark theme colors
+  * Fix access to GnuPG keys
+  * Use UUID4 item ids for pubsub posts
+  * Dont send invalid show values
+  * Windows: Dont override format region settings
+  * Various smaller improvements
+
+Gajim 1.1.2 (15 January 2019)
 
   New
 
@@ -6,13 +59,57 @@ Gajim 1.1.0 (TBA)
 
   Bug fixes
 
-  * 9322 Error when adding contact
-  * 9385 Ignore invalid bookmarks
-  * 9386 Discovery: Browsing nodes without identity
-  * 9393 Error when parsing invalid timestamps
-  * 9398 Error on jingle file transfer
+  * #9322 Error when adding contact
+  * #9385 Ignore invalid bookmarks
+  * #9386 Discovery: Browsing nodes without identity
+  * #9393 Error when parsing invalid timestamps
+  * #9398 Error on jingle file transfer
 
-Gajim 1.0.99.1 (07 October 2018)
+Gajim 1.1.1 (24 December 2018)
+
+  Bug fixes
+
+  * #8362 DBus: Incorrect unread message count
+  * #9427 Placeholder not cleared if pasting text into message input
+  * #9444 Determine the delay timestamp correctly when using mam:1
+  * #9453 Fix opening links inside the group chat subject (MacOS/Windows)
+  * #9465 Allow the full range of possible nicknames in group chats
+  * #9067 Gajim crashes when receiving xhtml messages
+  * #9096 Error when clicking on a subscription notification
+  * #9446 Chatstate error in MUC conversation
+  * #9471 Conversation Textview: Error on key press
+  * #9472 Handle presences without from attr correctly
+  * #9473 Error when creating a new group chat
+  * #9491 Identify group chat subject changes correctly
+  * #9496 Error on MUC roster selection change
+  * Determine soundplayer correctly on unix systems
+  * In some circumstances plugins could not be deleted
+  * Show correct contact status on tabs
+  * Dont answer group chat receipt requests
+  * Fix receipts for private messages
+  * Pressing the back button in the Accounts window leads to an error
+  * Better handle not available keyring backends
+  * Dont show incorrect contact on private messages
+  * Join group chat menu is disabled when there are no bookmarks
+  * Error on start chat menu action
+  * Error when opening sign-in/out notification
+  * Copying text does not work with different keyboard layouts
+
+Gajim 1.1.0 (06 May 2018)
+
+  New
+
+  * Remove support for XEP-0091
+
+  Bug fixes
+
+  * #9322 Error when adding contact
+  * #9385 Ignore invalid bookmarks
+  * #9386 Discovery: Browsing nodes without identity
+  * #9393 Error when parsing invalid timestamps
+  * #9398 Error on jingle file transfer
+
+Gajim 1.1.0-beta2 / 1.0.99.1 (13 October 2018)
 
   New
 
@@ -27,19 +124,19 @@ Gajim 1.0.99.1 (07 October 2018)
 
   Bug fixes
 
-  * 9198 Creating new MUCs with captial letters is not possible
-  * 9210 Error when clicking on new message indicator
-  * 9280 Inviting users to a MUC causes error
-  * 9301 Error when opening service discovery window
-  * 9309 Error when clicking on a groupchat invite notification
-  * 9311 Error when requesting server info
-  * 9117 Windows UAC changes status not available
-  * 9324 No menus/dialogs on Win7
-  * 9326 IPV6 Connection problem on Win10
-  * 9334 Joining big MUCs takes very long
-  * 9339 Error caused by remote_control
+  * #9198 Creating new MUCs with captial letters is not possible
+  * #9210 Error when clicking on new message indicator
+  * #9280 Inviting users to a MUC causes error
+  * #9301 Error when opening service discovery window
+  * #9309 Error when clicking on a groupchat invite notification
+  * #9311 Error when requesting server info
+  * #9117 Windows UAC changes status not available
+  * #9324 No menus/dialogs on Win7
+  * #9326 IPV6 Connection problem on Win10
+  * #9334 Joining big MUCs takes very long
+  * #9339 Error caused by remote_control
 
-Gajim 1.0.99 (19 August 2018)
+Gajim 1.1.0-beta1 / 1.0.99 (19 August 2018)
 
   New
 
@@ -60,16 +157,16 @@ Gajim 1.0.99 (19 August 2018)
 
   Bug fixes
 
-  * 8658 Translation doesnt work on Windows
-  * 8750 Increase time frame for duplicate search in MUCs
-  * 9138 Translation in Flatpak does not work
-  * 9140 Error when clicking on the notification of an incoming message
-  * 9159 Wrong form type when responding to a voice request
-  * 9069 Send cancel IQ if muc configuration is aborted 
-  * 9167 Flatpak fails to determine locale settings
-  * 9171 Gajim requests vcard multiple times
-  * 9198 Creating new MUCs with capital letters is not possible
-  * 9211 Punycode and Unicode with Internationalized Domain Names
+  * #8658 Translation doesnt work on Windows
+  * #8750 Increase time frame for duplicate search in MUCs
+  * #9138 Translation in Flatpak does not work
+  * #9140 Error when clicking on the notification of an incoming message
+  * #9159 Wrong form type when responding to a voice request
+  * #9069 Send cancel IQ if muc configuration is aborted
+  * #9167 Flatpak fails to determine locale settings
+  * #9171 Gajim requests vcard multiple times
+  * #9198 Creating new MUCs with capital letters is not possible
+  * #9211 Punycode and Unicode with Internationalized Domain Names
 
   Other changes
 
@@ -91,9 +188,9 @@ Gajim 1.0.3 (20 May 2018)
 
   Bugs fixed:
 
-  * 8296 Fix errors on roster updates after stream management resume
-  * 9106 Convert font weight from pango to css values
-  * 9124 Bring ChatControl to front when notification is clicked
+  * #8296 Fix errors on roster updates after stream management resume
+  * #9106 Convert font weight from pango to css values
+  * #9124 Bring ChatControl to front when notification is clicked
 
   * Set no-store hint on groupchat chatstates
   * Dont show OOB uri if message body is the same
@@ -107,26 +204,26 @@ Gajim 1.0.2 (30 April 2018)
 
   Bugs fixed:
 
-  * 7879 Server name is rejected for group chat bookmarks
-  * 8964 setup.py install misses some files if used with "--skip-build"
-  * 9017 Password was sometimes stored in plaintext
-  * 9022 Dont show error when receiving invalid avatars
-  * 9031 Windows: Always hide roster window on X
-  * 9038 No License in About dialog
-  * 9039 Encode filenames before sending
-  * 9044 Catch invalid IQ stanzas and log them
-  * 9049 XMPP logo in "Add New Contact" window instead Gajim logo
-  * 9050 Mark some strings as translatable
-  * 9054 Error on file send completion
-  * 9055 Removing a bookmark causes error
-  * 9057 Avatar is deleted when updating vCard
-  * 9065 Account label isn't change in tooltip of notification area icon
-  * 9066 Placeholder text does't disappear
-  * 9068 Missing pulseaudio in Flatpak image
-  * 9070 Fix History Manager search
-  * 9074 Proxy comobobox in accounts/connections doesn't get update after ManageProxies
-  * 9094 problem receiving file
-  * 9101 Notification never autohides in gnome
+  * #7879 Server name is rejected for group chat bookmarks
+  * #8964 setup.py install misses some files if used with "--skip-build"
+  * #9017 Password was sometimes stored in plaintext
+  * #9022 Dont show error when receiving invalid avatars
+  * #9031 Windows: Always hide roster window on X
+  * #9038 No License in About dialog
+  * #9039 Encode filenames before sending
+  * #9044 Catch invalid IQ stanzas and log them
+  * #9049 XMPP logo in "Add New Contact" window instead Gajim logo
+  * #9050 Mark some strings as translatable
+  * #9054 Error on file send completion
+  * #9055 Removing a bookmark causes error
+  * #9057 Avatar is deleted when updating vCard
+  * #9065 Account label isn't change in tooltip of notification area icon
+  * #9066 Placeholder text does't disappear
+  * #9068 Missing pulseaudio in Flatpak image
+  * #9070 Fix History Manager search
+  * #9074 Proxy comobobox in accounts/connections doesn't get update after ManageProxies
+  * #9094 problem receiving file
+  * #9101 Notification never autohides in gnome
 
   * Correctly reload Plugins
   * Save history export with utf8 encoding
