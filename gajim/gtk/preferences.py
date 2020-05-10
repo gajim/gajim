@@ -100,6 +100,10 @@ class Preferences(Gtk.ApplicationWindow):
             self._ui.tabs_placement.set_active(3)
 
         ## Contact List Appearance
+        # Merge accounts
+        st = app.config.get('mergeaccounts')
+        self._ui.merge_accounts_checkbutton.set_active(st)
+
         # Display avatars in roster
         st = app.config.get('show_avatars_in_roster')
         self._ui.show_avatars_in_roster_checkbutton.set_active(st)
@@ -589,6 +593,10 @@ class Preferences(Gtk.ApplicationWindow):
             app.config.set('tabs_position', 'left')
         else: # right
             app.config.set('tabs_position', 'right')
+
+    def on_merge_accounts_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'mergeaccounts')
+        app.app.activate_action('merge')
 
     def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
