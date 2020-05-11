@@ -157,6 +157,10 @@ _dependencies = {
 }
 
 
+def get_client(account):
+    return connections[account]
+
+
 def is_installed(dependency):
     if dependency == 'ZEROCONF':
         # Alias for checking zeroconf libs
