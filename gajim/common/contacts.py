@@ -670,7 +670,7 @@ class Contacts():
         for _contact in self._contacts[old_jid]:
             _contact.jid = new_jid
             self._contacts[new_jid].append(_contact)
-            del self._contacts[old_jid]
+        del self._contacts[old_jid]
 
     def get_combined_chatstate(self, jid):
         if jid not in self._contacts:
