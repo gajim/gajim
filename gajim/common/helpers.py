@@ -883,7 +883,8 @@ def get_accounts_info():
     accounts = []
     accounts_list = sorted(app.contacts.get_accounts())
     for account in accounts_list:
-        status = app.connections[account].status
+
+        status = get_connection_status(account)
         message = app.connections[account].status_message
         single_line = get_uf_show(status)
         if message is None:

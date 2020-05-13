@@ -35,6 +35,7 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.helpers import get_connection_status
 from gajim.common.const import AvatarSize
 from gajim.common.const import PEPEventType
 from gajim.common.i18n import Q_
@@ -308,7 +309,7 @@ class RosterTooltip(StatusTable):
                 jid=jid,
                 account=account,
                 name=account_name,
-                show=connection.status,
+                show=get_connection_status(account),
                 status=connection.status_message,
                 resource=connection.get_own_jid().getResource(),
                 priority=connection.priority)
