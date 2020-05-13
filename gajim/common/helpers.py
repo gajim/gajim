@@ -374,11 +374,6 @@ def get_file_path_from_dnd_dropped_uri(uri):
         path = path[5:] # 5 is len('file:')
     return path
 
-def get_xmpp_show(show):
-    if show in ('online', 'offline'):
-        return None
-    return show
-
 def sanitize_filename(filename):
     """
     Make sure the filename we will write does contain only acceptable and latin
