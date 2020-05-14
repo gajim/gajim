@@ -52,7 +52,7 @@ def generate_avatar(letters, color, size, scale):
     font_size = size * 0.5
 
     # Set up surface
-    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+    surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
     context = cairo.Context(surface)
 
     context.set_source_rgb(color_r, color_g, color_b)
@@ -61,26 +61,20 @@ def generate_avatar(letters, color, size, scale):
 
     # Draw letters
     context.select_font_face('sans-serif',
-                             cairo.FONT_SLANT_NORMAL,
-                             cairo.FONT_WEIGHT_NORMAL)
+                             cairo.FontSlant.NORMAL,
+                             cairo.FontWeight.NORMAL)
     context.set_font_size(font_size)
     extends = context.text_extents(letters)
-    if isinstance(extends, tuple):
-        # For cairo < 1.15
-        x_bearing, y_bearing, ex_width, ex_height = extends[0:4]
-    else:
-        x_bearing = extends.x_bearing
-        y_bearing = extends.y_bearing
-        ex_width = extends.width
-        ex_height = extends.height
+    x_bearing = extends.x_bearing
+    y_bearing = extends.y_bearing
+    ex_width = extends.width
+    ex_height = extends.height
 
     x_pos = width / 2 - (ex_width / 2 + x_bearing)
     y_pos = height / 2 - (ex_height / 2 + y_bearing)
     context.move_to(x_pos, y_pos)
     context.set_source_rgb(0.95, 0.95, 0.95)
-    # use cairo.OPERATOR_OVER legacy constant because its
-    # compatible with cairo < 1.13
-    context.set_operator(cairo.OPERATOR_OVER)
+    context.set_operator(cairo.Operator.OVER)
     context.show_text(letters)
 
     return context.get_target()
@@ -90,7 +84,7 @@ def add_status_to_avatar(surface, show):
     width = surface.get_width()
     height = surface.get_height()
 
-    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+    new_surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
     new_surface.set_device_scale(*surface.get_device_scale())
 
     scale = surface.get_device_scale()[0]
@@ -128,7 +122,7 @@ def square(surface, size):
     if width == height:
         return surface
 
-    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
+    new_surface = cairo.ImageSurface(cairo.Format.ARGB32, size, size)
     new_surface.set_device_scale(*surface.get_device_scale())
     context = cairo.Context(new_surface)
 
@@ -147,7 +141,7 @@ def square(surface, size):
 
 
 def clip_circle(surface):
-    new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+    new_surface = cairo.ImageSurface(cairo.Format.ARGB32,
                                      surface.get_width(),
                                      surface.get_height())
 
