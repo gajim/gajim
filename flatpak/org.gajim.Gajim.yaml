@@ -42,6 +42,24 @@ cleanup:
   - '*.la'
 
 modules:
+  - name: python3-pyparsing
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=/app pyparsing-2.4.7-py2.py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/8a/bb/488841f56197b13700afd5658fc279a2025a39e22449b7cf29864669b15d/pyparsing-2.4.7-py2.py3-none-any.whl
+        sha256: ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b
+
+  - name: python3-packaging
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=/app packaging-20.3-py2.py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/62/0a/34641d2bf5c917c96db0ded85ae4da25b6cd922d6b794648d4e7e07c88e5/packaging-20.3-py2.py3-none-any.whl
+        sha256: 82f77b9bee21c1bafbf35a84905d604d5d1223801d639cf3ed140bd651c08752
+
   - name: python3-pycparser
     buildsystem: simple
     build-commands:

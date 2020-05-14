@@ -56,9 +56,9 @@ import urllib
 from urllib.parse import unquote
 from io import StringIO
 from datetime import datetime, timedelta
-from distutils.version import LooseVersion as V
 from encodings.punycode import punycode_encode
 from functools import wraps
+from packaging.version import Version as V
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.const import Role

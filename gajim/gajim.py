@@ -22,7 +22,7 @@ import signal
 import platform
 from ctypes import CDLL, byref, create_string_buffer
 from ctypes.util import find_library
-from distutils.version import LooseVersion as V
+from packaging.version import Version as V
 
 from gajim.common import i18n
 
