@@ -260,6 +260,18 @@ button.flat.link { padding: 0; border: 0; }
 /*Image Preview*/
 .preview-image { box-shadow: 0px 0px 3px 0px alpha(@theme_text_color, 0.2); }
 
+/* Badge */
+.badge {
+    color: rgb(242, 242, 242);
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 4px;
+    font-size: 80%;
+    font-weight: bold;
+}
+
 /* Treeview */
 .adhoc-treeview { padding: 5px; }
 .adhoc-scrolled { border: 1px solid; border-color:@unfocused_borders; }

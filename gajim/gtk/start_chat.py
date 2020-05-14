@@ -37,6 +37,7 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import generate_account_badge
 
 
 class Search(IntEnum):
@@ -136,8 +137,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
             for bookmark in bookmarks:
                 jid = str(bookmark.jid)
                 name = get_groupchat_name(con, jid)
-                rows.append(ContactRow(account, None, jid,
-                                       name, show_account, True))
+                rows.append(ContactRow(account, None, jid, name, show_account,
+                                       groupchat=True))
 
     def _load_contacts(self, rows):
         generator = self._incremental_add(rows)
@@ -401,7 +402,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
             show_account = len(self._accounts) > 1
             row = ContactRow(account, None, '', None, show_account)
             self.new_contact_rows[account] = row
-            group_row = ContactRow(account, None, '', None, show_account, True)
+            group_row = ContactRow(account, None, '', None, show_account,
+                                   groupchat=True)
             self.new_groupchat_rows[account] = group_row
             self._ui.listbox.add(row)
             self._ui.listbox.add(group_row)
@@ -609,8 +611,8 @@ class ContactRow(Gtk.ListBoxRow):
         image.set_size_request(AvatarSize.CHAT, AvatarSize.CHAT)
         grid.add(image)
 
-        middle_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        middle_box.set_hexpand(True)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        box.set_hexpand(True)
 
         if self.name is None:
             if self.groupchat:
@@ -624,7 +626,17 @@ class ContactRow(Gtk.ListBoxRow):
         self.name_label.set_width_chars(20)
         self.name_label.set_halign(Gtk.Align.START)
         self.name_label.get_style_context().add_class('bold16')
-        middle_box.add(self.name_label)
+        name_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        name_box.add(self.name_label)
+        if show_account:
+            account_badge = generate_account_badge(account)
+            account_badge.set_tooltip_text(
+                _('Account: %s' % self.account_label))
+            account_badge.set_halign(Gtk.Align.END)
+            account_badge.set_valign(Gtk.Align.START)
+            account_badge.set_hexpand(True)
+            name_box.add(account_badge)
+        box.add(name_box)
 
         self.jid_label = Gtk.Label(label=jid)
         self.jid_label.set_tooltip_text(jid)
@@ -633,21 +645,9 @@ class ContactRow(Gtk.ListBoxRow):
         self.jid_label.set_width_chars(22)
         self.jid_label.set_halign(Gtk.Align.START)
         self.jid_label.get_style_context().add_class('dim-label')
-        middle_box.add(self.jid_label)
+        box.add(self.jid_label)
 
-        grid.add(middle_box)
-
-        if show_account:
-            account_icon = Gtk.Image.new_from_icon_name(
-                'org.gajim.Gajim-symbolic', Gtk.IconSize.MENU)
-            account_icon.set_tooltip_text(
-                _('Account: %s' % self.account_label))
-            account_class = app.css_config.get_dynamic_class(account)
-            account_icon.get_style_context().add_class(account_class)
-            right_box = Gtk.Box()
-            right_box.set_vexpand(True)
-            right_box.add(account_icon)
-            grid.add(right_box)
+        grid.add(box)
 
         self.add(grid)
         self.show_all()

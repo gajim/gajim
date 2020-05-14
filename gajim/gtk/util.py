@@ -660,6 +660,19 @@ def get_color_for_account(account: str) -> str:
     return rgba.to_string()
 
 
+def generate_account_badge(account):
+    account_label = app.get_account_label(account)
+    badge = Gtk.Label(label=account_label)
+    badge.set_ellipsize(Pango.EllipsizeMode.END)
+    badge.set_max_width_chars(12)
+    badge.set_size_request(50, -1)
+    account_class = app.css_config.get_dynamic_class(account)
+    badge_context = badge.get_style_context()
+    badge_context.add_class(account_class)
+    badge_context.add_class('badge')
+    return badge
+
+
 @lru_cache(maxsize=16)
 def get_css_show_class(show):
     if show in ('online', 'chat'):
