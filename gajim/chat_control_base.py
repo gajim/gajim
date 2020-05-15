@@ -60,6 +60,7 @@ from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import get_hardware_key_codes
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import generate_account_badge
 from gajim.gtk.const import ControlType  # pylint: disable=unused-import
 from gajim.gtk.emoji_chooser import emoji_chooser
 
@@ -140,11 +141,11 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         self._accounts = app.get_enabled_accounts_with_labels()
         if len(self._accounts) > 1:
-            self.xml.account_image.set_tooltip_text(
-                app.get_account_label(self.account))
-            account_class = app.css_config.get_dynamic_class(self.account)
-            self.xml.account_image.get_style_context().add_class(account_class)
-            self.xml.account_image.show()
+            account_badge = generate_account_badge(self.account)
+            account_badge.set_tooltip_text(
+                _('Account: %s') % app.get_account_label(self.account))
+            self.xml.account_badge.add(account_badge)
+            account_badge.show()
 
         # Init DND
         self.TARGET_TYPE_URI_LIST = 80
