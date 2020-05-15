@@ -29,7 +29,7 @@ import fnmatch
 import zipfile
 from shutil import rmtree, move
 import configparser
-from pkg_resources import parse_version
+from packaging.version import Version as V
 
 import gajim
 from gajim.common import app
@@ -645,14 +645,14 @@ class PluginManager(metaclass=Singleton):
                 continue
 
             gajim_v = gajim.__version__.split('+', 1)[0]
-            gajim_v_cmp = parse_version(gajim_v)
+            gajim_v_cmp = V(gajim_v)
 
-            if min_v and gajim_v_cmp < parse_version(min_v):
+            if min_v and gajim_v_cmp < V(min_v):
                 log.warning('Plugin %s not loaded, newer version of'
                             'gajim required: %s < %s',
                             elem_name, gajim_v, min_v)
                 continue
-            if max_v and gajim_v_cmp > parse_version(max_v):
+            if max_v and gajim_v_cmp > V(max_v):
                 log.warning('Plugin %s not loaded, plugin incompatible '
                             'with current version of gajim: '
                             '%s > %s', elem_name, gajim_v, max_v)
