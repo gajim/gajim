@@ -28,6 +28,7 @@ import sys
 import re
 import logging
 from pathlib import Path
+from packaging.version import Version as V
 
 from gi.repository import Gdk
 from nbxmpp.util import text_to_color
@@ -126,32 +127,26 @@ class OptionsParser:
         return True
 
     def update_config(self, old_version, new_version):
-        old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)
-        old = []
-        while old_version_list:
-            old.append(int(old_version_list.pop(0)))
-        new_version_list = new_version.split('.')
-        new = []
-        while new_version_list:
-            new.append(int(new_version_list.pop(0)))
+        old = V(old_version)
+        new = V(new_version)
 
-        if old < [0, 16, 4, 1] and new >= [0, 16, 4, 1]:
+        if old < V('0.16.4.1') <= new:
             self.update_config_to_01641()
-        if old < [0, 16, 10, 1] and new >= [0, 16, 10, 1]:
+        if old < V('0.16.10.1') <= new:
             self.update_config_to_016101()
-        if old < [0, 16, 10, 2] and new >= [0, 16, 10, 2]:
+        if old < V('0.16.10.2') <= new:
             self.update_config_to_016102()
-        if old < [0, 16, 10, 4] and new >= [0, 16, 10, 4]:
+        if old < V('0.16.10.4') <= new:
             self.update_config_to_016104()
-        if old < [0, 16, 10, 5] and new >= [0, 16, 10, 5]:
+        if old < V('0.16.10.5') <= new:
             self.update_config_to_016105()
-        if old < [0, 98, 3] and new >= [0, 98, 3]:
+        if old < V('0.98.3') <= new:
             self.update_config_to_0983()
-        if old < [1, 1, 93] and new >= [1, 1, 93]:
+        if old < V('1.1.93') <= new:
             self.update_config_to_1193()
-        if old < [1, 1, 94] and new >= [1, 1, 94]:
+        if old < V('1.1.94') <= new:
             self.update_config_to_1194()
-        if old < [1, 1, 95] and new >= [1, 1, 95]:
+        if old < V('1.1.95') <= new:
             self.update_config_to_1195()
 
         app.config.set('version', new_version)
