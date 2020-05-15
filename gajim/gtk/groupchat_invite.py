@@ -26,6 +26,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.helpers import validate_jid
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import generate_account_badge
 
 
 class GroupChatInvite(Gtk.Box):
@@ -296,8 +297,8 @@ class ContactRow(Gtk.ListBoxRow):
         image.set_size_request(AvatarSize.ROSTER, AvatarSize.ROSTER)
         grid.add(image)
 
-        middle_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        middle_box.set_hexpand(True)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        box.set_hexpand(True)
 
         if self.name is None:
             self.name = _('Invite New Contact')
@@ -308,7 +309,18 @@ class ContactRow(Gtk.ListBoxRow):
         self.name_label.set_width_chars(20)
         self.name_label.set_halign(Gtk.Align.START)
         self.name_label.get_style_context().add_class('bold16')
-        middle_box.add(self.name_label)
+        name_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        name_box.add(self.name_label)
+
+        if show_account:
+            account_badge = generate_account_badge(account)
+            account_badge.set_tooltip_text(
+                _('Account: %s' % self.account_label))
+            account_badge.set_halign(Gtk.Align.END)
+            account_badge.set_valign(Gtk.Align.START)
+            account_badge.set_hexpand(True)
+            name_box.add(account_badge)
+        box.add(name_box)
 
         self.jid_label = Gtk.Label(label=jid)
         self.jid_label.set_tooltip_text(jid)
@@ -317,22 +329,9 @@ class ContactRow(Gtk.ListBoxRow):
         self.jid_label.set_width_chars(22)
         self.jid_label.set_halign(Gtk.Align.START)
         self.jid_label.get_style_context().add_class('dim-label')
-        middle_box.add(self.jid_label)
+        box.add(self.jid_label)
 
-        grid.add(middle_box)
-
-        if show_account:
-            account_icon = Gtk.Image.new_from_icon_name(
-                'org.gajim.Gajim-symbolic', Gtk.IconSize.MENU)
-            account_icon.set_tooltip_text(
-                _('Account: %s' % self.account_label))
-            account_class = app.css_config.get_dynamic_class(account)
-            account_icon.get_style_context().add_class(account_class)
-
-            right_box = Gtk.Box()
-            right_box.set_vexpand(True)
-            right_box.add(account_icon)
-            grid.add(right_box)
+        grid.add(box)
 
         self.add(grid)
         self.show_all()
