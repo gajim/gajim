@@ -61,7 +61,6 @@ import sys
 import os
 from io import StringIO
 from functools import reduce
-from pkg_resources import parse_version
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -170,12 +169,6 @@ class IterableIPShell:
         # Workaround for updating namespace with sys.modules
         #
         self.__update_namespace()
-
-        # Avoid using input splitter when not really needed.
-        # Perhaps it could work even before 5.8.0
-        # But it definitely does not work any more with >= 7.0.0
-        self.no_input_splitter = parse_version(IPython.release.version) >= \
-            parse_version('5.8.0')
         self.lines = []
 
     def __update_namespace(self):
@@ -208,28 +201,21 @@ class IterableIPShell:
                 self.IP.rl_do_indent = True
 
         try:
-            line = self.IP.raw_input(self.prompt)
+            self.IP.raw_input(self.prompt)
         except KeyboardInterrupt:
             self.IP.write('\nKeyboardInterrupt\n')
             self.IP.input_splitter.reset()
         except Exception:
             self.IP.showtraceback()
         else:
-            if self.no_input_splitter:
-                self.lines.append(self.IP.raw_input(self.prompt))
-                self.iter_more = self.IP.check_complete(
-                    '\n'.join(self.lines))[0] == 'incomplete'
-            else:
-                self.IP.input_splitter.push(line)
-                self.iter_more = self.IP.input_splitter.push_accepts_more()
+            self.lines.append(self.IP.raw_input(self.prompt))
+            self.iter_more = self.IP.check_complete(
+                '\n'.join(self.lines))[0] == 'incomplete'
 
             self.prompt = self.generatePrompt(self.iter_more)
             if not self.iter_more:
-                if self.no_input_splitter:
-                    source_raw = '\n'.join(self.lines)
-                    self.lines = []
-                else:
-                    source_raw = self.IP.input_splitter.raw_reset()
+                source_raw = '\n'.join(self.lines)
+                self.lines = []
 
                 self.IP.run_cell(source_raw, store_history=True)
                 self.IP.rl_do_indent = False
