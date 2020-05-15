@@ -545,6 +545,7 @@ class GajimApplication(Gtk.Application):
     def _set_shortcuts(self):
         shortcuts = {
             'app.quit': ['<Primary>Q'],
+            'app.shortcuts': ['<Primary>question'],
             'app.preferences': ['<Primary>P'],
             'app.plugins': ['<Primary>E'],
             'app.xml-console': ['<Primary><Shift>X'],
