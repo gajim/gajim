@@ -131,6 +131,8 @@ proxy65_manager = None
 
 cert_store = None
 
+task_manager = None
+
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
 
