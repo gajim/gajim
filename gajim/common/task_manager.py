@@ -30,10 +30,10 @@ class TaskManager:
         self._timeout = None
         self._queue = queue.PriorityQueue()
 
-    def _start_worker(self):
+    def _start_worker(self) -> None:
         self._timeout = GLib.timeout_add_seconds(2, self._process_queue)
 
-    def _process_queue(self):
+    def _process_queue(self) -> bool:
         log.info('%s tasks queued', self._queue.qsize())
         requeue = []
         while not self._queue.empty():
@@ -63,7 +63,7 @@ class TaskManager:
         self._timeout = None
         return False
 
-    def _requeue_tasks(self, tasks: List[Task]):
+    def _requeue_tasks(self, tasks: List[Task]) -> bool:
         if not tasks:
             return False
 
@@ -72,7 +72,7 @@ class TaskManager:
             self._queue.put_nowait(task)
         return True
 
-    def add_task(self, task: Task):
+    def add_task(self, task: Task) -> None:
         log.info('Adding task: %r', task)
         self._queue.put_nowait(task)
         if self._timeout is None:
@@ -85,20 +85,24 @@ class Task:
         self.priority = priority
         self._obsolete = False
 
-    def is_obsolete(self):
+    def is_obsolete(self) -> bool:
         return self._obsolete
 
-    def set_obsolete(self):
+    def set_obsolete(self) -> None:
         self._obsolete = True
 
-    def __lt__(self, task: Task):
-        return self.priority < task.priority
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Task):
+            raise NotImplementedError
+        return self.priority < other.priority
 
-    def __eq__(self, task: Task):
-        return task.priority == self.priority
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Task):
+            raise NotImplementedError
+        return other.priority == self.priority
 
-    def execute(self):
+    def execute(self) -> None:
         raise NotImplementedError
 
-    def preconditions_met(self):
+    def preconditions_met(self) -> bool:
         raise NotImplementedError
