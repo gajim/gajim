@@ -11,6 +11,8 @@ from gajim.common.i18n import Q_
 EncryptionData = namedtuple('EncryptionData', 'additional_data')
 EncryptionData.__new__.__defaults__ = (None,)  # type: ignore
 
+Entity = namedtuple('Entity', 'jid node hash method')
+
 
 class AvatarSize(IntEnum):
     TAB = 16
