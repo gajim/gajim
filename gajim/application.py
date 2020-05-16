@@ -55,6 +55,7 @@ from gajim.common import exceptions
 from gajim.common import logger
 from gajim.common.i18n import _
 from gajim.common.contacts import LegacyContactsAPI
+from gajim.common.task_manager import TaskManager
 
 
 class GajimApplication(Gtk.Application):
@@ -218,6 +219,7 @@ class GajimApplication(Gtk.Application):
 
         from gajim.common.cert_store import CertificateStore
         app.cert_store = CertificateStore()
+        app.task_manager = TaskManager()
 
         # Set Application Menu
         app.app = self
