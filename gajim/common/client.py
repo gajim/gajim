@@ -79,7 +79,6 @@ class Client(ConnectionHandlers):
 
         self.available_transports = {}
 
-        # Register all modules
         modules.register_modules(self)
 
         self._create_client()
@@ -162,7 +161,9 @@ class Client(ConnectionHandlers):
         self._client.subscribe('stanza-sent', self._on_stanza_sent)
         self._client.subscribe('stanza-received', self._on_stanza_received)
 
-        self._register_new_handlers()
+        for handler in modules.get_handlers(self):
+            self._client.register_handler(handler)
+        self.handlers_registered = True
 
     def process_ssl_errors(self):
         if not self._ssl_errors:
@@ -372,11 +373,6 @@ class Client(ConnectionHandlers):
         app.nec.push_incoming_event(
             OurShowEvent(None, conn=self, show=show))
 
-    def _register_new_handlers(self):
-        for handler in modules.get_handlers(self):
-            self._client.register_handler(handler)
-        self.handlers_registered = True
-
     def get_module(self, name):
         return modules.get(self._account, name)
 
@@ -522,7 +518,7 @@ class Client(ConnectionHandlers):
             self._reconnect_timer_source = None
 
     def cleanup(self):
-        pass
+        modules.unregister_modules(self)
 
     def quit(self, kill_core):
         if kill_core and self._state in (ClientState.CONNECTING,
