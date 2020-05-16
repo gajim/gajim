@@ -128,25 +128,24 @@ class OptionsParser:
 
     def update_config(self, old_version, new_version):
         old = V(old_version)
-        new = V(new_version)
 
-        if old < V('0.16.4.1') <= new:
+        if old < V('0.16.4.1'):
             self.update_config_to_01641()
-        if old < V('0.16.10.1') <= new:
+        if old < V('0.16.10.1'):
             self.update_config_to_016101()
-        if old < V('0.16.10.2') <= new:
+        if old < V('0.16.10.2'):
             self.update_config_to_016102()
-        if old < V('0.16.10.4') <= new:
+        if old < V('0.16.10.4'):
             self.update_config_to_016104()
-        if old < V('0.16.10.5') <= new:
+        if old < V('0.16.10.5'):
             self.update_config_to_016105()
-        if old < V('0.98.3') <= new:
+        if old < V('0.98.3'):
             self.update_config_to_0983()
-        if old < V('1.1.93') <= new:
+        if old < V('1.1.93'):
             self.update_config_to_1193()
-        if old < V('1.1.94') <= new:
+        if old < V('1.1.94'):
             self.update_config_to_1194()
-        if old < V('1.1.95') <= new:
+        if old < V('1.1.95'):
             self.update_config_to_1195()
         if old < [1, 1, 99, 1] and new >= [1, 1, 99, 1]:
             self.update_config_to_11991()
