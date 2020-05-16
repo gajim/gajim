@@ -216,6 +216,30 @@ class MUCJoinedState(Enum):
     def __str__(self):
         return self.name
 
+    @property
+    def is_joined(self):
+        return self == MUCJoinedState.JOINED
+
+    @property
+    def is_not_joined(self):
+        return self == MUCJoinedState.NOT_JOINED
+
+    @property
+    def is_joining(self):
+        return self == MUCJoinedState.JOINING
+
+    @property
+    def is_creating(self):
+        return self == MUCJoinedState.CREATING
+
+    @property
+    def is_captcha_request(self):
+        return self == MUCJoinedState.CAPTCHA_REQUEST
+
+    @property
+    def is_captcha_failed(self):
+        return self == MUCJoinedState.CAPTCHA_FAILED
+
 
 class ClientState(IntEnum):
     DISCONNECTING = 0
