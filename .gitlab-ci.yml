@@ -20,7 +20,7 @@ run-tests:
     - mypy gajim
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
     - python3 -m unittest discover -s test/no_gui -v
-    - codespell -I codespell.conf gajim
+    - codespell -I codespell.conf --skip="*__pycache__*,gajim/data/icons,gajim/data/sounds,gajim/data/emoticons" gajim
     - deactivate
     - rm -rf civenv-master
 
