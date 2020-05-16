@@ -57,7 +57,6 @@ class Client(ConnectionHandlers):
         self.password = None
 
         self._priority = 0
-        self.handlers_registered = False
         self._connect_machine_calls = 0
         self.avatar_conversion = False
         self.addressing_supported = False
@@ -175,7 +174,6 @@ class Client(ConnectionHandlers):
 
         for handler in modules.get_handlers(self):
             self._client.register_handler(handler)
-        self.handlers_registered = True
 
     def process_ssl_errors(self):
         if not self._ssl_errors:

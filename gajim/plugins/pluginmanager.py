@@ -406,13 +406,8 @@ class PluginManager(metaclass=Singleton):
                 instance, name = module.get_instance(con)
                 modules.register_single_module(con, instance, name)
 
-                # If handlers have been registered, register the
-                # plugin handlers. Otherwise this will be done
-                # automatically on connecting
-                # in connection_handlers._register_handlers()
-                if con.handlers_registered:
-                    for handler in instance.handlers:
-                        con.connection.register_handler(handler)
+                for handler in instance.handlers:
+                    con.connection.register_handler(handler)
 
     def _unregister_modules_with_handlers(self, plugin):
         if not hasattr(plugin, 'modules'):
@@ -422,11 +417,8 @@ class PluginManager(metaclass=Singleton):
                 instance = con.get_module(module.name)
                 modules.unregister_single_module(con, module.name)
 
-                # Account is still connected and handlers are registered
-                # So just unregister the plugin handlers
-                if con.handlers_registered:
-                    for handler in instance.handlers:
-                        con.connection.unregister_handler(handler)
+                for handler in instance.handlers:
+                    con.connection.unregister_handler(handler)
 
     def activate_plugin(self, plugin):
         '''
