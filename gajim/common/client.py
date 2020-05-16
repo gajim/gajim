@@ -77,6 +77,8 @@ class Client(ConnectionHandlers):
 
         self._ssl_errors = set()
 
+        self._destroyed = False
+
         self.available_transports = {}
 
         modules.register_modules(self)
@@ -120,6 +122,16 @@ class Client(ConnectionHandlers):
         self._remove_account = value
 
     def _create_client(self):
+        if self._destroyed:
+            # If we disable an account cleanup() is called and all
+            # modules are unregistered. Because disable_account() does not wait
+            # for the client to properly disconnect, handlers of the
+            # nbxmpp.Client() are emitted after we called cleanup().
+            # After nbxmpp.Client() disconnects and is destroyed we create a
+            # new instance with this method but modules.get_handlers() fails
+            # because modules are already unregistered.
+            # TODO: Make this nicer
+            return
         log.info('Create new nbxmpp client')
         self._client = NBXMPPClient(log_context=self._account)
         self.connection = self._client
@@ -518,6 +530,7 @@ class Client(ConnectionHandlers):
             self._reconnect_timer_source = None
 
     def cleanup(self):
+        self._destroyed = True
         modules.unregister_modules(self)
 
     def quit(self, kill_core):
