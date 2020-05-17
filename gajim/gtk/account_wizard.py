@@ -136,17 +136,29 @@ class AccountWizard(Assistant):
                 if self.get_page('signup').is_advanced():
                     self.show_page('advanced',
                                    Gtk.StackTransitionType.SLIDE_LEFT)
+
+                elif self.get_page('signup').is_anonymous():
+                    self._test_anonymous_server()
+
                 else:
                     self._register_with_server()
 
             elif page == 'advanced':
-                self._register_with_server()
+                if self.get_page('signup').is_anonymous():
+                    self._test_anonymous_server()
+                else:
+                    self._register_with_server()
 
             elif page == 'security-warning':
                 if self.get_page('security-warning').trust_certificate:
                     app.cert_store.add_certificate(
                         self.get_page('security-warning').cert)
-                self._register_with_server(ignore_all_errors=True)
+
+                if self.get_page('signup').is_anonymous():
+                    self._test_anonymous_server(ignore_all_errors=True)
+
+                else:
+                    self._register_with_server(ignore_all_errors=True)
 
             elif page == 'form':
                 self._show_progress_page(_('Creating Account...'),
@@ -155,8 +167,6 @@ class AccountWizard(Assistant):
 
         elif button_name == 'connect':
             if page == 'success':
-                # if self.get_page('success').is_update():
-                #     app.interface.show_vcard_when_connect.append(self.account)
                 app.interface.enable_account(self.get_page('success').account)
                 self.destroy()
 
@@ -279,6 +289,22 @@ class AccountWizard(Assistant):
 
         self._client.connect()
 
+    def _test_anonymous_server(self, ignore_all_errors=False):
+        self._show_progress_page(_('Connecting...'),
+                                 _('Connecting to server...'))
+        domain = self.get_page('signup').get_server()
+        advanced = self.get_page('signup').is_advanced()
+
+        self._client = self._get_base_client(
+            domain,
+            None,
+            Mode.ANONYMOUS_TEST,
+            advanced,
+            ignore_all_errors)
+
+        self._client.subscribe('anonymous-supported', self._on_anonymous_supported)
+        self._client.connect()
+
     def _register_with_server(self, ignore_all_errors=False):
         self._show_progress_page(_('Connecting...'),
                                  _('Connecting to server...'))
@@ -315,12 +341,33 @@ class AccountWizard(Assistant):
         client.get_module('Register').request_register_form(
             callback=self._on_register_form)
 
+    def _on_anonymous_supported(self, client, _signal_name):
+        account = self._generate_account_name(client.domain)
+        proxy_name = None
+        if client.proxy is not None:
+            proxy_name = self.get_page('advanced').get_proxy()
+
+        app.interface.create_account(account,
+                                     None,
+                                     client.domain,
+                                     client.password,
+                                     proxy_name,
+                                     client.custom_host,
+                                     anonymous=True)
+        self.get_page('success').set_account(account)
+        self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
+
     def _on_disconnected(self, client, _signal_name):
         domain, error, text = client.get_error()
         if domain == StreamError.SASL:
-            self._show_error_page(_('Authentication failed'),
-                                  SASL_ERRORS.get(error),
-                                  text or '')
+            if error == 'anonymous-not-supported':
+                self._show_error_page(_('Anonymous login not supported'),
+                                      _('Anonymous login not supported'),
+                                      _('This server does not support anonymous'))
+            else:
+                self._show_error_page(_('Authentication failed'),
+                                      SASL_ERRORS.get(error),
+                                      text or '')
 
         elif domain == StreamError.BAD_CERTIFICATE:
             self.get_page('security-warning').set_warning(

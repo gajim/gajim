@@ -1615,17 +1615,16 @@ class Interface:
                        custom_host,
                        anonymous=False):
 
-        if not account or not username or not domain:
-            log.error('Creating account failed: '
-                      'account: %s, username: %s, domain: %s',
-                      account, username, domain)
-            return
+        account_label = f'{username}@{domain}'
+        if anonymous:
+            username = 'anon'
+            account_label = f'anon@{domain}'
 
         config = {}
         config['active'] = False
         config['name'] = username
         config['resource'] = 'gajim.%s' % helpers.get_random_string(8)
-        config['account_label'] = '%s@%s' % (username, domain)
+        config['account_label'] = account_label
         config['account_color'] = get_color_for_account(
             '%s@%s' % (username, domain))
         config['hostname'] = domain
