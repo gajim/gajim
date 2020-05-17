@@ -554,7 +554,6 @@ class GajimApplication(Gtk.Application):
             'app.file-transfer': ['<Primary>T'],
             'app.ipython': ['<Primary><Alt>I'],
             'app.start-chat::': ['<Primary>N'],
-            'app.accounts::': ['<Alt>A'],
             'app.create-groupchat::': ['<Primary>G'],
             'win.show-roster': ['<Primary>R'],
             'win.show-offline': ['<Primary>O'],
