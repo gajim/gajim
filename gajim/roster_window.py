@@ -2973,15 +2973,6 @@ class RosterWindow:
             ctrl.leave()
         self.remove_groupchat(jid, account)
 
-    def on_reconnect(self, widget, jid, account):
-        """
-        When reconnect menuitem is activated: join the room
-        """
-        if jid in app.interface.minimized_controls[account]:
-            ctrl = app.interface.minimized_controls[account][jid]
-            app.interface.join_gc_room(account, jid, ctrl.nick,
-                app.gc_passwords.get(jid, ''))
-
     def on_send_single_message_menuitem_activate(self, widget, account,
     contact=None):
         if contact is None:
@@ -5121,12 +5112,6 @@ class RosterWindow:
                                     account)
             menu.append(rename_menuitem)
 
-        if not app.gc_connected[account].get(jid, False):
-            connect_menuitem = Gtk.MenuItem.new_with_mnemonic(_(
-                '_Reconnect'))
-            connect_menuitem.connect('activate', self.on_reconnect, jid,
-                account)
-            menu.append(connect_menuitem)
         disconnect_menuitem = Gtk.MenuItem.new_with_mnemonic(_(
             '_Leave'))
         disconnect_menuitem.connect('activate', self.on_disconnect, jid,
