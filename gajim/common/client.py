@@ -148,6 +148,11 @@ class Client(ConnectionHandlers):
             # his password
             self.password = passwords.get_password(self._account)
 
+        anonymous = app.config.get_per(
+            'accounts', self._account, 'anonymous_auth')
+        if anonymous:
+            self._client.set_mechs(['ANONYMOUS'])
+
         self._client.set_password(self.password)
         self._client.set_accepted_certificates(
             app.cert_store.get_certificates())

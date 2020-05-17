@@ -701,7 +701,6 @@ Creating an account on one server allows you to communicate with contacts from o
       <object class="GtkCheckButton" id="sign_up_anonymously">
         <property name="label" translatable="yes">Sign up Anonymously</property>
         <property name="visible">True</property>
-        <property name="sensitive">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Note: Anonymous accounts are not possible on all servers</property>
