@@ -147,7 +147,7 @@ class OptionsParser:
             self.update_config_to_1194()
         if old < V('1.1.95'):
             self.update_config_to_1195()
-        if old < [1, 1, 99, 1] and new >= [1, 1, 99, 1]:
+        if old < V('1.1.99.1'):
             self.update_config_to_11991()
 
         app.config.set('version', new_version)
