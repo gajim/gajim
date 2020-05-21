@@ -1113,7 +1113,7 @@ class Logger:
         roster is the new version.
         """
         # First we must reset roster_version value to ensure that the server
-        # sends back all the roster at the next connexion if the replacement
+        # sends back all the roster at the next connection if the replacement
         # didn't work properly.
         app.config.set_per('accounts', account_name, 'roster_version', '')
 
