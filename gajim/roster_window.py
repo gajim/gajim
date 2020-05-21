@@ -5356,7 +5356,7 @@ class RosterWindow:
         self.starting_filtering = False
         # Number of renderers plugins added
         self.nb_ext_renderers = 0
-        # When we quit, rememver if we already saved config once
+        # When we quit, remember if we already saved config once
         self.save_done = False
 
         # [icon, name, type, jid, account, editable, mood_pixbuf,
