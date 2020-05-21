@@ -148,6 +148,14 @@ function install_gajim {
     mkdir "${PACKAGE_DIR}"/gajim/data/plugins
     7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/plugin_installer.zip
 
+    # Install preview plugin
+    curl -o "${BUILD_ROOT}"/url_image_preview.zip https://ftp.gajim.org/plugins_master_zip/url_image_preview.zip
+    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/url_image_preview.zip
+
+    # Install omemo plugin
+    curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins_master_zip/omemo.zip
+    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/omemo.zip
+
     # Install language dicts
     curl -o "${BUILD_ROOT}"/speller_dicts.zip https://gajim.org/downloads/snap/win/build/speller_dicts.zip
     7z x -o"${MINGW_ROOT}"/share "${BUILD_ROOT}"/speller_dicts.zip
