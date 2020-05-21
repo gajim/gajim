@@ -39,6 +39,7 @@ from collections import namedtuple
 from gi.repository import GLib
 
 from nbxmpp.protocol import Iq
+from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import CommonError
 from nbxmpp.modules.discovery import parse_disco_info
@@ -162,6 +163,16 @@ def _adapt_common_error(common_error):
 
 def _convert_marker(marker):
     return 'received' if marker == 0 else 'displayed'
+
+def _jid_adapter(jid):
+    return str(jid)
+
+def _jid_converter(jid):
+    return JID(jid.decode())
+
+
+sqlite.register_converter('jid', _jid_converter)
+sqlite.register_adapter(JID, _jid_adapter)
 
 sqlite.register_converter('disco_info', _convert_disco_info)
 sqlite.register_adapter(DiscoInfo, _adapt_disco_info)
