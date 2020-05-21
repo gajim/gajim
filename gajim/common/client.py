@@ -283,6 +283,7 @@ class Client(ConnectionHandlers):
 
         if self._destroy_client:
             self._client.destroy()
+            self._client = None
             self._destroy_client = False
             self._create_client()
 
@@ -519,6 +520,7 @@ class Client(ConnectionHandlers):
 
         if self._destroy_client:
             self._client.destroy()
+            self._client = None
             self._destroy_client = False
             self._create_client()
 
@@ -529,6 +531,13 @@ class Client(ConnectionHandlers):
 
     def cleanup(self):
         self._destroyed = True
+        if self._client is not None:
+            # cleanup() is called befor nbmxpp.Client has disconnected,
+            # when we disable the account. So we need to unregister
+            # handlers here.
+            # TODO: cleanup() should not be called befor disconnect is finished
+            for handler in modules.get_handlers(self):
+                self._client.unregister_handler(handler)
         modules.unregister_modules(self)
 
     def quit(self, kill_core):
