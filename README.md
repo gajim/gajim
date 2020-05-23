@@ -14,6 +14,7 @@
 - python3-precis-i18n
 - python3-packaging
 - gir1.2-soup-2.4
+- GLib > 2.60.0
 
 ### Optional Runtime Requirements
 
