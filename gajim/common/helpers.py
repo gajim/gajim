@@ -1659,3 +1659,17 @@ def get_ignored_ssl_errors(account):
     ignore_ssl_errors = app.config.get_per(
         'accounts', account, 'ignore_ssl_errors').split()
     return {Gio.TlsCertificateFlags(int(err)) for err in ignore_ssl_errors}
+
+
+def get_idle_status_message(state, status_message):
+    message = app.config.get(f'auto{state}_message')
+    if not message:
+        message = status_message
+    else:
+        message = message.replace('$S', '%(status)s')
+        message = message.replace('$T', '%(time)s')
+        message = message % {
+            'status': status_message,
+            'time': app.config.get(f'auto{state}time')
+        }
+    return message

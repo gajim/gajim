@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
 import logging
 
 import nbxmpp
@@ -34,6 +35,8 @@ from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.helpers import get_resource
 from gajim.common.helpers import get_ignored_ssl_errors
+from gajim.common.helpers import get_idle_status_message
+from gajim.common.idle import Monitor
 from gajim.common.i18n import _
 
 from gajim.common.connection_handlers import ConnectionHandlers
@@ -68,6 +71,9 @@ class Client(ConnectionHandlers):
         self._state = ClientState.DISCONNECTED
         self._status = 'online'
         self._status_message = ''
+        self._idle_status = 'online'
+        self._idle_status_enabled = True
+        self._idle_status_message = ''
 
         self._reconnect = True
         self._reconnect_timer_source = None
@@ -83,6 +89,13 @@ class Client(ConnectionHandlers):
         modules.register_modules(self)
 
         self._create_client()
+
+        self._idle_handler_id = Monitor.connect('state-changed',
+                                                self._idle_state_changed)
+
+        if sys.platform not in ('win32', 'darwin'):
+            self._screensaver_handler_id = app.app.connect(
+                'notify::screensaver-active', self._screensaver_state_changed)
 
         ConnectionHandlers.__init__(self)
 
@@ -100,6 +113,8 @@ class Client(ConnectionHandlers):
 
     @property
     def status_message(self):
+        if self._idle_status_active():
+            return self._idle_status_message
         return self._status_message
 
     @property
@@ -328,13 +343,15 @@ class Client(ConnectionHandlers):
         # This returns the bare jid
         return nbxmpp.JID(app.get_jid_from_account(self._account))
 
-    def change_status(self, show, msg, auto=False):
-        if not msg:
-            msg = ''
+    def change_status(self, show, message):
+        if not message:
+            message = ''
+
+        self._idle_status_enabled = show == 'online'
+        self._status_message = message
 
         if show != 'offline':
             self._status = show
-        self._status_message = msg
 
         if self._state.is_disconnecting:
             log.warning('Can\'t change status while '
@@ -367,7 +384,7 @@ class Client(ConnectionHandlers):
         if show == 'offline':
             presence = self.get_module('Presence').get_presence(
                 typ='unavailable',
-                status=msg,
+                status=message,
                 caps=False)
 
             self.send_stanza(presence)
@@ -376,18 +393,21 @@ class Client(ConnectionHandlers):
                             destroy_client=True)
             return
 
-        self._priority = app.get_priority(self._account, show)
+        self.update_presence()
 
+    def update_presence(self):
+        status, message, idle = self.get_presence_state()
+        self._priority = app.get_priority(self._account, status)
         self.get_module('Presence').send_presence(
             priority=self._priority,
-            show=show,
-            status=msg,
-            idle_time=auto)
+            show=status,
+            status=message,
+            idle_time=idle)
 
-        self.get_module('MUC').update_presence(auto=auto)
+        self.get_module('MUC').update_presence()
 
         app.nec.push_incoming_event(
-            OurShowEvent(None, conn=self, show=show))
+            OurShowEvent(None, conn=self, show=status))
 
     def get_module(self, name):
         return modules.get(self._account, name)
@@ -407,10 +427,13 @@ class Client(ConnectionHandlers):
     def _send_first_presence(self):
         self._priority = app.get_priority(self._account, self._status)
 
+        self._status, message, idle = self.get_presence_state()
+
         self.get_module('Presence').send_presence(
             priority=self._priority,
             show=self._status,
-            status=self._status_message)
+            status=message,
+            idle_time=idle)
 
         self._set_client_available()
 
@@ -507,12 +530,6 @@ class Client(ConnectionHandlers):
 
     def _schedule_reconnect(self):
         self._set_state(ClientState.RECONNECT_SCHEDULED)
-        if app.status_before_autoaway[self._account]:
-            # We were auto away. So go back online
-            self._status_message = app.status_before_autoaway[self._account]
-            app.status_before_autoaway[self._account] = ''
-            self._status = 'online'
-
         log.info("Reconnect to %s in 3s", self._account)
         self._reconnect_timer_source = GLib.timeout_add_seconds(
             3, self.connect)
@@ -534,8 +551,53 @@ class Client(ConnectionHandlers):
             GLib.source_remove(self._reconnect_timer_source)
             self._reconnect_timer_source = None
 
+    def _idle_state_changed(self, monitor):
+        state = monitor.state.value
+
+        if monitor.is_awake():
+            self._idle_status = state
+            self._idle_status_message = ''
+            if self._state.is_available and self._idle_status_enabled:
+                self._status = state
+                self.update_presence()
+            return
+
+        if not app.config.get(f'auto{state}'):
+            return
+
+        if (state in ('away', 'xa') and self._status == 'online' or
+                state == 'xa' and self._idle_status == 'away'):
+
+            self._idle_status = state
+            self._idle_status_message = get_idle_status_message(
+                state, self._status_message)
+            if self._state.is_available and self._idle_status_enabled:
+                self._status = state
+                self.update_presence()
+
+    def _idle_status_active(self):
+        if not Monitor.is_available():
+            return False
+
+        if not self._idle_status_enabled:
+            return False
+
+        return self._idle_status != 'online'
+
+    def get_presence_state(self):
+        if self._idle_status_active():
+            return self._idle_status, self._idle_status_message, True
+        return self._status, self._status_message, False
+
+    @staticmethod
+    def _screensaver_state_changed(application, _param):
+        active = application.get_property('screensaver-active')
+        Monitor.set_extended_away(active)
+
     def cleanup(self):
         self._destroyed = True
+        Monitor.disconnect(self._idle_handler_id)
+        app.app.disconnect(self._screensaver_handler_id)
         if self._client is not None:
             # cleanup() is called before nbmxpp.Client has disconnected,
             # when we disable the account. So we need to unregister

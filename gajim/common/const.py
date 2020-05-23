@@ -120,11 +120,11 @@ class ButtonAction(Enum):
     SUGGESTED = 'suggested-action'
 
 @unique
-class IdleState(IntEnum):
-    UNKNOWN = 0
-    XA = 1
-    AWAY = 2
-    AWAKE = 3
+class IdleState(Enum):
+    UNKNOWN = 'unknown'
+    XA = 'xa'
+    AWAY = 'away'
+    AWAKE = 'online'
 
 
 @unique

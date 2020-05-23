@@ -26,6 +26,7 @@ import ctypes.util
 import logging
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 
 from gajim.common.const import IdleState
 
@@ -36,6 +37,7 @@ class DBusGnomeIdleMonitor:
 
     def __init__(self):
         self.last_idle_time = 0
+        self._extended_away = False
 
         log.debug('Connecting to D-Bus')
         self.dbus_gnome_proxy = Gio.DBusProxy.new_for_bus_sync(
@@ -75,12 +77,17 @@ class DBusGnomeIdleMonitor:
 
         return self.last_idle_time
 
+    def set_extended_away(self, state):
+        self._extended_away = state
+
     def is_extended_away(self):
-        return False
+        return self._extended_away
 
 
 class XssIdleMonitor:
     def __init__(self):
+
+        self._extended_away = False
 
         class XScreenSaverInfo(ctypes.Structure):
             _fields_ = [
@@ -140,6 +147,9 @@ class XssIdleMonitor:
             return info
         return int(self.xss_info_p.contents.idle / 1000)
 
+    def set_extended_away(self, state):
+        self._extended_away = state
+
     def is_extended_away(self):
         return False
 
@@ -193,17 +203,32 @@ class WindowsIdleMonitor:
             return True
 
 
-class IdleMonitor:
+class IdleMonitor(GObject.GObject):
+
+    __gsignals__ = {
+        'state-changed': (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None, # return value
+            () # arguments
+        )}
+
     def __init__(self):
+        GObject.GObject.__init__(self)
         self.set_interval()
         self._state = IdleState.AWAKE
         self._idle_monitor = self._get_idle_monitor()
+
+        if self.is_available():
+            GLib.timeout_add_seconds(1, self._poll)
 
     def set_interval(self, away_interval=60, xa_interval=120):
         log.info('Set interval: away: %s, xa: %s',
                  away_interval, xa_interval)
         self._away_interval = away_interval
         self._xa_interval = xa_interval
+
+    def set_extended_away(self, state):
+        self._idle_monitor.set_extended_away(state)
 
     def is_available(self):
         return self._idle_monitor is not None
@@ -226,7 +251,8 @@ class IdleMonitor:
     def is_unknown(self):
         return self.state == IdleState.UNKNOWN
 
-    def _get_idle_monitor(self):
+    @staticmethod
+    def _get_idle_monitor():
         if sys.platform == 'win32':
             return WindowsIdleMonitor()
 
@@ -244,28 +270,33 @@ class IdleMonitor:
     def get_idle_sec(self):
         return self._idle_monitor.get_idle_sec()
 
-    def poll(self):
+    def _poll(self):
         """
         Check to see if we should change state
         """
-        if not self.is_available():
-            return False
-
         if self._idle_monitor.is_extended_away():
             log.info('Extended Away: Screensaver or Locked Screen')
-            self._state = IdleState.XA
+            self._set_state(IdleState.XA)
             return True
 
         idle_time = self.get_idle_sec()
 
         # xa is stronger than away so check for xa first
         if idle_time > self._xa_interval:
-            self._state = IdleState.XA
+            self._set_state(IdleState.XA)
         elif idle_time > self._away_interval:
-            self._state = IdleState.AWAY
+            self._set_state(IdleState.AWAY)
         else:
-            self._state = IdleState.AWAKE
+            self._set_state(IdleState.AWAKE)
         return True
+
+    def _set_state(self, state):
+        if self._state == state:
+            return
+
+        self._state = state
+        log.info('State changed: %s', state)
+        self.emit('state-changed')
 
 
 Monitor = IdleMonitor()

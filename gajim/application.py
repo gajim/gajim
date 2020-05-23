@@ -173,8 +173,6 @@ class GajimApplication(Gtk.Application):
         self.connect('command-line', self._handle_remote_options)
         self.connect('startup', self._startup)
         self.connect('activate', self._activate)
-        if sys.platform not in ('win32', 'darwin'):
-            self.connect("notify::screensaver-active", self._screensaver_active)
 
         self.interface = None
 
@@ -604,46 +602,3 @@ class GajimApplication(Gtk.Application):
         elif event.feature == Namespace.BLOCKING:
             action = '%s-blocking' % event.account
             self.lookup_action(action).set_enabled(True)
-
-    def _screensaver_active(self, _application, _param):
-        '''Signal handler for screensaver active change'''
-
-        active = self.get_property('screensaver-active')
-
-        roster = app.interface.roster
-
-        if not active:
-            for account in app.connections:
-                if app.account_is_available(account) and \
-                        app.sleeper_state[account] == 'autoaway-forced':
-                    # We came back online after screensaver autoaway
-                    roster.send_status(account, 'online',
-                                       app.status_before_autoaway[account])
-                    app.status_before_autoaway[account] = ''
-                    app.sleeper_state[account] = 'online'
-            return
-        if not app.config.get('autoaway'):
-            # Don't go auto away if user disabled the option
-            return
-        for account in app.connections:
-            if (account not in app.sleeper_state or
-                    not app.sleeper_state[account]):
-                continue
-            if app.sleeper_state[account] == 'online':
-                if not app.account_is_available(account):
-                    continue
-                # we save our online status
-                app.status_before_autoaway[account] = \
-                    app.connections[account].status
-                # we go away (no auto status) [we pass True to auto param]
-                auto_message = app.config.get('autoaway_message')
-                if not auto_message:
-                    auto_message = app.connections[account].status
-                else:
-                    auto_message = auto_message.replace('$S', '%(status)s')
-                    auto_message = auto_message.replace('$T', '%(time)s')
-                    auto_message = auto_message % {
-                        'status': app.status_before_autoaway[account],
-                        'time': app.config.get('autoxatime')}
-                roster.send_status(account, 'away', auto_message, auto=True)
-                app.sleeper_state[account] = 'autoaway-forced'

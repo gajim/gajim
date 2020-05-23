@@ -52,7 +52,6 @@ from gajim import gui_menu_builder
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import idle
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
 from gajim.common.helpers import save_roster_position
@@ -2058,7 +2057,7 @@ class RosterWindow:
     def set_connecting_state(self, account):
         self.set_state(account, 'connecting')
 
-    def send_status(self, account, status, txt, auto=False):
+    def send_status(self, account, status, txt):
         if status != 'offline':
             app.config.set_per('accounts', account, 'last_status', status)
             app.config.set_per('accounts', account, 'last_status_msg',
@@ -2066,7 +2065,7 @@ class RosterWindow:
             if not app.account_is_available(account):
                 self.set_connecting_state(account)
 
-        self.send_status_continue(account, status, txt, auto)
+        self.send_status_continue(account, status, txt)
 
     def send_pep(self, account, pep_dict):
         connection = app.connections[account]
@@ -2101,18 +2100,11 @@ class RosterWindow:
         if ctrl:
             ctrl.update_all_pep_types()
 
-    def send_status_continue(self, account, status, txt, auto):
-        if app.account_is_available(account):
-            if status == 'online' and not idle.Monitor.is_unknown():
-                app.sleeper_state[account] = 'online'
-            elif app.sleeper_state[account] not in ('autoaway', 'autoxa') or \
-            status == 'offline':
-                app.sleeper_state[account] = 'off'
-
+    def send_status_continue(self, account, status, txt):
         if status == 'offline':
             self.delete_pep(app.get_jid_from_account(account), account)
 
-        app.connections[account].change_status(status, txt, auto)
+        app.connections[account].change_status(status, txt)
 
     def chg_contact_status(self, contact, show, status, account):
         """
