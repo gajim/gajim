@@ -30,7 +30,7 @@ _MIN_NBXMPP_VER = '0.9.94'
 _MIN_GTK_VER = '3.22.27'
 _MIN_CAIRO_VER = '1.16.0'
 _MIN_PYGOBJECT_VER = '3.32.0'
-_MIN_GLIB_VER = '3.60.0'
+_MIN_GLIB_VER = '2.60.0'
 
 
 def check_version(dep_name, current_ver, min_ver):
