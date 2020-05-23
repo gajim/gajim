@@ -220,11 +220,7 @@ class VCardAvatars(BaseModule):
                 self._log.debug('Avatar already advertised')
                 return
 
-        self._con.get_module('Presence').send_presence(
-            priority=self._con.priority,
-            show=self._con.status,
-            status=self._con.status_message)
-
+        self._con.update_presence()
         self.avatar_advertised = True
 
     def add_update_node(self, node):

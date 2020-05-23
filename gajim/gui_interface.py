@@ -823,16 +823,6 @@ class Interface:
 
         pep_supported = obj.conn.get_module('PEP').supported
 
-        if not idle.Monitor.is_unknown() and obj.conn.status in ('online', 'chat'):
-            # we go online or free for chat, so we activate auto status
-            app.sleeper_state[account] = 'online'
-        elif not ((idle.Monitor.is_away() and obj.conn.status == 'away') or \
-        (idle.Monitor.is_xa() and obj.conn.status == 'xa')):
-            # If we are autoaway/xa and come back after a disconnection, do
-            # nothing
-            # Else disable autoaway
-            app.sleeper_state[account] = 'off'
-
         if obj.conn.get_module('MAM').available:
             obj.conn.get_module('MAM').request_archive_on_signin()
 
@@ -1535,77 +1525,6 @@ class Interface:
 ### Other Methods
 ################################################################################
 
-    def read_sleepy(self):
-        """
-        Check idle status and change that status if needed
-        """
-        if not idle.Monitor.poll():
-            # idle detection is not supported in that OS
-            return False # stop looping in vain
-
-        for account in app.connections:
-            if account not in app.sleeper_state or \
-            not app.sleeper_state[account]:
-                continue
-            if idle.Monitor.is_awake():
-                if app.sleeper_state[account] in ('autoaway', 'autoxa'):
-                    # we go online
-                    self.roster.send_status(account, 'online',
-                        app.status_before_autoaway[account])
-                    app.status_before_autoaway[account] = ''
-                    app.sleeper_state[account] = 'online'
-                if app.sleeper_state[account] == 'idle':
-                    # we go to the previous state
-                    status = app.connections[account].status
-                    self.roster.send_status(account, status,
-                        app.status_before_autoaway[account])
-                    app.status_before_autoaway[account] = ''
-                    app.sleeper_state[account] = 'off'
-            elif idle.Monitor.is_away() and app.config.get('autoaway'):
-                if app.sleeper_state[account] == 'online':
-                    # we save out online status
-                    app.status_before_autoaway[account] = \
-                        app.connections[account].status_message
-                    # we go away (no auto status) [we pass True to auto param]
-                    auto_message = app.config.get('autoaway_message')
-                    if not auto_message:
-                        auto_message = app.connections[account].status
-                    else:
-                        auto_message = auto_message.replace('$S', '%(status)s')
-                        auto_message = auto_message.replace('$T', '%(time)s')
-                        auto_message = auto_message % {
-                            'status': app.status_before_autoaway[account],
-                            'time': app.config.get('autoawaytime')
-                        }
-                    self.roster.send_status(account, 'away', auto_message,
-                        auto=True)
-                    app.sleeper_state[account] = 'autoaway'
-                elif app.sleeper_state[account] == 'off':
-                    # we save out online status
-                    app.status_before_autoaway[account] = \
-                        app.connections[account].status
-                    status = app.connections[account].status
-                    self.roster.send_status(account, status,
-                        app.status_before_autoaway[account], auto=True)
-                    app.sleeper_state[account] = 'idle'
-            elif idle.Monitor.is_xa() and \
-            app.sleeper_state[account] in ('online', 'autoaway',
-            'autoaway-forced') and app.config.get('autoxa'):
-                # we go extended away [we pass True to auto param]
-                auto_message = app.config.get('autoxa_message')
-                if not auto_message:
-                    auto_message = app.connections[account].status
-                else:
-                    auto_message = auto_message.replace('$S', '%(status)s')
-                    auto_message = auto_message.replace('$T', '%(time)s')
-                    auto_message = auto_message % {
-                            'status': app.status_before_autoaway[account],
-                            'time': app.config.get('autoxatime')
-                            }
-                self.roster.send_status(account, 'xa', auto_message, auto=True)
-                app.sleeper_state[account] = 'autoxa'
-        return True # renew timeout (loop for ever)
-
     @staticmethod
     def create_account(account,
                        username,
@@ -1685,9 +1604,7 @@ class Interface:
             app.nicks[account] = app.config.get_per(
                 'accounts', account, 'name')
         app.block_signed_in_notifications[account] = True
-        app.sleeper_state[account] = 'off'
         app.last_message_time[account] = {}
-        app.status_before_autoaway[account] = ''
         # refresh roster
         if len(app.connections) >= 2:
             # Do not merge accounts if only one exists
@@ -1727,9 +1644,7 @@ class Interface:
         del app.automatic_rooms[account]
         del app.to_be_removed[account]
         del app.newly_added[account]
-        del app.sleeper_state[account]
         del app.last_message_time[account]
-        del app.status_before_autoaway[account]
         if len(app.connections) >= 2:
             # Do not merge accounts if only one exists
             self.roster.regroup = app.config.get('mergeaccounts')
@@ -1980,8 +1895,6 @@ class Interface:
             GLib.timeout_add_seconds(timeout, self.process_connections)
         else:
             GLib.timeout_add(timeout, self.process_connections)
-        GLib.timeout_add_seconds(app.config.get(
-                'check_idle_every_foo_seconds'), self.read_sleepy)
 
         def remote_init():
             if app.config.get('remote_control'):
@@ -2107,9 +2020,7 @@ class Interface:
             app.to_be_removed[a] = []
             app.nicks[a] = app.config.get_per('accounts', a, 'name')
             app.block_signed_in_notifications[a] = True
-            app.sleeper_state[a] = 0
             app.last_message_time[a] = {}
-            app.status_before_autoaway[a] = ''
 
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()

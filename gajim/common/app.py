@@ -118,15 +118,6 @@ block_signed_in_notifications = {}  # type: Dict[str, bool]
  # type of each connection (ssl, tls, tcp, ...)
 con_types = {}  # type: Dict[str, Optional[str]]
 
-# whether we pass auto away / xa or not
-#'off': don't use sleeper for this account
-#'online': online and use sleeper
-#'autoaway': autoaway and use sleeper
-#'autoxa': autoxa and use sleeper
-sleeper_state = {}  # type: Dict[str, str]
-
-status_before_autoaway = {}  # type: Dict[str, str]
-
 proxy65_manager = None
 
 cert_store = None

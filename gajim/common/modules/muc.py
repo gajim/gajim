@@ -297,21 +297,24 @@ class MUC(BaseModule):
             account=self._account,
             room_jid=result.jid))
 
-    def update_presence(self, auto=False):
+    def update_presence(self):
         mucs = self._manager.get_mucs_with_state([MUCJoinedState.JOINED,
                                                   MUCJoinedState.JOINING])
+
+        status, message, idle = self._con.get_presence_state()
         for muc_data in mucs:
             self._con.get_module('Presence').send_presence(
                 muc_data.occupant_jid,
-                show=self._con.status,
-                status=self._con.status_message,
-                idle_time=auto)
+                show=status,
+                status=message,
+                idle_time=idle)
 
     def change_nick(self, room_jid, new_nick):
+        status, message, _idle = self._con.get_presence_state()
         self._con.get_module('Presence').send_presence(
             '%s/%s' % (room_jid, new_nick),
-            show=self._con.status,
-            status=self._con.status_message)
+            show=status,
+            status=message)
 
     def _on_error_presence(self, _con, _stanza, properties):
         room_jid = properties.jid.getBare()
