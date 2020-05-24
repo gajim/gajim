@@ -101,17 +101,18 @@ show_bookmarked=False, force_resource=False):
         if acct not in connected_accounts:
             continue
         room_jid = gc_control.room_jid
+        room_name = gc_control.room_name
         if room_jid in ignore_rooms:
             continue
         if room_jid in app.gc_connected[acct] and \
         app.gc_connected[acct][room_jid] and \
         contacts_transport in ['jabber', None]:
-            rooms.append((room_jid, acct))
+            rooms.append((room_jid, room_name, acct))
     if rooms:
         item = Gtk.SeparatorMenuItem.new() # separator
         invite_to_submenu.append(item)
-        for (room_jid, account) in rooms:
-            menuitem = Gtk.MenuItem.new_with_label(room_jid.split('@')[0])
+        for (room_jid, room_name, account) in rooms:
+            menuitem = Gtk.MenuItem.new_with_label(room_name)
             if len(contact_list) > 1: # several resources
                 menuitem.set_submenu(build_resources_submenu(
                     contact_list, account, roster.on_invite_to_room, room_jid,
