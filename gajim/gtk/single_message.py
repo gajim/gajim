@@ -27,7 +27,6 @@ from gajim.common.structs import OutgoingMessage
 from gajim.conversation_textview import ConversationTextview
 
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_completion_liststore
@@ -86,15 +85,14 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
             lang = app.config.get('speller_language')
             gspell_lang = Gspell.language_lookup(lang)
             if gspell_lang is None:
-                AspellDictError(lang)
-            else:
-                spell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
-                    self._ui.message_textview.get_buffer())
-                spell_buffer.set_spell_checker(Gspell.Checker.new(gspell_lang))
-                spell_view = Gspell.TextView.get_from_gtk_text_view(
-                    self._ui.message_textview)
-                spell_view.set_inline_spell_checking(True)
-                spell_view.set_enable_language_menu(True)
+                gspell_lang = Gspell.language_get_default()
+            spell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
+                self._ui.message_textview.get_buffer())
+            spell_buffer.set_spell_checker(Gspell.Checker.new(gspell_lang))
+            spell_view = Gspell.TextView.get_from_gtk_text_view(
+                self._ui.message_textview)
+            spell_view.set_inline_spell_checking(True)
+            spell_view.set_enable_language_menu(True)
 
         self._prepare_widgets_for(self._action)
 

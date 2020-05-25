@@ -142,16 +142,6 @@ class HigDialog(Gtk.MessageDialog):
         self.show_all()
 
 
-class AspellDictError:
-    def __init__(self, lang):
-        ErrorDialog(
-            _('Dictionary for language "%s" not available') % lang,
-            _('You have to install the dictionary "%s" to use spellchecking, '
-              'or choose another language by setting the speller_language '
-              'option.\n\n'
-              'Highlighting misspelled words feature will not be used') % lang)
-
-
 class WarningDialog(HigDialog):
     """
     HIG compliant warning dialog
