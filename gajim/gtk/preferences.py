@@ -44,7 +44,6 @@ from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_available_iconsets
 from gajim.gtk.util import open_window
-from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.sounds import ManageSounds
 from gajim.gtk.const import ControlType
 from gajim.gtk import gstreamer
@@ -638,13 +637,8 @@ class Preferences(Gtk.ApplicationWindow):
         gspell_lang = Gspell.language_lookup(lang)
         if gspell_lang is None:
             gspell_lang = Gspell.language_get_default()
-        if gspell_lang is None:
-            AspellDictError(lang)
-            app.config.set('use_speller', False)
-            widget.set_active(False)
-        else:
-            app.config.set('speller_language', gspell_lang.get_code())
-            self.apply_speller()
+        app.config.set('speller_language', gspell_lang.get_code())
+        self.apply_speller()
 
     def apply_speller(self):
         for ctrl in self._get_all_controls():

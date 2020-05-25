@@ -621,9 +621,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             return
 
         gspell_lang = self.get_speller_language()
-        if gspell_lang is None:
-            return
-
         spell_checker = Gspell.Checker.new(gspell_lang)
         spell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
             self.msg_textview.get_buffer())
