@@ -677,9 +677,9 @@ def generate_account_badge(account):
 def get_css_show_class(show):
     if show in ('online', 'chat'):
         return '.gajim-status-online'
-    if show in ('away', 'xa'):
+    if show == 'away':
         return '.gajim-status-away'
-    if show == 'dnd':
+    if show in ('dnd', 'xa'):
         return '.gajim-status-dnd'
     # 'offline', 'not in roster', 'requested'
     return '.gajim-status-offline'
