@@ -97,21 +97,34 @@ def add_status_to_avatar(surface, show):
     width = width / scale
     height = height / scale
 
-    clip_size = width / 6.5
+    clip_radius = width / 5.5
+    center_x = width - clip_radius
+    center_y = height - clip_radius
+
     context.set_source_rgb(255, 255, 255)
     context.set_operator(cairo.Operator.CLEAR)
-    context.arc(width - clip_size, height - clip_size, clip_size, 0, 2 * pi)
+    context.arc(center_x, center_y, clip_radius, 0, 2 * pi)
     context.fill()
 
     css_color = get_css_show_class(show)
     color = convert_rgb_string_to_float(
         app.css_config.get_value(css_color, StyleAttr.COLOR))
-    show_size = width / 6.5
-    show_radius = show_size * 0.80
+
+    show_radius = clip_radius * 0.75
+
     context.set_source_rgb(*color)
     context.set_operator(cairo.Operator.OVER)
-    context.arc(width - show_size, height - show_size, show_radius, 0, 2 * pi)
+    context.arc(center_x, center_y, show_radius, 0, 2 * pi)
     context.fill()
+
+    if show == 'dnd':
+        line_length = clip_radius / 2
+        context.move_to(center_x - line_length, center_y)
+        context.line_to(center_x + line_length, center_y)
+
+        context.set_source_rgb(255, 255, 255)
+        context.set_line_width(clip_radius / 4)
+        context.stroke()
 
     return context.get_target()
 
