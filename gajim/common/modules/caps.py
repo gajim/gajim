@@ -214,7 +214,6 @@ class EntityCapsTask(Task):
             if muc is None or not muc.state.is_joined:
                 self.set_obsolete()
                 return False
-            return True
 
         return client.state.is_available
 
