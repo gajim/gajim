@@ -129,6 +129,13 @@ class Client(ConnectionHandlers):
     def features(self):
         return self._client.features
 
+    @property
+    def local_address(self):
+        address = self._client.local_address
+        if address is not None:
+            return address.to_string().split(':')[0]
+        return None
+
     def set_remove_account(self, value):
         # Used by the RemoveAccount Assistant to make the Client
         # not react to any stream errors that happen while the
