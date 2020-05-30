@@ -78,7 +78,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         self.feature_listbox = Gtk.ListBox()
         self.feature_listbox.set_name('ServerInfo')
         self.feature_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.feature_listbox.set_header_func(self.header_func, 'Features')
         self._ui.features_scrolled.add(self.feature_listbox)
         for feature in self.get_features():
             self.add_feature(feature)
@@ -89,15 +88,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
     def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
-
-    @staticmethod
-    def header_func(row, before, user_data):
-        if before:
-            row.set_header(None)
-        else:
-            label = Gtk.Label(label=user_data)
-            label.set_halign(Gtk.Align.START)
-            row.set_header(label)
 
     def _add_connection_info(self):
         # Connection type
