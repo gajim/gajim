@@ -303,9 +303,15 @@ class Bytestream(BaseModule):
                                   self._account,
                                   'ft_send_local_ips'):
             return
+
+        my_ip = self._con.local_address
+        if my_ip is None:
+            log.warning('No local address available')
+            return
+
         try:
             # The ip we're connected to server with
-            my_ips = [self._con.peerhost[0]]
+            my_ips = [my_ip]
             # all IPs from local DNS
             for addr in socket.getaddrinfo(socket.gethostname(), None):
                 if (not addr[4][0] in my_ips and
@@ -333,11 +339,11 @@ class Bytestream(BaseModule):
         self._add_streamhosts_to_query(query, sender, port, add_hosts)
 
     def _add_upnp_igd_as_streamhost_to_query(self, query, file_props, iq):
-        if not app.is_installed('UPNP'):
+        my_ip = self._con.local_address
+        if my_ip is None or not app.is_installed('UPNP'):
+            log.warning('No local address available')
             self._con.connection.send(iq)
             return
-
-        my_ip = self._con.peerhost[0]
 
         # check if we are connected with an IPv4 address
         try:

@@ -198,16 +198,21 @@ class JingleTransportSocks5(JingleTransport):
         hosts = set()
         local_ip_cand = []
 
-        candidate = {
-            'host': self.connection.peerhost[0],
-            'candidate_id': generate_id(),
-            'port': port,
-            'type': 'direct',
-            'jid': self.ourjid,
-            'priority': priority
-        }
-        hosts.add(self.connection.peerhost[0])
-        local_ip_cand.append(candidate)
+        my_ip = self.connection.local_address
+        if my_ip is None:
+            log.warning('No local address available')
+
+        else:
+            candidate = {
+                'host': my_ip,
+                'candidate_id': generate_id(),
+                'port': port,
+                'type': 'direct',
+                'jid': self.ourjid,
+                'priority': priority
+            }
+            hosts.add(my_ip)
+            local_ip_cand.append(candidate)
 
         try:
             for addrinfo in socket.getaddrinfo(socket.gethostname(), None):
