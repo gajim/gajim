@@ -154,16 +154,13 @@ class JingleTransportSocks5(JingleTransport):
     def parse_transport_stanza(self, transport):
         candidates = []
         for candidate in transport.iterTags('candidate'):
-            typ = 'direct' # default value
-            if candidate.has_attr('type'):
-                typ = candidate['type']
             cand = {
                 'state': 0,
                 'target': self.ourjid,
                 'host': candidate['host'],
-                'port': int(candidate['port']),
+                'port': int(candidate.get('port', 1080)),
                 'candidate_id': candidate['cid'],
-                'type': typ,
+                'type': candidate.get('type', 'direct'),
                 'priority': candidate['priority']
             }
             candidates.append(cand)
