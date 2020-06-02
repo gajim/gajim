@@ -2568,19 +2568,19 @@ class RosterWindow:
         """
         self.rename_self_contact(obj.old_jid, obj.new_jid, obj.conn.name)
 
-    def _nec_our_show(self, obj):
+    def _nec_our_show(self, event):
         model = self.status_combobox.get_model()
         iter_ = model.get_iter_from_string('6')
-        if obj.show == 'offline':
+        if event.show == 'offline':
             # sensitivity for this menuitem
             if app.get_number_of_connected_accounts() == 0:
                 model[iter_][3] = False
-            self.application.set_account_actions_state(obj.conn.name)
+            self.application.set_account_actions_state(event.account)
             self.application.update_app_actions_state()
         else:
             # sensitivity for this menuitem
             model[iter_][3] = True
-        self.on_status_changed(obj.conn.name, obj.show)
+        self.on_status_changed(event.account, event.show)
 
     def _nec_connection_type(self, obj):
         self.draw_account(obj.conn.name)

@@ -132,9 +132,9 @@ class Notification(EventHelper):
                                'printed_gc_msg'):
                 self._withdraw('new-message', event.account, event.jid)
 
-    def _nec_our_status(self, obj):
-        if app.account_is_connected(obj.conn.name):
-            self._withdraw('connection-failed', obj.conn.name)
+    def _nec_our_status(self, event):
+        if app.account_is_connected(event.account):
+            self._withdraw('connection-failed', event.account)
 
     @staticmethod
     def _get_icon_name(obj):

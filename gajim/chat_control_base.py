@@ -42,6 +42,7 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import event_filter
 from gajim.common.contacts import GC_Contact
 from gajim.common.const import Chatstate
 from gajim.common.structs import OutgoingMessage
@@ -434,14 +435,12 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.session.control = None
         self.session = None
 
-    def _nec_our_status(self, obj):
-        if self.account != obj.conn.name:
+    @event_filter(['account'])
+    def _nec_our_status(self, event):
+        if event.show == 'connecting':
             return
 
-        if obj.show == 'connecting':
-            return
-
-        if obj.show == 'offline':
+        if event.show == 'offline':
             self.got_disconnected()
         else:
             self.got_connected()

@@ -90,7 +90,7 @@ class Presence(BaseModule):
         if properties.is_self_presence:
             app.nec.push_incoming_event(
                 NetworkEvent('our-show',
-                             conn=self._con,
+                             account=self._account,
                              show=properties.show.value))
             return
 
