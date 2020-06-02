@@ -403,7 +403,7 @@ class Client(ConnectionHandlers):
 
         self.update_presence()
 
-    def update_presence(self):
+    def update_presence(self, include_muc=True):
         status, message, idle = self.get_presence_state()
         self._priority = app.get_priority(self._account, status)
         self.get_module('Presence').send_presence(
@@ -412,7 +412,8 @@ class Client(ConnectionHandlers):
             status=message,
             idle_time=idle)
 
-        self.get_module('MUC').update_presence()
+        if include_muc:
+            self.get_module('MUC').update_presence()
 
     def get_module(self, name):
         return modules.get(self._account, name)
@@ -427,12 +428,14 @@ class Client(ConnectionHandlers):
         elif self._connect_machine_calls == 3:
             self.get_module('Roster').request_roster()
         elif self._connect_machine_calls == 4:
-            self._send_first_presence()
+            self._finish_connect()
 
-    def _send_first_presence(self):
+    def _finish_connect(self):
         self._status_sync_on_resume = False
         self._set_client_available()
-        self.update_presence()
+
+        # We did not resume the stream, so we are not joined any MUCs
+        self.update_presence(include_muc=False)
 
         if not self.avatar_conversion:
             # ask our VCard
