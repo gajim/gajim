@@ -227,9 +227,6 @@ class Client(ConnectionHandlers):
         if self._status_sync_on_resume:
             self._status_sync_on_resume = False
             self.update_presence()
-        else:
-            app.nec.push_incoming_event(
-                OurShowEvent(None, conn=self, show=self._status))
 
     def _set_client_available(self):
         self._set_state(ClientState.AVAILABLE)
@@ -417,9 +414,6 @@ class Client(ConnectionHandlers):
             idle_time=idle)
 
         self.get_module('MUC').update_presence()
-
-        app.nec.push_incoming_event(
-            OurShowEvent(None, conn=self, show=status))
 
     def get_module(self, name):
         return modules.get(self._account, name)
