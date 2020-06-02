@@ -217,12 +217,6 @@ class Interface:
                                      self.unblock_signed_in_notifications,
                                      event.account)
 
-        if (event.account in self.show_vcard_when_connect and
-                event.show not in ('offline', 'error')):
-            action = '%s-profile' % event.account
-            app.app.activate_action(action, GLib.Variant('s', event.account))
-            self.show_vcard_when_connect.remove(event.account)
-
     @staticmethod
     def handle_gc_error(gc_control, pritext, sectext):
         if gc_control and gc_control.autorejoin is not None:
@@ -2024,8 +2018,6 @@ class Interface:
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
             music_track.enable()
-
-        self.show_vcard_when_connect = []
 
         idle.Monitor.set_interval(app.config.get('autoawaytime') * 60,
                                   app.config.get('autoxatime') * 60)
