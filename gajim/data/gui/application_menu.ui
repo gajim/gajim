@@ -5,7 +5,7 @@
       <attribute name="label">_Gajim</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">_Start Chat…</attribute>
+          <attribute name="label" translatable="yes">_Start / Join Chat…</attribute>
           <attribute name="action">app.start-chat</attribute>
           <attribute name="target"></attribute>
         </item>
