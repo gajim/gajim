@@ -216,7 +216,7 @@ class Client(ConnectionHandlers):
     def _on_resume_failed(self, _client, _signal_name):
         log.info('Resume failed')
         app.nec.push_incoming_event(NetworkEvent(
-            'our-show', conn=self, show='offline'))
+            'our-show', account=self._account, show='offline'))
         self.get_module('Chatstate').enabled = False
 
     def _on_resume_successful(self, _client, _signal_name):
@@ -260,7 +260,7 @@ class Client(ConnectionHandlers):
             self._reconnect = False
             self._after_disconnect()
             app.nec.push_incoming_event(NetworkEvent(
-                'our-show', conn=self, show='offline'))
+                'our-show', account=self._account, show='offline'))
             self.process_ssl_errors()
 
         elif domain in (StreamError.STREAM, StreamError.BIND):
@@ -292,12 +292,12 @@ class Client(ConnectionHandlers):
             self._after_disconnect()
             self._schedule_reconnect()
             app.nec.push_incoming_event(
-                NetworkEvent('our-show', conn=self, show='error'))
+                NetworkEvent('our-show', account=self._account, show='error'))
 
         else:
             self.get_module('Chatstate').enabled = False
             app.nec.push_incoming_event(NetworkEvent(
-                'our-show', conn=self, show='offline'))
+                'our-show', account=self._account, show='offline'))
             self._after_disconnect()
 
     def _after_disconnect(self):
@@ -535,7 +535,7 @@ class Client(ConnectionHandlers):
         self._set_state(ClientState.DISCONNECTED)
         self._disable_reconnect_timer()
         app.nec.push_incoming_event(
-            NetworkEvent('our-show', conn=self, show='offline'))
+            NetworkEvent('our-show', account=self._account, show='offline'))
 
         if self._destroy_client:
             self._client.destroy()

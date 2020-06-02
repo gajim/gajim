@@ -201,28 +201,27 @@ class Interface:
     def unblock_signed_in_notifications(account):
         app.block_signed_in_notifications[account] = False
 
-    def handle_event_status(self, obj): # OUR status
-        #('STATUS', account, show)
-        account = obj.conn.name
-        if obj.show in ('offline', 'error'):
+    def handle_event_status(self, event):
+        if event.show in ('offline', 'error'):
             # TODO: Close all account windows
             pass
 
-        if obj.show == 'offline':
-            app.block_signed_in_notifications[account] = True
+        if event.show == 'offline':
+            app.block_signed_in_notifications[event.account] = True
         else:
             # 30 seconds after we change our status to sth else than offline
             # we stop blocking notifications of any kind
             # this prevents from getting the roster items as 'just signed in'
             # contacts. 30 seconds should be enough time
-            GLib.timeout_add_seconds(30, self.unblock_signed_in_notifications,
-                account)
+            GLib.timeout_add_seconds(30,
+                                     self.unblock_signed_in_notifications,
+                                     event.account)
 
-        if account in self.show_vcard_when_connect and obj.show not in (
-        'offline', 'error'):
-            action = '%s-profile' % account
-            app.app.activate_action(action, GLib.Variant('s', account))
-            self.show_vcard_when_connect.remove(account)
+        if (event.account in self.show_vcard_when_connect and
+                event.show not in ('offline', 'error')):
+            action = '%s-profile' % event.account
+            app.app.activate_action(action, GLib.Variant('s', event.account))
+            self.show_vcard_when_connect.remove(event.account)
 
     @staticmethod
     def handle_gc_error(gc_control, pritext, sectext):

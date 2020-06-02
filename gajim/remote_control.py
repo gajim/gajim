@@ -382,8 +382,8 @@ class GajimRemote(Server):
             event_type, obj.properties.subject,
             obj.msg_log_id, obj.properties.nickname]))
 
-    def on_our_status(self, obj):
-        self.raise_signal('AccountPresence', (obj.show, obj.conn.name))
+    def on_our_status(self, event):
+        self.raise_signal('AccountPresence', (event.show, event.account))
 
     def on_account_created(self, obj):
         self.raise_signal('NewAccount', (obj.conn.name, obj.account_info))

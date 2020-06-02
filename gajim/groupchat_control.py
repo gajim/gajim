@@ -1128,12 +1128,11 @@ class GroupchatControl(ChatControlBase):
                                     msg_log_id=event.msg_log_id,
                                     displaymarking=event.displaymarking)
 
+    @event_filter(['account'])
     def _nec_our_status(self, event):
-        if self.account != event.conn.name:
-            return
-
+        client = app.get_client(event.account)
         if (event.show == 'offline' and
-                not event.conn.state.is_reconnect_scheduled):
+                not client.state.is_reconnect_scheduled):
             self.got_disconnected()
 
         if self.parent_win:
