@@ -69,6 +69,7 @@ class Client(ConnectionHandlers):
         self.roster_supported = True
 
         self._state = ClientState.DISCONNECTED
+        self._status_sync_on_resume = False
         self._status = 'online'
         self._status_message = ''
         self._idle_status = 'online'
@@ -223,13 +224,17 @@ class Client(ConnectionHandlers):
         self._set_state(ClientState.CONNECTED)
         self._set_client_available()
 
+        if self._status_sync_on_resume:
+            self._status_sync_on_resume = False
+            self.update_presence()
+        else:
+            app.nec.push_incoming_event(
+                OurShowEvent(None, conn=self, show=self._status))
+
     def _set_client_available(self):
         self._set_state(ClientState.AVAILABLE)
         app.nec.push_incoming_event(NetworkEvent('account-connected',
                                                  account=self._account))
-
-        app.nec.push_incoming_event(
-            OurShowEvent(None, conn=self, show=self._status))
 
     def disconnect(self, gracefully, reconnect, destroy_client=False):
         if self._state.is_disconnecting:
@@ -432,17 +437,9 @@ class Client(ConnectionHandlers):
             self._send_first_presence()
 
     def _send_first_presence(self):
-        self._priority = app.get_priority(self._account, self._status)
-
-        self._status, message, idle = self.get_presence_state()
-
-        self.get_module('Presence').send_presence(
-            priority=self._priority,
-            show=self._status,
-            status=message,
-            idle_time=idle)
-
+        self._status_sync_on_resume = False
         self._set_client_available()
+        self.update_presence()
 
         if not self.avatar_conversion:
             # ask our VCard
@@ -564,9 +561,7 @@ class Client(ConnectionHandlers):
         if monitor.is_awake():
             self._idle_status = state
             self._idle_status_message = ''
-            if self._state.is_available and self._idle_status_enabled:
-                self._status = state
-                self.update_presence()
+            self._update_status()
             return
 
         if not app.config.get(f'auto{state}'):
@@ -578,9 +573,17 @@ class Client(ConnectionHandlers):
             self._idle_status = state
             self._idle_status_message = get_idle_status_message(
                 state, self._status_message)
-            if self._state.is_available and self._idle_status_enabled:
-                self._status = state
-                self.update_presence()
+            self._update_status()
+
+    def _update_status(self):
+        if not self._idle_status_enabled:
+            return
+
+        self._status = self._idle_status
+        if self._state.is_available:
+            self.update_presence()
+        else:
+            self._status_sync_on_resume = True
 
     def _idle_status_active(self):
         if not Monitor.is_available():
