@@ -217,26 +217,6 @@ class Interface:
                                      self.unblock_signed_in_notifications,
                                      event.account)
 
-    @staticmethod
-    def handle_gc_error(gc_control, pritext, sectext):
-        if gc_control and gc_control.autorejoin is not None:
-            if gc_control.error_dialog:
-                gc_control.error_dialog.destroy()
-            def on_close(dummy):
-                gc_control.error_dialog.destroy()
-                gc_control.error_dialog = None
-            gc_control.error_dialog = ErrorDialog(pritext, sectext,
-                on_response_ok=on_close, on_response_cancel=on_close)
-            gc_control.error_dialog.set_modal(False)
-            if gc_control.parent_win:
-                gc_control.error_dialog.set_transient_for(
-                    gc_control.parent_win.window)
-        else:
-            d = ErrorDialog(pritext, sectext)
-            if gc_control and gc_control.parent_win:
-                d.set_transient_for(gc_control.parent_win.window)
-            d.set_modal(False)
-
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
         # priority, timestamp))

@@ -28,12 +28,9 @@ import logging
 import operator
 
 import nbxmpp
-from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common.connection_handlers_events import StreamReceivedEvent
 from gajim.common.connection_handlers_events import PresenceReceivedEvent
-from gajim.common.connection_handlers_events import StreamConflictReceivedEvent
 from gajim.common.connection_handlers_events import NotificationEvent
 
 
@@ -181,17 +178,4 @@ class ConnectionHandlers(ConnectionHandlersBase):
         ConnectionHandlersBase.__init__(self)
 
         app.nec.register_incoming_event(PresenceReceivedEvent)
-        app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
-
-    def _StreamCB(self, con, obj):
-        log.debug('StreamCB')
-        app.nec.push_incoming_event(StreamReceivedEvent(None,
-            conn=self, stanza=obj))
-
-    def _register_handlers(self, con, con_type):
-        # try to find another way to register handlers in each class
-        # that defines handlers
-
-        con.RegisterHandler('unknown', self._StreamCB,
-            Namespace.XMPP_STREAMS, xmlns=Namespace.STREAMS)
