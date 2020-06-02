@@ -34,8 +34,6 @@ import re
 import os
 import subprocess
 import webbrowser
-import errno
-import select
 import base64
 import hashlib
 import shlex
@@ -92,7 +90,10 @@ if app.is_installed('PYCURL'):
 
 log = logging.getLogger('gajim.c.helpers')
 
-special_groups = (_('Transports'), _('Not in contact list'), _('Observers'), _('Group chats'))
+special_groups = (_('Transports'),
+                  _('Not in contact list'),
+                  _('Observers'),
+                  _('Group chats'))
 
 URL_REGEX = re.compile(
     r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
@@ -151,16 +152,18 @@ def parse_resource(resource):
     """
     Perform stringprep on resource and return it
     """
-    if resource:
-        try:
-            return resource.encode('OpaqueString').decode('utf-8')
-        except UnicodeError:
-            raise InvalidFormat('Invalid character in resource.')
+    if not resource:
+        return None
 
-def windowsify(s):
+    try:
+        return resource.encode('OpaqueString').decode('utf-8')
+    except UnicodeError:
+        raise InvalidFormat('Invalid character in resource.')
+
+def windowsify(word):
     if os.name == 'nt':
-        return s.capitalize()
-    return s
+        return word.capitalize()
+    return word
 
 def get_uf_show(show, use_mnemonic=False):
     """
@@ -341,8 +344,8 @@ def exec_command(command, use_shell=False, posix=True):
         subprocess.Popen('%s &' % command, shell=True).wait()
     else:
         args = shlex.split(command, posix=posix)
-        p = subprocess.Popen(args)
-        app.thread_interface(p.wait)
+        process = subprocess.Popen(args)
+        app.thread_interface(process.wait)
 
 def build_command(executable, parameter):
     # we add to the parameter (can hold path with spaces)
@@ -423,8 +426,7 @@ def get_contact_dict_for_account(account):
     """
     contacts_dict = {}
     for jid in app.contacts.get_jid_list(account):
-        contact = app.contacts.get_contact_with_highest_priority(account,
-                        jid)
+        contact = app.contacts.get_contact_with_highest_priority(account, jid)
         contacts_dict[jid] = contact
         name = contact.name
         if name in contacts_dict:
@@ -462,22 +464,25 @@ def check_soundfile_path(file_, dirs=None):
     if os.path.exists(file_):
         return file_
 
-    for d in dirs:
-        d = os.path.join(d, 'sounds', file_)
-        if os.path.exists(d):
-            return d
+    for dir_ in dirs:
+        dir_ = os.path.join(dir_, 'sounds', file_)
+        if os.path.exists(dir_):
+            return dir_
     return None
 
 def strip_soundfile_path(file_, dirs=None, abs_=True):
     """
     Remove knowns paths from a sound file
 
-    Filechooser returns absolute path. If path is a known fallback path, we remove it.
-    So config have no hardcoded path        to DATA_DIR and text in textfield is shorther.
-    param: file_: the filename to strip.
-    param: dirs: list of knowns paths from which the filename should be stripped.
-    param:  abs_: force absolute path on dirs
+    Filechooser returns an absolute path.
+    If path is a known fallback path, we remove it.
+    So config has no hardcoded path to DATA_DIR and text in textfield is
+    shorther.
+    param: file_: the filename to strip
+    param: dirs: list of knowns paths from which the filename should be stripped
+    param: abs_: force absolute path on dirs
     """
+
     if not file_:
         return None
 
@@ -486,11 +491,11 @@ def strip_soundfile_path(file_, dirs=None, abs_=True):
                 configpaths.get('DATA')]
 
     name = os.path.basename(file_)
-    for d in dirs:
-        d = os.path.join(d, 'sounds', name)
+    for dir_ in dirs:
+        dir_ = os.path.join(dir_, 'sounds', name)
         if abs_:
-            d = os.path.abspath(d)
-        if file_ == d:
+            dir_ = os.path.abspath(dir_)
+        if file_ == dir_:
             return name
     return file_
 
@@ -582,8 +587,8 @@ def get_icon_name_to_show(contact, account=None):
     """
     if account and app.events.get_nb_roster_events(account, contact.jid):
         return 'event'
-    if account and app.events.get_nb_roster_events(
-        account, contact.get_full_jid()):
+    if account and app.events.get_nb_roster_events(account,
+                                                   contact.get_full_jid()):
         return 'event'
     if account and account in app.interface.minimized_controls and \
     contact.jid in app.interface.minimized_controls[account] and app.interface.\
@@ -657,8 +662,9 @@ def get_os_info():
             info = platform.system()
     return info
 
-def allow_showing_notification(account, type_='notify_on_new_message',
-is_first_message=True):
+def allow_showing_notification(account,
+                               type_='notify_on_new_message',
+                               is_first_message=True):
     """
     Is it allowed to show nofication?
 
@@ -668,9 +674,9 @@ is_first_message=True):
     """
     if type_ and (not app.config.get(type_) or not is_first_message):
         return False
-    if app.config.get('autopopupaway'): # always show notification
+    if app.config.get('autopopupaway'):
         return True
-    if app.connections[account].status in ('online', 'chat'): # we're online or chat
+    if app.connections[account].status in ('online', 'chat'):
         return True
     return False
 
@@ -681,7 +687,7 @@ def allow_popup_window(account):
     autopopup = app.config.get('autopopup')
     autopopupaway = app.config.get('autopopupaway')
     if autopopup and (autopopupaway or \
-    app.connections[account].status in ('online', 'chat')): # we're online or chat
+    app.connections[account].status in ('online', 'chat')):
         return True
     return False
 
@@ -697,7 +703,7 @@ def get_notification_icon_tooltip_dict():
     Return a dict of the form {acct: {'show': show, 'message': message,
     'event_lines': [list of text lines to show in tooltip]}
     """
-    # How many events must there be before they're shown summarized, not per-user
+    # How many events before we show summarized, not per-user
     max_ungrouped_events = 10
 
     accounts = get_accounts_info()
@@ -708,7 +714,8 @@ def get_notification_icon_tooltip_dict():
         account['event_lines'] = []
         # Gather events per-account
         pending_events = app.events.get_events(account=account_name)
-        messages, non_messages, total_messages, total_non_messages = {}, {}, 0, 0
+        messages, non_messages = {}, {}
+        total_messages, total_non_messages = 0, 0
         for jid in pending_events:
             for event in pending_events[jid]:
                 if event.type_.count('file') > 0:
@@ -722,19 +729,21 @@ def get_notification_icon_tooltip_dict():
         # Display unread messages numbers, if any
         if total_messages > 0:
             if total_messages > max_ungrouped_events:
-                text = ngettext(
-                        '%d message pending',
-                        '%d messages pending',
-                        total_messages, total_messages, total_messages)
+                text = ngettext('%d message pending',
+                                '%d messages pending',
+                                total_messages,
+                                total_messages,
+                                total_messages)
                 account['event_lines'].append(text)
             else:
                 for jid in messages:
-                    text = ngettext(
-                            '%d message pending',
-                            '%d messages pending',
-                            messages[jid], messages[jid], messages[jid])
+                    text = ngettext('%d message pending',
+                                    '%d messages pending',
+                                    messages[jid],
+                                    messages[jid],
+                                    messages[jid])
                     contact = app.contacts.get_first_contact_from_jid(
-                            account['name'], jid)
+                        account['name'], jid)
                     text += ' '
                     if jid in app.gc_connected[account['name']]:
                         text += _('from group chat %s') % (jid)
@@ -748,15 +757,19 @@ def get_notification_icon_tooltip_dict():
         # Display unseen events numbers, if any
         if total_non_messages > 0:
             if total_non_messages > max_ungrouped_events:
-                text = ngettext(
-                    '%d event pending',
-                    '%d events pending',
-                    total_non_messages, total_non_messages, total_non_messages)
+                text = ngettext('%d event pending',
+                                '%d events pending',
+                                total_non_messages,
+                                total_non_messages,
+                                total_non_messages)
                 account['event_lines'].append(text)
             else:
                 for jid in non_messages:
-                    text = ngettext('%d event pending', '%d events pending',
-                        non_messages[jid], non_messages[jid], non_messages[jid])
+                    text = ngettext('%d event pending',
+                                    '%d events pending',
+                                    non_messages[jid],
+                                    non_messages[jid],
+                                    non_messages[jid])
                     text += ' ' + _('from user %s') % (jid)
                     account[account]['event_lines'].append(text)
 
@@ -902,7 +915,9 @@ def _get_img_direct(attrs):
             f.fp._sock.fp._sock.settimeout(2)
         except Exception:
             pass
-        # On a slow internet connection with ~1000kbps you need ~10 seconds for 1 MB
+
+        # On a slow internet connection with ~1000kbps
+        # you need ~10 seconds for 1 MB
         deadline = time.time() + (10 * (max_size / 1048576))
         while True:
             if time.time() > deadline:
@@ -952,7 +967,9 @@ def _get_img_proxy(attrs, proxy):
         c.setopt(pycurl.FOLLOWLOCATION, 1)
         # Wait maximum 10s for connection
         c.setopt(pycurl.CONNECTTIMEOUT, 10)
-        # On a slow internet connection with ~1000kbps you need ~10 seconds for 1 MB
+
+        # On a slow internet connection with ~1000kbps
+        # you need ~10 seconds for 1 MB
         c.setopt(pycurl.TIMEOUT, 10 * (max_size / 1048576))
         c.setopt(pycurl.MAXFILESIZE, max_size)
         c.setopt(pycurl.WRITEFUNCTION, b.write)
@@ -1376,6 +1393,7 @@ def get_alternative_venue(error):
         uri = parse_uri(error.condition_data)
         if uri.type == URIType.XMPP and uri.action == URIAction.JOIN:
             return uri.data['jid']
+    return None
 
 
 def is_affiliation_change_allowed(self_contact, contact, target_aff):
