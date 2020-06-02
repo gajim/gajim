@@ -19,7 +19,6 @@
 
 import logging
 
-import OpenSSL.crypto
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import nec
@@ -27,25 +26,12 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common.i18n import _
-from gajim.common.const import SSLError
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
 
 
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
-
-class StreamReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'stream-received'
-
-class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'stream-conflict-received'
-    base_network_events = ['stream-received']
-
-    def generate(self):
-        if self.base_event.stanza.getTag('conflict'):
-            self.conn = self.base_event.conn
-            return True
 
 class PresenceReceivedEvent(nec.NetworkIncomingEvent):
     name = 'presence-received'
@@ -58,32 +44,6 @@ class OurShowEvent(nec.NetworkIncomingEvent):
 
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
-
-class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
-    name = 'new-account-connected'
-
-    def generate(self):
-        try:
-            self.errnum = self.conn.connection.Connection.ssl_errnum
-        except AttributeError:
-            self.errnum = 0 # we don't have an errnum
-        self.ssl_msg = ''
-        if self.errnum > 0:
-            self.ssl_msg = SSLError.get(self.errnum,
-                _('Unknown SSL error: %d') % self.errnum)
-        self.ssl_cert = ''
-        self.ssl_fingerprint_sha1 = ''
-        self.ssl_fingerprint_sha256 = ''
-        if self.conn.connection.Connection.ssl_certificate:
-            cert = self.conn.connection.Connection.ssl_certificate
-            self.ssl_cert = OpenSSL.crypto.dump_certificate(
-                OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
-            self.ssl_fingerprint_sha1 = cert.digest('sha1').decode('utf-8')
-            self.ssl_fingerprint_sha256 = cert.digest('sha256').decode('utf-8')
-        return True
-
-class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
-    name = 'new-account-not-connected'
 
 class ConnectionLostEvent(nec.NetworkIncomingEvent):
     name = 'connection-lost'
