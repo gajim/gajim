@@ -55,7 +55,6 @@ from string import Template
 import urllib
 from urllib.parse import unquote
 from io import StringIO
-from datetime import datetime, timedelta
 from encodings.punycode import punycode_encode
 from functools import wraps
 from packaging.version import Version as V
@@ -163,15 +162,6 @@ def windowsify(s):
         return s.capitalize()
     return s
 
-def temp_failure_retry(func, *args, **kwargs):
-    while True:
-        try:
-            return func(*args, **kwargs)
-        except (os.error, IOError, select.error) as ex:
-            if ex.errno == errno.EINTR:
-                continue
-            raise
-
 def get_uf_show(show, use_mnemonic=False):
     """
     Return a userfriendly string for dnd/xa/chat and make all strings
@@ -222,7 +212,6 @@ def get_uf_show(show, use_mnemonic=False):
     else:
         uf_show = Q_('?contact has status:Has errors')
     return uf_show
-
 
 def get_uf_sub(sub):
     if sub == 'none':
@@ -425,42 +414,6 @@ def reduce_chars_newlines(text, max_chars=0, max_lines=0):
 def get_account_status(account):
     status = reduce_chars_newlines(account['status_line'], 100, 1)
     return status
-
-def datetime_tuple(timestamp):
-    """
-    Convert timestamp using strptime and the format: %Y%m%dT%H:%M:%S
-
-    Because of various datetime formats are used the following exceptions
-    are handled:
-            - Optional milliseconds appended to the string are removed
-            - Optional Z (that means UTC) appended to the string are removed
-            - XEP-082 datetime strings have all '-' chars removed to meet
-              the above format.
-    """
-    date, tim = timestamp.split('T', 1)
-    date = date.replace('-', '')
-    tim = tim.replace('z', '')
-    tim = tim.replace('Z', '')
-    zone = None
-    if '+' in tim:
-        sign = -1
-        tim, zone = tim.split('+', 1)
-    if '-' in tim:
-        sign = 1
-        tim, zone = tim.split('-', 1)
-    tim = tim.split('.')[0]
-    tim = time.strptime(date + 'T' + tim, '%Y%m%dT%H:%M:%S')
-    if zone:
-        zone = zone.replace(':', '')
-        tim = datetime.fromtimestamp(time.mktime(tim))
-        if len(zone) > 2:
-            zone = time.strptime(zone, '%H%M')
-        else:
-            zone = time.strptime(zone, '%H')
-        zone = timedelta(hours=zone.tm_hour, minutes=zone.tm_min)
-        tim += zone * sign
-        tim = tim.timetuple()
-    return tim
 
 def get_contact_dict_for_account(account):
     """
@@ -739,29 +692,6 @@ def allow_sound_notification(account, sound_event):
         return True
     return False
 
-def get_chat_control(account, contact):
-    full_jid_with_resource = contact.jid
-    if contact.resource:
-        full_jid_with_resource += '/' + contact.resource
-    highest_contact = app.contacts.get_contact_with_highest_priority(
-        account, contact.jid)
-
-    # Look for a chat control that has the given resource, or default to
-    # one without resource
-    ctrl = app.interface.msg_win_mgr.get_control(full_jid_with_resource,
-            account)
-
-    if ctrl:
-        return ctrl
-
-    if (highest_contact and
-        highest_contact.resource and
-            contact.resource != highest_contact.resource):
-        return None
-
-    # unknown contact or offline message
-    return app.interface.msg_win_mgr.get_control(contact.jid, account)
-
 def get_notification_icon_tooltip_dict():
     """
     Return a dict of the form {acct: {'show': show, 'message': message,
@@ -831,50 +761,6 @@ def get_notification_icon_tooltip_dict():
                     account[account]['event_lines'].append(text)
 
     return accounts
-
-def get_notification_icon_tooltip_text():
-    text = None
-    # How many events must there be before they're shown summarized, not per-user
-    # max_ungrouped_events = 10
-    # Character which should be used to indent in the tooltip.
-    indent_with = ' '
-
-    accounts = get_notification_icon_tooltip_dict()
-
-    if not accounts:
-        # No configured account
-        return _('Gajim')
-
-    # at least one account present
-
-    # Is there more that one account?
-    if len(accounts) == 1:
-        show_more_accounts = False
-    else:
-        show_more_accounts = True
-
-    # If there is only one account, its status is shown on the first line.
-    if show_more_accounts:
-        text = _('Gajim')
-    else:
-        text = _('Gajim - %s') % (get_account_status(accounts[0]))
-
-    # Gather and display events. (With accounts, when there are more.)
-    for account in accounts:
-        account_name = account['name']
-        # Set account status, if not set above
-        if show_more_accounts:
-            message = '\n' + indent_with + ' %s - %s'
-            text += message % (account_name, get_account_status(account))
-            # Account list shown, messages need to be indented more
-            indent_how = 2
-        else:
-            # If no account list is shown, messages could have default indenting.
-            indent_how = 1
-        for line in account['event_lines']:
-            text += '\n' + indent_with * indent_how + ' '
-            text += line
-    return text
 
 def get_accounts_info():
     """
@@ -958,20 +844,6 @@ def get_subscription_request_msg(account=None):
             name = nick
         s = Template(s).safe_substitute({'name': name})
         return s
-
-def replace_dataform_media(form, stanza):
-    found = False
-    for field in form.getTags('field'):
-        for media in field.getTags('media'):
-            for uri in media.getTags('uri'):
-                uri_data = uri.getData()
-                if uri_data.startswith('cid:'):
-                    uri_data = uri_data[4:]
-                    for data in stanza.getTags('data', namespace=Namespace.BOB):
-                        if data.getAttr('cid') == uri_data:
-                            uri.setData(data.getData())
-                            found = True
-    return found
 
 def get_user_proxy(account):
     proxy_name = app.config.get_per('accounts', account, 'proxy')
