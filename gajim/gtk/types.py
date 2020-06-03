@@ -13,10 +13,3 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 # Types for typechecking
-
-from typing import ClassVar
-from typing import List
-
-from gajim.gtk.const import Filter
-
-FilterList = ClassVar[List[Filter]]

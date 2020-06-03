@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List
+
 import os
 import sys
 from pathlib import Path
@@ -27,7 +29,6 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.const import Filter
-from gajim.gtk.types import FilterList  # pylint: disable=unused-import
 
 
 def _require_native() -> bool:
@@ -85,7 +86,7 @@ class BaseFileChooser:
 class BaseFileOpenDialog:
 
     _title = _('Choose File to Send…')
-    _filters = [Filter(_('All files'), '*', True)]  # type: FilterList
+    _filters = [Filter(_('All files'), '*', True)]
 
 
 class BaseAvatarChooserDialog:
@@ -96,7 +97,7 @@ class BaseAvatarChooserDialog:
     if _require_native():
         _filters = [Filter(_('PNG files'), '*.png', True),
                     Filter(_('JPEG files'), '*.jp*g', False),
-                    Filter(_('SVG files'), '*.svg', False)]  # type: FilterList
+                    Filter(_('SVG files'), '*.svg', False)]
     else:
         _filters = [Filter(_('Images'), ['image/png',
                                          'image/jpeg',
@@ -106,7 +107,7 @@ class BaseAvatarChooserDialog:
 class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
 
     _title = ''
-    _filters = []  # type: FilterList
+    _filters: List[Filter] = []
     _action = Gtk.FileChooserAction.OPEN
 
     def __init__(self, accept_cb, cancel_cb=None, transient_for=None,
@@ -158,7 +159,7 @@ class NativeAvatarChooserDialog(BaseAvatarChooserDialog, NativeFileChooserDialog
 class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
 
     _title = ''
-    _filters = []  # type: FilterList
+    _filters: List[Filter] = []
     _action = Gtk.FileChooserAction.OPEN
     _preivew_size = (200, 200)
 
