@@ -226,6 +226,14 @@ class Client(ConnectionHandlers):
         if self._status_sync_on_resume:
             self._status_sync_on_resume = False
             self.update_presence()
+        else:
+            # Normally show is updated when we receive a presence reflection.
+            # On resume, if show has not changed while offline, we dont send
+            # a new presence so we have to trigger the event here.
+            app.nec.push_incoming_event(
+                NetworkEvent('our-show',
+                             account=self._account,
+                             show=self._status))
 
     def _set_client_available(self):
         self._set_state(ClientState.AVAILABLE)
