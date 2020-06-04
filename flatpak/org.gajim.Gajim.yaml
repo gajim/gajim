@@ -238,6 +238,7 @@ modules:
         commands:
           - sed -i "s+<id>org.gajim.Gajim</id>+<id>org.gajim.Gajim.Devel</id>+" data/org.gajim.Gajim.appdata.xml.in
           - sed -i "s+<name>Gajim</name>+<name>Gajim (Nightly)</name>+" data/org.gajim.Gajim.appdata.xml.in
+          - sed -i "s+Exec=gajim+Exec=gajim-devel+" data/org.gajim.Gajim.desktop.in
           - mv gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim{.Devel,}.svg
     post-install:
       - install -d /app/plugins
