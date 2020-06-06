@@ -152,21 +152,6 @@ class GajimApplication(Gtk.Application):
             GLib.OptionArg.NONE,
             _('Start a new chat'))
 
-        self.add_main_option(
-            'simulate-network-lost',
-            0,
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.NONE,
-            _('Simulate loss of connectivity'))
-
-        self.add_main_option(
-            'simulate-network-connected',
-            0,
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.NONE,
-            _('Simulate regaining connectivity'))
-
-
         self.add_main_option_entries(self._get_remaining_entry())
 
         self.connect('handle-local-options', self._handle_local_options)
@@ -326,14 +311,6 @@ class GajimApplication(Gtk.Application):
             if options.contains(cmd):
                 self.activate_action(cmd)
                 return 0
-
-        if options.contains('simulate-network-lost'):
-            app.interface.network_status_changed(None, False)
-            return 0
-
-        if options.contains('simulate-network-connected'):
-            app.interface.network_status_changed(None, True)
-            return 0
 
         if remaining is not None:
             self._open_uris(remaining.unpack())
