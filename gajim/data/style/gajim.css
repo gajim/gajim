@@ -101,6 +101,24 @@ list.settings > row > box {
     margin: 6px 18px;
 }
 
+/* InfoBar */
+infobar.info > revealer > box {
+    color: #3A87AD;
+    background-color: #D9EDF7;
+}
+infobar.question > revealer > box {
+    color: #295A72;
+    background-color: #AFDAF0;
+}
+infobar.warning > revealer > box {
+    color: #D06821;
+    background-color: #FFEBC0;
+}
+infobar.error > revealer > box {
+    color: #B94A48;
+    background-color: #F2DEDE;
+}
+
 /*SendFileDialog*/
 #SendFileDialog grid list > row { padding: 10px 20px 10px 10px; }
 
