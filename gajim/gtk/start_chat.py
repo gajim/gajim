@@ -52,7 +52,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_title(_('Start New Conversation'))
+        self.set_title(_('Start / Join Chat'))
         self.set_default_size(-1, 400)
         self.ready_to_destroy = False
         self._parameter_form = None
@@ -95,6 +95,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         self._muc_info_box = GroupChatInfoScrolled()
         self._ui.info_box.add(self._muc_info_box)
+
+        self._ui.infobar.set_revealed(app.config.get('show_help_start_chat'))
 
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._destroy)
@@ -258,6 +260,11 @@ class StartChatDialog(Gtk.ApplicationWindow):
         if is_search:
             self._ui.search_entry.grab_focus_without_selecting()
         return Gdk.EVENT_PROPAGATE
+
+    def _on_infobar_response(self, _widget, response):
+        if response == Gtk.ResponseType.CLOSE:
+            self._ui.infobar.set_revealed(False)
+            app.config.set('show_help_start_chat', False)
 
     def _start_new_chat(self, row):
         if row.new:
