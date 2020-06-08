@@ -1,1 +1,19 @@
 /* Gajim Dark Application CSS File */
+
+/* InfoBar */
+infobar.info > revealer > box {
+    color: #D9EDF7;
+    background-color: #3A87AD;
+}
+infobar.question > revealer > box {
+    color: #D9EDF7;
+    background-color: #295A72;
+}
+infobar.warning > revealer > box {
+    color: #FCF8E3;
+    background-color: #D2822B;
+}
+infobar.error > revealer > box {
+    color: #FCE5D5;
+    background-color: #D64937;
+}
