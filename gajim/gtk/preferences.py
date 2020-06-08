@@ -1059,5 +1059,13 @@ class Preferences(Gtk.ApplicationWindow):
     def _on_debug_folder_clicked(self, _widget):
         open_file(configpaths.get('DEBUG'))
 
+    def _on_reset_help_clicked(self, widget):
+        widget.set_sensitive(False)
+        helping_hints = [
+            'start_chat',
+        ]
+        for hint in helping_hints:
+            app.config.set('show_help_%s' % hint, True)
+
     def on_open_advanced_editor_button_clicked(self, _widget):
         open_window('AdvancedConfig')

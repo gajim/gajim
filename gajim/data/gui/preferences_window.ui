@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment_status_auto_away">
@@ -2529,7 +2529,6 @@ to discover one from the server. (Example: stun.iptel.org)</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
                             <property name="mnemonic_widget">proxies_combobox</property>
-                            <property name="angle">0.01</property>
                             <style>
                               <class name="dim-label"/>
                             </style>
@@ -2650,6 +2649,23 @@ to discover one from the server. (Example: stun.iptel.org)</property>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="reset_help">
+                        <property name="label" translatable="yes">_Reset Hints</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">In order to introduce you to features, Gajim displays some hints. This button will reset all these hints.</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="_on_reset_help_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>
