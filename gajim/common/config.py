@@ -249,6 +249,7 @@ class Config:
         'command_system_execute': [opt_bool, False, _('If enabled, Gajim will execute commands (/show, /sh, /execute, /exec).')],
         'groupchat_roster_width': [opt_int, 210, _('Width of group chat roster in pixel')],
         'dev_force_bookmark_2': [opt_bool, False, _('Force Bookmark 2 usage')],
+        'show_help_start_chat': [opt_bool, True, _('Shows an info bar with helpful hints in the Start / Join Chat dialog')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {
