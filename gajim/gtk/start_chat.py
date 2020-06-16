@@ -370,15 +370,17 @@ class StartChatDialog(Gtk.ApplicationWindow):
         return box == Search.GLOBAL
 
     def _on_global_search_toggle(self, button):
-        self._ui.search_entry.set_text('')
         self._ui.search_entry.grab_focus()
         image_style_context = button.get_children()[0].get_style_context()
         if button.get_active():
             image_style_context.add_class('selected-color')
             self._set_listbox(self._global_search_listbox)
+            if self._ui.search_entry.get_text():
+                self._start_search()
             self._remove_new_jid_row()
             self._ui.listbox.invalidate_filter()
         else:
+            self._ui.search_entry.set_text('')
             image_style_context.remove_class('selected-color')
             self._set_listbox(self._ui.listbox)
             self._global_search_listbox.remove_all()
