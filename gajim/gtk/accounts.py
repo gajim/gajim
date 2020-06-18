@@ -61,6 +61,9 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.add(box)
 
         for account in app.get_accounts_sorted():
+            if account == 'Local':
+                # Disable zeroconf support until its working again
+                continue
             self.add_account(account, initial=True)
 
         self._menu.connect('menu-activated', self._on_menu_activated)
