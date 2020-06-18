@@ -615,8 +615,10 @@ class GeneralPage(GenericSettingPage):
                     SettingType.ACTION, '-import-contacts',
                     props={'account': account}),
 
-            Setting(SettingKind.DIALOG, _('Client Certificate'),
-                    SettingType.DIALOG, props={'dialog': CertificateDialog}),
+            # Currently not supported by nbxmpp
+            #
+            # Setting(SettingKind.DIALOG, _('Client Certificate'),
+            #         SettingType.DIALOG, props={'dialog': CertificateDialog}),
 
             Setting(SettingKind.SWITCH, _('Connect on startup'),
                     SettingType.ACCOUNT_CONFIG, 'autoconnect'),
