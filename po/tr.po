@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.13.10.2-dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-29 02:05+0000\n"
+"POT-Creation-Date: 2020-06-20 12:35+0000\n"
 "PO-Revision-Date: 2010-03-24 22:29+0100\n"
 "Last-Translator: Ferdi Kunzmann <shegman@tablatures.de>\n"
 "Language-Team: Turkish\n"
@@ -17,6 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Bookmarks: -1,-1,66,-1,-1,-1,-1,-1,-1,-1\n"
+
+#: gajim/chat_control_base.py:147 gajim/gtk/start_chat.py:643
+#: gajim/gtk/groupchat_invite.py:318
+#, fuzzy, python-format
+msgid "Account: %s"
+msgstr "Hesaplar"
 
 #: gajim/chat_control_base.py:570
 #, fuzzy
@@ -32,61 +38,61 @@ msgstr "ve YETKİLENDİRİLMEMİŞ"
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 
-#: gajim/chat_control_base.py:701
+#: gajim/chat_control_base.py:698
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: gajim/chat_control_base.py:709 gajim/conversation_textview.py:507
+#: gajim/chat_control_base.py:706 gajim/conversation_textview.py:507
 msgid "_Clear"
 msgstr "_Temizle"
 
-#: gajim/chat_control_base.py:714
+#: gajim/chat_control_base.py:711
 msgid "Paste as quote"
 msgstr ""
 
-#: gajim/chat_control_base.py:751
+#: gajim/chat_control_base.py:748
 #, fuzzy
 msgid "Paste Image"
 msgstr "Resim seç"
 
-#: gajim/chat_control_base.py:752
+#: gajim/chat_control_base.py:749
 msgid "You are trying to paste an image"
 msgstr ""
 
-#: gajim/chat_control_base.py:753
+#: gajim/chat_control_base.py:750
 #, fuzzy
 msgid ""
 "Are you sure you want to paste your clipboard's image into the chat window?"
 msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
 
-#: gajim/chat_control_base.py:755 gajim/groupchat_control.py:1737
-#: gajim/roster_window.py:2845 gajim/roster_window.py:4064
+#: gajim/chat_control_base.py:752 gajim/groupchat_control.py:1736
+#: gajim/roster_window.py:2837 gajim/roster_window.py:4047
 #: gajim/message_window.py:364
 #, fuzzy
 msgid "_Do not ask me again"
 msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
-#: gajim/chat_control_base.py:758
+#: gajim/chat_control_base.py:755
 msgid "_Paste"
 msgstr ""
 
-#: gajim/chat_control_base.py:1314 gajim/gtk/accounts.py:307
+#: gajim/chat_control_base.py:1310 gajim/gtk/accounts.py:310
 #, fuzzy
 msgid "Privacy"
 msgstr "Geçersiz Liste İsmi"
 
-#: gajim/chat_control_base.py:1315
+#: gajim/chat_control_base.py:1311
 #, fuzzy
 msgid "Warning"
 msgstr "ben burdaysam"
 
-#: gajim/chat_control_base.py:1316
+#: gajim/chat_control_base.py:1312
 #, python-format
 msgid ""
 "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 msgstr ""
 
-#: gajim/chat_control_base.py:1321
+#: gajim/chat_control_base.py:1317
 msgid "_Continue"
 msgstr "_Devam"
 
@@ -147,13 +153,13 @@ msgid " resource with priority "
 msgstr "Beni bir açılan pencereyle _haberle"
 
 #: gajim/gui_menu_builder.py:254 gajim/gui_menu_builder.py:345
-#: gajim/chat_control.py:295 gajim/roster_window.py:779
-#: gajim/roster_window.py:1718 gajim/roster_window.py:1720
-#: gajim/roster_window.py:2032 gajim/roster_window.py:3288
-#: gajim/roster_window.py:3321 gajim/gui_interface.py:322
+#: gajim/chat_control.py:295 gajim/roster_window.py:778
+#: gajim/roster_window.py:1717 gajim/roster_window.py:1719
+#: gajim/roster_window.py:2031 gajim/roster_window.py:3271
+#: gajim/roster_window.py:3304 gajim/gui_interface.py:295
 #: gajim/common/contacts.py:219 gajim/common/contacts.py:348
-#: gajim/common/contacts.py:459 gajim/common/helpers.py:96
-#: gajim/common/helpers.py:219 gajim/gtk/add_contact.py:320
+#: gajim/common/contacts.py:459 gajim/common/helpers.py:94
+#: gajim/common/helpers.py:212 gajim/gtk/add_contact.py:320
 #: gajim/gtk/subscription_request.py:63 gajim/gtk/subscription_request.py:95
 #: gajim/gtk/roster_item_exchange.py:112
 #, fuzzy
@@ -185,23 +191,23 @@ msgstr "Aktarım protokolü"
 msgid "_Modify Transport"
 msgstr "Aktarım protokolü"
 
-#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4932
+#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4915
 #, fuzzy
 msgid "_Rename…"
 msgstr "_Ad Değiştir"
 
-#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4948
-#: gajim/roster_window.py:5063 gajim/data/gui/blocked_contacts_window.ui:52
+#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4931
+#: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr "Engellemeyi _Kaldır"
 
-#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4953
-#: gajim/roster_window.py:5067 gajim/data/gui/contact_context_menu.ui:151
+#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4936
+#: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr "_Engelle"
 
-#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4960
+#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4943
 #: gajim/data/gui/contact_context_menu.ui:181
 msgid "Remo_ve"
 msgstr "K_aldır"
@@ -230,7 +236,7 @@ msgstr "Dosya Farklı Kaydet..."
 msgid "Send Chatstate"
 msgstr "Son durum: %s"
 
-#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:280
+#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:283
 #, fuzzy
 msgid "Invite Contacts…"
 msgstr "Kişi Davet _Et"
@@ -258,13 +264,12 @@ msgid "Information"
 msgstr "_Bilgi"
 
 #: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:594
-#: gajim/data/gui/application_menu.ui:68
 #, fuzzy
 msgid "History"
 msgstr "_Geçmiş"
 
 #: gajim/gui_menu_builder.py:533 gajim/gui_menu_builder.py:649
-#: gajim/data/gui/preferences_window.ui:1861
+#: gajim/data/gui/preferences_window.ui:1886
 msgid "Disabled"
 msgstr "Geçersizleşti"
 
@@ -308,7 +313,7 @@ msgstr "_Yerleştir"
 msgid "Destroy…"
 msgstr "Açıklama"
 
-#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:828
+#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:843
 #, fuzzy
 msgid "Chat Settings"
 msgstr "Bağlantı Kurulamıyor"
@@ -360,11 +365,11 @@ msgstr "Komuta _Yürüt"
 msgid "Leave"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:163
+#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:166
 msgid "No threshold"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:165
+#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:168
 #, python-format
 msgid "%i day"
 msgid_plural "%i days"
@@ -384,7 +389,7 @@ msgid "Add Contact…"
 msgstr "Kişi _ekle"
 
 #: gajim/gui_menu_builder.py:672 gajim/gtk/profile.py:53
-#: gajim/gtk/accounts.py:703 gajim/gtk/accounts.py:741
+#: gajim/gtk/accounts.py:708 gajim/gtk/accounts.py:746
 #, fuzzy
 msgid "Profile"
 msgstr "dosya"
@@ -404,7 +409,7 @@ msgstr "Çevrimiçi Servisler"
 msgid "Server Info"
 msgstr "_Sunuc:"
 
-#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2722
+#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2763
 msgid "Advanced"
 msgstr "İlerlemiş"
 
@@ -439,7 +444,7 @@ msgid "Privacy Lists"
 msgstr "Kişisel Gizlilik Listesini biçimle"
 
 #: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
-#: gajim/gtk/server_info.py:138
+#: gajim/gtk/server_info.py:128
 #, fuzzy
 msgid "Admin"
 msgstr "_Yönetici"
@@ -480,8 +485,7 @@ msgstr "%s hesaptan"
 msgid "_Modify Account…"
 msgstr "%s hesaptan"
 
-#: gajim/gui_menu_builder.py:745 gajim/data/gui/application_menu.ui:36
-#: gajim/data/gui/shortcuts_window.ui:203 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "Hesaplar"
 
@@ -497,6 +501,7 @@ msgstr "Grup Sohbete Katıl"
 
 #: gajim/gui_menu_builder.py:780 gajim/gui_menu_builder.py:806
 #: gajim/data/gui/subscription_request_window.ui:106
+#: gajim/gtk/start_chat.py:630
 #, fuzzy
 msgid "Start Chat"
 msgstr "Sohbet _Başla"
@@ -624,7 +629,7 @@ msgstr "Dosya mevcut değil"
 #: gajim/data/gui/privacy_list_window.ui:317
 #: gajim/data/gui/blocking_list.ui:115 gajim/data/gui/bookmarks.ui:101
 #: gajim/gtk/discovery.py:829 gajim/gtk/add_contact.py:31
-#: gajim/gtk/accounts.py:734
+#: gajim/gtk/accounts.py:739
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM Adres:"
@@ -643,7 +648,7 @@ msgid "Nickname"
 msgstr "Takma ad"
 
 #: gajim/history_manager.py:178 gajim/history_manager.py:217
-#: gajim/data/gui/preferences_window.ui:1382
+#: gajim/data/gui/preferences_window.ui:1397
 #: gajim/data/gui/single_message_window.ui:266 gajim/gtk/history.py:117
 msgid "Message"
 msgstr "İleti"
@@ -716,142 +721,142 @@ msgid "Do you want to permanently delete this message?"
 msgid_plural "Do you want to permanently delete these messages?"
 msgstr[0] "Seçilen anahtarları gerçekten silmek istiyor musunuz? "
 
-#: gajim/dialogs.py:83
+#: gajim/dialogs.py:82
 #, fuzzy, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "İlk Ad:"
 
-#: gajim/dialogs.py:85
+#: gajim/dialogs.py:84
 #, python-format
 msgid "XMPP Address: <i>%s</i>"
 msgstr ""
 
-#: gajim/dialogs.py:116 gajim/dialogs.py:129 gajim/roster_window.py:2899
-#: gajim/roster_window.py:3730 gajim/roster_window.py:4970
+#: gajim/dialogs.py:115 gajim/dialogs.py:128 gajim/roster_window.py:2891
+#: gajim/roster_window.py:3713 gajim/roster_window.py:4953
 #: gajim/common/contacts.py:163 gajim/common/contacts.py:203
-#: gajim/data/gui/preferences_window.ui:541
-#: gajim/data/gui/preferences_window.ui:593
-#: gajim/data/gui/shortcuts_window.ui:184 gajim/gtk/accounts.py:305
+#: gajim/data/gui/preferences_window.ui:556
+#: gajim/data/gui/preferences_window.ui:608
+#: gajim/data/gui/shortcuts_window.ui:184 gajim/gtk/accounts.py:308
 msgid "General"
 msgstr "Genel"
 
-#: gajim/dialogs.py:202
+#: gajim/dialogs.py:201
 msgid "Group"
 msgstr "Grup"
 
-#: gajim/dialogs.py:209
+#: gajim/dialogs.py:208
 msgid "In the group"
 msgstr "Grupda"
 
-#: gajim/dialogs.py:357
+#: gajim/dialogs.py:356
 msgid "Set Mood"
 msgstr "Ruh Halini Ayarla"
 
-#: gajim/dialogs.py:404 gajim/dialogs.py:417
+#: gajim/dialogs.py:403 gajim/dialogs.py:416
 #: gajim/data/gui/change_mood_dialog.ui:98
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gajim/dialogs.py:478
+#: gajim/dialogs.py:477
 #, fuzzy, python-format
 msgid "%s Status Message"
 msgstr "durum ileti"
 
-#: gajim/dialogs.py:492
+#: gajim/dialogs.py:491
 #, fuzzy
 msgid "Status Message"
 msgstr "durum ileti"
 
-#: gajim/dialogs.py:700
+#: gajim/dialogs.py:698
 msgid "Overwrite"
 msgstr ""
 
-#: gajim/dialogs.py:701
+#: gajim/dialogs.py:699
 #, fuzzy
 msgid "Overwrite Status Message?"
 msgstr "Durum ileti değiştir"
 
-#: gajim/dialogs.py:702
+#: gajim/dialogs.py:700
 msgid "This name is already in use. Do you want to overwrite this preset?"
 msgstr ""
 
-#: gajim/dialogs.py:706 gajim/plugins/gui.py:292
+#: gajim/dialogs.py:704 gajim/plugins/gui.py:292
 msgid "_Overwrite"
 msgstr ""
 
-#: gajim/dialogs.py:718
+#: gajim/dialogs.py:716
 #, fuzzy
 msgid "Status Preset"
 msgstr "durum ileti"
 
-#: gajim/dialogs.py:719
+#: gajim/dialogs.py:717
 #, fuzzy
 msgid "Save status as preset"
 msgstr "Önceden hazırlanmış olarak kaydet:"
 
-#: gajim/dialogs.py:720
+#: gajim/dialogs.py:718
 msgid "Please assign a name to this status message preset"
 msgstr ""
 
-#: gajim/dialogs.py:723
+#: gajim/dialogs.py:721
 #, fuzzy
 msgid "_Save"
 msgstr "Sahip"
 
-#: gajim/dialogs.py:725
+#: gajim/dialogs.py:723
 #, fuzzy
 msgid "New Status"
 msgstr "Durum"
 
-#: gajim/dialogs.py:752 gajim/gtk/discovery.py:518 gajim/gtk/profile.py:306
+#: gajim/dialogs.py:750 gajim/gtk/discovery.py:518 gajim/gtk/profile.py:306
 #, fuzzy
 msgid "You are not connected to the server"
 msgstr "Şu anda bir veritabanına bağlı değilsiniz.\n"
 
-#: gajim/dialogs.py:753
+#: gajim/dialogs.py:751
 #, fuzzy
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Bağlantızıs kişisel ilanlar sayfayı yazımlayanmiyor"
 
-#: gajim/dialogs.py:764 gajim/dialogs.py:835 gajim/data/gui/bookmarks.ui:122
+#: gajim/dialogs.py:762 gajim/dialogs.py:833 gajim/data/gui/bookmarks.ui:122
 #: gajim/gtk/discovery.py:822 gajim/gtk/discovery.py:1646
 #: gajim/gtk/discovery.py:1892 gajim/gtk/history.py:99
 #: gajim/gtk/roster_item_exchange.py:83
 msgid "Name"
 msgstr "Adı"
 
-#: gajim/dialogs.py:767 gajim/data/gui/join_groupchat_window.ui:163
+#: gajim/dialogs.py:765 gajim/data/gui/join_groupchat_window.ui:163
 #: gajim/data/gui/server_info.ui:146
 #, fuzzy
 msgid "Server"
 msgstr "_Sunuc:"
 
-#: gajim/dialogs.py:803
+#: gajim/dialogs.py:801
 msgid "This account is not connected to the server"
 msgstr ""
 
-#: gajim/dialogs.py:804
+#: gajim/dialogs.py:802
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 
-#: gajim/dialogs.py:833
+#: gajim/dialogs.py:831
 #, fuzzy
 msgid "Synchronise"
 msgstr "Kişileri eşzamana getir"
 
-#: gajim/dialogs.py:1045
+#: gajim/dialogs.py:1043
 msgid "an audio and video"
 msgstr "bir ses ve video"
 
-#: gajim/dialogs.py:1047
+#: gajim/dialogs.py:1045
 msgid "an audio"
 msgstr "bir ses"
 
-#: gajim/dialogs.py:1049
+#: gajim/dialogs.py:1047
 msgid "a video"
 msgstr "bir video"
 
-#: gajim/dialogs.py:1053
+#: gajim/dialogs.py:1051
 #, python-format
 msgid ""
 "%(contact)s wants to start a %(type)s chat with you. Do you want to answer "
@@ -874,7 +879,7 @@ msgid "No File Transfer available"
 msgstr "Dosya Gönderme Tamamlandı"
 
 #: gajim/groupchat_control.py:541 gajim/dialog_messages.py:31
-#: gajim/dialog_messages.py:36 gajim/gtk/single_message.py:240
+#: gajim/dialog_messages.py:36 gajim/gtk/single_message.py:238
 #, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Geçersiz Dosya"
@@ -904,7 +909,7 @@ msgstr "Dosya Gönderme Soru"
 
 #: gajim/groupchat_control.py:831
 #, python-format
-msgid "<b>%s</b> from <b>%s</b> requests voice"
+msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 msgstr ""
 
 #: gajim/groupchat_control.py:835
@@ -929,7 +934,7 @@ msgstr "grup %s yok - root kullanılacak\n"
 msgid "A setting not related to privacy has been changed"
 msgstr ""
 
-#: gajim/groupchat_control.py:1088 gajim/groupchat_control.py:1248
+#: gajim/groupchat_control.py:1088 gajim/groupchat_control.py:1247
 #, fuzzy
 msgid "Conversations are stored on the server"
 msgstr "%s: OID (-o) 0 olamaz\n"
@@ -954,189 +959,189 @@ msgstr "%s grup sohbete katıldı"
 msgid "Group chat is now fully anonymous"
 msgstr "Grup sohbetler"
 
-#: gajim/groupchat_control.py:1148
+#: gajim/groupchat_control.py:1147
 #, fuzzy, python-format
 msgid "Ping? (%s)"
 msgstr "Pong! (%s s.)"
 
-#: gajim/groupchat_control.py:1151
+#: gajim/groupchat_control.py:1150
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
 msgstr "Pong! (%s s.)"
 
-#: gajim/groupchat_control.py:1154 gajim/chat_control.py:643
+#: gajim/groupchat_control.py:1153 gajim/chat_control.py:643
 msgid "Error."
 msgstr "Hata."
 
-#: gajim/groupchat_control.py:1239
+#: gajim/groupchat_control.py:1238
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s grup sohbete katıldı"
 
-#: gajim/groupchat_control.py:1244
+#: gajim/groupchat_control.py:1243
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr ""
 
-#: gajim/groupchat_control.py:1252
+#: gajim/groupchat_control.py:1251
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "[%s sayfasını okuyamazsınız.]"
 
-#: gajim/groupchat_control.py:1262
+#: gajim/groupchat_control.py:1261
 #, fuzzy
 msgid "A new group chat has been created"
 msgstr "Yeni bir oda yaratılmıştır"
 
-#: gajim/groupchat_control.py:1266
+#: gajim/groupchat_control.py:1265
 #, fuzzy
 msgid "Failed to Configure Group Chat"
 msgstr "Tam-Ekrandan Çık"
 
-#: gajim/groupchat_control.py:1276 gajim/privatechat_control.py:105
+#: gajim/groupchat_control.py:1275 gajim/privatechat_control.py:105
 #, python-format
 msgid "You are now known as %s"
 msgstr "Adınızı %s olarak değiştirdiniz"
 
-#: gajim/groupchat_control.py:1278 gajim/privatechat_control.py:107
+#: gajim/groupchat_control.py:1277 gajim/privatechat_control.py:107
 #, python-brace-format
 msgid "{nick} is now known as {new_nick}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1303 gajim/privatechat_control.py:133
+#: gajim/groupchat_control.py:1302 gajim/privatechat_control.py:133
 #, fuzzy, python-brace-format
 msgid "You are now {show}{status}"
 msgstr "Adınızı %s olarak değiştirdiniz"
 
-#: gajim/groupchat_control.py:1309 gajim/privatechat_control.py:139
+#: gajim/groupchat_control.py:1308 gajim/privatechat_control.py:139
 #, fuzzy, python-brace-format
 msgid "{nick} is now {show}{status}"
 msgstr "%(nick)s durumu şimdi %(status)s"
 
-#: gajim/groupchat_control.py:1326 gajim/groupchat_control.py:1356
-#: gajim/groupchat_control.py:1384 gajim/groupchat_control.py:1443
+#: gajim/groupchat_control.py:1325 gajim/groupchat_control.py:1355
+#: gajim/groupchat_control.py:1383 gajim/groupchat_control.py:1442
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1329
+#: gajim/groupchat_control.py:1328
 #, fuzzy, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 
-#: gajim/groupchat_control.py:1335
+#: gajim/groupchat_control.py:1334
 #, fuzzy, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 
-#: gajim/groupchat_control.py:1359
+#: gajim/groupchat_control.py:1358
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 
-#: gajim/groupchat_control.py:1364
+#: gajim/groupchat_control.py:1363
 #, fuzzy, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 
-#: gajim/groupchat_control.py:1387
+#: gajim/groupchat_control.py:1386
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 
-#: gajim/groupchat_control.py:1392
+#: gajim/groupchat_control.py:1391
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1398
+#: gajim/groupchat_control.py:1397
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1405
+#: gajim/groupchat_control.py:1404
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1412 gajim/groupchat_control.py:1477
+#: gajim/groupchat_control.py:1411 gajim/groupchat_control.py:1476
 #, fuzzy
 msgid ": Affiliation changed"
 msgstr "üyelik değişti"
 
-#: gajim/groupchat_control.py:1418 gajim/groupchat_control.py:1482
+#: gajim/groupchat_control.py:1417 gajim/groupchat_control.py:1481
 msgid ": Group chat configuration changed to members-only"
 msgstr ""
 
-#: gajim/groupchat_control.py:1446
+#: gajim/groupchat_control.py:1445
 #, fuzzy, python-brace-format
 msgid "{nick} has been removed from the group chat{by}{reason}"
 msgstr "%s grup sohbete katıldı"
 
-#: gajim/groupchat_control.py:1456
+#: gajim/groupchat_control.py:1455
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1462
+#: gajim/groupchat_control.py:1461
 #, python-brace-format
 msgid "{nick} has been kicked{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1470
+#: gajim/groupchat_control.py:1469
 #, python-brace-format
 msgid "{nick} has been banned{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1487
+#: gajim/groupchat_control.py:1486
 #, python-brace-format
 msgid "{nick} has left{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1509
+#: gajim/groupchat_control.py:1508
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s grup sohbete katıldı"
 
-#: gajim/groupchat_control.py:1521
+#: gajim/groupchat_control.py:1520
 #, fuzzy
 msgid "Failed to Join Group Chat"
 msgstr "Grup eklenemedi: grup zaten var"
 
-#: gajim/groupchat_control.py:1527
+#: gajim/groupchat_control.py:1526
 #, fuzzy
 msgid "Failed to Create Group Chat"
 msgstr "Tam-Ekrandan Çık"
 
-#: gajim/groupchat_control.py:1543
+#: gajim/groupchat_control.py:1542
 #, fuzzy
 msgid "Group chat has been destroyed"
 msgstr "Oda imha edildi"
 
-#: gajim/groupchat_control.py:1548
+#: gajim/groupchat_control.py:1547
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "%s grup sohbete katıldı"
 
-#: gajim/groupchat_control.py:1733
+#: gajim/groupchat_control.py:1732
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Tam-Ekrandan Çık"
 
-#: gajim/groupchat_control.py:1734
+#: gajim/groupchat_control.py:1733
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
 
-#: gajim/groupchat_control.py:1735
+#: gajim/groupchat_control.py:1734
 #, python-format
 msgid "If you close this window, you will leave '%s'."
 msgstr ""
 
-#: gajim/groupchat_control.py:1741 gajim/roster_window.py:5131
+#: gajim/groupchat_control.py:1740 gajim/roster_window.py:5108
 msgid "_Leave"
 msgstr ""
 
-#: gajim/groupchat_control.py:1786 gajim/roster_window.py:3018
+#: gajim/groupchat_control.py:1785 gajim/roster_window.py:3001
 #, fuzzy, python-format
 msgid "%(jid)s has been invited to this group chat"
 msgstr "%s grup sohbete katıldı"
@@ -1190,7 +1195,7 @@ msgstr "\"%s\"den yeni bir ileti aldın"
 msgid "Close"
 msgstr "_Gönder & Kapat"
 
-#: gajim/chat_control.py:1139 gajim/common/connection_handlers_events.py:277
+#: gajim/chat_control.py:1139 gajim/common/connection_handlers_events.py:237
 #: gajim/gtk/notification.py:185 gajim/gtk/notification.py:214
 #: gajim/gtk/notification.py:273
 msgid "New Message"
@@ -1198,9 +1203,9 @@ msgstr "Yeni Mesaj"
 
 #: gajim/chat_control.py:1144 gajim/chat_control.py:1441
 #: gajim/chat_control.py:1450 gajim/message_window.py:367
-#: gajim/data/gui/groupchat_control.ui:1021
-#: gajim/data/gui/groupchat_control.ui:1107
-#: gajim/data/gui/groupchat_control.ui:1213
+#: gajim/data/gui/groupchat_control.ui:1024
+#: gajim/data/gui/groupchat_control.ui:1110
+#: gajim/data/gui/groupchat_control.ui:1216
 #, fuzzy
 msgid "_Close"
 msgstr "_Gönder & Kapat"
@@ -1219,9 +1224,8 @@ msgstr ""
 msgid "%(name)s is now %(show)s %(status)s"
 msgstr "%(nick)s durumu şimdi %(status)s"
 
-#: gajim/chat_control.py:1405 gajim/roster_window.py:4204
-#: gajim/roster_window.py:4205 gajim/data/gui/application_menu.ui:64
-#: gajim/gtk/filetransfer_progress.py:35
+#: gajim/chat_control.py:1405 gajim/roster_window.py:4187
+#: gajim/roster_window.py:4188 gajim/gtk/filetransfer_progress.py:35
 #, fuzzy
 msgid "File Transfer"
 msgstr "Dosya Aktarımları"
@@ -1243,8 +1247,8 @@ msgstr "Hesaplar"
 msgid "_Decline"
 msgstr "Bağlı _değil"
 
-#: gajim/chat_control.py:1435 gajim/gui_interface.py:719
-#: gajim/gui_interface.py:749 gajim/gui_interface.py:775
+#: gajim/chat_control.py:1435 gajim/gui_interface.py:693
+#: gajim/gui_interface.py:723 gajim/gui_interface.py:749
 #: gajim/gtk/notification.py:188 gajim/gtk/notification.py:284
 msgid "File Transfer Completed"
 msgstr "Dosya Gönderimi Tamamlandı"
@@ -1254,7 +1258,7 @@ msgstr "Dosya Gönderimi Tamamlandı"
 msgid "Open _Folder"
 msgstr "Gmail Gelen Kutusunu _Aç"
 
-#: gajim/chat_control.py:1468 gajim/gui_interface.py:412
+#: gajim/chat_control.py:1468 gajim/gui_interface.py:386
 #: gajim/data/gui/groupchat_invitation_received.ui:42
 #: gajim/gtk/notification.py:189 gajim/gtk/notification.py:210
 #: gajim/gtk/notification.py:288
@@ -1262,11 +1266,11 @@ msgstr "Gmail Gelen Kutusunu _Aç"
 msgid "Group Chat Invitation"
 msgstr "Grup Sohbeti Daveti"
 
-#: gajim/chat_control.py:1493 gajim/roster_window.py:1952
+#: gajim/chat_control.py:1493 gajim/roster_window.py:1951
 msgid "Remote contact stopped transfer"
 msgstr ""
 
-#: gajim/chat_control.py:1495 gajim/roster_window.py:1954
+#: gajim/chat_control.py:1495 gajim/roster_window.py:1953
 msgid "Error opening file"
 msgstr "Dosya açılırken hata"
 
@@ -1285,210 +1289,203 @@ msgstr "Dosya Gönderme Tamamlandı"
 msgid "Connection with peer cannot be established."
 msgstr ""
 
-#: gajim/application.py:79
+#: gajim/application.py:80
 msgid "Show the application's version"
 msgstr ""
 
-#: gajim/application.py:86
+#: gajim/application.py:87
 #, fuzzy
 msgid "Show only critical errors"
 msgstr "Kişi listesindeki olayları göster"
 
-#: gajim/application.py:93
+#: gajim/application.py:94
 msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
-#: gajim/application.py:101
+#: gajim/application.py:102
 msgid "Print XML stanzas and other debug information"
 msgstr ""
 
-#: gajim/application.py:108
+#: gajim/application.py:109
 #, fuzzy
 msgid "Use defined profile in configuration directory"
 msgstr "İlerlemiş Ayarlama Editörü"
 
-#: gajim/application.py:116
+#: gajim/application.py:117
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Hata açıklaması…"
 
-#: gajim/application.py:124
+#: gajim/application.py:125
 msgid "Configure logging system"
 msgstr ""
 
-#: gajim/application.py:132
+#: gajim/application.py:133
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Bütün Bekleyen _Olayları Göster"
 
-#: gajim/application.py:139
+#: gajim/application.py:140
 msgid "Open IPython shell"
 msgstr ""
 
-#: gajim/application.py:146
+#: gajim/application.py:147
 msgid "Pops up a window with the next pending event"
 msgstr ""
 
-#: gajim/application.py:152 gajim/data/gui/shortcuts_window.ui:189
+#: gajim/application.py:153 gajim/data/gui/shortcuts_window.ui:189
 #: data/org.gajim.Gajim.desktop.in:21
 #, fuzzy
 msgid "Start a new chat"
 msgstr "Sohbet _Başla"
 
-#: gajim/application.py:159
-msgid "Simulate loss of connectivity"
-msgstr ""
-
-#: gajim/application.py:166
-msgid "Simulate regaining connectivity"
-msgstr ""
-
-#: gajim/application.py:210 gajim/gui_interface.py:125
+#: gajim/application.py:194 gajim/gui_interface.py:125
 #, fuzzy
 msgid "Database Error"
 msgstr "Hata açıklaması…"
 
-#: gajim/roster_window.py:287 gajim/roster_window.py:1023
+#: gajim/roster_window.py:286 gajim/roster_window.py:1022
 #, fuzzy
 msgid "Merged accounts"
 msgstr "Hesapları bir_leştir"
 
-#: gajim/roster_window.py:846 gajim/roster_window.py:1630
-#: gajim/roster_window.py:1663 gajim/roster_window.py:1714
-#: gajim/roster_window.py:1716 gajim/roster_window.py:1871
-#: gajim/roster_window.py:2522 gajim/roster_window.py:4284
-#: gajim/roster_window.py:4911 gajim/common/contacts.py:201
-#: gajim/common/contacts.py:451 gajim/common/helpers.py:96
+#: gajim/roster_window.py:845 gajim/roster_window.py:1629
+#: gajim/roster_window.py:1662 gajim/roster_window.py:1713
+#: gajim/roster_window.py:1715 gajim/roster_window.py:1870
+#: gajim/roster_window.py:2514 gajim/roster_window.py:4267
+#: gajim/roster_window.py:4894 gajim/common/contacts.py:201
+#: gajim/common/contacts.py:451 gajim/common/helpers.py:93
 #: gajim/gtk/discovery.py:128 gajim/gtk/discovery.py:129
 #: gajim/gtk/discovery.py:1415
 msgid "Transports"
 msgstr "Taşıma"
 
-#: gajim/roster_window.py:1722 gajim/roster_window.py:1724
-#: gajim/roster_window.py:4284 gajim/roster_window.py:4881
-#: gajim/gui_interface.py:1355 gajim/common/contacts.py:199
+#: gajim/roster_window.py:1721 gajim/roster_window.py:1723
+#: gajim/roster_window.py:4267 gajim/roster_window.py:4864
+#: gajim/gui_interface.py:1319 gajim/common/contacts.py:199
 #: gajim/common/helpers.py:96
 #, fuzzy
 msgid "Group chats"
 msgstr "Grup sohbetler"
 
-#: gajim/roster_window.py:2014
+#: gajim/roster_window.py:2013
 #, fuzzy
 msgid "Authorization sent"
 msgstr "Yeni bir oda yaratılmıştır"
 
-#: gajim/roster_window.py:2015
+#: gajim/roster_window.py:2014
 #, fuzzy, python-format
 msgid "\"%s\" will now see your status."
 msgstr "%(nick)s durumu şimdi %(status)s"
 
-#: gajim/roster_window.py:2033
+#: gajim/roster_window.py:2032
 #, fuzzy
 msgid "Subscription request has been sent"
 msgstr "Onay e-postası gönderildi."
 
-#: gajim/roster_window.py:2034
+#: gajim/roster_window.py:2033
 #, python-format
 msgid "If \"%s\" accepts this request you will know their status."
 msgstr ""
 
-#: gajim/roster_window.py:2048
+#: gajim/roster_window.py:2047
 #, fuzzy
 msgid "Authorization removed"
 msgstr "Yeni bir oda yaratılmıştır"
 
-#: gajim/roster_window.py:2049
+#: gajim/roster_window.py:2048
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr ""
 
-#: gajim/roster_window.py:2276
+#: gajim/roster_window.py:2268
 #, fuzzy
 msgid "desynced"
 msgstr "-e  --ed  Bir ed betiği çıktılar."
 
-#: gajim/roster_window.py:2344 gajim/data/gui/shortcuts_window.ui:245
+#: gajim/roster_window.py:2336 gajim/data/gui/shortcuts_window.ui:238
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
 
-#: gajim/roster_window.py:2345
+#: gajim/roster_window.py:2337
 #, fuzzy
 msgid "You are about to quit Gajim"
 msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
 
-#: gajim/roster_window.py:2346
+#: gajim/roster_window.py:2338
 #, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
 
-#: gajim/roster_window.py:2347
+#: gajim/roster_window.py:2339
 #, fuzzy
 msgid "_Always quit when closing Gajim"
 msgstr "Gajimi her zaman kapat"
 
-#: gajim/roster_window.py:2350 gajim/roster_window.py:2446
-#: gajim/roster_window.py:2486 gajim/data/gui/systray_context_menu.ui:83
+#: gajim/roster_window.py:2342 gajim/roster_window.py:2438
+#: gajim/roster_window.py:2478 gajim/data/gui/application_menu.ui:30
+#: gajim/data/gui/systray_context_menu.ui:83
 msgid "_Quit"
 msgstr ""
 
-#: gajim/roster_window.py:2439
+#: gajim/roster_window.py:2431
 #, fuzzy
 msgid "Stop File Transfers"
 msgstr "Dosya Aktarımları"
 
-#: gajim/roster_window.py:2440
+#: gajim/roster_window.py:2432
 #, fuzzy
 msgid "You still have running file transfers"
 msgstr "%s size bir dosya göndermek istiyor:"
 
-#: gajim/roster_window.py:2441
+#: gajim/roster_window.py:2433
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
 msgstr ""
 
-#: gajim/roster_window.py:2479
+#: gajim/roster_window.py:2471
 #, fuzzy
 msgid "Unread Messages"
 msgstr "Okunmamış iletler var"
 
-#: gajim/roster_window.py:2480
+#: gajim/roster_window.py:2472
 #, fuzzy
 msgid "You still have unread messages"
 msgstr "Okunmamış iletler var"
 
-#: gajim/roster_window.py:2481
+#: gajim/roster_window.py:2473
 msgid ""
 "Messages will only be available for reading them later if storing chat "
 "history is enabled and if the contact is in your contact list."
 msgstr ""
 
-#: gajim/roster_window.py:2741
+#: gajim/roster_window.py:2733
 msgid "You have unread messages"
 msgstr "Okunmamış iletler var"
 
-#: gajim/roster_window.py:2742
+#: gajim/roster_window.py:2734
 msgid "You must read them before removing this transport."
 msgstr ""
 
-#: gajim/roster_window.py:2745
+#: gajim/roster_window.py:2737
 #, fuzzy, python-format
 msgid "Transport '%s' will be removed"
 msgstr "%d paket kaldırılacak\n"
 
-#: gajim/roster_window.py:2746
+#: gajim/roster_window.py:2738
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
 "using this transport."
 msgstr ""
 
-#: gajim/roster_window.py:2749
+#: gajim/roster_window.py:2741
 #, fuzzy
 msgid "Transports will be removed"
 msgstr "%d paket kaldırılacak\n"
 
-#: gajim/roster_window.py:2754
+#: gajim/roster_window.py:2746
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
@@ -1496,147 +1493,147 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gajim/roster_window.py:2758
+#: gajim/roster_window.py:2750
 #, fuzzy
 msgid "Remove Transport"
 msgstr "_XML Konsolu Göster"
 
-#: gajim/roster_window.py:2828
+#: gajim/roster_window.py:2820
 #, fuzzy
 msgid "Block Contact"
 msgstr "Engellenmiş Kişiler"
 
-#: gajim/roster_window.py:2829
+#: gajim/roster_window.py:2821
 #, fuzzy
 msgid "Really block this contact?"
 msgstr "Bu bağlantı için her zaman kabul et"
 
-#: gajim/roster_window.py:2830
+#: gajim/roster_window.py:2822
 msgid ""
 "This contact will see you offline and you will not receive any messages sent "
 "to you by this contact."
 msgstr ""
 
-#: gajim/roster_window.py:2832
+#: gajim/roster_window.py:2824
 #, fuzzy
 msgid "_Block Contact"
 msgstr "Engellenmiş Kişiler"
 
-#: gajim/roster_window.py:2834
+#: gajim/roster_window.py:2826
 #, fuzzy
 msgid "Block Group"
 msgstr "_Engelle"
 
-#: gajim/roster_window.py:2835
+#: gajim/roster_window.py:2827
 #, fuzzy
 msgid "Really block this group?"
 msgstr "Bu bağlantı için her zaman kabul et"
 
-#: gajim/roster_window.py:2836
+#: gajim/roster_window.py:2828
 msgid ""
 "All contacts of this group will see you as offline and you will not receive "
 "any messages sent to you by any one of these contacts."
 msgstr ""
 
-#: gajim/roster_window.py:2839
+#: gajim/roster_window.py:2831
 #, fuzzy
 msgid "_Block Group"
 msgstr "_Engelle"
 
-#: gajim/roster_window.py:2893
+#: gajim/roster_window.py:2885
 msgid "Rename Contact"
 msgstr "Kişiyi yeniden adlandır"
 
-#: gajim/roster_window.py:2894
+#: gajim/roster_window.py:2886
 #, fuzzy, python-format
 msgid "Rename contact %s?"
 msgstr "Kişiyi yeniden adlandır"
 
-#: gajim/roster_window.py:2895
+#: gajim/roster_window.py:2887
 #, fuzzy
 msgid "Please enter a new nickname"
 msgstr "Bu kişi için %s yeni bir takma ad girin."
 
-#: gajim/roster_window.py:2902
+#: gajim/roster_window.py:2894
 msgid "Rename Group"
 msgstr "Grupu yeniden adlandır"
 
-#: gajim/roster_window.py:2903
+#: gajim/roster_window.py:2895
 #, fuzzy, python-format
 msgid "Rename group %s?"
 msgstr "Grupu yeniden adlandır"
 
-#: gajim/roster_window.py:2904
+#: gajim/roster_window.py:2896
 #, fuzzy
 msgid "Please enter a new name"
 msgstr "Yeni posta yarat"
 
-#: gajim/roster_window.py:2934 gajim/roster_window.py:3065
-#: gajim/data/gui/groupchat_control.ui:1734
+#: gajim/roster_window.py:2926 gajim/roster_window.py:3048
+#: gajim/data/gui/groupchat_control.ui:1737
 #, fuzzy
 msgid "_Rename"
 msgstr "Adı _değiştir"
 
-#: gajim/roster_window.py:2956 gajim/roster_window.py:2957
+#: gajim/roster_window.py:2948 gajim/roster_window.py:2949
 msgid "Remove Group"
 msgstr "Grubu Sil"
 
-#: gajim/roster_window.py:2958
+#: gajim/roster_window.py:2950
 #, fuzzy, python-format
 msgid "Do you want to remove %s from the contact list?"
 msgstr "%s grupu kişi listesinden silmek istiyor musun?"
 
-#: gajim/roster_window.py:2959
+#: gajim/roster_window.py:2951
 #, fuzzy
 msgid "_Also remove all contacts of this group from contact list"
 msgstr "Bide bütün grupdaki kişileri listeden sil"
 
-#: gajim/roster_window.py:3060 gajim/roster_window.py:3061
+#: gajim/roster_window.py:3043 gajim/roster_window.py:3044
 #, fuzzy
 msgid "Rename Group Chat"
 msgstr "Tam-Ekrandan Çık"
 
-#: gajim/roster_window.py:3062
+#: gajim/roster_window.py:3045
 #, fuzzy
 msgid "Please enter a new name for this group chat"
 msgstr "Grup %s için yeni isim giriniz: "
 
-#: gajim/roster_window.py:3305
+#: gajim/roster_window.py:3288
 #, fuzzy
 msgid "Remove Contact"
 msgstr "Kişiyi yeniden adlandır"
 
-#: gajim/roster_window.py:3306
+#: gajim/roster_window.py:3289
 #, fuzzy
 msgid "Remove contact from contact list"
 msgstr "Kişiyi listeden sil"
 
-#: gajim/roster_window.py:3307
+#: gajim/roster_window.py:3290
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "%s grupu kişi listesinden silmek istiyor musun?"
 
-#: gajim/roster_window.py:3316 gajim/roster_window.py:3336
+#: gajim/roster_window.py:3299 gajim/roster_window.py:3319
 msgid ""
 "By removing this contact you also remove authorization. This means the "
 "contact will see you as offline."
 msgstr ""
 
-#: gajim/roster_window.py:3327
+#: gajim/roster_window.py:3310
 msgid "Do you want to continue?"
 msgstr "Devam etmek istiyor musunuz?"
 
-#: gajim/roster_window.py:3338
+#: gajim/roster_window.py:3321
 #, fuzzy
 msgid "_I want this contact to know my status after removal"
 msgstr "Silindikten sonra bu kişi benim durumu bilsin"
 
-#: gajim/roster_window.py:3345
+#: gajim/roster_window.py:3328
 #, fuzzy
 msgid "Remove contacts from contact list"
 msgstr "Kişiyi listeden sil"
 
-#: gajim/roster_window.py:3351
+#: gajim/roster_window.py:3334
 #, python-format
 msgid ""
 "By removing the following contacts, you will also remove authorization. This "
@@ -1645,167 +1642,163 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gajim/roster_window.py:3355
+#: gajim/roster_window.py:3338
 #, fuzzy
 msgid "Remove Contacts"
 msgstr "Kişiyi yeniden adlandır"
 
-#: gajim/roster_window.py:3375
+#: gajim/roster_window.py:3358
 msgid "No account available"
 msgstr "Hiç bir hesap bulunmiyor"
 
-#: gajim/roster_window.py:3376
+#: gajim/roster_window.py:3359
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 
-#: gajim/roster_window.py:3957
+#: gajim/roster_window.py:3940
 msgid "Metacontacts storage not supported by your server"
 msgstr ""
 
-#: gajim/roster_window.py:3959
+#: gajim/roster_window.py:3942
 msgid ""
 "Your server does not support storing metacontacts information. So this "
 "information will not be saved on next reconnection."
 msgstr ""
 
-#: gajim/roster_window.py:4056
+#: gajim/roster_window.py:4039
 msgid "You are about to create a metacontact"
 msgstr ""
 
-#: gajim/roster_window.py:4057
+#: gajim/roster_window.py:4040
 msgid ""
 "Metacontacts are a way to regroup several contacts in one single contact. "
 "Generally it is used when the same person has several XMPP- or Transport-"
 "Accounts."
 msgstr ""
 
-#: gajim/roster_window.py:4061
+#: gajim/roster_window.py:4044
 #, fuzzy
 msgid "Create Metacontact"
 msgstr "Kişiyi yeniden adlandır"
 
-#: gajim/roster_window.py:4067 gajim/data/gui/groupchat_creation.ui:317
+#: gajim/roster_window.py:4050 gajim/data/gui/groupchat_creation.ui:317
 #, fuzzy
 msgid "_Create"
 msgstr "Yaratıcı"
 
-#: gajim/roster_window.py:4184
+#: gajim/roster_window.py:4167
 #, fuzzy
 msgid "Invalid file URI:"
 msgstr "Adres verilmedi"
 
-#: gajim/roster_window.py:4196
+#: gajim/roster_window.py:4179
 #, fuzzy, python-format
 msgid "Send this file to %s:\n"
 msgid_plural "Send these files to %s:\n"
 msgstr[0] "Yapmak istediğiniz şey bu mu?"
 
-#: gajim/roster_window.py:4209 gajim/data/gui/xml_console.ui:334
+#: gajim/roster_window.py:4192 gajim/data/gui/xml_console.ui:334
 msgid "_Send"
 msgstr "_Gönder"
 
-#: gajim/roster_window.py:4354
+#: gajim/roster_window.py:4337
 #, fuzzy, python-format
 msgid "Send %(from)s to %(to)s"
 msgstr "Bunu %s buna %s gönder"
 
-#: gajim/roster_window.py:4367
+#: gajim/roster_window.py:4350
 #, fuzzy, python-format
 msgid "Make %s first contact"
 msgstr "bir ses ve video"
 
-#: gajim/roster_window.py:4372
+#: gajim/roster_window.py:4355
 #, fuzzy, python-format
 msgid "Make %(contact1)s and %(contact2)s metacontacts"
 msgstr "bir ses ve video"
 
-#: gajim/roster_window.py:4722 gajim/roster_window.py:4809
+#: gajim/roster_window.py:4705 gajim/roster_window.py:4792
 msgid "_Change Status Message"
 msgstr "Durum ileti değiştir"
 
-#: gajim/roster_window.py:4742
+#: gajim/roster_window.py:4725
 #, fuzzy
 msgid "Publish Tune"
 msgstr "Albüm Ayarı"
 
-#: gajim/roster_window.py:4753
+#: gajim/roster_window.py:4736
 #, fuzzy
 msgid "Publish Location"
 msgstr " B - DosyaKilidi konumu"
 
-#: gajim/roster_window.py:4883
+#: gajim/roster_window.py:4866
 #, fuzzy
 msgid "_Maximize All"
 msgstr "Bütün durumlar"
 
-#: gajim/roster_window.py:4890 gajim/roster_window.py:5032
+#: gajim/roster_window.py:4873 gajim/roster_window.py:5015
 #, fuzzy
 msgid "Send Group M_essage"
 msgstr "grupdaki herkez"
 
-#: gajim/roster_window.py:4897
+#: gajim/roster_window.py:4880
 msgid "To all users"
 msgstr "Tüm kullanıcılara"
 
-#: gajim/roster_window.py:4901
+#: gajim/roster_window.py:4884
 msgid "To all online users"
 msgstr "Tüm çevredeki kullanıcılara"
 
-#: gajim/roster_window.py:4913 gajim/roster_window.py:5038
+#: gajim/roster_window.py:4896 gajim/roster_window.py:5021
 #: gajim/data/gui/contact_context_menu.ui:36
 msgid "In_vite to"
 msgstr "Buna davet _et"
 
-#: gajim/roster_window.py:5048
+#: gajim/roster_window.py:5031
 #, fuzzy
 msgid "_Manage Contacts"
 msgstr "Kişileri eşzamana getir"
 
-#: gajim/roster_window.py:5054
+#: gajim/roster_window.py:5037
 #, fuzzy
 msgid "Edit _Groups…"
 msgstr "Kişisel ilanlar sayfayı yazımla"
 
-#: gajim/roster_window.py:5075 gajim/data/gui/filetransfers.ui:12
+#: gajim/roster_window.py:5058 gajim/data/gui/filetransfers.ui:12
 #: gajim/gtk/dialogs.py:68
 msgid "_Remove"
 msgstr "_Kaldır"
 
-#: gajim/roster_window.py:5112
+#: gajim/roster_window.py:5095
 #, fuzzy
 msgid "_Maximize"
 msgstr "Ekranı kapla"
 
-#: gajim/roster_window.py:5117
+#: gajim/roster_window.py:5100
 #, fuzzy
 msgid "Re_name"
 msgstr "Adı _değiştir"
 
-#: gajim/roster_window.py:5126
-msgid "_Reconnect"
-msgstr "_Yeniden bağlan"
-
-#: gajim/roster_window.py:5139
+#: gajim/roster_window.py:5116
 #, fuzzy
 msgid "Execute command"
 msgstr "Komuta _Yürüt"
 
-#: gajim/roster_window.py:5147 gajim/data/gui/contact_context_menu.ui:205
+#: gajim/roster_window.py:5124 gajim/data/gui/contact_context_menu.ui:205
+#: gajim/data/gui/application_menu.ui:68
 msgid "_History"
 msgstr "_Geçmiş"
 
-#: gajim/roster_window.py:5228 gajim/data/gui/application_menu.ui:18
-#: gajim/data/gui/history_window.ui:57
+#: gajim/roster_window.py:5205 gajim/data/gui/history_window.ui:57
 #, fuzzy
 msgid "History Manager"
 msgstr "Paket Yöneticisi"
 
-#: gajim/roster_window.py:5309 gajim/gui_interface.py:323
-#: gajim/common/contacts.py:197 gajim/common/helpers.py:96
+#: gajim/roster_window.py:5286 gajim/gui_interface.py:296
+#: gajim/common/contacts.py:197 gajim/common/helpers.py:95
 msgid "Observers"
 msgstr "İzlemci"
 
-#: gajim/roster_window.py:5312
+#: gajim/roster_window.py:5289
 msgid "Observers can see your status, but you are not allowed to see theirs"
 msgstr ""
 
@@ -1960,7 +1953,7 @@ msgstr "Yeni bir oda yaratılmıştır"
 msgid "HTTP Authorization Request"
 msgstr "Yeni bir oda yaratılmıştır"
 
-#: gajim/gui_interface.py:179 gajim/gui_interface.py:359
+#: gajim/gui_interface.py:179 gajim/gui_interface.py:333
 #: gajim/gtk/filetransfer.py:339
 #, fuzzy
 msgid "_No"
@@ -1971,189 +1964,189 @@ msgstr "Hiçbiri"
 msgid "Connection Failed"
 msgstr "Bağlantı Kurulamıyor"
 
-#: gajim/gui_interface.py:283
+#: gajim/gui_interface.py:256
 #, fuzzy, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "Kişisel ilet gönderimi başarısız"
 
-#: gajim/gui_interface.py:308 gajim/gtk/notification.py:190
+#: gajim/gui_interface.py:281 gajim/gtk/notification.py:190
 msgid "Subscription request"
 msgstr "Üyelik isteği"
 
-#: gajim/gui_interface.py:343
+#: gajim/gui_interface.py:316
 #, fuzzy
 msgid "Authorization accepted"
 msgstr "Değer kabul edildi!"
 
-#: gajim/gui_interface.py:344
+#: gajim/gui_interface.py:317
 #, python-format
 msgid "The contact \"%s\" has authorized you to see their status."
 msgstr ""
 
-#: gajim/gui_interface.py:354
+#: gajim/gui_interface.py:327
 #, fuzzy
 msgid "Subscription Removed"
 msgstr "Üyelik İsteği"
 
-#: gajim/gui_interface.py:355
+#: gajim/gui_interface.py:328
 #, fuzzy, python-format
-msgid "%s (%s) has removed subscription from you"
+msgid "%(name)s (%(jid)s) has removed subscription from you"
 msgstr "\"%s\" kişi listesinden silincek"
 
-#: gajim/gui_interface.py:356
+#: gajim/gui_interface.py:330
 msgid ""
 "You will always see this contact as offline.\n"
 "Do you want to remove them from your contact list?"
 msgstr ""
 
-#: gajim/gui_interface.py:381 gajim/gtk/notification.py:191
+#: gajim/gui_interface.py:355 gajim/gtk/notification.py:191
 msgid "Unsubscribed"
 msgstr "Üyelikten çıkarıldı"
 
-#: gajim/gui_interface.py:393
+#: gajim/gui_interface.py:367
 #, python-format
 msgid "%(jid)s declined the invitation: %(reason)s"
 msgstr ""
 
-#: gajim/gui_interface.py:397
+#: gajim/gui_interface.py:371
 #, python-format
 msgid "%(jid)s declined the invitation"
 msgstr ""
 
-#: gajim/gui_interface.py:413
+#: gajim/gui_interface.py:387
 #, fuzzy, python-brace-format
 msgid "You are invited to {room} by {user}"
 msgstr ""
 "Şuraya bir yorum gönderiyorsunuz:\n"
 "  "
 
-#: gajim/gui_interface.py:434
+#: gajim/gui_interface.py:408
 #, fuzzy
 msgid "Certificate Passphrase Required"
 msgstr "Bu anahtarın kullanım süresi dolmuş"
 
-#: gajim/gui_interface.py:435
+#: gajim/gui_interface.py:409
 #, fuzzy, python-format
 msgid "Enter the certificate passphrase for account %s"
 msgstr "Gadu-Gudu hesabı için parola değiştir"
 
-#: gajim/gui_interface.py:444
+#: gajim/gui_interface.py:418
 #, fuzzy, python-format
 msgid "Enter your password for account %s"
 msgstr "Gadu-Gudu hesabı için parola değiştir"
 
-#: gajim/gui_interface.py:456
+#: gajim/gui_interface.py:430
 #, fuzzy
 msgid "Password Required"
 msgstr "Şifre gerekli"
 
-#: gajim/gui_interface.py:456
+#: gajim/gui_interface.py:430
 #, fuzzy
 msgid "Save password"
 msgstr "Parolayı Değiştir"
 
-#: gajim/gui_interface.py:525 gajim/gui_interface.py:556
+#: gajim/gui_interface.py:499 gajim/gui_interface.py:530
 #: gajim/gtk/filetransfer.py:333 gajim/gtk/filetransfer.py:334
 #: gajim/gtk/notification.py:188 gajim/gtk/notification.py:281
 msgid "File Transfer Error"
 msgstr "Dosya Gönderim Hatası"
 
-#: gajim/gui_interface.py:590
+#: gajim/gui_interface.py:564
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s size bir dosya göndermek istiyor."
 
-#: gajim/gui_interface.py:592 gajim/gtk/filetransfer.py:485
+#: gajim/gui_interface.py:566 gajim/gtk/filetransfer.py:485
 #: gajim/gtk/notification.py:187 gajim/gtk/notification.py:278
 msgid "File Transfer Request"
 msgstr "Dosya Gönderim İsteği"
 
-#: gajim/gui_interface.py:695
+#: gajim/gui_interface.py:669
 #, fuzzy
 msgid "Remote Contact Stopped Transfer"
 msgstr "Kişiyi listeden sil"
 
-#: gajim/gui_interface.py:700
+#: gajim/gui_interface.py:674
 #, fuzzy
 msgid "Error Opening File"
 msgstr "Dosya açılırken hata"
 
-#: gajim/gui_interface.py:710
+#: gajim/gui_interface.py:684
 #, fuzzy
 msgid "SSL Certificate Error"
 msgstr "<b>Bir hata oluştu:</b>"
 
-#: gajim/gui_interface.py:723 gajim/gui_interface.py:754
-#: gajim/gui_interface.py:781 gajim/gtk/notification.py:189
+#: gajim/gui_interface.py:697 gajim/gui_interface.py:728
+#: gajim/gui_interface.py:755 gajim/gtk/notification.py:189
 #: gajim/gtk/notification.py:285
 msgid "File Transfer Stopped"
 msgstr "Dosya Gönderimi Durduruldu"
 
-#: gajim/gui_interface.py:727
+#: gajim/gui_interface.py:701
 #, fuzzy
 msgid "File Transfer Failed"
 msgstr "Dosya Gönderme Tamamlandı"
 
-#: gajim/gui_interface.py:750
+#: gajim/gui_interface.py:724
 #, python-format
 msgid "%(filename)s received from %(name)s."
 msgstr ""
 
-#: gajim/gui_interface.py:755
+#: gajim/gui_interface.py:729
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr ""
 
-#: gajim/gui_interface.py:761
+#: gajim/gui_interface.py:735
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s failed."
 msgstr ""
 
-#: gajim/gui_interface.py:776
+#: gajim/gui_interface.py:750
 #, fuzzy, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Gönderdiğiniz iletide yazacak adın rengi."
 
-#: gajim/gui_interface.py:782
+#: gajim/gui_interface.py:756
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr ""
 
-#: gajim/gui_interface.py:788
+#: gajim/gui_interface.py:762
 #, fuzzy, python-format
 msgid "File transfer of %(filename)s to %(name)s failed."
 msgstr "Gönderdiğiniz iletide yazacak adın rengi."
 
-#: gajim/gui_interface.py:886 gajim/gui_interface.py:887
+#: gajim/gui_interface.py:850 gajim/gui_interface.py:851
 msgid "Username Conflict"
 msgstr "Kullanan ad Çarpışması"
 
-#: gajim/gui_interface.py:888
+#: gajim/gui_interface.py:852
 #, fuzzy
 msgid "Please enter a new username for your local account"
 msgstr "Grup %s için yeni isim giriniz: "
 
-#: gajim/gui_interface.py:892 gajim/data/gui/passphrase_dialog.ui:44
+#: gajim/gui_interface.py:856 gajim/data/gui/passphrase_dialog.ui:44
 #: gajim/gtk/dialogs.py:49
 msgid "_OK"
 msgstr "_Tamam"
 
-#: gajim/gui_interface.py:950
+#: gajim/gui_interface.py:914
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr ""
 
-#: gajim/gui_interface.py:952
+#: gajim/gui_interface.py:916
 #, fuzzy
 msgid "Voice Chat Request"
 msgstr "Dosya Gönderme Soru"
 
-#: gajim/gui_interface.py:1004 gajim/gui_interface.py:1005
+#: gajim/gui_interface.py:968 gajim/gui_interface.py:969
 #, fuzzy
 msgid "Insecure Connection"
 msgstr "Tehlikeli bağlantı"
 
-#: gajim/gui_interface.py:1006
+#: gajim/gui_interface.py:970
 #, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) using an "
@@ -2161,20 +2154,20 @@ msgid ""
 "Connecting PLAIN is strongly discouraged."
 msgstr ""
 
-#: gajim/gui_interface.py:1013 gajim/data/gui/groupchat_control.ui:518
+#: gajim/gui_interface.py:977 gajim/data/gui/groupchat_control.ui:521
 msgid "_Abort"
 msgstr ""
 
-#: gajim/gui_interface.py:1016
+#: gajim/gui_interface.py:980
 #, fuzzy
 msgid "_Connect Anyway"
 msgstr "Connecting"
 
-#: gajim/gui_interface.py:1833
+#: gajim/gui_interface.py:1721
 msgid "Could not save your settings and preferences"
 msgstr ""
 
-#: gajim/gui_interface.py:1895
+#: gajim/gui_interface.py:1783
 msgid "Gajim: IPython Console"
 msgstr ""
 
@@ -2682,77 +2675,72 @@ msgid ""
 "Type \"%(basename)s help %(command)s\" for more info"
 msgstr ""
 
-#: gajim/common/logger.py:199 gajim/common/logger.py:204
+#: gajim/common/logger.py:210 gajim/common/logger.py:215
 #, python-format
 msgid "%s is a directory but should be a file"
 msgstr ""
 
-#: gajim/common/logger.py:224
+#: gajim/common/logger.py:235
 #, fuzzy, python-format
 msgid "Creating %s"
 msgstr "Yaratıcı"
 
-#: gajim/common/connection_handlers_events.py:73
-#, fuzzy, python-format
-msgid "Unknown SSL error: %d"
-msgstr "<b>Bir hata oluştu:</b>"
-
-#: gajim/common/connection_handlers_events.py:274 gajim/gtk/notification.py:185
+#: gajim/common/connection_handlers_events.py:234 gajim/gtk/notification.py:185
 #: gajim/gtk/notification.py:215 gajim/gtk/notification.py:274
 msgid "New Private Message"
 msgstr "Yeni kişisel Mesaj"
 
-#: gajim/common/connection_handlers_events.py:282
-#: gajim/common/connection_handlers_events.py:374
+#: gajim/common/connection_handlers_events.py:242
+#: gajim/common/connection_handlers_events.py:339
 #, fuzzy, python-format
 msgid "New message from %(nickname)s"
 msgid_plural "%(n_msgs)i unread messages from %(nickname)s"
 msgstr[0] "%(nickname)s den Yeni İlet alındı"
 
-#: gajim/common/connection_handlers_events.py:363 gajim/gtk/notification.py:186
+#: gajim/common/connection_handlers_events.py:325 gajim/gtk/notification.py:186
 #: gajim/gtk/notification.py:216
 #, fuzzy
 msgid "New Group Chat Message"
 msgstr "_Yeni Bir Grup Sohbeti"
 
-#: gajim/common/connection_handlers_events.py:449
+#: gajim/common/connection_handlers_events.py:414
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s Durumu değiştirdi"
 
-#: gajim/common/connection_handlers_events.py:451 gajim/gtk/history.py:581
+#: gajim/common/connection_handlers_events.py:416 gajim/gtk/history.py:581
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s durumu şimdi %(status)s"
 
-#: gajim/common/connection_handlers_events.py:455 gajim/gtk/notification.py:187
+#: gajim/common/connection_handlers_events.py:420 gajim/gtk/notification.py:187
 #: gajim/gtk/notification.py:208 gajim/gtk/notification.py:291
 msgid "Contact Changed Status"
 msgstr "Bağlantı Durumunu Değiştirdi"
 
-#: gajim/common/connection_handlers_events.py:457
+#: gajim/common/connection_handlers_events.py:422
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s Girdi"
 
-#: gajim/common/connection_handlers_events.py:461 gajim/gtk/notification.py:184
+#: gajim/common/connection_handlers_events.py:426 gajim/gtk/notification.py:184
 #: gajim/gtk/notification.py:206 gajim/gtk/notification.py:267
 msgid "Contact Signed In"
 msgstr "Bağlantı Giriş Yaptı"
 
-#: gajim/common/connection_handlers_events.py:463
+#: gajim/common/connection_handlers_events.py:428
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s Çıktı"
 
-#: gajim/common/connection_handlers_events.py:467 gajim/gtk/notification.py:184
+#: gajim/common/connection_handlers_events.py:432 gajim/gtk/notification.py:184
 #: gajim/gtk/notification.py:207 gajim/gtk/notification.py:270
 msgid "Contact Signed Out"
 msgstr "Bağlantı Çıkış Yaptı"
 
-#: gajim/common/client.py:249 gajim/common/const.py:912
-#: gajim/common/const.py:913 gajim/common/const.py:914
-#: gajim/common/const.py:917 gajim/gtk/account_wizard.py:306
+#: gajim/common/client.py:296 gajim/common/const.py:938
+#: gajim/common/const.py:939 gajim/common/const.py:940
+#: gajim/common/const.py:943 gajim/gtk/account_wizard.py:368
 #, fuzzy
 msgid "Authentication failed"
 msgstr "Kimliksiz kimlik doğrulaması"
@@ -3137,156 +3125,155 @@ msgid ""
 msgstr ""
 
 #: gajim/common/config.py:216
-#, fuzzy
-msgid "Choose interval between 2 checks of idleness."
-msgstr "Denetimler arasındaki süre %lu saniye olarak belirleniyor\n"
-
-#: gajim/common/config.py:217
 msgid ""
 "Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
 "(mailto and xmpp are handled separately)."
 msgstr ""
 
-#: gajim/common/config.py:218
+#: gajim/common/config.py:217
 msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
-#: gajim/common/config.py:222
+#: gajim/common/config.py:221
 msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
 msgstr ""
 
-#: gajim/common/config.py:223
+#: gajim/common/config.py:222
 msgid "Optionally resize Jingle output video. Example: 320x240."
 msgstr ""
 
-#: gajim/common/config.py:224
+#: gajim/common/config.py:223
 msgid "If enabled, you will see your webcam's video stream as well."
 msgstr ""
 
-#: gajim/common/config.py:227
+#: gajim/common/config.py:226
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in 'stun_server' option, or the one given by the XMPP server."
 msgstr ""
 
-#: gajim/common/config.py:228
+#: gajim/common/config.py:227
 msgid "STUN server to use when using Jingle"
 msgstr ""
 
-#: gajim/common/config.py:229
+#: gajim/common/config.py:228
 msgid ""
 "If enabled, Gajim will show affiliation of group chat participants by adding "
 "a colored square to the status icon."
 msgstr ""
 
-#: gajim/common/config.py:230
+#: gajim/common/config.py:229
 msgid ""
 "Proxy used for all outgoing connections if the account does not have a "
 "specific proxy configured."
 msgstr ""
 
-#: gajim/common/config.py:231
+#: gajim/common/config.py:230
 msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
-#: gajim/common/config.py:232
+#: gajim/common/config.py:231
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
 msgstr ""
 
-#: gajim/common/config.py:233
+#: gajim/common/config.py:232
 msgid ""
 "If enabled, Gajim will display an icon to show that sent messages have been "
 "received by your contact."
 msgstr ""
 
-#: gajim/common/config.py:234
+#: gajim/common/config.py:233
 msgid ""
 "If enabled, Gajim will use the System's Keyring to store account passwords."
 msgstr ""
 
-#: gajim/common/config.py:235
+#: gajim/common/config.py:234
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
 
-#: gajim/common/config.py:236
+#: gajim/common/config.py:235
 msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
-#: gajim/common/config.py:237
+#: gajim/common/config.py:236
 msgid "Options in days which can be chosen in the sync threshold menu"
 msgstr ""
 
-#: gajim/common/config.py:238
+#: gajim/common/config.py:237
 msgid ""
 "Maximum history in days we request from a public group chat archive. 0: As "
 "much as possible."
 msgstr ""
 
-#: gajim/common/config.py:239
+#: gajim/common/config.py:238
 msgid ""
 "Maximum history in days we request from a private group chat archive. 0: As "
 "much as possible."
 msgstr ""
 
-#: gajim/common/config.py:240
+#: gajim/common/config.py:239
 msgid ""
 "If enabled, Gajim shows the group chat subject in the chat window when "
 "joining."
 msgstr ""
 
-#: gajim/common/config.py:241
+#: gajim/common/config.py:240
 msgid ""
 "If enabled, the contact row is colored according to the current chat state "
 "of the contact."
 msgstr ""
 
-#: gajim/common/config.py:242
+#: gajim/common/config.py:241
 msgid ""
 "If enabled, the tab is colored according to the current chat state of the "
 "contact."
 msgstr ""
 
-#: gajim/common/config.py:243
+#: gajim/common/config.py:242
 msgid ""
 "Shows a text in the banner that describes the current chat state of the "
 "contact."
 msgstr ""
 
-#: gajim/common/config.py:244
+#: gajim/common/config.py:243
 msgid ""
 "Chat state notifications that are sent to contacts. Possible values: all, "
 "composing_only, disabled"
 msgstr ""
 
-#: gajim/common/config.py:245
+#: gajim/common/config.py:244
 msgid ""
 "Chat state notifications that are sent to the group chat. Possible values: "
 "'all', 'composing_only', 'disabled'"
 msgstr ""
 
-#: gajim/common/config.py:248
+#: gajim/common/config.py:247
 msgid "API Preferences. Possible values: 'http', 'iq'"
 msgstr ""
 
-#: gajim/common/config.py:249
+#: gajim/common/config.py:248
 msgid "Selecting text will copy it to the clipboard"
 msgstr ""
 
-#: gajim/common/config.py:250
+#: gajim/common/config.py:249
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-#: gajim/common/config.py:251
+#: gajim/common/config.py:250
 msgid "Width of group chat roster in pixel"
 msgstr ""
 
-#: gajim/common/config.py:252
+#: gajim/common/config.py:251
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Bu odayi yer imle"
+
+#: gajim/common/config.py:252
+msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
+msgstr ""
 
 #: gajim/common/config.py:269
 #, fuzzy
@@ -3459,7 +3446,7 @@ msgid ""
 "plugin window instead."
 msgstr ""
 
-#: gajim/common/config.py:376 gajim/common/const.py:354
+#: gajim/common/config.py:376 gajim/common/const.py:380
 #, fuzzy
 msgid "Sleeping"
 msgstr "Uyuyan bir kapibara."
@@ -3474,7 +3461,7 @@ msgstr "Geri Düğme"
 msgid "Back in some minutes."
 msgstr "Bekleme süresi (dakikalar)"
 
-#: gajim/common/config.py:378 gajim/common/const.py:320
+#: gajim/common/config.py:378 gajim/common/const.py:346
 msgid "Eating"
 msgstr "Yemelik"
 
@@ -3491,7 +3478,7 @@ msgstr "Filim"
 msgid "I'm watching a movie."
 msgstr "Bir filim bakiyorum."
 
-#: gajim/common/config.py:380 gajim/common/const.py:387
+#: gajim/common/config.py:380 gajim/common/const.py:413
 msgid "Working"
 msgstr " Çalışılıyor"
 
@@ -3558,1100 +3545,1100 @@ msgstr ""
 msgid "Tor"
 msgstr "Kime"
 
-#: gajim/common/optparser.py:53
+#: gajim/common/optparser.py:54
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Hata: %s okumak için açılamıyor"
 
-#: gajim/common/const.py:254
+#: gajim/common/const.py:280
 #, fuzzy
 msgid "?Group chat name:Team"
 msgstr "?Group Chat Contact Role:Hiç biri"
 
-#: gajim/common/const.py:255
+#: gajim/common/const.py:281
 msgid "?Group chat description:Project discussion"
 msgstr ""
 
-#: gajim/common/const.py:256
+#: gajim/common/const.py:282
 #, fuzzy
 msgid "?Group chat address:team"
 msgstr "Grup sohbetler"
 
-#: gajim/common/const.py:257
+#: gajim/common/const.py:283
 #, fuzzy
 msgid "?Group chat name:Family"
 msgstr "%s grup sohbete katıldı"
 
-#: gajim/common/const.py:258
+#: gajim/common/const.py:284
 msgid "?Group chat description:Spring gathering"
 msgstr ""
 
-#: gajim/common/const.py:259
+#: gajim/common/const.py:285
 msgid "?Group chat address:family"
 msgstr ""
 
-#: gajim/common/const.py:260
+#: gajim/common/const.py:286
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Grup Sohbeti Daveti"
 
-#: gajim/common/const.py:261
+#: gajim/common/const.py:287
 msgid "?Group chat description:Trip planning"
 msgstr ""
 
-#: gajim/common/const.py:262
+#: gajim/common/const.py:288
 #, fuzzy
 msgid "?Group chat address:vacation"
 msgstr "Grup Sohbeti Daveti"
 
-#: gajim/common/const.py:263
+#: gajim/common/const.py:289
 #, fuzzy
 msgid "?Group chat name:Repairs"
 msgstr "Grup Sohbetler"
 
-#: gajim/common/const.py:264
+#: gajim/common/const.py:290
 msgid "?Group chat description:Local help group"
 msgstr ""
 
-#: gajim/common/const.py:265
+#: gajim/common/const.py:291
 #, fuzzy
 msgid "?Group chat address:repairs"
 msgstr "Grup sohbetler"
 
-#: gajim/common/const.py:266
+#: gajim/common/const.py:292
 #, fuzzy
 msgid "?Group chat name:News"
 msgstr "?Group Chat Contact Role:Hiç biri"
 
-#: gajim/common/const.py:267
+#: gajim/common/const.py:293
 #, fuzzy
 msgid "?Group chat description:Local news and reports"
 msgstr "grup %s yok - root kullanılacak\n"
 
-#: gajim/common/const.py:268
+#: gajim/common/const.py:294
 #, fuzzy
 msgid "?Group chat address:news"
 msgstr "_Yeni Bir Grup Sohbeti"
 
-#: gajim/common/const.py:273
+#: gajim/common/const.py:299
 #, fuzzy
 msgid "Remote server not found"
 msgstr "Hizmet bulunamadı"
 
-#: gajim/common/const.py:274
+#: gajim/common/const.py:300
 msgid "Remote server timeout"
 msgstr ""
 
-#: gajim/common/const.py:275 gajim/common/const.py:276
-#: gajim/common/const.py:277
+#: gajim/common/const.py:301 gajim/common/const.py:302
+#: gajim/common/const.py:303
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "%s mevcut bir grubun ismi değil"
 
-#: gajim/common/const.py:278
+#: gajim/common/const.py:304
 #, fuzzy
 msgid "Group chat already exists"
 msgstr "Dosyası zaten var"
 
-#: gajim/common/const.py:279
+#: gajim/common/const.py:305
 #, fuzzy
 msgid "Group chat does not exist"
 msgstr "grup %s yok - root kullanılacak\n"
 
-#: gajim/common/const.py:280
+#: gajim/common/const.py:306
 #, fuzzy
 msgid "Group chat is closed"
 msgstr "Grup sohbetler"
 
-#: gajim/common/const.py:286
+#: gajim/common/const.py:312
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
-#: gajim/common/const.py:289
+#: gajim/common/const.py:315
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
-#: gajim/common/const.py:293
+#: gajim/common/const.py:319
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
-#: gajim/common/const.py:297
+#: gajim/common/const.py:323
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
 msgstr ""
 
-#: gajim/common/const.py:304
+#: gajim/common/const.py:330
 #, fuzzy
 msgid "Doing Chores"
 msgstr "dosya indeksi taraması yapılırken"
 
-#: gajim/common/const.py:305
+#: gajim/common/const.py:331
 msgid "Buying Groceries"
 msgstr "Alişverişde"
 
-#: gajim/common/const.py:306
+#: gajim/common/const.py:332
 msgid "Cleaning"
 msgstr "Temizleniyor"
 
-#: gajim/common/const.py:307
+#: gajim/common/const.py:333
 msgid "Cooking"
 msgstr "Pişirmede"
 
-#: gajim/common/const.py:308
+#: gajim/common/const.py:334
 #, fuzzy
 msgid "Doing Maintenance"
 msgstr "teşhis için; zıpla, zıpla"
 
-#: gajim/common/const.py:309
+#: gajim/common/const.py:335
 #, fuzzy
 msgid "Doing the Dishes"
 msgstr "dosya indeksi taraması yapılırken"
 
-#: gajim/common/const.py:310
+#: gajim/common/const.py:336
 #, fuzzy
 msgid "Doing the Laundry"
 msgstr "dosya indeksi taraması yapılırken"
 
-#: gajim/common/const.py:311
+#: gajim/common/const.py:337
 msgid "Gardening"
 msgstr "Bahçecilik"
 
-#: gajim/common/const.py:312
+#: gajim/common/const.py:338
 #, fuzzy
 msgid "Running an Errand"
 msgstr "Başka bir Gajim zaten çalışıyor "
 
-#: gajim/common/const.py:313
+#: gajim/common/const.py:339
 #, fuzzy
 msgid "Walking the Dog"
 msgstr "Ağaçta gezinme başarısız"
 
-#: gajim/common/const.py:315
+#: gajim/common/const.py:341
 msgid "Drinking"
 msgstr "İçmede"
 
-#: gajim/common/const.py:316
+#: gajim/common/const.py:342
 msgid "Having a Beer"
 msgstr "Bir Birada"
 
-#: gajim/common/const.py:317
+#: gajim/common/const.py:343
 #, fuzzy
 msgid "Having Coffee"
 msgstr "Bir Birada"
 
-#: gajim/common/const.py:318
+#: gajim/common/const.py:344
 msgid "Having Tea"
 msgstr "Bir Çayda"
 
-#: gajim/common/const.py:321
+#: gajim/common/const.py:347
 msgid "Having a Snack"
 msgstr "Bir hafif Yemekte"
 
-#: gajim/common/const.py:322
+#: gajim/common/const.py:348
 msgid "Having Breakfast"
 msgstr "Kahvaltıda"
 
-#: gajim/common/const.py:323
+#: gajim/common/const.py:349
 msgid "Having Dinner"
 msgstr "Akşam yemekte"
 
-#: gajim/common/const.py:324
+#: gajim/common/const.py:350
 msgid "Having Lunch"
 msgstr "Yemekte"
 
-#: gajim/common/const.py:326
+#: gajim/common/const.py:352
 msgid "Exercising"
 msgstr "Antrenmanda"
 
-#: gajim/common/const.py:327 gajim/common/const.py:378
+#: gajim/common/const.py:353 gajim/common/const.py:404
 #, fuzzy
 msgid "Cycling"
 msgstr "Çevrim renkleri"
 
-#: gajim/common/const.py:328
+#: gajim/common/const.py:354
 msgid "Dancing"
 msgstr "Dansda"
 
-#: gajim/common/const.py:329
+#: gajim/common/const.py:355
 msgid "Hiking"
 msgstr "Yürüşde"
 
-#: gajim/common/const.py:330
+#: gajim/common/const.py:356
 msgid "Jogging"
 msgstr "Koşuda"
 
-#: gajim/common/const.py:331
+#: gajim/common/const.py:357
 #, fuzzy
 msgid "Playing Sports"
 msgstr "DVD'leri Oynatmak"
 
-#: gajim/common/const.py:332
+#: gajim/common/const.py:358
 #, fuzzy
 msgid "Running"
 msgstr "Çalıştırılıyor"
 
-#: gajim/common/const.py:333
+#: gajim/common/const.py:359
 msgid "Skiing"
 msgstr "Kayakta"
 
-#: gajim/common/const.py:334
+#: gajim/common/const.py:360
 msgid "Swimming"
 msgstr "Yüzmekte"
 
-#: gajim/common/const.py:335
+#: gajim/common/const.py:361
 #, fuzzy
 msgid "Working out"
 msgstr "%(nickname)s Çıktı"
 
-#: gajim/common/const.py:337
+#: gajim/common/const.py:363
 msgid "Grooming"
 msgstr "Tımarlamada"
 
-#: gajim/common/const.py:338
+#: gajim/common/const.py:364
 msgid "At the Spa"
 msgstr "Spa'da"
 
-#: gajim/common/const.py:339
+#: gajim/common/const.py:365
 msgid "Brushing Teeth"
 msgstr "Diş furçalamada"
 
-#: gajim/common/const.py:340
+#: gajim/common/const.py:366
 msgid "Getting a Haircut"
 msgstr "Berberde"
 
-#: gajim/common/const.py:341
+#: gajim/common/const.py:367
 msgid "Shaving"
 msgstr "Traşda"
 
-#: gajim/common/const.py:342
+#: gajim/common/const.py:368
 msgid "Taking a Bath"
 msgstr "Banyo yapıyor"
 
-#: gajim/common/const.py:343
+#: gajim/common/const.py:369
 msgid "Taking a Shower"
 msgstr "Duş alıyor"
 
-#: gajim/common/const.py:345
+#: gajim/common/const.py:371
 msgid "Having an Appointment"
 msgstr "Bir Buluşmada"
 
-#: gajim/common/const.py:347
+#: gajim/common/const.py:373
 msgid "Inactive"
 msgstr "Pasif"
 
-#: gajim/common/const.py:348
+#: gajim/common/const.py:374
 #, fuzzy
 msgid "Day Off"
 msgstr "Günün İletisini Sil"
 
-#: gajim/common/const.py:349
+#: gajim/common/const.py:375
 #, fuzzy
 msgid "Hanging out"
 msgstr "%(nickname)s Çıktı"
 
-#: gajim/common/const.py:350
+#: gajim/common/const.py:376
 msgid "Hiding"
 msgstr "Saklanmada"
 
-#: gajim/common/const.py:351
+#: gajim/common/const.py:377
 #, fuzzy
 msgid "On Vacation"
 msgstr "Telefondayım"
 
-#: gajim/common/const.py:352
+#: gajim/common/const.py:378
 msgid "Praying"
 msgstr "Namaz kılmada"
 
-#: gajim/common/const.py:353
+#: gajim/common/const.py:379
 msgid "Scheduled Holiday"
 msgstr "Planlamış Tatilde"
 
-#: gajim/common/const.py:355
+#: gajim/common/const.py:381
 msgid "Thinking"
 msgstr "Düşüncede"
 
-#: gajim/common/const.py:357
+#: gajim/common/const.py:383
 #, fuzzy
 msgid "Relaxing"
 msgstr "İlintileyici esnekliği etkin olur"
 
-#: gajim/common/const.py:358
+#: gajim/common/const.py:384
 msgid "Fishing"
 msgstr "Balık avlamada"
 
-#: gajim/common/const.py:359
+#: gajim/common/const.py:385
 msgid "Gaming"
 msgstr "Oyunda"
 
-#: gajim/common/const.py:360
+#: gajim/common/const.py:386
 #, fuzzy
 msgid "Going out"
 msgstr "%(nickname)s Çıktı"
 
-#: gajim/common/const.py:361
+#: gajim/common/const.py:387
 msgid "Partying"
 msgstr "Eğlencede"
 
-#: gajim/common/const.py:362
+#: gajim/common/const.py:388
 #, fuzzy
 msgid "Reading"
 msgstr "Dosya okunurken hata:"
 
-#: gajim/common/const.py:363
+#: gajim/common/const.py:389
 msgid "Rehearsing"
 msgstr "Provada"
 
-#: gajim/common/const.py:364
+#: gajim/common/const.py:390
 msgid "Shopping"
 msgstr "Alışverişde"
 
-#: gajim/common/const.py:365
+#: gajim/common/const.py:391
 msgid "Smoking"
 msgstr "Sigara içmekte"
 
-#: gajim/common/const.py:366
+#: gajim/common/const.py:392
 msgid "Socializing"
 msgstr "Arkadaşlarlan buluşmakta"
 
-#: gajim/common/const.py:367
+#: gajim/common/const.py:393
 msgid "Sunbathing"
 msgstr "Güneşlencede"
 
-#: gajim/common/const.py:368
+#: gajim/common/const.py:394
 #, fuzzy
 msgid "Watching TV"
 msgstr "Bir filim bakiyorum."
 
-#: gajim/common/const.py:369
+#: gajim/common/const.py:395
 msgid "Watching a Movie"
 msgstr "Filim bakmakta"
 
-#: gajim/common/const.py:371
+#: gajim/common/const.py:397
 #, fuzzy
 msgid "Talking"
 msgstr "%s'le konuşurken hata oldu (%s)"
 
-#: gajim/common/const.py:372
+#: gajim/common/const.py:398
 #, fuzzy
 msgid "In Real Life"
 msgstr "Buna davet _et"
 
-#: gajim/common/const.py:373
+#: gajim/common/const.py:399
 msgid "On the Phone"
 msgstr "Telefondayım"
 
-#: gajim/common/const.py:374
+#: gajim/common/const.py:400
 #, fuzzy
 msgid "On Video Phone"
 msgstr "bir ses ve video"
 
-#: gajim/common/const.py:376
+#: gajim/common/const.py:402
 msgid "Traveling"
 msgstr "Gezide"
 
-#: gajim/common/const.py:377
+#: gajim/common/const.py:403
 msgid "Commuting"
 msgstr "Değiştircede"
 
-#: gajim/common/const.py:379
+#: gajim/common/const.py:405
 msgid "Driving"
 msgstr "Araba sürüyor"
 
-#: gajim/common/const.py:380
+#: gajim/common/const.py:406
 #, fuzzy
 msgid "In a Car"
 msgstr "ben burdaysam"
 
-#: gajim/common/const.py:381
+#: gajim/common/const.py:407
 #, fuzzy
 msgid "On a Bus"
 msgstr "Telefondayım"
 
-#: gajim/common/const.py:382
+#: gajim/common/const.py:408
 #, fuzzy
 msgid "On a Plane"
 msgstr "Telefondayım"
 
-#: gajim/common/const.py:383
+#: gajim/common/const.py:409
 msgid "On a Train"
 msgstr "Trende"
 
-#: gajim/common/const.py:384
+#: gajim/common/const.py:410
 #, fuzzy
 msgid "On a Trip"
 msgstr "Telefondayım"
 
-#: gajim/common/const.py:385
+#: gajim/common/const.py:411
 msgid "Walking"
 msgstr "Yürüyor"
 
-#: gajim/common/const.py:388
+#: gajim/common/const.py:414
 msgid "Coding"
 msgstr "Kodlamada"
 
-#: gajim/common/const.py:389
+#: gajim/common/const.py:415
 #, fuzzy
 msgid "In a Meeting"
 msgstr "ben burdaysam"
 
-#: gajim/common/const.py:390
+#: gajim/common/const.py:416
 msgid "Studying"
 msgstr "Okumakta"
 
-#: gajim/common/const.py:391
+#: gajim/common/const.py:417
 #, fuzzy
 msgid "Writing"
 msgstr "%s yazılıyor..."
 
-#: gajim/common/const.py:394
+#: gajim/common/const.py:420
 msgid "Afraid"
 msgstr "Korkmuş"
 
-#: gajim/common/const.py:395
+#: gajim/common/const.py:421
 msgid "Amazed"
 msgstr "Şaşkın"
 
-#: gajim/common/const.py:396
+#: gajim/common/const.py:422
 msgid "Amorous"
 msgstr "Sevdalı"
 
-#: gajim/common/const.py:397
+#: gajim/common/const.py:423
 msgid "Angry"
 msgstr "Kızgın"
 
-#: gajim/common/const.py:398
+#: gajim/common/const.py:424
 msgid "Annoyed"
 msgstr "Sinirli"
 
-#: gajim/common/const.py:399
+#: gajim/common/const.py:425
 msgid "Anxious"
 msgstr "Sıkıntılı"
 
-#: gajim/common/const.py:400
+#: gajim/common/const.py:426
 msgid "Aroused"
 msgstr "Uyandırılmış"
 
-#: gajim/common/const.py:401
+#: gajim/common/const.py:427
 msgid "Ashamed"
 msgstr "Mahçup"
 
-#: gajim/common/const.py:402
+#: gajim/common/const.py:428
 msgid "Bored"
 msgstr "Sıkılmış"
 
-#: gajim/common/const.py:403
+#: gajim/common/const.py:429
 msgid "Brave"
 msgstr "Cesur"
 
-#: gajim/common/const.py:404
+#: gajim/common/const.py:430
 msgid "Calm"
 msgstr "Sakin"
 
-#: gajim/common/const.py:405
+#: gajim/common/const.py:431
 msgid "Cautious"
 msgstr "Dikkatli"
 
-#: gajim/common/const.py:406
+#: gajim/common/const.py:432
 msgid "Cold"
 msgstr "Soğuk"
 
-#: gajim/common/const.py:407
+#: gajim/common/const.py:433
 msgid "Confident"
 msgstr "Cüretli"
 
-#: gajim/common/const.py:408
+#: gajim/common/const.py:434
 msgid "Confused"
 msgstr "Şaşkın"
 
-#: gajim/common/const.py:409
+#: gajim/common/const.py:435
 msgid "Contemplative"
 msgstr "Dalgın"
 
-#: gajim/common/const.py:410
+#: gajim/common/const.py:436
 msgid "Contented"
 msgstr "Mutlu"
 
-#: gajim/common/const.py:411
+#: gajim/common/const.py:437
 msgid "Cranky"
 msgstr "Tuhaf"
 
-#: gajim/common/const.py:412
+#: gajim/common/const.py:438
 msgid "Crazy"
 msgstr "Çılgın"
 
-#: gajim/common/const.py:413
+#: gajim/common/const.py:439
 msgid "Creative"
 msgstr "Yaratıcı"
 
-#: gajim/common/const.py:414
+#: gajim/common/const.py:440
 msgid "Curious"
 msgstr "Meraklı"
 
-#: gajim/common/const.py:415
+#: gajim/common/const.py:441
 msgid "Dejected"
 msgstr "Üzgün"
 
-#: gajim/common/const.py:416
+#: gajim/common/const.py:442
 msgid "Depressed"
 msgstr "Deprese"
 
-#: gajim/common/const.py:417
+#: gajim/common/const.py:443
 msgid "Disappointed"
 msgstr "Kırgın"
 
-#: gajim/common/const.py:418
+#: gajim/common/const.py:444
 msgid "Disgusted"
 msgstr "İğrenmiş"
 
-#: gajim/common/const.py:419
+#: gajim/common/const.py:445
 msgid "Dismayed"
 msgstr "Korkutulmuş"
 
-#: gajim/common/const.py:420
+#: gajim/common/const.py:446
 msgid "Distracted"
 msgstr "Şaşırmış"
 
-#: gajim/common/const.py:421
+#: gajim/common/const.py:447
 msgid "Embarrassed"
 msgstr "Utangaç"
 
-#: gajim/common/const.py:422
+#: gajim/common/const.py:448
 msgid "Envious"
 msgstr "Kıskanç"
 
-#: gajim/common/const.py:423
+#: gajim/common/const.py:449
 msgid "Excited"
 msgstr "Heyecanlı"
 
-#: gajim/common/const.py:424
+#: gajim/common/const.py:450
 msgid "Flirtatious"
 msgstr "Çapkın"
 
-#: gajim/common/const.py:425
+#: gajim/common/const.py:451
 msgid "Frustrated"
 msgstr "Yılmış"
 
-#: gajim/common/const.py:426
+#: gajim/common/const.py:452
 msgid "Grateful"
 msgstr "Memnun"
 
-#: gajim/common/const.py:427
+#: gajim/common/const.py:453
 msgid "Grieving"
 msgstr "Matemli"
 
-#: gajim/common/const.py:428
+#: gajim/common/const.py:454
 msgid "Grumpy"
 msgstr "Somurtkan"
 
-#: gajim/common/const.py:429
+#: gajim/common/const.py:455
 msgid "Guilty"
 msgstr "Suçlu"
 
-#: gajim/common/const.py:430
+#: gajim/common/const.py:456
 msgid "Happy"
 msgstr "Mutlu"
 
-#: gajim/common/const.py:431
+#: gajim/common/const.py:457
 msgid "Hopeful"
 msgstr "Ümitli"
 
-#: gajim/common/const.py:432
+#: gajim/common/const.py:458
 msgid "Hot"
 msgstr "Sıcak"
 
-#: gajim/common/const.py:433
+#: gajim/common/const.py:459
 msgid "Humbled"
 msgstr "Mütevazi"
 
-#: gajim/common/const.py:434
+#: gajim/common/const.py:460
 msgid "Humiliated"
 msgstr "Alçalmiş"
 
-#: gajim/common/const.py:435
+#: gajim/common/const.py:461
 msgid "Hungry"
 msgstr "Aç"
 
-#: gajim/common/const.py:436
+#: gajim/common/const.py:462
 msgid "Hurt"
 msgstr "Kırgın"
 
-#: gajim/common/const.py:437
+#: gajim/common/const.py:463
 msgid "Impressed"
 msgstr "Üzerinde etki bırakılmış"
 
-#: gajim/common/const.py:438
+#: gajim/common/const.py:464
 msgid "In Awe"
 msgstr "Üzgün"
 
-#: gajim/common/const.py:439
+#: gajim/common/const.py:465
 msgid "In Love"
 msgstr "Aşık"
 
-#: gajim/common/const.py:440
+#: gajim/common/const.py:466
 msgid "Indignant"
 msgstr "Öfkeli"
 
-#: gajim/common/const.py:441
+#: gajim/common/const.py:467
 msgid "Interested"
 msgstr "İlgili"
 
-#: gajim/common/const.py:442
+#: gajim/common/const.py:468
 msgid "Intoxicated"
 msgstr "Sarhoş"
 
-#: gajim/common/const.py:443
+#: gajim/common/const.py:469
 msgid "Invincible"
 msgstr "Yenilmez"
 
-#: gajim/common/const.py:444
+#: gajim/common/const.py:470
 msgid "Jealous"
 msgstr "Kıskanç"
 
-#: gajim/common/const.py:445
+#: gajim/common/const.py:471
 msgid "Lonely"
 msgstr "Yanlız"
 
-#: gajim/common/const.py:446
+#: gajim/common/const.py:472
 msgid "Lost"
 msgstr "Kaybettin"
 
-#: gajim/common/const.py:447
+#: gajim/common/const.py:473
 msgid "Lucky"
 msgstr "Uğurlu"
 
-#: gajim/common/const.py:448
+#: gajim/common/const.py:474
 msgid "Mean"
 msgstr "Ortalama"
 
-#: gajim/common/const.py:449
+#: gajim/common/const.py:475
 msgid "Moody"
 msgstr "Değişken"
 
-#: gajim/common/const.py:450
+#: gajim/common/const.py:476
 msgid "Nervous"
 msgstr "Heyecanlı"
 
-#: gajim/common/const.py:451
+#: gajim/common/const.py:477
 msgid "Neutral"
 msgstr "Nötr"
 
-#: gajim/common/const.py:452
+#: gajim/common/const.py:478
 msgid "Offended"
 msgstr "Küskün"
 
-#: gajim/common/const.py:453
+#: gajim/common/const.py:479
 msgid "Outraged"
 msgstr "Nefretli"
 
-#: gajim/common/const.py:454
+#: gajim/common/const.py:480
 msgid "Playful"
 msgstr "Oyunbaz"
 
-#: gajim/common/const.py:455
+#: gajim/common/const.py:481
 msgid "Proud"
 msgstr "Şerefli"
 
-#: gajim/common/const.py:456
+#: gajim/common/const.py:482
 #, fuzzy
 msgid "Relaxed"
 msgstr "gevşek (TagSoup kipi)"
 
-#: gajim/common/const.py:457
+#: gajim/common/const.py:483
 msgid "Relieved"
 msgstr "Ferahlamiş"
 
-#: gajim/common/const.py:458
+#: gajim/common/const.py:484
 msgid "Remorseful"
 msgstr "Pişmanlı"
 
-#: gajim/common/const.py:459
+#: gajim/common/const.py:485
 msgid "Restless"
 msgstr "Rahatsız"
 
-#: gajim/common/const.py:460
+#: gajim/common/const.py:486
 msgid "Sad"
 msgstr "Üzgün"
 
-#: gajim/common/const.py:461
+#: gajim/common/const.py:487
 msgid "Sarcastic"
 msgstr "Kinayeli"
 
-#: gajim/common/const.py:462
+#: gajim/common/const.py:488
 msgid "Satisfied"
 msgstr "Memnun"
 
-#: gajim/common/const.py:463
+#: gajim/common/const.py:489
 msgid "Serious"
 msgstr "Ciddi"
 
-#: gajim/common/const.py:464
+#: gajim/common/const.py:490
 msgid "Shocked"
 msgstr "Sarsılmış"
 
-#: gajim/common/const.py:465
+#: gajim/common/const.py:491
 msgid "Shy"
 msgstr "Utangaç"
 
-#: gajim/common/const.py:466
+#: gajim/common/const.py:492
 msgid "Sick"
 msgstr "Hasta"
 
-#: gajim/common/const.py:467
+#: gajim/common/const.py:493
 msgid "Sleepy"
 msgstr "Uykulu"
 
-#: gajim/common/const.py:468
+#: gajim/common/const.py:494
 msgid "Spontaneous"
 msgstr "Spontan"
 
-#: gajim/common/const.py:469
+#: gajim/common/const.py:495
 msgid "Stressed"
 msgstr "Vurgulu"
 
-#: gajim/common/const.py:470
+#: gajim/common/const.py:496
 msgid "Strong"
 msgstr "Güçlü"
 
-#: gajim/common/const.py:471
+#: gajim/common/const.py:497
 msgid "Surprised"
 msgstr "Şaşırmış"
 
-#: gajim/common/const.py:472
+#: gajim/common/const.py:498
 msgid "Thankful"
 msgstr "Şükreden"
 
-#: gajim/common/const.py:473
+#: gajim/common/const.py:499
 msgid "Thirsty"
 msgstr "Susamış"
 
-#: gajim/common/const.py:474
+#: gajim/common/const.py:500
 msgid "Tired"
 msgstr "Yorgun"
 
-#: gajim/common/const.py:475
+#: gajim/common/const.py:501
 msgid "Undefined"
 msgstr "Tanımsız"
 
-#: gajim/common/const.py:476
+#: gajim/common/const.py:502
 msgid "Weak"
 msgstr "Kuvvetsiz"
 
-#: gajim/common/const.py:477
+#: gajim/common/const.py:503
 msgid "Worried"
 msgstr "Düşünceli"
 
-#: gajim/common/const.py:481
+#: gajim/common/const.py:507
 msgid "accuracy"
 msgstr ""
 
-#: gajim/common/const.py:482
+#: gajim/common/const.py:508
 #, fuzzy
 msgid "alt"
 msgstr "öntanımlı"
 
-#: gajim/common/const.py:483
+#: gajim/common/const.py:509
 msgid "area"
 msgstr ""
 
-#: gajim/common/const.py:484
+#: gajim/common/const.py:510
 #, fuzzy
 msgid "bearing"
 msgstr "denizcilik"
 
-#: gajim/common/const.py:485
+#: gajim/common/const.py:511
 #, fuzzy
 msgid "building"
 msgstr "Saklanmada"
 
-#: gajim/common/const.py:486
+#: gajim/common/const.py:512
 #, fuzzy
 msgid "country"
 msgstr "Hesap"
 
-#: gajim/common/const.py:487
+#: gajim/common/const.py:513
 #, fuzzy
 msgid "countrycode"
 msgstr "Hesap sırası"
 
-#: gajim/common/const.py:488
+#: gajim/common/const.py:514
 msgid "datum"
 msgstr ""
 
-#: gajim/common/const.py:489
+#: gajim/common/const.py:515
 #, fuzzy
 msgid "description"
 msgstr "Açıklama"
 
-#: gajim/common/const.py:490
+#: gajim/common/const.py:516
 #, fuzzy
 msgid "error"
 msgstr "Hata"
 
-#: gajim/common/const.py:491
+#: gajim/common/const.py:517
 msgid "floor"
 msgstr ""
 
-#: gajim/common/const.py:492
+#: gajim/common/const.py:518
 msgid "lat"
 msgstr ""
 
-#: gajim/common/const.py:493
+#: gajim/common/const.py:519
 msgid "locality"
 msgstr ""
 
-#: gajim/common/const.py:494
+#: gajim/common/const.py:520
 #, fuzzy
 msgid "lon"
 msgstr "bir"
 
-#: gajim/common/const.py:495
+#: gajim/common/const.py:521
 msgid "postalcode"
 msgstr ""
 
-#: gajim/common/const.py:496
+#: gajim/common/const.py:522
 msgid "region"
 msgstr ""
 
-#: gajim/common/const.py:497
+#: gajim/common/const.py:523
 msgid "room"
 msgstr "oda"
 
-#: gajim/common/const.py:498
+#: gajim/common/const.py:524
 msgid "speed"
 msgstr ""
 
-#: gajim/common/const.py:499
+#: gajim/common/const.py:525
 msgid "street"
 msgstr ""
 
-#: gajim/common/const.py:500
+#: gajim/common/const.py:526
 msgid "text"
 msgstr ""
 
-#: gajim/common/const.py:501
+#: gajim/common/const.py:527
 msgid "timestamp"
 msgstr ""
 
-#: gajim/common/const.py:502
+#: gajim/common/const.py:528
 msgid "URI"
 msgstr ""
 
-#: gajim/common/const.py:507
+#: gajim/common/const.py:533
 #, fuzzy
 msgid "Unable to get issuer certificate"
 msgstr "başlangıç dizini belirlenemedi"
 
-#: gajim/common/const.py:508
+#: gajim/common/const.py:534
 #, fuzzy
 msgid "Unable to get certificate CRL"
 msgstr "başlangıç dizini belirlenemedi"
 
-#: gajim/common/const.py:509
+#: gajim/common/const.py:535
 #, fuzzy
 msgid "Unable to decrypt certificate's signature"
 msgstr "başlangıç dizini belirlenemedi"
 
-#: gajim/common/const.py:510
+#: gajim/common/const.py:536
 msgid "Unable to decrypt CRL's signature"
 msgstr ""
 
-#: gajim/common/const.py:511
-msgid "Unable to decode issuer public key"
-msgstr ""
-
-#: gajim/common/const.py:512
-#, fuzzy
-msgid "Certificate signature failure"
-msgstr "Hata: Yanlış imza"
-
-#: gajim/common/const.py:513
-#, fuzzy
-msgid "CRL signature failure"
-msgstr "Hata: Yanlış imza"
-
-#: gajim/common/const.py:514
-#, fuzzy
-msgid "Certificate is not yet valid"
-msgstr "Sertifika henüz geçerli değil"
-
-#: gajim/common/const.py:515
-#, fuzzy
-msgid "Certificate has expired"
-msgstr "Bu anahtarın kullanım süresi dolmuş"
-
-#: gajim/common/const.py:516
-#, fuzzy
-msgid "CRL is not yet valid"
-msgstr "Sertifika henüz geçerli değil"
-
-#: gajim/common/const.py:517
-#, fuzzy
-msgid "CRL has expired"
-msgstr "Bu anahtarın kullanım süresi dolmuş"
-
-#: gajim/common/const.py:518
-msgid "Format error in certificate's notBefore field"
-msgstr ""
-
-#: gajim/common/const.py:519
-msgid "Format error in certificate's notAfter field"
-msgstr ""
-
-#: gajim/common/const.py:520
-msgid "Format error in CRL's lastUpdate field"
-msgstr ""
-
-#: gajim/common/const.py:521
-msgid "Format error in CRL's nextUpdate field"
-msgstr ""
-
-#: gajim/common/const.py:522
-#, fuzzy
-msgid "Out of memory"
-msgstr "%(nickname)s Çıktı"
-
-#: gajim/common/const.py:523
-#, fuzzy
-msgid "Self signed certificate"
-msgstr "%(nickname)s Girdi"
-
-#: gajim/common/const.py:524
-#, fuzzy
-msgid "Self signed certificate in certificate chain"
-msgstr "öz-imzalı sertifika KÖTÜ bir imzaya sahip"
-
-#: gajim/common/const.py:525
-#, fuzzy
-msgid "Unable to get local issuer certificate"
-msgstr "başlangıç dizini belirlenemedi"
-
-#: gajim/common/const.py:526
-#, fuzzy
-msgid "Unable to verify the first certificate"
-msgstr "başlangıç dizini belirlenemedi"
-
-#: gajim/common/const.py:527
-msgid "Certificate chain too long"
-msgstr "Sertifika zinciri çok uzun"
-
-#: gajim/common/const.py:528
-#, fuzzy
-msgid "Certificate revoked"
-msgstr "sertifika hükümsüz kılınmış"
-
-#: gajim/common/const.py:529
-#, fuzzy
-msgid "Invalid CA certificate"
-msgstr "Geçersiz Jabber kimliği"
-
-#: gajim/common/const.py:530
-#, fuzzy
-msgid "Path length constraint exceeded"
-msgstr "Kağıt Uçağın Gideceği Yol Uzunluğu"
-
-#: gajim/common/const.py:531
-#, fuzzy
-msgid "Unsupported certificate purpose"
-msgstr "Sertifika doğrulama hatası (%s)"
-
-#: gajim/common/const.py:532
-#, fuzzy
-msgid "Certificate not trusted"
-msgstr "GPG anahtara güvenilmiyor"
-
-#: gajim/common/const.py:533
-#, fuzzy
-msgid "Certificate rejected"
-msgstr "^Rededilmiş durumunu değiştir"
-
-#: gajim/common/const.py:534
-#, fuzzy
-msgid "Subject issuer mismatch"
-msgstr "ifade yığıtı uyumsuzluğu"
-
-#: gajim/common/const.py:535
-msgid "Authority and subject key identifier mismatch"
-msgstr ""
-
-#: gajim/common/const.py:536
-msgid "Authority and issuer serial number mismatch"
-msgstr ""
-
 #: gajim/common/const.py:537
-msgid "Key usage does not include certificate signing"
+msgid "Unable to decode issuer public key"
 msgstr ""
 
 #: gajim/common/const.py:538
 #, fuzzy
+msgid "Certificate signature failure"
+msgstr "Hata: Yanlış imza"
+
+#: gajim/common/const.py:539
+#, fuzzy
+msgid "CRL signature failure"
+msgstr "Hata: Yanlış imza"
+
+#: gajim/common/const.py:540
+#, fuzzy
+msgid "Certificate is not yet valid"
+msgstr "Sertifika henüz geçerli değil"
+
+#: gajim/common/const.py:541
+#, fuzzy
+msgid "Certificate has expired"
+msgstr "Bu anahtarın kullanım süresi dolmuş"
+
+#: gajim/common/const.py:542
+#, fuzzy
+msgid "CRL is not yet valid"
+msgstr "Sertifika henüz geçerli değil"
+
+#: gajim/common/const.py:543
+#, fuzzy
+msgid "CRL has expired"
+msgstr "Bu anahtarın kullanım süresi dolmuş"
+
+#: gajim/common/const.py:544
+msgid "Format error in certificate's notBefore field"
+msgstr ""
+
+#: gajim/common/const.py:545
+msgid "Format error in certificate's notAfter field"
+msgstr ""
+
+#: gajim/common/const.py:546
+msgid "Format error in CRL's lastUpdate field"
+msgstr ""
+
+#: gajim/common/const.py:547
+msgid "Format error in CRL's nextUpdate field"
+msgstr ""
+
+#: gajim/common/const.py:548
+#, fuzzy
+msgid "Out of memory"
+msgstr "%(nickname)s Çıktı"
+
+#: gajim/common/const.py:549
+#, fuzzy
+msgid "Self signed certificate"
+msgstr "%(nickname)s Girdi"
+
+#: gajim/common/const.py:550
+#, fuzzy
+msgid "Self signed certificate in certificate chain"
+msgstr "öz-imzalı sertifika KÖTÜ bir imzaya sahip"
+
+#: gajim/common/const.py:551
+#, fuzzy
+msgid "Unable to get local issuer certificate"
+msgstr "başlangıç dizini belirlenemedi"
+
+#: gajim/common/const.py:552
+#, fuzzy
+msgid "Unable to verify the first certificate"
+msgstr "başlangıç dizini belirlenemedi"
+
+#: gajim/common/const.py:553
+msgid "Certificate chain too long"
+msgstr "Sertifika zinciri çok uzun"
+
+#: gajim/common/const.py:554
+#, fuzzy
+msgid "Certificate revoked"
+msgstr "sertifika hükümsüz kılınmış"
+
+#: gajim/common/const.py:555
+#, fuzzy
+msgid "Invalid CA certificate"
+msgstr "Geçersiz Jabber kimliği"
+
+#: gajim/common/const.py:556
+#, fuzzy
+msgid "Path length constraint exceeded"
+msgstr "Kağıt Uçağın Gideceği Yol Uzunluğu"
+
+#: gajim/common/const.py:557
+#, fuzzy
+msgid "Unsupported certificate purpose"
+msgstr "Sertifika doğrulama hatası (%s)"
+
+#: gajim/common/const.py:558
+#, fuzzy
+msgid "Certificate not trusted"
+msgstr "GPG anahtara güvenilmiyor"
+
+#: gajim/common/const.py:559
+#, fuzzy
+msgid "Certificate rejected"
+msgstr "^Rededilmiş durumunu değiştir"
+
+#: gajim/common/const.py:560
+#, fuzzy
+msgid "Subject issuer mismatch"
+msgstr "ifade yığıtı uyumsuzluğu"
+
+#: gajim/common/const.py:561
+msgid "Authority and subject key identifier mismatch"
+msgstr ""
+
+#: gajim/common/const.py:562
+msgid "Authority and issuer serial number mismatch"
+msgstr ""
+
+#: gajim/common/const.py:563
+msgid "Key usage does not include certificate signing"
+msgstr ""
+
+#: gajim/common/const.py:564
+#, fuzzy
 msgid "Application verification failure"
 msgstr "'%s' çözülürken geçici bozukluk"
 
-#: gajim/common/const.py:858
+#: gajim/common/const.py:884
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-#: gajim/common/const.py:859
+#: gajim/common/const.py:885
 #, fuzzy
 msgid "The certificate has been revoked"
 msgstr "sertifika hükümsüz kılınmış"
 
-#: gajim/common/const.py:860
+#: gajim/common/const.py:886
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
-#: gajim/common/const.py:861
+#: gajim/common/const.py:887
 msgid "The certificate’s algorithm is insecure"
 msgstr ""
 
-#: gajim/common/const.py:862
+#: gajim/common/const.py:888
 msgid "The certificate’s activation time is in the future"
 msgstr ""
 
-#: gajim/common/const.py:863
+#: gajim/common/const.py:889
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "<b>Bir hata oluştu:</b>"
 
-#: gajim/common/const.py:864
+#: gajim/common/const.py:890
 #, fuzzy
 msgid "The certificate has expired"
 msgstr "Bu anahtarın kullanım süresi dolmuş"
 
-#: gajim/common/const.py:908
+#: gajim/common/const.py:934
 #, fuzzy
 msgid "Authentication aborted"
 msgstr "Değer kabul edildi!"
 
-#: gajim/common/const.py:909
+#: gajim/common/const.py:935
 #, fuzzy
 msgid "Account disabled"
 msgstr "Dosya boş"
 
-#: gajim/common/const.py:910
+#: gajim/common/const.py:936
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Bu anahtarın kullanım süresi dolmuş"
 
-#: gajim/common/const.py:911
+#: gajim/common/const.py:937
 #, fuzzy
 msgid "Encryption required"
 msgstr "Üyelik isteği"
 
-#: gajim/common/const.py:915
+#: gajim/common/const.py:941
 #, fuzzy
 msgid "Authentication mechanism not supported"
 msgstr "Rahatsız etmeyin"
 
-#: gajim/common/const.py:916
+#: gajim/common/const.py:942
 #, fuzzy
 msgid "Authentication mechanism too weak"
 msgstr "Kimliksiz kimlik doğrulaması"
 
-#: gajim/common/const.py:918
+#: gajim/common/const.py:944
 msgid "Authentication currently not possible"
 msgstr ""
 
@@ -4744,241 +4731,230 @@ msgstr "ses çıktısı"
 msgid "video input"
 msgstr "video girdisi"
 
-#: gajim/common/helpers.py:188
+#: gajim/common/helpers.py:181
 msgid "_Busy"
 msgstr "_Meşgul"
 
-#: gajim/common/helpers.py:190
+#: gajim/common/helpers.py:183
 msgid "Busy"
 msgstr "Meşgul"
 
-#: gajim/common/helpers.py:193
+#: gajim/common/helpers.py:186
 msgid "_Not Available"
 msgstr "_Mevcut Değil"
 
-#: gajim/common/helpers.py:195
+#: gajim/common/helpers.py:188
 msgid "Not Available"
 msgstr "Mevcut Değil"
 
-#: gajim/common/helpers.py:198
+#: gajim/common/helpers.py:191
 msgid "_Free for Chat"
 msgstr "Sohbet için _Hazır"
 
-#: gajim/common/helpers.py:200
+#: gajim/common/helpers.py:193
 msgid "Free for Chat"
 msgstr "Sohbet için Hazır"
 
-#: gajim/common/helpers.py:203
+#: gajim/common/helpers.py:196
 #, fuzzy
 msgid "?user status:_Available"
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/common/helpers.py:205
+#: gajim/common/helpers.py:198
 #, fuzzy
 msgid "?user status:Available"
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/common/helpers.py:207
+#: gajim/common/helpers.py:200
 msgid "Connecting"
 msgstr "Connecting"
 
-#: gajim/common/helpers.py:210 gajim/data/gui/preferences_window.ui:1289
+#: gajim/common/helpers.py:203 gajim/data/gui/preferences_window.ui:1304
 msgid "A_way"
 msgstr "_Uzakta"
 
-#: gajim/common/helpers.py:212 gajim/common/modules/adhoc_commands.py:122
+#: gajim/common/helpers.py:205 gajim/common/modules/adhoc_commands.py:122
 #: gajim/command_system/implementation/standard.py:148
 msgid "Away"
 msgstr "Uzakta"
 
-#: gajim/common/helpers.py:215
+#: gajim/common/helpers.py:208
 msgid "_Offline"
 msgstr "Bağlı _değil"
 
-#: gajim/common/helpers.py:217
+#: gajim/common/helpers.py:210
 msgid "Offline"
 msgstr "Bağlı değil"
 
-#: gajim/common/helpers.py:221
+#: gajim/common/helpers.py:214
 msgid "?contact has status:Unknown"
 msgstr "?contact has status:Bilinmez"
 
-#: gajim/common/helpers.py:223
+#: gajim/common/helpers.py:216
 msgid "?contact has status:Has errors"
 msgstr "?contact has status:Hatalı"
 
-#: gajim/common/helpers.py:229
+#: gajim/common/helpers.py:221
 msgid "?Subscription we already have:None"
 msgstr "?Subscription we already have:Hiç biri"
 
-#: gajim/common/helpers.py:231
+#: gajim/common/helpers.py:223
 msgid "To"
 msgstr "Kime"
 
-#: gajim/common/helpers.py:233 gajim/data/gui/groups_post_window.ui:33
+#: gajim/common/helpers.py:225 gajim/data/gui/groups_post_window.ui:33
 msgid "From"
 msgstr "Gönderen"
 
-#: gajim/common/helpers.py:235
+#: gajim/common/helpers.py:227
 msgid "Both"
 msgstr "İkisi de"
 
-#: gajim/common/helpers.py:237 gajim/gtk/server_info.py:234
+#: gajim/common/helpers.py:229 gajim/gtk/server_info.py:224
 #, fuzzy
 msgid "Unknown"
 msgstr "?OS:Unknown?OS:Bilinmez"
 
-#: gajim/common/helpers.py:243
+#: gajim/common/helpers.py:235
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Hiç biri"
 
-#: gajim/common/helpers.py:245
+#: gajim/common/helpers.py:237
 msgid "Subscribe"
 msgstr "Üye yap"
 
-#: gajim/common/helpers.py:257
+#: gajim/common/helpers.py:249
 msgid "?Group Chat Contact Role:None"
 msgstr "?Group Chat Contact Role:Hiç biri"
 
-#: gajim/common/helpers.py:260
+#: gajim/common/helpers.py:252
 msgid "Moderators"
 msgstr "Moderatör"
 
-#: gajim/common/helpers.py:262
+#: gajim/common/helpers.py:254
 msgid "Moderator"
 msgstr "Moderatör"
 
-#: gajim/common/helpers.py:265 gajim/data/gui/groupchat_info_scrolled.ui:213
+#: gajim/common/helpers.py:257 gajim/data/gui/groupchat_info_scrolled.ui:213
 msgid "Participants"
 msgstr "Katılanlar"
 
-#: gajim/common/helpers.py:267
+#: gajim/common/helpers.py:259
 msgid "Participant"
 msgstr "Katılan"
 
-#: gajim/common/helpers.py:270
+#: gajim/common/helpers.py:262
 msgid "Visitors"
 msgstr "Ziyaretçiler"
 
-#: gajim/common/helpers.py:272
+#: gajim/common/helpers.py:264
 msgid "Visitor"
 msgstr "Ziyaretçi"
 
-#: gajim/common/helpers.py:281
+#: gajim/common/helpers.py:273
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "?Group Chat Contact Affiliation:Hiç biri"
 
-#: gajim/common/helpers.py:284
+#: gajim/common/helpers.py:276
 #, fuzzy
 msgid "Owners"
 msgstr "Sahibi"
 
-#: gajim/common/helpers.py:286 gajim/data/gui/groupchat_config.ui:32
+#: gajim/common/helpers.py:278 gajim/data/gui/groupchat_config.ui:32
 msgid "Owner"
 msgstr "Sahibi"
 
-#: gajim/common/helpers.py:289
+#: gajim/common/helpers.py:281
 #, fuzzy
 msgid "Administrators"
 msgstr "Yönetici"
 
-#: gajim/common/helpers.py:291
+#: gajim/common/helpers.py:283
 msgid "Administrator"
 msgstr "Yönetici"
 
-#: gajim/common/helpers.py:294
+#: gajim/common/helpers.py:286
 #, fuzzy
 msgid "Members"
 msgstr "Üye"
 
-#: gajim/common/helpers.py:296 gajim/data/gui/groupchat_config.ui:40
+#: gajim/common/helpers.py:288 gajim/data/gui/groupchat_config.ui:40
 #: gajim/gtk/groupchat_config.py:105
 msgid "Member"
 msgstr "Üye"
 
-#: gajim/common/helpers.py:333
+#: gajim/common/helpers.py:325
 msgid "is paying attention to the conversation"
 msgstr "sobete dikkat veriyor"
 
-#: gajim/common/helpers.py:335
+#: gajim/common/helpers.py:327
 msgid "is doing something else"
 msgstr "başka bir şey yapıyor"
 
-#: gajim/common/helpers.py:337
+#: gajim/common/helpers.py:329
 #, fuzzy
 msgid "is composing a message…"
 msgstr "ilet yazıyor…"
 
-#: gajim/common/helpers.py:340
+#: gajim/common/helpers.py:332
 msgid "paused composing a message"
 msgstr "ilet yazarken durdu"
 
-#: gajim/common/helpers.py:342
+#: gajim/common/helpers.py:334
 msgid "has closed the chat window or tab"
 msgstr ""
 
-#: gajim/common/helpers.py:801 gajim/common/helpers.py:808
+#: gajim/common/helpers.py:732 gajim/common/helpers.py:740
 #, fuzzy, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "Ileti alınıyor"
 
-#: gajim/common/helpers.py:815
+#: gajim/common/helpers.py:749
 #, fuzzy, python-format
 msgid "from group chat %s"
 msgstr "grupdaki herkez"
 
-#: gajim/common/helpers.py:818 gajim/common/helpers.py:835
+#: gajim/common/helpers.py:752 gajim/common/helpers.py:773
 #, fuzzy, python-format
 msgid "from user %s"
 msgstr " gönderen kişi %s"
 
-#: gajim/common/helpers.py:820
+#: gajim/common/helpers.py:754
 #, fuzzy, python-format
 msgid "from %s"
 msgstr " gönderen %s"
 
-#: gajim/common/helpers.py:827 gajim/common/helpers.py:833
+#: gajim/common/helpers.py:760 gajim/common/helpers.py:768
 #, fuzzy, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] "Kişi listesindeki olayları göster"
 
-#: gajim/common/helpers.py:851 gajim/common/helpers.py:863
-#: gajim/data/gui/roster_window.ui:79 data/org.gajim.Gajim.desktop.in:4
-#: data/org.gajim.Gajim.appdata.xml.in:7
-msgid "Gajim"
-msgstr "Gajim"
-
-#: gajim/common/helpers.py:865
-#, python-format
-msgid "Gajim - %s"
-msgstr "Gajim - %s"
-
-#: gajim/common/helpers.py:954 gajim/data/gui/add_new_contact_window.ui:25
+#: gajim/common/helpers.py:849 gajim/data/gui/add_new_contact_window.ui:25
 msgid "I would like to add you to my contact list."
 msgstr "Seni kişi listeme eklemek isterdim"
 
-#: gajim/common/helpers.py:956
+#: gajim/common/helpers.py:851
 msgid "Hello, I am $name."
 msgstr "Merhaba, benim adım $name."
 
-#: gajim/common/helpers.py:1046 gajim/common/helpers.py:1055
-#: gajim/common/helpers.py:1113
+#: gajim/common/helpers.py:929 gajim/common/helpers.py:938
+#: gajim/common/helpers.py:998
 #, fuzzy
 msgid "Timeout loading image"
 msgstr "Resimi Farklı Kaydet..."
 
-#: gajim/common/helpers.py:1065 gajim/common/helpers.py:1111
+#: gajim/common/helpers.py:948 gajim/common/helpers.py:996
 msgid "Image is too big"
 msgstr "Resim çok büyük"
 
-#: gajim/common/helpers.py:1076
+#: gajim/common/helpers.py:959
 #, fuzzy
 msgid "PyCURL is not installed"
 msgstr "Sertifika henüz geçerli değil"
 
-#: gajim/common/helpers.py:1115
+#: gajim/common/helpers.py:1000
 #, fuzzy
 msgid "Error loading image"
 msgstr "Resimi Farklı Kaydet..."
@@ -5189,7 +5165,7 @@ msgid "Join Automatically"
 msgstr ""
 
 #: gajim/data/gui/join_groupchat_window.ui:131
-#: gajim/data/gui/profile_window.ui:233 gajim/gtk/xml_console.py:281
+#: gajim/data/gui/profile_window.ui:233 gajim/gtk/xml_console.py:282
 msgid "Account"
 msgstr "Hesap"
 
@@ -5200,7 +5176,7 @@ msgstr "Grup sohbetler"
 
 #: gajim/data/gui/join_groupchat_window.ui:180
 #: gajim/data/gui/account_wizard.ui:255 gajim/data/gui/bookmarks.ui:158
-#: gajim/gtk/accounts.py:826
+#: gajim/gtk/accounts.py:831
 #, fuzzy
 msgid "Password"
 msgstr "Parola:"
@@ -5242,17 +5218,17 @@ msgid "Time remaining"
 msgstr ""
 
 #: gajim/data/gui/filetransfer_progress.ui:172
-#: gajim/data/gui/filetransfers.ui:30 gajim/data/gui/groupchat_control.ui:597
-#: gajim/data/gui/groupchat_control.ui:689
-#: gajim/data/gui/groupchat_control.ui:801
-#: gajim/data/gui/groupchat_control.ui:893
-#: gajim/data/gui/groupchat_control.ui:1294
-#: gajim/data/gui/groupchat_control.ui:1420
-#: gajim/data/gui/groupchat_control.ui:1546
-#: gajim/data/gui/groupchat_control.ui:1717
-#: gajim/data/gui/groupchat_control.ui:1795
+#: gajim/data/gui/filetransfers.ui:30 gajim/data/gui/groupchat_control.ui:600
+#: gajim/data/gui/groupchat_control.ui:692
+#: gajim/data/gui/groupchat_control.ui:804
+#: gajim/data/gui/groupchat_control.ui:896
+#: gajim/data/gui/groupchat_control.ui:1297
+#: gajim/data/gui/groupchat_control.ui:1423
+#: gajim/data/gui/groupchat_control.ui:1549
+#: gajim/data/gui/groupchat_control.ui:1720
+#: gajim/data/gui/groupchat_control.ui:1798
 #: gajim/data/gui/passphrase_dialog.ui:29 gajim/gtk/dialogs.py:53
-#: gajim/gtk/filechoosers.py:178
+#: gajim/gtk/filechoosers.py:179
 msgid "_Cancel"
 msgstr "_İptal"
 
@@ -5607,40 +5583,45 @@ msgstr "İş"
 #. "About" is the text of a tab of vcard window
 #: gajim/data/gui/profile_window.ui:1297
 #: gajim/data/gui/vcard_information_window.ui:1484
-#: gajim/data/gui/application_menu.ui:93
 #, fuzzy
 msgid "About"
 msgstr "Hakkında"
 
-#: gajim/data/gui/start_chat_dialog.ui:53
+#: gajim/data/gui/start_chat_dialog.ui:66
+msgid ""
+"Start a new chat, join a group chat or search for new group chats globally. "
+"You can also enter an XMPP address."
+msgstr ""
+
+#: gajim/data/gui/start_chat_dialog.ui:125
 #, fuzzy
 msgid "Global Group Chat Search"
 msgstr "Grup Sohbete Katıl"
 
-#: gajim/data/gui/start_chat_dialog.ui:189
-#: gajim/data/gui/start_chat_dialog.ui:229
-#: gajim/data/gui/start_chat_dialog.ui:364
+#: gajim/data/gui/start_chat_dialog.ui:268
+#: gajim/data/gui/start_chat_dialog.ui:308
+#: gajim/data/gui/start_chat_dialog.ui:443
 #, fuzzy
 msgid "_Back"
 msgstr "Geri Düğme"
 
-#: gajim/data/gui/start_chat_dialog.ui:245
-#: gajim/data/gui/groupchat_control.ui:818
-#: gajim/data/gui/groupchat_control.ui:910 gajim/gtk/discovery.py:1702
+#: gajim/data/gui/start_chat_dialog.ui:324
+#: gajim/data/gui/groupchat_control.ui:821
+#: gajim/data/gui/groupchat_control.ui:913 gajim/gtk/discovery.py:1702
 #: gajim/gtk/groupchat_join.py:65
 msgid "_Join"
 msgstr "_Katıl"
 
-#: gajim/data/gui/start_chat_dialog.ui:289
+#: gajim/data/gui/start_chat_dialog.ui:368
 #, fuzzy
 msgid "Select Account"
 msgstr "XMPP hesabı %s@%s"
 
-#: gajim/data/gui/start_chat_dialog.ui:380
+#: gajim/data/gui/start_chat_dialog.ui:459
 msgid "_Select"
 msgstr ""
 
-#: gajim/data/gui/start_chat_dialog.ui:442
+#: gajim/data/gui/start_chat_dialog.ui:521
 msgid ""
 "No contacts found\n"
 "You can also type an XMPP address"
@@ -5709,7 +5690,7 @@ msgid "Strike"
 msgstr "Ü&stü Çizili"
 
 #: gajim/data/gui/groupchat_control.ui:54 gajim/data/gui/chat_control.ui:318
-#: gajim/gtk/accounts.py:607
+#: gajim/gtk/accounts.py:610
 msgid "Color"
 msgstr "Renk"
 
@@ -5722,125 +5703,125 @@ msgstr "Yazıtipi"
 msgid "Clear formatting"
 msgstr "Işareti temizle"
 
-#: gajim/data/gui/groupchat_control.ui:333 gajim/data/gui/chat_control.ui:887
+#: gajim/data/gui/groupchat_control.ui:336 gajim/data/gui/chat_control.ui:889
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Parolayı Değiştir"
 
-#: gajim/data/gui/groupchat_control.ui:379 gajim/data/gui/chat_control.ui:646
+#: gajim/data/gui/groupchat_control.ui:382 gajim/data/gui/chat_control.ui:648
 msgid "Show a list of emojis (Alt+M)"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:506
+#: gajim/data/gui/groupchat_control.ui:509
 msgid "Joining…"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:564
+#: gajim/data/gui/groupchat_control.ui:567
 #, fuzzy
 msgid "Enter new nickname"
 msgstr "Bu kişi için %s yeni bir takma ad girin."
 
-#: gajim/data/gui/groupchat_control.ui:614
-#: gajim/data/gui/groupchat_control.ui:706
+#: gajim/data/gui/groupchat_control.ui:617
+#: gajim/data/gui/groupchat_control.ui:709
 #, fuzzy
 msgid "Ch_ange"
 msgstr "Takma Ad Ayarla"
 
-#: gajim/data/gui/groupchat_control.ui:671
+#: gajim/data/gui/groupchat_control.ui:674
 #, fuzzy
 msgid "Change Subject"
 msgstr "Konuk Değiştiriliyor"
 
-#: gajim/data/gui/groupchat_control.ui:783
+#: gajim/data/gui/groupchat_control.ui:786
 #, fuzzy
 msgid "Enter password"
 msgstr "Yeni parola girin: "
 
-#: gajim/data/gui/groupchat_control.ui:1000
+#: gajim/data/gui/groupchat_control.ui:1003
 #, fuzzy
 msgid "_Leave Group Chat"
 msgstr "Tam-Ekrandan Çık"
 
-#: gajim/data/gui/groupchat_control.ui:1004
+#: gajim/data/gui/groupchat_control.ui:1007
 #, fuzzy
 msgid "Gajim will not try to join this group chat again"
 msgstr "%s grup sohbete katıldı"
 
-#: gajim/data/gui/groupchat_control.ui:1060
+#: gajim/data/gui/groupchat_control.ui:1063
 #, fuzzy
-msgid "An error occured"
+msgid "An error occurred"
 msgstr "<b>Bir hata oluştu:</b>"
 
-#: gajim/data/gui/groupchat_control.ui:1125
+#: gajim/data/gui/groupchat_control.ui:1128
 #, fuzzy
 msgid "_Try again"
 msgstr "Tekrar dene ? [e/H] "
 
-#: gajim/data/gui/groupchat_control.ui:1273
+#: gajim/data/gui/groupchat_control.ui:1276
 #, fuzzy
 msgid "Kick participant"
 msgstr "Katılan"
 
-#: gajim/data/gui/groupchat_control.ui:1311
+#: gajim/data/gui/groupchat_control.ui:1314
 msgid "_Kick"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1344
-#: gajim/data/gui/groupchat_control.ui:1470
-#: gajim/data/gui/groupchat_control.ui:1596
-#: gajim/data/gui/groupchat_control.ui:1613
-#: gajim/data/gui/groupchat_control.ui:1702
-#: gajim/data/gui/groupchat_control.ui:1703
+#: gajim/data/gui/groupchat_control.ui:1347
+#: gajim/data/gui/groupchat_control.ui:1473
+#: gajim/data/gui/groupchat_control.ui:1599
+#: gajim/data/gui/groupchat_control.ui:1616
+#: gajim/data/gui/groupchat_control.ui:1705
+#: gajim/data/gui/groupchat_control.ui:1706
 msgid "Insert Emoji"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1357
-#: gajim/data/gui/groupchat_control.ui:1483
+#: gajim/data/gui/groupchat_control.ui:1360
+#: gajim/data/gui/groupchat_control.ui:1486
 msgid "Reason (optional)"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1399
+#: gajim/data/gui/groupchat_control.ui:1402
 #, fuzzy
 msgid "Ban participant"
 msgstr "Katılan"
 
-#: gajim/data/gui/groupchat_control.ui:1437
+#: gajim/data/gui/groupchat_control.ui:1440
 msgid "_Ban"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1525
+#: gajim/data/gui/groupchat_control.ui:1528
 #, fuzzy
 msgid "Destroy group chat"
 msgstr "_Yeni Bir Grup Sohbeti"
 
-#: gajim/data/gui/groupchat_control.ui:1563
+#: gajim/data/gui/groupchat_control.ui:1566
 #, fuzzy
 msgid "_Destroy"
 msgstr "Açıklama"
 
-#: gajim/data/gui/groupchat_control.ui:1597
+#: gajim/data/gui/groupchat_control.ui:1600
 msgid "Alternate venue (optional)..."
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1614
+#: gajim/data/gui/groupchat_control.ui:1617
 #, fuzzy
 msgid "Reason (optional)..."
 msgstr "Neden"
 
-#: gajim/data/gui/groupchat_control.ui:1627
+#: gajim/data/gui/groupchat_control.ui:1630
 msgid "Reason for destruction"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1642
+#: gajim/data/gui/groupchat_control.ui:1645
 msgid "Where participants should go"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1683
+#: gajim/data/gui/groupchat_control.ui:1686
 #, fuzzy
 msgid "Enter a new name for this group chat"
 msgstr "Grup %s için yeni isim giriniz: "
 
-#: gajim/data/gui/groupchat_control.ui:1810
+#: gajim/data/gui/groupchat_control.ui:1813
 #, fuzzy
 msgid "_Invite"
 msgstr "Davet _et"
@@ -5940,20 +5921,20 @@ msgid "Add"
 msgstr "Ekle"
 
 #: gajim/data/gui/mam_preferences.ui:194 gajim/data/gui/groupchat_config.ui:151
-#: gajim/gtk/remove_account.py:43 gajim/gtk/accounts.py:337
+#: gajim/gtk/remove_account.py:43 gajim/gtk/accounts.py:340
 #, fuzzy
 msgid "Remove"
 msgstr "_Kaldır"
 
-#: gajim/data/gui/vcard_information_window.ui:72 gajim/gtk/accounts.py:686
+#: gajim/data/gui/vcard_information_window.ui:72 gajim/gtk/accounts.py:691
 #, fuzzy
 msgid "Resource"
 msgstr "Kaynak:"
 
 #: gajim/data/gui/vcard_information_window.ui:89
-#: gajim/data/gui/preferences_window.ui:1396
-#: gajim/data/gui/preferences_window.ui:1552
-#: gajim/data/gui/preferences_window.ui:1756
+#: gajim/data/gui/preferences_window.ui:1411
+#: gajim/data/gui/preferences_window.ui:1567
+#: gajim/data/gui/preferences_window.ui:1781
 msgid "Status"
 msgstr "Durum"
 
@@ -5963,7 +5944,7 @@ msgid "Client"
 msgstr "?Client:Bilinmez"
 
 #: gajim/data/gui/vcard_information_window.ui:123
-#: gajim/data/gui/preferences_window.ui:1859
+#: gajim/data/gui/preferences_window.ui:1884
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistem:</b>"
@@ -6120,81 +6101,90 @@ msgid ""
 "minimizing to the system's notification area"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:374
+#: gajim/data/gui/preferences_window.ui:371
 msgid "Behavior of Windows and Tabs"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:406
+#: gajim/data/gui/preferences_window.ui:403
+#, fuzzy
+msgid "Me_rge accounts"
+msgstr "Hesapları bir_leştir"
+
+#: gajim/data/gui/preferences_window.ui:407
+msgid "Displays all your accounts merged into a single one"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:421
 #, fuzzy
 msgid "Show a_vatars of contacts in contact list"
 msgstr "Kişi listesindeki olayları göster"
 
-#: gajim/data/gui/preferences_window.ui:410
+#: gajim/data/gui/preferences_window.ui:425
 #, fuzzy
 msgid ""
 "If checked, avatars of contacts will be shown in the contact list window and "
 "in group chats"
 msgstr "Grup sohbetine girilemiyor"
 
-#: gajim/data/gui/preferences_window.ui:424
+#: gajim/data/gui/preferences_window.ui:439
 #, fuzzy
 msgid "Show status _messages of contacts in contact list"
 msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 
-#: gajim/data/gui/preferences_window.ui:428
+#: gajim/data/gui/preferences_window.ui:443
 msgid ""
 "If checked, status messages of contacts will be shown under the contact's "
 "name, in the contact list window, and in group chats"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:442
+#: gajim/data/gui/preferences_window.ui:457
 msgid ""
 "Show e_xtra information of contacts in contact list (mood, activity, ...)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:446
+#: gajim/data/gui/preferences_window.ui:461
 msgid ""
 "If checked, additional info published by the contact will be shown in the "
 "contact list. Additional infos (published via PEP) may include e.g. mood, "
 "activity, tune, location, ..."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:467
+#: gajim/data/gui/preferences_window.ui:482
 #, fuzzy
 msgid "Sort contacts by status"
 msgstr "Port numarasına göre sırala"
 
-#: gajim/data/gui/preferences_window.ui:477
+#: gajim/data/gui/preferences_window.ui:492
 #, fuzzy
 msgid "in _contact list"
 msgstr "Kişileri eşzamana getir"
 
-#: gajim/data/gui/preferences_window.ui:494
+#: gajim/data/gui/preferences_window.ui:509
 #, fuzzy
 msgid "in _group chats"
 msgstr "grupdaki herkez"
 
-#: gajim/data/gui/preferences_window.ui:523
+#: gajim/data/gui/preferences_window.ui:538
 #, fuzzy
 msgid "Contact List Appearance"
 msgstr "Kişi listesindeki olayları göster"
 
-#: gajim/data/gui/preferences_window.ui:570
+#: gajim/data/gui/preferences_window.ui:585
 msgid "Enable auto copy"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:573
+#: gajim/data/gui/preferences_window.ui:588
 msgid ""
 "If enabled, selecting Text will be copied to the clipboard, otherwise you "
 "can copy text with CTRL + SHIFT + C"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:624
+#: gajim/data/gui/preferences_window.ui:639
 #, fuzzy
 msgid "Enable spell _checking"
 msgstr "Tamamlanmamış yazım denetimi kaydı"
 
-#: gajim/data/gui/preferences_window.ui:627
+#: gajim/data/gui/preferences_window.ui:642
 msgid ""
 "If checked, spelling errors in input fields of chat windows will be "
 "highlighted. If no language is explicitly set via right click on the input "
@@ -6202,206 +6192,206 @@ msgid ""
 "Needs gspell to be installed."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:641
+#: gajim/data/gui/preferences_window.ui:656
 #, fuzzy
 msgid "Show message recei_pts (✔)"
 msgstr "iletinin içindekiler"
 
-#: gajim/data/gui/preferences_window.ui:645
+#: gajim/data/gui/preferences_window.ui:660
 msgid ""
 "If checked, a small checkmark will be shown after each message when it was "
 "received. Note that this is not supported by all clients and therefore could "
 "be misleading."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:659
+#: gajim/data/gui/preferences_window.ui:674
 #, fuzzy
 msgid "_Show XHTML formatting"
 msgstr "Yer:"
 
-#: gajim/data/gui/preferences_window.ui:676
+#: gajim/data/gui/preferences_window.ui:691
 #, fuzzy
 msgid "Display status messages in _single chats"
 msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 
-#: gajim/data/gui/preferences_window.ui:680
+#: gajim/data/gui/preferences_window.ui:695
 msgid ""
 "If checked, status lines will be shown in 1 on 1 chats when a contact "
 "changes their status or status message"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:694
+#: gajim/data/gui/preferences_window.ui:709
 #, fuzzy
 msgid "Show subject after _joining a group chat"
 msgstr "Grup sohbetine girilemiyor"
 
-#: gajim/data/gui/preferences_window.ui:698
+#: gajim/data/gui/preferences_window.ui:713
 #, fuzzy
 msgid "If checked, the subject will be shown when joining a group chat"
 msgstr "Grup sohbetine girilemiyor"
 
-#: gajim/data/gui/preferences_window.ui:720
+#: gajim/data/gui/preferences_window.ui:735
 #, fuzzy
 msgid "Group Chat Settings"
 msgstr "Bağlantı Kurulamıyor"
 
-#: gajim/data/gui/preferences_window.ui:735
+#: gajim/data/gui/preferences_window.ui:750
 msgid "Show join/leave (Default)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:739
+#: gajim/data/gui/preferences_window.ui:754
 msgid ""
 "If join/leave status messages are shown in the group chat. This setting can "
 "be overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:758
+#: gajim/data/gui/preferences_window.ui:773
 msgid ""
 "The default sync threshold for new public group chats. This setting can be "
 "overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:760
+#: gajim/data/gui/preferences_window.ui:775
 msgid "Default Sync Threshold"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:802
+#: gajim/data/gui/preferences_window.ui:817
 #, fuzzy
 msgid "Show status changes (Default)"
 msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 
-#: gajim/data/gui/preferences_window.ui:806
+#: gajim/data/gui/preferences_window.ui:821
 msgid ""
 "If status change messages are shown in the group chat. This setting can be "
 "overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:863
+#: gajim/data/gui/preferences_window.ui:878
 #, fuzzy
 msgid "Show chatstate in tabs"
 msgstr "Başlık çubuğu içeriğini sekme çubuğu etiketlerinde göster"
 
-#: gajim/data/gui/preferences_window.ui:867
+#: gajim/data/gui/preferences_window.ui:882
 msgid ""
 "If checked, the tab will be colored according to the current chatstate of "
 "the contact"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:881
+#: gajim/data/gui/preferences_window.ui:896
 #, fuzzy
 msgid "Show chatstate in contact list"
 msgstr "Başlık çubuğu içeriğini sekme çubuğu etiketlerinde göster"
 
-#: gajim/data/gui/preferences_window.ui:885
+#: gajim/data/gui/preferences_window.ui:900
 msgid ""
 "If checked, the contact row will be colored according to the current "
 "chatstate of the contact"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:899
+#: gajim/data/gui/preferences_window.ui:914
 msgid "Show chatstate in banner"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:903
+#: gajim/data/gui/preferences_window.ui:918
 msgid ""
-"If checked, a desciption of the contacts current chatstate is shown in the "
+"If checked, a description of the contacts current chatstate is shown in the "
 "banner"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:923
+#: gajim/data/gui/preferences_window.ui:938
 #, fuzzy
 msgid "Chatstate"
 msgstr "Son durum: %s"
 
-#: gajim/data/gui/preferences_window.ui:940
+#: gajim/data/gui/preferences_window.ui:955
 #: gajim/data/gui/history_window.ui:303
 #, fuzzy
 msgid "Chat"
 msgstr "Sohbetler"
 
-#: gajim/data/gui/preferences_window.ui:994
+#: gajim/data/gui/preferences_window.ui:1009
 msgid "Show _notification area icon"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1013
+#: gajim/data/gui/preferences_window.ui:1028
 #, fuzzy
 msgid "_When new event is received"
 msgstr "Yeni olay alınca:"
 
-#: gajim/data/gui/preferences_window.ui:1054
+#: gajim/data/gui/preferences_window.ui:1069
 msgid "Show popups/notifications when a chat window is already _open"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1071
+#: gajim/data/gui/preferences_window.ui:1086
 msgid "Allow popups/notifications when I'm _away, not available or busy"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1088
+#: gajim/data/gui/preferences_window.ui:1103
 msgid "Notify me about contacts that sign _in"
 msgstr "_Giren kişilerden haber ver"
 
-#: gajim/data/gui/preferences_window.ui:1093
+#: gajim/data/gui/preferences_window.ui:1108
 msgid ""
 "A popup window about contacts that just signed in will be shown in the "
 "bottom right of the screen "
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1107
+#: gajim/data/gui/preferences_window.ui:1122
 msgid "Notify me about contacts that sign _out"
 msgstr "_Çıkan kişilerden haber ver"
 
-#: gajim/data/gui/preferences_window.ui:1111
+#: gajim/data/gui/preferences_window.ui:1126
 msgid ""
 "A popup window about contacts that just signed out will be shown in the "
 "bottom right of the screen "
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1129
+#: gajim/data/gui/preferences_window.ui:1144
 #, fuzzy
 msgid "Visual Notifications"
 msgstr "<b>Görsel Bildirimler</b>"
 
-#: gajim/data/gui/preferences_window.ui:1165
+#: gajim/data/gui/preferences_window.ui:1180
 msgid "Play _sounds"
 msgstr "_Sesleri çal"
 
-#: gajim/data/gui/preferences_window.ui:1182
-#: gajim/data/gui/preferences_window.ui:1822
+#: gajim/data/gui/preferences_window.ui:1197
+#: gajim/data/gui/preferences_window.ui:1847
 msgid "Ma_nage..."
 msgstr "Yön_et..."
 
-#: gajim/data/gui/preferences_window.ui:1205
+#: gajim/data/gui/preferences_window.ui:1220
 #, fuzzy
 msgid "Allow playing sounds when I'm _busy"
 msgstr "Meşgulsem ses vermeye izin ver"
 
-#: gajim/data/gui/preferences_window.ui:1227
+#: gajim/data/gui/preferences_window.ui:1242
 #, fuzzy
 msgid "Sounds"
 msgstr "Wav Sesleri"
 
-#: gajim/data/gui/preferences_window.ui:1245
+#: gajim/data/gui/preferences_window.ui:1260
 msgid "Notifications"
 msgstr "Bildirimler"
 
-#: gajim/data/gui/preferences_window.ui:1272
+#: gajim/data/gui/preferences_window.ui:1287
 #, fuzzy
 msgid "No_t Available"
 msgstr "Mevcut Değil"
 
-#: gajim/data/gui/preferences_window.ui:1276
+#: gajim/data/gui/preferences_window.ui:1291
 msgid ""
 "If checked, the status will be changed to Not Available when the computer "
 "has not been used for the specified time"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1293
+#: gajim/data/gui/preferences_window.ui:1308
 msgid ""
 "If checked, the status will be changed to Away when the computer has not "
 "been used for the specified time"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1339
+#: gajim/data/gui/preferences_window.ui:1354
 msgid ""
 "The automatic away status message. If empty, the current status message will "
 "not be changed.\n"
@@ -6409,7 +6399,7 @@ msgid ""
 "$T will be replaced by auto-away timeout."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1354
+#: gajim/data/gui/preferences_window.ui:1369
 msgid ""
 "The automatic not available status message. If empty, the current status "
 "message will not be changed.\n"
@@ -6417,231 +6407,241 @@ msgid ""
 "$T will be replaced by auto-not-available timeout."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1368
+#: gajim/data/gui/preferences_window.ui:1383
 #, fuzzy
 msgid "Minutes"
 msgstr "dakika"
 
-#: gajim/data/gui/preferences_window.ui:1412 gajim/gtk/features.py:108
+#: gajim/data/gui/preferences_window.ui:1427 gajim/gtk/features.py:97
 #, fuzzy
 msgid "Automatic Status"
 msgstr "Otomatik durum"
 
-#: gajim/data/gui/preferences_window.ui:1443
+#: gajim/data/gui/preferences_window.ui:1458
 msgid "_Remember and restore status of the last session"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1447
+#: gajim/data/gui/preferences_window.ui:1462
 msgid ""
 "If checked, the status and status message used in the last session will be "
 "restored"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1469
+#: gajim/data/gui/preferences_window.ui:1484
 #, fuzzy
 msgid "Ask for status message when I"
 msgstr "Durum ileti sor ben buysam:"
 
-#: gajim/data/gui/preferences_window.ui:1485
+#: gajim/data/gui/preferences_window.ui:1500
 msgid "Sign _in"
 msgstr "_Bağlan"
 
-#: gajim/data/gui/preferences_window.ui:1502
+#: gajim/data/gui/preferences_window.ui:1517
 msgid "Sign _out"
 msgstr "_Çık"
 
-#: gajim/data/gui/preferences_window.ui:1536
+#: gajim/data/gui/preferences_window.ui:1551
 msgid ""
 "If enabled, Gajim will not ask for a status message. The specified default "
 "message will be used instead."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1564
+#: gajim/data/gui/preferences_window.ui:1579
 msgid "Default Message"
 msgstr "Öntanımlı İlet"
 
-#: gajim/data/gui/preferences_window.ui:1579
-#: gajim/data/gui/preferences_window.ui:1860
+#: gajim/data/gui/preferences_window.ui:1594
+#: gajim/data/gui/preferences_window.ui:1885
 #, fuzzy
 msgid "Enabled"
 msgstr "Etkin"
 
-#: gajim/data/gui/preferences_window.ui:1605
+#: gajim/data/gui/preferences_window.ui:1620
 #, fuzzy
 msgid "Status Messages"
 msgstr "durum ileti"
 
-#: gajim/data/gui/preferences_window.ui:1738
+#: gajim/data/gui/preferences_window.ui:1763
 #, fuzzy
 msgid "Preset Status Messages"
 msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
 
-#: gajim/data/gui/preferences_window.ui:1779 gajim/data/gui/themes_window.ui:85
+#: gajim/data/gui/preferences_window.ui:1804 gajim/data/gui/themes_window.ui:85
 #, fuzzy
 msgid "Themes"
 msgstr "Temalar"
 
-#: gajim/data/gui/preferences_window.ui:1796
+#: gajim/data/gui/preferences_window.ui:1821
 #, fuzzy
 msgid "_Theme"
 msgstr "Temalar"
 
-#: gajim/data/gui/preferences_window.ui:1827
+#: gajim/data/gui/preferences_window.ui:1852
 msgid "Configure color and font of the interface"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1841
+#: gajim/data/gui/preferences_window.ui:1866
 #, fuzzy
 msgid "_Dark Theme"
 msgstr "Gajim - %s"
 
-#: gajim/data/gui/preferences_window.ui:1875
+#: gajim/data/gui/preferences_window.ui:1900
 msgid "Emojis"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1892
+#: gajim/data/gui/preferences_window.ui:1917
 #, fuzzy
 msgid "_Emoji Theme"
 msgstr "Gajim - %s"
 
-#: gajim/data/gui/preferences_window.ui:1921
+#: gajim/data/gui/preferences_window.ui:1946
 msgid "Icons"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1938
+#: gajim/data/gui/preferences_window.ui:1963
 #, fuzzy
 msgid "_Status iconset"
 msgstr "Durum simgeler:"
 
-#: gajim/data/gui/preferences_window.ui:1964
+#: gajim/data/gui/preferences_window.ui:1989
 #, fuzzy
 msgid "Use transports _icons"
 msgstr "G_PG acenta kullan"
 
-#: gajim/data/gui/preferences_window.ui:1968
+#: gajim/data/gui/preferences_window.ui:1993
 msgid ""
 "If checked, protocol-specific status icons will be used (e.g. a contact from "
 "ICQ will have the equivalent ICQ icon for status online, away, busy, etc...)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1995
+#: gajim/data/gui/preferences_window.ui:2020
 msgid "_Convert ASCII Emojis"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2073
+#: gajim/data/gui/preferences_window.ui:2098
 msgid "Style"
 msgstr "Biçem"
 
-#: gajim/data/gui/preferences_window.ui:2100
+#: gajim/data/gui/preferences_window.ui:2125
 #, fuzzy
 msgid "Show _Features"
 msgstr "Özellikler:"
 
-#: gajim/data/gui/preferences_window.ui:2178
+#: gajim/data/gui/preferences_window.ui:2203
 #, fuzzy
 msgid "A_udio output device"
 msgstr "Ses çıkış aygıtı"
 
-#: gajim/data/gui/preferences_window.ui:2219
+#: gajim/data/gui/preferences_window.ui:2244
 #, fuzzy
 msgid "_Audio input device"
 msgstr "Ses giriş aygıtı"
 
-#: gajim/data/gui/preferences_window.ui:2236
+#: gajim/data/gui/preferences_window.ui:2261
 #, fuzzy
 msgid "Audio"
 msgstr "Ses testi"
 
-#: gajim/data/gui/preferences_window.ui:2253
+#: gajim/data/gui/preferences_window.ui:2278
 #, fuzzy
 msgid "Video"
 msgstr "Video testi"
 
-#: gajim/data/gui/preferences_window.ui:2270
+#: gajim/data/gui/preferences_window.ui:2295
 #, fuzzy
 msgid "_Video input device"
 msgstr "Video giriş aygıtı"
 
-#: gajim/data/gui/preferences_window.ui:2298
+#: gajim/data/gui/preferences_window.ui:2323
 #, fuzzy
 msgid "Video output"
 msgstr "video çıktısı"
 
-#: gajim/data/gui/preferences_window.ui:2326
+#: gajim/data/gui/preferences_window.ui:2351
 #, fuzzy
 msgid "Video _framerate"
 msgstr "Video testi"
 
-#: gajim/data/gui/preferences_window.ui:2355
+#: gajim/data/gui/preferences_window.ui:2380
 #, fuzzy
 msgid "Video si_ze"
 msgstr "Video testi"
 
-#: gajim/data/gui/preferences_window.ui:2380
+#: gajim/data/gui/preferences_window.ui:2405
 msgid "Vi_ew own video source"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2399 gajim/data/gui/server_info.ui:298
-#: gajim/gtk/accounts.py:308
+#: gajim/data/gui/preferences_window.ui:2424 gajim/data/gui/server_info.ui:298
+#: gajim/gtk/accounts.py:311
 msgid "Connection"
 msgstr "Bağlantı"
 
-#: gajim/data/gui/preferences_window.ui:2413
+#: gajim/data/gui/preferences_window.ui:2438
 #, fuzzy
 msgid "STU_N server"
 msgstr "STUN Sunuc:"
 
-#: gajim/data/gui/preferences_window.ui:2431
+#: gajim/data/gui/preferences_window.ui:2456
 msgid ""
 "STUN server hostname. If no hostname was given, Gajim will try\n"
 "to discover one from the server. (Example: stun.iptel.org)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2470
+#: gajim/data/gui/preferences_window.ui:2495
 #, fuzzy
 msgid "Audio/Video"
 msgstr "Ses / Video"
 
-#: gajim/data/gui/preferences_window.ui:2503
+#: gajim/data/gui/preferences_window.ui:2528
 msgid "_Global proxy"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2540
+#: gajim/data/gui/preferences_window.ui:2564
 msgid "_Manage..."
 msgstr "_Yönet..."
 
-#: gajim/data/gui/preferences_window.ui:2563
+#: gajim/data/gui/preferences_window.ui:2587
 #, fuzzy
 msgid "_Store status changes of contacts in history"
 msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 
-#: gajim/data/gui/preferences_window.ui:2585
+#: gajim/data/gui/preferences_window.ui:2609
 msgid "Enable _debug logging (restart required)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2589
+#: gajim/data/gui/preferences_window.ui:2613
 #, fuzzy
 msgid "If checked, Gajim will store a log file for debugging"
 msgstr "İşaretliyse, Gajim bu hesapının parolayı hatırlar"
 
-#: gajim/data/gui/preferences_window.ui:2606
+#: gajim/data/gui/preferences_window.ui:2630
 msgid "Opens folder containing debug logs"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2636
+#: gajim/data/gui/preferences_window.ui:2656
+msgid "_Reset Hints"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2660
+msgid ""
+"In order to introduce you to features, Gajim displays some hints. This "
+"button will reset all these hints."
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2677
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Karışık</b>"
 
-#: gajim/data/gui/preferences_window.ui:2669
+#: gajim/data/gui/preferences_window.ui:2710
 msgid "Attention: Please use these options with caution!"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2682
+#: gajim/data/gui/preferences_window.ui:2723
 msgid "_Open..."
 msgstr "_Aç..."
 
-#: gajim/data/gui/preferences_window.ui:2704 gajim/gtk/advanced_config.py:84
+#: gajim/data/gui/preferences_window.ui:2745 gajim/gtk/advanced_config.py:84
 #, fuzzy
 msgid "Advanced Configuration Editor (ACE)"
 msgstr "İlerlemiş Ayarlama Editörü"
@@ -6819,12 +6819,12 @@ msgstr ""
 msgid "Your password"
 msgstr "Yeni parola girin: "
 
-#: gajim/data/gui/account_wizard.ui:266 gajim/data/gui/account_wizard.ui:720
+#: gajim/data/gui/account_wizard.ui:266 gajim/data/gui/account_wizard.ui:719
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "İlerlemiş aksiyonlar"
 
-#: gajim/data/gui/account_wizard.ui:270 gajim/data/gui/account_wizard.ui:724
+#: gajim/data/gui/account_wizard.ui:270 gajim/data/gui/account_wizard.ui:723
 #, fuzzy
 msgid "Proxy, custom hostname and port"
 msgstr "Kendi bir makine adı/portu kullan"
@@ -6910,7 +6910,7 @@ msgid ""
 "a>"
 msgstr ""
 
-#: gajim/data/gui/account_wizard.ui:631 gajim/gtk/account_wizard.py:59
+#: gajim/data/gui/account_wizard.ui:631 gajim/gtk/account_wizard.py:60
 #, fuzzy
 msgid "Sign Up"
 msgstr "_Bağlan"
@@ -6924,7 +6924,7 @@ msgstr "Yeni posta yarat"
 msgid "Sign up Anonymously"
 msgstr ""
 
-#: gajim/data/gui/account_wizard.ui:707
+#: gajim/data/gui/account_wizard.ui:706
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
 
@@ -6951,8 +6951,8 @@ msgstr "Öntanımlı değerlerine geri al"
 msgid "Resets value to default"
 msgstr "Öntanımlı değerlerine geri al"
 
-#: gajim/data/gui/server_info.ui:20 gajim/gtk/accounts.py:682
-#: gajim/gtk/accounts.py:788
+#: gajim/data/gui/server_info.ui:20 gajim/gtk/accounts.py:687
+#: gajim/gtk/accounts.py:793
 #, fuzzy
 msgid "Hostname"
 msgstr "_Bilgisayar adı:"
@@ -6995,7 +6995,7 @@ msgstr "%(nickname)s Girdi"
 msgid "Proxy Host"
 msgstr "Vekil _Makine:"
 
-#: gajim/data/gui/server_info.ui:261 gajim/gtk/accounts.py:796
+#: gajim/data/gui/server_info.ui:261 gajim/gtk/accounts.py:801
 msgid "Type"
 msgstr "Tip"
 
@@ -7008,8 +7008,7 @@ msgstr "_Protokol:"
 msgid "Copy info to clipboard"
 msgstr ""
 
-#: gajim/data/gui/server_info.ui:359 gajim/data/gui/application_menu.ui:89
-#: gajim/gtk/features.py:41 gajim/gtk/features.py:52
+#: gajim/data/gui/server_info.ui:359 gajim/gtk/features.py:40
 msgid "Features"
 msgstr "Özellikler:"
 
@@ -7190,6 +7189,11 @@ msgstr ""
 msgid "Change Status Message…"
 msgstr "Durum ileti değiştir"
 
+#: gajim/data/gui/roster_window.ui:79 data/org.gajim.Gajim.desktop.in:4
+#: data/org.gajim.Gajim.appdata.xml.in:7
+msgid "Gajim"
+msgstr "Gajim"
+
 #: gajim/data/gui/change_mood_dialog.ui:73
 msgid "<b>Mood:</b>"
 msgstr "<b>Ruh Hali:</b>"
@@ -7266,8 +7270,8 @@ msgstr " [ %i%% ] (askıda)"
 
 #: gajim/data/gui/plugins_window.ui:363
 msgid ""
-"Plug-in decription should be displayed here. This text will be erased during "
-"PluginsWindow initialization."
+"Plug-in description should be displayed here. This text will be erased "
+"during PluginsWindow initialization."
 msgstr ""
 
 #: gajim/data/gui/privacy_list_window.ui:18
@@ -7465,84 +7469,105 @@ msgstr "Bağlantı Kurulamıyor"
 msgid "_Name"
 msgstr "_Ad:"
 
-#: gajim/data/gui/manage_proxies.ui:337 gajim/gtk/accounts.py:679
+#: gajim/data/gui/manage_proxies.ui:337 gajim/gtk/accounts.py:684
 #, fuzzy
 msgid "Proxy"
 msgstr "Prox_y:"
 
 #: gajim/data/gui/application_menu.ui:8
 #, fuzzy
-msgid "Start Chat…"
+msgid "_Start / Join Chat…"
 msgstr "Sohbet _Başla"
 
 #: gajim/data/gui/application_menu.ui:13
 #, fuzzy
-msgid "Create Group Chat…"
+msgid "Create _Group Chat…"
 msgstr "Tam-Ekrandan Çık"
 
-#: gajim/data/gui/application_menu.ui:22 gajim/data/gui/shortcuts_window.ui:217
-#: gajim/plugins/gui.py:68
-msgid "Plugins"
-msgstr ""
-
-#: gajim/data/gui/application_menu.ui:26 gajim/data/gui/shortcuts_window.ui:210
-#: gajim/gtk/preferences.py:64
+#: gajim/data/gui/application_menu.ui:18
 #, fuzzy
-msgid "Preferences"
+msgid "_History Manager"
+msgstr "Paket Yöneticisi"
+
+#: gajim/data/gui/application_menu.ui:22
+#, fuzzy
+msgid "Pl_ugins"
+msgstr "Bağlantı Kurulamıyor"
+
+#: gajim/data/gui/application_menu.ui:26
+#: gajim/data/gui/systray_context_menu.ui:68
+#, fuzzy
+msgid "_Preferences"
 msgstr "Tercihler"
 
-#: gajim/data/gui/application_menu.ui:30
-msgid "Quit"
-msgstr ""
+#: gajim/data/gui/application_menu.ui:36
+#, fuzzy
+msgid "_Accounts"
+msgstr "Hesaplar"
 
 #: gajim/data/gui/application_menu.ui:39
 #, fuzzy
-msgid "View"
+msgid "_View"
 msgstr "_Görünüm"
 
-#: gajim/data/gui/application_menu.ui:42
+#: gajim/data/gui/application_menu.ui:42 gajim/gtk/statusicon.py:270
 #, fuzzy
-msgid "Show Contact List"
+msgid "Show _Contact List"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #: gajim/data/gui/application_menu.ui:46
 #, fuzzy
-msgid "Show Offline Contacts"
+msgid "Show _Offline Contacts"
 msgstr "_Çevredışı Kişileri Göster"
 
 #: gajim/data/gui/application_menu.ui:50
 #, fuzzy
-msgid "Show Active Contacts"
+msgid "Show _Active Contacts"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #: gajim/data/gui/application_menu.ui:54
 #, fuzzy
-msgid "Show Transports"
+msgid "Show _Transports"
 msgstr "_XML Konsolu Göster"
 
-#: gajim/data/gui/application_menu.ui:60 gajim/data/gui/xml_console.ui:8
+#: gajim/data/gui/application_menu.ui:60
 #, fuzzy
-msgid "XML Console"
+msgid "_XML Console"
 msgstr "_XML Konsolu Göster"
+
+#: gajim/data/gui/application_menu.ui:64
+#, fuzzy
+msgid "_File Transfer"
+msgstr "Dosya Aktarımları"
 
 #: gajim/data/gui/application_menu.ui:74
 #, fuzzy
-msgid "Help"
+msgid "_Help"
 msgstr "_Yardım"
 
 #: gajim/data/gui/application_menu.ui:77
 #, fuzzy
-msgid "Wiki (Online)"
+msgid "_Wiki (Online)"
 msgstr "Çevrimiçi"
 
 #: gajim/data/gui/application_menu.ui:81
 #, fuzzy
-msgid "FAQ (Online)"
+msgid "FA_Q (Online)"
 msgstr "Çevrimiçi"
 
 #: gajim/data/gui/application_menu.ui:85
-msgid "Keyboard Shortcuts"
+msgid "_Keyboard Shortcuts"
 msgstr ""
+
+#: gajim/data/gui/application_menu.ui:89
+#, fuzzy
+msgid "_Features"
+msgstr "Özellikler:"
+
+#: gajim/data/gui/application_menu.ui:93
+#, fuzzy
+msgid "_About"
+msgstr "Hakkında"
 
 #: gajim/data/gui/groupchat_creation.ui:27
 msgid "Public or Private?"
@@ -7834,60 +7859,69 @@ msgstr "Kişi listesindeki olayları göster"
 msgid "Create new group chat"
 msgstr "Tam-Ekrandan Çık"
 
-#: gajim/data/gui/shortcuts_window.ui:224
+#: gajim/data/gui/shortcuts_window.ui:203 gajim/gtk/preferences.py:63
+#, fuzzy
+msgid "Preferences"
+msgstr "Tercihler"
+
+#: gajim/data/gui/shortcuts_window.ui:210 gajim/plugins/gui.py:68
+msgid "Plugins"
+msgstr ""
+
+#: gajim/data/gui/shortcuts_window.ui:217
 #, fuzzy
 msgid "File transfers"
 msgstr "Dosya Aktarımları"
 
-#: gajim/data/gui/shortcuts_window.ui:231
+#: gajim/data/gui/shortcuts_window.ui:224
 #, fuzzy
 msgid "Set the status message"
 msgstr "durum ileti"
 
-#: gajim/data/gui/shortcuts_window.ui:238
+#: gajim/data/gui/shortcuts_window.ui:231
 #, fuzzy
 msgid "Show XML console"
 msgstr "_XML Konsolu Göster"
 
-#: gajim/data/gui/shortcuts_window.ui:253
+#: gajim/data/gui/shortcuts_window.ui:246
 #, fuzzy
 msgid "Appearance"
 msgstr "<b>Sohbet Görünümü</b>"
 
-#: gajim/data/gui/shortcuts_window.ui:258
+#: gajim/data/gui/shortcuts_window.ui:251
 #, fuzzy
 msgid "Show offline contacts"
 msgstr "_Çevredışı Kişileri Göster"
 
-#: gajim/data/gui/shortcuts_window.ui:265
+#: gajim/data/gui/shortcuts_window.ui:258
 #, fuzzy
 msgid "Show only active contacts"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
-#: gajim/data/gui/shortcuts_window.ui:272
+#: gajim/data/gui/shortcuts_window.ui:265
 msgid "Enable contact list filtering"
 msgstr ""
 
-#: gajim/data/gui/shortcuts_window.ui:279
+#: gajim/data/gui/shortcuts_window.ui:272
 #, fuzzy
 msgid "Show / hide contact list"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
-#: gajim/data/gui/shortcuts_window.ui:287 gajim/data/gui/groupchat_invite.ui:83
+#: gajim/data/gui/shortcuts_window.ui:280 gajim/data/gui/groupchat_invite.ui:83
 msgid "Contacts"
 msgstr "Kişiler"
 
-#: gajim/data/gui/shortcuts_window.ui:292
+#: gajim/data/gui/shortcuts_window.ui:285
 #, fuzzy
 msgid "Contact information"
 msgstr "Kişisel Bilgisi"
 
-#: gajim/data/gui/shortcuts_window.ui:299
+#: gajim/data/gui/shortcuts_window.ui:292
 #, fuzzy
 msgid "Rename contact"
 msgstr "Kişiyi yeniden adlandır"
 
-#: gajim/data/gui/shortcuts_window.ui:306
+#: gajim/data/gui/shortcuts_window.ui:299
 #, fuzzy
 msgid "Delete contact"
 msgstr "Kişileri eşzamana getir"
@@ -7964,12 +7998,17 @@ msgstr "Formu doldur."
 msgid "Group Chat Configuration"
 msgstr "Grup Sohbeti Daveti"
 
+#: gajim/data/gui/xml_console.ui:8
+#, fuzzy
+msgid "XML Console"
+msgstr "_XML Konsolu Göster"
+
 #: gajim/data/gui/xml_console.ui:131
 #, fuzzy
 msgid "Start Search..."
 msgstr "Sohbet _Başla"
 
-#: gajim/data/gui/xml_console.ui:241 gajim/gtk/xml_console.py:308
+#: gajim/data/gui/xml_console.ui:241 gajim/gtk/xml_console.py:309
 #, fuzzy
 msgid "Filter"
 msgstr "Filtre:"
@@ -8015,11 +8054,6 @@ msgstr "Bütün Bekleyen _Olayları Göster"
 #: gajim/data/gui/systray_context_menu.ui:52
 msgid "Mute Sounds"
 msgstr "Sesi Kapat"
-
-#: gajim/data/gui/systray_context_menu.ui:68
-#, fuzzy
-msgid "_Preferences"
-msgstr "Tercihler"
 
 #: gajim/data/gui/single_message_window.ui:42
 #, fuzzy
@@ -8484,7 +8518,7 @@ msgid "Sender: %s"
 msgstr "Gönderen: %s"
 
 #: gajim/gtk/filetransfer.py:240 gajim/gtk/filetransfer.py:749
-#: gajim/gtk/tooltips.py:549
+#: gajim/gtk/tooltips.py:550
 msgid "Recipient: "
 msgstr "Alıcı:"
 
@@ -8636,7 +8670,7 @@ msgstr "Dosya: "
 msgid "It is not possible to send empty files"
 msgstr ""
 
-#: gajim/gtk/filetransfer.py:747 gajim/gtk/tooltips.py:543
+#: gajim/gtk/filetransfer.py:747 gajim/gtk/tooltips.py:544
 msgid "Sender: "
 msgstr "Gönderen"
 
@@ -8651,7 +8685,7 @@ msgid "Change"
 msgstr "Takma Ad Ayarla"
 
 #: gajim/gtk/change_password.py:45 gajim/gtk/remove_account.py:45
-#: gajim/gtk/account_wizard.py:64 gajim/gtk/accounts.py:380
+#: gajim/gtk/account_wizard.py:65 gajim/gtk/accounts.py:383
 #, fuzzy
 msgid "Back"
 msgstr "Geri Düğme"
@@ -8681,11 +8715,12 @@ msgid "Password Change Failed"
 msgstr "Şifre gerekli"
 
 #: gajim/gtk/change_password.py:63
-msgid "An error occured while trying to change your password."
-msgstr ""
+#, fuzzy
+msgid "An error occurred while trying to change your password."
+msgstr "Aralık yeniden konumlandırılması sırasında bir hata oluştu."
 
 #: gajim/gtk/change_password.py:142 gajim/gtk/change_password.py:144
-#: gajim/gtk/change_password.py:221 gajim/gtk/accounts.py:833
+#: gajim/gtk/change_password.py:221 gajim/gtk/accounts.py:838
 msgid "Change Password"
 msgstr "Parolayı Değiştir"
 
@@ -8720,36 +8755,26 @@ msgstr ""
 msgid "Unknown SSL error '%s'"
 msgstr "<b>Bir hata oluştu:</b>"
 
-#: gajim/gtk/start_chat.py:54
+#: gajim/gtk/start_chat.py:55
 #, fuzzy
-msgid "Start New Conversation"
-msgstr "Devam edilen sohbet"
+msgid "Start / Join Chat"
+msgstr "Sohbet _Başla"
 
-#: gajim/gtk/start_chat.py:271 gajim/gtk/start_chat.py:350
+#: gajim/gtk/start_chat.py:279 gajim/gtk/start_chat.py:358
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
 
-#: gajim/gtk/start_chat.py:617 gajim/gtk/groupchat_join.py:40
+#: gajim/gtk/start_chat.py:628 gajim/gtk/groupchat_join.py:40
 msgid "Join Group Chat"
 msgstr "Grup Sohbete Katıl"
 
-#: gajim/gtk/start_chat.py:619 gajim/gtk/add_contact.py:42
-#, fuzzy
-msgid "Add Contact"
-msgstr "Kişi _ekle"
-
-#: gajim/gtk/start_chat.py:644 gajim/gtk/groupchat_invite.py:328
-#, fuzzy, python-format
-msgid "Account: %s"
-msgstr "Hesaplar"
-
-#: gajim/gtk/start_chat.py:700
+#: gajim/gtk/start_chat.py:709
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
 
-#: gajim/gtk/start_chat.py:793
+#: gajim/gtk/start_chat.py:802
 #, fuzzy, python-format
 msgid "%s group chats found"
 msgstr "%s bulunamadı"
@@ -8875,67 +8900,67 @@ msgstr "_Üye yap"
 msgid "_Unsubscribe"
 msgstr "_Üyelikten çık"
 
-#: gajim/gtk/single_message.py:52
+#: gajim/gtk/single_message.py:51
 msgid "Send Single Message"
 msgstr "Tek bir İlet gönder"
 
-#: gajim/gtk/single_message.py:103
+#: gajim/gtk/single_message.py:101
 #, fuzzy
 msgid "(No subject)"
 msgstr "konu"
 
-#: gajim/gtk/single_message.py:159
+#: gajim/gtk/single_message.py:157
 #, python-format
 msgid "Single Message using account %s"
 msgstr "%s Hesabını Kullanarak Tekli Mesaj"
 
-#: gajim/gtk/single_message.py:161
+#: gajim/gtk/single_message.py:159
 #, fuzzy, python-format
 msgid "Single Message in account %s"
 msgstr "Ileti cevap da içerilsin mi?"
 
-#: gajim/gtk/single_message.py:163
+#: gajim/gtk/single_message.py:161
 #, fuzzy
 msgid "Single Message"
 msgstr "Tek Bir İleti Gönder…"
 
-#: gajim/gtk/single_message.py:166
+#: gajim/gtk/single_message.py:164
 #, python-format
 msgid "Send %s"
 msgstr "Gönder %s"
 
-#: gajim/gtk/single_message.py:185
+#: gajim/gtk/single_message.py:183
 #, python-format
 msgid "Received %s"
 msgstr "Alındı %s"
 
-#: gajim/gtk/single_message.py:207
+#: gajim/gtk/single_message.py:205
 #, fuzzy, python-format
 msgid "Characters typed: %s"
 msgstr "Rahatsız etmeyin"
 
-#: gajim/gtk/single_message.py:212 gajim/gtk/xml_console.py:169
+#: gajim/gtk/single_message.py:210 gajim/gtk/xml_console.py:169
 #, fuzzy
 msgid "Connection not available"
 msgstr "Hiç bir hesap bulunmiyor"
 
-#: gajim/gtk/single_message.py:213
+#: gajim/gtk/single_message.py:211
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr ""
 
-#: gajim/gtk/single_message.py:241
+#: gajim/gtk/single_message.py:239
 #, python-format
 msgid ""
 "It is not possible to send a message to %s, this XMPP Address is not valid."
 msgstr ""
 
-#: gajim/gtk/single_message.py:318
+#: gajim/gtk/single_message.py:316
 #, fuzzy, python-format
 msgid "RE: %s"
 msgstr "Adı _değiştir"
 
-#: gajim/gtk/single_message.py:319
+#: gajim/gtk/single_message.py:317
 #, fuzzy, python-format
 msgid "%s wrote:\n"
 msgstr "Yazıldı: %s\n"
@@ -8981,89 +9006,75 @@ msgstr "Onay başarılı oldu."
 msgid "Registration failed"
 msgstr "Kayıt başarısız"
 
-#: gajim/gtk/dialogs.py:148
-#, fuzzy, python-format
-msgid "Dictionary for language \"%s\" not available"
-msgstr "Oynatıcı için erişim türü kullanılır değil: %s\n"
-
-#: gajim/gtk/dialogs.py:149
-#, python-format
-msgid ""
-"You have to install the dictionary \"%s\" to use spellchecking, or choose "
-"another language by setting the speller_language option.\n"
-"\n"
-"Highlighting misspelled words feature will not be used"
-msgstr ""
-
-#: gajim/gtk/dialogs.py:224
+#: gajim/gtk/dialogs.py:214
 #, fuzzy
 msgid "Certificate"
 msgstr "%(nickname)s Girdi"
 
-#: gajim/gtk/dialogs.py:238
+#: gajim/gtk/dialogs.py:228
 #, fuzzy, python-format
 msgid ""
 "Certificate for \n"
 "%s"
 msgstr "%s hesapına"
 
-#: gajim/gtk/dialogs.py:287
+#: gajim/gtk/dialogs.py:277
 msgid "Issued to\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:288 gajim/gtk/dialogs.py:293
+#: gajim/gtk/dialogs.py:278 gajim/gtk/dialogs.py:283
 msgid "Common Name (CN): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:289 gajim/gtk/dialogs.py:294
+#: gajim/gtk/dialogs.py:279 gajim/gtk/dialogs.py:284
 msgid "Organization (O): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:290 gajim/gtk/dialogs.py:295
+#: gajim/gtk/dialogs.py:280 gajim/gtk/dialogs.py:285
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:291
+#: gajim/gtk/dialogs.py:281
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG Numara:"
 
-#: gajim/gtk/dialogs.py:292
+#: gajim/gtk/dialogs.py:282
 msgid "Issued by\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:296
+#: gajim/gtk/dialogs.py:286
 msgid "Validity\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:297
+#: gajim/gtk/dialogs.py:287
 msgid "Issued on: "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:298
+#: gajim/gtk/dialogs.py:288
 msgid "Expires on: "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:299
+#: gajim/gtk/dialogs.py:289
 msgid "SHA-1:"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:301
+#: gajim/gtk/dialogs.py:291
 msgid "SHA-256:"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:314
+#: gajim/gtk/dialogs.py:304
 #, fuzzy
 msgid "Group Chat Invitation "
 msgstr "Grup Sohbeti Daveti"
 
-#: gajim/gtk/dialogs.py:336
+#: gajim/gtk/dialogs.py:326
 #, python-format
 msgid ""
 "<b>%(contact)s</b> has invited you to the group chat <b>%(room_jid)s</b>"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:344
+#: gajim/gtk/dialogs.py:334
 #, fuzzy, python-format
 msgid "Comment: %s"
 msgstr "Yorum:"
@@ -9077,6 +9088,11 @@ msgstr "GG Numara:"
 #, fuzzy
 msgid "ICQ Number"
 msgstr "ICQ Numara:"
+
+#: gajim/gtk/add_contact.py:42
+#, fuzzy
+msgid "Add Contact"
+msgstr "Kişi _ekle"
 
 #: gajim/gtk/add_contact.py:260
 #, fuzzy, python-format
@@ -9134,7 +9150,7 @@ msgstr "Eklentilerin etkinleştirilmesinde hata #%d."
 #: gajim/gtk/add_contact.py:486
 #, python-format
 msgid ""
-"This error occured while adding a contact for transport %(transport)s:\n"
+"This error occurred while adding a contact for transport %(transport)s:\n"
 "\n"
 "%(error)s"
 msgstr ""
@@ -9376,10 +9392,9 @@ msgid "Error: %s"
 msgstr "Hata: %s"
 
 #: gajim/gtk/history.py:591 gajim/gtk/groupchat_config.py:133
-#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:329
-#: gajim/gtk/account_wizard.py:365 gajim/gtk/account_wizard.py:366
+#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:391
 #: gajim/gtk/account_wizard.py:427 gajim/gtk/account_wizard.py:428
-#: gajim/gtk/search.py:336
+#: gajim/gtk/account_wizard.py:493 gajim/gtk/search.py:336
 msgid "Error"
 msgstr "Hata"
 
@@ -9402,8 +9417,8 @@ msgstr "OpenPGP:"
 msgid "New E-mail"
 msgstr "Yeni E-mail"
 
-#: gajim/gtk/settings.py:469 gajim/gtk/filechoosers.py:88
-#: gajim/gtk/filechoosers.py:139 gajim/gtk/filechoosers.py:146
+#: gajim/gtk/settings.py:469 gajim/gtk/filechoosers.py:89
+#: gajim/gtk/filechoosers.py:140 gajim/gtk/filechoosers.py:147
 #: gajim/gtk/sounds.py:35
 msgid "All files"
 msgstr "Tüm dosyalar"
@@ -9418,9 +9433,9 @@ msgstr "Temizleniyor"
 msgid "Manage Proxies"
 msgstr "Vekil Sunuc Profili İşlet"
 
-#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:684
-#: gajim/gtk/preferences.py:1027 gajim/gtk/preferences.py:1037
-#: gajim/gtk/preferences.py:1041
+#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:748
+#: gajim/gtk/preferences.py:1029 gajim/gtk/preferences.py:1039
+#: gajim/gtk/preferences.py:1043
 #, fuzzy
 msgid "No Proxy"
 msgstr "Prox_y:"
@@ -9513,8 +9528,8 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
-#: gajim/gtk/history_sync.py:239 gajim/gtk/account_wizard.py:249
-#: gajim/gtk/account_wizard.py:268
+#: gajim/gtk/history_sync.py:239 gajim/gtk/account_wizard.py:274
+#: gajim/gtk/account_wizard.py:293 gajim/gtk/account_wizard.py:309
 #, fuzzy
 msgid "Connecting..."
 msgstr "Connecting"
@@ -9601,127 +9616,127 @@ msgstr "Şükreden"
 msgid "translator-credits"
 msgstr ""
 
-#: gajim/gtk/filechoosers.py:87
+#: gajim/gtk/filechoosers.py:88
 #, fuzzy
 msgid "Choose File to Send…"
 msgstr "%s size bir dosya göndermek istiyor:"
 
-#: gajim/gtk/filechoosers.py:93
+#: gajim/gtk/filechoosers.py:94
 #, fuzzy
 msgid "Choose Avatar…"
 msgstr "Resim seç"
 
-#: gajim/gtk/filechoosers.py:97
+#: gajim/gtk/filechoosers.py:98
 #, fuzzy
 msgid "PNG files"
 msgstr "Tüm dosyalar"
 
-#: gajim/gtk/filechoosers.py:98
+#: gajim/gtk/filechoosers.py:99
 #, fuzzy
 msgid "JPEG files"
 msgstr "Tüm dosyalar"
 
-#: gajim/gtk/filechoosers.py:99
+#: gajim/gtk/filechoosers.py:100
 #, fuzzy
 msgid "SVG files"
 msgstr "Gönder %s"
 
-#: gajim/gtk/filechoosers.py:101
+#: gajim/gtk/filechoosers.py:102
 msgid "Images"
 msgstr "Resimler"
 
-#: gajim/gtk/filechoosers.py:138
+#: gajim/gtk/filechoosers.py:139
 #, fuzzy
 msgid "Choose Archive"
 msgstr "Resim seç"
 
-#: gajim/gtk/filechoosers.py:140
+#: gajim/gtk/filechoosers.py:141
 #, fuzzy
 msgid "ZIP files"
 msgstr "Tüm dosyalar"
 
-#: gajim/gtk/filechoosers.py:145
+#: gajim/gtk/filechoosers.py:146
 #, fuzzy
 msgid "Save File as…"
 msgstr "Dosya Farklı Kaydet..."
 
-#: gajim/gtk/filechoosers.py:179
+#: gajim/gtk/filechoosers.py:180
 #, fuzzy
 msgid "_Open"
 msgstr "OpenPGP:"
 
-#: gajim/gtk/tooltips.py:224
+#: gajim/gtk/tooltips.py:225
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr ""
 
-#: gajim/gtk/tooltips.py:483
+#: gajim/gtk/tooltips.py:484
 msgid "Connected"
 msgstr "Bağlantılı"
 
-#: gajim/gtk/tooltips.py:485
+#: gajim/gtk/tooltips.py:486
 msgid "Disconnected"
 msgstr "Bağlantızıs"
 
-#: gajim/gtk/tooltips.py:539
+#: gajim/gtk/tooltips.py:540
 #, fuzzy
 msgid "File Name: "
 msgstr "Dosya adı: %s"
 
-#: gajim/gtk/tooltips.py:542
+#: gajim/gtk/tooltips.py:543
 #, fuzzy
 msgid "?Noun:Download"
 msgstr "Yükleme"
 
-#: gajim/gtk/tooltips.py:548
+#: gajim/gtk/tooltips.py:549
 #, fuzzy
 msgid "?Noun:Upload"
 msgstr "Gönder"
 
-#: gajim/gtk/tooltips.py:555
+#: gajim/gtk/tooltips.py:556
 #, fuzzy
 msgid "?transfer type:Type: "
 msgstr "Dosya Gönderme Tamamlandı"
 
-#: gajim/gtk/tooltips.py:561
+#: gajim/gtk/tooltips.py:562
 #, fuzzy
 msgid "?transfer status:Transferred: "
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/gtk/tooltips.py:564
+#: gajim/gtk/tooltips.py:565
 #, fuzzy
 msgid "?transfer status:Status: "
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/gtk/tooltips.py:566
+#: gajim/gtk/tooltips.py:567
 msgid "Description: "
 msgstr "Açıklama: "
 
-#: gajim/gtk/tooltips.py:590
+#: gajim/gtk/tooltips.py:591
 #, fuzzy
 msgid "?transfer status:Aborted"
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/gtk/tooltips.py:592
+#: gajim/gtk/tooltips.py:593
 #, fuzzy
 msgid "?transfer status:Completed"
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/gtk/tooltips.py:594
+#: gajim/gtk/tooltips.py:595
 msgid "?transfer status:Paused"
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/gtk/tooltips.py:597
+#: gajim/gtk/tooltips.py:598
 #, fuzzy
 msgid "?transfer status:Stalled"
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/gtk/tooltips.py:601
+#: gajim/gtk/tooltips.py:602
 #, fuzzy
 msgid "?transfer status:Transferring"
 msgstr "?transfer status:Duraklanıldı"
 
-#: gajim/gtk/tooltips.py:602 gajim/gtk/tooltips.py:603
+#: gajim/gtk/tooltips.py:603 gajim/gtk/tooltips.py:604
 #, fuzzy
 msgid "?transfer status:Not started"
 msgstr "?transfer status:Duraklanıldı"
@@ -9730,7 +9745,7 @@ msgstr "?transfer status:Duraklanıldı"
 msgid " (optional)..."
 msgstr ""
 
-#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:540
+#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:604
 #, fuzzy
 msgid "Invalid Address"
 msgstr "Geçersiz Dosya"
@@ -9831,11 +9846,6 @@ msgstr "%s hesapı kullanıp"
 #, fuzzy
 msgid "Hide _Contact List"
 msgstr "Kişi Davet _Et"
-
-#: gajim/gtk/statusicon.py:270
-#, fuzzy
-msgid "Show _Contact List"
-msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #: gajim/gtk/statusicon.py:278
 msgid "Hide this menu"
@@ -9960,176 +9970,176 @@ msgstr "?Ask (for Subscription):Hiç biri"
 msgid "?password:Hidden"
 msgstr "Parola:"
 
-#: gajim/gtk/server_info.py:139
+#: gajim/gtk/server_info.py:129
 msgid "Support"
 msgstr ""
 
-#: gajim/gtk/server_info.py:140
+#: gajim/gtk/server_info.py:130
 msgid "Security"
 msgstr ""
 
-#: gajim/gtk/server_info.py:141
+#: gajim/gtk/server_info.py:131
 msgid "Feedback"
 msgstr ""
 
-#: gajim/gtk/server_info.py:142
+#: gajim/gtk/server_info.py:132
 msgid "Abuse"
 msgstr ""
 
-#: gajim/gtk/server_info.py:143
+#: gajim/gtk/server_info.py:133
 msgid "Sales"
 msgstr ""
 
-#: gajim/gtk/server_info.py:227
+#: gajim/gtk/server_info.py:217
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
 msgstr ""
 
-#: gajim/gtk/server_info.py:350
+#: gajim/gtk/server_info.py:340
 #, fuzzy
 msgid ""
 "\n"
 "Disabled in preferences"
 msgstr "Tercihler"
 
-#: gajim/gtk/features.py:101
+#: gajim/gtk/features.py:90
 msgid "Audio / Video"
 msgstr "Ses / Video"
 
-#: gajim/gtk/features.py:103
+#: gajim/gtk/features.py:92
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-#: gajim/gtk/features.py:104
+#: gajim/gtk/features.py:93
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
 "gstreamer1.0-plugins-ugly"
 msgstr ""
 
-#: gajim/gtk/features.py:106 gajim/gtk/features.py:157
-#: gajim/gtk/preferences.py:360
+#: gajim/gtk/features.py:95 gajim/gtk/features.py:145
+#: gajim/gtk/preferences.py:363
 msgid "Feature not available under Windows"
 msgstr ""
 
-#: gajim/gtk/features.py:110
+#: gajim/gtk/features.py:99
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
 
-#: gajim/gtk/features.py:112
+#: gajim/gtk/features.py:101
 #, fuzzy
 msgid "Requires: libxss"
 msgstr "Çıktı dosyası için paylaşımlı kitaplık `%s' gerekli\n"
 
-#: gajim/gtk/features.py:113 gajim/gtk/features.py:134
+#: gajim/gtk/features.py:102 gajim/gtk/features.py:123
 msgid "No additional requirements"
 msgstr ""
 
-#: gajim/gtk/features.py:115
+#: gajim/gtk/features.py:104
 #, fuzzy
 msgid "Bonjour / Zeroconf (Serverless Chat)"
 msgstr "Bonjour / Zeroconf"
 
-#: gajim/gtk/features.py:117
+#: gajim/gtk/features.py:106
 msgid ""
 "Enables Gajim to automatically detected clients in a local network for "
 "serverless chats"
 msgstr ""
 
-#: gajim/gtk/features.py:119
+#: gajim/gtk/features.py:108
 #, fuzzy
 msgid "Requires: gir1.2-avahi-0.6"
 msgstr "Python Programlama Dili"
 
-#: gajim/gtk/features.py:120
+#: gajim/gtk/features.py:109
 #, fuzzy, python-format
 msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 msgstr "Dbus Denetim Altyapısı"
 
-#: gajim/gtk/features.py:123
+#: gajim/gtk/features.py:112
 #, fuzzy
 msgid "Location detection"
 msgstr "Bağlantı"
 
-#: gajim/gtk/features.py:125
+#: gajim/gtk/features.py:114
 msgid ""
 "Enables Gajim to be location-aware, if the user decides to publish the "
 "device’s location"
 msgstr ""
 
-#: gajim/gtk/features.py:127
+#: gajim/gtk/features.py:116
 #, fuzzy
 msgid "Requires: geoclue"
 msgstr " (yetki gerektirir)"
 
-#: gajim/gtk/features.py:128
+#: gajim/gtk/features.py:117
 msgid "Feature is not available under Windows"
 msgstr ""
 
-#: gajim/gtk/features.py:130
+#: gajim/gtk/features.py:119
 #, fuzzy
 msgid "Notification Sounds"
 msgstr "Bildirimler"
 
-#: gajim/gtk/features.py:132
+#: gajim/gtk/features.py:121
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
-#: gajim/gtk/features.py:133
+#: gajim/gtk/features.py:122
 #, fuzzy
 msgid "Requires: gsound"
 msgstr "Dbus Denetim Altyapısı"
 
-#: gajim/gtk/features.py:136
+#: gajim/gtk/features.py:125
 #, fuzzy
 msgid "Secure Password Storage"
 msgstr "Parolayı Değiştir"
 
-#: gajim/gtk/features.py:138
+#: gajim/gtk/features.py:127
 msgid ""
 "Enables Gajim to store Passwords securely instead of storing them in "
 "plaintext"
 msgstr ""
 
-#: gajim/gtk/features.py:140
-msgid ""
-"Requires: libsecret and a provider (such as GNOME Keyring and KSecretService)"
-msgstr ""
+#: gajim/gtk/features.py:129
+#, fuzzy
+msgid "Requires: gnome-keyring or kwallet"
+msgstr "Paket Yöneticisi"
 
-#: gajim/gtk/features.py:142
+#: gajim/gtk/features.py:130
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-#: gajim/gtk/features.py:145
+#: gajim/gtk/features.py:133
 #, fuzzy
 msgid "Spell Checker"
 msgstr "Tamamlanmamış yazım denetimi kaydı"
 
-#: gajim/gtk/features.py:147
+#: gajim/gtk/features.py:135
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
-#: gajim/gtk/features.py:149 gajim/gtk/features.py:150
+#: gajim/gtk/features.py:137 gajim/gtk/features.py:138
 #, fuzzy
 msgid "Requires: Gspell"
 msgstr " (yetki gerektirir)"
 
-#: gajim/gtk/features.py:152
+#: gajim/gtk/features.py:140
 msgid "UPnP-IGD Port Forwarding"
 msgstr ""
 
-#: gajim/gtk/features.py:154
+#: gajim/gtk/features.py:142
 msgid ""
 "Enables Gajim to request your router to forward ports for file transfers"
 msgstr ""
 
-#: gajim/gtk/features.py:156
+#: gajim/gtk/features.py:144
 #, fuzzy
 msgid "Requires: gir1.2-gupnpigd-1.0"
 msgstr "Python Programlama Dili"
 
-#: gajim/gtk/features.py:217
+#: gajim/gtk/features.py:200
 #, fuzzy
 msgid "Disabled in Preferences"
 msgstr "Tercihler"
@@ -10176,7 +10186,7 @@ msgstr "Geçersiz Liste İsmi"
 msgid "You must enter a name to create a privacy list."
 msgstr ""
 
-#: gajim/gtk/groupchat_invite.py:303
+#: gajim/gtk/groupchat_invite.py:304
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Kişi Davet _Et"
@@ -10204,7 +10214,7 @@ msgstr "_Bitir"
 msgid "Commands"
 msgstr "komut"
 
-#: gajim/gtk/adhoc.py:104 gajim/gtk/account_wizard.py:62
+#: gajim/gtk/adhoc.py:104 gajim/gtk/account_wizard.py:63
 msgid "Next"
 msgstr ""
 
@@ -10277,120 +10287,134 @@ msgstr "Dosya Gönderme Soru"
 msgid "Loading"
 msgstr "Kodlamada"
 
-#: gajim/gtk/account_wizard.py:61
+#: gajim/gtk/account_wizard.py:62
 #, fuzzy
 msgid "Connect"
 msgstr "Bağlantılı"
 
-#: gajim/gtk/account_wizard.py:63
+#: gajim/gtk/account_wizard.py:64
 msgid "Log In"
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:77
+#: gajim/gtk/account_wizard.py:78
 #, fuzzy
 msgid "An error occurred during account creation"
 msgstr "Aralık yeniden konumlandırılması sırasında bir hata oluştu."
 
-#: gajim/gtk/account_wizard.py:151
+#: gajim/gtk/account_wizard.py:164
 #, fuzzy
 msgid "Creating Account..."
 msgstr "XMPP hesabı %s@%s"
 
-#: gajim/gtk/account_wizard.py:152
+#: gajim/gtk/account_wizard.py:165
 #, fuzzy
 msgid "Trying to create account..."
 msgstr "Bu hesabın parolyı değiştirmek için tikla"
 
-#: gajim/gtk/account_wizard.py:250 gajim/gtk/account_wizard.py:269
+#: gajim/gtk/account_wizard.py:275 gajim/gtk/account_wizard.py:294
+#: gajim/gtk/account_wizard.py:310
 #, fuzzy
 msgid "Connecting to server..."
 msgstr "Connecting"
 
-#: gajim/gtk/account_wizard.py:318 gajim/gtk/account_wizard.py:319
+#: gajim/gtk/account_wizard.py:364 gajim/gtk/account_wizard.py:365
+msgid "Anonymous login not supported"
+msgstr ""
+
+#: gajim/gtk/account_wizard.py:366
+#, fuzzy
+msgid "This server does not support anonymous"
+msgstr "Dalga %s biçimini desteklemiyor..."
+
+#: gajim/gtk/account_wizard.py:380 gajim/gtk/account_wizard.py:381
 #, fuzzy
 msgid "Signup not allowed"
 msgstr "Rahatsız etmeyin"
 
-#: gajim/gtk/account_wizard.py:320
+#: gajim/gtk/account_wizard.py:382
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Dalga %s biçimini desteklemiyor..."
 
-#: gajim/gtk/account_wizard.py:336 gajim/gtk/account_wizard.py:337
+#: gajim/gtk/account_wizard.py:398 gajim/gtk/account_wizard.py:399
 #, fuzzy
 msgid "Connection failed"
 msgstr "Bağlantı Kurulamıyor"
 
-#: gajim/gtk/account_wizard.py:338
+#: gajim/gtk/account_wizard.py:400
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:392
+#: gajim/gtk/account_wizard.py:454
 #, fuzzy
 msgid "Account is being created"
 msgstr "ping:  Bağlanılan sunucuya PING at."
 
-#: gajim/gtk/account_wizard.py:457 gajim/gtk/accounts.py:554
+#: gajim/gtk/account_wizard.py:491
+msgid "The server rejected the registration without an error message"
+msgstr ""
+
+#: gajim/gtk/account_wizard.py:521 gajim/gtk/accounts.py:557
 #, fuzzy
 msgid "Add Account"
 msgstr "Kişi _ekle"
 
-#: gajim/gtk/account_wizard.py:564
+#: gajim/gtk/account_wizard.py:628
 #, fuzzy
 msgid "Create New Account"
 msgstr "Yeni posta yarat"
 
-#: gajim/gtk/account_wizard.py:623
+#: gajim/gtk/account_wizard.py:687
 #, fuzzy
 msgid "Must be a port number"
 msgstr "url portu bir sayı olmalı\n"
 
-#: gajim/gtk/account_wizard.py:630
+#: gajim/gtk/account_wizard.py:694
 msgid "Port must be a number between 0 and 65535"
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:667
+#: gajim/gtk/account_wizard.py:731
 #, fuzzy
 msgid "Advanced settings"
 msgstr "İlerlemiş aksiyonlar"
 
-#: gajim/gtk/account_wizard.py:713
+#: gajim/gtk/account_wizard.py:777
 #, fuzzy
 msgid "Security Warning"
 msgstr "ben burdaysam"
 
-#: gajim/gtk/account_wizard.py:732
+#: gajim/gtk/account_wizard.py:796
 #, fuzzy, python-format
 msgid "Unknown TLS error '%s'"
 msgstr "<b>Bir hata oluştu:</b>"
 
-#: gajim/gtk/account_wizard.py:767 gajim/gtk/account_wizard.py:770
+#: gajim/gtk/account_wizard.py:831 gajim/gtk/account_wizard.py:834
 #, fuzzy
 msgid "Create Account"
 msgstr "XMPP hesabı %s@%s"
 
-#: gajim/gtk/account_wizard.py:821
+#: gajim/gtk/account_wizard.py:885
 msgid "Redirect"
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:831
+#: gajim/gtk/account_wizard.py:895
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Bunu %s buna %s gönder"
 
-#: gajim/gtk/account_wizard.py:842
+#: gajim/gtk/account_wizard.py:906
 #, fuzzy
 msgid "Account Added"
 msgstr "Hesap sırası"
 
-#: gajim/gtk/account_wizard.py:843
+#: gajim/gtk/account_wizard.py:907
 #, fuzzy
 msgid "Account has been added successfully"
 msgstr "'%s' (%d) öğesi zaten bir görüntüye eklenmiş"
 
-#: gajim/gtk/xml_console.py:95 gajim/gtk/xml_console.py:278
+#: gajim/gtk/xml_console.py:95 gajim/gtk/xml_console.py:279
 #, fuzzy
 msgid "All Accounts"
 msgstr "Hesaplar"
@@ -10433,251 +10457,251 @@ msgstr "Ara"
 msgid "No results found"
 msgstr "<b>Telefon numara:</b>"
 
-#: gajim/gtk/preferences.py:363
+#: gajim/gtk/preferences.py:366
 msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
-#: gajim/gtk/preferences.py:375 gajim/gtk/preferences.py:384
+#: gajim/gtk/preferences.py:378 gajim/gtk/preferences.py:387
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: gajim/gtk/preferences.py:401
+#: gajim/gtk/preferences.py:404
 msgid ""
 "<span color=\"red\" font-weight=\"bold\">Unavailable</span>, video support "
 "will be disabled"
 msgstr ""
 
-#: gajim/gtk/preferences.py:407
+#: gajim/gtk/preferences.py:410
 msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
 msgstr ""
 
-#: gajim/gtk/preferences.py:410
+#: gajim/gtk/preferences.py:413
 msgid "<span color=\"yellow\" font-weight=\"bold\">Unaccelerated</span>"
 msgstr ""
 
-#: gajim/gtk/preferences.py:876
+#: gajim/gtk/preferences.py:878
 #, fuzzy
 msgid "status message title"
 msgstr "Durum ileti değiştir"
 
-#: gajim/gtk/preferences.py:877
+#: gajim/gtk/preferences.py:879
 #, fuzzy
 msgid "status message text"
 msgstr "Durum ileti değiştir"
 
-#: gajim/gtk/accounts.py:119
+#: gajim/gtk/accounts.py:122
 #, fuzzy
 msgid "Re-Login"
 msgstr "%(nick)s durumu şimdi %(status)s"
 
-#: gajim/gtk/accounts.py:120
+#: gajim/gtk/accounts.py:123
 #, fuzzy
 msgid "Re-Login now?"
 msgstr "%(nick)s durumu şimdi %(status)s"
 
-#: gajim/gtk/accounts.py:121
+#: gajim/gtk/accounts.py:124
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 
-#: gajim/gtk/accounts.py:123
+#: gajim/gtk/accounts.py:126
 msgid "_Later"
 msgstr ""
 
-#: gajim/gtk/accounts.py:125
+#: gajim/gtk/accounts.py:128
 msgid "_Re-Login"
 msgstr ""
 
-#: gajim/gtk/accounts.py:489
+#: gajim/gtk/accounts.py:492
 #, fuzzy
 msgid "Please check if Bonjour is installed."
 msgstr "Paket sisteminin kilitli olup olmadığını kontrol edin."
 
-#: gajim/gtk/accounts.py:491
+#: gajim/gtk/accounts.py:494
 #, fuzzy
 msgid "Please check if Avahi is installed."
 msgstr "Paket sisteminin kilitli olup olmadığını kontrol edin."
 
-#: gajim/gtk/accounts.py:530
+#: gajim/gtk/accounts.py:533
 #, fuzzy
 msgid "Disable Account"
 msgstr "XMPP hesabı %s@%s"
 
-#: gajim/gtk/accounts.py:531
+#: gajim/gtk/accounts.py:534
 #, fuzzy, python-format
 msgid "Account %s is still connected"
 msgstr "ping:  Bağlanılan sunucuya PING at."
 
-#: gajim/gtk/accounts.py:532
+#: gajim/gtk/accounts.py:535
 msgid "All chat and group chat windows will be closed."
 msgstr ""
 
-#: gajim/gtk/accounts.py:536
+#: gajim/gtk/accounts.py:539
 #, fuzzy
 msgid "_Disable Account"
 msgstr "XMPP hesabı %s@%s"
 
-#: gajim/gtk/accounts.py:603
+#: gajim/gtk/accounts.py:606
 #, fuzzy
 msgid "Label"
 msgstr "etiket"
 
-#: gajim/gtk/accounts.py:609
+#: gajim/gtk/accounts.py:612
 msgid "Recognize your account by color"
 msgstr ""
 
-#: gajim/gtk/accounts.py:611
+#: gajim/gtk/accounts.py:614
 msgid "Login"
 msgstr ""
 
-#: gajim/gtk/accounts.py:614
+#: gajim/gtk/accounts.py:617
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Kişi Davet _Et"
 
-#: gajim/gtk/accounts.py:618 gajim/gtk/accounts.py:810
-#, fuzzy
-msgid "Client Certificate"
-msgstr "%(nickname)s Girdi"
-
-#: gajim/gtk/accounts.py:621 gajim/gtk/accounts.py:707
+#: gajim/gtk/accounts.py:626 gajim/gtk/accounts.py:712
 #, fuzzy
 msgid "Connect on startup"
 msgstr "Gajim açılırken bağlan"
 
-#: gajim/gtk/accounts.py:625 gajim/gtk/accounts.py:712
+#: gajim/gtk/accounts.py:630 gajim/gtk/accounts.py:717
 #, fuzzy
 msgid "Save conversations for all contacts"
 msgstr "Her kişinin sohbet _kaydını kaydet"
 
-#: gajim/gtk/accounts.py:627 gajim/gtk/accounts.py:714
+#: gajim/gtk/accounts.py:632 gajim/gtk/accounts.py:719
 msgid "Store conversations on the harddrive"
 msgstr ""
 
-#: gajim/gtk/accounts.py:629 gajim/gtk/accounts.py:716
+#: gajim/gtk/accounts.py:634 gajim/gtk/accounts.py:721
 #, fuzzy
 msgid "Global Status"
 msgstr "Bütün durumlar"
 
-#: gajim/gtk/accounts.py:631
+#: gajim/gtk/accounts.py:636
 #, fuzzy
 msgid "Synchronise the status of all accounts"
 msgstr "Durum satırı okunamadı"
 
-#: gajim/gtk/accounts.py:633
+#: gajim/gtk/accounts.py:638
 msgid "Use file transfer proxies"
 msgstr "Dosya aktarım vekil sunucları kullan"
 
-#: gajim/gtk/accounts.py:649
+#: gajim/gtk/accounts.py:654
 #, fuzzy
 msgid "Idle Time"
 msgstr "Üye olduğu süre:"
 
-#: gajim/gtk/accounts.py:651
+#: gajim/gtk/accounts.py:656
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-#: gajim/gtk/accounts.py:653
+#: gajim/gtk/accounts.py:658
 msgid "Local System Time"
 msgstr ""
 
-#: gajim/gtk/accounts.py:655
-msgid "Disclose the local system time of the device Gajim runs on"
-msgstr ""
-
-#: gajim/gtk/accounts.py:658
-#, fuzzy
-msgid "Client / Operating System"
-msgstr "%(nickname)s Girdi"
-
 #: gajim/gtk/accounts.py:660
-msgid ""
-"Disclose informations about the client and operating system you currently use"
+msgid "Disclose the local system time of the device Gajim runs on"
 msgstr ""
 
 #: gajim/gtk/accounts.py:663
 #, fuzzy
+msgid "Client / Operating System"
+msgstr "%(nickname)s Girdi"
+
+#: gajim/gtk/accounts.py:665
+msgid ""
+"Disclose information about the client and operating system you currently use"
+msgstr ""
+
+#: gajim/gtk/accounts.py:668
+#, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Kişi Davet _Et"
 
-#: gajim/gtk/accounts.py:665
+#: gajim/gtk/accounts.py:670
 msgid "Ignore everything from contacts not in your Roster"
 msgstr ""
 
-#: gajim/gtk/accounts.py:683
+#: gajim/gtk/accounts.py:688
 msgid "Manually set the hostname for the server"
 msgstr ""
 
-#: gajim/gtk/accounts.py:689 gajim/gtk/accounts.py:759
-#: gajim/gtk/accounts.py:764
+#: gajim/gtk/accounts.py:694 gajim/gtk/accounts.py:764
+#: gajim/gtk/accounts.py:769
 #, fuzzy
 msgid "Priority"
 msgstr "Ön_celik:"
 
-#: gajim/gtk/accounts.py:709
+#: gajim/gtk/accounts.py:714
 #, fuzzy
 msgid "Use environment variable"
 msgstr "sistemin HTTP vekil ayarları kullanılır"
 
-#: gajim/gtk/accounts.py:718
+#: gajim/gtk/accounts.py:723
 #, fuzzy
 msgid "Synchronize the status of all accounts"
 msgstr "Durum satırı okunamadı"
 
-#: gajim/gtk/accounts.py:728
+#: gajim/gtk/accounts.py:733
 #, fuzzy
 msgid "First Name"
 msgstr "İlk Ad:"
 
-#: gajim/gtk/accounts.py:731
+#: gajim/gtk/accounts.py:736
 #, fuzzy
 msgid "Last Name"
 msgstr "Soy Ad:"
 
-#: gajim/gtk/accounts.py:737
+#: gajim/gtk/accounts.py:742
 #, fuzzy
 msgid "Email"
 msgstr "Yeni E-mail"
 
-#: gajim/gtk/accounts.py:755
+#: gajim/gtk/accounts.py:760
 #, fuzzy
 msgid "Adjust to status"
 msgstr "Durumu a_yarla"
 
-#: gajim/gtk/accounts.py:784
+#: gajim/gtk/accounts.py:789
 #, fuzzy
 msgid "Enable"
 msgstr "Etkin"
 
-#: gajim/gtk/accounts.py:792
+#: gajim/gtk/accounts.py:797
 #, fuzzy
 msgid "Port"
 msgstr "_Porta:"
 
-#: gajim/gtk/accounts.py:802
+#: gajim/gtk/accounts.py:807
 #, fuzzy
 msgid "Connection Settings"
 msgstr "Bağlantı"
 
-#: gajim/gtk/accounts.py:812
+#: gajim/gtk/accounts.py:815
+#, fuzzy
+msgid "Client Certificate"
+msgstr "%(nickname)s Girdi"
+
+#: gajim/gtk/accounts.py:817
 msgid "PKCS12 Files"
 msgstr ""
 
-#: gajim/gtk/accounts.py:814
+#: gajim/gtk/accounts.py:819
 #, fuzzy
 msgid "Encrypted Certificate"
 msgstr "sertifika hükümsüz kılınmış"
 
-#: gajim/gtk/accounts.py:818
+#: gajim/gtk/accounts.py:823
 #, fuzzy
 msgid "Certificate Settings"
 msgstr "sertifika hükümsüz kılınmış"
 
-#: gajim/gtk/accounts.py:830
+#: gajim/gtk/accounts.py:835
 #, fuzzy
 msgid "Save Password"
 msgstr "Parolayı Değiştir"
 
-#: gajim/gtk/accounts.py:838
+#: gajim/gtk/accounts.py:843
 #, fuzzy
 msgid "Login Settings"
 msgstr "Bağlantı Kurulamıyor"
@@ -10750,22 +10774,22 @@ msgstr ""
 msgid "Bookmarks for %s"
 msgstr "_Yer imi"
 
-#: gajim/plugins/pluginmanager.py:727 gajim/plugins/pluginmanager.py:733
+#: gajim/plugins/pluginmanager.py:717 gajim/plugins/pluginmanager.py:723
 msgid "Archive corrupted"
 msgstr ""
 
-#: gajim/plugins/pluginmanager.py:729
+#: gajim/plugins/pluginmanager.py:719
 #, fuzzy
 msgid "Archive empty"
 msgstr "Dosya boş"
 
-#: gajim/plugins/pluginmanager.py:741 gajim/plugins/pluginmanager.py:749
+#: gajim/plugins/pluginmanager.py:731 gajim/plugins/pluginmanager.py:739
 #: gajim/plugins/gui.py:273
 #, fuzzy
 msgid "Archive is malformed"
 msgstr "Karalı servisin TXT verisi"
 
-#: gajim/plugins/pluginmanager.py:757 gajim/plugins/gui.py:288
+#: gajim/plugins/pluginmanager.py:747 gajim/plugins/gui.py:288
 #: gajim/plugins/gui.py:301
 #, fuzzy
 msgid "Plugin already exists"
@@ -10918,29 +10942,55 @@ msgstr ""
 msgid "Even more features via plugins"
 msgstr ""
 
-#: data/org.gajim.Gajim.appdata.xml.in:49
+#: data/org.gajim.Gajim.appdata.xml.in:44
 #, fuzzy
 msgid "Contact list"
 msgstr "Kişiler"
 
-#: data/org.gajim.Gajim.appdata.xml.in:53
+#: data/org.gajim.Gajim.appdata.xml.in:48
 msgid "Tabbed chat window"
 msgstr ""
 
-#: data/org.gajim.Gajim.appdata.xml.in:57
+#: data/org.gajim.Gajim.appdata.xml.in:52
 #, fuzzy
 msgid "Group chat support"
 msgstr "Grup sohbetler"
 
-#: data/org.gajim.Gajim.appdata.xml.in:61
+#: data/org.gajim.Gajim.appdata.xml.in:56
 #, fuzzy
 msgid "Chat history"
 msgstr "Son Kullanılan:"
 
-#: data/org.gajim.Gajim.appdata.xml.in:65
+#: data/org.gajim.Gajim.appdata.xml.in:60
 #, fuzzy
 msgid "Plugin manager"
 msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Start New Conversation"
+#~ msgstr "Devam edilen sohbet"
+
+#, fuzzy
+#~ msgid "Unknown SSL error: %d"
+#~ msgstr "<b>Bir hata oluştu:</b>"
+
+#, fuzzy
+#~ msgid "Choose interval between 2 checks of idleness."
+#~ msgstr "Denetimler arasındaki süre %lu saniye olarak belirleniyor\n"
+
+#~ msgid "Gajim - %s"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
+#~ msgid "Dictionary for language \"%s\" not available"
+#~ msgstr "Oynatıcı için erişim türü kullanılır değil: %s\n"
+
+#~ msgid "_Reconnect"
+#~ msgstr "_Yeniden bağlan"
+
+#, fuzzy
+#~ msgid "Show Contact List"
+#~ msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #, fuzzy
 #~ msgid "Add to Contact List"
@@ -13089,10 +13139,6 @@ msgstr "Bağlantı Kurulamıyor"
 #~ msgstr " [ %i%% ] (askıda)"
 
 #, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "Bağlantı Kurulamıyor"
-
-#, fuzzy
 #~ msgid "cyan"
 #~ msgstr "turkuaz"
 
@@ -13181,10 +13227,6 @@ msgstr "Bağlantı Kurulamıyor"
 #, fuzzy
 #~ msgid "Autodetection of network status."
 #~ msgstr "Durumu a_yarla"
-
-#, fuzzy
-#~ msgid "Requires gnome-network-manager"
-#~ msgstr "Paket Yöneticisi"
 
 #, fuzzy
 #~ msgid "Bookmark this room (Ctrl+B)"
@@ -13400,9 +13442,6 @@ msgstr "Bağlantı Kurulamıyor"
 #~ "Giren iletler için öntanımlı porta senin kurmada uygun değilse burada "
 #~ "değişterebilirsin.\n"
 #~ "Belki halka ayarları değiştirmeye üzerinde düşünürsün."
-
-#~ msgid "Mer_ge accounts"
-#~ msgstr "Hesapları bir_leştir"
 
 #, fuzzy
 #~ msgid "Account Name Already Used"

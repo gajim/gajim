@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-29 02:05+0000\n"
+"POT-Creation-Date: 2020-06-20 12:35+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -16,6 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: -1,775,-1,-1,-1,-1,-1,-1,-1,-1\n"
+
+#: gajim/chat_control_base.py:147 gajim/gtk/start_chat.py:643
+#: gajim/gtk/groupchat_invite.py:318
+#, fuzzy, python-format
+msgid "Account: %s"
+msgstr "Kontoer"
 
 #: gajim/chat_control_base.py:570
 msgid "and authenticated"
@@ -30,61 +36,61 @@ msgstr "og IKKE identitetsbekreftet"
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s kryptering er aktiv %(authenticated)s."
 
-#: gajim/chat_control_base.py:701
+#: gajim/chat_control_base.py:698
 msgid "_Undo"
 msgstr "_Angre"
 
-#: gajim/chat_control_base.py:709 gajim/conversation_textview.py:507
+#: gajim/chat_control_base.py:706 gajim/conversation_textview.py:507
 msgid "_Clear"
 msgstr "_Tøm"
 
-#: gajim/chat_control_base.py:714
+#: gajim/chat_control_base.py:711
 msgid "Paste as quote"
 msgstr ""
 
-#: gajim/chat_control_base.py:751
+#: gajim/chat_control_base.py:748
 #, fuzzy
 msgid "Paste Image"
 msgstr "Velg bilde"
 
-#: gajim/chat_control_base.py:752
+#: gajim/chat_control_base.py:749
 #, fuzzy
 msgid "You are trying to paste an image"
 msgstr "Du er i ferd med å lokke flerfoldige faner"
 
-#: gajim/chat_control_base.py:753
+#: gajim/chat_control_base.py:750
 #, fuzzy
 msgid ""
 "Are you sure you want to paste your clipboard's image into the chat window?"
 msgstr "Er du sikker på at du vil forlate gruppesamtalen \"%s\"?"
 
-#: gajim/chat_control_base.py:755 gajim/groupchat_control.py:1737
-#: gajim/roster_window.py:2845 gajim/roster_window.py:4064
+#: gajim/chat_control_base.py:752 gajim/groupchat_control.py:1736
+#: gajim/roster_window.py:2837 gajim/roster_window.py:4047
 #: gajim/message_window.py:364
 msgid "_Do not ask me again"
 msgstr "_Ikke spør meg igjen"
 
-#: gajim/chat_control_base.py:758
+#: gajim/chat_control_base.py:755
 msgid "_Paste"
 msgstr ""
 
-#: gajim/chat_control_base.py:1314 gajim/gtk/accounts.py:307
+#: gajim/chat_control_base.py:1310 gajim/gtk/accounts.py:310
 #, fuzzy
 msgid "Privacy"
 msgstr "Personverns-liste"
 
-#: gajim/chat_control_base.py:1315
+#: gajim/chat_control_base.py:1311
 #, fuzzy
 msgid "Warning"
 msgstr "Advarsel: %s"
 
-#: gajim/chat_control_base.py:1316
+#: gajim/chat_control_base.py:1312
 #, fuzzy, python-format
 msgid ""
 "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 msgstr "Dersom du sender en fil til %s, vil vedkommende kjenne din ekte JID."
 
-#: gajim/chat_control_base.py:1321
+#: gajim/chat_control_base.py:1317
 msgid "_Continue"
 msgstr "_Fortsett"
 
@@ -150,13 +156,13 @@ msgid " resource with priority "
 msgstr " ressurs med prioritet "
 
 #: gajim/gui_menu_builder.py:254 gajim/gui_menu_builder.py:345
-#: gajim/chat_control.py:295 gajim/roster_window.py:779
-#: gajim/roster_window.py:1718 gajim/roster_window.py:1720
-#: gajim/roster_window.py:2032 gajim/roster_window.py:3288
-#: gajim/roster_window.py:3321 gajim/gui_interface.py:322
+#: gajim/chat_control.py:295 gajim/roster_window.py:778
+#: gajim/roster_window.py:1717 gajim/roster_window.py:1719
+#: gajim/roster_window.py:2031 gajim/roster_window.py:3271
+#: gajim/roster_window.py:3304 gajim/gui_interface.py:295
 #: gajim/common/contacts.py:219 gajim/common/contacts.py:348
-#: gajim/common/contacts.py:459 gajim/common/helpers.py:96
-#: gajim/common/helpers.py:219 gajim/gtk/add_contact.py:320
+#: gajim/common/contacts.py:459 gajim/common/helpers.py:94
+#: gajim/common/helpers.py:212 gajim/gtk/add_contact.py:320
 #: gajim/gtk/subscription_request.py:63 gajim/gtk/subscription_request.py:95
 #: gajim/gtk/roster_item_exchange.py:112
 #, fuzzy
@@ -184,22 +190,22 @@ msgstr "_Behandle transport"
 msgid "_Modify Transport"
 msgstr "_Endre transport"
 
-#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4932
+#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4915
 msgid "_Rename…"
 msgstr "_Gi nytt navn…"
 
-#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4948
-#: gajim/roster_window.py:5063 gajim/data/gui/blocked_contacts_window.ui:52
+#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4931
+#: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr "_Frigi"
 
-#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4953
-#: gajim/roster_window.py:5067 gajim/data/gui/contact_context_menu.ui:151
+#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4936
+#: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr "_Blokker"
 
-#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4960
+#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4943
 #: gajim/data/gui/contact_context_menu.ui:181
 msgid "Remo_ve"
 msgstr "_Fjern"
@@ -228,7 +234,7 @@ msgstr "Lagre fil som…"
 msgid "Send Chatstate"
 msgstr "Siste tilstand"
 
-#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:280
+#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:283
 #, fuzzy
 msgid "Invite Contacts…"
 msgstr "Inviter _kontakter"
@@ -255,12 +261,11 @@ msgid "Information"
 msgstr "Informasjon"
 
 #: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:594
-#: gajim/data/gui/application_menu.ui:68
 msgid "History"
 msgstr "Historikk"
 
 #: gajim/gui_menu_builder.py:533 gajim/gui_menu_builder.py:649
-#: gajim/data/gui/preferences_window.ui:1861
+#: gajim/data/gui/preferences_window.ui:1886
 msgid "Disabled"
 msgstr "Avskrudd"
 
@@ -304,7 +309,7 @@ msgstr "_Sett opp"
 msgid "Destroy…"
 msgstr "Ødelegger %s"
 
-#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:828
+#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:843
 #, fuzzy
 msgid "Chat Settings"
 msgstr "Sludresnarveier"
@@ -355,11 +360,11 @@ msgstr "K_jør Kommando…"
 msgid "Leave"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:163
+#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:166
 msgid "No threshold"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:165
+#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:168
 #, fuzzy, python-format
 msgid "%i day"
 msgid_plural "%i days"
@@ -380,7 +385,7 @@ msgid "Add Contact…"
 msgstr "Legg til kontakt…"
 
 #: gajim/gui_menu_builder.py:672 gajim/gtk/profile.py:53
-#: gajim/gtk/accounts.py:703 gajim/gtk/accounts.py:741
+#: gajim/gtk/accounts.py:708 gajim/gtk/accounts.py:746
 msgid "Profile"
 msgstr "Profil"
 
@@ -398,7 +403,7 @@ msgstr "Oppdag tjenester"
 msgid "Server Info"
 msgstr "Tjenerinfo"
 
-#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2722
+#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2763
 msgid "Advanced"
 msgstr "Avansert"
 
@@ -430,7 +435,7 @@ msgid "Privacy Lists"
 msgstr "Personvernslister"
 
 #: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
-#: gajim/gtk/server_info.py:138
+#: gajim/gtk/server_info.py:128
 msgid "Admin"
 msgstr "Admin"
 
@@ -470,8 +475,7 @@ msgstr "_Rediger Konto"
 msgid "_Modify Account…"
 msgstr "_Rediger Konto"
 
-#: gajim/gui_menu_builder.py:745 gajim/data/gui/application_menu.ui:36
-#: gajim/data/gui/shortcuts_window.ui:203 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "Kontoer"
 
@@ -486,6 +490,7 @@ msgstr "Ta del i gruppesludring"
 
 #: gajim/gui_menu_builder.py:780 gajim/gui_menu_builder.py:806
 #: gajim/data/gui/subscription_request_window.ui:106
+#: gajim/gtk/start_chat.py:630
 msgid "Start Chat"
 msgstr "Start samtale"
 
@@ -614,7 +619,7 @@ msgstr "Fila finnes ikke"
 #: gajim/data/gui/privacy_list_window.ui:317
 #: gajim/data/gui/blocking_list.ui:115 gajim/data/gui/bookmarks.ui:101
 #: gajim/gtk/discovery.py:829 gajim/gtk/add_contact.py:31
-#: gajim/gtk/accounts.py:734
+#: gajim/gtk/accounts.py:739
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM-adresse:"
@@ -633,7 +638,7 @@ msgid "Nickname"
 msgstr "Kallenavn"
 
 #: gajim/history_manager.py:178 gajim/history_manager.py:217
-#: gajim/data/gui/preferences_window.ui:1382
+#: gajim/data/gui/preferences_window.ui:1397
 #: gajim/data/gui/single_message_window.ui:266 gajim/gtk/history.py:117
 msgid "Message"
 msgstr "Melding"
@@ -715,142 +720,142 @@ msgid_plural "Do you want to permanently delete these messages?"
 msgstr[0] "Ønsker du å slette valgt melding?"
 msgstr[1] "Ønsker du å slette valgte meldinger?"
 
-#: gajim/dialogs.py:83
+#: gajim/dialogs.py:82
 #, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "Kontaktnavn: <i>%s</i>"
 
-#: gajim/dialogs.py:85
+#: gajim/dialogs.py:84
 #, python-format
 msgid "XMPP Address: <i>%s</i>"
 msgstr ""
 
-#: gajim/dialogs.py:116 gajim/dialogs.py:129 gajim/roster_window.py:2899
-#: gajim/roster_window.py:3730 gajim/roster_window.py:4970
+#: gajim/dialogs.py:115 gajim/dialogs.py:128 gajim/roster_window.py:2891
+#: gajim/roster_window.py:3713 gajim/roster_window.py:4953
 #: gajim/common/contacts.py:163 gajim/common/contacts.py:203
-#: gajim/data/gui/preferences_window.ui:541
-#: gajim/data/gui/preferences_window.ui:593
-#: gajim/data/gui/shortcuts_window.ui:184 gajim/gtk/accounts.py:305
+#: gajim/data/gui/preferences_window.ui:556
+#: gajim/data/gui/preferences_window.ui:608
+#: gajim/data/gui/shortcuts_window.ui:184 gajim/gtk/accounts.py:308
 msgid "General"
 msgstr "Generelt"
 
-#: gajim/dialogs.py:202
+#: gajim/dialogs.py:201
 msgid "Group"
 msgstr "Gruppe"
 
-#: gajim/dialogs.py:209
+#: gajim/dialogs.py:208
 msgid "In the group"
 msgstr "I gruppen"
 
-#: gajim/dialogs.py:357
+#: gajim/dialogs.py:356
 msgid "Set Mood"
 msgstr "Angi humør"
 
-#: gajim/dialogs.py:404 gajim/dialogs.py:417
+#: gajim/dialogs.py:403 gajim/dialogs.py:416
 #: gajim/data/gui/change_mood_dialog.ui:98
 msgid "None"
 msgstr "Ingen"
 
-#: gajim/dialogs.py:478
+#: gajim/dialogs.py:477
 #, python-format
 msgid "%s Status Message"
 msgstr "%s Statusmelding"
 
-#: gajim/dialogs.py:492
+#: gajim/dialogs.py:491
 msgid "Status Message"
 msgstr "Statusmelding"
 
-#: gajim/dialogs.py:700
+#: gajim/dialogs.py:698
 #, fuzzy
 msgid "Overwrite"
 msgstr "Overskriv?"
 
-#: gajim/dialogs.py:701
+#: gajim/dialogs.py:699
 msgid "Overwrite Status Message?"
 msgstr "Overskriv statusmelding?"
 
-#: gajim/dialogs.py:702
+#: gajim/dialogs.py:700
 #, fuzzy
 msgid "This name is already in use. Do you want to overwrite this preset?"
 msgstr ""
 "Dette navnet er allerede i bruk. Ønsker du å overskrive denne "
 "statusmeldingen?"
 
-#: gajim/dialogs.py:706 gajim/plugins/gui.py:292
+#: gajim/dialogs.py:704 gajim/plugins/gui.py:292
 #, fuzzy
 msgid "_Overwrite"
 msgstr "Overskriv?"
 
-#: gajim/dialogs.py:718
+#: gajim/dialogs.py:716
 #, fuzzy
 msgid "Status Preset"
 msgstr "Statusmelding"
 
-#: gajim/dialogs.py:719
+#: gajim/dialogs.py:717
 #, fuzzy
 msgid "Save status as preset"
 msgstr "Lagre som forvalg…"
 
-#: gajim/dialogs.py:720
+#: gajim/dialogs.py:718
 #, fuzzy
 msgid "Please assign a name to this status message preset"
 msgstr "Skriv inn et navn for denne statusmeldingen"
 
-#: gajim/dialogs.py:723
+#: gajim/dialogs.py:721
 #, fuzzy
 msgid "_Save"
 msgstr "Lagre _som"
 
-#: gajim/dialogs.py:725
+#: gajim/dialogs.py:723
 #, fuzzy
 msgid "New Status"
 msgstr "Status"
 
-#: gajim/dialogs.py:752 gajim/gtk/discovery.py:518 gajim/gtk/profile.py:306
+#: gajim/dialogs.py:750 gajim/gtk/discovery.py:518 gajim/gtk/profile.py:306
 msgid "You are not connected to the server"
 msgstr "Du er ikke tilkoblet tjeneren"
 
-#: gajim/dialogs.py:753
+#: gajim/dialogs.py:751
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Du kan ikke flette kontakter uten å være tilkoblet."
 
-#: gajim/dialogs.py:764 gajim/dialogs.py:835 gajim/data/gui/bookmarks.ui:122
+#: gajim/dialogs.py:762 gajim/dialogs.py:833 gajim/data/gui/bookmarks.ui:122
 #: gajim/gtk/discovery.py:822 gajim/gtk/discovery.py:1646
 #: gajim/gtk/discovery.py:1892 gajim/gtk/history.py:99
 #: gajim/gtk/roster_item_exchange.py:83
 msgid "Name"
 msgstr "Navn"
 
-#: gajim/dialogs.py:767 gajim/data/gui/join_groupchat_window.ui:163
+#: gajim/dialogs.py:765 gajim/data/gui/join_groupchat_window.ui:163
 #: gajim/data/gui/server_info.ui:146
 msgid "Server"
 msgstr "Tjener"
 
-#: gajim/dialogs.py:803
+#: gajim/dialogs.py:801
 msgid "This account is not connected to the server"
 msgstr "Denne kontoen er ikke tilkoblet tjeneren"
 
-#: gajim/dialogs.py:804
+#: gajim/dialogs.py:802
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Du kan ikke flette med en konto uten å være tilkoblet."
 
-#: gajim/dialogs.py:833
+#: gajim/dialogs.py:831
 msgid "Synchronise"
 msgstr "Flett"
 
-#: gajim/dialogs.py:1045
+#: gajim/dialogs.py:1043
 msgid "an audio and video"
 msgstr "en lyd og video"
 
-#: gajim/dialogs.py:1047
+#: gajim/dialogs.py:1045
 msgid "an audio"
 msgstr "en lyd"
 
-#: gajim/dialogs.py:1049
+#: gajim/dialogs.py:1047
 msgid "a video"
 msgstr "en video"
 
-#: gajim/dialogs.py:1053
+#: gajim/dialogs.py:1051
 #, fuzzy, python-format
 msgid ""
 "%(contact)s wants to start a %(type)s chat with you. Do you want to answer "
@@ -874,7 +879,7 @@ msgid "No File Transfer available"
 msgstr "Ingen filoverføringer tilgjengelig"
 
 #: gajim/groupchat_control.py:541 gajim/dialog_messages.py:31
-#: gajim/dialog_messages.py:36 gajim/gtk/single_message.py:240
+#: gajim/dialog_messages.py:36 gajim/gtk/single_message.py:238
 #, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Ugyldig fil"
@@ -904,7 +909,7 @@ msgstr "Forespørsel om lydsamtale"
 
 #: gajim/groupchat_control.py:831
 #, python-format
-msgid "<b>%s</b> from <b>%s</b> requests voice"
+msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 msgstr ""
 
 #: gajim/groupchat_control.py:835
@@ -930,7 +935,7 @@ msgstr "Rommet viser nå utilgjengelige medlemmer"
 msgid "A setting not related to privacy has been changed"
 msgstr "En innstilling som ikke har med personvern å gjøre har blitt endret"
 
-#: gajim/groupchat_control.py:1088 gajim/groupchat_control.py:1248
+#: gajim/groupchat_control.py:1088 gajim/groupchat_control.py:1247
 #, fuzzy
 msgid "Conversations are stored on the server"
 msgstr "Denne økta VIL bli arkivert på tjeneren"
@@ -955,193 +960,193 @@ msgstr "Rommet er nå semi-anonymt"
 msgid "Group chat is now fully anonymous"
 msgstr "Rommet er nå helt anonymt"
 
-#: gajim/groupchat_control.py:1148
+#: gajim/groupchat_control.py:1147
 #, fuzzy, python-format
 msgid "Ping? (%s)"
 msgstr "Pong! (%s s.)"
 
-#: gajim/groupchat_control.py:1151
+#: gajim/groupchat_control.py:1150
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
 msgstr "Pong! (%(nick)s %(delay)s s.)"
 
-#: gajim/groupchat_control.py:1154 gajim/chat_control.py:643
+#: gajim/groupchat_control.py:1153 gajim/chat_control.py:643
 msgid "Error."
 msgstr "Feil."
 
-#: gajim/groupchat_control.py:1239
+#: gajim/groupchat_control.py:1238
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s har tatt del i gruppesamtalen"
 
-#: gajim/groupchat_control.py:1244
+#: gajim/groupchat_control.py:1243
 #, fuzzy
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr "Enhver samtaledeltager kan se hele JID-en din"
 
-#: gajim/groupchat_control.py:1252
+#: gajim/groupchat_control.py:1251
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Tjeneren har tildelt eller endret ditt kallenavn i dette rommet"
 
-#: gajim/groupchat_control.py:1262
+#: gajim/groupchat_control.py:1261
 #, fuzzy
 msgid "A new group chat has been created"
 msgstr "Et nytt rom har blitt opprettet"
 
-#: gajim/groupchat_control.py:1266
+#: gajim/groupchat_control.py:1265
 #, fuzzy
 msgid "Failed to Configure Group Chat"
 msgstr "Forlat gruppesamtaler"
 
-#: gajim/groupchat_control.py:1276 gajim/privatechat_control.py:105
+#: gajim/groupchat_control.py:1275 gajim/privatechat_control.py:105
 #, python-format
 msgid "You are now known as %s"
 msgstr "Du går nå under navnet %s"
 
-#: gajim/groupchat_control.py:1278 gajim/privatechat_control.py:107
+#: gajim/groupchat_control.py:1277 gajim/privatechat_control.py:107
 #, fuzzy, python-brace-format
 msgid "{nick} is now known as {new_nick}"
 msgstr "%(nick)s går nå under navnet %(new_nick)s"
 
-#: gajim/groupchat_control.py:1303 gajim/privatechat_control.py:133
+#: gajim/groupchat_control.py:1302 gajim/privatechat_control.py:133
 #, fuzzy, python-brace-format
 msgid "You are now {show}{status}"
 msgstr "Du går nå under navnet %s"
 
-#: gajim/groupchat_control.py:1309 gajim/privatechat_control.py:139
+#: gajim/groupchat_control.py:1308 gajim/privatechat_control.py:139
 #, fuzzy, python-brace-format
 msgid "{nick} is now {show}{status}"
 msgstr "%(nick)s er nå %(status)s"
 
-#: gajim/groupchat_control.py:1326 gajim/groupchat_control.py:1356
-#: gajim/groupchat_control.py:1384 gajim/groupchat_control.py:1443
+#: gajim/groupchat_control.py:1325 gajim/groupchat_control.py:1355
+#: gajim/groupchat_control.py:1383 gajim/groupchat_control.py:1442
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1329
+#: gajim/groupchat_control.py:1328
 #, fuzzy, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr ""
 "** Tilhørighet for %(nick)s har blitt satt til %(affiliation)s av %(actor)s"
 
-#: gajim/groupchat_control.py:1335
+#: gajim/groupchat_control.py:1334
 #, fuzzy, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** Tilhørigheten til %(nick)s har blitt satt til %(affiliation)s"
 
-#: gajim/groupchat_control.py:1359
+#: gajim/groupchat_control.py:1358
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Rollen til %(nick)s har blitt satt til %(role)s av %(actor)s"
 
-#: gajim/groupchat_control.py:1364
+#: gajim/groupchat_control.py:1363
 #, fuzzy, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Rollen til %(nick)s har blitt satt til %(role)s av %(actor)s"
 
-#: gajim/groupchat_control.py:1387
+#: gajim/groupchat_control.py:1386
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(nick)s har blitt fjernet fra rommet (%(reason)s)"
 
-#: gajim/groupchat_control.py:1392
+#: gajim/groupchat_control.py:1391
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1398
+#: gajim/groupchat_control.py:1397
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1405
+#: gajim/groupchat_control.py:1404
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1412 gajim/groupchat_control.py:1477
+#: gajim/groupchat_control.py:1411 gajim/groupchat_control.py:1476
 #, fuzzy
 msgid ": Affiliation changed"
 msgstr "tilhørighet endret"
 
-#: gajim/groupchat_control.py:1418 gajim/groupchat_control.py:1482
+#: gajim/groupchat_control.py:1417 gajim/groupchat_control.py:1481
 #, fuzzy
 msgid ": Group chat configuration changed to members-only"
 msgstr "romoppsett endret til kun medlemmer"
 
-#: gajim/groupchat_control.py:1446
+#: gajim/groupchat_control.py:1445
 #, fuzzy, python-brace-format
 msgid "{nick} has been removed from the group chat{by}{reason}"
 msgstr "%(nick)s har blitt fjernet fra rommet (%(reason)s)"
 
-#: gajim/groupchat_control.py:1456
+#: gajim/groupchat_control.py:1455
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1462
+#: gajim/groupchat_control.py:1461
 #, fuzzy, python-brace-format
 msgid "{nick} has been kicked{actor}{reason}"
 msgstr "%(nick)s har blitt kastet ut: %(reason)s"
 
-#: gajim/groupchat_control.py:1470
+#: gajim/groupchat_control.py:1469
 #, fuzzy, python-brace-format
 msgid "{nick} has been banned{actor}{reason}"
 msgstr "%(nick)s har blitt bannlyst: %(reason)s"
 
-#: gajim/groupchat_control.py:1487
+#: gajim/groupchat_control.py:1486
 #, python-brace-format
 msgid "{nick} has left{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1509
+#: gajim/groupchat_control.py:1508
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s har tatt del i gruppesamtalen"
 
-#: gajim/groupchat_control.py:1521
+#: gajim/groupchat_control.py:1520
 #, fuzzy
 msgid "Failed to Join Group Chat"
 msgstr "Klarte ikke å ta del i gruppesludring"
 
-#: gajim/groupchat_control.py:1527
+#: gajim/groupchat_control.py:1526
 #, fuzzy
 msgid "Failed to Create Group Chat"
 msgstr "Forlat gruppesamtaler"
 
-#: gajim/groupchat_control.py:1543
+#: gajim/groupchat_control.py:1542
 #, fuzzy
 msgid "Group chat has been destroyed"
 msgstr "Rommet har blitt kansellert"
 
-#: gajim/groupchat_control.py:1548
+#: gajim/groupchat_control.py:1547
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Du kan bli med i dette rommet i steden for: %s"
 
-#: gajim/groupchat_control.py:1733
+#: gajim/groupchat_control.py:1732
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Forlat gruppesamtaler"
 
-#: gajim/groupchat_control.py:1734
+#: gajim/groupchat_control.py:1733
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Er du sikker på at du vil forlate gruppesamtalen \"%s\"?"
 
-#: gajim/groupchat_control.py:1735
+#: gajim/groupchat_control.py:1734
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
 msgstr ""
 "Dersom du lukker dette vinduet, så vil du bli frakoblet fra disse rommene."
 
-#: gajim/groupchat_control.py:1741 gajim/roster_window.py:5131
+#: gajim/groupchat_control.py:1740 gajim/roster_window.py:5108
 msgid "_Leave"
 msgstr ""
 
-#: gajim/groupchat_control.py:1786 gajim/roster_window.py:3018
+#: gajim/groupchat_control.py:1785 gajim/roster_window.py:3001
 #, fuzzy, python-format
 msgid "%(jid)s has been invited to this group chat"
 msgstr "%(jid)s har blitt invitert til dette rommet"
@@ -1195,7 +1200,7 @@ msgstr "Du fikk akkurat en ny melding fra \"%s\""
 msgid "Close"
 msgstr "_Lukk"
 
-#: gajim/chat_control.py:1139 gajim/common/connection_handlers_events.py:277
+#: gajim/chat_control.py:1139 gajim/common/connection_handlers_events.py:237
 #: gajim/gtk/notification.py:185 gajim/gtk/notification.py:214
 #: gajim/gtk/notification.py:273
 msgid "New Message"
@@ -1203,9 +1208,9 @@ msgstr "Ny melding"
 
 #: gajim/chat_control.py:1144 gajim/chat_control.py:1441
 #: gajim/chat_control.py:1450 gajim/message_window.py:367
-#: gajim/data/gui/groupchat_control.ui:1021
-#: gajim/data/gui/groupchat_control.ui:1107
-#: gajim/data/gui/groupchat_control.ui:1213
+#: gajim/data/gui/groupchat_control.ui:1024
+#: gajim/data/gui/groupchat_control.ui:1110
+#: gajim/data/gui/groupchat_control.ui:1216
 msgid "_Close"
 msgstr "_Lukk"
 
@@ -1223,9 +1228,8 @@ msgstr ""
 msgid "%(name)s is now %(show)s %(status)s"
 msgstr "%(name)s er nå %(show)s %(status)s"
 
-#: gajim/chat_control.py:1405 gajim/roster_window.py:4204
-#: gajim/roster_window.py:4205 gajim/data/gui/application_menu.ui:64
-#: gajim/gtk/filetransfer_progress.py:35
+#: gajim/chat_control.py:1405 gajim/roster_window.py:4187
+#: gajim/roster_window.py:4188 gajim/gtk/filetransfer_progress.py:35
 msgid "File Transfer"
 msgstr "Filoverføring"
 
@@ -1245,8 +1249,8 @@ msgstr "_Godkjenn"
 msgid "_Decline"
 msgstr "_Frakoblet"
 
-#: gajim/chat_control.py:1435 gajim/gui_interface.py:719
-#: gajim/gui_interface.py:749 gajim/gui_interface.py:775
+#: gajim/chat_control.py:1435 gajim/gui_interface.py:693
+#: gajim/gui_interface.py:723 gajim/gui_interface.py:749
 #: gajim/gtk/notification.py:188 gajim/gtk/notification.py:284
 msgid "File Transfer Completed"
 msgstr "Filoverføring fullført"
@@ -1256,7 +1260,7 @@ msgstr "Filoverføring fullført"
 msgid "Open _Folder"
 msgstr "Åpne _inneholdende mappe"
 
-#: gajim/chat_control.py:1468 gajim/gui_interface.py:412
+#: gajim/chat_control.py:1468 gajim/gui_interface.py:386
 #: gajim/data/gui/groupchat_invitation_received.ui:42
 #: gajim/gtk/notification.py:189 gajim/gtk/notification.py:210
 #: gajim/gtk/notification.py:288
@@ -1264,11 +1268,11 @@ msgstr "Åpne _inneholdende mappe"
 msgid "Group Chat Invitation"
 msgstr "Invitasjon til gruppesamtale"
 
-#: gajim/chat_control.py:1493 gajim/roster_window.py:1952
+#: gajim/chat_control.py:1493 gajim/roster_window.py:1951
 msgid "Remote contact stopped transfer"
 msgstr "Kontakten stoppet overføringen"
 
-#: gajim/chat_control.py:1495 gajim/roster_window.py:1954
+#: gajim/chat_control.py:1495 gajim/roster_window.py:1953
 msgid "Error opening file"
 msgstr "Feil under åpning av fil"
 
@@ -1285,155 +1289,148 @@ msgstr "Filoverføring avbrutt"
 msgid "Connection with peer cannot be established."
 msgstr "Tilkoblingen med likemann kan ikke opprettes."
 
-#: gajim/application.py:79
+#: gajim/application.py:80
 msgid "Show the application's version"
 msgstr "Vis programversjon"
 
-#: gajim/application.py:86
+#: gajim/application.py:87
 msgid "Show only critical errors"
 msgstr "Bare vis kritiske feil"
 
-#: gajim/application.py:93
+#: gajim/application.py:94
 #, fuzzy
 msgid "Separate profile files completely (even history database and plugins)"
 msgstr "Del profilene helt (selv historikkdatabase og programtillegg)"
 
-#: gajim/application.py:101
+#: gajim/application.py:102
 msgid "Print XML stanzas and other debug information"
 msgstr "Skriv ut XML-stanza-er og annen feilrettingsinformasjon"
 
-#: gajim/application.py:108
+#: gajim/application.py:109
 msgid "Use defined profile in configuration directory"
 msgstr "Bruk definert profil i oppsettsmappe"
 
-#: gajim/application.py:116
+#: gajim/application.py:117
 msgid "Set configuration directory"
 msgstr "Velg oppsettsmappe"
 
-#: gajim/application.py:124
+#: gajim/application.py:125
 msgid "Configure logging system"
 msgstr "Sett opp loggføringssystem"
 
-#: gajim/application.py:132
+#: gajim/application.py:133
 msgid "Show all warnings"
 msgstr "Vis alle advarsler"
 
-#: gajim/application.py:139
+#: gajim/application.py:140
 msgid "Open IPython shell"
 msgstr ""
 
-#: gajim/application.py:146
+#: gajim/application.py:147
 msgid "Pops up a window with the next pending event"
 msgstr "Viser et oppsprettsvindu med neste ventende hendelse"
 
-#: gajim/application.py:152 gajim/data/gui/shortcuts_window.ui:189
+#: gajim/application.py:153 gajim/data/gui/shortcuts_window.ui:189
 #: data/org.gajim.Gajim.desktop.in:21
 msgid "Start a new chat"
 msgstr "Start ny samtale"
 
-#: gajim/application.py:159
-msgid "Simulate loss of connectivity"
-msgstr ""
-
-#: gajim/application.py:166
-msgid "Simulate regaining connectivity"
-msgstr ""
-
-#: gajim/application.py:210 gajim/gui_interface.py:125
+#: gajim/application.py:194 gajim/gui_interface.py:125
 msgid "Database Error"
 msgstr "Database-feil"
 
-#: gajim/roster_window.py:287 gajim/roster_window.py:1023
+#: gajim/roster_window.py:286 gajim/roster_window.py:1022
 msgid "Merged accounts"
 msgstr "Flettede kontoer"
 
-#: gajim/roster_window.py:846 gajim/roster_window.py:1630
-#: gajim/roster_window.py:1663 gajim/roster_window.py:1714
-#: gajim/roster_window.py:1716 gajim/roster_window.py:1871
-#: gajim/roster_window.py:2522 gajim/roster_window.py:4284
-#: gajim/roster_window.py:4911 gajim/common/contacts.py:201
-#: gajim/common/contacts.py:451 gajim/common/helpers.py:96
+#: gajim/roster_window.py:845 gajim/roster_window.py:1629
+#: gajim/roster_window.py:1662 gajim/roster_window.py:1713
+#: gajim/roster_window.py:1715 gajim/roster_window.py:1870
+#: gajim/roster_window.py:2514 gajim/roster_window.py:4267
+#: gajim/roster_window.py:4894 gajim/common/contacts.py:201
+#: gajim/common/contacts.py:451 gajim/common/helpers.py:93
 #: gajim/gtk/discovery.py:128 gajim/gtk/discovery.py:129
 #: gajim/gtk/discovery.py:1415
 msgid "Transports"
 msgstr "Transporter"
 
-#: gajim/roster_window.py:1722 gajim/roster_window.py:1724
-#: gajim/roster_window.py:4284 gajim/roster_window.py:4881
-#: gajim/gui_interface.py:1355 gajim/common/contacts.py:199
+#: gajim/roster_window.py:1721 gajim/roster_window.py:1723
+#: gajim/roster_window.py:4267 gajim/roster_window.py:4864
+#: gajim/gui_interface.py:1319 gajim/common/contacts.py:199
 #: gajim/common/helpers.py:96
 #, fuzzy
 msgid "Group chats"
 msgstr "Gruppesamtaler"
 
-#: gajim/roster_window.py:2014
+#: gajim/roster_window.py:2013
 msgid "Authorization sent"
 msgstr "Godkjenning sendt"
 
-#: gajim/roster_window.py:2015
+#: gajim/roster_window.py:2014
 #, python-format
 msgid "\"%s\" will now see your status."
 msgstr "\"%s\" vil nå kunne se din status."
 
-#: gajim/roster_window.py:2033
+#: gajim/roster_window.py:2032
 msgid "Subscription request has been sent"
 msgstr "Abonnementsforespørselen har blitt sendt"
 
-#: gajim/roster_window.py:2034
+#: gajim/roster_window.py:2033
 #, fuzzy, python-format
 msgid "If \"%s\" accepts this request you will know their status."
 msgstr ""
 "Hvis \"%s\" godtar denne forespørselen vil du få kjennskap til vedkommendes "
 "status."
 
-#: gajim/roster_window.py:2048
+#: gajim/roster_window.py:2047
 msgid "Authorization removed"
 msgstr "Godkjenning fjernet"
 
-#: gajim/roster_window.py:2049
+#: gajim/roster_window.py:2048
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Nå vil \"%s\" se deg som frakoblet."
 
-#: gajim/roster_window.py:2276
+#: gajim/roster_window.py:2268
 #, fuzzy
 msgid "desynced"
 msgstr "usynkronisert"
 
-#: gajim/roster_window.py:2344 gajim/data/gui/shortcuts_window.ui:245
+#: gajim/roster_window.py:2336 gajim/data/gui/shortcuts_window.ui:238
 msgid "Quit Gajim"
 msgstr "Avslutt Gajim"
 
-#: gajim/roster_window.py:2345
+#: gajim/roster_window.py:2337
 #, fuzzy
 msgid "You are about to quit Gajim"
 msgstr "Bekreft lukking av Gajim."
 
-#: gajim/roster_window.py:2346
+#: gajim/roster_window.py:2338
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Bekreft lukking av Gajim."
 
-#: gajim/roster_window.py:2347
+#: gajim/roster_window.py:2339
 #, fuzzy
 msgid "_Always quit when closing Gajim"
 msgstr "Alltid lukk Gajim"
 
-#: gajim/roster_window.py:2350 gajim/roster_window.py:2446
-#: gajim/roster_window.py:2486 gajim/data/gui/systray_context_menu.ui:83
+#: gajim/roster_window.py:2342 gajim/roster_window.py:2438
+#: gajim/roster_window.py:2478 gajim/data/gui/application_menu.ui:30
+#: gajim/data/gui/systray_context_menu.ui:83
 msgid "_Quit"
 msgstr "_Avslutt"
 
-#: gajim/roster_window.py:2439
+#: gajim/roster_window.py:2431
 #, fuzzy
 msgid "Stop File Transfers"
 msgstr "Filoverføringer"
 
-#: gajim/roster_window.py:2440
+#: gajim/roster_window.py:2432
 #, fuzzy
 msgid "You still have running file transfers"
 msgstr "Du har filoverføringer underveis"
 
-#: gajim/roster_window.py:2441
+#: gajim/roster_window.py:2433
 #, fuzzy
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
@@ -1442,17 +1439,17 @@ msgstr ""
 "Hvis du avslutter nå, vil fil(ene) som er underveis bli stoppet. Ønsker du "
 "fremdeles å avslutte?"
 
-#: gajim/roster_window.py:2479
+#: gajim/roster_window.py:2471
 #, fuzzy
 msgid "Unread Messages"
 msgstr "Uleste hendelser"
 
-#: gajim/roster_window.py:2480
+#: gajim/roster_window.py:2472
 #, fuzzy
 msgid "You still have unread messages"
 msgstr "Du har uleste meldinger"
 
-#: gajim/roster_window.py:2481
+#: gajim/roster_window.py:2473
 #, fuzzy
 msgid ""
 "Messages will only be available for reading them later if storing chat "
@@ -1461,20 +1458,20 @@ msgstr ""
 "Meldinger vil kun være tilgjengelig for senere lesning hvis du har historikk "
 "påskrudd og kontakten er å finne på din kontaktliste."
 
-#: gajim/roster_window.py:2741
+#: gajim/roster_window.py:2733
 msgid "You have unread messages"
 msgstr "Du har uleste meldinger"
 
-#: gajim/roster_window.py:2742
+#: gajim/roster_window.py:2734
 msgid "You must read them before removing this transport."
 msgstr "Du må lese dem før du fjerner denne transporten."
 
-#: gajim/roster_window.py:2745
+#: gajim/roster_window.py:2737
 #, fuzzy, python-format
 msgid "Transport '%s' will be removed"
 msgstr "Transporten \"%s\" vil bli fjernet"
 
-#: gajim/roster_window.py:2746
+#: gajim/roster_window.py:2738
 #, fuzzy
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
@@ -1483,11 +1480,11 @@ msgstr ""
 "Du vil ikke lenger kunne sende og motta meldinger fra kontakter som bruker "
 "denne transporten."
 
-#: gajim/roster_window.py:2749
+#: gajim/roster_window.py:2741
 msgid "Transports will be removed"
 msgstr "Transporter vil bli fjernet"
 
-#: gajim/roster_window.py:2754
+#: gajim/roster_window.py:2746
 #, fuzzy, python-format
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
@@ -1497,22 +1494,22 @@ msgstr ""
 "Du vil ikke lenger kunne sende og motta meldinger fra kontakter som bruker "
 "denne transporten."
 
-#: gajim/roster_window.py:2758
+#: gajim/roster_window.py:2750
 #, fuzzy
 msgid "Remove Transport"
 msgstr "Vis transporter"
 
-#: gajim/roster_window.py:2828
+#: gajim/roster_window.py:2820
 #, fuzzy
 msgid "Block Contact"
 msgstr "Blokkerte kontakter"
 
-#: gajim/roster_window.py:2829
+#: gajim/roster_window.py:2821
 #, fuzzy
 msgid "Really block this contact?"
 msgstr "Er OpenPGP tilgjengelig for denne kontakten?"
 
-#: gajim/roster_window.py:2830
+#: gajim/roster_window.py:2822
 #, fuzzy
 msgid ""
 "This contact will see you offline and you will not receive any messages sent "
@@ -1521,22 +1518,22 @@ msgstr ""
 "Denne kontakten vil se deg som frakoblet og du vil ikke motta meldinger "
 "vedkommende sender deg."
 
-#: gajim/roster_window.py:2832
+#: gajim/roster_window.py:2824
 #, fuzzy
 msgid "_Block Contact"
 msgstr "Blokkerte kontakter"
 
-#: gajim/roster_window.py:2834
+#: gajim/roster_window.py:2826
 #, fuzzy
 msgid "Block Group"
 msgstr "_Blokker"
 
-#: gajim/roster_window.py:2835
+#: gajim/roster_window.py:2827
 #, fuzzy
 msgid "Really block this group?"
 msgstr "Er OpenPGP tilgjengelig for denne kontakten?"
 
-#: gajim/roster_window.py:2836
+#: gajim/roster_window.py:2828
 #, fuzzy
 msgid ""
 "All contacts of this group will see you as offline and you will not receive "
@@ -1545,86 +1542,86 @@ msgstr ""
 "Denne kontakten vil se deg som frakoblet og du vil ikke motta meldinger "
 "vedkommende sender deg."
 
-#: gajim/roster_window.py:2839
+#: gajim/roster_window.py:2831
 #, fuzzy
 msgid "_Block Group"
 msgstr "_Blokker"
 
-#: gajim/roster_window.py:2893
+#: gajim/roster_window.py:2885
 msgid "Rename Contact"
 msgstr "Gi kontakt nytt navn"
 
-#: gajim/roster_window.py:2894
+#: gajim/roster_window.py:2886
 #, fuzzy, python-format
 msgid "Rename contact %s?"
 msgstr "Gi kontakt nytt navn"
 
-#: gajim/roster_window.py:2895
+#: gajim/roster_window.py:2887
 #, fuzzy
 msgid "Please enter a new nickname"
 msgstr "E_tter kallenavn:"
 
-#: gajim/roster_window.py:2902
+#: gajim/roster_window.py:2894
 msgid "Rename Group"
 msgstr "Gi gruppe nytt navn"
 
-#: gajim/roster_window.py:2903
+#: gajim/roster_window.py:2895
 #, fuzzy, python-format
 msgid "Rename group %s?"
 msgstr "Gi gruppe nytt navn"
 
-#: gajim/roster_window.py:2904
+#: gajim/roster_window.py:2896
 #, fuzzy
 msgid "Please enter a new name"
 msgstr "Velg en ny og ren drakt."
 
-#: gajim/roster_window.py:2934 gajim/roster_window.py:3065
-#: gajim/data/gui/groupchat_control.ui:1734
+#: gajim/roster_window.py:2926 gajim/roster_window.py:3048
+#: gajim/data/gui/groupchat_control.ui:1737
 #, fuzzy
 msgid "_Rename"
 msgstr "Gi _nytt navn"
 
-#: gajim/roster_window.py:2956 gajim/roster_window.py:2957
+#: gajim/roster_window.py:2948 gajim/roster_window.py:2949
 msgid "Remove Group"
 msgstr "Fjern gruppe"
 
-#: gajim/roster_window.py:2958
+#: gajim/roster_window.py:2950
 #, fuzzy, python-format
 msgid "Do you want to remove %s from the contact list?"
 msgstr "Ønsker du å fjerne gruppen %s fra kontaktlista?"
 
-#: gajim/roster_window.py:2959
+#: gajim/roster_window.py:2951
 #, fuzzy
 msgid "_Also remove all contacts of this group from contact list"
 msgstr "Fjern også alle kontaktene i denne gruppa fra kontaktlista di"
 
-#: gajim/roster_window.py:3060 gajim/roster_window.py:3061
+#: gajim/roster_window.py:3043 gajim/roster_window.py:3044
 #, fuzzy
 msgid "Rename Group Chat"
 msgstr "Forlat gruppesamtaler"
 
-#: gajim/roster_window.py:3062
+#: gajim/roster_window.py:3045
 #, fuzzy
 msgid "Please enter a new name for this group chat"
 msgstr "Skriv inn nytt brukernavn for din lokale konto"
 
-#: gajim/roster_window.py:3305
+#: gajim/roster_window.py:3288
 #, fuzzy
 msgid "Remove Contact"
 msgstr "Gi kontakt nytt navn"
 
-#: gajim/roster_window.py:3306
+#: gajim/roster_window.py:3289
 #, fuzzy
 msgid "Remove contact from contact list"
 msgstr "Fjerner kontakt fra kontaktliste"
 
-#: gajim/roster_window.py:3307
+#: gajim/roster_window.py:3290
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr ""
 "Du er i ferd med å fjerne \"%(name)s\" (%(jid)s) fra kontaktlista di.\n"
 
-#: gajim/roster_window.py:3316 gajim/roster_window.py:3336
+#: gajim/roster_window.py:3299 gajim/roster_window.py:3319
 #, fuzzy
 msgid ""
 "By removing this contact you also remove authorization. This means the "
@@ -1633,21 +1630,21 @@ msgstr ""
 "Ved å fjerne disse kontaktene fjerner du også autorisasjonen, noe som gjør "
 "at de alltid vil se deg som frakoblet."
 
-#: gajim/roster_window.py:3327
+#: gajim/roster_window.py:3310
 msgid "Do you want to continue?"
 msgstr "Ønsker du å fortsette?"
 
-#: gajim/roster_window.py:3338
+#: gajim/roster_window.py:3321
 #, fuzzy
 msgid "_I want this contact to know my status after removal"
 msgstr "Jeg ønsker at kontakten skal kunne se min status etter fjerning"
 
-#: gajim/roster_window.py:3345
+#: gajim/roster_window.py:3328
 #, fuzzy
 msgid "Remove contacts from contact list"
 msgstr "Fjerner kontakt fra kontaktliste"
 
-#: gajim/roster_window.py:3351
+#: gajim/roster_window.py:3334
 #, fuzzy, python-format
 msgid ""
 "By removing the following contacts, you will also remove authorization. This "
@@ -1658,24 +1655,24 @@ msgstr ""
 "Ved å fjerne disse kontaktene fjerner du også autorisasjonen, noe som gjør "
 "at de alltid vil se deg som frakoblet."
 
-#: gajim/roster_window.py:3355
+#: gajim/roster_window.py:3338
 #, fuzzy
 msgid "Remove Contacts"
 msgstr "Gi kontakt nytt navn"
 
-#: gajim/roster_window.py:3375
+#: gajim/roster_window.py:3358
 msgid "No account available"
 msgstr "Ingen konto tilgjengelig"
 
-#: gajim/roster_window.py:3376
+#: gajim/roster_window.py:3359
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Du må opprette en konto før du kan føre samtaler med andre kontakter."
 
-#: gajim/roster_window.py:3957
+#: gajim/roster_window.py:3940
 msgid "Metacontacts storage not supported by your server"
 msgstr "Du mangler støtte for lagring av metakontakter på tjeneren din"
 
-#: gajim/roster_window.py:3959
+#: gajim/roster_window.py:3942
 msgid ""
 "Your server does not support storing metacontacts information. So this "
 "information will not be saved on next reconnection."
@@ -1683,14 +1680,14 @@ msgstr ""
 "Tjeneren din støtter ikke lagring av metakontaktinformasjon. Denne "
 "informasjonen vil ikke være lagret neste gang du kobler til."
 
-#: gajim/roster_window.py:4056
+#: gajim/roster_window.py:4039
 #, fuzzy
 msgid "You are about to create a metacontact"
 msgstr ""
 "Du er i ferd med å opprette en metakontakt. Er du sikker på at du vil "
 "fortsette?"
 
-#: gajim/roster_window.py:4057
+#: gajim/roster_window.py:4040
 #, fuzzy
 msgid ""
 "Metacontacts are a way to regroup several contacts in one single contact. "
@@ -1700,124 +1697,120 @@ msgstr ""
 "Metakontakter er en måte å omgruppere flere kontakter på én linje. Generelt "
 "brukes dette når samme person har flere XMPP- eller transport-kontoer."
 
-#: gajim/roster_window.py:4061
+#: gajim/roster_window.py:4044
 #, fuzzy
 msgid "Create Metacontact"
 msgstr "Gi kontakt nytt navn"
 
-#: gajim/roster_window.py:4067 gajim/data/gui/groupchat_creation.ui:317
+#: gajim/roster_window.py:4050 gajim/data/gui/groupchat_creation.ui:317
 #, fuzzy
 msgid "_Create"
 msgstr "Kreativ"
 
-#: gajim/roster_window.py:4184
+#: gajim/roster_window.py:4167
 msgid "Invalid file URI:"
 msgstr "Ugyldig fil-URI:"
 
-#: gajim/roster_window.py:4196
+#: gajim/roster_window.py:4179
 #, fuzzy, python-format
 msgid "Send this file to %s:\n"
 msgid_plural "Send these files to %s:\n"
 msgstr[0] "Ønsker du å sende denne fila til %s:"
 msgstr[1] "Ønsker du å sende disse filene til %s:"
 
-#: gajim/roster_window.py:4209 gajim/data/gui/xml_console.ui:334
+#: gajim/roster_window.py:4192 gajim/data/gui/xml_console.ui:334
 msgid "_Send"
 msgstr "_Send"
 
-#: gajim/roster_window.py:4354
+#: gajim/roster_window.py:4337
 #, python-format
 msgid "Send %(from)s to %(to)s"
 msgstr "Send %(from)s til %(to)s"
 
-#: gajim/roster_window.py:4367
+#: gajim/roster_window.py:4350
 #, python-format
 msgid "Make %s first contact"
 msgstr "Gjør %s til første kontakt"
 
-#: gajim/roster_window.py:4372
+#: gajim/roster_window.py:4355
 #, python-format
 msgid "Make %(contact1)s and %(contact2)s metacontacts"
 msgstr "Gjør %(contact1)s og %(contact2)s til metakontakter"
 
-#: gajim/roster_window.py:4722 gajim/roster_window.py:4809
+#: gajim/roster_window.py:4705 gajim/roster_window.py:4792
 msgid "_Change Status Message"
 msgstr "_Endre statusmelding"
 
-#: gajim/roster_window.py:4742
+#: gajim/roster_window.py:4725
 msgid "Publish Tune"
 msgstr "Offentliggjør melodi"
 
-#: gajim/roster_window.py:4753
+#: gajim/roster_window.py:4736
 msgid "Publish Location"
 msgstr "Offentliggjør plassering"
 
-#: gajim/roster_window.py:4883
+#: gajim/roster_window.py:4866
 msgid "_Maximize All"
 msgstr "_Maksimer alle"
 
-#: gajim/roster_window.py:4890 gajim/roster_window.py:5032
+#: gajim/roster_window.py:4873 gajim/roster_window.py:5015
 msgid "Send Group M_essage"
 msgstr "Send gruppe_melding"
 
-#: gajim/roster_window.py:4897
+#: gajim/roster_window.py:4880
 msgid "To all users"
 msgstr "Til alle brukere"
 
-#: gajim/roster_window.py:4901
+#: gajim/roster_window.py:4884
 msgid "To all online users"
 msgstr "Til alle påloggede brukere"
 
-#: gajim/roster_window.py:4913 gajim/roster_window.py:5038
+#: gajim/roster_window.py:4896 gajim/roster_window.py:5021
 #: gajim/data/gui/contact_context_menu.ui:36
 msgid "In_vite to"
 msgstr "In_viter til"
 
-#: gajim/roster_window.py:5048
+#: gajim/roster_window.py:5031
 msgid "_Manage Contacts"
 msgstr "_Behandle kontakter"
 
-#: gajim/roster_window.py:5054
+#: gajim/roster_window.py:5037
 msgid "Edit _Groups…"
 msgstr "Rediger _grupper…"
 
-#: gajim/roster_window.py:5075 gajim/data/gui/filetransfers.ui:12
+#: gajim/roster_window.py:5058 gajim/data/gui/filetransfers.ui:12
 #: gajim/gtk/dialogs.py:68
 msgid "_Remove"
 msgstr "_Fjern"
 
-#: gajim/roster_window.py:5112
+#: gajim/roster_window.py:5095
 msgid "_Maximize"
 msgstr "__Maksimer"
 
-#: gajim/roster_window.py:5117
+#: gajim/roster_window.py:5100
 #, fuzzy
 msgid "Re_name"
 msgstr "Gi _nytt navn"
 
-#: gajim/roster_window.py:5126
-msgid "_Reconnect"
-msgstr "_Koble til på ny"
-
-#: gajim/roster_window.py:5139
+#: gajim/roster_window.py:5116
 msgid "Execute command"
 msgstr "Kjør kommando"
 
-#: gajim/roster_window.py:5147 gajim/data/gui/contact_context_menu.ui:205
+#: gajim/roster_window.py:5124 gajim/data/gui/contact_context_menu.ui:205
+#: gajim/data/gui/application_menu.ui:68
 msgid "_History"
 msgstr "_Historikk"
 
-#: gajim/roster_window.py:5228 gajim/data/gui/application_menu.ui:18
-#: gajim/data/gui/history_window.ui:57
+#: gajim/roster_window.py:5205 gajim/data/gui/history_window.ui:57
 msgid "History Manager"
 msgstr "Historikk-behandler"
 
-#: gajim/roster_window.py:5309 gajim/gui_interface.py:323
-#: gajim/common/contacts.py:197 gajim/common/helpers.py:96
+#: gajim/roster_window.py:5286 gajim/gui_interface.py:296
+#: gajim/common/contacts.py:197 gajim/common/helpers.py:95
 msgid "Observers"
 msgstr "Observatører"
 
-#: gajim/roster_window.py:5312
+#: gajim/roster_window.py:5289
 msgid "Observers can see your status, but you are not allowed to see theirs"
 msgstr ""
 
@@ -1970,7 +1963,7 @@ msgstr "Godkjenning sendt"
 msgid "HTTP Authorization Request"
 msgstr "Godkjenning sendt"
 
-#: gajim/gui_interface.py:179 gajim/gui_interface.py:359
+#: gajim/gui_interface.py:179 gajim/gui_interface.py:333
 #: gajim/gtk/filetransfer.py:339
 #, fuzzy
 msgid "_No"
@@ -1981,35 +1974,35 @@ msgstr "Ingen"
 msgid "Connection Failed"
 msgstr "Tilkobling mislyktes"
 
-#: gajim/gui_interface.py:283
+#: gajim/gui_interface.py:256
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "feil ved forsendelse av %(message)s ( %(error)s )"
 
-#: gajim/gui_interface.py:308 gajim/gtk/notification.py:190
+#: gajim/gui_interface.py:281 gajim/gtk/notification.py:190
 msgid "Subscription request"
 msgstr "Abonnementsforespørsel"
 
-#: gajim/gui_interface.py:343
+#: gajim/gui_interface.py:316
 msgid "Authorization accepted"
 msgstr "Godkjenning godtatt"
 
-#: gajim/gui_interface.py:344
+#: gajim/gui_interface.py:317
 #, fuzzy, python-format
 msgid "The contact \"%s\" has authorized you to see their status."
 msgstr "Kontakten \"%s\" har godkjent at du kan se vedkommendes status."
 
-#: gajim/gui_interface.py:354
+#: gajim/gui_interface.py:327
 #, fuzzy
 msgid "Subscription Removed"
 msgstr "Abonnements-forespørsel"
 
-#: gajim/gui_interface.py:355
+#: gajim/gui_interface.py:328
 #, fuzzy, python-format
-msgid "%s (%s) has removed subscription from you"
+msgid "%(name)s (%(jid)s) has removed subscription from you"
 msgstr "Kontakten \"%s\" abonnerer ikke lengre på deg"
 
-#: gajim/gui_interface.py:356
+#: gajim/gui_interface.py:330
 #, fuzzy
 msgid ""
 "You will always see this contact as offline.\n"
@@ -2018,147 +2011,147 @@ msgstr ""
 "Du vil alltid se dem som frakoblet.\n"
 "Ønsker du å fjerne dem fra kontaktlisten din?"
 
-#: gajim/gui_interface.py:381 gajim/gtk/notification.py:191
+#: gajim/gui_interface.py:355 gajim/gtk/notification.py:191
 msgid "Unsubscribed"
 msgstr "Abonnement opphevet"
 
-#: gajim/gui_interface.py:393
+#: gajim/gui_interface.py:367
 #, python-format
 msgid "%(jid)s declined the invitation: %(reason)s"
 msgstr "%(jid)s avslo invitasjonen: %(reason)s"
 
-#: gajim/gui_interface.py:397
+#: gajim/gui_interface.py:371
 #, python-format
 msgid "%(jid)s declined the invitation"
 msgstr "%(jid)s avslo invitasjonen"
 
-#: gajim/gui_interface.py:413
+#: gajim/gui_interface.py:387
 #, python-brace-format
 msgid "You are invited to {room} by {user}"
 msgstr "Du er invitert {room} av {user}"
 
-#: gajim/gui_interface.py:434
+#: gajim/gui_interface.py:408
 msgid "Certificate Passphrase Required"
 msgstr "Sertifikat-passord kreves"
 
-#: gajim/gui_interface.py:435
+#: gajim/gui_interface.py:409
 #, python-format
 msgid "Enter the certificate passphrase for account %s"
 msgstr "Skriv in sertifikatspassordet for kontoen %s"
 
-#: gajim/gui_interface.py:444
+#: gajim/gui_interface.py:418
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Skriv inn passord for kontoen %s"
 
-#: gajim/gui_interface.py:456
+#: gajim/gui_interface.py:430
 msgid "Password Required"
 msgstr "Passord påkrevd"
 
-#: gajim/gui_interface.py:456
+#: gajim/gui_interface.py:430
 msgid "Save password"
 msgstr "Lagre passord"
 
-#: gajim/gui_interface.py:525 gajim/gui_interface.py:556
+#: gajim/gui_interface.py:499 gajim/gui_interface.py:530
 #: gajim/gtk/filetransfer.py:333 gajim/gtk/filetransfer.py:334
 #: gajim/gtk/notification.py:188 gajim/gtk/notification.py:281
 msgid "File Transfer Error"
 msgstr "Filoverføring feilet"
 
-#: gajim/gui_interface.py:590
+#: gajim/gui_interface.py:564
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s ønsker å sende deg ei fil."
 
-#: gajim/gui_interface.py:592 gajim/gtk/filetransfer.py:485
+#: gajim/gui_interface.py:566 gajim/gtk/filetransfer.py:485
 #: gajim/gtk/notification.py:187 gajim/gtk/notification.py:278
 msgid "File Transfer Request"
 msgstr "Filoverføringsforespørsel"
 
-#: gajim/gui_interface.py:695
+#: gajim/gui_interface.py:669
 #, fuzzy
 msgid "Remote Contact Stopped Transfer"
 msgstr "Kontakten stoppet overføringen"
 
-#: gajim/gui_interface.py:700
+#: gajim/gui_interface.py:674
 #, fuzzy
 msgid "Error Opening File"
 msgstr "Feil under åpning av fil"
 
-#: gajim/gui_interface.py:710
+#: gajim/gui_interface.py:684
 #, fuzzy
 msgid "SSL Certificate Error"
 msgstr "Feil med SSL-sertifikat"
 
-#: gajim/gui_interface.py:723 gajim/gui_interface.py:754
-#: gajim/gui_interface.py:781 gajim/gtk/notification.py:189
+#: gajim/gui_interface.py:697 gajim/gui_interface.py:728
+#: gajim/gui_interface.py:755 gajim/gtk/notification.py:189
 #: gajim/gtk/notification.py:285
 msgid "File Transfer Stopped"
 msgstr "Filoverføring stoppet"
 
-#: gajim/gui_interface.py:727
+#: gajim/gui_interface.py:701
 msgid "File Transfer Failed"
 msgstr "Filoverføring mislyktes"
 
-#: gajim/gui_interface.py:750
+#: gajim/gui_interface.py:724
 #, python-format
 msgid "%(filename)s received from %(name)s."
 msgstr "%(filename)s mottatt fra %(name)s."
 
-#: gajim/gui_interface.py:755
+#: gajim/gui_interface.py:729
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Filoverføringen %(filename)s fra %(name)s stoppet."
 
-#: gajim/gui_interface.py:761
+#: gajim/gui_interface.py:735
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s failed."
 msgstr "Filoverføringen %(filename)s fra %(name)s mislyktes."
 
-#: gajim/gui_interface.py:776
+#: gajim/gui_interface.py:750
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Du har sendt %(filename)s til %(name)s."
 
-#: gajim/gui_interface.py:782
+#: gajim/gui_interface.py:756
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Filoverføringen %(filename)s til %(name)s har stoppet."
 
-#: gajim/gui_interface.py:788
+#: gajim/gui_interface.py:762
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s failed."
 msgstr "Filoverføringen %(filename)s til %(name)s mislyktes."
 
-#: gajim/gui_interface.py:886 gajim/gui_interface.py:887
+#: gajim/gui_interface.py:850 gajim/gui_interface.py:851
 msgid "Username Conflict"
 msgstr "Brukernavn-konflikt"
 
-#: gajim/gui_interface.py:888
+#: gajim/gui_interface.py:852
 #, fuzzy
 msgid "Please enter a new username for your local account"
 msgstr "Skriv inn nytt brukernavn for din lokale konto"
 
-#: gajim/gui_interface.py:892 gajim/data/gui/passphrase_dialog.ui:44
+#: gajim/gui_interface.py:856 gajim/data/gui/passphrase_dialog.ui:44
 #: gajim/gtk/dialogs.py:49
 msgid "_OK"
 msgstr "_OK"
 
-#: gajim/gui_interface.py:950
+#: gajim/gui_interface.py:914
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s ønsker å starte en lydsamtale."
 
-#: gajim/gui_interface.py:952
+#: gajim/gui_interface.py:916
 msgid "Voice Chat Request"
 msgstr "Forespørsel om lydsamtale"
 
-#: gajim/gui_interface.py:1004 gajim/gui_interface.py:1005
+#: gajim/gui_interface.py:968 gajim/gui_interface.py:969
 #, fuzzy
 msgid "Insecure Connection"
 msgstr "Usikker tilkobling"
 
-#: gajim/gui_interface.py:1006
+#: gajim/gui_interface.py:970
 #, fuzzy, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) using an "
@@ -2169,20 +2162,20 @@ msgstr ""
 "vis. Dette betyr at samtaler vil foregå ukryptert, hvilket frarådes sterkt.\n"
 "Er du sikker på at du ønsker å gjøre dette?"
 
-#: gajim/gui_interface.py:1013 gajim/data/gui/groupchat_control.ui:518
+#: gajim/gui_interface.py:977 gajim/data/gui/groupchat_control.ui:521
 msgid "_Abort"
 msgstr ""
 
-#: gajim/gui_interface.py:1016
+#: gajim/gui_interface.py:980
 #, fuzzy
 msgid "_Connect Anyway"
 msgstr "Kobler til"
 
-#: gajim/gui_interface.py:1833
+#: gajim/gui_interface.py:1721
 msgid "Could not save your settings and preferences"
 msgstr "Kunne ikke lagre innstillinger"
 
-#: gajim/gui_interface.py:1895
+#: gajim/gui_interface.py:1783
 msgid "Gajim: IPython Console"
 msgstr ""
 
@@ -2714,78 +2707,73 @@ msgstr ""
 "Argumentet \"%(arg)s\" er ikke oppgitt. \n"
 "Skriv \"%(basename)s help %(command)s\" for mer info"
 
-#: gajim/common/logger.py:199 gajim/common/logger.py:204
+#: gajim/common/logger.py:210 gajim/common/logger.py:215
 #, python-format
 msgid "%s is a directory but should be a file"
 msgstr "%s er en katalog men skulle vært ei fil"
 
-#: gajim/common/logger.py:224
+#: gajim/common/logger.py:235
 #, fuzzy, python-format
 msgid "Creating %s"
 msgstr "Ødelegger %s"
 
-#: gajim/common/connection_handlers_events.py:73
-#, python-format
-msgid "Unknown SSL error: %d"
-msgstr "Ukjent SSL-feil: %d"
-
-#: gajim/common/connection_handlers_events.py:274 gajim/gtk/notification.py:185
+#: gajim/common/connection_handlers_events.py:234 gajim/gtk/notification.py:185
 #: gajim/gtk/notification.py:215 gajim/gtk/notification.py:274
 msgid "New Private Message"
 msgstr "Ny privat melding"
 
-#: gajim/common/connection_handlers_events.py:282
-#: gajim/common/connection_handlers_events.py:374
+#: gajim/common/connection_handlers_events.py:242
+#: gajim/common/connection_handlers_events.py:339
 #, fuzzy, python-format
 msgid "New message from %(nickname)s"
 msgid_plural "%(n_msgs)i unread messages from %(nickname)s"
 msgstr[0] "Ny melding fra %(nickname)s"
 msgstr[1] "Ny melding fra %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:363 gajim/gtk/notification.py:186
+#: gajim/common/connection_handlers_events.py:325 gajim/gtk/notification.py:186
 #: gajim/gtk/notification.py:216
 #, fuzzy
 msgid "New Group Chat Message"
 msgstr "Ny gruppesamtale"
 
-#: gajim/common/connection_handlers_events.py:449
+#: gajim/common/connection_handlers_events.py:414
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s endret status"
 
-#: gajim/common/connection_handlers_events.py:451 gajim/gtk/history.py:581
+#: gajim/common/connection_handlers_events.py:416 gajim/gtk/history.py:581
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s er nå %(status)s"
 
-#: gajim/common/connection_handlers_events.py:455 gajim/gtk/notification.py:187
+#: gajim/common/connection_handlers_events.py:420 gajim/gtk/notification.py:187
 #: gajim/gtk/notification.py:208 gajim/gtk/notification.py:291
 msgid "Contact Changed Status"
 msgstr "En kontakt endret status"
 
-#: gajim/common/connection_handlers_events.py:457
+#: gajim/common/connection_handlers_events.py:422
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s logget inn"
 
-#: gajim/common/connection_handlers_events.py:461 gajim/gtk/notification.py:184
+#: gajim/common/connection_handlers_events.py:426 gajim/gtk/notification.py:184
 #: gajim/gtk/notification.py:206 gajim/gtk/notification.py:267
 msgid "Contact Signed In"
 msgstr "En kontakt logget inn"
 
-#: gajim/common/connection_handlers_events.py:463
+#: gajim/common/connection_handlers_events.py:428
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s logget ut"
 
-#: gajim/common/connection_handlers_events.py:467 gajim/gtk/notification.py:184
+#: gajim/common/connection_handlers_events.py:432 gajim/gtk/notification.py:184
 #: gajim/gtk/notification.py:207 gajim/gtk/notification.py:270
 msgid "Contact Signed Out"
 msgstr "En kontakt logget ut"
 
-#: gajim/common/client.py:249 gajim/common/const.py:912
-#: gajim/common/const.py:913 gajim/common/const.py:914
-#: gajim/common/const.py:917 gajim/gtk/account_wizard.py:306
+#: gajim/common/client.py:296 gajim/common/const.py:938
+#: gajim/common/const.py:939 gajim/common/const.py:940
+#: gajim/common/const.py:943 gajim/gtk/account_wizard.py:368
 #, fuzzy
 msgid "Authentication failed"
 msgstr "Identitetsbekreftelse feilet med følgende, \"%s\""
@@ -3297,10 +3285,6 @@ msgstr ""
 "Maksimalt antall linjer som vises i samtaler. De eldste linjene fjernes."
 
 #: gajim/common/config.py:216
-msgid "Choose interval between 2 checks of idleness."
-msgstr "Velg intervall mellom to uvirksomhetssjekker."
-
-#: gajim/common/config.py:217
 #, fuzzy
 msgid ""
 "Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
@@ -3309,7 +3293,7 @@ msgstr ""
 "Lovlige URI-handlesett. Bare skjema i denne listen vil bli akseptert som en "
 "\"ekte\" URI. (mailto og xmpp håndteres separat)"
 
-#: gajim/common/config.py:218
+#: gajim/common/config.py:217
 #, fuzzy
 msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
@@ -3317,24 +3301,24 @@ msgstr ""
 "Hvis sant vil komplettering i samtalerom gjøres slik som i skallbasert "
 "variant"
 
-#: gajim/common/config.py:222
+#: gajim/common/config.py:221
 #, fuzzy
 msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
 msgstr ""
 "Alternativ fiksering av jingle-utdataens videoskuddtakt. Eksempelvis: 10/1 "
 "eller 25/2"
 
-#: gajim/common/config.py:223
+#: gajim/common/config.py:222
 #, fuzzy
 msgid "Optionally resize Jingle output video. Example: 320x240."
 msgstr ""
 "Alternativ justering av oppløsning for utdata-video. Eksempelvis: 320x240"
 
-#: gajim/common/config.py:224
+#: gajim/common/config.py:223
 msgid "If enabled, you will see your webcam's video stream as well."
 msgstr ""
 
-#: gajim/common/config.py:227
+#: gajim/common/config.py:226
 #, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
@@ -3343,11 +3327,11 @@ msgstr ""
 "Gajim vil forsøke å bruke STUN-tjener ved bruk av Jingle. Valget er i "
 "\"stun_server\", eller det gitt av XMPP-tjeneren."
 
-#: gajim/common/config.py:228
+#: gajim/common/config.py:227
 msgid "STUN server to use when using Jingle"
 msgstr "STUN-tjener til bruk med Jingle"
 
-#: gajim/common/config.py:229
+#: gajim/common/config.py:228
 #, fuzzy
 msgid ""
 "If enabled, Gajim will show affiliation of group chat participants by adding "
@@ -3356,7 +3340,7 @@ msgstr ""
 "Hvis sant vil Gajim vise tilhørighet for deltagere i gruppesamtale ved å "
 "legge til en farget firkant i status-miniatyrbildet"
 
-#: gajim/common/config.py:230
+#: gajim/common/config.py:229
 #, fuzzy
 msgid ""
 "Proxy used for all outgoing connections if the account does not have a "
@@ -3365,21 +3349,21 @@ msgstr ""
 "Mellomtjenere brukt for utgående tilkoblinger, hvis kontoen ikke har satt "
 "opp en spesifikk mellomtjener"
 
-#: gajim/common/config.py:231
+#: gajim/common/config.py:230
 #, fuzzy
 msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 "Hvis sant vil Gajim ignorere innkommende forespørsler om oppmerksomhet "
 "(\"wizz\")."
 
-#: gajim/common/config.py:232
+#: gajim/common/config.py:231
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
 msgstr ""
 "Hvis påskrudd vil Gajim presentere viduene fra sist gang Gajim ble lukket."
 
-#: gajim/common/config.py:233
+#: gajim/common/config.py:232
 #, fuzzy
 msgid ""
 "If enabled, Gajim will display an icon to show that sent messages have been "
@@ -3388,7 +3372,7 @@ msgstr ""
 "Hvis valgt vil Gajim vise et ikon for å gjøre oppmerksom på at sendt melding "
 "har ankommet kontakt"
 
-#: gajim/common/config.py:234
+#: gajim/common/config.py:233
 #, fuzzy
 msgid ""
 "If enabled, Gajim will use the System's Keyring to store account passwords."
@@ -3396,38 +3380,38 @@ msgstr ""
 "Dersom sant vil Gajim bruke Gnome-nøkkelringen (dersom tilgjengelig) til å "
 "lagre kontopassord."
 
-#: gajim/common/config.py:235
+#: gajim/common/config.py:234
 #, fuzzy
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr "Kjøring av XEP-0146-kommandoer i Gajim."
 
-#: gajim/common/config.py:236
+#: gajim/common/config.py:235
 msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
-#: gajim/common/config.py:237
+#: gajim/common/config.py:236
 msgid "Options in days which can be chosen in the sync threshold menu"
 msgstr ""
 
-#: gajim/common/config.py:238
+#: gajim/common/config.py:237
 msgid ""
 "Maximum history in days we request from a public group chat archive. 0: As "
 "much as possible."
 msgstr ""
 
-#: gajim/common/config.py:239
+#: gajim/common/config.py:238
 msgid ""
 "Maximum history in days we request from a private group chat archive. 0: As "
 "much as possible."
 msgstr ""
 
-#: gajim/common/config.py:240
+#: gajim/common/config.py:239
 msgid ""
 "If enabled, Gajim shows the group chat subject in the chat window when "
 "joining."
 msgstr ""
 
-#: gajim/common/config.py:241
+#: gajim/common/config.py:240
 #, fuzzy
 msgid ""
 "If enabled, the contact row is colored according to the current chat state "
@@ -3436,7 +3420,7 @@ msgstr ""
 "Hvis avkrysset vil Gajim tillate at andre ser hvilket operativsystem du "
 "bruker"
 
-#: gajim/common/config.py:242
+#: gajim/common/config.py:241
 #, fuzzy
 msgid ""
 "If enabled, the tab is colored according to the current chat state of the "
@@ -3445,7 +3429,7 @@ msgstr ""
 "Hvis avkrysset vil Gajim tillate at andre ser hvilket operativsystem du "
 "bruker"
 
-#: gajim/common/config.py:243
+#: gajim/common/config.py:242
 #, fuzzy
 msgid ""
 "Shows a text in the banner that describes the current chat state of the "
@@ -3454,7 +3438,7 @@ msgstr ""
 "Hvis avkrysset vil Gajim tillate at andre ser hvilket operativsystem du "
 "bruker"
 
-#: gajim/common/config.py:244
+#: gajim/common/config.py:243
 #, fuzzy
 msgid ""
 "Chat state notifications that are sent to contacts. Possible values: all, "
@@ -3463,7 +3447,7 @@ msgstr ""
 "Sendt merknad for samtalestatus. Kan være 'alle', 'bare_skriving' eller "
 "'avslått'."
 
-#: gajim/common/config.py:245
+#: gajim/common/config.py:244
 #, fuzzy
 msgid ""
 "Chat state notifications that are sent to the group chat. Possible values: "
@@ -3472,27 +3456,31 @@ msgstr ""
 "Sendt merknad for samtalestatus. Kan være 'alle', 'bare_skriving' eller "
 "'avslått'."
 
-#: gajim/common/config.py:248
+#: gajim/common/config.py:247
 msgid "API Preferences. Possible values: 'http', 'iq'"
 msgstr ""
 
-#: gajim/common/config.py:249
+#: gajim/common/config.py:248
 msgid "Selecting text will copy it to the clipboard"
 msgstr ""
 
-#: gajim/common/config.py:250
+#: gajim/common/config.py:249
 #, fuzzy
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr "Kjøring av XEP-0146-kommandoer i Gajim."
 
-#: gajim/common/config.py:251
+#: gajim/common/config.py:250
 msgid "Width of group chat roster in pixel"
 msgstr ""
 
-#: gajim/common/config.py:252
+#: gajim/common/config.py:251
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Bokmerk rommet"
+
+#: gajim/common/config.py:252
+msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
+msgstr ""
 
 #: gajim/common/config.py:269
 #, fuzzy
@@ -3713,7 +3701,7 @@ msgstr ""
 "skrus av). Dette valget SKAL IKKE brukes til å (de)aktivere tillegg. Bruk "
 "GUI i steden for."
 
-#: gajim/common/config.py:376 gajim/common/const.py:354
+#: gajim/common/config.py:376 gajim/common/const.py:380
 msgid "Sleeping"
 msgstr "Sover"
 
@@ -3725,7 +3713,7 @@ msgstr "Straks tilbake"
 msgid "Back in some minutes."
 msgstr "Tilbake om noen minutter."
 
-#: gajim/common/config.py:378 gajim/common/const.py:320
+#: gajim/common/config.py:378 gajim/common/const.py:346
 msgid "Eating"
 msgstr "Spiser"
 
@@ -3742,7 +3730,7 @@ msgstr "Film"
 msgid "I'm watching a movie."
 msgstr "Ser på en film."
 
-#: gajim/common/config.py:380 gajim/common/const.py:387
+#: gajim/common/config.py:380 gajim/common/const.py:413
 msgid "Working"
 msgstr "Jobber"
 
@@ -3809,116 +3797,116 @@ msgstr "Lyd som spilles når en MUC-melding ankommer."
 msgid "Tor"
 msgstr "Tor"
 
-#: gajim/common/optparser.py:53
+#: gajim/common/optparser.py:54
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Feil: kan ikke åpne %s for lesing"
 
-#: gajim/common/const.py:254
+#: gajim/common/const.py:280
 #, fuzzy
 msgid "?Group chat name:Team"
 msgstr "?Group Chat Contact Role:Ingen"
 
-#: gajim/common/const.py:255
+#: gajim/common/const.py:281
 msgid "?Group chat description:Project discussion"
 msgstr ""
 
-#: gajim/common/const.py:256
+#: gajim/common/const.py:282
 #, fuzzy
 msgid "?Group chat address:team"
 msgstr "Gruppesludringsstøtte"
 
-#: gajim/common/const.py:257
+#: gajim/common/const.py:283
 #, fuzzy
 msgid "?Group chat name:Family"
 msgstr "Fremheving av gruppesamtale:"
 
-#: gajim/common/const.py:258
+#: gajim/common/const.py:284
 msgid "?Group chat description:Spring gathering"
 msgstr ""
 
-#: gajim/common/const.py:259
+#: gajim/common/const.py:285
 msgid "?Group chat address:family"
 msgstr ""
 
-#: gajim/common/const.py:260
+#: gajim/common/const.py:286
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Invitasjon til gruppesamtale"
 
-#: gajim/common/const.py:261
+#: gajim/common/const.py:287
 msgid "?Group chat description:Trip planning"
 msgstr ""
 
-#: gajim/common/const.py:262
+#: gajim/common/const.py:288
 #, fuzzy
 msgid "?Group chat address:vacation"
 msgstr "Invitasjon til gruppesamtale"
 
-#: gajim/common/const.py:263
+#: gajim/common/const.py:289
 #, fuzzy
 msgid "?Group chat name:Repairs"
 msgstr "Gruppe Samtale"
 
-#: gajim/common/const.py:264
+#: gajim/common/const.py:290
 msgid "?Group chat description:Local help group"
 msgstr ""
 
-#: gajim/common/const.py:265
+#: gajim/common/const.py:291
 #, fuzzy
 msgid "?Group chat address:repairs"
 msgstr "Gruppesludringsstøtte"
 
-#: gajim/common/const.py:266
+#: gajim/common/const.py:292
 #, fuzzy
 msgid "?Group chat name:News"
 msgstr "?Group Chat Contact Role:Ingen"
 
-#: gajim/common/const.py:267
+#: gajim/common/const.py:293
 #, fuzzy
 msgid "?Group chat description:Local news and reports"
 msgstr "Oppretting av gruppesludring tillates ikke."
 
-#: gajim/common/const.py:268
+#: gajim/common/const.py:294
 #, fuzzy
 msgid "?Group chat address:news"
 msgstr "Ny gruppesamtale"
 
-#: gajim/common/const.py:273
+#: gajim/common/const.py:299
 #, fuzzy
 msgid "Remote server not found"
 msgstr "Tjenesten ble ikke funnet"
 
-#: gajim/common/const.py:274
+#: gajim/common/const.py:300
 msgid "Remote server timeout"
 msgstr ""
 
-#: gajim/common/const.py:275 gajim/common/const.py:276
-#: gajim/common/const.py:277
+#: gajim/common/const.py:301 gajim/common/const.py:302
+#: gajim/common/const.py:303
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "%s er ikke en gruppesamtale-tjener"
 
-#: gajim/common/const.py:278
+#: gajim/common/const.py:304
 #, fuzzy
 msgid "Group chat already exists"
 msgstr "Lokal konto eksisterer allerede."
 
-#: gajim/common/const.py:279
+#: gajim/common/const.py:305
 #, fuzzy
 msgid "Group chat does not exist"
 msgstr "Gruppesamtalen <b>%s</b> finnes ikke."
 
-#: gajim/common/const.py:280
+#: gajim/common/const.py:306
 #, fuzzy
 msgid "Group chat is closed"
 msgstr "Historikk for gruppesamtaler"
 
-#: gajim/common/const.py:286
+#: gajim/common/const.py:312
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "Meldingen har blitt kryptert med OTR og kunne ikke dekrypteres."
 
-#: gajim/common/const.py:289
+#: gajim/common/const.py:315
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
@@ -3927,7 +3915,7 @@ msgstr ""
 "dekrypteres. Du kan installere PGP-programtillegget for å håndtere de "
 "meldingene."
 
-#: gajim/common/const.py:293
+#: gajim/common/const.py:319
 #, fuzzy
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
@@ -3937,921 +3925,921 @@ msgstr ""
 "dekrypteres. Du kan installere PGP-programtillegget for å håndtere de "
 "meldingene."
 
-#: gajim/common/const.py:297
+#: gajim/common/const.py:323
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
 msgstr "Meldingen har blitt kryptert med %s og kunne ikke dekrypteres."
 
-#: gajim/common/const.py:304
+#: gajim/common/const.py:330
 msgid "Doing Chores"
 msgstr "Utfører gjøremål"
 
-#: gajim/common/const.py:305
+#: gajim/common/const.py:331
 msgid "Buying Groceries"
 msgstr "Kjøper mat"
 
-#: gajim/common/const.py:306
+#: gajim/common/const.py:332
 msgid "Cleaning"
 msgstr "Vasker"
 
-#: gajim/common/const.py:307
+#: gajim/common/const.py:333
 msgid "Cooking"
 msgstr "Lager mat"
 
-#: gajim/common/const.py:308
+#: gajim/common/const.py:334
 msgid "Doing Maintenance"
 msgstr "Driver vedlikehold"
 
-#: gajim/common/const.py:309
+#: gajim/common/const.py:335
 msgid "Doing the Dishes"
 msgstr "Tar oppvasken"
 
-#: gajim/common/const.py:310
+#: gajim/common/const.py:336
 msgid "Doing the Laundry"
 msgstr "Vasker klær"
 
-#: gajim/common/const.py:311
+#: gajim/common/const.py:337
 msgid "Gardening"
 msgstr "Gjør hagearbeid"
 
-#: gajim/common/const.py:312
+#: gajim/common/const.py:338
 msgid "Running an Errand"
 msgstr "Løper et ærend"
 
-#: gajim/common/const.py:313
+#: gajim/common/const.py:339
 msgid "Walking the Dog"
 msgstr "Går tur med hunden"
 
-#: gajim/common/const.py:315
+#: gajim/common/const.py:341
 msgid "Drinking"
 msgstr "Drikker"
 
-#: gajim/common/const.py:316
+#: gajim/common/const.py:342
 msgid "Having a Beer"
 msgstr "Tar seg en øl"
 
-#: gajim/common/const.py:317
+#: gajim/common/const.py:343
 msgid "Having Coffee"
 msgstr "Tar seg en kaffe"
 
-#: gajim/common/const.py:318
+#: gajim/common/const.py:344
 msgid "Having Tea"
 msgstr "Tar seg en kopp té"
 
-#: gajim/common/const.py:321
+#: gajim/common/const.py:347
 msgid "Having a Snack"
 msgstr "Tar seg en matbit"
 
-#: gajim/common/const.py:322
+#: gajim/common/const.py:348
 msgid "Having Breakfast"
 msgstr "Spiser frokost"
 
-#: gajim/common/const.py:323
+#: gajim/common/const.py:349
 msgid "Having Dinner"
 msgstr "Spiser middag"
 
-#: gajim/common/const.py:324
+#: gajim/common/const.py:350
 msgid "Having Lunch"
 msgstr "Spiser lunsj"
 
-#: gajim/common/const.py:326
+#: gajim/common/const.py:352
 msgid "Exercising"
 msgstr "Trimmer"
 
-#: gajim/common/const.py:327 gajim/common/const.py:378
+#: gajim/common/const.py:353 gajim/common/const.py:404
 msgid "Cycling"
 msgstr "Sykler"
 
-#: gajim/common/const.py:328
+#: gajim/common/const.py:354
 msgid "Dancing"
 msgstr "Danser"
 
-#: gajim/common/const.py:329
+#: gajim/common/const.py:355
 msgid "Hiking"
 msgstr "På tursti"
 
-#: gajim/common/const.py:330
+#: gajim/common/const.py:356
 msgid "Jogging"
 msgstr "Jogger"
 
-#: gajim/common/const.py:331
+#: gajim/common/const.py:357
 msgid "Playing Sports"
 msgstr "Bedriver sport"
 
-#: gajim/common/const.py:332
+#: gajim/common/const.py:358
 msgid "Running"
 msgstr "Løper"
 
-#: gajim/common/const.py:333
+#: gajim/common/const.py:359
 msgid "Skiing"
 msgstr "Går på ski"
 
-#: gajim/common/const.py:334
+#: gajim/common/const.py:360
 msgid "Swimming"
 msgstr "Svømmer"
 
-#: gajim/common/const.py:335
+#: gajim/common/const.py:361
 msgid "Working out"
 msgstr "Trener"
 
-#: gajim/common/const.py:337
+#: gajim/common/const.py:363
 msgid "Grooming"
 msgstr "Steller seg"
 
-#: gajim/common/const.py:338
+#: gajim/common/const.py:364
 msgid "At the Spa"
 msgstr "Er på spa"
 
-#: gajim/common/const.py:339
+#: gajim/common/const.py:365
 msgid "Brushing Teeth"
 msgstr "Pusser tenner"
 
-#: gajim/common/const.py:340
+#: gajim/common/const.py:366
 msgid "Getting a Haircut"
 msgstr "Klipper håret"
 
-#: gajim/common/const.py:341
+#: gajim/common/const.py:367
 msgid "Shaving"
 msgstr "Barberer seg"
 
-#: gajim/common/const.py:342
+#: gajim/common/const.py:368
 msgid "Taking a Bath"
 msgstr "Tar et bad"
 
-#: gajim/common/const.py:343
+#: gajim/common/const.py:369
 msgid "Taking a Shower"
 msgstr "Tar seg en dusj"
 
-#: gajim/common/const.py:345
+#: gajim/common/const.py:371
 msgid "Having an Appointment"
 msgstr "Har en avtale"
 
-#: gajim/common/const.py:347
+#: gajim/common/const.py:373
 msgid "Inactive"
 msgstr "Inaktiv"
 
-#: gajim/common/const.py:348
+#: gajim/common/const.py:374
 msgid "Day Off"
 msgstr "Fridag"
 
-#: gajim/common/const.py:349
+#: gajim/common/const.py:375
 msgid "Hanging out"
 msgstr "Slapper av"
 
-#: gajim/common/const.py:350
+#: gajim/common/const.py:376
 msgid "Hiding"
 msgstr "Gjemmer seg"
 
-#: gajim/common/const.py:351
+#: gajim/common/const.py:377
 msgid "On Vacation"
 msgstr "På ferie"
 
-#: gajim/common/const.py:352
+#: gajim/common/const.py:378
 msgid "Praying"
 msgstr "Ber"
 
-#: gajim/common/const.py:353
+#: gajim/common/const.py:379
 msgid "Scheduled Holiday"
 msgstr "Planlagt ferie"
 
-#: gajim/common/const.py:355
+#: gajim/common/const.py:381
 msgid "Thinking"
 msgstr "Tenker"
 
-#: gajim/common/const.py:357
+#: gajim/common/const.py:383
 msgid "Relaxing"
 msgstr "Slapper av"
 
-#: gajim/common/const.py:358
+#: gajim/common/const.py:384
 msgid "Fishing"
 msgstr "Fisker"
 
-#: gajim/common/const.py:359
+#: gajim/common/const.py:385
 msgid "Gaming"
 msgstr "Spiller"
 
-#: gajim/common/const.py:360
+#: gajim/common/const.py:386
 msgid "Going out"
 msgstr "Går ut"
 
-#: gajim/common/const.py:361
+#: gajim/common/const.py:387
 msgid "Partying"
 msgstr "Fester"
 
-#: gajim/common/const.py:362
+#: gajim/common/const.py:388
 msgid "Reading"
 msgstr "Leser"
 
-#: gajim/common/const.py:363
+#: gajim/common/const.py:389
 msgid "Rehearsing"
 msgstr "Øver"
 
-#: gajim/common/const.py:364
+#: gajim/common/const.py:390
 msgid "Shopping"
 msgstr "Sover"
 
-#: gajim/common/const.py:365
+#: gajim/common/const.py:391
 msgid "Smoking"
 msgstr "Røyker"
 
-#: gajim/common/const.py:366
+#: gajim/common/const.py:392
 msgid "Socializing"
 msgstr "Sosialiserer"
 
-#: gajim/common/const.py:367
+#: gajim/common/const.py:393
 msgid "Sunbathing"
 msgstr "Soler seg"
 
-#: gajim/common/const.py:368
+#: gajim/common/const.py:394
 msgid "Watching TV"
 msgstr "Ser på TV"
 
-#: gajim/common/const.py:369
+#: gajim/common/const.py:395
 msgid "Watching a Movie"
 msgstr "Ser på film"
 
-#: gajim/common/const.py:371
+#: gajim/common/const.py:397
 msgid "Talking"
 msgstr "Snakker"
 
-#: gajim/common/const.py:372
+#: gajim/common/const.py:398
 msgid "In Real Life"
 msgstr "I det virkelige liv"
 
-#: gajim/common/const.py:373
+#: gajim/common/const.py:399
 msgid "On the Phone"
 msgstr "Sitter i telefonen"
 
-#: gajim/common/const.py:374
+#: gajim/common/const.py:400
 msgid "On Video Phone"
 msgstr "På videotelefon"
 
-#: gajim/common/const.py:376
+#: gajim/common/const.py:402
 msgid "Traveling"
 msgstr "Reiser"
 
-#: gajim/common/const.py:377
+#: gajim/common/const.py:403
 msgid "Commuting"
 msgstr "Pendler"
 
-#: gajim/common/const.py:379
+#: gajim/common/const.py:405
 msgid "Driving"
 msgstr "Kjører"
 
-#: gajim/common/const.py:380
+#: gajim/common/const.py:406
 msgid "In a Car"
 msgstr "I en bil"
 
-#: gajim/common/const.py:381
+#: gajim/common/const.py:407
 msgid "On a Bus"
 msgstr "På bussen"
 
-#: gajim/common/const.py:382
+#: gajim/common/const.py:408
 msgid "On a Plane"
 msgstr "Flyr"
 
-#: gajim/common/const.py:383
+#: gajim/common/const.py:409
 msgid "On a Train"
 msgstr "På toget"
 
-#: gajim/common/const.py:384
+#: gajim/common/const.py:410
 msgid "On a Trip"
 msgstr "På reise"
 
-#: gajim/common/const.py:385
+#: gajim/common/const.py:411
 msgid "Walking"
 msgstr "Spaserer"
 
-#: gajim/common/const.py:388
+#: gajim/common/const.py:414
 msgid "Coding"
 msgstr "Koder"
 
-#: gajim/common/const.py:389
+#: gajim/common/const.py:415
 msgid "In a Meeting"
 msgstr "I et møte"
 
-#: gajim/common/const.py:390
+#: gajim/common/const.py:416
 msgid "Studying"
 msgstr "Studerer"
 
-#: gajim/common/const.py:391
+#: gajim/common/const.py:417
 msgid "Writing"
 msgstr "Skriver"
 
-#: gajim/common/const.py:394
+#: gajim/common/const.py:420
 msgid "Afraid"
 msgstr "Redd"
 
-#: gajim/common/const.py:395
+#: gajim/common/const.py:421
 msgid "Amazed"
 msgstr "Forbløffet"
 
-#: gajim/common/const.py:396
+#: gajim/common/const.py:422
 msgid "Amorous"
 msgstr "Amorøs"
 
-#: gajim/common/const.py:397
+#: gajim/common/const.py:423
 msgid "Angry"
 msgstr "Er Bjørn Sundquist"
 
-#: gajim/common/const.py:398
+#: gajim/common/const.py:424
 msgid "Annoyed"
 msgstr "Irritert"
 
-#: gajim/common/const.py:399
+#: gajim/common/const.py:425
 msgid "Anxious"
 msgstr "Engstelig"
 
-#: gajim/common/const.py:400
+#: gajim/common/const.py:426
 msgid "Aroused"
 msgstr "Opphisset"
 
-#: gajim/common/const.py:401
+#: gajim/common/const.py:427
 msgid "Ashamed"
 msgstr "Skamfull"
 
-#: gajim/common/const.py:402
+#: gajim/common/const.py:428
 msgid "Bored"
 msgstr "Kjeder seg"
 
-#: gajim/common/const.py:403
+#: gajim/common/const.py:429
 msgid "Brave"
 msgstr "Modig"
 
-#: gajim/common/const.py:404
+#: gajim/common/const.py:430
 msgid "Calm"
 msgstr "Rolig"
 
-#: gajim/common/const.py:405
+#: gajim/common/const.py:431
 msgid "Cautious"
 msgstr "Forsiktig"
 
-#: gajim/common/const.py:406
+#: gajim/common/const.py:432
 msgid "Cold"
 msgstr "Kald"
 
-#: gajim/common/const.py:407
+#: gajim/common/const.py:433
 msgid "Confident"
 msgstr "Selvsikker"
 
-#: gajim/common/const.py:408
+#: gajim/common/const.py:434
 msgid "Confused"
 msgstr "Forvirret"
 
-#: gajim/common/const.py:409
+#: gajim/common/const.py:435
 msgid "Contemplative"
 msgstr "Overveiende"
 
-#: gajim/common/const.py:410
+#: gajim/common/const.py:436
 msgid "Contented"
 msgstr "Utfordrende"
 
-#: gajim/common/const.py:411
+#: gajim/common/const.py:437
 msgid "Cranky"
 msgstr "Gretten"
 
-#: gajim/common/const.py:412
+#: gajim/common/const.py:438
 msgid "Crazy"
 msgstr "Gal"
 
-#: gajim/common/const.py:413
+#: gajim/common/const.py:439
 msgid "Creative"
 msgstr "Kreativ"
 
-#: gajim/common/const.py:414
+#: gajim/common/const.py:440
 msgid "Curious"
 msgstr "Nysgjerrig"
 
-#: gajim/common/const.py:415
+#: gajim/common/const.py:441
 msgid "Dejected"
 msgstr "Nedslått"
 
-#: gajim/common/const.py:416
+#: gajim/common/const.py:442
 msgid "Depressed"
 msgstr "Deprimert"
 
-#: gajim/common/const.py:417
+#: gajim/common/const.py:443
 msgid "Disappointed"
 msgstr "Skuffet"
 
-#: gajim/common/const.py:418
+#: gajim/common/const.py:444
 msgid "Disgusted"
 msgstr "Vemmes"
 
-#: gajim/common/const.py:419
+#: gajim/common/const.py:445
 msgid "Dismayed"
 msgstr "Forferdet"
 
-#: gajim/common/const.py:420
+#: gajim/common/const.py:446
 msgid "Distracted"
 msgstr "Distrahert"
 
-#: gajim/common/const.py:421
+#: gajim/common/const.py:447
 msgid "Embarrassed"
 msgstr "Forlegen"
 
-#: gajim/common/const.py:422
+#: gajim/common/const.py:448
 msgid "Envious"
 msgstr "Misunnelig"
 
-#: gajim/common/const.py:423
+#: gajim/common/const.py:449
 msgid "Excited"
 msgstr "Begeistret"
 
-#: gajim/common/const.py:424
+#: gajim/common/const.py:450
 msgid "Flirtatious"
 msgstr "Flørtende"
 
-#: gajim/common/const.py:425
+#: gajim/common/const.py:451
 msgid "Frustrated"
 msgstr "Frustrert"
 
-#: gajim/common/const.py:426
+#: gajim/common/const.py:452
 msgid "Grateful"
 msgstr "Takknemlig"
 
-#: gajim/common/const.py:427
+#: gajim/common/const.py:453
 msgid "Grieving"
 msgstr "Sørgende"
 
-#: gajim/common/const.py:428
+#: gajim/common/const.py:454
 msgid "Grumpy"
 msgstr "Gretten"
 
-#: gajim/common/const.py:429
+#: gajim/common/const.py:455
 msgid "Guilty"
 msgstr "Skyldig"
 
-#: gajim/common/const.py:430
+#: gajim/common/const.py:456
 msgid "Happy"
 msgstr "Glad"
 
-#: gajim/common/const.py:431
+#: gajim/common/const.py:457
 msgid "Hopeful"
 msgstr "Håpefull"
 
-#: gajim/common/const.py:432
+#: gajim/common/const.py:458
 msgid "Hot"
 msgstr "Varm"
 
-#: gajim/common/const.py:433
+#: gajim/common/const.py:459
 msgid "Humbled"
 msgstr "Ydmyk"
 
-#: gajim/common/const.py:434
+#: gajim/common/const.py:460
 msgid "Humiliated"
 msgstr "Ydmyket"
 
-#: gajim/common/const.py:435
+#: gajim/common/const.py:461
 msgid "Hungry"
 msgstr "Sulten"
 
-#: gajim/common/const.py:436
+#: gajim/common/const.py:462
 msgid "Hurt"
 msgstr "Såret"
 
-#: gajim/common/const.py:437
+#: gajim/common/const.py:463
 msgid "Impressed"
 msgstr "Imponert"
 
-#: gajim/common/const.py:438
+#: gajim/common/const.py:464
 msgid "In Awe"
 msgstr "Ærefrykt"
 
-#: gajim/common/const.py:439
+#: gajim/common/const.py:465
 msgid "In Love"
 msgstr "Forelsket"
 
-#: gajim/common/const.py:440
+#: gajim/common/const.py:466
 msgid "Indignant"
 msgstr "Indignert"
 
-#: gajim/common/const.py:441
+#: gajim/common/const.py:467
 msgid "Interested"
 msgstr "Interessert"
 
-#: gajim/common/const.py:442
+#: gajim/common/const.py:468
 msgid "Intoxicated"
 msgstr "Beruset"
 
-#: gajim/common/const.py:443
+#: gajim/common/const.py:469
 msgid "Invincible"
 msgstr "Uovervinnelig"
 
-#: gajim/common/const.py:444
+#: gajim/common/const.py:470
 msgid "Jealous"
 msgstr "Sjalu"
 
-#: gajim/common/const.py:445
+#: gajim/common/const.py:471
 msgid "Lonely"
 msgstr "Ensom"
 
-#: gajim/common/const.py:446
+#: gajim/common/const.py:472
 msgid "Lost"
 msgstr "Bortkommet"
 
-#: gajim/common/const.py:447
+#: gajim/common/const.py:473
 msgid "Lucky"
 msgstr "Heldig"
 
-#: gajim/common/const.py:448
+#: gajim/common/const.py:474
 msgid "Mean"
 msgstr "Slem"
 
-#: gajim/common/const.py:449
+#: gajim/common/const.py:475
 msgid "Moody"
 msgstr "Humørsyk"
 
-#: gajim/common/const.py:450
+#: gajim/common/const.py:476
 msgid "Nervous"
 msgstr "Nervøs"
 
-#: gajim/common/const.py:451
+#: gajim/common/const.py:477
 msgid "Neutral"
 msgstr "Nøytral"
 
-#: gajim/common/const.py:452
+#: gajim/common/const.py:478
 msgid "Offended"
 msgstr "Fornærmet"
 
-#: gajim/common/const.py:453
+#: gajim/common/const.py:479
 msgid "Outraged"
 msgstr "Opprørt"
 
-#: gajim/common/const.py:454
+#: gajim/common/const.py:480
 msgid "Playful"
 msgstr "Leken"
 
-#: gajim/common/const.py:455
+#: gajim/common/const.py:481
 msgid "Proud"
 msgstr "Stolt"
 
-#: gajim/common/const.py:456
+#: gajim/common/const.py:482
 msgid "Relaxed"
 msgstr "Avslappet"
 
-#: gajim/common/const.py:457
+#: gajim/common/const.py:483
 msgid "Relieved"
 msgstr "Lettet"
 
-#: gajim/common/const.py:458
+#: gajim/common/const.py:484
 msgid "Remorseful"
 msgstr "Angrende"
 
-#: gajim/common/const.py:459
+#: gajim/common/const.py:485
 msgid "Restless"
 msgstr "Rastløs"
 
-#: gajim/common/const.py:460
+#: gajim/common/const.py:486
 msgid "Sad"
 msgstr "Lei seg"
 
-#: gajim/common/const.py:461
+#: gajim/common/const.py:487
 msgid "Sarcastic"
 msgstr "Sarkastisk"
 
-#: gajim/common/const.py:462
+#: gajim/common/const.py:488
 msgid "Satisfied"
 msgstr "Tilfreds"
 
-#: gajim/common/const.py:463
+#: gajim/common/const.py:489
 msgid "Serious"
 msgstr "Seriøs"
 
-#: gajim/common/const.py:464
+#: gajim/common/const.py:490
 msgid "Shocked"
 msgstr "Sjokkert"
 
-#: gajim/common/const.py:465
+#: gajim/common/const.py:491
 msgid "Shy"
 msgstr "Blyg"
 
-#: gajim/common/const.py:466
+#: gajim/common/const.py:492
 msgid "Sick"
 msgstr "Syk"
 
-#: gajim/common/const.py:467
+#: gajim/common/const.py:493
 msgid "Sleepy"
 msgstr "Søvnig"
 
-#: gajim/common/const.py:468
+#: gajim/common/const.py:494
 msgid "Spontaneous"
 msgstr "Spontan"
 
-#: gajim/common/const.py:469
+#: gajim/common/const.py:495
 msgid "Stressed"
 msgstr "Stresset"
 
-#: gajim/common/const.py:470
+#: gajim/common/const.py:496
 msgid "Strong"
 msgstr "Sterk"
 
-#: gajim/common/const.py:471
+#: gajim/common/const.py:497
 msgid "Surprised"
 msgstr "Overrasket"
 
-#: gajim/common/const.py:472
+#: gajim/common/const.py:498
 msgid "Thankful"
 msgstr "Takknemlig"
 
-#: gajim/common/const.py:473
+#: gajim/common/const.py:499
 msgid "Thirsty"
 msgstr "Tørst"
 
-#: gajim/common/const.py:474
+#: gajim/common/const.py:500
 msgid "Tired"
 msgstr "Trøtt"
 
-#: gajim/common/const.py:475
+#: gajim/common/const.py:501
 msgid "Undefined"
 msgstr "Udefinert"
 
-#: gajim/common/const.py:476
+#: gajim/common/const.py:502
 msgid "Weak"
 msgstr "Svak"
 
-#: gajim/common/const.py:477
+#: gajim/common/const.py:503
 msgid "Worried"
 msgstr "Bekymret"
 
-#: gajim/common/const.py:481
+#: gajim/common/const.py:507
 msgid "accuracy"
 msgstr "nøyaktighet"
 
-#: gajim/common/const.py:482
+#: gajim/common/const.py:508
 msgid "alt"
 msgstr "alt"
 
-#: gajim/common/const.py:483
+#: gajim/common/const.py:509
 msgid "area"
 msgstr "område"
 
-#: gajim/common/const.py:484
+#: gajim/common/const.py:510
 msgid "bearing"
 msgstr "kurs"
 
-#: gajim/common/const.py:485
+#: gajim/common/const.py:511
 msgid "building"
 msgstr "bygning"
 
-#: gajim/common/const.py:486
+#: gajim/common/const.py:512
 msgid "country"
 msgstr "land"
 
-#: gajim/common/const.py:487
+#: gajim/common/const.py:513
 msgid "countrycode"
 msgstr "landskode"
 
-#: gajim/common/const.py:488
+#: gajim/common/const.py:514
 msgid "datum"
 msgstr "dato"
 
-#: gajim/common/const.py:489
+#: gajim/common/const.py:515
 msgid "description"
 msgstr "Beskrivelse"
 
-#: gajim/common/const.py:490
+#: gajim/common/const.py:516
 msgid "error"
 msgstr "feil"
 
-#: gajim/common/const.py:491
+#: gajim/common/const.py:517
 msgid "floor"
 msgstr "etasje"
 
-#: gajim/common/const.py:492
+#: gajim/common/const.py:518
 msgid "lat"
 msgstr "breddegrad"
 
-#: gajim/common/const.py:493
+#: gajim/common/const.py:519
 msgid "locality"
 msgstr "samhold"
 
-#: gajim/common/const.py:494
+#: gajim/common/const.py:520
 msgid "lon"
 msgstr "lengdegrad"
 
-#: gajim/common/const.py:495
+#: gajim/common/const.py:521
 msgid "postalcode"
 msgstr "postnummer"
 
-#: gajim/common/const.py:496
+#: gajim/common/const.py:522
 msgid "region"
 msgstr "fylke"
 
-#: gajim/common/const.py:497
+#: gajim/common/const.py:523
 msgid "room"
 msgstr "rom"
 
-#: gajim/common/const.py:498
+#: gajim/common/const.py:524
 msgid "speed"
 msgstr "hastighet"
 
-#: gajim/common/const.py:499
+#: gajim/common/const.py:525
 msgid "street"
 msgstr "gate"
 
-#: gajim/common/const.py:500
+#: gajim/common/const.py:526
 msgid "text"
 msgstr "tekst"
 
-#: gajim/common/const.py:501
+#: gajim/common/const.py:527
 msgid "timestamp"
 msgstr "tidsstempel"
 
-#: gajim/common/const.py:502
+#: gajim/common/const.py:528
 msgid "URI"
 msgstr ""
 
-#: gajim/common/const.py:507
+#: gajim/common/const.py:533
 msgid "Unable to get issuer certificate"
 msgstr "Ikke i stand til innhente utsteders sertifikat"
 
-#: gajim/common/const.py:508
+#: gajim/common/const.py:534
 msgid "Unable to get certificate CRL"
 msgstr "Ikke i stand til å skaffe sertifikatets CRL"
 
-#: gajim/common/const.py:509
+#: gajim/common/const.py:535
 msgid "Unable to decrypt certificate's signature"
 msgstr "Ikke i stand til å dekryptere sertifikatets signatur"
 
-#: gajim/common/const.py:510
+#: gajim/common/const.py:536
 msgid "Unable to decrypt CRL's signature"
 msgstr "Ikke i stand til å dekryptere CRL-ens signatur"
 
-#: gajim/common/const.py:511
+#: gajim/common/const.py:537
 msgid "Unable to decode issuer public key"
 msgstr "Klarer ikke å dekode usteders offentlige nøkkel"
 
-#: gajim/common/const.py:512
+#: gajim/common/const.py:538
 msgid "Certificate signature failure"
 msgstr "Sertifikat-signaturfeil"
 
-#: gajim/common/const.py:513
+#: gajim/common/const.py:539
 msgid "CRL signature failure"
 msgstr "CRL-signaturfeil"
 
-#: gajim/common/const.py:514
+#: gajim/common/const.py:540
 msgid "Certificate is not yet valid"
 msgstr "Sertifikatet er ikke gylig enda"
 
-#: gajim/common/const.py:515
+#: gajim/common/const.py:541
 msgid "Certificate has expired"
 msgstr "Sertifikatet har utløpt"
 
-#: gajim/common/const.py:516
+#: gajim/common/const.py:542
 msgid "CRL is not yet valid"
 msgstr "CRL er ikke gyldig enda"
 
-#: gajim/common/const.py:517
+#: gajim/common/const.py:543
 msgid "CRL has expired"
 msgstr "CRL har utgått"
 
-#: gajim/common/const.py:518
+#: gajim/common/const.py:544
 msgid "Format error in certificate's notBefore field"
 msgstr "Formateringsfeil i sertifkatets ikkeFør-felt"
 
-#: gajim/common/const.py:519
+#: gajim/common/const.py:545
 msgid "Format error in certificate's notAfter field"
 msgstr "Formateringsfeil i sertifikatets ikkeEtter-felt"
 
-#: gajim/common/const.py:520
+#: gajim/common/const.py:546
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Formateringsfeil i CRL-ens sisteOppdatering-s-felt"
 
-#: gajim/common/const.py:521
+#: gajim/common/const.py:547
 msgid "Format error in CRL's nextUpdate field"
 msgstr "Formateringsfeil i CRL-ens nesteOppdatering-s-felt"
 
-#: gajim/common/const.py:522
+#: gajim/common/const.py:548
 msgid "Out of memory"
 msgstr "Tom for minne"
 
-#: gajim/common/const.py:523
+#: gajim/common/const.py:549
 msgid "Self signed certificate"
 msgstr "Selvsignert sertifikat"
 
-#: gajim/common/const.py:524
+#: gajim/common/const.py:550
 msgid "Self signed certificate in certificate chain"
 msgstr "Selvsignert sertifikat i sertifikatkjeden"
 
-#: gajim/common/const.py:525
+#: gajim/common/const.py:551
 msgid "Unable to get local issuer certificate"
 msgstr "Ute av stand til å få tak i lokal utsteders sertifikat"
 
-#: gajim/common/const.py:526
+#: gajim/common/const.py:552
 msgid "Unable to verify the first certificate"
 msgstr "Ute av stand til å bekrefte det første sertifikatet"
 
-#: gajim/common/const.py:527
+#: gajim/common/const.py:553
 msgid "Certificate chain too long"
 msgstr "Sertifikatskjeden er for lang"
 
-#: gajim/common/const.py:528
+#: gajim/common/const.py:554
 msgid "Certificate revoked"
 msgstr "Sertifikat tilbakekallt"
 
-#: gajim/common/const.py:529
+#: gajim/common/const.py:555
 msgid "Invalid CA certificate"
 msgstr "Ugyldig CA-sertifikat"
 
-#: gajim/common/const.py:530
+#: gajim/common/const.py:556
 msgid "Path length constraint exceeded"
 msgstr "Stilengde-begrensning overskredet"
 
-#: gajim/common/const.py:531
+#: gajim/common/const.py:557
 msgid "Unsupported certificate purpose"
 msgstr "Ikke støttet sertifkats-hensikt"
 
-#: gajim/common/const.py:532
+#: gajim/common/const.py:558
 msgid "Certificate not trusted"
 msgstr "Sertifikatet er ikke tiltrodd"
 
-#: gajim/common/const.py:533
+#: gajim/common/const.py:559
 msgid "Certificate rejected"
 msgstr "Sertifikat avvist"
 
-#: gajim/common/const.py:534
+#: gajim/common/const.py:560
 msgid "Subject issuer mismatch"
 msgstr "Emne-utsteder samsvarer ikke"
 
-#: gajim/common/const.py:535
+#: gajim/common/const.py:561
 msgid "Authority and subject key identifier mismatch"
 msgstr "Autoritet og emne-nøkkel-identifikator samsvarer ikke"
 
-#: gajim/common/const.py:536
+#: gajim/common/const.py:562
 msgid "Authority and issuer serial number mismatch"
 msgstr "Autoritet og utsteders seriernummer samsvarer ikke"
 
-#: gajim/common/const.py:537
+#: gajim/common/const.py:563
 msgid "Key usage does not include certificate signing"
 msgstr "Nøkkelbruk inkluderer ikke sertifikatssignering"
 
-#: gajim/common/const.py:538
+#: gajim/common/const.py:564
 msgid "Application verification failure"
 msgstr "Programbekreftelsesfeil"
 
-#: gajim/common/const.py:858
+#: gajim/common/const.py:884
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-#: gajim/common/const.py:859
+#: gajim/common/const.py:885
 #, fuzzy
 msgid "The certificate has been revoked"
 msgstr "Sertifikat tilbakekallt"
 
-#: gajim/common/const.py:860
+#: gajim/common/const.py:886
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
-#: gajim/common/const.py:861
+#: gajim/common/const.py:887
 msgid "The certificate’s algorithm is insecure"
 msgstr ""
 
-#: gajim/common/const.py:862
+#: gajim/common/const.py:888
 msgid "The certificate’s activation time is in the future"
 msgstr ""
 
-#: gajim/common/const.py:863
+#: gajim/common/const.py:889
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "Ukjent SSL-feil: %d"
 
-#: gajim/common/const.py:864
+#: gajim/common/const.py:890
 #, fuzzy
 msgid "The certificate has expired"
 msgstr "Sertifikatet har utløpt"
 
-#: gajim/common/const.py:908
+#: gajim/common/const.py:934
 #, fuzzy
 msgid "Authentication aborted"
 msgstr "Godkjenning godtatt"
 
-#: gajim/common/const.py:909
+#: gajim/common/const.py:935
 #, fuzzy
 msgid "Account disabled"
 msgstr "Konto avskrudd"
 
-#: gajim/common/const.py:910
+#: gajim/common/const.py:936
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Sertifikatet har utløpt"
 
-#: gajim/common/const.py:911
+#: gajim/common/const.py:937
 #, fuzzy
 msgid "Encryption required"
 msgstr "Krypteringsfeil"
 
-#: gajim/common/const.py:915
+#: gajim/common/const.py:941
 #, fuzzy
 msgid "Authentication mechanism not supported"
 msgstr "Tillegget støttes ikke"
 
-#: gajim/common/const.py:916
+#: gajim/common/const.py:942
 #, fuzzy
 msgid "Authentication mechanism too weak"
 msgstr "Identitetsbekreftelse feilet med følgende, \"%s\""
 
-#: gajim/common/const.py:918
+#: gajim/common/const.py:944
 msgid "Authentication currently not possible"
 msgstr ""
 
@@ -4948,239 +4936,228 @@ msgstr "lydutdata"
 msgid "video input"
 msgstr "videoinndata"
 
-#: gajim/common/helpers.py:188
+#: gajim/common/helpers.py:181
 msgid "_Busy"
 msgstr "_Opptatt"
 
-#: gajim/common/helpers.py:190
+#: gajim/common/helpers.py:183
 msgid "Busy"
 msgstr "Opptatt"
 
-#: gajim/common/helpers.py:193
+#: gajim/common/helpers.py:186
 msgid "_Not Available"
 msgstr "_Ikke tilgjengelig"
 
-#: gajim/common/helpers.py:195
+#: gajim/common/helpers.py:188
 msgid "Not Available"
 msgstr "Ikke tilgjengelig"
 
-#: gajim/common/helpers.py:198
+#: gajim/common/helpers.py:191
 msgid "_Free for Chat"
 msgstr "_Ledig for prat"
 
-#: gajim/common/helpers.py:200
+#: gajim/common/helpers.py:193
 msgid "Free for Chat"
 msgstr "Ledig for prat"
 
-#: gajim/common/helpers.py:203
+#: gajim/common/helpers.py:196
 msgid "?user status:_Available"
 msgstr "?user status:_Tilgjengelig"
 
-#: gajim/common/helpers.py:205
+#: gajim/common/helpers.py:198
 msgid "?user status:Available"
 msgstr "?user status:Tilgjengelig"
 
-#: gajim/common/helpers.py:207
+#: gajim/common/helpers.py:200
 msgid "Connecting"
 msgstr "Kobler til"
 
-#: gajim/common/helpers.py:210 gajim/data/gui/preferences_window.ui:1289
+#: gajim/common/helpers.py:203 gajim/data/gui/preferences_window.ui:1304
 msgid "A_way"
 msgstr "B_orte"
 
-#: gajim/common/helpers.py:212 gajim/common/modules/adhoc_commands.py:122
+#: gajim/common/helpers.py:205 gajim/common/modules/adhoc_commands.py:122
 #: gajim/command_system/implementation/standard.py:148
 msgid "Away"
 msgstr "Borte"
 
-#: gajim/common/helpers.py:215
+#: gajim/common/helpers.py:208
 msgid "_Offline"
 msgstr "_Frakoblet"
 
-#: gajim/common/helpers.py:217
+#: gajim/common/helpers.py:210
 msgid "Offline"
 msgstr "Frakoblet"
 
-#: gajim/common/helpers.py:221
+#: gajim/common/helpers.py:214
 msgid "?contact has status:Unknown"
 msgstr "?contact has status:Ukjent"
 
-#: gajim/common/helpers.py:223
+#: gajim/common/helpers.py:216
 msgid "?contact has status:Has errors"
 msgstr "?contact has status:Har feil"
 
-#: gajim/common/helpers.py:229
+#: gajim/common/helpers.py:221
 msgid "?Subscription we already have:None"
 msgstr "?Subscription we already have:Ingen"
 
-#: gajim/common/helpers.py:231
+#: gajim/common/helpers.py:223
 msgid "To"
 msgstr "Til"
 
-#: gajim/common/helpers.py:233 gajim/data/gui/groups_post_window.ui:33
+#: gajim/common/helpers.py:225 gajim/data/gui/groups_post_window.ui:33
 msgid "From"
 msgstr "Fra"
 
-#: gajim/common/helpers.py:235
+#: gajim/common/helpers.py:227
 msgid "Both"
 msgstr "Begge"
 
-#: gajim/common/helpers.py:237 gajim/gtk/server_info.py:234
+#: gajim/common/helpers.py:229 gajim/gtk/server_info.py:224
 #, fuzzy
 msgid "Unknown"
 msgstr "?OS:Ukjent"
 
-#: gajim/common/helpers.py:243
+#: gajim/common/helpers.py:235
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Ingen"
 
-#: gajim/common/helpers.py:245
+#: gajim/common/helpers.py:237
 msgid "Subscribe"
 msgstr "Abonner"
 
-#: gajim/common/helpers.py:257
+#: gajim/common/helpers.py:249
 msgid "?Group Chat Contact Role:None"
 msgstr "?Group Chat Contact Role:Ingen"
 
-#: gajim/common/helpers.py:260
+#: gajim/common/helpers.py:252
 msgid "Moderators"
 msgstr "Moderatorer"
 
-#: gajim/common/helpers.py:262
+#: gajim/common/helpers.py:254
 msgid "Moderator"
 msgstr "Moderator"
 
-#: gajim/common/helpers.py:265 gajim/data/gui/groupchat_info_scrolled.ui:213
+#: gajim/common/helpers.py:257 gajim/data/gui/groupchat_info_scrolled.ui:213
 msgid "Participants"
 msgstr "Deltakere"
 
-#: gajim/common/helpers.py:267
+#: gajim/common/helpers.py:259
 msgid "Participant"
 msgstr "Deltaker"
 
-#: gajim/common/helpers.py:270
+#: gajim/common/helpers.py:262
 msgid "Visitors"
 msgstr "Besøkende"
 
-#: gajim/common/helpers.py:272
+#: gajim/common/helpers.py:264
 msgid "Visitor"
 msgstr "Besøk"
 
-#: gajim/common/helpers.py:281
+#: gajim/common/helpers.py:273
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "?Group Chat Contact Affiliation:Ingen"
 
-#: gajim/common/helpers.py:284
+#: gajim/common/helpers.py:276
 #, fuzzy
 msgid "Owners"
 msgstr "Eier"
 
-#: gajim/common/helpers.py:286 gajim/data/gui/groupchat_config.ui:32
+#: gajim/common/helpers.py:278 gajim/data/gui/groupchat_config.ui:32
 msgid "Owner"
 msgstr "Eier"
 
-#: gajim/common/helpers.py:289
+#: gajim/common/helpers.py:281
 #, fuzzy
 msgid "Administrators"
 msgstr "Administrator"
 
-#: gajim/common/helpers.py:291
+#: gajim/common/helpers.py:283
 msgid "Administrator"
 msgstr "Administrator"
 
-#: gajim/common/helpers.py:294
+#: gajim/common/helpers.py:286
 #, fuzzy
 msgid "Members"
 msgstr "Medlem"
 
-#: gajim/common/helpers.py:296 gajim/data/gui/groupchat_config.ui:40
+#: gajim/common/helpers.py:288 gajim/data/gui/groupchat_config.ui:40
 #: gajim/gtk/groupchat_config.py:105
 msgid "Member"
 msgstr "Medlem"
 
-#: gajim/common/helpers.py:333
+#: gajim/common/helpers.py:325
 msgid "is paying attention to the conversation"
 msgstr "fokuserer på samtalen"
 
-#: gajim/common/helpers.py:335
+#: gajim/common/helpers.py:327
 msgid "is doing something else"
 msgstr "gjør noe annet"
 
-#: gajim/common/helpers.py:337
+#: gajim/common/helpers.py:329
 msgid "is composing a message…"
 msgstr ""
 "tilkjennegir blodets hvisken og benpipernes bøn fra det ubevisste sjeleliv…"
 
-#: gajim/common/helpers.py:340
+#: gajim/common/helpers.py:332
 msgid "paused composing a message"
 msgstr "tok pause i meldingsskrivingen"
 
-#: gajim/common/helpers.py:342
+#: gajim/common/helpers.py:334
 msgid "has closed the chat window or tab"
 msgstr "har lukket samtalevinduet eller fanen"
 
-#: gajim/common/helpers.py:801 gajim/common/helpers.py:808
+#: gajim/common/helpers.py:732 gajim/common/helpers.py:740
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "%d melding venter"
 msgstr[1] "%d meldinger venter"
 
-#: gajim/common/helpers.py:815
+#: gajim/common/helpers.py:749
 #, fuzzy, python-format
 msgid "from group chat %s"
 msgstr "i _gruppesamtaler"
 
-#: gajim/common/helpers.py:818 gajim/common/helpers.py:835
+#: gajim/common/helpers.py:752 gajim/common/helpers.py:773
 #, python-format
 msgid "from user %s"
 msgstr "fra brukeren %s"
 
-#: gajim/common/helpers.py:820
+#: gajim/common/helpers.py:754
 #, python-format
 msgid "from %s"
 msgstr "fra %s"
 
-#: gajim/common/helpers.py:827 gajim/common/helpers.py:833
+#: gajim/common/helpers.py:760 gajim/common/helpers.py:768
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] "%d hendelse venter"
 msgstr[1] "%d hendelser venter"
 
-#: gajim/common/helpers.py:851 gajim/common/helpers.py:863
-#: gajim/data/gui/roster_window.ui:79 data/org.gajim.Gajim.desktop.in:4
-#: data/org.gajim.Gajim.appdata.xml.in:7
-msgid "Gajim"
-msgstr "Gajim"
-
-#: gajim/common/helpers.py:865
-#, python-format
-msgid "Gajim - %s"
-msgstr "Gajim - %s"
-
-#: gajim/common/helpers.py:954 gajim/data/gui/add_new_contact_window.ui:25
+#: gajim/common/helpers.py:849 gajim/data/gui/add_new_contact_window.ui:25
 msgid "I would like to add you to my contact list."
 msgstr "Jeg vil legge deg til i kontaktlisten min."
 
-#: gajim/common/helpers.py:956
+#: gajim/common/helpers.py:851
 msgid "Hello, I am $name."
 msgstr "Hei, jeg er $name."
 
-#: gajim/common/helpers.py:1046 gajim/common/helpers.py:1055
-#: gajim/common/helpers.py:1113
+#: gajim/common/helpers.py:929 gajim/common/helpers.py:938
+#: gajim/common/helpers.py:998
 msgid "Timeout loading image"
 msgstr "Tidsavbrudd ved innlasting av bilde"
 
-#: gajim/common/helpers.py:1065 gajim/common/helpers.py:1111
+#: gajim/common/helpers.py:948 gajim/common/helpers.py:996
 msgid "Image is too big"
 msgstr "Bildet er for stort"
 
-#: gajim/common/helpers.py:1076
+#: gajim/common/helpers.py:959
 msgid "PyCURL is not installed"
 msgstr "PyCURL er ikke intallert"
 
-#: gajim/common/helpers.py:1115
+#: gajim/common/helpers.py:1000
 msgid "Error loading image"
 msgstr "Feil ved innlasting av bilde"
 
@@ -5396,7 +5373,7 @@ msgid "Join Automatically"
 msgstr ""
 
 #: gajim/data/gui/join_groupchat_window.ui:131
-#: gajim/data/gui/profile_window.ui:233 gajim/gtk/xml_console.py:281
+#: gajim/data/gui/profile_window.ui:233 gajim/gtk/xml_console.py:282
 msgid "Account"
 msgstr "Konto"
 
@@ -5407,7 +5384,7 @@ msgstr "Gruppesamtaler"
 
 #: gajim/data/gui/join_groupchat_window.ui:180
 #: gajim/data/gui/account_wizard.ui:255 gajim/data/gui/bookmarks.ui:158
-#: gajim/gtk/accounts.py:826
+#: gajim/gtk/accounts.py:831
 msgid "Password"
 msgstr "Passord"
 
@@ -5448,17 +5425,17 @@ msgid "Time remaining"
 msgstr ""
 
 #: gajim/data/gui/filetransfer_progress.ui:172
-#: gajim/data/gui/filetransfers.ui:30 gajim/data/gui/groupchat_control.ui:597
-#: gajim/data/gui/groupchat_control.ui:689
-#: gajim/data/gui/groupchat_control.ui:801
-#: gajim/data/gui/groupchat_control.ui:893
-#: gajim/data/gui/groupchat_control.ui:1294
-#: gajim/data/gui/groupchat_control.ui:1420
-#: gajim/data/gui/groupchat_control.ui:1546
-#: gajim/data/gui/groupchat_control.ui:1717
-#: gajim/data/gui/groupchat_control.ui:1795
+#: gajim/data/gui/filetransfers.ui:30 gajim/data/gui/groupchat_control.ui:600
+#: gajim/data/gui/groupchat_control.ui:692
+#: gajim/data/gui/groupchat_control.ui:804
+#: gajim/data/gui/groupchat_control.ui:896
+#: gajim/data/gui/groupchat_control.ui:1297
+#: gajim/data/gui/groupchat_control.ui:1423
+#: gajim/data/gui/groupchat_control.ui:1549
+#: gajim/data/gui/groupchat_control.ui:1720
+#: gajim/data/gui/groupchat_control.ui:1798
 #: gajim/data/gui/passphrase_dialog.ui:29 gajim/gtk/dialogs.py:53
-#: gajim/gtk/filechoosers.py:178
+#: gajim/gtk/filechoosers.py:179
 msgid "_Cancel"
 msgstr "_Avbryt"
 
@@ -5803,40 +5780,45 @@ msgstr "Jobb"
 #. "About" is the text of a tab of vcard window
 #: gajim/data/gui/profile_window.ui:1297
 #: gajim/data/gui/vcard_information_window.ui:1484
-#: gajim/data/gui/application_menu.ui:93
 msgid "About"
 msgstr "Om"
 
-#: gajim/data/gui/start_chat_dialog.ui:53
+#: gajim/data/gui/start_chat_dialog.ui:66
+msgid ""
+"Start a new chat, join a group chat or search for new group chats globally. "
+"You can also enter an XMPP address."
+msgstr ""
+
+#: gajim/data/gui/start_chat_dialog.ui:125
 #, fuzzy
 msgid "Global Group Chat Search"
 msgstr "Ta del i gruppesamtale"
 
-#: gajim/data/gui/start_chat_dialog.ui:189
-#: gajim/data/gui/start_chat_dialog.ui:229
-#: gajim/data/gui/start_chat_dialog.ui:364
+#: gajim/data/gui/start_chat_dialog.ui:268
+#: gajim/data/gui/start_chat_dialog.ui:308
+#: gajim/data/gui/start_chat_dialog.ui:443
 #, fuzzy
 msgid "_Back"
 msgstr "Straks tilbake"
 
-#: gajim/data/gui/start_chat_dialog.ui:245
-#: gajim/data/gui/groupchat_control.ui:818
-#: gajim/data/gui/groupchat_control.ui:910 gajim/gtk/discovery.py:1702
+#: gajim/data/gui/start_chat_dialog.ui:324
+#: gajim/data/gui/groupchat_control.ui:821
+#: gajim/data/gui/groupchat_control.ui:913 gajim/gtk/discovery.py:1702
 #: gajim/gtk/groupchat_join.py:65
 msgid "_Join"
 msgstr "_Delta"
 
-#: gajim/data/gui/start_chat_dialog.ui:289
+#: gajim/data/gui/start_chat_dialog.ui:368
 #, fuzzy
 msgid "Select Account"
 msgstr "Fjerner kontoen %s"
 
-#: gajim/data/gui/start_chat_dialog.ui:380
+#: gajim/data/gui/start_chat_dialog.ui:459
 #, fuzzy
 msgid "_Select"
 msgstr "Tøm fil"
 
-#: gajim/data/gui/start_chat_dialog.ui:442
+#: gajim/data/gui/start_chat_dialog.ui:521
 msgid ""
 "No contacts found\n"
 "You can also type an XMPP address"
@@ -5906,7 +5888,7 @@ msgid "Strike"
 msgstr "Gjennomstrek"
 
 #: gajim/data/gui/groupchat_control.ui:54 gajim/data/gui/chat_control.ui:318
-#: gajim/gtk/accounts.py:607
+#: gajim/gtk/accounts.py:610
 msgid "Color"
 msgstr "Farge"
 
@@ -5918,129 +5900,129 @@ msgstr "Skrift"
 msgid "Clear formatting"
 msgstr "Fjern formatering"
 
-#: gajim/data/gui/groupchat_control.ui:333 gajim/data/gui/chat_control.ui:887
+#: gajim/data/gui/groupchat_control.ui:336 gajim/data/gui/chat_control.ui:889
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Velg kryptering"
 
-#: gajim/data/gui/groupchat_control.ui:379 gajim/data/gui/chat_control.ui:646
+#: gajim/data/gui/groupchat_control.ui:382 gajim/data/gui/chat_control.ui:648
 #, fuzzy
 msgid "Show a list of emojis (Alt+M)"
 msgstr "Vis en liste over smilefjes (Alt+M)"
 
-#: gajim/data/gui/groupchat_control.ui:506
+#: gajim/data/gui/groupchat_control.ui:509
 #, fuzzy
 msgid "Joining…"
 msgstr "Bannlyser…"
 
-#: gajim/data/gui/groupchat_control.ui:564
+#: gajim/data/gui/groupchat_control.ui:567
 #, fuzzy
 msgid "Enter new nickname"
 msgstr "E_tter kallenavn:"
 
-#: gajim/data/gui/groupchat_control.ui:614
-#: gajim/data/gui/groupchat_control.ui:706
+#: gajim/data/gui/groupchat_control.ui:617
+#: gajim/data/gui/groupchat_control.ui:709
 #, fuzzy
 msgid "Ch_ange"
 msgstr "Endre kallenavn"
 
-#: gajim/data/gui/groupchat_control.ui:671
+#: gajim/data/gui/groupchat_control.ui:674
 msgid "Change Subject"
 msgstr "Endre emne"
 
-#: gajim/data/gui/groupchat_control.ui:783
+#: gajim/data/gui/groupchat_control.ui:786
 #, fuzzy
 msgid "Enter password"
 msgstr "Skriv inn nytt passord:"
 
-#: gajim/data/gui/groupchat_control.ui:1000
+#: gajim/data/gui/groupchat_control.ui:1003
 #, fuzzy
 msgid "_Leave Group Chat"
 msgstr "Forlat gruppesamtaler"
 
-#: gajim/data/gui/groupchat_control.ui:1004
+#: gajim/data/gui/groupchat_control.ui:1007
 #, fuzzy
 msgid "Gajim will not try to join this group chat again"
 msgstr "Dersom valgt vil Gajim automatisk ta del i gruppesamtalen ved oppstart"
 
-#: gajim/data/gui/groupchat_control.ui:1060
+#: gajim/data/gui/groupchat_control.ui:1063
 #, fuzzy
-msgid "An error occured"
+msgid "An error occurred"
 msgstr "<b>En feil har inntruffet:</b>"
 
-#: gajim/data/gui/groupchat_control.ui:1125
+#: gajim/data/gui/groupchat_control.ui:1128
 #, fuzzy
 msgid "_Try again"
 msgstr "Bekreft igjen…"
 
-#: gajim/data/gui/groupchat_control.ui:1273
+#: gajim/data/gui/groupchat_control.ui:1276
 #, fuzzy
 msgid "Kick participant"
 msgstr "Deltaker"
 
-#: gajim/data/gui/groupchat_control.ui:1311
+#: gajim/data/gui/groupchat_control.ui:1314
 msgid "_Kick"
 msgstr "_Kast ut"
 
-#: gajim/data/gui/groupchat_control.ui:1344
-#: gajim/data/gui/groupchat_control.ui:1470
-#: gajim/data/gui/groupchat_control.ui:1596
-#: gajim/data/gui/groupchat_control.ui:1613
-#: gajim/data/gui/groupchat_control.ui:1702
-#: gajim/data/gui/groupchat_control.ui:1703
+#: gajim/data/gui/groupchat_control.ui:1347
+#: gajim/data/gui/groupchat_control.ui:1473
+#: gajim/data/gui/groupchat_control.ui:1599
+#: gajim/data/gui/groupchat_control.ui:1616
+#: gajim/data/gui/groupchat_control.ui:1705
+#: gajim/data/gui/groupchat_control.ui:1706
 #, fuzzy
 msgid "Insert Emoji"
 msgstr "Skru på ASCII-smilefjes"
 
-#: gajim/data/gui/groupchat_control.ui:1357
-#: gajim/data/gui/groupchat_control.ui:1483
+#: gajim/data/gui/groupchat_control.ui:1360
+#: gajim/data/gui/groupchat_control.ui:1486
 #, fuzzy
 msgid "Reason (optional)"
 msgstr "Du kan også skrive inn et alternativt møtested:"
 
-#: gajim/data/gui/groupchat_control.ui:1399
+#: gajim/data/gui/groupchat_control.ui:1402
 #, fuzzy
 msgid "Ban participant"
 msgstr "Deltaker"
 
-#: gajim/data/gui/groupchat_control.ui:1437
+#: gajim/data/gui/groupchat_control.ui:1440
 msgid "_Ban"
 msgstr "_Bannlys"
 
-#: gajim/data/gui/groupchat_control.ui:1525
+#: gajim/data/gui/groupchat_control.ui:1528
 #, fuzzy
 msgid "Destroy group chat"
 msgstr "Ny gruppesamtale"
 
-#: gajim/data/gui/groupchat_control.ui:1563
+#: gajim/data/gui/groupchat_control.ui:1566
 #, fuzzy
 msgid "_Destroy"
 msgstr "Ødelegger %s"
 
-#: gajim/data/gui/groupchat_control.ui:1597
+#: gajim/data/gui/groupchat_control.ui:1600
 #, fuzzy
 msgid "Alternate venue (optional)..."
 msgstr "Du kan også skrive inn et alternativt møtested:"
 
-#: gajim/data/gui/groupchat_control.ui:1614
+#: gajim/data/gui/groupchat_control.ui:1617
 #, fuzzy
 msgid "Reason (optional)..."
 msgstr "Grunn"
 
-#: gajim/data/gui/groupchat_control.ui:1627
+#: gajim/data/gui/groupchat_control.ui:1630
 msgid "Reason for destruction"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1642
+#: gajim/data/gui/groupchat_control.ui:1645
 msgid "Where participants should go"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1683
+#: gajim/data/gui/groupchat_control.ui:1686
 #, fuzzy
 msgid "Enter a new name for this group chat"
 msgstr "Skriv inn nytt navn på gruppen %s"
 
-#: gajim/data/gui/groupchat_control.ui:1810
+#: gajim/data/gui/groupchat_control.ui:1813
 #, fuzzy
 msgid "_Invite"
 msgstr "In_viter"
@@ -6130,18 +6112,18 @@ msgid "Add"
 msgstr "Legg til"
 
 #: gajim/data/gui/mam_preferences.ui:194 gajim/data/gui/groupchat_config.ui:151
-#: gajim/gtk/remove_account.py:43 gajim/gtk/accounts.py:337
+#: gajim/gtk/remove_account.py:43 gajim/gtk/accounts.py:340
 msgid "Remove"
 msgstr "Fjern"
 
-#: gajim/data/gui/vcard_information_window.ui:72 gajim/gtk/accounts.py:686
+#: gajim/data/gui/vcard_information_window.ui:72 gajim/gtk/accounts.py:691
 msgid "Resource"
 msgstr "Ressurs"
 
 #: gajim/data/gui/vcard_information_window.ui:89
-#: gajim/data/gui/preferences_window.ui:1396
-#: gajim/data/gui/preferences_window.ui:1552
-#: gajim/data/gui/preferences_window.ui:1756
+#: gajim/data/gui/preferences_window.ui:1411
+#: gajim/data/gui/preferences_window.ui:1567
+#: gajim/data/gui/preferences_window.ui:1781
 msgid "Status"
 msgstr "Status"
 
@@ -6151,7 +6133,7 @@ msgid "Client"
 msgstr "Klient:"
 
 #: gajim/data/gui/vcard_information_window.ui:123
-#: gajim/data/gui/preferences_window.ui:1859
+#: gajim/data/gui/preferences_window.ui:1884
 msgid "System"
 msgstr "System"
 
@@ -6305,16 +6287,25 @@ msgid ""
 "minimizing to the system's notification area"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:374
+#: gajim/data/gui/preferences_window.ui:371
 msgid "Behavior of Windows and Tabs"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:406
+#: gajim/data/gui/preferences_window.ui:403
+#, fuzzy
+msgid "Me_rge accounts"
+msgstr "Sammenslåin_g av kontoer"
+
+#: gajim/data/gui/preferences_window.ui:407
+msgid "Displays all your accounts merged into a single one"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:421
 #, fuzzy
 msgid "Show a_vatars of contacts in contact list"
 msgstr "Viser a_vatarer for kontakter i kontaktlisten"
 
-#: gajim/data/gui/preferences_window.ui:410
+#: gajim/data/gui/preferences_window.ui:425
 #, fuzzy
 msgid ""
 "If checked, avatars of contacts will be shown in the contact list window and "
@@ -6323,12 +6314,12 @@ msgstr ""
 "Dersom valgt vil Gajim vise avatarer for kontakter i kontaktlistevinduet og "
 "i gruppesamtaler"
 
-#: gajim/data/gui/preferences_window.ui:424
+#: gajim/data/gui/preferences_window.ui:439
 #, fuzzy
 msgid "Show status _messages of contacts in contact list"
 msgstr "Viser status_meldinger for kontakter i kontaktlisten"
 
-#: gajim/data/gui/preferences_window.ui:428
+#: gajim/data/gui/preferences_window.ui:443
 #, fuzzy
 msgid ""
 "If checked, status messages of contacts will be shown under the contact's "
@@ -6337,54 +6328,54 @@ msgstr ""
 "Dersom valgt vil Gajim vise statusmelding tilhørende kontakter under "
 "kontaktnavnet i kontaktlistevinduet og i gruppesludringer"
 
-#: gajim/data/gui/preferences_window.ui:442
+#: gajim/data/gui/preferences_window.ui:457
 #, fuzzy
 msgid ""
 "Show e_xtra information of contacts in contact list (mood, activity, ...)"
 msgstr ""
 "Vis e_kstra informasjon om kontakter i kontaktlista (humør, aktivitet, …)"
 
-#: gajim/data/gui/preferences_window.ui:446
+#: gajim/data/gui/preferences_window.ui:461
 msgid ""
 "If checked, additional info published by the contact will be shown in the "
 "contact list. Additional infos (published via PEP) may include e.g. mood, "
 "activity, tune, location, ..."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:467
+#: gajim/data/gui/preferences_window.ui:482
 msgid "Sort contacts by status"
 msgstr "Sorter kontakter etter status"
 
-#: gajim/data/gui/preferences_window.ui:477
+#: gajim/data/gui/preferences_window.ui:492
 #, fuzzy
 msgid "in _contact list"
 msgstr "Sendte kontakter:"
 
-#: gajim/data/gui/preferences_window.ui:494
+#: gajim/data/gui/preferences_window.ui:509
 msgid "in _group chats"
 msgstr "i _gruppesamtaler"
 
-#: gajim/data/gui/preferences_window.ui:523
+#: gajim/data/gui/preferences_window.ui:538
 #, fuzzy
 msgid "Contact List Appearance"
 msgstr "Utveksling av kontaktlisteelement"
 
-#: gajim/data/gui/preferences_window.ui:570
+#: gajim/data/gui/preferences_window.ui:585
 msgid "Enable auto copy"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:573
+#: gajim/data/gui/preferences_window.ui:588
 msgid ""
 "If enabled, selecting Text will be copied to the clipboard, otherwise you "
 "can copy text with CTRL + SHIFT + C"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:624
+#: gajim/data/gui/preferences_window.ui:639
 #, fuzzy
 msgid "Enable spell _checking"
 msgstr "Skru på kontaktlistefiltrering"
 
-#: gajim/data/gui/preferences_window.ui:627
+#: gajim/data/gui/preferences_window.ui:642
 #, fuzzy
 msgid ""
 "If checked, spelling errors in input fields of chat windows will be "
@@ -6396,29 +6387,29 @@ msgstr ""
 "Dersom språk ikke er valgt ved høyreklikking i feltet, vil forvalgt "
 "språkvalg brukes for denne kontakten, eller gruppesamtalen."
 
-#: gajim/data/gui/preferences_window.ui:641
+#: gajim/data/gui/preferences_window.ui:656
 #, fuzzy
 msgid "Show message recei_pts (✔)"
 msgstr "meldingsinnhold"
 
-#: gajim/data/gui/preferences_window.ui:645
+#: gajim/data/gui/preferences_window.ui:660
 msgid ""
 "If checked, a small checkmark will be shown after each message when it was "
 "received. Note that this is not supported by all clients and therefore could "
 "be misleading."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:659
+#: gajim/data/gui/preferences_window.ui:674
 #, fuzzy
 msgid "_Show XHTML formatting"
 msgstr "Vis formateringsliste"
 
-#: gajim/data/gui/preferences_window.ui:676
+#: gajim/data/gui/preferences_window.ui:691
 #, fuzzy
 msgid "Display status messages in _single chats"
 msgstr "Viser status_meldinger for kontakter i kontaktlisten"
 
-#: gajim/data/gui/preferences_window.ui:680
+#: gajim/data/gui/preferences_window.ui:695
 #, fuzzy
 msgid ""
 "If checked, status lines will be shown in 1 on 1 chats when a contact "
@@ -6427,58 +6418,58 @@ msgstr ""
 "Hvis usant vil du ikke lenger kunne se statuslinjer i samtaler når en "
 "kontakt endrer status og/eller statusmelding."
 
-#: gajim/data/gui/preferences_window.ui:694
+#: gajim/data/gui/preferences_window.ui:709
 #, fuzzy
 msgid "Show subject after _joining a group chat"
 msgstr "Kunne ikke ta del i gruppesamtale"
 
-#: gajim/data/gui/preferences_window.ui:698
+#: gajim/data/gui/preferences_window.ui:713
 #, fuzzy
 msgid "If checked, the subject will be shown when joining a group chat"
 msgstr "Kunne ikke ta del i gruppesamtale"
 
-#: gajim/data/gui/preferences_window.ui:720
+#: gajim/data/gui/preferences_window.ui:735
 #, fuzzy
 msgid "Group Chat Settings"
 msgstr "Sludresnarveier"
 
-#: gajim/data/gui/preferences_window.ui:735
+#: gajim/data/gui/preferences_window.ui:750
 msgid "Show join/leave (Default)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:739
+#: gajim/data/gui/preferences_window.ui:754
 msgid ""
 "If join/leave status messages are shown in the group chat. This setting can "
 "be overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:758
+#: gajim/data/gui/preferences_window.ui:773
 msgid ""
 "The default sync threshold for new public group chats. This setting can be "
 "overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:760
+#: gajim/data/gui/preferences_window.ui:775
 msgid "Default Sync Threshold"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:802
+#: gajim/data/gui/preferences_window.ui:817
 #, fuzzy
 msgid "Show status changes (Default)"
 msgstr "_Vis statusendringer"
 
-#: gajim/data/gui/preferences_window.ui:806
+#: gajim/data/gui/preferences_window.ui:821
 msgid ""
 "If status change messages are shown in the group chat. This setting can be "
 "overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:863
+#: gajim/data/gui/preferences_window.ui:878
 #, fuzzy
 msgid "Show chatstate in tabs"
 msgstr "Vis lukkingsknapp på fanen?"
 
-#: gajim/data/gui/preferences_window.ui:867
+#: gajim/data/gui/preferences_window.ui:882
 #, fuzzy
 msgid ""
 "If checked, the tab will be colored according to the current chatstate of "
@@ -6487,64 +6478,67 @@ msgstr ""
 "Hvis avkrysset vil Gajim tillate at andre ser hvilket operativsystem du "
 "bruker"
 
-#: gajim/data/gui/preferences_window.ui:881
+#: gajim/data/gui/preferences_window.ui:896
 #, fuzzy
 msgid "Show chatstate in contact list"
 msgstr "Vis lukkingsknapp på fanen?"
 
-#: gajim/data/gui/preferences_window.ui:885
+#: gajim/data/gui/preferences_window.ui:900
 msgid ""
 "If checked, the contact row will be colored according to the current "
 "chatstate of the contact"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:899
+#: gajim/data/gui/preferences_window.ui:914
 msgid "Show chatstate in banner"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:903
+#: gajim/data/gui/preferences_window.ui:918
+#, fuzzy
 msgid ""
-"If checked, a desciption of the contacts current chatstate is shown in the "
+"If checked, a description of the contacts current chatstate is shown in the "
 "banner"
 msgstr ""
+"Hvis avkrysset vil Gajim tillate at andre ser hvilket operativsystem du "
+"bruker"
 
-#: gajim/data/gui/preferences_window.ui:923
+#: gajim/data/gui/preferences_window.ui:938
 #, fuzzy
 msgid "Chatstate"
 msgstr "Siste tilstand"
 
-#: gajim/data/gui/preferences_window.ui:940
+#: gajim/data/gui/preferences_window.ui:955
 #: gajim/data/gui/history_window.ui:303
 msgid "Chat"
 msgstr "Samtale"
 
-#: gajim/data/gui/preferences_window.ui:994
+#: gajim/data/gui/preferences_window.ui:1009
 #, fuzzy
 msgid "Show _notification area icon"
 msgstr "Vis merknad i systemstatusfeltet (systray):"
 
-#: gajim/data/gui/preferences_window.ui:1013
+#: gajim/data/gui/preferences_window.ui:1028
 #, fuzzy
 msgid "_When new event is received"
 msgstr "Ved mottak av ny hendelse:"
 
-#: gajim/data/gui/preferences_window.ui:1054
+#: gajim/data/gui/preferences_window.ui:1069
 #, fuzzy
 msgid "Show popups/notifications when a chat window is already _open"
 msgstr "Tillat oppsprett/merknader når et sludrevindu åpnes"
 
-#: gajim/data/gui/preferences_window.ui:1071
+#: gajim/data/gui/preferences_window.ui:1086
 #, fuzzy
 msgid "Allow popups/notifications when I'm _away, not available or busy"
 msgstr ""
 "Tillat oppspretts/merknader når jeg er _borte/ikke tilgjengelig/opptatt/"
 "usynlig"
 
-#: gajim/data/gui/preferences_window.ui:1088
+#: gajim/data/gui/preferences_window.ui:1103
 msgid "Notify me about contacts that sign _in"
 msgstr "Varsle meg om kontakter som logger _inn"
 
-#: gajim/data/gui/preferences_window.ui:1093
+#: gajim/data/gui/preferences_window.ui:1108
 #, fuzzy
 msgid ""
 "A popup window about contacts that just signed in will be shown in the "
@@ -6552,50 +6546,50 @@ msgid ""
 msgstr ""
 "Gajim vil alarmere deg med sprett-opp vindu i bunnen til høyre på skjermen"
 
-#: gajim/data/gui/preferences_window.ui:1107
+#: gajim/data/gui/preferences_window.ui:1122
 msgid "Notify me about contacts that sign _out"
 msgstr "Varsle meg om kontakter som logger _ut"
 
-#: gajim/data/gui/preferences_window.ui:1111
+#: gajim/data/gui/preferences_window.ui:1126
 msgid ""
 "A popup window about contacts that just signed out will be shown in the "
 "bottom right of the screen "
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1129
+#: gajim/data/gui/preferences_window.ui:1144
 #, fuzzy
 msgid "Visual Notifications"
 msgstr "<b>Visuelle merknader</b>"
 
-#: gajim/data/gui/preferences_window.ui:1165
+#: gajim/data/gui/preferences_window.ui:1180
 msgid "Play _sounds"
 msgstr "Spill av _lyder"
 
-#: gajim/data/gui/preferences_window.ui:1182
-#: gajim/data/gui/preferences_window.ui:1822
+#: gajim/data/gui/preferences_window.ui:1197
+#: gajim/data/gui/preferences_window.ui:1847
 msgid "Ma_nage..."
 msgstr "Be_handle…"
 
-#: gajim/data/gui/preferences_window.ui:1205
+#: gajim/data/gui/preferences_window.ui:1220
 #, fuzzy
 msgid "Allow playing sounds when I'm _busy"
 msgstr "Tillat lyd når jeg er _opptatt"
 
-#: gajim/data/gui/preferences_window.ui:1227
+#: gajim/data/gui/preferences_window.ui:1242
 #, fuzzy
 msgid "Sounds"
 msgstr "Lyd"
 
-#: gajim/data/gui/preferences_window.ui:1245
+#: gajim/data/gui/preferences_window.ui:1260
 msgid "Notifications"
 msgstr "Merknader"
 
-#: gajim/data/gui/preferences_window.ui:1272
+#: gajim/data/gui/preferences_window.ui:1287
 #, fuzzy
 msgid "No_t Available"
 msgstr "Ikke tilgjengelig"
 
-#: gajim/data/gui/preferences_window.ui:1276
+#: gajim/data/gui/preferences_window.ui:1291
 #, fuzzy
 msgid ""
 "If checked, the status will be changed to Not Available when the computer "
@@ -6604,7 +6598,7 @@ msgstr ""
 "Dersom valgt vil Gajim endre status til Ikke Tilgjengelig når maskinen ikke "
 "har vert i bruk enda lenger"
 
-#: gajim/data/gui/preferences_window.ui:1293
+#: gajim/data/gui/preferences_window.ui:1308
 #, fuzzy
 msgid ""
 "If checked, the status will be changed to Away when the computer has not "
@@ -6613,7 +6607,7 @@ msgstr ""
 "Dersom valgt vil Gajim endre status til Ikke Tilgjengelig når maskinen ikke "
 "har vert i bruk enda lenger"
 
-#: gajim/data/gui/preferences_window.ui:1339
+#: gajim/data/gui/preferences_window.ui:1354
 #, fuzzy
 msgid ""
 "The automatic away status message. If empty, the current status message will "
@@ -6626,7 +6620,7 @@ msgstr ""
 "$S byttes ut av tidligere brukt statusmelding\n"
 "$T byttest ut av 'Automatisk-borte'-tidsavbrudd"
 
-#: gajim/data/gui/preferences_window.ui:1354
+#: gajim/data/gui/preferences_window.ui:1369
 #, fuzzy
 msgid ""
 "The automatic not available status message. If empty, the current status "
@@ -6639,40 +6633,40 @@ msgstr ""
 "$S vil byttes ut av forrige status melding\n"
 "$T vil byttes ut av automatisk 'Ikke-tilgjengelig'-tidsavbrudd"
 
-#: gajim/data/gui/preferences_window.ui:1368
+#: gajim/data/gui/preferences_window.ui:1383
 #, fuzzy
 msgid "Minutes"
 msgstr "minutter"
 
-#: gajim/data/gui/preferences_window.ui:1412 gajim/gtk/features.py:108
+#: gajim/data/gui/preferences_window.ui:1427 gajim/gtk/features.py:97
 #, fuzzy
 msgid "Automatic Status"
 msgstr "Automatisk status"
 
-#: gajim/data/gui/preferences_window.ui:1443
+#: gajim/data/gui/preferences_window.ui:1458
 msgid "_Remember and restore status of the last session"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1447
+#: gajim/data/gui/preferences_window.ui:1462
 msgid ""
 "If checked, the status and status message used in the last session will be "
 "restored"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1469
+#: gajim/data/gui/preferences_window.ui:1484
 #, fuzzy
 msgid "Ask for status message when I"
 msgstr "Spør etter statusmelding når jeg:"
 
-#: gajim/data/gui/preferences_window.ui:1485
+#: gajim/data/gui/preferences_window.ui:1500
 msgid "Sign _in"
 msgstr "Logg _inn"
 
-#: gajim/data/gui/preferences_window.ui:1502
+#: gajim/data/gui/preferences_window.ui:1517
 msgid "Sign _out"
 msgstr "Logg _ut"
 
-#: gajim/data/gui/preferences_window.ui:1536
+#: gajim/data/gui/preferences_window.ui:1551
 msgid ""
 "If enabled, Gajim will not ask for a status message. The specified default "
 "message will be used instead."
@@ -6680,68 +6674,68 @@ msgstr ""
 "Dersom valgt vil Gajim ikke spørre etter statusmelding. Oppgitt forvalg for "
 "meldingen vil benyttes i steden for."
 
-#: gajim/data/gui/preferences_window.ui:1564
+#: gajim/data/gui/preferences_window.ui:1579
 msgid "Default Message"
 msgstr "Forvalgt melding"
 
-#: gajim/data/gui/preferences_window.ui:1579
-#: gajim/data/gui/preferences_window.ui:1860
+#: gajim/data/gui/preferences_window.ui:1594
+#: gajim/data/gui/preferences_window.ui:1885
 msgid "Enabled"
 msgstr "Påslått"
 
-#: gajim/data/gui/preferences_window.ui:1605
+#: gajim/data/gui/preferences_window.ui:1620
 #, fuzzy
 msgid "Status Messages"
 msgstr "Statusmelding"
 
-#: gajim/data/gui/preferences_window.ui:1738
+#: gajim/data/gui/preferences_window.ui:1763
 #, fuzzy
 msgid "Preset Status Messages"
 msgstr "<b>Forvalgt statusmelding</b>"
 
-#: gajim/data/gui/preferences_window.ui:1779 gajim/data/gui/themes_window.ui:85
+#: gajim/data/gui/preferences_window.ui:1804 gajim/data/gui/themes_window.ui:85
 #, fuzzy
 msgid "Themes"
 msgstr "Drakt"
 
-#: gajim/data/gui/preferences_window.ui:1796
+#: gajim/data/gui/preferences_window.ui:1821
 #, fuzzy
 msgid "_Theme"
 msgstr "Drakt"
 
-#: gajim/data/gui/preferences_window.ui:1827
+#: gajim/data/gui/preferences_window.ui:1852
 msgid "Configure color and font of the interface"
 msgstr "Sett opp farge og skrift for grensesnittet"
 
-#: gajim/data/gui/preferences_window.ui:1841
+#: gajim/data/gui/preferences_window.ui:1866
 #, fuzzy
 msgid "_Dark Theme"
 msgstr "gajim-remote"
 
-#: gajim/data/gui/preferences_window.ui:1875
+#: gajim/data/gui/preferences_window.ui:1900
 msgid "Emojis"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1892
+#: gajim/data/gui/preferences_window.ui:1917
 #, fuzzy
 msgid "_Emoji Theme"
 msgstr "gajim-remote"
 
-#: gajim/data/gui/preferences_window.ui:1921
+#: gajim/data/gui/preferences_window.ui:1946
 msgid "Icons"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1938
+#: gajim/data/gui/preferences_window.ui:1963
 #, fuzzy
 msgid "_Status iconset"
 msgstr "Standard _miniatyrbildesamling:"
 
-#: gajim/data/gui/preferences_window.ui:1964
+#: gajim/data/gui/preferences_window.ui:1989
 #, fuzzy
 msgid "Use transports _icons"
 msgstr "Bruk _transportens miniatyrbilder"
 
-#: gajim/data/gui/preferences_window.ui:1968
+#: gajim/data/gui/preferences_window.ui:1993
 #, fuzzy
 msgid ""
 "If checked, protocol-specific status icons will be used (e.g. a contact from "
@@ -6750,76 +6744,76 @@ msgstr ""
 "Dersom valgt vil Gajim bruke protkoll-spesifikke ikoner. (En kontakt fra ICQ "
 "vil ha tilsvarende ICQ-ikon for pålogget stastus, borte, opptatt, osv…)"
 
-#: gajim/data/gui/preferences_window.ui:1995
+#: gajim/data/gui/preferences_window.ui:2020
 #, fuzzy
 msgid "_Convert ASCII Emojis"
 msgstr "Skru på ASCII-smilefjes"
 
-#: gajim/data/gui/preferences_window.ui:2073
+#: gajim/data/gui/preferences_window.ui:2098
 msgid "Style"
 msgstr "Stil"
 
-#: gajim/data/gui/preferences_window.ui:2100
+#: gajim/data/gui/preferences_window.ui:2125
 #, fuzzy
 msgid "Show _Features"
 msgstr "Funksjonalitet"
 
-#: gajim/data/gui/preferences_window.ui:2178
+#: gajim/data/gui/preferences_window.ui:2203
 #, fuzzy
 msgid "A_udio output device"
 msgstr "Lydenhet for avspilling"
 
-#: gajim/data/gui/preferences_window.ui:2219
+#: gajim/data/gui/preferences_window.ui:2244
 #, fuzzy
 msgid "_Audio input device"
 msgstr "Lydenhet for mikrofon"
 
-#: gajim/data/gui/preferences_window.ui:2236
+#: gajim/data/gui/preferences_window.ui:2261
 #, fuzzy
 msgid "Audio"
 msgstr "Lydtest"
 
-#: gajim/data/gui/preferences_window.ui:2253
+#: gajim/data/gui/preferences_window.ui:2278
 #, fuzzy
 msgid "Video"
 msgstr "Videotest"
 
-#: gajim/data/gui/preferences_window.ui:2270
+#: gajim/data/gui/preferences_window.ui:2295
 #, fuzzy
 msgid "_Video input device"
 msgstr "Videokamera-enhet"
 
-#: gajim/data/gui/preferences_window.ui:2298
+#: gajim/data/gui/preferences_window.ui:2323
 #, fuzzy
 msgid "Video output"
 msgstr "videoutdata"
 
-#: gajim/data/gui/preferences_window.ui:2326
+#: gajim/data/gui/preferences_window.ui:2351
 #, fuzzy
 msgid "Video _framerate"
 msgstr "Bildetakt for video"
 
-#: gajim/data/gui/preferences_window.ui:2355
+#: gajim/data/gui/preferences_window.ui:2380
 #, fuzzy
 msgid "Video si_ze"
 msgstr "Videostørrelse"
 
-#: gajim/data/gui/preferences_window.ui:2380
+#: gajim/data/gui/preferences_window.ui:2405
 #, fuzzy
 msgid "Vi_ew own video source"
 msgstr "Vis egen videokilde"
 
-#: gajim/data/gui/preferences_window.ui:2399 gajim/data/gui/server_info.ui:298
-#: gajim/gtk/accounts.py:308
+#: gajim/data/gui/preferences_window.ui:2424 gajim/data/gui/server_info.ui:298
+#: gajim/gtk/accounts.py:311
 msgid "Connection"
 msgstr "Tilkobling"
 
-#: gajim/data/gui/preferences_window.ui:2413
+#: gajim/data/gui/preferences_window.ui:2438
 #, fuzzy
 msgid "STU_N server"
 msgstr "STUN-tjener:"
 
-#: gajim/data/gui/preferences_window.ui:2431
+#: gajim/data/gui/preferences_window.ui:2456
 #, fuzzy
 msgid ""
 "STUN server hostname. If no hostname was given, Gajim will try\n"
@@ -6828,53 +6822,63 @@ msgstr ""
 "STUN-tjenerens vertsnavn. Hvis ikke noe er oppgitt, vil Gajim\n"
 "prøve å lete opp ett fra tjeneren."
 
-#: gajim/data/gui/preferences_window.ui:2470
+#: gajim/data/gui/preferences_window.ui:2495
 #, fuzzy
 msgid "Audio/Video"
 msgstr "Lyd / Video"
 
-#: gajim/data/gui/preferences_window.ui:2503
+#: gajim/data/gui/preferences_window.ui:2528
 #, fuzzy
 msgid "_Global proxy"
 msgstr "Global mellomtjener:"
 
-#: gajim/data/gui/preferences_window.ui:2540
+#: gajim/data/gui/preferences_window.ui:2564
 msgid "_Manage..."
 msgstr "_Behandle…"
 
-#: gajim/data/gui/preferences_window.ui:2563
+#: gajim/data/gui/preferences_window.ui:2587
 #, fuzzy
 msgid "_Store status changes of contacts in history"
 msgstr "_Loggfør statusendringer tilhørende kontakter"
 
-#: gajim/data/gui/preferences_window.ui:2585
+#: gajim/data/gui/preferences_window.ui:2609
 #, fuzzy
 msgid "Enable _debug logging (restart required)"
 msgstr "Skru på kontaktlistefiltrering"
 
-#: gajim/data/gui/preferences_window.ui:2589
+#: gajim/data/gui/preferences_window.ui:2613
 #, fuzzy
 msgid "If checked, Gajim will store a log file for debugging"
 msgstr "Dersom valgt vil Gajim huske passordet for kontoen"
 
-#: gajim/data/gui/preferences_window.ui:2606
+#: gajim/data/gui/preferences_window.ui:2630
 msgid "Opens folder containing debug logs"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2636
+#: gajim/data/gui/preferences_window.ui:2656
+msgid "_Reset Hints"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2660
+msgid ""
+"In order to introduce you to features, Gajim displays some hints. This "
+"button will reset all these hints."
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2677
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
 
-#: gajim/data/gui/preferences_window.ui:2669
+#: gajim/data/gui/preferences_window.ui:2710
 msgid "Attention: Please use these options with caution!"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2682
+#: gajim/data/gui/preferences_window.ui:2723
 msgid "_Open..."
 msgstr "_Åpne…"
 
-#: gajim/data/gui/preferences_window.ui:2704 gajim/gtk/advanced_config.py:84
+#: gajim/data/gui/preferences_window.ui:2745 gajim/gtk/advanced_config.py:84
 #, fuzzy
 msgid "Advanced Configuration Editor (ACE)"
 msgstr "Avansert oppsettsbehandlder"
@@ -7053,12 +7057,12 @@ msgstr ""
 msgid "Your password"
 msgstr "Skriv inn nytt passord:"
 
-#: gajim/data/gui/account_wizard.ui:266 gajim/data/gui/account_wizard.ui:720
+#: gajim/data/gui/account_wizard.ui:266 gajim/data/gui/account_wizard.ui:719
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Avanserte Handlinger"
 
-#: gajim/data/gui/account_wizard.ui:270 gajim/data/gui/account_wizard.ui:724
+#: gajim/data/gui/account_wizard.ui:270 gajim/data/gui/account_wizard.ui:723
 #, fuzzy
 msgid "Proxy, custom hostname and port"
 msgstr "Bruk egendefinert maskinnavn/port"
@@ -7145,7 +7149,7 @@ msgid ""
 "a>"
 msgstr ""
 
-#: gajim/data/gui/account_wizard.ui:631 gajim/gtk/account_wizard.py:59
+#: gajim/data/gui/account_wizard.ui:631 gajim/gtk/account_wizard.py:60
 #, fuzzy
 msgid "Sign Up"
 msgstr "Logg _inn"
@@ -7159,7 +7163,7 @@ msgstr "Velg et kallenavn"
 msgid "Sign up Anonymously"
 msgstr ""
 
-#: gajim/data/gui/account_wizard.ui:707
+#: gajim/data/gui/account_wizard.ui:706
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
 
@@ -7189,8 +7193,8 @@ msgstr "_Tilbakestill til forvalg"
 msgid "Resets value to default"
 msgstr "_Tilbakestill til forvalg"
 
-#: gajim/data/gui/server_info.ui:20 gajim/gtk/accounts.py:682
-#: gajim/gtk/accounts.py:788
+#: gajim/data/gui/server_info.ui:20 gajim/gtk/accounts.py:687
+#: gajim/gtk/accounts.py:793
 msgid "Hostname"
 msgstr "Vertsnavn"
 
@@ -7231,7 +7235,7 @@ msgstr "Vis sertifikat…"
 msgid "Proxy Host"
 msgstr "_Vert for mellomtjener:"
 
-#: gajim/data/gui/server_info.ui:261 gajim/gtk/accounts.py:796
+#: gajim/data/gui/server_info.ui:261 gajim/gtk/accounts.py:801
 msgid "Type"
 msgstr "Skriv"
 
@@ -7245,8 +7249,7 @@ msgstr "_Protokoll:"
 msgid "Copy info to clipboard"
 msgstr "_Kopier lenke-plassering"
 
-#: gajim/data/gui/server_info.ui:359 gajim/data/gui/application_menu.ui:89
-#: gajim/gtk/features.py:41 gajim/gtk/features.py:52
+#: gajim/data/gui/server_info.ui:359 gajim/gtk/features.py:40
 msgid "Features"
 msgstr "Funksjonalitet"
 
@@ -7433,6 +7436,11 @@ msgstr ""
 msgid "Change Status Message…"
 msgstr "Endre statusmelding…"
 
+#: gajim/data/gui/roster_window.ui:79 data/org.gajim.Gajim.desktop.in:4
+#: data/org.gajim.Gajim.appdata.xml.in:7
+msgid "Gajim"
+msgstr "Gajim"
+
 #: gajim/data/gui/change_mood_dialog.ui:73
 msgid "<b>Mood:</b>"
 msgstr "<b>Humør:</b>"
@@ -7509,9 +7517,10 @@ msgid "Installed"
 msgstr "Innstallert"
 
 #: gajim/data/gui/plugins_window.ui:363
+#, fuzzy
 msgid ""
-"Plug-in decription should be displayed here. This text will be erased during "
-"PluginsWindow initialization."
+"Plug-in description should be displayed here. This text will be erased "
+"during PluginsWindow initialization."
 msgstr ""
 "Tilleggets beskrivelse bør vises her. Denne teksten vil bli slettet under "
 "igangsetting av PluginsWindow."
@@ -7698,76 +7707,104 @@ msgstr "Sludresnarveier"
 msgid "_Name"
 msgstr "_Navn:"
 
-#: gajim/data/gui/manage_proxies.ui:337 gajim/gtk/accounts.py:679
+#: gajim/data/gui/manage_proxies.ui:337 gajim/gtk/accounts.py:684
 msgid "Proxy"
 msgstr "Mellomtjener"
 
 #: gajim/data/gui/application_menu.ui:8
 #, fuzzy
-msgid "Start Chat…"
+msgid "_Start / Join Chat…"
 msgstr "Start samtale"
 
 #: gajim/data/gui/application_menu.ui:13
 #, fuzzy
-msgid "Create Group Chat…"
+msgid "Create _Group Chat…"
 msgstr "Forlat gruppesamtaler"
 
-#: gajim/data/gui/application_menu.ui:22 gajim/data/gui/shortcuts_window.ui:217
-#: gajim/plugins/gui.py:68
-msgid "Plugins"
+#: gajim/data/gui/application_menu.ui:18
+#, fuzzy
+msgid "_History Manager"
+msgstr "Historikk-behandler"
+
+#: gajim/data/gui/application_menu.ui:22
+#, fuzzy
+msgid "Pl_ugins"
 msgstr "Tillegg"
 
-#: gajim/data/gui/application_menu.ui:26 gajim/data/gui/shortcuts_window.ui:210
-#: gajim/gtk/preferences.py:64
-msgid "Preferences"
-msgstr "Tilstedeværelse"
+#: gajim/data/gui/application_menu.ui:26
+#: gajim/data/gui/systray_context_menu.ui:68
+msgid "_Preferences"
+msgstr "_Innstillinger"
 
-#: gajim/data/gui/application_menu.ui:30
-msgid "Quit"
-msgstr "Avslutt"
+#: gajim/data/gui/application_menu.ui:36
+#, fuzzy
+msgid "_Accounts"
+msgstr "Kontoer"
 
 #: gajim/data/gui/application_menu.ui:39
-msgid "View"
+#, fuzzy
+msgid "_View"
 msgstr "Vis"
 
-#: gajim/data/gui/application_menu.ui:42
+#: gajim/data/gui/application_menu.ui:42 gajim/gtk/statusicon.py:270
 #, fuzzy
-msgid "Show Contact List"
+msgid "Show _Contact List"
 msgstr "Vis aktive kontakter"
 
 #: gajim/data/gui/application_menu.ui:46
-msgid "Show Offline Contacts"
+#, fuzzy
+msgid "Show _Offline Contacts"
 msgstr "Vis _frakoblede kontakter"
 
 #: gajim/data/gui/application_menu.ui:50
-msgid "Show Active Contacts"
+#, fuzzy
+msgid "Show _Active Contacts"
 msgstr "Vis aktive kontakter"
 
 #: gajim/data/gui/application_menu.ui:54
-msgid "Show Transports"
+#, fuzzy
+msgid "Show _Transports"
 msgstr "Vis transporter"
 
-#: gajim/data/gui/application_menu.ui:60 gajim/data/gui/xml_console.ui:8
-msgid "XML Console"
+#: gajim/data/gui/application_menu.ui:60
+#, fuzzy
+msgid "_XML Console"
 msgstr "XML-konsoll"
 
+#: gajim/data/gui/application_menu.ui:64
+#, fuzzy
+msgid "_File Transfer"
+msgstr "Filoverføring"
+
 #: gajim/data/gui/application_menu.ui:74
-msgid "Help"
+#, fuzzy
+msgid "_Help"
 msgstr "Hjelp"
 
 #: gajim/data/gui/application_menu.ui:77
 #, fuzzy
-msgid "Wiki (Online)"
+msgid "_Wiki (Online)"
 msgstr "Pålogget"
 
 #: gajim/data/gui/application_menu.ui:81
 #, fuzzy
-msgid "FAQ (Online)"
+msgid "FA_Q (Online)"
 msgstr "Pålogget"
 
 #: gajim/data/gui/application_menu.ui:85
-msgid "Keyboard Shortcuts"
+#, fuzzy
+msgid "_Keyboard Shortcuts"
 msgstr "Tastatursnarveier"
+
+#: gajim/data/gui/application_menu.ui:89
+#, fuzzy
+msgid "_Features"
+msgstr "Funksjonalitet"
+
+#: gajim/data/gui/application_menu.ui:93
+#, fuzzy
+msgid "_About"
+msgstr "Om"
 
 #: gajim/data/gui/groupchat_creation.ui:27
 msgid "Public or Private?"
@@ -8066,54 +8103,62 @@ msgstr "Sludresnarveier"
 msgid "Create new group chat"
 msgstr "Forlat gruppesamtaler"
 
-#: gajim/data/gui/shortcuts_window.ui:224
+#: gajim/data/gui/shortcuts_window.ui:203 gajim/gtk/preferences.py:63
+msgid "Preferences"
+msgstr "Tilstedeværelse"
+
+#: gajim/data/gui/shortcuts_window.ui:210 gajim/plugins/gui.py:68
+msgid "Plugins"
+msgstr "Tillegg"
+
+#: gajim/data/gui/shortcuts_window.ui:217
 msgid "File transfers"
 msgstr "Filoverføringer"
 
-#: gajim/data/gui/shortcuts_window.ui:231
+#: gajim/data/gui/shortcuts_window.ui:224
 msgid "Set the status message"
 msgstr "Sett statusmelding"
 
-#: gajim/data/gui/shortcuts_window.ui:238
+#: gajim/data/gui/shortcuts_window.ui:231
 #, fuzzy
 msgid "Show XML console"
 msgstr "Vis _XML-konsoll"
 
-#: gajim/data/gui/shortcuts_window.ui:253
+#: gajim/data/gui/shortcuts_window.ui:246
 msgid "Appearance"
 msgstr "Utseende"
 
-#: gajim/data/gui/shortcuts_window.ui:258
+#: gajim/data/gui/shortcuts_window.ui:251
 msgid "Show offline contacts"
 msgstr "Vis _frakoblede kontakter"
 
-#: gajim/data/gui/shortcuts_window.ui:265
+#: gajim/data/gui/shortcuts_window.ui:258
 msgid "Show only active contacts"
 msgstr "Kun vis aktive kontakter"
 
-#: gajim/data/gui/shortcuts_window.ui:272
+#: gajim/data/gui/shortcuts_window.ui:265
 #, fuzzy
 msgid "Enable contact list filtering"
 msgstr "Skru på kontaktlistefiltrering"
 
-#: gajim/data/gui/shortcuts_window.ui:279
+#: gajim/data/gui/shortcuts_window.ui:272
 #, fuzzy
 msgid "Show / hide contact list"
 msgstr "Kun vis aktive kontakter"
 
-#: gajim/data/gui/shortcuts_window.ui:287 gajim/data/gui/groupchat_invite.ui:83
+#: gajim/data/gui/shortcuts_window.ui:280 gajim/data/gui/groupchat_invite.ui:83
 msgid "Contacts"
 msgstr "Kontakter"
 
-#: gajim/data/gui/shortcuts_window.ui:292
+#: gajim/data/gui/shortcuts_window.ui:285
 msgid "Contact information"
 msgstr "Kontaktinformasjon"
 
-#: gajim/data/gui/shortcuts_window.ui:299
+#: gajim/data/gui/shortcuts_window.ui:292
 msgid "Rename contact"
 msgstr "Gi kontakt nytt navn"
 
-#: gajim/data/gui/shortcuts_window.ui:306
+#: gajim/data/gui/shortcuts_window.ui:299
 msgid "Delete contact"
 msgstr "Slett kontakt"
 
@@ -8189,12 +8234,16 @@ msgstr "Fyll inn skjemaet."
 msgid "Group Chat Configuration"
 msgstr "Invitasjon til gruppesamtale"
 
+#: gajim/data/gui/xml_console.ui:8
+msgid "XML Console"
+msgstr "XML-konsoll"
+
 #: gajim/data/gui/xml_console.ui:131
 #, fuzzy
 msgid "Start Search..."
 msgstr "_Start Samtale..."
 
-#: gajim/data/gui/xml_console.ui:241 gajim/gtk/xml_console.py:308
+#: gajim/data/gui/xml_console.ui:241 gajim/gtk/xml_console.py:309
 msgid "Filter"
 msgstr "Filter"
 
@@ -8236,10 +8285,6 @@ msgstr "Vis alle _handlinger på vent"
 #: gajim/data/gui/systray_context_menu.ui:52
 msgid "Mute Sounds"
 msgstr "Slå av lyder"
-
-#: gajim/data/gui/systray_context_menu.ui:68
-msgid "_Preferences"
-msgstr "_Innstillinger"
 
 #: gajim/data/gui/single_message_window.ui:42
 #, fuzzy
@@ -8724,7 +8769,7 @@ msgid "Sender: %s"
 msgstr "Avsender: %s"
 
 #: gajim/gtk/filetransfer.py:240 gajim/gtk/filetransfer.py:749
-#: gajim/gtk/tooltips.py:549
+#: gajim/gtk/tooltips.py:550
 msgid "Recipient: "
 msgstr "Mottaker: "
 
@@ -8878,7 +8923,7 @@ msgstr "Fil: "
 msgid "It is not possible to send empty files"
 msgstr "Det er ikke mulig å sende tomme filer"
 
-#: gajim/gtk/filetransfer.py:747 gajim/gtk/tooltips.py:543
+#: gajim/gtk/filetransfer.py:747 gajim/gtk/tooltips.py:544
 msgid "Sender: "
 msgstr "Avsender: "
 
@@ -8893,7 +8938,7 @@ msgid "Change"
 msgstr "Endre kallenavn"
 
 #: gajim/gtk/change_password.py:45 gajim/gtk/remove_account.py:45
-#: gajim/gtk/account_wizard.py:64 gajim/gtk/accounts.py:380
+#: gajim/gtk/account_wizard.py:65 gajim/gtk/accounts.py:383
 #, fuzzy
 msgid "Back"
 msgstr "Straks tilbake"
@@ -8924,11 +8969,12 @@ msgid "Password Change Failed"
 msgstr "Passord påkrevd"
 
 #: gajim/gtk/change_password.py:63
-msgid "An error occured while trying to change your password."
-msgstr ""
+#, fuzzy
+msgid "An error occurred while trying to change your password."
+msgstr "Det skjedde en feil under oppretting av kontoen"
 
 #: gajim/gtk/change_password.py:142 gajim/gtk/change_password.py:144
-#: gajim/gtk/change_password.py:221 gajim/gtk/accounts.py:833
+#: gajim/gtk/change_password.py:221 gajim/gtk/accounts.py:838
 msgid "Change Password"
 msgstr "Endre passord"
 
@@ -8966,36 +9012,26 @@ msgstr ""
 msgid "Unknown SSL error '%s'"
 msgstr "Ukjent SSL-feil: %d"
 
-#: gajim/gtk/start_chat.py:54
+#: gajim/gtk/start_chat.py:55
 #, fuzzy
-msgid "Start New Conversation"
-msgstr "Start ny samtale"
+msgid "Start / Join Chat"
+msgstr "Start samtale"
 
-#: gajim/gtk/start_chat.py:271 gajim/gtk/start_chat.py:350
+#: gajim/gtk/start_chat.py:279 gajim/gtk/start_chat.py:358
 msgid "You can not join a group chat unless you are connected."
 msgstr "Du kan ikke gå inn i en gruppesamtale uten å være tilkoblet."
 
-#: gajim/gtk/start_chat.py:617 gajim/gtk/groupchat_join.py:40
+#: gajim/gtk/start_chat.py:628 gajim/gtk/groupchat_join.py:40
 msgid "Join Group Chat"
 msgstr "Ta del i gruppesamtale"
 
-#: gajim/gtk/start_chat.py:619 gajim/gtk/add_contact.py:42
-#, fuzzy
-msgid "Add Contact"
-msgstr "Legg til kontakt…"
-
-#: gajim/gtk/start_chat.py:644 gajim/gtk/groupchat_invite.py:328
-#, fuzzy, python-format
-msgid "Account: %s"
-msgstr "Kontoer"
-
-#: gajim/gtk/start_chat.py:700
+#: gajim/gtk/start_chat.py:709
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
 
-#: gajim/gtk/start_chat.py:793
+#: gajim/gtk/start_chat.py:802
 #, fuzzy, python-format
 msgid "%s group chats found"
 msgstr "%s ikke funnet"
@@ -9123,65 +9159,65 @@ msgstr "_Abonner"
 msgid "_Unsubscribe"
 msgstr "_Fjern abonnement"
 
-#: gajim/gtk/single_message.py:52
+#: gajim/gtk/single_message.py:51
 msgid "Send Single Message"
 msgstr "Send en Melding"
 
-#: gajim/gtk/single_message.py:103
+#: gajim/gtk/single_message.py:101
 #, fuzzy
 msgid "(No subject)"
 msgstr "tema"
 
-#: gajim/gtk/single_message.py:159
+#: gajim/gtk/single_message.py:157
 #, python-format
 msgid "Single Message using account %s"
 msgstr "Enkeltmelding ved bruk av kontoen %s"
 
-#: gajim/gtk/single_message.py:161
+#: gajim/gtk/single_message.py:159
 #, python-format
 msgid "Single Message in account %s"
 msgstr "Enkeltmelding i kontoen %s"
 
-#: gajim/gtk/single_message.py:163
+#: gajim/gtk/single_message.py:161
 msgid "Single Message"
 msgstr "Enkeltmelding"
 
-#: gajim/gtk/single_message.py:166
+#: gajim/gtk/single_message.py:164
 #, python-format
 msgid "Send %s"
 msgstr "Send %s"
 
-#: gajim/gtk/single_message.py:185
+#: gajim/gtk/single_message.py:183
 #, python-format
 msgid "Received %s"
 msgstr "Mottatt %s"
 
-#: gajim/gtk/single_message.py:207
+#: gajim/gtk/single_message.py:205
 #, fuzzy, python-format
 msgid "Characters typed: %s"
 msgstr "Ulovlig tegn"
 
-#: gajim/gtk/single_message.py:212 gajim/gtk/xml_console.py:169
+#: gajim/gtk/single_message.py:210 gajim/gtk/xml_console.py:169
 msgid "Connection not available"
 msgstr "Tilkobling ikke tilgjengelig"
 
-#: gajim/gtk/single_message.py:213
+#: gajim/gtk/single_message.py:211
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Sjekk at du er tilkoblet \"%s\"."
 
-#: gajim/gtk/single_message.py:241
+#: gajim/gtk/single_message.py:239
 #, fuzzy, python-format
 msgid ""
 "It is not possible to send a message to %s, this XMPP Address is not valid."
 msgstr "Det er ikke mulig å sende en melding til %s, JID-en er ikke gyldig."
 
-#: gajim/gtk/single_message.py:318
+#: gajim/gtk/single_message.py:316
 #, python-format
 msgid "RE: %s"
 msgstr "SV: %s"
 
-#: gajim/gtk/single_message.py:319
+#: gajim/gtk/single_message.py:317
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s skrev:\n"
@@ -9227,93 +9263,75 @@ msgstr "Registrert"
 msgid "Registration failed"
 msgstr "Registrering feilet"
 
-#: gajim/gtk/dialogs.py:148
-#, python-format
-msgid "Dictionary for language \"%s\" not available"
-msgstr "Ordliste for språket \"%s\" er ikke tilgjengelig"
-
-#: gajim/gtk/dialogs.py:149
-#, python-format
-msgid ""
-"You have to install the dictionary \"%s\" to use spellchecking, or choose "
-"another language by setting the speller_language option.\n"
-"\n"
-"Highlighting misspelled words feature will not be used"
-msgstr ""
-"Du må installere '%s'-ordbok for å bruke stavekontroll, eller velge et annet "
-"språk ved å sette speller_language -valget.\n"
-"\n"
-"Funksjonen for utheving av feilstavede ord vil ikke bli brukt"
-
-#: gajim/gtk/dialogs.py:224
+#: gajim/gtk/dialogs.py:214
 #, fuzzy
 msgid "Certificate"
 msgstr "Klientsertifikat"
 
-#: gajim/gtk/dialogs.py:238
+#: gajim/gtk/dialogs.py:228
 #, fuzzy, python-format
 msgid ""
 "Certificate for \n"
 "%s"
 msgstr "Sertifikat for kontoen %s"
 
-#: gajim/gtk/dialogs.py:287
+#: gajim/gtk/dialogs.py:277
 msgid "Issued to\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:288 gajim/gtk/dialogs.py:293
+#: gajim/gtk/dialogs.py:278 gajim/gtk/dialogs.py:283
 msgid "Common Name (CN): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:289 gajim/gtk/dialogs.py:294
+#: gajim/gtk/dialogs.py:279 gajim/gtk/dialogs.py:284
 msgid "Organization (O): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:290 gajim/gtk/dialogs.py:295
+#: gajim/gtk/dialogs.py:280 gajim/gtk/dialogs.py:285
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:291
+#: gajim/gtk/dialogs.py:281
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG-nummer:"
 
-#: gajim/gtk/dialogs.py:292
+#: gajim/gtk/dialogs.py:282
 msgid "Issued by\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:296
+#: gajim/gtk/dialogs.py:286
 msgid "Validity\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:297
+#: gajim/gtk/dialogs.py:287
 msgid "Issued on: "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:298
+#: gajim/gtk/dialogs.py:288
 msgid "Expires on: "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:299
+#: gajim/gtk/dialogs.py:289
 msgid "SHA-1:"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:301
+#: gajim/gtk/dialogs.py:291
 msgid "SHA-256:"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:314
+#: gajim/gtk/dialogs.py:304
 #, fuzzy
 msgid "Group Chat Invitation "
 msgstr "Invitasjon til gruppesamtale"
 
-#: gajim/gtk/dialogs.py:336
+#: gajim/gtk/dialogs.py:326
 #, fuzzy, python-format
 msgid ""
 "<b>%(contact)s</b> has invited you to the group chat <b>%(room_jid)s</b>"
 msgstr "$Contact har invitert deg til gruppesamtalen %(room_jid)s"
 
-#: gajim/gtk/dialogs.py:344
+#: gajim/gtk/dialogs.py:334
 #, python-format
 msgid "Comment: %s"
 msgstr "Kommentar: %s"
@@ -9327,6 +9345,11 @@ msgstr "GG-nummer:"
 #, fuzzy
 msgid "ICQ Number"
 msgstr "ICQ-nummer:"
+
+#: gajim/gtk/add_contact.py:42
+#, fuzzy
+msgid "Add Contact"
+msgstr "Legg til kontakt…"
 
 #: gajim/gtk/add_contact.py:260
 #, fuzzy, python-format
@@ -9380,9 +9403,9 @@ msgid "Error while adding transport contact"
 msgstr "Feil ved tilføying av transportkontakt"
 
 #: gajim/gtk/add_contact.py:486
-#, python-format
+#, fuzzy, python-format
 msgid ""
-"This error occured while adding a contact for transport %(transport)s:\n"
+"This error occurred while adding a contact for transport %(transport)s:\n"
 "\n"
 "%(error)s"
 msgstr ""
@@ -9627,10 +9650,9 @@ msgid "Error: %s"
 msgstr "Feil: %s"
 
 #: gajim/gtk/history.py:591 gajim/gtk/groupchat_config.py:133
-#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:329
-#: gajim/gtk/account_wizard.py:365 gajim/gtk/account_wizard.py:366
+#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:391
 #: gajim/gtk/account_wizard.py:427 gajim/gtk/account_wizard.py:428
-#: gajim/gtk/search.py:336
+#: gajim/gtk/account_wizard.py:493 gajim/gtk/search.py:336
 msgid "Error"
 msgstr "Feil"
 
@@ -9652,8 +9674,8 @@ msgstr "Åpne"
 msgid "New E-mail"
 msgstr "Ny E-post"
 
-#: gajim/gtk/settings.py:469 gajim/gtk/filechoosers.py:88
-#: gajim/gtk/filechoosers.py:139 gajim/gtk/filechoosers.py:146
+#: gajim/gtk/settings.py:469 gajim/gtk/filechoosers.py:89
+#: gajim/gtk/filechoosers.py:140 gajim/gtk/filechoosers.py:147
 #: gajim/gtk/sounds.py:35
 msgid "All files"
 msgstr "Alle filer"
@@ -9666,9 +9688,9 @@ msgstr "Tøm fil"
 msgid "Manage Proxies"
 msgstr "Behandle mellomtjenere"
 
-#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:684
-#: gajim/gtk/preferences.py:1027 gajim/gtk/preferences.py:1037
-#: gajim/gtk/preferences.py:1041
+#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:748
+#: gajim/gtk/preferences.py:1029 gajim/gtk/preferences.py:1039
+#: gajim/gtk/preferences.py:1043
 #, fuzzy
 msgid "No Proxy"
 msgstr "Mellomtjener"
@@ -9758,8 +9780,8 @@ msgstr "Ett år"
 msgid "Everything"
 msgstr "Alt"
 
-#: gajim/gtk/history_sync.py:239 gajim/gtk/account_wizard.py:249
-#: gajim/gtk/account_wizard.py:268
+#: gajim/gtk/history_sync.py:239 gajim/gtk/account_wizard.py:274
+#: gajim/gtk/account_wizard.py:293 gajim/gtk/account_wizard.py:309
 msgid "Connecting..."
 msgstr "Kobler til…"
 
@@ -9859,122 +9881,122 @@ msgstr ""
 "Allan Nordhøy <epost@anotheragency.no>\n"
 "Stian B. Barmen <stian@barmen.nu>"
 
-#: gajim/gtk/filechoosers.py:87
+#: gajim/gtk/filechoosers.py:88
 msgid "Choose File to Send…"
 msgstr "Velg fil å sende…"
 
-#: gajim/gtk/filechoosers.py:93
+#: gajim/gtk/filechoosers.py:94
 #, fuzzy
 msgid "Choose Avatar…"
 msgstr "Velg arkiv"
 
-#: gajim/gtk/filechoosers.py:97
+#: gajim/gtk/filechoosers.py:98
 #, fuzzy
 msgid "PNG files"
 msgstr "Alle filer"
 
-#: gajim/gtk/filechoosers.py:98
+#: gajim/gtk/filechoosers.py:99
 #, fuzzy
 msgid "JPEG files"
 msgstr "Alle filer"
 
-#: gajim/gtk/filechoosers.py:99
+#: gajim/gtk/filechoosers.py:100
 #, fuzzy
 msgid "SVG files"
 msgstr "Send filer"
 
-#: gajim/gtk/filechoosers.py:101
+#: gajim/gtk/filechoosers.py:102
 msgid "Images"
 msgstr "Bilder"
 
-#: gajim/gtk/filechoosers.py:138
+#: gajim/gtk/filechoosers.py:139
 msgid "Choose Archive"
 msgstr "Velg arkiv"
 
-#: gajim/gtk/filechoosers.py:140
+#: gajim/gtk/filechoosers.py:141
 #, fuzzy
 msgid "ZIP files"
 msgstr "Zip-filer"
 
-#: gajim/gtk/filechoosers.py:145
+#: gajim/gtk/filechoosers.py:146
 msgid "Save File as…"
 msgstr "Lagre fil som…"
 
-#: gajim/gtk/filechoosers.py:179
+#: gajim/gtk/filechoosers.py:180
 #, fuzzy
 msgid "_Open"
 msgstr "Åpne"
 
-#: gajim/gtk/tooltips.py:224
+#: gajim/gtk/tooltips.py:225
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "%(owner_or_admin_or_member)s av denne gruppesamtalen"
 
-#: gajim/gtk/tooltips.py:483
+#: gajim/gtk/tooltips.py:484
 msgid "Connected"
 msgstr "Tilkoblet"
 
-#: gajim/gtk/tooltips.py:485
+#: gajim/gtk/tooltips.py:486
 msgid "Disconnected"
 msgstr "Frakoblet"
 
-#: gajim/gtk/tooltips.py:539
+#: gajim/gtk/tooltips.py:540
 #, fuzzy
 msgid "File Name: "
 msgstr "Filnavn: %s"
 
-#: gajim/gtk/tooltips.py:542
+#: gajim/gtk/tooltips.py:543
 msgid "?Noun:Download"
 msgstr "?Noun:Nedlasting"
 
-#: gajim/gtk/tooltips.py:548
+#: gajim/gtk/tooltips.py:549
 msgid "?Noun:Upload"
 msgstr "?Noun:Opplasting"
 
-#: gajim/gtk/tooltips.py:555
+#: gajim/gtk/tooltips.py:556
 #, fuzzy
 msgid "?transfer type:Type: "
 msgstr "Filoverføring stoppet"
 
-#: gajim/gtk/tooltips.py:561
+#: gajim/gtk/tooltips.py:562
 #, fuzzy
 msgid "?transfer status:Transferred: "
 msgstr "?transfer status:Pauset"
 
-#: gajim/gtk/tooltips.py:564
+#: gajim/gtk/tooltips.py:565
 #, fuzzy
 msgid "?transfer status:Status: "
 msgstr "?transfer status:Pauset"
 
-#: gajim/gtk/tooltips.py:566
+#: gajim/gtk/tooltips.py:567
 msgid "Description: "
 msgstr "Beskrivelse: "
 
-#: gajim/gtk/tooltips.py:590
+#: gajim/gtk/tooltips.py:591
 #, fuzzy
 msgid "?transfer status:Aborted"
 msgstr "?transfer status:Pauset"
 
-#: gajim/gtk/tooltips.py:592
+#: gajim/gtk/tooltips.py:593
 #, fuzzy
 msgid "?transfer status:Completed"
 msgstr "?transfer status:Pauset"
 
-#: gajim/gtk/tooltips.py:594
+#: gajim/gtk/tooltips.py:595
 msgid "?transfer status:Paused"
 msgstr "?transfer status:Pauset"
 
-#: gajim/gtk/tooltips.py:597
+#: gajim/gtk/tooltips.py:598
 #, fuzzy
 msgid "?transfer status:Stalled"
 msgstr "?transfer status:Pauset"
 
-#: gajim/gtk/tooltips.py:601
+#: gajim/gtk/tooltips.py:602
 #, fuzzy
 msgid "?transfer status:Transferring"
 msgstr "?transfer status:Pauset"
 
-#: gajim/gtk/tooltips.py:602 gajim/gtk/tooltips.py:603
+#: gajim/gtk/tooltips.py:603 gajim/gtk/tooltips.py:604
 #, fuzzy
 msgid "?transfer status:Not started"
 msgstr "?transfer status:Pauset"
@@ -9983,7 +10005,7 @@ msgstr "?transfer status:Pauset"
 msgid " (optional)..."
 msgstr ""
 
-#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:540
+#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:604
 #, fuzzy
 msgid "Invalid Address"
 msgstr "Ugyldig fil"
@@ -10073,11 +10095,6 @@ msgstr "bruker kontoen %s"
 #, fuzzy
 msgid "Hide _Contact List"
 msgstr "Inviter _kontakter"
-
-#: gajim/gtk/statusicon.py:270
-#, fuzzy
-msgid "Show _Contact List"
-msgstr "Vis aktive kontakter"
 
 #: gajim/gtk/statusicon.py:278
 msgid "Hide this menu"
@@ -10193,48 +10210,48 @@ msgstr "?Ask (for Subscription):Ingen"
 msgid "?password:Hidden"
 msgstr "Passord:"
 
-#: gajim/gtk/server_info.py:139
+#: gajim/gtk/server_info.py:129
 msgid "Support"
 msgstr ""
 
-#: gajim/gtk/server_info.py:140
+#: gajim/gtk/server_info.py:130
 msgid "Security"
 msgstr ""
 
-#: gajim/gtk/server_info.py:141
+#: gajim/gtk/server_info.py:131
 msgid "Feedback"
 msgstr ""
 
-#: gajim/gtk/server_info.py:142
+#: gajim/gtk/server_info.py:132
 msgid "Abuse"
 msgstr ""
 
-#: gajim/gtk/server_info.py:143
+#: gajim/gtk/server_info.py:133
 msgid "Sales"
 msgstr ""
 
-#: gajim/gtk/server_info.py:227
+#: gajim/gtk/server_info.py:217
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
 msgstr "%(days)s dager, %(hours)s timer"
 
-#: gajim/gtk/server_info.py:350
+#: gajim/gtk/server_info.py:340
 #, fuzzy
 msgid ""
 "\n"
 "Disabled in preferences"
 msgstr "Arkiveringsinnstillinger"
 
-#: gajim/gtk/features.py:101
+#: gajim/gtk/features.py:90
 msgid "Audio / Video"
 msgstr "Lyd / Video"
 
-#: gajim/gtk/features.py:103
+#: gajim/gtk/features.py:92
 #, fuzzy
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Evne til å starte lyd- og video-samtaler."
 
-#: gajim/gtk/features.py:104
+#: gajim/gtk/features.py:93
 #, fuzzy
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
@@ -10243,34 +10260,34 @@ msgstr ""
 "Krever gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav og "
 "gstreamer1.0-plugins-ugly."
 
-#: gajim/gtk/features.py:106 gajim/gtk/features.py:157
-#: gajim/gtk/preferences.py:360
+#: gajim/gtk/features.py:95 gajim/gtk/features.py:145
+#: gajim/gtk/preferences.py:363
 #, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Funksjonen er ikke tilgjengelig på Windows."
 
-#: gajim/gtk/features.py:110
+#: gajim/gtk/features.py:99
 #, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr "Evnen til å måle uvirksom tid for å kunne sette auto-status."
 
-#: gajim/gtk/features.py:112
+#: gajim/gtk/features.py:101
 #, fuzzy
 msgid "Requires: libxss"
 msgstr "Krever libxss-biblioteket."
 
-#: gajim/gtk/features.py:113 gajim/gtk/features.py:134
+#: gajim/gtk/features.py:102 gajim/gtk/features.py:123
 msgid "No additional requirements"
 msgstr ""
 
-#: gajim/gtk/features.py:115
+#: gajim/gtk/features.py:104
 #, fuzzy
 msgid "Bonjour / Zeroconf (Serverless Chat)"
 msgstr "Bonjour / Zeroconf"
 
-#: gajim/gtk/features.py:117
+#: gajim/gtk/features.py:106
 #, fuzzy
 msgid ""
 "Enables Gajim to automatically detected clients in a local network for "
@@ -10278,105 +10295,103 @@ msgid ""
 msgstr ""
 "Tjenerløs samtale med automatisk oppdagede klienter på lokalt nettverk."
 
-#: gajim/gtk/features.py:119
+#: gajim/gtk/features.py:108
 #, fuzzy
 msgid "Requires: gir1.2-avahi-0.6"
 msgstr "Krever gir1.2-gupnpigd-1.0."
 
-#: gajim/gtk/features.py:120
+#: gajim/gtk/features.py:109
 #, fuzzy, python-format
 msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 msgstr "Krever at pybonjour og bonjour-SDK kjører (%(url)s)"
 
-#: gajim/gtk/features.py:123
+#: gajim/gtk/features.py:112
 #, fuzzy
 msgid "Location detection"
 msgstr "Tilkoblingsvalg"
 
-#: gajim/gtk/features.py:125
+#: gajim/gtk/features.py:114
 msgid ""
 "Enables Gajim to be location-aware, if the user decides to publish the "
 "device’s location"
 msgstr ""
 
-#: gajim/gtk/features.py:127
+#: gajim/gtk/features.py:116
 #, fuzzy
 msgid "Requires: geoclue"
 msgstr "Krever Gspell"
 
-#: gajim/gtk/features.py:128
+#: gajim/gtk/features.py:117
 #, fuzzy
 msgid "Feature is not available under Windows"
 msgstr "Funksjonen er ikke tilgjengelig på Windows."
 
-#: gajim/gtk/features.py:130
+#: gajim/gtk/features.py:119
 #, fuzzy
 msgid "Notification Sounds"
 msgstr "Merknader"
 
-#: gajim/gtk/features.py:132
+#: gajim/gtk/features.py:121
 #, fuzzy
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Evne til å starte lyd- og video-samtaler."
 
-#: gajim/gtk/features.py:133
+#: gajim/gtk/features.py:122
 #, fuzzy
 msgid "Requires: gsound"
 msgstr "Krever python-dbus."
 
-#: gajim/gtk/features.py:136
+#: gajim/gtk/features.py:125
 #, fuzzy
 msgid "Secure Password Storage"
 msgstr "Lagre passord"
 
-#: gajim/gtk/features.py:138
+#: gajim/gtk/features.py:127
 #, fuzzy
 msgid ""
 "Enables Gajim to store Passwords securely instead of storing them in "
 "plaintext"
 msgstr "Passord kan lagres sikkert og ikke bare i klartekst."
 
-#: gajim/gtk/features.py:140
+#: gajim/gtk/features.py:129
 #, fuzzy
-msgid ""
-"Requires: libsecret and a provider (such as GNOME Keyring and KSecretService)"
-msgstr ""
-"Krever libsecret og en tilbyder (som GNOME-nøkkelringen og KSecretService)."
+msgid "Requires: gnome-keyring or kwallet"
+msgstr "Krever gnome-keyring og python-gnome2-desktop, eller kwalletcli."
 
-#: gajim/gtk/features.py:142
+#: gajim/gtk/features.py:130
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-#: gajim/gtk/features.py:145
+#: gajim/gtk/features.py:133
 msgid "Spell Checker"
 msgstr "Stavekontroll"
 
-#: gajim/gtk/features.py:147
+#: gajim/gtk/features.py:135
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
-#: gajim/gtk/features.py:149 gajim/gtk/features.py:150
+#: gajim/gtk/features.py:137 gajim/gtk/features.py:138
 #, fuzzy
 msgid "Requires: Gspell"
 msgstr "Krever Gspell"
 
-#: gajim/gtk/features.py:152
+#: gajim/gtk/features.py:140
 msgid "UPnP-IGD Port Forwarding"
 msgstr ""
 
-#: gajim/gtk/features.py:154
+#: gajim/gtk/features.py:142
 #, fuzzy
 msgid ""
 "Enables Gajim to request your router to forward ports for file transfers"
 msgstr ""
 "Evnen til å forespørre din ruter etter åpning av port for filoverføring."
 
-#: gajim/gtk/features.py:156
+#: gajim/gtk/features.py:144
 #, fuzzy
 msgid "Requires: gir1.2-gupnpigd-1.0"
 msgstr "Krever gir1.2-gupnpigd-1.0."
 
-#: gajim/gtk/features.py:217
+#: gajim/gtk/features.py:200
 #, fuzzy
 msgid "Disabled in Preferences"
 msgstr "Arkiveringsinnstillinger"
@@ -10423,7 +10438,7 @@ msgstr "Listenavnet er ugyldig"
 msgid "You must enter a name to create a privacy list."
 msgstr "Du må skrive inn et navn for å lage en personvernsliste."
 
-#: gajim/gtk/groupchat_invite.py:303
+#: gajim/gtk/groupchat_invite.py:304
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Inviter _kontakter"
@@ -10451,7 +10466,7 @@ msgstr "_Avslutt"
 msgid "Commands"
 msgstr "Kommandoer: %s"
 
-#: gajim/gtk/adhoc.py:104 gajim/gtk/account_wizard.py:62
+#: gajim/gtk/adhoc.py:104 gajim/gtk/account_wizard.py:63
 msgid "Next"
 msgstr ""
 
@@ -10522,120 +10537,134 @@ msgstr "Abonneringsønske fra %s"
 msgid "Loading"
 msgstr "Laster"
 
-#: gajim/gtk/account_wizard.py:61
+#: gajim/gtk/account_wizard.py:62
 #, fuzzy
 msgid "Connect"
 msgstr "Tilkoblet"
 
-#: gajim/gtk/account_wizard.py:63
+#: gajim/gtk/account_wizard.py:64
 #, fuzzy
 msgid "Log In"
 msgstr "_Logg på"
 
-#: gajim/gtk/account_wizard.py:77
+#: gajim/gtk/account_wizard.py:78
 msgid "An error occurred during account creation"
 msgstr "Det skjedde en feil under oppretting av kontoen"
 
-#: gajim/gtk/account_wizard.py:151
+#: gajim/gtk/account_wizard.py:164
 #, fuzzy
 msgid "Creating Account..."
 msgstr "Fjerner kontoen %s"
 
-#: gajim/gtk/account_wizard.py:152
+#: gajim/gtk/account_wizard.py:165
 #, fuzzy
 msgid "Trying to create account..."
 msgstr "Klikk for å endre kontoens passord"
 
-#: gajim/gtk/account_wizard.py:250 gajim/gtk/account_wizard.py:269
+#: gajim/gtk/account_wizard.py:275 gajim/gtk/account_wizard.py:294
+#: gajim/gtk/account_wizard.py:310
 #, fuzzy
 msgid "Connecting to server..."
 msgstr "Kobler til…"
 
-#: gajim/gtk/account_wizard.py:318 gajim/gtk/account_wizard.py:319
+#: gajim/gtk/account_wizard.py:364 gajim/gtk/account_wizard.py:365
+msgid "Anonymous login not supported"
+msgstr ""
+
+#: gajim/gtk/account_wizard.py:366
+#, fuzzy
+msgid "This server does not support anonymous"
+msgstr "Din server støtter ikke Vcard"
+
+#: gajim/gtk/account_wizard.py:380 gajim/gtk/account_wizard.py:381
 #, fuzzy
 msgid "Signup not allowed"
 msgstr "Ulovlig tegn"
 
-#: gajim/gtk/account_wizard.py:320
+#: gajim/gtk/account_wizard.py:382
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Din server støtter ikke Vcard"
 
-#: gajim/gtk/account_wizard.py:336 gajim/gtk/account_wizard.py:337
+#: gajim/gtk/account_wizard.py:398 gajim/gtk/account_wizard.py:399
 #, fuzzy
 msgid "Connection failed"
 msgstr "Tilkobling mislyktes"
 
-#: gajim/gtk/account_wizard.py:338
+#: gajim/gtk/account_wizard.py:400
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:392
+#: gajim/gtk/account_wizard.py:454
 #, fuzzy
 msgid "Account is being created"
 msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
 
-#: gajim/gtk/account_wizard.py:457 gajim/gtk/accounts.py:554
+#: gajim/gtk/account_wizard.py:491
+msgid "The server rejected the registration without an error message"
+msgstr ""
+
+#: gajim/gtk/account_wizard.py:521 gajim/gtk/accounts.py:557
 #, fuzzy
 msgid "Add Account"
 msgstr "Legg til kontakt…"
 
-#: gajim/gtk/account_wizard.py:564
+#: gajim/gtk/account_wizard.py:628
 #, fuzzy
 msgid "Create New Account"
 msgstr "Lag en ny post"
 
-#: gajim/gtk/account_wizard.py:623
+#: gajim/gtk/account_wizard.py:687
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Egendefinert port må være et portnummer"
 
-#: gajim/gtk/account_wizard.py:630
+#: gajim/gtk/account_wizard.py:694
 #, fuzzy
 msgid "Port must be a number between 0 and 65535"
 msgstr "Ressursen må være mellom 1 og 1023 byte"
 
-#: gajim/gtk/account_wizard.py:667
+#: gajim/gtk/account_wizard.py:731
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Avanserte Handlinger"
 
-#: gajim/gtk/account_wizard.py:713
+#: gajim/gtk/account_wizard.py:777
 #, fuzzy
 msgid "Security Warning"
 msgstr "Advarsel: %s"
 
-#: gajim/gtk/account_wizard.py:732
+#: gajim/gtk/account_wizard.py:796
 #, fuzzy, python-format
 msgid "Unknown TLS error '%s'"
 msgstr "Ukjent SSL-feil: %d"
 
-#: gajim/gtk/account_wizard.py:767 gajim/gtk/account_wizard.py:770
+#: gajim/gtk/account_wizard.py:831 gajim/gtk/account_wizard.py:834
 #, fuzzy
 msgid "Create Account"
 msgstr "Fjerner kontoen %s"
 
-#: gajim/gtk/account_wizard.py:821
+#: gajim/gtk/account_wizard.py:885
 msgid "Redirect"
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:831
+#: gajim/gtk/account_wizard.py:895
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Registrer til %s"
 
-#: gajim/gtk/account_wizard.py:842
+#: gajim/gtk/account_wizard.py:906
 #, fuzzy
 msgid "Account Added"
 msgstr "Konto-rad"
 
-#: gajim/gtk/account_wizard.py:843
+#: gajim/gtk/account_wizard.py:907
 msgid "Account has been added successfully"
 msgstr "Kontoen har blitt lagt til uten feilmeldinger"
 
-#: gajim/gtk/xml_console.py:95 gajim/gtk/xml_console.py:278
+#: gajim/gtk/xml_console.py:95 gajim/gtk/xml_console.py:279
 #, fuzzy
 msgid "All Accounts"
 msgstr "Kontoer"
@@ -10678,238 +10707,238 @@ msgstr "Søk"
 msgid "No results found"
 msgstr "Inget resultat"
 
-#: gajim/gtk/preferences.py:363
+#: gajim/gtk/preferences.py:366
 msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
-#: gajim/gtk/preferences.py:375 gajim/gtk/preferences.py:384
+#: gajim/gtk/preferences.py:378 gajim/gtk/preferences.py:387
 msgid "Default"
 msgstr "Forvalg"
 
-#: gajim/gtk/preferences.py:401
+#: gajim/gtk/preferences.py:404
 msgid ""
 "<span color=\"red\" font-weight=\"bold\">Unavailable</span>, video support "
 "will be disabled"
 msgstr ""
 
-#: gajim/gtk/preferences.py:407
+#: gajim/gtk/preferences.py:410
 msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
 msgstr ""
 
-#: gajim/gtk/preferences.py:410
+#: gajim/gtk/preferences.py:413
 msgid "<span color=\"yellow\" font-weight=\"bold\">Unaccelerated</span>"
 msgstr ""
 
-#: gajim/gtk/preferences.py:876
+#: gajim/gtk/preferences.py:878
 msgid "status message title"
 msgstr "status-meldingstittel"
 
-#: gajim/gtk/preferences.py:877
+#: gajim/gtk/preferences.py:879
 msgid "status message text"
 msgstr "statusmeldings-tekst"
 
-#: gajim/gtk/accounts.py:119
+#: gajim/gtk/accounts.py:122
 #, fuzzy
 msgid "Re-Login"
 msgstr "Innlogging"
 
-#: gajim/gtk/accounts.py:120
+#: gajim/gtk/accounts.py:123
 #, fuzzy
 msgid "Re-Login now?"
 msgstr "Logge inn på nytt nå?"
 
-#: gajim/gtk/accounts.py:121
+#: gajim/gtk/accounts.py:124
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Dersom du ønsker at endringene skal trå i kraft umiddelbart, må du logge inn "
 "på nytt."
 
-#: gajim/gtk/accounts.py:123
+#: gajim/gtk/accounts.py:126
 msgid "_Later"
 msgstr ""
 
-#: gajim/gtk/accounts.py:125
+#: gajim/gtk/accounts.py:128
 #, fuzzy
 msgid "_Re-Login"
 msgstr "Innlogging"
 
-#: gajim/gtk/accounts.py:489
+#: gajim/gtk/accounts.py:492
 #, fuzzy
 msgid "Please check if Bonjour is installed."
 msgstr "Sjekk om Avahi eller Bonjour er installert."
 
-#: gajim/gtk/accounts.py:491
+#: gajim/gtk/accounts.py:494
 #, fuzzy
 msgid "Please check if Avahi is installed."
 msgstr "Sjekk om Avahi eller Bonjour er installert."
 
-#: gajim/gtk/accounts.py:530
+#: gajim/gtk/accounts.py:533
 #, fuzzy
 msgid "Disable Account"
 msgstr "Ugyldig konto"
 
-#: gajim/gtk/accounts.py:531
+#: gajim/gtk/accounts.py:534
 #, fuzzy, python-format
 msgid "Account %s is still connected"
 msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
 
-#: gajim/gtk/accounts.py:532
+#: gajim/gtk/accounts.py:535
 #, fuzzy
 msgid "All chat and group chat windows will be closed."
 msgstr "Alle samtaler og gruppesamtaler vil bli lukket. Ønsker du å fortsette?"
 
-#: gajim/gtk/accounts.py:536
+#: gajim/gtk/accounts.py:539
 #, fuzzy
 msgid "_Disable Account"
 msgstr "Ugyldig konto"
 
-#: gajim/gtk/accounts.py:603
+#: gajim/gtk/accounts.py:606
 msgid "Label"
 msgstr ""
 
-#: gajim/gtk/accounts.py:609
+#: gajim/gtk/accounts.py:612
 msgid "Recognize your account by color"
 msgstr ""
 
-#: gajim/gtk/accounts.py:611
+#: gajim/gtk/accounts.py:614
 msgid "Login"
 msgstr "Innlogging"
 
-#: gajim/gtk/accounts.py:614
+#: gajim/gtk/accounts.py:617
 msgid "Import Contacts"
 msgstr "Importer kontakter"
 
-#: gajim/gtk/accounts.py:618 gajim/gtk/accounts.py:810
-msgid "Client Certificate"
-msgstr "Klientsertifikat"
-
-#: gajim/gtk/accounts.py:621 gajim/gtk/accounts.py:707
+#: gajim/gtk/accounts.py:626 gajim/gtk/accounts.py:712
 msgid "Connect on startup"
 msgstr "Koble til ved oppstart"
 
-#: gajim/gtk/accounts.py:625 gajim/gtk/accounts.py:712
+#: gajim/gtk/accounts.py:630 gajim/gtk/accounts.py:717
 msgid "Save conversations for all contacts"
 msgstr "Lagre alle samtaler ført med kontakter"
 
-#: gajim/gtk/accounts.py:627 gajim/gtk/accounts.py:714
+#: gajim/gtk/accounts.py:632 gajim/gtk/accounts.py:719
 msgid "Store conversations on the harddrive"
 msgstr "Lagre samtaler på harddisken"
 
-#: gajim/gtk/accounts.py:629 gajim/gtk/accounts.py:716
+#: gajim/gtk/accounts.py:634 gajim/gtk/accounts.py:721
 msgid "Global Status"
 msgstr "Global status"
 
-#: gajim/gtk/accounts.py:631
+#: gajim/gtk/accounts.py:636
 msgid "Synchronise the status of all accounts"
 msgstr "Synkroniser statusen for alle kontoer"
 
-#: gajim/gtk/accounts.py:633
+#: gajim/gtk/accounts.py:638
 msgid "Use file transfer proxies"
 msgstr "Bruk filoverførings-mellomtjenere"
 
-#: gajim/gtk/accounts.py:649
+#: gajim/gtk/accounts.py:654
 #, fuzzy
 msgid "Idle Time"
 msgstr "Uvirksom siden:"
 
-#: gajim/gtk/accounts.py:651
+#: gajim/gtk/accounts.py:656
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-#: gajim/gtk/accounts.py:653
+#: gajim/gtk/accounts.py:658
 msgid "Local System Time"
 msgstr ""
 
-#: gajim/gtk/accounts.py:655
+#: gajim/gtk/accounts.py:660
 msgid "Disclose the local system time of the device Gajim runs on"
 msgstr ""
 
-#: gajim/gtk/accounts.py:658
+#: gajim/gtk/accounts.py:663
 #, fuzzy
 msgid "Client / Operating System"
 msgstr "Klientsertifikat"
 
-#: gajim/gtk/accounts.py:660
+#: gajim/gtk/accounts.py:665
 #, fuzzy
 msgid ""
-"Disclose informations about the client and operating system you currently use"
+"Disclose information about the client and operating system you currently use"
 msgstr "Tillat Gajim å sende informasjon om hvilket operativsystem du bruker."
 
-#: gajim/gtk/accounts.py:663
+#: gajim/gtk/accounts.py:668
 #, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Inviter _kontakter"
 
-#: gajim/gtk/accounts.py:665
+#: gajim/gtk/accounts.py:670
 #, fuzzy
 msgid "Ignore everything from contacts not in your Roster"
 msgstr "_Ignorer hendelser fra kontakter som ikke er i kontaktlisten"
 
-#: gajim/gtk/accounts.py:683
+#: gajim/gtk/accounts.py:688
 msgid "Manually set the hostname for the server"
 msgstr "Sett vertsnavnet for tjeneren manuelt"
 
-#: gajim/gtk/accounts.py:689 gajim/gtk/accounts.py:759
-#: gajim/gtk/accounts.py:764
+#: gajim/gtk/accounts.py:694 gajim/gtk/accounts.py:764
+#: gajim/gtk/accounts.py:769
 msgid "Priority"
 msgstr "Prioritet"
 
-#: gajim/gtk/accounts.py:709
+#: gajim/gtk/accounts.py:714
 msgid "Use environment variable"
 msgstr "Bruk miljøvariabel"
 
-#: gajim/gtk/accounts.py:718
+#: gajim/gtk/accounts.py:723
 msgid "Synchronize the status of all accounts"
 msgstr "Synkroniser statusen for alle kontoer"
 
-#: gajim/gtk/accounts.py:728
+#: gajim/gtk/accounts.py:733
 msgid "First Name"
 msgstr "Fornavn"
 
-#: gajim/gtk/accounts.py:731
+#: gajim/gtk/accounts.py:736
 msgid "Last Name"
 msgstr "Etternavn"
 
-#: gajim/gtk/accounts.py:737
+#: gajim/gtk/accounts.py:742
 msgid "Email"
 msgstr "E-post"
 
-#: gajim/gtk/accounts.py:755
+#: gajim/gtk/accounts.py:760
 msgid "Adjust to status"
 msgstr "Juster til status"
 
-#: gajim/gtk/accounts.py:784
+#: gajim/gtk/accounts.py:789
 msgid "Enable"
 msgstr "Slå på"
 
-#: gajim/gtk/accounts.py:792
+#: gajim/gtk/accounts.py:797
 msgid "Port"
 msgstr "Port"
 
-#: gajim/gtk/accounts.py:802
+#: gajim/gtk/accounts.py:807
 #, fuzzy
 msgid "Connection Settings"
 msgstr "Tilkoblingsvalg"
 
-#: gajim/gtk/accounts.py:812
+#: gajim/gtk/accounts.py:815
+msgid "Client Certificate"
+msgstr "Klientsertifikat"
+
+#: gajim/gtk/accounts.py:817
 msgid "PKCS12 Files"
 msgstr "PCKS12-filer"
 
-#: gajim/gtk/accounts.py:814
+#: gajim/gtk/accounts.py:819
 msgid "Encrypted Certificate"
 msgstr "Kryptert sertifikat"
 
-#: gajim/gtk/accounts.py:818
+#: gajim/gtk/accounts.py:823
 #, fuzzy
 msgid "Certificate Settings"
 msgstr "Sertifikatsvalg"
 
-#: gajim/gtk/accounts.py:830
+#: gajim/gtk/accounts.py:835
 msgid "Save Password"
 msgstr "Lagre passord"
 
-#: gajim/gtk/accounts.py:838
+#: gajim/gtk/accounts.py:843
 #, fuzzy
 msgid "Login Settings"
 msgstr "Tillegg"
@@ -10990,20 +11019,20 @@ msgstr ""
 msgid "Bookmarks for %s"
 msgstr "Bokmerker"
 
-#: gajim/plugins/pluginmanager.py:727 gajim/plugins/pluginmanager.py:733
+#: gajim/plugins/pluginmanager.py:717 gajim/plugins/pluginmanager.py:723
 msgid "Archive corrupted"
 msgstr "Arkiv skadet"
 
-#: gajim/plugins/pluginmanager.py:729
+#: gajim/plugins/pluginmanager.py:719
 msgid "Archive empty"
 msgstr "Arkiv tomt"
 
-#: gajim/plugins/pluginmanager.py:741 gajim/plugins/pluginmanager.py:749
+#: gajim/plugins/pluginmanager.py:731 gajim/plugins/pluginmanager.py:739
 #: gajim/plugins/gui.py:273
 msgid "Archive is malformed"
 msgstr "Arkivet er skadet"
 
-#: gajim/plugins/pluginmanager.py:757 gajim/plugins/gui.py:288
+#: gajim/plugins/pluginmanager.py:747 gajim/plugins/gui.py:288
 #: gajim/plugins/gui.py:301
 msgid "Plugin already exists"
 msgstr "Programtillegget finnes allerede"
@@ -11156,26 +11185,71 @@ msgstr "Tjenesteoppdagelse med noder, brukersøk"
 msgid "Even more features via plugins"
 msgstr "Andre funksjoner via programtillegg"
 
-#: data/org.gajim.Gajim.appdata.xml.in:49
+#: data/org.gajim.Gajim.appdata.xml.in:44
 #, fuzzy
 msgid "Contact list"
 msgstr "Kontakter"
 
-#: data/org.gajim.Gajim.appdata.xml.in:53
+#: data/org.gajim.Gajim.appdata.xml.in:48
 msgid "Tabbed chat window"
 msgstr "Fanebasert sludrevindu"
 
-#: data/org.gajim.Gajim.appdata.xml.in:57
+#: data/org.gajim.Gajim.appdata.xml.in:52
 msgid "Group chat support"
 msgstr "Gruppesludringsstøtte"
 
-#: data/org.gajim.Gajim.appdata.xml.in:61
+#: data/org.gajim.Gajim.appdata.xml.in:56
 msgid "Chat history"
 msgstr "Sludrehistorikk"
 
-#: data/org.gajim.Gajim.appdata.xml.in:65
+#: data/org.gajim.Gajim.appdata.xml.in:60
 msgid "Plugin manager"
 msgstr "Programtilleggsbehandler"
+
+#, fuzzy
+#~ msgid "Start New Conversation"
+#~ msgstr "Start ny samtale"
+
+#~ msgid "Unknown SSL error: %d"
+#~ msgstr "Ukjent SSL-feil: %d"
+
+#~ msgid "Choose interval between 2 checks of idleness."
+#~ msgstr "Velg intervall mellom to uvirksomhetssjekker."
+
+#~ msgid "Gajim - %s"
+#~ msgstr "Gajim - %s"
+
+#~ msgid "Dictionary for language \"%s\" not available"
+#~ msgstr "Ordliste for språket \"%s\" er ikke tilgjengelig"
+
+#~ msgid ""
+#~ "You have to install the dictionary \"%s\" to use spellchecking, or choose "
+#~ "another language by setting the speller_language option.\n"
+#~ "\n"
+#~ "Highlighting misspelled words feature will not be used"
+#~ msgstr ""
+#~ "Du må installere '%s'-ordbok for å bruke stavekontroll, eller velge et "
+#~ "annet språk ved å sette speller_language -valget.\n"
+#~ "\n"
+#~ "Funksjonen for utheving av feilstavede ord vil ikke bli brukt"
+
+#, fuzzy
+#~ msgid ""
+#~ "Requires: libsecret and a provider (such as GNOME Keyring and "
+#~ "KSecretService)"
+#~ msgstr ""
+#~ "Krever libsecret og en tilbyder (som GNOME-nøkkelringen og "
+#~ "KSecretService)."
+
+#~ msgid "_Reconnect"
+#~ msgstr "_Koble til på ny"
+
+#~ msgid "Quit"
+#~ msgstr "Avslutt"
+
+#, fuzzy
+#~ msgid "Show Contact List"
+#~ msgstr "Vis aktive kontakter"
 
 #, fuzzy
 #~ msgid "Add to Contact List"
@@ -14862,9 +14936,6 @@ msgstr "Programtilleggsbehandler"
 #~ "oppsett kan du velge en annen her.\n"
 #~ "Du kan også vurdere å endre mulige brannmursinnstillinger."
 
-#~ msgid "Mer_ge accounts"
-#~ msgstr "Sammenslåin_g av kontoer"
-
 #~ msgid "OpenPGP is not usable on this computer"
 #~ msgstr "OpenPGP er ikke brukbart på denne maskinen"
 
@@ -15327,9 +15398,6 @@ msgstr "Programtilleggsbehandler"
 
 #~ msgid "Requires python-gnome2."
 #~ msgstr "Krever python-gnome2."
-
-#~ msgid "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
-#~ msgstr "Krever gnome-keyring og python-gnome2-desktop, eller kwalletcli."
 
 #~ msgid "SRV"
 #~ msgstr "SRV"

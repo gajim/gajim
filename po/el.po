@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-29 02:05+0000\n"
+"POT-Creation-Date: 2020-06-20 12:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:46+0200\n"
 "Last-Translator: Stavros Giannouris <stavrosg@hellug.gr>\n"
 "Language-Team:  <>\n"
@@ -24,6 +24,12 @@ msgstr ""
 "X-Poedit-Language: Greek\n"
 "X-Poedit-Country: GREECE\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,-1,623\n"
+
+#: gajim/chat_control_base.py:147 gajim/gtk/start_chat.py:643
+#: gajim/gtk/groupchat_invite.py:318
+#, fuzzy, python-format
+msgid "Account: %s"
+msgstr "Λογαριασμοί"
 
 #: gajim/chat_control_base.py:570
 #, fuzzy
@@ -40,62 +46,62 @@ msgstr "Χρήση πιστοποίησης"
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 
-#: gajim/chat_control_base.py:701
+#: gajim/chat_control_base.py:698
 msgid "_Undo"
 msgstr ""
 
-#: gajim/chat_control_base.py:709 gajim/conversation_textview.py:507
+#: gajim/chat_control_base.py:706 gajim/conversation_textview.py:507
 msgid "_Clear"
 msgstr ""
 
-#: gajim/chat_control_base.py:714
+#: gajim/chat_control_base.py:711
 msgid "Paste as quote"
 msgstr ""
 
-#: gajim/chat_control_base.py:751
+#: gajim/chat_control_base.py:748
 #, fuzzy
 msgid "Paste Image"
 msgstr "Επιλογή εικόνας"
 
-#: gajim/chat_control_base.py:752
+#: gajim/chat_control_base.py:749
 #, fuzzy
 msgid "You are trying to paste an image"
 msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
 
-#: gajim/chat_control_base.py:753
+#: gajim/chat_control_base.py:750
 #, fuzzy
 msgid ""
 "Are you sure you want to paste your clipboard's image into the chat window?"
 msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
 
-#: gajim/chat_control_base.py:755 gajim/groupchat_control.py:1737
-#: gajim/roster_window.py:2845 gajim/roster_window.py:4064
+#: gajim/chat_control_base.py:752 gajim/groupchat_control.py:1736
+#: gajim/roster_window.py:2837 gajim/roster_window.py:4047
 #: gajim/message_window.py:364
 #, fuzzy
 msgid "_Do not ask me again"
 msgstr "Μη_ν με ξαναρωτήσεις"
 
-#: gajim/chat_control_base.py:758
+#: gajim/chat_control_base.py:755
 msgid "_Paste"
 msgstr ""
 
-#: gajim/chat_control_base.py:1314 gajim/gtk/accounts.py:307
+#: gajim/chat_control_base.py:1310 gajim/gtk/accounts.py:310
 #, fuzzy
 msgid "Privacy"
 msgstr "Προσωπικές συζητήσεις"
 
-#: gajim/chat_control_base.py:1315
+#: gajim/chat_control_base.py:1311
 #, fuzzy
 msgid "Warning"
 msgstr "Απαγορεύοντας την πρόσβαση στον %s"
 
-#: gajim/chat_control_base.py:1316
+#: gajim/chat_control_base.py:1312
 #, python-format
 msgid ""
 "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 msgstr ""
 
-#: gajim/chat_control_base.py:1321
+#: gajim/chat_control_base.py:1317
 msgid "_Continue"
 msgstr "_Συνέχεια"
 
@@ -164,13 +170,13 @@ msgid " resource with priority "
 msgstr " πόρος με προτεραιότητα"
 
 #: gajim/gui_menu_builder.py:254 gajim/gui_menu_builder.py:345
-#: gajim/chat_control.py:295 gajim/roster_window.py:779
-#: gajim/roster_window.py:1718 gajim/roster_window.py:1720
-#: gajim/roster_window.py:2032 gajim/roster_window.py:3288
-#: gajim/roster_window.py:3321 gajim/gui_interface.py:322
+#: gajim/chat_control.py:295 gajim/roster_window.py:778
+#: gajim/roster_window.py:1717 gajim/roster_window.py:1719
+#: gajim/roster_window.py:2031 gajim/roster_window.py:3271
+#: gajim/roster_window.py:3304 gajim/gui_interface.py:295
 #: gajim/common/contacts.py:219 gajim/common/contacts.py:348
-#: gajim/common/contacts.py:459 gajim/common/helpers.py:96
-#: gajim/common/helpers.py:219 gajim/gtk/add_contact.py:320
+#: gajim/common/contacts.py:459 gajim/common/helpers.py:94
+#: gajim/common/helpers.py:212 gajim/gtk/add_contact.py:320
 #: gajim/gtk/subscription_request.py:63 gajim/gtk/subscription_request.py:95
 #: gajim/gtk/roster_item_exchange.py:112
 #, fuzzy
@@ -202,23 +208,23 @@ msgstr "Μεταφορές"
 msgid "_Modify Transport"
 msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
-#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4932
+#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4915
 #, fuzzy
 msgid "_Rename…"
 msgstr "_Μετονομασία"
 
-#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4948
-#: gajim/roster_window.py:5063 gajim/data/gui/blocked_contacts_window.ui:52
+#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4931
+#: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4953
-#: gajim/roster_window.py:5067 gajim/data/gui/contact_context_menu.ui:151
+#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4936
+#: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4960
+#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4943
 #: gajim/data/gui/contact_context_menu.ui:181
 #, fuzzy
 msgid "Remo_ve"
@@ -249,7 +255,7 @@ msgstr "Αποθήκευση αρχείου ως..."
 msgid "Send Chatstate"
 msgstr "Τελευταία κατάσταση: %s"
 
-#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:280
+#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:283
 #, fuzzy
 msgid "Invite Contacts…"
 msgstr "Επαφές"
@@ -277,13 +283,12 @@ msgid "Information"
 msgstr "Πληροφορίες επαφής"
 
 #: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:594
-#: gajim/data/gui/application_menu.ui:68
 #, fuzzy
 msgid "History"
 msgstr "_Ιστορικό"
 
 #: gajim/gui_menu_builder.py:533 gajim/gui_menu_builder.py:649
-#: gajim/data/gui/preferences_window.ui:1861
+#: gajim/data/gui/preferences_window.ui:1886
 msgid "Disabled"
 msgstr "Απενεργοποιημένο"
 
@@ -327,7 +332,7 @@ msgstr "_Συνέχεια"
 msgid "Destroy…"
 msgstr "Περιγραφή: %s"
 
-#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:828
+#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:843
 #, fuzzy
 msgid "Chat Settings"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
@@ -377,11 +382,11 @@ msgstr "_Εκτέλεση εντολής..."
 msgid "Leave"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:163
+#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:166
 msgid "No threshold"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:165
+#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:168
 #, fuzzy, python-format
 msgid "%i day"
 msgid_plural "%i days"
@@ -404,7 +409,7 @@ msgid "Add Contact…"
 msgstr "_Προσθήκη επαφής..."
 
 #: gajim/gui_menu_builder.py:672 gajim/gtk/profile.py:53
-#: gajim/gtk/accounts.py:703 gajim/gtk/accounts.py:741
+#: gajim/gtk/accounts.py:708 gajim/gtk/accounts.py:746
 #, fuzzy
 msgid "Profile"
 msgstr "αρχείο"
@@ -424,7 +429,7 @@ msgstr "Εύρεση _υπηρεσιών"
 msgid "Server Info"
 msgstr "Εξυπηρετητής"
 
-#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2722
+#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2763
 msgid "Advanced"
 msgstr "Προχωρημένοι"
 
@@ -459,7 +464,7 @@ msgid "Privacy Lists"
 msgstr "Προσωπικές συζητήσεις"
 
 #: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
-#: gajim/gtk/server_info.py:138
+#: gajim/gtk/server_info.py:128
 #, fuzzy
 msgid "Admin"
 msgstr "_Διαχειριστής"
@@ -500,8 +505,7 @@ msgstr "Επεξεργασία λογαριασμού"
 msgid "_Modify Account…"
 msgstr "Επεξεργασία λογαριασμού"
 
-#: gajim/gui_menu_builder.py:745 gajim/data/gui/application_menu.ui:36
-#: gajim/data/gui/shortcuts_window.ui:203 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "Λογαριασμοί"
 
@@ -517,6 +521,7 @@ msgstr "Συμμετοχή σε ομαδική κουβέντα"
 
 #: gajim/gui_menu_builder.py:780 gajim/gui_menu_builder.py:806
 #: gajim/data/gui/subscription_request_window.ui:106
+#: gajim/gtk/start_chat.py:630
 msgid "Start Chat"
 msgstr "Έναρξη κουβέντας"
 
@@ -645,7 +650,7 @@ msgstr "Δεν υπάρχει τέτοια συζήτηση."
 #: gajim/data/gui/privacy_list_window.ui:317
 #: gajim/data/gui/blocking_list.ui:115 gajim/data/gui/bookmarks.ui:101
 #: gajim/gtk/discovery.py:829 gajim/gtk/add_contact.py:31
-#: gajim/gtk/accounts.py:734
+#: gajim/gtk/accounts.py:739
 #, fuzzy
 msgid "XMPP Address"
 msgstr "Αντιγραφή διεύθυνσης email"
@@ -664,7 +669,7 @@ msgid "Nickname"
 msgstr "Όνομα χρήστη"
 
 #: gajim/history_manager.py:178 gajim/history_manager.py:217
-#: gajim/data/gui/preferences_window.ui:1382
+#: gajim/data/gui/preferences_window.ui:1397
 #: gajim/data/gui/single_message_window.ui:266 gajim/gtk/history.py:117
 msgid "Message"
 msgstr "Μήνυμα"
@@ -746,147 +751,147 @@ msgid_plural "Do you want to permanently delete these messages?"
 msgstr[0] "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
 msgstr[1] "Θέλετε σίγουρα να διαγράψετε τα επιλεγμένα μηνύματα;"
 
-#: gajim/dialogs.py:83
+#: gajim/dialogs.py:82
 #, fuzzy, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "Όνομα εικονιδίου"
 
-#: gajim/dialogs.py:85
+#: gajim/dialogs.py:84
 #, python-format
 msgid "XMPP Address: <i>%s</i>"
 msgstr ""
 
-#: gajim/dialogs.py:116 gajim/dialogs.py:129 gajim/roster_window.py:2899
-#: gajim/roster_window.py:3730 gajim/roster_window.py:4970
+#: gajim/dialogs.py:115 gajim/dialogs.py:128 gajim/roster_window.py:2891
+#: gajim/roster_window.py:3713 gajim/roster_window.py:4953
 #: gajim/common/contacts.py:163 gajim/common/contacts.py:203
-#: gajim/data/gui/preferences_window.ui:541
-#: gajim/data/gui/preferences_window.ui:593
-#: gajim/data/gui/shortcuts_window.ui:184 gajim/gtk/accounts.py:305
+#: gajim/data/gui/preferences_window.ui:556
+#: gajim/data/gui/preferences_window.ui:608
+#: gajim/data/gui/shortcuts_window.ui:184 gajim/gtk/accounts.py:308
 msgid "General"
 msgstr "Γενικά"
 
-#: gajim/dialogs.py:202
+#: gajim/dialogs.py:201
 msgid "Group"
 msgstr "Ομάδα"
 
-#: gajim/dialogs.py:209
+#: gajim/dialogs.py:208
 msgid "In the group"
 msgstr "Στην ομάδα"
 
-#: gajim/dialogs.py:357
+#: gajim/dialogs.py:356
 #, fuzzy
 msgid "Set Mood"
 msgstr "Ορισμός MOTD"
 
-#: gajim/dialogs.py:404 gajim/dialogs.py:417
+#: gajim/dialogs.py:403 gajim/dialogs.py:416
 #: gajim/data/gui/change_mood_dialog.ui:98
 msgid "None"
 msgstr "Κανένα"
 
-#: gajim/dialogs.py:478
+#: gajim/dialogs.py:477
 #, python-format
 msgid "%s Status Message"
 msgstr "Μήνυμα για κατάσταση %s"
 
-#: gajim/dialogs.py:492
+#: gajim/dialogs.py:491
 msgid "Status Message"
 msgstr "Μήνυμα κατάστασης"
 
-#: gajim/dialogs.py:700
+#: gajim/dialogs.py:698
 msgid "Overwrite"
 msgstr ""
 
-#: gajim/dialogs.py:701
+#: gajim/dialogs.py:699
 #, fuzzy
 msgid "Overwrite Status Message?"
 msgstr "Μήνυμα κατάστασης"
 
-#: gajim/dialogs.py:702
+#: gajim/dialogs.py:700
 #, fuzzy
 msgid "This name is already in use. Do you want to overwrite this preset?"
 msgstr ""
 "Αυτό το όνομα χρησιμοποιείται ήδη από κάποιον άλλον από τους λογαριασμούς "
 "σας. Παρακαλώ, επιλέξτε άλλο όνομα."
 
-#: gajim/dialogs.py:706 gajim/plugins/gui.py:292
+#: gajim/dialogs.py:704 gajim/plugins/gui.py:292
 msgid "_Overwrite"
 msgstr ""
 
-#: gajim/dialogs.py:718
+#: gajim/dialogs.py:716
 #, fuzzy
 msgid "Status Preset"
 msgstr "Μήνυμα κατάστασης"
 
-#: gajim/dialogs.py:719
+#: gajim/dialogs.py:717
 #, fuzzy
 msgid "Save status as preset"
 msgstr "Αποθήκευση ως προκαθορισμένο..."
 
-#: gajim/dialogs.py:720
+#: gajim/dialogs.py:718
 #, fuzzy
 msgid "Please assign a name to this status message preset"
 msgstr "Εισάγετε ένα όνομα για αυτό το μήνυμα κατάστασης"
 
-#: gajim/dialogs.py:723
+#: gajim/dialogs.py:721
 #, fuzzy
 msgid "_Save"
 msgstr "Έχει"
 
-#: gajim/dialogs.py:725
+#: gajim/dialogs.py:723
 #, fuzzy
 msgid "New Status"
 msgstr "Κατάσταση"
 
-#: gajim/dialogs.py:752 gajim/gtk/discovery.py:518 gajim/gtk/profile.py:306
+#: gajim/dialogs.py:750 gajim/gtk/discovery.py:518 gajim/gtk/profile.py:306
 msgid "You are not connected to the server"
 msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
 
-#: gajim/dialogs.py:753
+#: gajim/dialogs.py:751
 #, fuzzy
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Πρέπει να είστε συνδεδεμένος για να αλλάξετε τον κωδικό σας."
 
-#: gajim/dialogs.py:764 gajim/dialogs.py:835 gajim/data/gui/bookmarks.ui:122
+#: gajim/dialogs.py:762 gajim/dialogs.py:833 gajim/data/gui/bookmarks.ui:122
 #: gajim/gtk/discovery.py:822 gajim/gtk/discovery.py:1646
 #: gajim/gtk/discovery.py:1892 gajim/gtk/history.py:99
 #: gajim/gtk/roster_item_exchange.py:83
 msgid "Name"
 msgstr "Όνομα"
 
-#: gajim/dialogs.py:767 gajim/data/gui/join_groupchat_window.ui:163
+#: gajim/dialogs.py:765 gajim/data/gui/join_groupchat_window.ui:163
 #: gajim/data/gui/server_info.ui:146
 msgid "Server"
 msgstr "Εξυπηρετητής"
 
-#: gajim/dialogs.py:803
+#: gajim/dialogs.py:801
 #, fuzzy
 msgid "This account is not connected to the server"
 msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
 
-#: gajim/dialogs.py:804
+#: gajim/dialogs.py:802
 #, fuzzy
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 "Δε μπορείτε να συμμετάσχετε σε μια ομαδική συζήτηση εκτός αν είστε "
 "συνδεδεμένος."
 
-#: gajim/dialogs.py:833
+#: gajim/dialogs.py:831
 msgid "Synchronise"
 msgstr ""
 
-#: gajim/dialogs.py:1045
+#: gajim/dialogs.py:1043
 msgid "an audio and video"
 msgstr ""
 
-#: gajim/dialogs.py:1047
+#: gajim/dialogs.py:1045
 msgid "an audio"
 msgstr ""
 
-#: gajim/dialogs.py:1049
+#: gajim/dialogs.py:1047
 msgid "a video"
 msgstr ""
 
-#: gajim/dialogs.py:1053
+#: gajim/dialogs.py:1051
 #, python-format
 msgid ""
 "%(contact)s wants to start a %(type)s chat with you. Do you want to answer "
@@ -909,7 +914,7 @@ msgid "No File Transfer available"
 msgstr "Μεταφορές αρχείων"
 
 #: gajim/groupchat_control.py:541 gajim/dialog_messages.py:31
-#: gajim/dialog_messages.py:36 gajim/gtk/single_message.py:240
+#: gajim/dialog_messages.py:36 gajim/gtk/single_message.py:238
 #, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Μη έγκυρο αρχείο"
@@ -939,7 +944,7 @@ msgstr "Αίτηση μεταφοράς αρχείου"
 
 #: gajim/groupchat_control.py:831
 #, python-format
-msgid "<b>%s</b> from <b>%s</b> requests voice"
+msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 msgstr ""
 
 #: gajim/groupchat_control.py:835
@@ -964,7 +969,7 @@ msgstr "Δεν υπάρχει τέτοια συζήτηση."
 msgid "A setting not related to privacy has been changed"
 msgstr ""
 
-#: gajim/groupchat_control.py:1088 gajim/groupchat_control.py:1248
+#: gajim/groupchat_control.py:1088 gajim/groupchat_control.py:1247
 #, fuzzy
 msgid "Conversations are stored on the server"
 msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
@@ -989,190 +994,190 @@ msgstr "Επισήμανση "
 msgid "Group chat is now fully anonymous"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/groupchat_control.py:1148
+#: gajim/groupchat_control.py:1147
 #, python-format
 msgid "Ping? (%s)"
 msgstr ""
 
-#: gajim/groupchat_control.py:1151
+#: gajim/groupchat_control.py:1150
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
 msgstr ""
 
-#: gajim/groupchat_control.py:1154 gajim/chat_control.py:643
+#: gajim/groupchat_control.py:1153 gajim/chat_control.py:643
 #, fuzzy
 msgid "Error."
 msgstr "Σφάλμα:"
 
-#: gajim/groupchat_control.py:1239
+#: gajim/groupchat_control.py:1238
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
-#: gajim/groupchat_control.py:1244
+#: gajim/groupchat_control.py:1243
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr ""
 
-#: gajim/groupchat_control.py:1252
+#: gajim/groupchat_control.py:1251
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Αλλαγή _ψευδώνυμου"
 
-#: gajim/groupchat_control.py:1262
+#: gajim/groupchat_control.py:1261
 #, fuzzy
 msgid "A new group chat has been created"
 msgstr "Ο νέος σας λογαριασμός δημιουργήθηκε με επιτυχία"
 
-#: gajim/groupchat_control.py:1266
+#: gajim/groupchat_control.py:1265
 #, fuzzy
 msgid "Failed to Configure Group Chat"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/groupchat_control.py:1276 gajim/privatechat_control.py:105
+#: gajim/groupchat_control.py:1275 gajim/privatechat_control.py:105
 #, python-format
 msgid "You are now known as %s"
 msgstr "Είστε τώρα γνωστός ως %s"
 
-#: gajim/groupchat_control.py:1278 gajim/privatechat_control.py:107
+#: gajim/groupchat_control.py:1277 gajim/privatechat_control.py:107
 #, fuzzy, python-brace-format
 msgid "{nick} is now known as {new_nick}"
 msgstr "Ο %s είναι τώρα γνωστός ως %s"
 
-#: gajim/groupchat_control.py:1303 gajim/privatechat_control.py:133
+#: gajim/groupchat_control.py:1302 gajim/privatechat_control.py:133
 #, fuzzy, python-brace-format
 msgid "You are now {show}{status}"
 msgstr "Είστε τώρα γνωστός ως %s"
 
-#: gajim/groupchat_control.py:1309 gajim/privatechat_control.py:139
+#: gajim/groupchat_control.py:1308 gajim/privatechat_control.py:139
 #, fuzzy, python-brace-format
 msgid "{nick} is now {show}{status}"
 msgstr "Ο %(nick)s είναι τώρα %(status)s"
 
-#: gajim/groupchat_control.py:1326 gajim/groupchat_control.py:1356
-#: gajim/groupchat_control.py:1384 gajim/groupchat_control.py:1443
+#: gajim/groupchat_control.py:1325 gajim/groupchat_control.py:1355
+#: gajim/groupchat_control.py:1383 gajim/groupchat_control.py:1442
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1329
+#: gajim/groupchat_control.py:1328
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1335
+#: gajim/groupchat_control.py:1334
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1359
+#: gajim/groupchat_control.py:1358
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1364
+#: gajim/groupchat_control.py:1363
 #, fuzzy, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1387
+#: gajim/groupchat_control.py:1386
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1392
+#: gajim/groupchat_control.py:1391
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1398
+#: gajim/groupchat_control.py:1397
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1405
+#: gajim/groupchat_control.py:1404
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1412 gajim/groupchat_control.py:1477
+#: gajim/groupchat_control.py:1411 gajim/groupchat_control.py:1476
 #, fuzzy
 msgid ": Affiliation changed"
 msgstr "Συσχέτιση: "
 
-#: gajim/groupchat_control.py:1418 gajim/groupchat_control.py:1482
+#: gajim/groupchat_control.py:1417 gajim/groupchat_control.py:1481
 msgid ": Group chat configuration changed to members-only"
 msgstr ""
 
-#: gajim/groupchat_control.py:1446
+#: gajim/groupchat_control.py:1445
 #, fuzzy, python-brace-format
 msgid "{nick} has been removed from the group chat{by}{reason}"
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1456
+#: gajim/groupchat_control.py:1455
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1462
+#: gajim/groupchat_control.py:1461
 #, fuzzy, python-brace-format
 msgid "{nick} has been kicked{actor}{reason}"
 msgstr "Ο %(nick)s πετάχτηκε έξω: %(reason)s"
 
-#: gajim/groupchat_control.py:1470
+#: gajim/groupchat_control.py:1469
 #, fuzzy, python-brace-format
 msgid "{nick} has been banned{actor}{reason}"
 msgstr "Ο %(nick)s έχει απαγορευτεί: %(reason)s"
 
-#: gajim/groupchat_control.py:1487
+#: gajim/groupchat_control.py:1486
 #, python-brace-format
 msgid "{nick} has left{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1509
+#: gajim/groupchat_control.py:1508
 #, fuzzy, python-format
 msgid "%s has joined the group chat"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
-#: gajim/groupchat_control.py:1521
+#: gajim/groupchat_control.py:1520
 #, fuzzy
 msgid "Failed to Join Group Chat"
 msgstr "Δεν ήταν δυνατή η σύνδεση στην ομαδική συζήτηση"
 
-#: gajim/groupchat_control.py:1527
+#: gajim/groupchat_control.py:1526
 #, fuzzy
 msgid "Failed to Create Group Chat"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/groupchat_control.py:1543
+#: gajim/groupchat_control.py:1542
 #, fuzzy
 msgid "Group chat has been destroyed"
 msgstr "Η εξουσιοδότηση έχει αφαιρεθεί"
 
-#: gajim/groupchat_control.py:1548
+#: gajim/groupchat_control.py:1547
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
-#: gajim/groupchat_control.py:1733
+#: gajim/groupchat_control.py:1732
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/groupchat_control.py:1734
+#: gajim/groupchat_control.py:1733
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
 
-#: gajim/groupchat_control.py:1735
+#: gajim/groupchat_control.py:1734
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
 msgstr "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτά το δωμάτια."
 
-#: gajim/groupchat_control.py:1741 gajim/roster_window.py:5131
+#: gajim/groupchat_control.py:1740 gajim/roster_window.py:5108
 msgid "_Leave"
 msgstr ""
 
-#: gajim/groupchat_control.py:1786 gajim/roster_window.py:3018
+#: gajim/groupchat_control.py:1785 gajim/roster_window.py:3001
 #, fuzzy, python-format
 msgid "%(jid)s has been invited to this group chat"
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
@@ -1227,7 +1232,7 @@ msgstr "Mόλις λάβατε ένα μήνυμα από \"%s\""
 msgid "Close"
 msgstr "_Αποστολή & κλείσιμο"
 
-#: gajim/chat_control.py:1139 gajim/common/connection_handlers_events.py:277
+#: gajim/chat_control.py:1139 gajim/common/connection_handlers_events.py:237
 #: gajim/gtk/notification.py:185 gajim/gtk/notification.py:214
 #: gajim/gtk/notification.py:273
 msgid "New Message"
@@ -1235,9 +1240,9 @@ msgstr "Νέο μήνυμα"
 
 #: gajim/chat_control.py:1144 gajim/chat_control.py:1441
 #: gajim/chat_control.py:1450 gajim/message_window.py:367
-#: gajim/data/gui/groupchat_control.ui:1021
-#: gajim/data/gui/groupchat_control.ui:1107
-#: gajim/data/gui/groupchat_control.ui:1213
+#: gajim/data/gui/groupchat_control.ui:1024
+#: gajim/data/gui/groupchat_control.ui:1110
+#: gajim/data/gui/groupchat_control.ui:1216
 #, fuzzy
 msgid "_Close"
 msgstr "_Αποστολή & κλείσιμο"
@@ -1256,9 +1261,8 @@ msgstr ""
 msgid "%(name)s is now %(show)s %(status)s"
 msgstr "Ο %(nick)s είναι τώρα %(status)s"
 
-#: gajim/chat_control.py:1405 gajim/roster_window.py:4204
-#: gajim/roster_window.py:4205 gajim/data/gui/application_menu.ui:64
-#: gajim/gtk/filetransfer_progress.py:35
+#: gajim/chat_control.py:1405 gajim/roster_window.py:4187
+#: gajim/roster_window.py:4188 gajim/gtk/filetransfer_progress.py:35
 #, fuzzy
 msgid "File Transfer"
 msgstr "Μεταφορές αρχείων"
@@ -1280,8 +1284,8 @@ msgstr "Αποδοχή"
 msgid "_Decline"
 msgstr "Απ_οσυνδεδεμένος"
 
-#: gajim/chat_control.py:1435 gajim/gui_interface.py:719
-#: gajim/gui_interface.py:749 gajim/gui_interface.py:775
+#: gajim/chat_control.py:1435 gajim/gui_interface.py:693
+#: gajim/gui_interface.py:723 gajim/gui_interface.py:749
 #: gajim/gtk/notification.py:188 gajim/gtk/notification.py:284
 msgid "File Transfer Completed"
 msgstr "Η μεταφορά αρχείου ολοκληρώθηκε"
@@ -1291,7 +1295,7 @@ msgstr "Η μεταφορά αρχείου ολοκληρώθηκε"
 msgid "Open _Folder"
 msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
-#: gajim/chat_control.py:1468 gajim/gui_interface.py:412
+#: gajim/chat_control.py:1468 gajim/gui_interface.py:386
 #: gajim/data/gui/groupchat_invitation_received.ui:42
 #: gajim/gtk/notification.py:189 gajim/gtk/notification.py:210
 #: gajim/gtk/notification.py:288
@@ -1299,12 +1303,12 @@ msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 msgid "Group Chat Invitation"
 msgstr "Πρόσκληση ομαδικής κουβέντας"
 
-#: gajim/chat_control.py:1493 gajim/roster_window.py:1952
+#: gajim/chat_control.py:1493 gajim/roster_window.py:1951
 #, fuzzy
 msgid "Remote contact stopped transfer"
 msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
-#: gajim/chat_control.py:1495 gajim/roster_window.py:1954
+#: gajim/chat_control.py:1495 gajim/roster_window.py:1953
 #, fuzzy
 msgid "Error opening file"
 msgstr "Σφάλμα κατά την ανάγνωση του αρχείου:"
@@ -1324,180 +1328,173 @@ msgstr "Άνοιγμα αρχείου μενού"
 msgid "Connection with peer cannot be established."
 msgstr "Η σύνδεση με τον απομακρυσμένο ομότιμο δεν ήταν εφικτή."
 
-#: gajim/application.py:79
+#: gajim/application.py:80
 #, fuzzy
 msgid "Show the application's version"
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
 
-#: gajim/application.py:86
+#: gajim/application.py:87
 #, fuzzy
 msgid "Show only critical errors"
 msgstr "Εμφά_νιση το μόνο στο κύριο παράθυρο"
 
-#: gajim/application.py:93
+#: gajim/application.py:94
 msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
-#: gajim/application.py:101
+#: gajim/application.py:102
 msgid "Print XML stanzas and other debug information"
 msgstr ""
 
-#: gajim/application.py:108
+#: gajim/application.py:109
 #, fuzzy
 msgid "Use defined profile in configuration directory"
 msgstr "Επεξεργασία ρυθμίσεων για προχωρημένους"
 
-#: gajim/application.py:116
+#: gajim/application.py:117
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Ρυθμίσεις δωματίου"
 
-#: gajim/application.py:124
+#: gajim/application.py:125
 msgid "Configure logging system"
 msgstr ""
 
-#: gajim/application.py:132
+#: gajim/application.py:133
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
 
-#: gajim/application.py:139
+#: gajim/application.py:140
 msgid "Open IPython shell"
 msgstr ""
 
-#: gajim/application.py:146
+#: gajim/application.py:147
 #, fuzzy
 msgid "Pops up a window with the next pending event"
 msgstr "Εμφάνιση ενός παραθύρου με το επόμενο αδιάβαστο μήνυμα"
 
-#: gajim/application.py:152 gajim/data/gui/shortcuts_window.ui:189
+#: gajim/application.py:153 gajim/data/gui/shortcuts_window.ui:189
 #: data/org.gajim.Gajim.desktop.in:21
 #, fuzzy
 msgid "Start a new chat"
 msgstr "Έναρξη κουβέντας"
 
-#: gajim/application.py:159
-msgid "Simulate loss of connectivity"
-msgstr ""
-
-#: gajim/application.py:166
-msgid "Simulate regaining connectivity"
-msgstr ""
-
-#: gajim/application.py:210 gajim/gui_interface.py:125
+#: gajim/application.py:194 gajim/gui_interface.py:125
 msgid "Database Error"
 msgstr ""
 
-#: gajim/roster_window.py:287 gajim/roster_window.py:1023
+#: gajim/roster_window.py:286 gajim/roster_window.py:1022
 msgid "Merged accounts"
 msgstr "Συνενωμένοι λογαριασμοί"
 
-#: gajim/roster_window.py:846 gajim/roster_window.py:1630
-#: gajim/roster_window.py:1663 gajim/roster_window.py:1714
-#: gajim/roster_window.py:1716 gajim/roster_window.py:1871
-#: gajim/roster_window.py:2522 gajim/roster_window.py:4284
-#: gajim/roster_window.py:4911 gajim/common/contacts.py:201
-#: gajim/common/contacts.py:451 gajim/common/helpers.py:96
+#: gajim/roster_window.py:845 gajim/roster_window.py:1629
+#: gajim/roster_window.py:1662 gajim/roster_window.py:1713
+#: gajim/roster_window.py:1715 gajim/roster_window.py:1870
+#: gajim/roster_window.py:2514 gajim/roster_window.py:4267
+#: gajim/roster_window.py:4894 gajim/common/contacts.py:201
+#: gajim/common/contacts.py:451 gajim/common/helpers.py:93
 #: gajim/gtk/discovery.py:128 gajim/gtk/discovery.py:129
 #: gajim/gtk/discovery.py:1415
 msgid "Transports"
 msgstr "Μεταφορές"
 
-#: gajim/roster_window.py:1722 gajim/roster_window.py:1724
-#: gajim/roster_window.py:4284 gajim/roster_window.py:4881
-#: gajim/gui_interface.py:1355 gajim/common/contacts.py:199
+#: gajim/roster_window.py:1721 gajim/roster_window.py:1723
+#: gajim/roster_window.py:4267 gajim/roster_window.py:4864
+#: gajim/gui_interface.py:1319 gajim/common/contacts.py:199
 #: gajim/common/helpers.py:96
 #, fuzzy
 msgid "Group chats"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/roster_window.py:2014
+#: gajim/roster_window.py:2013
 #, fuzzy
 msgid "Authorization sent"
 msgstr "Η εξουσιοδότηση έχει σταλεί"
 
-#: gajim/roster_window.py:2015
+#: gajim/roster_window.py:2014
 #, fuzzy, python-format
 msgid "\"%s\" will now see your status."
 msgstr "Τώρα ο/η \"%s\" θα γνωρίζει την κατάσταση σας."
 
-#: gajim/roster_window.py:2033
+#: gajim/roster_window.py:2032
 msgid "Subscription request has been sent"
 msgstr "Η αίτηση εγγραφής έχει σταλεί"
 
-#: gajim/roster_window.py:2034
+#: gajim/roster_window.py:2033
 #, fuzzy, python-format
 msgid "If \"%s\" accepts this request you will know their status."
 msgstr ""
 "Εάν ο/η \"%s\" αποδεχθεί αυτή την αίτηση, θα γνωρίζετε την κατάσταση του/της."
 
-#: gajim/roster_window.py:2048
+#: gajim/roster_window.py:2047
 #, fuzzy
 msgid "Authorization removed"
 msgstr "Η εξουσιοδότηση έχει αφαιρεθεί"
 
-#: gajim/roster_window.py:2049
+#: gajim/roster_window.py:2048
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Τώρα ο/η \"%s\" θα σας βλέπει πάντα ως αποσυνδεδεμένο/η."
 
-#: gajim/roster_window.py:2276
+#: gajim/roster_window.py:2268
 #, fuzzy
 msgid "desynced"
 msgstr "Προχωρημένοι"
 
-#: gajim/roster_window.py:2344 gajim/data/gui/shortcuts_window.ui:245
+#: gajim/roster_window.py:2336 gajim/data/gui/shortcuts_window.ui:238
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
 
-#: gajim/roster_window.py:2345
+#: gajim/roster_window.py:2337
 #, fuzzy
 msgid "You are about to quit Gajim"
 msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από τα δωμάτια \"%s\";"
 
-#: gajim/roster_window.py:2346
+#: gajim/roster_window.py:2338
 #, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από τα δωμάτια \"%s\";"
 
-#: gajim/roster_window.py:2347
+#: gajim/roster_window.py:2339
 msgid "_Always quit when closing Gajim"
 msgstr ""
 
-#: gajim/roster_window.py:2350 gajim/roster_window.py:2446
-#: gajim/roster_window.py:2486 gajim/data/gui/systray_context_menu.ui:83
+#: gajim/roster_window.py:2342 gajim/roster_window.py:2438
+#: gajim/roster_window.py:2478 gajim/data/gui/application_menu.ui:30
+#: gajim/data/gui/systray_context_menu.ui:83
 #, fuzzy
 msgid "_Quit"
 msgstr "_Έξοδος"
 
-#: gajim/roster_window.py:2439
+#: gajim/roster_window.py:2431
 #, fuzzy
 msgid "Stop File Transfers"
 msgstr "Μεταφορές αρχείων"
 
-#: gajim/roster_window.py:2440
+#: gajim/roster_window.py:2432
 #, fuzzy
 msgid "You still have running file transfers"
 msgstr "Ακύρωση μεταφοράς αρχείου"
 
-#: gajim/roster_window.py:2441
+#: gajim/roster_window.py:2433
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
 msgstr ""
 
-#: gajim/roster_window.py:2479
+#: gajim/roster_window.py:2471
 #, fuzzy
 msgid "Unread Messages"
 msgstr "Αδιάβαστα γεγονότα"
 
-#: gajim/roster_window.py:2480
+#: gajim/roster_window.py:2472
 #, fuzzy
 msgid "You still have unread messages"
 msgstr "Έχετε μη-αναγνωσμένα μηνύματα"
 
-#: gajim/roster_window.py:2481
+#: gajim/roster_window.py:2473
 #, fuzzy
 msgid ""
 "Messages will only be available for reading them later if storing chat "
@@ -1506,23 +1503,23 @@ msgstr ""
 "Τα μηνύματα θα είναι διαθέσιμα για ανάγνωση αργότερα μόνο αν έχετε "
 "ενεργοποιημένο το ιστορικό."
 
-#: gajim/roster_window.py:2741
+#: gajim/roster_window.py:2733
 msgid "You have unread messages"
 msgstr "Έχετε μη-αναγνωσμένα μηνύματα"
 
-#: gajim/roster_window.py:2742
+#: gajim/roster_window.py:2734
 #, fuzzy
 msgid "You must read them before removing this transport."
 msgstr ""
 "Ανάγνωση όλων των γεγονότων που εκκρεμούν, πριν την αφαίρεση αυτού του "
 "λογαριασμού."
 
-#: gajim/roster_window.py:2745
+#: gajim/roster_window.py:2737
 #, fuzzy, python-format
 msgid "Transport '%s' will be removed"
 msgstr "Η μεταφορά \"%s\" θα αφαιρεθεί"
 
-#: gajim/roster_window.py:2746
+#: gajim/roster_window.py:2738
 #, fuzzy
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
@@ -1531,12 +1528,12 @@ msgstr ""
 "Δε θα μπορείτε να στείλετε και να λάβετε μηνύματα στις επαφές από αυτή τη "
 "μεταφορά."
 
-#: gajim/roster_window.py:2749
+#: gajim/roster_window.py:2741
 #, fuzzy
 msgid "Transports will be removed"
 msgstr "Αυτό το ραντεβού θα απομακρυνθεί οριστικά."
 
-#: gajim/roster_window.py:2754
+#: gajim/roster_window.py:2746
 #, fuzzy, python-format
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
@@ -1546,129 +1543,129 @@ msgstr ""
 "Δε θα μπορείτε να στείλετε και να λάβετε μηνύματα στις επαφές από αυτή τη "
 "μεταφορά."
 
-#: gajim/roster_window.py:2758
+#: gajim/roster_window.py:2750
 #, fuzzy
 msgid "Remove Transport"
 msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
-#: gajim/roster_window.py:2828
+#: gajim/roster_window.py:2820
 #, fuzzy
 msgid "Block Contact"
 msgstr "Επαφές"
 
-#: gajim/roster_window.py:2829
+#: gajim/roster_window.py:2821
 #, fuzzy
 msgid "Really block this contact?"
 msgstr "Το OpenPGP δεν είναι διαθέσιμο σε αυτόν τον Η/Υ"
 
-#: gajim/roster_window.py:2830
+#: gajim/roster_window.py:2822
 msgid ""
 "This contact will see you offline and you will not receive any messages sent "
 "to you by this contact."
 msgstr ""
 
-#: gajim/roster_window.py:2832
+#: gajim/roster_window.py:2824
 #, fuzzy
 msgid "_Block Contact"
 msgstr "Επαφές"
 
-#: gajim/roster_window.py:2834
+#: gajim/roster_window.py:2826
 #, fuzzy
 msgid "Block Group"
 msgstr "Ομάδα"
 
-#: gajim/roster_window.py:2835
+#: gajim/roster_window.py:2827
 #, fuzzy
 msgid "Really block this group?"
 msgstr "Το OpenPGP δεν είναι διαθέσιμο σε αυτόν τον Η/Υ"
 
-#: gajim/roster_window.py:2836
+#: gajim/roster_window.py:2828
 msgid ""
 "All contacts of this group will see you as offline and you will not receive "
 "any messages sent to you by any one of these contacts."
 msgstr ""
 
-#: gajim/roster_window.py:2839
+#: gajim/roster_window.py:2831
 #, fuzzy
 msgid "_Block Group"
 msgstr "_Ομάδα:"
 
-#: gajim/roster_window.py:2893
+#: gajim/roster_window.py:2885
 #, fuzzy
 msgid "Rename Contact"
 msgstr "_Μετονομασία αρχείων"
 
-#: gajim/roster_window.py:2894
+#: gajim/roster_window.py:2886
 #, fuzzy, python-format
 msgid "Rename contact %s?"
 msgstr "_Μετονομασία αρχείων"
 
-#: gajim/roster_window.py:2895
+#: gajim/roster_window.py:2887
 #, fuzzy
 msgid "Please enter a new nickname"
 msgstr "Με_τά από ψευδώνυμο:"
 
-#: gajim/roster_window.py:2902
+#: gajim/roster_window.py:2894
 #, fuzzy
 msgid "Rename Group"
 msgstr "Ιδιοκτήτης / Ομάδα"
 
-#: gajim/roster_window.py:2903
+#: gajim/roster_window.py:2895
 #, fuzzy, python-format
 msgid "Rename group %s?"
 msgstr "Ιδιοκτήτης / Ομάδα"
 
-#: gajim/roster_window.py:2904
+#: gajim/roster_window.py:2896
 #, fuzzy
 msgid "Please enter a new name"
 msgstr "Δημιουργία νέου προφίλ"
 
-#: gajim/roster_window.py:2934 gajim/roster_window.py:3065
-#: gajim/data/gui/groupchat_control.ui:1734
+#: gajim/roster_window.py:2926 gajim/roster_window.py:3048
+#: gajim/data/gui/groupchat_control.ui:1737
 #, fuzzy
 msgid "_Rename"
 msgstr "_Μετονομασία"
 
-#: gajim/roster_window.py:2956 gajim/roster_window.py:2957
+#: gajim/roster_window.py:2948 gajim/roster_window.py:2949
 msgid "Remove Group"
 msgstr "Διαγραφή ομάδας"
 
-#: gajim/roster_window.py:2958
+#: gajim/roster_window.py:2950
 #, fuzzy, python-format
 msgid "Do you want to remove %s from the contact list?"
 msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
 
-#: gajim/roster_window.py:2959
+#: gajim/roster_window.py:2951
 #, fuzzy
 msgid "_Also remove all contacts of this group from contact list"
 msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
-#: gajim/roster_window.py:3060 gajim/roster_window.py:3061
+#: gajim/roster_window.py:3043 gajim/roster_window.py:3044
 #, fuzzy
 msgid "Rename Group Chat"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/roster_window.py:3062
+#: gajim/roster_window.py:3045
 #, fuzzy
 msgid "Please enter a new name for this group chat"
 msgstr "<b>Παρακαλώ συμπληρώστε τα δεδομένα για το νέο λογαριασμό σας</b>"
 
-#: gajim/roster_window.py:3305
+#: gajim/roster_window.py:3288
 #, fuzzy
 msgid "Remove Contact"
 msgstr "_Μετονομασία αρχείων"
 
-#: gajim/roster_window.py:3306
+#: gajim/roster_window.py:3289
 #, fuzzy
 msgid "Remove contact from contact list"
 msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
-#: gajim/roster_window.py:3307
+#: gajim/roster_window.py:3290
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
 
-#: gajim/roster_window.py:3316 gajim/roster_window.py:3336
+#: gajim/roster_window.py:3299 gajim/roster_window.py:3319
 #, fuzzy
 msgid ""
 "By removing this contact you also remove authorization. This means the "
@@ -1677,22 +1674,22 @@ msgstr ""
 "Αφαιρώντας αυτή την επαφή αφαιρείται επίσης και την εξουσιοδότηση, με "
 "συνέπεια να σας βλέπει πάντα αποσυνδεδεμένο/η."
 
-#: gajim/roster_window.py:3327
+#: gajim/roster_window.py:3310
 #, fuzzy
 msgid "Do you want to continue?"
 msgstr "Τι θέλετε να κάνετε;"
 
-#: gajim/roster_window.py:3338
+#: gajim/roster_window.py:3321
 #, fuzzy
 msgid "_I want this contact to know my status after removal"
 msgstr "Επιθυμώ αυτή η επαφή να γνωρίζει την κατάστασή μου μετά την αφαίρεση"
 
-#: gajim/roster_window.py:3345
+#: gajim/roster_window.py:3328
 #, fuzzy
 msgid "Remove contacts from contact list"
 msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
-#: gajim/roster_window.py:3351
+#: gajim/roster_window.py:3334
 #, fuzzy, python-format
 msgid ""
 "By removing the following contacts, you will also remove authorization. This "
@@ -1703,170 +1700,165 @@ msgstr ""
 "Αφαιρώντας αυτή την επαφή αφαιρείται επίσης και την εξουσιοδότηση, με "
 "συνέπεια να σας βλέπει πάντα αποσυνδεδεμένο/η."
 
-#: gajim/roster_window.py:3355
+#: gajim/roster_window.py:3338
 #, fuzzy
 msgid "Remove Contacts"
 msgstr "_Μετονομασία αρχείων"
 
-#: gajim/roster_window.py:3375
+#: gajim/roster_window.py:3358
 msgid "No account available"
 msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
 
-#: gajim/roster_window.py:3376
+#: gajim/roster_window.py:3359
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "Πρέπει να δημιουργήσετε ένα λογαριασμό για να μπορέσετε να συνομιλείτε με "
 "άλλες επαφές."
 
-#: gajim/roster_window.py:3957
+#: gajim/roster_window.py:3940
 msgid "Metacontacts storage not supported by your server"
 msgstr ""
 
-#: gajim/roster_window.py:3959
+#: gajim/roster_window.py:3942
 msgid ""
 "Your server does not support storing metacontacts information. So this "
 "information will not be saved on next reconnection."
 msgstr ""
 
-#: gajim/roster_window.py:4056
+#: gajim/roster_window.py:4039
 #, fuzzy
 msgid "You are about to create a metacontact"
 msgstr ""
 "Πρέπει να δημιουργήσετε ένα λογαριασμό για να μπορέσετε να συνομιλείτε με "
 "άλλες επαφές."
 
-#: gajim/roster_window.py:4057
+#: gajim/roster_window.py:4040
 msgid ""
 "Metacontacts are a way to regroup several contacts in one single contact. "
 "Generally it is used when the same person has several XMPP- or Transport-"
 "Accounts."
 msgstr ""
 
-#: gajim/roster_window.py:4061
+#: gajim/roster_window.py:4044
 #, fuzzy
 msgid "Create Metacontact"
 msgstr "_Μετονομασία αρχείων"
 
-#: gajim/roster_window.py:4067 gajim/data/gui/groupchat_creation.ui:317
+#: gajim/roster_window.py:4050 gajim/data/gui/groupchat_creation.ui:317
 #, fuzzy
 msgid "_Create"
 msgstr "Ανενεργό"
 
-#: gajim/roster_window.py:4184
+#: gajim/roster_window.py:4167
 #, fuzzy
 msgid "Invalid file URI:"
 msgstr "Μη έγκυρο αρχείο"
 
-#: gajim/roster_window.py:4196
+#: gajim/roster_window.py:4179
 #, fuzzy, python-format
 msgid "Send this file to %s:\n"
 msgid_plural "Send these files to %s:\n"
 msgstr[0] "O %s επιθυμεί να σας στείλει ένα αρχείο:"
 msgstr[1] "O %s επιθυμεί να σας στείλει ένα αρχείο:"
 
-#: gajim/roster_window.py:4209 gajim/data/gui/xml_console.ui:334
+#: gajim/roster_window.py:4192 gajim/data/gui/xml_console.ui:334
 msgid "_Send"
 msgstr "_Αποστολή"
 
-#: gajim/roster_window.py:4354
+#: gajim/roster_window.py:4337
 #, fuzzy, python-format
 msgid "Send %(from)s to %(to)s"
 msgstr "Αποστολή %s"
 
-#: gajim/roster_window.py:4367
+#: gajim/roster_window.py:4350
 #, fuzzy, python-format
 msgid "Make %s first contact"
 msgstr "Μετατροπή των %s και %s σε μεταεπαφές"
 
-#: gajim/roster_window.py:4372
+#: gajim/roster_window.py:4355
 #, fuzzy, python-format
 msgid "Make %(contact1)s and %(contact2)s metacontacts"
 msgstr "Μετατροπή των %s και %s σε μεταεπαφές"
 
-#: gajim/roster_window.py:4722 gajim/roster_window.py:4809
+#: gajim/roster_window.py:4705 gajim/roster_window.py:4792
 msgid "_Change Status Message"
 msgstr "Α_λλαγή μηνύματος κατάστασης"
 
-#: gajim/roster_window.py:4742
+#: gajim/roster_window.py:4725
 msgid "Publish Tune"
 msgstr ""
 
-#: gajim/roster_window.py:4753
+#: gajim/roster_window.py:4736
 msgid "Publish Location"
 msgstr ""
 
-#: gajim/roster_window.py:4883
+#: gajim/roster_window.py:4866
 msgid "_Maximize All"
 msgstr ""
 
-#: gajim/roster_window.py:4890 gajim/roster_window.py:5032
+#: gajim/roster_window.py:4873 gajim/roster_window.py:5015
 #, fuzzy
 msgid "Send Group M_essage"
 msgstr "Αρχηγός ομάδας παραθύρων"
 
-#: gajim/roster_window.py:4897
+#: gajim/roster_window.py:4880
 msgid "To all users"
 msgstr "Σε όλους τους χρήστες"
 
-#: gajim/roster_window.py:4901
+#: gajim/roster_window.py:4884
 msgid "To all online users"
 msgstr "Σε όλους τους συνδεδεμένους χρήστες"
 
-#: gajim/roster_window.py:4913 gajim/roster_window.py:5038
+#: gajim/roster_window.py:4896 gajim/roster_window.py:5021
 #: gajim/data/gui/contact_context_menu.ui:36
 #, fuzzy
 msgid "In_vite to"
 msgstr "Αδυναμία φόρτωσης"
 
-#: gajim/roster_window.py:5048
+#: gajim/roster_window.py:5031
 #, fuzzy
 msgid "_Manage Contacts"
 msgstr "_Μετονομασία αρχείων"
 
-#: gajim/roster_window.py:5054
+#: gajim/roster_window.py:5037
 #, fuzzy
 msgid "Edit _Groups…"
 msgstr "Επεξεργασία _ομάδων"
 
-#: gajim/roster_window.py:5075 gajim/data/gui/filetransfers.ui:12
+#: gajim/roster_window.py:5058 gajim/data/gui/filetransfers.ui:12
 #: gajim/gtk/dialogs.py:68
 msgid "_Remove"
 msgstr "_Αφαίρεση"
 
-#: gajim/roster_window.py:5112
+#: gajim/roster_window.py:5095
 msgid "_Maximize"
 msgstr ""
 
-#: gajim/roster_window.py:5117
+#: gajim/roster_window.py:5100
 #, fuzzy
 msgid "Re_name"
 msgstr "_Μετονομασία"
 
-#: gajim/roster_window.py:5126
-#, fuzzy
-msgid "_Reconnect"
-msgstr "Αποσύνδεση επαφής"
-
-#: gajim/roster_window.py:5139
+#: gajim/roster_window.py:5116
 #, fuzzy
 msgid "Execute command"
 msgstr "_Εκτέλεση εντολής..."
 
-#: gajim/roster_window.py:5147 gajim/data/gui/contact_context_menu.ui:205
+#: gajim/roster_window.py:5124 gajim/data/gui/contact_context_menu.ui:205
+#: gajim/data/gui/application_menu.ui:68
 msgid "_History"
 msgstr "_Ιστορικό"
 
-#: gajim/roster_window.py:5228 gajim/data/gui/application_menu.ui:18
-#: gajim/data/gui/history_window.ui:57
+#: gajim/roster_window.py:5205 gajim/data/gui/history_window.ui:57
 msgid "History Manager"
 msgstr "Διαχειριστής ιστορικού"
 
-#: gajim/roster_window.py:5309 gajim/gui_interface.py:323
-#: gajim/common/contacts.py:197 gajim/common/helpers.py:96
+#: gajim/roster_window.py:5286 gajim/gui_interface.py:296
+#: gajim/common/contacts.py:197 gajim/common/helpers.py:95
 msgid "Observers"
 msgstr "Παρατηρητές"
 
-#: gajim/roster_window.py:5312
+#: gajim/roster_window.py:5289
 msgid "Observers can see your status, but you are not allowed to see theirs"
 msgstr ""
 
@@ -2021,7 +2013,7 @@ msgstr "Η εξουσιοδότηση έχει σταλεί"
 msgid "HTTP Authorization Request"
 msgstr "Η εξουσιοδότηση έχει σταλεί"
 
-#: gajim/gui_interface.py:179 gajim/gui_interface.py:359
+#: gajim/gui_interface.py:179 gajim/gui_interface.py:333
 #: gajim/gtk/filetransfer.py:339
 #, fuzzy
 msgid "_No"
@@ -2032,187 +2024,187 @@ msgstr "Κανένα"
 msgid "Connection Failed"
 msgstr "Η σύνδεση απέτυχε"
 
-#: gajim/gui_interface.py:283
+#: gajim/gui_interface.py:256
 #, fuzzy, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "σφάλμα κατά την αποστολή του %s ( %s )"
 
-#: gajim/gui_interface.py:308 gajim/gtk/notification.py:190
+#: gajim/gui_interface.py:281 gajim/gtk/notification.py:190
 #, fuzzy
 msgid "Subscription request"
 msgstr "Αίτηση εγγραφής"
 
-#: gajim/gui_interface.py:343
+#: gajim/gui_interface.py:316
 msgid "Authorization accepted"
 msgstr "Λήψη εξουσιοδότησης"
 
-#: gajim/gui_interface.py:344
+#: gajim/gui_interface.py:317
 #, fuzzy, python-format
 msgid "The contact \"%s\" has authorized you to see their status."
 msgstr "Η επαφή \"%s\" σας εξουσιοδότησε να βλέπετε την κατάστασή της."
 
-#: gajim/gui_interface.py:354
+#: gajim/gui_interface.py:327
 #, fuzzy
 msgid "Subscription Removed"
 msgstr "Αίτηση εγγραφής"
 
-#: gajim/gui_interface.py:355
+#: gajim/gui_interface.py:328
 #, fuzzy, python-format
-msgid "%s (%s) has removed subscription from you"
+msgid "%(name)s (%(jid)s) has removed subscription from you"
 msgstr "Η επαφή \"%s\" αφαίρεσαι την εγγραφή από εσάς"
 
-#: gajim/gui_interface.py:356
+#: gajim/gui_interface.py:330
 msgid ""
 "You will always see this contact as offline.\n"
 "Do you want to remove them from your contact list?"
 msgstr ""
 
-#: gajim/gui_interface.py:381 gajim/gtk/notification.py:191
+#: gajim/gui_interface.py:355 gajim/gtk/notification.py:191
 #, fuzzy
 msgid "Unsubscribed"
 msgstr "_Εγγραφή"
 
-#: gajim/gui_interface.py:393
+#: gajim/gui_interface.py:367
 #, python-format
 msgid "%(jid)s declined the invitation: %(reason)s"
 msgstr ""
 
-#: gajim/gui_interface.py:397
+#: gajim/gui_interface.py:371
 #, python-format
 msgid "%(jid)s declined the invitation"
 msgstr ""
 
-#: gajim/gui_interface.py:413
+#: gajim/gui_interface.py:387
 #, fuzzy, python-brace-format
 msgid "You are invited to {room} by {user}"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
-#: gajim/gui_interface.py:434
+#: gajim/gui_interface.py:408
 #, fuzzy
 msgid "Certificate Passphrase Required"
 msgstr "Απαιτείται φράση πρόσβασης"
 
-#: gajim/gui_interface.py:435
+#: gajim/gui_interface.py:409
 #, fuzzy, python-format
 msgid "Enter the certificate passphrase for account %s"
 msgstr "Πληκτρολογήστε τη φράση πρόσβασης GPG για το λογαριασμό %s"
 
-#: gajim/gui_interface.py:444
+#: gajim/gui_interface.py:418
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Πληκτρολογήστε τον κωδικό σας για το λογαριασμό %s"
 
-#: gajim/gui_interface.py:456
+#: gajim/gui_interface.py:430
 msgid "Password Required"
 msgstr "Απαιτείται κωδικός"
 
-#: gajim/gui_interface.py:456
+#: gajim/gui_interface.py:430
 msgid "Save password"
 msgstr "Αποθήκευση κωδικού"
 
-#: gajim/gui_interface.py:525 gajim/gui_interface.py:556
+#: gajim/gui_interface.py:499 gajim/gui_interface.py:530
 #: gajim/gtk/filetransfer.py:333 gajim/gtk/filetransfer.py:334
 #: gajim/gtk/notification.py:188 gajim/gtk/notification.py:281
 msgid "File Transfer Error"
 msgstr "Σφάλμα μεταφοράς αρχείου"
 
-#: gajim/gui_interface.py:590
+#: gajim/gui_interface.py:564
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "O/Η %s επιθυμεί να σας στείλει ένα αρχείο."
 
-#: gajim/gui_interface.py:592 gajim/gtk/filetransfer.py:485
+#: gajim/gui_interface.py:566 gajim/gtk/filetransfer.py:485
 #: gajim/gtk/notification.py:187 gajim/gtk/notification.py:278
 msgid "File Transfer Request"
 msgstr "Αίτηση μεταφοράς αρχείου"
 
-#: gajim/gui_interface.py:695
+#: gajim/gui_interface.py:669
 #, fuzzy
 msgid "Remote Contact Stopped Transfer"
 msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
-#: gajim/gui_interface.py:700
+#: gajim/gui_interface.py:674
 #, fuzzy
 msgid "Error Opening File"
 msgstr "Σφάλμα κατά την ανάγνωση του αρχείου:"
 
-#: gajim/gui_interface.py:710
+#: gajim/gui_interface.py:684
 #, fuzzy
 msgid "SSL Certificate Error"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
-#: gajim/gui_interface.py:723 gajim/gui_interface.py:754
-#: gajim/gui_interface.py:781 gajim/gtk/notification.py:189
+#: gajim/gui_interface.py:697 gajim/gui_interface.py:728
+#: gajim/gui_interface.py:755 gajim/gtk/notification.py:189
 #: gajim/gtk/notification.py:285
 msgid "File Transfer Stopped"
 msgstr "Η μεταφορά αρχείου διακόπηκε"
 
-#: gajim/gui_interface.py:727
+#: gajim/gui_interface.py:701
 #, fuzzy
 msgid "File Transfer Failed"
 msgstr "Μεταφορές αρχείων"
 
-#: gajim/gui_interface.py:750
+#: gajim/gui_interface.py:724
 #, fuzzy, python-format
 msgid "%(filename)s received from %(name)s."
 msgstr "Η μεταφορά του αρχείου %(filename)s από τον/την %(name)s σταμάτησε."
 
-#: gajim/gui_interface.py:755
+#: gajim/gui_interface.py:729
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Η μεταφορά του αρχείου %(filename)s από τον/την %(name)s σταμάτησε."
 
-#: gajim/gui_interface.py:761
+#: gajim/gui_interface.py:735
 #, fuzzy, python-format
 msgid "File transfer of %(filename)s from %(name)s failed."
 msgstr "Η μεταφορά του αρχείου %(filename)s από τον/την %(name)s σταμάτησε."
 
-#: gajim/gui_interface.py:776
+#: gajim/gui_interface.py:750
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Έχετε στείλει με επιτυχία το %(filename)s στον/ους %(name)s."
 
-#: gajim/gui_interface.py:782
+#: gajim/gui_interface.py:756
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Η μεταφορά του αρχείου %(filename)s στον/ους %(name)s σταμάτησε."
 
-#: gajim/gui_interface.py:788
+#: gajim/gui_interface.py:762
 #, fuzzy, python-format
 msgid "File transfer of %(filename)s to %(name)s failed."
 msgstr "Η μεταφορά του αρχείου %(filename)s στον/ους %(name)s σταμάτησε."
 
-#: gajim/gui_interface.py:886 gajim/gui_interface.py:887
+#: gajim/gui_interface.py:850 gajim/gui_interface.py:851
 #, fuzzy
 msgid "Username Conflict"
 msgstr "Θα πρέπει να προσδιορίσετε ένα όνομα χρήστη !"
 
-#: gajim/gui_interface.py:888
+#: gajim/gui_interface.py:852
 #, fuzzy
 msgid "Please enter a new username for your local account"
 msgstr "<b>Παρακαλώ συμπληρώστε τα δεδομένα για το νέο λογαριασμό σας</b>"
 
-#: gajim/gui_interface.py:892 gajim/data/gui/passphrase_dialog.ui:44
+#: gajim/gui_interface.py:856 gajim/data/gui/passphrase_dialog.ui:44
 #: gajim/gtk/dialogs.py:49
 msgid "_OK"
 msgstr "_Εντάξει"
 
-#: gajim/gui_interface.py:950
+#: gajim/gui_interface.py:914
 #, fuzzy, python-format
 msgid "%s wants to start a voice chat."
 msgstr "O/Η %s επιθυμεί να σας στείλει ένα αρχείο."
 
-#: gajim/gui_interface.py:952
+#: gajim/gui_interface.py:916
 #, fuzzy
 msgid "Voice Chat Request"
 msgstr "Αίτηση μεταφοράς αρχείου"
 
-#: gajim/gui_interface.py:1004 gajim/gui_interface.py:1005
+#: gajim/gui_interface.py:968 gajim/gui_interface.py:969
 #, fuzzy
 msgid "Insecure Connection"
 msgstr "Σύνδεση"
 
-#: gajim/gui_interface.py:1006
+#: gajim/gui_interface.py:970
 #, fuzzy, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) using an "
@@ -2222,20 +2214,20 @@ msgstr ""
 "Πρέπει να δημιουργήσετε ένα λογαριασμό για να μπορέσετε να συνομιλείτε με "
 "άλλες επαφές."
 
-#: gajim/gui_interface.py:1013 gajim/data/gui/groupchat_control.ui:518
+#: gajim/gui_interface.py:977 gajim/data/gui/groupchat_control.ui:521
 msgid "_Abort"
 msgstr ""
 
-#: gajim/gui_interface.py:1016
+#: gajim/gui_interface.py:980
 #, fuzzy
 msgid "_Connect Anyway"
 msgstr "Συνδέεται"
 
-#: gajim/gui_interface.py:1833
+#: gajim/gui_interface.py:1721
 msgid "Could not save your settings and preferences"
 msgstr "Δεν ήταν δυνατή η αποθήκευση των προτιμήσεων σας"
 
-#: gajim/gui_interface.py:1895
+#: gajim/gui_interface.py:1783
 msgid "Gajim: IPython Console"
 msgstr ""
 
@@ -2781,78 +2773,73 @@ msgstr ""
 "Το όρισμα \"%s\" δεν έχει οριστεί. \n"
 "Πληκτρολογήστε \"%s help %s\" για περισσότερες πληροφορίες"
 
-#: gajim/common/logger.py:199 gajim/common/logger.py:204
+#: gajim/common/logger.py:210 gajim/common/logger.py:215
 #, fuzzy, python-format
 msgid "%s is a directory but should be a file"
 msgstr "Το %s είναι κατάλογος αλλά θα έπρεπε να είναι αρχείο"
 
-#: gajim/common/logger.py:224
+#: gajim/common/logger.py:235
 #, fuzzy, python-format
 msgid "Creating %s"
 msgstr "Περιγραφή: %s"
 
-#: gajim/common/connection_handlers_events.py:73
-#, fuzzy, python-format
-msgid "Unknown SSL error: %d"
-msgstr "Άγνωστη έκδοση του D-Bus: %s"
-
-#: gajim/common/connection_handlers_events.py:274 gajim/gtk/notification.py:185
+#: gajim/common/connection_handlers_events.py:234 gajim/gtk/notification.py:185
 #: gajim/gtk/notification.py:215 gajim/gtk/notification.py:274
 msgid "New Private Message"
 msgstr "Νέο προσωπικό μήνυμα"
 
-#: gajim/common/connection_handlers_events.py:282
-#: gajim/common/connection_handlers_events.py:374
+#: gajim/common/connection_handlers_events.py:242
+#: gajim/common/connection_handlers_events.py:339
 #, fuzzy, python-format
 msgid "New message from %(nickname)s"
 msgid_plural "%(n_msgs)i unread messages from %(nickname)s"
 msgstr[0] "Νέο μήνυμα από %(nickname)s"
 msgstr[1] "Νέο μήνυμα από %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:363 gajim/gtk/notification.py:186
+#: gajim/common/connection_handlers_events.py:325 gajim/gtk/notification.py:186
 #: gajim/gtk/notification.py:216
 #, fuzzy
 msgid "New Group Chat Message"
 msgstr "Αρχηγός ομάδας παραθύρων"
 
-#: gajim/common/connection_handlers_events.py:449
+#: gajim/common/connection_handlers_events.py:414
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "Ο %(nick)s άλλαξε κατάσταση"
 
-#: gajim/common/connection_handlers_events.py:451 gajim/gtk/history.py:581
+#: gajim/common/connection_handlers_events.py:416 gajim/gtk/history.py:581
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "Ο %(nick)s είναι τώρα %(status)s"
 
-#: gajim/common/connection_handlers_events.py:455 gajim/gtk/notification.py:187
+#: gajim/common/connection_handlers_events.py:420 gajim/gtk/notification.py:187
 #: gajim/gtk/notification.py:208 gajim/gtk/notification.py:291
 msgid "Contact Changed Status"
 msgstr "Η επαφή άλλαξε κατάσταση"
 
-#: gajim/common/connection_handlers_events.py:457
+#: gajim/common/connection_handlers_events.py:422
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "Σύνδεση %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:461 gajim/gtk/notification.py:184
+#: gajim/common/connection_handlers_events.py:426 gajim/gtk/notification.py:184
 #: gajim/gtk/notification.py:206 gajim/gtk/notification.py:267
 msgid "Contact Signed In"
 msgstr "Σύνδεση επαφής"
 
-#: gajim/common/connection_handlers_events.py:463
+#: gajim/common/connection_handlers_events.py:428
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "Αποσύνδεση %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:467 gajim/gtk/notification.py:184
+#: gajim/common/connection_handlers_events.py:432 gajim/gtk/notification.py:184
 #: gajim/gtk/notification.py:207 gajim/gtk/notification.py:270
 msgid "Contact Signed Out"
 msgstr "Αποσύνδεση επαφής"
 
-#: gajim/common/client.py:249 gajim/common/const.py:912
-#: gajim/common/const.py:913 gajim/common/const.py:914
-#: gajim/common/const.py:917 gajim/gtk/account_wizard.py:306
+#: gajim/common/client.py:296 gajim/common/const.py:938
+#: gajim/common/const.py:939 gajim/common/const.py:940
+#: gajim/common/const.py:943 gajim/gtk/account_wizard.py:368
 #, fuzzy
 msgid "Authentication failed"
 msgstr "Η πιστοποίηση ταυτότητας με \"%s\" απέτυχε"
@@ -3296,106 +3283,102 @@ msgid ""
 msgstr ""
 
 #: gajim/common/config.py:216
-msgid "Choose interval between 2 checks of idleness."
-msgstr ""
-
-#: gajim/common/config.py:217
 msgid ""
 "Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
 "(mailto and xmpp are handled separately)."
 msgstr ""
 
-#: gajim/common/config.py:218
+#: gajim/common/config.py:217
 msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
-#: gajim/common/config.py:222
+#: gajim/common/config.py:221
 msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
 msgstr ""
 
-#: gajim/common/config.py:223
+#: gajim/common/config.py:222
 msgid "Optionally resize Jingle output video. Example: 320x240."
 msgstr ""
 
-#: gajim/common/config.py:224
+#: gajim/common/config.py:223
 msgid "If enabled, you will see your webcam's video stream as well."
 msgstr ""
 
-#: gajim/common/config.py:227
+#: gajim/common/config.py:226
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in 'stun_server' option, or the one given by the XMPP server."
 msgstr ""
 
-#: gajim/common/config.py:228
+#: gajim/common/config.py:227
 msgid "STUN server to use when using Jingle"
 msgstr ""
 
-#: gajim/common/config.py:229
+#: gajim/common/config.py:228
 msgid ""
 "If enabled, Gajim will show affiliation of group chat participants by adding "
 "a colored square to the status icon."
 msgstr ""
 
-#: gajim/common/config.py:230
+#: gajim/common/config.py:229
 msgid ""
 "Proxy used for all outgoing connections if the account does not have a "
 "specific proxy configured."
 msgstr ""
 
-#: gajim/common/config.py:231
+#: gajim/common/config.py:230
 msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
-#: gajim/common/config.py:232
+#: gajim/common/config.py:231
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
 msgstr ""
 
-#: gajim/common/config.py:233
+#: gajim/common/config.py:232
 msgid ""
 "If enabled, Gajim will display an icon to show that sent messages have been "
 "received by your contact."
 msgstr ""
 
-#: gajim/common/config.py:234
+#: gajim/common/config.py:233
 msgid ""
 "If enabled, Gajim will use the System's Keyring to store account passwords."
 msgstr ""
 
-#: gajim/common/config.py:235
+#: gajim/common/config.py:234
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
 
-#: gajim/common/config.py:236
+#: gajim/common/config.py:235
 msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
-#: gajim/common/config.py:237
+#: gajim/common/config.py:236
 msgid "Options in days which can be chosen in the sync threshold menu"
 msgstr ""
 
-#: gajim/common/config.py:238
+#: gajim/common/config.py:237
 msgid ""
 "Maximum history in days we request from a public group chat archive. 0: As "
 "much as possible."
 msgstr ""
 
-#: gajim/common/config.py:239
+#: gajim/common/config.py:238
 msgid ""
 "Maximum history in days we request from a private group chat archive. 0: As "
 "much as possible."
 msgstr ""
 
-#: gajim/common/config.py:240
+#: gajim/common/config.py:239
 msgid ""
 "If enabled, Gajim shows the group chat subject in the chat window when "
 "joining."
 msgstr ""
 
-#: gajim/common/config.py:241
+#: gajim/common/config.py:240
 #, fuzzy
 msgid ""
 "If enabled, the contact row is colored according to the current chat state "
@@ -3404,7 +3387,7 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτό το δωμάτιο κατά την "
 "εκκίνηση"
 
-#: gajim/common/config.py:242
+#: gajim/common/config.py:241
 #, fuzzy
 msgid ""
 "If enabled, the tab is colored according to the current chat state of the "
@@ -3413,7 +3396,7 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτό το δωμάτιο κατά την "
 "εκκίνηση"
 
-#: gajim/common/config.py:243
+#: gajim/common/config.py:242
 #, fuzzy
 msgid ""
 "Shows a text in the banner that describes the current chat state of the "
@@ -3422,38 +3405,42 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτό το δωμάτιο κατά την "
 "εκκίνηση"
 
-#: gajim/common/config.py:244
+#: gajim/common/config.py:243
 msgid ""
 "Chat state notifications that are sent to contacts. Possible values: all, "
 "composing_only, disabled"
 msgstr ""
 
-#: gajim/common/config.py:245
+#: gajim/common/config.py:244
 msgid ""
 "Chat state notifications that are sent to the group chat. Possible values: "
 "'all', 'composing_only', 'disabled'"
 msgstr ""
 
-#: gajim/common/config.py:248
+#: gajim/common/config.py:247
 msgid "API Preferences. Possible values: 'http', 'iq'"
 msgstr ""
 
-#: gajim/common/config.py:249
+#: gajim/common/config.py:248
 msgid "Selecting text will copy it to the clipboard"
 msgstr ""
 
-#: gajim/common/config.py:250
+#: gajim/common/config.py:249
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-#: gajim/common/config.py:251
+#: gajim/common/config.py:250
 msgid "Width of group chat roster in pixel"
 msgstr ""
 
-#: gajim/common/config.py:252
+#: gajim/common/config.py:251
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "_Τοποθέτηση σελιδοδείκτη για αυτό το δωμάτιο"
+
+#: gajim/common/config.py:252
+msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
+msgstr ""
 
 #: gajim/common/config.py:269
 msgid ""
@@ -3634,7 +3621,7 @@ msgid ""
 "plugin window instead."
 msgstr ""
 
-#: gajim/common/config.py:376 gajim/common/const.py:354
+#: gajim/common/config.py:376 gajim/common/const.py:380
 msgid "Sleeping"
 msgstr "Κοιμάμαι"
 
@@ -3646,7 +3633,7 @@ msgstr "Πίσω σύντομα"
 msgid "Back in some minutes."
 msgstr "Πίσω σε λίγα λεπτά."
 
-#: gajim/common/config.py:378 gajim/common/const.py:320
+#: gajim/common/config.py:378 gajim/common/const.py:346
 msgid "Eating"
 msgstr "Τρώω"
 
@@ -3663,7 +3650,7 @@ msgstr "Ταινία"
 msgid "I'm watching a movie."
 msgstr "Βλέπω μια ταινία."
 
-#: gajim/common/config.py:380 gajim/common/const.py:387
+#: gajim/common/config.py:380 gajim/common/const.py:413
 msgid "Working"
 msgstr "Δουλειά"
 
@@ -3729,1128 +3716,1128 @@ msgstr ""
 msgid "Tor"
 msgstr "Προς"
 
-#: gajim/common/optparser.py:53
+#: gajim/common/optparser.py:54
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Σφάλμα: το αρχείο %s δε μπορεί να ανοιχθεί για ανάγνωση"
 
-#: gajim/common/const.py:254
+#: gajim/common/const.py:280
 #, fuzzy
 msgid "?Group chat name:Team"
 msgstr "Κανένας"
 
-#: gajim/common/const.py:255
+#: gajim/common/const.py:281
 msgid "?Group chat description:Project discussion"
 msgstr ""
 
-#: gajim/common/const.py:256
+#: gajim/common/const.py:282
 #, fuzzy
 msgid "?Group chat address:team"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/common/const.py:257
+#: gajim/common/const.py:283
 #, fuzzy
 msgid "?Group chat name:Family"
 msgstr "Επισήμανση "
 
-#: gajim/common/const.py:258
+#: gajim/common/const.py:284
 msgid "?Group chat description:Spring gathering"
 msgstr ""
 
-#: gajim/common/const.py:259
+#: gajim/common/const.py:285
 msgid "?Group chat address:family"
 msgstr ""
 
-#: gajim/common/const.py:260
+#: gajim/common/const.py:286
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Πρόσκληση ομαδικής κουβέντας"
 
-#: gajim/common/const.py:261
+#: gajim/common/const.py:287
 msgid "?Group chat description:Trip planning"
 msgstr ""
 
-#: gajim/common/const.py:262
+#: gajim/common/const.py:288
 #, fuzzy
 msgid "?Group chat address:vacation"
 msgstr "Πρόσκληση ομαδικής κουβέντας"
 
-#: gajim/common/const.py:263
+#: gajim/common/const.py:289
 #, fuzzy
 msgid "?Group chat name:Repairs"
 msgstr "Ομαδική συζήτηση"
 
-#: gajim/common/const.py:264
+#: gajim/common/const.py:290
 msgid "?Group chat description:Local help group"
 msgstr ""
 
-#: gajim/common/const.py:265
+#: gajim/common/const.py:291
 #, fuzzy
 msgid "?Group chat address:repairs"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/common/const.py:266
+#: gajim/common/const.py:292
 #, fuzzy
 msgid "?Group chat name:News"
 msgstr "Κανένας"
 
-#: gajim/common/const.py:267
+#: gajim/common/const.py:293
 #, fuzzy
 msgid "?Group chat description:Local news and reports"
 msgstr "Δεν επιτρέπεται η δημιουργία ομαδικών συζητήσεων."
 
-#: gajim/common/const.py:268
+#: gajim/common/const.py:294
 #, fuzzy
 msgid "?Group chat address:news"
 msgstr "Αρχηγός ομάδας παραθύρων"
 
-#: gajim/common/const.py:273
+#: gajim/common/const.py:299
 #, fuzzy
 msgid "Remote server not found"
 msgstr "Η υπηρεσία δεν ήταν δυνατό να βρεθεί"
 
-#: gajim/common/const.py:274
+#: gajim/common/const.py:300
 msgid "Remote server timeout"
 msgstr ""
 
-#: gajim/common/const.py:275 gajim/common/const.py:276
-#: gajim/common/const.py:277
+#: gajim/common/const.py:301 gajim/common/const.py:302
+#: gajim/common/const.py:303
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Αυτή η μορφή συμπίεσης δεν υποστηρίζεται:"
 
-#: gajim/common/const.py:278
+#: gajim/common/const.py:304
 #, fuzzy
 msgid "Group chat already exists"
 msgstr "Υπάρχει ήδη τοπικό προφίλ με αυτό το όνομα"
 
-#: gajim/common/const.py:279
+#: gajim/common/const.py:305
 #, fuzzy
 msgid "Group chat does not exist"
 msgstr "Δεν υπάρχει τέτοια συζήτηση."
 
-#: gajim/common/const.py:280
+#: gajim/common/const.py:306
 #, fuzzy
 msgid "Group chat is closed"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/common/const.py:286
+#: gajim/common/const.py:312
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
-#: gajim/common/const.py:289
+#: gajim/common/const.py:315
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
-#: gajim/common/const.py:293
+#: gajim/common/const.py:319
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
-#: gajim/common/const.py:297
+#: gajim/common/const.py:323
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
 msgstr ""
 
-#: gajim/common/const.py:304
+#: gajim/common/const.py:330
 #, fuzzy
 msgid "Doing Chores"
 msgstr "Λάθος διακομιστής"
 
-#: gajim/common/const.py:305
+#: gajim/common/const.py:331
 msgid "Buying Groceries"
 msgstr ""
 
-#: gajim/common/const.py:306
+#: gajim/common/const.py:332
 #, fuzzy
 msgid "Cleaning"
 msgstr "Απόγευμα"
 
-#: gajim/common/const.py:307
+#: gajim/common/const.py:333
 #, fuzzy
 msgid "Cooking"
 msgstr "Σύνθεση"
 
-#: gajim/common/const.py:308
+#: gajim/common/const.py:334
 msgid "Doing Maintenance"
 msgstr ""
 
-#: gajim/common/const.py:309
+#: gajim/common/const.py:335
 msgid "Doing the Dishes"
 msgstr ""
 
-#: gajim/common/const.py:310
+#: gajim/common/const.py:336
 msgid "Doing the Laundry"
 msgstr ""
 
-#: gajim/common/const.py:311
+#: gajim/common/const.py:337
 #, fuzzy
 msgid "Gardening"
 msgstr "Πρωί"
 
-#: gajim/common/const.py:312
+#: gajim/common/const.py:338
 msgid "Running an Errand"
 msgstr ""
 
-#: gajim/common/const.py:313
+#: gajim/common/const.py:339
 #, fuzzy
 msgid "Walking the Dog"
 msgstr "όλους στην ομάδα"
 
-#: gajim/common/const.py:315
+#: gajim/common/const.py:341
 #, fuzzy
 msgid "Drinking"
 msgstr "Δουλειά"
 
-#: gajim/common/const.py:316
+#: gajim/common/const.py:342
 msgid "Having a Beer"
 msgstr ""
 
-#: gajim/common/const.py:317
+#: gajim/common/const.py:343
 msgid "Having Coffee"
 msgstr ""
 
-#: gajim/common/const.py:318
+#: gajim/common/const.py:344
 msgid "Having Tea"
 msgstr ""
 
-#: gajim/common/const.py:321
+#: gajim/common/const.py:347
 msgid "Having a Snack"
 msgstr ""
 
-#: gajim/common/const.py:322
+#: gajim/common/const.py:348
 msgid "Having Breakfast"
 msgstr ""
 
-#: gajim/common/const.py:323
+#: gajim/common/const.py:349
 msgid "Having Dinner"
 msgstr ""
 
-#: gajim/common/const.py:324
+#: gajim/common/const.py:350
 msgid "Having Lunch"
 msgstr ""
 
-#: gajim/common/const.py:326
+#: gajim/common/const.py:352
 msgid "Exercising"
 msgstr ""
 
-#: gajim/common/const.py:327 gajim/common/const.py:378
+#: gajim/common/const.py:353 gajim/common/const.py:404
 msgid "Cycling"
 msgstr ""
 
-#: gajim/common/const.py:328
+#: gajim/common/const.py:354
 #, fuzzy
 msgid "Dancing"
 msgstr "Απόγευμα"
 
-#: gajim/common/const.py:329
+#: gajim/common/const.py:355
 #, fuzzy
 msgid "Hiking"
 msgstr "Διώχνοντας τον %s"
 
-#: gajim/common/const.py:330
+#: gajim/common/const.py:356
 #, fuzzy
 msgid "Jogging"
 msgstr "_Συμμετοχή"
 
-#: gajim/common/const.py:331
+#: gajim/common/const.py:357
 msgid "Playing Sports"
 msgstr ""
 
-#: gajim/common/const.py:332
+#: gajim/common/const.py:358
 msgid "Running"
 msgstr ""
 
-#: gajim/common/const.py:333
+#: gajim/common/const.py:359
 #, fuzzy
 msgid "Skiing"
 msgstr "Δουλειά"
 
-#: gajim/common/const.py:334
+#: gajim/common/const.py:360
 msgid "Swimming"
 msgstr ""
 
-#: gajim/common/const.py:335
+#: gajim/common/const.py:361
 #, fuzzy
 msgid "Working out"
 msgstr "Δουλειά"
 
-#: gajim/common/const.py:337
+#: gajim/common/const.py:363
 #, fuzzy
 msgid "Grooming"
 msgstr "Από"
 
-#: gajim/common/const.py:338
+#: gajim/common/const.py:364
 msgid "At the Spa"
 msgstr ""
 
-#: gajim/common/const.py:339
+#: gajim/common/const.py:365
 msgid "Brushing Teeth"
 msgstr ""
 
-#: gajim/common/const.py:340
-msgid "Getting a Haircut"
-msgstr ""
-
-#: gajim/common/const.py:341
-#, fuzzy
-msgid "Shaving"
-msgstr "Τρώω"
-
-#: gajim/common/const.py:342
-msgid "Taking a Bath"
-msgstr ""
-
-#: gajim/common/const.py:343
-msgid "Taking a Shower"
-msgstr ""
-
-#: gajim/common/const.py:345
-msgid "Having an Appointment"
-msgstr ""
-
-#: gajim/common/const.py:347
-msgid "Inactive"
-msgstr "Ανενεργό"
-
-#: gajim/common/const.py:348
-msgid "Day Off"
-msgstr ""
-
-#: gajim/common/const.py:349
-#, fuzzy
-msgid "Hanging out"
-msgstr "Αλλαγή θέματος"
-
-#: gajim/common/const.py:350
-#, fuzzy
-msgid "Hiding"
-msgstr "Διώχνοντας τον %s"
-
-#: gajim/common/const.py:351
-msgid "On Vacation"
-msgstr ""
-
-#: gajim/common/const.py:352
-#, fuzzy
-msgid "Praying"
-msgstr "Τρώω"
-
-#: gajim/common/const.py:353
-msgid "Scheduled Holiday"
-msgstr ""
-
-#: gajim/common/const.py:355
-#, fuzzy
-msgid "Thinking"
-msgstr "Δουλειά"
-
-#: gajim/common/const.py:357
-#, fuzzy
-msgid "Relaxing"
-msgstr "λιτό"
-
-#: gajim/common/const.py:358
-#, fuzzy
-msgid "Fishing"
-msgstr "Διώχνοντας τον %s"
-
-#: gajim/common/const.py:359
-#, fuzzy
-msgid "Gaming"
-msgstr "Τρώω"
-
-#: gajim/common/const.py:360
-#, fuzzy
-msgid "Going out"
-msgstr "Αποσ_ύνδεση"
-
-#: gajim/common/const.py:361
-#, fuzzy
-msgid "Partying"
-msgstr "Τρώω"
-
-#: gajim/common/const.py:362
-#, fuzzy
-msgid "Reading"
-msgstr "Αιτία"
-
-#: gajim/common/const.py:363
-#, fuzzy
-msgid "Rehearsing"
-msgstr "Αιτία"
-
-#: gajim/common/const.py:364
-#, fuzzy
-msgid "Shopping"
-msgstr "Κοιμάμαι"
-
-#: gajim/common/const.py:365
-#, fuzzy
-msgid "Smoking"
-msgstr "Δουλειά"
-
 #: gajim/common/const.py:366
-msgid "Socializing"
+msgid "Getting a Haircut"
 msgstr ""
 
 #: gajim/common/const.py:367
 #, fuzzy
-msgid "Sunbathing"
+msgid "Shaving"
 msgstr "Τρώω"
 
 #: gajim/common/const.py:368
-msgid "Watching TV"
+msgid "Taking a Bath"
 msgstr ""
 
 #: gajim/common/const.py:369
+msgid "Taking a Shower"
+msgstr ""
+
+#: gajim/common/const.py:371
+msgid "Having an Appointment"
+msgstr ""
+
+#: gajim/common/const.py:373
+msgid "Inactive"
+msgstr "Ανενεργό"
+
+#: gajim/common/const.py:374
+msgid "Day Off"
+msgstr ""
+
+#: gajim/common/const.py:375
+#, fuzzy
+msgid "Hanging out"
+msgstr "Αλλαγή θέματος"
+
+#: gajim/common/const.py:376
+#, fuzzy
+msgid "Hiding"
+msgstr "Διώχνοντας τον %s"
+
+#: gajim/common/const.py:377
+msgid "On Vacation"
+msgstr ""
+
+#: gajim/common/const.py:378
+#, fuzzy
+msgid "Praying"
+msgstr "Τρώω"
+
+#: gajim/common/const.py:379
+msgid "Scheduled Holiday"
+msgstr ""
+
+#: gajim/common/const.py:381
+#, fuzzy
+msgid "Thinking"
+msgstr "Δουλειά"
+
+#: gajim/common/const.py:383
+#, fuzzy
+msgid "Relaxing"
+msgstr "λιτό"
+
+#: gajim/common/const.py:384
+#, fuzzy
+msgid "Fishing"
+msgstr "Διώχνοντας τον %s"
+
+#: gajim/common/const.py:385
+#, fuzzy
+msgid "Gaming"
+msgstr "Τρώω"
+
+#: gajim/common/const.py:386
+#, fuzzy
+msgid "Going out"
+msgstr "Αποσ_ύνδεση"
+
+#: gajim/common/const.py:387
+#, fuzzy
+msgid "Partying"
+msgstr "Τρώω"
+
+#: gajim/common/const.py:388
+#, fuzzy
+msgid "Reading"
+msgstr "Αιτία"
+
+#: gajim/common/const.py:389
+#, fuzzy
+msgid "Rehearsing"
+msgstr "Αιτία"
+
+#: gajim/common/const.py:390
+#, fuzzy
+msgid "Shopping"
+msgstr "Κοιμάμαι"
+
+#: gajim/common/const.py:391
+#, fuzzy
+msgid "Smoking"
+msgstr "Δουλειά"
+
+#: gajim/common/const.py:392
+msgid "Socializing"
+msgstr ""
+
+#: gajim/common/const.py:393
+#, fuzzy
+msgid "Sunbathing"
+msgstr "Τρώω"
+
+#: gajim/common/const.py:394
+msgid "Watching TV"
+msgstr ""
+
+#: gajim/common/const.py:395
 #, fuzzy
 msgid "Watching a Movie"
 msgstr "Βλέπω μια ταινία."
 
-#: gajim/common/const.py:371
+#: gajim/common/const.py:397
 #, fuzzy
 msgid "Talking"
 msgstr "Τρώω"
 
-#: gajim/common/const.py:372
+#: gajim/common/const.py:398
 msgid "In Real Life"
 msgstr ""
 
-#: gajim/common/const.py:373
+#: gajim/common/const.py:399
 #, fuzzy
 msgid "On the Phone"
 msgstr "Είμαι στο τηλέφωνο."
 
-#: gajim/common/const.py:374
-msgid "On Video Phone"
-msgstr ""
-
-#: gajim/common/const.py:376
-#, fuzzy
-msgid "Traveling"
-msgstr "Μεταφέρεται"
-
-#: gajim/common/const.py:377
-#, fuzzy
-msgid "Commuting"
-msgstr "Σύνθεση"
-
-#: gajim/common/const.py:379
-msgid "Driving"
-msgstr ""
-
-#: gajim/common/const.py:380
-msgid "In a Car"
-msgstr ""
-
-#: gajim/common/const.py:381
-msgid "On a Bus"
-msgstr ""
-
-#: gajim/common/const.py:382
-#, fuzzy
-msgid "On a Plane"
-msgstr "Συνδεδεμένος"
-
-#: gajim/common/const.py:383
-#, fuzzy
-msgid "On a Train"
-msgstr "Το άνοιγμα του συνδέσμου απέτυχε"
-
-#: gajim/common/const.py:384
-msgid "On a Trip"
-msgstr ""
-
-#: gajim/common/const.py:385
-#, fuzzy
-msgid "Walking"
-msgstr "Δουλειά"
-
-#: gajim/common/const.py:388
-#, fuzzy
-msgid "Coding"
-msgstr "Σύνθεση"
-
-#: gajim/common/const.py:389
-msgid "In a Meeting"
-msgstr ""
-
-#: gajim/common/const.py:390
-msgid "Studying"
-msgstr ""
-
-#: gajim/common/const.py:391
-#, fuzzy
-msgid "Writing"
-msgstr "Δουλειά"
-
-#: gajim/common/const.py:394
-msgid "Afraid"
-msgstr ""
-
-#: gajim/common/const.py:395
-msgid "Amazed"
-msgstr ""
-
-#: gajim/common/const.py:396
-msgid "Amorous"
-msgstr ""
-
-#: gajim/common/const.py:397
-msgid "Angry"
-msgstr ""
-
-#: gajim/common/const.py:398
-msgid "Annoyed"
-msgstr ""
-
-#: gajim/common/const.py:399
-msgid "Anxious"
-msgstr ""
-
 #: gajim/common/const.py:400
-#, fuzzy
-msgid "Aroused"
-msgstr "Παύση"
-
-#: gajim/common/const.py:401
-msgid "Ashamed"
+msgid "On Video Phone"
 msgstr ""
 
 #: gajim/common/const.py:402
 #, fuzzy
-msgid "Bored"
-msgstr "Έντονα"
+msgid "Traveling"
+msgstr "Μεταφέρεται"
 
 #: gajim/common/const.py:403
 #, fuzzy
-msgid "Brave"
-msgstr "Έχει"
-
-#: gajim/common/const.py:404
-msgid "Calm"
-msgstr ""
+msgid "Commuting"
+msgstr "Σύνθεση"
 
 #: gajim/common/const.py:405
-#, fuzzy
-msgid "Cautious"
-msgstr "Συζητήσεις"
+msgid "Driving"
+msgstr ""
 
 #: gajim/common/const.py:406
-#, fuzzy
-msgid "Cold"
-msgstr "Έντονα"
+msgid "In a Car"
+msgstr ""
 
 #: gajim/common/const.py:407
-#, fuzzy
-msgid "Confident"
-msgstr "_Περιεχόμενα"
+msgid "On a Bus"
+msgstr ""
 
 #: gajim/common/const.py:408
-msgid "Confused"
-msgstr ""
+#, fuzzy
+msgid "On a Plane"
+msgstr "Συνδεδεμένος"
 
 #: gajim/common/const.py:409
 #, fuzzy
-msgid "Contemplative"
-msgstr "Ολοκληρώθηκε"
+msgid "On a Train"
+msgstr "Το άνοιγμα του συνδέσμου απέτυχε"
 
 #: gajim/common/const.py:410
-#, fuzzy
-msgid "Contented"
-msgstr "_Περιεχόμενα"
+msgid "On a Trip"
+msgstr ""
 
 #: gajim/common/const.py:411
-msgid "Cranky"
-msgstr ""
-
-#: gajim/common/const.py:412
-msgid "Crazy"
-msgstr ""
-
-#: gajim/common/const.py:413
 #, fuzzy
-msgid "Creative"
-msgstr "Ανενεργό"
+msgid "Walking"
+msgstr "Δουλειά"
 
 #: gajim/common/const.py:414
 #, fuzzy
-msgid "Curious"
-msgstr "_Πίσω"
+msgid "Coding"
+msgstr "Σύνθεση"
 
 #: gajim/common/const.py:415
-#, fuzzy
-msgid "Dejected"
-msgstr "Διαγραφή"
+msgid "In a Meeting"
+msgstr ""
 
 #: gajim/common/const.py:416
-msgid "Depressed"
+msgid "Studying"
 msgstr ""
 
 #: gajim/common/const.py:417
 #, fuzzy
-msgid "Disappointed"
-msgstr "Απενεργοποιημένο"
-
-#: gajim/common/const.py:418
-msgid "Disgusted"
-msgstr ""
-
-#: gajim/common/const.py:419
-#, fuzzy
-msgid "Dismayed"
-msgstr "Απενεργοποιημένο"
+msgid "Writing"
+msgstr "Δουλειά"
 
 #: gajim/common/const.py:420
-#, fuzzy
-msgid "Distracted"
-msgstr "Απενεργοποιημένο"
+msgid "Afraid"
+msgstr ""
 
 #: gajim/common/const.py:421
-msgid "Embarrassed"
+msgid "Amazed"
 msgstr ""
 
 #: gajim/common/const.py:422
-#, fuzzy
-msgid "Envious"
-msgstr "_Πίσω"
+msgid "Amorous"
+msgstr ""
 
 #: gajim/common/const.py:423
-#, fuzzy
-msgid "Excited"
-msgstr "Ενεργό"
+msgid "Angry"
+msgstr ""
 
 #: gajim/common/const.py:424
-msgid "Flirtatious"
+msgid "Annoyed"
 msgstr ""
 
 #: gajim/common/const.py:425
-msgid "Frustrated"
+msgid "Anxious"
 msgstr ""
 
 #: gajim/common/const.py:426
-msgid "Grateful"
-msgstr ""
+#, fuzzy
+msgid "Aroused"
+msgstr "Παύση"
 
 #: gajim/common/const.py:427
-msgid "Grieving"
+msgid "Ashamed"
 msgstr ""
 
 #: gajim/common/const.py:428
 #, fuzzy
-msgid "Grumpy"
-msgstr "Ομάδα"
+msgid "Bored"
+msgstr "Έντονα"
 
 #: gajim/common/const.py:429
-msgid "Guilty"
-msgstr ""
+#, fuzzy
+msgid "Brave"
+msgstr "Έχει"
 
 #: gajim/common/const.py:430
-msgid "Happy"
+msgid "Calm"
 msgstr ""
 
 #: gajim/common/const.py:431
-msgid "Hopeful"
-msgstr ""
+#, fuzzy
+msgid "Cautious"
+msgstr "Συζητήσεις"
 
 #: gajim/common/const.py:432
 #, fuzzy
-msgid "Hot"
-msgstr "Ε_ξυπηρετητής:"
+msgid "Cold"
+msgstr "Έντονα"
 
 #: gajim/common/const.py:433
-msgid "Humbled"
-msgstr ""
+#, fuzzy
+msgid "Confident"
+msgstr "_Περιεχόμενα"
 
 #: gajim/common/const.py:434
-msgid "Humiliated"
+msgid "Confused"
 msgstr ""
 
 #: gajim/common/const.py:435
-msgid "Hungry"
-msgstr ""
+#, fuzzy
+msgid "Contemplative"
+msgstr "Ολοκληρώθηκε"
 
 #: gajim/common/const.py:436
-msgid "Hurt"
-msgstr ""
+#, fuzzy
+msgid "Contented"
+msgstr "_Περιεχόμενα"
 
 #: gajim/common/const.py:437
-#, fuzzy
-msgid "Impressed"
-msgstr "μήνυμα"
+msgid "Cranky"
+msgstr ""
 
 #: gajim/common/const.py:438
-msgid "In Awe"
+msgid "Crazy"
 msgstr ""
 
 #: gajim/common/const.py:439
-msgid "In Love"
-msgstr ""
+#, fuzzy
+msgid "Creative"
+msgstr "Ανενεργό"
 
 #: gajim/common/const.py:440
-msgid "Indignant"
-msgstr ""
+#, fuzzy
+msgid "Curious"
+msgstr "_Πίσω"
 
 #: gajim/common/const.py:441
-msgid "Interested"
-msgstr ""
+#, fuzzy
+msgid "Dejected"
+msgstr "Διαγραφή"
 
 #: gajim/common/const.py:442
-#, fuzzy
-msgid "Intoxicated"
-msgstr "Ενεργό"
+msgid "Depressed"
+msgstr ""
 
 #: gajim/common/const.py:443
 #, fuzzy
-msgid "Invincible"
-msgstr "Αφανής"
+msgid "Disappointed"
+msgstr "Απενεργοποιημένο"
 
 #: gajim/common/const.py:444
-msgid "Jealous"
+msgid "Disgusted"
 msgstr ""
 
 #: gajim/common/const.py:445
 #, fuzzy
-msgid "Lonely"
-msgstr "ένα"
+msgid "Dismayed"
+msgstr "Απενεργοποιημένο"
 
 #: gajim/common/const.py:446
 #, fuzzy
-msgid "Lost"
-msgstr "Ε_ξυπηρετητής:"
+msgid "Distracted"
+msgstr "Απενεργοποιημένο"
 
 #: gajim/common/const.py:447
-msgid "Lucky"
+msgid "Embarrassed"
 msgstr ""
 
 #: gajim/common/const.py:448
 #, fuzzy
-msgid "Mean"
-msgstr "Γερμανικά"
+msgid "Envious"
+msgstr "_Πίσω"
 
 #: gajim/common/const.py:449
 #, fuzzy
-msgid "Moody"
-msgstr "_Τροποποίηση"
+msgid "Excited"
+msgstr "Ενεργό"
 
 #: gajim/common/const.py:450
-#, fuzzy
-msgid "Nervous"
-msgstr "_Πίσω"
+msgid "Flirtatious"
+msgstr ""
 
 #: gajim/common/const.py:451
-msgid "Neutral"
+msgid "Frustrated"
 msgstr ""
 
 #: gajim/common/const.py:452
-#, fuzzy
-msgid "Offended"
-msgstr "Αποσυνδεδεμένος"
+msgid "Grateful"
+msgstr ""
 
 #: gajim/common/const.py:453
-msgid "Outraged"
+msgid "Grieving"
 msgstr ""
 
 #: gajim/common/const.py:454
-msgid "Playful"
-msgstr ""
-
-#: gajim/common/const.py:455
 #, fuzzy
-msgid "Proud"
+msgid "Grumpy"
 msgstr "Ομάδα"
 
+#: gajim/common/const.py:455
+msgid "Guilty"
+msgstr ""
+
 #: gajim/common/const.py:456
-msgid "Relaxed"
+msgid "Happy"
 msgstr ""
 
 #: gajim/common/const.py:457
-#, fuzzy
-msgid "Relieved"
-msgstr "έντεκα"
-
-#: gajim/common/const.py:458
-msgid "Remorseful"
+msgid "Hopeful"
 msgstr ""
 
+#: gajim/common/const.py:458
+#, fuzzy
+msgid "Hot"
+msgstr "Ε_ξυπηρετητής:"
+
 #: gajim/common/const.py:459
-msgid "Restless"
+msgid "Humbled"
 msgstr ""
 
 #: gajim/common/const.py:460
-#, fuzzy
-msgid "Sad"
-msgstr "Πάγωσε"
+msgid "Humiliated"
+msgstr ""
 
 #: gajim/common/const.py:461
-msgid "Sarcastic"
+msgid "Hungry"
 msgstr ""
 
 #: gajim/common/const.py:462
-#, fuzzy
-msgid "Satisfied"
-msgstr "Τελευταία τροποποίηση:"
+msgid "Hurt"
+msgstr ""
 
 #: gajim/common/const.py:463
 #, fuzzy
-msgid "Serious"
-msgstr "_Πίσω"
+msgid "Impressed"
+msgstr "μήνυμα"
 
 #: gajim/common/const.py:464
-msgid "Shocked"
+msgid "In Awe"
 msgstr ""
 
 #: gajim/common/const.py:465
-msgid "Shy"
+msgid "In Love"
 msgstr ""
 
 #: gajim/common/const.py:466
-#, fuzzy
-msgid "Sick"
-msgstr "Ψευδώνυμο"
+msgid "Indignant"
+msgstr ""
 
 #: gajim/common/const.py:467
-#, fuzzy
-msgid "Sleepy"
-msgstr "Κοιμάμαι"
+msgid "Interested"
+msgstr ""
 
 #: gajim/common/const.py:468
-msgid "Spontaneous"
-msgstr ""
+#, fuzzy
+msgid "Intoxicated"
+msgstr "Ενεργό"
 
 #: gajim/common/const.py:469
 #, fuzzy
-msgid "Stressed"
-msgstr "Οδός:"
+msgid "Invincible"
+msgstr "Αφανής"
 
 #: gajim/common/const.py:470
-msgid "Strong"
+msgid "Jealous"
 msgstr ""
 
 #: gajim/common/const.py:471
 #, fuzzy
-msgid "Surprised"
-msgstr "Εγγεγραμμένος"
+msgid "Lonely"
+msgstr "ένα"
 
 #: gajim/common/const.py:472
-msgid "Thankful"
-msgstr ""
+#, fuzzy
+msgid "Lost"
+msgstr "Ε_ξυπηρετητής:"
 
 #: gajim/common/const.py:473
-msgid "Thirsty"
+msgid "Lucky"
 msgstr ""
 
 #: gajim/common/const.py:474
 #, fuzzy
-msgid "Tired"
-msgstr "Χρόνος"
+msgid "Mean"
+msgstr "Γερμανικά"
 
 #: gajim/common/const.py:475
 #, fuzzy
-msgid "Undefined"
-msgstr "Υπογράμμιση"
+msgid "Moody"
+msgstr "_Τροποποίηση"
 
 #: gajim/common/const.py:476
-msgid "Weak"
-msgstr ""
+#, fuzzy
+msgid "Nervous"
+msgstr "_Πίσω"
 
 #: gajim/common/const.py:477
-msgid "Worried"
+msgid "Neutral"
+msgstr ""
+
+#: gajim/common/const.py:478
+#, fuzzy
+msgid "Offended"
+msgstr "Αποσυνδεδεμένος"
+
+#: gajim/common/const.py:479
+msgid "Outraged"
+msgstr ""
+
+#: gajim/common/const.py:480
+msgid "Playful"
 msgstr ""
 
 #: gajim/common/const.py:481
-msgid "accuracy"
-msgstr ""
+#, fuzzy
+msgid "Proud"
+msgstr "Ομάδα"
 
 #: gajim/common/const.py:482
-#, fuzzy
-msgid "alt"
-msgstr "Προεπιλογή"
-
-#: gajim/common/const.py:483
-msgid "area"
+msgid "Relaxed"
 msgstr ""
 
-#: gajim/common/const.py:484
+#: gajim/common/const.py:483
 #, fuzzy
-msgid "bearing"
-msgstr "θαλασσί"
+msgid "Relieved"
+msgstr "έντεκα"
+
+#: gajim/common/const.py:484
+msgid "Remorseful"
+msgstr ""
 
 #: gajim/common/const.py:485
-#, fuzzy
-msgid "building"
-msgstr "Διώχνοντας τον %s"
+msgid "Restless"
+msgstr ""
 
 #: gajim/common/const.py:486
 #, fuzzy
-msgid "country"
-msgstr "Χώρα:"
+msgid "Sad"
+msgstr "Πάγωσε"
 
 #: gajim/common/const.py:487
-#, fuzzy
-msgid "countrycode"
-msgstr "Λογαριασμός"
+msgid "Sarcastic"
+msgstr ""
 
 #: gajim/common/const.py:488
-msgid "datum"
-msgstr ""
+#, fuzzy
+msgid "Satisfied"
+msgstr "Τελευταία τροποποίηση:"
 
 #: gajim/common/const.py:489
 #, fuzzy
-msgid "description"
-msgstr "Περιγραφή"
+msgid "Serious"
+msgstr "_Πίσω"
 
 #: gajim/common/const.py:490
-#, fuzzy
-msgid "error"
-msgstr "Σφάλμα:"
+msgid "Shocked"
+msgstr ""
 
 #: gajim/common/const.py:491
-msgid "floor"
+msgid "Shy"
 msgstr ""
 
 #: gajim/common/const.py:492
-msgid "lat"
-msgstr ""
+#, fuzzy
+msgid "Sick"
+msgstr "Ψευδώνυμο"
 
 #: gajim/common/const.py:493
-msgid "locality"
-msgstr ""
+#, fuzzy
+msgid "Sleepy"
+msgstr "Κοιμάμαι"
 
 #: gajim/common/const.py:494
-#, fuzzy
-msgid "lon"
-msgstr "ένα"
+msgid "Spontaneous"
+msgstr ""
 
 #: gajim/common/const.py:495
 #, fuzzy
-msgid "postalcode"
-msgstr "Τ.Κ.:"
+msgid "Stressed"
+msgstr "Οδός:"
 
 #: gajim/common/const.py:496
-msgid "region"
+msgid "Strong"
 msgstr ""
 
 #: gajim/common/const.py:497
 #, fuzzy
-msgid "room"
-msgstr "Από"
+msgid "Surprised"
+msgstr "Εγγεγραμμένος"
 
 #: gajim/common/const.py:498
-msgid "speed"
+msgid "Thankful"
 msgstr ""
 
 #: gajim/common/const.py:499
-msgid "street"
+msgid "Thirsty"
 msgstr ""
 
 #: gajim/common/const.py:500
-msgid "text"
-msgstr ""
+#, fuzzy
+msgid "Tired"
+msgstr "Χρόνος"
 
 #: gajim/common/const.py:501
-msgid "timestamp"
-msgstr ""
+#, fuzzy
+msgid "Undefined"
+msgstr "Υπογράμμιση"
 
 #: gajim/common/const.py:502
-msgid "URI"
+msgid "Weak"
+msgstr ""
+
+#: gajim/common/const.py:503
+msgid "Worried"
 msgstr ""
 
 #: gajim/common/const.py:507
-msgid "Unable to get issuer certificate"
+msgid "accuracy"
 msgstr ""
 
 #: gajim/common/const.py:508
-msgid "Unable to get certificate CRL"
-msgstr ""
+#, fuzzy
+msgid "alt"
+msgstr "Προεπιλογή"
 
 #: gajim/common/const.py:509
-msgid "Unable to decrypt certificate's signature"
+msgid "area"
 msgstr ""
 
 #: gajim/common/const.py:510
-msgid "Unable to decrypt CRL's signature"
-msgstr ""
+#, fuzzy
+msgid "bearing"
+msgstr "θαλασσί"
 
 #: gajim/common/const.py:511
-msgid "Unable to decode issuer public key"
-msgstr ""
+#, fuzzy
+msgid "building"
+msgstr "Διώχνοντας τον %s"
 
 #: gajim/common/const.py:512
-msgid "Certificate signature failure"
-msgstr ""
+#, fuzzy
+msgid "country"
+msgstr "Χώρα:"
 
 #: gajim/common/const.py:513
-msgid "CRL signature failure"
-msgstr ""
+#, fuzzy
+msgid "countrycode"
+msgstr "Λογαριασμός"
 
 #: gajim/common/const.py:514
-msgid "Certificate is not yet valid"
+msgid "datum"
 msgstr ""
 
 #: gajim/common/const.py:515
-msgid "Certificate has expired"
-msgstr ""
+#, fuzzy
+msgid "description"
+msgstr "Περιγραφή"
 
 #: gajim/common/const.py:516
-msgid "CRL is not yet valid"
-msgstr ""
+#, fuzzy
+msgid "error"
+msgstr "Σφάλμα:"
 
 #: gajim/common/const.py:517
-msgid "CRL has expired"
+msgid "floor"
 msgstr ""
 
 #: gajim/common/const.py:518
-msgid "Format error in certificate's notBefore field"
+msgid "lat"
 msgstr ""
 
 #: gajim/common/const.py:519
-msgid "Format error in certificate's notAfter field"
+msgid "locality"
 msgstr ""
 
 #: gajim/common/const.py:520
-msgid "Format error in CRL's lastUpdate field"
-msgstr ""
+#, fuzzy
+msgid "lon"
+msgstr "ένα"
 
 #: gajim/common/const.py:521
-msgid "Format error in CRL's nextUpdate field"
-msgstr ""
+#, fuzzy
+msgid "postalcode"
+msgstr "Τ.Κ.:"
 
 #: gajim/common/const.py:522
-msgid "Out of memory"
+msgid "region"
 msgstr ""
 
 #: gajim/common/const.py:523
-msgid "Self signed certificate"
-msgstr ""
+#, fuzzy
+msgid "room"
+msgstr "Από"
 
 #: gajim/common/const.py:524
-msgid "Self signed certificate in certificate chain"
+msgid "speed"
 msgstr ""
 
 #: gajim/common/const.py:525
-msgid "Unable to get local issuer certificate"
+msgid "street"
 msgstr ""
 
 #: gajim/common/const.py:526
-msgid "Unable to verify the first certificate"
+msgid "text"
 msgstr ""
 
 #: gajim/common/const.py:527
-msgid "Certificate chain too long"
+msgid "timestamp"
 msgstr ""
 
 #: gajim/common/const.py:528
+msgid "URI"
+msgstr ""
+
+#: gajim/common/const.py:533
+msgid "Unable to get issuer certificate"
+msgstr ""
+
+#: gajim/common/const.py:534
+msgid "Unable to get certificate CRL"
+msgstr ""
+
+#: gajim/common/const.py:535
+msgid "Unable to decrypt certificate's signature"
+msgstr ""
+
+#: gajim/common/const.py:536
+msgid "Unable to decrypt CRL's signature"
+msgstr ""
+
+#: gajim/common/const.py:537
+msgid "Unable to decode issuer public key"
+msgstr ""
+
+#: gajim/common/const.py:538
+msgid "Certificate signature failure"
+msgstr ""
+
+#: gajim/common/const.py:539
+msgid "CRL signature failure"
+msgstr ""
+
+#: gajim/common/const.py:540
+msgid "Certificate is not yet valid"
+msgstr ""
+
+#: gajim/common/const.py:541
+msgid "Certificate has expired"
+msgstr ""
+
+#: gajim/common/const.py:542
+msgid "CRL is not yet valid"
+msgstr ""
+
+#: gajim/common/const.py:543
+msgid "CRL has expired"
+msgstr ""
+
+#: gajim/common/const.py:544
+msgid "Format error in certificate's notBefore field"
+msgstr ""
+
+#: gajim/common/const.py:545
+msgid "Format error in certificate's notAfter field"
+msgstr ""
+
+#: gajim/common/const.py:546
+msgid "Format error in CRL's lastUpdate field"
+msgstr ""
+
+#: gajim/common/const.py:547
+msgid "Format error in CRL's nextUpdate field"
+msgstr ""
+
+#: gajim/common/const.py:548
+msgid "Out of memory"
+msgstr ""
+
+#: gajim/common/const.py:549
+msgid "Self signed certificate"
+msgstr ""
+
+#: gajim/common/const.py:550
+msgid "Self signed certificate in certificate chain"
+msgstr ""
+
+#: gajim/common/const.py:551
+msgid "Unable to get local issuer certificate"
+msgstr ""
+
+#: gajim/common/const.py:552
+msgid "Unable to verify the first certificate"
+msgstr ""
+
+#: gajim/common/const.py:553
+msgid "Certificate chain too long"
+msgstr ""
+
+#: gajim/common/const.py:554
 msgid "Certificate revoked"
 msgstr ""
 
-#: gajim/common/const.py:529
+#: gajim/common/const.py:555
 #, fuzzy
 msgid "Invalid CA certificate"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
-#: gajim/common/const.py:530
+#: gajim/common/const.py:556
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: gajim/common/const.py:531
+#: gajim/common/const.py:557
 msgid "Unsupported certificate purpose"
 msgstr ""
 
-#: gajim/common/const.py:532
+#: gajim/common/const.py:558
 msgid "Certificate not trusted"
 msgstr ""
 
-#: gajim/common/const.py:533
+#: gajim/common/const.py:559
 msgid "Certificate rejected"
 msgstr ""
 
-#: gajim/common/const.py:534
+#: gajim/common/const.py:560
 msgid "Subject issuer mismatch"
 msgstr ""
 
-#: gajim/common/const.py:535
+#: gajim/common/const.py:561
 msgid "Authority and subject key identifier mismatch"
 msgstr ""
 
-#: gajim/common/const.py:536
+#: gajim/common/const.py:562
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
-#: gajim/common/const.py:537
+#: gajim/common/const.py:563
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
-#: gajim/common/const.py:538
+#: gajim/common/const.py:564
 msgid "Application verification failure"
 msgstr ""
 
-#: gajim/common/const.py:858
+#: gajim/common/const.py:884
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-#: gajim/common/const.py:859
+#: gajim/common/const.py:885
 #, fuzzy
 msgid "The certificate has been revoked"
 msgstr "Η κατάσταση άλλαξε."
 
-#: gajim/common/const.py:860
+#: gajim/common/const.py:886
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
-#: gajim/common/const.py:861
+#: gajim/common/const.py:887
 msgid "The certificate’s algorithm is insecure"
 msgstr ""
 
-#: gajim/common/const.py:862
+#: gajim/common/const.py:888
 msgid "The certificate’s activation time is in the future"
 msgstr ""
 
-#: gajim/common/const.py:863
+#: gajim/common/const.py:889
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "Άγνωστη έκδοση του D-Bus: %s"
 
-#: gajim/common/const.py:864
+#: gajim/common/const.py:890
 #, fuzzy
 msgid "The certificate has expired"
 msgstr "Απαιτείται φράση πρόσβασης"
 
-#: gajim/common/const.py:908
+#: gajim/common/const.py:934
 #, fuzzy
 msgid "Authentication aborted"
 msgstr "Λήψη εξουσιοδότησης"
 
-#: gajim/common/const.py:909
+#: gajim/common/const.py:935
 #, fuzzy
 msgid "Account disabled"
 msgstr "Απενεργοποιήθηκε η κρυπτογράφηση"
 
-#: gajim/common/const.py:910
+#: gajim/common/const.py:936
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Απαιτείται φράση πρόσβασης"
 
-#: gajim/common/const.py:911
+#: gajim/common/const.py:937
 #, fuzzy
 msgid "Encryption required"
 msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
 
-#: gajim/common/const.py:915
+#: gajim/common/const.py:941
 #, fuzzy
 msgid "Authentication mechanism not supported"
 msgstr "Η επέκταση δεν υποστηρίζεται"
 
-#: gajim/common/const.py:916
+#: gajim/common/const.py:942
 #, fuzzy
 msgid "Authentication mechanism too weak"
 msgstr "Η πιστοποίηση ταυτότητας με \"%s\" απέτυχε"
 
-#: gajim/common/const.py:918
+#: gajim/common/const.py:944
 msgid "Authentication currently not possible"
 msgstr ""
 
@@ -4941,243 +4928,232 @@ msgstr ""
 msgid "video input"
 msgstr ""
 
-#: gajim/common/helpers.py:188
+#: gajim/common/helpers.py:181
 msgid "_Busy"
 msgstr "Απα_σχολημένος"
 
-#: gajim/common/helpers.py:190
+#: gajim/common/helpers.py:183
 msgid "Busy"
 msgstr "Απασχολημένος"
 
-#: gajim/common/helpers.py:193
+#: gajim/common/helpers.py:186
 msgid "_Not Available"
 msgstr "_Μη διαθέσιμος"
 
-#: gajim/common/helpers.py:195
+#: gajim/common/helpers.py:188
 msgid "Not Available"
 msgstr "Μη διαθέσιμος"
 
-#: gajim/common/helpers.py:198
+#: gajim/common/helpers.py:191
 msgid "_Free for Chat"
 msgstr "Διαθέσιμος για _κουβέντα"
 
-#: gajim/common/helpers.py:200
+#: gajim/common/helpers.py:193
 msgid "Free for Chat"
 msgstr "Διαθέσιμος για κουβέντα"
 
-#: gajim/common/helpers.py:203
+#: gajim/common/helpers.py:196
 #, fuzzy
 msgid "?user status:_Available"
 msgstr "_Διαθέσιμος"
 
-#: gajim/common/helpers.py:205
+#: gajim/common/helpers.py:198
 #, fuzzy
 msgid "?user status:Available"
 msgstr "Εκτύπωση όλων των σελίδων"
 
-#: gajim/common/helpers.py:207
+#: gajim/common/helpers.py:200
 msgid "Connecting"
 msgstr "Συνδέεται"
 
-#: gajim/common/helpers.py:210 gajim/data/gui/preferences_window.ui:1289
+#: gajim/common/helpers.py:203 gajim/data/gui/preferences_window.ui:1304
 msgid "A_way"
 msgstr "Α_πομακρυσμένος"
 
-#: gajim/common/helpers.py:212 gajim/common/modules/adhoc_commands.py:122
+#: gajim/common/helpers.py:205 gajim/common/modules/adhoc_commands.py:122
 #: gajim/command_system/implementation/standard.py:148
 msgid "Away"
 msgstr "Απομακρυσμένος"
 
-#: gajim/common/helpers.py:215
+#: gajim/common/helpers.py:208
 msgid "_Offline"
 msgstr "Απ_οσυνδεδεμένος"
 
-#: gajim/common/helpers.py:217
+#: gajim/common/helpers.py:210
 msgid "Offline"
 msgstr "Αποσυνδεδεμένος"
 
-#: gajim/common/helpers.py:221
+#: gajim/common/helpers.py:214
 msgid "?contact has status:Unknown"
 msgstr "?κατάσταση επαφής: Άγνωστη"
 
-#: gajim/common/helpers.py:223
+#: gajim/common/helpers.py:216
 msgid "?contact has status:Has errors"
 msgstr "?κατάσταση επαφής: Υπάρχουν σφάλματα"
 
-#: gajim/common/helpers.py:229
+#: gajim/common/helpers.py:221
 msgid "?Subscription we already have:None"
 msgstr "Καμία"
 
-#: gajim/common/helpers.py:231
+#: gajim/common/helpers.py:223
 msgid "To"
 msgstr "Προς"
 
-#: gajim/common/helpers.py:233 gajim/data/gui/groups_post_window.ui:33
+#: gajim/common/helpers.py:225 gajim/data/gui/groups_post_window.ui:33
 msgid "From"
 msgstr "Από"
 
-#: gajim/common/helpers.py:235
+#: gajim/common/helpers.py:227
 msgid "Both"
 msgstr "Και τα δυο"
 
-#: gajim/common/helpers.py:237 gajim/gtk/server_info.py:234
+#: gajim/common/helpers.py:229 gajim/gtk/server_info.py:224
 #, fuzzy
 msgid "Unknown"
 msgstr "?Λειτ. Σύστημα: Άγνωστο"
 
-#: gajim/common/helpers.py:243
+#: gajim/common/helpers.py:235
 msgid "?Ask (for Subscription):None"
 msgstr "Τίποτα"
 
-#: gajim/common/helpers.py:245
+#: gajim/common/helpers.py:237
 msgid "Subscribe"
 msgstr "Εγγραφή"
 
-#: gajim/common/helpers.py:257
+#: gajim/common/helpers.py:249
 msgid "?Group Chat Contact Role:None"
 msgstr "Κανένας"
 
-#: gajim/common/helpers.py:260
+#: gajim/common/helpers.py:252
 msgid "Moderators"
 msgstr "Διαχειριστές"
 
-#: gajim/common/helpers.py:262
+#: gajim/common/helpers.py:254
 msgid "Moderator"
 msgstr "Διαχειριστής"
 
-#: gajim/common/helpers.py:265 gajim/data/gui/groupchat_info_scrolled.ui:213
+#: gajim/common/helpers.py:257 gajim/data/gui/groupchat_info_scrolled.ui:213
 msgid "Participants"
 msgstr "Συμμετέχοντες"
 
-#: gajim/common/helpers.py:267
+#: gajim/common/helpers.py:259
 msgid "Participant"
 msgstr "Συμμετέχων"
 
-#: gajim/common/helpers.py:270
+#: gajim/common/helpers.py:262
 msgid "Visitors"
 msgstr "Επισκέπτες"
 
-#: gajim/common/helpers.py:272
+#: gajim/common/helpers.py:264
 msgid "Visitor"
 msgstr "Επισκέπτης"
 
-#: gajim/common/helpers.py:281
+#: gajim/common/helpers.py:273
 #, fuzzy
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "Κανένας"
 
-#: gajim/common/helpers.py:284
+#: gajim/common/helpers.py:276
 #, fuzzy
 msgid "Owners"
 msgstr "Ιδιοκτήτης"
 
-#: gajim/common/helpers.py:286 gajim/data/gui/groupchat_config.ui:32
+#: gajim/common/helpers.py:278 gajim/data/gui/groupchat_config.ui:32
 msgid "Owner"
 msgstr "Ιδιοκτήτης"
 
-#: gajim/common/helpers.py:289
+#: gajim/common/helpers.py:281
 #, fuzzy
 msgid "Administrators"
 msgstr "Διαχειριστής"
 
-#: gajim/common/helpers.py:291
+#: gajim/common/helpers.py:283
 msgid "Administrator"
 msgstr "Διαχειριστής"
 
-#: gajim/common/helpers.py:294
+#: gajim/common/helpers.py:286
 #, fuzzy
 msgid "Members"
 msgstr "Μέλος"
 
-#: gajim/common/helpers.py:296 gajim/data/gui/groupchat_config.ui:40
+#: gajim/common/helpers.py:288 gajim/data/gui/groupchat_config.ui:40
 #: gajim/gtk/groupchat_config.py:105
 msgid "Member"
 msgstr "Μέλος"
 
-#: gajim/common/helpers.py:333
+#: gajim/common/helpers.py:325
 msgid "is paying attention to the conversation"
 msgstr "έχει την προσοχή του στην κουβέντα"
 
-#: gajim/common/helpers.py:335
+#: gajim/common/helpers.py:327
 msgid "is doing something else"
 msgstr "κάνει κάτι άλλο"
 
-#: gajim/common/helpers.py:337
+#: gajim/common/helpers.py:329
 #, fuzzy
 msgid "is composing a message…"
 msgstr "γράφει ένα μήνυμα..."
 
-#: gajim/common/helpers.py:340
+#: gajim/common/helpers.py:332
 msgid "paused composing a message"
 msgstr "σταμάτησε για λίγο να γράφει ένα μήνυμα"
 
-#: gajim/common/helpers.py:342
+#: gajim/common/helpers.py:334
 msgid "has closed the chat window or tab"
 msgstr "έκλεισε το παράθυρο ή την καρτέλα"
 
-#: gajim/common/helpers.py:801 gajim/common/helpers.py:808
+#: gajim/common/helpers.py:732 gajim/common/helpers.py:740
 #, fuzzy, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "Αποστολή μηνύματος"
 msgstr[1] "Αποστολή μηνύματος"
 
-#: gajim/common/helpers.py:815
+#: gajim/common/helpers.py:749
 #, fuzzy, python-format
 msgid "from group chat %s"
 msgstr "Συμμετοχή σε _ομαδική συζήτηση"
 
-#: gajim/common/helpers.py:818 gajim/common/helpers.py:835
+#: gajim/common/helpers.py:752 gajim/common/helpers.py:773
 #, fuzzy, python-format
 msgid "from user %s"
 msgstr "Από %s"
 
-#: gajim/common/helpers.py:820
+#: gajim/common/helpers.py:754
 #, fuzzy, python-format
 msgid "from %s"
 msgstr "Από %s"
 
-#: gajim/common/helpers.py:827 gajim/common/helpers.py:833
+#: gajim/common/helpers.py:760 gajim/common/helpers.py:768
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gajim/common/helpers.py:851 gajim/common/helpers.py:863
-#: gajim/data/gui/roster_window.ui:79 data/org.gajim.Gajim.desktop.in:4
-#: data/org.gajim.Gajim.appdata.xml.in:7
-msgid "Gajim"
-msgstr "Gajim"
-
-#: gajim/common/helpers.py:865
-#, python-format
-msgid "Gajim - %s"
-msgstr "Gajim - %s"
-
-#: gajim/common/helpers.py:954 gajim/data/gui/add_new_contact_window.ui:25
+#: gajim/common/helpers.py:849 gajim/data/gui/add_new_contact_window.ui:25
 msgid "I would like to add you to my contact list."
 msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου."
 
-#: gajim/common/helpers.py:956
+#: gajim/common/helpers.py:851
 msgid "Hello, I am $name."
 msgstr ""
 
-#: gajim/common/helpers.py:1046 gajim/common/helpers.py:1055
-#: gajim/common/helpers.py:1113
+#: gajim/common/helpers.py:929 gajim/common/helpers.py:938
+#: gajim/common/helpers.py:998
 #, fuzzy
 msgid "Timeout loading image"
 msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 
-#: gajim/common/helpers.py:1065 gajim/common/helpers.py:1111
+#: gajim/common/helpers.py:948 gajim/common/helpers.py:996
 msgid "Image is too big"
 msgstr "Η εικόνα είναι πολύ μεγάλη"
 
-#: gajim/common/helpers.py:1076
+#: gajim/common/helpers.py:959
 msgid "PyCURL is not installed"
 msgstr ""
 
-#: gajim/common/helpers.py:1115
+#: gajim/common/helpers.py:1000
 #, fuzzy
 msgid "Error loading image"
 msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
@@ -5387,7 +5363,7 @@ msgid "Join Automatically"
 msgstr ""
 
 #: gajim/data/gui/join_groupchat_window.ui:131
-#: gajim/data/gui/profile_window.ui:233 gajim/gtk/xml_console.py:281
+#: gajim/data/gui/profile_window.ui:233 gajim/gtk/xml_console.py:282
 msgid "Account"
 msgstr "Λογαριασμός"
 
@@ -5398,7 +5374,7 @@ msgstr "Ομαδικές συζητήσεις"
 
 #: gajim/data/gui/join_groupchat_window.ui:180
 #: gajim/data/gui/account_wizard.ui:255 gajim/data/gui/bookmarks.ui:158
-#: gajim/gtk/accounts.py:826
+#: gajim/gtk/accounts.py:831
 #, fuzzy
 msgid "Password"
 msgstr "Κωδικός πρόσβασης:"
@@ -5440,17 +5416,17 @@ msgid "Time remaining"
 msgstr ""
 
 #: gajim/data/gui/filetransfer_progress.ui:172
-#: gajim/data/gui/filetransfers.ui:30 gajim/data/gui/groupchat_control.ui:597
-#: gajim/data/gui/groupchat_control.ui:689
-#: gajim/data/gui/groupchat_control.ui:801
-#: gajim/data/gui/groupchat_control.ui:893
-#: gajim/data/gui/groupchat_control.ui:1294
-#: gajim/data/gui/groupchat_control.ui:1420
-#: gajim/data/gui/groupchat_control.ui:1546
-#: gajim/data/gui/groupchat_control.ui:1717
-#: gajim/data/gui/groupchat_control.ui:1795
+#: gajim/data/gui/filetransfers.ui:30 gajim/data/gui/groupchat_control.ui:600
+#: gajim/data/gui/groupchat_control.ui:692
+#: gajim/data/gui/groupchat_control.ui:804
+#: gajim/data/gui/groupchat_control.ui:896
+#: gajim/data/gui/groupchat_control.ui:1297
+#: gajim/data/gui/groupchat_control.ui:1423
+#: gajim/data/gui/groupchat_control.ui:1549
+#: gajim/data/gui/groupchat_control.ui:1720
+#: gajim/data/gui/groupchat_control.ui:1798
 #: gajim/data/gui/passphrase_dialog.ui:29 gajim/gtk/dialogs.py:53
-#: gajim/gtk/filechoosers.py:178
+#: gajim/gtk/filechoosers.py:179
 msgid "_Cancel"
 msgstr "_Άκυρο"
 
@@ -5806,39 +5782,44 @@ msgstr "Δουλειά"
 #. "About" is the text of a tab of vcard window
 #: gajim/data/gui/profile_window.ui:1297
 #: gajim/data/gui/vcard_information_window.ui:1484
-#: gajim/data/gui/application_menu.ui:93
 msgid "About"
 msgstr "Περί"
 
-#: gajim/data/gui/start_chat_dialog.ui:53
+#: gajim/data/gui/start_chat_dialog.ui:66
+msgid ""
+"Start a new chat, join a group chat or search for new group chats globally. "
+"You can also enter an XMPP address."
+msgstr ""
+
+#: gajim/data/gui/start_chat_dialog.ui:125
 #, fuzzy
 msgid "Global Group Chat Search"
 msgstr "Συμμετοχή σε ομαδική κουβέντα"
 
-#: gajim/data/gui/start_chat_dialog.ui:189
-#: gajim/data/gui/start_chat_dialog.ui:229
-#: gajim/data/gui/start_chat_dialog.ui:364
+#: gajim/data/gui/start_chat_dialog.ui:268
+#: gajim/data/gui/start_chat_dialog.ui:308
+#: gajim/data/gui/start_chat_dialog.ui:443
 #, fuzzy
 msgid "_Back"
 msgstr "Πίσω σύντομα"
 
-#: gajim/data/gui/start_chat_dialog.ui:245
-#: gajim/data/gui/groupchat_control.ui:818
-#: gajim/data/gui/groupchat_control.ui:910 gajim/gtk/discovery.py:1702
+#: gajim/data/gui/start_chat_dialog.ui:324
+#: gajim/data/gui/groupchat_control.ui:821
+#: gajim/data/gui/groupchat_control.ui:913 gajim/gtk/discovery.py:1702
 #: gajim/gtk/groupchat_join.py:65
 msgid "_Join"
 msgstr "_Συμμετοχή"
 
-#: gajim/data/gui/start_chat_dialog.ui:289
+#: gajim/data/gui/start_chat_dialog.ui:368
 #, fuzzy
 msgid "Select Account"
 msgstr "Aφαίρεση του λογαριασμού %s"
 
-#: gajim/data/gui/start_chat_dialog.ui:380
+#: gajim/data/gui/start_chat_dialog.ui:459
 msgid "_Select"
 msgstr ""
 
-#: gajim/data/gui/start_chat_dialog.ui:442
+#: gajim/data/gui/start_chat_dialog.ui:521
 msgid ""
 "No contacts found\n"
 "You can also type an XMPP address"
@@ -5911,7 +5892,7 @@ msgid "Strike"
 msgstr "Ψευδώνυμο"
 
 #: gajim/data/gui/groupchat_control.ui:54 gajim/data/gui/chat_control.ui:318
-#: gajim/gtk/accounts.py:607
+#: gajim/gtk/accounts.py:610
 msgid "Color"
 msgstr "Χρώμα"
 
@@ -5925,129 +5906,129 @@ msgstr "_Γραμματοσειρά:"
 msgid "Clear formatting"
 msgstr "Πληροφορίες επαφής"
 
-#: gajim/data/gui/groupchat_control.ui:333 gajim/data/gui/chat_control.ui:887
+#: gajim/data/gui/groupchat_control.ui:336 gajim/data/gui/chat_control.ui:889
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
 
-#: gajim/data/gui/groupchat_control.ui:379 gajim/data/gui/chat_control.ui:646
+#: gajim/data/gui/groupchat_control.ui:382 gajim/data/gui/chat_control.ui:648
 #, fuzzy
 msgid "Show a list of emojis (Alt+M)"
 msgstr "Κάντε κλικ για να εισάγετε φατσούλα (Alt+M)"
 
-#: gajim/data/gui/groupchat_control.ui:506
+#: gajim/data/gui/groupchat_control.ui:509
 #, fuzzy
 msgid "Joining…"
 msgstr "Απαγορεύεται η πρόσβαση..."
 
-#: gajim/data/gui/groupchat_control.ui:564
+#: gajim/data/gui/groupchat_control.ui:567
 #, fuzzy
 msgid "Enter new nickname"
 msgstr "Με_τά από ψευδώνυμο:"
 
-#: gajim/data/gui/groupchat_control.ui:614
-#: gajim/data/gui/groupchat_control.ui:706
+#: gajim/data/gui/groupchat_control.ui:617
+#: gajim/data/gui/groupchat_control.ui:709
 #, fuzzy
 msgid "Ch_ange"
 msgstr "Αλλαγή _ψευδώνυμου"
 
-#: gajim/data/gui/groupchat_control.ui:671
+#: gajim/data/gui/groupchat_control.ui:674
 #, fuzzy
 msgid "Change Subject"
 msgstr "Αλλαγή _θέματος"
 
-#: gajim/data/gui/groupchat_control.ui:783
+#: gajim/data/gui/groupchat_control.ui:786
 #, fuzzy
 msgid "Enter password"
 msgstr "Εισάγετε νέο κωδικό πρόσβασης:"
 
-#: gajim/data/gui/groupchat_control.ui:1000
+#: gajim/data/gui/groupchat_control.ui:1003
 #, fuzzy
 msgid "_Leave Group Chat"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/data/gui/groupchat_control.ui:1004
+#: gajim/data/gui/groupchat_control.ui:1007
 #, fuzzy
 msgid "Gajim will not try to join this group chat again"
 msgstr ""
 "Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτό το δωμάτιο κατά την "
 "εκκίνηση"
 
-#: gajim/data/gui/groupchat_control.ui:1060
+#: gajim/data/gui/groupchat_control.ui:1063
 #, fuzzy
-msgid "An error occured"
+msgid "An error occurred"
 msgstr "Δημιουργήθηκε σφάλμα κατά την αφαίρεση της εργασίας !"
 
-#: gajim/data/gui/groupchat_control.ui:1125
+#: gajim/data/gui/groupchat_control.ui:1128
 msgid "_Try again"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1273
+#: gajim/data/gui/groupchat_control.ui:1276
 #, fuzzy
 msgid "Kick participant"
 msgstr "Συμμετέχων"
 
-#: gajim/data/gui/groupchat_control.ui:1311
+#: gajim/data/gui/groupchat_control.ui:1314
 msgid "_Kick"
 msgstr "_Ξεφορτώσου τον"
 
-#: gajim/data/gui/groupchat_control.ui:1344
-#: gajim/data/gui/groupchat_control.ui:1470
-#: gajim/data/gui/groupchat_control.ui:1596
-#: gajim/data/gui/groupchat_control.ui:1613
-#: gajim/data/gui/groupchat_control.ui:1702
-#: gajim/data/gui/groupchat_control.ui:1703
+#: gajim/data/gui/groupchat_control.ui:1347
+#: gajim/data/gui/groupchat_control.ui:1473
+#: gajim/data/gui/groupchat_control.ui:1599
+#: gajim/data/gui/groupchat_control.ui:1616
+#: gajim/data/gui/groupchat_control.ui:1705
+#: gajim/data/gui/groupchat_control.ui:1706
 #, fuzzy
 msgid "Insert Emoji"
 msgstr "Διαχείριση Συμβόλων"
 
-#: gajim/data/gui/groupchat_control.ui:1357
-#: gajim/data/gui/groupchat_control.ui:1483
+#: gajim/data/gui/groupchat_control.ui:1360
+#: gajim/data/gui/groupchat_control.ui:1486
 msgid "Reason (optional)"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1399
+#: gajim/data/gui/groupchat_control.ui:1402
 #, fuzzy
 msgid "Ban participant"
 msgstr "Συμμετέχων"
 
-#: gajim/data/gui/groupchat_control.ui:1437
+#: gajim/data/gui/groupchat_control.ui:1440
 msgid "_Ban"
 msgstr "_Απαγόρευση πρόσβασης"
 
-#: gajim/data/gui/groupchat_control.ui:1525
+#: gajim/data/gui/groupchat_control.ui:1528
 #, fuzzy
 msgid "Destroy group chat"
 msgstr "Αρχηγός ομάδας παραθύρων"
 
-#: gajim/data/gui/groupchat_control.ui:1563
+#: gajim/data/gui/groupchat_control.ui:1566
 #, fuzzy
 msgid "_Destroy"
 msgstr "Περιγραφή: %s"
 
-#: gajim/data/gui/groupchat_control.ui:1597
+#: gajim/data/gui/groupchat_control.ui:1600
 msgid "Alternate venue (optional)..."
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1614
+#: gajim/data/gui/groupchat_control.ui:1617
 #, fuzzy
 msgid "Reason (optional)..."
 msgstr "Αιτία"
 
-#: gajim/data/gui/groupchat_control.ui:1627
+#: gajim/data/gui/groupchat_control.ui:1630
 msgid "Reason for destruction"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1642
+#: gajim/data/gui/groupchat_control.ui:1645
 msgid "Where participants should go"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1683
+#: gajim/data/gui/groupchat_control.ui:1686
 #, fuzzy
 msgid "Enter a new name for this group chat"
 msgstr "Επιλέξτε ένα όνομα για τη νέα συνεδρία:"
 
-#: gajim/data/gui/groupchat_control.ui:1810
+#: gajim/data/gui/groupchat_control.ui:1813
 #, fuzzy
 msgid "_Invite"
 msgstr "Αδυναμία φόρτωσης"
@@ -6149,20 +6130,20 @@ msgid "Add"
 msgstr "Προσθήκη"
 
 #: gajim/data/gui/mam_preferences.ui:194 gajim/data/gui/groupchat_config.ui:151
-#: gajim/gtk/remove_account.py:43 gajim/gtk/accounts.py:337
+#: gajim/gtk/remove_account.py:43 gajim/gtk/accounts.py:340
 #, fuzzy
 msgid "Remove"
 msgstr "_Αφαίρεση"
 
-#: gajim/data/gui/vcard_information_window.ui:72 gajim/gtk/accounts.py:686
+#: gajim/data/gui/vcard_information_window.ui:72 gajim/gtk/accounts.py:691
 #, fuzzy
 msgid "Resource"
 msgstr "Πόρος:"
 
 #: gajim/data/gui/vcard_information_window.ui:89
-#: gajim/data/gui/preferences_window.ui:1396
-#: gajim/data/gui/preferences_window.ui:1552
-#: gajim/data/gui/preferences_window.ui:1756
+#: gajim/data/gui/preferences_window.ui:1411
+#: gajim/data/gui/preferences_window.ui:1567
+#: gajim/data/gui/preferences_window.ui:1781
 msgid "Status"
 msgstr "Κατάσταση"
 
@@ -6172,7 +6153,7 @@ msgid "Client"
 msgstr "Εφαρμογή:"
 
 #: gajim/data/gui/vcard_information_window.ui:123
-#: gajim/data/gui/preferences_window.ui:1859
+#: gajim/data/gui/preferences_window.ui:1884
 #, fuzzy
 msgid "System"
 msgstr "<b>Προσαρμοσμένες ρυθμίσεις</b>"
@@ -6328,16 +6309,25 @@ msgid ""
 "minimizing to the system's notification area"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:374
+#: gajim/data/gui/preferences_window.ui:371
 msgid "Behavior of Windows and Tabs"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:406
+#: gajim/data/gui/preferences_window.ui:403
+#, fuzzy
+msgid "Me_rge accounts"
+msgstr "Συ_γχώνευση λογαριασμών"
+
+#: gajim/data/gui/preferences_window.ui:407
+msgid "Displays all your accounts merged into a single one"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:421
 #, fuzzy
 msgid "Show a_vatars of contacts in contact list"
 msgstr "Εμφάνιση των ά_βαταρ των επαφών στη λίστα επαφών"
 
-#: gajim/data/gui/preferences_window.ui:410
+#: gajim/data/gui/preferences_window.ui:425
 #, fuzzy
 msgid ""
 "If checked, avatars of contacts will be shown in the contact list window and "
@@ -6346,12 +6336,12 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα εμφανίζει τα άβαταρ των επαφών στην λίστα επαφών "
 "και στις ομαδικές κουβέντες"
 
-#: gajim/data/gui/preferences_window.ui:424
+#: gajim/data/gui/preferences_window.ui:439
 #, fuzzy
 msgid "Show status _messages of contacts in contact list"
 msgstr "Εμφάνιση των _μηνυμάτων κατάστασης στη λίστα επαφών"
 
-#: gajim/data/gui/preferences_window.ui:428
+#: gajim/data/gui/preferences_window.ui:443
 #, fuzzy
 msgid ""
 "If checked, status messages of contacts will be shown under the contact's "
@@ -6360,54 +6350,54 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα εμφανίζει τα μηνύματα κατάστασης των επαφών σας "
 "κάτω από τα ονόματα τους στη λίστα επαφών και στις ομαδικές κουβέντες"
 
-#: gajim/data/gui/preferences_window.ui:442
+#: gajim/data/gui/preferences_window.ui:457
 #, fuzzy
 msgid ""
 "Show e_xtra information of contacts in contact list (mood, activity, ...)"
 msgstr "Εμφάνιση των ά_βαταρ των επαφών στη λίστα επαφών"
 
-#: gajim/data/gui/preferences_window.ui:446
+#: gajim/data/gui/preferences_window.ui:461
 msgid ""
 "If checked, additional info published by the contact will be shown in the "
 "contact list. Additional infos (published via PEP) may include e.g. mood, "
 "activity, tune, location, ..."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:467
+#: gajim/data/gui/preferences_window.ui:482
 #, fuzzy
 msgid "Sort contacts by status"
 msgstr "Τα_ξινόμηση επαφών βάσει κατάστασης"
 
-#: gajim/data/gui/preferences_window.ui:477
+#: gajim/data/gui/preferences_window.ui:492
 #, fuzzy
 msgid "in _contact list"
 msgstr "Επαφές"
 
-#: gajim/data/gui/preferences_window.ui:494
+#: gajim/data/gui/preferences_window.ui:509
 #, fuzzy
 msgid "in _group chats"
 msgstr "Συμμετοχή σε _ομαδική συζήτηση"
 
-#: gajim/data/gui/preferences_window.ui:523
+#: gajim/data/gui/preferences_window.ui:538
 #, fuzzy
 msgid "Contact List Appearance"
 msgstr "Αποσύνδεση επαφής"
 
-#: gajim/data/gui/preferences_window.ui:570
+#: gajim/data/gui/preferences_window.ui:585
 msgid "Enable auto copy"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:573
+#: gajim/data/gui/preferences_window.ui:588
 msgid ""
 "If enabled, selecting Text will be copied to the clipboard, otherwise you "
 "can copy text with CTRL + SHIFT + C"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:624
+#: gajim/data/gui/preferences_window.ui:639
 msgid "Enable spell _checking"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:627
+#: gajim/data/gui/preferences_window.ui:642
 msgid ""
 "If checked, spelling errors in input fields of chat windows will be "
 "highlighted. If no language is explicitly set via right click on the input "
@@ -6415,29 +6405,29 @@ msgid ""
 "Needs gspell to be installed."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:641
+#: gajim/data/gui/preferences_window.ui:656
 #, fuzzy
 msgid "Show message recei_pts (✔)"
 msgstr "περιεχόμενα μηνύματος"
 
-#: gajim/data/gui/preferences_window.ui:645
+#: gajim/data/gui/preferences_window.ui:660
 msgid ""
 "If checked, a small checkmark will be shown after each message when it was "
 "received. Note that this is not supported by all clients and therefore could "
 "be misleading."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:659
+#: gajim/data/gui/preferences_window.ui:674
 #, fuzzy
 msgid "_Show XHTML formatting"
 msgstr "Κάντε κλικ για να εισάγετε φατσούλα (Alt+M)"
 
-#: gajim/data/gui/preferences_window.ui:676
+#: gajim/data/gui/preferences_window.ui:691
 #, fuzzy
 msgid "Display status messages in _single chats"
 msgstr "Εμφάνιση των _μηνυμάτων κατάστασης στη λίστα επαφών"
 
-#: gajim/data/gui/preferences_window.ui:680
+#: gajim/data/gui/preferences_window.ui:695
 #, fuzzy
 msgid ""
 "If checked, status lines will be shown in 1 on 1 chats when a contact "
@@ -6447,58 +6437,58 @@ msgstr ""
 "παράθυρα συζητήσεων όταν η επαφή αλλάζει την κατάσταση και/ή τo μήνυμα "
 "κατάστασης."
 
-#: gajim/data/gui/preferences_window.ui:694
+#: gajim/data/gui/preferences_window.ui:709
 #, fuzzy
 msgid "Show subject after _joining a group chat"
 msgstr "Δεν ήταν δυνατή η σύνδεση στην ομαδική συζήτηση"
 
-#: gajim/data/gui/preferences_window.ui:698
+#: gajim/data/gui/preferences_window.ui:713
 #, fuzzy
 msgid "If checked, the subject will be shown when joining a group chat"
 msgstr "Δεν ήταν δυνατή η σύνδεση στην ομαδική συζήτηση"
 
-#: gajim/data/gui/preferences_window.ui:720
+#: gajim/data/gui/preferences_window.ui:735
 #, fuzzy
 msgid "Group Chat Settings"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
-#: gajim/data/gui/preferences_window.ui:735
+#: gajim/data/gui/preferences_window.ui:750
 msgid "Show join/leave (Default)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:739
+#: gajim/data/gui/preferences_window.ui:754
 msgid ""
 "If join/leave status messages are shown in the group chat. This setting can "
 "be overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:758
+#: gajim/data/gui/preferences_window.ui:773
 msgid ""
 "The default sync threshold for new public group chats. This setting can be "
 "overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:760
+#: gajim/data/gui/preferences_window.ui:775
 msgid "Default Sync Threshold"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:802
+#: gajim/data/gui/preferences_window.ui:817
 #, fuzzy
 msgid "Show status changes (Default)"
 msgstr "Καταγραφή α_λλαγών κατάστασης των επαφών"
 
-#: gajim/data/gui/preferences_window.ui:806
+#: gajim/data/gui/preferences_window.ui:821
 msgid ""
 "If status change messages are shown in the group chat. This setting can be "
 "overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:863
+#: gajim/data/gui/preferences_window.ui:878
 #, fuzzy
 msgid "Show chatstate in tabs"
 msgstr "Προβολή κουμπιού κλεισίματος στην καρτέλα;"
 
-#: gajim/data/gui/preferences_window.ui:867
+#: gajim/data/gui/preferences_window.ui:882
 #, fuzzy
 msgid ""
 "If checked, the tab will be colored according to the current chatstate of "
@@ -6507,67 +6497,70 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτό το δωμάτιο κατά την "
 "εκκίνηση"
 
-#: gajim/data/gui/preferences_window.ui:881
+#: gajim/data/gui/preferences_window.ui:896
 #, fuzzy
 msgid "Show chatstate in contact list"
 msgstr "Προβολή κουμπιού κλεισίματος στην καρτέλα;"
 
-#: gajim/data/gui/preferences_window.ui:885
+#: gajim/data/gui/preferences_window.ui:900
 msgid ""
 "If checked, the contact row will be colored according to the current "
 "chatstate of the contact"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:899
+#: gajim/data/gui/preferences_window.ui:914
 msgid "Show chatstate in banner"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:903
+#: gajim/data/gui/preferences_window.ui:918
+#, fuzzy
 msgid ""
-"If checked, a desciption of the contacts current chatstate is shown in the "
+"If checked, a description of the contacts current chatstate is shown in the "
 "banner"
 msgstr ""
+"Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτό το δωμάτιο κατά την "
+"εκκίνηση"
 
-#: gajim/data/gui/preferences_window.ui:923
+#: gajim/data/gui/preferences_window.ui:938
 #, fuzzy
 msgid "Chatstate"
 msgstr "Τελευταία κατάσταση: %s"
 
-#: gajim/data/gui/preferences_window.ui:940
+#: gajim/data/gui/preferences_window.ui:955
 #: gajim/data/gui/history_window.ui:303
 msgid "Chat"
 msgstr "Κουβέντα"
 
-#: gajim/data/gui/preferences_window.ui:994
+#: gajim/data/gui/preferences_window.ui:1009
 #, fuzzy
 msgid "Show _notification area icon"
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
 
-#: gajim/data/gui/preferences_window.ui:1013
+#: gajim/data/gui/preferences_window.ui:1028
 #, fuzzy
 msgid "_When new event is received"
 msgstr "Όταν λαμβάνεται ένα νέο γεγονός"
 
-#: gajim/data/gui/preferences_window.ui:1054
+#: gajim/data/gui/preferences_window.ui:1069
 #, fuzzy
 msgid "Show popups/notifications when a chat window is already _open"
 msgstr ""
 "Να επιτρέπονται οι εμφανίσεις/γνωστοποιήσεις όταν είμαι _απομακρ./μη διαθ./"
 "απασχολ./αφανής"
 
-#: gajim/data/gui/preferences_window.ui:1071
+#: gajim/data/gui/preferences_window.ui:1086
 #, fuzzy
 msgid "Allow popups/notifications when I'm _away, not available or busy"
 msgstr ""
 "Να επιτρέπονται οι εμφανίσεις/γνωστοποιήσεις όταν είμαι _απομακρ./μη διαθ./"
 "απασχολ./αφανής"
 
-#: gajim/data/gui/preferences_window.ui:1088
+#: gajim/data/gui/preferences_window.ui:1103
 #, fuzzy
 msgid "Notify me about contacts that sign _in"
 msgstr "Ειδοποίηση όταν μια επαφή:"
 
-#: gajim/data/gui/preferences_window.ui:1093
+#: gajim/data/gui/preferences_window.ui:1108
 #, fuzzy
 msgid ""
 "A popup window about contacts that just signed in will be shown in the "
@@ -6576,51 +6569,51 @@ msgstr ""
 "Το Gajim θα σας ειδοποιήσει για το νέο μήνυμα μέσω ενός αναδυόμενου "
 "παραθύρου στο κάτω δεξιά μέρος της οθόνης"
 
-#: gajim/data/gui/preferences_window.ui:1107
+#: gajim/data/gui/preferences_window.ui:1122
 #, fuzzy
 msgid "Notify me about contacts that sign _out"
 msgstr "Ειδοποίηση όταν μια επαφή:"
 
-#: gajim/data/gui/preferences_window.ui:1111
+#: gajim/data/gui/preferences_window.ui:1126
 msgid ""
 "A popup window about contacts that just signed out will be shown in the "
 "bottom right of the screen "
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1129
+#: gajim/data/gui/preferences_window.ui:1144
 #, fuzzy
 msgid "Visual Notifications"
 msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
 
-#: gajim/data/gui/preferences_window.ui:1165
+#: gajim/data/gui/preferences_window.ui:1180
 msgid "Play _sounds"
 msgstr "Αναπαραγωγή _ήχων"
 
-#: gajim/data/gui/preferences_window.ui:1182
-#: gajim/data/gui/preferences_window.ui:1822
+#: gajim/data/gui/preferences_window.ui:1197
+#: gajim/data/gui/preferences_window.ui:1847
 msgid "Ma_nage..."
 msgstr "Δια_χείριση..."
 
-#: gajim/data/gui/preferences_window.ui:1205
+#: gajim/data/gui/preferences_window.ui:1220
 msgid "Allow playing sounds when I'm _busy"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1227
+#: gajim/data/gui/preferences_window.ui:1242
 #, fuzzy
 msgid "Sounds"
 msgstr "Ήχος"
 
-#: gajim/data/gui/preferences_window.ui:1245
+#: gajim/data/gui/preferences_window.ui:1260
 #, fuzzy
 msgid "Notifications"
 msgstr "Τροποποίηση λογαριασμού"
 
-#: gajim/data/gui/preferences_window.ui:1272
+#: gajim/data/gui/preferences_window.ui:1287
 #, fuzzy
 msgid "No_t Available"
 msgstr "Μη διαθέσιμος"
 
-#: gajim/data/gui/preferences_window.ui:1276
+#: gajim/data/gui/preferences_window.ui:1291
 #, fuzzy
 msgid ""
 "If checked, the status will be changed to Not Available when the computer "
@@ -6628,7 +6621,7 @@ msgid ""
 msgstr ""
 "Αν επιλεγεί, το Gajim θα έχει δικό του εικονίδιο στην περιοχή γνωστοποίησης"
 
-#: gajim/data/gui/preferences_window.ui:1293
+#: gajim/data/gui/preferences_window.ui:1308
 #, fuzzy
 msgid ""
 "If checked, the status will be changed to Away when the computer has not "
@@ -6636,7 +6629,7 @@ msgid ""
 msgstr ""
 "Αν επιλεγεί, το Gajim θα έχει δικό του εικονίδιο στην περιοχή γνωστοποίησης"
 
-#: gajim/data/gui/preferences_window.ui:1339
+#: gajim/data/gui/preferences_window.ui:1354
 msgid ""
 "The automatic away status message. If empty, the current status message will "
 "not be changed.\n"
@@ -6644,7 +6637,7 @@ msgid ""
 "$T will be replaced by auto-away timeout."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1354
+#: gajim/data/gui/preferences_window.ui:1369
 msgid ""
 "The automatic not available status message. If empty, the current status "
 "message will not be changed.\n"
@@ -6652,109 +6645,109 @@ msgid ""
 "$T will be replaced by auto-not-available timeout."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1368
+#: gajim/data/gui/preferences_window.ui:1383
 #, fuzzy
 msgid "Minutes"
 msgstr "λεπτά"
 
-#: gajim/data/gui/preferences_window.ui:1412 gajim/gtk/features.py:108
+#: gajim/data/gui/preferences_window.ui:1427 gajim/gtk/features.py:97
 #, fuzzy
 msgid "Automatic Status"
 msgstr "Αδυναμία φόρτωσης"
 
-#: gajim/data/gui/preferences_window.ui:1443
+#: gajim/data/gui/preferences_window.ui:1458
 msgid "_Remember and restore status of the last session"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1447
+#: gajim/data/gui/preferences_window.ui:1462
 msgid ""
 "If checked, the status and status message used in the last session will be "
 "restored"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1469
+#: gajim/data/gui/preferences_window.ui:1484
 #, fuzzy
 msgid "Ask for status message when I"
 msgstr "Ερώτηση μηνύματος κατάστασης όταν γίνομαι:"
 
-#: gajim/data/gui/preferences_window.ui:1485
+#: gajim/data/gui/preferences_window.ui:1500
 msgid "Sign _in"
 msgstr "Σύν_δεση"
 
-#: gajim/data/gui/preferences_window.ui:1502
+#: gajim/data/gui/preferences_window.ui:1517
 msgid "Sign _out"
 msgstr "Αποσ_ύνδεση"
 
-#: gajim/data/gui/preferences_window.ui:1536
+#: gajim/data/gui/preferences_window.ui:1551
 msgid ""
 "If enabled, Gajim will not ask for a status message. The specified default "
 "message will be used instead."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1564
+#: gajim/data/gui/preferences_window.ui:1579
 #, fuzzy
 msgid "Default Message"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
-#: gajim/data/gui/preferences_window.ui:1579
-#: gajim/data/gui/preferences_window.ui:1860
+#: gajim/data/gui/preferences_window.ui:1594
+#: gajim/data/gui/preferences_window.ui:1885
 #, fuzzy
 msgid "Enabled"
 msgstr "Ενεργοποίηση"
 
-#: gajim/data/gui/preferences_window.ui:1605
+#: gajim/data/gui/preferences_window.ui:1620
 #, fuzzy
 msgid "Status Messages"
 msgstr "Μήνυμα κατάστασης"
 
-#: gajim/data/gui/preferences_window.ui:1738
+#: gajim/data/gui/preferences_window.ui:1763
 #, fuzzy
 msgid "Preset Status Messages"
 msgstr "<b>Προκαθορισμένα μηνύματα κατάστασης</b>"
 
-#: gajim/data/gui/preferences_window.ui:1779 gajim/data/gui/themes_window.ui:85
+#: gajim/data/gui/preferences_window.ui:1804 gajim/data/gui/themes_window.ui:85
 #, fuzzy
 msgid "Themes"
 msgstr "Θέμα"
 
-#: gajim/data/gui/preferences_window.ui:1796
+#: gajim/data/gui/preferences_window.ui:1821
 #, fuzzy
 msgid "_Theme"
 msgstr "Θέμα"
 
-#: gajim/data/gui/preferences_window.ui:1827
+#: gajim/data/gui/preferences_window.ui:1852
 msgid "Configure color and font of the interface"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1841
+#: gajim/data/gui/preferences_window.ui:1866
 #, fuzzy
 msgid "_Dark Theme"
 msgstr "Gajim - %s"
 
-#: gajim/data/gui/preferences_window.ui:1875
+#: gajim/data/gui/preferences_window.ui:1900
 msgid "Emojis"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1892
+#: gajim/data/gui/preferences_window.ui:1917
 #, fuzzy
 msgid "_Emoji Theme"
 msgstr "Gajim - %s"
 
-#: gajim/data/gui/preferences_window.ui:1921
+#: gajim/data/gui/preferences_window.ui:1946
 msgid "Icons"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1938
+#: gajim/data/gui/preferences_window.ui:1963
 #, fuzzy
 msgid "_Status iconset"
 msgstr "Εξορισμού _σετ εικονιδίων κατάστασης:"
 
-#: gajim/data/gui/preferences_window.ui:1964
+#: gajim/data/gui/preferences_window.ui:1989
 #, fuzzy
 msgid "Use transports _icons"
 msgstr "Χρήση σετ _εικονιδίων κατάστασης:"
 
-#: gajim/data/gui/preferences_window.ui:1968
+#: gajim/data/gui/preferences_window.ui:1993
 #, fuzzy
 msgid ""
 "If checked, protocol-specific status icons will be used (e.g. a contact from "
@@ -6764,120 +6757,130 @@ msgstr ""
 "πρωτόκολλο της επαφής. (πχ. Μια επαφή από το MSN θα έχει το αντίστοιχο msn "
 "εικονίδιο για τις καταστάσεις διαθέσιμος, απομακρυσμένος κλπ..)"
 
-#: gajim/data/gui/preferences_window.ui:1995
+#: gajim/data/gui/preferences_window.ui:2020
 #, fuzzy
 msgid "_Convert ASCII Emojis"
 msgstr "Διαχείριση Συμβόλων"
 
-#: gajim/data/gui/preferences_window.ui:2073
+#: gajim/data/gui/preferences_window.ui:2098
 #, fuzzy
 msgid "Style"
 msgstr "Πάγωσε"
 
-#: gajim/data/gui/preferences_window.ui:2100
+#: gajim/data/gui/preferences_window.ui:2125
 #, fuzzy
 msgid "Show _Features"
 msgstr "Χαρακτηριστικά διακομιστή"
 
-#: gajim/data/gui/preferences_window.ui:2178
+#: gajim/data/gui/preferences_window.ui:2203
 msgid "A_udio output device"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2219
+#: gajim/data/gui/preferences_window.ui:2244
 msgid "_Audio input device"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2236
+#: gajim/data/gui/preferences_window.ui:2261
 msgid "Audio"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2253
+#: gajim/data/gui/preferences_window.ui:2278
 msgid "Video"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2270
+#: gajim/data/gui/preferences_window.ui:2295
 #, fuzzy
 msgid "_Video input device"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
-#: gajim/data/gui/preferences_window.ui:2298
+#: gajim/data/gui/preferences_window.ui:2323
 #, fuzzy
 msgid "Video output"
 msgstr "Προσωπική συζήτηση"
 
-#: gajim/data/gui/preferences_window.ui:2326
+#: gajim/data/gui/preferences_window.ui:2351
 msgid "Video _framerate"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2355
+#: gajim/data/gui/preferences_window.ui:2380
 msgid "Video si_ze"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2380
+#: gajim/data/gui/preferences_window.ui:2405
 msgid "Vi_ew own video source"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2399 gajim/data/gui/server_info.ui:298
-#: gajim/gtk/accounts.py:308
+#: gajim/data/gui/preferences_window.ui:2424 gajim/data/gui/server_info.ui:298
+#: gajim/gtk/accounts.py:311
 msgid "Connection"
 msgstr "Σύνδεση"
 
-#: gajim/data/gui/preferences_window.ui:2413
+#: gajim/data/gui/preferences_window.ui:2438
 #, fuzzy
 msgid "STU_N server"
 msgstr "Εξυπηρετητής:"
 
-#: gajim/data/gui/preferences_window.ui:2431
+#: gajim/data/gui/preferences_window.ui:2456
 msgid ""
 "STUN server hostname. If no hostname was given, Gajim will try\n"
 "to discover one from the server. (Example: stun.iptel.org)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2470
+#: gajim/data/gui/preferences_window.ui:2495
 msgid "Audio/Video"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2503
+#: gajim/data/gui/preferences_window.ui:2528
 msgid "_Global proxy"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2540
+#: gajim/data/gui/preferences_window.ui:2564
 #, fuzzy
 msgid "_Manage..."
 msgstr "Διαχείριση..."
 
-#: gajim/data/gui/preferences_window.ui:2563
+#: gajim/data/gui/preferences_window.ui:2587
 #, fuzzy
 msgid "_Store status changes of contacts in history"
 msgstr "Καταγραφή α_λλαγών κατάστασης των επαφών"
 
-#: gajim/data/gui/preferences_window.ui:2585
+#: gajim/data/gui/preferences_window.ui:2609
 msgid "Enable _debug logging (restart required)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2589
+#: gajim/data/gui/preferences_window.ui:2613
 #, fuzzy
 msgid "If checked, Gajim will store a log file for debugging"
 msgstr "Αν επιλεγεί, το Gajim θα θυμάται τον κωδικό για αυτόν το λογαριασμό"
 
-#: gajim/data/gui/preferences_window.ui:2606
+#: gajim/data/gui/preferences_window.ui:2630
 msgid "Opens folder containing debug logs"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2636
+#: gajim/data/gui/preferences_window.ui:2656
+msgid "_Reset Hints"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2660
+msgid ""
+"In order to introduce you to features, Gajim displays some hints. This "
+"button will reset all these hints."
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2677
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Διάφορα</b>"
 
-#: gajim/data/gui/preferences_window.ui:2669
+#: gajim/data/gui/preferences_window.ui:2710
 msgid "Attention: Please use these options with caution!"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2682
+#: gajim/data/gui/preferences_window.ui:2723
 msgid "_Open..."
 msgstr "_Άνοιγμα..."
 
-#: gajim/data/gui/preferences_window.ui:2704 gajim/gtk/advanced_config.py:84
+#: gajim/data/gui/preferences_window.ui:2745 gajim/gtk/advanced_config.py:84
 #, fuzzy
 msgid "Advanced Configuration Editor (ACE)"
 msgstr "Επεξεργασία ρυθμίσεων για προχωρημένους"
@@ -7068,12 +7071,12 @@ msgstr ""
 msgid "Your password"
 msgstr "Εισάγετε νέο κωδικό πρόσβασης:"
 
-#: gajim/data/gui/account_wizard.ui:266 gajim/data/gui/account_wizard.ui:720
+#: gajim/data/gui/account_wizard.ui:266 gajim/data/gui/account_wizard.ui:719
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Προχωρημένες ενέργειες"
 
-#: gajim/data/gui/account_wizard.ui:270 gajim/data/gui/account_wizard.ui:724
+#: gajim/data/gui/account_wizard.ui:270 gajim/data/gui/account_wizard.ui:723
 #, fuzzy
 msgid "Proxy, custom hostname and port"
 msgstr "Χρήση προσαρμοσμένου διακομιστή/θύρας"
@@ -7160,7 +7163,7 @@ msgid ""
 "a>"
 msgstr ""
 
-#: gajim/data/gui/account_wizard.ui:631 gajim/gtk/account_wizard.py:59
+#: gajim/data/gui/account_wizard.ui:631 gajim/gtk/account_wizard.py:60
 #, fuzzy
 msgid "Sign Up"
 msgstr "Σύν_δεση"
@@ -7174,7 +7177,7 @@ msgstr "Δημιουργία νέου προφίλ"
 msgid "Sign up Anonymously"
 msgstr ""
 
-#: gajim/data/gui/account_wizard.ui:707
+#: gajim/data/gui/account_wizard.ui:706
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
 
@@ -7204,8 +7207,8 @@ msgstr "Επανα_φορά προεπιλεγμένων χρωμάτων"
 msgid "Resets value to default"
 msgstr "Επανα_φορά προεπιλεγμένων χρωμάτων"
 
-#: gajim/data/gui/server_info.ui:20 gajim/gtk/accounts.py:682
-#: gajim/gtk/accounts.py:788
+#: gajim/data/gui/server_info.ui:20 gajim/gtk/accounts.py:687
+#: gajim/gtk/accounts.py:793
 #, fuzzy
 msgid "Hostname"
 msgstr "Εξυπηρετητής:"
@@ -7249,7 +7252,7 @@ msgstr "Μη έγκυρο όνομα χρήστη"
 msgid "Proxy Host"
 msgstr "Μεσολαβητής:"
 
-#: gajim/data/gui/server_info.ui:261 gajim/gtk/accounts.py:796
+#: gajim/data/gui/server_info.ui:261 gajim/gtk/accounts.py:801
 msgid "Type"
 msgstr "Είδος"
 
@@ -7263,8 +7266,7 @@ msgstr "_Πρωτόκολλο:"
 msgid "Copy info to clipboard"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
-#: gajim/data/gui/server_info.ui:359 gajim/data/gui/application_menu.ui:89
-#: gajim/gtk/features.py:41 gajim/gtk/features.py:52
+#: gajim/data/gui/server_info.ui:359 gajim/gtk/features.py:40
 #, fuzzy
 msgid "Features"
 msgstr "Χαρακτηριστικά διακομιστή"
@@ -7444,6 +7446,11 @@ msgstr ""
 msgid "Change Status Message…"
 msgstr "Α_λλαγή μηνύματος κατάστασης"
 
+#: gajim/data/gui/roster_window.ui:79 data/org.gajim.Gajim.desktop.in:4
+#: data/org.gajim.Gajim.appdata.xml.in:7
+msgid "Gajim"
+msgstr "Gajim"
+
 #: gajim/data/gui/change_mood_dialog.ui:73
 #, fuzzy
 msgid "<b>Mood:</b>"
@@ -7522,8 +7529,8 @@ msgstr "Πάγωσε"
 
 #: gajim/data/gui/plugins_window.ui:363
 msgid ""
-"Plug-in decription should be displayed here. This text will be erased during "
-"PluginsWindow initialization."
+"Plug-in description should be displayed here. This text will be erased "
+"during PluginsWindow initialization."
 msgstr ""
 
 #: gajim/data/gui/privacy_list_window.ui:18
@@ -7723,83 +7730,105 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 msgid "_Name"
 msgstr "_Όνομα:"
 
-#: gajim/data/gui/manage_proxies.ui:337 gajim/gtk/accounts.py:679
+#: gajim/data/gui/manage_proxies.ui:337 gajim/gtk/accounts.py:684
 #, fuzzy
 msgid "Proxy"
 msgstr "Μεσολαβητής:"
 
 #: gajim/data/gui/application_menu.ui:8
 #, fuzzy
-msgid "Start Chat…"
+msgid "_Start / Join Chat…"
 msgstr "Έναρξη κουβέντας"
 
 #: gajim/data/gui/application_menu.ui:13
 #, fuzzy
-msgid "Create Group Chat…"
+msgid "Create _Group Chat…"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/data/gui/application_menu.ui:22 gajim/data/gui/shortcuts_window.ui:217
-#: gajim/plugins/gui.py:68
-msgid "Plugins"
-msgstr ""
+#: gajim/data/gui/application_menu.ui:18
+#, fuzzy
+msgid "_History Manager"
+msgstr "Διαχειριστής ιστορικού"
 
-#: gajim/data/gui/application_menu.ui:26 gajim/data/gui/shortcuts_window.ui:210
-#: gajim/gtk/preferences.py:64
-msgid "Preferences"
+#: gajim/data/gui/application_menu.ui:22
+#, fuzzy
+msgid "Pl_ugins"
+msgstr "Η δημοσιοποίηση της vCard απέτυχε"
+
+#: gajim/data/gui/application_menu.ui:26
+#: gajim/data/gui/systray_context_menu.ui:68
+#, fuzzy
+msgid "_Preferences"
 msgstr "Προτιμήσεις"
 
-#: gajim/data/gui/application_menu.ui:30
+#: gajim/data/gui/application_menu.ui:36
 #, fuzzy
-msgid "Quit"
-msgstr "_Έξοδος"
+msgid "_Accounts"
+msgstr "Λογαριασμοί"
 
 #: gajim/data/gui/application_menu.ui:39
 #, fuzzy
-msgid "View"
+msgid "_View"
 msgstr "_Προβολή"
 
-#: gajim/data/gui/application_menu.ui:42
+#: gajim/data/gui/application_menu.ui:42 gajim/gtk/statusicon.py:270
 #, fuzzy
-msgid "Show Contact List"
+msgid "Show _Contact List"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
 #: gajim/data/gui/application_menu.ui:46
 #, fuzzy
-msgid "Show Offline Contacts"
+msgid "Show _Offline Contacts"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
 #: gajim/data/gui/application_menu.ui:50
 #, fuzzy
-msgid "Show Active Contacts"
+msgid "Show _Active Contacts"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
 #: gajim/data/gui/application_menu.ui:54
 #, fuzzy
-msgid "Show Transports"
+msgid "Show _Transports"
 msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
-#: gajim/data/gui/application_menu.ui:60 gajim/data/gui/xml_console.ui:8
-msgid "XML Console"
+#: gajim/data/gui/application_menu.ui:60
+#, fuzzy
+msgid "_XML Console"
 msgstr "XML Κονσόλα"
+
+#: gajim/data/gui/application_menu.ui:64
+#, fuzzy
+msgid "_File Transfer"
+msgstr "Μεταφορές αρχείων"
 
 #: gajim/data/gui/application_menu.ui:74
 #, fuzzy
-msgid "Help"
+msgid "_Help"
 msgstr "_Βοήθεια"
 
 #: gajim/data/gui/application_menu.ui:77
 #, fuzzy
-msgid "Wiki (Online)"
+msgid "_Wiki (Online)"
 msgstr "Συνδεδεμένος"
 
 #: gajim/data/gui/application_menu.ui:81
 #, fuzzy
-msgid "FAQ (Online)"
+msgid "FA_Q (Online)"
 msgstr "Συνδεδεμένος"
 
 #: gajim/data/gui/application_menu.ui:85
-msgid "Keyboard Shortcuts"
+msgid "_Keyboard Shortcuts"
 msgstr ""
+
+#: gajim/data/gui/application_menu.ui:89
+#, fuzzy
+msgid "_Features"
+msgstr "Χαρακτηριστικά διακομιστή"
+
+#: gajim/data/gui/application_menu.ui:93
+#, fuzzy
+msgid "_About"
+msgstr "Περί"
 
 #: gajim/data/gui/groupchat_creation.ui:27
 msgid "Public or Private?"
@@ -8107,60 +8136,68 @@ msgstr "Αποσύνδεση επαφής"
 msgid "Create new group chat"
 msgstr "Ομαδικές συζητήσεις"
 
-#: gajim/data/gui/shortcuts_window.ui:224
+#: gajim/data/gui/shortcuts_window.ui:203 gajim/gtk/preferences.py:63
+msgid "Preferences"
+msgstr "Προτιμήσεις"
+
+#: gajim/data/gui/shortcuts_window.ui:210 gajim/plugins/gui.py:68
+msgid "Plugins"
+msgstr ""
+
+#: gajim/data/gui/shortcuts_window.ui:217
 #, fuzzy
 msgid "File transfers"
 msgstr "Μεταφορές αρχείων"
 
-#: gajim/data/gui/shortcuts_window.ui:231
+#: gajim/data/gui/shortcuts_window.ui:224
 #, fuzzy
 msgid "Set the status message"
 msgstr "μήνυμα κατάστασης"
 
-#: gajim/data/gui/shortcuts_window.ui:238
+#: gajim/data/gui/shortcuts_window.ui:231
 #, fuzzy
 msgid "Show XML console"
 msgstr "Κονσόλα _XML"
 
-#: gajim/data/gui/shortcuts_window.ui:253
+#: gajim/data/gui/shortcuts_window.ui:246
 #, fuzzy
 msgid "Appearance"
 msgstr "<b>Επεξεργασία κανόνα</b>"
 
-#: gajim/data/gui/shortcuts_window.ui:258
+#: gajim/data/gui/shortcuts_window.ui:251
 #, fuzzy
 msgid "Show offline contacts"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
-#: gajim/data/gui/shortcuts_window.ui:265
+#: gajim/data/gui/shortcuts_window.ui:258
 #, fuzzy
 msgid "Show only active contacts"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
-#: gajim/data/gui/shortcuts_window.ui:272
+#: gajim/data/gui/shortcuts_window.ui:265
 msgid "Enable contact list filtering"
 msgstr ""
 
-#: gajim/data/gui/shortcuts_window.ui:279
+#: gajim/data/gui/shortcuts_window.ui:272
 #, fuzzy
 msgid "Show / hide contact list"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
-#: gajim/data/gui/shortcuts_window.ui:287 gajim/data/gui/groupchat_invite.ui:83
+#: gajim/data/gui/shortcuts_window.ui:280 gajim/data/gui/groupchat_invite.ui:83
 msgid "Contacts"
 msgstr "Επαφές"
 
-#: gajim/data/gui/shortcuts_window.ui:292
+#: gajim/data/gui/shortcuts_window.ui:285
 #, fuzzy
 msgid "Contact information"
 msgstr "Πληροφορίες επαφής"
 
-#: gajim/data/gui/shortcuts_window.ui:299
+#: gajim/data/gui/shortcuts_window.ui:292
 #, fuzzy
 msgid "Rename contact"
 msgstr "_Μετονομασία αρχείων"
 
-#: gajim/data/gui/shortcuts_window.ui:306
+#: gajim/data/gui/shortcuts_window.ui:299
 #, fuzzy
 msgid "Delete contact"
 msgstr "Επαφές"
@@ -8238,12 +8275,16 @@ msgstr "Εκτέλεση στο Τερματικό"
 msgid "Group Chat Configuration"
 msgstr "Πρόσκληση ομαδικής κουβέντας"
 
+#: gajim/data/gui/xml_console.ui:8
+msgid "XML Console"
+msgstr "XML Κονσόλα"
+
 #: gajim/data/gui/xml_console.ui:131
 #, fuzzy
 msgid "Start Search..."
 msgstr "_Έναρξη συζήτησης"
 
-#: gajim/data/gui/xml_console.ui:241 gajim/gtk/xml_console.py:308
+#: gajim/data/gui/xml_console.ui:241 gajim/gtk/xml_console.py:309
 #, fuzzy
 msgid "Filter"
 msgstr "Φιλτράρισμα:"
@@ -8289,11 +8330,6 @@ msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμ�
 #: gajim/data/gui/systray_context_menu.ui:52
 msgid "Mute Sounds"
 msgstr "Σίγαση ήχων"
-
-#: gajim/data/gui/systray_context_menu.ui:68
-#, fuzzy
-msgid "_Preferences"
-msgstr "Προτιμήσεις"
 
 #: gajim/data/gui/single_message_window.ui:42
 #, fuzzy
@@ -8764,7 +8800,7 @@ msgid "Sender: %s"
 msgstr "Αποστολέας: %s"
 
 #: gajim/gtk/filetransfer.py:240 gajim/gtk/filetransfer.py:749
-#: gajim/gtk/tooltips.py:549
+#: gajim/gtk/tooltips.py:550
 msgid "Recipient: "
 msgstr "Παραλήπτης: "
 
@@ -8918,7 +8954,7 @@ msgstr "Αρχείο:"
 msgid "It is not possible to send empty files"
 msgstr "Δεν είναι δυνατό να στείλετε άδεια αρχεία"
 
-#: gajim/gtk/filetransfer.py:747 gajim/gtk/tooltips.py:543
+#: gajim/gtk/filetransfer.py:747 gajim/gtk/tooltips.py:544
 msgid "Sender: "
 msgstr "Αποστολέας: "
 
@@ -8933,7 +8969,7 @@ msgid "Change"
 msgstr "Αλλαγή _ψευδώνυμου"
 
 #: gajim/gtk/change_password.py:45 gajim/gtk/remove_account.py:45
-#: gajim/gtk/account_wizard.py:64 gajim/gtk/accounts.py:380
+#: gajim/gtk/account_wizard.py:65 gajim/gtk/accounts.py:383
 #, fuzzy
 msgid "Back"
 msgstr "Πίσω σύντομα"
@@ -8964,11 +9000,12 @@ msgid "Password Change Failed"
 msgstr "Απαιτείται κωδικός"
 
 #: gajim/gtk/change_password.py:63
-msgid "An error occured while trying to change your password."
-msgstr ""
+#, fuzzy
+msgid "An error occurred while trying to change your password."
+msgstr "Σφάλμα κατά τη διάρκεια δημιουργίας λογαριασμού"
 
 #: gajim/gtk/change_password.py:142 gajim/gtk/change_password.py:144
-#: gajim/gtk/change_password.py:221 gajim/gtk/accounts.py:833
+#: gajim/gtk/change_password.py:221 gajim/gtk/accounts.py:838
 msgid "Change Password"
 msgstr "Αλλαγή κωδικού πρόσβασης"
 
@@ -9003,38 +9040,28 @@ msgstr ""
 msgid "Unknown SSL error '%s'"
 msgstr "Άγνωστη έκδοση του D-Bus: %s"
 
-#: gajim/gtk/start_chat.py:54
+#: gajim/gtk/start_chat.py:55
 #, fuzzy
-msgid "Start New Conversation"
-msgstr "Σύνδεση"
+msgid "Start / Join Chat"
+msgstr "Έναρξη κουβέντας"
 
-#: gajim/gtk/start_chat.py:271 gajim/gtk/start_chat.py:350
+#: gajim/gtk/start_chat.py:279 gajim/gtk/start_chat.py:358
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
 "Δε μπορείτε να συμμετάσχετε σε μια ομαδική συζήτηση εκτός αν είστε "
 "συνδεδεμένος."
 
-#: gajim/gtk/start_chat.py:617 gajim/gtk/groupchat_join.py:40
+#: gajim/gtk/start_chat.py:628 gajim/gtk/groupchat_join.py:40
 msgid "Join Group Chat"
 msgstr "Συμμετοχή σε ομαδική κουβέντα"
 
-#: gajim/gtk/start_chat.py:619 gajim/gtk/add_contact.py:42
-#, fuzzy
-msgid "Add Contact"
-msgstr "_Προσθήκη επαφής..."
-
-#: gajim/gtk/start_chat.py:644 gajim/gtk/groupchat_invite.py:328
-#, fuzzy, python-format
-msgid "Account: %s"
-msgstr "Λογαριασμοί"
-
-#: gajim/gtk/start_chat.py:700
+#: gajim/gtk/start_chat.py:709
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
 
-#: gajim/gtk/start_chat.py:793
+#: gajim/gtk/start_chat.py:802
 #, fuzzy, python-format
 msgid "%s group chats found"
 msgstr "μη υπαρκτό %s"
@@ -9166,66 +9193,66 @@ msgstr "_Εγγραφή"
 msgid "_Unsubscribe"
 msgstr "_Εγγραφή"
 
-#: gajim/gtk/single_message.py:52
+#: gajim/gtk/single_message.py:51
 #, fuzzy
 msgid "Send Single Message"
 msgstr "_Αποστολή μονού μηνύματος"
 
-#: gajim/gtk/single_message.py:103
+#: gajim/gtk/single_message.py:101
 #, fuzzy
 msgid "(No subject)"
 msgstr "θέμα"
 
-#: gajim/gtk/single_message.py:159
+#: gajim/gtk/single_message.py:157
 #, fuzzy, python-format
 msgid "Single Message using account %s"
 msgstr "Μονό μήνυμα με χρήση του λογαριασμού %s"
 
-#: gajim/gtk/single_message.py:161
+#: gajim/gtk/single_message.py:159
 #, fuzzy, python-format
 msgid "Single Message in account %s"
 msgstr "Μονό μήνυμα με χρήση του λογαριασμού %s"
 
-#: gajim/gtk/single_message.py:163
+#: gajim/gtk/single_message.py:161
 msgid "Single Message"
 msgstr "Μονό μήνυμα"
 
-#: gajim/gtk/single_message.py:166
+#: gajim/gtk/single_message.py:164
 #, python-format
 msgid "Send %s"
 msgstr "Αποστολή %s"
 
-#: gajim/gtk/single_message.py:185
+#: gajim/gtk/single_message.py:183
 #, python-format
 msgid "Received %s"
 msgstr "Έγινε λήψη του %s"
 
-#: gajim/gtk/single_message.py:207
+#: gajim/gtk/single_message.py:205
 #, fuzzy, python-format
 msgid "Characters typed: %s"
 msgstr "Δεν επιτρέπεται το ψευδώνυμο: %s"
 
-#: gajim/gtk/single_message.py:212 gajim/gtk/xml_console.py:169
+#: gajim/gtk/single_message.py:210 gajim/gtk/xml_console.py:169
 msgid "Connection not available"
 msgstr "Σύνδεση μη διαθέσιμη"
 
-#: gajim/gtk/single_message.py:213
+#: gajim/gtk/single_message.py:211
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Παρακαλώ βεβαιωθείτε ότι είστε συνδεδεμένοι με το \"%s\"."
 
-#: gajim/gtk/single_message.py:241
+#: gajim/gtk/single_message.py:239
 #, fuzzy, python-format
 msgid ""
 "It is not possible to send a message to %s, this XMPP Address is not valid."
 msgstr "Δεν είναι δυνατό να στείλετε άδεια αρχεία"
 
-#: gajim/gtk/single_message.py:318
+#: gajim/gtk/single_message.py:316
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: gajim/gtk/single_message.py:319
+#: gajim/gtk/single_message.py:317
 #, python-format
 msgid "%s wrote:\n"
 msgstr "Ο/Η %s έγραψε:\n"
@@ -9272,89 +9299,75 @@ msgstr "Επιτυχής καταχώρηση λογαριασμού"
 msgid "Registration failed"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
-#: gajim/gtk/dialogs.py:148
-#, fuzzy, python-format
-msgid "Dictionary for language \"%s\" not available"
-msgstr "Δεν υπάρχει διαθέσιμο λεξικό για τη γλώσσα %s"
-
-#: gajim/gtk/dialogs.py:149
-#, python-format
-msgid ""
-"You have to install the dictionary \"%s\" to use spellchecking, or choose "
-"another language by setting the speller_language option.\n"
-"\n"
-"Highlighting misspelled words feature will not be used"
-msgstr ""
-
-#: gajim/gtk/dialogs.py:224
+#: gajim/gtk/dialogs.py:214
 #, fuzzy
 msgid "Certificate"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
-#: gajim/gtk/dialogs.py:238
+#: gajim/gtk/dialogs.py:228
 #, fuzzy, python-format
 msgid ""
 "Certificate for \n"
 "%s"
 msgstr "για το λογαριασμό %s"
 
-#: gajim/gtk/dialogs.py:287
+#: gajim/gtk/dialogs.py:277
 msgid "Issued to\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:288 gajim/gtk/dialogs.py:293
+#: gajim/gtk/dialogs.py:278 gajim/gtk/dialogs.py:283
 msgid "Common Name (CN): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:289 gajim/gtk/dialogs.py:294
+#: gajim/gtk/dialogs.py:279 gajim/gtk/dialogs.py:284
 msgid "Organization (O): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:290 gajim/gtk/dialogs.py:295
+#: gajim/gtk/dialogs.py:280 gajim/gtk/dialogs.py:285
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:291
+#: gajim/gtk/dialogs.py:281
 #, fuzzy
 msgid "Serial Number: "
 msgstr "Αριθμός χώρων εργασίας:"
 
-#: gajim/gtk/dialogs.py:292
+#: gajim/gtk/dialogs.py:282
 msgid "Issued by\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:296
+#: gajim/gtk/dialogs.py:286
 msgid "Validity\n"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:297
+#: gajim/gtk/dialogs.py:287
 msgid "Issued on: "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:298
+#: gajim/gtk/dialogs.py:288
 msgid "Expires on: "
 msgstr ""
 
-#: gajim/gtk/dialogs.py:299
+#: gajim/gtk/dialogs.py:289
 msgid "SHA-1:"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:301
+#: gajim/gtk/dialogs.py:291
 msgid "SHA-256:"
 msgstr ""
 
-#: gajim/gtk/dialogs.py:314
+#: gajim/gtk/dialogs.py:304
 #, fuzzy
 msgid "Group Chat Invitation "
 msgstr "Πρόσκληση ομαδικής κουβέντας"
 
-#: gajim/gtk/dialogs.py:336
+#: gajim/gtk/dialogs.py:326
 #, fuzzy, python-format
 msgid ""
 "<b>%(contact)s</b> has invited you to the group chat <b>%(room_jid)s</b>"
 msgstr "Ο/Η %(contact_jid)s σας προσκάλεσε στο %(room_jid)s"
 
-#: gajim/gtk/dialogs.py:344
+#: gajim/gtk/dialogs.py:334
 #, python-format
 msgid "Comment: %s"
 msgstr "Σχόλιο: %s"
@@ -9368,6 +9381,11 @@ msgstr "Αριθμός χώρων εργασίας:"
 #, fuzzy
 msgid "ICQ Number"
 msgstr "Αριθμός χώρων εργασίας:"
+
+#: gajim/gtk/add_contact.py:42
+#, fuzzy
+msgid "Add Contact"
+msgstr "_Προσθήκη επαφής..."
 
 #: gajim/gtk/add_contact.py:260
 #, fuzzy, python-format
@@ -9425,7 +9443,7 @@ msgstr "Σφάλμα κατά την προσθήκη της υπηρεσίας.
 #: gajim/gtk/add_contact.py:486
 #, python-format
 msgid ""
-"This error occured while adding a contact for transport %(transport)s:\n"
+"This error occurred while adding a contact for transport %(transport)s:\n"
 "\n"
 "%(error)s"
 msgstr ""
@@ -9670,10 +9688,9 @@ msgid "Error: %s"
 msgstr "Μήνυμα σφάλματος: %s"
 
 #: gajim/gtk/history.py:591 gajim/gtk/groupchat_config.py:133
-#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:329
-#: gajim/gtk/account_wizard.py:365 gajim/gtk/account_wizard.py:366
+#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:391
 #: gajim/gtk/account_wizard.py:427 gajim/gtk/account_wizard.py:428
-#: gajim/gtk/search.py:336
+#: gajim/gtk/account_wizard.py:493 gajim/gtk/search.py:336
 #, fuzzy
 msgid "Error"
 msgstr "Σφάλμα:"
@@ -9697,8 +9714,8 @@ msgstr "OpenPGP: "
 msgid "New E-mail"
 msgstr "Νέο E-Mail"
 
-#: gajim/gtk/settings.py:469 gajim/gtk/filechoosers.py:88
-#: gajim/gtk/filechoosers.py:139 gajim/gtk/filechoosers.py:146
+#: gajim/gtk/settings.py:469 gajim/gtk/filechoosers.py:89
+#: gajim/gtk/filechoosers.py:140 gajim/gtk/filechoosers.py:147
 #: gajim/gtk/sounds.py:35
 msgid "All files"
 msgstr "Όλα τα αρχεία"
@@ -9713,9 +9730,9 @@ msgstr "Απόγευμα"
 msgid "Manage Proxies"
 msgstr "Διαχείριση προφίλ μεσολαβητή"
 
-#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:684
-#: gajim/gtk/preferences.py:1027 gajim/gtk/preferences.py:1037
-#: gajim/gtk/preferences.py:1041
+#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:748
+#: gajim/gtk/preferences.py:1029 gajim/gtk/preferences.py:1039
+#: gajim/gtk/preferences.py:1043
 #, fuzzy
 msgid "No Proxy"
 msgstr "Μεσολαβητής:"
@@ -9809,8 +9826,8 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
-#: gajim/gtk/history_sync.py:239 gajim/gtk/account_wizard.py:249
-#: gajim/gtk/account_wizard.py:268
+#: gajim/gtk/history_sync.py:239 gajim/gtk/account_wizard.py:274
+#: gajim/gtk/account_wizard.py:293 gajim/gtk/account_wizard.py:309
 #, fuzzy
 msgid "Connecting..."
 msgstr "Συνδέεται"
@@ -9901,131 +9918,131 @@ msgstr ""
 "Σταύρος Γιαννούρης <stavrosg@hellug.gr>\n"
 "Στάθης Καμπέρης <ekamperi@auth.gr>"
 
-#: gajim/gtk/filechoosers.py:87
+#: gajim/gtk/filechoosers.py:88
 #, fuzzy
 msgid "Choose File to Send…"
 msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
 
-#: gajim/gtk/filechoosers.py:93
+#: gajim/gtk/filechoosers.py:94
 #, fuzzy
 msgid "Choose Avatar…"
 msgstr "Επιλογή εικόνας"
 
-#: gajim/gtk/filechoosers.py:97
+#: gajim/gtk/filechoosers.py:98
 #, fuzzy
 msgid "PNG files"
 msgstr "Όλα τα αρχεία"
 
-#: gajim/gtk/filechoosers.py:98
+#: gajim/gtk/filechoosers.py:99
 #, fuzzy
 msgid "JPEG files"
 msgstr "Όλα τα αρχεία"
 
-#: gajim/gtk/filechoosers.py:99
+#: gajim/gtk/filechoosers.py:100
 #, fuzzy
 msgid "SVG files"
 msgstr "Αποστολή αρχείου"
 
-#: gajim/gtk/filechoosers.py:101
+#: gajim/gtk/filechoosers.py:102
 msgid "Images"
 msgstr "Εικόνες"
 
-#: gajim/gtk/filechoosers.py:138
+#: gajim/gtk/filechoosers.py:139
 #, fuzzy
 msgid "Choose Archive"
 msgstr "Επιλογή εικόνας"
 
-#: gajim/gtk/filechoosers.py:140
+#: gajim/gtk/filechoosers.py:141
 #, fuzzy
 msgid "ZIP files"
 msgstr "Όλα τα αρχεία"
 
-#: gajim/gtk/filechoosers.py:145
+#: gajim/gtk/filechoosers.py:146
 #, fuzzy
 msgid "Save File as…"
 msgstr "Αποθήκευση αρχείου ως..."
 
-#: gajim/gtk/filechoosers.py:179
+#: gajim/gtk/filechoosers.py:180
 #, fuzzy
 msgid "_Open"
 msgstr "OpenPGP: "
 
-#: gajim/gtk/tooltips.py:224
+#: gajim/gtk/tooltips.py:225
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr ""
 
-#: gajim/gtk/tooltips.py:483
+#: gajim/gtk/tooltips.py:484
 #, fuzzy
 msgid "Connected"
 msgstr "Σύνδεση"
 
-#: gajim/gtk/tooltips.py:485
+#: gajim/gtk/tooltips.py:486
 #, fuzzy
 msgid "Disconnected"
 msgstr "Αποσύνδεση επαφής"
 
-#: gajim/gtk/tooltips.py:539
+#: gajim/gtk/tooltips.py:540
 #, fuzzy
 msgid "File Name: "
 msgstr "Όνομα αρχείου: %s"
 
-#: gajim/gtk/tooltips.py:542
+#: gajim/gtk/tooltips.py:543
 #, fuzzy
 msgid "?Noun:Download"
 msgstr "Λήψη"
 
-#: gajim/gtk/tooltips.py:548
+#: gajim/gtk/tooltips.py:549
 #, fuzzy
 msgid "?Noun:Upload"
 msgstr "Αποστολή"
 
-#: gajim/gtk/tooltips.py:555
+#: gajim/gtk/tooltips.py:556
 #, fuzzy
 msgid "?transfer type:Type: "
 msgstr "Η μεταφορά αρχείου διακόπηκε"
 
-#: gajim/gtk/tooltips.py:561
+#: gajim/gtk/tooltips.py:562
 #, fuzzy
 msgid "?transfer status:Transferred: "
 msgstr "Εκτύπωση όλων των σελίδων"
 
-#: gajim/gtk/tooltips.py:564
+#: gajim/gtk/tooltips.py:565
 #, fuzzy
 msgid "?transfer status:Status: "
 msgstr "Εκτύπωση όλων των σελίδων"
 
-#: gajim/gtk/tooltips.py:566
+#: gajim/gtk/tooltips.py:567
 #, fuzzy
 msgid "Description: "
 msgstr "Περιγραφή: %s"
 
-#: gajim/gtk/tooltips.py:590
+#: gajim/gtk/tooltips.py:591
 #, fuzzy
 msgid "?transfer status:Aborted"
 msgstr "Εκτύπωση όλων των σελίδων"
 
-#: gajim/gtk/tooltips.py:592
+#: gajim/gtk/tooltips.py:593
 #, fuzzy
 msgid "?transfer status:Completed"
 msgstr "Εκτύπωση όλων των σελίδων"
 
-#: gajim/gtk/tooltips.py:594
+#: gajim/gtk/tooltips.py:595
 #, fuzzy
 msgid "?transfer status:Paused"
 msgstr "Εκτύπωση όλων των σελίδων"
 
-#: gajim/gtk/tooltips.py:597
+#: gajim/gtk/tooltips.py:598
 #, fuzzy
 msgid "?transfer status:Stalled"
 msgstr "Εκτύπωση όλων των σελίδων"
 
-#: gajim/gtk/tooltips.py:601
+#: gajim/gtk/tooltips.py:602
 #, fuzzy
 msgid "?transfer status:Transferring"
 msgstr "Εκτύπωση όλων των σελίδων"
 
-#: gajim/gtk/tooltips.py:602 gajim/gtk/tooltips.py:603
+#: gajim/gtk/tooltips.py:603 gajim/gtk/tooltips.py:604
 #, fuzzy
 msgid "?transfer status:Not started"
 msgstr "Εκτύπωση όλων των σελίδων"
@@ -10034,7 +10051,7 @@ msgstr "Εκτύπωση όλων των σελίδων"
 msgid " (optional)..."
 msgstr ""
 
-#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:540
+#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:604
 #, fuzzy
 msgid "Invalid Address"
 msgstr "Μη έγκυρο αρχείο"
@@ -10129,11 +10146,6 @@ msgstr "με χρήση του λογαριασμού %s"
 #, fuzzy
 msgid "Hide _Contact List"
 msgstr "Επαφές"
-
-#: gajim/gtk/statusicon.py:270
-#, fuzzy
-msgid "Show _Contact List"
-msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
 #: gajim/gtk/statusicon.py:278
 msgid "Hide this menu"
@@ -10261,172 +10273,172 @@ msgstr "Τίποτα"
 msgid "?password:Hidden"
 msgstr "Κωδικός πρόσβασης:"
 
-#: gajim/gtk/server_info.py:139
+#: gajim/gtk/server_info.py:129
 msgid "Support"
 msgstr ""
 
-#: gajim/gtk/server_info.py:140
+#: gajim/gtk/server_info.py:130
 msgid "Security"
 msgstr ""
 
-#: gajim/gtk/server_info.py:141
+#: gajim/gtk/server_info.py:131
 msgid "Feedback"
 msgstr ""
 
-#: gajim/gtk/server_info.py:142
+#: gajim/gtk/server_info.py:132
 msgid "Abuse"
 msgstr ""
 
-#: gajim/gtk/server_info.py:143
+#: gajim/gtk/server_info.py:133
 msgid "Sales"
 msgstr ""
 
-#: gajim/gtk/server_info.py:227
+#: gajim/gtk/server_info.py:217
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
 msgstr ""
 
-#: gajim/gtk/server_info.py:350
+#: gajim/gtk/server_info.py:340
 #, fuzzy
 msgid ""
 "\n"
 "Disabled in preferences"
 msgstr "_Προτιμήσεις"
 
-#: gajim/gtk/features.py:101
+#: gajim/gtk/features.py:90
 msgid "Audio / Video"
 msgstr ""
 
-#: gajim/gtk/features.py:103
+#: gajim/gtk/features.py:92
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-#: gajim/gtk/features.py:104
+#: gajim/gtk/features.py:93
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
 "gstreamer1.0-plugins-ugly"
 msgstr ""
 
-#: gajim/gtk/features.py:106 gajim/gtk/features.py:157
-#: gajim/gtk/preferences.py:360
+#: gajim/gtk/features.py:95 gajim/gtk/features.py:145
+#: gajim/gtk/preferences.py:363
 #, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέσιμος"
 
-#: gajim/gtk/features.py:110
+#: gajim/gtk/features.py:99
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
 
-#: gajim/gtk/features.py:112
+#: gajim/gtk/features.py:101
 msgid "Requires: libxss"
 msgstr ""
 
-#: gajim/gtk/features.py:113 gajim/gtk/features.py:134
+#: gajim/gtk/features.py:102 gajim/gtk/features.py:123
 msgid "No additional requirements"
 msgstr ""
 
-#: gajim/gtk/features.py:115
+#: gajim/gtk/features.py:104
 msgid "Bonjour / Zeroconf (Serverless Chat)"
 msgstr ""
 
-#: gajim/gtk/features.py:117
+#: gajim/gtk/features.py:106
 msgid ""
 "Enables Gajim to automatically detected clients in a local network for "
 "serverless chats"
 msgstr ""
 
-#: gajim/gtk/features.py:119
+#: gajim/gtk/features.py:108
 msgid "Requires: gir1.2-avahi-0.6"
 msgstr ""
 
-#: gajim/gtk/features.py:120
+#: gajim/gtk/features.py:109
 #, python-format
 msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 msgstr ""
 
-#: gajim/gtk/features.py:123
+#: gajim/gtk/features.py:112
 #, fuzzy
 msgid "Location detection"
 msgstr "Σύνδεση"
 
-#: gajim/gtk/features.py:125
+#: gajim/gtk/features.py:114
 msgid ""
 "Enables Gajim to be location-aware, if the user decides to publish the "
 "device’s location"
 msgstr ""
 
-#: gajim/gtk/features.py:127
+#: gajim/gtk/features.py:116
 #, fuzzy
 msgid "Requires: geoclue"
 msgstr "_Φωνή"
 
-#: gajim/gtk/features.py:128
+#: gajim/gtk/features.py:117
 #, fuzzy
 msgid "Feature is not available under Windows"
 msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέσιμος"
 
-#: gajim/gtk/features.py:130
+#: gajim/gtk/features.py:119
 #, fuzzy
 msgid "Notification Sounds"
 msgstr "Τροποποίηση λογαριασμού"
 
-#: gajim/gtk/features.py:132
+#: gajim/gtk/features.py:121
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
-#: gajim/gtk/features.py:133
+#: gajim/gtk/features.py:122
 #, fuzzy
 msgid "Requires: gsound"
 msgstr "Απαιτείται κωδικός"
 
-#: gajim/gtk/features.py:136
+#: gajim/gtk/features.py:125
 #, fuzzy
 msgid "Secure Password Storage"
 msgstr "Αποθήκευση κωδικού"
 
-#: gajim/gtk/features.py:138
+#: gajim/gtk/features.py:127
 msgid ""
 "Enables Gajim to store Passwords securely instead of storing them in "
 "plaintext"
 msgstr ""
 
-#: gajim/gtk/features.py:140
-msgid ""
-"Requires: libsecret and a provider (such as GNOME Keyring and KSecretService)"
-msgstr ""
+#: gajim/gtk/features.py:129
+#, fuzzy
+msgid "Requires: gnome-keyring or kwallet"
+msgstr "Διαχειριστής ιστορικού"
 
-#: gajim/gtk/features.py:142
+#: gajim/gtk/features.py:130
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-#: gajim/gtk/features.py:145
+#: gajim/gtk/features.py:133
 msgid "Spell Checker"
 msgstr ""
 
-#: gajim/gtk/features.py:147
+#: gajim/gtk/features.py:135
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
-#: gajim/gtk/features.py:149 gajim/gtk/features.py:150
+#: gajim/gtk/features.py:137 gajim/gtk/features.py:138
 msgid "Requires: Gspell"
 msgstr ""
 
-#: gajim/gtk/features.py:152
+#: gajim/gtk/features.py:140
 msgid "UPnP-IGD Port Forwarding"
 msgstr ""
 
-#: gajim/gtk/features.py:154
+#: gajim/gtk/features.py:142
 msgid ""
 "Enables Gajim to request your router to forward ports for file transfers"
 msgstr ""
 
-#: gajim/gtk/features.py:156
+#: gajim/gtk/features.py:144
 msgid "Requires: gir1.2-gupnpigd-1.0"
 msgstr ""
 
-#: gajim/gtk/features.py:217
+#: gajim/gtk/features.py:200
 #, fuzzy
 msgid "Disabled in Preferences"
 msgstr "_Προτιμήσεις"
@@ -10474,7 +10486,7 @@ msgstr "Μη έγκυρο όνομα αρχείου"
 msgid "You must enter a name to create a privacy list."
 msgstr "Πρέπει να δώσετε έναν κωδικό για το νέο λογαριασμό."
 
-#: gajim/gtk/groupchat_invite.py:303
+#: gajim/gtk/groupchat_invite.py:304
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Επαφές"
@@ -10502,7 +10514,7 @@ msgstr "_Τέλος"
 msgid "Commands"
 msgstr "Εντολές: %s"
 
-#: gajim/gtk/adhoc.py:104 gajim/gtk/account_wizard.py:62
+#: gajim/gtk/adhoc.py:104 gajim/gtk/account_wizard.py:63
 msgid "Next"
 msgstr ""
 
@@ -10575,119 +10587,133 @@ msgstr "Αίτηση εγγραφής από %s"
 msgid "Loading"
 msgstr "Σύνθεση"
 
-#: gajim/gtk/account_wizard.py:61
+#: gajim/gtk/account_wizard.py:62
 #, fuzzy
 msgid "Connect"
 msgstr "Σύνδεση"
 
-#: gajim/gtk/account_wizard.py:63
+#: gajim/gtk/account_wizard.py:64
 #, fuzzy
 msgid "Log In"
 msgstr "_Σύνδεση"
 
-#: gajim/gtk/account_wizard.py:77
+#: gajim/gtk/account_wizard.py:78
 #, fuzzy
 msgid "An error occurred during account creation"
 msgstr "Σφάλμα κατά τη διάρκεια δημιουργίας λογαριασμού"
 
-#: gajim/gtk/account_wizard.py:151
+#: gajim/gtk/account_wizard.py:164
 #, fuzzy
 msgid "Creating Account..."
 msgstr "Aφαίρεση του λογαριασμού %s"
 
-#: gajim/gtk/account_wizard.py:152
+#: gajim/gtk/account_wizard.py:165
 #, fuzzy
 msgid "Trying to create account..."
 msgstr "Πατήστε για να αλλάξετε τον κωδικό του λογαριασμού"
 
-#: gajim/gtk/account_wizard.py:250 gajim/gtk/account_wizard.py:269
+#: gajim/gtk/account_wizard.py:275 gajim/gtk/account_wizard.py:294
+#: gajim/gtk/account_wizard.py:310
 #, fuzzy
 msgid "Connecting to server..."
 msgstr "Συνδέεται"
 
-#: gajim/gtk/account_wizard.py:318 gajim/gtk/account_wizard.py:319
+#: gajim/gtk/account_wizard.py:364 gajim/gtk/account_wizard.py:365
+msgid "Anonymous login not supported"
+msgstr ""
+
+#: gajim/gtk/account_wizard.py:366
+#, fuzzy
+msgid "This server does not support anonymous"
+msgstr "Αυτή η υπηρεσία δεν περιέχει άλλα αντικείμενα."
+
+#: gajim/gtk/account_wizard.py:380 gajim/gtk/account_wizard.py:381
 #, fuzzy
 msgid "Signup not allowed"
 msgstr "Δεν επιτρέπεται το ψευδώνυμο: %s"
 
-#: gajim/gtk/account_wizard.py:320
+#: gajim/gtk/account_wizard.py:382
 msgid "This server does not allow signup."
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:336 gajim/gtk/account_wizard.py:337
+#: gajim/gtk/account_wizard.py:398 gajim/gtk/account_wizard.py:399
 #, fuzzy
 msgid "Connection failed"
 msgstr "Η σύνδεση απέτυχε"
 
-#: gajim/gtk/account_wizard.py:338
+#: gajim/gtk/account_wizard.py:400
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:392
+#: gajim/gtk/account_wizard.py:454
 #, fuzzy
 msgid "Account is being created"
 msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
 
-#: gajim/gtk/account_wizard.py:457 gajim/gtk/accounts.py:554
+#: gajim/gtk/account_wizard.py:491
+msgid "The server rejected the registration without an error message"
+msgstr ""
+
+#: gajim/gtk/account_wizard.py:521 gajim/gtk/accounts.py:557
 #, fuzzy
 msgid "Add Account"
 msgstr "_Προσθήκη επαφής..."
 
-#: gajim/gtk/account_wizard.py:564
+#: gajim/gtk/account_wizard.py:628
 #, fuzzy
 msgid "Create New Account"
 msgstr "Δημιουργία νέου προφίλ"
 
-#: gajim/gtk/account_wizard.py:623
+#: gajim/gtk/account_wizard.py:687
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Ο προσαρμοσμένος αριθμός θύρας του μεσολαβητή πρέπει να είναι αριθμός."
 
-#: gajim/gtk/account_wizard.py:630
+#: gajim/gtk/account_wizard.py:694
 msgid "Port must be a number between 0 and 65535"
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:667
+#: gajim/gtk/account_wizard.py:731
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Προχωρημένες ενέργειες"
 
-#: gajim/gtk/account_wizard.py:713
+#: gajim/gtk/account_wizard.py:777
 #, fuzzy
 msgid "Security Warning"
 msgstr "Απαγορεύοντας την πρόσβαση στον %s"
 
-#: gajim/gtk/account_wizard.py:732
+#: gajim/gtk/account_wizard.py:796
 #, fuzzy, python-format
 msgid "Unknown TLS error '%s'"
 msgstr "Άγνωστη έκδοση του D-Bus: %s"
 
-#: gajim/gtk/account_wizard.py:767 gajim/gtk/account_wizard.py:770
+#: gajim/gtk/account_wizard.py:831 gajim/gtk/account_wizard.py:834
 #, fuzzy
 msgid "Create Account"
 msgstr "Aφαίρεση του λογαριασμού %s"
 
-#: gajim/gtk/account_wizard.py:821
+#: gajim/gtk/account_wizard.py:885
 msgid "Redirect"
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:831
+#: gajim/gtk/account_wizard.py:895
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Εγγραφή στο %s"
 
-#: gajim/gtk/account_wizard.py:842
+#: gajim/gtk/account_wizard.py:906
 #, fuzzy
 msgid "Account Added"
 msgstr "Λογαριασμός"
 
-#: gajim/gtk/account_wizard.py:843
+#: gajim/gtk/account_wizard.py:907
 msgid "Account has been added successfully"
 msgstr "Ο λογαριασμός προστέθηκε με επιτυχία"
 
-#: gajim/gtk/xml_console.py:95 gajim/gtk/xml_console.py:278
+#: gajim/gtk/xml_console.py:95 gajim/gtk/xml_console.py:279
 #, fuzzy
 msgid "All Accounts"
 msgstr "Λογαριασμοί"
@@ -10730,255 +10756,255 @@ msgstr "Αναζήτηση"
 msgid "No results found"
 msgstr "μη υπαρκτό %s"
 
-#: gajim/gtk/preferences.py:363
+#: gajim/gtk/preferences.py:366
 msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
-#: gajim/gtk/preferences.py:375 gajim/gtk/preferences.py:384
+#: gajim/gtk/preferences.py:378 gajim/gtk/preferences.py:387
 msgid "Default"
 msgstr "Προεπιλογή"
 
-#: gajim/gtk/preferences.py:401
+#: gajim/gtk/preferences.py:404
 msgid ""
 "<span color=\"red\" font-weight=\"bold\">Unavailable</span>, video support "
 "will be disabled"
 msgstr ""
 
-#: gajim/gtk/preferences.py:407
+#: gajim/gtk/preferences.py:410
 msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
 msgstr ""
 
-#: gajim/gtk/preferences.py:410
+#: gajim/gtk/preferences.py:413
 msgid "<span color=\"yellow\" font-weight=\"bold\">Unaccelerated</span>"
 msgstr ""
 
-#: gajim/gtk/preferences.py:876
+#: gajim/gtk/preferences.py:878
 msgid "status message title"
 msgstr "τίτλος μηνύματος κατάστασης"
 
-#: gajim/gtk/preferences.py:877
+#: gajim/gtk/preferences.py:879
 msgid "status message text"
 msgstr "κείμενο μηνύματος κατάστασης"
 
-#: gajim/gtk/accounts.py:119
+#: gajim/gtk/accounts.py:122
 #, fuzzy
 msgid "Re-Login"
 msgstr "Νέα είσοδος τώρα;"
 
-#: gajim/gtk/accounts.py:120
+#: gajim/gtk/accounts.py:123
 #, fuzzy
 msgid "Re-Login now?"
 msgstr "Νέα είσοδος τώρα;"
 
-#: gajim/gtk/accounts.py:121
+#: gajim/gtk/accounts.py:124
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Αν θέλετε να εφαρμόσετε άμεσα τις αλλαγές, θα πρέπει να αποσυνδεθείτε και να "
 "συνδεθείτε ξανά."
 
-#: gajim/gtk/accounts.py:123
+#: gajim/gtk/accounts.py:126
 #, fuzzy
 msgid "_Later"
 msgstr "_Τέλος"
 
-#: gajim/gtk/accounts.py:125
+#: gajim/gtk/accounts.py:128
 msgid "_Re-Login"
 msgstr ""
 
-#: gajim/gtk/accounts.py:489
+#: gajim/gtk/accounts.py:492
 #, fuzzy
 msgid "Please check if Bonjour is installed."
 msgstr "Το Gajim εκτελείται ήδη"
 
-#: gajim/gtk/accounts.py:491
+#: gajim/gtk/accounts.py:494
 #, fuzzy
 msgid "Please check if Avahi is installed."
 msgstr "Το Gajim εκτελείται ήδη"
 
-#: gajim/gtk/accounts.py:530
+#: gajim/gtk/accounts.py:533
 #, fuzzy
 msgid "Disable Account"
 msgstr "Μη έγκυρο όνομα λογαριασμού"
 
-#: gajim/gtk/accounts.py:531
+#: gajim/gtk/accounts.py:534
 #, fuzzy, python-format
 msgid "Account %s is still connected"
 msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
 
-#: gajim/gtk/accounts.py:532
+#: gajim/gtk/accounts.py:535
 msgid "All chat and group chat windows will be closed."
 msgstr ""
 
-#: gajim/gtk/accounts.py:536
+#: gajim/gtk/accounts.py:539
 #, fuzzy
 msgid "_Disable Account"
 msgstr "Μη έγκυρο όνομα λογαριασμού"
 
-#: gajim/gtk/accounts.py:603
+#: gajim/gtk/accounts.py:606
 msgid "Label"
 msgstr ""
 
-#: gajim/gtk/accounts.py:609
+#: gajim/gtk/accounts.py:612
 msgid "Recognize your account by color"
 msgstr ""
 
-#: gajim/gtk/accounts.py:611
+#: gajim/gtk/accounts.py:614
 msgid "Login"
 msgstr ""
 
-#: gajim/gtk/accounts.py:614
+#: gajim/gtk/accounts.py:617
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Επαφές"
 
-#: gajim/gtk/accounts.py:618 gajim/gtk/accounts.py:810
-#, fuzzy
-msgid "Client Certificate"
-msgstr "Μη έγκυρο όνομα χρήστη"
-
-#: gajim/gtk/accounts.py:621 gajim/gtk/accounts.py:707
+#: gajim/gtk/accounts.py:626 gajim/gtk/accounts.py:712
 #, fuzzy
 msgid "Connect on startup"
 msgstr "Σύνδεση κατά την ε_κκίνηση του Gajim"
 
-#: gajim/gtk/accounts.py:625 gajim/gtk/accounts.py:712
+#: gajim/gtk/accounts.py:630 gajim/gtk/accounts.py:717
 #, fuzzy
 msgid "Save conversations for all contacts"
 msgstr "Αποθήκευση ιστορι_κού συνομιλιών για όλες τις επαφές"
 
-#: gajim/gtk/accounts.py:627 gajim/gtk/accounts.py:714
+#: gajim/gtk/accounts.py:632 gajim/gtk/accounts.py:719
 msgid "Store conversations on the harddrive"
 msgstr ""
 
-#: gajim/gtk/accounts.py:629 gajim/gtk/accounts.py:716
+#: gajim/gtk/accounts.py:634 gajim/gtk/accounts.py:721
 #, fuzzy
 msgid "Global Status"
 msgstr "Όλες οι καταστάσεις"
 
-#: gajim/gtk/accounts.py:631
+#: gajim/gtk/accounts.py:636
 #, fuzzy
 msgid "Synchronise the status of all accounts"
 msgstr "Αλλάζει την κατάσταση ενός ή πολλών λογαριασμών"
 
-#: gajim/gtk/accounts.py:633
+#: gajim/gtk/accounts.py:638
 msgid "Use file transfer proxies"
 msgstr "Χρήση μεσολαβητών μεταφοράς αρχείων"
 
-#: gajim/gtk/accounts.py:649
+#: gajim/gtk/accounts.py:654
 #, fuzzy
 msgid "Idle Time"
 msgstr "από τις %s"
 
-#: gajim/gtk/accounts.py:651
+#: gajim/gtk/accounts.py:656
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-#: gajim/gtk/accounts.py:653
+#: gajim/gtk/accounts.py:658
 msgid "Local System Time"
 msgstr ""
 
-#: gajim/gtk/accounts.py:655
+#: gajim/gtk/accounts.py:660
 msgid "Disclose the local system time of the device Gajim runs on"
 msgstr ""
 
-#: gajim/gtk/accounts.py:658
+#: gajim/gtk/accounts.py:663
 #, fuzzy
 msgid "Client / Operating System"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
-#: gajim/gtk/accounts.py:660
+#: gajim/gtk/accounts.py:665
 #, fuzzy
 msgid ""
-"Disclose informations about the client and operating system you currently use"
+"Disclose information about the client and operating system you currently use"
 msgstr ""
 "Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτό το δωμάτιο κατά την "
 "εκκίνηση"
 
-#: gajim/gtk/accounts.py:663
+#: gajim/gtk/accounts.py:668
 #, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Επαφές"
 
-#: gajim/gtk/accounts.py:665
+#: gajim/gtk/accounts.py:670
 #, fuzzy
 msgid "Ignore everything from contacts not in your Roster"
 msgstr "Να _αγνοούνται γεγονότα από επαφές που δεν είναι στη λίστα επαφών"
 
-#: gajim/gtk/accounts.py:683
+#: gajim/gtk/accounts.py:688
 msgid "Manually set the hostname for the server"
 msgstr ""
 
-#: gajim/gtk/accounts.py:689 gajim/gtk/accounts.py:759
-#: gajim/gtk/accounts.py:764
+#: gajim/gtk/accounts.py:694 gajim/gtk/accounts.py:764
+#: gajim/gtk/accounts.py:769
 #, fuzzy
 msgid "Priority"
 msgstr "Π_ροτεραιότητα:"
 
-#: gajim/gtk/accounts.py:709
+#: gajim/gtk/accounts.py:714
 #, fuzzy
 msgid "Use environment variable"
 msgstr "To Session bus δεν είναι διαθέσιμο"
 
-#: gajim/gtk/accounts.py:718
+#: gajim/gtk/accounts.py:723
 #, fuzzy
 msgid "Synchronize the status of all accounts"
 msgstr "Αλλάζει την κατάσταση ενός ή πολλών λογαριασμών"
 
-#: gajim/gtk/accounts.py:728
+#: gajim/gtk/accounts.py:733
 #, fuzzy
 msgid "First Name"
 msgstr "Όνομα:"
 
-#: gajim/gtk/accounts.py:731
+#: gajim/gtk/accounts.py:736
 #, fuzzy
 msgid "Last Name"
 msgstr "Επώνυμο:"
 
-#: gajim/gtk/accounts.py:737
+#: gajim/gtk/accounts.py:742
 #, fuzzy
 msgid "Email"
 msgstr "Νέο E-Mail"
 
-#: gajim/gtk/accounts.py:755
+#: gajim/gtk/accounts.py:760
 #, fuzzy
 msgid "Adjust to status"
 msgstr "Αδυναμία φόρτωσης"
 
-#: gajim/gtk/accounts.py:784
+#: gajim/gtk/accounts.py:789
 msgid "Enable"
 msgstr "Ενεργοποίηση"
 
-#: gajim/gtk/accounts.py:792
+#: gajim/gtk/accounts.py:797
 #, fuzzy
 msgid "Port"
 msgstr "_Θύρα:"
 
-#: gajim/gtk/accounts.py:802
+#: gajim/gtk/accounts.py:807
 #, fuzzy
 msgid "Connection Settings"
 msgstr "Σύνδεση"
 
-#: gajim/gtk/accounts.py:812
+#: gajim/gtk/accounts.py:815
+#, fuzzy
+msgid "Client Certificate"
+msgstr "Μη έγκυρο όνομα χρήστη"
+
+#: gajim/gtk/accounts.py:817
 msgid "PKCS12 Files"
 msgstr ""
 
-#: gajim/gtk/accounts.py:814
+#: gajim/gtk/accounts.py:819
 #, fuzzy
 msgid "Encrypted Certificate"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
-#: gajim/gtk/accounts.py:818
+#: gajim/gtk/accounts.py:823
 #, fuzzy
 msgid "Certificate Settings"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
-#: gajim/gtk/accounts.py:830
+#: gajim/gtk/accounts.py:835
 #, fuzzy
 msgid "Save Password"
 msgstr "Αποθήκευση κωδικού"
 
-#: gajim/gtk/accounts.py:838
+#: gajim/gtk/accounts.py:843
 #, fuzzy
 msgid "Login Settings"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
@@ -11058,21 +11084,21 @@ msgstr ""
 msgid "Bookmarks for %s"
 msgstr "_Τοποθέτηση σελιδοδείκτη για αυτό το δωμάτιο"
 
-#: gajim/plugins/pluginmanager.py:727 gajim/plugins/pluginmanager.py:733
+#: gajim/plugins/pluginmanager.py:717 gajim/plugins/pluginmanager.py:723
 msgid "Archive corrupted"
 msgstr ""
 
-#: gajim/plugins/pluginmanager.py:729
+#: gajim/plugins/pluginmanager.py:719
 #, fuzzy
 msgid "Archive empty"
 msgstr "Διαδρομή αρχείου"
 
-#: gajim/plugins/pluginmanager.py:741 gajim/plugins/pluginmanager.py:749
+#: gajim/plugins/pluginmanager.py:731 gajim/plugins/pluginmanager.py:739
 #: gajim/plugins/gui.py:273
 msgid "Archive is malformed"
 msgstr ""
 
-#: gajim/plugins/pluginmanager.py:757 gajim/plugins/gui.py:288
+#: gajim/plugins/pluginmanager.py:747 gajim/plugins/gui.py:288
 #: gajim/plugins/gui.py:301
 #, fuzzy
 msgid "Plugin already exists"
@@ -11225,29 +11251,56 @@ msgstr "Ανακάλυψη υπηρεσιών χρησιμοποιώντας τ�
 msgid "Even more features via plugins"
 msgstr ""
 
-#: data/org.gajim.Gajim.appdata.xml.in:49
+#: data/org.gajim.Gajim.appdata.xml.in:44
 #, fuzzy
 msgid "Contact list"
 msgstr "Επαφές"
 
-#: data/org.gajim.Gajim.appdata.xml.in:53
+#: data/org.gajim.Gajim.appdata.xml.in:48
 msgid "Tabbed chat window"
 msgstr ""
 
-#: data/org.gajim.Gajim.appdata.xml.in:57
+#: data/org.gajim.Gajim.appdata.xml.in:52
 #, fuzzy
 msgid "Group chat support"
 msgstr "Ομαδικές συζητήσεις"
 
-#: data/org.gajim.Gajim.appdata.xml.in:61
+#: data/org.gajim.Gajim.appdata.xml.in:56
 #, fuzzy
 msgid "Chat history"
 msgstr "Καταγραφή ιστορικού"
 
-#: data/org.gajim.Gajim.appdata.xml.in:65
+#: data/org.gajim.Gajim.appdata.xml.in:60
 #, fuzzy
 msgid "Plugin manager"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
+
+#, fuzzy
+#~ msgid "Start New Conversation"
+#~ msgstr "Σύνδεση"
+
+#, fuzzy
+#~ msgid "Unknown SSL error: %d"
+#~ msgstr "Άγνωστη έκδοση του D-Bus: %s"
+
+#~ msgid "Gajim - %s"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
+#~ msgid "Dictionary for language \"%s\" not available"
+#~ msgstr "Δεν υπάρχει διαθέσιμο λεξικό για τη γλώσσα %s"
+
+#, fuzzy
+#~ msgid "_Reconnect"
+#~ msgstr "Αποσύνδεση επαφής"
+
+#, fuzzy
+#~ msgid "Quit"
+#~ msgstr "_Έξοδος"
+
+#, fuzzy
+#~ msgid "Show Contact List"
+#~ msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
 #, fuzzy
 #~ msgid "Add to Contact List"
@@ -13712,10 +13765,6 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 #~ msgstr "Πάγωσε"
 
 #, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
-
-#, fuzzy
 #~ msgid "Security error during download"
 #~ msgstr "Η σύνδεση με \"%s\" στάθηκε αδύνατη"
 
@@ -13870,10 +13919,6 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
 #~ msgid "Network-Watcher"
-#~ msgstr "Διαχειριστής ιστορικού"
-
-#, fuzzy
-#~ msgid "Requires gnome-network-manager"
 #~ msgstr "Διαχειριστής ιστορικού"
 
 #, fuzzy
@@ -14138,9 +14183,6 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 #, fuzzy
 #~ msgid "Use cust_om port:"
 #~ msgstr "Χρήση προσαρμοσμένης θύρας:"
-
-#~ msgid "Mer_ge accounts"
-#~ msgstr "Συ_γχώνευση λογαριασμών"
 
 #, fuzzy
 #~ msgid "OpenPGP is not usable on this computer"
