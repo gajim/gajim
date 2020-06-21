@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-__version__ = "1.1.99.1"
+__version__ = "1.2.0"
 
 IS_FLATPAK = False
 if os.path.exists('/app/share/run-as-flatpak'):
