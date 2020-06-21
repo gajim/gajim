@@ -7,14 +7,14 @@
 - python3-gi
 - python3-gi-cairo
 - gir1.2-gtk-3.0 (>=3.22)
-- python3-nbxmpp (>=0.9.94)
+- python3-nbxmpp (>=1.0.0)
 - python3-openssl (>=16.2)
 - python3-css-parser
 - python3-keyring
 - python3-precis-i18n
 - python3-packaging
 - gir1.2-soup-2.4
-- GLib > 2.60.0
+- GLib (>=2.60.0)
 
 ### Optional Runtime Requirements
 
