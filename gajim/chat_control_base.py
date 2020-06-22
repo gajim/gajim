@@ -148,7 +148,10 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self.xml.account_badge.add(account_badge)
             account_badge.show()
 
-        # Init DND
+        # Drag and drop
+        self.xml.overlay.add_overlay(self.xml.drop_area)
+        self.xml.drop_area.hide()
+
         self.TARGET_TYPE_URI_LIST = 80
         uri_entry = Gtk.TargetEntry.new(
             'text/uri-list',
@@ -156,39 +159,32 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self.TARGET_TYPE_URI_LIST)
         dst_targets = Gtk.TargetList.new([uri_entry])
         dst_targets.add_text_targets(0)
-        self.dnd_list = [uri_entry,
-                         Gtk.TargetEntry.new(
-                             'MY_TREE_MODEL_ROW',
-                             Gtk.TargetFlags.SAME_APP,
-                             0)]
-        id_ = self.widget.connect('drag_data_received',
-                                  self._on_drag_data_received)
-        self.handlers[id_] = self.widget
-        self.widget.drag_dest_set(
+        self._dnd_list = [uri_entry,
+                          Gtk.TargetEntry.new(
+                              'MY_TREE_MODEL_ROW',
+                              Gtk.TargetFlags.SAME_APP,
+                              0)]
+
+        id_ = self.xml.overlay.connect('drag_data_received',
+                                       self._on_drag_data_received)
+
+        self.handlers[id_] = self.xml.overlay
+        id_ = self.xml.overlay.connect('drag_motion', self._on_drag_motion)
+        self.handlers[id_] = self.xml.overlay
+        id_ = self.xml.overlay.connect('drag_leave', self._on_drag_leave)
+        self.handlers[id_] = self.xml.overlay
+
+        self.xml.overlay.drag_dest_set(
             Gtk.DestDefaults.ALL,
-            self.dnd_list,
+            self._dnd_list,
             Gdk.DragAction.COPY)
-        self.widget.drag_dest_set_target_list(dst_targets)
+        self.xml.overlay.drag_dest_set_target_list(dst_targets)
 
         # Create textviews and connect signals
         self.conv_textview = ConversationTextview(self.account)
+        self.conv_textview.tv.drag_dest_unset()
         id_ = self.conv_textview.connect('quote', self.on_quote)
         self.handlers[id_] = self.conv_textview.tv
-
-        # FIXME: DND on non editable TextView, find a better way
-        self.drag_entered = False
-        id_ = self.conv_textview.tv.connect('drag_data_received',
-                                            self._on_drag_data_received)
-        self.handlers[id_] = self.conv_textview.tv
-        id_ = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
-        self.handlers[id_] = self.conv_textview.tv
-        id_ = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
-        self.handlers[id_] = self.conv_textview.tv
-        self.conv_textview.tv.drag_dest_set(
-            Gtk.DestDefaults.ALL,
-            self.dnd_list,
-            Gdk.DragAction.COPY)
-        self.conv_textview.tv.drag_dest_set_target_list(dst_targets)
 
         id_ = self.conv_textview.tv.connect('grab-focus',
                                             self._on_html_textview_grab_focus)
@@ -938,14 +934,12 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         """
 
     def _on_drag_leave(self, *args):
-        # FIXME: DND on non editable TextView, find a better way
-        self.drag_entered = False
-        self.conv_textview.tv.set_editable(False)
+        self.xml.drop_area.set_no_show_all(True)
+        self.xml.drop_area.hide()
 
     def _on_drag_motion(self, *args):
-        # FIXME: DND on non editable TextView, find a better way
-        if not self.drag_entered:
-            self.conv_textview.tv.set_editable(True)
+        self.xml.drop_area.set_no_show_all(False)
+        self.xml.drop_area.show_all()
 
     def drag_data_file_transfer(self, selection):
         # we may have more than one file dropped
