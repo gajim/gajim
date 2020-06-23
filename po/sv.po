@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-20 12:35+0000\n"
+"POT-Creation-Date: 2020-06-21 11:23+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -163,7 +163,7 @@ msgstr "Det finns inga väntande prenumerationsbegäran."
 msgid " resource with priority "
 msgstr " resurs med prioritet "
 
-#: gajim/gui_menu_builder.py:254 gajim/gui_menu_builder.py:345
+#: gajim/gui_menu_builder.py:255 gajim/gui_menu_builder.py:346
 #: gajim/chat_control.py:295 gajim/roster_window.py:778
 #: gajim/roster_window.py:1717 gajim/roster_window.py:1719
 #: gajim/roster_window.py:2031 gajim/roster_window.py:3271
@@ -177,435 +177,435 @@ msgstr " resurs med prioritet "
 msgid "Not in contact list"
 msgstr "Visa frånkopplade _kontakter"
 
-#: gajim/gui_menu_builder.py:358
+#: gajim/gui_menu_builder.py:359
 #, fuzzy
 msgid "I would like to add you to my contact list"
 msgstr "Jag vill lägga till dig i min kontaktlista."
 
-#: gajim/gui_menu_builder.py:436
+#: gajim/gui_menu_builder.py:437
 #, fuzzy
 msgid "Send Single _Message…"
 msgstr "Skicka ett _meddelande"
 
-#: gajim/gui_menu_builder.py:451
+#: gajim/gui_menu_builder.py:452
 #, fuzzy
 msgid "E_xecute Command…"
 msgstr "_Kör kommando"
 
-#: gajim/gui_menu_builder.py:459
+#: gajim/gui_menu_builder.py:460
 msgid "_Manage Transport"
 msgstr "_Hantera transport"
 
-#: gajim/gui_menu_builder.py:465
+#: gajim/gui_menu_builder.py:466
 msgid "_Modify Transport"
 msgstr "_Ändra transport"
 
-#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4915
+#: gajim/gui_menu_builder.py:473 gajim/roster_window.py:4915
 #, fuzzy
 msgid "_Rename…"
 msgstr "Byt _namn"
 
-#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4931
+#: gajim/gui_menu_builder.py:484 gajim/roster_window.py:4931
 #: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr "A_vblockera"
 
-#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4936
+#: gajim/gui_menu_builder.py:487 gajim/roster_window.py:4936
 #: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr "_Blockera"
 
-#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4943
+#: gajim/gui_menu_builder.py:495 gajim/roster_window.py:4943
 #: gajim/data/gui/contact_context_menu.ui:181
 msgid "Remo_ve"
 msgstr "Ta _bort"
 
-#: gajim/gui_menu_builder.py:504 gajim/data/gui/contact_context_menu.ui:198
+#: gajim/gui_menu_builder.py:505 gajim/data/gui/contact_context_menu.ui:198
 msgid "_Information"
 msgstr "_Information"
 
-#: gajim/gui_menu_builder.py:517
+#: gajim/gui_menu_builder.py:518
 #, fuzzy
 msgid "Send File"
 msgstr "Skicka _fil"
 
-#: gajim/gui_menu_builder.py:518
+#: gajim/gui_menu_builder.py:519
 #, fuzzy
 msgid "Upload File…"
 msgstr "Spara fil som..."
 
-#: gajim/gui_menu_builder.py:519
+#: gajim/gui_menu_builder.py:520
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Spara fil som..."
 
-#: gajim/gui_menu_builder.py:521 gajim/gui_menu_builder.py:588
+#: gajim/gui_menu_builder.py:522 gajim/gui_menu_builder.py:589
 #, fuzzy
 msgid "Send Chatstate"
 msgstr "Senaste status: %s"
 
-#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:283
+#: gajim/gui_menu_builder.py:523 gajim/data/gui/groupchat_control.ui:283
 #, fuzzy
 msgid "Invite Contacts…"
 msgstr "Bjud in _kontakter"
 
-#: gajim/gui_menu_builder.py:523 gajim/gui_menu_builder.py:781
-#: gajim/gui_menu_builder.py:808 gajim/gui_menu_builder.py:847
+#: gajim/gui_menu_builder.py:524 gajim/gui_menu_builder.py:782
+#: gajim/gui_menu_builder.py:809 gajim/gui_menu_builder.py:848
 #, fuzzy
 msgid "Add to Contact List…"
 msgstr "_Lägg till kontakt..."
 
-#: gajim/gui_menu_builder.py:524
+#: gajim/gui_menu_builder.py:525
 #, fuzzy
 msgid "Voice Chat"
 msgstr "Förfrågan om Filöverföring"
 
-#: gajim/gui_menu_builder.py:525
+#: gajim/gui_menu_builder.py:526
 #, fuzzy
 msgid "Video Chat"
 msgstr "Privat Chatt"
 
-#: gajim/gui_menu_builder.py:526 gajim/gui_menu_builder.py:573
-#: gajim/gui_menu_builder.py:842
+#: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:574
+#: gajim/gui_menu_builder.py:843
 #, fuzzy
 msgid "Information"
 msgstr "_Information"
 
-#: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:594
+#: gajim/gui_menu_builder.py:528 gajim/gui_menu_builder.py:595
 #, fuzzy
 msgid "History"
 msgstr "_Historik"
 
-#: gajim/gui_menu_builder.py:533 gajim/gui_menu_builder.py:649
+#: gajim/gui_menu_builder.py:534 gajim/gui_menu_builder.py:650
 #: gajim/data/gui/preferences_window.ui:1886
 msgid "Disabled"
 msgstr "Avstängd"
 
-#: gajim/gui_menu_builder.py:534
+#: gajim/gui_menu_builder.py:535
 #, fuzzy
 msgid "Composing Only"
 msgstr "Skriver"
 
-#: gajim/gui_menu_builder.py:535
+#: gajim/gui_menu_builder.py:536
 #, fuzzy
 msgid "All Chat States"
 msgstr "Alla statusar"
 
-#: gajim/gui_menu_builder.py:574
+#: gajim/gui_menu_builder.py:575
 #, fuzzy
 msgid "Manage Group Chat"
 msgstr "Lämna gruppchattar"
 
-#: gajim/gui_menu_builder.py:575
+#: gajim/gui_menu_builder.py:576
 #, fuzzy
 msgid "Rename…"
 msgstr "Byt _namn"
 
-#: gajim/gui_menu_builder.py:576
+#: gajim/gui_menu_builder.py:577
 #, fuzzy
 msgid "Change Subject…"
 msgstr "Byt _ämne..."
 
-#: gajim/gui_menu_builder.py:577
+#: gajim/gui_menu_builder.py:578
 #, fuzzy
 msgid "Upload Avatar…"
 msgstr "Välj Bild"
 
-#: gajim/gui_menu_builder.py:578
+#: gajim/gui_menu_builder.py:579
 #, fuzzy
 msgid "Configure…"
 msgstr "_Konfigurera"
 
-#: gajim/gui_menu_builder.py:579
+#: gajim/gui_menu_builder.py:580
 #, fuzzy
 msgid "Destroy…"
 msgstr "Förstör %s"
 
-#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:843
+#: gajim/gui_menu_builder.py:582 gajim/data/gui/preferences_window.ui:843
 #, fuzzy
 msgid "Chat Settings"
 msgstr "Registreringen misslyckades"
 
-#: gajim/gui_menu_builder.py:582
+#: gajim/gui_menu_builder.py:583
 msgid "Show Join/Leave"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:583
+#: gajim/gui_menu_builder.py:584
 #, fuzzy
 msgid "Show Status Changes"
 msgstr "_Logga statusändringar för kontakter"
 
-#: gajim/gui_menu_builder.py:584
+#: gajim/gui_menu_builder.py:585
 #, fuzzy
 msgid "Notify on all Messages"
 msgstr "Förvalda meddelanden:"
 
-#: gajim/gui_menu_builder.py:585
+#: gajim/gui_menu_builder.py:586
 #, fuzzy
 msgid "Minimize on Close"
 msgstr "_Minimera vid stängning"
 
-#: gajim/gui_menu_builder.py:587
+#: gajim/gui_menu_builder.py:588
 #, fuzzy
 msgid "Minimize When Joining Automatically"
 msgstr "Minimera när du gått in automatiskt"
 
-#: gajim/gui_menu_builder.py:590
+#: gajim/gui_menu_builder.py:591
 msgid "Sync Threshold"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:591
+#: gajim/gui_menu_builder.py:592
 #, fuzzy
 msgid "Change Nickname…"
 msgstr "Byt smek_namn..."
 
-#: gajim/gui_menu_builder.py:592
+#: gajim/gui_menu_builder.py:593
 #, fuzzy
 msgid "Request Voice"
 msgstr "_Röst"
 
-#: gajim/gui_menu_builder.py:593 gajim/gui_menu_builder.py:865
+#: gajim/gui_menu_builder.py:594 gajim/gui_menu_builder.py:866
 #, fuzzy
 msgid "Execute Command…"
 msgstr "_Kör kommando"
 
-#: gajim/gui_menu_builder.py:595
+#: gajim/gui_menu_builder.py:596
 msgid "Leave"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:166
+#: gajim/gui_menu_builder.py:641 gajim/gtk/preferences.py:166
 msgid "No threshold"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:168
+#: gajim/gui_menu_builder.py:643 gajim/gtk/preferences.py:168
 #, fuzzy, python-format
 msgid "%i day"
 msgid_plural "%i days"
 msgstr[0] "%i dagar sen"
 msgstr[1] "%i dagar sen"
 
-#: gajim/gui_menu_builder.py:650
+#: gajim/gui_menu_builder.py:651
 #, fuzzy
 msgid "Composing only"
 msgstr "Skriver"
 
-#: gajim/gui_menu_builder.py:651
+#: gajim/gui_menu_builder.py:652
 #, fuzzy
 msgid "All chat states"
 msgstr "Alla statusar"
 
-#: gajim/gui_menu_builder.py:671
+#: gajim/gui_menu_builder.py:672
 #, fuzzy
 msgid "Add Contact…"
 msgstr "_Lägg till kontakt..."
 
-#: gajim/gui_menu_builder.py:672 gajim/gtk/profile.py:53
+#: gajim/gui_menu_builder.py:673 gajim/gtk/profile.py:53
 #: gajim/gtk/accounts.py:708 gajim/gtk/accounts.py:746
 #, fuzzy
 msgid "Profile"
 msgstr "fil"
 
-#: gajim/gui_menu_builder.py:673
+#: gajim/gui_menu_builder.py:674
 #, fuzzy
 msgid "Send Single Message…"
 msgstr "Skicka ett _meddelande"
 
-#: gajim/gui_menu_builder.py:674
+#: gajim/gui_menu_builder.py:675
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Upptäck tjänster"
 
-#: gajim/gui_menu_builder.py:675 gajim/gtk/server_info.py:48
+#: gajim/gui_menu_builder.py:676 gajim/gtk/server_info.py:48
 #, fuzzy
 msgid "Server Info"
 msgstr "Server"
 
-#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2763
+#: gajim/gui_menu_builder.py:677 gajim/data/gui/preferences_window.ui:2763
 msgid "Advanced"
 msgstr "Avancerat"
 
-#: gajim/gui_menu_builder.py:677 gajim/gtk/mam_preferences.py:98
+#: gajim/gui_menu_builder.py:678 gajim/gtk/mam_preferences.py:98
 #, fuzzy
 msgid "Archiving Preferences"
 msgstr "_Inställningar"
 
-#: gajim/gui_menu_builder.py:678
+#: gajim/gui_menu_builder.py:679
 #, fuzzy
 msgid "Blocking List"
 msgstr "Bannlista"
 
-#: gajim/gui_menu_builder.py:679
+#: gajim/gui_menu_builder.py:680
 #, fuzzy
 msgid "Bookmarks"
 msgstr "_Bokmärk"
 
-#: gajim/gui_menu_builder.py:680
+#: gajim/gui_menu_builder.py:681
 #, fuzzy
 msgid "PEP Configuration"
 msgstr "Rumkonfiguration"
 
-#: gajim/gui_menu_builder.py:681
+#: gajim/gui_menu_builder.py:682
 #, fuzzy
 msgid "Synchronise History…"
 msgstr "Synkronisera"
 
-#: gajim/gui_menu_builder.py:682 gajim/gtk/privacy_list.py:409
+#: gajim/gui_menu_builder.py:683 gajim/gtk/privacy_list.py:409
 msgid "Privacy Lists"
 msgstr "Integritetslistor"
 
-#: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
+#: gajim/gui_menu_builder.py:685 gajim/data/gui/groupchat_config.ui:36
 #: gajim/gtk/server_info.py:128
 #, fuzzy
 msgid "Admin"
 msgstr "_Admin"
 
-#: gajim/gui_menu_builder.py:685
+#: gajim/gui_menu_builder.py:686
 #, fuzzy
 msgid "Send Server Message…"
 msgstr "_Skicka servermeddelande..."
 
-#: gajim/gui_menu_builder.py:686
+#: gajim/gui_menu_builder.py:687
 #, fuzzy
 msgid "Set MOTD…"
 msgstr "Ange MOTD..."
 
-#: gajim/gui_menu_builder.py:687
+#: gajim/gui_menu_builder.py:688
 #, fuzzy
 msgid "Update MOTD…"
 msgstr "Uppdatera MOTD..."
 
-#: gajim/gui_menu_builder.py:688
+#: gajim/gui_menu_builder.py:689
 #, fuzzy
 msgid "Delete MOTD…"
 msgstr "Ta bort MOTD"
 
-#: gajim/gui_menu_builder.py:725
+#: gajim/gui_menu_builder.py:726
 #, fuzzy
 msgid "_Add Account…"
 msgstr "_Lägg till kontakt..."
 
-#: gajim/gui_menu_builder.py:731
+#: gajim/gui_menu_builder.py:732
 #, fuzzy
 msgid "_Modify Accounts…"
 msgstr "_Redigera konto"
 
-#: gajim/gui_menu_builder.py:741 gajim/data/gui/zeroconf_context_menu.ui:26
+#: gajim/gui_menu_builder.py:742 gajim/data/gui/zeroconf_context_menu.ui:26
 #: gajim/data/gui/account_context_menu.ui:79
 #, fuzzy
 msgid "_Modify Account…"
 msgstr "_Redigera konto"
 
-#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:746 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "Konton"
 
-#: gajim/gui_menu_builder.py:774 gajim/gui_menu_builder.py:779
+#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:780
 #, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopiera JID/e-postadress"
 
-#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:807
+#: gajim/gui_menu_builder.py:776 gajim/gui_menu_builder.py:808
 #, fuzzy
 msgid "Join Groupchat"
 msgstr "Gå in i gruppchatt"
 
-#: gajim/gui_menu_builder.py:780 gajim/gui_menu_builder.py:806
+#: gajim/gui_menu_builder.py:781 gajim/gui_menu_builder.py:807
 #: gajim/data/gui/subscription_request_window.ui:106
 #: gajim/gtk/start_chat.py:630
 msgid "Start Chat"
 msgstr "Starta Chatt"
 
-#: gajim/gui_menu_builder.py:786
+#: gajim/gui_menu_builder.py:787
 #, fuzzy
 msgid "Copy Link Location"
 msgstr "_Kopiera länkplats"
 
-#: gajim/gui_menu_builder.py:787
+#: gajim/gui_menu_builder.py:788
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Öppna länk i webbläsare"
 
-#: gajim/gui_menu_builder.py:792
+#: gajim/gui_menu_builder.py:793
 #, fuzzy
 msgid "Copy Email Address"
 msgstr "_Kopiera JID/e-postadress"
 
-#: gajim/gui_menu_builder.py:793 gajim/gui_menu_builder.py:805
+#: gajim/gui_menu_builder.py:794 gajim/gui_menu_builder.py:806
 #, fuzzy
 msgid "Open Email Composer"
 msgstr "_Skriv e-post"
 
-#: gajim/gui_menu_builder.py:798
+#: gajim/gui_menu_builder.py:799
 #, fuzzy
 msgid "Copy Location"
 msgstr "_Kopiera länkplats"
 
-#: gajim/gui_menu_builder.py:799
+#: gajim/gui_menu_builder.py:800
 #, fuzzy
 msgid "Show Location"
 msgstr "Notifiering"
 
-#: gajim/gui_menu_builder.py:804
+#: gajim/gui_menu_builder.py:805
 #, fuzzy
 msgid "Copy XMPP Address/Email"
 msgstr "_Kopiera JID/e-postadress"
 
-#: gajim/gui_menu_builder.py:856
+#: gajim/gui_menu_builder.py:857
 #, fuzzy
 msgid "Invite"
 msgstr "Bjud _in"
 
-#: gajim/gui_menu_builder.py:874
+#: gajim/gui_menu_builder.py:875
 #, fuzzy
 msgid "Unblock"
 msgstr "A_vblockera"
 
-#: gajim/gui_menu_builder.py:877
+#: gajim/gui_menu_builder.py:878
 #, fuzzy
 msgid "Block"
 msgstr "_Blockera"
 
-#: gajim/gui_menu_builder.py:883
+#: gajim/gui_menu_builder.py:884
 #, fuzzy
 msgid "Kick"
 msgstr "Sparka _ut"
 
-#: gajim/gui_menu_builder.py:891
+#: gajim/gui_menu_builder.py:892
 #, fuzzy
 msgid "Ban"
 msgstr "_Bannlys"
 
-#: gajim/gui_menu_builder.py:901
+#: gajim/gui_menu_builder.py:902
 #, fuzzy
 msgid "Make Owner"
 msgstr "Ägare"
 
-#: gajim/gui_menu_builder.py:910
+#: gajim/gui_menu_builder.py:911
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Admin"
 
-#: gajim/gui_menu_builder.py:919
+#: gajim/gui_menu_builder.py:920
 #, fuzzy
 msgid "Make Member"
 msgstr "Medlem"
 
-#: gajim/gui_menu_builder.py:928
+#: gajim/gui_menu_builder.py:929
 #, fuzzy
 msgid "Revoke Member"
 msgstr "Medlem"
 
-#: gajim/gui_menu_builder.py:938
+#: gajim/gui_menu_builder.py:939
 msgid "Grant Voice"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:941
+#: gajim/gui_menu_builder.py:942
 #, fuzzy
 msgid "Revoke Voice"
 msgstr "_Röst"
 
-#: gajim/gui_menu_builder.py:961
+#: gajim/gui_menu_builder.py:962
 #, fuzzy
 msgid "Copy"
 msgstr "Rummets JID"

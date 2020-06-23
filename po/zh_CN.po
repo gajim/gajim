@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-20 12:35+0000\n"
+"POT-Creation-Date: 2020-06-21 11:23+0000\n"
 "PO-Revision-Date: 2010-10-31 17:37+0800\n"
 "Last-Translator: Guanhao Yin <yinguanhao@gmail.com>\n"
 "Language-Team: \n"
@@ -151,7 +151,7 @@ msgstr "没有未处理的认证请求"
 msgid " resource with priority "
 msgstr " 带有优先级的资源 "
 
-#: gajim/gui_menu_builder.py:254 gajim/gui_menu_builder.py:345
+#: gajim/gui_menu_builder.py:255 gajim/gui_menu_builder.py:346
 #: gajim/chat_control.py:295 gajim/roster_window.py:778
 #: gajim/roster_window.py:1717 gajim/roster_window.py:1719
 #: gajim/roster_window.py:2031 gajim/roster_window.py:3271
@@ -165,429 +165,429 @@ msgstr " 带有优先级的资源 "
 msgid "Not in contact list"
 msgstr "显示离线联系人"
 
-#: gajim/gui_menu_builder.py:358
+#: gajim/gui_menu_builder.py:359
 #, fuzzy
 msgid "I would like to add you to my contact list"
 msgstr "我想添加您到我的联系人列表"
 
-#: gajim/gui_menu_builder.py:436
+#: gajim/gui_menu_builder.py:437
 msgid "Send Single _Message…"
 msgstr "发送单条(_M)…"
 
-#: gajim/gui_menu_builder.py:451
+#: gajim/gui_menu_builder.py:452
 #, fuzzy
 msgid "E_xecute Command…"
 msgstr "执行命令(_E)..."
 
-#: gajim/gui_menu_builder.py:459
+#: gajim/gui_menu_builder.py:460
 msgid "_Manage Transport"
 msgstr "管理代理(_M)"
 
-#: gajim/gui_menu_builder.py:465
+#: gajim/gui_menu_builder.py:466
 msgid "_Modify Transport"
 msgstr "修改代理(_M)"
 
-#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4915
+#: gajim/gui_menu_builder.py:473 gajim/roster_window.py:4915
 #, fuzzy
 msgid "_Rename…"
 msgstr "重命名(_R)"
 
-#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4931
+#: gajim/gui_menu_builder.py:484 gajim/roster_window.py:4931
 #: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr "解除屏蔽(_U)"
 
-#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4936
+#: gajim/gui_menu_builder.py:487 gajim/roster_window.py:4936
 #: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr "屏蔽(_B)"
 
-#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4943
+#: gajim/gui_menu_builder.py:495 gajim/roster_window.py:4943
 #: gajim/data/gui/contact_context_menu.ui:181
 msgid "Remo_ve"
 msgstr "移除(_R)"
 
-#: gajim/gui_menu_builder.py:504 gajim/data/gui/contact_context_menu.ui:198
+#: gajim/gui_menu_builder.py:505 gajim/data/gui/contact_context_menu.ui:198
 msgid "_Information"
 msgstr "信息(_I)"
 
-#: gajim/gui_menu_builder.py:517
+#: gajim/gui_menu_builder.py:518
 #, fuzzy
 msgid "Send File"
 msgstr "发送文件(_F)"
 
-#: gajim/gui_menu_builder.py:518
+#: gajim/gui_menu_builder.py:519
 #, fuzzy
 msgid "Upload File…"
 msgstr "另存为..."
 
-#: gajim/gui_menu_builder.py:519
+#: gajim/gui_menu_builder.py:520
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "另存为..."
 
-#: gajim/gui_menu_builder.py:521 gajim/gui_menu_builder.py:588
+#: gajim/gui_menu_builder.py:522 gajim/gui_menu_builder.py:589
 #, fuzzy
 msgid "Send Chatstate"
 msgstr "最后状态"
 
-#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:283
+#: gajim/gui_menu_builder.py:523 gajim/data/gui/groupchat_control.ui:283
 #, fuzzy
 msgid "Invite Contacts…"
 msgstr "邀请联系人(_C)"
 
-#: gajim/gui_menu_builder.py:523 gajim/gui_menu_builder.py:781
-#: gajim/gui_menu_builder.py:808 gajim/gui_menu_builder.py:847
+#: gajim/gui_menu_builder.py:524 gajim/gui_menu_builder.py:782
+#: gajim/gui_menu_builder.py:809 gajim/gui_menu_builder.py:848
 #, fuzzy
 msgid "Add to Contact List…"
 msgstr "添加联系人(_A)..."
 
-#: gajim/gui_menu_builder.py:524
+#: gajim/gui_menu_builder.py:525
 #, fuzzy
 msgid "Voice Chat"
 msgstr "语音聊天请求"
 
-#: gajim/gui_menu_builder.py:525
+#: gajim/gui_menu_builder.py:526
 #, fuzzy
 msgid "Video Chat"
 msgstr "视频测试"
 
-#: gajim/gui_menu_builder.py:526 gajim/gui_menu_builder.py:573
-#: gajim/gui_menu_builder.py:842
+#: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:574
+#: gajim/gui_menu_builder.py:843
 #, fuzzy
 msgid "Information"
 msgstr "信息(_I)"
 
-#: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:594
+#: gajim/gui_menu_builder.py:528 gajim/gui_menu_builder.py:595
 #, fuzzy
 msgid "History"
 msgstr "历史(_H)"
 
-#: gajim/gui_menu_builder.py:533 gajim/gui_menu_builder.py:649
+#: gajim/gui_menu_builder.py:534 gajim/gui_menu_builder.py:650
 #: gajim/data/gui/preferences_window.ui:1886
 msgid "Disabled"
 msgstr "禁用"
 
-#: gajim/gui_menu_builder.py:534
+#: gajim/gui_menu_builder.py:535
 #, fuzzy
 msgid "Composing Only"
 msgstr "仅正在编辑"
 
-#: gajim/gui_menu_builder.py:535
+#: gajim/gui_menu_builder.py:536
 #, fuzzy
 msgid "All Chat States"
 msgstr "所有聊天状态"
 
-#: gajim/gui_menu_builder.py:574
+#: gajim/gui_menu_builder.py:575
 #, fuzzy
 msgid "Manage Group Chat"
 msgstr "离开聊天室"
 
-#: gajim/gui_menu_builder.py:575
+#: gajim/gui_menu_builder.py:576
 #, fuzzy
 msgid "Rename…"
 msgstr "重命名(_R)"
 
-#: gajim/gui_menu_builder.py:576
+#: gajim/gui_menu_builder.py:577
 #, fuzzy
 msgid "Change Subject…"
 msgstr "更改主题(_S)"
 
-#: gajim/gui_menu_builder.py:577
+#: gajim/gui_menu_builder.py:578
 #, fuzzy
 msgid "Upload Avatar…"
 msgstr "选择归档文件"
 
-#: gajim/gui_menu_builder.py:578
+#: gajim/gui_menu_builder.py:579
 #, fuzzy
 msgid "Configure…"
 msgstr "配置"
 
-#: gajim/gui_menu_builder.py:579
+#: gajim/gui_menu_builder.py:580
 #, fuzzy
 msgid "Destroy…"
 msgstr "正在销毁 %s"
 
-#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:843
+#: gajim/gui_menu_builder.py:582 gajim/data/gui/preferences_window.ui:843
 #, fuzzy
 msgid "Chat Settings"
 msgstr "插件"
 
-#: gajim/gui_menu_builder.py:582
+#: gajim/gui_menu_builder.py:583
 msgid "Show Join/Leave"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:583
+#: gajim/gui_menu_builder.py:584
 #, fuzzy
 msgid "Show Status Changes"
 msgstr "记录联系人状态变化(_L)"
 
-#: gajim/gui_menu_builder.py:584
+#: gajim/gui_menu_builder.py:585
 #, fuzzy
 msgid "Notify on all Messages"
 msgstr "预设的消息: "
 
-#: gajim/gui_menu_builder.py:585
+#: gajim/gui_menu_builder.py:586
 #, fuzzy
 msgid "Minimize on Close"
 msgstr "关闭时最小化窗口"
 
-#: gajim/gui_menu_builder.py:587
+#: gajim/gui_menu_builder.py:588
 #, fuzzy
 msgid "Minimize When Joining Automatically"
 msgstr "自动加入时最小化"
 
-#: gajim/gui_menu_builder.py:590
+#: gajim/gui_menu_builder.py:591
 msgid "Sync Threshold"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:591
+#: gajim/gui_menu_builder.py:592
 #, fuzzy
 msgid "Change Nickname…"
 msgstr "更改昵称(_N)"
 
-#: gajim/gui_menu_builder.py:592
+#: gajim/gui_menu_builder.py:593
 #, fuzzy
 msgid "Request Voice"
 msgstr "语音(_V)"
 
-#: gajim/gui_menu_builder.py:593 gajim/gui_menu_builder.py:865
+#: gajim/gui_menu_builder.py:594 gajim/gui_menu_builder.py:866
 #, fuzzy
 msgid "Execute Command…"
 msgstr "执行命令(_E)..."
 
-#: gajim/gui_menu_builder.py:595
+#: gajim/gui_menu_builder.py:596
 msgid "Leave"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:166
+#: gajim/gui_menu_builder.py:641 gajim/gtk/preferences.py:166
 msgid "No threshold"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:168
+#: gajim/gui_menu_builder.py:643 gajim/gtk/preferences.py:168
 #, python-format
 msgid "%i day"
 msgid_plural "%i days"
 msgstr[0] ""
 
-#: gajim/gui_menu_builder.py:650
+#: gajim/gui_menu_builder.py:651
 msgid "Composing only"
 msgstr "仅正在编辑"
 
-#: gajim/gui_menu_builder.py:651
+#: gajim/gui_menu_builder.py:652
 msgid "All chat states"
 msgstr "所有聊天状态"
 
-#: gajim/gui_menu_builder.py:671
+#: gajim/gui_menu_builder.py:672
 #, fuzzy
 msgid "Add Contact…"
 msgstr "添加联系人(_A)..."
 
-#: gajim/gui_menu_builder.py:672 gajim/gtk/profile.py:53
+#: gajim/gui_menu_builder.py:673 gajim/gtk/profile.py:53
 #: gajim/gtk/accounts.py:708 gajim/gtk/accounts.py:746
 #, fuzzy
 msgid "Profile"
 msgstr "文件"
 
-#: gajim/gui_menu_builder.py:673
+#: gajim/gui_menu_builder.py:674
 msgid "Send Single Message…"
 msgstr "发送单条消息…"
 
-#: gajim/gui_menu_builder.py:674
+#: gajim/gui_menu_builder.py:675
 #, fuzzy
 msgid "Discover Services…"
 msgstr "发现服务(_D)"
 
-#: gajim/gui_menu_builder.py:675 gajim/gtk/server_info.py:48
+#: gajim/gui_menu_builder.py:676 gajim/gtk/server_info.py:48
 #, fuzzy
 msgid "Server Info"
 msgstr "服务器"
 
-#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2763
+#: gajim/gui_menu_builder.py:677 gajim/data/gui/preferences_window.ui:2763
 msgid "Advanced"
 msgstr "高级"
 
-#: gajim/gui_menu_builder.py:677 gajim/gtk/mam_preferences.py:98
+#: gajim/gui_menu_builder.py:678 gajim/gtk/mam_preferences.py:98
 #, fuzzy
 msgid "Archiving Preferences"
 msgstr "编辑存档首选项(_V)"
 
-#: gajim/gui_menu_builder.py:678
+#: gajim/gui_menu_builder.py:679
 #, fuzzy
 msgid "Blocking List"
 msgstr "封禁名单"
 
-#: gajim/gui_menu_builder.py:679
+#: gajim/gui_menu_builder.py:680
 #, fuzzy
 msgid "Bookmarks"
 msgstr "将本聊天室加入书签(_B)"
 
-#: gajim/gui_menu_builder.py:680
+#: gajim/gui_menu_builder.py:681
 #, fuzzy
 msgid "PEP Configuration"
 msgstr "聊天室设置"
 
-#: gajim/gui_menu_builder.py:681
+#: gajim/gui_menu_builder.py:682
 #, fuzzy
 msgid "Synchronise History…"
 msgstr "同步"
 
-#: gajim/gui_menu_builder.py:682 gajim/gtk/privacy_list.py:409
+#: gajim/gui_menu_builder.py:683 gajim/gtk/privacy_list.py:409
 msgid "Privacy Lists"
 msgstr "隐私策略列表"
 
-#: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
+#: gajim/gui_menu_builder.py:685 gajim/data/gui/groupchat_config.ui:36
 #: gajim/gtk/server_info.py:128
 #, fuzzy
 msgid "Admin"
 msgstr "管理(_A)"
 
-#: gajim/gui_menu_builder.py:685
+#: gajim/gui_menu_builder.py:686
 #, fuzzy
 msgid "Send Server Message…"
 msgstr "发送服务器消息(_S)"
 
-#: gajim/gui_menu_builder.py:686
+#: gajim/gui_menu_builder.py:687
 #, fuzzy
 msgid "Set MOTD…"
 msgstr "设定 MOTD..."
 
-#: gajim/gui_menu_builder.py:687
+#: gajim/gui_menu_builder.py:688
 #, fuzzy
 msgid "Update MOTD…"
 msgstr "更新 MOTD..."
 
-#: gajim/gui_menu_builder.py:688
+#: gajim/gui_menu_builder.py:689
 #, fuzzy
 msgid "Delete MOTD…"
 msgstr "删除 MOTD"
 
-#: gajim/gui_menu_builder.py:725
+#: gajim/gui_menu_builder.py:726
 #, fuzzy
 msgid "_Add Account…"
 msgstr "添加联系人(_A)..."
 
-#: gajim/gui_menu_builder.py:731
+#: gajim/gui_menu_builder.py:732
 #, fuzzy
 msgid "_Modify Accounts…"
 msgstr "修改账户信息(_M)"
 
-#: gajim/gui_menu_builder.py:741 gajim/data/gui/zeroconf_context_menu.ui:26
+#: gajim/gui_menu_builder.py:742 gajim/data/gui/zeroconf_context_menu.ui:26
 #: gajim/data/gui/account_context_menu.ui:79
 #, fuzzy
 msgid "_Modify Account…"
 msgstr "修改账户信息(_M)"
 
-#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:746 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "账户"
 
-#: gajim/gui_menu_builder.py:774 gajim/gui_menu_builder.py:779
+#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:780
 #, fuzzy
 msgid "Copy XMPP Address"
 msgstr "复制 JID/电子邮件地址(_C)"
 
-#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:807
+#: gajim/gui_menu_builder.py:776 gajim/gui_menu_builder.py:808
 msgid "Join Groupchat"
 msgstr "加入聊天室"
 
-#: gajim/gui_menu_builder.py:780 gajim/gui_menu_builder.py:806
+#: gajim/gui_menu_builder.py:781 gajim/gui_menu_builder.py:807
 #: gajim/data/gui/subscription_request_window.ui:106
 #: gajim/gtk/start_chat.py:630
 msgid "Start Chat"
 msgstr "开始聊天"
 
-#: gajim/gui_menu_builder.py:786
+#: gajim/gui_menu_builder.py:787
 #, fuzzy
 msgid "Copy Link Location"
 msgstr "复制链接位置(_C)"
 
-#: gajim/gui_menu_builder.py:787
+#: gajim/gui_menu_builder.py:788
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "在浏览器中打开链接(_O)"
 
-#: gajim/gui_menu_builder.py:792
+#: gajim/gui_menu_builder.py:793
 #, fuzzy
 msgid "Copy Email Address"
 msgstr "复制 JID/电子邮件地址(_C)"
 
-#: gajim/gui_menu_builder.py:793 gajim/gui_menu_builder.py:805
+#: gajim/gui_menu_builder.py:794 gajim/gui_menu_builder.py:806
 #, fuzzy
 msgid "Open Email Composer"
 msgstr "打开邮件编辑器(_O)"
 
-#: gajim/gui_menu_builder.py:798
+#: gajim/gui_menu_builder.py:799
 #, fuzzy
 msgid "Copy Location"
 msgstr "复制链接位置(_C)"
 
-#: gajim/gui_menu_builder.py:799
+#: gajim/gui_menu_builder.py:800
 #, fuzzy
 msgid "Show Location"
 msgstr "位置："
 
-#: gajim/gui_menu_builder.py:804
+#: gajim/gui_menu_builder.py:805
 #, fuzzy
 msgid "Copy XMPP Address/Email"
 msgstr "复制 JID/电子邮件地址(_C)"
 
-#: gajim/gui_menu_builder.py:856
+#: gajim/gui_menu_builder.py:857
 #, fuzzy
 msgid "Invite"
 msgstr "邀请(_V)"
 
-#: gajim/gui_menu_builder.py:874
+#: gajim/gui_menu_builder.py:875
 #, fuzzy
 msgid "Unblock"
 msgstr "解除屏蔽(_U)"
 
-#: gajim/gui_menu_builder.py:877
+#: gajim/gui_menu_builder.py:878
 #, fuzzy
 msgid "Block"
 msgstr "屏蔽(_B)"
 
-#: gajim/gui_menu_builder.py:883
+#: gajim/gui_menu_builder.py:884
 #, fuzzy
 msgid "Kick"
 msgstr "踢除(_K)"
 
-#: gajim/gui_menu_builder.py:891
+#: gajim/gui_menu_builder.py:892
 #, fuzzy
 msgid "Ban"
 msgstr "封禁(_B)"
 
-#: gajim/gui_menu_builder.py:901
+#: gajim/gui_menu_builder.py:902
 #, fuzzy
 msgid "Make Owner"
 msgstr "所有者"
 
-#: gajim/gui_menu_builder.py:910
+#: gajim/gui_menu_builder.py:911
 #, fuzzy
 msgid "Make Admin"
 msgstr "管理(_A)"
 
-#: gajim/gui_menu_builder.py:919
+#: gajim/gui_menu_builder.py:920
 #, fuzzy
 msgid "Make Member"
 msgstr "成员"
 
-#: gajim/gui_menu_builder.py:928
+#: gajim/gui_menu_builder.py:929
 #, fuzzy
 msgid "Revoke Member"
 msgstr "成员"
 
-#: gajim/gui_menu_builder.py:938
+#: gajim/gui_menu_builder.py:939
 msgid "Grant Voice"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:941
+#: gajim/gui_menu_builder.py:942
 #, fuzzy
 msgid "Revoke Voice"
 msgstr "语音(_V)"
 
-#: gajim/gui_menu_builder.py:961
+#: gajim/gui_menu_builder.py:962
 #, fuzzy
 msgid "Copy"
 msgstr "聊天室 JID"
