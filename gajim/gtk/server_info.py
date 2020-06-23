@@ -126,6 +126,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
     def _add_contact_addresses(self, dataforms):
         fields = {
             'admin-addresses': _('Admin'),
+            'status-addresses': _('Status'),
             'support-addresses': _('Support'),
             'security-addresses': _('Security'),
             'feedback-addresses': _('Feedback'),
