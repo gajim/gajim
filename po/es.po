@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 02:05+0000\n"
+"POT-Creation-Date: 2020-06-22 02:05+0000\n"
 "PO-Revision-Date: 2009-08-19 23:49+0200\n"
 "Last-Translator: Membris Khan <frank@giingo.org>\n"
 "Language-Team: none <>\n"
@@ -152,7 +152,7 @@ msgstr "No hay ninguna suscripción pendiente."
 msgid " resource with priority "
 msgstr " recurso con prioridad "
 
-#: gajim/gui_menu_builder.py:254 gajim/gui_menu_builder.py:345
+#: gajim/gui_menu_builder.py:255 gajim/gui_menu_builder.py:346
 #: gajim/chat_control.py:295 gajim/roster_window.py:778
 #: gajim/roster_window.py:1717 gajim/roster_window.py:1719
 #: gajim/roster_window.py:2031 gajim/roster_window.py:3271
@@ -165,366 +165,366 @@ msgstr " recurso con prioridad "
 msgid "Not in contact list"
 msgstr "No en la lista de contactos"
 
-#: gajim/gui_menu_builder.py:358
+#: gajim/gui_menu_builder.py:359
 msgid "I would like to add you to my contact list"
 msgstr "Me gustaría añadirte a mi lista de contactos"
 
-#: gajim/gui_menu_builder.py:436
+#: gajim/gui_menu_builder.py:437
 msgid "Send Single _Message…"
 msgstr "Enviar _mensaje inidividual…"
 
-#: gajim/gui_menu_builder.py:451
+#: gajim/gui_menu_builder.py:452
 msgid "E_xecute Command…"
 msgstr "_Ejecutar comando…"
 
-#: gajim/gui_menu_builder.py:459
+#: gajim/gui_menu_builder.py:460
 msgid "_Manage Transport"
 msgstr "_Gestionar transporte"
 
-#: gajim/gui_menu_builder.py:465
+#: gajim/gui_menu_builder.py:466
 msgid "_Modify Transport"
 msgstr "_Modificar transporte"
 
-#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4915
+#: gajim/gui_menu_builder.py:473 gajim/roster_window.py:4915
 msgid "_Rename…"
 msgstr "_Renombrar…"
 
-#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4931
+#: gajim/gui_menu_builder.py:484 gajim/roster_window.py:4931
 #: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr "_Desbloquear"
 
-#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4936
+#: gajim/gui_menu_builder.py:487 gajim/roster_window.py:4936
 #: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr "_Bloquear"
 
-#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4943
+#: gajim/gui_menu_builder.py:495 gajim/roster_window.py:4943
 #: gajim/data/gui/contact_context_menu.ui:181
 msgid "Remo_ve"
 msgstr "_Eliminar"
 
-#: gajim/gui_menu_builder.py:504 gajim/data/gui/contact_context_menu.ui:198
+#: gajim/gui_menu_builder.py:505 gajim/data/gui/contact_context_menu.ui:198
 msgid "_Information"
 msgstr "_Información"
 
-#: gajim/gui_menu_builder.py:517
+#: gajim/gui_menu_builder.py:518
 msgid "Send File"
 msgstr "Enviar fichero"
 
-#: gajim/gui_menu_builder.py:518
+#: gajim/gui_menu_builder.py:519
 msgid "Upload File…"
 msgstr "Subir archivo..."
 
-#: gajim/gui_menu_builder.py:519
+#: gajim/gui_menu_builder.py:520
 msgid "Send File Directly…"
 msgstr "Enviar archivo directamente..."
 
-#: gajim/gui_menu_builder.py:521 gajim/gui_menu_builder.py:588
+#: gajim/gui_menu_builder.py:522 gajim/gui_menu_builder.py:589
 msgid "Send Chatstate"
 msgstr "Enviar estado"
 
-#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:283
+#: gajim/gui_menu_builder.py:523 gajim/data/gui/groupchat_control.ui:283
 msgid "Invite Contacts…"
 msgstr "Invitar contactos…"
 
-#: gajim/gui_menu_builder.py:523 gajim/gui_menu_builder.py:781
-#: gajim/gui_menu_builder.py:808 gajim/gui_menu_builder.py:847
+#: gajim/gui_menu_builder.py:524 gajim/gui_menu_builder.py:782
+#: gajim/gui_menu_builder.py:809 gajim/gui_menu_builder.py:848
 msgid "Add to Contact List…"
 msgstr "Añadir a la lista de contactos…"
 
-#: gajim/gui_menu_builder.py:524
+#: gajim/gui_menu_builder.py:525
 msgid "Voice Chat"
 msgstr "Chat de voz"
 
-#: gajim/gui_menu_builder.py:525
+#: gajim/gui_menu_builder.py:526
 msgid "Video Chat"
 msgstr "Chat de vídeo"
 
-#: gajim/gui_menu_builder.py:526 gajim/gui_menu_builder.py:573
-#: gajim/gui_menu_builder.py:842
+#: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:574
+#: gajim/gui_menu_builder.py:843
 msgid "Information"
 msgstr "Información"
 
-#: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:594
+#: gajim/gui_menu_builder.py:528 gajim/gui_menu_builder.py:595
 msgid "History"
 msgstr "Historial"
 
-#: gajim/gui_menu_builder.py:533 gajim/gui_menu_builder.py:649
+#: gajim/gui_menu_builder.py:534 gajim/gui_menu_builder.py:650
 #: gajim/data/gui/preferences_window.ui:1886
 msgid "Disabled"
 msgstr "Deshabilitado"
 
-#: gajim/gui_menu_builder.py:534
+#: gajim/gui_menu_builder.py:535
 msgid "Composing Only"
 msgstr "Solo componiendo"
 
-#: gajim/gui_menu_builder.py:535
+#: gajim/gui_menu_builder.py:536
 msgid "All Chat States"
 msgstr "Todos los estados de chat"
 
-#: gajim/gui_menu_builder.py:574
+#: gajim/gui_menu_builder.py:575
 msgid "Manage Group Chat"
 msgstr "Gestionar grupos de chat"
 
-#: gajim/gui_menu_builder.py:575
+#: gajim/gui_menu_builder.py:576
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: gajim/gui_menu_builder.py:576
+#: gajim/gui_menu_builder.py:577
 msgid "Change Subject…"
 msgstr "Cambiar asunto…"
 
-#: gajim/gui_menu_builder.py:577
+#: gajim/gui_menu_builder.py:578
 msgid "Upload Avatar…"
 msgstr "Subir Imagen…"
 
-#: gajim/gui_menu_builder.py:578
+#: gajim/gui_menu_builder.py:579
 msgid "Configure…"
 msgstr "Configurar…"
 
-#: gajim/gui_menu_builder.py:579
+#: gajim/gui_menu_builder.py:580
 msgid "Destroy…"
 msgstr "Destruir…"
 
-#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:843
+#: gajim/gui_menu_builder.py:582 gajim/data/gui/preferences_window.ui:843
 msgid "Chat Settings"
 msgstr "Preferencias de conversación"
 
-#: gajim/gui_menu_builder.py:582
+#: gajim/gui_menu_builder.py:583
 msgid "Show Join/Leave"
 msgstr "Mostrar unirse/abandonar"
 
-#: gajim/gui_menu_builder.py:583
+#: gajim/gui_menu_builder.py:584
 msgid "Show Status Changes"
 msgstr "Mostrar cambios de estado"
 
-#: gajim/gui_menu_builder.py:584
+#: gajim/gui_menu_builder.py:585
 msgid "Notify on all Messages"
 msgstr "Notificar para todos los mensajes"
 
-#: gajim/gui_menu_builder.py:585
+#: gajim/gui_menu_builder.py:586
 msgid "Minimize on Close"
 msgstr "Minimizar al cerrar"
 
-#: gajim/gui_menu_builder.py:587
+#: gajim/gui_menu_builder.py:588
 msgid "Minimize When Joining Automatically"
 msgstr "Minimizar al unirse automáticamente"
 
-#: gajim/gui_menu_builder.py:590
+#: gajim/gui_menu_builder.py:591
 msgid "Sync Threshold"
 msgstr "Umbral de sincronización"
 
-#: gajim/gui_menu_builder.py:591
+#: gajim/gui_menu_builder.py:592
 msgid "Change Nickname…"
 msgstr "Cambiar alias…"
 
-#: gajim/gui_menu_builder.py:592
+#: gajim/gui_menu_builder.py:593
 msgid "Request Voice"
 msgstr "Petición de voz"
 
-#: gajim/gui_menu_builder.py:593 gajim/gui_menu_builder.py:865
+#: gajim/gui_menu_builder.py:594 gajim/gui_menu_builder.py:866
 msgid "Execute Command…"
 msgstr "Ejecutar comando…"
 
-#: gajim/gui_menu_builder.py:595
+#: gajim/gui_menu_builder.py:596
 msgid "Leave"
 msgstr "Abandonar"
 
-#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:166
+#: gajim/gui_menu_builder.py:641 gajim/gtk/preferences.py:166
 msgid "No threshold"
 msgstr "Sin umbral"
 
-#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:168
+#: gajim/gui_menu_builder.py:643 gajim/gtk/preferences.py:168
 #, python-format
 msgid "%i day"
 msgid_plural "%i days"
 msgstr[0] "hace %i día"
 msgstr[1] "hace %i días"
 
-#: gajim/gui_menu_builder.py:650
+#: gajim/gui_menu_builder.py:651
 msgid "Composing only"
 msgstr "Solo componiendo"
 
-#: gajim/gui_menu_builder.py:651
+#: gajim/gui_menu_builder.py:652
 msgid "All chat states"
 msgstr "Todos los estados de chat"
 
-#: gajim/gui_menu_builder.py:671
+#: gajim/gui_menu_builder.py:672
 msgid "Add Contact…"
 msgstr "Añadir contacto..."
 
-#: gajim/gui_menu_builder.py:672 gajim/gtk/profile.py:53
+#: gajim/gui_menu_builder.py:673 gajim/gtk/profile.py:53
 #: gajim/gtk/accounts.py:708 gajim/gtk/accounts.py:746
 msgid "Profile"
 msgstr "Perfil"
 
-#: gajim/gui_menu_builder.py:673
+#: gajim/gui_menu_builder.py:674
 msgid "Send Single Message…"
 msgstr "Enviar mensaje único..."
 
-#: gajim/gui_menu_builder.py:674
+#: gajim/gui_menu_builder.py:675
 msgid "Discover Services…"
 msgstr "Descubrir servicios…"
 
-#: gajim/gui_menu_builder.py:675 gajim/gtk/server_info.py:48
+#: gajim/gui_menu_builder.py:676 gajim/gtk/server_info.py:48
 msgid "Server Info"
 msgstr "Información del Servidor"
 
-#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2763
+#: gajim/gui_menu_builder.py:677 gajim/data/gui/preferences_window.ui:2763
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: gajim/gui_menu_builder.py:677 gajim/gtk/mam_preferences.py:98
+#: gajim/gui_menu_builder.py:678 gajim/gtk/mam_preferences.py:98
 msgid "Archiving Preferences"
 msgstr "Preferencias de archivado"
 
-#: gajim/gui_menu_builder.py:678
+#: gajim/gui_menu_builder.py:679
 msgid "Blocking List"
 msgstr "Lista de bloqueo"
 
-#: gajim/gui_menu_builder.py:679
+#: gajim/gui_menu_builder.py:680
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: gajim/gui_menu_builder.py:680
+#: gajim/gui_menu_builder.py:681
 msgid "PEP Configuration"
 msgstr "Configuración PEP"
 
-#: gajim/gui_menu_builder.py:681
+#: gajim/gui_menu_builder.py:682
 msgid "Synchronise History…"
 msgstr "Sincronizar historial…"
 
-#: gajim/gui_menu_builder.py:682 gajim/gtk/privacy_list.py:409
+#: gajim/gui_menu_builder.py:683 gajim/gtk/privacy_list.py:409
 msgid "Privacy Lists"
 msgstr "Listas de privacidad"
 
-#: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
+#: gajim/gui_menu_builder.py:685 gajim/data/gui/groupchat_config.ui:36
 #: gajim/gtk/server_info.py:128
 msgid "Admin"
 msgstr "Admin"
 
-#: gajim/gui_menu_builder.py:685
+#: gajim/gui_menu_builder.py:686
 msgid "Send Server Message…"
 msgstr "Enviar mensaje de servidor…"
 
-#: gajim/gui_menu_builder.py:686
+#: gajim/gui_menu_builder.py:687
 msgid "Set MOTD…"
 msgstr "Definir MOTD…"
 
-#: gajim/gui_menu_builder.py:687
+#: gajim/gui_menu_builder.py:688
 msgid "Update MOTD…"
 msgstr "Actualizar MOTD…"
 
-#: gajim/gui_menu_builder.py:688
+#: gajim/gui_menu_builder.py:689
 msgid "Delete MOTD…"
 msgstr "Eliminar MOTD…"
 
-#: gajim/gui_menu_builder.py:725
+#: gajim/gui_menu_builder.py:726
 msgid "_Add Account…"
 msgstr "_Añadir cuenta…"
 
-#: gajim/gui_menu_builder.py:731
+#: gajim/gui_menu_builder.py:732
 msgid "_Modify Accounts…"
 msgstr "_Modificar cuentas…"
 
-#: gajim/gui_menu_builder.py:741 gajim/data/gui/zeroconf_context_menu.ui:26
+#: gajim/gui_menu_builder.py:742 gajim/data/gui/zeroconf_context_menu.ui:26
 #: gajim/data/gui/account_context_menu.ui:79
 msgid "_Modify Account…"
 msgstr "_Modificar cuenta…"
 
-#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:746 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: gajim/gui_menu_builder.py:774 gajim/gui_menu_builder.py:779
+#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:780
 msgid "Copy XMPP Address"
 msgstr "Copiar dirección XMPP"
 
-#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:807
+#: gajim/gui_menu_builder.py:776 gajim/gui_menu_builder.py:808
 msgid "Join Groupchat"
 msgstr "Unirse al grupo de charla"
 
-#: gajim/gui_menu_builder.py:780 gajim/gui_menu_builder.py:806
+#: gajim/gui_menu_builder.py:781 gajim/gui_menu_builder.py:807
 #: gajim/data/gui/subscription_request_window.ui:106
 #: gajim/gtk/start_chat.py:630
 msgid "Start Chat"
 msgstr "Iniciar conversación"
 
-#: gajim/gui_menu_builder.py:786
+#: gajim/gui_menu_builder.py:787
 msgid "Copy Link Location"
 msgstr "Copiar la dirección del enlace"
 
-#: gajim/gui_menu_builder.py:787
+#: gajim/gui_menu_builder.py:788
 msgid "Open Link in Browser"
 msgstr "Abrir enlace en navegador"
 
-#: gajim/gui_menu_builder.py:792
+#: gajim/gui_menu_builder.py:793
 msgid "Copy Email Address"
 msgstr "Copiar dirección de correo electrónico"
 
-#: gajim/gui_menu_builder.py:793 gajim/gui_menu_builder.py:805
+#: gajim/gui_menu_builder.py:794 gajim/gui_menu_builder.py:806
 msgid "Open Email Composer"
 msgstr "Abrir el compositor de correo"
 
-#: gajim/gui_menu_builder.py:798
+#: gajim/gui_menu_builder.py:799
 msgid "Copy Location"
 msgstr "Copiar ubicación"
 
-#: gajim/gui_menu_builder.py:799
+#: gajim/gui_menu_builder.py:800
 msgid "Show Location"
 msgstr "Mostrar la ubicación"
 
-#: gajim/gui_menu_builder.py:804
+#: gajim/gui_menu_builder.py:805
 msgid "Copy XMPP Address/Email"
 msgstr "Copiar la dirección de correo/ID de Jabber"
 
-#: gajim/gui_menu_builder.py:856
+#: gajim/gui_menu_builder.py:857
 msgid "Invite"
 msgstr "Invitar"
 
-#: gajim/gui_menu_builder.py:874
+#: gajim/gui_menu_builder.py:875
 msgid "Unblock"
 msgstr "Desbloquear"
 
-#: gajim/gui_menu_builder.py:877
+#: gajim/gui_menu_builder.py:878
 msgid "Block"
 msgstr "Bloquear"
 
-#: gajim/gui_menu_builder.py:883
+#: gajim/gui_menu_builder.py:884
 msgid "Kick"
 msgstr "Expulsar"
 
-#: gajim/gui_menu_builder.py:891
+#: gajim/gui_menu_builder.py:892
 msgid "Ban"
 msgstr "Prohibir"
 
-#: gajim/gui_menu_builder.py:901
+#: gajim/gui_menu_builder.py:902
 msgid "Make Owner"
 msgstr "Hacer propietario"
 
-#: gajim/gui_menu_builder.py:910
+#: gajim/gui_menu_builder.py:911
 msgid "Make Admin"
 msgstr "Hacer administrador"
 
-#: gajim/gui_menu_builder.py:919
+#: gajim/gui_menu_builder.py:920
 msgid "Make Member"
 msgstr "Hacer miembro"
 
-#: gajim/gui_menu_builder.py:928
+#: gajim/gui_menu_builder.py:929
 msgid "Revoke Member"
 msgstr "Revocar Miembro"
 
-#: gajim/gui_menu_builder.py:938
+#: gajim/gui_menu_builder.py:939
 msgid "Grant Voice"
 msgstr "Conceder voz"
 
-#: gajim/gui_menu_builder.py:941
+#: gajim/gui_menu_builder.py:942
 msgid "Revoke Voice"
 msgstr "Revocar Voz"
 
-#: gajim/gui_menu_builder.py:961
+#: gajim/gui_menu_builder.py:962
 msgid "Copy"
 msgstr "Copiar"
 
@@ -5376,9 +5376,8 @@ msgstr "Nombre de pila"
 #. Middle Name
 #: gajim/data/gui/profile_window.ui:516
 #: gajim/data/gui/vcard_information_window.ui:821
-#, fuzzy
 msgid "Middle"
-msgstr "Medio:"
+msgstr "Segundo nombre"
 
 #. Prefix in Name
 #: gajim/data/gui/profile_window.ui:532
@@ -6140,21 +6139,19 @@ msgstr ""
 
 #: gajim/data/gui/preferences_window.ui:914
 msgid "Show chatstate in banner"
-msgstr ""
+msgstr "Mostrar estado del chat en el banner"
 
 #: gajim/data/gui/preferences_window.ui:918
-#, fuzzy
 msgid ""
 "If checked, a description of the contacts current chatstate is shown in the "
 "banner"
 msgstr ""
-"Si está marcado, Gajim permitirá a otros detectar el sistema operativo que "
-"estás usando"
+"Si está marcado, se muestra una descripción del estado actual de los "
+"contacto banner"
 
 #: gajim/data/gui/preferences_window.ui:938
-#, fuzzy
 msgid "Chatstate"
-msgstr "Último estado"
+msgstr "Estado del chat"
 
 #: gajim/data/gui/preferences_window.ui:955
 #: gajim/data/gui/history_window.ui:303
@@ -6185,13 +6182,12 @@ msgid "Notify me about contacts that sign _in"
 msgstr "Notif_icarme de los contactos que se conecten"
 
 #: gajim/data/gui/preferences_window.ui:1108
-#, fuzzy
 msgid ""
 "A popup window about contacts that just signed in will be shown in the "
 "bottom right of the screen "
 msgstr ""
-"Gajim te notificará de nuevos eventos a través de un mensaje emergente en la "
-"esquina inferior derecha de la pantalla"
+"Se mostrará una ventana emergente sobre los contactos que acaban de iniciar "
+"sesión en la parte inferior derecha de la pantalla "
 
 #: gajim/data/gui/preferences_window.ui:1122
 msgid "Notify me about contacts that sign _out"
@@ -6202,6 +6198,8 @@ msgid ""
 "A popup window about contacts that just signed out will be shown in the "
 "bottom right of the screen "
 msgstr ""
+"Se mostrará una ventana emergente sobre los contactos que acaban de cerrar "
+"sesión en la parte inferior derecha de la pantalla "
 
 #: gajim/data/gui/preferences_window.ui:1144
 msgid "Visual Notifications"
@@ -6249,30 +6247,28 @@ msgstr ""
 "durante el tiempo especificado"
 
 #: gajim/data/gui/preferences_window.ui:1354
-#, fuzzy
 msgid ""
 "The automatic away status message. If empty, the current status message will "
 "not be changed.\n"
 "$S will be replaced by previous status message.\n"
 "$T will be replaced by auto-away timeout."
 msgstr ""
-"El mensje de estado de auto-ausencia. Si está vacío, Gajim no cambiará el "
-"mensaje de estado actual\n"
-"$S será reemplazado por el anterior mensaje de estado\n"
-"$T será reemplazado por la activación del auto-ausente"
+"Mensaje automático de estado de ausencia. Si está vacío, el mensaje de "
+"estado actual no cambiará.\n"
+"$S será reemplazado por el mensaje de estado anterior.\n"
+"$T será reemplazado por tiempo de espera automático."
 
 #: gajim/data/gui/preferences_window.ui:1369
-#, fuzzy
 msgid ""
 "The automatic not available status message. If empty, the current status "
 "message will not be changed.\n"
 "$S will be replaced by previous status message.\n"
 "$T will be replaced by auto-not-available timeout."
 msgstr ""
-"El mensaje de estado de auto-no disponbile. Si está vacío, Gajim no cambiará "
-"el mensaje de estado actual\n"
-"$S será reemplazado por el anterior mensaje de estado\n"
-"$T será reemplazado por la activación del auto-no disponible"
+"Mensaje automático de estado no disponible. Si está vacío, el mensaje de "
+"estado actual no cambiará.\n"
+"$S será reemplazado por un mensaje de estado anterior.\n"
+"$T será reemplazado por un tiempo de espera automático no disponible."
 
 #: gajim/data/gui/preferences_window.ui:1383
 msgid "Minutes"
@@ -6360,23 +6356,21 @@ msgid "Icons"
 msgstr "Iconos"
 
 #: gajim/data/gui/preferences_window.ui:1963
-#, fuzzy
 msgid "_Status iconset"
-msgstr "Set de _iconos de estado:"
+msgstr "Conjunto de iconos de estado"
 
 #: gajim/data/gui/preferences_window.ui:1989
 msgid "Use transports _icons"
 msgstr "Usar _iconos de transportes"
 
 #: gajim/data/gui/preferences_window.ui:1993
-#, fuzzy
 msgid ""
 "If checked, protocol-specific status icons will be used (e.g. a contact from "
 "ICQ will have the equivalent ICQ icon for status online, away, busy, etc...)"
 msgstr ""
-"Si está marcado, Gajim usará iconos específicos para el protocolo- (p. ej. "
-"un contacto de MSN tendrá el icono de msn equivalente para su estado en "
-"línea, ausente, ocupado, etc...)"
+"Si está marcado, se usarán iconos específicos para el protocolo (p. ej. un "
+"contacto de ICQ tendrá el icono de ICQ para su estado en línea, ausente, "
+"ocupado, etc...)"
 
 #: gajim/data/gui/preferences_window.ui:2020
 msgid "_Convert ASCII Emojis"
@@ -6461,12 +6455,11 @@ msgstr "Guardar cambios de estados de contactos en el historial"
 
 #: gajim/data/gui/preferences_window.ui:2609
 msgid "Enable _debug logging (restart required)"
-msgstr ""
+msgstr "Habilitado trazado de _depuración (se requiere reiniciar)"
 
 #: gajim/data/gui/preferences_window.ui:2613
-#, fuzzy
 msgid "If checked, Gajim will store a log file for debugging"
-msgstr "Si está marcado, Gajim recordará la contraseña para esta cuenta"
+msgstr "Si está marcado, Gajim guardará archivo de traza para depuración"
 
 #: gajim/data/gui/preferences_window.ui:2630
 msgid "Opens folder containing debug logs"
@@ -6474,13 +6467,15 @@ msgstr "Abre carpeta conteniendo trazas de depuración"
 
 #: gajim/data/gui/preferences_window.ui:2656
 msgid "_Reset Hints"
-msgstr ""
+msgstr "_Restablecer sugerencias"
 
 #: gajim/data/gui/preferences_window.ui:2660
 msgid ""
 "In order to introduce you to features, Gajim displays some hints. This "
 "button will reset all these hints."
 msgstr ""
+"Para presentarte las funciones, Gajim muestra algunos consejos. Este botón "
+"restablecerá todas estas sugerencias."
 
 #: gajim/data/gui/preferences_window.ui:2677
 msgid "Miscellaneous"
@@ -6614,9 +6609,8 @@ msgid "_Port"
 msgstr "_Puerto"
 
 #: gajim/data/gui/account_wizard.ui:46
-#, fuzzy
 msgid "_Hostname"
-msgstr "Nombre del host:"
+msgstr "Nombre del _host"
 
 #: gajim/data/gui/account_wizard.ui:62 gajim/data/gui/account_wizard.ui:689
 #: gajim/data/gui/manage_proxies.ui:223
@@ -6644,9 +6638,8 @@ msgid "Welcome"
 msgstr "Bienvenido"
 
 #: gajim/data/gui/account_wizard.ui:219
-#, fuzzy
 msgid "Please enter your credentials or Sign Up"
-msgstr "Por favor, escribir una nueva contraseña."
+msgstr "Por favor ingresa tus credenciales o regístrate"
 
 #: gajim/data/gui/account_wizard.ui:237
 msgid "Your XMPP address (e.g. user@example.org)"
@@ -6666,14 +6659,12 @@ msgid "_Advanced Settings"
 msgstr "Configuraciones avanzadas"
 
 #: gajim/data/gui/account_wizard.ui:270 gajim/data/gui/account_wizard.ui:723
-#, fuzzy
 msgid "Proxy, custom hostname and port"
-msgstr "Usar nombre de host y puerto personalizados"
+msgstr "Proxy, nombre de host y puerto"
 
 #: gajim/data/gui/account_wizard.ui:283
-#, fuzzy
 msgid "_Log In"
-msgstr "_Conectar"
+msgstr "Iniciar sesión"
 
 #: gajim/data/gui/account_wizard.ui:288
 msgid "Log in with your credentials"
@@ -6684,9 +6675,8 @@ msgid "or"
 msgstr "o"
 
 #: gajim/data/gui/account_wizard.ui:314
-#, fuzzy
 msgid "_Sign Up"
-msgstr "Cone_ctar"
+msgstr "Regístrate"
 
 #: gajim/data/gui/account_wizard.ui:318
 msgid "Sign up for a new account on a server of your choice"
@@ -6757,9 +6747,8 @@ msgstr ""
 "a>"
 
 #: gajim/data/gui/account_wizard.ui:631 gajim/gtk/account_wizard.py:60
-#, fuzzy
 msgid "Sign Up"
-msgstr "Cone_ctar"
+msgstr "Regístrate"
 
 #: gajim/data/gui/account_wizard.ui:646
 msgid "_Please choose a server"
@@ -6767,7 +6756,7 @@ msgstr "_Por favor, elegir un servidor"
 
 #: gajim/data/gui/account_wizard.ui:702
 msgid "Sign up Anonymously"
-msgstr ""
+msgstr "Regístrate anóminamente"
 
 #: gajim/data/gui/account_wizard.ui:706
 msgid "Note: Anonymous accounts are not possible on all servers"
@@ -6783,7 +6772,7 @@ msgstr "_Filtro"
 
 #: gajim/data/gui/advanced_configuration.ui:88
 msgid "Type to search for values..."
-msgstr ""
+msgstr "Escribe para buscar valores..."
 
 #: gajim/data/gui/advanced_configuration.ui:180
 msgid "_Reset Value"
@@ -6901,7 +6890,7 @@ msgstr "Mensaje..."
 
 #: gajim/data/gui/groupchat_invitation_received.ui:120
 msgid "_Message if you decline (optional)"
-msgstr ""
+msgstr "_Mensaje si rechazas (opcional)"
 
 #: gajim/data/gui/edit_groups_dialog.ui:8
 msgid "Edit Groups"
@@ -6912,9 +6901,8 @@ msgid "Save this message as a preset"
 msgstr "Guardar este mensaje como predeterminado"
 
 #: gajim/data/gui/change_status_message_dialog.ui:152
-#, fuzzy
 msgid "Preset _messages"
-msgstr "Mensajes predefinidos:"
+msgstr "_Mensajes preestablecidos"
 
 #: gajim/data/gui/change_status_message_dialog.ui:170
 msgid "Ac_tivity"
@@ -6966,9 +6954,8 @@ msgstr "_Protocolo"
 
 #: gajim/data/gui/add_new_contact_window.ui:295
 #: gajim/data/gui/single_message_window.ui:161
-#, fuzzy
 msgid "Query Contact Info"
-msgstr "_Información"
+msgstr "Consulta de información de contacto"
 
 #: gajim/data/gui/add_new_contact_window.ui:314
 msgid "A_llow contact to view my status"
@@ -7021,7 +7008,7 @@ msgstr "<b>Mensaje:</b>"
 
 #: gajim/data/gui/themes_window.ui:43
 msgid "Add a setting you would like to change"
-msgstr ""
+msgstr "Añade una configuración que te gustaría cambiar"
 
 #: gajim/data/gui/themes_window.ui:171
 msgid "Add Setting"
@@ -7076,7 +7063,6 @@ msgid "Installed"
 msgstr "Instalado"
 
 #: gajim/data/gui/plugins_window.ui:363
-#, fuzzy
 msgid ""
 "Plug-in description should be displayed here. This text will be erased "
 "during PluginsWindow initialization."
@@ -7161,9 +7147,8 @@ msgid "to send me status"
 msgstr "para enviarme el estado"
 
 #: gajim/data/gui/privacy_list_window.ui:557
-#, fuzzy
 msgid "All (including subscription)"
-msgstr "todos por suscripción"
+msgstr "Todo (incluyendo suscripción)"
 
 #: gajim/data/gui/privacy_list_window.ui:598
 msgid "Order:"
@@ -7186,9 +7171,8 @@ msgid "Choose Sound"
 msgstr "Elegir sonido"
 
 #: gajim/data/gui/manage_sounds_window.ui:112
-#, fuzzy
 msgid "Clear Sound"
-msgstr "Elegir sonido"
+msgstr "Sonido claro"
 
 #: gajim/data/gui/manage_sounds_window.ui:133
 msgid "Play Sound"
@@ -7262,21 +7246,18 @@ msgid "Proxy"
 msgstr "Proxy"
 
 #: gajim/data/gui/application_menu.ui:8
-#, fuzzy
 msgid "_Start / Join Chat…"
-msgstr "Iniciar conversación"
+msgstr "Iniciar / unirse a conversación…"
 
 #: gajim/data/gui/application_menu.ui:13
-#, fuzzy
 msgid "Create _Group Chat…"
-msgstr "Abandonar grupos de charla"
+msgstr "Crear _grupo de conversación…"
 
 #: gajim/data/gui/application_menu.ui:18
 msgid "_History Manager"
 msgstr "Gestor de _Histórico"
 
 #: gajim/data/gui/application_menu.ui:22
-#, fuzzy
 msgid "Pl_ugins"
 msgstr "Extensiones"
 
@@ -7286,7 +7267,6 @@ msgid "_Preferences"
 msgstr "_Preferencias"
 
 #: gajim/data/gui/application_menu.ui:36
-#, fuzzy
 msgid "_Accounts"
 msgstr "Cuentas"
 
@@ -7295,19 +7275,16 @@ msgid "_View"
 msgstr "_Ver"
 
 #: gajim/data/gui/application_menu.ui:42 gajim/gtk/statusicon.py:270
-#, fuzzy
 msgid "Show _Contact List"
-msgstr "Mostrar sólo contactos _activos"
+msgstr "Mostrar lista de _contactos"
 
 #: gajim/data/gui/application_menu.ui:46
-#, fuzzy
 msgid "Show _Offline Contacts"
 msgstr "Mostrar contactos desconectados"
 
 #: gajim/data/gui/application_menu.ui:50
-#, fuzzy
 msgid "Show _Active Contacts"
-msgstr "Mostrar sólo contactos _activos"
+msgstr "Mostrar contactos _activos"
 
 #: gajim/data/gui/application_menu.ui:54
 msgid "Show _Transports"
@@ -7386,6 +7363,8 @@ msgid ""
 "Gajim encountered an error. A report is shown below.\n"
 "By reporting this bug you might help people to fix this."
 msgstr ""
+"Gajim encontró un error. A continuación se muestra un informe.\n"
+"Al informar este error, puedes ayudar a la gente a solucionarlo."
 
 #: gajim/data/gui/exception_dialog.ui:116
 msgid "_Report Bug"
@@ -7396,22 +7375,19 @@ msgid "_Deny"
 msgstr "_Denegar"
 
 #: gajim/data/gui/subscription_request_window.ui:153
-#, fuzzy
 msgid ""
 "Deny authorization from contact so the contact cannot know if you are "
 "connected"
 msgstr ""
-"Denegar autorización al contacto para que no pueda saber cuándo estás "
-"conectado"
+"Denegar autorización al contacto para que no pueda saber si estás conectado"
 
 #: gajim/data/gui/subscription_request_window.ui:165
 msgid "Ac_cept"
 msgstr "A_ceptar"
 
 #: gajim/data/gui/subscription_request_window.ui:171
-#, fuzzy
 msgid "Authorize contact so the contact can know if you are connected"
-msgstr "Autorizar contacto para que pueda saber cuándo estás conectado"
+msgstr "Autorizar contacto para que pueda saber si estás conectado"
 
 #: gajim/data/gui/groupchat_info_scrolled.ui:17
 msgid "Address"
@@ -7427,16 +7403,15 @@ msgstr "Autor"
 
 #: gajim/data/gui/groupchat_info_scrolled.ui:151
 msgid "Discussion Logs"
-msgstr ""
+msgstr "Registros de discusión"
 
 #: gajim/data/gui/groupchat_info_scrolled.ui:230
 msgid "Group Chat Language"
 msgstr "Idioma del grupo"
 
 #: gajim/data/gui/emoji_chooser.ui:98
-#, fuzzy
 msgid "No Results Found"
-msgstr "Sin resultados"
+msgstr "No se han encontrado resultados"
 
 #: gajim/data/gui/chat_to_muc_window.ui:24
 msgid "Invite Friends!"
@@ -7483,7 +7458,6 @@ msgid "Gajim History Logs Manager"
 msgstr "Gestor de Histórico de Gajim"
 
 #: gajim/data/gui/history_manager.ui:108
-#, fuzzy
 msgid ""
 "This history manager is not intended for viewing chat history. If you are "
 "looking for such functionality, please use the history window instead.\n"
@@ -7491,11 +7465,11 @@ msgid ""
 "You can use this program to delete or export history. Either select logs "
 "from the left or search the database."
 msgstr ""
-"Este gestor de registros no está pensado para ver registros. Si quieres "
+"Este gestor de historial no está pensado para ver conversaciones. Si quieres "
 "dicha funcionalidad usa la ventana del histórico en su lugar.\n"
 "\n"
-"Usa este programa para eliminar o exportar registros. Puedes seleccionar "
-"registros de la parte izquierda y/o buscar en la base de datos abajo."
+"Usa este programa para eliminar o exportar el historial. Puedes seleccionar "
+"registros de la parte izquierda o buscar en la base de datos."
 
 #: gajim/data/gui/history_manager.ui:124
 msgid ""
@@ -7521,9 +7495,8 @@ msgid "Chat Shortcuts"
 msgstr "Atajos de conversaciones"
 
 #: gajim/data/gui/shortcuts_window.ui:12
-#, fuzzy
 msgid "Message composition"
-msgstr "Contenido del mensaje"
+msgstr "Composición del mensaje"
 
 #: gajim/data/gui/shortcuts_window.ui:17
 msgid "Send the message"
@@ -7538,33 +7511,28 @@ msgid "Select an emoji"
 msgstr "Seleccionar un emoticono"
 
 #: gajim/data/gui/shortcuts_window.ui:38
-#, fuzzy
 msgid "Complete a command or a nickname"
-msgstr "Por favor crea un nuevo tema desde cero con el nombre deseado."
+msgstr "Completa un comando o un alias"
 
 #: gajim/data/gui/shortcuts_window.ui:45
 msgid "Previously sent message"
 msgstr "Mensaje enviado previamente"
 
 #: gajim/data/gui/shortcuts_window.ui:52
-#, fuzzy
 msgid "Next sent messages"
-msgstr "Mensajes predefinidos:"
+msgstr "Siguientes mensajes enviados"
 
 #: gajim/data/gui/shortcuts_window.ui:59
-#, fuzzy
 msgid "Quote previous message"
-msgstr "O selecciona un mensaje predefinido:"
+msgstr "Citar mensaje anterior"
 
 #: gajim/data/gui/shortcuts_window.ui:66
-#, fuzzy
 msgid "Quote next message"
-msgstr "Enviar mensaje"
+msgstr "Citar el siguiente mensaje"
 
 #: gajim/data/gui/shortcuts_window.ui:73
-#, fuzzy
 msgid "Clear message entry"
-msgstr "Mensaje enviado"
+msgstr "Limpiar entrada de mensaje"
 
 #: gajim/data/gui/shortcuts_window.ui:81
 msgid "Recent history"
@@ -7600,15 +7568,15 @@ msgstr "Cambiar a la pestaña siguiente"
 
 #: gajim/data/gui/shortcuts_window.ui:134
 msgid "Switch to the first - ninth tab"
-msgstr ""
+msgstr "Cambiar a la primera - novena pestaña"
 
 #: gajim/data/gui/shortcuts_window.ui:141
 msgid "Switch to the previous unread tab"
-msgstr ""
+msgstr "Cambiar a la pestaña anterior no leída"
 
 #: gajim/data/gui/shortcuts_window.ui:148
 msgid "Switch to the next unread tab"
-msgstr ""
+msgstr "Cambiar a la siguiente pestaña no leída"
 
 #: gajim/data/gui/shortcuts_window.ui:155
 msgid "Move tab to the left"
@@ -7623,9 +7591,8 @@ msgid "Close chat"
 msgstr "Cerrar conversación"
 
 #: gajim/data/gui/shortcuts_window.ui:180
-#, fuzzy
 msgid "Contact List Shortcuts"
-msgstr "Atajos de conversaciones"
+msgstr "Atajos de la lista de contactos"
 
 #: gajim/data/gui/shortcuts_window.ui:196
 msgid "Create new group chat"
@@ -7708,9 +7675,8 @@ msgid "Search selected day only"
 msgstr "Buscar solo en el día seleccionado"
 
 #: gajim/data/gui/history_window.ui:317
-#, fuzzy
 msgid "Store history for this chat"
-msgstr "Ignorar este error para este certificado"
+msgstr "Guardar historial de esta conversación"
 
 #: gajim/data/gui/history_window.ui:332
 msgid "Store History"
@@ -7721,6 +7687,8 @@ msgid ""
 "No contacts left.\n"
 "You can also type an XMPP address."
 msgstr ""
+"No quedan contactos.\n"
+"También puedes escribir una dirección XMPP."
 
 #: gajim/data/gui/groupchat_invite.ui:69
 msgid "Invitees"
@@ -7768,18 +7736,16 @@ msgstr "Limpiar"
 
 #: gajim/data/gui/xml_console.ui:302
 msgid "Paste Last Input"
-msgstr ""
+msgstr "Pegar la última entrada"
 
 #: gajim/data/gui/xml_console.ui:316
-#, fuzzy
 msgid "Presets"
-msgstr "_Presencia"
+msgstr "Preajustes"
 
 #: gajim/data/gui/roster_item_exchange_window.ui:39
 #: gajim/gtk/roster_item_exchange.py:35
-#, fuzzy
 msgid "Contact List Exchange"
-msgstr "Intercambio de elementos del roster"
+msgstr "Intercambiar lista de contactos"
 
 #: gajim/data/gui/roster_item_exchange_window.ui:144
 msgid "OK"
@@ -7802,7 +7768,6 @@ msgid "Mute Sounds"
 msgstr "Silenciar sonidos"
 
 #: gajim/data/gui/single_message_window.ui:42
-#, fuzzy
 msgid "_To"
 msgstr "A"
 
@@ -7823,7 +7788,6 @@ msgid "Characters typed: 0"
 msgstr "Cáracteres: 0"
 
 #: gajim/data/gui/single_message_window.ui:189
-#, fuzzy
 msgid "_From"
 msgstr "De"
 
@@ -7865,9 +7829,8 @@ msgstr "<b>Mensaje:</b>"
 
 #: gajim/command_system/mapping.py:169 gajim/command_system/mapping.py:179
 #: gajim/command_system/mapping.py:199
-#, fuzzy
 msgid "Missing arguments"
-msgstr "No se encuentra el argumento \"contact_jid\""
+msgstr "Faltan argumentos"
 
 #: gajim/command_system/mapping.py:266
 msgid "Too many arguments"
@@ -7875,22 +7838,27 @@ msgstr "Demasiados argumentos"
 
 #: gajim/command_system/implementation/execute.py:60
 msgid "Execute expression inside a shell, show output"
-msgstr ""
+msgstr "Ejecutar expresión en una shell, mostrar salida"
 
 #: gajim/command_system/implementation/execute.py:74
 msgid ""
 "Command disabled. This command can be enabled by setting "
 "'command_system_execute' to True in ACE (Advanced Configuration Editor)."
 msgstr ""
+"Comando deshabilitado. Este comando se puede habilitar estableciendo "
+"'command_system_execute' en Verdadero en ACE (Editor de configuración "
+"avanzada)."
 
 #: gajim/command_system/implementation/execute.py:125
 msgid "Execute expression inside a shell, send output"
-msgstr ""
+msgstr "Ejecutar expresión en una shell, enviar salida"
 
 #: gajim/command_system/implementation/standard.py:52
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
+"Mostrar ayuda sobre un comando dado o una lista de comandos disponibles si "
+"se proporciona -a"
 
 #: gajim/command_system/implementation/standard.py:81
 msgid "Send a message to the contact"
@@ -7898,11 +7866,11 @@ msgstr "Enviar un mensaje al contacto"
 
 #: gajim/command_system/implementation/standard.py:86
 msgid "Send action (in the third person) to the current chat"
-msgstr ""
+msgstr "Enviar acción (en tercera persona) al chat actual"
 
 #: gajim/command_system/implementation/standard.py:91
 msgid "Show logged messages which mention given text"
-msgstr ""
+msgstr "Mostrar mensajes registrados que mencionan el texto dado"
 
 #: gajim/command_system/implementation/standard.py:96
 #, python-format
@@ -7922,6 +7890,12 @@ msgid ""
 "    online, away, chat, xa, dnd.\n"
 "    "
 msgstr ""
+"\n"
+"     Establecer el estado actual\n"
+"\n"
+"    El estado se puede dar como uno de los siguientes valores: \n"
+"    en línea, ausente, chat, ausencia extendida, no molestar.\n"
+"    "
 
 #: gajim/command_system/implementation/standard.py:145
 msgid "Set the current status to away"
@@ -7947,18 +7921,16 @@ msgstr "Hacer un ping al contacto"
 
 #: gajim/command_system/implementation/standard.py:192
 #: gajim/command_system/implementation/standard.py:421
-#, fuzzy
 msgid "Command is not supported for zeroconf accounts"
-msgstr "Comando no soportado por la cuenta zeroconf."
+msgstr "Comando no soportado en cuentas zeroconf"
 
 #: gajim/command_system/implementation/standard.py:196
 msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
+msgstr "Enviar secuencia DTMF a través de un chat de voz abierto"
 
 #: gajim/command_system/implementation/standard.py:199
-#, fuzzy
 msgid "No open voice chats with the contact"
-msgstr "Click para ver anteriores conversaciones con este contacto"
+msgstr "No hay chats de voz abiertos con el contacto"
 
 #: gajim/command_system/implementation/standard.py:202
 #, python-format
@@ -7967,26 +7939,23 @@ msgstr "%s no es un tono válido"
 
 #: gajim/command_system/implementation/standard.py:209
 msgid "Toggle Voice Chat"
-msgstr ""
+msgstr "Alternar chat de voz"
 
 #: gajim/command_system/implementation/standard.py:212
-#, fuzzy
 msgid "Voice chats are not available"
-msgstr "El bus de la sesión no está disponible"
+msgstr "Los chats de voz no está disponibles"
 
 #: gajim/command_system/implementation/standard.py:219
 msgid "Toggle Video Chat"
-msgstr ""
+msgstr "Alternar chat de vídeo"
 
 #: gajim/command_system/implementation/standard.py:222
-#, fuzzy
 msgid "Video chats are not available"
-msgstr "El bus de la sesión no está disponible"
+msgstr "Los chats de vídeo no están disponibles"
 
 #: gajim/command_system/implementation/standard.py:229
-#, fuzzy
 msgid "Send a message to the contact that will attract their attention"
-msgstr "Enviar un mensaje al contacto"
+msgstr "Enviar un mensaje al contacto para atraer su atención"
 
 #: gajim/command_system/implementation/standard.py:269
 msgid "Change your nickname in a group chat"
@@ -7997,9 +7966,8 @@ msgid "Invalid nickname"
 msgstr "Alias no válido"
 
 #: gajim/command_system/implementation/standard.py:281
-#, fuzzy
 msgid "Open a private chat window with a specified participant"
-msgstr "Abra una ventana de chat privada con un ocupante especificado"
+msgstr "Abrir una ventana de chat privada con un participante especificado"
 
 #: gajim/command_system/implementation/standard.py:287
 #: gajim/command_system/implementation/standard.py:297
@@ -8010,13 +7978,12 @@ msgid "Nickname not found"
 msgstr "Alias no encontrado"
 
 #: gajim/command_system/implementation/standard.py:290
-#, fuzzy
 msgid ""
 "Open a private chat window with a specified participant and send him a "
 "message"
 msgstr ""
-"Abra una ventana de chat privada con un ocupante especificado y envíele un "
-"mensaje"
+"Abrir una ventana de chat privada con un participante especificado y envíale "
+"un mensaje"
 
 #: gajim/command_system/implementation/standard.py:300
 msgid "Display or change a group chat topic"
@@ -8024,7 +7991,7 @@ msgstr "Mostrar o cambiar el tema de una sala de conversación"
 
 #: gajim/command_system/implementation/standard.py:309
 msgid "Invite a user to a group chat for a reason"
-msgstr ""
+msgstr "Invitar al usuario a un grupo por alguna razón"
 
 #: gajim/command_system/implementation/standard.py:312
 #, python-format
@@ -8032,14 +7999,14 @@ msgid "Invited %(jid)s to %(room_jid)s"
 msgstr "%(jid)s invitado a %(room_jid)s"
 
 #: gajim/command_system/implementation/standard.py:317
-#, fuzzy
 msgid "Join a group chat given by an XMPP Address"
-msgstr "en _grupos de charla"
+msgstr "Unirte a un grupo dado por una dirección XMPP"
 
 #: gajim/command_system/implementation/standard.py:327
 msgid ""
 "Leave the group chat, optionally giving a reason, and close tab or window"
 msgstr ""
+"Dejar el grupo, opcionalmente dar una razón y cerrar la pestaña o ventana"
 
 #: gajim/command_system/implementation/standard.py:333
 msgid ""
@@ -8049,11 +8016,15 @@ msgid ""
 "    If given nickname is not found it will be treated as a JID.\n"
 "    "
 msgstr ""
+"\n"
+"    Prohibir al user por alias o JID en un grupo\n"
+"\n"
+"    Si el alias no se encuentra, será tratado como un JID.\n"
+"    "
 
 #: gajim/command_system/implementation/standard.py:349
-#, fuzzy
 msgid "Kick user from group chat by nickname"
-msgstr "Has sido invitado a un grupo de charla"
+msgstr "Expulsa del grupo al usuario por alias"
 
 #: gajim/command_system/implementation/standard.py:358
 msgid ""
@@ -8061,11 +8032,13 @@ msgid ""
 "    Role can be given as one of the following values:\n"
 "    moderator, participant, visitor, none"
 msgstr ""
+"Establecer el rol de participante en un grupo\n"
+"    Rol puede ser uno de los siguientes:\n"
+"    moderador, participante, visitante, ninguno"
 
 #: gajim/command_system/implementation/standard.py:363
-#, fuzzy
 msgid "Invalid role given"
-msgstr "Servidor no válido"
+msgstr "Rol no válido"
 
 #: gajim/command_system/implementation/standard.py:370
 msgid ""
@@ -8073,11 +8046,13 @@ msgid ""
 "    Affiliation can be given as one of the following values:\n"
 "    owner, admin, member, outcast, none"
 msgstr ""
+"Establecer la afiliación de los participantes en el grupo.\n"
+"    La afiliación puede darse como uno de los siguientes valores: \n"
+"    propietario, administrador, miembro, rechazado, ninguno"
 
 #: gajim/command_system/implementation/standard.py:375
-#, fuzzy
 msgid "Invalid affiliation given"
-msgstr "cambió la afiliación"
+msgstr "Afiliación no válida"
 
 #: gajim/command_system/implementation/standard.py:385
 msgid "Display names of all group chat participants"
@@ -8097,7 +8072,7 @@ msgstr "¡Error durante la ejecución del comando!"
 
 #: gajim/command_system/implementation/custom.py:114
 msgid "The same as using a doc-string, except it supports translation"
-msgstr ""
+msgstr "Lo mismo que usar una doc-string, excepto que admite traducción"
 
 #: gajim/gtk/filetransfer_progress.py:104
 #, python-format
@@ -8150,6 +8125,8 @@ msgid ""
 "Participants entering this group chat need to request permission to send "
 "messages"
 msgstr ""
+"Lo participantes que entren en este grupo necesitan pedir permiso para "
+"enviar mensajes"
 
 #: gajim/gtk/groupchat_info.py:60
 msgid "?Group chat feature:Not Moderated"
@@ -8158,6 +8135,8 @@ msgstr "?Group chat feature:No moderado"
 #: gajim/gtk/groupchat_info.py:61
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
+"Los participantes que entren en este grupo están autorizados a enviar "
+"mensajes"
 
 #: gajim/gtk/groupchat_info.py:65
 msgid "?Group chat feature:Public"
@@ -8165,16 +8144,15 @@ msgstr "?Group chat feature:Público"
 
 #: gajim/gtk/groupchat_info.py:66
 msgid "Group chat can be found via search"
-msgstr ""
+msgstr "El grupo puede ser encontrado vía búsqueda"
 
 #: gajim/gtk/groupchat_info.py:69
 msgid "?Group chat feature:Hidden"
 msgstr "?Group chat feature:Oculto"
 
 #: gajim/gtk/groupchat_info.py:70
-#, fuzzy
 msgid "This group chat can not be found via search"
-msgstr "Este grupo de charla no tiene tema"
+msgstr "Este grupo no puede ser encontrado vía búsqueda"
 
 #: gajim/gtk/groupchat_info.py:73
 msgid "?Group chat feature:Password Required"
@@ -8254,9 +8232,8 @@ msgid "File transfer completed"
 msgstr "Transferencia de archivo finalizada"
 
 #: gajim/gtk/filetransfer.py:276 gajim/gtk/filetransfer.py:285
-#, fuzzy
 msgid "Connection with peer could not be established."
-msgstr "La conexión con el cliente no se pudo establecer."
+msgstr "No se pudo establecer conexión con otro."
 
 #: gajim/gtk/filetransfer.py:293
 #, python-format
@@ -8425,9 +8402,8 @@ msgid "Password Change Failed"
 msgstr "El cambio de contraseña ha fallado"
 
 #: gajim/gtk/change_password.py:63
-#, fuzzy
 msgid "An error occurred while trying to change your password."
-msgstr "Ha ocurrido un error durante la creación de la cuenta"
+msgstr "Ha ocurrido un error mientras intentabas cambiar tu contraseña."
 
 #: gajim/gtk/change_password.py:142 gajim/gtk/change_password.py:144
 #: gajim/gtk/change_password.py:221 gajim/gtk/accounts.py:838
@@ -8464,9 +8440,8 @@ msgid "Unknown SSL error '%s'"
 msgstr "Error SSL desconocido '%s'"
 
 #: gajim/gtk/start_chat.py:55
-#, fuzzy
 msgid "Start / Join Chat"
-msgstr "Iniciar conversación"
+msgstr "Iniciar / unirse a un chat"
 
 #: gajim/gtk/start_chat.py:279 gajim/gtk/start_chat.py:358
 msgid "You can not join a group chat unless you are connected."
@@ -8481,6 +8456,8 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+"Buscar grupos a nivel mundial\n"
+"(presiona Intro para comenzar la búsqueda)"
 
 #: gajim/gtk/start_chat.py:802
 #, python-format
@@ -8492,13 +8469,12 @@ msgid "This service has not yet responded with detailed information"
 msgstr "Este servicio no ha respondido todavía con información detallada"
 
 #: gajim/gtk/discovery.py:71
-#, fuzzy
 msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely a legacy service or broken."
 msgstr ""
-"Este servicio podría no responder con información detallada.\n"
-"Posiblemente es antiguo o está roto"
+"Este servicio no pudo responder con información detallada.\n"
+"Es muy probable que sea un servicio heredado o roto."
 
 #: gajim/gtk/discovery.py:127
 msgid "Others"
@@ -8798,7 +8774,7 @@ msgstr "Añadir contacto"
 #: gajim/gtk/add_contact.py:260
 #, python-format
 msgid "%s Missing"
-msgstr ""
+msgstr "Falta %s"
 
 #: gajim/gtk/add_contact.py:261
 #, python-format
@@ -8815,9 +8791,8 @@ msgid "The user ID must not contain a resource."
 msgstr "Esta ID de usuario no contiene un recurso."
 
 #: gajim/gtk/add_contact.py:300
-#, fuzzy
 msgid "You cannot add yourself to your contact list."
-msgstr "No puedes añadirte a tí mismo a tu roster."
+msgstr "No puedes añadirte a ti mismo a tu roster"
 
 #: gajim/gtk/add_contact.py:305
 msgid "Account Offline"
@@ -8828,14 +8803,12 @@ msgid "Your account must be online to add new contacts."
 msgstr "Tu cuenta debe estar en línea para añadir nuevos contactos."
 
 #: gajim/gtk/add_contact.py:322
-#, fuzzy
 msgid "Contact Already in Contact List"
 msgstr "Contacto ya presente en el roster"
 
 #: gajim/gtk/add_contact.py:323
-#, fuzzy
 msgid "This contact is already in your contact list."
-msgstr "Este contacto ya está listado en tu roster."
+msgstr "Este contacto ya está en tu roster."
 
 #: gajim/gtk/add_contact.py:380 gajim/gtk/add_contact.py:418
 msgid "User ID:"
@@ -8852,104 +8825,97 @@ msgid ""
 "\n"
 "%(error)s"
 msgstr ""
+"Este error ocurrió al agregar un contacto para el transporte %(transport)s:\n"
+"\n"
+"%(error)s"
 
 #: gajim/gtk/message_input.py:47
 msgid "Write a message…"
 msgstr "Escribir un mensaje"
 
 #: gajim/gtk/themes.py:37
-#, fuzzy
 msgid "Chatstate Composing"
-msgstr "Componiendo"
+msgstr "Componiendo estado de chat"
 
 #: gajim/gtk/themes.py:41
-#, fuzzy
 msgid "Chatstate Inactive"
-msgstr "Inactivo"
+msgstr "Estado inactivo"
 
 #: gajim/gtk/themes.py:45
 msgid "Chatstate Gone"
-msgstr ""
+msgstr "Estado me he ido"
 
 #: gajim/gtk/themes.py:49
-#, fuzzy
 msgid "Chatstate Paused"
-msgstr "Cambiar estado"
+msgstr "Estado en pausa"
 
 #: gajim/gtk/themes.py:53
-#, fuzzy
 msgid "Group Chat Tab New Directed Message"
-msgstr "Nuevo Mensaje Directo en Pestaña MUC"
+msgstr "Nuevo Mensaje Directo en pestaña de grupo de chat"
 
 #: gajim/gtk/themes.py:57
-#, fuzzy
 msgid "Group Chat Tab New Message"
-msgstr "Nuevo mensaje"
+msgstr "Nuevo mensaje en pestaña de grupo de chat"
 
 #: gajim/gtk/themes.py:61
 msgid "Banner Foreground Color"
-msgstr ""
+msgstr "Color del banner"
 
 #: gajim/gtk/themes.py:65
 msgid "Banner Background Color"
-msgstr ""
+msgstr "Color de fondo del banner"
 
 #: gajim/gtk/themes.py:69
 msgid "Banner Font"
-msgstr ""
+msgstr "Tipografía del banner"
 
 #: gajim/gtk/themes.py:73
 msgid "Account Row Foreground Color"
-msgstr ""
+msgstr "Color de la fila de cuenta"
 
 #: gajim/gtk/themes.py:77
 msgid "Account Row Background Color"
-msgstr ""
+msgstr "Color de fondo de fila de cuenta"
 
 #: gajim/gtk/themes.py:81
-#, fuzzy
 msgid "Account Row Font"
-msgstr "Cuenta"
+msgstr "Tipografía de fila de cuenta"
 
 #: gajim/gtk/themes.py:85
 msgid "Group Row Foreground Color"
-msgstr ""
+msgstr "Color de fila de grupo"
 
 #: gajim/gtk/themes.py:89
 msgid "Group Row Background Color"
-msgstr ""
+msgstr "Color de fondo de fila de grupo"
 
 #: gajim/gtk/themes.py:93
-#, fuzzy
 msgid "Group Row Font"
-msgstr "Grupo"
+msgstr "Tipografía de fila de grupo"
 
 #: gajim/gtk/themes.py:97
 msgid "Contact Row Foreground Color"
-msgstr ""
+msgstr "Color de fila de contacto"
 
 #: gajim/gtk/themes.py:101
 msgid "Contact Row Background Color"
-msgstr ""
+msgstr "Color de fondo de fila de contacto"
 
 #: gajim/gtk/themes.py:105
-#, fuzzy
 msgid "Contact Row Font"
-msgstr "_Mostrar evento en roster"
+msgstr "Tipografía de fila de contacto"
 
 #: gajim/gtk/themes.py:109
 msgid "Conversation Font"
 msgstr "Tipografía para conversación"
 
 #: gajim/gtk/themes.py:113
-#, fuzzy
 msgid "Incoming Nickname Color"
-msgstr "Alias no válido"
+msgstr "Color de alias entrante"
 
 #: gajim/gtk/themes.py:117
-#, fuzzy
 msgid "Outgoing Nickname Color"
-msgstr "Cambiando alias"
+msgstr "Color de alias saliente"
 
 #: gajim/gtk/themes.py:121
 msgid "Incoming Message Text Color"
@@ -8984,19 +8950,16 @@ msgid "Highlight Message Color"
 msgstr "Color de mensaje resaltado"
 
 #: gajim/gtk/themes.py:153
-#, fuzzy
 msgid "Message Correcting"
-msgstr "Mensajes"
+msgstr "Corrección de mensaje"
 
 #: gajim/gtk/themes.py:157
-#, fuzzy
 msgid "Contact Disconnected Background"
-msgstr "Contacto desconectado"
+msgstr "Fondo de contacto desconectado"
 
 #: gajim/gtk/themes.py:161
-#, fuzzy
 msgid "Contact Connected Background "
-msgstr "Nombre de contacto"
+msgstr "Fondo de contacto conectado"
 
 #: gajim/gtk/themes.py:164
 msgid "Status Online Color"
@@ -9024,7 +8987,7 @@ msgstr "Nombre no válido"
 
 #: gajim/gtk/themes.py:218
 msgid "Name <b>default</b> is not allowed"
-msgstr ""
+msgstr "Nombre <b>default</b> no está permitido"
 
 #: gajim/gtk/themes.py:225
 msgid "Spaces are not allowed"
@@ -9100,9 +9063,8 @@ msgid "All files"
 msgstr "Todos los archivos"
 
 #: gajim/gtk/settings.py:478
-#, fuzzy
 msgid "Clear File"
-msgstr "Limpiando"
+msgstr "Vaciar fichero"
 
 #: gajim/gtk/settings.py:603 gajim/gtk/proxies.py:33
 msgid "Manage Proxies"
@@ -9111,14 +9073,12 @@ msgstr "Gestionar Proxies"
 #: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:748
 #: gajim/gtk/preferences.py:1029 gajim/gtk/preferences.py:1039
 #: gajim/gtk/preferences.py:1043
-#, fuzzy
 msgid "No Proxy"
-msgstr "Proxy"
+msgstr "Sin proxy"
 
 #: gajim/gtk/settings.py:650
-#, fuzzy
 msgid "Adjust to Status"
-msgstr "_Ajustar al estado"
+msgstr "Ajustar al estado"
 
 #: gajim/gtk/settings.py:662
 msgid "On"
@@ -9134,7 +9094,7 @@ msgstr "Eliminando la cuenta..."
 
 #: gajim/gtk/remove_account.py:51
 msgid "Trying to remove account..."
-msgstr ""
+msgstr "Intentando eliminar cuenta..."
 
 #: gajim/gtk/remove_account.py:54 gajim/gtk/remove_account.py:55
 msgid "Account Removed"
@@ -9159,12 +9119,11 @@ msgstr "Esto eliminará tu cuenta de Gajim."
 #: gajim/gtk/remove_account.py:189
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
-msgstr ""
+msgstr "¿Quieres dar de baja tu cuenta en <b>%s</b> también?"
 
 #: gajim/gtk/remove_account.py:198
-#, fuzzy
 msgid "_Unregister account from service"
-msgstr "_Registrar nueva cuenta"
+msgstr "Dar de baja la cuenta del servicio"
 
 #: gajim/gtk/remove_account.py:217
 msgid "Account has to be connected"
@@ -9175,9 +9134,8 @@ msgid "Synchronise History"
 msgstr "Sincronizar historial"
 
 #: gajim/gtk/history_sync.py:203
-#, fuzzy
 msgid "How far back should the chat history be synchronised?"
-msgstr "¿Qué quieres hacer?"
+msgstr "¿Cuánto tiempo atrás debe sincronizarse el historial de chat?"
 
 #: gajim/gtk/history_sync.py:208
 msgid "One Month"
@@ -9221,11 +9179,13 @@ msgstr ""
 
 #: gajim/gtk/history_sync.py:279
 msgid "Gajim is fully synchronised with the archive."
-msgstr ""
+msgstr "Gajim está totalmente sincronizado con el archivo."
 
 #: gajim/gtk/history_sync.py:282
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
+"Ya hay una sincronización en progreso. Por favor, inténtalo de nuevo más "
+"tarde."
 
 #: gajim/gtk/about.py:51 data/org.gajim.Gajim.desktop.in:6
 #: data/org.gajim.Gajim.appdata.xml.in:8
@@ -9390,18 +9350,16 @@ msgid " (optional)..."
 msgstr " (opcional)..."
 
 #: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:604
-#, fuzzy
 msgid "Invalid Address"
-msgstr "Archivo no válido"
+msgstr "Dirección no válida"
 
 #: gajim/gtk/groupchat_creation.py:186
 msgid "Not Connected"
 msgstr "No conectado"
 
 #: gajim/gtk/groupchat_creation.py:187
-#, fuzzy
 msgid "You have to be connected to create a group chat."
-msgstr "No has entrado al grupo de charla"
+msgstr "Tienes que estar conectado para crear un grupo."
 
 #: gajim/gtk/sounds.py:40
 msgid "Wav Sounds"
@@ -9461,7 +9419,7 @@ msgstr "Cancelar"
 
 #: gajim/gtk/dataform.py:692
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: gajim/gtk/statusicon.py:200
 msgid "_Change Status Message…"
@@ -9473,9 +9431,8 @@ msgid "using account %s"
 msgstr "usando la cuenta %s"
 
 #: gajim/gtk/statusicon.py:265
-#, fuzzy
 msgid "Hide _Contact List"
-msgstr "Invitar _Contactos"
+msgstr "Ocultar lista de _contactos"
 
 #: gajim/gtk/statusicon.py:278
 msgid "Hide this menu"
@@ -9498,9 +9455,8 @@ msgid "Information received"
 msgstr "Información recibida"
 
 #: gajim/gtk/profile.py:307
-#, fuzzy
 msgid "Without a connection, you can not publish your contact information."
-msgstr "Sin una conexión no puedes publicar tu información de contacto."
+msgstr "Sin una conexión, no puedes publicar tu información de contacto."
 
 #: gajim/gtk/profile.py:320
 msgid "Sending profile…"
@@ -9528,19 +9484,16 @@ msgid "Archiving Preferences for %s"
 msgstr "Preferencias de archivado para %s"
 
 #: gajim/gtk/mam_preferences.py:99
-#, fuzzy
 msgid "Archiving Preferences Saved"
-msgstr "_Preferencias"
+msgstr "Guardadas las preferencias de archivado"
 
 #: gajim/gtk/mam_preferences.py:100
-#, fuzzy
 msgid "Your archiving preferences have successfully been saved."
-msgstr "_Preferencias"
+msgstr "Tus preferencias de archivado han sido guardadas con éxito."
 
 #: gajim/gtk/mam_preferences.py:107
-#, fuzzy
 msgid "Archiving Preferences Error"
-msgstr "_Preferencias"
+msgstr "Error en las preferencias de archivado"
 
 #: gajim/gtk/mam_preferences.py:108
 msgid "Error received: {}"
@@ -9571,9 +9524,8 @@ msgid "?config type:Color"
 msgstr "?config type:Color"
 
 #: gajim/gtk/advanced_config.py:112
-#, fuzzy
 msgid "?config:Preference Name"
-msgstr "Nombre de la opción"
+msgstr "?config:Nombre de preferencia"
 
 #: gajim/gtk/advanced_config.py:123
 msgid "?config:Value"
@@ -9629,9 +9581,8 @@ msgid "Audio / Video"
 msgstr "Audio / Vídeo"
 
 #: gajim/gtk/features.py:92
-#, fuzzy
 msgid "Enables Gajim to provide Audio and Video chats"
-msgstr "Capacidad para iniciar el chat de audio y vídeo."
+msgstr "Habilita a Gajim para proporcionar chats de audio y vídeo"
 
 #: gajim/gtk/features.py:93
 msgid ""
@@ -9647,12 +9598,12 @@ msgid "Feature not available under Windows"
 msgstr "Característica no disponible en Windows"
 
 #: gajim/gtk/features.py:99
-#, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
-"Posibilidad de medir el tiempo de inactividad para definir el auto-estado."
+"Permite a Gajim medir el tiempo de inactividad de tu ordenador para "
+"configurar tu estado automáticamente"
 
 #: gajim/gtk/features.py:101
 msgid "Requires: libxss"
@@ -9660,18 +9611,19 @@ msgstr "Requiere: libxss"
 
 #: gajim/gtk/features.py:102 gajim/gtk/features.py:123
 msgid "No additional requirements"
-msgstr ""
+msgstr "Sin requerimientos adicionales"
 
 #: gajim/gtk/features.py:104
 msgid "Bonjour / Zeroconf (Serverless Chat)"
 msgstr "Bonjour / Zeroconf (Chat sin servidor)"
 
 #: gajim/gtk/features.py:106
-#, fuzzy
 msgid ""
 "Enables Gajim to automatically detected clients in a local network for "
 "serverless chats"
-msgstr "Charla sin servidor con clientes autodetectados en una red local."
+msgstr ""
+"Permite a Gajim detectar clientes automáticamente en una red local para "
+"chats sin servidor"
 
 #: gajim/gtk/features.py:108
 msgid "Requires: gir1.2-avahi-0.6"
@@ -9691,6 +9643,8 @@ msgid ""
 "Enables Gajim to be location-aware, if the user decides to publish the "
 "device’s location"
 msgstr ""
+"Permite a Gajim conocer la ubicación, si el usuario decide publicar la "
+"ubicación del dispositivo"
 
 #: gajim/gtk/features.py:116
 msgid "Requires: geoclue"
@@ -9713,17 +9667,16 @@ msgid "Requires: gsound"
 msgstr "Requiere: gsound"
 
 #: gajim/gtk/features.py:125
-#, fuzzy
 msgid "Secure Password Storage"
-msgstr "Guardar contraseña"
+msgstr "Almacenamiento seguro de contraseñas"
 
 #: gajim/gtk/features.py:127
-#, fuzzy
 msgid ""
 "Enables Gajim to store Passwords securely instead of storing them in "
 "plaintext"
 msgstr ""
-"Las contraseñas se pueden guardar de forma segura y no sólo en texto plano."
+"Permite a Gajim almacenar contraseñas de forma segura en lugar de "
+"almacenarlas en texto sin formato"
 
 #: gajim/gtk/features.py:129
 msgid "Requires: gnome-keyring or kwallet"
@@ -9732,6 +9685,7 @@ msgstr "Requiere: gnome-keyring o kwallet"
 #: gajim/gtk/features.py:130
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
+"Windows Credential Vault se usa para almacenamiento seguro de contraseñas"
 
 #: gajim/gtk/features.py:133
 msgid "Spell Checker"
@@ -9739,7 +9693,7 @@ msgstr "Corrector ortográfico"
 
 #: gajim/gtk/features.py:135
 msgid "Enables Gajim to spell check your messages while composing"
-msgstr ""
+msgstr "Permite a Gajim revisar la ortografía de tus mensajes mientras redactas"
 
 #: gajim/gtk/features.py:137 gajim/gtk/features.py:138
 msgid "Requires: Gspell"
@@ -9747,15 +9701,14 @@ msgstr "Requiere: Gspell"
 
 #: gajim/gtk/features.py:140
 msgid "UPnP-IGD Port Forwarding"
-msgstr ""
+msgstr "UPnP-IGD Port Forwarding"
 
 #: gajim/gtk/features.py:142
-#, fuzzy
 msgid ""
 "Enables Gajim to request your router to forward ports for file transfers"
 msgstr ""
-"Capacidad de solicitar que su enrutador reenvíe el puerto para la "
-"transferencia de archivos."
+"Permite a Gajim solicitar que tu router reenvíe puertos para transferencias "
+"de archivos"
 
 #: gajim/gtk/features.py:144
 msgid "Requires: gir1.2-gupnpigd-1.0"
@@ -9811,9 +9764,8 @@ msgid "Invite New Contact"
 msgstr "Invitar a nuevo contacto"
 
 #: gajim/gtk/groupchat_config.py:134
-#, fuzzy
 msgid "A Group Chat needs at least one Owner"
-msgstr "Ninguno"
+msgstr "Un grupo necesita al menos un propietario"
 
 #: gajim/gtk/groupchat_config.py:242
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
@@ -9823,7 +9775,7 @@ msgstr ""
 
 #: gajim/gtk/groupchat_config.py:399
 msgid "An entry with this XMPP Address already exists"
-msgstr ""
+msgstr "Ya existe una entrada con esta dirección XMPP"
 
 #: gajim/gtk/adhoc.py:92
 msgid "Finish"
@@ -9846,14 +9798,12 @@ msgid "Execute"
 msgstr "Ejecutar"
 
 #: gajim/gtk/adhoc.py:196
-#, fuzzy
 msgid "No commands available"
-msgstr "Cuenta no disponible"
+msgstr "No hay comandos disponibles"
 
 #: gajim/gtk/adhoc.py:245
-#, fuzzy
 msgid "Request Command List"
-msgstr "_Ejecutar comando"
+msgstr "Solicitar lista de comando"
 
 #: gajim/gtk/adhoc.py:260
 msgid "Executing…"
@@ -9868,14 +9818,13 @@ msgid "Finished"
 msgstr "Finalizado"
 
 #: gajim/gtk/adhoc.py:454
-#, fuzzy
 msgid "Execution failed"
-msgstr "Falló la conexión"
+msgstr "Falló la ejecución"
 
 #: gajim/gtk/blocking.py:38
-#, fuzzy, python-format
+#, python-format
 msgid "Blocking List for %s"
-msgstr "Lista de privacidad para %s"
+msgstr "Lista de bloqueo para %s"
 
 #: gajim/gtk/blocking.py:72
 msgid "Error!"
@@ -9904,9 +9853,8 @@ msgid "Connect"
 msgstr "Conectar"
 
 #: gajim/gtk/account_wizard.py:64
-#, fuzzy
 msgid "Log In"
-msgstr "_Conectar"
+msgstr "Iniciar sesión"
 
 #: gajim/gtk/account_wizard.py:78
 msgid "An error occurred during account creation"
@@ -9927,22 +9875,19 @@ msgstr "Conectando al servidor..."
 
 #: gajim/gtk/account_wizard.py:364 gajim/gtk/account_wizard.py:365
 msgid "Anonymous login not supported"
-msgstr ""
+msgstr "Inicio de sesión anónimo no soportado"
 
 #: gajim/gtk/account_wizard.py:366
-#, fuzzy
 msgid "This server does not support anonymous"
-msgstr "Tu servidor no soporta vCard"
+msgstr "Este servidor no soporta inicio de sesión anónimo"
 
 #: gajim/gtk/account_wizard.py:380 gajim/gtk/account_wizard.py:381
-#, fuzzy
 msgid "Signup not allowed"
-msgstr "Espacios no permitidos"
+msgstr "Registro no permitido"
 
 #: gajim/gtk/account_wizard.py:382
-#, fuzzy
 msgid "This server does not allow signup."
-msgstr "Tu servidor no soporta vCard"
+msgstr "Este servidor no soporta registro."
 
 #: gajim/gtk/account_wizard.py:398 gajim/gtk/account_wizard.py:399
 msgid "Connection failed"
@@ -9953,6 +9898,8 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
+"Gajim no pudo llegar al servidor. Asegúrate de que tu dirección XMPP sea "
+"correcta."
 
 #: gajim/gtk/account_wizard.py:454
 msgid "Account is being created"
@@ -9960,7 +9907,7 @@ msgstr "La cuenta se está creando"
 
 #: gajim/gtk/account_wizard.py:491
 msgid "The server rejected the registration without an error message"
-msgstr ""
+msgstr "El servidor rechazó el registro sin un mensaje de error"
 
 #: gajim/gtk/account_wizard.py:521 gajim/gtk/accounts.py:557
 msgid "Add Account"
@@ -10021,9 +9968,8 @@ msgid "Please make sure you are connected with '%s'."
 msgstr "Por favor, asegúrate de estar conectado con '%s'."
 
 #: gajim/gtk/xml_console.py:180
-#, fuzzy
 msgid "Invalid Node"
-msgstr "Archivo no válido"
+msgstr "Nodo no válido"
 
 #: gajim/gtk/search.py:95 gajim/gtk/search.py:191
 msgid "Search"
@@ -10035,7 +9981,7 @@ msgstr "Nueva búsqueda"
 
 #: gajim/gtk/search.py:176
 msgid "Request Search Form"
-msgstr ""
+msgstr "Solicitar formulario de búsqueda"
 
 #: gajim/gtk/search.py:236
 msgid "Search…"
@@ -10046,13 +9992,12 @@ msgid "Search Result"
 msgstr "Resultado de la busqueda"
 
 #: gajim/gtk/search.py:250
-#, fuzzy
 msgid "No results found"
-msgstr "Sin resultados"
+msgstr "No se han encontrado resultados"
 
 #: gajim/gtk/preferences.py:366
 msgid "Missing dependencies for Audio/Video"
-msgstr ""
+msgstr "Dependencias faltantes para audio/vídeo"
 
 #: gajim/gtk/preferences.py:378 gajim/gtk/preferences.py:387
 msgid "Default"
@@ -10083,29 +10028,24 @@ msgid "status message text"
 msgstr "texto del mensaje de estado"
 
 #: gajim/gtk/accounts.py:122
-#, fuzzy
 msgid "Re-Login"
-msgstr "¿Reconectar ahora?"
+msgstr "Reiniciar sesión"
 
 #: gajim/gtk/accounts.py:123
 msgid "Re-Login now?"
 msgstr "¿Reconectar ahora?"
 
 #: gajim/gtk/accounts.py:124
-#, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
-msgstr ""
-"Si quieres que se apliquen todos los cambios instantáneamente, debes "
-"reconectar."
+msgstr "Para aplicar los cambios, tienes que reiniciar sesión."
 
 #: gajim/gtk/accounts.py:126
-#, fuzzy
 msgid "_Later"
-msgstr "_Últimos"
+msgstr "Más tarde"
 
 #: gajim/gtk/accounts.py:128
 msgid "_Re-Login"
-msgstr ""
+msgstr "_Reiniciar sesión"
 
 #: gajim/gtk/accounts.py:492
 msgid "Please check if Bonjour is installed."
@@ -10143,81 +10083,75 @@ msgstr "Reconocer tu cuenta por color"
 
 #: gajim/gtk/accounts.py:614
 msgid "Login"
-msgstr ""
+msgstr "Inicio de sesión"
 
 #: gajim/gtk/accounts.py:617
 msgid "Import Contacts"
 msgstr "Importar contactos"
 
 #: gajim/gtk/accounts.py:626 gajim/gtk/accounts.py:712
-#, fuzzy
 msgid "Connect on startup"
-msgstr "C_onectar al inicio de Gajim"
+msgstr "Conectar al inicio"
 
 #: gajim/gtk/accounts.py:630 gajim/gtk/accounts.py:717
-#, fuzzy
 msgid "Save conversations for all contacts"
-msgstr "Grabar conversaciones para todos los contactos"
+msgstr "Guardar conversaciones para todos los contactos"
 
 #: gajim/gtk/accounts.py:632 gajim/gtk/accounts.py:719
 msgid "Store conversations on the harddrive"
-msgstr ""
+msgstr "Almacenar conversaciones en el disco duro"
 
 #: gajim/gtk/accounts.py:634 gajim/gtk/accounts.py:721
 msgid "Global Status"
 msgstr "Estado global"
 
 #: gajim/gtk/accounts.py:636
-#, fuzzy
 msgid "Synchronise the status of all accounts"
-msgstr "Cambia el estado de una o varias cuentas"
+msgstr "Sincronizar los estados de todas las cuentas"
 
 #: gajim/gtk/accounts.py:638
 msgid "Use file transfer proxies"
 msgstr "Usar proxies para las transferencias de archivo"
 
 #: gajim/gtk/accounts.py:654
-#, fuzzy
 msgid "Idle Time"
-msgstr "Inactivo desde:"
+msgstr "Tiempo inactivo"
 
 #: gajim/gtk/accounts.py:656
 msgid "Disclose the time of your last activity"
-msgstr ""
+msgstr "Revela la hora de tu última actividad."
 
 #: gajim/gtk/accounts.py:658
 msgid "Local System Time"
-msgstr ""
+msgstr "Hora local del sistema"
 
 #: gajim/gtk/accounts.py:660
 msgid "Disclose the local system time of the device Gajim runs on"
 msgstr ""
+"Revela la hora del sistema local del dispositivo en el que se ejecuta Gajim"
 
 #: gajim/gtk/accounts.py:663
 msgid "Client / Operating System"
 msgstr "Cliente / Sistema operativo"
 
 #: gajim/gtk/accounts.py:665
-#, fuzzy
 msgid ""
 "Disclose information about the client and operating system you currently use"
 msgstr ""
-"Si está marcado, Gajim permitirá a otros detectar el sistema operativo que "
-"estás usando"
+"Revelar información sobre el cliente y el sistema operativo que usas "
+"actualmente"
 
 #: gajim/gtk/accounts.py:668
-#, fuzzy
 msgid "Ignore Unknown Contacts"
-msgstr "Invitar _Contactos"
+msgstr "Ignorar contactos desconocidos"
 
 #: gajim/gtk/accounts.py:670
-#, fuzzy
 msgid "Ignore everything from contacts not in your Roster"
-msgstr "_Ignorar mensajes de contactos que no están en la lista de contactos"
+msgstr "Ignorar todo de contactos que no estén en tu roster"
 
 #: gajim/gtk/accounts.py:688
 msgid "Manually set the hostname for the server"
-msgstr ""
+msgstr "Establecer manualmente el nombre de host para el servidor"
 
 #: gajim/gtk/accounts.py:694 gajim/gtk/accounts.py:764
 #: gajim/gtk/accounts.py:769
@@ -10225,33 +10159,28 @@ msgid "Priority"
 msgstr "Prioridad"
 
 #: gajim/gtk/accounts.py:714
-#, fuzzy
 msgid "Use environment variable"
-msgstr "_usar variable de entorno HTTP__PROXY"
+msgstr "Usar variable de entorno"
 
 #: gajim/gtk/accounts.py:723
 msgid "Synchronize the status of all accounts"
 msgstr "Sincronizar el estado de todas las cuentas"
 
 #: gajim/gtk/accounts.py:733
-#, fuzzy
 msgid "First Name"
-msgstr "Nombre:"
+msgstr "Nombre"
 
 #: gajim/gtk/accounts.py:736
-#, fuzzy
 msgid "Last Name"
-msgstr "Apellido(s):"
+msgstr "Apellido"
 
 #: gajim/gtk/accounts.py:742
-#, fuzzy
 msgid "Email"
-msgstr "Nuevo correo-e"
+msgstr "Correo electrónico"
 
 #: gajim/gtk/accounts.py:760
-#, fuzzy
 msgid "Adjust to status"
-msgstr "_Ajustar al estado"
+msgstr "Ajustar al estado"
 
 #: gajim/gtk/accounts.py:789
 msgid "Enable"
@@ -10262,9 +10191,8 @@ msgid "Port"
 msgstr "Puerto"
 
 #: gajim/gtk/accounts.py:807
-#, fuzzy
 msgid "Connection Settings"
-msgstr "Conexión"
+msgstr "Configuración de la conexión"
 
 #: gajim/gtk/accounts.py:815
 msgid "Client Certificate"
@@ -10279,18 +10207,16 @@ msgid "Encrypted Certificate"
 msgstr "Certificado cifrado"
 
 #: gajim/gtk/accounts.py:823
-#, fuzzy
 msgid "Certificate Settings"
-msgstr "Notificaciones"
+msgstr "Configuraciones de certificado"
 
 #: gajim/gtk/accounts.py:835
 msgid "Save Password"
 msgstr "Guardar contraseña"
 
 #: gajim/gtk/accounts.py:843
-#, fuzzy
 msgid "Login Settings"
-msgstr "Extensiones"
+msgstr "Configuraciones de inicio de sesión"
 
 #: gajim/gtk/roster_item_exchange.py:49
 #, python-format
@@ -10369,7 +10295,7 @@ msgstr "Marcadores para %s"
 
 #: gajim/plugins/pluginmanager.py:717 gajim/plugins/pluginmanager.py:723
 msgid "Archive corrupted"
-msgstr ""
+msgstr "Archivo corrupto"
 
 #: gajim/plugins/pluginmanager.py:719
 msgid "Archive empty"
@@ -10377,9 +10303,8 @@ msgstr "Archivo vacío"
 
 #: gajim/plugins/pluginmanager.py:731 gajim/plugins/pluginmanager.py:739
 #: gajim/plugins/gui.py:273
-#, fuzzy
 msgid "Archive is malformed"
-msgstr "El servicio envió información malformada"
+msgstr "Archivo mal formado"
 
 #: gajim/plugins/pluginmanager.py:747 gajim/plugins/gui.py:288
 #: gajim/plugins/gui.py:301
@@ -10389,6 +10314,8 @@ msgstr "La extensión ya existe"
 #: gajim/plugins/gui.py:76
 msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 msgstr ""
+"Haz clic para ver la página wiki de Gajim sobre cómo instalar complementos "
+"en Flatpak."
 
 #: gajim/plugins/gui.py:85
 msgid "Plugin"
@@ -10412,9 +10339,8 @@ msgid "Overwrite Plugin?"
 msgstr "¿Sobrescribir extensión?"
 
 #: gajim/plugins/gui.py:289
-#, fuzzy
 msgid "Do you want to overwrite the currently installed version?"
-msgstr "¿Quieres aceptar la invitación?"
+msgstr "¿Quieres sobrescribir la versión actualmente instalada?"
 
 #: data/org.gajim.Gajim.desktop.in:5
 msgid "XMPP IM Client"
@@ -10422,7 +10348,7 @@ msgstr "Cliente IM XMPP"
 
 #: data/org.gajim.Gajim.desktop.in:8
 msgid "chat;messaging;im;xmpp;bonjour;voip;"
-msgstr ""
+msgstr "chat;messaging;im;xmpp;bonjour;voip;"
 
 #: data/org.gajim.Gajim.desktop.in:11 data/org.gajim.Gajim.desktop.in:23
 #: data/org.gajim.Gajim.desktop.in:29
@@ -10439,18 +10365,25 @@ msgid ""
 "you can chat through various XMPP services of your choice (e.g. Jabber.org) "
 "as well as transports (e.g. Facebook, IRC)."
 msgstr ""
+"Gajim pretende ser un cliente XMPP fácil de usar y con todas las funciones. "
+"Con Gajim puedes chatear a través de varios servicios XMPP de tu elección ("
+"por ejemplo, Jabber.org), así como transportes (por ejemplo, Facebook, IRC)."
 
 #: data/org.gajim.Gajim.appdata.xml.in:14
 msgid ""
 "Just chat with your friends or family, easily share pictures and thoughts or "
 "discuss the news with your groups."
 msgstr ""
+"Simplemente chatea con tus amigos o familiares, comparte fácilmente imágenes "
+"y pensamientos o discute las noticias con tus grupos."
 
 #: data/org.gajim.Gajim.appdata.xml.in:17
 msgid ""
 "Gajim integrates well with your other devices: just chat and see what's been "
 "said on your mobile device."
 msgstr ""
+"Gajim se integra bien con tus otros dispositivos: solo chatea y ve lo que se "
+"dice en tu dispositivo móvil."
 
 #: data/org.gajim.Gajim.appdata.xml.in:20
 msgid "Features:"
@@ -10459,6 +10392,7 @@ msgstr "Características:"
 #: data/org.gajim.Gajim.appdata.xml.in:22
 msgid "Never miss a message, keep all your chat clients synchronized"
 msgstr ""
+"No te pierdas ni un mensaje, mantén todos tus clientes de chat sincronizados"
 
 #: data/org.gajim.Gajim.appdata.xml.in:23
 msgid "Invite friends to group chats or join one"
@@ -10466,23 +10400,25 @@ msgstr "Invita a amigos a los grupos o únete a uno"
 
 #: data/org.gajim.Gajim.appdata.xml.in:24
 msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
+msgstr "Envía fácilmente fotos, videos u otros archivos a amigos y grupos"
 
 #: data/org.gajim.Gajim.appdata.xml.in:25
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
 msgstr ""
+"Chatea de forma segura con cifrado de extremo a extremo a través de OMEMO u "
+"OpenPGP"
 
 #: data/org.gajim.Gajim.appdata.xml.in:26
 msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
+msgstr "Usa tus emoticones favoritos, configura tu propia foto de perfil"
 
 #: data/org.gajim.Gajim.appdata.xml.in:27
 msgid "Keep and manage all your chat history"
-msgstr ""
+msgstr "Mantén y gestiona todo tu historial de conversación"
 
 #: data/org.gajim.Gajim.appdata.xml.in:28
 msgid "Organize your chats with tabs"
-msgstr ""
+msgstr "Organiza tus conversaciones en pestañas"
 
 #: data/org.gajim.Gajim.appdata.xml.in:29
 msgid "Automatic spell-checking for your messages"
@@ -10491,17 +10427,22 @@ msgstr "Corrección ortográfica automática de tus mensajes"
 #: data/org.gajim.Gajim.appdata.xml.in:30
 msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
 msgstr ""
+"Conéctate a otros mensajeros a través de transportes (Facebook, IRC, ...)"
 
 #: data/org.gajim.Gajim.appdata.xml.in:31
 msgid ""
 "Lookup things on Wikipedia, dictionaries or other search engines directly "
 "from the chat window"
 msgstr ""
+"Busca cosas en Wikipedia, diccionarios u otros motores de búsqueda "
+"directamente desde la ventana de chat"
 
 #: data/org.gajim.Gajim.appdata.xml.in:32
 msgid ""
 "Set your activity, tune, and mood to show your friends how you are feeling"
 msgstr ""
+"Establece tu actividad, melodía y estado de ánimo para mostrar a tus amigos "
+"cómo te sientes."
 
 #: data/org.gajim.Gajim.appdata.xml.in:33
 msgid "Support for multiple accounts"
@@ -10509,11 +10450,11 @@ msgstr "Soporta múltiples cuentas"
 
 #: data/org.gajim.Gajim.appdata.xml.in:34
 msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
+msgstr "Agrupa múltiples contactos de un amigo a un solo Meta-Contacto"
 
 #: data/org.gajim.Gajim.appdata.xml.in:35
 msgid "XML console to see what's happening on the protocol layer"
-msgstr ""
+msgstr "Consola XML para ver qué sucede en la capa de protocolo"
 
 #: data/org.gajim.Gajim.appdata.xml.in:36
 msgid "Serverless messaging (Bonjour/Zeroconf)"
@@ -10533,12 +10474,11 @@ msgstr "Lista de contactos"
 
 #: data/org.gajim.Gajim.appdata.xml.in:48
 msgid "Tabbed chat window"
-msgstr ""
+msgstr "Ventana de chat con pestañas"
 
 #: data/org.gajim.Gajim.appdata.xml.in:52
-#, fuzzy
 msgid "Group chat support"
-msgstr "Grupos de charla"
+msgstr "Soporte de grupos"
 
 #: data/org.gajim.Gajim.appdata.xml.in:56
 msgid "Chat history"

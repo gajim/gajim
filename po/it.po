@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 02:05+0000\n"
+"POT-Creation-Date: 2020-06-22 02:05+0000\n"
 "PO-Revision-Date: 2014-05-12 12:00+0200\n"
 "Last-Translator: Davide Pizzetti <erpizzo@alice.it>\n"
 "Language-Team: Gajim Translators\n"
@@ -158,7 +158,7 @@ msgstr "Non c'è nessuna richiesta di sottoscrizione in attesa."
 msgid " resource with priority "
 msgstr " risorsa con priorità "
 
-#: gajim/gui_menu_builder.py:254 gajim/gui_menu_builder.py:345
+#: gajim/gui_menu_builder.py:255 gajim/gui_menu_builder.py:346
 #: gajim/chat_control.py:295 gajim/roster_window.py:778
 #: gajim/roster_window.py:1717 gajim/roster_window.py:1719
 #: gajim/roster_window.py:2031 gajim/roster_window.py:3271
@@ -171,368 +171,368 @@ msgstr " risorsa con priorità "
 msgid "Not in contact list"
 msgstr "Non nella lista dei contatti"
 
-#: gajim/gui_menu_builder.py:358
+#: gajim/gui_menu_builder.py:359
 msgid "I would like to add you to my contact list"
 msgstr "Vorrei aggiungerti alla lista dei miei contatti."
 
-#: gajim/gui_menu_builder.py:436
+#: gajim/gui_menu_builder.py:437
 msgid "Send Single _Message…"
 msgstr "Invia un _messaggio singolo…"
 
-#: gajim/gui_menu_builder.py:451
+#: gajim/gui_menu_builder.py:452
 msgid "E_xecute Command…"
 msgstr "_Esegui il comando…"
 
-#: gajim/gui_menu_builder.py:459
+#: gajim/gui_menu_builder.py:460
 msgid "_Manage Transport"
 msgstr "_Gestisci il trasporto"
 
-#: gajim/gui_menu_builder.py:465
+#: gajim/gui_menu_builder.py:466
 msgid "_Modify Transport"
 msgstr "_Modifica il trasporto"
 
-#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4915
+#: gajim/gui_menu_builder.py:473 gajim/roster_window.py:4915
 msgid "_Rename…"
 msgstr "_Rinomina…"
 
-#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4931
+#: gajim/gui_menu_builder.py:484 gajim/roster_window.py:4931
 #: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr "_Sblocca"
 
-#: gajim/gui_menu_builder.py:486 gajim/roster_window.py:4936
+#: gajim/gui_menu_builder.py:487 gajim/roster_window.py:4936
 #: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr "_Blocca"
 
-#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4943
+#: gajim/gui_menu_builder.py:495 gajim/roster_window.py:4943
 #: gajim/data/gui/contact_context_menu.ui:181
 msgid "Remo_ve"
 msgstr "_Elimina"
 
-#: gajim/gui_menu_builder.py:504 gajim/data/gui/contact_context_menu.ui:198
+#: gajim/gui_menu_builder.py:505 gajim/data/gui/contact_context_menu.ui:198
 msgid "_Information"
 msgstr "_Informazioni"
 
-#: gajim/gui_menu_builder.py:517
+#: gajim/gui_menu_builder.py:518
 msgid "Send File"
 msgstr "Invia File"
 
-#: gajim/gui_menu_builder.py:518
+#: gajim/gui_menu_builder.py:519
 msgid "Upload File…"
 msgstr "Carica un file…"
 
-#: gajim/gui_menu_builder.py:519
+#: gajim/gui_menu_builder.py:520
 msgid "Send File Directly…"
 msgstr "Invia un file direttamente…"
 
-#: gajim/gui_menu_builder.py:521 gajim/gui_menu_builder.py:588
+#: gajim/gui_menu_builder.py:522 gajim/gui_menu_builder.py:589
 msgid "Send Chatstate"
 msgstr "Invia lo stato della chat"
 
-#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:283
+#: gajim/gui_menu_builder.py:523 gajim/data/gui/groupchat_control.ui:283
 msgid "Invite Contacts…"
 msgstr "Invita Contatti"
 
-#: gajim/gui_menu_builder.py:523 gajim/gui_menu_builder.py:781
-#: gajim/gui_menu_builder.py:808 gajim/gui_menu_builder.py:847
+#: gajim/gui_menu_builder.py:524 gajim/gui_menu_builder.py:782
+#: gajim/gui_menu_builder.py:809 gajim/gui_menu_builder.py:848
 msgid "Add to Contact List…"
 msgstr "Aggiungi alla lista contatti…"
 
-#: gajim/gui_menu_builder.py:524
+#: gajim/gui_menu_builder.py:525
 msgid "Voice Chat"
 msgstr "Chat vocale"
 
-#: gajim/gui_menu_builder.py:525
+#: gajim/gui_menu_builder.py:526
 msgid "Video Chat"
 msgstr "Conversazione video"
 
-#: gajim/gui_menu_builder.py:526 gajim/gui_menu_builder.py:573
-#: gajim/gui_menu_builder.py:842
+#: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:574
+#: gajim/gui_menu_builder.py:843
 msgid "Information"
 msgstr "Informazioni"
 
-#: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:594
+#: gajim/gui_menu_builder.py:528 gajim/gui_menu_builder.py:595
 msgid "History"
 msgstr "Cronologia"
 
-#: gajim/gui_menu_builder.py:533 gajim/gui_menu_builder.py:649
+#: gajim/gui_menu_builder.py:534 gajim/gui_menu_builder.py:650
 #: gajim/data/gui/preferences_window.ui:1886
 msgid "Disabled"
 msgstr "Disabilitato"
 
-#: gajim/gui_menu_builder.py:534
+#: gajim/gui_menu_builder.py:535
 msgid "Composing Only"
 msgstr "Solo Composizione Messaggio"
 
-#: gajim/gui_menu_builder.py:535
+#: gajim/gui_menu_builder.py:536
 msgid "All Chat States"
 msgstr "Tutti gli Stati"
 
-#: gajim/gui_menu_builder.py:574
+#: gajim/gui_menu_builder.py:575
 msgid "Manage Group Chat"
 msgstr "Gestisci la conversazione di gruppo"
 
-#: gajim/gui_menu_builder.py:575
+#: gajim/gui_menu_builder.py:576
 msgid "Rename…"
 msgstr "Rinomina…"
 
-#: gajim/gui_menu_builder.py:576
+#: gajim/gui_menu_builder.py:577
 msgid "Change Subject…"
 msgstr "Cambia l'Argomento"
 
-#: gajim/gui_menu_builder.py:577
+#: gajim/gui_menu_builder.py:578
 msgid "Upload Avatar…"
 msgstr "Carica un avatar…"
 
-#: gajim/gui_menu_builder.py:578
+#: gajim/gui_menu_builder.py:579
 msgid "Configure…"
 msgstr "Configura…"
 
-#: gajim/gui_menu_builder.py:579
+#: gajim/gui_menu_builder.py:580
 msgid "Destroy…"
 msgstr "Destruggi…"
 
-#: gajim/gui_menu_builder.py:581 gajim/data/gui/preferences_window.ui:843
+#: gajim/gui_menu_builder.py:582 gajim/data/gui/preferences_window.ui:843
 msgid "Chat Settings"
 msgstr "Impostazioni della chat"
 
-#: gajim/gui_menu_builder.py:582
+#: gajim/gui_menu_builder.py:583
 #, fuzzy
 msgid "Show Join/Leave"
 msgstr "Mostra chi si unisce / se ne va"
 
-#: gajim/gui_menu_builder.py:583
+#: gajim/gui_menu_builder.py:584
 msgid "Show Status Changes"
 msgstr "Mostra Cambi di Stato"
 
-#: gajim/gui_menu_builder.py:584
+#: gajim/gui_menu_builder.py:585
 msgid "Notify on all Messages"
 msgstr "Notifica Tutti i Messaggi"
 
-#: gajim/gui_menu_builder.py:585
+#: gajim/gui_menu_builder.py:586
 msgid "Minimize on Close"
 msgstr "Minimizza alla Chiusura"
 
-#: gajim/gui_menu_builder.py:587
+#: gajim/gui_menu_builder.py:588
 msgid "Minimize When Joining Automatically"
 msgstr "Minimizza quando ti Unisci Automaticamente"
 
-#: gajim/gui_menu_builder.py:590
+#: gajim/gui_menu_builder.py:591
 msgid "Sync Threshold"
 msgstr "Sincronizza il valore di soglia"
 
-#: gajim/gui_menu_builder.py:591
+#: gajim/gui_menu_builder.py:592
 msgid "Change Nickname…"
 msgstr "Cambia Soprannome…"
 
-#: gajim/gui_menu_builder.py:592
+#: gajim/gui_menu_builder.py:593
 msgid "Request Voice"
 msgstr "Richiedi voce"
 
-#: gajim/gui_menu_builder.py:593 gajim/gui_menu_builder.py:865
+#: gajim/gui_menu_builder.py:594 gajim/gui_menu_builder.py:866
 msgid "Execute Command…"
 msgstr "Esegui Comando…"
 
-#: gajim/gui_menu_builder.py:595
+#: gajim/gui_menu_builder.py:596
 msgid "Leave"
 msgstr "Abbandona"
 
-#: gajim/gui_menu_builder.py:640 gajim/gtk/preferences.py:166
+#: gajim/gui_menu_builder.py:641 gajim/gtk/preferences.py:166
 msgid "No threshold"
 msgstr "Nessun valore di soglia"
 
-#: gajim/gui_menu_builder.py:642 gajim/gtk/preferences.py:168
+#: gajim/gui_menu_builder.py:643 gajim/gtk/preferences.py:168
 #, python-format
 msgid "%i day"
 msgid_plural "%i days"
 msgstr[0] "%i giorno fa"
 msgstr[1] "%i giorni fa"
 
-#: gajim/gui_menu_builder.py:650
+#: gajim/gui_menu_builder.py:651
 msgid "Composing only"
 msgstr "Solo scrittura"
 
-#: gajim/gui_menu_builder.py:651
+#: gajim/gui_menu_builder.py:652
 msgid "All chat states"
 msgstr "Tutti gli stati"
 
-#: gajim/gui_menu_builder.py:671
+#: gajim/gui_menu_builder.py:672
 msgid "Add Contact…"
 msgstr "Aggiungi un contatto…"
 
-#: gajim/gui_menu_builder.py:672 gajim/gtk/profile.py:53
+#: gajim/gui_menu_builder.py:673 gajim/gtk/profile.py:53
 #: gajim/gtk/accounts.py:708 gajim/gtk/accounts.py:746
 msgid "Profile"
 msgstr "Profilo"
 
-#: gajim/gui_menu_builder.py:673
+#: gajim/gui_menu_builder.py:674
 msgid "Send Single Message…"
 msgstr "Invia un messaggio singolo…"
 
-#: gajim/gui_menu_builder.py:674
+#: gajim/gui_menu_builder.py:675
 msgid "Discover Services…"
 msgstr "Ricerca Servizi…"
 
-#: gajim/gui_menu_builder.py:675 gajim/gtk/server_info.py:48
+#: gajim/gui_menu_builder.py:676 gajim/gtk/server_info.py:48
 msgid "Server Info"
 msgstr "Informazioni sul server"
 
-#: gajim/gui_menu_builder.py:676 gajim/data/gui/preferences_window.ui:2763
+#: gajim/gui_menu_builder.py:677 gajim/data/gui/preferences_window.ui:2763
 msgid "Advanced"
 msgstr "Avanzato"
 
-#: gajim/gui_menu_builder.py:677 gajim/gtk/mam_preferences.py:98
+#: gajim/gui_menu_builder.py:678 gajim/gtk/mam_preferences.py:98
 msgid "Archiving Preferences"
 msgstr "Archiviazione preferenze"
 
-#: gajim/gui_menu_builder.py:678
+#: gajim/gui_menu_builder.py:679
 msgid "Blocking List"
 msgstr "Elenco degli utenti bloccati"
 
-#: gajim/gui_menu_builder.py:679
+#: gajim/gui_menu_builder.py:680
 msgid "Bookmarks"
 msgstr "Segnalibri"
 
-#: gajim/gui_menu_builder.py:680
+#: gajim/gui_menu_builder.py:681
 msgid "PEP Configuration"
 msgstr "Configurazione PEP"
 
-#: gajim/gui_menu_builder.py:681
+#: gajim/gui_menu_builder.py:682
 msgid "Synchronise History…"
 msgstr "Sincronizza Cronologia…"
 
-#: gajim/gui_menu_builder.py:682 gajim/gtk/privacy_list.py:409
+#: gajim/gui_menu_builder.py:683 gajim/gtk/privacy_list.py:409
 msgid "Privacy Lists"
 msgstr "Elenchi della privacy"
 
-#: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
+#: gajim/gui_menu_builder.py:685 gajim/data/gui/groupchat_config.ui:36
 #: gajim/gtk/server_info.py:128
 msgid "Admin"
 msgstr "Amministratore"
 
-#: gajim/gui_menu_builder.py:685
+#: gajim/gui_menu_builder.py:686
 msgid "Send Server Message…"
 msgstr "Invia un messaggio del server..."
 
-#: gajim/gui_menu_builder.py:686
+#: gajim/gui_menu_builder.py:687
 msgid "Set MOTD…"
 msgstr "Imposta il messaggio del giorno..."
 
-#: gajim/gui_menu_builder.py:687
+#: gajim/gui_menu_builder.py:688
 msgid "Update MOTD…"
 msgstr "Aggiorna il messaggio del giorno..."
 
-#: gajim/gui_menu_builder.py:688
+#: gajim/gui_menu_builder.py:689
 msgid "Delete MOTD…"
 msgstr "Elimina messaggio del giorno..."
 
-#: gajim/gui_menu_builder.py:725
+#: gajim/gui_menu_builder.py:726
 msgid "_Add Account…"
 msgstr "_Aggiungi un account…"
 
-#: gajim/gui_menu_builder.py:731
+#: gajim/gui_menu_builder.py:732
 msgid "_Modify Accounts…"
 msgstr "_Modifica gli account…"
 
-#: gajim/gui_menu_builder.py:741 gajim/data/gui/zeroconf_context_menu.ui:26
+#: gajim/gui_menu_builder.py:742 gajim/data/gui/zeroconf_context_menu.ui:26
 #: gajim/data/gui/account_context_menu.ui:79
 msgid "_Modify Account…"
 msgstr "_Modifica l'account…"
 
-#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:746 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "Account"
 
-#: gajim/gui_menu_builder.py:774 gajim/gui_menu_builder.py:779
+#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:780
 msgid "Copy XMPP Address"
 msgstr "Copia l'indirizzo XMPP"
 
-#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:807
+#: gajim/gui_menu_builder.py:776 gajim/gui_menu_builder.py:808
 msgid "Join Groupchat"
 msgstr "Unisciti ad una conversazione di gruppo"
 
-#: gajim/gui_menu_builder.py:780 gajim/gui_menu_builder.py:806
+#: gajim/gui_menu_builder.py:781 gajim/gui_menu_builder.py:807
 #: gajim/data/gui/subscription_request_window.ui:106
 #: gajim/gtk/start_chat.py:630
 msgid "Start Chat"
 msgstr "Inizia una conversazione"
 
-#: gajim/gui_menu_builder.py:786
+#: gajim/gui_menu_builder.py:787
 msgid "Copy Link Location"
 msgstr "Copia l'indirizzo del collegamento"
 
-#: gajim/gui_menu_builder.py:787
+#: gajim/gui_menu_builder.py:788
 msgid "Open Link in Browser"
 msgstr "Apri il collegamento nel browser"
 
-#: gajim/gui_menu_builder.py:792
+#: gajim/gui_menu_builder.py:793
 msgid "Copy Email Address"
 msgstr "Copia l'indirizzo e-mail"
 
-#: gajim/gui_menu_builder.py:793 gajim/gui_menu_builder.py:805
+#: gajim/gui_menu_builder.py:794 gajim/gui_menu_builder.py:806
 msgid "Open Email Composer"
 msgstr "Apri il compositore delle e-mail"
 
-#: gajim/gui_menu_builder.py:798
+#: gajim/gui_menu_builder.py:799
 msgid "Copy Location"
 msgstr "Copia la posizione"
 
-#: gajim/gui_menu_builder.py:799
+#: gajim/gui_menu_builder.py:800
 msgid "Show Location"
 msgstr "Mostra la posizione"
 
-#: gajim/gui_menu_builder.py:804
+#: gajim/gui_menu_builder.py:805
 msgid "Copy XMPP Address/Email"
 msgstr "Copia l'indirizzo XMPP/E-mail"
 
-#: gajim/gui_menu_builder.py:856
+#: gajim/gui_menu_builder.py:857
 msgid "Invite"
 msgstr "Invita"
 
-#: gajim/gui_menu_builder.py:874
+#: gajim/gui_menu_builder.py:875
 msgid "Unblock"
 msgstr "Sblocca"
 
-#: gajim/gui_menu_builder.py:877
+#: gajim/gui_menu_builder.py:878
 msgid "Block"
 msgstr "Blocca"
 
-#: gajim/gui_menu_builder.py:883
+#: gajim/gui_menu_builder.py:884
 msgid "Kick"
 msgstr "Caccia"
 
-#: gajim/gui_menu_builder.py:891
+#: gajim/gui_menu_builder.py:892
 msgid "Ban"
 msgstr "Bandisci"
 
-#: gajim/gui_menu_builder.py:901
+#: gajim/gui_menu_builder.py:902
 msgid "Make Owner"
 msgstr "Rendi proprietario"
 
-#: gajim/gui_menu_builder.py:910
+#: gajim/gui_menu_builder.py:911
 msgid "Make Admin"
 msgstr "Rendi amministratore"
 
-#: gajim/gui_menu_builder.py:919
+#: gajim/gui_menu_builder.py:920
 msgid "Make Member"
 msgstr "Rendi membro"
 
-#: gajim/gui_menu_builder.py:928
+#: gajim/gui_menu_builder.py:929
 #, fuzzy
 msgid "Revoke Member"
 msgstr "Rifiuta Membro"
 
-#: gajim/gui_menu_builder.py:938
+#: gajim/gui_menu_builder.py:939
 msgid "Grant Voice"
 msgstr ""
 
-#: gajim/gui_menu_builder.py:941
+#: gajim/gui_menu_builder.py:942
 msgid "Revoke Voice"
 msgstr "Rifiuta Richiesta di Parola"
 
-#: gajim/gui_menu_builder.py:961
+#: gajim/gui_menu_builder.py:962
 msgid "Copy"
 msgstr "Copia"
 
