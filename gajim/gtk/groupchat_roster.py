@@ -345,7 +345,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
                                                       self.room_jid,
                                                       nick2)
             if gc_contact1.show != gc_contact2.show:
-                return -1 if gc_contact1.show < gc_contact2.show else 1
+                return -1 if gc_contact1.show > gc_contact2.show else 1
 
             return locale.strcoll(nick1.lower(), nick2.lower())
 
