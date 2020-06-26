@@ -93,9 +93,8 @@ class Client(ConnectionHandlers):
         self._idle_handler_id = Monitor.connect('state-changed',
                                                 self._idle_state_changed)
 
-        if sys.platform not in ('win32', 'darwin'):
-            self._screensaver_handler_id = app.app.connect(
-                'notify::screensaver-active', self._screensaver_state_changed)
+        self._screensaver_handler_id = app.app.connect(
+            'notify::screensaver-active', self._screensaver_state_changed)
 
         ConnectionHandlers.__init__(self)
 
