@@ -627,6 +627,8 @@ Jakub Szypulka
 DEVS_CURRENT = u"""\
 Yann Leboulanger (asterix AT lagaule.org)
 Philipp Hörist (philipp AT hoerist.com)
+Daniel Brötzmann (wurstsalat AT posteo.de)
+André Apitzsch
 """.strip().split("\n")
 
 DEVS_PAST = u"""\
