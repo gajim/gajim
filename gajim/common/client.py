@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import logging
 
 import nbxmpp
