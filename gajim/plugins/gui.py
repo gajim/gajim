@@ -30,7 +30,6 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gdk
 
 from gajim.common import app
-from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import open_uri
@@ -167,8 +166,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.description.set_text(plugin.description)
 
-        self._ui.uninstall_plugin_button.set_sensitive(
-            configpaths.get('PLUGINS_USER') in plugin.__path__)
+        self._ui.uninstall_plugin_button.set_sensitive(True)
         self._ui.configure_plugin_button.set_sensitive(
             plugin.config_dialog is not None)
 
