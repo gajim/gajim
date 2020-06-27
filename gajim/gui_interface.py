@@ -1533,7 +1533,7 @@ class Interface:
         config['use_custom_host'] = use_custom_host
         if custom_host:
             host, _protocol, type_ = custom_host
-            host, port = host.split(':')
+            host, port = host.rsplit(':', maxsplit=1)
             config['custom_port'] = int(port)
             config['custom_host'] = host
             config['custom_type'] = type_.value
