@@ -25,10 +25,13 @@ __all__ = ['PluginManager']
 
 import os
 import sys
-import fnmatch
 import zipfile
+from pathlib import Path
+from importlib.util import spec_from_file_location
+from importlib.util import module_from_spec
 from shutil import rmtree, move
 import configparser
+from dataclasses import dataclass
 from packaging.version import Version as V
 
 import gajim
@@ -40,11 +43,116 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import Singleton
-from gajim.plugins import plugins_i18n
+from gajim.plugins.plugins_i18n import _ as p_
 
 from gajim.plugins.helpers import log
 from gajim.plugins.helpers import GajimPluginActivateException
+from gajim.plugins.helpers import is_shipped_plugin
 from gajim.plugins.gajimplugin import GajimPlugin, GajimPluginException
+
+
+FIELDS = ('name',
+          'short_name',
+          'version',
+          'min_gajim_version',
+          'max_gajim_version',
+          'description',
+          'authors',
+          'homepage')
+
+
+@dataclass
+class Plugin:
+    name: str
+    short_name: str
+    description: str
+    authors: str
+    homepage: str
+    version: V
+    min_gajim_version: V
+    max_gajim_version: V
+    shipped: bool
+    path: Path
+
+    @classmethod
+    def from_manifest(cls, path):
+        shipped = is_shipped_plugin(path)
+        manifest = path / 'manifest.ini'
+        if not manifest.exists() and not manifest.is_dir():
+            raise ValueError('Not a plugin path: {path}')
+
+        conf = configparser.ConfigParser()
+        conf.remove_section('info')
+
+        with manifest.open() as conf_file:
+            try:
+                conf.read_file(conf_file)
+            except configparser.Error as error:
+                raise ValueError(f'Error while parsing manifest: '
+                                 f'{path.name}, {error}')
+
+        for field in FIELDS:
+            try:
+                value = conf.get('info', field, fallback=None)
+            except configparser.Error as error:
+                raise ValueError(f'Error while parsing manifest: '
+                                 f'{path.name}, {error}')
+
+            if value is None:
+                raise ValueError(f'No {field} found for {path.name}')
+
+        name = conf.get('info', 'name')
+        short_name = conf.get('info', 'short_name')
+        description = p_(conf.get('info', 'description'))
+        authors = conf.get('info', 'authors')
+        homepage = conf.get('info', 'homepage')
+        version = V(conf.get('info', 'version'))
+        min_gajim_version = V(conf.get('info', 'min_gajim_version'))
+        max_gajim_version = V(conf.get('info', 'max_gajim_version'))
+        gajim_version = V(gajim.__version__.split('+', 1)[0])
+
+        if not min_gajim_version <= gajim_version <= max_gajim_version:
+            raise ValueError(
+                f'Plugin {path.name} not loaded, '
+                f'newer version of gajim required: '
+                f'{min_gajim_version} <= {gajim_version} <= {max_gajim_version}'
+            )
+
+        return cls(name=name,
+                   short_name=short_name,
+                   description=description,
+                   authors=authors,
+                   homepage=homepage,
+                   version=version,
+                   min_gajim_version=min_gajim_version,
+                   max_gajim_version=max_gajim_version,
+                   shipped=shipped,
+                   path=path)
+
+    def load_module(self):
+        moduel_path = self.path / '__init__.py'
+        module_name = self.path.stem
+
+        try:
+            spec = spec_from_file_location(module_name, moduel_path)
+            if spec is None:
+                return None
+            module = module_from_spec(spec)
+            sys.modules[spec.name] = module
+            spec.loader.exec_module(module)
+        except Exception as error:
+            log.warning('Error while loading module: %s', error)
+            return None
+
+        for module_attr_name in dir(module):
+            module_attr = getattr(module, module_attr_name)
+            if issubclass(module_attr, GajimPlugin):
+                for field in FIELDS:
+                    setattr(module_attr, field, str(getattr(self, field)))
+                setattr(module_attr, '__path__', str(self.path))
+                return module_attr
+        return None
+
 
 class PluginManager(metaclass=Singleton):
     '''
@@ -109,10 +217,7 @@ class PluginManager(metaclass=Singleton):
         '''
 
         self.update_plugins()
-
-        for path in reversed(configpaths.get_plugin_dirs()):
-            pc = self.scan_dir_for_plugins(path)
-            self.add_plugins(pc)
+        self._load_plugins()
 
     def _plugin_has_entry_in_global_config(self, plugin):
         if app.config.get_per('plugins', plugin.short_name) is None:
@@ -152,48 +257,55 @@ class PluginManager(metaclass=Singleton):
                     self.delete_plugin_files(dst_dir)
                 move(src_dir, dst_dir)
             except Exception:
-                log.exception('Upgrade of plugin %s failed. Impossible to move '
-                    'files from "%s" to "%s"', directory, src_dir, dst_dir)
+                log.exception('Upgrade of plugin %s failed. '
+                              'Impossible to move files from "%s" to "%s"',
+                              directory, src_dir, dst_dir)
                 continue
             updated_plugins.append(directory)
             if activate:
-                pc = self.scan_dir_for_plugins(dst_dir, scan_dirs=True,
-                    package=True)
-                if not pc:
+                plugin = self._load_plugin(Path(dst_dir))
+                if plugin is None:
+                    log.warning('Error while updating plugin')
                     continue
-                self.add_plugin(pc[0])
-                plugin = self.plugins[-1]
-                self.activate_plugin(plugin)
+
+                self.add_plugin(plugin, activate=True)
         return updated_plugins
 
 
     def init_plugins(self):
         self._activate_all_plugins_from_global_config()
 
-    def add_plugin(self, plugin_class):
-        '''
-        :todo: what about adding plug-ins that are already added? Module reload
-        and adding class from reloaded module or ignoring adding plug-in?
-        '''
+    def add_plugin(self, plugin, activate=False):
+        plugin_class = plugin.load_module()
+        if plugin_class is None:
+            return None
+
+        if plugin in self.plugins:
+            log.info('Not loading plugin %s v %s. Plugin already loaded.',
+                     plugin.short_name, plugin.version)
+            return None
+
         try:
-            plugin = plugin_class()
+            plugin_obj = plugin_class()
         except Exception:
             log.exception('Error while loading a plugin')
-            return
+            return None
 
-        if plugin not in self.plugins:
-            if not self._plugin_has_entry_in_global_config(plugin):
-                self._create_plugin_entry_in_global_config(plugin)
+        if not self._plugin_has_entry_in_global_config(plugin):
+            self._create_plugin_entry_in_global_config(plugin)
+            if plugin.shipped:
+                self._set_plugin_active_in_global_config(plugin)
 
-            self.plugins.append(plugin)
-            plugin.active = False
-            app.nec.push_incoming_event(
-                NetworkEvent('plugin-added', plugin=plugin))
-        else:
-            log.info('Not loading plugin %s v%s from module %s '
-                     '(identified by short name: %s). Plugin already loaded.',
-                     plugin.name, plugin.version,
-                     plugin.__module__, plugin.short_name)
+        self.plugins.append(plugin_obj)
+        plugin_obj.active = False
+
+        if activate:
+            self.activate_plugin(plugin_obj)
+
+        app.nec.push_incoming_event(
+            NetworkEvent('plugin-added', plugin=plugin_obj))
+
+        return plugin_obj
 
     def remove_plugin(self, plugin):
         '''
@@ -220,13 +332,15 @@ class PluginManager(metaclass=Singleton):
         for module_to_remove in modules_to_remove:
             del sys.modules[module_to_remove]
 
-    def add_plugins(self, plugin_classes):
-        for plugin_class in plugin_classes:
-            self.add_plugin(plugin_class)
-
     def get_active_plugin(self, plugin_name):
         for plugin in self.active_plugins:
             if plugin.short_name == plugin_name:
+                return plugin
+        return None
+
+    def get_plugin(self, short_name):
+        for plugin in self.plugins:
+            if plugin.short_name == short_name:
                 return plugin
         return None
 
@@ -478,10 +592,6 @@ class PluginManager(metaclass=Singleton):
         self._set_plugin_active_in_global_config(plugin, False)
         plugin.active = False
 
-    def _deactivate_all_plugins(self):
-        for plugin_object in self.active_plugins:
-            self.deactivate_plugin(plugin_object)
-
     def _add_gui_extension_points_handlers_from_plugin(self, plugin):
         for gui_extpoint_name, gui_extpoint_handlers in \
         plugin.gui_extension_points.items():
@@ -505,19 +615,6 @@ class PluginManager(metaclass=Singleton):
                         except Exception:
                             log.warning('Error executing %s',
                                         handler, exc_info=True)
-
-
-    def _activate_all_plugins(self):
-        '''
-        Activates all plugins in `plugins`.
-
-        Activated plugins are appended to `active_plugins` list.
-        '''
-        for plugin in self.plugins:
-            try:
-                self.activate_plugin(plugin)
-            except GajimPluginActivateException:
-                pass
 
     def _activate_all_plugins_from_global_config(self):
         for plugin in self.plugins:
@@ -552,159 +649,35 @@ class PluginManager(metaclass=Singleton):
     def _set_plugin_active_in_global_config(self, plugin, active=True):
         app.config.set_per('plugins', plugin.short_name, 'active', active)
 
-    def scan_dir_for_plugins(self, path, scan_dirs=True, package=False):
-        r'''
-        Scans given directory for plugin classes.
+    @staticmethod
+    def _load_plugin(plugin_path):
+        try:
+            return Plugin.from_manifest(plugin_path)
+        except Exception as error:
+            log.warning(error)
 
-        :param path: directory to scan for plugins
-        :type path: str
-
-        :param scan_dirs: folders inside path are processed as modules
-        :type scan_dirs: boolean
-
-        :param package: if path points to a single package folder
-        :type package: boolean
-
-        :return: list of found plugin classes (subclasses of `GajimPlugin`
-        :rtype: [] of class objects
-
-        :note: currently it only searches for plugin classes in '\*.py' files
-                present in given directory `path` (no recursion here)
-
-        :todo: add scanning zipped modules
-        '''
-        plugins_found = []
-        conf = configparser.ConfigParser()
-        fields = ('name', 'short_name', 'version', 'description', 'authors',
-            'homepage')
-        if not os.path.isdir(path):
-            return plugins_found
-
-        if package:
-            path, package_name = os.path.split(path)
-            dir_list = [package_name]
-        else:
-            dir_list = os.listdir(path)
-
-        sys.path.insert(0, path)
-
-        for elem_name in dir_list:
-            file_path = os.path.join(path, elem_name)
-
-            if os.path.isfile(file_path) and fnmatch.fnmatch(file_path, '*.py'):
-                module_name = os.path.splitext(elem_name)[0]
-            elif os.path.isdir(file_path) and scan_dirs:
-                module_name = elem_name
-                file_path += os.path.sep
-            else:
+    def _load_plugins(self):
+        plugins = {}
+        for plugin_dir in configpaths.get_plugin_dirs():
+            if not plugin_dir.is_dir():
                 continue
 
-            manifest_path = os.path.join(os.path.dirname(file_path),
-                'manifest.ini')
-            if scan_dirs and (not os.path.isfile(manifest_path)):
-                continue
-
-            # read metadata from manifest.ini
-            conf.remove_section('info')
-            with open(manifest_path, encoding='utf-8') as conf_file:
-                try:
-                    conf.read_file(conf_file)
-                except configparser.Error:
-                    log.warning('Plugin %s not loaded, error loading manifest',
-                                elem_name, exc_info=True)
+            for plugin_path in plugin_dir.iterdir():
+                plugin = self._load_plugin(plugin_path)
+                if plugin is None:
                     continue
 
-            short_name = conf.get('info', 'short_name', fallback=None)
-            if short_name is None:
-                log.error('No short_name defined for %s', elem_name)
-
-            # Check if the plugin is already loaded
-            try:
-                for plugin in self.plugins:
-                    if plugin.short_name == short_name:
-                        raise PluginAlreadyLoaded(
-                            'Skip Plugin %s because its '
-                            'already loaded' % elem_name)
-            except PluginAlreadyLoaded as error:
-                log.warning(error)
-                continue
-
-            min_v = conf.get('info', 'min_gajim_version', fallback=None)
-            max_v = conf.get('info', 'max_gajim_version', fallback=None)
-
-            if min_v is None or max_v is None:
-                log.warning('Plugin without min/max version: %s', elem_name)
-                continue
-
-            gajim_v = gajim.__version__.split('+', 1)[0]
-            gajim_v_cmp = V(gajim_v)
-
-            if min_v and gajim_v_cmp < V(min_v):
-                log.warning('Plugin %s not loaded, newer version of'
-                            'gajim required: %s < %s',
-                            elem_name, gajim_v, min_v)
-                continue
-            if max_v and gajim_v_cmp > V(max_v):
-                log.warning('Plugin %s not loaded, plugin incompatible '
-                            'with current version of gajim: '
-                            '%s > %s', elem_name, gajim_v, max_v)
-                continue
-
-            module = None
-            try:
-                log.info('Loading %s', module_name)
-                module = __import__(module_name)
-            except Exception:
-                log.warning(
-                    'While trying to load %s, exception occurred',
-                    elem_name, exc_info=True)
-                continue
-
-            if module is None:
-                continue
-
-            log.debug('Attributes processing started')
-            for module_attr_name in [attr_name for attr_name in dir(module)
-            if not (attr_name.startswith('__') or attr_name.endswith('__'))]:
-                module_attr = getattr(module, module_attr_name)
-                log.debug('%s: %s', module_attr_name, module_attr)
-
-                try:
-                    if not issubclass(module_attr, GajimPlugin) or \
-                    module_attr is GajimPlugin:
+                same_plugin = plugins.get(plugin.short_name)
+                if same_plugin is not None:
+                    if same_plugin.version > plugin.version:
                         continue
-                    log.debug('is subclass of GajimPlugin')
-                    module_attr.__path__ = os.path.abspath(
-                        os.path.dirname(file_path))
 
-                    for option in fields:
-                        if conf.get('info', option) == '':
-                            raise configparser.NoOptionError(option, 'info')
-                        if option == 'description':
-                            setattr(module_attr, option, plugins_i18n._(conf.get('info', option)))
-                            continue
-                        setattr(module_attr, option, conf.get('info', option))
+                log.info('Found plugin %s %s',
+                         plugin.short_name, plugin.version)
+                plugins[plugin.short_name] = plugin
 
-                    plugins_found.append(module_attr)
-                except TypeError:
-                    pass
-                except configparser.NoOptionError:
-                    # all fields are required
-                    log.debug(
-                        '%s: wrong manifest file. all fields are required!',
-                        module_attr_name)
-                except configparser.NoSectionError:
-                    # info section are required
-                    log.debug(
-                        '%s: wrong manifest file. info section are required!',
-                        module_attr_name)
-                except configparser.MissingSectionHeaderError:
-                    # info section are required
-                    log.debug('%s: wrong manifest file. section are required!',
-                              module_attr_name)
-
-        sys.path.remove(path)
-        return plugins_found
+        for plugin in plugins.values():
+            self.add_plugin(plugin)
 
     def install_from_zip(self, zip_filename, overwrite=None):
         '''
@@ -734,28 +707,30 @@ class PluginManager(metaclass=Singleton):
             if 'manifest.ini' in filename.split('/')[1]:
                 manifest = True
         if not manifest:
-            return
+            return None
         if len(dirs) > 1:
             raise PluginsystemError(_('Archive is malformed'))
 
-        user_dir = configpaths.get('PLUGINS_USER')
-        plugin_dir = os.path.join(user_dir, dirs[0])
+        plugin_name = dirs[0]
+        user_dir = Path(configpaths.get('PLUGINS_USER'))
+        plugin_path = user_dir / plugin_name
 
-        if os.path.isdir(plugin_dir):
+        if plugin_path.exists():
         # Plugin dir already exists
             if not overwrite:
                 raise PluginsystemError(_('Plugin already exists'))
-            self.uninstall_plugin(self.get_plugin_by_path(plugin_dir))
+            self.uninstall_plugin(self.get_plugin_by_path(str(plugin_path)))
 
         zip_file.extractall(user_dir)
         zip_file.close()
 
-        plugins = self.scan_dir_for_plugins(plugin_dir, package=True)
-        if not plugins:
-            return
-        self.add_plugin(plugins[0])
-        plugin = self.plugins[-1]
-        return plugin
+        plugin = self._load_plugin(plugin_path)
+        if plugin is None:
+            log.warning('Error while installing from zip')
+            rmtree(plugin_path)
+            raise PluginsystemError(_('Installation failed'))
+
+        return self.add_plugin(plugin)
 
     def delete_plugin_files(self, plugin_path):
         def on_error(func, path, error):
@@ -777,6 +752,10 @@ class PluginManager(metaclass=Singleton):
 
         self.remove_plugin(plugin)
         self.delete_plugin_files(plugin.__path__)
+        if not is_shipped_plugin(Path(plugin.__path__)):
+            path = Path(configpaths.get('PLUGINS_BASE')) / plugin.short_name
+            if path.exists():
+                self.delete_plugin_files(str(path))
         if self._plugin_has_entry_in_global_config(plugin):
             self._remove_plugin_entry_in_global_config(plugin)
 
@@ -787,7 +766,4 @@ class PluginManager(metaclass=Singleton):
         for plugin in self.plugins:
             if plugin.__path__ in plugin_dir:
                 return plugin
-
-
-class PluginAlreadyLoaded(Exception):
-    pass
+        return None

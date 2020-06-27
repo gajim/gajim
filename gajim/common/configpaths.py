@@ -42,12 +42,12 @@ def get(key: str) -> str:
     return _paths[key]
 
 
-def get_plugin_dirs() -> List[str]:
+def get_plugin_dirs() -> List[Path]:
     if gajim.IS_FLATPAK:
-        return ['/app/plugins',
-                _paths['PLUGINS_BASE']]
-    return [_paths['PLUGINS_BASE'],
-            _paths['PLUGINS_USER']]
+        return [Path(_paths['PLUGINS_BASE']),
+                Path('/app/plugins')]
+    return [Path(_paths['PLUGINS_BASE']),
+            Path(_paths['PLUGINS_USER'])]
 
 
 def get_paths(type_: PathType) -> Generator[str, None, None]:

@@ -1901,11 +1901,7 @@ class Interface:
 
         self.avatar_storage = AvatarStorage()
 
-        cfg_was_read = parser.read()
-
-        if not cfg_was_read:
-            # enable plugin_installer by default when creating config file
-            app.config.set_per('plugins', 'plugin_installer', 'active', True)
+        parser.read()
 
         # Load CSS files
         app.load_css_config()
