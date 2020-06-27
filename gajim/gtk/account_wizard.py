@@ -49,6 +49,8 @@ from .assistant import ErrorPage
 from .dataform import DataFormWidget
 from .util import get_builder
 from .util import open_window
+from .util import get_color_for_account
+from .util import get_app_window
 
 log = logging.getLogger('gajim.gui.account_wizard')
 
@@ -969,13 +971,65 @@ class Success(SuccessPage):
         self.set_heading(_('Account has been added successfully'))
 
         self._account = None
+        self._our_jid = None
+        self._label = None
+        self._color = None
+
+        self._ui = get_builder('account_wizard.ui')
+        self.pack_start(self._ui.account_label_box, True, True, 0)
+
+        self._provider = self._add_css_provider()
+
+        self._ui.account_name_entry.connect('changed', self._on_name_changed)
+        self._ui.account_color_button.connect('color-set', self._on_color_set)
+
+        self.show_all()
 
     def set_account(self, account):
         self._account = account
+        self._our_jid = app.get_jid_from_account(account)
+        self._ui.badge_preview.set_text(self._our_jid)
+        rgba = Gdk.RGBA()
+        rgba.parse(get_color_for_account(self._our_jid))
+        self._ui.account_color_button.set_rgba(rgba)
+        self._color = rgba.to_string()
+        self._set_badge_color(self._color)
 
     @property
     def account(self):
         return self._account
+
+    def _add_css_provider(self):
+        context = self._ui.badge_preview.get_style_context()
+        provider = Gtk.CssProvider()
+        context.add_provider(provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
+        return provider
+
+    def _on_name_changed(self, entry):
+        self._label = entry.get_text()
+        self._ui.badge_preview.set_text(self._label or self._our_jid)
+        self._save_config()
+
+    def _on_color_set(self, button):
+        rgba = button.get_rgba()
+        self._color = rgba.to_string()
+        self._set_badge_color(self._color)
+        self._save_config()
+
+    def _set_badge_color(self, color):
+        css = '.badge { background-color: %s }' % color
+        self._provider.load_from_data(bytes(css.encode()))
+
+    def _save_config(self):
+        app.settings.set_account_setting(
+            self._account, 'account_color', self._color)
+        if self._label:
+            app.settings.set_account_setting(
+                self._account, 'account_label', self._label)
+        app.css_config.refresh()
+        window = get_app_window('AccountsWindow')
+        if window is not None:
+            window.update_account_label(self._account)
 
     def get_visible_buttons(self):
         return ['connect']
