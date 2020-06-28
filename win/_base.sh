@@ -190,9 +190,11 @@ function cleanup_install {
         fi
     done
 
-    find "${MINGW_ROOT}" -regextype "posix-extended" -name "*.exe" -a ! \
-        -iregex ".*/(gajim|python|history_manager)[^/]*\\.exe" \
-        -exec rm -f {} \;
+    KEEP="gajim|gajim-debug|python3|gajim-history-manager|gdbus|gspawn-win32-helper"
+
+    echo "deleting .exe files"
+    find "${MINGW_ROOT}" -regextype "posix-extended" -name "*.exe" -and ! \
+        -iregex ".*/(${KEEP})\.exe" -exec rm -f {} \; -print
 
     rm -Rf "${MINGW_ROOT}"/libexec
     rm -Rf "${MINGW_ROOT}"/share/gtk-doc
@@ -227,6 +229,7 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/share/fontconfig
     rm -Rf "${MINGW_ROOT}"/share/gettext-*
     rm -Rf "${MINGW_ROOT}"/share/gstreamer-1.0
+    rm -Rf "${MINGW_ROOT}"/share/terminfo
 
     find "${MINGW_ROOT}"/share/glib-2.0 -type f ! \
         -name "*.compiled" -exec rm -f {} \;
@@ -240,6 +243,10 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/lib/ruby
     rm -Rf "${MINGW_ROOT}"/lib/tcl8
     rm -Rf "${MINGW_ROOT}"/lib/tcl8.6
+    rm -Rf "${MINGW_ROOT}"/lib/terminfo
+    rm -Rf "${MINGW_ROOT}"/lib/installed-tests
+    rm -Rf "${MINGW_ROOT}"/lib/tabset
+    rm -Rf "${MINGW_ROOT}"/lib/libthai
 
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstvpx.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstdaala.dll
