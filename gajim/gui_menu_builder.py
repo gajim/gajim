@@ -749,7 +749,8 @@ def build_accounts_menu():
 def get_encryption_menu(control_id, control_type, zeroconf=False):
     menu = Gio.Menu()
     menu.append(
-        'Disabled', 'win.set-encryption-{}::{}'.format(control_id, 'disabled'))
+        _('Disabled'),
+        'win.set-encryption-{}::{}'.format(control_id, 'disabled'))
     for name, plugin in app.plugin_manager.encryption_plugins.items():
         if control_type.is_groupchat:
             if not hasattr(plugin, 'allow_groupchat'):
