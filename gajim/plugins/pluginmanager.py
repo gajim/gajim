@@ -79,7 +79,7 @@ class Plugin:
         shipped = is_shipped_plugin(path)
         manifest = path / 'manifest.ini'
         if not manifest.exists() and not manifest.is_dir():
-            raise ValueError('Not a plugin path: {path}')
+            raise ValueError(f'Not a plugin path: {path}')
 
         conf = configparser.ConfigParser()
         conf.remove_section('info')
