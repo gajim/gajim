@@ -130,11 +130,15 @@ class Plugin:
                    path=path)
 
     def load_module(self):
-        moduel_path = self.path / '__init__.py'
+        module_path = self.path / '__init__.py'
+        if not module_path.exists():
+            # On Windows we only ship compiled files
+            module_path = self.path/ '__init__.pyc'
+
         module_name = self.path.stem
 
         try:
-            spec = spec_from_file_location(module_name, moduel_path)
+            spec = spec_from_file_location(module_name, module_path)
             if spec is None:
                 return None
             module = module_from_spec(spec)
