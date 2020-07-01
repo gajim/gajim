@@ -78,10 +78,10 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         self._ui.default_combo.set_active_id(result.default)
         self._ui.preferences_store.clear()
         for jid in result.always:
-            self._ui.preferences_store.append((str(jid), 'Always'))
+            self._ui.preferences_store.append((str(jid), True))
 
         for jid in result.never:
-            self._ui.preferences_store.append((str(jid), 'Never'))
+            self._ui.preferences_store.append((str(jid), False))
 
     @ensure_not_destroyed
     def _mam_prefs_saved(self, result):
@@ -137,8 +137,8 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         never = []
         default = self._ui.default_combo.get_active_id()
         for item in self._ui.preferences_store:
-            jid, type_ = item
-            if type_ == 'Always':
+            jid, archive = item
+            if archive:
                 always.append(jid)
             else:
                 never.append(jid)
