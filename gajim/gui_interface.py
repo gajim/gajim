@@ -1521,7 +1521,6 @@ class Interface:
             '%s@%s' % (username, domain))
         config['hostname'] = domain
         config['savepass'] = True
-        config['password'] = password
         config['anonymous_auth'] = anonymous
         config['autoconnect'] = True
         config['sync_with_global_status'] = True
@@ -1541,6 +1540,9 @@ class Interface:
         app.config.add_per('accounts', account)
         for opt in config:
             app.config.set_per('accounts', account, opt, config[opt])
+
+        # Password module depends on existing config
+        passwords.save_password(account, password)
 
         app.css_config.refresh()
         # refresh accounts window
