@@ -1545,9 +1545,10 @@ class Interface:
         passwords.save_password(account, password)
 
         app.css_config.refresh()
-        # refresh accounts window
+
         # Action must be added before account window is updated
         app.app.add_account_actions(account)
+
         window = get_app_window('AccountsWindow')
         if window is not None:
             window.add_account(account)
