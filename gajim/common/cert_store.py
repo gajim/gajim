@@ -62,6 +62,7 @@ class CertificateStore:
 
     def add_certificate(self, certificate):
         log.info('Add certificate to trust store')
+        self._certs.append(certificate)
         pem = certificate.props.certificate_pem
         path = self._get_random_path()
         write_file_async(path,
