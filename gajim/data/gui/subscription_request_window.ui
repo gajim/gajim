@@ -1,7 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkPopoverMenu" id="deny_popover">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkModelButton" id="deny_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">_Deny</property>
+            <signal name="clicked" handler="_on_deny_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkModelButton" id="block_button">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">_Block User</property>
+            <signal name="clicked" handler="_on_block_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkModelButton" id="report_button">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">_Report as Spam</property>
+            <signal name="clicked" handler="_on_report_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="submenu">main</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -26,22 +86,20 @@
         <property name="row_spacing">6</property>
         <property name="column_spacing">12</property>
         <child>
-          <object class="GtkLabel" id="jid_label">
+          <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="label">&lt;XMPP address&gt;</property>
+            <property name="label">Subscription Request</property>
             <property name="wrap">True</property>
             <property name="wrap_mode">word-char</property>
-            <property name="max_width_chars">50</property>
-            <property name="xalign">0</property>
             <style>
               <class name="large-header"/>
             </style>
           </object>
           <packing>
-            <property name="left_attach">1</property>
+            <property name="left_attach">0</property>
             <property name="top_attach">0</property>
+            <property name="width">2</property>
           </packing>
         </child>
         <child>
@@ -84,25 +142,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="contact_info_button">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Contact Information</property>
-            <property name="valign">center</property>
-            <property name="image">image2</property>
-            <signal name="clicked" handler="_on_contact_info_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkButton" id="start_chat_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Start Chat</property>
             <property name="valign">center</property>
             <property name="image">image1</property>
@@ -114,7 +157,19 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkButton" id="contact_info_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">Contact Information</property>
+            <property name="valign">center</property>
+            <property name="image">image2</property>
+            <signal name="clicked" handler="_on_contact_info_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
         </child>
       </object>
       <packing>
@@ -144,15 +199,20 @@
         <property name="spacing">12</property>
         <property name="homogeneous">True</property>
         <child>
-          <object class="GtkButton" id="deny_button">
-            <property name="label" translatable="yes">_Deny</property>
+          <object class="GtkMenuButton">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="receives_default">False</property>
-            <property name="tooltip_text" translatable="yes">Deny authorization from contact so the contact cannot know if you are connected</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_deny_clicked" swapped="no"/>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="popover">deny_popover</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Deny…</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -166,9 +226,8 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="can_default">True</property>
-            <property name="has_default">True</property>
-            <property name="receives_default">False</property>
-            <property name="tooltip_text" translatable="yes">Authorize contact so the contact can know if you are connected</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Allows the contact to see your online status</property>
             <property name="use_underline">True</property>
             <signal name="clicked" handler="_on_authorize_clicked" swapped="no"/>
             <style>
@@ -178,7 +237,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

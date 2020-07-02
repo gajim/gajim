@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from gajim import vcard
 
@@ -33,24 +34,37 @@ class SubscriptionRequest(Gtk.ApplicationWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title(_('Subscription Request'))
 
-        self._ui = get_builder('subscription_request_window.ui')
-        self.add(self._ui.subscription_box)
         self.jid = jid
         self.account = account
         self.user_nick = user_nick
-        self._ui.jid_label.set_text(self.jid)
+
+        self._ui = get_builder('subscription_request_window.ui')
+        self.add(self._ui.subscription_box)
+        self._ui.authorize_button.grab_default()
+
         if len(app.connections) >= 2:
-            prompt_text = \
-                _('Subscription request for account %(account)s from %(jid)s')\
-                % {'account': account, 'jid': self.jid}
+            prompt_text = _(
+                'Subscription request for account %(account)s from '
+                '%(jid)s') % {'account': self.account, 'jid': self.jid}
         else:
             prompt_text = _('Subscription request from %s') % self.jid
 
         self._ui.request_label.set_text(prompt_text)
         self._ui.subscription_text.set_text(text)
 
+        con = app.connections[self.account]
+        if con.get_module('Blocking').supported:
+            self._ui.block_button.set_sensitive(True)
+            self._ui.report_button.set_sensitive(True)
+
+        self.connect('key-press-event', self._on_key_press)
+
         self._ui.connect_signals(self)
         self.show_all()
+
+    def _on_key_press(self, _widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
 
     def _on_authorize_clicked(self, _widget):
         """
@@ -86,12 +100,28 @@ class SubscriptionRequest(Gtk.ApplicationWindow):
         app.interface.new_chat_from_jid(self.account, self.jid)
 
     def _on_deny_clicked(self, _widget):
-        """
-        Refuse the request
-        """
+        self._deny_request()
+        self._remove_contact()
+
+    def _on_block_clicked(self, _widget):
+        self._deny_request()
+        con = app.connections[self.account]
+        con.get_module('Blocking').block([self.jid])
+        self._remove_contact()
+
+    def _on_report_clicked(self, _widget):
+        self._deny_request()
+        con = app.connections[self.account]
+        con.get_module('Blocking').block([self.jid], report='spam')
+        self._remove_contact()
+
+    def _deny_request(self):
         con = app.connections[self.account]
         con.get_module('Presence').unsubscribed(self.jid)
+
+    def _remove_contact(self):
         contact = app.contacts.get_contact(self.account, self.jid)
         if contact and _('Not in contact list') in contact.get_shown_groups():
-            app.interface.roster.remove_contact(self.jid, self.account)
+            app.interface.roster.remove_contact(
+                self.jid, self.account, force=True, backend=True)
         self.destroy()
