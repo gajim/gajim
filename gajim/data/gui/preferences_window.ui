@@ -585,7 +585,7 @@
                             <property name="label" translatable="yes">Enable auto copy</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">If enabled, selecting Text will be copied to the clipboard, otherwise you can copy text with CTRL + SHIFT + C</property>
+                            <property name="tooltip_text" translatable="yes">If enabled, selected text will automatically be copied to the clipboard, otherwise you can copy text with CTRL + SHIFT + C</property>
                             <property name="halign">start</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
