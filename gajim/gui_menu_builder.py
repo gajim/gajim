@@ -397,7 +397,7 @@ control=None, gc_contact=None, is_anonymous=True):
         if helpers.jid_is_blocked(account, jid):
             block_menuitem.set_no_show_all(True)
             block_menuitem.hide()
-            if transport != 'jabber':
+            if transport not in ('jabber', None):
                 unblock_menuitem.set_no_show_all(True)
                 unblock_menuitem.hide()
                 unignore_menuitem.set_no_show_all(False)
@@ -409,7 +409,7 @@ control=None, gc_contact=None, is_anonymous=True):
         else:
             unblock_menuitem.set_no_show_all(True)
             unblock_menuitem.hide()
-            if transport != 'jabber':
+            if transport not in ('jabber', None):
                 block_menuitem.set_no_show_all(True)
                 block_menuitem.hide()
                 ignore_menuitem.set_no_show_all(False)
