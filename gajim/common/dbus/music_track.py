@@ -85,10 +85,8 @@ class MusicTrackListener:
                 -1,
                 None)
         except GLib.Error as error:
-            if error.domain == 'g-dbus-error-quark':
-                log.debug("Could not list names: %s", error.message)
-                return
-            raise
+            log.debug("Could not list names: %s", error.message)
+            return
 
         for name in result[0]:
             if name.startswith(MPRIS_PLAYER_PREFIX):
@@ -199,12 +197,10 @@ class MusicTrackListener:
                 -1,
                 None)
         except GLib.Error as error:
-            if error.domain == 'g-dbus-error-quark':
-                log.debug("Could not enable music listener: %s", error.message)
-                return None
-            raise
-        else:
-            return self._get_music_info(result[0])
+            log.debug("Could not enable music listener: %s", error.message)
+            return None
+
+        return self._get_music_info(result[0])
 
 
 def enable():
