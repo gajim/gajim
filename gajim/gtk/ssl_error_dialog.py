@@ -80,4 +80,4 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
             app.cert_store.add_certificate(self._cert)
 
         self.destroy()
-        self._con.process_ssl_errors()
+        self._con.process_tls_errors()
