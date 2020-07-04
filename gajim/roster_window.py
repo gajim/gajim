@@ -290,13 +290,9 @@ class RosterWindow:
             show = helpers.get_connection_status(account)
             our_jid = app.get_jid_from_account(account)
 
-            tls_pixbuf = None
-            if app.account_is_securely_connected(account):
-                tls_pixbuf = 'changes-prevent'
-
             it = self.model.append(None, [get_icon_name(show),
                 GLib.markup_escape_text(account), 'account', our_jid,
-                account, None, None, None, None, None, tls_pixbuf, True] +
+                account, None, None, None, None, None, None, True] +
                 [None] * self.nb_ext_renderers)
             self._iters[account]['account'] = it
 
@@ -1008,15 +1004,6 @@ class RosterWindow:
         child_iter = self._get_account_iter(account, self.model)
         if not child_iter:
             return
-
-        num_of_accounts = app.get_number_of_connected_accounts()
-        num_of_secured = app.get_number_of_securely_connected_accounts()
-
-        tls_pixbuf = None
-        if app.account_is_securely_connected(account) and not self.regroup or\
-        self.regroup and num_of_secured and num_of_secured == num_of_accounts:
-            tls_pixbuf = 'changes-prevent'
-            self.model[child_iter][Column.PADLOCK_PIXBUF] = tls_pixbuf
 
         if self.regroup:
             account_name = _('Merged accounts')
@@ -2188,8 +2175,6 @@ class RosterWindow:
                 # No need to redraw contacts if we're quitting
                 if child_iterA:
                     self.model[child_iterA][Column.AVATAR_IMG] = None
-                if account in app.con_types:
-                    app.con_types[account] = None
                 for jid in list(app.contacts.get_jid_list(account)):
                     lcontact = app.contacts.get_contacts(account, jid)
                     ctrl = app.interface.msg_win_mgr.get_gc_control(jid,

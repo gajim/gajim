@@ -91,8 +91,7 @@ class StatusTable:
                           1)
         self.current_row += 1
 
-    def add_status_row(self, show, str_status, show_lock=False,
-                       indent=True, transport=None):
+    def add_status_row(self, show, str_status, indent=True, transport=None):
         """
         Append a new row with status icon to the table
         """
@@ -117,10 +116,6 @@ class StatusTable:
         status_label.set_ellipsize(Pango.EllipsizeMode.END)
         status_label.set_max_width_chars(30)
         self.table.attach(status_label, 3, self.current_row, 1, 1)
-        if show_lock:
-            lock_image = Gtk.Image()
-            lock_image.set_from_icon_name('dialog-password', Gtk.IconSize.MENU)
-            self.table.attach(lock_image, 4, self.current_row, 1, 1)
         self.current_row += 1
 
     def fill_table_with_accounts(self, accounts):
@@ -128,8 +123,6 @@ class StatusTable:
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
             message = GLib.markup_escape_text(message)
-            con_type = app.con_types.get(acct['name'])
-            show_lock = con_type in ('tls', 'ssl')
 
             account_label = GLib.markup_escape_text(acct['account_label'])
             if message:
@@ -137,10 +130,7 @@ class StatusTable:
             else:
                 status = account_label
 
-            self.add_status_row(acct['show'],
-                                status,
-                                show_lock=show_lock,
-                                indent=False)
+            self.add_status_row(acct['show'], status, indent=False)
 
             for line in acct['event_lines']:
                 self.add_text_row('  ' + line, 1)
