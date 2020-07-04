@@ -115,9 +115,6 @@ nicks = {}  # type: Dict[str, str]
 # from this transport
 block_signed_in_notifications = {}  # type: Dict[str, bool]
 
- # type of each connection (ssl, tls, tcp, ...)
-con_types = {}  # type: Dict[str, Optional[str]]
-
 proxy65_manager = None
 
 cert_store = None
@@ -465,21 +462,6 @@ def in_groupchat(account, room_jid):
     if room_jid not in gc_connected[account]:
         return False
     return gc_connected[account][room_jid]
-
-def get_number_of_securely_connected_accounts():
-    """
-    Return the number of the accounts that are SSL/TLS connected
-    """
-    num_of_secured = 0
-    for account in connections:
-        if account_is_securely_connected(account):
-            num_of_secured += 1
-    return num_of_secured
-
-def account_is_securely_connected(account):
-    if not account_is_connected(account):
-        return False
-    return con_types.get(account) in ('tls', 'ssl')
 
 def get_transport_name_from_jid(jid, use_config_setting=True):
     """
