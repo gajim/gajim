@@ -33,7 +33,7 @@ from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.helpers import get_resource
-from gajim.common.helpers import get_ignored_ssl_errors
+from gajim.common.helpers import get_ignored_tls_errors
 from gajim.common.helpers import get_idle_status_message
 from gajim.common.idle import Monitor
 from gajim.common.i18n import _
@@ -79,7 +79,7 @@ class Client(ConnectionHandlers):
         self._destroy_client = False
         self._remove_account = False
 
-        self._ssl_errors = set()
+        self._tls_errors = set()
 
         self._destroyed = False
 
@@ -178,7 +178,7 @@ class Client(ConnectionHandlers):
             app.cert_store.get_certificates())
 
         self._client.set_ignored_tls_errors(
-            get_ignored_ssl_errors(self._account))
+            get_ignored_tls_errors(self._account))
 
         if app.config.get_per('accounts', self._account,
                               'use_plain_connection'):
@@ -200,8 +200,8 @@ class Client(ConnectionHandlers):
         for handler in modules.get_handlers(self):
             self._client.register_handler(handler)
 
-    def process_ssl_errors(self):
-        if not self._ssl_errors:
+    def process_tls_errors(self):
+        if not self._tls_errors:
             self.connect(ignore_all_errors=True)
             return
 
@@ -209,7 +209,7 @@ class Client(ConnectionHandlers):
                     account=self._account,
                     connection=self,
                     cert=self._client.peer_certificate[0],
-                    error_num=self._ssl_errors.pop())
+                    error_num=self._tls_errors.pop())
 
     def _on_resume_failed(self, _client, _signal_name):
         log.info('Resume failed')
@@ -261,13 +261,13 @@ class Client(ConnectionHandlers):
             self._reconnect = False
 
         elif domain == StreamError.BAD_CERTIFICATE:
-            self._ssl_errors = self._client.peer_certificate[1]
+            self._tls_errors = self._client.peer_certificate[1]
             self.get_module('Chatstate').enabled = False
             self._reconnect = False
             self._after_disconnect()
             app.nec.push_incoming_event(NetworkEvent(
                 'our-show', account=self._account, show='offline'))
-            self.process_ssl_errors()
+            self.process_tls_errors()
 
         elif domain in (StreamError.STREAM, StreamError.BIND):
             if error == 'conflict':
