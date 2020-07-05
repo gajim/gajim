@@ -251,8 +251,9 @@ class ChatControl(ChatControlBase):
         actions = [
             ('invite-contacts-', self._on_invite_contacts),
             ('add-to-roster-', self._on_add_to_roster),
+            ('block-contact-', self._on_block_contact),
             ('information-', self._on_information),
-            ]
+        ]
 
         for action in actions:
             action_name, func = action
@@ -299,6 +300,11 @@ class ChatControl(ChatControlBase):
         else:
             win.lookup_action(
                 'add-to-roster-' + self.control_id).set_enabled(False)
+
+        # Block contact
+        win.lookup_action(
+            'block-contact-' + self.control_id).set_enabled(
+                online and con.get_module('Blocking').supported)
 
         # Audio
         win.lookup_action('toggle-audio-' + self.control_id).set_enabled(
@@ -375,6 +381,33 @@ class ChatControl(ChatControlBase):
 
     def _on_add_to_roster(self, _action, _param):
         AddNewContactWindow(self.account, self.contact.jid)
+
+    def _on_block_contact(self, _action, _param):
+        def _block_contact(report=None):
+            con = app.connections[self.account]
+            con.get_module('Blocking').block([self.contact.jid], report=report)
+
+            self.parent_win.remove_tab(self, None, force=True)
+            if _('Not in contact list') in self.contact.get_shown_groups():
+                app.interface.roster.remove_contact(
+                    self.contact.jid, self.account, force=True, backend=True)
+                return
+            app.interface.roster.draw_contact(self.contact.jid, self.account)
+
+        NewConfirmationDialog(
+            _('Block Contact'),
+            _('Really block this contact?'),
+            _('You will appear offline for this contact and you will '
+              'not receive further messages.'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('OK',
+                               text=_('_Report Spam'),
+                               callback=_block_contact,
+                               kwargs={'report': 'spam'}),
+             DialogButton.make('Remove',
+                               text=_('_Block'),
+                               callback=_block_contact)],
+            modal=False).show()
 
     def _on_information(self, _action, _param):
         app.interface.roster.on_info(None, self.contact, self.account)
