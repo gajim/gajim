@@ -837,11 +837,6 @@ def jid_is_blocked(account, jid):
             jid in con.get_module('PrivacyLists').blocked_contacts or
             con.get_module('PrivacyLists').blocked_all)
 
-def group_is_blocked(account, group):
-    con = app.connections[account]
-    return (group in con.get_module('PrivacyLists').blocked_groups or
-            con.get_module('PrivacyLists').blocked_all)
-
 def get_subscription_request_msg(account=None):
     s = app.config.get_per('accounts', account, 'subscription_request_msg')
     if s:
