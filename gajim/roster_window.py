@@ -1073,8 +1073,6 @@ class RosterWindow:
         else:
             accounts = [account]
         text = GLib.markup_escape_text(group)
-        if helpers.group_is_blocked(account, group):
-            text = '<span strikethrough="true">%s</span>' % text
         if app.config.get('show_contacts_number'):
             nbr_on, nbr_total = app.contacts.get_nb_online_total_contacts(
                     accounts=accounts, groups=[group])
@@ -1165,14 +1163,7 @@ class RosterWindow:
                 name = '%s [%s]' % (name, str(nb_unread))
 
         # Strike name if blocked
-        strike = False
-        if helpers.jid_is_blocked(account, jid):
-            strike = True
-        else:
-            for group in contact.get_shown_groups():
-                if helpers.group_is_blocked(account, group):
-                    strike = True
-                    break
+        strike = helpers.jid_is_blocked(account, jid)
         if strike:
             name = '<span strikethrough="true">%s</span>' % name
 
@@ -2744,7 +2735,7 @@ class RosterWindow:
         for jid in obj.changed:
             self.draw_contact(jid, obj.conn.name)
 
-    def on_block(self, widget, list_, group=None):
+    def on_block(self, widget, list_):
         """
         When clicked on the 'block' button in context menu. list_ is a list of
         (contact, account)
@@ -2757,34 +2748,25 @@ class RosterWindow:
             accounts = []
             for _, account in list_:
                 con = app.connections[account]
-                if con.get_module('PrivacyLists').supported or (
-                        group is None and con.get_module('Blocking').supported):
+                if (con.get_module('PrivacyLists').supported or
+                        con.get_module('Blocking').supported):
                     accounts.append(account)
 
-            if group is None:
-                for acct in accounts:
-                    l_ = [i[0] for i in list_ if i[1] == acct]
-                    con = app.connections[acct]
-                    con.get_module('PrivacyLists').block_contacts(l_, msg)
-                    for contact in l_:
-                        ctrl = app.interface.msg_win_mgr.get_control(
-                            contact.jid, acct)
-                        if ctrl:
-                            ctrl.parent_win.remove_tab(
-                                ctrl, ctrl.parent_win.CLOSE_COMMAND, force=True)
-                        if contact.show == 'not in roster':
-                            self.remove_contact(contact.jid, acct, force=True,
-                                                backend=True)
-                            return
-                        self.draw_contact(contact.jid, acct)
-            else:
-                for acct in accounts:
-                    l_ = [i[0] for i in list_ if i[1] == acct]
-                    con = app.connections[acct]
-                    con.get_module('PrivacyLists').block_group(group, l_, msg)
-                    self.draw_group(group, acct)
-                    for contact in l_:
-                        self.draw_contact(contact.jid, acct)
+            for acct in accounts:
+                l_ = [i[0] for i in list_ if i[1] == acct]
+                con = app.connections[acct]
+                con.get_module('PrivacyLists').block_contacts(l_, msg)
+                for contact in l_:
+                    ctrl = app.interface.msg_win_mgr.get_control(
+                        contact.jid, acct)
+                    if ctrl:
+                        ctrl.parent_win.remove_tab(
+                            ctrl, ctrl.parent_win.CLOSE_COMMAND, force=True)
+                    if contact.show == 'not in roster':
+                        self.remove_contact(contact.jid, acct, force=True,
+                                            backend=True)
+                        return
+                    self.draw_contact(contact.jid, acct)
 
         def _block_it(is_checked=None):
             if is_checked is not None:  # Dialog has been shown
@@ -2800,22 +2782,11 @@ class RosterWindow:
             _block_it()
             return
 
-        # Set dialog's labels depending on if it is a group or a single contact
-        if group is None:
-            title = _('Block Contact')
-            pritext = _('Really block this contact?')
-            sectext = _('You will appear offline for this contact and you '
-                        'will not receive further messages.')
-        else:
-            title = _('Block Group')
-            pritext = _('Really block this group?')
-            sectext = _('You will appear offline for these contacts '
-                        'and you will not receive further messages.')
-
         NewConfirmationCheckDialog(
-            title,
-            pritext,
-            sectext,
+            _('Block Contact'),
+            _('Really block this contact?'),
+            _('You will appear offline for this contact and you '
+              'will not receive further messages.'),
             _('_Do not ask again'),
             [DialogButton.make('Cancel'),
              DialogButton.make('Remove',
@@ -2823,32 +2794,24 @@ class RosterWindow:
                                callback=_block_it)],
             modal=False).show()
 
-    def on_unblock(self, widget, list_, group=None):
+    def on_unblock(self, widget, list_):
         """
         When clicked on the 'unblock' button in context menu.
         """
         accounts = []
         for _, account in list_:
             con = app.connections[account]
-            if con.get_module('PrivacyLists').supported or (
-                    group is None and con.get_module('Blocking').supported):
+            if (con.get_module('PrivacyLists').supported or
+                    con.get_module('Blocking').supported):
                 accounts.append(account)
 
-        if group is None:
-            for acct in accounts:
-                l_ = [i[0] for i in list_ if i[1] == acct]
-                con = app.connections[acct]
-                con.get_module('PrivacyLists').unblock_contacts(l_)
-                for contact in l_:
-                    self.draw_contact(contact.jid, acct)
-        else:
-            for acct in accounts:
-                l_ = [i[0] for i in list_ if i[1] == acct]
-                con = app.connections[acct]
-                con.get_module('PrivacyLists').unblock_group(group, l_)
-                self.draw_group(group, acct)
-                for contact in l_:
-                    self.draw_contact(contact.jid, acct)
+        for acct in accounts:
+            l_ = [i[0] for i in list_ if i[1] == acct]
+            con = app.connections[acct]
+            con.get_module('PrivacyLists').unblock_contacts(l_)
+            for contact in l_:
+                self.draw_contact(contact.jid, acct)
+
         for acct in accounts:
             if 'privacy_list_block' in app.interface.instances[acct]:
                 del app.interface.instances[acct]['privacy_list_block']
@@ -4898,28 +4861,6 @@ class RosterWindow:
             menu.append(rename_item)
             rename_item.connect('activate', self.on_rename, 'group', group,
                 account)
-
-            # Block group
-            is_blocked = False
-            if self.regroup:
-                for g_account in app.connections:
-                    if helpers.group_is_blocked(g_account, group):
-                        is_blocked = True
-            else:
-                if helpers.group_is_blocked(account, group):
-                    is_blocked = True
-
-            if is_blocked and app.connections[account].get_module('PrivacyLists').supported:
-                unblock_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Unblock'))
-                unblock_menuitem.connect('activate', self.on_unblock, list_,
-                    group)
-                menu.append(unblock_menuitem)
-            else:
-                block_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Block'))
-                block_menuitem.connect('activate', self.on_block, list_, group)
-                menu.append(block_menuitem)
-                if not app.connections[account].get_module('PrivacyLists').supported:
-                    block_menuitem.set_sensitive(False)
 
             # Remove group
             remove_item = Gtk.MenuItem.new_with_mnemonic(_('Remo_ve'))
