@@ -4905,16 +4905,19 @@ class RosterWindow:
         list_ = [] # list of (jid, account) tuples
         one_account_offline = False
         is_blocked = True
-        privacy_rules_supported = True
+        blocking_supported = True
         for titer in iters:
             jid = model[titer][Column.JID]
             account = model[titer][Column.ACCOUNT]
             if not app.account_is_available(account):
                 one_account_offline = True
-            if not app.connections[account].get_module('PrivacyLists').supported:
-                privacy_rules_supported = False
-            contact = app.contacts.get_contact_with_highest_priority(account,
-                jid)
+
+            con = app.connections[account]
+            if (not con.get_module('PrivacyLists').supported and
+                    not con.get_module('Blocking').supported):
+                blocking_supported = False
+            contact = app.contacts.get_contact_with_highest_priority(
+                account, jid)
             if not helpers.jid_is_blocked(account, jid):
                 is_blocked = False
             list_.append((contact, account))
@@ -4965,7 +4968,7 @@ class RosterWindow:
         manage_contacts_submenu.append(item)
 
         # Block
-        if is_blocked and privacy_rules_supported:
+        if is_blocked and blocking_supported:
             unblock_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Unblock'))
             unblock_menuitem.connect('activate', self.on_unblock, list_)
             manage_contacts_submenu.append(unblock_menuitem)
@@ -4974,7 +4977,7 @@ class RosterWindow:
             block_menuitem.connect('activate', self.on_block, list_)
             manage_contacts_submenu.append(block_menuitem)
 
-            if not privacy_rules_supported:
+            if not blocking_supported:
                 block_menuitem.set_sensitive(False)
 
         # Remove
