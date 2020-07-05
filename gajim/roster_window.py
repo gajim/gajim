@@ -2787,8 +2787,8 @@ class RosterWindow:
                         self.draw_contact(contact.jid, acct)
 
         def _block_it(is_checked=None):
-            if is_checked is not None: # dialog has been shown
-                if is_checked:  # user does not want to be asked again
+            if is_checked is not None:  # Dialog has been shown
+                if is_checked:
                     app.config.set('confirm_block', 'no')
                 else:
                     app.config.set('confirm_block', 'yes')
@@ -2804,25 +2804,22 @@ class RosterWindow:
         if group is None:
             title = _('Block Contact')
             pritext = _('Really block this contact?')
-            sectext = _('This contact will see you offline and you will not '
-                        'receive any messages sent to you by this contact.')
-            button_text = _('_Block Contact')
+            sectext = _('You will appear offline for this contact and you '
+                        'will not receive further messages.')
         else:
             title = _('Block Group')
             pritext = _('Really block this group?')
-            sectext = _('All contacts of this group will see you as offline '
-                        'and you will not receive any messages sent to you '
-                        'by any one of these contacts.')
-            button_text = _('_Block Group')
+            sectext = _('You will appear offline for these contacts '
+                        'and you will not receive further messages.')
 
         NewConfirmationCheckDialog(
             title,
             pritext,
             sectext,
-            _('_Do not ask me again'),
+            _('_Do not ask again'),
             [DialogButton.make('Cancel'),
              DialogButton.make('Remove',
-                               text=button_text,
+                               text=_('_Block'),
                                callback=_block_it)],
             modal=False).show()
 
