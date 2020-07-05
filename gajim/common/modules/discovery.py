@@ -137,7 +137,6 @@ class Discovery(BaseModule):
         self._con.get_module('Blocking').pass_disco(result)
         self._con.get_module('VCardTemp').pass_disco(result)
         self._con.get_module('Carbons').pass_disco(result)
-        self._con.get_module('PrivacyLists').pass_disco(result)
         self._con.get_module('HTTPUpload').pass_disco(result)
 
         if Namespace.REGISTER in result.features:

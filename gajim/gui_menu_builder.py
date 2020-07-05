@@ -391,8 +391,7 @@ control=None, gc_contact=None, is_anonymous=True):
 
 
     con = app.connections[account]
-    if con and (con.get_module('PrivacyLists').supported or
-                con.get_module('Blocking').supported):
+    if con.get_module('Blocking').supported:
         transport = app.get_transport_name_from_jid(jid, use_config_setting=False)
         if helpers.jid_is_blocked(account, jid):
             block_menuitem.set_no_show_all(True)
@@ -681,7 +680,6 @@ def get_account_menu(account):
             ('-bookmarks', _('Bookmarks')),
             ('-pep-config', _('PEP Configuration')),
             ('-sync-history', _('Synchronise History…')),
-            ('-privacylists', _('Privacy Lists')),
         ]),
         (_('Admin'), [
             ('-send-server-message', _('Send Server Message…')),
@@ -871,17 +869,6 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu.append(item)
 
     menu.append(Gtk.SeparatorMenuItem())
-
-    if helpers.jid_is_blocked(account, contact.get_full_jid()):
-        action = 'win.unblock-%s::%s' % (control_id, contact.name)
-        label = _('Unblock')
-    else:
-        action = 'win.block-%s::%s' % (control_id, contact.name)
-        label = _('Block')
-
-    item = Gtk.MenuItem(label=label)
-    item.set_detailed_action_name(action)
-    menu.append(item)
 
     item = Gtk.MenuItem(label=_('Kick'))
     action = 'win.kick-%s::%s' % (control_id, contact.name)

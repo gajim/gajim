@@ -56,7 +56,6 @@ MODULES = [
     'pep',
     'ping',
     'presence',
-    'privacylists',
     'pubsub',
     'receipts',
     'register',
@@ -98,11 +97,6 @@ class ModuleMock:
 
         # Blocking
         self.blocked = []  # type: List[Any]
-
-        # Privacy Lists
-        self.blocked_contacts = []  # type: List[Any]
-        self.blocked_groups = []  # type: List[Any]
-        self.blocked_all = False
 
         # Delimiter
         self.delimiter = '::'

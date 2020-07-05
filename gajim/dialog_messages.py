@@ -71,18 +71,6 @@ messages = {
         _('Custom hostname "%s" is wrong. It will be ignored.'),
         ErrorDialog),
 
-    'privacy-list-error': Message(
-        _('Error While Removing Privacy List'),
-        _('Privacy list %s has not been removed. '
-          'It is probably active in one of your connected resources. '
-          'Please deactivate it and try again.'),
-        ErrorDialog),
-
-    'invisibility-not-supported': Message(
-        _('Invisibility Not Supported'),
-        _('This account %s doesn\'t support invisibility.'),
-        ErrorDialog),
-
     'agent-register-success': Message(
         _('Registration Succeeded'),
         _('Registration with agent %s succeeded.'),

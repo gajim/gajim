@@ -101,7 +101,6 @@ WINDOW_MODULES = {
     'StartChatDialog': 'gajim.gtk.start_chat',
     'AddNewContactWindow': 'gajim.gtk.add_contact',
     'SingleMessageWindow': 'gajim.gtk.single_message',
-    'PrivacyListsWindow': 'gajim.gtk.privacy_list',
     'Bookmarks': 'gajim.gtk.bookmarks',
     'AccountWizard': 'gajim.gtk.account_wizard',
     'HistoryWindow': 'gajim.gtk.history',
