@@ -275,8 +275,6 @@ class GroupchatControl(ChatControlBase):
             ('invite-', None, self._on_invite),
             ('contact-information-', 's', self._on_contact_information),
             ('execute-command-', 's', self._on_execute_command),
-            ('block-', 's', self._on_block),
-            ('unblock-', 's', self._on_unblock),
             ('ban-', 's', self._on_ban),
             ('kick-', 's', self._on_kick),
             ('change-role-', 'as', self._on_change_role),
@@ -439,13 +437,6 @@ class GroupchatControl(ChatControlBase):
         self._get_action('contact-information-').set_enabled(self.is_connected)
 
         self._get_action('execute-command-').set_enabled(self.is_connected)
-
-        block_supported = con.get_module('PrivacyLists').supported
-        self._get_action('block-').set_enabled(self.is_connected and
-                                               block_supported)
-
-        self._get_action('unblock-').set_enabled(self.is_connected and
-                                                 block_supported)
 
         self._get_action('ban-').set_enabled(self.is_connected)
 
@@ -660,20 +651,6 @@ class GroupchatControl(ChatControlBase):
         else:
             app.interface.instances[self.account]['infos'][contact.jid] = \
                 vcard.VcardWindow(contact, self.account, gc_contact)
-
-    def _on_block(self, _action, param):
-        nick = param.get_string()
-        fjid = self.room_jid + '/' + nick
-        con = app.connections[self.account]
-        con.get_module('PrivacyLists').block_gc_contact(fjid)
-        self.roster.draw_contact(nick)
-
-    def _on_unblock(self, _action, param):
-        nick = param.get_string()
-        fjid = self.room_jid + '/' + nick
-        con = app.connections[self.account]
-        con.get_module('PrivacyLists').unblock_gc_contact(fjid)
-        self.roster.draw_contact(nick)
 
     def _on_kick(self, _action, param):
         nick = param.get_string()

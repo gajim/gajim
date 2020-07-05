@@ -2748,14 +2748,14 @@ class RosterWindow:
             accounts = []
             for _, account in list_:
                 con = app.connections[account]
-                if (con.get_module('PrivacyLists').supported or
-                        con.get_module('Blocking').supported):
+                if con.get_module('Blocking').supported:
                     accounts.append(account)
 
             for acct in accounts:
                 l_ = [i[0] for i in list_ if i[1] == acct]
                 con = app.connections[acct]
-                con.get_module('PrivacyLists').block_contacts(l_, msg)
+                jid_list = [contact.jid for contact in l_]
+                con.get_module('Blocking').block(jid_list)
                 for contact in l_:
                     ctrl = app.interface.msg_win_mgr.get_control(
                         contact.jid, acct)
@@ -2801,20 +2801,16 @@ class RosterWindow:
         accounts = []
         for _, account in list_:
             con = app.connections[account]
-            if (con.get_module('PrivacyLists').supported or
-                    con.get_module('Blocking').supported):
+            if con.get_module('Blocking').supported:
                 accounts.append(account)
 
         for acct in accounts:
             l_ = [i[0] for i in list_ if i[1] == acct]
             con = app.connections[acct]
-            con.get_module('PrivacyLists').unblock_contacts(l_)
+            jid_list = [contact.jid for contact in l_]
+            con.get_module('Blocking').unblock(jid_list)
             for contact in l_:
                 self.draw_contact(contact.jid, acct)
-
-        for acct in accounts:
-            if 'privacy_list_block' in app.interface.instances[acct]:
-                del app.interface.instances[acct]['privacy_list_block']
 
     def on_rename(self, widget, row_type, jid, account):
         # This function is called either by F2 or by Rename menuitem
@@ -4913,8 +4909,7 @@ class RosterWindow:
                 one_account_offline = True
 
             con = app.connections[account]
-            if (not con.get_module('PrivacyLists').supported and
-                    not con.get_module('Blocking').supported):
+            if not con.get_module('Blocking').supported:
                 blocking_supported = False
             contact = app.contacts.get_contact_with_highest_priority(
                 account, jid)

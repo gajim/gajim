@@ -473,7 +473,6 @@ class GajimApplication(Gtk.Application):
             ('-archive', a.on_mam_preferences, 'feature', 's'),
             ('-pep-config', a.on_pep_config, 'online', 's'),
             ('-sync-history', a.on_history_sync, 'online', 's'),
-            ('-privacylists', a.on_privacy_lists, 'feature', 's'),
             ('-blocking', a.on_blocking_list, 'feature', 's'),
             ('-send-server-message', a.on_send_server_message, 'online', 's'),
             ('-set-motd', a.on_set_motd, 'online', 's'),
@@ -570,9 +569,6 @@ class GajimApplication(Gtk.Application):
             self.lookup_action(action).set_enabled(True)
         elif event.feature == Namespace.MAM_2:
             action = '%s-archive' % event.account
-            self.lookup_action(action).set_enabled(True)
-        elif event.feature == Namespace.PRIVACY:
-            action = '%s-privacylists' % event.account
             self.lookup_action(action).set_enabled(True)
         elif event.feature == Namespace.BLOCKING:
             action = '%s-blocking' % event.account

@@ -258,8 +258,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                     max_file_size
 
         return [
-            Feature('XEP-0016: Privacy Lists',
-                    con.get_module('PrivacyLists').supported),
             Feature('XEP-0045: Multi-User Chat',
                     con.get_module('MUC').supported),
             Feature('XEP-0054: vcard-temp',

@@ -26,7 +26,6 @@ from gajim import dialogs
 from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.about import AboutDialog
-from gajim.gtk.privacy_list import PrivacyListsWindow
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.util import open_window
@@ -169,15 +168,6 @@ def on_history_sync(_action, param):
     open_window('HistorySyncAssistant',
                 account=account,
                 parent=interface.roster.window)
-
-
-def on_privacy_lists(_action, param):
-    account = param.get_string()
-    if 'privacy_lists' in interface.instances[account]:
-        interface.instances[account]['privacy_lists'].window.present()
-    else:
-        interface.instances[account]['privacy_lists'] = \
-            PrivacyListsWindow(account)
 
 
 def on_server_info(_action, param):
