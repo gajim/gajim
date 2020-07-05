@@ -802,36 +802,14 @@ class ChatControl(ChatControlBase):
         name, jid
         """
         contact = self.contact
-        jid = contact.jid
-
         name = contact.get_shown_name()
         if self.resource:
             name += '/' + self.resource
         if self._type.is_privatechat:
-            name = i18n.direction_mark +  _(
+            name = i18n.direction_mark + _(
                 '%(nickname)s from group chat %(room_name)s') % \
                 {'nickname': name, 'room_name': self.room_name}
         name = i18n.direction_mark + GLib.markup_escape_text(name)
-
-        # We know our contacts nick, but if another contact has the same nick
-        # in another account we need to also display the account.
-        # except if we are talking to two different resources of the
-        # same contact
-        acct_info = ''
-        for account in app.contacts.get_accounts():
-            if account == self.account:
-                continue
-            if acct_info: # We already found a contact with same nick
-                break
-            for jid in app.contacts.get_jid_list(account):
-                other_contact_ = \
-                    app.contacts.get_first_contact_from_jid(account, jid)
-                if other_contact_.get_shown_name() == \
-                self.contact.get_shown_name():
-                    acct_info = i18n.direction_mark + ' (%s)' % \
-                        GLib.markup_escape_text(
-                            app.get_account_label(self.account))
-                    break
 
         status = contact.status
         if status is not None:
@@ -849,17 +827,12 @@ class ChatControl(ChatControlBase):
         if app.config.get('show_chatstate_in_banner'):
             chatstate = helpers.get_uf_chatstate(cs)
 
-            label_text = '<span>%s</span><span size="x-small" weight="light">%s %s</span>' \
-                % (name, acct_info, chatstate)
-            if acct_info:
-                acct_info = i18n.direction_mark + ' ' + acct_info
-            label_tooltip = '%s%s %s' % (name, acct_info, chatstate)
+            label_text = '<span>%s</span><span size="x-small" weight="light"> %s</span>' % \
+                (name, chatstate)
+            label_tooltip = '%s %s' % (name, chatstate)
         else:
-            label_text = '<span>%s</span><span size="x-small" weight="light">%s</span>' % \
-                    (name, acct_info)
-            if acct_info:
-                acct_info = i18n.direction_mark + ' ' + acct_info
-            label_tooltip = '%s%s' % (name, acct_info)
+            label_text = '<span>%s</span>' % name
+            label_tooltip = name
 
         if status_escaped:
             status_text = make_href_markup(status_escaped)
