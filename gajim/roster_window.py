@@ -2740,10 +2740,12 @@ class RosterWindow:
         When clicked on the 'block' button in context menu. list_ is a list of
         (contact, account)
         """
-        def on_continue(msg, pep_dict):
-            if msg is None:
-                # user pressed Cancel to change status message dialog
-                return
+        def _block_it(is_checked=None, report=None):
+            if is_checked is not None:  # Dialog has been shown
+                if is_checked:
+                    app.config.set('confirm_block', 'no')
+                else:
+                    app.config.set('confirm_block', 'yes')
 
             accounts = []
             for _, account in list_:
@@ -2755,7 +2757,7 @@ class RosterWindow:
                 l_ = [i[0] for i in list_ if i[1] == acct]
                 con = app.connections[acct]
                 jid_list = [contact.jid for contact in l_]
-                con.get_module('Blocking').block(jid_list)
+                con.get_module('Blocking').block(jid_list, report)
                 for contact in l_:
                     ctrl = app.interface.msg_win_mgr.get_control(
                         contact.jid, acct)
@@ -2767,14 +2769,6 @@ class RosterWindow:
                                             backend=True)
                         return
                     self.draw_contact(contact.jid, acct)
-
-        def _block_it(is_checked=None):
-            if is_checked is not None:  # Dialog has been shown
-                if is_checked:
-                    app.config.set('confirm_block', 'no')
-                else:
-                    app.config.set('confirm_block', 'yes')
-            self.get_status_message('offline', on_continue, show_pep=False)
 
         # Check if confirmation is needed for blocking
         confirm_block = app.config.get('confirm_block')
@@ -2789,6 +2783,10 @@ class RosterWindow:
               'will not receive further messages.'),
             _('_Do not ask again'),
             [DialogButton.make('Cancel'),
+             DialogButton.make('OK',
+                               text=_('_Report Spam'),
+                               callback=_block_it,
+                               kwargs={'report': 'spam'}),
              DialogButton.make('Remove',
                                text=_('_Block'),
                                callback=_block_it)],
