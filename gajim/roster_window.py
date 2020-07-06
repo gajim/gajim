@@ -2921,24 +2921,24 @@ class RosterWindow:
         app.interface.instances['file_transfers'].show_file_send_request(
             account, contact)
 
-    def on_invite_to_room(self, widget, list_, room_jid, room_account,
-    resource=None):
+    def on_invite_to_room(self,
+                          _widget,
+                          list_,
+                          room_jid,
+                          room_account,
+                          resource=None):
         """
         Resource parameter MUST NOT be used if more than one contact in list
         """
-        for e in list_:
-            contact = e[0]
+        gc_control = app.get_groupchat_control(room_account, room_jid)
+        if gc_control is None:
+            return
+
+        for contact, _ in list_:
             contact_jid = contact.jid
             if resource: # we MUST have one contact only in list_
                 contact_jid += '/' + resource
-            con = app.connections[room_account]
-            con.get_module('MUC').invite(room_jid, contact_jid)
-            gc_control = app.interface.msg_win_mgr.get_gc_control(room_jid,
-                room_account)
-            if gc_control:
-                gc_control.add_info_message(
-                    _('%(jid)s has been invited to this group chat') % {
-                    'jid': contact_jid})
+            gc_control.invite(contact_jid)
 
     def on_all_groupchat_maximized(self, widget, group_list):
         for (contact, account) in group_list:
@@ -4158,8 +4158,9 @@ class RosterWindow:
             if type_source != 'contact':
                 return
             contact_jid = data
-            con = app.connections[account_dest]
-            con.get_module('MUC').invite(jid_dest, contact_jid)
+            gc_control = app.get_groupchat_control(account_dest, jid_dest)
+            if gc_control is not None:
+                gc_control.invite(contact_jid)
             return
 
         if type_source == 'group':

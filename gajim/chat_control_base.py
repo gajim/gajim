@@ -1071,9 +1071,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             self.received_history_pos = pos
 
-    def add_info_message(self, text):
+    def add_info_message(self, text, message_id=None):
         self.conv_textview.print_conversation_line(
-            text, 'info', '', None, graphics=False)
+            text, 'info', '', None, message_id=message_id, graphics=False)
 
     def add_status_message(self, text):
         self.conv_textview.print_conversation_line(

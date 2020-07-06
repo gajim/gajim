@@ -777,7 +777,8 @@ class MUC(BaseModule):
 
         password = app.gc_passwords.get(room, None)
         self._log.info('Invite %s to %s', to, room)
-        self._nbxmpp('MUC').invite(room, to, reason, password, continue_, type_)
+        return self._nbxmpp('MUC').invite(room, to, reason, password,
+                                          continue_, type_)
 
     @event_filter(['account'])
     def _on_account_disconnected(self, _event):

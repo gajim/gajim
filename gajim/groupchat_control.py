@@ -218,6 +218,7 @@ class GroupchatControl(ChatControlBase):
             ('signed-in', ged.GUI1, self._on_signed_in),
             ('decrypted-message-received', ged.GUI2, self._on_decrypted_message_received),
             ('message-sent', ged.OUT_POSTCORE, self._on_message_sent),
+            ('message-error', ged.GUI1, self._on_message_error),
             ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
         ])
         # pylint: enable=line-too-long
@@ -512,10 +513,16 @@ class GroupchatControl(ChatControlBase):
 
     def _on_invite_clicked(self, _button):
         invitees = self._invite_box.get_invitees()
-        con = app.connections[self.account]
         for jid in invitees:
-            con.get_module('MUC').invite(self.room_jid, jid)
+            self.invite(jid)
         self._show_page('groupchat')
+
+    def invite(self, contact_jid):
+        con = app.connections[self.account]
+        message_id = con.get_module('MUC').invite(self.room_jid, contact_jid)
+        self.add_info_message(
+            _(f'{contact_jid} has been invited to this group chat'),
+            message_id=message_id)
 
     def _on_destroy_room(self, _action, _param):
         self.xml.destroy_reason_entry.grab_focus()
@@ -1757,10 +1764,7 @@ class GroupchatControl(ChatControlBase):
                 return
             contact_jid = data
 
-            con = app.connections[self.account]
-            con.get_module('MUC').invite(self.room_jid, contact_jid)
-            self.add_info_message(_('%(jid)s has been invited to this '
-                                    'group chat') % {'jid': contact_jid})
+            self.invite(contact_jid)
 
     def _jid_not_blocked(self, bare_jid: str) -> bool:
         fjid = self.room_jid + '/' + bare_jid
