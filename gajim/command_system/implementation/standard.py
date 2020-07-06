@@ -308,10 +308,9 @@ class StandardGroupChatCommands(CommandContainer):
     @command(raw=True, empty=True)
     @doc(_("Invite a user to a group chat for a reason"))
     def invite(self, jid, reason):
-        self.connection.get_module('MUC').invite(self.room_jid, jid, reason)
-        return _("Invited %(jid)s to %(room_jid)s") % {
-            'jid': jid,
-            'room_jid': self.room_jid}
+        control = app.get_groupchat_control(self.account, self.room_jid)
+        if control is not None:
+            control.invite(jid)
 
     @command(raw=True, empty=True)
     @doc(_("Join a group chat given by an XMPP Address"))
