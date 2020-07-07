@@ -541,6 +541,14 @@
     </implements>
     <implements>
       <xmpp:SupportedXep>
+        <xmpp:xep rdf:resource="https://xmpp.org/extensions/xep-0377.html" />
+        <xmpp:status>partial</xmpp:status>
+        <xmpp:version>0.2</xmpp:version>
+        <xmpp:note>Basic Spam/Abuse reporting via XEP-0191</xmpp:note>
+      </xmpp:SupportedXep>
+    </implements>
+    <implements>
+      <xmpp:SupportedXep>
         <xmpp:xep rdf:resource="https://xmpp.org/extensions/xep-0380.html" />
         <xmpp:status>complete</xmpp:status>
         <xmpp:version>0.1</xmpp:version>
