@@ -242,6 +242,7 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         app.plugin_manager.gui_extension_point('groupchat_control', self)
+        self._restore_conversation()
 
     @property
     def nick(self):
@@ -442,6 +443,25 @@ class GroupchatControl(ChatControlBase):
         self._get_action('ban-').set_enabled(self.is_connected)
 
         self._get_action('kick-').set_enabled(self.is_connected)
+
+    def _restore_conversation(self):
+        rows = app.logger.load_groupchat_messages(
+            self.account, self.contact.jid)
+
+        for row in rows:
+            other_tags_for_name = ['muc_nickname_color_%s' % row.contact_name]
+            ChatControlBase.add_message(self,
+                                        row.message,
+                                        'incoming',
+                                        row.contact_name,
+                                        float(row.time),
+                                        other_tags_for_name=other_tags_for_name,
+                                        message_id=row.message_id,
+                                        restored=True,
+                                        additional_data=row.additional_data)
+
+        if rows:
+            self.conv_textview.print_empty_line()
 
     def _is_subject_change_allowed(self):
         contact = app.contacts.get_gc_contact(
