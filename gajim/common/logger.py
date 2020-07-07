@@ -526,9 +526,9 @@ class Logger:
             return [user['jid'] for user in family]
         return [jid]
 
-    def get_account_id(self, account):
+    def get_account_id(self, account, type_=JIDConstant.NORMAL_TYPE):
         jid = app.get_jid_from_account(account)
-        return self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
+        return self.get_jid_id(jid, type_=type_)
 
     @timeit
     def get_jid_id(self, jid, kind=None, type_=None):
@@ -754,6 +754,26 @@ class Logger:
 
             all_messages.append((result, shown))
         return all_messages
+
+    def load_groupchat_messages(self, account, jid):
+        account_id = self.get_account_id(account, type_=JIDConstant.ROOM_TYPE)
+
+        sql = '''
+            SELECT time, contact_name, message, additional_data, message_id
+            FROM logs NATURAL JOIN jids WHERE jid = ?
+            AND account_id = ? AND kind = ?
+            ORDER BY time DESC, log_line_id DESC LIMIT ?'''
+
+        try:
+            messages = self._con.execute(
+                sql, (jid, account_id, KindConstant.GC_MSG, 50)).fetchall()
+        except sqlite.DatabaseError:
+            self.dispatch('DB_ERROR',
+                          exceptions.DatabaseMalformed(self._log_db_path))
+            return []
+
+        messages.reverse()
+        return messages
 
     @timeit
     def get_last_conversation_lines(self, account, jid, pending):
