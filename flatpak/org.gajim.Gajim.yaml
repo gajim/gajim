@@ -90,11 +90,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app idna-2.9-py2.py3-none-any.whl
+      - pip3 install --prefix=/app idna-2.10-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/89/e3/afebe61c546d18fb1709a61bee788254b40e736cff7271c7de5de2dc4128/idna-2.9-py2.py3-none-any.whl
-        sha256: a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa
+        url: https://files.pythonhosted.org/packages/a2/38/928ddce2273eaa564f6f50de919327bf3a00f091b5baba8dfa9460f3a8a8/idna-2.10-py2.py3-none-any.whl
+        sha256: b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0
 
   - name: python3-cryptography
     buildsystem: simple
@@ -153,11 +153,11 @@ modules:
   - name: python3-importlib_metadata
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app importlib_metadata-1.6.1-py2.py3-none-any.whl
+      - pip3 install --prefix=/app importlib_metadata-1.7.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/98/13/a1d703ec396ade42c1d33df0e1cb691a28b7c08b336a5683912c87e04cd7/importlib_metadata-1.6.1-py2.py3-none-any.whl
-        sha256: 15ec6c0fd909e893e3a08b3a7c76ecb149122fb14b7efe1199ddd4c7c57ea958
+        url: https://files.pythonhosted.org/packages/8e/58/cdea07eb51fc2b906db0968a94700866fc46249bdc75cac23f9d13168929/importlib_metadata-1.7.0-py2.py3-none-any.whl
+        sha256: dc15b2969b4ce36305c51eebe62d418ac7791e9a157911d58bfb1f9ccd8e2070
 
   - name: python3-keyring
     buildsystem: simple
@@ -212,11 +212,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app .
+      - pip3 install --prefix=/app nbxmpp-1.0.1-py3-none-any.whl
     sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/d1/c7/361b7ed01e4adbf781e6ad3ff2a2b2612c6d1c9bdc5d825e91c8c3ea203f/nbxmpp-1.0.0.tar.gz
-        sha256: 8b7e967bc1d0f1a1f7cf3395b6f5d70009ae5607ad9afb8de32ff92b661693ad
+      - type: file
+        url: https://files.pythonhosted.org/packages/69/88/1c4dd610dc04363f3e6477ca035a1293370ef47a8c15527e60e885276a32/nbxmpp-1.0.1-py3-none-any.whl
+        sha256: 0d7fbf5740925e3890f48fb293043db1dadf02fbb65bb6344d2dec0c056f71d4
 
   - name: gajim
     buildsystem: simple
