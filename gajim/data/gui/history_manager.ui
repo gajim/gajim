@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkMenu" id="context_menu">
     <property name="can_focus">False</property>
     <child>
@@ -32,9 +32,6 @@
     <property name="default_height">500</property>
     <signal name="delete-event" handler="on_history_manager_window_delete_event" swapped="no"/>
     <child>
-      <placeholder/>
-    </child>
-    <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -56,7 +53,6 @@
                   <object class="GtkTreeView" id="jids_listview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="rules_hint">True</property>
                     <signal name="button-press-event" handler="on_listview_button_press_event" swapped="no"/>
                     <signal name="key-press-event" handler="on_jids_listview_key_press_event" swapped="no"/>
                     <child internal-child="selection">
@@ -80,8 +76,8 @@
                   <object class="GtkBox" id="welcome_box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">20</property>
-                    <property name="margin_right">20</property>
+                    <property name="margin_start">20</property>
+                    <property name="margin_end">20</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">10</property>
                     <child>
@@ -144,13 +140,12 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
                   <object class="GtkScrolledWindow" id="logs_scrolledwindow">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="margin_left">6</property>
+                    <property name="margin_start">6</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="logs_listview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="rules_hint">True</property>
                         <property name="enable_search">False</property>
                         <signal name="button-press-event" handler="on_listview_button_press_event" swapped="no"/>
                         <signal name="key-press-event" handler="on_logs_listview_key_press_event" swapped="no"/>
@@ -170,13 +165,12 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
                   <object class="GtkScrolledWindow" id="search_results_scrolledwindow">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="margin_left">6</property>
+                    <property name="margin_start">6</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="search_results_listview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="rules_hint">True</property>
                         <signal name="button-press-event" handler="on_listview_button_press_event" swapped="no"/>
                         <signal name="row-activated" handler="on_search_results_listview_row_activated" swapped="no"/>
                         <child internal-child="selection">
@@ -255,6 +249,9 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>

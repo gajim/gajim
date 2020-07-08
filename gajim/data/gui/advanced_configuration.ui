@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkBox" id="box">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -113,7 +113,6 @@
           <object class="GtkTreeView" id="advanced_treeview">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="rules_hint">True</property>
             <signal name="row-activated" handler="_on_treeview_row_activated" swapped="no"/>
             <child internal-child="selection">
               <object class="GtkTreeSelection">
