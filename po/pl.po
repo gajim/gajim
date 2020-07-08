@@ -10,24 +10,24 @@ msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-21 11:23+0000\n"
-"PO-Revision-Date: 2013-09-02 10:44+0100\n"
-"Last-Translator: Michał Olber <michal.olber@osworld.pl>\n"
-"Language-Team: Polish <dominik@kozaczko.info, translation-team-pl@lists."
-"sourceforge.net>\n"
+"PO-Revision-Date: 2020-06-29 10:36+0000\n"
+"Last-Translator: Dame <anothergajimtranslation@realmail.anonaddy.me>\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/1-2/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.1.1\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 
 #: gajim/chat_control_base.py:147 gajim/gtk/start_chat.py:643
 #: gajim/gtk/groupchat_invite.py:318
-#, fuzzy, python-format
+#, python-format
 msgid "Account: %s"
-msgstr "Konta"
+msgstr "Konto: %s"
 
 #: gajim/chat_control_base.py:570
 msgid "and authenticated"
@@ -65,7 +65,7 @@ msgstr "Próbujesz wkleić obraz"
 #: gajim/chat_control_base.py:750
 msgid ""
 "Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Czy jesteś pewien, ze chcesz wkleić obraz ze schowka w to okno czatu?"
+msgstr "Na pewno chcesz wkleić obrazek ze schowka do tego okna czatu?"
 
 #: gajim/chat_control_base.py:752 gajim/groupchat_control.py:1736
 #: gajim/roster_window.py:2837 gajim/roster_window.py:4047
