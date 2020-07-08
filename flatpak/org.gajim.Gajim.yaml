@@ -61,11 +61,11 @@ modules:
   - name: python3-packaging
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app packaging-20.3-py2.py3-none-any.whl
+      - pip3 install --prefix=/app packaging-20.4-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/62/0a/34641d2bf5c917c96db0ded85ae4da25b6cd922d6b794648d4e7e07c88e5/packaging-20.3-py2.py3-none-any.whl
-        sha256: 82f77b9bee21c1bafbf35a84905d604d5d1223801d639cf3ed140bd651c08752
+        url: https://files.pythonhosted.org/packages/46/19/c5ab91b1b05cfe63cccd5cfc971db9214c6dd6ced54e33c30d5af1d2bc43/packaging-20.4-py2.py3-none-any.whl
+        sha256: 998416ba6962ae7fbd6596850b80e17859a5753ba17c32284f67bfff33784181
 
   - name: python3-pycparser
     buildsystem: simple
@@ -97,11 +97,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app idna-2.9-py2.py3-none-any.whl
+      - pip3 install --prefix=/app idna-2.10-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/89/e3/afebe61c546d18fb1709a61bee788254b40e736cff7271c7de5de2dc4128/idna-2.9-py2.py3-none-any.whl
-        sha256: a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa
+        url: https://files.pythonhosted.org/packages/a2/38/928ddce2273eaa564f6f50de919327bf3a00f091b5baba8dfa9460f3a8a8/idna-2.10-py2.py3-none-any.whl
+        sha256: b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0
 
   - name: python3-cryptography
     buildsystem: simple
@@ -160,22 +160,22 @@ modules:
   - name: python3-importlib_metadata
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app importlib_metadata-1.6.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app importlib_metadata-1.7.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/ad/e4/891bfcaf868ccabc619942f27940c77a8a4b45fd8367098955bb7e152fb1/importlib_metadata-1.6.0-py2.py3-none-any.whl
-        sha256: 2a688cbaa90e0cc587f1df48bdc97a6eadccdcd9c35fb3f976a09e3b5016d90f
+        url: https://files.pythonhosted.org/packages/8e/58/cdea07eb51fc2b906db0968a94700866fc46249bdc75cac23f9d13168929/importlib_metadata-1.7.0-py2.py3-none-any.whl
+        sha256: dc15b2969b4ce36305c51eebe62d418ac7791e9a157911d58bfb1f9ccd8e2070
 
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-21.2.0-py3-none-any.whl
+      - pip3 install --prefix=/app keyring-21.2.1-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/04/21/42d92822959a37ccc390742c2706c8b06cc6a29c10a5ef2e8d22cf0e2e33/keyring-21.2.0-py3-none-any.whl
-        sha256: 8179b1cdcdcbc221456b5b74e6b7cfa06f8dd9f239eb81892166d9223d82c5ba
+        url: https://files.pythonhosted.org/packages/a8/5e/d13b9feb235d042321a239ac8bc85e90cf3bbe49090c6f1383ac3fd53e0e/keyring-21.2.1-py3-none-any.whl
+        sha256: 3401234209015144a5d75701e71cb47239e552b0882313e9f51e8976f9e27843
 
   - name: python3-css-parser
     buildsystem: simple
