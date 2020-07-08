@@ -1,3 +1,33 @@
+Gajim 1.2.1 (08 July 2020)
+
+  New
+
+  * ServerInfo: Display status address
+  * Add block and spam reporting in various places
+  * Roster: Allow to add contacts from `Not in contact list` group via DND
+  * Roster: Allow sending message to serveral groups
+  * Groupchat/Chat: Rework DND
+  * Groupchat: Display recent history from the database
+
+  Changes
+
+  * Removed Privacy Lists support
+  * Roster: Remove blocking whole group feature
+
+  Bug fixes
+
+  * #10067 Error when showing invite menu
+  * #10144 Windows: Multiple instances of Gajim not possible
+  * #10152 Error when trying to disactivate or delete account
+  * #10160 Can't http upload with self signed Certificate
+  * #10162 Add option to use fixed-width horizontal tabs
+  * #10164 Timeout error when using music track listener
+  * #10171 Show error when MUC invite fails
+  * GroupchatRoster: Sort contacts in correct order
+  * MamPreferences: Correctly display preference state for JID
+  * Windows: Auto activate shipped plugins
+
+
 Gajim 1.2.0 (21 June 2020)
 
   New
