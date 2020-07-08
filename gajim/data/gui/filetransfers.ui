@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkMenu" id="file_transfers_menu">
     <property name="can_focus">False</property>
@@ -60,9 +60,6 @@
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="_on_file_transfers_dialog_delete_event" swapped="no"/>
     <signal name="key-press-event" handler="_on_file_transfers_window_key_press_event" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -200,6 +197,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="file_transfers_window-atkobject">
