@@ -363,7 +363,8 @@ class AccountWizard(Assistant):
             if error == 'anonymous-not-supported':
                 self._show_error_page(_('Anonymous login not supported'),
                                       _('Anonymous login not supported'),
-                                      _('This server does not support anonymous'))
+                                      _('This server does not support '
+                                        'anonymous login.'))
             else:
                 self._show_error_page(_('Authentication failed'),
                                       SASL_ERRORS.get(error),
