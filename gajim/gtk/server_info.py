@@ -262,6 +262,8 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                     con.get_module('MUC').supported),
             Feature('XEP-0054: vcard-temp',
                     con.get_module('VCardTemp').supported),
+            Feature('XEP-0077: In-Band Registration',
+                    con.get_module('Register').supported),
             Feature('XEP-0163: Personal Eventing Protocol',
                     con.get_module('PEP').supported),
             Feature('XEP-0163: #publish-options',

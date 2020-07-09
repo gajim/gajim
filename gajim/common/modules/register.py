@@ -38,6 +38,11 @@ class Register(BaseModule):
 
         self.agent_registrations = {}
 
+        self.supported = False
+
+    def pass_disco(self, info):
+        self.supported = Namespace.REGISTER in info.features
+
     def register_agent(self, agent, form, is_form, success_cb, error_cb):
         if not app.account_is_available(self._account):
             return
