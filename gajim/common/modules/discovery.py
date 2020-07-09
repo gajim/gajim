@@ -138,9 +138,7 @@ class Discovery(BaseModule):
         self._con.get_module('VCardTemp').pass_disco(result)
         self._con.get_module('Carbons').pass_disco(result)
         self._con.get_module('HTTPUpload').pass_disco(result)
-
-        if Namespace.REGISTER in result.features:
-            self._con.register_supported = True
+        self._con.get_module('Register').pass_disco(result)
 
         self._con.connect_machine(restart=True)
 
