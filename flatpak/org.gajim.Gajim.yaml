@@ -17,6 +17,7 @@ finish-args:
   - --talk-name=org.gnome.Mutter.IdleMonitor
   # Keyring
   - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.kde.kwalletd5
   # GnuPG
   - --filesystem=~/.gnupg
   # camera access
