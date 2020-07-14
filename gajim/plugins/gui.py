@@ -168,7 +168,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.uninstall_plugin_button.set_sensitive(True)
         self._ui.configure_plugin_button.set_sensitive(
-            plugin.config_dialog is not None)
+            plugin.config_dialog is not None and plugin.active)
 
     def _clear_installed_plugin_info(self):
         self._ui.plugin_name_label.set_text('')
@@ -217,6 +217,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                               transient_for=self)
                 return
 
+        self._ui.configure_plugin_button.set_sensitive(not is_active)
         self.installed_plugins_model[path][Column.ACTIVE] = not is_active
 
     def _on_configure_plugin(self, _widget):
