@@ -177,7 +177,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.overlay.drag_dest_set(
             Gtk.DestDefaults.ALL,
             self._dnd_list,
-            Gdk.DragAction.COPY)
+            Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
         self.xml.overlay.drag_dest_set_target_list(dst_targets)
 
         # Create textviews and connect signals
