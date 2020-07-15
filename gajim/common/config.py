@@ -250,6 +250,8 @@ class Config:
         'groupchat_roster_width': [opt_int, 210, _('Width of group chat roster in pixel')],
         'dev_force_bookmark_2': [opt_bool, False, _('Force Bookmark 2 usage')],
         'show_help_start_chat': [opt_bool, True, _('Shows an info bar with helpful hints in the Start / Join Chat dialog')],
+        'check_for_update': [opt_bool, True, _('Check for Gajim updates periodically')],
+        'last_update_check': [opt_str, '', _('Date of the last update check')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {
