@@ -35,14 +35,18 @@ import os
 import sys
 import re
 import time
+import json
 import logging
 from functools import partial
 from threading import Thread
+from datetime import datetime
 from importlib.util import find_spec
+from packaging.version import Version as V
 
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gio
+from gi.repository import Soup
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
 
@@ -91,6 +95,7 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
@@ -1839,6 +1844,81 @@ class Interface:
         app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
                 'active', False)
 
+    def check_for_updates(self):
+        if not app.config.get('check_for_update'):
+            return
+
+        now = datetime.now()
+        last_check = app.config.get('last_update_check')
+        if not last_check:
+            def _on_cancel():
+                app.config.set('check_for_update', False)
+
+            def _on_check():
+                self._get_latest_release()
+
+            NewConfirmationDialog(
+                _('Update Check'),
+                _('Gajim Update Check'),
+                _('Search for Gajim updates periodically?'),
+                [DialogButton.make('Cancel',
+                                   text=_('_No'),
+                                   callback=_on_cancel),
+                 DialogButton.make('Accept',
+                                   text=_('_Search Periodically'),
+                                   callback=_on_check)]).show()
+            return
+
+        last_check_time = datetime.strptime(last_check, '%Y-%m-%d %H:%M')
+        if (now - last_check_time).days < 7:
+            return
+
+        self._get_latest_release()
+
+    def _get_latest_release(self):
+        log.info('Checking for Gajim updates')
+        session = Soup.Session()
+        session.props.user_agent = 'Gajim %s' % app.version
+        message = Soup.Message.new('GET', 'https://gajim.org/current-version.json')
+        session.queue_message(message, self._on_update_checked)
+
+    def _on_update_checked(self, _session, message):
+        now = datetime.now()
+        app.config.set('last_update_check', now.strftime('%Y-%m-%d %H:%M'))
+
+        body = message.props.response_body.data
+        if not body:
+            log.warning('Could not reach gajim.org for update check')
+            return
+
+        data = json.loads(body)
+        latest_version = data['current_version']
+
+        if V(latest_version) > V(app.version):
+            def _on_cancel(is_checked):
+                if is_checked:
+                    app.config.set('check_for_update', False)
+
+            def _on_update(is_checked):
+                if is_checked:
+                    app.config.set('check_for_update', False)
+                helpers.open_uri('https://gajim.org/download')
+
+            NewConfirmationCheckDialog(
+                _('Update Available'),
+                _('Gajim Update Available'),
+                _('There is an update available for Gajim '
+                  '(latest version: %s)' % str(latest_version)),
+                _('_Do not show again'),
+                [DialogButton.make('Cancel',
+                                    text=_('_Later'),
+                                    callback=_on_cancel),
+                 DialogButton.make('Accept',
+                                    text=_('_Update Now'),
+                                    callback=_on_update)]).show()
+        else:
+            log.info('Gajim is up to date')
+
     def run(self, application):
         if app.config.get('trayicon') != 'never':
             self.show_systray()
@@ -1997,6 +2077,8 @@ class Interface:
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
             music_track.enable()
+        else:
+            GLib.timeout_add_seconds(20, self.check_for_updates)
 
         idle.Monitor.set_interval(app.config.get('autoawaytime') * 60,
                                   app.config.get('autoxatime') * 60)

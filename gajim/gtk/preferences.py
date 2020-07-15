@@ -14,6 +14,7 @@
 
 import logging
 import os
+import sys
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -428,6 +429,11 @@ class Preferences(Gtk.ApplicationWindow):
 
         self._ui.enable_logging.set_active(app.get_debug_mode())
         self._ui.enable_logging.show()
+
+        if sys.platform in ('win32', 'darwin'):
+            st = app.config.get('check_for_update')
+            self._ui.update_check.set_active(st)
+            self._ui.update_check.show()
 
         self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
@@ -1065,6 +1071,9 @@ class Preferences(Gtk.ApplicationWindow):
 
     def _on_debug_folder_clicked(self, _widget):
         open_file(configpaths.get('DEBUG'))
+
+    def _on_update_check_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'check_for_update')
 
     def _on_reset_help_clicked(self, widget):
         widget.set_sensitive(False)
