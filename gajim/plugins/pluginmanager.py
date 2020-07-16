@@ -647,6 +647,9 @@ class PluginManager(metaclass=Singleton):
                     continue
                 modules.register_single_module(con, instance, name)
 
+                for handler in instance.handlers:
+                    con.connection.register_handler(handler)
+
     def _plugin_is_active_in_global_config(self, plugin):
         return app.config.get_per('plugins', plugin.short_name, 'active')
 
