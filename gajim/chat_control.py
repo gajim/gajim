@@ -765,7 +765,7 @@ class ChatControl(ChatControlBase):
         new_sid = None
         if jingle_state == self.JINGLE_STATE_NULL:
             new_sid = None
-        if state in ('connection_received', 'connecting'):
+        if state in ('connection_received', 'connecting', 'connected'):
             new_sid = sid
 
         jingle.state = jingle_state
@@ -888,9 +888,6 @@ class ChatControl(ChatControlBase):
         if not jingle.sid:
             return
 
-        jingle.sid = None
-        jingle.state = self.JINGLE_STATE_NULL
-
         con = app.connections[self.account]
         session = con.get_module('Jingle').get_jingle_session(
             self.contact.get_full_jid(), jingle.sid)
@@ -898,6 +895,10 @@ class ChatControl(ChatControlBase):
             content = session.get_content(jingle_type)
             if content:
                 session.remove_content(content.creator, content.name)
+
+        jingle.sid = None
+        jingle.state = self.JINGLE_STATE_NULL
+
         var = GLib.Variant.new_boolean(False)
 
         jingle.action.change_state(var)
