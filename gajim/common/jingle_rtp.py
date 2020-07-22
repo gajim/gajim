@@ -182,6 +182,7 @@ class JingleRTPContent(JingleContent):
         self.funnel.set_state(Gst.State.PLAYING)
 
     def _on_src_pad_added(self, stream, pad, codec):
+        log.info('Used codec: %s', codec.to_string())
         if not self.funnel:
             self._setup_funnel()
         pad.link(self.funnel.get_request_pad('sink_%u'))
