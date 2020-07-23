@@ -8,7 +8,7 @@
     <name>Gajim</name>
     <short-name>gajim</short-name>
 
-    <shortdesc xml:lang="en">XMPP Chat Client</shortdesc>
+    <shortdesc xml:lang="en">A fully-featured XMPP chat client</shortdesc>
     <description xml:lang="en">
       Gajim aims to be an easy to use and fully-featured XMPP client.
       Just chat with your friends or family, easily share pictures and thoughts or discuss the news with your groups.
@@ -17,7 +17,7 @@
     </description>
 
     <homepage rdf:resource="https://gajim.org/" />
-    <wiki rdf:resource="https://dev.gajim.org/gajim/gajim/wikis/home" />
+    <wiki rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home" />
     <bug-database rdf:resource="https://dev.gajim.org/gajim/gajim/issues" />
     <category rdf:resource="https://linkmauve.fr/ns/xmpp-doap#category-client" />
     <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
