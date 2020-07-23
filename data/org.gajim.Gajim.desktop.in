@@ -2,7 +2,7 @@
 Categories=Network;InstantMessaging;GTK;Chat;
 Name=Gajim
 GenericName=XMPP IM Client
-Comment=A GTK XMPP client
+Comment=A fully-featured XMPP chat client
 #Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 Keywords=chat;messaging;im;xmpp;bonjour;voip;
 Exec=gajim %u
