@@ -57,7 +57,6 @@ from gajim.common.dbus import logind
 from gajim.common.dbus import music_track
 
 from gajim import gui_menu_builder
-from gajim import dialogs
 from gajim.dialog_messages import get_dialog
 
 from gajim.chat_control_base import ChatControlBase
@@ -82,6 +81,7 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.const import Display
+from gajim.common.const import JingleState
 
 from gajim.common.file_props import FilesProp
 
@@ -877,14 +877,16 @@ class Interface:
         ft.show_stopped(obj.jid, file_props, 'Peer cancelled ' +
                             'the transfer')
 
-    def handle_event_jingle_incoming(self, obj):
+    # Jingle AV handling
+    def handle_event_jingle_incoming(self, event):
         # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
         # data...))
         # TODO: conditional blocking if peer is not in roster
 
-        account = obj.conn.name
-        content_types = [obj.contents.media]
-
+        account = event.conn.name
+        content_types = []
+        for item in event.contents:
+            content_types.append(item.media)
         # check type of jingle session
         if 'audio' in content_types or 'video' in content_types:
             # a voip session...
@@ -895,74 +897,105 @@ class Interface:
             # unknown session type... it should be declined in common/jingle.py
             return
 
-        ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
-            or self.msg_win_mgr.get_control(obj.jid, account))
+        notification_event = events.JingleIncomingEvent(
+            event.fjid, event.sid, content_types)
+
+        ctrl = (self.msg_win_mgr.get_control(event.fjid, account)
+                or self.msg_win_mgr.get_control(event.jid, account))
         if ctrl:
             if 'audio' in content_types:
-                ctrl.set_audio_state('connection_received', obj.sid)
+                ctrl.set_jingle_state(
+                    'audio',
+                    JingleState.CONNECTION_RECEIVED,
+                    event.sid)
             if 'video' in content_types:
-                ctrl.set_video_state('connection_received', obj.sid)
-
-        dlg = dialogs.VoIPCallReceivedDialog.get_dialog(obj.fjid, obj.sid)
-        if dlg:
-            dlg.add_contents(content_types)
-            return
+                ctrl.set_jingle_state(
+                    'video',
+                    JingleState.CONNECTION_RECEIVED,
+                    event.sid)
+            ctrl.add_call_received_message(notification_event)
 
         if helpers.allow_popup_window(account):
-            dialogs.VoIPCallReceivedDialog(account, obj.fjid, obj.sid,
-                content_types)
+            app.interface.new_chat_from_jid(account, event.fjid)
+            ctrl.add_call_received_message(notification_event)
             return
 
-        event = events.JingleIncomingEvent(obj.fjid, obj.sid, content_types)
-        self.add_event(account, obj.jid, event)
+        self.add_event(account, event.fjid, notification_event)
 
         if helpers.allow_showing_notification(account):
-            # TODO: we should use another pixmap ;-)
-            txt = _('%s wants to start a voice chat.') % \
-                app.get_name_from_jid(account, obj.fjid)
-            event_type = _('Voice Chat Request')
+            heading = _('Incoming Call')
+            text = _(f'{app.get_name_from_jid(account, event.jid)} is calling')
             app.notification.popup(
-                event_type, obj.fjid, account, 'jingle-incoming',
-                icon_name='call-start-symbolic', title=event_type, text=txt)
+                heading,
+                event.fjid,
+                account,
+                'jingle-incoming',
+                icon_name='call-start-symbolic',
+                title=heading,
+                text=text)
 
-    def handle_event_jingle_connected(self, obj):
+    def handle_event_jingle_connected(self, event):
         # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
-        if obj.media in ('audio', 'video'):
-            account = obj.conn.name
-            ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
-                or self.msg_win_mgr.get_control(obj.jid, account))
+        if event.media in ('audio', 'video'):
+            account = event.conn.name
+            ctrl = (self.msg_win_mgr.get_control(event.fjid, account)
+                    or self.msg_win_mgr.get_control(event.jid, account))
             if ctrl:
-                if obj.media == 'audio':
-                    ctrl.set_audio_state('connected', obj.sid)
-                else:
-                    ctrl.set_video_state('connected', obj.sid)
+                con = app.connections[account]
+                session = con.get_module('Jingle').get_jingle_session(
+                    event.fjid, event.sid)
 
-    def handle_event_jingle_disconnected(self, obj):
+                if event.media == 'audio':
+                    content = session.get_content('audio')
+                    ctrl.set_jingle_state(
+                        'audio',
+                        JingleState.CONNECTED,
+                        event.sid)
+                if event.media == 'video':
+                    content = session.get_content('video')
+                    ctrl.set_jingle_state(
+                        'video',
+                        JingleState.CONNECTED,
+                        event.sid)
+
+                # Now, accept the content/sessions.
+                # This should be done after the chat control is running
+                if not session.accepted:
+                    session.approve_session()
+                for content in event.media:
+                    session.approve_content(content)
+
+    def handle_event_jingle_disconnected(self, event):
         # ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
-        account = obj.conn.name
-        ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
-            or self.msg_win_mgr.get_control(obj.jid, account))
+        account = event.conn.name
+        ctrl = (self.msg_win_mgr.get_control(event.fjid, account)
+                or self.msg_win_mgr.get_control(event.jid, account))
         if ctrl:
-            if obj.media is None:
-                ctrl.stop_jingle(sid=obj.sid, reason=obj.reason)
-            elif obj.media == 'audio':
-                ctrl.set_audio_state('stop', sid=obj.sid, reason=obj.reason)
-            elif obj.media == 'video':
-                ctrl.set_video_state('stop', sid=obj.sid, reason=obj.reason)
-        dialog = dialogs.VoIPCallReceivedDialog.get_dialog(obj.fjid, obj.sid)
-        if dialog:
-            if obj.media is None:
-                dialog.dialog.destroy()
-            else:
-                dialog.remove_contents((obj.media, ))
+            if event.media is None:
+                ctrl.stop_jingle(sid=event.sid, reason=event.reason)
+            if event.media == 'audio':
+                ctrl.set_jingle_state(
+                    'audio',
+                    JingleState.NULL,
+                    sid=event.sid,
+                    reason=event.reason)
+            if event.media == 'video':
+                ctrl.set_jingle_state(
+                    'video',
+                    JingleState.NULL,
+                    sid=event.sid,
+                    reason=event.reason)
 
-    def handle_event_jingle_error(self, obj):
+    def handle_event_jingle_error(self, event):
         # ('JINGLE_ERROR', account, (peerjid, sid, reason))
-        account = obj.conn.name
-        ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
-            or self.msg_win_mgr.get_control(obj.jid, account))
-        if ctrl and obj.sid == ctrl.jingle['audio'].sid:
-            ctrl.set_audio_state('error', reason=obj.reason)
+        account = event.conn.name
+        ctrl = (self.msg_win_mgr.get_control(event.fjid, account)
+                or self.msg_win_mgr.get_control(event.jid, account))
+        if ctrl and event.sid == ctrl.jingle['audio'].sid:
+            ctrl.set_jingle_state(
+                'audio',
+                JingleState.ERROR,
+                reason=event.reason)
 
     @staticmethod
     def handle_event_roster_item_exchange(obj):

@@ -180,6 +180,31 @@ class Jingle(BaseModule):
             jingle.start_session()
         return jingle.sid
 
+    def start_audio_video(self, jid):
+        if self.get_jingle_session(jid, media='video'):
+            return self.get_jingle_session(jid, media='video').sid
+        audio_session = self.get_jingle_session(jid, media='audio')
+        video_session = self.get_jingle_session(jid, media='video')
+        if audio_session and video_session:
+            return audio_session.sid
+        if audio_session:
+            video = JingleVideo(audio_session)
+            audio_session.add_content('video', video)
+            return audio_session.sid
+        if video_session:
+            audio = JingleAudio(video_session)
+            video_session.add_content('audio', audio)
+            return video_session.sid
+
+        jingle_session = JingleSession(self._con, weinitiate=True, jid=jid)
+        self._sessions[jingle_session.sid] = jingle_session
+        audio = JingleAudio(jingle_session)
+        video = JingleVideo(jingle_session)
+        jingle_session.add_content('audio', audio)
+        jingle_session.add_content('video', video)
+        jingle_session.start_session()
+        return jingle_session.sid
+
     def start_file_transfer(self, jid, file_props, request=False):
         logger.info("start file transfer with file: %s", file_props)
         contact = app.contacts.get_contact_with_highest_priority(

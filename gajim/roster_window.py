@@ -1938,9 +1938,12 @@ class RosterWindow:
             return True
 
         if event.type_ == 'jingle-incoming':
-            dialogs.VoIPCallReceivedDialog(account, event.peerjid, event.sid,
-                event.content_types)
-            app.events.remove_events(account, jid, event)
+            ctrl = app.interface.msg_win_mgr.get_control(jid, account)
+            if ctrl:
+                ctrl.parent_win.set_active_tab(ctrl)
+            else:
+                ctrl = app.interface.new_chat_from_jid(account, jid)
+                ctrl.add_call_received_message(event)
             return True
 
         return False

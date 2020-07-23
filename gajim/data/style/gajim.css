@@ -319,6 +319,19 @@ button.flat.link { padding: 0; border: 0; }
     font-weight: bold;
 }
 
+@keyframes pulse {
+    0%  { -gtk-icon-transform: scale(1.0); }
+    20% { -gtk-icon-transform: scale(1.1); }
+    35% { -gtk-icon-transform: scale(1.0); }
+}
+
+.audio-mic-animation {
+    animation-name: pulse;
+    animation-duration: 2.0s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
 /* Treeview */
 .adhoc-treeview { padding: 5px; }
 .adhoc-scrolled { border: 1px solid; border-color:@unfocused_borders; }

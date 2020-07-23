@@ -521,11 +521,10 @@ def get_singlechat_menu(control_id, account, jid):
         ('win.invite-contacts-', _('Invite Contacts…')),
         ('win.add-to-roster-', _('Add to Contact List…')),
         ('win.block-contact-', _('Block Contact…')),
-        ('win.toggle-audio-', _('Voice Chat')),
-        ('win.toggle-video-', _('Video Chat')),
+        ('win.start-call-', _('Start Call…')),
         ('win.information-', _('Information')),
         ('app.browse-history', _('History')),
-        ]
+    ]
 
     def build_chatstate_menu():
         menu = Gio.Menu()

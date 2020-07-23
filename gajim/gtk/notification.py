@@ -129,7 +129,7 @@ class Notification(EventHelper):
                 self._withdraw('gc-invitation', event.account, event.muc)
             if event.type_ in ('normal', 'printed_chat', 'chat',
                                'printed_pm', 'pm', 'printed_marked_gc_msg',
-                               'printed_gc_msg'):
+                               'printed_gc_msg', 'jingle-incoming'):
                 self._withdraw('new-message', event.account, event.jid)
 
     def _nec_our_status(self, event):
@@ -187,7 +187,7 @@ class Notification(EventHelper):
                 _('File Transfer Error'), _('File Transfer Completed'),
                 _('File Transfer Stopped'), _('Group Chat Invitation'),
                 _('Connection Failed'), _('Subscription request'),
-                _('Unsubscribed')):
+                _('Unsubscribed'), _('Incoming Call')):
             if 'actions' in self._daemon_capabilities:
                 # Create Variant Dict
                 dict_ = {'account': GLib.Variant('s', account),

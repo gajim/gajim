@@ -271,6 +271,17 @@ class ClientState(IntEnum):
         return self == ClientState.AVAILABLE
 
 
+class JingleState(Enum):
+    NULL = 'stop'
+    CONNECTING = 'connecting'
+    CONNECTION_RECEIVED = 'connection_received'
+    CONNECTED = 'connected'
+    ERROR = 'error'
+
+    def __str__(self):
+        return self.value
+
+
 MUC_CREATION_EXAMPLES = [
     (Q_('?Group chat name:Team'),
      Q_('?Group chat description:Project discussion'),
