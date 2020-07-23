@@ -5,17 +5,14 @@
   <metadata_license>CC-BY-SA-3.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <name>Gajim</name>
-  <summary>A GTK XMPP client</summary>
+  <summary>A fully-featured XMPP chat client</summary>
   <description>
-    <p>Gajim aims to be an easy to use and fully-featured XMPP client. 
-    With Gajim you can chat through various XMPP services of your choice 
-    (e.g. Jabber.org) as well as transports (e.g. Facebook, IRC).
-    </p>
+    <p>Gajim aims to be an easy to use and fully-featured XMPP client.</p>
     <p>Just chat with your friends or family, easily share pictures and 
     thoughts or discuss the news with your groups.
     </p>
-    <p>Gajim integrates well with your other devices: just chat and see what's
-    been said on your mobile device.
+    <p>Chat securely with End-to-End encryption via OMEMO or OpenPGP.</p>
+    <p>Gajim integrates well with your other devices: simply continue conversations on your mobile device.
     </p>
     <p>Features:</p>
     <ul>
@@ -65,10 +62,10 @@
   <update_contact>gajim-devel_AT_gajim.org</update_contact>
   <url type="homepage">https://gajim.org/</url>
   <url type="bugtracker">https://dev.gajim.org/gajim/gajim</url>
-  <url type="faq">https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq</url>
-  <url type="help">https://dev.gajim.org/gajim/gajim/wikis/help/Help</url>
-  <url type="donation">https://gajim.org/development/#donating</url>
-  <url type="translate">https://dev.gajim.org/gajim/gajim/wikis/development/DevTranslate</url>
+  <url type="faq">https://dev.gajim.org/gajim/gajim/-/wikis/help/gajimfaq</url>
+  <url type="help">https://dev.gajim.org/gajim/gajim/-/wikis/help/Help</url>
+  <url type="donation">https://gajim.org/development/#donations</url>
+  <url type="translate">https://dev.gajim.org/gajim/gajim/-/wikis/development/devtranslate</url>
   <translation type="gettext">gajim</translation>
   <content_rating type="oars-1.1">
     <content_attribute id="social-chat">intense</content_attribute>
