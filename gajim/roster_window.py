@@ -76,6 +76,7 @@ from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.tooltips import RosterTooltip
 from gajim.gtk.adhoc import AdHocCommand
+from gajim.gtk.status_selector import StatusSelector
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import restore_roster_position
@@ -246,26 +247,6 @@ class RosterWindow:
         if model[titer][0] == 'SEPARATOR':
             return True
         return False
-
-    @staticmethod
-    def _status_cell_data_func(cell_layout, cell, tree_model, iter_):
-        if isinstance(cell, Gtk.CellRendererPixbuf):
-            icon_name = tree_model[iter_][1]
-            if icon_name is None:
-                return
-            if tree_model[iter_][2] == 'status':
-                cell.set_property('icon_name', icon_name)
-            else:
-                iconset_name = get_icon_name(icon_name)
-                cell.set_property('icon_name', iconset_name)
-        else:
-            show = tree_model[iter_][0]
-            id_ = tree_model[iter_][2]
-            if id_ not in ('status', 'desync'):
-                show = helpers.get_uf_show(show)
-            cell.set_property('text', show)
-
-
 
 #############################################################################
 ### Methods for adding and removing roster window items
@@ -2083,6 +2064,7 @@ class RosterWindow:
             self.delete_pep(app.get_jid_from_account(account), account)
 
         app.connections[account].change_status(status, txt)
+        self._status_selector.update()
 
     def chg_contact_status(self, contact, show, status, account):
         """
@@ -2173,7 +2155,9 @@ class RosterWindow:
                     for contact in [c for c in lcontact if (
                     (c.show != 'offline' or c.is_transport()) and not ctrl)]:
                         self.chg_contact_status(contact, 'offline', '', account)
-        self.update_status_combobox()
+        if app.interface.systray_enabled:
+            app.interface.systray.change_status(show)
+        self._status_selector.update()
 
     def get_status_message(self, show, on_response, show_pep=True,
                     always_ask=False):
@@ -2210,44 +2194,6 @@ class RosterWindow:
             self.send_status(account, status, message)
             self.send_pep(account, pep_dict)
         self.get_status_message(status, on_response)
-
-    def update_status_combobox(self):
-        # table to change index in connection.connected to index in combobox
-        table = {
-            'offline':8,
-            'connecting':8,
-            'error': 8,
-            'online':0,
-            'chat':1,
-            'away':2,
-            'xa':3,
-            'dnd':4
-        }
-
-        liststore = self.status_combobox.get_model()
-
-        # Check if a desync'ed status entry and separator is currently
-        # in the liststore and remove it.
-        while len(liststore) > 9:
-            titer = liststore.get_iter_first()
-            liststore.remove(titer)
-
-        show = helpers.get_global_show()
-        # temporarily block signal in order not to send status that we show
-        # in the combobox
-        self.combobox_callback_active = False
-        if helpers.statuses_unified():
-            self.status_combobox.set_active(table[show])
-        else:
-            uf_show = helpers.get_uf_show(show)
-            liststore.prepend(['SEPARATOR', None, '', True])
-            status_combobox_text = uf_show + ' (' + _("desynced") + ')'
-            liststore.prepend(
-                [status_combobox_text, show, 'desync', False])
-            self.status_combobox.set_active(0)
-        self.combobox_callback_active = True
-        if app.interface.systray_enabled:
-            app.interface.systray.change_status(show)
 
     def get_show(self, lcontact):
         prio = lcontact[0].priority
@@ -2545,17 +2491,10 @@ class RosterWindow:
         self.rename_self_contact(obj.old_jid, obj.new_jid, obj.conn.name)
 
     def _nec_our_show(self, event):
-        model = self.status_combobox.get_model()
-        iter_ = model.get_iter_from_string('6')
         if event.show == 'offline':
-            # sensitivity for this menuitem
-            if app.get_number_of_connected_accounts() == 0:
-                model[iter_][3] = False
             self.application.set_account_actions_state(event.account)
             self.application.update_app_actions_state()
-        else:
-            # sensitivity for this menuitem
-            model[iter_][3] = True
+
         self.on_status_changed(event.account, event.show)
 
     def _nec_connection_type(self, obj):
@@ -3091,20 +3030,18 @@ class RosterWindow:
     def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
         # CTRL mask
         if modifier & Gdk.ModifierType.CONTROL_MASK:
-            if keyval == Gdk.KEY_s: # CTRL + s
-                model = self.status_combobox.get_model()
-                accounts = list(app.connections.keys())
-                status = model[self.previous_status_combobox_active][2]
-                def on_response(message, pep_dict):
-                    if message is not None: # None if user pressed Cancel
-                        for account in accounts:
-                            if not app.config.get_per('accounts', account,
-                            'sync_with_global_status'):
+            if keyval == Gdk.KEY_s:  # CTRL + s
+                show = helpers.get_global_show()
+                def _on_response(message, pep_dict):
+                    if message is not None:  # None if user pressed Cancel
+                        for account in app.contacts.get_accounts():
+                            sync_account = app.config.get_per(
+                                'accounts', account, 'sync_with_global_status')
+                            if not sync_account:
                                 continue
-                            current_show = app.connections[account].status
-                            self.send_status(account, current_show, message)
+                            self.send_status(account, show, message)
                             self.send_pep(account, pep_dict)
-                dialogs.ChangeStatusMessageDialog(on_response, status)
+                dialogs.ChangeStatusMessageDialog(_on_response, show)
                 return True
             if keyval == Gdk.KEY_k: # CTRL + k
                 self.enable_rfilter('')
@@ -3280,78 +3217,6 @@ class RosterWindow:
                 [DialogButton.make('Cancel'),
                  DialogButton.make('Remove',
                                    callback=on_ok2)]).show()
-
-    def on_status_combobox_changed(self, widget):
-        """
-        When we change our status via the combobox
-        """
-        model = self.status_combobox.get_model()
-        active = self.status_combobox.get_active()
-        if active == -1: # no active item
-            return
-        if not self.combobox_callback_active:
-            self.previous_status_combobox_active = active
-            return
-        accounts = list(app.connections.keys())
-        if not accounts:
-            ErrorDialog(_('No account available'),
-                _('You must create an account before you can chat with other '
-                'contacts.'))
-            self.update_status_combobox()
-            return
-
-        status = model[active][2]
-        if status == 'status':
-            # 'Change status message' selected:
-            # do not change show, just show change status dialog
-            status = model[self.previous_status_combobox_active][2]
-            def on_response(message, pep_dict):
-                if message is not None: # None if user pressed Cancel
-                    for account in accounts:
-                        if not app.config.get_per('accounts', account,
-                        'sync_with_global_status'):
-                            continue
-                        current_show = app.connections[account].status
-                        self.send_status(account, current_show, message)
-                        self.send_pep(account, pep_dict)
-                self.combobox_callback_active = False
-                self.status_combobox.set_active(
-                    self.previous_status_combobox_active)
-                self.combobox_callback_active = True
-            dialogs.ChangeStatusMessageDialog(on_response, status)
-            return
-        # we are about to change show, so save this new show so in case
-        # after user chooses "Change status message" menuitem
-        # we can return to this show
-        self.previous_status_combobox_active = active
-
-        def on_continue(message, pep_dict):
-            if message is None:
-                # user pressed Cancel to change status message dialog
-                self.update_status_combobox()
-                return
-            global_sync_accounts = []
-            for acct in accounts:
-                if app.config.get_per('accounts', acct,
-                'sync_with_global_status'):
-                    global_sync_accounts.append(acct)
-            global_sync_connected_accounts = \
-                app.get_number_of_connected_accounts(global_sync_accounts)
-            for account in accounts:
-                if not app.config.get_per('accounts', account,
-                'sync_with_global_status'):
-                    continue
-                # we are connected (so we wanna change show and status)
-                # or no account is connected and we want to connect with new
-                # show and status
-
-                if not global_sync_connected_accounts > 0 or \
-                app.account_is_available(account):
-                    self.send_status(account, status, message)
-                    self.send_pep(account, pep_dict)
-            self.update_status_combobox()
-
-        self.get_status_message(status, on_continue)
 
     def on_publish_tune_toggled(self, widget, account):
         active = widget.get_active()
@@ -4321,18 +4186,19 @@ class RosterWindow:
     def update_icons(self):
         # Update the roster
         self.setup_and_draw_roster()
-        # Update the status combobox
-        self.status_combobox.queue_draw()
+
         # Update the systray
         if app.interface.systray_enabled:
             app.interface.systray.set_img()
+            app.interface.systray.change_status(helpers.get_global_show())
 
         for win in app.interface.msg_win_mgr.windows():
             for ctrl in win.controls():
                 ctrl.update_ui()
                 win.redraw_tab(ctrl)
 
-        self.update_status_combobox()
+        self._status_selector.update()
+
 
     def set_account_status_icon(self, account):
         child_iterA = self._get_account_iter(account, self.model)
@@ -5294,20 +5160,9 @@ class RosterWindow:
         # accounts to draw next time we draw accounts.
         self.accounts_to_draw = []
 
-        # StatusComboBox
-        self.status_combobox = self.xml.get_object('status_combobox')
-        pixbuf_renderer, text_renderer = self.status_combobox.get_cells()
-        self.status_combobox.set_cell_data_func(
-            pixbuf_renderer, self._status_cell_data_func)
-        self.status_combobox.set_cell_data_func(
-            text_renderer, self._status_cell_data_func)
-        self.status_combobox.set_row_separator_func(self._iter_is_separator)
-
-        self.status_combobox.set_active(8)
-        # holds index to previously selected item so if
-        # "change status message..." is selected we can fallback to previously
-        # selected item and not stay with that item selected
-        self.previous_status_combobox_active = 8
+        # Status selector
+        self._status_selector = StatusSelector()
+        self.xml.roster_vbox2.add(self._status_selector)
 
         # Enable/Disable checkboxes at start
         if app.config.get('showoffline'):

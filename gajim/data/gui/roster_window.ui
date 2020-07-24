@@ -3,74 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkListStore" id="status_liststore">
-    <columns>
-      <!-- column-name statustext -->
-      <column type="gchararray"/>
-      <!-- column-name icon-name -->
-      <column type="gchararray"/>
-      <!-- column-name show -->
-      <column type="gchararray"/>
-      <!-- column-name sensible -->
-      <column type="gboolean"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0">online</col>
-        <col id="1">online</col>
-        <col id="2">online</col>
-        <col id="3">True</col>
-      </row>
-      <row>
-        <col id="0">chat</col>
-        <col id="1">chat</col>
-        <col id="2">chat</col>
-        <col id="3">True</col>
-      </row>
-      <row>
-        <col id="0">away</col>
-        <col id="1">away</col>
-        <col id="2">away</col>
-        <col id="3">True</col>
-      </row>
-      <row>
-        <col id="0">xa</col>
-        <col id="1">xa</col>
-        <col id="2">xa</col>
-        <col id="3">True</col>
-      </row>
-      <row>
-        <col id="0">dnd</col>
-        <col id="1">dnd</col>
-        <col id="2">dnd</col>
-        <col id="3">True</col>
-      </row>
-      <row>
-        <col id="0">SEPARATOR</col>
-        <col id="1">None</col>
-        <col id="2">None</col>
-        <col id="3">True</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Change Status Message…</col>
-        <col id="1">gajim-kbd_input</col>
-        <col id="2">status</col>
-        <col id="3">False</col>
-      </row>
-      <row>
-        <col id="0">SEPARATOR</col>
-        <col id="1">None</col>
-        <col id="2">None</col>
-        <col id="3">True</col>
-      </row>
-      <row>
-        <col id="0">offline</col>
-        <col id="1">offline</col>
-        <col id="2">offline</col>
-        <col id="3">True</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkApplicationWindow" id="roster_window">
     <property name="name">RosterWindow</property>
     <property name="width_request">85</property>
@@ -149,36 +81,6 @@
                     <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="status_combobox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="model">status_liststore</property>
-                    <signal name="changed" handler="on_status_combobox_changed" swapped="no"/>
-                    <child>
-                      <object class="GtkCellRendererPixbuf"/>
-                      <attributes>
-                        <attribute name="sensitive">3</attribute>
-                        <attribute name="icon-name">1</attribute>
-                      </attributes>
-                    </child>
-                    <child>
-                      <object class="GtkCellRendererText">
-                        <property name="xpad">5</property>
-                        <property name="ellipsize">end</property>
-                      </object>
-                      <attributes>
-                        <attribute name="sensitive">3</attribute>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
