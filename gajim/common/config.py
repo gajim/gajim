@@ -391,10 +391,9 @@ class Config:
     }
 
     defaultstatusmsg_default = {
-        'online': [False, _('I\'m available.')],
-        'chat': [False, _('I\'m free for chat.')],
+        'online': [False, _('I’m available.')],
         'away': [False, _('Be right back.')],
-        'xa': [False, _('I\'m not available.')],
+        'xa': [False, _('I’m not available.')],
         'dnd': [False, _('Do not disturb.')],
         'offline': [False, _('Bye!')],
     }
