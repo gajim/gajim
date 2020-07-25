@@ -2703,6 +2703,23 @@ to discover one from the server. (Example: stun.iptel.org)</property>
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="use_keyring_checkbutton">
+                        <property name="label" translatable="yes">Use your system’s _keyring to store passwords</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="_on_use_keyring_toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -2751,7 +2768,7 @@ to discover one from the server. (Example: stun.iptel.org)</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -2768,7 +2785,7 @@ to discover one from the server. (Example: stun.iptel.org)</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>

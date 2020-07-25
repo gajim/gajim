@@ -423,6 +423,9 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('log_contact_status_changes')
         self._ui.log_show_changes_checkbutton.set_active(st)
 
+        st = app.config.get('use_keyring')
+        self._ui.use_keyring_checkbutton.set_active(st)
+
         self._ui.enable_logging.set_active(app.get_debug_mode())
         self._ui.enable_logging.show()
 
@@ -1051,6 +1054,10 @@ class Preferences(Gtk.ApplicationWindow):
     # Log status changes of contacts
     def on_log_show_changes_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
+
+    # Use system’s keyring
+    def _on_use_keyring_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'use_keyring')
 
     # Enable debug logging
     def on_enable_logging_toggled(self, widget):
