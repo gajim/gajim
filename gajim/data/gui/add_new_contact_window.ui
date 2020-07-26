@@ -16,11 +16,6 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">user-info-symbolic</property>
-  </object>
   <object class="GtkTextBuffer" id="message_textbuffer">
     <property name="text" translatable="yes">I would like to add you to my contact list.</property>
     <signal name="end-user-action" handler="on_message_textbuffer_changed" swapped="no"/>
@@ -45,12 +40,9 @@
     <property name="width_request">400</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_start">18</property>
-    <property name="margin_end">18</property>
-    <property name="margin_bottom">18</property>
+    <property name="border_width">18</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
-    <property name="baseline_position">top</property>
     <child>
       <object class="GtkLabel" id="prompt_label">
         <property name="can_focus">False</property>
@@ -293,8 +285,14 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes">Query Contact Info</property>
-            <property name="image">image1</property>
             <signal name="clicked" handler="on_show_contact_info_button_clicked" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">user-info-symbolic</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -450,7 +448,7 @@ to add a contact from this protocol.</property>
         <property name="layout_style">end</property>
         <child>
           <object class="GtkButton" id="cancel_button">
-            <property name="label">_Cancel</property>
+            <property name="label" translatable="yes">_Cancel</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="can_default">True</property>
@@ -466,7 +464,7 @@ to add a contact from this protocol.</property>
         </child>
         <child>
           <object class="GtkButton" id="add_button">
-            <property name="label">_Add</property>
+            <property name="label" translatable="yes">_Add</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="can_default">True</property>
