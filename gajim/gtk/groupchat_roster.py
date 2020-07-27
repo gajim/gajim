@@ -260,13 +260,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
         if not has_parent:
             renderer.set_property('weight', 600)
-            renderer.set_property('height', 32)
-
-        elif app.config.get('show_status_msgs_in_roster'):
-            renderer.set_property('height', 38)
-
-        else:
-            renderer.set_property('height', 32)
+            renderer.set_property('ypad', 6)
 
     def _on_roster_row_activated(self, _treeview, path, _column):
         iter_ = self._store.get_iter(path)
