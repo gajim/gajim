@@ -22,6 +22,7 @@ from gi.repository import Gio
 
 from nbxmpp.client import Client
 from nbxmpp.protocol import JID
+from nbxmpp.protocol import validate_domainpart
 from nbxmpp.const import Mode
 from nbxmpp.const import StreamError
 from nbxmpp.const import ConnectionProtocol
@@ -61,7 +62,8 @@ class AccountWizard(Assistant):
                         css_class='suggested-action')
         self.add_button('connect', _('Connect'), css_class='suggested-action')
         self.add_button('next', _('Next'), css_class='suggested-action')
-        self.add_button('login', _('Log In'), css_class='suggested-action')
+        self.add_button('login', _('Log In'), complete=True,
+                        css_class='suggested-action')
         self.add_button('back', _('Back'))
 
         self.add_pages({'login': Login(self._on_button_clicked),
@@ -302,7 +304,8 @@ class AccountWizard(Assistant):
             advanced,
             ignore_all_errors)
 
-        self._client.subscribe('anonymous-supported', self._on_anonymous_supported)
+        self._client.subscribe('anonymous-supported',
+                               self._on_anonymous_supported)
         self._client.connect()
 
     def _register_with_server(self, ignore_all_errors=False):
@@ -675,38 +678,16 @@ class Signup(Page):
         open_uri(server)
         return Gdk.EVENT_STOP
 
-    def _check_port_entry(self):
-        port = self._ui.custom_port_entry.get_text()
-        if port == '':
-            self._show_icon(False)
-            return False
-        try:
-            port = int(port)
-        except Exception:
-            self._show_icon(True)
-            self._ui.custom_port_entry.set_icon_tooltip_text(
-                Gtk.EntryIconPosition.SECONDARY, _('Must be a port number'))
-            return False
-
-        if port not in range(0, 65535):
-            self._show_icon(True)
-            self._ui.custom_port_entry.set_icon_tooltip_text(
-                Gtk.EntryIconPosition.SECONDARY,
-                _('Port must be a number between 0 and 65535'))
-            return False
-
-        self._show_icon(False)
-        return True
-
-    def _show_icon(self, show):
-        icon = 'dialog-warning-symbolic' if show else None
-        self._ui.log_in_address_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY, icon)
-
     def _set_complete(self, *args):
-        server = self._ui.server_comboboxtext_sign_up_entry.get_text()
-        self._ui.visit_server_button.set_visible(server)
-        self.complete = server
+        try:
+            self.get_server()
+        except Exception:
+            self.complete = False
+            self._ui.visit_server_button.set_visible(False)
+        else:
+            self.complete = True
+            self._ui.visit_server_button.set_visible(True)
+
         self.get_toplevel().update_page_complete()
 
     def is_anonymous(self):
@@ -716,7 +697,8 @@ class Signup(Page):
         return self._ui.sign_up_advanced_checkbutton.get_active()
 
     def get_server(self):
-        return self._ui.server_comboboxtext_sign_up_entry.get_text()
+        return validate_domainpart(
+            self._ui.server_comboboxtext_sign_up_entry.get_text())
 
     @staticmethod
     def _on_activate_link(_label, uri):
@@ -730,10 +712,13 @@ class AdvancedSettings(Page):
     def __init__(self):
         Page.__init__(self)
         self.title = _('Advanced settings')
+        self.complete = False
 
         self._ui = get_builder('account_wizard.ui')
         self._ui.manage_proxies_button.connect('clicked',
                                                self._on_proxy_manager)
+        self._ui.custom_host_entry.connect('changed', self._set_complete)
+        self._ui.custom_port_entry.connect('changed', self._set_complete)
         self.pack_start(self._ui.advanced_grid, True, True, 0)
 
         self.show_all()
@@ -770,6 +755,59 @@ class AdvancedSettings(Page):
         return ('%s:%s' % (host, port),
                 protocol,
                 ConnectionType(con_type))
+
+    def _show_host_icon(self, show):
+        icon = 'dialog-warning-symbolic' if show else None
+        self._ui.custom_host_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, icon)
+
+    def _show_port_icon(self, show):
+        icon = 'dialog-warning-symbolic' if show else None
+        self._ui.custom_port_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, icon)
+
+    def _validate_host(self):
+        host = self._ui.custom_host_entry.get_text()
+        try:
+            validate_domainpart(host)
+        except Exception:
+            self._show_host_icon(True)
+            self._ui.custom_host_entry.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY, _('Invalid domain name'))
+            return False
+
+        self._show_host_icon(False)
+        return True
+
+    def _validate_port(self):
+        port = self._ui.custom_port_entry.get_text()
+        if not port:
+            self._show_port_icon(False)
+            return False
+
+        try:
+            port = int(port)
+        except Exception:
+            self._show_port_icon(True)
+            self._ui.custom_port_entry.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY, _('Must be a port number'))
+            return False
+
+        if port not in range(0, 65535):
+            self._show_port_icon(True)
+            self._ui.custom_port_entry.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                _('Port must be a number between 0 and 65535'))
+            return False
+
+        self._show_port_icon(False)
+        return True
+
+    def _set_complete(self, *args):
+        port_valid = self._validate_port()
+        host_valid = self._validate_host()
+        self.complete = port_valid and host_valid
+        self.get_toplevel().update_page_complete()
 
 
 class SecurityWarning(Page):
