@@ -540,7 +540,7 @@ class MUC(BaseModule):
             return
 
         if (not app.config.get('log_contact_status_changes') or
-                not app.config.should_log(self._account, properties.jid)):
+                not helpers.should_log(self._account, properties.jid)):
             return
 
         additional_data = AdditionalDataDict()

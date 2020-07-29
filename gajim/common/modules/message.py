@@ -24,6 +24,7 @@ from nbxmpp.util import generate_id
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import should_log
 from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
@@ -236,7 +237,7 @@ class Message(BaseModule):
     def _log_muc_message(self, event):
         self._check_for_mam_compliance(event.room_jid, event.stanza_id)
 
-        if (app.config.should_log(self._account, event.jid) and
+        if (should_log(self._account, event.jid) and
                 event.msgtxt and event.properties.muc_nickname):
             # if not event.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
@@ -355,7 +356,7 @@ class Message(BaseModule):
         if not message.is_loggable:
             return
 
-        if not app.config.should_log(self._account, message.jid):
+        if not should_log(self._account, message.jid):
             return
 
         if message.message is None:
