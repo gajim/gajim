@@ -36,7 +36,6 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import get_proxy
-from gajim.common.settings import Settings
 from gajim.common.i18n import _
 from gajim.common.const import SASL_ERRORS
 from gajim.common.const import GIO_TLS_ERRORS
@@ -724,7 +723,7 @@ class AdvancedSettings(Page):
     def update_proxy_list(self):
         model = Gtk.ListStore(str)
         self._ui.proxies_combobox.set_model(model)
-        proxies = app.config.get_per('proxies')
+        proxies = app.settings.get_proxies()
         proxies.insert(0, _('No Proxy'))
         for proxy in proxies:
             model.append([proxy])

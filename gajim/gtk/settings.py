@@ -614,7 +614,7 @@ class ProxyComboSetting(GenericSetting):
 
     def update_values(self):
         self._block_signal(True)
-        proxies = app.config.get_per('proxies')
+        proxies = app.settings.get_proxies()
         proxies.insert(0, _('No Proxy'))
         self.combo.remove_all()
         for index, value in enumerate(proxies):

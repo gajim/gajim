@@ -850,16 +850,17 @@ def get_user_proxy(account):
     return get_proxy(proxy_name)
 
 def get_proxy(proxy_name):
-    proxy = app.config.get_per('proxies', proxy_name)
-    if proxy is None:
+    try:
+        settings = app.settings.get_proxy_settings(proxy_name)
+    except ValueError:
         return None
 
     username, password = None, None
-    if proxy['useauth']:
-        username, password = proxy['user'], proxy['pass']
+    if settings['useauth']:
+        username, password = settings['user'], settings['pass']
 
-    return ProxyData(type=proxy['type'],
-                     host='%s:%s' % (proxy['host'], proxy['port']),
+    return ProxyData(type=settings['type'],
+                     host='%s:%s' % (settings['host'], settings['port']),
                      username=username,
                      password=password)
 

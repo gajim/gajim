@@ -63,7 +63,7 @@ class ManageProxies(Gtk.ApplicationWindow):
     def _fill_proxies_treeview(self):
         model = self._ui.proxies_treeview.get_model()
         model.clear()
-        for proxy in app.config.get_per('proxies'):
+        for proxy in app.settings.get_proxies():
             iter_ = model.append()
             model.set(iter_, 0, proxy)
 
@@ -82,13 +82,15 @@ class ManageProxies(Gtk.ApplicationWindow):
 
     def _on_add_proxy_button_clicked(self, _widget):
         model = self._ui.proxies_treeview.get_model()
-        proxies = app.config.get_per('proxies')
+        proxies = app.settings.get_proxies()
         i = 1
         while 'proxy' + str(i) in proxies:
             i += 1
+
+        proxy_name = 'proxy' + str(i)
+        app.settings.add_proxy(proxy_name)
         iter_ = model.append()
-        model.set(iter_, 0, 'proxy' + str(i))
-        app.config.add_per('proxies', 'proxy' + str(i))
+        model.set(iter_, 0, proxy_name)
         self._ui.proxies_treeview.set_cursor(model.get_path(iter_))
 
     def _on_remove_proxy_button_clicked(self, _widget):
@@ -100,7 +102,7 @@ class ManageProxies(Gtk.ApplicationWindow):
             return
         proxy = model[iter_][0]
         model.remove(iter_)
-        app.config.del_per('proxies', proxy)
+        app.settings.remove_proxy(proxy)
         self._ui.remove_proxy_button.set_sensitive(False)
         self._block_signal = True
         self._on_proxies_treeview_cursor_changed(self._ui.proxies_treeview)
@@ -111,7 +113,7 @@ class ManageProxies(Gtk.ApplicationWindow):
             return
         act = widget.get_active()
         proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'useauth', act)
+        app.settings.set_proxy_setting(proxy, 'useauth', act)
         self._ui.proxyuser_entry.set_sensitive(act)
         self._ui.proxypass_entry.set_sensitive(act)
 
@@ -136,27 +138,22 @@ class ManageProxies(Gtk.ApplicationWindow):
         proxy = model[iter_][0]
         self._ui.proxyname_entry.set_text(proxy)
 
-        proxytype = app.config.get_per('proxies', proxy, 'type')
-
         self._ui.remove_proxy_button.set_sensitive(True)
         self._ui.proxyname_entry.set_editable(True)
 
         self._ui.settings_grid.set_sensitive(True)
 
-        self._ui.proxyhost_entry.set_text(
-            app.config.get_per('proxies', proxy, 'host'))
-        self._ui.proxyport_entry.set_text(
-            str(app.config.get_per('proxies', proxy, 'port')))
-        self._ui.proxyuser_entry.set_text(
-            app.config.get_per('proxies', proxy, 'user'))
-        self._ui.proxypass_entry.set_text(
-            app.config.get_per('proxies', proxy, 'pass'))
+        settings = app.settings.get_proxy_settings(proxy)
+
+        self._ui.proxyhost_entry.set_text(settings['host'])
+        self._ui.proxyport_entry.set_text(str(settings['port']))
+        self._ui.proxyuser_entry.set_text(settings['user'])
+        self._ui.proxypass_entry.set_text(settings['pass'])
 
         types = ['http', 'socks5']
-        self._ui.proxytype_combobox.set_active(types.index(proxytype))
+        self._ui.proxytype_combobox.set_active(types.index(settings['type']))
 
-        self._ui.useauth_checkbutton.set_active(
-            app.config.get_per('proxies', proxy, 'useauth'))
+        self._ui.useauth_checkbutton.set_active(settings['useauth'])
         act = self._ui.useauth_checkbutton.get_active()
         self._ui.proxyuser_entry.set_sensitive(act)
         self._ui.proxypass_entry.set_sensitive(act)
@@ -182,11 +179,8 @@ class ManageProxies(Gtk.ApplicationWindow):
             return
         if new_name == old_name:
             return
-        config = app.config.get_per('proxies', old_name)
-        app.config.del_per('proxies', old_name)
-        app.config.add_per('proxies', new_name)
-        for option in config:
-            app.config.set_per('proxies', new_name, option, config[option])
+
+        app.settings.rename_proxy(old_name, new_name)
         model.set_value(iter_, 0, new_name)
 
     def _on_proxytype_combobox_changed(self, _widget):
@@ -197,32 +191,36 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._ui.proxyhost_entry.set_sensitive(True)
         self._ui.proxyport_entry.set_sensitive(True)
         proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'type', types[type_])
+        app.settings.set_proxy_setting(proxy, 'type', types[type_])
 
     def _on_proxyhost_entry_changed(self, entry):
         if self._block_signal:
             return
         value = entry.get_text()
         proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'host', value)
+        app.settings.set_proxy_setting(proxy, 'host', value)
 
     def _on_proxyport_entry_changed(self, entry):
         if self._block_signal:
             return
         value = entry.get_text()
+        try:
+            value = int(value)
+        except Exception:
+            value = 0
         proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'port', value)
+        app.settings.set_proxy_setting(proxy, 'port', value)
 
     def _on_proxyuser_entry_changed(self, entry):
         if self._block_signal:
             return
         value = entry.get_text()
         proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'user', value)
+        app.settings.set_proxy_setting(proxy, 'user', value)
 
     def _on_proxypass_entry_changed(self, entry):
         if self._block_signal:
             return
         value = entry.get_text()
         proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'pass', value)
+        app.settings.set_proxy_setting(proxy, 'pass', value)

@@ -846,7 +846,7 @@ class Preferences(Gtk.ApplicationWindow):
             our_proxy = _('No Proxy')
         model = self._ui.proxies_combobox.get_model()
         model.clear()
-        proxies = app.config.get_per('proxies')
+        proxies = app.settings.get_proxies()
         proxies.insert(0, _('No Proxy'))
         for index, proxy in enumerate(proxies):
             model.append([proxy])
