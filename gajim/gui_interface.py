@@ -2047,7 +2047,7 @@ class Interface:
         self.create_core_handlers_list()
         self.register_core_handlers()
 
-        self.create_zeroconf_default_config()
+        # self.create_zeroconf_default_config()
         # if app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'active') \
         # and app.is_installed('ZEROCONF'):
         #     app.connections[app.ZEROCONF_ACC_NAME] = \
