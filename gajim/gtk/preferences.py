@@ -161,7 +161,8 @@ class Preferences(Gtk.ApplicationWindow):
 
         # Group chat settings
         threshold_model = self._ui.sync_threshold_combobox.get_model()
-        days = app.config.get_options('threshold_options', return_type=int)
+        options = app.config.get('threshold_options').split(',')
+        days = [int(option.strip()) for option in options]
         for day in days:
             if day == 0:
                 label = _('No threshold')
