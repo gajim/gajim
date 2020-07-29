@@ -260,9 +260,10 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         else:
             self.popup_timeout = app.settings.get('notification_timeout')
 
+        sound = app.settings.get_soundevent_settings('attention_received')
+
         if msg_obj.properties.attention and not app.settings.get(
-        'ignore_incoming_attention') and app.config.get_per('soundevents',
-        'attention_received', 'enabled'):
+        'ignore_incoming_attention') and sound['enabled']:
             self.sound_event = 'attention_received'
             self.do_sound = True
         elif self.first_unread and helpers.allow_sound_notification(
@@ -383,8 +384,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             and not app.block_signed_in_notifications[account] and \
             not block_transport:
                 self.do_popup = True
-            if app.config.get_per('soundevents', 'contact_connected',
-            'enabled') and not app.block_signed_in_notifications[account] and\
+            sound = app.settings.get_soundevent_settings('contact_connected')
+            if sound['enabled'] and not app.block_signed_in_notifications[account] and\
             not block_transport and helpers.allow_sound_notification(account,
             'contact_connected'):
                 self.sound_event = event
@@ -394,8 +395,9 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             event = 'contact_disconnected'
             if helpers.allow_showing_notification(account, 'notify_on_signout'):
                 self.do_popup = True
-            if app.config.get_per('soundevents', 'contact_disconnected',
-            'enabled') and helpers.allow_sound_notification(account, event):
+
+            sound = app.settings.get_soundevent_settings('contact_disconnected')
+            if sound['enabled'] and helpers.allow_sound_notification(account, event):
                 self.sound_event = event
                 self.do_sound = True
         # Status change (not connected/disconnected or error (<1))

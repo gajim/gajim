@@ -51,10 +51,12 @@ class ManageSounds:
     @staticmethod
     def _on_row_changed(model, path, iter_):
         sound_event = model[iter_][3]
-        app.config.set_per('soundevents', sound_event,
-                           'enabled', bool(model[path][0]))
-        app.config.set_per('soundevents', sound_event,
-                           'path', model[iter_][2])
+        app.settings.set_soundevent_setting(sound_event,
+                                            'enabled',
+                                            bool(model[path][0]))
+        app.settings.set_soundevent_setting(sound_event,
+                                            'path',
+                                            model[iter_][2])
 
     def _on_toggle(self, _cell, path):
         if self._ui.filechooser.get_filename() is None:
@@ -66,8 +68,6 @@ class ManageSounds:
         model = self._ui.sounds_treeview.get_model()
         model.clear()
 
-        # NOTE: sounds_ui_names MUST have all items of
-        # sounds = app.config.get_per('soundevents') as keys
         # pylint: disable=line-too-long
         sounds_dict = {
             'attention_received': _('Attention Message Received'),
@@ -82,10 +82,12 @@ class ManageSounds:
         }
         # pylint: enable=line-too-long
 
-        for config_name, sound_name in sounds_dict.items():
-            enabled = app.config.get_per('soundevents', config_name, 'enabled')
-            path = app.config.get_per('soundevents', config_name, 'path')
-            model.append((enabled, sound_name, path, config_name))
+        for sound_event, sound_name in sounds_dict.items():
+            settings = app.settings.get_soundevent_settings(sound_event)
+            model.append((settings['enabled'],
+                          sound_name,
+                          settings['path'],
+                          sound_event))
 
     def _on_cursor_changed(self, treeview):
         model, iter_ = treeview.get_selection().get_selected()

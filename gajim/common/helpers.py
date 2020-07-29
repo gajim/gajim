@@ -438,8 +438,7 @@ def get_contact_dict_for_account(account):
 def play_sound(event):
     if not app.settings.get('sounds_on'):
         return
-    path_to_soundfile = app.config.get_per('soundevents', event, 'path')
-    play_sound_file(path_to_soundfile)
+    play_sound_file(app.settings.get_soundevent_settings(event)['path'])
 
 def check_soundfile_path(file_, dirs=None):
     """
@@ -689,7 +688,7 @@ def allow_popup_window(account):
 def allow_sound_notification(account, sound_event):
     if (app.settings.get('sounddnd') or
             app.connections[account].status != 'dnd' and
-            app.config.get_per('soundevents', sound_event, 'enabled')):
+            app.settings.get_soundevent_settings(sound_event)['enabled']):
         return True
     return False
 

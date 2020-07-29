@@ -985,20 +985,19 @@ class GroupchatControl(ChatControlBase):
         highlight, sound = None, None
 
         notify = self.contact.can_notify()
-        message_sound_enabled = app.config.get_per('soundevents',
-                                                   'muc_message_received',
-                                                   'enabled')
+        sound_enabled = app.settings.get_soundevent_settings(
+            'muc_message_received')['enabled']
 
         # Are any of the defined highlighting words in the text?
         if self.needs_visual_notification(text):
             highlight = True
-            if app.config.get_per('soundevents',
-                                  'muc_message_highlight',
-                                  'enabled'):
+            sound_settings = app.settings.get_soundevent_settings(
+                'muc_message_highlight')
+            if sound_settings['enabled']:
                 sound = 'highlight'
 
         # Do we play a sound on every muc message?
-        elif notify and message_sound_enabled:
+        elif notify and sound_enabled:
             sound = 'received'
 
         # Is it a history message? Don't want sound-floods when we join.
