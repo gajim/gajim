@@ -48,6 +48,7 @@ from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import URL_REGEX
+from gajim.common.helpers import notify_for_muc
 from gajim.common.const import MOODS
 from gajim.common.const import ACTIVITIES
 from gajim.common.const import LOCATION_DATA
@@ -500,7 +501,7 @@ def get_show_in_systray(type_, jid):
     """
     Return True if this event must be shown in systray, else False
     """
-    notify = app.config.notify_for_muc(jid)
+    notify = notify_for_muc(jid)
     if type_ == 'printed_gc_msg' and not notify:
         # it's not an highlighted message, don't show in systray
         return False

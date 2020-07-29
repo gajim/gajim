@@ -2368,7 +2368,7 @@ class RosterWindow:
             unread = app.events.get_nb_events()
 
             for event in app.events.get_all_events(['printed_gc_msg']):
-                if not app.config.notify_for_muc(event.jid):
+                if not helpers.notify_for_muc(event.jid):
                     unread -= 1
 
             # check if we have recent messages
