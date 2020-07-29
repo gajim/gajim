@@ -57,8 +57,7 @@ class SettingKind(IntEnum):
     FILECHOOSER = 10
     CHANGEPASSWORD = 11
     COMBO = 12
-    CHATSTATE_COMBO = 13
-    COLOR = 14
+    COLOR = 13
 
 
 @unique
