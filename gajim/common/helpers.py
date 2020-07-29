@@ -38,7 +38,6 @@ import base64
 import hashlib
 import shlex
 import socket
-import time
 import logging
 import json
 import copy
@@ -52,7 +51,6 @@ import string
 from string import Template
 import urllib
 from urllib.parse import unquote
-from io import StringIO
 from encodings.punycode import punycode_encode
 from functools import wraps
 from packaging.version import Version as V
@@ -83,9 +81,6 @@ from gajim.common.const import URIAction
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SHOW_LIST
 from gajim.common.structs import URI
-
-if app.is_installed('PYCURL'):
-    import pycurl
 
 
 log = logging.getLogger('gajim.c.helpers')
@@ -870,137 +865,6 @@ def get_proxy(proxy_name):
                      host='%s:%s' % (proxy['host'], proxy['port']),
                      username=username,
                      password=password)
-
-def get_proxy_info(account):
-    p = app.config.get_per('accounts', account, 'proxy')
-    if not p:
-        p = app.config.get('global_proxy')
-    if p and p in app.config.get_per('proxies'):
-        proxy = {}
-        proxyptr = app.config.get_per('proxies', p)
-        if not proxyptr:
-            return proxy
-        for key in proxyptr.keys():
-            proxy[key] = proxyptr[key]
-        return proxy
-
-def _get_img_direct(attrs):
-    """
-    Download an image. This function should be launched in a separated thread.
-    """
-    mem = b''
-    alt = ''
-    max_size = 2*1024*1024
-    if 'max_size' in attrs:
-        max_size = attrs['max_size']
-    # Wait maximum 10s for connection
-    socket.setdefaulttimeout(10)
-    try:
-        req = urllib.request.Request(attrs['src'])
-        req.add_header('User-Agent', 'Gajim ' + app.version)
-        f = urllib.request.urlopen(req)
-    except Exception as ex:
-        log.debug('Error loading image %s ', attrs['src']  + str(ex))
-        alt = attrs.get('alt', 'Broken image')
-    else:
-        # Wait 2s between each byte
-        try:
-            f.fp._sock.fp._sock.settimeout(2)
-        except Exception:
-            pass
-
-        # On a slow internet connection with ~1000kbps
-        # you need ~10 seconds for 1 MB
-        deadline = time.time() + (10 * (max_size / 1048576))
-        while True:
-            if time.time() > deadline:
-                log.debug('Timeout loading image %s ', attrs['src'])
-                mem = ''
-                alt = attrs.get('alt', '')
-                if alt:
-                    alt += '\n'
-                alt += _('Timeout loading image')
-                break
-            try:
-                temp = f.read(100)
-            except socket.timeout as ex:
-                log.debug('Timeout loading image %s ', attrs['src'] + str(ex))
-                alt = attrs.get('alt', '')
-                if alt:
-                    alt += '\n'
-                alt += _('Timeout loading image')
-                break
-            if temp:
-                mem += temp
-            else:
-                break
-            if len(mem) > max_size:
-                alt = attrs.get('alt', '')
-                if alt:
-                    alt += '\n'
-                alt += _('Image is too big')
-                break
-        f.close()
-    return (mem, alt)
-
-def _get_img_proxy(attrs, proxy):
-    """
-    Download an image through a proxy. This function should be launched in a
-    separated thread.
-    """
-    if not app.is_installed('PYCURL'):
-        return '', _('PyCURL is not installed')
-    alt, max_size = '', 2*1024*1024
-    if 'max_size' in attrs:
-        max_size = attrs['max_size']
-    try:
-        b = StringIO()
-        c = pycurl.Curl()
-        c.setopt(pycurl.URL, attrs['src'].encode('utf-8'))
-        c.setopt(pycurl.FOLLOWLOCATION, 1)
-        # Wait maximum 10s for connection
-        c.setopt(pycurl.CONNECTTIMEOUT, 10)
-
-        # On a slow internet connection with ~1000kbps
-        # you need ~10 seconds for 1 MB
-        c.setopt(pycurl.TIMEOUT, 10 * (max_size / 1048576))
-        c.setopt(pycurl.MAXFILESIZE, max_size)
-        c.setopt(pycurl.WRITEFUNCTION, b.write)
-        c.setopt(pycurl.USERAGENT, 'Gajim ' + app.version)
-        # set proxy
-        c.setopt(pycurl.PROXY, proxy['host'].encode('utf-8'))
-        c.setopt(pycurl.PROXYPORT, proxy['port'])
-        if proxy['useauth']:
-            c.setopt(pycurl.PROXYUSERPWD, proxy['user'].encode('utf-8')\
-                + ':' + proxy['pass'].encode('utf-8'))
-            c.setopt(pycurl.PROXYAUTH, pycurl.HTTPAUTH_ANY)
-        if proxy['type'] == 'http':
-            c.setopt(pycurl.PROXYTYPE, pycurl.PROXYTYPE_HTTP)
-        elif proxy['type'] == 'socks5':
-            c.setopt(pycurl.PROXYTYPE, pycurl.PROXYTYPE_SOCKS5)
-        c.close()
-        t = b.getvalue()
-        return (t, attrs.get('alt', ''))
-    except pycurl.error as ex:
-        alt = attrs.get('alt', '')
-        if alt:
-            alt += '\n'
-        if ex.errno == pycurl.E_FILESIZE_EXCEEDED:
-            alt += _('Image is too big')
-        elif ex.errno == pycurl.E_OPERATION_TIMEOUTED:
-            alt += _('Timeout loading image')
-        else:
-            alt += _('Error loading image')
-    except Exception as ex:
-        log.debug('Error loading image %s ', attrs['src']  + str(ex))
-        alt = attrs.get('alt', 'Broken image')
-    return ('', alt)
-
-def download_image(account, attrs):
-    proxy = get_proxy_info(account)
-    if proxy and proxy['type'] in ('http', 'socks5'):
-        return _get_img_proxy(attrs, proxy)
-    return _get_img_direct(attrs)
 
 def version_condition(current_version, required_version):
     if V(current_version) < V(required_version):

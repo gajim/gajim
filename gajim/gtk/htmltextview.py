@@ -33,7 +33,6 @@ modular.
 
 import re
 import logging
-import urllib
 import xml.sax
 import xml.sax.handler
 from io import StringIO
@@ -42,16 +41,12 @@ from gi.repository import GObject
 from gi.repository import Pango
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import helpers
-from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri
-from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_cursor
 
 from gajim.gui_menu_builder import get_conv_context_menu
@@ -510,123 +505,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.title = title
         return tag
 
-    def _update_img(self, output, attrs, img_mark, tags):
-        '''Callback function called after the function helpers.download_image.
-        '''
-        mem, alt = output
-        self._process_img(attrs, (mem, alt, img_mark, tags))
-
-    def _process_img(self, attrs, loaded=None):
-        '''Process a img tag.
-        '''
-        mem = ''
-        pixbuf = None
-        replace_mark = None
-        replace_tags = None
-
-        try:
-            if attrs['src'].startswith('data:image/'):
-                # The "data" URL scheme http://tools.ietf.org/html/rfc2397
-                import base64
-                img = attrs['src'].split(',')[1]
-                mem = base64.standard_b64decode(urllib.parse.unquote(
-                    img).encode('utf-8'))
-            elif loaded is not None:
-                (mem, alt, replace_mark, replace_tags) = loaded
-            else:
-                if self.conv_textview:
-                    img_mark = self.textbuf.create_mark(None, self.iter, True)
-                    app.thread_interface(
-                        helpers.download_image,
-                        [self.conv_textview.account, attrs],
-                        self._update_img,
-                        [attrs, img_mark, self._get_style_tags()])
-                    alt = attrs.get('alt', '')
-                    if alt:
-                        alt += '\n'
-                    alt += _('Loading')
-                    pixbuf = load_icon('image-missing',
-                                       self.textview,
-                                       pixbuf=True)
-            if mem:
-                # Caveat: GdkPixbuf is known not to be safe to load
-                # images from network... this program is now potentially
-                # hackable ;)
-                loader = GdkPixbuf.PixbufLoader()
-                dims = [0, 0]
-                def height_cb(length):
-                    dims[1] = length
-                def width_cb(length):
-                    dims[0] = length
-                # process width and height attributes
-                width = attrs.get('width')
-                height = attrs.get('height')
-                # override with width and height styles
-                for attr, val in style_iter(attrs.get('style', '')):
-                    if attr == 'width':
-                        width = val
-                    elif attr == 'height':
-                        height = val
-                if width:
-                    self._parse_length(width, False, False, 1, 1000, width_cb)
-                if height:
-                    self._parse_length(height, False, False, 1, 1000, height_cb)
-
-                def set_size(_pixbuf, width_, height_, dims):
-                    """
-                    FIXME: Floats should be relative to the whole textview, and
-                    resize with it. This needs new pifbufs for every resize,
-                    GdkPixbuf.Pixbuf.scale_simple or similar.
-                    """
-                    if isinstance(dims[0], float):
-                        dims[0] = int(dims[0] * width_)
-                    elif not dims[0]:
-                        dims[0] = width_
-                    if isinstance(dims[1], float):
-                        dims[1] = int(dims[1] * height_)
-                    if not dims[1]:
-                        dims[1] = height_
-                    loader.set_size(*dims)
-
-                if width or height:
-                    loader.connect('size-prepared', set_size, dims)
-                loader.write(mem)
-                loader.close()
-                pixbuf = loader.get_pixbuf()
-                alt = attrs.get('alt', '')
-            working_iter = self.iter
-            if replace_mark is not None:
-                working_iter = self.textbuf.get_iter_at_mark(replace_mark)
-                next_iter = working_iter.copy()
-                next_iter.forward_char()
-                self.textbuf.delete(working_iter, next_iter)
-                self.textbuf.delete_mark(replace_mark)
-            if pixbuf is not None:
-                if replace_mark:
-                    tags = replace_tags
-                else:
-                    tags = self._get_style_tags()
-                if tags:
-                    tmpmark = self.textbuf.create_mark(None, working_iter, True)
-                self.textbuf.insert_pixbuf(working_iter, pixbuf)
-                self.starting = False
-                if tags:
-                    start = self.textbuf.get_iter_at_mark(tmpmark)
-                    for tag in tags:
-                        self.textbuf.apply_tag(tag, start, working_iter)
-                    self.textbuf.delete_mark(tmpmark)
-            else:
-                self._insert_text('[IMG: %s]' % alt, working_iter)
-        except Exception as ex:
-            log.error('Error loading image %s', str(ex))
-            pixbuf = None
-            alt = attrs.get('alt', 'Broken image')
-            try:
-                loader.close()
-            except Exception:
-                pass
-        return pixbuf
-
     def _begin_span(self, style, tag=None, id_=None):
         if style is None:
             self.styles.append(tag)
@@ -730,8 +608,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 tag.is_anchor = True
         elif name in LIST_ELEMS:
             style += ';margin-left: 2em'
-        elif name == 'img':
-            tag = self._process_img(attrs)
+
         if name in _element_styles:
             style += _element_styles[name]
         # so that explicit styles override implicit ones,

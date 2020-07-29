@@ -140,7 +140,6 @@ _dependencies = {
     'AV': False,
     'GEOCLUE': False,
     'UPNP': False,
-    'PYCURL': False,
     'GSOUND': False,
     'GSPELL': False,
     'IDLE': False,
@@ -237,13 +236,6 @@ def detect_dependencies():
         gupnp_igd = GUPnPIgd.SimpleIgd()
         _dependencies['UPNP'] = True
     except ValueError:
-        pass
-
-    # PYCURL
-    try:
-        import pycurl  # pylint: disable=unused-import
-        _dependencies['PYCURL'] = True
-    except ImportError:
         pass
 
     # IDLE
