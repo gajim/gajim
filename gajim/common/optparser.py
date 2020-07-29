@@ -150,26 +150,6 @@ class OptionsParser:
 
         app.config.set('version', new_version)
 
-    @staticmethod
-    def update_ft_proxies(to_remove=None, to_add=None):
-        if to_remove is None:
-            to_remove = []
-        if to_add is None:
-            to_add = []
-        for account in app.config.get_per('accounts'):
-            proxies_str = app.config.get_per('accounts', account,
-                    'file_transfer_proxies')
-            proxies = [p.strip() for p in proxies_str.split(',')]
-            for wrong_proxy in to_remove:
-                if wrong_proxy in proxies:
-                    proxies.remove(wrong_proxy)
-            for new_proxy in to_add:
-                if new_proxy not in proxies:
-                    proxies.append(new_proxy)
-            proxies_str = ', '.join(proxies)
-            app.config.set_per('accounts', account, 'file_transfer_proxies',
-                    proxies_str)
-
     def update_config_to_01641(self):
         for account in self.old_values['accounts'].keys():
             connection_types = self.old_values['accounts'][account][
