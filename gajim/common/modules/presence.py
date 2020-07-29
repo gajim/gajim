@@ -318,10 +318,6 @@ class Presence(BaseModule):
             return
         if remove_auth:
             self._con.get_module('Roster').del_item(jid)
-            jid_list = app.config.get_per('contacts')
-            for j in jid_list:
-                if j.startswith(jid):
-                    app.config.del_per('contacts', j)
         else:
             self._log.info('Unsubscribe from %s', jid)
             self._jids_for_auto_auth.discard(jid)

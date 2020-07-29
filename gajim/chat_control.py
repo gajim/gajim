@@ -275,9 +275,7 @@ class ChatControl(ChatControlBase):
         video.action.connect('change-state', self._on_video)
         self.parent_win.window.add_action(video.action)
 
-        default_chatstate = app.settings.get('send_chatstate_default')
-        chatstate = app.config.get_per(
-            'contacts', self.contact.jid, 'send_chatstate', default_chatstate)
+        chatstate = self.contact.settings.get('send_chatstate')
 
         act = Gio.SimpleAction.new_stateful(
             'send-chatstate-' + self.control_id,
@@ -430,8 +428,7 @@ class ChatControl(ChatControlBase):
 
     def _on_send_chatstate(self, action, param):
         action.set_state(param)
-        app.config.set_per('contacts', self.contact.jid,
-                           'send_chatstate', param.get_string())
+        self.contact.settings.set('send_chatstate', param.get_string())
 
     def subscribe_events(self):
         """

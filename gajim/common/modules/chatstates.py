@@ -342,9 +342,7 @@ class Chatstate(BaseModule):
             default = app.settings.get('send_chatstate_muc_default')
             return app.config.get_per(
                 'rooms', contact.jid, 'send_chatstate', default)
-        default = app.settings.get('send_chatstate_default')
-        return app.config.get_per(
-            'contacts', contact.jid, 'send_chatstate', default)
+        return contact.settings.get('send_chatstate')
 
     def remove_delay_timeout(self, contact):
         timeout = self._delay_timeout_ids.get(contact.jid)
