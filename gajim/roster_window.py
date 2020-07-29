@@ -2159,7 +2159,7 @@ class RosterWindow:
             app.interface.systray.change_status(show)
         self._status_selector.update()
 
-    def get_status_message(self, show, on_response, show_pep=True,
+    def get_status_message(self, show, callback, show_pep=True,
                            always_ask=False):
         """
         Get the status message by:
@@ -2174,22 +2174,21 @@ class RosterWindow:
                      'mood': '',
                      'mood_text': ''}
         if not always_ask and ((show == 'online' and not app.config.get(
-        'ask_online_status')) or (show == 'offline' and not \
-        app.config.get('ask_offline_status'))):
-            on_response('', empty_pep)
+                'ask_online_status')) or (show == 'offline' and not
+                app.config.get('ask_offline_status'))):
+            callback('', empty_pep)
             return
 
-        dlg = dialogs.ChangeStatusMessageDialog(on_response, show, show_pep)
-        dlg.dialog.present() # show it on current workspace
+        open_window('StatusChange', callback=callback, show=show,
+                    show_pep=show_pep)
 
     def change_status(self, widget, account, status):
-        def on_response(message, pep_dict):
-            if message is None:
-                # user pressed Cancel to change status message dialog
+        def _on_response(message, pep_dict):
+            if message is None:  # None if user canceled
                 return
             self.send_status(account, status, message)
             self.send_pep(account, pep_dict)
-        self.get_status_message(status, on_response)
+        self.get_status_message(status, _on_response)
 
     def get_show(self, lcontact):
         prio = lcontact[0].priority
@@ -2928,12 +2927,13 @@ class RosterWindow:
 
     def on_change_status_message_activate(self, widget, account):
         show = app.connections[account].status
-        def on_response(message, pep_dict):
-            if message is None: # None is if user pressed Cancel
+        def _on_response(message, pep_dict):
+            if message is None:  # None if user canceled
                 return
             self.send_status(account, show, message)
             self.send_pep(account, pep_dict)
-        dialogs.ChangeStatusMessageDialog(on_response, show)
+        open_window('StatusChange', account=account, callback=_on_response,
+                    show=show)
 
     def on_add_to_roster(self, widget, contact, account):
         AddNewContactWindow(account, contact.jid, contact.name)
@@ -3031,7 +3031,7 @@ class RosterWindow:
             if keyval == Gdk.KEY_s:  # CTRL + s
                 show = helpers.get_global_show()
                 def _on_response(message, pep_dict):
-                    if message is not None:  # None if user pressed Cancel
+                    if message is not None:  # None if user canceled
                         for account in app.contacts.get_accounts():
                             sync_account = app.config.get_per(
                                 'accounts', account, 'sync_with_global_status')
@@ -3039,9 +3039,9 @@ class RosterWindow:
                                 continue
                             self.send_status(account, show, message)
                             self.send_pep(account, pep_dict)
-                dialogs.ChangeStatusMessageDialog(_on_response, show)
+                open_window('StatusChange', callback=_on_response, show=show)
                 return True
-            if keyval == Gdk.KEY_k: # CTRL + k
+            if keyval == Gdk.KEY_k:  # CTRL + k
                 self.enable_rfilter('')
 
     def on_roster_treeview_button_press_event(self, widget, event):
@@ -3084,17 +3084,17 @@ class RosterWindow:
                 show = helpers.get_global_show()
                 if show == 'offline':
                     return True
-                def on_response(message, pep_dict):
-                    if message is None:
+                def _on_response(message, pep_dict):
+                    if message is None:  # None if user canceled
                         return True
                     for acct in app.connections:
                         if not app.config.get_per('accounts', acct,
-                        'sync_with_global_status'):
+                                'sync_with_global_status'):
                             continue
                         current_show = app.connections[acct].status
                         self.send_status(acct, current_show, message)
                         self.send_pep(acct, pep_dict)
-                dialogs.ChangeStatusMessageDialog(on_response, show)
+                open_window('StatusChange', callback=_on_response, show=show)
             return True
 
         if event.button == 1: # Left click

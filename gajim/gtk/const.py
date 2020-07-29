@@ -121,4 +121,5 @@ WINDOW_MODULES = {
     'ChangePassword': 'gajim.gtk.change_password',
     'PluginsWindow': 'gajim.plugins.gui',
     'Features': 'gajim.gtk.features',
+    'StatusChange': 'gajim.gtk.status_change',
 }
