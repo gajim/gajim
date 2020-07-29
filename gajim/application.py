@@ -403,7 +403,7 @@ class GajimApplication(Gtk.Application):
 
         act = Gio.SimpleAction.new_stateful(
             'merge', None,
-            GLib.Variant.new_boolean(app.config.get('mergeaccounts')))
+            GLib.Variant.new_boolean(app.settings.get('mergeaccounts')))
         act.connect('change-state', app_actions.on_merge_accounts)
         self.add_action(act)
 

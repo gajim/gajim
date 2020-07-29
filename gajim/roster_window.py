@@ -1001,7 +1001,7 @@ class RosterWindow:
             account_name = '[%s]' % account_name
 
         if (app.account_is_available(account) or (self.regroup and \
-        app.get_number_of_connected_accounts())) and app.config.get(
+        app.get_number_of_connected_accounts())) and app.settings.get(
         'show_contacts_number'):
             nbr_on, nbr_total = app.contacts.get_nb_online_total_contacts(
                     accounts=accounts)
@@ -1045,7 +1045,7 @@ class RosterWindow:
         else:
             accounts = [account]
         text = GLib.markup_escape_text(group)
-        if app.config.get('show_contacts_number'):
+        if app.settings.get('show_contacts_number'):
             nbr_on, nbr_total = app.contacts.get_nb_online_total_contacts(
                     accounts=accounts, groups=[group])
             text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
@@ -1151,7 +1151,7 @@ class RosterWindow:
 
         # add status msg, if not empty, under contact name in
         # the treeview
-        if app.config.get('show_status_msgs_in_roster'):
+        if app.settings.get('show_status_msgs_in_roster'):
             status_span = '\n<span size="small" style="italic" ' \
                           'alpha="70%">{}</span>'
             if contact.is_groupchat:
@@ -1261,16 +1261,16 @@ class RosterWindow:
 
     def _is_pep_shown_in_roster(self, pep_type):
         if pep_type == PEPEventType.MOOD:
-            return app.config.get('show_mood_in_roster')
+            return app.settings.get('show_mood_in_roster')
 
         if pep_type == PEPEventType.ACTIVITY:
-            return app.config.get('show_activity_in_roster')
+            return app.settings.get('show_activity_in_roster')
 
         if pep_type == PEPEventType.TUNE:
-            return  app.config.get('show_tunes_in_roster')
+            return  app.settings.get('show_tunes_in_roster')
 
         if pep_type == PEPEventType.LOCATION:
-            return  app.config.get('show_location_in_roster')
+            return  app.settings.get('show_location_in_roster')
 
         return False
 
@@ -1313,7 +1313,7 @@ class RosterWindow:
             self.model[child_iter][column] = icon
 
     def _get_avatar_image(self, account, jid):
-        if not app.config.get('show_avatars_in_roster'):
+        if not app.settings.get('show_avatars_in_roster'):
             return None
         scale = self.window.get_scale_factor()
         surface = app.contacts.get_avatar(
@@ -1322,7 +1322,7 @@ class RosterWindow:
 
     def draw_avatar(self, jid, account):
         iters = self._get_contact_iter(jid, account, model=self.model)
-        if not iters or not app.config.get('show_avatars_in_roster'):
+        if not iters or not app.settings.get('show_avatars_in_roster'):
             return
         jid = self.model[iters[0]][Column.JID]
         image = self._get_avatar_image(account, jid)
@@ -1461,7 +1461,7 @@ class RosterWindow:
             # Not visible in roster
             return
         path = self.modelfilter.get_path(iters[0])
-        if self.dragging or not app.config.get(
+        if self.dragging or not app.settings.get(
         'scroll_roster_to_last_message'):
             # do not change selection while DND'ing
             return
@@ -1568,18 +1568,18 @@ class RosterWindow:
             return self.rfilter_string in contact.get_shown_name().lower()
         if self.contact_has_pending_roster_events(contact, account):
             return True
-        if app.config.get('showoffline'):
+        if app.settings.get('showoffline'):
             return True
 
         if contact.show in ('offline', 'error'):
             if contact.jid in app.to_be_removed[account]:
                 return True
             return False
-        if app.config.get('show_only_chat_and_online') and contact.show in (
+        if app.settings.get('show_only_chat_and_online') and contact.show in (
         'away', 'xa', 'busy'):
             return False
         if _('Transports') in contact.get_shown_groups():
-            return app.config.get('show_transports_group')
+            return app.settings.get('show_transports_group')
         return True
 
     def _visible_func(self, model, titer, dummy):
@@ -1697,7 +1697,7 @@ class RosterWindow:
         # We first compare by show if sort_by_show_in_roster is True or if it's
         # a child contact
         if type1 == 'contact' and type2 == 'contact' and \
-        app.config.get('sort_by_show_in_roster'):
+        app.settings.get('sort_by_show_in_roster'):
             cshow = {'chat':0, 'online': 1, 'away': 2, 'xa': 3, 'dnd': 4,
                      'offline': 6, 'not in roster': 7, 'error': 8}
             s = self.get_show(lcontact1)
@@ -2142,11 +2142,11 @@ class RosterWindow:
         return show
 
     def on_message_window_delete(self, win_mgr, msg_win):
-        if app.config.get('one_message_window') == 'always_with_roster':
+        if app.settings.get('one_message_window') == 'always_with_roster':
             self.show_roster_vbox(True)
             resize_window(self.window,
-                          app.config.get('roster_width'),
-                          app.config.get('roster_height'))
+                          app.settings.get('roster_width'),
+                          app.settings.get('roster_height'))
 
     def close_all_from_dict(self, dic):
         """
@@ -2176,15 +2176,15 @@ class RosterWindow:
         """
         Main window X button was clicked
         """
-        if not app.config.get('quit_on_roster_x_button') and (
-        (app.interface.systray_enabled and app.config.get('trayicon') != \
-        'on_event') or app.config.get('allow_hide_roster')):
+        if not app.settings.get('quit_on_roster_x_button') and (
+        (app.interface.systray_enabled and app.settings.get('trayicon') != \
+        'on_event') or app.settings.get('allow_hide_roster')):
             save_roster_position(self.window)
-            if os.name == 'nt' or app.config.get('hide_on_roster_x_button'):
+            if os.name == 'nt' or app.settings.get('hide_on_roster_x_button'):
                 self.window.hide()
             else:
                 self.window.iconify()
-        elif app.config.get('quit_on_roster_x_button'):
+        elif app.settings.get('quit_on_roster_x_button'):
             self.on_quit_request()
         else:
             def _on_ok(is_checked):
@@ -2404,7 +2404,7 @@ class RosterWindow:
                 app.contacts.add_contact(account, contact)
                 self.add_contact(self_jid, account)
 
-            if app.config.get('remember_opened_chat_controls'):
+            if app.settings.get('remember_opened_chat_controls'):
                 account = obj.conn.name
                 controls = app.config.get_per(
                     'accounts', account, 'opened_chat_controls')
@@ -2649,7 +2649,7 @@ class RosterWindow:
                     self.draw_contact(contact.jid, acct)
 
         # Check if confirmation is needed for blocking
-        confirm_block = app.config.get('confirm_block')
+        confirm_block = app.settings.get('confirm_block')
         if confirm_block == 'no':
             _block_it()
             return
@@ -3017,7 +3017,7 @@ class RosterWindow:
             model = self.modelfilter
             type_ = model[path][Column.TYPE]
             # x_min is the x start position of status icon column
-            if app.config.get('avatar_position_in_roster') == 'left':
+            if app.settings.get('avatar_position_in_roster') == 'left':
                 x_min = AvatarSize.ROSTER
             else:
                 x_min = 0
@@ -3211,11 +3211,11 @@ class RosterWindow:
                 # let message window close the tab
                 return
             list_of_paths = self.tree.get_selection().get_selected_rows()[1]
-            if not list_of_paths and not app.config.get(
+            if not list_of_paths and not app.settings.get(
             'quit_on_roster_x_button') and ((app.interface.systray_enabled and\
-            app.config.get('trayicon') == 'always') or app.config.get(
+            app.settings.get('trayicon') == 'always') or app.settings.get(
             'allow_hide_roster')):
-                if os.name == 'nt' or app.config.get('hide_on_roster_x_button'):
+                if os.name == 'nt' or app.settings.get('hide_on_roster_x_button'):
                     self.window.hide()
                 else:
                     self.window.iconify()
@@ -3233,7 +3233,7 @@ class RosterWindow:
                     self.on_info(widget, contact, account)
         elif event.get_state() & Gdk.ModifierType.CONTROL_MASK and event.keyval == \
         Gdk.KEY_h:
-            if app.config.get('one_message_window') == 'always_with_roster':
+            if app.settings.get('one_message_window') == 'always_with_roster':
                 # Let MessageWindow handle this
                 return
             treeselection = self.tree.get_selection()
@@ -3753,7 +3753,7 @@ class RosterWindow:
             c_dest.jid)
         source_family = app.contacts.get_metacontacts_family(account_source,
             c_source.jid)
-        confirm_metacontacts = app.config.get('confirm_metacontacts')
+        confirm_metacontacts = app.settings.get('confirm_metacontacts')
         if confirm_metacontacts == 'no' or dest_family == source_family:
             merge_contacts()
             return
@@ -4132,7 +4132,7 @@ class RosterWindow:
 ################################################################################
 
     def show_title(self):
-        change_title_allowed = app.config.get('change_roster_title')
+        change_title_allowed = app.settings.get('change_roster_title')
         if not change_title_allowed:
             return
 
@@ -4146,7 +4146,7 @@ class RosterWindow:
                     'printed_chat'], account)
 
 
-        if app.config.get('one_message_window') == 'always_with_roster':
+        if app.settings.get('one_message_window') == 'always_with_roster':
             # always_with_roster mode defers to the MessageWindow
             if not app.interface.msg_win_mgr.one_window_opened():
                 # No MessageWindow to defer to
@@ -4277,7 +4277,7 @@ class RosterWindow:
                 if ctrl and ctrl.attention_flag:
                     color = app.css_config.get_value(
                         '.state_muc_directed_msg_color', StyleAttr.COLOR)
-            elif app.config.get('show_chatstate_in_roster'):
+            elif app.settings.get('show_chatstate_in_roster'):
                 chatstate = app.contacts.get_combined_chatstate(account, jid)
                 if chatstate not in (None, 'active'):
                     color = app.css_config.get_value(
@@ -4343,7 +4343,7 @@ class RosterWindow:
             renderer.set_property('surface', surface)
         # allocate space for the icon only if needed
         if model[titer][Column.AVATAR_IMG] or \
-        app.config.get('avatar_position_in_roster') == 'left':
+        app.settings.get('avatar_position_in_roster') == 'left':
             renderer.set_property('visible', True)
             if type_:
                 # prevent type_ = None, see http://trac.gajim.org/ticket/2534
@@ -4356,7 +4356,7 @@ class RosterWindow:
         else:
             renderer.set_property('visible', False)
         if model[titer][Column.AVATAR_IMG] is None and \
-        app.config.get('avatar_position_in_roster') != 'left':
+        app.settings.get('avatar_position_in_roster') != 'left':
             renderer.set_property('visible', False)
 
         renderer.set_property('width', AvatarSize.ROSTER)
@@ -4976,15 +4976,15 @@ class RosterWindow:
              self.on_show_roster_action),
 
             ('show-offline',
-             app.config.get('showoffline'),
+             app.settings.get('showoffline'),
              self.on_show_offline_contacts_action),
 
             ('show-active',
-             app.config.get('show_only_chat_and_online'),
+             app.settings.get('show_only_chat_and_online'),
              self.on_show_active_contacts_action),
 
             ('show-transports',
-             app.config.get('show_transports_group'),
+             app.settings.get('show_transports_group'),
              self.on_show_transports_action),
         ]
 
@@ -5026,7 +5026,7 @@ class RosterWindow:
             self.on_message_window_delete)
 
         self.advanced_menus = [] # We keep them to destroy them
-        if app.config.get('roster_window_skip_taskbar'):
+        if app.settings.get('roster_window_skip_taskbar'):
             self.window.set_property('skip-taskbar-hint', True)
         self.tree = self.xml.get_object('roster_treeview')
         sel = self.tree.get_selection()
@@ -5052,14 +5052,14 @@ class RosterWindow:
         #FIXME: When list_accel_closures will be wrapped in pygtk
         # no need of this variable
         self.have_new_chat_accel = False # Is the "Ctrl+N" shown ?
-        self.regroup = app.config.get('mergeaccounts')
+        self.regroup = app.settings.get('mergeaccounts')
         self.clicked_path = None # Used remember on which row we clicked
         if len(app.connections) < 2:
             # Do not merge accounts if only one exists
             self.regroup = False
         resize_window(self.window,
-                      app.config.get('roster_width'),
-                      app.config.get('roster_height'))
+                      app.settings.get('roster_width'),
+                      app.settings.get('roster_height'))
         restore_roster_position(self.window)
 
         # Remove contact from roster when last event opened
@@ -5082,10 +5082,10 @@ class RosterWindow:
         self.xml.roster_vbox2.add(self._status_selector)
 
         # Enable/Disable checkboxes at start
-        if app.config.get('showoffline'):
+        if app.settings.get('showoffline'):
             self.window.lookup_action('show-active').set_enabled(False)
 
-        if app.config.get('show_only_chat_and_online'):
+        if app.settings.get('show_only_chat_and_online'):
             self.window.lookup_action('show-offline').set_enabled(False)
 
         if self.hpaned.get_child2() is None:
@@ -5108,7 +5108,7 @@ class RosterWindow:
                 False, None, Column.AVATAR_IMG,
                 self._fill_avatar_pixbuf_renderer, None))
 
-        if app.config.get('avatar_position_in_roster') == 'left':
+        if app.settings.get('avatar_position_in_roster') == 'left':
             add_avatar_renderer()
 
         self.renderers_list += (
@@ -5134,7 +5134,7 @@ class RosterWindow:
                 'icon_name', Column.LOCATION_ICON,
                 self._fill_pep_pixbuf_renderer, Column.LOCATION_ICON))
 
-        if app.config.get('avatar_position_in_roster') == 'right':
+        if app.settings.get('avatar_position_in_roster') == 'right':
             add_avatar_renderer()
 
         self.renderers_list.append(('padlock', Gtk.CellRendererPixbuf(), False,
@@ -5184,7 +5184,7 @@ class RosterWindow:
         self.xml.connect_signals(self)
         self.combobox_callback_active = True
 
-        self.collapsed_rows = app.config.get('collapsed_rows').split('\t')
+        self.collapsed_rows = app.settings.get('collapsed_rows').split('\t')
         self.tree.set_has_tooltip(True)
         self._roster_tooltip = RosterTooltip()
         self.tree.connect('query-tooltip', self.query_tooltip)
@@ -5192,16 +5192,16 @@ class RosterWindow:
         self._toggeling_row = False
         self.setup_and_draw_roster()
 
-        if app.config.get('show_roster_on_startup') == 'always':
+        if app.settings.get('show_roster_on_startup') == 'always':
             self.window.show_all()
-        elif app.config.get('show_roster_on_startup') == 'never':
-            if app.config.get('trayicon') != 'always':
+        elif app.settings.get('show_roster_on_startup') == 'never':
+            if app.settings.get('trayicon') != 'always':
                 # Without trayicon, user should see the roster!
                 self.window.show_all()
                 app.config.set('last_roster_visible', True)
         else:
-            if app.config.get('last_roster_visible') or \
-            app.config.get('trayicon') != 'always':
+            if app.settings.get('last_roster_visible') or \
+            app.settings.get('trayicon') != 'always':
                 self.window.show_all()
 
         self.scale_factor = self.window.get_scale_factor()

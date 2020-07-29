@@ -574,7 +574,7 @@ class Client(ConnectionHandlers):
             self._update_status()
             return
 
-        if not app.config.get(f'auto{state}'):
+        if not app.settings.get(f'auto{state}'):
             return
 
         if (state in ('away', 'xa') and self._status == 'online' or

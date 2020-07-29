@@ -63,7 +63,7 @@ class Execute(CommandContainer):
 
     @classmethod
     def spawn(cls, processor, expression):
-        command_system_execute = app.config.get('command_system_execute')
+        command_system_execute = app.settings.get('command_system_execute')
         if command_system_execute:
             pipes = dict(stdout=PIPE, stderr=PIPE)
             directory = expanduser(cls.DIRECTORY)

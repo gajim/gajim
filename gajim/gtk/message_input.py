@@ -159,7 +159,7 @@ class MessageInputTextView(Gtk.TextView):
             self.toggle_speller(False)
 
     def toggle_speller(self, activate):
-        if app.is_installed('GSPELL') and app.config.get('use_speller'):
+        if app.is_installed('GSPELL') and app.settings.get('use_speller'):
             spell_view = Gspell.TextView.get_from_gtk_text_view(self)
             spell_view.set_inline_spell_checking(activate)
 
@@ -378,7 +378,7 @@ class MessageInputTextView(Gtk.TextView):
         return None
 
     def replace_emojis(self):
-        theme = app.config.get('emoticons_theme')
+        theme = app.settings.get('emoticons_theme')
         if not theme or theme == 'font':
             return
 

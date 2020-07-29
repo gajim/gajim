@@ -559,7 +559,7 @@ class VoIPCallReceivedDialog:
             if video and not video.negotiated:
                 video_hbox = ctrl.xml.get_object('video_hbox')
                 video_hbox.set_no_show_all(False)
-                if app.config.get('video_see_self'):
+                if app.settings.get('video_see_self'):
                     fixed = ctrl.xml.get_object('outgoing_fixed')
                     fixed.set_no_show_all(False)
                 video_hbox.show_all()

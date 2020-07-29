@@ -317,7 +317,7 @@ class RosterTooltip(StatusTable):
         self.contact_jid = self.prim_contact.jid
         name = GLib.markup_escape_text(self.prim_contact.get_shown_name())
 
-        if app.config.get('mergeaccounts'):
+        if app.settings.get('mergeaccounts'):
             name = GLib.markup_escape_text(
                 self.prim_contact.account.name)
 
@@ -498,7 +498,7 @@ class FileTransfersTooltip():
     def __init__(self):
         self.sid = None
         self.widget = None
-        if app.config.get('use_kib_mib'):
+        if app.settings.get('use_kib_mib'):
             self.units = GLib.FormatSizeFlags.IEC_UNITS
         else:
             self.units = GLib.FormatSizeFlags.DEFAULT

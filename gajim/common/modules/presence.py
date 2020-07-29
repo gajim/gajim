@@ -227,7 +227,7 @@ class Presence(BaseModule):
         return contact_list[0].show not in ('not in roster', 'offline')
 
     def _log_presence(self, properties):
-        if not app.config.get('log_contact_status_changes'):
+        if not app.settings.get('log_contact_status_changes'):
             return
         if not should_log(self._account, properties.jid.getBare()):
             return
@@ -373,7 +373,7 @@ class Presence(BaseModule):
 
         if (idle_time and
                 app.is_installed('IDLE') and
-                app.config.get('autoaway')):
+                app.settings.get('autoaway')):
             idle_sec = idle.Monitor.get_idle_sec()
             time_ = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                                   time.gmtime(time.time() - idle_sec))

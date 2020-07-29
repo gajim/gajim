@@ -127,7 +127,7 @@ class PrivateChatControl(ChatControl):
         status = '' if status is None else ' - %s' % status
         show = helpers.get_uf_show(event.properties.show.value)
 
-        status_default = app.config.get('print_status_muc_default')
+        status_default = app.settings.get('gc_print_status_default')
         if not app.config.get_per('rooms', self.gc_contact.room_jid,
                                   'print_status', status_default):
             self.parent_win.redraw_tab(self)
@@ -216,7 +216,7 @@ class PrivateChatControl(ChatControl):
             self.got_connected()
 
     def show_avatar(self):
-        if not app.config.get('show_avatar_in_chat'):
+        if not app.settings.get('show_avatar_in_chat'):
             return
 
         scale = self.parent_win.window.get_scale_factor()

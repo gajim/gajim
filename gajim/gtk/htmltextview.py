@@ -723,7 +723,7 @@ class HtmlTextView(Gtk.TextView):
         if event.button == 1:
             # Left Mouse button
 
-            if not app.config.get('auto_copy'):
+            if not app.settings.get('auto_copy'):
                 return Gdk.EVENT_PROPAGATE
 
             if not textview.get_buffer().get_has_selection():

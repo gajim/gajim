@@ -612,7 +612,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                                      Gtk.IconSize.MENU)
 
     def set_speller(self):
-        if not app.is_installed('GSPELL') or not app.config.get('use_speller'):
+        if not app.is_installed('GSPELL') or not app.settings.get('use_speller'):
             return
 
         gspell_lang = self.get_speller_language()
@@ -634,7 +634,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             per_type, self.contact.jid, 'speller_language')
         if not lang:
             # use the default one
-            lang = app.config.get('speller_language')
+            lang = app.settings.get('speller_language')
             if not lang:
                 lang = i18n.LANG
         gspell_lang = Gspell.language_lookup(lang)
@@ -737,7 +737,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         image = clipboard.wait_for_image()
         if image is not None:
-            if not app.config.get('confirm_paste_image'):
+            if not app.settings.get('confirm_paste_image'):
                 self._paste_event_confirmed(True, image)
                 return
             NewConfirmationCheckDialog(
@@ -905,7 +905,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 send_message = False
             else:
                 is_ctrl_enter = bool(event_state & Gdk.ModifierType.CONTROL_MASK)
-                send_message = is_ctrl_enter == app.config.get('send_on_ctrl_enter')
+                send_message = is_ctrl_enter == app.settings.get('send_on_ctrl_enter')
 
             if send_message and not app.account_is_available(self.account):
                 # we are not connected
@@ -1056,7 +1056,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         size = len(history)
         scroll = pos != size
         # we don't want size of the buffer to grow indefinitely
-        max_size = app.config.get('key_up_lines')
+        max_size = app.settings.get('key_up_lines')
         for _i in range(size - max_size + 1):
             if pos == 0:
                 break
@@ -1206,7 +1206,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         """
         Hide show emoticons_button
         """
-        if app.config.get('emoticons_theme'):
+        if app.settings.get('emoticons_theme'):
             self.xml.emoticons_button.set_no_show_all(False)
             self.xml.emoticons_button.show()
         else:
@@ -1214,7 +1214,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self.xml.emoticons_button.hide()
 
     def set_emoticon_popover(self):
-        if not app.config.get('emoticons_theme'):
+        if not app.settings.get('emoticons_theme'):
             return
 
         if not self.parent_win:

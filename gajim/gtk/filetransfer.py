@@ -73,7 +73,7 @@ class FileTransfersWindow:
 
         self._ui = get_builder('filetransfers.ui')
         self.window = self._ui.file_transfers_window
-        show_notification = app.config.get('notify_on_file_complete')
+        show_notification = app.settings.get('notify_on_file_complete')
         self._ui.notify_ft_complete.set_active(show_notification)
         self.model = Gtk.ListStore(str, str, str, str, str, int, int, str)
         self._ui.transfers_list.set_model(self.model)
@@ -142,7 +142,7 @@ class FileTransfersWindow:
             'hash_error': 'network-error-symbolic',
         }
 
-        if app.config.get('use_kib_mib'):
+        if app.settings.get('use_kib_mib'):
             self.units = GLib.FormatSizeFlags.IEC_UNITS
         else:
             self.units = GLib.FormatSizeFlags.DEFAULT
@@ -453,7 +453,7 @@ class FileTransfersWindow:
                             file_props)
         FileSaveDialog(accept_cb,
                        cancel_cb,
-                       path=app.config.get('last_save_dir'),
+                       path=app.settings.get('last_save_dir'),
                        file_name=file_props.name)
 
     def show_file_request(self, account, contact, file_props):
@@ -1060,7 +1060,7 @@ class SendFileDialog(Gtk.ApplicationWindow):
         FileChooserDialog(self._set_files,
                           select_multiple=True,
                           transient_for=self,
-                          path=app.config.get('last_send_dir'))
+                          path=app.settings.get('last_send_dir'))
 
     def _remove_files(self, button):
         selected = self._ui.listbox.get_selected_rows()

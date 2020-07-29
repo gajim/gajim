@@ -121,7 +121,7 @@ class ChatControl(ChatControlBase):
 
         self.toggle_emoticons()
 
-        if not app.config.get('hide_chat_banner'):
+        if not app.settings.get('hide_chat_banner'):
             self.xml.banner_eventbox.set_no_show_all(False)
 
         self.xml.sendfile_button.set_action_name(
@@ -275,7 +275,7 @@ class ChatControl(ChatControlBase):
         video.action.connect('change-state', self._on_video)
         self.parent_win.window.add_action(video.action)
 
-        default_chatstate = app.config.get('send_chatstate_default')
+        default_chatstate = app.settings.get('send_chatstate_default')
         chatstate = app.config.get_per(
             'contacts', self.contact.jid, 'send_chatstate', default_chatstate)
 
@@ -702,8 +702,8 @@ class ChatControl(ChatControlBase):
         hbox = self.xml.audio_buttons_hbox
         if self.jingle['audio'].state == self.JINGLE_STATE_CONNECTED:
             # Set volume from config
-            input_vol = app.config.get('audio_input_volume')
-            output_vol = app.config.get('audio_output_volume')
+            input_vol = app.settings.get('audio_input_volume')
+            output_vol = app.settings.get('audio_output_volume')
             input_vol = max(min(input_vol, 100), 0)
             output_vol = max(min(output_vol, 100), 0)
             self.xml.mic_hscale.set_value(input_vol)
@@ -857,7 +857,7 @@ class ChatControl(ChatControlBase):
             cs = app.contacts.get_combined_chatstate(
                 self.account, self.contact.jid)
 
-        if app.config.get('show_chatstate_in_banner'):
+        if app.settings.get('show_chatstate_in_banner'):
             chatstate = helpers.get_uf_chatstate(cs)
 
             label_text = '<span>%s</span><span size="x-small" weight="light"> %s</span>' % \
@@ -912,7 +912,7 @@ class ChatControl(ChatControlBase):
                 if jingle_type == 'video':
                     video_hbox = self.xml.video_hbox
                     video_hbox.set_no_show_all(False)
-                    if app.config.get('video_see_self'):
+                    if app.settings.get('video_see_self'):
                         fixed = self.xml.outgoing_fixed
                         fixed.set_no_show_all(False)
                         video_hbox.show_all()
@@ -1155,7 +1155,7 @@ class ChatControl(ChatControlBase):
         on_yes(self)
 
     def show_avatar(self):
-        if not app.config.get('show_avatar_in_chat'):
+        if not app.settings.get('show_avatar_in_chat'):
             return
 
         scale = self.parent_win.window.get_scale_factor()
@@ -1310,8 +1310,8 @@ class ChatControl(ChatControlBase):
 
         self.redraw_after_event_removed(jid)
         if self.contact.show in ('offline', 'error'):
-            show_offline = app.config.get('showoffline')
-            show_transports = app.config.get('show_transports_group')
+            show_offline = app.settings.get('showoffline')
+            show_transports = app.settings.get('show_transports_group')
             if (not show_transports and app.jid_is_transport(jid)) or \
             (not show_offline and typ == 'chat' and \
             len(app.contacts.get_contacts(self.account, jid)) < 2):
@@ -1346,7 +1346,7 @@ class ChatControl(ChatControlBase):
         self.update_ui()
         self.parent_win.redraw_tab(self)
 
-        if not app.config.get('print_status_in_chats'):
+        if not app.settings.get('print_status_in_chats'):
             return
 
         if status:
@@ -1407,7 +1407,7 @@ class ChatControl(ChatControlBase):
         """
         Show an InfoBar on top of control
         """
-        if app.config.get('use_kib_mib'):
+        if app.settings.get('use_kib_mib'):
             units = GLib.FormatSizeFlags.IEC_UNITS
         else:
             units = GLib.FormatSizeFlags.DEFAULT

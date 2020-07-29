@@ -115,7 +115,7 @@ class CSSConfig():
 
     @property
     def prefer_dark(self):
-        setting = app.config.get('dark_theme')
+        setting = app.settings.get('dark_theme')
         if setting == Theme.SYSTEM:
             if settings is None:
                 return False
@@ -125,7 +125,7 @@ class CSSConfig():
     @staticmethod
     def set_dark_theme(value=None):
         if value is None:
-            value = app.config.get('dark_theme')
+            value = app.settings.get('dark_theme')
         else:
             app.config.set('dark_theme', value)
 
@@ -197,7 +197,7 @@ class CSSConfig():
     def _determine_theme_path(self):
         # Gets the path of the currently active theme.
         # If it does not exist, it falls back to the default theme
-        theme = app.config.get('roster_theme')
+        theme = app.settings.get('roster_theme')
         if theme == 'default':
             return self.get_theme_path(theme, user=False)
 

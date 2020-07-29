@@ -201,7 +201,7 @@ def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
 
 
 def set_urgency_hint(window: Any, setting: bool) -> None:
-    if app.config.get('use_urgency_hint'):
+    if app.settings.get('use_urgency_hint'):
         window.set_urgency_hint(setting)
 
 
@@ -253,7 +253,7 @@ def get_icon_name(name: str,
     if transport is not None:
         return '%s-%s' % (transport, name)
 
-    iconset = app.config.get('iconset')
+    iconset = app.settings.get('iconset')
     if not iconset:
         iconset = 'dcraven'
     return '%s-%s' % (iconset, name)
@@ -333,13 +333,13 @@ def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
 
 
 def restore_roster_position(window):
-    if not app.config.get('save-roster-position'):
+    if not app.settings.get('save-roster-position'):
         return
     if app.is_display(Display.WAYLAND):
         return
     move_window(window,
-                app.config.get('roster_x-position'),
-                app.config.get('roster_y-position'))
+                app.settings.get('roster_x-position'),
+                app.settings.get('roster_y-position'))
 
 
 def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
@@ -488,7 +488,7 @@ def get_show_in_roster(event, session=None):
     if event == 'gc_message_received':
         return True
     if event == 'message_received':
-        if app.config.get('autopopup_chat_opened'):
+        if app.settings.get('autopopup_chat_opened'):
             return True
         if session and session.control:
             return False
@@ -505,7 +505,7 @@ def get_show_in_systray(type_, account, jid):
             return contact.can_notify()
         # it's not an highlighted message, don't show in systray
         return False
-    return app.config.get('trayicon_notification_on_events')
+    return app.settings.get('trayicon_notification_on_events')
 
 
 def get_primary_accel_mod():

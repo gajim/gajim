@@ -298,7 +298,7 @@ class ConversationTextview(GObject.GObject):
         self.displaymarking_tags = {}
 
         # One mark at the beginning then 2 marks between each lines
-        size = app.config.get('max_conversation_lines')
+        size = app.settings.get('max_conversation_lines')
         size = 2 * size - 1
         self.marks_queue = queue.Queue(size)
 
@@ -479,7 +479,7 @@ class ConversationTextview(GObject.GObject):
         buffer_ = self.tv.get_buffer()
         start, end = buffer_.get_bounds()
         buffer_.delete(start, end)
-        size = app.config.get('max_conversation_lines')
+        size = app.settings.get('max_conversation_lines')
         size = 2 * size - 1
         self.marks_queue = queue.Queue(size)
         self.focus_out_end_mark = None
@@ -530,7 +530,7 @@ class ConversationTextview(GObject.GObject):
             phrase_for_url = urllib.parse.quote(self.selected_phrase.encode(
                 'utf-8'))
 
-            always_use_en = app.config.get('always_english_wikipedia')
+            always_use_en = app.settings.get('always_english_wikipedia')
             if always_use_en:
                 link = 'https://en.wikipedia.org/wiki/Special:Search?search=%s'\
                         % phrase_for_url
@@ -543,10 +543,10 @@ class ConversationTextview(GObject.GObject):
             submenu.append(item)
 
             item = Gtk.MenuItem.new_with_mnemonic(_('Look it up in _Dictionary'))
-            dict_link = app.config.get('dictionary_url')
+            dict_link = app.settings.get('dictionary_url')
             if dict_link == 'WIKTIONARY':
                 # special link (yeah undocumented but default)
-                always_use_en = app.config.get('always_english_wiktionary')
+                always_use_en = app.settings.get('always_english_wiktionary')
                 if always_use_en:
                     link = 'https://en.wiktionary.org/wiki/Special:Search?search=%s'\
                             % phrase_for_url
@@ -569,7 +569,7 @@ class ConversationTextview(GObject.GObject):
             submenu.append(item)
 
 
-            search_link = app.config.get('search_engine')
+            search_link = app.settings.get('search_engine')
             if search_link.find('%s') == -1:
                 # we must have %s in the url
                 item = Gtk.MenuItem.new_with_label(
@@ -672,7 +672,7 @@ class ConversationTextview(GObject.GObject):
                 otext += '\n{} {}'.format(oob_desc, oob_url)
 
         # basic: links + mail + formatting is always checked (we like that)
-        if app.config.get('emoticons_theme') and graphics:
+        if app.settings.get('emoticons_theme') and graphics:
             # search for emoticons & urls
             iterator = app.interface.emot_and_basic_re.finditer(otext)
         else: # search for just urls + mail + formatting
@@ -728,7 +728,7 @@ class ConversationTextview(GObject.GObject):
         text_is_valid_uri = False
         is_xhtml_link = None
         show_ascii_formatting_chars = \
-            app.config.get('show_ascii_formatting_chars')
+            app.settings.get('show_ascii_formatting_chars')
         buffer_ = self.tv.get_buffer()
 
         # Detect XHTML-IM link
@@ -740,7 +740,7 @@ class ConversationTextview(GObject.GObject):
                 break
 
         # Check if we accept this as an uri
-        schemes = app.config.get('uri_schemes').split()
+        schemes = app.settings.get('uri_schemes').split()
         for scheme in schemes:
             if special_text.startswith(scheme):
                 text_is_valid_uri = True
@@ -750,7 +750,7 @@ class ConversationTextview(GObject.GObject):
         else:
             end_iter = buffer_.get_end_iter()
 
-        theme = app.config.get('emoticons_theme')
+        theme = app.settings.get('emoticons_theme')
         show_emojis = theme and theme != 'font'
         if show_emojis and graphics and is_emoji(special_text):
             # it's an emoticon
@@ -1011,12 +1011,12 @@ class ConversationTextview(GObject.GObject):
             text_tags.append(other_text_tag)
 
         else:  # not status nor /me
-            if app.config.get('chat_merge_consecutive_nickname'):
+            if app.settings.get('chat_merge_consecutive_nickname'):
                 if kind != old_kind or self.just_cleared:
                     self.print_name(name, kind, other_tags_for_name,
                         direction_mark=direction_mark, iter_=iter_)
                 else:
-                    self.print_real_text(app.config.get(
+                    self.print_real_text(app.settings.get(
                         'chat_merge_consecutive_nickname_indent'),
                         mark=insert_mark, additional_data=additional_data)
             else:
@@ -1086,7 +1086,7 @@ class ConversationTextview(GObject.GObject):
         """
         Format the time according to config setting 'time_stamp'
         """
-        format_ = helpers.from_one_line(app.config.get('time_stamp'))
+        format_ = helpers.from_one_line(app.settings.get('time_stamp'))
         tim_format = time.strftime(format_, tim)
         return tim_format
 
@@ -1160,7 +1160,7 @@ class ConversationTextview(GObject.GObject):
     def print_time(self, text, kind, tim, direction_mark, other_tags_for_time, iter_):
         local_tim = time.localtime(tim)
         buffer_ = self.tv.get_buffer()
-        current_print_time = app.config.get('print_time')
+        current_print_time = app.settings.get('print_time')
 
         if current_print_time == 'always':
             timestamp_str = self.get_time_to_show(local_tim)
@@ -1172,7 +1172,7 @@ class ConversationTextview(GObject.GObject):
             else:
                 buffer_.insert(iter_, timestamp)
         elif current_print_time == 'sometimes':
-            every_foo_seconds = 60 * app.config.get(
+            every_foo_seconds = 60 * app.settings.get(
                 'print_ichat_every_foo_minutes')
             seconds_passed = tim - self.last_time_printout
             if seconds_passed > every_foo_seconds:
@@ -1211,9 +1211,9 @@ class ConversationTextview(GObject.GObject):
                 if tag.startswith('muc_nickname_color_'):
                     self._add_new_colour_tags(tag, name)
 
-            before_str = app.config.get('before_nickname')
+            before_str = app.settings.get('before_nickname')
             before_str = helpers.from_one_line(before_str)
-            after_str = app.config.get('after_nickname')
+            after_str = app.settings.get('after_nickname')
             after_str = helpers.from_one_line(after_str)
             format_ = before_str + name + direction_mark + after_str + ' '
             buffer_.insert_with_tags_by_name(end_iter, format_, *name_tags)
@@ -1251,7 +1251,7 @@ class ConversationTextview(GObject.GObject):
             iter_ = buffer_.get_iter_at_mark(mark)
 
         xhtml = additional_data.get_value('gajim', 'xhtml', False)
-        if xhtml and app.config.get('show_xhtml'):
+        if xhtml and app.settings.get('show_xhtml'):
             try:
                 if name and (text.startswith('/me ') or text.startswith('/me\n')):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
@@ -1338,7 +1338,7 @@ class MessageIcons(Gtk.Box):
         self.show_all()
 
     def set_receipt_icon_visible(self, visible):
-        if not app.config.get('positive_184_ack'):
+        if not app.settings.get('positive_184_ack'):
             return
         self._receipt_image.set_visible(visible)
 

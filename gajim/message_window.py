@@ -108,7 +108,7 @@ class MessageWindow(EventHelper):
             self.parent_paned = parent_paned
             old_parent = self.notebook.get_parent()
             old_parent.remove(self.notebook)
-            if app.config.get('roster_on_the_right'):
+            if app.settings.get('roster_on_the_right'):
                 child1 = self.parent_paned.get_child1()
                 self.parent_paned.remove(child1)
                 self.parent_paned.pack1(self.notebook, resize=False)
@@ -143,7 +143,7 @@ class MessageWindow(EventHelper):
         self.handlers[id_] = self.notebook
 
         # Tab customizations
-        pref_pos = app.config.get('tabs_position')
+        pref_pos = app.settings.get('tabs_position')
         if pref_pos == 'bottom':
             nb_pos = Gtk.PositionType.BOTTOM
         elif pref_pos == 'left':
@@ -154,12 +154,12 @@ class MessageWindow(EventHelper):
             nb_pos = Gtk.PositionType.TOP
         self.notebook.set_tab_pos(nb_pos)
         window_mode = app.interface.msg_win_mgr.mode
-        if app.config.get('tabs_always_visible') or \
+        if app.settings.get('tabs_always_visible') or \
         window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
             self.notebook.set_show_tabs(True)
         else:
             self.notebook.set_show_tabs(False)
-        self.notebook.set_show_border(app.config.get('tabs_border'))
+        self.notebook.set_show_border(app.settings.get('tabs_border'))
         self.show_icon()
 
         self.register_events([
@@ -228,7 +228,7 @@ class MessageWindow(EventHelper):
         if res != Gdk.EVENT_PROPAGATE:
             return res
 
-        if action == 'escape' and app.config.get('escape_key_closes'):
+        if action == 'escape' and app.settings.get('escape_key_closes'):
             self.remove_tab(control, self.CLOSE_ESC)
             return
 
@@ -355,7 +355,7 @@ class MessageWindow(EventHelper):
                         ctrl.minimize()
                 win.destroy()
 
-            if not app.config.get('confirm_close_multiple_tabs'):
+            if not app.settings.get('confirm_close_multiple_tabs'):
                 for ctrl in self.controls():
                     if ctrl.minimizable():
                         ctrl.minimize()
@@ -631,7 +631,7 @@ class MessageWindow(EventHelper):
             return # don't show_title, we are dead
         elif self.get_num_controls() == 1: # we are going from two tabs to one
             window_mode = app.interface.msg_win_mgr.mode
-            show_tabs_if_one_tab = app.config.get('tabs_always_visible') or \
+            show_tabs_if_one_tab = app.settings.get('tabs_always_visible') or \
                 window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER
             self.notebook.set_show_tabs(show_tabs_if_one_tab)
 
@@ -646,7 +646,7 @@ class MessageWindow(EventHelper):
 
         # Optionally hide close button
         close_button = hbox.get_children()[2]
-        if app.config.get('tabs_close_button'):
+        if app.settings.get('tabs_close_button'):
             close_button.show()
         else:
             close_button.hide()
@@ -655,7 +655,7 @@ class MessageWindow(EventHelper):
         if isinstance(ctrl, ChatControl):
             tab_label_str = ctrl.get_tab_label()
             # Set Label Color
-            if app.config.get('show_chatstate_in_tabs'):
+            if app.settings.get('show_chatstate_in_tabs'):
                 gtkgui_helpers.add_css_class(
                     nick_label, chatstate, 'gajim-state-')
         else:
@@ -783,7 +783,7 @@ class MessageWindow(EventHelper):
             if ctrl.get_nb_unread() > 0:
                 found = True
                 break # found
-            if app.config.get('ctrl_tab_go_to_next_composing'):
+            if app.settings.get('ctrl_tab_go_to_next_composing'):
                 # Search for a composing contact
                 contact = ctrl.contact
                 if first_composing_ind == -1 and contact.chatstate == 'composing':
@@ -909,7 +909,7 @@ class MessageWindowMgr(GObject.GObject):
         self._windows = {}
 
         # Map the mode to a int constant for frequent compares
-        mode = app.config.get('one_message_window')
+        mode = app.settings.get('one_message_window')
         self.mode = WINDOW_TYPES.index(mode)
 
         self.parent_win = parent_window
@@ -956,11 +956,11 @@ class MessageWindowMgr(GObject.GObject):
         """
         Resizes window according to config settings
         """
-        hpaned = app.config.get('roster_hpaned_position')
+        hpaned = app.settings.get('roster_hpaned_position')
         if self.mode in (self.ONE_MSG_WINDOW_ALWAYS,
                          self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER):
-            size = (app.config.get('msgwin-width'),
-                    app.config.get('msgwin-height'))
+            size = (app.settings.get('msgwin-width'),
+                    app.settings.get('msgwin-height'))
             if self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
                 # Add the hpaned position to our message window's size
                 size = (hpaned + size[0], size[1])
@@ -970,7 +970,7 @@ class MessageWindowMgr(GObject.GObject):
         elif self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_PERTYPE):
             opt_width = type_ + '-msgwin-width'
             opt_height = type_ + '-msgwin-height'
-            size = (app.config.get(opt_width), app.config.get(opt_height))
+            size = (app.settings.get(opt_width), app.settings.get(opt_height))
         else:
             return
         win.resize(size[0], size[1])
@@ -986,14 +986,14 @@ class MessageWindowMgr(GObject.GObject):
             return
 
         if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
-            pos = (app.config.get('msgwin-x-position'),
-                    app.config.get('msgwin-y-position'))
+            pos = (app.settings.get('msgwin-x-position'),
+                    app.settings.get('msgwin-y-position'))
         elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
             pos = (app.config.get_per('accounts', acct, 'msgwin-x-position'),
                     app.config.get_per('accounts', acct, 'msgwin-y-position'))
         elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
-            pos = (app.config.get(type_ + '-msgwin-x-position'),
-                    app.config.get(type_ + '-msgwin-y-position'))
+            pos = (app.settings.get(type_ + '-msgwin-x-position'),
+                    app.settings.get(type_ + '-msgwin-y-position'))
         else:
             return
 
@@ -1048,7 +1048,7 @@ class MessageWindowMgr(GObject.GObject):
 
         # Position and size window based on saved state and window mode
         if not self.one_window_opened(contact, acct, type_):
-            if app.config.get('msgwin-max-state'):
+            if app.settings.get('msgwin-max-state'):
                 win.window.maximize()
             else:
                 self._resize_window(win, acct, type_)
@@ -1177,7 +1177,7 @@ class MessageWindowMgr(GObject.GObject):
         elif self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
             # Ignore hpaned separator's width and calculate width ourselves
             win_width = msg_win.window.get_allocation().width
-            hpaned_position = app.config.get('roster_hpaned_position')
+            hpaned_position = app.settings.get('roster_hpaned_position')
             width = win_width - hpaned_position
 
         if acct:
@@ -1203,7 +1203,8 @@ class MessageWindowMgr(GObject.GObject):
     def reconfig(self):
         for w in self.windows():
             self.save_state(w)
-        mode = app.config.get('one_message_window')
+
+        mode = app.settings.get('one_message_window')
         if self.mode == WINDOW_TYPES.index(mode):
             # No change
             return
@@ -1238,8 +1239,8 @@ class MessageWindowMgr(GObject.GObject):
                 w.parent_paned.remove(child)
                 self.parent_win.lookup_action('show-roster').set_enabled(False)
                 resize_window(w.window,
-                              app.config.get('roster_width'),
-                              app.config.get('roster_height'))
+                              app.settings.get('roster_width'),
+                              app.settings.get('roster_height'))
 
         self._windows = {}
 
@@ -1253,7 +1254,7 @@ class MessageWindowMgr(GObject.GObject):
             mw.new_tab(ctrl)
 
     def save_opened_controls(self):
-        if not app.config.get('remember_opened_chat_controls'):
+        if not app.settings.get('remember_opened_chat_controls'):
             return
         chat_controls = {}
         for acct in app.connections:

@@ -159,7 +159,7 @@ class Notification(EventHelper):
             icon_name = 'mail-message-new'
 
         if timeout < 0:
-            timeout = app.config.get('notification_timeout')
+            timeout = app.settings.get('notification_timeout')
 
         if sys.platform == 'win32':
             self._withdraw()
@@ -324,11 +324,11 @@ class PopupNotification(Gtk.Window):
 
     @staticmethod
     def _get_window_pos():
-        pos_x = app.config.get('notification_position_x')
+        pos_x = app.settings.get('notification_position_x')
         screen_w, screen_h = get_total_screen_geometry()
         if pos_x < 0:
             pos_x = screen_w - 312 + pos_x + 1
-        pos_y = app.config.get('notification_position_y')
+        pos_y = app.settings.get('notification_position_y')
         if pos_y < 0:
             pos_y = screen_h - 95 - 80 + pos_y + 1
         return pos_x, pos_y

@@ -141,7 +141,7 @@ class StatusIcon:
         """
         if not app.interface.systray_enabled:
             return
-        if app.config.get('trayicon') == 'always':
+        if app.settings.get('trayicon') == 'always':
             self.status_icon.set_visible(True)
         if app.events.get_nb_systray_events():
             self.status_icon.set_visible(True)
@@ -150,7 +150,7 @@ class StatusIcon:
             self.status_icon.set_from_icon_name(icon_name)
             return
 
-        if app.config.get('trayicon') == 'on_event':
+        if app.settings.get('trayicon') == 'on_event':
             self.status_icon.set_visible(False)
 
         icon_name = get_icon_name(self.status)
@@ -252,7 +252,7 @@ class StatusIcon:
                              self._on_single_message, account)
                 account_menu_for_single_message.append(item)
 
-        sounds_mute_menuitem.set_active(not app.config.get('sounds_on'))
+        sounds_mute_menuitem.set_active(not app.settings.get('sounds_on'))
 
         win = app.interface.roster.window
         if self._show_roster_handler_id:
@@ -321,7 +321,7 @@ class StatusIcon:
             else:
                 win.show_all()
                 restore_roster_position(win)
-                if not app.config.get('roster_window_skip_taskbar'):
+                if not app.settings.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(Gtk.get_current_event_time())
         else:

@@ -51,7 +51,7 @@ ACTIVITY_PAGELIST = [
 class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
     def __init__(self, callback=None, account=None, status=None, show_pep=True):
         Gtk.ApplicationWindow.__init__(self)
-        countdown_time = app.config.get('change_status_window_timeout')
+        countdown_time = app.settings.get('change_status_window_timeout')
         TimeoutWindow.__init__(self, countdown_time)
         self.set_name('StatusChange')
         self.set_application(app.app)
@@ -120,8 +120,8 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             self.destroy()
 
     def _apply_speller(self):
-        if app.config.get('use_speller') and app.is_installed('GSPELL'):
-            lang = app.config.get('speller_language')
+        if app.settings.get('use_speller') and app.is_installed('GSPELL'):
+            lang = app.settings.get('speller_language')
             gspell_lang = Gspell.language_lookup(lang)
             if gspell_lang is None:
                 gspell_lang = Gspell.language_get_default()

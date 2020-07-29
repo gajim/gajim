@@ -80,10 +80,10 @@ class Features(Gtk.ApplicationWindow):
 
         notification_sounds_available = (
             app.is_installed('GSOUND') or sys.platform in ('win32', 'darwin'))
-        notification_sounds_enabled = app.config.get('sounds_on')
-        spell_check_enabled = app.config.get('use_speller')
+        notification_sounds_enabled = app.settings.get('sounds_on')
+        spell_check_enabled = app.settings.get('use_speller')
 
-        auto_status = [app.config.get('autoaway'), app.config.get('autoxa')]
+        auto_status = [app.settings.get('autoaway'), app.settings.get('autoxa')]
         auto_status_enabled = bool(any(auto_status))
 
         return [
@@ -129,7 +129,7 @@ class Features(Gtk.ApplicationWindow):
                     _('Requires: gnome-keyring or kwallet'),
                     _('Windows Credential Vault is used for secure password '
                       'storage'),
-                    app.config.get('use_keyring')),
+                    app.settings.get('use_keyring')),
             Feature(_('Spell Checker'),
                     app.is_installed('GSPELL'),
                     _('Enables Gajim to spell check your messages while '

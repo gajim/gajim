@@ -797,7 +797,7 @@ class ZeroconfProfileDialog(SettingsDialog):
 class PriorityDialog(SettingsDialog):
     def __init__(self, account, parent):
 
-        neg_priority = app.config.get('enable_negative_priority')
+        neg_priority = app.settings.get('enable_negative_priority')
         if neg_priority:
             range_ = (-128, 127)
         else:

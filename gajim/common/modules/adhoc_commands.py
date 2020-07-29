@@ -201,7 +201,7 @@ class AdHocCommands(BaseModule):
 
         # a list of all commands exposed: node -> command class
         self._commands = {}
-        if app.config.get('remote_commands'):
+        if app.settings.get('remote_commands'):
             for cmdobj in (ChangeStatusCommand,):
                 self._commands[cmdobj.commandnode] = cmdobj
 

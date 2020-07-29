@@ -137,11 +137,11 @@ class HistoryWindow(Gtk.ApplicationWindow):
             self._load_history(None)
 
         resize_window(self,
-                      app.config.get('history_window_width'),
-                      app.config.get('history_window_height'))
+                      app.settings.get('history_window_width'),
+                      app.settings.get('history_window_height'))
         move_window(self,
-                    app.config.get('history_window_x-position'),
-                    app.config.get('history_window_y-position'))
+                    app.settings.get('history_window_x-position'),
+                    app.settings.get('history_window_y-position'))
 
         self._ui.connect_signals(self)
         self.connect('delete-event', self._on_delete)
@@ -526,13 +526,13 @@ class HistoryWindow(Gtk.ApplicationWindow):
         # Make the beginning of every message searchable by its log_line_id
         buf.create_mark(str(log_line_id), end_iter, left_gravity=True)
 
-        if app.config.get('print_time') == 'always':
-            timestamp_str = app.config.get('time_stamp')
+        if app.settings.get('print_time') == 'always':
+            timestamp_str = app.settings.get('time_stamp')
             timestamp_str = helpers.from_one_line(timestamp_str)
             tim = time.strftime(timestamp_str, time.localtime(float(tim)))
             buf.insert(end_iter, tim)
-        elif app.config.get('print_time') == 'sometimes':
-            every_foo_seconds = 60 * app.config.get(
+        elif app.settings.get('print_time') == 'sometimes':
+            every_foo_seconds = 60 * app.settings.get(
                 'print_ichat_every_foo_minutes')
             seconds_passed = tim - self.last_time_printout
             if seconds_passed > every_foo_seconds:
@@ -605,9 +605,9 @@ class HistoryWindow(Gtk.ApplicationWindow):
             # eg. nkour: nkour is now Offline
             if contact_name and kind != KindConstant.GCSTATUS:
                 # add stuff before and after contact name
-                before_str = app.config.get('before_nickname')
+                before_str = app.settings.get('before_nickname')
                 before_str = helpers.from_one_line(before_str)
-                after_str = app.config.get('after_nickname')
+                after_str = app.settings.get('after_nickname')
                 after_str = helpers.from_one_line(after_str)
                 format_ = before_str + contact_name + after_str + ' '
                 if tag_name:

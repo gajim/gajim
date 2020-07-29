@@ -95,8 +95,8 @@ class JingleRTPContent(JingleContent):
         # due to bad controlling-mode
 
         params = {'controlling-mode': self.session.weinitiate, 'debug': False}
-        if app.config.get('use_stun_server'):
-            stun_server = app.config.get('stun_server')
+        if app.settings.get('use_stun_server'):
+            stun_server = app.settings.get('stun_server')
             if not stun_server and self.session.connection._stun_servers:
                 stun_server = self.session.connection._stun_servers[0]['host']
             if stun_server:
@@ -117,7 +117,7 @@ class JingleRTPContent(JingleContent):
         return JingleContent.is_ready(self) and self.candidates_ready
 
     def make_bin_from_config(self, config_key, pipeline, text):
-        pipeline = pipeline % app.config.get(config_key)
+        pipeline = pipeline % app.settings.get(config_key)
         try:
             gst_bin = Gst.parse_bin_from_description(pipeline, True)
             return gst_bin
@@ -432,7 +432,7 @@ class JingleVideo(JingleRTPContent):
         bus.enable_sync_message_emission()
 
     def do_setup(self, self_display_sink, other_sink):
-        if app.config.get('video_see_self'):
+        if app.settings.get('video_see_self'):
             tee = '! tee name=split ! queue name=self-display-queue split. ! queue name=network-queue'
         else:
             tee = ''
@@ -441,7 +441,7 @@ class JingleVideo(JingleRTPContent):
                                                  '%%s %s' % tee,
                                                  _("video input"))
         self.pipeline.add(self.src_bin)
-        if app.config.get('video_see_self'):
+        if app.settings.get('video_see_self'):
             self.pipeline.add(self_display_sink)
             self_display_queue = self.src_bin.get_by_name('self-display-queue')
             self_display_queue.get_static_pad('src').link_maybe_ghosting(self_display_sink.get_static_pad('sink'))

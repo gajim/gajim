@@ -439,7 +439,7 @@ class Logger:
         """
         returns the timeout in epoch
         """
-        timeout = app.config.get('restore_timeout')
+        timeout = app.settings.get('restore_timeout')
 
         now = int(time.time())
         if timeout > 0:
@@ -796,7 +796,7 @@ class Logger:
         returns a list of namedtuples
         """
 
-        restore = app.config.get('restore_lines')
+        restore = app.settings.get('restore_lines')
         if restore <= 0:
             return []
 

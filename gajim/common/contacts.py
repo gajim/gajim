@@ -268,7 +268,7 @@ class Contact(CommonContact):
         if not self.is_groupchat:
             raise ValueError
 
-        all_ = app.config.get('notify_on_all_muc_messages')
+        all_ = app.settings.get('notify_on_all_muc_messages')
         room = app.config.get_per('rooms', self.jid, 'notify_on_all_messages')
         return all_ or room
 
@@ -960,7 +960,7 @@ class MetacontactManager():
 
         (nearby_family, big_brother_jid, big_brother_account)
         """
-        if common.app.config.get('mergeaccounts'):
+        if common.app.settings.get('mergeaccounts'):
             # group all together
             nearby_family = family
         else:

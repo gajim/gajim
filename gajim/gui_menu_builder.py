@@ -633,7 +633,7 @@ def get_groupchat_menu(control_id, account, jid):
 
     def build_sync_menu():
         menu = Gio.Menu()
-        days = app.config.get('threshold_options').split(',')
+        days = app.settings.get('threshold_options').split(',')
         days = [int(day) for day in days]
         action_name = 'win.choose-sync-%s::' % control_id
         for day in days:

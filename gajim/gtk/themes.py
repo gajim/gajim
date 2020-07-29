@@ -332,7 +332,7 @@ class Themes(Gtk.ApplicationWindow):
         theme = store[iter_][Column.THEME]
 
         def _remove_theme():
-            if theme == app.config.get('roster_theme'):
+            if theme == app.settings.get('roster_theme'):
                 self._apply_theme('default')
 
             app.css_config.remove_theme(theme)
@@ -344,7 +344,7 @@ class Themes(Gtk.ApplicationWindow):
                 self._clear_options()
 
         text = _('Do you want to delete this theme?')
-        if theme == app.config.get('roster_theme'):
+        if theme == app.settings.get('roster_theme'):
             text = _('This is the theme you are currently using.\n'
                      'Do you want to delete this theme?')
 

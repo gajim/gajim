@@ -372,7 +372,7 @@ class HistoryManager:
             self.nickname_col_for_logs.set_visible(False)
             self.subject_col_for_logs.set_visible(True)
 
-        format_ = helpers.from_one_line(app.config.get('time_stamp'))
+        format_ = helpers.from_one_line(app.settings.get('time_stamp'))
         for row in results:
             # exposed in UI (TreeViewColumns) are only
             # time, message, subject, nickname
@@ -429,7 +429,7 @@ class HistoryManager:
                 ''', (like_sql, like_sql))
 
         results = self.cur.fetchall()
-        format_ = helpers.from_one_line(app.config.get('time_stamp'))
+        format_ = helpers.from_one_line(app.settings.get('time_stamp'))
         for row in results:
             # exposed in UI (TreeViewColumns) are only
             # JID, time, message, subject, nickname

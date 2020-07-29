@@ -212,7 +212,7 @@ class GenericSetting(Gtk.ListBoxRow):
             return value
 
         if type_ == SettingType.CONFIG:
-            return app.config.get(value)
+            return app.settings.get(value)
 
         if type_ == SettingType.ACCOUNT_CONFIG:
             if value == 'password':

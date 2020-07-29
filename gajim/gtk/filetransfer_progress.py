@@ -39,7 +39,7 @@ class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):
         self._transfer.connect('state-changed', self._on_transfer_state_change)
         self._transfer.connect('progress', self._on_transfer_progress)
 
-        if app.config.get('use_kib_mib'):
+        if app.settings.get('use_kib_mib'):
             self._units = GLib.FormatSizeFlags.IEC_UNITS
         else:
             self._units = GLib.FormatSizeFlags.DEFAULT

@@ -93,7 +93,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self._roster.set_search_equal_func(self._search_func)
 
         self._ui.contact_column.set_fixed_width(
-            app.config.get('groupchat_roster_width'))
+            app.settings.get('groupchat_roster_width'))
         self._ui.contact_column.set_cell_data_func(self._ui.text_renderer,
                                                    self._text_cell_data_func)
 
@@ -329,7 +329,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             nick1 = model[iter1][Column.NICK_OR_GROUP]
             nick2 = model[iter2][Column.NICK_OR_GROUP]
 
-            if not app.config.get('sort_by_show_in_muc'):
+            if not app.settings.get('sort_by_show_in_muc'):
                 return locale.strcoll(nick1.lower(), nick2.lower())
 
             gc_contact1 = app.contacts.get_gc_contact(self._account,
@@ -398,7 +398,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         if status is not None:
             status = status.strip()
 
-        if status and app.config.get('show_status_msgs_in_roster'):
+        if status and app.settings.get('show_status_msgs_in_roster'):
             # Display only first line
             status = status.split('\n', 1)[0]
             # escape markup entities and make them small italic and fg color

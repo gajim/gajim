@@ -339,10 +339,10 @@ class Chatstate(BaseModule):
     @staticmethod
     def _get_chatstate_setting(contact):
         if contact.is_groupchat:
-            default = app.config.get('send_chatstate_muc_default')
+            default = app.settings.get('send_chatstate_muc_default')
             return app.config.get_per(
                 'rooms', contact.jid, 'send_chatstate', default)
-        default = app.config.get('send_chatstate_default')
+        default = app.settings.get('send_chatstate_default')
         return app.config.get_per(
             'contacts', contact.jid, 'send_chatstate', default)
 

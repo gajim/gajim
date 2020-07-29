@@ -664,7 +664,7 @@ class Interface:
         ft = self.instances['file_transfers']
         if helpers.allow_popup_window(account):
             if file_props.error == 0:
-                if app.config.get('notify_on_file_complete'):
+                if app.settings.get('notify_on_file_complete'):
                     ft.show_completed(jid, file_props)
             elif file_props.error == -1:
                 ft.show_stopped(
@@ -691,7 +691,7 @@ class Interface:
         msg_type = ''
         event_type = ''
         if (file_props.error == 0 and
-                app.config.get('notify_on_file_complete')):
+                app.settings.get('notify_on_file_complete')):
             event_class = events.FileCompletedEvent
             msg_type = 'file-completed'
             event_type = _('File Transfer Completed')
@@ -772,8 +772,8 @@ class Interface:
             txt = ''
             icon_name = None
 
-        if (app.config.get('notify_on_file_complete') and
-                (app.config.get('autopopupaway') or
+        if (app.settings.get('notify_on_file_complete') and
+                (app.settings.get('autopopupaway') or
                 app.connections[account].status in ('online', 'chat'))):
             # We want to be notified and we are online/chat or we don't mind
             # to be bugged when away/na/busy
@@ -1281,14 +1281,14 @@ class Interface:
         link_pattern = basic_pattern
         self.link_pattern_re = re.compile(link_pattern, re.I | re.U)
 
-        if app.config.get('ascii_formatting'):
+        if app.settings.get('ascii_formatting'):
             basic_pattern += formatting
         self.basic_pattern = basic_pattern
 
         # because emoticons match later (in the string) they need to be after
         # basic matches that may occur earlier
         emoticons = emoji_data.get_regex()
-        if app.config.get('ascii_emoticons'):
+        if app.settings.get('ascii_emoticons'):
             emoticons += '|%s' % emoji_ascii_data.get_regex()
 
         self.emot_and_basic = '%s|%s' % (basic_pattern, emoticons)
@@ -1591,7 +1591,7 @@ class Interface:
         # refresh roster
         if len(app.connections) >= 2:
             # Do not merge accounts if only one exists
-            self.roster.regroup = app.config.get('mergeaccounts')
+            self.roster.regroup = app.settings.get('mergeaccounts')
         else:
             self.roster.regroup = False
         self.roster.setup_and_draw_roster()
@@ -1630,7 +1630,7 @@ class Interface:
         del app.last_message_time[account]
         if len(app.connections) >= 2:
             # Do not merge accounts if only one exists
-            self.roster.regroup = app.config.get('mergeaccounts')
+            self.roster.regroup = app.settings.get('mergeaccounts')
         else:
             self.roster.regroup = False
         app.config.set_per(
@@ -1870,11 +1870,11 @@ class Interface:
                 'active', False)
 
     def check_for_updates(self):
-        if not app.config.get('check_for_update'):
+        if not app.settings.get('check_for_update'):
             return
 
         now = datetime.now()
-        last_check = app.config.get('last_update_check')
+        last_check = app.settings.get('last_update_check')
         if not last_check:
             def _on_cancel():
                 app.config.set('check_for_update', False)
@@ -1945,7 +1945,7 @@ class Interface:
             log.info('Gajim is up to date')
 
     def run(self, application):
-        if app.config.get('trayicon') != 'never':
+        if app.settings.get('trayicon') != 'never':
             self.show_systray()
 
         self.roster = roster_window.RosterWindow(application)
@@ -1978,7 +1978,7 @@ class Interface:
             GLib.timeout_add(timeout, self.process_connections)
 
         def remote_init():
-            if app.config.get('remote_control'):
+            if app.settings.get('remote_control'):
                 try:
                     from gajim import remote_control
                     remote_control.GajimRemote()
@@ -2016,7 +2016,7 @@ class Interface:
 
         app.logger.reset_shown_unread_messages()
         # override logging settings from config (don't take care of '-q' option)
-        if app.config.get('verbose'):
+        if app.settings.get('verbose'):
             logging_helpers.set_verbose()
 
         for account in app.config.get_per('accounts'):
@@ -2074,8 +2074,8 @@ class Interface:
         else:
             GLib.timeout_add_seconds(20, self.check_for_updates)
 
-        idle.Monitor.set_interval(app.config.get('autoawaytime') * 60,
-                                  app.config.get('autoxatime') * 60)
+        idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
+                                  app.settings.get('autoxatime') * 60)
 
         self.systray_enabled = False
 

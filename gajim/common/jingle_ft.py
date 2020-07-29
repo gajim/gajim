@@ -370,7 +370,7 @@ class JingleFileTransfer(JingleContent):
         sha_str = helpers.get_auth_sha(self.file_props.sid, sender,
                                        receiver)
         self.file_props.sha_str = sha_str
-        port = app.config.get('file_transfers_port')
+        port = app.settings.get('file_transfers_port')
         fingerprint = None
         if self.use_security:
             fingerprint = 'server'

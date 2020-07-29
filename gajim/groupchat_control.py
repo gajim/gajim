@@ -129,7 +129,7 @@ class GroupchatControl(ChatControlBase):
         else:
             self.scale_factor = app.interface.roster.scale_factor
 
-        if not app.config.get('hide_groupchat_banner'):
+        if not app.settings.get('hide_groupchat_banner'):
             self.xml.banner_eventbox.set_no_show_all(False)
 
         # muc attention flag (when we are mentioned in a muc)
@@ -235,7 +235,7 @@ class GroupchatControl(ChatControlBase):
         self.update_ui()
         self.widget.show_all()
 
-        if app.config.get('hide_groupchat_occupants_list'):
+        if app.settings.get('hide_groupchat_occupants_list'):
             # Roster is shown by default, so toggle the roster button to hide it
             self.show_roster()
 
@@ -309,7 +309,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_minimize_on_autojoin)
         self.parent_win.window.add_action(act)
 
-        default_muc_chatstate = app.config.get('send_chatstate_muc_default')
+        default_muc_chatstate = app.settings.get('send_chatstate_muc_default')
         chatstate = app.config.get_per(
             'rooms', self.contact.jid, 'send_chatstate', default_muc_chatstate)
 
@@ -334,7 +334,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_notify_on_all_messages)
         self.parent_win.window.add_action(act)
 
-        status_default = app.config.get('print_status_muc_default')
+        status_default = app.settings.get('print_status_muc_default')
         value = app.config.get_per('rooms', self.contact.jid,
                                    'print_status', status_default)
 
@@ -344,7 +344,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_print_status)
         self.parent_win.window.add_action(act)
 
-        join_default = app.config.get('print_join_left_default')
+        join_default = app.settings.get('print_join_left_default')
         value = app.config.get_per('rooms', self.contact.jid,
                                    'print_join_left', join_default)
 
@@ -423,14 +423,14 @@ class GroupchatControl(ChatControlBase):
             contact.affiliation.is_owner)
 
         # Print join/left
-        join_default = app.config.get('print_join_left_default')
+        join_default = app.settings.get('print_join_left_default')
         value = app.config.get_per('rooms', self.contact.jid,
                                    'print_join_left', join_default)
         self._get_action('print-join-left-').set_state(
             GLib.Variant.new_boolean(value))
 
         # Print join/left
-        status_default = app.config.get('print_status_muc_default')
+        status_default = app.settings.get('print_status_muc_default')
         value = app.config.get_per('rooms', self.contact.jid,
                                    'print_status', status_default)
         self._get_action('print-status-').set_state(
@@ -890,8 +890,8 @@ class GroupchatControl(ChatControlBase):
                                additional_data=additional_data)
         app.events.add_event(self.account, fjid, event)
 
-        autopopup = app.config.get('autopopup')
-        autopopupaway = app.config.get('autopopupaway')
+        autopopup = app.settings.get('autopopup')
+        autopopupaway = app.settings.get('autopopupaway')
         if not autopopup or (not autopopupaway and \
                 app.account_is_available(self.account)):
             self.roster.draw_contact(nick)
@@ -1028,7 +1028,7 @@ class GroupchatControl(ChatControlBase):
         Check text to see whether any of the words in (muc_highlight_words and
         nick) appear
         """
-        special_words = app.config.get('muc_highlight_words').split(';')
+        special_words = app.settings.get('muc_highlight_words').split(';')
         special_words.append(self.nick)
         con = app.connections[self.account]
         special_words.append(con.get_own_jid().getStripped())
@@ -1066,7 +1066,7 @@ class GroupchatControl(ChatControlBase):
             date = time.strftime('%c', time.localtime(event.user_timestamp))
             text = '%s - %s' % (text, date)
 
-        if (app.config.get('show_subject_on_join') or
+        if (app.settings.get('show_subject_on_join') or
                 self._muc_data.state != MUCJoinedState.JOINING):
             self.add_info_message(text)
 
@@ -1300,7 +1300,7 @@ class GroupchatControl(ChatControlBase):
         status = '' if status is None else ' - %s' % status
         show = helpers.get_uf_show(event.properties.show.value)
 
-        status_default = app.config.get('print_status_muc_default')
+        status_default = app.settings.get('gc_print_status_default')
         if not app.config.get_per('rooms', self.room_jid,
                                   'print_status', status_default):
             self.roster.draw_contact(nick)
@@ -1449,7 +1449,7 @@ class GroupchatControl(ChatControlBase):
         #Group Chat: We have been removed from the room
         message = _('{nick} has been removed from the group chat{by}{reason}')
 
-        join_default = app.config.get('print_join_left_default')
+        join_default = app.settings.get('print_join_left_default')
         print_join_left = app.config.get_per(
             'rooms', self.room_jid, 'print_join_left', join_default)
 
@@ -1503,7 +1503,7 @@ class GroupchatControl(ChatControlBase):
     @event_filter(['account', 'room_jid'])
     def _on_user_joined(self, event):
         nick = event.properties.muc_nickname
-        join_default = app.config.get('print_join_left_default')
+        join_default = app.settings.get('print_join_left_default')
         print_join_left = app.config.get_per(
             'rooms', self.room_jid, 'print_join_left', join_default)
 
@@ -1710,7 +1710,7 @@ class GroupchatControl(ChatControlBase):
         if self.minimizable():
             return True
         # whether to ask for confirmation before closing muc
-        if app.config.get('confirm_close_muc') and self.is_connected:
+        if app.settings.get('confirm_close_muc') and self.is_connected:
             return False
         return True
 
@@ -1720,7 +1720,7 @@ class GroupchatControl(ChatControlBase):
             return
 
         # whether to ask for confirmation before closing muc
-        if app.config.get('confirm_close_muc') and self.is_connected:
+        if app.settings.get('confirm_close_muc') and self.is_connected:
             def on_ok(is_checked):
                 if is_checked:
                     # User does not want to be asked again
@@ -1813,7 +1813,7 @@ class GroupchatControl(ChatControlBase):
             else:
                 begin = ''
 
-            gc_refer_to_nick_char = app.config.get('gc_refer_to_nick_char')
+            gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
             with_refer_to_nick_char = False
             after_nick_len = 1 # the space that is printed after we type [Tab]
 
@@ -1857,7 +1857,7 @@ class GroupchatControl(ChatControlBase):
                     # gc_refer_to_nick_char may be more than one char!
                     start_iter.backward_chars(len(begin) + len(add))
                 elif (self.last_key_tabs and
-                      not app.config.get('shell_like_completion')):
+                      not app.settings.get('shell_like_completion')):
                     # have to accommodate for the added space from last
                     # completion
                     start_iter.backward_chars(len(begin) + \
@@ -1872,7 +1872,7 @@ class GroupchatControl(ChatControlBase):
                 # get a shell-like completion
                 # if there's more than one nick for this completion, complete
                 # only the part that all these nicks have in common
-                if app.config.get('shell_like_completion') and \
+                if app.settings.get('shell_like_completion') and \
                 len(self.nick_hits) > 1:
                     end = False
                     completion = ''
@@ -1984,7 +1984,7 @@ class GroupchatControl(ChatControlBase):
                 start = ' '
             add = ' '
         else:
-            gc_refer_to_nick_char = app.config.get('gc_refer_to_nick_char')
+            gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
             add = gc_refer_to_nick_char + ' '
         message_buffer.insert_at_cursor(start + nick + add)
 

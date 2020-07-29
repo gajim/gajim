@@ -193,7 +193,7 @@ class CommonConnection:
 
         idle_time = None
         if auto:
-            if app.is_installed('IDLE') and app.config.get('autoaway'):
+            if app.is_installed('IDLE') and app.settings.get('autoaway'):
                 idle_sec = idle.Monitor.get_idle_sec()
                 idle_time = time.strftime(
                     '%Y-%m-%dT%H:%M:%SZ',

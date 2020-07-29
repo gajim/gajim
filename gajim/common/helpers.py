@@ -436,7 +436,7 @@ def get_contact_dict_for_account(account):
     return contacts_dict
 
 def play_sound(event):
-    if not app.config.get('sounds_on'):
+    if not app.settings.get('sounds_on'):
         return
     path_to_soundfile = app.config.get_per('soundevents', event, 'path')
     play_sound_file(path_to_soundfile)
@@ -667,9 +667,9 @@ def allow_showing_notification(account,
     option that need to be True e.g.: notify_on_signing is_first_message: set it
     to false when it's not the first message
     """
-    if type_ and (not app.config.get(type_) or not is_first_message):
+    if type_ and (not app.settings.get(type_) or not is_first_message):
         return False
-    if app.config.get('autopopupaway'):
+    if app.settings.get('autopopupaway'):
         return True
     if app.connections[account].status in ('online', 'chat'):
         return True
@@ -679,15 +679,15 @@ def allow_popup_window(account):
     """
     Is it allowed to popup windows?
     """
-    autopopup = app.config.get('autopopup')
-    autopopupaway = app.config.get('autopopupaway')
+    autopopup = app.settings.get('autopopup')
+    autopopupaway = app.settings.get('autopopupaway')
     if autopopup and (autopopupaway or \
     app.connections[account].status in ('online', 'chat')):
         return True
     return False
 
 def allow_sound_notification(account, sound_event):
-    if (app.config.get('sounddnd') or
+    if (app.settings.get('sounddnd') or
             app.connections[account].status != 'dnd' and
             app.config.get_per('soundevents', sound_event, 'enabled')):
         return True
@@ -902,9 +902,9 @@ def get_sync_threshold(jid, archive_info):
     disco_info = app.logger.get_last_disco_info(jid)
     if archive_info is None or archive_info.sync_threshold is None:
         if disco_info is not None and disco_info.muc_is_members_only:
-            threshold = app.config.get('private_room_sync_threshold')
+            threshold = app.settings.get('private_room_sync_threshold')
         else:
-            threshold = app.config.get('public_room_sync_threshold')
+            threshold = app.settings.get('public_room_sync_threshold')
         app.logger.set_archive_infos(jid, sync_threshold=threshold)
         return threshold
     return archive_info.sync_threshold
@@ -983,7 +983,7 @@ class AdditionalDataDict(collections.UserDict):
 
 
 def save_roster_position(window):
-    if not app.config.get('save-roster-position'):
+    if not app.settings.get('save-roster-position'):
         return
     if app.is_display(Display.WAYLAND):
         return
@@ -1401,7 +1401,7 @@ def warn_about_plain_connection(account, connection_types):
 
 
 def get_idle_status_message(state, status_message):
-    message = app.config.get(f'auto{state}_message')
+    message = app.settings.get(f'auto{state}_message')
     if not message:
         message = status_message
     else:
@@ -1409,7 +1409,7 @@ def get_idle_status_message(state, status_message):
         message = message.replace('$T', '%(time)s')
         message = message % {
             'status': status_message,
-            'time': app.config.get(f'auto{state}time')
+            'time': app.settings.get(f'auto{state}time')
         }
     return message
 
@@ -1434,9 +1434,9 @@ def ask_for_status_message(status, signin=False):
         return True
 
     if signin:
-        return app.config.get('ask_online_status')
+        return app.settings.get('ask_online_status')
 
     if status == 'offline':
-        return app.config.get('ask_offline_status')
+        return app.settings.get('ask_offline_status')
 
-    return app.config.get('always_ask_for_status_message')
+    return app.settings.get('always_ask_for_status_message')

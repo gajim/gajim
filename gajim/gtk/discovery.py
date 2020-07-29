@@ -552,7 +552,7 @@ class ServiceDiscoveryWindow:
         if address_entry:
             self.address_comboboxtext = self._ui.address_comboboxtext
 
-            self.latest_addresses = app.config.get(
+            self.latest_addresses = app.settings.get(
                 'latest_disco_addresses').split()
             if jid in self.latest_addresses:
                 self.latest_addresses.remove(jid)

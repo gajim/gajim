@@ -79,10 +79,10 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
         else:
             self._ui.to_entry.set_text(to)
 
-        if (app.config.get('use_speller') and
+        if (app.settings.get('use_speller') and
                 app.is_installed('GSPELL') and
                 action == 'send'):
-            lang = app.config.get('speller_language')
+            lang = app.settings.get('speller_language')
             gspell_lang = Gspell.language_lookup(lang)
             if gspell_lang is None:
                 gspell_lang = Gspell.language_get_default()
@@ -125,11 +125,11 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
 
         # get window position and size from config
         resize_window(self,
-                      app.config.get('single-msg-width'),
-                      app.config.get('single-msg-height'))
+                      app.settings.get('single-msg-width'),
+                      app.settings.get('single-msg-height'))
         move_window(self,
-                    app.config.get('single-msg-x-position'),
-                    app.config.get('single-msg-y-position'))
+                    app.settings.get('single-msg-x-position'),
+                    app.settings.get('single-msg-y-position'))
 
         self.show_all()
 
