@@ -278,9 +278,6 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('ask_offline_status')
         self._ui.prompt_offline_status_message_checkbutton.set_active(st)
 
-        # Default status messages
-        self.fill_default_msg_treeview()
-
         # Status messages
         renderer = Gtk.CellRendererText()
         renderer.connect('edited', self.on_msg_cell_edited)
@@ -442,8 +439,6 @@ class Preferences(Gtk.ApplicationWindow):
                                 self.on_msg_treemodel_row_changed)
         self._ui.msg_treeview.get_model().connect('row-deleted',
                                 self.on_msg_treemodel_row_deleted)
-        self._ui.default_msg_treeview.get_model().connect('row-changed',
-                                self.on_default_msg_treemodel_row_changed)
 
         self.sounds_preferences = None
         self.theme_preferences = None
@@ -703,38 +698,6 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ask_offline_status')
-
-    def fill_default_msg_treeview(self):
-        model = self._ui.default_msg_treeview.get_model()
-        model.clear()
-        status = []
-        for status_ in app.config.get_per('defaultstatusmsg'):
-            status.append(status_)
-        status.sort()
-        for status_ in status:
-            msg = app.config.get_per('defaultstatusmsg', status_, 'message')
-            msg = helpers.from_one_line(msg)
-            enabled = app.config.get_per('defaultstatusmsg', status_, 'enabled')
-            iter_ = model.append()
-            uf_show = helpers.get_uf_show(status_)
-            model.set(iter_, 0, status_, 1, uf_show, 2, msg, 3, enabled)
-
-    def on_default_msg_cell_edited(self, cell, row, new_text):
-        model = self._ui.default_msg_treeview.get_model()
-        iter_ = model.get_iter_from_string(row)
-        model.set_value(iter_, 2, new_text)
-
-    def default_msg_toggled_cb(self, cell, path):
-        model = self._ui.default_msg_treeview.get_model()
-        model[path][3] = not model[path][3]
-
-    def on_default_msg_treemodel_row_changed(self, model, path, iter_):
-        status = model[iter_][0]
-        message = model[iter_][2]
-        message = helpers.to_one_line(message)
-        app.config.set_per('defaultstatusmsg', status, 'enabled',
-                model[iter_][3])
-        app.config.set_per('defaultstatusmsg', status, 'message', message)
 
     def save_status_messages(self, model):
         for msg in app.config.get_per('statusmsg'):

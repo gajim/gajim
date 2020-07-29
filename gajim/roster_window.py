@@ -2160,23 +2160,19 @@ class RosterWindow:
         self._status_selector.update()
 
     def get_status_message(self, show, on_response, show_pep=True,
-                    always_ask=False):
+                           always_ask=False):
         """
         Get the status message by:
 
-        1/ looking in default status message
-        2/ asking to user if needed depending on ask_on(ff)line_status and
-                always_ask
+        asking to user if needed depending on ask_on(ff)line_status and
+            always_ask
         show_pep can be False to hide pep things from status message or True
         """
-        empty_pep = {'activity': '', 'subactivity': '', 'activity_text': '',
-            'mood': '', 'mood_text': ''}
-        if show in app.config.get_per('defaultstatusmsg'):
-            if app.config.get_per('defaultstatusmsg', show, 'enabled'):
-                msg = app.config.get_per('defaultstatusmsg', show, 'message')
-                msg = helpers.from_one_line(msg)
-                on_response(msg, empty_pep)
-                return
+        empty_pep = {'activity': '',
+                     'subactivity': '',
+                     'activity_text': '',
+                     'mood': '',
+                     'mood_text': ''}
         if not always_ask and ((show == 'online' and not app.config.get(
         'ask_online_status')) or (show == 'offline' and not \
         app.config.get('ask_offline_status'))):
