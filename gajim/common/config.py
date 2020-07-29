@@ -33,6 +33,7 @@ from typing import List  # pylint: disable=unused-import
 from typing import Tuple  # pylint: disable=unused-import
 
 import re
+import copy
 from enum import IntEnum, unique
 
 from gi.repository import GLib
@@ -565,6 +566,12 @@ class Config:
         if subname not in obj:
             return None
         return obj[subname]
+
+    def get_all(self):
+        return copy.deepcopy(self.__options[1])
+
+    def get_all_per(self, optname):
+        return copy.deepcopy(self.__options_per_key[optname][1])
 
     def get_default_per(self, optname, subname):
         if optname not in self.__options_per_key:

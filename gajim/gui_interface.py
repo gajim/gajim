@@ -80,14 +80,13 @@ from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.client import Client
+from gajim.common.settings import Settings
 from gajim.common.const import Display
 
 from gajim.common.file_props import FilesProp
 
 from gajim import roster_window
 from gajim.common import ged
-from gajim.common import configpaths
-from gajim.common import optparser
 
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.notification import Notification
@@ -115,7 +114,6 @@ from gajim.gtk.util import get_color_for_account
 from gajim.gtk.const import ControlType
 
 
-parser = optparser.OptionsParser(str(configpaths.get('CONFIG_FILE')))
 log = logging.getLogger('gajim.interface')
 
 class Interface:
@@ -1754,12 +1752,7 @@ class Interface:
 
     @staticmethod
     def save_config():
-        if parser.write():
-            return
-
-        error_dialog = ErrorDialog(
-            _('Could not save your settings and preferences'))
-        error_dialog.run()
+        app.settings.save()
 
     def update_avatar(self, account=None, jid=None,
                       contact=None, room_avatar=False):
@@ -2016,7 +2009,7 @@ class Interface:
 
         self.avatar_storage = AvatarStorage()
 
-        parser.read()
+        Settings.init()
 
         # Load CSS files
         app.load_css_config()
@@ -2030,37 +2023,6 @@ class Interface:
             if app.config.get_per('accounts', account, 'is_zeroconf'):
                 app.ZEROCONF_ACC_NAME = account
                 break
-
-        # add default status messages if there is not in the config file
-        if not app.config.get_per('statusmsg'):
-            default = app.config.statusmsg_default
-            for msg in default:
-                app.config.add_per('statusmsg', msg)
-                app.config.set_per('statusmsg', msg, 'message',
-                    default[msg][0])
-                app.config.set_per('statusmsg', msg, 'activity',
-                    default[msg][1])
-                app.config.set_per('statusmsg', msg, 'subactivity',
-                    default[msg][2])
-                app.config.set_per('statusmsg', msg, 'activity_text',
-                    default[msg][3])
-                app.config.set_per('statusmsg', msg, 'mood',
-                    default[msg][4])
-                app.config.set_per('statusmsg', msg, 'mood_text',
-                    default[msg][5])
-
-        # Add Tor proxy if there is not in the config
-        if not app.config.get_per('proxies'):
-            default = app.config.proxies_default
-            for proxy in default:
-                app.config.add_per('proxies', proxy)
-                app.config.set_per('proxies', proxy, 'type',
-                    default[proxy][0])
-                app.config.set_per('proxies', proxy, 'host',
-                    default[proxy][1])
-                app.config.set_per('proxies', proxy, 'port',
-                    default[proxy][2])
-
 
         app.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts

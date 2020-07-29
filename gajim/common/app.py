@@ -52,10 +52,12 @@ from gajim.common.types import InterfaceT  # pylint: disable=unused-import
 from gajim.common.types import LoggerT  # pylint: disable=unused-import
 from gajim.common.types import ConnectionT  # pylint: disable=unused-import
 from gajim.common.types import LegacyContactsAPIT  # pylint: disable=unused-import
+from gajim.common.types import SettingsT  # pylint: disable=unused-import
 
 interface = cast(InterfaceT, None)
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
 config = c_config.Config()
+settings = cast(SettingsT, None)
 version = gajim.__version__
 connections = {}  # type: Dict[str, ConnectionT]
 avatar_cache = {}  # type: Dict[str, Dict[str, Any]]

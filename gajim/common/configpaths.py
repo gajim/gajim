@@ -194,6 +194,7 @@ class ConfigPaths:
             ('PLUGINS_DATA', 'plugins_data', PathLocation.DATA, PathType.FOLDER),
 
             # Config paths
+            ('SETTINGS', 'settings.sqlite', PathLocation.CONFIG, PathType.FILE),
             ('CONFIG_FILE', 'config', PathLocation.CONFIG, PathType.FILE),
             ('PLUGINS_CONFIG_DIR',
              'pluginsconfig', PathLocation.CONFIG, PathType.FOLDER),

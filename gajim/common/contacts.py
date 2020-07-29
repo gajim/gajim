@@ -24,15 +24,31 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from functools import partial
+
 try:
     from gajim.common import app
     from gajim.common.i18n import _
     from gajim.common.account import Account
     from gajim import common
     from gajim.common.const import Chatstate
+    from gajim.common.settings import Settings
 except ImportError as e:
     if __name__ != "__main__":
         raise ImportError(str(e))
+
+
+class ContactSettings:
+    def __init__(self, account, jid):
+        self.get = partial(Settings.get_contact_setting, account, jid)
+        self.set = partial(Settings.set_contact_setting, account, jid)
+
+
+class GroupChatSettings:
+    def __init__(self, account, jid):
+        self.get = partial(Settings.get_group_chat_setting, account, jid)
+        self.set = partial(Settings.set_group_chat_setting, account, jid)
+
 
 class XMPPEntity:
     """
@@ -165,6 +181,11 @@ class Contact(CommonContact):
         self._is_groupchat = groupchat
         self._is_pm_contact = is_pm_contact
 
+        if groupchat:
+            self.settings = GroupChatSettings(account.name, jid)
+        else:
+            self.settings = ContactSettings(account.name, jid)
+
         self.sub = sub
         self.ask = ask
 
@@ -268,6 +289,8 @@ class GC_Contact(CommonContact):
         self.role = role
         self.affiliation = affiliation
         self.avatar_sha = avatar_sha
+
+        self.settings = ContactSettings(account.name, jid)
 
     def get_full_jid(self):
         return self.room_jid + '/' + self.name
