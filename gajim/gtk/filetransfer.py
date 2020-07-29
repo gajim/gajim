@@ -379,7 +379,7 @@ class FileTransfersWindow:
     def _start_receive(self, file_path, account, contact, file_props):
         file_dir = os.path.dirname(file_path)
         if file_dir:
-            app.config.set('last_save_dir', file_dir)
+            app.settings.set('last_save_dir', file_dir)
         file_props.file_name = file_path
         file_props.type_ = 'r'
         self.add_transfer(account, contact, file_props)
@@ -389,7 +389,7 @@ class FileTransfersWindow:
     def on_file_request_accepted(self, account, contact, file_props):
         def _on_accepted(account, contact, file_props, file_path):
             if os.path.exists(file_path):
-                app.config.set('last_save_dir', os.path.dirname(file_path))
+                app.settings.set('last_save_dir', os.path.dirname(file_path))
 
                 # Check if we have write permissions
                 if not os.access(file_path, os.W_OK):
@@ -924,7 +924,7 @@ class FileTransfersWindow:
         self.set_status(file_props, 'stop')
 
     def _on_notify_ft_complete_toggled(self, widget, *args):
-        app.config.set('notify_on_file_complete', widget.get_active())
+        app.settings.set('notify_on_file_complete', widget.get_active())
 
     def _on_file_transfers_dialog_delete_event(self, widget, event):
         self.window.hide()
@@ -1075,7 +1075,7 @@ class SendFileDialog(Gtk.ApplicationWindow):
             last_dir = row.path.parent
             self._ui.listbox.add(row)
         self._ui.listbox.show_all()
-        app.config.set('last_send_dir', str(last_dir))
+        app.settings.set('last_send_dir', str(last_dir))
 
     def _get_description(self):
         buffer_ = self._ui.description.get_buffer()

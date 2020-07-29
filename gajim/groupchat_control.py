@@ -1724,13 +1724,13 @@ class GroupchatControl(ChatControlBase):
             def on_ok(is_checked):
                 if is_checked:
                     # User does not want to be asked again
-                    app.config.set('confirm_close_muc', False)
+                    app.settings.set('confirm_close_muc', False)
                 on_yes(self)
 
             def on_cancel(is_checked):
                 if is_checked:
                     # User does not want to be asked again
-                    app.config.set('confirm_close_muc', False)
+                    app.settings.set('confirm_close_muc', False)
                 on_no(self)
 
             NewConfirmationCheckDialog(

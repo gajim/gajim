@@ -140,11 +140,11 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
     def _save_position(self):
         # save the window size and position
         x_pos, y_pos = self.get_position()
-        app.config.set('single-msg-x-position', x_pos)
-        app.config.set('single-msg-y-position', y_pos)
+        app.settings.set('single-msg-x-position', x_pos)
+        app.settings.set('single-msg-y-position', y_pos)
         width, height = self.get_size()
-        app.config.set('single-msg-width', width)
-        app.config.set('single-msg-height', height)
+        app.settings.set('single-msg-width', width)
+        app.settings.set('single-msg-height', height)
 
     def _on_to_entry_changed(self, _widget):
         entry = self._ui.to_entry.get_text()

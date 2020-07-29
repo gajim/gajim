@@ -290,7 +290,7 @@ class StatusIcon:
 
     @staticmethod
     def _on_sounds_mute(widget):
-        app.config.set('sounds_on', not widget.get_active())
+        app.settings.set('sounds_on', not widget.get_active())
 
     @staticmethod
     def _on_show_roster(_widget):

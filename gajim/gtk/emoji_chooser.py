@@ -305,11 +305,11 @@ class EmojiChooser(Gtk.Popover):
         themes = helpers.get_available_emoticon_themes()
         if theme not in themes:
             if sys.platform not in ('win32', 'darwin'):
-                app.config.set('emoticons_theme', 'font')
+                app.settings.set('emoticons_theme', 'font')
                 theme = 'font'
             else:
                 # Win/Mac fallback to noto
-                app.config.set('emoticons_theme', 'noto')
+                app.settings.set('emoticons_theme', 'noto')
                 theme = 'noto'
         return theme
 

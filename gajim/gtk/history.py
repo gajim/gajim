@@ -809,7 +809,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
         x, y = self.get_window().get_root_origin()
         width, height = self.get_size()
 
-        app.config.set('history_window_x-position', x)
-        app.config.set('history_window_y-position', y)
-        app.config.set('history_window_width', width)
-        app.config.set('history_window_height', height)
+        app.settings.set('history_window_x-position', x)
+        app.settings.set('history_window_y-position', y)
+        app.settings.set('history_window_width', width)
+        app.settings.set('history_window_height', height)

@@ -758,7 +758,7 @@ class ServiceDiscoveryWindow:
         self.address_comboboxtext.get_model().clear()
         for j in self.latest_addresses:
             self.address_comboboxtext.append_text(j)
-        app.config.set('latest_disco_addresses',
+        app.settings.set('latest_disco_addresses',
                        ' '.join(self.latest_addresses))
         self.travel(jid, None)
 

@@ -304,7 +304,7 @@ class Themes(Gtk.ApplicationWindow):
 
     @staticmethod
     def _apply_theme(theme):
-        app.config.set('roster_theme', theme)
+        app.settings.set('roster_theme', theme)
         app.css_config.change_theme(theme)
         app.nec.push_incoming_event(NetworkEvent('theme-update'))
 

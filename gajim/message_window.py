@@ -348,7 +348,7 @@ class MessageWindow(EventHelper):
         if number_of_closed_control > 1:
             def _on_yes1(checked):
                 if checked:
-                    app.config.set('confirm_close_multiple_tabs', False)
+                    app.settings.set('confirm_close_multiple_tabs', False)
                 self.dont_warn_on_delete = True
                 for ctrl in self.controls():
                     if ctrl.minimizable():
@@ -1191,14 +1191,14 @@ class MessageWindowMgr(GObject.GObject):
         else:
             win_maximized = msg_win.window.get_window().get_state() == \
                     Gdk.WindowState.MAXIMIZED
-            app.config.set(max_win_key, win_maximized)
+            app.settings.set(max_win_key, win_maximized)
             width += width_adjust
-            app.config.set(size_width_key, width)
-            app.config.set(size_height_key, height)
+            app.settings.set(size_width_key, width)
+            app.settings.set(size_height_key, height)
 
             if self.mode != self.ONE_MSG_WINDOW_NEVER:
-                app.config.set(pos_x_key, x)
-                app.config.set(pos_y_key, y)
+                app.settings.set(pos_x_key, x)
+                app.settings.set(pos_y_key, y)
 
     def reconfig(self):
         for w in self.windows():
@@ -1220,7 +1220,7 @@ class MessageWindowMgr(GObject.GObject):
                 # Stash current size so it can be restored if the MessageWindow
                 # is not longer embedded
                 roster_width = w.parent_paned.get_position()
-                app.config.set('roster_width', roster_width)
+                app.settings.set('roster_width', roster_width)
 
             while w.notebook.get_n_pages():
                 page = w.notebook.get_nth_page(0)

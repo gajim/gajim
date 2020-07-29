@@ -797,12 +797,12 @@ class ChatControl(ChatControlBase):
     def on_mic_hscale_value_changed(self, _widget, value):
         self._get_audio_content().set_mic_volume(value / 100)
         # Save volume to config
-        app.config.set('audio_input_volume', value)
+        app.settings.set('audio_input_volume', value)
 
     def on_sound_hscale_value_changed(self, _widget, value):
         self._get_audio_content().set_out_volume(value / 100)
         # Save volume to config
-        app.config.set('audio_output_volume', value)
+        app.settings.set('audio_output_volume', value)
 
     def on_location_eventbox_button_release_event(self, _widget, _event):
         if 'geoloc' in self.contact.pep:

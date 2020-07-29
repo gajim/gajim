@@ -422,7 +422,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_checkbutton_toggled(self, widget, config_name,
                                change_sensitivity_widgets=None):
-        app.config.set(config_name, widget.get_active())
+        app.settings.set(config_name, widget.get_active())
         if change_sensitivity_widgets:
             for w in change_sensitivity_widgets:
                 w.set_sensitive(widget.get_active())
@@ -444,11 +444,11 @@ class Preferences(Gtk.ApplicationWindow):
 
     ### General tab ###
     def on_one_window_type_combo_changed(self, combobox):
-        app.config.set('one_message_window', combobox.get_active_id())
+        app.settings.set('one_message_window', combobox.get_active_id())
         app.interface.msg_win_mgr.reconfig()
 
     def on_show_roster_on_startup_changed(self, combobox):
-        app.config.set('show_roster_on_startup', combobox.get_active_id())
+        app.settings.set('show_roster_on_startup', combobox.get_active_id())
 
     def on_quit_on_roster_x_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'quit_on_roster_x_button')
@@ -456,13 +456,13 @@ class Preferences(Gtk.ApplicationWindow):
     def on_tab_placement_changed(self, widget):
         active = widget.get_active()
         if active == 0: # top
-            app.config.set('tabs_position', 'top')
+            app.settings.set('tabs_position', 'top')
         elif active == 1: # bottom
-            app.config.set('tabs_position', 'bottom')
+            app.settings.set('tabs_position', 'bottom')
         elif active == 2: # left
-            app.config.set('tabs_position', 'left')
+            app.settings.set('tabs_position', 'left')
         else: # right
-            app.config.set('tabs_position', 'right')
+            app.settings.set('tabs_position', 'right')
 
     def on_merge_accounts_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'mergeaccounts')
@@ -501,14 +501,14 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_speller_checkbutton_toggled(self, widget):
         active = widget.get_active()
-        app.config.set('use_speller', active)
+        app.settings.set('use_speller', active)
         if not active:
             return
         lang = app.settings.get('speller_language')
         gspell_lang = Gspell.language_lookup(lang)
         if gspell_lang is None:
             gspell_lang = Gspell.language_get_default()
-        app.config.set('speller_language', gspell_lang.get_code())
+        app.settings.set('speller_language', gspell_lang.get_code())
         self.apply_speller()
 
     def apply_speller(self):
@@ -530,7 +530,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     def _on_sync_threshold_changed(self, widget):
         active = widget.get_active_id()
-        app.config.set('public_room_sync_threshold', int(active))
+        app.settings.set('public_room_sync_threshold', int(active))
 
     def _on_join_leave_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'gc_print_join_left_default')
@@ -555,26 +555,26 @@ class Preferences(Gtk.ApplicationWindow):
     def on_systray_combobox_changed(self, widget):
         active = widget.get_active()
         if active == 0:
-            app.config.set('trayicon', 'never')
+            app.settings.set('trayicon', 'never')
             app.interface.hide_systray()
         elif active == 1:
-            app.config.set('trayicon', 'on_event')
+            app.settings.set('trayicon', 'on_event')
             app.interface.show_systray()
         else:
-            app.config.set('trayicon', 'always')
+            app.settings.set('trayicon', 'always')
             app.interface.show_systray()
 
     def on_event_received_combobox_changed(self, widget):
         active = widget.get_active()
         if active == 0:
-            app.config.set('autopopup', True)
-            app.config.set('notify_on_new_message', False)
+            app.settings.set('autopopup', True)
+            app.settings.set('notify_on_new_message', False)
         elif active == 1:
-            app.config.set('autopopup', False)
-            app.config.set('notify_on_new_message', True)
+            app.settings.set('autopopup', False)
+            app.settings.set('notify_on_new_message', True)
         else:
-            app.config.set('autopopup', False)
-            app.config.set('notify_on_new_message', False)
+            app.settings.set('autopopup', False)
+            app.settings.set('notify_on_new_message', False)
 
     def on_notify_on_signin_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'notify_on_signin')
@@ -609,12 +609,12 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_auto_away_time_spinbutton_value_changed(self, widget):
         aat = widget.get_value_as_int()
-        app.config.set('autoawaytime', aat)
+        app.settings.set('autoawaytime', aat)
         idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
                                   app.settings.get('autoxatime') * 60)
 
     def on_auto_away_message_entry_changed(self, widget):
-        app.config.set('autoaway_message', widget.get_text())
+        app.settings.set('autoaway_message', widget.get_text())
 
     def on_auto_xa_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'autoxa',
@@ -623,12 +623,12 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_auto_xa_time_spinbutton_value_changed(self, widget):
         axt = widget.get_value_as_int()
-        app.config.set('autoxatime', axt)
+        app.settings.set('autoxatime', axt)
         idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
                                   app.settings.get('autoxatime') * 60)
 
     def on_auto_xa_message_entry_changed(self, widget):
-        app.config.set('autoxa_message', widget.get_text())
+        app.settings.set('autoxa_message', widget.get_text())
 
     def on_sign_in_status_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ask_online_status')
@@ -643,7 +643,7 @@ class Preferences(Gtk.ApplicationWindow):
     @staticmethod
     def on_theme_combobox_changed(combobox):
         theme = combobox.get_active_id()
-        app.config.set('roster_theme', theme)
+        app.settings.set('roster_theme', theme)
         app.css_config.change_theme(theme)
         app.nec.push_incoming_event(NetworkEvent('theme-update'))
 
@@ -670,13 +670,13 @@ class Preferences(Gtk.ApplicationWindow):
         active = widget.get_active()
         model = widget.get_model()
         emot_theme = model[active][0]
-        app.config.set('emoticons_theme', emot_theme)
+        app.settings.set('emoticons_theme', emot_theme)
         from gajim.gtk.emoji_chooser import emoji_chooser
         emoji_chooser.load()
         self.toggle_emoticons()
 
     def on_convert_ascii_toggle(self, widget):
-        app.config.set('ascii_emoticons', widget.get_active())
+        app.settings.set('ascii_emoticons', widget.get_active())
         app.interface.make_regexps()
 
     def toggle_emoticons(self):
@@ -690,7 +690,7 @@ class Preferences(Gtk.ApplicationWindow):
         model = widget.get_model()
         active = widget.get_active()
         icon_string = model[active][1]
-        app.config.set('iconset', icon_string)
+        app.settings.set('iconset', icon_string)
         app.interface.roster.update_icons()
 
     def on_transports_iconsets_checkbutton_toggled(self, widget):
@@ -704,7 +704,7 @@ class Preferences(Gtk.ApplicationWindow):
         model = combobox.get_model()
         active = combobox.get_active()
         device = model[active][1]
-        app.config.set(config_name, device)
+        app.settings.set(config_name, device)
         return device
 
     def on_audio_input_combobox_changed(self, widget):
@@ -735,7 +735,7 @@ class Preferences(Gtk.ApplicationWindow):
             src.link(self.av_sink)
             self.av_src = src
             self.av_pipeline.set_state(Gst.State.PLAYING)
-        app.config.set('video_input_device', device)
+        app.settings.set('video_input_device', device)
 
     def _on_live_preview_toggled(self, widget):
         if widget.get_active():
@@ -824,7 +824,7 @@ class Preferences(Gtk.ApplicationWindow):
             self._ui.stun_server_entry])
 
     def stun_server_entry_changed(self, widget):
-        app.config.set('stun_server', widget.get_text())
+        app.settings.set('stun_server', widget.get_text())
 
     ### Advanced tab ###
     # Proxies
@@ -835,7 +835,7 @@ class Preferences(Gtk.ApplicationWindow):
         proxy = widget.get_model()[active][0]
         if proxy == _('No Proxy'):
             proxy = ''
-        app.config.set('global_proxy', proxy)
+        app.settings.set('global_proxy', proxy)
 
     def on_manage_proxies_button_clicked(self, _widget):
         app.app.activate_action('manage-proxies')
@@ -879,7 +879,7 @@ class Preferences(Gtk.ApplicationWindow):
             'start_chat',
         ]
         for hint in helping_hints:
-            app.config.set('show_help_%s' % hint, True)
+            app.settings.set('show_help_%s' % hint, True)
 
     def on_open_advanced_editor_button_clicked(self, _widget):
         open_window('AdvancedConfig')

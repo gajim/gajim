@@ -127,7 +127,7 @@ class CSSConfig():
         if value is None:
             value = app.settings.get('dark_theme')
         else:
-            app.config.set('dark_theme', value)
+            app.settings.set('dark_theme', value)
 
         if settings is None:
             return
@@ -204,7 +204,7 @@ class CSSConfig():
         theme_path = self.get_theme_path(theme)
         if not theme or not theme_path.exists():
             log.warning('Theme %s not found, fallback to default', theme)
-            app.config.set('roster_theme', 'default')
+            app.settings.set('roster_theme', 'default')
             log.info('Use Theme: default')
             return self.get_theme_path('default', user=False)
         log.info('Use Theme: %s', theme)
@@ -467,7 +467,7 @@ class CSSConfig():
             return False
         self._load_selected(theme_path)
         self._activate_theme()
-        app.config.set('roster_theme', theme)
+        app.settings.set('roster_theme', theme)
         log.info('Change Theme: Successful switched to %s', theme)
         return True
 

@@ -124,7 +124,7 @@ def on_single_message(_action, param):
 def on_merge_accounts(action, param):
     action.set_state(param)
     value = param.get_boolean()
-    app.config.set('mergeaccounts', value)
+    app.settings.set('mergeaccounts', value)
     # Do not merge accounts if only one active
     if len(app.connections) >= 2:
         app.interface.roster.regroup = value

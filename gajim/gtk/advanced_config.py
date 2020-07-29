@@ -221,7 +221,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                 app.config.set_per(optname, key, option, newval)
             else:
                 self._remember_option(option, modelrow[1], newval)
-                app.config.set(option, newval)
+                app.settings.set(option, newval)
             modelrow[1] = self.right_true_dict[newval]
             self._check_for_restart()
 
@@ -262,7 +262,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
             app.config.set_per(optname, key, option, text)
         else:
             self._remember_option(option, modelrow[1], text)
-            app.config.set(option, text)
+            app.settings.set(option, text)
         modelrow[1] = text
         self._check_for_restart()
 
@@ -298,7 +298,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                         option,
                         modelrow[Column.VALUE],
                         default)
-                    app.config.set(option, default)
+                    app.settings.set(option, default)
                 modelrow[Column.VALUE] = self.right_true_dict[default]
                 self._check_for_restart()
             else:

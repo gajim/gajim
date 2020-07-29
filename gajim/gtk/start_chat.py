@@ -264,7 +264,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _on_infobar_response(self, _widget, response):
         if response == Gtk.ResponseType.CLOSE:
             self._ui.infobar.set_revealed(False)
-            app.config.set('show_help_start_chat', False)
+            app.settings.set('show_help_start_chat', False)
 
     def _start_new_chat(self, row):
         if row.new:

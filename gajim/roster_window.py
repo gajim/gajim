@@ -2189,7 +2189,7 @@ class RosterWindow:
         else:
             def _on_ok(is_checked):
                 if is_checked:
-                    app.config.set('quit_on_roster_x_button', True)
+                    app.settings.set('quit_on_roster_x_button', True)
                 self.on_quit_request()
             NewConfirmationCheckDialog(
                 _('Quit Gajim'),
@@ -2212,19 +2212,19 @@ class RosterWindow:
         if self.window.get_window() is not None:
             save_roster_position(self.window)
             width, height = self.window.get_size()
-            app.config.set('roster_width', width)
-            app.config.set('roster_height', height)
+            app.settings.set('roster_width', width)
+            app.settings.set('roster_height', height)
             if not self.xml.get_object('roster_vbox2').get_property('visible'):
                 # The roster vbox is hidden, so the message window is larger
                 # then we want to save (i.e. the window will grow every startup)
                 # so adjust.
                 msgwin_width_adjust = -1 * width
-        app.config.set('last_roster_visible',
+        app.settings.set('last_roster_visible',
                 self.window.get_property('visible'))
         app.interface.msg_win_mgr.save_opened_controls()
         app.interface.msg_win_mgr.shutdown(msgwin_width_adjust)
 
-        app.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
+        app.settings.set('collapsed_rows', '\t'.join(self.collapsed_rows))
         app.interface.save_config()
         for account in app.connections:
             app.connections[account].quit(True)
@@ -2621,9 +2621,9 @@ class RosterWindow:
         def _block_it(is_checked=None, report=None):
             if is_checked is not None:  # Dialog has been shown
                 if is_checked:
-                    app.config.set('confirm_block', 'no')
+                    app.settings.set('confirm_block', 'no')
                 else:
-                    app.config.set('confirm_block', 'yes')
+                    app.settings.set('confirm_block', 'yes')
 
             accounts = []
             for _, account in list_:
@@ -3160,7 +3160,7 @@ class RosterWindow:
                                 GLib.Variant('s', account))
 
     def on_show_transports_action(self, action, param):
-        app.config.set('show_transports_group', param.get_boolean())
+        app.settings.set('show_transports_group', param.get_boolean())
         action.set_state(param)
         self.refilter_shown_roster_items()
 
@@ -3522,7 +3522,7 @@ class RosterWindow:
         When show offline option is changed: redraw the treeview
         """
         action.set_state(param)
-        app.config.set('showoffline', param.get_boolean())
+        app.settings.set('showoffline', param.get_boolean())
         self.refilter_shown_roster_items()
         self.window.lookup_action('show-active').set_enabled(
             not param.get_boolean())
@@ -3532,7 +3532,7 @@ class RosterWindow:
         When show only active contact option is changed: redraw the treeview
         """
         action.set_state(param)
-        app.config.set('show_only_chat_and_online', param.get_boolean())
+        app.settings.set('show_only_chat_and_online', param.get_boolean())
         self.refilter_shown_roster_items()
         self.window.lookup_action('show-offline').set_enabled(
             not param.get_boolean())
@@ -3618,8 +3618,8 @@ class RosterWindow:
         """
         if gparamspec and gparamspec.name == 'position':
             roster_width = pane.get_child1().get_allocation().width
-            app.config.set('roster_width', roster_width)
-            app.config.set('roster_hpaned_position', pane.get_position())
+            app.settings.set('roster_width', roster_width)
+            app.settings.set('roster_hpaned_position', pane.get_position())
 
 ################################################################################
 ### Drag and Drop handling
@@ -3668,9 +3668,9 @@ class RosterWindow:
             contacts = 0
             if is_checked is not None: # dialog has been shown
                 if is_checked: # user does not want to be asked again
-                    app.config.set('confirm_metacontacts', 'no')
+                    app.settings.set('confirm_metacontacts', 'no')
                 else:
-                    app.config.set('confirm_metacontacts', 'yes')
+                    app.settings.set('confirm_metacontacts', 'yes')
 
             # We might have dropped on a metacontact.
             # Remove it and add it again later with updated family info
@@ -5198,7 +5198,7 @@ class RosterWindow:
             if app.settings.get('trayicon') != 'always':
                 # Without trayicon, user should see the roster!
                 self.window.show_all()
-                app.config.set('last_roster_visible', True)
+                app.settings.set('last_roster_visible', True)
         else:
             if app.settings.get('last_roster_visible') or \
             app.settings.get('trayicon') != 'always':

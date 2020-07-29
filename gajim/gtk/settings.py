@@ -232,7 +232,7 @@ class GenericSetting(Gtk.ListBoxRow):
 
     def set_value(self, state):
         if self.type_ == SettingType.CONFIG:
-            app.config.set(self.value, state)
+            app.settings.set(self.value, state)
         if self.type_ == SettingType.ACCOUNT_CONFIG:
             if self.value == 'password':
                 passwords.save_password(self.account, state)

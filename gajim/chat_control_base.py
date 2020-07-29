@@ -754,7 +754,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def _paste_event_confirmed(self, is_checked, image):
         if is_checked:
-            app.config.set('confirm_paste_image', False)
+            app.settings.set('confirm_paste_image', False)
 
         dir_ = tempfile.gettempdir()
         path = os.path.join(dir_, '%s.png' % str(uuid.uuid4()))

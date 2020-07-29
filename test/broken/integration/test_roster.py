@@ -167,7 +167,7 @@ class TestRosterWindow(unittest.TestCase):
 class TestRosterWindowRegrouped(TestRosterWindow):
 
     def setUp(self):
-        app.config.set('mergeaccounts', True)
+        app.settings.set('mergeaccounts', True)
         TestRosterWindow.setUp(self)
 
     def test_toggle_regroup(self):

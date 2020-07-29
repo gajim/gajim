@@ -989,8 +989,8 @@ def save_roster_position(window):
         return
     x_pos, y_pos = window.get_position()
     log.debug('Save roster position: %s %s', x_pos, y_pos)
-    app.config.set('roster_x-position', x_pos)
-    app.config.set('roster_y-position', y_pos)
+    app.settings.set('roster_x-position', x_pos)
+    app.settings.set('roster_y-position', y_pos)
 
 
 class Singleton(type):

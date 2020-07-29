@@ -100,7 +100,7 @@ class ManageSounds:
 
         filename = button.get_filename()
         directory = os.path.dirname(filename)
-        app.config.set('last_sounds_dir', directory)
+        app.settings.set('last_sounds_dir', directory)
         path_to_snd_file = helpers.strip_soundfile_path(filename)
 
         # set new path to sounds_model

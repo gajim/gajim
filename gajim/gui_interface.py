@@ -1877,7 +1877,7 @@ class Interface:
         last_check = app.settings.get('last_update_check')
         if not last_check:
             def _on_cancel():
-                app.config.set('check_for_update', False)
+                app.settings.set('check_for_update', False)
 
             def _on_check():
                 self._get_latest_release()
@@ -1909,7 +1909,7 @@ class Interface:
 
     def _on_update_checked(self, _session, message):
         now = datetime.now()
-        app.config.set('last_update_check', now.strftime('%Y-%m-%d %H:%M'))
+        app.settings.set('last_update_check', now.strftime('%Y-%m-%d %H:%M'))
 
         body = message.props.response_body.data
         if not body:
@@ -1922,11 +1922,11 @@ class Interface:
         if V(latest_version) > V(app.version):
             def _on_cancel(is_checked):
                 if is_checked:
-                    app.config.set('check_for_update', False)
+                    app.settings.set('check_for_update', False)
 
             def _on_update(is_checked):
                 if is_checked:
-                    app.config.set('check_for_update', False)
+                    app.settings.set('check_for_update', False)
                 helpers.open_uri('https://gajim.org/download')
 
             NewConfirmationCheckDialog(
