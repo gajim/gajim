@@ -20,9 +20,9 @@ from gajim.common.helpers import get_uf_show
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import statuses_unified
 from gajim.common.i18n import _
-from gajim.dialogs import ChangeStatusMessageDialog
 
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import open_window
 
 
 class StatusSelector(Gtk.MenuButton):
@@ -101,7 +101,7 @@ class StatusSelector(Gtk.MenuButton):
 
     def _on_change_status(self, button):
         def _on_response(message, pep_dict):
-            if message is None:  # None if user pressed Cancel
+            if message is None:  # None if user canceled
                 return
             for account in app.contacts.get_accounts():
                 sync_account = app.config.get_per(
@@ -115,7 +115,7 @@ class StatusSelector(Gtk.MenuButton):
         new_show = button.get_name()
         if new_show == 'change_status_message':
             new_show = get_global_show()
-            ChangeStatusMessageDialog(_on_response, new_show)
+            open_window('StatusChange', callback=_on_response, show=new_show)
             return
 
         app.interface.roster.get_status_message(new_show, _on_response)

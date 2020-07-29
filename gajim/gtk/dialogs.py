@@ -518,6 +518,40 @@ class InputDialog(NewConfirmationDialog):
         super()._on_response(_dialog, response)
 
 
+class TimeoutWindow:
+    """
+    Class designed to be derivated by other windows
+    Derived windows close automatically after reaching the timeout
+    """
+    def __init__(self, timeout):
+        self.countdown_left = timeout
+        self.countdown_enabled = True
+        self.title_text = ''
+
+    def run_timeout(self):
+        if self.countdown_left > 0:
+            self.countdown()
+            GLib.timeout_add_seconds(1, self.countdown)
+
+    def on_timeout(self):
+        """
+        To be implemented by derivated classes
+        """
+
+    def countdown(self):
+        if self.countdown_enabled:
+            if self.countdown_left <= 0:
+                self.on_timeout()
+                return False
+            self.set_title('%s [%s]' % (
+                self.title_text, str(self.countdown_left)))
+            self.countdown_left -= 1
+            return True
+
+        self.set_title(self.title_text)
+        return False
+
+
 class ShortcutsWindow:
     def __init__(self):
         transient = app.app.get_active_window()
