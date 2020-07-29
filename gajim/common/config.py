@@ -91,7 +91,7 @@ class Config:
         'iconset': [opt_str, DEFAULT_ICONSET, '', True],
         'use_transports_iconsets': [opt_bool, True, '', True],
         'collapsed_rows': [opt_str, '', _('List of rows (accounts and groups) that are collapsed (space separated).'), True],
-        'roster_theme': [opt_str, _('default'), '', True],
+        'roster_theme': [opt_str, 'default', '', True],
         'mergeaccounts': [opt_bool, False, '', True],
         'sort_by_show_in_roster': [opt_bool, True, '', True],
         'sort_by_show_in_muc': [opt_bool, False, '', True],
