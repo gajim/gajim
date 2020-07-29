@@ -223,17 +223,6 @@ class PluginManager(metaclass=Singleton):
         self.update_plugins()
         self._load_plugins()
 
-    def _plugin_has_entry_in_global_config(self, plugin):
-        if app.config.get_per('plugins', plugin.short_name) is None:
-            return False
-        return True
-
-    def _create_plugin_entry_in_global_config(self, plugin):
-        app.config.add_per('plugins', plugin.short_name)
-
-    def _remove_plugin_entry_in_global_config(self, plugin):
-        app.config.del_per('plugins', plugin.short_name)
-
     def update_plugins(self, replace=True, activate=False, plugin_name=None):
         '''
         Move plugins from the downloaded folder to the user plugin folder
@@ -275,9 +264,17 @@ class PluginManager(metaclass=Singleton):
                 self.add_plugin(plugin, activate=True)
         return updated_plugins
 
-
     def init_plugins(self):
-        self._activate_all_plugins_from_global_config()
+        for plugin in self.plugins:
+            if not app.settings.get_plugin_setting(plugin.short_name, 'active'):
+                continue
+            if not plugin.activatable:
+                continue
+
+            try:
+                self.activate_plugin(plugin)
+            except GajimPluginActivateException:
+                pass
 
     def add_plugin(self, plugin, activate=False):
         plugin_class = plugin.load_module()
@@ -295,10 +292,10 @@ class PluginManager(metaclass=Singleton):
             log.exception('Error while loading a plugin')
             return None
 
-        if not self._plugin_has_entry_in_global_config(plugin):
-            self._create_plugin_entry_in_global_config(plugin)
-            if plugin.shipped:
-                self._set_plugin_active_in_global_config(plugin)
+        if plugin.short_name not in app.settings.get_plugins():
+            app.settings.set_plugin_setting(plugin.short_name,
+                                            'active',
+                                            plugin.shipped)
 
         self.plugins.append(plugin_obj)
         plugin_obj.active = False
@@ -558,7 +555,7 @@ class PluginManager(metaclass=Singleton):
             except GajimPluginException as e:
                 self.deactivate_plugin(plugin)
                 raise GajimPluginActivateException(str(e))
-            self._set_plugin_active_in_global_config(plugin)
+            app.settings.set_plugin_setting(plugin.short_name, 'active', True)
             plugin.active = True
 
     def deactivate_plugin(self, plugin):
@@ -593,7 +590,7 @@ class PluginManager(metaclass=Singleton):
         # removing plug-in from active plug-ins list
         plugin.deactivate()
         self.active_plugins.remove(plugin)
-        self._set_plugin_active_in_global_config(plugin, False)
+        app.settings.set_plugin_setting(plugin.short_name, 'active', False)
         plugin.active = False
 
     def _add_gui_extension_points_handlers_from_plugin(self, plugin):
@@ -620,15 +617,6 @@ class PluginManager(metaclass=Singleton):
                             log.warning('Error executing %s',
                                         handler, exc_info=True)
 
-    def _activate_all_plugins_from_global_config(self):
-        for plugin in self.plugins:
-            if self._plugin_is_active_in_global_config(plugin) and \
-            plugin.activatable:
-                try:
-                    self.activate_plugin(plugin)
-                except GajimPluginActivateException:
-                    pass
-
     def register_modules_for_account(self, con):
         '''
         A new account has been added, register modules
@@ -649,12 +637,6 @@ class PluginManager(metaclass=Singleton):
 
                 for handler in instance.handlers:
                     con.connection.register_handler(handler)
-
-    def _plugin_is_active_in_global_config(self, plugin):
-        return app.config.get_per('plugins', plugin.short_name, 'active')
-
-    def _set_plugin_active_in_global_config(self, plugin, active=True):
-        app.config.set_per('plugins', plugin.short_name, 'active', active)
 
     @staticmethod
     def _load_plugin(plugin_path):
@@ -763,8 +745,8 @@ class PluginManager(metaclass=Singleton):
             path = Path(configpaths.get('PLUGINS_BASE')) / plugin.short_name
             if path.exists():
                 self.delete_plugin_files(str(path))
-        if self._plugin_has_entry_in_global_config(plugin):
-            self._remove_plugin_entry_in_global_config(plugin)
+
+        app.settings.remove_plugin(plugin.short_name)
 
         app.nec.push_incoming_event(
             NetworkEvent('plugin-removed', plugin=plugin))
