@@ -1556,3 +1556,17 @@ def get_idle_status_message(state, status_message):
             'time': app.config.get(f'auto{state}time')
         }
     return message
+
+
+def should_log(account, jid):
+    """
+    Should conversations between a local account and a remote jid be logged?
+    """
+    no_log_for = app.config.get_per('accounts', account, 'no_log_for')
+
+    if not no_log_for:
+        no_log_for = ''
+
+    no_log_for = no_log_for.split()
+
+    return (account not in no_log_for) and (jid not in no_log_for)

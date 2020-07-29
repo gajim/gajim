@@ -628,19 +628,6 @@ class Config:
             return obj[subname][Option.RESTART]
         return False
 
-    def should_log(self, account, jid):
-        """
-        Should conversations between a local account and a remote jid be logged?
-        """
-        no_log_for = self.get_per('accounts', account, 'no_log_for')
-
-        if not no_log_for:
-            no_log_for = ''
-
-        no_log_for = no_log_for.split()
-
-        return (account not in no_log_for) and (jid not in no_log_for)
-
     def notify_for_muc(self, room):
         all_ = self.get('notify_on_all_muc_messages')
         room = self.get_per('rooms', room, 'notify_on_all_messages')

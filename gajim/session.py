@@ -66,8 +66,7 @@ class ChatControlSession:
         )
 
     def is_loggable(self):
-        return app.config.should_log(self.conn.name,
-                                     self.jid.getStripped())
+        return helpers.should_log(self.conn.name, self.jid.getStripped())
 
     def get_to(self):
         bare_jid = self.jid.getBare()
