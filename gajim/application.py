@@ -54,6 +54,7 @@ from gajim.common import logging_helpers
 from gajim.common import exceptions
 from gajim.common import logger
 from gajim.common.i18n import _
+from gajim.common.settings import Settings
 from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.task_manager import TaskManager
 
@@ -447,7 +448,7 @@ class GajimApplication(Gtk.Application):
             act.connect('activate', func)
             self.add_action(act)
 
-        accounts_list = sorted(app.config.get_per('accounts'))
+        accounts_list = sorted(Settings.get_accounts())
         if not accounts_list:
             return
         if len(accounts_list) > 1:

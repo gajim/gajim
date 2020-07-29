@@ -26,6 +26,7 @@ import css_parser
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.settings import Settings
 from gajim.common.const import StyleAttr, CSSPriority
 
 from gajim.gtk.const import Theme
@@ -534,7 +535,7 @@ class CSSConfig():
 
     def refresh(self):
         css = ''
-        accounts = app.config.get_per('accounts')
+        accounts = Settings.get_accounts()
         for index, account in enumerate(accounts):
             color = app.config.get_per('accounts', account, 'account_color')
             css_class = 'gajim_class_%s' % index

@@ -57,6 +57,7 @@ from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.const import PEPEventType, AvatarSize, StyleAttr
 from gajim.common.dbus import location
+from gajim.common.settings import Settings
 
 from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
@@ -5206,9 +5207,11 @@ class RosterWindow:
 
         self.scale_factor = self.window.get_scale_factor()
 
-        if not app.config.get_per('accounts') or \
-        app.config.get_per('accounts') == ['Local'] and not \
-        app.config.get_per('accounts', 'Local', 'active'):
+        accounts = Settings.get_accounts()
+
+        if (not accounts or
+                accounts == ['Local'] and
+                not app.config.get_per('accounts', 'Local', 'active')):
         # if we have no account configured or only Local account but not enabled
             def _open_wizard():
                 open_window('AccountWizard')

@@ -1690,8 +1690,8 @@ class Interface:
             return
 
         for account in app.connections:
-            if not app.config.get_per('accounts', account,
-                                      'sync_with_global_status'):
+            if not app.settings.get_account_setting(account,
+                                                    'sync_with_global_status'):
                 continue
 
             message = app.get_client(account).status_message
@@ -2019,7 +2019,7 @@ class Interface:
         if app.settings.get('verbose'):
             logging_helpers.set_verbose()
 
-        for account in app.config.get_per('accounts'):
+        for account in Settings.get_accounts():
             if app.config.get_per('accounts', account, 'is_zeroconf'):
                 app.ZEROCONF_ACC_NAME = account
                 break
@@ -2047,7 +2047,7 @@ class Interface:
         #     app.connections[app.ZEROCONF_ACC_NAME] = \
         #         connection_zeroconf.ConnectionZeroconf(app.ZEROCONF_ACC_NAME)
 
-        for account in app.config.get_per('accounts'):
+        for account in Settings.get_accounts():
             if not app.config.get_per('accounts', account, 'is_zeroconf') and\
             app.config.get_per('accounts', account, 'active'):
                 app.connections[account] = Client(account)

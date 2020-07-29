@@ -36,6 +36,7 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import get_proxy
+from gajim.common.settings import Settings
 from gajim.common.i18n import _
 from gajim.common.const import SASL_ERRORS
 from gajim.common.const import GIO_TLS_ERRORS
@@ -420,7 +421,7 @@ class AccountWizard(Assistant):
     @staticmethod
     def _generate_account_name(domain):
         i = 1
-        while domain in app.config.get_per('accounts'):
+        while domain in Settings.get_accounts():
             domain = domain + str(i)
             i += 1
         return domain

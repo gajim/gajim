@@ -156,8 +156,8 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             moods = []
             for account in app.connections:
                 client = app.get_client(account)
-                if not app.config.get_per('accounts', client.account,
-                                          'sync_with_global_status'):
+                if not app.settings.get_account_setting(
+                        client.account, 'sync_with_global_status'):
                     continue
 
                 status_messages.append(client.status_message)
@@ -513,8 +513,8 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
 
         if self.account is None:
             for client in app.get_available_clients():
-                if not app.config.get_per('accounts', client.account,
-                                          'sync_with_global_status'):
+                if not app.settings.get_account_setting(
+                        client.account, 'sync_with_global_status'):
                     continue
                 client.set_user_mood(mood)
 
@@ -530,8 +530,8 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
 
         if self.account is None:
             for client in app.get_available_clients():
-                if not app.config.get_per('accounts', client.account,
-                                          'sync_with_global_status'):
+                if not app.settings.get_account_setting(
+                        client.account, 'sync_with_global_status'):
                     continue
                 client.set_user_activity(activity)
 
@@ -547,8 +547,8 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             return
 
         for account in app.connections:
-            if not app.config.get_per('accounts', account,
-                                      'sync_with_global_status'):
+            if not app.settings.get_account_setting(
+                    account, 'sync_with_global_status'):
                 continue
 
             app.interface.roster.send_status(account, self._status, message)
