@@ -962,7 +962,7 @@ class GroupchatControl(ChatControlBase):
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']
-        if app.config.notify_for_muc(self.room_jid):
+        if helpers.notify_for_muc(self.room_jid):
             type_events.append('printed_gc_msg')
         nb = len(app.events.get_events(self.account,
                                        self.room_jid,
@@ -984,7 +984,7 @@ class GroupchatControl(ChatControlBase):
         """
         highlight, sound = None, None
 
-        notify = app.config.notify_for_muc(self.room_jid)
+        notify = helpers.notify_for_muc(self.room_jid)
         message_sound_enabled = app.config.get_per('soundevents',
                                                    'muc_message_received',
                                                    'enabled')

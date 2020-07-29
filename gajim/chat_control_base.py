@@ -1138,7 +1138,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         if kind == 'incoming':
             if (not self._type.is_groupchat or
-                    app.config.notify_for_muc(jid) or
+                    helpers.notify_for_muc(jid) or
                     'marked' in other_tags_for_text):
                 # it's a normal message, or a muc message with want to be
                 # notified about if quitting just after

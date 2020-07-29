@@ -628,11 +628,6 @@ class Config:
             return obj[subname][Option.RESTART]
         return False
 
-    def notify_for_muc(self, room):
-        all_ = self.get('notify_on_all_muc_messages')
-        room = self.get_per('rooms', room, 'notify_on_all_messages')
-        return all_ or room
-
     def get_options(self, optname, return_type=str):
         options = self.get(optname).split(',')
         options = [return_type(option.strip()) for option in options]
