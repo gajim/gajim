@@ -627,11 +627,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         spell_checker.connect('notify::language', self.on_language_changed)
 
     def get_speller_language(self):
-        per_type = 'contacts'
-        if self._type.is_groupchat:
-            per_type = 'rooms'
-        lang = app.config.get_per(
-            per_type, self.contact.jid, 'speller_language')
+        lang = self.contact.settings.get('speller_language')
         if not lang:
             # use the default one
             lang = app.settings.get('speller_language')
@@ -644,13 +640,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def on_language_changed(self, checker, _param):
         gspell_lang = checker.get_language()
-        per_type = 'contacts'
-        if self._type.is_groupchat:
-            per_type = 'rooms'
-        if not app.config.get_per(per_type, self.contact.jid):
-            app.config.add_per(per_type, self.contact.jid)
-        app.config.set_per(per_type, self.contact.jid,
-                           'speller_language', gspell_lang.get_code())
+        self.contact.settings.set('speller_language', gspell_lang.get_code())
 
     def _on_html_textview_grab_focus(self, textview):
         # Abort signal so the textview does not get focused

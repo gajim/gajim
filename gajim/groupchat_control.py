@@ -291,8 +291,7 @@ class GroupchatControl(ChatControlBase):
             act.connect("activate", func)
             self.parent_win.window.add_action(act)
 
-        minimize = app.config.get_per(
-            'rooms', self.contact.jid, 'minimize_on_close', True)
+        minimize = self.contact.settings.get('minimize_on_close')
 
         act = Gio.SimpleAction.new_stateful(
             'minimize-on-close-' + self.control_id, None,
@@ -300,8 +299,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_minimize_on_close)
         self.parent_win.window.add_action(act)
 
-        minimize = app.config.get_per(
-            'rooms', self.contact.jid, 'minimize_on_autojoin', True)
+        minimize = self.contact.settings.get('minimize_on_autojoin')
 
         act = Gio.SimpleAction.new_stateful(
             'minimize-on-autojoin-' + self.control_id, None,
@@ -309,9 +307,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_minimize_on_autojoin)
         self.parent_win.window.add_action(act)
 
-        default_muc_chatstate = app.settings.get('send_chatstate_muc_default')
-        chatstate = app.config.get_per(
-            'rooms', self.contact.jid, 'send_chatstate', default_muc_chatstate)
+        chatstate = self.contact.settings.get('send_chatstate')
 
         act = Gio.SimpleAction.new_stateful(
             'send-chatstate-' + self.control_id,
@@ -320,13 +316,12 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_send_chatstate)
         self.parent_win.window.add_action(act)
 
-        # Enable notify on all for private rooms
-        members_only = False
-        if self.disco_info is not None:
-            members_only = self.disco_info.muc_is_members_only
+        context = 'public'
+        if self.disco_info is not None and self.disco_info.muc_is_members_only:
+            context = 'private'
 
-        value = app.config.get_per(
-            'rooms', self.contact.jid, 'notify_on_all_messages', members_only)
+        value = self.contact.settings.get('notify_on_all_messages',
+                                          context=context)
 
         act = Gio.SimpleAction.new_stateful(
             'notify-on-message-' + self.control_id,
@@ -334,9 +329,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_notify_on_all_messages)
         self.parent_win.window.add_action(act)
 
-        status_default = app.settings.get('print_status_muc_default')
-        value = app.config.get_per('rooms', self.contact.jid,
-                                   'print_status', status_default)
+        value = self.contact.settings.get('print_status')
 
         act = Gio.SimpleAction.new_stateful(
             'print-status-' + self.control_id,
@@ -344,9 +337,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_print_status)
         self.parent_win.window.add_action(act)
 
-        join_default = app.settings.get('print_join_left_default')
-        value = app.config.get_per('rooms', self.contact.jid,
-                                   'print_join_left', join_default)
+        value = self.contact.settings.get('print_join_left')
 
         act = Gio.SimpleAction.new_stateful(
             'print-join-left-' + self.control_id,
@@ -423,16 +414,12 @@ class GroupchatControl(ChatControlBase):
             contact.affiliation.is_owner)
 
         # Print join/left
-        join_default = app.settings.get('print_join_left_default')
-        value = app.config.get_per('rooms', self.contact.jid,
-                                   'print_join_left', join_default)
+        value = self.contact.settings.get('print_join_left')
         self._get_action('print-join-left-').set_state(
             GLib.Variant.new_boolean(value))
 
         # Print join/left
-        status_default = app.settings.get('print_status_muc_default')
-        value = app.config.get_per('rooms', self.contact.jid,
-                                   'print_status', status_default)
+        value = self.contact.settings.get('print_status')
         self._get_action('print-status-').set_state(
             GLib.Variant.new_boolean(value))
 
@@ -600,13 +587,11 @@ class GroupchatControl(ChatControlBase):
 
     def _on_print_join_left(self, action, param):
         action.set_state(param)
-        app.config.set_per('rooms', self.contact.jid,
-                           'print_join_left', param.get_boolean())
+        self.contact.settings.set('print_join_left', param.get_boolean())
 
     def _on_print_status(self, action, param):
         action.set_state(param)
-        app.config.set_per('rooms', self.contact.jid,
-                           'print_status', param.get_boolean())
+        self.contact.settings.set('print_status', param.get_boolean())
 
     def _on_request_voice(self, _action, _param):
         """
@@ -617,23 +602,19 @@ class GroupchatControl(ChatControlBase):
 
     def _on_minimize_on_close(self, action, param):
         action.set_state(param)
-        app.config.set_per('rooms', self.contact.jid,
-                           'minimize_on_close', param.get_boolean())
+        self.contact.settings.set('minimize_on_close', param.get_boolean())
 
     def _on_minimize_on_autojoin(self, action, param):
         action.set_state(param)
-        app.config.set_per('rooms', self.contact.jid,
-                           'minimize_on_autojoin', param.get_boolean())
+        self.contact.settings.set('minimize_on_autojoin', param.get_boolean())
 
     def _on_send_chatstate(self, action, param):
         action.set_state(param)
-        app.config.set_per('rooms', self.contact.jid,
-                           'send_chatstate', param.get_string())
+        self.contact.settings.set('send_chatstate', param.get_string())
 
     def _on_notify_on_all_messages(self, action, param):
         action.set_state(param)
-        app.config.set_per('rooms', self.contact.jid,
-                           'notify_on_all_messages', param.get_boolean())
+        self.contact.settings.set('notify_on_all_messages', param.get_boolean())
 
     def _on_sync_threshold(self, action, param):
         threshold = param.get_string()
@@ -1299,9 +1280,7 @@ class GroupchatControl(ChatControlBase):
         status = '' if status is None else ' - %s' % status
         show = helpers.get_uf_show(event.properties.show.value)
 
-        status_default = app.settings.get('gc_print_status_default')
-        if not app.config.get_per('rooms', self.room_jid,
-                                  'print_status', status_default):
+        if not self.contact.settings.get('print_status'):
             self.roster.draw_contact(nick)
             return
 
@@ -1448,9 +1427,7 @@ class GroupchatControl(ChatControlBase):
         #Group Chat: We have been removed from the room
         message = _('{nick} has been removed from the group chat{by}{reason}')
 
-        join_default = app.settings.get('print_join_left_default')
-        print_join_left = app.config.get_per(
-            'rooms', self.room_jid, 'print_join_left', join_default)
+        print_join_left = self.contact.settings.get('print_join_left')
 
         if StatusCode.REMOVED_ERROR in status_codes:
             # Handle 333 before 307, some MUCs add both
@@ -1502,13 +1479,9 @@ class GroupchatControl(ChatControlBase):
     @event_filter(['account', 'room_jid'])
     def _on_user_joined(self, event):
         nick = event.properties.muc_nickname
-        join_default = app.settings.get('print_join_left_default')
-        print_join_left = app.config.get_per(
-            'rooms', self.room_jid, 'print_join_left', join_default)
-
         self.roster.add_contact(nick)
 
-        if self.is_connected and print_join_left:
+        if self.is_connected and self.contact.settings.get('print_join_left'):
             self.add_info_message(_('%s has joined the group chat') % nick)
 
     @event_filter(['account', 'room_jid'])
@@ -1627,8 +1600,7 @@ class GroupchatControl(ChatControlBase):
     def minimizable(self):
         if self.force_non_minimizable:
             return False
-        return app.config.get_per('rooms', self.contact.jid,
-                                  'minimize_on_close', True)
+        return self.contact.settings.get('minimize_on_close')
 
     def minimize(self):
         # Minimize it

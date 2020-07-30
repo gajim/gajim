@@ -127,9 +127,9 @@ class PrivateChatControl(ChatControl):
         status = '' if status is None else ' - %s' % status
         show = helpers.get_uf_show(event.properties.show.value)
 
-        status_default = app.settings.get('gc_print_status_default')
-        if not app.config.get_per('rooms', self.gc_contact.room_jid,
-                                  'print_status', status_default):
+        if not app.settings.get_group_chat_setting(self.account,
+                                                   self.gc_contact.room_jid,
+                                                   'print_status'):
             self.parent_win.redraw_tab(self)
             self.update_ui()
             return

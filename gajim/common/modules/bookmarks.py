@@ -288,8 +288,10 @@ class Bookmarks(BaseModule):
                 if bookmark.jid not in app.gc_connected[self._account]:
                     # we are not already connected
                     self._log.info('Autojoin Bookmark: %s', bookmark.jid)
-                    minimize = app.config.get_per('rooms', bookmark.jid,
-                                                  'minimize_on_autojoin', True)
+                    minimize = app.settings.get_group_chat_setting(
+                        self._account,
+                        bookmark.jid,
+                        'minimize_on_autojoin')
                     app.interface.join_groupchat(self._account,
                                                  str(bookmark.jid),
                                                  minimized=minimize)
