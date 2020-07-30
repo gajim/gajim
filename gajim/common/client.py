@@ -28,7 +28,6 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import modules
 from gajim.common.const import ClientState
-from gajim.common.helpers import get_encryption_method
 from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
@@ -479,20 +478,24 @@ class Client(ConnectionHandlers):
         stanza = self.get_module('Message').build_message_stanza(message)
         message.stanza = stanza
 
-        method = get_encryption_method(message.account, message.jid)
-        if method is not None:
-            # TODO: Make extension point return encrypted message
-
-            extension = 'encrypt'
-            if message.is_groupchat:
-                extension = 'gc_encrypt'
-            app.plugin_manager.extension_point(extension + method,
-                                               self,
-                                               message,
-                                               self._send_message)
+        if message.contact is None:
+            # Only Single Message should have no contact
+            self._send_message(message)
             return
 
-        self._send_message(message)
+        method = message.contact.settings.get('encryption')
+        if not method:
+            self._send_message(message)
+            return
+
+        # TODO: Make extension point return encrypted message
+        extension = 'encrypt'
+        if message.is_groupchat:
+            extension = 'gc_encrypt'
+        app.plugin_manager.extension_point(extension + method,
+                                           self,
+                                           message,
+                                           self._send_message)
 
     def _send_message(self, message):
         message.set_sent_timestamp()

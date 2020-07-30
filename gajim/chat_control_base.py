@@ -583,15 +583,12 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             'encryption_dialog' + self.encryption, self)
 
     def set_encryption_state(self, encryption):
-        config_key = '%s-%s' % (self.account, self.contact.jid)
         self.encryption = encryption
         self.conv_textview.encryption_enabled = encryption is not None
-        app.config.set_per('encryption', config_key,
-                           'encryption', self.encryption or '')
+        self.contact.settings.set('encryption', self.encryption or '')
 
     def get_encryption_state(self):
-        config_key = '%s-%s' % (self.account, self.contact.jid)
-        state = app.config.get_per('encryption', config_key, 'encryption')
+        state = self.contact.settings.get('encryption')
         if not state:
             return None
         if state not in app.plugin_manager.encryption_plugins:
