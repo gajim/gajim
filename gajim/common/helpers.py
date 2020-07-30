@@ -1434,9 +1434,3 @@ def should_log(account, jid):
     no_log_for = no_log_for.split()
 
     return (account not in no_log_for) and (jid not in no_log_for)
-
-
-def notify_for_muc(room):
-    all_ = app.config.get('notify_on_all_muc_messages')
-    room = app.config.get_per('rooms', room, 'notify_on_all_messages')
-    return all_ or room

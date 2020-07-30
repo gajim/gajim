@@ -2368,7 +2368,9 @@ class RosterWindow:
             unread = app.events.get_nb_events()
 
             for event in app.events.get_all_events(['printed_gc_msg']):
-                if not helpers.notify_for_muc(event.jid):
+                contact = app.contacts.get_groupchat_contact(event.account,
+                                                             event.jid)
+                if contact is None or not contact.can_notify():
                     unread -= 1
 
             # check if we have recent messages

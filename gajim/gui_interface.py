@@ -1058,7 +1058,7 @@ class Interface:
             'file-completed': 'ft_finished'}
         event_type = event_types.get(event.type_)
         show_in_roster = get_show_in_roster(event_type, jid)
-        show_in_systray = get_show_in_systray(event_type, jid)
+        show_in_systray = get_show_in_systray(event_type, account, jid)
         event.show_in_roster = show_in_roster
         event.show_in_systray = show_in_systray
         app.events.add_event(account, jid, event)
