@@ -305,8 +305,9 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.control_focused = self.control.has_focus()
 
         if app.config.get('notify_on_new_message'):
-            notify_for_muc = (helpers.notify_for_muc(self.jid) or
-                              sound == 'highlight')
+            contact = app.contacts.get_groupchat_contact(self.account,
+                                                         self.jid)
+            notify_for_muc = sound == 'highlight' or contact.can_notify()
             if not notify_for_muc:
                 self.do_popup = False
 

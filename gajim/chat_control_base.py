@@ -1138,7 +1138,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         if kind == 'incoming':
             if (not self._type.is_groupchat or
-                    helpers.notify_for_muc(jid) or
+                    self.contact.can_notify() or
                     'marked' in other_tags_for_text):
                 # it's a normal message, or a muc message with want to be
                 # notified about if quitting just after
@@ -1176,7 +1176,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                     event = 'message_received'
                 show_in_roster = get_show_in_roster(event, self.session)
                 show_in_systray = get_show_in_systray(
-                    event_type.type_, self.contact.jid)
+                    event_type.type_, self.account, self.contact.jid)
 
                 event = event_type(text,
                                    subject,

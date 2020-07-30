@@ -36,7 +36,6 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
-from gajim.common.helpers import notify_for_muc
 from gajim.common.nec import EventHelper
 
 from gajim import gtkgui_helpers
@@ -492,8 +491,8 @@ class MessageWindow(EventHelper):
         unread = 0
         for ctrl in self.controls():
             if (ctrl.is_groupchat and
-                     not notify_for_muc(ctrl.room_jid) and
-                     not ctrl.attention_flag):
+                    not ctrl.contact.can_notify() and
+                    not ctrl.attention_flag):
                 # count only pm messages
                 unread += ctrl.get_nb_unread_pm()
                 continue
@@ -510,7 +509,7 @@ class MessageWindow(EventHelper):
         if control.is_groupchat:
             name = control.contact.get_shown_name()
             urgent = (control.attention_flag or
-                      notify_for_muc(control.room_jid))
+                      control.contact.can_notify())
         else:
             name = control.contact.get_shown_name()
             if control.resource:

@@ -218,7 +218,9 @@ class ChatControlSession:
         else:
             # Everything else
             obj.show_in_roster = get_show_in_roster(event_type, self)
-            obj.show_in_systray = get_show_in_systray(event_type, contact.jid)
+            obj.show_in_systray = get_show_in_systray(event_type,
+                                                      obj.conn.name,
+                                                      contact.jid)
             do_event = True
         if do_event:
             kind = obj.properties.type.value
@@ -321,7 +323,9 @@ class ChatControlSession:
         event_type = 'message_received'
 
         show_in_roster = get_show_in_roster(event_type, self)
-        show_in_systray = get_show_in_systray(event_type, contact.jid)
+        show_in_systray = get_show_in_systray(event_type,
+                                              self.conn.name,
+                                              contact.jid)
 
         event = event_t(msg, subject, msg_type, tim, resource,
             msg_log_id, session=self,

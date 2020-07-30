@@ -243,6 +243,14 @@ class Contact(CommonContact):
         # if not '@' or '@' starts the jid then contact is transport
         return self.jid.find('@') <= 0
 
+    def can_notify(self):
+        if not self.is_groupchat:
+            raise ValueError
+
+        all_ = app.config.get('notify_on_all_muc_messages')
+        room = app.config.get_per('rooms', self.jid, 'notify_on_all_messages')
+        return all_ or room
+
 
 class GC_Contact(CommonContact):
     """
