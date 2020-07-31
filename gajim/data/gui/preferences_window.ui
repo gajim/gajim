@@ -61,24 +61,31 @@
   </object>
   <object class="GtkListStore" id="one_window_type_liststore">
     <columns>
-      <!-- column-name item -->
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name setting -->
       <column type="gchararray"/>
     </columns>
     <data>
       <row>
         <col id="0" translatable="yes">Detached contact list with detached chats</col>
+        <col id="1">never</col>
       </row>
       <row>
         <col id="0" translatable="yes">Detached contact list with single chat</col>
+        <col id="1">always</col>
       </row>
       <row>
         <col id="0" translatable="yes">Single window for everything</col>
+        <col id="1">always_with_roster</col>
       </row>
       <row>
         <col id="0" translatable="yes">Detached contact list with chat grouped by account</col>
+        <col id="1" translatable="yes">peracct</col>
       </row>
       <row>
         <col id="0" translatable="yes">Detached contact list with chat grouped by type</col>
+        <col id="1">pertype</col>
       </row>
     </data>
   </object>
@@ -262,6 +269,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">one_window_type_liststore</property>
+                        <property name="id_column">1</property>
                         <signal name="changed" handler="on_one_window_type_combo_changed" swapped="no"/>
                         <child>
                           <object class="GtkCellRendererText"/>
