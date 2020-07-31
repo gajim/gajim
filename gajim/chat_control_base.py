@@ -750,8 +750,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self._start_filetransfer(path)
 
     def _get_pref_ft_method(self):
-        ft_pref = app.config.get_per('accounts', self.account,
-                                     'filetransfer_preference')
+        ft_pref = app.settings.get_account_setting(self.account,
+                                                   'filetransfer_preference')
         httpupload = self.parent_win.window.lookup_action(
             'send-file-httpupload-%s' % self.control_id)
         jingle = self.parent_win.window.lookup_action(

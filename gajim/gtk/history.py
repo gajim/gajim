@@ -320,15 +320,15 @@ class HistoryWindow(Gtk.ApplicationWindow):
                 self._ui.log_history_checkbutton.set_sensitive(False)
             else:
                 # Are log disabled for account ?
-                if self.account in app.config.get_per(
-                        'accounts', self.account, 'no_log_for').split(' '):
+                if self.account in app.settings.get_account_setting(
+                        self.account, 'no_log_for').split(' '):
                     self._ui.log_history_checkbutton.set_active(False)
                     self._ui.log_history_checkbutton.set_sensitive(False)
                 else:
                     # Are log disabled for jid ?
                     log = True
-                    if self.jid in app.config.get_per(
-                            'accounts', self.account, 'no_log_for').split(' '):
+                    if self.jid in app.settings.get_account_setting(
+                            self.account, 'no_log_for').split(' '):
                         log = False
                     self._ui.log_history_checkbutton.set_active(log)
                     self._ui.log_history_checkbutton.set_sensitive(True)
@@ -774,8 +774,8 @@ class HistoryWindow(Gtk.ApplicationWindow):
     def on_log_history_checkbutton_toggled(self, widget, *args):
         # log conversation history?
         oldlog = True
-        no_log_for = app.config.get_per(
-            'accounts', self.account, 'no_log_for').split()
+        no_log_for = app.settings.get_account_setting(
+            self.account, 'no_log_for').split()
         if self.jid in no_log_for:
             oldlog = False
         log = widget.get_active()
@@ -784,8 +784,8 @@ class HistoryWindow(Gtk.ApplicationWindow):
         if log and self.jid in no_log_for:
             no_log_for.remove(self.jid)
         if oldlog != log:
-            app.config.set_per(
-                'accounts', self.account, 'no_log_for', ' '.join(no_log_for))
+            app.settings.set_account_setting(
+                self.account, 'no_log_for', ' '.join(no_log_for))
 
     def on_show_status_checkbutton_toggled(self, widget):
         # reload logs

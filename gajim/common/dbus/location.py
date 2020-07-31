@@ -82,7 +82,7 @@ class LocationListener:
         for acct in accounts:
             if not app.account_is_available(acct):
                 continue
-            if not app.config.get_per('accounts', acct, 'publish_location'):
+            if not app.settings.get_account_setting(acct, 'publish_location'):
                 continue
             if self.location_info == self._data:
                 continue

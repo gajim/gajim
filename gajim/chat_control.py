@@ -337,7 +337,7 @@ class ChatControl(ChatControlBase):
         self.xml.sendfile_button.set_tooltip_text(tooltip_text)
 
         # Convert to GC
-        if app.config.get_per('accounts', self.account, 'is_zeroconf'):
+        if app.settings.get_account_setting(self.account, 'is_zeroconf'):
             win.lookup_action(
                 'invite-contacts-' + self.control_id).set_enabled(False)
         else:
@@ -1126,8 +1126,8 @@ class ChatControl(ChatControlBase):
         time_ = app.last_message_time[self.account][self.get_full_jid()]
         # 2 seconds
         if time.time() - time_ < 2:
-            no_log_for = app.config.get_per(
-                'accounts', self.account, 'no_log_for').split()
+            no_log_for = app.settings.get_account_setting(
+                self.account, 'no_log_for').split()
             more = ''
             if self.contact.jid in no_log_for:
                 more = _('Note: Chat history is disabled for this contact.')

@@ -82,9 +82,7 @@ class UserTune(BaseModule):
         if not self._con.get_module('PEP').supported:
             return
 
-        if not app.config.get_per('accounts',
-                                  self._account,
-                                  'publish_tune'):
+        if not app.settings.get_account_setting(self._account, 'publish_tune'):
             return
 
         if tune == self._tune_data:
@@ -97,18 +95,16 @@ class UserTune(BaseModule):
 
     def set_enabled(self, enable):
         if enable:
-            app.config.set_per('accounts',
-                               self._account,
-                               'publish_tune',
-                               True)
+            app.settings.set_account_setting(self._account,
+                                             'publish_tune',
+                                             True)
             self._publish_current_tune()
 
         else:
             self.set_tune(None)
-            app.config.set_per('accounts',
-                               self._account,
-                               'publish_tune',
-                               False)
+            app.settings.set_account_setting(self._account,
+                                             'publish_tune',
+                                             False)
 
     def _publish_current_tune(self):
         self.set_tune(MusicTrackListener.get().current_tune)

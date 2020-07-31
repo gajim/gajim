@@ -44,7 +44,7 @@ class UserNickname(BaseModule):
         nick = properties.pubsub_event.data
         if properties.is_self_message:
             if nick is None:
-                nick = app.config.get_per('accounts', self._account, 'name')
+                nick = app.settings.get_account_setting(self._account, 'name')
             app.nicks[self._account] = nick
 
         for contact in app.contacts.get_contacts(self._account,

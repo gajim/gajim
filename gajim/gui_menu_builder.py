@@ -291,7 +291,7 @@ control=None, gc_contact=None, is_anonymous=True):
         item.hide()
 
     # Zeroconf Account
-    if app.config.get_per('accounts', account, 'is_zeroconf'):
+    if app.settings.get_account_setting(account, 'is_zeroconf'):
         for item in (send_single_message_menuitem,
         invite_menuitem, block_menuitem, unblock_menuitem, ignore_menuitem,
         unignore_menuitem, subscription_menuitem,

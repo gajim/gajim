@@ -503,7 +503,7 @@ class ServiceDiscoveryWindow:
         self._account = account
         self.parent = parent
         if not jid:
-            jid = app.config.get_per('accounts', account, 'hostname')
+            jid = app.settings.get_account_setting(account, 'hostname')
             node = None
 
         self.jid = None

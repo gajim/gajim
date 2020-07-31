@@ -422,7 +422,7 @@ class Interface:
         text = _('Enter your password for account %s') % account
 
         def on_ok(passphrase, save):
-            app.config.set_per('accounts', account, 'savepass', save)
+            app.settings.set_account_setting(account, 'savepass', save)
             passwords.save_password(account, passphrase)
             obj.on_password(passphrase)
             del self.pass_dialog[account]
@@ -805,7 +805,7 @@ class Interface:
 
         # enable location listener
         if (pep_supported and app.is_installed('GEOCLUE') and
-                app.config.get_per('accounts', account, 'publish_location')):
+                app.settings.get_account_setting(account, 'publish_location')):
             location.enable()
 
         if ask_for_status_message(obj.conn.status, signin=True):
@@ -846,7 +846,7 @@ class Interface:
 
     def handle_event_zc_name_conflict(self, obj):
         def _on_ok(new_name):
-            app.config.set_per('accounts', obj.conn.name, 'name', new_name)
+            app.settings.set_account_setting(obj.conn.name, 'name', new_name)
             obj.conn.username = new_name
             obj.conn.change_status(obj.conn.status, obj.conn.status_message)
 
@@ -1544,9 +1544,9 @@ class Interface:
             config['custom_host'] = host
             config['custom_type'] = type_.value
 
-        app.config.add_per('accounts', account)
+        app.settings.add_account(account)
         for opt in config:
-            app.config.set_per('accounts', account, opt, config[opt])
+            app.settings.set_account_setting(account, opt, config[opt])
 
         # Password module depends on existing config
         passwords.save_password(account, password)
@@ -1584,8 +1584,8 @@ class Interface:
         if account == app.ZEROCONF_ACC_NAME:
             app.nicks[account] = app.ZEROCONF_ACC_NAME
         else:
-            app.nicks[account] = app.config.get_per(
-                'accounts', account, 'name')
+            app.nicks[account] = app.settings.get_account_setting(account,
+                                                                  'name')
         app.block_signed_in_notifications[account] = True
         app.last_message_time[account] = {}
         # refresh roster
@@ -1597,7 +1597,7 @@ class Interface:
         self.roster.setup_and_draw_roster()
         gui_menu_builder.build_accounts_menu()
         self.roster.send_status(account, 'online', '')
-        app.config.set_per('accounts', account, 'active', True)
+        app.settings.set_account_setting(account, 'active', True)
         app.app.update_app_actions_state()
         window = get_app_window('AccountsWindow')
         if window is not None:
@@ -1633,23 +1633,22 @@ class Interface:
             self.roster.regroup = app.settings.get('mergeaccounts')
         else:
             self.roster.regroup = False
-        app.config.set_per(
-            'accounts', account, 'roster_version', '')
+        app.settings.set_account_setting(account, 'roster_version', '')
         self.roster.setup_and_draw_roster()
         self.roster.update_status_selector()
         gui_menu_builder.build_accounts_menu()
-        app.config.set_per('accounts', account, 'active', False)
+        app.settings.set_account_setting(account, 'active', False)
         app.app.update_app_actions_state()
 
     def remove_account(self, account):
-        if app.config.get_per('accounts', account, 'active'):
+        if app.settings.get_account_setting(account, 'active'):
             self.disable_account(account)
 
         app.logger.remove_roster(app.get_jid_from_account(account))
         # Delete password must be before del_per() because it calls set_per()
         # which would recreate the account with defaults values if not found
         passwords.delete_password(account)
-        app.config.del_per('accounts', account)
+        app.settings.remove_account(account)
         app.app.remove_account_actions(account)
 
         window = get_app_window('AccountsWindow')
@@ -1662,17 +1661,16 @@ class Interface:
         """
 
         for account in app.connections:
-            if not app.config.get_per('accounts', account, 'autoconnect'):
+            if not app.settings.get_account_setting(account, 'autoconnect'):
                 continue
 
             status = 'online'
             status_message = ''
 
-            if app.config.get_per('accounts', account, 'restore_last_status'):
-                status = app.config.get_per('accounts', account, 'last_status')
-                status_message = app.config.get_per('accounts',
-                                                    account,
-                                                    'last_status_msg')
+            if app.settings.get_account_setting(account, 'restore_last_status'):
+                status = app.settings.get_account_setting(account, 'last_status')
+                status_message = app.settings.get_account_setting(
+                    account, 'last_status_msg')
                 status_message = helpers.from_one_line(status_message)
 
             self.roster.send_status(account, status, status_message)
@@ -1847,27 +1845,34 @@ class Interface:
                     connection.disconnect(gracefully=False, reconnect=True)
 
     def create_zeroconf_default_config(self):
-        if app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'name'):
+        if app.settings.get_account_setting(app.ZEROCONF_ACC_NAME, 'name'):
             return
         log.info('Creating zeroconf account')
-        app.config.add_per('accounts', app.ZEROCONF_ACC_NAME)
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                'autoconnect', True)
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'no_log_for',
-                '')
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'password',
-                'zeroconf')
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                'sync_with_global_status', True)
-
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                'custom_port', 5298)
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                'is_zeroconf', True)
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                'use_ft_proxies', False)
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                'active', False)
+        app.settings.add_account(app.ZEROCONF_ACC_NAME)
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'autoconnect',
+                                         True)
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'no_log_for',
+                                         '')
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'password',
+                                         'zeroconf')
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'sync_with_global_status',
+                                         True)
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'custom_port',
+                                         5298)
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'is_zeroconf',
+                                         True)
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'use_ft_proxies',
+                                         False)
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'active',
+                                         False)
 
     def check_for_updates(self):
         if not app.settings.get('check_for_update'):
@@ -2019,8 +2024,8 @@ class Interface:
         if app.settings.get('verbose'):
             logging_helpers.set_verbose()
 
-        for account in Settings.get_accounts():
-            if app.config.get_per('accounts', account, 'is_zeroconf'):
+        for account in app.settings.get_accounts():
+            if app.settings.get_account_setting(account, 'is_zeroconf'):
                 app.ZEROCONF_ACC_NAME = account
                 break
 
@@ -2042,14 +2047,14 @@ class Interface:
         self.register_core_handlers()
 
         # self.create_zeroconf_default_config()
-        # if app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'active') \
+        # if app.settings.get_account_setting(app.ZEROCONF_ACC_NAME, 'active') \
         # and app.is_installed('ZEROCONF'):
         #     app.connections[app.ZEROCONF_ACC_NAME] = \
         #         connection_zeroconf.ConnectionZeroconf(app.ZEROCONF_ACC_NAME)
 
-        for account in Settings.get_accounts():
-            if not app.config.get_per('accounts', account, 'is_zeroconf') and\
-            app.config.get_per('accounts', account, 'active'):
+        for account in app.settings.get_accounts():
+            if (not app.settings.get_account_setting(account, 'is_zeroconf') and
+                    app.settings.get_account_setting(account, 'active')):
                 app.connections[account] = Client(account)
 
         self.instances = {}
@@ -2064,7 +2069,7 @@ class Interface:
             app.automatic_rooms[a] = {}
             app.newly_added[a] = []
             app.to_be_removed[a] = []
-            app.nicks[a] = app.config.get_per('accounts', a, 'name')
+            app.nicks[a] = app.settings.get_account_setting(a, 'name')
             app.block_signed_in_notifications[a] = True
             app.last_message_time[a] = {}
 

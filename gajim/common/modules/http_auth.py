@@ -44,8 +44,8 @@ class HTTPAuth(BaseModule):
             return
 
         self._log.info('Auth request received')
-        auto_answer = app.config.get_per(
-            'accounts', self._account, 'http_auth')
+        auto_answer = app.settings.get_account_setting(self._account,
+                                                       'http_auth')
         if auto_answer in ('yes', 'no'):
             self.build_http_auth_answer(stanza, auto_answer)
             raise nbxmpp.NodeProcessed

@@ -185,8 +185,8 @@ class JingleTransportSocks5(JingleTransport):
                 self.candidates.append(cand)
 
     def _add_local_ips_as_candidates(self):
-        if not app.config.get_per('accounts', self.connection.name,
-        'ft_send_local_ips'):
+        if not app.settings.get_account_setting(self.connection.name,
+                                                'ft_send_local_ips'):
             return
         if not self.connection:
             return

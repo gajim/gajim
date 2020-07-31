@@ -76,29 +76,31 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         values
         """
         self.host = socket.gethostname()
-        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'hostname',
-                self.host)
-        self.port = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                'custom_port')
-        self.autoconnect = app.config.get_per('accounts',
-                app.ZEROCONF_ACC_NAME, 'autoconnect')
-        self.sync_with_global_status = app.config.get_per('accounts',
-                app.ZEROCONF_ACC_NAME, 'sync_with_global_status')
-        self.first = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                'zeroconf_first_name')
-        self.last = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                'zeroconf_last_name')
-        self.jabber_id = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                'zeroconf_jabber_id')
-        self.email = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                'zeroconf_email')
+        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                         'hostname',
+                                         self.host)
+        self.port = app.settings.get_account_setting(app.ZEROCONF_ACC_NAME,
+                                                     'custom_port')
+        self.autoconnect = app.settings.get_account_setting(
+            app.ZEROCONF_ACC_NAME, 'autoconnect')
+        self.sync_with_global_status = app.settings.get_account_setting(
+            app.ZEROCONF_ACC_NAME, 'sync_with_global_status')
+        self.first = app.settings.get_account_setting(app.ZEROCONF_ACC_NAME,
+                                                      'zeroconf_first_name')
+        self.last = app.settings.get_account_setting(app.ZEROCONF_ACC_NAME,
+                                                     'zeroconf_last_name')
+        self.jabber_id = app.settings.get_account_setting(app.ZEROCONF_ACC_NAME,
+                                                          'zeroconf_jabber_id')
+        self.email = app.settings.get_account_setting(app.ZEROCONF_ACC_NAME,
+                                                      'zeroconf_email')
 
         if not self.username:
             self.username = getpass.getuser()
-            app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'name',
-                self.username)
+            app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
+                                             'name',
+                                             self.username)
         else:
-            self.username = app.config.get_per('accounts',
+            self.username = app.settings.get_account_setting(
                 app.ZEROCONF_ACC_NAME, 'name')
 
     def get_own_jid(self, *args, **kwargs):
@@ -312,20 +314,20 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def reannounce(self):
         if self._state.is_connected:
             txt = {}
-            txt['1st'] = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'zeroconf_first_name')
-            txt['last'] = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'zeroconf_last_name')
-            txt['jid'] = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'zeroconf_jabber_id')
-            txt['email'] = app.config.get_per('accounts',
-                    app.ZEROCONF_ACC_NAME, 'zeroconf_email')
+            txt['1st'] = app.settings.get_account_setting(
+                app.ZEROCONF_ACC_NAME, 'zeroconf_first_name')
+            txt['last'] = app.settings.get_account_setting(
+                app.ZEROCONF_ACC_NAME, 'zeroconf_last_name')
+            txt['jid'] = app.settings.get_account_setting(
+                app.ZEROCONF_ACC_NAME, 'zeroconf_jabber_id')
+            txt['email'] = app.settings.get_account_setting(
+                app.ZEROCONF_ACC_NAME, 'zeroconf_email')
             self.connection.reannounce(txt)
 
     def update_details(self):
         if self.connection:
-            port = app.config.get_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'custom_port')
+            port = app.settings.get_account_setting(app.ZEROCONF_ACC_NAME,
+                                                    'custom_port')
             if port != self.port:
                 self.port = port
                 last_msg = self.connection.last_msg

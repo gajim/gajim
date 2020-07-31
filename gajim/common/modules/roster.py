@@ -62,8 +62,8 @@ class Roster(BaseModule):
                     avatar_sha=item['avatar_sha']))
         else:
             self._log.info('Database empty, reset roster version')
-            app.config.set_per(
-                'accounts', self._account, 'roster_version', '')
+            app.settings.set_account_setting(
+                self._account, 'roster_version', '')
 
         app.nec.push_incoming_event(NetworkEvent(
             'roster-received',
@@ -75,8 +75,8 @@ class Roster(BaseModule):
         version = None
         features = self._con.connection.features
         if features.has_roster_version:
-            version = app.config.get_per(
-                'accounts', self._account, 'roster_version')
+            version = app.settings.get_account_setting(self._account,
+                                                       'roster_version')
 
         self._log.info('Requested from server')
         iq = nbxmpp.Iq('get', Namespace.ROSTER)
@@ -141,8 +141,9 @@ class Roster(BaseModule):
                 attrs['subscription'], attrs['ask'], attrs['groups'])
 
         self._log.info('New version: %s', version)
-        app.config.set_per(
-            'accounts', self._account, 'roster_version', version)
+        app.settings.set_account_setting(self._account,
+                                         'roster_version',
+                                         version)
 
         raise nbxmpp.NodeProcessed
 

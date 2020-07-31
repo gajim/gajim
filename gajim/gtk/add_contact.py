@@ -330,8 +330,9 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
             message = message_buffer.get_text(start_iter, end_iter, True)
             if self.save_message_checkbutton.get_active():
                 msg = helpers.to_one_line(message)
-                app.config.set_per('accounts', self.account,
-                                   'subscription_request_msg', msg)
+                app.settings.set_account_setting(self.account,
+                                                 'subscription_request_msg',
+                                                 msg)
         else:
             message = ''
         group = self.group_comboboxentry.get_child().get_text()

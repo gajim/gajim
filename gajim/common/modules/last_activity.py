@@ -37,8 +37,8 @@ class LastActivity(BaseModule):
     def _answer_request(self, _con, stanza, properties):
         self._log.info('Request from %s', properties.jid)
 
-        allow_send = app.config.get_per(
-            'accounts', self._account, 'send_idle_time')
+        allow_send = app.settings.get_account_setting(self._account,
+                                                      'send_idle_time')
         if app.is_installed('IDLE') and allow_send:
             iq = stanza.buildReply('result')
             query = iq.setQuery()

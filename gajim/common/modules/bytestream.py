@@ -104,11 +104,11 @@ class Bytestream(BaseModule):
     def pass_disco(self, info):
         if Namespace.BYTESTREAM not in info.features:
             return
-        if app.config.get_per('accounts', self._account, 'use_ft_proxies'):
+        if app.settings.get_account_setting(self._account, 'use_ft_proxies'):
             log.info('Discovered proxy: %s', info.jid)
             our_fjid = self._con.get_own_jid()
-            testit = app.config.get_per(
-                'accounts', self._account, 'test_ft_proxies_on_startup')
+            testit = app.settings.get_account_setting(
+                self._account, 'test_ft_proxies_on_startup')
             app.proxy65_manager.resolve(
                 info.jid, self._con.connection, str(our_fjid),
                 default=self._account, testit=testit)
@@ -299,9 +299,8 @@ class Bytestream(BaseModule):
             streamhost.setAttr('jid', sender)
 
     def _add_local_ips_as_streamhosts_to_query(self, query, file_props):
-        if not app.config.get_per('accounts',
-                                  self._account,
-                                  'ft_send_local_ips'):
+        if not app.settings.get_account_setting(self._account,
+                                                'ft_send_local_ips'):
             return
 
         my_ip = self._con.local_address
@@ -452,12 +451,10 @@ class Bytestream(BaseModule):
                                                [proxyhost['host']])
 
     def _get_file_transfer_proxies_from_config(self, file_props):
-        configured_proxies = app.config.get_per('accounts',
-                                                self._account,
-                                                'file_transfer_proxies')
-        shall_use_proxies = app.config.get_per('accounts',
-                                               self._account,
-                                               'use_ft_proxies')
+        configured_proxies = app.settings.get_account_setting(
+            self._account, 'file_transfer_proxies')
+        shall_use_proxies = app.settings.get_account_setting(
+            self._account, 'use_ft_proxies')
         if shall_use_proxies:
             proxyhost_dicts = []
             proxies = []

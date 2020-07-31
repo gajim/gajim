@@ -63,8 +63,8 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.account = account
         self.jid = app.get_jid_from_account(account)
-        account_label = app.config.get_per(
-            'accounts', account, 'account_label')
+        account_label = app.settings.get_account_setting(account,
+                                                         'account_label')
         self.set_value('account_label', account_label)
 
         self.dialog = None
@@ -312,7 +312,7 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
         nick = vcard_.get('NICKNAME') or None
         app.connections[self.account].get_module('UserNickname').set_nickname(nick)
         if not nick:
-            nick = app.config.get_per('accounts', self.account, 'name')
+            nick = app.settings.get_account_setting(self.account, 'name')
         app.nicks[self.account] = nick
         app.connections[self.account].get_module('VCardTemp').send_vcard(
             vcard_, sha)

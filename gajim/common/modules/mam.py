@@ -270,14 +270,9 @@ class MAM(BaseModule):
 
         archive = app.logger.get_archive_infos(own_jid)
 
-        # Migration of last_mam_id from config to DB
+        mam_id = None
         if archive is not None:
             mam_id = archive.last_mam_id
-        else:
-            mam_id = app.config.get_per(
-                'accounts', self._account, 'last_mam_id')
-            if mam_id:
-                app.config.del_per('accounts', self._account, 'last_mam_id')
 
         start_date = None
         queryid = self._get_query_id(own_jid)

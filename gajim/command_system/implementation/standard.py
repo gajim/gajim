@@ -134,8 +134,8 @@ class StandardCommonCommands(CommandContainer):
         if status not in ('online', 'away', 'chat', 'xa', 'dnd'):
             raise CommandError("Invalid status given")
         for connection in app.connections.values():
-            if not app.config.get_per('accounts', connection.name,
-                                      'sync_with_global_status'):
+            if not app.settings.get_account_setting(connection.name,
+                                                    'sync_with_global_status'):
                 continue
             if not connection.state.is_available:
                 continue
@@ -148,8 +148,8 @@ class StandardCommonCommands(CommandContainer):
             message = _("Away")
 
         for connection in app.connections.values():
-            if not app.config.get_per('accounts', connection.name,
-                                      'sync_with_global_status'):
+            if not app.settings.get_account_setting(connection.name,
+                                                    'sync_with_global_status'):
                 continue
             if not connection.state.is_available:
                 continue
@@ -162,8 +162,8 @@ class StandardCommonCommands(CommandContainer):
             message = _("Available")
 
         for connection in app.connections.values():
-            if not app.config.get_per('accounts', connection.name,
-                                      'sync_with_global_status'):
+            if not app.settings.get_account_setting(connection.name,
+                                                    'sync_with_global_status'):
                 continue
             if not connection.state.is_available:
                 continue

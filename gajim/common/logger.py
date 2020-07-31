@@ -1135,7 +1135,7 @@ class Logger:
         # First we must reset roster_version value to ensure that the server
         # sends back all the roster at the next connection if the replacement
         # didn't work properly.
-        app.config.set_per('accounts', account_name, 'roster_version', '')
+        app.settings.set_account_setting(account_name, 'roster_version', '')
 
         account_jid = app.get_jid_from_account(account_name)
         # Execute get_jid_id() because this ensures on new accounts that the
@@ -1154,8 +1154,9 @@ class Logger:
 
         # At this point, we are sure the replacement works properly so we can
         # set the new roster_version value.
-        app.config.set_per('accounts', account_name, 'roster_version',
-            roster_version)
+        app.settings.set_account_setting(account_name,
+                                         'roster_version',
+                                         roster_version)
 
     @timeit
     def del_contact(self, account_jid, jid):

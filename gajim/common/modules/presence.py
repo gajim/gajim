@@ -248,7 +248,7 @@ class Presence(BaseModule):
         fjid = str(properties.jid)
 
         is_transport = app.jid_is_transport(fjid)
-        auto_auth = app.config.get_per('accounts', self._account, 'autoauth')
+        auto_auth = app.settings.get_account_setting(self._account, 'autoauth')
 
         self._log.info('Received Subscribe: %s, transport: %s, '
                        'auto_auth: %s, user_nick: %s',

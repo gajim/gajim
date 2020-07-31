@@ -42,13 +42,13 @@ class VCardAvatars(BaseModule):
         self._find_own_avatar()
 
     def _find_own_avatar(self):
-        sha = app.config.get_per('accounts', self._account, 'avatar_sha')
+        sha = app.settings.get_account_setting(self._account, 'avatar_sha')
         if not sha:
             return
         path = Path(configpaths.get('AVATAR')) / sha
         if not path.exists():
             self._log.info('Missing own avatar, reset sha')
-            app.config.set_per('accounts', self._account, 'avatar_sha', '')
+            app.settings.set_account_setting(self._account, 'avatar_sha', '')
 
     def _presence_received(self, _con, _stanza, properties):
         if not properties.type.is_available:
@@ -83,20 +83,21 @@ class VCardAvatars(BaseModule):
         if properties.avatar_state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', properties.jid)
-            app.config.set_per('accounts', self._account, 'avatar_sha', '')
+            app.settings.set_account_setting(self._account, 'avatar_sha', '')
             app.contacts.set_avatar(self._account, jid, None)
             app.interface.update_avatar(self._account, jid)
             return
 
         self._log.info('Update: %s %s', jid, properties.avatar_sha)
-        current_sha = app.config.get_per(
-            'accounts', self._account, 'avatar_sha')
+        current_sha = app.settings.get_account_setting(self._account,
+                                                       'avatar_sha')
 
         if properties.avatar_sha != current_sha:
             path = Path(configpaths.get('AVATAR')) / properties.avatar_sha
             if path.exists():
-                app.config.set_per('accounts', self._account,
-                                   'avatar_sha', properties.avatar_sha)
+                app.settings.set_account_setting(self._account,
+                                                 'avatar_sha',
+                                                 properties.avatar_sha)
                 app.contacts.set_avatar(self._account,
                                         jid,
                                         properties.avatar_sha)
@@ -226,7 +227,7 @@ class VCardAvatars(BaseModule):
     def add_update_node(self, node):
         update = node.setTag('x', namespace=Namespace.VCARD_UPDATE)
         if self._con.get_module('VCardTemp').own_vcard_received:
-            sha = app.config.get_per('accounts', self._account, 'avatar_sha')
+            sha = app.settings.get_account_setting(self._account, 'avatar_sha')
             own_jid = self._con.get_own_jid()
             self._log.info('Send avatar presence to: %s %s',
                            node.getTo() or own_jid, sha or 'no sha advertised')

@@ -50,8 +50,8 @@ class UserAvatar(BaseModule):
             app.interface.update_avatar(self._account, jid)
         else:
             if properties.is_self_message:
-                sha = app.config.get_per(
-                    'accounts', self._account, 'avatar_sha')
+                sha = app.settings.get_account_setting(self._account,
+                                                       'avatar_sha')
             else:
                 sha = app.contacts.get_avatar_sha(self._account, jid)
 
@@ -72,10 +72,9 @@ class UserAvatar(BaseModule):
         app.interface.save_avatar(result.data)
 
         if self._con.get_own_jid().bareMatch(result.jid):
-            app.config.set_per('accounts',
-                               self._account,
-                               'avatar_sha',
-                               result.sha)
+            app.settings.set_account_setting(self._account,
+                                             'avatar_sha',
+                                             result.sha)
         else:
             own_jid = self._con.get_own_jid().getBare()
             app.logger.set_avatar_sha(own_jid, str(result.jid), result.sha)

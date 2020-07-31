@@ -66,9 +66,8 @@ class Message(BaseModule):
             # Server message
             return
 
-        if not app.config.get_per('accounts',
-                                  self._account,
-                                  'ignore_unknown_contacts'):
+        if not app.settings.get_account_setting(self._account,
+                                                'ignore_unknown_contacts'):
             return
 
         jid = properties.jid.getBare()

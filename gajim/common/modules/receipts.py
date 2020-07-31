@@ -56,8 +56,8 @@ class Receipts(BaseModule):
             return
 
         if properties.receipt.is_request:
-            if not app.config.get_per('accounts', self._account,
-                                      'answer_receipts'):
+            if not app.settings.get_account_setting(self._account,
+                                                    'answer_receipts'):
                 return
 
             if properties.eme is not None:

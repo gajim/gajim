@@ -86,14 +86,14 @@ def on_profile(_action, param):
 
 def on_send_server_message(_action, param):
     account = param.get_string()
-    server = app.config.get_per('accounts', account, 'hostname')
+    server = app.settings.get_account_setting(account, 'hostname')
     server += '/announce/online'
     SingleMessageWindow(account, server, 'send')
 
 
 def on_service_disco(_action, param):
     account = param.get_string()
-    server_jid = app.config.get_per('accounts', account, 'hostname')
+    server_jid = app.settings.get_account_setting(account, 'hostname')
     if server_jid in interface.instances[account]['disco']:
         interface.instances[account]['disco'][server_jid].\
             window.present()
@@ -188,14 +188,14 @@ def on_manage_proxies(_action, _param):
 
 def on_set_motd(_action, param):
     account = param.get_string()
-    server = app.config.get_per('accounts', account, 'hostname')
+    server = app.settings.get_account_setting(account, 'hostname')
     server += '/announce/motd'
     SingleMessageWindow(account, server, 'send')
 
 
 def on_update_motd(_action, param):
     account = param.get_string()
-    server = app.config.get_per('accounts', account, 'hostname')
+    server = app.settings.get_account_setting(account, 'hostname')
     server += '/announce/motd/update'
     SingleMessageWindow(account, server, 'send')
 

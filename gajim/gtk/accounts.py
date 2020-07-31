@@ -98,7 +98,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
     def _check_relogin(self):
         for account in self._need_relogin:
             settings = self._get_relogin_settings(account)
-            active = app.config.get_per('accounts', account, 'active')
+            active = app.settings.get_account_setting(account, 'active')
             if settings != self._need_relogin[account]:
                 self._need_relogin[account] = settings
                 if active:
@@ -140,7 +140,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
         values = []
         for setting in settings:
-            values.append(app.config.get_per('accounts', account, setting))
+            values.append(app.settings.get_account_setting(account, setting))
         return values
 
     @staticmethod
@@ -149,7 +149,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
             app.interface.raise_dialog('unread-events-on-remove-account')
             return
 
-        if app.config.get_per('accounts', account, 'is_zeroconf'):
+        if app.settings.get_account_setting(account, 'is_zeroconf'):
             # Should never happen as button is insensitive
             return
 
@@ -484,7 +484,7 @@ class AccountRow(Gtk.ListBoxRow):
 
         self._switch = Gtk.Switch()
         self._switch.set_active(
-            app.config.get_per('accounts', self._account, 'active'))
+            app.settings.get_account_setting(self._account, 'active'))
         self._switch.set_vexpand(False)
 
         if (self._account == app.ZEROCONF_ACC_NAME and
@@ -526,7 +526,7 @@ class AccountRow(Gtk.ListBoxRow):
             app.interface.disable_account(account)
             switch.set_state(state)
 
-        old_state = app.config.get_per('accounts', account, 'active')
+        old_state = app.settings.get_account_setting(account, 'active')
         if old_state == state:
             return Gdk.EVENT_PROPAGATE
 
@@ -896,6 +896,6 @@ class LoginDialog(SettingsDialog):
         passwords.save_password(self.account, new_password)
 
     def on_destroy(self, *args):
-        savepass = app.config.get_per('accounts', self.account, 'savepass')
+        savepass = app.settings.get_account_setting(self.account, 'savepass')
         if not savepass:
             passwords.delete_password(self.account)

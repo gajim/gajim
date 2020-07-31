@@ -383,7 +383,8 @@ class TransformChatToMUC:
             server_list.append(str(service_jid))
 
         # add servers or recently joined groupchats
-        recently_groupchat = app.config.get_per('accounts', account, 'recent_groupchats').split()
+        recently_groupchat = app.settings.get_account_setting(
+            account, 'recent_groupchats').split()
         for g in recently_groupchat:
             server = app.get_server_from_jid(g)
             if server not in server_list and not server.startswith('irc'):

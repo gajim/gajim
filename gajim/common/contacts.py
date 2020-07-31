@@ -32,7 +32,6 @@ try:
     from gajim.common.account import Account
     from gajim import common
     from gajim.common.const import Chatstate
-    from gajim.common.settings import Settings
 except ImportError as e:
     if __name__ != "__main__":
         raise ImportError(str(e))
@@ -40,14 +39,14 @@ except ImportError as e:
 
 class ContactSettings:
     def __init__(self, account, jid):
-        self.get = partial(Settings.get_contact_setting, account, jid)
-        self.set = partial(Settings.set_contact_setting, account, jid)
+        self.get = partial(app.settings.get_contact_setting, account, jid)
+        self.set = partial(app.settings.set_contact_setting, account, jid)
 
 
 class GroupChatSettings:
     def __init__(self, account, jid):
-        self.get = partial(Settings.get_group_chat_setting, account, jid)
-        self.set = partial(Settings.set_group_chat_setting, account, jid)
+        self.get = partial(app.settings.get_group_chat_setting, account, jid)
+        self.set = partial(app.settings.set_group_chat_setting, account, jid)
 
 
 class XMPPEntity:
@@ -952,7 +951,7 @@ class MetacontactManager():
         order = data.get('order', 0)
         transport = common.app.get_transport_name_from_jid(jid)
         server = common.app.get_server_from_jid(jid)
-        myserver = common.app.config.get_per('accounts', account, 'hostname')
+        myserver = app.settings.get_account_setting(account, 'hostname')
         return (bool(contact), show > 2, has_order, order, bool(transport),
                 show, priority, server == myserver, jid, account)
 
@@ -966,7 +965,7 @@ class MetacontactManager():
 
         (nearby_family, big_brother_jid, big_brother_account)
         """
-        if common.app.settings.get('mergeaccounts'):
+        if app.settings.get('mergeaccounts'):
             # group all together
             nearby_family = family
         else:

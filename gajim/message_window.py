@@ -965,8 +965,8 @@ class MessageWindowMgr(GObject.GObject):
                 # Add the hpaned position to our message window's size
                 size = (hpaned + size[0], size[1])
         elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
-            size = (app.config.get_per('accounts', acct, 'msgwin-width'),
-                    app.config.get_per('accounts', acct, 'msgwin-height'))
+            size = (app.settings.get_account_setting(acct, 'msgwin-width'),
+                    app.settings.get_account_setting(acct, 'msgwin-height'))
         elif self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_PERTYPE):
             opt_width = type_ + '-msgwin-width'
             opt_height = type_ + '-msgwin-height'
@@ -989,8 +989,8 @@ class MessageWindowMgr(GObject.GObject):
             pos = (app.settings.get('msgwin-x-position'),
                     app.settings.get('msgwin-y-position'))
         elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
-            pos = (app.config.get_per('accounts', acct, 'msgwin-x-position'),
-                    app.config.get_per('accounts', acct, 'msgwin-y-position'))
+            pos = (app.settings.get_account_setting(acct, 'msgwin-x-position'),
+                   app.settings.get_account_setting(acct, 'msgwin-y-position'))
         elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
             pos = (app.settings.get(type_ + '-msgwin-x-position'),
                     app.settings.get(type_ + '-msgwin-y-position'))
@@ -1181,12 +1181,12 @@ class MessageWindowMgr(GObject.GObject):
             width = win_width - hpaned_position
 
         if acct:
-            app.config.set_per('accounts', acct, size_width_key, width)
-            app.config.set_per('accounts', acct, size_height_key, height)
+            app.settings.set_account_setting(acct, size_width_key, width)
+            app.settings.set_account_setting(acct, size_height_key, height)
 
             if self.mode != self.ONE_MSG_WINDOW_NEVER:
-                app.config.set_per('accounts', acct, pos_x_key, x)
-                app.config.set_per('accounts', acct, pos_y_key, y)
+                app.settings.set_account_setting(acct, pos_x_key, x)
+                app.settings.set_account_setting(acct, pos_y_key, y)
 
         else:
             win_maximized = msg_win.window.get_window().get_state() == \
@@ -1264,5 +1264,6 @@ class MessageWindowMgr(GObject.GObject):
             if ctrl.contact.jid not in chat_controls[acct]:
                 chat_controls[acct].append(ctrl.contact.jid)
         for acct in app.connections:
-            app.config.set_per('accounts', acct, 'opened_chat_controls',
-                ','.join(chat_controls[acct]))
+            app.settings.set_account_setting(acct,
+                                             'opened_chat_controls',
+                                             ','.join(chat_controls[acct]))

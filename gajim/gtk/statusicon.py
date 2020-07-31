@@ -225,7 +225,7 @@ class StatusIcon:
             # submenus
             for account in app.connections:
                 if app.account_is_available(account) and \
-                not app.config.get_per('accounts', account, 'is_zeroconf'):
+                not app.settings.get_account_setting(account, 'is_zeroconf'):
 
                     # for single message
                     single_message_menuitem.set_submenu(None)

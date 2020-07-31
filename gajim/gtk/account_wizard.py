@@ -421,7 +421,7 @@ class AccountWizard(Assistant):
     @staticmethod
     def _generate_account_name(domain):
         i = 1
-        while domain in Settings.get_accounts():
+        while domain in app.settings.get_accounts():
             domain = domain + str(i)
             i += 1
         return domain

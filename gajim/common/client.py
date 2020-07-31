@@ -50,9 +50,9 @@ class Client(ConnectionHandlers):
         self._client = None
         self._account = account
         self.name = account
-        self._hostname = app.config.get_per(
-            'accounts', self._account, 'hostname')
-        self._user = app.config.get_per('accounts', self._account, 'name')
+        self._hostname = app.settings.get_account_setting(self._account,
+                                                          'hostname')
+        self._user = app.settings.get_account_setting(self._account, 'name')
         self.password = None
 
         self._priority = 0
@@ -162,14 +162,14 @@ class Client(ConnectionHandlers):
         if custom_host is not None:
             self._client.set_custom_host(*custom_host)
 
-        pass_saved = app.config.get_per('accounts', self._account, 'savepass')
+        pass_saved = app.settings.get_account_setting(self._account, 'savepass')
         if pass_saved:
             # Request password from keyring only if the user chose to save
             # his password
             self.password = passwords.get_password(self._account)
 
-        anonymous = app.config.get_per(
-            'accounts', self._account, 'anonymous_auth')
+        anonymous = app.settings.get_account_setting(self._account,
+                                                     'anonymous_auth')
         if anonymous:
             self._client.set_mechs(['ANONYMOUS'])
 
@@ -177,8 +177,8 @@ class Client(ConnectionHandlers):
         self._client.set_accepted_certificates(
             app.cert_store.get_certificates())
 
-        if app.config.get_per('accounts', self._account,
-                              'use_plain_connection'):
+        if app.settings.get_account_setting(self._account,
+                                            'use_plain_connection'):
             self._client.set_connection_types([ConnectionType.PLAIN])
 
         proxy = get_user_proxy(self._account)
@@ -261,8 +261,9 @@ class Client(ConnectionHandlers):
         elif domain in (StreamError.STREAM, StreamError.BIND):
             if error == 'conflict':
                 # Reset resource
-                app.config.set_per('accounts', self._account,
-                                   'resource', 'gajim.$rand')
+                app.settings.set_account_setting(self._account,
+                                                 'resource',
+                                                 'gajim.$rand')
 
         elif domain == StreamError.SASL:
             self._reconnect = False

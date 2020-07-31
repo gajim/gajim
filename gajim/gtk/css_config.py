@@ -26,7 +26,6 @@ import css_parser
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.settings import Settings
 from gajim.common.const import StyleAttr, CSSPriority
 
 from gajim.gtk.const import Theme
@@ -535,9 +534,9 @@ class CSSConfig():
 
     def refresh(self):
         css = ''
-        accounts = Settings.get_accounts()
+        accounts = app.settings.get_accounts()
         for index, account in enumerate(accounts):
-            color = app.config.get_per('accounts', account, 'account_color')
+            color = app.settings.get_account_setting(account, 'account_color')
             css_class = 'gajim_class_%s' % index
             css += '.%s { background-color: %s }\n' % (css_class, color)
             self._dynamic_dict[account] = css_class

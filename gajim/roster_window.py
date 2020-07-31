@@ -57,7 +57,6 @@ from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.const import PEPEventType, AvatarSize, StyleAttr
 from gajim.common.dbus import location
-from gajim.common.settings import Settings
 
 from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
@@ -2012,8 +2011,8 @@ class RosterWindow:
 
     def send_status(self, account, status, txt):
         if status != 'offline':
-            app.config.set_per('accounts', account, 'last_status', status)
-            app.config.set_per('accounts', account, 'last_status_msg',
+            app.settings.set_account_setting(account, 'last_status', status)
+            app.settings.set_account_setting(account, 'last_status_msg',
                     helpers.to_one_line(txt))
             if not app.account_is_available(account):
                 self.set_connecting_state(account)
@@ -2397,7 +2396,7 @@ class RosterWindow:
             account = obj.conn.name
             self_jid = app.get_jid_from_account(account)
             if self_jid not in app.contacts.get_jid_list(account):
-                sha = app.config.get_per('accounts', account, 'avatar_sha')
+                sha = app.settings.get_account_setting(account, 'avatar_sha')
                 contact = app.contacts.create_contact(
                     jid=self_jid, account=account, name=app.nicks[account],
                     groups=['self_contact'], show='offline', sub='both',
@@ -2407,8 +2406,8 @@ class RosterWindow:
 
             if app.settings.get('remember_opened_chat_controls'):
                 account = obj.conn.name
-                controls = app.config.get_per(
-                    'accounts', account, 'opened_chat_controls')
+                controls = app.settings.get_account_setting(
+                    account, 'opened_chat_controls')
                 if controls:
                     for jid in controls.split(','):
                         contact = \
@@ -2419,8 +2418,8 @@ class RosterWindow:
                                 account, jid)
                         app.interface.on_open_chat_window(
                             None, contact, account)
-                app.config.set_per(
-                    'accounts', account, 'opened_chat_controls', '')
+                app.settings.set_account_setting(
+                    account, 'opened_chat_controls', '')
             GLib.idle_add(self.refilter_shown_roster_items)
 
     def _nec_anonymous_auth(self, obj):
@@ -2561,7 +2560,7 @@ class RosterWindow:
         account) tuple
         """
         for (contact, account) in list_:
-            if app.config.get_per('accounts', account, 'hostname') == \
+            if app.settings.get_account_setting(account, 'hostname') == \
             contact.jid:
                 # We remove the server contact
                 # remove it from treeview
@@ -3141,7 +3140,8 @@ class RosterWindow:
     def on_publish_location_toggled(self, widget, account):
         active = widget.get_active()
         client = app.get_client(account)
-        app.config.set_per('accounts', account, 'publish_location', active)
+        app.settings.set_account_setting(account, 'publish_location', active)
+
         if active:
             location.enable()
         else:
@@ -3507,7 +3507,7 @@ class RosterWindow:
 
 
     def on_service_disco_menuitem_activate(self, widget, account):
-        server_jid = app.config.get_per('accounts', account, 'hostname')
+        server_jid = app.settings.get_account_setting(account, 'hostname')
         if server_jid in app.interface.instances[account]['disco']:
             app.interface.instances[account]['disco'][server_jid].\
                 window.present()
@@ -3929,7 +3929,7 @@ class RosterWindow:
         type_source = model[iter_source][Column.TYPE]
         account_source = model[iter_source][Column.ACCOUNT]
 
-        if app.config.get_per('accounts', account_source, 'is_zeroconf'):
+        if app.settings.get_account_setting(account_source, 'is_zeroconf'):
             return
 
         if type_dest == 'self_contact':
@@ -3974,7 +3974,7 @@ class RosterWindow:
             return
 
         # A contact was dropped
-        if app.config.get_per('accounts', account_dest, 'is_zeroconf'):
+        if app.settings.get_account_setting(account_dest, 'is_zeroconf'):
             # drop on zeroconf account, adding not possible
             return
 
@@ -4408,7 +4408,7 @@ class RosterWindow:
     def build_account_menu(self, account):
         # we have to create our own set of icons for the menu
         # using self.jabber_status_images is poopoo
-        if not app.config.get_per('accounts', account, 'is_zeroconf'):
+        if not app.settings.get_account_setting(account, 'is_zeroconf'):
             xml = get_builder('account_context_menu.ui')
             account_context_menu = xml.get_object('account_context_menu')
 
@@ -4458,8 +4458,8 @@ class RosterWindow:
                 if sys.platform in ('win32', 'darwin'):
                     item.set_sensitive(False)
                 else:
-                    active = app.config.get_per('accounts', account,
-                                                'publish_tune')
+                    active = app.settings.get_account_setting(account,
+                                                              'publish_tune')
                     item.set_active(active)
                     item.connect('toggled', self.on_publish_tune_toggled,
                                  account)
@@ -4469,8 +4469,8 @@ class RosterWindow:
                 if not app.is_installed('GEOCLUE'):
                     item.set_sensitive(False)
                 else:
-                    active = app.config.get_per('accounts', account,
-                                                'publish_location')
+                    active = app.settings.get_account_setting(
+                        account, 'publish_location')
                     item.set_active(active)
                     item.connect('toggled', self.on_publish_location_toggled,
                                  account)
@@ -4487,7 +4487,7 @@ class RosterWindow:
                 add_contact_menuitem.set_sensitive(False)
             service_discovery_menuitem.connect('activate',
                 self.on_service_disco_menuitem_activate, account)
-            hostname = app.config.get_per('accounts', account, 'hostname')
+            hostname = app.settings.get_account_setting(account, 'hostname')
             contact = app.contacts.create_contact(jid=hostname,
                 account=account) # Fake contact
             execute_command_menuitem.connect('activate',
@@ -4641,7 +4641,7 @@ class RosterWindow:
                 menu.append(invite_menuitem)
 
             # there is no singlemessage and custom status for zeroconf
-            if app.config.get_per('accounts', account, 'is_zeroconf'):
+            if app.settings.get_account_setting(account, 'is_zeroconf'):
                 send_group_message_item.set_sensitive(False)
 
             if not app.account_is_available(account):
@@ -5207,11 +5207,11 @@ class RosterWindow:
 
         self.scale_factor = self.window.get_scale_factor()
 
-        accounts = Settings.get_accounts()
+        accounts = app.settings.get_accounts()
 
         if (not accounts or
                 accounts == ['Local'] and
-                not app.config.get_per('accounts', 'Local', 'active')):
+                not app.settings.get_account_setting('Local', 'active')):
         # if we have no account configured or only Local account but not enabled
             def _open_wizard():
                 open_window('AccountWizard')

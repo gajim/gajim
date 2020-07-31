@@ -93,7 +93,7 @@ class EntityTime(BaseModule):
 
     def _answer_request(self, _con, stanza, _properties):
         self._log.info('%s asked for the time', stanza.getFrom())
-        if app.config.get_per('accounts', self._account, 'send_time_info'):
+        if app.settings.get_account_setting(self._account, 'send_time_info'):
             iq = stanza.buildReply('result')
             time_ = iq.setTag('time', namespace=Namespace.TIME_REVISED)
             formated_time = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())

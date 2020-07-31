@@ -144,13 +144,13 @@ class VCardTemp(BaseModule):
 
     def _avatar_publish_result(self, _nbxmpp_client, stanza, sha):
         if stanza.getType() == 'result':
-            current_sha = app.config.get_per(
-                'accounts', self._account, 'avatar_sha')
+            current_sha = app.settings.get_account_setting(self._account,
+                                                           'avatar_sha')
             if current_sha != sha:
                 if not app.account_is_connected(self._account):
                     return
-                app.config.set_per(
-                    'accounts', self._account, 'avatar_sha', sha or '')
+                app.settings.set_account_setting(
+                    self._account, 'avatar_sha', sha or '')
                 own_jid = self._con.get_own_jid().getStripped()
                 app.contacts.set_avatar(self._account, own_jid, sha)
                 app.interface.update_avatar(
@@ -235,22 +235,22 @@ class VCardTemp(BaseModule):
         if avatar_sha is None:
             # No avatar found in vcard
             self._log.info('No avatar found')
-            app.config.set_per('accounts', self._account, 'avatar_sha', '')
+            app.settings.set_account_setting(self._account, 'avatar_sha', '')
             app.contacts.set_avatar(self._account, jid, avatar_sha)
             self._con.get_module('VCardAvatars').send_avatar_presence(
                 force=True)
             return
 
         # Avatar found in vcard
-        current_sha = app.config.get_per(
-            'accounts', self._account, 'avatar_sha')
+        current_sha = app.settings.get_account_setting(self._account,
+                                                       'avatar_sha')
         if current_sha == avatar_sha:
             self._con.get_module('VCardAvatars').send_avatar_presence()
         else:
             app.interface.save_avatar(photo_decoded)
             app.contacts.set_avatar(self._account, jid, avatar_sha)
-            app.config.set_per(
-                'accounts', self._account, 'avatar_sha', avatar_sha)
+            app.settings.set_account_setting(
+                self._account, 'avatar_sha', avatar_sha)
             self._con.get_module('VCardAvatars').send_avatar_presence(
                 force=True)
 

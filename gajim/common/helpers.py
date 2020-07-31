@@ -537,8 +537,8 @@ def get_connection_status(account):
 def get_global_show():
     maxi = 0
     for account in app.connections:
-        if not app.config.get_per('accounts', account,
-                                  'sync_with_global_status'):
+        if not app.settings.get_account_setting(account,
+                                                'sync_with_global_status'):
             continue
         status = get_connection_status(account)
         index = SHOW_LIST.index(status)
@@ -549,8 +549,8 @@ def get_global_show():
 def get_global_status_message():
     maxi = 0
     for account in app.connections:
-        if not app.config.get_per('accounts', account,
-                                  'sync_with_global_status'):
+        if not app.settings.get_account_setting(account,
+                                                'sync_with_global_status'):
             continue
         status = app.connections[account].status
         index = SHOW_LIST.index(status)
@@ -565,8 +565,8 @@ def statuses_unified():
     """
     reference = None
     for account in app.connections:
-        if not app.config.get_per('accounts', account,
-                                  'sync_with_global_status'):
+        if not app.settings.get_account_setting(account,
+                                                'sync_with_global_status'):
             continue
         if reference is None:
             reference = app.connections[account].status
@@ -800,7 +800,8 @@ def get_current_show(account):
 
 def get_optional_features(account):
     features = []
-    if app.config.get_per('accounts', account, 'request_user_data'):
+
+    if app.settings.get_account_setting(account, 'request_user_data'):
         features.append(Namespace.MOOD + '+notify')
         features.append(Namespace.ACTIVITY + '+notify')
         features.append(Namespace.TUNE + '+notify')
@@ -827,7 +828,7 @@ def jid_is_blocked(account, jid):
     return jid in con.get_module('Blocking').blocked
 
 def get_subscription_request_msg(account=None):
-    s = app.config.get_per('accounts', account, 'subscription_request_msg')
+    s = app.settings.get_account_setting(account, 'subscription_request_msg')
     if s:
         return s
     s = _('I would like to add you to my contact list.')
@@ -843,7 +844,7 @@ def get_subscription_request_msg(account=None):
         return s
 
 def get_user_proxy(account):
-    proxy_name = app.config.get_per('accounts', account, 'proxy')
+    proxy_name = app.settings.get_account_setting(account, 'proxy')
     if not proxy_name:
         return None
     return get_proxy(proxy_name)
@@ -922,7 +923,8 @@ def load_json(path, key=None, default=None):
 def ignore_contact(account, jid):
     jid = str(jid)
     known_contact = app.contacts.get_contacts(account, jid)
-    ignore = app.config.get_per('accounts', account, 'ignore_unknown_contacts')
+    ignore = app.settings.get_account_setting(account,
+                                              'ignore_unknown_contacts')
     if ignore and not known_contact:
         log.info('Ignore unknown contact %s', jid)
         return True
@@ -1168,14 +1170,14 @@ def geo_provider_from_location(lat, lon):
 
 
 def get_resource(account):
-    resource = app.config.get_per('accounts', account, 'resource')
+    resource = app.settings.get_account_setting(account, 'resource')
     if not resource:
         return None
 
     resource = Template(resource).safe_substitute(
         {'hostname': socket.gethostname(),
          'rand': get_random_string()})
-    app.config.set_per('accounts', account, 'resource', resource)
+    app.settings.set_account_setting(account, 'resource', resource)
     return resource
 
 
@@ -1368,11 +1370,11 @@ def convert_gio_to_openssl_cert(cert):
 
 
 def get_custom_host(account):
-    if not app.config.get_per('accounts', account, 'use_custom_host'):
+    if not app.settings.get_account_setting(account, 'use_custom_host'):
         return None
-    host = app.config.get_per('accounts', account, 'custom_host')
-    port = app.config.get_per('accounts', account, 'custom_port')
-    type_ = app.config.get_per('accounts', account, 'custom_type')
+    host = app.settings.get_account_setting(account, 'custom_host')
+    port = app.settings.get_account_setting(account, 'custom_port')
+    type_ = app.settings.get_account_setting(account, 'custom_type')
 
     protocol = ConnectionProtocol.TCP
     if host.startswith('ws://') or host.startswith('wss://'):
@@ -1384,8 +1386,8 @@ def get_custom_host(account):
 
 
 def warn_about_plain_connection(account, connection_types):
-    warn = app.config.get_per(
-        'accounts', account, 'confirm_unencrypted_connection')
+    warn = app.settings.get_account_setting(
+        account, 'confirm_unencrypted_connection')
     for type_ in connection_types:
         if type_.is_plain and warn:
             return True
@@ -1410,7 +1412,7 @@ def should_log(account, jid):
     """
     Should conversations between a local account and a remote jid be logged?
     """
-    no_log_for = app.config.get_per('accounts', account, 'no_log_for')
+    no_log_for = app.settings.get_account_setting(account, 'no_log_for')
 
     if not no_log_for:
         no_log_for = ''

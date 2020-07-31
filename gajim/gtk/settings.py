@@ -218,10 +218,10 @@ class GenericSetting(Gtk.ListBoxRow):
             if value == 'password':
                 return passwords.get_password(account)
             if value == 'no_log_for':
-                no_log = app.config.get_per(
-                    'accounts', account, 'no_log_for').split()
+                no_log = app.settings.get_account_setting(
+                    account, 'no_log_for').split()
                 return account not in no_log
-            return app.config.get_per('accounts', account, value)
+            return app.settings.get_account_setting(account, value)
 
         if type_ == SettingType.ACTION:
             if value.startswith('-'):
@@ -239,7 +239,9 @@ class GenericSetting(Gtk.ListBoxRow):
             if self.value == 'no_log_for':
                 self.set_no_log_for(self.account, state)
             else:
-                app.config.set_per('accounts', self.account, self.value, state)
+                app.settings.set_account_setting(self.account,
+                                                 self.value,
+                                                 state)
 
         if self.callback is not None:
             self.callback(state, self.data)
@@ -248,12 +250,14 @@ class GenericSetting(Gtk.ListBoxRow):
 
     @staticmethod
     def set_no_log_for(account, state):
-        no_log = app.config.get_per('accounts', account, 'no_log_for').split()
+        no_log = app.settings.get_account_setting(account, 'no_log_for').split()
         if state and account in no_log:
             no_log.remove(account)
         elif not state and account not in no_log:
             no_log.append(account)
-        app.config.set_per('accounts', account, 'no_log_for', ' '.join(no_log))
+        app.settings.set_account_setting(account,
+                                         'no_log_for',
+                                         ' '.join(no_log))
 
     def on_row_activated(self):
         raise NotImplementedError
@@ -537,7 +541,7 @@ class LoginSetting(DialogSetting):
 
     def update_activatable(self, name, value):
         super().update_activatable(name, value)
-        anonym = app.config.get_per('accounts', self.account, 'anonymous_auth')
+        anonym = app.settings.get_account_setting(self.account, 'anonymous_auth')
         self.set_activatable(not anonym)
 
 
@@ -634,12 +638,12 @@ class PrioritySetting(DialogSetting):
         DialogSetting.__init__(self, *args, **kwargs)
 
     def get_setting_value(self):
-        adjust = app.config.get_per(
-            'accounts', self.account, 'adjust_priority_with_status')
+        adjust = app.settings.get_account_setting(
+            self.account, 'adjust_priority_with_status')
         if adjust:
             return _('Adjust to Status')
 
-        priority = app.config.get_per('accounts', self.account, 'priority')
+        priority = app.settings.get_account_setting(self.account, 'priority')
         return str(priority)
 
 
@@ -648,7 +652,7 @@ class CutstomHostnameSetting(DialogSetting):
         DialogSetting.__init__(self, *args, **kwargs)
 
     def get_setting_value(self):
-        custom = app.config.get_per('accounts', self.account, 'use_custom_host')
+        custom = app.settings.get_account_setting(self.account, 'use_custom_host')
         return _('On') if custom else _('Off')
 
 
