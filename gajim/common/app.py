@@ -396,8 +396,9 @@ def get_accounts_sorted():
     '''
     account_list = config.get_per('accounts')
     account_list.sort(key=str.lower)
-    account_list.remove('Local')
-    account_list.insert(0, 'Local')
+    if 'Local' in account_list:
+        account_list.remove('Local')
+        account_list.insert(0, 'Local')
     return account_list
 
 def get_enabled_accounts_with_labels(exclude_local=True, connected_only=False,
