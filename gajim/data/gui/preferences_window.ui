@@ -81,7 +81,7 @@
       </row>
       <row>
         <col id="0" translatable="yes">Detached contact list with chat grouped by account</col>
-        <col id="1" translatable="yes">peracct</col>
+        <col id="1">peracct</col>
       </row>
       <row>
         <col id="0" translatable="yes">Detached contact list with chat grouped by type</col>
