@@ -165,20 +165,6 @@ class GajimRemote(Server):
                 <arg name='message' type='s' />
                 <arg direction='out' type='b' />
             </method>
-            <method name='prefs_del'>
-                <arg name='key' type='s' />
-                <arg direction='out' type='b' />
-            </method>
-            <method name='prefs_list'>
-                <arg direction='out' type='a{ss}' />
-            </method>
-            <method name='prefs_put'>
-                <arg name='key' type='s' />
-                <arg direction='out' type='b' />
-            </method>
-            <method name='prefs_store'>
-                <arg direction='out' type='b' />
-            </method>
             <method name='remove_contact'>
                 <arg name='jid' type='s' />
                 <arg name='account' type='s' />
@@ -738,53 +724,6 @@ class GajimRemote(Server):
                     if item:
                         result.append(item)
         return result
-
-    def prefs_list(self):
-        prefs_dict = {}
-
-        def get_prefs(data, name, path, value):
-            if value is None:
-                return
-            key = ''
-            if path is not None:
-                for node in path:
-                    key += node + '#'
-            key += name
-            prefs_dict[key] = str(value)
-
-        app.config.foreach(get_prefs)
-        return prefs_dict
-
-    def prefs_store(self):
-        try:
-            app.interface.save_config()
-        except Exception:
-            return False
-        return True
-
-    def prefs_del(self, key):
-        if not key:
-            return False
-        key_path = key.split('#', 2)
-        if len(key_path) != 3:
-            return False
-        if key_path[2] == '*':
-            app.config.del_per(key_path[0], key_path[1])
-        else:
-            app.config.del_per(key_path[0], key_path[1], key_path[2])
-        return True
-
-    def prefs_put(self, key):
-        if not key:
-            return False
-        key_path = key.split('#', 2)
-        if len(key_path) < 3:
-            subname, value = key.split('=', 1)
-            app.config.set(subname, value)
-            return True
-        subname, value = key_path[2].split('=', 1)
-        app.config.set_per(key_path[0], key_path[1], subname, value)
-        return True
 
     def add_contact(self, jid, account):
         if account:
