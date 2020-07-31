@@ -77,12 +77,8 @@ class Preferences(Gtk.ApplicationWindow):
             self._ui.one_window_type_combobox.set_active(0)
 
         # Show roster on startup
-        choices = c_config.opt_show_roster_on_startup
-        type_ = app.config.get('show_roster_on_startup')
-        if type_ in choices:
-            self._ui.show_roster_on_startup.set_active(choices.index(type_))
-        else:
-            self._ui.show_roster_on_startup.set_active(0)
+        self._ui.show_roster_on_startup.set_active_id(
+            app.config.get('show_roster_on_startup'))
 
         # Quit on roster x
         st = app.config.get('quit_on_roster_x_button')
@@ -505,10 +501,8 @@ class Preferences(Gtk.ApplicationWindow):
         app.config.set('one_message_window', config_type)
         app.interface.msg_win_mgr.reconfig()
 
-    def on_show_roster_on_startup_changed(self, widget):
-        active = widget.get_active()
-        config_type = c_config.opt_show_roster_on_startup[active]
-        app.config.set('show_roster_on_startup', config_type)
+    def on_show_roster_on_startup_changed(self, combobox):
+        app.config.set('show_roster_on_startup', combobox.get_active_id())
 
     def on_quit_on_roster_x_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'quit_on_roster_x_button')
