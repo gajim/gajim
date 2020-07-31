@@ -112,18 +112,23 @@
   </object>
   <object class="GtkListStore" id="show_roster_on_startup_liststore">
     <columns>
-      <!-- column-name item -->
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name setting -->
       <column type="gchararray"/>
     </columns>
     <data>
       <row>
         <col id="0" translatable="yes">Always</col>
+        <col id="1">always</col>
       </row>
       <row>
         <col id="0" translatable="yes">Never</col>
+        <col id="1">never</col>
       </row>
       <row>
         <col id="0" translatable="yes">Last state</col>
+        <col id="1">last_state</col>
       </row>
     </data>
   </object>
@@ -275,6 +280,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">show_roster_on_startup_liststore</property>
+                        <property name="id_column">1</property>
                         <signal name="changed" handler="on_show_roster_on_startup_changed" swapped="no"/>
                         <child>
                           <object class="GtkCellRendererText"/>

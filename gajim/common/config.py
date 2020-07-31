@@ -55,7 +55,6 @@ opt_str = ['string', 0]
 opt_bool = ['boolean', 0]
 opt_color = ['color', r'(#[0-9a-fA-F]{6})|rgb\(\d+,\d+,\d+\)|rgba\(\d+,\d+,\d+,[01]\.?\d*\)']
 opt_one_window_types = ['never', 'always', 'always_with_roster', 'peracct', 'pertype']
-opt_show_roster_on_startup = ['always', 'never', 'last_state']
 opt_treat_incoming_messages = ['', 'chat', 'normal']
 
 
