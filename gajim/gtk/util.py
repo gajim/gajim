@@ -256,7 +256,7 @@ def get_icon_name(name: str,
 
     iconset = app.config.get('iconset')
     if not iconset:
-        iconset = app.config.DEFAULT_ICONSET
+        iconset = 'dcraven'
     return '%s-%s' % (iconset, name)
 
 
