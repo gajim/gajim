@@ -31,7 +31,6 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
 
-from gajim import common
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import Q_
@@ -56,7 +55,13 @@ from gajim.gtk.const import ControlType
 
 log = logging.getLogger('gajim.message_window')
 
-####################
+
+WINDOW_TYPES = ['never',
+                'always',
+                'always_with_roster',
+                'peracct',
+                'pertype']
+
 
 class MessageWindow(EventHelper):
     """
@@ -877,7 +882,7 @@ class MessageWindowMgr(GObject.GObject):
             'window-delete': (GObject.SignalFlags.RUN_LAST, None, (object,)),
     }
 
-    # These constants map to common.config.opt_one_window_types indices
+    # These constants map to WINDOW_TYPES indices
     (
             ONE_MSG_WINDOW_NEVER,
             ONE_MSG_WINDOW_ALWAYS,
@@ -885,6 +890,7 @@ class MessageWindowMgr(GObject.GObject):
             ONE_MSG_WINDOW_PERACCT,
             ONE_MSG_WINDOW_PERTYPE,
     ) = range(5)
+
     # A key constant for the main window in ONE_MSG_WINDOW_ALWAYS mode
     MAIN_WIN = 'main'
     # A key constant for the main window in ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER mode
@@ -904,7 +910,7 @@ class MessageWindowMgr(GObject.GObject):
 
         # Map the mode to a int constant for frequent compares
         mode = app.config.get('one_message_window')
-        self.mode = common.config.opt_one_window_types.index(mode)
+        self.mode = WINDOW_TYPES.index(mode)
 
         self.parent_win = parent_window
         self.parent_paned = parent_paned
@@ -1198,10 +1204,10 @@ class MessageWindowMgr(GObject.GObject):
         for w in self.windows():
             self.save_state(w)
         mode = app.config.get('one_message_window')
-        if self.mode == common.config.opt_one_window_types.index(mode):
+        if self.mode == WINDOW_TYPES.index(mode):
             # No change
             return
-        self.mode = common.config.opt_one_window_types.index(mode)
+        self.mode = WINDOW_TYPES.index(mode)
 
         controls = []
         for w in self.windows():

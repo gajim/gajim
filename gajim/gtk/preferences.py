@@ -29,7 +29,6 @@ except Exception:
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
-from gajim.common import config as c_config
 from gajim.common import idle
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
@@ -69,12 +68,8 @@ class Preferences(Gtk.ApplicationWindow):
         ### General tab ###
         ## Behavior of Windows and Tabs
         # Set default for single window type
-        choices = c_config.opt_one_window_types
-        type_ = app.config.get('one_message_window')
-        if type_ in choices:
-            self._ui.one_window_type_combobox.set_active(choices.index(type_))
-        else:
-            self._ui.one_window_type_combobox.set_active(0)
+        self._ui.one_window_type_combobox.set_active_id(
+            app.config.get('one_message_window'))
 
         # Show roster on startup
         self._ui.show_roster_on_startup.set_active_id(
@@ -495,10 +490,8 @@ class Preferences(Gtk.ApplicationWindow):
                 yield ctrl
 
     ### General tab ###
-    def on_one_window_type_combo_changed(self, widget):
-        active = widget.get_active()
-        config_type = c_config.opt_one_window_types[active]
-        app.config.set('one_message_window', config_type)
+    def on_one_window_type_combo_changed(self, combobox):
+        app.config.set('one_message_window', combobox.get_active_id())
         app.interface.msg_win_mgr.reconfig()
 
     def on_show_roster_on_startup_changed(self, combobox):
