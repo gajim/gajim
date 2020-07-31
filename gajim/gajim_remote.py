@@ -164,28 +164,6 @@ class GajimRemote:
                                                 'account'), False)
                                 ]
                         ],
-                'prefs_list': [
-                                _('Lists all preferences and their values'),
-                                []
-                        ],
-                'prefs_put': [
-                                _('Sets value of \'key\' to \'value\'.'),
-                                [
-                                        (_('key=value'), _('\'key\' is the name of the preference, '
-                                                '\'value\' is what to set it to'), True)
-                                ]
-                        ],
-                'prefs_del': [
-                                _('Deletes a preference item'),
-                                [
-                                        (_('key'), _('name of the preference to be deleted'), True)
-                                ]
-                        ],
-                'prefs_store': [
-                                _('Writes the current state of Gajim preferences to the .config '
-                                        'file'),
-                                []
-                        ],
                 'remove_contact': [
                                 _('Removes contact from contact list'),
                                 [
