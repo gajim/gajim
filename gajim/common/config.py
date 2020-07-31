@@ -104,7 +104,6 @@ class Config:
                 'remove */_ . So *abc* will be bold but with * * not removed.')],
         'sounds_on': [opt_bool, True],
         'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nickname completion (tab) in group chat.')],
-        'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when nickname is already used in group chat.')],
         'msgwin-max-state': [opt_bool, False],
         'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
         'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
@@ -144,7 +143,6 @@ class Config:
         'change_roster_title': [opt_bool, True, _('If enabled, Gajim will add * and [n] in contact list window title.')],
         'restore_lines': [opt_int, 10, _('Number of messages from chat history to be restored when a chat tab/window is reopened.')],
         'restore_timeout': [opt_int, -1, _('How far back in time (minutes) chat history is restored. -1 means no limit.')],
-        'muc_autorejoin_timeout': [opt_int, 1, _('How many seconds to wait before trying to automatically rejoin a group chat you were disconnected from. Set to 0 to disable automatic rejoining.')],
         'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and make a new line with Enter.')],
         'last_roster_visible': [opt_bool, True],
         'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP (previously sent messages).')],
@@ -222,7 +220,6 @@ class Config:
         'audio_output_volume': [opt_int, 50],
         'use_stun_server': [opt_bool, False, _('If enabled, Gajim will try to use a STUN server when using Jingle. The one in \'stun_server\' option, or the one given by the XMPP server.')],
         'stun_server': [opt_str, '', _('STUN server to use when using Jingle')],
-        'show_affiliation_in_groupchat': [opt_bool, True, _('If enabled, Gajim will show affiliation of group chat participants by adding a colored square to the status icon.')],
         'global_proxy': [opt_str, '', _('Proxy used for all outgoing connections if the account does not have a specific proxy configured.')],
         'ignore_incoming_attention': [opt_bool, False, _('If enabled, Gajim will ignore incoming attention requests (\'wizz\').')],
         'remember_opened_chat_controls': [opt_bool, True, _('If enabled, Gajim will reopen chat windows that were opened last time Gajim was closed.')],
@@ -289,7 +286,6 @@ class Config:
             'sync_with_global_status': [opt_bool, False, ],
             'no_log_for': [opt_str, '', _('List of XMPP Addresses (space separated) for which you do not want to store chat history. You can also add the name of an account to disable storing chat history for this account.')],
             'attached_gpg_keys': [opt_str, ''],
-            'time_for_ping_alive_answer': [opt_int, 60, _('How many seconds to wait for the answer of a ping alive packet before trying to reconnect.')],
             'http_auth': [opt_str, 'ask'], # yes, no, ask
             # proxy65 for FT
             'file_transfer_proxies': [opt_str, ''],
