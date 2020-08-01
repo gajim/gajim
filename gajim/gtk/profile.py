@@ -16,37 +16,35 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import base64
 import time
 import logging
-import hashlib
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 
+from nbxmpp.errors import is_error
+from nbxmpp.modules.vcard_temp import VCard
+
 from gajim.common import app
-from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
-from gajim.common.helpers import event_filter
+from gajim.common.modules.util import task
 
 from gajim import gtkgui_helpers
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import EventHelper
 from gajim.gtk.filechoosers import AvatarChooserDialog
 
 
 log = logging.getLogger('gajim.profile')
 
 
-class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
+class ProfileWindow(Gtk.ApplicationWindow):
     def __init__(self, account):
         Gtk.ApplicationWindow.__init__(self)
-        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
@@ -69,8 +67,7 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.dialog = None
         self.avatar_mime_type = None
-        self.avatar_encoded = None
-        self.avatar_sha = None
+        self._avatar_bytes = None
         self.message_id = self.statusbar.push(self.context_id,
                                               _('Retrieving profile…'))
         self.update_progressbar_timeout_id = GLib.timeout_add(
@@ -78,15 +75,10 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
         self.remove_statusbar_timeout_id = None
 
         self.xml.connect_signals(self)
-        self.register_events([
-            ('vcard-published', ged.GUI1, self._nec_vcard_published),
-            ('vcard-not-published', ged.GUI1, self._nec_vcard_not_published),
-        ])
 
         self.show_all()
         self.xml.get_object('ok_button').grab_focus()
-        app.connections[account].get_module('VCardTemp').request_vcard(
-            self._nec_vcard_received, self.jid)
+        self._request_vcard()
 
     def on_information_notebook_switch_page(self, widget, page, page_num):
         GLib.idle_add(self.xml.get_object('ok_button').grab_focus)
@@ -100,6 +92,7 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
         self.remove_statusbar_timeout_id = None
 
     def on_profile_window_destroy(self, widget):
+        app.cancel_tasks(self)
         if self.update_progressbar_timeout_id is not None:
             GLib.source_remove(self.update_progressbar_timeout_id)
         if self.remove_statusbar_timeout_id is not None:
@@ -120,8 +113,7 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
         button.hide()
         text_button = self.xml.get_object('NOPHOTO_button')
         text_button.show()
-        self.avatar_encoded = None
-        self.avatar_sha = None
+        self._avatar_bytes = None
         self.avatar_mime_type = None
 
     def _on_set_avatar_clicked(self, _button):
@@ -144,8 +136,7 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
             text_button = self.xml.get_object('NOPHOTO_button')
             text_button.hide()
 
-            self.avatar_sha = sha
-            self.avatar_encoded = base64.b64encode(data).decode('utf-8')
+            self._avatar_bytes = data
             self.avatar_mime_type = 'image/png'
 
         AvatarChooserDialog(on_ok, transient_for=self)
@@ -176,37 +167,43 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
         except AttributeError:
             pass
 
-    def set_values(self, vcard_):
+    def _set_avatar(self, vcard):
+        avatar, _ = vcard.get_avatar()
+
         button = self.xml.get_object('PHOTO_button')
         image = self.xml.get_object('PHOTO_image')
         text_button = self.xml.get_object('NOPHOTO_button')
-        if 'PHOTO' not in vcard_:
-            # set default image
+
+        if avatar is None:
             image.set_from_pixbuf(None)
             button.hide()
             text_button.show()
+            return
+
+        try:
+            surface = self._get_surface_from_data(avatar)
+        except Exception:
+            log.exception('Error while loading avatar')
+            image.set_from_pixbuf(None)
+            button.hide()
+            text_button.show()
+            return
+
+        self._avatar_bytes = avatar
+        self.avatar_mime_type = vcard.data['PHOTO']['TYPE']
+
+        image.set_from_surface(surface)
+        button.show()
+        text_button.hide()
+
+    def _get_surface_from_data(self, data):
+        scale = self.get_scale_factor()
+        pixbuf = gtkgui_helpers.scale_pixbuf_from_data(data, AvatarSize.VCARD)
+        return Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
+
+    def set_values(self, vcard_):
         for i in vcard_.keys():
             if i == 'PHOTO':
-                photo_encoded = vcard_[i]['BINVAL']
-                if photo_encoded == '':
-                    continue
-                self.avatar_encoded = photo_encoded
-                photo_decoded = base64.b64decode(photo_encoded.encode('utf-8'))
-                self.avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
-                if 'TYPE' in vcard_[i]:
-                    self.avatar_mime_type = vcard_[i]['TYPE']
-
-                scale = self.get_scale_factor()
-                surface = app.interface.avatar_storage.surface_from_filename(
-                    self.avatar_sha, AvatarSize.VCARD, scale)
-                if surface is None:
-                    pixbuf = gtkgui_helpers.scale_pixbuf_from_data(
-                        photo_decoded, AvatarSize.VCARD)
-                    surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf,
-                                                                   scale)
-                image.set_from_surface(surface)
-                button.show()
-                text_button.hide()
                 continue
             if i in ('ADR', 'TEL', 'EMAIL'):
                 for entry in vcard_[i]:
@@ -235,9 +232,6 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
             self.progressbar.hide()
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
-
-    def _nec_vcard_received(self, jid, resource, room, vcard_, *args):
-        self.set_values(vcard_)
 
     def add_to_vcard(self, vcard_, entry, txt):
         """
@@ -291,11 +285,10 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
             vcard_['DESC'] = txt
 
         # Avatar
-        if self.avatar_encoded:
-            vcard_['PHOTO'] = {'BINVAL': self.avatar_encoded}
-            if self.avatar_mime_type:
-                vcard_['PHOTO']['TYPE'] = self.avatar_mime_type
-        return vcard_, self.avatar_sha
+        vcard = VCard(vcard_)
+        if self._avatar_bytes:
+            vcard.set_avatar(self._avatar_bytes, self.avatar_mime_type)
+        return vcard
 
     def on_ok_button_clicked(self, widget):
         if self.update_progressbar_timeout_id:
@@ -308,43 +301,69 @@ class ProfileWindow(Gtk.ApplicationWindow, EventHelper):
                   'information.'),
                 transient_for=self)
             return
-        vcard_, sha = self.make_vcard()
-        nick = vcard_.get('NICKNAME') or None
-        app.connections[self.account].get_module('UserNickname').set_nickname(nick)
-        if not nick:
-            nick = app.settings.get_account_setting(self.account, 'name')
-        app.nicks[self.account] = nick
-        app.connections[self.account].get_module('VCardTemp').send_vcard(
-            vcard_, sha)
+
+        vcard_ = self.make_vcard()
+
+        client = app.get_client(self.account)
+        client.get_module('VCardTemp').set_vcard(
+            vcard_, callback=self._on_set_vcard_result)
+        self._set_nickname(vcard_)
+
         self.message_id = self.statusbar.push(
             self.context_id, _('Sending profile…'))
         self.progressbar.show()
         self.update_progressbar_timeout_id = GLib.timeout_add(
             100, self.update_progressbar)
 
-    @event_filter(['account'])
-    def _nec_vcard_published(self, _event):
-        if self.update_progressbar_timeout_id is not None:
-            GLib.source_remove(self.update_progressbar_timeout_id)
-            self.update_progressbar_timeout_id = None
-        self.destroy()
+    @task
+    def _request_vcard(self):
+        _task = yield
 
-    @event_filter(['account'])
-    def _nec_vcard_not_published(self, _event):
-        if self.message_id:
-            self.statusbar.remove(self.context_id, self.message_id)
-        self.message_id = self.statusbar.push(
-            self.context_id, _('Information NOT published'))
-        self.remove_statusbar_timeout_id = GLib.timeout_add_seconds(
-            3, self.remove_statusbar, self.message_id)
-        if self.update_progressbar_timeout_id is not None:
-            GLib.source_remove(self.update_progressbar_timeout_id)
-            self.progressbar.set_fraction(0)
-            self.update_progressbar_timeout_id = None
-        InformationDialog(
-            _('vCard publication failed'),
-            _('There was an error while publishing your personal information, '
-              'try again later.'), transient_for=self)
+        client = app.get_client(self.account)
+        vcard = yield client.get_module('VCardTemp').request_vcard()
+
+        if is_error(vcard):
+            return
+
+        self._set_avatar(vcard)
+        self.set_values(vcard.data)
+
+    def _on_set_vcard_result(self, task_):
+        try:
+            task_.finish()
+        except Exception as error:
+            log.warning(error)
+
+            if self.message_id:
+                self.statusbar.remove(self.context_id, self.message_id)
+            self.message_id = self.statusbar.push(
+                self.context_id, _('Information NOT published'))
+            self.remove_statusbar_timeout_id = GLib.timeout_add_seconds(
+                3, self.remove_statusbar, self.message_id)
+            if self.update_progressbar_timeout_id is not None:
+                GLib.source_remove(self.update_progressbar_timeout_id)
+                self.progressbar.set_fraction(0)
+                self.update_progressbar_timeout_id = None
+            InformationDialog(
+                _('vCard publication failed'),
+                _('There was an error while publishing your personal information, '
+                  'try again later.'), transient_for=self)
+
+        else:
+            if self.update_progressbar_timeout_id is not None:
+                GLib.source_remove(self.update_progressbar_timeout_id)
+                self.update_progressbar_timeout_id = None
+            self.destroy()
+
+    def _set_nickname(self, vcard):
+        nick = vcard.data.get('NICKNAME') or None
+
+        client = app.get_client(self.account)
+        client.get_module('UserNickname').set_nickname(nick)
+
+        if not nick:
+            nick = app.config.get_per('accounts', self.account, 'name')
+        app.nicks[self.account] = nick
 
     def on_cancel_button_clicked(self, widget):
         self.destroy()

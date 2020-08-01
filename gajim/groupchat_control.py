@@ -35,6 +35,7 @@ from nbxmpp.const import StatusCode
 from nbxmpp.const import Affiliation
 from nbxmpp.const import PresenceType
 from nbxmpp.util import is_error_result
+from nbxmpp.modules.vcard_temp import VCard
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -43,7 +44,7 @@ from gi.repository import Gio
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
-from gajim import vcard
+from gajim.vcard import VcardWindow
 
 from gajim.common import events
 from gajim.common import app
@@ -65,7 +66,6 @@ from gajim.command_system.implementation.hosts import GroupChatCommands
 
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ConfirmationCheckDialog
-from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.groupchat_config import GroupchatConfig
@@ -573,19 +573,31 @@ class GroupchatControl(ChatControlBase):
             data, sha = app.interface.avatar_storage.prepare_for_publish(
                 filename)
             if sha is None:
-                ErrorDialog(
-                    _('Could not load image'),
-                    transient_for=self.parent_win.window)
+                self.add_info_message(_('Loading avatar failed'))
                 return
 
             avatar = base64.b64encode(data).decode('utf-8')
+            vcard = VCard()
+            vcard.set_avatar(avatar, 'image/png')
+
             con = app.connections[self.account]
-            con.get_module('VCardTemp').upload_room_avatar(
-                self.room_jid, avatar)
+            con.get_module('VCardTemp').set_vcard(
+                vcard,
+                jid=self.room_jid,
+                callback=self._on_upload_avatar_result)
 
         AvatarChooserDialog(_on_accept,
                             transient_for=self.parent_win.window,
                             modal=True)
+
+    def _on_upload_avatar_result(self, task):
+        try:
+            task.finish()
+        except Exception as error:
+            self.add_info_message(_(f'Avatar upload failed: {error}'))
+
+        else:
+            self.add_info_message(_('Avatar upload successful'))
 
     def _on_contact_information(self, _action, param):
         nick = param.get_string()
@@ -598,7 +610,7 @@ class GroupchatControl(ChatControlBase):
                 window.present()
         else:
             app.interface.instances[self.account]['infos'][contact.jid] = \
-                vcard.VcardWindow(contact, self.account, gc_contact)
+                VcardWindow(contact, self.account, gc_contact)
 
     def _on_kick(self, _action, param):
         nick = param.get_string()

@@ -129,13 +129,6 @@ class IdleState(Enum):
 
 
 @unique
-class RequestAvatar(IntEnum):
-    SELF = 0
-    ROOM = 1
-    USER = 2
-
-
-@unique
 class PEPEventType(IntEnum):
     ABSTRACT = 0
     ACTIVITY = 1

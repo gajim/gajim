@@ -133,10 +133,6 @@ messages = {
           'for the chosen encryption.'),
         ErrorDialog),
 
-    'avatar-upload-error': Message(
-        _('Avatar Upload Failed'),
-        '%s',
-        ErrorDialog),
     }
 
 

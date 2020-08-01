@@ -14,16 +14,14 @@
 
 # XEP-0153: vCard-Based Avatars
 
-from pathlib import Path
-
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.const import AvatarState
+from nbxmpp.modules.util import is_error
 
 from gajim.common import app
-from gajim.common import configpaths
-from gajim.common.const import RequestAvatar
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import task
 
 
 class VCardAvatars(BaseModule):
@@ -38,17 +36,55 @@ class VCardAvatars(BaseModule):
                           priority=51),
         ]
 
-        self.avatar_advertised = False
-        self._find_own_avatar()
+        self.avatar_conversion_available = False
 
-    def _find_own_avatar(self):
-        sha = app.settings.get_account_setting(self._account, 'avatar_sha')
-        if not sha:
+    def pass_disco(self, info):
+        is_available = Namespace.VCARD_CONVERSION in info.features
+        self.avatar_conversion_available = is_available
+        self._log.info('Discovered Avatar Conversion')
+
+    @task
+    def _request_vcard(self, jid, expected_sha, type_):
+        _task = yield
+
+        vcard = yield self._con.get_module('VCardTemp').request_vcard(jid=jid)
+
+        if is_error(vcard):
+            self._log.warning(vcard)
             return
-        path = Path(configpaths.get('AVATAR')) / sha
-        if not path.exists():
-            self._log.info('Missing own avatar, reset sha')
-            app.settings.set_account_setting(self._account, 'avatar_sha', '')
+
+        avatar, avatar_sha = vcard.get_avatar()
+        if avatar is None:
+            self._log.warning('Avatar missing: %s %s', jid, expected_sha)
+            return
+
+        if expected_sha != avatar_sha:
+            self._log.warning('Avatar mismatch: %s %s != %s',
+                              jid,
+                              expected_sha,
+                              avatar_sha)
+            return
+
+        self._log.info('Received: %s %s', jid, avatar_sha)
+        app.interface.save_avatar(avatar)
+
+        if type_ == 'contact':
+            self._con.get_module('Roster').set_avatar_sha(jid, avatar_sha)
+            app.contacts.set_avatar(self._account, jid, avatar_sha)
+            app.interface.update_avatar(self._account, jid)
+
+        elif type_ == 'muc':
+            app.storage.cache.set_muc_avatar_sha(jid, avatar_sha)
+            app.contacts.set_avatar(self._account, jid, avatar_sha)
+            app.interface.update_avatar(self._account, jid, room_avatar=True)
+
+        elif type_ == 'muc-user':
+            contact = app.contacts.get_gc_contact(self._account,
+                                                  jid.bare,
+                                                  jid.resource)
+            if contact is not None:
+                contact.avatar_sha = avatar_sha
+                app.interface.update_avatar(contact=contact)
 
     def _presence_received(self, _con, _stanza, properties):
         if not properties.type.is_available:
@@ -59,15 +95,6 @@ class VCardAvatars(BaseModule):
             return
 
         if self._con.get_own_jid().bare_match(properties.jid):
-            if self._con.get_own_jid() == properties.jid:
-                # Initial presence reflection
-                if self._con.avatar_conversion:
-                    # XEP-0398: Tells us the current avatar sha on the
-                    # initial presence reflection
-                    self._self_update_received(properties)
-            else:
-                # Presence from another resource of ours
-                self._self_update_received(properties)
             return
 
         if properties.from_muc:
@@ -77,38 +104,6 @@ class VCardAvatars(BaseModule):
             contact = app.contacts.get_groupchat_contact(self._account,
                                                          str(properties.jid))
             self._update_received(properties, room=contact is not None)
-
-    def _self_update_received(self, properties):
-        jid = properties.jid.bare
-        if properties.avatar_state == AvatarState.EMPTY:
-            # Empty <photo/> tag, means no avatar is advertised
-            self._log.info('%s has no avatar published', properties.jid)
-            app.settings.set_account_setting(self._account, 'avatar_sha', '')
-            app.contacts.set_avatar(self._account, jid, None)
-            app.interface.update_avatar(self._account, jid)
-            return
-
-        self._log.info('Update: %s %s', jid, properties.avatar_sha)
-        current_sha = app.settings.get_account_setting(self._account,
-                                                       'avatar_sha')
-
-        if properties.avatar_sha != current_sha:
-            path = Path(configpaths.get('AVATAR')) / properties.avatar_sha
-            if path.exists():
-                app.settings.set_account_setting(self._account,
-                                                 'avatar_sha',
-                                                 properties.avatar_sha)
-                app.contacts.set_avatar(self._account,
-                                        jid,
-                                        properties.avatar_sha)
-                app.interface.update_avatar(self._account, jid)
-            else:
-                self._log.info('Request : %s', jid)
-                self._con.get_module('VCardTemp').request_vcard(
-                    RequestAvatar.SELF)
-        else:
-            self._log.info('Avatar already known: %s %s',
-                           jid, properties.avatar_sha)
 
     def muc_disco_info_update(self, disco_info):
         if not disco_info.supports(Namespace.VCARD):
@@ -135,9 +130,6 @@ class VCardAvatars(BaseModule):
         if state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', jid)
-
-            # Remove avatar
-            self._log.debug('Remove: %s', jid)
             app.contacts.set_avatar(self._account, jid, None)
 
             if room:
@@ -169,11 +161,9 @@ class VCardAvatars(BaseModule):
             if avatar_sha not in self._requested_shas:
                 self._requested_shas.append(avatar_sha)
                 if room:
-                    self._con.get_module('VCardTemp').request_vcard(
-                        RequestAvatar.ROOM, jid, sha=avatar_sha)
+                    self._request_vcard(jid, avatar_sha, 'muc')
                 else:
-                    self._con.get_module('VCardTemp').request_vcard(
-                        RequestAvatar.USER, jid, sha=avatar_sha)
+                    self._request_vcard(jid, avatar_sha, 'contact')
 
     def _gc_update_received(self, properties):
         nick = properties.jid.resource
@@ -186,9 +176,8 @@ class VCardAvatars(BaseModule):
             return
 
         if properties.avatar_state == AvatarState.EMPTY:
-            # Empty <photo/> tag, means no avatar is advertised, remove avatar
+            # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', nick)
-            self._log.debug('Remove: %s', nick)
             gc_contact.avatar_sha = None
             app.interface.update_avatar(contact=gc_contact)
         else:
@@ -197,9 +186,9 @@ class VCardAvatars(BaseModule):
                 if properties.avatar_sha not in self._requested_shas:
                     app.log('avatar').info('Request: %s', nick)
                     self._requested_shas.append(properties.avatar_sha)
-                    self._con.get_module('VCardTemp').request_vcard(
-                        RequestAvatar.USER, str(properties.jid),
-                        room=True, sha=properties.avatar_sha)
+                    self._request_vcard(properties.jid,
+                                        properties.avatar_sha,
+                                        'muc-user')
                 return
 
             if gc_contact.avatar_sha != properties.avatar_sha:
@@ -209,29 +198,6 @@ class VCardAvatars(BaseModule):
                 app.interface.update_avatar(contact=gc_contact)
             else:
                 self._log.info('Avatar already known: %s', nick)
-
-    def send_avatar_presence(self, force=False, after_publish=False):
-        if self._con.avatar_conversion:
-            if not after_publish:
-                # XEP-0398: We only resend presence after we publish a
-                # new avatar
-                return
-        else:
-            if self.avatar_advertised and not force:
-                self._log.debug('Avatar already advertised')
-                return
-
-        self._con.update_presence()
-        self.avatar_advertised = True
-
-    def add_update_node(self, node):
-        update = node.setTag('x', namespace=Namespace.VCARD_UPDATE)
-        if self._con.get_module('VCardTemp').own_vcard_received:
-            sha = app.settings.get_account_setting(self._account, 'avatar_sha')
-            own_jid = self._con.get_own_jid()
-            self._log.info('Send avatar presence to: %s %s',
-                           node.getTo() or own_jid, sha or 'no sha advertised')
-            update.setTagData('photo', sha)
 
 
 def get_instance(*args, **kwargs):

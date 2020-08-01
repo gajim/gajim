@@ -112,9 +112,7 @@ class Discovery(BaseModule):
         self._con.get_module('PEP').pass_disco(result)
         self._con.get_module('PubSub').pass_disco(result)
         self._con.get_module('Bookmarks').pass_disco(result)
-
-        if 'urn:xmpp:pep-vcard-conversion:0' in result.features:
-            self._con.avatar_conversion = True
+        self._con.get_module('VCardAvatars').pass_disco(result)
 
         self._con.get_module('Caps').update_caps()
 

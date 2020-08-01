@@ -362,11 +362,6 @@ class Presence(BaseModule):
             nick_tag = presence.setTag('nick', namespace=Namespace.NICK)
             nick_tag.setData(nick)
 
-        if not self._con.avatar_conversion:
-            # XEP-0398 not supported by server so
-            # we add the avatar sha to our presence
-            self._con.get_module('VCardAvatars').add_update_node(presence)
-
         if (idle_time and
                 app.is_installed('IDLE') and
                 app.settings.get('autoaway')):

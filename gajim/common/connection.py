@@ -71,7 +71,6 @@ class CommonConnection:
         self.pep = {}
 
         self.roster_supported = True
-        self.avatar_conversion = False
 
         self._stun_servers = [] # STUN servers of our jabber server
 

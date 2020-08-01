@@ -824,13 +824,7 @@ def get_subscription_request_msg(account=None):
     s = _('I would like to add you to my contact list.')
     if account:
         s = _('Hello, I am $name.') + ' ' + s
-        name = app.connections[account].get_module('VCardTemp').get_vard_name()
-        nick = app.nicks[account]
-        if name and nick:
-            name += ' (%s)' % nick
-        elif nick:
-            name = nick
-        s = Template(s).safe_substitute({'name': name})
+        s = Template(s).safe_substitute({'name': app.nicks[account]})
         return s
 
 def get_user_proxy(account):
