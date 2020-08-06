@@ -263,7 +263,7 @@
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon_name">edit-clear-symbolic</property>
+                <property name="icon_name">edit-clear-all-symbolic</property>
               </object>
             </child>
           </object>
