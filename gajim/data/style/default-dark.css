@@ -1,54 +1,54 @@
 
 .gajim-incoming-nickname {
-    color: rgb(210, 75, 75)
+    color: rgb(210, 75, 75);
 }
 .gajim-outgoing-nickname {
-    color: rgb(40, 140, 210)
+    color: rgb(40, 140, 210);
 }
 .gajim-outgoing-message-text {
-    color: rgb(200, 200, 200)
+    color: rgb(200, 200, 200);
 }
 .gajim-status-message {
-    color: rgb(140, 175, 210)
+    color: rgb(140, 175, 210);
 }
 .gajim-url {
-    color: rgb(60, 135, 220)
+    color: rgb(60, 135, 220);
 }
 .gajim-highlight-message {
-    color: rgb(210, 70, 30)
+    color: rgb(210, 70, 30);
 }
 .gajim-state-tab-muc-directed-msg {
-    color: rgb(210, 70, 30)
+    color: rgb(210, 70, 30);
 }
 .gajim-state-tab-muc-msg {
-    color: rgb(80, 95, 230)
+    color: rgb(80, 95, 230);
 }
 .gajim-roster-disconnected {
-    background: rgb(80, 30, 30)
+    background: rgb(80, 30, 30);
 }
 .gajim-roster-connected {
-    background: rgb(30, 80, 50)
+    background: rgb(30, 80, 50);
 }
 .gajim-state-composing {
-    color: rgb(90, 180, 90)
+    color: rgb(90, 180, 90);
 }
 .gajim-state-inactive {
-    color: rgb(158, 158, 158)
+    color: rgb(158, 158, 158);
 }
 .gajim-state-gone {
-    color: rgb(128, 128, 128)
+    color: rgb(128, 128, 128);
 }
 .gajim-state-paused {
-    color: rgb(20, 210, 160)
+    color: rgb(20, 210, 160);
 }
 .gajim-message-placeholder {
-    color: rgb(195, 195, 195)
+    color: rgb(195, 195, 195);
 }
 .gajim-msg-correcting text {
-    background: rgb(100, 100, 50)
+    background: rgb(100, 100, 50);
 }
 .gajim-search-highlight {
-    color: rgb(30, 80, 80)
+    color: rgb(30, 80, 80);
 }
 .gajim-notify-message {
     color: rgb(30, 144, 255);

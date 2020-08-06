@@ -6,13 +6,13 @@
 	border: none;
 	}
 
-.scrolled-no-border {border: none}
+.scrolled-no-border { border: none; }
 .no-scroll-indicator undershoot.top, undershoot.bottom { background-image: none; }
 .scrollbar-style scrollbar trough {background-color:@theme_base_color; }
 .scrollbar-style scrollbar {border:none; }
 .one-line-scrollbar scrollbar.vertical slider { min-height: 20px; }
 
-.actionbar-no-border box {border: none}
+.actionbar-no-border box { border: none; }
 .actionbar-no-border button { 
 	padding: 0px;
 	background-color: @theme_base_color; 
@@ -30,7 +30,7 @@
 
 .chatcontrol-separator {margin-bottom: 5px;}
 
-.link-button { min-height: 0px }
+.link-button { min-height: 0px; }
 
 /* VCardWindow */
 .VCard-GtkLinkButton { padding-left: 5px; border-left: none; }
@@ -41,7 +41,7 @@ popover#EmoticonPopover button > label { font-size: 24px; }
 popover#EmoticonPopover flowboxchild > label { font-size: 24px; }
 popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 popover#EmoticonPopover scrolledwindow { border: none; }
-popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_color}
+popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_color; }
 
 .emoji-chooser-heading { font-size: 13px; font-weight: bold; padding: 5px;}
 .emoji-chooser-flowbox { padding-left: 5px; padding-right: 11px; }
@@ -52,10 +52,10 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 #HistorySyncAssistant progressbar text { color: #000; font-size: 18px; padding: 10px;}
 #HistorySyncAssistant list { border: 1px solid; border-color: @borders; }
 #HistorySyncAssistant list > row { padding: 10px 30px 10px 30px; }
-#HistorySyncAssistant list > row > label { color: @insensitive_fg_color }
+#HistorySyncAssistant list > row > label { color: @insensitive_fg_color; }
 #HistorySyncAssistant list > row.activatable > label { color: @theme_text_color; }
 #HistorySyncAssistant list > row.activatable:selected > label { color: @theme_selected_fg_color; }
-#FinishedLabel { font-size: 14px; font-weight: bold }
+#FinishedLabel { font-size: 14px; font-weight: bold; }
 
 /* Server Info */
 #ServerInfo { border: 1px solid; border-color: @borders; }
@@ -74,10 +74,10 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 
 /* SettingsBox */
 .settings-box > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
-.settings-box > row:last-child { border-bottom: 0px}
+.settings-box > row:last-child { border-bottom: 0px; }
 .settings-box > row.activatable:active { box-shadow: none; }
 .settings-box > row { padding: 10px 20px 10px 10px; }
-.settings-box > row:not(.activatable) label { color: @insensitive_fg_color }
+.settings-box > row:not(.activatable) label { color: @insensitive_fg_color; }
 
 /* GenericSetting */
 #SubDescription { color: @insensitive_fg_color; font-size: small;}
@@ -88,7 +88,7 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 .PopoverButtonListbox { padding-left: 0px; padding-right: 0px; }
 .PopoverButtonListbox > list { margin-top: 10px; margin-bottom: 10px; }
 .PopoverButtonListbox > list > row { padding: 10px 20px 10px 20px; }
-.PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color }
+.PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color; }
 
 /* Settings ListBox */
 
@@ -148,7 +148,7 @@ infobar.error > revealer > box {
     padding: 6px;
 }
 .tls-error-list > row:last-child {
-    border-bottom: 0px
+    border-bottom: 0px;
 }
 
 /* Start Chat Accounts Treeview */
@@ -158,10 +158,10 @@ infobar.error > revealer > box {
 
 /* StartChatListBox */
 .start-chat-row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
-.start-chat-row:last-child { border-bottom: 0px}
+.start-chat-row:last-child { border-bottom: 0px; }
 .start-chat-row.activatable:active { box-shadow: none; }
 .start-chat-row { padding: 10px 20px 10px 10px; }
-.start-chat-row:not(.activatable) label { color: @insensitive_fg_color }
+.start-chat-row:not(.activatable) label { color: @insensitive_fg_color; }
 .start-chat-row:focus { outline: none; }
 
 /* GroupChatRoster */
@@ -213,11 +213,11 @@ infobar.error > revealer > box {
 #ThemesWindow grid { padding: 12px; }
 
 .theme_listbox row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; padding: 5px 10px 5px 10px;}
-.theme_listbox row:last-child { border-bottom: 0px}
+.theme_listbox row:last-child { border-bottom: 0px; }
 .theme_listbox row.activatable:active { box-shadow: none; }
-.theme_listbox row:not(.activatable) label { color: @insensitive_fg_color }
+.theme_listbox row:not(.activatable) label { color: @insensitive_fg_color; }
 .theme_listbox row:focus { outline: none; }
-.theme_listbox row:hover { background-color: @theme_base_color }
+.theme_listbox row:hover { background-color: @theme_base_color; }
 
 .theme_remove_button {
     background-color: @theme_base_color; 
@@ -255,7 +255,7 @@ treeview.space { padding: 6px; }
 button.flat.link { padding: 0; border: 0; }
 
 /*MessageWindow Notebook*/
-.notebook-tab-label {min-width: 80px}
+.notebook-tab-label { min-width: 80px; }
 
 /*Icon colors*/
 .success-color { color: @success_color; }
@@ -264,11 +264,11 @@ button.flat.link { padding: 0; border: 0; }
 .selected-color { color: @theme_selected_bg_color; }
 
 /*Encryption*/
-.encrypted-color { color: rgb(75, 181, 67) }
-.unencrypted-color { color: @error_color }
+.encrypted-color { color: rgb(75, 181, 67); }
+.unencrypted-color { color: @error_color; }
 
 /*Receipts*/
-.receipt-received-color { color: rgb(75, 181, 67) }
+.receipt-received-color { color: rgb(75, 181, 67); }
 
 /*Dataforms*/
 .field-fixed { font-size: 16px; font-weight: bold; padding-top:5px;}
