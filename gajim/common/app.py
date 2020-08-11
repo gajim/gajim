@@ -36,6 +36,7 @@ import logging
 import uuid
 from pathlib import Path
 from collections import namedtuple
+from collections import defaultdict
 
 import nbxmpp
 from gi.repository import Gdk
@@ -151,6 +152,7 @@ _dependencies = {
     'IDLE': False,
 }
 
+_tasks = defaultdict(list)
 
 def print_version():
     log('gajim').info('Gajim Version: %s', gajim.__version__)
@@ -661,3 +663,27 @@ def get_groupchat_control(account, jid):
         return app.interface.minimized_controls[account][jid]
     except Exception:
         return None
+
+
+def register_task(self, task):
+    _tasks[id(self)].append(task)
+
+
+def remove_task(task, id_):
+    try:
+        _tasks[id_].remove(task)
+    except Exception:
+        pass
+    else:
+        if not _tasks[id_]:
+            del _tasks[id_]
+
+
+def cancel_tasks(obj):
+    id_ = id(obj)
+    if id_ not in _tasks:
+        return
+
+    task_list = _tasks[id_]
+    for task in task_list:
+        task.cancel()

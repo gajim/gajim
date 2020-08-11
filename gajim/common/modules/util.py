@@ -20,6 +20,8 @@ from logging import LoggerAdapter
 from functools import wraps
 from functools import partial
 
+from nbxmpp.task import Task
+
 from gajim.common import app
 from gajim.common.const import EME_MESSAGES
 
@@ -88,3 +90,17 @@ def get_eme_message(eme_data):
 class LogAdapter(LoggerAdapter):
     def process(self, msg, kwargs):
         return '(%s) %s' % (self.extra['account'], msg), kwargs
+
+
+def task(func):
+    @wraps(func)
+    def func_wrapper(self, *args, callback=None, user_data=None, **kwargs):
+        task_ = Task(func(self, *args, **kwargs))
+        app.register_task(self, task_)
+        task_.set_finalize_func(app.remove_task, id(self))
+        task_.set_user_data(user_data)
+        if callback is not None:
+            task_.add_done_callback(callback)
+        task_.start()
+        return task_
+    return func_wrapper
