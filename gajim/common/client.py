@@ -33,7 +33,6 @@ from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.helpers import get_resource
-from gajim.common.helpers import get_ignored_tls_errors
 from gajim.common.helpers import get_idle_status_message
 from gajim.common.idle import Monitor
 from gajim.common.i18n import _
@@ -78,8 +77,6 @@ class Client(ConnectionHandlers):
         self._reconnect_timer_source = None
         self._destroy_client = False
         self._remove_account = False
-
-        self._tls_errors = set()
 
         self._destroyed = False
 
@@ -177,9 +174,6 @@ class Client(ConnectionHandlers):
         self._client.set_accepted_certificates(
             app.cert_store.get_certificates())
 
-        self._client.set_ignored_tls_errors(
-            get_ignored_tls_errors(self._account))
-
         if app.config.get_per('accounts', self._account,
                               'use_plain_connection'):
             self._client.set_connection_types([ConnectionType.PLAIN])
@@ -199,17 +193,6 @@ class Client(ConnectionHandlers):
 
         for handler in modules.get_handlers(self):
             self._client.register_handler(handler)
-
-    def process_tls_errors(self):
-        if not self._tls_errors:
-            self.connect(ignore_all_errors=True)
-            return
-
-        open_window('SSLErrorDialog',
-                    account=self._account,
-                    connection=self,
-                    cert=self._client.peer_certificate[0],
-                    error_num=self._tls_errors.pop())
 
     def _on_resume_failed(self, _client, _signal_name):
         log.info('Resume failed')
@@ -261,13 +244,19 @@ class Client(ConnectionHandlers):
             self._reconnect = False
 
         elif domain == StreamError.BAD_CERTIFICATE:
-            self._tls_errors = self._client.peer_certificate[1]
             self.get_module('Chatstate').enabled = False
             self._reconnect = False
             self._after_disconnect()
             app.nec.push_incoming_event(NetworkEvent(
                 'our-show', account=self._account, show='offline'))
-            self.process_tls_errors()
+
+            cert, errors = self._client.peer_certificate
+
+            open_window('SSLErrorDialog',
+                        account=self._account,
+                        client=self,
+                        cert=cert,
+                        error=errors.pop())
 
         elif domain in (StreamError.STREAM, StreamError.BIND):
             if error == 'conflict':
@@ -511,29 +500,29 @@ class Client(ConnectionHandlers):
             message.stanza = stanza
             self._send_message(message)
 
-    def connect(self, ignore_all_errors=False):
+    def connect(self, ignored_tls_errors=None):
         if self._state not in (ClientState.DISCONNECTED,
                                ClientState.RECONNECT_SCHEDULED):
             # Do not try to reco while we are already trying
             return
 
         log.info('Connect')
+
+        self._client.set_ignored_tls_errors(ignored_tls_errors)
         self._reconnect = True
         self._disable_reconnect_timer()
         self._set_state(ClientState.CONNECTING)
-        if ignore_all_errors:
-            self._client.set_ignore_tls_errors(True)
-            self._client.connect()
-        else:
-            if warn_about_plain_connection(self._account,
-                                           self._client.connection_types):
-                app.nec.push_incoming_event(NetworkEvent(
-                    'plain-connection',
-                    account=self._account,
-                    connect=self._client.connect,
-                    abort=self._abort_reconnect))
-                return
-            self._client.connect()
+
+        if warn_about_plain_connection(self._account,
+                                       self._client.connection_types):
+            app.nec.push_incoming_event(NetworkEvent(
+                'plain-connection',
+                account=self._account,
+                connect=self._client.connect,
+                abort=self._abort_reconnect))
+            return
+
+        self._client.connect()
 
     def _schedule_reconnect(self):
         self._set_state(ClientState.RECONNECT_SCHEDULED)
