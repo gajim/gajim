@@ -818,6 +818,10 @@ class MUCManager:
     def get_mucs_with_state(self, states):
         return [muc for muc in self._mucs.values() if muc.state in states]
 
+    def reset_state(self):
+        for muc in self._mucs.values():
+            self.set_state(muc.jid, MUCJoinedState.NOT_JOINED)
+
     def __contains__(self, room_jid):
         return room_jid in self._mucs
 
