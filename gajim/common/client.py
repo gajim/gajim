@@ -244,11 +244,8 @@ class Client(ConnectionHandlers):
             self._reconnect = False
 
         elif domain == StreamError.BAD_CERTIFICATE:
-            self.get_module('Chatstate').enabled = False
             self._reconnect = False
-            self._after_disconnect()
-            app.nec.push_incoming_event(NetworkEvent(
-                'our-show', account=self._account, show='offline'))
+            self._destroy_client = True
 
             cert, errors = self._client.peer_certificate
 
@@ -266,6 +263,7 @@ class Client(ConnectionHandlers):
 
         elif domain == StreamError.SASL:
             self._reconnect = False
+            self._destroy_client = True
 
             if error in ('not-authorized', 'no-password'):
                 def _on_password(password):
