@@ -746,7 +746,7 @@ class PluginManager(metaclass=Singleton):
                 os.unlink(path)
                 return
             # access is denied or other
-            raise PluginsystemError(error[1][1])
+            raise PluginsystemError(str(error[1]))
 
         rmtree(plugin_path, False, on_error)
 
