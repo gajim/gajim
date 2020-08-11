@@ -1301,19 +1301,20 @@ class GroupchatControl(ChatControlBase):
         show = helpers.get_uf_show(event.properties.show.value)
 
         status_default = app.config.get('print_status_muc_default')
+        if not app.config.get_per('rooms', self.room_jid,
+                                  'print_status', status_default):
+            self.roster.draw_contact(nick)
+            return
 
         if event.properties.is_muc_self_presence:
             message = _('You are now {show}{status}').format(show=show,
                                                              status=status)
-            self.add_status_message(message)
 
-        elif app.config.get_per('rooms', self.room_jid,
-                                'print_status', status_default):
+        else:
             message = _('{nick} is now {show}{status}').format(nick=nick,
                                                                show=show,
                                                                status=status)
-            self.add_status_message(message)
-
+        self.add_status_message(message)
         self.roster.draw_contact(nick)
 
     @event_filter(['account', 'room_jid'])
