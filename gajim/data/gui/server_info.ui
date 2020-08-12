@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkNotebook" id="server_info_notebook">
@@ -166,7 +166,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="top_attach">4</property>
           </packing>
         </child>
         <child>
@@ -181,7 +181,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -194,18 +194,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="connection_protocol">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -221,7 +210,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
+            <property name="top_attach">8</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -237,7 +226,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+            <property name="top_attach">6</property>
           </packing>
         </child>
         <child>
@@ -250,7 +239,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
+            <property name="top_attach">6</property>
           </packing>
         </child>
         <child>
@@ -265,15 +254,30 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="domain_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="label">Domain</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
             <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
+          <object class="GtkLabel" id="dns_label">
             <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes">Protocol</property>
+            <property name="label">DNS</property>
             <style>
               <class name="dim-label"/>
             </style>
@@ -282,6 +286,90 @@
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="ip_port_label">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="halign">end</property>
+            <property name="label">IP / Port</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="websocket_label">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="halign">end</property>
+            <property name="label">WebSocket URL</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="domain">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="dns">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="halign">start</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="ip_port">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="halign">start</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="websocket">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="halign">start</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <style>
           <class name="margin-18"/>

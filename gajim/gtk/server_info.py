@@ -91,24 +91,37 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _add_connection_info(self):
         # Connection type
-        client = app.connections[self.account].connection
-        con_type = client.current_connection_type
-        self._ui.connection_type.set_text(con_type.value)
-        if con_type.is_plain:
-            self._ui.conection_type.get_style_context().add_class(
-                'error-color')
+        nbxmpp_client = app.connections[self.account].connection
+        address = nbxmpp_client.current_address
 
-        is_websocket = app.connections[self.account].connection.is_websocket
-        protocol = 'WebSocket' if is_websocket else 'TCP'
-        self._ui.connection_protocol.set_text(protocol)
+        self._ui.connection_type.set_text(address.type.value)
+        if address.type.is_plain:
+            self._ui.conection_type.get_style_context().add_class('error-color')
 
         # Connection proxy
-        proxy = client.proxy
+        proxy = address.proxy
         if proxy is not None:
             self._ui.proxy_type.set_text(proxy.type)
             self._ui.proxy_host.set_text(proxy.host)
 
         self._ui.cert_button.set_sensitive(self.cert)
+
+        self._ui.domain.set_text(address.domain)
+
+        visible = address.service is not None
+        self._ui.dns_label.set_visible(visible)
+        self._ui.dns.set_visible(visible)
+        self._ui.dns.set_text(address.service or '')
+
+        visible = nbxmpp_client.remote_address is not None
+        self._ui.ip_port_label.set_visible(visible)
+        self._ui.ip_port.set_visible(visible)
+        self._ui.ip_port.set_text(nbxmpp_client.remote_address or '')
+
+        visible = address.uri is not None
+        self._ui.websocket_label.set_visible(visible)
+        self._ui.websocket.set_visible(visible)
+        self._ui.websocket.set_text(address.uri or '')
 
     def _on_cert_button_clicked(self, _button):
         open_window('CertificateDialog',
