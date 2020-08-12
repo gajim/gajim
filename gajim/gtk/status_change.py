@@ -57,6 +57,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self.set_name('StatusChange')
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_default_size(400, 350)
         self.set_show_menubar(False)
         self.set_transient_for(app.interface.roster.window)
         self.title_text = _('Status Message')  # TimeoutWindow
@@ -96,14 +97,8 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             self._draw_mood()
             self._init_moods()
         else:
-            self._ui.activity_label.set_no_show_all(True)
-            self._ui.activity_button.set_no_show_all(True)
-            self._ui.mood_label.set_no_show_all(True)
-            self._ui.mood_button.set_no_show_all(True)
-            self._ui.activity_label.hide()
-            self._ui.activity_button.hide()
-            self._ui.mood_label.hide()
-            self._ui.mood_button.hide()
+            self._ui.pep_grid.set_no_show_all(True)
+            self._ui.pep_grid.hide()
 
         self._message_buffer.connect('changed', self._stop_timeout)
         self.connect('key-press-event', self._on_key_press)
@@ -161,7 +156,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             activities = []
             subactivities = []
             moods = []
-            for account in app.get_connected_accounts():
+            for account in app.connections:
                 status_messages.append(app.connections[account].status_message)
                 activity_data = app.connections[account].pep.get(
                     PEPEventType.ACTIVITY)
