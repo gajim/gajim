@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkPopover" id="preset_popover">
@@ -116,7 +116,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkGrid" id="pep_grid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
