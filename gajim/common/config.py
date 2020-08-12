@@ -370,12 +370,6 @@ class Config:
         _('Working'): [_('I\'m working.'), 'working', 'other', '', '', ''],
         _('Phone'): [_('I\'m on the phone.'), 'talking', 'on_the_phone', '', '', ''],
         _('Out'): [_('I\'m out enjoying life.'), 'relaxing', 'going_out', '', '', ''],
-        '_last_online': ['', '', '', '', '', ''],
-        '_last_chat': ['', '', '', '', '', ''],
-        '_last_away': ['', '', '', '', '', ''],
-        '_last_xa': ['', '', '', '', '', ''],
-        '_last_dnd': ['', '', '', '', '', ''],
-        '_last_offline': ['', '', '', '', '', ''],
     }
 
     soundevents_default = {
