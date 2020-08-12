@@ -2066,13 +2066,13 @@ class RosterWindow:
         app.connections[account].change_status(status, txt)
         self._status_selector.update()
 
-    def chg_contact_status(self, contact, show, status, account):
+    def chg_contact_status(self, contact, show, status_message, account):
         """
         When a contact changes their status
         """
         contact_instances = app.contacts.get_contacts(account, contact.jid)
         contact.show = show
-        contact.status = status
+        contact.status = status_message
         # name is to show in conversation window
         name = contact.get_shown_name()
         fjid = contact.get_full_jid()
@@ -2105,12 +2105,12 @@ class RosterWindow:
         if ctrl and not ctrl.is_groupchat:
             ctrl.contact = app.contacts.get_contact_with_highest_priority(
                 account, contact.jid)
-            ctrl.update_status_display(name, uf_show, status)
+            ctrl.update_status_display(name, uf_show, status_message)
 
         if contact.resource:
             ctrl = app.interface.msg_win_mgr.get_control(fjid, account)
             if ctrl:
-                ctrl.update_status_display(name, uf_show, status)
+                ctrl.update_status_display(name, uf_show, status_message)
 
         # Delete pep if needed
         keep_pep = any(c.show not in ('error', 'offline') for c in
@@ -2134,8 +2134,8 @@ class RosterWindow:
         self_contact = app.contacts.get_contact(account,
                 app.get_jid_from_account(account), resource=self_resource)
         if self_contact:
-            status = app.connections[account].status
-            self.chg_contact_status(self_contact, show, status, account)
+            status_message = app.connections[account].status_message
+            self.chg_contact_status(self_contact, show, status_message, account)
         self.set_account_status_icon(account)
         if show == 'offline':
             if self.quit_on_next_offline > -1:
