@@ -270,17 +270,6 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('ask_offline_status')
         self._ui.prompt_offline_status_message_checkbutton.set_active(st)
 
-        # Status messages
-        renderer = Gtk.CellRendererText()
-        renderer.connect('edited', self.on_msg_cell_edited)
-        renderer.set_property('editable', True)
-        col = Gtk.TreeViewColumn('name', renderer, text=0)
-        self._ui.msg_treeview.append_column(col)
-        self.fill_msg_treeview()
-
-        buf = self._ui.msg_textview.get_buffer()
-        buf.connect('end-user-action', self.on_msg_textview_changed)
-
         ### Style tab ###
         # Themes
         self.changed_id = self._ui.theme_combobox.connect(
@@ -426,11 +415,6 @@ class Preferences(Gtk.ApplicationWindow):
 
         self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
-
-        self._ui.msg_treeview.get_model().connect('row-changed',
-                                self.on_msg_treemodel_row_changed)
-        self._ui.msg_treeview.get_model().connect('row-deleted',
-                                self.on_msg_treemodel_row_deleted)
 
         self.sounds_preferences = None
         self.theme_preferences = None
@@ -686,111 +670,6 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ask_offline_status')
-
-    def save_status_messages(self, model):
-        for msg in app.config.get_per('statusmsg'):
-            app.config.del_per('statusmsg', msg)
-        iter_ = model.get_iter_first()
-        while iter_:
-            val = model[iter_][0]
-            if model[iter_][1]: # We have a preset message
-                if not val: # No title, use message text for title
-                    val = model[iter_][1]
-                app.config.add_per('statusmsg', val)
-                msg = helpers.to_one_line(model[iter_][1])
-                app.config.set_per('statusmsg', val, 'message', msg)
-                i = 2
-                # Store mood / activity
-                for subname in ('activity', 'subactivity', 'activity_text',
-                'mood', 'mood_text'):
-                    val2 = model[iter_][i]
-                    if not val2:
-                        val2 = ''
-                    app.config.set_per('statusmsg', val, subname, val2)
-                    i += 1
-            iter_ = model.iter_next(iter_)
-
-    def on_msg_treemodel_row_changed(self, model, path, iter_):
-        self.save_status_messages(model)
-
-    def on_msg_treemodel_row_deleted(self, model, path):
-        self.save_status_messages(model)
-
-    def fill_msg_treeview(self):
-        self._ui.delete_msg_button.set_sensitive(False)
-        model = self._ui.msg_treeview.get_model()
-        model.clear()
-        preset_status = []
-        for msg_name in app.config.get_per('statusmsg'):
-            if msg_name.startswith('_last_'):
-                continue
-            preset_status.append(msg_name)
-        preset_status.sort()
-        for msg_name in preset_status:
-            msg_text = app.config.get_per('statusmsg', msg_name, 'message')
-            msg_text = helpers.from_one_line(msg_text)
-            activity = app.config.get_per('statusmsg', msg_name, 'activity')
-            subactivity = app.config.get_per('statusmsg', msg_name,
-                'subactivity')
-            activity_text = app.config.get_per('statusmsg', msg_name,
-                'activity_text')
-            mood = app.config.get_per('statusmsg', msg_name, 'mood')
-            mood_text = app.config.get_per('statusmsg', msg_name, 'mood_text')
-            iter_ = model.append()
-            model.set(iter_, 0, msg_name, 1, msg_text, 2, activity, 3,
-                subactivity, 4, activity_text, 5, mood, 6, mood_text)
-
-    def on_msg_cell_edited(self, cell, row, new_text):
-        model = self._ui.msg_treeview.get_model()
-        iter_ = model.get_iter_from_string(row)
-        model.set_value(iter_, 0, new_text)
-
-    def on_msg_treeview_cursor_changed(self, widget, data=None):
-        sel = self._ui.msg_treeview.get_selection()
-        if not sel:
-            return
-        (model, iter_) = sel.get_selected()
-        if not iter_:
-            return
-        self._ui.delete_msg_button.set_sensitive(True)
-        buf = self._ui.msg_textview.get_buffer()
-        msg = model[iter_][1]
-        buf.set_text(msg)
-
-    def on_new_msg_button_clicked(self, widget, data=None):
-        model = self._ui.msg_treeview.get_model()
-        iter_ = model.append()
-        model.set(
-            iter_, 0, _('status message title'), 1,
-            _('status message text'))
-        self._ui.msg_treeview.set_cursor(model.get_path(iter_))
-
-    def on_delete_msg_button_clicked(self, widget, data=None):
-        sel = self._ui.msg_treeview.get_selection()
-        if not sel:
-            return
-        (model, iter_) = sel.get_selected()
-        if not iter_:
-            return
-        buf = self._ui.msg_textview.get_buffer()
-        model.remove(iter_)
-        buf.set_text('')
-        self._ui.delete_msg_button.set_sensitive(False)
-
-    def on_msg_textview_changed(self, widget, data=None):
-        sel = self._ui.msg_treeview.get_selection()
-        if not sel:
-            return
-        (model, iter_) = sel.get_selected()
-        if not iter_:
-            return
-        buf = self._ui.msg_textview.get_buffer()
-        first_iter, end_iter = buf.get_bounds()
-        model.set_value(iter_, 1, buf.get_text(first_iter, end_iter, True))
-
-    def on_msg_treeview_key_press_event(self, widget, event):
-        if event.keyval == Gdk.KEY_Delete:
-            self.on_delete_msg_button_clicked(widget)
 
     ### Style ###
     @staticmethod
