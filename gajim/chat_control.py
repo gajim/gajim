@@ -1180,7 +1180,10 @@ class ChatControl(ChatControlBase):
             treeview = app.interface.roster.tree
             model = treeview.get_model()
             data = selection.get_data().decode()
-            path = treeview.get_selection().get_selected_rows()[1][0]
+            tree_selection = treeview.get_selection()
+            if tree_selection.count_selected_rows() == 0:
+                return
+            path = tree_selection.get_selected_rows()[1][0]
             iter_ = model.get_iter(path)
             type_ = model[iter_][2]
             if type_ != 'contact':  # Source is not a contact
