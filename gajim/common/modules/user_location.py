@@ -35,6 +35,11 @@ class UserLocation(BaseModule):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._location_received)
 
+        self._current_location = None
+
+    def get_current_location(self):
+        return self._current_location
+
     @event_node(Namespace.LOCATION)
     def _location_received(self, _con, _stanza, properties):
         if properties.pubsub_event.retracted:
@@ -53,6 +58,7 @@ class UserLocation(BaseModule):
                 self._con.pep[PEPEventType.LOCATION] = data
             else:
                 self._con.pep.pop(PEPEventType.LOCATION, None)
+            self._current_location = data
 
         app.nec.push_incoming_event(
             NetworkEvent('location-received',
@@ -63,6 +69,7 @@ class UserLocation(BaseModule):
 
     @store_publish
     def set_location(self, location):
+        self._current_location = location
         self._log.info('Send %s', location)
         self._nbxmpp('Location').set_location(location)
 

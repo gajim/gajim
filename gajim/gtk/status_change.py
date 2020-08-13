@@ -494,17 +494,30 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self.countdown_enabled = False
         self._ui.mood_page_button.set_sensitive(switch.get_active())
 
+    def _send_user_mood(self):
+        mood = None
+        if self._ui.mood_switch.get_active():
+            mood = self._pep_dict['mood']
+
+        for client in app.get_available_clients(self.account):
+            client.set_user_mood(mood)
+
+    def _send_user_activity(self):
+        activity = None
+        if self._ui.activity_switch.get_active():
+            activity = (self._pep_dict['activity'],
+                        self._pep_dict['subactivity'])
+
+        for client in app.get_available_clients(self.account):
+            client.set_user_activity(activity)
+
     def _change_status(self, *args):
         beg, end = self._message_buffer.get_bounds()
         message = self._message_buffer.get_text(beg, end, True).strip()
         message = remove_invalid_xml_chars(message)
 
-        if not self._ui.activity_switch.get_active():
-            self._pep_dict['activity'] = ''
-            self._pep_dict['subactivity'] = ''
+        self._send_user_activity()
+        self._send_user_mood()
 
-        if not self._ui.mood_switch.get_active():
-            self._pep_dict['mood'] = ''
-
-        self._callback(message, self._pep_dict)
+        self._callback(message)
         self.destroy()

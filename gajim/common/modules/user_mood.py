@@ -18,12 +18,12 @@ from typing import Any
 from typing import Tuple
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import MoodData
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
-from gajim.common.modules.util import store_publish
 from gajim.common.const import PEPEventType
 
 
@@ -37,6 +37,11 @@ class UserMood(BaseModule):
     def __init__(self, con):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._mood_received)
+
+        self._current_mood = None
+
+    def get_current_mood(self):
+        return self._current_mood
 
     @event_node(Namespace.MOOD)
     def _mood_received(self, _con, _stanza, properties):
@@ -56,6 +61,7 @@ class UserMood(BaseModule):
                 self._con.pep[PEPEventType.MOOD] = data
             else:
                 self._con.pep.pop(PEPEventType.MOOD, None)
+            self._current_mood = data
 
         app.nec.push_incoming_event(
             NetworkEvent('mood-received',
@@ -64,9 +70,20 @@ class UserMood(BaseModule):
                          mood=data,
                          is_self_message=properties.is_self_message))
 
-    @store_publish
     def set_mood(self, mood):
-        self._log.info('Send %s', mood)
+        if mood is not None:
+            mood = MoodData(mood, None)
+
+        if mood == self._current_mood:
+            return
+
+        self._current_mood = mood
+
+        if mood is None:
+            self._log.info('Remove user mood')
+        else:
+            self._log.info('Set %s', mood)
+
         self._nbxmpp('Mood').set_mood(mood)
 
 

@@ -372,7 +372,7 @@ class StatusIcon:
         model = app.interface.roster.status_combobox.get_model()
         active = app.interface.roster.status_combobox.get_active()
         status = model[active][2]
-        def on_response(message, pep_dict):
+        def on_response(message):
             if message is None: # None if user press Cancel
                 return
             accounts = app.connections.keys()
@@ -383,6 +383,6 @@ class StatusIcon:
                     continue
                 show = app.connections[acct].status
                 app.interface.roster.send_status(acct, show, message)
-                app.interface.roster.send_pep(acct, pep_dict)
+
         dlg = dialogs.ChangeStatusMessageDialog(on_response, status)
         dlg.dialog.present()
