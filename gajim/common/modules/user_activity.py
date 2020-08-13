@@ -18,12 +18,12 @@ from typing import Any
 from typing import Tuple
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import ActivityData
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
-from gajim.common.modules.util import store_publish
 from gajim.common.const import PEPEventType
 
 
@@ -37,6 +37,11 @@ class UserActivity(BaseModule):
     def __init__(self, con):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._activity_received)
+
+        self._current_activity = None
+
+    def get_current_activity(self):
+        return self._current_activity
 
     @event_node(Namespace.ACTIVITY)
     def _activity_received(self, _con, _stanza, properties):
@@ -56,6 +61,7 @@ class UserActivity(BaseModule):
                 self._con.pep[PEPEventType.ACTIVITY] = data
             else:
                 self._con.pep.pop(PEPEventType.ACTIVITY, None)
+            self._current_activity = data
 
         app.nec.push_incoming_event(
             NetworkEvent('activity-received',
@@ -64,9 +70,20 @@ class UserActivity(BaseModule):
                          activity=data,
                          is_self_message=properties.is_self_message))
 
-    @store_publish
     def set_activity(self, activity):
-        self._log.info('Send %s', activity)
+        if activity is not None:
+            activity = ActivityData(*activity, None)
+
+        if activity == self._current_activity:
+            return
+
+        self._current_activity = activity
+
+        if activity is None:
+            self._log.info('Remove user activity')
+        else:
+            self._log.info('Set %s', activity)
+
         self._nbxmpp('Activity').set_activity(activity)
 
 

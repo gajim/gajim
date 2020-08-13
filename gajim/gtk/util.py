@@ -545,6 +545,12 @@ def format_mood(mood, text):
     return markuptext
 
 
+def get_account_mood_icon_name(account):
+    client = app.get_client(account)
+    mood = client.get_module('UserMood').get_current_mood()
+    return f'mood-{mood.mood}' if mood is not None else mood
+
+
 def format_activity(activity, subactivity, text):
     if activity is None:
         return None
@@ -569,6 +575,14 @@ def get_activity_icon_name(activity, subactivity=None):
     return icon_name
 
 
+def get_account_activity_icon_name(account):
+    client = app.get_client(account)
+    activity = client.get_module('UserActivity').get_current_activity()
+    if activity is None:
+        return None
+    return get_activity_icon_name(activity.activity, activity.subactivity)
+
+
 def format_tune(artist, _length, _rating, source, title, _track, _uri):
     if artist is None and title is None and source is None:
         return None
@@ -581,6 +595,12 @@ def format_tune(artist, _length, _rating, source, title, _track, _uri):
                                                  'artist': artist,
                                                  'source': source}
     return tune_string
+
+
+def get_account_tune_icon_name(account):
+    client = app.get_client(account)
+    tune = client.get_module('UserTune').get_current_tune()
+    return None if tune is None else 'audio-x-generic'
 
 
 def format_location(location):
@@ -598,6 +618,12 @@ def format_location(location):
             'tag': tag.capitalize(), 'text': text}
 
     return location_string.strip()
+
+
+def get_account_location_icon_name(account):
+    client = app.get_client(account)
+    location = client.get_module('UserLocation').get_current_location()
+    return None if location is None else 'applications-internet'
 
 
 def format_fingerprint(fingerprint):

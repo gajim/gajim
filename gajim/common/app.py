@@ -378,6 +378,19 @@ def get_number_of_connected_accounts(accounts_list=None):
             connected_accounts = connected_accounts + 1
     return connected_accounts
 
+def get_available_clients(account=None):
+    clients = []
+    if account is not None:
+        client = connections.get(account)
+        if client is None or not client.state.is_available:
+            return []
+        return [client]
+
+    for client in connections.values():
+        if client.state.is_available:
+            clients.append(client)
+    return clients
+
 def get_connected_accounts(exclude_local=False):
     """
     Returns a list of CONNECTED accounts

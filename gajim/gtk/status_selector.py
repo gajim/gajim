@@ -100,7 +100,7 @@ class StatusSelector(Gtk.MenuButton):
         self.set_popover(self._status_popover)
 
     def _on_change_status(self, button):
-        def _on_response(message, pep_dict):
+        def _on_response(message):
             if message is None:  # None if user canceled
                 return
             for account in app.contacts.get_accounts():
@@ -109,7 +109,6 @@ class StatusSelector(Gtk.MenuButton):
                 if not sync_account:
                     continue
                 app.interface.roster.send_status(account, new_show, message)
-                app.interface.roster.send_pep(account, pep_dict)
 
         self._status_popover.popdown()
         new_show = button.get_name()

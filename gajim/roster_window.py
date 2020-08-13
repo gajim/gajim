@@ -42,8 +42,6 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
 from nbxmpp.namespaces import Namespace
-from nbxmpp.structs import MoodData
-from nbxmpp.structs import ActivityData
 
 from gajim import dialogs
 from gajim import vcard
@@ -84,6 +82,10 @@ from gajim.gtk.util import get_metacontact_surface
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import set_urgency_hint
 from gajim.gtk.util import get_activity_icon_name
+from gajim.gtk.util import get_account_activity_icon_name
+from gajim.gtk.util import get_account_mood_icon_name
+from gajim.gtk.util import get_account_tune_icon_name
+from gajim.gtk.util import get_account_location_icon_name
 from gajim.gtk.util import open_window
 
 
@@ -1006,29 +1008,17 @@ class RosterWindow:
 
         self.model[child_iter][Column.NAME] = GLib.markup_escape_text(account_name)
 
-        pep_dict = app.connections[account].pep
-        if app.config.get('show_mood_in_roster') and PEPEventType.MOOD in pep_dict:
-            self.model[child_iter][Column.MOOD_PIXBUF] = 'mood-%s' % pep_dict[PEPEventType.MOOD].mood
-        else:
-            self.model[child_iter][Column.MOOD_PIXBUF] = None
+        mood_icon_name = get_account_mood_icon_name(account)
+        self.model[child_iter][Column.MOOD_PIXBUF] = mood_icon_name
 
-        if app.config.get('show_activity_in_roster') and PEPEventType.ACTIVITY in pep_dict:
-            activity = pep_dict[PEPEventType.ACTIVITY].activity
-            subactivity = pep_dict[PEPEventType.ACTIVITY].subactivity
-            icon_name = get_activity_icon_name(activity, subactivity)
-            self.model[child_iter][Column.ACTIVITY_PIXBUF] = icon_name
-        else:
-            self.model[child_iter][Column.ACTIVITY_PIXBUF] = None
+        activity_icon_name = get_account_activity_icon_name(account)
+        self.model[child_iter][Column.ACTIVITY_PIXBUF] = activity_icon_name
 
-        if app.config.get('show_tunes_in_roster') and PEPEventType.TUNE in pep_dict:
-            self.model[child_iter][Column.TUNE_ICON] = 'audio-x-generic'
-        else:
-            self.model[child_iter][Column.TUNE_ICON] = None
+        tune_icon_name = get_account_tune_icon_name(account)
+        self.model[child_iter][Column.TUNE_ICON] = tune_icon_name
 
-        if app.config.get('show_location_in_roster') and PEPEventType.LOCATION in pep_dict:
-            self.model[child_iter][Column.LOCATION_ICON] = 'applications-internet'
-        else:
-            self.model[child_iter][Column.LOCATION_ICON] = None
+        location_icon_name = get_account_location_icon_name(account)
+        self.model[child_iter][Column.LOCATION_ICON] = location_icon_name
 
     def _really_draw_accounts(self):
         for acct in self.accounts_to_draw:
@@ -2026,26 +2016,6 @@ class RosterWindow:
 
         self.send_status_continue(account, status, txt)
 
-    def send_pep(self, account, pep_dict):
-        connection = app.connections[account]
-        if 'activity' in pep_dict:
-            activity = pep_dict['activity']
-            subactivity = pep_dict.get('subactivity', None)
-            activity_text = pep_dict.get('activity_text', None)
-            connection.get_module('UserActivity').set_activity(ActivityData(
-                activity, subactivity, activity_text))
-        else:
-            connection.get_module('UserActivity').set_activity(None)
-
-        if 'mood' in pep_dict:
-            mood = pep_dict['mood']
-            mood_text = pep_dict.get('mood_text', None)
-            connection.get_module('UserMood').set_mood(MoodData(mood, mood_text))
-        else:
-            connection.get_module('UserMood').set_mood(None)
-
-        connection.get_module('UserTune').set_tune(None)
-
     def delete_pep(self, jid, account):
         if jid == app.get_jid_from_account(account):
             app.connections[account].pep = {}
@@ -2168,26 +2138,20 @@ class RosterWindow:
             always_ask
         show_pep can be False to hide pep things from status message or True
         """
-        empty_pep = {'activity': '',
-                     'subactivity': '',
-                     'activity_text': '',
-                     'mood': '',
-                     'mood_text': ''}
         if not always_ask and ((show == 'online' and not app.config.get(
                 'ask_online_status')) or (show == 'offline' and not
                 app.config.get('ask_offline_status'))):
-            callback('', empty_pep)
+            callback('')
             return
 
         open_window('StatusChange', callback=callback, show=show,
                     show_pep=show_pep)
 
     def change_status(self, widget, account, status):
-        def _on_response(message, pep_dict):
+        def _on_response(message):
             if message is None:  # None if user canceled
                 return
             self.send_status(account, status, message)
-            self.send_pep(account, pep_dict)
         self.get_status_message(status, _on_response)
 
     def get_show(self, lcontact):
@@ -2311,7 +2275,7 @@ class RosterWindow:
                 get_msg = True
                 break
 
-        def on_continue3(message, pep_dict):
+        def on_continue3(message):
             self.quit_on_next_offline = 0
             accounts_to_disconnect = []
             for acct in accounts:
@@ -2326,11 +2290,10 @@ class RosterWindow:
 
             for acct in accounts_to_disconnect:
                 self.send_status(acct, 'offline', message)
-                self.send_pep(acct, pep_dict)
 
-        def on_continue2(message, pep_dict):
+        def on_continue2(message):
             if 'file_transfers' not in app.interface.instances:
-                on_continue3(message, pep_dict)
+                on_continue3(message)
                 return
             # check if there is an active file transfer
             from gajim.common.modules.bytestream import is_transfer_active
@@ -2354,12 +2317,11 @@ class RosterWindow:
                      DialogButton.make('Remove',
                                        text=_('_Quit'),
                                        callback=on_continue3,
-                                       args=[message,
-                                             pep_dict])]).show()
+                                       args=[message])]).show()
                 return
-            on_continue3(message, pep_dict)
+            on_continue3(message)
 
-        def on_continue(message, pep_dict):
+        def on_continue(message):
             if message is None:
                 # user pressed Cancel to change status message dialog
                 return
@@ -2396,15 +2358,14 @@ class RosterWindow:
                      DialogButton.make('Remove',
                                        text=_('_Quit'),
                                        callback=on_continue2,
-                                       args=[message,
-                                             pep_dict])]).show()
+                                       args=[message])]).show()
                 return
-            on_continue2(message, pep_dict)
+            on_continue2(message)
 
         if get_msg:
             self.get_status_message('offline', on_continue, show_pep=False)
         else:
-            on_continue('', None)
+            on_continue('')
 
     def _nec_presence_received(self, obj):
         account = obj.conn.name
@@ -2927,11 +2888,11 @@ class RosterWindow:
 
     def on_change_status_message_activate(self, widget, account):
         show = app.connections[account].status
-        def _on_response(message, pep_dict):
+        def _on_response(message):
             if message is None:  # None if user canceled
                 return
             self.send_status(account, show, message)
-            self.send_pep(account, pep_dict)
+
         open_window('StatusChange', account=account, callback=_on_response,
                     show=show)
 
@@ -3030,7 +2991,7 @@ class RosterWindow:
         if modifier & Gdk.ModifierType.CONTROL_MASK:
             if keyval == Gdk.KEY_s:  # CTRL + s
                 show = helpers.get_global_show()
-                def _on_response(message, pep_dict):
+                def _on_response(message):
                     if message is not None:  # None if user canceled
                         for account in app.contacts.get_accounts():
                             sync_account = app.config.get_per(
@@ -3038,7 +2999,7 @@ class RosterWindow:
                             if not sync_account:
                                 continue
                             self.send_status(account, show, message)
-                            self.send_pep(account, pep_dict)
+
                 open_window('StatusChange', callback=_on_response, show=show)
                 return True
             if keyval == Gdk.KEY_k:  # CTRL + k
@@ -3084,7 +3045,7 @@ class RosterWindow:
                 show = helpers.get_global_show()
                 if show == 'offline':
                     return True
-                def _on_response(message, pep_dict):
+                def _on_response(message):
                     if message is None:  # None if user canceled
                         return True
                     for acct in app.connections:
@@ -3093,7 +3054,7 @@ class RosterWindow:
                             continue
                         current_show = app.connections[acct].status
                         self.send_status(acct, current_show, message)
-                        self.send_pep(acct, pep_dict)
+
                 open_window('StatusChange', callback=_on_response, show=show)
             return True
 
@@ -3218,17 +3179,20 @@ class RosterWindow:
 
     def on_publish_tune_toggled(self, widget, account):
         active = widget.get_active()
-        app.connections[account].get_module('UserTune').set_enabled(active)
+        client = app.get_client(account)
+        client.get_module('UserTune').set_enabled(active)
 
     def on_publish_location_toggled(self, widget, account):
         active = widget.get_active()
+        client = app.get_client(account)
         app.config.set_per('accounts', account, 'publish_location', active)
         if active:
             location.enable()
         else:
-            app.connections[account].get_module('UserLocation').set_location(None)
+            client = app.get_client(account)
+            client.set_user_location(None)
 
-        app.connections[account].get_module('Caps').update_caps()
+        client.get_module('Caps').update_caps()
 
     def on_add_new_contact(self, widget, account):
         AddNewContactWindow(account)

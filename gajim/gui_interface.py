@@ -1673,12 +1673,12 @@ class Interface:
                     shows[show] = [a]
                 else:
                     shows[show].append(a)
-        def on_message(message, pep_dict):
+        def on_message(message):
             if message is None:
                 return
             for a in shows[show]:
                 self.roster.send_status(a, show, message)
-                self.roster.send_pep(a, pep_dict)
+
         for show in shows:
             self.roster.get_status_message(show, on_message)
         return False
