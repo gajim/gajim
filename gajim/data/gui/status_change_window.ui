@@ -48,7 +48,7 @@
                 <property name="focus_on_click">False</property>
                 <property name="receives_default">True</property>
                 <property name="popover">preset_popover</property>
-                <signal name="toggled" handler="_stop_timeout" swapped="no"/>
+                <signal name="toggled" handler="stop_timeout" swapped="no"/>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>

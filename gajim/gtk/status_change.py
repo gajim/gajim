@@ -100,21 +100,18 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             self._ui.pep_grid.set_no_show_all(True)
             self._ui.pep_grid.hide()
 
-        self._message_buffer.connect('changed', self._stop_timeout)
+        self._message_buffer.connect('changed', self.stop_timeout)
         self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
 
         self.show_all()
-        self.run_timeout()
+        self.start_timeout()
 
     def on_timeout(self):
         self._change_status()
 
-    def _stop_timeout(self, *args):
-        self.countdown_enabled = False
-
     def _on_key_press(self, _widget, event):
-        self.countdown_enabled = False
+        self.stop_timeout()
         if event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
             if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
                 self._change_status()
@@ -374,7 +371,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             self._ui.mood_button_label.set_text(_('No mood'))
 
     def _on_preset_select(self, widget):
-        self.countdown_enabled = False
+        self.stop_timeout()
         self._ui.preset_popover.popdown()
         name = widget.get_name()
         self._message_buffer.set_text(self._preset_messages_dict[name][0])
@@ -390,13 +387,13 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self._ui.mood_page_button.set_sensitive(self._pep_dict['mood'])
 
     def _on_preset_remove(self, widget):
-        self.countdown_enabled = False
+        self.stop_timeout()
         name = widget.get_name()
         app.config.del_per('statusmsg', name)
         self._get_presets()
 
     def _on_save_as_preset_clicked(self, _widget):
-        self.countdown_enabled = False
+        self.stop_timeout()
         start_iter, finish_iter = self._message_buffer.get_bounds()
         message_text = self._message_buffer.get_text(
             start_iter, finish_iter, True)
@@ -452,7 +449,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             transient_for=self).show()
 
     def _on_activity_page_clicked(self, _widget):
-        self.countdown_enabled = False
+        self.stop_timeout()
         self._ui.status_stack.set_visible_child_full(
             'activity-page',
             Gtk.StackTransitionType.SLIDE_LEFT)
@@ -467,7 +464,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self._pep_dict['subactivity'] = ''
 
     def _on_mood_page_clicked(self, _widget):
-        self.countdown_enabled = False
+        self.stop_timeout()
         self._ui.status_stack.set_visible_child_full(
             'mood-page',
             Gtk.StackTransitionType.SLIDE_LEFT)
@@ -487,11 +484,11 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self._draw_mood()
 
     def _on_activity_switch(self, switch, *args):
-        self.countdown_enabled = False
+        self.stop_timeout()
         self._ui.activity_page_button.set_sensitive(switch.get_active())
 
     def _on_mood_switch(self, switch, *args):
-        self.countdown_enabled = False
+        self.stop_timeout()
         self._ui.mood_page_button.set_sensitive(switch.get_active())
 
     def _send_user_mood(self):
@@ -512,6 +509,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             client.set_user_activity(activity)
 
     def _change_status(self, *args):
+        self.stop_timeout()
         beg, end = self._message_buffer.get_bounds()
         message = self._message_buffer.get_text(beg, end, True).strip()
         message = remove_invalid_xml_chars(message)
