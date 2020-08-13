@@ -50,7 +50,7 @@ ACTIVITY_PAGELIST = [
 
 
 class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
-    def __init__(self, callback, account=None, show=None, show_pep=True):
+    def __init__(self, callback=None, account=None, status=None, show_pep=True):
         Gtk.ApplicationWindow.__init__(self)
         countdown_time = app.config.get('change_status_window_timeout')
         TimeoutWindow.__init__(self, countdown_time)
@@ -64,7 +64,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
 
         self.account = account
         self._callback = callback
-        self._show = show
+        self._status = status
         self._show_pep = show_pep
 
         self._ui = get_builder('status_change_window.ui')
@@ -80,7 +80,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self._preset_messages_dict = {}
         self._get_presets()
 
-        if self._show:
+        if self._status:
             self._ui.activity_switch.set_active(self._pep_dict['activity'])
             self._ui.activity_page_button.set_sensitive(
                 self._pep_dict['activity'])
@@ -497,6 +497,9 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             mood = self._pep_dict['mood']
 
         for client in app.get_available_clients(self.account):
+            if not app.config.get_per('accounts', client.account,
+                                      'sync_with_global_status'):
+                continue
             client.set_user_mood(mood)
 
     def _send_user_activity(self):
@@ -506,7 +509,24 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                         self._pep_dict['subactivity'])
 
         for client in app.get_available_clients(self.account):
+            if not app.config.get_per('accounts', client.account,
+                                      'sync_with_global_status'):
+                continue
             client.set_user_activity(activity)
+
+    def _send_status_and_message(self, message):
+        if self.account is not None:
+            app.interface.roster.send_status(self.account,
+                                             self._status,
+                                             message)
+            return
+
+        for account in app.connections:
+            if not app.config.get_per('accounts', account,
+                                      'sync_with_global_status'):
+                continue
+
+            app.interface.roster.send_status(account, self._status, message)
 
     def _change_status(self, *args):
         self.stop_timeout()
@@ -514,8 +534,12 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         message = self._message_buffer.get_text(beg, end, True).strip()
         message = remove_invalid_xml_chars(message)
 
-        self._send_user_activity()
-        self._send_user_mood()
+        if self._show_pep:
+            self._send_user_activity()
+            self._send_user_mood()
 
-        self._callback(message)
+        if self._callback is not None:
+            self._callback(message)
+        else:
+            self._send_status_and_message(message)
         self.destroy()

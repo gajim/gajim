@@ -75,6 +75,7 @@ from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common import logging_helpers
+from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
@@ -808,6 +809,9 @@ class Interface:
         if (pep_supported and app.is_installed('GEOCLUE') and
                 app.config.get_per('accounts', account, 'publish_location')):
             location.enable()
+
+        if ask_for_status_message(obj.conn.status, signin=True):
+            open_window('StatusChange', status=obj.conn.status)
 
     @staticmethod
     def show_httpupload_progress(transfer):
@@ -1673,6 +1677,42 @@ class Interface:
                 status_message = helpers.from_one_line(status_message)
 
             self.roster.send_status(account, status, status_message)
+
+    def change_status(self, status=None):
+        # status=None means we want to change the message only
+
+        ask = ask_for_status_message(status)
+
+        if status is None:
+            status = helpers.get_global_show()
+
+        if ask:
+            open_window('StatusChange', status=status)
+            return
+
+        for account in app.connections:
+            if not app.config.get_per('accounts', account,
+                                      'sync_with_global_status'):
+                continue
+
+            message = app.get_client(account).status_message
+            self.roster.send_status(account, status, message)
+
+    def change_account_status(self, account, status=None):
+        # status=None means we want to change the message only
+
+        ask = ask_for_status_message(status)
+
+        client = app.get_client(account)
+        if status is None:
+            status = client.status
+
+        if ask:
+            open_window('StatusChange', status=status, account=account)
+            return
+
+        message = client.status_message
+        self.roster.send_status(account, status, message)
 
     def show_systray(self):
         if not app.is_display(Display.WAYLAND):

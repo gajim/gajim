@@ -22,7 +22,6 @@ from gajim.common.helpers import statuses_unified
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import open_window
 
 
 class StatusSelector(Gtk.MenuButton):
@@ -100,24 +99,11 @@ class StatusSelector(Gtk.MenuButton):
         self.set_popover(self._status_popover)
 
     def _on_change_status(self, button):
-        def _on_response(message):
-            if message is None:  # None if user canceled
-                return
-            for account in app.contacts.get_accounts():
-                sync_account = app.config.get_per(
-                    'accounts', account, 'sync_with_global_status')
-                if not sync_account:
-                    continue
-                app.interface.roster.send_status(account, new_show, message)
-
         self._status_popover.popdown()
-        new_show = button.get_name()
-        if new_show == 'change_status_message':
-            new_show = get_global_show()
-            open_window('StatusChange', callback=_on_response, show=new_show)
-            return
-
-        app.interface.roster.get_status_message(new_show, _on_response)
+        new_status = button.get_name()
+        if new_status == 'change_status_message':
+            new_status = None
+        app.interface.change_status(status=new_status)
 
     def update(self):
         show = get_global_show()

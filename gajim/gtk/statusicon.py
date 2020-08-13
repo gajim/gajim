@@ -24,8 +24,6 @@ import os
 from gi.repository import Gtk
 from gi.repository import GLib
 
-from gajim import dialogs
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
@@ -354,35 +352,8 @@ class StatusIcon:
 
     @staticmethod
     def _on_show(_widget, show):
-        # we all add some fake (we cannot select those nor have them as show)
-        # but this helps to align with roster's status_combobox index positions
-        status = ['online', 'chat', 'away', 'xa', 'dnd',
-                  'SEPARATOR', 'CHANGE_STATUS_MSG_MENUITEM', 'SEPARATOR',
-                  'offline']
-        index = status.index(show)
-        if not helpers.statuses_unified():
-            app.interface.roster.status_combobox.set_active(index + 2)
-            return
-        current = app.interface.roster.status_combobox.get_active()
-        if index != current:
-            app.interface.roster.status_combobox.set_active(index)
+        app.interface.change_status(status=show)
 
     @staticmethod
     def _on_change_status(_widget):
-        model = app.interface.roster.status_combobox.get_model()
-        active = app.interface.roster.status_combobox.get_active()
-        status = model[active][2]
-        def on_response(message):
-            if message is None: # None if user press Cancel
-                return
-            accounts = app.connections.keys()
-            for acct in accounts:
-                if not app.config.get_per('accounts',
-                                          acct,
-                                          'sync_with_global_status'):
-                    continue
-                show = app.connections[acct].status
-                app.interface.roster.send_status(acct, show, message)
-
-        dlg = dialogs.ChangeStatusMessageDialog(on_response, status)
-        dlg.dialog.present()
+        app.interface.change_status()

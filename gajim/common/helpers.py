@@ -1428,3 +1428,17 @@ def should_log(account, jid):
     no_log_for = no_log_for.split()
 
     return (account not in no_log_for) and (jid not in no_log_for)
+
+
+def ask_for_status_message(status, signin=False):
+    if status is None:
+        # We try to change the message
+        return True
+
+    if signin:
+        return app.config.get('ask_online_status')
+
+    if status == 'offline':
+        return app.config.get('ask_offline_status')
+
+    return app.config.get('always_ask_for_status_message')
