@@ -103,6 +103,10 @@ class Client(ConnectionHandlers):
         return self._state
 
     @property
+    def account(self):
+        return self._account
+
+    @property
     def status(self):
         return self._status
 

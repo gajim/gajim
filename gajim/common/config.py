@@ -246,6 +246,7 @@ class Config:
         'show_help_start_chat': [opt_bool, True, _('Shows an info bar with helpful hints in the Start / Join Chat dialog')],
         'check_for_update': [opt_bool, True, _('Check for Gajim updates periodically')],
         'last_update_check': [opt_str, '', _('Date of the last update check')],
+        'always_ask_for_status_message': [opt_bool, True],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {

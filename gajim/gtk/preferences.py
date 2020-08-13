@@ -168,7 +168,7 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.join_leave_checkbutton.set_active(st)
 
         st = app.config.get('print_status_muc_default')
-        self._ui.status_change_checkbutton.set_active(st)
+        self._ui.show_status_change_checkbutton.set_active(st)
 
         # Displayed chat state notifications
         st = app.config.get('show_chatstate_in_tabs')
@@ -266,9 +266,11 @@ class Preferences(Gtk.ApplicationWindow):
 
         # Ask for status when online/offline
         st = app.config.get('ask_online_status')
-        self._ui.prompt_online_status_message_checkbutton.set_active(st)
+        self._ui.sign_in_status_checkbutton.set_active(st)
         st = app.config.get('ask_offline_status')
-        self._ui.prompt_offline_status_message_checkbutton.set_active(st)
+        self._ui.sign_out_status_checkbutton.set_active(st)
+        st = app.config.get('always_ask_for_status_message')
+        self._ui.status_change_checkbutton.set_active(st)
 
         ### Style tab ###
         # Themes
@@ -568,7 +570,7 @@ class Preferences(Gtk.ApplicationWindow):
         for control in self._get_all_muc_controls():
             control.update_actions()
 
-    def _on_status_change_toggled(self, widget):
+    def _on_show_status_change_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'print_status_muc_default')
         for control in self._get_all_muc_controls():
             control.update_actions()
@@ -665,11 +667,14 @@ class Preferences(Gtk.ApplicationWindow):
         widget.set_inconsistent(False)
         self.on_per_account_checkbutton_toggled(widget, 'restore_last_status')
 
-    def on_prompt_online_status_message_checkbutton_toggled(self, widget):
+    def on_sign_in_status_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ask_online_status')
 
-    def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
+    def on_sign_out_status_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ask_offline_status')
+
+    def on_status_change_checkbutton_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'always_ask_for_status_message')
 
     ### Style ###
     @staticmethod

@@ -53,6 +53,7 @@ from gajim.common import helpers
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
 from gajim.common.helpers import save_roster_position
+from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.const import PEPEventType, AvatarSize, StyleAttr
 from gajim.common.dbus import location
@@ -2014,7 +2015,11 @@ class RosterWindow:
             if not app.account_is_available(account):
                 self.set_connecting_state(account)
 
-        self.send_status_continue(account, status, txt)
+        if status == 'offline':
+            self.delete_pep(app.get_jid_from_account(account), account)
+
+        app.connections[account].change_status(status, txt)
+        self._status_selector.update()
 
     def delete_pep(self, jid, account):
         if jid == app.get_jid_from_account(account):
@@ -2028,13 +2033,6 @@ class RosterWindow:
         ctrl = app.interface.msg_win_mgr.get_control(jid, account)
         if ctrl:
             ctrl.update_all_pep_types()
-
-    def send_status_continue(self, account, status, txt):
-        if status == 'offline':
-            self.delete_pep(app.get_jid_from_account(account), account)
-
-        app.connections[account].change_status(status, txt)
-        self._status_selector.update()
 
     def chg_contact_status(self, contact, show, status_message, account):
         """
@@ -2129,30 +2127,8 @@ class RosterWindow:
             app.interface.systray.change_status(show)
         self._status_selector.update()
 
-    def get_status_message(self, show, callback, show_pep=True,
-                           always_ask=False):
-        """
-        Get the status message by:
-
-        asking to user if needed depending on ask_on(ff)line_status and
-            always_ask
-        show_pep can be False to hide pep things from status message or True
-        """
-        if not always_ask and ((show == 'online' and not app.config.get(
-                'ask_online_status')) or (show == 'offline' and not
-                app.config.get('ask_offline_status'))):
-            callback('')
-            return
-
-        open_window('StatusChange', callback=callback, show=show,
-                    show_pep=show_pep)
-
-    def change_status(self, widget, account, status):
-        def _on_response(message):
-            if message is None:  # None if user canceled
-                return
-            self.send_status(account, status, message)
-        self.get_status_message(status, _on_response)
+    def change_status(self, _widget, account, status):
+        app.interface.change_account_status(account, status=status)
 
     def get_show(self, lcontact):
         prio = lcontact[0].priority
@@ -2362,8 +2338,11 @@ class RosterWindow:
                 return
             on_continue2(message)
 
-        if get_msg:
-            self.get_status_message('offline', on_continue, show_pep=False)
+        if get_msg and ask_for_status_message('offline'):
+            open_window('StatusChange',
+                        status='offline',
+                        callback=on_continue,
+                        show_pep=False)
         else:
             on_continue('')
 
@@ -2886,15 +2865,8 @@ class RosterWindow:
             input_str=name,
             transient_for=self.window).show()
 
-    def on_change_status_message_activate(self, widget, account):
-        show = app.connections[account].status
-        def _on_response(message):
-            if message is None:  # None if user canceled
-                return
-            self.send_status(account, show, message)
-
-        open_window('StatusChange', account=account, callback=_on_response,
-                    show=show)
+    def on_change_status_message_activate(self, _widget, account):
+        app.interface.change_account_status(account)
 
     def on_add_to_roster(self, widget, contact, account):
         AddNewContactWindow(account, contact.jid, contact.name)
@@ -2990,17 +2962,7 @@ class RosterWindow:
         # CTRL mask
         if modifier & Gdk.ModifierType.CONTROL_MASK:
             if keyval == Gdk.KEY_s:  # CTRL + s
-                show = helpers.get_global_show()
-                def _on_response(message):
-                    if message is not None:  # None if user canceled
-                        for account in app.contacts.get_accounts():
-                            sync_account = app.config.get_per(
-                                'accounts', account, 'sync_with_global_status')
-                            if not sync_account:
-                                continue
-                            self.send_status(account, show, message)
-
-                open_window('StatusChange', callback=_on_response, show=show)
+                app.interface.change_status()
                 return True
             if keyval == Gdk.KEY_k:  # CTRL + k
                 self.enable_rfilter('')
@@ -3040,22 +3002,13 @@ class RosterWindow:
                 account = model[path][Column.ACCOUNT]
                 if account != 'all':
                     if app.account_is_available(account):
-                        self.on_change_status_message_activate(widget, account)
+                        app.interface.change_account_status(account)
                     return True
+
                 show = helpers.get_global_show()
                 if show == 'offline':
                     return True
-                def _on_response(message):
-                    if message is None:  # None if user canceled
-                        return True
-                    for acct in app.connections:
-                        if not app.config.get_per('accounts', acct,
-                                'sync_with_global_status'):
-                            continue
-                        current_show = app.connections[acct].status
-                        self.send_status(acct, current_show, message)
-
-                open_window('StatusChange', callback=_on_response, show=show)
+                app.interface.change_status()
             return True
 
         if event.button == 1: # Left click
