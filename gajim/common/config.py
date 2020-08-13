@@ -269,7 +269,6 @@ class Config:
             'autopriority_xa': [opt_int, 30],
             'autopriority_dnd': [opt_int, 20],
             'autoconnect': [opt_bool, False, '', True],
-            'autoconnect_as': [opt_str, 'online', _('Status to be used automatically when connecting. Can be \'online\', \'chat\', \'away\', \'xa\' or \'dnd\'. NOTE: This option is used only if \'restore_last_status\' is disabled.'), True],
             'restore_last_status': [opt_bool, False, _('If enabled, the last status will be restored.')],
             'autoauth': [opt_bool, False, _('If enabled, contacts requesting authorization will be accepted automatically.')],
             'active': [opt_bool, True, _('If disabled, this account will be disabled and will not appear in the contact list window.'), True],

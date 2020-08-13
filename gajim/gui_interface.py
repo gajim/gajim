@@ -1657,31 +1657,22 @@ class Interface:
         """
         Auto connect at startup
         """
-        # dict of account that want to connect sorted by status
-        shows = {}
-        for a in app.connections:
-            if app.config.get_per('accounts', a, 'autoconnect'):
-                if app.config.get_per('accounts', a, 'restore_last_status'):
-                    self.roster.send_status(a, app.config.get_per('accounts',
-                        a, 'last_status'), helpers.from_one_line(
-                        app.config.get_per('accounts', a, 'last_status_msg')))
-                    continue
-                show = app.config.get_per('accounts', a, 'autoconnect_as')
-                if show not in ['online', 'chat', 'away', 'xa', 'dnd']:
-                    continue
-                if show not in shows:
-                    shows[show] = [a]
-                else:
-                    shows[show].append(a)
-        def on_message(message):
-            if message is None:
-                return
-            for a in shows[show]:
-                self.roster.send_status(a, show, message)
 
-        for show in shows:
-            self.roster.get_status_message(show, on_message)
-        return False
+        for account in app.connections:
+            if not app.config.get_per('accounts', account, 'autoconnect'):
+                continue
+
+            status = 'online'
+            status_message = ''
+
+            if app.config.get_per('accounts', account, 'restore_last_status'):
+                status = app.config.get_per('accounts', account, 'last_status')
+                status_message = app.config.get_per('accounts',
+                                                    account,
+                                                    'last_status_msg')
+                status_message = helpers.from_one_line(status_message)
+
+            self.roster.send_status(account, status, status_message)
 
     def show_systray(self):
         if not app.is_display(Display.WAYLAND):
