@@ -1,3 +1,36 @@
+Gajim 1.2.1 (15 August 2020)
+
+  New
+
+  * Status Selector was reworked
+  * Status Change dialog was reworked
+  * Preferences: Added Setting to toggle the use of a keyring
+  * Windows/Mac: Gajim notifys now about new updates
+  * ServerInfo: Show more details about the current connection
+
+  Changes
+
+  * The status "Free for Chat" was removed
+  * Default status message was removed, use presets instead
+  * XHTML: Support for the <img> tag was removed
+  * DBus: Ability to change settings was removed
+  * Removed ability to ignore TLS errors
+
+  Bug fixes
+
+  * #9011 Add support for KDE notification drag and drop
+  * #10176 Login Dialog throws error
+  * #10192 MUC: Respect print status setting for own status changes
+  * #10197 AddContact: Validate JID on input
+  * #10200 MUC: Gajim fails to connect to after suspend
+  * #10201 GroupchatRoster: Don’t fix height of rows
+  * #10208 PluginManager: Show error correctly when plugin removal fails
+  * Flatpak: Add hole for kwallet password storage
+  * Fix Jingle session termination
+  * #10221 ChatControl: Don’t fail when dropping text on chat
+  * StatusIcon: Fix setting status
+
+
 Gajim 1.2.1 (08 July 2020)
 
   New
