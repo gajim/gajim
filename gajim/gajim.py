@@ -94,7 +94,7 @@ def _disable_csd():
     if sys.platform != 'win32':
         return
 
-    if 'GTK_OSD' in os.environ:
+    if 'GTK_CSD' in os.environ:
         # Respect user settings
         return
 
