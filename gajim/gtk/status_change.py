@@ -91,11 +91,13 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self._apply_speller()
         self._message_buffer.set_text(from_one_line(self._status_message))
 
+        self._activity_btns = {}
+        self._mood_btns = {}
         if show_pep:
-            self._draw_activity()
             self._init_activities()
-            self._draw_mood()
+            self._draw_activity()
             self._init_moods()
+            self._draw_mood()
         else:
             self._ui.pep_grid.set_no_show_all(True)
             self._ui.pep_grid.hide()
@@ -222,7 +224,6 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             preset_box.show_all()
 
     def _init_activities(self):
-        radio_btns = {}
         group = None
 
         for category in ACTIVITIES:
@@ -236,10 +237,10 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             # Other
             act = category + '_other'
             if group:
-                radio_btns[act] = Gtk.RadioButton()
-                radio_btns[act].join_group(group)
+                self._activity_btns[act] = Gtk.RadioButton()
+                self._activity_btns[act].join_group(group)
             else:
-                radio_btns[act] = group = Gtk.RadioButton()
+                self._activity_btns[act] = group = Gtk.RadioButton()
 
             icon = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
             icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
@@ -249,11 +250,11 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 label='<b>%s</b>' % ACTIVITIES[category]['category'])
             label.set_use_markup(True)
             icon_box.pack_start(label, False, False, 0)
-            radio_btns[act].add(icon_box)
-            radio_btns[act].join_group(self._ui.no_activity_button)
-            radio_btns[act].connect(
+            self._activity_btns[act].add(icon_box)
+            self._activity_btns[act].join_group(self._ui.no_activity_button)
+            self._activity_btns[act].connect(
                 'toggled', self._on_activity_toggled, [category, 'other'])
-            category_box.pack_start(radio_btns[act], False, False, 0)
+            category_box.pack_start(self._activity_btns[act], False, False, 0)
 
             activities = list(ACTIVITIES[category].keys())
             activities.sort()
@@ -264,10 +265,10 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 act = category + '_' + activity
 
                 if group:
-                    radio_btns[act] = Gtk.RadioButton()
-                    radio_btns[act].join_group(group)
+                    self._activity_btns[act] = Gtk.RadioButton()
+                    self._activity_btns[act].join_group(group)
                 else:
-                    radio_btns[act] = group = Gtk.RadioButton()
+                    self._activity_btns[act] = group = Gtk.RadioButton()
 
                 icon_name = get_activity_icon_name(category, activity)
                 icon = Gtk.Image.new_from_icon_name(
@@ -277,11 +278,13 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                                    spacing=6)
                 icon_box.pack_start(icon, False, False, 0)
                 icon_box.pack_start(label, False, False, 0)
-                radio_btns[act].join_group(self._ui.no_activity_button)
-                radio_btns[act].connect('toggled', self._on_activity_toggled,
-                                        [category, activity])
-                radio_btns[act].add(icon_box)
-                category_box.pack_start(radio_btns[act], False, False, 0)
+                self._activity_btns[act].join_group(
+                    self._ui.no_activity_button)
+                self._activity_btns[act].connect(
+                    'toggled', self._on_activity_toggled, [category, activity])
+                self._activity_btns[act].add(icon_box)
+                category_box.pack_start(
+                    self._activity_btns[act], False, False, 0)
 
         if not self._pep_dict['activity']:
             self._ui.no_activity_button.set_active(True)
@@ -291,8 +294,9 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                     self._pep_dict['activity']]:
                 self._pep_dict['subactivity'] = 'other'
 
-            radio_btns[self._pep_dict['activity'] + '_' + self._pep_dict[
-                'subactivity']].set_active(True)
+            self._activity_btns[
+                self._pep_dict['activity'] + '_' + self._pep_dict[
+                    'subactivity']].set_active(True)
 
             self._ui.activity_notebook.set_current_page(
                 ACTIVITY_PAGELIST.index(self._pep_dict['activity']))
@@ -309,6 +313,11 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 self._ui.activity_button_label.set_text(
                     ACTIVITIES[self._pep_dict['activity']][
                         self._pep_dict['subactivity']])
+                self._activity_btns[
+                    self._pep_dict['activity'] + '_' + self._pep_dict[
+                        'subactivity']].set_active(True)
+                self._ui.activity_notebook.set_current_page(
+                    ACTIVITY_PAGELIST.index(self._pep_dict['activity']))
             else:
                 icon_name = get_activity_icon_name(self._pep_dict['activity'])
                 self._ui.activity_image.set_from_icon_name(
@@ -326,7 +335,6 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
 
         x_position = 1
         y_position = 0
-        mood_buttons = {}
 
         # Order them first
         moods = []
@@ -337,16 +345,16 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         for mood in moods:
             image = Gtk.Image.new_from_icon_name(
                 'mood-%s' % mood, Gtk.IconSize.MENU)
-            mood_buttons[mood] = Gtk.RadioButton()
-            mood_buttons[mood].join_group(self._ui.no_mood_button)
-            mood_buttons[mood].set_mode(False)
-            mood_buttons[mood].add(image)
-            mood_buttons[mood].set_relief(Gtk.ReliefStyle.NONE)
-            mood_buttons[mood].set_tooltip_text(MOODS[mood])
-            mood_buttons[mood].connect(
+            self._mood_btns[mood] = Gtk.RadioButton()
+            self._mood_btns[mood].join_group(self._ui.no_mood_button)
+            self._mood_btns[mood].set_mode(False)
+            self._mood_btns[mood].add(image)
+            self._mood_btns[mood].set_relief(Gtk.ReliefStyle.NONE)
+            self._mood_btns[mood].set_tooltip_text(MOODS[mood])
+            self._mood_btns[mood].connect(
                 'clicked', self._on_mood_button_clicked, mood)
             self._ui.moods_grid.attach(
-                mood_buttons[mood], x_position, y_position, 1, 1)
+                self._mood_btns[mood], x_position, y_position, 1, 1)
 
             # Calculate the next position
             x_position += 1
@@ -355,7 +363,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 y_position += 1
 
         if self._pep_dict['mood'] in MOODS:
-            mood_buttons[self._pep_dict['mood']].set_active(True)
+            self._mood_btns[self._pep_dict['mood']].set_active(True)
             self._ui.mood_label.set_text(MOODS[self._pep_dict['mood']])
         else:
             self._ui.mood_label.set_text(_('No mood selected'))
@@ -366,9 +374,12 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 'mood-%s' % self._pep_dict['mood'], Gtk.IconSize.MENU)
             self._ui.mood_button_label.set_text(
                 MOODS[self._pep_dict['mood']])
+            self._mood_btns[self._pep_dict['mood']].set_active(True)
+            self._ui.mood_label.set_text(MOODS[self._pep_dict['mood']])
         else:
             self._ui.mood_image.set_from_pixbuf(None)
             self._ui.mood_button_label.set_text(_('No mood'))
+            self._ui.mood_label.set_text(_('No mood selected'))
 
     def _on_preset_select(self, widget):
         self.stop_timeout()
