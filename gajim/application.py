@@ -179,6 +179,7 @@ class GajimApplication(Gtk.Application):
     def _startup(self, _application):
 
         # Create and initialize Application Paths & Databases
+        app.print_version()
         app.detect_dependencies()
         configpaths.create_paths()
         try:
