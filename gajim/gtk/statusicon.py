@@ -186,7 +186,7 @@ class StatusIcon:
         self.popup_menus.append(sub_menu)
         status_menuitem.set_submenu(sub_menu)
 
-        for show in ('online', 'chat', 'away', 'xa', 'dnd'):
+        for show in ('online', 'away', 'xa', 'dnd'):
             uf_show = helpers.get_uf_show(show, use_mnemonic=True)
             item = Gtk.MenuItem.new_with_mnemonic(uf_show)
             sub_menu.append(item)
