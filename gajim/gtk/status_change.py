@@ -511,10 +511,15 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         if self._ui.mood_switch.get_active():
             mood = self._pep_dict['mood']
 
-        for client in app.get_available_clients(self.account):
-            if not app.config.get_per('accounts', client.account,
-                                      'sync_with_global_status'):
-                continue
+        if self.account is None:
+            for client in app.get_available_clients():
+                if not app.config.get_per('accounts', client.account,
+                                          'sync_with_global_status'):
+                    continue
+                client.set_user_mood(mood)
+
+        else:
+            client = app.get_client(self.account)
             client.set_user_mood(mood)
 
     def _send_user_activity(self):
@@ -523,10 +528,15 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             activity = (self._pep_dict['activity'],
                         self._pep_dict['subactivity'])
 
-        for client in app.get_available_clients(self.account):
-            if not app.config.get_per('accounts', client.account,
-                                      'sync_with_global_status'):
-                continue
+        if self.account is None:
+            for client in app.get_available_clients():
+                if not app.config.get_per('accounts', client.account,
+                                          'sync_with_global_status'):
+                    continue
+                client.set_user_activity(activity)
+
+        else:
+            client = app.get_client(self.account)
             client.set_user_activity(activity)
 
     def _send_status_and_message(self, message):
