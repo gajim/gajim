@@ -18,7 +18,6 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import ACTIVITIES
 from gajim.common.const import MOODS
-from gajim.common.const import PEPEventType
 from gajim.common.helpers import from_one_line
 from gajim.common.helpers import to_one_line
 from gajim.common.helpers import remove_invalid_xml_chars
@@ -77,7 +76,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             'mood': '',
         }
         self._get_current_status_data()
-        self._preset_messages_dict = {}
+        self._presets = {}
         self._get_presets()
 
         if self._status:
@@ -140,11 +139,11 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         are synchronized. If not, no status message/pep data will be displayed.
         '''
         if self.account:
-            self._status_message = app.connections[self.account].status_message
-            activity_data = app.connections[self.account].pep.get(
-                PEPEventType.ACTIVITY)
-            mood_data = app.connections[self.account].pep.get(
-                PEPEventType.MOOD)
+            client = app.get_client(self.account)
+            self._status_message = client.status_message
+            activity_data = client.get_module(
+                'UserActivity').get_current_activity()
+            mood_data = client.get_module('UserMood').get_current_mood()
             if activity_data:
                 self._pep_dict['activity'] = activity_data.activity
                 self._pep_dict['subactivity'] = activity_data.subactivity
@@ -156,10 +155,15 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             subactivities = []
             moods = []
             for account in app.connections:
-                status_messages.append(app.connections[account].status_message)
-                activity_data = app.connections[account].pep.get(
-                    PEPEventType.ACTIVITY)
-                mood_data = app.connections[account].pep.get(PEPEventType.MOOD)
+                client = app.get_client(account)
+                if not app.config.get_per('accounts', client.account,
+                                          'sync_with_global_status'):
+                    continue
+
+                status_messages.append(client.status_message)
+                activity_data = client.get_module(
+                    'UserActivity').get_current_activity()
+                mood_data = client.get_module('UserMood').get_current_mood()
                 if activity_data:
                     activities.append(activity_data.activity)
                     subactivities.append(activity_data.subactivity)
@@ -171,7 +175,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             equal_subactivities = all(x == subactivities[0] for x in
                                       subactivities)
             equal_moods = all(x == moods[0] for x in moods)
-            if equal_messages:
+            if status_messages and equal_messages:
                 self._status_message = status_messages[0]
             if activities and equal_activities:
                 self._pep_dict['activity'] = activities[0]
@@ -181,7 +185,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 self._pep_dict['mood'] = moods[0]
 
     def _get_presets(self):
-        self._preset_messages_dict = {}
+        self._presets = {}
         for msg_name in app.config.get_per('statusmsg'):
             if msg_name.startswith('_last_'):
                 continue
@@ -189,7 +193,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
             for opt in ['message', 'activity', 'subactivity', 'mood']:
                 opts.append(app.config.get_per('statusmsg', msg_name, opt))
             opts[0] = from_one_line(opts[0])
-            self._preset_messages_dict[msg_name] = opts
+            self._presets[msg_name] = opts
         self._build_preset_popover()
 
     def _build_preset_popover(self):
@@ -201,7 +205,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         preset_box.get_style_context().add_class('margin-3')
         self._ui.preset_popover.add(preset_box)
 
-        for preset in self._preset_messages_dict:
+        for preset in self._presets:
             button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
             preset_button = Gtk.Button()
@@ -385,10 +389,10 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self.stop_timeout()
         self._ui.preset_popover.popdown()
         name = widget.get_name()
-        self._message_buffer.set_text(self._preset_messages_dict[name][0])
-        self._pep_dict['activity'] = self._preset_messages_dict[name][1]
-        self._pep_dict['subactivity'] = self._preset_messages_dict[name][2]
-        self._pep_dict['mood'] = self._preset_messages_dict[name][3]
+        self._message_buffer.set_text(self._presets[name][0])
+        self._pep_dict['activity'] = self._presets[name][1]
+        self._pep_dict['subactivity'] = self._presets[name][2]
+        self._pep_dict['mood'] = self._presets[name][3]
         self._draw_activity()
         self._draw_mood()
 
@@ -432,7 +436,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 app.config.set_per('statusmsg', preset_name, 'mood', mood)
                 self._get_presets()
 
-            if preset_name in self._preset_messages_dict:
+            if preset_name in self._presets:
                 NewConfirmationDialog(
                     _('Overwrite'),
                     _('Overwrite Status Message?'),
