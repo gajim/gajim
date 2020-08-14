@@ -146,6 +146,10 @@ _dependencies = {
 }
 
 
+def print_version():
+    log('gajim').info('Gajim Version: %s', gajim.__version__)
+
+
 def get_client(account):
     return connections[account]
 
