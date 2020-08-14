@@ -404,8 +404,7 @@ class GajimRemote(Server):
             # If user did not ask for account, returns the global status
             return str(helpers.get_global_status_message())
         # return show for the given account
-        status = app.connections[account].status
-        return status
+        return app.connections[account].status_message
 
     def _get_account_and_contact(self, account, jid):
         """
