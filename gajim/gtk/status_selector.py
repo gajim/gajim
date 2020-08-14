@@ -30,6 +30,7 @@ class StatusSelector(Gtk.MenuButton):
         self.set_direction(Gtk.ArrowType.UP)
         self._compact = compact
         self._create_popover()
+        self.set_no_show_all(True)
 
         self._current_show_icon = Gtk.Image()
         self._current_show_icon.set_from_icon_name(
@@ -43,6 +44,7 @@ class StatusSelector(Gtk.MenuButton):
             self._current_show_label.set_halign(Gtk.Align.START)
             self._current_show_label.set_xalign(0)
             box.add(self._current_show_label)
+            box.show_all()
         self.add(box)
 
     def _create_popover(self):
@@ -106,6 +108,11 @@ class StatusSelector(Gtk.MenuButton):
         app.interface.change_status(status=new_status)
 
     def update(self):
+        if not app.connections:
+            self.hide()
+            return
+
+        self.show()
         show = get_global_show()
         uf_show = get_uf_show(show)
         self._current_show_icon.set_from_icon_name(

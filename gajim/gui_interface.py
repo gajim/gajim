@@ -1638,6 +1638,7 @@ class Interface:
         app.config.set_per(
             'accounts', account, 'roster_version', '')
         self.roster.setup_and_draw_roster()
+        self.roster.update_status_selector()
         gui_menu_builder.build_accounts_menu()
         app.config.set_per('accounts', account, 'active', False)
         app.app.update_app_actions_state()

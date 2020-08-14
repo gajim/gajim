@@ -1446,6 +1446,8 @@ class RosterWindow:
         # Recalculate column width for ellipsizing
         self.tree.columns_autosize()
 
+    def update_status_selector(self):
+        self._status_selector.update()
 
     def select_contact(self, jid, account):
         """
