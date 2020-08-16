@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 16:48+0200\n"
-"PO-Revision-Date: 2020-07-07 19:59+0000\n"
+"POT-Creation-Date: 2020-07-16 22:30+0200\n"
+"PO-Revision-Date: 2020-07-24 08:42+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/1-2/kk/>\n"
 "Language: kk\n"
@@ -65,9 +65,8 @@ msgid ""
 msgstr ""
 "Алмасу буферінен суретті чат терезесіне кірістіруді шынымен қалайсыз ба?"
 
-#: gajim/chat_control_base.py:748 gajim/groupchat_control.py:1736
-#: gajim/roster_window.py:2822 gajim/roster_window.py:4032
-#: gajim/message_window.py:364
+#: gajim/chat_control_base.py:748 gajim/groupchat_control.py:1740
+#: gajim/roster_window.py:3986 gajim/message_window.py:364
 msgid "_Do not ask me again"
 msgstr "М_ені қайта сұрамау"
 
@@ -154,10 +153,11 @@ msgid " resource with priority "
 msgstr " ресурс, приоритеті "
 
 #: gajim/gui_menu_builder.py:255 gajim/gui_menu_builder.py:346
-#: gajim/chat_control.py:295 gajim/roster_window.py:774
-#: gajim/roster_window.py:1704 gajim/roster_window.py:1706
-#: gajim/roster_window.py:2018 gajim/roster_window.py:3256
-#: gajim/roster_window.py:3289 gajim/gui_interface.py:295
+#: gajim/chat_control.py:296 gajim/chat_control.py:391
+#: gajim/roster_window.py:774 gajim/roster_window.py:1695
+#: gajim/roster_window.py:1697 gajim/roster_window.py:2009
+#: gajim/roster_window.py:3210 gajim/roster_window.py:3243
+#: gajim/roster_window.py:4243 gajim/gui_interface.py:295
 #: gajim/common/contacts.py:219 gajim/common/contacts.py:348
 #: gajim/common/contacts.py:459 gajim/common/helpers.py:94
 #: gajim/common/helpers.py:212 gajim/gtk/add_contact.py:320
@@ -170,70 +170,75 @@ msgstr "Контакттар тізімінде емес"
 msgid "I would like to add you to my contact list"
 msgstr "Мен сізді өзімнің контакттар тізіміне қосқым келеді"
 
-#: gajim/gui_menu_builder.py:437
+#: gajim/gui_menu_builder.py:436
 msgid "Send Single _Message…"
 msgstr "Бір хабарла_маны жіберу…"
 
-#: gajim/gui_menu_builder.py:452
+#: gajim/gui_menu_builder.py:451
 msgid "E_xecute Command…"
 msgstr "К_оманданы орындау…"
 
-#: gajim/gui_menu_builder.py:460
+#: gajim/gui_menu_builder.py:459
 msgid "_Manage Transport"
 msgstr "_Транспортты басқару"
 
-#: gajim/gui_menu_builder.py:466
+#: gajim/gui_menu_builder.py:465
 msgid "_Modify Transport"
 msgstr "Тр_анспортты басқару"
 
-#: gajim/gui_menu_builder.py:473 gajim/roster_window.py:4900
+#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4879
 msgid "_Rename…"
 msgstr "Атын ауысты_ру…"
 
-#: gajim/gui_menu_builder.py:484 gajim/roster_window.py:4916
-#: gajim/roster_window.py:5031 gajim/data/gui/blocked_contacts_window.ui:52
+#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4990
+#: gajim/data/gui/blocked_contacts_window.ui:51
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr "Б_локтамау"
 
-#: gajim/gui_menu_builder.py:487 gajim/roster_window.py:4921
-#: gajim/roster_window.py:5035 gajim/data/gui/contact_context_menu.ui:151
+#: gajim/gui_menu_builder.py:486 gajim/chat_control.py:408
+#: gajim/roster_window.py:2791 gajim/roster_window.py:4994
+#: gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr "_Блоктау"
 
-#: gajim/gui_menu_builder.py:495 gajim/roster_window.py:4928
+#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4885
 #: gajim/data/gui/contact_context_menu.ui:181
 msgid "Remo_ve"
 msgstr "Ө_шіру"
 
-#: gajim/gui_menu_builder.py:505 gajim/data/gui/contact_context_menu.ui:198
+#: gajim/gui_menu_builder.py:504 gajim/data/gui/contact_context_menu.ui:198
 msgid "_Information"
 msgstr "_Ақпараты"
 
-#: gajim/gui_menu_builder.py:518
+#: gajim/gui_menu_builder.py:517
 msgid "Send File"
 msgstr "Файлды жіберу"
 
-#: gajim/gui_menu_builder.py:519
+#: gajim/gui_menu_builder.py:518
 msgid "Upload File…"
 msgstr "Файлды жүктеп жіберу…"
 
-#: gajim/gui_menu_builder.py:520
+#: gajim/gui_menu_builder.py:519
 msgid "Send File Directly…"
 msgstr "Файлды тікелей жіберу…"
 
-#: gajim/gui_menu_builder.py:522 gajim/gui_menu_builder.py:589
+#: gajim/gui_menu_builder.py:521 gajim/gui_menu_builder.py:589
 msgid "Send Chatstate"
 msgstr "Чат қалып-күйін жіберу"
 
-#: gajim/gui_menu_builder.py:523 gajim/data/gui/groupchat_control.ui:332
+#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:332
 msgid "Invite Contacts…"
 msgstr "Контакттарды шақыру…"
 
-#: gajim/gui_menu_builder.py:524 gajim/gui_menu_builder.py:783
-#: gajim/gui_menu_builder.py:810 gajim/gui_menu_builder.py:849
+#: gajim/gui_menu_builder.py:523 gajim/gui_menu_builder.py:782
+#: gajim/gui_menu_builder.py:809 gajim/gui_menu_builder.py:848
 msgid "Add to Contact List…"
 msgstr "Контакттар тізіміне қосу…"
+
+#: gajim/gui_menu_builder.py:524
+msgid "Block Contact…"
+msgstr "Контактты блоктау…"
 
 #: gajim/gui_menu_builder.py:525
 msgid "Voice Chat"
@@ -244,7 +249,7 @@ msgid "Video Chat"
 msgstr "Видео чат"
 
 #: gajim/gui_menu_builder.py:527 gajim/gui_menu_builder.py:574
-#: gajim/gui_menu_builder.py:844
+#: gajim/gui_menu_builder.py:843
 msgid "Information"
 msgstr "Ақпарат"
 
@@ -253,7 +258,7 @@ msgid "History"
 msgstr "Тарих"
 
 #: gajim/gui_menu_builder.py:534 gajim/gui_menu_builder.py:650
-#: gajim/gui_menu_builder.py:752 gajim/data/gui/preferences_window.ui:1886
+#: gajim/gui_menu_builder.py:751 gajim/data/gui/preferences_window.ui:1879
 msgid "Disabled"
 msgstr "Сөндірулі"
 
@@ -325,7 +330,7 @@ msgstr "Никті өзгерту…"
 msgid "Request Voice"
 msgstr "Дауыс беру құқығын сұрау"
 
-#: gajim/gui_menu_builder.py:594 gajim/gui_menu_builder.py:867
+#: gajim/gui_menu_builder.py:594 gajim/gui_menu_builder.py:866
 msgid "Execute Command…"
 msgstr "Команданы орындау…"
 
@@ -373,7 +378,7 @@ msgstr "Қызметтерді қарап шығу…"
 msgid "Server Info"
 msgstr "Сервер ақпараты"
 
-#: gajim/gui_menu_builder.py:677 gajim/data/gui/preferences_window.ui:2763
+#: gajim/gui_menu_builder.py:677 gajim/data/gui/preferences_window.ui:2866
 msgid "Advanced"
 msgstr "Кеңейтілген"
 
@@ -397,135 +402,123 @@ msgstr "PEP баптауы"
 msgid "Synchronise History…"
 msgstr "Тарихты синхрондау…"
 
-#: gajim/gui_menu_builder.py:683 gajim/gtk/privacy_list.py:409
-msgid "Privacy Lists"
-msgstr "Жекелік тізімдер"
-
-#: gajim/gui_menu_builder.py:685 gajim/data/gui/groupchat_config.ui:36
+#: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
 #: gajim/gtk/server_info.py:128
 msgid "Admin"
 msgstr "Әкімші"
 
-#: gajim/gui_menu_builder.py:686
+#: gajim/gui_menu_builder.py:685
 msgid "Send Server Message…"
 msgstr "Сервер хабарламасын жіберу…"
 
-#: gajim/gui_menu_builder.py:687
+#: gajim/gui_menu_builder.py:686
 msgid "Set MOTD…"
 msgstr "MOTD орнату…"
 
-#: gajim/gui_menu_builder.py:688
+#: gajim/gui_menu_builder.py:687
 msgid "Update MOTD…"
 msgstr "MOTD жаңарту…"
 
-#: gajim/gui_menu_builder.py:689
+#: gajim/gui_menu_builder.py:688
 msgid "Delete MOTD…"
 msgstr "MOTD өшіру…"
 
-#: gajim/gui_menu_builder.py:726
+#: gajim/gui_menu_builder.py:725
 msgid "_Add Account…"
 msgstr "_Тіркелгіні қосу…"
 
-#: gajim/gui_menu_builder.py:732
+#: gajim/gui_menu_builder.py:731
 msgid "_Modify Accounts…"
 msgstr "Тіркелгілерді тү_зету…"
 
-#: gajim/gui_menu_builder.py:742 gajim/data/gui/zeroconf_context_menu.ui:26
+#: gajim/gui_menu_builder.py:741 gajim/data/gui/zeroconf_context_menu.ui:26
 #: gajim/data/gui/account_context_menu.ui:79
 msgid "_Modify Account…"
 msgstr "Тіркелгіні тү_зету…"
 
-#: gajim/gui_menu_builder.py:746 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "Тіркелгілер"
 
-#: gajim/gui_menu_builder.py:776 gajim/gui_menu_builder.py:781
+#: gajim/gui_menu_builder.py:775 gajim/gui_menu_builder.py:780
 msgid "Copy XMPP Address"
 msgstr "XMPP адресін көшіру"
 
-#: gajim/gui_menu_builder.py:777 gajim/gui_menu_builder.py:809
+#: gajim/gui_menu_builder.py:776 gajim/gui_menu_builder.py:808
 msgid "Join Groupchat"
 msgstr "Бөлмеге кіру"
 
-#: gajim/gui_menu_builder.py:782 gajim/gui_menu_builder.py:808
+#: gajim/gui_menu_builder.py:781 gajim/gui_menu_builder.py:807
 #: gajim/data/gui/subscription_request_window.ui:149
 #: gajim/gtk/start_chat.py:630
 msgid "Start Chat"
 msgstr "Чатты бастау"
 
-#: gajim/gui_menu_builder.py:788
+#: gajim/gui_menu_builder.py:787
 msgid "Copy Link Location"
 msgstr "Сілтеме адресін көшіру"
 
-#: gajim/gui_menu_builder.py:789
+#: gajim/gui_menu_builder.py:788
 msgid "Open Link in Browser"
 msgstr "Сілтемені браузерде ашу"
 
-#: gajim/gui_menu_builder.py:794
+#: gajim/gui_menu_builder.py:793
 msgid "Copy Email Address"
 msgstr "Эл. пошта адресін көшіру"
 
-#: gajim/gui_menu_builder.py:795 gajim/gui_menu_builder.py:807
+#: gajim/gui_menu_builder.py:794 gajim/gui_menu_builder.py:806
 msgid "Open Email Composer"
 msgstr "Эл. пошта құрастырушысын ашу"
 
-#: gajim/gui_menu_builder.py:800
+#: gajim/gui_menu_builder.py:799
 msgid "Copy Location"
 msgstr "Орналасуды көшіру"
 
-#: gajim/gui_menu_builder.py:801
+#: gajim/gui_menu_builder.py:800
 msgid "Show Location"
 msgstr "Орналасуды көрсету"
 
-#: gajim/gui_menu_builder.py:806
+#: gajim/gui_menu_builder.py:805
 msgid "Copy XMPP Address/Email"
 msgstr "XMPP/эл. пошта адресін көшіру"
 
-#: gajim/gui_menu_builder.py:858
+#: gajim/gui_menu_builder.py:857
 msgid "Invite"
 msgstr "Шақыру"
 
-#: gajim/gui_menu_builder.py:876
-msgid "Unblock"
-msgstr "Блоктаудан босату"
-
-#: gajim/gui_menu_builder.py:879
-msgid "Block"
-msgstr "Блоктау"
-
-#: gajim/gui_menu_builder.py:885
+#: gajim/gui_menu_builder.py:873
 msgid "Kick"
 msgstr "Тебу"
 
-#: gajim/gui_menu_builder.py:893
+#: gajim/gui_menu_builder.py:881
 msgid "Ban"
 msgstr "Бандау"
 
-#: gajim/gui_menu_builder.py:903
+#: gajim/gui_menu_builder.py:891
 msgid "Make Owner"
 msgstr "Ие қылу"
 
-#: gajim/gui_menu_builder.py:912
+#: gajim/gui_menu_builder.py:900
 msgid "Make Admin"
 msgstr "Әкімші қылу"
 
-#: gajim/gui_menu_builder.py:921
+#: gajim/gui_menu_builder.py:909
 msgid "Make Member"
 msgstr "Мүше қылу"
 
-#: gajim/gui_menu_builder.py:930
+#: gajim/gui_menu_builder.py:918
 msgid "Revoke Member"
 msgstr "Мүше құқығын алып тастау"
 
-#: gajim/gui_menu_builder.py:940
+#: gajim/gui_menu_builder.py:928
 msgid "Grant Voice"
 msgstr "Дауыс құқығын беру"
 
-#: gajim/gui_menu_builder.py:943
+#: gajim/gui_menu_builder.py:931
 msgid "Revoke Voice"
 msgstr "Дауыс құқығын алып тастау"
 
-#: gajim/gui_menu_builder.py:963
+#: gajim/gui_menu_builder.py:951
 msgid "Copy"
 msgstr "Көшіріп алу"
 
@@ -578,7 +571,7 @@ msgid "Nickname"
 msgstr "Ник аты"
 
 #: gajim/history_manager.py:178 gajim/history_manager.py:217
-#: gajim/data/gui/preferences_window.ui:1397
+#: gajim/data/gui/preferences_window.ui:1390
 #: gajim/data/gui/single_message_window.ui:266 gajim/gtk/history.py:117
 msgid "Message"
 msgstr "Хабарлама"
@@ -662,8 +655,8 @@ msgstr "Контакт аты: <i>%s</i>"
 msgid "XMPP Address: <i>%s</i>"
 msgstr "XMPP адресі: <i>%s</i>"
 
-#: gajim/dialogs.py:115 gajim/dialogs.py:128 gajim/roster_window.py:2876
-#: gajim/roster_window.py:3698 gajim/roster_window.py:4938
+#: gajim/dialogs.py:115 gajim/dialogs.py:128 gajim/roster_window.py:2830
+#: gajim/roster_window.py:3652 gajim/roster_window.py:4895
 #: gajim/common/contacts.py:163 gajim/common/contacts.py:203
 #: gajim/data/gui/preferences_window.ui:556
 #: gajim/data/gui/preferences_window.ui:608
@@ -711,7 +704,7 @@ msgid "This name is already in use. Do you want to overwrite this preset?"
 msgstr ""
 "Бұл атау қолдануда. Бұл қалып-күй хабарламасын алмастыруды қалайсыз ба?"
 
-#: gajim/dialogs.py:704 gajim/plugins/gui.py:290
+#: gajim/dialogs.py:704 gajim/plugins/gui.py:291
 msgid "_Overwrite"
 msgstr "Үстінен жа_зу"
 
@@ -790,7 +783,7 @@ msgstr ""
 "%(contact)s сізбен %(type)s чатын бастағысы келеді. Қоңырауға жауап бересіз "
 "бе?"
 
-#: gajim/groupchat_control.py:407 gajim/chat_control.py:330
+#: gajim/groupchat_control.py:407 gajim/chat_control.py:336
 msgid "Send File…"
 msgstr "Файлды жіберу…"
 
@@ -799,307 +792,329 @@ msgstr "Файлды жіберу…"
 msgid "Send File (max. %s MiB)…"
 msgstr "Файлды жіберу (макс. %s МиБ)…"
 
-#: gajim/groupchat_control.py:413 gajim/chat_control.py:332
+#: gajim/groupchat_control.py:413 gajim/chat_control.py:338
 msgid "No File Transfer available"
 msgstr "Қолжетімді файлдармен алмасу жоқ"
 
-#: gajim/groupchat_control.py:541 gajim/dialog_messages.py:31
+#: gajim/groupchat_control.py:544
+#, python-brace-format
+msgid "{contact_jid} has been invited to this group chat"
+msgstr "{contact_jid} бұл топтық чатқа шақырылды"
+
+#: gajim/groupchat_control.py:559 gajim/dialog_messages.py:31
 #: gajim/dialog_messages.py:36 gajim/gtk/single_message.py:238
 msgid "Invalid XMPP Address"
 msgstr "XMPP адресі жарамсыз"
 
-#: gajim/groupchat_control.py:638 gajim/gtk/profile.py:133
+#: gajim/groupchat_control.py:656 gajim/gtk/profile.py:133
 msgid "Could not load image"
 msgstr "Суретті жүктеу мүмкін емес"
 
-#: gajim/groupchat_control.py:681
+#: gajim/groupchat_control.py:685
 #, python-format
 msgid "Kick %s"
 msgstr "%s тебу"
 
-#: gajim/groupchat_control.py:690
+#: gajim/groupchat_control.py:694
 #, python-format
 msgid "Ban %s"
 msgstr "%s бұғаттау"
 
-#: gajim/groupchat_control.py:738
+#: gajim/groupchat_control.py:742
 msgid "Insert Nickname"
 msgstr "Ник кірістіру"
 
-#: gajim/groupchat_control.py:829 gajim/groupchat_control.py:830
+#: gajim/groupchat_control.py:833 gajim/groupchat_control.py:834
 msgid "Voice Request"
 msgstr "Дыбыс чатына сұраным"
 
-#: gajim/groupchat_control.py:831
+#: gajim/groupchat_control.py:835
 #, python-format
 msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 msgstr ""
 "<b>%(room_name)s</b> топтық чатынан <b>%(nick)s</b> дауыс құқығын сұрап отыр"
 
-#: gajim/groupchat_control.py:835
+#: gajim/groupchat_control.py:839
 msgid "_Approve"
 msgstr "Рұқс_ат ету"
 
-#: gajim/groupchat_control.py:1058
+#: gajim/groupchat_control.py:1062
 #, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(nick)s тақырыпты %(subject)s етіп орнатқан"
 
-#: gajim/groupchat_control.py:1074
+#: gajim/groupchat_control.py:1078
 msgid "Group chat now shows unavailable members"
 msgstr "Топтық чат енді қолжетімсіз қатысушыларды көрсетеді"
 
-#: gajim/groupchat_control.py:1077
+#: gajim/groupchat_control.py:1081
 msgid "Group chat now does not show unavailable members"
 msgstr "Топтық чат енді қолжетімсіз қатысушыларды көрсетпейді"
 
-#: gajim/groupchat_control.py:1081
+#: gajim/groupchat_control.py:1085
 msgid "A setting not related to privacy has been changed"
 msgstr "Жекелікке байланысты емес баптау өзгертілді"
 
-#: gajim/groupchat_control.py:1088 gajim/groupchat_control.py:1247
+#: gajim/groupchat_control.py:1092 gajim/groupchat_control.py:1251
 msgid "Conversations are stored on the server"
 msgstr "Сөйлесулер серверде сақталады"
 
-#: gajim/groupchat_control.py:1091
+#: gajim/groupchat_control.py:1095
 msgid "Conversations are not stored on the server"
 msgstr "Сөйлесулер серверде сақталмайды"
 
-#: gajim/groupchat_control.py:1094
+#: gajim/groupchat_control.py:1098
 msgid "Group chat is now non-anonymous"
 msgstr "Топтық чат енді анонимды емес"
 
-#: gajim/groupchat_control.py:1098
+#: gajim/groupchat_control.py:1102
 msgid "Group chat is now semi-anonymous"
 msgstr "Топтық чат енді жартылай анонимды"
 
-#: gajim/groupchat_control.py:1102
+#: gajim/groupchat_control.py:1106
 msgid "Group chat is now fully anonymous"
 msgstr "Топтық чат енді толық анонимды"
 
-#: gajim/groupchat_control.py:1147
+#: gajim/groupchat_control.py:1151
 #, python-format
 msgid "Ping? (%s)"
 msgstr "Пинг? (%s)"
 
-#: gajim/groupchat_control.py:1150
+#: gajim/groupchat_control.py:1154
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
 msgstr "Понг! (%(nick)s %(delay)s сек.)"
 
-#: gajim/groupchat_control.py:1153 gajim/chat_control.py:643
+#: gajim/groupchat_control.py:1157 gajim/chat_control.py:676
 msgid "Error."
 msgstr "Қате."
 
-#: gajim/groupchat_control.py:1238
+#: gajim/groupchat_control.py:1242
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "Сіз (%s) чат бөлмесіне кірдіңіз"
 
-#: gajim/groupchat_control.py:1243
+#: gajim/groupchat_control.py:1247
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr "Барлық қатысушылар сіздің толық XMPP адресіңізді көре алады"
 
-#: gajim/groupchat_control.py:1251
+#: gajim/groupchat_control.py:1255
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Сервер сізге бөлме никті таңдаған не сіздегісін өзгерткен"
 
-#: gajim/groupchat_control.py:1261
+#: gajim/groupchat_control.py:1265
 msgid "A new group chat has been created"
 msgstr "Жаңа чат бөлмесі жасалған"
 
-#: gajim/groupchat_control.py:1265
+#: gajim/groupchat_control.py:1269
 #, fuzzy
 msgid "Failed to Configure Group Chat"
 msgstr "Топ чаттардан шығу"
 
-#: gajim/groupchat_control.py:1275 gajim/privatechat_control.py:105
+#: gajim/groupchat_control.py:1279 gajim/privatechat_control.py:105
 #, python-format
 msgid "You are now known as %s"
 msgstr "Бұдан былай %s ретінде белгілі боласыз"
 
-#: gajim/groupchat_control.py:1277 gajim/privatechat_control.py:107
+#: gajim/groupchat_control.py:1281 gajim/privatechat_control.py:107
 #, python-brace-format
 msgid "{nick} is now known as {new_nick}"
 msgstr "{nick} енді {new_nick} ретінде белгілі"
 
-#: gajim/groupchat_control.py:1302 gajim/privatechat_control.py:133
+#: gajim/groupchat_control.py:1306 gajim/privatechat_control.py:133
 #, python-brace-format
 msgid "You are now {show}{status}"
 msgstr "Сіз енді {show}{status} ретінде белгілі боласыз"
 
-#: gajim/groupchat_control.py:1308 gajim/privatechat_control.py:139
+#: gajim/groupchat_control.py:1312 gajim/privatechat_control.py:139
 #, python-brace-format
 msgid "{nick} is now {show}{status}"
 msgstr "{nick} енді {show}{status}"
 
-#: gajim/groupchat_control.py:1325 gajim/groupchat_control.py:1355
-#: gajim/groupchat_control.py:1383 gajim/groupchat_control.py:1442
+#: gajim/groupchat_control.py:1329 gajim/groupchat_control.py:1359
+#: gajim/groupchat_control.py:1387 gajim/groupchat_control.py:1446
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1328
+#: gajim/groupchat_control.py:1332
 #, fuzzy, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** %(actor)s қазір %(nick)s қатысуын %(affiliation)s етіп орнатқан"
 
-#: gajim/groupchat_control.py:1334
+#: gajim/groupchat_control.py:1338
 #, fuzzy, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** %(nick)s қатысуы %(affiliation)s етіп орнатылған"
 
-#: gajim/groupchat_control.py:1358
+#: gajim/groupchat_control.py:1362
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** %(actor)s қазір %(nick)s ролін %(role)s етіп орнатқан"
 
-#: gajim/groupchat_control.py:1363
+#: gajim/groupchat_control.py:1367
 #, fuzzy, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** %(actor)s қазір %(nick)s ролін %(role)s етіп орнатқан"
 
-#: gajim/groupchat_control.py:1386
+#: gajim/groupchat_control.py:1390
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(nick)s бөлімнен шығарылған (%(reason)s)"
 
-#: gajim/groupchat_control.py:1391
+#: gajim/groupchat_control.py:1395
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1397
+#: gajim/groupchat_control.py:1401
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1404
+#: gajim/groupchat_control.py:1408
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1411 gajim/groupchat_control.py:1476
+#: gajim/groupchat_control.py:1415 gajim/groupchat_control.py:1480
 #, fuzzy
 msgid ": Affiliation changed"
 msgstr "қатысуы өзгертілген"
 
-#: gajim/groupchat_control.py:1417 gajim/groupchat_control.py:1481
+#: gajim/groupchat_control.py:1421 gajim/groupchat_control.py:1485
 #, fuzzy
 msgid ": Group chat configuration changed to members-only"
 msgstr "бөлімге қатысу тек мүшелер үшін деп өзгертілген"
 
-#: gajim/groupchat_control.py:1445
+#: gajim/groupchat_control.py:1449
 #, fuzzy, python-brace-format
 msgid "{nick} has been removed from the group chat{by}{reason}"
 msgstr "%(nick)s бөлімнен шығарылған (%(reason)s)"
 
-#: gajim/groupchat_control.py:1455
+#: gajim/groupchat_control.py:1459
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1461
+#: gajim/groupchat_control.py:1465
 #, fuzzy, python-brace-format
 msgid "{nick} has been kicked{actor}{reason}"
 msgstr "%(nick)s тебілген болса керек: %(reason)s"
 
-#: gajim/groupchat_control.py:1469
+#: gajim/groupchat_control.py:1473
 #, fuzzy, python-brace-format
 msgid "{nick} has been banned{actor}{reason}"
 msgstr "%(nick)s бандалған болса керек: %(reason)s"
 
-#: gajim/groupchat_control.py:1486
+#: gajim/groupchat_control.py:1490
 #, python-brace-format
 msgid "{nick} has left{reason}"
 msgstr ""
 
-#: gajim/groupchat_control.py:1508
+#: gajim/groupchat_control.py:1512
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s чат бөлмесіне кірді"
 
-#: gajim/groupchat_control.py:1520
+#: gajim/groupchat_control.py:1524
 msgid "Failed to Join Group Chat"
 msgstr "Топтық чатқа кіру сәтсіз аяқталды"
 
-#: gajim/groupchat_control.py:1526
+#: gajim/groupchat_control.py:1530
 #, fuzzy
 msgid "Failed to Create Group Chat"
 msgstr "Топ чаттардан шығу"
 
-#: gajim/groupchat_control.py:1542
+#: gajim/groupchat_control.py:1546
 #, fuzzy
 msgid "Group chat has been destroyed"
 msgstr "Бөлме жойылған"
 
-#: gajim/groupchat_control.py:1547
+#: gajim/groupchat_control.py:1551
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Оның орнына мына бөлмеге кіре аласыз: %s"
 
-#: gajim/groupchat_control.py:1732
+#: gajim/groupchat_control.py:1736
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Топ чаттардан шығу"
 
-#: gajim/groupchat_control.py:1733
+#: gajim/groupchat_control.py:1737
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "\"%s\" топ чатынан шығуды шынымен қалайсыз ба?"
 
-#: gajim/groupchat_control.py:1734
+#: gajim/groupchat_control.py:1738
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
 msgstr "Бұл терезені жапсаңыз, топ чатынан шығасыз."
 
-#: gajim/groupchat_control.py:1740 gajim/roster_window.py:5093
+#: gajim/groupchat_control.py:1744 gajim/roster_window.py:5052
 msgid "_Leave"
 msgstr ""
 
-#: gajim/groupchat_control.py:1785 gajim/roster_window.py:2986
-#, fuzzy, python-format
-msgid "%(jid)s has been invited to this group chat"
-msgstr "%(nick)s бөлімнен шығарылған (%(reason)s)"
+#: gajim/chat_control.py:398 gajim/roster_window.py:2780
+#, fuzzy
+msgid "Block Contact"
+msgstr "Блокталған контакттар"
 
-#: gajim/chat_control.py:423
+#: gajim/chat_control.py:399 gajim/roster_window.py:2781
+#, fuzzy
+msgid "Really block this contact?"
+msgstr "Бұл контакт үшін OpenPGP қосулы тұр ма?"
+
+#: gajim/chat_control.py:400 gajim/roster_window.py:2782
+#, fuzzy
+msgid ""
+"You will appear offline for this contact and you will not receive further "
+"messages."
+msgstr "Хабарламаны алатын контакттың JID-і"
+
+#: gajim/chat_control.py:404 gajim/roster_window.py:2787
+#, fuzzy
+msgid "_Report Spam"
+msgstr "Ақаулық жөнінде хаба_рлау"
+
+#: gajim/chat_control.py:456
 msgid "Show a list of formattings"
 msgstr "Пішімдеулер тізімін көрсету"
 
-#: gajim/chat_control.py:427
+#: gajim/chat_control.py:460
 msgid "This contact does not support HTML"
 msgstr "Бұл контакт HTML қолдамайды"
 
-#: gajim/chat_control.py:638
+#: gajim/chat_control.py:671
 msgid "Ping?"
 msgstr "Ping?"
 
-#: gajim/chat_control.py:641
+#: gajim/chat_control.py:674
 #, fuzzy, python-format
 msgid "Pong! (%s seconds)"
 msgstr "Pong! (%s сек.)"
 
-#: gajim/chat_control.py:713
+#: gajim/chat_control.py:746
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
 msgstr "%(type)s қалып-күйі : %(state)s, себебі: %(reason)s"
 
-#: gajim/chat_control.py:812
+#: gajim/chat_control.py:843
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s, %(room_name)s топ чатынан"
 
-#: gajim/chat_control.py:1129
+#: gajim/chat_control.py:1135
 #, fuzzy
 msgid "Note: Chat history is disabled for this contact."
 msgstr "Бұл сертификат үшін осы қатені елемеу."
 
-#: gajim/chat_control.py:1131
+#: gajim/chat_control.py:1137
 msgid "Note: Chat history is disabled for this account."
 msgstr ""
 
-#: gajim/chat_control.py:1132
+#: gajim/chat_control.py:1138
 #, python-format
 msgid ""
 "You just received a new message from %s.\n"
@@ -1108,20 +1123,20 @@ msgstr ""
 "Сіз \"%s\" жіберген жаңа хабарламаны алдыңыз.\n"
 "Бұл бетті жабуды қалайсыз ба?"
 
-#: gajim/chat_control.py:1138 gajim/gtk/change_password.py:44
+#: gajim/chat_control.py:1144 gajim/gtk/change_password.py:44
 #: gajim/gtk/remove_account.py:44
 #, fuzzy
 msgid "Close"
 msgstr "_Жіберу мен жабу"
 
-#: gajim/chat_control.py:1139 gajim/common/connection_handlers_events.py:237
+#: gajim/chat_control.py:1145 gajim/common/connection_handlers_events.py:237
 #: gajim/gtk/notification.py:185 gajim/gtk/notification.py:214
 #: gajim/gtk/notification.py:273
 msgid "New Message"
 msgstr "Жаңа хабарлама"
 
-#: gajim/chat_control.py:1144 gajim/chat_control.py:1441
-#: gajim/chat_control.py:1450 gajim/message_window.py:367
+#: gajim/chat_control.py:1150 gajim/chat_control.py:1447
+#: gajim/chat_control.py:1456 gajim/message_window.py:367
 #: gajim/data/gui/groupchat_control.ui:1073
 #: gajim/data/gui/groupchat_control.ui:1159
 #: gajim/data/gui/groupchat_control.ui:1265
@@ -1129,7 +1144,7 @@ msgstr "Жаңа хабарлама"
 msgid "_Close"
 msgstr "_Жіберу мен жабу"
 
-#: gajim/chat_control.py:1231
+#: gajim/chat_control.py:1237
 #, python-format
 msgid ""
 "Subject: %(subject)s\n"
@@ -1138,46 +1153,46 @@ msgstr ""
 "Тақырыбы: %(subject)s\n"
 "%(message)s"
 
-#: gajim/chat_control.py:1344
+#: gajim/chat_control.py:1350
 #, fuzzy, python-format
 msgid "%(name)s is now %(show)s %(status)s"
 msgstr "%(name)s қазір %(status)s"
 
-#: gajim/chat_control.py:1405 gajim/roster_window.py:4172
-#: gajim/roster_window.py:4173 gajim/gtk/filetransfer_progress.py:35
+#: gajim/chat_control.py:1411 gajim/roster_window.py:4126
+#: gajim/roster_window.py:4127 gajim/gtk/filetransfer_progress.py:35
 #, fuzzy
 msgid "File Transfer"
 msgstr "Файлдармен алмасу"
 
-#: gajim/chat_control.py:1409
+#: gajim/chat_control.py:1415
 #, fuzzy
 msgid "Size"
 msgstr "Өлшемі: %s"
 
-#: gajim/chat_control.py:1411 gajim/chat_control.py:1471
+#: gajim/chat_control.py:1417 gajim/chat_control.py:1477
 #: gajim/data/gui/groupchat_invitation_received.ui:77 gajim/gtk/dialogs.py:57
 #, fuzzy
 msgid "_Accept"
 msgstr "_Тіркелгілер"
 
-#: gajim/chat_control.py:1413 gajim/chat_control.py:1473
+#: gajim/chat_control.py:1419 gajim/chat_control.py:1479
 #: gajim/data/gui/groupchat_invitation_received.ui:62
 #, fuzzy
 msgid "_Decline"
 msgstr "Желі_де емес"
 
-#: gajim/chat_control.py:1435 gajim/gui_interface.py:693
+#: gajim/chat_control.py:1441 gajim/gui_interface.py:693
 #: gajim/gui_interface.py:723 gajim/gui_interface.py:749
 #: gajim/gtk/notification.py:188 gajim/gtk/notification.py:284
 msgid "File Transfer Completed"
 msgstr "Файлдармен алмасу аяқталды"
 
-#: gajim/chat_control.py:1439 gajim/gtk/filetransfer.py:259
+#: gajim/chat_control.py:1445 gajim/gtk/filetransfer.py:259
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Орналасқан буманы ашу"
 
-#: gajim/chat_control.py:1468 gajim/gui_interface.py:386
+#: gajim/chat_control.py:1474 gajim/gui_interface.py:386
 #: gajim/data/gui/groupchat_invitation_received.ui:42
 #: gajim/gtk/notification.py:189 gajim/gtk/notification.py:210
 #: gajim/gtk/notification.py:288
@@ -1185,24 +1200,24 @@ msgstr "_Орналасқан буманы ашу"
 msgid "Group Chat Invitation"
 msgstr "Топ чатына шақыру"
 
-#: gajim/chat_control.py:1493 gajim/roster_window.py:1938
+#: gajim/chat_control.py:1499 gajim/roster_window.py:1929
 msgid "Remote contact stopped transfer"
 msgstr "Қашықтағы контакт файлдармен алмасуды тоқтатқан"
 
-#: gajim/chat_control.py:1495 gajim/roster_window.py:1940
+#: gajim/chat_control.py:1501 gajim/roster_window.py:1931
 msgid "Error opening file"
 msgstr "Файлды ашу қатесі"
 
-#: gajim/chat_control.py:1497 gajim/gtk/filetransfer.py:297
+#: gajim/chat_control.py:1503 gajim/gtk/filetransfer.py:297
 msgid "File transfer stopped"
 msgstr "Файлдармен алмасу тоқтатылды"
 
-#: gajim/chat_control.py:1502 gajim/gtk/filetransfer.py:275
+#: gajim/chat_control.py:1508 gajim/gtk/filetransfer.py:275
 #: gajim/gtk/filetransfer.py:284
 msgid "File transfer cancelled"
 msgstr "Файлдармен алмасу тоқтатылды"
 
-#: gajim/chat_control.py:1503
+#: gajim/chat_control.py:1509
 msgid "Connection with peer cannot be established."
 msgstr "Тораппен байланысты орнату мүмкін емес."
 
@@ -1265,96 +1280,96 @@ msgstr "Дерекқор қатесі"
 msgid "Merged accounts"
 msgstr "Біріктірілген тіркелгілер"
 
-#: gajim/roster_window.py:841 gajim/roster_window.py:1616
-#: gajim/roster_window.py:1649 gajim/roster_window.py:1700
-#: gajim/roster_window.py:1702 gajim/roster_window.py:1857
-#: gajim/roster_window.py:2499 gajim/roster_window.py:4252
-#: gajim/roster_window.py:4879 gajim/common/contacts.py:201
+#: gajim/roster_window.py:841 gajim/roster_window.py:1607
+#: gajim/roster_window.py:1640 gajim/roster_window.py:1691
+#: gajim/roster_window.py:1693 gajim/roster_window.py:1848
+#: gajim/roster_window.py:2490 gajim/roster_window.py:4207
+#: gajim/roster_window.py:4854 gajim/common/contacts.py:201
 #: gajim/common/contacts.py:451 gajim/common/helpers.py:93
 #: gajim/gtk/discovery.py:128 gajim/gtk/discovery.py:129
 #: gajim/gtk/discovery.py:1415
 msgid "Transports"
 msgstr "Қызметтер"
 
-#: gajim/roster_window.py:1708 gajim/roster_window.py:1710
-#: gajim/roster_window.py:4252 gajim/roster_window.py:4849
+#: gajim/roster_window.py:1699 gajim/roster_window.py:1701
+#: gajim/roster_window.py:4207 gajim/roster_window.py:4819
 #: gajim/gui_interface.py:1319 gajim/common/contacts.py:199
 #: gajim/common/helpers.py:96
 #, fuzzy
 msgid "Group chats"
 msgstr "Топтық чаттар"
 
-#: gajim/roster_window.py:2000
+#: gajim/roster_window.py:1991
 #, fuzzy
 msgid "Authorization sent"
 msgstr "Авторизация жіберілді"
 
-#: gajim/roster_window.py:2001
+#: gajim/roster_window.py:1992
 #, fuzzy, python-format
 msgid "\"%s\" will now see your status."
 msgstr "\"%s\" енді сіздің қалып-күйіңізді біле алады."
 
-#: gajim/roster_window.py:2019
+#: gajim/roster_window.py:2010
 msgid "Subscription request has been sent"
 msgstr "Жазылуға сұраным жіберілді"
 
-#: gajim/roster_window.py:2020
+#: gajim/roster_window.py:2011
 #, fuzzy, python-format
 msgid "If \"%s\" accepts this request you will know their status."
 msgstr ""
 "Егер \"%s\" сіздің сұранымыңызды қабылдаса, сіз оның қалып-күйін біле аласыз."
 
-#: gajim/roster_window.py:2034
+#: gajim/roster_window.py:2025
 #, fuzzy
 msgid "Authorization removed"
 msgstr "Авторизация өшірілді"
 
-#: gajim/roster_window.py:2035
+#: gajim/roster_window.py:2026
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "\"%s\" енді сізді әрқашан желіде емес күйінде көреді."
 
-#: gajim/roster_window.py:2253
+#: gajim/roster_window.py:2244
 #, fuzzy
 msgid "desynced"
 msgstr "байланыспаған"
 
-#: gajim/roster_window.py:2321 gajim/data/gui/shortcuts_window.ui:238
+#: gajim/roster_window.py:2312 gajim/data/gui/shortcuts_window.ui:238
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
 
-#: gajim/roster_window.py:2322
+#: gajim/roster_window.py:2313
 msgid "You are about to quit Gajim"
 msgstr "Gajim-нан шығуды қаладыңыз"
 
-#: gajim/roster_window.py:2323
+#: gajim/roster_window.py:2314
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Gajim-нан шығуды шынымен қалайсыз ба?"
 
-#: gajim/roster_window.py:2324
+#: gajim/roster_window.py:2315
 #, fuzzy
 msgid "_Always quit when closing Gajim"
 msgstr "Gajim-ді әрқашан жабу"
 
-#: gajim/roster_window.py:2327 gajim/roster_window.py:2423
-#: gajim/roster_window.py:2463 gajim/data/gui/application_menu.ui:30
+#: gajim/roster_window.py:2318 gajim/roster_window.py:2414
+#: gajim/roster_window.py:2454 gajim/data/gui/application_menu.ui:30
 #: gajim/data/gui/systray_context_menu.ui:83
 #, fuzzy
 msgid "_Quit"
 msgstr "_Шығу"
 
-#: gajim/roster_window.py:2416
+#: gajim/roster_window.py:2407
 #, fuzzy
 msgid "Stop File Transfers"
 msgstr "Файлдармен алмасу"
 
-#: gajim/roster_window.py:2417
+#: gajim/roster_window.py:2408
 #, fuzzy
 msgid "You still have running file transfers"
 msgstr "Қазір белсенді файлдармен алмасулар бар"
 
-#: gajim/roster_window.py:2418
+#: gajim/roster_window.py:2409
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -1362,17 +1377,17 @@ msgstr ""
 "Қазыр шықсаңыз, файл(дар)мен алмасу тоқтатылады.\n"
 "Шығуды қалайсыз ба?"
 
-#: gajim/roster_window.py:2456
+#: gajim/roster_window.py:2447
 #, fuzzy
 msgid "Unread Messages"
 msgstr "Оқылмаған оқиғалар"
 
-#: gajim/roster_window.py:2457
+#: gajim/roster_window.py:2448
 #, fuzzy
 msgid "You still have unread messages"
 msgstr "Сізде оқылмаған хабарламалар бар"
 
-#: gajim/roster_window.py:2458
+#: gajim/roster_window.py:2449
 #, fuzzy
 msgid ""
 "Messages will only be available for reading them later if storing chat "
@@ -1381,20 +1396,20 @@ msgstr ""
 "Кейінірек оқу үшін хабарламалар тек тарихыңыз қосулы және контакт "
 "ростеріңізде болса ғана қолжетерлік болады."
 
-#: gajim/roster_window.py:2718
+#: gajim/roster_window.py:2709
 msgid "You have unread messages"
 msgstr "Сізде оқылмаған хабарламалар бар"
 
-#: gajim/roster_window.py:2719
+#: gajim/roster_window.py:2710
 msgid "You must read them before removing this transport."
 msgstr "Транспортты өшіру алдында келесіні оқуыңыз керек."
 
-#: gajim/roster_window.py:2722
+#: gajim/roster_window.py:2713
 #, fuzzy, python-format
 msgid "Transport '%s' will be removed"
 msgstr "\"%s\" транспорты өшіріледі"
 
-#: gajim/roster_window.py:2723
+#: gajim/roster_window.py:2714
 #, fuzzy
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
@@ -1403,11 +1418,11 @@ msgstr ""
 "Бұл транспортты қолданатын барлық контакттарға бұдан былай хабарламаларды "
 "жібере не ала алмайтын боласыз."
 
-#: gajim/roster_window.py:2726
+#: gajim/roster_window.py:2717
 msgid "Transports will be removed"
 msgstr "Транспорттар өшіріледі"
 
-#: gajim/roster_window.py:2731
+#: gajim/roster_window.py:2722
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
@@ -1418,132 +1433,89 @@ msgstr ""
 "жібере не ала алмайтын боласыз:\n"
 "%s"
 
-#: gajim/roster_window.py:2735
+#: gajim/roster_window.py:2726
 #, fuzzy
 msgid "Remove Transport"
 msgstr "Транс_порттарды көрсету"
 
-#: gajim/roster_window.py:2805
+#: gajim/roster_window.py:2784
 #, fuzzy
-msgid "Block Contact"
-msgstr "Блокталған контакттар"
+msgid "_Do not ask again"
+msgstr "М_ені қайта сұрамау"
 
-#: gajim/roster_window.py:2806
-#, fuzzy
-msgid "Really block this contact?"
-msgstr "Бұл контакт үшін OpenPGP қосулы тұр ма?"
-
-#: gajim/roster_window.py:2807
-#, fuzzy
-msgid ""
-"This contact will see you offline and you will not receive any messages sent "
-"to you by this contact."
-msgstr ""
-"Контакт бұдан былай сізді желіде емес сияқты көреді және сіз ол сізге "
-"жібергісі келетін хабарламаларды ала алмайтын боласыз."
-
-#: gajim/roster_window.py:2809
-#, fuzzy
-msgid "_Block Contact"
-msgstr "Блокталған контакттар"
-
-#: gajim/roster_window.py:2811
-#, fuzzy
-msgid "Block Group"
-msgstr "_Блоктау"
-
-#: gajim/roster_window.py:2812
-#, fuzzy
-msgid "Really block this group?"
-msgstr "Бұл контакт үшін OpenPGP қосулы тұр ма?"
-
-#: gajim/roster_window.py:2813
-#, fuzzy
-msgid ""
-"All contacts of this group will see you as offline and you will not receive "
-"any messages sent to you by any one of these contacts."
-msgstr ""
-"Контакт бұдан былай сізді желіде емес сияқты көреді және сіз ол сізге "
-"жібергісі келетін хабарламаларды ала алмайтын боласыз."
-
-#: gajim/roster_window.py:2816
-#, fuzzy
-msgid "_Block Group"
-msgstr "_Блоктау"
-
-#: gajim/roster_window.py:2870
+#: gajim/roster_window.py:2824
 msgid "Rename Contact"
 msgstr "Контакт атын ауыстыру"
 
-#: gajim/roster_window.py:2871
+#: gajim/roster_window.py:2825
 #, python-format
 msgid "Rename contact %s?"
 msgstr "%s контакт атын ауыстыру керек пе?"
 
-#: gajim/roster_window.py:2872
+#: gajim/roster_window.py:2826
 #, fuzzy
 msgid "Please enter a new nickname"
 msgstr "%s контакты үшін жаңа ник атын енгізіңіз"
 
-#: gajim/roster_window.py:2879
+#: gajim/roster_window.py:2833
 msgid "Rename Group"
 msgstr "Топ атын ауыстыру"
 
-#: gajim/roster_window.py:2880
+#: gajim/roster_window.py:2834
 #, python-format
 msgid "Rename group %s?"
 msgstr "%s топ атын ауыстыру керек пе?"
 
-#: gajim/roster_window.py:2881
+#: gajim/roster_window.py:2835
 msgid "Please enter a new name"
 msgstr "Жаңа атты енгізіңіз"
 
-#: gajim/roster_window.py:2911 gajim/roster_window.py:3033
+#: gajim/roster_window.py:2865 gajim/roster_window.py:2987
 #: gajim/data/gui/groupchat_control.ui:1786
 #, fuzzy
 msgid "_Rename"
 msgstr "Аты_н ауыстыру"
 
-#: gajim/roster_window.py:2933 gajim/roster_window.py:2934
+#: gajim/roster_window.py:2887 gajim/roster_window.py:2888
 msgid "Remove Group"
 msgstr "Топты өшіру"
 
-#: gajim/roster_window.py:2935
+#: gajim/roster_window.py:2889
 #, fuzzy, python-format
 msgid "Do you want to remove %s from the contact list?"
 msgstr "Сіз ростерден %s тобын өшіруді қалайсыз ба?"
 
-#: gajim/roster_window.py:2936
+#: gajim/roster_window.py:2890
 #, fuzzy
 msgid "_Also remove all contacts of this group from contact list"
 msgstr "Сонымен қатар ростерден осы топтың барлық контакттарын өшіру"
 
-#: gajim/roster_window.py:3028 gajim/roster_window.py:3029
+#: gajim/roster_window.py:2982 gajim/roster_window.py:2983
 #, fuzzy
 msgid "Rename Group Chat"
 msgstr "Топ чаттардан шығу"
 
-#: gajim/roster_window.py:3030
+#: gajim/roster_window.py:2984
 #, fuzzy
 msgid "Please enter a new name for this group chat"
 msgstr "Жергілікті тіркелгіңіз үшін жаңа пайдаланушы атын енгізіңіз"
 
-#: gajim/roster_window.py:3273
+#: gajim/roster_window.py:3227
 #, fuzzy
 msgid "Remove Contact"
 msgstr "Контакт атын ауыстыру"
 
-#: gajim/roster_window.py:3274
+#: gajim/roster_window.py:3228
 #, fuzzy
 msgid "Remove contact from contact list"
 msgstr "Ростерден контактты өшіреді"
 
-#: gajim/roster_window.py:3275
+#: gajim/roster_window.py:3229
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Сіз \"%(name)s\" (%(jid)s) ростеріңізден өшіруді қалағансыз.\n"
 
-#: gajim/roster_window.py:3284 gajim/roster_window.py:3304
+#: gajim/roster_window.py:3238 gajim/roster_window.py:3258
 msgid ""
 "By removing this contact you also remove authorization. This means the "
 "contact will see you as offline."
@@ -1551,21 +1523,21 @@ msgstr ""
 "Бұл контактты өшіру нәтижесінде оған берген авторизацияны да өшіресіз. Ол "
 "енді сізді әрқашан желіде емес сияқты көреді."
 
-#: gajim/roster_window.py:3295
+#: gajim/roster_window.py:3249
 msgid "Do you want to continue?"
 msgstr "Жалғастыруды қалайсыз ба?"
 
-#: gajim/roster_window.py:3306
+#: gajim/roster_window.py:3260
 #, fuzzy
 msgid "_I want this contact to know my status after removal"
 msgstr "Өшіруден кейін осы контакттар менің қалып-күйімді білуін қалаймын"
 
-#: gajim/roster_window.py:3313
+#: gajim/roster_window.py:3267
 #, fuzzy
 msgid "Remove contacts from contact list"
 msgstr "Ростерден контактты өшіреді"
 
-#: gajim/roster_window.py:3319
+#: gajim/roster_window.py:3273
 #, python-format
 msgid ""
 "By removing the following contacts, you will also remove authorization. This "
@@ -1578,24 +1550,24 @@ msgstr ""
 "\n"
 "%s"
 
-#: gajim/roster_window.py:3323
+#: gajim/roster_window.py:3277
 #, fuzzy
 msgid "Remove Contacts"
 msgstr "Контакт атын ауыстыру"
 
-#: gajim/roster_window.py:3343
+#: gajim/roster_window.py:3297
 msgid "No account available"
 msgstr "Бірде-бір тіркелгі қолжетерсіз"
 
-#: gajim/roster_window.py:3344
+#: gajim/roster_window.py:3298
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Басқа контакттармен сөйлесу үшін алдымен тіркелгіні жасауыңыз қажет."
 
-#: gajim/roster_window.py:3925
+#: gajim/roster_window.py:3879
 msgid "Metacontacts storage not supported by your server"
 msgstr "Метаконтакттарды сақтау серверіңіз қолдамайды"
 
-#: gajim/roster_window.py:3927
+#: gajim/roster_window.py:3881
 #, fuzzy
 msgid ""
 "Your server does not support storing metacontacts information. So this "
@@ -1604,11 +1576,11 @@ msgstr ""
 "Серверінің метаконтакттар ақпаратын сақтауды қолдамайды. Сол үшін, бұл "
 "ақпарат келесі рет қосылғаны үшін сақталмайды."
 
-#: gajim/roster_window.py:4024
+#: gajim/roster_window.py:3978
 msgid "You are about to create a metacontact"
 msgstr "Метаконтакт жасауды қаладыңыз"
 
-#: gajim/roster_window.py:4025
+#: gajim/roster_window.py:3979
 #, fuzzy
 msgid ""
 "Metacontacts are a way to regroup several contacts in one single contact. "
@@ -1618,121 +1590,117 @@ msgstr ""
 "Метаконтакт - бірнеше бірлік контактты бір жолға біріктіру тәсілі. Әдетте ол "
 "бір адамның бірнеше Jabber не транспорт тіркелгілері бар болса қолданылады."
 
-#: gajim/roster_window.py:4029
+#: gajim/roster_window.py:3983
 #, fuzzy
 msgid "Create Metacontact"
 msgstr "Контакт атын ауыстыру"
 
-#: gajim/roster_window.py:4035 gajim/data/gui/groupchat_creation.ui:317
+#: gajim/roster_window.py:3989 gajim/data/gui/groupchat_creation.ui:317
 #, fuzzy
 msgid "_Create"
 msgstr "Жасампаз"
 
-#: gajim/roster_window.py:4152
+#: gajim/roster_window.py:4106
 msgid "Invalid file URI:"
 msgstr "Файл URI қате:"
 
-#: gajim/roster_window.py:4164
+#: gajim/roster_window.py:4118
 #, python-format
 msgid "Send this file to %s:\n"
 msgid_plural "Send these files to %s:\n"
 msgstr[0] "Бұл файлды %s үшін жіберу:\n"
 msgstr[1] "Бұл файлдарды %s үшін жіберу:\n"
 
-#: gajim/roster_window.py:4177 gajim/data/gui/xml_console.ui:334
+#: gajim/roster_window.py:4131 gajim/data/gui/xml_console.ui:334
 msgid "_Send"
 msgstr "_Жіберу"
 
-#: gajim/roster_window.py:4322
+#: gajim/roster_window.py:4284
 #, fuzzy, python-format
 msgid "Send %(from)s to %(to)s"
 msgstr "%s қазір %s үшін жіберу"
 
-#: gajim/roster_window.py:4335
+#: gajim/roster_window.py:4297
 #, python-format
 msgid "Make %s first contact"
 msgstr "%s бірінші контакт қылу"
 
-#: gajim/roster_window.py:4340
+#: gajim/roster_window.py:4302
 #, fuzzy, python-format
 msgid "Make %(contact1)s and %(contact2)s metacontacts"
 msgstr "%s және %s метаконтакт жасау"
 
-#: gajim/roster_window.py:4690 gajim/roster_window.py:4777
+#: gajim/roster_window.py:4652 gajim/roster_window.py:4739
 msgid "_Change Status Message"
 msgstr "Қалып-кү_й хабарламасын өзгерту"
 
-#: gajim/roster_window.py:4710
+#: gajim/roster_window.py:4672
 msgid "Publish Tune"
 msgstr "Өленді жариялау"
 
-#: gajim/roster_window.py:4721
+#: gajim/roster_window.py:4683
 msgid "Publish Location"
 msgstr "Орналасуды жариялау"
 
-#: gajim/roster_window.py:4851
+#: gajim/roster_window.py:4822
 msgid "_Maximize All"
 msgstr "Бар_лығын жазу"
 
-#: gajim/roster_window.py:4858 gajim/roster_window.py:5000
+#: gajim/roster_window.py:4831 gajim/roster_window.py:4959
 msgid "Send Group M_essage"
 msgstr "Топ ү_шін хабарлама жіберу"
 
-#: gajim/roster_window.py:4865
+#: gajim/roster_window.py:4838
 msgid "To all users"
 msgstr "Барлық пайдаланушыларға"
 
-#: gajim/roster_window.py:4869
+#: gajim/roster_window.py:4842
 msgid "To all online users"
 msgstr "Барлық желідегі пайдаланушыларға"
 
-#: gajim/roster_window.py:4881 gajim/roster_window.py:5006
+#: gajim/roster_window.py:4853 gajim/roster_window.py:4965
 #: gajim/data/gui/contact_context_menu.ui:36
 msgid "In_vite to"
 msgstr "_Шақыру"
 
-#: gajim/roster_window.py:5016
+#: gajim/roster_window.py:4975
 msgid "_Manage Contacts"
 msgstr "_Контакттарды басқару"
 
-#: gajim/roster_window.py:5022
+#: gajim/roster_window.py:4981
 msgid "Edit _Groups…"
 msgstr "Топтар_ды түзету…"
 
-#: gajim/roster_window.py:5043 gajim/data/gui/filetransfers.ui:12
+#: gajim/roster_window.py:5002 gajim/data/gui/filetransfers.ui:12
 #: gajim/gtk/dialogs.py:68
 msgid "_Remove"
 msgstr "Өші_ру"
 
-#: gajim/roster_window.py:5080
+#: gajim/roster_window.py:5039
 msgid "_Maximize"
 msgstr "_Максималды қылу"
 
-#: gajim/roster_window.py:5085
+#: gajim/roster_window.py:5044
 #, fuzzy
 msgid "Re_name"
 msgstr "Аты_н ауыстыру"
 
-#: gajim/roster_window.py:5101
+#: gajim/roster_window.py:5060
 #, fuzzy
 msgid "Execute command"
 msgstr "К_оманда орындау"
 
-#: gajim/roster_window.py:5109 gajim/data/gui/contact_context_menu.ui:205
+#: gajim/roster_window.py:5068 gajim/data/gui/contact_context_menu.ui:205
 #: gajim/data/gui/application_menu.ui:68
 msgid "_History"
 msgstr "Тар_ихы"
 
-#: gajim/roster_window.py:5190 gajim/data/gui/history_window.ui:57
-msgid "History Manager"
-msgstr "Тарихты басқару"
-
-#: gajim/roster_window.py:5271 gajim/gui_interface.py:296
+#: gajim/roster_window.py:5161 gajim/gui_interface.py:296
 #: gajim/common/contacts.py:197 gajim/common/helpers.py:95
 msgid "Observers"
 msgstr "Байқаушылар"
 
-#: gajim/roster_window.py:5274
+#: gajim/roster_window.py:5164
 msgid "Observers can see your status, but you are not allowed to see theirs"
 msgstr ""
 
@@ -1876,9 +1844,8 @@ msgid "Do you accept this request (account: %s)?"
 msgstr "%s тіркелгісіндегі бұл сұранымды қабылдайсыз ба?"
 
 #: gajim/gui_interface.py:175
-#, fuzzy
 msgid "Authorization Request"
-msgstr "Авторизация жіберілді"
+msgstr "Авторизация сұранымы"
 
 #: gajim/gui_interface.py:176
 #, fuzzy
@@ -2170,44 +2137,20 @@ msgstr "Пайдаланушы хост аты/порт қолдану"
 
 #: gajim/dialog_messages.py:75
 #, fuzzy
-msgid "Error While Removing Privacy List"
-msgstr "Жекелік тізімін өшіру кезінде қате кетті"
-
-#: gajim/dialog_messages.py:76
-#, fuzzy, python-format
-msgid ""
-"Privacy list %s has not been removed. It is probably active in one of your "
-"connected resources. Please deactivate it and try again."
-msgstr ""
-"%s жекелік тізімі өшірілмеген. Байланысқан ресурстарыңыздың біреу үшін болуы "
-"мүмкін. Оны сөндіріп, қайталар көріңіз."
-
-#: gajim/dialog_messages.py:82
-#, fuzzy
-msgid "Invisibility Not Supported"
-msgstr "Жасырын болуға қолдау жоқ"
-
-#: gajim/dialog_messages.py:83
-#, fuzzy, python-format
-msgid "This account %s doesn't support invisibility."
-msgstr "%s тіркелгісі жасырын болуды қолдамайды."
-
-#: gajim/dialog_messages.py:87
-#, fuzzy
 msgid "Registration Succeeded"
 msgstr "Тіркелу сәтті аяқталды"
 
-#: gajim/dialog_messages.py:88
+#: gajim/dialog_messages.py:76
 #, python-format
 msgid "Registration with agent %s succeeded."
 msgstr "%s агенті көмегімен тіркелу сәтті аяқталды."
 
-#: gajim/dialog_messages.py:92
+#: gajim/dialog_messages.py:80
 #, fuzzy
 msgid "Registration Failed"
 msgstr "Тіркелу сәтсіз"
 
-#: gajim/dialog_messages.py:93
+#: gajim/dialog_messages.py:81
 #, python-format
 msgid ""
 "Registration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
@@ -2215,12 +2158,12 @@ msgstr ""
 "%(agent)s агенті көмегімен тіркелу %(error)s қатесімен аяқталды: "
 "%(error_msg)s"
 
-#: gajim/dialog_messages.py:98
+#: gajim/dialog_messages.py:86
 #, fuzzy
 msgid "GStreamer Error"
 msgstr "GStreamer қатесі"
 
-#: gajim/dialog_messages.py:99
+#: gajim/dialog_messages.py:87
 #, fuzzy, python-format
 msgid ""
 "Error: %(error)s\n"
@@ -2229,21 +2172,21 @@ msgstr ""
 "Қате: %s\n"
 "Жөндеу: %s"
 
-#: gajim/dialog_messages.py:103
+#: gajim/dialog_messages.py:91
 #, fuzzy
 msgid "Wrong Host"
 msgstr "Қате хост"
 
-#: gajim/dialog_messages.py:104
+#: gajim/dialog_messages.py:92
 msgid "Invalid local address? :-O"
 msgstr "Жергілікті адрес қате? :-O"
 
-#: gajim/dialog_messages.py:108
+#: gajim/dialog_messages.py:96
 #, fuzzy
 msgid "Avahi Error"
 msgstr "Avahi қатесі"
 
-#: gajim/dialog_messages.py:109
+#: gajim/dialog_messages.py:97
 #, python-format
 msgid ""
 "%s\n"
@@ -2252,53 +2195,53 @@ msgstr ""
 "%s\n"
 "Link-local хабарламалары дұрыс істемеуі мүмкін."
 
-#: gajim/dialog_messages.py:113
+#: gajim/dialog_messages.py:101
 #, fuzzy
 msgid "Could not request upload slot for HTTP File Upload"
 msgstr "Жергілікті қызметті қосу мүмкін емес"
 
-#: gajim/dialog_messages.py:118 gajim/dialog_messages.py:123
+#: gajim/dialog_messages.py:106 gajim/dialog_messages.py:111
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Суретті жүктеу мүмкін емес"
 
-#: gajim/dialog_messages.py:119
+#: gajim/dialog_messages.py:107
 msgid "Exception raised while trying to open file (see log)."
 msgstr ""
 
-#: gajim/dialog_messages.py:128
+#: gajim/dialog_messages.py:116
 #, fuzzy
 msgid "Not Secure"
 msgstr "Басталмаған"
 
-#: gajim/dialog_messages.py:129
+#: gajim/dialog_messages.py:117
 #, fuzzy
 msgid "The server returned an insecure transport (HTTP)."
 msgstr "Қызмет қатені қайтарған."
 
-#: gajim/dialog_messages.py:133
+#: gajim/dialog_messages.py:121
 #, fuzzy
 msgid "Could not Upload File"
 msgstr "Суретті жүктеу мүмкін емес"
 
-#: gajim/dialog_messages.py:134
+#: gajim/dialog_messages.py:122
 #, python-format
 msgid "HTTP response code from server: %s"
 msgstr ""
 
-#: gajim/dialog_messages.py:138
+#: gajim/dialog_messages.py:126
 msgid "Upload Error"
 msgstr ""
 
-#: gajim/dialog_messages.py:143
+#: gajim/dialog_messages.py:131
 msgid "Encryption Error"
 msgstr ""
 
-#: gajim/dialog_messages.py:144
+#: gajim/dialog_messages.py:132
 msgid "There is no encryption method available for the chosen encryption."
 msgstr ""
 
-#: gajim/dialog_messages.py:149
+#: gajim/dialog_messages.py:137
 #, fuzzy
 msgid "Avatar Upload Failed"
 msgstr "vCard жариялануы қатемен аяқталды"
@@ -2705,7 +2648,7 @@ msgstr "Контакт шықты"
 
 #: gajim/common/client.py:294 gajim/common/const.py:940
 #: gajim/common/const.py:941 gajim/common/const.py:942
-#: gajim/common/const.py:945 gajim/gtk/account_wizard.py:368
+#: gajim/common/const.py:945 gajim/gtk/account_wizard.py:369
 #, fuzzy
 msgid "Authentication failed"
 msgstr "\"%s\" үішн аутентификация сәтсіз"
@@ -4865,7 +4808,7 @@ msgstr "?user status:Осында"
 msgid "Connecting"
 msgstr "Байланыс орнату"
 
-#: gajim/common/helpers.py:203 gajim/data/gui/preferences_window.ui:1304
+#: gajim/common/helpers.py:203 gajim/data/gui/preferences_window.ui:1297
 msgid "A_way"
 msgstr "К_етіп қалған"
 
@@ -5028,29 +4971,29 @@ msgid_plural "%d events pending"
 msgstr[0] "%d оқиға кезекте бар"
 msgstr[1] "%d оқиға кезекте бар"
 
-#: gajim/common/helpers.py:849 gajim/data/gui/add_new_contact_window.ui:25
+#: gajim/common/helpers.py:842 gajim/data/gui/add_new_contact_window.ui:25
 msgid "I would like to add you to my contact list."
 msgstr "Мен сізді өзімнің контакттар тізіміне қосқым келеді."
 
-#: gajim/common/helpers.py:851
+#: gajim/common/helpers.py:844
 msgid "Hello, I am $name."
 msgstr "Сәлем, мен - $name."
 
-#: gajim/common/helpers.py:929 gajim/common/helpers.py:938
-#: gajim/common/helpers.py:998
+#: gajim/common/helpers.py:922 gajim/common/helpers.py:931
+#: gajim/common/helpers.py:991
 msgid "Timeout loading image"
 msgstr "Суретті жүктеу уақыты бітті"
 
-#: gajim/common/helpers.py:948 gajim/common/helpers.py:996
+#: gajim/common/helpers.py:941 gajim/common/helpers.py:989
 msgid "Image is too big"
 msgstr "Сурет тым үлкен"
 
-#: gajim/common/helpers.py:959
+#: gajim/common/helpers.py:952
 #, fuzzy
 msgid "PyCURL is not installed"
 msgstr "CRL мерзімі әлі басталмаған"
 
-#: gajim/common/helpers.py:1000
+#: gajim/common/helpers.py:993
 #, fuzzy
 msgid "Error loading image"
 msgstr "Суретті жүктеу уақыты бітті"
@@ -5459,7 +5402,7 @@ msgid "Copy Certificate Information"
 msgstr "Сертификат ақпаратын көшіріп алу"
 
 #: gajim/data/gui/filetransfers_send_file_dialog.ui:15
-#: gajim/data/gui/advanced_configuration.ui:143
+#: gajim/data/gui/advanced_configuration.ui:142
 #: gajim/data/gui/groupchat_info_scrolled.ui:33 gajim/gtk/discovery.py:1664
 msgid "Description"
 msgstr "Сипаттамасы"
@@ -5697,29 +5640,29 @@ msgstr "_Буманы ашу"
 msgid "File Transfers"
 msgstr "Файлдармен алмасу"
 
-#: gajim/data/gui/filetransfers.ui:94
+#: gajim/data/gui/filetransfers.ui:91
 msgid "_Show notification when file transfer is complete"
 msgstr "Файлдармен алмасу аяқталғанда е_скерту"
 
-#: gajim/data/gui/filetransfers.ui:134
+#: gajim/data/gui/filetransfers.ui:131
 msgid "file transfers list"
 msgstr "файлдармен алмасу тізімі"
 
-#: gajim/data/gui/filetransfers.ui:135
+#: gajim/data/gui/filetransfers.ui:132
 msgid "A list of active, completed and stopped file transfers"
 msgstr "Белсенді, аяқталған және тоқтатылған файлдармен алмасулар тізімі"
 
-#: gajim/data/gui/filetransfers.ui:157
+#: gajim/data/gui/filetransfers.ui:154
 msgid "Remove completed, cancelled and failed file transfers from the list"
 msgstr ""
 "Тізімнен аяқталған, бас тартылған және сәтсіз файлдармен алмасуларды өшіру"
 
-#: gajim/data/gui/filetransfers.ui:170
+#: gajim/data/gui/filetransfers.ui:167
 #, fuzzy
 msgid "Pause or resume file transfer"
 msgstr "Файлдармен алмасудан бас тарту"
 
-#: gajim/data/gui/filetransfers.ui:183
+#: gajim/data/gui/filetransfers.ui:180
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "Бұл файлдармен алмасудан бас тарту және толық емес файлдарды өшіру"
@@ -5990,9 +5933,9 @@ msgid "Resource"
 msgstr "Ресурс"
 
 #: gajim/data/gui/vcard_information_window.ui:89
-#: gajim/data/gui/preferences_window.ui:1411
-#: gajim/data/gui/preferences_window.ui:1567
-#: gajim/data/gui/preferences_window.ui:1781 gajim/gtk/server_info.py:129
+#: gajim/data/gui/preferences_window.ui:1404
+#: gajim/data/gui/preferences_window.ui:1560
+#: gajim/data/gui/preferences_window.ui:1774 gajim/gtk/server_info.py:129
 msgid "Status"
 msgstr "Күй"
 
@@ -6002,7 +5945,7 @@ msgid "Client"
 msgstr "<b>Клиент:</b>"
 
 #: gajim/data/gui/vcard_information_window.ui:123
-#: gajim/data/gui/preferences_window.ui:1884
+#: gajim/data/gui/preferences_window.ui:1877
 #, fuzzy
 msgid "System"
 msgstr "<b>Жүйе:</b>"
@@ -6331,11 +6274,11 @@ msgid ""
 "overridden in the group chat menu."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:878
+#: gajim/data/gui/preferences_window.ui:873
 msgid "Show chatstate in tabs"
 msgstr "Беттерде чат күйін көрсету"
 
-#: gajim/data/gui/preferences_window.ui:882
+#: gajim/data/gui/preferences_window.ui:877
 #, fuzzy
 msgid ""
 "If checked, the tab will be colored according to the current chatstate of "
@@ -6344,21 +6287,21 @@ msgstr ""
 "Белгіленген болса, Gajim басқаларға сіздің операциялық жүйеңізді анықтауға "
 "рұқсат етеді"
 
-#: gajim/data/gui/preferences_window.ui:896
+#: gajim/data/gui/preferences_window.ui:891
 msgid "Show chatstate in contact list"
 msgstr "Контакттар тізімінде чат күйін көрсету"
 
-#: gajim/data/gui/preferences_window.ui:900
+#: gajim/data/gui/preferences_window.ui:895
 msgid ""
 "If checked, the contact row will be colored according to the current "
 "chatstate of the contact"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:914
+#: gajim/data/gui/preferences_window.ui:909
 msgid "Show chatstate in banner"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:918
+#: gajim/data/gui/preferences_window.ui:913
 #, fuzzy
 msgid ""
 "If checked, a description of the contacts current chatstate is shown in the "
@@ -6367,89 +6310,89 @@ msgstr ""
 "Белгіленген болса, Gajim басқаларға сіздің операциялық жүйеңізді анықтауға "
 "рұқсат етеді"
 
-#: gajim/data/gui/preferences_window.ui:938
+#: gajim/data/gui/preferences_window.ui:931
 #, fuzzy
 msgid "Chatstate"
 msgstr "Соңғы қалып-күйі: %s"
 
-#: gajim/data/gui/preferences_window.ui:955
+#: gajim/data/gui/preferences_window.ui:948
 #: gajim/data/gui/history_window.ui:303
 #, fuzzy
 msgid "Chat"
 msgstr "Чаттар"
 
-#: gajim/data/gui/preferences_window.ui:1009
+#: gajim/data/gui/preferences_window.ui:1002
 msgid "Show _notification area icon"
 msgstr "Жүйелік сөре таңбашасы_н көрсету"
 
-#: gajim/data/gui/preferences_window.ui:1028
+#: gajim/data/gui/preferences_window.ui:1021
 msgid "_When new event is received"
 msgstr "Жаңа оқ_иға алынған кезінде"
 
-#: gajim/data/gui/preferences_window.ui:1069
+#: gajim/data/gui/preferences_window.ui:1062
 #, fuzzy
 msgid "Show popups/notifications when a chat window is already _open"
 msgstr "Қалқыма/хабарлауды мен _кқ/қж/бе/жасырын болғанда рұқсат ету"
 
-#: gajim/data/gui/preferences_window.ui:1086
+#: gajim/data/gui/preferences_window.ui:1079
 #, fuzzy
 msgid "Allow popups/notifications when I'm _away, not available or busy"
 msgstr "Қалқыма/хабарлауды мен _кқ/қж/бе/жасырын болғанда рұқсат ету"
 
-#: gajim/data/gui/preferences_window.ui:1103
+#: gajim/data/gui/preferences_window.ui:1096
 msgid "Notify me about contacts that sign _in"
 msgstr "Жаңа кір_гендер туралы хабарлау"
 
-#: gajim/data/gui/preferences_window.ui:1108
+#: gajim/data/gui/preferences_window.ui:1101
 msgid ""
 "A popup window about contacts that just signed in will be shown in the "
 "bottom right of the screen "
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1122
+#: gajim/data/gui/preferences_window.ui:1115
 msgid "Notify me about contacts that sign _out"
 msgstr "Жаңа _шыққандар туралы хабарлау"
 
-#: gajim/data/gui/preferences_window.ui:1126
+#: gajim/data/gui/preferences_window.ui:1119
 msgid ""
 "A popup window about contacts that just signed out will be shown in the "
 "bottom right of the screen "
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1144
+#: gajim/data/gui/preferences_window.ui:1137
 #, fuzzy
 msgid "Visual Notifications"
 msgstr "<b>Хабарламалар</b>"
 
-#: gajim/data/gui/preferences_window.ui:1180
+#: gajim/data/gui/preferences_window.ui:1173
 msgid "Play _sounds"
 msgstr "Дыбы_старды ойнату"
 
-#: gajim/data/gui/preferences_window.ui:1197
-#: gajim/data/gui/preferences_window.ui:1847
+#: gajim/data/gui/preferences_window.ui:1190
+#: gajim/data/gui/preferences_window.ui:1840
 msgid "Ma_nage..."
 msgstr "Б_асқару..."
 
-#: gajim/data/gui/preferences_window.ui:1220
+#: gajim/data/gui/preferences_window.ui:1213
 #, fuzzy
 msgid "Allow playing sounds when I'm _busy"
 msgstr "Мен бос емес _болғанда дыбыстарға рұқсат ету"
 
-#: gajim/data/gui/preferences_window.ui:1242
+#: gajim/data/gui/preferences_window.ui:1235
 #, fuzzy
 msgid "Sounds"
 msgstr "Wav дыбыстары"
 
-#: gajim/data/gui/preferences_window.ui:1260
+#: gajim/data/gui/preferences_window.ui:1253
 msgid "Notifications"
 msgstr "Хабарламалар"
 
-#: gajim/data/gui/preferences_window.ui:1287
+#: gajim/data/gui/preferences_window.ui:1280
 #, fuzzy
 msgid "No_t Available"
 msgstr "Қол жетерсіз"
 
-#: gajim/data/gui/preferences_window.ui:1291
+#: gajim/data/gui/preferences_window.ui:1284
 #, fuzzy
 msgid ""
 "If checked, the status will be changed to Not Available when the computer "
@@ -6458,7 +6401,7 @@ msgstr ""
 "Белгіленген болса, Gajim компьютеріңіз одан да көп қолданылмаса, қалып-"
 "күйіңізді Қолжетерсізге ауыстырады."
 
-#: gajim/data/gui/preferences_window.ui:1308
+#: gajim/data/gui/preferences_window.ui:1301
 #, fuzzy
 msgid ""
 "If checked, the status will be changed to Away when the computer has not "
@@ -6467,7 +6410,7 @@ msgstr ""
 "Белгіленген болса, Gajim компьютеріңіз одан да көп қолданылмаса, қалып-"
 "күйіңізді Қолжетерсізге ауыстырады."
 
-#: gajim/data/gui/preferences_window.ui:1354
+#: gajim/data/gui/preferences_window.ui:1347
 #, fuzzy
 msgid ""
 "The automatic away status message. If empty, the current status message will "
@@ -6480,7 +6423,7 @@ msgstr ""
 "$S алдыңғы күй хабарласымен, ал\n"
 "$T авто кетіп қалған уақыт шамасымен алмастырылады"
 
-#: gajim/data/gui/preferences_window.ui:1369
+#: gajim/data/gui/preferences_window.ui:1362
 #, fuzzy
 msgid ""
 "The automatic not available status message. If empty, the current status "
@@ -6493,40 +6436,40 @@ msgstr ""
 "$S алдыңғы күй хабарласымен, ал\n"
 "$T авто қолжетерсіз уақыт шамасымен алмастырылады"
 
-#: gajim/data/gui/preferences_window.ui:1383
+#: gajim/data/gui/preferences_window.ui:1376
 #, fuzzy
 msgid "Minutes"
 msgstr "минуттан кейін"
 
-#: gajim/data/gui/preferences_window.ui:1427 gajim/gtk/features.py:97
+#: gajim/data/gui/preferences_window.ui:1420 gajim/gtk/features.py:97
 #, fuzzy
 msgid "Automatic Status"
 msgstr "Өздігінен қалып-күйді орнату"
 
-#: gajim/data/gui/preferences_window.ui:1458
+#: gajim/data/gui/preferences_window.ui:1451
 msgid "_Remember and restore status of the last session"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1462
+#: gajim/data/gui/preferences_window.ui:1455
 msgid ""
 "If checked, the status and status message used in the last session will be "
 "restored"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1484
+#: gajim/data/gui/preferences_window.ui:1477
 #, fuzzy
 msgid "Ask for status message when I"
 msgstr "Күй хабарламасын сұрау:"
 
-#: gajim/data/gui/preferences_window.ui:1500
+#: gajim/data/gui/preferences_window.ui:1493
 msgid "Sign _in"
 msgstr "Мен _кірген"
 
-#: gajim/data/gui/preferences_window.ui:1517
+#: gajim/data/gui/preferences_window.ui:1510
 msgid "Sign _out"
 msgstr "Мен _шыққан кезде"
 
-#: gajim/data/gui/preferences_window.ui:1551
+#: gajim/data/gui/preferences_window.ui:1544
 msgid ""
 "If enabled, Gajim will not ask for a status message. The specified default "
 "message will be used instead."
@@ -6534,68 +6477,68 @@ msgstr ""
 "Қосулы тұрса, Gajim қалып-күй хабарламасын сұрамайды, бастапқы мәндері "
 "қолданылады."
 
-#: gajim/data/gui/preferences_window.ui:1579
+#: gajim/data/gui/preferences_window.ui:1572
 msgid "Default Message"
 msgstr "Хабарлама"
 
-#: gajim/data/gui/preferences_window.ui:1594
-#: gajim/data/gui/preferences_window.ui:1885
+#: gajim/data/gui/preferences_window.ui:1587
+#: gajim/data/gui/preferences_window.ui:1878
 msgid "Enabled"
 msgstr "Қосулы"
 
-#: gajim/data/gui/preferences_window.ui:1620
+#: gajim/data/gui/preferences_window.ui:1613
 #, fuzzy
 msgid "Status Messages"
 msgstr "Күй хабарламасы"
 
-#: gajim/data/gui/preferences_window.ui:1763
+#: gajim/data/gui/preferences_window.ui:1756
 #, fuzzy
 msgid "Preset Status Messages"
 msgstr "<b>Алдын-ала орнатылған қалып-күй хабарламалары</b>"
 
-#: gajim/data/gui/preferences_window.ui:1804 gajim/data/gui/themes_window.ui:85
+#: gajim/data/gui/preferences_window.ui:1797 gajim/data/gui/themes_window.ui:85
 #, fuzzy
 msgid "Themes"
 msgstr "Тақырыбы"
 
-#: gajim/data/gui/preferences_window.ui:1821
+#: gajim/data/gui/preferences_window.ui:1814
 #, fuzzy
 msgid "_Theme"
 msgstr "Тақырыбы"
 
-#: gajim/data/gui/preferences_window.ui:1852
+#: gajim/data/gui/preferences_window.ui:1845
 msgid "Configure color and font of the interface"
 msgstr "Интерфейстің түстерін мен қарібін баптау"
 
-#: gajim/data/gui/preferences_window.ui:1866
+#: gajim/data/gui/preferences_window.ui:1859
 #, fuzzy
 msgid "_Dark Theme"
 msgstr "Gajim - %s"
 
-#: gajim/data/gui/preferences_window.ui:1900
+#: gajim/data/gui/preferences_window.ui:1893
 msgid "Emojis"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1917
+#: gajim/data/gui/preferences_window.ui:1910
 #, fuzzy
 msgid "_Emoji Theme"
 msgstr "Gajim - %s"
 
-#: gajim/data/gui/preferences_window.ui:1946
+#: gajim/data/gui/preferences_window.ui:1939
 msgid "Icons"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:1963
+#: gajim/data/gui/preferences_window.ui:1956
 #, fuzzy
 msgid "_Status iconset"
 msgstr "Кү_й таңбашалары:"
 
-#: gajim/data/gui/preferences_window.ui:1989
+#: gajim/data/gui/preferences_window.ui:1982
 #, fuzzy
 msgid "Use transports _icons"
 msgstr "_Транспорт таңбашаларын қолдану"
 
-#: gajim/data/gui/preferences_window.ui:1993
+#: gajim/data/gui/preferences_window.ui:1986
 #, fuzzy
 msgid ""
 "If checked, protocol-specific status icons will be used (e.g. a contact from "
@@ -6605,15 +6548,15 @@ msgstr ""
 "(Мыс. Mail.ru пайдаланушылары үшін сәйкес Mail.ru Agent таңбашалары "
 "көрсетіледі)"
 
-#: gajim/data/gui/preferences_window.ui:2020
+#: gajim/data/gui/preferences_window.ui:2013
 msgid "_Convert ASCII Emojis"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2098
+#: gajim/data/gui/preferences_window.ui:2091
 msgid "Style"
 msgstr "Стиль"
 
-#: gajim/data/gui/preferences_window.ui:2125
+#: gajim/data/gui/preferences_window.ui:2118
 #, fuzzy
 msgid "Show _Features"
 msgstr "Мүміндіктері"
@@ -6643,36 +6586,12 @@ msgstr "Видео сынау"
 msgid "_Video input device"
 msgstr "Видео енгізу құрылғысы"
 
-#: gajim/data/gui/preferences_window.ui:2323
-#, fuzzy
-msgid "Video output"
-msgstr "видео шығысы"
-
-#: gajim/data/gui/preferences_window.ui:2351
-#, fuzzy
-msgid "Video _framerate"
-msgstr "Видеоның кадр/сек қасиеті"
-
-#: gajim/data/gui/preferences_window.ui:2380
-#, fuzzy
-msgid "Video si_ze"
-msgstr "Видео өлшемі"
-
-#: gajim/data/gui/preferences_window.ui:2405
-msgid "Vi_ew own video source"
-msgstr ""
-
-#: gajim/data/gui/preferences_window.ui:2424 gajim/data/gui/server_info.ui:298
-#: gajim/gtk/accounts.py:311
-msgid "Connection"
-msgstr "Байланыс"
-
-#: gajim/data/gui/preferences_window.ui:2438
+#: gajim/data/gui/preferences_window.ui:2320
 #, fuzzy
 msgid "STU_N server"
 msgstr "STUN сервері:"
 
-#: gajim/data/gui/preferences_window.ui:2456
+#: gajim/data/gui/preferences_window.ui:2338
 #, fuzzy
 msgid ""
 "STUN server hostname. If no hostname was given, Gajim will try\n"
@@ -6681,61 +6600,93 @@ msgstr ""
 "STUN серверінің хост аты. Көрсетілмеген болса, Gajim серверден\n"
 "оны іздеп көреді."
 
-#: gajim/data/gui/preferences_window.ui:2495
+#: gajim/data/gui/preferences_window.ui:2353 gajim/data/gui/server_info.ui:298
+#: gajim/gtk/accounts.py:311
+msgid "Connection"
+msgstr "Байланыс"
+
+#: gajim/data/gui/preferences_window.ui:2367
+msgid "Vi_ew own video source"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2397
+#, fuzzy
+msgid "Video si_ze"
+msgstr "Видео өлшемі"
+
+#: gajim/data/gui/preferences_window.ui:2414
+#, fuzzy
+msgid "Video _framerate"
+msgstr "Видеоның кадр/сек қасиеті"
+
+#: gajim/data/gui/preferences_window.ui:2442
+#, fuzzy
+msgid "Video output"
+msgstr "видео шығысы"
+
+#: gajim/data/gui/preferences_window.ui:2465
+msgid "Show live _preview"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2550
+msgid "Live Preview"
+msgstr ""
+
+#: gajim/data/gui/preferences_window.ui:2598
 #, fuzzy
 msgid "Audio/Video"
 msgstr "Аудио / Видео"
 
-#: gajim/data/gui/preferences_window.ui:2528
+#: gajim/data/gui/preferences_window.ui:2631
 msgid "_Global proxy"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2564
+#: gajim/data/gui/preferences_window.ui:2667
 msgid "_Manage..."
 msgstr "_Басқару..."
 
-#: gajim/data/gui/preferences_window.ui:2587
+#: gajim/data/gui/preferences_window.ui:2690
 #, fuzzy
 msgid "_Store status changes of contacts in history"
 msgstr "К_онтакттардың күй өзгерісін тарихқа жазу"
 
-#: gajim/data/gui/preferences_window.ui:2609
+#: gajim/data/gui/preferences_window.ui:2712
 msgid "Enable _debug logging (restart required)"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2613
+#: gajim/data/gui/preferences_window.ui:2716
 #, fuzzy
 msgid "If checked, Gajim will store a log file for debugging"
 msgstr "Белгіленген болса, Gajim бұл тіркелгі үшін парольді сақтап отырады"
 
-#: gajim/data/gui/preferences_window.ui:2630
+#: gajim/data/gui/preferences_window.ui:2733
 msgid "Opens folder containing debug logs"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2656
+#: gajim/data/gui/preferences_window.ui:2759
 msgid "_Reset Hints"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2660
+#: gajim/data/gui/preferences_window.ui:2763
 msgid ""
 "In order to introduce you to features, Gajim displays some hints. This "
 "button will reset all these hints."
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2677
+#: gajim/data/gui/preferences_window.ui:2780
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Таңдамалы</b>"
 
-#: gajim/data/gui/preferences_window.ui:2710
+#: gajim/data/gui/preferences_window.ui:2813
 msgid "Attention: Please use these options with caution!"
 msgstr ""
 
-#: gajim/data/gui/preferences_window.ui:2723
+#: gajim/data/gui/preferences_window.ui:2826
 msgid "_Open..."
 msgstr "А_шу..."
 
-#: gajim/data/gui/preferences_window.ui:2745 gajim/gtk/advanced_config.py:84
+#: gajim/data/gui/preferences_window.ui:2848 gajim/gtk/advanced_config.py:84
 #, fuzzy
 msgid "Advanced Configuration Editor (ACE)"
 msgstr "Кеңейтілген баптаулар түзетушісі"
@@ -6761,7 +6712,7 @@ msgid "Only Admins and Owners can modify the affiliation"
 msgstr ""
 
 #: gajim/data/gui/groupchat_config.ui:270
-#: gajim/data/gui/groupchat_info_scrolled.ui:179 gajim/plugins/gui.py:315
+#: gajim/data/gui/groupchat_info_scrolled.ui:179 gajim/plugins/gui.py:316
 msgid "Configuration"
 msgstr "Баптаулар"
 
@@ -7039,12 +6990,12 @@ msgstr "Фильтр:"
 msgid "Type to search for values..."
 msgstr ""
 
-#: gajim/data/gui/advanced_configuration.ui:180
+#: gajim/data/gui/advanced_configuration.ui:179
 #, fuzzy
 msgid "_Reset Value"
 msgstr "Бас_тапқы түстерге тастау"
 
-#: gajim/data/gui/advanced_configuration.ui:185
+#: gajim/data/gui/advanced_configuration.ui:184
 #, fuzzy
 msgid "Resets value to default"
 msgstr "Бас_тапқы түстерге тастау"
@@ -7374,7 +7325,7 @@ msgstr "одан"
 msgid "to"
 msgstr "оған"
 
-#: gajim/data/gui/privacy_list_window.ui:47 gajim/gtk/privacy_list.py:59
+#: gajim/data/gui/privacy_list_window.ui:47
 msgid "Privacy List"
 msgstr "Жекелік тізімі"
 
@@ -7761,11 +7712,11 @@ msgstr "Экспорт"
 msgid "_Delete"
 msgstr "Өшіру"
 
-#: gajim/data/gui/history_manager.ui:29 gajim/data/gui/history_manager.ui:91
+#: gajim/data/gui/history_manager.ui:29 gajim/data/gui/history_manager.ui:87
 msgid "Gajim History Logs Manager"
 msgstr "Gajim тарихы логтар менеджері"
 
-#: gajim/data/gui/history_manager.ui:108
+#: gajim/data/gui/history_manager.ui:104
 #, fuzzy
 msgid ""
 "This history manager is not intended for viewing chat history. If you are "
@@ -7780,7 +7731,7 @@ msgstr ""
 "Осыны логтарды өшіру не экспорттау үшін қолданыңыз. Логтарды сол жақтан "
 "таңдауға болады, және/немесе дерекқордан іздеуге болады."
 
-#: gajim/data/gui/history_manager.ui:124
+#: gajim/data/gui/history_manager.ui:120
 msgid ""
 "<b>WARNING:</b>\n"
 "If you plan to do massive deletions, please make sure Gajim is not running. "
@@ -7791,12 +7742,12 @@ msgstr ""
 "Жалпы айтқанда, ағымда сөйлесіп жатқан контакттар тарихын өшіруден бас "
 "тартыңыз."
 
-#: gajim/data/gui/history_manager.ui:217
+#: gajim/data/gui/history_manager.ui:211
 #, fuzzy
 msgid "Search database..."
 msgstr "Д_ереққордан іздеу"
 
-#: gajim/data/gui/history_manager.ui:232
+#: gajim/data/gui/history_manager.ui:226
 #, fuzzy
 msgid "Search in database"
 msgstr "Д_ереққордан іздеу"
@@ -7997,6 +7948,10 @@ msgstr "Пароль"
 #, fuzzy
 msgid "Display status changes"
 msgstr "К_онтакттардың күй өзгерісін тарихқа жазу"
+
+#: gajim/data/gui/history_window.ui:57
+msgid "History Manager"
+msgstr "Тарихты басқару"
 
 #: gajim/data/gui/history_window.ui:233
 #, fuzzy
@@ -8259,13 +8214,13 @@ msgid "Clear the text window"
 msgstr "Терезені жасырады"
 
 #: gajim/command_system/implementation/standard.py:188
-#: gajim/command_system/implementation/standard.py:417
+#: gajim/command_system/implementation/standard.py:416
 #, fuzzy
 msgid "Send a ping to the contact"
 msgstr "Контактқа файлды жібереді"
 
 #: gajim/command_system/implementation/standard.py:192
-#: gajim/command_system/implementation/standard.py:421
+#: gajim/command_system/implementation/standard.py:420
 msgid "Command is not supported for zeroconf accounts"
 msgstr ""
 
@@ -8322,9 +8277,9 @@ msgstr "Па_йдаланушымен чат терезесін ашу"
 
 #: gajim/command_system/implementation/standard.py:287
 #: gajim/command_system/implementation/standard.py:297
-#: gajim/command_system/implementation/standard.py:352
-#: gajim/command_system/implementation/standard.py:365
-#: gajim/command_system/implementation/standard.py:377
+#: gajim/command_system/implementation/standard.py:351
+#: gajim/command_system/implementation/standard.py:364
+#: gajim/command_system/implementation/standard.py:376
 #, fuzzy
 msgid "Nickname not found"
 msgstr "Қолданылатын ник"
@@ -8345,22 +8300,17 @@ msgstr "Топ чат беті/терезесін жабу алдында сұр
 msgid "Invite a user to a group chat for a reason"
 msgstr ""
 
-#: gajim/command_system/implementation/standard.py:312
-#, fuzzy, python-format
-msgid "Invited %(jid)s to %(room_jid)s"
-msgstr "%s қазір %s үшін жіберу"
-
-#: gajim/command_system/implementation/standard.py:317
+#: gajim/command_system/implementation/standard.py:316
 #, fuzzy
 msgid "Join a group chat given by an XMPP Address"
 msgstr "_чат бөлмелерінде"
 
-#: gajim/command_system/implementation/standard.py:327
+#: gajim/command_system/implementation/standard.py:326
 msgid ""
 "Leave the group chat, optionally giving a reason, and close tab or window"
 msgstr ""
 
-#: gajim/command_system/implementation/standard.py:333
+#: gajim/command_system/implementation/standard.py:332
 msgid ""
 "\n"
 "    Ban user by a nick or a JID from a groupchat\n"
@@ -8369,45 +8319,45 @@ msgid ""
 "    "
 msgstr ""
 
-#: gajim/command_system/implementation/standard.py:349
+#: gajim/command_system/implementation/standard.py:348
 #, fuzzy
 msgid "Kick user from group chat by nickname"
 msgstr "Сізді топтық чатқа шақырған"
 
-#: gajim/command_system/implementation/standard.py:358
+#: gajim/command_system/implementation/standard.py:357
 msgid ""
 "Set participant role in group chat.\n"
 "    Role can be given as one of the following values:\n"
 "    moderator, participant, visitor, none"
 msgstr ""
 
-#: gajim/command_system/implementation/standard.py:363
+#: gajim/command_system/implementation/standard.py:362
 #, fuzzy
 msgid "Invalid role given"
 msgstr "Сервер қате"
 
-#: gajim/command_system/implementation/standard.py:370
+#: gajim/command_system/implementation/standard.py:369
 msgid ""
 "Set participant affiliation in group chat.\n"
 "    Affiliation can be given as one of the following values:\n"
 "    owner, admin, member, outcast, none"
 msgstr ""
 
-#: gajim/command_system/implementation/standard.py:375
+#: gajim/command_system/implementation/standard.py:374
 #, fuzzy
 msgid "Invalid affiliation given"
 msgstr "қатысуы өзгертілген"
 
-#: gajim/command_system/implementation/standard.py:385
+#: gajim/command_system/implementation/standard.py:384
 #, fuzzy
 msgid "Display names of all group chat participants"
 msgstr "%s топтық чаттың аты емес."
 
-#: gajim/command_system/implementation/standard.py:407
+#: gajim/command_system/implementation/standard.py:406
 msgid "Forbid a participant to send you public or private messages"
 msgstr ""
 
-#: gajim/command_system/implementation/standard.py:412
+#: gajim/command_system/implementation/standard.py:411
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -9446,9 +9396,9 @@ msgid "Error: %s"
 msgstr "Қате: %s"
 
 #: gajim/gtk/history.py:591 gajim/gtk/groupchat_config.py:133
-#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:391
-#: gajim/gtk/account_wizard.py:427 gajim/gtk/account_wizard.py:428
-#: gajim/gtk/account_wizard.py:493 gajim/gtk/search.py:336
+#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:392
+#: gajim/gtk/account_wizard.py:428 gajim/gtk/account_wizard.py:429
+#: gajim/gtk/account_wizard.py:494 gajim/gtk/search.py:336
 msgid "Error"
 msgstr "Қате"
 
@@ -9486,7 +9436,7 @@ msgstr "Тазалау"
 msgid "Manage Proxies"
 msgstr "Прокси профайлдарын басқару"
 
-#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:748
+#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:749
 #: gajim/gtk/preferences.py:1029 gajim/gtk/preferences.py:1039
 #: gajim/gtk/preferences.py:1043
 #, fuzzy
@@ -9782,7 +9732,7 @@ msgstr "?transfer status:Аялдатылған"
 msgid " (optional)..."
 msgstr ""
 
-#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:604
+#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:605
 #, fuzzy
 msgid "Invalid Address"
 msgstr "Қате файл"
@@ -10176,47 +10126,6 @@ msgstr "Талап етеді: python-gnome2."
 msgid "Disabled in Preferences"
 msgstr "Архивтеу ба_птауларын түзету"
 
-#: gajim/gtk/privacy_list.py:53
-#, python-format
-msgid "Privacy List <b><i>%s</i></b>"
-msgstr "Жекелік тізімі <b><i>%s</i></b>"
-
-#: gajim/gtk/privacy_list.py:57
-#, python-format
-msgid "Privacy List for %s"
-msgstr "%s үшін жекелік тізімі"
-
-#: gajim/gtk/privacy_list.py:130
-#, python-format
-msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
-msgstr "Реті: %(order)s, әрекеті: %(action)s, түрі: %(type)s, мәні: %(value)s"
-
-#: gajim/gtk/privacy_list.py:137
-#, python-format
-msgid "Order: %(order)s, action: %(action)s"
-msgstr "Реті: %(order)s, әрекеті: %(action)s"
-
-#: gajim/gtk/privacy_list.py:193
-msgid "<b>Edit a rule</b>"
-msgstr "<b>Ережені түзету</b>"
-
-#: gajim/gtk/privacy_list.py:307
-msgid "<b>Add a rule</b>"
-msgstr "<b>Ережені қосу</b>"
-
-#: gajim/gtk/privacy_list.py:407
-#, python-format
-msgid "Privacy Lists for %s"
-msgstr "%s үшін жекелік тізімдері"
-
-#: gajim/gtk/privacy_list.py:507
-msgid "Invalid List Name"
-msgstr "Тізім аты қате"
-
-#: gajim/gtk/privacy_list.py:508
-msgid "You must enter a name to create a privacy list."
-msgstr "Жекелік тізімін жасау үшін оның атын енгізуіңіз керек."
-
 #: gajim/gtk/groupchat_invite.py:304
 #, fuzzy
 msgid "Invite New Contact"
@@ -10351,94 +10260,94 @@ msgstr ""
 
 #: gajim/gtk/account_wizard.py:366
 #, fuzzy
-msgid "This server does not support anonymous"
+msgid "This server does not support anonymous login."
 msgstr "Серверіңіз Vcard-ты қолдамайды"
 
-#: gajim/gtk/account_wizard.py:380 gajim/gtk/account_wizard.py:381
+#: gajim/gtk/account_wizard.py:381 gajim/gtk/account_wizard.py:382
 #, fuzzy
 msgid "Signup not allowed"
 msgstr "Таңба рұқсат етілмеген"
 
-#: gajim/gtk/account_wizard.py:382
+#: gajim/gtk/account_wizard.py:383
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Серверіңіз Vcard-ты қолдамайды"
 
-#: gajim/gtk/account_wizard.py:398 gajim/gtk/account_wizard.py:399
+#: gajim/gtk/account_wizard.py:399 gajim/gtk/account_wizard.py:400
 #, fuzzy
 msgid "Connection failed"
 msgstr "Байланысу сәтсіз"
 
-#: gajim/gtk/account_wizard.py:400
+#: gajim/gtk/account_wizard.py:401
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:454
+#: gajim/gtk/account_wizard.py:455
 #, fuzzy
 msgid "Account is being created"
 msgstr "\"%s\" тіркелгісі серверге қосылған"
 
-#: gajim/gtk/account_wizard.py:491
+#: gajim/gtk/account_wizard.py:492
 msgid "The server rejected the registration without an error message"
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:521 gajim/gtk/accounts.py:557
+#: gajim/gtk/account_wizard.py:522 gajim/gtk/accounts.py:557
 #, fuzzy
 msgid "Add Account"
 msgstr "_Контакт қосу..."
 
-#: gajim/gtk/account_wizard.py:628
+#: gajim/gtk/account_wizard.py:629
 #, fuzzy
 msgid "Create New Account"
 msgstr "Жаңа хабарламаны жасау"
 
-#: gajim/gtk/account_wizard.py:687
+#: gajim/gtk/account_wizard.py:688
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Таңдауыңызша порт нөмірі түрінде берілуі тиіс."
 
-#: gajim/gtk/account_wizard.py:694
+#: gajim/gtk/account_wizard.py:695
 #, fuzzy
 msgid "Port must be a number between 0 and 65535"
 msgstr "Сервер 1 мен 1023 таңба арасында болуы керек"
 
-#: gajim/gtk/account_wizard.py:731
+#: gajim/gtk/account_wizard.py:732
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Кеңейтілген әрекеттер"
 
-#: gajim/gtk/account_wizard.py:777
+#: gajim/gtk/account_wizard.py:778
 #, fuzzy
 msgid "Security Warning"
 msgstr "%s банға жіберу"
 
-#: gajim/gtk/account_wizard.py:796
+#: gajim/gtk/account_wizard.py:797
 #, fuzzy, python-format
 msgid "Unknown TLS error '%s'"
 msgstr "Белгісіз SSL қатесі: %d"
 
-#: gajim/gtk/account_wizard.py:831 gajim/gtk/account_wizard.py:834
+#: gajim/gtk/account_wizard.py:832 gajim/gtk/account_wizard.py:835
 #, fuzzy
 msgid "Create Account"
 msgstr "%s тіркелгісі өшірілуде"
 
-#: gajim/gtk/account_wizard.py:885
+#: gajim/gtk/account_wizard.py:886
 msgid "Redirect"
 msgstr ""
 
-#: gajim/gtk/account_wizard.py:895
+#: gajim/gtk/account_wizard.py:896
 #, fuzzy
 msgid "Register on the Website"
 msgstr "%s үшін тіркелу"
 
-#: gajim/gtk/account_wizard.py:906
+#: gajim/gtk/account_wizard.py:907
 #, fuzzy
 msgid "Account Added"
 msgstr "Тіркелгі бағаны"
 
-#: gajim/gtk/account_wizard.py:907
+#: gajim/gtk/account_wizard.py:908
 msgid "Account has been added successfully"
 msgstr "Тіркелгі сәтті қосылды"
 
@@ -10488,31 +10397,31 @@ msgstr "Нәтижесі жоқ"
 msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
-#: gajim/gtk/preferences.py:378 gajim/gtk/preferences.py:387
+#: gajim/gtk/preferences.py:381 gajim/gtk/preferences.py:390
 msgid "Default"
 msgstr "Бастапқысы"
 
-#: gajim/gtk/preferences.py:404
+#: gajim/gtk/preferences.py:804
+msgid "status message title"
+msgstr "қалып-күй хабарлама атауы"
+
+#: gajim/gtk/preferences.py:805
+msgid "status message text"
+msgstr "қалып-күй хабарлама мәтіні"
+
+#: gajim/gtk/preferences.py:941
 msgid ""
 "<span color=\"red\" font-weight=\"bold\">Unavailable</span>, video support "
 "will be disabled"
 msgstr ""
 
-#: gajim/gtk/preferences.py:410
+#: gajim/gtk/preferences.py:947
 msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
 msgstr ""
 
-#: gajim/gtk/preferences.py:413
+#: gajim/gtk/preferences.py:950
 msgid "<span color=\"yellow\" font-weight=\"bold\">Unaccelerated</span>"
 msgstr ""
-
-#: gajim/gtk/preferences.py:878
-msgid "status message title"
-msgstr "қалып-күй хабарлама атауы"
-
-#: gajim/gtk/preferences.py:879
-msgid "status message text"
-msgstr "қалып-күй хабарлама мәтіні"
 
 #: gajim/gtk/accounts.py:122
 msgid "Re-Login"
@@ -10806,25 +10715,25 @@ msgstr ""
 msgid "Bookmarks for %s"
 msgstr "_Бетбелгі"
 
-#: gajim/plugins/pluginmanager.py:694 gajim/plugins/pluginmanager.py:700
+#: gajim/plugins/pluginmanager.py:697 gajim/plugins/pluginmanager.py:703
 msgid "Archive corrupted"
 msgstr "Архив зақымдалған"
 
-#: gajim/plugins/pluginmanager.py:696
+#: gajim/plugins/pluginmanager.py:699
 msgid "Archive empty"
 msgstr "Архив бос"
 
-#: gajim/plugins/pluginmanager.py:708 gajim/plugins/pluginmanager.py:716
-#: gajim/plugins/gui.py:271
+#: gajim/plugins/pluginmanager.py:711 gajim/plugins/pluginmanager.py:719
+#: gajim/plugins/gui.py:272
 msgid "Archive is malformed"
 msgstr "Архив қате"
 
-#: gajim/plugins/pluginmanager.py:725 gajim/plugins/gui.py:286
-#: gajim/plugins/gui.py:299
+#: gajim/plugins/pluginmanager.py:728 gajim/plugins/gui.py:287
+#: gajim/plugins/gui.py:300
 msgid "Plugin already exists"
 msgstr "Плагин бар болып тұр"
 
-#: gajim/plugins/pluginmanager.py:735
+#: gajim/plugins/pluginmanager.py:738
 #, fuzzy
 msgid "Installation failed"
 msgstr "Тіркелу сәтсіз"
@@ -10846,16 +10755,16 @@ msgstr "%s банға жіберу"
 msgid "Plugin failed"
 msgstr "Плагин сәтсіз"
 
-#: gajim/plugins/gui.py:247
+#: gajim/plugins/gui.py:248
 msgid "Unable to properly remove the plugin"
 msgstr "Плагинді дұрыс өшіру мүмкін емес"
 
-#: gajim/plugins/gui.py:285
+#: gajim/plugins/gui.py:286
 #, fuzzy
 msgid "Overwrite Plugin?"
 msgstr "Үстінен жазу керек пе?"
 
-#: gajim/plugins/gui.py:287
+#: gajim/plugins/gui.py:288
 #, fuzzy
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "Шақыруды қабылдайсыз ба?"
@@ -10999,6 +10908,100 @@ msgstr "Соңғылар:"
 #, fuzzy
 msgid "Plugin manager"
 msgstr "Плагин сәтсіз"
+
+#~ msgid "Privacy Lists"
+#~ msgstr "Жекелік тізімдер"
+
+#~ msgid "Unblock"
+#~ msgstr "Блоктаудан босату"
+
+#~ msgid "Block"
+#~ msgstr "Блоктау"
+
+#, fuzzy
+#~ msgid ""
+#~ "This contact will see you offline and you will not receive any messages "
+#~ "sent to you by this contact."
+#~ msgstr ""
+#~ "Контакт бұдан былай сізді желіде емес сияқты көреді және сіз ол сізге "
+#~ "жібергісі келетін хабарламаларды ала алмайтын боласыз."
+
+#, fuzzy
+#~ msgid "_Block Contact"
+#~ msgstr "Блокталған контакттар"
+
+#, fuzzy
+#~ msgid "Block Group"
+#~ msgstr "_Блоктау"
+
+#, fuzzy
+#~ msgid "Really block this group?"
+#~ msgstr "Бұл контакт үшін OpenPGP қосулы тұр ма?"
+
+#, fuzzy
+#~ msgid ""
+#~ "All contacts of this group will see you as offline and you will not "
+#~ "receive any messages sent to you by any one of these contacts."
+#~ msgstr ""
+#~ "Контакт бұдан былай сізді желіде емес сияқты көреді және сіз ол сізге "
+#~ "жібергісі келетін хабарламаларды ала алмайтын боласыз."
+
+#, fuzzy
+#~ msgid "_Block Group"
+#~ msgstr "_Блоктау"
+
+#, fuzzy
+#~ msgid "Error While Removing Privacy List"
+#~ msgstr "Жекелік тізімін өшіру кезінде қате кетті"
+
+#, fuzzy
+#~ msgid ""
+#~ "Privacy list %s has not been removed. It is probably active in one of "
+#~ "your connected resources. Please deactivate it and try again."
+#~ msgstr ""
+#~ "%s жекелік тізімі өшірілмеген. Байланысқан ресурстарыңыздың біреу үшін "
+#~ "болуы мүмкін. Оны сөндіріп, қайталар көріңіз."
+
+#, fuzzy
+#~ msgid "Invisibility Not Supported"
+#~ msgstr "Жасырын болуға қолдау жоқ"
+
+#, fuzzy
+#~ msgid "This account %s doesn't support invisibility."
+#~ msgstr "%s тіркелгісі жасырын болуды қолдамайды."
+
+#, fuzzy
+#~ msgid "Invited %(jid)s to %(room_jid)s"
+#~ msgstr "%s қазір %s үшін жіберу"
+
+#~ msgid "Privacy List <b><i>%s</i></b>"
+#~ msgstr "Жекелік тізімі <b><i>%s</i></b>"
+
+#~ msgid "Privacy List for %s"
+#~ msgstr "%s үшін жекелік тізімі"
+
+#~ msgid ""
+#~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
+#~ msgstr ""
+#~ "Реті: %(order)s, әрекеті: %(action)s, түрі: %(type)s, мәні: %(value)s"
+
+#~ msgid "Order: %(order)s, action: %(action)s"
+#~ msgstr "Реті: %(order)s, әрекеті: %(action)s"
+
+#~ msgid "<b>Edit a rule</b>"
+#~ msgstr "<b>Ережені түзету</b>"
+
+#~ msgid "<b>Add a rule</b>"
+#~ msgstr "<b>Ережені қосу</b>"
+
+#~ msgid "Privacy Lists for %s"
+#~ msgstr "%s үшін жекелік тізімдері"
+
+#~ msgid "Invalid List Name"
+#~ msgstr "Тізім аты қате"
+
+#~ msgid "You must enter a name to create a privacy list."
+#~ msgstr "Жекелік тізімін жасау үшін оның атын енгізуіңіз керек."
 
 #, fuzzy
 #~ msgid ""

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-21 11:23+0000\n"
-"PO-Revision-Date: 2020-06-29 10:36+0000\n"
+"POT-Creation-Date: 2020-07-16 22:30+0200\n"
+"PO-Revision-Date: 2020-07-24 08:42+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/1-2/ja/>"
 "\n"
@@ -22,63 +22,62 @@ msgstr ""
 msgid "Account: %s"
 msgstr "アカウント: %s"
 
-#: gajim/chat_control_base.py:570
+#: gajim/chat_control_base.py:566
 msgid "and authenticated"
 msgstr "認証されています"
 
-#: gajim/chat_control_base.py:574
+#: gajim/chat_control_base.py:570
 msgid "and NOT authenticated"
 msgstr "認証されていません"
 
-#: gajim/chat_control_base.py:578
+#: gajim/chat_control_base.py:574
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s の暗号化は有効 %(authenticated)s。"
 
-#: gajim/chat_control_base.py:698
+#: gajim/chat_control_base.py:694
 msgid "_Undo"
 msgstr "元に戻す (_U)"
 
-#: gajim/chat_control_base.py:706 gajim/conversation_textview.py:507
+#: gajim/chat_control_base.py:702 gajim/conversation_textview.py:507
 msgid "_Clear"
 msgstr "消去 (_C)"
 
-#: gajim/chat_control_base.py:711
+#: gajim/chat_control_base.py:707
 msgid "Paste as quote"
 msgstr "引用として貼付"
 
-#: gajim/chat_control_base.py:748
+#: gajim/chat_control_base.py:744
 msgid "Paste Image"
 msgstr "画像を貼り付け"
 
-#: gajim/chat_control_base.py:749
+#: gajim/chat_control_base.py:745
 msgid "You are trying to paste an image"
 msgstr "画像を貼り付けようとしています"
 
-#: gajim/chat_control_base.py:750
+#: gajim/chat_control_base.py:746
 msgid ""
 "Are you sure you want to paste your clipboard's image into the chat window?"
 msgstr "本当にクリップボードからチャットウィンドウに画像を貼り付けますか ?"
 
-#: gajim/chat_control_base.py:752 gajim/groupchat_control.py:1736
-#: gajim/roster_window.py:2837 gajim/roster_window.py:4047
-#: gajim/message_window.py:364
+#: gajim/chat_control_base.py:748 gajim/groupchat_control.py:1740
+#: gajim/roster_window.py:3986 gajim/message_window.py:364
 msgid "_Do not ask me again"
 msgstr "次回から質問しない (_D)"
 
-#: gajim/chat_control_base.py:755
+#: gajim/chat_control_base.py:751
 msgid "_Paste"
 msgstr "貼り付け (_P)"
 
-#: gajim/chat_control_base.py:1310 gajim/gtk/accounts.py:310
+#: gajim/chat_control_base.py:1304 gajim/gtk/accounts.py:310
 msgid "Privacy"
 msgstr "プライバシー"
 
-#: gajim/chat_control_base.py:1311
+#: gajim/chat_control_base.py:1305
 msgid "Warning"
 msgstr "警告"
 
-#: gajim/chat_control_base.py:1312
+#: gajim/chat_control_base.py:1306
 #, python-format
 msgid ""
 "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
@@ -86,7 +85,7 @@ msgstr ""
 "ファイルを <b>%s</b> に送信すると、その相手はあなたの本当の JID を知ることに"
 "なります。"
 
-#: gajim/chat_control_base.py:1317
+#: gajim/chat_control_base.py:1311
 msgid "_Continue"
 msgstr "続ける (_C)"
 
@@ -114,13 +113,16 @@ msgstr "<b>分掌:</b>"
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in their presence"
-msgstr "この相手先はあなたの在席情報に関心があります。しかし、あなたはこの相手先の在席情報に関心がありません"
+msgstr ""
+"この相手先はあなたの在席情報に関心があります。しかし、あなたはこの相手先の在"
+"席情報に関心がありません"
 
 #: gajim/vcard.py:365
 msgid ""
 "You are interested in the contact's presence information, but it is not "
 "mutual"
-msgstr "あなたは相手先の在席情報に関心があります。しかし、相手先はそうではありません"
+msgstr ""
+"あなたは相手先の在席情報に関心があります。しかし、相手先はそうではありません"
 
 #: gajim/vcard.py:367
 msgid "The contact and you want to exchange presence information"
@@ -145,14 +147,15 @@ msgid " resource with priority "
 msgstr " リソース。優先順位は "
 
 #: gajim/gui_menu_builder.py:255 gajim/gui_menu_builder.py:346
-#: gajim/chat_control.py:295 gajim/roster_window.py:778
-#: gajim/roster_window.py:1717 gajim/roster_window.py:1719
-#: gajim/roster_window.py:2031 gajim/roster_window.py:3271
-#: gajim/roster_window.py:3304 gajim/gui_interface.py:295
+#: gajim/chat_control.py:296 gajim/chat_control.py:391
+#: gajim/roster_window.py:774 gajim/roster_window.py:1695
+#: gajim/roster_window.py:1697 gajim/roster_window.py:2009
+#: gajim/roster_window.py:3210 gajim/roster_window.py:3243
+#: gajim/roster_window.py:4243 gajim/gui_interface.py:295
 #: gajim/common/contacts.py:219 gajim/common/contacts.py:348
 #: gajim/common/contacts.py:459 gajim/common/helpers.py:94
 #: gajim/common/helpers.py:212 gajim/gtk/add_contact.py:320
-#: gajim/gtk/subscription_request.py:63 gajim/gtk/subscription_request.py:95
+#: gajim/gtk/subscription_request.py:77 gajim/gtk/subscription_request.py:124
 #: gajim/gtk/roster_item_exchange.py:112
 msgid "Not in contact list"
 msgstr "相手先一覧にありません"
@@ -161,70 +164,75 @@ msgstr "相手先一覧にありません"
 msgid "I would like to add you to my contact list"
 msgstr "あなたを私の相手先一覧に追加したいと思います"
 
-#: gajim/gui_menu_builder.py:437
+#: gajim/gui_menu_builder.py:436
 msgid "Send Single _Message…"
 msgstr "単発メッセージを送信…(_M)"
 
-#: gajim/gui_menu_builder.py:452
+#: gajim/gui_menu_builder.py:451
 msgid "E_xecute Command…"
 msgstr "コマンド実行…(_X)"
 
-#: gajim/gui_menu_builder.py:460
+#: gajim/gui_menu_builder.py:459
 msgid "_Manage Transport"
 msgstr "中継先の管理 (_M)"
 
-#: gajim/gui_menu_builder.py:466
+#: gajim/gui_menu_builder.py:465
 msgid "_Modify Transport"
 msgstr "中継先の変更 (_M)"
 
-#: gajim/gui_menu_builder.py:473 gajim/roster_window.py:4915
+#: gajim/gui_menu_builder.py:472 gajim/roster_window.py:4879
 msgid "_Rename…"
 msgstr "名前の変更…(_R)"
 
-#: gajim/gui_menu_builder.py:484 gajim/roster_window.py:4931
-#: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
+#: gajim/gui_menu_builder.py:483 gajim/roster_window.py:4990
+#: gajim/data/gui/blocked_contacts_window.ui:51
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
 msgstr "遮断の解除 (_U)"
 
-#: gajim/gui_menu_builder.py:487 gajim/roster_window.py:4936
-#: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
+#: gajim/gui_menu_builder.py:486 gajim/chat_control.py:408
+#: gajim/roster_window.py:2791 gajim/roster_window.py:4994
+#: gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
 msgstr "遮断 (_B)"
 
-#: gajim/gui_menu_builder.py:495 gajim/roster_window.py:4943
+#: gajim/gui_menu_builder.py:494 gajim/roster_window.py:4885
 #: gajim/data/gui/contact_context_menu.ui:181
 msgid "Remo_ve"
 msgstr "削除 (_V)"
 
-#: gajim/gui_menu_builder.py:505 gajim/data/gui/contact_context_menu.ui:198
+#: gajim/gui_menu_builder.py:504 gajim/data/gui/contact_context_menu.ui:198
 msgid "_Information"
 msgstr "情報 (_I)"
 
-#: gajim/gui_menu_builder.py:518
+#: gajim/gui_menu_builder.py:517
 msgid "Send File"
 msgstr "ファイルを送信"
 
-#: gajim/gui_menu_builder.py:519
+#: gajim/gui_menu_builder.py:518
 msgid "Upload File…"
 msgstr "ファイルをアップロード…"
 
-#: gajim/gui_menu_builder.py:520
+#: gajim/gui_menu_builder.py:519
 msgid "Send File Directly…"
 msgstr "直接ファイルを送信…"
 
-#: gajim/gui_menu_builder.py:522 gajim/gui_menu_builder.py:589
+#: gajim/gui_menu_builder.py:521 gajim/gui_menu_builder.py:589
 msgid "Send Chatstate"
 msgstr "チャット状態を送信"
 
-#: gajim/gui_menu_builder.py:523 gajim/data/gui/groupchat_control.ui:283
+#: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:332
 msgid "Invite Contacts…"
 msgstr "相手先を招待…"
 
-#: gajim/gui_menu_builder.py:524 gajim/gui_menu_builder.py:782
+#: gajim/gui_menu_builder.py:523 gajim/gui_menu_builder.py:782
 #: gajim/gui_menu_builder.py:809 gajim/gui_menu_builder.py:848
 msgid "Add to Contact List…"
 msgstr "相手先一覧に追加…"
+
+#: gajim/gui_menu_builder.py:524
+msgid "Block Contact…"
+msgstr "相手先を遮断…"
 
 #: gajim/gui_menu_builder.py:525
 msgid "Voice Chat"
@@ -244,7 +252,7 @@ msgid "History"
 msgstr "履歴"
 
 #: gajim/gui_menu_builder.py:534 gajim/gui_menu_builder.py:650
-#: gajim/data/gui/preferences_window.ui:1886
+#: gajim/gui_menu_builder.py:751 gajim/data/gui/preferences_window.ui:1879
 msgid "Disabled"
 msgstr "無効"
 
@@ -364,7 +372,7 @@ msgstr "サービスを探索…"
 msgid "Server Info"
 msgstr "サーバー情報"
 
-#: gajim/gui_menu_builder.py:677 gajim/data/gui/preferences_window.ui:2763
+#: gajim/gui_menu_builder.py:677 gajim/data/gui/preferences_window.ui:2866
 msgid "Advanced"
 msgstr "拡張"
 
@@ -388,45 +396,41 @@ msgstr "PEP の調整"
 msgid "Synchronise History…"
 msgstr "履歴を同期…"
 
-#: gajim/gui_menu_builder.py:683 gajim/gtk/privacy_list.py:409
-msgid "Privacy Lists"
-msgstr "プライバシーリスト"
-
-#: gajim/gui_menu_builder.py:685 gajim/data/gui/groupchat_config.ui:36
+#: gajim/gui_menu_builder.py:684 gajim/data/gui/groupchat_config.ui:36
 #: gajim/gtk/server_info.py:128
 msgid "Admin"
 msgstr "管理"
 
-#: gajim/gui_menu_builder.py:686
+#: gajim/gui_menu_builder.py:685
 msgid "Send Server Message…"
 msgstr "サーバーメッセージを送信…"
 
-#: gajim/gui_menu_builder.py:687
+#: gajim/gui_menu_builder.py:686
 msgid "Set MOTD…"
 msgstr "MOTD を設定…"
 
-#: gajim/gui_menu_builder.py:688
+#: gajim/gui_menu_builder.py:687
 msgid "Update MOTD…"
 msgstr "MOTD を更新…"
 
-#: gajim/gui_menu_builder.py:689
+#: gajim/gui_menu_builder.py:688
 msgid "Delete MOTD…"
 msgstr "MOTD を削除…"
 
-#: gajim/gui_menu_builder.py:726
+#: gajim/gui_menu_builder.py:725
 msgid "_Add Account…"
 msgstr "アカウントを追加…(_A)"
 
-#: gajim/gui_menu_builder.py:732
+#: gajim/gui_menu_builder.py:731
 msgid "_Modify Accounts…"
 msgstr "アカウントを編集…(_M)"
 
-#: gajim/gui_menu_builder.py:742 gajim/data/gui/zeroconf_context_menu.ui:26
+#: gajim/gui_menu_builder.py:741 gajim/data/gui/zeroconf_context_menu.ui:26
 #: gajim/data/gui/account_context_menu.ui:79
 msgid "_Modify Account…"
 msgstr "アカウントを編集…(_M)"
 
-#: gajim/gui_menu_builder.py:746 gajim/gtk/accounts.py:51
+#: gajim/gui_menu_builder.py:745 gajim/gtk/accounts.py:51
 msgid "Accounts"
 msgstr "アカウント"
 
@@ -439,7 +443,7 @@ msgid "Join Groupchat"
 msgstr "談話室に参加"
 
 #: gajim/gui_menu_builder.py:781 gajim/gui_menu_builder.py:807
-#: gajim/data/gui/subscription_request_window.ui:106
+#: gajim/data/gui/subscription_request_window.ui:149
 #: gajim/gtk/start_chat.py:630
 msgid "Start Chat"
 msgstr "チャットを開始"
@@ -476,49 +480,41 @@ msgstr "XMPP アドレス/Eメールをコピー"
 msgid "Invite"
 msgstr "招待"
 
-#: gajim/gui_menu_builder.py:875
-msgid "Unblock"
-msgstr "遮断の解除"
-
-#: gajim/gui_menu_builder.py:878
-msgid "Block"
-msgstr "遮断"
-
-#: gajim/gui_menu_builder.py:884
+#: gajim/gui_menu_builder.py:873
 msgid "Kick"
 msgstr "蹴り出し"
 
-#: gajim/gui_menu_builder.py:892
+#: gajim/gui_menu_builder.py:881
 msgid "Ban"
 msgstr "締め出し"
 
-#: gajim/gui_menu_builder.py:902
+#: gajim/gui_menu_builder.py:891
 msgid "Make Owner"
 msgstr "主宰者にする"
 
-#: gajim/gui_menu_builder.py:911
+#: gajim/gui_menu_builder.py:900
 msgid "Make Admin"
 msgstr "管理人にする"
 
 # (Mako)「会員」では排他的なニュアンスが強いのでしかたなくカタカナ語で
-#: gajim/gui_menu_builder.py:920
+#: gajim/gui_menu_builder.py:909
 msgid "Make Member"
 msgstr "メンバーにする"
 
 # (Mako)「会員」では排他的なニュアンスが強いのでしかたなくカタカナ語で
-#: gajim/gui_menu_builder.py:929
+#: gajim/gui_menu_builder.py:918
 msgid "Revoke Member"
 msgstr "メンバーを取り消す"
 
-#: gajim/gui_menu_builder.py:939
+#: gajim/gui_menu_builder.py:928
 msgid "Grant Voice"
 msgstr "発言権を与える"
 
-#: gajim/gui_menu_builder.py:942
+#: gajim/gui_menu_builder.py:931
 msgid "Revoke Voice"
 msgstr "発言権を取り消す"
 
-#: gajim/gui_menu_builder.py:962
+#: gajim/gui_menu_builder.py:951
 msgid "Copy"
 msgstr "コピー"
 
@@ -571,7 +567,7 @@ msgid "Nickname"
 msgstr "ニックネーム"
 
 #: gajim/history_manager.py:178 gajim/history_manager.py:217
-#: gajim/data/gui/preferences_window.ui:1397
+#: gajim/data/gui/preferences_window.ui:1390
 #: gajim/data/gui/single_message_window.ui:266 gajim/gtk/history.py:117
 msgid "Message"
 msgstr "メッセージ"
@@ -653,8 +649,8 @@ msgstr "相手先名: <i>%s</i>"
 msgid "XMPP Address: <i>%s</i>"
 msgstr "XMPP アドレス: <i>%s</i>"
 
-#: gajim/dialogs.py:115 gajim/dialogs.py:128 gajim/roster_window.py:2891
-#: gajim/roster_window.py:3713 gajim/roster_window.py:4953
+#: gajim/dialogs.py:115 gajim/dialogs.py:128 gajim/roster_window.py:2830
+#: gajim/roster_window.py:3652 gajim/roster_window.py:4895
 #: gajim/common/contacts.py:163 gajim/common/contacts.py:203
 #: gajim/data/gui/preferences_window.ui:556
 #: gajim/data/gui/preferences_window.ui:608
@@ -700,7 +696,7 @@ msgstr "状況メッセージを上書きしますか ?"
 msgid "This name is already in use. Do you want to overwrite this preset?"
 msgstr "この名前は既に使われています。この事前設定を上書きしますか ?"
 
-#: gajim/dialogs.py:704 gajim/plugins/gui.py:292
+#: gajim/dialogs.py:704 gajim/plugins/gui.py:291
 msgid "_Overwrite"
 msgstr "上書き (_O)"
 
@@ -774,10 +770,10 @@ msgid ""
 "%(contact)s wants to start a %(type)s chat with you. Do you want to answer "
 "the call?"
 msgstr ""
-"%(contact)s さんは、%(type)s で会話を始めようとしています。呼び出しに応じます"
-"か ?"
+"%(contact)s さんは、%(type)s でチャットを始めようとしています。呼び出しに応じ"
+"ますか ?"
 
-#: gajim/groupchat_control.py:407 gajim/chat_control.py:330
+#: gajim/groupchat_control.py:407 gajim/chat_control.py:336
 msgid "Send File…"
 msgstr "ファイルを送信…"
 
@@ -786,302 +782,321 @@ msgstr "ファイルを送信…"
 msgid "Send File (max. %s MiB)…"
 msgstr "ファイルを送信 (最大. %s MiB)…"
 
-#: gajim/groupchat_control.py:413 gajim/chat_control.py:332
+#: gajim/groupchat_control.py:413 gajim/chat_control.py:338
 msgid "No File Transfer available"
 msgstr "ファイル転送は利用できません"
 
-#: gajim/groupchat_control.py:541 gajim/dialog_messages.py:31
+#: gajim/groupchat_control.py:544
+#, python-brace-format
+msgid "{contact_jid} has been invited to this group chat"
+msgstr "{contact_jid} は既にこの談話室に招待されています"
+
+#: gajim/groupchat_control.py:559 gajim/dialog_messages.py:31
 #: gajim/dialog_messages.py:36 gajim/gtk/single_message.py:238
 msgid "Invalid XMPP Address"
 msgstr "XMPP アドレスが正しくありません"
 
-#: gajim/groupchat_control.py:638 gajim/gtk/profile.py:133
+#: gajim/groupchat_control.py:656 gajim/gtk/profile.py:133
 msgid "Could not load image"
 msgstr "画像を読み込めませんでした"
 
-#: gajim/groupchat_control.py:681
+#: gajim/groupchat_control.py:685
 #, python-format
 msgid "Kick %s"
 msgstr "%s を蹴り出す"
 
-#: gajim/groupchat_control.py:690
+#: gajim/groupchat_control.py:694
 #, python-format
 msgid "Ban %s"
 msgstr "%s を締め出す"
 
-#: gajim/groupchat_control.py:738
+#: gajim/groupchat_control.py:742
 msgid "Insert Nickname"
 msgstr "ニックネームを挿入"
 
-#: gajim/groupchat_control.py:829 gajim/groupchat_control.py:830
+#: gajim/groupchat_control.py:833 gajim/groupchat_control.py:834
 msgid "Voice Request"
-msgstr "発言権を要求"
-
-#: gajim/groupchat_control.py:831
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
+msgstr "発言権の要求"
 
 #: gajim/groupchat_control.py:835
+#, python-format
+msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
+msgstr "<b>%(nick)s</b> が <b>%(room_name)s</b> で発言権を求めています"
+
+#: gajim/groupchat_control.py:839
 msgid "_Approve"
 msgstr "承認 (_A)"
 
-#: gajim/groupchat_control.py:1058
+#: gajim/groupchat_control.py:1062
 #, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(nick)s さんは題を %(subject)s に設定しました"
 
-#: gajim/groupchat_control.py:1074
+#: gajim/groupchat_control.py:1078
 msgid "Group chat now shows unavailable members"
 msgstr "談話室はメンバー以外にも見えます"
 
-#: gajim/groupchat_control.py:1077
+#: gajim/groupchat_control.py:1081
 msgid "Group chat now does not show unavailable members"
 msgstr "談話室はメンバー以外には見えません"
 
-#: gajim/groupchat_control.py:1081
+#: gajim/groupchat_control.py:1085
 msgid "A setting not related to privacy has been changed"
 msgstr "プライバシーに関係のない設定が変更されました"
 
-#: gajim/groupchat_control.py:1088 gajim/groupchat_control.py:1247
+#: gajim/groupchat_control.py:1092 gajim/groupchat_control.py:1251
 msgid "Conversations are stored on the server"
 msgstr "会話はサーバーに保管されます"
 
-#: gajim/groupchat_control.py:1091
+#: gajim/groupchat_control.py:1095
 msgid "Conversations are not stored on the server"
 msgstr "会話はサーバーに保管されません"
 
-#: gajim/groupchat_control.py:1094
+#: gajim/groupchat_control.py:1098
 msgid "Group chat is now non-anonymous"
 msgstr "談話室は非匿名になります"
 
-#: gajim/groupchat_control.py:1098
+#: gajim/groupchat_control.py:1102
 msgid "Group chat is now semi-anonymous"
 msgstr "談話室は半匿名になります"
 
-#: gajim/groupchat_control.py:1102
+#: gajim/groupchat_control.py:1106
 msgid "Group chat is now fully anonymous"
 msgstr "談話室は完全匿名になります"
 
-#: gajim/groupchat_control.py:1147
+#: gajim/groupchat_control.py:1151
 #, python-format
 msgid "Ping? (%s)"
 msgstr "Ping? (%s)"
 
-#: gajim/groupchat_control.py:1150
+#: gajim/groupchat_control.py:1154
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
 msgstr "Pong! (%(nick)s %(delay)s s.)"
 
-#: gajim/groupchat_control.py:1153 gajim/chat_control.py:643
+#: gajim/groupchat_control.py:1157 gajim/chat_control.py:676
 msgid "Error."
 msgstr "エラーです。"
 
-#: gajim/groupchat_control.py:1238
+#: gajim/groupchat_control.py:1242
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "あなた (%s) が談話室に参加しました"
 
-#: gajim/groupchat_control.py:1243
+#: gajim/groupchat_control.py:1247
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr "参加者の誰もがあなたの完全 XMPP アドレス を知ることができます"
 
-#: gajim/groupchat_control.py:1251
+#: gajim/groupchat_control.py:1255
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
 "サーバーはあなたのこの談話室でのニックネームを割り当て (または変更し) ました"
 
-#: gajim/groupchat_control.py:1261
+#: gajim/groupchat_control.py:1265
 msgid "A new group chat has been created"
 msgstr "新しい談話室が作成されました"
 
-#: gajim/groupchat_control.py:1265
+#: gajim/groupchat_control.py:1269
 msgid "Failed to Configure Group Chat"
 msgstr "談話室の調整に失敗しました"
 
-#: gajim/groupchat_control.py:1275 gajim/privatechat_control.py:105
+#: gajim/groupchat_control.py:1279 gajim/privatechat_control.py:105
 #, python-format
 msgid "You are now known as %s"
 msgstr "あなたは %s として認識されます"
 
-#: gajim/groupchat_control.py:1277 gajim/privatechat_control.py:107
+#: gajim/groupchat_control.py:1281 gajim/privatechat_control.py:107
 #, python-brace-format
 msgid "{nick} is now known as {new_nick}"
 msgstr "{nick} は現在 {new_nick} と認識されました"
 
-#: gajim/groupchat_control.py:1302 gajim/privatechat_control.py:133
+#: gajim/groupchat_control.py:1306 gajim/privatechat_control.py:133
 #, python-brace-format
 msgid "You are now {show}{status}"
 msgstr "あなたは現在 {show}{status}"
 
-#: gajim/groupchat_control.py:1308 gajim/privatechat_control.py:139
+#: gajim/groupchat_control.py:1312 gajim/privatechat_control.py:139
 #, python-brace-format
 msgid "{nick} is now {show}{status}"
 msgstr "{nick} は現在 {show}{status}"
 
-#: gajim/groupchat_control.py:1325 gajim/groupchat_control.py:1355
-#: gajim/groupchat_control.py:1383 gajim/groupchat_control.py:1442
+#: gajim/groupchat_control.py:1329 gajim/groupchat_control.py:1359
+#: gajim/groupchat_control.py:1387 gajim/groupchat_control.py:1446
 #, python-brace-format
 msgid " by {actor}"
 msgstr " {actor} によって"
 
-#: gajim/groupchat_control.py:1328
+#: gajim/groupchat_control.py:1332
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr ""
 "** {actor} によって、あなたの分掌は {affiliation} に設定されました: {reason}"
 
-#: gajim/groupchat_control.py:1334
+#: gajim/groupchat_control.py:1338
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
 "** {actor} によって、{nick} の分掌は {affiliation} に設定されました: {reason}"
 
 # (Mako)ここでの role は「役」
-#: gajim/groupchat_control.py:1358
+#: gajim/groupchat_control.py:1362
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** {actor} によって、あなたの役は {role} に設定されました: {reason}"
 
 # (Mako)ここでの role は「役」
-#: gajim/groupchat_control.py:1363
+#: gajim/groupchat_control.py:1367
 #, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** {actor} によって、{nick} の役は {role} に設定されました: {reason}"
 
-#: gajim/groupchat_control.py:1386
+#: gajim/groupchat_control.py:1390
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "{actor} によって、この談話室から削除されました ({reason})"
 
-#: gajim/groupchat_control.py:1391
+#: gajim/groupchat_control.py:1395
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr "エラーのため、あなたは退出しました: {reason}"
 
-#: gajim/groupchat_control.py:1397
+#: gajim/groupchat_control.py:1401
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr "{actor} によって、あなたは蹴り出されました: {reason}"
 
-#: gajim/groupchat_control.py:1404
+#: gajim/groupchat_control.py:1408
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr "{actor} によって、あなたは締め出されました: {reason}"
 
-#: gajim/groupchat_control.py:1411 gajim/groupchat_control.py:1476
+#: gajim/groupchat_control.py:1415 gajim/groupchat_control.py:1480
 msgid ": Affiliation changed"
 msgstr "分掌を変更しました"
 
-#: gajim/groupchat_control.py:1417 gajim/groupchat_control.py:1481
+#: gajim/groupchat_control.py:1421 gajim/groupchat_control.py:1485
 msgid ": Group chat configuration changed to members-only"
 msgstr "談話室はメンバー制に変更されました"
 
-#: gajim/groupchat_control.py:1445
+#: gajim/groupchat_control.py:1449
 #, python-brace-format
 msgid "{nick} has been removed from the group chat{by}{reason}"
 msgstr "{nick} は削除されました ({by}{reason})"
 
-#: gajim/groupchat_control.py:1455
+#: gajim/groupchat_control.py:1459
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr "エラーのため、{nick} は退出しました: {reason}"
 
-#: gajim/groupchat_control.py:1461
+#: gajim/groupchat_control.py:1465
 #, python-brace-format
 msgid "{nick} has been kicked{actor}{reason}"
 msgstr "{actor} によって、{nick} は蹴り出されました: {reason}"
 
-#: gajim/groupchat_control.py:1469
+#: gajim/groupchat_control.py:1473
 #, python-brace-format
 msgid "{nick} has been banned{actor}{reason}"
 msgstr "{actor} によって、{nick} は締め出されました: {reason}"
 
-#: gajim/groupchat_control.py:1486
+#: gajim/groupchat_control.py:1490
 #, python-brace-format
 msgid "{nick} has left{reason}"
 msgstr "{nick} は退出しました: {reason}"
 
-#: gajim/groupchat_control.py:1508
+#: gajim/groupchat_control.py:1512
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s が談話室に参加しました"
 
-#: gajim/groupchat_control.py:1520
+#: gajim/groupchat_control.py:1524
 msgid "Failed to Join Group Chat"
 msgstr "談話室への参加に失敗しました"
 
-#: gajim/groupchat_control.py:1526
+#: gajim/groupchat_control.py:1530
 msgid "Failed to Create Group Chat"
 msgstr "談話室の作成に失敗しました"
 
-#: gajim/groupchat_control.py:1542
+#: gajim/groupchat_control.py:1546
 msgid "Group chat has been destroyed"
 msgstr "談話室は閉鎖されました"
 
-#: gajim/groupchat_control.py:1547
+#: gajim/groupchat_control.py:1551
 #, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "代わりに次の談話室に参加できます: xmpp:%s?join"
 
-#: gajim/groupchat_control.py:1732
+#: gajim/groupchat_control.py:1736
 msgid "Leave Group Chat"
 msgstr "談話室から退出"
 
-#: gajim/groupchat_control.py:1733
+#: gajim/groupchat_control.py:1737
 msgid "Are you sure you want to leave this group chat?"
 msgstr "本当にこの談話室から退出しますか ?"
 
-#: gajim/groupchat_control.py:1734
+#: gajim/groupchat_control.py:1738
 #, python-format
 msgid "If you close this window, you will leave '%s'."
 msgstr "このウィンドウを閉じると、’%s’ を退出します。"
 
-#: gajim/groupchat_control.py:1740 gajim/roster_window.py:5108
+#: gajim/groupchat_control.py:1744 gajim/roster_window.py:5052
 msgid "_Leave"
 msgstr "退出 (_L)"
 
-#: gajim/groupchat_control.py:1785 gajim/roster_window.py:3001
-#, python-format
-msgid "%(jid)s has been invited to this group chat"
-msgstr "%(jid)s は既にこの談話室に招待されています"
+#: gajim/chat_control.py:398 gajim/roster_window.py:2780
+msgid "Block Contact"
+msgstr "相手先を遮断"
 
-#: gajim/chat_control.py:423
+#: gajim/chat_control.py:399 gajim/roster_window.py:2781
+msgid "Really block this contact?"
+msgstr "本当にこの相手先を遮断しますか ?"
+
+#: gajim/chat_control.py:400 gajim/roster_window.py:2782
+#, fuzzy
+msgid ""
+"You will appear offline for this contact and you will not receive further "
+"messages."
+msgstr "メッセージを受け取りたい相手先の XMPP アドレス"
+
+#: gajim/chat_control.py:404 gajim/roster_window.py:2787
+msgid "_Report Spam"
+msgstr "スパムを報告 (_R)"
+
+#: gajim/chat_control.py:456
 msgid "Show a list of formattings"
 msgstr "書式の一覧を表示する"
 
-#: gajim/chat_control.py:427
+#: gajim/chat_control.py:460
 msgid "This contact does not support HTML"
 msgstr "この相手先は HTML に対応していません"
 
-#: gajim/chat_control.py:638
+#: gajim/chat_control.py:671
 msgid "Ping?"
 msgstr "Ping?"
 
-#: gajim/chat_control.py:641
+#: gajim/chat_control.py:674
 #, python-format
 msgid "Pong! (%s seconds)"
 msgstr "Pong! (%s 秒)"
 
-#: gajim/chat_control.py:713
+#: gajim/chat_control.py:746
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
 msgstr "%(type)s の状態: %(state)s 理由: %(reason)s"
 
-#: gajim/chat_control.py:812
+#: gajim/chat_control.py:843
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s さん (談話室 %(room_name)s より)"
 
-#: gajim/chat_control.py:1129
+#: gajim/chat_control.py:1135
 msgid "Note: Chat history is disabled for this contact."
 msgstr "注意: この相手先の会話履歴は無効になっています。"
 
-#: gajim/chat_control.py:1131
+#: gajim/chat_control.py:1137
 msgid "Note: Chat history is disabled for this account."
 msgstr "注意: このアカウントの会話履歴は無効になっています。"
 
-#: gajim/chat_control.py:1132
+#: gajim/chat_control.py:1138
 #, python-format
 msgid ""
 "You just received a new message from %s.\n"
@@ -1090,26 +1105,26 @@ msgstr ""
 "\"%s\" さんから新しいメッセージを受信しました。\n"
 "このタブを閉じますか ?"
 
-#: gajim/chat_control.py:1138 gajim/gtk/change_password.py:44
+#: gajim/chat_control.py:1144 gajim/gtk/change_password.py:44
 #: gajim/gtk/remove_account.py:44
 msgid "Close"
 msgstr "閉じる"
 
-#: gajim/chat_control.py:1139 gajim/common/connection_handlers_events.py:237
+#: gajim/chat_control.py:1145 gajim/common/connection_handlers_events.py:237
 #: gajim/gtk/notification.py:185 gajim/gtk/notification.py:214
 #: gajim/gtk/notification.py:273
 msgid "New Message"
 msgstr "新着メッセージ"
 
-#: gajim/chat_control.py:1144 gajim/chat_control.py:1441
-#: gajim/chat_control.py:1450 gajim/message_window.py:367
-#: gajim/data/gui/groupchat_control.ui:1024
-#: gajim/data/gui/groupchat_control.ui:1110
-#: gajim/data/gui/groupchat_control.ui:1216
+#: gajim/chat_control.py:1150 gajim/chat_control.py:1447
+#: gajim/chat_control.py:1456 gajim/message_window.py:367
+#: gajim/data/gui/groupchat_control.ui:1073
+#: gajim/data/gui/groupchat_control.ui:1159
+#: gajim/data/gui/groupchat_control.ui:1265
 msgid "_Close"
 msgstr "閉じる (_C)"
 
-#: gajim/chat_control.py:1231
+#: gajim/chat_control.py:1237
 #, python-format
 msgid ""
 "Subject: %(subject)s\n"
@@ -1118,66 +1133,66 @@ msgstr ""
 "件名: %(subject)s\n"
 "%(message)s"
 
-#: gajim/chat_control.py:1344
+#: gajim/chat_control.py:1350
 #, python-format
 msgid "%(name)s is now %(show)s %(status)s"
 msgstr "%(name)s さんは現在、%(show)s %(status)s"
 
-#: gajim/chat_control.py:1405 gajim/roster_window.py:4187
-#: gajim/roster_window.py:4188 gajim/gtk/filetransfer_progress.py:35
+#: gajim/chat_control.py:1411 gajim/roster_window.py:4126
+#: gajim/roster_window.py:4127 gajim/gtk/filetransfer_progress.py:35
 msgid "File Transfer"
 msgstr "ファイルを転送"
 
-#: gajim/chat_control.py:1409
+#: gajim/chat_control.py:1415
 msgid "Size"
 msgstr "サイズ"
 
-#: gajim/chat_control.py:1411 gajim/chat_control.py:1471
+#: gajim/chat_control.py:1417 gajim/chat_control.py:1477
 #: gajim/data/gui/groupchat_invitation_received.ui:77 gajim/gtk/dialogs.py:57
 msgid "_Accept"
 msgstr "承認 (_A)"
 
-#: gajim/chat_control.py:1413 gajim/chat_control.py:1473
+#: gajim/chat_control.py:1419 gajim/chat_control.py:1479
 #: gajim/data/gui/groupchat_invitation_received.ui:62
 msgid "_Decline"
 msgstr "拒否 (_D)"
 
-#: gajim/chat_control.py:1435 gajim/gui_interface.py:693
+#: gajim/chat_control.py:1441 gajim/gui_interface.py:693
 #: gajim/gui_interface.py:723 gajim/gui_interface.py:749
 #: gajim/gtk/notification.py:188 gajim/gtk/notification.py:284
 msgid "File Transfer Completed"
 msgstr "ファイルの転送の完了"
 
 # #(Mako)Containing をどうする
-#: gajim/chat_control.py:1439 gajim/gtk/filetransfer.py:259
+#: gajim/chat_control.py:1445 gajim/gtk/filetransfer.py:259
 msgid "Open _Folder"
 msgstr "フォルダを開く (_F)"
 
-#: gajim/chat_control.py:1468 gajim/gui_interface.py:386
+#: gajim/chat_control.py:1474 gajim/gui_interface.py:386
 #: gajim/data/gui/groupchat_invitation_received.ui:42
 #: gajim/gtk/notification.py:189 gajim/gtk/notification.py:210
 #: gajim/gtk/notification.py:288
 msgid "Group Chat Invitation"
 msgstr "談話室への招待"
 
-#: gajim/chat_control.py:1493 gajim/roster_window.py:1951
+#: gajim/chat_control.py:1499 gajim/roster_window.py:1929
 msgid "Remote contact stopped transfer"
 msgstr "向こうの相手先が転送を中止しました"
 
-#: gajim/chat_control.py:1495 gajim/roster_window.py:1953
+#: gajim/chat_control.py:1501 gajim/roster_window.py:1931
 msgid "Error opening file"
 msgstr "ファイルを開く際のエラー"
 
-#: gajim/chat_control.py:1497 gajim/gtk/filetransfer.py:297
+#: gajim/chat_control.py:1503 gajim/gtk/filetransfer.py:297
 msgid "File transfer stopped"
 msgstr "ファイルの転送が中断しました"
 
-#: gajim/chat_control.py:1502 gajim/gtk/filetransfer.py:275
+#: gajim/chat_control.py:1508 gajim/gtk/filetransfer.py:275
 #: gajim/gtk/filetransfer.py:284
 msgid "File transfer cancelled"
 msgstr "ファイルの転送が中止されました"
 
-#: gajim/chat_control.py:1503
+#: gajim/chat_control.py:1509
 msgid "Connection with peer cannot be established."
 msgstr "ピア接続は確立できません。"
 
@@ -1230,92 +1245,91 @@ msgstr "新しいチャットを開始"
 msgid "Database Error"
 msgstr "データベースのエラー"
 
-#: gajim/roster_window.py:286 gajim/roster_window.py:1022
+#: gajim/roster_window.py:286 gajim/roster_window.py:1009
 msgid "Merged accounts"
 msgstr "統合アカウント"
 
-#: gajim/roster_window.py:845 gajim/roster_window.py:1629
-#: gajim/roster_window.py:1662 gajim/roster_window.py:1713
-#: gajim/roster_window.py:1715 gajim/roster_window.py:1870
-#: gajim/roster_window.py:2514 gajim/roster_window.py:4267
-#: gajim/roster_window.py:4894 gajim/common/contacts.py:201
+#: gajim/roster_window.py:841 gajim/roster_window.py:1607
+#: gajim/roster_window.py:1640 gajim/roster_window.py:1691
+#: gajim/roster_window.py:1693 gajim/roster_window.py:1848
+#: gajim/roster_window.py:2490 gajim/roster_window.py:4207
+#: gajim/roster_window.py:4854 gajim/common/contacts.py:201
 #: gajim/common/contacts.py:451 gajim/common/helpers.py:93
 #: gajim/gtk/discovery.py:128 gajim/gtk/discovery.py:129
 #: gajim/gtk/discovery.py:1415
 msgid "Transports"
 msgstr "中継先"
 
-#: gajim/roster_window.py:1721 gajim/roster_window.py:1723
-#: gajim/roster_window.py:4267 gajim/roster_window.py:4864
+#: gajim/roster_window.py:1699 gajim/roster_window.py:1701
+#: gajim/roster_window.py:4207 gajim/roster_window.py:4819
 #: gajim/gui_interface.py:1319 gajim/common/contacts.py:199
 #: gajim/common/helpers.py:96
 msgid "Group chats"
 msgstr "談話室"
 
-#: gajim/roster_window.py:2013
+#: gajim/roster_window.py:1991
 msgid "Authorization sent"
 msgstr "承認が送信されました"
 
-#: gajim/roster_window.py:2014
+#: gajim/roster_window.py:1992
 #, python-format
 msgid "\"%s\" will now see your status."
 msgstr "現在 \"%s\" さんはあなたの在席状況を知ることができます。"
 
-#: gajim/roster_window.py:2032
+#: gajim/roster_window.py:2010
 msgid "Subscription request has been sent"
 msgstr "在席通知の申し込みを送信しました"
 
-#: gajim/roster_window.py:2033
+#: gajim/roster_window.py:2011
 #, python-format
 msgid "If \"%s\" accepts this request you will know their status."
 msgstr ""
 "\"%s\" さんがこの申し込みを承認したら、相手先の在席状況を知ることができます。"
 
-#: gajim/roster_window.py:2047
+#: gajim/roster_window.py:2025
 msgid "Authorization removed"
 msgstr "承認を削除しました"
 
-#: gajim/roster_window.py:2048
+#: gajim/roster_window.py:2026
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "\"%s\" さんは常にあなたをオフラインとして見ることになります。"
 
-#: gajim/roster_window.py:2268
+#: gajim/roster_window.py:2244
 msgid "desynced"
 msgstr "不揃い"
 
-#: gajim/roster_window.py:2336 gajim/data/gui/shortcuts_window.ui:238
+#: gajim/roster_window.py:2312 gajim/data/gui/shortcuts_window.ui:238
 msgid "Quit Gajim"
 msgstr "Gajim を終了"
 
-#: gajim/roster_window.py:2337
+#: gajim/roster_window.py:2313
 msgid "You are about to quit Gajim"
 msgstr "Gajim を終了しようとしています"
 
-#: gajim/roster_window.py:2338
+#: gajim/roster_window.py:2314
 msgid "Are you sure you want to quit Gajim?"
 msgstr "本当に Gajim を終了しますか ?"
 
-#: gajim/roster_window.py:2339
-#, fuzzy
+#: gajim/roster_window.py:2315
 msgid "_Always quit when closing Gajim"
-msgstr "常に Gajim を終了する"
+msgstr "Gajim を閉じると常に終了する (_A)"
 
-#: gajim/roster_window.py:2342 gajim/roster_window.py:2438
-#: gajim/roster_window.py:2478 gajim/data/gui/application_menu.ui:30
+#: gajim/roster_window.py:2318 gajim/roster_window.py:2414
+#: gajim/roster_window.py:2454 gajim/data/gui/application_menu.ui:30
 #: gajim/data/gui/systray_context_menu.ui:83
 msgid "_Quit"
 msgstr "終了 (_Q)"
 
-#: gajim/roster_window.py:2431
+#: gajim/roster_window.py:2407
 msgid "Stop File Transfers"
 msgstr "ファイル転送を中止"
 
-#: gajim/roster_window.py:2432
+#: gajim/roster_window.py:2408
 msgid "You still have running file transfers"
 msgstr "ファイルの転送を実行中です"
 
-#: gajim/roster_window.py:2433
+#: gajim/roster_window.py:2409
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -1323,45 +1337,47 @@ msgstr ""
 "いま終了すると、転送中のファイルは失われます。\n"
 "それでも終了しますか ?"
 
-#: gajim/roster_window.py:2471
+#: gajim/roster_window.py:2447
 msgid "Unread Messages"
 msgstr "未読メッセージ"
 
-#: gajim/roster_window.py:2472
+#: gajim/roster_window.py:2448
 msgid "You still have unread messages"
 msgstr "未読のメッセージがあります"
 
-#: gajim/roster_window.py:2473
+#: gajim/roster_window.py:2449
 msgid ""
 "Messages will only be available for reading them later if storing chat "
 "history is enabled and if the contact is in your contact list."
-msgstr "履歴が有効になっていて、かつ相手先が相手先一覧にあれば、メッセージは後で読めます。"
+msgstr ""
+"履歴が有効になっていて、かつ相手先が相手先一覧にあれば、メッセージは後で読め"
+"ます。"
 
-#: gajim/roster_window.py:2733
+#: gajim/roster_window.py:2709
 msgid "You have unread messages"
 msgstr "未読のメッセージがあります"
 
-#: gajim/roster_window.py:2734
+#: gajim/roster_window.py:2710
 msgid "You must read them before removing this transport."
 msgstr "この中継先を削除する前に、それらを読んでください。"
 
-#: gajim/roster_window.py:2737
+#: gajim/roster_window.py:2713
 #, python-format
 msgid "Transport '%s' will be removed"
 msgstr "中継先 '%s' を削除します"
 
-#: gajim/roster_window.py:2738
+#: gajim/roster_window.py:2714
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
 "using this transport."
 msgstr ""
 "もうこの中継先をとおして相手先とメッセージを送受信することはできません。"
 
-#: gajim/roster_window.py:2741
+#: gajim/roster_window.py:2717
 msgid "Transports will be removed"
 msgstr "中継先を削除します"
 
-#: gajim/roster_window.py:2746
+#: gajim/roster_window.py:2722
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages from and to contacts "
@@ -1371,116 +1387,80 @@ msgstr ""
 "もうこれらの中継先をとおして相手先とメッセージを送受信することはできません:\n"
 "%s"
 
-#: gajim/roster_window.py:2750
+#: gajim/roster_window.py:2726
 msgid "Remove Transport"
 msgstr "中継先を削除"
 
-#: gajim/roster_window.py:2820
-msgid "Block Contact"
-msgstr "相手先を遮断"
-
-#: gajim/roster_window.py:2821
-msgid "Really block this contact?"
-msgstr "本当にこの相手先を遮断しますか ?"
-
-#: gajim/roster_window.py:2822
-msgid ""
-"This contact will see you offline and you will not receive any messages sent "
-"to you by this contact."
-msgstr ""
-"この相手先はあなたをオフラインと認識します。相手先が送るメッセージは受信しま"
-"せん。"
+#: gajim/roster_window.py:2784
+msgid "_Do not ask again"
+msgstr "次回から質問しない (_D)"
 
 #: gajim/roster_window.py:2824
-msgid "_Block Contact"
-msgstr "相手先を遮断 (_B)"
-
-#: gajim/roster_window.py:2826
-msgid "Block Group"
-msgstr "グループを遮断"
-
-#: gajim/roster_window.py:2827
-msgid "Really block this group?"
-msgstr "本当にこのグループを遮断しますか ?"
-
-#: gajim/roster_window.py:2828
-msgid ""
-"All contacts of this group will see you as offline and you will not receive "
-"any messages sent to you by any one of these contacts."
-msgstr ""
-"このグループの相手先はあなたをオフラインと認識します。これらの相手先が送る"
-"メッセージは受信しません。"
-
-#: gajim/roster_window.py:2831
-msgid "_Block Group"
-msgstr "グループを遮断 (_B)"
-
-#: gajim/roster_window.py:2885
 msgid "Rename Contact"
 msgstr "相手先の名前を変更"
 
-#: gajim/roster_window.py:2886
+#: gajim/roster_window.py:2825
 #, python-format
 msgid "Rename contact %s?"
 msgstr "相手先 %s の名前を変更しますか ?"
 
-#: gajim/roster_window.py:2887
+#: gajim/roster_window.py:2826
 msgid "Please enter a new nickname"
 msgstr "新しいニックネームを入力してください"
 
-#: gajim/roster_window.py:2894
+#: gajim/roster_window.py:2833
 msgid "Rename Group"
 msgstr "グループの名前を変更"
 
-#: gajim/roster_window.py:2895
+#: gajim/roster_window.py:2834
 #, python-format
 msgid "Rename group %s?"
 msgstr "グループ %s の名前を変更しますか ?"
 
-#: gajim/roster_window.py:2896
+#: gajim/roster_window.py:2835
 msgid "Please enter a new name"
 msgstr "新しい名前を入力してください"
 
-#: gajim/roster_window.py:2926 gajim/roster_window.py:3048
-#: gajim/data/gui/groupchat_control.ui:1737
+#: gajim/roster_window.py:2865 gajim/roster_window.py:2987
+#: gajim/data/gui/groupchat_control.ui:1786
 msgid "_Rename"
 msgstr "名前の変更 (_R)"
 
-#: gajim/roster_window.py:2948 gajim/roster_window.py:2949
+#: gajim/roster_window.py:2887 gajim/roster_window.py:2888
 msgid "Remove Group"
 msgstr "グループの削除"
 
-#: gajim/roster_window.py:2950
+#: gajim/roster_window.py:2889
 #, python-format
 msgid "Do you want to remove %s from the contact list?"
 msgstr "相手先一覧から %s を削除しますか ?"
 
-#: gajim/roster_window.py:2951
+#: gajim/roster_window.py:2890
 msgid "_Also remove all contacts of this group from contact list"
 msgstr "相手先一覧のこのグループのすべての相手先も削除します (_A)"
 
-#: gajim/roster_window.py:3043 gajim/roster_window.py:3044
+#: gajim/roster_window.py:2982 gajim/roster_window.py:2983
 msgid "Rename Group Chat"
 msgstr "談話室から退出"
 
-#: gajim/roster_window.py:3045
+#: gajim/roster_window.py:2984
 msgid "Please enter a new name for this group chat"
 msgstr "この談話室の新しい名前を入力してください"
 
-#: gajim/roster_window.py:3288
+#: gajim/roster_window.py:3227
 msgid "Remove Contact"
 msgstr "相手先を削除"
 
-#: gajim/roster_window.py:3289
+#: gajim/roster_window.py:3228
 msgid "Remove contact from contact list"
 msgstr "相手先を相手先一覧から削除します"
 
-#: gajim/roster_window.py:3290
+#: gajim/roster_window.py:3229
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "%(name)s (%(jid)s) を相手先一覧から削除しようとしています。\n"
 
-#: gajim/roster_window.py:3299 gajim/roster_window.py:3319
+#: gajim/roster_window.py:3238 gajim/roster_window.py:3258
 msgid ""
 "By removing this contact you also remove authorization. This means the "
 "contact will see you as offline."
@@ -1488,19 +1468,19 @@ msgstr ""
 "この相手先を相手先一覧から削除すると、在席通知の承認も取り消します。この相手"
 "先はあなたを常にオフラインとして見ることになります。"
 
-#: gajim/roster_window.py:3310
+#: gajim/roster_window.py:3249
 msgid "Do you want to continue?"
 msgstr "続けますか ?"
 
-#: gajim/roster_window.py:3321
+#: gajim/roster_window.py:3260
 msgid "_I want this contact to know my status after removal"
 msgstr "削除後も、この相手先に自分の在席状況を知らせる (_I)"
 
-#: gajim/roster_window.py:3328
+#: gajim/roster_window.py:3267
 msgid "Remove contacts from contact list"
 msgstr "相手先を相手先一覧から削除します"
 
-#: gajim/roster_window.py:3334
+#: gajim/roster_window.py:3273
 #, python-format
 msgid ""
 "By removing the following contacts, you will also remove authorization. This "
@@ -1508,27 +1488,28 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"これら相手先を相手先一覧から削除すると、在席通知の承認も取り消します。これらの相手先はあなたを常にオフラインとして見ることになります:\n"
+"これら相手先を相手先一覧から削除すると、在席通知の承認も取り消します。これら"
+"の相手先はあなたを常にオフラインとして見ることになります:\n"
 "\n"
 "%s"
 
-#: gajim/roster_window.py:3338
+#: gajim/roster_window.py:3277
 msgid "Remove Contacts"
 msgstr "相手先を削除"
 
-#: gajim/roster_window.py:3358
+#: gajim/roster_window.py:3297
 msgid "No account available"
 msgstr "アカウントがありません"
 
-#: gajim/roster_window.py:3359
+#: gajim/roster_window.py:3298
 msgid "You must create an account before you can chat with other contacts."
 msgstr "相手先とチャットを開始する前に、アカウントを作成してください。"
 
-#: gajim/roster_window.py:3940
+#: gajim/roster_window.py:3879
 msgid "Metacontacts storage not supported by your server"
 msgstr "サーバーはメタ相手先の保存に対応していません"
 
-#: gajim/roster_window.py:3942
+#: gajim/roster_window.py:3881
 msgid ""
 "Your server does not support storing metacontacts information. So this "
 "information will not be saved on next reconnection."
@@ -1536,11 +1517,11 @@ msgstr ""
 "サーバーはメタ相手先の情報の保存に対応していません。したがってその情報は次の"
 "接続の際には失われています。"
 
-#: gajim/roster_window.py:4039
+#: gajim/roster_window.py:3978
 msgid "You are about to create a metacontact"
 msgstr "メタ相手先を作成しようとしています"
 
-#: gajim/roster_window.py:4040
+#: gajim/roster_window.py:3979
 msgid ""
 "Metacontacts are a way to regroup several contacts in one single contact. "
 "Generally it is used when the same person has several XMPP- or Transport-"
@@ -1549,121 +1530,117 @@ msgstr ""
 "メタ相手先は、いくつかの相手先を一行にまとめるひとつの方法です。一般に、同一"
 "人物が複数の XMPP アカウントや中継先アカウントを持っているときに使用します。"
 
-#: gajim/roster_window.py:4044
+#: gajim/roster_window.py:3983
 msgid "Create Metacontact"
 msgstr "メタ相手先を作成"
 
-#: gajim/roster_window.py:4050 gajim/data/gui/groupchat_creation.ui:317
+#: gajim/roster_window.py:3989 gajim/data/gui/groupchat_creation.ui:317
 msgid "_Create"
 msgstr "作成 (_C)"
 
-#: gajim/roster_window.py:4167
+#: gajim/roster_window.py:4106
 msgid "Invalid file URI:"
 msgstr "ファイルの URI が正しくありません:"
 
-#: gajim/roster_window.py:4179
+#: gajim/roster_window.py:4118
 #, python-format
 msgid "Send this file to %s:\n"
 msgid_plural "Send these files to %s:\n"
 msgstr[0] "このファイルを %s さんに転送します:\n"
 msgstr[1] "これらのファイルを %s さんに転送します:\n"
 
-#: gajim/roster_window.py:4192 gajim/data/gui/xml_console.ui:334
+#: gajim/roster_window.py:4131 gajim/data/gui/xml_console.ui:334
 msgid "_Send"
 msgstr "送信 (_S)"
 
-#: gajim/roster_window.py:4337
+#: gajim/roster_window.py:4284
 #, python-format
 msgid "Send %(from)s to %(to)s"
 msgstr "%(from)s を %(to)s に送信"
 
-#: gajim/roster_window.py:4350
+#: gajim/roster_window.py:4297
 #, python-format
 msgid "Make %s first contact"
 msgstr "%s を優先の相手先とする"
 
 # (Mako) よくわからない。Make [c_source.get_shown_name()] and [c_dest.get_shown_name()] metacontacts
-#: gajim/roster_window.py:4355
+#: gajim/roster_window.py:4302
 #, python-format
 msgid "Make %(contact1)s and %(contact2)s metacontacts"
 msgstr "%(contact1)s と %(contact2)s をメタ相手先とする"
 
-#: gajim/roster_window.py:4705 gajim/roster_window.py:4792
+#: gajim/roster_window.py:4652 gajim/roster_window.py:4739
 msgid "_Change Status Message"
 msgstr "状況メッセージの変更 (_C)"
 
-#: gajim/roster_window.py:4725
+#: gajim/roster_window.py:4672
 msgid "Publish Tune"
 msgstr "聴いている楽曲名を公開"
 
-#: gajim/roster_window.py:4736
+#: gajim/roster_window.py:4683
 msgid "Publish Location"
 msgstr "位置情報を公開"
 
 # (Mako)ここでは「復元」の意味か
-#: gajim/roster_window.py:4866
+#: gajim/roster_window.py:4822
 msgid "_Maximize All"
 msgstr "ウィンドウをすべて復元 (_M)"
 
-#: gajim/roster_window.py:4873 gajim/roster_window.py:5015
+#: gajim/roster_window.py:4831 gajim/roster_window.py:4959
 msgid "Send Group M_essage"
 msgstr "メッセージの一斉送信 (_E)"
 
-#: gajim/roster_window.py:4880
+#: gajim/roster_window.py:4838
 msgid "To all users"
 msgstr "すべてのユーザーに"
 
-#: gajim/roster_window.py:4884
+#: gajim/roster_window.py:4842
 msgid "To all online users"
 msgstr "オンラインのすべてのユーザーに"
 
-#: gajim/roster_window.py:4896 gajim/roster_window.py:5021
+#: gajim/roster_window.py:4853 gajim/roster_window.py:4965
 #: gajim/data/gui/contact_context_menu.ui:36
 msgid "In_vite to"
 msgstr "招待 (_V)"
 
-#: gajim/roster_window.py:5031
+#: gajim/roster_window.py:4975
 msgid "_Manage Contacts"
 msgstr "相手先の管理 (_M)"
 
-#: gajim/roster_window.py:5037
+#: gajim/roster_window.py:4981
 msgid "Edit _Groups…"
 msgstr "グループの編集…(_G)"
 
-#: gajim/roster_window.py:5058 gajim/data/gui/filetransfers.ui:12
+#: gajim/roster_window.py:5002 gajim/data/gui/filetransfers.ui:12
 #: gajim/gtk/dialogs.py:68
 msgid "_Remove"
 msgstr "削除 (_R)"
 
 # (Mako)ここでは「復元」の意味か
-#: gajim/roster_window.py:5095
+#: gajim/roster_window.py:5039
 msgid "_Maximize"
 msgstr "ウィンドウの復元 (_M)"
 
-#: gajim/roster_window.py:5100
+#: gajim/roster_window.py:5044
 msgid "Re_name"
 msgstr "名前の変更 (_N)"
 
-#: gajim/roster_window.py:5116
+#: gajim/roster_window.py:5060
 msgid "Execute command"
 msgstr "コマンドを実行"
 
-#: gajim/roster_window.py:5124 gajim/data/gui/contact_context_menu.ui:205
+#: gajim/roster_window.py:5068 gajim/data/gui/contact_context_menu.ui:205
 #: gajim/data/gui/application_menu.ui:68
 msgid "_History"
 msgstr "履歴 (_H)"
 
-#: gajim/roster_window.py:5205 gajim/data/gui/history_window.ui:57
-msgid "History Manager"
-msgstr "履歴管理"
-
 # (Mako)承認なしに名簿にある状態
-#: gajim/roster_window.py:5286 gajim/gui_interface.py:296
+#: gajim/roster_window.py:5161 gajim/gui_interface.py:296
 #: gajim/common/contacts.py:197 gajim/common/helpers.py:95
 msgid "Observers"
 msgstr "オブザーバー"
 
-#: gajim/roster_window.py:5289
+#: gajim/roster_window.py:5164
 msgid "Observers can see your status, but you are not allowed to see theirs"
 msgstr ""
 
@@ -2000,7 +1977,7 @@ msgstr ""
 "ています。これは、会話が暗号化されないことを意味します。PLAIN 接続はまったく"
 "推奨しません。"
 
-#: gajim/gui_interface.py:977 gajim/data/gui/groupchat_control.ui:521
+#: gajim/gui_interface.py:977 gajim/data/gui/groupchat_control.ui:570
 msgid "_Abort"
 msgstr "中断 (_A)"
 
@@ -2008,11 +1985,11 @@ msgstr "中断 (_A)"
 msgid "_Connect Anyway"
 msgstr "それでも接続 (_A)"
 
-#: gajim/gui_interface.py:1721
+#: gajim/gui_interface.py:1724
 msgid "Could not save your settings and preferences"
 msgstr "設定を保存できませんでした"
 
-#: gajim/gui_interface.py:1783
+#: gajim/gui_interface.py:1786
 msgid "Gajim: IPython Console"
 msgstr "Gajim: IPython コンソール"
 
@@ -2078,51 +2055,29 @@ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 msgstr "カスタムホスト名 \"%s\" が正しくありません。これを無視します。"
 
 #: gajim/dialog_messages.py:75
-msgid "Error While Removing Privacy List"
-msgstr "プライバシーリストを削除する際のエラー"
-
-#: gajim/dialog_messages.py:76
-#, python-format
-msgid ""
-"Privacy list %s has not been removed. It is probably active in one of your "
-"connected resources. Please deactivate it and try again."
-msgstr ""
-"プライバシーリスト %s は削除されませんでした。現在の接続に使用されているよう"
-"です。使用をやめて、もういちど試してください。"
-
-#: gajim/dialog_messages.py:82
-msgid "Invisibility Not Supported"
-msgstr "「居ないふり」はサポートされていません"
-
-#: gajim/dialog_messages.py:83
-#, python-format
-msgid "This account %s doesn't support invisibility."
-msgstr "このアカウント %s は「居ないふり」に対応していません。"
-
-#: gajim/dialog_messages.py:87
 msgid "Registration Succeeded"
 msgstr "登録が完了しました"
 
-#: gajim/dialog_messages.py:88
+#: gajim/dialog_messages.py:76
 #, python-format
 msgid "Registration with agent %s succeeded."
 msgstr "エージェント %s の登録は成功しました。"
 
-#: gajim/dialog_messages.py:92
+#: gajim/dialog_messages.py:80
 msgid "Registration Failed"
 msgstr "登録に失敗しました"
 
-#: gajim/dialog_messages.py:93
+#: gajim/dialog_messages.py:81
 #, python-format
 msgid ""
 "Registration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr "%(agent)s の登録は失敗しました。%(error)s: %(error_msg)s"
 
-#: gajim/dialog_messages.py:98
+#: gajim/dialog_messages.py:86
 msgid "GStreamer Error"
 msgstr "GStreamer エラー"
 
-#: gajim/dialog_messages.py:99
+#: gajim/dialog_messages.py:87
 #, python-format
 msgid ""
 "Error: %(error)s\n"
@@ -2131,19 +2086,19 @@ msgstr ""
 "エラー: %(error)s\n"
 "デバッグ: %(debug)s"
 
-#: gajim/dialog_messages.py:103
+#: gajim/dialog_messages.py:91
 msgid "Wrong Host"
 msgstr "ホストが正しくありません"
 
-#: gajim/dialog_messages.py:104
+#: gajim/dialog_messages.py:92
 msgid "Invalid local address? :-O"
 msgstr "ローカルアドレスが正しくありません"
 
-#: gajim/dialog_messages.py:108
+#: gajim/dialog_messages.py:96
 msgid "Avahi Error"
 msgstr "Avahi エラー"
 
-#: gajim/dialog_messages.py:109
+#: gajim/dialog_messages.py:97
 #, python-format
 msgid ""
 "%s\n"
@@ -2152,48 +2107,48 @@ msgstr ""
 "%s\n"
 "ローカルの伝送がうまく働いていないようです。"
 
-#: gajim/dialog_messages.py:113
+#: gajim/dialog_messages.py:101
 msgid "Could not request upload slot for HTTP File Upload"
 msgstr "HTTP ファイルアップロード枠を要求できませんでした"
 
-#: gajim/dialog_messages.py:118 gajim/dialog_messages.py:123
+#: gajim/dialog_messages.py:106 gajim/dialog_messages.py:111
 msgid "Could not Open File"
 msgstr "ファイルを開けませんでした"
 
-#: gajim/dialog_messages.py:119
+#: gajim/dialog_messages.py:107
 msgid "Exception raised while trying to open file (see log)."
 msgstr "ファイルを開く際に例外が発生しました (ログを参照してください)。"
 
-#: gajim/dialog_messages.py:128
+#: gajim/dialog_messages.py:116
 msgid "Not Secure"
 msgstr "安全ではない"
 
-#: gajim/dialog_messages.py:129
+#: gajim/dialog_messages.py:117
 msgid "The server returned an insecure transport (HTTP)."
 msgstr "サーバーは安全でない経路 (HTTP) を返しました。"
 
-#: gajim/dialog_messages.py:133
+#: gajim/dialog_messages.py:121
 msgid "Could not Upload File"
 msgstr "ファイルをアップロードできませんでした"
 
-#: gajim/dialog_messages.py:134
+#: gajim/dialog_messages.py:122
 #, python-format
 msgid "HTTP response code from server: %s"
 msgstr "サーバーからの HTTP 応答コード: %s"
 
-#: gajim/dialog_messages.py:138
+#: gajim/dialog_messages.py:126
 msgid "Upload Error"
 msgstr "アップロードエラー"
 
-#: gajim/dialog_messages.py:143
+#: gajim/dialog_messages.py:131
 msgid "Encryption Error"
 msgstr "暗号化のエラー"
 
-#: gajim/dialog_messages.py:144
+#: gajim/dialog_messages.py:132
 msgid "There is no encryption method available for the chosen encryption."
-msgstr ""
+msgstr "選択した暗号化に適用できる暗号化方式がありません。"
 
-#: gajim/dialog_messages.py:149
+#: gajim/dialog_messages.py:137
 msgid "Avatar Upload Failed"
 msgstr "アバターのアップロードに失敗しました"
 
@@ -2204,7 +2159,9 @@ msgstr "私信の送信に失敗しました"
 #: gajim/privatechat_control.py:199
 #, python-format
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
-msgstr "あなたが既に談話室 \"%(room)s\" にいないか、あるいは \"%(nick)s\" さんがいません。"
+msgstr ""
+"あなたが既に談話室 \"%(room)s\" にいないか、あるいは \"%(nick)s\" さんがいま"
+"せん。"
 
 #: gajim/gajim_remote.py:55 gajim/common/exceptions.py:70
 msgid "D-Bus is not present on this machine or python module is missing"
@@ -2274,8 +2231,9 @@ msgid ""
 "change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
 msgstr ""
-"アカウント \"account\" の在席状況を変更します。アカウントが指定されない場合、\"sync with global status\" "
-"オプションが設定されているアカウントすべての在席状況を変更します"
+"アカウント \"account\" の在席状況を変更します。アカウントが指定されない場"
+"合、\"sync with global status\" オプションが設定されているアカウントすべての"
+"在席状況を変更します"
 
 #: gajim/gajim_remote.py:108
 msgid "Changes the priority of account(s)"
@@ -2300,7 +2258,8 @@ msgstr ""
 #: gajim/gajim_remote.py:118
 msgid ""
 "Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "相手先一覧にある相手先に新たにメッセージを送信します(アカウントは省略可)。"
+msgstr ""
+"相手先一覧にある相手先に新たにメッセージを送信します(アカウントは省略可)。"
 
 #: gajim/gajim_remote.py:120 gajim/gajim_remote.py:130
 msgid "XMPP Address of the contact that will receive the message"
@@ -2582,9 +2541,9 @@ msgid "Contact Signed Out"
 msgstr "相手先がサインアウトしました"
 
 # (Mako) %s はアカウントか
-#: gajim/common/client.py:296 gajim/common/const.py:938
-#: gajim/common/const.py:939 gajim/common/const.py:940
-#: gajim/common/const.py:943 gajim/gtk/account_wizard.py:368
+#: gajim/common/client.py:294 gajim/common/const.py:940
+#: gajim/common/const.py:941 gajim/common/const.py:942
+#: gajim/common/const.py:945 gajim/gtk/account_wizard.py:369
 msgid "Authentication failed"
 msgstr "認証は失敗しました"
 
@@ -2592,7 +2551,9 @@ msgstr "認証は失敗しました"
 msgid ""
 "Show desktop notification even when a chat window is opened for this contact "
 "and does not have focus."
-msgstr "この相手先のチャットウィンドウが開いていてフォーカスが当たっていない場合でもデスクトップ通知を表示します。"
+msgstr ""
+"この相手先のチャットウィンドウが開いていてフォーカスが当たっていない場合でも"
+"デスクトップ通知を表示します。"
 
 #: gajim/common/config.py:77
 msgid "Play sound even when being busy."
@@ -2687,25 +2648,33 @@ msgstr "* / _ の組を、書式指定の文字として扱います。"
 msgid ""
 "If enabled, do not remove */_ . So *abc* will be bold but with * * not "
 "removed."
-msgstr "有効の場合、*/_ を除去しません。たとえば *abc* は太字になりますが * * は除かれません。"
+msgstr ""
+"有効の場合、*/_ を除去しません。たとえば *abc* は太字になりますが * * は除か"
+"れません。"
 
 #: gajim/common/config.py:109
 msgid ""
 "Character to add after nickname when using nickname completion (tab) in "
 "group chat."
-msgstr "談話室で、ニックネーム補完 (タブ) を使うとき、ニックネームの後ろにつけ加えられる文字。"
+msgstr ""
+"談話室で、ニックネーム補完 (タブ) を使うとき、ニックネームの後ろにつけ加えら"
+"れる文字。"
 
 #: gajim/common/config.py:110
 msgid ""
 "Character to propose to add after desired nickname when nickname is already "
 "used in group chat."
-msgstr "談話室で、希望したニックネームが他の誰かに使われていた場合、希望したニックネームの後ろにつけ加えられる文字。"
+msgstr ""
+"談話室で、希望したニックネームが他の誰かに使われていた場合、希望したニック"
+"ネームの後ろにつけ加えられる文字。"
 
 #: gajim/common/config.py:132
 msgid ""
 "If enabled, Gajim will save the contact list window position when hiding it, "
 "and restore it when showing the contact list window again."
-msgstr "有効の場合、Gajim は相手先一覧を閉じる際にその位置を保存し、開く際にはその位置に復元戻します。"
+msgstr ""
+"有効の場合、Gajim は相手先一覧を閉じる際にその位置を保存し、開く際にはその位"
+"置に復元戻します。"
 
 #: gajim/common/config.py:138
 msgid "Place the contact list on the right in single window mode"
@@ -2733,7 +2702,8 @@ msgstr "会話の中で、ニックネームの後に表示される文字列。
 
 #: gajim/common/config.py:147
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr "有効の場合、Gajim は相手先一覧ウィンドウのタイトルに * と [n] を付けます。"
+msgstr ""
+"有効の場合、Gajim は相手先一覧ウィンドウのタイトルに * と [n] を付けます。"
 
 #: gajim/common/config.py:148
 msgid ""
@@ -2751,7 +2721,9 @@ msgstr "履歴を復元する際に遡る時間 (単位は分) 。-1 は制限�
 msgid ""
 "How many seconds to wait before trying to automatically rejoin a group chat "
 "you were disconnected from. Set to 0 to disable automatic rejoining."
-msgstr "切断されてから談話室に自動で再参加を試みるまでの待機時間 (単位は秒)。0 は再参加しません。"
+msgstr ""
+"切断されてから談話室に自動で再参加を試みるまでの待機時間 (単位は秒)。0 は再参"
+"加しません。"
 
 #: gajim/common/config.py:151
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -2794,7 +2766,9 @@ msgstr "談話室のタブまたはウィンドウを閉じる前に確認を求
 msgid ""
 "Ask before closing tabbed chat window if there are chats that can lose data "
 "(chat, private chat, group chat that will not be minimized)."
-msgstr "タブのあるチャットウィンドウを閉じる前に、それがデータを失う操作であることの確認を求めます (チャット、私信、談話室は最小化されません)。"
+msgstr ""
+"タブのあるチャットウィンドウを閉じる前に、それがデータを失う操作であることの"
+"確認を求めます (チャット、私信、談話室は最小化されません)。"
 
 #: gajim/common/config.py:166
 msgid ""
@@ -2840,20 +2814,24 @@ msgid ""
 "This setting is taken into account only if the notification area icon is "
 "used."
 msgstr ""
-"有効の場合、ウィンドウマネージャーの X ボタンがクリックされた場合に Gajim "
-"を終了します。この設定は通知アイコンが使用されているときのみ適用されます。"
+"有効の場合、ウィンドウマネージャーの X ボタンがクリックされた場合に Gajim を"
+"終了します。この設定は通知アイコンが使用されているときのみ適用されます。"
 
 #: gajim/common/config.py:182
 msgid ""
 "If enabled, Gajim hides the contact list window when pressing the X button "
 "instead of minimizing into the notification area."
-msgstr "有効の場合、Gajim は X ボタンが押された際に、相手先一覧ウィンドウを最小化するのではなく、閉じます。"
+msgstr ""
+"有効の場合、Gajim は X ボタンが押された際に、相手先一覧ウィンドウを最小化する"
+"のではなく、閉じます。"
 
 #: gajim/common/config.py:183
 msgid ""
 "If enabled, Gajim will display the status message (if not empty) underneath "
 "the contact name in the contact list window."
-msgstr "有効の場合、Gajim は相手先一覧ウィンドウの相手先の名前の下に在席状況メッセージを (それが空でなければ) 表示します。"
+msgstr ""
+"有効の場合、Gajim は相手先一覧ウィンドウの相手先の名前の下に在席状況メッセー"
+"ジを (それが空でなければ) 表示します。"
 
 #: gajim/common/config.py:189
 msgid ""
@@ -2864,7 +2842,9 @@ msgstr "相手先一覧でのアバターの表示位置。'left'(左)または 
 msgid ""
 "If disabled, Gajim will no longer print status messages in chats when a "
 "contact changes their status (and/or their status message)."
-msgstr "無効の場合、相手先が在席状況や状況メッセージを変更しても、Gajim はチャットに在席状況を表示しません。"
+msgstr ""
+"無効の場合、相手先が在席状況や状況メッセージを変更しても、Gajim はチャットに"
+"在席状況を表示しません。"
 
 #: gajim/common/config.py:191
 msgid ""
@@ -2876,7 +2856,9 @@ msgstr "デフォルト設定: 談話室への入退室ごとに状況メッセ�
 msgid ""
 "Default Setting: Show a status message for all status changes (away, dnd, "
 "etc.) of users in a group chat."
-msgstr "デフォルト設定: 談話室でユーザーのすべての状況変更(離席中、取り込み中など)のメッセージを表示します。"
+msgstr ""
+"デフォルト設定: 談話室でユーザーのすべての状況変更(離席中、取り込み中など)の"
+"メッセージを表示します。"
 
 #: gajim/common/config.py:194
 msgid "Don't show contact list window in the system taskbar."
@@ -2886,7 +2868,9 @@ msgstr "システムのタスクバーに相手先一覧ウィンドウを表示
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
-msgstr "有効の場合、保留のイベントがある場合にウィンドウをフラッシュさせます (たいていのウィンドウマネージャのデフォルトです)。"
+msgstr ""
+"有効の場合、保留のイベントがある場合にウィンドウをフラッシュさせます (たいて"
+"いのウィンドウマネージャのデフォルトです)。"
 
 #: gajim/common/config.py:199
 msgid ""
@@ -2901,10 +2885,13 @@ msgid ""
 msgstr ""
 "新着メッセージを置くウィンドウの制御。\n"
 "'always'(常に) - すべてのメッセージはひとつのウィンドウに。\n"
-"'always_with_roster'(相手先一覧つき) - 'always'(常に) に似て、メッセージは相手先一覧つきのひとつのウィンドウに。\n"
+"'always_with_roster'(相手先一覧つき) - 'always'(常に) に似て、メッセージは相"
+"手先一覧つきのひとつのウィンドウに。\n"
 "'never'(なし) - すべてのメッセージはそれぞれのウィンドウに。\n"
-"'peracct'(アカウントごと) - それぞれのアカウントへのメッセージはそれぞれのウィンドウに。\n"
-"'pertype'(種類ごと) - メッセージの種類(たとえばチャット、談話室)ごとにそれぞれのウィンドウに。"
+"'peracct'(アカウントごと) - それぞれのアカウントへのメッセージはそれぞれの"
+"ウィンドウに。\n"
+"'pertype'(種類ごと) - メッセージの種類(たとえばチャット、談話室)ごとにそれぞ"
+"れのウィンドウに。"
 
 #: gajim/common/config.py:200
 msgid ""
@@ -2955,19 +2942,24 @@ msgstr "連続するニックネームを統合する際の字下げ幅。"
 msgid ""
 "Ctrl+Tab switches to the next composing tab when there are no tabs with "
 "messages pending."
-msgstr "未読メッセージを含むタブがない場合、Ctrl+Tab で次の入力タブに移動します。"
+msgstr ""
+"未読メッセージを含むタブがない場合、Ctrl+Tab で次の入力タブに移動します。"
 
 #: gajim/common/config.py:209
 msgid ""
 "Show a confirmation dialog to create metacontacts? Empty string means never "
 "show the dialog."
-msgstr "メタ相手先の作成時に確認のダイアログを表示するかどうか。空文字ならダイアログを表示しません。"
+msgstr ""
+"メタ相手先の作成時に確認のダイアログを表示するかどうか。空文字ならダイアログ"
+"を表示しません。"
 
 #: gajim/common/config.py:210
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
-msgstr "相手先の遮断の確認のダイアログを表示するかどうか。空文字ならダイアログを表示しません。"
+msgstr ""
+"相手先の遮断の確認のダイアログを表示するかどうか。空文字ならダイアログを表示"
+"しません。"
 
 #: gajim/common/config.py:211
 msgid ""
@@ -2975,20 +2967,25 @@ msgid ""
 "the Accounts window. BE CAREFUL, when you are logged in with a negative "
 "priority, you will NOT receive any message from your server."
 msgstr ""
-"有効の場合、アカウントの設定ウィンドウで、アカウントに負の優先順位を設定できます。【注意】負の優先順位のままログインすると、サーバーからどんなメッセージも"
-"受信しません。"
+"有効の場合、アカウントの設定ウィンドウで、アカウントに負の優先順位を設定でき"
+"ます。【注意】負の優先順位のままログインすると、サーバーからどんなメッセージ"
+"も受信しません。"
 
 #: gajim/common/config.py:212
 msgid ""
 "If enabled, Gajim will show both the number of online and total contacts in "
 "account rows as well as in group rows."
-msgstr "有効の場合、Gajim はアカウントとグループの行にオンラインと総計の相手先の数を表示します。"
+msgstr ""
+"有効の場合、Gajim はアカウントとグループの行にオンラインと総計の相手先の数を"
+"表示します。"
 
 #: gajim/common/config.py:213
 msgid ""
 "If enabled, Gajim will scroll and select the contact who sent you the last "
 "message, if the chat window is not already opened."
-msgstr "有効の場合、チャットウィンドウが開いていない場合に、最新のメッセージをあなたに送った相手先をスクロールして選択します。"
+msgstr ""
+"有効の場合、チャットウィンドウが開いていない場合に、最新のメッセージをあなた"
+"に送った相手先をスクロールして選択します。"
 
 #: gajim/common/config.py:214
 msgid "Time of inactivity needed before the change status window closes down."
@@ -3030,8 +3027,9 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in 'stun_server' option, or the one given by the XMPP server."
 msgstr ""
-"有効の場合、Gajim は Jingle を使う際に STUN サーバーを利用しようとします。サーバーは 'stun_server' オプションか、"
-"または XMPP サーバーによって与えられます。"
+"有効の場合、Gajim は Jingle を使う際に STUN サーバーを利用しようとします。"
+"サーバーは 'stun_server' オプションか、または XMPP サーバーによって与えられま"
+"す。"
 
 #: gajim/common/config.py:227
 msgid "STUN server to use when using Jingle"
@@ -3041,7 +3039,9 @@ msgstr "Jingle を使う際に利用する STUN サーバー"
 msgid ""
 "If enabled, Gajim will show affiliation of group chat participants by adding "
 "a colored square to the status icon."
-msgstr "有効の場合、Gajim は談話室の参加者の分掌をステータスアイコンに色付き四角をつけて表示します。"
+msgstr ""
+"有効の場合、Gajim は談話室の参加者の分掌をステータスアイコンに色付き四角をつ"
+"けて表示します。"
 
 #: gajim/common/config.py:229
 msgid ""
@@ -3059,13 +3059,17 @@ msgstr "有効の場合、Gajim は受信する注目メッセージを無視し
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
-msgstr "有効の場合、Gajim は、最後に終了した際に開いていたチャットウィンドウを再び開きます。"
+msgstr ""
+"有効の場合、Gajim は、最後に終了した際に開いていたチャットウィンドウを再び開"
+"きます。"
 
 #: gajim/common/config.py:232
 msgid ""
 "If enabled, Gajim will display an icon to show that sent messages have been "
 "received by your contact."
-msgstr "有効の場合、Gajim は、送ったメッセージが相手先に受信されたとき、アイコンを表示します。"
+msgstr ""
+"有効の場合、Gajim は、送ったメッセージが相手先に受信されたとき、アイコンを表"
+"示します。"
 
 #: gajim/common/config.py:233
 msgid ""
@@ -3088,13 +3092,13 @@ msgstr "「同期の制限」メニューの、1日あたりの制限値の選�
 msgid ""
 "Maximum history in days we request from a public group chat archive. 0: As "
 "much as possible."
-msgstr ""
+msgstr "公開談話室の保存から引き出す最大履歴(日数)。0なら最大限。"
 
 #: gajim/common/config.py:238
 msgid ""
 "Maximum history in days we request from a private group chat archive. 0: As "
 "much as possible."
-msgstr ""
+msgstr "非公開談話室の保存から引き出す最大履歴(日数)。0なら最大限。"
 
 #: gajim/common/config.py:239
 msgid ""
@@ -3106,7 +3110,8 @@ msgstr "有効の場合、Gajim は談話室への参加の際にその題を表
 msgid ""
 "If enabled, the contact row is colored according to the current chat state "
 "of the contact."
-msgstr "有効の場合、Gajim は相手先のチャット状態に応じて相手先の行に色を付けます。"
+msgstr ""
+"有効の場合、Gajim は相手先のチャット状態に応じて相手先の行に色を付けます。"
 
 #: gajim/common/config.py:241
 msgid ""
@@ -3125,14 +3130,16 @@ msgid ""
 "Chat state notifications that are sent to contacts. Possible values: all, "
 "composing_only, disabled"
 msgstr ""
-"相手先に送信されるチャット状態通知。all (すべての状態)、composing_only (入力中のみ)、disabled (通知しない) のいずれか"
+"相手先に送信されるチャット状態通知。all (すべての状態)、composing_only (入力"
+"中のみ)、disabled (通知しない) のいずれか"
 
 #: gajim/common/config.py:244
 msgid ""
 "Chat state notifications that are sent to the group chat. Possible values: "
 "'all', 'composing_only', 'disabled'"
 msgstr ""
-"談話室に送信されるチャット状態通知。all (すべての状態)、composing_only (入力中のみ)、disabled (通知しない) のいずれか"
+"談話室に送信されるチャット状態通知。all (すべての状態)、composing_only (入力"
+"中のみ)、disabled (通知しない) のいずれか"
 
 #: gajim/common/config.py:247
 msgid "API Preferences. Possible values: 'http', 'iq'"
@@ -3140,11 +3147,12 @@ msgstr "API の選択。'http' または 'iq'"
 
 #: gajim/common/config.py:248
 msgid "Selecting text will copy it to the clipboard"
-msgstr ""
+msgstr "選択したテキストはクリップボードにコピーされます"
 
 #: gajim/common/config.py:249
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr "有効の場合、Gajim はコマンドを実行します(/show, /sh, /execute, /exec)。"
+msgstr ""
+"有効の場合、Gajim はコマンドを実行します(/show, /sh, /execute, /exec)。"
 
 #: gajim/common/config.py:250
 msgid "Width of group chat roster in pixel"
@@ -3157,7 +3165,7 @@ msgstr "ブックマーク名"
 
 #: gajim/common/config.py:252
 msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
+msgstr "「チャットを開始」ダイアログにヒントを表示します"
 
 #: gajim/common/config.py:269
 msgid ""
@@ -3173,8 +3181,9 @@ msgid ""
 "'away', 'xa' or 'dnd'. NOTE: This option is used only if "
 "'restore_last_status' is disabled."
 msgstr ""
-"自動接続の際に使われる在席状況。'online'(オンライン)、'chat'(チャット可)、'away'(離席中)、'xa'(不在)、'dnd'(取り込み"
-"中) のいずれか。注意: このオプションは 'restore_last_status' が無効のときのみ使われます。"
+"自動接続の際に使われる在席状況。'online'(オンライン)、'chat'(チャット"
+"可)、'away'(離席中)、'xa'(不在)、'dnd'(取り込み中) のいずれか。注意: このオプ"
+"ションは 'restore_last_status' が無効のときのみ使われます。"
 
 # (Mako) If enabled は If True であるべきだろう
 #: gajim/common/config.py:277
@@ -3190,7 +3199,8 @@ msgstr "有効の場合、相手先の承認の要求は自動的に了承され
 msgid ""
 "If disabled, this account will be disabled and will not appear in the "
 "contact list window."
-msgstr "無効の場合、このアカウントを無効にして、相手先一覧ウィンドウに表示しません。"
+msgstr ""
+"無効の場合、このアカウントを無効にして、相手先一覧ウィンドウに表示しません。"
 
 #: gajim/common/config.py:283
 msgid "Use an unencrypted connection to the server"
@@ -3217,7 +3227,9 @@ msgid ""
 "List of XMPP Addresses (space separated) for which you do not want to store "
 "chat history. You can also add the name of an account to disable storing "
 "chat history for this account."
-msgstr "履歴を保存しない XMPP アドレスの一覧 (空白で区切る)。アカウント名も追加でき、そのアカウントについて履歴を残しません。"
+msgstr ""
+"履歴を保存しない XMPP アドレスの一覧 (空白で区切る)。アカウント名も追加でき、"
+"そのアカウントについて履歴を残しません。"
 
 #: gajim/common/config.py:293
 msgid ""
@@ -3230,20 +3242,21 @@ msgid ""
 "If enabled, Gajim will use your IP and proxies defined in "
 "'file_transfer_proxies' option for file transfers."
 msgstr ""
-"有効の場合、Gajim はあなたの IP とプロキシを使います。プロキシはファイル転送のために file_transfer_proxies "
-"オプションで定義します。"
+"有効の場合、Gajim はあなたの IP とプロキシを使います。プロキシはファイル転送"
+"のために file_transfer_proxies オプションで定義します。"
 
 #: gajim/common/config.py:298
 msgid ""
 "If enabled, Gajim will test file transfer proxies on startup to be sure they "
 "work. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
-"有効の場合、Gajim は起動時にファイル転送プロキシが正常に機能するかテストを行います。Openfire のプロキシは (正常に機能する場合でも) "
-"このテストに失敗することがわかっています。"
+"有効の場合、Gajim は起動時にファイル転送プロキシが正常に機能するかテストを行"
+"います。Openfire のプロキシは (正常に機能する場合でも) このテストに失敗するこ"
+"とがわかっています。"
 
 #: gajim/common/config.py:310
 msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr "有効の場合、Gajim は、送ったメッセージが相手先に受信されたとき、アイコンを表示します。"
+msgstr "有効の場合、Gajim はメッセージ受信確認に応答します。"
 
 #: gajim/common/config.py:319
 msgid ""
@@ -3262,7 +3275,9 @@ msgstr "追加しようとする相手先に送られるメッセージ。"
 msgid ""
 "If enabled, Gajim will send your local IP so your contact can connect to "
 "your machine for file transfers."
-msgstr "有効の場合、Gajim は相手先がファイル転送を行うためにあなたのローカル IP アドレスを送信します。"
+msgstr ""
+"有効の場合、Gajim は相手先がファイル転送を行うためにあなたのローカル IP アド"
+"レスを送信します。"
 
 #: gajim/common/config.py:325
 msgid ""
@@ -3288,7 +3303,8 @@ msgid ""
 "Chat state notifications that are sent to contacts. Possible values: 'all', "
 "'composing_only', 'disabled'"
 msgstr ""
-"相手先に送信されるチャット状態通知。all (すべての状態)、composing_only (入力中のみ)、disabled (通知しない) のいずれか"
+"相手先に送信されるチャット状態通知。all (すべての状態)、composing_only (入力"
+"中のみ)、disabled (通知しない) のいずれか"
 
 #: gajim/common/config.py:359
 msgid "The currently active encryption for that contact."
@@ -3303,7 +3319,9 @@ msgstr "有効の場合、この談話室でのすべてのメッセージにつ
 msgid ""
 "Show a status message for all status changes (away, dnd, etc.) of users in a "
 "group chat."
-msgstr "談話室のユーザーのすべての状況変更(離席中、取り込み中など)の状況メッセージを表示します。"
+msgstr ""
+"談話室のユーザーのすべての状況変更(離席中、取り込み中など)の状況メッセージを"
+"表示します。"
 
 #: gajim/common/config.py:365
 msgid "Show a status message for every join or leave in a group chat."
@@ -3335,8 +3353,9 @@ msgid ""
 "Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
 "plugin window instead."
 msgstr ""
-"有効の場合、プラグインは起動時に有効化されます (これは Gajim "
-"の終了時に保存されます)。このオプションをプラグインの有効化/無効化のために使用しないでください。代わりにプラグインウィンドウを使用してください。"
+"有効の場合、プラグインは起動時に有効化されます (これは Gajim の終了時に保存さ"
+"れます)。このオプションをプラグインの有効化/無効化のために使用しないでくださ"
+"い。代わりにプラグインウィンドウを使用してください。"
 
 #: gajim/common/config.py:376 gajim/common/const.py:380
 msgid "Sleeping"
@@ -4396,60 +4415,60 @@ msgstr "証明書署名に鍵の使い方が含まれていません"
 msgid "Application verification failure"
 msgstr "アプリケーションの検証に失敗しました"
 
-#: gajim/common/const.py:884
+#: gajim/common/const.py:886
 msgid "The signing certificate authority is not known"
 msgstr "署名している証明機関が不明です"
 
-#: gajim/common/const.py:885
+#: gajim/common/const.py:887
 msgid "The certificate has been revoked"
 msgstr "証明書は失効しています"
 
-#: gajim/common/const.py:886
+#: gajim/common/const.py:888
 msgid "The certificate does not match the expected identity of the site"
 msgstr "証明書はサイトと一致しません"
 
-#: gajim/common/const.py:887
+#: gajim/common/const.py:889
 msgid "The certificate’s algorithm is insecure"
 msgstr "証明書のアルゴリズムは安全ではありません"
 
-#: gajim/common/const.py:888
+#: gajim/common/const.py:890
 msgid "The certificate’s activation time is in the future"
 msgstr "証明書の有効期間はまだ先です"
 
-#: gajim/common/const.py:889
+#: gajim/common/const.py:891
 msgid "Unknown validation error"
 msgstr "未知の検証エラー"
 
-#: gajim/common/const.py:890
+#: gajim/common/const.py:892
 msgid "The certificate has expired"
 msgstr "証明書は期限切れです"
 
-#: gajim/common/const.py:934
+#: gajim/common/const.py:936
 msgid "Authentication aborted"
 msgstr "認証は中断しました"
 
-#: gajim/common/const.py:935
+#: gajim/common/const.py:937
 msgid "Account disabled"
 msgstr "アカウントは無効です"
 
-#: gajim/common/const.py:936
+#: gajim/common/const.py:938
 msgid "Credentials expired"
 msgstr "認証情報は期限切れです"
 
-#: gajim/common/const.py:937
+#: gajim/common/const.py:939
 msgid "Encryption required"
 msgstr "暗号化が必要です"
 
-#: gajim/common/const.py:941
+#: gajim/common/const.py:943
 msgid "Authentication mechanism not supported"
 msgstr "この認証メカニズムに対応していません"
 
 # (Mako) %s はアカウントか
-#: gajim/common/const.py:942
+#: gajim/common/const.py:944
 msgid "Authentication mechanism too weak"
 msgstr "認証メカニズムが弱すぎます"
 
-#: gajim/common/const.py:944
+#: gajim/common/const.py:946
 msgid "Authentication currently not possible"
 msgstr "今のところ認証できません"
 
@@ -4582,7 +4601,7 @@ msgstr "在席"
 msgid "Connecting"
 msgstr "接続中です"
 
-#: gajim/common/helpers.py:203 gajim/data/gui/preferences_window.ui:1304
+#: gajim/common/helpers.py:203 gajim/data/gui/preferences_window.ui:1297
 msgid "A_way"
 msgstr "離席中 (_W)"
 
@@ -4627,7 +4646,7 @@ msgstr "こちらが承認"
 msgid "Both"
 msgstr "相互に承認"
 
-#: gajim/common/helpers.py:229 gajim/gtk/server_info.py:224
+#: gajim/common/helpers.py:229 gajim/gtk/server_info.py:225
 msgid "Unknown"
 msgstr "不明"
 
@@ -4749,28 +4768,28 @@ msgid_plural "%d events pending"
 msgstr[0] "保留イベント %d 件"
 msgstr[1] "保留イベント %d 件"
 
-#: gajim/common/helpers.py:849 gajim/data/gui/add_new_contact_window.ui:25
+#: gajim/common/helpers.py:842 gajim/data/gui/add_new_contact_window.ui:25
 msgid "I would like to add you to my contact list."
 msgstr "あなたを私の相手先リストに追加したいと思います。"
 
-#: gajim/common/helpers.py:851
+#: gajim/common/helpers.py:844
 msgid "Hello, I am $name."
 msgstr "こんにちは。私は $name です。"
 
-#: gajim/common/helpers.py:929 gajim/common/helpers.py:938
-#: gajim/common/helpers.py:998
+#: gajim/common/helpers.py:922 gajim/common/helpers.py:931
+#: gajim/common/helpers.py:991
 msgid "Timeout loading image"
 msgstr "画像の読み込みに失敗しました"
 
-#: gajim/common/helpers.py:948 gajim/common/helpers.py:996
+#: gajim/common/helpers.py:941 gajim/common/helpers.py:989
 msgid "Image is too big"
 msgstr "画像が大きすぎます"
 
-#: gajim/common/helpers.py:959
+#: gajim/common/helpers.py:952
 msgid "PyCURL is not installed"
 msgstr "pyCURL がインストールされていません"
 
-#: gajim/common/helpers.py:1000
+#: gajim/common/helpers.py:993
 msgid "Error loading image"
 msgstr "画像読み込みエラー"
 
@@ -5026,15 +5045,15 @@ msgid "Time remaining"
 msgstr "残り時間"
 
 #: gajim/data/gui/filetransfer_progress.ui:172
-#: gajim/data/gui/filetransfers.ui:30 gajim/data/gui/groupchat_control.ui:600
-#: gajim/data/gui/groupchat_control.ui:692
-#: gajim/data/gui/groupchat_control.ui:804
-#: gajim/data/gui/groupchat_control.ui:896
-#: gajim/data/gui/groupchat_control.ui:1297
-#: gajim/data/gui/groupchat_control.ui:1423
-#: gajim/data/gui/groupchat_control.ui:1549
-#: gajim/data/gui/groupchat_control.ui:1720
-#: gajim/data/gui/groupchat_control.ui:1798
+#: gajim/data/gui/filetransfers.ui:30 gajim/data/gui/groupchat_control.ui:649
+#: gajim/data/gui/groupchat_control.ui:741
+#: gajim/data/gui/groupchat_control.ui:853
+#: gajim/data/gui/groupchat_control.ui:945
+#: gajim/data/gui/groupchat_control.ui:1346
+#: gajim/data/gui/groupchat_control.ui:1472
+#: gajim/data/gui/groupchat_control.ui:1598
+#: gajim/data/gui/groupchat_control.ui:1769
+#: gajim/data/gui/groupchat_control.ui:1847
 #: gajim/data/gui/passphrase_dialog.ui:29 gajim/gtk/dialogs.py:53
 #: gajim/gtk/filechoosers.py:179
 msgid "_Cancel"
@@ -5042,7 +5061,7 @@ msgstr "中止 (_C)"
 
 #: gajim/data/gui/zeroconf_information_window.ui:8
 #: gajim/data/gui/vcard_information_window.ui:8
-#: gajim/data/gui/subscription_request_window.ui:91
+#: gajim/data/gui/subscription_request_window.ui:164
 msgid "Contact Information"
 msgstr "相手先の情報"
 
@@ -5175,7 +5194,7 @@ msgid "Copy Certificate Information"
 msgstr "証明書の情報をコピー"
 
 #: gajim/data/gui/filetransfers_send_file_dialog.ui:15
-#: gajim/data/gui/advanced_configuration.ui:143
+#: gajim/data/gui/advanced_configuration.ui:142
 #: gajim/data/gui/groupchat_info_scrolled.ui:33 gajim/gtk/discovery.py:1664
 msgid "Description"
 msgstr "説明"
@@ -5363,6 +5382,8 @@ msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
 msgstr ""
+"チャットを開始、談話室に参加または新しい談話室を広域に検索します。XMPP アドレ"
+"スを入力することもできます。"
 
 #: gajim/data/gui/start_chat_dialog.ui:125
 msgid "Global Group Chat Search"
@@ -5375,8 +5396,8 @@ msgid "_Back"
 msgstr "戻る (_B)"
 
 #: gajim/data/gui/start_chat_dialog.ui:324
-#: gajim/data/gui/groupchat_control.ui:821
-#: gajim/data/gui/groupchat_control.ui:913 gajim/gtk/discovery.py:1702
+#: gajim/data/gui/groupchat_control.ui:870
+#: gajim/data/gui/groupchat_control.ui:962 gajim/gtk/discovery.py:1702
 #: gajim/gtk/groupchat_join.py:65
 msgid "_Join"
 msgstr "参加 (_J)"
@@ -5410,27 +5431,27 @@ msgstr "フォルダを開く (_O)"
 msgid "File Transfers"
 msgstr "ファイル転送"
 
-#: gajim/data/gui/filetransfers.ui:94
+#: gajim/data/gui/filetransfers.ui:91
 msgid "_Show notification when file transfer is complete"
 msgstr "ファイル転送が完了したら通知する (_S)"
 
-#: gajim/data/gui/filetransfers.ui:134
+#: gajim/data/gui/filetransfers.ui:131
 msgid "file transfers list"
 msgstr "ファイル転送の一覧"
 
-#: gajim/data/gui/filetransfers.ui:135
+#: gajim/data/gui/filetransfers.ui:132
 msgid "A list of active, completed and stopped file transfers"
 msgstr "ファイル転送の転送中、完了、中止の一覧"
 
-#: gajim/data/gui/filetransfers.ui:157
+#: gajim/data/gui/filetransfers.ui:154
 msgid "Remove completed, cancelled and failed file transfers from the list"
 msgstr "一覧から、完了・中止・失敗したファイル転送を削除します"
 
-#: gajim/data/gui/filetransfers.ui:170
+#: gajim/data/gui/filetransfers.ui:167
 msgid "Pause or resume file transfer"
 msgstr "ファイルの転送を一時中断または再開します"
 
-#: gajim/data/gui/filetransfers.ui:183
+#: gajim/data/gui/filetransfers.ui:180
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "選択されたファイルの転送を中止し、不完全なファイルは削除します"
 
@@ -5438,192 +5459,196 @@ msgstr "選択されたファイルの転送を中止し、不完全なファイ
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "ファイル転送の一覧を表示します"
 
-#: gajim/data/gui/groupchat_control.ui:13 gajim/data/gui/chat_control.ui:277
+#: gajim/data/gui/groupchat_control.ui:36 gajim/data/gui/chat_control.ui:48
+#, fuzzy
+msgid "Drop files or contacts"
+msgstr "相手先にファイルを転送します"
+
+#: gajim/data/gui/groupchat_control.ui:58 gajim/data/gui/chat_control.ui:322
 msgid "Bold"
 msgstr "太字"
 
-#: gajim/data/gui/groupchat_control.ui:22 gajim/data/gui/chat_control.ui:286
+#: gajim/data/gui/groupchat_control.ui:67 gajim/data/gui/chat_control.ui:331
 msgid "Italic"
 msgstr "イタリック"
 
-#: gajim/data/gui/groupchat_control.ui:31 gajim/data/gui/chat_control.ui:295
+#: gajim/data/gui/groupchat_control.ui:76 gajim/data/gui/chat_control.ui:340
 msgid "Underline"
 msgstr "下線"
 
-#: gajim/data/gui/groupchat_control.ui:40 gajim/data/gui/chat_control.ui:304
+#: gajim/data/gui/groupchat_control.ui:85 gajim/data/gui/chat_control.ui:349
 msgid "Strike"
 msgstr "抹消線"
 
-#: gajim/data/gui/groupchat_control.ui:54 gajim/data/gui/chat_control.ui:318
+#: gajim/data/gui/groupchat_control.ui:99 gajim/data/gui/chat_control.ui:363
 #: gajim/gtk/accounts.py:610
 msgid "Color"
 msgstr "色"
 
-#: gajim/data/gui/groupchat_control.ui:62 gajim/data/gui/chat_control.ui:326
+#: gajim/data/gui/groupchat_control.ui:107 gajim/data/gui/chat_control.ui:371
 msgid "Font"
 msgstr "フォント"
 
-#: gajim/data/gui/groupchat_control.ui:76 gajim/data/gui/chat_control.ui:340
+#: gajim/data/gui/groupchat_control.ui:121 gajim/data/gui/chat_control.ui:385
 msgid "Clear formatting"
 msgstr "書式の解除"
 
-#: gajim/data/gui/groupchat_control.ui:336 gajim/data/gui/chat_control.ui:889
+#: gajim/data/gui/groupchat_control.ui:385 gajim/data/gui/chat_control.ui:938
 msgid "Choose encryption"
 msgstr "暗号化方式を選択"
 
-#: gajim/data/gui/groupchat_control.ui:382 gajim/data/gui/chat_control.ui:648
+#: gajim/data/gui/groupchat_control.ui:431 gajim/data/gui/chat_control.ui:697
 msgid "Show a list of emojis (Alt+M)"
 msgstr "絵文字の一覧を表示する (Alt+M)"
 
-#: gajim/data/gui/groupchat_control.ui:509
+#: gajim/data/gui/groupchat_control.ui:558
 msgid "Joining…"
 msgstr "参加中…"
 
-#: gajim/data/gui/groupchat_control.ui:567
+#: gajim/data/gui/groupchat_control.ui:616
 msgid "Enter new nickname"
 msgstr "新しいニックネームを入力してください"
 
-#: gajim/data/gui/groupchat_control.ui:617
-#: gajim/data/gui/groupchat_control.ui:709
+#: gajim/data/gui/groupchat_control.ui:666
+#: gajim/data/gui/groupchat_control.ui:758
 msgid "Ch_ange"
 msgstr "変更 (_A)"
 
-#: gajim/data/gui/groupchat_control.ui:674
+#: gajim/data/gui/groupchat_control.ui:723
 msgid "Change Subject"
 msgstr "談話室の題を変更"
 
-#: gajim/data/gui/groupchat_control.ui:786
+#: gajim/data/gui/groupchat_control.ui:835
 msgid "Enter password"
 msgstr "新しいパスワードを入力してください:"
 
-#: gajim/data/gui/groupchat_control.ui:1003
+#: gajim/data/gui/groupchat_control.ui:1052
 msgid "_Leave Group Chat"
 msgstr "談話室から退出 (_L)"
 
-#: gajim/data/gui/groupchat_control.ui:1007
-#, fuzzy
+#: gajim/data/gui/groupchat_control.ui:1056
 msgid "Gajim will not try to join this group chat again"
-msgstr "チェックをつけると、起動時にこの談話室に参加します"
+msgstr "Gajim はもうこの談話室に参加しようとしません"
 
-#: gajim/data/gui/groupchat_control.ui:1063
+#: gajim/data/gui/groupchat_control.ui:1112
 msgid "An error occurred"
 msgstr "エラーが発生しました"
 
-#: gajim/data/gui/groupchat_control.ui:1128
+#: gajim/data/gui/groupchat_control.ui:1177
 msgid "_Try again"
 msgstr "再試行 (_T)"
 
-#: gajim/data/gui/groupchat_control.ui:1276
+#: gajim/data/gui/groupchat_control.ui:1325
 msgid "Kick participant"
 msgstr "参加者を蹴り出す"
 
-#: gajim/data/gui/groupchat_control.ui:1314
+#: gajim/data/gui/groupchat_control.ui:1363
 msgid "_Kick"
 msgstr "蹴り出し (_K)"
 
-#: gajim/data/gui/groupchat_control.ui:1347
-#: gajim/data/gui/groupchat_control.ui:1473
-#: gajim/data/gui/groupchat_control.ui:1599
-#: gajim/data/gui/groupchat_control.ui:1616
-#: gajim/data/gui/groupchat_control.ui:1705
-#: gajim/data/gui/groupchat_control.ui:1706
+#: gajim/data/gui/groupchat_control.ui:1396
+#: gajim/data/gui/groupchat_control.ui:1522
+#: gajim/data/gui/groupchat_control.ui:1648
+#: gajim/data/gui/groupchat_control.ui:1665
+#: gajim/data/gui/groupchat_control.ui:1754
+#: gajim/data/gui/groupchat_control.ui:1755
 msgid "Insert Emoji"
 msgstr "絵文字を挿入"
 
-#: gajim/data/gui/groupchat_control.ui:1360
-#: gajim/data/gui/groupchat_control.ui:1486
+#: gajim/data/gui/groupchat_control.ui:1409
+#: gajim/data/gui/groupchat_control.ui:1535
 msgid "Reason (optional)"
 msgstr "理由 (省略可)"
 
-#: gajim/data/gui/groupchat_control.ui:1402
+#: gajim/data/gui/groupchat_control.ui:1451
 msgid "Ban participant"
 msgstr "参加者を締め出す"
 
-#: gajim/data/gui/groupchat_control.ui:1440
+#: gajim/data/gui/groupchat_control.ui:1489
 msgid "_Ban"
 msgstr "締め出し (_B)"
 
-#: gajim/data/gui/groupchat_control.ui:1528
+#: gajim/data/gui/groupchat_control.ui:1577
 msgid "Destroy group chat"
 msgstr "談話室を閉鎖"
 
-#: gajim/data/gui/groupchat_control.ui:1566
+#: gajim/data/gui/groupchat_control.ui:1615
 msgid "_Destroy"
 msgstr "閉鎖 (_D)"
 
-#: gajim/data/gui/groupchat_control.ui:1600
+#: gajim/data/gui/groupchat_control.ui:1649
 msgid "Alternate venue (optional)..."
 msgstr "また、代替の場所(省略可)…"
 
-#: gajim/data/gui/groupchat_control.ui:1617
+#: gajim/data/gui/groupchat_control.ui:1666
 msgid "Reason (optional)..."
 msgstr "理由 (省略可)…"
 
-#: gajim/data/gui/groupchat_control.ui:1630
+#: gajim/data/gui/groupchat_control.ui:1679
 msgid "Reason for destruction"
 msgstr "閉鎖の理由"
 
-#: gajim/data/gui/groupchat_control.ui:1645
+#: gajim/data/gui/groupchat_control.ui:1694
 msgid "Where participants should go"
 msgstr ""
 
-#: gajim/data/gui/groupchat_control.ui:1686
+#: gajim/data/gui/groupchat_control.ui:1735
 msgid "Enter a new name for this group chat"
 msgstr "談話室の新しい名前を入力してください"
 
-#: gajim/data/gui/groupchat_control.ui:1813
+#: gajim/data/gui/groupchat_control.ui:1862
 msgid "_Invite"
 msgstr "招待 (_I)"
 
-#: gajim/data/gui/chat_control.ui:35
+#: gajim/data/gui/chat_control.ui:80
 msgid "<b>1</b>"
 msgstr "<b>1</b>"
 
-#: gajim/data/gui/chat_control.ui:56
+#: gajim/data/gui/chat_control.ui:101
 msgid "<b>2</b> abc"
 msgstr "<b>2</b> abc"
 
-#: gajim/data/gui/chat_control.ui:76
+#: gajim/data/gui/chat_control.ui:121
 msgid "<b>3</b> def"
 msgstr "<b>3</b> def"
 
-#: gajim/data/gui/chat_control.ui:96
+#: gajim/data/gui/chat_control.ui:141
 msgid "<b>4</b> ghi"
 msgstr "<b>4</b> ghi"
 
-#: gajim/data/gui/chat_control.ui:116
+#: gajim/data/gui/chat_control.ui:161
 msgid "<b>5</b> jkl"
 msgstr "<b>5</b> jkl"
 
-#: gajim/data/gui/chat_control.ui:136
+#: gajim/data/gui/chat_control.ui:181
 msgid "<b>6</b> mno"
 msgstr "<b>6</b> mno"
 
-#: gajim/data/gui/chat_control.ui:156
+#: gajim/data/gui/chat_control.ui:201
 msgid "<b>7</b> pqrs"
 msgstr "<b>7</b> pqrs"
 
-#: gajim/data/gui/chat_control.ui:176
+#: gajim/data/gui/chat_control.ui:221
 msgid "<b>8</b> tuv"
 msgstr "<b>8</b> tuv"
 
-#: gajim/data/gui/chat_control.ui:196
+#: gajim/data/gui/chat_control.ui:241
 msgid "<b>9</b> wxyz"
 msgstr "<b>9</b> wxyz"
 
-#: gajim/data/gui/chat_control.ui:216
+#: gajim/data/gui/chat_control.ui:261
 msgid "<b>*</b>"
 msgstr "<b>*</b>"
 
-#: gajim/data/gui/chat_control.ui:236
+#: gajim/data/gui/chat_control.ui:281
 msgid "<b>0</b>"
 msgstr "<b>0</b>"
 
-#: gajim/data/gui/chat_control.ui:256
+#: gajim/data/gui/chat_control.ui:301
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
 
-#: gajim/data/gui/chat_control.ui:442
+#: gajim/data/gui/chat_control.ui:491
 msgid "The last message was written on a mobile client"
 msgstr "最新のメッセージはモバイルクライアントで書かれました"
 
@@ -5667,9 +5692,9 @@ msgid "Resource"
 msgstr "リソース"
 
 #: gajim/data/gui/vcard_information_window.ui:89
-#: gajim/data/gui/preferences_window.ui:1411
-#: gajim/data/gui/preferences_window.ui:1567
-#: gajim/data/gui/preferences_window.ui:1781
+#: gajim/data/gui/preferences_window.ui:1404
+#: gajim/data/gui/preferences_window.ui:1560
+#: gajim/data/gui/preferences_window.ui:1774 gajim/gtk/server_info.py:129
 msgid "Status"
 msgstr "在席状況"
 
@@ -5678,7 +5703,7 @@ msgid "Client"
 msgstr "クライアント"
 
 #: gajim/data/gui/vcard_information_window.ui:123
-#: gajim/data/gui/preferences_window.ui:1884
+#: gajim/data/gui/preferences_window.ui:1877
 msgid "System"
 msgstr "システム"
 
@@ -5768,9 +5793,8 @@ msgid "All status messages"
 msgstr "すべての状況メッセージ"
 
 #: gajim/data/gui/preferences_window.ui:98
-#, fuzzy
 msgid "Only enter/leave messages"
-msgstr "未読のメッセージがあります"
+msgstr "入退室のメッセージのみ"
 
 # 起動時に名簿を表示するか
 #: gajim/data/gui/preferences_window.ui:126
@@ -5818,7 +5842,9 @@ msgstr "相手先一覧を閉じると Gajim を終了する (_Q)"
 msgid ""
 "If enabled, Gajim will quit when closing the contact list window instead of "
 "minimizing to the system's notification area"
-msgstr "有効の場合、相手先一覧ウィンドウが閉じられた際、システム通知エリアに最小化せずに、Gajim を終了します。"
+msgstr ""
+"有効の場合、相手先一覧ウィンドウが閉じられた際、システム通知エリアに最小化せ"
+"ずに、Gajim を終了します。"
 
 #: gajim/data/gui/preferences_window.ui:371
 msgid "Behavior of Windows and Tabs"
@@ -5840,7 +5866,9 @@ msgstr "相手先一覧に相手先のアバターを表示する (_V)"
 msgid ""
 "If checked, avatars of contacts will be shown in the contact list window and "
 "in group chats"
-msgstr "チェックをつけると、Gajim は相手先一覧ウィンドウと談話室に相手先のアバターを表示します"
+msgstr ""
+"チェックをつけると、Gajim は相手先一覧ウィンドウと談話室に相手先のアバターを"
+"表示します"
 
 #: gajim/data/gui/preferences_window.ui:439
 msgid "Show status _messages of contacts in contact list"
@@ -5850,7 +5878,9 @@ msgstr "相手先一覧に相手先の状況メッセージを表示する (_M)"
 msgid ""
 "If checked, status messages of contacts will be shown under the contact's "
 "name, in the contact list window, and in group chats"
-msgstr "チェックをつけると、Gajim は相手先一覧ウィンドウと談話室の相手先名の下に状況メッセージを表示します"
+msgstr ""
+"チェックをつけると、Gajim は相手先一覧ウィンドウと談話室の相手先名の下に状況"
+"メッセージを表示します"
 
 #: gajim/data/gui/preferences_window.ui:457
 msgid ""
@@ -5863,7 +5893,8 @@ msgid ""
 "contact list. Additional infos (published via PEP) may include e.g. mood, "
 "activity, tune, location, ..."
 msgstr ""
-"チェックをつけると、相手先が公表する詳細情報を相手先一覧に表示します。(PEPによって公表される)詳細情報とはたとえば気分、動向、楽曲、位置……です。"
+"チェックをつけると、相手先が公表する詳細情報を相手先一覧に表示します。(PEPに"
+"よって公表される)詳細情報とはたとえば気分、動向、楽曲、位置……です。"
 
 #: gajim/data/gui/preferences_window.ui:482
 msgid "Sort contacts by status"
@@ -5887,9 +5918,9 @@ msgstr "自動コピーを有効化する"
 
 #: gajim/data/gui/preferences_window.ui:588
 msgid ""
-"If enabled, selecting Text will be copied to the clipboard, otherwise you "
-"can copy text with CTRL + SHIFT + C"
-msgstr "有効の場合、選択したテキストはクリップボードにコピーされます。そうでない場合、CTRL + SHIFT + C でコピーできます。"
+"If enabled, selected text will automatically be copied to the clipboard, "
+"otherwise you can copy text with CTRL + SHIFT + C"
+msgstr "有効の場合、選択したテキストは自動的にクリップボードにコピーされます。そうでない場合、CTRL + SHIFT + C でコピーできます。"
 
 #: gajim/data/gui/preferences_window.ui:639
 msgid "Enable spell _checking"
@@ -5902,8 +5933,10 @@ msgid ""
 "field, the default language will be used for this contact or group chat. "
 "Needs gspell to be installed."
 msgstr ""
-"チェックをつけると、Gajim はチャットウィンドウの入力欄でスペルの間違いを強調して表示します。入力欄での右クリックで言語を明示的に指定できますが、それ"
-"がない場合は、この相手先や談話室にはデフォルトの言語が適用されます。gspell のインストールが必要です。"
+"チェックをつけると、Gajim はチャットウィンドウの入力欄でスペルの間違いを強調"
+"して表示します。入力欄での右クリックで言語を明示的に指定できますが、それがな"
+"い場合は、この相手先や談話室にはデフォルトの言語が適用されます。gspell のイン"
+"ストールが必要です。"
 
 #: gajim/data/gui/preferences_window.ui:656
 msgid "Show message recei_pts (✔)"
@@ -5915,8 +5948,9 @@ msgid ""
 "received. Note that this is not supported by all clients and therefore could "
 "be misleading."
 msgstr ""
-"チェックをつけると、個々のメッセージの後に、それが受け取られた際に小さなチェックマークを付けます。ただし、すべてのクライアントがこれに対応しているわけでは"
-"なく、そのため誤解を生じることがあることに注意してください。"
+"チェックをつけると、個々のメッセージの後に、それが受け取られた際に小さな"
+"チェックマークを付けます。ただし、すべてのクライアントがこれに対応しているわ"
+"けではなく、そのため誤解を生じることがあることに注意してください。"
 
 #: gajim/data/gui/preferences_window.ui:674
 msgid "_Show XHTML formatting"
@@ -5930,7 +5964,9 @@ msgstr "1対1チャットで相手先の状況メッセージを表示する (_S
 msgid ""
 "If checked, status lines will be shown in 1 on 1 chats when a contact "
 "changes their status or status message"
-msgstr "チェックをつけると、相手先が在席状況や状況メッセージを変更した際、1対1チャットに在席状況を表示します"
+msgstr ""
+"チェックをつけると、相手先が在席状況や状況メッセージを変更した際、1対1チャッ"
+"トに在席状況を表示します"
 
 #: gajim/data/gui/preferences_window.ui:709
 msgid "Show subject after _joining a group chat"
@@ -5952,17 +5988,21 @@ msgstr "入室/退室を表示 (デフォルト)"
 msgid ""
 "If join/leave status messages are shown in the group chat. This setting can "
 "be overridden in the group chat menu."
-msgstr "談話室で入室／退室メッセージを表示するか。この設定は談話室メニューで上書きされることがあります。"
+msgstr ""
+"談話室で入室／退室メッセージを表示するか。この設定は談話室メニューで上書きさ"
+"れることがあります。"
 
 #: gajim/data/gui/preferences_window.ui:773
 msgid ""
 "The default sync threshold for new public group chats. This setting can be "
 "overridden in the group chat menu."
 msgstr ""
+"新しい談話室での同期の制限のデフォルト値。この設定は談話室メニューで上書きさ"
+"れることがあります。"
 
 #: gajim/data/gui/preferences_window.ui:775
 msgid "Default Sync Threshold"
-msgstr ""
+msgstr "デフォルトの同期の制限値"
 
 #: gajim/data/gui/preferences_window.ui:817
 msgid "Show status changes (Default)"
@@ -5972,256 +6012,275 @@ msgstr "状況変更を表示 (デフォルト)"
 msgid ""
 "If status change messages are shown in the group chat. This setting can be "
 "overridden in the group chat menu."
-msgstr "談話室で状況変更メッセージを表示するか。この設定は談話室メニューで上書きされることがあります。"
+msgstr ""
+"談話室で状況変更メッセージを表示するか。この設定は談話室メニューで上書きされ"
+"ることがあります。"
 
-#: gajim/data/gui/preferences_window.ui:878
+#: gajim/data/gui/preferences_window.ui:873
 msgid "Show chatstate in tabs"
 msgstr "チャット状態をタブに表示する"
 
-#: gajim/data/gui/preferences_window.ui:882
+#: gajim/data/gui/preferences_window.ui:877
 msgid ""
 "If checked, the tab will be colored according to the current chatstate of "
 "the contact"
-msgstr "チェックをつけると、相手先の現在のチャット状態に応じてタブに色を付けます"
+msgstr ""
+"チェックをつけると、相手先の現在のチャット状態に応じてタブに色を付けます"
 
-#: gajim/data/gui/preferences_window.ui:896
+#: gajim/data/gui/preferences_window.ui:891
 msgid "Show chatstate in contact list"
 msgstr "チャット状態を相手先一覧に表示する"
 
-#: gajim/data/gui/preferences_window.ui:900
+#: gajim/data/gui/preferences_window.ui:895
 msgid ""
 "If checked, the contact row will be colored according to the current "
 "chatstate of the contact"
-msgstr "チェックをつけると、相手先の現在のチャット状態に応じて、相手先の行に色を付けます"
+msgstr ""
+"チェックをつけると、相手先の現在のチャット状態に応じて、相手先の行に色を付け"
+"ます"
 
-#: gajim/data/gui/preferences_window.ui:914
+#: gajim/data/gui/preferences_window.ui:909
 msgid "Show chatstate in banner"
 msgstr "チャット状態をバナーに表示する"
 
-#: gajim/data/gui/preferences_window.ui:918
+#: gajim/data/gui/preferences_window.ui:913
 msgid ""
 "If checked, a description of the contacts current chatstate is shown in the "
 "banner"
-msgstr "チェックをつけると、相手先の現在のチャット状態の説明をバナーに表示します"
+msgstr ""
+"チェックをつけると、相手先の現在のチャット状態の説明をバナーに表示します"
 
 # 起動時に名簿を表示するか
-#: gajim/data/gui/preferences_window.ui:938
+#: gajim/data/gui/preferences_window.ui:931
 msgid "Chatstate"
 msgstr "チャット状態"
 
-#: gajim/data/gui/preferences_window.ui:955
+#: gajim/data/gui/preferences_window.ui:948
 #: gajim/data/gui/history_window.ui:303
 msgid "Chat"
 msgstr "チャット"
 
-#: gajim/data/gui/preferences_window.ui:1009
+#: gajim/data/gui/preferences_window.ui:1002
 msgid "Show _notification area icon"
 msgstr "通知エリアのアイコンを表示する (_N)"
 
-#: gajim/data/gui/preferences_window.ui:1028
+#: gajim/data/gui/preferences_window.ui:1021
 msgid "_When new event is received"
 msgstr "新しいイベントを受信したとき (_W)"
 
-#: gajim/data/gui/preferences_window.ui:1069
+#: gajim/data/gui/preferences_window.ui:1062
 msgid "Show popups/notifications when a chat window is already _open"
 msgstr "チャットウィンドウが開いているときでも、ポップアップや通知を表示する"
 
-#: gajim/data/gui/preferences_window.ui:1086
+#: gajim/data/gui/preferences_window.ui:1079
 msgid "Allow popups/notifications when I'm _away, not available or busy"
 msgstr "離席中/不在/取り込み中のとき、ポップアップや通知を許可する (_A)"
 
-#: gajim/data/gui/preferences_window.ui:1103
+#: gajim/data/gui/preferences_window.ui:1096
 msgid "Notify me about contacts that sign _in"
 msgstr "相手先のサインインを通知する (_I)"
 
-#: gajim/data/gui/preferences_window.ui:1108
+#: gajim/data/gui/preferences_window.ui:1101
 msgid ""
 "A popup window about contacts that just signed in will be shown in the "
 "bottom right of the screen "
-msgstr "相手先のサインインについて画面の右下にポップアップウィンドウを表示します "
+msgstr ""
+"相手先のサインインについて画面の右下にポップアップウィンドウを表示します "
 
-#: gajim/data/gui/preferences_window.ui:1122
+#: gajim/data/gui/preferences_window.ui:1115
 msgid "Notify me about contacts that sign _out"
 msgstr "相手先のサインアウトを通知する (_O)"
 
-#: gajim/data/gui/preferences_window.ui:1126
+#: gajim/data/gui/preferences_window.ui:1119
 msgid ""
 "A popup window about contacts that just signed out will be shown in the "
 "bottom right of the screen "
-msgstr "相手先のサインアウトについて画面の右下にポップアップウィンドウを表示します "
+msgstr ""
+"相手先のサインアウトについて画面の右下にポップアップウィンドウを表示します "
 
-#: gajim/data/gui/preferences_window.ui:1144
+#: gajim/data/gui/preferences_window.ui:1137
 msgid "Visual Notifications"
 msgstr "目への通知"
 
-#: gajim/data/gui/preferences_window.ui:1180
+#: gajim/data/gui/preferences_window.ui:1173
 msgid "Play _sounds"
 msgstr "サウンドを鳴らす (_S)"
 
-#: gajim/data/gui/preferences_window.ui:1197
-#: gajim/data/gui/preferences_window.ui:1847
+#: gajim/data/gui/preferences_window.ui:1190
+#: gajim/data/gui/preferences_window.ui:1840
 msgid "Ma_nage..."
 msgstr "設定...(_N)"
 
-#: gajim/data/gui/preferences_window.ui:1220
+#: gajim/data/gui/preferences_window.ui:1213
 msgid "Allow playing sounds when I'm _busy"
 msgstr "取り込み中でもサウンドを鳴らす (_B)"
 
-#: gajim/data/gui/preferences_window.ui:1242
+#: gajim/data/gui/preferences_window.ui:1235
 msgid "Sounds"
 msgstr "サウンド"
 
-#: gajim/data/gui/preferences_window.ui:1260
+#: gajim/data/gui/preferences_window.ui:1253
 msgid "Notifications"
 msgstr "通知"
 
-#: gajim/data/gui/preferences_window.ui:1287
+#: gajim/data/gui/preferences_window.ui:1280
 msgid "No_t Available"
 msgstr "不在 (_T)"
 
-#: gajim/data/gui/preferences_window.ui:1291
+#: gajim/data/gui/preferences_window.ui:1284
 msgid ""
 "If checked, the status will be changed to Not Available when the computer "
 "has not been used for the specified time"
-msgstr "チェックをつけると、Gajim はコンピューターが一定時間使われていないとき、在席状況を「不在」に変更します"
+msgstr ""
+"チェックをつけると、Gajim はコンピューターが一定時間使われていないとき、在席"
+"状況を「不在」に変更します"
 
-#: gajim/data/gui/preferences_window.ui:1308
+#: gajim/data/gui/preferences_window.ui:1301
 msgid ""
 "If checked, the status will be changed to Away when the computer has not "
 "been used for the specified time"
-msgstr "チェックをつけると、Gajim はコンピューターが一定時間使われていないとき、在席状況を「離席中」に変更します"
+msgstr ""
+"チェックをつけると、Gajim はコンピューターが一定時間使われていないとき、在席"
+"状況を「離席中」に変更します"
 
-#: gajim/data/gui/preferences_window.ui:1354
+#: gajim/data/gui/preferences_window.ui:1347
 msgid ""
 "The automatic away status message. If empty, the current status message will "
 "not be changed.\n"
 "$S will be replaced by previous status message.\n"
 "$T will be replaced by auto-away timeout."
 msgstr ""
-"自動「離席中」メッセージ。空にすると、Gajim は現在の状況メッセージを変更しません。\n"
+"自動「離席中」メッセージ。空にすると、Gajim は現在の状況メッセージを変更しま"
+"せん。\n"
 "$S は前の状況メッセージに置き換えられます。\n"
 "$T は自動離席の設定時間に置き換えられます。"
 
-#: gajim/data/gui/preferences_window.ui:1369
+#: gajim/data/gui/preferences_window.ui:1362
 msgid ""
 "The automatic not available status message. If empty, the current status "
 "message will not be changed.\n"
 "$S will be replaced by previous status message.\n"
 "$T will be replaced by auto-not-available timeout."
 msgstr ""
-"自動「不在」メッセージ。空にすると、Gajim は現在の状況メッセージを変更しません。\n"
+"自動「不在」メッセージ。空にすると、Gajim は現在の状況メッセージを変更しませ"
+"ん。\n"
 "$S は前の状況メッセージに置き換えられます。\n"
 "$T は自動不在の設定時間に置き換えられます。"
 
-#: gajim/data/gui/preferences_window.ui:1383
+#: gajim/data/gui/preferences_window.ui:1376
 msgid "Minutes"
 msgstr "時間(分)"
 
-#: gajim/data/gui/preferences_window.ui:1427 gajim/gtk/features.py:97
+#: gajim/data/gui/preferences_window.ui:1420 gajim/gtk/features.py:97
 msgid "Automatic Status"
 msgstr "在席状況の自動変更"
 
-#: gajim/data/gui/preferences_window.ui:1458
+#: gajim/data/gui/preferences_window.ui:1451
 msgid "_Remember and restore status of the last session"
 msgstr "最後の状況を記憶し復元する (_R)"
 
-#: gajim/data/gui/preferences_window.ui:1462
+#: gajim/data/gui/preferences_window.ui:1455
 msgid ""
 "If checked, the status and status message used in the last session will be "
 "restored"
-msgstr "チェックをつけると、最後のセッションで用いられた状況と状況メッセージを復元します"
+msgstr ""
+"チェックをつけると、最後のセッションで用いられた状況と状況メッセージを復元し"
+"ます"
 
 # (Mako)語順が難しい
-#: gajim/data/gui/preferences_window.ui:1484
+#: gajim/data/gui/preferences_window.ui:1477
 msgid "Ask for status message when I"
 msgstr "状況メッセージを求めるのは、私が"
 
 # (Mako)"Ask status message when I:" に続く語
-#: gajim/data/gui/preferences_window.ui:1500
+#: gajim/data/gui/preferences_window.ui:1493
 msgid "Sign _in"
 msgstr "サインインしたとき (_I)"
 
 # (Mako)"Ask status message when I:" に続く語
-#: gajim/data/gui/preferences_window.ui:1517
+#: gajim/data/gui/preferences_window.ui:1510
 msgid "Sign _out"
 msgstr "サインアウトしたとき (_O)"
 
-#: gajim/data/gui/preferences_window.ui:1551
+#: gajim/data/gui/preferences_window.ui:1544
 msgid ""
 "If enabled, Gajim will not ask for a status message. The specified default "
 "message will be used instead."
-msgstr "有効の場合、Gajim は状況メッセージを要求しません。かわりに対応するデフォルトのメッセージが使われます。"
+msgstr ""
+"有効の場合、Gajim は状況メッセージを要求しません。かわりに対応するデフォルト"
+"のメッセージが使われます。"
 
-#: gajim/data/gui/preferences_window.ui:1579
+#: gajim/data/gui/preferences_window.ui:1572
 msgid "Default Message"
 msgstr "デフォルトのメッセージ"
 
-#: gajim/data/gui/preferences_window.ui:1594
-#: gajim/data/gui/preferences_window.ui:1885
+#: gajim/data/gui/preferences_window.ui:1587
+#: gajim/data/gui/preferences_window.ui:1878
 msgid "Enabled"
 msgstr "有効"
 
-#: gajim/data/gui/preferences_window.ui:1620
+#: gajim/data/gui/preferences_window.ui:1613
 msgid "Status Messages"
 msgstr "状況メッセージ"
 
-#: gajim/data/gui/preferences_window.ui:1763
+#: gajim/data/gui/preferences_window.ui:1756
 msgid "Preset Status Messages"
 msgstr "状況メッセージを事前設定"
 
-#: gajim/data/gui/preferences_window.ui:1804 gajim/data/gui/themes_window.ui:85
+#: gajim/data/gui/preferences_window.ui:1797 gajim/data/gui/themes_window.ui:85
 msgid "Themes"
 msgstr "テーマ"
 
-#: gajim/data/gui/preferences_window.ui:1821
+#: gajim/data/gui/preferences_window.ui:1814
 msgid "_Theme"
 msgstr "テーマ (_T)"
 
-#: gajim/data/gui/preferences_window.ui:1852
+#: gajim/data/gui/preferences_window.ui:1845
 msgid "Configure color and font of the interface"
 msgstr "色とフォントの調整"
 
-#: gajim/data/gui/preferences_window.ui:1866
+#: gajim/data/gui/preferences_window.ui:1859
 msgid "_Dark Theme"
 msgstr "ダークテーマ (_D)"
 
-#: gajim/data/gui/preferences_window.ui:1900
+#: gajim/data/gui/preferences_window.ui:1893
 msgid "Emojis"
 msgstr "絵文字"
 
-#: gajim/data/gui/preferences_window.ui:1917
+#: gajim/data/gui/preferences_window.ui:1910
 msgid "_Emoji Theme"
 msgstr "絵文字テーマ (_E)"
 
-#: gajim/data/gui/preferences_window.ui:1946
+#: gajim/data/gui/preferences_window.ui:1939
 msgid "Icons"
 msgstr "アイコン"
 
-#: gajim/data/gui/preferences_window.ui:1963
+#: gajim/data/gui/preferences_window.ui:1956
 msgid "_Status iconset"
 msgstr "状況アイコンセット (_S)"
 
-#: gajim/data/gui/preferences_window.ui:1989
+#: gajim/data/gui/preferences_window.ui:1982
 msgid "Use transports _icons"
 msgstr "中継先のアイコンを使う (_I)"
 
-#: gajim/data/gui/preferences_window.ui:1993
+#: gajim/data/gui/preferences_window.ui:1986
 msgid ""
 "If checked, protocol-specific status icons will be used (e.g. a contact from "
 "ICQ will have the equivalent ICQ icon for status online, away, busy, etc...)"
 msgstr ""
-"チェックをつけると、Gajim はプロトコル特有の在席状況アイコンを使用します (例: ICQ からの相手先にはオンライン、離席中、"
-"取り込み中...などの対応する ICQ のアイコンがあります)"
+"チェックをつけると、Gajim はプロトコル特有の在席状況アイコンを使用します "
+"(例: ICQ からの相手先にはオンライン、離席中、取り込み中...などの対応する ICQ "
+"のアイコンがあります)"
 
-#: gajim/data/gui/preferences_window.ui:2020
+#: gajim/data/gui/preferences_window.ui:2013
 msgid "_Convert ASCII Emojis"
 msgstr "ASCII 感情アイコンを変換 (_C)"
 
-#: gajim/data/gui/preferences_window.ui:2098
+#: gajim/data/gui/preferences_window.ui:2091
 msgid "Style"
 msgstr "スタイル"
 
-#: gajim/data/gui/preferences_window.ui:2125
+#: gajim/data/gui/preferences_window.ui:2118
 msgid "Show _Features"
 msgstr "特徴を表示 (_U)"
 
@@ -6245,32 +6304,11 @@ msgstr "ビデオ"
 msgid "_Video input device"
 msgstr "ビデオ入力デバイス (_V)"
 
-#: gajim/data/gui/preferences_window.ui:2323
-msgid "Video output"
-msgstr "ビデオ出力"
-
-#: gajim/data/gui/preferences_window.ui:2351
-msgid "Video _framerate"
-msgstr "ビデオのフレームレート (_F)"
-
-#: gajim/data/gui/preferences_window.ui:2380
-msgid "Video si_ze"
-msgstr "ビデオの大きさ (_Z)"
-
-#: gajim/data/gui/preferences_window.ui:2405
-msgid "Vi_ew own video source"
-msgstr "自分の画像入力を見る (_E)"
-
-#: gajim/data/gui/preferences_window.ui:2424 gajim/data/gui/server_info.ui:298
-#: gajim/gtk/accounts.py:311
-msgid "Connection"
-msgstr "接続"
-
-#: gajim/data/gui/preferences_window.ui:2438
+#: gajim/data/gui/preferences_window.ui:2320
 msgid "STU_N server"
 msgstr "STUN サーバー (_N)"
 
-#: gajim/data/gui/preferences_window.ui:2456
+#: gajim/data/gui/preferences_window.ui:2338
 msgid ""
 "STUN server hostname. If no hostname was given, Gajim will try\n"
 "to discover one from the server. (Example: stun.iptel.org)"
@@ -6278,57 +6316,88 @@ msgstr ""
 "STUN サーバー名。空なら、Gajim はサーバーから探索\n"
 "しようとします。(例: stun.iptel.org)"
 
-#: gajim/data/gui/preferences_window.ui:2495
+#: gajim/data/gui/preferences_window.ui:2353 gajim/data/gui/server_info.ui:298
+#: gajim/gtk/accounts.py:311
+msgid "Connection"
+msgstr "接続"
+
+#: gajim/data/gui/preferences_window.ui:2367
+msgid "Vi_ew own video source"
+msgstr "自分の画像入力を見る (_E)"
+
+#: gajim/data/gui/preferences_window.ui:2397
+msgid "Video si_ze"
+msgstr "ビデオの大きさ (_Z)"
+
+#: gajim/data/gui/preferences_window.ui:2414
+msgid "Video _framerate"
+msgstr "ビデオのフレームレート (_F)"
+
+#: gajim/data/gui/preferences_window.ui:2442
+msgid "Video output"
+msgstr "ビデオ出力"
+
+#: gajim/data/gui/preferences_window.ui:2465
+msgid "Show live _preview"
+msgstr "ライブプレビューを表示 (_P)"
+
+#: gajim/data/gui/preferences_window.ui:2550
+msgid "Live Preview"
+msgstr "ライブプレビュー"
+
+#: gajim/data/gui/preferences_window.ui:2598
 msgid "Audio/Video"
 msgstr "音声/ビデオ"
 
-#: gajim/data/gui/preferences_window.ui:2528
+#: gajim/data/gui/preferences_window.ui:2631
 msgid "_Global proxy"
 msgstr "全体ののプロキシ (_G)"
 
-#: gajim/data/gui/preferences_window.ui:2564
+#: gajim/data/gui/preferences_window.ui:2667
 msgid "_Manage..."
 msgstr "管理...(_M)"
 
-#: gajim/data/gui/preferences_window.ui:2587
+#: gajim/data/gui/preferences_window.ui:2690
 msgid "_Store status changes of contacts in history"
 msgstr "相手先の状況変更を履歴に記録する (_S)"
 
-#: gajim/data/gui/preferences_window.ui:2609
+#: gajim/data/gui/preferences_window.ui:2712
 msgid "Enable _debug logging (restart required)"
 msgstr "デバッグのログを有効化(再起動が必要) (_D)"
 
-#: gajim/data/gui/preferences_window.ui:2613
+#: gajim/data/gui/preferences_window.ui:2716
 msgid "If checked, Gajim will store a log file for debugging"
 msgstr "チェックをつけると、Gajim はデバッグのためにログファイルを残します"
 
-#: gajim/data/gui/preferences_window.ui:2630
+#: gajim/data/gui/preferences_window.ui:2733
 msgid "Opens folder containing debug logs"
 msgstr "デバッグのログを置くフォルダを開きます"
 
-#: gajim/data/gui/preferences_window.ui:2656
+#: gajim/data/gui/preferences_window.ui:2759
 msgid "_Reset Hints"
-msgstr ""
+msgstr "ヒントをリセット (_R)"
 
-#: gajim/data/gui/preferences_window.ui:2660
+#: gajim/data/gui/preferences_window.ui:2763
 msgid ""
 "In order to introduce you to features, Gajim displays some hints. This "
 "button will reset all these hints."
 msgstr ""
+"特徴を紹介する目的で Gajim はヒントを表示します。このボタンはこれらのヒントを"
+"リセットします。"
 
-#: gajim/data/gui/preferences_window.ui:2677
+#: gajim/data/gui/preferences_window.ui:2780
 msgid "Miscellaneous"
 msgstr "その他の設定"
 
-#: gajim/data/gui/preferences_window.ui:2710
+#: gajim/data/gui/preferences_window.ui:2813
 msgid "Attention: Please use these options with caution!"
 msgstr "注意: これらのオプションの取扱には注意してください。"
 
-#: gajim/data/gui/preferences_window.ui:2723
+#: gajim/data/gui/preferences_window.ui:2826
 msgid "_Open..."
 msgstr "開く...(_O)"
 
-#: gajim/data/gui/preferences_window.ui:2745 gajim/gtk/advanced_config.py:84
+#: gajim/data/gui/preferences_window.ui:2848 gajim/gtk/advanced_config.py:84
 msgid "Advanced Configuration Editor (ACE)"
 msgstr "詳細設定エディタ (ACE)"
 
@@ -6345,7 +6414,8 @@ msgstr ""
 "&lt;ユーザー@ドメイン/リソース&gt; (リソースが合致する場合のみ)\n"
 "&lt;ユーザー@ドメイン&gt; (リソースが何であれ合致)\n"
 "&lt;ドメイン/リソース&gt; (リソースが合致する場合のみ)\n"
-"&lt;ドメイン&gt; (ドメインの合致。どんな user@domain や domain/resource でも可)\n"
+"&lt;ドメイン&gt; (ドメインの合致。どんな user@domain や domain/resource でも"
+"可)\n"
 
 #: gajim/data/gui/groupchat_config.ui:132
 #: gajim/data/gui/groupchat_config.ui:156
@@ -6353,7 +6423,7 @@ msgid "Only Admins and Owners can modify the affiliation"
 msgstr "管理人と主宰者だけが分掌を変更できます"
 
 #: gajim/data/gui/groupchat_config.ui:270
-#: gajim/data/gui/groupchat_info_scrolled.ui:179 gajim/plugins/gui.py:317
+#: gajim/data/gui/groupchat_info_scrolled.ui:179 gajim/plugins/gui.py:316
 msgid "Configuration"
 msgstr "調整"
 
@@ -6555,7 +6625,8 @@ msgid ""
 "from other servers as well."
 msgstr ""
 "選択できるサーバーはたくさんあります。\n"
-"ひとつのサーバーにアカウントを作成すれば、他のサーバーの相手先と通信できます。"
+"ひとつのサーバーにアカウントを作成すれば、他のサーバーの相手先と通信できま"
+"す。"
 
 #: gajim/data/gui/account_wizard.ui:530
 msgid "Visit Server's Website"
@@ -6612,11 +6683,11 @@ msgstr "フィルター (_F)"
 msgid "Type to search for values..."
 msgstr "検索する語を入力してください…"
 
-#: gajim/data/gui/advanced_configuration.ui:180
+#: gajim/data/gui/advanced_configuration.ui:179
 msgid "_Reset Value"
 msgstr "値をリセット (_R)"
 
-#: gajim/data/gui/advanced_configuration.ui:185
+#: gajim/data/gui/advanced_configuration.ui:184
 msgid "Resets value to default"
 msgstr "値をデフォルトに戻します"
 
@@ -6905,7 +6976,9 @@ msgstr "インストール済"
 msgid ""
 "Plug-in description should be displayed here. This text will be erased "
 "during PluginsWindow initialization."
-msgstr "プラグインの説明がここに表示されます。この文はプラグインウィンドウの初期化の際に消去されます。"
+msgstr ""
+"プラグインの説明がここに表示されます。この文はプラグインウィンドウの初期化の"
+"際に消去されます。"
 
 #: gajim/data/gui/privacy_list_window.ui:18
 msgid "none"
@@ -6925,7 +6998,7 @@ msgstr "こちらが承認"
 msgid "to"
 msgstr "相手先が承認"
 
-#: gajim/data/gui/privacy_list_window.ui:47 gajim/gtk/privacy_list.py:59
+#: gajim/data/gui/privacy_list_window.ui:47
 msgid "Privacy List"
 msgstr "プライバシーリスト"
 
@@ -6997,7 +7070,7 @@ msgstr "順位:"
 msgid "Manage sounds"
 msgstr "サウンドの管理"
 
-#: gajim/data/gui/manage_sounds_window.ui:55 gajim/plugins/gui.py:96
+#: gajim/data/gui/manage_sounds_window.ui:55 gajim/plugins/gui.py:95
 msgid "Active"
 msgstr "有効"
 
@@ -7169,7 +7242,9 @@ msgstr "公開か非公開か ?"
 msgid ""
 "<b>Private:</b> If you plan to chat encrypted, you would typically want to "
 "create a private group chat. You have to invite people so they can join."
-msgstr "<b>非公開:</b> 暗号化されたチャットをしない場合などには、非公開談話室を作成します。参加するには招待が必要です。"
+msgstr ""
+"<b>非公開:</b> 暗号化されたチャットをしない場合などには、非公開談話室を作成し"
+"ます。参加するには招待が必要です。"
 
 #: gajim/data/gui/groupchat_creation.ui:58
 msgid "<b>Public:</b> Anyone who knows the address can join."
@@ -7207,23 +7282,29 @@ msgstr ""
 msgid "_Report Bug"
 msgstr "バグを報告する (_R)"
 
-#: gajim/data/gui/subscription_request_window.ui:148
+#: gajim/data/gui/subscription_request_window.ui:19
 msgid "_Deny"
 msgstr "拒否する (_D)"
 
-#: gajim/data/gui/subscription_request_window.ui:153
-msgid ""
-"Deny authorization from contact so the contact cannot know if you are "
-"connected"
-msgstr "拒否すると、あなたが接続したときに相手先はそのことを知ることができません"
+#: gajim/data/gui/subscription_request_window.ui:34
+msgid "_Block User"
+msgstr "ユーザーを遮断 (_B)"
 
-#: gajim/data/gui/subscription_request_window.ui:165
+#: gajim/data/gui/subscription_request_window.ui:49
+msgid "_Report as Spam"
+msgstr "スパムとして報告 (_R)"
+
+#: gajim/data/gui/subscription_request_window.ui:212
+msgid "_Deny…"
+msgstr "拒否… (_D)"
+
+#: gajim/data/gui/subscription_request_window.ui:225
 msgid "Ac_cept"
 msgstr "承認する (_C)"
 
-#: gajim/data/gui/subscription_request_window.ui:171
-msgid "Authorize contact so the contact can know if you are connected"
-msgstr "承認すると、あなたが接続したときに相手先はそのことを知ることができます"
+#: gajim/data/gui/subscription_request_window.ui:230
+msgid "Allows the contact to see your online status"
+msgstr "この相手先に自分の在席状況を見ることを許可する"
 
 #: gajim/data/gui/groupchat_info_scrolled.ui:17
 msgid "Address"
@@ -7289,11 +7370,11 @@ msgstr "書き出し (_E)"
 msgid "_Delete"
 msgstr "削除 (_D)"
 
-#: gajim/data/gui/history_manager.ui:29 gajim/data/gui/history_manager.ui:91
+#: gajim/data/gui/history_manager.ui:29 gajim/data/gui/history_manager.ui:87
 msgid "Gajim History Logs Manager"
 msgstr "Gajim 履歴記録管理"
 
-#: gajim/data/gui/history_manager.ui:108
+#: gajim/data/gui/history_manager.ui:104
 msgid ""
 "This history manager is not intended for viewing chat history. If you are "
 "looking for such functionality, please use the history window instead.\n"
@@ -7301,11 +7382,13 @@ msgid ""
 "You can use this program to delete or export history. Either select logs "
 "from the left or search the database."
 msgstr ""
-"この履歴マネージャーはチャットの履歴を見るためのものではありません。そのような機能のためには、かわりに履歴ウィンドウを使ってください。\n"
+"この履歴マネージャーはチャットの履歴を見るためのものではありません。そのよう"
+"な機能のためには、かわりに履歴ウィンドウを使ってください。\n"
 "\n"
-"このプログラムは履歴の削除や書き出しのために使ってください。左の一覧から記録を選択するか、または下の欄でデータベースを検索できます。"
+"このプログラムは履歴の削除や書き出しのために使ってください。左の一覧から記録"
+"を選択するか、または下の欄でデータベースを検索できます。"
 
-#: gajim/data/gui/history_manager.ui:124
+#: gajim/data/gui/history_manager.ui:120
 msgid ""
 "<b>WARNING:</b>\n"
 "If you plan to do massive deletions, please make sure Gajim is not running. "
@@ -7315,11 +7398,11 @@ msgstr ""
 "大幅な削除を考えているなら、Gajim が起動していないときに実行してください。一"
 "般に、チャットしている最中の相手先の削除は避けてください。"
 
-#: gajim/data/gui/history_manager.ui:217
+#: gajim/data/gui/history_manager.ui:211
 msgid "Search database..."
 msgstr "データベースを検索…"
 
-#: gajim/data/gui/history_manager.ui:232
+#: gajim/data/gui/history_manager.ui:226
 msgid "Search in database"
 msgstr "データベースを検索"
 
@@ -7421,7 +7504,7 @@ msgstr "タブを右へ移動"
 
 #: gajim/data/gui/shortcuts_window.ui:169
 msgid "Close chat"
-msgstr "会話を閉じる"
+msgstr "チャットを閉じる"
 
 #: gajim/data/gui/shortcuts_window.ui:180
 msgid "Contact List Shortcuts"
@@ -7435,7 +7518,7 @@ msgstr "新しい談話室を作成"
 msgid "Preferences"
 msgstr "設定"
 
-#: gajim/data/gui/shortcuts_window.ui:210 gajim/plugins/gui.py:68
+#: gajim/data/gui/shortcuts_window.ui:210 gajim/plugins/gui.py:67
 msgid "Plugins"
 msgstr "プラグイン"
 
@@ -7494,6 +7577,10 @@ msgstr "パスフレーズ"
 #: gajim/data/gui/history_window.ui:27
 msgid "Display status changes"
 msgstr "状況変更を表示"
+
+#: gajim/data/gui/history_window.ui:57
+msgid "History Manager"
+msgstr "履歴管理"
 
 #: gajim/data/gui/history_window.ui:233
 msgid "Mode"
@@ -7578,9 +7665,8 @@ msgstr "Presets"
 
 #: gajim/data/gui/roster_item_exchange_window.ui:39
 #: gajim/gtk/roster_item_exchange.py:35
-#, fuzzy
 msgid "Contact List Exchange"
-msgstr "相手先一覧の項目の交換"
+msgstr "相手先一覧の交換"
 
 # (Mako)ほかの項目との並びで、バランスを考えてあえてカッコでつけ加えている
 #: gajim/data/gui/roster_item_exchange_window.ui:144
@@ -7686,7 +7772,8 @@ msgid ""
 "Command disabled. This command can be enabled by setting "
 "'command_system_execute' to True in ACE (Advanced Configuration Editor)."
 msgstr ""
-"コマンドは無効です。このコマンドは、詳細設定エディタ(ACE)で 'command_system_execute' を設定して、有効にできます。"
+"コマンドは無効です。このコマンドは、詳細設定エディタ(ACE)で "
+"'command_system_execute' を設定して、有効にできます。"
 
 #: gajim/command_system/implementation/execute.py:125
 msgid "Execute expression inside a shell, send output"
@@ -7752,12 +7839,12 @@ msgid "Clear the text window"
 msgstr "ウィンドウ内を消去します"
 
 #: gajim/command_system/implementation/standard.py:188
-#: gajim/command_system/implementation/standard.py:417
+#: gajim/command_system/implementation/standard.py:416
 msgid "Send a ping to the contact"
 msgstr "相手先に ping を送信します"
 
 #: gajim/command_system/implementation/standard.py:192
-#: gajim/command_system/implementation/standard.py:421
+#: gajim/command_system/implementation/standard.py:420
 msgid "Command is not supported for zeroconf accounts"
 msgstr "コマンドは、zeroconf アカウントには使えません"
 
@@ -7808,9 +7895,9 @@ msgstr "指定した在室者との私信のウィンドウを開きます"
 
 #: gajim/command_system/implementation/standard.py:287
 #: gajim/command_system/implementation/standard.py:297
-#: gajim/command_system/implementation/standard.py:352
-#: gajim/command_system/implementation/standard.py:365
-#: gajim/command_system/implementation/standard.py:377
+#: gajim/command_system/implementation/standard.py:351
+#: gajim/command_system/implementation/standard.py:364
+#: gajim/command_system/implementation/standard.py:376
 msgid "Nickname not found"
 msgstr "ニックネームは見つかりません"
 
@@ -7828,21 +7915,18 @@ msgstr "談話室の題を表示または変更します"
 msgid "Invite a user to a group chat for a reason"
 msgstr "理由を添えて、談話室に招待します"
 
-#: gajim/command_system/implementation/standard.py:312
-#, python-format
-msgid "Invited %(jid)s to %(room_jid)s"
-msgstr "%(jid)s を %(room_jid)s に招待しました"
-
-#: gajim/command_system/implementation/standard.py:317
+#: gajim/command_system/implementation/standard.py:316
 msgid "Join a group chat given by an XMPP Address"
 msgstr "XMPP アドレス 指定で談話室に参加"
 
-#: gajim/command_system/implementation/standard.py:327
+#: gajim/command_system/implementation/standard.py:326
 msgid ""
 "Leave the group chat, optionally giving a reason, and close tab or window"
-msgstr "談話室から退出し (理由があればそれを送信します)、タブまたはウィンドウを閉じます"
+msgstr ""
+"談話室から退出し (理由があればそれを送信します)、タブまたはウィンドウを閉じま"
+"す"
 
-#: gajim/command_system/implementation/standard.py:333
+#: gajim/command_system/implementation/standard.py:332
 msgid ""
 "\n"
 "    Ban user by a nick or a JID from a groupchat\n"
@@ -7856,11 +7940,11 @@ msgstr ""
 "    ニックネームが見つからなければ JID として扱います。\n"
 "    "
 
-#: gajim/command_system/implementation/standard.py:349
+#: gajim/command_system/implementation/standard.py:348
 msgid "Kick user from group chat by nickname"
 msgstr "ニックネームで指定するユーザーを談話室から蹴り出します"
 
-#: gajim/command_system/implementation/standard.py:358
+#: gajim/command_system/implementation/standard.py:357
 msgid ""
 "Set participant role in group chat.\n"
 "    Role can be given as one of the following values:\n"
@@ -7870,11 +7954,11 @@ msgstr ""
 "    役は次のいずれかの値です:\n"
 "    moderator (司会者), participant (参加者), visitor (傍聴者), none (なし)"
 
-#: gajim/command_system/implementation/standard.py:363
+#: gajim/command_system/implementation/standard.py:362
 msgid "Invalid role given"
 msgstr "役が正しくありません"
 
-#: gajim/command_system/implementation/standard.py:370
+#: gajim/command_system/implementation/standard.py:369
 msgid ""
 "Set participant affiliation in group chat.\n"
 "    Affiliation can be given as one of the following values:\n"
@@ -7882,21 +7966,22 @@ msgid ""
 msgstr ""
 "談話室での分掌を設定します。\n"
 "    分掌は次のいずれかの値です:\n"
-"    owner (主宰者), admin (管理者), member (メンバー), outcast (追放者), none (なし)"
+"    owner (主宰者), admin (管理者), member (メンバー), outcast (追放者), "
+"none (なし)"
 
-#: gajim/command_system/implementation/standard.py:375
+#: gajim/command_system/implementation/standard.py:374
 msgid "Invalid affiliation given"
 msgstr "分掌が正しくありません"
 
-#: gajim/command_system/implementation/standard.py:385
+#: gajim/command_system/implementation/standard.py:384
 msgid "Display names of all group chat participants"
 msgstr "談話室のすべての参加者の名前を表示します"
 
-#: gajim/command_system/implementation/standard.py:407
+#: gajim/command_system/implementation/standard.py:406
 msgid "Forbid a participant to send you public or private messages"
 msgstr "参加者がメッセージ (私信も含む) を送ってくることを禁止します"
 
-#: gajim/command_system/implementation/standard.py:412
+#: gajim/command_system/implementation/standard.py:411
 msgid "Allow a participant to send you public or private messages"
 msgstr "参加者がメッセージ (私信も含む) を送ってくることを許可します"
 
@@ -8048,7 +8133,7 @@ msgid "Sender: %s"
 msgstr "送信者: %s"
 
 #: gajim/gtk/filetransfer.py:240 gajim/gtk/filetransfer.py:749
-#: gajim/gtk/tooltips.py:550
+#: gajim/gtk/tooltips.py:540
 msgid "Recipient: "
 msgstr "受取人: "
 
@@ -8193,7 +8278,7 @@ msgstr "ファイル: "
 msgid "It is not possible to send empty files"
 msgstr "空のファイルを転送することはできません"
 
-#: gajim/gtk/filetransfer.py:747 gajim/gtk/tooltips.py:544
+#: gajim/gtk/filetransfer.py:747 gajim/gtk/tooltips.py:534
 msgid "Sender: "
 msgstr "送信者: "
 
@@ -8268,9 +8353,8 @@ msgid "Unknown SSL error '%s'"
 msgstr "未知の SSL エラー: '%s'"
 
 #: gajim/gtk/start_chat.py:55
-#, fuzzy
 msgid "Start / Join Chat"
-msgstr "チャットを開始… (_S)"
+msgstr "チャットを開始"
 
 #: gajim/gtk/start_chat.py:279 gajim/gtk/start_chat.py:358
 msgid "You can not join a group chat unless you are connected."
@@ -8285,7 +8369,7 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
-"全体的に談話室を検索します\n"
+"談話室を広域に検索します\n"
 "(リターンで検索開始)"
 
 #: gajim/gtk/start_chat.py:802
@@ -8344,7 +8428,7 @@ msgstr "このサービスを見ることはできません"
 
 #: gajim/gtk/discovery.py:700
 msgid "This type of service does not contain any items to browse."
-msgstr ""
+msgstr "このサービスのタイプには表示する項目がありません。"
 
 #: gajim/gtk/discovery.py:738 gajim/gtk/discovery.py:747
 msgid "Invalid Server Name"
@@ -8581,7 +8665,8 @@ msgstr "談話室への招待 "
 #, python-format
 msgid ""
 "<b>%(contact)s</b> has invited you to the group chat <b>%(room_jid)s</b>"
-msgstr "<b>%(contact)s</b> さんがあなたを談話室 <b>%(room_jid)s</b> へ招待しています"
+msgstr ""
+"<b>%(contact)s</b> さんがあなたを談話室 <b>%(room_jid)s</b> へ招待しています"
 
 #: gajim/gtk/dialogs.py:334
 #, python-format
@@ -8863,9 +8948,9 @@ msgid "Error: %s"
 msgstr "エラー: %s"
 
 #: gajim/gtk/history.py:591 gajim/gtk/groupchat_config.py:133
-#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:391
-#: gajim/gtk/account_wizard.py:427 gajim/gtk/account_wizard.py:428
-#: gajim/gtk/account_wizard.py:493 gajim/gtk/search.py:336
+#: gajim/gtk/groupchat_config.py:398 gajim/gtk/account_wizard.py:392
+#: gajim/gtk/account_wizard.py:428 gajim/gtk/account_wizard.py:429
+#: gajim/gtk/account_wizard.py:494 gajim/gtk/search.py:336
 msgid "Error"
 msgstr "エラー"
 
@@ -8901,7 +8986,7 @@ msgstr "ファイルを消去"
 msgid "Manage Proxies"
 msgstr "プロキシを管理"
 
-#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:748
+#: gajim/gtk/settings.py:624 gajim/gtk/account_wizard.py:749
 #: gajim/gtk/preferences.py:1029 gajim/gtk/preferences.py:1039
 #: gajim/gtk/preferences.py:1043
 msgid "No Proxy"
@@ -8965,7 +9050,6 @@ msgid "Synchronise History"
 msgstr "履歴を同期"
 
 #: gajim/gtk/history_sync.py:203
-#, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "どのくらい遡りたいですか ?"
 
@@ -9110,70 +9194,68 @@ msgstr "ファイルの保存…"
 msgid "_Open"
 msgstr "開く (_O)"
 
-#: gajim/gtk/tooltips.py:225
+#: gajim/gtk/tooltips.py:215
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "この談話室の %(owner_or_admin_or_member)s"
 
-#: gajim/gtk/tooltips.py:484
+#: gajim/gtk/tooltips.py:474
 msgid "Connected"
 msgstr "接続中"
 
-#: gajim/gtk/tooltips.py:486
+#: gajim/gtk/tooltips.py:476
 msgid "Disconnected"
 msgstr "切断中"
 
-#: gajim/gtk/tooltips.py:540
+#: gajim/gtk/tooltips.py:530
 msgid "File Name: "
 msgstr "ファイル名: "
 
-#: gajim/gtk/tooltips.py:543
+#: gajim/gtk/tooltips.py:533
 msgid "?Noun:Download"
 msgstr "ダウンロード"
 
-#: gajim/gtk/tooltips.py:549
+#: gajim/gtk/tooltips.py:539
 msgid "?Noun:Upload"
 msgstr "アップロード"
 
-#: gajim/gtk/tooltips.py:556
+#: gajim/gtk/tooltips.py:546
 msgid "?transfer type:Type: "
 msgstr "タイプ: "
 
-#: gajim/gtk/tooltips.py:562
-#, fuzzy
+#: gajim/gtk/tooltips.py:552
 msgid "?transfer status:Transferred: "
-msgstr "一時停止しました"
+msgstr "転送済: "
 
-#: gajim/gtk/tooltips.py:565
-#, fuzzy
+#: gajim/gtk/tooltips.py:555
 msgid "?transfer status:Status: "
-msgstr "一時停止しました"
+msgstr "状態: "
 
-#: gajim/gtk/tooltips.py:567
+#: gajim/gtk/tooltips.py:557
 msgid "Description: "
 msgstr "説明: "
 
-#: gajim/gtk/tooltips.py:591
+#: gajim/gtk/tooltips.py:581
 msgid "?transfer status:Aborted"
 msgstr "中断しました"
 
-#: gajim/gtk/tooltips.py:593
+#: gajim/gtk/tooltips.py:583
 msgid "?transfer status:Completed"
 msgstr "完了しました"
 
-#: gajim/gtk/tooltips.py:595
+#: gajim/gtk/tooltips.py:585
 msgid "?transfer status:Paused"
 msgstr "一時停止しました"
 
-#: gajim/gtk/tooltips.py:598
+#: gajim/gtk/tooltips.py:588
 msgid "?transfer status:Stalled"
 msgstr "失速しました"
 
-#: gajim/gtk/tooltips.py:602
+#: gajim/gtk/tooltips.py:592
 msgid "?transfer status:Transferring"
 msgstr "転送中です"
 
-#: gajim/gtk/tooltips.py:603 gajim/gtk/tooltips.py:604
+#: gajim/gtk/tooltips.py:593 gajim/gtk/tooltips.py:594
 msgid "?transfer status:Not started"
 msgstr "開始していません"
 
@@ -9181,7 +9263,7 @@ msgstr "開始していません"
 msgid " (optional)..."
 msgstr " (省略可)…"
 
-#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:604
+#: gajim/gtk/groupchat_creation.py:138 gajim/gtk/account_wizard.py:605
 msgid "Invalid Address"
 msgstr "アドレスが正しくありません"
 
@@ -9376,32 +9458,32 @@ msgstr "なし"
 msgid "?password:Hidden"
 msgstr "非表示"
 
-#: gajim/gtk/server_info.py:129
+#: gajim/gtk/server_info.py:130
 msgid "Support"
 msgstr "サポート"
 
-#: gajim/gtk/server_info.py:130
+#: gajim/gtk/server_info.py:131
 msgid "Security"
 msgstr "セキュリティ"
 
-#: gajim/gtk/server_info.py:131
+#: gajim/gtk/server_info.py:132
 msgid "Feedback"
 msgstr "フィードバック"
 
-#: gajim/gtk/server_info.py:132
+#: gajim/gtk/server_info.py:133
 msgid "Abuse"
 msgstr "不正通報"
 
-#: gajim/gtk/server_info.py:133
+#: gajim/gtk/server_info.py:134
 msgid "Sales"
 msgstr "セールス"
 
-#: gajim/gtk/server_info.py:217
+#: gajim/gtk/server_info.py:218
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
 msgstr "%(days)s日%(hours)s時間"
 
-#: gajim/gtk/server_info.py:340
+#: gajim/gtk/server_info.py:341
 msgid ""
 "\n"
 "Disabled in preferences"
@@ -9422,8 +9504,8 @@ msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
 "gstreamer1.0-plugins-ugly"
 msgstr ""
-"gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, gstreamer1.0"
-"-plugins-ugly が必要です。"
+"gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, gstreamer1.0-"
+"plugins-ugly が必要です。"
 
 #: gajim/gtk/features.py:95 gajim/gtk/features.py:145
 #: gajim/gtk/preferences.py:363
@@ -9442,7 +9524,7 @@ msgstr "libxss ライブラリが必要です"
 
 #: gajim/gtk/features.py:102 gajim/gtk/features.py:123
 msgid "No additional requirements"
-msgstr ""
+msgstr "追加要件なし"
 
 #: gajim/gtk/features.py:104
 msgid "Bonjour / Zeroconf (Serverless Chat)"
@@ -9452,7 +9534,9 @@ msgstr "Bonjour / Zeroconf (サーバーなしのチャット)"
 msgid ""
 "Enables Gajim to automatically detected clients in a local network for "
 "serverless chats"
-msgstr "ローカルなネットワークで自動検出されたクライアントと、サーバーなしのチャットができます"
+msgstr ""
+"ローカルなネットワークで自動検出されたクライアントと、サーバーなしのチャット"
+"ができます"
 
 # …
 #: gajim/gtk/features.py:108
@@ -9473,6 +9557,7 @@ msgid ""
 "Enables Gajim to be location-aware, if the user decides to publish the "
 "device’s location"
 msgstr ""
+"ユーザーが位置情報を通知すると決定すれば、Gajim は位置認識を可能にします"
 
 #: gajim/gtk/features.py:116
 msgid "Requires: geoclue"
@@ -9542,47 +9627,6 @@ msgstr "gir1.2-gupnpigd-1.0 が必要です"
 msgid "Disabled in Preferences"
 msgstr "設定で無効化されています"
 
-#: gajim/gtk/privacy_list.py:53
-#, python-format
-msgid "Privacy List <b><i>%s</i></b>"
-msgstr "プライバシーリスト <b><i>%s</i></b>"
-
-#: gajim/gtk/privacy_list.py:57
-#, python-format
-msgid "Privacy List for %s"
-msgstr "%s のプライバシーリスト"
-
-#: gajim/gtk/privacy_list.py:130
-#, python-format
-msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
-msgstr "順位: %(order)s, 操作: %(action)s, 型: %(type)s, 値: %(value)s"
-
-#: gajim/gtk/privacy_list.py:137
-#, python-format
-msgid "Order: %(order)s, action: %(action)s"
-msgstr "順位: %(order)s, 操作: %(action)s"
-
-#: gajim/gtk/privacy_list.py:193
-msgid "<b>Edit a rule</b>"
-msgstr "<b>規則の編集</b>"
-
-#: gajim/gtk/privacy_list.py:307
-msgid "<b>Add a rule</b>"
-msgstr "<b>規則の追加</b>"
-
-#: gajim/gtk/privacy_list.py:407
-#, python-format
-msgid "Privacy Lists for %s"
-msgstr "%s のプライバシーリスト"
-
-#: gajim/gtk/privacy_list.py:507
-msgid "Invalid List Name"
-msgstr "リスト名が正しくありません"
-
-#: gajim/gtk/privacy_list.py:508
-msgid "You must enter a name to create a privacy list."
-msgstr "プライバシーリストを作成するには、名前を入力してください。"
-
 #: gajim/gtk/groupchat_invite.py:304
 msgid "Invite New Contact"
 msgstr "新しい相手先を招待"
@@ -9624,9 +9668,8 @@ msgid "No commands available"
 msgstr "使用できるアカウントはありません"
 
 #: gajim/gtk/adhoc.py:245
-#, fuzzy
 msgid "Request Command List"
-msgstr "コマンド実行"
+msgstr "要求コマンド一覧"
 
 #: gajim/gtk/adhoc.py:260
 msgid "Executing…"
@@ -9653,16 +9696,16 @@ msgstr "%s の追放者一覧"
 msgid "Error!"
 msgstr "エラー !"
 
-#: gajim/gtk/subscription_request.py:34
+#: gajim/gtk/subscription_request.py:35
 msgid "Subscription Request"
 msgstr "在席通知の申し込み"
 
-#: gajim/gtk/subscription_request.py:44
+#: gajim/gtk/subscription_request.py:47
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "アカウント %(account)s に対して、%(jid)s さんからの在席通知の申し込み"
 
-#: gajim/gtk/subscription_request.py:47
+#: gajim/gtk/subscription_request.py:50
 #, python-format
 msgid "Subscription request from %s"
 msgstr "%s さんから在席通知の申し込み"
@@ -9701,81 +9744,82 @@ msgid "Anonymous login not supported"
 msgstr "匿名ログインに対応していません"
 
 #: gajim/gtk/account_wizard.py:366
-msgid "This server does not support anonymous"
-msgstr "このサーバーは匿名に対応していません"
+msgid "This server does not support anonymous login."
+msgstr "このサーバーは匿名ログインに対応していません。"
 
-#: gajim/gtk/account_wizard.py:380 gajim/gtk/account_wizard.py:381
+#: gajim/gtk/account_wizard.py:381 gajim/gtk/account_wizard.py:382
 msgid "Signup not allowed"
 msgstr "登録は許可されていません"
 
-#: gajim/gtk/account_wizard.py:382
+#: gajim/gtk/account_wizard.py:383
 msgid "This server does not allow signup."
 msgstr "このサーバーは登録を許可していません。"
 
-#: gajim/gtk/account_wizard.py:398 gajim/gtk/account_wizard.py:399
+#: gajim/gtk/account_wizard.py:399 gajim/gtk/account_wizard.py:400
 msgid "Connection failed"
 msgstr "接続に失敗しました"
 
-#: gajim/gtk/account_wizard.py:400
+#: gajim/gtk/account_wizard.py:401
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
-msgstr "サーバーに到達できませんでした。XMPP アドレスが正しいか確認してください。"
+msgstr ""
+"サーバーに到達できませんでした。XMPP アドレスが正しいか確認してください。"
 
-#: gajim/gtk/account_wizard.py:454
+#: gajim/gtk/account_wizard.py:455
 msgid "Account is being created"
 msgstr "アカウントを作成しています"
 
-#: gajim/gtk/account_wizard.py:491
+#: gajim/gtk/account_wizard.py:492
 msgid "The server rejected the registration without an error message"
 msgstr "サーバーはエラーメッセージなしに登録を拒否しました"
 
-#: gajim/gtk/account_wizard.py:521 gajim/gtk/accounts.py:557
+#: gajim/gtk/account_wizard.py:522 gajim/gtk/accounts.py:557
 msgid "Add Account"
 msgstr "アカウントを追加"
 
-#: gajim/gtk/account_wizard.py:628
+#: gajim/gtk/account_wizard.py:629
 msgid "Create New Account"
 msgstr "新しいアカウントを作成"
 
-#: gajim/gtk/account_wizard.py:687
+#: gajim/gtk/account_wizard.py:688
 msgid "Must be a port number"
 msgstr "ポート番号が必要です"
 
-#: gajim/gtk/account_wizard.py:694
+#: gajim/gtk/account_wizard.py:695
 msgid "Port must be a number between 0 and 65535"
 msgstr "ポート番号は0から65525のあいだの数値でなければなりません"
 
-#: gajim/gtk/account_wizard.py:731
+#: gajim/gtk/account_wizard.py:732
 msgid "Advanced settings"
 msgstr "詳細設定"
 
-#: gajim/gtk/account_wizard.py:777
+#: gajim/gtk/account_wizard.py:778
 msgid "Security Warning"
 msgstr "セキュリティ警告"
 
-#: gajim/gtk/account_wizard.py:796
+#: gajim/gtk/account_wizard.py:797
 #, python-format
 msgid "Unknown TLS error '%s'"
 msgstr "未知の TLS エラー: '%s'"
 
-#: gajim/gtk/account_wizard.py:831 gajim/gtk/account_wizard.py:834
+#: gajim/gtk/account_wizard.py:832 gajim/gtk/account_wizard.py:835
 msgid "Create Account"
 msgstr "アカウントを作成"
 
-#: gajim/gtk/account_wizard.py:885
+#: gajim/gtk/account_wizard.py:886
 msgid "Redirect"
 msgstr "リダイレクト"
 
-#: gajim/gtk/account_wizard.py:895
+#: gajim/gtk/account_wizard.py:896
 msgid "Register on the Website"
 msgstr "ウェブサイトで登録"
 
-#: gajim/gtk/account_wizard.py:906
+#: gajim/gtk/account_wizard.py:907
 msgid "Account Added"
 msgstr "アカウントを追加しました"
 
-#: gajim/gtk/account_wizard.py:907
+#: gajim/gtk/account_wizard.py:908
 msgid "Account has been added successfully"
 msgstr "アカウントは無事に追加されました"
 
@@ -9820,31 +9864,33 @@ msgstr "見つかりません"
 msgid "Missing dependencies for Audio/Video"
 msgstr "音声/ビデオの依存がありません"
 
-#: gajim/gtk/preferences.py:378 gajim/gtk/preferences.py:387
+#: gajim/gtk/preferences.py:381 gajim/gtk/preferences.py:390
 msgid "Default"
 msgstr "デフォルト"
 
-#: gajim/gtk/preferences.py:404
-msgid ""
-"<span color=\"red\" font-weight=\"bold\">Unavailable</span>, video support "
-"will be disabled"
-msgstr "<span color=\"red\" font-weight=\"bold\">無効</span>です。ビデオに対応していないようです"
-
-#: gajim/gtk/preferences.py:410
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-#: gajim/gtk/preferences.py:413
-msgid "<span color=\"yellow\" font-weight=\"bold\">Unaccelerated</span>"
-msgstr ""
-
-#: gajim/gtk/preferences.py:878
+#: gajim/gtk/preferences.py:804
 msgid "status message title"
 msgstr "状況メッセージのタイトル"
 
-#: gajim/gtk/preferences.py:879
+#: gajim/gtk/preferences.py:805
 msgid "status message text"
 msgstr "状況メッセージの文"
+
+#: gajim/gtk/preferences.py:941
+msgid ""
+"<span color=\"red\" font-weight=\"bold\">Unavailable</span>, video support "
+"will be disabled"
+msgstr ""
+"<span color=\"red\" font-weight=\"bold\">無効</span>です。ビデオに対応してい"
+"ないようです"
+
+#: gajim/gtk/preferences.py:947
+msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> 高速化"
+
+#: gajim/gtk/preferences.py:950
+msgid "<span color=\"yellow\" font-weight=\"bold\">Unaccelerated</span>"
+msgstr "<span color=\"yellow\" font-weight=\"bold\">非高速化</span>"
 
 #: gajim/gtk/accounts.py:122
 msgid "Re-Login"
@@ -10036,17 +10082,23 @@ msgstr "ログイン設定"
 #: gajim/gtk/roster_item_exchange.py:49
 #, python-format
 msgid "<b>%s</b> would like to add some contacts to your contact list."
-msgstr "<b>%s</b> さんが、あなたの相手先一覧にいくつかの相手先を追加するよう、求めています。"
+msgstr ""
+"<b>%s</b> さんが、あなたの相手先一覧にいくつかの相手先を追加するよう、求めて"
+"います。"
 
 #: gajim/gtk/roster_item_exchange.py:52
 #, python-format
 msgid "<b>%s</b> would like to modify some contacts in your contact list."
-msgstr "<b>%s</b> さんが、あなたの相手先一覧にあるいくつかの相手先を変更するよう、求めています。"
+msgstr ""
+"<b>%s</b> さんが、あなたの相手先一覧にあるいくつかの相手先を変更するよう、求"
+"めています。"
 
 #: gajim/gtk/roster_item_exchange.py:55
 #, python-format
 msgid "<b>%s</b> would like to delete some contacts from your contact list."
-msgstr "<b>%s</b> さんが、あなたの相手先一覧にあるいくつかの相手先を削除するよう、求めています。"
+msgstr ""
+"<b>%s</b> さんが、あなたの相手先一覧にあるいくつかの相手先を削除するよう、求"
+"めています。"
 
 #: gajim/gtk/roster_item_exchange.py:73 gajim/gtk/roster_item_exchange.py:161
 msgid "Modify"
@@ -10105,52 +10157,56 @@ msgstr ""
 msgid "Bookmarks for %s"
 msgstr "%s のブックマーク"
 
-#: gajim/plugins/pluginmanager.py:717 gajim/plugins/pluginmanager.py:723
+#: gajim/plugins/pluginmanager.py:697 gajim/plugins/pluginmanager.py:703
 msgid "Archive corrupted"
 msgstr "書庫が壊れています"
 
-#: gajim/plugins/pluginmanager.py:719
+#: gajim/plugins/pluginmanager.py:699
 msgid "Archive empty"
 msgstr "書庫が空です"
 
-#: gajim/plugins/pluginmanager.py:731 gajim/plugins/pluginmanager.py:739
-#: gajim/plugins/gui.py:273
+#: gajim/plugins/pluginmanager.py:711 gajim/plugins/pluginmanager.py:719
+#: gajim/plugins/gui.py:272
 msgid "Archive is malformed"
 msgstr "書庫の形式が正しくありません"
 
-#: gajim/plugins/pluginmanager.py:747 gajim/plugins/gui.py:288
-#: gajim/plugins/gui.py:301
+#: gajim/plugins/pluginmanager.py:728 gajim/plugins/gui.py:287
+#: gajim/plugins/gui.py:300
 msgid "Plugin already exists"
 msgstr "プラグインは既に存在しています"
 
-#: gajim/plugins/gui.py:76
+#: gajim/plugins/pluginmanager.py:738
+msgid "Installation failed"
+msgstr "インストールに失敗しました"
+
+#: gajim/plugins/gui.py:75
 msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 msgstr ""
 "Flatpak でプラグインをインストールする方法は、クリックして Gajim の wiki ペー"
 "ジを見てください。"
 
-#: gajim/plugins/gui.py:85
+#: gajim/plugins/gui.py:84
 msgid "Plugin"
 msgstr "プラグイン"
 
-#: gajim/plugins/gui.py:160
+#: gajim/plugins/gui.py:159
 #, python-format
 msgid "Warning: %s"
 msgstr "警告: %s"
 
-#: gajim/plugins/gui.py:218
+#: gajim/plugins/gui.py:216
 msgid "Plugin failed"
 msgstr "プラグインに失敗しました"
 
-#: gajim/plugins/gui.py:249
+#: gajim/plugins/gui.py:248
 msgid "Unable to properly remove the plugin"
 msgstr "プラグインを正しく削除できません"
 
-#: gajim/plugins/gui.py:287
+#: gajim/plugins/gui.py:286
 msgid "Overwrite Plugin?"
 msgstr "プラグインを上書きしますか ?"
 
-#: gajim/plugins/gui.py:289
+#: gajim/plugins/gui.py:288
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "現在インストールされているバージョンを上書きしますか ?"
 
@@ -10186,7 +10242,8 @@ msgid ""
 "Just chat with your friends or family, easily share pictures and thoughts or "
 "discuss the news with your groups."
 msgstr ""
-"友人や家族と会話はもちろん、画像を送ったりグループで議論したりもできます。"
+"友人や家族とチャットはもちろん、画像を送ったりグループで議論したりもできま"
+"す。"
 
 #: data/org.gajim.Gajim.appdata.xml.in:17
 msgid ""
@@ -10288,6 +10345,98 @@ msgstr "会話の履歴"
 #: data/org.gajim.Gajim.appdata.xml.in:60
 msgid "Plugin manager"
 msgstr "プラグイン管理"
+
+#~ msgid "Privacy Lists"
+#~ msgstr "プライバシーリスト"
+
+#~ msgid "Unblock"
+#~ msgstr "遮断の解除"
+
+#~ msgid "Block"
+#~ msgstr "遮断"
+
+#~ msgid ""
+#~ "This contact will see you offline and you will not receive any messages "
+#~ "sent to you by this contact."
+#~ msgstr ""
+#~ "この相手先はあなたをオフラインと認識します。相手先が送るメッセージは受信し"
+#~ "ません。"
+
+#~ msgid "_Block Contact"
+#~ msgstr "相手先を遮断 (_B)"
+
+#~ msgid "Block Group"
+#~ msgstr "グループを遮断"
+
+#~ msgid "Really block this group?"
+#~ msgstr "本当にこのグループを遮断しますか ?"
+
+#~ msgid ""
+#~ "All contacts of this group will see you as offline and you will not "
+#~ "receive any messages sent to you by any one of these contacts."
+#~ msgstr ""
+#~ "このグループの相手先はあなたをオフラインと認識します。これらの相手先が送る"
+#~ "メッセージは受信しません。"
+
+#~ msgid "_Block Group"
+#~ msgstr "グループを遮断 (_B)"
+
+#~ msgid "Error While Removing Privacy List"
+#~ msgstr "プライバシーリストを削除する際のエラー"
+
+#~ msgid ""
+#~ "Privacy list %s has not been removed. It is probably active in one of "
+#~ "your connected resources. Please deactivate it and try again."
+#~ msgstr ""
+#~ "プライバシーリスト %s は削除されませんでした。現在の接続に使用されているよ"
+#~ "うです。使用をやめて、もういちど試してください。"
+
+#~ msgid "Invisibility Not Supported"
+#~ msgstr "「居ないふり」はサポートされていません"
+
+#~ msgid "This account %s doesn't support invisibility."
+#~ msgstr "このアカウント %s は「居ないふり」に対応していません。"
+
+#~ msgid ""
+#~ "Deny authorization from contact so the contact cannot know if you are "
+#~ "connected"
+#~ msgstr ""
+#~ "拒否すると、あなたが接続したときに相手先はそのことを知ることができません"
+
+#~ msgid "Authorize contact so the contact can know if you are connected"
+#~ msgstr ""
+#~ "承認すると、あなたが接続したときに相手先はそのことを知ることができます"
+
+#~ msgid "Invited %(jid)s to %(room_jid)s"
+#~ msgstr "%(jid)s を %(room_jid)s に招待しました"
+
+#~ msgid "Privacy List <b><i>%s</i></b>"
+#~ msgstr "プライバシーリスト <b><i>%s</i></b>"
+
+#~ msgid "Privacy List for %s"
+#~ msgstr "%s のプライバシーリスト"
+
+#~ msgid ""
+#~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
+#~ msgstr "順位: %(order)s, 操作: %(action)s, 型: %(type)s, 値: %(value)s"
+
+#~ msgid "Order: %(order)s, action: %(action)s"
+#~ msgstr "順位: %(order)s, 操作: %(action)s"
+
+#~ msgid "<b>Edit a rule</b>"
+#~ msgstr "<b>規則の編集</b>"
+
+#~ msgid "<b>Add a rule</b>"
+#~ msgstr "<b>規則の追加</b>"
+
+#~ msgid "Privacy Lists for %s"
+#~ msgstr "%s のプライバシーリスト"
+
+#~ msgid "Invalid List Name"
+#~ msgstr "リスト名が正しくありません"
+
+#~ msgid "You must enter a name to create a privacy list."
+#~ msgstr "プライバシーリストを作成するには、名前を入力してください。"
 
 #~ msgid "Simulate loss of connectivity"
 #~ msgstr "接続の喪失を模する"
