@@ -85,17 +85,17 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/05/54/3324b0c46340c31b909fcec598696aaec7ddc8c18a63f2db352562d3354c/cffi-1.14.0.tar.gz
-        sha256: 2d384f4a127a15ba701207f7639d94106693b6cd64173d6c8988e2c25f3ac2b6
+        url: https://files.pythonhosted.org/packages/f7/09/88bbe20b76ca76be052c366fe77aa5e3cd6e5f932766e5597fecdd95b2a8/cffi-1.14.2.tar.gz
+        sha256: ae8f34d50af2c2154035984b8b5fc5d9ed63f32fe615646ab435b05b132ca91b
 
   - name: python3-asn1crypto
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app asn1crypto-1.3.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app asn1crypto-1.4.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/e9/51/1db4a60049fb7390959be586b6eb743098e6cea3f6b2d3ed9e17fec62ba2/asn1crypto-1.3.0-py2.py3-none-any.whl
-        sha256: 831d2710d3274c8a74befdddaf9f17fcbf6e350534565074818722d6d615b315
+        url: https://files.pythonhosted.org/packages/b5/a8/56be92dcd4a5bf1998705a9b4028249fe7c9a035b955fe93b6a3e5b829f8/asn1crypto-1.4.0-py2.py3-none-any.whl
+        sha256: 4bcdf33c861c7d40bdcd74d8e4dd7661aac320fcdf40b9a3f95b4ee12fde2fa8
 
   - name: python3-idna
     buildsystem: simple
@@ -112,8 +112,8 @@ modules:
       - python3 setup.py install --prefix=/app
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/56/3b/78c6816918fdf2405d62c98e48589112669f36711e50158a0c15d804c30d/cryptography-2.9.2.tar.gz
-        sha256: a0c30272fb4ddda5f5ffc1089d7405b7a71b0b0f51993cb4e5dbb4590b2fc229
+        url: https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554/cryptography-3.0.tar.gz
+        sha256: 8e924dbc025206e97756e8903039662aa58aa9ba357d8e1d8fc29e3092322053
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -172,13 +172,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-21.2.1-py3-none-any.whl
+      - pip3 install --prefix=/app keyring-21.3.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/a8/5e/d13b9feb235d042321a239ac8bc85e90cf3bbe49090c6f1383ac3fd53e0e/keyring-21.2.1-py3-none-any.whl
-        sha256: 3401234209015144a5d75701e71cb47239e552b0882313e9f51e8976f9e27843
+        url: https://files.pythonhosted.org/packages/59/4d/469272124b46456c425a505a8b5f2d42d2fe95d1181de2d888d684506cf7/keyring-21.3.0-py3-none-any.whl
+        sha256: e7a17caf40c40b6bb8c4772224a487e4a63013560ed0c521065aeba7ecd42182
 
   - name: python3-css-parser
     buildsystem: simple
@@ -192,11 +192,11 @@ modules:
   - name: python3-precis_i18n
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app precis_i18n-1.0.1-py3-none-any.whl
+      - pip3 install --prefix=/app precis_i18n-1.0.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/b6/ec/9abe8377d9819fc0383992aaa1b8ce263b45a2371f9f30204abf61029937/precis_i18n-1.0.1-py3-none-any.whl
-        sha256: dc9f9fb0c080af9454adce9cc1ddcd718309f3a99ca05186f65e9f6b0654dcd9
+        url: https://files.pythonhosted.org/packages/13/f5/3a7485a32dd4422a2a78de744bea4a00126b6001416c677b99c1a6e50e28/precis_i18n-1.0.2-py3-none-any.whl
+        sha256: c7d5a1f5667a6e7cb85db0a5a4ec8e1090eaeb6e189e8131a5ee238492d60445
 
   - name: gsound
     sources:
