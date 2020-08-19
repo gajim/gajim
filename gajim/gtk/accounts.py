@@ -635,6 +635,11 @@ class GeneralPage(GenericSettingPage):
                     SettingType.ACCOUNT_CONFIG, 'sync_with_global_status',
                     desc=_('Synchronise the status of all accounts')),
 
+            Setting(SettingKind.SWITCH, _('Remember Last Status'),
+                    SettingType.ACCOUNT_CONFIG, 'restore_last_status',
+                    desc=_('Restore status and status message of your '
+                           'last session')),
+
             Setting(SettingKind.SWITCH, _('Use file transfer proxies'),
                     SettingType.ACCOUNT_CONFIG, 'use_ft_proxies'),
         ]

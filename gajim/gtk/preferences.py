@@ -257,13 +257,6 @@ class Preferences(Gtk.ApplicationWindow):
         if not idle.Monitor.is_available():
             self._ui.autoaway_table.set_sensitive(False)
 
-        # Restore last status
-        st = self.get_per_account_option('restore_last_status')
-        if st == 'mixed':
-            self._ui.restore_last_status_checkbutton.set_inconsistent(True)
-        else:
-            self._ui.restore_last_status_checkbutton.set_active(st)
-
         # Ask for status when online/offline
         st = app.config.get('ask_online_status')
         self._ui.sign_in_status_checkbutton.set_active(st)
@@ -662,10 +655,6 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_auto_xa_message_entry_changed(self, widget):
         app.config.set('autoxa_message', widget.get_text())
-
-    def on_restore_last_status_checkbutton_toggled(self, widget):
-        widget.set_inconsistent(False)
-        self.on_per_account_checkbutton_toggled(widget, 'restore_last_status')
 
     def on_sign_in_status_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ask_online_status')
