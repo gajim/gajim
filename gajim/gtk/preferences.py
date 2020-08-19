@@ -420,35 +420,9 @@ class Preferences(Gtk.ApplicationWindow):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def get_per_account_option(self, opt):
-        """
-        Return the value of the option opt if it's the same in all accounts else
-        returns "mixed"
-        """
-        if not app.connections:
-            # A non existent key return default value
-            return app.config.get_per('accounts', '__default__', opt)
-        val = None
-        for account in app.connections:
-            v = app.config.get_per('accounts', account, opt)
-            if val is None:
-                val = v
-            elif val != v:
-                return 'mixed'
-        return val
-
     def on_checkbutton_toggled(self, widget, config_name,
                                change_sensitivity_widgets=None):
         app.config.set(config_name, widget.get_active())
-        if change_sensitivity_widgets:
-            for w in change_sensitivity_widgets:
-                w.set_sensitive(widget.get_active())
-
-    def on_per_account_checkbutton_toggled(self, widget, config_name,
-                                           change_sensitivity_widgets=None):
-        for account in app.connections:
-            app.config.set_per('accounts', account, config_name,
-                    widget.get_active())
         if change_sensitivity_widgets:
             for w in change_sensitivity_widgets:
                 w.set_sensitive(widget.get_active())
