@@ -16,32 +16,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="applications_liststore">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Use default applications</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Custom</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="default_message_liststore">
-    <columns>
-      <!-- column-name status_ -->
-      <column type="gchararray"/>
-      <!-- column-name status -->
-      <column type="gchararray"/>
-      <!-- column-name defaultmsg -->
-      <column type="gchararray"/>
-      <!-- column-name enabled -->
-      <column type="gboolean"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="on_event_received_liststore">
     <columns>
       <!-- column-name item -->
@@ -138,24 +112,6 @@
         <col id="1">last_state</col>
       </row>
     </data>
-  </object>
-  <object class="GtkListStore" id="status_message_liststore">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name activity -->
-      <column type="gchararray"/>
-      <!-- column-name sub_activity -->
-      <column type="gchararray"/>
-      <!-- column-name activity_text -->
-      <column type="gchararray"/>
-      <!-- column-name mood -->
-      <column type="gchararray"/>
-      <!-- column-name mood_text -->
-      <column type="gchararray"/>
-    </columns>
   </object>
   <object class="GtkListStore" id="sync_threshold_liststore">
     <columns>
