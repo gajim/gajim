@@ -1310,7 +1310,7 @@ class Interface:
         # detects eg. *b* *bold* *bold bold* test *bold* *bold*! (*bold*)
         # doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
         formatting = r'|(?<!\w)' r'\*[^\s*]' r'([^*]*[^\s*])?' r'\*(?!\w)|'\
-            r'(?<!\S)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\S)|'\
+            r'(?<!\S)' r'~[^\s~]' r'([^~]*[^\s~])?' r'~(?!\S)|'\
             r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
 
         basic_pattern = links + '|' + mail + '|' + legacy_prefixes
