@@ -913,7 +913,7 @@ def get_sync_threshold(jid, archive_info):
 
 def load_json(path, key=None, default=None):
     try:
-        with open(path, 'r') as file:
+        with path.open('r') as file:
             json_dict = json.loads(file.read())
     except Exception:
         log.exception('Parsing error')

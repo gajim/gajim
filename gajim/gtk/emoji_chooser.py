@@ -12,10 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import sys
 import logging
 import weakref
+from pathlib import Path
 from collections import OrderedDict
 
 from gi.repository import Gtk
@@ -317,15 +317,14 @@ class EmojiChooser(Gtk.Popover):
     def _get_emoji_theme_path(theme):
         if theme == 'font':
             return 'font'
-        emoticons_data_path = os.path.join(configpaths.get('EMOTICONS'),
-                                           theme,
-                                           '%s.png' % theme)
-        if os.path.exists(emoticons_data_path):
+
+        base_path = Path(configpaths.get('EMOTICONS'))
+        emoticons_data_path = base_path / theme / f'{theme}.png'
+        if emoticons_data_path.exists():
             return emoticons_data_path
 
-        emoticons_user_path = os.path.join(configpaths.get('MY_EMOTS'),
-                                           '%s.png' % theme)
-        if os.path.exists(emoticons_user_path):
+        emoticons_user_path = Path(configpaths.get('MY_EMOTS')) / f'{theme}.png'
+        if emoticons_user_path.exists():
             return emoticons_user_path
 
         log.warning('Could not find emoji theme: %s', theme)
@@ -385,7 +384,7 @@ class EmojiChooser(Gtk.Popover):
     @staticmethod
     def _get_next_pixbuf(path):
         src_x = src_y = cur_column = 0
-        atlas = GdkPixbuf.Pixbuf.new_from_file(path)
+        atlas = GdkPixbuf.Pixbuf.new_from_file(str(path))
 
         while True:
             src_x = cur_column * Emoji.PARSE_WIDTH

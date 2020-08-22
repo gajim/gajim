@@ -115,7 +115,7 @@ from gajim.gtk.util import get_color_for_account
 from gajim.gtk.const import ControlType
 
 
-parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
+parser = optparser.OptionsParser(str(configpaths.get('CONFIG_FILE')))
 log = logging.getLogger('gajim.interface')
 
 class Interface:

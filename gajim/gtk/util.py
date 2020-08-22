@@ -20,7 +20,6 @@ from typing import List
 from typing import Tuple
 from typing import Optional
 
-import os
 import sys
 import logging
 import textwrap
@@ -60,7 +59,7 @@ from gajim.gtk.const import WINDOW_MODULES
 
 _icon_theme = Gtk.IconTheme.get_default()
 if _icon_theme is not None:
-    _icon_theme.append_search_path(configpaths.get('ICONS'))
+    _icon_theme.append_search_path(str(configpaths.get('ICONS')))
 
 log = logging.getLogger('gajim.gtk.util')
 
@@ -164,7 +163,7 @@ class Builder:
         if gettext_ is None:
             gettext_ = _
 
-        file_path = os.path.join(configpaths.get('GUI'), filename)
+        file_path = str(Path(configpaths.get('GUI')) / filename)
 
         if sys.platform == "win32":
             # This is a workaround for non working translation on Windows

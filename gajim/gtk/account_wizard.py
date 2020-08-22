@@ -12,8 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import logging
+from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -553,9 +553,8 @@ class Login(Page):
 
     def _create_server_completion(self):
         # Parse servers.json
-        server_file_path = os.path.join(
-            configpaths.get('DATA'), 'other', 'servers.json')
-        self._servers = helpers.load_json(server_file_path, 'servers', [])
+        file_path = Path(configpaths.get('DATA')) / 'other' / 'servers.json'
+        self._servers = helpers.load_json(file_path, 'servers', [])
 
         # Create a separate model for the address entry, because it will
         # be updated with our localpart@
@@ -631,11 +630,6 @@ class Signup(Page):
         self.complete = False
         self.title = _('Create New Account')
 
-        # Parse servers.json
-        server_file_path = os.path.join(
-            configpaths.get('DATA'), 'other', 'servers.json')
-        self._servers = helpers.load_json(server_file_path, 'servers', [])
-
         self._ui = get_builder('account_wizard.ui')
         self._ui.server_comboboxtext_sign_up_entry.set_activates_default(True)
         self._create_server_completion()
@@ -658,13 +652,12 @@ class Signup(Page):
 
     def _create_server_completion(self):
         # Parse servers.json
-        server_file_path = os.path.join(
-            configpaths.get('DATA'), 'other', 'servers.json')
-        self._servers = helpers.load_json(server_file_path, 'servers', [])
+        file_path = Path(configpaths.get('DATA')) / 'other' / 'servers.json'
+        servers = helpers.load_json(file_path, 'servers', [])
 
         # Create servers_model for comboboxes and entries
         servers_model = Gtk.ListStore(str)
-        for server in self._servers:
+        for server in servers:
             servers_model.append((server,))
 
         # Sign up combobox and entry
