@@ -186,14 +186,11 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
 
     def _get_presets(self):
         self._presets = {}
-        for msg_name in app.config.get_per('statusmsg'):
-            if msg_name.startswith('_last_'):
-                continue
-            opts = []
-            for opt in ['message', 'activity', 'subactivity', 'mood']:
-                opts.append(app.config.get_per('statusmsg', msg_name, opt))
+        for preset_name in app.settings.get_status_presets():
+            preset = app.settings.get_status_preset_settings(preset_name)
+            opts = list(preset.values())
             opts[0] = from_one_line(opts[0])
-            self._presets[msg_name] = opts
+            self._presets[preset_name] = opts
         self._build_preset_popover()
 
     def _build_preset_popover(self):
@@ -404,7 +401,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
     def _on_preset_remove(self, widget):
         self.stop_timeout()
         name = widget.get_name()
-        app.config.del_per('statusmsg', name)
+        app.settings.remove_status_preset(name)
         self._get_presets()
 
     def _on_save_as_preset_clicked(self, _widget):
@@ -427,13 +424,14 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                     subactivity = self._pep_dict['subactivity']
                 if self._ui.mood_switch.get_active():
                     mood = self._pep_dict['mood']
-                app.config.set_per('statusmsg', preset_name, 'message',
-                                   msg_text_one_line)
-                app.config.set_per('statusmsg', preset_name, 'activity',
-                                   activity)
-                app.config.set_per('statusmsg', preset_name, 'subactivity',
-                                   subactivity)
-                app.config.set_per('statusmsg', preset_name, 'mood', mood)
+                app.settings.set_status_preset_setting(
+                    preset_name, 'message', msg_text_one_line)
+                app.settings.set_status_preset_setting(
+                    preset_name, 'activity', activity)
+                app.settings.set_status_preset_setting(
+                    preset_name, 'subactivity', subactivity)
+                app.settings.set_status_preset_setting(
+                    preset_name, 'mood', mood)
                 self._get_presets()
 
             if preset_name in self._presets:
@@ -449,7 +447,6 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                     transient_for=self).show()
                 return
 
-            app.config.add_per('statusmsg', preset_name)
             _on_set_config()
 
         InputDialog(
