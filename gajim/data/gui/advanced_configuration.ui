@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkBox" id="box">
@@ -7,93 +7,33 @@
     <property name="can_focus">False</property>
     <property name="border_width">18</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">12</property>
     <child>
-      <object class="GtkInfoBar" id="restart_warning">
+      <object class="GtkLabel">
+        <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="message_type">warning</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox">
-            <property name="can_focus">False</property>
-            <property name="spacing">6</property>
-            <property name="layout_style">end</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child internal-child="content_area">
-          <object class="GtkBox">
-            <property name="can_focus">False</property>
-            <property name="spacing">16</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">You should restart Gajim for some changes to take effect</property>
-                <property name="use_markup">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="label" translatable="yes">A restart may be required for some settings to take effect</property>
+        <property name="xalign">0</property>
+        <attributes>
+          <attribute name="foreground" value="#efef29292929"/>
+        </attributes>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
+        <property name="padding">5</property>
         <property name="position">0</property>
       </packing>
     </child>
     <child>
-      <object class="GtkBox">
+      <object class="GtkSearchEntry" id="search_entry">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">_Filter</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">filter_entry</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="filter_entry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="placeholder_text" translatable="yes">Type to search for values...</property>
-            <signal name="changed" handler="_on_filter_entry_changed" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
+        <property name="can_focus">True</property>
+        <property name="primary_icon_name">edit-find-symbolic</property>
+        <property name="primary_icon_activatable">False</property>
+        <property name="primary_icon_sensitive">False</property>
+        <property name="placeholder_text" translatable="yes">Type to search for values...</property>
+        <signal name="search-changed" handler="_on_search_entry_changed" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -141,6 +81,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Description</property>
             <property name="use_markup">True</property>
+            <property name="xalign">0</property>
             <style>
               <class name="bold"/>
             </style>
