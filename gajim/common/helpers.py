@@ -1393,7 +1393,7 @@ def get_custom_host(account):
 
 def warn_about_plain_connection(account, connection_types):
     warn = app.config.get_per(
-        'accounts', account, 'action_when_plain_connection') == 'warn'
+        'accounts', account, 'confirm_unencrypted_connection')
     for type_ in connection_types:
         if type_.is_plain and warn:
             return True

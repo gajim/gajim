@@ -309,6 +309,7 @@ class AccountSubMenu(Gtk.ListBox):
         if account != 'Local':
             self.add(PageMenuItem('privacy', _('Privacy')))
             self.add(PageMenuItem('connection', _('Connection')))
+            self.add(PageMenuItem('advanced', _('Advanced')))
             self.add(RemoveMenuItem())
 
     @property
@@ -400,6 +401,8 @@ class PageMenuItem(MenuItem):
             icon = 'preferences-system-privacy-symbolic'
         elif name == 'connection':
             icon = 'preferences-system-network-symbolic'
+        elif name == 'advanced':
+            icon = 'preferences-other-symbolic'
         else:
             icon = 'dialog-error-symbolic'
 
@@ -422,6 +425,7 @@ class Account:
             self._settings.add_page(GeneralPage(account))
             self._settings.add_page(ConnectionPage(account))
             self._settings.add_page(PrivacyPage(account))
+            self._settings.add_page(AdvancedPage(account))
 
         self._account_row = AccountRow(account)
         self._menu.add_account(self._account_row)
@@ -675,6 +679,10 @@ class PrivacyPage(GenericSettingPage):
                     desc=_('Ignore everything from contacts not in your '
                            'Roster')),
 
+            Setting(SettingKind.SWITCH, _('Send Message Receipts'),
+                    SettingType.ACCOUNT_CONFIG, 'answer_receipts',
+                    desc=_('Tell your contacts if you received a message')),
+
             ]
         GenericSettingPage.__init__(self, account, settings)
 
@@ -698,8 +706,42 @@ class ConnectionPage(GenericSettingPage):
 
             Setting(SettingKind.PRIORITY, _('Priority'),
                     SettingType.DIALOG, props={'dialog': PriorityDialog}),
-            ]
 
+            Setting(SettingKind.SWITCH, _('Use Unencrypted Connection'),
+                    SettingType.ACCOUNT_CONFIG, 'use_plain_connection',
+                    desc=_('Use an unencrypted connection to the server')),
+
+            Setting(SettingKind.SWITCH, _('Confirm Unencrypted Connection'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'confirm_unencrypted_connection',
+                    desc=_('Show a confirmation dialog before connecting '
+                           'unencrypted')),
+            ]
+        GenericSettingPage.__init__(self, account, settings)
+
+
+class AdvancedPage(GenericSettingPage):
+
+    name = 'advanced'
+
+    def __init__(self, account):
+
+        settings = [
+            Setting(SettingKind.SWITCH, _('Contact Information'),
+                    SettingType.ACCOUNT_CONFIG, 'request_user_data',
+                    desc=_('Request contact information '
+                           '(Mood, Activity, Tune, Location)')),
+
+            Setting(SettingKind.SWITCH, _('Accept all Contact Requests'),
+                    SettingType.ACCOUNT_CONFIG, 'autoauth',
+                    desc=_('Automatically accept all contact requests')),
+
+            Setting(SettingKind.COMBO, _('Filetransfer Preference'),
+                    SettingType.ACCOUNT_CONFIG, 'filetransfer_preference',
+                    props={'combo_items': ['httpupload', 'jingle']},
+                    desc=_('Preferred file transfer mechanism for '
+                           'file drag&drop on a chat window'))
+            ]
         GenericSettingPage.__init__(self, account, settings)
 
 

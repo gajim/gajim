@@ -277,7 +277,7 @@ class Config:
             'keyid': [opt_str, '', '', True],
             'keyname': [opt_str, '', '', True],
             'use_plain_connection': [opt_bool, False, _('Use an unencrypted connection to the server')],
-            'action_when_plain_connection': [opt_str, 'warn', _('Show a warning dialog before sending password on an plaintext connection. Can be \'warn\', or \'none\'.')],
+            'confirm_unencrypted_connection': [opt_bool, True],
             'use_custom_host': [opt_bool, False, '', True],
             'custom_port': [opt_int, 5222, '', True],
             'custom_host': [opt_str, '', '', True],
