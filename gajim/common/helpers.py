@@ -802,17 +802,14 @@ def get_current_show(account):
 
 def get_optional_features(account):
     features = []
-    if app.config.get_per('accounts', account, 'subscribe_mood'):
+    if app.config.get_per('accounts', account, 'request_user_data'):
         features.append(Namespace.MOOD + '+notify')
-    if app.config.get_per('accounts', account, 'subscribe_activity'):
         features.append(Namespace.ACTIVITY + '+notify')
-    if app.config.get_per('accounts', account, 'subscribe_tune'):
         features.append(Namespace.TUNE + '+notify')
+        features.append(Namespace.LOCATION + '+notify')
 
     features.append(Namespace.NICK + '+notify')
 
-    if app.config.get_per('accounts', account, 'subscribe_location'):
-        features.append(Namespace.LOCATION + '+notify')
     if app.connections[account].get_module('Bookmarks').using_bookmark_2:
         features.append(Namespace.BOOKMARKS_2 + '+notify')
     elif app.connections[account].get_module('Bookmarks').using_bookmark_1:
