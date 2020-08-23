@@ -18,18 +18,29 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common import helpers
+from gajim.common.helpers import play_sound
+from gajim.common.helpers import check_soundfile_path
+from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_app_window
 
 
-class ManageSounds:
-    def __init__(self):
-        self._ui = get_builder('manage_sounds_window.ui')
-        self.window = self._ui.manage_sounds_window
-        self.window.set_transient_for(app.app.get_active_window())
+class ManageSounds(Gtk.ApplicationWindow):
+    def __init__(self, transient_for):
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_show_menubar(False)
+        self.set_name('ManageSounds')
+        self.set_default_size(400, 400)
+        self.set_resizable(True)
+        self.set_transient_for(transient_for)
+        self.set_modal(True)
+        self.set_title(_('Manage Sounds'))
+
+        self._ui = get_builder('manage_sounds.ui')
+        self.add(self._ui.manage_sounds)
 
         filter_ = Gtk.FileFilter()
         filter_.set_name(_('All files'))
@@ -44,9 +55,10 @@ class ManageSounds:
 
         self._fill_sound_treeview()
 
+        self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
 
-        self.window.show_all()
+        self.show_all()
 
     @staticmethod
     def _on_row_changed(model, path, iter_):
@@ -91,7 +103,7 @@ class ManageSounds:
 
     def _on_cursor_changed(self, treeview):
         model, iter_ = treeview.get_selection().get_selected()
-        path_to_snd_file = helpers.check_soundfile_path(model[iter_][2])
+        path_to_snd_file = check_soundfile_path(model[iter_][2])
         if path_to_snd_file is None:
             self._ui.filechooser.unselect_all()
         else:
@@ -103,7 +115,7 @@ class ManageSounds:
         filename = button.get_filename()
         directory = os.path.dirname(filename)
         app.settings.set('last_sounds_dir', directory)
-        path_to_snd_file = helpers.strip_soundfile_path(filename)
+        path_to_snd_file = strip_soundfile_path(filename)
 
         # set new path to sounds_model
         model[iter_][2] = path_to_snd_file
@@ -119,14 +131,8 @@ class ManageSounds:
     def _on_play(self, *args):
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
         snd_event_config_name = model[iter_][3]
-        helpers.play_sound(snd_event_config_name)
+        play_sound(snd_event_config_name)
 
     def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
-            self.window.destroy()
-
-    @staticmethod
-    def _on_destroy(*args):
-        window = get_app_window('Preferences')
-        if window is not None:
-            window.sounds_preferences = None
+            self.destroy()

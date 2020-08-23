@@ -44,7 +44,6 @@ from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_available_iconsets
 from gajim.gtk.util import open_window
-from gajim.gtk.sounds import ManageSounds
 from gajim.gtk.const import ControlType
 from gajim.gtk import gstreamer
 
@@ -411,9 +410,6 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
 
-        self.sounds_preferences = None
-        self.theme_preferences = None
-
         self.show_all()
 
     def _on_key_press(self, widget, event):
@@ -592,11 +588,8 @@ class Preferences(Gtk.ApplicationWindow):
         self.on_checkbutton_toggled(widget, 'sounds_on',
                 [self._ui.manage_sounds_button])
 
-    def on_manage_sounds_button_clicked(self, widget):
-        if self.sounds_preferences is None:
-            self.sounds_preferences = ManageSounds()
-        else:
-            self.sounds_preferences.window.present()
+    def on_manage_sounds_button_clicked(self, _widget):
+        open_window('ManageSounds', transient_for=self)
 
     def on_sound_dnd_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'sounddnd')

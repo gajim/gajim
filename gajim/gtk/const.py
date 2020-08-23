@@ -104,6 +104,7 @@ WINDOW_MODULES = {
     'AccountWizard': 'gajim.gtk.account_wizard',
     'HistoryWindow': 'gajim.gtk.history',
     'ManageProxies': 'gajim.gtk.proxies',
+    'ManageSounds': 'gajim.gtk.manage_sounds',
     'ServiceDiscoveryWindow': 'gajim.gtk.discovery',
     'BlockingList': 'gajim.gtk.blocking',
     'XMLConsoleWindow': 'gajim.gtk.xml_console',
