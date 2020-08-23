@@ -307,7 +307,6 @@ class Config:
             'subscribe_mood': [opt_bool, True],
             'subscribe_activity': [opt_bool, True],
             'subscribe_tune': [opt_bool, True],
-            'subscribe_nick': [opt_bool, True],
             'subscribe_location': [opt_bool, True],
             'ignore_unknown_contacts': [opt_bool, False],
             'send_os_info': [opt_bool, True, _('Allow Gajim to send information about the operating system you are running.')],

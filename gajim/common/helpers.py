@@ -808,8 +808,9 @@ def get_optional_features(account):
         features.append(Namespace.ACTIVITY + '+notify')
     if app.config.get_per('accounts', account, 'subscribe_tune'):
         features.append(Namespace.TUNE + '+notify')
-    if app.config.get_per('accounts', account, 'subscribe_nick'):
-        features.append(Namespace.NICK + '+notify')
+
+    features.append(Namespace.NICK + '+notify')
+
     if app.config.get_per('accounts', account, 'subscribe_location'):
         features.append(Namespace.LOCATION + '+notify')
     if app.connections[account].get_module('Bookmarks').using_bookmark_2:
