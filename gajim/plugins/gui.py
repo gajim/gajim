@@ -217,7 +217,8 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                               transient_for=self)
                 return
 
-        self._ui.configure_plugin_button.set_sensitive(not is_active)
+        self._ui.configure_plugin_button.set_sensitive(
+            plugin.config_dialog is not None and not is_active)
         self.installed_plugins_model[path][Column.ACTIVE] = not is_active
 
     def _on_configure_plugin(self, _widget):
