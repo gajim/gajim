@@ -225,7 +225,6 @@ ACCOUNT_SETTINGS = {
         'sync_with_global_status': False,
         'no_log_for': '',
         'attached_gpg_keys': '',
-        'http_auth': 'ask',
         'file_transfer_proxies': '',
         'use_ft_proxies': False,
         'test_ft_proxies_on_startup': False,
