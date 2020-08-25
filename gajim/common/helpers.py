@@ -32,7 +32,6 @@ import sys
 import re
 import os
 import subprocess
-import webbrowser
 import base64
 import hashlib
 import shlex
@@ -1119,17 +1118,10 @@ def open_uri(uri, account=None):
         open_file(uri.data)
 
     elif uri.type == URIType.MAIL:
-        uri = 'mailto:%s' % uri.data
-        if os.name == 'nt':
-            webbrowser.open(uri)
-        else:
-            Gio.AppInfo.launch_default_for_uri(uri)
+        Gio.AppInfo.launch_default_for_uri(f'mailto:{uri.data}')
 
     elif uri.type in (URIType.WEB, URIType.GEO):
-        if os.name == 'nt':
-            webbrowser.open(uri.data)
-        else:
-            Gio.AppInfo.launch_default_for_uri(uri.data)
+        Gio.AppInfo.launch_default_for_uri(uri.data)
 
     elif uri.type == URIType.AT:
         app.interface.new_chat_from_jid(account, uri.data)
