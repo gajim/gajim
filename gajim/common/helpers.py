@@ -1100,6 +1100,9 @@ def parse_uri(uri):
         if not lon:
             return URI(type=URIType.UNKNOWN, data=uri)
 
+        if Gio.AppInfo.get_default_for_uri_scheme('geo'):
+            return URI(type=URIType.GEO, data=uri)
+
         uri = geo_provider_from_location(lat, lon)
         return URI(type=URIType.GEO, data=uri)
 
