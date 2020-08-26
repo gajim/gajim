@@ -272,6 +272,10 @@ class _Settings:
     def _migrate_soundevent_settings(self) -> None:
         soundevent_settings = app.config.get_all_per('soundevents')
         for soundevent, settings in list(soundevent_settings.items()):
+            if soundevent not in DEFAULT_SOUNDEVENT_SETTINGS:
+                del soundevent_settings[soundevent]
+                continue
+
             for setting, value in list(settings.items()):
                 if DEFAULT_SOUNDEVENT_SETTINGS[soundevent][setting] == value:
                     del soundevent_settings[soundevent][setting]
