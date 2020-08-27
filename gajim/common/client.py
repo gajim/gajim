@@ -212,7 +212,7 @@ class Client(ConnectionHandlers):
             self.update_presence()
         else:
             # Normally show is updated when we receive a presence reflection.
-            # On resume, if show has not changed while offline, we dont send
+            # On resume, if show has not changed while offline, we don’t send
             # a new presence so we have to trigger the event here.
             app.nec.push_incoming_event(
                 NetworkEvent('our-show',
