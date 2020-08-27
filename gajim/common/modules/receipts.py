@@ -77,9 +77,9 @@ class Receipts(BaseModule):
                            properties.jid,
                            properties.receipt.id)
 
-            jid = properties.jid.copy()
+            jid = properties.jid
             if not properties.is_muc_pm:
-                jid.setBare()
+                jid = jid.new_as_bare()
 
             app.logger.set_marker(app.get_jid_from_account(self._account),
                                   jid,
@@ -97,11 +97,11 @@ class Receipts(BaseModule):
     def _get_contact(self, properties):
         if properties.is_muc_pm:
             return app.contacts.get_gc_contact(self._account,
-                                               properties.jid.getBare(),
-                                               properties.jid.getResource())
+                                               properties.jid.bare,
+                                               properties.jid.resource)
 
         contact = app.contacts.get_contact(self._account,
-                                           properties.jid.getBare())
+                                           properties.jid.bare)
         if contact is not None and contact.sub not in ('to', 'none'):
             return contact
         return None

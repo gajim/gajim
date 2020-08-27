@@ -41,7 +41,7 @@ class Gateway(BaseModule):
             self._log.info('Error: %s', stanza.getError())
             return
 
-        agent = stanza.getFrom().getBare()
+        agent = stanza.getFrom().bare
         jid_list = []
         for jid in app.contacts.get_jid_list(self._account):
             if jid.endswith('@' + agent):
@@ -72,8 +72,8 @@ class Gateway(BaseModule):
 
     def _on_prompt_result(self, _nbxmpp_client, stanza):
         jid = str(stanza.getFrom())
-        fjid = stanza.getFrom().getBare()
-        resource = stanza.getFrom().getResource()
+        fjid = stanza.getFrom().bare
+        resource = stanza.getFrom().resource
 
         query = stanza.getTag('query')
         if query is not None:

@@ -578,7 +578,7 @@ class ChatControl(ChatControlBase):
             if not event.properties.jid == self.contact.get_full_jid():
                 return
         else:
-            if not event.properties.jid.bareMatch(self.contact.jid):
+            if not event.properties.jid.bare_match(self.contact.jid):
                 return
 
         kind = '' # incoming

@@ -2100,7 +2100,7 @@ class RosterWindow:
         if account not in app.contacts.get_accounts():
             return
         child_iterA = self._get_account_iter(account, self.model)
-        self_resource = app.connections[account].get_own_jid().getResource()
+        self_resource = app.connections[account].get_own_jid().resource
         self_contact = app.contacts.get_contact(account,
                 app.get_jid_from_account(account), resource=self_resource)
         if self_contact:

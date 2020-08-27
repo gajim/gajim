@@ -93,7 +93,7 @@ class MAM(BaseModule):
         else:
             expected_archive = self._con.get_own_jid()
 
-        return properties.mam.archive.bareMatch(expected_archive)
+        return properties.mam.archive.bare_match(expected_archive)
 
     def _get_unique_id(self, properties):
         if properties.type.is_groupchat:
@@ -105,7 +105,7 @@ class MAM(BaseModule):
         if properties.is_muc_pm:
             return properties.mam.id, properties.id
 
-        if self._con.get_own_jid().bareMatch(properties.from_):
+        if self._con.get_own_jid().bare_match(properties.from_):
             # message we sent
             return properties.mam.id, properties.id
 
@@ -119,7 +119,7 @@ class MAM(BaseModule):
             return
 
         if properties.type.is_groupchat:
-            archive_jid = properties.jid.getBare()
+            archive_jid = properties.jid.bare
             timestamp = properties.timestamp
 
             disco_info = app.logger.get_last_disco_info(archive_jid)
@@ -136,7 +136,7 @@ class MAM(BaseModule):
             if not self.available:
                 return
 
-            archive_jid = self._con.get_own_jid().getBare()
+            archive_jid = self._con.get_own_jid().bare
             timestamp = None
 
         if properties.stanza_id is None:
@@ -179,7 +179,7 @@ class MAM(BaseModule):
         if is_groupchat:
             kind = KindConstant.GC_MSG
         else:
-            if properties.from_.bareMatch(self._con.get_own_jid()):
+            if properties.from_.bare_match(self._con.get_own_jid()):
                 kind = KindConstant.CHAT_MSG_SENT
             else:
                 kind = KindConstant.CHAT_MSG_RECV
@@ -217,7 +217,7 @@ class MAM(BaseModule):
             self._log.debug(stanza.getProperties())
             return
 
-        with_ = properties.jid.getStripped()
+        with_ = properties.jid.bare
         if properties.is_muc_pm:
             # we store the message with the full JID
             with_ = str(with_)
@@ -262,7 +262,7 @@ class MAM(BaseModule):
         return query_id
 
     def request_archive_on_signin(self):
-        own_jid = self._con.get_own_jid().getBare()
+        own_jid = self._con.get_own_jid().bare
 
         if own_jid in self._mam_query_ids:
             self._log.warning('Request already running: %s', own_jid)
@@ -407,7 +407,7 @@ class MAM(BaseModule):
                                  after=None,
                                  queryid=None):
 
-        jid = self._con.get_own_jid().getBare()
+        jid = self._con.get_own_jid().bare
 
         if after is None:
             self._log.info('Request interval: %s, from %s to %s',

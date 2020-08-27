@@ -62,7 +62,7 @@ class Message(BaseModule):
                 properties.is_mam_message):
             return
 
-        if self._con.get_own_jid().getDomain() == str(properties.jid):
+        if self._con.get_own_jid().domain == str(properties.jid):
             # Server message
             return
 
@@ -70,7 +70,7 @@ class Message(BaseModule):
                                                 'ignore_unknown_contacts'):
             return
 
-        jid = properties.jid.getBare()
+        jid = properties.jid.bare
         if self._con.get_module('Roster').get_item(jid) is None:
             self._log.warning('Ignore message from unknown contact: %s', jid)
             self._log.warning(stanza)
@@ -103,8 +103,8 @@ class Message(BaseModule):
 
         from_ = stanza.getFrom()
         fjid = str(from_)
-        jid = from_.getBare()
-        resource = from_.getResource()
+        jid = from_.bare
+        resource = from_.resource
 
         type_ = properties.type
 
@@ -115,14 +115,14 @@ class Message(BaseModule):
             # Don’t check for message text because the message could be
             # encrypted.
             if app.logger.deduplicate_muc_message(self._account,
-                                                  properties.jid.getBare(),
-                                                  properties.jid.getResource(),
+                                                  properties.jid.bare,
+                                                  properties.jid.resource,
                                                   properties.timestamp,
                                                   properties.id):
                 raise nbxmpp.NodeProcessed
 
         if (properties.is_self_message or properties.is_muc_pm):
-            archive_jid = self._con.get_own_jid().getStripped()
+            archive_jid = self._con.get_own_jid().bare
             if app.logger.find_stanza_id(self._account,
                                          archive_jid,
                                          stanza_id,
@@ -214,9 +214,9 @@ class Message(BaseModule):
             NetworkEvent('decrypted-message-received', **event_attr))
 
     def _message_error_received(self, _con, _stanza, properties):
-        jid = properties.jid.copy()
+        jid = properties.jid
         if not properties.is_muc_pm:
-            jid.setBare()
+            jid = jid.new_as_bare()
 
         self._log.info(properties.error)
 
@@ -267,7 +267,7 @@ class Message(BaseModule):
 
         if properties.type.is_groupchat:
             disco_info = app.logger.get_last_disco_info(
-                properties.jid.getBare())
+                properties.jid.bare)
 
             if disco_info.mam_namespace != Namespace.MAM_2:
                 return None, None
@@ -279,7 +279,7 @@ class Message(BaseModule):
 
             archive = self._con.get_own_jid()
 
-        if archive.bareMatch(properties.stanza_id.by):
+        if archive.bare_match(properties.stanza_id.by):
             return properties.stanza_id.id, None
         # stanza-id not added by the archive, ignore it.
         return None, None
@@ -329,7 +329,7 @@ class Message(BaseModule):
             oob.addChild('url').setData(message.oob_url)
 
         # XEP-0184
-        if not own_jid.bareMatch(message.jid):
+        if not own_jid.bare_match(message.jid):
             if message.message and not message.is_groupchat:
                 stanza.setReceiptRequest()
 

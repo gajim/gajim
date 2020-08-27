@@ -81,7 +81,7 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         col.pack_start(cellrenderer_text, True)
         col.add_attribute(cellrenderer_text, 'text', 0)
 
-        jid = self._con.get_own_jid().getStripped()
+        jid = self._con.get_own_jid().bare
         self._con.get_module('Discovery').disco_items(
             jid, callback=self._items_received)
 
@@ -90,7 +90,7 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
             ErrorDialog('Error', to_user_string(result))
             return
 
-        jid = result.jid.getBare()
+        jid = result.jid.bare
         for item in result.items:
             if item.jid == jid and item.node is not None:
                 self.treestore.append([item.node])

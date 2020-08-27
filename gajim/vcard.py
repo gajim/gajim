@@ -255,7 +255,7 @@ class VcardWindow(EventHelper):
         client = ''
         os_info = ''
         while i in self.os_info:
-            if self.os_info[i]['resource'] == JID(jid).getResource():
+            if self.os_info[i]['resource'] == JID.from_string(jid).resource:
                 if not error:
                     self.os_info[i]['client'] = '%s %s' % (result.name,
                                                            result.version)
@@ -286,12 +286,12 @@ class VcardWindow(EventHelper):
         if self.gc_contact:
             if obj.jid != self.contact.jid:
                 return
-        elif obj.jid.getStripped() != self.contact.jid:
+        elif obj.jid.bare != self.contact.jid:
             return
         i = 0
         time_s = ''
         while i in self.time_info:
-            if self.time_info[i]['resource'] == obj.jid.getResource():
+            if self.time_info[i]['resource'] == obj.jid.resource:
                 if obj.time_info:
                     self.time_info[i]['time'] = obj.time_info
                 else:

@@ -679,7 +679,7 @@ class JingleSession:
         return (reason, text)
 
     def __make_jingle(self, action, reason=None):
-        stanza = nbxmpp.Iq(typ='set', to=nbxmpp.JID(self.peerjid),
+        stanza = nbxmpp.Iq(typ='set', to=nbxmpp.JID.from_string(self.peerjid),
                            frm=self.ourjid)
         attrs = {
             'action': action,

@@ -95,7 +95,7 @@ class Presence(BaseModule):
                              show=properties.show.value))
             return
 
-        jid = properties.jid.getBare()
+        jid = properties.jid.bare
         roster_item = self._con.get_module('Roster').get_item(jid)
         if not properties.is_self_bare and roster_item is None:
             # Handle only presence from roster contacts
@@ -114,8 +114,8 @@ class Presence(BaseModule):
             'need_add_in_roster': False,
             'popup': False,
             'ptype': properties.type.value,
-            'jid': properties.jid.getBare(),
-            'resource': properties.jid.getResource(),
+            'jid': properties.jid.bare,
+            'resource': properties.jid.resource,
             'id_': properties.id,
             'fjid': str(properties.jid),
             'timestamp': properties.timestamp,
@@ -139,8 +139,8 @@ class Presence(BaseModule):
 
     def _update_contact(self, event, properties):
         # Note: A similar method also exists in connection_zeroconf
-        jid = properties.jid.getBare()
-        resource = properties.jid.getResource()
+        jid = properties.jid.bare
+        resource = properties.jid.resource
 
         status_strings = ['offline', 'error', 'online', 'chat', 'away',
                           'xa', 'dnd']
@@ -156,8 +156,8 @@ class Presence(BaseModule):
         event.contact_list = contact_list
 
         contact = app.contacts.get_contact_strict(self._account,
-                                                  properties.jid.getBare(),
-                                                  properties.jid.getResource())
+                                                  properties.jid.bare,
+                                                  properties.jid.resource)
         if contact is None:
             contact = app.contacts.get_first_contact_from_jid(self._account,
                                                               jid)
@@ -229,7 +229,7 @@ class Presence(BaseModule):
     def _log_presence(self, properties):
         if not app.settings.get('log_contact_status_changes'):
             return
-        if not should_log(self._account, properties.jid.getBare()):
+        if not should_log(self._account, properties.jid.bare):
             return
 
         show = ShowConstant[properties.show.name]
@@ -237,14 +237,14 @@ class Presence(BaseModule):
             show = ShowConstant.OFFLINE
 
         app.logger.insert_into_logs(self._account,
-                                    properties.jid.getBare(),
+                                    properties.jid.bare,
                                     time.time(),
                                     KindConstant.STATUS,
                                     message=properties.status,
                                     show=show)
 
     def _subscribe_received(self, _con, _stanza, properties):
-        jid = properties.jid.getBare()
+        jid = properties.jid.bare
         fjid = str(properties.jid)
 
         is_transport = app.jid_is_transport(fjid)
@@ -276,7 +276,7 @@ class Presence(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _subscribed_received(self, _con, _stanza, properties):
-        jid = properties.jid.getBare()
+        jid = properties.jid.bare
         self._log.info('Received Subscribed: %s', properties.jid)
         if jid in self.automatically_added:
             self.automatically_added.remove(jid)
@@ -296,7 +296,7 @@ class Presence(BaseModule):
         self._log.info('Received Unsubscribed: %s', properties.jid)
         app.nec.push_incoming_event(NetworkEvent(
             'unsubscribed-presence-received',
-            conn=self._con, jid=properties.jid.getBare()))
+            conn=self._con, jid=properties.jid.bare))
         raise nbxmpp.NodeProcessed
 
     def subscribed(self, jid):

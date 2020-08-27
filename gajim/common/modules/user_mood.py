@@ -66,7 +66,7 @@ class UserMood(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('mood-received',
                          account=self._account,
-                         jid=properties.jid.getBare(),
+                         jid=properties.jid.bare,
                          mood=data,
                          is_self_message=properties.is_self_message))
 

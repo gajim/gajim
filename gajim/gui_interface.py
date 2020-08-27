@@ -188,7 +188,7 @@ class Interface:
                                args=[obj, 'yes'])]).show()
 
     def handle_event_iq_error(self, event):
-        ctrl = self.msg_win_mgr.get_control(event.properties.jid.getBare(),
+        ctrl = self.msg_win_mgr.get_control(event.properties.jid.bare,
                                             event.account)
         if ctrl and ctrl.is_groupchat:
             ctrl.add_info_message('Error: %s' % event.properties.error)
@@ -288,8 +288,8 @@ class Interface:
                 'gajim-subscription_request', event_type, obj.jid)
 
     def handle_event_subscribed_presence(self, event):
-        bare_jid = event.jid.getBare()
-        resource = event.jid.getResource()
+        bare_jid = event.jid.bare
+        resource = event.jid.resource
         if bare_jid in app.contacts.get_jid_list(event.account):
             contact = app.contacts.get_first_contact_from_jid(event.account,
                                                               bare_jid)
@@ -300,7 +300,7 @@ class Interface:
                                                     _('Observers')],
                                                    update=False)
         else:
-            name = event.jid.getNode()
+            name = event.jid.localpart
             name = name.split('%', 1)[0]
             contact = app.contacts.create_contact(jid=bare_jid,
                                                   account=event.account,
@@ -794,7 +794,7 @@ class Interface:
         # block signed in notifications for 30 seconds
 
         # Add our own JID into the DB
-        app.logger.insert_jid(obj.conn.get_own_jid().getStripped())
+        app.logger.insert_jid(obj.conn.get_own_jid().bare)
         account = obj.conn.name
         app.block_signed_in_notifications[account] = True
 

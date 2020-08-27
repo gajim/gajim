@@ -1011,7 +1011,7 @@ class GroupchatControl(ChatControlBase):
         special_words = app.settings.get('muc_highlight_words').split(';')
         special_words.append(self.nick)
         con = app.connections[self.account]
-        special_words.append(con.get_own_jid().getStripped())
+        special_words.append(con.get_own_jid().bare)
         # Strip empties: ''.split(';') == [''] and would highlight everything.
         # Also lowercase everything for case insensitive compare.
         special_words = [word.lower() for word in special_words if word]
@@ -1096,7 +1096,7 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['account'])
     def _on_decrypted_message_received(self, event):
-        if not event.properties.jid.bareMatch(self.room_jid):
+        if not event.properties.jid.bare_match(self.room_jid):
             return
 
         if event.properties.is_muc_pm and not event.session.control:

@@ -168,7 +168,7 @@ def _jid_adapter(jid):
     return str(jid)
 
 def _jid_converter(jid):
-    return JID(jid.decode())
+    return JID.from_string(jid.decode())
 
 
 sqlite.register_converter('jid', _jid_converter)

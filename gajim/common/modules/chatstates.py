@@ -105,12 +105,12 @@ class Chatstate(BaseModule):
             return
 
         full_jid = stanza.getFrom()
-        if full_jid is None or self._con.get_own_jid().bareMatch(full_jid):
+        if full_jid is None or self._con.get_own_jid().bare_match(full_jid):
             # Presence from ourself
             return
 
         contact = app.contacts.get_gc_contact(
-            self._account, full_jid.getStripped(), full_jid.getResource())
+            self._account, full_jid.bare, full_jid.resource)
         if contact is None:
             contact = app.contacts.get_contact_from_full_jid(
                 self._account, str(full_jid))
@@ -150,8 +150,8 @@ class Chatstate(BaseModule):
         if properties.is_muc_pm:
             contact = app.contacts.get_gc_contact(
                 self._account,
-                properties.jid.getBare(),
-                properties.jid.getResource())
+                properties.jid.bare,
+                properties.jid.resource)
         else:
             contact = app.contacts.get_contact_from_full_jid(
                 self._account, str(properties.jid))
@@ -224,7 +224,7 @@ class Chatstate(BaseModule):
 
         if not contact.is_groupchat:
             # Don’t send chatstates to ourself
-            if self._con.get_own_jid().bareMatch(contact.jid):
+            if self._con.get_own_jid().bare_match(contact.jid):
                 return None
 
             if not contact.supports(Namespace.CHATSTATES):
@@ -256,7 +256,7 @@ class Chatstate(BaseModule):
     @ensure_enabled
     def set_chatstate(self, contact: ContactT, state: State) -> None:
         # Don’t send chatstates to ourself
-        if self._con.get_own_jid().bareMatch(contact.jid):
+        if self._con.get_own_jid().bare_match(contact.jid):
             return
 
         if contact.jid in self._blocked:

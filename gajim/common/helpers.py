@@ -1199,17 +1199,17 @@ def get_default_muc_config():
 
 def validate_jid(jid, type_=None):
     try:
-        jid = JID(str(jid))
+        jid = JID.from_string(str(jid))
     except InvalidJid as error:
         raise ValueError(error)
 
     if type_ is None:
         return jid
-    if type_ == 'bare' and jid.isBare:
+    if type_ == 'bare' and jid.is_bare:
         return jid
-    if type_ == 'full' and jid.isFull:
+    if type_ == 'full' and jid.is_full:
         return jid
-    if type_ == 'domain' and jid.isDomain:
+    if type_ == 'domain' and jid.is_domain:
         return jid
 
     raise ValueError('Not a %s JID' % type_)

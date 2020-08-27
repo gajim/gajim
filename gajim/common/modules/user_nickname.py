@@ -56,7 +56,7 @@ class UserNickname(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('nickname-received',
                          account=self._account,
-                         jid=properties.jid.getBare(),
+                         jid=properties.jid.bare,
                          nickname=nick))
 
 

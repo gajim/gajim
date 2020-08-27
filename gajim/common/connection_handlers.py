@@ -159,7 +159,7 @@ class ConnectionHandlersBase:
         if not cls:
             cls = app.default_session_type
 
-        sess = cls(self, nbxmpp.JID(jid), thread_id, type_)
+        sess = cls(self, nbxmpp.JID.from_string(jid), thread_id, type_)
 
         # determine if this session is a pm session
         # if not, discard the resource so that all sessions are stored bare

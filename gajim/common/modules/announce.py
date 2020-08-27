@@ -24,7 +24,7 @@ class Announce(BaseModule):
         BaseModule.__init__(self, con)
 
     def delete_motd(self):
-        server = self._con.get_own_jid().getDomain()
+        server = self._con.get_own_jid().domain
         jid = '%s/announce/motd/delete' % server
         self.set_announce(jid)
 

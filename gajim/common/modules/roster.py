@@ -45,7 +45,7 @@ class Roster(BaseModule):
 
     def load_roster(self):
         self._log.info('Load from database')
-        account_jid = self._con.get_own_jid().getStripped()
+        account_jid = self._con.get_own_jid().bare
         data = app.logger.get_roster(account_jid)
         if data:
             self.set_raw(data)
@@ -116,7 +116,7 @@ class Roster(BaseModule):
 
         sender = stanza.getFrom()
         if sender is not None:
-            if not self._con.get_own_jid().bareMatch(sender):
+            if not self._con.get_own_jid().bare_match(sender):
                 self._log.warning('Wrong JID %s', stanza.getFrom())
                 return
 
@@ -135,7 +135,7 @@ class Roster(BaseModule):
                 ask=attrs['ask'],
                 groups=attrs['groups'],
                 avatar_sha=None))
-            account_jid = self._con.get_own_jid().getStripped()
+            account_jid = self._con.get_own_jid().bare
             app.logger.add_or_update_contact(
                 account_jid, item.jid, attrs['name'],
                 attrs['subscription'], attrs['ask'], attrs['groups'])
@@ -227,7 +227,7 @@ class Roster(BaseModule):
         if pres.getType() != 'subscribe':
             return
 
-        jid = pres.getFrom().getStripped()
+        jid = pres.getFrom().bare
 
         if jid in self._data:
             return
@@ -238,7 +238,7 @@ class Roster(BaseModule):
                            'subscription':
                            'none',
                            'groups': ['Not in contact list']}
-        account_jid = self._con.get_own_jid().getStripped()
+        account_jid = self._con.get_own_jid().bare
         app.logger.add_or_update_contact(
             account_jid, jid,
             self._data[jid]['name'],
@@ -358,7 +358,7 @@ class Roster(BaseModule):
         """
         Set the internal data representation of the roster
         """
-        own_jid = self._con.get_own_jid().getStripped()
+        own_jid = self._con.get_own_jid().bare
         self._data = data
         self._data[own_jid] = {
             'resources': {},

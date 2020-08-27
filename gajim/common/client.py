@@ -347,7 +347,7 @@ class Client(ConnectionHandlers):
                 return jid
 
         # This returns the bare jid
-        return nbxmpp.JID(app.get_jid_from_account(self._account))
+        return nbxmpp.JID.from_string(app.get_jid_from_account(self._account))
 
     def change_status(self, show, message):
         if not message:

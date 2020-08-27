@@ -572,9 +572,8 @@ def get_recent_groupchats(account):
 
     recent_list = []
     for groupchat in recent_groupchats:
-        jid = nbxmpp.JID(groupchat)
-        recent = RecentGroupchat(
-            jid.getNode(), jid.getDomain(), jid.getResource())
+        jid = nbxmpp.JID.from_string(groupchat)
+        recent = RecentGroupchat(jid.localpart, jid.domain, jid.resource)
         recent_list.append(recent)
     return recent_list
 

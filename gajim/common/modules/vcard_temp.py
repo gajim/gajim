@@ -92,7 +92,7 @@ class VCardTemp(BaseModule):
             iq.setTo(jid)
         iq.setQuery('vCard').setNamespace(Namespace.VCARD)
 
-        own_jid = self._con.get_own_jid().getStripped()
+        own_jid = self._con.get_own_jid().bare
         self._log.info('Request: %s, expected sha: %s', jid or own_jid, sha)
 
         self._con.connection.SendAndCallForResponse(
@@ -151,10 +151,10 @@ class VCardTemp(BaseModule):
                     return
                 app.settings.set_account_setting(
                     self._account, 'avatar_sha', sha or '')
-                own_jid = self._con.get_own_jid().getStripped()
+                own_jid = self._con.get_own_jid().bare
                 app.contacts.set_avatar(self._account, own_jid, sha)
                 app.interface.update_avatar(
-                    self._account, self._con.get_own_jid().getStripped())
+                    self._account, self._con.get_own_jid().bare)
                 self._con.get_module('VCardAvatars').send_avatar_presence(
                     after_publish=True)
             self._log.info('%s: Published: %s', self._account, sha)
@@ -191,11 +191,11 @@ class VCardTemp(BaseModule):
         room = False
         if frm_jid is None:
             frm_jid = self._con.get_own_jid()
-        elif frm_jid.getStripped() in self.room_jids:
+        elif frm_jid.bare in self.room_jids:
             room = True
 
-        resource = frm_jid.getResource()
-        jid = frm_jid.getStripped()
+        resource = frm_jid.resource
+        jid = frm_jid.bare
 
         stanza_error = stanza.getError()
         if stanza_error in ('service-unavailable', 'item-not-found',
@@ -211,7 +211,7 @@ class VCardTemp(BaseModule):
             return
         vcard = self._node_to_dict(vcard_node)
 
-        if self._con.get_own_jid().bareMatch(jid):
+        if self._con.get_own_jid().bare_match(jid):
             if 'NICKNAME' in vcard:
                 app.nicks[self._account] = vcard['NICKNAME']
             elif 'FN' in vcard:
@@ -292,7 +292,7 @@ class VCardTemp(BaseModule):
                 app.interface.update_avatar(contact=contact)
         else:
             self._log.info('Received: %s %s', jid, avatar_sha)
-            own_jid = self._con.get_own_jid().getStripped()
+            own_jid = self._con.get_own_jid().bare
             app.logger.set_avatar_sha(own_jid, jid, avatar_sha)
             app.contacts.set_avatar(self._account, jid, avatar_sha)
             app.interface.update_avatar(self._account, jid)

@@ -131,7 +131,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
 
         try:
             jid = validate_jid(text)
-            if jid.getResource():
+            if jid.resource:
                 raise ValueError
 
         except ValueError:

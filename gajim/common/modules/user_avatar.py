@@ -40,7 +40,7 @@ class UserAvatar(BaseModule):
 
         data = properties.pubsub_event.data
         jid = str(properties.jid)
-        own_jid = self._con.get_own_jid().getBare()
+        own_jid = self._con.get_own_jid().bare
 
         if data is None:
             # Remove avatar
@@ -71,12 +71,12 @@ class UserAvatar(BaseModule):
         self._log.info('Received Avatar: %s %s', result.jid, result.sha)
         app.interface.save_avatar(result.data)
 
-        if self._con.get_own_jid().bareMatch(result.jid):
+        if self._con.get_own_jid().bare_match(result.jid):
             app.settings.set_account_setting(self._account,
                                              'avatar_sha',
                                              result.sha)
         else:
-            own_jid = self._con.get_own_jid().getBare()
+            own_jid = self._con.get_own_jid().bare
             app.logger.set_avatar_sha(own_jid, str(result.jid), result.sha)
 
         app.contacts.set_avatar(self._account, str(result.jid), result.sha)

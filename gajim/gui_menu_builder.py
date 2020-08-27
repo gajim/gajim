@@ -146,7 +146,7 @@ show_bookmarked=False, force_resource=False):
     item = Gtk.SeparatorMenuItem.new() # separator
     invite_to_submenu.append(item)
     for (room_jid, account) in rooms2:
-        menuitem = Gtk.MenuItem.new_with_label(room_jid.getNode())
+        menuitem = Gtk.MenuItem.new_with_label(room_jid.localpart)
         if len(contact_list) > 1: # several resources
             menuitem.set_submenu(build_resources_submenu(
                 contact_list, account, roster.on_invite_to_room, str(room_jid),

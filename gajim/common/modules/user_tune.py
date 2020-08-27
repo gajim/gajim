@@ -73,7 +73,7 @@ class UserTune(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('tune-received',
                          account=self._account,
-                         jid=properties.jid.getBare(),
+                         jid=properties.jid.bare,
                          tune=data,
                          is_self_message=properties.is_self_message))
 

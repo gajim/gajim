@@ -756,7 +756,7 @@ class ClientZeroconf:
         if to is None:
             # Can’t send undirected stanza over Zeroconf.
             return -1
-        to = to.getStripped()
+        to = to.bare
         stanza.setFrom(self.roster.zeroconf.name)
 
         try:

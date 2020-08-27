@@ -320,8 +320,8 @@ class GajimRemote(Server):
             obj.jid, obj.message, chatstate]))
 
     def on_time(self, obj):
-        self.raise_signal('EntityTime', (obj.conn.name, [obj.jid.getStripped(),
-                                                         obj.jid.getResource(),
+        self.raise_signal('EntityTime', (obj.conn.name, [obj.jid.bare,
+                                                         obj.jid.resource,
                                                          obj.time_info]))
 
     def on_roster_info(self, obj):
@@ -346,8 +346,8 @@ class GajimRemote(Server):
 
     def on_subscribed_presence_received(self, event):
         self.raise_signal('Subscribed', (event.account,
-                                         [event.jid.getBare(),
-                                          event.jid.getResource()]))
+                                         [event.jid.bare,
+                                          event.jid.resource]))
 
     def on_unsubscribed_presence_received(self, obj):
         self.raise_signal('Unsubscribed', (obj.conn.name, obj.jid))

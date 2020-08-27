@@ -26,7 +26,7 @@ URI.__new__.__defaults__ = (None, None)  # type: ignore
 
 class MUCData:
     def __init__(self, room_jid, nick, password, config=None):
-        self._room_jid = JID(room_jid)
+        self._room_jid = JID.from_string(room_jid)
         self._config = config
         self.nick = nick
         self.password = password
@@ -40,9 +40,7 @@ class MUCData:
 
     @property
     def occupant_jid(self):
-        jid = self._room_jid.copy()
-        jid.setResource(self.nick)
-        return jid
+        return self._room_jid.new_with(resource=self.nick)
 
     @property
     def config(self):

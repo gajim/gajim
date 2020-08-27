@@ -113,7 +113,7 @@ class Caps(BaseModule):
             NetworkEvent('caps-update',
                          account=self._account,
                          fjid=jid,
-                         jid=properties.jid.getBare()))
+                         jid=properties.jid.bare))
 
     def _execute_task(self, task):
         self._log.info('Request %s from %s', task.entity.hash, task.entity.jid)
@@ -160,7 +160,7 @@ class Caps(BaseModule):
                 NetworkEvent('caps-update',
                              account=self._account,
                              fjid=str(task.entity.jid),
-                             jid=task.entity.jid.getBare()))
+                             jid=task.entity.jid.bare))
 
     def update_caps(self):
         if not app.account_is_connected(self._account):
@@ -209,7 +209,7 @@ class EntityCapsTask(Task):
 
         if self._from_muc:
             muc = client.get_module('MUC').get_manager().get(
-                self.entity.jid.getBare())
+                self.entity.jid.bare)
 
             if muc is None or not muc.state.is_joined:
                 self.set_obsolete()

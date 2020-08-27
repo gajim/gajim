@@ -276,12 +276,12 @@ class AccountWizard(Assistant):
         self._show_progress_page(_('Connecting...'),
                                  _('Connecting to server...'))
         address, password = self.get_page('login').get_credentials()
-        jid = JID(address)
+        jid = JID.from_string(address)
         advanced = self.get_page('login').is_advanced()
 
         self._client = self._get_base_client(
-            jid.getDomain(),
-            jid.getNode(),
+            jid.domain,
+            jid.localpart,
             Mode.LOGIN_TEST,
             advanced,
             ignore_all_errors)
@@ -599,7 +599,7 @@ class Login(Page):
 
         try:
             jid = validate_jid(address, type_='bare')
-            if jid.getResource():
+            if jid.resource:
                 raise ValueError
         except ValueError:
             self._show_icon(True)

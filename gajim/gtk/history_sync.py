@@ -61,7 +61,7 @@ class HistorySyncAssistant(Gtk.Assistant, EventHelper):
 
         self._hide_buttons()
 
-        own_jid = self.con.get_own_jid().getStripped()
+        own_jid = self.con.get_own_jid().bare
 
         mam_start = ArchiveState.NEVER
         archive = app.logger.get_archive_infos(own_jid)
@@ -141,7 +141,7 @@ class HistorySyncAssistant(Gtk.Assistant, EventHelper):
         log.info('Start: %s', self.start)
         log.info('End: %s', self.end)
 
-        jid = self.con.get_own_jid().getBare()
+        jid = self.con.get_own_jid().bare
 
         self.con.get_module('MAM').make_query(jid,
                                               start=self.start,

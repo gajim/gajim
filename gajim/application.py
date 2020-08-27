@@ -248,12 +248,12 @@ class GajimApplication(Gtk.Application):
                 jid, cmd = uri, 'message'
 
             try:
-                jid = JID(jid)
+                jid = JID.from_string(jid)
             except InvalidJid as error:
                 app.log('uri_handler').warning('Invalid JID %s: %s', uri, error)
                 continue
 
-            if cmd == 'join' and jid.getResource():
+            if cmd == 'join' and jid.resource:
                 app.log('uri_handler').warning('Invalid MUC JID %s', uri)
                 continue
 

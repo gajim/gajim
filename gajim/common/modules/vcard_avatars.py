@@ -58,7 +58,7 @@ class VCardAvatars(BaseModule):
                                        AvatarState.NOT_READY):
             return
 
-        if self._con.get_own_jid().bareMatch(properties.jid):
+        if self._con.get_own_jid().bare_match(properties.jid):
             if self._con.get_own_jid() == properties.jid:
                 # Initial presence reflection
                 if self._con.avatar_conversion:
@@ -79,7 +79,7 @@ class VCardAvatars(BaseModule):
             self._update_received(properties, room=contact is not None)
 
     def _self_update_received(self, properties):
-        jid = properties.jid.getBare()
+        jid = properties.jid.bare
         if properties.avatar_state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', properties.jid)
@@ -126,13 +126,13 @@ class VCardAvatars(BaseModule):
         self._process_update(str(disco_info.jid), state, avatar_sha, True)
 
     def _update_received(self, properties, room=False):
-        self._process_update(properties.jid.getBare(),
+        self._process_update(properties.jid.bare,
                              properties.avatar_state,
                              properties.avatar_sha,
                              room)
 
     def _process_update(self, jid, state, avatar_sha, room):
-        acc_jid = self._con.get_own_jid().getStripped()
+        acc_jid = self._con.get_own_jid().bare
         if state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', jid)
@@ -176,10 +176,10 @@ class VCardAvatars(BaseModule):
                         RequestAvatar.USER, jid, sha=avatar_sha)
 
     def _gc_update_received(self, properties):
-        nick = properties.jid.getResource()
+        nick = properties.jid.resource
 
         gc_contact = app.contacts.get_gc_contact(
-            self._account, properties.jid.getBare(), nick)
+            self._account, properties.jid.bare, nick)
 
         if gc_contact is None:
             self._log.error('no gc contact found: %s', nick)

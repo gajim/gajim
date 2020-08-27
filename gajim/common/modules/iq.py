@@ -50,7 +50,7 @@ class Iq(BaseModule):
                 app.nec.push_incoming_event(
                     NetworkEvent('file-request-error',
                                  conn=self._con,
-                                 jid=properties.jid.getBare(),
+                                 jid=properties.jid.bare,
                                  file_props=file_props,
                                  error_msg=to_user_string(properties.error)))
                 self._con.get_module('Bytestream').disconnect_transfer(

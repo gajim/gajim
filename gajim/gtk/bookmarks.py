@@ -87,7 +87,7 @@ class Bookmarks(Gtk.ApplicationWindow):
             log.warning('Invalid JID: %s (%s)', error, new_value)
             return
 
-        if not jid.isBare:
+        if not jid.is_bare:
             log.warning('Invalid JID: only bare JIDs allowed (%s)', jid)
             return
 
@@ -144,7 +144,7 @@ class Bookmarks(Gtk.ApplicationWindow):
             if not row[Column.ADDRESS]:
                 continue
 
-            bookmark = BookmarkData(jid=JID(row[Column.ADDRESS]),
+            bookmark = BookmarkData(jid=JID.from_string(row[Column.ADDRESS]),
                                     name=row[Column.NAME],
                                     autojoin=row[Column.AUTOJOIN],
                                     password=row[Column.PASSWORD],

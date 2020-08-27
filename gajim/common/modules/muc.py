@@ -162,7 +162,7 @@ class MUC(BaseModule):
             app.nec.push_incoming_event(
                 NetworkEvent('muc-join-failed',
                              account=self._account,
-                             room_jid=result.jid.getBare(),
+                             room_jid=result.jid.bare,
                              error=result))
             return
 
@@ -317,7 +317,7 @@ class MUC(BaseModule):
             status=message)
 
     def _on_error_presence(self, _con, _stanza, properties):
-        room_jid = properties.jid.getBare()
+        room_jid = properties.jid.bare
         muc_data = self._manager.get(room_jid)
         if muc_data is None:
             return
@@ -529,7 +529,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent(event_name,
                          account=self._account,
-                         room_jid=properties.jid.getBare(),
+                         room_jid=properties.jid.bare,
                          properties=properties))
         self._log_muc_event(event_name, properties)
 
@@ -558,7 +558,7 @@ class MUC(BaseModule):
 
         app.logger.insert_into_logs(
             self._account,
-            properties.jid.getBare(),
+            properties.jid.bare,
             properties.timestamp,
             KindConstant.GCSTATUS,
             contact_name=properties.muc_nickname,
@@ -571,7 +571,7 @@ class MUC(BaseModule):
         if properties.muc_user.jid is not None:
             real_jid = str(properties.muc_user.jid)
         contact = app.contacts.create_gc_contact(
-            room_jid=properties.jid.getBare(),
+            room_jid=properties.jid.bare,
             account=self._account,
             name=properties.muc_nickname,
             show=properties.show,
@@ -686,7 +686,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-captcha-challenge',
                          account=self._account,
-                         room_jid=properties.jid.getBare(),
+                         room_jid=properties.jid.bare,
                          form=properties.captcha.form))
         raise nbxmpp.NodeProcessed
 

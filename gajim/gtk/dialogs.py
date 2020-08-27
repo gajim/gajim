@@ -313,11 +313,11 @@ class InvitationReceivedDialog(Gtk.ApplicationWindow):
         self.from_ = str(event.from_)
         self.password = event.password
 
-        if event.from_.bareMatch(event.muc):
-            contact_text = event.from_.getResource()
+        if event.from_.bare_match(event.muc):
+            contact_text = event.from_.resource
         else:
             contact = app.contacts.get_first_contact_from_jid(
-                self.account, event.from_.getBare())
+                self.account, event.from_.bare)
             if contact is None:
                 contact_text = str(event.from_)
             else:

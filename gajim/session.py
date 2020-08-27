@@ -37,7 +37,7 @@ class ChatControlSession:
         self.conn = conn
         self.jid = jid
         self.type_ = type_
-        self.resource = jid.getResource()
+        self.resource = jid.resource
         self.control = None
 
         if thread_id:
@@ -66,10 +66,10 @@ class ChatControlSession:
         )
 
     def is_loggable(self):
-        return helpers.should_log(self.conn.name, self.jid.getStripped())
+        return helpers.should_log(self.conn.name, self.jid.bare)
 
     def get_to(self):
-        bare_jid = self.jid.getBare()
+        bare_jid = self.jid.bare
         if not self.resource:
             return bare_jid
         return bare_jid + '/' + self.resource

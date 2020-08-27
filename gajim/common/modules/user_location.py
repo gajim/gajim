@@ -63,7 +63,7 @@ class UserLocation(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('location-received',
                          account=self._account,
-                         jid=properties.jid.getBare(),
+                         jid=properties.jid.bare,
                          location=data,
                          is_self_message=properties.is_self_message))
 

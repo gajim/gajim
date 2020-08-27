@@ -59,7 +59,7 @@ class Discovery(BaseModule):
         return self._server_info
 
     def discover_server_items(self):
-        server = self._con.get_own_jid().getDomain()
+        server = self._con.get_own_jid().domain
         self.disco_items(server, callback=self._server_items_received)
 
     def _server_items_received(self, result):
@@ -95,7 +95,7 @@ class Discovery(BaseModule):
             NetworkIncomingEvent('server-disco-received'))
 
     def discover_account_info(self):
-        own_jid = self._con.get_own_jid().getStripped()
+        own_jid = self._con.get_own_jid().bare
         self.disco_info(own_jid, callback=self._account_info_received)
 
     def _account_info_received(self, result):
@@ -120,7 +120,7 @@ class Discovery(BaseModule):
 
     def discover_server_info(self):
         # Calling this method starts the connect_maschine()
-        server = self._con.get_own_jid().getDomain()
+        server = self._con.get_own_jid().domain
         self.disco_info(server, callback=self._server_info_received)
 
     def _server_info_received(self, result):
