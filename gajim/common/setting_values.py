@@ -186,6 +186,8 @@ APP_SETTINGS = {
     'gc_print_status_default': False,
     'gc_print_join_left_default': False,
     'gc_send_chatstate_default': 'composing_only',
+    'check_for_update': True,
+    'last_update_check': '',
     'always_ask_for_status_message': False,
 }
 
