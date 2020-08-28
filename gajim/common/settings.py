@@ -383,6 +383,13 @@ class _Settings:
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
 
+        if value is None:
+            try:
+                del self._settings['app'][setting]
+            except KeyError:
+                pass
+            return
+
         default = APP_SETTINGS[setting]
         if not isinstance(value, type(default)):
             raise TypeError(f'Invalid type for {setting}: '
@@ -484,6 +491,13 @@ class _Settings:
         if setting not in ACCOUNT_SETTINGS['account']:
             raise ValueError(f'Invalid account setting: {setting}')
 
+        if value is None:
+            try:
+                del self._account_settings[account]['account'][setting]
+            except KeyError:
+                pass
+            return
+
         default = ACCOUNT_SETTINGS['account'][setting]
         if not isinstance(value, type(default)):
             raise TypeError(f'Invalid type for {setting}: '
@@ -528,6 +542,13 @@ class _Settings:
 
         if setting not in ACCOUNT_SETTINGS['group_chat']:
             raise ValueError(f'Invalid group chat setting: {setting}')
+
+        if value is None:
+            try:
+                del self._account_settings[account]['group_chat'][setting]
+            except KeyError:
+                pass
+            return
 
         default = ACCOUNT_SETTINGS['group_chat'][setting]
         if default is HAS_APP_DEFAULT:
@@ -578,6 +599,13 @@ class _Settings:
 
         if setting not in ACCOUNT_SETTINGS['contact']:
             raise ValueError(f'Invalid contact setting: {setting}')
+
+        if value is None:
+            try:
+                del self._account_settings[account]['contact'][setting]
+            except KeyError:
+                pass
+            return
 
         default = ACCOUNT_SETTINGS['contact'][setting]
         if default is HAS_APP_DEFAULT:
