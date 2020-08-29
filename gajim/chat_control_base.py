@@ -82,6 +82,14 @@ if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
 
+if sys.platform == 'darwin':
+    COPY_MODIFIER = Gdk.ModifierType.META_MASK
+    COPY_MODIFIER_KEYS = (Gdk.KEY_Meta_L, Gdk.KEY_Meta_R)
+else:
+    COPY_MODIFIER = Gdk.ModifierType.CONTROL_MASK
+    COPY_MODIFIER_KEYS = (Gdk.KEY_Control_L, Gdk.KEY_Control_R)
+
+
 ################################################################################
 class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     """
@@ -187,9 +195,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         id_ = self.conv_textview.connect('quote', self.on_quote)
         self.handlers[id_] = self.conv_textview.tv
 
-        id_ = self.conv_textview.tv.connect('grab-focus',
-                                            self._on_html_textview_grab_focus)
-        self.handlers[id_] = self.conv_textview.tv
+        self.conv_textview.tv.connect('key-press-event',
+                                      self._on_conv_textview_key_press_event)
 
         self.conv_scrolledwindow = self.xml.conversation_scrolledwindow
         self.conv_scrolledwindow.add(self.conv_textview.tv)
@@ -278,6 +285,27 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
+
+    def _on_conv_textview_key_press_event(self, textview, event):
+        if event.keyval in COPY_MODIFIER_KEYS:
+            # Don’t route modifier keys for copy action to the Message Input
+            # otherwise pressing CTRL/META + c (the next event after that)
+            # will not reach the textview (because the Message Input would get
+            # focused).
+            return Gdk.EVENT_PROPAGATE
+
+        if event.get_state() & COPY_MODIFIER:
+            # Don’t reroute the event if it is META + c and the
+            # textview has a selection
+            if event.keyval == Gdk.KEY_c:
+                if textview.get_buffer().props.has_selection:
+                    return Gdk.EVENT_PROPAGATE
+
+        # Focus the Messsage Input and resend the event
+        textview.unselect()
+        self.msg_textview.grab_focus()
+        self.msg_textview.get_toplevel().propagate_key_event(event)
+        return Gdk.EVENT_STOP
 
     @property
     def type(self):
@@ -511,10 +539,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self.msg_textview.emit('insert-emoji')
             return Gdk.EVENT_STOP
 
-        if action == 'copy-text':
-            self.conv_textview.tv.emit('copy-clipboard')
-            return Gdk.EVENT_STOP
-
         return Gdk.EVENT_PROPAGATE
 
     def add_actions(self):
@@ -642,13 +666,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def on_language_changed(self, checker, _param):
         gspell_lang = checker.get_language()
         self.contact.settings.set('speller_language', gspell_lang.get_code())
-
-    def _on_html_textview_grab_focus(self, textview):
-        # Abort signal so the textview does not get focused
-        # Focus the MessageInputTextView instead
-        GObject.signal_stop_emission_by_name(textview, 'grab-focus')
-        self.msg_textview.grab_focus()
-        return Gdk.EVENT_STOP
 
     def on_banner_label_populate_popup(self, _label, menu):
         """

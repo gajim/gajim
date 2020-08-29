@@ -240,7 +240,6 @@ class Config:
         'muclumbus_api_jid': [opt_str, 'rodrigo.de.mucobedo@dreckshal.de'],
         'muclumbus_api_http_uri': [opt_str, 'https://search.jabbercat.org/api/1.0/search'],
         'muclumbus_api_pref': [opt_str, 'http', _('API Preferences. Possible values: \'http\', \'iq\'')],
-        'auto_copy': [opt_bool, True, _('Selecting text will copy it to the clipboard')],
         'command_system_execute': [opt_bool, False, _('If enabled, Gajim will execute commands (/show, /sh, /execute, /exec).')],
         'groupchat_roster_width': [opt_int, 210, _('Width of group chat roster in pixel')],
         'dev_force_bookmark_2': [opt_bool, False, _('Force Bookmark 2 usage')],

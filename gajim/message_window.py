@@ -193,7 +193,6 @@ class MessageWindow(EventHelper):
             'switch-tab-7',
             'switch-tab-8',
             'switch-tab-9',
-            'copy-text',
         ]
 
         disabled_for_emacs = (

@@ -558,7 +558,6 @@ class GajimApplication(Gtk.Application):
             'win.switch-tab-7': ['<Alt>7', '<Alt>KP_7'],
             'win.switch-tab-8': ['<Alt>8', '<Alt>KP_8'],
             'win.switch-tab-9': ['<Alt>9', '<Alt>KP_9'],
-            'win.copy-text': ['<Control><Shift>c'],
         }
 
         for action, accels in shortcuts.items():

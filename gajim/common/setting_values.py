@@ -176,7 +176,6 @@ APP_SETTINGS = {
     'muclumbus_api_jid': 'rodrigo.de.mucobedo@dreckshal.de',
     'muclumbus_api_http_uri': 'https://search.jabbercat.org/api/1.0/search',
     'muclumbus_api_pref': 'http',
-    'auto_copy': True,
     'command_system_execute': False,
     'groupchat_roster_width': 210,
     'dev_force_bookmark_2': False,
