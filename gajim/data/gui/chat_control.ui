@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -398,6 +398,9 @@
       <object class="GtkOverlay" id="overlay">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <signal name="drag-data-received" handler="_on_drag_data_received" swapped="no"/>
+        <signal name="drag-leave" handler="_on_drag_leave" swapped="no"/>
+        <signal name="drag-motion" handler="_on_drag_motion" swapped="no"/>
         <child>
           <object class="GtkPaned" id="paned1">
             <property name="visible">True</property>
@@ -412,6 +415,7 @@
                     <property name="name">ChatControl-BannerEventBox</property>
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
+                    <signal name="button-press-event" handler="_on_banner_eventbox_button_press_event" swapped="no"/>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>

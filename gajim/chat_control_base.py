@@ -135,19 +135,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.connect_signals(self)
         self.widget = self.xml.get_object('%s_hbox' % widget_name)
 
-        if not self._type.is_groupchat:
-            # Create banner and connect signals
-            id_ = self.xml.banner_eventbox.connect(
-                'button-press-event',
-                self._on_banner_eventbox_button_press_event)
-            self.handlers[id_] = self.xml.banner_eventbox
-
-        if self.xml.banner_label is not None:
-            id_ = self.xml.banner_label.connect(
-                'populate-popup',
-                self.on_banner_label_populate_popup)
-            self.handlers[id_] = self.xml.banner_label
-
         self._accounts = app.get_enabled_accounts_with_labels()
         if len(self._accounts) > 1:
             account_badge = generate_account_badge(self.account)
@@ -173,15 +160,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                               Gtk.TargetFlags.SAME_APP,
                               0)]
 
-        id_ = self.xml.overlay.connect('drag-data-received',
-                                       self._on_drag_data_received)
-
-        self.handlers[id_] = self.xml.overlay
-        id_ = self.xml.overlay.connect('drag-motion', self._on_drag_motion)
-        self.handlers[id_] = self.xml.overlay
-        id_ = self.xml.overlay.connect('drag-leave', self._on_drag_leave)
-        self.handlers[id_] = self.xml.overlay
-
         self.xml.overlay.drag_dest_set(
             Gtk.DestDefaults.ALL,
             self._dnd_list,
@@ -197,39 +175,28 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.conv_textview.tv.connect('key-press-event',
                                       self._on_conv_textview_key_press_event)
 
-        self.conv_scrolledwindow = self.xml.conversation_scrolledwindow
-        self.conv_scrolledwindow.add(self.conv_textview.tv)
-        widget = self.conv_scrolledwindow.get_vadjustment()
-        id_ = widget.connect('changed',
-                             self.on_conversation_vadjustment_changed)
-        self.handlers[id_] = widget
+        self.xml.conversation_scrolledwindow.add(self.conv_textview.tv)
+        widget = self.xml.conversation_scrolledwindow.get_vadjustment()
+        widget.connect('changed', self.on_conversation_vadjustment_changed)
 
-        vscrollbar = self.conv_scrolledwindow.get_vscrollbar()
-        id_ = vscrollbar.connect('button-release-event',
-                                 self._on_scrollbar_button_release)
-        self.handlers[id_] = vscrollbar
+        vscrollbar = self.xml.conversation_scrolledwindow.get_vscrollbar()
+        vscrollbar.connect('button-release-event',
+                           self._on_scrollbar_button_release)
 
-        self.correcting = False
-        self.last_sent_msg = None
-
-        # add MessageInputTextView to UI and connect signals
         self.msg_textview = MessageInputTextView()
+        self.msg_textview.connect('paste-clipboard',
+                                  self._on_message_textview_paste_event)
+        self.msg_textview.connect('key-press-event',
+                                  self._on_message_textview_key_press_event)
+        self.msg_textview.connect('populate-popup',
+                                  self.on_msg_textview_populate_popup)
+        self.msg_textview.connect('text-changed',
+                                  self._on_message_tv_buffer_changed)
 
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.add(self.msg_textview)
 
         self.xml.hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
-
-        id_ = self.msg_textview.connect('paste-clipboard',
-                                        self._on_message_textview_paste_event)
-        self.handlers[id_] = self.msg_textview
-        id_ = self.msg_textview.connect(
-            'key-press-event',
-            self._on_message_textview_key_press_event)
-        self.handlers[id_] = self.msg_textview
-        id_ = self.msg_textview.connect('populate-popup',
-                                        self.on_msg_textview_populate_popup)
-        self.handlers[id_] = self.msg_textview
 
         # the following vars are used to keep history of user's messages
         self.sent_history = []
@@ -237,6 +204,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.received_history = []
         self.received_history_pos = 0
         self.orig_msg = None
+
+        self.correcting = False
+        self.last_sent_msg = None
 
         self.set_emoticon_popover()
 
@@ -255,9 +225,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         con = app.connections[self.account]
         con.get_module('Chatstate').set_active(self.contact)
 
-        id_ = self.msg_textview.connect('text-changed',
-                                        self._on_message_tv_buffer_changed)
-        self.handlers[id_] = self.msg_textview
         if parent_win is not None:
             id_ = parent_win.window.connect('motion-notify-event',
                                             self._on_window_motion_notify)
@@ -686,13 +653,17 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
-            del self.handlers[i]
+        self.handlers.clear()
 
         self.conv_textview.del_handlers()
         del self.conv_textview
-
-        self.msg_textview.destroy()
         del self.msg_textview
+        del self.msg_scrolledwindow
+
+        self.widget.destroy()
+        del self.widget
+
+        del self.xml
 
         # PluginSystem: removing GUI extension points
         # connected with ChatControlBase instance object
@@ -1451,7 +1422,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             if direction != Gdk.ScrollDirection.UP:
                 return
         # Check if we have a Scrollbar
-        adjustment = self.conv_scrolledwindow.get_vadjustment()
+        adjustment = self.xml.conversation_scrolledwindow.get_vadjustment()
         if adjustment.get_upper() != adjustment.get_page_size():
             app.log('autoscroll').info('Autoscroll disabled')
             self.conv_textview.autoscroll = False

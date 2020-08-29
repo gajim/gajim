@@ -561,10 +561,6 @@ class MessageWindow(EventHelper):
         ask any confirmation
         """
         def close(ctrl):
-            if reason is not None: # We are leaving gc with a status message
-                ctrl.shutdown(reason)
-            else: # We are leaving gc without status message or it's a chat
-                ctrl.shutdown()
             # Update external state
             app.events.remove_events(
                 ctrl.account, ctrl.get_full_jid,
@@ -587,6 +583,11 @@ class MessageWindow(EventHelper):
 
             if not self._controls[ctrl.account]:
                 del self._controls[ctrl.account]
+
+            if reason is not None: # We are leaving gc with a status message
+                ctrl.shutdown(reason)
+            else: # We are leaving gc without status message or it's a chat
+                ctrl.shutdown()
 
             self.check_tabs()
             self.show_title()
