@@ -144,7 +144,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         if self.xml.banner_label is not None:
             id_ = self.xml.banner_label.connect(
-                'populate_popup',
+                'populate-popup',
                 self.on_banner_label_populate_popup)
             self.handlers[id_] = self.xml.banner_label
 
@@ -173,13 +173,13 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                               Gtk.TargetFlags.SAME_APP,
                               0)]
 
-        id_ = self.xml.overlay.connect('drag_data_received',
+        id_ = self.xml.overlay.connect('drag-data-received',
                                        self._on_drag_data_received)
 
         self.handlers[id_] = self.xml.overlay
-        id_ = self.xml.overlay.connect('drag_motion', self._on_drag_motion)
+        id_ = self.xml.overlay.connect('drag-motion', self._on_drag_motion)
         self.handlers[id_] = self.xml.overlay
-        id_ = self.xml.overlay.connect('drag_leave', self._on_drag_leave)
+        id_ = self.xml.overlay.connect('drag-leave', self._on_drag_leave)
         self.handlers[id_] = self.xml.overlay
 
         self.xml.overlay.drag_dest_set(
@@ -224,10 +224,10 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                                         self._on_message_textview_paste_event)
         self.handlers[id_] = self.msg_textview
         id_ = self.msg_textview.connect(
-            'key_press_event',
+            'key-press-event',
             self._on_message_textview_key_press_event)
         self.handlers[id_] = self.msg_textview
-        id_ = self.msg_textview.connect('populate_popup',
+        id_ = self.msg_textview.connect('populate-popup',
                                         self.on_msg_textview_populate_popup)
         self.handlers[id_] = self.msg_textview
 
