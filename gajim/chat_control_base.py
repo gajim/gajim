@@ -267,7 +267,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 if textview.get_buffer().props.has_selection:
                     return Gdk.EVENT_PROPAGATE
 
-        # Focus the Messsage Input and resend the event
+        # Focus the Message Input and resend the event
         textview.unselect()
         self.msg_textview.grab_focus()
         self.msg_textview.get_toplevel().propagate_key_event(event)
