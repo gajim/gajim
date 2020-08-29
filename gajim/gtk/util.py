@@ -21,6 +21,7 @@ from typing import Tuple
 from typing import Optional
 
 import sys
+import weakref
 import logging
 import textwrap
 from importlib import import_module
@@ -811,3 +812,13 @@ class EventHelper(CommonEventHelper):
 
     def __on_destroy(self, *args):
         self.unregister_events()
+
+
+def check_destroy(widget):
+    def _destroy(*args):
+        print('DESTROYED', args)
+    widget.connect('destroy', _destroy)
+
+
+def check_finalize(obj, name):
+    weakref.finalize(obj, print, f'{name} has been finalized')
