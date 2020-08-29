@@ -190,9 +190,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         # Create textviews and connect signals
         self.conv_textview = ConversationTextview(self.account)
-        self.conv_textview.tv.drag_dest_unset()
+
         id_ = self.conv_textview.connect('quote', self.on_quote)
-        self.handlers[id_] = self.conv_textview.tv
+        self.handlers[id_] = self.conv_textview
 
         self.conv_textview.tv.connect('key-press-event',
                                       self._on_conv_textview_key_press_event)
@@ -214,7 +214,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         # add MessageInputTextView to UI and connect signals
         self.msg_textview = MessageInputTextView()
-        self.msg_textview.drag_dest_unset()
+
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.add(self.msg_textview)
 

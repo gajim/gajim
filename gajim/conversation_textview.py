@@ -100,14 +100,6 @@ class ConversationTextview(GObject.GObject):
         self.tv = HtmlTextView(account)
         self.tv.connect('query-tooltip', self._query_tooltip)
 
-        # set properties
-        self.tv.set_border_width(1)
-        self.tv.set_accepts_tab(True)
-        self.tv.set_editable(False)
-        self.tv.set_cursor_visible(False)
-        self.tv.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
-        self.tv.set_left_margin(2)
-        self.tv.set_right_margin(2)
         self._buffer = self.tv.get_buffer()
         self.handlers = {}
         self.image_cache = {}

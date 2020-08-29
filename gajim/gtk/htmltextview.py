@@ -703,9 +703,18 @@ class HtmlTextView(Gtk.TextView):
 
     def __init__(self, account, standalone=False):
         Gtk.TextView.__init__(self)
-        self.set_wrap_mode(Gtk.WrapMode.CHAR)
-        self.set_editable(False)
+
         self.set_has_tooltip(True)
+        self.set_border_width(1)
+        self.set_accepts_tab(True)
+        self.set_editable(False)
+        self.set_cursor_visible(False)
+        self.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
+        self.set_left_margin(2)
+        self.set_right_margin(2)
+
+        self.drag_dest_unset()
+
         self.connect('copy-clipboard', self._on_copy_clipboard)
         self.get_buffer().eol_tag = self.get_buffer().create_tag('eol')
 

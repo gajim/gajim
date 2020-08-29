@@ -61,6 +61,8 @@ class MessageInputTextView(Gtk.TextView):
         self.set_pixels_below_lines(2)
         self.get_style_context().add_class('gajim-conversation-font')
 
+        self.drag_dest_unset()
+
         # set undo list
         self.undo_list = []
         # needed to know if we undid something
