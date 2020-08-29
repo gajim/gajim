@@ -683,6 +683,17 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         menu.show_all()
 
     def shutdown(self):
+        for i in list(self.handlers.keys()):
+            if self.handlers[i].handler_is_connected(i):
+                self.handlers[i].disconnect(i)
+            del self.handlers[i]
+
+        self.conv_textview.del_handlers()
+        del self.conv_textview
+
+        self.msg_textview.destroy()
+        del self.msg_textview
+
         # PluginSystem: removing GUI extension points
         # connected with ChatControlBase instance object
         app.plugin_manager.remove_gui_extension_point('chat_control_base', self)

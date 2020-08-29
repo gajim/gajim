@@ -1638,9 +1638,6 @@ class GroupchatControl(ChatControlBase):
             app.connections[self.account].get_module('MUC').leave(
                 self.room_jid, reason=reason)
 
-        # PluginSystem: calling shutdown of super class (ChatControlBase)
-        # to let it remove it's GUI extension points
-        super(GroupchatControl, self).shutdown()
         # PluginSystem: removing GUI extension points connected with
         # GrouphatControl instance object
         app.plugin_manager.remove_gui_extension_point(
@@ -1668,14 +1665,10 @@ class GroupchatControl(ChatControlBase):
         self.roster.destroy()
         self.roster = None
 
-        # remove all register handlers on wigets, created by self.xml
-        # to prevent circular references among objects
-        for i in list(self.handlers.keys()):
-            if self.handlers[i].handler_is_connected(i):
-                self.handlers[i].disconnect(i)
-            del self.handlers[i]
         # Remove unread events from systray
         app.events.remove_events(self.account, self.room_jid)
+
+        super(GroupchatControl, self).shutdown()
 
     def safe_shutdown(self):
         if self.minimizable():

@@ -1104,16 +1104,7 @@ class ChatControl(ChatControlBase):
                                   self.account,
                                   force=True,
                                   backend=backend)
-        # remove all register handlers on widgets, created by self.xml
-        # to prevent circular references among objects
-        for i in list(self.handlers.keys()):
-            if self.handlers[i].handler_is_connected(i):
-                self.handlers[i].disconnect(i)
-            del self.handlers[i]
-        self.conv_textview.del_handlers()
-        self.msg_textview.destroy()
-        # PluginSystem: calling shutdown of super class (ChatControlBase) to let
-        # it remove it's GUI extension points
+
         super(ChatControl, self).shutdown()
 
     def minimizable(self):
