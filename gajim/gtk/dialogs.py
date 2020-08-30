@@ -18,6 +18,7 @@ from collections import namedtuple
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import Pango
 
 from gajim.common import app
@@ -26,6 +27,7 @@ from gajim.common.const import ButtonAction
 from gajim.common.helpers import convert_gio_to_openssl_cert
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_thumbnail_size
 
 
 class DialogButton(namedtuple('DialogButton', ('response text callback args '
@@ -487,6 +489,38 @@ class NewConfirmationCheckDialog(NewConfirmationDialog):
         if button is not None:
             button.args.insert(0, self._checkbutton.get_active())
         super()._on_response(_dialog, response)
+
+
+class PastePreviewDialog(NewConfirmationCheckDialog):
+    def __init__(self, title, text, sec_text, check_text, image,
+                 buttons, modal=True, transient_for=None):
+        NewConfirmationCheckDialog.__init__(self,
+                                            title,
+                                            text,
+                                            sec_text,
+                                            check_text,
+                                            buttons,
+                                            transient_for=transient_for,
+                                            modal=modal)
+
+        preview = Gtk.Image()
+        preview.set_halign(Gtk.Align.CENTER)
+        preview.get_style_context().add_class('preview-image')
+        size = 300
+        image_width = image.get_width()
+        image_height = image.get_height()
+
+        if size > image_width and size > image_height:
+            preview.set_from_pixbuf(image)
+        else:
+            thumb_width, thumb_height = get_thumbnail_size(image, size)
+            pixbuf_scaled = image.scale_simple(
+                thumb_width, thumb_height, GdkPixbuf.InterpType.BILINEAR)
+            preview.set_from_pixbuf(pixbuf_scaled)
+
+        content_area = self.get_content_area()
+        content_area.pack_start(preview, True, True, 0)
+        content_area.reorder_child(preview, 2)
 
 
 class InputDialog(NewConfirmationDialog):

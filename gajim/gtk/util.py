@@ -23,6 +23,7 @@ from typing import Optional
 import sys
 import weakref
 import logging
+import math
 import textwrap
 import functools
 from importlib import import_module
@@ -755,6 +756,25 @@ def load_pixbuf(path, size=None):
                                        height,
                                        GdkPixbuf.InterpType.BILINEAR)
         return pixbuf
+
+
+def get_thumbnail_size(pixbuf, size):
+    # Calculates the new thumbnail size while preserving the aspect ratio
+    image_width = pixbuf.get_width()
+    image_height = pixbuf.get_height()
+
+    if image_width > image_height:
+        if image_width > size:
+            image_height = math.ceil(
+                (size / float(image_width) * image_height))
+            image_width = int(size)
+    else:
+        if image_height > size:
+            image_width = math.ceil(
+                (size / float(image_height) * image_width))
+            image_height = int(size)
+
+    return image_width, image_height
 
 
 def make_href_markup(string):

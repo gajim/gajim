@@ -53,7 +53,7 @@ from gajim.conversation_textview import ConversationTextview
 
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
-from gajim.gtk.dialogs import NewConfirmationCheckDialog
+from gajim.gtk.dialogs import PastePreviewDialog
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_show_in_roster
@@ -731,12 +731,13 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             if not app.settings.get('confirm_paste_image'):
                 self._paste_event_confirmed(True, image)
                 return
-            NewConfirmationCheckDialog(
+            PastePreviewDialog(
                 _('Paste Image'),
                 _('You are trying to paste an image'),
                 _('Are you sure you want to paste your '
                   'clipboard\'s image into the chat window?'),
                 _('_Do not ask me again'),
+                image,
                 [DialogButton.make('Cancel'),
                  DialogButton.make('Accept',
                                    text=_('_Paste'),
