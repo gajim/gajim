@@ -132,7 +132,7 @@ APP_SETTINGS = {
     'one_message_window': 'always',
     'show_roster_on_startup': 'always',
     'show_avatar_in_chat': True,
-    'escape_key_closes': True,
+    'escape_key_closes': False,
     'hide_groupchat_banner': False,
     'hide_chat_banner': False,
     'hide_groupchat_occupants_list': False,
