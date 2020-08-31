@@ -736,9 +736,10 @@ class AdvancedPage(GenericSettingPage):
                     SettingType.ACCOUNT_CONFIG, 'autoauth',
                     desc=_('Automatically accept all contact requests')),
 
-            Setting(SettingKind.COMBO, _('Filetransfer Preference'),
+            Setting(SettingKind.POPOVER, _('Filetransfer Preference'),
                     SettingType.ACCOUNT_CONFIG, 'filetransfer_preference',
-                    props={'combo_items': ['httpupload', 'jingle']},
+                    props={'entries': {'httpupload': _('Upload Files'),
+                                       'jingle': _('Send Files Directly')}},
                     desc=_('Preferred file transfer mechanism for '
                            'file drag&drop on a chat window'))
             ]
