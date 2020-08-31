@@ -61,16 +61,11 @@ class SettingsDialog(Gtk.ApplicationWindow):
         self.add(self.listbox)
 
         self.show_all()
-        self.listbox.connect('row-activated', self.on_row_activated)
         self.connect('key-press-event', self.on_key_press)
 
     def on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
-
-    @staticmethod
-    def on_row_activated(_listbox, row):
-        row.on_row_activated()
 
     def get_setting(self, name):
         return self.listbox.get_setting(name)
@@ -104,6 +99,12 @@ class SettingsBox(Gtk.ListBox):
         if extend is not None:
             for setting, callback in extend:
                 self.map[setting] = callback
+
+        self.listbox.connect('row-activated', self.on_row_activated)
+
+    @staticmethod
+    def on_row_activated(_listbox, row):
+        row.on_row_activated()
 
     def add_setting(self, setting):
         if not isinstance(setting, Gtk.ListBoxRow):

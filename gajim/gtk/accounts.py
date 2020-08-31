@@ -585,8 +585,6 @@ class GenericSettingPage(Gtk.Box):
 
         self.pack_end(self.listbox, True, True, 0)
 
-        self.listbox.connect('row-activated', self.on_row_activated)
-
     def connect_signal(self, stack):
         return stack.connect('notify::visible-child',
                              self._on_visible_child_changed)
@@ -594,10 +592,6 @@ class GenericSettingPage(Gtk.Box):
     def _on_visible_child_changed(self, stack, _param):
         if self == stack.get_visible_child():
             self.listbox.update_states()
-
-    @staticmethod
-    def on_row_activated(_listbox, row):
-        row.on_row_activated()
 
 
 class GeneralPage(GenericSettingPage):
