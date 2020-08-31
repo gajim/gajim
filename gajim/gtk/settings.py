@@ -572,11 +572,11 @@ class PopoverSetting(GenericSetting):
         box.add(self._current_label)
         box.add(image)
 
-        menu_listbox = Gtk.ListBox()
-        menu_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        for value, label in entries.items():
-            menu_listbox.add(PopoverRow(label, value))
-        menu_listbox.connect('row-activated', self._on_menu_row_activated)
+        self._menu_listbox = Gtk.ListBox()
+        self._menu_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self._add_menu_entries(entries)
+        self._menu_listbox.connect('row-activated',
+                                   self._on_menu_row_activated)
 
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_propagate_natural_height(True)
@@ -584,7 +584,7 @@ class PopoverSetting(GenericSetting):
         scrolled_window.set_max_content_height(400)
         scrolled_window.set_policy(Gtk.PolicyType.NEVER,
                                    Gtk.PolicyType.AUTOMATIC)
-        scrolled_window.add(menu_listbox)
+        scrolled_window.add(self._menu_listbox)
         scrolled_window.show_all()
 
         self._popover = Gtk.Popover()
@@ -599,6 +599,15 @@ class PopoverSetting(GenericSetting):
 
         self.show_all()
 
+    def _add_menu_entries(self, entries):
+        if isinstance(entries, list):
+            entries = {key: key for key in entries}
+
+        for value, label in entries.items():
+            self._menu_listbox.add(PopoverRow(label, value))
+
+        self._menu_listbox.show_all()
+
     def _on_menu_row_activated(self, listbox, row):
         listbox.unselect_all()
         self._current_label.set_text(row.label)
@@ -608,6 +617,10 @@ class PopoverSetting(GenericSetting):
 
     def on_row_activated(self):
         self._popover.popup()
+
+    def update_entries(self, entries):
+        self._menu_listbox.foreach(self._menu_listbox.remove)
+        self._add_menu_entries(entries)
 
 
 class PopoverRow(Gtk.ListBoxRow):
