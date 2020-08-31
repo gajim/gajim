@@ -98,6 +98,7 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.HOSTNAME: CutstomHostnameSetting,
             SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
             SettingKind.COMBO: ComboSetting,
+            SettingKind.POPOVER: PopoverSetting,
         }
 
         if extend is not None:
@@ -543,6 +544,77 @@ class LoginSetting(DialogSetting):
         super().update_activatable(name, value)
         anonym = app.settings.get_account_setting(self.account, 'anonymous_auth')
         self.set_activatable(not anonym)
+
+
+class PopoverSetting(GenericSetting):
+
+    __gproperties__ = {
+        "setting-value": (str, 'Dummy', '', '',
+                          GObject.ParamFlags.READWRITE),}
+
+    def __init__(self, *args, entries):
+        GenericSetting.__init__(self, *args)
+
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
+                      spacing=12)
+        box.set_halign(Gtk.Align.END)
+
+        self._current_label = Gtk.Label()
+        self._current_label.set_valign(Gtk.Align.CENTER)
+        image = Gtk.Image.new_from_icon_name('pan-down-symbolic',
+                                             Gtk.IconSize.MENU)
+        image.set_valign(Gtk.Align.CENTER)
+
+        box.add(self._current_label)
+        box.add(image)
+
+        menu_listbox = Gtk.ListBox()
+        menu_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        for value, label in entries.items():
+            menu_listbox.add(PopoverRow(label, value))
+        menu_listbox.connect('row-activated', self._on_menu_row_activated)
+
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_propagate_natural_height(True)
+        scrolled_window.set_propagate_natural_width(True)
+        scrolled_window.set_max_content_height(400)
+        scrolled_window.set_policy(Gtk.PolicyType.NEVER,
+                                   Gtk.PolicyType.AUTOMATIC)
+        scrolled_window.add(menu_listbox)
+        scrolled_window.show_all()
+
+        self._popover = Gtk.Popover()
+        self._popover.get_style_context().add_class('combo')
+        self._popover.set_relative_to(image)
+        self._popover.set_position(Gtk.PositionType.BOTTOM)
+        self._popover.add(scrolled_window)
+
+        self.setting_box.pack_end(box, True, True, 0)
+
+        self._current_label.set_text(entries.get(self.setting_value, ''))
+
+        self.show_all()
+
+    def _on_menu_row_activated(self, listbox, row):
+        listbox.unselect_all()
+        self._current_label.set_text(row.label)
+        self._popover.popdown()
+
+        self.set_value(row.value)
+
+    def on_row_activated(self):
+        self._popover.popup()
+
+
+class PopoverRow(Gtk.ListBoxRow):
+    def __init__(self, label, value):
+        Gtk.ListBoxRow.__init__(self)
+        self.label = label
+        self.value = value
+
+        label = Gtk.Label(label=label)
+        label.set_xalign(0)
+        self.add(label)
 
 
 class ComboSetting(GenericSetting):
