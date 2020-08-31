@@ -100,7 +100,7 @@ class SettingsBox(Gtk.ListBox):
             for setting, callback in extend:
                 self.map[setting] = callback
 
-        self.listbox.connect('row-activated', self.on_row_activated)
+        self.connect('row-activated', self.on_row_activated)
 
     @staticmethod
     def on_row_activated(_listbox, row):
