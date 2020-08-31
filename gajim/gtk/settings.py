@@ -556,6 +556,9 @@ class PopoverSetting(GenericSetting):
     def __init__(self, *args, entries):
         GenericSetting.__init__(self, *args)
 
+        if isinstance(entries, list):
+            entries = {key: key for key in entries}
+
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
                       spacing=12)
         box.set_halign(Gtk.Align.END)
