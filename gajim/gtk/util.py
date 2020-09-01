@@ -24,6 +24,7 @@ import sys
 import weakref
 import logging
 import textwrap
+import functools
 from importlib import import_module
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -38,6 +39,7 @@ except Exception:
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GdkPixbuf
 import nbxmpp
@@ -164,6 +166,16 @@ class Builder:
         if gettext_ is None:
             gettext_ = _
 
+        xml_text = self._load_string_from_filename(filename, gettext_)
+
+        if widgets is not None:
+            self._builder.add_objects_from_string(xml_text, widgets)
+        else:
+            self._builder.add_from_string(xml_text)
+
+    @staticmethod
+    @functools.lru_cache(maxsize=None)
+    def _load_string_from_filename(filename, gettext_):
         file_path = str(Path(configpaths.get('GUI')) / filename)
 
         if sys.platform == "win32":
@@ -173,22 +185,14 @@ class Builder:
                 if 'translatable' in node.attrib and node.text is not None:
                     node.text = gettext_(node.text)
 
-            xml_text = ET.tostring(tree.getroot(),
-                                   encoding='unicode',
-                                   method='xml')
+            return ET.tostring(tree.getroot(),
+                               encoding='unicode',
+                               method='xml')
 
-            if widgets is not None:
-                self._builder.add_objects_from_string(xml_text, widgets)
-            else:
-                # Workaround
-                # https://gitlab.gnome.org/GNOME/pygobject/issues/255
-                Gtk.Builder.__mro__[1].add_from_string(
-                    self._builder, xml_text, len(xml_text.encode("utf-8")))
-        else:
-            if widgets is not None:
-                self._builder.add_objects_from_file(file_path, widgets)
-            else:
-                self._builder.add_from_file(file_path)
+
+        file = Gio.File.new_for_path(file_path)
+        content = file.load_contents(None)
+        return content[1].decode()
 
     def __getattr__(self, name):
         try:
