@@ -298,7 +298,16 @@ class SwitchSetting(GenericSetting):
         self.switch.set_halign(Gtk.Align.END)
         self.switch.set_valign(Gtk.Align.CENTER)
 
-        self.setting_box.add(self.switch)
+        self._switch_state_label = Gtk.Label()
+        self._switch_state_label.set_xalign(1)
+        self._switch_state_label.set_valign(Gtk.Align.CENTER)
+        self._set_label(self.setting_value)
+
+        box = Gtk.Box(spacing=12)
+        box.set_halign(Gtk.Align.END)
+        box.add(self._switch_state_label)
+        box.add(self.switch)
+        self.setting_box.add(box)
 
         self.show_all()
 
@@ -309,6 +318,11 @@ class SwitchSetting(GenericSetting):
     def on_switch(self, switch, *args):
         value = switch.get_active()
         self.set_value(value)
+        self._set_label(value)
+
+    def _set_label(self, active):
+        text = _('On') if active else _('Off')
+        self._switch_state_label.set_text(text)
 
 
 class EntrySetting(GenericSetting):
