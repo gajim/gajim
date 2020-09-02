@@ -397,7 +397,7 @@ class MessageWindow(EventHelper):
         return True # halt the delete for the moment
 
     def _on_window_destroy(self, win):
-        for ctrl in self.controls():
+        for ctrl in self.remove_all_controls():
             ctrl.shutdown()
         self._controls.clear()
         # Clean up handlers connected to the parent window, this is important since
@@ -571,6 +571,7 @@ class MessageWindow(EventHelper):
 
             fctrl = self.get_control(fjid, ctrl.account)
             bctrl = self.get_control(jid, ctrl.account)
+
             # keep last_message_time around unless this was our last control with
             # that jid
             if not fctrl and not bctrl and \
@@ -757,6 +758,12 @@ class MessageWindow(EventHelper):
         for jid_dict in list(self._controls.values()):
             for ctrl in list(jid_dict.values()):
                 yield ctrl
+
+    def remove_all_controls(self):
+        for _account, control_dict in self._controls.items():
+            for contact in list(control_dict.keys()):
+                yield control_dict[contact]
+                del control_dict[contact]
 
     def get_nb_controls(self):
         return sum(len(jid_dict) for jid_dict in self._controls.values())
