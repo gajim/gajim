@@ -527,6 +527,17 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             action.set_enabled(False)
             self.parent_win.window.add_action(action)
 
+    def remove_actions(self):
+        actions = [
+            'set-encryption-',
+            'send-file-',
+            'send-file-httpupload-',
+            'send-file-jingle-',
+        ]
+
+        for action in actions:
+            self.parent_win.window.remove_action(f'{action}{self.control_id}')
+
     def change_encryption(self, action, param):
         encryption = param.get_string()
         if encryption == 'disabled':

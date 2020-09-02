@@ -352,6 +352,20 @@ class ChatControl(ChatControlBase):
         win.lookup_action(
             'information-' + self.control_id).set_enabled(online)
 
+    def remove_actions(self):
+        super().remove_actions()
+        actions = [
+            'invite-contacts-',
+            'add-to-roster-',
+            'block-contact-',
+            'information-',
+            'toggle-audio-',
+            'toggle-video-',
+            'send-chatstate-',
+        ]
+        for action in actions:
+            self.parent_win.window.remove_action(f'{action}{self.control_id}')
+
     def focus(self):
         self.msg_textview.grab_focus()
 
@@ -1076,12 +1090,15 @@ class ChatControl(ChatControlBase):
 
         self.unsubscribe_events()
 
+        self.remove_actions()
+
         # Send 'gone' chatstate
         con = app.connections[self.account]
         con.get_module('Chatstate').set_chatstate(self.contact, Chatstate.GONE)
 
         for jingle_type in ('audio', 'video'):
             self.close_jingle_content(jingle_type)
+        self.jingle.clear()
 
         # disconnect self from session
         if self.session:

@@ -431,6 +431,37 @@ class GroupchatControl(ChatControlBase):
 
         self._get_action('kick-').set_enabled(self.is_connected)
 
+    def remove_actions(self):
+        super().remove_actions()
+        actions = [
+            'rename-groupchat-',
+            'change-subject-',
+            'change-nickname-',
+            'disconnect-',
+            'destroy-',
+            'configure-',
+            'request-voice-',
+            'upload-avatar-',
+            'information-',
+            'invite-',
+            'contact-information-',
+            'execute-command-',
+            'ban-',
+            'kick-',
+            'change-role-',
+            'change-affiliation-',
+            'minimize-on-close-',
+            'minimize-on-autojoin-',
+            'send-chatstate-',
+            'notify-on-message-',
+            'print-status-',
+            'print-join-left-',
+            'choose-sync-',
+        ]
+
+        for action in actions:
+            self.parent_win.window.remove_action(f'{action}{self.control_id}')
+
     def _restore_conversation(self):
         rows = app.logger.load_groupchat_messages(
             self.account, self.contact.jid)
@@ -1603,7 +1634,7 @@ class GroupchatControl(ChatControlBase):
         return self.contact.settings.get('minimize_on_close')
 
     def minimize(self):
-        # Minimize it
+        self.remove_actions()
         win = app.interface.msg_win_mgr.get_window(self.contact.jid,
                                                    self.account)
         ctrl = win.get_control(self.contact.jid, self.account)
@@ -1667,6 +1698,9 @@ class GroupchatControl(ChatControlBase):
 
         # Remove unread events from systray
         app.events.remove_events(self.account, self.room_jid)
+
+        if self.parent_win is not None:
+            self.remove_actions()
 
         super(GroupchatControl, self).shutdown()
 
