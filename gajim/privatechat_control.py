@@ -181,7 +181,7 @@ class PrivateChatControl(ChatControl):
     def _on_update_gc_avatar(self, event):
         if event.contact != self.gc_contact:
             return
-        self.show_avatar()
+        self._update_avatar()
 
     def send_message(self, message, xhtml=None, process_commands=True,
                      attention=False):
@@ -215,7 +215,7 @@ class PrivateChatControl(ChatControl):
         else:
             self.got_connected()
 
-    def show_avatar(self):
+    def _update_avatar(self):
         scale = self.parent_win.window.get_scale_factor()
         surface = self.gc_contact.get_avatar(AvatarSize.CHAT,
                                              scale,

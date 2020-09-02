@@ -166,6 +166,8 @@ class GroupchatControl(ChatControlBase):
                                         lambda *args: self.show_roster())
         self.xml.banner_actionbar.pack_end(self.hide_roster_button)
 
+        self._update_avatar()
+
         # Holds CaptchaRequest widget
         self._captcha_request = None
 
@@ -808,14 +810,14 @@ class GroupchatControl(ChatControlBase):
             AvatarSize.ROSTER,
             self.scale_factor)
 
-    def _update_banner_state_image(self):
+    def _update_avatar(self):
         surface = app.interface.avatar_storage.get_muc_surface(
             self.account,
             self.contact.jid,
             AvatarSize.CHAT,
             self.scale_factor)
 
-        self.xml.gc_banner_status_image.set_from_surface(surface)
+        self.xml.avatar_image.set_from_surface(surface)
 
     def draw_banner_text(self):
         """
@@ -826,7 +828,7 @@ class GroupchatControl(ChatControlBase):
 
     @event_filter(['jid=room_jid'])
     def _on_update_room_avatar(self, event):
-        self._update_banner_state_image()
+        self._update_avatar()
 
     @event_filter(['account'])
     def _on_bookmarks_received(self, _event):
@@ -1187,8 +1189,6 @@ class GroupchatControl(ChatControlBase):
         self.is_connected = True
         ChatControlBase.got_connected(self)
 
-        # We don't redraw the whole banner here, because only icon change
-        self._update_banner_state_image()
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
@@ -1224,8 +1224,6 @@ class GroupchatControl(ChatControlBase):
         # Update Roster
         app.interface.roster.draw_contact(self.room_jid, self.account)
 
-        # We don't redraw the whole banner here, because only icon change
-        self._update_banner_state_image()
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 

@@ -141,7 +141,7 @@ class ChatControl(ChatControlBase):
 
         self.update_toolbar()
         self.update_all_pep_types()
-        self.show_avatar()
+        self._update_avatar()
 
         # Hook up signals
         widget = self.xml.location_eventbox
@@ -673,7 +673,7 @@ class ChatControl(ChatControlBase):
 
     @event_filter(['account', 'jid'])
     def _on_update_roster_avatar(self, obj):
-        self.show_avatar()
+        self._update_avatar()
 
     def _nec_ping(self, event):
         if self.contact != event.contact:
@@ -838,7 +838,7 @@ class ChatControl(ChatControlBase):
         # The name banner is drawn here
         ChatControlBase.update_ui(self)
         self.update_toolbar()
-        self.show_avatar()
+        self._update_avatar()
 
     def draw_banner_text(self):
         """
@@ -1159,7 +1159,7 @@ class ChatControl(ChatControlBase):
             return
         on_yes(self)
 
-    def show_avatar(self):
+    def _update_avatar(self):
         scale = self.parent_win.window.get_scale_factor()
         surface = app.contacts.get_avatar(self.account,
                                           self.contact.jid,

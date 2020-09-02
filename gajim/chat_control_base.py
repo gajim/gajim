@@ -344,7 +344,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         Derived types MAY implement this.
         """
         self.draw_banner_text()
-        self._update_banner_state_image()
 
     def update_toolbar(self):
         """
@@ -370,11 +369,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         Derived types MAY implement this
         """
         self.draw_banner()
-
-    def _update_banner_state_image(self):
-        """
-        Derived types MAY implement this
-        """
 
     def _update_toolbar(self):
         """
