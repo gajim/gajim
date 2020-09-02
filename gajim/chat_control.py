@@ -1160,9 +1160,6 @@ class ChatControl(ChatControlBase):
         on_yes(self)
 
     def show_avatar(self):
-        if not app.settings.get('show_avatar_in_chat'):
-            return
-
         scale = self.parent_win.window.get_scale_factor()
         surface = app.contacts.get_avatar(self.account,
                                           self.contact.jid,

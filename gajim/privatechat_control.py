@@ -216,9 +216,6 @@ class PrivateChatControl(ChatControl):
             self.got_connected()
 
     def show_avatar(self):
-        if not app.settings.get('show_avatar_in_chat'):
-            return
-
         scale = self.parent_win.window.get_scale_factor()
         surface = self.gc_contact.get_avatar(AvatarSize.CHAT,
                                              scale,

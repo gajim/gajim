@@ -194,7 +194,6 @@ class Config:
             #always, never, peracct, pertype should not be translated
                 _('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'always_with_roster\' - Like \'always\' but the messages are in a single window along with the contact list.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g. chats vs. group chats) is sent to a specific window.')],
         'show_roster_on_startup':[opt_str, 'always', _('Show contact list window on startup.\n\'always\' - Always show contact list window.\n\'never\' - Never show contact list window.\n\'last_state\' - Restore last state of the contact list window.')],
-        'show_avatar_in_chat': [opt_bool, True, _('If enabled, Gajim displays the avatar in the chat window.')],
         'escape_key_closes': [opt_bool, False, _('If enabled, pressing Esc closes a tab/window.')],
         'hide_groupchat_banner': [opt_bool, False, _('Hides the banner in a group chat window.')],
         'hide_chat_banner': [opt_bool, False, _('Hides the banner in a 1:1 chat window.')],
