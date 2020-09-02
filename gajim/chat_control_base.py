@@ -345,8 +345,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         """
         self.draw_banner_text()
         self._update_banner_state_image()
-        app.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
-                                               self)
 
     def update_toolbar(self):
         """
@@ -679,8 +677,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # PluginSystem: removing GUI extension points
         # connected with ChatControlBase instance object
         app.plugin_manager.remove_gui_extension_point('chat_control_base', self)
-        app.plugin_manager.remove_gui_extension_point(
-            'chat_control_base_draw_banner', self)
         app.plugin_manager.remove_gui_extension_point(
             'chat_control_base_update_toolbar', self)
 
