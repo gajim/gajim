@@ -653,6 +653,14 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         menu.show_all()
 
     def shutdown(self):
+        # remove_gui_extension_point() is called on shutdown, but also when
+        # a plugin is getting disabled. Plugins don’t know the difference.
+        # Plugins might want to remove their widgets on
+        # remove_gui_extension_point(), so delete the objects only afterwards.
+        app.plugin_manager.remove_gui_extension_point('chat_control_base', self)
+        app.plugin_manager.remove_gui_extension_point(
+            'chat_control_base_update_toolbar', self)
+
         for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
@@ -667,12 +675,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         del self.widget
 
         del self.xml
-
-        # PluginSystem: removing GUI extension points
-        # connected with ChatControlBase instance object
-        app.plugin_manager.remove_gui_extension_point('chat_control_base', self)
-        app.plugin_manager.remove_gui_extension_point(
-            'chat_control_base_update_toolbar', self)
 
         self.unregister_events()
 
