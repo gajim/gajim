@@ -223,6 +223,10 @@ class GroupchatControl(ChatControlBase):
             ('message-error', ged.GUI1, self._on_message_error),
             ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
         ])
+
+        app.settings.connect_signal('gc_print_join_left_default', self.update_actions)
+        app.settings.connect_signal('gc_print_status_default', self.update_actions)
+
         # pylint: enable=line-too-long
 
         self.is_connected = False
@@ -358,7 +362,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_sync_threshold)
         self.parent_win.window.add_action(act)
 
-    def update_actions(self):
+    def update_actions(self, *args):
         if self.parent_win is None:
             return
 
@@ -1661,6 +1665,8 @@ class GroupchatControl(ChatControlBase):
         del win._controls[self.account][self.contact.jid]
 
     def shutdown(self, reason=None):
+        app.settings.disconnect_signals(self)
+
         # Leave MUC if we are still joined
         if self._muc_data.state != MUCJoinedState.NOT_JOINED:
             self.got_disconnected()

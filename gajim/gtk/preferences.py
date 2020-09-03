@@ -522,13 +522,9 @@ class Preferences(Gtk.ApplicationWindow):
 
     def _on_join_leave_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'gc_print_join_left_default')
-        for control in self._get_all_muc_controls():
-            control.update_actions()
 
     def _on_show_status_change_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'gc_print_status_default')
-        for control in self._get_all_muc_controls():
-            control.update_actions()
 
     def on_show_chatstate_in_tabs_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_chatstate_in_tabs')
