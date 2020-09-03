@@ -23,6 +23,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
+from gajim.common.i18n import Q_
 
 from gajim import gtkgui_helpers
 
@@ -321,7 +322,7 @@ class SwitchSetting(GenericSetting):
         self._set_label(value)
 
     def _set_label(self, active):
-        text = _('On') if active else _('Off')
+        text = Q_('?switch:On') if active else Q_('?switch:Off')
         self._switch_state_label.set_text(text)
 
 
