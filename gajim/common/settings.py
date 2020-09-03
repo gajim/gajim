@@ -21,8 +21,11 @@ import sys
 import json
 import logging
 import sqlite3
+import inspect
+import weakref
 from pathlib import Path
 from collections import namedtuple
+from collections import defaultdict
 
 from gi.repository import GLib
 
@@ -73,6 +76,38 @@ class _Settings:
 
         self._settings = {}
         self._account_settings = {}
+
+        self._callbacks = defaultdict(list)
+
+    def connect_signal(self, setting, func, account=None, jid=None):
+        if not inspect.ismethod(func):
+            # static methods are not bound to an object so we can’t easily
+            # remove the func once it should not be called anymore
+            raise ValueError('Only bound methods can be connected')
+
+        func = weakref.WeakMethod(func)
+        self._callbacks[(setting, account, jid)].append(func)
+
+    def disconnect_signals(self, object_):
+        for _, handlers in self._callbacks.items():
+            for handler in list(handlers):
+                func = handler()
+                if func is None or func.__self__ is object_:
+                    print('remove handler', handler)
+                    handlers.remove(handler)
+
+    def _notify(self, setting, account=None, jid=None):
+        log.info('Signal: %s changed', setting)
+
+        callbacks = self._callbacks[(setting, account, jid)]
+        for func in list(callbacks):
+            if func() is None:
+                callbacks.remove(func)
+                continue
+            try:
+                func()(setting, account, jid)
+            except Exception:
+                log.exception('Error while executing signal callback')
 
     def init(self) -> None:
         self._setup_installation_defaults()
@@ -388,6 +423,8 @@ class _Settings:
                 del self._settings['app'][setting]
             except KeyError:
                 pass
+
+            self._notify(setting)
             return
 
         default = APP_SETTINGS[setting]
@@ -398,6 +435,7 @@ class _Settings:
         self._settings['app'][setting] = value
 
         self._commit_settings('app')
+        self._notify(setting)
 
     set = set_app_setting
 
@@ -506,6 +544,7 @@ class _Settings:
         self._account_settings[account]['account'][setting] = value
 
         self._commit_account_settings(account)
+        self._notify(setting, account)
 
     def get_group_chat_setting(self,
                                account: str,
@@ -568,6 +607,7 @@ class _Settings:
             group_chat_settings[jid][setting] = value
 
         self._commit_account_settings(account)
+        self._notify(setting, account, jid)
 
     def get_contact_setting(self,
                             account: str,
@@ -621,6 +661,7 @@ class _Settings:
             contact_settings[jid][setting] = value
 
         self._commit_account_settings(account)
+        self._notify(setting, account, jid)
 
     def set_soundevent_setting(self,
                                event_name: str,

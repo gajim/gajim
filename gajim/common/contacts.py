@@ -193,6 +193,10 @@ class Contact(CommonContact):
 
         self.pep = {}
 
+    def connect_signal(self, setting, func):
+        app.settings.connect_signal(
+            setting, func, self.account.name, self.jid)
+
     def get_full_jid(self):
         if self.resource:
             return self.jid + '/' + self.resource
