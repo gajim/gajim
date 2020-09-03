@@ -839,6 +839,7 @@ class ChatControl(ChatControlBase):
         ChatControlBase.update_ui(self)
         self.update_toolbar()
         self._update_avatar()
+        self.update_actions()
 
     def draw_banner_text(self):
         """
