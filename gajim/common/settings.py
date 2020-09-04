@@ -93,7 +93,6 @@ class _Settings:
             for handler in list(handlers):
                 func = handler()
                 if func is None or func.__self__ is object_:
-                    print('remove handler', handler)
                     handlers.remove(handler)
 
     def _notify(self, value, setting, account=None, jid=None):
