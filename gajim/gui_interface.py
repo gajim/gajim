@@ -245,9 +245,9 @@ class Interface:
 
     @staticmethod
     def handle_event_msgsent(obj):
-        # ('MSGSENT', account, (jid, msg))
-        # Do not play sound if it is a standalone chatstate message (eg no msg)
-        # or if it is a message to more than one recipient
+        if not obj.play_sound:
+            return
+
         enabled = app.settings.get_soundevent_settings('message_sent')['enabled']
         if enabled:
             if isinstance(obj.jid, list) and len(obj.jid) > 1:

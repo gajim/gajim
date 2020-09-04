@@ -63,7 +63,8 @@ class OutgoingMessage:
                  correct_id=None,
                  oob_url=None,
                  xhtml=None,
-                 nodes=None):
+                 nodes=None,
+                 play_sound=True):
 
         if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
             raise ValueError('Unknown message type: %s' % type_)
@@ -108,6 +109,7 @@ class OutgoingMessage:
             self.additional_data.set_value('gajim', 'xhtml', xhtml)
 
         self.nodes = nodes
+        self.play_sound = play_sound
 
         self.timestamp = None
         self.message_id = None

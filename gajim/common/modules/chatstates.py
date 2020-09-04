@@ -317,7 +317,8 @@ class Chatstate(BaseModule):
                                   contact=contact,
                                   message=None,
                                   type_=type_,
-                                  chatstate=chatstate)
+                                  chatstate=chatstate,
+                                  play_sound=False)
 
         self._con.send_message(message)
 
