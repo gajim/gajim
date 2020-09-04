@@ -96,7 +96,7 @@ class _Settings:
                     print('remove handler', handler)
                     handlers.remove(handler)
 
-    def _notify(self, setting, account=None, jid=None):
+    def _notify(self, value, setting, account=None, jid=None):
         log.info('Signal: %s changed', setting)
 
         callbacks = self._callbacks[(setting, account, jid)]
@@ -105,7 +105,7 @@ class _Settings:
                 callbacks.remove(func)
                 continue
             try:
-                func()(setting, account, jid)
+                func()(value, setting, account, jid)
             except Exception:
                 log.exception('Error while executing signal callback')
 
@@ -418,24 +418,24 @@ class _Settings:
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
 
+        default = APP_SETTINGS[setting]
+        if not isinstance(value, type(default)) and value is not None:
+            raise TypeError(f'Invalid type for {setting}: '
+                            f'{value} {type(value)}')
+
         if value is None:
             try:
                 del self._settings['app'][setting]
             except KeyError:
                 pass
 
-            self._notify(setting)
+            self._notify(default, setting)
             return
-
-        default = APP_SETTINGS[setting]
-        if not isinstance(value, type(default)):
-            raise TypeError(f'Invalid type for {setting}: '
-                            f'{value} {type(value)}')
 
         self._settings['app'][setting] = value
 
         self._commit_settings('app')
-        self._notify(setting)
+        self._notify(value, setting)
 
     set = set_app_setting
 
@@ -529,22 +529,24 @@ class _Settings:
         if setting not in ACCOUNT_SETTINGS['account']:
             raise ValueError(f'Invalid account setting: {setting}')
 
+        default = ACCOUNT_SETTINGS['account'][setting]
+        if not isinstance(value, type(default)) and value is not None:
+            raise TypeError(f'Invalid type for {setting}: '
+                            f'{value} {type(value)}')
+
         if value is None:
             try:
                 del self._account_settings[account]['account'][setting]
             except KeyError:
                 pass
-            return
 
-        default = ACCOUNT_SETTINGS['account'][setting]
-        if not isinstance(value, type(default)):
-            raise TypeError(f'Invalid type for {setting}: '
-                            f'{value} {type(value)}')
+            self._notify(default, setting, account)
+            return
 
         self._account_settings[account]['account'][setting] = value
 
         self._commit_account_settings(account)
-        self._notify(setting, account)
+        self._notify(value, setting, account)
 
     def get_group_chat_setting(self,
                                account: str,
@@ -582,13 +584,6 @@ class _Settings:
         if setting not in ACCOUNT_SETTINGS['group_chat']:
             raise ValueError(f'Invalid group chat setting: {setting}')
 
-        if value is None:
-            try:
-                del self._account_settings[account]['group_chat'][setting]
-            except KeyError:
-                pass
-            return
-
         default = ACCOUNT_SETTINGS['group_chat'][setting]
         if default is HAS_APP_DEFAULT:
             if context is None:
@@ -596,9 +591,18 @@ class _Settings:
             else:
                 default = APP_SETTINGS[f'gc_{setting}_{context}_default']
 
-        if not isinstance(value, type(default)):
+        if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f'Invalid type for {setting}: '
                             f'{value} {type(value)}')
+
+        if value is None:
+            try:
+                del self._account_settings[account]['group_chat'][setting]
+            except KeyError:
+                pass
+
+            self._notify(default, setting, account, jid)
+            return
 
         group_chat_settings = self._account_settings[account]['group_chat']
         if jid not in group_chat_settings:
@@ -607,7 +611,7 @@ class _Settings:
             group_chat_settings[jid][setting] = value
 
         self._commit_account_settings(account)
-        self._notify(setting, account, jid)
+        self._notify(value, setting, account, jid)
 
     def get_contact_setting(self,
                             account: str,
@@ -640,19 +644,21 @@ class _Settings:
         if setting not in ACCOUNT_SETTINGS['contact']:
             raise ValueError(f'Invalid contact setting: {setting}')
 
+        default = ACCOUNT_SETTINGS['contact'][setting]
+        if default is HAS_APP_DEFAULT:
+            default = APP_SETTINGS[f'{setting}_default']
+        if not isinstance(value, type(default)) and value is not None:
+            raise TypeError(f'Invalid type for {setting}: '
+                            f'{value} {type(value)}')
+
         if value is None:
             try:
                 del self._account_settings[account]['contact'][setting]
             except KeyError:
                 pass
-            return
 
-        default = ACCOUNT_SETTINGS['contact'][setting]
-        if default is HAS_APP_DEFAULT:
-            default = APP_SETTINGS[f'{setting}_default']
-        if not isinstance(value, type(default)):
-            raise TypeError(f'Invalid type for {setting}: '
-                            f'{value} {type(value)}')
+            self._notify(default, setting, account, jid)
+            return
 
         contact_settings = self._account_settings[account]['contact']
         if jid not in contact_settings:
@@ -661,7 +667,7 @@ class _Settings:
             contact_settings[jid][setting] = value
 
         self._commit_account_settings(account)
-        self._notify(setting, account, jid)
+        self._notify(value, setting, account, jid)
 
     def set_soundevent_setting(self,
                                event_name: str,
