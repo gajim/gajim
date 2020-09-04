@@ -757,7 +757,7 @@ class CutstomHostnameSetting(DialogSetting):
 
     def get_setting_value(self):
         custom = app.settings.get_account_setting(self.account, 'use_custom_host')
-        return _('On') if custom else _('Off')
+        return Q_('?switch:On') if custom else Q_('?switch:Off')
 
 
 class ChangePasswordSetting(DialogSetting):
