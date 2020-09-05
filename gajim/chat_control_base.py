@@ -55,7 +55,6 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.message_input import MessageInputTextView
-from gajim.gtk import util
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
