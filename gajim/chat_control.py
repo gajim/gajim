@@ -312,6 +312,11 @@ class ChatControl(ChatControlBase):
         win.lookup_action('toggle-video-' + self.control_id).set_enabled(
             online and self.jingle['video'].available)
 
+        # Send message
+        has_text = self.msg_textview.has_text()
+        win.lookup_action(
+            f'send-message-{self.control_id}').set_enabled(online and has_text)
+
         # Send file (HTTP File Upload)
         httpupload = win.lookup_action(
             'send-file-httpupload-' + self.control_id)

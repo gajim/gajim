@@ -187,6 +187,7 @@ APP_SETTINGS = {
     'check_for_update': True,
     'last_update_check': '',
     'always_ask_for_status_message': False,
+    'show_send_message_button': False,
 }
 
 ACCOUNT_SETTINGS = {

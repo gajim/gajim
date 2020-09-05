@@ -393,6 +393,11 @@ class GroupchatControl(ChatControlBase):
         # Execute command
         self._get_action('execute-command-').set_enabled(self.is_connected)
 
+        # Send message
+        has_text = self.msg_textview.has_text()
+        self._get_action('send-message-').set_enabled(
+            self.is_connected and has_text)
+
         # Send file (HTTP File Upload)
         httpupload = self._get_action(
             'send-file-httpupload-')

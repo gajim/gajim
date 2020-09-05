@@ -192,6 +192,16 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.msg_textview.connect('text-changed',
                                   self._on_message_tv_buffer_changed)
 
+        # Send message button
+        self.xml.send_message_button.set_action_name(
+            'win.send-message-%s' % self.control_id)
+        self.xml.send_message_button.set_visible(
+            app.settings.get('show_send_message_button'))
+        app.settings.bind_signal(
+            'show_send_message_button',
+            self.xml.send_message_button,
+            'set_visible')
+
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.add(self.msg_textview)
 
@@ -513,6 +523,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.parent_win.window.add_action(action)
 
         actions = {
+            'send-message-%s': self._on_send_message,
             'send-file-%s': self._on_send_file,
             'send-file-httpupload-%s': self._on_send_file,
             'send-file-jingle-%s': self._on_send_file,
@@ -526,6 +537,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def remove_actions(self):
         actions = [
+            'send-message-',
             'set-encryption-',
             'send-file-',
             'send-file-httpupload-',
@@ -911,10 +923,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 app.interface.raise_dialog('not-connected-while-sending')
                 return True
 
-            textview.replace_emojis()
-            message = textview.get_text()
-            xhtml = textview.get_xhtml()
-            self.send_message(message, xhtml=xhtml)
+            self._on_send_message()
             return True
 
         elif event.keyval == Gdk.KEY_z: # CTRL+z
@@ -962,6 +971,12 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         lname = label_list[idx]
         label = labels[lname]
         return label
+
+    def _on_send_message(self, *args):
+        self.msg_textview.replace_emojis()
+        message = self.msg_textview.get_text()
+        xhtml = self.msg_textview.get_xhtml()
+        self.send_message(message, xhtml=xhtml)
 
     def send_message(self,
                      message,
@@ -1029,6 +1044,10 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 self.contact, self.msg_textview.has_text())
 
     def _on_message_tv_buffer_changed(self, textview, textbuffer):
+        has_text = self.msg_textview.has_text()
+        self.parent_win.window.lookup_action(
+            'send-message-' + self.control_id).set_enabled(has_text)
+
         if textbuffer.get_char_count() and self.encryption:
             app.plugin_manager.extension_point(
                 'typing' + self.encryption, self)
