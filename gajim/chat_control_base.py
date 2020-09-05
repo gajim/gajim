@@ -894,6 +894,10 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 if not app.settings.get('send_on_ctrl_enter'):
                     textview.insert_newline()
                     return True
+            else:
+                if app.settings.get('send_on_ctrl_enter'):
+                    textview.insert_newline()
+                    return True
 
             if not app.account_is_available(self.account):
                 # we are not connected
