@@ -610,6 +610,8 @@ class GeneralPage(GenericSettingPage):
                     desc=_('Recognize your account by color')),
 
             Setting(SettingKind.LOGIN, _('Login'), SettingType.DIALOG,
+                    bind='anonymous_auth',
+                    inverted=True,
                     props={'dialog': LoginDialog}),
 
             Setting(SettingKind.ACTION, _('Import Contacts'),
@@ -800,12 +802,15 @@ class PriorityDialog(SettingsDialog):
 
         settings = [
             Setting(SettingKind.SWITCH, _('Adjust to status'),
-                    SettingType.ACCOUNT_CONFIG, 'adjust_priority_with_status',
-                    'adjust'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'adjust_priority_with_status'),
 
             Setting(SettingKind.SPIN, _('Priority'),
-                    SettingType.ACCOUNT_CONFIG, 'priority',
-                    enabledif=('adjust', False), props={'range_': range_}),
+                    SettingType.ACCOUNT_CONFIG,
+                    'priority',
+                    bind='adjust_priority_with_status',
+                    inverted=True,
+                    props={'range_': range_}),
             ]
 
         SettingsDialog.__init__(self, parent, _('Priority'),
@@ -830,19 +835,19 @@ class CutstomHostnameDialog(SettingsDialog):
         settings = [
             Setting(SettingKind.SWITCH, _('Enable'),
                     SettingType.ACCOUNT_CONFIG,
-                    'use_custom_host', name='custom'),
+                    'use_custom_host'),
 
             Setting(SettingKind.ENTRY, _('Hostname'),
                     SettingType.ACCOUNT_CONFIG, 'custom_host',
-                    enabledif=('custom', True)),
+                    bind='use_custom_host'),
 
             Setting(SettingKind.ENTRY, _('Port'),
                     SettingType.ACCOUNT_CONFIG, 'custom_port',
-                    enabledif=('custom', True)),
+                    bind='use_custom_host'),
 
             Setting(SettingKind.COMBO, _('Type'),
                     SettingType.ACCOUNT_CONFIG, 'custom_type',
-                    enabledif=('custom', True),
+                    bind='use_custom_host',
                     props={'combo_items': type_values}),
             ]
 
@@ -871,11 +876,11 @@ class LoginDialog(SettingsDialog):
 
         settings = [
             Setting(SettingKind.ENTRY, _('Password'),
-                    SettingType.ACCOUNT_CONFIG, 'password', name='password',
-                    enabledif=('savepass', True)),
+                    SettingType.ACCOUNT_CONFIG, 'password',
+                    bind='savepass'),
 
             Setting(SettingKind.SWITCH, _('Save Password'),
-                    SettingType.ACCOUNT_CONFIG, 'savepass', name='savepass'),
+                    SettingType.ACCOUNT_CONFIG, 'savepass'),
 
             Setting(SettingKind.CHANGEPASSWORD, _('Change Password'),
                     SettingType.DIALOG, callback=self.on_password_change,

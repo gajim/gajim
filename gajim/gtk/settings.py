@@ -17,7 +17,6 @@
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gdk
-from gi.repository import GObject
 from gi.repository import Pango
 
 from gajim.common import app
@@ -114,7 +113,7 @@ class SettingsBox(Gtk.ListBox):
                     self.account, *setting[1:-1], **setting.props)
             else:
                 listitem = self.map[setting.kind](self.account, *setting[1:-1])
-        listitem.connect('notify::setting-value', self.on_setting_changed)
+
         if setting.name is not None:
             self.named_settings[setting.name] = listitem
         self.add(listitem)
@@ -123,28 +122,23 @@ class SettingsBox(Gtk.ListBox):
         return self.named_settings[name]
 
     def update_states(self):
-        values = []
-        values.append((None, None))
         for row in self.get_children():
-            name = row.name
-            if name is None:
-                continue
-            value = row.get_property('setting-value')
-            values.append((name, value))
-
-        for name, value in values:
-            for row in self.get_children():
-                row.update_activatable(name, value)
-
-    def on_setting_changed(self, widget, *args):
-        value = widget.get_property('setting-value')
-        for row in self.get_children():
-            row.update_activatable(widget.name, value)
+            row.update_activatable()
 
 
 class GenericSetting(Gtk.ListBoxRow):
-    def __init__(self, account, label, type_, value,
-                 name, callback, data, desc, enabledif, enabled_func):
+    def __init__(self,
+                 account,
+                 label,
+                 type_,
+                 value,
+                 name,
+                 callback,
+                 data,
+                 desc,
+                 bind,
+                 inverted,
+                 enabled_func):
         Gtk.ListBoxRow.__init__(self)
         self._grid = Gtk.Grid()
         self._grid.set_size_request(-1, 30)
@@ -157,7 +151,8 @@ class GenericSetting(Gtk.ListBoxRow):
         self.label = label
         self.account = account
         self.name = name
-        self.enabledif = enabledif
+        self.bind = bind
+        self.inverted = inverted
         self.enabled_func = enabled_func
         self.setting_value = self.get_value()
 
@@ -193,16 +188,26 @@ class GenericSetting(Gtk.ListBoxRow):
         self._grid.add(self.setting_box)
         self.add(self._grid)
 
-    def do_get_property(self, prop):
-        if prop.name == 'setting-value':
-            return self.setting_value
-        raise AttributeError('unknown property %s' % prop.name)
+        self.connect('destroy', self._on_destroy)
+        self._bind_sensitive_state()
 
-    def do_set_property(self, prop, value):
-        if prop.name == 'setting-value':
-            self.setting_value = value
-        else:
-            raise AttributeError('unknown property %s' % prop.name)
+    def _bind_sensitive_state(self):
+        if self.bind is None:
+            return
+
+        app.settings.connect_signal(self.bind,
+                                    self._on_setting_changed,
+                                    account=self.account)
+
+        value = app.settings.get_account_setting(self.account, self.bind)
+        if self.inverted:
+            value = not value
+        self.set_sensitive(value)
+
+    def _on_setting_changed(self, value, *args):
+        if self.inverted:
+            value = not value
+        self.set_sensitive(value)
 
     def get_value(self):
         return self.__get_value(self.type_, self.value, self.account)
@@ -249,8 +254,6 @@ class GenericSetting(Gtk.ListBoxRow):
         if self.callback is not None:
             self.callback(state, self.data)
 
-        self.set_property('setting-value', state)
-
     @staticmethod
     def set_no_log_for(account, state):
         no_log = app.settings.get_account_setting(account, 'no_log_for').split()
@@ -265,25 +268,20 @@ class GenericSetting(Gtk.ListBoxRow):
     def on_row_activated(self):
         raise NotImplementedError
 
-    def update_activatable(self, name, value):
-        enabled_func_value = True
-        if self.enabled_func is not None:
-            enabled_func_value = self.enabled_func()
+    def update_activatable(self):
+        if self.enabled_func is None:
+            return
 
-        enabledif_value = True
-        if self.enabledif is not None and self.enabledif[0] == name:
-            enabledif_value = (name, value) == self.enabledif
+        enabled_func_value = self.enabled_func()
+        self.set_activatable(enabled_func_value)
+        self.set_sensitive(enabled_func_value)
 
-        self.set_activatable(enabled_func_value and enabledif_value)
-        self.set_sensitive(enabled_func_value and enabledif_value)
+    def _on_destroy(self, *args):
+        if self.bind is not None:
+            app.settings.disconnect_signals(self)
 
 
 class SwitchSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (bool, 'Switch Value', '', False,
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args):
         GenericSetting.__init__(self, *args)
 
@@ -327,11 +325,6 @@ class SwitchSetting(GenericSetting):
 
 
 class EntrySetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Entry Value', '', '',
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args):
         GenericSetting.__init__(self, *args)
 
@@ -358,12 +351,6 @@ class EntrySetting(GenericSetting):
 
 
 class ColorSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Color Value', '', '',
-                          GObject.ParamFlags.READWRITE),
-    }
-
     def __init__(self, *args):
         GenericSetting.__init__(self, *args)
 
@@ -389,11 +376,6 @@ class ColorSetting(GenericSetting):
 
 
 class DialogSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Dummy', '', '',
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args, dialog):
         GenericSetting.__init__(self, *args)
         self.dialog = dialog
@@ -422,11 +404,6 @@ class DialogSetting(GenericSetting):
 
 
 class SpinSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (int, 'Priority', '', -128, 127, 0,
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args, range_):
         GenericSetting.__init__(self, *args)
 
@@ -460,11 +437,6 @@ class SpinSetting(GenericSetting):
 
 
 class FileChooserSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Certificate Path', '', '',
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args, filefilter):
         GenericSetting.__init__(self, *args)
 
@@ -510,11 +482,6 @@ class FileChooserSetting(GenericSetting):
 
 
 class CallbackSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Dummy', '', '',
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args, callback):
         GenericSetting.__init__(self, *args)
         self.callback = callback
@@ -525,11 +492,6 @@ class CallbackSetting(GenericSetting):
 
 
 class ActionSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Dummy', '', '',
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args, account):
         GenericSetting.__init__(self, *args)
         action_name = '%s%s' % (account, self.value)
@@ -556,18 +518,8 @@ class LoginSetting(DialogSetting):
         jid = app.get_jid_from_account(self.account)
         return jid
 
-    def update_activatable(self, name, value):
-        super().update_activatable(name, value)
-        anonym = app.settings.get_account_setting(self.account, 'anonymous_auth')
-        self.set_activatable(not anonym)
-
 
 class PopoverSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Dummy', '', '',
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args, entries):
         GenericSetting.__init__(self, *args)
 
@@ -650,11 +602,6 @@ class PopoverRow(Gtk.ListBoxRow):
 
 
 class ComboSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Proxy', '', '',
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args, combo_items):
         GenericSetting.__init__(self, *args)
 
@@ -683,11 +630,6 @@ class ComboSetting(GenericSetting):
 
 
 class ProxyComboSetting(GenericSetting):
-
-    __gproperties__ = {
-        "setting-value": (str, 'Proxy', '', '',
-                          GObject.ParamFlags.READWRITE),}
-
     def __init__(self, *args):
         GenericSetting.__init__(self, *args)
 
@@ -756,7 +698,8 @@ class CutstomHostnameSetting(DialogSetting):
         DialogSetting.__init__(self, *args, **kwargs)
 
     def get_setting_value(self):
-        custom = app.settings.get_account_setting(self.account, 'use_custom_host')
+        custom = app.settings.get_account_setting(self.account,
+                                                  'use_custom_host')
         return Q_('?switch:On') if custom else Q_('?switch:Off')
 
 
@@ -768,7 +711,7 @@ class ChangePasswordSetting(DialogSetting):
         parent.destroy()
         open_window('ChangePassword', account=self.account)
 
-    def update_activatable(self, name, value):
+    def update_activatable(self):
         activatable = False
         if self.account in app.connections:
             con = app.connections[self.account]
