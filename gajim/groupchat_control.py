@@ -2150,6 +2150,10 @@ class GroupchatControl(ChatControlBase):
         con.get_module('Bookmarks').remove(self.room_jid)
         self._close_control()
 
+    def _on_retry_join_clicked(self, _button=None):
+        app.connections[self.account].get_module('MUC').join(self._muc_data)
+        self._show_page('progress')
+
     def _on_page_cancel_clicked(self, _button=None):
         self._show_page('groupchat')
 

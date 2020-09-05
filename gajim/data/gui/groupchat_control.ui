@@ -137,8 +137,8 @@
             <child>
               <object class="GtkBox" id="groupchat_control_vbox">
                 <property name="can_focus">True</property>
-                <property name="margin_left">7</property>
-                <property name="margin_right">7</property>
+                <property name="margin_start">7</property>
+                <property name="margin_end">7</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">7</property>
                 <property name="spacing">3</property>
@@ -147,7 +147,7 @@
                     <property name="width_request">0</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">4</property>
+                    <property name="margin_end">4</property>
                     <property name="hexpand">True</property>
                     <property name="orientation">vertical</property>
                     <child>
@@ -1049,7 +1049,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="remove_bookmark_button">
-                            <property name="label" translatable="yes">_Leave Group Chat</property>
+                            <property name="label" translatable="yes">_Forget Group Chat</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1069,6 +1069,21 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkButton" id="retry_button">
+                            <property name="label" translatable="yes">_Retry</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                            <signal name="clicked" handler="_on_retry_join_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkButton" id="close_button">
                             <property name="label" translatable="yes">_Close</property>
                             <property name="visible">True</property>
@@ -1083,7 +1098,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
