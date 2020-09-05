@@ -122,6 +122,14 @@ class MessageInputTextView(Gtk.TextView):
     def insert_text(self, text):
         self.get_buffer().insert_at_cursor(text)
 
+    def insert_newline(self):
+        buffer_ = self.get_buffer()
+        buffer_.insert_at_cursor('\n')
+        mark = buffer_.get_insert()
+        iter_ = buffer_.get_iter_at_mark(mark)
+        if buffer_.get_end_iter().equal(iter_):
+            GLib.idle_add(scroll_to_end, self.get_parent())
+
     def has_text(self):
         buf = self.get_buffer()
         start, end = buf.get_bounds()

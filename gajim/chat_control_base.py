@@ -795,7 +795,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             ft = app.interface.instances['file_transfers']
             ft.send_file(self.account, self.contact, path)
 
-    def _on_message_textview_key_press_event(self, widget, event):
+    def _on_message_textview_key_press_event(self, textview, event):
         if event.keyval == Gdk.KEY_space:
             self.space_pressed = True
 
@@ -805,7 +805,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             # If the space key has been pressed and now it hasn't,
             # we save the buffer into the undo list. But be careful we're not
             # pressing Control again (as in ctrl+z)
-            _buffer = widget.get_buffer()
+            _buffer = textview.get_buffer()
             start_iter, end_iter = _buffer.get_bounds()
             self.msg_textview.save_undo(_buffer.get_text(start_iter,
                                                          end_iter,
@@ -884,34 +884,29 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 else:  # Ctrl+Down
                     self.scroll_messages('down', message_buffer, 'sent')
                 return True
-        elif event.keyval == Gdk.KEY_Return or \
-        event.keyval == Gdk.KEY_KP_Enter:  # ENTER
-            message_textview = widget
-            message_buffer = message_textview.get_buffer()
-            message_textview.replace_emojis()
-            start_iter, end_iter = message_buffer.get_bounds()
-            message = message_buffer.get_text(start_iter, end_iter, False)
-            xhtml = self.msg_textview.get_xhtml()
+        elif (event.keyval == Gdk.KEY_Return or
+              event.keyval == Gdk.KEY_KP_Enter):  # ENTER
 
             if event_state & Gdk.ModifierType.SHIFT_MASK:
-                send_message = False
-            else:
-                is_ctrl_enter = bool(event_state & Gdk.ModifierType.CONTROL_MASK)
-                send_message = is_ctrl_enter == app.settings.get('send_on_ctrl_enter')
+                textview.insert_newline()
+                return True
 
-            if send_message and not app.account_is_available(self.account):
+            if event_state & Gdk.ModifierType.CONTROL_MASK:
+                if not app.settings.get('send_on_ctrl_enter'):
+                    textview.insert_newline()
+                    return True
+
+            if not app.account_is_available(self.account):
                 # we are not connected
                 app.interface.raise_dialog('not-connected-while-sending')
-            elif send_message:
-                self.send_message(message, xhtml=xhtml)
-            else:
-                message_buffer.insert_at_cursor('\n')
-                mark = message_buffer.get_insert()
-                iter_ = message_buffer.get_iter_at_mark(mark)
-                if message_buffer.get_end_iter().equal(iter_):
-                    GLib.idle_add(util.scroll_to_end, self.msg_scrolledwindow)
+                return True
 
+            textview.replace_emojis()
+            message = textview.get_text()
+            xhtml = textview.get_xhtml()
+            self.send_message(message, xhtml=xhtml)
             return True
+
         elif event.keyval == Gdk.KEY_z: # CTRL+z
             if event_state & Gdk.ModifierType.CONTROL_MASK:
                 self.msg_textview.undo()
