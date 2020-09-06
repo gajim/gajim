@@ -266,6 +266,12 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 if textview.get_buffer().props.has_selection:
                     return Gdk.EVENT_PROPAGATE
 
+        if not self.msg_textview.get_sensitive():
+            # If the input textview is not sensitive it can’t get the focus.
+            # In that case propagate_key_event() would send the event again
+            # to the conversation textview. This would mean a recursion.
+            return Gdk.EVENT_PROPAGATE
+
         # Focus the Message Input and resend the event
         textview.unselect()
         self.msg_textview.grab_focus()
