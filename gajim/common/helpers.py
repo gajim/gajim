@@ -1430,3 +1430,16 @@ def ask_for_status_message(status, signin=False):
         return app.settings.get('ask_offline_status')
 
     return app.settings.get('always_ask_for_status_message')
+
+
+def get_group_chat_nick(account, room_jid):
+    nick = app.nicks[account]
+
+    client = app.get_client(account)
+
+    bookmark = client.get_module('Bookmarks').get_bookmark(room_jid)
+    if bookmark is not None:
+        if bookmark.nick is not None:
+            nick = bookmark.nick
+
+    return nick

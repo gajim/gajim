@@ -76,6 +76,7 @@ from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common import logging_helpers
 from gajim.common.helpers import ask_for_status_message
+from gajim.common.helpers import get_group_chat_nick
 from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
@@ -1347,15 +1348,12 @@ class Interface:
     @staticmethod
     def _create_muc_data(account, room_jid, nick, password, config):
         if not nick:
-            nick = app.nicks[account]
+            nick = get_group_chat_nick(account, room_jid)
 
         # Fetch data from bookmarks
-        con = app.connections[account]
-        bookmark = con.get_module('Bookmarks').get_bookmark(room_jid)
+        client = app.get_client(account)
+        bookmark = client.get_module('Bookmarks').get_bookmark(room_jid)
         if bookmark is not None:
-            if bookmark.nick is not None:
-                nick = bookmark.nick
-
             if bookmark.password is not None:
                 password = bookmark.password
 
