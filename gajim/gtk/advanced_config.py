@@ -103,15 +103,12 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         treeview.set_model(self.modelfilter)
 
-        self.connect('key-press-event', self._on_key_press)
+        self.connect_after('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
         self.show_all()
 
     def _on_key_press(self, _widget, event):
         if event.keyval != Gdk.KEY_Escape:
-            return
-
-        if self.renderer_text.get_property('editing'):
             return
 
         if self._ui.search_entry.get_text():

@@ -61,7 +61,7 @@ class SettingsDialog(Gtk.ApplicationWindow):
         self.add(self.listbox)
 
         self.show_all()
-        self.connect('key-press-event', self.on_key_press)
+        self.connect_after('key-press-event', self.on_key_press)
 
     def on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:

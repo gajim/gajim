@@ -200,9 +200,15 @@ class Themes(Gtk.ApplicationWindow):
 
         self._ui.connect_signals(self)
         self.connect('destroy', self._on_destroy)
+        self.connect_after('key-press-event', self._on_key_press)
+
         self.show_all()
 
         self._fill_choose_listbox()
+
+    def _on_key_press(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
 
     def _get_themes(self):
         for theme in app.css_config.themes:

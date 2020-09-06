@@ -41,7 +41,7 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         self.set_show_menubar(False)
         self.set_title(_('Archiving Preferences for %s') % account)
 
-        self.connect('key-press-event', self._on_key_press)
+        self.connect_after('key-press-event', self._on_key_press)
 
         self.account = account
         self._con = app.connections[account]

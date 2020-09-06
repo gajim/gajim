@@ -64,7 +64,7 @@ class Bookmarks(Gtk.ApplicationWindow):
         self._ui.bookmarks_view.set_search_equal_func(self._search_func)
 
         self._ui.connect_signals(self)
-        self.connect('key-press-event', self._on_key_press)
+        self.connect_after('key-press-event', self._on_key_press)
 
         self.show_all()
 

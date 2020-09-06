@@ -68,7 +68,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
         self._menu.connect('menu-activated', self._on_menu_activated)
         self.connect('destroy', self._on_destroy)
-        self.connect('key-press-event', self._on_key_press)
+        self.connect_after('key-press-event', self._on_key_press)
 
         self.show_all()
 

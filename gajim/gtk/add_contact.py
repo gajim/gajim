@@ -41,7 +41,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_resizable(False)
         self.set_title(_('Add Contact'))
 
-        self.connect('key-press-event', self._on_key_press)
+        self.connect_after('key-press-event', self._on_key_press)
 
         self.account = account
         self.adding_jid = False

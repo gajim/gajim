@@ -38,7 +38,7 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._init_list()
         self._block_signal = False
 
-        self.connect('key-press-event', self._on_key_press)
+        self.connect_after('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
         self.show_all()

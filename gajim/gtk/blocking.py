@@ -37,7 +37,7 @@ class BlockingList(Gtk.ApplicationWindow):
         self.set_show_menubar(False)
         self.set_title(_('Blocking List for %s') % account)
 
-        self.connect('key-press-event', self._on_key_press)
+        self.connect_after('key-press-event', self._on_key_press)
 
         self.account = account
         self._con = app.connections[account]
