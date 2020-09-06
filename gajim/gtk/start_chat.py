@@ -27,6 +27,7 @@ from gajim.common import app
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_groupchat_name
+from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_alternative_venue
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
@@ -34,6 +35,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import get_icon_name
@@ -65,6 +67,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         self._ui = get_builder('start_chat_dialog.ui')
         self.add(self._ui.stack)
+
+        self._nick_chooser = NickChooser()
+        self._ui.join_box.pack_start(self._nick_chooser, True, False, 0)
 
         self.new_contact_row_visible = False
         self.new_contact_rows = {}
@@ -313,6 +318,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
         elif result.is_muc:
             self._muc_info_box.set_account(account)
             self._muc_info_box.set_from_disco_info(result)
+            self._nick_chooser.set_text(get_group_chat_nick(
+                account, result.jid))
             self._ui.stack.set_visible_child_name('info')
 
         else:
@@ -336,7 +343,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _on_join_clicked(self, _button=None):
         account = self._muc_info_box.get_account()
         jid = self._muc_info_box.get_jid()
-        app.interface.show_or_join_groupchat(account, str(jid))
+        nickname = self._nick_chooser.get_text()
+        app.interface.show_or_join_groupchat(
+            account, str(jid), nick=nickname)
         self.ready_to_destroy = True
 
     def _on_back_clicked(self, _button=None):

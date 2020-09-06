@@ -23,11 +23,12 @@ from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_alternative_venue
+from gajim.common.helpers import get_group_chat_nick
 from gajim.common.const import MUC_DISCO_ERRORS
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.util import ensure_not_destroyed
-
 
 
 class GroupchatJoin(Gtk.ApplicationWindow):
@@ -59,17 +60,26 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self._stack.set_visible_child_name('progress')
         self._stack.get_visible_child().start()
 
-        self._stack.connect('notify::visible-child-name', self._on_page_changed)
-
+        self._stack.connect('notify::visible-child-name',
+                            self._on_page_changed)
         self._main_box.add(self._stack)
+
+        self._nick_chooser = NickChooser()
 
         self._join_button = Gtk.Button.new_with_mnemonic(_('_Join'))
         self._join_button.set_halign(Gtk.Align.END)
         self._join_button.set_sensitive(False)
+        self._join_button.set_can_default(True)
         self._join_button.get_style_context().add_class('suggested-action')
         self._join_button.connect('clicked', self._on_join)
 
-        self._main_box.add(self._join_button)
+        join_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        join_box.get_style_context().add_class('linked')
+        join_box.set_halign(Gtk.Align.END)
+        join_box.add(self._nick_chooser)
+        join_box.add(self._join_button)
+
+        self._main_box.add(join_box)
 
         self.connect('key-press-event', self._on_key_press_event)
         self.connect('destroy', self._on_destroy)
@@ -101,6 +111,9 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
         elif result.is_muc:
             self._muc_info_box.set_from_disco_info(result)
+            nickname = get_group_chat_nick(self.account, result.jid)
+            self._nick_chooser.set_text(nickname)
+            self._join_button.grab_default()
             self._stack.set_visible_child_name('info')
 
         else:
@@ -121,8 +134,10 @@ class GroupchatJoin(Gtk.ApplicationWindow):
     def _set_error_from_code(self, error_code):
         self._show_error_page(MUC_DISCO_ERRORS[error_code])
 
-    def _on_join(self, _button):
-        app.interface.show_or_join_groupchat(self.account, self.jid)
+    def _on_join(self, *args):
+        nickname = self._nick_chooser.get_text()
+        app.interface.show_or_join_groupchat(
+            self.account, self.jid, nick=nickname)
         self.destroy()
 
     def _on_destroy(self, *args):
