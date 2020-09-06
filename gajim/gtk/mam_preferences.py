@@ -26,7 +26,7 @@ from gajim.gtk.util import get_builder
 from gajim.gtk.util import EventHelper
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import InformationDialog
 
 log = logging.getLogger('gajim.gtk.mam_preferences')
@@ -94,7 +94,7 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         def _on_ok():
             self.destroy()
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Archiving Preferences'),
             _('Archiving Preferences Saved'),
             _('Your archiving preferences have successfully been saved.'),

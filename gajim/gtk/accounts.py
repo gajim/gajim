@@ -27,7 +27,7 @@ from gajim.common import passwords
 from gajim.common.i18n import _
 
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
@@ -118,7 +118,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
                                                 reconnect=True,
                                                 destroy_client=True)
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Re-Login'),
             _('Re-Login now?'),
             _('To apply all changes instantly, you have to re-login.'),
@@ -533,7 +533,7 @@ class AccountRow(Gtk.ListBoxRow):
         if (account in app.connections and
                 not app.connections[account].state.is_disconnected):
             # Connecting or connected
-            NewConfirmationDialog(
+            ConfirmationDialog(
                 _('Disable Account'),
                 _('Account %s is still connected') % account,
                 _('All chat and group chat windows will be closed.'),

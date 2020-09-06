@@ -94,8 +94,8 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.dialogs import NewConfirmationDialog
-from gajim.gtk.dialogs import NewConfirmationCheckDialog
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationCheckDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import InvitationReceivedDialog
@@ -175,7 +175,7 @@ class Interface:
             sec_msg = obj.msg + '\n' + sec_msg
         message = message + '\n' + sec_msg
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Authorization Request'),
             _('HTTP Authorization Request'),
             message,
@@ -327,7 +327,7 @@ class Interface:
 
         name = contact.get_shown_name()
         jid = contact.jid
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Subscription Removed'),
             _('%(name)s (%(jid)s) has removed subscription from you') % {
                 'name': name, 'jid': jid},
@@ -971,7 +971,7 @@ class Interface:
                                  obj.exchange_items_list, obj.fjid)
 
     def handle_event_plain_connection(self, event):
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Insecure Connection'),
             _('Insecure Connection'),
             _('You are about to connect to the account %(account)s '
@@ -1887,7 +1887,7 @@ class Interface:
             def _on_check():
                 self._get_latest_release()
 
-            NewConfirmationDialog(
+            ConfirmationDialog(
                 _('Update Check'),
                 _('Gajim Update Check'),
                 _('Search for Gajim updates periodically?'),
@@ -1934,7 +1934,7 @@ class Interface:
                     app.settings.set('check_for_update', False)
                 helpers.open_uri('https://gajim.org/download')
 
-            NewConfirmationCheckDialog(
+            ConfirmationCheckDialog(
                 _('Update Available'),
                 _('Gajim Update Available'),
                 _('There is an update available for Gajim '

@@ -63,9 +63,9 @@ from gajim.chat_control_base import ChatControlBase
 from gajim.command_system.implementation.hosts import GroupChatCommands
 
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationCheckDialog
+from gajim.gtk.dialogs import ConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.adhoc import AdHocCommand
@@ -847,7 +847,7 @@ class GroupchatControl(ChatControlBase):
             con = app.connections[self.account]
             con.get_module('MUC').approve_voice_request(self.room_jid,
                                                         event.voice_request)
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Voice Request'),
             _('Voice Request'),
             _('<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice') % {
@@ -1735,7 +1735,7 @@ class GroupchatControl(ChatControlBase):
                     app.settings.set('confirm_close_muc', False)
                 on_no(self)
 
-            NewConfirmationCheckDialog(
+            ConfirmationCheckDialog(
                 _('Leave Group Chat'),
                 _('Are you sure you want to leave this group chat?'),
                 _('If you close this window, you will leave '

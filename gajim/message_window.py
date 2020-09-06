@@ -42,7 +42,7 @@ from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
 
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationCheckDialog
+from gajim.gtk.dialogs import ConfirmationCheckDialog
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
@@ -361,7 +361,7 @@ class MessageWindow(EventHelper):
                 # destroy window
                 return False
 
-            NewConfirmationCheckDialog(
+            ConfirmationCheckDialog(
                 _('Close Tabs'),
                 _('You are about to close several tabs'),
                 _('Do you really want to close all of them?'),

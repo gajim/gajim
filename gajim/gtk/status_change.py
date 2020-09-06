@@ -25,7 +25,7 @@ from gajim.common.i18n import _
 
 from gajim.gtk.dialogs import TimeoutWindow
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_activity_icon_name
@@ -435,7 +435,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 self._get_presets()
 
             if preset_name in self._presets:
-                NewConfirmationDialog(
+                ConfirmationDialog(
                     _('Overwrite'),
                     _('Overwrite Status Message?'),
                     _('This name is already in use. Do you want to '

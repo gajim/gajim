@@ -58,7 +58,7 @@ from gajim import gui_menu_builder
 from gajim import dialogs
 
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_cursor
 from gajim.gtk.util import format_mood
@@ -406,7 +406,7 @@ class ChatControl(ChatControlBase):
                 return
             app.interface.roster.draw_contact(self.contact.jid, self.account)
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Block Contact'),
             _('Really block this contact?'),
             _('You will appear offline for this contact and you will '
@@ -1147,7 +1147,7 @@ class ChatControl(ChatControlBase):
             if more:
                 text += '\n' + more
 
-            NewConfirmationDialog(
+            ConfirmationDialog(
                 _('Close'),
                 _('New Message'),
                 text,

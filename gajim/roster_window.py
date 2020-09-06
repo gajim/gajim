@@ -62,8 +62,8 @@ from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
 
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
-from gajim.gtk.dialogs import NewConfirmationCheckDialog
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import WarningDialog
@@ -2191,7 +2191,7 @@ class RosterWindow:
                 if is_checked:
                     app.settings.set('quit_on_roster_x_button', True)
                 self.on_quit_request()
-            NewConfirmationCheckDialog(
+            ConfirmationCheckDialog(
                 _('Quit Gajim'),
                 _('You are about to quit Gajim'),
                 _('Are you sure you want to quit Gajim?'),
@@ -2285,7 +2285,7 @@ class RosterWindow:
                         break
 
             if transfer_active:
-                NewConfirmationDialog(
+                ConfirmationDialog(
                     _('Stop File Transfers'),
                     _('You still have running file transfers'),
                     _('If you quit now, the file(s) being transferred will '
@@ -2326,7 +2326,7 @@ class RosterWindow:
                     break
 
             if unread or recent:
-                NewConfirmationDialog(
+                ConfirmationDialog(
                     _('Unread Messages'),
                     _('You still have unread messages'),
                     _('Messages will only be available for reading them later '
@@ -2600,7 +2600,7 @@ class RosterWindow:
             sectext = _('You will no longer be able to send and receive '
                         'messages from and to contacts using these '
                         'transports:\n%s') % jids
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Remove Transport'),
             pritext,
             sectext,
@@ -2654,7 +2654,7 @@ class RosterWindow:
             _block_it()
             return
 
-        NewConfirmationCheckDialog(
+        ConfirmationCheckDialog(
             _('Block Contact'),
             _('Really block this contact?'),
             _('You will appear offline for this contact and you '
@@ -2761,7 +2761,7 @@ class RosterWindow:
                         'Presence').unsubscribe(contact.jid)
                     self.remove_contact(contact.jid, account, backend=True)
 
-        NewConfirmationCheckDialog(
+        ConfirmationCheckDialog(
             _('Remove Group'),
             _('Remove Group'),
             _('Do you want to remove %s from the contact list?') % group,
@@ -3082,7 +3082,7 @@ class RosterWindow:
                             'name': contact.get_shown_name(),
                             'jid': contact.jid}
             if contact.sub == 'to':
-                NewConfirmationDialog(
+                ConfirmationDialog(
                     title,
                     pritext,
                     sectext + \
@@ -3093,7 +3093,7 @@ class RosterWindow:
                                        callback=on_ok2)]).show()
             elif _('Not in contact list') in contact.get_shown_groups():
                 # Contact is not in roster
-                NewConfirmationDialog(
+                ConfirmationDialog(
                     title,
                     pritext,
                     sectext + \
@@ -3102,7 +3102,7 @@ class RosterWindow:
                      DialogButton.make('Remove',
                                        callback=on_ok2)]).show()
             else:
-                NewConfirmationCheckDialog(
+                ConfirmationCheckDialog(
                     title,
                     pritext,
                     sectext + \
@@ -3124,7 +3124,7 @@ class RosterWindow:
             sectext = _('By removing the following contacts, you will also '
                         'remove authorization. This means they will see you '
                         'as offline:\n\n%s') % jids
-            NewConfirmationDialog(
+            ConfirmationDialog(
                 _('Remove Contacts'),
                 pritext,
                 sectext,
@@ -3762,7 +3762,7 @@ class RosterWindow:
         sectext = _('Metacontacts are a way to regroup several contacts in '
                     'one single contact. Generally it is used when the same '
                     'person has several XMPP- or Transport-Accounts.')
-        NewConfirmationCheckDialog(
+        ConfirmationCheckDialog(
             _('Create Metacontact'),
             pritext,
             sectext,
@@ -3905,7 +3905,7 @@ class RosterWindow:
             for uri in uri_splitted:
                 path = helpers.get_file_path_from_dnd_dropped_uri(uri)
                 text += '\n' + os.path.basename(path)
-            NewConfirmationDialog(
+            ConfirmationDialog(
                 _('File Transfer'),
                 _('File Transfer'),
                 text,

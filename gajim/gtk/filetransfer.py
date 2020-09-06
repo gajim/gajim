@@ -42,7 +42,7 @@ from gajim.common.modules.bytestream import (is_transfer_active,
                                              is_transfer_stopped)
 
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import HigDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import ErrorDialog
@@ -329,7 +329,7 @@ class FileTransfersWindow:
             file_name = os.path.basename(file_props.file_name)
         else:
             file_name = file_props.name
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('File Transfer Error'),
             _('File Transfer Error'),
             _('The file %s has been received, but it seems to have '
@@ -420,7 +420,7 @@ class FileTransfersWindow:
                     con.get_module('Bytestream').send_file_rejection(
                         file_props)
 
-                NewConfirmationDialog(
+                ConfirmationDialog(
                     _('File Transfer Conflict'),
                     _('File already exists'),
                     _('Resume download or replace file?'),
@@ -481,7 +481,7 @@ class FileTransfersWindow:
             app.connections[account].get_module(
                 'Bytestream').send_file_rejection(file_props)
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('File Transfer Request'),
             _('%s wants to send you a file') % contact.get_shown_name(),
             sectext,

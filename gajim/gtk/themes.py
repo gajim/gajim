@@ -27,7 +27,7 @@ from gajim.common.const import StyleAttr
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_app_window
 
@@ -348,7 +348,7 @@ class Themes(Gtk.ApplicationWindow):
             text = _('This is the theme you are currently using.\n'
                      'Do you want to delete this theme?')
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Delete'),
             _('Delete Theme'),
             text,

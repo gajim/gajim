@@ -52,7 +52,7 @@ from gajim import gtkgui_helpers
 from gajim.conversation_textview import ConversationTextview
 
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import PastePreviewDialog
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.util import at_the_end
@@ -1303,7 +1303,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             contact = app.contacts.get_contact(self.account, gc_contact.jid)
             if not contact or contact.sub not in ('both', 'to'):
 
-                NewConfirmationDialog(
+                ConfirmationDialog(
                     _('Privacy'),
                     _('Warning'),
                     _('If you send a file to <b>%s</b>, your real XMPP '

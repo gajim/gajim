@@ -91,7 +91,7 @@ if is_standalone():
 
 from gajim.common import helpers
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.util import convert_rgb_to_hex
@@ -251,7 +251,7 @@ class HistoryManager:
             if is_standalone():
                 Gtk.main_quit()
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Database Cleanup'),
             _('Clean up the database?'),
             _('This is STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING.\n'
@@ -573,7 +573,7 @@ class HistoryManager:
 
             self.AT_LEAST_ONE_DELETION_DONE = True
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Delete'),
             ngettext('Delete Conversation', 'Delete Conversations', paths_len),
             ngettext('Do you want to permanently delete this '
@@ -612,7 +612,7 @@ class HistoryManager:
 
             self.AT_LEAST_ONE_DELETION_DONE = True
 
-        NewConfirmationDialog(
+        ConfirmationDialog(
             _('Delete'),
             ngettext('Delete Message', 'Delete Messages', paths_len),
             ngettext('Do you want to permanently delete this message?',

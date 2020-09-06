@@ -412,7 +412,7 @@ class PassphraseDialog:
             self.cancel_handler()
 
 
-class NewConfirmationDialog(Gtk.MessageDialog):
+class ConfirmationDialog(Gtk.MessageDialog):
     def __init__(self, title, text, sec_text, buttons,
                  modal=True, transient_for=None):
         if transient_for is None:
@@ -460,16 +460,19 @@ class NewConfirmationDialog(Gtk.MessageDialog):
         self.show_all()
 
 
-class NewConfirmationCheckDialog(NewConfirmationDialog):
+NewConfirmationDialog = ConfirmationDialog
+
+
+class ConfirmationCheckDialog(ConfirmationDialog):
     def __init__(self, title, text, sec_text, check_text,
                  buttons, modal=True, transient_for=None):
-        NewConfirmationDialog.__init__(self,
-                                       title,
-                                       text,
-                                       sec_text,
-                                       buttons,
-                                       transient_for=transient_for,
-                                       modal=modal)
+        ConfirmationDialog.__init__(self,
+                                    title,
+                                    text,
+                                    sec_text,
+                                    buttons,
+                                    transient_for=transient_for,
+                                    modal=modal)
 
         self._checkbutton = Gtk.CheckButton.new_with_mnemonic(check_text)
         self._checkbutton.set_can_focus(False)
@@ -491,17 +494,20 @@ class NewConfirmationCheckDialog(NewConfirmationDialog):
         super()._on_response(_dialog, response)
 
 
-class PastePreviewDialog(NewConfirmationCheckDialog):
+NewConfirmationCheckDialog = ConfirmationCheckDialog
+
+
+class PastePreviewDialog(ConfirmationCheckDialog):
     def __init__(self, title, text, sec_text, check_text, image,
                  buttons, modal=True, transient_for=None):
-        NewConfirmationCheckDialog.__init__(self,
-                                            title,
-                                            text,
-                                            sec_text,
-                                            check_text,
-                                            buttons,
-                                            transient_for=transient_for,
-                                            modal=modal)
+        ConfirmationCheckDialog.__init__(self,
+                                         title,
+                                         text,
+                                         sec_text,
+                                         check_text,
+                                         buttons,
+                                         transient_for=transient_for,
+                                         modal=modal)
 
         preview = Gtk.Image()
         preview.set_halign(Gtk.Align.CENTER)
@@ -523,16 +529,16 @@ class PastePreviewDialog(NewConfirmationCheckDialog):
         content_area.reorder_child(preview, 2)
 
 
-class InputDialog(NewConfirmationDialog):
+class InputDialog(ConfirmationDialog):
     def __init__(self, title, text, sec_text, buttons, input_str=None,
                  transient_for=None, modal=True):
-        NewConfirmationDialog.__init__(self,
-                                       title,
-                                       text,
-                                       sec_text,
-                                       buttons,
-                                       transient_for=transient_for,
-                                       modal=modal)
+        ConfirmationDialog.__init__(self,
+                                    title,
+                                    text,
+                                    sec_text,
+                                    buttons,
+                                    transient_for=transient_for,
+                                    modal=modal)
 
         self._entry = Gtk.Entry()
         self._entry.set_activates_default(True)

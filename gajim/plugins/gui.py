@@ -40,7 +40,7 @@ from gajim.plugins.plugins_i18n import _
 
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.filechoosers import ArchiveChooserDialog
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import load_icon
@@ -283,7 +283,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                     _show_warn_dialog()
                     return
 
-            NewConfirmationDialog(
+            ConfirmationDialog(
                 _('Overwrite Plugin?'),
                 _('Plugin already exists'),
                 _('Do you want to overwrite the currently installed version?'),
