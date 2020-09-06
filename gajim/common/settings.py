@@ -99,8 +99,9 @@ class _Settings:
                 if func is None or func.__self__ is object_:
                     handlers.remove(handler)
 
-    def bind_signal(self, setting, widget, func, account=None, jid=None):
+    def bind_signal(self, setting, widget, func_name, account=None, jid=None):
         callbacks = self._callbacks[(setting, account, jid)]
+        func = getattr(widget, func_name)
         callbacks.append(func)
 
         def _on_destroy(*args):
