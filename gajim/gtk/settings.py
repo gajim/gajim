@@ -195,16 +195,17 @@ class GenericSetting(Gtk.ListBoxRow):
         if self.bind is None:
             return
 
-        app.settings.connect_signal(self.bind,
-                                    self._on_setting_changed,
-                                    account=self.account)
+        app.settings.bind_signal(self.bind,
+                                 self,
+                                 'set_sensitive',
+                                 account=self.account,
+                                 inverted=self.inverted)
 
-        value = app.settings.get_account_setting(self.account, self.bind)
-        if self.inverted:
-            value = not value
-        self.set_sensitive(value)
+        if self.account is not None:
+            value = app.settings.get_account_setting(self.account, self.bind)
+        else:
+            value = app.settings.get(self.bind)
 
-    def _on_setting_changed(self, value, *args):
         if self.inverted:
             value = not value
         self.set_sensitive(value)

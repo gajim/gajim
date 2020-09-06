@@ -27,7 +27,6 @@ from pathlib import Path
 from collections import namedtuple
 from collections import defaultdict
 
-from gi.module import FunctionInfo
 from gi.repository import GLib
 
 from gajim import IS_PORTABLE
@@ -93,19 +92,26 @@ class _Settings:
     def disconnect_signals(self, object_):
         for _, handlers in self._callbacks.items():
             for handler in list(handlers):
-                if isinstance(handler, FunctionInfo):
+                if isinstance(handler, tuple):
                     continue
                 func = handler()
                 if func is None or func.__self__ is object_:
                     handlers.remove(handler)
 
-    def bind_signal(self, setting, widget, func_name, account=None, jid=None):
+    def bind_signal(self,
+                    setting,
+                    widget,
+                    func_name,
+                    account=None,
+                    jid=None,
+                    inverted=False):
+
         callbacks = self._callbacks[(setting, account, jid)]
         func = getattr(widget, func_name)
-        callbacks.append(func)
+        callbacks.append((func, inverted))
 
         def _on_destroy(*args):
-            callbacks.remove(func)
+            callbacks.remove((func, inverted))
 
         widget.connect('destroy', _on_destroy)
 
@@ -114,7 +120,11 @@ class _Settings:
 
         callbacks = self._callbacks[(setting, account, jid)]
         for func in list(callbacks):
-            if isinstance(func, FunctionInfo):
+            if isinstance(func, tuple):
+                func, inverted = func
+                if inverted:
+                    value = not value
+
                 try:
                     func(value)
                 except Exception:
