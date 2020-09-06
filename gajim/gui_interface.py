@@ -1345,8 +1345,9 @@ class Interface:
             mw.set_active_tab(control)
 
     @staticmethod
-    def _create_muc_data(account, room_jid, password, config):
-        nick = app.nicks[account]
+    def _create_muc_data(account, room_jid, nick, password, config):
+        if not nick:
+            nick = app.nicks[account]
 
         # Fetch data from bookmarks
         con = app.connections[account]
@@ -1361,7 +1362,7 @@ class Interface:
         return MUCData(room_jid, nick, password, config)
 
     def create_groupchat(self, account, room_jid, config=None):
-        muc_data = self._create_muc_data(account, room_jid, None, config)
+        muc_data = self._create_muc_data(account, room_jid, None, None, config)
         self.create_groupchat_control(account, room_jid, muc_data)
         app.connections[account].get_module('MUC').create(muc_data)
 
@@ -1370,11 +1371,21 @@ class Interface:
             return
         self.join_groupchat(account, room_jid, **kwargs)
 
-    def join_groupchat(self, account, room_jid, password=None, minimized=False):
+    def join_groupchat(self,
+                       account,
+                       room_jid,
+                       password=None,
+                       nick=None,
+                       minimized=False):
+
         if not app.account_is_available(account):
             return
 
-        muc_data = self._create_muc_data(account, room_jid, password, None)
+        muc_data = self._create_muc_data(account,
+                                         room_jid,
+                                         nick,
+                                         password,
+                                         None)
         self.create_groupchat_control(
             account, room_jid, muc_data, minimize=minimized)
 
