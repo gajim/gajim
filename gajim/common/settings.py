@@ -27,6 +27,7 @@ from pathlib import Path
 from collections import namedtuple
 from collections import defaultdict
 
+from gi.module import FunctionInfo
 from gi.repository import GLib
 
 from gajim import IS_PORTABLE
@@ -85,26 +86,50 @@ class _Settings:
             # remove the func once it should not be called anymore
             raise ValueError('Only bound methods can be connected')
 
+
         func = weakref.WeakMethod(func)
         self._callbacks[(setting, account, jid)].append(func)
 
     def disconnect_signals(self, object_):
         for _, handlers in self._callbacks.items():
             for handler in list(handlers):
+                if isinstance(handler, FunctionInfo):
+                    continue
                 func = handler()
                 if func is None or func.__self__ is object_:
                     handlers.remove(handler)
+
+    def bind_signal(self, setting, widget, func, account=None, jid=None):
+        callbacks = self._callbacks[(setting, account, jid)]
+        callbacks.append(func)
+
+        def _on_destroy(*args):
+            callbacks.remove(func)
+
+        widget.connect('destroy', _on_destroy)
 
     def _notify(self, value, setting, account=None, jid=None):
         log.info('Signal: %s changed', setting)
 
         callbacks = self._callbacks[(setting, account, jid)]
         for func in list(callbacks):
+            if isinstance(func, FunctionInfo):
+                try:
+                    func(value)
+                except Exception:
+                    log.exception('Error while executing signal callback')
+                continue
+
             if func() is None:
                 callbacks.remove(func)
                 continue
+
+            func = func()
+            if func is None:
+                continue
+
             try:
-                func()(value, setting, account, jid)
+                func(value, setting, account, jid)
             except Exception:
                 log.exception('Error while executing signal callback')
 
