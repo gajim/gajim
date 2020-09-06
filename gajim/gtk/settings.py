@@ -565,7 +565,17 @@ class PopoverSetting(GenericSetting):
 
         self._current_label.set_text(entries.get(self.setting_value, ''))
 
+        self._bind_label()
+
         self.show_all()
+
+    def _bind_label(self):
+        if self.type_ not in (SettingType.CONFIG, SettingType.ACCOUNT_CONFIG):
+            return
+
+        app.settings.bind_signal(self.value,
+                                 self._current_label,
+                                 'set_text')
 
     def _add_menu_entries(self, entries):
         if isinstance(entries, list):
