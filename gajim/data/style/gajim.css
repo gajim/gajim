@@ -338,3 +338,6 @@ popover.combo list { border-style: none; background-color: transparent; }
 popover.combo list > row { padding: 0px 12px 0px 12px; min-height: 50px; }
 popover.combo list > row:not(:last-child) { border-bottom: 1px solid alpha(#cdc7c2, 0.5); }
 popover.combo scrollbar.vertical { padding-top: 2px; padding-bottom: 2px; }
+
+
+messagedialog.confirmation-dialog > box { margin-top: 18px; }

@@ -424,6 +424,8 @@ class ConfirmationDialog(Gtk.MessageDialog):
                                    message_type=Gtk.MessageType.QUESTION,
                                    modal=modal)
 
+        self.get_style_context().add_class('confirmation-dialog')
+
         self._buttons = {}
 
         for button in buttons:
