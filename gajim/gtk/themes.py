@@ -239,6 +239,7 @@ class Themes(Gtk.ApplicationWindow):
         if result is False:
             return
 
+        app.settings.set('roster_theme', new_name)
         self._ui.theme_store.set_value(iter_, Column.THEME, new_name)
 
     def _select_theme_row(self, iter_):
