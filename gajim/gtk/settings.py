@@ -277,13 +277,22 @@ class GenericSetting(Gtk.ListBoxRow):
         self.set_activatable(enabled_func_value)
         self.set_sensitive(enabled_func_value)
 
+    def _add_action_button(self, kwargs):
+        icon_name = kwargs.get('button-icon-name')
+        if icon_name is None:
+            return
+
+        button = Gtk.Button.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+        button.connect('clicked', kwargs['button-callback'])
+        self.setting_box.add(button)
+
     def _on_destroy(self, *args):
         if self.bind is not None:
             app.settings.disconnect_signals(self)
 
 
 class SwitchSetting(GenericSetting):
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         GenericSetting.__init__(self, *args)
 
         self.switch = Gtk.Switch()
@@ -308,6 +317,8 @@ class SwitchSetting(GenericSetting):
         box.add(self._switch_state_label)
         box.add(self.switch)
         self.setting_box.add(box)
+
+        self._add_action_button(kwargs)
 
         self.show_all()
 
@@ -521,7 +532,7 @@ class LoginSetting(DialogSetting):
 
 
 class PopoverSetting(GenericSetting):
-    def __init__(self, *args, entries):
+    def __init__(self, *args, entries, **kwargs):
         GenericSetting.__init__(self, *args)
 
         if isinstance(entries, list):
@@ -530,6 +541,7 @@ class PopoverSetting(GenericSetting):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
                       spacing=12)
         box.set_halign(Gtk.Align.END)
+        box.set_hexpand(True)
 
         self._current_label = Gtk.Label()
         self._current_label.set_valign(Gtk.Align.CENTER)
@@ -561,7 +573,9 @@ class PopoverSetting(GenericSetting):
         self._popover.set_position(Gtk.PositionType.BOTTOM)
         self._popover.add(scrolled_window)
 
-        self.setting_box.pack_end(box, True, True, 0)
+        self.setting_box.add(box)
+
+        self._add_action_button(kwargs)
 
         self._current_label.set_text(entries.get(self.setting_value, ''))
 
