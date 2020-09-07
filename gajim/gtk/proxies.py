@@ -31,6 +31,7 @@ class ManageProxies(Gtk.ApplicationWindow):
         self.set_default_size(500, -1)
         self.set_show_menubar(False)
         self.set_title(_('Manage Proxies'))
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         self._ui = get_builder('manage_proxies.ui')
         self.add(self._ui.box)

@@ -53,6 +53,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('Start / Join Chat'))
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_default_size(-1, 400)
         self.ready_to_destroy = False
         self._parameter_form = None

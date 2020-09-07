@@ -46,6 +46,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         self.set_default_size(400, 600)
         self.set_show_menubar(False)
         self.set_title(_('Server Info'))
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         self.account = account
         self._destroyed = False

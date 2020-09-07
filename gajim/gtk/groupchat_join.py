@@ -38,6 +38,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('Join Group Chat'))
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         self._destroyed = False
         self.account = account
