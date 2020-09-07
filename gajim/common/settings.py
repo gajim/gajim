@@ -829,6 +829,13 @@ class _Settings:
         del self._settings['proxies'][proxy_name]
         self._commit_settings('proxies')
 
+        if self.get_app_setting('global_proxy') == proxy_name:
+            self.set_app_setting('global_proxy', None)
+
+        for account in self._account_settings:
+            if self.get_account_setting(account, 'proxy') == proxy_name:
+                self.set_account_setting(account, 'proxy', None)
+
 
 Settings = _Settings()
 
