@@ -88,7 +88,6 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.LOGIN: LoginSetting,
             SettingKind.FILECHOOSER: FileChooserSetting,
             SettingKind.CALLBACK: CallbackSetting,
-            SettingKind.PROXY: ProxyComboSetting,
             SettingKind.PRIORITY: PrioritySetting,
             SettingKind.HOSTNAME: CutstomHostnameSetting,
             SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
@@ -649,56 +648,6 @@ class ComboSetting(GenericSetting):
 
     def on_value_change(self, combo):
         self.set_value(combo.get_active_id())
-
-    def on_row_activated(self):
-        pass
-
-
-class ProxyComboSetting(GenericSetting):
-    def __init__(self, *args):
-        GenericSetting.__init__(self, *args)
-
-        self.combo = MaxWidthComboBoxText()
-        self.combo.set_valign(Gtk.Align.CENTER)
-
-        self._signal_id = None
-        self.update_values()
-
-        button = get_image_button(
-            'preferences-system-symbolic', _('Manage Proxies'))
-        button.set_action_name('app.manage-proxies')
-        button.set_valign(Gtk.Align.CENTER)
-
-        self.setting_box.pack_start(self.combo, True, True, 0)
-        self.setting_box.pack_start(button, False, True, 0)
-        self.show_all()
-
-    def _block_signal(self, state):
-        if state:
-            if self._signal_id is None:
-                return
-            self.combo.disconnect(self._signal_id)
-        else:
-            self._signal_id = self.combo.connect('changed',
-                                                 self.on_value_change)
-            self.combo.emit('changed')
-
-    def update_values(self):
-        self._block_signal(True)
-        proxies = app.settings.get_proxies()
-        proxies.insert(0, _('No Proxy'))
-        self.combo.remove_all()
-        for index, value in enumerate(proxies):
-            self.combo.insert_text(-1, value)
-            if value == self.setting_value or index == 0:
-                self.combo.set_active(index)
-        self._block_signal(False)
-
-    def on_value_change(self, combo):
-        if combo.get_active() == 0:
-            self.set_value('')
-        else:
-            self.set_value(combo.get_active_text())
 
     def on_row_activated(self):
         pass

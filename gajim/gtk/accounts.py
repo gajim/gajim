@@ -212,7 +212,7 @@ class Settings(Gtk.ScrolledWindow):
         for page in self._pages[account]:
             if page.name != 'connection':
                 continue
-            page.listbox.get_setting('proxy').update_values()
+            page.update_proxy_entries()
 
 
 class AccountMenu(Gtk.Box):
@@ -690,8 +690,11 @@ class ConnectionPage(GenericSettingPage):
     def __init__(self, account):
 
         settings = [
-            Setting(SettingKind.PROXY, _('Proxy'),
-                    SettingType.ACCOUNT_CONFIG, 'proxy', name='proxy'),
+            Setting(SettingKind.POPOVER, _('Proxy'),
+                    SettingType.ACCOUNT_CONFIG, 'proxy', name='proxy',
+                    props={'entries': self._get_proxies(),
+                           'button-icon-name': 'preferences-system-symbolic',
+                           'button-callback': self._on_proxy_edit}),
 
             Setting(SettingKind.HOSTNAME, _('Hostname'), SettingType.DIALOG,
                     desc=_('Manually set the hostname for the server'),
@@ -714,6 +717,20 @@ class ConnectionPage(GenericSettingPage):
                            'unencrypted')),
             ]
         GenericSettingPage.__init__(self, account, settings)
+
+    @staticmethod
+    def _get_proxies():
+        proxies = {'': _('No Proxy')}
+        for proxy in app.settings.get_proxies():
+            proxies[proxy] = proxy
+        return proxies
+
+    @staticmethod
+    def _on_proxy_edit(*args):
+        open_window('ManageProxies')
+
+    def update_proxy_entries(self):
+        self.listbox.get_setting('proxy').update_entries(self._get_proxies())
 
 
 class AdvancedPage(GenericSettingPage):

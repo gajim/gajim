@@ -51,7 +51,6 @@ class SettingKind(IntEnum):
     LOGIN = 4
     DIALOG = 5
     CALLBACK = 6
-    PROXY = 7
     HOSTNAME = 8
     PRIORITY = 9
     FILECHOOSER = 10
