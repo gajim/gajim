@@ -180,7 +180,7 @@ class GenericSetting(Gtk.ListBoxRow):
 
         self._grid.add(description_box)
 
-        self.setting_box = Gtk.Box(spacing=6)
+        self.setting_box = Gtk.Box(spacing=12)
         self.setting_box.set_size_request(200, -1)
         self.setting_box.set_valign(Gtk.Align.CENTER)
         self.setting_box.set_name('GenericSettingBox')
