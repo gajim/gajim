@@ -572,8 +572,8 @@ class PopoverSetting(GenericSetting):
 
         self._add_action_button(kwargs)
 
-        self._current_label.set_text(entries.get(self.setting_value,
-                                                 self._default_text or ''))
+        text = self._entries.get(self.setting_value, self._default_text or '')
+        self._current_label.set_text(text)
 
         self._bind_label()
 
