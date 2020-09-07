@@ -146,46 +146,6 @@ def scale_pixbuf_from_data(data, size):
     pixbuf = get_pixbuf_from_data(data)
     return scale_pixbuf(pixbuf, size)
 
-
-def create_combobox(value_list, selected_value=None):
-    """
-    Value_list is [(label1, value1)]
-    """
-    liststore = Gtk.ListStore(str, str)
-    combobox = Gtk.ComboBox.new_with_model(liststore)
-    cell = Gtk.CellRendererText()
-    combobox.pack_start(cell, True)
-    combobox.add_attribute(cell, 'text', 0)
-    i = -1
-    for value in value_list:
-        liststore.append(value)
-        if selected_value == value[1]:
-            i = value_list.index(value)
-    if i > -1:
-        combobox.set_active(i)
-    combobox.show_all()
-    return combobox
-
-def create_list_multi(value_list, selected_values=None):
-    """
-    Value_list is [(label1, value1)]
-    """
-    liststore = Gtk.ListStore(str, str)
-    treeview = Gtk.TreeView.new_with_model(liststore)
-    treeview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
-    treeview.set_headers_visible(False)
-    col = Gtk.TreeViewColumn()
-    treeview.append_column(col)
-    cell = Gtk.CellRendererText()
-    col.pack_start(cell, True)
-    col.set_attributes(cell, text=0)
-    for value in value_list:
-        iter_ = liststore.append(value)
-        if value[1] in selected_values:
-            treeview.get_selection().select_iter(iter_)
-    treeview.show_all()
-    return treeview
-
 def label_set_autowrap(widget):
     """
     Make labels automatically re-wrap if their containers are resized.
