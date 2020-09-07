@@ -187,7 +187,6 @@ class GenericSetting(Gtk.ListBoxRow):
         self._grid.add(self.setting_box)
         self.add(self._grid)
 
-        self.connect('destroy', self._on_destroy)
         self._bind_sensitive_state()
 
     def _bind_sensitive_state(self):
@@ -284,10 +283,6 @@ class GenericSetting(Gtk.ListBoxRow):
         button = Gtk.Button.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
         button.connect('clicked', kwargs['button-callback'])
         self.setting_box.add(button)
-
-    def _on_destroy(self, *args):
-        if self.bind is not None:
-            app.settings.disconnect_signals(self)
 
 
 class SwitchSetting(GenericSetting):
@@ -534,8 +529,7 @@ class PopoverSetting(GenericSetting):
     def __init__(self, *args, entries, **kwargs):
         GenericSetting.__init__(self, *args)
 
-        if isinstance(entries, list):
-            entries = {key: key for key in entries}
+        self._entries = self._convert_to_dict(entries)
 
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
                       spacing=12)
@@ -555,7 +549,7 @@ class PopoverSetting(GenericSetting):
 
         self._menu_listbox = Gtk.ListBox()
         self._menu_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        self._add_menu_entries(entries)
+        self._add_menu_entries()
         self._menu_listbox.connect('row-activated',
                                    self._on_menu_row_activated)
 
@@ -583,26 +577,36 @@ class PopoverSetting(GenericSetting):
 
         self._bind_label()
 
+        self.connect('destroy', self._on_destroy)
+
         self.show_all()
+
+    @staticmethod
+    def _convert_to_dict(entries):
+        if isinstance(entries, list):
+            entries = {key: key for key in entries}
+        return entries
 
     def _bind_label(self):
         if self.type_ not in (SettingType.CONFIG, SettingType.ACCOUNT_CONFIG):
             return
 
-        app.settings.bind_signal(self.value,
-                                 self._current_label,
-                                 'set_text',
-                                 account=self.account,
-                                 default_text=self._default_text)
+        app.settings.connect_signal(self.value,
+                                    self._on_setting_changed,
+                                    account=self.account)
 
-    def _add_menu_entries(self, entries):
-        if isinstance(entries, list):
-            entries = {key: key for key in entries}
+    def _on_setting_changed(self, value, *args):
+        text = self._entries.get(value)
+        if text is None:
+            text = self._default_text or ''
 
+        self._current_label.set_text(text)
+
+    def _add_menu_entries(self):
         if self._default_text is not None:
             self._menu_listbox.add(PopoverRow(self._default_text, ''))
 
-        for value, label in entries.items():
+        for value, label in self._entries.items():
             self._menu_listbox.add(PopoverRow(label, value))
 
         self._menu_listbox.show_all()
@@ -617,8 +621,12 @@ class PopoverSetting(GenericSetting):
         self._popover.popup()
 
     def update_entries(self, entries):
+        self._entries = self._convert_to_dict(entries)
         self._menu_listbox.foreach(self._menu_listbox.remove)
-        self._add_menu_entries(entries)
+        self._add_menu_entries()
+
+    def _on_destroy(self, *args):
+        app.settings.disconnect_signals(self)
 
 
 class PopoverRow(Gtk.ListBoxRow):
