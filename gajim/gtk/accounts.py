@@ -693,6 +693,7 @@ class ConnectionPage(GenericSettingPage):
             Setting(SettingKind.POPOVER, _('Proxy'),
                     SettingType.ACCOUNT_CONFIG, 'proxy', name='proxy',
                     props={'entries': self._get_proxies(),
+                           'default-text': _('No Proxy'),
                            'button-icon-name': 'preferences-system-symbolic',
                            'button-callback': self._on_proxy_edit}),
 
@@ -720,10 +721,7 @@ class ConnectionPage(GenericSettingPage):
 
     @staticmethod
     def _get_proxies():
-        proxies = {'': _('No Proxy')}
-        for proxy in app.settings.get_proxies():
-            proxies[proxy] = proxy
-        return proxies
+        return {proxy: proxy for proxy in app.settings.get_proxies()}
 
     @staticmethod
     def _on_proxy_edit(*args):
