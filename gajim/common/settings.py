@@ -104,14 +104,15 @@ class _Settings:
                     func_name,
                     account=None,
                     jid=None,
-                    inverted=False):
+                    inverted=False,
+                    default_text=None):
 
         callbacks = self._callbacks[(setting, account, jid)]
         func = getattr(widget, func_name)
-        callbacks.append((func, inverted))
+        callbacks.append((func, inverted, default_text))
 
         def _on_destroy(*args):
-            callbacks.remove((func, inverted))
+            callbacks.remove((func, inverted, default_text))
 
         widget.connect('destroy', _on_destroy)
 
@@ -121,9 +122,12 @@ class _Settings:
         callbacks = self._callbacks[(setting, account, jid)]
         for func in list(callbacks):
             if isinstance(func, tuple):
-                func, inverted = func
-                if inverted:
+                func, inverted, default_text = func
+                if isinstance(value, bool) and inverted:
                     value = not value
+
+                if value == '' and default_text is not None:
+                    value = default_text
 
                 try:
                     func(value)
