@@ -542,6 +542,8 @@ class PopoverSetting(GenericSetting):
         box.set_halign(Gtk.Align.END)
         box.set_hexpand(True)
 
+        self._default_text = kwargs.get('default-text')
+
         self._current_label = Gtk.Label()
         self._current_label.set_valign(Gtk.Align.CENTER)
         image = Gtk.Image.new_from_icon_name('pan-down-symbolic',
@@ -576,7 +578,8 @@ class PopoverSetting(GenericSetting):
 
         self._add_action_button(kwargs)
 
-        self._current_label.set_text(entries.get(self.setting_value, ''))
+        self._current_label.set_text(entries.get(self.setting_value,
+                                                 self._default_text or ''))
 
         self._bind_label()
 
@@ -588,11 +591,16 @@ class PopoverSetting(GenericSetting):
 
         app.settings.bind_signal(self.value,
                                  self._current_label,
-                                 'set_text')
+                                 'set_text',
+                                 account=self.account,
+                                 default_text=self._default_text)
 
     def _add_menu_entries(self, entries):
         if isinstance(entries, list):
             entries = {key: key for key in entries}
+
+        if self._default_text is not None:
+            self._menu_listbox.add(PopoverRow(self._default_text, ''))
 
         for value, label in entries.items():
             self._menu_listbox.add(PopoverRow(label, value))
@@ -601,7 +609,6 @@ class PopoverSetting(GenericSetting):
 
     def _on_menu_row_activated(self, listbox, row):
         listbox.unselect_all()
-        self._current_label.set_text(row.label)
         self._popover.popdown()
 
         self.set_value(row.value)
