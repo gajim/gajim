@@ -478,6 +478,7 @@ class _Settings:
             except KeyError:
                 pass
 
+            self._commit_settings('app')
             self._notify(default, setting)
             return
 
@@ -589,6 +590,7 @@ class _Settings:
             except KeyError:
                 pass
 
+            self._commit_account_settings(account)
             self._notify(default, setting, account)
             return
 
@@ -663,6 +665,7 @@ class _Settings:
             except KeyError:
                 pass
 
+            self._commit_account_settings(account)
             self._notify(default, setting, account, jid)
             return
 
@@ -737,6 +740,7 @@ class _Settings:
             except KeyError:
                 pass
 
+            self._commit_account_settings(account)
             self._notify(default, setting, account, jid)
             return
 
