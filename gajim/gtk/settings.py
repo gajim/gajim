@@ -277,11 +277,24 @@ class GenericSetting(Gtk.ListBoxRow):
 
     def _add_action_button(self, kwargs):
         icon_name = kwargs.get('button-icon-name')
-        if icon_name is None:
+        button_text = kwargs.get('button-text')
+        tooltip_text = kwargs.get('button-tooltip') or ''
+        style = kwargs.get('button-style')
+
+        if icon_name is not None:
+            button = Gtk.Button.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+
+        elif button_text is not None:
+            button = Gtk.Button(label=button_text)
+
+        else:
             return
 
-        button = Gtk.Button.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+        if style is not None:
+            button.get_style_context().add_class(style)
+
         button.connect('clicked', kwargs['button-callback'])
+        button.set_tooltip_text(tooltip_text)
         self.setting_box.add(button)
 
 
