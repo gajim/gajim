@@ -661,7 +661,7 @@ class _Settings:
 
         if value is None:
             try:
-                del self._account_settings[account]['group_chat'][setting]
+                del self._account_settings[account]['group_chat'][jid][setting]
             except KeyError:
                 pass
 
@@ -736,7 +736,7 @@ class _Settings:
 
         if value is None:
             try:
-                del self._account_settings[account]['contact'][setting]
+                del self._account_settings[account]['contact'][jid][setting]
             except KeyError:
                 pass
 
