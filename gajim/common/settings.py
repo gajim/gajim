@@ -42,6 +42,7 @@ from gajim.common.setting_values import DEFAULT_SOUNDEVENT_SETTINGS
 from gajim.common.setting_values import STATUS_PRESET_SETTINGS
 from gajim.common.setting_values import STATUS_PRESET_EXAMPLES
 from gajim.common.setting_values import HAS_APP_DEFAULT
+from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
 
 SETTING_TYPE = Union[bool, int, str, object]
 
@@ -608,6 +609,14 @@ class _Settings:
                     return self.get_app_setting(
                         f'gc_{setting}_{context}_default')
                 return self.get_app_setting(f'gc_{setting}_default')
+
+            if default is HAS_ACCOUNT_DEFAULT:
+                if context is not None:
+                    return self.get_account_setting(
+                        account, f'gc_{setting}_{context}_default')
+                return self.get_account_setting(account,
+                                                f'gc_{setting}_default')
+
             return default
 
     def set_group_chat_setting(self,
@@ -624,11 +633,16 @@ class _Settings:
             raise ValueError(f'Invalid group chat setting: {setting}')
 
         default = ACCOUNT_SETTINGS['group_chat'][setting]
-        if default is HAS_APP_DEFAULT:
+        if default in (HAS_APP_DEFAULT, HAS_ACCOUNT_DEFAULT):
+
+            default_store = APP_SETTINGS
+            if default is HAS_ACCOUNT_DEFAULT:
+                default_store = ACCOUNT_SETTINGS['account']
+
             if context is None:
-                default = APP_SETTINGS[f'gc_{setting}_default']
+                default = default_store[f'gc_{setting}_default']
             else:
-                default = APP_SETTINGS[f'gc_{setting}_{context}_default']
+                default = default_store[f'gc_{setting}_{context}_default']
 
         if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f'Invalid type for {setting}: '
@@ -677,6 +691,10 @@ class _Settings:
             default = ACCOUNT_SETTINGS['contact'][setting]
             if default is HAS_APP_DEFAULT:
                 return self.get_app_setting(f'{setting}_default')
+
+            if default is HAS_ACCOUNT_DEFAULT:
+                return self.get_account_setting(account, f'{setting}_default')
+
             return default
 
     def set_contact_setting(self,
@@ -692,8 +710,14 @@ class _Settings:
             raise ValueError(f'Invalid contact setting: {setting}')
 
         default = ACCOUNT_SETTINGS['contact'][setting]
-        if default is HAS_APP_DEFAULT:
-            default = APP_SETTINGS[f'{setting}_default']
+        if default in (HAS_APP_DEFAULT, HAS_ACCOUNT_DEFAULT):
+
+            default_store = APP_SETTINGS
+            if default is HAS_ACCOUNT_DEFAULT:
+                default_store = ACCOUNT_SETTINGS['account']
+
+            default = default_store[f'{setting}_default']
+
         if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f'Invalid type for {setting}: '
                             f'{value} {type(value)}')

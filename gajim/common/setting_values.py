@@ -4,7 +4,11 @@ from gajim.common.i18n import _
 class _DEFAULT:
     pass
 
+class _ACCOUNT_DEFAULT:
+    pass
+
 HAS_APP_DEFAULT = _DEFAULT()
+HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 
 # pylint: disable=line-too-long
 
