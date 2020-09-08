@@ -284,7 +284,13 @@ class _Settings:
         # Migrate deprecated settings
         value = app_settings.pop('send_chatstate_muc_default', None)
         if value is not None:
-            app_settings['gc_send_chatstate_default'] = value
+            for account in self._account_settings['account']:
+                self._account_settings[account]['account']['gc_send_chatstate_default'] = value
+
+        value = app_settings.pop('send_chatstate_default', None)
+        if value is not None:
+            for account in self._account_settings['account']:
+                self._account_settings[account]['account']['send_chatstate_default'] = value
 
         value = app_settings.pop('print_join_left_default', None)
         if value is not None:
@@ -302,6 +308,9 @@ class _Settings:
 
         self._settings['app'] = app_settings
         self._commit_settings('app')
+
+        for account in self._account_settings:
+            self._commit_account_settings(account)
 
     def _migrate_encryption_settings(self) -> None:
         # Migrate encryption settings into contact/group chat settings

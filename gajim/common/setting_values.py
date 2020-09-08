@@ -175,7 +175,6 @@ APP_SETTINGS = {
     'show_chatstate_in_roster': True,
     'show_chatstate_in_tabs': True,
     'show_chatstate_in_banner': True,
-    'send_chatstate_default': 'composing_only',
     'muclumbus_api_jid': 'rodrigo.de.mucobedo@dreckshal.de',
     'muclumbus_api_http_uri': 'https://search.jabbercat.org/api/1.0/search',
     'muclumbus_api_pref': 'http',
@@ -187,7 +186,6 @@ APP_SETTINGS = {
     'gc_notify_on_all_messages_public_default': False,
     'gc_print_status_default': False,
     'gc_print_join_left_default': False,
-    'gc_send_chatstate_default': 'composing_only',
     'check_for_update': True,
     'last_update_check': '',
     'always_ask_for_status_message': False,
@@ -259,11 +257,13 @@ ACCOUNT_SETTINGS = {
         'opened_chat_controls': '',
         'recent_groupchats': '',
         'filetransfer_preference' : 'httpupload',
+        'send_chatstate_default': 'composing_only',
+        'gc_send_chatstate_default': 'composing_only',
     },
 
     'contact': {
         'speller_language': '',
-        'send_chatstate': HAS_APP_DEFAULT,
+        'send_chatstate': HAS_ACCOUNT_DEFAULT,
         'encryption': '',
     },
 
@@ -274,7 +274,7 @@ ACCOUNT_SETTINGS = {
         'print_join_left': HAS_APP_DEFAULT,
         'minimize_on_autojoin': True,
         'minimize_on_close': True,
-        'send_chatstate': HAS_APP_DEFAULT,
+        'send_chatstate': HAS_ACCOUNT_DEFAULT,
         'encryption': '',
     },
 }
