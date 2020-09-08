@@ -655,6 +655,12 @@ class PrivacyPage(GenericSettingPage):
 
     def __init__(self, account):
 
+        chatstate_entries = {
+            'all': _('Enabled'),
+            'composing_only': _('Composing Only'),
+            'disabled': _('Disabled'),
+        }
+
         settings = [
             Setting(SettingKind.SWITCH, _('Idle Time'),
                     SettingType.ACCOUNT_CONFIG, 'send_idle_time',
@@ -679,8 +685,42 @@ class PrivacyPage(GenericSettingPage):
                     SettingType.ACCOUNT_CONFIG, 'answer_receipts',
                     desc=_('Tell your contacts if you received a message')),
 
+            Setting(SettingKind.POPOVER,
+                    _('Send Chatstate'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'send_chatstate_default',
+                    desc=_('Default for chats'),
+                    props={'entries': chatstate_entries,
+                           'button-text':_('Reset'),
+                           'button-tooltip': _('Reset all chats to the '
+                                               'current default value'),
+                           'button-style': 'destructive-action',
+                           'button-callback': self._reset_send_chatstate}),
+
+            Setting(SettingKind.POPOVER,
+                    _('Send Chatstate in Group Chats'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'gc_send_chatstate_default',
+                    desc=_('Default for group chats'),
+                    props={'entries': chatstate_entries,
+                           'button-text':_('Reset'),
+                           'button-tooltip': _('Reset all group chats to the '
+                                               'current default value'),
+                           'button-style': 'destructive-action',
+                           'button-callback': self._reset_gc_send_chatstate}),
+
             ]
         GenericSettingPage.__init__(self, account, settings)
+
+    @staticmethod
+    def _reset_send_chatstate(button):
+        button.set_sensitive(False)
+        app.settings.set_contact_settings('send_chatstate', None)
+
+    @staticmethod
+    def _reset_gc_send_chatstate(button):
+        button.set_sensitive(False)
+        app.settings.set_group_chat_settings('send_chatstate', None)
 
 
 class ConnectionPage(GenericSettingPage):
