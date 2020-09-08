@@ -749,6 +749,14 @@ class _Settings:
         self._commit_account_settings(account)
         self._notify(value, setting, account, jid)
 
+    def set_contact_settings(self,
+                             setting: str,
+                             value: SETTING_TYPE) -> None:
+
+        for account in self._account_settings:
+            for jid in self._account_settings[account]['contact']:
+                self.set_contact_setting(account, jid, setting, value)
+
     def set_soundevent_setting(self,
                                event_name: str,
                                setting: str,
