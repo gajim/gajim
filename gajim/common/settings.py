@@ -652,6 +652,14 @@ class _Settings:
         self._commit_account_settings(account)
         self._notify(value, setting, account, jid)
 
+    def set_group_chat_settings(self,
+                                setting: str,
+                                value: SETTING_TYPE) -> None:
+
+        for account in self._account_settings:
+            for jid in self._account_settings[account]['group_chat']:
+                self.set_group_chat_setting(account, jid, setting, value)
+
     def get_contact_setting(self,
                             account: str,
                             jid: str,
