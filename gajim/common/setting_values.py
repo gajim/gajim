@@ -451,7 +451,6 @@ ADVANCED_SETTINGS = {
         'remote_commands': _('If enabled, Gajim will execute XEP-0146 Commands.'),
         'threshold_options': _('Options in days which can be chosen in the sync threshold menu'),
         'private_room_sync_threshold': _('Maximum history in days we request from a private group chat archive. 0: As much as possible.'),
-        'send_chatstate_default': _('Chat state notifications that are sent to contacts. Possible values: all, composing_only, disabled'),
         'muclumbus_api_jid': '',
         'muclumbus_api_http_uri': '',
         'muclumbus_api_pref': _('API Preferences. Possible values: \'http\', \'iq\''),
@@ -460,7 +459,6 @@ ADVANCED_SETTINGS = {
         'dev_force_bookmark_2': _('Force Bookmark 2 usage'),
         'gc_notify_on_all_messages_private_default': '',
         'gc_notify_on_all_messages_public_default': '',
-        'gc_send_chatstate_default': '',
     },
 }
 
