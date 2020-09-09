@@ -41,6 +41,7 @@ from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import StyleAttr
 from gajim.common.const import Trust
+from gajim.common.const import URI_SCHEMES
 from gajim.common.helpers import to_user_string
 
 from gajim.gtk import util
@@ -642,8 +643,7 @@ class ConversationTextview(GObject.GObject):
                 break
 
         # Check if we accept this as an uri
-        schemes = app.settings.get('uri_schemes').split()
-        for scheme in schemes:
+        for scheme in URI_SCHEMES:
             if special_text.startswith(scheme):
                 text_is_valid_uri = True
 
