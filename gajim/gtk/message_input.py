@@ -18,6 +18,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
@@ -108,6 +109,18 @@ class MessageInputTextView(Gtk.TextView):
         self.connect('focus-in-event', self._on_grab_focus)
         self.connect('grab-focus', self._on_grab_focus)
         self.connect('focus-out-event', self._on_focus_out)
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, *args):
+        # We restore the TextView’s drag destination to avoid a GTK warning
+        # when closing the control. ChatControlBase.shutdown() calls destroy()
+        # on the control’s main box, causing GTK to recursively destroy the
+        # child widgets. GTK then tries to set a target list on the TextView,
+        # resulting in a warning because the Widget has no drag destination.
+        self.drag_dest_set(
+            Gtk.DestDefaults.ALL,
+            None,
+            Gdk.DragAction.DEFAULT)
 
     def _on_buffer_changed(self, *args):
         text = self.get_text()
