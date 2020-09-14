@@ -191,6 +191,7 @@ class Themes(Gtk.ApplicationWindow):
         self.set_transient_for(transient)
         self.set_resizable(True)
         self.set_default_size(600, 400)
+        self.set_modal(True)
 
         self._ui = get_builder('themes_window.ui')
         self.add(self._ui.theme_grid)
