@@ -182,7 +182,7 @@ class Column(IntEnum):
 
 class Themes(Gtk.ApplicationWindow):
     def __init__(self, transient):
-        Gtk.Window.__init__(self)
+        Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_title(_('Gajim Themes'))
         self.set_name('ThemesWindow')
