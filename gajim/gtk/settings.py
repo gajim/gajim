@@ -291,7 +291,8 @@ class GenericSetting(Gtk.ListBoxRow):
             return
 
         if style is not None:
-            button.get_style_context().add_class(style)
+            for css_class in style.split(' '):
+                button.get_style_context().add_class(css_class)
 
         button.connect('clicked', kwargs['button-callback'])
         button.set_tooltip_text(tooltip_text)
