@@ -284,12 +284,12 @@ class _Settings:
         # Migrate deprecated settings
         value = app_settings.pop('send_chatstate_muc_default', None)
         if value is not None:
-            for account in self._account_settings['account']:
+            for account in self._account_settings:
                 self._account_settings[account]['account']['gc_send_chatstate_default'] = value
 
         value = app_settings.pop('send_chatstate_default', None)
         if value is not None:
-            for account in self._account_settings['account']:
+            for account in self._account_settings:
                 self._account_settings[account]['account']['send_chatstate_default'] = value
 
         value = app_settings.pop('print_join_left_default', None)
