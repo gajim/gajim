@@ -73,10 +73,12 @@ class SettingsDialog(Gtk.ApplicationWindow):
 
 
 class SettingsBox(Gtk.ListBox):
-    def __init__(self, account, extend=None):
+    def __init__(self, account=None, jid=None, context=None, extend=None):
         Gtk.ListBox.__init__(self)
         self.get_style_context().add_class('settings-box')
         self.account = account
+        self.jid = jid
+        self.context = context
         self.named_settings = {}
 
         self.map = {
@@ -112,10 +114,16 @@ class SettingsBox(Gtk.ListBox):
     def add_setting(self, setting):
         if not isinstance(setting, Gtk.ListBoxRow):
             if setting.props is not None:
-                listitem = self.map[setting.kind](
-                    self.account, *setting[1:-1], **setting.props)
+                listitem = self.map[setting.kind](self.account,
+                                                  self.jid,
+                                                  self.context,
+                                                  *setting[1:-1],
+                                                  **setting.props)
             else:
-                listitem = self.map[setting.kind](self.account, *setting[1:-1])
+                listitem = self.map[setting.kind](self.account,
+                                                  self.jid,
+                                                  self.context,
+                                                  *setting[1:-1])
 
         if setting.name is not None:
             self.named_settings[setting.name] = listitem
@@ -132,6 +140,8 @@ class SettingsBox(Gtk.ListBox):
 class GenericSetting(Gtk.ListBoxRow):
     def __init__(self,
                  account,
+                 jid,
+                 context,
                  label,
                  type_,
                  value,
@@ -153,6 +163,8 @@ class GenericSetting(Gtk.ListBoxRow):
         self.data = data
         self.label = label
         self.account = account
+        self.jid = jid
+        self.context = context
         self.name = name
         self.bind = bind
         self.inverted = inverted
@@ -203,8 +215,17 @@ class GenericSetting(Gtk.ListBoxRow):
                                  account=self.account,
                                  inverted=self.inverted)
 
-        if self.account is not None:
+        if self.type_ == SettingType.CONTACT:
+            value = app.settings.get_contact_setting(
+                self.account, self.jid, self.bind)
+
+        elif self.type_ == SettingType.GROUP_CHAT:
+            value = app.settings.get_group_chat_setting(
+                self.account, self.jid, self.bind)
+
+        elif self.type_ == SettingType.ACCOUNT_CONFIG:
             value = app.settings.get_account_setting(self.account, self.bind)
+
         else:
             value = app.settings.get(self.bind)
 
@@ -213,14 +234,25 @@ class GenericSetting(Gtk.ListBoxRow):
         self.set_sensitive(value)
 
     def get_value(self):
-        return self.__get_value(self.type_, self.value, self.account)
+        return self.__get_value(self.type_,
+                                self.value,
+                                self.account,
+                                self.jid,
+                                self.context)
 
     @staticmethod
-    def __get_value(type_, value, account):
+    def __get_value(type_, value, account, jid, context):
         if value is None:
             return None
         if type_ == SettingType.VALUE:
             return value
+
+        if type_ == SettingType.CONTACT:
+            return app.settings.get_contact_setting(account, jid, value)
+
+        if type_ == SettingType.GROUP_CHAT:
+            value = app.settings.get_group_chat_setting(
+                account, jid, value, context)
 
         if type_ == SettingType.CONFIG:
             return app.settings.get(value)
@@ -244,7 +276,8 @@ class GenericSetting(Gtk.ListBoxRow):
     def set_value(self, state):
         if self.type_ == SettingType.CONFIG:
             app.settings.set(self.value, state)
-        if self.type_ == SettingType.ACCOUNT_CONFIG:
+
+        elif self.type_ == SettingType.ACCOUNT_CONFIG:
             if self.value == 'password':
                 passwords.save_password(self.account, state)
             if self.value == 'no_log_for':
@@ -253,6 +286,14 @@ class GenericSetting(Gtk.ListBoxRow):
                 app.settings.set_account_setting(self.account,
                                                  self.value,
                                                  state)
+
+        elif self.type_ == SettingType.CONTACT:
+            app.settings.set_contact_setting(
+                self.account, self.jid, self.value, state)
+
+        elif self.type_ == SettingType.GROUP_CHAT:
+            app.settings.set_group_chat_setting(
+                self.account, self.jid, self.value, state, self.context)
 
         if self.callback is not None:
             self.callback(state, self.data)

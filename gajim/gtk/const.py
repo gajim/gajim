@@ -65,11 +65,13 @@ class SettingKind(IntEnum):
 
 @unique
 class SettingType(IntEnum):
-    ACCOUNT_CONFIG = 0
-    CONFIG = 1
-    VALUE = 2
-    ACTION = 3
-    DIALOG = 4
+    CONFIG = 0
+    ACCOUNT_CONFIG = 1
+    CONTACT = 2
+    GROUP_CHAT = 3
+    VALUE = 4
+    ACTION = 5
+    DIALOG = 6
 
 
 class ControlType(Enum):
