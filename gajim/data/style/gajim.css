@@ -79,6 +79,15 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 .settings-box > row { padding: 10px 20px 10px 10px; }
 .settings-box > row:not(.activatable) label { color: @insensitive_fg_color; }
 
+window.settings-dialog row {
+    border-bottom: 0px;
+}
+
+window.settings-dialog list { 
+    background: transparent;
+    margin: 12px;
+}
+
 /* GenericSetting */
 #SubDescription { color: @insensitive_fg_color; font-size: small;}
 #GenericSettingBox { margin-left: 30px; }
@@ -91,9 +100,8 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 .PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color; }
 
 /* Settings ListBox */
-
 list.settings {
-	border: @borders 1px solid;
+    border: @borders 1px solid;
 }
 list.settings > row:not(:last-child) {
 	border-bottom: @theme_unfocused_bg_color 1px solid;
@@ -101,6 +109,27 @@ list.settings > row:not(:last-child) {
 list.settings row { min-height: 52px; }
 list.settings > row > box {
     margin: 6px 18px;
+}
+
+/* Settings Window */
+list.settings-menu row {
+    border-bottom: 1px solid;
+    border-color: @theme_unfocused_bg_color;
+    padding: 14px;
+    min-width: 170px;
+}
+list.settings-menu row label {
+    padding-left: 12px;
+}
+.settings-stack viewport > box {
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 10px;
+    margin-top: 25px;
+}
+.settings-border {
+    border: 1px solid;
+    border-color: @borders;
 }
 
 /* InfoBar */
@@ -123,10 +152,6 @@ infobar.error > revealer > box {
 
 /*SendFileDialog*/
 #SendFileDialog grid list > row { padding: 10px 20px 10px 10px; }
-
-/* Preferences Window */
-.PreferencesWindow { background-color: @theme_base_color; }
-.PreferencesStack { background-color: @theme_bg_color; }
 
 /* Accounts Window */
 .accounts-menu { border-right: 1px solid; border-color: @borders;}
@@ -333,12 +358,24 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 
-popover.combo list { min-width: 200px; margin: 12px;}
+popover.combo list {
+    min-width: 200px;
+    margin: 12px;
+}
 popover.combo { padding: 0px; }
-popover.combo list { border-style: none; background-color: transparent; }
-popover.combo list > row { padding: 0px 12px 0px 12px; min-height: 50px; }
+popover.combo list {
+    border-style: none;
+    background-color: transparent;
+}
+popover.combo list > row {
+    padding: 0px 12px 0px 12px;
+    min-height: 40px;
+}
 popover.combo list > row:not(:last-child) { border-bottom: 1px solid alpha(#cdc7c2, 0.5); }
 popover.combo scrollbar.vertical { padding-top: 2px; padding-bottom: 2px; }
-
+popover.combo scrollbar.vertical {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
 
 messagedialog.confirmation-dialog > box { margin-top: 18px; }

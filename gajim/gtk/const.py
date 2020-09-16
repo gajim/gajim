@@ -58,6 +58,9 @@ class SettingKind(IntEnum):
     COMBO = 12
     COLOR = 13
     POPOVER = 14
+    AUTO_AWAY = 15
+    AUTO_EXTENDED_AWAY = 16
+    USE_STUN_SERVER = 17
 
 
 @unique

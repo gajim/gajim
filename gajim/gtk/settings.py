@@ -44,6 +44,7 @@ class SettingsDialog(Gtk.ApplicationWindow):
         self.set_resizable(False)
         self.set_default_size(250, -1)
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+        self.get_style_context().add_class('settings-dialog')
         self.account = account
         if flags == Gtk.DialogFlags.MODAL:
             self.set_modal(True)
@@ -93,6 +94,9 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
             SettingKind.COMBO: ComboSetting,
             SettingKind.POPOVER: PopoverSetting,
+            SettingKind.AUTO_AWAY: CutstomAutoAwaySetting,
+            SettingKind.AUTO_EXTENDED_AWAY: CutstomAutoExtendedAwaySetting,
+            SettingKind.USE_STUN_SERVER: CutstomStunServerSetting
         }
 
         if extend is not None:
@@ -721,3 +725,30 @@ class ChangePasswordSetting(DialogSetting):
             activatable = (con.state.is_available and
                            con.get_module('Register').supported)
         self.set_activatable(activatable)
+
+
+class CutstomAutoAwaySetting(DialogSetting):
+    def __init__(self, *args, **kwargs):
+        DialogSetting.__init__(self, *args, **kwargs)
+
+    def get_setting_value(self):
+        value = app.settings.get('autoaway')
+        return Q_('?switch:On') if value else Q_('?switch:Off')
+
+
+class CutstomAutoExtendedAwaySetting(DialogSetting):
+    def __init__(self, *args, **kwargs):
+        DialogSetting.__init__(self, *args, **kwargs)
+
+    def get_setting_value(self):
+        value = app.settings.get('autoxa')
+        return Q_('?switch:On') if value else Q_('?switch:Off')
+
+
+class CutstomStunServerSetting(DialogSetting):
+    def __init__(self, *args, **kwargs):
+        DialogSetting.__init__(self, *args, **kwargs)
+
+    def get_setting_value(self):
+        value = app.settings.get('use_stun_server')
+        return Q_('?switch:On') if value else Q_('?switch:Off')

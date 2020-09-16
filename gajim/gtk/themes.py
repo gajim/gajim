@@ -200,7 +200,6 @@ class Themes(Gtk.ApplicationWindow):
         self._ui.option_listbox.set_placeholder(self._ui.placeholder)
 
         self._ui.connect_signals(self)
-        self.connect('destroy', self._on_destroy)
         self.connect_after('key-press-event', self._on_key_press)
 
         self.show_all()
@@ -305,6 +304,8 @@ class Themes(Gtk.ApplicationWindow):
         if not app.css_config.add_new_theme(name):
             return
 
+        self._update_preferences_window()
+
         self._ui.remove_theme_button.set_sensitive(True)
         iter_ = self._ui.theme_store.append([name])
         self._select_theme_row(iter_)
@@ -320,7 +321,7 @@ class Themes(Gtk.ApplicationWindow):
         app.interface.roster.repaint_themed_widgets()
         app.interface.roster.change_roster_style(None)
 
-        # Update Preferences theme combobox
+    def _update_preferences_window(self):
         window = get_app_window('Preferences')
         if window is not None:
             window.update_theme_list()
@@ -344,6 +345,7 @@ class Themes(Gtk.ApplicationWindow):
                 self._apply_theme('default')
 
             app.css_config.remove_theme(theme)
+            self._update_preferences_window()
             store.remove(iter_)
 
             first = store.get_iter_first()
@@ -364,12 +366,6 @@ class Themes(Gtk.ApplicationWindow):
              DialogButton.make('Delete',
                                callback=_remove_theme)],
             transient_for=self).show()
-
-    @staticmethod
-    def _on_destroy(*args):
-        window = get_app_window('Preferences')
-        if window is not None:
-            window.update_theme_list()
 
 
 class Option(Gtk.ListBoxRow):

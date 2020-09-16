@@ -13,23 +13,14 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import os
 import sys
 
-from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import Pango
-
-try:
-    from gi.repository import Gst
-except Exception:
-    pass
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
-from gajim.common import idle
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
@@ -40,12 +31,19 @@ from gajim.common.multimedia_helpers import VideoInputManager
 
 from gajim.chat_control_base import ChatControlBase
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_icon_name
+from gajim.gtk.const import Setting
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
+from gajim.gtk.const import ControlType
+from gajim.gtk.emoji_chooser import emoji_chooser
+from gajim.gtk.settings import SettingsBox
+from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.sidebar_switcher import SideBarSwitcher
+from gajim.gtk.video_preview import VideoPreview
 from gajim.gtk.util import get_available_iconsets
 from gajim.gtk.util import open_window
-from gajim.gtk.const import ControlType
-from gajim.gtk import gstreamer
+from gajim.gtk.util import get_app_window
+from gajim.gtk.util import get_builder
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
@@ -59,373 +57,99 @@ class Preferences(Gtk.ApplicationWindow):
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
+        self.set_name('PreferencesWindow')
+        self.set_default_size(900, 650)
+        self.set_resizable(True)
         self.set_title(_('Preferences'))
 
-        self._ui = get_builder('preferences_window.ui')
-        self.add(self._ui.preferences_window)
+        self._ui = get_builder('preferences.ui')
 
-        ### General tab ###
-        ## Behavior of Windows and Tabs
-        # Set default for single window type
-        self._ui.one_window_type_combobox.set_active_id(
-            app.settings.get('one_message_window'))
+        self._video_preview = None
+        self._prefs = {}
 
-        # Show roster on startup
-        self._ui.show_roster_on_startup.set_active_id(
-            app.settings.get('show_roster_on_startup'))
+        side_bar_switcher = SideBarSwitcher()
+        side_bar_switcher.set_stack(self._ui.stack)
+        self._ui.grid.attach(side_bar_switcher, 0, 0, 1, 1)
 
-        # Quit on roster x
-        st = app.settings.get('quit_on_roster_x_button')
-        self._ui.quit_on_roster_x_checkbutton.set_active(st)
+        self.add(self._ui.grid)
 
-        # Tab placement
-        st = app.settings.get('tabs_position')
-        if st == 'top':
-            self._ui.tabs_placement.set_active(0)
-        elif st == 'bottom':
-            self._ui.tabs_placement.set_active(1)
-        elif st == 'left':
-            self._ui.tabs_placement.set_active(2)
-        else: # right
-            self._ui.tabs_placement.set_active(3)
+        self._check_emoji_theme()
 
-        ## Contact List Appearance
-        # Merge accounts
-        st = app.settings.get('mergeaccounts')
-        self._ui.merge_accounts_checkbutton.set_active(st)
+        prefs = [
+            ('window_behaviour', WindowBehaviour),
+            ('contact_list', ContactList),
+            ('chats', Chats),
+            ('group_chats', GroupChats),
+            ('visual_notifications', VisualNotifications),
+            ('sounds', Sounds),
+            ('status_message', StatusMessage),
+            ('automatic_status', AutomaticStatus),
+            ('themes', Themes),
+            ('emoji', Emoji),
+            ('status_icon', StatusIcon),
+            ('server', Server),
+            ('audio', Audio),
+            ('video', Video),
+            ('miscellaneous', Miscellaneous),
+            ('advanced', Advanced),
+        ]
 
-        # Display avatars in roster
-        st = app.settings.get('show_avatars_in_roster')
-        self._ui.show_avatars_in_roster_checkbutton.set_active(st)
+        self._add_prefs(prefs)
+        self._add_video_preview()
 
-        # Display status msg under contact name in roster
-        st = app.settings.get('show_status_msgs_in_roster')
-        self._ui.show_status_msgs_in_roster_checkbutton.set_active(st)
+        self._ui.audio_video_info_bar.set_revealed(not app.is_installed('AV'))
 
-        # Display PEP in roster
-        st1 = app.settings.get('show_mood_in_roster')
-        st2 = app.settings.get('show_activity_in_roster')
-        st3 = app.settings.get('show_tunes_in_roster')
-        st4 = app.settings.get('show_location_in_roster')
-        if st1 == st2 == st3 == st4:
-            self._ui.show_pep_in_roster_checkbutton.set_active(st1)
-        else:
-            self._ui.show_pep_in_roster_checkbutton.set_inconsistent(True)
-
-        # Sort contacts by show
-        st = app.settings.get('sort_by_show_in_roster')
-        self._ui.sort_by_show_in_roster_checkbutton.set_active(st)
-        st = app.settings.get('sort_by_show_in_muc')
-        self._ui.sort_by_show_in_muc_checkbutton.set_active(st)
-
-        ### Chat tab ###
-
-        ## Chat Settings
-        # Use speller
-        if app.is_installed('GSPELL'):
-            st = app.settings.get('use_speller')
-            self._ui.speller_checkbutton.set_active(st)
-        else:
-            self._ui.speller_checkbutton.set_sensitive(False)
-
-        # XEP-0184 positive ack
-        st = app.settings.get('positive_184_ack')
-        self._ui.positive_184_ack_checkbutton.set_active(st)
-
-        # Ignore XHTML
-        st = app.settings.get('show_xhtml')
-        self._ui.xhtml_checkbutton.set_active(st)
-
-        # Print status messages in single chats
-        st = app.settings.get('print_status_in_chats')
-        self._ui.print_status_in_chats_checkbutton.set_active(st)
-
-        # Show subject on join
-        st = app.settings.get('show_subject_on_join')
-        self._ui.subject_on_join_checkbutton.set_active(st)
-
-        # Group chat settings
-        threshold_model = self._ui.sync_threshold_combobox.get_model()
-        options = app.settings.get('threshold_options').split(',')
-        days = [int(option.strip()) for option in options]
-        for day in days:
-            if day == 0:
-                label = _('No threshold')
-            else:
-                label = ngettext('%i day', '%i days', day, day, day)
-            threshold_model.append([str(day), label])
-        public_threshold = app.settings.get('public_room_sync_threshold')
-        self._ui.sync_threshold_combobox.set_id_column(0)
-        self._ui.sync_threshold_combobox.set_active_id(str(public_threshold))
-
-        st = app.settings.get('gc_print_join_left_default')
-        self._ui.join_leave_checkbutton.set_active(st)
-
-        st = app.settings.get('gc_print_status_default')
-        self._ui.show_status_change_checkbutton.set_active(st)
-
-        # Displayed chat state notifications
-        st = app.settings.get('show_chatstate_in_tabs')
-        self._ui.show_chatstate_in_tabs.set_active(st)
-
-        st = app.settings.get('show_chatstate_in_roster')
-        self._ui.show_chatstate_in_roster.set_active(st)
-
-        st = app.settings.get('show_chatstate_in_banner')
-        self._ui.show_chatstate_in_banner.set_active(st)
-
-        ### Notifications tab ###
-        ## Visual Notifications
-        # Systray icon
-        if app.settings.get('trayicon') == 'never':
-            self._ui.systray_combobox.set_active(0)
-        elif app.settings.get('trayicon') == 'on_event':
-            self._ui.systray_combobox.set_active(1)
-        else: # always
-            self._ui.systray_combobox.set_active(2)
-
-        # Notify on new event
-        if app.settings.get('autopopup'):
-            self._ui.on_event_received_combobox.set_active(0)
-        elif app.settings.get('notify_on_new_message'):
-            self._ui.on_event_received_combobox.set_active(1)
-        else: # only show in roster
-            self._ui.on_event_received_combobox.set_active(2)
-
-        # Notify on online statuses
-        st = app.settings.get('notify_on_signin')
-        self._ui.notify_on_signin_checkbutton.set_active(st)
-
-        # Notify on offline statuses
-        st = app.settings.get('notify_on_signout')
-        self._ui.notify_on_signout_checkbutton.set_active(st)
-
-        # Auto popup when away
-        st = app.settings.get('autopopupaway')
-        self._ui.auto_popup_away_checkbutton.set_active(st)
-
-        # Auto popup when chat already open
-        st = app.settings.get('autopopup_chat_opened')
-        self._ui.auto_popup_chat_opened_checkbutton.set_active(st)
-
-        ## Sounds
-        # Sounds
-        if app.settings.get('sounds_on'):
-            self._ui.play_sounds_checkbutton.set_active(True)
-        else:
-            self._ui.manage_sounds_button.set_sensitive(False)
-
-        # Allow sounds when dnd
-        st = app.settings.get('sounddnd')
-        self._ui.sound_dnd_checkbutton.set_active(st)
-
-        #### Status tab ###
-        # Auto away
-        st = app.settings.get('autoaway')
-        self._ui.auto_away_checkbutton.set_active(st)
-
-        # Auto away time
-        st = app.settings.get('autoawaytime')
-        self._ui.auto_away_time_spinbutton.set_value(st)
-        self._ui.auto_away_time_spinbutton.set_sensitive(app.settings.get('autoaway'))
-
-        # Auto away message
-        st = app.settings.get('autoaway_message')
-        self._ui.auto_away_message_entry.set_text(st)
-        self._ui.auto_away_message_entry.set_sensitive(app.settings.get('autoaway'))
-
-        # Auto xa
-        st = app.settings.get('autoxa')
-        self._ui.auto_xa_checkbutton.set_active(st)
-
-        # Auto xa time
-        st = app.settings.get('autoxatime')
-        self._ui.auto_xa_time_spinbutton.set_value(st)
-        self._ui.auto_xa_time_spinbutton.set_sensitive(app.settings.get('autoxa'))
-
-        # Auto xa message
-        st = app.settings.get('autoxa_message')
-        self._ui.auto_xa_message_entry.set_text(st)
-        self._ui.auto_xa_message_entry.set_sensitive(app.settings.get('autoxa'))
-
-        if not idle.Monitor.is_available():
-            self._ui.autoaway_table.set_sensitive(False)
-
-        # Ask for status when online/offline
-        st = app.settings.get('ask_online_status')
-        self._ui.sign_in_status_checkbutton.set_active(st)
-        st = app.settings.get('ask_offline_status')
-        self._ui.sign_out_status_checkbutton.set_active(st)
-        st = app.settings.get('always_ask_for_status_message')
-        self._ui.status_change_checkbutton.set_active(st)
-
-        ### Style tab ###
-        # Themes
-        self.changed_id = self._ui.theme_combobox.connect(
-            'changed', self.on_theme_combobox_changed)
-        self.update_theme_list()
-
-        # Dark theme
-        self._ui.dark_theme_combobox.set_active_id(str(app.settings.get('dark_theme')))
-
-        # Emoticons
-        emoticon_themes = helpers.get_available_emoticon_themes()
-
-        for theme in emoticon_themes:
-            self._ui.emoticons_combobox.append_text(theme)
-
-        config_theme = app.settings.get('emoticons_theme')
-        if config_theme not in emoticon_themes:
-            config_theme = 'font'
-        self._ui.emoticons_combobox.set_id_column(0)
-        self._ui.emoticons_combobox.set_active_id(config_theme)
-
-        self._ui.ascii_emoticons.set_active(app.settings.get('ascii_emoticons'))
-
-        # Iconset
-        model = Gtk.ListStore(str, str)
-        renderer_image = Gtk.CellRendererPixbuf()
-        renderer_text = Gtk.CellRendererText()
-        renderer_text.set_property('xpad', 5)
-        self._ui.iconset_combobox.pack_start(renderer_image, False)
-        self._ui.iconset_combobox.pack_start(renderer_text, True)
-        self._ui.iconset_combobox.add_attribute(renderer_text, 'text', 1)
-        self._ui.iconset_combobox.add_attribute(renderer_image, 'icon_name', 0)
-        self._ui.iconset_combobox.set_model(model)
-
-        for index, iconset_name in enumerate(get_available_iconsets()):
-            icon_name = get_icon_name('online', iconset=iconset_name)
-            model.append([icon_name, iconset_name])
-            if app.settings.get('iconset') == iconset_name:
-                self._ui.iconset_combobox.set_active(index)
-
-        # Use transports iconsets
-        st = app.settings.get('use_transports_iconsets')
-        self._ui.transports_iconsets_checkbutton.set_active(st)
-
-        ### Audio/Video tab ###
-        def create_av_combobox(opt_name, device_dict, config_name=None,
-                               # This key is there to give the first index to autovideosrc and co.
-                               key=lambda x: '' if x[1].startswith('auto') else x[0].lower()):
-            combobox = self._ui.get_object(opt_name + '_combobox')
-            cell = Gtk.CellRendererText()
-            cell.set_property('ellipsize', Pango.EllipsizeMode.END)
-            cell.set_property('ellipsize-set', True)
-            combobox.pack_start(cell, True)
-            combobox.add_attribute(cell, 'text', 0)
-            model = Gtk.ListStore(str, str)
-            combobox.set_model(model)
-            if config_name:
-                config = app.settings.get(config_name)
-            else:
-                config = app.settings.get(opt_name + '_device')
-
-            for index, (name, value) in enumerate(sorted(device_dict.items(),
-                                                         key=key)):
-                model.append((name, value))
-                if config == value:
-                    combobox.set_active(index)
-
-        if os.name == 'nt':
-            self._ui.av_dependencies_label.set_text(
-                _('Feature not available under Windows'))
-        else:
-            self._ui.av_dependencies_label.set_text(
-                _('Missing dependencies for Audio/Video'))
-
-        if app.is_installed('AV'):
-            self._ui.av_dependencies_infobar.set_no_show_all(True)
-            self._ui.av_dependencies_infobar.hide()
-
-            create_av_combobox(
-                'audio_input', AudioInputManager().get_devices())
-            create_av_combobox(
-                'audio_output', AudioOutputManager().get_devices())
-            create_av_combobox(
-                'video_input', VideoInputManager().get_devices())
-
-            create_av_combobox(
-                'video_framerate',
-                {_('Default'): '',
-                 '15fps': '15/1',
-                 '10fps': '10/1',
-                 '5fps': '5/1',
-                 '2.5fps': '5/2'},
-                'video_framerate',
-                key=lambda x: -1 if not x[1] else float(x[0][:-3]))
-            create_av_combobox(
-                'video_size',
-                {_('Default'): '',
-                 '800x600': '800x600',
-                 '640x480': '640x480',
-                 '320x240': '320x240'},
-                'video_size',
-                key=lambda x: -1 if not x[1] else int(x[0][:3]))
-            st = app.settings.get('video_see_self')
-            self._ui.video_see_self_checkbutton.set_active(st)
-
-            self.av_pipeline = None
-            self.av_src = None
-            self.av_sink = None
-            self.av_widget = None
-        else:
-            for opt_name in ('audio_input', 'audio_output', 'video_input',
-                             'video_framerate', 'video_size'):
-                combobox = self._ui.get_object(opt_name + '_combobox')
-                combobox.set_sensitive(False)
-            self._ui.live_preview_checkbutton.set_sensitive(False)
-
-        # STUN
-        st = app.settings.get('use_stun_server')
-        self._ui.stun_checkbutton.set_active(st)
-        self._ui.stun_server_entry.set_sensitive(st)
-        self._ui.stun_server_entry.set_text(app.settings.get('stun_server'))
-
-        ### Advanced tab ###
-
-        ## Miscellaneous
-        # Proxy
-        self.update_proxy_list()
-
-        # Log status changes of contacts
-        st = app.settings.get('log_contact_status_changes')
-        self._ui.log_show_changes_checkbutton.set_active(st)
-
-        st = app.settings.get('use_keyring')
-        self._ui.use_keyring_checkbutton.set_active(st)
-
-        self._ui.enable_logging.set_active(app.get_debug_mode())
-        self._ui.enable_logging.show()
-
-        if sys.platform in ('win32', 'darwin'):
-            st = app.settings.get('check_for_update')
-            self._ui.update_check.set_active(st)
-            self._ui.update_check.show()
-
-        self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
+        self._ui.connect_signals(self)
 
         self.show_all()
 
-    def _on_key_press(self, widget, event):
+    def get_ui(self):
+        return self._ui
+
+    def _add_prefs(self, prefs):
+        for ui_name, klass in prefs:
+            pref_box = getattr(self._ui, ui_name)
+            if ui_name == 'video' and sys.platform == 'win32':
+                continue
+
+            pref = klass(self)
+            pref_box.add(pref)
+            self._prefs[ui_name] = pref
+
+    def _add_video_preview(self):
+        if sys.platform == 'win32':
+            return
+        self._video_preview = VideoPreview()
+        self._ui.video.add(self._video_preview.widget)
+
+    def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def on_checkbutton_toggled(self, widget, config_name,
-                               change_sensitivity_widgets=None):
-        app.settings.set(config_name, widget.get_active())
-        if change_sensitivity_widgets:
-            for w in change_sensitivity_widgets:
-                w.set_sensitive(widget.get_active())
+    def get_video_preview(self):
+        return self._video_preview
 
-    def _get_all_controls(self):
+    @staticmethod
+    def _on_features_clicked(_widget, _response):
+        open_window('Features')
+
+    def update_theme_list(self):
+        self._prefs['themes'].update_theme_list()
+
+    def update_proxy_list(self):
+        self._prefs['miscellaneous'].update_proxy_list()
+
+    @staticmethod
+    def get_all_controls():
         for ctrl in app.interface.msg_win_mgr.get_controls():
             yield ctrl
         for account in app.connections:
             for ctrl in app.interface.minimized_controls[account].values():
                 yield ctrl
 
-    def _get_all_muc_controls(self):
+    @staticmethod
+    def get_all_muc_controls():
         for ctrl in app.interface.msg_win_mgr.get_controls(
                 ControlType.GROUPCHAT):
             yield ctrl
@@ -433,434 +157,936 @@ class Preferences(Gtk.ApplicationWindow):
             for ctrl in app.interface.minimized_controls[account].values():
                 yield ctrl
 
-    ### General tab ###
-    def on_one_window_type_combo_changed(self, combobox):
-        app.settings.set('one_message_window', combobox.get_active_id())
+    @staticmethod
+    def _check_emoji_theme():
+        # Ensure selected emoji theme is valid
+        emoji_themes = helpers.get_available_emoticon_themes()
+        settings_theme = app.settings.get('emoticons_theme')
+        if settings_theme not in emoji_themes:
+            app.settings.set('emoticons_theme', 'font')
+
+
+class PreferenceBox(SettingsBox):
+    def __init__(self, settings):
+        SettingsBox.__init__(self, None)
+        self.get_style_context().add_class('settings-border')
+        self.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.set_vexpand(False)
+        self.set_valign(Gtk.Align.END)
+
+        for setting in settings:
+            self.add_setting(setting)
+        self.update_states()
+
+
+class WindowBehaviour(PreferenceBox):
+    def __init__(self, *args):
+        win_layout_items = {
+            'never': _('Detached contact list with detached chats'),
+            'always': _('Detached contact list with single chat'),
+            'always_with_roster': _('Single window for everything'),
+            'peracct': _('Detached contact list with chats grouped by account'),
+            'pertype': _('Detached contact list with chats grouped by type'),
+        }
+
+        roster_on_startup_items = {
+            'always': _('Always'),
+            'never': _('Never'),
+            'last_state': _('Restore last state'),
+        }
+
+        tab_position_items = {
+            'top': _('Top'),
+            'bottom': _('Bottom'),
+            'left': _('Left'),
+            'Right': _('Right'),
+        }
+
+        settings = [
+            Setting(SettingKind.POPOVER,
+                    _('Window Layout'),
+                    SettingType.CONFIG,
+                    'one_message_window',
+                    props={'entries': win_layout_items},
+                    callback=self._on_win_layout_changed),
+
+            Setting(SettingKind.POPOVER,
+                    _('Contact List on Startup'),
+                    SettingType.CONFIG,
+                    'show_roster_on_startup',
+                    props={'entries': roster_on_startup_items},
+                    desc=_('Show contact list when starting Gajim')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Quit on Close'),
+                    SettingType.CONFIG,
+                    'quit_on_roster_x_button',
+                    desc=_('Quit when closing contact list')),
+
+            Setting(SettingKind.POPOVER,
+                    _('Tab Position'),
+                    SettingType.CONFIG,
+                    'tabs_position',
+                    props={'entries': tab_position_items},
+                    desc=_('Placement of chat window tabs'),
+                    callback=self._on_win_layout_changed),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _on_win_layout_changed(*args):
         app.interface.msg_win_mgr.reconfig()
 
-    def on_show_roster_on_startup_changed(self, combobox):
-        app.settings.set('show_roster_on_startup', combobox.get_active_id())
 
-    def on_quit_on_roster_x_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'quit_on_roster_x_button')
+class ContactList(PreferenceBox):
+    def __init__(self, *args):
 
-    def on_tab_placement_changed(self, widget):
-        active = widget.get_active()
-        if active == 0: # top
-            app.settings.set('tabs_position', 'top')
-        elif active == 1: # bottom
-            app.settings.set('tabs_position', 'bottom')
-        elif active == 2: # left
-            app.settings.set('tabs_position', 'left')
-        else: # right
-            app.settings.set('tabs_position', 'right')
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Merge Accounts'),
+                    SettingType.CONFIG,
+                    'mergeaccounts',
+                    callback=self._on_merge_accounts),
 
-    def on_merge_accounts_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'mergeaccounts')
+            Setting(SettingKind.SWITCH,
+                    _('Show Avatars'),
+                    SettingType.CONFIG,
+                    'show_avatars_in_roster',
+                    callback=self._on_show_avatar_in_roster_changed),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Status Message'),
+                    SettingType.CONFIG,
+                    'show_status_msgs_in_roster',
+                    callback=self._on_show_status_in_roster),
+
+            Setting(SettingKind.SWITCH,
+                    _('Sort Contacts by Status'),
+                    SettingType.CONFIG,
+                    'sort_by_show_in_roster',
+                    callback=self._on_sort_by_show_in_roster),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Mood'),
+                    SettingType.CONFIG,
+                    'show_mood_in_roster'),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Activity'),
+                    SettingType.CONFIG,
+                    'show_activity_in_roster'),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Tune'),
+                    SettingType.CONFIG,
+                    'show_tunes_in_roster'),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Location'),
+                    SettingType.CONFIG,
+                    'show_location_in_roster'),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _on_merge_accounts(*args):
         app.app.activate_action('merge')
 
-    def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
+    @staticmethod
+    def _on_show_avatar_in_roster_changed(*args):
         app.interface.roster.setup_and_draw_roster()
 
-    def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
+    @staticmethod
+    def _on_show_status_in_roster(*args):
         app.interface.roster.setup_and_draw_roster()
-        for ctrl in self._get_all_muc_controls():
+        controls = get_app_window('Preferences').get_all_muc_controls()
+        for ctrl in controls:
             ctrl.roster.draw_contacts()
 
-    def on_show_pep_in_roster_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_mood_in_roster')
-        self.on_checkbutton_toggled(widget, 'show_activity_in_roster')
-        self.on_checkbutton_toggled(widget, 'show_tunes_in_roster')
-        self.on_checkbutton_toggled(widget, 'show_location_in_roster')
+    @staticmethod
+    def _on_sort_by_show_in_roster(*args):
         app.interface.roster.setup_and_draw_roster()
 
-    def on_sort_by_show_in_roster_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'sort_by_show_in_roster')
-        app.interface.roster.setup_and_draw_roster()
 
-    def on_sort_by_show_in_muc_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'sort_by_show_in_muc')
-        # Redraw groupchats
-        for ctrl in self._get_all_muc_controls():
-            ctrl.roster.invalidate_sort()
+class Chats(PreferenceBox):
+    def __init__(self, *args):
 
-    ### Chat tab ###
-    def on_speller_checkbutton_toggled(self, widget):
-        active = widget.get_active()
-        app.settings.set('use_speller', active)
-        if not active:
+        speller_desc = None
+        if not app.is_installed('GSPELL'):
+            speller_desc = _('Needs gspell to be installed')
+
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Spell Checking'),
+                    SettingType.CONFIG,
+                    'use_speller',
+                    desc=speller_desc,
+                    enabled_func=self._speller_available,
+                    callback=self._on_use_speller),
+
+            Setting(SettingKind.SWITCH,
+                    _('Message Receipts (✔)'),
+                    SettingType.CONFIG,
+                    'positive_184_ack',
+                    desc=_('Add a checkmark to received messages')),
+
+            Setting(SettingKind.SWITCH,
+                    _('XHTML Formatting'),
+                    SettingType.CONFIG,
+                    'show_xhtml',
+                    desc=_('Render XHTML styles (colors, etc.) of incoming '
+                           'messages')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Status Message'),
+                    SettingType.CONFIG,
+                    'print_status_in_chats'),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Chat State In Tabs'),
+                    SettingType.CONFIG,
+                    'show_chatstate_in_tabs',
+                    desc=_('Show the contact’s chat state (e.g. typing) in '
+                           'the chat’s tab')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Chat State In Banner'),
+                    SettingType.CONFIG,
+                    'show_chatstate_in_banner',
+                    desc=_('Show the contact’s chat state (e.g. typing) in '
+                           'the chats tab’s banner')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Display Chat State In Contact List'),
+                    SettingType.CONFIG,
+                    'show_chatstate_in_roster',
+                    desc=_('Show the contact’s chat state (e.g. typing) in '
+                           'the contact list')),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _speller_available():
+        return app.is_installed('GSPELL')
+
+    @staticmethod
+    def _on_use_speller(value, *args):
+        if not value:
             return
+
         lang = app.settings.get('speller_language')
         gspell_lang = Gspell.language_lookup(lang)
         if gspell_lang is None:
             gspell_lang = Gspell.language_get_default()
         app.settings.set('speller_language', gspell_lang.get_code())
-        self.apply_speller()
-
-    def apply_speller(self):
-        for ctrl in self._get_all_controls():
+        for ctrl in get_app_window('Preferences').get_all_controls():
             if isinstance(ctrl, ChatControlBase):
                 ctrl.set_speller()
 
-    def on_positive_184_ack_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'positive_184_ack')
 
-    def on_xhtml_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_xhtml')
+class GroupChats(PreferenceBox):
+    def __init__(self, *args):
 
-    def on_print_status_in_chats_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'print_status_in_chats')
+        sync_threshold = {}
+        options = app.settings.get('threshold_options').split(',')
+        days = [int(option.strip()) for option in options]
+        for day in days:
+            if day == 0:
+                label = _('No threshold')
+            else:
+                label = ngettext('%i day', '%i days', day, day, day)
+            sync_threshold[day] = label
 
-    def on_subject_on_join_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_subject_on_join')
+        settings = [
 
-    def _on_sync_threshold_changed(self, widget):
-        active = widget.get_active_id()
-        app.settings.set('public_room_sync_threshold', int(active))
+            Setting(SettingKind.SWITCH,
+                    _('Show Subject'),
+                    SettingType.CONFIG,
+                    'show_subject_on_join'),
 
-    def _on_join_leave_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'gc_print_join_left_default')
+            Setting(SettingKind.SWITCH,
+                    _('Sort Contacts by Status'),
+                    SettingType.CONFIG,
+                    'sort_by_show_in_muc',
+                    callback=self._on_sort_by_show_in_muc),
 
-    def _on_show_status_change_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'gc_print_status_default')
+            Setting(SettingKind.POPOVER,
+                    _('Default Sync Threshold'),
+                    SettingType.CONFIG,
+                    'public_room_sync_threshold',
+                    desc=_('Default for new public group chats'),
+                    props={'entries': sync_threshold},
+                    callback=self._on_sync_threshold_changed),
 
-    def on_show_chatstate_in_tabs_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_chatstate_in_tabs')
+            Setting(SettingKind.SWITCH,
+                    _('Show Joined / Left'),
+                    SettingType.CONFIG,
+                    'gc_print_join_left_default',
+                    desc=_('Default for new group chats'),
+                    props={'button-text':_('Reset'),
+                           'button-tooltip': _('Reset all group chats to the '
+                                               'current default value'),
+                           'button-style': 'destructive-action',
+                           'button-callback': self._reset_join_left}),
 
-    def on_show_chatstate_in_roster_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_chatstate_in_roster')
+            Setting(SettingKind.SWITCH,
+                    _('Show Status Changes'),
+                    SettingType.CONFIG,
+                    'gc_print_status_default',
+                    desc=_('Default for new group chats'),
+                    props={'button-text':_('Reset'),
+                           'button-tooltip': _('Reset all group chats to the '
+                                               'current default value'),
+                           'button-style': 'destructive-action',
+                           'button-callback': self._reset_print_status}),
 
-    def on_show_chatstate_in_banner_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'show_chatstate_in_banner')
+        ]
 
-    ### Notifications tab ###
-    def on_systray_combobox_changed(self, widget):
-        active = widget.get_active()
-        if active == 0:
-            app.settings.set('trayicon', 'never')
+        PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _on_sync_threshold_changed(value, *args):
+        app.settings.set('public_room_sync_threshold', int(value))
+
+    @staticmethod
+    def _on_sort_by_show_in_muc(*args):
+        for ctrl in get_app_window('Preferences').get_all_muc_controls():
+            ctrl.roster.invalidate_sort()
+
+    @staticmethod
+    def _reset_join_left(button):
+        button.set_sensitive(False)
+        app.settings.set_group_chat_settings('print_join_left', None)
+
+    @staticmethod
+    def _reset_print_status(button):
+        button.set_sensitive(False)
+        app.settings.set_group_chat_settings('print_status', None)
+
+
+class VisualNotifications(PreferenceBox):
+    def __init__(self, *args):
+        trayicon_items = {
+            'never': _('Hide icon'),
+            'on_event': _('Only show for pending events'),
+            'always': _('Always show icon'),
+        }
+
+        event_received_items = {
+            'open_message': _('Pop it up'),
+            'notify_me': _('Notify me about it'),
+            'show_in_roster': _('Show only in contact list'),
+        }
+
+        settings = [
+            Setting(SettingKind.POPOVER,
+                    _('Notification Area Icon'),
+                    SettingType.CONFIG,
+                    'trayicon',
+                    props={'entries': trayicon_items},
+                    callback=self._on_trayicon),
+
+            Setting(SettingKind.POPOVER,
+                    _('Event Handling'),
+                    SettingType.VALUE,
+                    self._get_event_handling(),
+                    desc=_('How Gajim notifies you about new events'),
+                    props={'entries': event_received_items},
+                    callback=self._set_event_handling),
+
+            Setting(SettingKind.SWITCH,
+                    _('Always Show Notifications'),
+                    SettingType.CONFIG,
+                    'autopopup_chat_opened',
+                    desc=_('Show notifications even if there is already '
+                           'a chat window opened')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Notifications When Away'),
+                    SettingType.CONFIG,
+                    'autopopupaway',
+                    desc=_('Show notifications even if you are Away, '
+                           'Busy, etc.')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Contact Online Notification'),
+                    SettingType.CONFIG,
+                    'notify_on_signin',
+                    desc=_('Show a notification when a contact goes '
+                           'online')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Contact Offline Notification'),
+                    SettingType.CONFIG,
+                    'notify_on_signout',
+                    desc=_('Show a notification when a contact goes '
+                           'offline')),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _on_trayicon(value, *args):
+        if value == 'never':
             app.interface.hide_systray()
-        elif active == 1:
-            app.settings.set('trayicon', 'on_event')
+        elif value == 'on_event':
             app.interface.show_systray()
         else:
-            app.settings.set('trayicon', 'always')
             app.interface.show_systray()
 
-    def on_event_received_combobox_changed(self, widget):
-        active = widget.get_active()
-        if active == 0:
+    @staticmethod
+    def _get_event_handling():
+        autopopup = app.settings.get('autopopup')
+        notify_on_new_message = app.settings.get('notify_on_new_message')
+        if autopopup and not notify_on_new_message:
+            return 'open_message'
+        if not autopopup and notify_on_new_message:
+            return 'notify_me'
+        if not autopopup and not notify_on_new_message:
+            return 'show_in_roster'
+        return 'open_message'
+
+    @staticmethod
+    def _set_event_handling(value, *args):
+        if value == 'open_message':
             app.settings.set('autopopup', True)
             app.settings.set('notify_on_new_message', False)
-        elif active == 1:
+        elif value == 'notify_me':
             app.settings.set('autopopup', False)
             app.settings.set('notify_on_new_message', True)
         else:
             app.settings.set('autopopup', False)
             app.settings.set('notify_on_new_message', False)
 
-    def on_notify_on_signin_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'notify_on_signin')
 
-    def on_notify_on_signout_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'notify_on_signout')
+class Sounds(PreferenceBox):
+    def __init__(self, *args):
 
-    def on_auto_popup_away_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'autopopupaway')
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Play Sounds'),
+                    SettingType.CONFIG,
+                    'sounds_on',
+                    desc=_('Play sounds to notify about events'),
+                    props={'button-icon-name': 'preferences-system-symbolic',
+                           'button-callback': self._on_manage_sounds}),
 
-    def on_auto_popup_chat_opened_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'autopopup_chat_opened')
+            Setting(SettingKind.SWITCH,
+                    _('Sounds When Away'),
+                    SettingType.CONFIG,
+                    'sounddnd',
+                    desc=_('Play sounds even when you are Away, Busy, etc.'),
+                    bind='sounds_on'),
+        ]
 
-    def on_play_sounds_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'sounds_on',
-                [self._ui.manage_sounds_button])
+        PreferenceBox.__init__(self, settings)
 
-    def on_manage_sounds_button_clicked(self, _widget):
-        open_window('ManageSounds', transient_for=self)
+    def _on_manage_sounds(self, *args):
+        open_window('ManageSounds', transient_for=self.get_toplevel())
 
-    def on_sound_dnd_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'sounddnd')
 
-    ### Status tab ###
-    def on_auto_away_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'autoaway',
-                                [self._ui.auto_away_time_spinbutton,
-                                 self._ui.auto_away_message_entry])
+class StatusMessage(PreferenceBox):
+    def __init__(self, *args):
 
-    def on_auto_away_time_spinbutton_value_changed(self, widget):
-        aat = widget.get_value_as_int()
-        app.settings.set('autoawaytime', aat)
-        idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
-                                  app.settings.get('autoxatime') * 60)
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Sign In'),
+                    SettingType.CONFIG,
+                    'ask_online_status'),
 
-    def on_auto_away_message_entry_changed(self, widget):
-        app.settings.set('autoaway_message', widget.get_text())
+            Setting(SettingKind.SWITCH,
+                    _('Sign Out'),
+                    SettingType.CONFIG,
+                    'ask_offline_status'),
 
-    def on_auto_xa_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'autoxa',
-                                [self._ui.auto_xa_time_spinbutton,
-                                 self._ui.auto_xa_message_entry])
+            Setting(SettingKind.SWITCH,
+                    _('Status Change'),
+                    SettingType.CONFIG,
+                    'always_ask_for_status_message'),
+        ]
 
-    def on_auto_xa_time_spinbutton_value_changed(self, widget):
-        axt = widget.get_value_as_int()
-        app.settings.set('autoxatime', axt)
-        idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
-                                  app.settings.get('autoxatime') * 60)
+        PreferenceBox.__init__(self, settings)
 
-    def on_auto_xa_message_entry_changed(self, widget):
-        app.settings.set('autoxa_message', widget.get_text())
 
-    def on_sign_in_status_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'ask_online_status')
+class AutomaticStatus(PreferenceBox):
+    def __init__(self, *args):
 
-    def on_sign_out_status_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'ask_offline_status')
+        settings = [
+            Setting(SettingKind.AUTO_AWAY,
+                    _('Auto Away'),
+                    SettingType.DIALOG,
+                    desc=_('Change your status to \'Away\' after a certain '
+                           'amount of time'),
+                    props={'dialog': AutoAwayDialog}),
 
-    def on_status_change_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'always_ask_for_status_message')
+            Setting(SettingKind.AUTO_EXTENDED_AWAY,
+                    _('Auto Not Available'),
+                    SettingType.DIALOG,
+                    desc=_('Change your status to \'Not Available\' after a '
+                           'certain amount of time'),
+                    props={'dialog': AutoExtendedAwayDialog}),
 
-    ### Style ###
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
     @staticmethod
-    def on_theme_combobox_changed(combobox):
-        theme = combobox.get_active_id()
-        app.settings.set('roster_theme', theme)
-        app.css_config.change_theme(theme)
-        app.nec.push_incoming_event(NetworkEvent('theme-update'))
+    def _get_auto_away():
+        return app.settings.get('autoaway')
 
-        # Begin repainting themed widgets throughout
+    @staticmethod
+    def _get_auto_xa():
+        return app.settings.get('autoxa')
+
+
+class AutoAwayDialog(SettingsDialog):
+    def __init__(self, account, parent):
+
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Auto Away'),
+                    SettingType.CONFIG,
+                    'autoaway'),
+
+            Setting(SettingKind.SPIN,
+                    _('Time Until Away'),
+                    SettingType.CONFIG,
+                    'autoawaytime',
+                    desc=_('Minutes until your status gets changed'),
+                    props={'range_': (1, 720)},
+                    bind='autoaway'),
+
+            Setting(SettingKind.ENTRY,
+                    _('Status Message'),
+                    SettingType.CONFIG,
+                    'autoaway_message',
+                    bind='autoaway'),
+            ]
+
+        SettingsDialog.__init__(self, parent, _('Auto Away Settings'),
+                                Gtk.DialogFlags.MODAL, settings, account)
+
+
+class AutoExtendedAwayDialog(SettingsDialog):
+    def __init__(self, account, parent):
+
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Auto Not Available'),
+                    SettingType.CONFIG,
+                    'autoxa'),
+
+            Setting(SettingKind.SPIN,
+                    _('Time Until Not Available'),
+                    SettingType.CONFIG,
+                    'autoxatime',
+                    desc=_('Minutes until your status gets changed'),
+                    props={'range_': (1, 720)},
+                    bind='autoxa'),
+
+            Setting(SettingKind.ENTRY,
+                    _('Status Message'),
+                    SettingType.CONFIG,
+                    'autoxa_message',
+                    bind='autoxa'),
+            ]
+
+        SettingsDialog.__init__(self, parent, _('Auto Extended Away Settings'),
+                                Gtk.DialogFlags.MODAL, settings, account)
+
+
+class Themes(PreferenceBox):
+    def __init__(self, *args):
+
+        theme_items = self._get_theme_items()
+
+        dark_theme_items = {
+            0: _('Disabled'),
+            1: _('Enabled'),
+            2: _('System'),
+        }
+
+        settings = [
+            Setting(SettingKind.POPOVER,
+                    _('Dark Theme'),
+                    SettingType.CONFIG,
+                    'dark_theme',
+                    props={'entries': dark_theme_items},
+                    callback=self._on_dark_theme),
+
+            Setting(SettingKind.POPOVER,
+                    _('Theme'),
+                    SettingType.CONFIG,
+                    'roster_theme',
+                    name='roster_theme',
+                    props={'entries': theme_items,
+                           'button-icon-name': 'preferences-system-symbolic',
+                           'button-callback': self._on_edit_themes},
+                    callback=self._on_theme_changed),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _get_theme_items():
+        theme_items = ['default']
+        for settings_theme in app.css_config.themes:
+            theme_items.append(settings_theme)
+        return theme_items
+
+    def update_theme_list(self):
+        self.get_setting('roster_theme').update_entries(self._get_theme_items())
+
+    def _on_edit_themes(self, *args):
+        open_window('Themes', transient=self.get_toplevel())
+
+    @staticmethod
+    def _on_theme_changed(value, *args):
+        app.css_config.change_theme(value)
+        app.nec.push_incoming_event(NetworkEvent('theme-update'))
         app.interface.roster.repaint_themed_widgets()
         app.interface.roster.change_roster_style(None)
 
-    def update_theme_list(self):
-        with self._ui.theme_combobox.handler_block(self.changed_id):
-            self._ui.theme_combobox.remove_all()
-            self._ui.theme_combobox.append('default', 'default')
-            for config_theme in app.css_config.themes:
-                self._ui.theme_combobox.append(config_theme, config_theme)
+    @staticmethod
+    def _on_dark_theme(value, *args):
+        app.css_config.set_dark_theme(int(value))
 
-        self._ui.theme_combobox.set_active_id(app.settings.get('roster_theme'))
 
-    def on_manage_theme_button_clicked(self, widget):
-        open_window('Themes', transient=self)
+class Emoji(PreferenceBox):
+    def __init__(self, *args):
 
-    def on_dark_theme_changed(self, widget):
-        app.css_config.set_dark_theme(int(widget.get_active_id()))
+        emoji_themes_items = []
+        for theme in helpers.get_available_emoticon_themes():
+            emoji_themes_items.append(theme)
 
-    def on_emoticons_combobox_changed(self, widget):
-        active = widget.get_active()
-        model = widget.get_model()
-        emot_theme = model[active][0]
-        app.settings.set('emoticons_theme', emot_theme)
-        from gajim.gtk.emoji_chooser import emoji_chooser
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Convert ASCII Emojis'),
+                    SettingType.CONFIG,
+                    'ascii_emoticons',
+                    desc=_('Typing short codes like :-) will display emojis'),
+                    callback=self._on_ascii_emoticons),
+        ]
+
+        if sys.platform in ('win32', 'darwin'):
+            settings.append(
+                Setting(SettingKind.POPOVER,
+                        _('Emoji Theme'),
+                        SettingType.CONFIG,
+                        'emoticons_theme',
+                        desc=_('Choose from various emoji styles'),
+                        props={'entries': emoji_themes_items},
+                        callback=self._on_emoticons_theme))
+
+        PreferenceBox.__init__(self, settings)
+
+    def _on_emoticons_theme(self, *args):
         emoji_chooser.load()
-        self.toggle_emoticons()
+        self._toggle_emoticons()
 
-    def on_convert_ascii_toggle(self, widget):
-        app.settings.set('ascii_emoticons', widget.get_active())
-        app.interface.make_regexps()
-
-    def toggle_emoticons(self):
-        """
-        Update emoticons state in Opened Chat Windows
-        """
-        for ctrl in self._get_all_controls():
+    @staticmethod
+    def _toggle_emoticons():
+        controls = get_app_window('Preferences').get_all_controls()
+        for ctrl in controls:
             ctrl.toggle_emoticons()
 
-    def on_iconset_combobox_changed(self, widget):
-        model = widget.get_model()
-        active = widget.get_active()
-        icon_string = model[active][1]
-        app.settings.set('iconset', icon_string)
+    @staticmethod
+    def _on_ascii_emoticons(*args):
+        app.interface.make_regexps()
+
+
+class StatusIcon(PreferenceBox):
+    def __init__(self, *args):
+
+        iconset_items = []
+        for _index, iconset_name in enumerate(get_available_iconsets()):
+            iconset_items.append(iconset_name)
+
+        settings = [
+            Setting(SettingKind.POPOVER,
+                    _('Status Icon Set'),
+                    SettingType.CONFIG,
+                    'iconset',
+                    props={'entries': iconset_items},
+                    callback=self._on_iconset_changed),
+
+            Setting(SettingKind.SWITCH,
+                    _('Use Transport Icons'),
+                    SettingType.CONFIG,
+                    'use_transports_iconsets',
+                    desc=_('Display protocol-specific status icons '
+                           '(ICQ, ..)')),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _on_iconset_changed(*args):
         app.interface.roster.update_icons()
 
-    def on_transports_iconsets_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
 
-    ### Audio/Video tab ###
-    def _on_features_button_clicked(self, _button):
-        open_window('Features')
+class Server(PreferenceBox):
+    def __init__(self, *args):
 
-    def on_av_combobox_changed(self, combobox, config_name):
-        model = combobox.get_model()
-        active = combobox.get_active()
-        device = model[active][1]
-        app.settings.set(config_name, device)
-        return device
+        settings = [
 
-    def on_audio_input_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'audio_input_device')
+            Setting(SettingKind.USE_STUN_SERVER,
+                    _('Use Stun Server'),
+                    SettingType.DIALOG,
+                    desc=_('Helps to establish calls through firewalls'),
+                    props={'dialog': StunServerDialog}),
+        ]
 
-    def on_audio_output_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'audio_output_device')
+        PreferenceBox.__init__(self, settings)
 
-    def on_video_input_combobox_changed(self, widget):
-        model = widget.get_model()
-        active = widget.get_active()
-        device = model[active][1]
+        self.set_sensitive(app.is_installed('AV'))
 
-        try:
-            src = Gst.parse_bin_from_description(device, True)
-        except GLib.Error:
-            # TODO: disable the entry instead of just selecting the default.
-            log.error('Failed to parse "%s" as Gstreamer element,'
-                      ' falling back to autovideosrc', device)
-            widget.set_active(0)
+
+class StunServerDialog(SettingsDialog):
+    def __init__(self, account, parent):
+
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Use Stun Server'),
+                    SettingType.CONFIG,
+                    'use_stun_server'),
+
+            Setting(SettingKind.ENTRY,
+                    _('STUN Server'),
+                    SettingType.CONFIG,
+                    'stun_server',
+                    bind='use_stun_server')
+            ]
+
+        SettingsDialog.__init__(self, parent, _('Auto Away Settings'),
+                                Gtk.DialogFlags.MODAL, settings, account)
+
+
+class Audio(PreferenceBox):
+    def __init__(self, *args):
+
+        deps_installed = app.is_installed('AV')
+
+        audio_input_devices = {}
+        audio_output_devices = {}
+        if deps_installed:
+            audio_input_devices = AudioInputManager().get_devices()
+            audio_output_devices = AudioOutputManager().get_devices()
+
+        audio_input_items = self._create_av_combo_items(audio_input_devices)
+        audio_output_items = self._create_av_combo_items(audio_output_devices)
+
+        settings = [
+            Setting(SettingKind.POPOVER,
+                    _('Audio Input Device'),
+                    SettingType.CONFIG,
+                    'audio_input_device',
+                    desc=_('Select your audio input (e.g. microphone)'),
+                    props={'entries': audio_input_items}),
+
+            Setting(SettingKind.POPOVER,
+                    _('Audio Output Device'),
+                    SettingType.CONFIG,
+                    'audio_output_device',
+                    desc=_('Select an audio output (e.g. speakers, '
+                           'headphones)'),
+                    props={'entries': audio_output_items}),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+        self.set_sensitive(deps_installed)
+
+    @staticmethod
+    def _create_av_combo_items(items_dict):
+        items = enumerate(sorted(
+            items_dict.items(),
+            key=lambda x: '' if x[1].startswith('auto') else x[0].lower()))
+        combo_items = {}
+        for _index, (name, value) in items:
+            combo_items[value] = name
+        return combo_items
+
+
+class Video(PreferenceBox):
+    def __init__(self, *args):
+
+        deps_installed = app.is_installed('AV')
+
+        video_input_devices = {}
+        if deps_installed:
+            video_input_devices = VideoInputManager().get_devices()
+
+        video_input_items = self._create_av_combo_items(video_input_devices)
+
+        video_framerates = {
+            '': _('Default'),
+            '15/1': '15 fps',
+            '10/1': '10 fps',
+            '5/1': '5 fps',
+            '5/2': '2.5 fps',
+        }
+
+        video_sizes = {
+            '': _('Default'),
+            '800x600': '800x600',
+            '640x480': '640x480',
+            '320x240': '320x240',
+        }
+
+        settings = [
+            Setting(SettingKind.POPOVER,
+                    _('Video Input Device'),
+                    SettingType.CONFIG,
+                    'video_input_device',
+                    props={'entries': video_input_items},
+                    desc=_('Select your video input device (e.g. webcam, '
+                           'screen capture)'),
+                    callback=self._on_video_input_changed),
+
+            Setting(SettingKind.POPOVER,
+                    _('Video Framerate'),
+                    SettingType.CONFIG,
+                    'video_framerate',
+                    props={'entries': video_framerates}),
+
+            Setting(SettingKind.POPOVER,
+                    _('Video Resolution'),
+                    SettingType.CONFIG,
+                    'video_size',
+                    props={'entries': video_sizes}),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show My Video Stream'),
+                    SettingType.CONFIG,
+                    'video_see_self',
+                    desc=_('Show your own video stream in calls')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Live Preview'),
+                    SettingType.VALUE,
+                    desc=_('Show a live preview to test your video source'),
+                    callback=self._toggle_live_preview),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+        self.set_sensitive(deps_installed)
+
+    @staticmethod
+    def _on_video_input_changed(value, *args):
+        preview = get_app_window('Preferences').get_video_preview()
+        if preview is None or not preview.is_active:
+            # changed signal gets triggered when we fill the combobox
             return
+        preview.refresh()
 
-        if self._ui.live_preview_checkbutton.get_active():
-            self.av_pipeline.set_state(Gst.State.NULL)
-            if self.av_src is not None:
-                self.av_pipeline.remove(self.av_src)
-            self.av_pipeline.add(src)
-            src.link(self.av_sink)
-            self.av_src = src
-            self.av_pipeline.set_state(Gst.State.PLAYING)
-        app.settings.set('video_input_device', device)
+    @staticmethod
+    def _toggle_live_preview(value, *args):
+        preview = get_app_window('Preferences').get_video_preview()
+        preview.toggle_preview(value)
 
-    def _on_live_preview_toggled(self, widget):
-        if widget.get_active():
-            sink, widget, name = gstreamer.create_gtk_widget()
-            if sink is None:
-                log.error('Failed to obtain a working Gstreamer GTK+ sink, '
-                          'video support will be disabled')
-                self._ui.video_input_combobox.set_sensitive(False)
-                self._ui.selected_video_output.set_markup(
-                    _('<span color="red" font-weight="bold">'
-                      'Unavailable</span>, video support will be disabled'))
-                return
+    @staticmethod
+    def _create_av_combo_items(items_dict):
+        items = enumerate(sorted(
+            items_dict.items(),
+            key=lambda x: '' if x[1].startswith('auto') else x[0].lower()))
+        combo_items = {}
+        for _index, (name, value) in items:
+            combo_items[value] = name
+        return combo_items
 
-            text = ''
-            if name == 'gtkglsink':
-                text = _('<span color="green" font-weight="bold">'
-                         'OpenGL</span> accelerated')
-            elif name == 'gtksink':
-                text = _('<span color="yellow" font-weight="bold">'
-                         'Unaccelerated</span>')
-            self._ui.selected_video_output.set_markup(text)
-            if self.av_pipeline is None:
-                self.av_pipeline = Gst.Pipeline.new('preferences-pipeline')
-            else:
-                self.av_pipeline.set_state(Gst.State.NULL)
-            self.av_pipeline.add(sink)
-            self.av_sink = sink
 
-            if self.av_widget is not None:
-                self._ui.av_preview_box.remove(self.av_widget)
-            self._ui.av_preview_placeholder.set_visible(False)
-            self._ui.av_preview_box.add(widget)
-            self.av_widget = widget
-
-            src_name = app.settings.get('video_input_device')
-            try:
-                self.av_src = Gst.parse_bin_from_description(src_name, True)
-            except GLib.Error:
-                log.error('Failed to parse "%s" as Gstreamer element, '
-                          'falling back to autovideosrc', src_name)
-                self.av_src = None
-            if self.av_src is not None:
-                self.av_pipeline.add(self.av_src)
-                self.av_src.link(self.av_sink)
-                self.av_pipeline.set_state(Gst.State.PLAYING)
-            else:
-                # Parsing the pipeline stored in video_input_device failed,
-                # let’s try the default one.
-                self.av_src = Gst.ElementFactory.make('autovideosrc', None)
-                if self.av_src is None:
-                    log.error('Failed to obtain a working Gstreamer source, '
-                              'video will be disabled.')
-                    self._ui.video_input_combobox.set_sensitive(False)
-                    return
-                # Great, this succeeded, let’s store it back into the
-                # config and use it. We’ve made autovideosrc the first
-                # element in the combobox so we can pick index 0 without
-                # worry.
-                self._ui.video_input_combobox.set_active(0)
-        else:
-            if self.av_pipeline is not None:
-                self.av_pipeline.set_state(Gst.State.NULL)
-            if self.av_src is not None:
-                self.av_pipeline.remove(self.av_src)
-                self.av_src = None
-            if self.av_sink is not None:
-                self.av_pipeline.remove(self.av_sink)
-                self.av_sink = None
-            if self.av_widget is not None:
-                self._ui.av_preview_box.remove(self.av_widget)
-                self._ui.av_preview_placeholder.set_visible(True)
-                self.av_widget = None
-            self.av_pipeline = None
-
-    def on_video_framerate_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'video_framerate')
-
-    def on_video_size_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'video_size')
-
-    def on_video_see_self_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'video_see_self')
-
-    def on_stun_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'use_stun_server', [
-            self._ui.stun_server_entry])
-
-    def stun_server_entry_changed(self, widget):
-        app.settings.set('stun_server', widget.get_text())
-
-    ### Advanced tab ###
-    # Proxies
-    def on_proxies_combobox_changed(self, widget):
-        active = widget.get_active()
-        if active == -1:
-            return
-        proxy = widget.get_model()[active][0]
-        if proxy == _('No Proxy'):
-            proxy = ''
-        app.settings.set('global_proxy', proxy)
-
-    def on_manage_proxies_button_clicked(self, _widget):
-        app.app.activate_action('manage-proxies')
-
-    def update_proxy_list(self):
-        our_proxy = app.settings.get('global_proxy')
-        if not our_proxy:
-            our_proxy = _('No Proxy')
-        model = self._ui.proxies_combobox.get_model()
-        model.clear()
-        proxies = app.settings.get_proxies()
-        proxies.insert(0, _('No Proxy'))
-        for index, proxy in enumerate(proxies):
-            model.append([proxy])
-            if our_proxy == proxy:
-                self._ui.proxies_combobox.set_active(index)
-        if our_proxy not in proxies:
-            self._ui.proxies_combobox.set_active(0)
-
-    # Log status changes of contacts
-    def on_log_show_changes_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
-
-    # Use system’s keyring
-    def _on_use_keyring_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'use_keyring')
-
-    # Enable debug logging
-    def on_enable_logging_toggled(self, widget):
-        app.set_debug_mode(widget.get_active())
-
-    def _on_debug_folder_clicked(self, _widget):
-        open_file(configpaths.get('DEBUG'))
-
-    def _on_update_check_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'check_for_update')
-
-    def _on_reset_help_clicked(self, widget):
-        widget.set_sensitive(False)
-        helping_hints = [
+class Miscellaneous(PreferenceBox):
+    def __init__(self, pref_window):
+        self._hints_list = [
             'start_chat',
         ]
-        for hint in helping_hints:
-            app.settings.set('show_help_%s' % hint, True)
 
-    def on_open_advanced_editor_button_clicked(self, _widget):
+        settings = [
+            Setting(SettingKind.POPOVER,
+                    _('Global Proxy'),
+                    SettingType.CONFIG,
+                    'global_proxy',
+                    name='global_proxy',
+                    props={'entries': self._get_proxies(),
+                           'default-text': _('No Proxy'),
+                           'button-icon-name': 'preferences-system-symbolic',
+                           'button-callback': self._on_proxy_edit}),
+
+            Setting(SettingKind.SWITCH,
+                    _('Use System Keyring'),
+                    SettingType.CONFIG,
+                    'use_keyring',
+                    desc=_('Use your system’s keyring to store passwords')),
+        ]
+
+        if sys.platform in ('win32', 'darwin'):
+            settings.append(
+                Setting(SettingKind.SWITCH,
+                        _('Check For Updates'),
+                        SettingType.CONFIG,
+                        'check_for_update',
+                        desc=_('Check for Gajim updates periodically')))
+
+        PreferenceBox.__init__(self, settings)
+
+        reset_button = pref_window.get_ui().reset_button
+        reset_button.connect('clicked', self._on_reset_hints)
+        reset_button.set_sensitive(self._check_hints_reset)
+
+    @staticmethod
+    def _get_proxies():
+        return {proxy: proxy for proxy in app.settings.get_proxies()}
+
+    @staticmethod
+    def _on_proxy_edit(*args):
+        open_window('ManageProxies')
+
+    def update_proxy_list(self):
+        self.get_setting('global_proxy').update_entries(self._get_proxies())
+
+    def _check_hints_reset(self):
+        for hint in self._hints_list:
+            if app.settings.get('show_help_%s' % hint) is False:
+                return True
+        return False
+
+    def _on_reset_hints(self, button):
+        for hint in self._hints_list:
+            app.settings.set('show_help_%s' % hint, True)
+        button.set_sensitive(False)
+
+
+class Advanced(PreferenceBox):
+    def __init__(self, pref_window):
+
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Debug Logging'),
+                    SettingType.VALUE,
+                    app.get_debug_mode(),
+                    props={'button-icon-name': 'folder-symbolic',
+                           'button-callback': self._on_open_debug_logs},
+                    callback=self._on_debug_logging),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+        pref_window.get_ui().ace_button.connect(
+            'clicked', self._on_advanced_config_editor)
+
+    @staticmethod
+    def _on_debug_logging(value, *args):
+        app.set_debug_mode(value)
+
+    @staticmethod
+    def _on_open_debug_logs(*args):
+        open_file(configpaths.get('DEBUG'))
+
+    @staticmethod
+    def _on_advanced_config_editor(*args):
         open_window('AdvancedConfig')
