@@ -26,6 +26,7 @@ from gajim.common.i18n import Q_
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
+from gajim.common.const import AvatarSize
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import make_href_markup
@@ -149,6 +150,14 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
             name = get_groupchat_name(con, info.jid)
         self._ui.name.set_text(name)
         self._ui.name.set_visible(True)
+
+        # Set avatar
+        surface = app.interface.avatar_storage.get_muc_surface(
+            self._account,
+            str(info.jid),
+            AvatarSize.GROUP_INFO,
+            self.get_scale_factor())
+        self._ui.avatar_image.set_from_surface(surface)
 
         # Set description
         has_desc = bool(info.muc_description)

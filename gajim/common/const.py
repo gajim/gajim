@@ -19,6 +19,7 @@ class AvatarSize(IntEnum):
     ROSTER = 32
     CHAT = 48
     NOTIFICATION = 48
+    GROUP_INFO = 100
     TOOLTIP = 125
     VCARD = 200
     PUBLISH = 200
