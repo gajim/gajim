@@ -209,29 +209,45 @@ class GenericSetting(Gtk.ListBoxRow):
         if self.bind is None:
             return
 
-        app.settings.bind_signal(self.bind,
+        bind_setting_type, setting, account, jid = self._parse_bind()
+
+        app.settings.bind_signal(setting,
                                  self,
                                  'set_sensitive',
-                                 account=self.account,
+                                 account=account,
+                                 jid=jid,
                                  inverted=self.inverted)
 
-        if self.type_ == SettingType.CONTACT:
-            value = app.settings.get_contact_setting(
-                self.account, self.jid, self.bind)
+        if bind_setting_type == SettingType.CONTACT:
+            value = app.settings.get_contact_setting(account, jid, setting)
 
-        elif self.type_ == SettingType.GROUP_CHAT:
-            value = app.settings.get_group_chat_setting(
-                self.account, self.jid, self.bind)
+        elif bind_setting_type == SettingType.GROUP_CHAT:
+            value = app.settings.get_group_chat_setting(account, jid, setting)
 
-        elif self.type_ == SettingType.ACCOUNT_CONFIG:
-            value = app.settings.get_account_setting(self.account, self.bind)
+        elif bind_setting_type == SettingType.ACCOUNT_CONFIG:
+            value = app.settings.get_account_setting(account, setting)
 
         else:
-            value = app.settings.get(self.bind)
+            value = app.settings.get(setting)
 
         if self.inverted:
             value = not value
         self.set_sensitive(value)
+
+    def _parse_bind(self):
+        if '::' not in self.bind:
+            return SettingType.CONFIG, self.bind, None, None
+
+        bind_setting_type, setting = self.bind.split('::')
+        if bind_setting_type == 'account':
+            return SettingType.ACCOUNT_CONFIG, setting, self.account, None
+
+        if bind_setting_type == 'contact':
+            return SettingType.CONTACT, setting, self.account, self.jid
+
+        if bind_setting_type == 'group_chat':
+            return SettingType.GROUP_CHAT, setting, self.account, self.jid
+        raise ValueError(f'Invalid bind argument: {self.bind}')
 
     def get_value(self):
         return self.__get_value(self.type_,

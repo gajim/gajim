@@ -610,7 +610,7 @@ class GeneralPage(GenericSettingPage):
                     desc=_('Recognize your account by color')),
 
             Setting(SettingKind.LOGIN, _('Login'), SettingType.DIALOG,
-                    bind='anonymous_auth',
+                    bind='account::anonymous_auth',
                     inverted=True,
                     props={'dialog': LoginDialog}),
 
@@ -863,7 +863,7 @@ class PriorityDialog(SettingsDialog):
             Setting(SettingKind.SPIN, _('Priority'),
                     SettingType.ACCOUNT_CONFIG,
                     'priority',
-                    bind='adjust_priority_with_status',
+                    bind='account::adjust_priority_with_status',
                     inverted=True,
                     props={'range_': range_}),
             ]
@@ -894,15 +894,15 @@ class CutstomHostnameDialog(SettingsDialog):
 
             Setting(SettingKind.ENTRY, _('Hostname'),
                     SettingType.ACCOUNT_CONFIG, 'custom_host',
-                    bind='use_custom_host'),
+                    bind='account::use_custom_host'),
 
             Setting(SettingKind.ENTRY, _('Port'),
                     SettingType.ACCOUNT_CONFIG, 'custom_port',
-                    bind='use_custom_host'),
+                    bind='account::use_custom_host'),
 
             Setting(SettingKind.COMBO, _('Type'),
                     SettingType.ACCOUNT_CONFIG, 'custom_type',
-                    bind='use_custom_host',
+                    bind='account::use_custom_host',
                     props={'combo_items': type_values}),
             ]
 
@@ -932,7 +932,7 @@ class LoginDialog(SettingsDialog):
         settings = [
             Setting(SettingKind.ENTRY, _('Password'),
                     SettingType.ACCOUNT_CONFIG, 'password',
-                    bind='savepass'),
+                    bind='account::savepass'),
 
             Setting(SettingKind.SWITCH, _('Save Password'),
                     SettingType.ACCOUNT_CONFIG, 'savepass'),
