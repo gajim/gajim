@@ -25,7 +25,6 @@ from gajim.common.helpers import is_role_change_allowed
 from gajim.common.i18n import _
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
-from gajim.common.const import THRESHOLD_OPTIONS
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.const import ControlType
@@ -572,6 +571,7 @@ def get_singlechat_menu(control_id, account, jid):
 def get_groupchat_menu(control_id, account, jid):
     groupchat_menu = [
         ('win.information-', _('Information')),
+        ('win.groupchat-settings-', _('Settings…')),
         (_('Manage Group Chat'), [
             ('win.rename-groupchat-', _('Rename…')),
             ('win.change-subject-', _('Change Subject…')),
@@ -579,16 +579,6 @@ def get_groupchat_menu(control_id, account, jid):
             ('win.configure-', _('Configure…')),
             ('win.destroy-', _('Destroy…')),
         ]),
-        (_('Chat Settings'), [
-            ('win.print-join-left-', _('Show Join/Leave')),
-            ('win.print-status-', _('Show Status Changes')),
-            ('win.notify-on-message-', _('Notify on all Messages')),
-            ('win.minimize-on-close-', _('Minimize on Close')),
-            ('win.minimize-on-autojoin-',
-             _('Minimize When Joining Automatically')),
-            (_('Send Chatstate'), ['chatstate']),
-        ]),
-        (_('Sync Threshold'), ['sync']),
         ('win.change-nickname-', _('Change Nickname…')),
         ('win.request-voice-', _('Request Voice')),
         ('win.execute-command-', _('Execute Command…')),
@@ -620,36 +610,8 @@ def get_groupchat_menu(control_id, account, jid):
                     menu.append(label, action_name + control_id)
             else:
                 label, sub_menu = item
-                if 'sync' in sub_menu:
-                    # Sync threshold menu
-                    submenu = build_sync_menu()
-                elif 'chatstate' in sub_menu:
-                    submenu = build_chatstate_menu()
-                else:
-                    # This is a submenu
-                    submenu = build_menu(sub_menu)
+                submenu = build_menu(sub_menu)
                 menu.append_submenu(label, submenu)
-        return menu
-
-    def build_sync_menu():
-        menu = Gio.Menu()
-        action_name = 'win.choose-sync-%s::' % control_id
-        for days, label in THRESHOLD_OPTIONS.items():
-            menu.append(label, '%s%s' % (action_name, days))
-        return menu
-
-    def build_chatstate_menu():
-        menu = Gio.Menu()
-        entries = [
-            (_('Disabled'), 'disabled'),
-            (_('Composing only'), 'composing_only'),
-            (_('All chat states'), 'all')
-        ]
-
-        for entry in entries:
-            label, setting = entry
-            action = 'win.send-chatstate-%s::%s' % (control_id, setting)
-            menu.append(label, action)
         return menu
 
     return build_menu(groupchat_menu)

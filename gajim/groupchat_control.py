@@ -73,11 +73,11 @@ from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_invite import GroupChatInvite
+from gajim.gtk.groupchat_settings import GroupChatSettingsScrolled
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_app_window
 from gajim.gtk.const import ControlType
-
 
 log = logging.getLogger('gajim.groupchat_control')
 
@@ -176,6 +176,12 @@ class GroupchatControl(ChatControlBase):
         self._subject_data = None
         self._muc_info_box = GroupChatInfoScrolled(self.account, {'width': 600})
         self.xml.info_grid.attach(self._muc_info_box, 0, 0, 1, 1)
+
+        # Groupchat settings
+        self._groupchat_settings_box = GroupChatSettingsScrolled(
+            self.account, self.room_jid, self.context)
+        self.xml.settings_grid.attach(self._groupchat_settings_box, 0, 0, 1, 1)
+
 
         # Groupchat invite
         self.xml.quick_invite_button.set_action_name(
@@ -279,6 +285,7 @@ class GroupchatControl(ChatControlBase):
     def add_actions(self):
         super().add_actions()
         actions = [
+            ('groupchat-settings-', None, self._on_groupchat_settings),
             ('rename-groupchat-', None, self._on_rename_groupchat),
             ('change-subject-', None, self._on_change_subject),
             ('change-nickname-', None, self._on_change_nick),
@@ -304,66 +311,6 @@ class GroupchatControl(ChatControlBase):
             act = Gio.SimpleAction.new(action_name + self.control_id, variant)
             act.connect("activate", func)
             self.parent_win.window.add_action(act)
-
-        minimize = self.contact.settings.get('minimize_on_close')
-
-        act = Gio.SimpleAction.new_stateful(
-            'minimize-on-close-' + self.control_id, None,
-            GLib.Variant.new_boolean(minimize))
-        act.connect('change-state', self._on_minimize_on_close)
-        self.parent_win.window.add_action(act)
-
-        minimize = self.contact.settings.get('minimize_on_autojoin')
-
-        act = Gio.SimpleAction.new_stateful(
-            'minimize-on-autojoin-' + self.control_id, None,
-            GLib.Variant.new_boolean(minimize))
-        act.connect('change-state', self._on_minimize_on_autojoin)
-        self.parent_win.window.add_action(act)
-
-        chatstate = self.contact.settings.get('send_chatstate')
-
-        act = Gio.SimpleAction.new_stateful(
-            'send-chatstate-' + self.control_id,
-            GLib.VariantType.new("s"),
-            GLib.Variant("s", chatstate))
-        act.connect('change-state', self._on_send_chatstate)
-        self.parent_win.window.add_action(act)
-
-        value = self.contact.settings.get('notify_on_all_messages',
-                                          context=self.context)
-
-        act = Gio.SimpleAction.new_stateful(
-            'notify-on-message-' + self.control_id,
-            None, GLib.Variant.new_boolean(value))
-        act.connect('change-state', self._on_notify_on_all_messages)
-        self.parent_win.window.add_action(act)
-
-        value = self.contact.settings.get('print_status')
-
-        act = Gio.SimpleAction.new_stateful(
-            'print-status-' + self.control_id,
-            None, GLib.Variant.new_boolean(value))
-        act.connect('change-state', self._on_print_status)
-        self.parent_win.window.add_action(act)
-
-        value = self.contact.settings.get('print_join_left')
-
-        act = Gio.SimpleAction.new_stateful(
-            'print-join-left-' + self.control_id,
-            None, GLib.Variant.new_boolean(value))
-        act.connect('change-state', self._on_print_join_left)
-        self.parent_win.window.add_action(act)
-
-        threshold = self.contact.settings.get('sync_threshold',
-                                              context=self.context)
-
-        initial = GLib.Variant.new_string(str(threshold))
-        act = Gio.SimpleAction.new_stateful(
-            'choose-sync-' + self.control_id,
-            initial.get_type(), initial)
-        act.connect('change-state', self._on_sync_threshold)
-        self.parent_win.window.add_action(act)
 
     def update_actions(self, *args):
         if self.parent_win is None:
@@ -427,16 +374,6 @@ class GroupchatControl(ChatControlBase):
             vcard_support and
             contact.affiliation.is_owner)
 
-        # Print join/left
-        value = self.contact.settings.get('print_join_left')
-        self._get_action('print-join-left-').set_state(
-            GLib.Variant.new_boolean(value))
-
-        # Print join/left
-        value = self.contact.settings.get('print_status')
-        self._get_action('print-status-').set_state(
-            GLib.Variant.new_boolean(value))
-
         self._get_action('contact-information-').set_enabled(self.is_connected)
 
         self._get_action('execute-command-').set_enabled(self.is_connected)
@@ -448,6 +385,7 @@ class GroupchatControl(ChatControlBase):
     def remove_actions(self):
         super().remove_actions()
         actions = [
+            'groupchat-settings-',
             'rename-groupchat-',
             'change-subject-',
             'change-nickname-',
@@ -464,13 +402,6 @@ class GroupchatControl(ChatControlBase):
             'kick-',
             'change-role-',
             'change-affiliation-',
-            'minimize-on-close-',
-            'minimize-on-autojoin-',
-            'send-chatstate-',
-            'notify-on-message-',
-            'print-status-',
-            'print-join-left-',
-            'choose-sync-',
         ]
 
         for action in actions:
@@ -531,19 +462,10 @@ class GroupchatControl(ChatControlBase):
     def _on_disco_update(self, _event):
         if self.parent_win is None:
             return
-        win = self.parent_win.window
         self.update_actions()
         self.draw_banner_text()
 
-        # After the room has been created, reevaluate threshold
-        if self.disco_info.has_mam:
-            threshold = self.contact.settings.get('sync_threshold',
-                                                  context=self.context)
-            win.change_action_state('choose-sync-%s' % self.control_id,
-                                    GLib.Variant('s', str(threshold)))
-
     # Actions
-
     def _on_disconnect(self, _action, _param):
         self.leave()
 
@@ -554,6 +476,9 @@ class GroupchatControl(ChatControlBase):
             self._muc_info_box.set_author(self._subject_data.nickname,
                                           self._subject_data.user_timestamp)
         self._show_page('muc-info')
+
+    def _on_groupchat_settings(self, _action, _param):
+        self._show_page('muc-settings')
 
     def _on_invite(self, _action, _param):
         self._invite_box.load_contacts()
@@ -629,43 +554,12 @@ class GroupchatControl(ChatControlBase):
             return
         GroupchatConfig(self.account, result.jid, 'owner', result.form)
 
-    def _on_print_join_left(self, action, param):
-        action.set_state(param)
-        self.contact.settings.set('print_join_left', param.get_boolean())
-
-    def _on_print_status(self, action, param):
-        action.set_state(param)
-        self.contact.settings.set('print_status', param.get_boolean())
-
     def _on_request_voice(self, _action, _param):
         """
         Request voice in the current room
         """
         con = app.connections[self.account]
         con.get_module('MUC').request_voice(self.room_jid)
-
-    def _on_minimize_on_close(self, action, param):
-        action.set_state(param)
-        self.contact.settings.set('minimize_on_close', param.get_boolean())
-
-    def _on_minimize_on_autojoin(self, action, param):
-        action.set_state(param)
-        self.contact.settings.set('minimize_on_autojoin', param.get_boolean())
-
-    def _on_send_chatstate(self, action, param):
-        action.set_state(param)
-        self.contact.settings.set('send_chatstate', param.get_string())
-
-    def _on_notify_on_all_messages(self, action, param):
-        action.set_state(param)
-        self.contact.settings.set('notify_on_all_messages', param.get_boolean())
-
-    def _on_sync_threshold(self, action, param):
-        threshold = param.get_string()
-        action.set_state(param)
-        self.contact.settings.set('sync_threshold',
-                                  int(threshold),
-                                  context=self.context)
 
     def _on_execute_command(self, _action, param):
         jid = self.room_jid
