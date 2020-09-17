@@ -267,7 +267,7 @@ class GenericSetting(Gtk.ListBoxRow):
             return app.settings.get_contact_setting(account, jid, value)
 
         if type_ == SettingType.GROUP_CHAT:
-            value = app.settings.get_group_chat_setting(
+            return app.settings.get_group_chat_setting(
                 account, jid, value, context)
 
         if type_ == SettingType.CONFIG:
