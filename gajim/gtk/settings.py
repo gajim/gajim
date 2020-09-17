@@ -73,12 +73,11 @@ class SettingsDialog(Gtk.ApplicationWindow):
 
 
 class SettingsBox(Gtk.ListBox):
-    def __init__(self, account=None, jid=None, context=None, extend=None):
+    def __init__(self, account=None, jid=None, extend=None):
         Gtk.ListBox.__init__(self)
         self.get_style_context().add_class('settings-box')
         self.account = account
         self.jid = jid
-        self.context = context
         self.named_settings = {}
 
         self.map = {
@@ -116,13 +115,11 @@ class SettingsBox(Gtk.ListBox):
             if setting.props is not None:
                 listitem = self.map[setting.kind](self.account,
                                                   self.jid,
-                                                  self.context,
                                                   *setting[1:-1],
                                                   **setting.props)
             else:
                 listitem = self.map[setting.kind](self.account,
                                                   self.jid,
-                                                  self.context,
                                                   *setting[1:-1])
 
         if setting.name is not None:
@@ -141,7 +138,6 @@ class GenericSetting(Gtk.ListBoxRow):
     def __init__(self,
                  account,
                  jid,
-                 context,
                  label,
                  type_,
                  value,
@@ -151,7 +147,9 @@ class GenericSetting(Gtk.ListBoxRow):
                  desc,
                  bind,
                  inverted,
-                 enabled_func):
+                 enabled_func,
+                 context):
+
         Gtk.ListBoxRow.__init__(self)
         self._grid = Gtk.Grid()
         self._grid.set_size_request(-1, 30)
