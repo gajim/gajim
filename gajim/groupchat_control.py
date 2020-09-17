@@ -266,7 +266,7 @@ class GroupchatControl(ChatControlBase):
 
     @property
     def disco_info(self):
-        return app.logger.get_last_disco_info(self.contact.jid)
+        return app.storage.cache.get_last_disco_info(self.contact.jid)
 
     def add_actions(self):
         super().add_actions()

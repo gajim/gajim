@@ -56,6 +56,7 @@ from gajim.common import logger
 from gajim.common.i18n import _
 from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.task_manager import TaskManager
+from gajim.common.storage.cache import CacheStorage
 
 
 class GajimApplication(Gtk.Application):
@@ -182,6 +183,8 @@ class GajimApplication(Gtk.Application):
         app.print_version()
         app.detect_dependencies()
         configpaths.create_paths()
+        app.storage.cache = CacheStorage()
+        app.storage.cache.init()
         try:
             app.logger = logger.Logger()
             app.contacts = LegacyContactsAPI()

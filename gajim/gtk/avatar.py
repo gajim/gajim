@@ -239,7 +239,7 @@ class AvatarStorage(metaclass=Singleton):
         if surface is not None:
             return surface
 
-        avatar_sha = app.logger.get_muc_avatar_sha(jid)
+        avatar_sha = app.storage.cache.get_muc_avatar_sha(jid)
         if avatar_sha is not None:
             surface = self.surface_from_filename(avatar_sha, size, scale)
             if surface is None:

@@ -45,8 +45,7 @@ class Roster(BaseModule):
 
     def load_roster(self):
         self._log.info('Load from database')
-        account_jid = self._con.get_own_jid().bare
-        data = app.logger.get_roster(account_jid)
+        data = app.storage.cache.load_roster(self._account)
         if data:
             self.set_raw(data)
             for jid, item in self._data.items():
@@ -70,6 +69,9 @@ class Roster(BaseModule):
             conn=self._con,
             roster=self._data.copy(),
             received_from_server=False))
+
+    def _store_roster(self):
+        app.storage.cache.store_roster(self._account, self._data)
 
     def request_roster(self):
         version = None
@@ -99,7 +101,10 @@ class Roster(BaseModule):
                 version = self._parse_roster(stanza)
 
                 self._log.info('New version: %s', version)
-                app.logger.replace_roster(self._account, version, self._data)
+                self._store_roster()
+                app.settings.set_account_setting(self._account,
+                                                 'roster_version',
+                                                 version)
 
                 received_from_server = True
 
@@ -135,10 +140,8 @@ class Roster(BaseModule):
                 ask=attrs['ask'],
                 groups=attrs['groups'],
                 avatar_sha=None))
-            account_jid = self._con.get_own_jid().bare
-            app.logger.add_or_update_contact(
-                account_jid, item.jid, attrs['name'],
-                attrs['subscription'], attrs['ask'], attrs['groups'])
+
+            self._store_roster()
 
         self._log.info('New version: %s', version)
         app.settings.set_account_setting(self._account,
@@ -238,13 +241,8 @@ class Roster(BaseModule):
                            'subscription':
                            'none',
                            'groups': ['Not in contact list']}
-        account_jid = self._con.get_own_jid().bare
-        app.logger.add_or_update_contact(
-            account_jid, jid,
-            self._data[jid]['name'],
-            self._data[jid]['subscription'],
-            self._data[jid]['ask'],
-            self._data[jid]['groups'])
+
+        self._store_roster()
 
     def _get_item_data(self, jid, dataname):
         """
@@ -368,6 +366,13 @@ class Roster(BaseModule):
             'groups': None,
             'avatar_sha': None
         }
+
+    def set_avatar_sha(self, jid, sha):
+        if jid not in self._data:
+            return
+
+        self._data[jid]['avatar_sha'] = sha
+        self._store_roster()
 
 
 def get_instance(*args, **kwargs):

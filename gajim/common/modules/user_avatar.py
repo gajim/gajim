@@ -40,13 +40,12 @@ class UserAvatar(BaseModule):
 
         data = properties.pubsub_event.data
         jid = str(properties.jid)
-        own_jid = self._con.get_own_jid().bare
 
         if data is None:
             # Remove avatar
             self._log.info('Remove: %s', jid)
             app.contacts.set_avatar(self._account, jid, None)
-            app.logger.set_avatar_sha(own_jid, jid, None)
+            self._con.get_module('Roster').set_avatar_sha(jid, None)
             app.interface.update_avatar(self._account, jid)
         else:
             if properties.is_self_message:
@@ -76,8 +75,8 @@ class UserAvatar(BaseModule):
                                              'avatar_sha',
                                              result.sha)
         else:
-            own_jid = self._con.get_own_jid().bare
-            app.logger.set_avatar_sha(own_jid, str(result.jid), result.sha)
+            self._con.get_module('Roster').set_avatar_sha(str(result.jid),
+                                                          result.sha)
 
         app.contacts.set_avatar(self._account, str(result.jid), result.sha)
         app.interface.update_avatar(self._account, str(result.jid))

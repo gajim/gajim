@@ -143,7 +143,7 @@ class CommonContact(XMPPEntity):
             # return caps for a contact that has no resources left.
             return False
 
-        disco_info = app.logger.get_last_disco_info(self.get_full_jid())
+        disco_info = app.storage.cache.get_last_disco_info(self.get_full_jid())
         if disco_info is None:
             return False
 
@@ -151,7 +151,7 @@ class CommonContact(XMPPEntity):
 
     @property
     def uses_phone(self):
-        disco_info = app.logger.get_last_disco_info(self.get_full_jid())
+        disco_info = app.storage.cache.get_last_disco_info(self.get_full_jid())
         if disco_info is None:
             return False
 
@@ -271,7 +271,7 @@ class Contact(CommonContact):
         if not self.is_groupchat:
             raise ValueError
 
-        disco_info = app.logger.get_last_disco_info(self.jid)
+        disco_info = app.storage.cache.get_last_disco_info(self.jid)
 
         context = 'public'
         if disco_info is not None and disco_info.muc_is_members_only:

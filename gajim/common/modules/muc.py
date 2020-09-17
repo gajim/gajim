@@ -141,7 +141,8 @@ class MUC(BaseModule):
 
         self._manager.add(muc_data)
 
-        disco_info = app.logger.get_last_disco_info(muc_data.jid, max_age=60)
+        disco_info = app.storage.cache.get_last_disco_info(muc_data.jid,
+                                                           max_age=60)
         if disco_info is None:
             self._con.get_module('Discovery').disco_muc(
                 muc_data.jid,

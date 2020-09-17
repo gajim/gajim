@@ -357,7 +357,7 @@ class RosterTooltip(StatusTable):
 
         else:  # only one resource
             if contact.is_groupchat:
-                disco_info = app.logger.get_last_disco_info(contact.jid)
+                disco_info = app.storage.cache.get_last_disco_info(contact.jid)
                 if disco_info is not None:
                     description = disco_info.muc_description
                     if description:

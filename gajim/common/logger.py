@@ -28,7 +28,6 @@ This module allows to access the on-disk database of logs
 import os
 import sys
 import time
-import math
 import datetime
 import calendar
 import json
@@ -38,20 +37,16 @@ from collections import namedtuple
 
 from gi.repository import GLib
 
-from nbxmpp.protocol import Iq
-from nbxmpp.protocol import JID
-from nbxmpp.structs import DiscoInfo
-from nbxmpp.structs import CommonError
-from nbxmpp.modules.discovery import parse_disco_info
-
 from gajim.common import exceptions
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.i18n import _
-from gajim.common.const import (
-    JIDConstant, KindConstant, ShowConstant, TypeConstant,
-    SubscriptionConstant)
+from gajim.common.const import ShowConstant
+from gajim.common.const import KindConstant
+from gajim.common.const import JIDConstant
+
+from gajim.common.storage.base import timeit
 
 
 LOGS_SQL_STATEMENT = '''
@@ -97,113 +92,23 @@ LOGS_SQL_STATEMENT = '''
     PRAGMA user_version=5;
     '''
 
-CACHE_SQL_STATEMENT = '''
-    CREATE TABLE transports_cache (
-            transport TEXT UNIQUE,
-            type INTEGER
-    );
-    CREATE TABLE caps_cache (
-            hash_method TEXT,
-            hash TEXT,
-            data TEXT,
-            last_seen INTEGER
-    );
-    CREATE TABLE last_seen_disco_info(
-            jid TEXT PRIMARY KEY UNIQUE,
-            disco_info TEXT,
-            last_seen INTEGER
-    );
-    CREATE TABLE roster_entry(
-            account_jid_id INTEGER,
-            jid_id INTEGER,
-            name TEXT,
-            subscription INTEGER,
-            ask BOOLEAN,
-            avatar_sha TEXT,
-            PRIMARY KEY (account_jid_id, jid_id)
-    );
-    CREATE TABLE roster_group(
-            account_jid_id INTEGER,
-            jid_id INTEGER,
-            group_name TEXT,
-            PRIMARY KEY (account_jid_id, jid_id, group_name)
-    );
-    CREATE TABLE muc_avatars(
-            jid TEXT PRIMARY KEY UNIQUE,
-            avatar_sha TEXT
-    );
-    PRAGMA user_version=5;
-    '''
 
 log = logging.getLogger('gajim.c.logger')
 
 
-def timeit(func):
-    def func_wrapper(self, *args, **kwargs):
-        start = time.time()
-        result = func(self, *args, **kwargs)
-        exec_time = (time.time() - start) * 1e3
-        level = 30 if exec_time > 50 else 10
-        log.log(level, 'Execution time for %s: %s ms',
-                func.__name__, math.ceil(exec_time))
-        return result
-    return func_wrapper
-
-def _convert_disco_info(disco_info):
-    return parse_disco_info(Iq(node=disco_info))
-
-def _adapt_disco_info(disco_info):
-    return str(disco_info.stanza)
-
-def _convert_common_error(common_error):
-    return CommonError.from_string(common_error)
-
-def _adapt_common_error(common_error):
-    return common_error.serialize()
-
-def _convert_marker(marker):
-    return 'received' if marker == 0 else 'displayed'
-
-def _jid_adapter(jid):
-    return str(jid)
-
-def _jid_converter(jid):
-    return JID.from_string(jid.decode())
-
-
-sqlite.register_converter('jid', _jid_converter)
-sqlite.register_adapter(JID, _jid_adapter)
-
-sqlite.register_converter('disco_info', _convert_disco_info)
-sqlite.register_adapter(DiscoInfo, _adapt_disco_info)
-
-sqlite.register_converter('common_error', _convert_common_error)
-sqlite.register_adapter(CommonError, _adapt_common_error)
-
-sqlite.register_converter('marker', _convert_marker)
-
-
 class Logger:
     def __init__(self):
+        self._log = log
         self._jid_ids = {}
         self._jid_ids_reversed = {}
         self._con = None
         self._commit_timout_id = None
         self._log_db_path = configpaths.get('LOG_DB')
-        self._cache_db_path = configpaths.get('CACHE_DB')
-
-        self._entity_caps_cache = {}
-        self._disco_info_cache = {}
-        self._muc_avatar_sha_cache = {}
 
         self._create_databases()
         self._migrate_databases()
         self._connect_databases()
         self._get_jid_ids_from_db()
-        self._fill_disco_info_cache()
-        self._fill_muc_avatar_sha_cache()
-        self._clean_caps_table()
-        self._load_caps_data()
 
     def _create_databases(self):
         if os.path.isdir(self._log_db_path):
@@ -211,18 +116,8 @@ class Logger:
                       self._log_db_path)
             sys.exit()
 
-        if os.path.isdir(self._cache_db_path):
-            log.error(_('%s is a directory but should be a file'),
-                      self._cache_db_path)
-            sys.exit()
-
         if not os.path.exists(self._log_db_path):
-            if os.path.exists(self._cache_db_path):
-                os.remove(self._cache_db_path)
             self._create(LOGS_SQL_STATEMENT, self._log_db_path)
-
-        if not os.path.exists(self._cache_db_path):
-            self._create(CACHE_SQL_STATEMENT, self._cache_db_path)
 
     @staticmethod
     def _connect(*args, **kwargs):
@@ -256,10 +151,6 @@ class Logger:
         try:
             con = self._connect(self._log_db_path)
             self._migrate_logs(con)
-            con.close()
-
-            con = self._connect(self._cache_db_path)
-            self._migrate_cache(con)
             con.close()
         except Exception:
             log.exception('Error')
@@ -318,50 +209,6 @@ class Logger:
             ]
             self._execute_multiple(con, statements)
 
-    @timeit
-    def _migrate_cache(self, con):
-        if self._get_user_version(con) == 0:
-            # All migrations from 0.16.9 until 1.0.0
-            statements = [
-                'ALTER TABLE roster_entry ADD COLUMN "avatar_sha" TEXT',
-                'PRAGMA user_version=1'
-                ]
-            self._execute_multiple(con, statements)
-
-        if self._get_user_version(con) < 2:
-            statements = [
-                'DROP TABLE IF EXISTS caps_cache',
-                'CREATE TABLE caps_cache (hash_method TEXT, hash TEXT, data TEXT, last_seen INTEGER)',
-                'PRAGMA user_version=2'
-                ]
-            self._execute_multiple(con, statements)
-
-        if self._get_user_version(con) < 3:
-            statements = [
-                '''CREATE TABLE last_seen_disco_info(
-                    jid TEXT PRIMARY KEY UNIQUE,
-                    disco_info TEXT,
-                    last_seen INTEGER)''',
-                'PRAGMA user_version=3'
-                ]
-            self._execute_multiple(con, statements)
-
-        if self._get_user_version(con) < 4:
-            statements = [
-                '''CREATE TABLE muc_avatars(
-                   jid TEXT PRIMARY KEY UNIQUE,
-                   avatar_sha TEXT)''',
-                'PRAGMA user_version=4'
-                ]
-            self._execute_multiple(con, statements)
-
-        if self._get_user_version(con) < 5:
-            statements = [
-                'DELETE FROM caps_cache',
-                'PRAGMA user_version=5'
-                ]
-            self._execute_multiple(con, statements)
-
     @staticmethod
     def _execute_multiple(con, statements):
         """
@@ -416,13 +263,6 @@ class Logger:
         self._con.create_function("get_timeout", 0, self._get_timeout)
 
         self._set_synchronous(False)
-        try:
-            self._con.execute("ATTACH DATABASE '%s' AS cache" %
-                              self._cache_db_path.replace("'", "''"))
-        except Exception:
-            log.exception('Error')
-            self._con.close()
-            sys.exit()
 
     @timeit
     def _set_synchronous(self, sync):
@@ -593,99 +433,6 @@ class Logger:
         # invisible in GC when someone goes invisible
         # it's a RFC violation .... but we should not crash
         return None
-
-    def convert_human_transport_type_to_db_api_values(self, type_):
-        """
-        Convert from string style to constant ints for db
-        """
-        if type_ == 'aim':
-            return TypeConstant.AIM
-        if type_ == 'gadu-gadu':
-            return TypeConstant.GG
-        if type_ == 'http-ws':
-            return TypeConstant.HTTP_WS
-        if type_ == 'icq':
-            return TypeConstant.ICQ
-        if type_ == 'msn':
-            return TypeConstant.MSN
-        if type_ == 'qq':
-            return TypeConstant.QQ
-        if type_ == 'sms':
-            return TypeConstant.SMS
-        if type_ == 'smtp':
-            return TypeConstant.SMTP
-        if type_ in ('tlen', 'x-tlen'):
-            return TypeConstant.TLEN
-        if type_ == 'newmail':
-            return TypeConstant.NEWMAIL
-        if type_ == 'rss':
-            return TypeConstant.RSS
-        if type_ == 'weather':
-            return TypeConstant.WEATHER
-        if type_ == 'mrim':
-            return TypeConstant.MRIM
-        if type_ == 'jabber':
-            return TypeConstant.NO_TRANSPORT
-        return None
-
-    def convert_api_values_to_human_transport_type(self, type_id):
-        """
-        Convert from constant ints for db to string style
-        """
-        if type_id == TypeConstant.AIM:
-            return 'aim'
-        if type_id == TypeConstant.GG:
-            return 'gadu-gadu'
-        if type_id == TypeConstant.HTTP_WS:
-            return 'http-ws'
-        if type_id == TypeConstant.ICQ:
-            return 'icq'
-        if type_id == TypeConstant.MSN:
-            return 'msn'
-        if type_id == TypeConstant.QQ:
-            return 'qq'
-        if type_id == TypeConstant.SMS:
-            return 'sms'
-        if type_id == TypeConstant.SMTP:
-            return 'smtp'
-        if type_id == TypeConstant.TLEN:
-            return 'tlen'
-        if type_id == TypeConstant.NEWMAIL:
-            return 'newmail'
-        if type_id == TypeConstant.RSS:
-            return 'rss'
-        if type_id == TypeConstant.WEATHER:
-            return 'weather'
-        if type_id == TypeConstant.MRIM:
-            return 'mrim'
-        if type_id == TypeConstant.NO_TRANSPORT:
-            return 'jabber'
-
-    def convert_xmpp_sub(self, sub):
-        """
-        Convert from string style to constant ints for db
-        """
-        if sub == 'none':
-            return SubscriptionConstant.NONE
-        if sub == 'to':
-            return SubscriptionConstant.TO
-        if sub == 'from':
-            return SubscriptionConstant.FROM
-        if sub == 'both':
-            return SubscriptionConstant.BOTH
-
-    def convert_db_sub(self, sub):
-        """
-        Convert from constant ints for db to string style
-        """
-        if sub == SubscriptionConstant.NONE:
-            return 'none'
-        if sub == SubscriptionConstant.TO:
-            return 'to'
-        if sub == SubscriptionConstant.FROM:
-            return 'from'
-        if sub == SubscriptionConstant.BOTH:
-            return 'both'
 
     @timeit
     def insert_unread_events(self, message_id, jid_id):
@@ -1044,246 +791,6 @@ class Logger:
             sql, tuple(jids) + (start, end)).fetchone()
 
     @timeit
-    def save_transport_type(self, jid, type_):
-        """
-        Save the type of the transport in DB
-        """
-        type_id = self.convert_human_transport_type_to_db_api_values(type_)
-        if not type_id:
-            # unknown type
-            return
-        result = self._con.execute(
-            'SELECT type from transports_cache WHERE transport = "%s"' % jid).fetchone()
-        if result:
-            if result.type == type_id:
-                return
-            sql = 'UPDATE transports_cache SET type = %d WHERE transport = "%s"' %\
-                    (type_id, jid)
-            self.simple_commit(sql)
-            return
-        sql = 'INSERT INTO transports_cache (transport, type) VALUES (?, ?)'
-        self._con.execute(sql, (jid, type_id))
-        self._timeout_commit()
-
-    @timeit
-    def get_transports_type(self):
-        """
-        Return all the type of the transports in DB
-        """
-        results = self._con.execute('SELECT * from transports_cache').fetchall()
-        if not results:
-            return {}
-        answer = {}
-        for result in results:
-            answer[result.transport] = self.convert_api_values_to_human_transport_type(
-                    result.type)
-        return answer
-
-    @timeit
-    def _load_caps_data(self):
-        '''
-        Load caps cache data
-        '''
-        rows = self._con.execute(
-            'SELECT hash_method, hash, data as "data [disco_info]" '
-            'FROM caps_cache')
-
-        for row in rows:
-            self._entity_caps_cache[(row.hash_method, row.hash)] = row.data
-
-    @timeit
-    def add_caps_entry(self, jid, hash_method, hash_, caps_data):
-        self._entity_caps_cache[(hash_method, hash_)] = caps_data
-
-        self._disco_info_cache[jid] = caps_data
-
-        self._con.execute('''
-                INSERT INTO caps_cache (hash_method, hash, data, last_seen)
-                VALUES (?, ?, ?, ?)
-                ''', (hash_method, hash_, caps_data, int(time.time())))
-        self._timeout_commit()
-
-    def get_caps_entry(self, hash_method, hash_):
-        return self._entity_caps_cache.get((hash_method, hash_))
-
-    @timeit
-    def update_caps_time(self, method, hash_):
-        sql = '''UPDATE caps_cache SET last_seen = ?
-                 WHERE hash_method = ? and hash = ?'''
-        self._con.execute(sql, (int(time.time()), method, hash_))
-        self._timeout_commit()
-
-    @timeit
-    def _clean_caps_table(self):
-        """
-        Remove caps which was not seen for 3 months
-        """
-        timestamp = int(time.time()) - 3 * 30 * 24 * 3600
-        self._con.execute('DELETE FROM caps_cache WHERE last_seen < ?',
-                          (timestamp,))
-        self._timeout_commit()
-
-    @timeit
-    def replace_roster(self, account_name, roster_version, roster):
-        """
-        Replace current roster in DB by a new one
-
-        accout_name is the name of the account to change.
-        roster_version is the version of the new roster.
-        roster is the new version.
-        """
-        # First we must reset roster_version value to ensure that the server
-        # sends back all the roster at the next connection if the replacement
-        # didn't work properly.
-        app.settings.set_account_setting(account_name, 'roster_version', '')
-
-        account_jid = app.get_jid_from_account(account_name)
-        # Execute get_jid_id() because this ensures on new accounts that the
-        # jid_id will be created
-        self.get_jid_id(account_jid, type_=JIDConstant.NORMAL_TYPE)
-
-        # Delete old roster
-        self.remove_roster(account_jid)
-
-        # Fill roster tables with the new roster
-        for jid in roster:
-            self.add_or_update_contact(account_jid, jid, roster[jid]['name'],
-                roster[jid]['subscription'], roster[jid]['ask'],
-                roster[jid]['groups'], commit=False)
-        self._timeout_commit()
-
-        # At this point, we are sure the replacement works properly so we can
-        # set the new roster_version value.
-        app.settings.set_account_setting(account_name,
-                                         'roster_version',
-                                         roster_version)
-
-    @timeit
-    def del_contact(self, account_jid, jid):
-        """
-        Remove jid from account_jid roster
-        """
-        try:
-            account_jid_id = self.get_jid_id(account_jid)
-            jid_id = self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError as e:
-            raise exceptions.PysqliteOperationalError(str(e))
-        self._con.execute(
-                'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?',
-                (account_jid_id, jid_id))
-        self._con.execute(
-                'DELETE FROM roster_entry WHERE account_jid_id=? AND jid_id=?',
-                (account_jid_id, jid_id))
-        self._timeout_commit()
-
-    @timeit
-    def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups,
-                              commit=True):
-        """
-        Add or update a contact from account_jid roster
-        """
-        if sub == 'remove':
-            self.del_contact(account_jid, jid)
-            return
-
-        try:
-            account_jid_id = self.get_jid_id(account_jid)
-            jid_id = self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
-        except exceptions.PysqliteOperationalError as error:
-            raise exceptions.PysqliteOperationalError(str(error))
-
-        # Update groups information
-        # First we delete all previous groups information
-        sql = 'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?'
-        self._con.execute(sql, (account_jid_id, jid_id))
-        # Then we add all new groups information
-        sql = '''INSERT INTO roster_group (account_jid_id, jid_id, group_name)
-                 VALUES (?, ?, ?)'''
-        for group in groups:
-            self._con.execute(sql, (account_jid_id, jid_id, group))
-
-        if name is None:
-            name = ''
-
-        sql = '''REPLACE INTO roster_entry
-                 (account_jid_id, jid_id, name, subscription, ask)
-                 VALUES(?, ?, ?, ?, ?)'''
-        self._con.execute(sql, (account_jid_id,
-                                jid_id,
-                                name,
-                                self.convert_xmpp_sub(sub),
-                                bool(ask)))
-        if commit:
-            self._timeout_commit()
-
-    @timeit
-    def get_roster(self, account_jid):
-        """
-        Return the accound_jid roster in NonBlockingRoster format
-        """
-        data = {}
-        account_jid_id = self.get_jid_id(account_jid, type_=JIDConstant.NORMAL_TYPE)
-
-        # First we fill data with roster_entry information
-        rows = self._con.execute('''
-                SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask, re.avatar_sha
-                FROM roster_entry re, jids j
-                WHERE re.account_jid_id=? AND j.jid_id=re.jid_id''', (account_jid_id,))
-        for row in rows:
-            #jid, jid_id, name, subscription, ask
-            jid = row.jid
-            name = row.name
-            data[jid] = {}
-            data[jid]['avatar_sha'] = row.avatar_sha
-            if name:
-                data[jid]['name'] = name
-            else:
-                data[jid]['name'] = None
-            data[jid]['subscription'] = self.convert_db_sub(row.subscription)
-            data[jid]['groups'] = []
-            data[jid]['resources'] = {}
-            if row.ask:
-                data[jid]['ask'] = 'subscribe'
-            else:
-                data[jid]['ask'] = None
-            data[jid]['id'] = row.jid_id
-
-        # Then we add group for roster entries
-        for jid in data:
-            rows = self._con.execute('''
-                    SELECT group_name FROM roster_group
-                    WHERE account_jid_id=? AND jid_id=?''',
-                    (account_jid_id, data[jid]['id']))
-            for row in rows:
-                group_name = row.group_name
-                data[jid]['groups'].append(group_name)
-            del data[jid]['id']
-
-        return data
-
-    @timeit
-    def remove_roster(self, account_jid):
-        """
-        Remove the roster of an account
-
-        :param account_jid:     The jid of the account
-        """
-        try:
-            jid_id = self.get_jid_id(account_jid)
-        except ValueError:
-            # This happens if the JID never made it to the Database
-            # because the account was never connected
-            return
-
-        sql = '''
-            DELETE FROM roster_entry WHERE account_jid_id = {jid_id};
-            DELETE FROM roster_group WHERE account_jid_id = {jid_id};
-            '''.format(jid_id=jid_id)
-
-        self._con.executescript(sql)
-        self._timeout_commit()
-
-    @timeit
     def deduplicate_muc_message(self, account, jid, resource,
                                 timestamp, message_id):
         """
@@ -1520,71 +1027,6 @@ class Logger:
         self._timeout_commit()
 
     @timeit
-    def _fill_muc_avatar_sha_cache(self):
-        sql = '''SELECT jid, avatar_sha FROM muc_avatars'''
-        rows = self._con.execute(sql).fetchall()
-        for row in rows:
-            self._muc_avatar_sha_cache[row.jid] = row.avatar_sha
-        log.info('%d Avatar SHA entries loaded', len(rows))
-
-    @timeit
-    def set_avatar_sha(self, account_jid, jid, sha=None):
-        """
-        Set the avatar sha of a jid on an account
-
-        :param account_jid: The jid of the account
-
-        :param jid:         The jid that belongs to the avatar
-
-        :param sha:         The sha of the avatar
-
-        """
-
-        account_jid_id = self.get_jid_id(account_jid)
-        jid_id = self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
-
-        sql = '''
-            UPDATE roster_entry SET avatar_sha = ?
-            WHERE account_jid_id = ? AND jid_id = ?
-            '''
-        self._con.execute(sql, (sha, account_jid_id, jid_id))
-        self._timeout_commit()
-
-    @timeit
-    def set_muc_avatar_sha(self, jid, sha=None):
-        """
-        Set the avatar sha of a MUC
-
-        :param jid:         The MUC jid that belongs to the avatar
-
-        :param sha:         The sha of the avatar
-
-        """
-
-        sql = '''INSERT INTO muc_avatars (jid, avatar_sha)
-                 VALUES (?, ?)'''
-
-        try:
-            self._con.execute(sql, (jid, sha))
-        except sqlite.IntegrityError:
-            sql = 'UPDATE muc_avatars SET avatar_sha = ? WHERE jid = ?'
-            self._con.execute(sql, (sha, jid))
-
-        self._muc_avatar_sha_cache[jid] = sha
-
-        self._timeout_commit()
-
-    def get_muc_avatar_sha(self, jid):
-        """
-        Get the avatar sha of a MUC
-
-        :param jid:         The MUC jid that belongs to the avatar
-
-        """
-
-        return self._muc_avatar_sha_cache.get(jid)
-
-    @timeit
     def get_archive_infos(self, jid):
         """
         Get the archive infos
@@ -1656,67 +1098,4 @@ class Logger:
                  WHERE jid_id = ?'''
         self._con.execute(sql, (jid_id,))
         log.info('Reset message archive info: %s', jid)
-        self._timeout_commit()
-
-    @timeit
-    def _fill_disco_info_cache(self):
-        sql = '''SELECT disco_info as "disco_info [disco_info]",
-                 jid, last_seen FROM
-                 last_seen_disco_info'''
-        rows = self._con.execute(sql).fetchall()
-        for row in rows:
-            disco_info = row.disco_info._replace(timestamp=row.last_seen)
-            self._disco_info_cache[row.jid] = disco_info
-        log.info('%d DiscoInfo entries loaded', len(rows))
-
-    def get_last_disco_info(self, jid, max_age=0):
-        """
-        Get last disco info from jid
-
-        :param jid:         The jid
-
-        :param max_age:     max age in seconds of the DiscoInfo record
-
-        """
-
-        disco_info = self._disco_info_cache.get(jid)
-        if disco_info is not None:
-            max_timestamp = time.time() - max_age if max_age else 0
-            if max_timestamp > disco_info.timestamp:
-                return None
-        return disco_info
-
-    @timeit
-    def set_last_disco_info(self, jid, disco_info, cache_only=False):
-        """
-        Get last disco info from jid
-
-        :param jid:          The jid
-
-        :param disco_info:   A DiscoInfo object
-
-        """
-
-        log.info('Save disco info from %s', jid)
-
-        if cache_only:
-            self._disco_info_cache[jid] = disco_info
-            return
-
-        disco_exists = self.get_last_disco_info(jid) is not None
-        if disco_exists:
-            sql = '''UPDATE last_seen_disco_info SET
-                     disco_info = ?, last_seen = ?
-                     WHERE jid = ?'''
-
-            self._con.execute(sql, (disco_info, disco_info.timestamp, str(jid)))
-
-        else:
-            sql = '''INSERT INTO last_seen_disco_info
-                     (jid, disco_info, last_seen)
-                     VALUES (?, ?, ?)'''
-
-            self._con.execute(sql, (str(jid), disco_info, disco_info.timestamp))
-
-        self._disco_info_cache[jid] = disco_info
         self._timeout_commit()

@@ -101,14 +101,14 @@ class Caps(BaseModule):
 
         self._log.info('Received %s', task.entity)
 
-        disco_info = app.logger.get_caps_entry(task.entity.method,
-                                               task.entity.hash)
+        disco_info = app.storage.cache.get_caps_entry(task.entity.method,
+                                                      task.entity.hash)
         if disco_info is None:
             self._queue_task(task)
             return
 
         jid = str(properties.jid)
-        app.logger.set_last_disco_info(jid, disco_info, cache_only=True)
+        app.storage.cache.set_last_disco_info(jid, disco_info, cache_only=True)
         app.nec.push_incoming_event(
             NetworkEvent('caps-update',
                          account=self._account,
@@ -143,7 +143,7 @@ class Caps(BaseModule):
                               disco_info.jid, error)
             return
 
-        app.logger.add_caps_entry(
+        app.storage.cache.add_caps_entry(
             str(disco_info.jid),
             task.entity.method,
             disco_info.get_caps_hash(),

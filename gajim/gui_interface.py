@@ -1321,7 +1321,7 @@ class Interface:
 
     def create_groupchat_control(self, account, room_jid, muc_data,
                                  minimize=False):
-        avatar_sha = app.logger.get_muc_avatar_sha(room_jid)
+        avatar_sha = app.storage.cache.get_muc_avatar_sha(room_jid)
         contact = app.contacts.create_contact(jid=room_jid,
                                               account=account,
                                               groups=[_('Group chats')],
@@ -1653,7 +1653,7 @@ class Interface:
         if app.settings.get_account_setting(account, 'active'):
             self.disable_account(account)
 
-        app.logger.remove_roster(app.get_jid_from_account(account))
+        app.storage.cache.remove_roster(account)
         # Delete password must be before del_per() because it calls set_per()
         # which would recreate the account with defaults values if not found
         passwords.delete_password(account)
@@ -2102,9 +2102,6 @@ class Interface:
             emoji_chooser.load()
 
         self.make_regexps()
-
-        # get transports type from DB
-        app.transport_type = app.logger.get_transports_type()
 
         self.last_ftwindow_update = 0
 

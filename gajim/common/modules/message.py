@@ -253,7 +253,7 @@ class Message(BaseModule):
                 message_id=event.properties.id)
 
     def _check_for_mam_compliance(self, room_jid, stanza_id):
-        disco_info = app.logger.get_last_disco_info(room_jid)
+        disco_info = app.storage.cache.get_last_disco_info(room_jid)
         if stanza_id is None and disco_info.mam_namespace == Namespace.MAM_2:
             self._log.warning('%s announces mam:2 without stanza-id', room_jid)
 
@@ -266,7 +266,7 @@ class Message(BaseModule):
             return None, None
 
         if properties.type.is_groupchat:
-            disco_info = app.logger.get_last_disco_info(
+            disco_info = app.storage.cache.get_last_disco_info(
                 properties.jid.bare)
 
             if disco_info.mam_namespace != Namespace.MAM_2:

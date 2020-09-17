@@ -266,7 +266,7 @@ class VCardTemp(BaseModule):
         app.interface.save_avatar(photo_decoded)
 
         self._log.info('Received: %s %s', jid, avatar_sha)
-        app.logger.set_muc_avatar_sha(jid, avatar_sha)
+        app.storage.cache.set_muc_avatar_sha(jid, avatar_sha)
         app.contacts.set_avatar(self._account, jid, avatar_sha)
         app.interface.update_avatar(self._account, jid, room_avatar=True)
 
@@ -292,8 +292,7 @@ class VCardTemp(BaseModule):
                 app.interface.update_avatar(contact=contact)
         else:
             self._log.info('Received: %s %s', jid, avatar_sha)
-            own_jid = self._con.get_own_jid().bare
-            app.logger.set_avatar_sha(own_jid, jid, avatar_sha)
+            self._con.get_module('Roster').set_avatar_sha(jid, avatar_sha)
             app.contacts.set_avatar(self._account, jid, avatar_sha)
             app.interface.update_avatar(self._account, jid)
 

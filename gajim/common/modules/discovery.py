@@ -153,7 +153,6 @@ class Discovery(BaseModule):
             jid = str(info.jid)
             if jid not in app.transport_type:
                 app.transport_type[jid] = identity.type
-            app.logger.save_transport_type(jid, identity.type)
 
             if identity.type in self._con.available_transports:
                 self._con.available_transports[identity.type].append(jid)
@@ -200,7 +199,7 @@ class Discovery(BaseModule):
     def _muc_info_received(self, result, callback=None):
         self._log.info('MUC info received: %s', result.jid)
         if not is_error_result(result):
-            app.logger.set_last_disco_info(result.jid, result)
+            app.storage.cache.set_last_disco_info(result.jid, result)
             self._con.get_module('VCardAvatars').muc_disco_info_update(result)
             app.nec.push_incoming_event(NetworkEvent(
                 'muc-disco-update',

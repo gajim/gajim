@@ -122,7 +122,7 @@ class MAM(BaseModule):
             archive_jid = properties.jid.bare
             timestamp = properties.timestamp
 
-            disco_info = app.logger.get_last_disco_info(archive_jid)
+            disco_info = app.storage.cache.get_last_disco_info(archive_jid)
             if disco_info is None:
                 # This is the case on MUC creation
                 # After MUC configuration we receive a configuration change

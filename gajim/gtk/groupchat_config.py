@@ -52,7 +52,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
             self._ui.add_button.set_sensitive(True)
             self._ui.add_button.set_tooltip_text('')
 
-        disco_info = app.logger.get_last_disco_info(self.jid)
+        disco_info = app.storage.cache.get_last_disco_info(self.jid)
         visible = disco_info.supports(Namespace.REGISTER)
         self._ui.reserved_name_column.set_visible(visible)
         self._ui.info_button.set_sensitive(False)

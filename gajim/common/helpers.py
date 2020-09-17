@@ -898,7 +898,7 @@ def call_counter(func):
     return helper
 
 def get_sync_threshold(jid, archive_info):
-    disco_info = app.logger.get_last_disco_info(jid)
+    disco_info = app.storage.cache.get_last_disco_info(jid)
     if archive_info is None or archive_info.sync_threshold is None:
         if disco_info is not None and disco_info.muc_is_members_only:
             threshold = app.settings.get('private_room_sync_threshold')
@@ -1231,7 +1231,7 @@ def get_groupchat_name(con, jid):
     if name:
         return name
 
-    disco_info = app.logger.get_last_disco_info(jid)
+    disco_info = app.storage.cache.get_last_disco_info(jid)
     if disco_info is not None:
         if disco_info.muc_name:
             return disco_info.muc_name

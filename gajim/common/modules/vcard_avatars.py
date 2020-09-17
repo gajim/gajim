@@ -132,7 +132,6 @@ class VCardAvatars(BaseModule):
                              room)
 
     def _process_update(self, jid, state, avatar_sha, room):
-        acc_jid = self._con.get_own_jid().bare
         if state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', jid)
@@ -142,9 +141,9 @@ class VCardAvatars(BaseModule):
             app.contacts.set_avatar(self._account, jid, None)
 
             if room:
-                app.logger.set_muc_avatar_sha(jid, None)
+                app.storage.cache.set_muc_avatar_sha(jid, None)
             else:
-                app.logger.set_avatar_sha(acc_jid, jid, None)
+                self._con.get_module('Roster').set_avatar_sha(jid, None)
             app.interface.update_avatar(self._account, jid, room_avatar=room)
         else:
             self._log.info('Update: %s %s', jid, avatar_sha)
@@ -158,9 +157,10 @@ class VCardAvatars(BaseModule):
                 # Check if the avatar is already in storage
                 self._log.info('Found avatar in storage')
                 if room:
-                    app.logger.set_muc_avatar_sha(jid, avatar_sha)
+                    app.storage.cache.set_muc_avatar_sha(jid, avatar_sha)
                 else:
-                    app.logger.set_avatar_sha(acc_jid, jid, avatar_sha)
+                    self._con.get_module('Roster').set_avatar_sha(jid,
+                                                                  avatar_sha)
                 app.contacts.set_avatar(self._account, jid, avatar_sha)
                 app.interface.update_avatar(
                     self._account, jid, room_avatar=room)

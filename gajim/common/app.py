@@ -71,6 +71,12 @@ plugin_manager = None # Plugins Manager
 
 logger = cast(LoggerT, None)
 
+class Storage:
+    def __init__(self):
+        self.cache = None
+
+storage = Storage()
+
 css_config = None
 
 transport_type = {}  # type: Dict[str, str]
