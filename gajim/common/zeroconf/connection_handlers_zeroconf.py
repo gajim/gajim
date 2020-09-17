@@ -114,7 +114,7 @@ class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
     def _message_error_received(self, _con, _stanza, properties):
         log.info(properties.error)
 
-        app.logger.set_message_error(app.get_jid_from_account(self.name),
+        app.storage.archive.set_message_error(app.get_jid_from_account(self.name),
                                      properties.jid,
                                      properties.id,
                                      properties.error)

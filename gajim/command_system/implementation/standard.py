@@ -90,7 +90,7 @@ class StandardCommonCommands(CommandContainer):
     @command('lastlog', overlap=True)
     @doc(_("Show logged messages which mention given text"))
     def grep(self, text, limit=None):
-        results = app.logger.search_log(self.account, self.contact.jid, text)
+        results = app.storage.archive.search_log(self.account, self.contact.jid, text)
 
         if not results:
             raise CommandError(_("%s: Nothing found") % text)

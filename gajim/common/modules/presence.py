@@ -236,12 +236,12 @@ class Presence(BaseModule):
         if properties.type.is_unavailable:
             show = ShowConstant.OFFLINE
 
-        app.logger.insert_into_logs(self._account,
-                                    properties.jid.bare,
-                                    time.time(),
-                                    KindConstant.STATUS,
-                                    message=properties.status,
-                                    show=show)
+        app.storage.archive.insert_into_logs(self._account,
+                                             properties.jid.bare,
+                                             time.time(),
+                                             KindConstant.STATUS,
+                                             message=properties.status,
+                                             show=show)
 
     def _subscribe_received(self, _con, _stanza, properties):
         jid = properties.jid.bare

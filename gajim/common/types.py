@@ -35,7 +35,6 @@ if TYPE_CHECKING:
     from gajim.common.contacts import LegacyContactsAPI
     from gajim.common.nec import NetworkEvent
     from gajim.common.nec import NetworkEventsController
-    from gajim.common.logger import Logger
 
     from gajim.gui_interface import Interface
     from gajim.common.settings import _Settings
@@ -43,7 +42,6 @@ if TYPE_CHECKING:
 
 NetworkEventsControllerT = Union['NetworkEventsController']
 InterfaceT = Union['Interface']
-LoggerT = Union['Logger']
 
 ConnectionT = Union['Client', 'ConnectionZeroconf']
 ContactsT = Union['Contact', 'GC_Contact']

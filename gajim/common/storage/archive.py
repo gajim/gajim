@@ -21,35 +21,29 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-"""
-This module allows to access the on-disk database of logs
-"""
-
-import os
-import sys
 import time
 import datetime
 import calendar
 import json
 import logging
 import sqlite3 as sqlite
+from pathlib import Path
 from collections import namedtuple
 
-from gi.repository import GLib
-
-from gajim.common import exceptions
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.i18n import _
 from gajim.common.const import ShowConstant
 from gajim.common.const import KindConstant
 from gajim.common.const import JIDConstant
 
+from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
 
 
-LOGS_SQL_STATEMENT = '''
+CURRENT_USER_VERSION = 5
+
+ARCHIVE_SQL_STATEMENT = '''
     CREATE TABLE jids(
             jid_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             jid TEXT UNIQUE,
@@ -89,76 +83,57 @@ LOGS_SQL_STATEMENT = '''
     CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
     CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
     CREATE INDEX idx_logs_message_id ON logs (message_id);
-    PRAGMA user_version=5;
-    '''
+    PRAGMA user_version=%s;
+    ''' % CURRENT_USER_VERSION
 
 
-log = logging.getLogger('gajim.c.logger')
+log = logging.getLogger('gajim.c.storage.archive')
 
 
-class Logger:
+class MessageArchiveStorage(SqliteStorage):
     def __init__(self):
-        self._log = log
+        SqliteStorage.__init__(self,
+                               log,
+                               Path(configpaths.get('LOG_DB')),
+                               ARCHIVE_SQL_STATEMENT)
+
         self._jid_ids = {}
         self._jid_ids_reversed = {}
-        self._con = None
-        self._commit_timout_id = None
-        self._log_db_path = configpaths.get('LOG_DB')
 
-        self._create_databases()
-        self._migrate_databases()
-        self._connect_databases()
+    def init(self, **kwargs):
+        SqliteStorage.init(self,
+                           detect_types=sqlite.PARSE_COLNAMES)
+
+        self._set_journal_mode('WAL')
+        self._enable_secure_delete()
+
+        self._con.row_factory = self._namedtuple_factory
+
+        self._con.create_function("like", 1, self._like)
+        self._con.create_function("get_timeout", 0, self._get_timeout)
+
         self._get_jid_ids_from_db()
 
-    def _create_databases(self):
-        if os.path.isdir(self._log_db_path):
-            log.error(_('%s is a directory but should be a file'),
-                      self._log_db_path)
-            sys.exit()
+    def _namedtuple_factory(self, cursor, row):
+        fields = [col[0] for col in cursor.description]
+        Row = namedtuple("Row", fields)
+        named_row = Row(*row)
+        if 'additional_data' in fields:
+            _dict = json.loads(named_row.additional_data or '{}')
+            named_row = named_row._replace(
+                additional_data=AdditionalDataDict(_dict))
 
-        if not os.path.exists(self._log_db_path):
-            self._create(LOGS_SQL_STATEMENT, self._log_db_path)
+        # if an alias `account` for the field `account_id` is used for the
+        # query, the account_id is converted to the account jid
+        if 'account' in fields:
+            if named_row.account:
+                jid = self._jid_ids_reversed[named_row.account].jid
+                named_row = named_row._replace(account=jid)
+        return named_row
 
-    @staticmethod
-    def _connect(*args, **kwargs):
-        con = sqlite.connect(*args, **kwargs)
-        con.execute("PRAGMA secure_delete=1")
-        return con
-
-    @classmethod
-    def _create(cls, statement, path):
-        log.info(_('Creating %s'), path)
-        con = cls._connect(path)
-        os.chmod(path, 0o600)
-
-        try:
-            con.executescript(statement)
-        except Exception:
-            log.exception('Error')
-            con.close()
-            os.remove(path)
-            sys.exit()
-
-        con.commit()
-        con.close()
-
-    @staticmethod
-    def _get_user_version(con: sqlite.Connection) -> int:
-        """ Return the value of PRAGMA user_version. """
-        return con.execute('PRAGMA user_version').fetchone()[0]
-
-    def _migrate_databases(self):
-        try:
-            con = self._connect(self._log_db_path)
-            self._migrate_logs(con)
-            con.close()
-        except Exception:
-            log.exception('Error')
-            sys.exit()
-
-    @timeit
-    def _migrate_logs(self, con):
-        if self._get_user_version(con) == 0:
+    def _migrate(self):
+        user_version = self.user_version
+        if user_version == 0:
             # All migrations from 0.16.9 until 1.0.0
             statements = [
                 'ALTER TABLE logs ADD COLUMN "account_id" INTEGER',
@@ -179,100 +154,39 @@ class Logger:
                 'PRAGMA user_version=1'
             ]
 
-            self._execute_multiple(con, statements)
+            self._execute_multiple(statements)
 
-        if self._get_user_version(con) < 2:
+        if user_version < 2:
             statements = [
                 'ALTER TABLE last_archive_message ADD COLUMN "sync_threshold" INTEGER',
                 'PRAGMA user_version=2'
             ]
-            self._execute_multiple(con, statements)
+            self._execute_multiple(statements)
 
-        if self._get_user_version(con) < 3:
+        if user_version < 3:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "message_id" TEXT',
                 'PRAGMA user_version=3'
             ]
-            self._execute_multiple(con, statements)
+            self._execute_multiple(statements)
 
-        if self._get_user_version(con) < 4:
+        if user_version < 4:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "error" TEXT',
                 'PRAGMA user_version=4'
             ]
-            self._execute_multiple(con, statements)
+            self._execute_multiple(statements)
 
-        if self._get_user_version(con) < 5:
+        if user_version < 5:
             statements = [
                 'CREATE INDEX idx_logs_message_id ON logs (message_id)',
                 'PRAGMA user_version=5'
             ]
-            self._execute_multiple(con, statements)
+            self._execute_multiple(statements)
 
     @staticmethod
-    def _execute_multiple(con, statements):
-        """
-        Execute multiple statements with the option to fail on duplicates
-        but still continue
-        """
-        for sql in statements:
-            try:
-                con.execute(sql)
-                con.commit()
-            except sqlite.OperationalError as error:
-                if str(error).startswith('duplicate column name:'):
-                    log.info(error)
-                else:
-                    log.exception('Error')
-                    sys.exit()
-
-    def namedtuple_factory(self, cursor, row):
-        """
-        Usage:
-        con.row_factory = namedtuple_factory
-        """
-        fields = [col[0] for col in cursor.description]
-        Row = namedtuple("Row", fields)
-        named_row = Row(*row)
-        if 'additional_data' in fields:
-            _dict = json.loads(named_row.additional_data or '{}')
-            named_row = named_row._replace(
-                additional_data=AdditionalDataDict(_dict))
-
-        # if an alias `account` for the field `account_id` is used for the
-        # query, the account_id is converted to the account jid
-        if 'account' in fields:
-            if named_row.account:
-                jid = self._jid_ids_reversed[named_row.account].jid
-                named_row = named_row._replace(account=jid)
-        return named_row
-
-    def dispatch(self, event, error):
+    def dispatch(event, error):
         app.ged.raise_event(event, None, str(error))
-
-    def _connect_databases(self):
-        self._con = self._connect(self._log_db_path,
-                                  timeout=20.0,
-                                  isolation_level='IMMEDIATE',
-                                  detect_types=sqlite.PARSE_COLNAMES)
-
-        self._con.row_factory = self.namedtuple_factory
-
-        # DB functions
-        self._con.create_function("like", 1, self._like)
-        self._con.create_function("get_timeout", 0, self._get_timeout)
-
-        self._set_synchronous(False)
-
-    @timeit
-    def _set_synchronous(self, sync):
-        try:
-            if sync:
-                self._con.execute("PRAGMA synchronous = NORMAL")
-            else:
-                self._con.execute("PRAGMA synchronous = OFF")
-        except sqlite.Error:
-            log.exception('Error')
 
     @staticmethod
     def _get_timeout():
@@ -289,28 +203,6 @@ class Logger:
     @staticmethod
     def _like(search_str):
         return '%{}%'.format(search_str)
-
-    @timeit
-    def commit(self):
-        try:
-            self._con.commit()
-        except sqlite.OperationalError as e:
-            print(str(e), file=sys.stderr)
-        self._commit_timout_id = None
-        return False
-
-    def _timeout_commit(self):
-        if self._commit_timout_id:
-            return
-        self._commit_timout_id = GLib.timeout_add(500, self.commit)
-
-    @timeit
-    def simple_commit(self, sql_to_commit):
-        """
-        Helper to commit
-        """
-        self._con.execute(sql_to_commit)
-        self._timeout_commit()
 
     @timeit
     def _get_jid_ids_from_db(self):
@@ -347,7 +239,7 @@ class Logger:
         """
         jid_ = self._jid_ids.get(jid)
         if jid_ is None:
-            return
+            return None
         return jid_.type == JIDConstant.ROOM_TYPE
 
     @staticmethod
@@ -408,10 +300,11 @@ class Logger:
         lastrowid = self._con.execute(sql, (jid, type_)).lastrowid
         Row = namedtuple('Row', 'jid_id jid type')
         self._jid_ids[jid] = Row(lastrowid, jid, type_)
-        self._timeout_commit()
+        self._delayed_commit()
         return lastrowid
 
-    def convert_show_values_to_db_api_values(self, show):
+    @staticmethod
+    def convert_show_values_to_db_api_values(show):
         """
         Convert from string style to constant ints for db
         """
@@ -442,7 +335,7 @@ class Logger:
         sql = '''INSERT INTO unread_messages (message_id, jid_id, shown)
                  VALUES (?, ?, 0)'''
         self._con.execute(sql, (message_id, jid_id))
-        self._timeout_commit()
+        self._delayed_commit()
 
     @timeit
     def set_read_messages(self, message_ids):
@@ -451,7 +344,8 @@ class Logger:
         """
         ids = ','.join([str(i) for i in message_ids])
         sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
-        self.simple_commit(sql)
+        self._con.execute(sql)
+        self._delayed_commit()
 
     @timeit
     def set_shown_unread_msgs(self, msg_log_id):
@@ -460,7 +354,8 @@ class Logger:
         """
         sql = 'UPDATE unread_messages SET shown = 1 where message_id = %s' % \
                 msg_log_id
-        self.simple_commit(sql)
+        self._con.execute(sql)
+        self._delayed_commit()
 
     @timeit
     def reset_shown_unread_messages(self):
@@ -468,7 +363,8 @@ class Logger:
         Set shown field to False in unread_messages table
         """
         sql = 'UPDATE unread_messages SET shown = 0'
-        self.simple_commit(sql)
+        self._con.execute(sql)
+        self._delayed_commit()
 
     @timeit
     def get_unread_msgs(self):
@@ -495,13 +391,15 @@ class Logger:
                     ''' % msg_log_id
                     ).fetchone()
             if result is None:
-                # Log line is no more in logs table. remove it from unread_messages
+                # Log line is no more in logs table.
+                # remove it from unread_messages
                 self.set_read_messages([msg_log_id])
                 continue
 
             all_messages.append((result, shown))
         return all_messages
 
+    @timeit
     def load_groupchat_messages(self, account, jid):
         account_id = self.get_account_id(account, type_=JIDConstant.ROOM_TYPE)
 
@@ -511,13 +409,8 @@ class Logger:
             AND account_id = ? AND kind = ?
             ORDER BY time DESC, log_line_id DESC LIMIT ?'''
 
-        try:
-            messages = self._con.execute(
-                sql, (jid, account_id, KindConstant.GC_MSG, 50)).fetchall()
-        except sqlite.DatabaseError:
-            self.dispatch('DB_ERROR',
-                          exceptions.DatabaseMalformed(self._log_db_path))
-            return []
+        messages = self._con.execute(
+            sql, (jid, account_id, KindConstant.GC_MSG, 50)).fetchall()
 
         messages.reverse()
         return messages
@@ -568,26 +461,11 @@ class Logger:
                        account_id=account_id,
                        kinds=', '.join(kinds))
 
-        try:
-            messages = self._con.execute(
-                sql, tuple(jids) + (restore, pending)).fetchall()
-        except sqlite.DatabaseError:
-            self.dispatch('DB_ERROR',
-                          exceptions.DatabaseMalformed(self._log_db_path))
-            return []
+        messages = self._con.execute(
+            sql, tuple(jids) + (restore, pending)).fetchall()
 
         messages.reverse()
         return messages
-
-    def get_unix_time_from_date(self, year, month, day):
-        # year (fe 2005), month (fe 11), day (fe 25)
-        # returns time in seconds for the second that starts that date since epoch
-        # gimme unixtime from year month day:
-        d = datetime.date(year, month, day)
-        local_time = d.timetuple() # time tuple (compat with time.localtime())
-        # we have time since epoch baby :)
-        start_of_day = int(time.mktime(local_time))
-        return start_of_day
 
     @timeit
     def get_conversation_for_date(self, account, jid, date):
@@ -960,7 +838,7 @@ class Logger:
                      VALUES (?, (SELECT jid_id FROM jids WHERE jid = ?))'''
             self._con.execute(sql, (lastrowid, jid))
 
-        self._timeout_commit()
+        self._delayed_commit()
 
         return lastrowid
 
@@ -991,7 +869,7 @@ class Logger:
             WHERE account_id = ? AND jid_id = ? AND message_id = ?
             '''
         self._con.execute(sql, (error, account_id, jid_id, message_id))
-        self._timeout_commit()
+        self._delayed_commit()
 
     @timeit
     def set_marker(self, account_jid, jid, message_id, state):
@@ -1024,7 +902,7 @@ class Logger:
             WHERE account_id = ? AND jid_id = ? AND message_id = ?
             '''
         self._con.execute(sql, (state, account_id, jid_id, message_id))
-        self._timeout_commit()
+        self._delayed_commit()
 
     @timeit
     def get_archive_infos(self, jid):
@@ -1081,7 +959,7 @@ class Logger:
                      WHERE jid_id = ?'''.format(args)
             self._con.execute(sql, tuple(kwargs.values()) + (jid_id,))
         log.info('Set message archive info: %s %s', jid, kwargs)
-        self._timeout_commit()
+        self._delayed_commit()
 
     @timeit
     def reset_archive_infos(self, jid):
@@ -1098,4 +976,4 @@ class Logger:
                  WHERE jid_id = ?'''
         self._con.execute(sql, (jid_id,))
         log.info('Reset message archive info: %s', jid)
-        self._timeout_commit()
+        self._delayed_commit()

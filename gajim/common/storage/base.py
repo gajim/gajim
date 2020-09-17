@@ -108,6 +108,9 @@ class SqliteStorage:
     def _set_synchronous(self, mode):
         self._con.execute(f'PRAGMA synchronous={mode}')
 
+    def _enable_secure_delete(self):
+        self._con.execute('PRAGMA secure_delete=1')
+
     @property
     def user_version(self) -> int:
         return self._con.execute('PRAGMA user_version').fetchone()[0]
@@ -177,3 +180,11 @@ class SqliteStorage:
 
         self._commit_source_id = GLib.timeout_add(self._commit_delay,
                                                   self._commit)
+
+    def shutdown(self):
+        if self._commit_source_id is not None:
+            GLib.source_remove(self._commit_source_id)
+
+        self._commit()
+        self._con.close()
+        self._con = None

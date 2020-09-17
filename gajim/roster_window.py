@@ -1756,7 +1756,7 @@ class RosterWindow:
         Read from db the unread messages, and fire them up, and if we find very
         old unread messages, delete them from unread table
         """
-        results = app.logger.get_unread_msgs()
+        results = app.storage.archive.get_unread_msgs()
         for result, shown in results:
             jid = result.jid
             additional_data = result.additional_data
@@ -1770,14 +1770,14 @@ class RosterWindow:
                 tim = float(result.time)
                 session.roster_message(jid, result.message, tim, msg_type='chat',
                     msg_log_id=result.log_line_id, additional_data=additional_data)
-                app.logger.set_shown_unread_msgs(result.log_line_id)
+                app.storage.archive.set_shown_unread_msgs(result.log_line_id)
 
             elif (time.time() - result.time) > 2592000:
                 # ok, here we see that we have a message in unread messages
                 # table that is older than a month. It is probably from someone
                 # not in our roster for accounts we usually launch, so we will
                 # delete this id from unread message tables.
-                app.logger.set_read_messages([result.log_line_id])
+                app.storage.archive.set_read_messages([result.log_line_id])
 
     def fill_contacts_and_groups_dicts(self, array, account):
         """
@@ -1855,7 +1855,7 @@ class RosterWindow:
                 msg_log_ids.append(ev.msg_log_id)
 
         if msg_log_ids:
-            app.logger.set_read_messages(msg_log_ids)
+            app.storage.archive.set_read_messages(msg_log_ids)
 
         contact_list = ((event.jid.split('/')[0], event.account) for event in \
                 event_list)

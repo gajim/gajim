@@ -110,7 +110,7 @@ class ChatControlSession:
             if not obj.properties.is_muc_pm:
                 jid = obj.jid
 
-            obj.msg_log_id = app.logger.insert_into_logs(
+            obj.msg_log_id = app.storage.archive.insert_into_logs(
                 self.conn.name,
                 jid,
                 obj.properties.timestamp,
@@ -212,7 +212,7 @@ class ChatControlSession:
             read_ids = []
             for msg in unread_events:
                 read_ids.append(msg.msg_log_id)
-            app.logger.set_read_messages(read_ids)
+            app.storage.archive.set_read_messages(read_ids)
             app.events.remove_events(self.conn.name, fjid, types=['chat'])
             do_event = False
         else:
@@ -314,7 +314,7 @@ class ChatControlSession:
                                      additional_data=additional_data)
 
             if msg_log_id:
-                app.logger.set_read_messages([msg_log_id])
+                app.storage.archive.set_read_messages([msg_log_id])
 
             return
 

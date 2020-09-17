@@ -148,9 +148,10 @@ class MAM(BaseModule):
         if not self.is_catch_up_finished(archive_jid):
             return
 
-        app.logger.set_archive_infos(archive_jid,
-                                     last_mam_id=properties.stanza_id.id,
-                                     last_muc_timestamp=timestamp)
+        app.storage.archive.set_archive_infos(
+            archive_jid,
+            last_mam_id=properties.stanza_id.id,
+            last_muc_timestamp=timestamp)
 
     def _mam_message_received(self, _con, stanza, properties):
         if not properties.is_mam_message:
@@ -187,11 +188,11 @@ class MAM(BaseModule):
         stanza_id, message_id = self._get_unique_id(properties)
 
         # Search for duplicates
-        if app.logger.find_stanza_id(self._account,
-                                     str(properties.mam.archive),
-                                     stanza_id,
-                                     message_id,
-                                     groupchat=is_groupchat):
+        if app.storage.archive.find_stanza_id(self._account,
+                                              str(properties.mam.archive),
+                                              stanza_id,
+                                              message_id,
+                                              groupchat=is_groupchat):
             self._log.info('Found duplicate with stanza-id: %s, '
                            'message-id: %s', stanza_id, message_id)
             raise nbxmpp.NodeProcessed
@@ -229,16 +230,17 @@ class MAM(BaseModule):
                 return
             stanza_id = message_id
 
-        app.logger.insert_into_logs(self._account,
-                                    with_,
-                                    properties.mam.timestamp,
-                                    kind,
-                                    unread=False,
-                                    message=msgtxt,
-                                    contact_name=properties.muc_nickname,
-                                    additional_data=additional_data,
-                                    stanza_id=stanza_id,
-                                    message_id=properties.id)
+        app.storage.archive.insert_into_logs(
+            self._account,
+            with_,
+            properties.mam.timestamp,
+            kind,
+            unread=False,
+            message=msgtxt,
+            contact_name=properties.muc_nickname,
+            additional_data=additional_data,
+            stanza_id=stanza_id,
+            message_id=properties.id)
 
         app.nec.push_incoming_event(
             NetworkEvent('mam-decrypted-message-received',
@@ -268,7 +270,7 @@ class MAM(BaseModule):
             self._log.warning('Request already running: %s', own_jid)
             return
 
-        archive = app.logger.get_archive_infos(own_jid)
+        archive = app.storage.archive.get_archive_infos(own_jid)
 
         mam_id = None
         if archive is not None:
@@ -299,7 +301,7 @@ class MAM(BaseModule):
             self._catch_up_finished.remove(own_jid)
 
     def request_archive_on_muc_join(self, jid):
-        archive = app.logger.get_archive_infos(jid)
+        archive = app.storage.archive.get_archive_infos(jid)
         threshold = get_sync_threshold(jid, archive)
         self._log.info('Threshold for %s: %s', jid, threshold)
 
@@ -359,7 +361,7 @@ class MAM(BaseModule):
 
         if is_error_result(result):
             if result.condition == 'item-not-found':
-                app.logger.reset_archive_infos(result.jid)
+                app.storage.archive.reset_archive_infos(result.jid)
                 if groupchat:
                     self.request_archive_on_muc_join(result.jid)
                 else:
@@ -375,21 +377,22 @@ class MAM(BaseModule):
                 # <last> is not provided if the requested page was empty
                 # so this means we did not get anything hence we only need
                 # to update the archive info if <last> is present
-                app.logger.set_archive_infos(result.jid,
-                                             last_mam_id=result.rsm.last,
-                                             last_muc_timestamp=time.time())
+                app.storage.archive.set_archive_infos(
+                    result.jid,
+                    last_mam_id=result.rsm.last,
+                    last_muc_timestamp=time.time())
 
             if start_date is not None and not groupchat:
                 # Record the earliest timestamp we request from
                 # the account archive. For the account archive we only
                 # set start_date at the very first request.
-                app.logger.set_archive_infos(
+                app.storage.archive.set_archive_infos(
                     result.jid,
                     oldest_mam_timestamp=start_date.timestamp())
 
         else:
-            app.logger.set_archive_infos(result.jid,
-                                         last_mam_id=result.rsm.last)
+            app.storage.archive.set_archive_infos(result.jid,
+                                                  last_mam_id=result.rsm.last)
             queryid = self._get_query_id(result.jid)
 
             self._nbxmpp('MAM').make_query(result.jid,
@@ -445,8 +448,8 @@ class MAM(BaseModule):
         if result.complete:
             self._log.info('Request finished: %s, last mam id: %s',
                            result.jid, result.rsm.last)
-            app.logger.set_archive_infos(result.jid,
-                                         oldest_mam_timestamp=timestamp)
+            app.storage.archive.set_archive_infos(
+                result.jid, oldest_mam_timestamp=timestamp)
             app.nec.push_incoming_event(NetworkEvent(
                 'archiving-interval-finished',
                 account=self._account,

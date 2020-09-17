@@ -351,7 +351,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_print_join_left)
         self.parent_win.window.add_action(act)
 
-        archive_info = app.logger.get_archive_infos(self.contact.jid)
+        archive_info = app.storage.archive.get_archive_infos(self.contact.jid)
         threshold = helpers.get_sync_threshold(self.contact.jid,
                                                archive_info)
 
@@ -474,7 +474,7 @@ class GroupchatControl(ChatControlBase):
             self.parent_win.window.remove_action(f'{action}{self.control_id}')
 
     def _restore_conversation(self):
-        rows = app.logger.load_groupchat_messages(
+        rows = app.storage.archive.load_groupchat_messages(
             self.account, self.contact.jid)
 
         for row in rows:
@@ -534,7 +534,7 @@ class GroupchatControl(ChatControlBase):
 
         # After the room has been created, reevaluate threshold
         if self.disco_info.has_mam:
-            archive_info = app.logger.get_archive_infos(self.contact.jid)
+            archive_info = app.storage.archive.get_archive_infos(self.contact.jid)
             threshold = helpers.get_sync_threshold(self.contact.jid,
                                                    archive_info)
             win.change_action_state('choose-sync-%s' % self.control_id,
@@ -661,7 +661,7 @@ class GroupchatControl(ChatControlBase):
     def _on_sync_threshold(self, action, param):
         threshold = param.get_string()
         action.set_state(param)
-        app.logger.set_archive_infos(self.contact.jid, sync_threshold=threshold)
+        app.storage.archive.set_archive_infos(self.contact.jid, sync_threshold=threshold)
 
     def _on_execute_command(self, _action, param):
         jid = self.room_jid

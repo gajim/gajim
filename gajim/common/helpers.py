@@ -904,7 +904,7 @@ def get_sync_threshold(jid, archive_info):
             threshold = app.settings.get('private_room_sync_threshold')
         else:
             threshold = app.settings.get('public_room_sync_threshold')
-        app.logger.set_archive_infos(jid, sync_threshold=threshold)
+        app.storage.archive.set_archive_infos(jid, sync_threshold=threshold)
         return threshold
     return archive_info.sync_threshold
 

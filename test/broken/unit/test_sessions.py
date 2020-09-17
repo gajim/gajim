@@ -92,7 +92,7 @@ class TestChatControlSession(unittest.TestCase):
         sess = self.conn.sessions[jid]['123']
 
         # message was logged
-        calls = app.logger.mockGetNamedCalls('insert_into_logs')
+        calls = app.storage.archive.mockGetNamedCalls('insert_into_logs')
         self.assertEqual(1, len(calls))
 
         # no ChatControl was open and autopopup was off
@@ -118,7 +118,7 @@ class TestChatControlSession(unittest.TestCase):
         self.receive_chat_msg(fjid, msgtxt)
 
         # message was logged
-        calls = app.logger.mockGetNamedCalls('insert_into_logs')
+        calls = app.storage.archive.mockGetNamedCalls('insert_into_logs')
         self.assertEqual(2, len(calls))
 
         # the message does not go into the event queue

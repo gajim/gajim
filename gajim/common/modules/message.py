@@ -114,20 +114,22 @@ class Message(BaseModule):
             # Only for XEP-0045 MUC History
             # Don’t check for message text because the message could be
             # encrypted.
-            if app.logger.deduplicate_muc_message(self._account,
-                                                  properties.jid.bare,
-                                                  properties.jid.resource,
-                                                  properties.timestamp,
-                                                  properties.id):
+            if app.storage.archive.deduplicate_muc_message(
+                    self._account,
+                    properties.jid.bare,
+                    properties.jid.resource,
+                    properties.timestamp,
+                    properties.id):
                 raise nbxmpp.NodeProcessed
 
         if (properties.is_self_message or properties.is_muc_pm):
             archive_jid = self._con.get_own_jid().bare
-            if app.logger.find_stanza_id(self._account,
-                                         archive_jid,
-                                         stanza_id,
-                                         message_id,
-                                         properties.type.is_groupchat):
+            if app.storage.archive.find_stanza_id(
+                    self._account,
+                    archive_jid,
+                    stanza_id,
+                    message_id,
+                    properties.type.is_groupchat):
                 return
 
         msgtxt = properties.body
@@ -220,10 +222,11 @@ class Message(BaseModule):
 
         self._log.info(properties.error)
 
-        app.logger.set_message_error(app.get_jid_from_account(self._account),
-                                     jid,
-                                     properties.id,
-                                     properties.error)
+        app.storage.archive.set_message_error(
+            app.get_jid_from_account(self._account),
+            jid,
+            properties.id,
+            properties.error)
 
         app.nec.push_incoming_event(
             NetworkEvent('message-error',
@@ -241,7 +244,7 @@ class Message(BaseModule):
             # if not event.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
             # so don't store it in logs
-            app.logger.insert_into_logs(
+            app.storage.archive.insert_into_logs(
                 self._account,
                 event.jid,
                 event.properties.timestamp,
@@ -361,15 +364,16 @@ class Message(BaseModule):
         if message.message is None:
             return
 
-        app.logger.insert_into_logs(self._account,
-                                    message.jid,
-                                    message.timestamp,
-                                    message.kind,
-                                    message=message.message,
-                                    subject=message.subject,
-                                    additional_data=message.additional_data,
-                                    message_id=message.message_id,
-                                    stanza_id=message.message_id)
+        app.storage.archive.insert_into_logs(
+            self._account,
+            message.jid,
+            message.timestamp,
+            message.kind,
+            message=message.message,
+            subject=message.subject,
+            additional_data=message.additional_data,
+            message_id=message.message_id,
+            stanza_id=message.message_id)
 
 
 def get_instance(*args, **kwargs):

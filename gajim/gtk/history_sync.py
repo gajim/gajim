@@ -64,7 +64,7 @@ class HistorySyncAssistant(Gtk.Assistant, EventHelper):
         own_jid = self.con.get_own_jid().bare
 
         mam_start = ArchiveState.NEVER
-        archive = app.logger.get_archive_infos(own_jid)
+        archive = app.storage.archive.get_archive_infos(own_jid)
         if archive is not None and archive.oldest_mam_timestamp is not None:
             mam_start = int(float(archive.oldest_mam_timestamp))
 

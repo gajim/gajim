@@ -555,9 +555,9 @@ class MUC(BaseModule):
             show = 'offline'
         else:
             show = properties.show.value
-        show = app.logger.convert_show_values_to_db_api_values(show)
+        show = app.storage.archive.convert_show_values_to_db_api_values(show)
 
-        app.logger.insert_into_logs(
+        app.storage.archive.insert_into_logs(
             self._account,
             properties.jid.bare,
             properties.timestamp,

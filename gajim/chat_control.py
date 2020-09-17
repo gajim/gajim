@@ -637,7 +637,7 @@ class ChatControl(ChatControlBase):
             end = self.conv_textview.autoscroll
             if not pw or (pw.get_active_control() and self \
             == pw.get_active_control() and pw.is_active() and end):
-                app.logger.set_read_messages([event.msg_log_id])
+                app.storage.archive.set_read_messages([event.msg_log_id])
 
     @event_filter(['account', 'jid'])
     def _on_message_error(self, event):
@@ -1221,7 +1221,7 @@ class ChatControl(ChatControlBase):
                                                  self.contact.get_full_jid(),
                                                  ['chat', 'pm']))
 
-        rows = app.logger.get_last_conversation_lines(
+        rows = app.storage.archive.get_last_conversation_lines(
             self.account, jid, pending)
 
         local_old_kind = None
@@ -1299,7 +1299,7 @@ class ChatControl(ChatControlBase):
             if event.session and not self.session:
                 self.set_session(event.session)
         if message_ids:
-            app.logger.set_read_messages(message_ids)
+            app.storage.archive.set_read_messages(message_ids)
         app.events.remove_events(self.account,
                                  jid_with_resource,
                                  types=[str(self._type)])

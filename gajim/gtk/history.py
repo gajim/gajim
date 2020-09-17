@@ -174,7 +174,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
         self._ui.query_entry.set_model(liststore)
 
         # Add all jids in logs.db:
-        db_jids = app.logger.get_jids_in_db()
+        db_jids = app.storage.archive.get_jids_in_db()
         completion_dict = dict.fromkeys(db_jids)
 
         self.accounts_seen_online = list(app.contacts.get_accounts())
@@ -216,10 +216,10 @@ class HistoryWindow(Gtk.ApplicationWindow):
 
             info_acc = self._get_account_for_jid(info_jid)
 
-            if (app.logger.jid_is_room_jid(completed) or
-                    app.logger.jid_is_from_pm(completed)):
+            if (app.storage.archive.jid_is_room_jid(completed) or
+                    app.storage.archive.jid_is_from_pm(completed)):
                 icon = muc_active_icon
-                if app.logger.jid_is_from_pm(completed):
+                if app.storage.archive.jid_is_from_pm(completed):
                     # It's PM. Make it easier to find
                     room, nick = app.get_room_and_nick_from_fjid(completed)
                     info_completion = '%s from %s' % (nick, room)
@@ -336,10 +336,10 @@ class HistoryWindow(Gtk.ApplicationWindow):
             self.jids_to_search = [info_jid]
 
             # Get first/last date we have logs with contact
-            self.first_log = app.logger.get_first_date_that_has_logs(
+            self.first_log = app.storage.archive.get_first_date_that_has_logs(
                 self.account, self.jid)
             self.first_day = self._get_date_from_timestamp(self.first_log)
-            self.last_log = app.logger.get_last_date_that_has_logs(
+            self.last_log = app.storage.archive.get_last_date_that_has_logs(
                 self.account, self.jid)
             self.last_day = self._get_date_from_timestamp(self.last_log)
 
@@ -405,7 +405,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
         month = python_month(month)
 
         try:
-            log_days = app.logger.get_days_with_logs(
+            log_days = app.storage.archive.get_days_with_logs(
                 self.account, self.jid, year, month)
         except exceptions.PysqliteOperationalError as error:
             ErrorDialog(_('Disk Error'), str(error))
@@ -459,7 +459,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
             if _date == end_date:
                 break
             try:
-                logs = app.logger.get_date_has_logs(
+                logs = app.storage.archive.get_date_has_logs(
                     self.account, self.jid, _date)
             except exceptions.PysqliteOperationalError as e:
                 ErrorDialog(_('Disk Error'), str(e))
@@ -497,7 +497,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
 
         date = datetime.datetime(year, month, day)
 
-        conversation = app.logger.get_conversation_for_date(
+        conversation = app.storage.archive.get_conversation_for_date(
             self.account, self.jid, date)
 
         for message in conversation:
@@ -673,7 +673,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
 
             show_status = self._ui.show_status_checkbutton.get_active()
 
-            results = app.logger.search_log(account, jid, text, date)
+            results = app.storage.archive.search_log(account, jid, text, date)
             result_found = False
             # FIXME:
             # add "subject:  | message: " in message column if kind is single

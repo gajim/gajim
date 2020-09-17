@@ -795,7 +795,7 @@ class Interface:
         # block signed in notifications for 30 seconds
 
         # Add our own JID into the DB
-        app.logger.insert_jid(obj.conn.get_own_jid().bare)
+        app.storage.archive.insert_jid(obj.conn.get_own_jid().bare)
         account = obj.conn.name
         app.block_signed_in_notifications[account] = True
 
@@ -2028,7 +2028,7 @@ class Interface:
         # Load CSS files
         app.load_css_config()
 
-        app.logger.reset_shown_unread_messages()
+        app.storage.archive.reset_shown_unread_messages()
         # override logging settings from config (don't take care of '-q' option)
         if app.settings.get('verbose'):
             logging_helpers.set_verbose()

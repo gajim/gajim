@@ -52,11 +52,11 @@ from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
 from gajim.common import exceptions
-from gajim.common import logger
 from gajim.common.i18n import _
 from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.task_manager import TaskManager
 from gajim.common.storage.cache import CacheStorage
+from gajim.common.storage.archive import MessageArchiveStorage
 
 
 class GajimApplication(Gtk.Application):
@@ -183,10 +183,14 @@ class GajimApplication(Gtk.Application):
         app.print_version()
         app.detect_dependencies()
         configpaths.create_paths()
+
         app.storage.cache = CacheStorage()
         app.storage.cache.init()
+
+        app.storage.archive = MessageArchiveStorage()
+        app.storage.archive.init()
+
         try:
-            app.logger = logger.Logger()
             app.contacts = LegacyContactsAPI()
         except exceptions.DatabaseMalformed as error:
             dlg = Gtk.MessageDialog(
@@ -296,7 +300,8 @@ class GajimApplication(Gtk.Application):
             self.interface.roster.prepare_quit()
 
         # Commit any outstanding SQL transactions
-        app.logger.commit()
+        app.storage.cache.shutdown()
+        app.storage.archive.shutdown()
 
     def _handle_remote_options(self, _application, command_line):
         # Parse all options that should be executed on a remote instance

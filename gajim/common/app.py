@@ -49,7 +49,6 @@ from gajim.common.const import Display
 from gajim.common.events import Events
 from gajim.common.types import NetworkEventsControllerT  # pylint: disable=unused-import
 from gajim.common.types import InterfaceT  # pylint: disable=unused-import
-from gajim.common.types import LoggerT  # pylint: disable=unused-import
 from gajim.common.types import ConnectionT  # pylint: disable=unused-import
 from gajim.common.types import LegacyContactsAPIT  # pylint: disable=unused-import
 from gajim.common.types import SettingsT  # pylint: disable=unused-import
@@ -69,11 +68,10 @@ ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = cast(NetworkEventsControllerT, None)
 plugin_manager = None # Plugins Manager
 
-logger = cast(LoggerT, None)
-
 class Storage:
     def __init__(self):
         self.cache = None
+        self.archive = None
 
 storage = Storage()
 
