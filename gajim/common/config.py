@@ -227,7 +227,6 @@ class Config:
         'use_keyring': [opt_bool, True, _('If enabled, Gajim will use the System\'s Keyring to store account passwords.')],
         'remote_commands': [opt_bool, False, _('If enabled, Gajim will execute XEP-0146 Commands.')],
         'dark_theme': [opt_int, 2, _('2: System, 1: Enabled, 0: Disabled')],
-        'threshold_options': [opt_str, '1, 2, 4, 10, 0', _('Options in days which can be chosen in the sync threshold menu'), True],
         'public_room_sync_threshold': [opt_int, 1, _('Maximum history in days we request from a public group chat archive. 0: As much as possible.')],
         'private_room_sync_threshold': [opt_int, 0, _('Maximum history in days we request from a private group chat archive. 0: As much as possible.')],
         'show_subject_on_join': [opt_bool, True, _('If enabled, Gajim shows the group chat subject in the chat window when joining.')],

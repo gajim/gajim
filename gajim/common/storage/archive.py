@@ -41,7 +41,7 @@ from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
 
 
-CURRENT_USER_VERSION = 5
+CURRENT_USER_VERSION = 6
 
 ARCHIVE_SQL_STATEMENT = '''
     CREATE TABLE jids(
@@ -78,7 +78,6 @@ ARCHIVE_SQL_STATEMENT = '''
             last_mam_id TEXT,
             oldest_mam_timestamp TEXT,
             last_muc_timestamp TEXT,
-            sync_threshold INTEGER
     );
     CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
     CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
@@ -940,14 +939,13 @@ class MessageArchiveStorage(SqliteStorage):
         if not exists:
             sql = '''INSERT INTO last_archive_message
                      (jid_id, last_mam_id, oldest_mam_timestamp,
-                      last_muc_timestamp, sync_threshold)
-                      VALUES (?, ?, ?, ?, ?)'''
+                      last_muc_timestamp)
+                      VALUES (?, ?, ?, ?)'''
             self._con.execute(sql, (
                 jid_id,
                 kwargs.get('last_mam_id', None),
                 kwargs.get('oldest_mam_timestamp', None),
                 kwargs.get('last_muc_timestamp', None),
-                kwargs.get('sync_threshold', None)
             ))
         else:
             for key, value in list(kwargs.items()):

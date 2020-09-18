@@ -22,10 +22,10 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.helpers import is_role_change_allowed
-from gajim.common.i18n import ngettext
 from gajim.common.i18n import _
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
+from gajim.common.const import THRESHOLD_OPTIONS
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.const import ControlType
@@ -633,15 +633,9 @@ def get_groupchat_menu(control_id, account, jid):
 
     def build_sync_menu():
         menu = Gio.Menu()
-        days = app.settings.get('threshold_options').split(',')
-        days = [int(day) for day in days]
         action_name = 'win.choose-sync-%s::' % control_id
-        for day in days:
-            if day == 0:
-                label = _('No threshold')
-            else:
-                label = ngettext('%i day', '%i days', day, day, day)
-            menu.append(label, '%s%s' % (action_name, day))
+        for days, label in THRESHOLD_OPTIONS.items():
+            menu.append(label, '%s%s' % (action_name, days))
         return menu
 
     def build_chatstate_menu():

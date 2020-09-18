@@ -268,6 +268,13 @@ class GroupchatControl(ChatControlBase):
     def disco_info(self):
         return app.storage.cache.get_last_disco_info(self.contact.jid)
 
+    @property
+    def context(self):
+        disco_info = self.disco_info
+        if disco_info is None or not self.disco_info.muc_is_members_only:
+            return 'public'
+        return 'private'
+
     def add_actions(self):
         super().add_actions()
         actions = [
@@ -322,12 +329,8 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_send_chatstate)
         self.parent_win.window.add_action(act)
 
-        context = 'public'
-        if self.disco_info is not None and self.disco_info.muc_is_members_only:
-            context = 'private'
-
         value = self.contact.settings.get('notify_on_all_messages',
-                                          context=context)
+                                          context=self.context)
 
         act = Gio.SimpleAction.new_stateful(
             'notify-on-message-' + self.control_id,
@@ -351,9 +354,8 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_print_join_left)
         self.parent_win.window.add_action(act)
 
-        archive_info = app.storage.archive.get_archive_infos(self.contact.jid)
-        threshold = helpers.get_sync_threshold(self.contact.jid,
-                                               archive_info)
+        threshold = self.contact.settings.get('sync_threshold',
+                                              context=self.context)
 
         initial = GLib.Variant.new_string(str(threshold))
         act = Gio.SimpleAction.new_stateful(
@@ -534,9 +536,8 @@ class GroupchatControl(ChatControlBase):
 
         # After the room has been created, reevaluate threshold
         if self.disco_info.has_mam:
-            archive_info = app.storage.archive.get_archive_infos(self.contact.jid)
-            threshold = helpers.get_sync_threshold(self.contact.jid,
-                                                   archive_info)
+            threshold = self.contact.settings.get('sync_threshold',
+                                                  context=self.context)
             win.change_action_state('choose-sync-%s' % self.control_id,
                                     GLib.Variant('s', str(threshold)))
 
@@ -661,7 +662,9 @@ class GroupchatControl(ChatControlBase):
     def _on_sync_threshold(self, action, param):
         threshold = param.get_string()
         action.set_state(param)
-        app.storage.archive.set_archive_infos(self.contact.jid, sync_threshold=threshold)
+        self.contact.settings.set('sync_threshold',
+                                  int(threshold),
+                                  context=self.context)
 
     def _on_execute_command(self, _action, param):
         jid = self.room_jid

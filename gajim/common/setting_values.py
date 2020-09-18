@@ -167,9 +167,8 @@ APP_SETTINGS = {
     'use_keyring': True,
     'remote_commands': False,
     'dark_theme': 2,
-    'threshold_options': '1, 2, 4, 10, 0',
-    'public_room_sync_threshold': 1,
-    'private_room_sync_threshold': 0,
+    'gc_sync_threshold_public_default': 1,
+    'gc_sync_threshold_private_default': 0,
     'show_subject_on_join': True,
     'show_chatstate_in_roster': True,
     'show_chatstate_in_tabs': True,
@@ -275,6 +274,7 @@ ACCOUNT_SETTINGS = {
         'minimize_on_close': True,
         'send_chatstate': HAS_ACCOUNT_DEFAULT,
         'encryption': '',
+        'sync_threshold': HAS_APP_DEFAULT,
     },
 }
 
@@ -449,8 +449,6 @@ ADVANCED_SETTINGS = {
         'ignore_incoming_attention': _('If enabled, Gajim will ignore incoming attention requests (\'wizz\').'),
         'remember_opened_chat_controls': _('If enabled, Gajim will reopen chat windows that were opened last time Gajim was closed.'),
         'remote_commands': _('If enabled, Gajim will execute XEP-0146 Commands.'),
-        'threshold_options': _('Options in days which can be chosen in the sync threshold menu'),
-        'private_room_sync_threshold': _('Maximum history in days we request from a private group chat archive. 0: As much as possible.'),
         'muclumbus_api_jid': '',
         'muclumbus_api_http_uri': '',
         'muclumbus_api_pref': _('API Preferences. Possible values: \'http\', \'iq\''),

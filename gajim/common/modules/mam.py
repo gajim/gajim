@@ -30,7 +30,6 @@ from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.const import ArchiveState
 from gajim.common.const import KindConstant
 from gajim.common.const import SyncThreshold
-from gajim.common.helpers import get_sync_threshold
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
@@ -302,8 +301,20 @@ class MAM(BaseModule):
 
     def request_archive_on_muc_join(self, jid):
         archive = app.storage.archive.get_archive_infos(jid)
-        threshold = get_sync_threshold(jid, archive)
+        disco_info = app.storage.cache.get_last_disco_info(jid)
+
+        context = 'public'
+        if disco_info is not None and disco_info.muc_is_members_only:
+            context = 'private'
+
+        threshold = app.settings.get_group_chat_setting(self._account,
+                                                        jid,
+                                                        'sync_threshold',
+                                                        context=context)
         self._log.info('Threshold for %s: %s', jid, threshold)
+
+        if threshold == SyncThreshold.NO_SYNC:
+            return
 
         mam_id = None
         start_date = None

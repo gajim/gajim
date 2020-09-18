@@ -21,9 +21,9 @@ from gi.repository import Gdk
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
+from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
-from gajim.common.i18n import ngettext
 from gajim.common.helpers import open_file
 from gajim.common.multimedia_helpers import AudioInputManager
 from gajim.common.multimedia_helpers import AudioOutputManager
@@ -390,16 +390,6 @@ class Chats(PreferenceBox):
 class GroupChats(PreferenceBox):
     def __init__(self, *args):
 
-        sync_threshold = {}
-        options = app.settings.get('threshold_options').split(',')
-        days = [int(option.strip()) for option in options]
-        for day in days:
-            if day == 0:
-                label = _('No threshold')
-            else:
-                label = ngettext('%i day', '%i days', day, day, day)
-            sync_threshold[day] = label
-
         settings = [
 
             Setting(SettingKind.SWITCH,
@@ -416,9 +406,9 @@ class GroupChats(PreferenceBox):
             Setting(SettingKind.POPOVER,
                     _('Default Sync Threshold'),
                     SettingType.CONFIG,
-                    'public_room_sync_threshold',
+                    'gc_sync_threshold_public_default',
                     desc=_('Default for new public group chats'),
-                    props={'entries': sync_threshold},
+                    props={'entries': THRESHOLD_OPTIONS},
                     callback=self._on_sync_threshold_changed),
 
             Setting(SettingKind.SWITCH,

@@ -161,6 +161,7 @@ class Chatstate(IntEnum):
 
 
 class SyncThreshold(IntEnum):
+    NO_SYNC = -1
     NO_THRESHOLD = 0
 
     def __str__(self):
@@ -1084,4 +1085,14 @@ URI_SCHEMES = {
     'smb://',
     'webcal://',
     'aesgcm://',
+}
+
+
+THRESHOLD_OPTIONS = {
+    -1: _('No Sync'),
+    1: _('1 Day'),
+    2: _('2 Days'),
+    7: _('1 Week'),
+    30: _('1 Month'),
+    0: _('No Threshold'),
 }

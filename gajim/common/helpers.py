@@ -897,17 +897,6 @@ def call_counter(func):
         return func(self)
     return helper
 
-def get_sync_threshold(jid, archive_info):
-    disco_info = app.storage.cache.get_last_disco_info(jid)
-    if archive_info is None or archive_info.sync_threshold is None:
-        if disco_info is not None and disco_info.muc_is_members_only:
-            threshold = app.settings.get('private_room_sync_threshold')
-        else:
-            threshold = app.settings.get('public_room_sync_threshold')
-        app.storage.archive.set_archive_infos(jid, sync_threshold=threshold)
-        return threshold
-    return archive_info.sync_threshold
-
 def load_json(path, key=None, default=None):
     try:
         with path.open('r') as file:
