@@ -70,7 +70,7 @@ CREATE_SQL = '''
            json.dumps(PROXY_EXAMPLES))
 
 
-class _Settings:
+class Settings:
     def __init__(self):
         self._con = None
         self._commit_scheduled = None
@@ -158,8 +158,6 @@ class _Settings:
             self._migrate_old_config()
             self._commit()
         self._migrate_database()
-        app.settings = self # type: ignore
-        app.config = LegacyConfig() # type: ignore
 
     @staticmethod
     def _setup_installation_defaults() -> None:
@@ -890,30 +888,27 @@ class _Settings:
                 self.set_account_setting(account, 'proxy', None)
 
 
-Settings = _Settings()
-
-
 class LegacyConfig:
 
     @staticmethod
     def get(setting: str) -> SETTING_TYPE:
-        return Settings.get_app_setting(setting)
+        return app.settings.get_app_setting(setting)
 
     @staticmethod
     def set(setting: str, value: SETTING_TYPE) -> None:
-        Settings.set_app_setting(setting, value)
+        app.settings.set_app_setting(setting, value)
 
     @staticmethod
     def get_per(kind: str, key: str, setting: str) -> SETTING_TYPE:
         if kind == 'accounts':
-            return Settings.get_account_setting(key, setting)
+            return app.settings.get_account_setting(key, setting)
 
         if kind == 'plugins':
-            return Settings.get_plugin_setting(key, setting)
+            return app.settings.get_plugin_setting(key, setting)
         raise ValueError
 
     @staticmethod
     def set_per(kind: str, key: str, setting: str, value: SETTING_TYPE) -> None:
         if kind == 'accounts':
-            Settings.set_account_setting(key, setting, value)
+            app.settings.set_account_setting(key, setting, value)
         raise ValueError

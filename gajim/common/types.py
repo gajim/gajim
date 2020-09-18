@@ -37,7 +37,7 @@ if TYPE_CHECKING:
     from gajim.common.nec import NetworkEventsController
 
     from gajim.gui_interface import Interface
-    from gajim.common.settings import _Settings
+    from gajim.common.settings import Settings
 
 
 NetworkEventsControllerT = Union['NetworkEventsController']
@@ -61,4 +61,4 @@ PluginExtensionPoints = Dict[str, Tuple[Optional[Callable[..., None]],
 EventHandlersDict = Dict[str, Tuple[int, Callable[['NetworkEvent'], Optional[bool]]]]
 PluginEvents = List['NetworkEvent']
 
-SettingsT = Union['_Settings']
+SettingsT = Union['Settings']

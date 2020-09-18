@@ -57,6 +57,8 @@ from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.task_manager import TaskManager
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.archive import MessageArchiveStorage
+from gajim.common.settings import Settings
+from gajim.common.settings import LegacyConfig
 
 
 class GajimApplication(Gtk.Application):
@@ -183,6 +185,11 @@ class GajimApplication(Gtk.Application):
         app.print_version()
         app.detect_dependencies()
         configpaths.create_paths()
+
+        app.settings = Settings()
+        app.settings.init()
+
+        app.config = LegacyConfig() # type: ignore
 
         app.storage.cache = CacheStorage()
         app.storage.cache.init()

@@ -81,7 +81,6 @@ from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.client import Client
-from gajim.common.settings import Settings
 from gajim.common.const import Display
 
 from gajim.common.file_props import FilesProp
@@ -2022,8 +2021,6 @@ class Interface:
         self.sth_at_sth_dot_sth = None
 
         self.avatar_storage = AvatarStorage()
-
-        Settings.init()
 
         # Load CSS files
         app.load_css_config()
