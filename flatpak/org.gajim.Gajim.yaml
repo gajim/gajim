@@ -112,8 +112,8 @@ modules:
       - python3 setup.py install --prefix=/app
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554/cryptography-3.0.tar.gz
-        sha256: 8e924dbc025206e97756e8903039662aa58aa9ba357d8e1d8fc29e3092322053
+        url: https://files.pythonhosted.org/packages/12/be/c9cc7d7ab71dbcc9e4e517ead0cdd48e8c9a48d7b8bdddb738e90d08279a/cryptography-3.1.tar.gz
+        sha256: 26409a473cc6278e4c90f782cd5968ebad04d3911ed1c402fc86908c17633e08
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -172,13 +172,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-21.3.0-py3-none-any.whl
+      - pip3 install --prefix=/app keyring-21.4.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/59/4d/469272124b46456c425a505a8b5f2d42d2fe95d1181de2d888d684506cf7/keyring-21.3.0-py3-none-any.whl
-        sha256: e7a17caf40c40b6bb8c4772224a487e4a63013560ed0c521065aeba7ecd42182
+        url: https://files.pythonhosted.org/packages/e4/ed/7be20815f248b0d6aae406783c2bee392640924623c4e17b50ca90c7f74d/keyring-21.4.0-py3-none-any.whl
+        sha256: 4e34ea2fdec90c1c43d6610b5a5fafa1b9097db1802948e90caf5763974b8f8d
 
   - name: python3-css-parser
     buildsystem: simple
@@ -210,8 +210,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/gspell/1.8/gspell-1.8.3.tar.xz
-        sha256: 5ae514dd0216be069176accf6d0049d6a01cfa6a50df4bc06be85f7080b62de8
+        url: https://download.gnome.org/sources/gspell/1.8/gspell-1.8.4.tar.xz
+        sha256: cf4d16a716e813449bd631405dc1001ea89537b8cdae2b8abfb3999212bd43b4
 
   - name: farstream
     sources:
