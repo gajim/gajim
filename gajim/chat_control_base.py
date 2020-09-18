@@ -729,6 +729,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def paste_clipboard_as_quote(self, _item: Gtk.MenuItem) -> None:
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         text = clipboard.wait_for_text()
+        if text is None:
+            return
         self.insert_as_quote(text)
 
     def on_quote(self, _widget, text):
