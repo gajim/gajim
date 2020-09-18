@@ -30,13 +30,13 @@ finish-args:
   # camera access
   - --device=all
   # extensions
-  - --env=PYTHONPATH=/app/plugins/lib/python3.7/site-packages
+  - --env=PYTHONPATH=/app/plugins/site-packages
   - --env=GI_TYPELIB_PATH=/app/lib/girepository-1.0:/app/plugins/lib/girepository-1.0
 
 add-extensions:
   org.gajim.Gajim.Devel.Plugin:
     directory: plugins
-    merge-dirs: lib
+    merge-dirs: lib;site-packages
     add-ld-path: lib
     subdirectories: true
     no-autodownload: true
