@@ -575,13 +575,8 @@ def get_groupchat_menu(control_id, account, jid):
     groupchat_menu = [
         ('win.information-', _('Information')),
         ('win.groupchat-settings-', _('Settings…')),
-        (_('Manage Group Chat'), [
-            ('win.rename-groupchat-', _('Rename…')),
-            ('win.change-subject-', _('Change Subject…')),
-            ('win.upload-avatar-', _('Upload Avatar…')),
-            ('win.configure-', _('Configure…')),
-            ('win.destroy-', _('Destroy…')),
-        ]),
+        ('win.groupchat-manage-', _('Manage…')),
+        ('win.rename-groupchat-', _('Rename Chat…')),
         ('win.change-nickname-', _('Change Nickname…')),
         ('win.request-voice-', _('Request Voice')),
         ('win.execute-command-', _('Execute Command…')),

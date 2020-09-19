@@ -179,6 +179,10 @@ class GroupchatControl(ChatControlBase):
         # Groupchat settings
         self._groupchat_settings_box = None
 
+        # Holds the room’s config form, which is requested when managing
+        # the room
+        self._room_config_form = None
+
         # Groupchat invite
         self.xml.quick_invite_button.set_action_name(
             'win.invite-%s' % self.control_id)
@@ -275,14 +279,11 @@ class GroupchatControl(ChatControlBase):
         super().add_actions()
         actions = [
             ('groupchat-settings-', None, self._on_groupchat_settings),
+            ('groupchat-manage-', None, self._on_groupchat_manage),
             ('rename-groupchat-', None, self._on_rename_groupchat),
-            ('change-subject-', None, self._on_change_subject),
             ('change-nickname-', None, self._on_change_nick),
             ('disconnect-', None, self._on_disconnect),
-            ('destroy-', None, self._on_destroy_room),
-            ('configure-', None, self._on_configure_room),
             ('request-voice-', None, self._on_request_voice),
-            ('upload-avatar-', None, self._on_upload_avatar),
             ('information-', None, self._on_information),
             ('invite-', None, self._on_invite),
             ('contact-information-', 's', self._on_contact_information),
@@ -309,22 +310,8 @@ class GroupchatControl(ChatControlBase):
             self.account, self.room_jid, self.nick)
         con = app.connections[self.account]
 
-        # Destroy Room
-        self._get_action('destroy-').set_enabled(self.is_connected and
-                                                 contact.affiliation.is_owner)
-
-        # Configure Room
-        self._get_action('configure-').set_enabled(
-            self.is_connected and contact.affiliation in (Affiliation.ADMIN,
-                                                          Affiliation.OWNER))
-
-        self._get_action('request-voice-').set_enabled(self.is_connected and
-                                                       contact.role.is_visitor)
-
-        # Change Subject
-        subject_change = self._is_subject_change_allowed()
-        self._get_action('change-subject-').set_enabled(self.is_connected and
-                                                        subject_change)
+        self._get_action('request-voice-').set_enabled(
+            self.is_connected and contact.role.is_visitor)
 
         # Change Nick
         self._get_action('change-nickname-').set_enabled(self.is_connected)
@@ -354,14 +341,31 @@ class GroupchatControl(ChatControlBase):
             tooltip_text = _('No File Transfer available')
         self.xml.sendfile_button.set_tooltip_text(tooltip_text)
 
-        # Upload Avatar
+        # Manage chat
+        self._get_action('groupchat-manage-').set_enabled(
+            self.is_connected and contact.affiliation in (Affiliation.ADMIN,
+                                                          Affiliation.OWNER))
+
         vcard_support = False
         if self.disco_info is not None:
             vcard_support = self.disco_info.supports(Namespace.VCARD)
-        self._get_action('upload-avatar-').set_enabled(
-            self.is_connected and
-            vcard_support and
-            contact.affiliation.is_owner)
+            self.xml.muc_name_entry.set_text(self.disco_info.muc_name or '')
+            self.xml.muc_description_entry.set_text(
+                self.disco_info.muc_description or '')
+
+        if (self.is_connected and vcard_support and
+                contact.affiliation.is_owner):
+            self.xml.avatar_select_button.show()
+
+        self.xml.manage_change_subject_button.set_sensitive(
+            self.is_connected and self._is_subject_change_allowed())
+
+        self.xml.manage_advanced_button.set_sensitive(
+            self.is_connected and contact.affiliation in (Affiliation.ADMIN,
+                                                          Affiliation.OWNER))
+
+        self.xml.manage_destroy_button.set_sensitive(
+            self.is_connected and contact.affiliation.is_owner)
 
         self._get_action('contact-information-').set_enabled(self.is_connected)
 
@@ -375,14 +379,11 @@ class GroupchatControl(ChatControlBase):
         super().remove_actions()
         actions = [
             'groupchat-settings-',
+            'groupchat-manage-',
             'rename-groupchat-',
-            'change-subject-',
             'change-nickname-',
             'disconnect-',
-            'destroy-',
-            'configure-',
             'request-voice-',
-            'upload-avatar-',
             'information-',
             'invite-',
             'contact-information-',
@@ -477,6 +478,36 @@ class GroupchatControl(ChatControlBase):
         self.xml.settings_scrolled_box.add(self._groupchat_settings_box)
         self._show_page('muc-settings')
 
+    def _on_groupchat_manage(self, _action, _param):
+        surface = app.interface.avatar_storage.get_muc_surface(
+            self.account,
+            self.contact.jid,
+            AvatarSize.GROUP_INFO,
+            self.scale_factor)
+        self.xml.avatar_button_image.set_from_surface(surface)
+
+        self._show_page('muc-manage')
+        self.xml.manage_save_button.grab_default()
+
+        contact = app.contacts.get_gc_contact(
+            self.account, self.room_jid, self.nick)
+        if contact.affiliation.is_owner:
+            con = app.connections[self.account]
+            con.get_module('MUC').request_config(
+                self.room_jid, callback=self._on_manage_form_received)
+
+    def _on_manage_form_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            log.info(error)
+            return
+
+        self.xml.muc_name_entry.set_sensitive(True)
+        self.xml.muc_description_entry.set_sensitive(True)
+        self.xml.manage_save_button.set_sensitive(True)
+        self._room_config_form = result.form
+
     def _on_invite(self, _action, _param):
         self._invite_box.load_contacts()
         self._show_page('invite')
@@ -497,7 +528,7 @@ class GroupchatControl(ChatControlBase):
             _('%s has been invited to this group chat') % contact_jid,
             message_id=message_id)
 
-    def _on_destroy_room(self, _action, _param):
+    def _on_destroy_room(self, _button):
         self.xml.destroy_reason_entry.grab_focus()
         self.xml.destroy_button.grab_default()
         self._show_page('destroy')
@@ -528,7 +559,9 @@ class GroupchatControl(ChatControlBase):
         con.get_module('MUC').destroy(self.room_jid, reason, jid)
         self._show_page('groupchat')
 
-    def _on_configure_room(self, _action, _param):
+    def _on_configure_room(self, _button):
+        self.xml.manage_popover.popdown()
+
         win = get_app_window('GroupchatConfig', self.account, self.room_jid)
         if win is not None:
             win.present()
@@ -567,7 +600,7 @@ class GroupchatControl(ChatControlBase):
             jid += '/' + nick
         AdHocCommand(self.account, jid)
 
-    def _on_upload_avatar(self, _action, _param):
+    def _on_upload_avatar(self, _button):
         def _on_accept(filename):
             data, sha = app.interface.avatar_storage.prepare_for_publish(
                 filename)
@@ -2004,8 +2037,27 @@ class GroupchatControl(ChatControlBase):
             self.room_jid, name=new_name)
         self._show_page('groupchat')
 
-    def _on_change_subject(self, _action, _param):
-        if self._get_current_page() != 'groupchat':
+    def _on_manage_save_clicked(self, _button):
+        if self._room_config_form is not None:
+            name = self.xml.muc_name_entry.get_text()
+            desc = self.xml.muc_description_entry.get_text()
+            try:
+                name_field = self._room_config_form['muc#roomconfig_roomname']
+                desc_field = self._room_config_form['muc#roomconfig_roomdesc']
+            except KeyError:
+                pass
+            else:
+                name_field.value = name
+                desc_field.value = desc
+
+            con = app.connections[self.account]
+            con.get_module('MUC').set_config(
+                self.room_jid, self._room_config_form)
+
+        self._show_page('groupchat')
+
+    def _on_change_subject(self, _button):
+        if self._get_current_page() not in ('groupchat', 'muc-manage'):
             return
         self.xml.subject_textview.get_buffer().set_text(self.subject)
         self.xml.subject_textview.grab_focus()
