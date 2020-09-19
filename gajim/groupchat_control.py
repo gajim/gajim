@@ -69,6 +69,7 @@ from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.filechoosers import AvatarChooserDialog
 from gajim.gui.groupchat_config import GroupchatConfig
 from gajim.gui.adhoc import AdHocCommand
+from gajim.gui.avatar_selector import AvatarSelector
 from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_info import GroupChatInfoScrolled
 from gajim.gui.groupchat_invite import GroupChatInvite
@@ -190,6 +191,11 @@ class GroupchatControl(ChatControlBase):
         self._invite_box = GroupChatInvite(self.room_jid)
         self.xml.invite_grid.attach(self._invite_box, 0, 0, 1, 1)
         self._invite_box.connect('listbox-changed', self._on_invite_ready)
+
+        # Avatar selector
+        self._avatar_selector = AvatarSelector()
+        self._avatar_selector.set_size_request(400, 400)
+        self.xml.avatar_selector_grid.attach(self._avatar_selector, 0, 1, 1, 1)
 
         self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id,
                                                                 self.account,
@@ -600,22 +606,23 @@ class GroupchatControl(ChatControlBase):
             jid += '/' + nick
         AdHocCommand(self.account, jid)
 
-    def _on_upload_avatar(self, _button):
-        def _on_accept(filename):
-            data, sha = app.interface.avatar_storage.prepare_for_publish(
-                filename)
-            if sha is None:
-                self.add_info_message(_('Loading avatar failed'))
-                return
+    def _on_change_avatar(self, _button):
+        def _on_accept(path):
+            self._avatar_selector.prepare_crop_area(path)
+            self.xml.avatar_update_button.set_sensitive(
+                self._avatar_selector.get_prepared())
+            self._show_page('avatar-selector')
+            self.xml.avatar_update_button.grab_default()
 
-            vcard = VCard()
-            vcard.set_avatar(data, 'image/png')
+        AvatarChooserDialog(_on_accept,
+                            transient_for=self.parent_win.window,
+                            modal=True)
 
-            con = app.connections[self.account]
-            con.get_module('VCardTemp').set_vcard(
-                vcard,
-                jid=self.room_jid,
-                callback=self._on_upload_avatar_result)
+    def _on_avatar_select_file_clicked(self, _button):
+        def _on_accept(path):
+            self._avatar_selector.prepare_crop_area(path)
+            self.xml.avatar_update_button.set_sensitive(
+                self._avatar_selector.get_prepared())
 
         AvatarChooserDialog(_on_accept,
                             transient_for=self.parent_win.window,
@@ -629,6 +636,27 @@ class GroupchatControl(ChatControlBase):
 
         else:
             self.add_info_message(_('Avatar upload successful'))
+
+    def _on_avatar_update_clicked(self, _button):
+        success, data, _, _ = self._avatar_selector.get_avatar_bytes()
+        if not success:
+            self.add_info_message(_('Loading avatar failed'))
+            return
+
+        sha = app.interface.avatar_storage.save_avatar(data)
+        if sha is None:
+            self.add_info_message(_('Loading avatar failed'))
+            return
+
+        vcard = VCard()
+        vcard.set_avatar(data, 'image/png')
+
+        client = app.get_client(self.account)
+        client.get_module('VCardTemp').set_vcard(
+            vcard,
+            jid=self.room_jid,
+            callback=self._on_upload_avatar_result)
+        self._show_page('groupchat')
 
     def _on_contact_information(self, _action, param):
         nick = param.get_string()
@@ -777,7 +805,6 @@ class GroupchatControl(ChatControlBase):
             self.contact.jid,
             AvatarSize.CHAT,
             self.scale_factor)
-
         self.xml.avatar_image.set_from_surface(surface)
 
     def draw_banner_text(self):
@@ -788,7 +815,7 @@ class GroupchatControl(ChatControlBase):
         self.xml.banner_name_label.set_text(self.room_name)
 
     @event_filter(['jid=room_jid'])
-    def _on_update_room_avatar(self, event):
+    def _on_update_room_avatar(self, _event):
         self._update_avatar()
 
     @event_filter(['account'])
