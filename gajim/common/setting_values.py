@@ -15,7 +15,7 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 APP_SETTINGS = {
     'verbose': False,
     'autopopup': False,
-    'notify_on_new_message': True,
+    'show_notifications': True,
     'autopopupaway': False,
     'sounddnd': False,
     'showoffline': True,

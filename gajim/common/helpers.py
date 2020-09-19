@@ -655,7 +655,7 @@ def get_os_info():
     return info
 
 def allow_showing_notification(account):
-    if not app.settings.get('notify_on_new_message'):
+    if not app.settings.get('show_notifications'):
         return False
     if app.settings.get('autopopupaway'):
         return True

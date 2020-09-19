@@ -97,7 +97,8 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.POPOVER: PopoverSetting,
             SettingKind.AUTO_AWAY: CutstomAutoAwaySetting,
             SettingKind.AUTO_EXTENDED_AWAY: CutstomAutoExtendedAwaySetting,
-            SettingKind.USE_STUN_SERVER: CutstomStunServerSetting
+            SettingKind.USE_STUN_SERVER: CutstomStunServerSetting,
+            SettingKind.NOTIFICATIONS: NotificationsSetting,
         }
 
         if extend is not None:
@@ -806,4 +807,13 @@ class CutstomStunServerSetting(DialogSetting):
 
     def get_setting_value(self):
         value = app.settings.get('use_stun_server')
+        return Q_('?switch:On') if value else Q_('?switch:Off')
+
+
+class NotificationsSetting(DialogSetting):
+    def __init__(self, *args, **kwargs):
+        DialogSetting.__init__(self, *args, **kwargs)
+
+    def get_setting_value(self):
+        value = app.settings.get('show_notifications')
         return Q_('?switch:On') if value else Q_('?switch:Off')

@@ -243,7 +243,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             '%(n_msgs)i unread messages from %(nickname)s',
             num_unread) % {'nickname': nick, 'n_msgs': num_unread}
 
-        if app.settings.get('notify_on_new_message'):
+        if app.settings.get('show_notifications'):
             if self.first_unread or not self.control_focused:
                 if app.settings.get('autopopupaway'):
                     # always show notification
@@ -304,7 +304,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if self.control is not None:
             self.control_focused = self.control.has_focus()
 
-        if app.settings.get('notify_on_new_message'):
+        if app.settings.get('show_notifications'):
             contact = app.contacts.get_groupchat_contact(self.account,
                                                          self.jid)
             notify_for_muc = sound == 'highlight' or contact.can_notify()

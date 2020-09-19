@@ -61,6 +61,7 @@ class SettingKind(IntEnum):
     AUTO_AWAY = 15
     AUTO_EXTENDED_AWAY = 16
     USE_STUN_SERVER = 17
+    NOTIFICATIONS = 18
 
 
 @unique

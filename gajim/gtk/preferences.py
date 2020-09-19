@@ -487,12 +487,11 @@ class VisualNotifications(PreferenceBox):
                     props={'entries': event_received_items},
                     callback=self._set_event_handling),
 
-            Setting(SettingKind.SWITCH,
-                    _('Notifications When Away'),
-                    SettingType.CONFIG,
-                    'autopopupaway',
-                    desc=_('Show notifications even if you are Away, '
-                           'Busy, etc.')),
+            Setting(SettingKind.NOTIFICATIONS,
+                    _('Show Notifications'),
+                    SettingType.DIALOG,
+                    props={'dialog': NotificationsDialog}),
+
         ]
 
         PreferenceBox.__init__(self, settings)
@@ -509,12 +508,12 @@ class VisualNotifications(PreferenceBox):
     @staticmethod
     def _get_event_handling():
         autopopup = app.settings.get('autopopup')
-        notify_on_new_message = app.settings.get('notify_on_new_message')
-        if autopopup and not notify_on_new_message:
+        show_notifications = app.settings.get('show_notifications')
+        if autopopup and not show_notifications:
             return 'open_message'
-        if not autopopup and notify_on_new_message:
+        if not autopopup and show_notifications:
             return 'notify_me'
-        if not autopopup and not notify_on_new_message:
+        if not autopopup and not show_notifications:
             return 'show_in_roster'
         return 'open_message'
 
@@ -522,13 +521,35 @@ class VisualNotifications(PreferenceBox):
     def _set_event_handling(value, *args):
         if value == 'open_message':
             app.settings.set('autopopup', True)
-            app.settings.set('notify_on_new_message', False)
+            app.settings.set('show_notifications', False)
         elif value == 'notify_me':
             app.settings.set('autopopup', False)
-            app.settings.set('notify_on_new_message', True)
+            app.settings.set('show_notifications', True)
         else:
             app.settings.set('autopopup', False)
-            app.settings.set('notify_on_new_message', False)
+            app.settings.set('show_notifications', False)
+
+
+class NotificationsDialog(SettingsDialog):
+    def __init__(self, account, parent):
+
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Show Notifications'),
+                    SettingType.CONFIG,
+                    'show_notifications'),
+
+            Setting(SettingKind.SWITCH,
+                    _('Notifications When Away'),
+                    SettingType.CONFIG,
+                    'autopopupaway',
+                    desc=_('Show notifications even if you are Away, '
+                           'Busy, etc.'),
+                    bind='show_notifications'),
+            ]
+
+        SettingsDialog.__init__(self, parent, _('Notifications'),
+                                Gtk.DialogFlags.MODAL, settings, account)
 
 
 class Sounds(PreferenceBox):
