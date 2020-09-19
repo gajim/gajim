@@ -51,7 +51,7 @@ class SettingsDialog(Gtk.ApplicationWindow):
         elif flags == Gtk.DialogFlags.DESTROY_WITH_PARENT:
             self.set_destroy_with_parent(True)
 
-        self.listbox = SettingsBox(account, extend)
+        self.listbox = SettingsBox(account, extend=extend)
         self.listbox.set_hexpand(True)
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
