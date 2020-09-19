@@ -1945,6 +1945,11 @@ class GroupchatControl(ChatControlBase):
             self.parent_win.window.lookup_action(control_action).activate()
             return Gdk.EVENT_STOP
 
+        if action == 'show-contact-info':
+            self.parent_win.window.lookup_action(
+                'information-%s' % self.control_id).activate()
+            return Gdk.EVENT_STOP
+
         return Gdk.EVENT_PROPAGATE
 
     def focus(self):
