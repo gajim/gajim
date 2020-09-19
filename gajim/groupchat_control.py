@@ -51,6 +51,7 @@ from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.helpers import event_filter
 from gajim.common.helpers import to_user_string
+from gajim.common.helpers import allow_popup_window
 from gajim.common.const import AvatarSize
 
 from gajim.common.i18n import _
@@ -916,16 +917,13 @@ class GroupchatControl(ChatControlBase):
                                additional_data=additional_data)
         app.events.add_event(self.account, fjid, event)
 
-        autopopup = app.settings.get('autopopup')
-        autopopupaway = app.settings.get('autopopupaway')
-        if not autopopup or (not autopopupaway and \
-                app.account_is_available(self.account)):
+        if allow_popup_window(self.account):
+            self._start_private_message(nick)
+        else:
             self.roster.draw_contact(nick)
             if self.parent_win:
                 self.parent_win.show_title()
                 self.parent_win.redraw_tab(self)
-        else:
-            self._start_private_message(nick)
 
         contact = app.contacts.get_contact_with_highest_priority(
             self.account, self.room_jid)
