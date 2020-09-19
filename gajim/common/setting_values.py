@@ -17,7 +17,6 @@ APP_SETTINGS = {
     'autopopup': False,
     'notify_on_new_message': True,
     'autopopupaway': False,
-    'autopopup_chat_opened': False,
     'sounddnd': False,
     'showoffline': True,
     'show_only_chat_and_online': False,

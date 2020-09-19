@@ -69,7 +69,6 @@ class Config:
         'autopopup': [opt_bool, False],
         'notify_on_new_message': [opt_bool, True],
         'autopopupaway': [opt_bool, False],
-        'autopopup_chat_opened': [opt_bool, False, _('Show desktop notification even when a chat window is opened for this contact and does not have focus.')],
         'sounddnd': [opt_bool, False, _('Play sound even when being busy.')],
         'showoffline': [opt_bool, True],
         'show_only_chat_and_online': [opt_bool, False, _('Show only online and free for chat contacts in the contact list.')],

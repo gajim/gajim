@@ -244,8 +244,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             num_unread) % {'nickname': nick, 'n_msgs': num_unread}
 
         if app.settings.get('notify_on_new_message'):
-            if self.first_unread or (app.settings.get('autopopup_chat_opened') \
-            and not self.control_focused):
+            if self.first_unread or not self.control_focused:
                 if app.settings.get('autopopupaway'):
                     # always show notification
                     self.do_popup = True

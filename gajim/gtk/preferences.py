@@ -488,13 +488,6 @@ class VisualNotifications(PreferenceBox):
                     callback=self._set_event_handling),
 
             Setting(SettingKind.SWITCH,
-                    _('Always Show Notifications'),
-                    SettingType.CONFIG,
-                    'autopopup_chat_opened',
-                    desc=_('Show notifications even if there is already '
-                           'a chat window opened')),
-
-            Setting(SettingKind.SWITCH,
                     _('Notifications When Away'),
                     SettingType.CONFIG,
                     'autopopupaway',
