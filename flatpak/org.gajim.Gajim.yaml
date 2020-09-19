@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
-runtime-version: '3.36'
+runtime-version: '3.38'
 sdk: org.gnome.Sdk
 command: gajim-devel
 tags:
@@ -160,15 +160,6 @@ modules:
         url: https://files.pythonhosted.org/packages/b2/34/bfcb43cc0ba81f527bc4f40ef41ba2ff4080e047acb0586b56b3d017ace4/zipp-3.1.0-py3-none-any.whl
         sha256: aa36550ff0c0b7ef7fa639055d797116ee891440eac1a56f378e2d3179e0320b
 
-  - name: python3-importlib_metadata
-    buildsystem: simple
-    build-commands:
-      - pip3 install --prefix=/app importlib_metadata-1.7.0-py2.py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/8e/58/cdea07eb51fc2b906db0968a94700866fc46249bdc75cac23f9d13168929/importlib_metadata-1.7.0-py2.py3-none-any.whl
-        sha256: dc15b2969b4ce36305c51eebe62d418ac7791e9a157911d58bfb1f9ccd8e2070
-
   - name: python3-keyring
     buildsystem: simple
     build-commands:
@@ -198,12 +189,22 @@ modules:
         url: https://files.pythonhosted.org/packages/13/f5/3a7485a32dd4422a2a78de744bea4a00126b6001416c677b99c1a6e50e28/precis_i18n-1.0.2-py3-none-any.whl
         sha256: c7d5a1f5667a6e7cb85db0a5a4ec8e1090eaeb6e189e8131a5ee238492d60445
 
+  # GSound dependency
+  - name: libcanberra
+    sources:
+      - type: archive
+        url: http://0pointer.de/lennart/projects/libcanberra/libcanberra-0.30.tar.xz
+        sha256: c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72
+    config-opts:
+      - "--disable-alsa"
+      - "--disable-null"
+      - "--disable-oss"
+
   - name: gsound
     sources:
-      - type: git
-        url: https://gitlab.gnome.org/GNOME/gsound.git
-        tag: 1.0.2
-        commit: a86946b494aa32782b3f6334344d07b5c11d5219
+      - type: archive
+        url: https://download.gnome.org/sources/gsound/1.0/gsound-1.0.2.tar.xz
+        sha256: bba8ff30eea815037e53bee727bbd5f0b6a2e74d452a7711b819a7c444e78e53
 
   - name: gspell
     cleanup:
@@ -215,9 +216,12 @@ modules:
 
   - name: farstream
     sources:
-      - type: archive
-        url: https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
-        sha256: cb7d112433cf7c2e37a8ec918fb24f0ea5cb293cfa1002488e431de26482f47b
+      - type: git
+        url: https://gitlab.freedesktop.org/farstream/farstream.git
+        tag: 0.2.9
+        commit: 1e42278d11730f8409878e3b4904fdd47e360e6f
+      - type: patch
+        path: farstream-make-4.3.patch
 
   - name: python3-nbxmpp
     buildsystem: simple
