@@ -77,7 +77,7 @@ ARCHIVE_SQL_STATEMENT = '''
             jid_id INTEGER PRIMARY KEY UNIQUE,
             last_mam_id TEXT,
             oldest_mam_timestamp TEXT,
-            last_muc_timestamp TEXT,
+            last_muc_timestamp TEXT
     );
     CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
     CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
