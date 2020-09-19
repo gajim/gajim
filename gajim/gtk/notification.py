@@ -181,7 +181,6 @@ class Notification(EventHelper):
             notification.set_body(text)
         notif_id = None
         if event_type in (
-                _('Contact Signed In'), _('Contact Signed Out'),
                 _('New Message'), _('New Private Message'),
                 _('New Group Chat Message'),
                 _('Contact Changed Status'), _('File Transfer Request'),
@@ -203,9 +202,7 @@ class Notification(EventHelper):
                                                            variant_dict)
 
             # Only one notification per JID
-            if event_type in (_('Contact Signed In'),
-                              _('Contact Signed Out'),
-                              _('Contact Changed Status')):
+            if event_type == _('Contact Changed Status'):
                 notif_id = self._make_id('contact-status-changed', account, jid)
             elif event_type == _('Group Chat Invitation'):
                 notif_id = self._make_id('gc-invitation', account, room_jid)
@@ -264,15 +261,9 @@ class PopupNotification(Gtk.Window):
         self._ui = get_builder('popup_notification_window.ui')
         self.add(self._ui.eventbox)
 
-        if event_type == _('Contact Signed In'):
-            bg_color = app.css_config.get_value('.gajim-notify-signin',
-                                                StyleAttr.COLOR)
-        elif event_type == _('Contact Signed Out'):
-            bg_color = app.css_config.get_value('.gajim-notify-signout',
-                                                StyleAttr.COLOR)
-        elif event_type in (_('New Message'),
-                            _('New Private Message'),
-                            _('New E-mail')):
+        if event_type in (_('New Message'),
+                          _('New Private Message'),
+                          _('New E-mail')):
             bg_color = app.css_config.get_value('.gajim-notify-message',
                                                 StyleAttr.COLOR)
         elif event_type == _('File Transfer Request'):

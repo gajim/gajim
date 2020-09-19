@@ -500,20 +500,6 @@ class VisualNotifications(PreferenceBox):
                     'autopopupaway',
                     desc=_('Show notifications even if you are Away, '
                            'Busy, etc.')),
-
-            Setting(SettingKind.SWITCH,
-                    _('Contact Online Notification'),
-                    SettingType.CONFIG,
-                    'notify_on_signin',
-                    desc=_('Show a notification when a contact goes '
-                           'online')),
-
-            Setting(SettingKind.SWITCH,
-                    _('Contact Offline Notification'),
-                    SettingType.CONFIG,
-                    'notify_on_signout',
-                    desc=_('Show a notification when a contact goes '
-                           'offline')),
         ]
 
         PreferenceBox.__init__(self, settings)

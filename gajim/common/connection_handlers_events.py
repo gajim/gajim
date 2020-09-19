@@ -380,10 +380,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             if account_server in app.block_signed_in_notifications and \
             app.block_signed_in_notifications[account_server]:
                 block_transport = True
-            if helpers.allow_showing_notification(account, 'notify_on_signin') \
-            and not app.block_signed_in_notifications[account] and \
-            not block_transport:
-                self.do_popup = True
+
             sound = app.settings.get_soundevent_settings('contact_connected')
             if sound['enabled'] and not app.block_signed_in_notifications[account] and\
             not block_transport and helpers.allow_sound_notification(account,
@@ -393,9 +390,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         elif pres_obj.old_show > 1 and pres_obj.new_show < 2:
             event = 'contact_disconnected'
-            if helpers.allow_showing_notification(account, 'notify_on_signout'):
-                self.do_popup = True
-
             sound = app.settings.get_soundevent_settings('contact_disconnected')
             if sound['enabled'] and helpers.allow_sound_notification(account, event):
                 self.sound_event = event
@@ -422,18 +416,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             if pres_obj.status:
                 self.popup_text = self.popup_text + " : " + pres_obj.status
             self.popup_event_type = _('Contact Changed Status')
-        elif event == 'contact_connected':
-            self.popup_title = _('%(nickname)s Signed In') % {'nickname': nick}
-            self.popup_text = ''
-            if pres_obj.status:
-                self.popup_text = pres_obj.status
-            self.popup_event_type = _('Contact Signed In')
-        elif event == 'contact_disconnected':
-            self.popup_title = _('%(nickname)s Signed Out') % {'nickname': nick}
-            self.popup_text = ''
-            if pres_obj.status:
-                self.popup_text = pres_obj.status
-            self.popup_event_type = _('Contact Signed Out')
+
 
 class InformationEvent(nec.NetworkIncomingEvent):
     name = 'information'

@@ -654,21 +654,12 @@ def get_os_info():
             info = platform.system()
     return info
 
-def allow_showing_notification(account,
-                               type_='notify_on_new_message',
-                               is_first_message=True):
-    """
-    Is it allowed to show nofication?
-
-    Check OUR status and if we allow notifications for that status type is the
-    option that need to be True e.g.: notify_on_signing is_first_message: set it
-    to false when it's not the first message
-    """
-    if type_ and (not app.settings.get(type_) or not is_first_message):
+def allow_showing_notification(account):
+    if not app.settings.get('notify_on_new_message'):
         return False
     if app.settings.get('autopopupaway'):
         return True
-    if app.connections[account].status in ('online', 'chat'):
+    if app.account_is_available(account):
         return True
     return False
 

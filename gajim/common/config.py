@@ -67,8 +67,6 @@ class Config:
         # name: [ type, default_value, help_string, restart ]
         'verbose': [opt_bool, False, '', True],
         'autopopup': [opt_bool, False],
-        'notify_on_signin': [opt_bool, False],
-        'notify_on_signout': [opt_bool, False],
         'notify_on_new_message': [opt_bool, True],
         'autopopupaway': [opt_bool, False],
         'autopopup_chat_opened': [opt_bool, False, _('Show desktop notification even when a chat window is opened for this contact and does not have focus.')],
