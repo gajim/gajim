@@ -649,7 +649,10 @@ class PopoverSetting(GenericSetting):
         text = self._entries.get(self.setting_value, self._default_text or '')
         self._current_label.set_text(text)
 
-        self._bind_label()
+        app.settings.connect_signal(self.value,
+                                    self._on_setting_changed,
+                                    account=self.account,
+                                    jid=self.jid)
 
         self.connect('destroy', self._on_destroy)
 
@@ -660,14 +663,6 @@ class PopoverSetting(GenericSetting):
         if isinstance(entries, list):
             entries = {key: key for key in entries}
         return entries
-
-    def _bind_label(self):
-        if self.type_ not in (SettingType.CONFIG, SettingType.ACCOUNT_CONFIG):
-            return
-
-        app.settings.connect_signal(self.value,
-                                    self._on_setting_changed,
-                                    account=self.account)
 
     def _on_setting_changed(self, value, *args):
         text = self._entries.get(value)
