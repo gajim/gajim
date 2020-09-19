@@ -465,12 +465,6 @@ class VisualNotifications(PreferenceBox):
             'always': _('Always show icon'),
         }
 
-        event_received_items = {
-            'open_message': _('Pop it up'),
-            'notify_me': _('Notify me about it'),
-            'show_in_roster': _('Show only in contact list'),
-        }
-
         settings = [
             Setting(SettingKind.POPOVER,
                     _('Notification Area Icon'),
@@ -479,13 +473,12 @@ class VisualNotifications(PreferenceBox):
                     props={'entries': trayicon_items},
                     callback=self._on_trayicon),
 
-            Setting(SettingKind.POPOVER,
-                    _('Event Handling'),
-                    SettingType.VALUE,
-                    self._get_event_handling(),
-                    desc=_('How Gajim notifies you about new events'),
-                    props={'entries': event_received_items},
-                    callback=self._set_event_handling),
+            Setting(SettingKind.SWITCH,
+                    _('Open Events'),
+                    SettingType.CONFIG,
+                    'autopopup',
+                    desc=_('Open events instead of showing a notification '
+                           'in the contact list')),
 
             Setting(SettingKind.NOTIFICATIONS,
                     _('Show Notifications'),
@@ -504,30 +497,6 @@ class VisualNotifications(PreferenceBox):
             app.interface.show_systray()
         else:
             app.interface.show_systray()
-
-    @staticmethod
-    def _get_event_handling():
-        autopopup = app.settings.get('autopopup')
-        show_notifications = app.settings.get('show_notifications')
-        if autopopup and not show_notifications:
-            return 'open_message'
-        if not autopopup and show_notifications:
-            return 'notify_me'
-        if not autopopup and not show_notifications:
-            return 'show_in_roster'
-        return 'open_message'
-
-    @staticmethod
-    def _set_event_handling(value, *args):
-        if value == 'open_message':
-            app.settings.set('autopopup', True)
-            app.settings.set('show_notifications', False)
-        elif value == 'notify_me':
-            app.settings.set('autopopup', False)
-            app.settings.set('show_notifications', True)
-        else:
-            app.settings.set('autopopup', False)
-            app.settings.set('show_notifications', False)
 
 
 class NotificationsDialog(SettingsDialog):
