@@ -94,6 +94,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
     def _on_page_changed(self, stack, _param):
         name = stack.get_visible_child_name()
         self._join_button.set_sensitive(name == 'info')
+        self._nick_chooser.set_sensitive(name == 'info')
 
     @ensure_not_destroyed
     def _disco_info_received(self, result):
