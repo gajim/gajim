@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="affiliation_store">
     <columns>
       <!-- column-name jabberid -->
@@ -48,10 +48,6 @@
       <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
-        <property name="margin_top">12</property>
-        <property name="margin_bottom">12</property>
         <property name="label" translatable="yes">&lt;b&gt;XMPP Address&lt;/b&gt;
 &amp;lt;user@domain/resource&amp;gt; (only that resource matches)
 &amp;lt;user@domain&amp;gt; (any resource matches)
@@ -59,6 +55,9 @@
 &amp;lt;domain&amp;gt; (the domain itself matches, as does any user@domain or domain/resource)
 </property>
         <property name="use_markup">True</property>
+        <style>
+          <class name="padding-6"/>
+        </style>
       </object>
     </child>
   </object>
@@ -86,18 +85,16 @@
     <property name="height_request">500</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="row_spacing">12</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="hexpand">False</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkBox" id="treeview_buttonbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="valign">start</property>
-            <property name="margin_left">12</property>
             <property name="vexpand">False</property>
             <property name="spacing">6</property>
             <child>
@@ -113,9 +110,6 @@
                     <property name="icon_name">dialog-information-symbolic</property>
                   </object>
                 </child>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -148,16 +142,19 @@
             </child>
             <child>
               <object class="GtkButton" id="remove_button">
-                <property name="label" translatable="yes">Remove</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
                 <signal name="clicked" handler="_on_remove" swapped="no"/>
-                <style>
-                  <class name="destructive-action"/>
-                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon_name">list-remove-symbolic</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -173,51 +170,43 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox" id="close_ok_button_box">
+          <object class="GtkButton" id="ok_button">
+            <property name="label">_Apply</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">6</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="_on_cancel" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="pack_type">end</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="ok_button">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="_on_ok" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="pack_type">end</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
+            <signal name="clicked" handler="_on_ok" swapped="no"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="pack_type">end</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkButton">
+            <property name="label">_Cancel</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
+            <signal name="clicked" handler="_on_cancel" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <style>
+          <class name="margin-12"/>
+        </style>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -230,7 +219,6 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="transition_duration">300</property>
         <property name="transition_type">crossfade</property>
         <signal name="notify::visible-child-name" handler="_on_switch_page" swapped="no"/>
         <child>

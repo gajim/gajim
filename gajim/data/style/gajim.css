@@ -195,12 +195,12 @@ infobar.error > revealer > box {
 .groupchat-roster treeview { padding-left: 4px; }
 
 /* GroupchatConfig */
-#GroupchatConfig > box > buttonbox { margin: 0px 12px 12px 12px; }
 #GroupchatConfig stack { border-bottom: 1px solid; border-color: @borders;}
 #GroupchatConfig stacksidebar > scrolledwindow {
-    background-color:@theme_base_color;
+    background-color: @theme_base_color;
     border-bottom: 1px solid;
-    border-color: @borders;}
+    border-color: @borders;
+}
 #GroupchatConfig treeview { padding: 5px; }
 
 /* Popover Treeview */
