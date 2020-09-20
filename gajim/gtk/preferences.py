@@ -408,8 +408,7 @@ class GroupChats(PreferenceBox):
                     SettingType.CONFIG,
                     'gc_sync_threshold_public_default',
                     desc=_('Default for new public group chats'),
-                    props={'entries': THRESHOLD_OPTIONS},
-                    callback=self._on_sync_threshold_changed),
+                    props={'entries': THRESHOLD_OPTIONS}),
 
             Setting(SettingKind.SWITCH,
                     _('Show Joined / Left'),
@@ -436,10 +435,6 @@ class GroupChats(PreferenceBox):
         ]
 
         PreferenceBox.__init__(self, settings)
-
-    @staticmethod
-    def _on_sync_threshold_changed(value, *args):
-        app.settings.set('public_room_sync_threshold', int(value))
 
     @staticmethod
     def _on_sort_by_show_in_muc(*args):
