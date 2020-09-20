@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="bookmarks_store">
     <columns>
       <!-- column-name jid -->
@@ -19,62 +19,6 @@
   <object class="GtkGrid" id="bookmarks_grid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="row_spacing">6</property>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkButton">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">start</property>
-            <signal name="clicked" handler="_on_add_clicked" swapped="no"/>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">list-add-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="remove_button">
-            <property name="visible">True</property>
-            <property name="sensitive">False</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">start</property>
-            <signal name="clicked" handler="_on_remove_clicked" swapped="no"/>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">list-remove-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-      </packing>
-    </child>
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
@@ -174,7 +118,6 @@
               <object class="GtkTreeViewColumn">
                 <property name="sizing">fixed</property>
                 <property name="title" translatable="yes">Autojoin</property>
-                <property name="alignment">0.5</property>
                 <property name="sort_indicator">True</property>
                 <property name="sort_column_id">4</property>
                 <child>
@@ -203,25 +146,61 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox">
+      <object class="GtkToolbar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="toolbar_style">icons</property>
+        <property name="show_arrow">False</property>
+        <property name="icon_size">4</property>
         <child>
-          <object class="GtkButton">
-            <property name="label" translatable="yes">_Apply</property>
+          <object class="GtkToolButton">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">end</property>
+            <property name="can_focus">False</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_apply_clicked" swapped="no"/>
+            <property name="icon_name">list-add-symbolic</property>
+            <signal name="clicked" handler="_on_add_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="homogeneous">True</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkToolButton" id="remove_button">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="use_underline">True</property>
+            <property name="icon_name">list-remove-symbolic</property>
+            <signal name="clicked" handler="_on_remove_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <style>
+          <class name="inline-toolbar"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <property name="label" translatable="yes">_Apply</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="halign">end</property>
+        <property name="valign">end</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="_on_apply_clicked" swapped="no"/>
+        <style>
+          <class name="suggested-action"/>
+        </style>
       </object>
       <packing>
         <property name="left_attach">1</property>
