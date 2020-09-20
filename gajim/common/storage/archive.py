@@ -112,6 +112,7 @@ class MessageArchiveStorage(SqliteStorage):
         self._con.create_function("get_timeout", 0, self._get_timeout)
 
         self._get_jid_ids_from_db()
+        self._cleanup_chat_history()
 
     def _namedtuple_factory(self, cursor, row):
         fields = [col[0] for col in cursor.description]
@@ -975,3 +976,22 @@ class MessageArchiveStorage(SqliteStorage):
         self._con.execute(sql, (jid_id,))
         log.info('Reset message archive info: %s', jid)
         self._delayed_commit()
+
+    def _cleanup_chat_history(self):
+        """
+        Remove messages from account where messages are older than max_age
+        """
+        for account in app.settings.get_accounts():
+            max_age = app.settings.get_account_setting(
+                account, 'chat_history_max_age')
+            if max_age == -1:
+                continue
+            account_id = self.get_account_id(account)
+            now = time.time()
+            point_in_time = now - int(max_age)
+
+            sql = 'DELETE FROM logs WHERE account_id = ? AND time < ?'
+
+            cursor = self._con.execute(sql, (account_id, point_in_time))
+            self._delayed_commit()
+            log.info('Removed %s old messages for %s', cursor.rowcount, account)

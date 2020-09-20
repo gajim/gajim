@@ -251,9 +251,10 @@ ACCOUNT_SETTINGS = {
         'ft_send_local_ips': True,
         'opened_chat_controls': '',
         'recent_groupchats': '',
-        'filetransfer_preference' : 'httpupload',
+        'filetransfer_preference': 'httpupload',
         'send_chatstate_default': 'composing_only',
         'gc_send_chatstate_default': 'composing_only',
+        'chat_history_max_age': -1,
     },
 
     'contact': {

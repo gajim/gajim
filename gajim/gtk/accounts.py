@@ -654,6 +654,17 @@ class PrivacyPage(GenericSettingPage):
     name = 'privacy'
 
     def __init__(self, account):
+        self._account = account
+
+        history_max_age = {
+            -1: _('Forever'),
+            86400: _('1 Day'),
+            604800: _('1 Week'),
+            2629743: _('1 Month'),
+            7889229: _('3 Months'),
+            15778458: _('6 Months'),
+            31556926: _('1 Year'),
+        }
 
         chatstate_entries = {
             'all': _('Enabled'),
@@ -691,7 +702,7 @@ class PrivacyPage(GenericSettingPage):
                     'send_chatstate_default',
                     desc=_('Default for chats'),
                     props={'entries': chatstate_entries,
-                           'button-text':_('Reset'),
+                           'button-text': _('Reset'),
                            'button-tooltip': _('Reset all chats to the '
                                                'current default value'),
                            'button-style': 'destructive-action',
@@ -703,13 +714,19 @@ class PrivacyPage(GenericSettingPage):
                     'gc_send_chatstate_default',
                     desc=_('Default for group chats'),
                     props={'entries': chatstate_entries,
-                           'button-text':_('Reset'),
+                           'button-text': _('Reset'),
                            'button-tooltip': _('Reset all group chats to the '
                                                'current default value'),
                            'button-style': 'destructive-action',
                            'button-callback': self._reset_gc_send_chatstate}),
 
-            ]
+            Setting(SettingKind.POPOVER,
+                    _('Keep Chat History'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'chat_history_max_age',
+                    props={'entries': history_max_age},
+                    desc=_('How long Gajim should keep your chat history')),
+        ]
         GenericSettingPage.__init__(self, account, settings)
 
     @staticmethod
