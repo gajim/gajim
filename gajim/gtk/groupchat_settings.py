@@ -34,7 +34,7 @@ class GroupChatSettingsScrolled(Gtk.ScrolledWindow):
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
         box.set_valign(Gtk.Align.CENTER)
-        label = Gtk.Label(label=_('Settings for this Chat'))
+        label = Gtk.Label(label=_('Settings For This Chat'))
         label.get_style_context().add_class('bold16')
         label.set_halign(Gtk.Align.CENTER)
         box.add(label)
