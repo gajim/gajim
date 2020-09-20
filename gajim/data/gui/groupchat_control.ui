@@ -33,7 +33,7 @@
         <property name="can_focus">False</property>
         <property name="valign">start</property>
         <property name="vexpand">True</property>
-        <property name="label" translatable="yes">Drop files or contacts</property>
+        <property name="label" translatable="yes">Drop Files or Contacts</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">40</property>
         <style>
@@ -563,6 +563,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
@@ -639,7 +640,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Enter new nickname</property>
+                        <property name="label" translatable="yes">Enter Nickname</property>
                         <property name="xalign">0</property>
                         <style>
                           <class name="bold16"/>
@@ -818,7 +819,11 @@
                           <object class="GtkTextView" id="subject_textview">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="wrap_mode">word</property>
+                            <property name="wrap_mode">word-char</property>
+                            <property name="left_margin">3</property>
+                            <property name="right_margin">3</property>
+                            <property name="top_margin">3</property>
+                            <property name="bottom_margin">3</property>
                           </object>
                         </child>
                       </object>
@@ -858,7 +863,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Enter password</property>
+                        <property name="label" translatable="yes">Enter Password</property>
                         <property name="xalign">0</property>
                         <style>
                           <class name="bold16"/>
@@ -1096,7 +1101,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="retry_button">
-                            <property name="label" translatable="yes">_Retry</property>
+                            <property name="label" translatable="yes">T_ry Again</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1150,7 +1155,7 @@
                       <object class="GtkLabel" id="error_heading">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">An error occurred</property>
+                        <property name="label" translatable="yes">An Error Occurred</property>
                         <property name="justify">center</property>
                         <property name="wrap">True</property>
                         <property name="max_width_chars">40</property>
@@ -1215,7 +1220,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="captcha_try_again_button">
-                            <property name="label" translatable="yes">_Try again</property>
+                            <property name="label" translatable="yes">_Try Again</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
@@ -1363,7 +1368,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_bottom">6</property>
-                        <property name="label" translatable="yes">Kick participant</property>
+                        <property name="label" translatable="yes">Kick Participant</property>
                         <property name="ellipsize">end</property>
                         <property name="single_line_mode">True</property>
                         <property name="max_width_chars">22</property>
@@ -1489,7 +1494,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_bottom">6</property>
-                        <property name="label" translatable="yes">Ban participant</property>
+                        <property name="label" translatable="yes">Ban Participant</property>
                         <property name="ellipsize">end</property>
                         <property name="single_line_mode">True</property>
                         <property name="max_width_chars">22</property>
@@ -1615,7 +1620,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_bottom">6</property>
-                        <property name="label" translatable="yes">Destroy group chat</property>
+                        <property name="label" translatable="yes">Destroy This Chat</property>
                         <property name="ellipsize">end</property>
                         <property name="single_line_mode">True</property>
                         <property name="max_width_chars">22</property>
@@ -1773,7 +1778,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Enter a new name for this group chat</property>
+                        <property name="label" translatable="yes">Rename This Chat</property>
                         <property name="xalign">0</property>
                         <style>
                           <class name="bold16"/>
