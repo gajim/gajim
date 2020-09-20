@@ -417,7 +417,20 @@ class EntrySetting(GenericSetting):
 
         self.setting_box.pack_end(self.entry, True, True, 0)
 
+        app.settings.connect_signal(self.value,
+                                    self._on_setting_changed,
+                                    account=self.account,
+                                    jid=self.jid)
+
+        self.connect('destroy', self._on_destroy)
+
         self.show_all()
+
+    def _on_setting_changed(self, value, *args):
+        self.entry.set_text(value)
+
+    def _on_destroy(self, *args):
+        app.settings.disconnect_signals(self)
 
     def on_text_change(self, *args):
         text = self.entry.get_text()
@@ -441,7 +454,22 @@ class ColorSetting(GenericSetting):
 
         self.setting_box.pack_end(self.color_button, True, True, 0)
 
+        app.settings.connect_signal(self.value,
+                                    self._on_setting_changed,
+                                    account=self.account,
+                                    jid=self.jid)
+
+        self.connect('destroy', self._on_destroy)
+
         self.show_all()
+
+    def _on_setting_changed(self, value, *args):
+        rgba = Gdk.RGBA()
+        rgba.parse(value)
+        self.color_button.set_rgba(rgba)
+
+    def _on_destroy(self, *args):
+        app.settings.disconnect_signals(self)
 
     def on_color_set(self, button):
         rgba = button.get_rgba()
