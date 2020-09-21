@@ -314,6 +314,7 @@ class BooleanField(Field):
         if self.read_only:
             label = _('Yes') if field.value else _('No')
             self._widget = Gtk.Label(label=label)
+            self._widget.set_selectable(True)
             self._widget.set_xalign(0)
         else:
             self._widget = Gtk.CheckButton()
@@ -529,6 +530,7 @@ class TextSingleField(Field):
         if self.read_only:
             self._widget = Gtk.Label(label=field.value)
             self._widget.set_xalign(0)
+            self._widget.set_selectable(True)
         else:
             self._widget = Gtk.Entry()
             self._widget.set_text(field.value)
