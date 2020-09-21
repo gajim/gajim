@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkBox" id="ssl_error_box">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -28,7 +28,7 @@
       <object class="GtkLabel" id="intro_text">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_right">30</property>
+        <property name="margin_end">30</property>
         <property name="margin_bottom">6</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">50</property>
@@ -76,8 +76,8 @@
         <property name="receives_default">False</property>
         <property name="no_show_all">True</property>
         <property name="halign">start</property>
-        <property name="margin_left">15</property>
-        <property name="margin_right">15</property>
+        <property name="margin_start">15</property>
+        <property name="margin_end">15</property>
         <property name="use_underline">True</property>
         <property name="draw_indicator">True</property>
         <signal name="toggled" handler="_on_add_certificate_toggled" swapped="no"/>
