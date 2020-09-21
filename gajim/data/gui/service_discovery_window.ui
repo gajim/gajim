@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name item -->
@@ -16,9 +16,6 @@
     <property name="default_height">550</property>
     <signal name="destroy" handler="_on_service_discovery_window_destroy" swapped="no"/>
     <signal name="key-press-event" handler="_on_key_press_event" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox" id="service_discovery">
         <property name="width_request">400</property>
@@ -37,7 +34,6 @@
               <object class="GtkImage" id="banner_agent_icon">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">6</property>
               </object>
               <packing>
