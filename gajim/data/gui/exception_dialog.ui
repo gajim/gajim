@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkApplicationWindow" id="exception_dialog">
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -26,7 +23,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
-                <property name="stock">gtk-dialog-error</property>
+                <property name="icon_name">dialog-error</property>
                 <property name="icon_size">6</property>
               </object>
               <packing>
@@ -47,9 +44,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Sorry, that should not have happened</property>
+                    <property name="wrap">True</property>
+                    <property name="max_width_chars">30</property>
+                    <property name="xalign">0</property>
                     <style>
                       <class name="large-header"/>
-                      <class name="dim-label"/>
                     </style>
                   </object>
                   <packing>
@@ -68,6 +67,7 @@ By reporting this bug you might help people to fix this.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">60</property>
                     <property name="lines">3</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -97,12 +97,11 @@ By reporting this bug you might help people to fix this.</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="close_btn">
-                <property name="label">gtk-close</property>
+                <property name="label">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <property name="always_show_image">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_close_clicked" swapped="no"/>
               </object>
               <packing>
