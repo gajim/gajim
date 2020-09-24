@@ -152,7 +152,7 @@ _dependencies = {
     'IDLE': False,
 }
 
-_tasks = defaultdict(list)
+_tasks = defaultdict(list)  # type: Dict[int, List[Any]]
 
 def print_version():
     log('gajim').info('Gajim Version: %s', gajim.__version__)
