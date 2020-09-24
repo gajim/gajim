@@ -16,7 +16,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
 
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import is_error
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -98,7 +98,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
     @ensure_not_destroyed
     def _disco_info_received(self, result):
-        if is_error_result(result):
+        if is_error(result):
             jid = get_alternative_venue(result)
             if jid is None or self._redirected:
                 self._set_error(result)

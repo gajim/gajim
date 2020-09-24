@@ -22,6 +22,7 @@ from gi.repository import GLib
 from gi.repository import Pango
 
 from nbxmpp.util import is_error_result
+from nbxmpp.errors import is_error
 
 from gajim.common import app
 from gajim.common.helpers import validate_jid
@@ -306,7 +307,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     @ensure_not_destroyed
     def _disco_info_received(self, account, result):
-        if is_error_result(result):
+        if is_error(result):
             jid = get_alternative_venue(result)
             if jid is None or self._redirected:
                 self._set_error(result)

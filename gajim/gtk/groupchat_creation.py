@@ -18,7 +18,7 @@ import random
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common.const import MUC_CREATION_EXAMPLES
@@ -195,12 +195,14 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
             room_jid, callback=self._disco_info_received)
 
     @ensure_not_destroyed
-    def _disco_info_received(self, result):
-        if is_error_result(result):
-            if result.condition == 'item-not-found':
-                self._create_muc(result.jid)
+    def _disco_info_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            if error.condition == 'item-not-found':
+                self._create_muc(error.jid)
                 return
-            self._set_warning_from_error(result)
+            self._set_warning_from_error(error)
 
         else:
             self._set_warning_from_error_code(

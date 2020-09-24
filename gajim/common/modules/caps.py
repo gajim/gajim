@@ -23,8 +23,8 @@ from collections import defaultdict
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import DiscoIdentity
-from nbxmpp.util import is_error_result
 from nbxmpp.util import compute_caps_hash
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common.const import COMMON_FEATURES
@@ -120,17 +120,22 @@ class Caps(BaseModule):
         self._con.get_module('Discovery').disco_info(
             task.entity.jid,
             node=f'{task.entity.node}#{task.entity.hash}',
-            callback=self._on_disco_info)
+            callback=self._on_disco_info,
+            user_data=task.entity.jid)
 
-    def _on_disco_info(self, disco_info):
-        task = self._get_task(disco_info.jid)
+    def _on_disco_info(self, nbxmpp_task):
+        jid = nbxmpp_task.get_user_data()
+        task = self._get_task(jid)
         if task is None:
-            self._log.info('Task not found for %s', disco_info.jid)
+            self._log.info('Task not found for %s', jid)
             return
 
-        if is_error_result(disco_info):
-            self._remove_task(task)
-            self._log.info(disco_info)
+        self._remove_task(task)
+
+        try:
+            disco_info = nbxmpp_task.finish()
+        except StanzaError as error:
+            self._log.warning(error)
             return
 
         self._log.info('Disco Info received: %s', disco_info.jid)
@@ -138,7 +143,6 @@ class Caps(BaseModule):
         try:
             compute_caps_hash(disco_info)
         except Exception as error:
-            self._remove_task(task)
             self._log.warning('Disco info malformed: %s %s',
                               disco_info.jid, error)
             return

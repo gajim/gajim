@@ -49,6 +49,7 @@ import nbxmpp
 from nbxmpp.util import is_error_result
 from nbxmpp.structs import DiscoIdentity
 from nbxmpp.namespaces import Namespace
+from nbxmpp.errors import StanzaError
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -399,14 +400,16 @@ class ServicesCache:
             con.get_module('Discovery').disco_items(
                 jid, node, callback=self._disco_items_received)
 
-    def _disco_info_received(self, result):
+    def _disco_info_received(self, task):
         """
         Callback for when we receive an agent's info
         array is (agent, node, identities, features, data)
         """
 
-        if is_error_result(result):
-            self._disco_info_error(result)
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._disco_info_error(error)
             return
 
         identities = result.identities

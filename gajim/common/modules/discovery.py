@@ -17,7 +17,7 @@
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
@@ -62,10 +62,12 @@ class Discovery(BaseModule):
         server = self._con.get_own_jid().domain
         self.disco_items(server, callback=self._server_items_received)
 
-    def _server_items_received(self, result):
-        if is_error_result(result):
+    def _server_items_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
             self._log.warning('Server disco failed')
-            self._log.error(result)
+            self._log.error(error)
             return
 
         self._log.info('Server items received')
@@ -76,10 +78,12 @@ class Discovery(BaseModule):
                 continue
             self.disco_info(item.jid, callback=self._server_items_info_received)
 
-    def _server_items_info_received(self, result):
-        if is_error_result(result):
+    def _server_items_info_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
             self._log.warning('Server item disco info failed')
-            self._log.warning(result)
+            self._log.warning(error)
             return
 
         self._log.info('Server item info received: %s', result.jid)
@@ -98,10 +102,12 @@ class Discovery(BaseModule):
         own_jid = self._con.get_own_jid().bare
         self.disco_info(own_jid, callback=self._account_info_received)
 
-    def _account_info_received(self, result):
-        if is_error_result(result):
+    def _account_info_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
             self._log.warning('Account disco info failed')
-            self._log.warning(result)
+            self._log.warning(error)
             return
 
         self._log.info('Account info received: %s', result.jid)
@@ -121,10 +127,12 @@ class Discovery(BaseModule):
         server = self._con.get_own_jid().domain
         self.disco_info(server, callback=self._server_info_received)
 
-    def _server_info_received(self, result):
-        if is_error_result(result):
+    def _server_info_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
             self._log.error('Server disco info failed')
-            self._log.error(result)
+            self._log.error(error)
             return
 
         self._log.info('Server info received: %s', result.jid)
@@ -194,9 +202,16 @@ class Discovery(BaseModule):
                         callback=self._muc_info_received,
                         user_data=callback)
 
-    def _muc_info_received(self, result, callback=None):
-        self._log.info('MUC info received: %s', result.jid)
-        if not is_error_result(result):
+    def _muc_info_received(self, task):
+        callback = task.get_user_data()
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            result = error
+            self._log.warning(error)
+
+        else:
+            self._log.info('MUC info received: %s', result.jid)
             app.storage.cache.set_last_disco_info(result.jid, result)
             self._con.get_module('VCardAvatars').muc_disco_info_update(result)
             app.nec.push_incoming_event(NetworkEvent(

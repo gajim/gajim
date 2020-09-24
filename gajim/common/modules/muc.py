@@ -24,6 +24,7 @@ from nbxmpp.const import PresenceType
 from nbxmpp.const import StatusCode
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
+from nbxmpp.errors import is_error
 
 from gi.repository import GLib
 
@@ -62,6 +63,7 @@ class MUC(BaseModule):
         'request_voice',
         'approve_voice_request',
         'destroy',
+        'request_disco_info'
     ]
 
     def __init__(self, con):
@@ -158,7 +160,7 @@ class MUC(BaseModule):
         self._create(muc_data)
 
     def _on_disco_result(self, result):
-        if is_error_result(result):
+        if is_error(result):
             self._log.info('Disco %s failed: %s', result.jid, result.get_text())
             app.nec.push_incoming_event(
                 NetworkEvent('muc-join-failed',
@@ -285,7 +287,7 @@ class MUC(BaseModule):
             self.invite(result.jid, jid)
 
     def _on_disco_result_after_config(self, result):
-        if is_error_result(result):
+        if is_error(result):
             self._log.info('Disco %s failed: %s', result.jid, result.get_text())
             return
 
