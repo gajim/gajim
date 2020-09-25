@@ -26,7 +26,7 @@ from packaging.version import Version as V
 
 from gajim.common import i18n
 
-_MIN_NBXMPP_VER = '1.0.2'
+_MIN_NBXMPP_VER = '1.91.0'
 _MIN_GTK_VER = '3.22.27'
 _MIN_CAIRO_VER = '1.16.0'
 _MIN_PYGOBJECT_VER = '3.32.0'
