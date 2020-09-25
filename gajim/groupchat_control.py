@@ -577,7 +577,7 @@ class GroupchatControl(ChatControlBase):
                 return
 
             vcard = VCard()
-            vcard.set_avatar(avatar, 'image/png')
+            vcard.set_avatar(data, 'image/png')
 
             con = app.connections[self.account]
             con.get_module('VCardTemp').set_vcard(
