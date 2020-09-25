@@ -45,7 +45,7 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 from gajim.common.nec import EventHelper
-from gajim.common.modules.util import task
+from gajim.common.modules.util import as_task
 
 from gajim.gtk.util import get_builder
 
@@ -247,7 +247,7 @@ class VcardWindow(EventHelper):
                 widget.set_text('')
         self.xml.get_object('DESC_textview').get_buffer().set_text('')
 
-    @task
+    @as_task
     def _request_vcard(self, jid):
         _task = yield
 

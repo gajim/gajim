@@ -21,7 +21,7 @@ from nbxmpp.modules.util import is_error
 
 from gajim.common import app
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.util import task
+from gajim.common.modules.util import as_task
 
 
 class VCardAvatars(BaseModule):
@@ -43,7 +43,7 @@ class VCardAvatars(BaseModule):
         self.avatar_conversion_available = is_available
         self._log.info('Discovered Avatar Conversion')
 
-    @task
+    @as_task
     def _request_vcard(self, jid, expected_sha, type_):
         _task = yield
 

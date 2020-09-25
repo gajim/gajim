@@ -29,7 +29,7 @@ from nbxmpp.modules.vcard_temp import VCard
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
-from gajim.common.modules.util import task
+from gajim.common.modules.util import as_task
 
 from gajim import gtkgui_helpers
 
@@ -315,7 +315,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self.update_progressbar_timeout_id = GLib.timeout_add(
             100, self.update_progressbar)
 
-    @task
+    @as_task
     def _request_vcard(self):
         _task = yield
 

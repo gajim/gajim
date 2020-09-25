@@ -92,7 +92,7 @@ class LogAdapter(LoggerAdapter):
         return '(%s) %s' % (self.extra['account'], msg), kwargs
 
 
-def task(func):
+def as_task(func):
     @wraps(func)
     def func_wrapper(self, *args, callback=None, user_data=None, **kwargs):
         task_ = Task(func(self, *args, **kwargs))

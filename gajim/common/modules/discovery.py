@@ -23,7 +23,7 @@ from nbxmpp.errors import is_error
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
-from gajim.common.modules.util import task
+from gajim.common.modules.util import as_task
 from gajim.common.modules.base import BaseModule
 
 
@@ -194,7 +194,7 @@ class Discovery(BaseModule):
         if self._con.get_module('AdHocCommands').command_info_query(stanza):
             raise nbxmpp.NodeProcessed
 
-    @task
+    @as_task
     def disco_muc(self,
                   jid,
                   request_vcard=False,

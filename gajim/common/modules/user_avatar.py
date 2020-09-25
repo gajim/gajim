@@ -20,7 +20,7 @@ from nbxmpp.modules.util import is_error
 from gajim.common import app
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
-from gajim.common.modules.util import task
+from gajim.common.modules.util import as_task
 
 class UserAvatar(BaseModule):
 
@@ -62,7 +62,7 @@ class UserAvatar(BaseModule):
             self._log.info('Request: %s %s', jid, avatar_info.id)
             self._request_avatar(jid, avatar_info)
 
-    @task
+    @as_task
     def _request_avatar(self, jid, avatar_info):
         _task = yield
 
