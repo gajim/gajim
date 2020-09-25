@@ -1467,7 +1467,7 @@ class GroupchatControl(ChatControlBase):
         alternate = destroyed.alternate
         if alternate is not None:
             join_message = _('You can join this group chat '
-                             'instead: xmpp:%s?join') % alternate
+                             'instead: xmpp:%s?join') % str(alternate)
             self.add_info_message(join_message)
 
         self.got_disconnected()
