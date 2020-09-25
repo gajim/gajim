@@ -25,7 +25,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import time
-import base64
 import logging
 
 from nbxmpp.namespaces import Namespace
