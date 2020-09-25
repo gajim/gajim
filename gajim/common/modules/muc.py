@@ -24,7 +24,7 @@ from nbxmpp.const import PresenceType
 from nbxmpp.const import StatusCode
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
-from nbxmpp.errors import is_error
+from nbxmpp.errors import StanzaError
 
 from gi.repository import GLib
 
@@ -159,17 +159,19 @@ class MUC(BaseModule):
         self._manager.add(muc_data)
         self._create(muc_data)
 
-    def _on_disco_result(self, result):
-        if is_error(result):
-            self._log.info('Disco %s failed: %s', result.jid, result.get_text())
+    def _on_disco_result(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._log.info('Disco %s failed: %s', error.jid, error.get_text())
             app.nec.push_incoming_event(
                 NetworkEvent('muc-join-failed',
                              account=self._account,
-                             room_jid=result.jid.bare,
-                             error=result))
+                             room_jid=error.jid.bare,
+                             error=error))
             return
 
-        muc_data = self._manager.get(result.jid)
+        muc_data = self._manager.get(result.info.jid)
         if muc_data is None:
             self._log.warning('MUC Data not found, join aborted')
             return
@@ -286,19 +288,22 @@ class MUC(BaseModule):
         for jid in invites:
             self.invite(result.jid, jid)
 
-    def _on_disco_result_after_config(self, result):
-        if is_error(result):
-            self._log.info('Disco %s failed: %s', result.jid, result.get_text())
+    def _on_disco_result_after_config(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._log.info('Disco %s failed: %s', error.jid, error.get_text())
             return
 
-        muc_data = self._manager.get(result.jid)
+        jid = result.info.jid
+        muc_data = self._manager.get(jid)
         self._room_join_complete(muc_data)
 
-        self._log.info('Configuration finished: %s', result.jid)
+        self._log.info('Configuration finished: %s', jid)
         app.nec.push_incoming_event(NetworkEvent(
             'muc-configuration-finished',
             account=self._account,
-            room_jid=result.jid))
+            room_jid=jid))
 
     def update_presence(self):
         mucs = self._manager.get_mucs_with_state([MUCJoinedState.JOINED,

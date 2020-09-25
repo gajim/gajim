@@ -18,10 +18,12 @@ import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.errors import StanzaError
+from nbxmpp.errors import is_error
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
+from gajim.common.modules.util import task
 from gajim.common.modules.base import BaseModule
 
 
@@ -192,35 +194,49 @@ class Discovery(BaseModule):
         if self._con.get_module('AdHocCommands').command_info_query(stanza):
             raise nbxmpp.NodeProcessed
 
-    def disco_muc(self, jid, callback=None):
-        if not app.account_is_available(self._account):
-            return
+    @task
+    def disco_muc(self,
+                  jid,
+                  request_vcard=False,
+                  allow_redirect=False):
+
+        _task = yield
 
         self._log.info('Request MUC info for %s', jid)
 
-        self.disco_info(jid,
-                        callback=self._muc_info_received,
-                        user_data=callback)
+        result = yield self._nbxmpp('MUC').request_info(
+            jid,
+            request_vcard=request_vcard,
+            allow_redirect=allow_redirect)
 
-    def _muc_info_received(self, task):
-        callback = task.get_user_data()
-        try:
-            result = task.finish()
-        except StanzaError as error:
-            result = error
-            self._log.warning(error)
+        if is_error(result):
+            raise result
 
+        if result.redirected:
+            self._log.info('MUC info received after redirect: %s -> %s',
+                           jid, result.info.jid)
         else:
-            self._log.info('MUC info received: %s', result.jid)
-            app.storage.cache.set_last_disco_info(result.jid, result)
-            self._con.get_module('VCardAvatars').muc_disco_info_update(result)
-            app.nec.push_incoming_event(NetworkEvent(
-                'muc-disco-update',
-                account=self._account,
-                room_jid=result.jid))
+            self._log.info('MUC info received: %s', result.info.jid)
 
-        if callback is not None:
-            callback(result)
+        app.storage.cache.set_last_disco_info(result.info.jid, result.info)
+
+        if result.vcard is not None:
+            avatar, avatar_sha = result.vcard.get_avatar()
+            if avatar is not None:
+                if not app.interface.avatar_exists(avatar_sha):
+                    app.interface.save_avatar(avatar)
+
+                app.storage.cache.set_muc_avatar_sha(result.info.jid,
+                                                     avatar_sha)
+                app.interface.avatar_storage.invalidate_cache(result.info.jid)
+
+        self._con.get_module('VCardAvatars').muc_disco_info_update(result.info)
+        app.nec.push_incoming_event(NetworkEvent(
+            'muc-disco-update',
+            account=self._account,
+            room_jid=result.info.jid))
+
+        yield result
 
 
 def get_instance(*args, **kwargs):

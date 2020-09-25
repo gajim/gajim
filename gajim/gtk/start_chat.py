@@ -14,7 +14,6 @@
 
 import locale
 from enum import IntEnum
-from functools import partial
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -22,14 +21,13 @@ from gi.repository import GLib
 from gi.repository import Pango
 
 from nbxmpp.util import is_error_result
-from nbxmpp.errors import is_error
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
-from gajim.common.helpers import get_alternative_venue
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.const import AvatarSize
@@ -293,34 +291,37 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
             self.ready_to_destroy = False
             self._redirected = False
-            self._disco_muc(row.account, row.jid)
+            self._disco_muc(row.account, row.jid, request_vcard=row.new)
 
         else:
             app.interface.new_chat_from_jid(row.account, row.jid)
             self.ready_to_destroy = True
 
-    def _disco_muc(self, account, jid):
+    def _disco_muc(self, account, jid, request_vcard):
         self._ui.stack.set_visible_child_name('progress')
         con = app.connections[account]
         con.get_module('Discovery').disco_muc(
-            jid, callback=partial(self._disco_info_received, account))
+            jid,
+            request_vcard=request_vcard,
+            allow_redirect=True,
+            callback=self._disco_info_received,
+            user_data=account)
 
     @ensure_not_destroyed
-    def _disco_info_received(self, account, result):
-        if is_error(result):
-            jid = get_alternative_venue(result)
-            if jid is None or self._redirected:
-                self._set_error(result)
-                return
+    def _disco_info_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._set_error(error)
+            return
 
-            self._redirected = True
-            self._disco_muc(account, jid)
+        account = task.get_user_data()
 
-        elif result.is_muc:
+        if result.info.is_muc:
             self._muc_info_box.set_account(account)
-            self._muc_info_box.set_from_disco_info(result)
+            self._muc_info_box.set_from_disco_info(result.info)
             self._nick_chooser.set_text(get_group_chat_nick(
-                account, result.jid))
+                account, result.info.jid))
             self._ui.stack.set_visible_child_name('info')
 
         else:
@@ -371,7 +372,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return
 
         self._redirected = False
-        self._disco_muc(account, selected_row.jid)
+        self._disco_muc(account, selected_row.jid, request_vcard=True)
 
     def _set_listbox(self, listbox):
         if self._current_listbox == listbox:

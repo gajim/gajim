@@ -16,13 +16,12 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
 
-from nbxmpp.errors import is_error
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.helpers import to_user_string
-from gajim.common.helpers import get_alternative_venue
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.const import MUC_DISCO_ERRORS
 
@@ -89,7 +88,10 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
         con = app.connections[self.account]
         con.get_module('Discovery').disco_muc(
-            jid, callback=self._disco_info_received)
+            jid,
+            allow_redirect=True,
+            request_vcard=True,
+            callback=self._disco_info_received)
 
     def _on_page_changed(self, stack, _param):
         name = stack.get_visible_child_name()
@@ -97,22 +99,20 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self._nick_chooser.set_sensitive(name == 'info')
 
     @ensure_not_destroyed
-    def _disco_info_received(self, result):
-        if is_error(result):
-            jid = get_alternative_venue(result)
-            if jid is None or self._redirected:
-                self._set_error(result)
-                return
+    def _disco_info_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._log.info('Disco %s failed: %s', error.jid, error.get_text())
+            self._set_error(error)
+            return
 
-            self.jid = jid
-            self._redirected = True
-            con = app.connections[self.account]
-            con.get_module('Discovery').disco_muc(
-                jid, callback=self._disco_info_received)
+        if result.redirected:
+            self.jid = result.info.jid
 
-        elif result.is_muc:
-            self._muc_info_box.set_from_disco_info(result)
-            nickname = get_group_chat_nick(self.account, result.jid)
+        if result.info.is_muc:
+            self._muc_info_box.set_from_disco_info(result.info)
+            nickname = get_group_chat_nick(self.account, result.info.jid)
             self._nick_chooser.set_text(nickname)
             self._join_button.grab_default()
             self._stack.set_visible_child_name('info')

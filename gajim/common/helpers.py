@@ -1213,14 +1213,6 @@ def get_groupchat_name(con, jid):
     return jid.split('@')[0]
 
 
-def get_alternative_venue(error):
-    if error.condition == 'gone' and error.condition_data is not None:
-        uri = parse_uri(error.condition_data)
-        if uri.type == URIType.XMPP and uri.action == URIAction.JOIN:
-            return uri.data['jid']
-    return None
-
-
 def is_affiliation_change_allowed(self_contact, contact, target_aff):
     if contact.affiliation.value == target_aff:
         # Contact has already the target affiliation
