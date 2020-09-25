@@ -576,7 +576,6 @@ class GroupchatControl(ChatControlBase):
                 self.add_info_message(_('Loading avatar failed'))
                 return
 
-            avatar = base64.b64encode(data).decode('utf-8')
             vcard = VCard()
             vcard.set_avatar(avatar, 'image/png')
 
