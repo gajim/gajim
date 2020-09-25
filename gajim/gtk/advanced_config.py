@@ -153,7 +153,11 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         modelrow = self.model[modelpath]
         setting = modelrow[Column.NAME]
 
-        app.settings.set(setting, text)
+        value = text
+        if modelrow[Column.TYPE] == SETTING_TYPES[int]:
+            value = int(text)
+
+        app.settings.set(setting, value)
         modelrow[Column.VALUE] = text
 
     def _on_reset_button_clicked(self, button):
@@ -167,7 +171,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         if isinstance(default, bool):
             model[iter_][Column.VALUE] = BOOL_DICT[default]
         else:
-            model[iter_][Column.VALUE] = default
+            model[iter_][Column.VALUE] = str(default)
 
         app.settings.set(setting, default)
         button.set_sensitive(False)
