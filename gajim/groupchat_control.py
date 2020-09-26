@@ -72,7 +72,7 @@ from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_invite import GroupChatInvite
-from gajim.gtk.groupchat_settings import GroupChatSettingsScrolled
+from gajim.gtk.groupchat_settings import GroupChatSettings
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_app_window
@@ -177,10 +177,9 @@ class GroupchatControl(ChatControlBase):
         self.xml.info_grid.attach(self._muc_info_box, 0, 0, 1, 1)
 
         # Groupchat settings
-        self._groupchat_settings_box = GroupChatSettingsScrolled(
+        self._groupchat_settings_box = GroupChatSettings(
             self.account, self.room_jid, self.context)
-        self.xml.settings_grid.attach(self._groupchat_settings_box, 0, 0, 1, 1)
-
+        self.xml.settings_scrolled_box.add(self._groupchat_settings_box)
 
         # Groupchat invite
         self.xml.quick_invite_button.set_action_name(

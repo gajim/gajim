@@ -23,43 +23,14 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.settings import SettingsBox
 
 
-class GroupChatSettingsScrolled(Gtk.ScrolledWindow):
+class GroupChatSettings(SettingsBox):
     def __init__(self, account, jid, context):
-        Gtk.ScrolledWindow.__init__(self)
-        self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.set_max_content_height(400)
-        self.set_propagate_natural_height(True)
-        self.set_hexpand(True)
-        self.set_vexpand(True)
-
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
-        box.set_valign(Gtk.Align.CENTER)
-        label = Gtk.Label(label=_('Settings For This Chat'))
-        label.get_style_context().add_class('bold16')
-        label.set_halign(Gtk.Align.CENTER)
-        box.add(label)
-
-        chat_settings = ChatSettings(account, jid, context)
-        box.add(chat_settings)
-
-        self.add(box)
-        self.show_all()
-
-
-class GroupchatSettingsBox(SettingsBox):
-    def __init__(self, account, jid, settings):
         SettingsBox.__init__(self, account, jid)
 
         self.get_style_context().add_class('settings-border')
         self.set_selection_mode(Gtk.SelectionMode.NONE)
-
-        for setting in settings:
-            self.add_setting(setting)
-        self.update_states()
-
-
-class ChatSettings(GroupchatSettingsBox):
-    def __init__(self, account, jid, context):
+        self.set_valign(Gtk.Align.START)
+        self.set_halign(Gtk.Align.CENTER)
 
         chat_state = {
             'disabled': _('Disabled'),
@@ -106,6 +77,9 @@ class ChatSettings(GroupchatSettingsBox):
                     'sync_threshold',
                     context=context,
                     props={'entries': THRESHOLD_OPTIONS}),
+
         ]
 
-        GroupchatSettingsBox.__init__(self, account, jid, settings)
+        for setting in settings:
+            self.add_setting(setting)
+        self.update_states()
