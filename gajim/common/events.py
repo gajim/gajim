@@ -280,9 +280,10 @@ class Events:
                 del self._events[account][jid]
             self.fire_event_removed(removed_list)
             return
-        # no event nor type given, remove them all
-        self.fire_event_removed(self._events[account][jid])
+        # No event nor type given, remove them all
+        removed_list = self._events[account][jid]
         del self._events[account][jid]
+        self.fire_event_removed(removed_list)
 
     def change_jid(self, account, old_jid, new_jid):
         if account not in self._events:
