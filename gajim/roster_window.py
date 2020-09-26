@@ -2638,6 +2638,7 @@ class RosterWindow:
                 jid_list = [contact.jid for contact in l_]
                 con.get_module('Blocking').block(jid_list, report)
                 for contact in l_:
+                    app.events.remove_events(acct, contact.jid)
                     ctrl = app.interface.msg_win_mgr.get_control(
                         contact.jid, acct)
                     if ctrl:
