@@ -68,7 +68,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.service_registration import ServiceRegistration
@@ -1918,7 +1917,9 @@ class RosterWindow:
             return True
 
         if event.type_ == 'gc-invitation':
-            InvitationReceivedDialog(account, event)
+            open_window('GroupChatInvitation',
+                        account=account,
+                        event=event)
             app.events.remove_events(account, jid, event)
             return True
 

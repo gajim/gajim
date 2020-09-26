@@ -98,7 +98,6 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationCheckDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import PassphraseDialog
-from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
@@ -376,28 +375,29 @@ class Interface:
                         'jid': event.from_})
 
     def handle_event_gc_invitation(self, event):
-        if helpers.allow_popup_window(event.account) or not self.systray_enabled:
-            InvitationReceivedDialog(event.account, event)
+        event = events.GcInvitationtEvent(event)
+
+        if (helpers.allow_popup_window(event.account) or
+                not self.systray_enabled):
+            open_window('GroupChatInvitation',
+                        account=event.account,
+                        event=event)
             return
 
-        from_ = str(event.from_)
-        muc = str(event.muc)
-
-        event_ = events.GcInvitationtEvent(event)
-        self.add_event(event.account, from_, event_)
+        self.add_event(event.account, str(event.from_), event)
 
         if helpers.allow_showing_notification(event.account):
+            contact_name = event.get_inviter_name()
             event_type = _('Group Chat Invitation')
-            text = _('You are invited to {room} by {user}').format(room=muc,
-                                                                   user=from_)
+            text = _(f'{contact_name} invited you to {event.info.muc_name}')
             app.notification.popup(event_type,
-                                   from_,
+                                   str(event.from_),
                                    event.account,
                                    'gc-invitation',
                                    'gajim-gc_invitation',
                                    event_type,
                                    text,
-                                   room_jid=muc)
+                                   room_jid=event.muc)
 
     @staticmethod
     def handle_event_client_cert_passphrase(obj):
@@ -1165,7 +1165,9 @@ class Interface:
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            InvitationReceivedDialog(account, event)
+            open_window('GroupChatInvitation',
+                        account=account,
+                        event=event)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'subscription_request':

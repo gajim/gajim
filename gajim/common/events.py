@@ -22,6 +22,8 @@
 
 import time
 
+from gajim.common import app
+
 
 class Event:
     """
@@ -129,6 +131,16 @@ class GcInvitationtEvent(Event):
         Event.__init__(self, None, show_in_roster=False, show_in_systray=True)
         for key, value in vars(event).items():
             setattr(self, key, value)
+
+    def get_inviter_name(self):
+        if self.from_.bare_match(self.muc):
+            return self.from_.resource
+
+        contact = app.contacts.get_first_contact_from_jid(
+            self.account, self.from_.bare)
+        if contact is None:
+            return str(self.from_)
+        return contact.get_shown_name()
 
 class FileRequestEvent(Event):
     type_ = 'file-request'

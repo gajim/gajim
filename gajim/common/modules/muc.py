@@ -771,11 +771,27 @@ class MUC(BaseModule):
                 self._log.info('We are already in this room')
                 raise nbxmpp.NodeProcessed
 
-            app.nec.push_incoming_event(
-                NetworkEvent('muc-invitation',
-                             account=self._account,
-                             **data._asdict()))
+            self._con.get_module('Discovery').disco_muc(
+                data.muc,
+                request_vcard=True,
+                callback=self._on_disco_result_after_invite,
+                user_data=data)
+
             raise nbxmpp.NodeProcessed
+
+    def _on_disco_result_after_invite(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._log.warning(error)
+            return
+
+        invite_data = task.get_user_data()
+        app.nec.push_incoming_event(
+            NetworkEvent('muc-invitation',
+                         account=self._account,
+                         info=result.info,
+                         **invite_data._asdict()))
 
     def invite(self, room, to, reason=None, continue_=False):
         type_ = InviteType.MEDIATED

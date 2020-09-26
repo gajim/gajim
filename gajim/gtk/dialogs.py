@@ -295,64 +295,6 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._clipboard.set_text(clipboard_text, -1)
 
 
-class InvitationReceivedDialog(Gtk.ApplicationWindow):
-    def __init__(self, account, event):
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('InvitationReceivedDialog')
-        self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_resizable(False)
-        self.set_show_menubar(False)
-        self.set_title(_('Group Chat Invitation '))
-
-        self._ui = get_builder('groupchat_invitation_received.ui')
-        self.add(self._ui.grid)
-        self.show_all()
-        self._ui.connect_signals(self)
-
-        self.account = account
-        self.room_jid = str(event.muc)
-        self.from_ = str(event.from_)
-        self.password = event.password
-
-        if event.from_.bare_match(event.muc):
-            contact_text = event.from_.resource
-        else:
-            contact = app.contacts.get_first_contact_from_jid(
-                self.account, event.from_.bare)
-            if contact is None:
-                contact_text = str(event.from_)
-            else:
-                contact_text = contact.get_shown_name()
-
-        invitation_label = _('<b>%(contact)s</b> has invited you to the '
-                             'group chat <b>%(room_jid)s</b>') % \
-                            {'contact': contact_text,
-                             'room_jid': self.room_jid}
-        self._ui.invitation_label.set_markup(invitation_label)
-
-        if event.reason:
-            comment = GLib.markup_escape_text(event.reason)
-            comment = _('Comment: %s') % comment
-            self._ui.comment_label.show()
-            self._ui.comment_label.set_text(comment)
-
-    def on_message_mnemonic_activate(self, _widget, _group_cycling=False):
-        self._ui.message_expander.set_expanded(True)
-
-    def on_accept_button_clicked(self, _widget):
-        app.interface.show_or_join_groupchat(self.account,
-                                             self.room_jid,
-                                             password=self.password)
-        self.destroy()
-
-    def on_decline_button_clicked(self, _widget):
-        text = self._ui.decline_message.get_text()
-        app.connections[self.account].get_module('MUC').decline(
-            self.room_jid, self.from_, text)
-        self.destroy()
-
-
 class PassphraseDialog:
     """
     Class for Passphrase dialog

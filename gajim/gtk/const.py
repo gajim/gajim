@@ -129,4 +129,5 @@ WINDOW_MODULES = {
     'PluginsWindow': 'gajim.plugins.gui',
     'Features': 'gajim.gtk.features',
     'StatusChange': 'gajim.gtk.status_change',
+    'GroupChatInvitation': 'gajim.gtk.groupchat_invitation',
 }

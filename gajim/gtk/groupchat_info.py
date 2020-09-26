@@ -101,14 +101,23 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         Gtk.ScrolledWindow.__init__(self)
         if options is None:
             options = {}
+
+        self._minimal = options.get('minimal', False)
+
         self.set_size_request(options.get('width', 400), -1)
         self.set_halign(Gtk.Align.CENTER)
-        self.set_vexpand(True)
-        self.set_min_content_height(400)
-        self.set_policy(Gtk.PolicyType.NEVER,
-                        Gtk.PolicyType.AUTOMATIC)
+
+        if self._minimal:
+            self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
+        else:
+            self.set_vexpand(True)
+            self.set_min_content_height(400)
+            self.set_policy(Gtk.PolicyType.NEVER,
+                            Gtk.PolicyType.AUTOMATIC)
+
         self._account = account
         self._info = None
+
         self._ui = get_builder('groupchat_info_scrolled.ui')
         self.add(self._ui.info_grid)
         self._ui.connect_signals(self)
@@ -165,6 +174,12 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.description.set_visible(has_desc)
         self._ui.description_label.set_visible(has_desc)
 
+        # Set address
+        self._ui.address.set_text(str(info.jid))
+
+        if self._minimal:
+            return
+
         # Set subject
         self.set_subject(info.muc_subject)
 
@@ -173,9 +188,6 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.users.set_text(info.muc_users or '')
         self._ui.users.set_visible(has_users)
         self._ui.users_image.set_visible(has_users)
-
-        # Set address
-        self._ui.address.set_text(str(info.jid))
 
         # Set contacts
         self._ui.contact_box.foreach(self._ui.contact_box.remove)
