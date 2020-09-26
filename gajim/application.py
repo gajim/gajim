@@ -490,6 +490,7 @@ class GajimApplication(Gtk.Application):
             ('-update-motd', a.on_update_motd, 'online', 's'),
             ('-delete-motd', a.on_delete_motd, 'online', 's'),
             ('-open-event', a.on_open_event, 'always', 'a{sv}'),
+            ('-remove-event', a.on_remove_event, 'always', 'a{sv}'),
             ('-import-contacts', a.on_import_contacts, 'online', 's'),
         ]
 
