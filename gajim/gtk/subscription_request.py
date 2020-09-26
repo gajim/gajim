@@ -104,12 +104,14 @@ class SubscriptionRequest(Gtk.ApplicationWindow):
         self._remove_contact()
 
     def _on_block_clicked(self, _widget):
+        app.events.remove_events(self.account, self.jid)
         self._deny_request()
         con = app.connections[self.account]
         con.get_module('Blocking').block([self.jid])
         self._remove_contact()
 
     def _on_report_clicked(self, _widget):
+        app.events.remove_events(self.account, self.jid)
         self._deny_request()
         con = app.connections[self.account]
         con.get_module('Blocking').block([self.jid], report='spam')
