@@ -174,7 +174,7 @@ class GroupchatControl(ChatControlBase):
         # MUC Info
         self._subject_data = None
         self._muc_info_box = GroupChatInfoScrolled(self.account, {'width': 600})
-        self.xml.info_grid.attach(self._muc_info_box, 0, 0, 1, 1)
+        self.xml.info_box.add(self._muc_info_box)
 
         # Groupchat settings
         self._groupchat_settings_box = GroupChatSettings(
