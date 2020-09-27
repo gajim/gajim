@@ -340,6 +340,11 @@ class Chats(PreferenceBox):
                            'messages')),
 
             Setting(SettingKind.SWITCH,
+                    _('Show Send Message Button'),
+                    SettingType.CONFIG,
+                    'show_send_message_button'),
+
+            Setting(SettingKind.SWITCH,
                     _('Show Status Message'),
                     SettingType.CONFIG,
                     'print_status_in_chats'),
