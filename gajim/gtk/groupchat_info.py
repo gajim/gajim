@@ -242,6 +242,10 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                 row += 1
         grid.show_all()
 
+    def _on_copy_address(self, _button):
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(f'xmpp:{str(self._info.jid)}?join', -1)
+
     @staticmethod
     def _on_activate_log_link(button):
         open_uri(button.get_uri())
