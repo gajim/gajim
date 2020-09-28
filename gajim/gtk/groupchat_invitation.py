@@ -54,7 +54,7 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
         contact_label.set_justify(Gtk.Justification.CENTER)
         contact_label.set_line_wrap(True)
         invitation_label = Gtk.Label(
-            label=_('Has invited you to a group chat.\nDo you want to join?'))
+            label=_('has invited you to a group chat.\nDo you want to join?'))
         invitation_label.set_halign(Gtk.Align.CENTER)
         invitation_label.set_justify(Gtk.Justification.CENTER)
         invitation_label.set_max_width_chars(50)
