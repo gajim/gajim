@@ -136,7 +136,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         has_author = bool(author)
         if has_author and epoch_timestamp is not None:
             time_ = time.strftime('%c', time.localtime(epoch_timestamp))
-            author = '{} - {}'.format(author, time_)
+            author = f'{author} - {time_}'
 
         self._ui.author.set_text(author or '')
         self._ui.author.set_visible(has_author)
@@ -202,7 +202,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         # Set discussion logs
         has_log_uri = bool(info.muc_log_uri)
         self._ui.logs.set_uri(info.muc_log_uri or '')
-        self._ui.logs.set_label('Website')
+        self._ui.logs.set_label(_('Website'))
         self._ui.logs.set_visible(has_log_uri)
         self._ui.logs_label.set_visible(has_log_uri)
 
@@ -244,7 +244,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
     def _on_copy_address(self, _button):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(f'xmpp:{str(self._info.jid)}?join', -1)
+        clipboard.set_text(f'xmpp:{self._info.jid}?join', -1)
 
     @staticmethod
     def _on_activate_log_link(button):
@@ -252,7 +252,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         return Gdk.EVENT_STOP
 
     def _on_activate_contact_link(self, button):
-        open_uri('xmpp:%s?message' % button.get_uri(), account=self._account)
+        open_uri(f'xmpp:{button.get_uri()}?message', account=self._account)
         return Gdk.EVENT_STOP
 
     @staticmethod
