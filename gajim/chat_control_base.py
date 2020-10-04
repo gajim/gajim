@@ -79,6 +79,12 @@ from gajim.command_system.implementation import execute
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
+# This is needed so copying text from the conversation textview
+# works with different language layouts. Pressing the key c on a russian
+# layout yields another keyval than with the english layout.
+# So we match hardware keycodes instead of keyvals.
+# Multiple hardware keycodes can trigger a keyval like Gdk.KEY_c.
+KEYCODES_KEY_C = get_hardware_key_codes(Gdk.KEY_c)
 
 if sys.platform == 'darwin':
     COPY_MODIFIER = Gdk.ModifierType.META_MASK
@@ -94,12 +100,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     A base class containing a banner, ConversationTextview, MessageInputTextView
     """
 
-    # This is needed so copying text from the conversation textview
-    # works with different language layouts. Pressing the key c on a russian
-    # layout yields another keyval than with the english layout.
-    # So we match hardware keycodes instead of keyvals.
-    # Multiple hardware keycodes can trigger a keyval like Gdk.KEY_c.
-    keycodes_c = get_hardware_key_codes(Gdk.KEY_c)
     _type = None  # type: ControlType
 
     def __init__(self, parent_win, widget_name, contact, acct,
@@ -272,7 +272,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if event.get_state() & COPY_MODIFIER:
             # Don’t reroute the event if it is META + c and the
             # textview has a selection
-            if event.keyval == Gdk.KEY_c:
+            if event.hardware_keycode in KEYCODES_KEY_C:
                 if textview.get_buffer().props.has_selection:
                     return Gdk.EVENT_PROPAGATE
 
