@@ -350,6 +350,13 @@ class Message(BaseModule):
                 stanza.setTag('no-store',
                               namespace=Namespace.MSG_HINTS)
 
+        # XEP-0333
+        if message.message:
+            stanza.setMarkable()
+        if message.marker:
+            marker, id_ = message.marker
+            stanza.setMarker(marker, id_)
+
         # Add other nodes
         if message.nodes is not None:
             for node in message.nodes:

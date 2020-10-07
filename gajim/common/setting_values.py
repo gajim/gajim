@@ -255,12 +255,16 @@ ACCOUNT_SETTINGS = {
         'filetransfer_preference': 'httpupload',
         'send_chatstate_default': 'composing_only',
         'gc_send_chatstate_default': 'composing_only',
+        'send_marker_default': True,
+        'gc_send_marker_private_default': True,
+        'gc_send_marker_public_default': False,
         'chat_history_max_age': -1,
     },
 
     'contact': {
         'speller_language': '',
         'send_chatstate': HAS_ACCOUNT_DEFAULT,
+        'send_marker': HAS_ACCOUNT_DEFAULT,
         'encryption': '',
     },
 
@@ -272,6 +276,7 @@ ACCOUNT_SETTINGS = {
         'minimize_on_autojoin': True,
         'minimize_on_close': True,
         'send_chatstate': HAS_ACCOUNT_DEFAULT,
+        'send_marker': HAS_ACCOUNT_DEFAULT,
         'encryption': '',
         'sync_threshold': HAS_APP_DEFAULT,
     },

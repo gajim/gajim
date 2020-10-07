@@ -730,6 +730,19 @@ class PrivacyPage(GenericSettingPage):
                            'button-style': 'destructive-action',
                            'button-callback': self._reset_gc_send_chatstate}),
 
+            Setting(SettingKind.SWITCH,
+                    _('Send Read Markers'),
+                    SettingType.VALUE,
+                    app.settings.get_account_setting(
+                        account, 'send_marker_default'),
+                    callback=self._send_read_marker,
+                    desc=_('Default for chats and private group chats'),
+                    props={'button-text': _('Reset'),
+                           'button-tooltip': _('Reset all chats to the '
+                                               'current default value'),
+                           'button-style': 'destructive-action',
+                           'button-callback': self._reset_send_read_marker}),
+
             Setting(SettingKind.POPOVER,
                     _('Keep Chat History'),
                     SettingType.ACCOUNT_CONFIG,
@@ -748,6 +761,20 @@ class PrivacyPage(GenericSettingPage):
     def _reset_gc_send_chatstate(button):
         button.set_sensitive(False)
         app.settings.set_group_chat_settings('send_chatstate', None)
+
+    def _send_read_marker(self, state, _data):
+        app.settings.set_account_setting(
+            self._account, 'send_marker_default', state)
+        app.settings.set_account_setting(
+            self._account, 'gc_send_marker_private_default', state)
+
+    def _reset_send_read_marker(self, button):
+        button.set_sensitive(False)
+        app.settings.set_contact_settings('send_marker', None)
+        app.settings.set_group_chat_settings(
+            'send_marker', None, context='private')
+        for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
+            ctrl.update_actions()
 
 
 class ConnectionPage(GenericSettingPage):

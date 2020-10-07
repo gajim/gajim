@@ -243,6 +243,43 @@ class Interface:
             ctrl.remove_session(ctrl.session)
 
     @staticmethod
+    def handle_event_read_state_sync(event):
+        if event.type.is_groupchat:
+            control = app.get_groupchat_control(
+                event.account, event.jid.bare)
+            if control is None:
+                log.warning('Groupchat control not found')
+                return
+
+            jid = event.jid.bare
+            types = ['printed_gc_msg', 'printed_marked_gc_msg']
+
+        else:
+            types = ['chat', 'pm', 'printed_chat', 'printed_pm']
+            jid = event.jid
+
+            control = app.interface.msg_win_mgr.get_control(jid, event.account)
+
+        # Compare with control.last_msg_id.
+        events_ = app.events.get_events(event.account, jid, types)
+        if not events_:
+            log.warning('No Events')
+            return
+
+        if event.type.is_groupchat:
+            id_ = events_[-1].stanza_id or events_[-1].message_id
+        else:
+            id_ = events_[-1].message_id
+
+        if id_ != event.marker_id:
+            return
+
+        if not app.events.remove_events(event.account, jid, types=types):
+            # There were events to remove
+            if control is not None:
+                control.redraw_after_event_removed(event.jid)
+
+    @staticmethod
     def handle_event_msgsent(obj):
         if not obj.play_sound:
             return
@@ -1060,6 +1097,7 @@ class Interface:
             'unsubscribed-presence-received': [
                 self.handle_event_unsubscribed_presence],
             'zeroconf-name-conflict': [self.handle_event_zc_name_conflict],
+            'read-state-sync': [self.handle_event_read_state_sync],
         }
 
     def register_core_handlers(self):

@@ -33,6 +33,7 @@ from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import optparser
+from gajim.common.helpers import get_muc_context
 from gajim.common.setting_values import APP_SETTINGS
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import PROXY_SETTINGS
@@ -678,11 +679,16 @@ class Settings:
 
     def set_group_chat_settings(self,
                                 setting: str,
-                                value: SETTING_TYPE) -> None:
+                                value: SETTING_TYPE,
+                                context: str = None) -> None:
 
         for account in self._account_settings:
             for jid in self._account_settings[account]['group_chat']:
-                self.set_group_chat_setting(account, jid, setting, value)
+                if context is not None:
+                    if get_muc_context(jid) != context:
+                        continue
+                self.set_group_chat_setting(
+                    account, jid, setting, value, context)
 
     def get_contact_setting(self,
                             account: str,

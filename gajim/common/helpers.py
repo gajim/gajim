@@ -1406,3 +1406,13 @@ def get_group_chat_nick(account, room_jid):
             nick = bookmark.nick
 
     return nick
+
+
+def get_muc_context(jid):
+    disco_info = app.storage.cache.get_last_disco_info(jid)
+    if disco_info is None:
+        return None
+
+    if (disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous):
+        return 'private'
+    return 'public'

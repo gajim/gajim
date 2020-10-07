@@ -55,6 +55,7 @@ class OutgoingMessage:
                  type_,
                  subject=None,
                  chatstate=None,
+                 marker=None,
                  resource=None,
                  user_nick=None,
                  label=None,
@@ -69,7 +70,7 @@ class OutgoingMessage:
         if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
             raise ValueError('Unknown message type: %s' % type_)
 
-        if not message and chatstate is None:
+        if not message and chatstate is None and marker is None:
             raise ValueError('Trying to send message without content')
 
         self.account = account
@@ -91,6 +92,7 @@ class OutgoingMessage:
 
         self.subject = subject
         self.chatstate = chatstate
+        self.marker = marker
         self.resource = resource
         self.user_nick = user_nick
         self.label = label

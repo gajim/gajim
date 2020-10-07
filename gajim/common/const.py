@@ -970,6 +970,7 @@ COMMON_FEATURES = [
     Namespace.SECLABEL,
     Namespace.CONFERENCE,
     Namespace.CORRECT,
+    Namespace.CHATMARKERS,
     Namespace.EME,
     Namespace.XHTML_IM,
     Namespace.HASHES_2,

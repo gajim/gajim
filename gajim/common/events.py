@@ -91,13 +91,16 @@ class PmEvent(ChatEvent):
 class PrintedChatEvent(Event):
     type_ = 'printed_chat'
     def __init__(self, message, subject, control, msg_log_id, time_=None,
-    show_in_roster=False, show_in_systray=True):
+                 message_id=None, stanza_id=None, show_in_roster=False,
+                 show_in_systray=True):
         Event.__init__(self, time_, show_in_roster=show_in_roster,
-            show_in_systray=show_in_systray)
+                       show_in_systray=show_in_systray)
         self.message = message
         self.subject = subject
         self.control = control
         self.msg_log_id = msg_log_id
+        self.message_id = message_id
+        self.stanza_id = stanza_id
 
 class PrintedGcMsgEvent(PrintedChatEvent):
     type_ = 'printed_gc_msg'

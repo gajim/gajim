@@ -123,7 +123,7 @@ class ChatControl(ChatControlBase):
 
         # Menu for the HeaderBar
         self.control_menu = gui_menu_builder.get_singlechat_menu(
-            self.control_id, self.account, self.contact.jid)
+            self.control_id, self.account, self.contact.jid, self._type)
 
         # Settings menu
         self.xml.settings_menu.set_menu_model(self.control_menu)
@@ -228,6 +228,7 @@ class ChatControl(ChatControlBase):
             ('mam-decrypted-message-received', ged.GUI1, self._on_mam_decrypted_message_received),
             ('decrypted-message-received', ged.GUI1, self._on_decrypted_message_received),
             ('receipt-received', ged.GUI1, self._receipt_received),
+            ('displayed-received', ged.GUI1, self._displayed_received),
             ('message-error', ged.GUI1, self._on_message_error),
             ('zeroconf-error', ged.GUI1, self._on_zeroconf_error),
         ])
@@ -269,6 +270,15 @@ class ChatControl(ChatControlBase):
             GLib.VariantType.new("s"),
             GLib.Variant("s", chatstate))
         act.connect('change-state', self._on_send_chatstate)
+        self.parent_win.window.add_action(act)
+
+        marker = self.contact.settings.get('send_marker')
+
+        act = Gio.SimpleAction.new_stateful(
+            f'send-marker-{self.control_id}',
+            None,
+            GLib.Variant.new_boolean(marker))
+        act.connect('change-state', self._on_send_marker)
         self.parent_win.window.add_action(act)
 
     def update_actions(self):
@@ -338,6 +348,12 @@ class ChatControl(ChatControlBase):
             tooltip_text = _('No File Transfer available')
         self.xml.sendfile_button.set_tooltip_text(tooltip_text)
 
+        # Chat markers
+        state = GLib.Variant.new_boolean(
+            self.contact.settings.get('send_marker'))
+        win.lookup_action(
+            f'send-marker-{self.control_id}').change_state(state)
+
         # Convert to GC
         if app.settings.get_account_setting(self.account, 'is_zeroconf'):
             win.lookup_action(
@@ -363,6 +379,7 @@ class ChatControl(ChatControlBase):
             'information-',
             'start-call-',
             'send-chatstate-',
+            'send-marker-',
         ]
         for action in actions:
             self.parent_win.window.remove_action(f'{action}{self.control_id}')
@@ -434,6 +451,10 @@ class ChatControl(ChatControlBase):
     def _on_send_chatstate(self, action, param):
         action.set_state(param)
         self.contact.settings.set('send_chatstate', param.get_string())
+
+    def _on_send_marker(self, action, param):
+        action.set_state(param)
+        self.contact.settings.set('send_marker', param.get_boolean())
 
     def subscribe_events(self):
         """
@@ -642,6 +663,10 @@ class ChatControl(ChatControlBase):
     @event_filter(['account', 'jid'])
     def _receipt_received(self, event):
         self.conv_textview.show_receipt(event.receipt_id)
+
+    @event_filter(['account', 'jid'])
+    def _displayed_received(self, event):
+        self.conv_textview.show_displayed(event.marker_id)
 
     @event_filter(['account', 'jid'])
     def _on_zeroconf_error(self, event):
@@ -1385,6 +1410,14 @@ class ChatControl(ChatControlBase):
                 self.set_session(event.session)
         if message_ids:
             app.storage.archive.set_read_messages(message_ids)
+
+        # XEP-0333 Send <displayed> marker
+        con = app.connections[self.account]
+        con.get_module('ChatMarkers').send_displayed_marker(
+            self.contact,
+            self.last_msg_id,
+            self._type)
+        self.last_msg_id = None
         app.events.remove_events(self.account,
                                  jid_with_resource,
                                  types=[str(self._type)])

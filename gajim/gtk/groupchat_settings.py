@@ -71,6 +71,13 @@ class GroupChatSettings(SettingsBox):
                     'send_chatstate',
                     props={'entries': chat_state}),
 
+            Setting(SettingKind.SWITCH,
+                    _('Send Chat Markers'),
+                    SettingType.GROUP_CHAT,
+                    'send_marker',
+                    context=context,
+                    desc=_('Let others know if you read up to this point')),
+
             Setting(SettingKind.POPOVER,
                     _('Sync Threshold'),
                     SettingType.GROUP_CHAT,

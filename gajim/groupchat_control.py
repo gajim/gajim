@@ -658,6 +658,17 @@ class GroupchatControl(ChatControlBase):
         self.update_actions()
         self.set_lock_image()
         self.draw_banner_text()
+        type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
+        if not app.events.remove_events(self.account,
+                                        self.get_full_jid(),
+                                        types=type_):
+            # XEP-0333 Send <displayed> marker
+            con = app.connections[self.account]
+            con.get_module('ChatMarkers').send_displayed_marker(
+                self.contact,
+                self.last_msg_id,
+                self._type)
+            self.last_msg_id = None
 
     def _on_roster_row_activated(self, _roster, nick):
         self._start_private_message(nick)
@@ -796,17 +807,21 @@ class GroupchatControl(ChatControlBase):
         else:
             if event.properties.muc_nickname == self.nick:
                 self.last_sent_txt = event.msgtxt
+            stanza_id = None
+            if event.properties.stanza_id:
+                stanza_id = event.properties.stanza_id.id
             self.add_message(event.msgtxt,
                              contact=event.properties.muc_nickname,
                              tim=event.properties.timestamp,
                              displaymarking=event.displaymarking,
                              correct_id=event.correct_id,
                              message_id=event.properties.id,
+                             stanza_id=stanza_id,
                              additional_data=event.additional_data)
         event.needs_highlight = self.needs_visual_notification(event.msgtxt)
 
     def on_private_message(self, nick, sent, msg, tim, session, additional_data,
-                           msg_log_id=None, displaymarking=None):
+                           message_id, msg_log_id=None, displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
 
@@ -819,7 +834,9 @@ class GroupchatControl(ChatControlBase):
                                session=session,
                                displaymarking=displaymarking,
                                sent_forwarded=sent,
-                               additional_data=additional_data)
+                               additional_data=additional_data,
+                               message_id=message_id)
+
         app.events.add_event(self.account, fjid, event)
 
         if allow_popup_window(self.account):
@@ -837,7 +854,7 @@ class GroupchatControl(ChatControlBase):
 
     def add_message(self, text, contact='', tim=None,
                     displaymarking=None, correct_id=None, message_id=None,
-                    additional_data=None):
+                    stanza_id=None, additional_data=None):
         """
         Add message to the ConversationsTextview
 
@@ -887,6 +904,7 @@ class GroupchatControl(ChatControlBase):
                                     displaymarking=displaymarking,
                                     correct_id=correct_id,
                                     message_id=message_id,
+                                    stanza_id=stanza_id,
                                     additional_data=additional_data)
 
     def get_nb_unread(self):
@@ -1057,6 +1075,7 @@ class GroupchatControl(ChatControlBase):
                                     event.properties.timestamp,
                                     self.session,
                                     event.additional_data,
+                                    event.properties.id,
                                     msg_log_id=event.msg_log_id,
                                     displaymarking=event.displaymarking)
 

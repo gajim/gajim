@@ -511,12 +511,13 @@ def get_transport_menu(contact, account):
     return menu
 
 
-def get_singlechat_menu(control_id, account, jid):
+def get_singlechat_menu(control_id, account, jid, type_):
     singlechat_menu = [
         (_('Send File'), [
             ('win.send-file-httpupload-', _('Upload File…')),
             ('win.send-file-jingle-', _('Send File Directly…')),
             ]),
+        ('win.send-marker-', _('Send Read Markers')),
         (_('Send Chatstate'), ['chatstate']),
         ('win.invite-contacts-', _('Invite Contacts…')),
         ('win.add-to-roster-', _('Add to Contact List…')),
@@ -545,6 +546,9 @@ def get_singlechat_menu(control_id, account, jid):
         for item in preset:
             if isinstance(item[1], str):
                 action_name, label = item
+                if action_name == 'win.send-marker-' and type_ == 'pm':
+                    continue
+
                 if action_name == 'app.browse-history':
                     menuitem = Gio.MenuItem.new(label, action_name)
                     dict_ = {'account': GLib.Variant('s', account),
