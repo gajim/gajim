@@ -453,13 +453,16 @@ class ServicesCache:
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def _disco_items_received(self, result):
+    def _disco_items_received(self, task):
         """
         Callback for when we receive an agent's items
         array is (agent, node, items)
         """
-        if is_error_result(result):
-            self._disco_items_error(result)
+
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._disco_items_error(error)
             return
 
         addr = get_agent_address(result.jid, result.node)
