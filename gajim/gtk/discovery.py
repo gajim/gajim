@@ -46,7 +46,6 @@ import weakref
 import uuid
 
 import nbxmpp
-from nbxmpp.util import is_error_result
 from nbxmpp.structs import DiscoIdentity
 from nbxmpp.namespaces import Namespace
 from nbxmpp.errors import StanzaError
