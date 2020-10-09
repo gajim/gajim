@@ -389,7 +389,8 @@ class Interface:
         if helpers.allow_showing_notification(event.account):
             contact_name = event.get_inviter_name()
             event_type = _('Group Chat Invitation')
-            text = _(f'{contact_name} invited you to {event.info.muc_name}')
+            text = _('%(contact)s invited you to %(chat)s') % {
+                'contact': contact_name, 'chat': event.info.muc_name}
             app.notification.popup(event_type,
                                    str(event.from_),
                                    event.account,
@@ -925,7 +926,7 @@ class Interface:
         if helpers.allow_showing_notification(account):
             heading = _('Incoming Call')
             contact = app.get_name_from_jid(account, event.jid)
-            text = _(f'{contact} is calling')
+            text = _('%s is calling' % contact)
             app.notification.popup(
                 heading,
                 event.fjid,

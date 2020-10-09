@@ -495,7 +495,7 @@ class GroupchatControl(ChatControlBase):
         con = app.connections[self.account]
         message_id = con.get_module('MUC').invite(self.room_jid, contact_jid)
         self.add_info_message(
-            _(f'{contact_jid} has been invited to this group chat'),
+            _('%s has been invited to this group chat' % contact_jid),
             message_id=message_id)
 
     def _on_destroy_room(self, _action, _param):
@@ -591,7 +591,7 @@ class GroupchatControl(ChatControlBase):
         try:
             task.finish()
         except Exception as error:
-            self.add_info_message(_(f'Avatar upload failed: {error}'))
+            self.add_info_message(_('Avatar upload failed: %s' % error))
 
         else:
             self.add_info_message(_('Avatar upload successful'))
