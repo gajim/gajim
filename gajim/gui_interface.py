@@ -924,7 +924,8 @@ class Interface:
 
         if helpers.allow_showing_notification(account):
             heading = _('Incoming Call')
-            text = _(f'{app.get_name_from_jid(account, event.jid)} is calling')
+            contact = app.get_name_from_jid(account, event.jid)
+            text = _(f'{contact} is calling')
             app.notification.popup(
                 heading,
                 event.fjid,

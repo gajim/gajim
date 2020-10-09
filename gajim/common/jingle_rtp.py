@@ -130,11 +130,13 @@ class JingleRTPContent(JingleContent):
                     None,
                     conn=self.session.connection,
                     level='error',
-                    pri_txt=_(f'{text.capitalize()} configuration error'),
-                    sec_txt=_(
-                        f'Couldn’t set up {text}. Check your configuration.\n'
-                        f'Pipeline was:\n{pipeline}\n'
-                        f'Error was:\n{err}')))
+                    pri_txt=_(f'{text} configuration error'),
+                    sec_txt=_('Couldn’t set up %(text)s. Check your '
+                              'configuration.\nPipeline:\n%(pipeline)s\n'
+                              'Error:\n%(error)s') % {
+                                  'text': text,
+                                  'pipeline': pipeline,
+                                  'error': str(err)}))
             raise JingleContentSetupException
 
     def add_remote_candidates(self, candidates):
