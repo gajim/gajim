@@ -1688,7 +1688,7 @@ class ChatControl(ChatControlBase):
                     if ev.muc == ib_msg[2][0]:
                         self.info_bar_queue.remove(ib_msg)
                         removed = True
-                if ev.type_ == 'jingle-incoming':
+                elif ev.type_ == 'jingle-incoming':
                     # TODO: Need to be more specific here?
                     self.info_bar_queue.remove(ib_msg)
                     removed = True
