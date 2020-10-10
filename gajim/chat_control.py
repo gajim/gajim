@@ -1510,13 +1510,15 @@ class ChatControl(ChatControlBase):
         markup += '\n%s: %s' % (
             _('Size'),
             GLib.format_size_full(file_props.size, units))
-        b1 = Gtk.Button.new_with_mnemonic(_('_Accept'))
-        b1.connect('clicked', self._on_accept_file_request, file_props)
-        b2 = Gtk.Button.new_with_mnemonic(_('_Decline'))
-        b2.connect('clicked', self._on_cancel_file_request, file_props)
+        button_decline = Gtk.Button.new_with_mnemonic(_('_Decline'))
+        button_decline.connect(
+            'clicked', self._on_cancel_file_request, file_props)
+        button_accept = Gtk.Button.new_with_mnemonic(_('_Accept'))
+        button_accept.connect(
+            'clicked', self._on_accept_file_request, file_props)
         self._add_info_bar_message(
             markup,
-            [b1, b2],
+            [button_decline, button_accept],
             file_props,
             Gtk.MessageType.QUESTION)
 
@@ -1570,13 +1572,13 @@ class ChatControl(ChatControlBase):
         markup = '<b>%s</b>\n%s' % (_('Group Chat Invitation'), event.muc)
         if event.reason:
             markup += '\n(%s)' % event.reason
-        b1 = Gtk.Button.new_with_mnemonic(_('_Accept'))
-        b1.connect('clicked', self._on_accept_gc_invitation, event)
-        b2 = Gtk.Button.new_with_mnemonic(_('_Decline'))
-        b2.connect('clicked', self._on_cancel_gc_invitation, event)
+        button_decline = Gtk.Button.new_with_mnemonic(_('_Decline'))
+        button_decline.connect('clicked', self._on_cancel_gc_invitation, event)
+        button_accept = Gtk.Button.new_with_mnemonic(_('_Accept'))
+        button_accept.connect('clicked', self._on_accept_gc_invitation, event)
         self._add_info_bar_message(
             markup,
-            [b1, b2],
+            [button_decline, button_accept],
             (event.muc, event.reason),
             Gtk.MessageType.QUESTION)
 
