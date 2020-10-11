@@ -66,7 +66,6 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationCheckDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
