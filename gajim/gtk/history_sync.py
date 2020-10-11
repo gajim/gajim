@@ -248,11 +248,11 @@ class DownloadHistoryPage(Gtk.Box):
         self.received += 1
         if self.count:
             self.progress.set_fraction(self.received / self.count)
-            self.progress.set_text(_('%(received)s of %(max)s' % {
-                'received': self.received, 'max': self.count}))
+            self.progress.set_text(_('%(received)s of %(max)s') % {
+                'received': self.received, 'max': self.count})
         else:
             self.progress.pulse()
-            self.progress.set_text(_('Downloaded %s messages' % self.received))
+            self.progress.set_text(_('Downloaded %s messages') % self.received)
 
     def finished(self):
         self.progress.set_fraction(1)
@@ -273,7 +273,7 @@ class SummaryPage(Gtk.Box):
     def finished(self):
         received = self.assistant.download_history.received
         self.label.set_text(_('Finished synchronising chat history:\n'
-                              '%s messages downloaded' % received))
+                              '%s messages downloaded') % received)
 
     def nothing_to_do(self):
         self.label.set_text(_('Gajim is fully synchronised with the archive.'))

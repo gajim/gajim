@@ -652,7 +652,7 @@ class ContactRow(Gtk.ListBoxRow):
         if show_account:
             account_badge = generate_account_badge(account)
             account_badge.set_tooltip_text(
-                _('Account: %s' % self.account_label))
+                _('Account: %s') % self.account_label)
             account_badge.set_halign(Gtk.Align.END)
             account_badge.set_valign(Gtk.Align.START)
             account_badge.set_hexpand(True)

@@ -926,7 +926,7 @@ class Interface:
         if helpers.allow_showing_notification(account):
             heading = _('Incoming Call')
             contact = app.get_name_from_jid(account, event.jid)
-            text = _('%s is calling' % contact)
+            text = _('%s is calling') % contact
             app.notification.popup(
                 heading,
                 event.fjid,
@@ -1983,7 +1983,7 @@ class Interface:
                 _('Update Available'),
                 _('Gajim Update Available'),
                 _('There is an update available for Gajim '
-                  '(latest version: %s)' % str(latest_version)),
+                  '(latest version: %s)') % str(latest_version),
                 _('_Do not show again'),
                 [DialogButton.make('Cancel',
                                     text=_('_Later'),

@@ -130,7 +130,7 @@ class JingleRTPContent(JingleContent):
                     None,
                     conn=self.session.connection,
                     level='error',
-                    pri_txt=_('%s configuration error' % text),
+                    pri_txt=_('%s configuration error') % text,
                     sec_txt=_('Couldn’t set up %(text)s. Check your '
                               'configuration.\nPipeline:\n%(pipeline)s\n'
                               'Error:\n%(error)s') % {

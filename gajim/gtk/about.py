@@ -49,8 +49,8 @@ class AboutDialog(Gtk.AboutDialog):
 
         comments = []
         comments.append(_('A GTK XMPP client'))
-        comments.append(_('GTK Version: %s' % gtk_ver))
-        comments.append(_('GLib Version: %s' % glib_ver))
+        comments.append(_('GTK Version: %s') % gtk_ver)
+        comments.append(_('GLib Version: %s') % glib_ver)
         comments.append(_('PyGObject Version: %s') % gobject_ver)
         comments.append(_('python-nbxmpp Version: %s') % nbxmpp.__version__)
 

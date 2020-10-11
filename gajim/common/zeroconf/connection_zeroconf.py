@@ -261,7 +261,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 if result is False:
                     app.nec.push_incoming_event(ConnectionLostEvent(None,
                         conn=self, title=_('Could not start local service'),
-                        msg=_('Unable to bind to port %d.' % self.port)))
+                        msg=_('Unable to bind to port %d.') % self.port))
                 else: # result is None
                     app.nec.push_incoming_event(ConnectionLostEvent(None,
                         conn=self, title=_('Could not start local service'),

@@ -396,7 +396,7 @@ class FileTransfersWindow:
                     file_name = GLib.markup_escape_text(
                         os.path.basename(file_path))
                     ErrorDialog(
-                        _('Cannot overwrite existing file \'%s\'' % file_name),
+                        _('Cannot overwrite existing file \'%s\'') % file_name,
                         _('A file with this name already exists and you do '
                           'not have permission to overwrite it.'))
                     return

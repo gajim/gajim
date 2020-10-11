@@ -194,7 +194,7 @@ class RosterItemExchangeWindow(Gtk.ApplicationWindow):
                     count += 1
                     # It is selected
                     message = _('%s suggested me to add you to my '
-                                'contact list.' % self.jid_from)
+                                'contact list.') % self.jid_from
                     # Keep same groups and same nickname
                     groups = model[iter_][3].split(', ')
                     if groups == ['']:

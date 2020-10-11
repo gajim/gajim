@@ -495,7 +495,7 @@ class GroupchatControl(ChatControlBase):
         con = app.connections[self.account]
         message_id = con.get_module('MUC').invite(self.room_jid, contact_jid)
         self.add_info_message(
-            _('%s has been invited to this group chat' % contact_jid),
+            _('%s has been invited to this group chat') % contact_jid,
             message_id=message_id)
 
     def _on_destroy_room(self, _action, _param):
@@ -591,7 +591,7 @@ class GroupchatControl(ChatControlBase):
         try:
             task.finish()
         except Exception as error:
-            self.add_info_message(_('Avatar upload failed: %s' % error))
+            self.add_info_message(_('Avatar upload failed: %s') % error)
 
         else:
             self.add_info_message(_('Avatar upload successful'))
@@ -612,7 +612,7 @@ class GroupchatControl(ChatControlBase):
     def _on_kick(self, _action, param):
         nick = param.get_string()
         self._kick_nick = nick
-        self.xml.kick_label.set_text(_('Kick %s' % nick))
+        self.xml.kick_label.set_text(_('Kick %s') % nick)
         self.xml.kick_reason_entry.grab_focus()
         self.xml.kick_participant_button.grab_default()
         self._show_page('kick')
@@ -621,7 +621,7 @@ class GroupchatControl(ChatControlBase):
         jid = param.get_string()
         self._ban_jid = jid
         nick = app.get_nick_from_jid(jid)
-        self.xml.ban_label.set_text(_('Ban %s' % nick))
+        self.xml.ban_label.set_text(_('Ban %s') % nick)
         self.xml.ban_reason_entry.grab_focus()
         self.xml.ban_participant_button.grab_default()
         self._show_page('ban')

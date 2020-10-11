@@ -45,7 +45,7 @@ class Bookmarks(Gtk.ApplicationWindow):
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_title(_('Bookmarks for %s' % app.get_account_label(account)))
+        self.set_title(_('Bookmarks for %s') % app.get_account_label(account))
         self.set_default_size(700, 500)
 
         self.account = account

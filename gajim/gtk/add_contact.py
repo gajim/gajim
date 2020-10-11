@@ -258,7 +258,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         if not jid:
             ErrorDialog(
                 _('%s Missing') % self.uid_label.get_text(),
-                _('You must supply the %s of the new contact.' %
+                (_('You must supply the %s of the new contact.') %
                     self.uid_label.get_text())
             )
             return

@@ -1334,7 +1334,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                     _('Privacy'),
                     _('Warning'),
                     _('If you send a file to <b>%s</b>, your real XMPP '
-                      'address will be revealed.' % gc_contact.name),
+                      'address will be revealed.') % gc_contact.name,
                     [DialogButton.make('Cancel'),
                      DialogButton.make(
                          'OK',
