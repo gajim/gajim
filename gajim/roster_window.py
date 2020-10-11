@@ -3664,11 +3664,7 @@ class RosterWindow:
         con_dest = app.connections[account_dest]
         if (not con_source.get_module('MetaContacts').available or
                 not con_dest.get_module('MetaContacts').available):
-            WarningDialog(_('Metacontacts storage not supported by '
-                'your server'),
-                _('Your server does not support storing metacontacts '
-                'information. So this information will not be saved on next '
-                'reconnection.'))
+            return
 
         def merge_contacts(is_checked=None):
             contacts = 0

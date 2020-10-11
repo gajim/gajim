@@ -250,6 +250,11 @@ class ContactList(PreferenceBox):
                     callback=self._on_merge_accounts),
 
             Setting(SettingKind.SWITCH,
+                    _('Enable Metacontacts'),
+                    SettingType.CONFIG,
+                    'metacontacts_enabled'),
+
+            Setting(SettingKind.SWITCH,
                     _('Show Avatars'),
                     SettingType.CONFIG,
                     'show_avatars_in_roster',

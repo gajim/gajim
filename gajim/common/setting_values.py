@@ -139,6 +139,7 @@ APP_SETTINGS = {
     'chat_merge_consecutive_nickname': False,
     'chat_merge_consecutive_nickname_indent': '  ',
     'ctrl_tab_go_to_next_composing': True,
+    'metacontacts_enabled': True,
     'confirm_metacontacts': '',
     'confirm_block': '',
     'enable_negative_priority': False,

@@ -30,6 +30,10 @@ class MetaContacts(BaseModule):
         self.available = False
 
     def get_metacontacts(self):
+        if not app.settings.get('metacontacts_enabled'):
+            self._con.connect_machine()
+            return
+
         self._log.info('Request')
         node = nbxmpp.Node('storage', attrs={'xmlns': 'storage:metacontacts'})
         iq = nbxmpp.Iq('get', Namespace.PRIVATE, payload=node)
