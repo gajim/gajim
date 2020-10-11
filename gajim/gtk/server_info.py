@@ -17,7 +17,7 @@ from collections import namedtuple
 from datetime import timedelta
 
 import nbxmpp
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -28,7 +28,6 @@ from gajim.common import ged
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 
-from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import EventHelper
 from gajim.gtk.util import open_window
@@ -233,12 +232,14 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                 'days': delta.days, 'hours': hours}
             self._ui.server_uptime.set_text(uptime)
 
-    @ensure_not_destroyed
-    def _software_version_received(self, result):
-        if is_error_result(result):
+    def _software_version_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError:
             self.version = _('Unknown')
         else:
             self.version = '%s %s' % (result.name, result.version)
+
         self._ui.server_software.set_text(self.version)
 
     @staticmethod
