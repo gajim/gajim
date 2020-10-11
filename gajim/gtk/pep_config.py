@@ -14,7 +14,7 @@
 
 from gi.repository import Gdk
 from gi.repository import Gtk
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common import ged
@@ -85,9 +85,11 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         self._con.get_module('Discovery').disco_items(
             jid, callback=self._items_received)
 
-    def _items_received(self, result):
-        if is_error_result(result):
-            ErrorDialog('Error', to_user_string(result))
+    def _items_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            ErrorDialog('Error', to_user_string(error))
             return
 
         jid = result.jid.bare
