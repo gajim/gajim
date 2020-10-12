@@ -2614,7 +2614,7 @@ class RosterWindow:
 
     def _nec_blocking(self, obj):
         for jid in obj.changed:
-            self.draw_contact(jid, obj.conn.name)
+            self.draw_contact(str(jid), obj.conn.name)
 
     def on_block(self, widget, list_):
         """

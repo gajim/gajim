@@ -15,14 +15,15 @@
 # XEP-0191: Blocking Command
 
 import nbxmpp
+from nbxmpp.protocol import JID
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.util import is_error_result
+from nbxmpp.modules.util import raise_if_error
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
-from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import as_task
 
 
 class Blocking(BaseModule):
@@ -31,7 +32,7 @@ class Blocking(BaseModule):
     _nbxmpp_methods = [
         'block',
         'unblock',
-        'get_blocking_list',
+        'request_blocking_list',
     ]
 
     def __init__(self, con):
@@ -45,9 +46,6 @@ class Blocking(BaseModule):
                           typ='set',
                           ns=Namespace.BLOCKING),
         ]
-
-        self._register_callback('get_blocking_list',
-                                self._blocking_list_received)
 
         self.supported = False
 
@@ -63,59 +61,65 @@ class Blocking(BaseModule):
 
         self._log.info('Discovered blocking: %s', info.jid)
 
-    def _blocking_list_received(self, result):
-        if is_error_result(result):
-            self._log.info(result)
+    @as_task
+    def get_blocking_list(self):
+        _task = yield
+
+        blocking_list = yield self._nbxmpp('Blocking').request_blocking_list()
+
+        raise_if_error(blocking_list)
+
+        self.blocked = blocking_list
+        app.nec.push_incoming_event(NetworkEvent('blocking',
+                                                 conn=self._con,
+                                                 changed=self.blocked))
+        yield blocking_list
+
+    @as_task
+    def update_blocking_list(self, block, unblock):
+        _task = yield
+
+        if block:
+            result = yield self.block(block)
+            raise_if_error(result)
+
+        if unblock:
+            result = yield self.unblock(unblock)
+            raise_if_error(result)
+
+        yield True
+
+    def _blocking_push_received(self, _con, _stanza, properties):
+        if not properties.is_blocking:
             return
-
-        self.blocked = result.blocking_list
-        app.nec.push_incoming_event(
-            BlockingEvent(None, conn=self._con, changed=self.blocked))
-
-    def _blocking_push_received(self, _con, stanza, _properties):
-        reply = stanza.buildReply('result')
-        children = reply.getChildren()
-        for child in children:
-            reply.delChild(child)
-        self._nbxmpp().send(reply)
 
         changed_list = []
 
-        unblock = stanza.getTag('unblock', namespace=Namespace.BLOCKING)
-        if unblock is not None:
-            items = unblock.getTags('item')
-            if not items:
-                # Unblock all
-                changed_list = list(self.blocked)
-                self.blocked = []
-                for jid in self.blocked:
-                    self._presence_probe(jid)
-                self._log.info('Unblock all Push')
-                raise nbxmpp.NodeProcessed
-
-            for item in items:
-                # Unblock some contacts
-                jid = item.getAttr('jid')
-                changed_list.append(jid)
-                if jid not in self.blocked:
-                    continue
-                self.blocked.remove(jid)
+        if properties.blocking.unblock_all:
+            self.blocked = []
+            for jid in self.blocked:
                 self._presence_probe(jid)
-                self._log.info('Unblock Push: %s', jid)
+            self._log.info('Unblock all Push')
 
-        block = stanza.getTag('block', namespace=Namespace.BLOCKING)
-        if block is not None:
-            for item in block.getTags('item'):
-                jid = item.getAttr('jid')
-                if jid in self.blocked:
-                    continue
-                changed_list.append(jid)
-                self.blocked.append(jid)
-                self._set_contact_offline(jid)
-                self._log.info('Block Push: %s', jid)
+        for jid in properties.blocking.unblock:
+            changed_list.append(jid)
+            if jid not in self.blocked:
+                continue
+            self.blocked.remove(jid)
+            self._presence_probe(jid)
+            self._log.info('Unblock Push: %s', jid)
 
-        app.nec.push_incoming_event(
-            BlockingEvent(None, conn=self._con, changed=changed_list))
+        for jid in properties.blocking.block:
+            if jid in self.blocked:
+                continue
+            changed_list.append(jid)
+            self.blocked.append(jid)
+            self._set_contact_offline(str(jid))
+            self._log.info('Block Push: %s', jid)
+
+        app.nec.push_incoming_event(NetworkEvent('blocking',
+                                                 conn=self._con,
+                                                 changed=changed_list))
 
         raise nbxmpp.NodeProcessed
 
@@ -124,15 +128,11 @@ class Blocking(BaseModule):
         for contact in contact_list:
             contact.show = 'offline'
 
-    def _presence_probe(self, jid: str) -> None:
+    def _presence_probe(self, jid: JID) -> None:
         self._log.info('Presence probe: %s', jid)
         # Send a presence Probe to get the current Status
         probe = nbxmpp.Presence(jid, 'probe', frm=self._con.get_own_jid())
         self._nbxmpp().send(probe)
-
-
-class BlockingEvent(NetworkIncomingEvent):
-    name = 'blocking'
 
 
 def get_instance(*args, **kwargs):
