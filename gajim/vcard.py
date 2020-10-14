@@ -32,7 +32,7 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gdk
 from nbxmpp.structs import AnnotationNote
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
 from nbxmpp.errors import is_error
 
@@ -261,11 +261,18 @@ class VcardWindow(EventHelper):
         self._set_values(vcard.data, str(jid))
         self._load_avatar(vcard)
 
-    def set_os_info(self, result, jid):
+    def set_os_info(self, task):
+        error = False
+        try:
+            result = task.finish()
+        except StanzaError:
+            error = True
+
+        jid = task.get_user_data()
+
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
 
-        error = is_error_result(result)
         i = 0
         client = ''
         os_info = ''
