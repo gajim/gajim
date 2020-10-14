@@ -62,9 +62,11 @@ LangString NAME_SecLanguagesOther ${LANG_ENGLISH} "Other"
 LangString NAME_Themes ${LANG_ENGLISH} "Themes"
 LangString NAME_SecDesktopIcon ${LANG_ENGLISH} "Create icon on desktop"
 LangString NAME_SecAutostart ${LANG_ENGLISH} "Start Gajim when Windows starts"
+LangString NAME_SecURI ${LANG_ENGLISH} "Open xmpp links with Gajim"
 LangString DESC_SecGajim ${LANG_ENGLISH} "Installs the main Gajim files."
-LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "If set, a shortcut for Gajim will be created on the desktop."
-LangString DESC_SecAutostart ${LANG_ENGLISH} "If set, Gajim will be automatically started when Windows starts."
+LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "Creates a shortcut for Gajim on your desktop."
+LangString DESC_SecAutostart ${LANG_ENGLISH} "Starts Gajim automatically when starting Windows."
+LangString DESC_SecURI ${LANG_ENGLISH} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
 LangString STR_Installed ${LANG_ENGLISH} "Apparently, Gajim is already installed. Uninstall it?"
 LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently running.$\n\
 		Please quit Gajim and restart the uninstaller."
@@ -77,9 +79,11 @@ LangString NAME_SecLanguagesOther ${LANG_FRENCH} "Autre"
 LangString NAME_Themes ${LANG_FRENCH} "Thèmes"
 LangString NAME_SecDesktopIcon ${LANG_FRENCH} "Créer une icône sur le bureau"
 LangString NAME_SecAutostart ${LANG_FRENCH} "Lancer Gajim au démarrage de Windows"
+LangString NAME_SecURI ${LANG_FRENCH} "Ouvrir les liens xmpp avec Gajim"
 LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Gajim."
 LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionné, un raccourci pour Gajim sera créé sur le bureau."
 LangString DESC_SecAutostart ${LANG_FRENCH} "Si activé, Gajim sera automatiquement lancé au démarrage de Windows."
+LangString DESC_SecURI ${LANG_FRENCH} "Permet à Gajim d’ouvrir les liens xmpp (par exemple le lien vers un salon sur un site web)."
 LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement déjà installé. Lancer la désinstallation ?"
 LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancé.$\n\
 		Fermez-le et redémarrez le désinstallateur."
@@ -92,9 +96,11 @@ LangString NAME_SecLanguagesOther ${LANG_GERMAN} "Sonstige"
 LangString NAME_Themes ${LANG_GERMAN} "Designs"
 LangString NAME_SecDesktopIcon ${LANG_GERMAN} "Desktop-Icon erstellen"
 LangString NAME_SecAutostart ${LANG_GERMAN} "Gajim mit Windows starten"
+LangString NAME_SecURI ${LANG_GERMAN} "xmpp-Links mit Gajim öffnen"
 LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim."
-LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Falls aktiviert, wird ein Icon für Gajim auf dem Desktop erstellt."
-LangString DESC_SecAutostart ${LANG_GERMAN} "Falls aktiviert, wird Gajim beim Start von Windows automatisch gestartet."
+LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Erstellt ein Icon für Gajim auf dem Desktop."
+LangString DESC_SecAutostart ${LANG_GERMAN} "Startet Gajim automatisch zusammen mit Windows."
+LangString DESC_SecURI ${LANG_GERMAN} "Ermöglicht Gajim das Öffnen von xmpp-Links (z.B. verlinkter Gruppenchat auf einer Website)."
 LangString STR_Installed ${LANG_GERMAN} "Gajim ist anscheinend bereits installiert. Wollen Sie Gajim deinstallieren?"
 LangString STR_Running ${LANG_GERMAN} "Gajim läuft zurzeit.$\n\
 		Bitte beenden Sie Gajim und starten Sie das Setup erneut."
@@ -107,9 +113,11 @@ LangString NAME_SecLanguagesOther ${LANG_ITALIAN} "Altre"
 LangString NAME_Themes ${LANG_ITALIAN} "Temi"
 LangString NAME_SecDesktopIcon ${LANG_ITALIAN} "Crea un'icona sul desktop"
 LangString NAME_SecAutostart ${LANG_ITALIAN} "Lancia Gajim quando parte Windows"
+LangString NAME_SecURI ${LANG_ITALIAN} "Open xmpp links with Gajim"
 LangString DESC_SecGajim ${LANG_ITALIAN} "Installa i file principali di Gajim."
 LangString DESC_SecDesktopIcon ${LANG_ITALIAN} "Se selezionato, un'icona verrà creata sul desktop."
 LangString DESC_SecAutostart ${LANG_ITALIAN} "Se selezionato, Gajim sarà eseguito all'avvio di Windows."
+LangString DESC_SecURI ${LANG_ITALIAN} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
 LangString STR_Installed ${LANG_ITALIAN} "Gajim is apparently already installed. Uninstall it?"
 LangString STR_Running ${LANG_ITALIAN} "It appears that Gajim is currently running.$\n\
 		Close it and restart uninstaller."
@@ -122,9 +130,11 @@ LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Другое"
 LangString NAME_Themes ${LANG_RUSSIAN} "Темы"
 LangString NAME_SecDesktopIcon ${LANG_RUSSIAN} "Создать я лык на абочем столе"
 LangString NAME_SecAutostart ${LANG_RUSSIAN} "Запускать Gajim при загрузке Windows"
+LangString NAME_SecURI ${LANG_RUSSIAN} "Открывать xmpp-ссылки в Gajim"
 LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
 LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Если отмечено, на рабочем столе будет создан ярлык Gajim."
 LangString DESC_SecAutostart ${LANG_RUSSIAN} "Если отмечено, Gajim будет автоматически запускаться при загрузке Windows."
+LangString DESC_SecURI ${LANG_RUSSIAN} "Позволяет Gajim открывать xmpp-ссылки, например, адреса конференций на веб-странице."
 LangString STR_Installed ${LANG_RUSSIAN} "Похоже, Gajim уже установлен. Деинсталлировать установленную версию?"
 LangString STR_Running ${LANG_RUSSIAN} "Похоже, Gajim уже запущен.$\n\
 		Закройте его и запустите деинсталлятор снова."
@@ -137,9 +147,11 @@ LangString NAME_SecLanguagesOther ${LANG_HEBREW} "אחרות"
 LangString NAME_Themes ${LANG_HEBREW} "ערכאות נושא"
 LangString NAME_SecDesktopIcon ${LANG_HEBREW} "צור סמל בשולחן עבודה"
 LangString NAME_SecAutostart ${LANG_HEBREW} "הפעל את Gajim כאשר Windows מתחיל"
+LangString NAME_SecURI ${LANG_HEBREW} "Open xmpp links with Gajim"
 LangString DESC_SecGajim ${LANG_HEBREW} "מתקין קבצי Gajim עיקריים."
 LangString DESC_SecDesktopIcon ${LANG_HEBREW} "במידה ונקבעת, קיצור דרך עבור Gajim יושם על שולחן העבודה."
 LangString DESC_SecAutostart ${LANG_HEBREW} "במידה ונקבעת, Gajim יופעל אוטומטית כאשר Windows מתחיל."
+LangString DESC_SecURI ${LANG_HEBREW} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
 LangString STR_Installed ${LANG_HEBREW} "כפי הנראה, Gajim כבר מותקן. להסיר אותו?"
 LangString STR_Running ${LANG_HEBREW} "נראה שהתוכנית Gajim מורצת כעת.$\n\
         אנא צא מן Gajim ואתחל את מסיר ההתקנה."
@@ -188,6 +200,15 @@ Section $(NAME_SecAutostart) SecAutostart
 	CreateShortCut "$SMSTARTUP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
 SectionEnd
 
+Section $(NAME_SecURI) SecURI
+	WriteRegStr HKCU "Software\Classes\xmpp" "" "URL:xmpp-uri"
+	WriteRegStr HKCU "Software\Classes\xmpp" "URL Protocol" ""
+	WriteRegStr HKCU "Software\Classes\xmpp\DefaultIcon" "" "$INSTDIR\bin\Gajim.exe,1"
+	WriteRegStr HKCU "Software\Classes\xmpp\shell" "" "open"
+	WriteRegStr HKCU "Software\Classes\xmpp\shell\open\" "FriendlyAppName" "${myAppName}"
+	WriteRegStr HKCU "Software\Classes\xmpp\shell\open\command" "" '"$INSTDIR\bin\Gajim.exe" "%1"'
+SectionEnd
+
 Section "Uninstall"
 	RMDir /r "$INSTDIR"
 
@@ -212,6 +233,7 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecGajim} $(DESC_SecGajim)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktopIcon} $(DESC_SecDesktopIcon)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecAutostart} $(DESC_SecAutostart)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SecURI} $(DESC_SecURI)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function un.onInit
