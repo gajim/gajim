@@ -310,17 +310,17 @@ class GajimApplication(Gtk.Application):
         options = command_line.get_options_dict()
 
         remote_commands = [
-            'ipython',
-            'show-next-pending-event',
-            'start-chat',
+            ('ipython', None),
+            ('show-next-pending-event', None),
+            ('start-chat', GLib.Variant('s', '')),
         ]
 
         remaining = options.lookup_value(GLib.OPTION_REMAINING,
                                          GLib.VariantType.new('as'))
 
-        for cmd in remote_commands:
+        for cmd, parameter in remote_commands:
             if options.contains(cmd):
-                self.activate_action(cmd)
+                self.activate_action(cmd, parameter)
                 return 0
 
         if remaining is not None:
