@@ -66,7 +66,6 @@ class GajimApplication(Gtk.Application):
 
     def __init__(self):
         flags = (Gio.ApplicationFlags.HANDLES_COMMAND_LINE |
-                 Gio.ApplicationFlags.HANDLES_OPEN |
                  Gio.ApplicationFlags.CAN_OVERRIDE_APP_ID)
         Gtk.Application.__init__(self,
                                  application_id='org.gajim.Gajim',
@@ -158,7 +157,7 @@ class GajimApplication(Gtk.Application):
         self.add_main_option_entries(self._get_remaining_entry())
 
         self.connect('handle-local-options', self._handle_local_options)
-        self.connect('command-line', self._handle_remote_options)
+        self.connect('command-line', self._command_line)
         self.connect('startup', self._startup)
         self.connect('activate', self._activate)
 
@@ -180,7 +179,6 @@ class GajimApplication(Gtk.Application):
         return [option]
 
     def _startup(self, _application):
-
         # Create and initialize Application Paths & Databases
         app.print_version()
         app.detect_dependencies()
@@ -226,11 +224,6 @@ class GajimApplication(Gtk.Application):
         menubar = builder.get_object("menubar")
         self.set_menubar(menubar)
 
-    def _activate(self, _application):
-        if self.interface is not None:
-            self.interface.roster.window.present()
-            return
-
         from gajim.gui_interface import Interface
         self.interface = Interface()
         self.interface.run(self)
@@ -243,6 +236,9 @@ class GajimApplication(Gtk.Application):
         app.ged.register_event_handler('feature-discovered',
                                        ged.CORE,
                                        self._on_feature_discovered)
+
+    def _activate(self, _application):
+        self.interface.roster.window.present()
 
     def _open_uris(self, uris):
         accounts = list(app.connections.keys())
@@ -310,8 +306,7 @@ class GajimApplication(Gtk.Application):
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
 
-    def _handle_remote_options(self, _application, command_line):
-        # Parse all options that should be executed on a remote instance
+    def _command_line(self, _application, command_line):
         options = command_line.get_options_dict()
 
         remote_commands = [
