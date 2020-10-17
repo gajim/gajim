@@ -302,7 +302,11 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
             Feature('XEP-0398: Avatar Conversion',
                     con.get_module('VCardAvatars').avatar_conversion_available),
             Feature('XEP-0411: Bookmarks Conversion',
-                    con.get_module('Bookmarks').conversion)
+                    con.get_module('Bookmarks').conversion),
+            Feature('XEP-0402: Bookmarks Compat',
+                    con.get_module('Bookmarks').compat),
+            Feature('XEP-0402: Bookmarks Compat PEP',
+                    con.get_module('Bookmarks').compat_pep)
         ]
 
     def _on_clipboard_button_clicked(self, _widget):

@@ -22,11 +22,11 @@ from typing import Tuple
 from typing import Union
 from typing import Optional
 
+import functools
+
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
-from nbxmpp.util import is_error_result
 from nbxmpp.structs import BookmarkData
-from nbxmpp.const import BookmarkStoreType
 from gi.repository import GLib
 
 from gajim.common import app
@@ -36,20 +36,13 @@ from gajim.common.modules.util import event_node
 
 
 class Bookmarks(BaseModule):
-
-    _nbxmpp_extends = 'Bookmarks'
-    _nbxmpp_methods = [
-        'request_bookmarks',
-        'store_bookmarks',
-        'retract_bookmark',
-    ]
-
     def __init__(self, con):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._bookmark_event_received)
-        self._register_pubsub_handler(self._bookmark_2_event_received)
+        self._register_pubsub_handler(self._bookmark_1_event_received)
         self._conversion = False
-        self._conversion_2 = False
+        self._compat = False
+        self._compat_pep = False
         self._bookmarks = {}
         self._join_timeouts = []
         self._request_in_progress = True
@@ -59,20 +52,24 @@ class Bookmarks(BaseModule):
         return self._conversion
 
     @property
-    def conversion_2(self) -> bool:
-        return self._conversion_2
+    def compat(self) -> bool:
+        return self._compat
+
+    @property
+    def compat_pep(self) -> bool:
+        return self._compat_pep
 
     @property
     def bookmarks(self) -> List[BookmarkData]:
         return self._bookmarks.values()
 
     @property
-    def using_bookmark_1(self) -> bool:
-        return self._pubsub_support() and self.conversion
+    def pep_bookmarks_used(self) -> bool:
+        return self._bookmark_module() == 'PEPBookmarks'
 
     @property
-    def using_bookmark_2(self) -> bool:
-        return self._pubsub_support() and self.conversion_2
+    def nativ_bookmarks_used(self) -> bool:
+        return self._bookmark_module() == 'NativeBookmarks'
 
     @event_node(Namespace.BOOKMARKS)
     def _bookmark_event_received(self, _con, _stanza, properties):
@@ -84,7 +81,7 @@ class Bookmarks(BaseModule):
                               properties.jid)
             return
 
-        if not self.using_bookmark_1:
+        if not self.pep_bookmarks_used:
             return
 
         if self._request_in_progress:
@@ -99,14 +96,14 @@ class Bookmarks(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
 
-    @event_node(Namespace.BOOKMARKS_2)
-    def _bookmark_2_event_received(self, _con, _stanza, properties):
+    @event_node(Namespace.BOOKMARKS_1)
+    def _bookmark_1_event_received(self, _con, _stanza, properties):
         if not properties.is_self_message:
             self._log.warning('%s has an open access bookmarks node',
                               properties.jid)
             return
 
-        if not self.using_bookmark_2:
+        if not self.nativ_bookmarks_used:
             return
 
         if self._request_in_progress:
@@ -135,18 +132,21 @@ class Bookmarks(BaseModule):
             NetworkEvent('bookmarks-received', account=self._account))
 
     def pass_disco(self, info):
-        if app.settings.get('dev_force_bookmark_2'):
-            self._log.info('Forcing Bookmark 2 usage, '
-                           'without server conversion support: %s', info.jid)
-            self._conversion_2 = True
+        self._compat_pep = Namespace.BOOKMARKS_COMPAT_PEP in info.features
+        self._compat = Namespace.BOOKMARKS_COMPAT in info.features
+        self._conversion = Namespace.BOOKMARK_CONVERSION in info.features
 
-        elif Namespace.BOOKMARKS_COMPAT in info.features:
-            self._conversion_2 = True
-            self._log.info('Discovered Bookmarks Conversion 2: %s', info.jid)
+    @functools.lru_cache(maxsize=1)
+    def _bookmark_module(self):
+        if not self._con.get_module('PubSub').publish_options:
+            return 'PrivateBookmarks'
 
-        elif Namespace.BOOKMARK_CONVERSION in info.features:
-            self._conversion = True
-            self._log.info('Discovered Bookmarks Conversion: %s', info.jid)
+        if app.settings.get('dev_force_bookmark_2') or self._compat_pep:
+            return 'NativeBookmarks'
+
+        if self._conversion:
+            return 'PEPBookmarks'
+        return 'PrivateBookmarks'
 
     def _act_on_changed_bookmarks(
             self, old_bookmarks: Dict[str, BookmarkData]) -> None:
@@ -194,28 +194,19 @@ class Bookmarks(BaseModule):
     def get_bookmark(self, jid: Union[str, JID]) -> BookmarkData:
         return self._bookmarks.get(jid)
 
-    def _pubsub_support(self) -> bool:
-        return (self._con.get_module('PEP').supported and
-                self._con.get_module('PubSub').publish_options)
-
     def request_bookmarks(self) -> None:
         if not app.account_is_available(self._account):
             return
 
         self._request_in_progress = True
-        type_ = BookmarkStoreType.PRIVATE
-        if self._pubsub_support():
-            if self.conversion:
-                type_ = BookmarkStoreType.PUBSUB_BOOKMARK_1
-            if self._conversion_2:
-                type_ = BookmarkStoreType.PUBSUB_BOOKMARK_2
+        self._nbxmpp(self._bookmark_module()).request_bookmarks(
+            callback=self._bookmarks_received)
 
-        self._nbxmpp('Bookmarks').request_bookmarks(
-            type_, callback=self._bookmarks_received)
-
-    def _bookmarks_received(self, bookmarks: Any) -> None:
-        if is_error_result(bookmarks):
-            self._log.info(bookmarks)
+    def _bookmarks_received(self, task: Any) -> None:
+        try:
+            bookmarks = task.finish()
+        except Exception as error:
+            self._log.warning(error)
             bookmarks = None
 
         self._request_in_progress = False
@@ -225,7 +216,7 @@ class Bookmarks(BaseModule):
             NetworkEvent('bookmarks-received', account=self._account))
 
     def store_difference(self, bookmarks: List) -> None:
-        if self.using_bookmark_2:
+        if self.nativ_bookmarks_used:
             retract, add_or_modify = self._determine_changed_bookmarks(
                 bookmarks, self._bookmarks)
 
@@ -244,30 +235,10 @@ class Bookmarks(BaseModule):
         if not app.account_is_available(self._account):
             return
 
-        type_ = BookmarkStoreType.PRIVATE
-        if self._pubsub_support():
-            if self.conversion:
-                type_ = BookmarkStoreType.PUBSUB_BOOKMARK_1
-            if self.conversion_2:
-                type_ = BookmarkStoreType.PUBSUB_BOOKMARK_2
-
-        if bookmarks is None:
+        if bookmarks is None or not self.nativ_bookmarks_used:
             bookmarks = self._bookmarks.values()
 
-        self._nbxmpp('Bookmarks').store_bookmarks(bookmarks, type_)
-
-        app.nec.push_incoming_event(
-            NetworkEvent('bookmarks-received', account=self._account))
-
-    def store_bookmark(self, bookmark: BookmarkData) -> None:
-        if not app.account_is_available(self._account):
-            return
-
-        if not self.using_bookmark_2:
-            return
-
-        self._nbxmpp('Bookmarks').store_bookmarks(
-            [bookmark], BookmarkStoreType.PUBSUB_BOOKMARK_2)
+        self._nbxmpp(self._bookmark_module()).store_bookmarks(bookmarks)
 
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
@@ -308,10 +279,7 @@ class Bookmarks(BaseModule):
         self._log.info('Modify bookmark: %s %s', jid, kwargs)
         self._bookmarks[jid] = new_bookmark
 
-        if self.using_bookmark_2:
-            self.store_bookmark(new_bookmark)
-        else:
-            self.store_bookmarks()
+        self.store_bookmarks([new_bookmark])
 
     def add_or_modify(self, jid: str, **kwargs: Dict[str, str]) -> None:
         bookmark = self._bookmarks.get(jid)
@@ -323,18 +291,15 @@ class Bookmarks(BaseModule):
         self._bookmarks[jid] = new_bookmark
         self._log.info('Add new bookmark: %s', new_bookmark)
 
-        if self.using_bookmark_2:
-            self.store_bookmark(new_bookmark)
-        else:
-            self.store_bookmarks()
+        self.store_bookmarks([new_bookmark])
 
     def remove(self, jid: JID, publish: bool = True) -> None:
         removed = self._bookmarks.pop(jid, False)
         if not removed:
             return
         if publish:
-            if self.using_bookmark_2:
-                self._nbxmpp('Bookmarks').retract_bookmark(str(jid))
+            if self.nativ_bookmarks_used:
+                self._nbxmpp('NativeBookmarks').retract_bookmark(str(jid))
             else:
                 self.store_bookmarks()
 
@@ -367,12 +332,6 @@ class Bookmarks(BaseModule):
 
     def is_bookmark(self, jid: str) -> bool:
         return jid in self._bookmarks
-
-    def purge_pubsub_bookmarks(self) -> None:
-        self._log.info('Purge/Delete Bookmarks on PubSub, '
-                       'because publish options are not available')
-        self._con.get_module('PubSub').send_pb_purge('', 'storage:bookmarks')
-        self._con.get_module('PubSub').send_pb_delete('', 'storage:bookmarks')
 
     def _remove_timeouts(self):
         for _id in self._join_timeouts:

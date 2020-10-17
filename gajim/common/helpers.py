@@ -799,9 +799,9 @@ def get_optional_features(account):
 
     features.append(Namespace.NICK + '+notify')
 
-    if app.connections[account].get_module('Bookmarks').using_bookmark_2:
-        features.append(Namespace.BOOKMARKS_2 + '+notify')
-    elif app.connections[account].get_module('Bookmarks').using_bookmark_1:
+    if app.connections[account].get_module('Bookmarks').nativ_bookmarks_used:
+        features.append(Namespace.BOOKMARKS_1 + '+notify')
+    elif app.connections[account].get_module('Bookmarks').pep_bookmarks_used:
         features.append(Namespace.BOOKMARKS + '+notify')
     if app.is_installed('AV'):
         features.append(Namespace.JINGLE_RTP)
