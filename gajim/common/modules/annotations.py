@@ -49,6 +49,7 @@ class Annotations(BaseModule):
         except (StanzaError, MalformedStanzaError) as error:
             self._log.warning(error)
             self._annotations = {}
+            return
 
         for note in annotations:
             self._annotations[note.jid] = note
