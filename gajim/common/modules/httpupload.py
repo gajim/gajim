@@ -23,6 +23,7 @@ import mimetypes
 from nbxmpp.namespaces import Namespace
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import HTTPUploadStanzaError
 from nbxmpp.util import convert_tls_error_flags
 from gi.repository import GLib
 from gi.repository import Soup
@@ -167,7 +168,10 @@ class HTTPUpload(BaseModule):
 
         try:
             result = task.finish()
-        except (StanzaError, MalformedStanzaError) as error:
+        except (StanzaError,
+                HTTPUploadStanzaError,
+                MalformedStanzaError) as error:
+
             transfer.set_error()
 
             if error.app_condition == 'file-too-large':
