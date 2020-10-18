@@ -21,7 +21,8 @@ from urllib.parse import urlparse
 import mimetypes
 
 from nbxmpp.namespaces import Namespace
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
+from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.util import convert_tls_error_flags
 from gi.repository import GLib
 from gi.repository import Soup
@@ -161,20 +162,24 @@ class HTTPUpload(BaseModule):
             callback=self._received_slot,
             user_data=transfer)
 
-    def _received_slot(self, result, transfer):
-        if is_error_result(result):
+    def _received_slot(self, task):
+        transfer = task.get_user_data()
+
+        try:
+            result = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
             transfer.set_error()
 
-            if result.app_condition == 'file-too-large':
+            if error.app_condition == 'file-too-large':
                 size_text = GLib.format_size_full(
-                    result.get_max_file_size(),
+                    error.get_max_file_size(),
                     GLib.FormatSizeFlags.IEC_UNITS)
 
                 error_text = _('File is too large, '
                                'maximum allowed file size is: %s' % size_text)
             else:
-                error_text = str(result)
-                self._log.warning(result)
+                error_text = str(error)
+                self._log.warning(error)
 
             self._raise_information_event('request-upload-slot-error',
                                           error_text)
