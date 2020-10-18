@@ -18,7 +18,9 @@ from typing import Any
 from typing import Dict  # pylint: disable=unused-import
 from typing import Tuple
 
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
+from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.structs import AnnotationNote
 
 from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
@@ -32,29 +34,31 @@ class Annotations(BaseModule):
         'set_annotations',
     ]
 
-    def __init__(self, con: ConnectionT):
+    def __init__(self, con: ConnectionT) -> None:
         BaseModule.__init__(self, con)
 
-        self._register_callback('request_annotations',
-                                self._annotations_received)
-        self._annotations = {}  # type: Dict[str, Any]
+        self._annotations = {}  # type: Dict[str, AnnotationNote]
 
-    def set_annotations(self):
-        self._nbxmpp('Annotations').set_annotations(self._annotations.values())
+    def request_annotations(self) -> None:
+        self._nbxmpp('Annotations').request_annotations(
+            callback=self._annotations_received)
 
-    def _annotations_received(self, result):
-        if is_error_result(result):
+    def _annotations_received(self, task: Any) -> None:
+        try:
+            annotations = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
+            self._log.warning(error)
             self._annotations = {}
-            return
-        for note in result:
+
+        for note in annotations:
             self._annotations[note.jid] = note
 
-    def get_note(self, jid):
+    def get_note(self, jid: str) -> AnnotationNote:
         return self._annotations.get(jid)
 
-    def set_note(self, note):
+    def set_note(self, note: AnnotationNote) -> None:
         self._annotations[note.jid] = note
-        self.set_annotations()
+        self.set_annotations(self._annotations.values())
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[Annotations, str]:
