@@ -16,7 +16,13 @@ function main {
         mingw-w64-x86_64-python3-certifi \
         mingw-w64-x86_64-python3-pyopenssl \
         mingw-w64-x86_64-python3-pillow \
-        mingw-w64-x86_64-python3-six
+        mingw-w64-x86_64-python3-six \
+        mingw-w64-x86_64-python3-pygments \
+        mingw-w64-x86_64-libwebp \
+        mingw-w64-x86_64-goocanvas \
+        mingw-w64-x86_64-gspell \
+        mingw-w64-x86_64-hunspell \
+        mingw-w64-x86_64-libsoup \
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
