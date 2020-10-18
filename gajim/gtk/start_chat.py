@@ -20,8 +20,9 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
 
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
+from nbxmpp.errors import CancelledError
 
 from gajim.common import app
 from gajim.common.helpers import validate_jid
@@ -32,11 +33,11 @@ from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
+from gajim.common.modules.util import as_task
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import generate_account_badge
 
@@ -307,7 +308,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
             callback=self._disco_info_received,
             user_data=account)
 
-    @ensure_not_destroyed
     def _disco_info_received(self, task):
         try:
             result = task.finish()
@@ -527,85 +527,79 @@ class StartChatDialog(Gtk.ApplicationWindow):
         else:
             self._start_iq_search(con, text)
 
+    @as_task
     def _start_iq_search(self, con, text):
-        if self._parameter_form is None:
-            con.get_module('Muclumbus').request_parameters(
-                app.settings.get('muclumbus_api_jid'),
-                callback=self._parameters_received,
-                user_data=(con, text))
-        else:
-            self._parameter_form.vars['q'].value = text
+        _task = yield
 
-            con.get_module('Muclumbus').set_search(
+        if self._parameter_form is None:
+            result = yield con.get_module('Muclumbus').request_parameters(
+                app.settings.get('muclumbus_api_jid'))
+
+            self._process_search_result(result, parameters=True)
+
+            self._parameter_form = result
+            self._parameter_form.type_ = 'submit'
+
+        self._parameter_form.vars['q'].value = text
+
+        result = yield con.get_module('Muclumbus').set_search(
+            app.settings.get('muclumbus_api_jid'),
+            self._parameter_form)
+
+        self._process_search_result(result)
+
+        while not result.end:
+            result = yield con.get_module('Muclumbus').set_search(
                 app.settings.get('muclumbus_api_jid'),
                 self._parameter_form,
-                callback=self._on_search_result,
-                user_data=(con, False))
+                items_per_page=result.max,
+                after=result.last)
 
+            self._process_search_result(result)
+
+        self._global_search_listbox.end_search()
+
+    @as_task
     def _start_http_search(self, con, text):
+        _task = yield
+
         self._keywords = text.split(' ')
-        con.get_module('Muclumbus').set_http_search(
+        result = yield con.get_module('Muclumbus').set_http_search(
             app.settings.get('muclumbus_api_http_uri'),
-            self._keywords,
-            callback=self._on_search_result,
-            user_data=(con, True))
+            self._keywords)
 
-    @ensure_not_destroyed
-    def _parameters_received(self, result, user_data):
-        if is_error_result(result):
-            self._global_search_listbox.remove_progress()
-            self._show_error_page(to_user_string(result))
-            return
+        self._process_search_result(result)
 
-        con, text = user_data
-        self._parameter_form = result
-        self._parameter_form.type_ = 'submit'
-        self._start_iq_search(con, text)
+        while not result.end:
+            result = yield con.get_module('Muclumbus').set_http_search(
+                app.settings.get('muclumbus_api_http_uri'),
+                self._keywords,
+                after=result.last)
 
-    @ensure_not_destroyed
-    def _on_search_result(self, result, user_data):
+            self._process_search_result(result)
+
+        self._global_search_listbox.end_search()
+
+    def _process_search_result(self, result, parameters=False):
         if self._search_stopped:
-            return
+            raise CancelledError()
 
-        if is_error_result(result):
+        if is_error(result):
             self._global_search_listbox.remove_progress()
             self._show_error_page(to_user_string(result))
+            raise result
+
+        if parameters:
             return
 
         for item in result.items:
             self._global_search_listbox.add(ResultRow(item))
 
-        if result.end:
-            self._global_search_listbox.end_search()
-            return
-
-        con, http = user_data
-        if http:
-            self._continue_http_search(result, con)
-        else:
-            self._continue_iq_search(result, con)
-
-    def _continue_iq_search(self, result, con):
-        con.get_module('Muclumbus').set_search(
-            app.settings.get('muclumbus_api_jid'),
-            self._parameter_form,
-            items_per_page=result.max,
-            after=result.last,
-            callback=self._on_search_result,
-            user_data=(con, False))
-
-    def _continue_http_search(self, result, con):
-        con.get_module('Muclumbus').set_http_search(
-            app.settings.get('muclumbus_api_http_uri'),
-            self._keywords,
-            after=result.last,
-            callback=self._on_search_result,
-            user_data=(con, True))
-
     def _destroy(self, *args):
         if self._source_id is not None:
             GLib.source_remove(self._source_id)
         self._destroyed = True
+        app.cancel_tasks(self)
 
 
 class ContactRow(Gtk.ListBoxRow):
