@@ -49,6 +49,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         self.set_default_size(width, height)
         self.set_resizable(True)
         self.set_transient_for(transient_for)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         self._pages = {}
         self._buttons = {}
