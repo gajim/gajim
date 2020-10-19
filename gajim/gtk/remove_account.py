@@ -16,7 +16,7 @@ import logging
 
 from gi.repository import Gtk
 
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common import ged
@@ -26,7 +26,6 @@ from gajim.common.helpers import event_filter
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
-from gajim.gtk.util import ensure_not_destroyed
 
 log = logging.getLogger('gajim.gtk.remove_account')
 
@@ -149,12 +148,13 @@ class RemoveAccount(Assistant):
         self._con.disconnect(gracefully=True, reconnect=False)
         self._account_removed = True
 
-    @ensure_not_destroyed
-    def _on_remove_response(self, result):
-        if is_error_result(result):
+    def _on_remove_response(self, task):
+        try:
+            task.finish()
+        except StanzaError as error:
             self._con.set_remove_account(False)
 
-            error_text = to_user_string(result)
+            error_text = to_user_string(error)
             self.get_page('error').set_text(error_text)
             self.show_page('error')
             return
