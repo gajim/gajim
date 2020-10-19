@@ -16,7 +16,8 @@ import logging
 
 from gi.repository import Gtk
 
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
+from nbxmpp.errors import ChangePasswordStanzaError
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -26,7 +27,6 @@ from gajim.common.helpers import to_user_string
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import ensure_not_destroyed
 
 log = logging.getLogger('gajim.gtk.change_password')
 
@@ -119,17 +119,20 @@ class ChangePassword(Assistant):
             self._con.get_module('Register').change_password(
                 password, callback=self._on_change_password)
 
-    @ensure_not_destroyed
-    def _on_change_password(self, result):
-        if is_error_result(result):
-            error_text = to_user_string(result)
+    def _on_change_password(self, task):
+        try:
+            task.finish()
+        except ChangePasswordStanzaError as error:
+            self.get_page('next_stage').set_form(error.get_form())
+            self.show_page('next_stage', Gtk.StackTransitionType.SLIDE_LEFT)
+
+        except StanzaError as error:
+            error_text = to_user_string(error)
             self.get_page('error').set_text(error_text)
             self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
-        elif result.successful:
-            self.show_page('success')
+
         else:
-            self.get_page('next_stage').set_form(result.form)
-            self.show_page('next_stage', Gtk.StackTransitionType.SLIDE_LEFT)
+            self.show_page('success')
 
     def _on_destroy(self, *args):
         self._destroyed = True
