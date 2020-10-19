@@ -350,7 +350,7 @@ class StandardGroupChatCommands(CommandContainer):
         if who not in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         self.connection.get_module('MUC').set_role(
-            self.room_jid, who, 'none', reason or str())
+            self.room_jid, who, 'none', reason)
 
     @command(raw=True)
     # Do not translate moderator, participant, visitor, none

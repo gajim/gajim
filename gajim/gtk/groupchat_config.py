@@ -15,7 +15,7 @@
 import logging
 
 from nbxmpp.namespaces import Namespace
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 from gi.repository import Gdk
 from gi.repository import Gtk
 
@@ -26,7 +26,6 @@ from gajim.common.const import MUCUser
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import ensure_not_destroyed
 
 log = logging.getLogger('gajim.gtk.groupchat_config')
 
@@ -353,11 +352,13 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         con = app.connections[self.account]
         con.get_module('MUC').set_affiliation(self.jid, diff_dict)
 
-    @ensure_not_destroyed
-    def _on_affiliations_received(self, result, affiliation):
-        if is_error_result(result):
+    def _on_affiliations_received(self, task):
+        affiliation = task.get_user_data()
+        try:
+            result = task.finish()
+        except StanzaError as error:
             log.info('Error while requesting %s affiliations: %s',
-                     affiliation, result.condition)
+                     affiliation, error.condition)
             return
 
         if affiliation == 'outcast':

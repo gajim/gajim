@@ -33,7 +33,7 @@ from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
 from nbxmpp.const import Affiliation
 from nbxmpp.const import PresenceType
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 from nbxmpp.modules.vcard_temp import VCard
 
 from gi.repository import Gtk
@@ -546,9 +546,11 @@ class GroupchatControl(ChatControlBase):
                             self.room_jid,
                             contact.affiliation.value)
 
-    def _on_configure_form_received(self, result):
-        if is_error_result(result):
-            log.info(result)
+    def _on_configure_form_received(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            log.info(error)
             return
         GroupchatConfig(self.account, result.jid, 'owner', result.form)
 

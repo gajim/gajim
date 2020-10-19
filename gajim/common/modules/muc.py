@@ -23,7 +23,6 @@ from nbxmpp.const import InviteType
 from nbxmpp.const import PresenceType
 from nbxmpp.const import StatusCode
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.util import is_error_result
 from nbxmpp.errors import StanzaError
 
 from gi.repository import GLib
@@ -230,14 +229,16 @@ class MUC(BaseModule):
         self._nbxmpp('MUC').request_config(room_jid,
                                            callback=self._on_room_config)
 
-    def _on_room_config(self, result):
-        if is_error_result(result):
-            self._log.info(result)
+    def _on_room_config(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._log.info(error)
             app.nec.push_incoming_event(NetworkEvent(
                 'muc-configuration-failed',
                 account=self._account,
-                room_jid=result.jid,
-                error=result))
+                room_jid=error.jid,
+                error=error))
             return
 
         self._log.info('Configure room: %s', result.jid)
@@ -261,14 +262,16 @@ class MUC(BaseModule):
             else:
                 field.value = value
 
-    def _on_config_result(self, result):
-        if is_error_result(result):
-            self._log.info(result)
+    def _on_config_result(self, task):
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._log.info(error)
             app.nec.push_incoming_event(NetworkEvent(
                 'muc-configuration-failed',
                 account=self._account,
-                room_jid=result.jid,
-                error=result))
+                room_jid=error.jid,
+                error=error))
             return
 
         self._con.get_module('Discovery').disco_muc(
@@ -716,19 +719,19 @@ class MUC(BaseModule):
                                          form_node,
                                          callback=self._on_captcha_result)
 
-    def _on_captcha_result(self, result):
-        if not is_error_result(result):
-            return
-
-        muc_data = self._manager.get(result.jid)
-        if muc_data is None:
-            return
-        self._manager.set_state(result.jid, MUCJoinedState.CAPTCHA_FAILED)
-        app.nec.push_incoming_event(
-            NetworkEvent('muc-captcha-error',
-                         account=self._account,
-                         room_jid=str(result.jid),
-                         error_text=to_user_string(result)))
+    def _on_captcha_result(self, task):
+        try:
+            task.finish()
+        except StanzaError as error:
+            muc_data = self._manager.get(error.jid)
+            if muc_data is None:
+                return
+            self._manager.set_state(error.jid, MUCJoinedState.CAPTCHA_FAILED)
+            app.nec.push_incoming_event(
+                NetworkEvent('muc-captcha-error',
+                             account=self._account,
+                             room_jid=str(error.jid),
+                             error_text=to_user_string(error)))
 
     def _on_config_change(self, _con, _stanza, properties):
         if not properties.is_muc_config_change:
