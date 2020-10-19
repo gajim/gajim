@@ -346,7 +346,10 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._print_stanza(event, 'outgoing')
 
     def _print_stanza(self, event, kind):
-        account_label = app.get_account_label(event.account)
+        if event.account == 'AccountWizard':
+            account_label = 'Account Wizard'
+        else:
+            account_label = app.get_account_label(event.account)
 
         stanza = event.stanza
         if not isinstance(stanza, str):
