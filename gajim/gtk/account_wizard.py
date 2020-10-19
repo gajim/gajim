@@ -27,7 +27,9 @@ from nbxmpp.const import Mode
 from nbxmpp.const import StreamError
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
+from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import RegisterStanzaError
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -46,7 +48,6 @@ from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import open_window
-from gajim.gtk.util import ensure_not_destroyed
 
 
 log = logging.getLogger('gajim.gtk.account_wizard')
@@ -425,12 +426,13 @@ class AccountWizard(Assistant):
             i += 1
         return domain
 
-    @ensure_not_destroyed
-    def _on_register_form(self, result):
-        if is_error_result(result):
+    def _on_register_form(self, task):
+        try:
+            result = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
             self._show_error_page(_('Error'),
                                   _('Error'),
-                                  result.get_text())
+                                  error.get_text())
             self._disconnect()
             return
 
@@ -460,14 +462,36 @@ class AccountWizard(Assistant):
 
         form = self.get_page('form').get_submit_form()
         self._client.get_module('Register').submit_register_form(
-            None,
             form,
             callback=self._on_register_result)
 
-    @ensure_not_destroyed
-    def _on_register_result(self, result):
-        if is_error_result(result):
-            self._on_register_error(result)
+    def _on_register_result(self, task):
+        try:
+            task.finish()
+        except RegisterStanzaError as error:
+            self._set_error_text(error)
+            if error.type != 'modify':
+                self.get_page('form').remove_form()
+                self._disconnect()
+                return
+
+            register_data = error.get_data()
+            form = register_data.form
+            if register_data.form is None:
+                form = register_data.fields_form
+
+            if form is not None:
+                self.get_page('form').add_form(form)
+
+            else:
+                self.get_page('form').remove_form()
+                self._disconnect()
+            return
+
+        except (StanzaError, MalformedStanzaError) as error:
+            self._set_error_text(error)
+            self.get_page('form').remove_form()
+            self._disconnect()
             return
 
         username, password = self.get_page('form').get_credentials()
@@ -489,30 +513,12 @@ class AccountWizard(Assistant):
         self.get_page('form').remove_form()
         self._disconnect()
 
-    def _on_register_error(self, result):
-        error_text = result.get_text()
+    def _set_error_text(self, error):
+        error_text = error.get_text()
         if not error_text:
             error_text = _('The server rejected the registration '
                            'without an error message')
         self._show_error_page(_('Error'), _('Error'), error_text)
-
-        register_data = result.get_data()
-        if register_data is None:
-            # IQ error did not have the payload included
-            self.get_page('form').remove_form()
-            self._disconnect()
-            return
-
-        form = register_data.form
-        if register_data.form is None:
-            form = register_data.fields_form
-
-        if form is not None:
-            self.get_page('form').add_form(form)
-
-        else:
-            self.get_page('form').remove_form()
-            self._disconnect()
 
     def _on_destroy(self, *args):
         self._disconnect()
