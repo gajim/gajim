@@ -11,37 +11,36 @@ from setuptools import Command
 from setuptools.command.build_py import build_py as _build
 from setuptools.command.install import install as _install
 from distutils import log
-from distutils.util import convert_path, newer
+from distutils.util import newer
+from pathlib import Path
 
-import subprocess
-
-pos = [x for x in os.listdir('po') if x[-3:] == ".po"]
-ALL_LINGUAS = sorted([os.path.split(x)[-1][:-3] for x in pos])
+pos = Path('po').glob('*.po')
+ALL_LINGUAS = sorted([x.stem for x in pos])
 MAN_FILES = ['gajim.1', 'gajim-history-manager.1', 'gajim-remote.1']
 META_FILES = [('data/org.gajim.Gajim.desktop', 'share/applications', '--desktop'),
               ('data/org.gajim.Gajim.appdata.xml', 'share/metainfo', '--xml')]
-cwd = os.path.dirname(os.path.realpath(__file__))
-build_dir = os.path.join(cwd, "build")
+cwd = Path(__file__).resolve().parent
+build_dir = cwd / 'build'
 
 
 def update_trans():
     '''
     Update translation files
     '''
-    template = os.path.join('po', 'gajim.pot')
-    files = [os.path.join(root, f) for root, d, files in os.walk('gajim') for f in files if os.path.isfile(
-        os.path.join(root, f)) and (f.endswith('.py') or f.endswith('.ui'))]
-    files.append(os.path.join("data", "org.gajim.Gajim.desktop.in"))
-    files.append(os.path.join("data", "org.gajim.Gajim.appdata.xml.in"))
+    template = Path('po') / 'gajim.pot'
+    files = list(Path('gajim').rglob('*.py'))
+    files.extend(Path('gajim').rglob('*.ui'))
+    files.append(Path('data') / 'org.gajim.Gajim.desktop.in')
+    files.append(Path('data') / 'org.gajim.Gajim.appdata.xml.in')
     cmd = 'xgettext -c# --from-code=utf-8 --keyword=Q_ -o %s %s' % (
-        template, " ".join(files))
+        template, ' '.join([str(f) for f in files]))
     if os.system(cmd) != 0:
-        msg = "ERROR: %s could not be created!\n" % template
+        msg = f'ERROR: {template} could not be created!\n'
         raise SystemExit(msg)
 
     for lang in ALL_LINGUAS:
-        po_file = os.path.join('po', lang + '.po')
-        cmd = 'msgmerge -U %s %s' % (po_file, template)
+        po_file = Path('po') / (lang + '.po')
+        cmd = f'msgmerge -U {po_file} {template}'
         if os.system(cmd) != 0:
             msg = 'ERROR: Updating language translation file failed.'
             ask = msg + '\n Continue updating y/n [n] '
@@ -56,16 +55,16 @@ def build_trans(build_cmd):
     Translate the language files into gajim.mo
     '''
     for lang in ALL_LINGUAS:
-        po_file = os.path.join('po', lang + '.po')
-        mo_file = os.path.join(build_dir, 'mo', lang, 'LC_MESSAGES', 'gajim.mo')
-        mo_dir = os.path.dirname(mo_file)
-        if not (os.path.isdir(mo_dir) or os.path.islink(mo_dir)):
-            os.makedirs(mo_dir)
+        po_file = Path('po') / (lang + '.po')
+        mo_file = build_dir / 'mo' / lang / 'LC_MESSAGES' / 'gajim.mo'
+        mo_dir = mo_file.parent
+        if not (mo_dir.is_dir() or mo_dir.is_symlink()):
+            mo_dir.mkdir(parents=True)
 
         if newer(po_file, mo_file):
-            cmd = 'msgfmt %s -o %s' % (po_file, mo_file)
+            cmd = f'msgfmt {po_file} -o {mo_file}'
             if os.system(cmd) != 0:
-                os.remove(mo_file)
+                mo_file.unlink()
                 msg = 'ERROR: Building language translation files failed.'
                 ask = msg + '\n Continue building y/n [n] '
                 reply = input(ask)
@@ -77,8 +76,8 @@ def build_trans(build_cmd):
 def install_trans(install_cmd):
     data_files = install_cmd.distribution.data_files
     for lang in ALL_LINGUAS:
-        mo_file = os.path.join(build_dir, 'mo', lang, 'LC_MESSAGES', 'gajim.mo')
-        target = 'share/locale/' + lang + '/LC_MESSAGES'
+        mo_file = str(build_dir / 'mo' / lang / 'LC_MESSAGES' / 'gajim.mo')
+        target = f'share/locale/{lang}/LC_MESSAGES'
         data_files.append((target, [mo_file]))
 
 
@@ -86,35 +85,34 @@ def build_man(build_cmd):
     '''
     Compress Gajim manual files
     '''
-    newdir = os.path.join(build_dir, 'man')
-    if not (os.path.isdir(newdir) or os.path.islink(newdir)):
-        os.makedirs(newdir)
+    newdir = build_dir / 'man'
+    if not (newdir.is_dir() or newdir.is_symlink()):
+        newdir.mkdir()
 
     for man in MAN_FILES:
-        filename = os.path.join('data', man)
-        man_file_gz = os.path.join(newdir, man + '.gz')
-        if os.path.exists(man_file_gz):
+        filename = Path('data') / man
+        man_file_gz = newdir / (man + '.gz')
+        if man_file_gz.exists():
             if newer(filename, man_file_gz):
-                os.remove(man_file_gz)
+                man_file_gz.unlink()
             else:
-                filename = False
+                continue
 
-        if filename:
-            import gzip
-            # Binary io, so open is OK
-            with open(filename, 'rb') as f_in,\
-                    gzip.open(man_file_gz, 'wb') as f_out:
-                f_out.writelines(f_in)
-                log.info('Compiling %s >> %s', filename, man_file_gz)
+        import gzip
+        # Binary io, so open is OK
+        with open(filename, 'rb') as f_in,\
+                gzip.open(man_file_gz, 'wb') as f_out:
+            f_out.writelines(f_in)
+            log.info('Compiling %s >> %s', filename, man_file_gz)
 
 
 def install_man(install_cmd):
     data_files = install_cmd.distribution.data_files
-    man_dir = os.path.join(build_dir, 'man')
+    man_dir = build_dir / 'man'
     target = 'share/man/man1'
 
     for man in MAN_FILES:
-        man_file_gz = os.path.join(man_dir, man + '.gz')
+        man_file_gz = str(man_dir / (man + '.gz'))
         data_files.append((target, [man_file_gz]))
 
 
@@ -125,26 +123,25 @@ def build_intl(build_cmd):
     base = build_dir
 
     for filename, _, option in META_FILES:
-        filenamelocal = convert_path(filename)
-        newfile = os.path.join(base, filenamelocal)
-        newdir = os.path.dirname(newfile)
-        if not(os.path.isdir(newdir) or os.path.islink(newdir)):
-            os.makedirs(newdir)
-        merge(filenamelocal + '.in', newfile, option)
+        newfile = base / filename
+        newdir = newfile.parent
+        if not(newdir.is_dir() or newdir.is_symlink()):
+            newdir.mkdir()
+        merge(Path(filename + '.in'), newfile, option)
 
 
 def install_intl(install_cmd):
     data_files = install_cmd.distribution.data_files
 
     for filename, target, _ in META_FILES:
-        data_files.append((target, [build_dir + '/' + filename]))
+        data_files.append((target, [str(build_dir / filename)]))
 
 
 def merge(in_file, out_file, option, po_dir='po'):
     '''
     Run the msgfmt command.
     '''
-    if os.path.exists(in_file):
+    if in_file.exists():
         cmd = (('msgfmt %(opt)s -d %(po_dir)s --template %(in_file)s '
                 '-o %(out_file)s') %
                {'opt': option,
