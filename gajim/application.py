@@ -159,7 +159,6 @@ class GajimApplication(Gtk.Application):
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('command-line', self._command_line)
         self.connect('startup', self._startup)
-        self.connect('activate', self._activate)
 
         self.interface = None
 
@@ -236,9 +235,6 @@ class GajimApplication(Gtk.Application):
         app.ged.register_event_handler('feature-discovered',
                                        ged.CORE,
                                        self._on_feature_discovered)
-
-    def _activate(self, _application):
-        self.interface.roster.window.present()
 
     def _open_uris(self, uris):
         accounts = list(app.connections.keys())
@@ -327,7 +323,6 @@ class GajimApplication(Gtk.Application):
             self._open_uris(remaining.unpack())
             return 0
 
-        self.activate()
         return 0
 
     def _handle_local_options(self,
