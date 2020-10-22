@@ -17,16 +17,16 @@ from enum import IntEnum
 
 from gi.repository import Gtk
 
-from nbxmpp.util import is_error_result
 from nbxmpp.const import AdHocAction
 from nbxmpp.modules import dataforms
+from nbxmpp.errors import StanzaError
+from nbxmpp.errors import MalformedStanzaError
 
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import find_widget
 from gajim.gtk.util import MultiLineLabel
 
@@ -186,30 +186,25 @@ class AdHocCommand(Gtk.Assistant):
                 command, AdHocAction.CANCEL)
             self.set_current_page(Page.COMMANDS)
 
-    @ensure_not_destroyed
-    def _received_command_list(self, commands):
-        error_text = None
-        if is_error_result(commands):
-            error_text = to_user_string(commands)
+    def _received_command_list(self, task):
+        try:
+            commands = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
+            self._set_error(to_user_string(error), False)
+            return
 
-        elif not commands:
-            error_text = _('No commands available')
-
-        if error_text is not None:
-            self.get_nth_page(Page.ERROR).set_text(error_text)
-            self.get_nth_page(Page.ERROR).show_command_button = False
-            self.set_current_page(Page.ERROR)
+        if not commands:
+            self._set_error(_('No commands available'), False)
             return
 
         self.get_nth_page(Page.COMMANDS).add_commands(commands)
         self.set_current_page(Page.COMMANDS)
 
-    @ensure_not_destroyed
-    def _received_stage(self, stage):
-        if is_error_result(stage):
-            self.get_nth_page(Page.ERROR).set_text(to_user_string(stage))
-            self.get_nth_page(Page.ERROR).show_command_button = True
-            self.set_current_page(Page.ERROR)
+    def _received_stage(self, task):
+        try:
+            stage = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
+            self._set_error(to_user_string(error), True)
             return
 
         page = Page.STAGE
@@ -219,6 +214,11 @@ class AdHocCommand(Gtk.Assistant):
         stage_page = self.get_nth_page(page)
         stage_page.process_stage(stage)
         self.set_current_page(page)
+
+    def _set_error(self, text, show_command_button):
+        self.get_nth_page(Page.ERROR).set_text(text)
+        self.get_nth_page(Page.ERROR).show_command_button = show_command_button
+        self.set_current_page(Page.ERROR)
 
     def set_stage_complete(self, is_valid):
         self._buttons['next'].set_sensitive(is_valid)
