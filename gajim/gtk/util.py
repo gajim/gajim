@@ -28,7 +28,6 @@ import textwrap
 import functools
 from importlib import import_module
 import xml.etree.ElementTree as ET
-from pathlib import Path
 from functools import wraps
 from functools import lru_cache
 
@@ -177,7 +176,7 @@ class Builder:
     @staticmethod
     @functools.lru_cache(maxsize=None)
     def _load_string_from_filename(filename, gettext_):
-        file_path = str(Path(configpaths.get('GUI')) / filename)
+        file_path = str(configpaths.get('GUI') / filename)
 
         if sys.platform == "win32":
             # This is a workaround for non working translation on Windows
@@ -266,7 +265,7 @@ def get_icon_name(name: str,
 
 
 def load_user_iconsets():
-    iconsets_path = Path(configpaths.get('MY_ICONSETS'))
+    iconsets_path = configpaths.get('MY_ICONSETS')
     if not iconsets_path.exists():
         return
 
@@ -282,7 +281,7 @@ def get_available_iconsets():
     for iconset in GajimIconSet:
         iconsets.append(iconset.value)
 
-    iconsets_path = Path(configpaths.get('MY_ICONSETS'))
+    iconsets_path = configpaths.get('MY_ICONSETS')
     if not iconsets_path.exists():
         return iconsets
 

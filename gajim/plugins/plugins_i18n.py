@@ -22,7 +22,7 @@ from gajim.common import configpaths
 
 DOMAIN = 'gajim_plugins'
 try:
-    plugin_user_dir = Path(configpaths.get('PLUGINS_USER'))
+    plugin_user_dir = configpaths.get('PLUGINS_USER')
 except KeyError:
     # This allows to import the module for tests
     print('No plugin translation path available')

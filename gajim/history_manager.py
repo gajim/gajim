@@ -30,7 +30,6 @@ import sys
 import time
 import getopt
 import sqlite3
-from pathlib import Path
 from enum import IntEnum, unique
 
 import gi
@@ -109,7 +108,7 @@ class Column(IntEnum):
 
 class HistoryManager:
     def __init__(self):
-        log_db_path = Path(configpaths.get('LOG_DB'))
+        log_db_path = configpaths.get('LOG_DB')
         if not log_db_path.exists():
             ErrorDialog(_('Cannot find history logs database'),
                         _('%s does not exist.') % log_db_path)

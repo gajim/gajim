@@ -38,7 +38,7 @@ from gajim.common.const import PathType, PathLocation
 from gajim.common.types import PathTuple
 
 
-def get(key: str) -> str:
+def get(key: str) -> Path:
     return _paths[key]
 
 
@@ -50,7 +50,7 @@ def get_plugin_dirs() -> List[Path]:
             Path(_paths['PLUGINS_USER'])]
 
 
-def get_paths(type_: PathType) -> Generator[str, None, None]:
+def get_paths(type_: PathType) -> Generator[Path, None, None]:
     for key, value in _paths.items():
         path_type = value[2]
         if type_ != path_type:
@@ -71,7 +71,7 @@ def set_profile(profile: str) -> None:
 
 
 def set_config_root(config_root: str) -> None:
-    _paths.custom_config_root = str(Path(config_root).resolve())
+    _paths.custom_config_root = Path(config_root).resolve()
 
 
 def init() -> None:
@@ -80,24 +80,21 @@ def init() -> None:
 
 def create_paths() -> None:
     for path in get_paths(PathType.FOLDER):
-        if not isinstance(path, Path):
-            path_ = Path(path)
-
-        if path_.is_file():
-            print(_('%s is a file but it should be a directory') % path_)
+        if path.is_file():
+            print(_('%s is a file but it should be a directory') % path)
             print(_('Gajim will now exit'))
             sys.exit()
 
-        if not path_.exists():
-            for parent_path in reversed(path_.parents):
+        if not path.exists():
+            for parent_path in reversed(path.parents):
                 # Create all parent folders
                 # don't use mkdir(parent=True), as it ignores `mode`
                 # when creating the parents
                 if not parent_path.exists():
                     print(('creating %s directory') % parent_path)
                     parent_path.mkdir(mode=0o700)
-            print(('creating %s directory') % path_)
-            path_.mkdir(mode=0o700)
+            print(('creating %s directory') % path)
+            path.mkdir(mode=0o700)
 
 
 class ConfigPaths:
@@ -105,67 +102,66 @@ class ConfigPaths:
         self._paths = {}  # type: Dict[str, PathTuple]
         self.profile = ''
         self.profile_separation = False
-        self.custom_config_root = None  # type: Optional[str]
+        self.custom_config_root = None  # type: Optional[Path]
 
         if os.name == 'nt':
             try:
                 # Documents and Settings\[User Name]\Application Data\Gajim
                 self.config_root = self.cache_root = self.data_root = \
-                        os.path.join(os.environ['appdata'], 'Gajim')
+                        Path(os.environ['appdata']) / 'Gajim'
             except KeyError:
                 # win9x, in cwd
-                self.config_root = self.cache_root = self.data_root = '.'
+                self.config_root = self.cache_root = self.data_root = Path('.')
         else:
-            self.config_root = os.path.join(GLib.get_user_config_dir(),
-                                            'gajim')
-            self.cache_root = os.path.join(GLib.get_user_cache_dir(), 'gajim')
-            self.data_root = os.path.join(GLib.get_user_data_dir(), 'gajim')
+            self.config_root = Path(GLib.get_user_config_dir()) / 'gajim'
+            self.cache_root = Path(GLib.get_user_cache_dir()) / 'gajim'
+            self.data_root = Path(GLib.get_user_data_dir()) / 'gajim'
 
         import pkg_resources
-        basedir = pkg_resources.resource_filename("gajim", ".")
+        basedir = Path(pkg_resources.resource_filename("gajim", "."))
 
         source_paths = [
-            ('DATA', os.path.join(basedir, 'data')),
-            ('STYLE', os.path.join(basedir, 'data', 'style')),
-            ('EMOTICONS', os.path.join(basedir, 'data', 'emoticons')),
-            ('GUI', os.path.join(basedir, 'data', 'gui')),
-            ('ICONS', os.path.join(basedir, 'data', 'icons')),
-            ('HOME', os.path.expanduser('~')),
-            ('PLUGINS_BASE', os.path.join(basedir, 'data', 'plugins')),
+            ('DATA', basedir / 'data'),
+            ('STYLE', basedir / 'data' / 'style'),
+            ('EMOTICONS', basedir / 'data' / 'emoticons'),
+            ('GUI', basedir / 'data' / 'gui'),
+            ('ICONS', basedir / 'data' / 'icons'),
+            ('HOME', Path.home()),
+            ('PLUGINS_BASE', basedir / 'data' / 'plugins'),
         ]
 
         for path in source_paths:
             self.add(*path)
 
-    def __getitem__(self, key: str) -> str:
+    def __getitem__(self, key: str) -> Path:
         location, path, _ = self._paths[key]
         if location == PathLocation.CONFIG:
-            return os.path.join(self.config_root, path)
+            return self.config_root / path
         if location == PathLocation.CACHE:
-            return os.path.join(self.cache_root, path)
+            return self.cache_root / path
         if location == PathLocation.DATA:
-            return os.path.join(self.data_root, path)
+            return self.data_root / path
         return path
 
     def items(self) -> Generator[Tuple[str, PathTuple], None, None]:
         for key, value in self._paths.items():
             yield (key, value)
 
-    def _prepare(self, path: str, unique: bool) -> str:
+    def _prepare(self, path: Path, unique: bool) -> Path:
         if os.name == 'nt':
-            path = path.capitalize()
+            path = Path(str(path).capitalize())
         if self.profile:
             if unique or self.profile_separation:
-                return '%s.%s' % (path, self.profile)
+                return Path(f'{path}.{self.profile}')
         return path
 
     def add(self,
             name: str,
-            path: str,
+            path: Path,
             location: PathLocation = None,
             path_type: PathType = None,
             unique: bool = False) -> None:
-        if path and location is not None:
+        if location is not None:
             path = self._prepare(path, unique)
         self._paths[name] = (location, path, path_type)
 
@@ -175,10 +171,10 @@ class ConfigPaths:
             self.cache_root = self.data_root = self.custom_config_root
 
         user_dir_paths = [
-            ('TMP', tempfile.gettempdir()),
-            ('MY_CONFIG', '', PathLocation.CONFIG, PathType.FOLDER),
-            ('MY_CACHE', '', PathLocation.CACHE, PathType.FOLDER),
-            ('MY_DATA', '', PathLocation.DATA, PathType.FOLDER),
+            ('TMP', Path(tempfile.gettempdir())),
+            ('MY_CONFIG', Path(), PathLocation.CONFIG, PathType.FOLDER),
+            ('MY_CACHE', Path(), PathLocation.CACHE, PathType.FOLDER),
+            ('MY_DATA', Path(), PathLocation.DATA, PathType.FOLDER),
         ]
 
         for path in user_dir_paths:

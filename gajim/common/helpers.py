@@ -51,6 +51,7 @@ import urllib
 from urllib.parse import unquote
 from encodings.punycode import punycode_encode
 from functools import wraps
+from pathlib import Path
 from packaging.version import Version as V
 
 from nbxmpp.namespaces import Namespace
@@ -447,18 +448,18 @@ def check_soundfile_path(file_, dirs=None):
                                      (eg: ~/.gajim/sounds/, DATADIR/sounds...).
     :return      the path to file or None if it doesn't exists.
     """
+    if not file_:
+        return None
+    if Path(file_).exists():
+        return Path(file_)
+
     if dirs is None:
         dirs = [configpaths.get('MY_DATA'),
                 configpaths.get('DATA')]
 
-    if not file_:
-        return None
-    if os.path.exists(file_):
-        return file_
-
     for dir_ in dirs:
-        dir_ = os.path.join(dir_, 'sounds', file_)
-        if os.path.exists(dir_):
+        dir_ = dir_ / 'sounds' / file_
+        if dir_.exists():
             return dir_
     return None
 
@@ -482,11 +483,12 @@ def strip_soundfile_path(file_, dirs=None, abs_=True):
         dirs = [configpaths.get('MY_DATA'),
                 configpaths.get('DATA')]
 
-    name = os.path.basename(file_)
+    file_ = Path(file_)
+    name = file_.name
     for dir_ in dirs:
-        dir_ = os.path.join(dir_, 'sounds', name)
+        dir_ = dir_ / 'sounds' / name
         if abs_:
-            dir_ = os.path.abspath(dir_)
+            dir_ = dir_.absolute()
         if file_ == dir_:
             return name
     return file_
@@ -496,6 +498,7 @@ def play_sound_file(path_to_soundfile):
     if path_to_soundfile is None:
         return
 
+    path_to_soundfile = str(path_to_soundfile)
     if sys.platform == 'win32':
         import winsound
         try:
@@ -854,25 +857,19 @@ def version_condition(current_version, required_version):
     return True
 
 def get_available_emoticon_themes():
-    emoticons_themes = ['font']
     files = []
-    dir_iterator = os.scandir(configpaths.get('EMOTICONS'))
-    for folder in dir_iterator:
+    for folder in configpaths.get('EMOTICONS').iterdir():
         if not folder.is_dir():
             continue
-        file_iterator = os.scandir(folder.path)
-        for theme in file_iterator:
-            if theme.is_file():
-                files.append(theme.name)
+        files += [theme for theme in folder.iterdir() if theme.is_file()]
 
-    if os.path.isdir(configpaths.get('MY_EMOTS')):
-        files += os.listdir(configpaths.get('MY_EMOTS'))
+    my_emots = configpaths.get('MY_EMOTS')
+    if my_emots.is_dir():
+        files += list(my_emots.iterdir())
 
-    for file in files:
-        if file.endswith('.png'):
-            emoticons_themes.append(file[:-4])
-    emoticons_themes.sort()
-    return emoticons_themes
+    emoticons_themes = ['font']
+    emoticons_themes += [file.stem for file in files if file.suffix == '.png']
+    return sorted(emoticons_themes)
 
 def call_counter(func):
     def helper(self, restart=False):

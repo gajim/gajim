@@ -34,7 +34,6 @@ import os
 import sys
 import logging
 import uuid
-from pathlib import Path
 from collections import namedtuple
 from collections import defaultdict
 
@@ -631,7 +630,7 @@ def load_css_config():
     css_config = CSSConfig()
 
 def set_debug_mode(enable: bool) -> None:
-    debug_folder = Path(configpaths.get('DEBUG'))
+    debug_folder = configpaths.get('DEBUG')
     debug_enabled = debug_folder / 'debug-enabled'
     if enable:
         debug_enabled.touch()
@@ -640,7 +639,7 @@ def set_debug_mode(enable: bool) -> None:
             debug_enabled.unlink()
 
 def get_debug_mode() -> bool:
-    debug_folder = Path(configpaths.get('DEBUG'))
+    debug_folder = configpaths.get('DEBUG')
     debug_enabled = debug_folder / 'debug-enabled'
     return debug_enabled.exists()
 
@@ -648,7 +647,7 @@ def get_stored_bob_data(algo_hash: str) -> Optional[bytes]:
     try:
         return bob_cache[algo_hash]
     except KeyError:
-        filepath = Path(configpaths.get('BOB')) / algo_hash
+        filepath = configpaths.get('BOB') / algo_hash
         if filepath.exists():
             with open(str(filepath), 'r+b') as file:
                 data = file.read()

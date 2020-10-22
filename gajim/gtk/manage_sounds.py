@@ -107,7 +107,7 @@ class ManageSounds(Gtk.ApplicationWindow):
         if path_to_snd_file is None:
             self._ui.filechooser.unselect_all()
         else:
-            self._ui.filechooser.set_filename(path_to_snd_file)
+            self._ui.filechooser.set_filename(str(path_to_snd_file))
 
     def _on_file_set(self, button):
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
@@ -118,7 +118,7 @@ class ManageSounds(Gtk.ApplicationWindow):
         path_to_snd_file = strip_soundfile_path(filename)
 
         # set new path to sounds_model
-        model[iter_][2] = path_to_snd_file
+        model[iter_][2] = str(path_to_snd_file)
         # set the sound to enabled
         model[iter_][0] = True
 

@@ -23,7 +23,6 @@ import traceback
 import threading
 import webbrowser
 import platform
-from pathlib import Path
 from io import StringIO
 from urllib.parse import urlencode
 
@@ -69,7 +68,7 @@ def _hook(type_, value, tb):
 
 class ExceptionDialog():
     def __init__(self, type_, value, tb):
-        path = Path(configpaths.get('GUI')) / 'exception_dialog.ui'
+        path = configpaths.get('GUI') / 'exception_dialog.ui'
         self._ui = get_builder(path.resolve())
         self._ui.connect_signals(self)
 

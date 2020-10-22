@@ -14,7 +14,6 @@
 
 import logging
 import weakref
-from pathlib import Path
 from collections import OrderedDict
 
 from gi.repository import Gtk
@@ -312,12 +311,12 @@ class EmojiChooser(Gtk.Popover):
         if theme == 'font':
             return 'font'
 
-        base_path = Path(configpaths.get('EMOTICONS'))
+        base_path = configpaths.get('EMOTICONS')
         emoticons_data_path = base_path / theme / f'{theme}.png'
         if emoticons_data_path.exists():
             return emoticons_data_path
 
-        emoticons_user_path = Path(configpaths.get('MY_EMOTS')) / f'{theme}.png'
+        emoticons_user_path = configpaths.get('MY_EMOTS') / f'{theme}.png'
         if emoticons_user_path.exists():
             return emoticons_user_path
 

@@ -241,10 +241,10 @@ class PluginManager(metaclass=Singleton):
         dl_dir = configpaths.get('PLUGINS_DOWNLOAD')
         to_update = [plugin_name] if plugin_name else next(os.walk(dl_dir))[1]
         for directory in to_update:
-            src_dir = os.path.join(dl_dir, directory)
-            dst_dir = os.path.join(user_dir, directory)
+            src_dir = dl_dir / directory
+            dst_dir = user_dir / directory
             try:
-                if os.path.exists(dst_dir):
+                if dst_dir.exists():
                     if not replace:
                         continue
                     self.delete_plugin_files(dst_dir)
@@ -701,7 +701,7 @@ class PluginManager(metaclass=Singleton):
             raise PluginsystemError(_('Archive is malformed'))
 
         plugin_name = dirs[0]
-        user_dir = Path(configpaths.get('PLUGINS_USER'))
+        user_dir = configpaths.get('PLUGINS_USER')
         plugin_path = user_dir / plugin_name
 
         if plugin_path.exists():
@@ -742,7 +742,7 @@ class PluginManager(metaclass=Singleton):
         self.remove_plugin(plugin)
         self.delete_plugin_files(plugin.__path__)
         if not is_shipped_plugin(Path(plugin.__path__)):
-            path = Path(configpaths.get('PLUGINS_BASE')) / plugin.short_name
+            path = configpaths.get('PLUGINS_BASE') / plugin.short_name
             if path.exists():
                 self.delete_plugin_files(str(path))
 

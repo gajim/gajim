@@ -16,7 +16,6 @@ import json
 import time
 import sqlite3
 import logging
-from pathlib import Path
 from collections import namedtuple
 
 from gajim.common import configpaths
@@ -56,7 +55,7 @@ class CacheStorage(SqliteStorage):
     def __init__(self):
         SqliteStorage.__init__(self,
                                log,
-                               Path(configpaths.get('CACHE_DB')),
+                               configpaths.get('CACHE_DB'),
                                CACHE_SQL_STATEMENT)
 
         self._entity_caps_cache = {}

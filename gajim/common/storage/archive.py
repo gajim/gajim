@@ -27,7 +27,6 @@ import calendar
 import json
 import logging
 import sqlite3 as sqlite
-from pathlib import Path
 from collections import namedtuple
 
 from gajim.common import app
@@ -93,7 +92,7 @@ class MessageArchiveStorage(SqliteStorage):
     def __init__(self):
         SqliteStorage.__init__(self,
                                log,
-                               Path(configpaths.get('LOG_DB')),
+                               configpaths.get('LOG_DB'),
                                ARCHIVE_SQL_STATEMENT)
 
         self._jid_ids = {}

@@ -170,7 +170,7 @@ class Settings:
         return namedtuple("Row", fields)(*row)
 
     def _connect_database(self) -> None:
-        path = Path(configpaths.get('SETTINGS'))
+        path = configpaths.get('SETTINGS')
         if path.is_dir():
             log.error('%s is a directory but should be a file', path)
             sys.exit()
@@ -237,7 +237,7 @@ class Settings:
         pass
 
     def _migrate_old_config(self) -> None:
-        config_file = Path(configpaths.get('CONFIG_FILE'))
+        config_file = configpaths.get('CONFIG_FILE')
         if not config_file.exists():
             return
 

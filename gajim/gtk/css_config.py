@@ -17,7 +17,6 @@
 
 import math
 import logging
-from pathlib import Path
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -148,7 +147,7 @@ class CSSConfig():
                                      CSSPriority.DEFAULT_THEME_DARK)
 
     def _load_css_from_file(self, filename, priority):
-        path = Path(configpaths.get('STYLE')) / filename
+        path = configpaths.get('STYLE') / filename
         try:
             with open(path, "r") as file_:
                 css = file_.read()
@@ -180,7 +179,7 @@ class CSSConfig():
         return int(math.ceil(number / 100.0)) * 100
 
     def _gather_available_themes(self):
-        files = Path(configpaths.get('MY_THEME')).iterdir()
+        files = configpaths.get('MY_THEME').iterdir()
         self.themes = [file.stem for file in files if file.suffix == '.css']
         if 'default' in self.themes:
             # Ignore user created themes that are named 'default'
@@ -191,8 +190,8 @@ class CSSConfig():
             theme = 'default-dark'
 
         if user:
-            return Path(configpaths.get('MY_THEME')) / f'{theme}.css'
-        return Path(configpaths.get('STYLE')) / f'{theme}.css'
+            return configpaths.get('MY_THEME') / f'{theme}.css'
+        return configpaths.get('STYLE') / f'{theme}.css'
 
     def _determine_theme_path(self):
         # Gets the path of the currently active theme.

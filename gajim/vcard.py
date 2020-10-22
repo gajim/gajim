@@ -25,7 +25,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import logging
 
 from gi.repository import Gtk
@@ -89,11 +88,11 @@ class VcardWindow(EventHelper):
             self.real_resource = contact.resource
 
         puny_jid = helpers.sanitize_filename(contact.jid)
-        local_avatar_basepath = os.path.join(configpaths.get('AVATAR'), puny_jid) + \
-                '_local'
+        local_avatar_basepath = configpaths.get('AVATAR') / (puny_jid +
+                                                             '_local')
         for extension in ('.png', '.jpeg'):
-            local_avatar_path = local_avatar_basepath + extension
-            if os.path.isfile(local_avatar_path):
+            local_avatar_path = local_avatar_basepath.with_suffix(extension)
+            if local_avatar_path.is_file():
                 image = self.xml.get_object('custom_avatar_image')
                 image.set_from_file(local_avatar_path)
                 image.show()

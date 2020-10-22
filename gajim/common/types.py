@@ -22,6 +22,7 @@ from typing import Tuple
 from typing import Union
 from typing import TYPE_CHECKING
 
+from pathlib import Path
 import nbxmpp
 
 from gajim.common.const import PathType, PathLocation
@@ -53,7 +54,7 @@ PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]
 PEPHandlersDict = Dict[str, List[PEPNotifyCallback]]
 
 # Configpaths
-PathTuple = Tuple[Optional[PathLocation], str, Optional[PathType]]
+PathTuple = Tuple[Optional[PathLocation], Path, Optional[PathType]]
 
 # Plugins
 PluginExtensionPoints = Dict[str, Tuple[Optional[Callable[..., None]],

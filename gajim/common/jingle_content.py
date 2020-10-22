@@ -19,8 +19,6 @@ Handles Jingle contents (XEP 0166)
 from typing import Any  # pylint: disable=unused-import
 from typing import Dict  # pylint: disable=unused-import
 
-import os
-
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 
@@ -227,8 +225,8 @@ class JingleContent:
         if self.use_security:
             security = nbxmpp.simplexml.Node(
                 tag=Namespace.JINGLE_XTLS + ' security')
-            certpath = os.path.join(
-                configpaths.get('MY_CERT'), SELF_SIGNED_CERTIFICATE) + '.cert'
+            certpath = configpaths.get('MY_CERT') / (SELF_SIGNED_CERTIFICATE
+                                                     + '.cert')
             cert = load_cert_file(certpath)
             if cert:
                 digest_algo = (cert.get_signature_algorithm()

@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import logging
 import hashlib
 from math import pi
@@ -295,7 +294,7 @@ class AvatarStorage(metaclass=Singleton):
             return None
 
         sha = hashlib.sha1(data).hexdigest()
-        path = os.path.join(configpaths.get('AVATAR'), sha)
+        path = configpaths.get('AVATAR') / sha
         try:
             with open(path, 'wb') as output_file:
                 output_file.write(data)
@@ -306,8 +305,8 @@ class AvatarStorage(metaclass=Singleton):
 
     @staticmethod
     def get_avatar_path(filename):
-        path = os.path.join(configpaths.get('AVATAR'), filename)
-        if not os.path.isfile(path):
+        path = configpaths.get('AVATAR') / filename
+        if not path.is_file():
             return None
         return path
 

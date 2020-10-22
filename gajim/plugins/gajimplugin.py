@@ -210,8 +210,8 @@ class GajimPlugin:
 class GajimPluginConfig():
     def __init__(self, plugin):
         self.plugin = plugin
-        self.FILE_PATH = os.path.join(
-            configpaths.get('PLUGINS_CONFIG_DIR'), self.plugin.short_name)
+        self.FILE_PATH = (configpaths.get('PLUGINS_CONFIG_DIR') /
+                          self.plugin.short_name)
         self.data = {}
 
     def __getitem__(self, key):
@@ -243,18 +243,18 @@ class GajimPluginConfig():
         return self.data.items()
 
     def save(self):
-        fd = open(self.FILE_PATH, 'wb')
-        pickle.dump(self.data, fd)
-        fd.close()
+        with open(self.FILE_PATH, 'wb') as fd:
+            pickle.dump(self.data, fd)
 
     def load(self):
-        if os.path.isfile(self.FILE_PATH):
-            fd = open(self.FILE_PATH, 'rb')
+        if not self.FILE_PATH.is_file():
+            self.data = {}
+            self.save()
+            return
+        with open(self.FILE_PATH, 'rb') as fd:
             try:
                 self.data = pickle.load(fd)
-                fd.close()
             except Exception:
-                fd.close()
                 try:
                     import shelve
                     s = shelve.open(self.FILE_PATH)
@@ -276,9 +276,6 @@ class GajimPluginConfig():
                     os.rename(self.FILE_PATH, self.FILE_PATH + '.bak')
                     self.data = {}
                     self.save()
-        else:
-            self.data = {}
-            self.save()
 
 
 class GajimPluginException(Exception):

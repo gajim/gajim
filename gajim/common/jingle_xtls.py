@@ -13,7 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import os
+from pathlib import Path
 
 from OpenSSL import SSL, crypto
 
@@ -52,7 +52,7 @@ def load_cert_file(cert_path, cert_store=None):
     """
     This is almost identical to the one in nbxmpp.tls_nb
     """
-    if not os.path.isfile(cert_path):
+    if not cert_path.is_file():
         return None
     try:
         f = open(cert_path)
@@ -100,22 +100,22 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
 
-    cert_name = os.path.join(configpaths.get('MY_CERT'), SELF_SIGNED_CERTIFICATE)
-    ctx.use_privatekey_file((cert_name + '.pkey').encode('utf-8'))
-    ctx.use_certificate_file((cert_name + '.cert').encode('utf-8'))
+    cert_name = configpaths.get('MY_CERT') / SELF_SIGNED_CERTIFICATE
+    ctx.use_privatekey_file(str(cert_name.with_suffix('.pkey')).encode('utf-8'))
+    ctx.use_certificate_file(str(cert_name.with_suffix('.cert')).encode('utf-8'))
 
     # Try to load Diffie-Hellman parameters.
     # First try user DH parameters, if this fails load the default DH parameters
-    dh_params_name = os.path.join(configpaths.get('MY_CERT'), DH_PARAMS)
+    dh_params_name = configpaths.get('MY_CERT') / DH_PARAMS
     try:
         with open(dh_params_name, "r"):
             ctx.load_tmp_dh(dh_params_name.encode('utf-8'))
     except FileNotFoundError as err:
-        default_dh_params_name = os.path.join(configpaths.get('DATA'),
-                                              'other', DEFAULT_DH_PARAMS)
+        default_dh_params_name = (configpaths.get('DATA') / 'other' /
+                                  DEFAULT_DH_PARAMS)
         try:
             with open(default_dh_params_name, "r"):
-                ctx.load_tmp_dh(default_dh_params_name.encode('utf-8'))
+                ctx.load_tmp_dh(str(default_dh_params_name).encode('utf-8'))
         except FileNotFoundError as err:
             log.error('Unable to load default DH parameter file: %s, %s',
                       default_dh_params_name, err)
@@ -123,9 +123,9 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
 
     if remote_jid:
         store = ctx.get_cert_store()
-        path = os.path.join(os.path.expanduser(configpaths.get('MY_PEER_CERTS')),
-                            remote_jid) + '.cert'
-        if os.path.exists(path):
+        path = configpaths.get('MY_PEER_CERTS').expanduser() / (remote_jid
+                                                                + '.cert')
+        if path.exists():
             load_cert_file(path, cert_store=store)
             log.debug('certificate file %s loaded fingerprint %s',
                       path, fingerprint)
@@ -140,8 +140,8 @@ def read_cert(certpath):
     return certificate
 
 def send_cert(con, jid_from, sid):
-    certpath = os.path.join(configpaths.get('MY_CERT'), SELF_SIGNED_CERTIFICATE) + \
-        '.cert'
+    certpath = configpaths.get('MY_CERT') / (SELF_SIGNED_CERTIFICATE
+                                             + '.cert')
     certificate = read_cert(certpath)
     iq = nbxmpp.Iq('result', to=jid_from)
     iq.setAttr('id', sid)
@@ -159,8 +159,7 @@ def send_cert(con, jid_from, sid):
 
 def handle_new_cert(con, obj, jid_from):
     jid = app.get_jid_without_resource(jid_from)
-    certpath = os.path.join(os.path.expanduser(configpaths.get('MY_PEER_CERTS')), jid)
-    certpath += '.cert'
+    certpath = configpaths.get('MY_PEER_CERTS').expanduser() / (jid + '.cert')
 
     id_ = obj.getAttr('id')
 
@@ -177,9 +176,8 @@ def handle_new_cert(con, obj, jid_from):
     approve_pending_content(id_)
 
 def check_cert(jid, fingerprint):
-    certpath = os.path.join(os.path.expanduser(configpaths.get('MY_PEER_CERTS')), jid)
-    certpath += '.cert'
-    if os.path.exists(certpath):
+    certpath = configpaths.get('MY_PEER_CERTS').expanduser() / (jid + '.cert')
+    if certpath.exists():
         cert = load_cert_file(certpath)
         if cert:
             digest_algo = cert.get_signature_algorithm().decode('utf-8')\
@@ -273,12 +271,12 @@ def make_certs(filepath, CN):
     key = createKeyPair(TYPE_RSA, 4096)
     req = createCertRequest(key, CN=CN)
     cert = createCertificate(req, req, key, 0, 0, 60*60*24*365*5) # five years
-    with open(filepath + '.pkey', 'wb') as f:
-        os.chmod(filepath + '.pkey', 0o600)
+    with open(filepath.with_suffix('.pkey'), 'wb') as f:
+        filepath.with_suffix('.pkey').chmod(0o600)
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
-    with open(filepath + '.cert', 'wb') as f:
+    with open(filepath.with_suffix('.cert'), 'wb') as f:
         f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
 
 
 if __name__ == '__main__':
-    make_certs('./selfcert', 'gajim')
+    make_certs(Path('selfcert'), 'gajim')

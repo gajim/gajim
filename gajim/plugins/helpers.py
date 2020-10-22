@@ -27,7 +27,6 @@ from typing import List
 
 import logging
 import functools
-from pathlib import Path
 
 from gajim.common import configpaths
 from gajim.plugins import plugins_i18n
@@ -126,8 +125,8 @@ def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
 
 
 def is_shipped_plugin(path):
-    base = Path(configpaths.get('PLUGINS_BASE'))
+    base = configpaths.get('PLUGINS_BASE')
     if not base.exists():
         return False
-    plugin_parent = Path(path).parent
+    plugin_parent = path.parent
     return base.samefile(plugin_parent)

@@ -14,7 +14,6 @@
 
 
 import logging
-from pathlib import Path
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -30,7 +29,7 @@ log = logging.getLogger('gajim.c.cert_store')
 
 class CertificateStore:
     def __init__(self):
-        self._path = Path(configpaths.get('CERT_STORE'))
+        self._path = configpaths.get('CERT_STORE')
         self._certs = []
 
         self._load_certificates()

@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -559,7 +558,7 @@ class Login(Page):
 
     def _create_server_completion(self):
         # Parse servers.json
-        file_path = Path(configpaths.get('DATA')) / 'other' / 'servers.json'
+        file_path = configpaths.get('DATA') / 'other' / 'servers.json'
         self._servers = helpers.load_json(file_path, 'servers', [])
 
         # Create a separate model for the address entry, because it will
@@ -658,7 +657,7 @@ class Signup(Page):
 
     def _create_server_completion(self):
         # Parse servers.json
-        file_path = Path(configpaths.get('DATA')) / 'other' / 'servers.json'
+        file_path = configpaths.get('DATA') / 'other' / 'servers.json'
         servers = helpers.load_json(file_path, 'servers', [])
 
         # Create servers_model for comboboxes and entries

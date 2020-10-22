@@ -36,7 +36,6 @@
 import time
 import sys
 from datetime import datetime
-from pathlib import Path
 from urllib.parse import unquote
 
 from nbxmpp.namespaces import Namespace
@@ -384,7 +383,7 @@ class GajimApplication(Gtk.Application):
 
     @staticmethod
     def _redirect_output():
-        debug_folder = Path(configpaths.get('DEBUG'))
+        debug_folder = configpaths.get('DEBUG')
         date = datetime.today().strftime('%d%m%Y-%H%M%S')
         filename = '%s-debug.log' % date
         fd = open(debug_folder / filename, 'a')
@@ -392,7 +391,7 @@ class GajimApplication(Gtk.Application):
 
     @staticmethod
     def _cleanup_debug_logs():
-        debug_folder = Path(configpaths.get('DEBUG'))
+        debug_folder = configpaths.get('DEBUG')
         debug_files = list(debug_folder.glob('*-debug.log*'))
         now = time.time()
         for file in debug_files:

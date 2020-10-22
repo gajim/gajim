@@ -17,7 +17,6 @@
 import logging
 import hashlib
 from base64 import b64decode
-from pathlib import Path
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
@@ -133,7 +132,7 @@ def parse_bob_data(stanza):
         log.warning('No data found: %s', stanza)
         return None
 
-    filepath = Path(configpaths.get('BOB')) / algo_hash
+    filepath = configpaths.get('BOB') / algo_hash
     if algo_hash in app.bob_cache or filepath.exists():
         log.info('BoB data already cached')
         return None
@@ -182,7 +181,7 @@ def store_bob_data(bob_data):
 
     algo_hash = '%s+%s' % (bob_data.algo, bob_data.hash_)
 
-    filepath = Path(configpaths.get('BOB')) / algo_hash
+    filepath = configpaths.get('BOB') / algo_hash
     if algo_hash in app.bob_cache or filepath.exists():
         log.info('BoB data already cached')
         return None
