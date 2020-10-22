@@ -729,8 +729,9 @@ def scale_with_ratio(size, width, height):
 def load_pixbuf(path, size=None):
     try:
         if size is None:
-            return GdkPixbuf.Pixbuf.new_from_file(path)
-        return GdkPixbuf.Pixbuf.new_from_file_at_scale(path, size, size, True)
+            return GdkPixbuf.Pixbuf.new_from_file(str(path))
+        return GdkPixbuf.Pixbuf.new_from_file_at_scale(
+            str(path), size, size, True)
 
     except GLib.GError:
         try:
