@@ -20,7 +20,7 @@ import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common.helpers import to_user_string
@@ -149,11 +149,15 @@ class IBB(BaseModule):
                                       user_data=file_props)
         return file_props
 
-    def _on_open_result(self, result, file_props):
-        if is_error_result(result):
-            app.socks5queue.error_cb('Error', to_user_string(result))
-            self._log.warning(result)
+    def _on_open_result(self, task):
+        try:
+            task.finish()
+        except StanzaError as error:
+            app.socks5queue.error_cb('Error', to_user_string(error))
+            self._log.warning(error)
             return
+
+        file_props = task.get_user_data()
         self.send_data(file_props)
 
     def send_close(self, file_props):
@@ -183,10 +187,12 @@ class IBB(BaseModule):
             if session.weinitiate:
                 session.cancel_session()
 
-    def _on_close_result(self, result):
-        if is_error_result(result):
-            app.socks5queue.error_cb('Error', to_user_string(result))
-            self._log.warning(result)
+    def _on_close_result(self, task):
+        try:
+            task.finish()
+        except StanzaError as error:
+            app.socks5queue.error_cb('Error', to_user_string(error))
+            self._log.warning(error)
             return
 
     def send_data(self, file_props):
@@ -217,11 +223,15 @@ class IBB(BaseModule):
                 file_props.completed = True
             app.socks5queue.progress_transfer_cb(self._account, file_props)
 
-    def _on_data_result(self, result, file_props):
-        if is_error_result(result):
-            app.socks5queue.error_cb('Error', to_user_string(result))
-            self._log.warning(result)
+    def _on_data_result(self, task):
+        try:
+            task.finish()
+        except StanzaError as error:
+            app.socks5queue.error_cb('Error', to_user_string(error))
+            self._log.warning(error)
             return
+
+        file_props = task.get_user_data()
         self.send_data(file_props)
 
 
