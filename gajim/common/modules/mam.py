@@ -21,8 +21,11 @@ from datetime import timedelta
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
+from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import is_error
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.modules.util import raise_if_error
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -34,6 +37,7 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.util import get_eme_message
+from gajim.common.modules.util import as_task
 from gajim.common.modules.base import BaseModule
 
 
@@ -262,13 +266,8 @@ class MAM(BaseModule):
         self._mam_query_ids[jid] = query_id
         return query_id
 
-    def request_archive_on_signin(self):
+    def _get_query_params(self):
         own_jid = self._con.get_own_jid().bare
-
-        if own_jid in self._mam_query_ids:
-            self._log.warning('Request already running: %s', own_jid)
-            return
-
         archive = app.storage.archive.get_archive_infos(own_jid)
 
         mam_id = None
@@ -276,7 +275,6 @@ class MAM(BaseModule):
             mam_id = archive.last_mam_id
 
         start_date = None
-        queryid = self._get_query_id(own_jid)
         if mam_id:
             self._log.info('Request archive: %s, after mam-id %s',
                            own_jid, mam_id)
@@ -286,38 +284,13 @@ class MAM(BaseModule):
             start_date = datetime.utcnow() - timedelta(days=7)
             self._log.info('Request archive: %s, after date %s',
                            own_jid, start_date)
+        return mam_id, start_date
 
-        self._nbxmpp('MAM').make_query(own_jid,
-                                       queryid,
-                                       after=mam_id,
-                                       start=start_date,
-                                       callback=self._result_finished,
-                                       user_data={'queryid': queryid,
-                                                  'start': start_date,
-                                                  'groupchat': False})
-
-        if own_jid in self._catch_up_finished:
-            self._catch_up_finished.remove(own_jid)
-
-    def request_archive_on_muc_join(self, jid):
+    def _get_muc_query_params(self, jid, threshold):
         archive = app.storage.archive.get_archive_infos(jid)
-        disco_info = app.storage.cache.get_last_disco_info(jid)
-
-        context = 'public'
-        if disco_info is not None and disco_info.muc_is_members_only:
-            context = 'private'
-
-        threshold = app.settings.get_group_chat_setting(self._account,
-                                                        jid,
-                                                        'sync_threshold',
-                                                        context=context)
-        self._log.info('Threshold for %s: %s', jid, threshold)
-
-        if threshold == SyncThreshold.NO_SYNC:
-            return
-
         mam_id = None
         start_date = None
+
         if archive is None or archive.last_mam_id is None:
             # First join
             start_date = datetime.utcnow() - timedelta(days=1)
@@ -353,67 +326,117 @@ class MAM(BaseModule):
                 self._log.info('Request archive: %s, after mam-id %s:',
                                jid, archive.last_mam_id)
 
+        return mam_id, start_date
+
+    @as_task
+    def request_archive_on_signin(self):
+        _task = yield
+
+        own_jid = self._con.get_own_jid().bare
+
+        if own_jid in self._mam_query_ids:
+            self._log.warning('request already running for %s', own_jid)
+            return
+
+        mam_id, start_date = self._get_query_params()
+
+        result = yield self._execute_query(own_jid, mam_id, start_date)
+        if is_error(result) and result.condition == 'item-not-found':
+            app.storage.archive.reset_archive_infos(result.jid)
+            _, start_date = self._get_query_params()
+            result = yield self._execute_query(result.jid, None, start_date)
+            raise_if_error(result)
+
+        if result.rsm.last is not None:
+            # <last> is not provided if the requested page was empty
+            # so this means we did not get anything hence we only need
+            # to update the archive info if <last> is present
+            app.storage.archive.set_archive_infos(
+                result.jid,
+                last_mam_id=result.rsm.last,
+                last_muc_timestamp=time.time())
+
+        if start_date is not None:
+            # Record the earliest timestamp we request from
+            # the account archive. For the account archive we only
+            # set start_date at the very first request.
+            app.storage.archive.set_archive_infos(
+                result.jid,
+                oldest_mam_timestamp=start_date.timestamp())
+
+    @as_task
+    def request_archive_on_muc_join(self, jid):
+        _task = yield
+
+        disco_info = app.storage.cache.get_last_disco_info(jid)
+
+        context = 'public'
+        if disco_info is not None and disco_info.muc_is_members_only:
+            context = 'private'
+
+        threshold = app.settings.get_group_chat_setting(self._account,
+                                                        jid,
+                                                        'sync_threshold',
+                                                        context=context)
+        self._log.info('Threshold for %s: %s', jid, threshold)
+
+        if threshold == SyncThreshold.NO_SYNC:
+            return
+
+        mam_id, start_date = self._get_muc_query_params(jid, threshold)
+
+        result = yield self._execute_query(jid, mam_id, start_date)
+        if is_error(result) and result.condition == 'item-not-found':
+            app.storage.archive.reset_archive_infos(result.jid)
+            _, start_date = self._get_muc_query_params(jid, threshold)
+            result = yield self._execute_query(result.jid, None, start_date)
+            raise_if_error(result)
+
+        if result.rsm.last is not None:
+            # <last> is not provided if the requested page was empty
+            # so this means we did not get anything hence we only need
+            # to update the archive info if <last> is present
+            app.storage.archive.set_archive_infos(
+                result.jid,
+                last_mam_id=result.rsm.last,
+                last_muc_timestamp=time.time())
+
+    @as_task
+    def _execute_query(self, jid, mam_id, start_date):
+        _task = yield
+
         if jid in self._catch_up_finished:
             self._catch_up_finished.remove(jid)
 
         queryid = self._get_query_id(jid)
-        self._nbxmpp('MAM').make_query(jid,
+
+        result = yield self.make_query(jid,
                                        queryid,
                                        after=mam_id,
-                                       start=start_date,
-                                       callback=self._result_finished,
-                                       user_data={'queryid': queryid,
-                                                  'start': start_date,
-                                                  'groupchat': True})
+                                       start=start_date)
 
-    def _result_finished(self, result, user_data):
-        queryid, start_date, groupchat = user_data.values()
         self._remove_query_id(result.jid)
 
-        if is_error_result(result):
-            if result.condition == 'item-not-found':
-                app.storage.archive.reset_archive_infos(result.jid)
-                if groupchat:
-                    self.request_archive_on_muc_join(result.jid)
-                else:
-                    self.request_archive_on_signin()
-            return
+        raise_if_error(result)
 
-        if result.complete:
-            self._catch_up_finished.append(result.jid)
-            self._log.info('Request finished: %s, last mam id: %s',
-                           result.jid, result.rsm.last)
-
-            if result.rsm.last is not None:
-                # <last> is not provided if the requested page was empty
-                # so this means we did not get anything hence we only need
-                # to update the archive info if <last> is present
-                app.storage.archive.set_archive_infos(
-                    result.jid,
-                    last_mam_id=result.rsm.last,
-                    last_muc_timestamp=time.time())
-
-            if start_date is not None and not groupchat:
-                # Record the earliest timestamp we request from
-                # the account archive. For the account archive we only
-                # set start_date at the very first request.
-                app.storage.archive.set_archive_infos(
-                    result.jid,
-                    oldest_mam_timestamp=start_date.timestamp())
-
-        else:
+        while not result.complete:
             app.storage.archive.set_archive_infos(result.jid,
                                                   last_mam_id=result.rsm.last)
             queryid = self._get_query_id(result.jid)
 
-            self._nbxmpp('MAM').make_query(result.jid,
+            result = yield self.make_query(result.jid,
                                            queryid,
                                            after=result.rsm.last,
-                                           start=start_date,
-                                           callback=self._result_finished,
-                                           user_data={'queryid': queryid,
-                                                      'start': start_date,
-                                                      'groupchat': groupchat})
+                                           start=start_date)
+
+            self._remove_query_id(result.jid)
+
+            raise_if_error(result)
+
+        self._catch_up_finished.append(result.jid)
+        self._log.info('Request finished: %s, last mam id: %s',
+                       result.jid, result.rsm.last)
+        yield result
 
     def request_archive_interval(self,
                                  start_date,
@@ -433,23 +456,25 @@ class MAM(BaseModule):
             queryid = self._get_query_id(jid)
         self._mam_query_ids[jid] = queryid
 
-        self._nbxmpp('MAM').make_query(jid,
-                                       queryid,
-                                       after=after,
-                                       start=start_date,
-                                       end=end_date,
-                                       callback=self._on_interval_result,
-                                       user_data={'queryid': queryid,
-                                                  'start_date': start_date,
-                                                  'end_date': end_date})
+        self.make_query(jid,
+                        queryid,
+                        after=after,
+                        start=start_date,
+                        end=end_date,
+                        callback=self._on_interval_result,
+                        user_data=(queryid, start_date, end_date))
         return queryid
 
-    def _on_interval_result(self, result, user_data):
-        queryid, start_date, end_date = user_data.values()
-        self._remove_query_id(result.jid)
+    def _on_interval_result(self, task):
+        queryid, start_date, end_date = task.get_user_data()
 
-        if is_error_result(result):
+        try:
+            result = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
+            self._remove_query_id(error.jid)
             return
+
+        self._remove_query_id(result.jid)
 
         if start_date:
             timestamp = start_date.timestamp()

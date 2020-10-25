@@ -19,7 +19,8 @@ from datetime import datetime, timedelta
 from gi.repository import Gtk
 from gi.repository import GLib
 
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import StanzaError
+from nbxmpp.errors import MalformedStanzaError
 
 from gajim.common import app
 from gajim.common import ged
@@ -149,9 +150,10 @@ class HistorySyncAssistant(Gtk.Assistant, EventHelper):
                                               max_=0,
                                               callback=self._received_count)
 
-
-    def _received_count(self, result):
-        if is_error_result(result):
+    def _received_count(self, task):
+        try:
+            result = task.finish()
+        except (StanzaError, MalformedStanzaError):
             return
 
         if result.rsm.count is not None:

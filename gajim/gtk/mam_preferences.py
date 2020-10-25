@@ -17,14 +17,14 @@ import logging
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from nbxmpp.util import is_error_result
+from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import StanzaError
 
 from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import EventHelper
-from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import InformationDialog
@@ -66,10 +66,11 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
     def _on_destroy(self, *args):
         self._destroyed = True
 
-    @ensure_not_destroyed
-    def _mam_prefs_received(self, result):
-        if is_error_result(result):
-            self._on_error(result.get_text())
+    def _mam_prefs_received(self, task):
+        try:
+            result = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
+            self._on_error(error.get_text())
             return
 
         self._disable_spinner()
@@ -83,10 +84,11 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         for jid in result.never:
             self._ui.preferences_store.append((str(jid), False))
 
-    @ensure_not_destroyed
-    def _mam_prefs_saved(self, result):
-        if is_error_result(result):
-            self._on_error(result.get_text())
+    def _mam_prefs_saved(self, task):
+        try:
+            task.finish()
+        except StanzaError as error:
+            self._on_error(error.get_text())
             return
 
         self._disable_spinner()
