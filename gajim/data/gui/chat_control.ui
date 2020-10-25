@@ -398,9 +398,6 @@
       <object class="GtkOverlay" id="overlay">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <signal name="drag-data-received" handler="_on_drag_data_received" swapped="no"/>
-        <signal name="drag-leave" handler="_on_drag_leave" swapped="no"/>
-        <signal name="drag-motion" handler="_on_drag_motion" swapped="no"/>
         <child>
           <object class="GtkPaned" id="paned1">
             <property name="visible">True</property>

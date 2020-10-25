@@ -145,6 +145,10 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # Drag and drop
         self.xml.overlay.add_overlay(self.xml.drop_area)
         self.xml.drop_area.hide()
+        self.xml.overlay.connect(
+            'drag-data-received', self._on_drag_data_received)
+        self.xml.overlay.connect('drag-motion', self._on_drag_motion)
+        self.xml.overlay.connect('drag-leave', self._on_drag_leave)
 
         self.TARGET_TYPE_URI_LIST = 80
         uri_entry = Gtk.TargetEntry.new(
