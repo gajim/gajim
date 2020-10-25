@@ -287,14 +287,15 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         nick = msg_obj.properties.muc_nickname
 
-        if nick != msg_obj.gc_control.nick:
-            self.do_sound = True
-            if sound == 'received':
-                self.sound_event = 'muc_message_received'
-            elif sound == 'highlight':
-                self.sound_event = 'muc_message_highlight'
-            else:
-                self.do_sound = False
+        if nick == msg_obj.gc_control.nick:
+            # A message from ourself
+            return
+
+        self.do_sound = True
+        if sound == 'received':
+            self.sound_event = 'muc_message_received'
+        elif sound == 'highlight':
+            self.sound_event = 'muc_message_highlight'
         else:
             self.do_sound = False
 
