@@ -651,6 +651,7 @@ class ChatControl(ChatControlBase):
     def _on_update_roster_avatar(self, obj):
         self._update_avatar()
 
+    @event_filter(['account'])
     def _nec_ping(self, event):
         if self.contact != event.contact:
             return
@@ -660,7 +661,7 @@ class ChatControl(ChatControlBase):
             self.add_info_message(
                 _('Pong! (%s seconds)') % event.seconds)
         elif event.name == 'ping-error':
-            self.add_info_message(_('Error.'))
+            self.add_info_message(event.error)
 
     def change_resource(self, resource):
         old_full_jid = self.get_full_jid()

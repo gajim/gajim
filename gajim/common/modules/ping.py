@@ -19,91 +19,62 @@ from typing import Tuple
 
 import time
 
-import nbxmpp
-from nbxmpp.namespaces import Namespace
-from nbxmpp.structs import StanzaHandler
+from nbxmpp.errors import is_error
 
 from gajim.common import app
-from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
 from gajim.common.types import ConnectionT
 from gajim.common.types import ContactsT
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import as_task
 
 
 class Ping(BaseModule):
+
+    _nbxmpp_extends = 'Ping'
+    _nbxmpp_methods = [
+        'ping',
+    ]
+
     def __init__(self, con: ConnectionT) -> None:
         BaseModule.__init__(self, con)
 
-        self.handlers = [
-            StanzaHandler(name='iq',
-                          callback=self._answer_request,
-                          typ='get',
-                          ns=Namespace.PING),
-        ]
+        self.handlers = []
 
-    @staticmethod
-    def _get_ping_iq(to: str) -> nbxmpp.Iq:
-        iq = nbxmpp.Iq('get', to=to)
-        iq.addChild(name='ping', namespace=Namespace.PING)
-        return iq
-
+    @as_task
     def send_ping(self, contact: ContactsT) -> None:
+        _task = yield
+
         if not app.account_is_available(self._account):
             return
 
-        to = contact.get_full_jid()
-        iq = self._get_ping_iq(to)
+        jid = contact.get_full_jid()
 
-        self._log.info('Send ping to %s', to)
+        self._log.info('Send ping to %s', jid)
 
-        self._con.connection.SendAndCallForResponse(
-            iq, self._pong_received, {'ping_time': time.time(),
-                                      'contact': contact})
+        app.nec.push_incoming_event(NetworkEvent('ping-sent',
+                                                 account=self._account,
+                                                 contact=contact))
 
-        app.nec.push_incoming_event(
-            PingSentEvent(None, conn=self._con, contact=contact))
+        ping_time = time.time()
 
-    def _pong_received(self,
-                       _nbxmpp_client: Any,
-                       stanza: nbxmpp.Iq,
-                       ping_time: int,
-                       contact: ContactsT) -> None:
-        if not nbxmpp.isResultNode(stanza):
-            self._log.info('Error: %s', stanza.getError())
-            app.nec.push_incoming_event(
-                PingErrorEvent(None, conn=self._con, contact=contact))
+        response = yield self.ping(jid, timeout=10)
+        if is_error(response):
+            app.nec.push_incoming_event(NetworkEvent(
+                'ping-error',
+                account=self._account,
+                contact=contact,
+                error=str(response)))
             return
+
         diff = round(time.time() - ping_time, 2)
         self._log.info('Received pong from %s after %s seconds',
-                       stanza.getFrom(), diff)
-        app.nec.push_incoming_event(
-            PingReplyEvent(None, conn=self._con,
-                           contact=contact,
-                           seconds=diff))
+                       response.jid, diff)
 
-    def _answer_request(self,
-                        _con: ConnectionT,
-                        stanza: nbxmpp.Iq,
-                        _properties: Any) -> None:
-        iq = stanza.buildReply('result')
-        ping = iq.getTag('ping')
-        if ping is not None:
-            iq.delChild(ping)
-        self._con.connection.send(iq)
-        self._log.info('Send pong to %s', stanza.getFrom())
-        raise nbxmpp.NodeProcessed
-
-
-class PingSentEvent(NetworkIncomingEvent):
-    name = 'ping-sent'
-
-
-class PingReplyEvent(NetworkIncomingEvent):
-    name = 'ping-reply'
-
-
-class PingErrorEvent(NetworkIncomingEvent):
-    name = 'ping-error'
+        app.nec.push_incoming_event(NetworkEvent('ping-reply',
+                                                 account=self._account,
+                                                 contact=contact,
+                                                 seconds=diff))
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[Ping, str]:

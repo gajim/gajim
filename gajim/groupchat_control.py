@@ -1070,7 +1070,11 @@ class GroupchatControl(ChatControlBase):
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
+    @event_filter(['account'])
     def _nec_ping(self, event):
+        if not event.contact.is_groupchat:
+            return
+
         if self.contact.jid != event.contact.room_jid:
             return
 
@@ -1082,7 +1086,7 @@ class GroupchatControl(ChatControlBase):
                 _('Pong! (%(nick)s %(delay)s s.)') % {'nick': nick,
                                                       'delay': event.seconds})
         elif event.name == 'ping-error':
-            self.add_info_message(_('Error.'))
+            self.add_info_message(event.error)
 
     @property
     def is_connected(self) -> bool:

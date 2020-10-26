@@ -419,4 +419,6 @@ class StandardGroupChatCommands(CommandContainer):
             raise CommandError(
                 _('Command is not supported for zeroconf accounts'))
         gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
+        if gc_c is None:
+            raise CommandError(_("Unknown nickname"))
         app.connections[self.account].get_module('Ping').send_ping(gc_c)
