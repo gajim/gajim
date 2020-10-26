@@ -623,7 +623,7 @@ class ChatControl(ChatControlBase):
         message_id = event.message_id
 
         if event.label:
-            displaymarking = event.label.getTag('displaymarking')
+            displaymarking = event.label.displaymarking
         else:
             displaymarking = None
         if self.correcting:
