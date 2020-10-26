@@ -16,6 +16,7 @@
 
 from typing import Any
 from typing import Tuple
+from typing import Generator
 
 import time
 
@@ -42,7 +43,7 @@ class Ping(BaseModule):
         self.handlers = []
 
     @as_task
-    def send_ping(self, contact: ContactsT) -> None:
+    def send_ping(self, contact: ContactsT) -> Generator:
         _task = yield
 
         if not app.account_is_available(self._account):
