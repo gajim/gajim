@@ -483,7 +483,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         model.clear()
 
         sel = 0
-        _label, labellist, default = event.catalog
+        labellist = event.catalog.get_label_names()
+        default = event.catalog.default
         for index, label in enumerate(labellist):
             model.append([label])
             if label == default:
@@ -973,7 +974,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if self._type.is_privatechat:
             jid = self.gc_contact.room_jid
         catalog = con.get_module('SecLabels').get_catalog(jid)
-        labels, label_list, _ = catalog
+        labels, label_list = catalog.labels, catalog.get_label_names()
         lname = label_list[idx]
         label = labels[lname]
         return label

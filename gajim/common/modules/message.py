@@ -28,7 +28,6 @@ from gajim.common.helpers import should_log
 from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
-from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
@@ -178,6 +177,10 @@ class Message(BaseModule):
             if properties.eme is not None:
                 msgtxt = get_eme_message(properties.eme)
 
+        displaymarking = None
+        if properties.has_security_label:
+            displaymarking = properties.security_label.displaymarking
+
         event_attr = {
             'conn': self._con,
             'stanza': stanza,
@@ -195,7 +198,7 @@ class Message(BaseModule):
             'gc_control': gc_control,
             'popup': False,
             'msg_log_id': None,
-            'displaymarking': parse_securitylabel(stanza),
+            'displaymarking': displaymarking,
             'properties': properties,
         }
 
@@ -306,7 +309,7 @@ class Message(BaseModule):
         stanza.setOriginID(message.message_id)
 
         if message.label:
-            stanza.addChild(node=message.label)
+            stanza.addChild(node=message.label.to_node())
 
         # XEP-0172: user_nickname
         if message.user_nick:

@@ -14,15 +14,22 @@
 
 # XEP-0258: Security Labels in XMPP
 
-import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.errors import is_error
 
 from gajim.common import app
-from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import as_task
 
 
 class SecLabels(BaseModule):
+
+    _nbxmpp_extends = 'SecurityLabels'
+    _nbxmpp_methods = [
+        'request_catalog',
+    ]
+
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
@@ -36,57 +43,27 @@ class SecLabels(BaseModule):
         self.supported = True
         self._log.info('Discovered security labels: %s', info.jid)
 
+    @as_task
     def request_catalog(self, jid):
-        server = app.get_jid_from_account(self._account).split("@")[1]
-        iq = nbxmpp.Iq(typ='get', to=server)
-        iq.addChild(name='catalog',
-                    namespace=Namespace.SECLABEL_CATALOG,
-                    attrs={'to': jid})
-        self._log.info('Request catalog: server: %s, to: %s', server, jid)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._catalog_received)
+        _task = yield
 
-    def _catalog_received(self, _nbxmpp_client, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.info('Error: %s', stanza.getError())
+        catalog = yield self._nbxmpp('SecurityLabels').request_catalog(jid)
+
+        if is_error(catalog):
+            self._log.info(catalog)
             return
 
-        query = stanza.getTag('catalog', namespace=Namespace.SECLABEL_CATALOG)
-        to = query.getAttr('to')
-        items = query.getTags('item')
+        self._catalogs[jid] = catalog
 
-        labels = {}
-        label_list = []
-        default = None
-        for item in items:
-            label = item.getAttr('selector')
-            labels[label] = item.getTag('securitylabel')
-            label_list.append(label)
-            if item.getAttr('default') == 'true':
-                default = label
+        self._log.info('Received catalog: %s', jid)
 
-        catalog = (labels, label_list, default)
-        self._catalogs[to] = catalog
-
-        self._log.info('Received catalog: %s', to)
-        self._log.debug(catalog)
-
-        app.nec.push_incoming_event(SecLabelCatalog(
-            None, account=self._account, jid=to, catalog=catalog))
+        app.nec.push_incoming_event(NetworkEvent('sec-catalog-received',
+                                                 account=self._account,
+                                                 jid=jid,
+                                                 catalog=catalog))
 
     def get_catalog(self, jid):
         return self._catalogs.get(jid)
-
-
-def parse_securitylabel(stanza):
-    seclabel = stanza.getTag('securitylabel', namespace=Namespace.SECLABEL)
-    if seclabel is None:
-        return None
-    return seclabel.getTag('displaymarking')
-
-
-class SecLabelCatalog(NetworkIncomingEvent):
-    name = 'sec-catalog-received'
 
 
 def get_instance(*args, **kwargs):

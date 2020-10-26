@@ -1084,9 +1084,9 @@ class ConversationTextview(GObject.GObject):
                     'time_sometimes')
 
     def print_displaymarking(self, displaymarking, iter_):
-        bgcolor = displaymarking.getAttr('bgcolor') or '#FFF'
-        fgcolor = displaymarking.getAttr('fgcolor') or '#000'
-        text = displaymarking.getData()
+        bgcolor = displaymarking.bgcolor
+        fgcolor = displaymarking.fgcolor
+        text = displaymarking.name
         if text:
             buffer_ = self.tv.get_buffer()
             tag = self.displaymarking_tags.setdefault(bgcolor + '/' + fgcolor,
