@@ -1095,7 +1095,7 @@ class GroupchatControl(ChatControlBase):
     def got_connected(self):
         self.roster.initial_draw()
 
-        if self.disco_info.has_mam:
+        if self.disco_info.has_mam_2:
             # Request MAM
             con = app.connections[self.account]
             con.get_module('MAM').request_archive_on_muc_join(

@@ -341,11 +341,17 @@ class MAM(BaseModule):
         mam_id, start_date = self._get_query_params()
 
         result = yield self._execute_query(own_jid, mam_id, start_date)
-        if is_error(result) and result.condition == 'item-not-found':
+        if is_error(result):
+            if result.condition != 'item-not-found':
+                self._log.warning(result)
+                return
+
             app.storage.archive.reset_archive_infos(result.jid)
             _, start_date = self._get_query_params()
             result = yield self._execute_query(result.jid, None, start_date)
-            raise_if_error(result)
+            if is_error(result):
+                self._log.warning(result)
+                return
 
         if result.rsm.last is not None:
             # <last> is not provided if the requested page was empty
@@ -386,11 +392,17 @@ class MAM(BaseModule):
         mam_id, start_date = self._get_muc_query_params(jid, threshold)
 
         result = yield self._execute_query(jid, mam_id, start_date)
-        if is_error(result) and result.condition == 'item-not-found':
+        if is_error(result):
+            if result.condition != 'item-not-found':
+                self._log.warning(result)
+                return
+
             app.storage.archive.reset_archive_infos(result.jid)
             _, start_date = self._get_muc_query_params(jid, threshold)
             result = yield self._execute_query(result.jid, None, start_date)
-            raise_if_error(result)
+            if is_error(result):
+                self._log.warning(result)
+                return
 
         if result.rsm.last is not None:
             # <last> is not provided if the requested page was empty
