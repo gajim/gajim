@@ -14,52 +14,40 @@
 
 # XEP-0083: Nested Roster Groups
 
-import nbxmpp
-from nbxmpp.namespaces import Namespace
+
+from nbxmpp.errors import is_error
+from nbxmpp.modules.util import raise_if_error
 
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import as_task
 
 
 class Delimiter(BaseModule):
+
+    _nbxmpp_extends = 'Delimiter'
+    _nbxmpp_methods = [
+        'request_delimiter',
+        'set_delimiter'
+    ]
+
     def __init__(self, con):
         BaseModule.__init__(self, con)
         self.available = False
         self.delimiter = '::'
 
+    @as_task
     def get_roster_delimiter(self):
-        self._log.info('Request')
-        node = nbxmpp.Node('storage', attrs={'xmlns': 'roster:delimiter'})
-        iq = nbxmpp.Iq('get', Namespace.PRIVATE, payload=node)
+        _task = yield
 
-        self._con.connection.SendAndCallForResponse(
-            iq, self._delimiter_received)
+        delimiter = yield self.request_delimiter()
+        if is_error(delimiter) or delimiter is None:
+            result = yield self.set_delimiter(self.delimiter)
+            raise_if_error(result)
+            delimiter = self.delimiter
 
-    def _delimiter_received(self, _nbxmpp_client, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.info('Request error: %s', stanza.getError())
-        else:
-            delimiter = stanza.getQuery().getTagData('roster')
-            self.available = True
-            self._log.info('Delimiter received: %s', delimiter)
-            if delimiter:
-                self.delimiter = delimiter
-            else:
-                self.set_roster_delimiter()
-
+        self.delimiter = delimiter
+        self.available = True
         self._con.connect_machine()
-
-    def set_roster_delimiter(self):
-        self._log.info('Set delimiter')
-        iq = nbxmpp.Iq('set', Namespace.PRIVATE)
-        roster = iq.getQuery().addChild('roster', namespace='roster:delimiter')
-        roster.setData('::')
-
-        self._con.connection.SendAndCallForResponse(
-            iq, self._set_delimiter_response)
-
-    def _set_delimiter_response(self, _nbxmpp_client, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.info('Store error: %s', stanza.getError())
 
 
 def get_instance(*args, **kwargs):
