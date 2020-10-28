@@ -1335,13 +1335,13 @@ def get_custom_host(account):
     port = app.settings.get_account_setting(account, 'custom_port')
     type_ = app.settings.get_account_setting(account, 'custom_type')
 
-    protocol = ConnectionProtocol.TCP
     if host.startswith('ws://') or host.startswith('wss://'):
         protocol = ConnectionProtocol.WEBSOCKET
+    else:
+        host = f'{host}:{port}'
+        protocol = ConnectionProtocol.TCP
 
-    return ('%s:%s' % (host, port),
-            protocol,
-            ConnectionType(type_))
+    return (host, protocol, ConnectionType(type_))
 
 
 def warn_about_plain_connection(account, connection_types):
