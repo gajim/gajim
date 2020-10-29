@@ -755,6 +755,10 @@ def load_pixbuf(path, size=None):
                                        GdkPixbuf.InterpType.BILINEAR)
         return pixbuf
 
+    except RuntimeError as error:
+        log.warning('Loading pixbuf failed: %s', error)
+        return None
+
 
 def get_thumbnail_size(pixbuf, size):
     # Calculates the new thumbnail size while preserving the aspect ratio
