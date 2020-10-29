@@ -317,8 +317,8 @@ class Interface:
             bare_jid,
             event.account,
             title=_('Authorization accepted'),
-            text=_('The contact "%s" has authorized you'
-                   ' to see their status.') % event.jid)
+            text=_('The contact "%(jid)s" has authorized you'
+                   ' to see their status.') % {'jid': event.jid})
 
     def show_unsubscribed_dialog(self, account, contact):
         def _remove():
