@@ -85,8 +85,8 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/f7/09/88bbe20b76ca76be052c366fe77aa5e3cd6e5f932766e5597fecdd95b2a8/cffi-1.14.2.tar.gz
-        sha256: ae8f34d50af2c2154035984b8b5fc5d9ed63f32fe615646ab435b05b132ca91b
+        url: https://files.pythonhosted.org/packages/cb/ae/380e33d621ae301770358eb11a896a34c34f30db188847a561e8e39ee866/cffi-1.14.3.tar.gz
+        sha256: f92f789e4f9241cd262ad7a555ca2c648a98178a953af117ef7fad46aa1d5591
 
   - name: python3-asn1crypto
     buildsystem: simple
@@ -112,8 +112,8 @@ modules:
       - python3 setup.py install --prefix=/app
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/12/be/c9cc7d7ab71dbcc9e4e517ead0cdd48e8c9a48d7b8bdddb738e90d08279a/cryptography-3.1.tar.gz
-        sha256: 26409a473cc6278e4c90f782cd5968ebad04d3911ed1c402fc86908c17633e08
+        url: https://files.pythonhosted.org/packages/94/5c/42de91c7fbdb817b2d9a4e64b067946eb38a4eb36c1a09c96c87a0f86a82/cryptography-3.2.1.tar.gz
+        sha256: d3d5e10be0cf2a12214ddee45c6bd203dab435e3d83b4560c03066eda600bfe3
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -154,11 +154,11 @@ modules:
   - name: python3-zipp
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app zipp-3.1.0-py3-none-any.whl
+      - pip3 install --prefix=/app zipp-3.4.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/b2/34/bfcb43cc0ba81f527bc4f40ef41ba2ff4080e047acb0586b56b3d017ace4/zipp-3.1.0-py3-none-any.whl
-        sha256: aa36550ff0c0b7ef7fa639055d797116ee891440eac1a56f378e2d3179e0320b
+        url: https://files.pythonhosted.org/packages/41/ad/6a4f1a124b325618a7fb758b885b68ff7b058eec47d9220a12ab38d90b1f/zipp-3.4.0-py3-none-any.whl
+        sha256: 102c24ef8f171fd729d46599845e95c7ab894a4cf45f5de11a44cc7444fb1108
 
   - name: python3-keyring
     buildsystem: simple
@@ -174,11 +174,11 @@ modules:
   - name: python3-css-parser
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app css_parser-1.0.4-py3-none-any.whl
+      - pip3 install --prefix=/app css_parser-1.0.6-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/css_parser/css_parser-1.0.4-py3-none-any.whl
-        sha256: 49d6906416569e715b144df97ed81a94b6dc663fbcae6d1dbf4807e7fb8367ae
+        url: https://files.pythonhosted.org/packages/64/7a/5ea4d019d36e07026ac194817104ef2e82ba1384aab69fb75ebf56de97c2/css_parser-1.0.6-py2.py3-none-any.whl
+        sha256: 6fc4f8f0a4b62c77f043765e375cc64971c54ff9a0502fec7e8f1fb28bb96082
 
   - name: python3-precis_i18n
     buildsystem: simple
