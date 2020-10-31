@@ -716,6 +716,7 @@ class HtmlTextView(Gtk.TextView):
         self.drag_dest_unset()
 
         self.connect('copy-clipboard', self._on_copy_clipboard)
+        self.connect('destroy', self._on_destroy)
         self.get_buffer().eol_tag = self.get_buffer().create_tag('eol')
 
         self.account = account
@@ -725,6 +726,17 @@ class HtmlTextView(Gtk.TextView):
         if standalone:
             self.connect('query-tooltip', self._query_tooltip)
             self.create_tags()
+
+    def _on_destroy(self, *args):
+        # We restore the TextView’s drag destination to avoid a GTK warning
+        # when closing the control. ChatControlBase.shutdown() calls destroy()
+        # on the control’s main box, causing GTK to recursively destroy the
+        # child widgets. GTK then tries to set a target list on the TextView,
+        # resulting in a warning because the Widget has no drag destination.
+        self.drag_dest_set(
+            Gtk.DestDefaults.ALL,
+            None,
+            Gdk.DragAction.DEFAULT)
 
     def create_tags(self):
         color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
