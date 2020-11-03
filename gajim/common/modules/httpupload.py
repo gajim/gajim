@@ -217,7 +217,7 @@ class HTTPUpload(BaseModule):
 
         message.props.request_headers.set_content_type(transfer.mime, None)
         message.props.request_headers.set_content_length(transfer.size)
-        for name, value in transfer.headers:
+        for name, value in transfer.headers.items():
             message.props.request_headers.append(name, value)
 
         message.connect('wrote-headers', self._on_wrote_headers, transfer)
