@@ -93,9 +93,7 @@ class MusicTrackListener:
                 self._add_player(name)
 
         for name in list(self.players):
-            info = self._get_playing_track(name)
-            if info is not None:
-                self._emit(info)
+            self._get_playing_track(name)
 
     def stop(self):
         for name in list(self.players):
@@ -154,10 +152,7 @@ class MusicTrackListener:
         '''Signal handler for PropertiesChanged event'''
 
         log.info('Signal received: %s - %s', interface_name, parameters)
-
-        info = self._get_playing_track(user_data[0])
-
-        self._emit(info)
+        self._get_playing_track(user_data[0])
 
     @staticmethod
     def _get_music_info(properties):
@@ -189,18 +184,23 @@ class MusicTrackListener:
             'org.freedesktop.DBus.Properties',
             None)
 
-        try:
-            result = proxy.call_sync(
-                "GetAll",
-                GLib.Variant('(s)', ('org.mpris.MediaPlayer2.Player',)),
-                Gio.DBusCallFlags.NONE,
-                -1,
-                None)
-        except GLib.Error as error:
-            log.debug("Could not enable music listener: %s", error.message)
-            return None
+        def proxy_call_finished(proxy, res):
+            try:
+                result = proxy.call_finish(res)
+            except GLib.Error as error:
+                log.debug("Could not enable music listener: %s", error.message)
+                return
 
-        return self._get_music_info(result[0])
+            info = self._get_music_info(result[0])
+            if info is not None:
+                self._emit(info)
+
+        proxy.call("GetAll",
+                   GLib.Variant('(s)', ('org.mpris.MediaPlayer2.Player',)),
+                   Gio.DBusCallFlags.NONE,
+                   -1,
+                   None,
+                   proxy_call_finished)
 
 
 def enable():
