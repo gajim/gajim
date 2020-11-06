@@ -105,13 +105,14 @@ class ConfigPaths:
         self.custom_config_root = None  # type: Optional[Path]
 
         if os.name == 'nt':
-            try:
+            if gajim.IS_PORTABLE:
+                application_path = Path(sys.executable).parent
+                self.config_root = self.cache_root = self.data_root = \
+                        application_path.parent / 'UserData'
+            else:
                 # Documents and Settings\[User Name]\Application Data\Gajim
                 self.config_root = self.cache_root = self.data_root = \
                         Path(os.environ['appdata']) / 'Gajim'
-            except KeyError:
-                # win9x, in cwd
-                self.config_root = self.cache_root = self.data_root = Path('.')
         else:
             self.config_root = Path(GLib.get_user_config_dir()) / 'gajim'
             self.cache_root = Path(GLib.get_user_cache_dir()) / 'gajim'
