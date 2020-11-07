@@ -72,12 +72,6 @@ function create_root {
     build_pacman --noconfirm -S base
 }
 
-function download_install_dep () {
-    curl -o "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-"$1"-any.pkg.tar.xz \
-    http://repo.msys2.org/mingw/"${ARCH}"/mingw-w64-"${ARCH}"-"$1"-any.pkg.tar.xz
-    build_pacman --noconfirm -U "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-"$1"-any.pkg.tar.xz
-}
-
 function install_deps {
     build_pacman --noconfirm -S mingw-w64-"${ARCH}"-"${PYTHON_ID}" \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-gobject \
