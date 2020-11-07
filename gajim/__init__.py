@@ -1,5 +1,7 @@
 import os
 import subprocess
+import sys
+from pathlib import Path
 
 __version__ = "1.2.91"
 
@@ -7,10 +9,8 @@ IS_FLATPAK = False
 if os.path.exists('/app/share/run-as-flatpak'):
     IS_FLATPAK = True
 
-IS_PORTABLE = False
-portable_path = os.path.join(os.getcwd(), 'is_portable')
-if os.path.exists(portable_path):
-    IS_PORTABLE = True
+portable_path = Path(sys.executable).parent / 'is_portable'
+IS_PORTABLE = portable_path.exists()
 
 try:
     p = subprocess.Popen('git rev-parse --short=12 HEAD', shell=True,
