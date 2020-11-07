@@ -22,11 +22,7 @@ Download [msys2](http://www.msys2.org/) (msys2-x86_64-xxx.exe) and follow the in
 ### Build Gajim / Creating an Installer
 ---------------------
 
-Follow the steps in the Development section, but instead of ``./dev_env.sh`` execute ``./build.sh``.
-
-You can supply a git tag ``./build.sh [git-tag]``.
-
-Or dont supply it, then current HEAD is build.
+Follow the steps in the Development section, but instead of `./dev_env.sh` execute `./build.sh i686` or `./build.sh x86_64`.
 
 Both the installer and the portable installer should appear in ``C:\msys64\home\USER\gajim\win\_build_root``.
 
