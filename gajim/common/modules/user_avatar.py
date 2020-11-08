@@ -26,7 +26,8 @@ class UserAvatar(BaseModule):
 
     _nbxmpp_extends = 'UserAvatar'
     _nbxmpp_methods = [
-        'request_avatar',
+        'request_avatar_metadata',
+        'request_avatar_data',
         'set_avatar',
     ]
 
@@ -60,14 +61,14 @@ class UserAvatar(BaseModule):
 
             avatar_info = metadata.infos[0]
             self._log.info('Request: %s %s', jid, avatar_info.id)
-            self._request_avatar(jid, avatar_info)
+            self._request_avatar_data(jid, avatar_info)
 
     @as_task
-    def _request_avatar(self, jid, avatar_info):
+    def _request_avatar_data(self, jid, avatar_info):
         _task = yield
 
-        avatar = yield self._nbxmpp('UserAvatar').request_avatar(
-            avatar_info, jid=jid)
+        avatar = yield self._nbxmpp('UserAvatar').request_avatar_data(
+            avatar_info.id, jid=jid)
 
         if is_error(avatar):
             self._log.warning(avatar)
@@ -77,10 +78,9 @@ class UserAvatar(BaseModule):
         app.interface.save_avatar(avatar.data)
 
         if self._con.get_own_jid().bare_match(jid):
-            app.config.set_per('accounts',
-                               self._account,
-                               'avatar_sha',
-                               avatar.sha)
+            app.settings.set_account_setting(self._account,
+                                             'avatar_sha',
+                                             avatar.sha)
         else:
             self._con.get_module('Roster').set_avatar_sha(
                 str(jid), avatar.sha)
