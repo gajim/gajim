@@ -1,3 +1,121 @@
+Gajim 1.3.0-beta1 (TBA)
+
+  New
+
+  * Completely rewritten settings backend
+  * Redesigned Preferences user interface
+  * Setting for automatic history cleanup
+  * Chat-specific 'Group Chat Settings' page
+  * Support for Chat Markers (XEP-0333)
+  * Completely rewritten Profile window
+  * Support for vCard4 (XEP-0292)
+  * Redesigned Voice/Video chat interface
+  * Group chat invitations show Avatars and additional infos
+  * 'Mark as Read' button for message notifications
+  * 'Send Message' button in chat windows
+  * Windows: support for XMPP link handling
+  * Preview for pasting images from the clipboard
+
+  Changes
+
+  * Sync threshold setting could not be migrated to new settings (please make sure to check if you set a custom value)
+  * Message styling: `_underline_` style has been removed, and a new `~strikethrough~` style has been added
+  * Notification for contact sign in/out has been removed
+  * 'Auto copy' workaround for Ctrl+C usage in the chat window has been removed
+  * If Gajim fails to join a group chat, it now offers a Retry button (and also 'Forget Group Chat')
+  * Pressing the Escape key will not close chat windows by default
+  * Some shortcuts now use Primary (Ctrl/Cmd) instead of Alt (which is often used by Window Management): Change Subject (`<Primary><Shift>S`), Emoji Chooser (`<Primary><Shift>M`)
+  * Linux: Emoji button now opens GTK’s native Emoji chooser (with categories and recently used emojis)
+  * A/V codec selection has been improved
+
+  Bug fixes
+
+  * Some regressions with non-english keyboard layouts have been fixed
+  * Command for opening the Start Chat window (`gajim --start-chat`) has been fixed
+  * A/V menu entries are now updated (enabled/disabled) correctly when receiving the contact’s capabilities
+  * GSSAPI support has been fixed
+  * A bug where dropping selected text on a chat window would fail has been fixed
+  * 'Show status changes' setting has been fixed for group chats
+  * A bug where removing a plugin would fail has been fixed
+  * List of fixed issues https://dev.gajim.org/gajim/gajim/-/issues?scope=all&utf8=%E2%9C%93&state=closed&milestone_title=1.3.0
+
+
+Gajim 1.2.2 (15 August 2020)
+
+  New
+
+  * Status Selector was reworked
+  * Status Change dialog was reworked
+  * Preferences: Added Setting to toggle the use of a keyring
+  * Windows/Mac: Gajim notifies now about new updates
+  * ServerInfo: Show more details about the current connection
+
+  Changes
+
+  * The status "Free for Chat" was removed
+  * Default status message was removed, use presets instead
+  * XHTML: Support for the <img> tag was removed
+  * DBus: Ability to change settings was removed
+  * Removed ability to ignore TLS errors
+
+  Bug fixes
+
+  * #9011 Add support for KDE notification drag and drop
+  * #10176 Login Dialog throws error
+  * #10192 MUC: Respect print status setting for own status changes
+  * #10197 AddContact: Validate JID on input
+  * #10200 MUC: Gajim fails to connect to after suspend
+  * #10201 GroupchatRoster: Don’t fix height of rows
+  * #10208 PluginManager: Show error correctly when plugin removal fails
+  * Flatpak: Add hole for kwallet password storage
+  * Fix Jingle session termination
+  * #10221 ChatControl: Don’t fail when dropping text on chat
+  * StatusIcon: Fix setting status
+
+
+Gajim 1.2.1 (08 July 2020)
+
+  New
+
+  * ServerInfo: Display status address
+  * Add block and spam reporting in various places
+  * Roster: Allow to add contacts from `Not in contact list` group via DND
+  * Roster: Allow sending message to serveral groups
+  * Groupchat/Chat: Rework DND
+  * Groupchat: Display recent history from the database
+
+  Changes
+
+  * Removed Privacy Lists support
+  * Roster: Remove blocking whole group feature
+
+  Bug fixes
+
+  * #10067 Error when showing invite menu
+  * #10144 Windows: Multiple instances of Gajim not possible
+  * #10152 Error when trying to disactivate or delete account
+  * #10160 Can't http upload with self signed Certificate
+  * #10162 Add option to use fixed-width horizontal tabs
+  * #10164 Timeout error when using music track listener
+  * #10171 Show error when MUC invite fails
+  * GroupchatRoster: Sort contacts in correct order
+  * MamPreferences: Correctly display preference state for JID
+  * Windows: Auto activate shipped plugins
+
+
+Gajim 1.2.0 (21 June 2020)
+
+  New
+
+  * Add account badges
+  * Add usage hint for the Start Chat dialog
+  * Various smaller improvements
+
+  Bug fixes
+
+  * Various smaller bug fixes reported in beta
+
+
 Gajim 1.2.0-beta1 / 1.1.99.1 (01 May 2020)
 
   New
