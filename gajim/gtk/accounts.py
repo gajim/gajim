@@ -555,14 +555,24 @@ class AccountRow(Gtk.ListBoxRow):
 
 class AddNewAccountPage(Gtk.Box):
     def __init__(self):
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        Gtk.Box.__init__(self,
+                         orientation=Gtk.Orientation.VERTICAL,
+                         spacing=18)
         self.set_vexpand(True)
         self.set_hexpand(True)
+        self.set_margin_top(24)
+        pixbuf = Gtk.IconTheme.load_icon_for_scale(
+            Gtk.IconTheme.get_default(),
+            'org.gajim.Gajim-symbolic',
+            100,
+            self.get_scale_factor(),
+            0)
+        self.add(Gtk.Image.new_from_pixbuf(pixbuf))
+
         button = Gtk.Button(label=_('Add Account'))
         button.get_style_context().add_class('suggested-action')
         button.set_action_name('app.add-account')
         button.set_halign(Gtk.Align.CENTER)
-        button.set_valign(Gtk.Align.CENTER)
         self.add(button)
 
 
