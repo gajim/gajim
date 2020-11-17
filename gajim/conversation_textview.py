@@ -1241,7 +1241,7 @@ class MessageIcons(Gtk.Box):
         self._correction_image.set_no_show_all(True)
 
         self._marker_image = Gtk.Image.new_from_icon_name(
-            'emblem-ok-symbolic', Gtk.IconSize.MENU)
+            'feather-check-symbolic', Gtk.IconSize.MENU)
         self._marker_image.get_style_context().add_class(
             'receipt-received-color')
         self._marker_image.set_tooltip_text(_('Received'))
@@ -1264,10 +1264,8 @@ class MessageIcons(Gtk.Box):
 
     def set_displayed_icon_visible(self, visible):
         self._marker_image.set_visible(visible)
-        self._marker_image.get_style_context().remove_class(
-            'receipt-received-color')
-        self._marker_image.get_style_context().add_class(
-            'displayed-received-color')
+        self._marker_image.set_from_icon_name(
+            'feather-check-double-symbolic', Gtk.IconSize.MENU)
         self._marker_image.set_tooltip_text(Q_('?Message state:Read'))
 
     def set_correction_icon_visible(self, visible):
