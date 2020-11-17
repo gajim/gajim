@@ -76,6 +76,12 @@ class ChatMarkers(BaseModule):
         if not properties.is_muc_pm and not properties.type.is_groupchat:
             jid = properties.jid.bare
 
+        app.storage.archive.set_marker(
+            app.get_jid_from_account(self._account),
+            jid,
+            properties.marker.id,
+            'displayed')
+
         app.nec.push_outgoing_event(
             NetworkEvent(name,
                          account=self._account,
