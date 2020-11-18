@@ -177,9 +177,7 @@ class GroupchatControl(ChatControlBase):
         self.xml.info_box.add(self._muc_info_box)
 
         # Groupchat settings
-        self._groupchat_settings_box = GroupChatSettings(
-            self.account, self.room_jid)
-        self.xml.settings_scrolled_box.add(self._groupchat_settings_box)
+        self._groupchat_settings_box = None
 
         # Groupchat invite
         self.xml.quick_invite_button.set_action_name(
@@ -469,6 +467,14 @@ class GroupchatControl(ChatControlBase):
         self._show_page('muc-info')
 
     def _on_groupchat_settings(self, _action, _param):
+        if self._groupchat_settings_box is not None:
+            self.xml.settings_scrolled_box.remove(self._groupchat_settings_box)
+            self._groupchat_settings_box.destroy()
+
+        self._groupchat_settings_box = GroupChatSettings(
+            self.account, self.room_jid)
+        self._groupchat_settings_box.show_all()
+        self.xml.settings_scrolled_box.add(self._groupchat_settings_box)
         self._show_page('muc-settings')
 
     def _on_invite(self, _action, _param):
