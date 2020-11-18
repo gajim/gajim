@@ -601,8 +601,7 @@ class Settings:
     def get_group_chat_setting(self,
                                account: str,
                                jid: str,
-                               setting: str,
-                               context: str = None) -> SETTING_TYPE:
+                               setting: str) -> SETTING_TYPE:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -613,17 +612,26 @@ class Settings:
         try:
             return self._account_settings[account]['group_chat'][jid][setting]
         except KeyError:
+
+            context = get_muc_context(jid)
+            if context is None:
+                # If there is no disco info available
+                # to determine the context assume public
+                log.warning('Unable to determine context for: %s', jid)
+                context = 'public'
+
             default = ACCOUNT_SETTINGS['group_chat'][setting]
             if default is HAS_APP_DEFAULT:
-                if context is not None:
-                    return self.get_app_setting(
-                        f'gc_{setting}_{context}_default')
+                context_default_setting = f'gc_{setting}_{context}_default'
+                if context_default_setting in APP_SETTINGS:
+                    return self.get_app_setting(context_default_setting)
                 return self.get_app_setting(f'gc_{setting}_default')
 
             if default is HAS_ACCOUNT_DEFAULT:
-                if context is not None:
-                    return self.get_account_setting(
-                        account, f'gc_{setting}_{context}_default')
+                context_default_setting = f'gc_{setting}_{context}_default'
+                if context_default_setting in ACCOUNT_SETTINGS['account']:
+                    return self.get_account_setting(account,
+                                                    context_default_setting)
                 return self.get_account_setting(account,
                                                 f'gc_{setting}_default')
 
@@ -633,8 +641,7 @@ class Settings:
                                account: str,
                                jid: str,
                                setting: str,
-                               value: SETTING_TYPE,
-                               context: str = None) -> None:
+                               value: SETTING_TYPE) -> None:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -645,14 +652,22 @@ class Settings:
         default = ACCOUNT_SETTINGS['group_chat'][setting]
         if default in (HAS_APP_DEFAULT, HAS_ACCOUNT_DEFAULT):
 
+            context = get_muc_context(jid)
+            if context is None:
+                # If there is no disco info available
+                # to determine the context assume public
+                log.warning('Unable to determine context for: %s', jid)
+                context = 'public'
+
             default_store = APP_SETTINGS
             if default is HAS_ACCOUNT_DEFAULT:
                 default_store = ACCOUNT_SETTINGS['account']
 
-            if context is None:
-                default = default_store[f'gc_{setting}_default']
+            context_default_setting = f'gc_{setting}_{context}_default'
+            if context_default_setting in default_store:
+                default = default_store[context_default_setting]
             else:
-                default = default_store[f'gc_{setting}_{context}_default']
+                default = default_store[f'gc_{setting}_default']
 
         if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f'Invalid type for {setting}: '
@@ -687,8 +702,7 @@ class Settings:
                 if context is not None:
                     if get_muc_context(jid) != context:
                         continue
-                self.set_group_chat_setting(
-                    account, jid, setting, value, context)
+                self.set_group_chat_setting(account, jid, setting, value)
 
     def get_contact_setting(self,
                             account: str,

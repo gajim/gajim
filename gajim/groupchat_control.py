@@ -178,7 +178,7 @@ class GroupchatControl(ChatControlBase):
 
         # Groupchat settings
         self._groupchat_settings_box = GroupChatSettings(
-            self.account, self.room_jid, self.context)
+            self.account, self.room_jid)
         self.xml.settings_scrolled_box.add(self._groupchat_settings_box)
 
         # Groupchat invite
@@ -272,13 +272,6 @@ class GroupchatControl(ChatControlBase):
     @property
     def disco_info(self):
         return app.storage.cache.get_last_disco_info(self.contact.jid)
-
-    @property
-    def context(self):
-        disco_info = self.disco_info
-        if disco_info is None or not self.disco_info.muc_is_members_only:
-            return 'public'
-        return 'private'
 
     def add_actions(self):
         super().add_actions()

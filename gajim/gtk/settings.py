@@ -148,8 +148,7 @@ class GenericSetting(Gtk.ListBoxRow):
                  desc,
                  bind,
                  inverted,
-                 enabled_func,
-                 context):
+                 enabled_func):
 
         Gtk.ListBoxRow.__init__(self)
         self._grid = Gtk.Grid()
@@ -163,7 +162,6 @@ class GenericSetting(Gtk.ListBoxRow):
         self.label = label
         self.account = account
         self.jid = jid
-        self.context = context
         self.name = name
         self.bind = bind
         self.inverted = inverted
@@ -252,11 +250,10 @@ class GenericSetting(Gtk.ListBoxRow):
         return self.__get_value(self.type_,
                                 self.value,
                                 self.account,
-                                self.jid,
-                                self.context)
+                                self.jid)
 
     @staticmethod
-    def __get_value(type_, value, account, jid, context):
+    def __get_value(type_, value, account, jid):
         if value is None:
             return None
         if type_ == SettingType.VALUE:
@@ -267,7 +264,7 @@ class GenericSetting(Gtk.ListBoxRow):
 
         if type_ == SettingType.GROUP_CHAT:
             return app.settings.get_group_chat_setting(
-                account, jid, value, context)
+                account, jid, value)
 
         if type_ == SettingType.CONFIG:
             return app.settings.get(value)
@@ -308,7 +305,7 @@ class GenericSetting(Gtk.ListBoxRow):
 
         elif self.type_ == SettingType.GROUP_CHAT:
             app.settings.set_group_chat_setting(
-                self.account, self.jid, self.value, state, self.context)
+                self.account, self.jid, self.value, state)
 
         if self.callback is not None:
             self.callback(state, self.data)

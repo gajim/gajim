@@ -24,7 +24,7 @@ from gajim.gtk.settings import SettingsBox
 
 
 class GroupChatSettings(SettingsBox):
-    def __init__(self, account, jid, context):
+    def __init__(self, account, jid):
         SettingsBox.__init__(self, account, jid)
 
         self.get_style_context().add_class('settings-border')
@@ -52,8 +52,7 @@ class GroupChatSettings(SettingsBox):
             Setting(SettingKind.SWITCH,
                     _('Notify on all Messages'),
                     SettingType.GROUP_CHAT,
-                    'notify_on_all_messages',
-                    context=context),
+                    'notify_on_all_messages'),
 
             Setting(SettingKind.SWITCH,
                     _('Minimize on Close'),
@@ -75,14 +74,12 @@ class GroupChatSettings(SettingsBox):
                     _('Send Chat Markers'),
                     SettingType.GROUP_CHAT,
                     'send_marker',
-                    context=context,
                     desc=_('Let others know if you read up to this point')),
 
             Setting(SettingKind.POPOVER,
                     _('Sync Threshold'),
                     SettingType.GROUP_CHAT,
                     'sync_threshold',
-                    context=context,
                     props={'entries': THRESHOLD_OPTIONS}),
 
         ]

@@ -374,16 +374,9 @@ class MAM(BaseModule):
     def request_archive_on_muc_join(self, jid):
         _task = yield
 
-        disco_info = app.storage.cache.get_last_disco_info(jid)
-
-        context = 'public'
-        if disco_info is not None and disco_info.muc_is_members_only:
-            context = 'private'
-
         threshold = app.settings.get_group_chat_setting(self._account,
                                                         jid,
-                                                        'sync_threshold',
-                                                        context=context)
+                                                        'sync_threshold')
         self._log.info('Threshold for %s: %s', jid, threshold)
 
         if threshold == SyncThreshold.NO_SYNC:

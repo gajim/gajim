@@ -271,14 +271,8 @@ class Contact(CommonContact):
         if not self.is_groupchat:
             raise ValueError
 
-        disco_info = app.storage.cache.get_last_disco_info(self.jid)
-
-        context = 'public'
-        if disco_info is not None and disco_info.muc_is_members_only:
-            context = 'private'
-
         all_ = app.settings.get('notify_on_all_muc_messages')
-        room = self.settings.get('notify_on_all_messages', context=context)
+        room = self.settings.get('notify_on_all_messages')
         return all_ or room
 
 

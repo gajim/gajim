@@ -91,14 +91,8 @@ class ChatMarkers(BaseModule):
             jid = app.get_jid_without_resource(contact.jid)
 
         if type_ in ('gc', 'pm'):
-            disco_info = app.storage.cache.get_last_disco_info(jid)
-
-            context = 'public'
-            if disco_info is not None and disco_info.muc_is_members_only:
-                context = 'private'
-
             if not app.settings.get_group_chat_setting(
-                    self._account, jid, 'send_marker', context=context):
+                    self._account, jid, 'send_marker'):
                 return
         else:
             if not app.settings.get_contact_setting(

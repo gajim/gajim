@@ -22,7 +22,7 @@ from enum import unique
 Filter = namedtuple('Filter', 'name pattern default')
 
 Setting = namedtuple('Setting', 'kind label type value name callback data desc '
-                                'bind inverted enabled_func context props')
+                                'bind inverted enabled_func props')
 Setting.__new__.__defaults__ = (None,) * len(Setting._fields)  # type: ignore
 
 @unique
