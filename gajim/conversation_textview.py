@@ -964,7 +964,10 @@ class ConversationTextview(GObject.GObject):
             message_line.set_error(to_user_string(error))
 
         if marker is not None:
-            message_line.set_receipt()
+            if marker == 'received':
+                message_line.set_receipt()
+            elif marker == 'displayed':
+                message_line.set_displayed()
 
         if index is None:
             # New Message

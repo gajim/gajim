@@ -49,8 +49,10 @@ def _adapt_common_error(common_error):
 sqlite3.register_converter('common_error', _convert_common_error)
 sqlite3.register_adapter(CommonError, _adapt_common_error)
 
+
 def _convert_marker(marker):
-    return 'received' if marker == 0 else 'displayed'
+    return 'received' if int(marker) == 0 else 'displayed'
+
 
 sqlite3.register_converter('marker', _convert_marker)
 
