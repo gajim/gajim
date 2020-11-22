@@ -375,6 +375,7 @@ class ListMultiField(Field):
         self._widget.set_propagate_natural_height(True)
         self._widget.set_min_content_height(100)
         self._widget.set_max_content_height(300)
+        self._widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self._widget.add(self._treeview)
 
     def validate(self):
@@ -388,10 +389,13 @@ class ListMutliTreeView(Gtk.TreeView):
         self._field = field
         self._multi_field = multi_field
 
-        self._store = Gtk.ListStore(str, str, bool)
+        # label, value, tooltip, toggled
+        self._store = Gtk.ListStore(str, str, str, bool)
 
         col = Gtk.TreeViewColumn()
         cell = Gtk.CellRendererText()
+        cell.set_property('ellipsize', Pango.EllipsizeMode.END)
+        cell.set_property('width-chars', 40)
         col.pack_start(cell, True)
         col.set_attributes(cell, text=0)
         self.append_column(col)
@@ -403,15 +407,20 @@ class ListMutliTreeView(Gtk.TreeView):
         cell.set_property('xpad', 10)
         cell.connect('toggled', self._toggled)
         col.pack_start(cell, True)
-        col.set_attributes(cell, active=2)
+        col.set_attributes(cell, active=3)
         self.append_column(col)
 
         self.set_headers_visible(False)
 
         for option in field.options:
-            # option = (label, value)
+            label, value = option
             self._store.append(
-                [*option, option[1] in field.values])
+                [label, value, label, value in field.values])
+
+        labels_over_max_width = map(lambda x: len(x) > 40,
+                                    [option[0] for option in field.options])
+        if any(labels_over_max_width):
+            self.set_tooltip_column(2)
 
         self.set_model(self._store)
 
