@@ -77,7 +77,7 @@ FORM = '''
     <option label='Reminders'><value>reminders</value></option>
     <option label='Search'><value>search</value></option>
     <option label='Search1'><value>search1</value></option>
-    <option label='Search2'><value>search2</value></option>
+    <option label='Really long long long long long long long long entry'><value>longentry</value></option>
     <option label='Search3'><value>search3</value></option>
     <value>news</value>
     <value>search</value>
