@@ -83,14 +83,12 @@ class AdHocCommand(Gtk.Assistant):
         for button in list(action_area.get_children()):
             self.remove_action_widget(button)
 
-        cancel = Gtk.Button(label=_('Cancel'))
+        cancel = ActionButton(_('Cancel'), AdHocAction.CANCEL)
         cancel.connect('clicked', self._abort)
-        cancel.get_style_context().add_class('destructive-action')
         self._buttons['cancel'] = cancel
         self.add_action_widget(cancel)
 
-        complete = Gtk.Button(label=_('Finish'))
-        complete.action = AdHocAction.COMPLETE
+        complete = ActionButton(_('Finish'), AdHocAction.COMPLETE)
         complete.connect('clicked', self._execute_action)
         self._buttons['complete'] = complete
         self.add_action_widget(complete)
@@ -101,28 +99,26 @@ class AdHocCommand(Gtk.Assistant):
         self._buttons['commands'] = commands
         self.add_action_widget(commands)
 
-        next_ = Gtk.Button(label=_('Next'))
-        next_.action = AdHocAction.NEXT
+        next_ = ActionButton(_('Next'), AdHocAction.NEXT)
         next_.connect('clicked', self._execute_action)
         self._buttons['next'] = next_
         self.add_action_widget(next_)
 
-        prev = Gtk.Button(label=_('Previous'))
-        prev.action = AdHocAction.PREV
+        prev = ActionButton(_('Previous'), AdHocAction.PREV)
         prev.connect('clicked', self._execute_action)
         self._buttons['prev'] = prev
         self.add_action_widget(prev)
 
-        execute = Gtk.Button(label=_('Execute'))
-        execute.action = AdHocAction.EXECUTE
-        execute.get_style_context().add_class('suggested-action')
+        execute = ActionButton(_('Execute'), AdHocAction.EXECUTE)
         execute.connect('clicked', self._execute_action)
         self._buttons['execute'] = execute
         self.add_action_widget(execute)
 
     def _set_button_visibility(self, page):
-        for button in self._buttons.values():
+        for action, button in self._buttons.items():
             button.hide()
+            if action in ('next', 'prev', 'complete'):
+                button.remove_default()
 
         if page == Page.COMMANDS:
             self._buttons['execute'].show()
@@ -132,10 +128,13 @@ class AdHocCommand(Gtk.Assistant):
             stage_page = self.get_nth_page(page)
             if not stage_page.actions:
                 self._buttons['complete'].show()
+                self._buttons['complete'].make_default()
             else:
                 for action in stage_page.actions:
                     button = self._buttons.get(action.value)
                     if button is not None:
+                        if button.action == stage_page.default:
+                            button.make_default()
                         button.show()
 
         elif page == Page.ERROR:
@@ -328,6 +327,7 @@ class Stage(Gtk.Box):
         self._dataform_widget = None
         self._notes = []
         self._last_stage_data = None
+        self.default = None
         self.show_all()
 
     @property
@@ -347,6 +347,7 @@ class Stage(Gtk.Box):
         self._last_stage_data = stage_data
         self._show_notes(stage_data.notes)
         self._show_form(stage_data.data)
+        self.default = stage_data.default
 
     def _show_form(self, form):
         if self._dataform_widget is not None:
@@ -482,3 +483,20 @@ class Error(Gtk.Box):
     @show_command_button.setter
     def show_command_button(self, value):
         self._show_command_button = value
+
+
+class ActionButton(Gtk.Button):
+    def __init__(self, label, action):
+        Gtk.Button.__init__(self, label=label)
+        self.action = action
+
+        if action == AdHocAction.CANCEL:
+            self.get_style_context().add_class('destructive-action')
+        if action == AdHocAction.EXECUTE:
+            self.get_style_context().add_class('suggested-action')
+
+    def make_default(self):
+        self.get_style_context().add_class('suggested-action')
+
+    def remove_default(self):
+        self.get_style_context().remove_class('suggested-action')
