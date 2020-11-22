@@ -1186,6 +1186,17 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             # Record the history of received messages
             self.save_message(text, 'received')
 
+            # Send chat marker if we’re actively following the chat
+            if self.parent_win and self.contact.settings.get('send_marker'):
+                if (self.parent_win.get_active_control() == self and
+                        self.parent_win.is_active() and
+                        self.has_focus() and end):
+                    con = app.connections[self.account]
+                    con.get_module('ChatMarkers').send_displayed_marker(
+                        self.contact,
+                        self.last_msg_id,
+                        self._type)
+
         if kind in ('incoming', 'incoming_queue', 'error'):
             gc_message = False
             if self._type.is_groupchat:
