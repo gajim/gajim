@@ -361,6 +361,7 @@ class ListSingleField(Field):
 
     def _changed(self, widget):
         self._field.value = widget.get_active_id()
+        self._validate()
 
 
 class ListMultiField(Field):
