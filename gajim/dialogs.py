@@ -351,7 +351,7 @@ class TransformChatToMUC:
     instances = []  # type: List[TransformChatToMUC]
     def __init__(self, account, jids, preselected=None):
         """
-        This window is used to trasform a one-to-one chat to a MUC. We do 2
+        This window is used to transform a one-to-one chat to a MUC. We do 2
         things: first select the server and then make a guests list
         """
 
