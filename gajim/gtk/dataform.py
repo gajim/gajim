@@ -426,17 +426,17 @@ class ListMutliTreeView(Gtk.TreeView):
 
     def _toggled(self, _renderer, path):
         iter_ = self._store.get_iter(path)
-        current_value = self._store[iter_][2]
-        self._store.set_value(iter_, 2, not current_value)
+        current_value = self._store[iter_][3]
+        self._store.set_value(iter_, 3, not current_value)
         self._set_values()
         self._multi_field.validate()
 
     def _set_values(self):
         values = []
         for row in self.get_model():
-            if not row[2]:
+            if not row[3]:
                 continue
-            values.append(row[1])
+            values.append(row[2])
         self._field.values = values
 
 
