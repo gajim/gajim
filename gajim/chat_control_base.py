@@ -269,6 +269,10 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         CommandTools.__init__(self)
 
     def _on_conv_textview_key_press_event(self, textview, event):
+        if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
+            if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
+                return Gdk.EVENT_PROPAGATE
+
         if event.keyval in COPY_MODIFIER_KEYS:
             # Don’t route modifier keys for copy action to the Message Input
             # otherwise pressing CTRL/META + c (the next event after that)
@@ -844,20 +848,20 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if self._type.is_groupchat:
             if event.keyval not in (Gdk.KEY_ISO_Left_Tab, Gdk.KEY_Tab):
                 self.last_key_tabs = False
+
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
-            # CTRL + SHIFT + TAB
             if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
                             event.keyval == Gdk.KEY_ISO_Left_Tab:
                 self.parent_win.move_to_next_unread_tab(False)
                 return True
-            # SHIFT + PAGE_[UP|DOWN]: send to conv_textview
-            if event.keyval == Gdk.KEY_Page_Down or \
-                            event.keyval == Gdk.KEY_Page_Up:
+
+            if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
                 self.conv_textview.tv.event(event)
                 self._on_scroll(None, event.keyval)
                 return True
+
         if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
-            if event.keyval == Gdk.KEY_Tab:  # CTRL + TAB
+            if event.keyval == Gdk.KEY_Tab:
                 self.parent_win.move_to_next_unread_tab(True)
                 return True
 
