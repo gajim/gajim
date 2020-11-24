@@ -33,6 +33,7 @@ class Theme(IntEnum):
 
 
 class GajimIconSet(Enum):
+    BRUNO = 'bruno'
     DCRAVEN = 'dcraven'
     GNOME = 'gnome'
     GOOJIM = 'goojim'
