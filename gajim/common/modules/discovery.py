@@ -238,6 +238,28 @@ class Discovery(BaseModule):
 
         yield result
 
+    @as_task
+    def disco_contact(self, contact):
+        _task = yield
+
+        fjid = contact.get_full_jid()
+
+        result = yield self.disco_info(fjid)
+        if is_error(result):
+            raise result
+
+        self._log.info('Disco Info received: %s', fjid)
+
+        app.storage.cache.set_last_disco_info(result.jid,
+                                              result,
+                                              cache_only=True)
+
+        app.nec.push_incoming_event(
+            NetworkEvent('caps-update',
+                         account=self._account,
+                         fjid=fjid,
+                         jid=contact.jid))
+
 
 def get_instance(*args, **kwargs):
     return Discovery(*args, **kwargs), 'Discovery'

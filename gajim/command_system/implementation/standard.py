@@ -169,6 +169,15 @@ class StandardCommonCommands(CommandContainer):
                 continue
             connection.change_status('online', message)
 
+    @command
+    @doc(_("Send a disco info request"))
+    def disco(self):
+        client = app.get_client(self.account)
+        if not client.state.is_available:
+            return
+
+        client.get_module('Discovery').disco_contact(self.contact)
+
 
 class StandardCommonChatCommands(CommandContainer):
     """
