@@ -12,12 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from gi.repository import Gdk
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
@@ -25,13 +26,14 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dataform import DataFormDialog
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import EventHelper
 
 
-class PEPConfig(Gtk.ApplicationWindow, EventHelper):
+log = logging.getLogger('gajim.gtk.pep')
+
+
+class PEPConfig(Gtk.ApplicationWindow):
     def __init__(self, account):
         Gtk.ApplicationWindow.__init__(self)
-        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
@@ -50,10 +52,6 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         self._init_services()
         self._ui.services_treeview.get_selection().connect(
             'changed', self._on_services_selection_changed)
-
-        self.register_events([
-            ('pubsub-config-received', ged.GUI1, self._nec_pep_config_received),
-        ])
 
         self.show_all()
         self.connect('key-press-event', self._on_key_press_event)
@@ -97,9 +95,18 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
             if item.jid == jid and item.node is not None:
                 self.treestore.append([item.node])
 
-    def _node_removed(self, jid, node):
-        if jid != app.get_jid_from_account(self.account):
+    def _on_node_delete(self, task):
+        node = task.get_user_data()
+
+        try:
+            task.finish()
+        except StanzaError as error:
+            WarningDialog(
+                _('PEP node was not removed'),
+                _('PEP node %(node)s was not removed:\n%(message)s') % {
+                    'node': node, 'message': error})
             return
+
         model = self._ui.services_treeview.get_model()
         iter_ = model.get_iter_first()
         while iter_:
@@ -108,25 +115,17 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
                 break
             iter_ = model.iter_next(iter_)
 
-    def _node_not_removed(self, jid, node, msg):
-        if jid != app.get_jid_from_account(self.account):
-            return
-        WarningDialog(
-            _('PEP node was not removed'),
-            _('PEP node %(node)s was not removed:\n%(message)s') % {
-                'node': node, 'message': msg})
-
     def _on_delete_button_clicked(self, _widget):
         selection = self._ui.services_treeview.get_selection()
         if not selection:
             return
         model, iter_ = selection.get_selected()
         node = model[iter_][0]
-        our_jid = app.get_jid_from_account(self.account)
+
         con = app.connections[self.account]
-        con.get_module('PubSub').send_pb_delete(our_jid, node,
-                                                on_ok=self._node_removed,
-                                                on_fail=self._node_not_removed)
+        con.get_module('PubSub').delete(node,
+                                        callback=self._on_node_delete,
+                                        user_data=node)
 
     def _on_configure_button_clicked(self, _widget):
         selection = self._ui.services_treeview.get_selection()
@@ -134,18 +133,25 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
             return
         model, iter_ = selection.get_selected()
         node = model[iter_][0]
-        our_jid = app.get_jid_from_account(self.account)
+
         con = app.connections[self.account]
-        con.get_module('PubSub').request_pb_configuration(our_jid, node)
+        con.get_module('PubSub').get_node_configuration(
+            node,
+            callback=self._nec_pep_config_received)
 
     def _on_config_submit(self, form, node):
-        our_jid = app.get_jid_from_account(self.account)
         con = app.connections[self.account]
-        con.get_module('PubSub').send_pb_configure(our_jid, node, form)
+        con.get_module('PubSub').set_node_configuration(node, form)
 
-    def _nec_pep_config_received(self, obj):
-        DataFormDialog(_('Configure %s') % obj.node,
+    def _nec_pep_config_received(self, task):
+        try:
+            result = task.finish()
+        except Exception:
+            log.exception('Failed to retrive config')
+            return
+
+        DataFormDialog(_('Configure %s') % result.node,
                        self,
-                       obj.form,
-                       obj.node,
+                       result.form,
+                       result.node,
                        self._on_config_submit)

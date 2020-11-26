@@ -22,10 +22,8 @@
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
-from nbxmpp.modules import dataforms
 
 from gajim.common import app
-from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.modules.base import BaseModule
 
 
@@ -34,6 +32,9 @@ class PubSub(BaseModule):
     _nbxmpp_extends = 'PubSub'
     _nbxmpp_methods = [
         'publish',
+        'delete',
+        'set_node_configuration',
+        'get_node_configuration',
     ]
 
     def __init__(self, con):
@@ -76,93 +77,6 @@ class PubSub(BaseModule):
         pb.addChild('unsubscribe', {'node': node, 'jid': our_jid})
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
-
-    def send_pb_delete(self, jid, node, on_ok=None, on_fail=None):
-        """
-        Delete node
-        """
-        if not app.account_is_available(self._account):
-            return
-        query = nbxmpp.Iq('set', to=jid)
-        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB_OWNER)
-        pubsub.addChild('delete', {'node': node})
-
-        def response(_nbxmpp_client, resp, jid, node):
-            if resp.getType() == 'result' and on_ok:
-                on_ok(jid, node)
-            elif on_fail:
-                msg = resp.getErrorMsg()
-                on_fail(jid, node, msg)
-
-        self._con.connection.SendAndCallForResponse(
-            query, response, {'jid': jid, 'node': node})
-
-    def send_pb_configure(self, jid, node, form, cb=None, **kwargs):
-        if not app.account_is_available(self._account):
-            return
-
-        if cb is None:
-            cb = self._default_callback
-
-        query = nbxmpp.Iq('set', to=jid)
-        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB_OWNER)
-        configure = pubsub.addChild('configure', {'node': node})
-        configure.addChild(node=form)
-
-        self._log.info('Send node config for %s', node)
-        self._con.connection.SendAndCallForResponse(query, cb, kwargs)
-
-    def request_pb_configuration(self, jid, node):
-        if not app.account_is_available(self._account):
-            return
-
-        query = nbxmpp.Iq('get', to=jid)
-        pubsub = query.addChild('pubsub', namespace=Namespace.PUBSUB_OWNER)
-        pubsub.addChild('configure', {'node': node})
-
-        self._log.info('Request node config for %s', node)
-        self._con.connection.SendAndCallForResponse(
-            query, self._received_pb_configuration, {'node': node})
-
-    def _received_pb_configuration(self, _nbxmpp_client, stanza, node):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.warning('Error: %s', stanza.getError())
-            return
-
-        pubsub = stanza.getTag('pubsub', namespace=Namespace.PUBSUB_OWNER)
-        if pubsub is None:
-            self._log.warning('Malformed PubSub configure '
-                              'stanza (no pubsub node): %s', stanza)
-            return
-
-        configure = pubsub.getTag('configure')
-        if configure is None:
-            self._log.warning('Malformed PubSub configure '
-                              'stanza (no configure node): %s', stanza)
-            return
-
-        if configure.getAttr('node') != node:
-            self._log.warning('Malformed PubSub configure '
-                              'stanza (wrong node): %s', stanza)
-            return
-
-        form = configure.getTag('x', namespace=Namespace.DATA)
-        if form is None:
-            self._log.warning('Malformed PubSub configure '
-                              'stanza (no form): %s', stanza)
-            return
-
-        app.nec.push_incoming_event(PubSubConfigReceivedEvent(
-            None, conn=self._con, node=node,
-            form=dataforms.extend_form(node=form)))
-
-    def _default_callback(self, _con, stanza, *args, **kwargs):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.warning('Error: %s', stanza.getError())
-
-
-class PubSubConfigReceivedEvent(NetworkIncomingEvent):
-    name = 'pubsub-config-received'
 
 
 def get_instance(*args, **kwargs):
