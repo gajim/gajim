@@ -2190,8 +2190,9 @@ class GroupsPostWindow:
 
         # Publish it to node
         con = app.connections[self.account]
-        con.get_module('PubSub').send_pb_publish(
-            self.servicejid, self.groupid, item, str(uuid.uuid4()))
+        con.get_module('PubSub').publish(self.groupid,
+                                         item,
+                                         jid=self.servicejid)
 
         # Close the window
         self.window.destroy()
