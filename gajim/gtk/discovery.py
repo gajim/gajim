@@ -43,7 +43,6 @@
 
 import types
 import weakref
-import uuid
 
 import nbxmpp
 from nbxmpp.structs import DiscoIdentity
