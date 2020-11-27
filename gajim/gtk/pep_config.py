@@ -147,7 +147,7 @@ class PEPConfig(Gtk.ApplicationWindow):
         try:
             result = task.finish()
         except Exception:
-            log.exception('Failed to retrive config')
+            log.exception('Failed to retrieve config')
             return
 
         DataFormDialog(_('Configure %s') % result.node,
