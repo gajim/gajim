@@ -84,11 +84,11 @@ class Client(ConnectionHandlers):
 
         self._create_client()
 
-        self._idle_handler_id = Monitor.connect('state-changed',
-                                                self._idle_state_changed)
-
-        self._screensaver_handler_id = app.app.connect(
-            'notify::screensaver-active', self._screensaver_state_changed)
+        if Monitor.is_available():
+            self._idle_handler_id = Monitor.connect('state-changed',
+                                                    self._idle_state_changed)
+            self._screensaver_handler_id = app.app.connect(
+                'notify::screensaver-active', self._screensaver_state_changed)
 
         ConnectionHandlers.__init__(self)
 
@@ -615,8 +615,9 @@ class Client(ConnectionHandlers):
 
     def cleanup(self):
         self._destroyed = True
-        Monitor.disconnect(self._idle_handler_id)
-        app.app.disconnect(self._screensaver_handler_id)
+        if Monitor.is_available():
+            Monitor.disconnect(self._idle_handler_id)
+            app.app.disconnect(self._screensaver_handler_id)
         if self._client is not None:
             # cleanup() is called before nbmxpp.Client has disconnected,
             # when we disable the account. So we need to unregister
