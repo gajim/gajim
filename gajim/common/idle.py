@@ -28,6 +28,8 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 
+from gajim.common import app
+from gajim.common.const import Display
 from gajim.common.const import IdleState
 
 log = logging.getLogger('gajim.c.idle')
@@ -316,6 +318,9 @@ class IdleMonitor(GObject.GObject):
             return DBusGnomeIdleMonitor()
         except GLib.Error as error:
             log.info('Idle time via D-Bus (GNOME) not available: %s', error)
+
+        if app.is_display(Display.WAYLAND):
+            return
 
         try:
             return XssIdleMonitor()
