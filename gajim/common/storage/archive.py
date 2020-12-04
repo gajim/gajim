@@ -321,72 +321,72 @@ class MessageArchiveStorage(SqliteStorage):
         return None
 
     @timeit
-    def load_groupchat_messages(self, account, jid):
-        account_id = self.get_account_id(account, type_=JIDConstant.ROOM_TYPE)
-
-        sql = '''
-            SELECT time, contact_name, message, additional_data, message_id
-            FROM logs NATURAL JOIN jids WHERE jid = ?
-            AND account_id = ? AND kind = ?
-            ORDER BY time DESC, log_line_id DESC LIMIT ?'''
-
-        messages = self._con.execute(
-            sql, (jid, account_id, KindConstant.GC_MSG, 50)).fetchall()
-
-        messages.reverse()
-        return messages
-
-    @timeit
-    def get_last_conversation_lines(self, account, jid, pending):
+    def get_conversation_before(self, account, jid, end_timestamp, n_lines):
         """
-        Get recent messages
+        Load n_lines lines of conversation with jid before end_timestamp
 
-        Pending messages are already in queue to be printed when the
-        ChatControl is opened, so we don’t want to request those messages.
-        How many messages are requested depends on the 'restore_lines'
-        config value. How far back in time messages are requested depends on
-        _get_timeout().
+        :param account:         The account
 
-        :param account: The account
+        :param jid:             The jid for which we request the conversation
 
-        :param jid:     The jid from which we request the conversation lines
-
-        :param pending: How many messages are currently pending so we don’t
-                        request those messages
+        :param end_timestamp:   end timestamp / datetime.datetime instance
 
         returns a list of namedtuples
         """
-
-        restore = app.settings.get('restore_lines')
-        if restore <= 0:
-            return []
-
-        kinds = map(str, [KindConstant.SINGLE_MSG_RECV,
-                          KindConstant.SINGLE_MSG_SENT,
-                          KindConstant.CHAT_MSG_RECV,
-                          KindConstant.CHAT_MSG_SENT,
-                          KindConstant.ERROR])
-
         jids = self._get_family_jids(account, jid)
         account_id = self.get_account_id(account)
 
         sql = '''
-            SELECT time, kind, message, error as "error [common_error]",
-                   subject, additional_data, marker as "marker [marker]",
-                   message_id
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id, message_id,
+                   error as "error [common_error]",
+                   marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
-            AND account_id = {account_id} AND kind IN ({kinds})
-            AND time > get_timeout()
-            ORDER BY time DESC, log_line_id DESC LIMIT ? OFFSET ?
+            AND account_id = {account_id}
+            AND time < ?
+            ORDER BY time DESC, log_line_id DESC
+            LIMIT ?
             '''.format(jids=', '.join('?' * len(jids)),
-                       account_id=account_id,
-                       kinds=', '.join(kinds))
+                       account_id=account_id)
 
-        messages = self._con.execute(
-            sql, tuple(jids) + (restore, pending)).fetchall()
+        return self._con.execute(
+            sql,
+            tuple(jids) + (end_timestamp.timestamp(), n_lines)).fetchall()
 
-        messages.reverse()
-        return messages
+    @timeit
+    def get_conversation_muc_before(self, account, jid, end_timestamp,
+                                    n_lines):
+        """
+        Load n_lines lines of conversation with jid before end_timestamp
+
+        :param account:         The account
+
+        :param jid:             The jid for which we request the conversation
+
+        :param end_timestamp:   end timestamp / datetime.datetime instance
+
+        returns a list of namedtuples
+        """
+        jids = self._get_family_jids(account, jid)
+        # TODO: this does not load messages correctly when account_id is set
+        # account_id = self.get_account_id(account, type_=JIDConstant.ROOM_TYPE)
+
+        sql = '''
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id, message_id,
+                   error as "error [common_error]",
+                   marker as "marker [marker]"
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND kind = {kind}
+            AND time < ?
+            ORDER BY time DESC, log_line_id DESC
+            LIMIT ?
+            '''.format(jids=', '.join('?' * len(jids)),
+                       kind=KindConstant.GC_MSG)
+
+        return self._con.execute(
+            sql,
+            tuple(jids) + (end_timestamp.timestamp(), n_lines)).fetchall()
 
     @timeit
     def get_last_conversation_line(self, account, jid):

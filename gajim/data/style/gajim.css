@@ -40,6 +40,38 @@
     border-radius: 4px;
 }
 
+.conversation-row {
+    padding: 6px 3px 6px 6px;
+}
+.conversation-row grid textview {
+	background: transparent;
+}
+.conversation-row grid textview text {
+	background: transparent;
+}
+.conversation-mention-highlight {
+    background-color: rgb(255, 215, 194);
+}
+.conversation-system-row {
+    padding: 18px;
+}
+.conversation-date-row {
+    padding: 12px;
+}
+.conversation-meta {
+    color: @insensitive_fg_color;
+    font-size: small;
+}
+.conversation-read-marker {
+    color: @insensitive_fg_color;
+    font-size: small;
+    font-style: italic;
+}
+.conversation-nickname {
+    font-size: small;
+    font-weight: bold;
+}
+
 .link-button { min-height: 0px; }
 
 /* Main Window */

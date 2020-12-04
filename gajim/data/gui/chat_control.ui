@@ -623,7 +623,9 @@
                     <property name="can_focus">True</property>
                     <property name="shadow_type">in</property>
                     <property name="overlay_scrolling">False</property>
+                    <signal name="edge-overshot" handler="_on_edge_overshot" swapped="no"/>
                     <signal name="edge-reached" handler="_on_edge_reached" swapped="no"/>
+                    <signal name="realize" handler="_on_scroll_realize" swapped="no"/>
                     <signal name="scroll-event" handler="_on_scroll" swapped="no"/>
                     <child>
                       <placeholder/>

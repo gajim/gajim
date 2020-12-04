@@ -209,8 +209,6 @@ class ChatControl(ChatControlBase):
             gui_menu_builder.get_encryption_menu(
                 self.control_id, self._type, self.account == 'Local'))
         self.set_encryption_menu_icon()
-        # restore previous conversation
-        self.restore_conversation()
         self.msg_textview.grab_focus()
 
         # PluginSystem: adding GUI extension point for this ChatControl
@@ -562,7 +560,7 @@ class ChatControl(ChatControlBase):
                          additional_data=event.additional_data)
 
     def _on_message_error(self, event):
-        self.conv_textview.show_error(event.message_id, event.error)
+        self.conversation_view.show_error(event.message_id, event.error)
 
     def _on_message_sent(self, event):
         if not event.message:
@@ -589,10 +587,10 @@ class ChatControl(ChatControlBase):
                          additional_data=event.additional_data)
 
     def _on_receipt_received(self, event):
-        self.conv_textview.show_receipt(event.receipt_id)
+        self.conversation_view.show_receipt(event.receipt_id)
 
     def _on_displayed_received(self, event):
-        self.conv_textview.show_displayed(event.marker_id)
+        self.conversation_view.set_read_marker(event.marker_id)
 
     def _nec_ping(self, event):
         if self.contact != event.contact:
@@ -1176,62 +1174,6 @@ class ChatControl(ChatControlBase):
             dialogs.TransformChatToMUC(self.account,
                                        [self.contact.jid],
                                        [dropped_jid])
-
-    def restore_conversation(self):
-        jid = self.contact.jid
-        # number of messages that are in queue and are already logged, we want
-        # to avoid duplication
-        pending = len(app.events.get_events(self.account, jid, ['chat', 'pm']))
-        if self.resource:
-            pending += len(app.events.get_events(self.account,
-                                                 self.contact.get_full_jid(),
-                                                 ['chat', 'pm']))
-
-        rows = app.storage.archive.get_last_conversation_lines(
-            self.account, jid, pending)
-
-        local_old_kind = None
-        self.conv_textview.just_cleared = True
-        for row in rows: # time, kind, message, subject, additional_data
-            msg = row.message
-            additional_data = row.additional_data
-            if not msg: # message is empty, we don't print it
-                continue
-            if row.kind in (KindConstant.CHAT_MSG_SENT,
-                            KindConstant.SINGLE_MSG_SENT):
-                kind = 'outgoing'
-                name = self.get_our_nick()
-            elif row.kind in (KindConstant.SINGLE_MSG_RECV,
-                              KindConstant.CHAT_MSG_RECV):
-                kind = 'incoming'
-                name = self.contact.name
-            elif row.kind == KindConstant.ERROR:
-                kind = 'status'
-                name = self.contact.name
-
-            tim = float(row.time)
-
-            if row.subject:
-                msg = _('Subject: %(subject)s\n%(message)s') % \
-                    {'subject': row.subject, 'message': msg}
-            ChatControlBase.add_message(self,
-                                        msg,
-                                        kind,
-                                        name,
-                                        tim,
-                                        restored=True,
-                                        old_kind=local_old_kind,
-                                        additional_data=additional_data,
-                                        message_id=row.message_id,
-                                        marker=row.marker,
-                                        error=row.error)
-            if (row.message.startswith('/me ') or
-                    row.message.startswith('/me\n')):
-                local_old_kind = None
-            else:
-                local_old_kind = kind
-        if rows:
-            self.conv_textview.print_empty_line()
 
     def _on_convert_to_gc_menuitem_activate(self, _widget):
         """

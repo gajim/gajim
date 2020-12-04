@@ -33,7 +33,7 @@ don't need to dig up the code itself to write basic commands.
 
 from traceback import print_exc
 
-from gi.repository import Pango
+# from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -117,29 +117,33 @@ class CommandTools:
         self.install_tags()
 
     def install_tags(self):
-        buffer_ = self.conv_textview.tv.get_buffer()
+        # TODO implement this in ConversationView
+        # buffer_ = self.conv_textview.tv.get_buffer()
 
-        name = "Monospace"
-        font = Pango.FontDescription(name)
+        # name = "Monospace"
+        # font = Pango.FontDescription(name)
 
-        command_ok_tag = buffer_.create_tag("command_ok")
-        command_ok_tag.set_property("font-desc", font)
-        command_ok_tag.set_property("foreground", "#3465A4")
+        # command_ok_tag = buffer_.create_tag("command_ok")
+        # command_ok_tag.set_property("font-desc", font)
+        # command_ok_tag.set_property("foreground", "#3465A4")
 
-        command_error_tag = buffer_.create_tag("command_error")
-        command_error_tag.set_property("font-desc", font)
-        command_error_tag.set_property("foreground", "#F57900")
+        # command_error_tag = buffer_.create_tag("command_error")
+        # command_error_tag.set_property("font-desc", font)
+        # command_error_tag.set_property("foreground", "#F57900")
+        return
 
     def shift_line(self):
-        buffer_ = self.conv_textview.tv.get_buffer()
-        iter_ = buffer_.get_end_iter()
-        if iter_.ends_line() and not iter_.is_start():
-            buffer_.insert_with_tags_by_name(iter_, "\n", "eol")
+        # buffer_ = self.conv_textview.tv.get_buffer()
+        # iter_ = buffer_.get_end_iter()
+        # if iter_.ends_line() and not iter_.is_start():
+        #     buffer_.insert_with_tags_by_name(iter_, "\n", "eol")
+        return
 
     def append_with_tags(self, text, *tags):
-        buffer_ = self.conv_textview.tv.get_buffer()
-        iter_ = buffer_.get_end_iter()
-        buffer_.insert_with_tags_by_name(iter_, text, *tags)
+        # buffer_ = self.conv_textview.tv.get_buffer()
+        # iter_ = buffer_.get_end_iter()
+        # buffer_.insert_with_tags_by_name(iter_, text, *tags)
+        return
 
     def echo(self, text, tag="command_ok"):
         """

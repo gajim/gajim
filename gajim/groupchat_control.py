@@ -221,7 +221,6 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         app.plugin_manager.gui_extension_point('groupchat_control', self)
-        self._restore_conversation()
 
     def _connect_contact_signals(self):
         self.contact.multi_connect({
@@ -258,6 +257,8 @@ class GroupchatControl(ChatControlBase):
             ChatControlBase.got_connected(self)
 
             self.xml.formattings_button.set_sensitive(True)
+
+            self.conversation_view.update_avatars()
 
             self.update_actions()
 
@@ -424,25 +425,6 @@ class GroupchatControl(ChatControlBase):
 
         for action in actions:
             self.parent_win.window.remove_action(f'{action}{self.control_id}')
-
-    def _restore_conversation(self):
-        rows = app.storage.archive.load_groupchat_messages(
-            self.account, self.contact.jid)
-
-        for row in rows:
-            other_tags_for_name = ['muc_nickname_color_%s' % row.contact_name]
-            ChatControlBase.add_message(self,
-                                        row.message,
-                                        'incoming',
-                                        row.contact_name,
-                                        float(row.time),
-                                        other_tags_for_name=other_tags_for_name,
-                                        message_id=row.message_id,
-                                        restored=True,
-                                        additional_data=row.additional_data)
-
-        if rows:
-            self.conv_textview.print_empty_line()
 
     def _is_subject_change_allowed(self):
         contact = self.contact.get_resource(self.nick)
@@ -851,7 +833,7 @@ class GroupchatControl(ChatControlBase):
 
             self._nick_completion.record_message(contact, highlight)
 
-            self.check_focus_out_line()
+            # self.check_focus_out_line()
 
         ChatControlBase.add_message(self,
                                     text,
@@ -908,7 +890,7 @@ class GroupchatControl(ChatControlBase):
         if app.window.is_chat_active(self.account, self.room_jid):
             return
 
-        self.conv_textview.show_focus_out_line()
+        # self.conv_textview.show_focus_out_line()
 
     def needs_visual_notification(self, text):
         """
@@ -1102,11 +1084,12 @@ class GroupchatControl(ChatControlBase):
 
         self.add_info_message(message)
 
-        tv = self.conv_textview
-        if nick in tv.last_received_message_id:
-            tv.last_received_message_id[new_nick] = \
-                tv.last_received_message_id[nick]
-            del tv.last_received_message_id[nick]
+        # TODO: What to do with this?
+        # tv = self.conv_textview
+        # if nick in tv.last_received_message_id:
+        #     tv.last_received_message_id[new_nick] = \
+        #         tv.last_received_message_id[nick]
+        #     del tv.last_received_message_id[nick]
 
 
     def _on_user_status_show_changed(self,
@@ -1410,7 +1393,7 @@ class GroupchatControl(ChatControlBase):
             self.msg_textview.grab_focus()
 
     def _on_message_error(self, event):
-        self.conv_textview.show_error(event.message_id, event.error)
+        self.conversation_view.show_error(event.message_id, event.error)
 
     def shutdown(self, reason=None):
         app.settings.disconnect_signals(self)
@@ -1483,12 +1466,12 @@ class GroupchatControl(ChatControlBase):
             # self.parent_win.remove_tab(self, None, reason=reason, force=True)
 
     def set_control_active(self, state):
-        self.conv_textview.allow_focus_out_line = True
+        # self.conv_textview.allow_focus_out_line = True
         self.attention_flag = False
         ChatControlBase.set_control_active(self, state)
-        if not state:
-            # add the focus-out line to the tab we are leaving
-            self.check_focus_out_line()
+        # if not state:
+        #    # add the focus-out line to the tab we are leaving
+        #    self.check_focus_out_line()
         # Sending active to undo unread state
         self.parent_win.redraw_tab(self, 'active')
 

@@ -25,6 +25,7 @@
 
 import os
 import sys
+import datetime
 import time
 import uuid
 import tempfile
@@ -43,12 +44,12 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.const import KindConstant
 from gajim.common.structs import OutgoingMessage
 
 from gajim import gtkgui_helpers
 
-from gajim.conversation_textview import ConversationTextview
-
+from gajim.gui.conversation_view import ConversationView
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import PastePreviewDialog
@@ -93,7 +94,7 @@ else:
 ################################################################################
 class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     """
-    A base class containing a banner, ConversationTextview, MessageInputTextView
+    A base class containing a banner, ConversationView, MessageInputTextView
     """
 
     _type = None  # type: ControlType
@@ -164,14 +165,16 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
         self.xml.overlay.drag_dest_set_target_list(dst_targets)
 
-        # Create textviews and connect signals
-        self.conv_textview = ConversationTextview(self.account)
-
-        id_ = self.conv_textview.connect('quote', self.on_quote)
-        self.handlers[id_] = self.conv_textview
-
-        self.conv_textview.tv.connect('key-press-event',
-                                      self._on_conv_textview_key_press_event)
+        # Create ConversationView and connect signals
+        self.conversation_view = ConversationView(self.account, self.contact)
+        id_ = self.conversation_view.connect('quote', self.on_quote)
+        self.handlers[id_] = self.conversation_view
+        id_ = self.conversation_view.connect(
+            'load-history', self._on_load_history)
+        self.handlers[id_] = self.conversation_view
+        id_ = self.conversation_view.connect(
+            'key-press-event', self._on_conversation_view_key_press)
+        self.handlers[id_] = self.conversation_view
 
         # This is a workaround: as soon as a line break occurs in Gtk.TextView
         # with word-char wrapping enabled, a hyphen character is automatically
@@ -183,10 +186,18 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         hscrollbar = self.xml.conversation_scrolledwindow.get_hscrollbar()
         hscrollbar.hide()
 
-        self.xml.conversation_scrolledwindow.add(self.conv_textview.tv)
-        widget = self.xml.conversation_scrolledwindow.get_vadjustment()
-        widget.connect('changed', self.on_conversation_vadjustment_changed)
+        self.xml.conversation_scrolledwindow.add(self.conversation_view)
+        self._scrolled_old_upper = None
+        self._scrolled_old_value = None
+        self._scrolled_previous_value = 0
 
+        self._fetching_history = False
+        self._initial_fetch_done = False
+
+        vadjustment = self.xml.conversation_scrolledwindow.get_vadjustment()
+        vadjustment.connect(
+            'changed', self._on_conversation_vadjustment_changed)
+        vadjustment.connect('value-changed', self._on_scroll_value_changed)
         vscrollbar = self.xml.conversation_scrolledwindow.get_vscrollbar()
         vscrollbar.connect('button-release-event',
                            self._on_scrollbar_button_release)
@@ -237,7 +248,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         # Attach speller
         self.set_speller()
-        self.conv_textview.tv.show()
 
         # For XEP-0172
         self.user_nick = None
@@ -255,7 +265,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self.handlers[id_] = parent_win.window
 
         self.encryption = self.get_encryption_state()
-        self.conv_textview.encryption_enabled = self.encryption is not None
+        self.conversation_view.encryption_enabled = self.encryption is not None
 
         # PluginSystem: adding GUI extension point for ChatControlBase
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
@@ -284,7 +294,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         method_name = f'_on_{method_name}'
         getattr(self, method_name)(event)
 
-    def _on_conv_textview_key_press_event(self, textview, event):
+    def _on_conversation_view_key_press(self, _listbox, event):
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
             if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
                 return Gdk.EVENT_PROPAGATE
@@ -296,12 +306,13 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             # focused).
             return Gdk.EVENT_PROPAGATE
 
-        if event.get_state() & COPY_MODIFIER:
-            # Don’t reroute the event if it is META + c and the
-            # textview has a selection
-            if event.hardware_keycode in KEYCODES_KEY_C:
-                if textview.get_buffer().props.has_selection:
-                    return Gdk.EVENT_PROPAGATE
+        # if event.get_state() & COPY_MODIFIER:
+        # TODO
+        #     # Don’t reroute the event if it is META + c and the
+        #     # textview has a selection
+        #     if event.hardware_keycode in KEYCODES_KEY_C:
+        #         if textview.get_buffer().props.has_selection:
+        #             return Gdk.EVENT_PROPAGATE
 
         if not self.msg_textview.get_sensitive():
             # If the input textview is not sensitive it can’t get the focus.
@@ -517,7 +528,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             return Gdk.EVENT_STOP
 
         if action == 'clear-chat':
-            self.conv_textview.clear()
+            self.conversation_view.clear()
             return Gdk.EVENT_STOP
 
         if action == 'delete-line':
@@ -617,7 +628,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def set_encryption_state(self, encryption):
         self.encryption = encryption
-        self.conv_textview.encryption_enabled = encryption is not None
+        self.conversation_view.encryption_enabled = encryption is not None
         self.contact.settings.set('encryption', self.encryption or '')
 
     def get_encryption_state(self):
@@ -702,8 +713,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 self.handlers[i].disconnect(i)
         self.handlers.clear()
 
-        self.conv_textview.del_handlers()
-        del self.conv_textview
+        del self.conversation_view
         del self.msg_textview
         del self.msg_scrolledwindow
 
@@ -856,7 +866,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 return True
 
             if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
-                self.conv_textview.tv.event(event)
+                self.conversation_view.event(event)
                 self._on_scroll(None, event.keyval)
                 return True
 
@@ -1098,11 +1108,11 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self.received_history_pos = pos
 
     def add_info_message(self, text, message_id=None):
-        self.conv_textview.print_conversation_line(
+        self.conversation_view.add_message(
             text, 'info', '', None, message_id=message_id, graphics=False)
 
     def add_status_message(self, text):
-        self.conv_textview.print_conversation_line(
+        self.conversation_view.add_message(
             text, 'status', '', None)
 
     def add_message(self,
@@ -1130,9 +1140,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         """
         jid = self.contact.jid
         full_jid = self.get_full_jid()
-        textview = self.conv_textview
         end = False
-        if self.conv_textview.autoscroll or kind == 'outgoing':
+        if self.conversation_view.autoscroll or kind == 'outgoing':
             end = True
 
         if other_tags_for_name is None:
@@ -1144,21 +1153,18 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        textview.print_conversation_line(text,
-                                         kind,
-                                         name,
-                                         tim,
-                                         other_tags_for_name,
-                                         other_tags_for_time,
-                                         other_tags_for_text,
-                                         subject,
-                                         old_kind,
-                                         displaymarking=displaymarking,
-                                         message_id=message_id,
-                                         correct_id=correct_id,
-                                         additional_data=additional_data,
-                                         marker=marker,
-                                         error=error)
+        self.conversation_view.add_message(
+            text,
+            kind,
+            name,
+            tim,
+            other_text_tags=other_tags_for_text,
+            display_marking=displaymarking,
+            message_id=message_id,
+            correct_id=correct_id,
+            additional_data=additional_data,
+            marker=marker,
+            error=error)
 
         if restored:
             return
@@ -1301,7 +1307,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.update_tags()
 
     def update_tags(self):
-        self.conv_textview.update_tags()
+        self.conversation_view.update_text_tags()
 
     @staticmethod
     def clear(tv):
@@ -1372,7 +1378,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if state:
             self.set_emoticon_popover()
             jid = self.contact.jid
-            if self.conv_textview.autoscroll:
+            if self.conversation_view.autoscroll:
                 # we are at the end
                 type_ = [f'printed_{self._type}']
                 if self._type.is_groupchat:
@@ -1401,14 +1407,73 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 self.contact, Chatstate.INACTIVE)
 
     def scroll_to_end(self, force=False):
-        self.conv_textview.scroll_to_end(force)
+        self.conversation_view.scroll_to_end(force)
+
+    def _on_load_history(self, _button, lines):
+        self.fetch_n_lines_history(lines)
+
+    def fetch_n_lines_history(self, n_lines):
+        if self._fetching_history:
+            return
+
+        timestamp_end = self.conversation_view.first_message_timestamp
+        if not timestamp_end:
+            timestamp_end = datetime.datetime.now()
+        self._fetching_history = True
+        adjustment = self.xml.conversation_scrolledwindow.get_vadjustment()
+
+        # Store these values so we can restore scroll position later
+        self._scrolled_old_upper = adjustment.get_upper()
+        self._scrolled_old_value = adjustment.get_value()
+
+        if self.is_groupchat:
+            messages = app.storage.archive.get_conversation_muc_before(
+                self.account,
+                self.contact.jid,
+                timestamp_end,
+                n_lines)
+        else:
+            messages = app.storage.archive.get_conversation_before(
+                self.account,
+                self.contact.jid,
+                timestamp_end,
+                n_lines)
+
+        for msg in messages:
+            if not msg:
+                continue
+            kind = 'status'
+            contact_name = msg.contact_name
+            if msg.kind in (
+                    KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
+                kind = 'incoming'
+                contact_name = self.contact.name
+            elif msg.kind == KindConstant.GC_MSG:
+                kind = 'incoming'
+            elif msg.kind in (
+                    KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
+                kind = 'outgoing'
+                contact_name = self.get_our_nick()
+            if not msg.message:
+                continue
+            self.conversation_view.add_message(
+                msg.message,
+                kind,
+                contact_name,
+                msg.time,
+                subject=msg.subject,
+                additional_data=msg.additional_data,
+                message_id=msg.message_id,
+                marker=msg.marker,
+                error=msg.error,
+                history=True)
 
     def _on_edge_reached(self, _scrolledwindow, pos):
         if pos != Gtk.PositionType.BOTTOM:
             return
         # Remove all events and set autoscroll True
         app.log('autoscroll').info('Autoscroll enabled')
-        self.conv_textview.autoscroll = True
+        self.conversation_view.autoscroll = True
         if self.resource:
             jid = self.contact.get_full_jid()
         else:
@@ -1437,13 +1502,44 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                     self._type)
                 self.last_msg_id = None
 
+    def _on_edge_overshot(self, _scrolledwindow, pos):
+        # Fetch messages if we scroll against the top
+        if pos != Gtk.PositionType.TOP:
+            return
+        self.fetch_n_lines_history(30)
+
+    def _on_scroll_value_changed(self, adjustment):
+        if self.conversation_view.clearing or self._fetching_history:
+            return
+
+        value = adjustment.get_value()
+        previous_value = self._scrolled_previous_value
+        self._scrolled_previous_value = value
+
+        if value >= previous_value:
+            return
+
+        # Fetch messages before we reach the top
+        if value <= int(0.1 * adjustment.get_upper()):
+            self.fetch_n_lines_history(10)
+
+    def _on_scroll_realize(self, _widget):
+        # Initial message fetching when ChatControl is first opened
+        if not self._initial_fetch_done:
+            self._initial_fetch_done = True
+            restore_lines = app.settings.get('restore_lines')
+            if restore_lines <= 0:
+                return
+            self.fetch_n_lines_history(restore_lines)
+
     def _on_scrollbar_button_release(self, scrollbar, event):
         if event.get_button()[1] != 1:
             # We want only to catch the left mouse button
             return
+
         if not at_the_end(scrollbar.get_parent()):
             app.log('autoscroll').info('Autoscroll disabled')
-            self.conv_textview.autoscroll = False
+            self.conversation_view.autoscroll = False
 
     def has_focus(self):
         if self.parent_win:
@@ -1453,12 +1549,12 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         return False
 
     def _on_scroll(self, widget, event):
-        if not self.conv_textview.autoscroll:
+        if not self.conversation_view.autoscroll:
             # autoscroll is already disabled
             return
 
         if widget is None:
-            # call from _conv_textview_key_press_event()
+            # call from _on_conversation_view_key_press()
             # SHIFT + Gdk.KEY_Page_Up
             if event != Gdk.KEY_Page_Up:
                 return
@@ -1490,10 +1586,18 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         adjustment = self.xml.conversation_scrolledwindow.get_vadjustment()
         if adjustment.get_upper() != adjustment.get_page_size():
             app.log('autoscroll').info('Autoscroll disabled')
-            self.conv_textview.autoscroll = False
+            self.conversation_view.autoscroll = False
 
-    def on_conversation_vadjustment_changed(self, _adjustment):
+    def _on_conversation_vadjustment_changed(self, adjustment):
         self.scroll_to_end()
+        if self._fetching_history:
+            # Make sure the scroll position is kept
+            new_upper = adjustment.get_upper()
+            diff = new_upper - self._scrolled_old_upper
+            new_value = diff + self._scrolled_old_value
+            adjustment.set_value(new_value)
+            self._fetching_history = False
+            return
 
     def scroll_messages(self, direction, msg_buf, msg_type):
         if msg_type == 'sent':
@@ -1550,7 +1654,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def got_disconnected(self):
         self.msg_textview.set_sensitive(False)
         self.msg_textview.set_editable(False)
-        self.conv_textview.tv.grab_focus()
+        self.conversation_view.grab_focus()
 
         self.update_toolbar()
 

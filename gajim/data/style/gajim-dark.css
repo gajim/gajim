@@ -17,3 +17,14 @@ infobar.error > revealer > box {
     color: #FCE5D5;
     background-color: #D64937;
 }
+
+/* ConversationView */
+.conversation-mention-highlight {
+    background-color: rgb(251, 151, 97);
+}
+.conversation-mention-highlight:hover {
+    background-color: rgb(251, 151, 97);
+}
+.conversation-mention-highlight grid textview text {
+	background-color: rgb(251, 151, 97);
+}

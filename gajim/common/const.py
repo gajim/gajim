@@ -1049,6 +1049,7 @@ URI_SCHEMES = {
     'iris.xpcs:',
     'iris.lwz:',
     'ldap://',
+    'mailto:',
     'mid:',
     'modem:',
     'msrp://',
@@ -1081,6 +1082,7 @@ URI_SCHEMES = {
     'vemmi://',
     'xmlrpc.beep://',
     'xmlrpc.beeps://',
+    'xmpp:',
     'z39.50r://',
     'z39.50s://',
     'about:',
@@ -1104,6 +1106,22 @@ URI_SCHEMES = {
     'smb://',
     'webcal://',
     'aesgcm://',
+}
+
+
+TRUST_SYMBOL_DATA = {
+    Trust.UNTRUSTED: ('dialog-error-symbolic',
+                      _('Untrusted'),
+                      'error-color'),
+    Trust.UNDECIDED: ('security-low-symbolic',
+                      _('Trust Not Decided'),
+                      'warning-color'),
+    Trust.BLIND: ('security-medium-symbolic',
+                  _('Unverified'),
+                  'encrypted-color'),
+    Trust.VERIFIED: ('security-high-symbolic',
+                     _('Verified'),
+                     'encrypted-color')
 }
 
 
