@@ -24,7 +24,9 @@ from ctypes import CDLL, byref, create_string_buffer
 from ctypes.util import find_library
 from packaging.version import Version as V
 
+import gajim.gui
 from gajim.common import i18n
+
 
 _MIN_NBXMPP_VER = '1.99.0'
 _MIN_GTK_VER = '3.22.27'
@@ -102,13 +104,16 @@ def _disable_csd():
 
 
 def _init_gtk():
-    from gajim.gtk import exception
+    gajim.gui.init('gtk')
+
+    from gajim.gui import exception
     exception.init()
 
     i18n.initialize_direction_mark()
 
-    from gajim.application import GajimApplication
 
+def _run_app():
+    from gajim.application import GajimApplication
     application = GajimApplication()
     _install_sginal_handlers(application)
     application.run(sys.argv)
@@ -152,3 +157,4 @@ def main():
     _set_proc_title()
     _disable_csd()
     _init_gui('GTK')
+    _run_app()
