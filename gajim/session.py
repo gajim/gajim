@@ -28,8 +28,8 @@ from gajim.common import contacts
 from gajim.common import ged
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import KindConstant
-from gajim.gtk.util import get_show_in_roster
-from gajim.gtk.util import get_show_in_systray
+from gajim.gui.util import get_show_in_roster
+from gajim.gui.util import get_show_in_systray
 
 
 class ChatControlSession:

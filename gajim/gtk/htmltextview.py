@@ -47,9 +47,9 @@ from gajim.common import app
 from gajim.common.const import StyleAttr
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri
-from gajim.gtk.util import get_cursor
-
 from gajim.gui_menu_builder import get_conv_context_menu
+
+from .util import get_cursor
 
 log = logging.getLogger('gajim.htmlview')
 

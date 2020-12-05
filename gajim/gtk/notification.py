@@ -40,12 +40,12 @@ from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import get_monitor_scale_factor
-from gajim.gtk.util import get_total_screen_geometry
+from .util import get_builder
+from .util import get_icon_name
+from .util import get_monitor_scale_factor
+from .util import get_total_screen_geometry
 
-log = logging.getLogger('gajim.gtk.notification')
+log = logging.getLogger('gajim.gui.notification')
 
 
 class Notification(EventHelper):

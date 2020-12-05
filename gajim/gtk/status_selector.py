@@ -21,7 +21,7 @@ from gajim.common.helpers import get_global_show
 from gajim.common.helpers import statuses_unified
 from gajim.common.i18n import _
 
-from gajim.gtk.util import get_icon_name
+from .util import get_icon_name
 
 
 class StatusSelector(Gtk.MenuButton):

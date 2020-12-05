@@ -35,11 +35,11 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.modules.util import as_task
 
-from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.groupchat_nick import NickChooser
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import generate_account_badge
+from .groupchat_info import GroupChatInfoScrolled
+from .groupchat_nick import NickChooser
+from .util import get_builder
+from .util import get_icon_name
+from .util import generate_account_badge
 
 
 class Search(IntEnum):

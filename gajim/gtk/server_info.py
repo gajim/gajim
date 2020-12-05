@@ -28,11 +28,11 @@ from gajim.common import ged
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import EventHelper
-from gajim.gtk.util import open_window
+from .util import get_builder
+from .util import EventHelper
+from .util import open_window
 
-log = logging.getLogger('gajim.gtk.server_info')
+log = logging.getLogger('gajim.gui.server_info')
 
 
 class ServerInfo(Gtk.ApplicationWindow, EventHelper):

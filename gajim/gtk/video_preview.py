@@ -19,8 +19,8 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk import gstreamer
-from gajim.gtk.util import get_builder
+from . import gstreamer
+from .util import get_builder
 
 try:
     from gi.repository import Gst  # pylint: disable=ungrouped-imports
@@ -28,7 +28,7 @@ except Exception:
     pass
 
 
-log = logging.getLogger('gajim.gtk.preview')
+log = logging.getLogger('gajim.gui.preview')
 
 
 class VideoPreview:

@@ -1,6 +1,6 @@
 from gi.repository import Gtk
 
-from gajim.gtk.dataform import FakeDataFormWidget
+from gajim.gui.dataform import FakeDataFormWidget
 from gajim.common.const import CSSPriority
 
 from test.gtk import util

@@ -41,16 +41,16 @@ from gajim import gtkgui_helpers
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
 
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationCheckDialog
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import resize_window
-from gajim.gtk.util import move_window
-from gajim.gtk.util import get_app_icon_list
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import set_urgency_hint
-from gajim.gtk.util import get_app_window
-from gajim.gtk.const import ControlType
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ConfirmationCheckDialog
+from gajim.gui.util import get_icon_name
+from gajim.gui.util import resize_window
+from gajim.gui.util import move_window
+from gajim.gui.util import get_app_icon_list
+from gajim.gui.util import get_builder
+from gajim.gui.util import set_urgency_hint
+from gajim.gui.util import get_app_window
+from gajim.gui.const import ControlType
 
 
 log = logging.getLogger('gajim.message_window')

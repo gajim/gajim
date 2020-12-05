@@ -33,9 +33,9 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 
 from gajim.gui_menu_builder import get_groupchat_roster_menu
-from gajim.gtk.tooltips import GCTooltip
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import EventHelper
+from .tooltips import GCTooltip
+from .util import get_builder
+from .util import EventHelper
 
 
 AffiliationRoleSortOrder = {

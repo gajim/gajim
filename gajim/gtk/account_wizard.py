@@ -41,15 +41,15 @@ from gajim.common.i18n import _
 from gajim.common.const import SASL_ERRORS
 from gajim.common.const import GIO_TLS_ERRORS
 
-from gajim.gtk.assistant import Assistant
-from gajim.gtk.assistant import Page
-from gajim.gtk.assistant import SuccessPage
-from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import open_window
+from .assistant import Assistant
+from .assistant import Page
+from .assistant import SuccessPage
+from .dataform import DataFormWidget
+from .util import get_builder
+from .util import open_window
 
 
-log = logging.getLogger('gajim.gtk.account_wizard')
+log = logging.getLogger('gajim.gui.account_wizard')
 
 
 class AccountWizard(Assistant):

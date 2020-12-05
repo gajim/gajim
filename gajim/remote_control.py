@@ -33,7 +33,7 @@ from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.structs import OutgoingMessage
 
-from gajim.gtk.add_contact import AddNewContactWindow
+from gajim.gui.add_contact import AddNewContactWindow
 
 
 log = logging.getLogger('gajim.remote_control')

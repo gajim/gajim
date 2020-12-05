@@ -30,9 +30,9 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 
-from gajim.gtk.util import scale_with_ratio
+from .util import scale_with_ratio
 
-log = logging.getLogger('gajim.gtk.avatar_selector')
+log = logging.getLogger('gajim.gui.avatar_selector')
 
 
 @unique

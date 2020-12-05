@@ -30,7 +30,7 @@ import functools
 
 from gajim.common import configpaths
 from gajim.plugins import plugins_i18n
-from gajim.gtk.util import Builder
+from gajim.gui.util import Builder
 
 log = logging.getLogger('gajim.plugin_system')
 '''

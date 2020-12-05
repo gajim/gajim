@@ -38,12 +38,12 @@ from gajim.common.nec import EventHelper
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _
 
-from gajim.gtk.dialogs import WarningDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.filechoosers import ArchiveChooserDialog
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import load_icon
+from gajim.gui.dialogs import WarningDialog
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.filechoosers import ArchiveChooserDialog
+from gajim.gui.util import get_builder
+from gajim.gui.util import load_icon
 
 
 @unique

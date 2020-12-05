@@ -24,15 +24,15 @@ from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 
-from gajim.gtk import util
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import MaxWidthComboBoxText
-from gajim.gtk.util import EventHelper
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.settings import SettingsDialog
-from gajim.gtk.const import Setting
-from gajim.gtk.const import SettingKind
-from gajim.gtk.const import SettingType
+from . import util
+from .util import get_builder
+from .util import MaxWidthComboBoxText
+from .util import EventHelper
+from .dialogs import ErrorDialog
+from .settings import SettingsDialog
+from .const import Setting
+from .const import SettingKind
+from .const import SettingType
 
 
 class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):

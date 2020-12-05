@@ -63,20 +63,20 @@ from gajim.chat_control_base import ChatControlBase
 
 from gajim.command_system.implementation.hosts import GroupChatCommands
 
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationCheckDialog
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.filechoosers import AvatarChooserDialog
-from gajim.gtk.groupchat_config import GroupchatConfig
-from gajim.gtk.adhoc import AdHocCommand
-from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.groupchat_invite import GroupChatInvite
-from gajim.gtk.groupchat_settings import GroupChatSettings
-from gajim.gtk.groupchat_roster import GroupchatRoster
-from gajim.gtk.util import NickCompletionGenerator
-from gajim.gtk.util import get_app_window
-from gajim.gtk.const import ControlType
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ConfirmationCheckDialog
+from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.filechoosers import AvatarChooserDialog
+from gajim.gui.groupchat_config import GroupchatConfig
+from gajim.gui.adhoc import AdHocCommand
+from gajim.gui.dataform import DataFormWidget
+from gajim.gui.groupchat_info import GroupChatInfoScrolled
+from gajim.gui.groupchat_invite import GroupChatInvite
+from gajim.gui.groupchat_settings import GroupChatSettings
+from gajim.gui.groupchat_roster import GroupchatRoster
+from gajim.gui.util import NickCompletionGenerator
+from gajim.gui.util import get_app_window
+from gajim.gui.const import ControlType
 
 log = logging.getLogger('gajim.groupchat_control')
 

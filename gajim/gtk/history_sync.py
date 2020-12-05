@@ -28,10 +28,10 @@ from gajim.common.i18n import _
 from gajim.common.const import ArchiveState
 from gajim.common.helpers import event_filter
 
-from gajim.gtk.util import load_icon
-from gajim.gtk.util import EventHelper
+from .util import load_icon
+from .util import EventHelper
 
-log = logging.getLogger('gajim.gtk.history_sync')
+log = logging.getLogger('gajim.gui.history_sync')
 
 
 class Pages(IntEnum):

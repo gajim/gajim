@@ -28,8 +28,8 @@ from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
 from gajim.common.const import AvatarSize
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import make_href_markup
+from .util import get_builder
+from .util import make_href_markup
 
 
 MUC_FEATURES = {

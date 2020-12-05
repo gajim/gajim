@@ -34,7 +34,7 @@ import nbxmpp
 
 import gajim
 from gajim.common import configpaths
-from gajim.gtk.util import get_builder
+from .util import get_builder
 
 
 _exception_in_progress = threading.Lock()

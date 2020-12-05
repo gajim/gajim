@@ -41,10 +41,10 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.exceptions import GajimGeneralException
 
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_app_window
+from gajim.gui.dialogs import ErrorDialog
+from gajim.gui.util import get_icon_name
+from gajim.gui.util import get_builder
+from gajim.gui.util import get_app_window
 
 log = logging.getLogger('gajim.dialogs')
 

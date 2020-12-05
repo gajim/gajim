@@ -32,7 +32,7 @@ from gajim.common.i18n import Q_
 
 from gajim.common.setting_values import ADVANCED_SETTINGS
 from gajim.common.setting_values import APP_SETTINGS
-from gajim.gtk.util import get_builder
+from .util import get_builder
 
 
 @unique

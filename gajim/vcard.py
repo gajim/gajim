@@ -46,7 +46,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.nec import EventHelper
 from gajim.common.modules.util import as_task
 
-from gajim.gtk.util import get_builder
+from gajim.gui.util import get_builder
 
 
 log = logging.getLogger('gajim.vcard')

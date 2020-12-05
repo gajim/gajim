@@ -20,8 +20,8 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import EventHelper
+from .util import get_builder
+from .util import EventHelper
 
 
 class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):

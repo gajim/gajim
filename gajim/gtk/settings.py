@@ -26,11 +26,11 @@ from gajim.common.i18n import Q_
 
 from gajim import gtkgui_helpers
 
-from gajim.gtk.util import get_image_button
-from gajim.gtk.util import MaxWidthComboBoxText
-from gajim.gtk.util import open_window
-from gajim.gtk.const import SettingKind
-from gajim.gtk.const import SettingType
+from .util import get_image_button
+from .util import MaxWidthComboBoxText
+from .util import open_window
+from .const import SettingKind
+from .const import SettingType
 
 
 class SettingsDialog(Gtk.ApplicationWindow):

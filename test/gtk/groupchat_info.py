@@ -10,7 +10,7 @@ from nbxmpp.modules.discovery import parse_disco_info
 from gajim.common.const import CSSPriority
 
 from test.gtk import util
-from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gui.groupchat_info import GroupChatInfoScrolled
 
 util.load_style('gajim.css', CSSPriority.APPLICATION)
 

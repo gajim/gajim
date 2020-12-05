@@ -23,13 +23,13 @@ from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
 
-from gajim.gtk.dialogs import ShortcutsWindow
-from gajim.gtk.single_message import SingleMessageWindow
-from gajim.gtk.about import AboutDialog
-from gajim.gtk.history import HistoryWindow
-from gajim.gtk.discovery import ServiceDiscoveryWindow
-from gajim.gtk.util import open_window
-from gajim.gtk.util import get_app_window
+from gajim.gui.dialogs import ShortcutsWindow
+from gajim.gui.single_message import SingleMessageWindow
+from gajim.gui.about import AboutDialog
+from gajim.gui.history import HistoryWindow
+from gajim.gui.discovery import ServiceDiscoveryWindow
+from gajim.gui.util import open_window
+from gajim.gui.util import get_app_window
 
 # General Actions
 

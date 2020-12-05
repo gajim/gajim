@@ -208,7 +208,7 @@ class GajimApplication(Gtk.Application):
             dlg.destroy()
             sys.exit()
 
-        from gajim.gtk.util import load_user_iconsets
+        from gajim.gui.util import load_user_iconsets
         load_user_iconsets()
 
         from gajim.common.cert_store import CertificateStore
@@ -217,7 +217,7 @@ class GajimApplication(Gtk.Application):
 
         # Set Application Menu
         app.app = self
-        from gajim.gtk.util import get_builder
+        from gajim.gui.util import get_builder
         builder = get_builder('application_menu.ui')
         menubar = builder.get_object("menubar")
         self.set_menubar(menubar)

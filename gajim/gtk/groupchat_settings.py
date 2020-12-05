@@ -17,10 +17,10 @@ from gi.repository import Gtk
 from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.i18n import _
 
-from gajim.gtk.const import Setting
-from gajim.gtk.const import SettingKind
-from gajim.gtk.const import SettingType
-from gajim.gtk.settings import SettingsBox
+from .const import Setting
+from .const import SettingKind
+from .const import SettingType
+from .settings import SettingsBox
 
 
 class GroupChatSettings(SettingsBox):

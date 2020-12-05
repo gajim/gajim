@@ -33,10 +33,10 @@ from gajim.common.modules.util import as_task
 
 from gajim import gtkgui_helpers
 
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.util import get_builder
-from gajim.gtk.filechoosers import AvatarChooserDialog
+from .dialogs import ErrorDialog
+from .dialogs import InformationDialog
+from .util import get_builder
+from .filechoosers import AvatarChooserDialog
 
 
 log = logging.getLogger('gajim.profile')

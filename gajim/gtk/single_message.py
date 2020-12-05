@@ -26,12 +26,12 @@ from gajim.common.structs import OutgoingMessage
 
 from gajim.conversation_textview import ConversationTextview
 
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import get_completion_liststore
-from gajim.gtk.util import move_window
-from gajim.gtk.util import resize_window
+from .dialogs import ErrorDialog
+from .util import get_builder
+from .util import get_icon_name
+from .util import get_completion_liststore
+from .util import move_window
+from .util import resize_window
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports

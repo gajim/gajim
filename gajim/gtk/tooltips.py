@@ -42,16 +42,16 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.gtkgui_helpers import add_css_class
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import format_mood
-from gajim.gtk.util import format_activity
-from gajim.gtk.util import format_tune
-from gajim.gtk.util import format_location
-from gajim.gtk.util import get_css_show_class
+from .util import get_builder
+from .util import get_icon_name
+from .util import format_mood
+from .util import format_activity
+from .util import format_tune
+from .util import format_location
+from .util import get_css_show_class
 
 
-log = logging.getLogger('gajim.gtk.tooltips')
+log = logging.getLogger('gajim.gui.tooltips')
 
 
 class StatusTable:

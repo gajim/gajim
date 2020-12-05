@@ -25,9 +25,9 @@ from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.const import MUC_DISCO_ERRORS
 
-from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.groupchat_nick import NickChooser
-from gajim.gtk.util import ensure_not_destroyed
+from .groupchat_info import GroupChatInfoScrolled
+from .groupchat_nick import NickChooser
+from .util import ensure_not_destroyed
 
 
 class GroupchatJoin(Gtk.ApplicationWindow):

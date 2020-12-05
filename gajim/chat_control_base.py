@@ -51,18 +51,18 @@ from gajim import gtkgui_helpers
 
 from gajim.conversation_textview import ConversationTextview
 
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import PastePreviewDialog
-from gajim.gtk.message_input import MessageInputTextView
-from gajim.gtk.util import at_the_end
-from gajim.gtk.util import get_show_in_roster
-from gajim.gtk.util import get_show_in_systray
-from gajim.gtk.util import get_hardware_key_codes
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import generate_account_badge
-from gajim.gtk.const import ControlType  # pylint: disable=unused-import
-from gajim.gtk.emoji_chooser import emoji_chooser
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.dialogs import PastePreviewDialog
+from gajim.gui.message_input import MessageInputTextView
+from gajim.gui.util import at_the_end
+from gajim.gui.util import get_show_in_roster
+from gajim.gui.util import get_show_in_systray
+from gajim.gui.util import get_hardware_key_codes
+from gajim.gui.util import get_builder
+from gajim.gui.util import generate_account_badge
+from gajim.gui.const import ControlType  # pylint: disable=unused-import
+from gajim.gui.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
 from gajim.command_system.implementation.middleware import CommandTools

@@ -40,16 +40,16 @@ from gajim.common.const import StyleAttr
 
 from gajim import conversation_textview
 
-from gajim.gtk.util import python_month
-from gajim.gtk.util import gtk_month
-from gajim.gtk.util import resize_window
-from gajim.gtk.util import move_window
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import get_completion_liststore
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import scroll_to_end
+from .util import python_month
+from .util import gtk_month
+from .util import resize_window
+from .util import move_window
+from .util import get_icon_name
+from .util import get_completion_liststore
+from .util import get_builder
+from .util import scroll_to_end
 
-from gajim.gtk.dialogs import ErrorDialog
+from .dialogs import ErrorDialog
 
 @unique
 class InfoColumn(IntEnum):

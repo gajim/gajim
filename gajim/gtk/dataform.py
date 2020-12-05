@@ -25,8 +25,8 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import open_uri
 
-from gajim.gtk.util import MultiLineLabel
-from gajim.gtk.util import MaxWidthComboBoxText
+from .util import MultiLineLabel
+from .util import MaxWidthComboBoxText
 
 
 # Options

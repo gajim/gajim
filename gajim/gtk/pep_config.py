@@ -22,13 +22,13 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import WarningDialog
-from gajim.gtk.dataform import DataFormDialog
-from gajim.gtk.util import get_builder
+from .dialogs import ErrorDialog
+from .dialogs import WarningDialog
+from .dataform import DataFormDialog
+from .util import get_builder
 
 
-log = logging.getLogger('gajim.gtk.pep')
+log = logging.getLogger('gajim.gui.pep')
 
 
 class PEPConfig(Gtk.ApplicationWindow):

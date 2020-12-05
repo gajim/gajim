@@ -45,14 +45,14 @@ from gajim.common.const import Trust
 from gajim.common.const import URI_SCHEMES
 from gajim.common.helpers import to_user_string
 
-from gajim.gtk import util
-from gajim.gtk.util import get_cursor
-from gajim.gtk.util import format_fingerprint
-from gajim.gtk.util import text_to_color
-from gajim.gtk.emoji_data import emoji_pixbufs
-from gajim.gtk.emoji_data import is_emoji
-from gajim.gtk.emoji_data import get_emoji_pixbuf
-from gajim.gtk.htmltextview import HtmlTextView
+from gajim.gui import util
+from gajim.gui.util import get_cursor
+from gajim.gui.util import format_fingerprint
+from gajim.gui.util import text_to_color
+from gajim.gui.emoji_data import emoji_pixbufs
+from gajim.gui.emoji_data import is_emoji
+from gajim.gui.emoji_data import get_emoji_pixbuf
+from gajim.gui.htmltextview import HtmlTextView
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1

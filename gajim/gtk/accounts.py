@@ -26,17 +26,17 @@ from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
 
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.const import Setting
-from gajim.gtk.const import SettingKind
-from gajim.gtk.const import SettingType
-from gajim.gtk.settings import SettingsDialog
-from gajim.gtk.settings import SettingsBox
-from gajim.gtk.util import open_window
+from .dialogs import DialogButton
+from .dialogs import ConfirmationDialog
+from .const import Setting
+from .const import SettingKind
+from .const import SettingType
+from .settings import SettingsDialog
+from .settings import SettingsBox
+from .util import open_window
 
 
-log = logging.getLogger('gajim.gtk.accounts')
+log = logging.getLogger('gajim.gui.accounts')
 
 
 class AccountsWindow(Gtk.ApplicationWindow):

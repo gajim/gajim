@@ -39,7 +39,7 @@ from gajim.common.i18n import _
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import MessageSentEvent
 
-from gajim.gtk.util import open_window
+from gajim.gui.util import open_window
 
 
 log = logging.getLogger('gajim.client')

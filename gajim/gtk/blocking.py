@@ -23,10 +23,10 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.dialogs import HigDialog
+from .util import get_builder
+from .dialogs import HigDialog
 
-log = logging.getLogger('gajim.gtk.blocking_list')
+log = logging.getLogger('gajim.gui.blocking_list')
 
 
 class BlockingList(Gtk.ApplicationWindow):

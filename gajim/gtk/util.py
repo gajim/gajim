@@ -57,14 +57,14 @@ from gajim.common.const import Display
 from gajim.common.const import StyleAttr
 from gajim.common.nec import EventHelper as CommonEventHelper
 
-from gajim.gtk.const import GajimIconSet
-from gajim.gtk.const import WINDOW_MODULES
+from .const import GajimIconSet
+from .const import WINDOW_MODULES
 
 _icon_theme = Gtk.IconTheme.get_default()
 if _icon_theme is not None:
     _icon_theme.append_search_path(str(configpaths.get('ICONS')))
 
-log = logging.getLogger('gajim.gtk.util')
+log = logging.getLogger('gajim.gui.util')
 
 
 class NickCompletionGenerator:

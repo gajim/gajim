@@ -19,8 +19,8 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import get_group_chat_nick
 
-from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.groupchat_nick import NickChooser
+from .groupchat_info import GroupChatInfoScrolled
+from .groupchat_nick import NickChooser
 
 
 class GroupChatInvitation(Gtk.ApplicationWindow):

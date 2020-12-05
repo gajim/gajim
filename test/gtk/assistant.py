@@ -4,8 +4,8 @@ from gi.repository import Gtk
 
 from gajim.common.const import CSSPriority
 
-from gajim.gtk.assistant import Assistant
-from gajim.gtk.assistant import Page
+from gajim.gui.assistant import Assistant
+from gajim.gui.assistant import Page
 
 from test.gtk import util
 util.load_style('gajim.css', CSSPriority.APPLICATION)

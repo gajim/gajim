@@ -26,11 +26,11 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
-from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import find_widget
-from gajim.gtk.util import MultiLineLabel
+from .dataform import DataFormWidget
+from .util import find_widget
+from .util import MultiLineLabel
 
-log = logging.getLogger('gajim.gtk.adhoc')
+log = logging.getLogger('gajim.gui.adhoc')
 
 
 class Page(IntEnum):

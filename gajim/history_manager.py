@@ -89,13 +89,13 @@ if is_standalone():
     app.load_css_config()
 
 from gajim.common import helpers
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.filechoosers import FileSaveDialog
-from gajim.gtk.util import convert_rgb_to_hex
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_app_icon_list
+from gajim.gui.dialogs import ErrorDialog
+from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.filechoosers import FileSaveDialog
+from gajim.gui.util import convert_rgb_to_hex
+from gajim.gui.util import get_builder
+from gajim.gui.util import get_app_icon_list
 # pylint: enable=C0413
 
 @unique

@@ -34,8 +34,8 @@ from gajim.common.helpers import event_filter
 from gajim.chat_control import ChatControl
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.const import ControlType
+from gajim.gui.dialogs import ErrorDialog
+from gajim.gui.const import ControlType
 
 
 class PrivateChatControl(ChatControl):

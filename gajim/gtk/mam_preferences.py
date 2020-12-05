@@ -23,13 +23,13 @@ from nbxmpp.errors import StanzaError
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import EventHelper
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import InformationDialog
+from .util import get_builder
+from .util import EventHelper
+from .dialogs import DialogButton
+from .dialogs import ConfirmationDialog
+from .dialogs import InformationDialog
 
-log = logging.getLogger('gajim.gtk.mam_preferences')
+log = logging.getLogger('gajim.gui.mam_preferences')
 
 
 class MamPreferences(Gtk.ApplicationWindow, EventHelper):

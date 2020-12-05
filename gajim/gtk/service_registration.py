@@ -22,10 +22,10 @@ from nbxmpp.modules import dataforms
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.dataform import FakeDataFormWidget
+from .dataform import DataFormWidget
+from .dataform import FakeDataFormWidget
 
-log = logging.getLogger('gajim.gtk.registration')
+log = logging.getLogger('gajim.gui.registration')
 
 
 class Page(IntEnum):

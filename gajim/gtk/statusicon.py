@@ -29,12 +29,12 @@ from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.helpers import save_roster_position
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import restore_roster_position
-from gajim.gtk.util import open_window
-from gajim.gtk.single_message import SingleMessageWindow
-from gajim.gtk.tooltips import NotificationAreaTooltip
+from .util import get_builder
+from .util import get_icon_name
+from .util import restore_roster_position
+from .util import open_window
+from .single_message import SingleMessageWindow
+from .tooltips import NotificationAreaTooltip
 
 
 class StatusIcon:

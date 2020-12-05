@@ -23,11 +23,11 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.const import MUCUser
 
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import get_builder
+from .dialogs import ErrorDialog
+from .dataform import DataFormWidget
+from .util import get_builder
 
-log = logging.getLogger('gajim.gtk.groupchat_config')
+log = logging.getLogger('gajim.gui.groupchat_config')
 
 
 class GroupchatConfig(Gtk.ApplicationWindow):

@@ -88,29 +88,29 @@ from gajim.common.file_props import FilesProp
 from gajim import roster_window
 from gajim.common import ged
 
-from gajim.gtk.avatar import AvatarStorage
-from gajim.gtk.notification import Notification
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import WarningDialog
-from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import ConfirmationCheckDialog
-from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.dialogs import PassphraseDialog
-from gajim.gtk.filechoosers import FileChooserDialog
-from gajim.gtk.emoji_data import emoji_data
-from gajim.gtk.emoji_data import emoji_ascii_data
-from gajim.gtk.filetransfer import FileTransfersWindow
-from gajim.gtk.filetransfer_progress import FileTransferProgress
-from gajim.gtk.roster_item_exchange import RosterItemExchangeWindow
-from gajim.gtk.util import get_show_in_roster
-from gajim.gtk.util import get_show_in_systray
-from gajim.gtk.util import open_window
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import get_app_windows
-from gajim.gtk.util import get_color_for_account
-from gajim.gtk.const import ControlType
+from gajim.gui.avatar import AvatarStorage
+from gajim.gui.notification import Notification
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ErrorDialog
+from gajim.gui.dialogs import WarningDialog
+from gajim.gui.dialogs import InformationDialog
+from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.dialogs import ConfirmationCheckDialog
+from gajim.gui.dialogs import InputDialog
+from gajim.gui.dialogs import PassphraseDialog
+from gajim.gui.filechoosers import FileChooserDialog
+from gajim.gui.emoji_data import emoji_data
+from gajim.gui.emoji_data import emoji_ascii_data
+from gajim.gui.filetransfer import FileTransfersWindow
+from gajim.gui.filetransfer_progress import FileTransferProgress
+from gajim.gui.roster_item_exchange import RosterItemExchangeWindow
+from gajim.gui.util import get_show_in_roster
+from gajim.gui.util import get_show_in_systray
+from gajim.gui.util import open_window
+from gajim.gui.util import get_app_window
+from gajim.gui.util import get_app_windows
+from gajim.gui.util import get_color_for_account
+from gajim.gui.const import ControlType
 
 
 log = logging.getLogger('gajim.interface')
@@ -2166,11 +2166,11 @@ class Interface:
         self.systray_enabled = False
 
         if not app.is_display(Display.WAYLAND):
-            from gajim.gtk import statusicon
+            from gajim.gui import statusicon
             self.systray = statusicon.StatusIcon()
 
         if sys.platform in ('win32', 'darwin'):
-            from gajim.gtk.emoji_chooser import emoji_chooser
+            from gajim.gui.emoji_chooser import emoji_chooser
             emoji_chooser.load()
 
         self.make_regexps()

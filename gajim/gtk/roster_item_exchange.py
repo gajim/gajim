@@ -18,8 +18,8 @@ from gajim.common import app
 from gajim.common import i18n
 from gajim.common.i18n import _
 
-from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.util import get_builder
+from .dialogs import InformationDialog
+from .util import get_builder
 
 
 class RosterItemExchangeWindow(Gtk.ApplicationWindow):

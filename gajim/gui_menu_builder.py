@@ -26,8 +26,8 @@ from gajim.common.i18n import _
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.const import ControlType
+from gajim.gui.util import get_builder
+from gajim.gui.const import ControlType
 
 
 def build_resources_submenu(contacts, account, action, room_jid=None,

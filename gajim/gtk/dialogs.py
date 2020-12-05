@@ -26,8 +26,8 @@ from gajim.common.i18n import _
 from gajim.common.const import ButtonAction
 from gajim.common.helpers import convert_gio_to_openssl_cert
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_thumbnail_size
+from .util import get_builder
+from .util import get_thumbnail_size
 
 
 class DialogButton(namedtuple('DialogButton', ('response text callback args '

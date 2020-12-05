@@ -28,12 +28,12 @@ from gajim.common.i18n import _
 
 from gajim.gui_menu_builder import SearchMenu
 
-from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import ensure_not_destroyed
-from gajim.gtk.util import find_widget
-from gajim.gtk.util import EventHelper
+from .dataform import DataFormWidget
+from .util import ensure_not_destroyed
+from .util import find_widget
+from .util import EventHelper
 
-log = logging.getLogger('gajim.gtk.search')
+log = logging.getLogger('gajim.gui.search')
 
 
 class Page(IntEnum):

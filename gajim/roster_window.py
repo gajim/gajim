@@ -61,31 +61,31 @@ from gajim.common.dbus import location
 from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
 
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import ConfirmationCheckDialog
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.single_message import SingleMessageWindow
-from gajim.gtk.add_contact import AddNewContactWindow
-from gajim.gtk.service_registration import ServiceRegistration
-from gajim.gtk.discovery import ServiceDiscoveryWindow
-from gajim.gtk.tooltips import RosterTooltip
-from gajim.gtk.adhoc import AdHocCommand
-from gajim.gtk.status_selector import StatusSelector
-from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import resize_window
-from gajim.gtk.util import restore_roster_position
-from gajim.gtk.util import get_metacontact_surface
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import set_urgency_hint
-from gajim.gtk.util import get_activity_icon_name
-from gajim.gtk.util import get_account_activity_icon_name
-from gajim.gtk.util import get_account_mood_icon_name
-from gajim.gtk.util import get_account_tune_icon_name
-from gajim.gtk.util import get_account_location_icon_name
-from gajim.gtk.util import open_window
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.dialogs import ConfirmationCheckDialog
+from gajim.gui.dialogs import ErrorDialog
+from gajim.gui.dialogs import InputDialog
+from gajim.gui.dialogs import InformationDialog
+from gajim.gui.single_message import SingleMessageWindow
+from gajim.gui.add_contact import AddNewContactWindow
+from gajim.gui.service_registration import ServiceRegistration
+from gajim.gui.discovery import ServiceDiscoveryWindow
+from gajim.gui.tooltips import RosterTooltip
+from gajim.gui.adhoc import AdHocCommand
+from gajim.gui.status_selector import StatusSelector
+from gajim.gui.util import get_icon_name
+from gajim.gui.util import resize_window
+from gajim.gui.util import restore_roster_position
+from gajim.gui.util import get_metacontact_surface
+from gajim.gui.util import get_builder
+from gajim.gui.util import set_urgency_hint
+from gajim.gui.util import get_activity_icon_name
+from gajim.gui.util import get_account_activity_icon_name
+from gajim.gui.util import get_account_mood_icon_name
+from gajim.gui.util import get_account_tune_icon_name
+from gajim.gui.util import get_account_location_icon_name
+from gajim.gui.util import open_window
 
 
 log = logging.getLogger('gajim.roster')

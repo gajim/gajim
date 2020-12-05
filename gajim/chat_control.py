@@ -59,18 +59,18 @@ from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import dialogs
 
-from gajim.gtk.gstreamer import create_gtk_widget
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.add_contact import AddNewContactWindow
-from gajim.gtk.util import get_cursor
-from gajim.gtk.util import format_mood
-from gajim.gtk.util import format_activity
-from gajim.gtk.util import format_tune
-from gajim.gtk.util import format_location
-from gajim.gtk.util import get_activity_icon_name
-from gajim.gtk.util import make_href_markup
-from gajim.gtk.const import ControlType
+from gajim.gui.gstreamer import create_gtk_widget
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.add_contact import AddNewContactWindow
+from gajim.gui.util import get_cursor
+from gajim.gui.util import format_mood
+from gajim.gui.util import format_activity
+from gajim.gui.util import format_tune
+from gajim.gui.util import format_location
+from gajim.gui.util import get_activity_icon_name
+from gajim.gui.util import make_href_markup
+from gajim.gui.const import ControlType
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import

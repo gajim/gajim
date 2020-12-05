@@ -29,13 +29,13 @@ from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 
-from gajim.gtk.util import load_pixbuf
-from gajim.gtk.util import text_to_color
-from gajim.gtk.util import scale_with_ratio
-from gajim.gtk.util import get_css_show_class
-from gajim.gtk.util import convert_rgb_string_to_float
+from .util import load_pixbuf
+from .util import text_to_color
+from .util import scale_with_ratio
+from .util import get_css_show_class
+from .util import convert_rgb_string_to_float
 
-log = logging.getLogger('gajim.gtk.avatar')
+log = logging.getLogger('gajim.gui.avatar')
 
 
 def generate_avatar(letters, color, size, scale):

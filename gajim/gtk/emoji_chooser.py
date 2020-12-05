@@ -25,10 +25,10 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import configpaths
 
-from gajim.gtk.util import get_builder
-from gajim.gtk.emoji_data import emoji_data
-from gajim.gtk.emoji_data import emoji_pixbufs
-from gajim.gtk.emoji_data import Emoji
+from .util import get_builder
+from .emoji_data import emoji_data
+from .emoji_data import emoji_pixbufs
+from .emoji_data import Emoji
 
 MODIFIER_MAX_CHILDREN_PER_LINE = 6
 MAX_CHILDREN_PER_LINE = 10

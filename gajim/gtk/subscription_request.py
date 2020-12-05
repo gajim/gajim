@@ -20,8 +20,8 @@ from gajim import vcard
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.add_contact import AddNewContactWindow
-from gajim.gtk.util import get_builder
+from .add_contact import AddNewContactWindow
+from .util import get_builder
 
 
 class SubscriptionRequest(Gtk.ApplicationWindow):

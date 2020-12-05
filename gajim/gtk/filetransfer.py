@@ -41,17 +41,17 @@ from gajim.common.modules.bytestream import (is_transfer_active,
                                              is_transfer_paused,
                                              is_transfer_stopped)
 
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import HigDialog
-from gajim.gtk.dialogs import InformationDialog
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.filechoosers import FileSaveDialog
-from gajim.gtk.filechoosers import FileChooserDialog
-from gajim.gtk.tooltips import FileTransfersTooltip
-from gajim.gtk.util import get_builder
+from .dialogs import DialogButton
+from .dialogs import ConfirmationDialog
+from .dialogs import HigDialog
+from .dialogs import InformationDialog
+from .dialogs import ErrorDialog
+from .filechoosers import FileSaveDialog
+from .filechoosers import FileChooserDialog
+from .tooltips import FileTransfersTooltip
+from .util import get_builder
 
-log = logging.getLogger('gajim.gtk.filetransfer')
+log = logging.getLogger('gajim.gui.filetransfer')
 
 
 @unique

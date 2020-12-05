@@ -24,11 +24,11 @@ from gajim.common.i18n import _
 from gajim.common import passwords
 from gajim.common.helpers import to_user_string
 
-from gajim.gtk.assistant import Assistant
-from gajim.gtk.assistant import Page
-from gajim.gtk.dataform import DataFormWidget
+from .assistant import Assistant
+from .assistant import Page
+from .dataform import DataFormWidget
 
-log = logging.getLogger('gajim.gtk.change_password')
+log = logging.getLogger('gajim.gui.change_password')
 
 
 class ChangePassword(Assistant):

@@ -23,7 +23,7 @@ from gajim.common.helpers import check_soundfile_path
 from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
-from gajim.gtk.util import get_builder
+from .util import get_builder
 
 
 class ManageSounds(Gtk.ApplicationWindow):

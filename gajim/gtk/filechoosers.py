@@ -28,7 +28,7 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.const import Filter
+from .const import Filter
 
 
 def _require_native() -> bool:

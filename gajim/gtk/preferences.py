@@ -31,24 +31,24 @@ from gajim.common.multimedia_helpers import VideoInputManager
 
 from gajim.chat_control_base import ChatControlBase
 
-from gajim.gtk.const import Setting
-from gajim.gtk.const import SettingKind
-from gajim.gtk.const import SettingType
-from gajim.gtk.const import ControlType
-from gajim.gtk.emoji_chooser import emoji_chooser
-from gajim.gtk.settings import SettingsBox
-from gajim.gtk.settings import SettingsDialog
-from gajim.gtk.sidebar_switcher import SideBarSwitcher
-from gajim.gtk.video_preview import VideoPreview
-from gajim.gtk.util import get_available_iconsets
-from gajim.gtk.util import open_window
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import get_builder
+from .const import Setting
+from .const import SettingKind
+from .const import SettingType
+from .const import ControlType
+from .emoji_chooser import emoji_chooser
+from .settings import SettingsBox
+from .settings import SettingsDialog
+from .sidebar_switcher import SideBarSwitcher
+from .video_preview import VideoPreview
+from .util import get_available_iconsets
+from .util import open_window
+from .util import get_app_window
+from .util import get_builder
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
-log = logging.getLogger('gajim.gtk.preferences')
+log = logging.getLogger('gajim.gui.preferences')
 
 
 class Preferences(Gtk.ApplicationWindow):

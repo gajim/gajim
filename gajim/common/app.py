@@ -626,7 +626,7 @@ def prefers_app_menu():
 
 def load_css_config():
     global css_config
-    from gajim.gtk.css_config import CSSConfig
+    from gajim.gui.css_config import CSSConfig
     css_config = CSSConfig()
 
 def set_debug_mode(enable: bool) -> None:

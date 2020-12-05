@@ -23,12 +23,12 @@ from gajim.common.helpers import to_one_line
 from gajim.common.helpers import remove_invalid_xml_chars
 from gajim.common.i18n import _
 
-from gajim.gtk.dialogs import TimeoutWindow
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_activity_icon_name
+from .dialogs import TimeoutWindow
+from .dialogs import DialogButton
+from .dialogs import ConfirmationDialog
+from .dialogs import InputDialog
+from .util import get_builder
+from .util import get_activity_icon_name
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
