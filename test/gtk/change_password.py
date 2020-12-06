@@ -9,6 +9,9 @@ from nbxmpp.modules.dataforms import SimpleDataForm
 
 from gajim.common.const import CSSPriority
 
+from gajim import gui
+gui.init('gtk')
+
 from gajim.gui.change_password import ChangePassword
 
 from test.gtk import util
