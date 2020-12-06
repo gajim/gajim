@@ -9,6 +9,9 @@ from gajim.common import configpaths
 configpaths.init()
 from gajim.common.helpers import AdditionalDataDict
 
+from gajim import gui
+gui.init('gtk')
+
 from gajim.conversation_textview import ConversationTextview
 from gajim.gui_interface import Interface
 

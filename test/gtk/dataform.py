@@ -4,6 +4,9 @@ from gi.repository import Gtk
 import nbxmpp
 from nbxmpp.modules.dataforms import extend_form
 
+from gajim import gui
+gui.init('gtk')
+
 from gajim.gui.dataform import DataFormWidget
 from gajim.common.const import CSSPriority
 from gajim.common import app

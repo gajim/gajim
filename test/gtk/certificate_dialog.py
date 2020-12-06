@@ -4,6 +4,9 @@ from gi.repository import Gtk
 
 import OpenSSL
 
+from gajim import gui
+gui.init('gtk')
+
 from test.gtk import util
 from gajim.common.const import CSSPriority
 from gajim.gui.dialogs import CertificateDialog

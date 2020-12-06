@@ -4,6 +4,9 @@ from gi.repository import Gtk
 
 from gajim.common.const import CSSPriority
 
+from gajim import gui
+gui.init('gtk')
+
 from gajim.gui.assistant import Assistant
 from gajim.gui.assistant import Page
 
