@@ -461,6 +461,7 @@ ADVANCED_SETTINGS = {
         'dev_force_bookmark_2': _('Force Bookmark 2 usage'),
         'gc_notify_on_all_messages_private_default': '',
         'gc_notify_on_all_messages_public_default': '',
+        'metacontacts_enabled': '',
     },
 }
 
