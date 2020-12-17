@@ -19,9 +19,10 @@ from gi.repository import Gtk
 class SideBarSwitcher(Gtk.ListBox):
     def __init__(self):
         Gtk.ListBox.__init__(self)
-        self._stack = None
+        self.set_vexpand(True)
         self.get_style_context().add_class('settings-menu')
         self.connect('row-activated', self._on_row_activated)
+        self._stack = None
 
     def set_stack(self, stack):
         self._stack = stack
