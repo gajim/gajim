@@ -1,5 +1,4 @@
 before_script:
-  - sudo apt-get update -qq && sudo apt-get install -y -qq libtool pkg-config gir1.2-gtk-3.0 gir1.2-soup-2.4 python3-gi python3-cairo
   - sudo apt-get build-dep -y -qq gajim-default-nightly
 
 stages:
