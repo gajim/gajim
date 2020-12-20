@@ -814,14 +814,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if method is None:
             return
 
-        con = app.connections[self.account]
-
         if method == 'httpupload':
-            con.get_module('HTTPUpload').check_file_before_transfer(
-                path,
-                self.encryption,
-                self.contact,
-                groupchat=self._type.is_groupchat)
+            app.interface.send_httpupload(self, path)
 
         else:
             ft = app.interface.instances['file_transfers']

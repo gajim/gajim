@@ -21,21 +21,25 @@ class FileTransfer(Observable):
 
     _state_descriptions = {}  # type: Dict[FTState, str]
 
-    def __init__(self, account, cancel_func=None):
+    def __init__(self, account):
         Observable.__init__(self)
 
         self._account = account
-        self._cancel_func = cancel_func
 
         self._seen = 0
         self.size = 0
 
         self._state = None
         self._error_text = ''
+        self._error_domain = None
 
     @property
     def account(self):
         return self._account
+
+    @property
+    def state(self):
+        return self._state
 
     @property
     def seen(self):
@@ -51,9 +55,13 @@ class FileTransfer(Observable):
     def filename(self):
         raise NotImplementedError
 
-    def cancel(self):
-        if self._cancel_func is not None:
-            self._cancel_func(self)
+    @property
+    def error_text(self):
+        return self._error_text
+
+    @property
+    def error_domain(self):
+        return self._error_domain
 
     def get_state_description(self):
         return self._state_descriptions.get(self._state, '')
@@ -74,10 +82,16 @@ class FileTransfer(Observable):
         self._state = FTState.STARTED
         self.notify('state-changed', FTState.STARTED)
 
-    def set_error(self, text=''):
+    def set_error(self, domain, text=''):
         self._error_text = text
+        self._error_domain = domain
         self._state = FTState.ERROR
         self.notify('state-changed', FTState.ERROR)
+        self.disconnect_signals()
+
+    def set_cancelled(self):
+        self._state = FTState.CANCELLED
+        self.notify('state-changed', FTState.CANCELLED)
         self.disconnect_signals()
 
     def set_in_progress(self):

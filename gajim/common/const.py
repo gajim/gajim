@@ -908,6 +908,7 @@ class FTState(Enum):
     IN_PROGRESS = 'progress'
     FINISHED = 'finished'
     ERROR = 'error'
+    CANCELLED = 'cancelled'
 
     @property
     def is_preparing(self):
@@ -936,6 +937,16 @@ class FTState(Enum):
     @property
     def is_error(self):
         return self == FTState.ERROR
+
+    @property
+    def is_cancelled(self):
+        return self == FTState.CANCELLED
+
+    @property
+    def is_active(self):
+        return not (self.is_error or
+                    self.is_cancelled or
+                    self.is_finished)
 
 
 SASL_ERRORS = {

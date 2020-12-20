@@ -22,6 +22,7 @@ from gajim.common.i18n import _
 
 from .util import get_builder
 from .util import EventHelper
+from .dialogs import ErrorDialog
 
 
 class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):
@@ -57,7 +58,11 @@ class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):
         self._ui.connect_signals(self)
 
     def _on_transfer_state_change(self, transfer, _signal_name, state):
-        if state.is_finished or state.is_error:
+        if state.is_error:
+            ErrorDialog(_('Upload Failed'), transfer.error_text)
+            self.destroy()
+
+        if state.is_finished or state.is_cancelled:
             self.destroy()
             return
 
@@ -73,8 +78,10 @@ class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):
         self.destroy()
 
     def _on_destroy(self, *args):
-        self._transfer.cancel()
-        self._transfer.disconnect(self)
+        if self._transfer.state.is_active:
+            client = app.get_client(self._transfer.account)
+            client.get_module('HTTPUpload').cancel_transfer(self._transfer)
+
         self._transfer = None
         self._destroyed = True
         if self._pulse is not None:

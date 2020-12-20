@@ -77,6 +77,7 @@ from gajim.common import logging_helpers
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.structs import MUCData
+from gajim.common.structs import OutgoingMessage
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.client import Client
@@ -84,9 +85,11 @@ from gajim.common.const import Display
 from gajim.common.const import JingleState
 
 from gajim.common.file_props import FilesProp
+from gajim.common.connection_handlers_events import InformationEvent
 
 from gajim import roster_window
 from gajim.common import ged
+from gajim.common.exceptions import FileError
 
 from gajim.gui.avatar import AvatarStorage
 from gajim.gui.notification import Notification
@@ -849,34 +852,55 @@ class Interface:
         if ask_for_status_message(obj.conn.status, signin=True):
             open_window('StatusChange', status=obj.conn.status)
 
-    @staticmethod
-    def show_httpupload_progress(transfer):
-        FileTransferProgress(transfer)
+    def send_httpupload(self, chat_control, path=None):
+        if path is not None:
+            self._send_httpupload(chat_control, path)
+            return
 
-    def send_httpupload(self, chat_control):
         accept_cb = partial(self.on_file_dialog_ok, chat_control)
         FileChooserDialog(accept_cb,
                           select_multiple=True,
                           transient_for=chat_control.parent_win.window)
 
-    @staticmethod
-    def on_file_dialog_ok(chat_control, paths):
-        con = app.connections[chat_control.account]
+    def on_file_dialog_ok(self, chat_control, paths):
         for path in paths:
-            con.get_module('HTTPUpload').check_file_before_transfer(
+            self._send_httpupload(chat_control, path)
+
+    def _send_httpupload(self, chat_control, path):
+        con = app.connections[chat_control.account]
+        try:
+            transfer = con.get_module('HTTPUpload').make_transfer(
                 path,
                 chat_control.encryption,
                 chat_control.contact,
                 chat_control.is_groupchat)
+        except FileError as error:
+            app.nec.push_incoming_event(InformationEvent(
+                None, dialog_name='open-file-error2', args=error))
+            return
 
-    def encrypt_file(self, transfer, account, callback):
-        transfer.set_encrypting()
-        plugin = app.plugin_manager.encryption_plugins[transfer.encryption]
-        if hasattr(plugin, 'encrypt_file'):
-            plugin.encrypt_file(transfer, account, callback)
-        else:
-            transfer.set_error()
-            self.raise_dialog('httpupload-encryption-not-available')
+        transfer.connect('state-changed',
+                         self._on_http_upload_state_changed)
+        FileTransferProgress(transfer)
+        con.get_module('HTTPUpload').start_transfer(transfer)
+
+    @staticmethod
+    def _on_http_upload_state_changed(transfer, _signal_name, state):
+        if state.is_finished:
+            uri = transfer.get_transformed_uri()
+
+            type_ = 'chat'
+            if transfer.is_groupchat:
+                type_ = 'groupchat'
+
+            message = OutgoingMessage(account=transfer.account,
+                                      contact=transfer.contact,
+                                      message=uri,
+                                      type_=type_,
+                                      oob_url=uri)
+
+            client = app.get_client(transfer.account)
+            client.send_message(message)
 
     @staticmethod
     def handle_event_metacontacts(obj):

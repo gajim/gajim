@@ -45,6 +45,7 @@ import functools
 from collections import defaultdict
 import random
 import weakref
+import inspect
 import string
 from string import Template
 import urllib
@@ -1256,7 +1257,11 @@ class Observable:
                     self._callbacks[signal_name].remove(handler)
 
     def connect(self, signal_name, func):
-        weak_func = weakref.WeakMethod(func)
+        if inspect.ismethod(func):
+            weak_func = weakref.WeakMethod(func)
+        elif inspect.isfunction(func):
+            weak_func = weakref.ref(func)
+
         self._callbacks[signal_name].append(weak_func)
 
     def notify(self, signal_name, *args, **kwargs):

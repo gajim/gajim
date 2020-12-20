@@ -151,3 +151,7 @@ class StanzaMalformed(Exception):
 
 class SendMessageError(Exception):
     pass
+
+
+class FileError(Exception):
+    pass
