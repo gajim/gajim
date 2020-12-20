@@ -59,7 +59,9 @@ class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):
 
     def _on_transfer_state_change(self, transfer, _signal_name, state):
         if state.is_error:
-            ErrorDialog(_('Upload Failed'), transfer.error_text)
+            ErrorDialog(_('Upload Failed'),
+                        transfer.error_text,
+                        transient_for=app.interface.roster.window)
             self.destroy()
 
         if state.is_finished or state.is_cancelled:

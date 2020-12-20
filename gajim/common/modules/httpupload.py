@@ -110,7 +110,7 @@ class HTTPUpload(BaseModule):
                     'maximum allowed file size is: %s') % size
 
         if invalid_file:
-            raise FileError('file-error', msg)
+            raise FileError(msg)
 
         mime = mimetypes.MimeTypes().guess_type(path)[0]
         if not mime:
