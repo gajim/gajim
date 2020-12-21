@@ -15,6 +15,12 @@ run-tests:
     - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git@master
     - pip3 install -I pylint==2.4.4
     - pip3 install -I codespell
+    - pip3 install -I css-parser
+    - pip3 install -I keyring
+    - pip3 install -I packaging
+    - pip3 install -I precis-i18n
+    - pip3 install -I pyOpenSSL
+    - pip3 install -I pycairo
     - mypy -V
     - mypy gajim
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
