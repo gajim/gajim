@@ -20,7 +20,6 @@ run-tests:
     - pip3 install -I packaging
     - pip3 install -I precis-i18n
     - pip3 install -I pyOpenSSL
-    - pip3 install -I pycairo
     - mypy -V
     - mypy gajim
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
