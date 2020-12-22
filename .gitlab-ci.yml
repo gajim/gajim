@@ -38,7 +38,8 @@ run-tests:
 run-appdata:
   stage: test
   script:
-    - appstream-util validate data/org.gajim.Gajim.appdata.xml.in
+    - python3 setup.py build
+    - appstream-util validate build/data/org.gajim.Gajim.appdata.xml
 
 run-build:
   stage: build
