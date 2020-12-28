@@ -66,6 +66,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         self._avatar_selector = None
         self._current_avatar = None
+        self._current_vcard = None
         self._avatar_nick_public = None
 
         # False  - no change to avatar
@@ -75,8 +76,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         self._ui.nickname_entry.set_text(app.nicks[account])
 
-        self._profile = VCardGrid(self.account)
-        self._ui.profile_box.add(self._profile)
+        self._vcard_grid = VCardGrid(self.account)
+        self._ui.profile_box.add(self._vcard_grid)
 
         self.add(self._ui.profile_stack)
         self.show_all()
@@ -134,13 +135,13 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
     def _on_vcard_received(self, task):
         try:
-            vcard = task.finish()
+            self._current_vcard = task.finish()
         except StanzaError as error:
             log.info('Error loading VCard: %s', error)
-            vcard = VCard()
+            self._current_vcard = VCard()
 
         self._load_avatar()
-        self._profile.set_vcard(vcard)
+        self._vcard_grid.set_vcard(self._current_vcard.copy())
         self._ui.profile_stack.set_visible_child_name('profile')
         self._ui.spinner.stop()
 
@@ -169,11 +170,11 @@ class ProfileWindow(Gtk.ApplicationWindow):
     def _on_action(self, action, _param):
         name = action.get_name()
         key = name.split('-')[1]
-        self._profile.add_new_property(key)
+        self._vcard_grid.add_new_property(key)
         GLib.idle_add(scroll_to_end, self._ui.scrolled)
 
     def _on_edit_clicked(self, *args):
-        self._profile.set_editable(True)
+        self._vcard_grid.set_editable(True)
         self._ui.edit_button.hide()
         self._ui.add_entry_button.set_no_show_all(False)
         self._ui.add_entry_button.show_all()
@@ -185,7 +186,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.privacy_button.show()
 
     def _on_cancel_clicked(self, _widget):
-        self._profile.set_editable(False)
+        self._vcard_grid.set_editable(False)
         self._ui.edit_button.show()
         self._ui.add_entry_button.hide()
         self._ui.cancel_button.hide()
@@ -196,6 +197,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.nickname_entry.set_sensitive(False)
         self._ui.avatar_image.set_from_surface(self._current_avatar)
         self._ui.nickname_entry.set_text(app.nicks[self.account])
+        self._vcard_grid.clear()
+        self._vcard_grid.set_vcard(self._current_vcard.copy())
         self._new_avatar = False
 
     def _on_save_clicked(self, _widget):
@@ -210,11 +213,14 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.privacy_button.hide()
         self._ui.nickname_entry.set_sensitive(False)
 
-        self._profile.validate()
+        self._vcard_grid.validate()
+
+        vcard = self._vcard_grid.get_vcard()
+        self._current_vcard = vcard.copy()
 
         con = app.connections[self.account]
         con.get_module('VCard4').set_vcard(
-            self._profile.get_vcard(),
+            self._current_vcard,
             public=self._ui.vcard_access.get_active(),
             callback=self._on_save_finished)
 
@@ -302,6 +308,6 @@ class ProfileWindow(Gtk.ApplicationWindow):
             # TODO Handle error
             return
 
-        self._profile.set_editable(False)
+        self._vcard_grid.set_editable(False)
         self._ui.profile_stack.set_visible_child_name('profile')
         self._ui.spinner.stop()

@@ -180,7 +180,6 @@ class VCardGrid(Gtk.Grid):
         kwargs = DEFAULT_KWARGS[name]
         prop = self._vcard.add_property(name, **kwargs)
         self.add_property(prop, editable=True)
-        #GLib.idle_add(scroll_to_end, self.get_parent())
 
     def add_property(self, prop, editable=False):
         prop_class = self._callbacks.get(prop.name)
@@ -197,6 +196,14 @@ class VCardGrid(Gtk.Grid):
         self.remove_row(prop.row_number)
         self._props.remove(prop)
         self._vcard.remove_property(prop.get_base_property())
+
+    def clear(self):
+        self._vcard = None
+        self._row_count = 0
+        for prop in list(self._props):
+            self.remove_row(prop.row_number)
+
+        self._props = []
 
 
 class DescriptionLabel(Gtk.Label):
