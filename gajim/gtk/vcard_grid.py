@@ -158,6 +158,7 @@ class VCardGrid(Gtk.Grid):
             prop.set_editable(enabled)
 
     def set_vcard(self, vcard):
+        self.clear()
         self._vcard = vcard
 
         for entry in ORDER:
@@ -204,6 +205,9 @@ class VCardGrid(Gtk.Grid):
             self.remove_row(prop.row_number)
 
         self._props = []
+
+    def sort(self):
+        self.set_vcard(self._vcard)
 
 
 class DescriptionLabel(Gtk.Label):

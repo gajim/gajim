@@ -197,7 +197,6 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.nickname_entry.set_sensitive(False)
         self._ui.avatar_image.set_from_surface(self._current_avatar)
         self._ui.nickname_entry.set_text(app.nicks[self.account])
-        self._vcard_grid.clear()
         self._vcard_grid.set_vcard(self._current_vcard.copy())
         self._new_avatar = False
 
@@ -214,6 +213,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.nickname_entry.set_sensitive(False)
 
         self._vcard_grid.validate()
+        self._vcard_grid.sort()
 
         vcard = self._vcard_grid.get_vcard()
         self._current_vcard = vcard.copy()
