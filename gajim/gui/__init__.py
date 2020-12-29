@@ -1,10 +1,11 @@
 
 import sys
-import importlib
+from importlib.abc import MetaPathFinder
+from importlib.util import spec_from_file_location
 from pathlib import Path
 
 
-class GUIFinder(importlib.abc.MetaPathFinder):
+class GUIFinder(MetaPathFinder):
 
     def __init__(self, name, fallback=None):
         self._path = Path(__file__).parent.parent / name
@@ -22,7 +23,7 @@ class GUIFinder(importlib.abc.MetaPathFinder):
         if module_path is None:
             return None
 
-        spec = importlib.util.spec_from_file_location(fullname, module_path)
+        spec = spec_from_file_location(fullname, module_path)
 
         return spec
 
