@@ -660,7 +660,7 @@ class KeyProperty(VCardProperty):
                                          Gtk.PolicyType.AUTOMATIC)
         self._scrolled_window.add(self._value_text_view)
         self._scrolled_window.set_valign(Gtk.Align.CENTER)
-        self._scrolled_window.set_size_request(-1, 200)
+        self._scrolled_window.set_size_request(350, 200)
         self._scrolled_window.get_style_context().add_class('profile-scrolled')
 
         self._copy_button = Gtk.Button.new_from_icon_name('edit-copy-symbolic',
