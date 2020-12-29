@@ -1,15 +1,8 @@
-app-id: org.gajim.Gajim.Devel
+app-id: org.gajim.Gajim
 runtime: org.gnome.Platform
 runtime-version: '3.38'
 sdk: org.gnome.Sdk
-command: gajim-devel
-tags:
-  - devel
-  - development
-  - nightly
-rename-icon: org.gajim.Gajim
-rename-desktop-file: org.gajim.Gajim.desktop
-rename-appdata-file: org.gajim.Gajim.appdata.xml
+command: gajim
 finish-args:
   - --share=ipc
   - --share=network
@@ -35,7 +28,7 @@ finish-args:
   - --env=GI_TYPELIB_PATH=/app/lib/girepository-1.0:/app/plugins/lib/girepository-1.0
 
 add-extensions:
-  org.gajim.Gajim.Devel.Plugin:
+  org.gajim.Gajim.Plugin:
     directory: plugins
     merge-dirs: lib;site-packages
     add-ld-path: lib
@@ -65,11 +58,11 @@ modules:
   - name: python3-packaging
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app packaging-20.4-py2.py3-none-any.whl
+      - pip3 install --prefix=/app packaging-20.8-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/46/19/c5ab91b1b05cfe63cccd5cfc971db9214c6dd6ced54e33c30d5af1d2bc43/packaging-20.4-py2.py3-none-any.whl
-        sha256: 998416ba6962ae7fbd6596850b80e17859a5753ba17c32284f67bfff33784181
+        url: https://files.pythonhosted.org/packages/b1/a7/588bfa063e7763247ab6f7e1d994e331b85e0e7d09f853c59a6eb9696974/packaging-20.8-py2.py3-none-any.whl
+        sha256: 24e0da08660a87484d1602c30bb4902d74816b6985b93de36926f5bc95741858
 
   - name: python3-pycparser
     buildsystem: simple
@@ -86,8 +79,8 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/cb/ae/380e33d621ae301770358eb11a896a34c34f30db188847a561e8e39ee866/cffi-1.14.3.tar.gz
-        sha256: f92f789e4f9241cd262ad7a555ca2c648a98178a953af117ef7fad46aa1d5591
+        url: https://files.pythonhosted.org/packages/66/6a/98e023b3d11537a5521902ac6b50db470c826c682be6a8c661549cb7717a/cffi-1.14.4.tar.gz
+        sha256: 1a465cbe98a7fd391d47dce4b8f7e5b921e6cd805ef421d04f5f66ba8f06086c
 
   - name: python3-asn1crypto
     buildsystem: simple
@@ -113,17 +106,17 @@ modules:
       - python3 setup.py install --prefix=/app
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/94/5c/42de91c7fbdb817b2d9a4e64b067946eb38a4eb36c1a09c96c87a0f86a82/cryptography-3.2.1.tar.gz
-        sha256: d3d5e10be0cf2a12214ddee45c6bd203dab435e3d83b4560c03066eda600bfe3
+        url: https://files.pythonhosted.org/packages/b7/82/f7a4ddc1af185936c1e4fa000942ffa8fb2d98cff26b75afa7b3c63391c4/cryptography-3.3.1.tar.gz
+        sha256: 7e177e4bea2de937a584b13645cab32f25e3d96fc0bc4a4cf99c27dc77682be6
 
   - name: python3-pyopenssl
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app pyOpenSSL-19.1.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app pyOpenSSL-20.0.1-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/9e/de/f8342b68fa9e981d348039954657bdf681b2ab93de27443be51865ffa310/pyOpenSSL-19.1.0-py2.py3-none-any.whl
-        sha256: 621880965a720b8ece2f1b2f54ea2071966ab00e2970ad2ce11d596102063504
+        url: https://files.pythonhosted.org/packages/b2/5e/06351ede29fd4899782ad335c2e02f1f862a887c20a3541f17c3fa1a3525/pyOpenSSL-20.0.1-py2.py3-none-any.whl
+        sha256: 818ae18e06922c066f777a33f1fca45786d85edfe71cd043de6379337a7f274b
 
   - name: python3-dbus-python
     build-options:
@@ -137,20 +130,20 @@ modules:
   - name: python3-jeepney
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app jeepney-0.4.3-py3-none-any.whl
+      - pip3 install --prefix=/app jeepney-0.6.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/79/31/2e8d42727595faf224c6dbb748c32b192e212f25495fe841fb7ce8e168b8/jeepney-0.4.3-py3-none-any.whl
-        sha256: d6c6b49683446d2407d2fe3acb7a368a77ff063f9182fe427da15d622adc24cf
+        url: https://files.pythonhosted.org/packages/51/b0/a6ea72741aaac3f37fb96d195e4ee576a103c4c04e279bc6b446a70960e1/jeepney-0.6.0-py3-none-any.whl
+        sha256: aec56c0eb1691a841795111e184e13cad504f7703b9a64f63020816afa79a8ae
 
   - name: python3-secretstorage
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app SecretStorage-3.1.2-py3-none-any.whl
+      - pip3 install --prefix=/app SecretStorage-3.3.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/c3/50/8a02cad020e949e6d7105f5f4530d41e3febcaa5b73f8f2148aacb3aeba5/SecretStorage-3.1.2-py3-none-any.whl
-        sha256: b5ec909dde94d4ae2fa26af7c089036997030f0cf0a5cb372b4cccabd81c143b
+        url: https://files.pythonhosted.org/packages/63/a2/a6d9099b14eb5dbbb04fb722d2b5322688f8f99b471bdf2097e33efa8091/SecretStorage-3.3.0-py3-none-any.whl
+        sha256: 5c36f6537a523ec5f969ef9fad61c98eb9e017bc601d811e53aa25bece64892f
 
   - name: python3-zipp
     buildsystem: simple
@@ -164,13 +157,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-21.4.0-py3-none-any.whl
+      - pip3 install --prefix=/app keyring-21.7.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/e4/ed/7be20815f248b0d6aae406783c2bee392640924623c4e17b50ca90c7f74d/keyring-21.4.0-py3-none-any.whl
-        sha256: 4e34ea2fdec90c1c43d6610b5a5fafa1b9097db1802948e90caf5763974b8f8d
+        url: https://files.pythonhosted.org/packages/e2/23/c15f403d1993a003a711a37318bbe66096c0802b265047919d5c14a4d693/keyring-21.7.0-py3-none-any.whl
+        sha256: 4c41ce4f6d1ee91d589a346699ef5a94ba3429603ac8f700cc0097644cdd6748
 
   - name: python3-css-parser
     buildsystem: simple
@@ -237,16 +230,9 @@ modules:
     build-commands:
       - pip3 install --prefix=/app .
       - touch /app/share/run-as-flatpak
-      - echo -e '#!/bin/sh\ngajim --gapplication-app-id=org.gajim.Gajim.Devel "$@"' > /app/bin/gajim-devel
-      - chmod 755 /app/bin/gajim-devel
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
-      - type: shell
-        commands:
-          - sed -i "s+<id>org.gajim.Gajim</id>+<id>org.gajim.Gajim.Devel</id>+" data/org.gajim.Gajim.appdata.xml.in
-          - sed -i "s+<name>Gajim</name>+<name>Gajim (Nightly)</name>+" data/org.gajim.Gajim.appdata.xml.in
-          - sed -i "s+Exec=gajim+Exec=gajim-devel+" data/org.gajim.Gajim.desktop.in
-          - mv gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim{.Devel,}.svg
+        branch: gajim_1.3
     post-install:
       - install -d /app/plugins
