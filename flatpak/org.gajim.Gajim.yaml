@@ -220,10 +220,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app .
+      - pip3 install --prefix=/app nbxmpp-2.0.0-py3-none-any.whl
     sources:
-      - type: git
-        url: https://dev.gajim.org/gajim/python-nbxmpp.git
+      - type: file
+        url: https://files.pythonhosted.org/packages/e4/2f/ba0cb89ae369bcbc88ebb4fb9077c243e8212b9d71d559051ff27702f8b5/nbxmpp-2.0.0-py3-none-any.whl
+        sha256: 99cb256ed9da7792d5af20e814ab106819271faa6d8e2c86dc5860dafa648f12
 
   - name: gajim
     buildsystem: simple
