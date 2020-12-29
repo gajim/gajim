@@ -554,9 +554,6 @@ def get_account_mood_icon_name(account):
 
 
 def format_activity(activity, subactivity, text):
-    if activity is None:
-        return None
-
     if subactivity in ACTIVITIES[activity]:
         subactivity = ACTIVITIES[activity][subactivity]
     activity = ACTIVITIES[activity]['category']
@@ -586,8 +583,6 @@ def get_account_activity_icon_name(account):
 
 
 def format_tune(artist, _length, _rating, source, title, _track, _uri):
-    if artist is None and title is None and source is None:
-        return None
     artist = GLib.markup_escape_text(artist or _('Unknown Artist'))
     title = GLib.markup_escape_text(title or _('Unknown Title'))
     source = GLib.markup_escape_text(source or _('Unknown Source'))
