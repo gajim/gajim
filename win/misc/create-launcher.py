@@ -136,7 +136,7 @@ END
 """
 
     def to_ver_list(v):
-        v = v.replace('-dev', '.')
+        v = v.split("-")[0]
         return ",".join(map(str, (list(map(int, v.split("."))) + [0] * 4)[:4]))
 
     file_version_list = to_ver_list(file_version)
