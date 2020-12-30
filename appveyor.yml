@@ -1,3 +1,5 @@
+image: Visual Studio 2019
+
 environment:
   matrix:
     - MSYSTEM: MINGW64
@@ -19,11 +21,6 @@ clone_depth: 1
 
 install:
   - set PATH=C:\msys64\usr\bin;%PATH%
-  # Download new keyring until appveyor updates its installation
-  - bash -lc "curl -O http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
-  - bash -lc "curl -O http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz.sig"
-  - bash -lc "pacman-key --verify msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz.sig"
-  - bash -lc "pacman -U msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz --noconfirm"
   - bash -lc "pacman --needed --noconfirm -Syu"
   # This is needed because without killing all processes -Su will fail
   - ps: Get-Process | Where-Object {$_.path -like 'C:\msys64*'} | Stop-Process
