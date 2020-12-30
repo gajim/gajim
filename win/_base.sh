@@ -94,7 +94,7 @@ function install_deps {
         build_pip install precis-i18n
 
     PIP_REQUIREMENTS="\
-git+https://dev.gajim.org/gajim/python-nbxmpp.git
+git+https://dev.gajim.org/gajim/python-nbxmpp.git@nbxmpp_2.0
 git+https://dev.gajim.org/lovetox/pybonjour-python3.git
 git+https://github.com/enthought/pywin32-ctypes.git
 keyring
