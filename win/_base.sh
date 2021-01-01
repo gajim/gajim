@@ -138,16 +138,16 @@ function install_gajim {
         "${QL_VERSION}" "${MINGW_ROOT}"/bin
 
     # Install plugin installer
-    curl -o "${BUILD_ROOT}"/plugin_installer.zip https://ftp.gajim.org/plugins_master_zip/plugin_installer.zip
+    curl -o "${BUILD_ROOT}"/plugin_installer.zip https://ftp.gajim.org/plugins_1.3_zip/plugin_installer.zip
     mkdir "${PACKAGE_DIR}"/gajim/data/plugins
     7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/plugin_installer.zip
 
     # Install preview plugin
-    curl -o "${BUILD_ROOT}"/url_image_preview.zip https://ftp.gajim.org/plugins_master_zip/url_image_preview.zip
+    curl -o "${BUILD_ROOT}"/url_image_preview.zip https://ftp.gajim.org/plugins_1.3_zip/url_image_preview.zip
     7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/url_image_preview.zip
 
     # Install omemo plugin
-    curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins_master_zip/omemo.zip
+    curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins_1.3_zip/omemo.zip
     7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/omemo.zip
 
     # Install language dicts
