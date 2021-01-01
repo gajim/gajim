@@ -1,12 +1,19 @@
-before_script:
-  - sudo apt-get build-dep -y -qq gajim-default-nightly
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    - when: always
 
 stages:
   - test
   - build
 
-run-tests:
+Code Quality:
   stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - when: always
   script:
     - rm -rf civenv-master
     - virtualenv -p python3 --system-site-packages civenv
@@ -35,21 +42,31 @@ run-tests:
     reports:
       cobertura: coverage.xml
 
-run-appdata:
+appdata.xml:
   stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - when: always
   script:
     - python3 setup.py build
     - appstream-util validate build/data/org.gajim.Gajim.appdata.xml
 
-run-build:
+Linux:
   stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - when: always
+  before_script:
+    - sudo apt-get build-dep -y -qq gajim-default-nightly
   script:
     - python3 setup.py sdist
     - cd dist
     - GF=$(basename gajim-* .tar.gz)
     - gzip -d $GF.tar.gz
     - mkdir -p $GF/gajim/data/plugins/
-    - curl -O https://ftp.gajim.org/plugins_1/plugin_installer.zip
+    - curl -O https://ftp.gajim.org/plugins_master_zip/plugin_installer.zip
     - unzip plugin_installer.zip -d $GF/gajim/data/plugins/
     - rm plugin_installer.zip
     - tar -uf $GF.tar $GF
@@ -60,3 +77,10 @@ run-build:
     expire_in: 1 week
     paths:
       - dist/gajim-*.tar.gz
+
+Windows:
+  stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+  script:
+    - ./scripts/ci/appveyor.py
