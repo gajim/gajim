@@ -7,90 +7,87 @@ msgstr ""
 "Project-Id-Version: Gajim 0.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-22 02:05+0000\n"
-"PO-Revision-Date: 2005-08-18 18:21-0300\n"
-"Last-Translator: Miguel Fonseca <miguelcsf@gmail.com>\n"
-"Language-Team: none\n"
-"Language: \n"
+"PO-Revision-Date: 2020-07-03 20:44+0000\n"
+"Last-Translator: Fabiano Borges de Sousa <fabianobss@gmail.com>\n"
+"Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
+"pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.1.1\n"
 
 #: gajim/chat_control_base.py:147 gajim/gtk/start_chat.py:643
 #: gajim/gtk/groupchat_invite.py:318
-#, fuzzy, python-format
+#, python-format
 msgid "Account: %s"
-msgstr "Contas"
+msgstr "Conta:%s"
 
 #: gajim/chat_control_base.py:570
-#, fuzzy
 msgid "and authenticated"
-msgstr "Usar autenticação"
+msgstr "e autenticado"
 
 #: gajim/chat_control_base.py:574
-#, fuzzy
 msgid "and NOT authenticated"
-msgstr "Usar autenticação"
+msgstr "e NÃO autenticado"
 
 #: gajim/chat_control_base.py:578
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr ""
+msgstr "criptografia %(type)s está ativa %(authenticated)s."
 
 #: gajim/chat_control_base.py:698
 msgid "_Undo"
-msgstr ""
+msgstr "_Desfazer"
 
 #: gajim/chat_control_base.py:706 gajim/conversation_textview.py:507
 msgid "_Clear"
-msgstr ""
+msgstr "_Limpar"
 
 #: gajim/chat_control_base.py:711
 msgid "Paste as quote"
-msgstr ""
+msgstr "Colar como citação"
 
 #: gajim/chat_control_base.py:748
-#, fuzzy
 msgid "Paste Image"
-msgstr "Escolha chave"
+msgstr "Colar Imagem"
 
 #: gajim/chat_control_base.py:749
-#, fuzzy
 msgid "You are trying to paste an image"
-msgstr "Não está ligado ao servidor"
+msgstr "Você está tentando colar uma imagem"
 
 #: gajim/chat_control_base.py:750
-#, fuzzy
 msgid ""
 "Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Tem a certeza de que deseja sair da sala \"%s\"?"
+msgstr ""
+"Tem certeza de que deseja colar a imagem da sua área de transferência na "
+"janela de bate-papo?"
 
 #: gajim/chat_control_base.py:752 gajim/groupchat_control.py:1736
 #: gajim/roster_window.py:2837 gajim/roster_window.py:4047
 #: gajim/message_window.py:364
-#, fuzzy
 msgid "_Do not ask me again"
-msgstr "_Não voltar a perguntar"
+msgstr "_Não perguntar novamente"
 
 #: gajim/chat_control_base.py:755
 msgid "_Paste"
-msgstr ""
+msgstr "_Colar"
 
 #: gajim/chat_control_base.py:1310 gajim/gtk/accounts.py:310
-#, fuzzy
 msgid "Privacy"
-msgstr "Iniciar Conversa"
+msgstr "Privacidade"
 
 #: gajim/chat_control_base.py:1311
-#, fuzzy
 msgid "Warning"
-msgstr "Banindo %s"
+msgstr "Aviso"
 
 #: gajim/chat_control_base.py:1312
 #, python-format
 msgid ""
 "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 msgstr ""
+"Se você enviar um arquivo para <b>%s</b>, seu endereço XMPP será revelado."
 
 #: gajim/chat_control_base.py:1317
 msgid "_Continue"
@@ -105,58 +102,51 @@ msgid "?OS:Unknown"
 msgstr "?SO:Desconhecido"
 
 #: gajim/vcard.py:298 gajim/vcard.py:301
-#, fuzzy
 msgid "?Time:Unknown"
-msgstr "?Cliente:Desconhecido"
+msgstr "?Tempo:Desconhecido"
 
 #: gajim/vcard.py:352
 msgid "?Role in Group Chat:<b>Role:</b>"
-msgstr ""
+msgstr "?Função no Chat em Grupo:<b>Função:</b>"
 
 #: gajim/vcard.py:356
-#, fuzzy
 msgid "<b>Affiliation:</b>"
-msgstr "<b>Aplicações</b>"
+msgstr "<b>Filiação:</b>"
 
 #: gajim/vcard.py:363
-#, fuzzy
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in their presence"
 msgstr ""
-"Este contacto está interessado/a na suas informações de presença, mas você "
+"Este contato está interessado/a em suas informações de presença, mas você "
 "não está interessado na dele/a"
 
 #: gajim/vcard.py:365
-#, fuzzy
 msgid ""
 "You are interested in the contact's presence information, but it is not "
 "mutual"
 msgstr ""
-"Está interessado nas informações de presença do contacto, mas ele/ela não "
-"está na sua"
+"Você está interessado nas informações de presença do contato, mas, isso não "
+"é mútuo"
 
 #: gajim/vcard.py:367
-#, fuzzy
 msgid "The contact and you want to exchange presence information"
-msgstr ""
-"Você e o contacto estão interessados nas informações de presença um do outro"
+msgstr "Você e o contato desejam trocar informações de presença"
 
 #: gajim/vcard.py:369
-#, fuzzy
 msgid ""
 "You and the contact have a mutual disinterest in each-others presence "
 "information"
 msgstr ""
-"Você e o contacto estão interessados nas informações de presença um do outro"
+"Você e o contato não possuem interessem em trocar informações de presença"
 
 #: gajim/vcard.py:375
 msgid "You are waiting contact's answer about your subscription request"
-msgstr "Está à espera da resposta do contacto sobre o seu pedido de subscrição"
+msgstr "Esperando resposta do contato sobre o seu pedido de subscrição"
 
 #: gajim/vcard.py:377
 msgid "There is no pending subscription request."
-msgstr ""
+msgstr "Não existem pedidos pendentes de subscrição."
 
 #: gajim/vcard.py:382 gajim/vcard.py:432 gajim/vcard.py:531
 msgid " resource with priority "
@@ -172,61 +162,52 @@ msgstr " recurso com prioridade "
 #: gajim/common/helpers.py:212 gajim/gtk/add_contact.py:320
 #: gajim/gtk/subscription_request.py:63 gajim/gtk/subscription_request.py:95
 #: gajim/gtk/roster_item_exchange.py:112
-#, fuzzy
 msgid "Not in contact list"
-msgstr "Mostrar Contactos _Offline"
+msgstr "Não está na lista de contatos"
 
 #: gajim/gui_menu_builder.py:359
-#, fuzzy
 msgid "I would like to add you to my contact list"
-msgstr "Gostaria de o adicionar à minha lista de contactos."
+msgstr "Gostaria de o adicioná-lo a minha lista de contatos."
 
 #: gajim/gui_menu_builder.py:437
-#, fuzzy
 msgid "Send Single _Message…"
-msgstr "Enviar _Mensagem Simples"
+msgstr "Enviar _Mensagem única…"
 
 #: gajim/gui_menu_builder.py:452
-#, fuzzy
 msgid "E_xecute Command…"
-msgstr "comando"
+msgstr "E_xecutar Comando…"
 
 #: gajim/gui_menu_builder.py:460
-#, fuzzy
 msgid "_Manage Transport"
-msgstr "Transportes"
+msgstr "_Gerenciar Transporte"
 
 #: gajim/gui_menu_builder.py:466
-#, fuzzy
 msgid "_Modify Transport"
-msgstr "Transportes"
+msgstr "_Modificar Transporte"
 
 #: gajim/gui_menu_builder.py:473 gajim/roster_window.py:4915
-#, fuzzy
 msgid "_Rename…"
-msgstr "_Renomear"
+msgstr "_Renomear…"
 
 #: gajim/gui_menu_builder.py:484 gajim/roster_window.py:4931
 #: gajim/roster_window.py:5046 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/contact_context_menu.ui:143
 msgid "_Unblock"
-msgstr ""
+msgstr "_Desbloquear"
 
 #: gajim/gui_menu_builder.py:487 gajim/roster_window.py:4936
 #: gajim/roster_window.py:5050 gajim/data/gui/contact_context_menu.ui:151
 msgid "_Block"
-msgstr ""
+msgstr "_Bloquear"
 
 #: gajim/gui_menu_builder.py:495 gajim/roster_window.py:4943
 #: gajim/data/gui/contact_context_menu.ui:181
-#, fuzzy
 msgid "Remo_ve"
-msgstr "_Remover"
+msgstr "Remo_ver"
 
 #: gajim/gui_menu_builder.py:505 gajim/data/gui/contact_context_menu.ui:198
-#, fuzzy
 msgid "_Information"
-msgstr "Informações do Contacto"
+msgstr "_Informação"
 
 #: gajim/gui_menu_builder.py:518
 #, fuzzy
