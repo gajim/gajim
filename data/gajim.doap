@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="https://gajim.org/files/doap-style.xsl" type="text/xsl"?>
-<rdf:RDF xmlns="http://usefulinc.com/ns/doap#"
-         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Project xmlns="http://usefulinc.com/ns/doap#"
          xmlns:xmpp="https://linkmauve.fr/ns/xmpp-doap#"
-         xmlns:foaf="http://xmlns.com/foaf/0.1/">
-  <Project>
-
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:schema="https://schema.org/">
     <name>Gajim</name>
     <short-name>gajim</short-name>
 
@@ -19,7 +18,7 @@
 
     <homepage rdf:resource="https://gajim.org/"/>
     <download-page rdf:resource="https://gajim.org/download"/>
-    <xmpp:documentation rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home"/>
+    <schema:documentation rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home"/>
     <wiki rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home"/>
     <bug-database rdf:resource="https://dev.gajim.org/gajim/gajim/issues"/>
     <developer-forum rdf:resource="xmpp:gajim@conference.gajim.org?join"/>
@@ -27,8 +26,8 @@
     <category rdf:resource="https://linkmauve.fr/ns/xmpp-doap#category-client"/>
     <category rdf:resource="http://api.gnome.org/doap-extensions#apps"/>
     <license rdf:resource="http://usefulinc.com/doap/licenses/gplv3"/>
-    <xmpp:logo rdf:resource="https://gajim.org/img/gajim-logo.svg"/>
-    <xmpp:screenshot rdf:resource="https://gajim.org/img/screenshots/single-window-mode.png"/>
+    <schema:logo rdf:resource="https://gajim.org/img/gajim-logo.svg"/>
+    <schema:screenshot rdf:resource="https://gajim.org/img/screenshots/single-window-mode.png"/>
 
     <programming-language>Python</programming-language>
     <os>Linux</os>
