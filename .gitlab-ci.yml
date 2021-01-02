@@ -30,7 +30,7 @@ Code Quality:
     - pip3 install -I pyOpenSSL
     - mypy -V
     - mypy gajim
-    - scripts/dev/pylint-ci.sh --jobs=2 gajim
+    - scripts/ci/pylint.sh --jobs=2 gajim
     - coverage run --source=gajim -m unittest discover -s test/no_gui -v
     - coverage report -mi
     - coverage xml -i
@@ -58,19 +58,8 @@ Linux:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: never
     - when: always
-  before_script:
-    - sudo apt-get build-dep -y -qq gajim-default-nightly
   script:
-    - python3 setup.py sdist
-    - cd dist
-    - GF=$(basename gajim-* .tar.gz)
-    - gzip -d $GF.tar.gz
-    - mkdir -p $GF/gajim/data/plugins/
-    - curl -O https://ftp.gajim.org/plugins_master_zip/plugin_installer.zip
-    - unzip plugin_installer.zip -d $GF/gajim/data/plugins/
-    - rm plugin_installer.zip
-    - tar -uf $GF.tar $GF
-    - gzip $GF.tar
+    - ./scripts/ci/sdist.py
 
   artifacts:
     name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
