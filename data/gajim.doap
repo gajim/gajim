@@ -17,12 +17,18 @@
       Gajim integrates well with your other devices: simply continue conversations on your mobile device.
     </description>
 
-    <homepage rdf:resource="https://gajim.org/" />
-    <wiki rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home" />
-    <bug-database rdf:resource="https://dev.gajim.org/gajim/gajim/issues" />
-    <category rdf:resource="https://linkmauve.fr/ns/xmpp-doap#category-client" />
-    <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
-    <license rdf:resource="http://usefulinc.com/doap/licenses/gplv3" />
+    <homepage rdf:resource="https://gajim.org/"/>
+    <download-page rdf:resource="https://gajim.org/download"/>
+    <xmpp:documentation rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home"/>
+    <wiki rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home"/>
+    <bug-database rdf:resource="https://dev.gajim.org/gajim/gajim/issues"/>
+    <developer-forum rdf:resource="xmpp:gajim@conference.gajim.org?join"/>
+    <support-forum rdf:resource="xmpp:gajim@conference.gajim.org?join"/>
+    <category rdf:resource="https://linkmauve.fr/ns/xmpp-doap#category-client"/>
+    <category rdf:resource="http://api.gnome.org/doap-extensions#apps"/>
+    <license rdf:resource="http://usefulinc.com/doap/licenses/gplv3"/>
+    <xmpp:logo rdf:resource="https://gajim.org/img/gajim-logo.svg"/>
+    <xmpp:screenshot rdf:resource="https://gajim.org/img/screenshots/single-window-mode.png"/>
 
     <programming-language>Python</programming-language>
     <os>Linux</os>
