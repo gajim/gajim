@@ -172,6 +172,9 @@ try:
         # find the translation
         # Use LANGUAGE instead of LANG, LANG sets LC_ALL and thus
         # doesn't retain other region settings like LC_TIME
+
+        # See https://gitlab.gnome.org/GNOME/pygobject/-/issues/442
+        LANG = 'en'
         os.environ['LANGUAGE'] = LANG
 except Exception as error:
     print('Failed to determine default language', file=sys.stderr)
