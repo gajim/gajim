@@ -4,5 +4,5 @@ include:
   file: '.gajim-ci.yml'
 
 variables:
-  NBXMPP_BRANCH: nbxmpp_2.0
-  PLUGINS_BRANCH: gajim_1.3
+  NBXMPP_BRANCH: master
+  PLUGINS_BRANCH: master
