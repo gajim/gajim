@@ -16,7 +16,6 @@
 
 
 from nbxmpp.errors import is_error
-from nbxmpp.modules.util import raise_if_error
 
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
@@ -42,7 +41,10 @@ class Delimiter(BaseModule):
         delimiter = yield self.request_delimiter()
         if is_error(delimiter) or delimiter is None:
             result = yield self.set_delimiter(self.delimiter)
-            raise_if_error(result)
+            if is_error(result):
+                self._con.connect_machine()
+                return
+
             delimiter = self.delimiter
 
         self.delimiter = delimiter
