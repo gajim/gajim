@@ -583,7 +583,7 @@ class TextEntryProperty(VCardProperty):
     def _on_text_changed(self, entry, _param):
         text = entry.get_text()
         if self._prop.name == 'org':
-            self._prop.values[0] = text
+            self._prop.values = [text]
         else:
             self._prop.value = text
         self._value_label.set_value(text)
