@@ -3,10 +3,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2020-12-31 15:56+0000\n"
-"Last-Translator: Yann Leboulanger <asterix@lagaule.org>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
-">\n"
+"PO-Revision-Date: 2021-01-05 13:31+0000\n"
+"Last-Translator: pitchum <pitchum@gramaton.org>\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/1-3/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3601,9 +3600,8 @@ msgid "Remove Setting"
 msgstr "Supprimer paramètre"
 
 #: gajim/gtk/filetransfer_progress.py:62
-#, fuzzy
 msgid "Upload Failed"
-msgstr "Téléverser (via HTTP Upload)"
+msgstr "Échec du téléversement"
 
 #: gajim/gtk/filetransfer_progress.py:113
 #, python-format
@@ -5512,9 +5510,8 @@ msgid "Birthday"
 msgstr "Date de Naissance"
 
 #: gajim/gtk/profile.py:30 gajim/gtk/vcard_grid.py:36
-#, fuzzy
 msgid "Gender"
-msgstr "Expéditeur : "
+msgstr "Genre"
 
 #: gajim/gtk/profile.py:31 gajim/data/gui/groupchat_info_scrolled.ui:16
 msgid "Address"
@@ -5528,32 +5525,29 @@ msgstr "Numéro de téléphone"
 
 #: gajim/gtk/profile.py:35
 msgid "?profile:Organisation"
-msgstr ""
+msgstr "Organisation"
 
 #: gajim/gtk/profile.py:36 gajim/gtk/vcard_grid.py:41
 msgid "?profile:Title"
-msgstr ""
+msgstr "Titre"
 
 #: gajim/gtk/profile.py:37 gajim/gtk/vcard_grid.py:42
-#, fuzzy
 msgid "?profile:Role"
-msgstr "Profil"
+msgstr "Rôle"
 
 #: gajim/gtk/profile.py:38 gajim/gtk/vcard_grid.py:45
-#, fuzzy
 msgid "URL"
-msgstr "URL :"
+msgstr "URL"
 
 #: gajim/gtk/profile.py:39 gajim/gtk/vcard_grid.py:46
 #, fuzzy
 msgid "?profile:Key"
-msgstr "Profil"
+msgstr "Clef"
 
 #: gajim/gtk/profile.py:299 gajim/gtk/profile.py:301
 #: gajim/data/gui/profile.ui:98 gajim/data/gui/profile.ui:110
-#, fuzzy
 msgid "Everyone"
-msgstr "Tout"
+msgstr "Tout le monde"
 
 #: gajim/gtk/profile.py:299 gajim/gtk/profile.py:301
 #: gajim/data/gui/shortcuts_window.ui:108 gajim/data/gui/groupchat_invite.ui:83
@@ -5623,32 +5617,28 @@ msgid "Registration failed"
 msgstr "L'inscription a échoué"
 
 #: gajim/gtk/vcard_grid.py:37
-#, fuzzy
 msgid "?profile:Address"
 msgstr "Adresse"
 
 #: gajim/gtk/vcard_grid.py:40
-#, fuzzy
 msgid "IM Address"
-msgstr "Adresse"
+msgstr "Adresse de messagerie instantanée"
 
 #: gajim/gtk/vcard_grid.py:43
-#, fuzzy
 msgid "Organisation"
-msgstr "Organisation (O)"
+msgstr "Organisation"
 
 #: gajim/gtk/vcard_grid.py:44
-#, fuzzy
 msgid "?profile:Note"
-msgstr "Profil"
+msgstr "Note"
 
 #: gajim/gtk/vcard_grid.py:51
 msgid "Your public key or authentication certificate"
-msgstr ""
+msgstr "Votre clef publique ou certificat d'authentification"
 
 #: gajim/gtk/vcard_grid.py:59
 msgid "Post Office Box"
-msgstr ""
+msgstr "Boîte postale"
 
 #: gajim/gtk/vcard_grid.py:60 gajim/data/gui/vcard_information_window.ui:489
 #: gajim/data/gui/vcard_information_window.ui:1179
@@ -5658,7 +5648,7 @@ msgstr "Rue"
 #: gajim/gtk/vcard_grid.py:61
 #, fuzzy
 msgid "Extended Address"
-msgstr "Adresse 2"
+msgstr "Complément d'adresse"
 
 #: gajim/gtk/vcard_grid.py:62 gajim/data/gui/vcard_information_window.ui:505
 #: gajim/data/gui/vcard_information_window.ui:1195
@@ -5682,25 +5672,23 @@ msgstr "Pays"
 
 #: gajim/gtk/vcard_grid.py:111
 msgid "Male"
-msgstr ""
+msgstr "Homme"
 
 #: gajim/gtk/vcard_grid.py:112
 msgid "Female"
-msgstr ""
+msgstr "Femme"
 
 #: gajim/gtk/vcard_grid.py:113
 msgid "?Gender:Other"
-msgstr ""
+msgstr "Autre"
 
 #: gajim/gtk/vcard_grid.py:114
-#, fuzzy
 msgid "?Gender:None"
-msgstr "Expéditeur : "
+msgstr "Aucun"
 
 #: gajim/gtk/vcard_grid.py:121 gajim/gtk/vcard_grid.py:428
-#, fuzzy
 msgid "Home"
-msgstr "Site perso"
+msgstr "Domicile"
 
 #: gajim/gtk/vcard_grid.py:122 gajim/gtk/vcard_grid.py:429
 #: gajim/data/gui/vcard_information_window.ui:1452
@@ -5708,9 +5696,8 @@ msgid "Work"
 msgstr "Emploi"
 
 #: gajim/gtk/vcard_grid.py:598
-#, fuzzy
 msgid "YYYY-MM-DD"
-msgstr "Format : AAAA-MM-JJ"
+msgstr "AAAA-MM-JJ"
 
 #: gajim/gtk/adhoc.py:91
 msgid "Finish"
@@ -8854,42 +8841,43 @@ msgid "_Account"
 msgstr "_Comptes"
 
 #: gajim/data/gui/profile.ui:33
-#, fuzzy
 msgid "Contact Infos"
-msgstr "Obtenir les informations du contact"
+msgstr "Informations du contact"
 
 #: gajim/data/gui/profile.ui:45
-#, fuzzy
 msgid "Picture and Name"
-msgstr "Image à utiliser"
+msgstr "Image et nom"
 
 #: gajim/data/gui/profile.ui:57
+#, fuzzy
 msgid "Make your profile visible for everyone or just for your contacts."
 msgstr ""
+"Rendre votre profil visible par tout le monde ou uniquement par vos contacts."
 
 #: gajim/data/gui/profile.ui:179
 msgid "Remove your profile picture"
-msgstr ""
+msgstr "Retirer l'image de votre profil"
 
 #: gajim/data/gui/profile.ui:198
-#, fuzzy
 msgid "Change your profile picture"
-msgstr "Changer votre surnom (Ctrl+N)"
+msgstr "Changer l'image de votre profil"
 
 #: gajim/data/gui/profile.ui:229
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
 msgstr ""
+"Saisissez votre pseudonyme. C'est votre nom tel qu'il sera présenté à vos "
+"contacts."
 
 #: gajim/data/gui/profile.ui:298
 #, fuzzy
 msgid "Add Entry"
-msgstr "Article :"
+msgstr "Ajouter une entrée"
 
 #: gajim/data/gui/profile.ui:410
 #, fuzzy
 msgid "Update"
-msgstr "_Mettre à Jour Maintenant"
+msgstr "Mettre à jour"
 
 #: gajim/data/gui/manage_proxies.ui:12
 msgctxt "proxy configuration"
@@ -10141,8 +10129,9 @@ msgid ""
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
 msgstr ""
-"Discutez avec vos amis ou votre famille, partagez facilement des photos et "
-"des pensées, ou discutez des nouvelles avec vos groupes."
+"Gajim se veut être un client XMPP facile à utiliser et complet. Discutez "
+"simplement avec vos amis ou votre famille, partagez facilement des photos et "
+"des pensées ou discutez des actualités avec vos groupes."
 
 #: data/org.gajim.Gajim.appdata.xml.in:14
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
