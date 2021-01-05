@@ -787,7 +787,7 @@ class ConnectionPage(GenericSettingPage):
             Setting(SettingKind.POPOVER, _('Proxy'),
                     SettingType.ACCOUNT_CONFIG, 'proxy', name='proxy',
                     props={'entries': self._get_proxies(),
-                           'default-text': _('No Proxy'),
+                           'default-text': _('System'),
                            'button-icon-name': 'preferences-system-symbolic',
                            'button-callback': self._on_proxy_edit}),
 
