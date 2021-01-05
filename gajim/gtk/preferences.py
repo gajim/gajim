@@ -983,7 +983,7 @@ class Miscellaneous(PreferenceBox):
                     'global_proxy',
                     name='global_proxy',
                     props={'entries': self._get_proxies(),
-                           'default-text': _('No Proxy'),
+                           'default-text': _('System'),
                            'button-icon-name': 'preferences-system-symbolic',
                            'button-callback': self._on_proxy_edit}),
 
