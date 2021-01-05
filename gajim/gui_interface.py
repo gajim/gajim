@@ -73,7 +73,6 @@ from gajim.common import proxy65_manager
 from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
-from gajim.common import logging_helpers
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.structs import MUCData
@@ -2125,9 +2124,6 @@ class Interface:
         app.load_css_config()
 
         app.storage.archive.reset_shown_unread_messages()
-        # override logging settings from config (don't take care of '-q' option)
-        if app.settings.get('verbose'):
-            logging_helpers.set_verbose()
 
         for account in app.settings.get_accounts():
             if app.settings.get_account_setting(account, 'is_zeroconf'):

@@ -65,7 +65,6 @@ class Config:
 
     __options = ({
         # name: [ type, default_value, help_string, restart ]
-        'verbose': [opt_bool, False, '', True],
         'autopopup': [opt_bool, False],
         'autopopupaway': [opt_bool, False],
         'sounddnd': [opt_bool, False, _('Play sound even when being busy.')],
