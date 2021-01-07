@@ -36,7 +36,7 @@ MENU_DICT = {
     'title': Q_('?profile:Title'),
     'role': Q_('?profile:Role'),
     'url': _('URL'),
-    'key': Q_('?profile:Key'),
+    'key': Q_('?profile:Public Encryption Key'),
 }
 
 

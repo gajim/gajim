@@ -43,7 +43,7 @@ LABEL_DICT = {
     'org': _('Organisation'),
     'note': Q_('?profile:Note'),
     'url': _('URL'),
-    'key': Q_('?profile:Key'),
+    'key': Q_('?profile:Public Encryption Key'),
 }
 
 
