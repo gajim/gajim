@@ -58,8 +58,11 @@ class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):
         self._ui.connect_signals(self)
 
     def _on_transfer_state_change(self, transfer, _signal_name, state):
+        if self._destroyed:
+            return
+
         if state.is_error:
-            ErrorDialog(_('Upload Failed'),
+            ErrorDialog(_('Error'),
                         transfer.error_text,
                         transient_for=app.interface.roster.window)
             self.destroy()
@@ -80,12 +83,12 @@ class FileTransferProgress(Gtk.ApplicationWindow, EventHelper):
         self.destroy()
 
     def _on_destroy(self, *args):
+        self._destroyed = True
+
         if self._transfer.state.is_active:
-            client = app.get_client(self._transfer.account)
-            client.get_module('HTTPUpload').cancel_transfer(self._transfer)
+            self._transfer.cancel()
 
         self._transfer = None
-        self._destroyed = True
         if self._pulse is not None:
             GLib.source_remove(self._pulse)
 

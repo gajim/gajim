@@ -878,6 +878,7 @@ class Interface:
                 None, dialog_name='open-file-error2', args=error))
             return
 
+        transfer.connect('cancel', self._on_cancel_upload)
         transfer.connect('state-changed',
                          self._on_http_upload_state_changed)
         FileTransferProgress(transfer)
@@ -900,6 +901,11 @@ class Interface:
 
             client = app.get_client(transfer.account)
             client.send_message(message)
+
+    @staticmethod
+    def _on_cancel_upload(transfer, _signal_name):
+        client = app.get_client(transfer.account)
+        client.get_module('HTTPUpload').cancel_transfer(transfer)
 
     @staticmethod
     def handle_event_metacontacts(obj):
