@@ -46,6 +46,7 @@ from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import Pango
 
+import gajim.gui
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.i18n import _
@@ -54,6 +55,8 @@ from gajim.common.const import StyleAttr
 from gajim.common.const import JIDConstant
 from gajim.common.const import KindConstant
 from gajim.common.const import ShowConstant
+from gajim.common.settings import Settings
+
 
 def is_standalone():
     # Determine if we are in standalone mode
@@ -64,7 +67,15 @@ def is_standalone():
     return False
 
 
+def init_gtk():
+    gajim.gui.init('gtk')
+    from gajim.gui import exception
+    exception.init()
+
+
 if is_standalone():
+    init_gtk()
+
     try:
         shortargs = 'hvsc:l:p:'
         longargs = 'help verbose separate config-path= loglevel= profile='
@@ -86,6 +97,8 @@ if is_standalone():
             configpaths.set_config_root(a)
 
     configpaths.init()
+    app.settings = Settings()
+    app.settings.init()
     app.load_css_config()
 
 from gajim.common import helpers
