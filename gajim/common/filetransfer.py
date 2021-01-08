@@ -105,3 +105,6 @@ class FileTransfer(Observable):
 
     def update_progress(self):
         self.notify('progress')
+
+    def cancel(self):
+        self.notify('cancel')
