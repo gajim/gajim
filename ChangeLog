@@ -1,4 +1,20 @@
-Gajim 1.3.0-beta1 (TBA)
+Gajim 1.3.0-beta2 (10 January 2020)
+
+  Changes
+
+  * Use direct messages in non-anonymous group chats instead of PM
+
+  Bug fixes
+
+  * Fix a problem with the Gajim symbolic icon when opening the Accounts dialog
+  * Make Gajim connect even if the Private XML Storage extension is not available on the server
+  * #10235 Roster tooltip error
+  * #10342 Add Workaround for UnicodeDecodingError popups
+  * #10377 Profile: Make adding a Organisation entry work
+  * #10384 Make the HistoryManager work again in standalone mode
+
+
+Gajim 1.3.0-beta1 (29 December 2020)
 
   New
 
