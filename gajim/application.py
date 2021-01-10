@@ -146,7 +146,8 @@ class GajimApplication(Gtk.Application):
             0,
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
-            _('Sets an enviroment variable so GLib debug messages are printed'))
+            _('Sets an environment variable so '
+              'GLib debug messages are printed'))
 
         self.add_main_option(
             'show-next-pending-event',
