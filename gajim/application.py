@@ -33,6 +33,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import time
 import sys
 from datetime import datetime
@@ -139,6 +140,13 @@ class GajimApplication(Gtk.Application):
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
             _('Open IPython shell'))
+
+        self.add_main_option(
+            'gdebug',
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Sets an enviroment variable so GLib debug messages are printed'))
 
         self.add_main_option(
             'show-next-pending-event',
@@ -345,6 +353,9 @@ class GajimApplication(Gtk.Application):
             configpaths.set_config_root(path)
 
         configpaths.init()
+
+        if options.contains('gdebug'):
+            os.environ['G_MESSAGES_DEBUG'] = 'all'
 
         if app.get_debug_mode():
             # Redirect has to happen before logging init
