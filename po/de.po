@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gajim 0.13\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-01-10 23:38+0000\n"
-"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
+"PO-Revision-Date: 2021-01-13 06:42+0000\n"
+"Last-Translator: Max Muster <c@zp1.net>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/1-3/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -5545,7 +5545,7 @@ msgstr "Telefonnr."
 
 #: gajim/gtk/profile.py:35
 msgid "?profile:Organisation"
-msgstr "Organisation"
+msgstr "?Profil:Organisation"
 
 #: gajim/gtk/profile.py:36 gajim/gtk/vcard_grid.py:41
 msgid "?profile:Title"
@@ -5649,7 +5649,7 @@ msgstr "Organisation"
 
 #: gajim/gtk/vcard_grid.py:44
 msgid "?profile:Note"
-msgstr "Notiz"
+msgstr "?profile:Notiz"
 
 #: gajim/gtk/vcard_grid.py:51
 msgid "Your public key or authentication certificate"
@@ -5698,11 +5698,11 @@ msgstr "Weiblich"
 
 #: gajim/gtk/vcard_grid.py:113
 msgid "?Gender:Other"
-msgstr "Andere"
+msgstr "?Geschlecht:Andere"
 
 #: gajim/gtk/vcard_grid.py:114
 msgid "?Gender:None"
-msgstr "Keins"
+msgstr "?Geschlecht:Keins"
 
 #: gajim/gtk/vcard_grid.py:121 gajim/gtk/vcard_grid.py:428
 msgid "Home"
