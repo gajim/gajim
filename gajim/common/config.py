@@ -231,7 +231,7 @@ class Config:
         'send_chatstate_default': [opt_str, 'composing_only', _('Chat state notifications that are sent to contacts. Possible values: all, composing_only, disabled')],
         'send_chatstate_muc_default': [opt_str, 'composing_only', _('Chat state notifications that are sent to the group chat. Possible values: \'all\', \'composing_only\', \'disabled\'')],
         'muclumbus_api_jid': [opt_str, 'rodrigo.de.mucobedo@dreckshal.de'],
-        'muclumbus_api_http_uri': [opt_str, 'https://search.jabbercat.org/api/1.0/search'],
+        'muclumbus_api_http_uri': [opt_str, 'https://search.jabber.network/api/1.0/search'],
         'muclumbus_api_pref': [opt_str, 'http', _('API Preferences. Possible values: \'http\', \'iq\'')],
         'command_system_execute': [opt_bool, False, _('If enabled, Gajim will execute commands (/show, /sh, /execute, /exec).')],
         'groupchat_roster_width': [opt_int, 210, _('Width of group chat roster in pixel')],
