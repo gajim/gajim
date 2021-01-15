@@ -38,7 +38,7 @@ class PEPConfig(Gtk.ApplicationWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_name('PEPConfig')
-        self.set_default_size(300, 350)
+        self.set_default_size(500, 350)
         self.set_resizable(True)
         self.set_transient_for(app.interface.roster.window)
 
