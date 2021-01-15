@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-01-10 23:38+0000\n"
+"PO-Revision-Date: 2021-01-20 20:26+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/1-3/fr/>\n"
 "Language: fr\n"
@@ -1004,7 +1004,7 @@ msgstr "Émettre les accusés de lecture"
 
 #: gajim/gui_menu_builder.py:521 gajim/gtk/accounts.py:710
 msgid "Send Chatstate"
-msgstr "Envoyer le statut"
+msgstr "Émettre le statut"
 
 #: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:307
 msgid "Invite Contacts…"
@@ -4908,7 +4908,7 @@ msgstr "Rétablir toutes les discussions à la valeur par défaut actuelle"
 
 #: gajim/gtk/accounts.py:722
 msgid "Send Chatstate in Group Chats"
-msgstr "Envoyer le statut dans les salons de discussion"
+msgstr "Émettre le statut dans les salons de discussion"
 
 #: gajim/gtk/accounts.py:725
 msgid "Default for group chats"
