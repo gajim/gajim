@@ -103,6 +103,7 @@ from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.filetransfer_progress import FileTransferProgress
 from gajim.gui.roster_item_exchange import RosterItemExchangeWindow
+from gajim.gui.main import MainWindow
 from gajim.gui.util import get_show_in_roster
 from gajim.gui.util import get_show_in_systray
 from gajim.gui.util import open_window
@@ -237,7 +238,7 @@ class Interface:
             GLib.timeout_add_seconds(30, self.unblock_signed_in_notifications,
                 account_jid)
 
-        ctrl = self.msg_win_mgr.get_control(jid, account)
+        ctrl = app.window.get_control(account, jid)
         if ctrl and ctrl.session and len(obj.contact_list) > 1:
             ctrl.remove_session(ctrl.session)
 
@@ -257,7 +258,7 @@ class Interface:
             types = ['chat', 'pm', 'printed_chat', 'printed_pm']
             jid = event.jid
 
-            control = app.interface.msg_win_mgr.get_control(jid, event.account)
+            control = app.window.get_control(event.account, jid)
 
         # Compare with control.last_msg_id.
         events_ = app.events.get_events(event.account, jid, types)
@@ -1958,9 +1959,9 @@ class Interface:
             self.show_systray()
 
         self.roster = roster_window.RosterWindow(application)
-        if self.msg_win_mgr.mode == \
-        MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
-            self.msg_win_mgr.create_window(None, None, None)
+        # if self.msg_win_mgr.mode == \
+        # MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+        #     self.msg_win_mgr.create_window(None, None, None)
 
         # Creating plugin manager
         from gajim import plugins
@@ -1994,6 +1995,7 @@ class Interface:
                 except Exception:
                     pass
         GLib.timeout_add_seconds(5, remote_init)
+        MainWindow()
 
     def __init__(self):
         app.interface = self

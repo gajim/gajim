@@ -295,8 +295,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._disco_muc(row.account, row.jid, request_vcard=row.new)
 
         else:
-            app.interface.new_chat_from_jid(row.account, row.jid)
+            # app.interface.new_chat_from_jid(row.account, row.jid)
+            app.window.add_chat(row.account, row.jid)
             self.ready_to_destroy = True
+            self.destroy()
 
     def _disco_muc(self, account, jid, request_vcard):
         self._ui.stack.set_visible_child_name('progress')

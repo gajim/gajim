@@ -730,7 +730,7 @@ class RosterWindow:
 
         old_grps = []
         if backend:
-            if not app.interface.msg_win_mgr.get_control(jid, account) or \
+            if not app.window.get_control(account, jid) or \
             force:
                 # If a window is still opened: don't remove contact instance
                 # Remove contact before redrawing, otherwise the old
@@ -1827,7 +1827,7 @@ class RosterWindow:
 
             # If we already have chat windows opened, update them with new
             # contact instance
-            chat_control = app.interface.msg_win_mgr.get_control(ji, account)
+            chat_control = app.window.get_control(account, ji)
             if chat_control:
                 chat_control.contact = contact1
 
@@ -1937,7 +1937,7 @@ class RosterWindow:
             return True
 
         if event.type_ == 'jingle-incoming':
-            ctrl = app.interface.msg_win_mgr.get_control(jid, account)
+            ctrl = app.window.get_control(account, jid)
             if ctrl:
                 ctrl.parent_win.set_active_tab(ctrl)
             else:
@@ -2035,7 +2035,7 @@ class RosterWindow:
             contact.pep = {}
 
         self.draw_all_pep_types(jid, account)
-        ctrl = app.interface.msg_win_mgr.get_control(jid, account)
+        ctrl = app.window.get_control(account, jid)
         if ctrl:
             ctrl.update_all_pep_types()
 
@@ -2058,7 +2058,7 @@ class RosterWindow:
             # Remove resource when going offline
             if show in ('offline', 'error') and \
             not self.contact_has_pending_roster_events(contact, account):
-                ctrl = app.interface.msg_win_mgr.get_control(fjid, account)
+                ctrl = app.window.get_control(account, fjid)
                 if ctrl:
                     ctrl.update_ui()
                     ctrl.parent_win.redraw_tab(ctrl)
@@ -2074,14 +2074,14 @@ class RosterWindow:
         uf_show = helpers.get_uf_show(show)
 
         # print status in chat window and update status/GPG image
-        ctrl = app.interface.msg_win_mgr.get_control(contact.jid, account)
+        ctrl = app.window.get_control(account, contact.jid)
         if ctrl and not ctrl.is_groupchat:
             ctrl.contact = app.contacts.get_contact_with_highest_priority(
                 account, contact.jid)
             ctrl.update_status_display(name, uf_show, status_message)
 
         if contact.resource:
-            ctrl = app.interface.msg_win_mgr.get_control(fjid, account)
+            ctrl = app.window.get_control(account, fjid)
             if ctrl:
                 ctrl.update_status_display(name, uf_show, status_message)
 
@@ -2123,8 +2123,7 @@ class RosterWindow:
                     self.model[child_iterA][Column.AVATAR_IMG] = None
                 for jid in list(app.contacts.get_jid_list(account)):
                     lcontact = app.contacts.get_contacts(account, jid)
-                    ctrl = app.interface.msg_win_mgr.get_gc_control(jid,
-                        account)
+                    ctrl = app.window.get_control(account, jid)
                     for contact in [c for c in lcontact if (
                     (c.show != 'offline' or c.is_transport()) and not ctrl)]:
                         self.chg_contact_status(contact, 'offline', '', account)
@@ -2171,9 +2170,9 @@ class RosterWindow:
         """
         if account in app.interface.instances:
             self.close_all_from_dict(app.interface.instances[account])
-        for ctrl in app.interface.msg_win_mgr.get_controls(acct=account):
-            ctrl.parent_win.remove_tab(ctrl, ctrl.parent_win.CLOSE_CLOSE_BUTTON,
-                force=force)
+        # for ctrl in app.interface.msg_win_mgr.get_controls(acct=account):
+        #     ctrl.parent_win.remove_tab(ctrl, ctrl.parent_win.CLOSE_CLOSE_BUTTON,
+        #         force=force)
 
     def on_roster_window_delete_event(self, widget, event):
         """
@@ -2224,8 +2223,8 @@ class RosterWindow:
                 msgwin_width_adjust = -1 * width
         app.settings.set('last_roster_visible',
                 self.window.get_property('visible'))
-        app.interface.msg_win_mgr.save_opened_controls()
-        app.interface.msg_win_mgr.shutdown(msgwin_width_adjust)
+        # app.interface.msg_win_mgr.save_opened_controls()
+        # app.interface.msg_win_mgr.shutdown(msgwin_width_adjust)
 
         app.settings.set('collapsed_rows', '\t'.join(self.collapsed_rows))
         app.interface.save_config()
@@ -2316,19 +2315,19 @@ class RosterWindow:
                     unread -= 1
 
             # check if we have recent messages
-            recent = False
-            for win in app.interface.msg_win_mgr.windows():
-                for ctrl in win.controls():
-                    fjid = ctrl.get_full_jid()
-                    if fjid in app.last_message_time[ctrl.account]:
-                        if time.time() - app.last_message_time[ctrl.account][
-                        fjid] < 2:
-                            recent = True
-                            break
-                if recent:
-                    break
+            # recent = False
+            # for win in app.interface.msg_win_mgr.windows():
+            #     for ctrl in win.controls():
+            #         fjid = ctrl.get_full_jid()
+            #         if fjid in app.last_message_time[ctrl.account]:
+            #             if time.time() - app.last_message_time[ctrl.account][
+            #             fjid] < 2:
+            #                 recent = True
+            #                 break
+            #     if recent:
+            #         break
 
-            if unread or recent:
+            if unread:
                 ConfirmationDialog(
                     _('Unread Messages'),
                     _('You still have unread messages'),
@@ -2419,10 +2418,10 @@ class RosterWindow:
                         if not contact:
                             contact = self.add_to_not_in_the_roster(
                                 account, jid)
-                        app.interface.on_open_chat_window(
-                            None, contact, account)
-                app.settings.set_account_setting(
-                    account, 'opened_chat_controls', '')
+                        # app.interface.on_open_chat_window(
+                        #     None, contact, account)
+                # app.settings.set_account_setting(
+                #     account, 'opened_chat_controls', '')
             GLib.idle_add(self.refilter_shown_roster_items)
 
     def _nec_anonymous_auth(self, obj):
@@ -5021,9 +5020,9 @@ class RosterWindow:
         self.add_actions()
         self.hpaned = self.xml.get_object('roster_hpaned')
 
-        app.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
-        app.interface.msg_win_mgr.connect('window-delete',
-            self.on_message_window_delete)
+        # app.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
+        # app.interface.msg_win_mgr.connect('window-delete',
+        #     self.on_message_window_delete)
 
         self.advanced_menus = [] # We keep them to destroy them
         if app.settings.get('roster_window_skip_taskbar'):
