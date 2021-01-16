@@ -25,6 +25,7 @@
 
 from typing import ClassVar  # pylint: disable=unused-import
 from typing import Type  # pylint: disable=unused-import
+from typing import Optional  # pylint: disable=unused-import
 
 import os
 import time
@@ -908,7 +909,8 @@ class ChatControl(ChatControlBase):
         if video_sid and sid in (video_sid, None):
             self.close_jingle_content('video')
 
-    def close_jingle_content(self, jingle_type: str) -> None:
+    def close_jingle_content(self, jingle_type: str,
+                             shutdown: Optional[bool] = False) -> None:
         jingle = self.jingle[jingle_type]
         if not jingle.sid:
             return
@@ -921,9 +923,10 @@ class ChatControl(ChatControlBase):
             if content:
                 session.remove_content(content.creator, content.name)
 
-        jingle.sid = None
-        jingle.state = JingleState.NULL
-        jingle.update()
+        if not shutdown:
+            jingle.sid = None
+            jingle.state = JingleState.NULL
+            jingle.update()
 
     def _on_end_call_clicked(self, _widget):
         self.close_jingle_content('audio')
@@ -1213,7 +1216,7 @@ class ChatControl(ChatControlBase):
         con.get_module('Chatstate').set_chatstate(self.contact, Chatstate.GONE)
 
         for jingle_type in ('audio', 'video'):
-            self.close_jingle_content(jingle_type)
+            self.close_jingle_content(jingle_type, shutdown=True)
         self.jingle.clear()
 
         # disconnect self from session
