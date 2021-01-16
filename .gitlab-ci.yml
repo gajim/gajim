@@ -1,8 +1,8 @@
-include:
-- project: 'gajim/ci'
-  ref: master
-  file: '.gajim-ci.yml'
+# include:
+# - project: 'gajim/ci'
+#   ref: master
+#   file: '.gajim-ci.yml'
 
-variables:
-  NBXMPP_BRANCH: master
-  PLUGINS_BRANCH: master
+# variables:
+#   NBXMPP_BRANCH: master
+#   PLUGINS_BRANCH: master
