@@ -1,3 +1,6 @@
+
+import uuid
+
 from gajim.common.i18n import _
 
 class _DEFAULT:
@@ -185,6 +188,7 @@ APP_SETTINGS = {
     'last_update_check': '',
     'always_ask_for_status_message': False,
     'show_send_message_button': False,
+    'workspace_order': [],
 }
 
 ACCOUNT_SETTINGS = {
@@ -281,6 +285,15 @@ ACCOUNT_SETTINGS = {
         'sync_threshold': HAS_APP_DEFAULT,
     },
 }
+
+
+WORKSPACE_SETTINGS = {
+    'name': _('My Workspace'),
+    'open_chats': [],
+}
+
+
+INITAL_WORKSPACE = {str(uuid.uuid4()): {}}
 
 
 PLUGIN_SETTINGS = {

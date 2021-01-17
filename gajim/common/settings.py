@@ -19,6 +19,7 @@ from typing import Union
 
 import sys
 import json
+import uuid
 import logging
 import sqlite3
 import inspect
@@ -39,14 +40,16 @@ from gajim.common.setting_values import APP_SETTINGS
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import PROXY_SETTINGS
 from gajim.common.setting_values import PROXY_EXAMPLES
+from gajim.common.setting_values import INITAL_WORKSPACE
 from gajim.common.setting_values import PLUGIN_SETTINGS
+from gajim.common.setting_values import WORKSPACE_SETTINGS
 from gajim.common.setting_values import DEFAULT_SOUNDEVENT_SETTINGS
 from gajim.common.setting_values import STATUS_PRESET_SETTINGS
 from gajim.common.setting_values import STATUS_PRESET_EXAMPLES
 from gajim.common.setting_values import HAS_APP_DEFAULT
 from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
 
-SETTING_TYPE = Union[bool, int, str, object]
+SETTING_TYPE = Union[bool, int, str, object, list]
 
 log = logging.getLogger('gajim.c.settings')
 
@@ -66,10 +69,12 @@ CREATE_SQL = '''
     INSERT INTO settings(name, settings) VALUES ('status_presets', '%s');
     INSERT INTO settings(name, settings) VALUES ('proxies', '%s');
     INSERT INTO settings(name, settings) VALUES ('plugins', '{}');
+    INSERT INTO settings(name, settings) VALUES ('workspaces', '%s');
 
-    PRAGMA user_version=0;
+    PRAGMA user_version=1;
     ''' % (json.dumps(STATUS_PRESET_EXAMPLES),
-           json.dumps(PROXY_EXAMPLES))
+           json.dumps(PROXY_EXAMPLES),
+           json.dumps(INITAL_WORKSPACE))
 
 
 class Settings:
@@ -236,7 +241,12 @@ class Settings:
             sys.exit()
 
     def _migrate(self) -> None:
-        pass
+        version = self._get_user_version()
+        if version < 1:
+            sql = '''INSERT INTO settings(name, settings)
+                     VALUES ('workspaces', ?)'''
+            self._con.execute(sql, (json.dumps(INITAL_WORKSPACE),))
+            self._set_user_version(2)
 
     def _migrate_old_config(self) -> None:
         config_file = configpaths.get('CONFIG_FILE')
@@ -904,6 +914,59 @@ class Settings:
         for account in self._account_settings:
             if self.get_account_setting(account, 'proxy') == proxy_name:
                 self.set_account_setting(account, 'proxy', None)
+
+    def set_workspace_setting(self,
+                              workspace_id: str,
+                              setting: str,
+                              value: SETTING_TYPE) -> None:
+
+        if setting not in WORKSPACE_SETTINGS:
+            raise ValueError(f'Invalid workspace setting: {setting}')
+
+        if workspace_id not in self._settings['workspaces']:
+            raise ValueError(f'Workspace does not exists: {workspace_id}')
+
+        default = WORKSPACE_SETTINGS[setting]
+        if not isinstance(value, type(default)):
+            raise TypeError(f'Invalid type for {setting}: '
+                            f'{value} {type(value)}')
+
+        self._settings['workspaces'][workspace_id][setting] = value
+        self._commit_settings('workspaces')
+
+    def get_workspace_setting(self,
+                              workspace_id: str,
+                              setting: str) -> SETTING_TYPE:
+
+        if setting not in WORKSPACE_SETTINGS:
+            raise ValueError(f'Invalid workspace setting: {setting}')
+
+        if workspace_id not in self._settings['workspaces']:
+            raise ValueError(f'Workspace does not exists: {workspace_id}')
+
+        try:
+            return self._settings['workspaces'][workspace_id][setting]
+        except KeyError:
+            return WORKSPACE_SETTINGS[setting]
+
+    def get_workspaces(self) -> None:
+        workspaces = []
+        for id_, settings in self._settings['workspaces'].items():
+            workspaces.append((id_, settings['name']))
+        return workspaces
+
+    def add_workspace(self, name: str) -> None:
+        id_ = str(uuid.uuid4())
+        self._settings['workspaces'][id_] = {
+            'name': name,
+        }
+        self._commit_settings('workspaces')
+        return id_
+
+    def remove_workspace(self, id_: str) -> None:
+        del self._settings['workspaces'][id_]
+        self._commit_settings('workspaces')
+
 
 
 class LegacyConfig:
