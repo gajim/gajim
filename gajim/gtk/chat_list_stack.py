@@ -48,3 +48,7 @@ class ChatListStack(Gtk.Stack):
         open_chats = chat_list.get_open_chats()
         app.settings.set_workspace_setting(
             workspace_id, 'open_chats', open_chats)
+
+    def remove_chat(self, workspace_id, account, jid):
+        chat_list = self._chat_lists[workspace_id]
+        chat_list.remove_chat(account, jid)

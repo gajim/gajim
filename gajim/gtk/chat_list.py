@@ -35,6 +35,11 @@ class ChatList(Gtk.ListBox):
         row = self._chats[(account, jid)]
         self.select_row(row)
 
+    def remove_chat(self, account, jid):
+        row = self._chats.pop((account, jid))
+        self.remove(row)
+        row.destroy()
+
     def _on_row_selected(self, _listbox, row):
         if row is None:
             self._chat_stack.clear()

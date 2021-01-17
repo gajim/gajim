@@ -33,6 +33,11 @@ class ChatStack(Gtk.Stack):
         self.add_named(chat_control.widget, f'{account}:{jid}')
         chat_control.widget.show_all()
 
+    def remove_chat(self, account, jid):
+        control = self._controls[account].pop(jid)
+        control.shutdown()
+        self.remove(control)
+
     def show_chat(self, account, jid):
         self.set_visible_child_name(f'{account}:{jid}')
 
