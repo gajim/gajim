@@ -41,6 +41,9 @@ class ChatList(Gtk.ListBox):
             return
         self._chat_stack.show_chat(row.account, row.jid)
 
+    def get_open_chats(self):
+        return list(self._chats.keys())
+
 
 class ChatRow(Gtk.ListBoxRow):
     def __init__(self, account, jid):
