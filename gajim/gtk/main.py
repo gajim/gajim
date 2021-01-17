@@ -68,6 +68,11 @@ class MainWindow(Gtk.ApplicationWindow):
             self._chat_list_stack.select_chat(workspace_id, account, jid)
             self._chat_list_stack.store_open_chats(workspace_id)
 
+    def remove_chat(self, workspace_id, account, jid):
+        self._chat_stack.remove_chat(account, jid)
+        self._chat_list_stack.remove_chat(workspace_id, account, jid)
+        self._chat_list_stack.store_open_chats(workspace_id)
+
     def get_control(self, account, jid):
         return self._chat_stack.get_control(account, jid)
 
