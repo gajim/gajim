@@ -434,15 +434,18 @@ def gtk_month(month: int) -> int:
     return month - 1
 
 
-def convert_rgb_to_hex(rgb_string: str) -> str:
-    rgb = Gdk.RGBA()
-    rgb.parse(rgb_string)
-    rgb.to_color()
-
-    red = int(rgb.red * 255)
-    green = int(rgb.green * 255)
-    blue = int(rgb.blue * 255)
+def convert_rgba_to_hex(rgba: Gdk.RGBA) -> str:
+    red = int(rgba.red * 255)
+    green = int(rgba.green * 255)
+    blue = int(rgba.blue * 255)
     return '#%02x%02x%02x' % (red, green, blue)
+
+
+def convert_rgb_to_hex(rgb_string: str) -> str:
+    rgba = Gdk.RGBA()
+    rgba.parse(rgb_string)
+    rgba.to_color()
+    return convert_rgba_to_hex(rgba)
 
 
 @lru_cache(maxsize=1024)

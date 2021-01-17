@@ -41,6 +41,48 @@
 
 .link-button { min-height: 0px; }
 
+/* ChatList */
+.small-label {
+    font-size: small;
+}
+.revealer-close-button {
+    padding: 0px;
+}
+.unread-counter {
+    color: rgb(242, 242, 242);
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 10px;
+    font-size: 80%;
+    background-color: rgb(22, 100, 169);
+}
+.chatlist-row {
+    padding: 8px;
+    border-top: 1px solid @theme_unfocused_bg_color;
+    transition: none;
+}
+.chatlist-row:active {
+    box-shadow: none;
+}
+.chatlist-row:selected:active {
+    box-shadow: none;
+}
+.chatlist-row:hover {
+    background-color: @theme_unfocused_bg_color;
+}
+.chatlist-row:selected {
+    background-color: @theme_unfocused_bg_color;
+}
+.chatlist-row:selected label {
+    color: @theme_text_color;
+}
+.chatlist-row:selected button {
+	color: @theme_fg_color;
+}
+.chatlist-row:selected button:hover {
+    border-color: @insensitive_fg_color;
+}
+
 /* VCardWindow */
 .VCard-GtkLinkButton { padding-left: 5px; border-left: none; }
 
