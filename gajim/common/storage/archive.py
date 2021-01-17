@@ -467,6 +467,37 @@ class MessageArchiveStorage(SqliteStorage):
         return messages
 
     @timeit
+    def get_last_conversation_line(self, account, jid):
+        """
+        Load the last line of a conversation with jid for account.
+        Loads messages, but no status messages or error messages.
+
+        :param account:         The account
+
+        :param jid:             The jid for which we request the conversation
+
+        returns a list of namedtuples
+        """
+        jids = self._get_family_jids(account, jid)
+        account_id = self.get_account_id(account)
+
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS,
+                          KindConstant.ERROR])
+
+        sql = '''
+            SELECT contact_name, time, kind, message
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
+            AND kind NOT IN ({kinds})
+            ORDER BY time DESC
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id,
+                       kinds=', '.join(kinds))
+
+        return self._con.execute(sql, tuple(jids)).fetchone()
+
+    @timeit
     def get_conversation_for_date(self, account, jid, date):
         """
         Load the complete conversation with a given jid on a specific date
