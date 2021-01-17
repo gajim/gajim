@@ -950,9 +950,18 @@ class Settings:
             return WORKSPACE_SETTINGS[setting]
 
     def get_workspaces(self) -> None:
-        workspaces = []
-        for id_, settings in self._settings['workspaces'].items():
-            workspaces.append((id_, settings['name']))
+        workspace_order = app.settings.get_app_setting('workspace_order')
+
+        def sort_workspaces(workspace_id):
+            try:
+                return workspace_order.index(workspace_id)
+            except ValueError:
+                # Handle the case that a workflow id is for some reason not
+                # in the workspace order list
+                return 10000
+
+        workspaces = list(self._settings['workspaces'].keys())
+        workspaces.sort(key=sort_workspaces)
         return workspaces
 
     def add_workspace(self, name: str) -> None:
