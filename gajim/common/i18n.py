@@ -24,6 +24,7 @@ import locale
 import gettext
 import unicodedata
 from pathlib import Path
+from gi.repository import GLib
 
 DOMAIN = 'gajim'
 LANG = 'en'
@@ -45,10 +46,8 @@ def get_locale_dirs():
         # Check if we run as flatpak
         return [Path('/app/share/')]
 
-    data_dirs = os.getenv('XDG_DATA_DIRS')
-    if data_dirs:
-        return list(map(Path, data_dirs.split(':')))
-    return [Path('/usr/local/share/'), Path('/usr/share/')]
+    data_dirs = [GLib.get_user_data_dir()] + GLib.get_system_data_dirs()
+    return [Path(dir_) for dir_ in data_dirs]
 
 
 def iter_locale_dirs():
