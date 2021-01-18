@@ -40,6 +40,8 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self.set_name('CreateGroupchat')
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+        self.set_default_size(500, -1)
         self.set_show_menubar(False)
         self.set_resizable(True)
         self.set_title(_('Create Group Chat'))
