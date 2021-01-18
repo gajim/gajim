@@ -17,6 +17,7 @@ Entity = namedtuple('Entity', 'jid node hash method')
 class AvatarSize(IntEnum):
     TAB = 16
     ROSTER = 32
+    ACCOUNT_SIDE_BAR = 32
     CHAT = 48
     NOTIFICATION = 48
     GROUP_INFO = 100
