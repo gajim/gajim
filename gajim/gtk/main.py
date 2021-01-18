@@ -5,6 +5,7 @@ from gajim.common import app
 from gajim.gui.util import get_builder
 from gajim.gui.chat_list_stack import ChatListStack
 from gajim.gui.chat_stack import ChatStack
+from gajim.gui.account_side_bar import AccountSideBar
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -28,8 +29,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self._chat_stack = ChatStack()
         self._chat_list_stack = ChatListStack(self._ui, self._chat_stack)
-
-        self._ui.left_grid.add(self._chat_list_stack)
+        self._account_side_bar = AccountSideBar()
+        self._ui.left_grid.add(self._account_side_bar)
+        self._ui.middle_grid.add(self._chat_list_stack)
         self._ui.right_grid.add(self._chat_stack)
         self._ui.connect_signals(self)
 
