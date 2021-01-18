@@ -8,6 +8,7 @@ class AccountSideBar(Gtk.ListBox):
     def __init__(self):
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
+        self.set_valign(Gtk.Align.END)
 
         self._accounts = list(app.connections.keys())
         for account in self._accounts:

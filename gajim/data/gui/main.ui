@@ -103,7 +103,7 @@
       <object class="GtkGrid" id="left_grid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="valign">end</property>
+        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <child>
           <placeholder/>

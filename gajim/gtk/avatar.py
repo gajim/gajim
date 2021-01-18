@@ -79,6 +79,15 @@ def generate_avatar(letters, color, size, scale):
     return context.get_target()
 
 
+@lru_cache(maxsize=2048)
+def generate_default_avatar(letter, color_string, size, scale):
+    color = text_to_color(color_string)
+    surface = generate_avatar(letter, color, size, scale)
+    surface = clip_circle(surface)
+    surface.set_device_scale(scale, scale)
+    return surface
+
+
 def add_status_to_avatar(surface, show):
     width = surface.get_width()
     height = surface.get_height()
@@ -227,7 +236,7 @@ class AvatarStorage(metaclass=Singleton):
             color_string = contact.jid
 
         letter = self._generate_letter(name)
-        surface = self._generate_default_avatar(
+        surface = generate_default_avatar(
             letter, color_string, size, scale)
         if show is not None:
             surface = add_status_to_avatar(surface, show)
@@ -252,7 +261,7 @@ class AvatarStorage(metaclass=Singleton):
         con = app.connections[account]
         name = get_groupchat_name(con, jid)
         letter = self._generate_letter(name)
-        surface = self._generate_default_avatar(letter, jid, size, scale)
+        surface = generate_default_avatar(letter, jid, size, scale)
         self._cache[jid][(size, scale)] = surface
         return surface
 
@@ -353,12 +362,3 @@ class AvatarStorage(metaclass=Singleton):
             if letter.isalpha():
                 return letter.capitalize()
         return name[0].capitalize()
-
-    @staticmethod
-    @lru_cache(maxsize=2048)
-    def _generate_default_avatar(letter, color_string, size, scale):
-        color = text_to_color(color_string)
-        surface = generate_avatar(letter, color, size, scale)
-        surface = clip_circle(surface)
-        surface.set_device_scale(scale, scale)
-        return surface

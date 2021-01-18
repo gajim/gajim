@@ -6,6 +6,7 @@ from gajim.gui.util import get_builder
 from gajim.gui.chat_list_stack import ChatListStack
 from gajim.gui.chat_stack import ChatStack
 from gajim.gui.account_side_bar import AccountSideBar
+from gajim.gui.workspace_side_bar import WorkspaceSideBar
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -30,6 +31,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self._chat_stack = ChatStack()
         self._chat_list_stack = ChatListStack(self._ui, self._chat_stack)
         self._account_side_bar = AccountSideBar()
+        self._workspace_side_bar = WorkspaceSideBar()
+        self._ui.left_grid.add(self._workspace_side_bar)
         self._ui.left_grid.add(self._account_side_bar)
         self._ui.middle_grid.add(self._chat_list_stack)
         self._ui.right_grid.add(self._chat_stack)
@@ -80,6 +83,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def _load_chats(self):
         for workspace_id in app.settings.get_workspaces():
+            self._workspace_side_bar.add_workspace(workspace_id)
             open_chats = app.settings.get_workspace_setting(workspace_id,
                                                             'open_chats')
             for account, jid in open_chats:
