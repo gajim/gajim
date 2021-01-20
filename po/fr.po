@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-01-05 13:31+0000\n"
+"PO-Revision-Date: 2021-01-20 20:26+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/1-3/fr/>\n"
 "Language: fr\n"
@@ -1000,11 +1000,11 @@ msgstr "Enregistrer un fichier directement …"
 
 #: gajim/gui_menu_builder.py:520 gajim/gtk/accounts.py:734
 msgid "Send Read Markers"
-msgstr "Envoyer un marqueur de lecture"
+msgstr "Émettre les accusés de lecture"
 
 #: gajim/gui_menu_builder.py:521 gajim/gtk/accounts.py:710
 msgid "Send Chatstate"
-msgstr "Envoyer le statut"
+msgstr "Émettre le statut"
 
 #: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:307
 msgid "Invite Contacts…"
@@ -2149,7 +2149,7 @@ msgstr ": Affiliation changée"
 
 #: gajim/groupchat_control.py:1366 gajim/groupchat_control.py:1428
 msgid ": Group chat configuration changed to members-only"
-msgstr ": La configuration du salon a changé pour « membres seulement »"
+msgstr ": La configuration du salon a changé pour « réservé aux membres »"
 
 #: gajim/groupchat_control.py:1394
 #, python-brace-format
@@ -4908,7 +4908,7 @@ msgstr "Rétablir toutes les discussions à la valeur par défaut actuelle"
 
 #: gajim/gtk/accounts.py:722
 msgid "Send Chatstate in Group Chats"
-msgstr "Envoyer le statut dans les salons de discussion"
+msgstr "Émettre le statut dans les salons de discussion"
 
 #: gajim/gtk/accounts.py:725
 msgid "Default for group chats"
@@ -5540,9 +5540,8 @@ msgid "URL"
 msgstr "URL"
 
 #: gajim/gtk/profile.py:39 gajim/gtk/vcard_grid.py:46
-#, fuzzy
 msgid "?profile:Key"
-msgstr "Clef"
+msgstr "Clef publique PGP"
 
 #: gajim/gtk/profile.py:299 gajim/gtk/profile.py:301
 #: gajim/data/gui/profile.ui:98 gajim/data/gui/profile.ui:110
@@ -5646,7 +5645,6 @@ msgid "Street"
 msgstr "Rue"
 
 #: gajim/gtk/vcard_grid.py:61
-#, fuzzy
 msgid "Extended Address"
 msgstr "Complément d'adresse"
 
@@ -8849,7 +8847,6 @@ msgid "Picture and Name"
 msgstr "Image et nom"
 
 #: gajim/data/gui/profile.ui:57
-#, fuzzy
 msgid "Make your profile visible for everyone or just for your contacts."
 msgstr ""
 "Rendre votre profil visible par tout le monde ou uniquement par vos contacts."
@@ -8870,12 +8867,10 @@ msgstr ""
 "contacts."
 
 #: gajim/data/gui/profile.ui:298
-#, fuzzy
 msgid "Add Entry"
 msgstr "Ajouter une entrée"
 
 #: gajim/data/gui/profile.ui:410
-#, fuzzy
 msgid "Update"
 msgstr "Mettre à jour"
 
@@ -10116,14 +10111,13 @@ msgstr "Un client de chat XMPP complet"
 
 #: data/org.gajim.Gajim.desktop.in:8
 msgid "chat;messaging;im;xmpp;bonjour;voip;"
-msgstr "discussion;messagerie;messagerie instantanée;xmpp;bonjour;voip;"
+msgstr "chat;messaging;im;xmpp;bonjour;voip;"
 
 #: data/org.gajim.Gajim.desktop.in:27
 msgid "Show next pending event"
 msgstr "Montrer le prochain événement en attente"
 
 #: data/org.gajim.Gajim.appdata.xml.in:10
-#, fuzzy
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -10256,7 +10250,6 @@ msgid "Plugin manager"
 msgstr "Gestionnaire d'extensions"
 
 #: data/org.gajim.Gajim.appdata.xml.in:61
-#, fuzzy
 msgid "Gajim Team"
 msgstr "Thèmes de Gajim"
 

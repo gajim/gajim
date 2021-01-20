@@ -13,10 +13,9 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2020-12-28 12:14+0000\n"
-"Last-Translator: Uber <study-kbt@yandex.ru>\n"
-"Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
-">\n"
+"PO-Revision-Date: 2021-01-10 23:38+0000\n"
+"Last-Translator: Elijah Draga <waytoroot@gmail.com>\n"
+"Language-Team: Russian <https://translate.gajim.org/projects/gajim/1-3/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1001,9 +1000,8 @@ msgid "Send File Directly…"
 msgstr "Отправить файл напрямую…"
 
 #: gajim/gui_menu_builder.py:520 gajim/gtk/accounts.py:734
-#, fuzzy
 msgid "Send Read Markers"
-msgstr "Отправить пинг"
+msgstr "Отправлять метку прочтения"
 
 #: gajim/gui_menu_builder.py:521 gajim/gtk/accounts.py:710
 msgid "Send Chatstate"
@@ -1968,9 +1966,8 @@ msgid "Received"
 msgstr "Получено"
 
 #: gajim/conversation_textview.py:1272
-#, fuzzy
 msgid "?Message state:Read"
-msgstr "Спрятать станзы сообщений"
+msgstr "?Состояние сообщения:Прочитано"
 
 #: gajim/groupchat_control.py:352
 #, python-format
@@ -2450,9 +2447,8 @@ msgid "Available"
 msgstr "Доступен"
 
 #: gajim/command_system/implementation/standard.py:173
-#, fuzzy
 msgid "Send a disco info request"
-msgstr "Посылать запросы уведомления"
+msgstr "Отправлять информационные запросы"
 
 #: gajim/command_system/implementation/standard.py:192
 #: gajim/command_system/implementation/standard.py:273
@@ -4520,13 +4516,12 @@ msgid "Send Chat State"
 msgstr "Отправить состояние чата"
 
 #: gajim/gtk/groupchat_settings.py:74
-#, fuzzy
 msgid "Send Chat Markers"
-msgstr "Отправить состояние чата"
+msgstr "Отправлять состояние чата"
 
 #: gajim/gtk/groupchat_settings.py:77
 msgid "Let others know if you read up to this point"
-msgstr ""
+msgstr "Сообщать другим, если Вы дочитали до этого места"
 
 #: gajim/gtk/groupchat_settings.py:80
 msgid "Sync Threshold"
@@ -4880,9 +4875,8 @@ msgid "Default for group chats"
 msgstr "По умолчанию для групповых чатов"
 
 #: gajim/gtk/accounts.py:739
-#, fuzzy
 msgid "Default for chats and private group chats"
-msgstr "По умолчанию для новых групповых чатов"
+msgstr "По умолчанию для чатов и приватных групповых чатов"
 
 #: gajim/gtk/accounts.py:747
 msgid "Keep Chat History"
@@ -5476,9 +5470,8 @@ msgid "Birthday"
 msgstr "День рождения"
 
 #: gajim/gtk/profile.py:30 gajim/gtk/vcard_grid.py:36
-#, fuzzy
 msgid "Gender"
-msgstr "Отправитель: "
+msgstr "Пол"
 
 #: gajim/gtk/profile.py:31 gajim/data/gui/groupchat_info_scrolled.ui:16
 msgid "Address"
@@ -5492,30 +5485,26 @@ msgstr "Телефон"
 
 #: gajim/gtk/profile.py:35
 msgid "?profile:Organisation"
-msgstr ""
+msgstr "?профиль:Организация"
 
 #: gajim/gtk/profile.py:36 gajim/gtk/vcard_grid.py:41
 msgid "?profile:Title"
-msgstr ""
+msgstr "?профиль:Заглавие"
 
 #: gajim/gtk/profile.py:37 gajim/gtk/vcard_grid.py:42
-#, fuzzy
 msgid "?profile:Role"
-msgstr "Профиль"
+msgstr "?профиль:Роль"
 
 #: gajim/gtk/profile.py:38 gajim/gtk/vcard_grid.py:45
-#, fuzzy
 msgid "URL"
-msgstr "URL:"
+msgstr "URL"
 
 #: gajim/gtk/profile.py:39 gajim/gtk/vcard_grid.py:46
-#, fuzzy
 msgid "?profile:Key"
-msgstr "Профиль"
+msgstr "?профиль:Ключ"
 
 #: gajim/gtk/profile.py:299 gajim/gtk/profile.py:301
 #: gajim/data/gui/profile.ui:98 gajim/data/gui/profile.ui:110
-#, fuzzy
 msgid "Everyone"
 msgstr "Все"
 
@@ -5587,32 +5576,28 @@ msgid "Registration failed"
 msgstr "Ошибка регистрации"
 
 #: gajim/gtk/vcard_grid.py:37
-#, fuzzy
 msgid "?profile:Address"
-msgstr "Адрес"
+msgstr "?профиль:Адрес"
 
 #: gajim/gtk/vcard_grid.py:40
-#, fuzzy
 msgid "IM Address"
-msgstr "Адрес"
+msgstr "IM-адрес"
 
 #: gajim/gtk/vcard_grid.py:43
-#, fuzzy
 msgid "Organisation"
 msgstr "Организация"
 
 #: gajim/gtk/vcard_grid.py:44
-#, fuzzy
 msgid "?profile:Note"
-msgstr "Профиль"
+msgstr "?профиль:Заметки"
 
 #: gajim/gtk/vcard_grid.py:51
 msgid "Your public key or authentication certificate"
-msgstr ""
+msgstr "Ваш открытый ключ или сертификат аутентификации"
 
 #: gajim/gtk/vcard_grid.py:59
 msgid "Post Office Box"
-msgstr ""
+msgstr "Почтовый ящик"
 
 #: gajim/gtk/vcard_grid.py:60 gajim/data/gui/vcard_information_window.ui:489
 #: gajim/data/gui/vcard_information_window.ui:1179
@@ -5620,7 +5605,6 @@ msgid "Street"
 msgstr "Улица"
 
 #: gajim/gtk/vcard_grid.py:61
-#, fuzzy
 msgid "Extended Address"
 msgstr "Дополнительный адрес"
 
@@ -5646,23 +5630,21 @@ msgstr "Страна"
 
 #: gajim/gtk/vcard_grid.py:111
 msgid "Male"
-msgstr ""
+msgstr "Мужской"
 
 #: gajim/gtk/vcard_grid.py:112
 msgid "Female"
-msgstr ""
+msgstr "Женский"
 
 #: gajim/gtk/vcard_grid.py:113
 msgid "?Gender:Other"
-msgstr ""
+msgstr "?Пол:Другое"
 
 #: gajim/gtk/vcard_grid.py:114
-#, fuzzy
 msgid "?Gender:None"
-msgstr "Отправитель: "
+msgstr "?Пол:Не указано"
 
 #: gajim/gtk/vcard_grid.py:121 gajim/gtk/vcard_grid.py:428
-#, fuzzy
 msgid "Home"
 msgstr "Домашняя страница"
 
@@ -5672,9 +5654,8 @@ msgid "Work"
 msgstr "Работа"
 
 #: gajim/gtk/vcard_grid.py:598
-#, fuzzy
 msgid "YYYY-MM-DD"
-msgstr "Формат: YYYY-MM-DD"
+msgstr "YYYY-MM-DD"
 
 #: gajim/gtk/adhoc.py:91
 msgid "Finish"
@@ -8786,42 +8767,37 @@ msgid "_Account"
 msgstr "_Учетная запись"
 
 #: gajim/data/gui/profile.ui:33
-#, fuzzy
 msgid "Contact Infos"
-msgstr "Запросить контактную информацию"
+msgstr "Контактная информация"
 
 #: gajim/data/gui/profile.ui:45
-#, fuzzy
 msgid "Picture and Name"
-msgstr "Использовать картинку"
+msgstr "Изображение и имя"
 
 #: gajim/data/gui/profile.ui:57
 msgid "Make your profile visible for everyone or just for your contacts."
-msgstr ""
+msgstr "Сделать свой профиль видимым для всех или только для Ваших контактов."
 
 #: gajim/data/gui/profile.ui:179
 msgid "Remove your profile picture"
-msgstr ""
+msgstr "Удалить изображение Вашего профиля"
 
 #: gajim/data/gui/profile.ui:198
-#, fuzzy
 msgid "Change your profile picture"
-msgstr "Изменить ник (Ctrl+N)"
+msgstr "Изменить изображение Вашего профиля"
 
 #: gajim/data/gui/profile.ui:229
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
-msgstr ""
+msgstr "Введите Ваш ник. Так Ваше имя будет отображаться у Ваших контактах."
 
 #: gajim/data/gui/profile.ui:298
-#, fuzzy
 msgid "Add Entry"
-msgstr "Запись:"
+msgstr "Добавить запись"
 
 #: gajim/data/gui/profile.ui:410
-#, fuzzy
 msgid "Update"
-msgstr "_Обновить сейчас"
+msgstr "Обновить"
 
 #: gajim/data/gui/manage_proxies.ui:12
 msgctxt "proxy configuration"
@@ -10059,13 +10035,13 @@ msgid "Show next pending event"
 msgstr "Показать следующее ожидающее событие"
 
 #: data/org.gajim.Gajim.appdata.xml.in:10
-#, fuzzy
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
 msgstr ""
-"Общайтесь с друзьями или семьей, легко делитесь фотографиями и мыслями или "
+"Gajim стремится быть простым и и полнофункциональным XMPP-клиентом. Просто "
+"общайтесь с друзьями или семьей, легко делитесь фотографиями и мыслями или "
 "обсуждайте новости со своими группами."
 
 #: data/org.gajim.Gajim.appdata.xml.in:14
