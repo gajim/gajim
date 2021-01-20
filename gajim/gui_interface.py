@@ -1722,7 +1722,10 @@ class Interface:
             ctrl.shutdown()
 
         for win in get_app_windows(account):
-            # Close all account specific windows
+            # Close all account specific windows, except the RemoveAccount
+            # dialog. It shows if the removal was successful.
+            if type(win).__name__ == 'RemoveAccount':
+                continue
             win.destroy()
 
         if account == app.ZEROCONF_ACC_NAME:
