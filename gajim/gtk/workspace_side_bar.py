@@ -22,6 +22,7 @@ class WorkspaceSideBar(Gtk.ListBox):
 class Workspace(Gtk.ListBoxRow):
     def __init__(self, workspace_id):
         Gtk.ListBoxRow.__init__(self)
+        self.get_style_context().add_class('workspace-sidebar-item')
 
         self._workspace_id = workspace_id
         name = app.settings.get_workspace_setting(workspace_id, 'name')
@@ -31,5 +32,6 @@ class Workspace(Gtk.ListBoxRow):
         surface = generate_default_avatar(
             letter, name, AvatarSize.WORKSPACE, scale)
         self._image = Gtk.Image.new_from_surface(surface)
+        self._image.set_halign(Gtk.Align.CENTER)
         self.add(self._image)
         self.show_all()

@@ -41,6 +41,33 @@
 
 .link-button { min-height: 0px; }
 
+/* ChatList with Workspace and Account sidebars */
+/* Account sidebar */
+.account-sidebar-item {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.account-sidebar-item box {
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
+.account-sidebar-item image {
+	padding: 6px;
+	background-color: @theme_unfocused_bg_color;
+	box-shadow: inset 4px 4px 6px @borders;
+	border-radius: 6px;
+}
+/* Workspace sidebar */
+.workspace-sidebar-item {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+.workspace-sidebar-item image {
+    padding: 6px;
+	background-color: @theme_unfocused_bg_color;
+	box-shadow: inset 4px 4px 6px @borders;
+	border-radius: 6px;
+}
 /* ChatList */
 .small-label {
     font-size: small;
