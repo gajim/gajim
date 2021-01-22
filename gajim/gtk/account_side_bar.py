@@ -24,6 +24,7 @@ class AccountSideBar(Gtk.ListBox):
 class Account(Gtk.ListBoxRow):
     def __init__(self, account):
         Gtk.ListBoxRow.__init__(self)
+        self.get_style_context().add_class('account-sidebar-item')
 
         self._account = account
         self._jid = app.get_jid_from_account(account)
@@ -34,5 +35,15 @@ class Account(Gtk.ListBoxRow):
                                            AvatarSize.ACCOUNT_SIDE_BAR,
                                            scale)
         self._image = Gtk.Image.new_from_surface(surface)
-        self.add(self._image)
+
+        account_color_bar = Gtk.Box()
+        account_color_bar.set_size_request(6, -1)
+        account_class = app.css_config.get_dynamic_class(account)
+        account_color_bar.get_style_context().add_class(account_class)
+
+        account_box = Gtk.Box(spacing=6)
+        account_box.add(account_color_bar)
+        account_box.add(self._image)
+
+        self.add(account_box)
         self.show_all()
