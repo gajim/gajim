@@ -45,6 +45,9 @@
 .small-label {
     font-size: small;
 }
+.chatlist-top-bar {
+    padding: 6px;
+}
 .revealer-close-button {
     padding: 0px;
 }
