@@ -63,6 +63,7 @@
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkSearchEntry" id="search_entry">
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="primary-icon-name">edit-find-symbolic</property>

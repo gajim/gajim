@@ -40,6 +40,8 @@ class Account(Gtk.ListBoxRow):
         account_color_bar.set_size_request(6, -1)
         account_class = app.css_config.get_dynamic_class(account)
         account_color_bar.get_style_context().add_class(account_class)
+        account_color_bar.get_style_context().add_class(
+            'account-identifier-bar')
 
         account_box = Gtk.Box(spacing=6)
         account_box.add(account_color_bar)

@@ -81,6 +81,16 @@ class ChatRow(Gtk.ListBoxRow):
 
         self.connect('state-flags-changed', self._on_state_flags_changed)
 
+        account_bar = Gtk.Box()
+        account_bar.set_size_request(6, -1)
+        account_bar.set_no_show_all(True)
+        account_class = app.css_config.get_dynamic_class(account)
+        account_bar.get_style_context().add_class(account_class)
+        account_bar.get_style_context().add_class(
+            'account-identifier-bar')
+        if len(app.get_enabled_accounts_with_labels()) > 1:
+            account_bar.show()
+
         contact = app.contacts.get_contact(account, jid)
 
         if contact:
@@ -170,6 +180,7 @@ class ChatRow(Gtk.ListBoxRow):
         text_box.add(last_message_box)
 
         main_box = Gtk.Box(spacing=12)
+        main_box.pack_start(account_bar, False, True, 0)
         main_box.pack_start(avatar_image, False, True, 0)
         main_box.pack_start(text_box, True, True, 0)
 

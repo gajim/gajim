@@ -42,38 +42,54 @@
 .link-button { min-height: 0px; }
 
 /* ChatList with Workspace and Account sidebars */
+.chatlist-left-grid {
+	border-right: 1px solid @unfocused_borders;
+}
 /* Account sidebar */
 .account-sidebar-item {
-	padding-top: 2px;
-	padding-bottom: 2px;
+	padding-top: 3px;
+	padding-bottom: 3px;
 }
-.account-sidebar-item box {
+.account-sidebar-item:selected {
+	background-color: @borders;
+}
+.account-sidebar-item .account-identifier-bar {
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
 }
 .account-sidebar-item image {
 	padding: 6px;
 	background-color: @theme_unfocused_bg_color;
-	box-shadow: inset 4px 4px 6px @borders;
+	box-shadow: inset 0 0 6px @borders;
 	border-radius: 6px;
+	border: 1px solid @borders;
 }
 /* Workspace sidebar */
 .workspace-sidebar-item {
 	padding-top: 3px;
 	padding-bottom: 3px;
 }
+.workspace-sidebar-item:selected {
+	background-color: @borders;
+}
 .workspace-sidebar-item image {
-    padding: 6px;
+	padding: 6px;
 	background-color: @theme_unfocused_bg_color;
-	box-shadow: inset 4px 4px 6px @borders;
+	box-shadow: inset 0 0 6px @borders;
 	border-radius: 6px;
+	border: 1px solid @borders;
 }
 /* ChatList */
 .small-label {
     font-size: small;
 }
 .chatlist-top-bar {
-    padding: 6px;
+	padding: 12px;
+	border-right: 1px solid @unfocused_borders;
+	border-bottom: 1px solid @unfocused_borders;
+}
+.chatlist-stack {
+	border-right: 1px solid @unfocused_borders;
 }
 .revealer-close-button {
     padding: 0px;
@@ -87,9 +103,9 @@
     background-color: rgb(22, 100, 169);
 }
 .chatlist-row {
-    padding: 8px;
     border-top: 1px solid @theme_unfocused_bg_color;
     transition: none;
+    padding: 0px;
 }
 .chatlist-row:active {
     box-shadow: none;
@@ -111,6 +127,13 @@
 }
 .chatlist-row:selected button:hover {
     border-color: @insensitive_fg_color;
+}
+.chatlist-row overlay > box {
+	padding: 6px;
+}
+.chatlist-row .account-identifier-bar {
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
 }
 
 /* VCardWindow */
