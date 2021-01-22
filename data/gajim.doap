@@ -42,8 +42,8 @@
     <implements rdf:resource="https://xmpp.org/rfcs/rfc6120.html" />
     <implements rdf:resource="https://xmpp.org/rfcs/rfc6121.html" />
     <implements rdf:resource="https://xmpp.org/rfcs/rfc6122.html" />
-    <implements rdf:resource="https://tools.ietf.org/html/rfc7395" />
-    <implements rdf:resource="https://tools.ietf.org/html/rfc7590" />
+    <implements rdf:resource="https://xmpp.org/rfcs/rfc7395.html" />
+    <implements rdf:resource="https://xmpp.org/rfcs/rfc7590.html" />
     <implements>
       <xmpp:SupportedXep>
         <xmpp:xep rdf:resource="https://xmpp.org/extensions/xep-0004.html" />
