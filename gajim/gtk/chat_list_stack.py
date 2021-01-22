@@ -1,4 +1,5 @@
 
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -17,7 +18,13 @@ class ChatListStack(Gtk.Stack):
         self._chat_lists = {}
 
         self.show_all()
-        self._ui.search_entry.connect('search-changed', self._on_search_changed)
+        self._ui.start_chat_button.connect(
+            'clicked', self._on_start_chat_clicked)
+        self._ui.search_entry.connect(
+            'search-changed', self._on_search_changed)
+
+    def _on_start_chat_clicked(self, _button):
+        app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
     def _on_search_changed(self, search_entry):
         chat_list = self.get_visible_child()
