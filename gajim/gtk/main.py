@@ -1,5 +1,7 @@
 
 from gi.repository import Gtk
+from gi.repository import GLib
+from gi.repository import Gio
 
 from gajim.common import app
 from gajim.gui.util import get_builder
@@ -33,13 +35,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self._chat_list_stack = ChatListStack(self._ui, self._chat_stack)
         self._account_side_bar = AccountSideBar()
         self._workspace_side_bar = WorkspaceSideBar()
-        self._ui.left_grid.get_style_context().add_class('chatlist-left-grid')
-        self._ui.left_grid.add(self._workspace_side_bar)
-        account_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        account_box.set_valign(Gtk.Align.END)
-        account_box.add(Gtk.Separator())
-        account_box.add(self._account_side_bar)
-        self._ui.left_grid.add(account_box)
+        self._ui.workspace_scrolled.add(self._workspace_side_bar)
+
+        self._ui.account_box.add(self._account_side_bar)
+
         self._ui.middle_grid.add(self._chat_list_stack)
         self._ui.right_grid.add(self._chat_stack)
         self._ui.connect_signals(self)
@@ -47,6 +46,21 @@ class MainWindow(Gtk.ApplicationWindow):
         self.show_all()
 
         self._load_chats()
+        self._add_actions()
+
+    def _add_actions(self):
+        actions = [
+            ('add-workspace', 's', self.add_workspace),
+            ('remove-workspace', 's', self.remove_workspace),
+            ('remove-chat', 'as', self.remove_chat),
+        ]
+
+        for action in actions:
+            action_name, variant, func = action
+            variant = GLib.VariantType.new(variant)
+            act = Gio.SimpleAction.new(action_name, variant)
+            act.connect('activate', func)
+            self.add_action(act)
 
     def get_widget(self, name):
         return getattr(self._ui, name)
@@ -67,6 +81,16 @@ class MainWindow(Gtk.ApplicationWindow):
         # TODO
         return app.settings.get_workspaces()[0]
 
+    def add_workspace(self, _action, param):
+        name = param.get_string()
+        workspace_id = app.settings.add_workspace(name)
+        self._workspace_side_bar.add_workspace(workspace_id)
+
+    def remove_workspace(self, _action, param):
+        workspace_id = param.get_string()
+        self._workspace_side_bar.remove_workspace(workspace_id)
+        app.settings.remove_workspace(workspace_id)
+
     def add_chat(self, account, jid):
         workspace_id = self.get_active_workspace()
         self.add_chat_for_workspace(workspace_id, account, jid)
@@ -79,7 +103,8 @@ class MainWindow(Gtk.ApplicationWindow):
             self._chat_list_stack.select_chat(workspace_id, account, jid)
             self._chat_list_stack.store_open_chats(workspace_id)
 
-    def remove_chat(self, workspace_id, account, jid):
+    def remove_chat(self, _action, param):
+        workspace_id, account, jid = param.unpack()
         self._chat_list_stack.remove_chat(workspace_id, account, jid)
 
     def get_control(self, account, jid):

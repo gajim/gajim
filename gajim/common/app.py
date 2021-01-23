@@ -68,6 +68,7 @@ avatar_cache = {}  # type: Dict[str, Dict[str, Any]]
 bob_cache = {} # type: Dict[str, bytes]
 ipython_window = None
 app = None  # Gtk.Application
+window = None # MainWindow
 
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = cast(NetworkEventsControllerT, None)

@@ -4,7 +4,7 @@ from datetime import datetime
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
-from gi.repository import GObject
+from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -18,19 +18,12 @@ log = logging.getLogger('gajim.gtk.chatlist')
 
 
 class ChatList(Gtk.ListBox):
-
-    __gsignals__ = {
-        'chat-closed': (
-            GObject.SignalFlags.RUN_LAST,
-            None,
-            (Gtk.ListBoxRow,)
-        )}
-
-    def __init__(self):
+    def __init__(self, workspace_id):
         Gtk.ListBox.__init__(self)
 
         self._chats = {}
         self._current_filter_text = ''
+        self._workspace_id = workspace_id
         self.set_size_request(250, -1)
 
         self.show_all()
@@ -51,7 +44,7 @@ class ChatList(Gtk.ListBox):
             # Chat is already in the List
             return
 
-        row = ChatRow(account, jid)
+        row = ChatRow(self._workspace_id, account, jid)
         self._chats[(account, jid)] = row
         self.add(row)
 
@@ -72,11 +65,12 @@ class ChatList(Gtk.ListBox):
 
 
 class ChatRow(Gtk.ListBoxRow):
-    def __init__(self, account, jid):
+    def __init__(self, workspace_id, account, jid):
         Gtk.ListBoxRow.__init__(self)
 
         self.account = account
         self.jid = jid
+        self.workspace_id = workspace_id
         self._unread_count = 0
 
         self.get_style_context().add_class('chatlist-row')
@@ -201,7 +195,9 @@ class ChatRow(Gtk.ListBoxRow):
             self._revealer.set_reveal_child(False)
 
     def _on_close_button_clicked(self, _button):
-        self.get_parent().emit('chat-closed', self)
+        self.get_toplevel().activate_action(
+            'remove-chat',
+            GLib.Variant('as', [self.workspace_id, self.account, self.jid]))
 
     def set_unread(self, count):
         log.info('Set unread count: %s (%s)', self.jid, count)

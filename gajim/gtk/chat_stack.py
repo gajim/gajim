@@ -1,5 +1,4 @@
 
-from collections import defaultdict
 
 from gi.repository import Gtk
 
