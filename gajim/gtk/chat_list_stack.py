@@ -32,10 +32,22 @@ class ChatListStack(Gtk.Stack):
         chat_list.set_filter_text(search_entry.get_text())
 
     def add_chat_list(self, workspace_id):
-        chat_list = ChatList(self._ui, self._chat_stack)
+        chat_list = ChatList()
+        chat_list.connect('row-selected', self._on_row_selected)
+        chat_list.connect('chat-closed', self._on_chat_closed, workspace_id)
+
         self._chat_lists[workspace_id] = chat_list
         self.add_named(chat_list, workspace_id)
         return chat_list
+
+    def _on_row_selected(self, _chat_list, row):
+        if row is None:
+            self._chat_stack.clear()
+            return
+        self._chat_stack.show_chat(row.account, row.jid)
+
+    def _on_chat_closed(self, _chat_list, row, workspace_id):
+        self.remove_chat(workspace_id, row.account, row.jid)
 
     def show_chat_list(self, workspace_id):
         self.set_visible_child_name(workspace_id)
@@ -60,3 +72,13 @@ class ChatListStack(Gtk.Stack):
     def remove_chat(self, workspace_id, account, jid):
         chat_list = self._chat_lists[workspace_id]
         chat_list.remove_chat(account, jid)
+        self.store_open_chats(workspace_id)
+
+        if self._find_chat(account, jid) is None:
+            self._chat_stack.remove_chat(account, jid)
+
+    def _find_chat(self, account, jid):
+        for chat_list in self._chat_lists.values():
+            if chat_list.contains_chat(account, jid):
+                return chat_list
+        return None
