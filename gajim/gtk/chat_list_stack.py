@@ -39,6 +39,15 @@ class ChatListStack(Gtk.Stack):
         self.add_named(chat_list, workspace_id)
         return chat_list
 
+    def remove_chat_list(self, workspace_id):
+        chat_list = self._chat_lists[workspace_id]
+        self.remove(chat_list)
+        for account, jid in chat_list.get_open_chats():
+            self.remove_chat(workspace_id, account, jid)
+
+        self._chat_lists.pop(workspace_id)
+        chat_list.destroy()
+
     def _on_row_selected(self, _chat_list, row):
         if row is None:
             self._chat_stack.clear()

@@ -19,6 +19,8 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.connect('button-press-event', self._on_button_press)
         self.connect('row-activated', self._on_row_activated)
 
+        self._workspaces = {}
+
     @staticmethod
     def _sort_func(child1, child2):
         if child1.sort_index < child2.sort_index:
@@ -44,13 +46,27 @@ class WorkspaceSideBar(Gtk.ListBox):
                 'activate-workspace', GLib.Variant('s', row.workspace_id))
 
     def add_workspace(self, workspace_id):
-        self.add(Workspace(workspace_id))
+        row = Workspace(workspace_id)
+        self._workspaces[workspace_id] = row
+        self.add(row)
 
     def remove_workspace(self, workspace_id):
-        for row in self.get_children():
-            if row.workspace_id == workspace_id:
-                self.remove(row)
-                break
+        row = self._workspaces.pop(workspace_id)
+        self.remove(row)
+
+    def activate_workspace(self, workspace_id):
+        row = self.get_selected_row()
+        if row is not None and row.workspace_id == workspace_id:
+            return
+
+        row = self._workspaces[workspace_id]
+        self.select_row(row)
+
+    def get_active_workspace(self):
+        row = self.get_selected_row()
+        if row is None:
+            return None
+        return row.workspace_id
 
 
 class CommonWorkspace(Gtk.ListBoxRow):

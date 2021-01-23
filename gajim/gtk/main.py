@@ -52,6 +52,7 @@ class MainWindow(Gtk.ApplicationWindow):
         actions = [
             ('add-workspace', 's', self.add_workspace),
             ('remove-workspace', 's', self.remove_workspace),
+            ('activate-workspace', 's', self.activate_workspace),
             ('remove-chat', 'as', self.remove_chat),
         ]
 
@@ -78,21 +79,27 @@ class MainWindow(Gtk.ApplicationWindow):
         pass
 
     def get_active_workspace(self):
-        # TODO
-        return app.settings.get_workspaces()[0]
+        return self._workspace_side_bar.get_active_workspace()
 
     def add_workspace(self, _action, param):
         name = param.get_string()
         workspace_id = app.settings.add_workspace(name)
         self._workspace_side_bar.add_workspace(workspace_id)
+        self._chat_list_stack.add_chat_list(workspace_id)
 
     def remove_workspace(self, _action, param):
         workspace_id = param.get_string()
         self._workspace_side_bar.remove_workspace(workspace_id)
+        self._chat_list_stack.remove_chat_list(workspace_id)
         app.settings.remove_workspace(workspace_id)
 
+    def activate_workspace(self, _action, param):
+        workspace_id = param.get_string()
+        self._workspace_side_bar.activate_workspace(workspace_id)
+        self._chat_list_stack.show_chat_list(workspace_id)
+
     def add_chat(self, account, jid):
-        workspace_id = self.get_active_workspace()
+        workspace_id = self._workspace_side_bar.get_active_workspace()
         self.add_chat_for_workspace(workspace_id, account, jid)
 
     def add_chat_for_workspace(self, workspace_id, account, jid):
@@ -113,6 +120,7 @@ class MainWindow(Gtk.ApplicationWindow):
     def _load_chats(self):
         for workspace_id in app.settings.get_workspaces():
             self._workspace_side_bar.add_workspace(workspace_id)
+            self._chat_list_stack.add_chat_list(workspace_id)
             open_chats = app.settings.get_workspace_setting(workspace_id,
                                                             'open_chats')
             for account, jid in open_chats:
