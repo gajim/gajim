@@ -4,6 +4,7 @@ from datetime import datetime
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
+from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -17,11 +18,17 @@ log = logging.getLogger('gajim.gtk.chatlist')
 
 
 class ChatList(Gtk.ListBox):
-    def __init__(self, ui, chat_stack):
+
+    __gsignals__ = {
+        'chat-closed': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (Gtk.ListBoxRow,)
+        )}
+
+    def __init__(self):
         Gtk.ListBox.__init__(self)
 
-        self._ui = ui
-        self._chat_stack = chat_stack
         self._chats = {}
         self._current_filter_text = ''
         self.set_size_request(250, -1)
@@ -29,7 +36,6 @@ class ChatList(Gtk.ListBox):
         self.show_all()
 
         self.set_filter_func(self._filter_func)
-        self.connect('row-selected', self._on_row_selected)
 
     def _filter_func(self, row):
         if not self._current_filter_text:
@@ -41,10 +47,9 @@ class ChatList(Gtk.ListBox):
         self.invalidate_filter()
 
     def add_chat(self, account, jid):
-        for _row_account, row_jid in self.get_open_chats():
-            if row_jid == jid:
-                self.select_chat(account, jid)
-                return
+        if self._chats.get((account, jid)) is not None:
+            # Chat is already in the List
+            return
 
         row = ChatRow(account, jid)
         self._chats[(account, jid)] = row
@@ -59,11 +64,8 @@ class ChatList(Gtk.ListBox):
         self.remove(row)
         row.destroy()
 
-    def _on_row_selected(self, _listbox, row):
-        if row is None:
-            self._chat_stack.clear()
-            return
-        self._chat_stack.show_chat(row.account, row.jid)
+    def contains_chat(self, account, jid):
+        return self._chats.get((account, jid)) is not None
 
     def get_open_chats(self):
         return list(self._chats.keys())
@@ -199,7 +201,7 @@ class ChatRow(Gtk.ListBoxRow):
             self._revealer.set_reveal_child(False)
 
     def _on_close_button_clicked(self, _button):
-        self.get_parent().remove_chat(self.account, self.jid)
+        self.get_parent().emit('chat-closed', self)
 
     def set_unread(self, count):
         log.info('Set unread count: %s (%s)', self.jid, count)

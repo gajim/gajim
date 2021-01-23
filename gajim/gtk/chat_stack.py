@@ -17,26 +17,30 @@ class ChatStack(Gtk.Stack):
         self.add_named(Gtk.Box(), 'empty')
 
         self.show_all()
-        self._controls = defaultdict(dict)
+        self._controls = {}
 
     def get_control(self, account, jid):
         try:
-            return self._controls[account][jid]
+            return self._controls[(account, jid)]
         except KeyError:
             return None
 
     def add_chat(self, account, jid):
+        if self._controls.get((account, jid)) is not None:
+            # Control is already in the Stack
+            return
+
         mw = self.get_toplevel()
         contact = app.contacts.create_contact(jid, account)
         chat_control = ChatControl(mw, contact, account, None, None)
-        self._controls[account][jid] = chat_control
+        self._controls[(account, jid)] = chat_control
         self.add_named(chat_control.widget, f'{account}:{jid}')
         chat_control.widget.show_all()
 
     def remove_chat(self, account, jid):
-        control = self._controls[account].pop(jid)
+        control = self._controls.pop((account, jid))
+        self.remove(control.widget)
         control.shutdown()
-        self.remove(control)
 
     def show_chat(self, account, jid):
         self.set_visible_child_name(f'{account}:{jid}')
