@@ -32,9 +32,8 @@ class ChatListStack(Gtk.Stack):
         chat_list.set_filter_text(search_entry.get_text())
 
     def add_chat_list(self, workspace_id):
-        chat_list = ChatList()
+        chat_list = ChatList(workspace_id)
         chat_list.connect('row-selected', self._on_row_selected)
-        chat_list.connect('chat-closed', self._on_chat_closed, workspace_id)
 
         self._chat_lists[workspace_id] = chat_list
         self.add_named(chat_list, workspace_id)
@@ -45,9 +44,6 @@ class ChatListStack(Gtk.Stack):
             self._chat_stack.clear()
             return
         self._chat_stack.show_chat(row.account, row.jid)
-
-    def _on_chat_closed(self, _chat_list, row, workspace_id):
-        self.remove_chat(workspace_id, row.account, row.jid)
 
     def show_chat_list(self, workspace_id):
         self.set_visible_child_name(workspace_id)
