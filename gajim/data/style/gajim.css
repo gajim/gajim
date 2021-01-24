@@ -58,13 +58,12 @@
 	padding-bottom: 12px;
 }
 
-/*.account-sidebar-item:selected,*/
 .account-sidebar-item:hover {
     background: transparent;
     box-shadow: none;
     outline: none;
 }
-/*.account-sidebar-item:selected image,*/
+
 .account-sidebar-item:hover image {
     box-shadow: 0 0 6px @theme_selected_bg_color;
 }
@@ -97,6 +96,7 @@
 }
 .workspace-sidebar-item image {
 	border-radius: 9px;
+    border: 1px solid @borders;
 }
 /* ChatList */
 .small-label {
