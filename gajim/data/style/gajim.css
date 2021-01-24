@@ -46,12 +46,16 @@
 .chatlist-left-grid {
 	border-right: 1px solid @unfocused_borders;
 }
-
+.account-identifier-bar {
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
 /* Account sidebar */
 .account-sidebar {
-    background: transparent;
+	background: transparent;
+	padding-top: 3px;
+	border-top: 1px solid @borders;
 }
-
 .account-sidebar-item {
 	padding-top: 3px;
 	padding-bottom: 3px;
@@ -59,12 +63,10 @@
 .account-sidebar-item:selected {
 	background-color: @borders;
 }
-.account-sidebar-item .account-identifier-bar {
-	border-top-right-radius: 6px;
-	border-bottom-right-radius: 6px;
-}
 .account-sidebar-item image {
-	padding: 6px;
+	margin-left: 3px;
+	margin-right: 3px;
+	padding: 3px;
 	background-color: @theme_unfocused_bg_color;
 	box-shadow: inset 0 0 6px @borders;
 	border-radius: 6px;
@@ -141,10 +143,6 @@
 }
 .chatlist-row overlay > box {
 	padding: 6px;
-}
-.chatlist-row .account-identifier-bar {
-	border-top-right-radius: 6px;
-	border-bottom-right-radius: 6px;
 }
 
 /* VCardWindow */
