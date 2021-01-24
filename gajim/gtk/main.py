@@ -128,6 +128,8 @@ class MainWindow(Gtk.ApplicationWindow):
             open_chats = app.settings.get_workspace_setting(workspace_id,
                                                             'open_chats')
             for account, jid in open_chats:
+                if account not in app.connections:
+                    continue
                 self.add_chat_for_workspace(workspace_id, account, jid)
 
         self._startup_finished = True
