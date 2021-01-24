@@ -73,24 +73,26 @@
 	border: 1px solid @borders;
 }
 /* Workspace sidebar */
-
 .workspace-sidebar {
-    background: transparent;
+	background: transparent;
 }
-
 .workspace-sidebar-item {
 	padding-top: 3px;
 	padding-bottom: 3px;
 }
-.workspace-sidebar-item:selected {
-	background-color: @borders;
+.workspace-sidebar-item:selected,
+.workspace-sidebar-item:hover {
+	background: transparent;
+	box-shadow: none;
+	outline: none;
+}
+.workspace-sidebar-item:selected image,
+.workspace-sidebar-item:hover image {
+	box-shadow: 0 0 6px @theme_selected_bg_color;
 }
 .workspace-sidebar-item image {
-	padding: 6px;
-	background-color: @theme_unfocused_bg_color;
-	box-shadow: inset 0 0 6px @borders;
+	padding: 3px;
 	border-radius: 6px;
-	border: 1px solid @borders;
 }
 /* ChatList */
 .small-label {
