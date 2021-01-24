@@ -80,10 +80,13 @@ def generate_avatar(letters, color, size, scale):
 
 
 @lru_cache(maxsize=2048)
-def generate_default_avatar(letter, color_string, size, scale):
+def generate_default_avatar(letter, color_string, size, scale, style='circle'):
     color = text_to_color(color_string)
     surface = generate_avatar(letter, color, size, scale)
-    surface = clip_circle(surface)
+    if style == 'circle':
+        surface = clip_circle(surface)
+    elif style == 'round-corners':
+        surface = round_corners(surface)
     surface.set_device_scale(scale, scale)
     return surface
 
@@ -183,6 +186,34 @@ def clip_circle(surface):
     return context.get_target()
 
 
+def round_corners(surface):
+    new_surface = cairo.ImageSurface(cairo.Format.ARGB32,
+                                     surface.get_width(),
+                                     surface.get_height())
+
+    new_surface.set_device_scale(*surface.get_device_scale())
+    context = cairo.Context(new_surface)
+    context.set_source_surface(surface, 0, 0)
+
+    width = surface.get_width()
+    height = surface.get_height()
+    scale = surface.get_device_scale()[0]
+    radius = 9 * scale
+    degrees = pi / 180
+
+    context.new_sub_path()
+    context.arc(width - radius, radius, radius, -90 * degrees, 0 * degrees)
+    context.arc(width - radius, height - radius, radius, 0 * degrees, 90 * degrees)
+    context.arc(radius, height - radius, radius, 90 * degrees, 180 * degrees)
+    context.arc(radius, radius, radius, 180 * degrees, 270 * degrees)
+    context.close_path()
+    context.clip()
+
+    context.paint()
+
+    return context.get_target()
+
+
 def get_avatar_from_pixbuf(pixbuf, scale, show=None):
     size = max(pixbuf.get_width(), pixbuf.get_height())
     size *= scale
@@ -207,11 +238,23 @@ class AvatarStorage(metaclass=Singleton):
     def invalidate_cache(self, jid):
         self._cache.pop(jid, None)
 
-    def get_pixbuf(self, contact, size, scale, show=None, default=False):
-        surface = self.get_surface(contact, size, scale, show, default)
+    def get_pixbuf(self,
+                   contact,
+                   size,
+                   scale,
+                   show=None,
+                   default=False,
+                   style='circle'):
+        surface = self.get_surface(contact, size, scale, show, default, style)
         return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
-    def get_surface(self, contact, size, scale, show=None, default=False):
+    def get_surface(self,
+                    contact,
+                    size,
+                    scale,
+                    show=None,
+                    default=False,
+                    style='circle'):
         jid = contact.jid
         if contact.is_gc_contact:
             jid = contact.get_full_jid()
@@ -237,7 +280,7 @@ class AvatarStorage(metaclass=Singleton):
 
         letter = self._generate_letter(name)
         surface = generate_default_avatar(
-            letter, color_string, size, scale)
+            letter, color_string, size, scale, style=style)
         if show is not None:
             surface = add_status_to_avatar(surface, show)
         self._cache[jid][(size, scale, show)] = surface
