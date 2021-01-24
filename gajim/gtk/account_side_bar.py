@@ -2,6 +2,7 @@
 from gi.repository import Gtk
 from gajim.common.const import AvatarSize
 from gajim.common import app
+from gajim.common.i18n import _
 
 
 class AccountSideBar(Gtk.ListBox):
@@ -44,7 +45,9 @@ class Account(Gtk.ListBoxRow):
         account_color_bar.get_style_context().add_class(
             'account-identifier-bar')
 
-        account_box = Gtk.Box(spacing=6)
+        account_box = Gtk.Box()
+        account_box.set_tooltip_text(
+            _('Account: %s') % app.get_account_label(account))
         account_box.add(account_color_bar)
         account_box.add(self._image)
 
