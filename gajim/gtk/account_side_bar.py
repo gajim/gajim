@@ -27,16 +27,8 @@ class Account(Gtk.ListBoxRow):
     def __init__(self, account):
         Gtk.ListBoxRow.__init__(self)
         self.get_style_context().add_class('account-sidebar-item')
-
-        self._account = account
-        self._jid = app.get_jid_from_account(account)
-        contact = app.contacts.create_contact(self._jid, account)
-
-        scale = self.get_scale_factor()
-        surface = app.interface.get_avatar(contact,
-                                           AvatarSize.ACCOUNT_SIDE_BAR,
-                                           scale)
-        self._image = Gtk.Image.new_from_surface(surface)
+        self.set_selectable(False)
+        image = AccountAvatar(account)
 
         account_color_bar = Gtk.Box()
         account_color_bar.set_size_request(6, -1)
@@ -45,11 +37,26 @@ class Account(Gtk.ListBoxRow):
         account_color_bar.get_style_context().add_class(
             'account-identifier-bar')
 
-        account_box = Gtk.Box()
+        account_box = Gtk.Box(spacing=6)
         account_box.set_tooltip_text(
             _('Account: %s') % app.get_account_label(account))
         account_box.add(account_color_bar)
-        account_box.add(self._image)
+        account_box.add(image)
 
         self.add(account_box)
         self.show_all()
+
+
+class AccountAvatar(Gtk.Image):
+    def __init__(self, account):
+        Gtk.Image.__init__(self)
+
+        jid = app.get_jid_from_account(account)
+        contact = app.contacts.create_contact(jid, account)
+
+        scale = self.get_scale_factor()
+        surface = app.interface.get_avatar(contact,
+                                           AvatarSize.ACCOUNT_SIDE_BAR,
+                                           scale,
+                                           style='round-corners')
+        self.set_from_surface(surface)

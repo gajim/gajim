@@ -1774,10 +1774,18 @@ class Interface:
     def save_avatar(self, data):
         return self.avatar_storage.save_avatar(data)
 
-    def get_avatar(self, contact, size, scale, show=None, pixbuf=False):
+    def get_avatar(self,
+                   contact,
+                   size,
+                   scale,
+                   show=None,
+                   pixbuf=False,
+                   style='circle'):
         if pixbuf:
-            return self.avatar_storage.get_pixbuf(contact, size, scale, show)
-        return self.avatar_storage.get_surface(contact, size, scale, show)
+            return self.avatar_storage.get_pixbuf(
+                contact, size, scale, show, style=style)
+        return self.avatar_storage.get_surface(
+            contact, size, scale, show, style=style)
 
     def avatar_exists(self, filename):
         return self.avatar_storage.get_avatar_path(filename) is not None

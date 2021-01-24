@@ -5,6 +5,7 @@ from gi.repository import Gio
 
 from gajim.common import app
 from gajim.gui.util import get_builder
+from gajim.gui.util import load_icon
 from gajim.gui.chat_list_stack import ChatListStack
 from gajim.gui.chat_stack import ChatStack
 from gajim.gui.account_side_bar import AccountSideBar
@@ -35,6 +36,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self._chat_list_stack = ChatListStack(self._ui, self._chat_stack)
         self._account_side_bar = AccountSideBar()
         self._workspace_side_bar = WorkspaceSideBar()
+
+        surface = load_icon('org.gajim.Gajim', self, 40)
+        self._ui.app_image.set_from_surface(surface)
         self._ui.workspace_scrolled.add(self._workspace_side_bar)
 
         self._ui.account_box.add(self._account_side_bar)

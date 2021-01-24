@@ -84,13 +84,7 @@ class Workspace(CommonWorkspace):
 
         self.sort_index = 0
 
-        name = app.settings.get_workspace_setting(workspace_id, 'name')
-        letter = name[:2]
-
-        scale = self.get_scale_factor()
-        surface = generate_default_avatar(
-            letter, name, AvatarSize.WORKSPACE, scale)
-        image = Gtk.Image.new_from_surface(surface)
+        image = WorkspaceAvatar(workspace_id)
         image.set_halign(Gtk.Align.CENTER)
         self.add(image)
         self.show_all()
@@ -137,3 +131,15 @@ class WorspaceMenu(Gtk.Popover):
         self.set_relative_to(None)
         app.window.activate_action(action,
                                    GLib.Variant('s', self._workspace_id))
+
+
+class WorkspaceAvatar(Gtk.Image):
+    def __init__(self, workspace_id):
+        Gtk.Image.__init__(self)
+
+        name = app.settings.get_workspace_setting(workspace_id, 'name')
+        letter = name[:1].upper()
+        scale = self.get_scale_factor()
+        surface = generate_default_avatar(
+            letter, name, AvatarSize.WORKSPACE, scale, style='round-corners')
+        self.set_from_surface(surface)
