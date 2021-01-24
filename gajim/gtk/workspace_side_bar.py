@@ -15,6 +15,7 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.set_vexpand(True)
         self.set_valign(Gtk.Align.START)
         self.set_sort_func(self._sort_func)
+        self.get_style_context().add_class('workspace-sidebar')
         self.add(AddWorkspace('add'))
         self.connect('button-press-event', self._on_button_press)
         self.connect('row-activated', self._on_row_activated)

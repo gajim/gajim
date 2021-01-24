@@ -46,7 +46,12 @@
 .chatlist-left-grid {
 	border-right: 1px solid @unfocused_borders;
 }
+
 /* Account sidebar */
+.account-sidebar {
+    background: transparent;
+}
+
 .account-sidebar-item {
 	padding-top: 3px;
 	padding-bottom: 3px;
@@ -66,6 +71,11 @@
 	border: 1px solid @borders;
 }
 /* Workspace sidebar */
+
+.workspace-sidebar {
+    background: transparent;
+}
+
 .workspace-sidebar-item {
 	padding-top: 3px;
 	padding-bottom: 3px;
