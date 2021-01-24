@@ -62,24 +62,24 @@
 .account-sidebar {
 	background: transparent;
     margin-right: 12px;
+    margin-bottom: 6px;
 }
 .account-sidebar-item {
-	padding-bottom: 12px;
+    padding-top: 6px;
+	padding-bottom: 6px;
 }
 
-/*.account-sidebar-item:selected,*/
 .account-sidebar-item:hover {
     background: transparent;
     box-shadow: none;
     outline: none;
 }
-/*.account-sidebar-item:selected image,*/
+
 .account-sidebar-item:hover image {
     box-shadow: 0 0 6px @theme_selected_bg_color;
 }
 .account-sidebar-item image {
     border-radius: 9px;
-    border: 1px solid @borders;
 }
 .account-box > separator {
     background-color: darker(@theme_bg_color);
@@ -92,7 +92,8 @@
     margin-right: 12px;
 }
 .workspace-sidebar-item {
-	padding-bottom: 12px;
+    padding-top: 6px;
+	padding-bottom: 6px;
 }
 .workspace-sidebar-item:selected,
 .workspace-sidebar-item:hover {
