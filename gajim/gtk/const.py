@@ -131,4 +131,5 @@ WINDOW_MODULES = {
     'Features': 'gajim.gui.features',
     'StatusChange': 'gajim.gui.status_change',
     'GroupChatInvitation': 'gajim.gui.groupchat_invitation',
+    'WorkspaceDialog': 'gajim.gui.workspace_dialog',
 }
