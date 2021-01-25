@@ -6,7 +6,8 @@ from gajim.common import app
 
 from gajim.common.i18n import _
 
-from gajim.gui.avatar import generate_default_avatar
+from .avatar import generate_default_avatar
+from .util import open_window
 
 
 class WorkspaceSideBar(Gtk.ListBox):
@@ -40,8 +41,7 @@ class WorkspaceSideBar(Gtk.ListBox):
     def _on_row_activated(self, _listbox, row):
         main_window = self.get_toplevel()
         if row.workspace_id == 'add':
-            main_window.activate_action(
-                'add-workspace', GLib.Variant('s', 'test'))
+            open_window('WorkspaceDialog', edit_mode=False)
         else:
             main_window.activate_action(
                 'activate-workspace', GLib.Variant('s', row.workspace_id))
