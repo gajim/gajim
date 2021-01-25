@@ -52,20 +52,21 @@ class ChatListStack(Gtk.Stack):
         self._ui.workspace_label.set_text(
             app.settings.get_workspace_setting(workspace_id, 'name'))
 
-    def add_chat(self, workspace_id, *args):
+    def add_chat(self, workspace_id, account, jid, type_):
         chat_list = self._chat_lists.get(workspace_id)
         if chat_list is None:
             chat_list = self.add_chat_list(workspace_id)
-        chat_list.add_chat(*args)
+        chat_list.add_chat(account, jid, type_)
 
-    def select_chat(self, workspace_id, *args):
+    def select_chat(self, workspace_id, account, jid):
         self.show_chat_list(workspace_id)
         chat_list = self._chat_lists.get(workspace_id)
-        chat_list.select_chat(*args)
+        chat_list.select_chat(account, jid)
 
     def store_open_chats(self, workspace_id):
         chat_list = self._chat_lists[workspace_id]
         open_chats = chat_list.get_open_chats()
+        print('store', open_chats)
         app.settings.set_workspace_setting(
             workspace_id, 'open_chats', open_chats)
 

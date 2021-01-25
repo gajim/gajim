@@ -296,7 +296,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         else:
             # app.interface.new_chat_from_jid(row.account, row.jid)
-            app.window.add_chat(row.account, row.jid)
+            app.window.activate_action(
+                'add-chat', GLib.Variant('as',
+                                         [row.account, row.jid, 'contact']))
             self.ready_to_destroy = True
             self.destroy()
 
