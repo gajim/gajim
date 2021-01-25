@@ -64,6 +64,7 @@ class MainWindow(Gtk.ApplicationWindow):
             ('add-workspace', 's', self.add_workspace),
             ('remove-workspace', 's', self.remove_workspace),
             ('activate-workspace', 's', self.activate_workspace),
+            ('add-chat', 'as', self.add_chat),
             ('remove-chat', 'as', self.remove_chat),
         ]
 
@@ -109,13 +110,14 @@ class MainWindow(Gtk.ApplicationWindow):
         self._workspace_side_bar.activate_workspace(workspace_id)
         self._chat_list_stack.show_chat_list(workspace_id)
 
-    def add_chat(self, account, jid):
+    def add_chat(self, _action, param):
+        account, jid, type_ = param.unpack()
         workspace_id = self._workspace_side_bar.get_active_workspace()
-        self.add_chat_for_workspace(workspace_id, account, jid)
+        self.add_chat_for_workspace(workspace_id, account, jid, type_)
 
-    def add_chat_for_workspace(self, workspace_id, account, jid):
-        self._chat_stack.add_chat(account, jid)
-        self._chat_list_stack.add_chat(workspace_id, account, jid)
+    def add_chat_for_workspace(self, workspace_id, account, jid, type_):
+        self._chat_stack.add_chat(account, jid, type_)
+        self._chat_list_stack.add_chat(workspace_id, account, jid, type_)
 
         if self._startup_finished:
             self._chat_list_stack.select_chat(workspace_id, account, jid)
@@ -134,10 +136,10 @@ class MainWindow(Gtk.ApplicationWindow):
             self._chat_list_stack.add_chat_list(workspace_id)
             open_chats = app.settings.get_workspace_setting(workspace_id,
                                                             'open_chats')
-            for account, jid in open_chats:
+            for account, jid, type_ in open_chats:
                 if account not in app.connections:
                     continue
-                self.add_chat_for_workspace(workspace_id, account, jid)
+                self.add_chat_for_workspace(workspace_id, account, jid, type_)
 
         self._startup_finished = True
 

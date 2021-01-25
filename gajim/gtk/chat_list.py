@@ -38,12 +38,12 @@ class ChatList(Gtk.ListBox):
         self._current_filter_text = text
         self.invalidate_filter()
 
-    def add_chat(self, account, jid):
+    def add_chat(self, account, jid, type_):
         if self._chats.get((account, jid)) is not None:
             # Chat is already in the List
             return
 
-        row = ChatRow(self._workspace_id, account, jid)
+        row = ChatRow(self._workspace_id, account, jid, type_)
         self._chats[(account, jid)] = row
         self.add(row)
 
@@ -60,16 +60,20 @@ class ChatList(Gtk.ListBox):
         return self._chats.get((account, jid)) is not None
 
     def get_open_chats(self):
-        return list(self._chats.keys())
+        open_chats = []
+        for key, value in self._chats.items():
+            open_chats.append(key + (value.type,))
+        return open_chats
 
 
 class ChatRow(Gtk.ListBoxRow):
-    def __init__(self, workspace_id, account, jid):
+    def __init__(self, workspace_id, account, jid, type_):
         Gtk.ListBoxRow.__init__(self)
 
         self.account = account
         self.jid = jid
         self.workspace_id = workspace_id
+        self.type = type_
         self._unread_count = 0
 
         self.get_style_context().add_class('chatlist-row')

@@ -433,7 +433,7 @@ class Client(ConnectionHandlers):
         # We did not resume the stream, so we are not joined any MUCs
         self.update_presence(include_muc=False)
 
-        self.get_module('Bookmarks').request_bookmarks()
+        # self.get_module('Bookmarks').request_bookmarks()
         self.get_module('SoftwareVersion').set_enabled(True)
         self.get_module('LastActivity').set_enabled(True)
         self.get_module('Annotations').request_annotations()
