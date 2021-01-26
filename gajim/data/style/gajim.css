@@ -114,11 +114,7 @@
 }
 .chatlist-top-bar {
 	padding: 12px;
-	border-right: 1px solid @unfocused_borders;
 	border-bottom: 1px solid @unfocused_borders;
-}
-.chatlist-stack {
-	border-right: 1px solid @unfocused_borders;
 }
 .revealer-close-button {
     padding: 0px;

@@ -1,5 +1,4 @@
 
-from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -10,8 +9,7 @@ from gajim.gui.chat_list import ChatList
 class ChatListStack(Gtk.Stack):
     def __init__(self, ui, chat_stack):
         Gtk.Stack.__init__(self)
-        self.get_style_context().add_class('chatlist-stack')
-
+        self.set_hexpand(True)
         self.set_vexpand(True)
 
         self._ui = ui

@@ -24,7 +24,6 @@ class ChatList(Gtk.ListBox):
         self._chats = {}
         self._current_filter_text = ''
         self._workspace_id = workspace_id
-        self.set_size_request(250, -1)
 
         self.show_all()
 
