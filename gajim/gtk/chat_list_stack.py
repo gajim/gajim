@@ -16,6 +16,8 @@ class ChatListStack(Gtk.Stack):
         self._chat_stack = chat_stack
         self._chat_lists = {}
 
+        self.add_named(Gtk.Box(), 'default')
+
         self.show_all()
         self._ui.search_entry.connect(
             'search-changed', self._on_search_changed)
@@ -35,7 +37,7 @@ class ChatListStack(Gtk.Stack):
     def remove_chat_list(self, workspace_id):
         chat_list = self._chat_lists[workspace_id]
         self.remove(chat_list)
-        for account, jid in chat_list.get_open_chats():
+        for account, jid, _ in chat_list.get_open_chats():
             self.remove_chat(workspace_id, account, jid)
 
         self._chat_lists.pop(workspace_id)
@@ -48,9 +50,16 @@ class ChatListStack(Gtk.Stack):
         self._chat_stack.show_chat(row.account, row.jid)
 
     def show_chat_list(self, workspace_id):
-        self.set_visible_child_name(workspace_id)
+        current_workspace_id = self.get_visible_child_name()
+        if current_workspace_id == workspace_id:
+            return
+
+        if current_workspace_id != 'default':
+            self._chat_lists[current_workspace_id].unselect_all()
+
         self._ui.workspace_label.set_text(
             app.settings.get_workspace_setting(workspace_id, 'name'))
+        self.set_visible_child_name(workspace_id)
 
     def add_chat(self, workspace_id, account, jid, type_):
         chat_list = self._chat_lists.get(workspace_id)
@@ -66,7 +75,6 @@ class ChatListStack(Gtk.Stack):
     def store_open_chats(self, workspace_id):
         chat_list = self._chat_lists[workspace_id]
         open_chats = chat_list.get_open_chats()
-        print('store', open_chats)
         app.settings.set_workspace_setting(
             workspace_id, 'open_chats', open_chats)
 

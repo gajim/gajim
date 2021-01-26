@@ -105,9 +105,21 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def remove_workspace(self, _action, param):
         workspace_id = param.get_string()
-        self._workspace_side_bar.remove_workspace(workspace_id)
+
+        was_active = self.get_active_workspace() == workspace_id
+
+        success = self._workspace_side_bar.remove_workspace(workspace_id)
+        if not success:
+            return
+
+        if was_active:
+            new_active_id = self._workspace_side_bar.get_first_workspace()
+            self._workspace_side_bar.activate_workspace(new_active_id)
+            self._chat_list_stack.show_chat_list(new_active_id)
+
         self._chat_list_stack.remove_chat_list(workspace_id)
         app.settings.remove_workspace(workspace_id)
+
 
     def activate_workspace(self, _action, param):
         workspace_id = param.get_string()
@@ -144,6 +156,11 @@ class MainWindow(Gtk.ApplicationWindow):
                 if account not in app.connections:
                     continue
                 self.add_chat_for_workspace(workspace_id, account, jid, type_)
+
+        for workspace_id in app.settings.get_workspaces():
+            self._workspace_side_bar.activate_workspace(workspace_id)
+            self._chat_list_stack.show_chat_list(workspace_id)
+            break
 
         self._startup_finished = True
 
