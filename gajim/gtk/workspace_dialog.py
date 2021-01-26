@@ -27,7 +27,7 @@ from .util import text_to_color
 
 
 class WorkspaceDialog(Gtk.ApplicationWindow):
-    def __init__(self, edit_mode=True):
+    def __init__(self, workspace_id=None):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('WorkspaceDialog')
         self.set_application(app.app)
@@ -37,7 +37,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_size_request(350, -1)
 
-        self._edit_mode = edit_mode
+        self._workspace_id = workspace_id
 
         self._ui = get_builder('workspace_dialog.ui')
         self.add(self._ui.box)
@@ -46,8 +46,14 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self._avatar_selector.set_size_request(200, 200)
         self._ui.image_box.add(self._avatar_selector)
 
-        name = _('My Workspace')
-        rgba = Gdk.RGBA(*text_to_color(name))
+        if workspace_id is not None:
+            name = app.settings.get_workspace_setting(
+                workspace_id, 'name')
+            rgba = Gdk.RGBA()  # TODO: Load setting
+        else:
+            name = _('My Workspace')
+            rgba = Gdk.RGBA(*text_to_color(name))
+
         self._ui.entry.set_text(name)
         self._ui.color_chooser.set_rgba(rgba)
         self._generate_avatar()
@@ -91,9 +97,11 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         # avatar = self._get_avatar_data()
         # use_image = self._ui.use_image.get_active()
 
-        if self._edit_mode:
-            # TODO: Edit action
+        if self._workspace_id is not None:
+            app.settings.set_workspace_setting(
+                self._workspace_id, 'name', name)
             self.destroy()
+            return
 
         app.window.activate_action(
             'add-workspace', GLib.Variant('s', name))

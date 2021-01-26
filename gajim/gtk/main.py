@@ -11,6 +11,8 @@ from gajim.gui.chat_stack import ChatStack
 from gajim.gui.account_side_bar import AccountSideBar
 from gajim.gui.workspace_side_bar import WorkspaceSideBar
 
+from .util import open_window
+
 
 class MainWindow(Gtk.ApplicationWindow):
     def __init__(self):
@@ -45,6 +47,11 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self._ui.middle_grid.add(self._chat_list_stack)
         self._ui.right_grid.add(self._chat_stack)
+
+        self._ui.edit_workspace_button.connect(
+            'clicked', self._on_edit_workspace_clicked)
+        self._ui.start_chat_button.connect(
+            'clicked', self._on_start_chat_clicked)
         self._ui.connect_signals(self)
 
         self.show_all()
@@ -133,3 +140,10 @@ class MainWindow(Gtk.ApplicationWindow):
                 self.add_chat_for_workspace(workspace_id, account, jid)
 
         self._startup_finished = True
+
+    def _on_start_chat_clicked(self, _button):
+        app.app.activate_action('start-chat', GLib.Variant('s', ''))
+
+    def _on_edit_workspace_clicked(self, _button):
+        open_window('WorkspaceDialog',
+                    workspace_id=self.get_active_workspace())

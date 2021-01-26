@@ -94,7 +94,7 @@
               <object class="GtkColorButton" id="color_chooser">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
+                <property name="receives-default">False</property>
                 <property name="valign">center</property>
               </object>
               <packing>
@@ -192,7 +192,7 @@
             <property name="label" translatable="yes">_Save</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
+            <property name="receives-default">False</property>
             <property name="use-underline">True</property>
             <signal name="clicked" handler="_on_save" swapped="no"/>
             <style>
