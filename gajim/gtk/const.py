@@ -25,6 +25,10 @@ Setting = namedtuple('Setting', 'kind label type value name callback data desc '
                                 'bind inverted enabled_func props')
 Setting.__new__.__defaults__ = (None,) * len(Setting._fields)  # type: ignore
 
+
+DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'
+
+
 @unique
 class Theme(IntEnum):
     NOT_DARK = 0

@@ -19,6 +19,7 @@ class AvatarSize(IntEnum):
     ROSTER = 32
     ACCOUNT_SIDE_BAR = 40
     WORKSPACE = 40
+    WORKSPACE_EDIT = 100
     CHAT = 48
     NOTIFICATION = 48
     GROUP_INFO = 100

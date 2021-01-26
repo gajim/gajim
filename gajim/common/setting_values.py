@@ -288,6 +288,8 @@ ACCOUNT_SETTINGS = {
 
 WORKSPACE_SETTINGS = {
     'name': _('My Workspace'),
+    'color': '',
+    'avatar_sha': '',
     'open_chats': [],
 }
 

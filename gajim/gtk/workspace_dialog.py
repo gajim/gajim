@@ -20,10 +20,12 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
-from .avatar import generate_default_avatar
+from .avatar import make_workspace_avatar
 from .avatar_selector import AvatarSelector
 from .util import get_builder
-from .util import text_to_color
+from .util import rgba_to_float
+from .util import make_rgba
+from .const import DEFAULT_WORKSPACE_COLOR
 
 
 class WorkspaceDialog(Gtk.ApplicationWindow):
@@ -46,17 +48,21 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self._avatar_selector.set_size_request(200, 200)
         self._ui.image_box.add(self._avatar_selector)
 
+        name = _('My Workspace')
+        color = None
+        avatar_sha = None
+
         if workspace_id is not None:
             name = app.settings.get_workspace_setting(
                 workspace_id, 'name')
-            rgba = Gdk.RGBA()  # TODO: Load setting
-        else:
-            name = _('My Workspace')
-            rgba = Gdk.RGBA(*text_to_color(name))
+            color = app.settings.get_workspace_setting(
+                workspace_id, 'color')
+
+        rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
 
         self._ui.entry.set_text(name)
         self._ui.color_chooser.set_rgba(rgba)
-        self._generate_avatar()
+        self._update_avatar()
 
         self._ui.connect_signals(self)
 
@@ -70,14 +76,21 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
     def _on_cancel(self, _button):
         self.destroy()
 
-    def _generate_avatar(self):
-        name = self._ui.entry.get_text()
-        if not name:
-            return
-        letter = name[:1].upper()
+    def _on_color_set(self, _button):
+        self._update_avatar()
+
+    def _on_text_changed(self, _entry, _param):
+        self._update_avatar()
+
+    def _update_avatar(self):
+        name = self._ui.entry.get_text() or 'M'
+        rgba = self._ui.color_chooser.get_rgba()
         scale = self.get_scale_factor()
-        surface = generate_default_avatar(
-            letter, name, AvatarSize.GROUP_INFO, scale, style='round-corners')
+        surface = make_workspace_avatar(
+            name[:1].upper(),
+            rgba_to_float(rgba),
+            AvatarSize.WORKSPACE_EDIT,
+            scale)
         self._ui.preview.set_from_surface(surface)
 
     def _get_avatar_data(self):
@@ -92,14 +105,19 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
 
     def _on_save(self, _button):
         name = self._ui.entry.get_text()
-        # rgba = self._ui.color_chooser.get_rgba()
-        # color = rgba.to_string()
+        rgba = self._ui.color_chooser.get_rgba()
         # avatar = self._get_avatar_data()
         # use_image = self._ui.use_image.get_active()
 
         if self._workspace_id is not None:
             app.settings.set_workspace_setting(
                 self._workspace_id, 'name', name)
+            app.settings.set_workspace_setting(
+                self._workspace_id, 'color', rgba.to_string())
+
+            app.interface.avatar_storage.invalidate_cache(self._workspace_id)
+            workspace_bar = app.window.get_workspace_bar()
+            workspace_bar.update_avatar(self._workspace_id)
             self.destroy()
             return
 
