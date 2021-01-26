@@ -19,13 +19,8 @@ class ChatListStack(Gtk.Stack):
         self._chat_lists = {}
 
         self.show_all()
-        self._ui.start_chat_button.connect(
-            'clicked', self._on_start_chat_clicked)
         self._ui.search_entry.connect(
             'search-changed', self._on_search_changed)
-
-    def _on_start_chat_clicked(self, _button):
-        app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
     def _on_search_changed(self, search_entry):
         chat_list = self.get_visible_child()
@@ -56,6 +51,8 @@ class ChatListStack(Gtk.Stack):
 
     def show_chat_list(self, workspace_id):
         self.set_visible_child_name(workspace_id)
+        self._ui.workspace_label.set_text(
+            app.settings.get_workspace_setting(workspace_id, 'name'))
 
     def add_chat(self, workspace_id, *args):
         chat_list = self._chat_lists.get(workspace_id)
