@@ -51,8 +51,11 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.add(row)
 
     def remove_workspace(self, workspace_id):
+        if len(self._workspaces) == 1:
+            return False
         row = self._workspaces.pop(workspace_id)
         self.remove(row)
+        return True
 
     def activate_workspace(self, workspace_id):
         row = self.get_selected_row()
@@ -67,6 +70,10 @@ class WorkspaceSideBar(Gtk.ListBox):
         if row is None:
             return None
         return row.workspace_id
+
+    def get_first_workspace(self):
+        for row in self.get_children():
+            return row.workspace_id
 
     def update_avatar(self, workspace_id):
         row = self._workspaces[workspace_id]
