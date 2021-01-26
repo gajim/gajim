@@ -30,6 +30,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 
+from .filechoosers import AvatarChooserDialog
 from .util import scale_with_ratio
 
 log = logging.getLogger('gajim.gui.avatar_selector')
@@ -60,8 +61,8 @@ class Range(IntEnum):
 
 class AvatarSelector(Gtk.Box):
     def __init__(self):
-        Gtk.Box.__init__(self)
-        self.set_orientation(Gtk.Orientation.VERTICAL)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL,
+                         spacing=12)
         self.get_style_context().add_class('padding-18')
 
         uri_entry = Gtk.TargetEntry.new(
@@ -79,8 +80,16 @@ class AvatarSelector(Gtk.Box):
         self._crop_area.set_vexpand(True)
         self.add(self._crop_area)
 
+        self._load_button = Gtk.Button()
+        self._load_button.set_label(_('Load Image'))
+        self._load_button.set_halign(Gtk.Align.CENTER)
+        self._load_button.set_no_show_all(True)
+        self._load_button.connect('clicked', self._on_load_clicked)
+        self._load_button.show()
+        self.add(self._load_button)
+
         self._helper_label = Gtk.Label(
-            label=_('Select a picture or drop it here'))
+            label=_('…or drop it here'))
         self._helper_label.get_style_context().add_class('bold')
         self._helper_label.get_style_context().add_class('dim-label')
         self._helper_label.set_vexpand(True)
@@ -93,8 +102,17 @@ class AvatarSelector(Gtk.Box):
     def prepare_crop_area(self, path):
         pixbuf = self._get_pixbuf_from_path(path)
         self._crop_area.set_pixbuf(pixbuf)
+        self._load_button.hide()
         self._helper_label.hide()
         self._crop_area.show()
+
+    def _on_load_clicked(self, _button):
+        def _on_file_selected(path):
+            self.prepare_crop_area(path)
+
+        AvatarChooserDialog(_on_file_selected,
+                            transient_for=self.get_toplevel(),
+                            modal=True)
 
     def _on_drag_data_received(self, _widget, _context, _x_coord, _y_coord,
                                selection, target_type, _timestamp):
