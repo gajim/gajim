@@ -97,10 +97,11 @@ class MainWindow(Gtk.ApplicationWindow):
         return self._workspace_side_bar.get_active_workspace()
 
     def add_workspace(self, _action, param):
-        name = param.get_string()
-        workspace_id = app.settings.add_workspace(name)
+        workspace_id = param.get_string()
         self._workspace_side_bar.add_workspace(workspace_id)
         self._chat_list_stack.add_chat_list(workspace_id)
+        self._workspace_side_bar.activate_workspace(workspace_id)
+        self._chat_list_stack.show_chat_list(workspace_id)
 
     def remove_workspace(self, _action, param):
         workspace_id = param.get_string()

@@ -190,7 +190,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="save_button">
             <property name="label" translatable="yes">_Save</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
