@@ -79,11 +79,12 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
     def _on_color_set(self, _button):
         self._update_avatar()
 
-    def _on_text_changed(self, _entry, _param):
+    def _on_text_changed(self, entry, _param):
+        self._ui.save_button.set_sensitive(bool(entry.get_text()))
         self._update_avatar()
 
     def _update_avatar(self):
-        name = self._ui.entry.get_text() or 'M'
+        name = self._ui.entry.get_text()
         rgba = self._ui.color_chooser.get_rgba()
         scale = self.get_scale_factor()
         surface = make_workspace_avatar(
@@ -121,6 +122,10 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
             self.destroy()
             return
 
+        workspace_id = app.settings.add_workspace(name)
+        app.settings.set_workspace_setting(
+            workspace_id, 'color', rgba.to_string())
+
         app.window.activate_action(
-            'add-workspace', GLib.Variant('s', name))
+            'add-workspace', GLib.Variant('s', workspace_id))
         self.destroy()
