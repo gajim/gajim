@@ -90,6 +90,9 @@ class MainWindow(Gtk.ApplicationWindow):
     def get_active_jid(self, *args):
         pass
 
+    def get_workspace_bar(self):
+        return self._workspace_side_bar
+
     def get_active_workspace(self):
         return self._workspace_side_bar.get_active_workspace()
 
@@ -116,7 +119,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.add_chat_for_workspace(workspace_id, account, jid, type_)
 
     def add_chat_for_workspace(self, workspace_id, account, jid, type_):
-        self._chat_stack.add_chat(account, jid, type_)
+        self._chat_stack.add_chat(account, jid)
         self._chat_list_stack.add_chat(workspace_id, account, jid, type_)
 
         if self._startup_finished:

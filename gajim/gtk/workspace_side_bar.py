@@ -6,7 +6,6 @@ from gajim.common import app
 
 from gajim.common.i18n import _
 
-from .avatar import generate_default_avatar
 from .util import open_window
 
 
@@ -69,6 +68,10 @@ class WorkspaceSideBar(Gtk.ListBox):
             return None
         return row.workspace_id
 
+    def update_avatar(self, workspace_id):
+        row = self._workspaces[workspace_id]
+        row.update_avatar()
+
 
 class CommonWorkspace(Gtk.ListBoxRow):
     def __init__(self, workspace_id):
@@ -84,10 +87,13 @@ class Workspace(CommonWorkspace):
 
         self.sort_index = 0
 
-        image = WorkspaceAvatar(workspace_id)
-        image.set_halign(Gtk.Align.CENTER)
-        self.add(image)
+        self._image = WorkspaceAvatar(workspace_id)
+        self._image.set_halign(Gtk.Align.CENTER)
+        self.add(self._image)
         self.show_all()
+
+    def update_avatar(self):
+        self._image.update()
 
 
 class AddWorkspace(CommonWorkspace):
@@ -136,10 +142,11 @@ class WorspaceMenu(Gtk.Popover):
 class WorkspaceAvatar(Gtk.Image):
     def __init__(self, workspace_id):
         Gtk.Image.__init__(self)
+        self._workspace_id = workspace_id
+        self.update()
 
-        name = app.settings.get_workspace_setting(workspace_id, 'name')
-        letter = name[:1].upper()
+    def update(self):
         scale = self.get_scale_factor()
-        surface = generate_default_avatar(
-            letter, name, AvatarSize.WORKSPACE, scale, style='round-corners')
+        surface = app.interface.avatar_storage.get_workspace_surface(
+            self._workspace_id, AvatarSize.WORKSPACE, scale)
         self.set_from_surface(surface)

@@ -455,6 +455,16 @@ def convert_rgb_string_to_float(rgb_string: str) -> Tuple[float, float, float]:
     return (rgba.red, rgba.green, rgba.blue)
 
 
+def rgba_to_float(rgba):
+    return (rgba.red, rgba.green, rgba.blue)
+
+
+def make_rgba(color_string):
+    rgba = Gdk.RGBA()
+    rgba.parse(color_string)
+    return rgba
+
+
 def get_monitor_scale_factor() -> int:
     display = Gdk.Display.get_default()
     monitor = display.get_primary_monitor()

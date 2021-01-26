@@ -29,11 +29,14 @@ from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 
+from .const import DEFAULT_WORKSPACE_COLOR
 from .util import load_pixbuf
 from .util import text_to_color
 from .util import scale_with_ratio
 from .util import get_css_show_class
 from .util import convert_rgb_string_to_float
+from .util import rgba_to_float
+from .util import make_rgba
 
 log = logging.getLogger('gajim.gui.avatar')
 
@@ -79,9 +82,20 @@ def generate_avatar(letters, color, size, scale):
     return context.get_target()
 
 
-@lru_cache(maxsize=2048)
+@lru_cache(maxsize=None)
 def generate_default_avatar(letter, color_string, size, scale, style='circle'):
     color = text_to_color(color_string)
+    surface = generate_avatar(letter, color, size, scale)
+    if style == 'circle':
+        surface = clip_circle(surface)
+    elif style == 'round-corners':
+        surface = round_corners(surface)
+    surface.set_device_scale(scale, scale)
+    return surface
+
+
+@lru_cache(maxsize=None)
+def make_workspace_avatar(letter, color, size, scale, style='round-corners'):
     surface = generate_avatar(letter, color, size, scale)
     if style == 'circle':
         surface = clip_circle(surface)
@@ -307,6 +321,23 @@ class AvatarStorage(metaclass=Singleton):
         surface = generate_default_avatar(letter, jid, size, scale)
         self._cache[jid][(size, scale)] = surface
         return surface
+
+    def get_workspace_surface(self, workspace_id, size, scale):
+        surface = self._cache[workspace_id].get((size, scale))
+        if surface is not None:
+            return surface
+
+        name = app.settings.get_workspace_setting(workspace_id, 'name')
+        color = app.settings.get_workspace_setting(workspace_id, 'color')
+        avatar_sha = app.settings.get_workspace_setting(
+            workspace_id, 'avatar_sha')
+        if not avatar_sha:
+            rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
+            letter = name[:1].upper()
+            surface = make_workspace_avatar(
+                letter, rgba_to_float(rgba), size, scale)
+            self._cache[workspace_id][(size, scale)] = surface
+            return surface
 
     def prepare_for_publish(self, path):
         success, data = self._load_for_publish(path)
