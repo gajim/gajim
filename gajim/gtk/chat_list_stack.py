@@ -11,6 +11,7 @@ class ChatListStack(Gtk.Stack):
         Gtk.Stack.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
+        self.set_vhomogeneous(False)
 
         self._ui = ui
         self._chat_stack = chat_stack

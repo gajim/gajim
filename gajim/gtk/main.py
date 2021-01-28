@@ -36,6 +36,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self._chat_stack = ChatStack()
         self._chat_list_stack = ChatListStack(self._ui, self._chat_stack)
+        chat_list_scrolled = Gtk.ScrolledWindow()
+        chat_list_scrolled.add(self._chat_list_stack)
+
         self._account_side_bar = AccountSideBar()
         self._workspace_side_bar = WorkspaceSideBar()
 
@@ -45,7 +48,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self._ui.account_box.add(self._account_side_bar)
 
-        self._ui.middle_grid.add(self._chat_list_stack)
+        self._ui.middle_grid.add(chat_list_scrolled)
         self._ui.right_grid.add(self._chat_stack)
 
         self._ui.edit_workspace_button.connect(
