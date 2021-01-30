@@ -229,20 +229,6 @@
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="chat_list_scrolled">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
                 <style>
                   <class name="chatlist-top-bar"/>
                 </style>
@@ -252,6 +238,26 @@
                 <property name="top_attach">0</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkScrolledWindow" id="chat_list_scrolled">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <style>
+                  <class name="no-border"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <style>
+              <class name="middle-grid"/>
+            </style>
           </object>
           <packing>
             <property name="resize">True</property>

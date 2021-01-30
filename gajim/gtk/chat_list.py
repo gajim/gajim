@@ -25,6 +25,8 @@ class ChatList(Gtk.ListBox):
         self._current_filter_text = ''
         self._workspace_id = workspace_id
 
+        self.get_style_context().add_class('chatlist')
+
         self.show_all()
 
         self.set_filter_func(self._filter_func)
