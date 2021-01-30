@@ -111,12 +111,10 @@
 .small-label {
     font-size: small;
 }
-.chatlist-top-bar {
-	padding: 12px;
-	border-bottom: 1px solid @unfocused_borders;
-}
+
 .revealer-close-button {
     padding: 0px;
+    margin-right: 6px;
 }
 .unread-counter {
     color: rgb(242, 242, 242);
@@ -126,25 +124,30 @@
     font-size: 80%;
     background-color: rgb(22, 100, 169);
 }
-
-.chatlist { background: transparent; }
-
+.chatlist-top-bar {
+	padding: 12px;
+	background: @theme_base_color;
+}
+.chatlist {
+    background: @theme_base_color;
+}
 .chatlist-row {
-    border-top: 1px solid @theme_unfocused_bg_color;
     transition: none;
     padding: 0px;
+    margin-left: 6px;
+    margin-right: 6px;
+    border-radius: 6px;
 }
-.chatlist-row:active {
-    box-shadow: none;
-}
+.chatlist-row:active,
 .chatlist-row:selected:active {
     box-shadow: none;
 }
 .chatlist-row:hover {
-    background-color: @theme_unfocused_bg_color;
+    background-color: shade(@theme_base_color, 0.95);
 }
 .chatlist-row:selected {
-    background-color: @theme_unfocused_bg_color;
+    background-color: shade(@theme_base_color, 0.9);
+    outline: none;
 }
 .chatlist-row:selected label {
     color: @theme_text_color;

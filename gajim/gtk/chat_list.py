@@ -109,15 +109,12 @@ class ChatRow(Gtk.ListBoxRow):
             name = jid
 
         avatar_image = Gtk.Image.new_from_surface(avatar)
-        rgba = Gdk.RGBA(*text_to_color(jid))
-        name_color = convert_rgba_to_hex(rgba)
         chat_name_label = Gtk.Label()
         chat_name_label.set_halign(Gtk.Align.START)
         chat_name_label.set_xalign(0)
         chat_name_label.set_max_width_chars(18)
         chat_name_label.set_ellipsize(Pango.EllipsizeMode.END)
-        chat_name_label.set_markup(
-            f'<span foreground="{name_color}">{name}</span>')
+        chat_name_label.set_text(name)
 
         last_message_label = Gtk.Label()
         last_message_label.set_halign(Gtk.Align.START)
