@@ -47,7 +47,6 @@
     border-right: 1px solid @unfocused_borders;
 }
 
-
 .app-image-box { margin: 12px 12px 0px 12px }
 .app-image-box > separator {
     background-color: darker(@theme_bg_color);
@@ -127,6 +126,9 @@
     font-size: 80%;
     background-color: rgb(22, 100, 169);
 }
+
+.chatlist { background: transparent; }
+
 .chatlist-row {
     border-top: 1px solid @theme_unfocused_bg_color;
     transition: none;
@@ -156,6 +158,11 @@
 .chatlist-row overlay > box {
 	padding: 6px;
 }
+
+
+/*Middle Grid*/
+
+.middle-grid > scrolledwindow { background: transparent; }
 
 /* VCardWindow */
 .VCard-GtkLinkButton { padding-left: 5px; border-left: none; }
