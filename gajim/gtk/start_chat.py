@@ -354,6 +354,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         app.interface.show_add_join_groupchat(account, jid, nickname=nickname)
 
         self.ready_to_destroy = True
+        self.destroy()
 
     def _on_back_clicked(self, _button=None):
         self._ui.stack.set_visible_child_name('search')
