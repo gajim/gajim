@@ -206,9 +206,7 @@ class ChatRow(Gtk.ListBoxRow):
             self._revealer.set_reveal_child(False)
 
     def _on_close_button_clicked(self, _button):
-        self.get_toplevel().activate_action(
-            'remove-chat',
-            GLib.Variant('as', [self.workspace_id, self.account, self.jid]))
+        app.window.remove_chat(self.workspace_id, self.account, self.jid)
 
     def set_unread(self, count):
         log.info('Set unread count: %s (%s)', self.jid, count)

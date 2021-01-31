@@ -37,13 +37,12 @@ class WorkspaceSideBar(Gtk.ListBox):
         row = self.get_row_at_y(button_event.y)
         WorspaceMenu(row)
 
-    def _on_row_activated(self, _listbox, row):
-        main_window = self.get_toplevel()
+    @staticmethod
+    def _on_row_activated(_listbox, row):
         if row.workspace_id == 'add':
             open_window('WorkspaceDialog')
         else:
-            main_window.activate_action(
-                'activate-workspace', GLib.Variant('s', row.workspace_id))
+            app.window.activate_workspace(row.workspace_id)
 
     def add_workspace(self, workspace_id):
         row = Workspace(workspace_id)
