@@ -69,13 +69,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def _add_actions(self):
         actions = [
-            ('add-workspace', 's', self.add_workspace),
-            ('remove-workspace', 's', self.remove_workspace),
-            ('activate-workspace', 's', self.activate_workspace),
-            ('add-chat', 'as', self.add_chat),
-            ('add-group-chat', 'as', self.add_group_chat),
-            ('remove-chat', 'as', self.remove_chat),
-            ('activate-account-page', 's', self.activate_account_page),
+            ('add-workspace', 's', self._add_workspace),
+            ('remove-workspace', 's', self._remove_workspace),
+            ('activate-workspace', 's', self._activate_workspace),
+            ('add-chat', 'as', self._add_chat),
+            ('add-group-chat', 'as', self._add_group_chat),
+            ('remove-chat', 'as', self._remove_chat),
         ]
 
         for action in actions:
@@ -100,8 +99,7 @@ class MainWindow(Gtk.ApplicationWindow):
     def get_active_jid(self, *args):
         pass
 
-    def activate_account_page(self, _action, param):
-        account = param.get_string()
+    def show_account_page(self, account):
         self._account_side_bar.activate_account_page(account)
         self._ui.main_stack.set_visible_child_name(account)
 
@@ -119,16 +117,21 @@ class MainWindow(Gtk.ApplicationWindow):
             return False
         return self._chat_list_stack.is_chat_active(account, jid)
 
-    def add_workspace(self, _action, param):
+    def _add_workspace(self, _action, param):
         workspace_id = param.get_string()
+        self.add_workspace(workspace_id)
+
+    def add_workspace(self, workspace_id):
         self._workspace_side_bar.add_workspace(workspace_id)
         self._chat_list_stack.add_chat_list(workspace_id)
         self._workspace_side_bar.activate_workspace(workspace_id)
         self._chat_list_stack.show_chat_list(workspace_id)
 
-    def remove_workspace(self, _action, param):
+    def _remove_workspace(self, _action, param):
         workspace_id = param.get_string()
+        self.remove_workspace(workspace_id)
 
+    def remove_workspace(self, workspace_id):
         was_active = self.get_active_workspace() == workspace_id
 
         success = self._workspace_side_bar.remove_workspace(workspace_id)
@@ -143,19 +146,28 @@ class MainWindow(Gtk.ApplicationWindow):
         self._chat_list_stack.remove_chat_list(workspace_id)
         app.settings.remove_workspace(workspace_id)
 
-    def activate_workspace(self, _action, param):
-        self._ui.main_stack.set_visible_child_name('chats')
+    def _activate_workspace(self, _action, param):
         workspace_id = param.get_string()
+        self.activate_workspace(workspace_id)
+
+    def activate_workspace(self, workspace_id):
+        self._ui.main_stack.set_visible_child_name('chats')
         self._workspace_side_bar.activate_workspace(workspace_id)
         self._chat_list_stack.show_chat_list(workspace_id)
 
-    def add_group_chat(self, _action, param):
+    def _add_group_chat(self, _action, param):
         account, jid = param.unpack()
+        self.add_group_chat(account, jid)
+
+    def add_group_chat(self, account, jid):
         workspace_id = self._workspace_side_bar.get_active_workspace()
         self.add_chat_for_workspace(workspace_id, account, jid, 'groupchat')
 
-    def add_chat(self, _action, param):
+    def _add_chat(self, _action, param):
         account, jid, type_ = param.unpack()
+        self.add_chat(account, jid, type_)
+
+    def add_chat(self, account, jid, type_):
         workspace_id = self._workspace_side_bar.get_active_workspace()
         self.add_chat_for_workspace(workspace_id, account, jid, type_)
 
@@ -170,8 +182,11 @@ class MainWindow(Gtk.ApplicationWindow):
             self._chat_list_stack.select_chat(workspace_id, account, jid)
             self._chat_list_stack.store_open_chats(workspace_id)
 
-    def remove_chat(self, _action, param):
+    def _remove_chat(self, _action, param):
         workspace_id, account, jid = param.unpack()
+        self.remove_chat(workspace_id, account, jid)
+
+    def remove_chat(self, workspace_id, account, jid):
         self._chat_list_stack.remove_chat(workspace_id, account, jid)
 
     def chat_exists(self, account, jid):

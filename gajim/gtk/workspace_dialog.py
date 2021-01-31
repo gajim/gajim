@@ -14,7 +14,6 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -126,6 +125,5 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         app.settings.set_workspace_setting(
             workspace_id, 'color', rgba.to_string())
 
-        app.window.activate_action(
-            'add-workspace', GLib.Variant('s', workspace_id))
+        app.window.add_workspace(workspace_id)
         self.destroy()

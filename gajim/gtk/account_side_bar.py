@@ -25,10 +25,9 @@ class AccountSideBar(Gtk.ListBox):
     def remove_account(self, account):
         pass
 
-    def _on_row_activated(self, _listbox, row):
-        main_window = self.get_toplevel()
-        main_window.activate_action(
-            'activate-account-page', GLib.Variant('s', row.account))
+    @staticmethod
+    def _on_row_activated(_listbox, row):
+        app.window.show_account_page(row.account)
 
     def activate_account_page(self, account):
         row = self.get_selected_row()

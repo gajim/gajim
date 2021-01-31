@@ -44,7 +44,7 @@
 
 /* Main Window */
 .mainwindow-grid {
-    background:rgb(255, 255, 255);
+    background: @theme_base_color;
 }
 
 /* Generic elements */

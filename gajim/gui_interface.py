@@ -1368,16 +1368,14 @@ class Interface:
             client = app.get_client(account)
             client.get_module('MUC').join(jid, nick=nickname)
 
-        app.window.activate_action(
-            'add-group-chat', GLib.Variant('as', [account, str(jid)]))
+        app.window.add_group_chat(account, str(jid))
 
     @staticmethod
     def _on_muc_added(_muc_manger, _signal_name, account, jid):
         if app.window.chat_exists(account, jid):
             return
 
-        app.window.activate_action(
-            'add-group-chat', GLib.Variant('as', [account, str(jid)]))
+        app.window.add_group_chat(account, str(jid))
 
     def new_private_chat(self, gc_contact, account, session=None):
         conn = app.connections[account]
@@ -1576,7 +1574,7 @@ class Interface:
         self.instances[account] = {
             'infos': {}, 'disco': {}, 'gc_config': {}, 'search': {},
             'sub_request': {}}
-        self.minimized_controls[account] = {}
+
         app.groups[account] = {}
         app.contacts.add_account(account)
         app.gc_connected[account] = {}
@@ -1591,14 +1589,9 @@ class Interface:
         app.block_signed_in_notifications[account] = True
         app.last_message_time[account] = {}
         # refresh roster
-        if len(app.connections) >= 2:
-            # Do not merge accounts if only one exists
-            self.roster.regroup = app.settings.get('mergeaccounts')
-        else:
-            self.roster.regroup = False
-        self.roster.setup_and_draw_roster()
+
         gui_menu_builder.build_accounts_menu()
-        self.roster.send_status(account, 'online', '')
+        app.connections[account].change_status('online', '')
         app.settings.set_account_setting(account, 'active', True)
         app.app.update_app_actions_state()
         window = get_app_window('AccountsWindow')
@@ -1606,11 +1599,6 @@ class Interface:
             GLib.idle_add(window.enable_account, account, True)
 
     def disable_account(self, account):
-        self.roster.close_all(account, force=True)
-        for jid in self.minimized_controls[account]:
-            ctrl = self.minimized_controls[account][jid]
-            ctrl.shutdown()
-
         for win in get_app_windows(account):
             # Close all account specific windows, except the RemoveAccount
             # dialog. It shows if the removal was successful.
@@ -1623,7 +1611,6 @@ class Interface:
         app.connections[account].cleanup()
         del app.connections[account]
         del self.instances[account]
-        del self.minimized_controls[account]
         del app.nicks[account]
         del app.block_signed_in_notifications[account]
         del app.groups[account]
@@ -1633,14 +1620,8 @@ class Interface:
         del app.to_be_removed[account]
         del app.newly_added[account]
         del app.last_message_time[account]
-        if len(app.connections) >= 2:
-            # Do not merge accounts if only one exists
-            self.roster.regroup = app.settings.get('mergeaccounts')
-        else:
-            self.roster.regroup = False
+
         app.settings.set_account_setting(account, 'roster_version', '')
-        self.roster.setup_and_draw_roster()
-        self.roster.update_status_selector()
         gui_menu_builder.build_accounts_menu()
         app.settings.set_account_setting(account, 'active', False)
         app.app.update_app_actions_state()
@@ -2056,10 +2037,10 @@ class Interface:
         for account in app.settings.get_accounts():
             if (not app.settings.get_account_setting(account, 'is_zeroconf') and
                     app.settings.get_account_setting(account, 'active')):
-                app.connections[account] = Client(account)
-
-        muc_manager = app.connections[account].get_module('MUC').get_manager()
-        muc_manager.connect('muc-added', self._on_muc_added)
+                client = Client(account)
+                app.connections[account] = client
+                muc_manager = client.get_module('MUC').get_manager()
+                muc_manager.connect('muc-added', self._on_muc_added)
 
         self.instances = {}
 
