@@ -560,3 +560,27 @@ class GajimApplication(Gtk.Application):
         elif event.feature == Namespace.BLOCKING:
             action = '%s-blocking' % event.account
             self.lookup_action(action).set_enabled(True)
+
+    def start_shutdown(self, *args, **kwargs):
+        accounts_to_disconnect = {}
+
+        for account, client in app.connections.items():
+            if app.account_is_available(account):
+                accounts_to_disconnect[account] = client
+
+        if not accounts_to_disconnect:
+            self.quit()
+            return
+
+        def _on_disconnect(event):
+            accounts_to_disconnect.pop(event.account)
+            if not accounts_to_disconnect:
+                self.quit()
+                return
+
+        app.ged.register_event_handler('account-disconnected',
+                                       ged.CORE,
+                                       _on_disconnect)
+
+        for client in accounts_to_disconnect.values():
+            client.change_status('offline', kwargs.get('message', ''))

@@ -66,7 +66,7 @@ def on_bookmarks(_action, param):
 
 
 def on_quit(_action, _param):
-    interface.roster.on_quit_request()
+    app.window.quit()
 
 
 def on_new_chat(_action, param):
