@@ -6,6 +6,7 @@ from gi.repository import Gio
 from gajim.common import app
 from gajim.gui.util import get_builder
 from gajim.gui.util import load_icon
+from gajim.gui.account_page import AccountPage
 from gajim.gui.chat_list_stack import ChatListStack
 from gajim.gui.chat_stack import ChatStack
 from gajim.gui.account_side_bar import AccountSideBar
@@ -58,6 +59,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.show_all()
 
         self._load_chats()
+        self._add_accounts()
         self._add_actions()
 
     def _add_actions(self):
@@ -67,6 +69,7 @@ class MainWindow(Gtk.ApplicationWindow):
             ('activate-workspace', 's', self.activate_workspace),
             ('add-chat', 'as', self.add_chat),
             ('remove-chat', 'as', self.remove_chat),
+            ('activate-account-page', 's', self.activate_account_page),
         ]
 
         for action in actions:
@@ -90,6 +93,11 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def get_active_jid(self, *args):
         pass
+
+    def activate_account_page(self, _action, param):
+        account = param.get_string()
+        self._account_side_bar.activate_account_page(account)
+        self._ui.main_stack.set_visible_child_name(account)
 
     def get_workspace_bar(self):
         return self._workspace_side_bar
@@ -121,8 +129,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self._chat_list_stack.remove_chat_list(workspace_id)
         app.settings.remove_workspace(workspace_id)
 
-
     def activate_workspace(self, _action, param):
+        self._ui.main_stack.set_visible_child_name('chats')
         workspace_id = param.get_string()
         self._workspace_side_bar.activate_workspace(workspace_id)
         self._chat_list_stack.show_chat_list(workspace_id)
@@ -146,6 +154,11 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def get_control(self, account, jid):
         return self._chat_stack.get_control(account, jid)
+
+    def _add_accounts(self):
+        for account in list(app.connections.keys()):
+            self._ui.main_stack.add_named(
+                AccountPage(account), account)
 
     def _load_chats(self):
         for workspace_id in app.settings.get_workspaces():
