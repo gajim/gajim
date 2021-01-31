@@ -117,6 +117,10 @@
     background-color: darker(@theme_bg_color);
     margin: 0px 12px 0px 12px;
 }
+/* Account Page */
+.account-page {
+    background: @theme_bg_color;
+}
 
 /*Middle Grid*/
 .middle-grid > scrolledwindow { background: transparent; }
