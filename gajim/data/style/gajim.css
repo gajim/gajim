@@ -42,48 +42,31 @@
 
 .link-button { min-height: 0px; }
 
-/* ChatList with Workspace and Account sidebars */
-.chatlist-left-grid {
-    border-right: 1px solid @unfocused_borders;
+/* Main Window */
+.mainwindow-grid {
+    background:rgb(255, 255, 255);
 }
 
-.app-image-box { margin: 12px 12px 0px 12px }
-.app-image-box > separator {
-    background-color: darker(@theme_bg_color);
-}
-
-
+/* Generic elements */
 .account-identifier-bar {
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
 }
-/* Account sidebar */
-.account-sidebar {
-	background: transparent;
-    margin-right: 12px;
-    margin-bottom: 6px;
-}
-.account-sidebar-item {
-    padding-top: 6px;
-	padding-bottom: 6px;
+.small-label {
+    font-size: small;
 }
 
-.account-sidebar-item:hover {
-    background: transparent;
-    box-shadow: none;
-    outline: none;
+/* ChatList with Workspace and Account sidebars */
+.chatlist-left-grid {
+    border-right: 1px solid @unfocused_borders;
+    background: @theme_bg_color;
 }
 
-.account-sidebar-item:hover image {
-    box-shadow: 0 0 6px @theme_selected_bg_color;
-}
-.account-sidebar-item image {
-    border-radius: 9px;
-}
-.account-box > separator {
+.app-image-box { margin: 12px 12px 0px 12px; }
+.app-image-box > separator {
     background-color: darker(@theme_bg_color);
-    margin: 0px 12px 0px 12px;
 }
+
 /* Workspace sidebar */
 .workspace-sidebar {
 	background: transparent;
@@ -107,35 +90,50 @@
 .workspace-sidebar-item image {
 	border-radius: 9px;
 }
-/* ChatList */
-.small-label {
-    font-size: small;
+
+/* Account sidebar */
+.account-sidebar {
+	background: transparent;
+    margin-right: 12px;
+    margin-bottom: 6px;
+}
+.account-sidebar-item {
+    padding-top: 6px;
+	padding-bottom: 6px;
+}
+.account-sidebar-item:hover {
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+}
+.account-sidebar-item:selected image,
+.account-sidebar-item:hover image {
+    box-shadow: 0 0 6px @theme_selected_bg_color;
+}
+.account-sidebar-item image {
+    border-radius: 9px;
+}
+.account-box > separator {
+    background-color: darker(@theme_bg_color);
+    margin: 0px 12px 0px 12px;
 }
 
-.revealer-close-button {
-    padding: 0px;
-    margin-right: 6px;
-}
-.unread-counter {
-    color: rgb(242, 242, 242);
-    padding-left: 6px;
-    padding-right: 6px;
-    border-radius: 10px;
-    font-size: 80%;
-    background-color: rgb(22, 100, 169);
-}
+/*Middle Grid*/
+.middle-grid > scrolledwindow { background: transparent; }
+
 .chatlist-top-bar {
 	padding: 12px;
-	background: @theme_base_color;
+	background: transparent;
 }
 .chatlist {
-    background: @theme_base_color;
+    background: transparent;
 }
 .chatlist-row {
     transition: none;
     padding: 0px;
     margin-left: 6px;
     margin-right: 6px;
+    margin-bottom: 3px;
     border-radius: 6px;
 }
 .chatlist-row:active,
@@ -161,11 +159,18 @@
 .chatlist-row overlay > box {
 	padding: 6px;
 }
-
-
-/*Middle Grid*/
-
-.middle-grid > scrolledwindow { background: transparent; }
+.revealer-close-button {
+    padding: 0px;
+    margin-right: 6px;
+}
+.unread-counter {
+    color: rgb(242, 242, 242);
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 10px;
+    font-size: 80%;
+    background-color: rgb(22, 100, 169);
+}
 
 /* VCardWindow */
 .VCard-GtkLinkButton { padding-left: 5px; border-left: none; }
