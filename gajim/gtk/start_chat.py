@@ -350,8 +350,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
         account = self._muc_info_box.get_account()
         jid = self._muc_info_box.get_jid()
         nickname = self._nick_chooser.get_text()
-        app.interface.show_or_join_groupchat(
-            account, str(jid), nick=nickname)
+
+        app.interface.show_add_join_groupchat(account, jid, nickname=nickname)
+
         self.ready_to_destroy = True
 
     def _on_back_clicked(self, _button=None):

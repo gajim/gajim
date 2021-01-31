@@ -133,12 +133,6 @@ class Message(BaseModule):
 
         msgtxt = properties.body
 
-        # TODO: remove all control UI stuff
-        gc_control = app.interface.msg_win_mgr.get_gc_control(
-            jid, self._account)
-        if not gc_control:
-            minimized = app.interface.minimized_controls[self._account]
-            gc_control = minimized.get(jid)
         session = None
         if not properties.type.is_groupchat:
             if properties.is_muc_pm and properties.type.is_error:
@@ -195,7 +189,7 @@ class Message(BaseModule):
             'msgtxt': msgtxt,
             'session': session,
             'delayed': properties.user_timestamp is not None,
-            'gc_control': gc_control,
+            'gc_control': None,
             'popup': False,
             'msg_log_id': None,
             'displaymarking': displaymarking,
