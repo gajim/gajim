@@ -50,15 +50,16 @@ class Roster(BaseModule):
             self.set_raw(data)
             for jid, item in self._data.items():
                 self._log.debug('%s: %s', jid, item)
-                app.nec.push_incoming_event(NetworkEvent(
-                    'roster-info',
-                    conn=self._con,
+                contact = app.contacts.create_contact(
                     jid=jid,
-                    nickname=item['name'],
+                    account=self._account,
+                    name=item['name'],
+                    groups=item['groups'],
+                    show='offline',
                     sub=item['subscription'],
                     ask=item['ask'],
-                    groups=item['groups'],
-                    avatar_sha=item.get('avatar_sha')))
+                    avatar_sha=item['avatar_sha'])
+                app.contacts.add_contact(self._account, contact)
         else:
             self._log.info('Database empty, reset roster version')
             app.settings.set_account_setting(

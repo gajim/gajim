@@ -1113,7 +1113,7 @@ class Interface:
             'password-required': [self.handle_event_password_required],
             'plain-connection': [self.handle_event_plain_connection],
             'presence-received': [self.handle_event_presence],
-            'roster-info': [self.handle_event_roster_info],
+            # 'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
             'signed-in': [self.handle_event_signed_in],
@@ -1678,7 +1678,8 @@ class Interface:
                     account, 'last_status_msg')
                 status_message = helpers.from_one_line(status_message)
 
-            self.roster.send_status(account, status, status_message)
+            app.connections[account].change_status(status, status_message)
+            # self.roster.send_status(account, status, status_message)
 
     def change_status(self, status=None):
         # status=None means we want to change the message only
@@ -1966,7 +1967,7 @@ class Interface:
         if app.settings.get('trayicon') != 'never':
             self.show_systray()
 
-        self.roster = roster_window.RosterWindow(application)
+        # self.roster = roster_window.RosterWindow(application)
         # if self.msg_win_mgr.mode == \
         # MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
         #     self.msg_win_mgr.create_window(None, None, None)
@@ -1976,10 +1977,10 @@ class Interface:
         app.plugin_manager = plugins.PluginManager()
         app.plugin_manager.init_plugins()
 
-        self.roster._before_fill()
+        # self.roster._before_fill()
         for con in app.connections.values():
             con.get_module('Roster').load_roster()
-        self.roster._after_fill()
+        # self.roster._after_fill()
 
         # get instances for windows/dialogs that will show_all()/hide()
         self.instances['file_transfers'] = FileTransfersWindow()
