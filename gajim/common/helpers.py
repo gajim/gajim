@@ -1258,34 +1258,36 @@ def get_tls_error_phrase(tls_error):
 class Observable:
     def __init__(self, log_=None):
         self._log = log_
-        self._callbacks = defaultdict(list)
+        self._callbacks = defaultdict(lambda: defaultdict(list))
 
     def disconnect_signals(self):
-        self._callbacks = defaultdict(list)
+        self._callbacks = defaultdict(lambda: defaultdict(list))
 
     def disconnect(self, object_):
-        for handlers in self._callbacks.values():
-            for handler in list(handlers):
-                func = handler()
-                if func is None or func.__self__ == object_:
-                    handlers.remove(handler)
+        for signal_name, qualifiers in self._callbacks.items():
+            for handlers in qualifiers.values():
+                for handler in list(handlers):
+                    func = handler()
+                    if func is None or func.__self__ == object_:
+                        self._callbacks[signal_name][qualifiers].remove(handler)
 
-    def connect(self, signal_name, func):
+    def connect(self, signal_name, func, qualifiers=None):
         if inspect.ismethod(func):
             weak_func = weakref.WeakMethod(func)
         elif inspect.isfunction(func):
             weak_func = weakref.ref(func)
 
-        self._callbacks[signal_name].append(weak_func)
+        self._callbacks[signal_name][qualifiers].append(weak_func)
 
-    def notify(self, signal_name, *args, **kwargs):
+    def notify(self, signal_name, *args, qualifiers=None, **kwargs):
         if self._log is not None:
             self._log.info('Signal: %s', signal_name)
 
-        callbacks = self._callbacks.get(signal_name, [])
+        signal_callbacks = self._callbacks.get(signal_name, {})
+        callbacks = signal_callbacks.get(qualifiers, [])
         for func in list(callbacks):
             if func() is None:
-                self._callbacks[signal_name].remove(func)
+                self._callbacks[signal_name][qualifiers].remove(func)
                 continue
             func()(self, signal_name, *args, **kwargs)
 

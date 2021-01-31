@@ -102,7 +102,7 @@ class GroupchatControl(ChatControlBase):
         self.toggle_emoticons()
 
         self.room_jid = self.contact.jid
-        self._muc_data = muc_data
+        # self._muc_data = muc_data
 
         # Stores nickname we want to kick
         self._kick_nick = None
@@ -143,7 +143,7 @@ class GroupchatControl(ChatControlBase):
         # sorted list of nicks who mentioned us (last at the end)
         self.attention_list = []
         self.nick_hits = []
-        self._nick_completion = NickCompletionGenerator(muc_data.nick)
+        self.__nick_completion = None
         self.last_key_tabs = False
 
         self.setup_seclabel()
@@ -230,7 +230,6 @@ class GroupchatControl(ChatControlBase):
             ('gc-message-received', ged.GUI1, self._on_gc_message_received),
             ('mam-decrypted-message-received', ged.GUI1, self._on_mam_decrypted_message_received),
             ('update-room-avatar', ged.GUI1, self._on_update_room_avatar),
-            ('signed-in', ged.GUI1, self._on_signed_in),
             ('decrypted-message-received', ged.GUI2, self._on_decrypted_message_received),
             ('message-sent', ged.OUT_POSTCORE, self._on_message_sent),
             ('message-error', ged.GUI1, self._on_message_error),
@@ -248,8 +247,13 @@ class GroupchatControl(ChatControlBase):
 
         # Stack
         self.xml.stack.show_all()
-        self.xml.stack.set_visible_child_name('progress')
-        self.xml.progress_spinner.start()
+        self.xml.stack.set_visible_child_name('groupchat')
+
+        client = app.get_client(self.account)
+        manager = client.get_module('MUC').get_manager()
+        manager.connect('state-changed',
+                        self._on_muc_state_changed,
+                        qualifiers=(self.account, self.room_jid))
 
         self.update_ui()
         self.widget.show_all()
@@ -262,6 +266,44 @@ class GroupchatControl(ChatControlBase):
         # instance object
         app.plugin_manager.gui_extension_point('groupchat_control', self)
         self._restore_conversation()
+
+    def _on_muc_state_changed(self, _muc_manager, _signal_name, state):
+        if state == MUCJoinedState.JOINED:
+            self.roster.initial_draw()
+
+            self.is_connected = True
+            ChatControlBase.got_connected(self)
+
+            self.xml.formattings_button.set_sensitive(True)
+
+            self.update_actions()
+
+        elif state == MUCJoinedState.NOT_JOINED:
+
+            self.xml.formattings_button.set_sensitive(False)
+
+            self.roster.enable_sort(False)
+            self.roster.clear()
+
+            self.is_connected = False
+            ChatControlBase.got_disconnected(self)
+
+            con = app.connections[self.account]
+            con.get_module('Chatstate').remove_delay_timeout(self.contact)
+
+            self.update_actions()
+
+    @property
+    def _muc_data(self):
+        client = app.get_client(self.account)
+        manager = client.get_module('MUC').get_manager()
+        return manager.get(self.room_jid)
+
+    @property
+    def _nick_completion(self):
+        if self.__nick_completion is None:
+            self.__nick_completion = NickCompletionGenerator(self._muc_data.nick)
+        return self.__nick_completion
 
     @property
     def nick(self):
@@ -312,6 +354,8 @@ class GroupchatControl(ChatControlBase):
         if self.parent_win is None:
             return
 
+        # TODO
+        return
         contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
         con = app.connections[self.account]
@@ -1018,12 +1062,8 @@ class GroupchatControl(ChatControlBase):
         does not already have it as last event. If it goes to add this line
         - remove previous line first
         """
-        win = app.interface.msg_win_mgr.get_window(self.room_jid, self.account)
-        if win and self.room_jid == win.get_active_jid() and\
-        win.window.get_property('has-toplevel-focus') and\
-        self.parent_win.get_active_control() == self:
-            # it's the current room and it's the focused window.
-            # we have full focus (we are reading it!)
+
+        if app.window.is_chat_focused(self.account, self.room_jid):
             return
 
         self.conv_textview.show_focus_out_line()
@@ -1114,11 +1154,6 @@ class GroupchatControl(ChatControlBase):
         for change in changes:
             self.add_info_message(change)
 
-    def _on_signed_in(self, event):
-        if event.conn.name != self.account:
-            return
-        event.conn.get_module('MUC').join(self._muc_data)
-
     @event_filter(['account'])
     def _on_decrypted_message_received(self, event):
         if not event.properties.jid.bare_match(self.room_jid):
@@ -1174,61 +1209,11 @@ class GroupchatControl(ChatControlBase):
     def is_connected(self, value: bool) -> None:
         app.gc_connected[self.account][self.room_jid] = value
 
-    def got_connected(self):
-        self.roster.initial_draw()
-
-        if self.disco_info.has_mam_2:
-            # Request MAM
-            con = app.connections[self.account]
-            con.get_module('MAM').request_archive_on_muc_join(
-                self.room_jid)
-
-        self.is_connected = True
-        ChatControlBase.got_connected(self)
-
-        if self.parent_win:
-            self.parent_win.redraw_tab(self)
-
-        # Update Roster
-        app.interface.roster.draw_contact(self.room_jid, self.account)
-
-        self.xml.formattings_button.set_sensitive(True)
-
-        self.update_actions()
-
-    def got_disconnected(self):
-        self.xml.formattings_button.set_sensitive(False)
-
-        self.roster.enable_sort(False)
-        self.roster.clear()
-
-        for contact in app.contacts.get_gc_contact_list(
-                self.account, self.room_jid):
-            contact.presence = PresenceType.UNAVAILABLE
-            ctrl = app.interface.msg_win_mgr.get_control(contact.get_full_jid,
-                                                         self.account)
-            if ctrl:
-                ctrl.got_disconnected()
-
-            app.contacts.remove_gc_contact(self.account, contact)
-
-        self.is_connected = False
-        ChatControlBase.got_disconnected(self)
-
-        con = app.connections[self.account]
-        con.get_module('Chatstate').remove_delay_timeout(self.contact)
-
-        # Update Roster
-        app.interface.roster.draw_contact(self.room_jid, self.account)
-
-        if self.parent_win:
-            self.parent_win.redraw_tab(self)
-
-        self.update_actions()
-
     def leave(self, reason=None):
         self.got_disconnected()
         self._close_control(reason=reason)
+        app.connections[self.account].get_module('MUC').leave(
+            self.room_jid, reason=reason)
 
     def rejoin(self):
         app.connections[self.account].get_module('MUC').join(self._muc_data)
@@ -1623,67 +1608,13 @@ class GroupchatControl(ChatControlBase):
     def _on_message_error(self, event):
         self.conv_textview.show_error(event.message_id, event.error)
 
-    def minimizable(self):
-        if self.force_non_minimizable:
-            return False
-        return self.contact.settings.get('minimize_on_close')
-
-    def minimize(self):
-        self.remove_actions()
-        win = app.interface.msg_win_mgr.get_window(self.contact.jid,
-                                                   self.account)
-        ctrl = win.get_control(self.contact.jid, self.account)
-
-        ctrl_page = win.notebook.page_num(ctrl.widget)
-        control = win.notebook.get_nth_page(ctrl_page)
-
-        win.notebook.remove_page(ctrl_page)
-        control.unparent()
-        ctrl.parent_win = None
-
-        # Stop correcting message when we minimize
-        if self.correcting:
-            self.correcting = False
-            gtkgui_helpers.remove_css_class(
-                self.msg_textview, 'gajim-msg-correcting')
-            self.msg_textview.get_buffer().set_text('')
-
-        con = app.connections[self.account]
-        con.get_module('Chatstate').set_chatstate(self.contact,
-                                                  Chatstate.INACTIVE)
-
-        app.interface.roster.minimize_groupchat(
-            self.account, self.contact.jid, status=self.subject)
-
-        del win._controls[self.account][self.contact.jid]
-
     def shutdown(self, reason=None):
         app.settings.disconnect_signals(self)
-
-        # Leave MUC if we are still joined
-        if self._muc_data.state != MUCJoinedState.NOT_JOINED:
-            self.got_disconnected()
-            app.connections[self.account].get_module('MUC').leave(
-                self.room_jid, reason=reason)
 
         # PluginSystem: removing GUI extension points connected with
         # GrouphatControl instance object
         app.plugin_manager.remove_gui_extension_point(
             'groupchat_control', self)
-
-        nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
-        for nick in nick_list:
-            # Update pm chat window
-            fjid = self.room_jid + '/' + nick
-            ctrl = app.interface.msg_win_mgr.get_gc_control(fjid, self.account)
-            if ctrl:
-                contact = app.contacts.get_gc_contact(self.account,
-                                                      self.room_jid,
-                                                      nick)
-                contact.show = 'offline'
-                contact.status = ''
-                ctrl.update_ui()
-                ctrl.parent_win.redraw_tab(ctrl)
 
         # They can already be removed by the destroy function
         if self.room_jid in app.contacts.get_gc_list(self.account):
@@ -1702,18 +1633,12 @@ class GroupchatControl(ChatControlBase):
         super(GroupchatControl, self).shutdown()
 
     def safe_shutdown(self):
-        if self.minimizable():
-            return True
         # whether to ask for confirmation before closing muc
         if app.settings.get('confirm_close_muc') and self.is_connected:
             return False
         return True
 
-    def allow_shutdown(self, method, on_yes, on_no, on_minimize):
-        if self.minimizable():
-            on_minimize(self)
-            return
-
+    def allow_shutdown(self, method, on_yes, on_no):
         # whether to ask for confirmation before closing muc
         if app.settings.get('confirm_close_muc') and self.is_connected:
             def on_ok(is_checked):

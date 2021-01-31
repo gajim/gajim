@@ -1203,61 +1203,59 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                         self.last_msg_id,
                         self._type)
 
-        if kind in ('incoming', 'incoming_queue', 'error'):
-            gc_message = False
-            if self._type.is_groupchat:
-                gc_message = True
+        # TODO old event Code
+        # if kind in ('incoming', 'incoming_queue', 'error'):
+        #     gc_message = False
+        #     if self._type.is_groupchat:
+        #         gc_message = True
 
-            if ((self.parent_win and (not self.parent_win.get_active_control() or \
-            self != self.parent_win.get_active_control() or \
-            not self.parent_win.is_active() or not end)) or \
-            (gc_message and \
-            jid in app.interface.minimized_controls[self.account])) and \
-            kind in ('incoming', 'incoming_queue', 'error'):
-                # we want to have save this message in events list
-                # other_tags_for_text == ['marked'] --> highlighted gc message
-                if gc_message:
-                    if 'marked' in other_tags_for_text:
-                        event_type = events.PrintedMarkedGcMsgEvent
-                    else:
-                        event_type = events.PrintedGcMsgEvent
-                    event = 'gc_message_received'
-                else:
-                    if self._type.is_chat:
-                        event_type = events.PrintedChatEvent
-                    else:
-                        event_type = events.PrintedPmEvent
-                    event = 'message_received'
-                show_in_roster = get_show_in_roster(event, self.session)
-                show_in_systray = get_show_in_systray(
-                    event_type.type_, self.account, self.contact.jid)
+        #     if ((self.parent_win and (not self.parent_win.get_active_control() or \
+        #     self != self.parent_win.get_active_control() or \
+        #     not self.parent_win.is_active() or not end)) or \
+        #     (gc_message and \
+        #     jid in app.interface.minimized_controls[self.account])) and \
+        #     kind in ('incoming', 'incoming_queue', 'error'):
+        #         # we want to have save this message in events list
+        #         # other_tags_for_text == ['marked'] --> highlighted gc message
+        #         if gc_message:
+        #             if 'marked' in other_tags_for_text:
+        #                 event_type = events.PrintedMarkedGcMsgEvent
+        #             else:
+        #                 event_type = events.PrintedGcMsgEvent
+        #             event = 'gc_message_received'
+        #         else:
+        #             if self._type.is_chat:
+        #                 event_type = events.PrintedChatEvent
+        #             else:
+        #                 event_type = events.PrintedPmEvent
+        #             event = 'message_received'
+        #         show_in_roster = get_show_in_roster(event, self.session)
+        #         show_in_systray = get_show_in_systray(
+        #             event_type.type_, self.account, self.contact.jid)
 
-                event = event_type(text,
-                                   subject,
-                                   self,
-                                   msg_log_id,
-                                   message_id=message_id,
-                                   stanza_id=stanza_id,
-                                   show_in_roster=show_in_roster,
-                                   show_in_systray=show_in_systray)
-                app.events.add_event(self.account, full_jid, event)
-                # We need to redraw contact if we show in roster
-                if show_in_roster:
-                    app.interface.roster.draw_contact(self.contact.jid,
-                                                      self.account)
+        #         event = event_type(text,
+        #                            subject,
+        #                            self,
+        #                            msg_log_id,
+        #                            message_id=message_id,
+        #                            stanza_id=stanza_id,
+        #                            show_in_roster=show_in_roster,
+        #                            show_in_systray=show_in_systray)
+        #         app.events.add_event(self.account, full_jid, event)
+        #         # We need to redraw contact if we show in roster
+        #         if show_in_roster:
+        #             app.interface.roster.draw_contact(self.contact.jid,
+        #                                               self.account)
 
-        if not self.parent_win:
-            return
-
-        if (not self.parent_win.get_active_control() or \
-        self != self.parent_win.get_active_control() or \
-        not self.parent_win.is_active() or not end) and \
-        kind in ('incoming', 'incoming_queue', 'error'):
-            self.parent_win.redraw_tab(self)
-            if not self.parent_win.is_active():
-                self.parent_win.show_title(True, self) # Enabled Urgent hint
-            else:
-                self.parent_win.show_title(False, self) # Disabled Urgent hint
+        # if (not self.parent_win.get_active_control() or \
+        # self != self.parent_win.get_active_control() or \
+        # not self.parent_win.is_active() or not end) and \
+        # kind in ('incoming', 'incoming_queue', 'error'):
+        #     self.parent_win.redraw_tab(self)
+        #     if not self.parent_win.is_active():
+        #         self.parent_win.show_title(True, self) # Enabled Urgent hint
+        #     else:
+        #         self.parent_win.show_title(False, self) # Disabled Urgent hint
 
     def toggle_emoticons(self):
         """

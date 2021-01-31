@@ -36,6 +36,9 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import event_filter
+from gajim.common.helpers import get_group_chat_nick
+from gajim.common.helpers import Observable
+from gajim.common.structs import MUCData
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.base import BaseModule
@@ -106,9 +109,10 @@ class MUC(BaseModule):
 
         self.register_events([
             ('account-disconnected', ged.CORE, self._on_account_disconnected),
+            # ('signed-in', ged.GUI1, self._on_signed_in),
         ])
 
-        self._manager = MUCManager(self._log)
+        self._manager = MUCManager(self._account, self._log)
         self._rejoin_muc = set()
         self._join_timeouts = {}
         self._rejoin_timeouts = {}
@@ -136,11 +140,31 @@ class MUC(BaseModule):
                 self._muc_service_jid = info.jid
                 raise nbxmpp.NodeProcessed
 
-    def join(self, muc_data):
+    def _create_muc_data(self, room_jid, nick, password, config):
+        if not nick:
+            nick = get_group_chat_nick(self._account, room_jid)
+
+        # Fetch data from bookmarks
+        bookmark = self._con.get_module('Bookmarks').get_bookmark(room_jid)
+        if bookmark is not None:
+            if bookmark.password is not None:
+                password = bookmark.password
+
+        return MUCData(room_jid, nick, password, config)
+
+    def join(self, jid, nick=None, password=None, config=None):
         if not app.account_is_available(self._account):
             return
 
-        self._manager.add(muc_data)
+        muc_data = self._manager.get(jid)
+        if muc_data is None:
+            muc_data = self._create_muc_data(jid, nick, password, config)
+            self._manager.add(muc_data)
+
+        if not muc_data.state.is_not_joined:
+            self._log.warning('Can’t join MUC %s, state: %s',
+                              jid, muc_data.state)
+            return
 
         disco_info = app.storage.cache.get_last_disco_info(muc_data.jid,
                                                            max_age=60)
@@ -213,17 +237,25 @@ class MUC(BaseModule):
 
     def leave(self, room_jid, reason=None):
         self._log.info('Leave MUC: %s', room_jid)
+
+        self._con.get_module('Bookmarks').modify(room_jid, autojoin=False)
+
+        muc_data = self._manager.get(room_jid)
+        if muc_data is None:
+            return
+
+        if muc_data.state == MUCJoinedState.NOT_JOINED:
+            return
+
         self._remove_join_timeout(room_jid)
         self._remove_rejoin_timeout(room_jid)
         self._manager.set_state(room_jid, MUCJoinedState.NOT_JOINED)
-        muc_data = self._manager.get(room_jid)
+
         self._con.get_module('Presence').send_presence(
             muc_data.occupant_jid,
             typ='unavailable',
             status=reason,
             caps=False)
-        # We leave a group chat, disable bookmark autojoin
-        self._con.get_module('Bookmarks').modify(room_jid, autojoin=False)
 
     def configure_room(self, room_jid):
         self._nbxmpp('MUC').request_config(room_jid,
@@ -648,6 +680,11 @@ class MUC(BaseModule):
             password=muc_data.password,
             nick=muc_data.nick)
 
+        disco_info = app.storage.cache.get_last_disco_info(muc_data.jid)
+        if disco_info.has_mam_2:
+            self._con.get_module('MAM').request_archive_on_muc_join(
+                muc_data.jid)
+
     def _on_voice_request(self, _con, _stanza, properties):
         if not properties.is_voice_request:
             return
@@ -816,13 +853,16 @@ class MUC(BaseModule):
             self._remove_join_timeout(room_jid)
 
 
-class MUCManager:
-    def __init__(self, logger):
+class MUCManager(Observable):
+    def __init__(self, account, logger):
+        Observable.__init__(self)
+        self._account = account
         self._log = logger
         self._mucs = {}
 
     def add(self, muc):
         self._mucs[muc.jid] = muc
+        self.notify('muc-added', self._account, muc.jid)
 
     def remove(self, muc):
         self._mucs.pop(muc.jid, None)
@@ -837,6 +877,9 @@ class MUCManager:
                 return
             self._log.info('Set MUC state: %s %s', room_jid, state)
             muc.state = state
+            self.notify('state-changed',
+                        state,
+                        qualifiers=(self._account, room_jid))
 
     def get_joined_mucs(self):
         mucs = self._mucs.values()

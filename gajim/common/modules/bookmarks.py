@@ -242,18 +242,8 @@ class Bookmarks(BaseModule):
     def auto_join_bookmarks(self, bookmarks: List[BookmarkData]) -> None:
         for bookmark in bookmarks:
             if bookmark.autojoin:
-                # Only join non-opened groupchats. Opened one are already
-                # auto-joined on re-connection
-                if bookmark.jid not in app.gc_connected[self._account]:
-                    # we are not already connected
-                    self._log.info('Autojoin Bookmark: %s', bookmark.jid)
-                    minimize = app.settings.get_group_chat_setting(
-                        self._account,
-                        bookmark.jid,
-                        'minimize_on_autojoin')
-                    app.interface.join_groupchat(self._account,
-                                                 str(bookmark.jid),
-                                                 minimized=minimize)
+                self._log.info('Autojoin Bookmark: %s', bookmark.jid)
+                self._con.get_module('MUC').join(bookmark.jid)
 
     def modify(self, jid: JID, **kwargs: Any) -> None:
         bookmark = self._bookmarks.get(jid)

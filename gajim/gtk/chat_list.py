@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from gi.repository import Gdk
+
 from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import GLib
@@ -11,8 +11,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
 
-from .util import convert_rgba_to_hex
-from .util import text_to_color
 
 log = logging.getLogger('gajim.gtk.chatlist')
 
@@ -40,6 +38,10 @@ class ChatList(Gtk.ListBox):
         self._current_filter_text = text
         self.invalidate_filter()
 
+    def get_chat_type(self, account, jid):
+        row = self._chats.get((account, jid))
+        return row.type
+
     def add_chat(self, account, jid, type_):
         if self._chats.get((account, jid)) is not None:
             # Chat is already in the List
@@ -57,6 +59,13 @@ class ChatList(Gtk.ListBox):
         row = self._chats.pop((account, jid))
         self.remove(row)
         row.destroy()
+
+    def get_active_chat(self):
+        row = self.get_selected_row()
+        if row is None:
+            return None
+
+        return (row.account, row.jid)
 
     def contains_chat(self, account, jid):
         return self._chats.get((account, jid)) is not None

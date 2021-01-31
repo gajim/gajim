@@ -83,7 +83,7 @@ class HTTPUpload(BaseModule):
                                          GLib.FormatSizeFlags.IEC_UNITS)
             self._log.info('Component has a maximum file size of: %s', size)
 
-        for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
+        for ctrl in app.window.get_controls(account=self._account):
             ctrl.update_actions()
 
     def make_transfer(self, path, encryption, contact, groupchat=False):

@@ -23,6 +23,20 @@ class ChatListStack(Gtk.Stack):
         self._ui.search_entry.connect(
             'search-changed', self._on_search_changed)
 
+    def get_active_chat(self):
+        workspace_id = self.get_visible_child_name()
+        if workspace_id == 'empty':
+            return None
+
+        chat_list = self._chat_lists[workspace_id]
+        return chat_list.get_active_chat()
+
+    def is_chat_active(self, account, jid):
+        active = self.get_active_chat()
+        if active is None:
+            return False
+        return active == (account, jid)
+
     def _on_search_changed(self, search_entry):
         chat_list = self.get_visible_child()
         chat_list.set_filter_text(search_entry.get_text())
@@ -81,14 +95,28 @@ class ChatListStack(Gtk.Stack):
 
     def remove_chat(self, workspace_id, account, jid):
         chat_list = self._chat_lists[workspace_id]
+        type_ = chat_list.get_chat_type(account, jid)
         chat_list.remove_chat(account, jid)
         self.store_open_chats(workspace_id)
 
-        if self._find_chat(account, jid) is None:
+        if not self.contains_chat(account, jid):
             self._chat_stack.remove_chat(account, jid)
+            if type_ == 'groupchat':
+                client = app.get_client(account)
+                client.get_module('MUC').leave(jid)
 
     def _find_chat(self, account, jid):
         for chat_list in self._chat_lists.values():
             if chat_list.contains_chat(account, jid):
                 return chat_list
         return None
+
+    def contains_chat(self, account, jid, workspace_id=None):
+        if workspace_id is None:
+            for chat_list in self._chat_lists.values():
+                if chat_list.contains_chat(account, jid):
+                    return True
+            return False
+
+        chat_list = self._chat_lists[workspace_id]
+        return chat_list.contains_chat(account, jid)

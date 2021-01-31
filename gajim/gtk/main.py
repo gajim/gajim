@@ -68,6 +68,7 @@ class MainWindow(Gtk.ApplicationWindow):
             ('remove-workspace', 's', self.remove_workspace),
             ('activate-workspace', 's', self.activate_workspace),
             ('add-chat', 'as', self.add_chat),
+            ('add-group-chat', 'as', self.add_group_chat),
             ('remove-chat', 'as', self.remove_chat),
             ('activate-account-page', 's', self.activate_account_page),
         ]
@@ -105,6 +106,14 @@ class MainWindow(Gtk.ApplicationWindow):
     def get_active_workspace(self):
         return self._workspace_side_bar.get_active_workspace()
 
+    def get_active_chat(self):
+        return self._chat_list_stack.get_active_chat()
+
+    def is_chat_focused(self, account, jid):
+        if not self.get_property('has-toplevel-focus'):
+            return False
+        return self._chat_list_stack.is_chat_active(account, jid)
+
     def add_workspace(self, _action, param):
         workspace_id = param.get_string()
         self._workspace_side_bar.add_workspace(workspace_id)
@@ -135,13 +144,21 @@ class MainWindow(Gtk.ApplicationWindow):
         self._workspace_side_bar.activate_workspace(workspace_id)
         self._chat_list_stack.show_chat_list(workspace_id)
 
+    def add_group_chat(self, _action, param):
+        account, jid = param.unpack()
+        workspace_id = self._workspace_side_bar.get_active_workspace()
+        self.add_chat_for_workspace(workspace_id, account, jid, 'groupchat')
+
     def add_chat(self, _action, param):
         account, jid, type_ = param.unpack()
         workspace_id = self._workspace_side_bar.get_active_workspace()
         self.add_chat_for_workspace(workspace_id, account, jid, type_)
 
     def add_chat_for_workspace(self, workspace_id, account, jid, type_):
-        self._chat_stack.add_chat(account, jid)
+        if type_ == 'groupchat':
+            self._chat_stack.add_group_chat(account, jid)
+        else:
+            self._chat_stack.add_chat(account, jid)
         self._chat_list_stack.add_chat(workspace_id, account, jid, type_)
 
         if self._startup_finished:
@@ -152,6 +169,17 @@ class MainWindow(Gtk.ApplicationWindow):
         workspace_id, account, jid = param.unpack()
         self._chat_list_stack.remove_chat(workspace_id, account, jid)
 
+    def chat_exists(self, account, jid):
+        return self._chat_list_stack.contains_chat(account, jid)
+
+    def chat_exists_for_workspace(self, workspace_id, account, jid):
+        return self._chat_list_stack.contains_chat(
+            account, jid, workspace_id=workspace_id)
+
+    def select_chat(self, workspace_id, account, jid):
+        self._workspace_side_bar.activate_workspace(workspace_id)
+        self._chat_list_stack.select_chat(workspace_id, account, jid)
+
     def get_control(self, account, jid):
         return self._chat_stack.get_control(account, jid)
 
@@ -159,6 +187,9 @@ class MainWindow(Gtk.ApplicationWindow):
         for account in list(app.connections.keys()):
             self._ui.main_stack.add_named(
                 AccountPage(account), account)
+
+    def get_controls(self, account=None):
+        return self._chat_stack.get_controls(account)
 
     def _load_chats(self):
         for workspace_id in app.settings.get_workspaces():

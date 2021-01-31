@@ -1300,6 +1300,7 @@ class Interface:
 ################################################################################
 
     def show_groupchat(self, account, room_jid):
+        return False
         minimized_control = self.minimized_controls[account].get(room_jid)
         if minimized_control is not None:
             self.roster.on_groupchat_maximized(None, room_jid, account)
@@ -1357,30 +1358,26 @@ class Interface:
         self.create_groupchat_control(account, room_jid, muc_data)
         app.connections[account].get_module('MUC').create(muc_data)
 
-    def show_or_join_groupchat(self, account, room_jid, **kwargs):
-        if self.show_groupchat(account, room_jid):
-            return
-        self.join_groupchat(account, room_jid, **kwargs)
-
-    def join_groupchat(self,
-                       account,
-                       room_jid,
-                       password=None,
-                       nick=None,
-                       minimized=False):
-
-        if not app.account_is_available(account):
+    def show_add_join_groupchat(self, account, jid, nickname=None):
+        workspace_id = app.window.get_active_workspace()
+        if app.window.chat_exists_for_workspace(workspace_id, account, jid):
+            app.window.select_chat(workspace_id, account, jid)
             return
 
-        muc_data = self._create_muc_data(account,
-                                         room_jid,
-                                         nick,
-                                         password,
-                                         None)
-        self.create_groupchat_control(
-            account, room_jid, muc_data, minimize=minimized)
+        if not app.window.chat_exists(account, jid):
+            client = app.get_client(account)
+            client.get_module('MUC').join(jid, nick=nickname)
 
-        app.connections[account].get_module('MUC').join(muc_data)
+        app.window.activate_action(
+            'add-group-chat', GLib.Variant('as', [account, str(jid)]))
+
+    @staticmethod
+    def _on_muc_added(_muc_manger, _signal_name, account, jid):
+        if app.window.chat_exists(account, jid):
+            return
+
+        app.window.activate_action(
+            'add-group-chat', GLib.Variant('as', [account, str(jid)]))
 
     def new_private_chat(self, gc_contact, account, session=None):
         conn = app.connections[account]
@@ -1571,6 +1568,9 @@ class Interface:
 
         app.plugin_manager.register_modules_for_account(
             app.connections[account])
+
+        muc_manager = app.connections[account].get_module('MUC').get_manager()
+        muc_manager.connect('muc-added', self._on_muc_added)
 
         # update variables
         self.instances[account] = {
@@ -2056,6 +2056,9 @@ class Interface:
             if (not app.settings.get_account_setting(account, 'is_zeroconf') and
                     app.settings.get_account_setting(account, 'active')):
                 app.connections[account] = Client(account)
+
+        muc_manager = app.connections[account].get_module('MUC').get_manager()
+        muc_manager.connect('muc-added', self._on_muc_added)
 
         self.instances = {}
 
