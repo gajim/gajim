@@ -384,5 +384,8 @@
     <child>
       <placeholder/>
     </child>
+    <style>
+      <class name="mainwindow-grid"/>
+    </style>
   </object>
 </interface>
