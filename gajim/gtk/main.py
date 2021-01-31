@@ -4,6 +4,7 @@ from gi.repository import GLib
 from gi.repository import Gio
 
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim.gui.util import get_builder
 from gajim.gui.util import load_icon
 from gajim.gui.account_page import AccountPage
@@ -11,6 +12,10 @@ from gajim.gui.chat_list_stack import ChatListStack
 from gajim.gui.chat_stack import ChatStack
 from gajim.gui.account_side_bar import AccountSideBar
 from gajim.gui.workspace_side_bar import WorkspaceSideBar
+
+from gajim.common.helpers import ask_for_status_message
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ConfirmationDialog
 
 from .util import open_window
 
@@ -215,3 +220,77 @@ class MainWindow(Gtk.ApplicationWindow):
     def _on_edit_workspace_clicked(self, _button):
         open_window('WorkspaceDialog',
                     workspace_id=self.get_active_workspace())
+
+    def quit(self):
+        accounts = list(app.connections.keys())
+        get_msg = False
+        for acct in accounts:
+            if app.account_is_available(acct):
+                get_msg = True
+                break
+
+        def on_continue2(message):
+            if 'file_transfers' not in app.interface.instances:
+                app.app.start_shutdown(message=message)
+                return
+            # check if there is an active file transfer
+            from gajim.common.modules.bytestream import is_transfer_active
+            files_props = app.interface.instances['file_transfers'].\
+                files_props
+            transfer_active = False
+            for x in files_props:
+                for y in files_props[x]:
+                    if is_transfer_active(files_props[x][y]):
+                        transfer_active = True
+                        break
+
+            if transfer_active:
+                ConfirmationDialog(
+                    _('Stop File Transfers'),
+                    _('You still have running file transfers'),
+                    _('If you quit now, the file(s) being transferred will '
+                      'be lost.\n'
+                      'Do you still want to quit?'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       text=_('_Quit'),
+                                       callback=app.app.start_shutdown,
+                                       kwargs={'message': message})]).show()
+                return
+            app.app.start_shutdown(message=message)
+
+        def on_continue(message):
+            if message is None:
+                # user pressed Cancel to change status message dialog
+                return
+            # check if we have unread messages
+            unread = app.events.get_nb_events()
+
+            for event in app.events.get_all_events(['printed_gc_msg']):
+                contact = app.contacts.get_groupchat_contact(event.account,
+                                                             event.jid)
+                if contact is None or not contact.can_notify():
+                    unread -= 1
+
+            if unread:
+                ConfirmationDialog(
+                    _('Unread Messages'),
+                    _('You still have unread messages'),
+                    _('Messages will only be available for reading them later '
+                      'if storing chat history is enabled and if the contact '
+                      'is in your contact list.'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       text=_('_Quit'),
+                                       callback=on_continue2,
+                                       args=[message])]).show()
+                return
+            on_continue2(message)
+
+        if get_msg and ask_for_status_message('offline'):
+            open_window('StatusChange',
+                        status='offline',
+                        callback=on_continue,
+                        show_pep=False)
+        else:
+            on_continue('')
