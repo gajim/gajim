@@ -118,7 +118,7 @@ class ChatRow(Gtk.ListBoxRow):
 
         contact = app.contacts.get_contact(account, jid)
 
-        if contact:
+        if contact and not contact.is_groupchat:
             avatar = app.contacts.get_avatar(account,
                                              contact.jid,
                                              AvatarSize.ROSTER,
@@ -157,7 +157,8 @@ class ChatRow(Gtk.ListBoxRow):
         line = app.storage.archive.get_last_conversation_line(account, jid)
         last_message_box = Gtk.Box(spacing=3)
         if line is not None and line.message is not None:
-            last_message_label.set_text(line.message)
+            one_line = ' '.join(line.message.splitlines())
+            last_message_label.set_text(one_line)
             nick_label = Gtk.Label(label=_('Me:'))
             nick_label.set_halign(Gtk.Align.START)
             nick_label.get_style_context().add_class('small-label')
