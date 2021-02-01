@@ -23,7 +23,7 @@ from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
 
 
-CURRENT_USER_VERSION = 6
+CURRENT_USER_VERSION = 7
 
 CACHE_SQL_STATEMENT = '''
     CREATE TABLE caps_cache (
@@ -44,6 +44,14 @@ CACHE_SQL_STATEMENT = '''
     CREATE TABLE muc_avatars(
             jid TEXT PRIMARY KEY UNIQUE,
             avatar_sha TEXT
+    );
+    CREATE TABLE unread(
+            account TEXT,
+            jid TEXT,
+            count INTEGER,
+            message_id TEXT,
+            timestamp INTEGER,
+            PRIMARY KEY (account, jid)
     );
     PRAGMA user_version=%s;
     ''' % CURRENT_USER_VERSION
@@ -88,6 +96,23 @@ class CacheStorage(SqliteStorage):
 
         if user_version < 6:
             self._reinit_storage()
+            return
+
+        if user_version < 7:
+            statements = [
+                '''CREATE TABLE unread(
+                    account TEXT,
+                    jid TEXT,
+                    count INTEGER,
+                    message_id TEXT,
+                    timestamp INTEGER,
+                    PRIMARY KEY (account, jid))''',
+
+                'CREATE INDEX idx_unread ON unread(account, jid)',
+                'PRAGMA user_version=7'
+            ]
+
+            self._execute_multiple(statements)
 
     @timeit
     def _load_caps_data(self):
@@ -262,3 +287,28 @@ class CacheStorage(SqliteStorage):
         """
 
         return self._muc_avatar_sha_cache.get(jid)
+
+    @timeit
+    def get_unread_count(self, account, jid):
+        sql = '''SELECT count, message_id, timestamp FROM unread
+                 WHERE account = ? AND jid = ?'''
+        return self._con.execute(sql, (account, jid)).fetchone()
+
+    @timeit
+    def set_unread_count(self, account, jid, count, message_id, timestamp):
+        sql = '''INSERT INTO unread (account, jid, count, message_id, timestamp)
+                 VALUES (?, ?, ?, ?, ?)'''
+        self._con.execute(sql, (account, jid, count, message_id, timestamp))
+        self._delayed_commit()
+
+    @timeit
+    def update_unread_count(self, account, jid, count):
+        sql = 'UPDATE unread SET count = ? WHERE account = ? AND jid = ?'
+        self._con.execute(sql, (count, account, jid))
+        self._delayed_commit()
+
+    @timeit
+    def reset_unread_count(self, account, jid):
+        sql = 'DELETE FROM unread WHERE account = ? AND jid = ?'
+        self._con.execute(sql, (account, jid))
+        self._delayed_commit()

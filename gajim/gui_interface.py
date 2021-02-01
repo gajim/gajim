@@ -2004,8 +2004,6 @@ class Interface:
         # Load CSS files
         app.load_css_config()
 
-        app.storage.archive.reset_shown_unread_messages()
-
         for account in app.settings.get_accounts():
             if app.settings.get_account_setting(account, 'is_zeroconf'):
                 app.ZEROCONF_ACC_NAME = account
