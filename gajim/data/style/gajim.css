@@ -168,12 +168,13 @@
     margin-right: 6px;
 }
 .unread-counter {
+    background-color: rgb(22, 100, 169);
     color: rgb(242, 242, 242);
+    font-weight: bold;
+    font-size: 80%;
     padding-left: 6px;
     padding-right: 6px;
     border-radius: 10px;
-    font-size: 80%;
-    background-color: rgb(22, 100, 169);
 }
 
 /* VCardWindow */
