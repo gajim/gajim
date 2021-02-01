@@ -1,16 +1,14 @@
 import logging
-from datetime import datetime
 
-
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
-
+from gajim.common.helpers import get_uf_relative_time
 
 log = logging.getLogger('gajim.gtk.chatlist')
 
@@ -24,10 +22,21 @@ class ChatList(Gtk.ListBox):
         self._workspace_id = workspace_id
 
         self.get_style_context().add_class('chatlist')
+        self.connect('destroy', self._on_destroy)
 
         self.show_all()
 
         self.set_filter_func(self._filter_func)
+
+        self._timer_id = GLib.timeout_add_seconds(60, self._update_timer)
+
+    def _on_destroy(self):
+        if self._timer_id is not None:
+            GLib.source_remove(self._timer_id)
+
+    def _update_timer(self):
+        self.update()
+        GLib.timeout_add_seconds(60, self._update_timer)
 
     def _filter_func(self, row):
         if not self._current_filter_text:
@@ -76,6 +85,10 @@ class ChatList(Gtk.ListBox):
             open_chats.append(key + (value.type,))
         return open_chats
 
+    def update(self):
+        for _, row in self._chats.items():
+            row.update()
+
 
 class ChatRow(Gtk.ListBoxRow):
     def __init__(self, workspace_id, account, jid, type_):
@@ -85,6 +98,8 @@ class ChatRow(Gtk.ListBoxRow):
         self.jid = jid
         self.workspace_id = workspace_id
         self.type = type_
+
+        self._timestamp = None
         self._unread_count = 0
 
         self.get_style_context().add_class('chatlist-row')
@@ -132,11 +147,11 @@ class ChatRow(Gtk.ListBoxRow):
         last_message_label.set_ellipsize(Pango.EllipsizeMode.END)
         last_message_label.get_style_context().add_class('small-label')
 
-        timestamp_label = Gtk.Label()
-        timestamp_label.set_halign(Gtk.Align.END)
-        timestamp_label.set_valign(Gtk.Align.END)
-        timestamp_label.get_style_context().add_class('small-label')
-        timestamp_label.get_style_context().add_class('dim-label')
+        self._timestamp_label = Gtk.Label()
+        self._timestamp_label.set_halign(Gtk.Align.END)
+        self._timestamp_label.set_valign(Gtk.Align.END)
+        self._timestamp_label.get_style_context().add_class('small-label')
+        self._timestamp_label.get_style_context().add_class('dim-label')
 
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)
@@ -153,10 +168,10 @@ class ChatRow(Gtk.ListBoxRow):
             # TODO: MUC nick
             # TODO: file transfers have to be displayed differently
 
-            # TODO: Calculate user friendly timestamp for yesterday, etc.
-            date_time = datetime.fromtimestamp(line.time)
-            timestamp = date_time.strftime('%H:%M')
-            timestamp_label.set_text(timestamp)
+            self._timestamp = line.time
+            uf_timestamp = get_uf_relative_time(line.time)
+            self._timestamp_label.set_text(uf_timestamp)
+
         last_message_box.add(last_message_label)
 
         self._unread_label = Gtk.Label()
@@ -180,7 +195,7 @@ class ChatRow(Gtk.ListBoxRow):
         meta_box = Gtk.Box(spacing=6)
         meta_box.pack_start(chat_name_label, False, True, 0)
         meta_box.pack_end(self._unread_label, False, True, 0)
-        meta_box.pack_end(timestamp_label, False, True, 0)
+        meta_box.pack_end(self._timestamp_label, False, True, 0)
 
         text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         text_box.add(meta_box)
@@ -207,6 +222,11 @@ class ChatRow(Gtk.ListBoxRow):
 
     def _on_close_button_clicked(self, _button):
         app.window.remove_chat(self.workspace_id, self.account, self.jid)
+
+    def update(self):
+        if self._timestamp is not None:
+            uf_timestamp = get_uf_relative_time(self._timestamp)
+            self._timestamp_label.set_text(uf_timestamp)
 
     def set_unread(self, count):
         log.info('Set unread count: %s (%s)', self.jid, count)

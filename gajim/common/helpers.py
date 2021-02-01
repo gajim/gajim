@@ -50,6 +50,8 @@ import string
 import webbrowser
 from string import Template
 import urllib
+from datetime import datetime
+from datetime import timedelta
 from urllib.parse import unquote
 from encodings.punycode import punycode_encode
 from functools import wraps
@@ -285,6 +287,30 @@ def get_uf_affiliation(affiliation, plural=False):
         else:
             affiliation_name = _('Member')
     return affiliation_name
+
+def get_uf_relative_time(timestamp: int) -> str:
+    date_time = datetime.fromtimestamp(timestamp)
+    now = datetime.now()
+    timespan = now - date_time
+
+    if timespan > timedelta(days=365):
+        return str(date_time.year)
+    if timespan > timedelta(days=7):
+        return date_time.strftime('%b %d')
+    if timespan > timedelta(days=2):
+        return date_time.strftime('%a')
+    if date_time.strftime('%d') != now.strftime('%d'):
+        return _('Yesterday')
+    if timespan > timedelta(minutes=15):
+        return date_time.strftime('%H:%M')
+    if timespan > timedelta(minutes=1):
+        minutes = int(timespan.seconds / 60)
+        return ngettext('%i min ago',
+                        '%i mins ago',
+                        minutes,
+                        minutes,
+                        minutes)
+    return _('Just now')
 
 def get_sorted_keys(adict):
     keys = sorted(adict.keys())
