@@ -238,7 +238,6 @@ class MAM(BaseModule):
             with_,
             properties.mam.timestamp,
             kind,
-            unread=False,
             message=msgtxt,
             contact_name=properties.muc_nickname,
             additional_data=additional_data,

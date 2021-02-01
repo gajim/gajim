@@ -48,12 +48,6 @@ ARCHIVE_SQL_STATEMENT = '''
             jid TEXT UNIQUE,
             type INTEGER
     );
-    CREATE TABLE unread_messages(
-            message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-            jid_id INTEGER,
-            shown BOOLEAN default 0
-    );
-    CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
     CREATE TABLE logs(
             log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             account_id INTEGER,
@@ -325,78 +319,6 @@ class MessageArchiveStorage(SqliteStorage):
         # invisible in GC when someone goes invisible
         # it's a RFC violation .... but we should not crash
         return None
-
-    @timeit
-    def insert_unread_events(self, message_id, jid_id):
-        """
-        Add unread message with id: message_id
-        """
-        sql = '''INSERT INTO unread_messages (message_id, jid_id, shown)
-                 VALUES (?, ?, 0)'''
-        self._con.execute(sql, (message_id, jid_id))
-        self._delayed_commit()
-
-    @timeit
-    def set_read_messages(self, message_ids):
-        """
-        Mark all messages with ids in message_ids as read
-        """
-        ids = ','.join([str(i) for i in message_ids])
-        sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
-        self._con.execute(sql)
-        self._delayed_commit()
-
-    @timeit
-    def set_shown_unread_msgs(self, msg_log_id):
-        """
-        Mark unread message as shown un GUI
-        """
-        sql = 'UPDATE unread_messages SET shown = 1 where message_id = %s' % \
-                msg_log_id
-        self._con.execute(sql)
-        self._delayed_commit()
-
-    @timeit
-    def reset_shown_unread_messages(self):
-        """
-        Set shown field to False in unread_messages table
-        """
-        sql = 'UPDATE unread_messages SET shown = 0'
-        self._con.execute(sql)
-        self._delayed_commit()
-
-    @timeit
-    def get_unread_msgs(self):
-        """
-        Get all unread messages
-        """
-        all_messages = []
-        try:
-            unread_results = self._con.execute(
-                'SELECT message_id, shown from unread_messages').fetchall()
-        except Exception:
-            unread_results = []
-        for message in unread_results:
-            msg_log_id = message.message_id
-            shown = message.shown
-            # here we get infos for that message, and related jid from jids table
-            # do NOT change order of SELECTed things, unless you change function(s)
-            # that called this function
-            result = self._con.execute('''
-                    SELECT logs.log_line_id, logs.message, logs.time, logs.subject,
-                    jids.jid, logs.additional_data
-                    FROM logs, jids
-                    WHERE logs.log_line_id = %d AND logs.jid_id = jids.jid_id
-                    ''' % msg_log_id
-                    ).fetchone()
-            if result is None:
-                # Log line is no more in logs table.
-                # remove it from unread_messages
-                self.set_read_messages([msg_log_id])
-                continue
-
-            all_messages.append((result, shown))
-        return all_messages
 
     @timeit
     def load_groupchat_messages(self, account, jid):
@@ -824,8 +746,7 @@ class MessageArchiveStorage(SqliteStorage):
         return self.get_jid_id(jid, kind, type_)
 
     @timeit
-    def insert_into_logs(self, account, jid, time_, kind,
-                         unread=True, **kwargs):
+    def insert_into_logs(self, account, jid, time_, kind, **kwargs):
         """
         Insert a new message into the `logs` table
 
@@ -862,11 +783,6 @@ class MessageArchiveStorage(SqliteStorage):
 
         log.info('Insert into DB: jid: %s, time: %s, kind: %s, stanza_id: %s',
                  jid, time_, kind, kwargs.get('stanza_id', None))
-
-        if unread and kind == KindConstant.CHAT_MSG_RECV:
-            sql = '''INSERT INTO unread_messages (message_id, jid_id)
-                     VALUES (?, (SELECT jid_id FROM jids WHERE jid = ?))'''
-            self._con.execute(sql, (lastrowid, jid))
 
         self._delayed_commit()
 
