@@ -9,6 +9,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
 from gajim.common.helpers import get_groupchat_name
+from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_uf_relative_time
 
 log = logging.getLogger('gajim.gtk.chatlist')
@@ -167,14 +168,23 @@ class ChatRow(Gtk.ListBoxRow):
         if line is not None and line.message is not None:
             one_line = ' '.join(line.message.splitlines())
             last_message_label.set_text(one_line)
-            nick_label = Gtk.Label(label=_('Me:'))
+            nick_label = Gtk.Label()
             nick_label.set_halign(Gtk.Align.START)
             nick_label.get_style_context().add_class('small-label')
             nick_label.get_style_context().add_class('dim-label')
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
+                nick_label.set_text(_('Me:'))
                 last_message_box.add(nick_label)
-            # TODO: MUC nick
+            if line.kind == KindConstant.GC_MSG:
+                our_nick = get_group_chat_nick(account, jid)
+                if line.contact_name == our_nick:
+                    nick_label.set_text(_('Me:'))
+                else:
+                    nick_label.set_text(_('%(muc_nick)s: ') % {
+                        'muc_nick': line.contact_name})
+                last_message_box.add(nick_label)
+
             # TODO: file transfers have to be displayed differently
 
             self._timestamp = line.time
