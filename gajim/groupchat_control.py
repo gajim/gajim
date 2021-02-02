@@ -1670,10 +1670,10 @@ class GroupchatControl(ChatControlBase):
         on_yes(self)
 
     def _close_control(self, reason=None):
-        if self.parent_win is None:
-            self.shutdown(reason)
-        else:
-            self.parent_win.remove_tab(self, None, reason=reason, force=True)
+        # if self.parent_win is None:
+        self.shutdown(reason)
+        # else:
+            # self.parent_win.remove_tab(self, None, reason=reason, force=True)
 
     def set_control_active(self, state):
         self.conv_textview.allow_focus_out_line = True

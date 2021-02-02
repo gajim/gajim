@@ -4,6 +4,7 @@ from gi.repository import GLib
 from gi.repository import Gio
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.gui.util import get_builder
 from gajim.gui.util import load_icon
@@ -60,6 +61,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self._ui.start_chat_button.connect(
             'clicked', self._on_start_chat_clicked)
         self._ui.connect_signals(self)
+
+        app.ged.register_event_handler('message-received',
+                                       ged.CORE,
+                                       self._on_message_received)
 
         self.show_all()
 
@@ -235,6 +240,16 @@ class MainWindow(Gtk.ApplicationWindow):
     def _on_edit_workspace_clicked(self, _button):
         open_window('WorkspaceDialog',
                     workspace_id=self.get_active_workspace())
+
+    def _on_message_received(self, event):
+        if not self.chat_exists(event.account, event.jid):
+            self.add_chat(event.account, event.jid, 'contact')
+
+        if not event.msgtxt:
+            return
+
+        self._chat_stack.update(event)
+        self._chat_list_stack.update(event)
 
     def quit(self):
         accounts = list(app.connections.keys())

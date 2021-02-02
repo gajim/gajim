@@ -120,3 +120,7 @@ class ChatListStack(Gtk.Stack):
 
         chat_list = self._chat_lists[workspace_id]
         return chat_list.contains_chat(account, jid)
+
+    def update(self, event):
+        chat_list = self._find_chat(event.account, event.jid)
+        chat_list.update(event)

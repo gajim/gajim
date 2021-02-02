@@ -134,22 +134,22 @@ class Message(BaseModule):
         msgtxt = properties.body
 
         session = None
-        if not properties.type.is_groupchat:
-            if properties.is_muc_pm and properties.type.is_error:
-                session = self._con.find_session(fjid, properties.thread)
-                if not session:
-                    session = self._con.get_latest_session(fjid)
-                if not session:
-                    session = self._con.make_new_session(
-                        fjid, properties.thread, type_='pm')
-            else:
-                session = self._con.get_or_create_session(
-                    fjid, properties.thread)
+        # if not properties.type.is_groupchat:
+            # if properties.is_muc_pm and properties.type.is_error:
+            #     session = self._con.find_session(fjid, properties.thread)
+            #     if not session:
+            #         session = self._con.get_latest_session(fjid)
+            #     if not session:
+            #         session = self._con.make_new_session(
+            #             fjid, properties.thread, type_='pm')
+            # else:
+            #     session = self._con.get_or_create_session(
+            #         fjid, properties.thread)
 
-            if properties.thread and not session.received_thread_id:
-                session.received_thread_id = True
+            # if properties.thread and not session.received_thread_id:
+            #     session.received_thread_id = True
 
-            session.last_receive = time.time()
+            # session.last_receive = time.time()
 
         additional_data = AdditionalDataDict()
 
@@ -210,7 +210,7 @@ class Message(BaseModule):
             return
 
         app.nec.push_incoming_event(
-            NetworkEvent('decrypted-message-received', **event_attr))
+            NetworkEvent('message-received', **event_attr))
 
     def _message_error_received(self, _con, _stanza, properties):
         jid = properties.jid

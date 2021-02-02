@@ -62,7 +62,6 @@ from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
 from gajim.groupchat_control import GroupchatControl
 from gajim.privatechat_control import PrivateChatControl
-from gajim.message_window import MessageWindowMgr
 
 from gajim.session import ChatControlSession
 

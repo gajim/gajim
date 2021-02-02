@@ -227,7 +227,7 @@ class ChatControl(ChatControlBase):
             ('caps-update', ged.GUI1, self._on_caps_update),
             ('message-sent', ged.OUT_POSTCORE, self._on_message_sent),
             ('mam-decrypted-message-received', ged.GUI1, self._on_mam_decrypted_message_received),
-            ('decrypted-message-received', ged.GUI1, self._on_decrypted_message_received),
+            # ('decrypted-message-received', ged.GUI1, self._on_decrypted_message_received),
             ('receipt-received', ged.GUI1, self._receipt_received),
             ('displayed-received', ged.GUI1, self._displayed_received),
             ('message-error', ged.GUI1, self._on_message_error),
@@ -603,34 +603,6 @@ class ChatControl(ChatControlBase):
                          correct_id=event.correct_id,
                          message_id=event.properties.id,
                          additional_data=event.additional_data)
-
-    @event_filter(['account'])
-    def _on_decrypted_message_received(self, event):
-        if not event.msgtxt:
-            return True
-
-        if event.session.control != self:
-            return
-
-        typ = ''
-        if event.properties.is_sent_carbon:
-            typ = 'out'
-
-        self.add_message(event.msgtxt,
-                         typ,
-                         tim=event.properties.timestamp,
-                         subject=event.properties.subject,
-                         displaymarking=event.displaymarking,
-                         msg_log_id=event.msg_log_id,
-                         message_id=event.properties.id,
-                         correct_id=event.correct_id,
-                         additional_data=event.additional_data)
-        if event.msg_log_id:
-            pw = self.parent_win
-            end = self.conv_textview.autoscroll
-            if not pw or (pw.get_active_control() and self \
-            == pw.get_active_control() and pw.is_active() and end):
-                app.storage.archive.set_read_messages([event.msg_log_id])
 
     @event_filter(['account', 'jid'])
     def _on_message_error(self, event):
@@ -1229,17 +1201,6 @@ class ChatControl(ChatControlBase):
             self.get_full_jid(),
             types=['printed_%s' % self._type, str(self._type)])
         # Remove contact instance if contact has been removed
-        key = (self.contact.jid, self.account)
-        roster = app.interface.roster
-        has_pending = roster.contact_has_pending_roster_events(self.contact,
-                                                               self.account)
-        if key in roster.contacts_to_be_removed and not has_pending:
-            backend = roster.contacts_to_be_removed[key]['backend']
-            del roster.contacts_to_be_removed[key]
-            roster.remove_contact(self.contact.jid,
-                                  self.account,
-                                  force=True,
-                                  backend=backend)
 
         super(ChatControl, self).shutdown()
 

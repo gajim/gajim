@@ -132,8 +132,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
 
 class NotificationEvent(nec.NetworkIncomingEvent):
     name = 'notification'
-    base_network_events = ['decrypted-message-received',
-                           'gc-message-received',
+    base_network_events = ['gc-message-received',
                            'presence-received']
 
     def generate(self):

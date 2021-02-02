@@ -33,12 +33,11 @@ class ChatList(Gtk.ListBox):
         self._timer_id = GLib.timeout_add_seconds(60, self._update_timer)
 
     def _on_destroy(self):
-        if self._timer_id is not None:
-            GLib.source_remove(self._timer_id)
+        GLib.source_remove(self._timer_id)
 
     def _update_timer(self):
-        self.update()
-        GLib.timeout_add_seconds(60, self._update_timer)
+        self.update_time()
+        return True
 
     def _filter_func(self, row):
         if not self._current_filter_text:
@@ -87,9 +86,14 @@ class ChatList(Gtk.ListBox):
             open_chats.append(key + (value.type,))
         return open_chats
 
-    def update(self):
+    def update_time(self):
         for _, row in self._chats.items():
-            row.update()
+            row.update_time()
+
+    def update(self, event):
+        row = self._chats.get((event.account, event.jid))
+        row.add_unread()
+        row.set_last_message_text('Me', event.msgtxt)
 
 
 class ChatRow(Gtk.ListBoxRow):
@@ -150,11 +154,11 @@ class ChatRow(Gtk.ListBoxRow):
         chat_name_label.set_ellipsize(Pango.EllipsizeMode.END)
         chat_name_label.set_text(name)
 
-        last_message_label = Gtk.Label()
-        last_message_label.set_halign(Gtk.Align.START)
-        last_message_label.set_xalign(0)
-        last_message_label.set_ellipsize(Pango.EllipsizeMode.END)
-        last_message_label.get_style_context().add_class('small-label')
+        self._last_message_label = Gtk.Label()
+        self._last_message_label.set_halign(Gtk.Align.START)
+        self._last_message_label.set_xalign(0)
+        self._last_message_label.set_ellipsize(Pango.EllipsizeMode.END)
+        self._last_message_label.get_style_context().add_class('small-label')
 
         self._timestamp_label = Gtk.Label()
         self._timestamp_label.set_halign(Gtk.Align.END)
@@ -167,23 +171,24 @@ class ChatRow(Gtk.ListBoxRow):
         last_message_box = Gtk.Box(spacing=3)
         if line is not None and line.message is not None:
             one_line = ' '.join(line.message.splitlines())
-            last_message_label.set_text(one_line)
-            nick_label = Gtk.Label()
-            nick_label.set_halign(Gtk.Align.START)
-            nick_label.get_style_context().add_class('small-label')
-            nick_label.get_style_context().add_class('dim-label')
+
+            self._last_message_label.set_text(one_line)
+            self._nick_label = Gtk.Label()
+            self._nick_label.set_halign(Gtk.Align.START)
+            self._nick_label.get_style_context().add_class('small-label')
+            self._nick_label.get_style_context().add_class('dim-label')
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
-                nick_label.set_text(_('Me:'))
-                last_message_box.add(nick_label)
+                self._nick_label.set_text(_('Me:'))
+                last_message_box.add(self._nick_label)
             if line.kind == KindConstant.GC_MSG:
                 our_nick = get_group_chat_nick(account, jid)
                 if line.contact_name == our_nick:
-                    nick_label.set_text(_('Me:'))
+                    self._nick_label.set_text(_('Me:'))
                 else:
-                    nick_label.set_text(_('%(muc_nick)s: ') % {
+                    self._nick_label.set_text(_('%(muc_nick)s: ') % {
                         'muc_nick': line.contact_name})
-                last_message_box.add(nick_label)
+                last_message_box.add(self._nick_label)
 
             # TODO: file transfers have to be displayed differently
 
@@ -191,7 +196,7 @@ class ChatRow(Gtk.ListBoxRow):
             uf_timestamp = get_uf_relative_time(line.time)
             self._timestamp_label.set_text(uf_timestamp)
 
-        last_message_box.add(last_message_label)
+        last_message_box.add(self._last_message_label)
 
         self._unread_label = Gtk.Label()
         self._unread_label.set_no_show_all(True)
@@ -242,16 +247,16 @@ class ChatRow(Gtk.ListBoxRow):
     def _on_close_button_clicked(self, _button):
         app.window.remove_chat(self.workspace_id, self.account, self.jid)
 
-    def update(self):
+    def update_time(self):
         if self._timestamp is not None:
             uf_timestamp = get_uf_relative_time(self._timestamp)
             self._timestamp_label.set_text(uf_timestamp)
 
-    def set_unread(self, count):
-        log.info('Set unread count: %s (%s)', self.jid, count)
-        self._unread_count = count
-        if not count:
-            self._unread_label.hide()
-        else:
-            self._unread_label.set_text(str(count))
-            self._unread_label.show()
+    def add_unread(self):
+        self._unread_count += 1
+        self._unread_label.set_text(str(self._unread_count))
+        self._unread_label.show()
+
+    def set_last_message_text(self, nickname, text):
+        self._last_message_label.set_text(text)
+        self._nick_label.set_text(nickname)
