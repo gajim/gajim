@@ -8,6 +8,7 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
+from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_uf_relative_time
 
 log = logging.getLogger('gajim.gtk.chatlist')
@@ -118,32 +119,39 @@ class ChatRow(Gtk.ListBoxRow):
 
         contact = app.contacts.get_contact(account, jid)
 
-        if contact and not contact.is_groupchat:
-            avatar = app.contacts.get_avatar(account,
-                                             contact.jid,
-                                             AvatarSize.ROSTER,
-                                             self.get_scale_factor(),
-                                             contact.show)
-            name = contact.get_shown_name()
+        scale = self.get_scale_factor()
+        if contact:
+            if contact.is_groupchat:
+                avatar = app.contacts.get_avatar(account,
+                                                jid,
+                                                AvatarSize.ROSTER,
+                                                scale)
+                con = app.connections[account]
+                name = get_groupchat_name(con, jid)
+            else:
+                avatar = app.contacts.get_avatar(account,
+                                                 contact.jid,
+                                                 AvatarSize.ROSTER,
+                                                 scale,
+                                                 contact.show)
+                name = contact.get_shown_name()
         else:
             avatar = app.contacts.get_avatar(account,
                                              jid,
                                              AvatarSize.ROSTER,
-                                             self.get_scale_factor())
+                                             scale)
             name = jid
 
         avatar_image = Gtk.Image.new_from_surface(avatar)
         chat_name_label = Gtk.Label()
         chat_name_label.set_halign(Gtk.Align.START)
         chat_name_label.set_xalign(0)
-        chat_name_label.set_max_width_chars(18)
         chat_name_label.set_ellipsize(Pango.EllipsizeMode.END)
         chat_name_label.set_text(name)
 
         last_message_label = Gtk.Label()
         last_message_label.set_halign(Gtk.Align.START)
         last_message_label.set_xalign(0)
-        last_message_label.set_max_width_chars(20)
         last_message_label.set_ellipsize(Pango.EllipsizeMode.END)
         last_message_label.get_style_context().add_class('small-label')
 
