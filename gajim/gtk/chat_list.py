@@ -2,7 +2,6 @@ import logging
 
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -11,6 +10,8 @@ from gajim.common.i18n import _
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_uf_relative_time
+
+from gajim.gui.util import get_builder
 
 log = logging.getLogger('gajim.gtk.chatlist')
 
@@ -110,17 +111,16 @@ class ChatRow(Gtk.ListBoxRow):
 
         self.get_style_context().add_class('chatlist-row')
 
-        self.connect('state-flags-changed', self._on_state_flags_changed)
+        self._ui = get_builder('chat_list_row.ui')
+        self.add(self._ui.overlay)
 
-        account_bar = Gtk.Box()
-        account_bar.set_size_request(6, -1)
-        account_bar.set_no_show_all(True)
+        self.connect('state-flags-changed', self._on_state_flags_changed)
+        self._ui.close_button.connect('clicked', self._on_close_button_clicked)
+
         account_class = app.css_config.get_dynamic_class(account)
-        account_bar.get_style_context().add_class(account_class)
-        account_bar.get_style_context().add_class(
-            'account-identifier-bar')
+        self._ui.account_identifier.get_style_context().add_class(account_class)
         if len(app.get_enabled_accounts_with_labels()) > 1:
-            account_bar.show()
+            self._ui.account_identifier.show()
 
         contact = app.contacts.get_contact(account, jid)
 
@@ -147,116 +147,56 @@ class ChatRow(Gtk.ListBoxRow):
                                              scale)
             name = jid
 
-        avatar_image = Gtk.Image.new_from_surface(avatar)
-        chat_name_label = Gtk.Label()
-        chat_name_label.set_halign(Gtk.Align.START)
-        chat_name_label.set_xalign(0)
-        chat_name_label.set_ellipsize(Pango.EllipsizeMode.END)
-        chat_name_label.set_text(name)
-
-        self._last_message_label = Gtk.Label()
-        self._last_message_label.set_halign(Gtk.Align.START)
-        self._last_message_label.set_xalign(0)
-        self._last_message_label.set_ellipsize(Pango.EllipsizeMode.END)
-        self._last_message_label.get_style_context().add_class('small-label')
-
-        self._timestamp_label = Gtk.Label()
-        self._timestamp_label.set_halign(Gtk.Align.END)
-        self._timestamp_label.set_valign(Gtk.Align.END)
-        self._timestamp_label.get_style_context().add_class('small-label')
-        self._timestamp_label.get_style_context().add_class('dim-label')
+        self._ui.avatar_image.set_from_surface(avatar)
+        self._ui.name_label.set_text(name)
 
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)
-        last_message_box = Gtk.Box(spacing=3)
         if line is not None and line.message is not None:
             one_line = ' '.join(line.message.splitlines())
-
-            self._last_message_label.set_text(one_line)
-            self._nick_label = Gtk.Label()
-            self._nick_label.set_halign(Gtk.Align.START)
-            self._nick_label.get_style_context().add_class('small-label')
-            self._nick_label.get_style_context().add_class('dim-label')
+            self._ui.message_label.set_text(one_line)
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
-                self._nick_label.set_text(_('Me:'))
-                last_message_box.add(self._nick_label)
+                self._ui.nick_label.set_text(_('Me:'))
+                self._ui.nick_label.show()
+
             if line.kind == KindConstant.GC_MSG:
                 our_nick = get_group_chat_nick(account, jid)
                 if line.contact_name == our_nick:
-                    self._nick_label.set_text(_('Me:'))
+                    self._ui.nick_label.set_text(_('Me:'))
                 else:
-                    self._nick_label.set_text(_('%(muc_nick)s: ') % {
+                    self._ui.nick_label.set_text(_('%(muc_nick)s: ') % {
                         'muc_nick': line.contact_name})
-                last_message_box.add(self._nick_label)
+                self._ui.nick_label.show()
 
-            # TODO: file transfers have to be displayed differently
+            #  TODO: file transfers have to be displayed differently
 
             self._timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
-            self._timestamp_label.set_text(uf_timestamp)
+            self._ui.timestamp_label.set_text(uf_timestamp)
 
-        last_message_box.add(self._last_message_label)
-
-        self._unread_label = Gtk.Label()
-        self._unread_label.set_no_show_all(True)
-        self._unread_label.set_halign(Gtk.Align.END)
-        self._unread_label.get_style_context().add_class('unread-counter')
-
-        close_button = Gtk.Button.new_from_icon_name(
-            'window-close-symbolic', Gtk.IconSize.BUTTON)
-        close_button.set_valign(Gtk.Align.CENTER)
-        close_button.set_tooltip_text(_('Close'))
-        close_button.get_style_context().add_class('revealer-close-button')
-        close_button.get_style_context().add_class('flat')
-        close_button.connect('clicked', self._on_close_button_clicked)
-        self._revealer = Gtk.Revealer()
-        self._revealer.set_transition_type(
-            Gtk.RevealerTransitionType.CROSSFADE)
-        self._revealer.set_halign(Gtk.Align.END)
-        self._revealer.add(close_button)
-
-        meta_box = Gtk.Box(spacing=6)
-        meta_box.pack_start(chat_name_label, False, True, 0)
-        meta_box.pack_end(self._unread_label, False, True, 0)
-        meta_box.pack_end(self._timestamp_label, False, True, 0)
-
-        text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        text_box.add(meta_box)
-        text_box.add(last_message_box)
-
-        main_box = Gtk.Box(spacing=12)
-        main_box.pack_start(account_bar, False, True, 0)
-        main_box.pack_start(avatar_image, False, True, 0)
-        main_box.pack_start(text_box, True, True, 0)
-
-        overlay = Gtk.Overlay()
-        overlay.add(main_box)
-        overlay.add_overlay(self._revealer)
-
-        self.add(overlay)
         self.show_all()
 
     def _on_state_flags_changed(self, _listboxrow, *args):
         state = self.get_state_flags()
         if (state & Gtk.StateFlags.PRELIGHT) != 0:
-            self._revealer.set_reveal_child(True)
+            self._ui.revealer.set_reveal_child(True)
         else:
-            self._revealer.set_reveal_child(False)
+            self._ui.revealer.set_reveal_child(False)
 
     def _on_close_button_clicked(self, _button):
         app.window.remove_chat(self.workspace_id, self.account, self.jid)
 
     def update_time(self):
         if self._timestamp is not None:
-            uf_timestamp = get_uf_relative_time(self._timestamp)
-            self._timestamp_label.set_text(uf_timestamp)
+            self._ui.timestamp_label.set_text(
+                get_uf_relative_time(self._timestamp))
 
     def add_unread(self):
         self._unread_count += 1
-        self._unread_label.set_text(str(self._unread_count))
-        self._unread_label.show()
+        self._ui.unread_label.set_text(str(self._unread_count))
+        self._ui.unread_label.show()
 
     def set_last_message_text(self, nickname, text):
-        self._last_message_label.set_text(text)
-        self._nick_label.set_text(nickname)
+        self._ui.message_label.set_text(text)
+        self._ui.nick_label.set_text(nickname)

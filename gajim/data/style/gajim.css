@@ -135,8 +135,8 @@
 .chatlist-row {
     transition: none;
     padding: 0px;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: 12px;
+    margin-right: 12px;
     margin-bottom: 3px;
     border-radius: 6px;
 }
@@ -151,7 +151,7 @@
     background-color: shade(@theme_base_color, 0.9);
     outline: none;
 }
-.chatlist-row:selected label {
+.chatlist-row:selected label:not(.unread-counter){
     color: @theme_text_color;
 }
 .chatlist-row:selected button {
