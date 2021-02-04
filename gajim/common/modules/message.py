@@ -212,6 +212,24 @@ class Message(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('message-received', **event_attr))
 
+        log_type = KindConstant.CHAT_MSG_RECV
+        if properties.is_sent_carbon:
+            log_type = KindConstant.CHAT_MSG_SENT
+
+        if not should_log(self._account, jid) or not msgtxt:
+            return
+
+        app.storage.archive.insert_into_logs(
+            self._account,
+            fjid if properties.is_muc_pm else jid,
+            properties.timestamp,
+            log_type,
+            message=msgtxt,
+            subject=properties.subject,
+            additional_data=additional_data,
+            stanza_id=stanza_id or message_id,
+            message_id=properties.id)
+
     def _message_error_received(self, _con, _stanza, properties):
         jid = properties.jid
         if not properties.is_muc_pm:

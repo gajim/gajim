@@ -88,13 +88,11 @@ class PrivateChatControl(ChatControl):
     def get_our_nick(self):
         return self.room_ctrl.nick
 
-    @event_filter(['account'])
     def _on_caps_update(self, event):
         if event.fjid != self.gc_contact.get_full_jid():
             return
         self.update_contact()
 
-    @event_filter(['account'])
     def _on_nickname_changed(self, event):
         if event.properties.new_jid != self.gc_contact.get_full_jid():
             return

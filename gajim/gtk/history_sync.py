@@ -95,7 +95,7 @@ class HistorySyncAssistant(Gtk.Assistant, EventHelper):
         self.register_events([
             ('archiving-count-received', ged.GUI1, self._received_count),
             ('archiving-interval-finished', ged.GUI1, self._received_finished),
-            ('mam-message-received', ged.PRECORE, self._nec_mam_message_received),
+            ('raw-mam-message-received', ged.PRECORE, self._nec_mam_message_received),
         ])
         # pylint: enable=line-too-long
 

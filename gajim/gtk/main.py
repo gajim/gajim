@@ -18,12 +18,15 @@ from gajim.common.helpers import ask_for_status_message
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 
+from gajim.common.nec import EventHelper
+
 from .util import open_window
 
 
-class MainWindow(Gtk.ApplicationWindow):
+class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def __init__(self):
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title('Gajim')
@@ -62,9 +65,51 @@ class MainWindow(Gtk.ApplicationWindow):
             'clicked', self._on_start_chat_clicked)
         self._ui.connect_signals(self)
 
-        app.ged.register_event_handler('message-received',
-                                       ged.CORE,
-                                       self._on_message_received)
+        # pylint: disable=line-too-long
+        self.register_events([
+            ('nickname-received', ged.GUI1, self._on_event),
+            ('mood-received', ged.GUI1, self._on_event),
+            ('activity-received', ged.GUI1, self._on_event),
+            ('tune-received', ged.GUI1, self._on_event),
+            ('location-received', ged.GUI1, self._on_event),
+            ('update-client-info', ged.GUI1, self._on_event),
+            ('chatstate-received', ged.GUI1, self._on_event),
+            ('caps-update', ged.GUI1, self._on_event),
+            ('message-sent', ged.OUT_POSTCORE, self._on_event),
+            ('message-received', ged.CORE, self._on_event),
+            ('mam-message-received', ged.CORE, self._on_event),
+            ('gc-message-received', ged.CORE, self._on_event),
+            ('receipt-received', ged.GUI1, self._on_event),
+            ('displayed-received', ged.GUI1, self._on_event),
+            ('message-error', ged.GUI1, self._on_event),
+            ('zeroconf-error', ged.GUI1, self._on_event),
+            ('update-roster-avatar', ged.GUI1, self._on_event),
+            ('muc-creation-failed', ged.GUI1, self._on_event),
+            ('muc-joined', ged.GUI1, self._on_event),
+            ('muc-join-failed', ged.GUI1, self._on_event),
+            ('muc-user-joined', ged.GUI1, self._on_event),
+            ('muc-user-left', ged.GUI1, self._on_event),
+            ('muc-nickname-changed', ged.GUI1, self._on_event),
+            ('muc-self-presence', ged.GUI1, self._on_event),
+            ('muc-self-kicked', ged.GUI1, self._on_event),
+            ('muc-user-affiliation-changed', ged.GUI1, self._on_event),
+            ('muc-user-status-show-changed', ged.GUI1, self._on_event),
+            ('muc-user-role-changed', ged.GUI1, self._on_event),
+            ('muc-destroyed', ged.GUI1, self._on_event),
+            ('muc-presence-error', ged.GUI1, self._on_event),
+            ('muc-password-required', ged.GUI1, self._on_event),
+            ('muc-config-changed', ged.GUI1, self._on_event),
+            ('muc-subject', ged.GUI1, self._on_event),
+            ('muc-captcha-challenge', ged.GUI1, self._on_event),
+            ('muc-captcha-error', ged.GUI1, self._on_event),
+            ('muc-voice-request', ged.GUI1, self._on_event),
+            ('muc-disco-update', ged.GUI1, self._on_event),
+            ('muc-configuration-finished', ged.GUI1, self._on_event),
+            ('muc-configuration-failed', ged.GUI1, self._on_event),
+            ('update-room-avatar', ged.GUI1, self._on_event),
+            ('message-sent', ged.OUT_POSTCORE, self._on_event),
+            ('message-error', ged.GUI1, self._on_event),
+        ])
 
         self.show_all()
 
@@ -241,15 +286,29 @@ class MainWindow(Gtk.ApplicationWindow):
         open_window('WorkspaceDialog',
                     workspace_id=self.get_active_workspace())
 
-    def _on_message_received(self, event):
-        if not self.chat_exists(event.account, event.jid):
-            self.add_chat(event.account, event.jid, 'contact')
+    def _on_event(self, event):
+        if hasattr(event, 'jid'):
+            jid = event.jid
+        else:
+            jid = event.room_jid
 
-        if not event.msgtxt:
+        if event.name == 'caps-update':
+            #TODO
             return
 
-        self._chat_stack.update(event)
-        self._chat_list_stack.update(event)
+        if event.name == 'update-client-info':
+            #TODO
+            return
+
+        if not self.chat_exists(event.account, jid):
+            if event.name == 'message-received':
+                self.add_chat(event.account, jid, 'contact')
+            else:
+                # No chat is open, dont handle any gui events
+                return
+
+        self._chat_stack.process_event(event)
+        self._chat_list_stack.process_event(event)
 
     def quit(self):
         accounts = list(app.connections.keys())

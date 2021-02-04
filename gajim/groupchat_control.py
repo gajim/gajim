@@ -55,7 +55,6 @@ from gajim.common.helpers import allow_popup_window
 from gajim.common.const import AvatarSize
 
 from gajim.common.i18n import _
-from gajim.common.const import Chatstate
 from gajim.common.const import MUCJoinedState
 from gajim.common.structs import OutgoingMessage
 
@@ -203,43 +202,12 @@ class GroupchatControl(ChatControlBase):
 
         self.xml.settings_menu.set_menu_model(self.control_menu)
 
-        # pylint: disable=line-too-long
-        self.register_events([
-            ('muc-creation-failed', ged.GUI1, self._on_muc_creation_failed),
-            ('muc-joined', ged.GUI1, self._on_muc_joined),
-            ('muc-join-failed', ged.GUI1, self._on_muc_join_failed),
-            ('muc-user-joined', ged.GUI1, self._on_user_joined),
-            ('muc-user-left', ged.GUI1, self._on_user_left),
-            ('muc-nickname-changed', ged.GUI1, self._on_nickname_changed),
-            ('muc-self-presence', ged.GUI1, self._on_self_presence),
-            ('muc-self-kicked', ged.GUI1, self._on_self_kicked),
-            ('muc-user-affiliation-changed', ged.GUI1, self._on_affiliation_changed),
-            ('muc-user-status-show-changed', ged.GUI1, self._on_status_show_changed),
-            ('muc-user-role-changed', ged.GUI1, self._on_role_changed),
-            ('muc-destroyed', ged.GUI1, self._on_destroyed),
-            ('muc-presence-error', ged.GUI1, self._on_presence_error),
-            ('muc-password-required', ged.GUI1, self._on_password_required),
-            ('muc-config-changed', ged.GUI1, self._on_config_changed),
-            ('muc-subject', ged.GUI1, self._on_subject),
-            ('muc-captcha-challenge', ged.GUI1, self._on_captcha_challenge),
-            ('muc-captcha-error', ged.GUI1, self._on_captcha_error),
-            ('muc-voice-request', ged.GUI1, self._on_voice_request),
-            ('muc-disco-update', ged.GUI1, self._on_disco_update),
-            ('muc-configuration-finished', ged.GUI1, self._on_configuration_finished),
-            ('muc-configuration-failed', ged.GUI1, self._on_configuration_failed),
-            ('gc-message-received', ged.GUI1, self._on_gc_message_received),
-            ('mam-decrypted-message-received', ged.GUI1, self._on_mam_decrypted_message_received),
-            ('update-room-avatar', ged.GUI1, self._on_update_room_avatar),
-            ('decrypted-message-received', ged.GUI2, self._on_decrypted_message_received),
-            ('message-sent', ged.OUT_POSTCORE, self._on_message_sent),
-            ('message-error', ged.GUI1, self._on_message_error),
-            ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
-        ])
-
         app.settings.connect_signal('gc_print_join_left_default', self.update_actions)
         app.settings.connect_signal('gc_print_status_default', self.update_actions)
 
-        # pylint: enable=line-too-long
+        self.register_events([
+            ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
+        ])
 
         self.is_connected = False
         # disable win, we are not connected yet
@@ -498,8 +466,7 @@ class GroupchatControl(ChatControlBase):
     def _get_current_page(self):
         return self.xml.stack.get_visible_child_name()
 
-    @event_filter(['account', 'room_jid'])
-    def _on_disco_update(self, _event):
+    def _on_muc_disco_update(self, _event):
         if self.parent_win is None:
             return
         self.update_actions()
@@ -862,15 +829,10 @@ class GroupchatControl(ChatControlBase):
     def _on_update_room_avatar(self, _event):
         self._update_avatar()
 
-    @event_filter(['account'])
     def _on_bookmarks_received(self, _event):
-        if self.parent_win is None:
-            return
-        self.parent_win.redraw_tab(self)
         self.draw_banner_text()
 
-    @event_filter(['account', 'room_jid'])
-    def _on_voice_request(self, event):
+    def _on_muc_voice_request(self, event):
         def on_approve():
             con = app.connections[self.account]
             con.get_module('MUC').approve_voice_request(self.room_jid,
@@ -886,8 +848,7 @@ class GroupchatControl(ChatControlBase):
                                callback=on_approve)],
             modal=False).show()
 
-    @event_filter(['account'])
-    def _on_mam_decrypted_message_received(self, event):
+    def _on_mam_message_received(self, event):
         if not event.properties.type.is_groupchat:
             return
         if event.archive_jid != self.room_jid:
@@ -899,7 +860,6 @@ class GroupchatControl(ChatControlBase):
                          message_id=event.properties.id,
                          additional_data=event.additional_data)
 
-    @event_filter(['account', 'room_jid'])
     def _on_gc_message_received(self, event):
         if event.properties.muc_nickname is None:
             # message from server
@@ -1096,8 +1056,7 @@ class GroupchatControl(ChatControlBase):
                 found_here = text.find(special_word, start)
         return False
 
-    @event_filter(['account', 'room_jid'])
-    def _on_subject(self, event):
+    def _on_muc_subject(self, event):
         if self.subject == event.subject or event.is_fake:
             # Probably a rejoin, we already showed that subject
             return
@@ -1115,8 +1074,7 @@ class GroupchatControl(ChatControlBase):
                 self._muc_data.state != MUCJoinedState.JOINING):
             self.add_info_message(text)
 
-    @event_filter(['account', 'room_jid'])
-    def _on_config_changed(self, event):
+    def _on_muc_config_changed(self, event):
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
         changes = []
         if StatusCode.SHOWING_UNAVAILABLE in event.status_codes:
@@ -1154,8 +1112,7 @@ class GroupchatControl(ChatControlBase):
         for change in changes:
             self.add_info_message(change)
 
-    @event_filter(['account'])
-    def _on_decrypted_message_received(self, event):
+    def _on_message_received(self, event):
         if not event.properties.jid.bare_match(self.room_jid):
             return
 
@@ -1173,15 +1130,11 @@ class GroupchatControl(ChatControlBase):
                                     msg_log_id=event.msg_log_id,
                                     displaymarking=event.displaymarking)
 
-    @event_filter(['account'])
-    def _nec_our_status(self, event):
+    def _on_our_show(self, event):
         client = app.get_client(event.account)
         if (event.show == 'offline' and
                 not client.state.is_reconnect_scheduled):
             self.got_disconnected()
-
-        if self.parent_win:
-            self.parent_win.redraw_tab(self)
 
     @event_filter(['account'])
     def _nec_ping(self, event):
@@ -1223,8 +1176,7 @@ class GroupchatControl(ChatControlBase):
         if message is not None:
             ctrl.send_message(message)
 
-    @event_filter(['account', 'room_jid'])
-    def _on_self_presence(self, event):
+    def _on_muc_self_presence(self, event):
         nick = event.properties.muc_nickname
         status_codes = event.properties.muc_status_codes or []
 
@@ -1249,20 +1201,17 @@ class GroupchatControl(ChatControlBase):
         # Update Actions
         self.update_actions()
 
-    @event_filter(['account', 'room_jid'])
-    def _on_configuration_finished(self, _event):
+    def _on_muc_configuration_finished(self, _event):
         self.got_connected()
         self._show_page('groupchat')
         self.add_info_message(_('A new group chat has been created'))
 
-    @event_filter(['account', 'room_jid'])
-    def _on_configuration_failed(self, event):
+    def _on_muc_configuration_failed(self, event):
         self.xml.error_heading.set_text(_('Failed to Configure Group Chat'))
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
 
-    @event_filter(['account', 'room_jid'])
-    def _on_nickname_changed(self, event):
+    def _on_muc_nickname_changed(self, event):
         nick = event.properties.muc_nickname
         new_nick = event.properties.muc_user.nick
         if event.properties.is_muc_self_presence:
@@ -1285,7 +1234,7 @@ class GroupchatControl(ChatControlBase):
         self.roster.add_contact(new_nick)
 
     @event_filter(['account', 'room_jid'])
-    def _on_status_show_changed(self, event):
+    def _on_muc_user_status_show_changed(self, event):
         nick = event.properties.muc_nickname
         status = event.properties.status
         status = '' if status is None else ' - %s' % status
@@ -1306,8 +1255,7 @@ class GroupchatControl(ChatControlBase):
         self.add_status_message(message)
         self.roster.draw_contact(nick)
 
-    @event_filter(['account', 'room_jid'])
-    def _on_affiliation_changed(self, event):
+    def _on_muc_affiliation_changed(self, event):
         affiliation = helpers.get_uf_affiliation(
             event.properties.affiliation)
         nick = event.properties.muc_nickname
@@ -1337,8 +1285,7 @@ class GroupchatControl(ChatControlBase):
         self.roster.add_contact(nick)
         self.update_actions()
 
-    @event_filter(['account', 'room_jid'])
-    def _on_role_changed(self, event):
+    def _on_muc_user_role_changed(self, event):
         role = helpers.get_uf_role(event.properties.role)
         nick = event.properties.muc_nickname
         reason = event.properties.muc_user.reason
@@ -1365,8 +1312,7 @@ class GroupchatControl(ChatControlBase):
         self.roster.add_contact(nick)
         self.update_actions()
 
-    @event_filter(['account', 'room_jid'])
-    def _on_self_kicked(self, event):
+    def _on_muc_self_kicked(self, event):
         status_codes = event.properties.muc_status_codes or []
 
         reason = event.properties.muc_user.reason
@@ -1423,8 +1369,7 @@ class GroupchatControl(ChatControlBase):
         # Update Actions
         self.update_actions()
 
-    @event_filter(['account', 'room_jid'])
-    def _on_user_left(self, event):
+    def _on_muc_user_left(self, event):
         status_codes = event.properties.muc_status_codes or []
         nick = event.properties.muc_nickname
 
@@ -1482,24 +1427,20 @@ class GroupchatControl(ChatControlBase):
         self.roster.remove_contact(nick)
         self.roster.draw_groups()
 
-    @event_filter(['account', 'room_jid'])
     def _on_muc_joined(self, _event):
         self.got_connected()
         self._show_page('groupchat')
 
-    @event_filter(['account', 'room_jid'])
-    def _on_user_joined(self, event):
+    def _on_muc_user_joined(self, event):
         nick = event.properties.muc_nickname
         self.roster.add_contact(nick)
 
         if self.is_connected and self.contact.settings.get('print_join_left'):
             self.add_info_message(_('%s has joined the group chat') % nick)
 
-    @event_filter(['account', 'room_jid'])
-    def _on_password_required(self, _event):
+    def _on_muc_password_required(self, _event):
         self._show_page('password')
 
-    @event_filter(['account', 'room_jid'])
     def _on_muc_join_failed(self, event):
         con = app.connections[self.account]
         if con.get_module('Bookmarks').is_bookmark(self.room_jid):
@@ -1509,19 +1450,16 @@ class GroupchatControl(ChatControlBase):
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
 
-    @event_filter(['account', 'room_jid'])
     def _on_muc_creation_failed(self, event):
         self.xml.error_heading.set_text(_('Failed to Create Group Chat'))
         self.xml.error_label.set_text(to_user_string(event.error))
         self._show_page('error')
 
-    @event_filter(['account', 'room_jid'])
-    def _on_presence_error(self, event):
+    def _on_muc_presence_error(self, event):
         error_message = to_user_string(event.properties.error)
         self.add_info_message('Error: %s' % error_message)
 
-    @event_filter(['account', 'room_jid'])
-    def _on_destroyed(self, event):
+    def _on_muc_destroyed(self, event):
         destroyed = event.properties.muc_destroyed
 
         reason = destroyed.reason
@@ -2036,8 +1974,7 @@ class GroupchatControl(ChatControlBase):
     def _on_password_cancel_clicked(self, _button=None):
         self._close_control()
 
-    @event_filter(['account', 'room_jid'])
-    def _on_captcha_challenge(self, event):
+    def _on_muc_captcha_challenge(self, event):
         self._remove_captcha_request()
 
         options = {'no-scrolling': True,
@@ -2056,8 +1993,7 @@ class GroupchatControl(ChatControlBase):
         self._show_page('captcha')
         self._captcha_request.focus_first_entry()
 
-    @event_filter(['account', 'room_jid'])
-    def _on_captcha_error(self, event):
+    def _on_muc_captcha_error(self, event):
         self.xml.captcha_error_label.set_text(event.error_text)
         self._show_page('captcha-error')
 

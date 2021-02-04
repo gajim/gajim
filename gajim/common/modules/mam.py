@@ -161,7 +161,7 @@ class MAM(BaseModule):
             return
 
         app.nec.push_incoming_event(
-            NetworkIncomingEvent('mam-message-received',
+            NetworkIncomingEvent('raw-mam-message-received',
                                  account=self._account,
                                  stanza=stanza,
                                  properties=properties))
@@ -245,7 +245,7 @@ class MAM(BaseModule):
             message_id=properties.id)
 
         app.nec.push_incoming_event(
-            NetworkEvent('mam-decrypted-message-received',
+            NetworkEvent('mam-message-received',
                          account=self._account,
                          additional_data=additional_data,
                          correct_id=parse_correction(properties),
@@ -253,6 +253,7 @@ class MAM(BaseModule):
                          msgtxt=properties.body,
                          properties=properties,
                          kind=kind,
+                         jid=str(properties.jid.bare)
                          )
         )
 

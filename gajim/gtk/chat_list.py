@@ -14,7 +14,7 @@ from gajim.common.helpers import get_uf_relative_time
 from .tooltips import RosterTooltip
 from .util import get_builder
 
-log = logging.getLogger('gajim.gtk.chatlist')
+log = logging.getLogger('gajim.gui.chatlist')
 
 
 class ChatList(Gtk.ListBox):
@@ -121,9 +121,22 @@ class ChatList(Gtk.ListBox):
         for _, row in self._chats.items():
             row.update_time()
 
-    def update(self, event):
+    def process_event(self, event):
+        if event.name in ('message-received',
+                          'mam-message-received',
+                          'gc-message-received'):
+            self._on_message_received(event)
+        else:
+            log.warning('Unhandled Event: %s', event.name)
+
+    def _on_message_received(self, event):
+        if not event.msgtxt:
+            return
+
         row = self._chats.get((event.account, event.jid))
-        row.add_unread()
+        if not (row.is_selected() and
+                self.get_toplevel().get_property('has-toplevel-focus')):
+            row.add_unread()
         row.set_last_message_text('Me', event.msgtxt)
 
 

@@ -269,7 +269,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         # pylint: disable=line-too-long
         self.register_events([
-            ('our-show', ged.GUI1, self._nec_our_status),
+            ('our-show', ged.GUI1, self._on_our_show),
             ('ping-sent', ged.GUI1, self._nec_ping),
             ('ping-reply', ged.GUI1, self._nec_ping),
             ('ping-error', ged.GUI1, self._nec_ping),
@@ -281,6 +281,11 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
+
+    def process_event(self, event):
+        method_name = event.name.replace('-', '_')
+        method_name = f'_on_{method_name}'
+        getattr(self, method_name)(event)
 
     def _on_conv_textview_key_press_event(self, textview, event):
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
@@ -457,8 +462,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.session.control = None
         self.session = None
 
-    @event_filter(['account'])
-    def _nec_our_status(self, event):
+    def _on_our_show(self, event):
         if event.show == 'connecting':
             return
 
@@ -466,8 +470,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self.got_disconnected()
         else:
             self.got_connected()
-        if self.parent_win:
-            self.parent_win.redraw_tab(self)
 
     def _nec_ping(self, obj):
         raise NotImplementedError

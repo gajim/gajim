@@ -6,6 +6,13 @@ from gajim.common import app
 from gajim.gui.chat_list import ChatList
 
 
+HANDLED_EVENTS = [
+    'message-received',
+    'mam-message-received',
+    'gc-message-received',
+]
+
+
 class ChatListStack(Gtk.Stack):
     def __init__(self, ui, chat_stack):
         Gtk.Stack.__init__(self)
@@ -121,6 +128,13 @@ class ChatListStack(Gtk.Stack):
         chat_list = self._chat_lists[workspace_id]
         return chat_list.contains_chat(account, jid)
 
-    def update(self, event):
-        chat_list = self._find_chat(event.account, event.jid)
-        chat_list.update(event)
+    def process_event(self, event):
+        if event.name not in HANDLED_EVENTS:
+            return
+
+        if hasattr(event, 'jid'):
+            jid = event.jid
+        else:
+            jid = event.room_jid
+        chat_list = self._find_chat(event.account, jid)
+        chat_list.process_event(event)
