@@ -25,7 +25,8 @@ class WorkspaceSideBar(Gtk.ListBox):
         self._workspaces = {}
 
     def _on_unread_count_changed(self, _chat_list_stack, workspace_id, count):
-        pass
+        workspace = self._workspaces[workspace_id]
+        workspace.set_unread_count(count)
 
     @staticmethod
     def _sort_func(child1, child2):
@@ -97,7 +98,6 @@ class Workspace(CommonWorkspace):
         CommonWorkspace.__init__(self, workspace_id)
 
         self.sort_index = 0
-        self._unread_count = 0
 
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(
@@ -116,31 +116,15 @@ class Workspace(CommonWorkspace):
         self.add(overlay)
         self.show_all()
 
-    @property
-    def is_active(self):
-        return (self.is_selected() and
-                self.get_toplevel().get_property('is-active'))
-
     def update_avatar(self):
         self._image.update()
 
-    def _update_unread(self):
-        print('Update unread', self.workspace_id, self._unread_count)
-        if self._unread_count < 1000:
-            self._unread_label.set_text(str(self._unread_count))
+    def set_unread_count(self, count):
+        if count < 1000:
+            self._unread_label.set_text(str(count))
         else:
             self._unread_label.set_text('999+')
-        self._unread_label.set_visible(bool(self._unread_count))
-
-    def add_unread(self):
-        if self.is_active:
-            return
-        self._unread_count += 1
-        self._update_unread()
-
-    def reset_unread(self):
-        self._unread_count = 0
-        self._update_unread()
+        self._unread_label.set_visible(bool(count))
 
 
 class AddWorkspace(CommonWorkspace):
