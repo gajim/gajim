@@ -70,11 +70,11 @@
 /* Workspace sidebar */
 .workspace-sidebar {
 	background: transparent;
-    margin-left: 12px;
-    margin-right: 12px;
+	margin-left: 12px;
+	margin-right: 6px;
 }
 .workspace-sidebar-item {
-    padding-top: 6px;
+	padding-top: 0px;
 	padding-bottom: 6px;
 }
 .workspace-sidebar-item:selected,
@@ -89,6 +89,8 @@
 }
 .workspace-sidebar-item image {
 	border-radius: 9px;
+	margin-top: 6px;
+	margin-right: 6px;
 }
 
 /* Account sidebar */

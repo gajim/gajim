@@ -242,6 +242,10 @@ class ChatRow(Gtk.ListBoxRow):
 
     def _update_unread(self):
         print('Update unread', self.account, self.jid, self._unread_count)
+        if self._unread_count < 1000:
+            self._ui.unread_label.set_text(str(self._unread_count))
+        else:
+            self._ui.unread_label.set_text('999+')
         self._ui.unread_label.set_text(str(self._unread_count))
         self._ui.unread_label.set_visible(bool(self._unread_count))
 

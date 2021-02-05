@@ -92,14 +92,50 @@ class Workspace(CommonWorkspace):
         CommonWorkspace.__init__(self, workspace_id)
 
         self.sort_index = 0
+        self._unread_count = 0
+
+        self._unread_label = Gtk.Label()
+        self._unread_label.get_style_context().add_class(
+            'unread-counter')
+        self._unread_label.set_no_show_all(True)
+        self._unread_label.set_halign(Gtk.Align.END)
+        self._unread_label.set_valign(Gtk.Align.START)
 
         self._image = WorkspaceAvatar(workspace_id)
         self._image.set_halign(Gtk.Align.CENTER)
-        self.add(self._image)
+
+        overlay = Gtk.Overlay()
+        overlay.add(self._image)
+        overlay.add_overlay(self._unread_label)
+
+        self.add(overlay)
         self.show_all()
+
+    @property
+    def is_active(self):
+        return (self.is_selected() and
+                self.get_toplevel().get_property('is-active'))
 
     def update_avatar(self):
         self._image.update()
+
+    def _update_unread(self):
+        print('Update unread', self.workspace_id, self._unread_count)
+        if self._unread_count < 1000:
+            self._unread_label.set_text(str(self._unread_count))
+        else:
+            self._unread_label.set_text('999+')
+        self._unread_label.set_visible(bool(self._unread_count))
+
+    def add_unread(self):
+        if self.is_active:
+            return
+        self._unread_count += 1
+        self._update_unread()
+
+    def reset_unread(self):
+        self._unread_count = 0
+        self._update_unread()
 
 
 class AddWorkspace(CommonWorkspace):
