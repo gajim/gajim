@@ -102,7 +102,6 @@ from gajim.gui.dialogs import InputDialog
 from gajim.gui.dialogs import PassphraseDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.emoji_data import emoji_data
-from gajim.gui.emoji_data import emoji_ascii_data
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.filetransfer_progress import FileTransferProgress
 from gajim.gui.roster_item_exchange import RosterItemExchangeWindow
@@ -1392,8 +1391,6 @@ class Interface:
         # because emoticons match later (in the string) they need to be after
         # basic matches that may occur earlier
         emoticons = emoji_data.get_regex()
-        if app.settings.get('ascii_emoticons'):
-            emoticons += '|%s' % emoji_ascii_data.get_regex()
 
         self.emot_and_basic = '%s|%s' % (basic_pattern, emoticons)
 

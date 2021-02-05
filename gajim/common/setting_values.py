@@ -41,7 +41,6 @@ APP_SETTINGS = {
     'speller_language': '',
     'print_time': 'always',
     'emoticons_theme': 'noto-emoticons',
-    'ascii_emoticons': True,
     'ascii_formatting': True,
     'show_ascii_formatting_chars': True,
     'sounds_on': True,

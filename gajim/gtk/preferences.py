@@ -103,6 +103,8 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
 
         self.show_all()
+        if sys.platform not in ('win32', 'darwin'):
+            self._ui.emoji.hide()
 
     def get_ui(self):
         return self._ui
@@ -727,29 +729,23 @@ class Themes(PreferenceBox):
 
 class Emoji(PreferenceBox):
     def __init__(self, *args):
+        if sys.platform not in ('win32', 'darwin'):
+            PreferenceBox.__init__(self, [])
+            return
 
         emoji_themes_items = []
         for theme in helpers.get_available_emoticon_themes():
             emoji_themes_items.append(theme)
 
         settings = [
-            Setting(SettingKind.SWITCH,
-                    _('Convert ASCII Emojis'),
+            Setting(SettingKind.POPOVER,
+                    _('Emoji Theme'),
                     SettingType.CONFIG,
-                    'ascii_emoticons',
-                    desc=_('Typing short codes like :-) will display emojis'),
-                    callback=self._on_ascii_emoticons),
+                    'emoticons_theme',
+                    desc=_('Choose from various emoji styles'),
+                    props={'entries': emoji_themes_items},
+                    callback=self._on_emoticons_theme)
         ]
-
-        if sys.platform in ('win32', 'darwin'):
-            settings.append(
-                Setting(SettingKind.POPOVER,
-                        _('Emoji Theme'),
-                        SettingType.CONFIG,
-                        'emoticons_theme',
-                        desc=_('Choose from various emoji styles'),
-                        props={'entries': emoji_themes_items},
-                        callback=self._on_emoticons_theme))
 
         PreferenceBox.__init__(self, settings)
 
@@ -762,10 +758,6 @@ class Emoji(PreferenceBox):
         controls = get_app_window('Preferences').get_all_controls()
         for ctrl in controls:
             ctrl.toggle_emoticons()
-
-    @staticmethod
-    def _on_ascii_emoticons(*args):
-        app.interface.make_regexps()
 
 
 class StatusIcon(PreferenceBox):

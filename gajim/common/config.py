@@ -93,7 +93,6 @@ class Config:
         'speller_language': [opt_str, '', _('Language used for spell checking.')],
         'print_time': [opt_str, 'always', _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
         'emoticons_theme': [opt_str, 'noto-emoticons', '', True],
-        'ascii_emoticons': [opt_bool, True, _('When enabled, ASCII emojis will be converted to graphical emojis.'), True],
         'ascii_formatting': [opt_bool, True,
                 _('Treat * / _ pairs as possible formatting characters.'), True],
         'show_ascii_formatting_chars': [opt_bool, True, _('If enabled, do not '
