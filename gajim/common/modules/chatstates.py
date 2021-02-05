@@ -135,6 +135,7 @@ class Chatstate(BaseModule):
         app.nec.push_outgoing_event(
             NetworkEvent('chatstate-received',
                          account=self._account,
+                         jid=contact.jid,
                          contact=contact))
 
     def _process_chatstate(self, _con, _stanza, properties):
@@ -163,6 +164,7 @@ class Chatstate(BaseModule):
         app.nec.push_outgoing_event(
             NetworkEvent('chatstate-received',
                          account=self._account,
+                         jid=contact.jid,
                          contact=contact))
 
     @ensure_enabled

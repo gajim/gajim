@@ -1023,7 +1023,7 @@ class GroupchatControl(ChatControlBase):
         - remove previous line first
         """
 
-        if app.window.is_chat_focused(self.account, self.room_jid):
+        if app.window.is_chat_active(self.account, self.room_jid):
             return
 
         self.conv_textview.show_focus_out_line()

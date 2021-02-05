@@ -853,3 +853,36 @@ def check_destroy(widget):
 
 def check_finalize(obj, name):
     weakref.finalize(obj, print, f'{name} has been finalized')
+
+
+def _connect_destroy(sender, func, detailed_signal, handler, *args, **kwargs):
+    """Connect a bound method to a foreign object signal and disconnect
+    if the object the method is bound to emits destroy (Gtk.Widget subclass).
+    Also works if the handler is a nested function in a method and
+    references the method's bound object.
+    This solves the problem that the sender holds a strong reference
+    to the bound method and the bound to object doesn't get GCed.
+    """
+
+    if hasattr(handler, "__self__"):
+        obj = handler.__self__
+    else:
+        # XXX: get the "self" var of the enclosing scope.
+        # Used for nested functions which ref the object but aren't methods.
+        # In case they don't ref "self" normal connect() should be used anyway.
+        index = handler.__code__.co_freevars.index("self")
+        obj = handler.__closure__[index].cell_contents
+
+    assert obj is not sender
+
+    handler_id = func(detailed_signal, handler, *args, **kwargs)
+
+    def disconnect_cb(*args):
+        sender.disconnect(handler_id)
+
+    obj.connect('destroy', disconnect_cb)
+    return handler_id
+
+
+def connect_destroy(sender, *args, **kwargs):
+    return _connect_destroy(sender, sender.connect, *args, **kwargs)

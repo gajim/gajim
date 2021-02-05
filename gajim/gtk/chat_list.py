@@ -37,6 +37,9 @@ class ChatList(Gtk.ListBox):
 
         self.show_all()
 
+    def is_visible(self):
+        return self.get_parent().get_property('child-widget') == self
+
     def _on_destroy(self):
         GLib.source_remove(self._timer_id)
 
@@ -101,12 +104,11 @@ class ChatList(Gtk.ListBox):
         self.remove(row)
         row.destroy()
 
-    def get_active_chat(self):
+    def get_selected_chat(self):
         row = self.get_selected_row()
         if row is None:
             return None
-
-        return (row.account, row.jid)
+        return row
 
     def contains_chat(self, account, jid):
         return self._chats.get((account, jid)) is not None
@@ -134,9 +136,7 @@ class ChatList(Gtk.ListBox):
             return
 
         row = self._chats.get((event.account, event.jid))
-        if not (row.is_selected() and
-                self.get_toplevel().get_property('has-toplevel-focus')):
-            row.add_unread()
+        row.add_unread()
         row.set_last_message_text('Me', event.msgtxt)
 
 
@@ -220,6 +220,11 @@ class ChatRow(Gtk.ListBoxRow):
 
         self.show_all()
 
+    @property
+    def is_active(self):
+        return (self.is_selected() and
+                self.get_toplevel().get_property('is-active'))
+
     def _on_state_flags_changed(self, _listboxrow, *args):
         state = self.get_state_flags()
         if (state & Gtk.StateFlags.PRELIGHT) != 0:
@@ -235,10 +240,20 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.timestamp_label.set_text(
                 get_uf_relative_time(self._timestamp))
 
-    def add_unread(self):
-        self._unread_count += 1
+    def _update_unread(self):
+        print('Update unread', self.account, self.jid, self._unread_count)
         self._ui.unread_label.set_text(str(self._unread_count))
-        self._ui.unread_label.show()
+        self._ui.unread_label.set_visible(bool(self._unread_count))
+
+    def add_unread(self):
+        if self.is_active:
+            return
+        self._unread_count += 1
+        self._update_unread()
+
+    def reset_unread(self):
+        self._unread_count = 0
+        self._update_unread()
 
     def set_last_message_text(self, nickname, text):
         self._ui.message_label.set_text(text)

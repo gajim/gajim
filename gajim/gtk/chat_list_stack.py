@@ -14,7 +14,7 @@ HANDLED_EVENTS = [
 
 
 class ChatListStack(Gtk.Stack):
-    def __init__(self, ui, chat_stack):
+    def __init__(self, main_window, ui, chat_stack):
         Gtk.Stack.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -30,19 +30,30 @@ class ChatListStack(Gtk.Stack):
         self._ui.search_entry.connect(
             'search-changed', self._on_search_changed)
 
-    def get_active_chat(self):
+        main_window.connect('notify::is-active', self._on_window_active)
+
+    def _on_window_active(self, window, _param):
+        is_active = window.get_property('is-active')
+        if is_active:
+            chat = self.get_selected_chat()
+            if chat is not None:
+                chat.reset_unread()
+
+    def get_selected_chat(self):
         workspace_id = self.get_visible_child_name()
         if workspace_id == 'empty':
             return None
 
         chat_list = self._chat_lists[workspace_id]
-        return chat_list.get_active_chat()
+        return chat_list.get_selected_chat()
 
     def is_chat_active(self, account, jid):
-        active = self.get_active_chat()
-        if active is None:
+        chat = self.get_selected_chat()
+        if chat is None:
             return False
-        return active == (account, jid)
+        if chat.account != account or chat.jid != jid:
+            return False
+        return chat.is_active
 
     def _on_search_changed(self, search_entry):
         chat_list = self.get_visible_child()
@@ -69,7 +80,10 @@ class ChatListStack(Gtk.Stack):
         if row is None:
             self._chat_stack.clear()
             return
+
         self._chat_stack.show_chat(row.account, row.jid)
+        if row.is_active:
+            row.reset_unread()
 
     def show_chat_list(self, workspace_id):
         current_workspace_id = self.get_visible_child_name()

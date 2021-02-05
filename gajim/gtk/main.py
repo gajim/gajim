@@ -45,7 +45,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.add(self._ui.main_grid)
 
         self._chat_stack = ChatStack()
-        self._chat_list_stack = ChatListStack(self._ui, self._chat_stack)
+        self._chat_list_stack = ChatListStack(self, self._ui, self._chat_stack)
         self._ui.chat_list_scrolled.add(self._chat_list_stack)
 
         self._account_side_bar = AccountSideBar()
@@ -159,10 +159,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def get_active_workspace(self):
         return self._workspace_side_bar.get_active_workspace()
 
-    def get_active_chat(self):
-        return self._chat_list_stack.get_active_chat()
-
-    def is_chat_focused(self, account, jid):
+    def is_chat_active(self, account, jid):
         if not self.get_property('has-toplevel-focus'):
             return False
         return self._chat_list_stack.is_chat_active(account, jid)
