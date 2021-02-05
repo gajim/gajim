@@ -29,11 +29,8 @@ class EmojiData(OrderedDict):
 class EmojiPixbufs(dict):
     ...
 
-class EmojiAsciiData(dict):
-    ...
-
 emoji_pixbufs = EmojiPixbufs()
 
-emoji_ascii_data = EmojiAsciiData()
+emoji_ascii_data: dict[str, str]
 
 emoji_data = EmojiData()

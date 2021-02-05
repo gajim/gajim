@@ -144,45 +144,11 @@ class EmojiPixbufs(dict):
                     start(), end(), pixbuf.copy(), codepoint)
 
 
-class EmojiAsciiData(dict):
-    def get_regex(self):
-        # When an emoticon is bordered by an alphanumeric character it
-        # is NOT expanded.  e.g., foo:) NO, foo :) YES, (brb) NO,
-        # (:)) YES, etc. We still allow multiple emoticons
-        # side-by-side like :P:P:P
-
-        # TODO: Refactor this
-        keys = sorted(self.keys(), key=len, reverse=True)
-        pre_pattern = ''
-        post_pattern = ''
-        emoticon_length = 0
-        emoticons_pattern = ''
-        for emoticon in keys:
-            # escape regexp metachars
-            emoticon_escaped = re.escape(emoticon)
-            emoticons_pattern += emoticon_escaped + '|'
-            if emoticon_length != len(emoticon):
-                # Build up expressions to match emoticons next to others
-                pre_pattern = pre_pattern[:-1] + ')|(?<='
-                post_pattern = post_pattern[:-1] + ')|(?='
-                emoticon_length = len(emoticon)
-            pre_pattern += emoticon_escaped + '|'
-            post_pattern += emoticon_escaped + '|'
-        # We match from our list of emoticons, but they must either have
-        # whitespace, or another emoticon next to it to match successfully
-        # [\w.] alphanumeric and dot (for not matching 8) in (2.8))
-        emoticons_pattern = r'(?:(?<![\w.]' + \
-            pre_pattern[:-1] + '))' + '(?:' + \
-            emoticons_pattern[:-1] + ')' + r'(?:(?![\w]' + \
-            post_pattern[:-1] + '))'
-        return emoticons_pattern
-
-
 emoji_pixbufs = EmojiPixbufs()
 
 # pylint: disable=line-too-long
 
-emoji_ascii_data = EmojiAsciiData([
+emoji_ascii_data = dict([
     ("':-D", '\U0001F605'),
     (':)', '\U0001F642'),
     (':-O', '\U0001F62e'),
