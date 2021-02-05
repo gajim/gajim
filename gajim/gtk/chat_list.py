@@ -37,10 +37,19 @@ class ChatList(Gtk.ListBox):
 
         self.show_all()
 
+    def get_unread_count(self):
+        return sum([chats.unread_count for chats in self._chats.values()])
+
+    def emit_unread_changed(self):
+        count = self.get_unread_count()
+        self.get_parent().emit('unread-count-changed',
+                               self._workspace_id,
+                               count)
+
     def is_visible(self):
         return self.get_parent().get_property('child-widget') == self
 
-    def _on_destroy(self):
+    def _on_destroy(self, *args):
         GLib.source_remove(self._timer_id)
 
     def _update_timer(self):
@@ -221,6 +230,16 @@ class ChatRow(Gtk.ListBoxRow):
         self.show_all()
 
     @property
+    def unread_count(self):
+        return self._unread_count
+
+    @unread_count.setter
+    def unread_count(self, value):
+        self._unread_count = value
+        self._update_unread()
+        self.get_parent().emit_unread_changed()
+
+    @property
     def is_active(self):
         return (self.is_selected() and
                 self.get_toplevel().get_property('is-active'))
@@ -241,23 +260,19 @@ class ChatRow(Gtk.ListBoxRow):
                 get_uf_relative_time(self._timestamp))
 
     def _update_unread(self):
-        print('Update unread', self.account, self.jid, self._unread_count)
         if self._unread_count < 1000:
             self._ui.unread_label.set_text(str(self._unread_count))
         else:
             self._ui.unread_label.set_text('999+')
-        self._ui.unread_label.set_text(str(self._unread_count))
         self._ui.unread_label.set_visible(bool(self._unread_count))
 
     def add_unread(self):
         if self.is_active:
             return
-        self._unread_count += 1
-        self._update_unread()
+        self.unread_count += 1
 
     def reset_unread(self):
-        self._unread_count = 0
-        self._update_unread()
+        self.unread_count = 0
 
     def set_last_message_text(self, nickname, text):
         self._ui.message_label.set_text(text)

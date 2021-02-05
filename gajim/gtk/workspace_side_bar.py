@@ -10,7 +10,7 @@ from .util import open_window
 
 
 class WorkspaceSideBar(Gtk.ListBox):
-    def __init__(self):
+    def __init__(self, chat_list_stack):
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
         self.set_valign(Gtk.Align.START)
@@ -20,7 +20,12 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.connect('button-press-event', self._on_button_press)
         self.connect('row-activated', self._on_row_activated)
 
+        chat_list_stack.connect('unread-count-changed',
+                                self._on_unread_count_changed)
         self._workspaces = {}
+
+    def _on_unread_count_changed(self, _chat_list_stack, workspace_id, count):
+        pass
 
     @staticmethod
     def _sort_func(child1, child2):

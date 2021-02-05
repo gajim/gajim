@@ -49,7 +49,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.chat_list_scrolled.add(self._chat_list_stack)
 
         self._account_side_bar = AccountSideBar()
-        self._workspace_side_bar = WorkspaceSideBar()
+        self._workspace_side_bar = WorkspaceSideBar(self._chat_list_stack)
 
         surface = load_icon('org.gajim.Gajim', self, 40)
         self._ui.app_image.set_from_surface(surface)
@@ -107,7 +107,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('muc-configuration-finished', ged.GUI1, self._on_event),
             ('muc-configuration-failed', ged.GUI1, self._on_event),
             ('update-room-avatar', ged.GUI1, self._on_event),
-            ('message-sent', ged.OUT_POSTCORE, self._on_event),
             ('message-error', ged.GUI1, self._on_event),
         ])
 

@@ -1,5 +1,6 @@
 
 from gi.repository import Gtk
+from gi.repository import GObject
 
 from gajim.common import app
 
@@ -14,6 +15,13 @@ HANDLED_EVENTS = [
 
 
 class ChatListStack(Gtk.Stack):
+
+    __gsignals__ = {
+        'unread-count-changed': (GObject.SignalFlags.RUN_LAST,
+                                 None,
+                                 (str, int)),
+    }
+
     def __init__(self, main_window, ui, chat_stack):
         Gtk.Stack.__init__(self)
         self.set_hexpand(True)
