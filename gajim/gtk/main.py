@@ -67,6 +67,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         # pylint: disable=line-too-long
         self.register_events([
+            ('presence-received', ged.GUI1, self._on_event),
             ('nickname-received', ged.GUI1, self._on_event),
             ('mood-received', ged.GUI1, self._on_event),
             ('activity-received', ged.GUI1, self._on_event),

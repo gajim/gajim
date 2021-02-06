@@ -1405,17 +1405,19 @@ class ChatControl(ChatControlBase):
         ChatControlBase.got_disconnected(self)
         self.update_actions()
 
-    def update_status_display(self, name, uf_show, status):
+    def _on_presence_received(self, event):
+        uf_show = helpers.get_uf_show(event.show)
+        name = self.contact.get_shown_name()
+
         self.update_ui()
         self.parent_win.redraw_tab(self)
 
         if not app.settings.get('print_status_in_chats'):
             return
 
-        if status:
-            status = '- %s' % status
+        status = '- %s' % event.status if event.status else ''
         status_line = _('%(name)s is now %(show)s %(status)s') % {
-            'name': name, 'show': uf_show, 'status': status or ''}
+            'name': name, 'show': uf_show, 'status': status}
         self.add_status_message(status_line)
 
     def _info_bar_show_message(self):

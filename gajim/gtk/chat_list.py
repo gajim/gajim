@@ -141,6 +141,8 @@ class ChatList(Gtk.ListBox):
                           'mam-message-received',
                           'gc-message-received'):
             self._on_message_received(event)
+        elif event.name == 'presence-received':
+            self._on_presence_received(event)
         else:
             log.warning('Unhandled Event: %s', event.name)
 
@@ -152,6 +154,10 @@ class ChatList(Gtk.ListBox):
         row.set_last_message_text('Me', event.msgtxt)
 
         self._add_unread(row, event.properties)
+
+    def _on_presence_received(self, event):
+        row = self._chats.get((event.account, event.jid))
+        row.update_avatar()
 
     @staticmethod
     def _add_unread(row, properties):
@@ -189,33 +195,8 @@ class ChatRow(Gtk.ListBoxRow):
         if len(app.get_enabled_accounts_with_labels()) > 1:
             self._ui.account_identifier.show()
 
-        contact = app.contacts.get_contact(account, jid)
-
-        scale = self.get_scale_factor()
-        if contact:
-            if contact.is_groupchat:
-                avatar = app.contacts.get_avatar(account,
-                                                jid,
-                                                AvatarSize.ROSTER,
-                                                scale)
-                con = app.connections[account]
-                name = get_groupchat_name(con, jid)
-            else:
-                avatar = app.contacts.get_avatar(account,
-                                                 contact.jid,
-                                                 AvatarSize.ROSTER,
-                                                 scale,
-                                                 contact.show)
-                name = contact.get_shown_name()
-        else:
-            avatar = app.contacts.get_avatar(account,
-                                             jid,
-                                             AvatarSize.ROSTER,
-                                             scale)
-            name = jid
-
-        self._ui.avatar_image.set_from_surface(avatar)
-        self._ui.name_label.set_text(name)
+        self.update_avatar()
+        self.update_name()
 
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)
@@ -243,6 +224,44 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.timestamp_label.set_text(uf_timestamp)
 
         self.show_all()
+
+    def update_avatar(self):
+        contact = app.contacts.get_contact(self.account, self.jid)
+
+        scale = self.get_scale_factor()
+        if contact:
+            if contact.is_groupchat:
+                avatar = app.contacts.get_avatar(self.account,
+                                                 self.jid,
+                                                 AvatarSize.ROSTER,
+                                                 scale)
+            else:
+                avatar = app.contacts.get_avatar(self.account,
+                                                 contact.jid,
+                                                 AvatarSize.ROSTER,
+                                                 scale,
+                                                 contact.show)
+        else:
+            avatar = app.contacts.get_avatar(self.account,
+                                             self.jid,
+                                             AvatarSize.ROSTER,
+                                             scale)
+
+        self._ui.avatar_image.set_from_surface(avatar)
+
+    def update_name(self):
+        contact = app.contacts.get_contact(self.account, self.jid)
+        if contact is None:
+            self._ui.name_label.set_text(self.jid)
+            return
+
+        if contact.is_groupchat:
+            client = app.get_client(self.account)
+            name = get_groupchat_name(client, self.jid)
+        else:
+            name = contact.get_shown_name()
+
+        self._ui.name_label.set_text(name)
 
     @property
     def unread_count(self):

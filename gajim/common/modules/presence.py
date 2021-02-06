@@ -108,6 +108,7 @@ class Presence(BaseModule):
             show = 'offline'
 
         event_attrs = {
+            'account': self._account,
             'conn': self._con,
             'stanza': stanza,
             'prio': properties.priority,
@@ -132,7 +133,6 @@ class Presence(BaseModule):
 
         event_ = NetworkEvent('presence-received', **event_attrs)
 
-        # TODO: Refactor
         self._update_contact(event_, properties)
 
         app.nec.push_incoming_event(event_)

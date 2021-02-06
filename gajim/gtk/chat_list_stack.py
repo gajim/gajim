@@ -11,6 +11,7 @@ HANDLED_EVENTS = [
     'message-received',
     'mam-message-received',
     'gc-message-received',
+    'presence-received',
 ]
 
 
@@ -162,4 +163,6 @@ class ChatListStack(Gtk.Stack):
             return
 
         chat_list = self._find_chat(event.account, event.jid)
+        if chat_list is None:
+            return
         chat_list.process_event(event)
