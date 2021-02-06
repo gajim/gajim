@@ -149,8 +149,19 @@ class ChatList(Gtk.ListBox):
             return
 
         row = self._chats.get((event.account, event.jid))
-        row.add_unread()
         row.set_last_message_text('Me', event.msgtxt)
+
+        self._add_unread(row, event.properties)
+
+    @staticmethod
+    def _add_unread(row, properties):
+        if properties.is_carbon_message and properties.carbon.is_sent:
+            return
+
+        if properties.is_from_us():
+            return
+
+        row.add_unread()
 
 
 class ChatRow(Gtk.ListBoxRow):
