@@ -190,7 +190,7 @@ class MUC(BaseModule):
             app.nec.push_incoming_event(
                 NetworkEvent('muc-join-failed',
                              account=self._account,
-                             room_jid=error.jid.bare,
+                             jid=error.jid.bare,
                              error=error))
             return
 
@@ -269,7 +269,7 @@ class MUC(BaseModule):
             app.nec.push_incoming_event(NetworkEvent(
                 'muc-configuration-failed',
                 account=self._account,
-                room_jid=error.jid,
+                jid=error.jid,
                 error=error))
             return
 
@@ -302,7 +302,7 @@ class MUC(BaseModule):
             app.nec.push_incoming_event(NetworkEvent(
                 'muc-configuration-failed',
                 account=self._account,
-                room_jid=error.jid,
+                jid=error.jid,
                 error=error))
             return
 
@@ -338,7 +338,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(NetworkEvent(
             'muc-configuration-finished',
             account=self._account,
-            room_jid=jid))
+            jid=jid))
 
     def update_presence(self):
         mucs = self._manager.get_mucs_with_state([MUCJoinedState.JOINED,
@@ -382,7 +382,7 @@ class MUC(BaseModule):
                     app.nec.push_incoming_event(
                         NetworkEvent('muc-join-failed',
                                      account=self._account,
-                                     room_jid=room_jid,
+                                     jid=room_jid,
                                      error=properties.error))
 
         elif muc_data.state == MUCJoinedState.CREATING:
@@ -390,14 +390,14 @@ class MUC(BaseModule):
             app.nec.push_incoming_event(
                 NetworkEvent('muc-creation-failed',
                              account=self._account,
-                             room_jid=room_jid,
+                             jid=room_jid,
                              error=properties.error))
 
         elif muc_data.state == MUCJoinedState.CAPTCHA_REQUEST:
             app.nec.push_incoming_event(
                 NetworkEvent('muc-captcha-error',
                              account=self._account,
-                             room_jid=room_jid,
+                             jid=room_jid,
                              error_text=to_user_string(properties.error)))
             self._manager.set_state(room_jid, MUCJoinedState.CAPTCHA_FAILED)
             self._manager.set_state(room_jid, MUCJoinedState.NOT_JOINED)
@@ -572,7 +572,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent(event_name,
                          account=self._account,
-                         room_jid=properties.jid.bare,
+                         jid=properties.jid.bare,
                          properties=properties))
         self._log_muc_event(event_name, properties)
 
@@ -654,7 +654,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-subject',
                          account=self._account,
-                         room_jid=room_jid,
+                         jid=room_jid,
                          subject=subject,
                          nickname=nickname,
                          user_timestamp=timestamp,
@@ -666,7 +666,7 @@ class MUC(BaseModule):
             app.nec.push_incoming_event(
                 NetworkEvent('muc-joined',
                              account=self._account,
-                             room_jid=muc_data.jid))
+                             jid=muc_data.jid))
 
     def _room_join_complete(self, muc_data):
         self._remove_join_timeout(muc_data.jid)
@@ -697,7 +697,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-voice-request',
                          account=self._account,
-                         room_jid=str(properties.muc_jid),
+                         jid=str(properties.muc_jid),
                          voice_request=properties.voice_request))
         raise nbxmpp.NodeProcessed
 
@@ -734,7 +734,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-captcha-challenge',
                          account=self._account,
-                         room_jid=properties.jid.bare,
+                         jid=properties.jid.bare,
                          form=properties.captcha.form))
         raise nbxmpp.NodeProcessed
 
@@ -767,7 +767,7 @@ class MUC(BaseModule):
             app.nec.push_incoming_event(
                 NetworkEvent('muc-captcha-error',
                              account=self._account,
-                             room_jid=str(error.jid),
+                             jid=str(error.jid),
                              error_text=to_user_string(error)))
 
     def _on_config_change(self, _con, _stanza, properties):
@@ -780,7 +780,7 @@ class MUC(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('muc-config-changed',
                          account=self._account,
-                         room_jid=room_jid,
+                         jid=room_jid,
                          status_codes=properties.muc_status_codes))
         raise nbxmpp.NodeProcessed
 

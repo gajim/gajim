@@ -467,8 +467,6 @@ class GroupchatControl(ChatControlBase):
         return self.xml.stack.get_visible_child_name()
 
     def _on_muc_disco_update(self, _event):
-        if self.parent_win is None:
-            return
         self.update_actions()
         self.draw_banner_text()
 
@@ -825,9 +823,11 @@ class GroupchatControl(ChatControlBase):
         """
         self.xml.banner_name_label.set_text(self.room_name)
 
-    @event_filter(['jid=room_jid'])
     def _on_update_room_avatar(self, _event):
         self._update_avatar()
+
+    def _on_update_gc_avatar(self, event):
+        self.roster.process_avatar_update(event)
 
     def _on_bookmarks_received(self, _event):
         self.draw_banner_text()

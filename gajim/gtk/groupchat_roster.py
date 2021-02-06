@@ -102,7 +102,6 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
         self.register_events([
             ('theme-update', ged.GUI2, self._on_theme_update),
-            ('update-gc-avatar', ged.GUI1, self._on_avatar_update),
         ])
 
     @staticmethod
@@ -458,8 +457,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
     def _on_theme_update(self, _event):
         self.redraw()
 
-    @event_filter(['room_jid'])
-    def _on_avatar_update(self, event):
+    def process_avatar_update(self, event):
         self.draw_avatar(event.contact)
 
     def clear(self):

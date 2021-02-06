@@ -160,11 +160,6 @@ class Message(BaseModule):
         parse_oob(properties, additional_data)
         parse_xhtml(properties, additional_data)
 
-        app.nec.push_incoming_event(NetworkEvent('update-client-info',
-                                                 account=self._account,
-                                                 jid=jid,
-                                                 resource=resource))
-
         if properties.is_encrypted:
             additional_data['encrypted'] = properties.encrypted.additional_data
         else:

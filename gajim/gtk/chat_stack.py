@@ -89,9 +89,5 @@ class ChatStack(Gtk.Stack):
         self.set_visible_child_name('empty')
 
     def process_event(self, event):
-        if hasattr(event, 'jid'):
-            jid = event.jid
-        else:
-            jid = event.room_jid
-        control = self.get_control(event.account, jid)
+        control = self.get_control(event.account, event.jid)
         control.process_event(event)

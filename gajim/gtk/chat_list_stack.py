@@ -161,9 +161,5 @@ class ChatListStack(Gtk.Stack):
         if event.name not in HANDLED_EVENTS:
             return
 
-        if hasattr(event, 'jid'):
-            jid = event.jid
-        else:
-            jid = event.room_jid
-        chat_list = self._find_chat(event.account, jid)
+        chat_list = self._find_chat(event.account, event.jid)
         chat_list.process_event(event)

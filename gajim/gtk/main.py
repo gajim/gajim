@@ -72,7 +72,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('activity-received', ged.GUI1, self._on_event),
             ('tune-received', ged.GUI1, self._on_event),
             ('location-received', ged.GUI1, self._on_event),
-            ('update-client-info', ged.GUI1, self._on_event),
             ('chatstate-received', ged.GUI1, self._on_event),
             ('caps-update', ged.GUI1, self._on_event),
             ('message-sent', ged.OUT_POSTCORE, self._on_event),
@@ -82,8 +81,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('receipt-received', ged.GUI1, self._on_event),
             ('displayed-received', ged.GUI1, self._on_event),
             ('message-error', ged.GUI1, self._on_event),
-            ('zeroconf-error', ged.GUI1, self._on_event),
             ('update-roster-avatar', ged.GUI1, self._on_event),
+            ('update-room-avatar', ged.GUI1, self._on_event),
+            ('update-gc-avatar', ged.GUI1, self._on_event),
             ('muc-creation-failed', ged.GUI1, self._on_event),
             ('muc-joined', ged.GUI1, self._on_event),
             ('muc-join-failed', ged.GUI1, self._on_event),
@@ -106,8 +106,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('muc-disco-update', ged.GUI1, self._on_event),
             ('muc-configuration-finished', ged.GUI1, self._on_event),
             ('muc-configuration-failed', ged.GUI1, self._on_event),
-            ('update-room-avatar', ged.GUI1, self._on_event),
-            ('message-error', ged.GUI1, self._on_event),
         ])
 
         self.show_all()
@@ -299,22 +297,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     workspace_id=self.get_active_workspace())
 
     def _on_event(self, event):
-        if hasattr(event, 'jid'):
-            jid = event.jid
-        else:
-            jid = event.room_jid
-
         if event.name == 'caps-update':
             #TODO
             return
 
-        if event.name == 'update-client-info':
-            #TODO
-            return
-
-        if not self.chat_exists(event.account, jid):
+        if not self.chat_exists(event.account, event.jid):
             if event.name == 'message-received':
-                self.add_chat(event.account, jid, 'contact')
+                self.add_chat(event.account, event.jid, 'contact')
             else:
                 # No chat is open, dont handle any gui events
                 return

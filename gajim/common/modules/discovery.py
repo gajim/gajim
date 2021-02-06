@@ -234,7 +234,7 @@ class Discovery(BaseModule):
         app.nec.push_incoming_event(NetworkEvent(
             'muc-disco-update',
             account=self._account,
-            room_jid=result.info.jid))
+            jid=result.info.jid))
 
         yield result
 

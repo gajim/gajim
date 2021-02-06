@@ -162,9 +162,9 @@ class MessageWindow(EventHelper):
         self.notebook.set_show_border(app.settings.get('tabs_border'))
         self.show_icon()
 
-        self.register_events([
-            ('muc-disco-update', ged.GUI1, self._on_muc_disco_update),
-        ])
+        # self.register_events([
+        #     ('muc-disco-update', ged.GUI1, self._on_muc_disco_update),
+        # ])
 
     def _add_actions(self):
         actions = [

@@ -1744,8 +1744,9 @@ class Interface:
                 NetworkEvent('update-roster-avatar', account=account, jid=jid))
         else:
             app.nec.push_incoming_event(NetworkEvent('update-gc-avatar',
+                                                     account=account,
                                                      contact=contact,
-                                                     room_jid=contact.room_jid))
+                                                     jid=contact.room_jid))
 
     def save_avatar(self, data):
         return self.avatar_storage.save_avatar(data)
