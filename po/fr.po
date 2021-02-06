@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-01-20 20:26+0000\n"
+"PO-Revision-Date: 2021-02-01 22:12+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/1-3/fr/>\n"
 "Language: fr\n"
@@ -9560,7 +9560,7 @@ msgstr "Émoji"
 
 #: gajim/data/gui/preferences.ui:447
 msgid "Status Icon"
-msgstr "_Icône d'état"
+msgstr "Icône d'état"
 
 #: gajim/data/gui/preferences.ui:472
 msgid "Style"

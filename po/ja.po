@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-01-20 20:26+0000\n"
+"PO-Revision-Date: 2021-02-01 22:13+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/1-3/ja/>"
 "\n"
@@ -8100,9 +8100,8 @@ msgid "Your Nickname"
 msgstr "あなたのニックネーム"
 
 #: gajim/data/gui/groupchat_control.ui:36
-#, fuzzy
 msgid "Drop Files or Contacts"
-msgstr "相手先にファイルを転送します"
+msgstr "ファイルまたは相手先をドロップ"
 
 #: gajim/data/gui/groupchat_control.ui:58 gajim/data/gui/chat_control.ui:322
 msgid "Bold"
@@ -9055,9 +9054,8 @@ msgid "Change Nickname"
 msgstr "ニックネームを変更"
 
 #: gajim/data/gui/chat_control.ui:48
-#, fuzzy
 msgid "Drop files or contacts"
-msgstr "相手先にファイルを転送します"
+msgstr "ファイルまたは相手先をドロップ"
 
 #: gajim/data/gui/chat_control.ui:80
 msgid "<b>1</b>"
