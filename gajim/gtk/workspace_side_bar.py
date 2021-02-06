@@ -22,11 +22,16 @@ class WorkspaceSideBar(Gtk.ListBox):
 
         chat_list_stack.connect('unread-count-changed',
                                 self._on_unread_count_changed)
+        chat_list_stack.connect('chat-selected',
+                                self._on_chat_selected)
         self._workspaces = {}
 
     def _on_unread_count_changed(self, _chat_list_stack, workspace_id, count):
         workspace = self._workspaces[workspace_id]
         workspace.set_unread_count(count)
+
+    def _on_chat_selected(self, _chat_list_stack, workspace_id, *args):
+        self.activate_workspace(workspace_id)
 
     @staticmethod
     def _sort_func(child1, child2):

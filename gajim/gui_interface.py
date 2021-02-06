@@ -1358,16 +1358,11 @@ class Interface:
         app.connections[account].get_module('MUC').create(muc_data)
 
     def show_add_join_groupchat(self, account, jid, nickname=None):
-        workspace_id = app.window.get_active_workspace()
-        if app.window.chat_exists_for_workspace(workspace_id, account, jid):
-            app.window.select_chat(workspace_id, account, jid)
-            return
-
         if not app.window.chat_exists(account, jid):
             client = app.get_client(account)
             client.get_module('MUC').join(jid, nick=nickname)
 
-        app.window.add_group_chat(account, str(jid))
+        app.window.add_group_chat(account, str(jid), select=True)
 
     @staticmethod
     def _on_muc_added(_muc_manger, _signal_name, account, jid):

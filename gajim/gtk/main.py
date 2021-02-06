@@ -205,19 +205,38 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         account, jid = param.unpack()
         self.add_group_chat(account, jid)
 
-    def add_group_chat(self, account, jid):
+    def add_group_chat(self, account, jid, select=False):
         workspace_id = self._workspace_side_bar.get_active_workspace()
-        self.add_chat_for_workspace(workspace_id, account, jid, 'groupchat')
+        self.add_chat_for_workspace(workspace_id,
+                                    account,
+                                    jid,
+                                    'groupchat',
+                                    select=select)
 
     def _add_chat(self, _action, param):
         account, jid, type_ = param.unpack()
         self.add_chat(account, jid, type_)
 
-    def add_chat(self, account, jid, type_):
+    def add_chat(self, account, jid, type_, select=False):
         workspace_id = self._workspace_side_bar.get_active_workspace()
-        self.add_chat_for_workspace(workspace_id, account, jid, type_)
+        self.add_chat_for_workspace(workspace_id,
+                                    account,
+                                    jid,
+                                    type_,
+                                    select=select)
 
-    def add_chat_for_workspace(self, workspace_id, account, jid, type_):
+    def add_chat_for_workspace(self,
+                               workspace_id,
+                               account,
+                               jid,
+                               type_,
+                               select=False):
+
+        if self.chat_exists(account, jid):
+            if select:
+                self._chat_list_stack.select_chat(account, jid)
+            return
+
         if type_ == 'groupchat':
             self._chat_stack.add_group_chat(account, jid)
         else:
@@ -225,7 +244,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._chat_list_stack.add_chat(workspace_id, account, jid, type_)
 
         if self._startup_finished:
-            self._chat_list_stack.select_chat(workspace_id, account, jid)
+            if select:
+                self._chat_list_stack.select_chat(account, jid)
             self._chat_list_stack.store_open_chats(workspace_id)
 
     def _remove_chat(self, _action, param):
@@ -241,10 +261,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def chat_exists_for_workspace(self, workspace_id, account, jid):
         return self._chat_list_stack.contains_chat(
             account, jid, workspace_id=workspace_id)
-
-    def select_chat(self, workspace_id, account, jid):
-        self._workspace_side_bar.activate_workspace(workspace_id)
-        self._chat_list_stack.select_chat(workspace_id, account, jid)
 
     def get_control(self, account, jid):
         return self._chat_stack.get_control(account, jid)

@@ -20,6 +20,9 @@ class ChatListStack(Gtk.Stack):
         'unread-count-changed': (GObject.SignalFlags.RUN_LAST,
                                  None,
                                  (str, int)),
+        'chat-selected': (GObject.SignalFlags.RUN_LAST,
+                          None,
+                          (str, str, str)),
     }
 
     def __init__(self, main_window, ui, chat_stack):
@@ -92,6 +95,7 @@ class ChatListStack(Gtk.Stack):
         self._chat_stack.show_chat(row.account, row.jid)
         if row.is_active:
             row.reset_unread()
+        self.emit('chat-selected', row.workspace_id, row.account, row.jid)
 
     def show_chat_list(self, workspace_id):
         current_workspace_id = self.get_visible_child_name()
@@ -111,9 +115,12 @@ class ChatListStack(Gtk.Stack):
             chat_list = self.add_chat_list(workspace_id)
         chat_list.add_chat(account, jid, type_)
 
-    def select_chat(self, workspace_id, account, jid):
-        self.show_chat_list(workspace_id)
-        chat_list = self._chat_lists.get(workspace_id)
+    def select_chat(self, account, jid):
+        chat_list = self._find_chat(account, jid)
+        if chat_list is None:
+            return
+
+        self.show_chat_list(chat_list.workspace_id)
         chat_list.select_chat(account, jid)
 
     def store_open_chats(self, workspace_id):

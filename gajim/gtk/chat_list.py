@@ -37,6 +37,10 @@ class ChatList(Gtk.ListBox):
 
         self.show_all()
 
+    @property
+    def workspace_id(self):
+        return self._workspace_id
+
     def get_unread_count(self):
         return sum([chats.unread_count for chats in self._chats.values()])
 
