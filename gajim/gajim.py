@@ -28,7 +28,7 @@ import gajim.gui
 from gajim.common import i18n
 
 
-_MIN_NBXMPP_VER = '2.0.0'
+_MIN_NBXMPP_VER = '2.0.1'
 _MIN_GTK_VER = '3.22.27'
 _MIN_CAIRO_VER = '1.16.0'
 _MIN_PYGOBJECT_VER = '3.32.0'
