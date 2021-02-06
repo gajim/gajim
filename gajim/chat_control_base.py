@@ -34,7 +34,6 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
 
-from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
@@ -42,7 +41,6 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import event_filter
 from gajim.common.contacts import GC_Contact
 from gajim.common.const import Chatstate
 from gajim.common.structs import OutgoingMessage
@@ -56,8 +54,6 @@ from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import at_the_end
-from gajim.gui.util import get_show_in_roster
-from gajim.gui.util import get_show_in_systray
 from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.util import get_builder
 from gajim.gui.util import generate_account_badge

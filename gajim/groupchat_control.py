@@ -1233,7 +1233,6 @@ class GroupchatControl(ChatControlBase):
         self.roster.remove_contact(nick)
         self.roster.add_contact(new_nick)
 
-    @event_filter(['account', 'room_jid'])
     def _on_muc_user_status_show_changed(self, event):
         nick = event.properties.muc_nickname
         status = event.properties.status
@@ -1482,7 +1481,6 @@ class GroupchatControl(ChatControlBase):
         if self._wait_for_destruction:
             self._close_control()
 
-    @event_filter(['account', 'jid=room_jid'])
     def _on_message_sent(self, event):
         if not event.message:
             return
@@ -1542,7 +1540,6 @@ class GroupchatControl(ChatControlBase):
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 
-    @event_filter(['account', 'room_jid'])
     def _on_message_error(self, event):
         self.conv_textview.show_error(event.message_id, event.error)
 
