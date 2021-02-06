@@ -1052,8 +1052,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def _on_message_tv_buffer_changed(self, textview, textbuffer):
         has_text = self.msg_textview.has_text()
-        self.parent_win.window.lookup_action(
-            'send-message-' + self.control_id).set_enabled(has_text)
+        if self.parent_win is not None:
+            self.parent_win.window.lookup_action(
+                'send-message-' + self.control_id).set_enabled(has_text)
 
         if textbuffer.get_char_count() and self.encryption:
             app.plugin_manager.extension_point(
