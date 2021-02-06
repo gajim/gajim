@@ -58,11 +58,11 @@ modules:
   - name: python3-packaging
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app packaging-20.8-py2.py3-none-any.whl
+      - pip3 install --prefix=/app packaging-20.9-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/b1/a7/588bfa063e7763247ab6f7e1d994e331b85e0e7d09f853c59a6eb9696974/packaging-20.8-py2.py3-none-any.whl
-        sha256: 24e0da08660a87484d1602c30bb4902d74816b6985b93de36926f5bc95741858
+        url: https://files.pythonhosted.org/packages/3e/89/7ea760b4daa42653ece2380531c90f64788d979110a2ab51049d92f408af/packaging-20.9-py2.py3-none-any.whl
+        sha256: 67714da7f7bc052e064859c05c595155bd1ee9f69f76557e21f051443c20947a
 
   - name: python3-pycparser
     buildsystem: simple
@@ -157,13 +157,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-21.7.0-py3-none-any.whl
+      - pip3 install --prefix=/app keyring-22.0.1-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/e2/23/c15f403d1993a003a711a37318bbe66096c0802b265047919d5c14a4d693/keyring-21.7.0-py3-none-any.whl
-        sha256: 4c41ce4f6d1ee91d589a346699ef5a94ba3429603ac8f700cc0097644cdd6748
+        url: https://files.pythonhosted.org/packages/96/17/86e1e5b50dc14e5984a661dde2ed3b7f05efe1fdee32145a77708cf06904/keyring-22.0.1-py3-none-any.whl
+        sha256: 9f44660a5d4931bdc14c08a1d01ef30b18a7a8147380710d8c9f9531e1f6c3c0
 
   - name: python3-css-parser
     buildsystem: simple
@@ -220,11 +220,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app nbxmpp-2.0.0-py3-none-any.whl
+      - pip3 install --prefix=/app nbxmpp-2.0.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/e4/2f/ba0cb89ae369bcbc88ebb4fb9077c243e8212b9d71d559051ff27702f8b5/nbxmpp-2.0.0-py3-none-any.whl
-        sha256: 99cb256ed9da7792d5af20e814ab106819271faa6d8e2c86dc5860dafa648f12
+        url: https://files.pythonhosted.org/packages/9c/4e/dcf37c33a67eb2df00a3676deedb707d381815ce94fbb0007f97a82d1664/nbxmpp-2.0.1-py3-none-any.whl
+        sha256: 84edf0e0fe9b751e8796af46b388881f243b80afbf0664f82464cccc0afc417c
 
   - name: gajim
     buildsystem: simple
