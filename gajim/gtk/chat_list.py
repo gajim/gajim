@@ -27,6 +27,7 @@ class ChatList(Gtk.ListBox):
 
         self.get_style_context().add_class('chatlist')
         self.set_filter_func(self._filter_func)
+        self.set_sort_func(self._sort_func)
         self.set_has_tooltip(True)
 
         self.connect('destroy', self._on_destroy)
@@ -90,6 +91,12 @@ class ChatList(Gtk.ListBox):
         if not self._current_filter_text:
             return True
         return self._current_filter_text in row.jid
+
+    @staticmethod
+    def _sort_func(row1, row2):
+        if row1.is_recent == row2.is_recent:
+            return 0
+        return -1 if row1.is_recent else 1
 
     def set_filter_text(self, text):
         self._current_filter_text = text
@@ -278,6 +285,12 @@ class ChatRow(Gtk.ListBoxRow):
         return (self.is_selected() and
                 self.get_toplevel().get_property('is-active'))
 
+    @property
+    def is_recent(self):
+        if self._unread_count:
+            return True
+        return False
+
     def _on_state_flags_changed(self, _listboxrow, *args):
         state = self.get_state_flags()
         if (state & Gtk.StateFlags.PRELIGHT) != 0:
@@ -304,8 +317,12 @@ class ChatRow(Gtk.ListBoxRow):
         if self.is_active:
             return
         self.unread_count += 1
+        if self.unread_count == 1:
+            self.changed()
 
     def reset_unread(self):
+        if not self.unread_count:
+            return
         self.unread_count = 0
 
     def set_last_message_text(self, nickname, text):
