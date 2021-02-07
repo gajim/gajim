@@ -1,5 +1,7 @@
+import logging
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
 
@@ -21,6 +23,9 @@ from gajim.gui.dialogs import ConfirmationDialog
 from gajim.common.nec import EventHelper
 
 from .util import open_window
+
+
+log = logging.getLogger('gajim.gui.main')
 
 
 class MainWindow(Gtk.ApplicationWindow, EventHelper):
@@ -118,6 +123,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._load_chats()
         self._add_accounts()
         self._add_actions()
+        self._add_actions2()
 
     @staticmethod
     def _on_our_show(event):
@@ -153,6 +159,117 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             act = Gio.SimpleAction.new(action_name, variant)
             act.connect('activate', func)
             self.add_action(act)
+
+    def _add_actions2(self):
+        actions = [
+            'change-nickname',
+            'change-subject',
+            'escape',
+            'browse-history',
+            'send-file',
+            'show-contact-info',
+            'show-emoji-chooser',
+            'clear-chat',
+            'delete-line',
+            'close-tab',
+            'move-tab-up',
+            'move-tab-down',
+            'switch-next-tab',
+            'switch-prev-tab',
+            'switch-next-unread-tab-right'
+            'switch-next-unread-tab-left',
+            'switch-tab-1',
+            'switch-tab-2',
+            'switch-tab-3',
+            'switch-tab-4',
+            'switch-tab-5',
+            'switch-tab-6',
+            'switch-tab-7',
+            'switch-tab-8',
+            'switch-tab-9',
+        ]
+
+        disabled_for_emacs = (
+            'browse-history',
+            'send-file',
+            'close-tab'
+        )
+
+        key_theme = Gtk.Settings.get_default().get_property(
+            'gtk-key-theme-name')
+
+        for action in actions:
+            if key_theme == 'Emacs' and action in disabled_for_emacs:
+                continue
+            act = Gio.SimpleAction.new(action, None)
+            act.connect('activate', self._on_action)
+            self.add_action(act)
+
+    def _on_action(self, action, _param):
+        control = self.get_active_control()
+        if control is None:
+            return
+
+        log.info('Activate action: %s, active control: %s',
+                 action.get_name(), control.contact.jid)
+
+        action = action.get_name()
+
+        res = control.delegate_action(action)
+        if res != Gdk.EVENT_PROPAGATE:
+            return res
+
+        # if action == 'escape' and app.settings.get('escape_key_closes'):
+        #     self.remove_tab(control, self.CLOSE_ESC)
+        #     return
+
+        # if action == 'close-tab':
+        #     self.remove_tab(control, self.CLOSE_CTRL_KEY)
+        #     return
+
+        # if action == 'move-tab-up':
+        #     old_position = self.notebook.get_current_page()
+        #     self.notebook.reorder_child(control.widget,
+        #                                 old_position - 1)
+        #     return
+
+        # if action == 'move-tab-down':
+        #     old_position = self.notebook.get_current_page()
+        #     total_pages = self.notebook.get_n_pages()
+        #     if old_position == total_pages - 1:
+        #         self.notebook.reorder_child(control.widget, 0)
+        #     else:
+        #         self.notebook.reorder_child(control.widget,
+        #                                     old_position + 1)
+        #     return
+
+        # if action == 'switch-next-tab':
+        #     new = self.notebook.get_current_page() + 1
+        #     if new >= self.notebook.get_n_pages():
+        #         new = 0
+        #     self.notebook.set_current_page(new)
+        #     return
+
+        # if action == 'switch-prev-tab':
+        #     new = self.notebook.get_current_page() - 1
+        #     if new < 0:
+        #         new = self.notebook.get_n_pages() - 1
+        #     self.notebook.set_current_page(new)
+        #     return
+
+        # if action == 'switch-next-unread-tab-right':
+        #     self.move_to_next_unread_tab(True)
+        #     return
+
+        # if action == 'switch-next-unread-tab-left':
+        #     self.move_to_next_unread_tab(False)
+        #     return
+
+        # if action.startswith('switch-tab-'):
+        #     number = int(action[-1])
+        #     self.notebook.set_current_page(number - 1)
+        #     return
+
 
     def get_widget(self, name):
         return getattr(self._ui, name)
@@ -285,6 +402,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def get_control(self, account, jid):
         return self._chat_stack.get_control(account, jid)
+
+    def get_active_control(self):
+        chat = self._chat_list_stack.get_selected_chat()
+        if chat is None:
+            return None
+        return self.get_control(chat.account, chat.jid)
 
     def _add_accounts(self):
         for account in list(app.connections.keys()):
