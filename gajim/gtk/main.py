@@ -68,7 +68,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
-        # pylint: disable=line-too-long
         self.register_events([
             ('presence-received', ged.GUI1, self._on_event),
             ('nickname-received', ged.GUI1, self._on_event),
@@ -110,6 +109,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('muc-disco-update', ged.GUI1, self._on_event),
             ('muc-configuration-finished', ged.GUI1, self._on_event),
             ('muc-configuration-failed', ged.GUI1, self._on_event),
+            ('our-show', ged.GUI1, self._on_our_show),
+            ('signed-in', ged.GUI1, self._on_signed_in),
         ])
 
         self.show_all()
@@ -117,6 +118,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._load_chats()
         self._add_accounts()
         self._add_actions()
+
+    @staticmethod
+    def _on_our_show(event):
+        if event.show == 'offline':
+            app.app.set_account_actions_state(event.account)
+            app.app.update_app_actions_state()
+
+    @staticmethod
+    def _on_signed_in(event):
+        app.app.set_account_actions_state(event.account, True)
+        app.app.update_app_actions_state()
 
     @staticmethod
     def _on_button_release(paned, event):
