@@ -58,7 +58,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_default_size(400, 350)
         self.set_show_menubar(False)
-        self.set_transient_for(app.interface.roster.window)
+        self.set_transient_for(app.window)
         self.title_text = _('Status Message')  # TimeoutWindow
 
         self.account = account

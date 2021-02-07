@@ -31,7 +31,7 @@ from gajim.common.const import THANKS
 class AboutDialog(Gtk.AboutDialog):
     def __init__(self):
         Gtk.AboutDialog.__init__(self)
-        self.set_transient_for(app.interface.roster.window)
+        self.set_transient_for(app.window)
         self.set_name('Gajim')
         self.set_version(app.version)
         self.set_copyright('Copyright © 2003-2021 Gajim Team')

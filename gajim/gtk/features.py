@@ -39,7 +39,7 @@ class Features(Gtk.ApplicationWindow):
         self.set_name('Features')
         self.set_title(_('Features'))
         self.set_resizable(False)
-        self.set_transient_for(app.interface.roster.window)
+        self.set_transient_for(app.window)
 
         grid = Gtk.Grid()
         grid.set_name('FeaturesInfoGrid')

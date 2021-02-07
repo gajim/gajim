@@ -40,7 +40,7 @@ class PEPConfig(Gtk.ApplicationWindow):
         self.set_name('PEPConfig')
         self.set_default_size(500, 350)
         self.set_resizable(True)
-        self.set_transient_for(app.interface.roster.window)
+        self.set_transient_for(app.window)
 
         self._ui = get_builder('manage_pep_services_window.ui')
         self.add(self._ui.manage_pep_services)
