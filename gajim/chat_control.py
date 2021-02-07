@@ -188,19 +188,19 @@ class ChatControl(ChatControlBase):
 
         self.subscribe_events()
 
-        if not session:
-            # Don't use previous session if we want to a specific resource
-            # and it's not the same
-            if not resource:
-                resource = contact.resource
-            session = app.connections[self.account].find_controlless_session(
-                self.contact.jid, resource)
+        # if not session:
+        #     # Don't use previous session if we want to a specific resource
+        #     # and it's not the same
+        #     if not resource:
+        #         resource = contact.resource
+        #     session = app.connections[self.account].find_controlless_session(
+        #         self.contact.jid, resource)
+
+        # if session:
+        #     session.control = self
+        #     self.session = session
 
         self.setup_seclabel()
-        if session:
-            session.control = self
-            self.session = session
-
         self.add_actions()
         self.update_ui()
         self.set_lock_image()

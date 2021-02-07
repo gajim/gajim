@@ -48,26 +48,22 @@ class PrivateChatControl(ChatControl):
 
     def __init__(self, parent_win, gc_contact, contact, account, session):
         room_jid = gc_contact.room_jid
-        self.room_ctrl = app.interface.msg_win_mgr.get_gc_control(
-            room_jid, account)
-        if room_jid in app.interface.minimized_controls[account]:
-            self.room_ctrl = app.interface.minimized_controls[account][room_jid]
-
+        self.room_ctrl = app.window.get_control(account, room_jid)
         self.gc_contact = gc_contact
         ChatControl.__init__(self, parent_win, contact, account, session)
 
         # pylint: disable=line-too-long
-        self.register_events([
-            ('update-gc-avatar', ged.GUI1, self._on_update_gc_avatar),
-            ('caps-update', ged.GUI1, self._on_caps_update),
-            ('muc-user-joined', ged.GUI1, self._on_user_joined),
-            ('muc-user-left', ged.GUI1, self._on_user_left),
-            ('muc-nickname-changed', ged.GUI1, self._on_nickname_changed),
-            ('muc-self-presence', ged.GUI1, self._on_self_presence),
-            ('muc-self-kicked', ged.GUI1, self._on_disconnected),
-            ('muc-user-status-show-changed', ged.GUI1, self._on_status_show_changed),
-            ('muc-destroyed', ged.GUI1, self._on_disconnected),
-        ])
+        # self.register_events([
+        #     ('update-gc-avatar', ged.GUI1, self._on_update_gc_avatar),
+        #     ('caps-update', ged.GUI1, self._on_caps_update),
+        #     ('muc-user-joined', ged.GUI1, self._on_user_joined),
+        #     ('muc-user-left', ged.GUI1, self._on_user_left),
+        #     ('muc-nickname-changed', ged.GUI1, self._on_nickname_changed),
+        #     ('muc-self-presence', ged.GUI1, self._on_self_presence),
+        #     ('muc-self-kicked', ged.GUI1, self._on_disconnected),
+        #     ('muc-user-status-show-changed', ged.GUI1, self._on_status_show_changed),
+        #     ('muc-destroyed', ged.GUI1, self._on_disconnected),
+        # ])
         # pylint: enable=line-too-long
 
     @property

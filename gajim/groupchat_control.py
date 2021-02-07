@@ -740,7 +740,13 @@ class GroupchatControl(ChatControlBase):
             self.last_msg_id = None
 
     def _on_roster_row_activated(self, _roster, nick):
-        self._start_private_message(nick)
+        gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
+        muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
+        if not self.is_anonymous and muc_prefer_direct_msg:
+            jid = app.get_jid_without_resource(gc_c.jid)
+            app.window.add_chat(self.account, jid, 'contact', select=True)
+        else:
+            app.window.add_private_chat(self.account, gc_c.get_full_jid())
 
     def on_msg_textview_populate_popup(self, textview, menu):
         """
@@ -882,38 +888,6 @@ class GroupchatControl(ChatControlBase):
                              stanza_id=stanza_id,
                              additional_data=event.additional_data)
         event.needs_highlight = self.needs_visual_notification(event.msgtxt)
-
-    def on_private_message(self, nick, sent, msg, tim, session, additional_data,
-                           message_id, msg_log_id=None, displaymarking=None):
-        # Do we have a queue?
-        fjid = self.room_jid + '/' + nick
-
-        event = events.PmEvent(msg,
-                               '',
-                               'incoming',
-                               tim,
-                               '',
-                               msg_log_id,
-                               session=session,
-                               displaymarking=displaymarking,
-                               sent_forwarded=sent,
-                               additional_data=additional_data,
-                               message_id=message_id)
-
-        app.events.add_event(self.account, fjid, event)
-
-        if allow_popup_window(self.account):
-            self._start_private_message(nick)
-        else:
-            self.roster.draw_contact(nick)
-            if self.parent_win:
-                self.parent_win.show_title()
-                self.parent_win.redraw_tab(self)
-
-        contact = app.contacts.get_contact_with_highest_priority(
-            self.account, self.room_jid)
-        if contact:
-            app.interface.roster.draw_contact(self.room_jid, self.account)
 
     def add_message(self, text, contact='', tim=None,
                     displaymarking=None, correct_id=None, message_id=None,
@@ -1112,24 +1086,6 @@ class GroupchatControl(ChatControlBase):
         for change in changes:
             self.add_info_message(change)
 
-    def _on_message_received(self, event):
-        if not event.properties.jid.bare_match(self.room_jid):
-            return
-
-        if event.properties.is_muc_pm and not event.session.control:
-            # We got a pm from this room
-            nick = event.resource
-            # otherwise pass it off to the control to be queued
-            self.on_private_message(nick,
-                                    event.properties.is_sent_carbon,
-                                    event.msgtxt,
-                                    event.properties.timestamp,
-                                    self.session,
-                                    event.additional_data,
-                                    event.properties.id,
-                                    msg_log_id=event.msg_log_id,
-                                    displaymarking=event.displaymarking)
-
     def _on_our_show(self, event):
         client = app.get_client(event.account)
         if (event.show == 'offline' and
@@ -1171,10 +1127,10 @@ class GroupchatControl(ChatControlBase):
     def rejoin(self):
         app.connections[self.account].get_module('MUC').join(self._muc_data)
 
-    def send_pm(self, nick, message=None):
-        ctrl = self._start_private_message(nick)
-        if message is not None:
-            ctrl.send_message(message)
+    # def send_pm(self, nick, message=None):
+    #     ctrl = self._start_private_message(nick)
+    #     if message is not None:
+    #         ctrl.send_message(message)
 
     def _on_muc_self_presence(self, event):
         nick = event.properties.muc_nickname
@@ -1817,22 +1773,6 @@ class GroupchatControl(ChatControlBase):
             self._invite_box.focus_search_entry()
         elif page_name == 'destroy':
             self.xml.destroy_reason_entry.grab_focus_without_selecting()
-
-    def _start_private_message(self, nick):
-        gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
-        nick_jid = gc_c.get_full_jid()
-
-        muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
-        pm_queue = len(app.events.get_events(
-            self.account, jid=nick_jid, types=['pm']))
-        if not self.is_anonymous and muc_prefer_direct_msg and not pm_queue:
-            jid = app.get_jid_without_resource(gc_c.jid)
-            ctrl = app.interface.new_chat_from_jid(self.account, jid)
-        else:
-            ctrl = app.interface.new_private_chat(gc_c, self.account)
-            ctrl.parent_win.set_active_tab(ctrl)
-
-        return ctrl
 
     def append_nick_in_msg_textview(self, _widget, nick):
         message_buffer = self.msg_textview.get_buffer()

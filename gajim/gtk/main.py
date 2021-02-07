@@ -363,6 +363,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                     type_,
                                     select=select)
 
+    def add_private_chat(self, account, jid, select=False):
+        workspace_id = self._workspace_side_bar.get_active_workspace()
+        self.add_chat_for_workspace(workspace_id,
+                                    account,
+                                    jid,
+                                    'pm',
+                                    select=select)
+
     def add_chat_for_workspace(self,
                                workspace_id,
                                account,
@@ -377,6 +385,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if type_ == 'groupchat':
             self._chat_stack.add_group_chat(account, jid)
+        elif type_ == 'pm':
+            if not self._startup_finished:
+                # TODO: Currently we cant load private chats at start
+                # because the Contacts dont exist yet
+                return
+            self._chat_stack.add_private_chat(account, jid)
         else:
             self._chat_stack.add_chat(account, jid)
         self._chat_list_stack.add_chat(workspace_id, account, jid, type_)
@@ -449,7 +463,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if not self.chat_exists(event.account, event.jid):
             if event.name == 'message-received':
-                self.add_chat(event.account, event.jid, 'contact')
+                if event.properties.is_muc_pm:
+                    self.add_private_chat(event.account, event.jid, 'pm')
+                else:
+                    self.add_chat(event.account, event.jid, 'contact')
             else:
                 # No chat is open, dont handle any gui events
                 return

@@ -63,7 +63,7 @@ class ChatList(Gtk.ListBox):
 
     def _query_tooltip(self, widget, _x_pos, y_pos, _keyboard_mode, tooltip):
         row = self.get_row_at_y(y_pos)
-        if row is None:
+        if row is None or row.type == 'pm':
             self._tab_tooltip.clear_tooltip()
             return False
 

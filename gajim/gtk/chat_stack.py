@@ -6,6 +6,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.chat_control import ChatControl
 from gajim.groupchat_control import GroupchatControl
+from gajim.privatechat_control import PrivateChatControl
 
 from gajim.common.i18n import _
 
@@ -74,6 +75,17 @@ class ChatStack(Gtk.Stack):
         mw = self.get_toplevel()
         control = GroupchatControl(mw, contact, None, account)
         self._controls[(account, jid)] = control
+        self.add_named(control.widget, f'{account}:{jid}')
+        control.widget.show_all()
+
+    def add_private_chat(self, account, jid):
+        mw = self.get_toplevel()
+        bare_jid = app.get_jid_without_resource(jid)
+        nick = app.get_resource_from_jid(jid)
+        gc_c = app.contacts.get_gc_contact(account, bare_jid, nick)
+        contact = gc_c.as_contact()
+        control = PrivateChatControl(mw, gc_c, contact, account, None)
+        self._controls[(account, str(jid))] = control
         self.add_named(control.widget, f'{account}:{jid}')
         control.widget.show_all()
 
