@@ -1,3 +1,21 @@
+Gajim 1.3.0 (08 February 2021)
+
+  New
+
+  * Add --gdebug option
+
+  Bug fixes
+
+  * Search also in user data dir for translations
+  * AV: Fix closing chat window while in call
+  * Chat: Don’t unselect text after key press
+  * Profile: Correctly handle not existing vcard
+  * Fix display problems with feather icons
+  * Bookmarks: Check for config-node-max feature
+  * #10401 Fix race condition when removing an account
+  * #10421 Chat: Fix race condition when closing with ESC
+
+
 Gajim 1.3.0-beta2 (10 January 2020)
 
   Changes
