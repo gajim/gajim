@@ -65,6 +65,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             'clicked', self._on_start_chat_clicked)
         self._ui.connect_signals(self)
 
+        self._ui.paned.set_position(app.settings.get('chat_handle_position'))
+        self._ui.paned.connect('button-release-event', self._on_button_release)
+
         # pylint: disable=line-too-long
         self.register_events([
             ('presence-received', ged.GUI1, self._on_event),
@@ -114,6 +117,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._load_chats()
         self._add_accounts()
         self._add_actions()
+
+    @staticmethod
+    def _on_button_release(paned, event):
+        if event.window != paned.get_handle_window():
+            return
+        position = paned.get_position()
+        app.settings.set('chat_handle_position', position)
 
     def _add_actions(self):
         actions = [

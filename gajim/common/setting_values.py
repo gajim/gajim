@@ -189,6 +189,7 @@ APP_SETTINGS = {
     'always_ask_for_status_message': False,
     'show_send_message_button': False,
     'workspace_order': [],
+    'chat_handle_position': 350,
 }
 
 ACCOUNT_SETTINGS = {
