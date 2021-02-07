@@ -35,6 +35,9 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 
 
+NODE_MAX_NS = 'http://jabber.org/protocol/pubsub#config-node-max'
+
+
 class Bookmarks(BaseModule):
     def __init__(self, con):
         BaseModule.__init__(self, con)
@@ -43,6 +46,7 @@ class Bookmarks(BaseModule):
         self._conversion = False
         self._compat = False
         self._compat_pep = False
+        self._node_max = False
         self._bookmarks = {}
         self._join_timeouts = []
         self._request_in_progress = True
@@ -132,6 +136,7 @@ class Bookmarks(BaseModule):
             NetworkEvent('bookmarks-received', account=self._account))
 
     def pass_disco(self, info):
+        self._node_max = NODE_MAX_NS in info.features
         self._compat_pep = Namespace.BOOKMARKS_COMPAT_PEP in info.features
         self._compat = Namespace.BOOKMARKS_COMPAT in info.features
         self._conversion = Namespace.BOOKMARK_CONVERSION in info.features
@@ -141,7 +146,10 @@ class Bookmarks(BaseModule):
         if not self._con.get_module('PubSub').publish_options:
             return 'PrivateBookmarks'
 
-        if app.settings.get('dev_force_bookmark_2') or self._compat_pep:
+        if app.settings.get('dev_force_bookmark_2'):
+            return 'NativeBookmarks'
+
+        if self._compat_pep and self._node_max:
             return 'NativeBookmarks'
 
         if self._conversion:
