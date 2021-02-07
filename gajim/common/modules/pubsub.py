@@ -44,8 +44,9 @@ class PubSub(BaseModule):
         self.publish_options = False
 
     def pass_disco(self, info):
-        self._log.info('Discovered Pubsub publish options: %s', info.jid)
-        self.publish_options = True
+        if Namespace.PUBSUB_PUBLISH_OPTIONS in info.features:
+            self._log.info('Discovered Pubsub publish options: %s', info.jid)
+            self.publish_options = True
 
     def send_pb_subscription_query(self, jid, cb, **kwargs):
         if not app.account_is_available(self._account):
