@@ -202,6 +202,9 @@ class ChatRow(Gtk.ListBoxRow):
         if len(app.get_enabled_accounts_with_labels()) > 1:
             self._ui.account_identifier.show()
 
+        if self.type == 'groupchat':
+            self._ui.group_chat_indicator.show()
+
         self.update_avatar()
         self.update_name()
 

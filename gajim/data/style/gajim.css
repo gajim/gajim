@@ -162,6 +162,9 @@
 .chatlist-row:selected button:hover {
     border-color: @insensitive_fg_color;
 }
+.chatlist-row:selected image {
+	color: @theme_fg_color;
+}
 .chatlist-row overlay > box {
 	padding: 6px;
 }
