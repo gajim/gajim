@@ -98,12 +98,14 @@ class VideoPreview:
     def _disable_preview(self):
         if self._av_pipeline is not None:
             self._av_pipeline.set_state(Gst.State.NULL)
-        if self._av_src is not None:
-            self._av_pipeline.remove(self._av_src)
-            self._av_src = None
-        if self._av_sink is not None:
-            self._av_pipeline.remove(self._av_sink)
-            self._av_sink = None
+            if self._av_src is not None:
+                self._av_pipeline.remove(self._av_src)
+            if self._av_sink is not None:
+                self._av_pipeline.remove(self._av_sink)
+
+        self._av_src = None
+        self._av_sink = None
+
         if self._av_widget is not None:
             self._ui.video_preview_box.remove(self._av_widget)
             self._ui.video_preview_placeholder.set_visible(True)
