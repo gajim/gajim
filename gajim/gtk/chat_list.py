@@ -233,9 +233,19 @@ class ChatRow(Gtk.ListBoxRow):
         self.show_all()
 
     def update_avatar(self):
-        contact = app.contacts.get_contact(self.account, self.jid)
-
         scale = self.get_scale_factor()
+
+        if self.type == 'pm':
+            jid, resource = app.get_room_and_nick_from_fjid(self.jid)
+            contact = app.contacts.get_gc_contact(
+                self.account, jid, resource)
+            avatar = contact.get_avatar(AvatarSize.ROSTER,
+                                        scale,
+                                        contact.show.value)
+            self._ui.avatar_image.set_from_surface(avatar)
+            return
+
+        contact = app.contacts.get_contact(self.account, self.jid)
         if contact:
             if contact.is_groupchat:
                 avatar = app.contacts.get_avatar(self.account,
@@ -257,6 +267,16 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.avatar_image.set_from_surface(avatar)
 
     def update_name(self):
+        if self.type == 'pm':
+            jid, resource = app.get_room_and_nick_from_fjid(self.jid)
+            contact = app.contacts.get_gc_contact(
+                self.account, jid, resource)
+            client = app.get_client(self.account)
+            muc_name = get_groupchat_name(client, jid)
+            self._ui.name_label.set_text(
+                f'{contact.get_shown_name()} ({muc_name})')
+            return
+
         contact = app.contacts.get_contact(self.account, self.jid)
         if contact is None:
             self._ui.name_label.set_text(self.jid)
