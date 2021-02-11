@@ -182,7 +182,7 @@ class Settings(Gtk.ScrolledWindow):
         self.set_hexpand(True)
         self.set_vexpand(True)
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self._stack = Gtk.Stack()
+        self._stack = Gtk.Stack(vhomogeneous=False)
         self._stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
         self._stack.add_named(AddNewAccountPage(), 'add-account')
         self.get_style_context().add_class('accounts-settings')
