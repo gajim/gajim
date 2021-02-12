@@ -167,6 +167,11 @@ class Client(ConnectionHandlers):
             # his password
             self.password = passwords.get_password(self._account)
 
+        gssapi = app.settings.get_account_setting(self._account,
+                                                  'enable_gssapi')
+        if gssapi:
+            self._client.set_mechs(['GSSAPI'])
+
         anonymous = app.settings.get_account_setting(self._account,
                                                      'anonymous_auth')
         if anonymous:

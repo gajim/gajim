@@ -258,6 +258,7 @@ ACCOUNT_SETTINGS = {
         'gc_send_marker_private_default': True,
         'gc_send_marker_public_default': False,
         'chat_history_max_age': -1,
+        'enable_gssapi': False,
     },
 
     'contact': {
