@@ -157,37 +157,15 @@ class Client(ConnectionHandlers):
         self._client.set_username(self._user)
         self._client.set_resource(get_resource(self._account))
 
-        custom_host = get_custom_host(self._account)
-        if custom_host is not None:
-            self._client.set_custom_host(*custom_host)
-
         pass_saved = app.settings.get_account_setting(self._account, 'savepass')
         if pass_saved:
             # Request password from keyring only if the user chose to save
             # his password
             self.password = passwords.get_password(self._account)
 
-        gssapi = app.settings.get_account_setting(self._account,
-                                                  'enable_gssapi')
-        if gssapi:
-            self._client.set_mechs(['GSSAPI'])
-
-        anonymous = app.settings.get_account_setting(self._account,
-                                                     'anonymous_auth')
-        if anonymous:
-            self._client.set_mechs(['ANONYMOUS'])
-
         self._client.set_password(self.password)
         self._client.set_accepted_certificates(
             app.cert_store.get_certificates())
-
-        if app.settings.get_account_setting(self._account,
-                                            'use_plain_connection'):
-            self._client.set_connection_types([ConnectionType.PLAIN])
-
-        proxy = get_user_proxy(self._account)
-        if proxy is not None:
-            self._client.set_proxy(proxy)
 
         self._client.subscribe('resume-failed', self._on_resume_failed)
         self._client.subscribe('resume-successful', self._on_resume_successful)
@@ -277,7 +255,7 @@ class Client(ConnectionHandlers):
                 def _on_password(password):
                     self.password = password
                     self._client.set_password(password)
-                    self.connect()
+                    self._prepare_for_connect()
 
                 app.nec.push_incoming_event(NetworkEvent(
                     'password-required', conn=self, on_password=_on_password))
@@ -372,7 +350,7 @@ class Client(ConnectionHandlers):
             if show == 'offline':
                 return
 
-            self.connect()
+            self._prepare_for_connect()
             return
 
         if self._state.is_connecting:
@@ -387,7 +365,7 @@ class Client(ConnectionHandlers):
                 self._destroy_client = True
                 self._abort_reconnect()
             else:
-                self.connect()
+                self._prepare_for_connect()
             return
 
         # We are connected
@@ -522,6 +500,31 @@ class Client(ConnectionHandlers):
             message.stanza = stanza
             self._send_message(message)
 
+    def _prepare_for_connect(self):
+        custom_host = get_custom_host(self._account)
+        if custom_host is not None:
+            self._client.set_custom_host(*custom_host)
+
+        gssapi = app.settings.get_account_setting(self._account,
+                                                  'enable_gssapi')
+        if gssapi:
+            self._client.set_mechs(['GSSAPI'])
+
+        anonymous = app.settings.get_account_setting(self._account,
+                                                     'anonymous_auth')
+        if anonymous:
+            self._client.set_mechs(['ANONYMOUS'])
+
+        if app.settings.get_account_setting(self._account,
+                                            'use_plain_connection'):
+            self._client.set_connection_types([ConnectionType.PLAIN])
+
+        proxy = get_user_proxy(self._account)
+        if proxy is not None:
+            self._client.set_proxy(proxy)
+
+        self.connect()
+
     def connect(self, ignored_tls_errors=None):
         if self._state not in (ClientState.DISCONNECTED,
                                ClientState.RECONNECT_SCHEDULED):
@@ -550,7 +553,7 @@ class Client(ConnectionHandlers):
         self._set_state(ClientState.RECONNECT_SCHEDULED)
         log.info("Reconnect to %s in 3s", self._account)
         self._reconnect_timer_source = GLib.timeout_add_seconds(
-            3, self.connect)
+            3, self._prepare_for_connect)
 
     def _abort_reconnect(self):
         self._set_state(ClientState.DISCONNECTED)
