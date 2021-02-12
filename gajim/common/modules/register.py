@@ -31,6 +31,8 @@ class Register(BaseModule):
         'unregister',
         'change_password',
         'change_password_with_form',
+        'request_register_form',
+        'submit_register_form',
     ]
 
     def __init__(self, con):

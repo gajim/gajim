@@ -17,13 +17,14 @@ from enum import IntEnum
 
 from gi.repository import Gtk
 
-from nbxmpp.modules import dataforms
+from nbxmpp.errors import StanzaError
+from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import RegisterStanzaError
 
 from gajim.common import app
 from gajim.common.i18n import _
 
 from .dataform import DataFormWidget
-from .dataform import FakeDataFormWidget
 
 log = logging.getLogger('gajim.gui.registration')
 
@@ -44,7 +45,6 @@ class ServiceRegistration(Gtk.Assistant):
         self._agent = agent
         self._account = account
         self._data_form_widget = None
-        self._is_form = None
 
         self.set_application(app.app)
         self.set_resizable(True)
@@ -77,63 +77,55 @@ class ServiceRegistration(Gtk.Assistant):
         sidebar = main_box.get_children()[0]
         main_box.remove(sidebar)
 
-    def _build_dataform(self, form, is_form):
-        if not is_form:
-            return FakeDataFormWidget(form)
-
-        dataform = dataforms.extend_form(node=form)
-
-        form_widget = DataFormWidget(dataform)
-        form_widget.connect('is-valid', self._on_is_valid)
-        form_widget.validate()
-        return form_widget
-
     def _on_page_change(self, _assistant, _page):
         if self.get_current_page() == Page.REQUEST:
-            self._con.get_module('Register').get_register_form(
-                self._agent, self._on_get_success, self._on_error)
+            self._con.get_module('Register').request_register_form(
+                self._agent, callback=self._on_register_form)
         elif self.get_current_page() == Page.SENDING:
             self._register()
             self.commit()
 
-    def _on_get_success(self, form, is_form):
-        log.info('Show Form page')
-        self._is_form = is_form
-        self._data_form_widget = self._build_dataform(form, is_form)
+    def _on_register_form(self, task):
+        try:
+            result = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
+            self.get_nth_page(Page.ERROR).set_text(error.get_text())
+            self.set_current_page(Page.ERROR)
+            return
+
+        form = result.form
+        if result.form is None:
+            form = result.fields_form
+
+        self._data_form_widget = DataFormWidget(form)
+        self._data_form_widget.connect('is-valid', self._on_is_valid)
+        self._data_form_widget.validate()
         self.get_nth_page(Page.FORM).set_form(self._data_form_widget)
         self.set_current_page(Page.FORM)
 
     def _on_is_valid(self, _widget, is_valid):
         self.set_page_complete(self.get_nth_page(Page.FORM), is_valid)
 
-    def _on_error(self, error_text, form=None, is_form=False):
-        if form is not None:
-            log.info('Show Form page')
-            self._is_form = is_form
-            self._data_form_widget = self._build_dataform(form, is_form)
-            self.get_nth_page(Page.FORM).set_form(self._data_form_widget,
-                                                  error_text=error_text)
-            self.set_current_page(Page.FORM)
-        else:
-            log.info('Show Error page')
-            self.get_nth_page(Page.ERROR).set_text(error_text)
-            self.set_current_page(Page.ERROR)
-
     def _on_cancel(self, _widget):
         self.destroy()
 
     def _register(self):
-        log.info('Show Sending page')
         form = self._data_form_widget.get_submit_form()
-        self._con.get_module('Register').register_agent(
-            self._agent,
+        self._con.get_module('Register').submit_register_form(
             form,
-            self._is_form,
-            self._on_register_success,
-            self._on_error)
+            self._agent,
+            callback=self._on_register_result)
 
-    def _on_register_success(self):
-        log.info('Show Success page')
+    def _on_register_result(self, task):
+        try:
+            task.finish()
+        except (StanzaError,
+                MalformedStanzaError,
+                RegisterStanzaError) as error:
+            self.get_nth_page(Page.ERROR).set_text(error.get_text())
+            self.set_current_page(Page.ERROR)
+            return
+
         self.set_current_page(Page.SUCCESS)
 
 
