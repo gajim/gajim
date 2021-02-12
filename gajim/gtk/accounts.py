@@ -994,6 +994,9 @@ class LoginDialog(SettingsDialog):
             Setting(SettingKind.CHANGEPASSWORD, _('Change Password'),
                     SettingType.DIALOG, callback=self.on_password_change,
                     props={'dialog': None}),
+
+            Setting(SettingKind.SWITCH, _('Use GSSAPI'),
+                    SettingType.ACCOUNT_CONFIG, 'enable_gssapi'),
             ]
 
         SettingsDialog.__init__(self, parent, _('Login Settings'),
