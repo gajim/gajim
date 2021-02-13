@@ -28,6 +28,7 @@ from nbxmpp.modules.misc import build_xhtml_body
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
+from gajim.common.regex import LINK_REGEX
 
 from .util import scroll_to_end
 
@@ -207,7 +208,7 @@ class MessageInputTextView(Gtk.TextView):
         index = 0
 
         new_text = ''
-        iterator = app.interface.link_pattern_re.finditer(text)
+        iterator = LINK_REGEX.finditer(text)
         for match in iterator:
             start, end = match.span()
             url = text[start:end]

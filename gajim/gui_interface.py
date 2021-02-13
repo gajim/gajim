@@ -33,7 +33,6 @@
 
 import os
 import sys
-import re
 import time
 import json
 import logging
@@ -101,7 +100,6 @@ from gajim.gui.dialogs import ConfirmationCheckDialog
 from gajim.gui.dialogs import InputDialog
 from gajim.gui.dialogs import PassphraseDialog
 from gajim.gui.filechoosers import FileChooserDialog
-from gajim.gui.emoji_data import emoji_data
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.filetransfer_progress import FileTransferProgress
 from gajim.gui.roster_item_exchange import RosterItemExchangeWindow
@@ -1297,112 +1295,6 @@ class Interface:
                 ctrl.scroll_to_end()
 
 ################################################################################
-### Methods dealing with emoticons
-################################################################################
-
-    @property
-    def basic_pattern_re(self):
-        if not self._basic_pattern_re:
-            self._basic_pattern_re = re.compile(self.basic_pattern,
-                re.IGNORECASE)
-        return self._basic_pattern_re
-
-    @property
-    def emot_and_basic_re(self):
-        if not self._emot_and_basic_re:
-            self._emot_and_basic_re = re.compile(
-                self.emot_and_basic, re.IGNORECASE)
-        return self._emot_and_basic_re
-
-    @property
-    def sth_at_sth_dot_sth_re(self):
-        if not self._sth_at_sth_dot_sth_re:
-            self._sth_at_sth_dot_sth_re = re.compile(self.sth_at_sth_dot_sth)
-        return self._sth_at_sth_dot_sth_re
-
-    @property
-    def invalid_XML_chars_re(self):
-        if not self._invalid_XML_chars_re:
-            self._invalid_XML_chars_re = re.compile(self.invalid_XML_chars)
-        return self._invalid_XML_chars_re
-
-    def make_regexps(self):
-        # regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
-        # one escapes the metachars with \
-        # \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
-        # \s matches any whitespace character
-        # \w any alphanumeric character
-        # \W any non-alphanumeric character
-        # \b means word boundary. This is a zero-width assertion that
-        #    matches only at the beginning or end of a word.
-        # ^ matches at the beginning of lines
-        #
-        # * means 0 or more times
-        # + means 1 or more times
-        # ? means 0 or 1 time
-        # | means or
-        # [^*] anything but '*' (inside [] you don't have to escape metachars)
-        # [^\s*] anything but whitespaces and '*'
-        # (?<!\S) is a one char lookbehind assertion and asks for any leading
-        #         whitespace
-        # and matches beginning of lines so we have correct formatting detection
-        # even if the text is just '*foo*'
-        # (?!\S) is the same thing but it's a lookahead assertion
-        # \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at
-        #                the end
-        # so http://be) will match http://be and http://be)be) will match
-        # http://be)be
-
-        self._basic_pattern_re = None
-        self._emot_and_basic_re = None
-        self._sth_at_sth_dot_sth_re = None
-        self._invalid_XML_chars_re = None
-
-        legacy_prefixes = r"((?<=\()(www|ftp)\.([A-Za-z0-9\.\-_~:/\?#\[\]@!\$"\
-            r"&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+(?=\)))"\
-            r"|((www|ftp)\.([A-Za-z0-9\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]"\
-            r"|%[A-Fa-f0-9]{2})+"\
-            r"\.([A-Za-z0-9\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+)"
-        # NOTE: it's ok to catch www.gr such stuff exist!
-
-        # FIXME: recognize xmpp: and treat it specially
-        links = r"((?<=\()[A-Za-z][A-Za-z0-9\+\.\-]*:"\
-            r"([\w\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+"\
-            r"(?=\)))|(\w[\w\+\.\-]*:([^<>\s]|%[A-Fa-f0-9]{2})+)"
-
-        # 2nd one: at_least_one_char@at_least_one_char.at_least_one_char
-        mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]'
-
-        # detects eg. *b* *bold* *bold bold* test *bold* *bold*! (*bold*)
-        # doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
-        formatting = r'|(?<!\w)' r'\*[^\s*]' r'([^*]*[^\s*])?' r'\*(?!\w)|'\
-            r'(?<!\S)' r'~[^\s~]' r'([^~]*[^\s~])?' r'~(?!\S)|'\
-            r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
-
-        basic_pattern = links + '|' + mail + '|' + legacy_prefixes
-
-        link_pattern = basic_pattern
-        self.link_pattern_re = re.compile(link_pattern, re.I | re.U)
-
-        if app.settings.get('ascii_formatting'):
-            basic_pattern += formatting
-        self.basic_pattern = basic_pattern
-
-        # because emoticons match later (in the string) they need to be after
-        # basic matches that may occur earlier
-        emoticons = emoji_data.get_regex()
-
-        self.emot_and_basic = '%s|%s' % (basic_pattern, emoticons)
-
-        # at least one character in 3 parts (before @, after @, after .)
-        self.sth_at_sth_dot_sth = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-
-        # Invalid XML chars
-        self.invalid_XML_chars = '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
-            '[\ud800-\udfff]|[\ufffe-\uffff]'
-
-
-################################################################################
 ### Methods for opening new messages controls
 ################################################################################
 
@@ -2114,15 +2006,6 @@ class Interface:
 
         self.handlers = {}
         self.roster = None
-        self._invalid_XML_chars_re = None
-        self._basic_pattern_re = None
-        self._emot_and_basic_re = None
-        self._sth_at_sth_dot_sth_re = None
-        self.link_pattern_re = None
-        self.invalid_XML_chars = None
-        self.basic_pattern = None
-        self.emot_and_basic = None
-        self.sth_at_sth_dot_sth = None
 
         self.avatar_storage = AvatarStorage()
 
@@ -2198,8 +2081,6 @@ class Interface:
         if sys.platform in ('win32', 'darwin'):
             from gajim.gui.emoji_chooser import emoji_chooser
             emoji_chooser.load()
-
-        self.make_regexps()
 
         self.last_ftwindow_update = 0
 

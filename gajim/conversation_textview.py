@@ -44,6 +44,11 @@ from gajim.common.const import StyleAttr
 from gajim.common.const import Trust
 from gajim.common.const import URI_SCHEMES
 from gajim.common.helpers import to_user_string
+from gajim.common.regex import STH_AT_STH_DOT_STH_REGEX
+from gajim.common.regex import BASIC_REGEX
+from gajim.common.regex import LINK_REGEX
+from gajim.common.regex import EMOT_AND_BASIC_REGEX
+from gajim.common.regex import EMOT_AND_LINK_REGEX
 
 from gajim.gui import util
 from gajim.gui.util import get_cursor
@@ -584,9 +589,17 @@ class ConversationTextview(GObject.GObject):
         # basic: links + mail + formatting is always checked (we like that)
         if app.settings.get('emoticons_theme') and graphics:
             # search for emoticons & urls
-            iterator = app.interface.emot_and_basic_re.finditer(otext)
-        else: # search for just urls + mail + formatting
-            iterator = app.interface.basic_pattern_re.finditer(otext)
+            if app.settings.get('ascii_formatting'):
+                regex = EMOT_AND_BASIC_REGEX
+            else:
+                regex = EMOT_AND_LINK_REGEX
+        else:
+            if app.settings.get('ascii_formatting'):
+                # search for just urls + mail + formatting
+                regex = BASIC_REGEX
+            else: # search for just urls + mail
+                regex = LINK_REGEX
+        iterator = regex.finditer(otext)
         if iter_:
             end_iter = iter_
         else:
@@ -693,7 +706,7 @@ class ConversationTextview(GObject.GObject):
             tags.append('mail')
         elif special_text.startswith('xmpp:') and not is_xhtml_link:
             tags.append('xmpp')
-        elif app.interface.sth_at_sth_dot_sth_re.match(special_text) and\
+        elif STH_AT_STH_DOT_STH_REGEX.match(special_text) and \
         not is_xhtml_link:
             # it's a JID or mail
             tags.append('sth_at_sth')
