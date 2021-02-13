@@ -220,7 +220,8 @@ class Title:
 
 class Instructions:
     def __init__(self, instructions):
-        self._label = Gtk.Label(label=instructions)
+        self._label = Gtk.Label()
+        self._label.set_markup(make_href_markup(instructions))
         self._label.set_line_wrap(True)
         self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_justify(Gtk.Justification.CENTER)
