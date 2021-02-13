@@ -14,45 +14,33 @@
 
 # XEP-0012: Last Activity
 
-import nbxmpp
-from nbxmpp.namespaces import Namespace
-from nbxmpp.structs import StanzaHandler
-
 from gajim.common import app
 from gajim.common import idle
 from gajim.common.modules.base import BaseModule
 
 
 class LastActivity(BaseModule):
+
+    _nbxmpp_extends = 'LastActivity'
+    _nbxmpp_methods = [
+        'request_last_activity',
+        'set_idle_func',
+        'disable',
+    ]
+
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
-        self.handlers = [
-            StanzaHandler(name='iq',
-                          typ='get',
-                          callback=self._answer_request,
-                          ns=Namespace.LAST),
-        ]
+    def set_enabled(self, enabled):
+        if enabled and app.is_installed('IDLE'):
+            if not app.settings.get_account_setting(self._account,
+                                                    'send_idle_time'):
+                return
 
-    def _answer_request(self, _con, stanza, properties):
-        self._log.info('Request from %s', properties.jid)
-
-        allow_send = app.settings.get_account_setting(self._account,
-                                                      'send_idle_time')
-        if app.is_installed('IDLE') and allow_send:
-            iq = stanza.buildReply('result')
-            query = iq.setQuery()
-            seconds = idle.Monitor.get_idle_sec()
-            query.attrs['seconds'] = seconds
-            self._log.info('Respond with seconds: %s', seconds)
+            self._nbxmpp('LastActivity').set_idle_func(
+                idle.Monitor.get_idle_sec)
         else:
-            iq = stanza.buildReply('error')
-            err = nbxmpp.ErrorNode(nbxmpp.ERR_SERVICE_UNAVAILABLE)
-            iq.addChild(node=err)
-
-        self._con.connection.send(iq)
-
-        raise nbxmpp.NodeProcessed
+            self._nbxmpp('LastActivity').disable()
 
 
 def get_instance(*args, **kwargs):

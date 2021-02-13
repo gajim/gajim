@@ -16,8 +16,8 @@ import logging
 from collections import namedtuple
 from datetime import timedelta
 
-import nbxmpp
 from nbxmpp.errors import StanzaError
+from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.namespaces import Namespace
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -67,7 +67,9 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         con = app.connections[account]
         con.get_module('SoftwareVersion').request_software_version(
             self.hostname, callback=self._software_version_received)
-        self.request_last_activity()
+
+        con.get_module('LastActivity').request_last_activity(
+            self.hostname, callback=self._on_last_activity)
 
         server_info = con.get_module('Discovery').server_info
         self._add_contact_addresses(server_info.dataforms)
@@ -128,13 +130,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                     account=self.account,
                     transient_for=self,
                     cert=self.cert)
-
-    def request_last_activity(self):
-        if not app.account_is_connected(self.account):
-            return
-        con = app.connections[self.account]
-        iq = nbxmpp.Iq(to=self.hostname, typ='get', queryNS=Namespace.LAST)
-        con.connection.SendAndCallForResponse(iq, self._on_last_activity)
 
     def _add_contact_addresses(self, dataforms):
         fields = {
@@ -209,28 +204,20 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         open_uri(label.get_text(), account=self.account)
         return Gdk.EVENT_STOP
 
-    def _on_last_activity(self, _nbxmpp_client, stanza):
-        if self._destroyed:
-            # Window got closed in the meantime
-            return
-        if not nbxmpp.isResultNode(stanza):
-            log.warning('Received malformed result: %s', stanza)
-            return
-        if stanza.getQueryNS() != Namespace.LAST:
-            log.warning('Wrong namespace on result: %s', stanza)
-            return
+    def _on_last_activity(self, task):
         try:
-            seconds = int(stanza.getQuery().getAttr('seconds'))
-        except (ValueError, TypeError, AttributeError):
-            log.exception('Received malformed last activity result')
-        else:
-            delta = timedelta(seconds=seconds)
-            hours = 0
-            if seconds >= 3600:
-                hours = delta.seconds // 3600
-            uptime = _('%(days)s days, %(hours)s hours') % {
-                'days': delta.days, 'hours': hours}
-            self._ui.server_uptime.set_text(uptime)
+            result = task.finish()
+        except (StanzaError, MalformedStanzaError) as error:
+            log.warning(error)
+            return
+
+        delta = timedelta(seconds=result.seconds)
+        hours = 0
+        if result.seconds >= 3600:
+            hours = delta.seconds // 3600
+        uptime = _('%(days)s days, %(hours)s hours') % {
+            'days': delta.days, 'hours': hours}
+        self._ui.server_uptime.set_text(uptime)
 
     def _software_version_received(self, task):
         try:
