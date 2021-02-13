@@ -70,12 +70,12 @@
 /* Workspace sidebar */
 .workspace-sidebar {
 	background: transparent;
-	margin-left: 12px;
+	margin-left: 6px;
 	margin-right: 6px;
 }
 .workspace-sidebar-item {
 	padding-top: 0px;
-	padding-bottom: 6px;
+	padding-bottom: 0px;
 }
 .workspace-sidebar-item:selected,
 .workspace-sidebar-item:hover {
@@ -89,8 +89,13 @@
 }
 .workspace-sidebar-item image {
 	border-radius: 9px;
-	margin-top: 6px;
-	margin-right: 6px;
+	margin: 6px;
+}
+.workspace-sidebar-item.drag-hover-top {
+    border-top: 1px solid #4e9a06;
+}
+.workspace-sidebar-item.drag-hover-bottom {
+    border-bottom: 1px solid #4e9a06;
 }
 
 /* Account sidebar */
