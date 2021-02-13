@@ -80,6 +80,8 @@ from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SHOW_LIST
+from gajim.common.regex import INVALID_XML_CHARS_REGEX
+from gajim.common.regex import STH_AT_STH_DOT_STH_REGEX
 from gajim.common.structs import URI
 
 
@@ -632,7 +634,7 @@ def get_auth_sha(sid, initiator, target):
 
 def remove_invalid_xml_chars(string_):
     if string_:
-        string_ = re.sub(app.interface.invalid_XML_chars_re, '', string_)
+        string_ = re.sub(INVALID_XML_CHARS_REGEX, '', string_)
     return string_
 
 def get_random_string(count=16):
@@ -1067,7 +1069,7 @@ def parse_uri(uri):
         uri = uri[4:]
         return URI(type=URIType.TEL, data=uri)
 
-    if app.interface.sth_at_sth_dot_sth_re.match(uri):
+    if STH_AT_STH_DOT_STH_REGEX.match(uri):
         return URI(type=URIType.AT, data=uri)
 
     if uri.startswith('geo:'):
