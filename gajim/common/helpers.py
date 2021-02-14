@@ -140,11 +140,11 @@ def puny_encode_url(url):
         _url = '//' + _url
     try:
         o = urllib.parse.urlparse(_url)
-        p_loc = idn_to_ascii(o.netloc)
+        p_loc = idn_to_ascii(o.hostname)
     except Exception:
         log.debug('urlparse failed: %s', url)
         return False
-    return url.replace(o.netloc, p_loc)
+    return url.replace(o.hostname, p_loc)
 
 def parse_resource(resource):
     """
