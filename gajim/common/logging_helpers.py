@@ -17,7 +17,11 @@
 import logging
 import os
 import sys
+import time
+from datetime import datetime
 
+from gajim.common import app
+from gajim.common import configpaths
 from gajim.common.i18n import _
 
 def parseLogLevel(arg):
@@ -136,6 +140,11 @@ def init():
     """
     Iinitialize the logging system
     """
+
+    if app.get_debug_mode():
+        _cleanup_debug_logs()
+        _redirect_output()
+
     use_color = False
     if os.name != 'nt':
         use_color = sys.stderr.isatty()
@@ -164,6 +173,12 @@ def init():
     root_log.addHandler(consoleloghandler)
     root_log.propagate = False
 
+    # GAJIM_DEBUG is set only on Windows when using Gajim-Debug.exe
+    # Gajim-Debug.exe shows a command line prompt and we want to redirect
+    # log output to it
+    if app.get_debug_mode() or os.environ.get('GAJIM_DEBUG', False):
+        set_verbose()
+
 def set_loglevels(loglevels_string):
     parseAndSetLogLevels(loglevels_string)
 
@@ -174,6 +189,25 @@ def set_verbose():
 def set_quiet():
     parseAndSetLogLevels('gajim=CRITICAL')
     parseAndSetLogLevels('.nbxmpp=CRITICAL')
+
+
+def _redirect_output():
+    debug_folder = configpaths.get('DEBUG')
+    date = datetime.today().strftime('%d%m%Y-%H%M%S')
+    filename = '%s-debug.log' % date
+    fd = open(debug_folder / filename, 'a')
+    sys.stderr = sys.stdout = fd
+
+
+def _cleanup_debug_logs():
+    debug_folder = configpaths.get('DEBUG')
+    debug_files = list(debug_folder.glob('*-debug.log*'))
+    now = time.time()
+    for file in debug_files:
+        # Delete everything older than 3 days
+        if file.stat().st_ctime < now - 259200:
+            file.unlink()
+
 
 
 # tests
