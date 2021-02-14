@@ -140,8 +140,8 @@
                 <property name="spacing">3</property>
                 <child>
                   <object class="GtkLabel" id="nick_label">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <property name="halign">start</property>
                     <property name="single-line-mode">True</property>
                     <property name="xalign">0</property>

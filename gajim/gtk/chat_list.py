@@ -140,7 +140,7 @@ class ChatList(Gtk.ListBox):
         return open_chats
 
     def update_time(self):
-        for _, row in self._chats.items():
+        for _key, row in self._chats.items():
             row.update_time()
 
     def process_event(self, event):
@@ -150,6 +150,8 @@ class ChatList(Gtk.ListBox):
             self._on_message_received(event)
         elif event.name == 'presence-received':
             self._on_presence_received(event)
+        elif event.name == 'message-sent':
+            self._on_message_sent(event)
         else:
             log.warning('Unhandled Event: %s', event.name)
 
@@ -158,9 +160,41 @@ class ChatList(Gtk.ListBox):
             return
 
         row = self._chats.get((event.account, event.jid))
-        row.set_last_message_text('Me', event.msgtxt)
+        nick = self._get_nick_for_received_message(event)
+        row.set_last_message_text(nick, event.msgtxt)
 
         self._add_unread(row, event.properties)
+
+    def _on_message_sent(self, event):
+        msgtext = event.message
+        if not msgtext:
+            return
+
+        row = self._chats.get((event.account, event.jid))
+        con = app.get_client(event.account)
+        own_jid = con.get_own_jid()
+
+        if own_jid.bare_match(event.jid):
+            nick = ''
+        else:
+            nick = _('Me: ')
+        row.set_last_message_text(nick, msgtext)
+
+    @staticmethod
+    def _get_nick_for_received_message(event):
+        nick = _('Me: ')
+        if event.properties.type.is_groupchat:
+            event_nick = event.properties.muc_nickname
+            our_nick = get_group_chat_nick(event.account, event.jid)
+            if event_nick != our_nick:
+                nick = _('%(incoming_nick)s: ') % {'incoming_nick': event_nick}
+        else:
+            con = app.get_client(event.account)
+            own_jid = con.get_own_jid()
+            if not own_jid.bare_match(event.properties.from_):
+                nick = ''
+
+        return nick
 
     def _on_presence_received(self, event):
         row = self._chats.get((event.account, event.jid))
@@ -350,4 +384,5 @@ class ChatRow(Gtk.ListBoxRow):
 
     def set_last_message_text(self, nickname, text):
         self._ui.message_label.set_text(text)
+        self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(nickname)

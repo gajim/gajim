@@ -12,6 +12,7 @@ HANDLED_EVENTS = [
     'mam-message-received',
     'gc-message-received',
     'presence-received',
+    'message-sent',
 ]
 
 
