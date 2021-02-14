@@ -17,7 +17,6 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.set_sort_func(self._sort_func)
         self.get_style_context().add_class('workspace-sidebar')
         self.add(AddWorkspace('add'))
-        self.connect('button-press-event', self._on_button_press)
         self.connect('row-activated', self._on_row_activated)
 
         chat_list_stack.connect('unread-count-changed',
@@ -41,12 +40,6 @@ class WorkspaceSideBar(Gtk.ListBox):
         if child1.sort_index == child2.sort_index:
             return 0
         return 1
-
-    def _on_button_press(self, _listbox, button_event):
-        if button_event.button != 3:
-            return
-        row = self.get_row_at_y(button_event.y)
-        WorspaceMenu(row)
 
     @staticmethod
     def _on_row_activated(_listbox, row):
@@ -146,33 +139,6 @@ class AddWorkspace(CommonWorkspace):
         image.get_style_context().add_class('dim-label')
         self.add(image)
         self.show_all()
-
-
-class WorspaceMenu(Gtk.Popover):
-    def __init__(self, row):
-        Gtk.Popover.__init__(self)
-        entries = [
-            (_('Remove'), 'remove-workspace'),
-        ]
-
-        self._workspace_id = row.workspace_id
-
-        box = Gtk.Box()
-        for label, action in entries:
-            button = Gtk.Button(label=label)
-            button.connect('clicked', self._on_click, action)
-            box.add(button)
-        box.show_all()
-
-        self.add(box)
-        self.set_relative_to(row)
-        self.popup()
-
-    def _on_click(self, _button, action):
-        self.popdown()
-        self.set_relative_to(None)
-        app.window.activate_action(action,
-                                   GLib.Variant('s', self._workspace_id))
 
 
 class WorkspaceAvatar(Gtk.Image):

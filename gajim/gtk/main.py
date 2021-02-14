@@ -27,6 +27,11 @@ from .util import open_window
 
 log = logging.getLogger('gajim.gui.main')
 
+WORKSPACE_MENU_DICT = {
+    'edit': _('Edit…'),
+    'remove': _('Remove'),
+}
+
 
 class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def __init__(self):
@@ -64,8 +69,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.right_grid.add(self._chat_stack)
 
-        self._ui.edit_workspace_button.connect(
-            'clicked', self._on_edit_workspace_clicked)
+        workspace_menu = Gio.Menu()
+        for action, label in WORKSPACE_MENU_DICT.items():
+            workspace_menu.append(label, f'win.{action.lower()}-workspace')
+
+        self._ui.workspace_menu_button.set_menu_model(workspace_menu)
+
         self._ui.start_chat_button.connect(
             'clicked', self._on_start_chat_clicked)
         self._ui.connect_signals(self)
@@ -146,7 +155,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _add_actions(self):
         actions = [
             ('add-workspace', 's', self._add_workspace),
-            ('remove-workspace', 's', self._remove_workspace),
+            ('edit-workspace', None, self._edit_workspace),
+            ('remove-workspace', None, self._remove_workspace),
             ('activate-workspace', 's', self._activate_workspace),
             ('add-chat', 'as', self._add_chat),
             ('add-group-chat', 'as', self._add_group_chat),
@@ -155,7 +165,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         for action in actions:
             action_name, variant, func = action
-            variant = GLib.VariantType.new(variant)
+            if variant is not None:
+                variant = GLib.VariantType.new(variant)
             act = Gio.SimpleAction.new(action_name, variant)
             act.connect('activate', func)
             self.add_action(act)
@@ -311,9 +322,19 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._workspace_side_bar.activate_workspace(workspace_id)
         self._chat_list_stack.show_chat_list(workspace_id)
 
-    def _remove_workspace(self, _action, param):
-        workspace_id = param.get_string()
-        self.remove_workspace(workspace_id)
+    def _edit_workspace(self, _action, _param):
+        workspace_id = self.get_active_workspace()
+        if workspace_id is not None:
+            self.edit_workspace(workspace_id)
+
+    @staticmethod
+    def edit_workspace(workspace_id):
+        open_window('WorkspaceDialog', workspace_id=workspace_id)
+
+    def _remove_workspace(self, _action, _param):
+        workspace_id = self.get_active_workspace()
+        if workspace_id is not None:
+            self.remove_workspace(workspace_id)
 
     def remove_workspace(self, workspace_id):
         was_active = self.get_active_workspace() == workspace_id
@@ -451,10 +472,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_start_chat_clicked(self, _button):
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
-
-    def _on_edit_workspace_clicked(self, _button):
-        open_window('WorkspaceDialog',
-                    workspace_id=self.get_active_workspace())
 
     def _on_event(self, event):
         if event.name == 'caps-update':
