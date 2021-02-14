@@ -360,6 +360,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._workspace_side_bar.activate_workspace(workspace_id)
         self._chat_list_stack.show_chat_list(workspace_id)
 
+    def update_workspace(self, workspace_id):
+        name = app.settings.get_workspace_setting(workspace_id, 'name')
+        self._ui.workspace_label.set_text(name)
+        app.interface.avatar_storage.invalidate_cache(workspace_id)
+        self._workspace_side_bar.update_avatar(workspace_id)
+
     def _add_group_chat(self, _action, param):
         account, jid = param.unpack()
         self.add_group_chat(account, jid)

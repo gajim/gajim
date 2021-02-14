@@ -115,9 +115,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
             app.settings.set_workspace_setting(
                 self._workspace_id, 'color', rgba.to_string())
 
-            app.interface.avatar_storage.invalidate_cache(self._workspace_id)
-            workspace_bar = app.window.get_workspace_bar()
-            workspace_bar.update_avatar(self._workspace_id)
+            app.window.update_workspace(self._workspace_id)
             self.destroy()
             return
 
