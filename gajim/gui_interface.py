@@ -1185,15 +1185,15 @@ class Interface:
         self.roster.select_contact(bb_jid, bb_account)
 
     def handle_event(self, account, fjid, type_):
+        if type_ in ('connection-lost', 'connection-failed'):
+            app.interface.roster.window.present()
+            return
+
         w = None
         ctrl = None
 
         resource = app.get_resource_from_jid(fjid)
         jid = app.get_jid_without_resource(fjid)
-
-        if type_ == 'connection-lost':
-            app.interface.roster.window.present()
-            return
 
         if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
             w = self.msg_win_mgr.get_window(jid, account)
