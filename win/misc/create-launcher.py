@@ -58,7 +58,7 @@ def build_exe(source_path, resource_path, is_gui, out_path):
     subprocess.check_call(args)
 
 
-def get_launcher_code():
+def get_launcher_code(debug):
     template = """\
 #include "Python.h"
 #define WIN32_LEAN_AND_MEAN
@@ -89,6 +89,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     PySys_SetArgvEx(__argc, szArglist, 0);
     result = PyRun_SimpleString(
         "import sys; import os;"
+        "os.environ['GAJIM_DEBUG'] = %s;"
         "sys.frozen=True;"
         "from pathlib import Path;"
         "root_path = Path(sys.executable).parents[1];"
@@ -99,7 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     Py_Finalize();
     return result;
 }
-    """
+    """ % int(debug)
 
     return template
 
@@ -153,7 +154,7 @@ END
 
 
 def build_launcher(out_path, icon_path, file_desc, product_name, product_version,
-                   company_name, is_gui):
+                   company_name, is_gui, debug=False):
 
     src_ico = os.path.abspath(icon_path)
     target = os.path.abspath(out_path)
@@ -165,7 +166,7 @@ def build_launcher(out_path, icon_path, file_desc, product_name, product_version
     try:
         os.chdir(temp)
         with open("launcher.c", "w") as h:
-            h.write(get_launcher_code())
+            h.write(get_launcher_code(debug))
         shutil.copyfile(src_ico, "launcher.ico")
         with open("launcher.rc", "w") as h:
             h.write(get_resouce_code(
@@ -196,7 +197,7 @@ def main():
     build_launcher(
         os.path.join(target, "Gajim-Debug.exe"),
         os.path.join(misc, "gajim.ico"), "Gajim", "Gajim",
-        version, company_name, False)
+        version, company_name, False, debug=True)
 
     # build_launcher(
     #     os.path.join(target, "history_manager.exe"),
