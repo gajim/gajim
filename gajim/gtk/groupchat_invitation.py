@@ -21,6 +21,7 @@ from gajim.common.helpers import get_group_chat_nick
 
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
+from .util import generate_account_badge
 
 
 class GroupChatInvitation(Gtk.ApplicationWindow):
@@ -50,9 +51,18 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
         separator = Gtk.Separator()
         contact_label = Gtk.Label(label=event.get_inviter_name())
         contact_label.get_style_context().add_class('bold16')
-        contact_label.set_halign(Gtk.Align.CENTER)
-        contact_label.set_justify(Gtk.Justification.CENTER)
         contact_label.set_line_wrap(True)
+        contact_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        contact_box.set_halign(Gtk.Align.CENTER)
+        contact_box.add(contact_label)
+
+        enabled_accounts = app.get_enabled_accounts_with_labels()
+        if len(enabled_accounts) > 1:
+            account_badge = generate_account_badge(account)
+            account_badge.set_tooltip_text(
+                _('Account: %s') % app.get_account_label(account))
+            contact_box.add(account_badge)
+
         invitation_label = Gtk.Label(
             label=_('has invited you to a group chat.\nDo you want to join?'))
         invitation_label.set_halign(Gtk.Align.CENTER)
@@ -61,7 +71,7 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
         invitation_label.set_line_wrap(True)
 
         main_box.add(separator)
-        main_box.add(contact_label)
+        main_box.add(contact_box)
         main_box.add(invitation_label)
 
         decline_button = Gtk.Button.new_with_mnemonic(_('_Decline'))
