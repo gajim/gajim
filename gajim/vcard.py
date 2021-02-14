@@ -398,10 +398,13 @@ class VcardWindow(EventHelper):
                 tt_text = _("There is no pending subscription request.")
             ask_label.set_tooltip_text(tt_text)
 
-        resources = '%s (%s)' % (self.contact.resource, str(
-            self.contact.priority))
-        uf_resources = self.contact.resource + _(' resource with priority ')\
-                + str(self.contact.priority)
+        resources = ''
+        uf_resources = ''
+        if self.contact.resource:
+            resources = '%s (%s)' % (self.contact.resource, str(
+                self.contact.priority))
+            uf_resources = self.contact.resource + _(' resource with priority ')\
+                    + str(self.contact.priority)
         if not self.contact.status:
             self.contact.status = ''
 
