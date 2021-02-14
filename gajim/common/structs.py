@@ -14,6 +14,7 @@
 
 import time
 from collections import namedtuple
+from dataclasses import dataclass
 
 from nbxmpp.protocol import JID
 
@@ -165,3 +166,27 @@ class OutgoingMessage:
     def msg_iq(self, value):
         # Backwards compatibility for plugins
         self.stanza = value
+
+
+@dataclass(frozen=True)
+class PresenceData:
+    show: str
+    status: str
+    priority: int
+    idle_time: str
+    available: bool
+
+    @classmethod
+    def from_presence(cls, properties):
+        return cls(show=properties.show,
+                   status=properties.status,
+                   priority=properties.priority,
+                   idle_time=properties.idle_timestamp,
+                   available=properties.type.is_available)
+
+
+UNKNOWN_PRESENCE = PresenceData(show=None,
+                                status='',
+                                priority=0,
+                                idle_time=0,
+                                available=False)

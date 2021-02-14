@@ -42,6 +42,7 @@ MODULES = [
     'carbons',
     'chat_markers',
     'chatstates',
+    'contacts',
     'delimiter',
     'discovery',
     'entity_time',

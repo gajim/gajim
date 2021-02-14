@@ -26,6 +26,7 @@ from gajim.common import idle
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import should_log
+from gajim.common.structs import PresenceData
 from gajim.common.const import KindConstant
 from gajim.common.const import ShowConstant
 from gajim.common.modules.base import BaseModule
@@ -57,6 +58,8 @@ class Presence(BaseModule):
                           priority=49),
         ]
 
+        self._presence_store = {}
+
         # keep the jids we auto added (transports contacts) to not send the
         # SUBSCRIBED event to GUI
         self.automatically_added = []
@@ -76,6 +79,12 @@ class Presence(BaseModule):
             return
 
         self._log.info('Received from %s', properties.jid)
+
+        presence_data = PresenceData.from_presence(properties)
+        self._presence_store[properties.jid] = presence_data
+
+        contact = self._con.get_module('Contacts').get_contact(properties.jid)
+        contact.update_presence(presence_data)
 
         if properties.type == PresenceType.ERROR:
             self._log.info('Error: %s %s', properties.jid, properties.error)

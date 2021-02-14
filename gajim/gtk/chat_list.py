@@ -296,6 +296,9 @@ class ChatRow(Gtk.ListBoxRow):
         self.conversations_label = ConversationsHeader()
         self.pinned_label = PinnedHeader()
 
+        self._contact = app.get_client(account).get_module('Contacts').get_contact(jid)
+        self._contact.connect('presence-update', self._on_presence_update)
+
         self._timestamp = None
         self._unread_count = 0
         self._pinned = pinned
@@ -385,6 +388,9 @@ class ChatRow(Gtk.ListBoxRow):
     def toggle_pinned(self):
         self._pinned = not self._pinned
 
+    def _on_presence_update(self, _contact, _signal_name):
+        self.update_avatar()
+
     def update_avatar(self):
         scale = self.get_scale_factor()
 
@@ -410,7 +416,7 @@ class ChatRow(Gtk.ListBoxRow):
                                                  contact.jid,
                                                  AvatarSize.ROSTER,
                                                  scale,
-                                                 contact.show)
+                                                 self._contact.show.value)
         else:
             avatar = app.contacts.get_avatar(self.account,
                                              self.jid,
