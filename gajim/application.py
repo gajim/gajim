@@ -554,7 +554,7 @@ class GajimApplication(Gtk.Application):
             self.set_accels_for_action(action, accels)
 
     def _on_feature_discovered(self, event):
-        if event.feature == Namespace.VCARD:
+        if event.feature == Namespace.PUBSUB:
             action = '%s-profile' % event.account
             self.lookup_action(action).set_enabled(True)
         elif event.feature == Namespace.MAM_2:
