@@ -16,8 +16,6 @@
 
 from nbxmpp.namespaces import Namespace
 
-from gajim.common import app
-from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 
 
