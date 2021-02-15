@@ -458,7 +458,7 @@ class GajimApplication(Gtk.Application):
             ('-start-chat', a.start_chat, 'online', 'as'),
             ('-add-contact', a.on_add_contact, 'online', 'as'),
             ('-services', a.on_service_disco, 'online', 's'),
-            ('-profile', a.on_profile, 'feature', 's'),
+            ('-profile', a.on_profile, 'online', 's'),
             ('-server-info', a.on_server_info, 'online', 's'),
             ('-archive', a.on_mam_preferences, 'feature', 's'),
             ('-pep-config', a.on_pep_config, 'online', 's'),
@@ -554,10 +554,7 @@ class GajimApplication(Gtk.Application):
             self.set_accels_for_action(action, accels)
 
     def _on_feature_discovered(self, event):
-        if event.feature == Namespace.PUBSUB:
-            action = '%s-profile' % event.account
-            self.lookup_action(action).set_enabled(True)
-        elif event.feature == Namespace.MAM_2:
+        if event.feature == Namespace.MAM_2:
             action = '%s-archive' % event.account
             self.lookup_action(action).set_enabled(True)
         elif event.feature == Namespace.BLOCKING:
