@@ -231,7 +231,7 @@ class CropArea(Gtk.DrawingArea):
         width = min(self._crop.width, width - self._crop.x)
         height = min(self._crop.height, height - self._crop.y)
 
-        if width <= 0 or height <=0:
+        if width <= 0 or height <= 0:
             return None
 
         return GdkPixbuf.Pixbuf.new_subpixbuf(
@@ -661,7 +661,7 @@ class CropArea(Gtk.DrawingArea):
             # Prevent division by zero
             return 0
 
-        decision_slope = float(bounds_y - center_y) / (bounds_x - center_x)
+        decision_slope = slope_y / slope_x
         decision_intercept = - float(decision_slope * bounds_x)
         return int(decision_slope * user_x + decision_intercept)
 
