@@ -77,7 +77,6 @@ class AvatarSelector(Gtk.Box):
 
         self._crop_area = CropArea()
         self._crop_area.set_vexpand(True)
-        # self._crop_area.set_min_size(200, 200)
         self.add(self._crop_area)
 
         self._helper_label = Gtk.Label(
@@ -145,7 +144,7 @@ class AvatarSelector(Gtk.Box):
     def get_avatar_bytes(self):
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
-            return None
+            return False, None, 0, 0
         scaled, width, height = self._scale_for_publish(pixbuf)
 
         success, data = scaled.save_to_bufferv('png', [], [])
@@ -176,8 +175,8 @@ class CropArea(Gtk.DrawingArea):
         self._active_region = Loc.OUTSIDE
         self._last_press_x = -1
         self._last_press_y = -1
-        self._base_width = 100
-        self._base_height = 100
+        self._base_width = 10
+        self._base_height = 10
         self._aspect = float(1.0)
 
         self.set_size_request(self._base_width, self._base_height)
@@ -212,8 +211,8 @@ class CropArea(Gtk.DrawingArea):
 
         self._crop.width = 2 * self._base_width
         self._crop.height = 2 * self._base_height
-        self._crop.x = (width - self._crop.width) / 2
-        self._crop.y = (height - self._crop.height) / 2
+        self._crop.x = abs((width - self._crop.width) / 2)
+        self._crop.y = abs((height - self._crop.height) / 2)
 
         self._scale = 0.0
         self._image.x = 0
@@ -231,6 +230,9 @@ class CropArea(Gtk.DrawingArea):
         height = self._browse_pixbuf.get_height()
         width = min(self._crop.width, width - self._crop.x)
         height = min(self._crop.height, height - self._crop.y)
+
+        if width <= 0 or height <=0:
+            return None
 
         return GdkPixbuf.Pixbuf.new_subpixbuf(
             self._browse_pixbuf, self._crop.x, self._crop.y, width, height)
@@ -653,6 +655,12 @@ class CropArea(Gtk.DrawingArea):
 
     @staticmethod
     def _eval_radial_line(center_x, center_y, bounds_x, bounds_y, user_x):
+        slope_y = float(bounds_y - center_y)
+        slope_x = bounds_x - center_x
+        if slope_y == 0 or slope_x == 0:
+            # Prevent division by zero
+            return 0
+
         decision_slope = float(bounds_y - center_y) / (bounds_x - center_x)
         decision_intercept = - float(decision_slope * bounds_x)
         return int(decision_slope * user_x + decision_intercept)

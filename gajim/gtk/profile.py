@@ -17,6 +17,7 @@ from gajim.common.i18n import Q_
 
 from gajim.gui.avatar import clip_circle
 from gajim.gui.avatar_selector import AvatarSelector
+from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.filechoosers import AvatarChooserDialog
 from gajim.gui.util import get_builder
 from gajim.gui.vcard_grid import VCardGrid
@@ -276,12 +277,16 @@ class ProfileWindow(Gtk.ApplicationWindow):
     def _on_update_avatar(self, _button):
         success, data, width, height = self._avatar_selector.get_avatar_bytes()
         if not success:
-            # TODO: Error handling
+            self._ui.profile_stack.set_visible_child_name('profile')
+            ErrorDialog(_('Error while processing image'),
+                        _('Failed to generate avatar.'))
             return
 
         sha = app.interface.avatar_storage.save_avatar(data)
         if sha is None:
-            # TODO: Error handling
+            self._ui.profile_stack.set_visible_child_name('profile')
+            ErrorDialog(_('Error while processing image'),
+                        _('Failed to generate avatar.'))
             return
 
         self._new_avatar = Avatar()
