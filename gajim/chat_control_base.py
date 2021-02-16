@@ -178,6 +178,16 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.conv_textview.tv.connect('key-press-event',
                                       self._on_conv_textview_key_press_event)
 
+        # This is a workaround: as soon as a line break occurs in Gtk.TextView
+        # with word-char wrapping enabled, a hyphen character is automatically
+        # inserted before the line break. This triggers the hscrollbar to show,
+        # see: https://gitlab.gnome.org/GNOME/gtk/-/issues/2384
+        # Using set_hscroll_policy(Gtk.Scrollable.Policy.NEVER) would cause bad
+        # performance during resize, and prevent the window from being shrinked
+        # horizontally under certain conditions (applies to GroupchatControl)
+        hscrollbar = self.xml.conversation_scrolledwindow.get_hscrollbar()
+        hscrollbar.hide()
+
         self.xml.conversation_scrolledwindow.add(self.conv_textview.tv)
         widget = self.xml.conversation_scrolledwindow.get_vadjustment()
         widget.connect('changed', self.on_conversation_vadjustment_changed)
