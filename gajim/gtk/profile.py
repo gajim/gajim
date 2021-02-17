@@ -236,8 +236,10 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         else:
             # Only update avatar if it changed
-            con.get_module('UserAvatar').set_avatar(self._new_avatar,
-                                                    public=public)
+            con.get_module('UserAvatar').set_avatar(
+                self._new_avatar,
+                public=public,
+                callback=self._on_set_avatar)
 
         nick = GLib.markup_escape_text(self._ui.nickname_entry.get_text())
         con.get_module('UserNickname').set_nickname(nick, public=public)
@@ -246,6 +248,28 @@ class ProfileWindow(Gtk.ApplicationWindow):
             nick = app.settings.get_account_setting(
                 self.account, 'name')
         app.nicks[self.account] = nick
+
+    def _on_set_avatar(self, task):
+        try:
+            task.finish()
+        except StanzaError as error:
+            if self._new_avatar is None:
+                # Trying to remove the avatar but the node does not exist
+                if error.condition == 'item-not-found':
+                    return
+
+            title = _('Error while uploading avatar')
+            text = error.get_text()
+
+            if (error.condition == 'not-acceptable' and
+                    error.app_condition == 'payload-too-big'):
+                text = _('Avatar file size too big')
+
+            ErrorDialog(title, text)
+
+            self._ui.avatar_image.set_from_surface(self._current_avatar)
+            self._new_avatar = False
+            return
 
     def _on_remove_avatar(self, _button):
         contact = app.contacts.create_contact(self._jid, self.account)
