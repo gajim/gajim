@@ -39,6 +39,7 @@ class UserActivity(BaseModule):
         self._register_pubsub_handler(self._activity_received)
 
         self._current_activity = None
+        self._activities = {}
 
     def get_current_activity(self):
         return self._current_activity
@@ -49,19 +50,10 @@ class UserActivity(BaseModule):
             return
 
         data = properties.pubsub_event.data
-        for contact in app.contacts.get_contacts(self._account,
-                                                 str(properties.jid)):
-            if data is not None:
-                contact.pep[PEPEventType.ACTIVITY] = data
-            else:
-                contact.pep.pop(PEPEventType.ACTIVITY, None)
-
         if properties.is_self_message:
-            if data is not None:
-                self._con.pep[PEPEventType.ACTIVITY] = data
-            else:
-                self._con.pep.pop(PEPEventType.ACTIVITY, None)
             self._current_activity = data
+        else:
+            self._activities[properties.jid] = data
 
         app.nec.push_incoming_event(
             NetworkEvent('activity-received',

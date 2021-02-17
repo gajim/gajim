@@ -413,7 +413,7 @@ class GajimRemote(Server):
         """
         connected_account = None
         contact = None
-        accounts = app.contacts.get_accounts()
+        accounts = app.settings.get_active_accounts()
         # if there is only one account in roster, take it as default
         # if user did not ask for account
         if not account and len(accounts) == 1:
@@ -442,7 +442,7 @@ class GajimRemote(Server):
         or check if the given account is connected to the groupchat
         """
         connected_account = None
-        accounts = app.contacts.get_accounts()
+        accounts = app.settings.get_active_accounts()
         # if there is only one account in roster, take it as default
         # if user did not ask for account
         if not account and len(accounts) == 1:
@@ -628,7 +628,7 @@ class GajimRemote(Server):
                           message)
         else:
             # account not specified, so change the status of all accounts
-            for acc in app.contacts.get_accounts():
+            for acc in app.settings.get_active_accounts():
                 if not app.settings.get_account_setting(
                         acc, 'sync_with_global_status'):
                     continue
@@ -654,7 +654,7 @@ class GajimRemote(Server):
             GLib.idle_add(app.connections[account].change_status, show, status)
         else:
             # account not specified, so change prio of all accounts
-            for acc in app.contacts.get_accounts():
+            for acc in app.settings.get_active_accounts():
                 if not app.account_is_available(acc):
                     continue
                 if not app.settings.get_account_setting(
@@ -679,7 +679,7 @@ class GajimRemote(Server):
         """
         List register accounts
         """
-        result = app.contacts.get_accounts()
+        result = app.settings.get_active_accounts()
         result_array = []
         if result:
             for account in result:
@@ -709,7 +709,7 @@ class GajimRemote(Server):
         then return the contacts for the specified account
         """
         result = []
-        accounts = app.contacts.get_accounts()
+        accounts = app.settings.get_active_accounts()
         if not accounts:
             return result
         if account:
@@ -740,7 +740,7 @@ class GajimRemote(Server):
 
     def remove_contact(self, jid, account):
         jid = self._get_real_jid(jid, account)
-        accounts = app.contacts.get_accounts()
+        accounts = app.settings.get_active_accounts()
 
         # if there is only one account in roster, take it as default
         if account:
@@ -839,7 +839,7 @@ class GajimRemote(Server):
         if account:
             app.connections[account].send_stanza(str(xml))
         else:
-            for acc in app.contacts.get_accounts():
+            for acc in app.settings.get_active_accounts():
                 app.connections[acc].send_stanza(str(xml))
 
     def join_room(self, room_jid, password, account):

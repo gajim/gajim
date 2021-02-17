@@ -32,7 +32,6 @@ from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
 from nbxmpp.const import Affiliation
-from nbxmpp.const import PresenceType
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.vcard_temp import VCard
 
@@ -45,13 +44,11 @@ from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim.vcard import VcardWindow
 
-from gajim.common import events
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.helpers import event_filter
 from gajim.common.helpers import to_user_string
-from gajim.common.helpers import allow_popup_window
 from gajim.common.const import AvatarSize
 
 from gajim.common.i18n import _
@@ -89,7 +86,36 @@ class GroupchatControl(ChatControlBase):
     # will be processed with this command host.
     COMMAND_HOST = GroupChatCommands
 
-    def __init__(self, parent_win, contact, muc_data, acct):
+    def __init__(self, parent_win, jid, muc_data, acct):
+
+        contact = app.get_client(acct).get_module('Contacts').get_contact(
+            jid, groupchat=True)
+        contact.multi_connect({
+            'avatar-update': self._on_avatar_update,
+            'user-joined': self._on_user_joined,
+            'user-left': self._on_user_left,
+            'user-affiliation-changed': self._on_user_affiliation_changed,
+            'user-role-changed': self._on_user_role_changed,
+            'user-status-show-changed': self._on_user_status_show_changed,
+            'user-nickname-changed': self._on_user_nickname_changed,
+            'room-kicked': self._on_room_kicked,
+            'room-destroyed': self._on_room_destroyed,
+            'room-config-finished': self._on_room_config_finished,
+            'room-config-failed': self._on_room_config_failed,
+            'room-config-changed': self._on_room_config_changed,
+            'room-password-required': self._on_room_password_required,
+            'room-creation-failed': self._on_room_creation_failed,
+            'room-presence-error': self._on_room_presence_error,
+            'room-voice-request': self._on_room_voice_request,
+            'room-captcha-challenge': self._on_room_captcha_challenge,
+            'room-captcha-error': self._on_room_captcha_error,
+            'room-subject': self._on_room_subject,
+            'room-joined': self._on_room_joined,
+            'room-join-failed': self._on_room_join_failed,
+        })
+
+        # contact.connect('user-avatar-update', self._on_user_avatar_update)
+
         ChatControlBase.__init__(self,
                                  parent_win,
                                  'groupchat_control',
@@ -100,8 +126,7 @@ class GroupchatControl(ChatControlBase):
 
         self.toggle_emoticons()
 
-        self.room_jid = self.contact.jid
-        # self._muc_data = muc_data
+        self.room_jid = str(self.contact.jid)
 
         # Stores nickname we want to kick
         self._kick_nick = None
@@ -319,13 +344,10 @@ class GroupchatControl(ChatControlBase):
             self.parent_win.window.add_action(act)
 
     def update_actions(self, *args):
-        if self.parent_win is None:
+        if self._muc_data is None:
             return
 
-        # TODO
-        return
-        contact = app.contacts.get_gc_contact(
-            self.account, self.room_jid, self.nick)
+        contact = self.contact.get_resource(self.nick)
         con = app.connections[self.account]
 
         self._get_action('request-voice-').set_enabled(
@@ -435,11 +457,7 @@ class GroupchatControl(ChatControlBase):
             self.conv_textview.print_empty_line()
 
     def _is_subject_change_allowed(self):
-        contact = app.contacts.get_gc_contact(
-            self.account, self.room_jid, self.nick)
-        if contact is None:
-            return False
-
+        contact = self.contact.get_resource(self.nick)
         if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
             return True
 
@@ -478,7 +496,7 @@ class GroupchatControl(ChatControlBase):
         self._muc_info_box.set_from_disco_info(self.disco_info)
         if self._subject_data is not None:
             self._muc_info_box.set_subject(self._subject_data.subject)
-            self._muc_info_box.set_author(self._subject_data.nickname,
+            self._muc_info_box.set_author(self._subject_data.muc_nickname,
                                           self._subject_data.user_timestamp)
         self._show_page('muc-info')
 
@@ -582,12 +600,12 @@ class GroupchatControl(ChatControlBase):
             win.present()
             return
 
-        contact = app.contacts.get_gc_contact(
-            self.account, self.room_jid, self.nick)
+        contact = self.contact.get_resource(self.nick)
         if contact.affiliation.is_owner:
             con = app.connections[self.account]
             con.get_module('MUC').request_config(
                 self.room_jid, callback=self._on_configure_form_received)
+
         elif contact.affiliation.is_admin:
             GroupchatConfig(self.account,
                             self.room_jid,
@@ -669,16 +687,15 @@ class GroupchatControl(ChatControlBase):
 
     def _on_contact_information(self, _action, param):
         nick = param.get_string()
-        gc_contact = app.contacts.get_gc_contact(self.account,
-                                                 self.room_jid,
-                                                 nick)
-        contact = gc_contact.as_contact()
+
+        contact = self.contact.get_resource(nick)
+
         if contact.jid in app.interface.instances[self.account]['infos']:
             app.interface.instances[self.account]['infos'][contact.jid].\
                 window.present()
         else:
             app.interface.instances[self.account]['infos'][contact.jid] = \
-                VcardWindow(contact, self.account, gc_contact)
+                VcardWindow(contact, self.account, contact)
 
     def _on_kick(self, _action, param):
         nick = param.get_string()
@@ -740,86 +757,21 @@ class GroupchatControl(ChatControlBase):
             self.last_msg_id = None
 
     def _on_roster_row_activated(self, _roster, nick):
-        gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
         muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
         if not self.is_anonymous and muc_prefer_direct_msg:
-            jid = app.get_jid_without_resource(gc_c.jid)
-            app.window.add_chat(self.account, jid, 'contact', select=True)
+            app.window.add_chat(self.account,
+                                self.contact.jid,
+                                'contact',
+                                select=True)
         else:
-            app.window.add_private_chat(self.account, gc_c.get_full_jid())
+            contact = self.contact.get_resource(nick)
+            app.window.add_private_chat(self.account, contact.jid)
 
-    def on_msg_textview_populate_popup(self, textview, menu):
-        """
-        Override the default context menu and we prepend Clear
-        and the ability to insert a nick
-        """
-        ChatControlBase.on_msg_textview_populate_popup(self, textview, menu)
-        item = Gtk.SeparatorMenuItem.new()
-        menu.prepend(item)
-
-        item = Gtk.MenuItem.new_with_label(_('Insert Nickname'))
-        menu.prepend(item)
-        submenu = Gtk.Menu()
-        item.set_submenu(submenu)
-
-        nicks = app.contacts.get_nick_list(self.account, self.room_jid)
-        nicks.sort()
-        for nick in nicks:
-            item = Gtk.MenuItem.new_with_label(nick)
-            item.set_use_underline(False)
-            submenu.append(item)
-            id_ = item.connect('activate',
-                               self.append_nick_in_msg_textview, nick)
-            self.handlers[id_] = item
-
-        menu.show_all()
-
-    def get_tab_label(self, chatstate):
-        """
-        Markup the label if necessary. Returns a tuple such as: (new_label_str,
-        color) either of which can be None if chatstate is given that means we
-        have HE SENT US a chatstate
-        """
-
-        has_focus = self.parent_win.window.get_property('has-toplevel-focus')
-        current_tab = self.parent_win.get_active_control() == self
-        color = None
-        if chatstate == 'attention' and (not has_focus or not current_tab):
-            self.attention_flag = True
-            color = 'tab-muc-directed-msg'
-        elif chatstate == 'active' or (current_tab and has_focus):
-            self.attention_flag = False
-            # get active color from gtk
-            color = 'active'
-        elif chatstate == 'newmsg' and (not has_focus or not current_tab) \
-        and not self.attention_flag:
-            color = 'tab-muc-msg'
-
-        label_str = GLib.markup_escape_text(self.room_name)
-
-        # count waiting highlighted messages
-        unread = ''
-        num_unread = self.get_nb_unread()
-        if num_unread == 1:
-            unread = '*'
-        elif num_unread > 1:
-            unread = '[' + str(num_unread) + ']'
-        label_str = unread + label_str
-        return (label_str, color)
-
-    def get_tab_image(self):
-        return app.interface.avatar_storage.get_muc_surface(
-            self.account,
-            self.contact.jid,
-            AvatarSize.ROSTER,
-            self.scale_factor)
+    def _on_avatar_update(self, _contact, _signal_name):
+        self._update_avatar()
 
     def _update_avatar(self):
-        surface = app.interface.avatar_storage.get_muc_surface(
-            self.account,
-            self.contact.jid,
-            AvatarSize.CHAT,
-            self.scale_factor)
+        surface = self.contact.get_avatar(AvatarSize.CHAT, self.scale_factor)
         self.xml.avatar_image.set_from_surface(surface)
 
     def draw_banner_text(self):
@@ -827,10 +779,7 @@ class GroupchatControl(ChatControlBase):
         Draw the text in the fat line at the top of the window that houses the
         room jid
         """
-        self.xml.banner_name_label.set_text(self.room_name)
-
-    def _on_update_room_avatar(self, _event):
-        self._update_avatar()
+        self.xml.banner_name_label.set_text(self.contact.name)
 
     def _on_update_gc_avatar(self, event):
         self.roster.process_avatar_update(event)
@@ -838,16 +787,19 @@ class GroupchatControl(ChatControlBase):
     def _on_bookmarks_received(self, _event):
         self.draw_banner_text()
 
-    def _on_muc_voice_request(self, event):
+    def _on_room_voice_request(self, _contact, _signal_name, properties):
+        voice_request = properties.voice_request
+
         def on_approve():
             con = app.connections[self.account]
             con.get_module('MUC').approve_voice_request(self.room_jid,
-                                                        event.voice_request)
+                                                        voice_request)
+
         ConfirmationDialog(
             _('Voice Request'),
             _('Voice Request'),
             _('<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice') % {
-                'nick': event.voice_request.nick, 'room_name': self.room_name},
+                'nick': voice_request.nick, 'room_name': self.room_name},
             [DialogButton.make('Cancel'),
              DialogButton.make('Accept',
                                text=_('_Approve'),
@@ -944,23 +896,6 @@ class GroupchatControl(ChatControlBase):
                                     stanza_id=stanza_id,
                                     additional_data=additional_data)
 
-    def get_nb_unread(self):
-        type_events = ['printed_marked_gc_msg']
-        if self.contact.can_notify():
-            type_events.append('printed_gc_msg')
-        nb = len(app.events.get_events(self.account,
-                                       self.room_jid,
-                                       type_events))
-        nb += self.get_nb_unread_pm()
-        return nb
-
-    def get_nb_unread_pm(self):
-        nb = 0
-        for nick in app.contacts.get_nick_list(self.account, self.room_jid):
-            nb += len(app.events.get_events(self.account, self.room_jid + \
-                '/' + nick, ['pm']))
-        return nb
-
     def highlighting_for_message(self, text, tim):
         """
         Returns a 2-Tuple. The first says whether or not to highlight the text,
@@ -968,7 +903,9 @@ class GroupchatControl(ChatControlBase):
         """
         highlight, sound = None, None
 
-        notify = self.contact.can_notify()
+        # notify = self.contact.can_notify()
+        # TODO
+        notify = False
         sound_enabled = app.settings.get_soundevent_settings(
             'muc_message_received')['enabled']
 
@@ -1030,56 +967,60 @@ class GroupchatControl(ChatControlBase):
                 found_here = text.find(special_word, start)
         return False
 
-    def _on_muc_subject(self, event):
-        if self.subject == event.subject or event.is_fake:
+    def _on_room_subject(self, _contact, _signal_name, properties):
+        if self.subject == properties.subject:
             # Probably a rejoin, we already showed that subject
             return
 
-        self._subject_data = event
+        self._subject_data = properties
 
         text = _('%(nick)s has set the subject to %(subject)s') % {
-            'nick': event.nickname, 'subject': event.subject}
+            'nick': properties.muc_nickname, 'subject': properties.subject}
 
-        if event.user_timestamp:
-            date = time.strftime('%c', time.localtime(event.user_timestamp))
+        if properties.user_timestamp:
+            date = time.strftime('%c',
+                                 time.localtime(properties.user_timestamp))
             text = '%s - %s' % (text, date)
 
         if (app.settings.get('show_subject_on_join') or
                 self._muc_data.state != MUCJoinedState.JOINING):
             self.add_info_message(text)
 
-    def _on_muc_config_changed(self, event):
+    def _on_room_config_changed(self, _contact, _signal_name, properties):
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+
+        status_codes = properties.muc_status_codes
+
         changes = []
-        if StatusCode.SHOWING_UNAVAILABLE in event.status_codes:
+        if StatusCode.SHOWING_UNAVAILABLE in status_codes:
             changes.append(_('Group chat now shows unavailable members'))
 
-        if StatusCode.NOT_SHOWING_UNAVAILABLE in event.status_codes:
+        if StatusCode.NOT_SHOWING_UNAVAILABLE in status_codes:
             changes.append(_('Group chat now does not show '
                              'unavailable members'))
 
-        if StatusCode.CONFIG_NON_PRIVACY_RELATED in event.status_codes:
+        if StatusCode.CONFIG_NON_PRIVACY_RELATED in status_codes:
             changes.append(_('A setting not related to privacy has been '
                              'changed'))
             app.connections[self.account].get_module('Discovery').disco_muc(
                 self.room_jid)
 
-        if StatusCode.CONFIG_ROOM_LOGGING in event.status_codes:
+        if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Conversations are stored on the server'))
 
-        if StatusCode.CONFIG_NO_ROOM_LOGGING in event.status_codes:
+        if StatusCode.CONFIG_NO_ROOM_LOGGING in status_codes:
             changes.append(_('Conversations are not stored on the server'))
 
-        if StatusCode.CONFIG_NON_ANONYMOUS in event.status_codes:
+        if StatusCode.CONFIG_NON_ANONYMOUS in status_codes:
             changes.append(_('Group chat is now non-anonymous'))
             self.is_anonymous = False
 
-        if StatusCode.CONFIG_SEMI_ANONYMOUS in event.status_codes:
+        if StatusCode.CONFIG_SEMI_ANONYMOUS in status_codes:
             changes.append(_('Group chat is now semi-anonymous'))
             self.is_anonymous = True
 
-        if StatusCode.CONFIG_FULL_ANONYMOUS in event.status_codes:
+        if StatusCode.CONFIG_FULL_ANONYMOUS in status_codes:
             changes.append(_('Group chat is now fully anonymous'))
             self.is_anonymous = True
 
@@ -1132,14 +1073,19 @@ class GroupchatControl(ChatControlBase):
     #     if message is not None:
     #         ctrl.send_message(message)
 
-    def _on_muc_self_presence(self, event):
-        nick = event.properties.muc_nickname
-        status_codes = event.properties.muc_status_codes or []
+    def _on_user_joined(self, _contact, _signal_name, user_contact, properties):
+        nick = user_contact.name
+        if not properties.is_muc_self_presence:
+
+            if self.is_connected and self.contact.settings.get('print_join_left'):
+                self.add_info_message(_('%s has joined the group chat') % nick)
+            return
+
+        status_codes = properties.muc_status_codes or []
 
         if not self.is_connected:
             # We just joined the room
             self.add_info_message(_('You (%s) joined the group chat') % nick)
-            self.roster.add_contact(nick)
 
         if StatusCode.NON_ANONYMOUS in status_codes:
             self.add_info_message(
@@ -1157,20 +1103,20 @@ class GroupchatControl(ChatControlBase):
         # Update Actions
         self.update_actions()
 
-    def _on_muc_configuration_finished(self, _event):
+    def _on_room_config_finished(self, _contact, _signal_name):
         self.got_connected()
         self._show_page('groupchat')
         self.add_info_message(_('A new group chat has been created'))
 
-    def _on_muc_configuration_failed(self, event):
+    def _on_room_config_failed(self, _contact, _signal_name, error):
         self.xml.error_heading.set_text(_('Failed to Configure Group Chat'))
-        self.xml.error_label.set_text(to_user_string(event.error))
+        self.xml.error_label.set_text(to_user_string(error))
         self._show_page('error')
 
-    def _on_muc_nickname_changed(self, event):
-        nick = event.properties.muc_nickname
-        new_nick = event.properties.muc_user.nick
-        if event.properties.is_muc_self_presence:
+    def _on_user_nickname_changed(self, _contact, _signal_name, user_contact, properties):
+        nick = user_contact.name
+        new_nick = properties.muc_user.nick
+        if properties.is_muc_self_presence:
             self._nick_completion.change_nick(new_nick)
             message = _('You are now known as %s') % new_nick
         else:
@@ -1186,20 +1132,22 @@ class GroupchatControl(ChatControlBase):
                 tv.last_received_message_id[nick]
             del tv.last_received_message_id[nick]
 
-        self.roster.remove_contact(nick)
-        self.roster.add_contact(new_nick)
 
-    def _on_muc_user_status_show_changed(self, event):
-        nick = event.properties.muc_nickname
-        status = event.properties.status
-        status = '' if status is None else ' - %s' % status
-        show = helpers.get_uf_show(event.properties.show.value)
+    def _on_user_status_show_changed(self,
+                                     _contact,
+                                     _signal_name,
+                                     user_contact,
+                                     properties):
 
         if not self.contact.settings.get('print_status'):
-            self.roster.draw_contact(nick)
             return
 
-        if event.properties.is_muc_self_presence:
+        nick = user_contact.name
+        status = user_contact.status
+        status = '' if status is None else ' - %s' % status
+        show = helpers.get_uf_show(user_contact.show.value)
+
+        if properties.is_muc_self_presence:
             message = _('You are now {show}{status}').format(show=show,
                                                              status=status)
 
@@ -1208,20 +1156,22 @@ class GroupchatControl(ChatControlBase):
                                                                show=show,
                                                                status=status)
         self.add_status_message(message)
-        self.roster.draw_contact(nick)
 
-    def _on_muc_affiliation_changed(self, event):
-        affiliation = helpers.get_uf_affiliation(
-            event.properties.affiliation)
-        nick = event.properties.muc_nickname
-        reason = event.properties.muc_user.reason
+    def _on_user_affiliation_changed(self,
+                                     _contact,
+                                     _signal_name,
+                                     user_contact,
+                                     properties):
+        affiliation = helpers.get_uf_affiliation(user_contact.affiliation)
+        nick = user_contact.name
+        reason = properties.muc_user.reason
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
 
-        actor = event.properties.muc_user.actor
+        actor = properties.muc_user.actor
         #Group Chat: You have been kicked by Alice
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
-        if event.properties.is_muc_self_presence:
+        if properties.is_muc_self_presence:
             message = _('** Your Affiliation has been set to '
                         '{affiliation}{actor}{reason}').format(
                             affiliation=affiliation,
@@ -1236,21 +1186,23 @@ class GroupchatControl(ChatControlBase):
                             reason=reason)
 
         self.add_info_message(message)
-        self.roster.remove_contact(nick)
-        self.roster.add_contact(nick)
         self.update_actions()
 
-    def _on_muc_user_role_changed(self, event):
-        role = helpers.get_uf_role(event.properties.role)
-        nick = event.properties.muc_nickname
-        reason = event.properties.muc_user.reason
+    def _on_user_role_changed(self,
+                              _contact,
+                              _signal_name,
+                              user_contact,
+                              properties):
+        role = helpers.get_uf_role(user_contact.role)
+        nick = user_contact.name
+        reason = properties.muc_user.reason
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
 
-        actor = event.properties.muc_user.actor
+        actor = properties.muc_user.actor
         #Group Chat: You have been kicked by Alice
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
-        if event.properties.is_muc_self_presence:
+        if properties.is_muc_self_presence:
             message = _('** Your Role has been set to '
                         '{role}{actor}{reason}').format(role=role,
                                                         actor=actor,
@@ -1263,17 +1215,15 @@ class GroupchatControl(ChatControlBase):
                                                         reason=reason)
 
         self.add_info_message(message)
-        self.roster.remove_contact(nick)
-        self.roster.add_contact(nick)
         self.update_actions()
 
-    def _on_muc_self_kicked(self, event):
-        status_codes = event.properties.muc_status_codes or []
+    def _on_room_kicked(self, _contact, _signal_name, properties):
+        status_codes = properties.muc_status_codes or []
 
-        reason = event.properties.muc_user.reason
+        reason = properties.muc_user.reason
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
 
-        actor = event.properties.muc_user.actor
+        actor = properties.muc_user.actor
         #Group Chat: You have been kicked by Alice
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
@@ -1324,14 +1274,14 @@ class GroupchatControl(ChatControlBase):
         # Update Actions
         self.update_actions()
 
-    def _on_muc_user_left(self, event):
-        status_codes = event.properties.muc_status_codes or []
-        nick = event.properties.muc_nickname
+    def _on_user_left(self, _contact, _signal_name, user_contact, properties):
+        status_codes = properties.muc_status_codes or []
+        nick = user_contact.name
 
-        reason = event.properties.muc_user.reason
+        reason = properties.muc_user.reason
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
 
-        actor = event.properties.muc_user.actor
+        actor = properties.muc_user.actor
         #Group Chat: You have been kicked by Alice
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
@@ -1379,43 +1329,33 @@ class GroupchatControl(ChatControlBase):
                                                           reason=reason)
             self.add_info_message(message)
 
-        self.roster.remove_contact(nick)
-        self.roster.draw_groups()
-
-    def _on_muc_joined(self, _event):
+    def _on_room_joined(self, _contact, _signal_name):
         self.got_connected()
         self._show_page('groupchat')
 
-    def _on_muc_user_joined(self, event):
-        nick = event.properties.muc_nickname
-        self.roster.add_contact(nick)
-
-        if self.is_connected and self.contact.settings.get('print_join_left'):
-            self.add_info_message(_('%s has joined the group chat') % nick)
-
-    def _on_muc_password_required(self, _event):
+    def _on_room_password_required(self, _contact, _signal_name, _properties):
         self._show_page('password')
 
-    def _on_muc_join_failed(self, event):
+    def _on_room_join_failed(self, _contact, _signal_name, error):
         con = app.connections[self.account]
         if con.get_module('Bookmarks').is_bookmark(self.room_jid):
             self.xml.remove_bookmark_button.show()
 
         self.xml.error_heading.set_text(_('Failed to Join Group Chat'))
-        self.xml.error_label.set_text(to_user_string(event.error))
+        self.xml.error_label.set_text(to_user_string(error))
         self._show_page('error')
 
-    def _on_muc_creation_failed(self, event):
+    def _on_room_creation_failed(self, _contact, _signal_name, properties):
         self.xml.error_heading.set_text(_('Failed to Create Group Chat'))
-        self.xml.error_label.set_text(to_user_string(event.error))
+        self.xml.error_label.set_text(to_user_string(properties.error))
         self._show_page('error')
 
-    def _on_muc_presence_error(self, event):
-        error_message = to_user_string(event.properties.error)
+    def _on_room_presence_error(self, _contact, _signal_name, properties):
+        error_message = to_user_string(properties.error)
         self.add_info_message('Error: %s' % error_message)
 
-    def _on_muc_destroyed(self, event):
-        destroyed = event.properties.muc_destroyed
+    def _on_room_destroyed(self, _contact, _signal_name, properties):
+        destroyed = properties.muc_destroyed
 
         reason = destroyed.reason
         reason = '' if reason is None else ': %s' % reason
@@ -1501,6 +1441,7 @@ class GroupchatControl(ChatControlBase):
 
     def shutdown(self, reason=None):
         app.settings.disconnect_signals(self)
+        self.contact.disconnect(self)
 
         # PluginSystem: removing GUI extension points connected with
         # GrouphatControl instance object
@@ -1508,6 +1449,7 @@ class GroupchatControl(ChatControlBase):
             'groupchat_control', self)
 
         # They can already be removed by the destroy function
+        # TODO remove
         if self.room_jid in app.contacts.get_gc_list(self.account):
             app.contacts.remove_room(self.account, self.room_jid)
             del app.gc_connected[self.account][self.room_jid]
@@ -1641,8 +1583,7 @@ class GroupchatControl(ChatControlBase):
                 self.nick_hits.append(self.nick_hits[0])
                 begin = self.nick_hits.pop(0)
             else:
-                list_nick = app.contacts.get_nick_list(self.account,
-                                                       self.room_jid)
+                list_nick = self.contact.get_user_nicknames()
                 list_nick = list(filter(self._jid_not_blocked, list_nick))
 
                 log.debug("Nicks to be considered for autosuggestions: %s",
@@ -1911,12 +1852,13 @@ class GroupchatControl(ChatControlBase):
     def _on_password_cancel_clicked(self, _button=None):
         self._close_control()
 
-    def _on_muc_captcha_challenge(self, event):
+    def _on_room_captcha_challenge(self, _contact, _signal_name, properties):
         self._remove_captcha_request()
+        form = properties.captcha.form
 
         options = {'no-scrolling': True,
                    'entry-activates-default': True}
-        self._captcha_request = DataFormWidget(event.form, options=options)
+        self._captcha_request = DataFormWidget(form, options=options)
         self._captcha_request.connect('is-valid', self._on_captcha_changed)
         self._captcha_request.set_valign(Gtk.Align.START)
         self._captcha_request.show_all()
@@ -1930,8 +1872,9 @@ class GroupchatControl(ChatControlBase):
         self._show_page('captcha')
         self._captcha_request.focus_first_entry()
 
-    def _on_muc_captcha_error(self, event):
-        self.xml.captcha_error_label.set_text(event.error_text)
+    def _on_room_captcha_error(self, _contact, _signal_name, error):
+        error_text = to_user_string(error)
+        self.xml.captcha_error_label.set_text(error_text)
         self._show_page('captcha-error')
 
     def _remove_captcha_request(self):

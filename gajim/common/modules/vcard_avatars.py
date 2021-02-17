@@ -38,10 +38,15 @@ class VCardAvatars(BaseModule):
 
         self.avatar_conversion_available = False
 
+        self._muc_avatar_cache = {}
+
     def pass_disco(self, info):
         is_available = Namespace.VCARD_CONVERSION in info.features
         self.avatar_conversion_available = is_available
         self._log.info('Discovered Avatar Conversion')
+
+    def get_avatar_sha(self, jid):
+        return self._muc_avatar_cache.get(jid)
 
     @as_task
     def _request_vcard(self, jid, expected_sha, type_):
@@ -68,23 +73,18 @@ class VCardAvatars(BaseModule):
         self._log.info('Received: %s %s', jid, avatar_sha)
         app.interface.save_avatar(avatar)
 
+        contact = self._con.get_module('Contacts').get_contact(jid)
+
         if type_ == 'contact':
-            self._con.get_module('Roster').set_avatar_sha(jid, avatar_sha)
-            app.contacts.set_avatar(self._account, jid, avatar_sha)
-            app.interface.update_avatar(self._account, jid)
+            app.storage.cache.set_contact(jid, 'avatar', avatar_sha)
 
         elif type_ == 'muc':
-            app.storage.cache.set_muc_avatar_sha(jid, avatar_sha)
-            app.contacts.set_avatar(self._account, jid, avatar_sha)
-            app.interface.update_avatar(self._account, jid, room_avatar=True)
+            app.storage.cache.set_muc(jid, 'avatar', avatar_sha)
 
         elif type_ == 'muc-user':
-            contact = app.contacts.get_gc_contact(self._account,
-                                                  jid.bare,
-                                                  jid.resource)
-            if contact is not None:
-                contact.avatar_sha = avatar_sha
-                app.interface.update_avatar(contact=contact)
+            self._muc_avatar_cache[jid] = avatar_sha
+
+        contact.update_avatar(avatar_sha)
 
     def _presence_received(self, _con, _stanza, properties):
         if not properties.type.is_available:
@@ -98,12 +98,15 @@ class VCardAvatars(BaseModule):
             return
 
         if properties.from_muc:
-            self._gc_update_received(properties)
+            self._muc_update_received(properties)
+
         else:
-            # Check if presence is from a MUC service
-            contact = app.contacts.get_groupchat_contact(self._account,
-                                                         str(properties.jid))
-            self._update_received(properties, room=contact is not None)
+            jid = properties.jid.new_as_bare()
+            muc = self._con.get_module('MUC').get_manager().get(properties.jid)
+            self._process_update(jid,
+                                 properties.avatar_state,
+                                 properties.avatar_sha,
+                                 muc is not None)
 
     def muc_disco_info_update(self, disco_info):
         if not disco_info.supports(Namespace.VCARD):
@@ -118,68 +121,57 @@ class VCardAvatars(BaseModule):
 
         avatar_sha = disco_info.get_field_value(Namespace.MUC_INFO, field_var)
         state = AvatarState.EMPTY if not avatar_sha else AvatarState.ADVERTISED
-        self._process_update(str(disco_info.jid), state, avatar_sha, True)
+        self._process_update(disco_info.jid, state, avatar_sha, True)
 
-    def _update_received(self, properties, room=False):
-        self._process_update(properties.jid.bare,
-                             properties.avatar_state,
-                             properties.avatar_sha,
-                             room)
+    def _process_update(self, jid, state, avatar_sha, groupchat):
+        contact = self._con.get_module('Contacts').get_contact(
+            jid, groupchat=groupchat)
 
-    def _process_update(self, jid, state, avatar_sha, room):
         if state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', jid)
-            app.contacts.set_avatar(self._account, jid, None)
-
-            if room:
-                app.storage.cache.set_muc_avatar_sha(jid, None)
+            if groupchat:
+                app.storage.cache.set_muc(jid, 'avatar', None)
             else:
-                self._con.get_module('Roster').set_avatar_sha(jid, None)
-            app.interface.update_avatar(self._account, jid, room_avatar=room)
+                app.storage.cache.set_contact(jid, 'avatar', None)
+
+            contact.update_avatar(avatar_sha)
+
         else:
             self._log.info('Update: %s %s', jid, avatar_sha)
-            current_sha = app.contacts.get_avatar_sha(self._account, jid)
 
-            if avatar_sha == current_sha:
+            if avatar_sha == contact.avatar_sha:
                 self._log.info('Avatar already known: %s %s', jid, avatar_sha)
                 return
 
             if app.interface.avatar_exists(avatar_sha):
                 # Check if the avatar is already in storage
                 self._log.info('Found avatar in storage')
-                if room:
-                    app.storage.cache.set_muc_avatar_sha(jid, avatar_sha)
+                if groupchat:
+                    app.storage.cache.set_muc(jid, 'avatar', avatar_sha)
                 else:
-                    self._con.get_module('Roster').set_avatar_sha(jid,
-                                                                  avatar_sha)
-                app.contacts.set_avatar(self._account, jid, avatar_sha)
-                app.interface.update_avatar(
-                    self._account, jid, room_avatar=room)
+                    app.storage.cache.set_contact(jid, 'avatar', avatar_sha)
+
+                contact.update_avatar(avatar_sha)
                 return
 
             if avatar_sha not in self._requested_shas:
                 self._requested_shas.append(avatar_sha)
-                if room:
+                if groupchat:
                     self._request_vcard(jid, avatar_sha, 'muc')
                 else:
                     self._request_vcard(jid, avatar_sha, 'contact')
 
-    def _gc_update_received(self, properties):
+    def _muc_update_received(self, properties):
+        contact = self._con.get_module('Contacts').get_contact(properties.jid)
         nick = properties.jid.resource
-
-        gc_contact = app.contacts.get_gc_contact(
-            self._account, properties.jid.bare, nick)
-
-        if gc_contact is None:
-            self._log.error('no gc contact found: %s', nick)
-            return
 
         if properties.avatar_state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info('%s has no avatar published', nick)
-            gc_contact.avatar_sha = None
-            app.interface.update_avatar(contact=gc_contact)
+            self._muc_avatar_cache.pop(properties.jid, None)
+            contact.update_avatar()
+
         else:
             self._log.info('Update: %s %s', nick, properties.avatar_sha)
             if not app.interface.avatar_exists(properties.avatar_sha):
@@ -191,11 +183,13 @@ class VCardAvatars(BaseModule):
                                         'muc-user')
                 return
 
-            if gc_contact.avatar_sha != properties.avatar_sha:
+            current_avatar_sha = self._muc_avatar_cache.get(properties.jid)
+            if current_avatar_sha != properties.avatar_sha:
                 self._log.info('%s changed their Avatar: %s',
                                nick, properties.avatar_sha)
-                gc_contact.avatar_sha = properties.avatar_sha
-                app.interface.update_avatar(contact=gc_contact)
+                self._muc_avatar_cache[properties.jid] = properties.avatar_sha
+                contact.update_avatar()
+
             else:
                 self._log.info('Avatar already known: %s', nick)
 

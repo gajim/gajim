@@ -84,12 +84,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.register_events([
             ('presence-received', ged.GUI1, self._on_event),
-            ('nickname-received', ged.GUI1, self._on_event),
             ('mood-received', ged.GUI1, self._on_event),
             ('activity-received', ged.GUI1, self._on_event),
             ('tune-received', ged.GUI1, self._on_event),
             ('location-received', ged.GUI1, self._on_event),
-            ('chatstate-received', ged.GUI1, self._on_event),
             ('caps-update', ged.GUI1, self._on_event),
             ('message-sent', ged.OUT_POSTCORE, self._on_event),
             ('message-received', ged.CORE, self._on_event),
@@ -506,6 +504,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             #TODO
             return
 
+        if event.name == 'update-roster-avatar':
+            return
+
         if not self.chat_exists(event.account, event.jid):
             if event.name == 'message-received':
                 if event.properties.is_muc_pm:
@@ -562,27 +563,26 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 # user pressed Cancel to change status message dialog
                 return
             # check if we have unread messages
-            unread = app.events.get_nb_events()
+            # unread = app.events.get_nb_events()
 
-            for event in app.events.get_all_events(['printed_gc_msg']):
-                contact = app.contacts.get_groupchat_contact(event.account,
-                                                             event.jid)
-                if contact is None or not contact.can_notify():
-                    unread -= 1
+            # for event in app.events.get_all_events(['printed_gc_msg']):
+            #     contact = app.contacts.get_groupchat_contact(event.jid)
+            #     if contact is None or not contact.can_notify():
+            #         unread -= 1
 
-            if unread:
-                ConfirmationDialog(
-                    _('Unread Messages'),
-                    _('You still have unread messages'),
-                    _('Messages will only be available for reading them later '
-                      'if storing chat history is enabled and if the contact '
-                      'is in your contact list.'),
-                    [DialogButton.make('Cancel'),
-                     DialogButton.make('Remove',
-                                       text=_('_Quit'),
-                                       callback=on_continue2,
-                                       args=[message])]).show()
-                return
+            # if unread:
+            #     ConfirmationDialog(
+            #         _('Unread Messages'),
+            #         _('You still have unread messages'),
+            #         _('Messages will only be available for reading them later '
+            #           'if storing chat history is enabled and if the contact '
+            #           'is in your contact list.'),
+            #         [DialogButton.make('Cancel'),
+            #          DialogButton.make('Remove',
+            #                            text=_('_Quit'),
+            #                            callback=on_continue2,
+            #                            args=[message])]).show()
+            #     return
             on_continue2(message)
 
         if get_msg and ask_for_status_message('offline'):

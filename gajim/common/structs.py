@@ -17,9 +17,12 @@ from collections import namedtuple
 from dataclasses import dataclass
 
 from nbxmpp.protocol import JID
+from nbxmpp.const import Role
+from nbxmpp.const import Affiliation
 
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import KindConstant
+from gajim.common.const import PresenceShowExt
 
 URI = namedtuple('URI', 'type action data')
 URI.__new__.__defaults__ = (None, None)  # type: ignore
@@ -34,6 +37,7 @@ class MUCData:
         self.state = MUCJoinedState.NOT_JOINED
         # Message id of the captcha challenge
         self.captcha_id = None
+        self.subject = None
 
     @property
     def jid(self):
@@ -185,8 +189,38 @@ class PresenceData:
                    available=properties.type.is_available)
 
 
-UNKNOWN_PRESENCE = PresenceData(show=None,
+UNKNOWN_PRESENCE = PresenceData(show=PresenceShowExt.OFFLINE,
                                 status='',
                                 priority=0,
                                 idle_time=0,
                                 available=False)
+
+
+@dataclass(frozen=True)
+class MUCPresenceData:
+    show: str
+    status: str
+    idle_time: str
+    available: bool
+    affiliation: str
+    role: str
+    real_jid: JID
+
+    @classmethod
+    def from_presence(cls, properties):
+        return cls(show=properties.show,
+                   status=properties.status,
+                   idle_time=properties.idle_timestamp,
+                   available=properties.type.is_available,
+                   affiliation=properties.muc_user.affiliation,
+                   role=properties.muc_user.role,
+                   real_jid=properties.jid)
+
+
+UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
+                                       status='',
+                                       idle_time=0,
+                                       available=False,
+                                       affiliation=Affiliation.NONE,
+                                       role=Role.NONE,
+                                       real_jid=None)

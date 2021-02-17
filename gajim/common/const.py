@@ -1,9 +1,11 @@
 from enum import IntEnum, Enum, unique
 from collections import namedtuple
+from functools import total_ordering
 
 from gi.repository import Gio
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.const import PresenceShow
 
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
@@ -148,18 +150,6 @@ class PEPEventType(IntEnum):
     AVATAR = 6
     ATOM = 7
     BOOKMARKS = 8
-
-
-@unique
-class Chatstate(IntEnum):
-    COMPOSING = 0
-    PAUSED = 1
-    ACTIVE = 2
-    INACTIVE = 3
-    GONE = 4
-
-    def __str__(self):
-        return self.name.lower()
 
 
 class SyncThreshold(IntEnum):
@@ -1122,3 +1112,23 @@ THRESHOLD_OPTIONS = {
     30: _('1 Month'),
     0: _('No Threshold'),
 }
+
+
+@total_ordering
+class PresenceShowExt(Enum):
+
+    '''
+    This extends nbxmpp.const.PresenceShow for convenience
+    with an OFFLINE member
+    '''
+
+    OFFLINE = 'offline'
+
+    @property
+    def is_offline(self):
+        return self == PresenceShowExt.OFFLINE
+
+    def __lt__(self, other):
+        if not isinstance(other, PresenceShow):
+            return NotImplemented
+        return True

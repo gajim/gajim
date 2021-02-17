@@ -1395,7 +1395,7 @@ class RosterWindow:
 
     def _after_fill(self):
         self.starting = False
-        accounts_list = app.contacts.get_accounts()
+        accounts_list = app.settings.get_active_accounts()
         for account in app.connections:
             if account not in accounts_list:
                 continue
@@ -1433,10 +1433,10 @@ class RosterWindow:
         self._iters = {}
         # for merged mode
         self._iters['MERGED'] = {'account': None, 'groups': {}}
-        for acct in app.contacts.get_accounts():
+        for acct in app.settings.get_active_accounts():
             self._iters[acct] = {'account': None, 'groups': {}, 'contacts': {}}
 
-        for acct in app.contacts.get_accounts():
+        for acct in app.settings.get_active_accounts():
             self.add_account(acct)
             self.add_account_contacts(acct, improve_speed=True,
                 draw_contacts=False)
@@ -1611,7 +1611,7 @@ class RosterWindow:
             group = jid
             if group == _('Transports'):
                 if self.regroup:
-                    accounts = app.contacts.get_accounts()
+                    accounts = app.settings.get_active_accounts()
                 else:
                     accounts = [account]
                 for _acc in accounts:
@@ -1783,7 +1783,7 @@ class RosterWindow:
         """
         # FIXME: This function needs to be split
         # Most of the logic SHOULD NOT be done at GUI level
-        if account not in app.contacts.get_accounts():
+        if account not in app.settings.get_active_accounts():
             app.contacts.add_account(account)
         if not account in self._iters:
             self._iters[account] = {'account': None, 'groups': {},
@@ -2100,7 +2100,7 @@ class RosterWindow:
         """
         The core tells us that our status has changed
         """
-        if account not in app.contacts.get_accounts():
+        if account not in app.settings.get_active_accounts():
             return
         child_iterA = self._get_account_iter(account, self.model)
         self_resource = app.connections[account].get_own_jid().resource
@@ -3919,7 +3919,7 @@ class RosterWindow:
         # Is the contact we drag a meta contact?
         accounts = account_source
         if self.regroup:
-            accounts = app.contacts.get_accounts() or account_source
+            accounts = app.settings.get_active_accounts() or account_source
         is_big_brother = app.contacts.is_big_brother(account_source,
             jid_source, accounts)
 

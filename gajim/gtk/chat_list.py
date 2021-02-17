@@ -211,8 +211,6 @@ class ChatList(Gtk.ListBox):
             self._on_presence_received(event)
         elif event.name == 'message-sent':
             self._on_message_sent(event)
-        elif event.name == 'chatstate-received':
-            self._on_chatstate_received(event)
         else:
             log.warning('Unhandled Event: %s', event.name)
 
@@ -263,15 +261,6 @@ class ChatList(Gtk.ListBox):
         row = self._chats.get((event.account, event.jid))
         row.update_avatar()
 
-    def _on_chatstate_received(self, event):
-        row = self._chats.get((event.account, event.jid))
-        if event.contact.is_gc_contact:
-            chatstate = event.contact.chatstate
-        else:
-            chatstate = app.contacts.get_combined_chatstate(
-                row.account, row.jid)
-        row.set_chatstate(chatstate)
-
     @staticmethod
     def _add_unread(row, properties):
         if properties.is_carbon_message and properties.carbon.is_sent:
@@ -298,6 +287,9 @@ class ChatRow(Gtk.ListBoxRow):
 
         self._contact = app.get_client(account).get_module('Contacts').get_contact(jid)
         self._contact.connect('presence-update', self._on_presence_update)
+        self._contact.connect('chatstate-update', self._on_chatstate_update)
+        self._contact.connect('nickname-update', self._on_nickname_update)
+        self._contact.connect('avatar-update', self._on_avatar_update)
 
         self._timestamp = None
         self._unread_count = 0
@@ -391,69 +383,31 @@ class ChatRow(Gtk.ListBoxRow):
     def _on_presence_update(self, _contact, _signal_name):
         self.update_avatar()
 
+    def _on_avatar_update(self, _contact, _signal_name):
+        self.update_avatar()
+
     def update_avatar(self):
         scale = self.get_scale_factor()
-
-        if self.type == 'pm':
-            jid, resource = app.get_room_and_nick_from_fjid(self.jid)
-            contact = app.contacts.get_gc_contact(
-                self.account, jid, resource)
-            avatar = contact.get_avatar(AvatarSize.ROSTER,
-                                        scale,
-                                        contact.show.value)
-            self._ui.avatar_image.set_from_surface(avatar)
-            return
-
-        contact = app.contacts.get_contact(self.account, self.jid)
-        if contact:
-            if contact.is_groupchat:
-                avatar = app.contacts.get_avatar(self.account,
-                                                 self.jid,
-                                                 AvatarSize.ROSTER,
-                                                 scale)
-            else:
-                avatar = app.contacts.get_avatar(self.account,
-                                                 contact.jid,
-                                                 AvatarSize.ROSTER,
-                                                 scale,
-                                                 self._contact.show.value)
-        else:
-            avatar = app.contacts.get_avatar(self.account,
-                                             self.jid,
-                                             AvatarSize.ROSTER,
-                                             scale)
-
-        self._ui.avatar_image.set_from_surface(avatar)
+        surface = self._contact.get_avatar(AvatarSize.ROSTER, scale)
+        self._ui.avatar_image.set_from_surface(surface)
 
     def update_name(self):
         if self.type == 'pm':
-            jid, resource = app.get_room_and_nick_from_fjid(self.jid)
-            contact = app.contacts.get_gc_contact(
-                self.account, jid, resource)
             client = app.get_client(self.account)
-            muc_name = get_groupchat_name(client, jid)
-            self._ui.name_label.set_text(
-                f'{contact.get_shown_name()} ({muc_name})')
+            muc_name = get_groupchat_name(client, self.jid)
+            self._ui.name_label.set_text(f'{self._contact.name} ({muc_name})')
             return
 
-        contact = app.contacts.get_contact(self.account, self.jid)
-        if contact is None:
-            self._ui.name_label.set_text(self.jid)
-            return
+        self._ui.name_label.set_text(self._contact.name)
 
-        if contact.is_groupchat:
-            client = app.get_client(self.account)
-            name = get_groupchat_name(client, self.jid)
-        else:
-            name = contact.get_shown_name()
-
-        self._ui.name_label.set_text(name)
-
-    def set_chatstate(self, chatstate):
-        if chatstate == 'composing':
-            self._ui.chatstate_image.show()
-        else:
+    def _on_chatstate_update(self, contact, _signal_name):
+        if contact.chatstate is None:
             self._ui.chatstate_image.hide()
+        else:
+            self._ui.chatstate_image.set_visible(contact.chatstate.is_composing)
+
+    def _on_nickname_update(self, _contact, _signal_name):
+        self.update_name()
 
     @property
     def unread_count(self):

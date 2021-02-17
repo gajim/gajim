@@ -128,24 +128,26 @@ class StartChatDialog(Gtk.ApplicationWindow):
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             self.new_contact_rows[account] = None
-            for jid in app.contacts.get_jid_list(account):
-                contact = app.contacts.get_contact_with_highest_priority(
-                    account, jid)
-                if contact.is_groupchat:
-                    continue
+            client = app.get_client(account)
+            for jid, _data in client.get_module('Roster').iter():
+                contact = client.get_module('Contacts').get_contact(jid)
                 rows.append(ContactRow(account, contact, jid,
-                                       contact.get_shown_name(), show_account))
+                                       contact.name, show_account))
 
     def _add_groupchats(self, rows):
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             self.new_groupchat_rows[account] = None
-            con = app.connections[account]
-            bookmarks = con.get_module('Bookmarks').bookmarks
+            client = app.get_client(account)
+            bookmarks = client.get_module('Bookmarks').bookmarks
             for bookmark in bookmarks:
-                jid = str(bookmark.jid)
-                name = get_groupchat_name(con, jid)
-                rows.append(ContactRow(account, None, jid, name, show_account,
+                contact = client.get_module('Contacts').get_contact(
+                    bookmark.jid, groupchat=True)
+                rows.append(ContactRow(account,
+                                       contact,
+                                       bookmark.jid,
+                                       contact.name,
+                                       show_account,
                                        groupchat=True))
 
     def _load_contacts(self, rows):
@@ -618,13 +620,11 @@ class ContactRow(Gtk.ListBoxRow):
         self.groupchat = groupchat
         self.new = jid == ''
 
-        show = contact.show if contact else 'offline'
-
         grid = Gtk.Grid()
         grid.set_column_spacing(12)
         grid.set_size_request(260, -1)
 
-        image = self._get_avatar_image(account, jid, show)
+        image = self._get_avatar_image(contact)
         image.set_size_request(AvatarSize.CHAT, AvatarSize.CHAT)
         grid.add(image)
 
@@ -655,8 +655,8 @@ class ContactRow(Gtk.ListBoxRow):
             name_box.add(account_badge)
         box.add(name_box)
 
-        self.jid_label = Gtk.Label(label=jid)
-        self.jid_label.set_tooltip_text(jid)
+        self.jid_label = Gtk.Label(label=str(jid))
+        self.jid_label.set_tooltip_text(str(jid))
         self.jid_label.set_ellipsize(Pango.EllipsizeMode.END)
         self.jid_label.set_xalign(0)
         self.jid_label.set_width_chars(22)
@@ -669,7 +669,7 @@ class ContactRow(Gtk.ListBoxRow):
         self.add(grid)
         self.show_all()
 
-    def _get_avatar_image(self, account, jid, show):
+    def _get_avatar_image(self, contact):
         if self.new:
             icon_name = 'avatar-default'
             if self.groupchat:
@@ -677,14 +677,8 @@ class ContactRow(Gtk.ListBoxRow):
             return Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DND)
 
         scale = self.get_scale_factor()
-        if self.groupchat:
-            surface = app.interface.avatar_storage.get_muc_surface(
-                account, jid, AvatarSize.CHAT, scale)
-            return Gtk.Image.new_from_surface(surface)
-
-        avatar = app.contacts.get_avatar(
-            account, jid, AvatarSize.CHAT, scale, show)
-        return Gtk.Image.new_from_surface(avatar)
+        surface = contact.get_avatar(AvatarSize.CHAT, scale)
+        return Gtk.Image.new_from_surface(surface)
 
     def update_jid(self, jid):
         self.jid = jid
@@ -692,7 +686,7 @@ class ContactRow(Gtk.ListBoxRow):
 
     def get_search_text(self):
         if self.contact is None and not self.groupchat:
-            return self.jid
+            return str(self.jid)
         if self.show_account:
             return '%s %s %s' % (self.name, self.jid, self.account_label)
         return '%s %s' % (self.name, self.jid)

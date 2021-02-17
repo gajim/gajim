@@ -42,34 +42,39 @@ class UserAvatar(BaseModule):
             return
 
         metadata = properties.pubsub_event.data
-        jid = str(properties.jid)
+        jid = properties.jid
+        contact = self._con.get_module('Contacts').get_contact(jid)
 
         if metadata is None or not metadata.infos:
             self._log.info('No avatar published: %s', jid)
-            app.contacts.set_avatar(self._account, jid, None)
-            self._con.get_module('Roster').set_avatar_sha(jid, None)
-            app.interface.update_avatar(self._account, jid)
+            app.storage.cache.set_contact(jid, 'avatar', None)
+            contact.update_avatar(None)
+
         else:
-            if properties.is_self_message:
-                sha = app.settings.get_account_setting(self._account,
-                                                       'avatar_sha')
-            else:
-                sha = app.contacts.get_avatar_sha(self._account, jid)
+            sha = contact.avatar_sha
+            if contact.avatar_sha:
+                if sha in metadata.avatar_shas:
+                    self._log.info('Avatar already known: %s %s', jid, sha)
+                    return
 
-            if sha in metadata.avatar_shas:
-                self._log.info('Avatar already known: %s %s', jid, sha)
-                return
+                if app.interface.avatar_exists(sha):
+                    contact.update_avatar(sha)
+                    return
 
-            avatar_info = metadata.infos[0]
-            self._log.info('Request: %s %s', jid, avatar_info.id)
-            self._request_avatar_data(jid, avatar_info)
+            self._log.info('Request: %s %s', jid, metadata.default)
+            self._request_avatar_data(contact, metadata.default)
 
     @as_task
-    def _request_avatar_data(self, jid, avatar_info):
+    def _request_avatar_data(self, contact, sha):
         _task = yield
 
         avatar = yield self._nbxmpp('UserAvatar').request_avatar_data(
-            avatar_info.id, jid=jid)
+            sha, jid=contact.jid)
+
+        if avatar is None:
+            self._log.warning('%s advertised %s but data node is empty',
+                              contact.jid, sha)
+            return
 
         if avatar is None:
             self._log.warning('%s advertised %s but data node is empty',
@@ -80,19 +85,9 @@ class UserAvatar(BaseModule):
             self._log.warning(avatar)
             return
 
-        self._log.info('Received Avatar: %s %s', jid, avatar.sha)
+        self._log.info('Received Avatar: %s %s', contact.jid, avatar.sha)
         app.interface.save_avatar(avatar.data)
-
-        if self._con.get_own_jid().bare_match(jid):
-            app.settings.set_account_setting(self._account,
-                                             'avatar_sha',
-                                             avatar.sha)
-        else:
-            self._con.get_module('Roster').set_avatar_sha(
-                str(jid), avatar.sha)
-
-        app.contacts.set_avatar(self._account, str(jid), avatar.sha)
-        app.interface.update_avatar(self._account, str(jid))
+        contact.update_avatar(avatar.sha)
 
 
 def get_instance(*args, **kwargs):

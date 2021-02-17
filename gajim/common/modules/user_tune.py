@@ -41,6 +41,7 @@ class UserTune(BaseModule):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._tune_received)
         self._tune_data = None
+        self._tunes = {}
 
         self.register_events([
             ('music-track-changed', ged.CORE, self._on_music_track_changed),
@@ -56,19 +57,10 @@ class UserTune(BaseModule):
             return
 
         data = properties.pubsub_event.data
-        for contact in app.contacts.get_contacts(self._account,
-                                                 str(properties.jid)):
-            if data is not None:
-                contact.pep[PEPEventType.TUNE] = data
-            else:
-                contact.pep.pop(PEPEventType.TUNE, None)
-
         if properties.is_self_message:
-            if data is not None:
-                self._con.pep[PEPEventType.TUNE] = data
-            else:
-                self._con.pep.pop(PEPEventType.TUNE, None)
             self._tune_data = data
+        else:
+            self._tunes[properties.jid] = data
 
         app.nec.push_incoming_event(
             NetworkEvent('tune-received',

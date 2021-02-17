@@ -187,7 +187,7 @@ class GCTooltip():
         """
         self._hide_grid_childs()
 
-        self._ui.nick.set_text(contact.get_shown_name())
+        self._ui.nick.set_text(contact.name)
         self._ui.nick.show()
 
         # Status Message
@@ -204,7 +204,7 @@ class GCTooltip():
         self._ui.user_show.show()
 
         # JID
-        if contact.jid is not None:
+        if contact.real_jid is not None:
             self._ui.jid.set_text(str(contact.jid))
             self._ui.jid.show()
 
@@ -218,12 +218,8 @@ class GCTooltip():
             self._ui.affiliation.show()
 
         # Avatar
-        if contact.avatar_sha is not None:
-            app.log('avatar').debug(
-                'Load GCTooltip: %s %s', contact.name, contact.avatar_sha)
         scale = self._ui.tooltip_grid.get_scale_factor()
-        surface = app.interface.get_avatar(
-            contact, AvatarSize.TOOLTIP, scale)
+        surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)
         self._ui.avatar.set_from_surface(surface)
         self._ui.avatar.show()
         self._ui.fillelement.show()

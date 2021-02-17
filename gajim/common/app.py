@@ -95,10 +95,6 @@ contacts = cast(LegacyContactsAPIT, None)
 # {acct: {room_jid: True}}
 gc_connected = {}  # type: Dict[str, Dict[str, bool]]
 
-# dict of the pass required to enter a room
-# {room_jid: password}
-gc_passwords = {}  # type: Dict[str, str]
-
 # dict of rooms that must be automatically configured
 # and for which we have a list of invities
 # {account: {room_jid: {'invities': []}}}

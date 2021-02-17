@@ -163,7 +163,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         # Set avatar
         surface = app.interface.avatar_storage.get_muc_surface(
             self._account,
-            str(info.jid),
+            info.jid,
             AvatarSize.GROUP_INFO,
             self.get_scale_factor())
         self._ui.avatar_image.set_from_surface(surface)

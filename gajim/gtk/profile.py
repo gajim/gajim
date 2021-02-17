@@ -57,6 +57,10 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self.account = account
         self._jid = app.get_jid_from_account(account)
 
+        self._client = app.get_client(self.account)
+        self._contact = self._client.get_module('Contacts').get_contact(
+            self._jid)
+
         self._ui = get_builder('profile.ui')
 
         menu = Gio.Menu()
@@ -152,12 +156,9 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
     def _load_avatar(self):
         scale = self.get_scale_factor()
-        self._current_avatar = app.contacts.get_avatar(
-            self.account,
-            self._jid,
-            AvatarSize.VCARD,
-            scale)
-
+        self._current_avatar = self._contact.get_avatar(AvatarSize.VCARD,
+                                                        scale,
+                                                        add_show=False)
         self._ui.avatar_image.set_from_surface(self._current_avatar)
         self._ui.avatar_image.show()
 
@@ -223,8 +224,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         vcard = self._vcard_grid.get_vcard()
         self._current_vcard = vcard.copy()
 
-        con = app.connections[self.account]
-        con.get_module('VCard4').set_vcard(
+        client.get_module('VCard4').set_vcard(
             self._current_vcard,
             public=self._ui.vcard_access.get_active(),
             callback=self._on_save_finished)
@@ -233,17 +233,17 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         if self._new_avatar is False:
             if self._avatar_nick_public != public:
-                con.get_module('UserAvatar').set_access_model(public)
+                client.get_module('UserAvatar').set_access_model(public)
 
         else:
             # Only update avatar if it changed
-            con.get_module('UserAvatar').set_avatar(
+            client.get_module('UserAvatar').set_avatar(
                 self._new_avatar,
                 public=public,
                 callback=self._on_set_avatar)
 
         nick = GLib.markup_escape_text(self._ui.nickname_entry.get_text())
-        con.get_module('UserNickname').set_nickname(nick, public=public)
+        client.get_module('UserNickname').set_nickname(nick, public=public)
 
         if not nick:
             nick = app.settings.get_account_setting(
@@ -273,10 +273,11 @@ class ProfileWindow(Gtk.ApplicationWindow):
             return
 
     def _on_remove_avatar(self, _button):
-        contact = app.contacts.create_contact(self._jid, self.account)
         scale = self.get_scale_factor()
-        surface = app.interface.avatar_storage.get_surface(
-            contact, AvatarSize.VCARD, scale, default=True)
+        surface = self._contact.get_avatar(AvatarSize.VCARD,
+                                           scale,
+                                           add_show=False,
+                                           default=True)
 
         self._ui.avatar_image.set_from_surface(surface)
         self._ui.remove_avatar_button.hide()

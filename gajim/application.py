@@ -506,7 +506,7 @@ class GajimApplication(Gtk.Application):
         active_accounts = bool(app.get_connected_accounts(exclude_local=True))
         self.lookup_action('create-groupchat').set_enabled(active_accounts)
 
-        enabled_accounts = app.contacts.get_accounts()
+        enabled_accounts = app.settings.get_active_accounts()
         self.lookup_action('start-chat').set_enabled(enabled_accounts)
 
     def _set_shortcuts(self):

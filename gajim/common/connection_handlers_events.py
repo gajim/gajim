@@ -345,6 +345,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                       'groupchat_name': contact.get_shown_name()}
 
     def handle_incoming_pres_event(self, pres_obj):
+        return
+        # TODO
         if app.jid_is_transport(pres_obj.jid):
             return True
         account = pres_obj.conn.name

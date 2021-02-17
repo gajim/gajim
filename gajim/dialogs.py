@@ -413,7 +413,7 @@ class TransformChatToMUC:
                 contact_transport in ('jabber', None))
 
         # set jabber id and pseudos
-        for account_ in app.contacts.get_accounts():
+        for account_ in app.settings.get_active_accounts():
             if app.connections[account_].is_zeroconf:
                 continue
             for jid in app.contacts.get_jid_list(account_):

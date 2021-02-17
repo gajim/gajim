@@ -216,7 +216,7 @@ class StatusIcon:
         start_chat_menuitem.set_sensitive(iskey)
         single_message_menuitem.set_sensitive(iskey)
 
-        accounts_list = sorted(app.contacts.get_accounts())
+        accounts_list = sorted(app.settings.get_active_accounts())
 
         # menu items that don't apply to zeroconf connections
         if connected_accounts == 1 or (connected_accounts == 2 and \

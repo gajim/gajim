@@ -17,13 +17,16 @@ import time
 import sqlite3
 import logging
 from collections import namedtuple
+from collections import defaultdict
+
+from nbxmpp.protocol import JID
 
 from gajim.common import configpaths
 from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
 
 
-CURRENT_USER_VERSION = 7
+CURRENT_USER_VERSION = 8
 
 CACHE_SQL_STATEMENT = '''
     CREATE TABLE caps_cache (
@@ -41,9 +44,16 @@ CACHE_SQL_STATEMENT = '''
             account TEXT PRIMARY KEY UNIQUE,
             roster TEXT
     );
-    CREATE TABLE muc_avatars(
+    CREATE TABLE muc(
+             jid TEXT PRIMARY KEY UNIQUE,
+             avatar TEXT
+    );
+    CREATE TABLE contact(
             jid TEXT PRIMARY KEY UNIQUE,
-            avatar_sha TEXT
+            avatar TEXT,
+            avatar_ts INTEGER,
+            nickname TEXT,
+            nickname_ts INTEGER
     );
     CREATE TABLE unread(
             account TEXT,
@@ -53,6 +63,11 @@ CACHE_SQL_STATEMENT = '''
             timestamp INTEGER,
             PRIMARY KEY (account, jid)
     );
+
+    CREATE INDEX idx_unread ON unread(account, jid);
+    CREATE INDEX idx_contact ON contact(jid);
+    CREATE INDEX idx_muc ON muc(jid);
+
     PRAGMA user_version=%s;
     ''' % CURRENT_USER_VERSION
 
@@ -68,7 +83,8 @@ class CacheStorage(SqliteStorage):
 
         self._entity_caps_cache = {}
         self._disco_info_cache = {}
-        self._muc_avatar_sha_cache = {}
+        self._muc_cache = defaultdict(dict)
+        self._contact_cache = defaultdict(dict)
 
     def init(self, **kwargs):
         SqliteStorage.init(self,
@@ -77,14 +93,13 @@ class CacheStorage(SqliteStorage):
         self._con.row_factory = self._namedtuple_factory
 
         self._fill_disco_info_cache()
-        self._fill_muc_avatar_sha_cache()
         self._clean_caps_table()
         self._load_caps_data()
 
     @staticmethod
     def _namedtuple_factory(cursor, row):
         fields = [col[0] for col in cursor.description]
-        Row = namedtuple("Row", fields)
+        Row = namedtuple('Row', fields)
         return Row(*row)
 
     def _migrate(self):
@@ -94,25 +109,9 @@ class CacheStorage(SqliteStorage):
             self._reinit_storage()
             return
 
-        if user_version < 6:
+        if user_version < 8:
             self._reinit_storage()
             return
-
-        if user_version < 7:
-            statements = [
-                '''CREATE TABLE unread(
-                    account TEXT,
-                    jid TEXT,
-                    count INTEGER,
-                    message_id TEXT,
-                    timestamp INTEGER,
-                    PRIMARY KEY (account, jid))''',
-
-                'CREATE INDEX idx_unread ON unread(account, jid)',
-                'PRAGMA user_version=7'
-            ]
-
-            self._execute_multiple(statements)
 
     @timeit
     def _load_caps_data(self):
@@ -220,7 +219,11 @@ class CacheStorage(SqliteStorage):
 
     @timeit
     def store_roster(self, account, roster):
-        serialized = json.dumps(roster)
+        encoded_roster = {}
+        for jid, data in roster.items():
+            encoded_roster[str(jid)] = data
+
+        serialized = json.dumps(encoded_roster)
 
         insert_sql = 'INSERT INTO roster(account, roster) VALUES(?, ?)'
         update_sql = 'UPDATE roster SET roster = ? WHERE account = ?'
@@ -238,7 +241,11 @@ class CacheStorage(SqliteStorage):
         result = self._con.execute(select_sql, (account,)).fetchone()
         if result is None:
             return None
-        return json.loads(result.roster)
+
+        roster = {}
+        for jid, data in json.loads(result.roster).items():
+            roster[JID.from_string(jid)] = data
+        return roster
 
     @timeit
     def remove_roster(self, account):
@@ -247,46 +254,65 @@ class CacheStorage(SqliteStorage):
         self._commit()
 
     @timeit
-    def _fill_muc_avatar_sha_cache(self):
-        sql = '''SELECT jid, avatar_sha FROM muc_avatars'''
-        rows = self._con.execute(sql).fetchall()
-        for row in rows:
-            self._muc_avatar_sha_cache[row.jid] = row.avatar_sha
-        log.info('%d Avatar SHA entries loaded', len(rows))
-
-    @timeit
-    def set_muc_avatar_sha(self, jid, sha=None):
-        """
-        Set the avatar sha of a MUC
-
-        :param jid:         The MUC jid that belongs to the avatar
-
-        :param sha:         The sha of the avatar
-
-        """
-
-        sql = '''INSERT INTO muc_avatars (jid, avatar_sha)
-                 VALUES (?, ?)'''
+    def set_muc(self, jid, prop, value):
+        sql = f'''INSERT INTO muc (jid, {prop}) VALUES (?, ?)'''
 
         try:
-            self._con.execute(sql, (jid, sha))
+            self._con.execute(sql, (jid, value))
         except sqlite3.IntegrityError:
-            sql = 'UPDATE muc_avatars SET avatar_sha = ? WHERE jid = ?'
-            self._con.execute(sql, (sha, jid))
+            sql = f'UPDATE muc SET {prop} = ? WHERE jid = ?'
+            self._con.execute(sql, (value, jid))
 
-        self._muc_avatar_sha_cache[jid] = sha
+        self._muc_cache[jid][prop] = value
 
         self._delayed_commit()
 
-    def get_muc_avatar_sha(self, jid):
-        """
-        Get the avatar sha of a MUC
+    @timeit
+    def get_muc(self, jid, prop):
+        try:
+            return self._muc_cache[jid][prop]
+        except KeyError:
+            sql = f'''SELECT jid as "jid [jid]", {prop}
+                      FROM muc WHERE jid = ?'''
+            row = self._con.execute(sql, (jid,)).fetchone()
+            value = None if row is None else getattr(row, prop)
 
-        :param jid:         The MUC jid that belongs to the avatar
+            self._muc_cache[jid][prop] = value
+            return value
 
-        """
+    @timeit
+    def set_contact(self, jid, prop, value):
+        sql = f'INSERT INTO contact (jid, {prop}, {prop}_ts) VALUES (?, ?, ?)'
 
-        return self._muc_avatar_sha_cache.get(jid)
+        prop_ts = time.time()
+
+        try:
+            self._con.execute(sql, (jid, value, prop_ts))
+        except sqlite3.IntegrityError:
+            sql = f'UPDATE contact SET {prop} = ?, {prop}_ts = ? WHERE jid = ?'
+            self._con.execute(sql, (value, prop_ts, jid))
+
+        self._contact_cache[jid][prop] = (value, prop_ts)
+
+        self._delayed_commit()
+
+    @timeit
+    def get_contact(self, jid, prop):
+        try:
+            value, prop_ts = self._contact_cache[jid][prop]
+        except KeyError:
+            sql = f'''SELECT jid as "jid [jid]", {prop}, {prop}_ts
+                      FROM contact WHERE jid = ?'''
+            row = self._con.execute(sql, (jid,)).fetchone()
+            value = None if row is None else getattr(row, prop)
+            prop_ts = 0 if row is None else getattr(row, f'{prop}_ts')
+
+            self._contact_cache[jid][prop] = (value, prop_ts)
+            return value
+
+        else:
+            # TODO: Expire entries
+            return value
 
     @timeit
     def get_unread_count(self, account, jid):

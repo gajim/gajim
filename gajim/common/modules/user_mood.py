@@ -39,6 +39,7 @@ class UserMood(BaseModule):
         self._register_pubsub_handler(self._mood_received)
 
         self._current_mood = None
+        self._moods = {}
 
     def get_current_mood(self):
         return self._current_mood
@@ -49,19 +50,10 @@ class UserMood(BaseModule):
             return
 
         data = properties.pubsub_event.data
-        for contact in app.contacts.get_contacts(self._account,
-                                                 str(properties.jid)):
-            if data is not None:
-                contact.pep[PEPEventType.MOOD] = data
-            else:
-                contact.pep.pop(PEPEventType.MOOD, None)
-
         if properties.is_self_message:
-            if data is not None:
-                self._con.pep[PEPEventType.MOOD] = data
-            else:
-                self._con.pep.pop(PEPEventType.MOOD, None)
             self._current_mood = data
+        else:
+            self._moods[properties.jid] = data
 
         app.nec.push_incoming_event(
             NetworkEvent('mood-received',

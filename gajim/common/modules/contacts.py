@@ -16,15 +16,30 @@ from typing import Any
 from typing import Dict  # pylint: disable=unused-import
 from typing import Tuple
 
-from nbxmpp.const import PresenceShow
+from functools import partial
+
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common.const import PresenceShowExt
 from gajim.common.structs import UNKNOWN_PRESENCE
+from gajim.common.structs import UNKNOWN_MUC_PRESENCE
 from gajim.common.helpers import Observable
 from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
+from gajim.common.helpers import get_groupchat_name
 
+
+class ContactSettings:
+    def __init__(self, account, jid):
+        self.get = partial(app.settings.get_contact_setting, account, jid)
+        self.set = partial(app.settings.set_contact_setting, account, jid)
+
+
+class GroupChatSettings:
+    def __init__(self, account, jid):
+        self.get = partial(app.settings.get_group_chat_setting, account, jid)
+        self.set = partial(app.settings.set_group_chat_setting, account, jid)
 
 
 class Contacts(BaseModule):
@@ -33,7 +48,7 @@ class Contacts(BaseModule):
 
         self._contacts = {}
 
-    def add_contact(self, jid):
+    def add_contact(self, jid, groupchat=False):
         if isinstance(jid, str):
             jid = JID.from_string(jid)
 
@@ -41,11 +56,14 @@ class Contacts(BaseModule):
         if contact is not None:
             return contact
 
-        contact = BareContact(self._log, jid, self._account)
+        if groupchat:
+            contact = GroupchatContact(self._log, jid, self._account)
+        else:
+            contact = BareContact(self._log, jid, self._account)
         self._contacts[jid] = contact
         return contact
 
-    def get_contact(self, jid):
+    def get_contact(self, jid, groupchat=False):
         if isinstance(jid, str):
             jid = JID.from_string(jid)
 
@@ -54,7 +72,7 @@ class Contacts(BaseModule):
 
         contact = self._contacts.get(jid)
         if contact is None:
-            contact = self.add_contact(jid)
+            contact = self.add_contact(jid, groupchat=groupchat)
 
         if resource is None:
             return contact
@@ -62,6 +80,8 @@ class Contacts(BaseModule):
         contact = contact.get_resource(resource)
         return contact
 
+    def get_group_chat_contact(self, jid):
+        return self.get_contact(jid, groupchat=True)
 
 
 class CommonContact(Observable):
@@ -81,25 +101,44 @@ class CommonContact(Observable):
     def account(self):
         return self._account
 
-    @property
-    def chatstate(self):
-        return self._chatstate
+    def _on_signal(self, _contact, signal_name, *args, **kwargs):
+        self.notify(signal_name, *args, **kwargs)
 
-    def update_chatstate(self, value):
-        pass
+    def supports(self, requested_feature):
+        if not self.is_available:
+            return False
+
+        disco_info = app.storage.cache.get_last_disco_info(self._jid)
+        if disco_info is None:
+            return False
+
+        return disco_info.supports(requested_feature)
+
+    @property
+    def is_groupchat(self):
+        return False
+
+    @property
+    def is_pm_contact(self):
+        return False
 
 
 class BareContact(CommonContact):
     def __init__(self, logger, jid, account):
         CommonContact.__init__(self, logger, jid, account)
 
+        self.settings = ContactSettings(account, str(jid))
+
         self._resources = {}
+        self._avatar_sha = app.storage.cache.get_contact(jid, 'avatar')
 
     def add_resource(self, resource):
         jid = self._jid.new_with(resource=resource)
         contact = ResourceContact(self._log, jid, self._account)
         self._resources[resource] = contact
         contact.connect('presence-update', self._on_signal)
+        contact.connect('chatstate-update', self._on_signal)
+        contact.connect('nickname-update', self._on_signal)
         return contact
 
     def get_resource(self, resource):
@@ -107,9 +146,6 @@ class BareContact(CommonContact):
         if contact is None:
             contact = self.add_resource(resource)
         return contact
-
-    def _on_signal(self, _contact, signal_name, *args, **kwargs):
-        self.notify(signal_name, *args, **kwargs)
 
     # @property
     # def groups(self):
@@ -123,8 +159,82 @@ class BareContact(CommonContact):
     def show(self):
         show_values = [contact.show for contact in self._resources.values()]
         if not show_values:
-            return PresenceShow.OFFLINE
+            return PresenceShowExt.OFFLINE
         return max(show_values)
+
+    @property
+    def chatstate(self):
+        chatstates = {contact.chatstate for contact in self._resources.values()}
+        chatstates.discard(None)
+        if not chatstates:
+            return None
+        return min(chatstates)
+
+    @property
+    def name(self):
+        nickname = app.storage.cache.get_contact(self._jid, 'nickname')
+        if nickname is None:
+            return self._jid.localpart
+        return nickname
+
+    @property
+    def avatar_sha(self):
+        return app.storage.cache.get_contact(self._jid, 'avatar')
+
+    def get_avatar(self,
+                   size,
+                   scale,
+                   add_show=True,
+                   pixbuf=False,
+                   default=False,
+                   style='circle'):
+
+        show = self.show if add_show else None
+
+        if pixbuf:
+            return app.interface.avatar_storage.get_pixbuf(
+                self, size, scale, show, default=default, style=style)
+        return app.interface.avatar_storage.get_surface(
+            self, size, scale, show, default=default, style=style)
+
+    def update_presence(self, presence_data):
+        for contact in self._resources.values():
+            contact.update_presence(presence_data, notify=False)
+        self.notify('presence-update')
+
+    def update_avatar(self, sha):
+        if self._avatar_sha == sha:
+            return
+
+        self._avatar_sha = sha
+
+        app.storage.cache.set_contact(self._jid, 'avatar', sha)
+        app.interface.avatar_storage.invalidate_cache(self._jid)
+        self.notify('avatar-update')
+
+    def _get_roster_attr(self, attr):
+        item = self._module('Roster').get_item(self._jid)
+        if item is None:
+            return None
+        return getattr(item, attr)
+
+    @property
+    def is_in_roster(self):
+        item = self._module('Roster').get_item(self._jid)
+        return item is not None
+
+    @property
+    def ask(self):
+        return self._get_roster_attr('ask')
+
+    @property
+    def subscription(self):
+        return self._get_roster_attr('subscription')
+
+    @property
+    def groups(self):
+        return self._get_roster_attr('groups')
+
 
 
 class ResourceContact(CommonContact):
@@ -140,7 +250,7 @@ class ResourceContact(CommonContact):
     @property
     def show(self):
         if not self._presence.available:
-            return PresenceShow.OFFLINE
+            return PresenceShowExt.OFFLINE
         return self._presence.show
 
     @property
@@ -155,23 +265,182 @@ class ResourceContact(CommonContact):
     def idle_time(self):
         return self._presence.idle_time
 
-    def update_presence(self, presence_data):
+    @property
+    def chatstate(self):
+        return self._module('Chatstate').get_remote_chatstate(self._jid)
+
+    def update_presence(self, presence_data, notify=True):
         self._presence = presence_data
-        self.notify('presence-update')
+        if notify:
+            self.notify('presence-update')
 
 
-class Groupchat(CommonContact):
-    def __init__(self, jid, account):
-        CommonContact.__init__(self, jid, account)
-        self.jid = jid
-        self.account = account
+class GroupchatContact(CommonContact):
+    def __init__(self, logger, jid, account):
+        CommonContact.__init__(self, logger, jid, account)
+
+        self.settings = GroupChatSettings(account, str(jid))
+
+        self._resources = {}
+
+    @property
+    def is_groupchat(self):
+        return True
+
+    def add_resource(self, resource):
+        jid = self._jid.new_with(resource=resource)
+        contact = GroupchatParticipant(self._log, jid, self._account)
+        self._resources[resource] = contact
+        contact.connect('user-joined', self._on_user_signal)
+        contact.connect('user-left', self._on_user_signal)
+        contact.connect('user-affiliation-changed', self._on_user_signal)
+        contact.connect('user-role-changed', self._on_user_signal)
+        contact.connect('user-status-show-changed', self._on_user_signal)
+        contact.connect('user-avatar-update', self._on_user_signal)
+        return contact
+
+    def get_resource(self, resource):
+        contact = self._resources.get(resource)
+        if contact is None:
+            contact = self.add_resource(resource)
+        return contact
+
+    @property
+    def name(self):
+        client = app.get_client(self._account)
+        return get_groupchat_name(client, self._jid)
+
+    @property
+    def avatar_sha(self):
+        return app.storage.cache.get_muc(self._jid, 'avatar')
+
+    def get_avatar(self, size, scale):
+        return app.interface.avatar_storage.get_muc_surface(
+            self._account,
+            self._jid,
+            size,
+            scale)
+
+    def _on_user_signal(self, contact, signal_name, *args):
+        self.notify(signal_name, contact, *args)
+
+    def update_avatar(self, *args):
+        app.interface.avatar_storage.invalidate_cache(self._jid)
+        self.notify('avatar-update')
+
+    def set_destroyed(self):
+        for contact in self._resources.values():
+            contact.update_presence(UNKNOWN_MUC_PRESENCE)
+
+    def get_user_nicknames(self):
+        client = app.get_client(self._account)
+        manager = client.get_module('MUC').get_manager()
+        return manager.get_joined_users(self._jid)
 
 
 class GroupchatParticipant(CommonContact):
-    def __init__(self, jid, account):
-        CommonContact.__init__(self, jid, account)
-        self.jid = jid
-        self.account = account
+    def __init__(self, logger, jid, account):
+        CommonContact.__init__(self, logger, jid, account)
+
+        self.settings = ContactSettings(account, str(jid))
+
+        self._client = app.get_client(self._account)
+
+        self._presence = UNKNOWN_MUC_PRESENCE
+        self._muc_manager = self._client.get_module('MUC').get_manager()
+
+    @property
+    def is_pm_contact(self):
+        return True
+
+    @property
+    def presence(self):
+        return self._presence
+
+    def set_presence(self, presence):
+        self._presence = presence
+
+    @property
+    def is_available(self):
+        return self._presence.available
+
+    @property
+    def show(self):
+        if not self._presence.available:
+            return PresenceShowExt.OFFLINE
+        return self._presence.show
+
+    @property
+    def status(self):
+        return self._presence.status
+
+    @property
+    def idle_time(self):
+        return self._presence.idle_time
+
+    @property
+    def name(self):
+        return self._jid.resource
+
+    @property
+    def real_jid(self):
+        return self._presence.real_jid
+
+    @property
+    def affiliation(self):
+        return self._presence.affiliation
+
+    @property
+    def role(self):
+        return self._presence.role
+
+    @property
+    def avatar_sha(self):
+        return self._client.get_module('VCardAvatars').get_avatar_sha(self._jid)
+
+    def get_avatar(self,
+                   size,
+                   scale,
+                   add_show=True,
+                   style='circle'):
+
+        show = self.show if add_show else None
+        return app.interface.avatar_storage.get_surface(
+            self, size, scale, show, style=style)
+
+    def update_presence(self, presence, *args):
+        if not self._presence.available and presence.available:
+            self._presence = presence
+            self.notify('user-joined', *args)
+            return
+
+        if not presence.available:
+            self._presence = presence
+            self.notify('user-left', *args)
+            return
+
+        signals = []
+        if self._presence.affiliation != presence.affiliation:
+            signals.append('user-affiliation-changed')
+
+        if self._presence.role != presence.role:
+            signals.append('user-role-changed')
+
+        if (self._presence.status != presence.status or
+                self._presence.show != presence.show):
+            signals.append('user-status-show-changed')
+
+        self._presence = presence
+        for signal in signals:
+            self.notify(signal, *args)
+
+    def set_state(self, state, presence):
+        self._presence = presence
+        self.notify(state)
+
+    def update_avatar(self, *args):
+        app.interface.avatar_storage.invalidate_cache(self._jid)
+        self.notify('avatar-update')
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[Contacts, str]:

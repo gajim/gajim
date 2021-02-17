@@ -93,5 +93,9 @@ class BaseModule(EventHelper):
         self._log.info('Send stored publish')
         self._stored_publish()  # pylint: disable=not-callable
 
+    def _get_contact(self, jid, groupchat=False):
+        return self._con.get_module('Contacts').get_contact(
+            jid, groupchat=groupchat)
+
     def cleanup(self):
         self.unregister_events()

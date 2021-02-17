@@ -29,6 +29,8 @@ import time
 import uuid
 import tempfile
 
+from nbxmpp.const import Chatstate
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -42,7 +44,6 @@ from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.contacts import GC_Contact
-from gajim.common.const import Chatstate
 from gajim.common.structs import OutgoingMessage
 
 from gajim import gtkgui_helpers
@@ -104,14 +105,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # Undo needs this variable to know if space has been pressed.
         # Initialize it to True so empty textview is saved in undo list
         self.space_pressed = True
-
-        if resource is None:
-            # We very likely got a contact with a random resource.
-            # This is bad, we need the highest for caps etc.
-            _contact = app.contacts.get_contact_with_highest_priority(
-                acct, contact.jid)
-            if _contact and not isinstance(_contact, GC_Contact):
-                contact = _contact
 
         self.handlers = {}
         self.parent_win = parent_win
@@ -514,7 +507,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def delegate_action(self, action):
         if action == 'browse-history':
-            dict_ = {'jid': GLib.Variant('s', self.contact.jid),
+            dict_ = {'jid': GLib.Variant('s', str(self.contact.jid)),
                      'account': GLib.Variant('s', self.account)}
             variant = GLib.Variant('a{sv}', dict_)
             app.app.activate_action('browse-history', variant)
@@ -1179,7 +1172,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         if kind == 'incoming':
             if (not self._type.is_groupchat or
-                    self.contact.can_notify() or
+                    # self.contact.can_notify() or TODO
                     'marked' in other_tags_for_text):
                 # it's a normal message, or a muc message with want to be
                 # notified about if quitting just after
@@ -1505,35 +1498,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def on_conversation_vadjustment_changed(self, _adjustment):
         self.scroll_to_end()
-
-    def redraw_after_event_removed(self, jid):
-        """
-        We just removed a 'printed_*' event, redraw contact in roster or
-        gc_roster and titles in roster and msg_win
-        """
-        if not self.parent_win:  # minimized groupchat
-            return
-        self.parent_win.redraw_tab(self)
-        self.parent_win.show_title()
-        # TODO : get the contact and check get_show_in_roster()
-        if self._type.is_privatechat:
-            room_jid, nick = app.get_room_and_nick_from_fjid(jid)
-            groupchat_control = app.interface.msg_win_mgr.get_gc_control(
-                room_jid, self.account)
-            if room_jid in app.interface.minimized_controls[self.account]:
-                groupchat_control = \
-                        app.interface.minimized_controls[self.account][room_jid]
-            contact = app.contacts.get_contact_with_highest_priority(
-                self.account, room_jid)
-            if contact:
-                app.interface.roster.draw_contact(room_jid, self.account)
-            if groupchat_control:
-                groupchat_control.roster.draw_contact(nick)
-                if groupchat_control.parent_win:
-                    groupchat_control.parent_win.redraw_tab(groupchat_control)
-        else:
-            app.interface.roster.draw_contact(jid, self.account)
-            app.interface.roster.show_title()
 
     def scroll_messages(self, direction, msg_buf, msg_type):
         if msg_type == 'sent':

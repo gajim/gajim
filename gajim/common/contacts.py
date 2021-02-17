@@ -31,7 +31,7 @@ try:
     from gajim.common.i18n import _
     from gajim.common.account import Account
     from gajim import common
-    from gajim.common.const import Chatstate
+    # from gajim.common.const import Chatstate
 except ImportError as e:
     if __name__ != "__main__":
         raise ImportError(str(e))

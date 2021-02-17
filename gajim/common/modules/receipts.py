@@ -65,8 +65,7 @@ class Receipts(BaseModule):
                 if not properties.is_encrypted:
                     return
 
-            contact = self._get_contact(properties)
-            if contact is None:
+            if not self._should_answer(properties.jid):
                 return
             self._log.info('Send receipt: %s', properties.jid)
             self._con.connection.send(build_receipt(stanza))
@@ -95,17 +94,14 @@ class Receipts(BaseModule):
 
             raise nbxmpp.NodeProcessed
 
-    def _get_contact(self, properties):
+    def _should_answer(self, properties):
         if properties.is_muc_pm:
-            return app.contacts.get_gc_contact(self._account,
-                                               properties.jid.bare,
-                                               properties.jid.resource)
+            return True
 
-        contact = app.contacts.get_contact(self._account,
-                                           properties.jid.bare)
-        if contact is not None and contact.sub not in ('to', 'none'):
-            return contact
-        return None
+        contact = self._get_contact(properties.jid)
+        if contact.sub not in ('to', 'none'):
+            return True
+        return False
 
 
 def get_instance(*args, **kwargs):

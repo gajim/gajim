@@ -36,6 +36,7 @@ class UserLocation(BaseModule):
         self._register_pubsub_handler(self._location_received)
 
         self._current_location = None
+        self._locations = {}
 
     def get_current_location(self):
         return self._current_location
@@ -46,19 +47,10 @@ class UserLocation(BaseModule):
             return
 
         data = properties.pubsub_event.data
-        for contact in app.contacts.get_contacts(self._account,
-                                                 str(properties.jid)):
-            if data is not None:
-                contact.pep[PEPEventType.LOCATION] = data
-            else:
-                contact.pep.pop(PEPEventType.LOCATION, None)
-
         if properties.is_self_message:
-            if data is not None:
-                self._con.pep[PEPEventType.LOCATION] = data
-            else:
-                self._con.pep.pop(PEPEventType.LOCATION, None)
             self._current_location = data
+        else:
+            self._locations[properties.jid] = data
 
         app.nec.push_incoming_event(
             NetworkEvent('location-received',

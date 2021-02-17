@@ -131,7 +131,7 @@ def add_status_to_avatar(surface, show):
     context.arc(center_x, center_y, clip_radius, 0, 2 * pi)
     context.fill()
 
-    css_color = get_css_show_class(show)
+    css_color = get_css_show_class(show.value)
     color = convert_rgb_string_to_float(
         app.css_config.get_value(css_color, StyleAttr.COLOR))
 
@@ -142,7 +142,7 @@ def add_status_to_avatar(surface, show):
     context.arc(center_x, center_y, show_radius, 0, 2 * pi)
     context.fill()
 
-    if show == 'dnd':
+    if show.value == 'dnd':
         line_length = clip_radius / 2
         context.move_to(center_x - line_length, center_y)
         context.line_to(center_x + line_length, center_y)
@@ -269,10 +269,8 @@ class AvatarStorage(metaclass=Singleton):
                     show=None,
                     default=False,
                     style='circle'):
-        jid = contact.jid
-        if contact.is_gc_contact:
-            jid = contact.get_full_jid()
 
+        jid = contact.jid
         if not default:
             surface = self._cache[jid].get((size, scale, show))
             if surface is not None:
@@ -285,12 +283,8 @@ class AvatarStorage(metaclass=Singleton):
                 self._cache[jid][(size, scale, show)] = surface
                 return surface
 
-        name = contact.get_shown_name()
-        # Use nickname for group chats and bare JID for single contacts
-        if contact.is_gc_contact:
-            color_string = contact.name
-        else:
-            color_string = contact.jid
+        name = contact.name
+        color_string = str(contact.jid)
 
         letter = self._generate_letter(name)
         surface = generate_default_avatar(
@@ -306,7 +300,7 @@ class AvatarStorage(metaclass=Singleton):
             if surface is not None:
                 return surface
 
-            avatar_sha = app.storage.cache.get_muc_avatar_sha(jid)
+            avatar_sha = app.storage.cache.get_muc(jid, 'avatar')
             if avatar_sha is not None:
                 surface = self.surface_from_filename(avatar_sha, size, scale)
                 if surface is None:
@@ -318,7 +312,7 @@ class AvatarStorage(metaclass=Singleton):
         con = app.connections[account]
         name = get_groupchat_name(con, jid)
         letter = self._generate_letter(name)
-        surface = generate_default_avatar(letter, jid, size, scale)
+        surface = generate_default_avatar(letter, str(jid), size, scale)
         self._cache[jid][(size, scale)] = surface
         return surface
 
@@ -408,8 +402,7 @@ class AvatarStorage(metaclass=Singleton):
         surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
         return square(surface, size)
 
-    def _load_surface_from_storage(self, contact, size, scale):
-        filename = contact.avatar_sha
+    def _load_surface_from_storage(self, filename, size, scale):
         size = size * scale
         path = self.get_avatar_path(filename)
         if path is None:
@@ -422,10 +415,11 @@ class AvatarStorage(metaclass=Singleton):
         return square(surface, size)
 
     def _get_avatar_from_storage(self, contact, size, scale):
-        if contact.avatar_sha is None:
+        avatar_sha = contact.avatar_sha
+        if avatar_sha is None:
             return None
 
-        surface = self._load_surface_from_storage(contact, size, scale)
+        surface = self._load_surface_from_storage(avatar_sha, size, scale)
         if surface is None:
             return None
         return clip_circle(surface)

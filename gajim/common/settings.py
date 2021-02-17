@@ -563,6 +563,13 @@ class Settings:
     def get_accounts(self) -> List[str]:
         return list(self._account_settings.keys())
 
+    def get_active_accounts(self) -> List[str]:
+        active = []
+        for account, settings in self._account_settings.items():
+            if settings['account']['active'] is True:
+                active.append(account)
+        return active
+
     def get_account_setting(self,
                             account: str,
                             setting: str) -> SETTING_TYPE:

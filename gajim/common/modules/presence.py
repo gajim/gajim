@@ -142,7 +142,7 @@ class Presence(BaseModule):
 
         event_ = NetworkEvent('presence-received', **event_attrs)
 
-        self._update_contact(event_, properties)
+        # self._update_contact(event_, properties)
 
         app.nec.push_incoming_event(event_)
 

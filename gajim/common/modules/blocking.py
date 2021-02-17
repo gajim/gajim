@@ -124,9 +124,11 @@ class Blocking(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _set_contact_offline(self, jid: str) -> None:
-        contact_list = app.contacts.get_contacts(self._account, jid)
-        for contact in contact_list:
-            contact.show = 'offline'
+        # TODO
+        return
+        # contact_list = app.contacts.get_contacts(self._account, jid)
+        # for contact in contact_list:
+        #     contact.show = 'offline'
 
     def _presence_probe(self, jid: JID) -> None:
         self._log.info('Presence probe: %s', jid)

@@ -72,23 +72,25 @@ class Account(Gtk.ListBoxRow):
 
     def update(self):
         self._update_account_color()
-        self._image.update()
 
 
 class AccountAvatar(Gtk.Image):
     def __init__(self, account):
         Gtk.Image.__init__(self)
         self._account = account
-        self.update()
 
-    def update(self):
         jid = app.get_jid_from_account(self._account)
-        contact = app.contacts.create_contact(jid, self._account)
         client = app.get_client(self._account)
+        self._contact = client.get_module('Contacts').get_contact(jid)
+        self._contact.connect('avatar-update', self._on_avatar_update)
 
-        surface = app.interface.get_avatar(contact,
-                                           AvatarSize.ACCOUNT_SIDE_BAR,
+        self._update_image()
+
+    def _on_avatar_update(self, _contact, _signal_name):
+        self._update_image()
+
+    def _update_image(self):
+        surface = self._contact.get_avatar(AvatarSize.ACCOUNT_SIDE_BAR,
                                            self.get_scale_factor(),
-                                           style='round-corners',
-                                           show=client.status)
+                                           style='round-corners')
         self.set_from_surface(surface)

@@ -177,7 +177,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
         db_jids = app.storage.archive.get_jids_in_db()
         completion_dict = dict.fromkeys(db_jids)
 
-        self.accounts_seen_online = list(app.contacts.get_accounts())
+        self.accounts_seen_online = list(app.settings.get_active_accounts())
 
         # Enhance contacts of online accounts with contact.
         # Needed for mapping below
@@ -254,7 +254,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
         Return the corresponding account of the jid. May be None if an account
         could not be found
         """
-        accounts = app.contacts.get_accounts()
+        accounts = app.settings.get_active_accounts()
         account = None
         for acc in accounts:
             jid_list = app.contacts.get_jid_list(acc)
@@ -566,7 +566,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
             else:
                 # we don't have roster, we don't know our own nick, use first
                 # account one (urk!)
-                account = list(app.contacts.get_accounts())[0]
+                account = list(app.settings.get_active_accounts())[0]
                 contact_name = app.nicks[account]
             tag_name = 'outgoing'
             tag_msg = 'outgoingtxt'
@@ -663,7 +663,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
                 # the contact is offine, or if we browse a groupchat history.
                 # The account is not needed, a dummy can be set.
                 # This may leed to wrong self nick in the displayed history
-                account = list(app.contacts.get_accounts())[0]
+                account = list(app.settings.get_active_accounts())[0]
 
             date = None
             if self._ui.search_in_date.get_active():

@@ -48,8 +48,7 @@ class ChatStack(Gtk.Stack):
             return
 
         mw = self.get_toplevel()
-        contact = app.contacts.create_contact(jid, account)
-        chat_control = ChatControl(mw, contact, account, None, None)
+        chat_control = ChatControl(mw, jid, account, None, None)
         self._controls[(account, jid)] = chat_control
         self.add_named(chat_control.widget, f'{account}:{jid}')
         chat_control.widget.show_all()
@@ -57,14 +56,6 @@ class ChatStack(Gtk.Stack):
     def add_group_chat(self, account, jid):
         if self._controls.get((account, jid)) is not None:
             return
-        avatar_sha = app.storage.cache.get_muc_avatar_sha(jid)
-        contact = app.contacts.create_contact(jid=jid,
-                                              account=account,
-                                              groups=[_('Group chats')],
-                                              sub='none',
-                                              avatar_sha=avatar_sha,
-                                              groupchat=True)
-        app.contacts.add_contact(account, contact)
 
         # muc_data = self._create_muc_data(account,
         #                                  room_jid,
@@ -73,18 +64,14 @@ class ChatStack(Gtk.Stack):
         #                                  None)
 
         mw = self.get_toplevel()
-        control = GroupchatControl(mw, contact, None, account)
+        control = GroupchatControl(mw, jid, None, account)
         self._controls[(account, jid)] = control
         self.add_named(control.widget, f'{account}:{jid}')
         control.widget.show_all()
 
     def add_private_chat(self, account, jid):
         mw = self.get_toplevel()
-        bare_jid = app.get_jid_without_resource(jid)
-        nick = app.get_resource_from_jid(jid)
-        gc_c = app.contacts.get_gc_contact(account, bare_jid, nick)
-        contact = gc_c.as_contact()
-        control = PrivateChatControl(mw, gc_c, contact, account, None)
+        control = PrivateChatControl(mw, jid, None, account, None)
         self._controls[(account, str(jid))] = control
         self.add_named(control.widget, f'{account}:{jid}')
         control.widget.show_all()

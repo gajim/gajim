@@ -1314,7 +1314,7 @@ class Interface:
 
     def create_groupchat_control(self, account, room_jid, muc_data,
                                  minimize=False):
-        avatar_sha = app.storage.cache.get_muc_avatar_sha(room_jid)
+        avatar_sha = app.storage.cache.get_avatar_sha(room_jid)
         contact = app.contacts.create_contact(jid=room_jid,
                                               account=account,
                                               groups=[_('Group chats')],

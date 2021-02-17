@@ -38,6 +38,7 @@ from gi.repository import GLib
 from gi.repository import Gdk
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.const import Chatstate
 
 from gajim.common import app
 from gajim.common import helpers
@@ -50,7 +51,6 @@ from gajim.common.helpers import open_file
 from gajim.common.contacts import GC_Contact
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
-from gajim.common.const import Chatstate
 from gajim.common.const import PEPEventType
 from gajim.common.const import JingleState
 
@@ -100,7 +100,14 @@ class ChatControl(ChatControlBase):
     # processed with this command host.
     COMMAND_HOST = ChatCommands  # type: ClassVar[Type[CommandHost]]
 
-    def __init__(self, parent_win, contact, acct, session, resource=None):
+    def __init__(self, parent_win, jid, acct, session, resource=None):
+
+        contact = app.get_client(acct).get_module('Contacts').get_contact(jid)
+        contact.connect('presence-update', self._on_presence_update)
+        contact.connect('chatstate-update', self._on_chatstate_update)
+        contact.connect('nickname-update', self._on_nickname_update)
+        contact.connect('avatar-update', self._on_avatar_update)
+
         ChatControlBase.__init__(self,
                                  parent_win,
                                  'chat_control',
@@ -262,14 +269,15 @@ class ChatControl(ChatControlBase):
         con = app.connections[self.account]
 
         # Add to roster
-        if not isinstance(self.contact, GC_Contact) \
-        and _('Not in contact list') in self.contact.groups and \
-        app.connections[self.account].roster_supported and online:
-            win.lookup_action(
-                'add-to-roster-' + self.control_id).set_enabled(True)
-        else:
-            win.lookup_action(
-                'add-to-roster-' + self.control_id).set_enabled(False)
+        # TODO
+        # if not isinstance(self.contact, GC_Contact) \
+        # and _('Not in contact list') in self.contact.groups and \
+        # app.connections[self.account].roster_supported and online:
+        #     win.lookup_action(
+        #         'add-to-roster-' + self.control_id).set_enabled(True)
+        # else:
+        #     win.lookup_action(
+        #         'add-to-roster-' + self.control_id).set_enabled(False)
 
         # Block contact
         win.lookup_action(
@@ -278,7 +286,7 @@ class ChatControl(ChatControlBase):
 
         # Jingle AV detection
         if (self.contact.supports(Namespace.JINGLE_ICE_UDP) and
-                app.is_installed('FARSTREAM') and self.contact.resource):
+                app.is_installed('FARSTREAM') and self.contact.jid.resource):
             self.jingle['audio'].available = self.contact.supports(
                 Namespace.JINGLE_RTP_AUDIO)
             self.jingle['video'].available = self.contact.supports(
@@ -307,7 +315,7 @@ class ChatControl(ChatControlBase):
 
         # Send file (Jingle)
         jingle_support = self.contact.supports(Namespace.JINGLE_FILE_TRANSFER_5)
-        jingle_conditions = jingle_support and self.contact.show != 'offline'
+        jingle_conditions = jingle_support and not self.contact.show.is_offline
         jingle = win.lookup_action('send-file-jingle-' + self.control_id)
         jingle.set_enabled(online and jingle_conditions)
 
@@ -464,6 +472,8 @@ class ChatControl(ChatControlBase):
         self._update_pep(PEPEventType.TUNE)
 
     def _update_pep(self, type_):
+        return
+        # TODO
         image = self._get_pep_widget(type_)
         data = self.contact.pep.get(type_)
         if data is None:
@@ -522,23 +532,14 @@ class ChatControl(ChatControlBase):
             return
         self.xml.phone_image.set_visible(contact.uses_phone)
 
-    def _on_chatstate_received(self, event):
-        if self._type.is_privatechat:
-            if event.contact != self.gc_contact:
-                return
-        else:
-            if event.contact.jid != self.contact.jid:
-                return
-
+    def _on_chatstate_update(self, _contact, _signal_name):
         self.draw_banner_text()
 
-        # update chatstate in tab for this chat
-        if event.contact.is_gc_contact:
-            chatstate = event.contact.chatstate
-        else:
-            chatstate = app.contacts.get_combined_chatstate(
-                self.account, self.contact.jid)
-        self.parent_win.redraw_tab(self, chatstate)
+    def _on_nickname_update(self, _contact, _signal_name):
+        self.draw_banner_text()
+
+    def _on_presence_update(self, _contact, _signal_name):
+        self._update_avatar()
 
     def _on_caps_update(self, event):
         if self._type.is_chat and event.jid != self.contact.jid:
@@ -929,6 +930,8 @@ class ChatControl(ChatControlBase):
         app.settings.set('audio_output_volume', int(value))
 
     def on_location_eventbox_button_release_event(self, _widget, _event):
+        return
+        # TODO
         if 'geoloc' in self.contact.pep:
             location = self.contact.pep['geoloc'].data
             if 'lat' in location and 'lon' in location:
@@ -960,27 +963,19 @@ class ChatControl(ChatControlBase):
         name, jid
         """
         contact = self.contact
-        name = contact.get_shown_name()
+        name = contact.name
         if self.resource:
             name += '/' + self.resource
         if self._type.is_privatechat:
             name = i18n.direction_mark + _(
                 '%(nickname)s from group chat %(room_name)s') % \
                 {'nickname': name, 'room_name': self.room_name}
+
         name = i18n.direction_mark + GLib.markup_escape_text(name)
 
-        status = contact.status
-        if status is not None:
-            status_reduced = helpers.reduce_chars_newlines(status, max_lines=1)
-        else:
-            status_reduced = ''
-        status_escaped = GLib.markup_escape_text(status_reduced)
-
-        if self._type.is_privatechat:
-            cs = self.gc_contact.chatstate
-        else:
-            cs = app.contacts.get_combined_chatstate(
-                self.account, self.contact.jid)
+        cs = self.contact.chatstate
+        if cs is not None:
+            cs = cs.value
 
         if app.settings.get('show_chatstate_in_banner'):
             chatstate = helpers.get_uf_chatstate(cs)
@@ -992,16 +987,9 @@ class ChatControl(ChatControlBase):
             label_text = '<span>%s</span>' % name
             label_tooltip = name
 
-        if status_escaped:
-            status_text = make_href_markup(status_escaped)
-            status_text = '<span size="x-small" weight="light">%s</span>' % status_text
-            self.xml.banner_label.set_tooltip_text(status)
-            self.xml.banner_label.set_no_show_all(False)
-            self.xml.banner_label.show()
-        else:
-            status_text = ''
-            self.xml.banner_label.hide()
-            self.xml.banner_label.set_no_show_all(True)
+        status_text = ''
+        self.xml.banner_label.hide()
+        self.xml.banner_label.set_no_show_all(True)
 
         self.xml.banner_label.set_markup(status_text)
         # setup the label that holds name and jid
@@ -1072,10 +1060,10 @@ class ChatControl(ChatControlBase):
         else:
             if not frm:
                 kind = 'incoming'
-                name = contact.get_shown_name()
+                name = contact.name
             elif frm == 'print_queue':
                 kind = 'incoming_queue'
-                name = contact.get_shown_name()
+                name = contact.name
             else:
                 kind = 'outgoing'
                 name = self.get_our_nick()
@@ -1097,35 +1085,6 @@ class ChatControl(ChatControlBase):
             self.old_msg_kind = None
         else:
             self.old_msg_kind = kind
-
-    def get_tab_label(self):
-        unread = ''
-        if self.resource:
-            jid = self.contact.get_full_jid()
-        else:
-            jid = self.contact.jid
-        num_unread = len(app.events.get_events(
-            self.account, jid, ['printed_%s' % self._type, str(self._type)]))
-        if num_unread == 1:
-            unread = '*'
-        elif num_unread > 1:
-            unread = '[' + str(num_unread) + ']'
-
-        name = self.contact.get_shown_name()
-        if self.resource:
-            name += '/' + self.resource
-        label_str = GLib.markup_escape_text(name)
-        if num_unread: # if unread, text in the label becomes bold
-            label_str = '<b>' + unread + label_str + '</b>'
-        return label_str
-
-    def get_tab_image(self):
-        scale = self.parent_win.window.get_scale_factor()
-        return app.contacts.get_avatar(self.account,
-                                       self.contact.jid,
-                                       AvatarSize.ROSTER,
-                                       scale,
-                                       self.contact.show)
 
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """
@@ -1195,7 +1154,7 @@ class ChatControl(ChatControlBase):
             if self.account in no_log_for:
                 more = _('Note: Chat history is disabled for this account.')
             text = _('You just received a new message from %s.\n'
-                     'Do you want to close this tab?') % self.contact.get_shown_name()
+                     'Do you want to close this tab?') % self.contact.name
             if more:
                 text += '\n' + more
 
@@ -1212,14 +1171,12 @@ class ChatControl(ChatControlBase):
             return
         on_yes(self)
 
+    def _on_avatar_update(self, _contact, _signal_name):
+        self._update_avatar()
+
     def _update_avatar(self):
         scale = self.parent_win.window.get_scale_factor()
-        surface = app.contacts.get_avatar(self.account,
-                                          self.contact.jid,
-                                          AvatarSize.CHAT,
-                                          scale,
-                                          self.contact.show)
-
+        surface = self.contact.get_avatar(AvatarSize.CHAT, scale)
         self.xml.avatar_image.set_from_surface(surface)
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
@@ -1256,10 +1213,6 @@ class ChatControl(ChatControlBase):
 
     def restore_conversation(self):
         jid = self.contact.jid
-        # don't restore lines if it's a transport
-        if app.jid_is_transport(jid):
-            return
-
         # number of messages that are in queue and are already logged, we want
         # to avoid duplication
         pending = len(app.events.get_events(self.account, jid, ['chat', 'pm']))
@@ -1285,10 +1238,10 @@ class ChatControl(ChatControlBase):
             elif row.kind in (KindConstant.SINGLE_MSG_RECV,
                               KindConstant.CHAT_MSG_RECV):
                 kind = 'incoming'
-                name = self.contact.get_shown_name()
+                name = self.contact.name
             elif row.kind == KindConstant.ERROR:
                 kind = 'status'
-                name = self.contact.get_shown_name()
+                name = self.contact.name
 
             tim = float(row.time)
 
@@ -1314,75 +1267,6 @@ class ChatControl(ChatControlBase):
         if rows:
             self.conv_textview.print_empty_line()
 
-    def read_queue(self):
-        """
-        Read queue and print messages contained in it
-        """
-        jid = self.contact.jid
-        jid_with_resource = jid
-        if self.resource:
-            jid_with_resource += '/' + self.resource
-        events = app.events.get_events(self.account, jid_with_resource)
-
-        # list of message ids which should be marked as read
-        message_ids = []
-        for event in events:
-            if event.type_ != str(self._type):
-                continue
-            kind = 'print_queue'
-            if event.sent_forwarded:
-                kind = 'out'
-            self.add_message(event.message,
-                             kind,
-                             tim=event.time,
-                             subject=event.subject,
-                             displaymarking=event.displaymarking,
-                             correct_id=event.correct_id,
-                             message_id=event.message_id,
-                             additional_data=event.additional_data)
-            if isinstance(event.msg_log_id, int):
-                message_ids.append(event.msg_log_id)
-
-            if event.session and not self.session:
-                self.set_session(event.session)
-        if message_ids:
-            app.storage.archive.set_read_messages(message_ids)
-
-        # XEP-0333 Send <displayed> marker
-        con = app.connections[self.account]
-        con.get_module('ChatMarkers').send_displayed_marker(
-            self.contact,
-            self.last_msg_id,
-            self._type)
-        self.last_msg_id = None
-        app.events.remove_events(self.account,
-                                 jid_with_resource,
-                                 types=[str(self._type)])
-
-        typ = 'chat' # Is it a normal chat or a pm ?
-
-        # reset to status image in gc if it is a pm
-        # Is it a pm ?
-        room_jid, nick = app.get_room_and_nick_from_fjid(jid)
-        control = app.interface.msg_win_mgr.get_gc_control(room_jid,
-                                                           self.account)
-        if control and control.is_groupchat:
-            control.update_ui()
-            control.parent_win.show_title()
-            typ = 'pm'
-
-        self.redraw_after_event_removed(jid)
-        if self.contact.show in ('offline', 'error'):
-            show_offline = app.settings.get('showoffline')
-            show_transports = app.settings.get('show_transports_group')
-            if (not show_transports and app.jid_is_transport(jid)) or \
-            (not show_offline and typ == 'chat' and \
-            len(app.contacts.get_contacts(self.account, jid)) < 2):
-                app.interface.roster.remove_to_be_removed(self.contact.jid,
-                                                          self.account)
-            elif typ == 'pm':
-                control.remove_contact(nick)
-
     def _on_convert_to_gc_menuitem_activate(self, _widget):
         """
         User wants to invite some friends to chat
@@ -1391,13 +1275,6 @@ class ChatControl(ChatControlBase):
 
     def got_connected(self):
         ChatControlBase.got_connected(self)
-        # Refreshing contact
-        contact = app.contacts.get_contact_with_highest_priority(
-            self.account, self.contact.jid)
-        if isinstance(contact, GC_Contact):
-            contact = contact.as_contact()
-        if contact:
-            self.contact = contact
         self.draw_banner()
         self.update_actions()
 
@@ -1407,7 +1284,7 @@ class ChatControl(ChatControlBase):
 
     def _on_presence_received(self, event):
         uf_show = helpers.get_uf_show(event.show)
-        name = self.contact.get_shown_name()
+        name = self.contact.name
 
         self.update_ui()
         self.parent_win.redraw_tab(self)
