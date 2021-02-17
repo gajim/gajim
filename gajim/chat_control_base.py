@@ -183,7 +183,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # inserted before the line break. This triggers the hscrollbar to show,
         # see: https://gitlab.gnome.org/GNOME/gtk/-/issues/2384
         # Using set_hscroll_policy(Gtk.Scrollable.Policy.NEVER) would cause bad
-        # performance during resize, and prevent the window from being shrinked
+        # performance during resize, and prevent the window from being shrunk
         # horizontally under certain conditions (applies to GroupchatControl)
         hscrollbar = self.xml.conversation_scrolledwindow.get_hscrollbar()
         hscrollbar.hide()
