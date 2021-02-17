@@ -162,6 +162,7 @@ class ChatList(Gtk.ListBox):
         row = self._chats.get((event.account, event.jid))
         nick = self._get_nick_for_received_message(event)
         row.set_last_message_text(nick, event.msgtxt)
+        row.set_timestamp(event.properties.timestamp)
 
         self._add_unread(row, event.properties)
 
@@ -179,6 +180,7 @@ class ChatList(Gtk.ListBox):
         else:
             nick = _('Me: ')
         row.set_last_message_text(nick, msgtext)
+        row.set_timestamp(event.timestamp)
 
     @staticmethod
     def _get_nick_for_received_message(event):
@@ -357,6 +359,10 @@ class ChatRow(Gtk.ListBoxRow):
 
     def _on_close_button_clicked(self, _button):
         app.window.remove_chat(self.workspace_id, self.account, self.jid)
+
+    def set_timestamp(self, timestamp):
+        self._timestamp = timestamp
+        self.update_time()
 
     def update_time(self):
         if self._timestamp is not None:
