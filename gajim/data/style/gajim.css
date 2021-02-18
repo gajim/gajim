@@ -176,17 +176,20 @@
 }
 @keyframes composing {
     0%  {
-	    -gtk-icon-transform: translate(0px, 0px);
+	    -gtk-icon-transform: translate(0px, 2px);
 	}
     10% {
-	    -gtk-icon-transform: translate(0px, -3px) rotate(20deg);
+	    -gtk-icon-transform: translate(0px, -1px) rotate(20deg);
 	}
     30% {
-	    -gtk-icon-transform: translate(0px, -3px) rotate(-20deg);
+	    -gtk-icon-transform: translate(0px, -1px) rotate(-20deg);
 	}
     40% {
-	    -gtk-icon-transform: translate(0px, 0px);
+	    -gtk-icon-transform: translate(0px, 2px);
 	}
+    100% {
+        -gtk-icon-transform: translate(0px, 2px);
+    }
 }
 .chatstate-icon {
     animation-name: composing;
