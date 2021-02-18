@@ -13,6 +13,7 @@ HANDLED_EVENTS = [
     'gc-message-received',
     'presence-received',
     'message-sent',
+    'chatstate-received',
 ]
 
 

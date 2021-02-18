@@ -174,7 +174,26 @@
 .chatlist-row overlay > box {
 	padding: 6px;
 }
-
+@keyframes composing {
+    0%  {
+	    -gtk-icon-transform: translate(0px, 0px);
+	}
+    10% {
+	    -gtk-icon-transform: translate(0px, -3px) rotate(20deg);
+	}
+    30% {
+	    -gtk-icon-transform: translate(0px, -3px) rotate(-20deg);
+	}
+    40% {
+	    -gtk-icon-transform: translate(0px, 0px);
+	}
+}
+.chatstate-icon {
+    animation-name: composing;
+    animation-duration: 2.0s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
 .unread-counter {
     background-color: rgb(22, 100, 169);
     color: rgb(242, 242, 242);

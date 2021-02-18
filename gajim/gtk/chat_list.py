@@ -152,6 +152,8 @@ class ChatList(Gtk.ListBox):
             self._on_presence_received(event)
         elif event.name == 'message-sent':
             self._on_message_sent(event)
+        elif event.name == 'chatstate-received':
+            self._on_chatstate_received(event)
         else:
             log.warning('Unhandled Event: %s', event.name)
 
@@ -201,6 +203,15 @@ class ChatList(Gtk.ListBox):
     def _on_presence_received(self, event):
         row = self._chats.get((event.account, event.jid))
         row.update_avatar()
+
+    def _on_chatstate_received(self, event):
+        row = self._chats.get((event.account, event.jid))
+        if event.contact.is_gc_contact:
+            chatstate = event.contact.chatstate
+        else:
+            chatstate = app.contacts.get_combined_chatstate(
+                row.account, row.jid)
+        row.set_chatstate(chatstate)
 
     @staticmethod
     def _add_unread(row, properties):
@@ -328,6 +339,12 @@ class ChatRow(Gtk.ListBoxRow):
             name = contact.get_shown_name()
 
         self._ui.name_label.set_text(name)
+
+    def set_chatstate(self, chatstate):
+        if chatstate == 'composing':
+            self._ui.chatstate_image.show()
+        else:
+            self._ui.chatstate_image.hide()
 
     @property
     def unread_count(self):
