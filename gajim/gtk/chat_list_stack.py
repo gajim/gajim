@@ -132,6 +132,10 @@ class ChatListStack(Gtk.Stack):
         app.settings.set_workspace_setting(
             workspace_id, 'open_chats', open_chats)
 
+    def toggle_chat_pinned(self, workspace_id, account, jid):
+        chat_list = self._chat_lists[workspace_id]
+        chat_list.toggle_chat_pinned(account, jid)
+
     def remove_chat(self, workspace_id, account, jid):
         chat_list = self._chat_lists[workspace_id]
         type_ = chat_list.get_chat_type(account, jid)

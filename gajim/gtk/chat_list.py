@@ -11,6 +11,8 @@ from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_uf_relative_time
 
+from gajim.gui_menu_builder import get_chat_list_row_menu
+
 from .tooltips import RosterTooltip
 from .util import get_builder
 
@@ -94,6 +96,11 @@ class ChatList(Gtk.ListBox):
 
     @staticmethod
     def _sort_func(row1, row2):
+        if row1.is_pinned > row2.is_pinned:
+            return -1
+        if row2.is_pinned > row1.is_pinned:
+            return 1
+
         if row1.is_recent == row2.is_recent:
             return 0
         return -1 if row1.is_recent else 1
@@ -118,6 +125,11 @@ class ChatList(Gtk.ListBox):
     def select_chat(self, account, jid):
         row = self._chats[(account, jid)]
         self.select_row(row)
+
+    def toggle_chat_pinned(self, account, jid):
+        row = self._chats[(account, jid)]
+        row.toggle_pinned()
+        self.invalidate_sort()
 
     def remove_chat(self, account, jid):
         row = self._chats.pop((account, jid))
@@ -235,13 +247,15 @@ class ChatRow(Gtk.ListBoxRow):
 
         self._timestamp = None
         self._unread_count = 0
+        self._pinned = False  # TODO: Load from settings
 
         self.get_style_context().add_class('chatlist-row')
 
         self._ui = get_builder('chat_list_row.ui')
-        self.add(self._ui.overlay)
+        self.add(self._ui.eventbox)
 
         self.connect('state-flags-changed', self._on_state_flags_changed)
+        self._ui.eventbox.connect('button-press-event', self._on_button_press)
         self._ui.close_button.connect('clicked', self._on_close_button_clicked)
 
         account_class = app.css_config.get_dynamic_class(account)
@@ -281,6 +295,24 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.timestamp_label.set_text(uf_timestamp)
 
         self.show_all()
+
+    @property
+    def is_pinned(self):
+        return self._pinned
+
+    def _on_button_press(self, _widget, event):
+        if event.button == 3:  # right click
+            self._popup_menu()
+
+    def _popup_menu(self):
+        menu = get_chat_list_row_menu(
+            self.workspace_id, self.account, self.jid, self._pinned)
+        popover = Gtk.Popover.new_from_model(self, menu)
+        popover.set_position(Gtk.PositionType.BOTTOM)
+        popover.popup()
+
+    def toggle_pinned(self):
+        self._pinned = not self._pinned
 
     def update_avatar(self):
         scale = self.get_scale_factor()

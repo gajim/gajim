@@ -793,6 +793,20 @@ def get_conv_context_menu(account, uri):
     return menu
 
 
+def get_chat_list_row_menu(workspace_id, account, jid, pinned):
+    menu = Gio.Menu()
+    action = 'win.toggle-chat-pinned'
+    if not pinned:
+        label = _('Pin Conversation')
+    else:
+        label = _('Unpin Conversation')
+    menuitem = Gio.MenuItem.new(label, action)
+    variant_list = GLib.Variant('as', [workspace_id, account, jid])
+    menuitem.set_action_and_target_value(action, variant_list)
+    menu.append_item(menuitem)
+    return menu
+
+
 def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu = Gtk.Menu()
 

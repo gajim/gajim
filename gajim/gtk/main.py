@@ -161,6 +161,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('add-chat', 'as', self._add_chat),
             ('add-group-chat', 'as', self._add_group_chat),
             ('remove-chat', 'as', self._remove_chat),
+            ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
         ]
 
         for action in actions:
@@ -280,7 +281,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         #     number = int(action[-1])
         #     self.notebook.set_current_page(number - 1)
         #     return
-
 
     def get_widget(self, name):
         return getattr(self._ui, name)
@@ -426,6 +426,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             if select:
                 self._chat_list_stack.select_chat(account, jid)
             self._chat_list_stack.store_open_chats(workspace_id)
+
+    def _toggle_chat_pinned(self, _action, param):
+        workspace_id, account, jid = param.unpack()
+        self.toggle_chat_pinned(workspace_id, account, jid)
+
+    def toggle_chat_pinned(self, workspace_id, account, jid):
+        self._chat_list_stack.toggle_chat_pinned(workspace_id, account, jid)
 
     def _remove_chat(self, _action, param):
         workspace_id, account, jid = param.unpack()
