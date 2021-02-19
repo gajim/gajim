@@ -14,6 +14,12 @@ EncryptionData.__new__.__defaults__ = (None,)  # type: ignore
 Entity = namedtuple('Entity', 'jid node hash method')
 
 
+class RowHeaderType(IntEnum):
+    ACTIVE = 0
+    CONVERSATIONS = 1
+    PINNED = 2
+
+
 class AvatarSize(IntEnum):
     TAB = 16
     ROSTER = 32

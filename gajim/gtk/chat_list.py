@@ -6,6 +6,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
+from gajim.common.const import RowHeaderType
 from gajim.common.i18n import _
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
@@ -29,6 +30,7 @@ class ChatList(Gtk.ListBox):
 
         self.get_style_context().add_class('chatlist')
         self.set_filter_func(self._filter_func)
+        self.set_header_func(self._header_func)
         self.set_sort_func(self._sort_func)
         self.set_has_tooltip(True)
 
@@ -93,6 +95,33 @@ class ChatList(Gtk.ListBox):
         if not self._current_filter_text:
             return True
         return self._current_filter_text in row.jid
+
+    @staticmethod
+    def _header_func(row, before):
+        if before is None:
+            if row.is_pinned:
+                row.header = RowHeaderType.PINNED
+            # elif row.is_active():
+            #    row.header = RowHeaderType.ACTIVE
+            else:
+                row.header = None
+        else:
+            if row.is_pinned:
+                if before.is_pinned:
+                    row.header = None
+                else:
+                    row.header = RowHeaderType.PINNED
+            # elif row.is_active():
+            #    if before.is_active() and not before.is_pinned:
+            #        row.header = None
+            #    else:
+            #        row.header = RowHeaderType.ACTIVE
+            else:
+                # if before.is_active() or before.is_pinned:
+                if before.is_pinned:
+                    row.header = RowHeaderType.CONVERSATIONS
+                else:
+                    row.header = None
 
     @staticmethod
     def _sort_func(row1, row2):
@@ -245,6 +274,10 @@ class ChatRow(Gtk.ListBoxRow):
         self.workspace_id = workspace_id
         self.type = type_
 
+        self.active_label = ActiveHeader()
+        self.conversations_label = ConversationsHeader()
+        self.pinned_label = PinnedHeader()
+
         self._timestamp = None
         self._unread_count = 0
         self._pinned = False  # TODO: Load from settings
@@ -295,6 +328,26 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.timestamp_label.set_text(uf_timestamp)
 
         self.show_all()
+
+    @property
+    def header(self):
+        header = self.get_header()
+        if header is None:
+            return None
+        return header.type
+
+    @header.setter
+    def header(self, type_):
+        if type_ == self.header:
+            return
+        if type_ is None:
+            self.set_header(None)
+        elif type_ is RowHeaderType.PINNED:
+            self.set_header(self.pinned_label)
+        elif type_ == RowHeaderType.ACTIVE:
+            self.set_header(self.active_label)
+        else:
+            self.set_header(self.conversations_label)
 
     @property
     def is_pinned(self):
@@ -441,3 +494,38 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.message_label.set_text(text)
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(nickname)
+
+
+class BaseHeader(Gtk.Box):
+    def __init__(self, row_type, text):
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        self.type = row_type
+        label = Gtk.Label(label=text)
+        label.set_halign(Gtk.Align.START)
+        self.add(label)
+        self.get_style_context().add_class('header-box')
+        self.show_all()
+
+
+class ActiveHeader(BaseHeader):
+
+    def __init__(self):
+        BaseHeader.__init__(self,
+                            RowHeaderType.ACTIVE,
+                            _('Active'))
+
+
+class ConversationsHeader(BaseHeader):
+
+    def __init__(self):
+        BaseHeader.__init__(self,
+                            RowHeaderType.CONVERSATIONS,
+                            _('Conversations'))
+
+
+class PinnedHeader(BaseHeader):
+
+    def __init__(self):
+        BaseHeader.__init__(self,
+                            RowHeaderType.PINNED,
+                            _('Pinned'))
