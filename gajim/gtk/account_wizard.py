@@ -559,7 +559,7 @@ class Login(Page):
     def _create_server_completion(self):
         # Parse servers.json
         file_path = configpaths.get('DATA') / 'other' / 'servers.json'
-        self._servers = helpers.load_json(file_path, 'servers', [])
+        self._servers = helpers.load_json(file_path, default=[])
 
         # Create a separate model for the address entry, because it will
         # be updated with our localpart@
@@ -658,7 +658,7 @@ class Signup(Page):
     def _create_server_completion(self):
         # Parse servers.json
         file_path = configpaths.get('DATA') / 'other' / 'servers.json'
-        servers = helpers.load_json(file_path, 'servers', [])
+        servers = helpers.load_json(file_path, default=[])
 
         # Create servers_model for comboboxes and entries
         servers_model = Gtk.ListStore(str)
