@@ -794,17 +794,41 @@ def get_conv_context_menu(account, uri):
 
 
 def get_chat_list_row_menu(workspace_id, account, jid, pinned):
+    toggle_label = _('Unpin Conversation') if pinned else _('Pin Conversation')
+    menu_items = [
+        ('toggle-chat-pinned', toggle_label),
+        (_('Move Chat'), []),
+    ]
+
     menu = Gio.Menu()
-    action = 'win.toggle-chat-pinned'
-    if not pinned:
-        label = _('Pin Conversation')
-    else:
-        label = _('Unpin Conversation')
-    menuitem = Gio.MenuItem.new(label, action)
-    variant_list = GLib.Variant('as', [workspace_id, account, jid])
-    menuitem.set_action_and_target_value(action, variant_list)
-    menu.append_item(menuitem)
+    for item in menu_items:
+        if isinstance(item[1], str):
+            action, label = item
+            action = f'win.{action}'
+            menuitem = Gio.MenuItem.new(label, action)
+            variant_list = GLib.Variant('as', [workspace_id, account, jid])
+            menuitem.set_action_and_target_value(action, variant_list)
+            menu.append_item(menuitem)
+        else:
+            # This is a submenu
+            submenu = build_workspaces_submenu(workspace_id, account, jid)
+            menu.append_submenu(item[0], submenu)
+
     return menu
+
+
+def build_workspaces_submenu(current_workspace_id, account, jid):
+    submenu = Gio.Menu()
+    for workspace_id in app.settings.get_workspaces():
+        if workspace_id == current_workspace_id:
+            continue
+        name = app.settings.get_workspace_setting(workspace_id, 'name')
+        action = 'win.move-chat-to-workspace'
+        menuitem = Gio.MenuItem.new(name, action)
+        variant_list = GLib.Variant('as', [workspace_id, account, jid])
+        menuitem.set_action_and_target_value(action, variant_list)
+        submenu.append_item(menuitem)
+    return submenu
 
 
 def get_groupchat_roster_menu(account, control_id, self_contact, contact):

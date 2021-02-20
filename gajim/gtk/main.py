@@ -162,6 +162,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('add-group-chat', 'as', self._add_group_chat),
             ('remove-chat', 'as', self._remove_chat),
             ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
+            ('move-chat-to-workspace', 'as', self._move_chat_to_workspace),
         ]
 
         for action in actions:
@@ -433,6 +434,16 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def toggle_chat_pinned(self, workspace_id, account, jid):
         self._chat_list_stack.toggle_chat_pinned(workspace_id, account, jid)
+
+    def _move_chat_to_workspace(self, _action, param):
+        new_workspace_id, account, jid = param.unpack()
+        self.move_chat_to_workspace(new_workspace_id, account, jid)
+
+    def move_chat_to_workspace(self, new_workspace_id, account, jid):
+        current_chatlist = self._chat_list_stack.get_visible_child()
+        type_ = current_chatlist.get_chat_type(account, jid)
+        self.remove_chat(current_chatlist.workspace_id, account, jid)
+        self.add_chat_for_workspace(new_workspace_id, account, jid, type_)
 
     def _remove_chat(self, _action, param):
         workspace_id, account, jid = param.unpack()
