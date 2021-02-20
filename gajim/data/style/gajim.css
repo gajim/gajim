@@ -123,14 +123,16 @@
     padding-top: 6px;
 	padding-bottom: 6px;
 }
-.account-sidebar-item:hover {
+.account-sidebar-item:hover,
+.account-sidebar-item:selected,
+.account-sidebar-item:focus {
     background: transparent;
     box-shadow: none;
     outline: none;
 }
 .account-sidebar-item:selected image,
 .account-sidebar-item:hover image {
-    box-shadow: 0 0 6px @theme_selected_bg_color;
+    box-shadow: 0 0 5px @theme_selected_bg_color;
 }
 .account-sidebar-item image {
     border-radius: 9px;

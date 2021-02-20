@@ -40,7 +40,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title('Gajim')
-        self.set_default_size(800, 500)
+        self.set_default_size(1000, 500)
 
         # Compatibility with ChatControl
         self.window = self

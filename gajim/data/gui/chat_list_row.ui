@@ -131,21 +131,6 @@
                         <property name="position">2</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkLabel" id="unread_label">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <style>
-                          <class name="unread-counter"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -192,6 +177,21 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="unread_label">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <style>
+                          <class name="unread-counter"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="pack-type">end</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
