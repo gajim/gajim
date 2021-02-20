@@ -53,6 +53,9 @@ class ChatListStack(Gtk.Stack):
             if chat is not None:
                 chat.reset_unread()
 
+    def get_chatlist(self, workspace_id):
+        return self._chat_lists[workspace_id]
+
     def get_selected_chat(self):
         workspace_id = self.get_visible_child_name()
         if workspace_id == 'empty':

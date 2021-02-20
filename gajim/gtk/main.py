@@ -442,8 +442,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def move_chat_to_workspace(self, new_workspace_id, account, jid):
         current_chatlist = self._chat_list_stack.get_visible_child()
         type_ = current_chatlist.get_chat_type(account, jid)
-        self.remove_chat(current_chatlist.workspace_id, account, jid)
-        self.add_chat_for_workspace(new_workspace_id, account, jid, type_)
+        current_chatlist.remove_chat(account, jid)
+        new_chatlist = self._chat_list_stack.get_chatlist(new_workspace_id)
+        new_chatlist.add_chat(account, jid, type_)
 
     def _remove_chat(self, _action, param):
         workspace_id, account, jid = param.unpack()
