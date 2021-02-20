@@ -1,7 +1,6 @@
 
 from gi.repository import Gdk
 from gi.repository import Gtk
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -206,8 +205,16 @@ class Workspace(CommonWorkspace):
         self._image = WorkspaceAvatar(workspace_id)
         self._image.set_halign(Gtk.Align.CENTER)
 
+        selection_bar = Gtk.Box()
+        selection_bar.set_size_request(6, -1)
+        selection_bar.get_style_context().add_class('selection-bar')
+
+        item_box = Gtk.Box()
+        item_box.add(selection_bar)
+        item_box.add(self._image)
+
         overlay = Gtk.Overlay()
-        overlay.add(self._image)
+        overlay.add(item_box)
         overlay.add_overlay(self._unread_label)
 
         # Drag and Drop
@@ -257,11 +264,12 @@ class AddWorkspace(CommonWorkspace):
     def __init__(self, workspace_id):
         CommonWorkspace.__init__(self, workspace_id)
         self.set_selectable(False)
+        self.set_tooltip_text(_('Add Workspace'))
 
         image = Gtk.Image.new_from_icon_name('list-add-symbolic',
                                              Gtk.IconSize.DND)
         image.set_halign(Gtk.Align.CENTER)
-        image.get_style_context().add_class('dim-label')
+        image.get_style_context().add_class('workspace-add')
         self.add(image)
         self.show_all()
 
