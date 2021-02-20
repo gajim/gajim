@@ -33,6 +33,7 @@ class ChatList(Gtk.ListBox):
         self.set_header_func(self._header_func)
         self.set_sort_func(self._sort_func)
         self.set_has_tooltip(True)
+        self._set_placeholder()
 
         self.connect('destroy', self._on_destroy)
         self.connect('query-tooltip', self._query_tooltip)
@@ -133,6 +134,20 @@ class ChatList(Gtk.ListBox):
         if row1.is_recent == row2.is_recent:
             return 0
         return -1 if row1.is_recent else 1
+
+    def _set_placeholder(self):
+        icon = Gtk.Image.new_from_icon_name(
+            'go-up-symbolic', Gtk.IconSize.DND)
+        icon.set_halign(Gtk.Align.END)
+        label = Gtk.Label(label=_('Add a chat to get started'))
+        label.set_line_wrap(True)
+        label.set_max_width_chars(20)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
+        box.get_style_context().add_class('chatlist-placeholder')
+        box.add(icon)
+        box.add(label)
+        box.show_all()
+        self.set_placeholder(box)
 
     def set_filter_text(self, text):
         self._current_filter_text = text
