@@ -89,7 +89,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     PySys_SetArgvEx(__argc, szArglist, 0);
     result = PyRun_SimpleString(
         "import sys; import os;"
-        "os.environ['GAJIM_DEBUG'] = %s;"
+        "os.environ['GAJIM_DEBUG'] = '%s';"
         "sys.frozen=True;"
         "from pathlib import Path;"
         "root_path = Path(sys.executable).parents[1];"
