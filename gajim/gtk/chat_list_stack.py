@@ -115,11 +115,11 @@ class ChatListStack(Gtk.Stack):
             app.settings.get_workspace_setting(workspace_id, 'name'))
         self.set_visible_child_name(workspace_id)
 
-    def add_chat(self, workspace_id, account, jid, type_):
+    def add_chat(self, workspace_id, account, jid, type_, pinned=False):
         chat_list = self._chat_lists.get(workspace_id)
         if chat_list is None:
             chat_list = self.add_chat_list(workspace_id)
-        chat_list.add_chat(account, jid, type_)
+        chat_list.add_chat(account, jid, type_, pinned)
 
     def select_chat(self, account, jid):
         chat_list = self._find_chat(account, jid)
@@ -138,6 +138,7 @@ class ChatListStack(Gtk.Stack):
     def toggle_chat_pinned(self, workspace_id, account, jid):
         chat_list = self._chat_lists[workspace_id]
         chat_list.toggle_chat_pinned(account, jid)
+        self.store_open_chats(workspace_id)
 
     def remove_chat(self, workspace_id, account, jid):
         chat_list = self._chat_lists[workspace_id]

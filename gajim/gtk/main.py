@@ -404,6 +404,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                account,
                                jid,
                                type_,
+                               pinned=False,
                                select=False):
 
         if self.chat_exists(account, jid):
@@ -421,7 +422,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self._chat_stack.add_private_chat(account, jid)
         else:
             self._chat_stack.add_chat(account, jid)
-        self._chat_list_stack.add_chat(workspace_id, account, jid, type_)
+        self._chat_list_stack.add_chat(workspace_id, account, jid, type_,
+                                       pinned)
 
         if self._startup_finished:
             if select:
@@ -483,10 +485,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self._chat_list_stack.add_chat_list(workspace_id)
             open_chats = app.settings.get_workspace_setting(workspace_id,
                                                             'open_chats')
-            for account, jid, type_ in open_chats:
+            for account, jid, type_, pinned in open_chats:
                 if account not in app.connections:
                     continue
-                self.add_chat_for_workspace(workspace_id, account, jid, type_)
+                self.add_chat_for_workspace(workspace_id, account, jid, type_,
+                                            pinned=pinned)
 
         for workspace_id in app.settings.get_workspaces():
             self._workspace_side_bar.activate_workspace(workspace_id)

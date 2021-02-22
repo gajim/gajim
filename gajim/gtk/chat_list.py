@@ -157,12 +157,12 @@ class ChatList(Gtk.ListBox):
         row = self._chats.get((account, jid))
         return row.type
 
-    def add_chat(self, account, jid, type_):
+    def add_chat(self, account, jid, type_, pinned=False):
         if self._chats.get((account, jid)) is not None:
             # Chat is already in the List
             return
 
-        row = ChatRow(self._workspace_id, account, jid, type_)
+        row = ChatRow(self._workspace_id, account, jid, type_, pinned)
         self._chats[(account, jid)] = row
         self.add(row)
 
@@ -192,7 +192,7 @@ class ChatList(Gtk.ListBox):
     def get_open_chats(self):
         open_chats = []
         for key, value in self._chats.items():
-            open_chats.append(key + (value.type,))
+            open_chats.append(key + (value.type, value.is_pinned))
         return open_chats
 
     def update_time(self):
@@ -281,7 +281,7 @@ class ChatList(Gtk.ListBox):
 
 
 class ChatRow(Gtk.ListBoxRow):
-    def __init__(self, workspace_id, account, jid, type_):
+    def __init__(self, workspace_id, account, jid, type_, pinned):
         Gtk.ListBoxRow.__init__(self)
 
         self.account = account
@@ -295,7 +295,7 @@ class ChatRow(Gtk.ListBoxRow):
 
         self._timestamp = None
         self._unread_count = 0
-        self._pinned = False  # TODO: Load from settings
+        self._pinned = pinned
 
         self.get_style_context().add_class('chatlist-row')
 
