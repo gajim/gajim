@@ -34,7 +34,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_title(_('Workspace'))
+        self.set_title(_('Workspace Settings'))
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_size_request(350, -1)
 
@@ -62,6 +62,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self._ui.entry.set_text(name)
         self._ui.color_chooser.set_rgba(rgba)
         self._update_avatar()
+        self._ui.save_button.grab_default()
 
         self._ui.connect_signals(self)
 
@@ -81,6 +82,12 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
     def _on_text_changed(self, entry, _param):
         self._ui.save_button.set_sensitive(bool(entry.get_text()))
         self._update_avatar()
+
+    def _on_image_switch_toggled(self, switch, *args):
+        if switch.get_active():
+            self._ui.style_stack.set_visible_child_name('image')
+        else:
+            self._ui.style_stack.set_visible_child_name('color')
 
     def _update_avatar(self):
         name = self._ui.entry.get_text()
@@ -106,8 +113,9 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
     def _on_save(self, _button):
         name = self._ui.entry.get_text()
         rgba = self._ui.color_chooser.get_rgba()
-        # avatar = self._get_avatar_data()
-        # use_image = self._ui.use_image.get_active()
+        # use_image = self._ui.image_switch.get_active()
+        # if use_image:
+        #    avatar = self._get_avatar_data()
 
         if self._workspace_id is not None:
             app.settings.set_workspace_setting(
