@@ -126,6 +126,9 @@ class ChatList(Gtk.ListBox):
 
     @staticmethod
     def _sort_func(row1, row2):
+        if row1.is_pinned and row2.is_pinned:
+            # Don’t move pinned rows to top
+            return 0
         if row1.is_pinned > row2.is_pinned:
             return -1
         if row2.is_pinned > row1.is_pinned:
