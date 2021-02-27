@@ -36,10 +36,8 @@ class ChatList(Gtk.ListBox):
         self._set_placeholder()
 
         self.connect('destroy', self._on_destroy)
-        self.connect('query-tooltip', self._query_tooltip)
 
         self._timer_id = GLib.timeout_add_seconds(60, self._update_timer)
-        self._tab_tooltip = RosterTooltip()
 
         self.show_all()
 
@@ -65,32 +63,6 @@ class ChatList(Gtk.ListBox):
     def _update_timer(self):
         self.update_time()
         return True
-
-    def _query_tooltip(self, widget, _x_pos, y_pos, _keyboard_mode, tooltip):
-        row = self.get_row_at_y(y_pos)
-        if row is None or row.type == 'pm':
-            self._tab_tooltip.clear_tooltip()
-            return False
-
-        connected_contacts = []
-        contacts = app.contacts.get_contacts(row.account, row.jid)
-        if row.type == 'contact':
-            for contact in contacts:
-                if contact.show not in ('offline', 'error'):
-                    connected_contacts.append(contact)
-            if not connected_contacts:
-                # no connected contacts, show the offline one
-                connected_contacts = contacts
-        elif row.type == 'groupchat':
-            connected_contacts = contacts
-        else:
-            # TODO
-            connected_contacts = [row.jid]
-
-        value, widget = self._tab_tooltip.get_tooltip(
-            row, connected_contacts, row.account, None)
-        tooltip.set_custom(widget)
-        return value
 
     def _filter_func(self, row):
         if not self._current_filter_text:
