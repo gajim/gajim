@@ -216,7 +216,7 @@ class BareContact(CommonContact):
         item = self._module('Roster').get_item(self._jid)
         if item is None:
             return None
-        return getattr(item, attr)
+        return item.get(attr)
 
     @property
     def is_in_roster(self):

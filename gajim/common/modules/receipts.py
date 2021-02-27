@@ -98,8 +98,8 @@ class Receipts(BaseModule):
         if properties.is_muc_pm:
             return True
 
-        contact = self._get_contact(properties.jid)
-        if contact.sub not in ('to', 'none'):
+        contact = self._get_contact(properties.jid.bare)
+        if contact.subscription not in ('to', 'none'):
             return True
         return False
 
