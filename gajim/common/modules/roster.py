@@ -135,6 +135,10 @@ class Roster(BaseModule):
         for jid, data in self._roster.items():
             yield jid, data
 
+    def iter_contacts(self):
+        for jid in self._roster:
+            yield self._get_contact(jid)
+
 
 def get_instance(*args, **kwargs):
     return Roster(*args, **kwargs), 'Roster'
