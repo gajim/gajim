@@ -47,6 +47,7 @@ import random
 import weakref
 import inspect
 import string
+import webbrowser
 from string import Template
 import urllib
 from urllib.parse import unquote
@@ -1097,13 +1098,22 @@ def open_uri(uri, account=None):
         open_file(uri.data)
 
     elif uri.type == URIType.TEL:
-        Gio.AppInfo.launch_default_for_uri(f'tel:{uri.data}')
+        if sys.platform == 'win32':
+            webbrowser.open(f'tel:{uri.data}')
+        else:
+            Gio.AppInfo.launch_default_for_uri(f'tel:{uri.data}')
 
     elif uri.type == URIType.MAIL:
-        Gio.AppInfo.launch_default_for_uri(f'mailto:{uri.data}')
+        if sys.platform == 'win32':
+            webbrowser.open(f'mailto:{uri.data}')
+        else:
+            Gio.AppInfo.launch_default_for_uri(f'mailto:{uri.data}')
 
     elif uri.type in (URIType.WEB, URIType.GEO):
-        Gio.AppInfo.launch_default_for_uri(uri.data)
+        if sys.platform == 'win32':
+            webbrowser.open(uri.data)
+        else:
+            Gio.AppInfo.launch_default_for_uri(uri.data)
 
     elif uri.type == URIType.AT:
         app.interface.new_chat_from_jid(account, uri.data)
