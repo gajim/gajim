@@ -145,9 +145,6 @@ class GroupchatControl(ChatControlBase):
         self.roster.connect('row-activated', self._on_roster_row_activated)
 
         if parent_win is not None:
-            # On AutoJoin with minimize Groupchats are created without parent
-            # Tooltip Window and Actions have to be created with parent
-            self.roster.enable_tooltips()
             self.add_actions()
             GLib.idle_add(self.update_actions)
             self.scale_factor = parent_win.window.get_scale_factor()

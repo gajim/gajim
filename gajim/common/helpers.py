@@ -1291,11 +1291,11 @@ class Observable:
 
     def disconnect(self, object_):
         for signal_name, qualifiers in self._callbacks.items():
-            for handlers in qualifiers.values():
+            for qualifier, handlers in qualifiers.items():
                 for handler in list(handlers):
                     func = handler()
                     if func is None or func.__self__ == object_:
-                        self._callbacks[signal_name][qualifiers].remove(handler)
+                        self._callbacks[signal_name][qualifier].remove(handler)
 
     def connect(self, signal_name, func, qualifiers=None):
         if inspect.ismethod(func):

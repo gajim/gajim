@@ -20,6 +20,7 @@ from typing import List
 from typing import Tuple
 from typing import Optional
 
+import gc
 import sys
 import weakref
 import logging
@@ -852,7 +853,28 @@ def check_destroy(widget):
 
 
 def check_finalize(obj, name):
-    weakref.finalize(obj, print, f'{name} has been finalized')
+    finalizer = weakref.finalize(obj, log.info, f'{name} has been finalized')
+
+    def is_finalizer_ref(ref):
+        try:
+            return isinstance(ref[2][0], str)
+        except Exception:
+            return False
+
+    def check_finalized():
+        tup = finalizer.peek()
+        if tup is None:
+            return
+
+        gc.collect()
+        log.warning('%s not finalized', name)
+        log.warning('References:')
+        for ref in gc.get_referrers(tup[0]):
+            if is_finalizer_ref(ref):
+                continue
+            log.warning(ref)
+
+    GLib.timeout_add_seconds(2, check_finalized)
 
 
 def _connect_destroy(sender, func, detailed_signal, handler, *args, **kwargs):

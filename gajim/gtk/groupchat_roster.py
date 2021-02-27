@@ -74,7 +74,6 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self._control = control
         self._control_id = control.control_id
         self._show_roles = True
-        self._handler_ids = {}
         self._tooltip = GCTooltip()
         self._group_chat_contact = control.contact
         self._group_chat_contact.connect('user-avatar-update',
@@ -102,6 +101,8 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
         self._roster = self._ui.roster_treeview
         self._roster.set_search_equal_func(self._search_func)
+        self._roster.set_has_tooltip(True)
+        self._roster.connect('query-tooltip', self._query_tooltip)
 
         self._ui.contact_column.set_fixed_width(
             app.settings.get('groupchat_roster_width'))
@@ -124,14 +125,6 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
     def set_show_roles(self, enabled):
         self._show_roles = enabled
-
-    def enable_tooltips(self):
-        if self._roster.get_tooltip_window():
-            return
-
-        self._roster.set_has_tooltip(True)
-        id_ = self._roster.connect('query-tooltip', self._query_tooltip)
-        self._handler_ids[id_] = self._roster
 
     def _query_tooltip(self, widget, x_pos, y_pos, _keyboard_mode, tooltip):
         try:
@@ -479,10 +472,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self._store.clear()
 
     def _on_destroy(self, _roster):
-        for id_ in list(self._handler_ids.keys()):
-            if self._handler_ids[id_].handler_is_connected(id_):
-                self._handler_ids[id_].disconnect(id_)
-            del self._handler_ids[id_]
+        self._group_chat_contact.disconnect(self)
 
         self._contact_refs = {}
         self._group_refs = {}
@@ -490,6 +480,8 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self._roster.set_model(None)
         self._roster = None
         self._store.clear()
+        # Store keeps a ref on the object if we dont unset the sort func
+        self._store.set_sort_func(Column.TEXT, print)
         self._store = None
         self._tooltip.destroy()
         self._tooltip = None
