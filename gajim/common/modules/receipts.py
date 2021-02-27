@@ -65,7 +65,7 @@ class Receipts(BaseModule):
                 if not properties.is_encrypted:
                     return
 
-            if not self._should_answer(properties.jid):
+            if not self._should_answer(properties):
                 return
             self._log.info('Send receipt: %s', properties.jid)
             self._con.connection.send(build_receipt(stanza))
