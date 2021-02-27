@@ -158,7 +158,7 @@ class Chatstate(BaseModule):
         if contact is None:
             return
 
-        contact.chatstate = properties.chatstate
+        contact.chatstate = properties.chatstate.value
         self._log.info('Recv: %-10s - %s', properties.chatstate, properties.jid)
         app.nec.push_outgoing_event(
             NetworkEvent('chatstate-received',
