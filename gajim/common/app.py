@@ -32,16 +32,19 @@ from typing import List  # pylint: disable=unused-import
 from typing import Optional  # pylint: disable=unused-import
 from typing import cast
 
+import gc
 import os
 import sys
 import logging
 import uuid
+import weakref
 from collections import namedtuple
 from collections import defaultdict
 
 import nbxmpp
 from nbxmpp.idlequeue import IdleQueue
 from gi.repository import Gdk
+from gi.repository import GLib
 
 import gajim
 from gajim.common import config as c_config
@@ -691,3 +694,32 @@ def cancel_tasks(obj):
     task_list = _tasks[id_]
     for task in task_list:
         task.cancel()
+
+
+def check_finalize(obj):
+    if 'GAJIM_LEAK' not in os.environ:
+        return
+    name = obj.__class__.__name__
+    logger = logging.getLogger('gajim.leak')
+    finalizer = weakref.finalize(obj, logger.info, f'{name} has been finalized')
+
+    def is_finalizer_ref(ref):
+        try:
+            return isinstance(ref[2][0], str)
+        except Exception:
+            return False
+
+    def check_finalized():
+        tup = finalizer.peek()
+        if tup is None:
+            return
+
+        gc.collect()
+        logger.warning('%s not finalized', name)
+        logger.warning('References:')
+        for ref in gc.get_referrers(tup[0]):
+            if is_finalizer_ref(ref):
+                continue
+            logger.warning(ref)
+
+    GLib.timeout_add_seconds(2, check_finalized)

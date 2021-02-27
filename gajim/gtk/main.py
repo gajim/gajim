@@ -404,7 +404,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                type_,
                                pinned=False,
                                select=False):
-
         if self.chat_exists(account, jid):
             if select:
                 self._chat_list_stack.select_chat(account, jid)

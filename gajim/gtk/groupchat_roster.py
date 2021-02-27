@@ -20,7 +20,6 @@ from enum import IntEnum
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GObject
-from nbxmpp.const import Role
 from nbxmpp.const import Affiliation
 
 from gajim.common import app
@@ -28,7 +27,6 @@ from gajim.common import ged
 from gajim.common.helpers import get_uf_role
 from gajim.common.helpers import get_uf_affiliation
 from gajim.common.helpers import jid_is_blocked
-from gajim.common.helpers import event_filter
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 
@@ -485,3 +483,4 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self._store = None
         self._tooltip.destroy()
         self._tooltip = None
+        app.check_finalize(self)
