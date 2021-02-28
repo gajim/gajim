@@ -328,7 +328,7 @@ class GroupchatContact(CommonContact):
         app.interface.avatar_storage.invalidate_cache(self._jid)
         self.notify('avatar-update')
 
-    def set_destroyed(self):
+    def set_not_joined(self):
         for contact in self._resources.values():
             contact.update_presence(UNKNOWN_MUC_PRESENCE)
 
