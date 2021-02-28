@@ -29,13 +29,14 @@ from collections import namedtuple
 from collections import defaultdict
 
 from gi.repository import GLib
-from nbxmpp.protocol import JID
 
 from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import optparser
 from gajim.common.helpers import get_muc_context
+from gajim.common.storage.base import Encoder
+from gajim.common.storage.base import json_decoder
 from gajim.common.setting_values import APP_SETTINGS
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import PROXY_SETTINGS
@@ -75,22 +76,6 @@ CREATE_SQL = '''
     ''' % (json.dumps(STATUS_PRESET_EXAMPLES),
            json.dumps(PROXY_EXAMPLES),
            json.dumps(INITAL_WORKSPACE))
-
-
-class Encoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, JID):
-            return {'__type': 'JID', 'value': str(obj)}
-        return json.JSONEncoder.default(self, obj)
-
-
-def json_decoder(dct):
-    type_ = dct.get('__type')
-    if type_ is None:
-        return dct
-    if type_ == 'JID':
-        return JID.from_string(dct['value'])
-    return dct
 
 
 class Settings:

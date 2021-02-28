@@ -24,6 +24,8 @@ from nbxmpp.protocol import JID
 from gajim.common import configpaths
 from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
+from gajim.common.storage.base import Encoder
+from gajim.common.storage.base import json_decoder
 
 
 CURRENT_USER_VERSION = 8
@@ -219,11 +221,12 @@ class CacheStorage(SqliteStorage):
 
     @timeit
     def store_roster(self, account, roster):
-        encoded_roster = {}
-        for jid, data in roster.items():
-            encoded_roster[str(jid)] = data
+        # encoded_roster = {}
+        # for jid, data in roster.items():
+        #     encoded_roster[str(jid)] = data
 
-        serialized = json.dumps(encoded_roster)
+
+        serialized = json.dumps(list(roster.values()), cls=Encoder)
 
         insert_sql = 'INSERT INTO roster(account, roster) VALUES(?, ?)'
         update_sql = 'UPDATE roster SET roster = ? WHERE account = ?'
@@ -243,8 +246,10 @@ class CacheStorage(SqliteStorage):
             return None
 
         roster = {}
-        for jid, data in json.loads(result.roster).items():
-            roster[JID.from_string(jid)] = data
+        data = json.loads(result.roster, object_hook=json_decoder)
+        for item in data:
+            roster[item.jid] = item
+            # roster[JID.from_string(jid)] = data
         return roster
 
     @timeit

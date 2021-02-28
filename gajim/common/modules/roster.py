@@ -14,8 +14,6 @@
 
 # Roster
 
-from collections import namedtuple
-
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
@@ -23,8 +21,6 @@ from nbxmpp.structs import StanzaHandler
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
-
-RosterItem = namedtuple('RosterItem', 'jid data')
 
 
 class Roster(BaseModule):
@@ -58,14 +54,14 @@ class Roster(BaseModule):
         for jid in roster:
             self._con.get_module('Contacts').add_contact(jid)
 
+        self._roster = roster
+
     def _store_roster(self):
         app.storage.cache.store_roster(self._account, self._data)
 
     def request_roster(self):
-        version = None
-        if self._con.features.has_roster_version:
-            version = app.settings.get_account_setting(
-                self._account, 'roster_version') or None
+        version = app.settings.get_account_setting(self._account,
+                                                   'roster_version')
 
         self._log.info('Request version: %s', version)
         self._nbxmpp('Roster').request_roster(
@@ -78,19 +74,34 @@ class Roster(BaseModule):
             self._log.warning(error)
             return
 
-        self._roster.clear()
-
         self._log.info('Received Roster, version: %s', roster.version)
-        for item in roster.items:
-            self._con.get_module('Contacts').add_contact(item.jid)
-            self._roster[item.jid] = item.data
 
-        app.storage.cache.store_roster(self._account, self._roster)
+        if roster.version is None or roster.items is not None:
+            # version is None:
+            # ---------------
+            # No Roster versioning supported this
+            # means we got the complete roster
+            #
+            # items is not None:
+            # ---------------
+            # Roster versioning supported but
+            # server opted to send us the whole roster
+            self._set_roster_from_data(roster.items)
+
         app.settings.set_account_setting(self._account,
                                          'roster_version',
                                          roster.version)
 
         self._con.connect_machine()
+
+    def _set_roster_from_data(self, items):
+        self._roster.clear()
+        for item in items:
+            self._log.info(item)
+            self._con.get_module('Contacts').add_contact(item.jid)
+            self._roster[item.jid] = item
+
+        app.storage.cache.store_roster(self._account, self._roster)
 
     def _process_roster_push(self, _con, stanza, _properties):
         return

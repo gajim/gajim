@@ -16,11 +16,14 @@ import sys
 import math
 import time
 import sqlite3
+import json
+import dataclasses
 
 from gi.repository import GLib
 
 from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
+from nbxmpp.structs import RosterItem
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import CommonError
 from nbxmpp.modules.discovery import parse_disco_info
@@ -73,6 +76,31 @@ def _adapt_disco_info(disco_info):
 
 sqlite3.register_converter('disco_info', _convert_disco_info)
 sqlite3.register_adapter(DiscoInfo, _adapt_disco_info)
+
+
+class Encoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, JID):
+            return {'__type': 'JID', 'value': str(obj)}
+
+        if isinstance(obj, RosterItem):
+            dct = obj.asdict()
+            dct['__type'] = 'RosterItem'
+            return dct
+
+        return json.JSONEncoder.default(self, obj)
+
+
+def json_decoder(dct):
+    type_ = dct.get('__type')
+    if type_ is None:
+        return dct
+    if type_ == 'JID':
+        return JID.from_string(dct['value'])
+    if type_ == 'RosterItem':
+        dct.pop('__type')
+        return RosterItem(**dct)
+    return dct
 
 
 class SqliteStorage:
