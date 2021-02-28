@@ -61,7 +61,7 @@ class ChatMarkers(BaseModule):
             return
 
         if properties.is_mam_message:
-            if properties.from_.bareMatch(self._con.get_own_jid()):
+            if properties.from_.bare_match(self._con.get_own_jid()):
                 return
 
         self._raise_event('displayed-received', properties)
