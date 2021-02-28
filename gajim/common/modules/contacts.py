@@ -172,10 +172,13 @@ class BareContact(CommonContact):
 
     @property
     def name(self):
+        roster_name = self._get_roster_attr('name')
+        if roster_name:
+            return roster_name
         nickname = app.storage.cache.get_contact(self._jid, 'nickname')
-        if nickname is None:
-            return self._jid.localpart
-        return nickname
+        if nickname:
+            return nickname
+        return self._jid.localpart
 
     @property
     def avatar_sha(self):
@@ -216,7 +219,7 @@ class BareContact(CommonContact):
         item = self._module('Roster').get_item(self._jid)
         if item is None:
             return None
-        return item.get(attr)
+        return getattr(item, attr)
 
     @property
     def is_in_roster(self):
