@@ -806,12 +806,13 @@ def get_chat_list_row_menu(workspace_id, account, jid, pinned):
             action, label = item
             action = f'win.{action}'
             menuitem = Gio.MenuItem.new(label, action)
-            variant_list = GLib.Variant('as', [workspace_id, account, jid])
+            variant_list = GLib.Variant(
+                'as', [workspace_id, account, str(jid)])
             menuitem.set_action_and_target_value(action, variant_list)
             menu.append_item(menuitem)
         else:
             # This is a submenu
-            submenu = build_workspaces_submenu(workspace_id, account, jid)
+            submenu = build_workspaces_submenu(workspace_id, account, str(jid))
             menu.append_submenu(item[0], submenu)
 
     return menu

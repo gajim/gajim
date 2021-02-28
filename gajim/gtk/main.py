@@ -419,6 +419,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         current_chatlist.remove_chat(account, jid)
         new_chatlist = self._chat_list_stack.get_chatlist(new_workspace_id)
         new_chatlist.add_chat(account, jid, type_)
+        self._chat_list_stack.store_open_chats(current_chatlist.workspace_id)
+        self._chat_list_stack.store_open_chats(new_workspace_id)
 
     def _remove_chat(self, _action, param):
         workspace_id, account, jid = param.unpack()
