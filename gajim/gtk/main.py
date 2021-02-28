@@ -482,8 +482,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self._chat_list_stack.add_chat_list(workspace_id)
             open_chats = app.settings.get_workspace_setting(workspace_id,
                                                             'open_chats')
+
+            active_accounts = app.settings.get_active_accounts()
             for account, jid, type_, pinned in open_chats:
-                if account not in app.connections:
+                if account not in active_accounts:
                     continue
                 self.add_chat_for_workspace(workspace_id, account, jid, type_,
                                             pinned=pinned)

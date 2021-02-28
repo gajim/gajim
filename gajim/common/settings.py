@@ -77,6 +77,22 @@ CREATE_SQL = '''
            json.dumps(INITAL_WORKSPACE))
 
 
+class Encoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, JID):
+            return {'__type': 'JID', 'value': str(obj)}
+        return json.JSONEncoder.default(self, obj)
+
+
+def json_decoder(dct):
+    type_ = dct.get('__type')
+    if type_ is None:
+        return dct
+    if type_ == 'JID':
+        return JID.from_string(dct['value'])
+    return dct
+
+
 class Settings:
     def __init__(self):
         self._con = None
@@ -435,14 +451,17 @@ class Settings:
         settings = self._con.execute('SELECT * FROM settings').fetchall()
         for row in settings:
             log.info('Load %s settings', row.name)
-            self._settings[row.name] = json.loads(row.settings)
+            self._settings[row.name] = json.loads(row.settings,
+                                                  object_hook=json_decoder)
 
     def _load_account_settings(self) -> None:
         account_settings = self._con.execute(
             'SELECT * FROM account_settings').fetchall()
         for row in account_settings:
             log.info('Load account settings: %s', row.account)
-            self._account_settings[row.account] = json.loads(row.settings)
+            self._account_settings[row.account] = json.loads(
+                row.settings,
+                object_hook=json_decoder)
 
     def _commit_account_settings(self,
                                  account: str,
@@ -450,7 +469,7 @@ class Settings:
         log.info('Set account settings: %s', account)
         self._con.execute(
             'UPDATE account_settings SET settings = ? WHERE account = ?',
-            (json.dumps(self._account_settings[account]), account))
+            (json.dumps(self._account_settings[account], cls=Encoder), account))
 
         self._commit(schedule=schedule)
 
@@ -458,7 +477,7 @@ class Settings:
         log.info('Set settings: %s', name)
         self._con.execute(
             'UPDATE settings SET settings = ? WHERE name = ?',
-            (json.dumps(self._settings[name]), name))
+            (json.dumps(self._settings[name], cls=Encoder), name))
 
         self._commit(schedule=schedule)
 

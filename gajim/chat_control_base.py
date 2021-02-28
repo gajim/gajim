@@ -1047,6 +1047,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if not self.parent_win:
             # when a groupchat is minimized there is no parent window
             return
+        # TODO
+        return
         if self.parent_win.get_active_jid() == self.contact.jid:
             # if window is the active one, set last interaction
             con = app.connections[self.account]
