@@ -54,20 +54,22 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.add(self._ui.main_grid)
 
+        surface = load_icon('org.gajim.Gajim', self, 40)
+        self._ui.app_image.set_from_surface(surface)
+
         self._chat_stack = ChatStack()
+        self._ui.right_grid.add(self._chat_stack)
+
         self._chat_list_stack = ChatListStack(self, self._ui, self._chat_stack)
         self._ui.chat_list_scrolled.add(self._chat_list_stack)
 
-        self._account_side_bar = AccountSideBar()
         self._workspace_side_bar = WorkspaceSideBar(self._chat_list_stack)
-
-        surface = load_icon('org.gajim.Gajim', self, 40)
-        self._ui.app_image.set_from_surface(surface)
         self._ui.workspace_scrolled.add(self._workspace_side_bar)
 
+        self._account_side_bar = AccountSideBar()
         self._ui.account_box.add(self._account_side_bar)
 
-        self._ui.right_grid.add(self._chat_stack)
+        self._account_pages = {}
 
         workspace_menu = Gio.Menu()
         for action, label in WORKSPACE_MENU_DICT.items():
@@ -447,8 +449,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _add_accounts(self):
         for account in list(app.connections.keys()):
-            self._ui.main_stack.add_named(
-                AccountPage(account), account)
+            account_page = AccountPage(account)
+            self._account_pages[account] = account_page
+            self._ui.main_stack.add_named(account_page, account)
 
     def get_controls(self, account=None):
         return self._chat_stack.get_controls(account)
@@ -485,6 +488,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if event.name == 'update-roster-avatar':
             return
+
+        for page in self._account_pages.values():
+            page.process_event(event)
 
         if not self.chat_exists(event.account, event.jid):
             if event.name == 'message-received':

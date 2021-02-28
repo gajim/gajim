@@ -17,6 +17,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
+from .roster import Roster
 from .status_selector import StatusSelector
 from .util import open_window
 
@@ -46,7 +47,12 @@ class AccountPage(Gtk.Box):
         box.add(settings_button)
         box.add(self._status_selector)
 
-        self.add(box)
+        self._roster = Roster(account)
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        hbox.add(self._roster)
+        hbox.add(box)
+
+        self.add(hbox)
         self.show_all()
         self.update()
 
@@ -59,3 +65,6 @@ class AccountPage(Gtk.Box):
             self._account, 'account_label')
         self._account_label.set_text(account_label)
         self._status_selector.update()
+
+    def process_event(self, event):
+        self._roster.process_event(event)
