@@ -314,10 +314,9 @@ class StatusIcon:
         win = app.interface.roster.window
         if not app.events.get_systray_events():
             # No pending events, so toggle visible/hidden for roster window
-            if win.get_property('visible'):
-                if win.get_property('has-toplevel-focus') or os.name == 'nt':
-                    save_roster_position(win)
-                win.hide() # else we hide it from VD that was visible in
+            if win.get_property('has-toplevel-focus'):
+                save_roster_position(win)
+                win.hide()
             else:
                 win.show_all()
                 restore_roster_position(win)
