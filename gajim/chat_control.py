@@ -619,12 +619,6 @@ class ChatControl(ChatControlBase):
     def _on_displayed_received(self, event):
         self.conv_textview.show_displayed(event.marker_id)
 
-    def _on_zeroconf_error(self, event):
-        self.add_status_message(event.message)
-
-    def _on_update_roster_avatar(self, _event):
-        self._update_avatar()
-
     def _nec_ping(self, event):
         if self.contact != event.contact:
             return

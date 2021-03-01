@@ -1732,21 +1732,6 @@ class Interface:
     def save_config():
         app.settings.save()
 
-    def update_avatar(self, account=None, jid=None,
-                      contact=None, room_avatar=False):
-        self.avatar_storage.invalidate_cache(jid or contact.get_full_jid())
-        if room_avatar:
-            app.nec.push_incoming_event(
-                NetworkEvent('update-room-avatar', account=account, jid=jid))
-        elif contact is None:
-            app.nec.push_incoming_event(
-                NetworkEvent('update-roster-avatar', account=account, jid=jid))
-        else:
-            app.nec.push_incoming_event(NetworkEvent('update-gc-avatar',
-                                                     account=account,
-                                                     contact=contact,
-                                                     jid=contact.room_jid))
-
     def save_avatar(self, data):
         return self.avatar_storage.save_avatar(data)
 
