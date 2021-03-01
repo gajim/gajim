@@ -261,6 +261,7 @@ class MUC(BaseModule):
         self._manager.set_state(room_jid, MUCJoinedState.NOT_JOINED)
         room = self._get_contact(room_jid)
         room.set_not_joined()
+        room.notify('room-left')
 
     def configure_room(self, room_jid):
         self._nbxmpp('MUC').request_config(room_jid,
@@ -825,8 +826,9 @@ class MUCManager(Observable):
         for muc in self._mucs.values():
             self.set_state(muc.jid, MUCJoinedState.NOT_JOINED)
             self._joined_users.pop(muc.jid, None)
-            contact = client.get_module('Contacts').get_contact(muc.jid)
-            contact.set_not_joined()
+            room = client.get_module('Contacts').get_contact(muc.jid)
+            room.set_not_joined()
+            room.notify('room-left')
 
     def __contains__(self, room_jid):
         return room_jid in self._mucs

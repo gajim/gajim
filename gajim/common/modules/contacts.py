@@ -147,10 +147,6 @@ class BareContact(CommonContact):
             contact = self.add_resource(resource)
         return contact
 
-    # @property
-    # def groups(self):
-    #     return self._module('Roster').get_groups(self._jid)
-
     @property
     def is_available(self):
         return any([contact.is_available for contact in self._resources.values()])
@@ -333,7 +329,7 @@ class GroupchatContact(CommonContact):
 
     def set_not_joined(self):
         for contact in self._resources.values():
-            contact.update_presence(UNKNOWN_MUC_PRESENCE)
+            contact.update_presence(UNKNOWN_MUC_PRESENCE, notify=False)
 
     def get_user_nicknames(self):
         client = app.get_client(self._account)
@@ -411,7 +407,11 @@ class GroupchatParticipant(CommonContact):
         return app.interface.avatar_storage.get_surface(
             self, size, scale, show, style=style)
 
-    def update_presence(self, presence, *args):
+    def update_presence(self, presence, *args, notify=True):
+        if not notify:
+            self._presence = presence
+            return
+
         if not self._presence.available and presence.available:
             self._presence = presence
             self.notify('user-joined', *args)

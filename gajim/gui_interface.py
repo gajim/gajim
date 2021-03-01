@@ -186,8 +186,7 @@ class Interface:
                                args=[obj, 'yes'])]).show()
 
     def handle_event_iq_error(self, event):
-        ctrl = self.msg_win_mgr.get_control(event.properties.jid.bare,
-                                            event.account)
+        ctrl = app.window.get_control(event.account, event.properties.jid.bare)
         if ctrl and ctrl.is_groupchat:
             ctrl.add_info_message('Error: %s' % event.properties.error)
 
