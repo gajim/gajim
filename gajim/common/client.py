@@ -28,6 +28,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import modules
 from gajim.common.const import ClientState
+from gajim.common.structs import UNKNOWN_PRESENCE
 from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
@@ -294,6 +295,9 @@ class Client(ConnectionHandlers):
             self._destroy_client = False
             self._create_client()
 
+        jid = self.get_own_jid()
+        contact = self.get_module('Contacts').get_contact(jid)
+        contact.update_presence(UNKNOWN_PRESENCE)
         app.nec.push_incoming_event(NetworkEvent('account-disconnected',
                                                  account=self._account))
 

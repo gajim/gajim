@@ -16,6 +16,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.helpers import get_uf_show
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import statuses_unified
@@ -30,7 +31,6 @@ class StatusSelector(Gtk.MenuButton):
         self.set_direction(Gtk.ArrowType.UP)
         self._compact = compact
         self._create_popover()
-        self.set_no_show_all(True)
 
         self._current_show_icon = Gtk.Image()
         self._current_show_icon.set_from_icon_name(
@@ -46,6 +46,8 @@ class StatusSelector(Gtk.MenuButton):
             box.add(self._current_show_label)
             box.show_all()
         self.add(box)
+
+        app.ged.register_event_handler('our-show', ged.POSTGUI, self.update)
 
     def _create_popover(self):
         popover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -106,13 +108,14 @@ class StatusSelector(Gtk.MenuButton):
         if new_status == 'change_status_message':
             new_status = None
         app.interface.change_status(status=new_status)
+        self.update()
 
-    def update(self):
-        if not app.connections:
-            self.hide()
-            return
+    def update(self, *args, **kwargs):
+        # if not app.connections:
+        #     self.hide()
+        #     return
 
-        self.show()
+        # self.show()
         show = get_global_show()
         uf_show = get_uf_show(show)
         self._current_show_icon.set_from_icon_name(

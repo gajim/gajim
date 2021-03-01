@@ -83,7 +83,11 @@ class AccountAvatar(Gtk.Image):
         client = app.get_client(self._account)
         self._contact = client.get_module('Contacts').get_contact(jid)
         self._contact.connect('avatar-update', self._on_avatar_update)
+        self._contact.connect('presence-update', self._on_presence_update)
 
+        self._update_image()
+
+    def _on_presence_update(self, _contact, _signal_name):
         self._update_image()
 
     def _on_avatar_update(self, _contact, _signal_name):

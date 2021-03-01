@@ -1653,11 +1653,8 @@ class Interface:
                 status_message = helpers.from_one_line(status_message)
 
             app.connections[account].change_status(status, status_message)
-            # self.roster.send_status(account, status, status_message)
 
-    def change_status(self, status=None):
-        # status=None means we want to change the message only
-
+    def change_status(self, status):
         ask = ask_for_status_message(status)
 
         if status is None:
@@ -1672,12 +1669,9 @@ class Interface:
                                                     'sync_with_global_status'):
                 continue
 
-            message = app.get_client(account).status_message
-            self.roster.send_status(account, status, message)
+            self._change_status(account, status)
 
-    def change_account_status(self, account, status=None):
-        # status=None means we want to change the message only
-
+    def change_account_status(self, account, status):
         ask = ask_for_status_message(status)
 
         client = app.get_client(account)
@@ -1688,8 +1682,26 @@ class Interface:
             open_window('StatusChange', status=status, account=account)
             return
 
+        self._change_status(account, status)
+
+    @staticmethod
+    def _change_status(account, status):
+        client = app.get_client(account)
         message = client.status_message
-        self.roster.send_status(account, status, message)
+        if status != 'offline':
+            app.settings.set_account_setting(account, 'last_status', status)
+            app.settings.set_account_setting(
+                account,
+                'last_status_msg',
+                helpers.to_one_line(message))
+            # TODO update systray icon
+
+        if status == 'offline':
+            # TODO delete pep
+            # self.delete_pep(app.get_jid_from_account(account), account)
+            pass
+
+        client.change_status(status, message)
 
     def show_systray(self):
         if not app.is_display(Display.WAYLAND):
