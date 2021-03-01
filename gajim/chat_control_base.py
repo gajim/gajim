@@ -43,7 +43,6 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.contacts import GC_Contact
 from gajim.common.structs import OutgoingMessage
 
 from gajim import gtkgui_helpers
@@ -99,7 +98,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     _type = None  # type: ControlType
 
-    def __init__(self, parent_win, widget_name, contact, acct,
+    def __init__(self, parent_win, widget_name, jid, acct,
                  resource=None):
         EventHelper.__init__(self)
         # Undo needs this variable to know if space has been pressed.
@@ -108,7 +107,13 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.handlers = {}
         self.parent_win = parent_win
+
+        groupchat = self._type != ControlType.CHAT
+        contact = app.get_client(acct).get_module('Contacts').get_contact(
+            jid, groupchat=groupchat)
         self.contact = contact
+        self._connect_contact_signals()
+
         self.account = acct
         self.resource = resource
 
@@ -270,6 +275,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
+
+    def _connect_contact_signals(self):
+        raise NotImplementedError
 
     def process_event(self, event):
         method_name = event.name.replace('-', '_')
@@ -474,9 +482,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         # text to show is in in first column of liststore
         self.xml.label_selector.add_attribute(cell, 'text', 0)
         con = app.connections[self.account]
-        jid = self.contact.jid
-        if self._type.is_privatechat:
-            jid = self.gc_contact.room_jid
+        jid = self.contact.jid.bare
         if con.get_module('SecLabels').supported:
             con.get_module('SecLabels').request_catalog(jid)
 
@@ -484,9 +490,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if event.account != self.account:
             return
 
-        jid = self.contact.jid
-        if self._type.is_privatechat:
-            jid = self.gc_contact.room_jid
+        jid = self.contact.jid.bare
 
         if event.jid != jid:
             return
@@ -973,9 +977,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             return None
 
         con = app.connections[self.account]
-        jid = self.contact.jid
-        if self._type.is_privatechat:
-            jid = self.gc_contact.room_jid
+        jid = self.contact.jid.bare
         catalog = con.get_module('SecLabels').get_catalog(jid)
         labels, label_list = catalog.labels, catalog.get_label_names()
         lname = label_list[idx]

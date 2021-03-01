@@ -71,7 +71,7 @@ class ChatStack(Gtk.Stack):
 
     def add_private_chat(self, account, jid):
         mw = self.get_toplevel()
-        control = PrivateChatControl(mw, jid, None, account, None)
+        control = PrivateChatControl(mw, jid, account)
         self._controls[(account, str(jid))] = control
         self.add_named(control.widget, f'{account}:{jid}')
         control.widget.show_all()

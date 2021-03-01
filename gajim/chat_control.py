@@ -101,17 +101,10 @@ class ChatControl(ChatControlBase):
     COMMAND_HOST = ChatCommands  # type: ClassVar[Type[CommandHost]]
 
     def __init__(self, parent_win, jid, acct, session, resource=None):
-
-        contact = app.get_client(acct).get_module('Contacts').get_contact(jid)
-        contact.connect('presence-update', self._on_presence_update)
-        contact.connect('chatstate-update', self._on_chatstate_update)
-        contact.connect('nickname-update', self._on_nickname_update)
-        contact.connect('avatar-update', self._on_avatar_update)
-
         ChatControlBase.__init__(self,
                                  parent_win,
                                  'chat_control',
-                                 contact,
+                                 jid,
                                  acct,
                                  resource)
 
@@ -225,6 +218,14 @@ class ChatControl(ChatControlBase):
         app.plugin_manager.gui_extension_point('chat_control', self)
         self.update_actions()
 
+    def _connect_contact_signals(self):
+        self.contact.multi_connect({
+            'presence-update': self._on_presence_update,
+            'chatstate-update': self._on_chatstate_update,
+            'nickname-update': self._on_nickname_update,
+            'avatar-update': self._on_avatar_update,
+        })
+
     @property
     def jid(self):
         return self.contact.jid
@@ -315,7 +316,7 @@ class ChatControl(ChatControlBase):
 
         # Send file (Jingle)
         jingle_support = self.contact.supports(Namespace.JINGLE_FILE_TRANSFER_5)
-        jingle_conditions = jingle_support and not self.contact.show.is_offline
+        jingle_conditions = jingle_support and self.contact.is_available
         jingle = win.lookup_action('send-file-jingle-' + self.control_id)
         jingle.set_enabled(online and jingle_conditions)
 
@@ -532,7 +533,7 @@ class ChatControl(ChatControlBase):
             return
         self.xml.phone_image.set_visible(contact.uses_phone)
 
-    def _on_chatstate_update(self, _contact, _signal_name):
+    def _on_chatstate_update(self, *args):
         self.draw_banner_text()
 
     def _on_nickname_update(self, _contact, _signal_name):

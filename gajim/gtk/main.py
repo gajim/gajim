@@ -487,6 +487,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             for account, jid, type_, pinned in open_chats:
                 if account not in active_accounts:
                     continue
+
                 self.add_chat_for_workspace(workspace_id, account, jid, type_,
                                             pinned=pinned)
 
@@ -511,9 +512,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if not self.chat_exists(event.account, event.jid):
             if event.name == 'message-received':
                 if event.properties.is_muc_pm:
-                    self.add_private_chat(event.account, event.jid, 'pm')
+                    self.add_private_chat(event.account,
+                                          event.properties.jid,
+                                          'pm')
                 else:
-                    self.add_chat(event.account, event.jid, 'contact')
+                    self.add_chat(event.account,
+                                  event.properties.jid,
+                                  'contact')
             else:
                 # No chat is open, dont handle any gui events
                 return

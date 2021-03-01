@@ -163,7 +163,8 @@ class VCardAvatars(BaseModule):
                     self._request_vcard(jid, avatar_sha, 'contact')
 
     def _muc_update_received(self, properties):
-        contact = self._con.get_module('Contacts').get_contact(properties.jid)
+        contact = self._con.get_module('Contacts').get_contact(properties.jid,
+                                                               groupchat=True)
         nick = properties.jid.resource
 
         if properties.avatar_state == AvatarState.EMPTY:

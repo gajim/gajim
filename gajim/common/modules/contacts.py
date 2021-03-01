@@ -394,6 +394,10 @@ class GroupchatParticipant(CommonContact):
         return self._presence.role
 
     @property
+    def chatstate(self):
+        return self._module('Chatstate').get_remote_chatstate(self._jid)
+
+    @property
     def avatar_sha(self):
         return self._client.get_module('VCardAvatars').get_avatar_sha(self._jid)
 

@@ -87,40 +87,12 @@ class GroupchatControl(ChatControlBase):
     COMMAND_HOST = GroupChatCommands
 
     def __init__(self, parent_win, jid, muc_data, acct):
-
-        contact = app.get_client(acct).get_module('Contacts').get_contact(
-            jid, groupchat=True)
-        contact.multi_connect({
-            'avatar-update': self._on_avatar_update,
-            'user-joined': self._on_user_joined,
-            'user-left': self._on_user_left,
-            'user-affiliation-changed': self._on_user_affiliation_changed,
-            'user-role-changed': self._on_user_role_changed,
-            'user-status-show-changed': self._on_user_status_show_changed,
-            'user-nickname-changed': self._on_user_nickname_changed,
-            'room-kicked': self._on_room_kicked,
-            'room-destroyed': self._on_room_destroyed,
-            'room-config-finished': self._on_room_config_finished,
-            'room-config-failed': self._on_room_config_failed,
-            'room-config-changed': self._on_room_config_changed,
-            'room-password-required': self._on_room_password_required,
-            'room-creation-failed': self._on_room_creation_failed,
-            'room-presence-error': self._on_room_presence_error,
-            'room-voice-request': self._on_room_voice_request,
-            'room-captcha-challenge': self._on_room_captcha_challenge,
-            'room-captcha-error': self._on_room_captcha_error,
-            'room-subject': self._on_room_subject,
-            'room-joined': self._on_room_joined,
-            'room-join-failed': self._on_room_join_failed,
-        })
-
-        # contact.connect('user-avatar-update', self._on_user_avatar_update)
-
         ChatControlBase.__init__(self,
                                  parent_win,
                                  'groupchat_control',
-                                 contact,
+                                 jid,
                                  acct)
+
         self.force_non_minimizable = False
         self.is_anonymous = True
 
@@ -256,6 +228,31 @@ class GroupchatControl(ChatControlBase):
         # instance object
         app.plugin_manager.gui_extension_point('groupchat_control', self)
         self._restore_conversation()
+
+    def _connect_contact_signals(self):
+        self.contact.multi_connect({
+            'avatar-update': self._on_avatar_update,
+            'user-joined': self._on_user_joined,
+            'user-left': self._on_user_left,
+            'user-affiliation-changed': self._on_user_affiliation_changed,
+            'user-role-changed': self._on_user_role_changed,
+            'user-status-show-changed': self._on_user_status_show_changed,
+            'user-nickname-changed': self._on_user_nickname_changed,
+            'room-kicked': self._on_room_kicked,
+            'room-destroyed': self._on_room_destroyed,
+            'room-config-finished': self._on_room_config_finished,
+            'room-config-failed': self._on_room_config_failed,
+            'room-config-changed': self._on_room_config_changed,
+            'room-password-required': self._on_room_password_required,
+            'room-creation-failed': self._on_room_creation_failed,
+            'room-presence-error': self._on_room_presence_error,
+            'room-voice-request': self._on_room_voice_request,
+            'room-captcha-challenge': self._on_room_captcha_challenge,
+            'room-captcha-error': self._on_room_captcha_error,
+            'room-subject': self._on_room_subject,
+            'room-joined': self._on_room_joined,
+            'room-join-failed': self._on_room_join_failed,
+        })
 
     def _on_muc_state_changed(self, _muc_manager, _signal_name, state):
         if state == MUCJoinedState.JOINED:

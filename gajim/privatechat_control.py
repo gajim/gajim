@@ -46,56 +46,48 @@ class PrivateChatControl(ChatControl):
     # will be processed with this command host.
     COMMAND_HOST = PrivateChatCommands
 
-    def __init__(self, parent_win, gc_contact, contact, account, session):
-        room_jid = gc_contact.room_jid
-        self.room_ctrl = app.window.get_control(account, room_jid)
-        self.gc_contact = gc_contact
-        ChatControl.__init__(self, parent_win, contact, account, session)
+    def __init__(self, parent_win, jid, account):
+        client = app.get_client(account)
+        self._room_contact = client.get_module('Contacts').get_contact(jid.bare)
+        self._manager = client.get_module('MUC').get_manager()
 
-        # pylint: disable=line-too-long
+        ChatControl.__init__(self, parent_win, jid, account, None)
+
         # self.register_events([
         #     ('update-gc-avatar', ged.GUI1, self._on_update_gc_avatar),
         #     ('caps-update', ged.GUI1, self._on_caps_update),
-        #     ('muc-user-joined', ged.GUI1, self._on_user_joined),
-        #     ('muc-user-left', ged.GUI1, self._on_user_left),
-        #     ('muc-nickname-changed', ged.GUI1, self._on_nickname_changed),
-        #     ('muc-self-presence', ged.GUI1, self._on_self_presence),
-        #     ('muc-self-kicked', ged.GUI1, self._on_disconnected),
-        #     ('muc-user-status-show-changed', ged.GUI1, self._on_status_show_changed),
-        #     ('muc-destroyed', ged.GUI1, self._on_disconnected),
-        # ])
-        # pylint: enable=line-too-long
 
-    @property
-    def contact(self):
-        return self.gc_contact.as_contact()
-
-    @contact.setter
-    def contact(self, _value):
-        # TODO: remove all code that sets the contact here
-        return
+    def _connect_contact_signals(self):
+        self.contact.multi_connect({
+            'user-avatar-update': self._on_user_avatar_update,
+            'user-joined': self._on_user_joined,
+            'user-left': self._on_user_left,
+            'user-status-show-changed': self._on_user_status_show_changed,
+            'user-nickname-changed': self._on_user_nickname_changed,
+            # 'room-kicked': self._on_room_kicked,
+            # 'room-destroyed': self._on_room_destroyed,
+            'room-joined': self._on_room_joined,
+            # 'room-left': self._on_room_left
+            'chatstate-update': self._on_chatstate_update,
+        })
 
     @property
     def room_name(self):
-        if self.room_ctrl is not None:
-            return self.room_ctrl.room_name
-        return self.gc_contact.room_jid
+        return self._room_contact.name
 
     def get_our_nick(self):
-        return self.room_ctrl.nick
+        muc_data = self._manager.get(self._room_contact.jid)
+        return muc_data.nick
 
-    def _on_caps_update(self, event):
-        if event.fjid != self.gc_contact.get_full_jid():
-            return
-        self.update_contact()
+    def _on_user_nickname_changed(self,
+                                  _contact,
+                                  _signal_name,
+                                  _user_contact,
+                                  properties):
 
-    def _on_nickname_changed(self, event):
-        if event.properties.new_jid != self.gc_contact.get_full_jid():
-            return
-
-        nick = event.properties.muc_nickname
-        new_nick = event.properties.muc_user.nick
-        if event.properties.is_muc_self_presence:
+        nick = properties.muc_nickname
+        new_nick = properties.muc_user.nick
+        if properties.is_muc_self_presence:
             message = _('You are now known as %s') % new_nick
         else:
             message = _('{nick} is now known '
@@ -104,31 +96,23 @@ class PrivateChatControl(ChatControl):
         self.add_info_message(message)
 
         self.draw_banner()
-        app.interface.msg_win_mgr.change_key(str(event.properties.jid),
-                                             str(event.properties.new_jid),
-                                             self.account)
-
-        self.parent_win.redraw_tab(self)
         self.update_ui()
 
-    @event_filter(['account'])
-    def _on_status_show_changed(self, event):
-        if event.properties.jid != self.gc_contact.get_full_jid():
-            return
-
-        nick = event.properties.muc_nickname
-        status = event.properties.status
+    def _on_user_status_show_changed(self,
+                                     _contact,
+                                     _signal_name,
+                                     _user_contact,
+                                     properties):
+        nick = properties.muc_nickname
+        status = properties.status
         status = '' if status is None else ' - %s' % status
-        show = helpers.get_uf_show(event.properties.show.value)
+        show = helpers.get_uf_show(properties.show.value)
 
-        if not app.settings.get_group_chat_setting(self.account,
-                                                   self.gc_contact.room_jid,
-                                                   'print_status'):
-            self.parent_win.redraw_tab(self)
+        if not self._room_contact.settings.get('print_status'):
             self.update_ui()
             return
 
-        if event.properties.is_muc_self_presence:
+        if properties.is_muc_self_presence:
             message = _('You are now {show}{status}').format(show=show,
                                                              status=status)
 
@@ -137,45 +121,23 @@ class PrivateChatControl(ChatControl):
                                                                show=show,
                                                                status=status)
         self.add_status_message(message)
-        self.parent_win.redraw_tab(self)
         self.update_ui()
 
-    @event_filter(['account'])
-    def _on_disconnected(self, event):
-        if event.properties.jid != self.gc_contact.get_full_jid():
-            return
+    # def _on_disconnected(self, event):
+    #     if event.properties.jid != self.gc_contact.get_full_jid():
+    #         return
+    #     self.got_disconnected()
 
+    def _on_user_left(self, *args):
         self.got_disconnected()
 
-    @event_filter(['account'])
-    def _on_user_left(self, event):
-        if event.properties.jid != self.gc_contact.get_full_jid():
-            return
-
-        self.got_disconnected()
-
-    @event_filter(['account'])
-    def _on_user_joined(self, event):
-        if event.properties.jid != self.gc_contact.get_full_jid():
-            return
-
-        self.gc_contact = app.contacts.get_gc_contact(
-            self.account, self.gc_contact.room_jid, self.gc_contact.name)
-        self.parent_win.redraw_tab(self)
+    def _on_user_joined(self, *args):
         self.got_connected()
 
-    @event_filter(['account'])
-    def _on_self_presence(self, event):
-        if event.properties.jid != self.gc_contact.get_full_jid():
+    def _on_room_joined(self, *args):
+        if not self.contact.is_available:
             return
-
-        self.parent_win.redraw_tab(self)
         self.got_connected()
-
-    def _on_update_gc_avatar(self, event):
-        if event.contact != self.gc_contact:
-            return
-        self._update_avatar()
 
     def send_message(self, message, xhtml=None, process_commands=True,
                      attention=False):
@@ -188,14 +150,13 @@ class PrivateChatControl(ChatControl):
 
         # We need to make sure that we can still send through the room and that
         # the recipient did not go away
-        if self.gc_contact.presence.is_unavailable:
+        if not self.contact.is_available:
             ErrorDialog(
                 _('Sending private message failed'),
                 #in second %s code replaces with nickname
                 _('You are no longer in group chat "%(room)s" or '
                   '"%(nick)s" has left.') % {
-                      'room': self.room_name, 'nick': self.gc_contact.name},
-                transient_for=self.parent_win.window)
+                      'room': self.room_name, 'nick': self.contact.name})
             return
 
         ChatControl.send_message(self, message,
@@ -204,35 +165,16 @@ class PrivateChatControl(ChatControl):
                                  attention=attention)
 
     def update_ui(self):
-        if self.gc_contact.presence.is_unavailable:
+        if not self.contact.is_available:
             self.got_disconnected()
         else:
             self.got_connected()
 
-    def _update_avatar(self):
-        scale = self.parent_win.window.get_scale_factor()
-        surface = self.gc_contact.get_avatar(AvatarSize.CHAT,
-                                             scale,
-                                             self.gc_contact.show.value)
-
-        self.xml.avatar_image.set_from_surface(surface)
-
-    def get_tab_image(self):
-        if self.gc_contact.presence.is_unavailable:
-            show = 'offline'
-        else:
-            show = self.gc_contact.show.value
-        scale = self.parent_win.window.get_scale_factor()
-        return self.gc_contact.get_avatar(AvatarSize.ROSTER,
-                                          scale,
-                                          show)
-
-    def update_contact(self):
-        self.contact = self.gc_contact.as_contact()
+    def _on_user_avatar_update(self, *args):
+        self._update_avatar()
 
     def got_disconnected(self):
         ChatControl.got_disconnected(self)
-        self.parent_win.redraw_tab(self)
         ChatControl.update_ui(self)
 
     def got_connected(self):
