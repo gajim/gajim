@@ -1,3 +1,29 @@
+Gajim 1.3.1 (01 March 2021)
+
+  New
+
+  * Add setting for GSSAPI authentication
+
+  Changes
+
+  * #10416 Remove conversion of ASCII emojis
+
+  Bug fixes
+
+  * #10273 VcardWindow: Fix resource string if resource is missing
+  * #10424 GroupChatInvitation: Show account badge
+  * #10430 Preferences: Check for pipeline before removing elements
+  * #10436 Stop early when handling connection-failed in handle_event
+  * #10438 Set account window stack as non-vhomogeneous
+  * #10443 ServiceRegistration: Use nbxmpp register methods
+  * #10445 Change dataform to href markup URLs in fixed field
+  * #10450 Workaround for crash on clicking links
+  * AvatarSelector: Improve error handling
+  * Profile: Show error if avatar upload fails
+  * UserAvatar: Handle empty data nodes
+  * StatusIcon: Only hide application when its focused
+
+
 Gajim 1.3.0 (08 February 2021)
 
   New
