@@ -312,19 +312,24 @@ class StatusIcon:
 
     def _on_left_click(self):
         win = app.interface.roster.window
-        if not app.events.get_systray_events():
-            # No pending events, so toggle visible/hidden for roster window
-            if win.get_property('has-toplevel-focus'):
-                save_roster_position(win)
-                win.hide()
-            else:
-                win.show_all()
-                restore_roster_position(win)
-                if not app.settings.get('roster_window_skip_taskbar'):
-                    win.set_property('skip-taskbar-hint', False)
-                win.present_with_time(Gtk.get_current_event_time())
-        else:
+        if app.events.get_systray_events():
             self._handle_first_event()
+            return
+
+        if win.get_property('has-toplevel-focus'):
+            save_roster_position(win)
+            win.hide()
+            return
+
+        visible = win.get_property('visible')
+        win.show_all()
+        if not visible:
+            # Window was minimized
+            restore_roster_position(win)
+
+        if not app.settings.get('roster_window_skip_taskbar'):
+            win.set_property('skip-taskbar-hint', False)
+        win.present_with_time(Gtk.get_current_event_time())
 
     @staticmethod
     def _handle_first_event():
