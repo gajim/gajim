@@ -26,10 +26,7 @@
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import ged
 from gajim.common.i18n import _
-from gajim.common.const import AvatarSize
-from gajim.common.helpers import event_filter
 
 from gajim.chat_control import ChatControl
 from gajim.command_system.implementation.hosts import PrivateChatCommands
