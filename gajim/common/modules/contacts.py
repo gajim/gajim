@@ -443,7 +443,7 @@ class GroupchatParticipant(CommonContact):
 
     def update_avatar(self, *args):
         app.interface.avatar_storage.invalidate_cache(self._jid)
-        self.notify('avatar-update')
+        self.notify('user-avatar-update')
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[Contacts, str]:
