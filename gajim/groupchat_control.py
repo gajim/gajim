@@ -1053,6 +1053,20 @@ class GroupchatControl(ChatControlBase):
     def is_connected(self, value: bool) -> None:
         app.gc_connected[self.account][self.room_jid] = value
 
+    def got_disconnected(self):
+        self.xml.formattings_button.set_sensitive(False)
+
+        self.roster.enable_sort(False)
+        self.roster.clear()
+
+        self.is_connected = False
+        ChatControlBase.got_disconnected(self)
+
+        con = app.connections[self.account]
+        con.get_module('Chatstate').remove_delay_timeout(self.contact)
+
+        self.update_actions()
+
     def leave(self, reason=None):
         self.got_disconnected()
         self._close_control(reason=reason)
