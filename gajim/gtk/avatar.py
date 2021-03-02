@@ -86,10 +86,7 @@ def generate_avatar(letters, color, size, scale):
 def generate_default_avatar(letter, color_string, size, scale, style='circle'):
     color = text_to_color(color_string)
     surface = generate_avatar(letter, color, size, scale)
-    if style == 'circle':
-        surface = clip_circle(surface)
-    elif style == 'round-corners':
-        surface = round_corners(surface)
+    surface = clip(surface, style)
     surface.set_device_scale(scale, scale)
     return surface
 
@@ -97,10 +94,7 @@ def generate_default_avatar(letter, color_string, size, scale, style='circle'):
 @lru_cache(maxsize=None)
 def make_workspace_avatar(letter, color, size, scale, style='round-corners'):
     surface = generate_avatar(letter, color, size, scale)
-    if style == 'circle':
-        surface = clip_circle(surface)
-    elif style == 'round-corners':
-        surface = round_corners(surface)
+    surface = clip(surface, style)
     surface.set_device_scale(scale, scale)
     return surface
 
@@ -178,6 +172,14 @@ def square(surface, size):
     return context.get_target()
 
 
+def clip(surface, mode):
+    if mode == 'circle':
+        return clip_circle(surface)
+    if mode == 'round-corners':
+        return round_corners(surface)
+    raise ValueError('clip mode unknown: %s' % mode)
+
+
 def clip_circle(surface):
     new_surface = cairo.ImageSurface(cairo.Format.ARGB32,
                                      surface.get_width(),
@@ -228,23 +230,6 @@ def round_corners(surface):
     return context.get_target()
 
 
-def get_avatar_from_pixbuf(pixbuf, scale, show=None):
-    size = max(pixbuf.get_width(), pixbuf.get_height())
-    size *= scale
-    surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
-    if surface is None:
-        return None
-    surface = square(surface, size)
-    if surface is None:
-        return None
-    surface = clip_circle(surface)
-    if surface is None:
-        return None
-    if show is not None:
-        return add_status_to_avatar(surface, show)
-    return surface
-
-
 class AvatarStorage(metaclass=Singleton):
     def __init__(self):
         self._cache = defaultdict(dict)
@@ -276,7 +261,7 @@ class AvatarStorage(metaclass=Singleton):
             if surface is not None:
                 return surface
 
-            surface = self._get_avatar_from_storage(contact, size, scale)
+            surface = self._get_avatar_from_storage(contact, size, scale, style)
             if surface is not None:
                 if show is not None:
                     surface = add_status_to_avatar(surface, show)
@@ -294,7 +279,13 @@ class AvatarStorage(metaclass=Singleton):
         self._cache[jid][(size, scale, show)] = surface
         return surface
 
-    def get_muc_surface(self, account, jid, size, scale, default=False):
+    def get_muc_surface(self,
+                        account,
+                        jid,
+                        size,
+                        scale,
+                        default=False,
+                        style='circle'):
         if not default:
             surface = self._cache[jid].get((size, scale))
             if surface is not None:
@@ -305,14 +296,14 @@ class AvatarStorage(metaclass=Singleton):
                 surface = self.surface_from_filename(avatar_sha, size, scale)
                 if surface is None:
                     return None
-                surface = clip_circle(surface)
+                surface = clip(surface, style)
                 self._cache[jid][(size, scale)] = surface
                 return surface
 
         con = app.connections[account]
         name = get_groupchat_name(con, jid)
         letter = self._generate_letter(name)
-        surface = generate_default_avatar(letter, str(jid), size, scale)
+        surface = generate_default_avatar(letter, str(jid), size, scale, style)
         self._cache[jid][(size, scale)] = surface
         return surface
 
@@ -414,7 +405,7 @@ class AvatarStorage(metaclass=Singleton):
         surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
         return square(surface, size)
 
-    def _get_avatar_from_storage(self, contact, size, scale):
+    def _get_avatar_from_storage(self, contact, size, scale, style):
         avatar_sha = contact.avatar_sha
         if avatar_sha is None:
             return None
@@ -422,7 +413,7 @@ class AvatarStorage(metaclass=Singleton):
         surface = self._load_surface_from_storage(avatar_sha, size, scale)
         if surface is None:
             return None
-        return clip_circle(surface)
+        return clip(surface, style)
 
     @staticmethod
     def _generate_letter(name):
