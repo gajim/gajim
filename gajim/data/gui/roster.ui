@@ -8,11 +8,9 @@
       <column type="CairoGObjectSurface"/>
       <!-- column-name Text -->
       <column type="gchararray"/>
-      <!-- column-name Event -->
-      <column type="gboolean"/>
       <!-- column-name IsContact -->
       <column type="gboolean"/>
-      <!-- column-name GroupOrNickname -->
+      <!-- column-name JidOrGroup -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -42,7 +40,7 @@
             <property name="xalign">0</property>
           </object>
           <attributes>
-            <attribute name="visible">3</attribute>
+            <attribute name="visible">2</attribute>
             <attribute name="surface">0</attribute>
           </attributes>
         </child>
@@ -52,22 +50,6 @@
           </object>
           <attributes>
             <attribute name="markup">1</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn" id="event_column">
-        <property name="sizing">fixed</property>
-        <property name="fixed-width">35</property>
-        <property name="title">event</property>
-        <child>
-          <object class="GtkCellRendererPixbuf" id="icon">
-            <property name="xalign">0</property>
-            <property name="icon-name">gajim-event</property>
-          </object>
-          <attributes>
-            <attribute name="visible">2</attribute>
           </attributes>
         </child>
       </object>
