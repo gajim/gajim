@@ -224,6 +224,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         vcard = self._vcard_grid.get_vcard()
         self._current_vcard = vcard.copy()
 
+        client = app.get_client(self.account)
         client.get_module('VCard4').set_vcard(
             self._current_vcard,
             public=self._ui.vcard_access.get_active(),
