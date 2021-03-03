@@ -811,7 +811,7 @@ def get_roster_menu(account, jid):
 
 
 def get_chat_list_row_menu(workspace_id, account, jid, pinned):
-    toggle_label = _('Unpin Conversation') if pinned else _('Pin Conversation')
+    toggle_label = _('Unpin Chat') if pinned else _('Pin Chat')
     menu_items = [
         ('toggle-chat-pinned', toggle_label),
         (_('Move Chat'), []),

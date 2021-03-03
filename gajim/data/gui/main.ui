@@ -165,7 +165,7 @@
                             <property name="label">Workspace Label</property>
                             <property name="ellipsize">end</property>
                             <style>
-                              <class name="large-header"/>
+                              <class name="bold16"/>
                             </style>
                           </object>
                           <packing>

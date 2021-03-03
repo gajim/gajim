@@ -1,5 +1,6 @@
 import logging
 
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -14,7 +15,6 @@ from gajim.common.helpers import get_uf_relative_time
 
 from gajim.gui_menu_builder import get_chat_list_row_menu
 
-from .tooltips import RosterTooltip
 from .util import get_builder
 
 log = logging.getLogger('gajim.gui.chatlist')
@@ -32,7 +32,6 @@ class ChatList(Gtk.ListBox):
         self.set_filter_func(self._filter_func)
         self.set_header_func(self._header_func)
         self.set_sort_func(self._sort_func)
-        self.set_has_tooltip(True)
         self._set_placeholder()
 
         self.connect('destroy', self._on_destroy)
@@ -340,13 +339,21 @@ class ChatRow(Gtk.ListBoxRow):
 
     def _on_button_press(self, _widget, event):
         if event.button == 3:  # right click
-            self._popup_menu()
+            self._popup_menu(event)
 
-    def _popup_menu(self):
+    def _popup_menu(self, event):
         menu = get_chat_list_row_menu(
             self.workspace_id, self.account, self.jid, self._pinned)
+
+        rectangle = Gdk.Rectangle()
+        rectangle.x = event.x
+        rectangle.y = event.y
+        rectangle.width = rectangle.height = 1
+
         popover = Gtk.Popover.new_from_model(self, menu)
-        popover.set_position(Gtk.PositionType.BOTTOM)
+        popover.set_relative_to(self)
+        popover.set_position(Gtk.PositionType.RIGHT)
+        popover.set_pointing_to(rectangle)
         popover.popup()
 
     def toggle_pinned(self):
