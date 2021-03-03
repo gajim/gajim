@@ -15,55 +15,41 @@
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.i18n import _
 
 from .roster import Roster
 from .status_selector import StatusSelector
+from .util import get_builder
 from .util import open_window
 
 
 class AccountPage(Gtk.Box):
     def __init__(self, account):
         Gtk.Box.__init__(self)
-        self.get_style_context().add_class('account-page')
-
         self._account = account
 
-        self._account_label = Gtk.Label()
-        self._account_label.get_style_context().add_class('large-header')
+        self._ui = get_builder('account_page.ui')
+        self.add(self._ui.paned)
 
         self._status_selector = StatusSelector()
         self._status_selector.set_halign(Gtk.Align.CENTER)
-
-        settings_button = Gtk.Button(label=_('Settings'))
-        settings_button.set_halign(Gtk.Align.CENTER)
-        settings_button.connect('clicked', self._on_settings)
-
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
-        box.set_halign(Gtk.Align.CENTER)
-        box.set_valign(Gtk.Align.CENTER)
-        box.set_hexpand(True)
-        box.add(self._account_label)
-        box.add(settings_button)
-        box.add(self._status_selector)
+        self._ui.account_box.add(self._status_selector)
 
         self._roster = Roster(account)
-        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
-        hbox.add(self._roster)
-        hbox.add(box)
+        self._ui.roster_box.add(self._roster)
 
-        self.add(hbox)
+        self._ui.connect_signals(self)
         self.show_all()
+
         self.update()
 
-    def _on_settings(self, _button):
+    def _on_account_settings(self, _button):
         window = open_window('AccountsWindow')
         window.select_account(self._account)
 
     def update(self):
         account_label = app.settings.get_account_setting(
             self._account, 'account_label')
-        self._account_label.set_text(account_label)
+        self._ui.account_label.set_text(account_label)
         self._status_selector.update()
 
     def process_event(self, event):

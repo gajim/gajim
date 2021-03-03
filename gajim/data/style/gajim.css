@@ -141,9 +141,20 @@
     background-color: darker(@theme_bg_color);
     margin: 0px 12px 0px 12px;
 }
+
 /* Account Page */
 .account-page {
-    background: @theme_bg_color;
+    background: transparent;
+}
+.account-page-roster {
+	padding: 12px;
+}
+.account-page-box {
+    padding: 18px;
+}
+/* Roster */
+.roster treeview {
+	padding: 0 3px;
 }
 
 /*Middle Grid*/
@@ -430,9 +441,6 @@ infobar.error > revealer > box {
 .start-chat-row { padding: 10px 20px 10px 10px; }
 .start-chat-row:not(.activatable) label { color: @insensitive_fg_color; }
 .start-chat-row:focus { outline: none; }
-
-/* Roster */
-.roster treeview { padding-left: 4px; }
 
 /* GroupChatRoster */
 .groupchat-roster { border-left: 1px solid;

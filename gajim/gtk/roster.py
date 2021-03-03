@@ -3,6 +3,7 @@ import logging
 from typing import Optional
 from enum import IntEnum
 
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -12,6 +13,8 @@ from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
+
+from gajim.gui_menu_builder import get_roster_menu
 
 from .util import EventHelper
 from .util import get_builder
@@ -43,7 +46,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def __init__(self, account):
         Gtk.ScrolledWindow.__init__(self)
         EventHelper.__init__(self)
-        self.set_size_request(300, -1)
+        self.set_size_request(200, -1)
+        self.set_vexpand(True)
         self.get_style_context().add_class('roster')
 
         self._account = account
@@ -80,8 +84,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             # This is a group row
             return
 
-        nick = self._store[iter_][Column.JID_OR_GROUP]
-        self.emit('row-activated', nick)
+        jid = self._store[iter_][Column.JID_OR_GROUP]
+        self.emit('row-activated', jid)
 
     def _on_roster_button_press_event(self, treeview, event):
         if event.button not in (2, 3):
@@ -97,13 +101,13 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             # Group row
             return
 
-        nick = self._store[iter_][Column.JID_OR_GROUP]
+        jid = self._store[iter_][Column.JID_OR_GROUP]
 
         if event.button == 3:  # right click
-            self._show_contact_menu(nick)
+            self._show_contact_menu(jid, treeview, event)
 
         if event.button == 2:  # middle click
-            self.emit('row-activated', nick)
+            self.emit('row-activated', jid)
 
     @staticmethod
     def _on_focus_out(treeview, _param):
@@ -112,15 +116,26 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_theme_update(self, _event):
         self.redraw()
 
-    def _show_contact_menu(self, nick):
-        pass
+    def _show_contact_menu(self, jid, treeview, event):
+        menu = get_roster_menu(self._account, jid)
+
+        rectangle = Gdk.Rectangle()
+        rectangle.x = event.x
+        rectangle.y = event.y
+        rectangle.width = rectangle.height = 1
+
+        popover = Gtk.Popover.new_from_model(self, menu)
+        popover.set_relative_to(treeview)
+        popover.set_position(Gtk.PositionType.RIGHT)
+        popover.set_pointing_to(rectangle)
+        popover.popup()
 
     def _on_destroy(self, _roster):
         self._contact_refs = {}
         self._group_refs = {}
         self._roster.set_model(None)
         self._roster = None
-        # Store keeps a ref on the object if we dont unset the sort func
+        # Store keeps a ref on the object if we don’t unset the sort func
         self._store.set_sort_func(Column.TEXT, print)
         self._store.clear()
         self._store = None
@@ -188,13 +203,15 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         # Avatar
         surface = contact.get_avatar(AvatarSize.CHAT, self.get_scale_factor())
 
+        jid = str(contact.jid)
+        # TODO: Multiple groups per contact ?
         iter_ = self._store.append(
-            group_iter, (surface, contact.name, True, str(contact.jid)))
-        self._contact_refs[contact.jid] = Gtk.TreeRowReference(
+            group_iter, (surface, contact.name, True, jid))
+        self._contact_refs[jid] = Gtk.TreeRowReference(
             self._store, self._store.get_path(iter_))
 
         self.draw_groups()
-        self.draw_contact(contact.jid)
+        self.draw_contact(jid)
 
         if (group_path is not None and
                 self._roster.get_model() is not None):
@@ -224,14 +241,13 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         if not iter_:
             return
 
-        client = app.get_client(self._account)
-        contact = client.get_module('Contacts').get_contact(jid)
+        contact = self._client.get_module('Contacts').get_contact(jid)
 
         self.draw_avatar(contact)
         self._store[iter_][Column.TEXT] = GLib.markup_escape_text(contact.name)
 
     def draw_avatar(self, contact):
-        iter_ = self._get_contact_iter(contact.jid)
+        iter_ = self._get_contact_iter(str(contact.jid))
         if iter_ is None:
             return
 

@@ -793,6 +793,23 @@ def get_conv_context_menu(account, uri):
     return menu
 
 
+def get_roster_menu(account, jid):
+    menu_items = [
+        ('show-contact-info', _('Contact Info')),
+    ]
+    menu = Gio.Menu()
+    for item in menu_items:
+        action, label = item
+        action = f'win.{action}'
+        menuitem = Gio.MenuItem.new(label, action)
+        variant_list = GLib.Variant(
+            'as', [account, str(jid)])
+        menuitem.set_action_and_target_value(action, variant_list)
+        menu.append_item(menuitem)
+
+    return menu
+
+
 def get_chat_list_row_menu(workspace_id, account, jid, pinned):
     toggle_label = _('Unpin Conversation') if pinned else _('Pin Conversation')
     menu_items = [

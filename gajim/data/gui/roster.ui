@@ -30,7 +30,6 @@
     <child>
       <object class="GtkTreeViewColumn" id="contact_column">
         <property name="sizing">fixed</property>
-        <property name="fixed-width">210</property>
         <property name="title">avatar</property>
         <property name="expand">True</property>
         <child>
