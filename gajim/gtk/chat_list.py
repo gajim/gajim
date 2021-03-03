@@ -66,7 +66,8 @@ class ChatList(Gtk.ListBox):
     def _filter_func(self, row):
         if not self._current_filter_text:
             return True
-        return self._current_filter_text in row.jid
+        text = self._current_filter_text.lower()
+        return text in row.contact.name.lower()
 
     @staticmethod
     def _header_func(row, before):
@@ -256,11 +257,11 @@ class ChatRow(Gtk.ListBoxRow):
         self.conversations_label = ConversationsHeader()
         self.pinned_label = PinnedHeader()
 
-        self._contact = app.get_client(account).get_module('Contacts').get_contact(jid)
-        self._contact.connect('presence-update', self._on_presence_update)
-        self._contact.connect('chatstate-update', self._on_chatstate_update)
-        self._contact.connect('nickname-update', self._on_nickname_update)
-        self._contact.connect('avatar-update', self._on_avatar_update)
+        self.contact = app.get_client(account).get_module('Contacts').get_contact(jid)
+        self.contact.connect('presence-update', self._on_presence_update)
+        self.contact.connect('chatstate-update', self._on_chatstate_update)
+        self.contact.connect('nickname-update', self._on_nickname_update)
+        self.contact.connect('avatar-update', self._on_avatar_update)
 
         self._timestamp = None
         self._unread_count = 0
@@ -367,17 +368,17 @@ class ChatRow(Gtk.ListBoxRow):
 
     def update_avatar(self):
         scale = self.get_scale_factor()
-        surface = self._contact.get_avatar(AvatarSize.ROSTER, scale)
+        surface = self.contact.get_avatar(AvatarSize.ROSTER, scale)
         self._ui.avatar_image.set_from_surface(surface)
 
     def update_name(self):
         if self.type == 'pm':
             client = app.get_client(self.account)
             muc_name = get_groupchat_name(client, self.jid)
-            self._ui.name_label.set_text(f'{self._contact.name} ({muc_name})')
+            self._ui.name_label.set_text(f'{self.contact.name} ({muc_name})')
             return
 
-        self._ui.name_label.set_text(self._contact.name)
+        self._ui.name_label.set_text(self.contact.name)
 
     def _on_chatstate_update(self, contact, _signal_name):
         if contact.chatstate is None:

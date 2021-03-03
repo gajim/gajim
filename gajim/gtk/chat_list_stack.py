@@ -38,9 +38,12 @@ class ChatListStack(Gtk.Stack):
         self._chat_stack = chat_stack
         self._chat_lists = {}
 
+        self._last_visible_child_name = 'default'
+
         self.add_named(Gtk.Box(), 'default')
 
         self.show_all()
+        self.connect('notify::visible-child-name', self._on_visible_child_name)
         self._ui.search_entry.connect(
             'search-changed', self._on_search_changed)
 
@@ -52,6 +55,16 @@ class ChatListStack(Gtk.Stack):
             chat = self.get_selected_chat()
             if chat is not None:
                 chat.reset_unread()
+
+    def _on_visible_child_name(self, _stack, _param):
+        if self._last_visible_child_name == self.get_visible_child_name():
+            return
+
+        self._ui.search_entry.set_text('')
+        if self._last_visible_child_name != 'default':
+            child = self.get_child_by_name(self._last_visible_child_name)
+            child.set_filter_text('')
+        self._last_visible_child_name = self.get_visible_child_name()
 
     def get_chatlist(self, workspace_id):
         return self._chat_lists[workspace_id]
