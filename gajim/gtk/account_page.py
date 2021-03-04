@@ -37,6 +37,9 @@ class AccountPage(Gtk.Box):
         self._roster = Roster(account)
         self._ui.roster_box.add(self._roster)
 
+        self._ui.paned.set_position(app.settings.get('chat_handle_position'))
+        self._ui.paned.connect('button-release-event', self._on_button_release)
+
         self._ui.connect_signals(self)
         self.show_all()
 
@@ -45,6 +48,16 @@ class AccountPage(Gtk.Box):
     def _on_account_settings(self, _button):
         window = open_window('AccountsWindow')
         window.select_account(self._account)
+
+    @staticmethod
+    def _on_button_release(paned, event):
+        if event.window != paned.get_handle_window():
+            return
+        position = paned.get_position()
+        app.settings.set('chat_handle_position', position)
+
+    def get_roster(self):
+        return self._roster
 
     def update(self):
         account_label = app.settings.get_account_setting(

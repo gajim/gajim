@@ -418,7 +418,9 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.revealer.set_reveal_child(False)
 
     def _on_close_button_clicked(self, _button):
-        app.window.remove_chat(self.workspace_id, self.account, self.jid)
+        app.window.activate_action(
+            'remove-chat',
+            GLib.Variant('as', [self.account, self.jid]))
 
     def set_timestamp(self, timestamp):
         self._timestamp = timestamp

@@ -794,17 +794,24 @@ def get_conv_context_menu(account, uri):
 
 
 def get_roster_menu(account, jid):
+    if helpers.jid_is_blocked(account, jid):
+        block_label = _('Unblock')
+    else:
+        block_label = _('Block…')
     menu_items = [
-        ('show-contact-info', _('Contact Info')),
+        ('contact-info', _('Information')),
+        ('execute-command', _('Execute Command…')),
+        ('block-contact', block_label),
+        ('remove-contact', _('Remove…')),
     ]
+
     menu = Gio.Menu()
     for item in menu_items:
         action, label = item
-        action = f'win.{action}'
+        action = f'win.{action}-{account}'
         menuitem = Gio.MenuItem.new(label, action)
-        variant_list = GLib.Variant(
-            'as', [account, str(jid)])
-        menuitem.set_action_and_target_value(action, variant_list)
+        variant = GLib.Variant('s', str(jid))
+        menuitem.set_action_and_target_value(action, variant)
         menu.append_item(menuitem)
 
     return menu

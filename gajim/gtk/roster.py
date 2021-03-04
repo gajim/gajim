@@ -4,6 +4,7 @@ from typing import Optional
 from enum import IntEnum
 
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -12,6 +13,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
+from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
 
 from gajim.gui_menu_builder import get_roster_menu
@@ -73,10 +75,69 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._ui.connect_signals(self)
 
         self.register_events([
+            ('account-connected', ged.CORE, self._on_account_state),
+            ('account-disconnected', ged.CORE, self._on_account_state),
             ('theme-update', ged.GUI2, self._on_theme_update),
         ])
 
+        self._add_actions()
         self._initial_draw()
+
+    def _add_actions(self):
+        actions = [
+            ('contact-info', self._contact_info),
+            ('execute-command', self._execute_command),
+            ('block-contact', self._block_contact),
+            ('remove-contact', self._remove_contact),
+        ]
+        for action in actions:
+            action_name, func = action
+            act = Gio.SimpleAction.new(
+                f'{action_name}-{self._account}', GLib.VariantType.new('s'))
+            act.connect('activate', func)
+            app.window.add_action(act)
+
+    def update_actions(self):
+        online = app.account_is_connected(self._account)
+        blocking_support = self._client.get_module('Blocking').supported
+
+        app.window.lookup_action(
+            f'contact-info-{self._account}').set_enabled(online)
+        app.window.lookup_action(
+            f'execute-command-{self._account}').set_enabled(online)
+        app.window.lookup_action(
+            f'block-contact-{self._account}').set_enabled(
+                online and blocking_support)
+        app.window.lookup_action(
+            f'remove-contact-{self._account}').set_enabled(online)
+
+    def _remove_actions(self):
+        actions = [
+            'contact-info',
+            'execute-command',
+            'block-contact',
+            'remove-contact',
+        ]
+        for action in actions:
+            app.window.remove_action(f'{action}-{self._account}')
+
+    def _on_account_state(self, _event):
+        self.update_actions()
+
+    def _on_theme_update(self, _event):
+        self.redraw()
+
+    def _contact_info(self, _action, param):
+        app.window.contact_info(self._account, param.get_string())
+
+    def _execute_command(self, _action, param):
+        app.window.execute_command(self._account, param.get_string())
+
+    def _block_contact(self, _action, param):
+        app.window.block_contact(self._account, param.get_string())
+
+    def _remove_contact(self, _action, param):
+        app.window.remove_contact(self._account, param.get_string())
 
     def _on_roster_row_activated(self, _treeview, path, _column):
         iter_ = self._store.get_iter(path)
@@ -113,9 +174,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_focus_out(treeview, _param):
         treeview.get_selection().unselect_all()
 
-    def _on_theme_update(self, _event):
-        self.redraw()
-
     def _show_contact_menu(self, jid, treeview, event):
         menu = get_roster_menu(self._account, jid)
 
@@ -131,6 +189,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         popover.popup()
 
     def _on_destroy(self, _roster):
+        self._remove_actions()
         self._contact_refs = {}
         self._group_refs = {}
         self._roster.set_model(None)
@@ -163,8 +222,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self.enable_sort(True)
 
     def _initial_draw(self):
-        client = app.get_client(self._account)
-        for contact in client.get_module('Roster').iter_contacts():
+        for contact in self._client.get_module('Roster').iter_contacts():
             contact.connect('presence-update', self._on_presence_update)
             contact.connect('avatar-update', self._on_avatar_update)
             self._add_contact(contact)
@@ -217,6 +275,27 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                 self._roster.get_model() is not None):
             self._roster.expand_row(group_path, False)
 
+    def remove_contact(self, jid):
+        # TODO: How to delete a roster item?
+        #self._client.get_module('Roster').delete_item(jid)
+
+        iter_ = self._get_contact_iter(jid)
+        if not iter_:
+            return
+
+        group_iter = self._store.iter_parent(iter_)
+        if group_iter is None:
+            raise ValueError('Trying to remove non-chil')
+
+        self._store.remove(iter_)
+        del self._contact_refs[jid]
+        if not self._store.iter_has_child(group_iter):
+            group = self._store[group_iter][Column.JID_OR_GROUP]
+            del self._group_refs[group]
+            self._store.remove(group_iter)
+
+        self.redraw()
+
     def draw_groups(self):
         for group in self._group_refs:
             self.draw_group(group)
@@ -242,9 +321,12 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             return
 
         contact = self._client.get_module('Contacts').get_contact(jid)
+        name = GLib.markup_escape_text(contact.name)
+        if jid_is_blocked(self._account, jid):
+            name = f'<span strikethrough="true">{name}</span>'
 
         self.draw_avatar(contact)
-        self._store[iter_][Column.TEXT] = GLib.markup_escape_text(contact.name)
+        self._store[iter_][Column.TEXT] = name
 
     def draw_avatar(self, contact):
         iter_ = self._get_contact_iter(str(contact.jid))

@@ -7,20 +7,23 @@ from gi.repository import Gio
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.helpers import ask_for_status_message
+from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
-from gajim.gui.util import get_builder
-from gajim.gui.util import load_icon
+from gajim.common.nec import EventHelper
+
 from gajim.gui.account_page import AccountPage
+from gajim.gui.adhoc import AdHocCommand
 from gajim.gui.chat_list_stack import ChatListStack
 from gajim.gui.chat_stack import ChatStack
 from gajim.gui.account_side_bar import AccountSideBar
 from gajim.gui.workspace_side_bar import WorkspaceSideBar
-
-from gajim.common.helpers import ask_for_status_message
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.util import get_builder
+from gajim.gui.util import load_icon
 
-from gajim.common.nec import EventHelper
+from gajim.vcard import VcardWindow
 
 from .util import open_window
 
@@ -425,11 +428,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._chat_list_stack.store_open_chats(new_workspace_id)
 
     def _remove_chat(self, _action, param):
-        workspace_id, account, jid = param.unpack()
-        self.remove_chat(workspace_id, account, jid)
+        account, jid = param.unpack()
+        self.remove_chat(account, jid)
 
-    def remove_chat(self, workspace_id, account, jid):
-        self._chat_list_stack.remove_chat(workspace_id, account, jid)
+    def remove_chat(self, account, jid):
+        for workspace_id in app.settings.get_workspaces():
+            if self.chat_exists_for_workspace(workspace_id, account, jid):
+                self._chat_list_stack.remove_chat(workspace_id, account, jid)
+                return
 
     def chat_exists(self, account, jid):
         return self._chat_list_stack.contains_chat(account, jid)
@@ -447,14 +453,91 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return None
         return self.get_control(chat.account, chat.jid)
 
+    def get_controls(self, account=None):
+        return self._chat_stack.get_controls(account)
+
     def _add_accounts(self):
         for account in list(app.connections.keys()):
             account_page = AccountPage(account)
             self._account_pages[account] = account_page
             self._ui.main_stack.add_named(account_page, account)
 
-    def get_controls(self, account=None):
-        return self._chat_stack.get_controls(account)
+    @staticmethod
+    def contact_info(account, jid):
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
+
+        # TODO: VcardWindow does not work with new type Contacts
+        info = app.interface.instances[account]['infos']
+        if contact.jid in info:
+            info[contact.jid].window.present()
+        else:
+            info[contact.jid] = VcardWindow(contact, account)
+
+    @staticmethod
+    def execute_command(account, jid):
+        # TODO: Resource?
+        AdHocCommand(account, jid)
+
+    def block_contact(self, account, jid):
+        client = app.get_client(account)
+
+        if jid_is_blocked(account, jid):
+            client.get_module('Blocking').unblock([jid])
+            roster = self._account_pages[account].get_roster()
+            roster.draw_contact(jid)
+            return
+
+        # TODO: Keep "confirm_block" setting?
+        def _block_contact(report=None):
+            app.events.remove_events(account, jid)
+
+            contact = client.get_module('Contacts').get_contact(jid)
+            client.get_module('Blocking').block([jid], report)
+            if not contact.is_in_roster:
+                self.remove_chat(account, jid)
+                return
+
+            roster = self._account_pages[account].get_roster()
+            roster.draw_contact(jid)
+            # TODO: draw_contact draws too early (not blocked yet)
+            # TODO: Draw ChatList row differently?
+
+        ConfirmationDialog(
+            _('Block Contact'),
+            _('Really block this contact?'),
+            _('You will appear offline for this contact and you '
+              'will not receive further messages.'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('OK',
+                               text=_('_Report Spam'),
+                               callback=_block_contact,
+                               kwargs={'report': 'spam'}),
+             DialogButton.make('Remove',
+                               text=_('_Block'),
+                               callback=_block_contact)],
+            modal=False).show()
+
+    def remove_contact(self, account, jid):
+        def _remove_contact():
+            self.remove_chat(account, jid)
+            roster = self._account_pages[account].get_roster()
+            roster.remove_contact(jid)
+
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
+        sec_text = _('You are about to remove %(name)s (%(jid)s) from '
+                     'your contact list.\n') % {
+                         'name': contact.name,
+                         'jid': jid}
+        # TODO: ConfirmationCheckDialog for subscription decision?
+        ConfirmationDialog(
+            _('Remove Contact'),
+            _('Remove contact from contact list'),
+            sec_text,
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               callback=_remove_contact)]).show()
 
     def _load_chats(self):
         for workspace_id in app.settings.get_workspaces():

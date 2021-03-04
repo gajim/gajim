@@ -397,34 +397,10 @@ class ChatControl(ChatControlBase):
         AddNewContactWindow(self.account, self.contact.jid)
 
     def _on_block_contact(self, _action, _param):
-        def _block_contact(report=None):
-            con = app.connections[self.account]
-            con.get_module('Blocking').block([self.contact.jid], report=report)
-
-            self.parent_win.remove_tab(self, None, force=True)
-            if _('Not in contact list') in self.contact.get_shown_groups():
-                app.interface.roster.remove_contact(
-                    self.contact.jid, self.account, force=True, backend=True)
-                return
-            app.interface.roster.draw_contact(self.contact.jid, self.account)
-
-        ConfirmationDialog(
-            _('Block Contact'),
-            _('Really block this contact?'),
-            _('You will appear offline for this contact and you will '
-              'not receive further messages.'),
-            [DialogButton.make('Cancel'),
-             DialogButton.make('OK',
-                               text=_('_Report Spam'),
-                               callback=_block_contact,
-                               kwargs={'report': 'spam'}),
-             DialogButton.make('Remove',
-                               text=_('_Block'),
-                               callback=_block_contact)],
-            modal=False).show()
+        app.window.block_contact(self.account, self.contact.jid)
 
     def _on_information(self, _action, _param):
-        app.interface.roster.on_info(None, self.contact, self.account)
+        app.window.contact_info(self.account, self.contact.jid)
 
     def _on_invite_contacts(self, _action, _param):
         """
