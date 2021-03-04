@@ -97,6 +97,13 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             act.connect('activate', func)
             app.window.add_action(act)
 
+        action = Gio.SimpleAction.new_stateful(
+            f'show-offline-{self._account}',
+            None,
+            GLib.Variant.new_boolean(app.settings.get('showoffline')))
+        action.connect('change-state', self._show_offline)
+        app.window.add_action(action)
+
     def update_actions(self):
         online = app.account_is_connected(self._account)
         blocking_support = self._client.get_module('Blocking').supported
@@ -117,6 +124,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             'execute-command',
             'block-contact',
             'remove-contact',
+            'show-offline',
         ]
         for action in actions:
             app.window.remove_action(f'{action}-{self._account}')
@@ -126,6 +134,12 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _on_theme_update(self, _event):
         self.redraw()
+
+    def _show_offline(self, action, param):
+        action.set_state(param)
+        app.settings.set('showoffline', param.get_boolean())
+        print('_show_offline')
+        print(param.get_boolean())
 
     def _contact_info(self, _action, param):
         app.window.contact_info(self._account, param.get_string())

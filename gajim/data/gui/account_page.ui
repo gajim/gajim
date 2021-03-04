@@ -75,6 +75,7 @@
                 <property name="primary-icon-activatable">False</property>
                 <property name="primary-icon-sensitive">False</property>
                 <property name="placeholder-text" translatable="yes">Search…</property>
+                <signal name="changed" handler="_on_search_changed" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

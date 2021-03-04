@@ -12,14 +12,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from gi.repository import Gio
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.i18n import _
 
 from .roster import Roster
 from .status_selector import StatusSelector
 from .util import get_builder
 from .util import open_window
+
+ROSTER_MENU_DICT = {
+    'show-offline': _('Show Offline Contacts'),
+}
 
 
 class AccountPage(Gtk.Box):
@@ -40,6 +46,11 @@ class AccountPage(Gtk.Box):
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
+        roster_menu = Gio.Menu()
+        for action, label in ROSTER_MENU_DICT.items():
+            roster_menu.append(label, f'win.{action}-{account}')
+        self._ui.roster_menu_button.set_menu_model(roster_menu)
+
         self._ui.connect_signals(self)
         self.show_all()
 
@@ -48,6 +59,10 @@ class AccountPage(Gtk.Box):
     def _on_account_settings(self, _button):
         window = open_window('AccountsWindow')
         window.select_account(self._account)
+
+    def _on_search_changed(self, widget):
+        text = widget.get_text().lower()
+        print(text)
 
     @staticmethod
     def _on_button_release(paned, event):
