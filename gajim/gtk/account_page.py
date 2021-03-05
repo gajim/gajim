@@ -62,7 +62,7 @@ class AccountPage(Gtk.Box):
 
     def _on_search_changed(self, widget):
         text = widget.get_text().lower()
-        print(text)
+        self._roster.set_search_string(text)
 
     @staticmethod
     def _on_button_release(paned, event):

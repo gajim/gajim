@@ -12,6 +12,8 @@
       <column type="gboolean"/>
       <!-- column-name JidOrGroup -->
       <column type="gchararray"/>
+      <!-- column-name Visible -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkTreeView" id="roster_treeview">
