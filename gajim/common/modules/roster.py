@@ -95,6 +95,9 @@ class Roster(BaseModule):
                                          'roster_version',
                                          roster.version)
 
+        app.nec.push_incoming_event(NetworkEvent('roster-received',
+                                                 account=self._account))
+
         self._con.connect_machine()
 
     def _set_roster_from_data(self, items):
@@ -119,7 +122,7 @@ class Roster(BaseModule):
                                          'roster_version',
                                          properties.roster.version)
 
-        app.nec.push_incoming_event(NetworkEvent('roster-info',
+        app.nec.push_incoming_event(NetworkEvent('roster-push',
                                                  account=self._account,
                                                  item=item))
 
