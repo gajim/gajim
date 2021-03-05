@@ -26,7 +26,10 @@ from gajim.common.modules.base import BaseModule
 class Roster(BaseModule):
 
     _nbxmpp_extends = 'Roster'
-    _nbxmpp_methods = []
+    _nbxmpp_methods = [
+        'delete_item',
+        'set_item',
+    ]
 
     def __init__(self, con):
         BaseModule.__init__(self, con)
@@ -57,7 +60,7 @@ class Roster(BaseModule):
         self._roster = roster
 
     def _store_roster(self):
-        app.storage.cache.store_roster(self._account, self._data)
+        app.storage.cache.store_roster(self._account, self._roster)
 
     def request_roster(self):
         version = app.settings.get_account_setting(self._account,
@@ -101,41 +104,24 @@ class Roster(BaseModule):
             self._con.get_module('Contacts').add_contact(item.jid)
             self._roster[item.jid] = item
 
-        app.storage.cache.store_roster(self._account, self._roster)
+        self._store_roster()
 
-    def _process_roster_push(self, _con, stanza, _properties):
-        return
-        # TODO
+    def _process_roster_push(self, _con, _stanza, properties):
         self._log.info('Push received')
 
-        sender = stanza.getFrom()
-        if sender is not None:
-            if not self._con.get_own_jid().bare_match(sender):
-                self._log.warning('Wrong JID %s', stanza.getFrom())
-                return
+        item = properties.roster.item
+        self._roster[item.jid] = item
 
-        push_items, version = self._parse_push(stanza)
+        self._store_roster()
 
-        self._ack_roster_push(stanza)
-
-        for item in push_items:
-            attrs = item.data
-            app.nec.push_incoming_event(NetworkEvent(
-                'roster-info',
-                conn=self._con,
-                jid=item.jid,
-                nickname=attrs['name'],
-                sub=attrs['subscription'],
-                ask=attrs['ask'],
-                groups=attrs['groups'],
-                avatar_sha=None))
-
-            self._store_roster()
-
-        self._log.info('New version: %s', version)
+        self._log.info('New version: %s', properties.roster.version)
         app.settings.set_account_setting(self._account,
                                          'roster_version',
-                                         version)
+                                         properties.roster.version)
+
+        app.nec.push_incoming_event(NetworkEvent('roster-info',
+                                                 account=self._account,
+                                                 item=item))
 
         raise nbxmpp.NodeProcessed
 
