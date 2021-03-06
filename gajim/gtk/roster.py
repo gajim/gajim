@@ -14,7 +14,6 @@ from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.const import PresenceShowExt
-from gajim.common.helpers import jid_is_blocked
 from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 
