@@ -134,6 +134,19 @@ class Roster(BaseModule):
     def get_item(self, jid):
         return self._roster.get(jid)
 
+    def set_groups(self, jid, groups):
+        if groups is not None:
+            groups = set(groups)
+        item = self.get_item(jid)
+        self._nbxmpp('Roster').set_item(jid, item.name, groups)
+
+    def change_group(self, jid, old_group, new_group):
+        item = self.get_item(jid)
+        groups = set(item.groups)
+        groups.discard(old_group)
+        groups.add(new_group)
+        self._nbxmpp('Roster').set_item(jid, item.name, groups)
+
     def iter(self):
         for jid, data in self._roster.items():
             yield jid, data
