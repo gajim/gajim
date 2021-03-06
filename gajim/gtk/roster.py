@@ -8,7 +8,6 @@ from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import ged
@@ -44,14 +43,6 @@ class Column(IntEnum):
 
 
 class Roster(Gtk.ScrolledWindow, EventHelper):
-
-    __gsignals__ = {
-        'row-activated': (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,  # return value
-            (str, ))  # arguments
-    }
-
     def __init__(self, account):
         Gtk.ScrolledWindow.__init__(self)
         EventHelper.__init__(self)
@@ -175,7 +166,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             return
 
         jid = self._store[iter_][Column.JID_OR_GROUP]
-        self.emit('row-activated', jid)
+        app.window.add_chat(self._account, jid, 'contact', select=True)
+        app.window.show_chats()
 
     def _on_roster_button_press_event(self, treeview, event):
         if event.button not in (2, 3):
