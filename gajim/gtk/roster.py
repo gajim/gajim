@@ -98,10 +98,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _add_actions(self):
         actions = [
-            ('contact-info', self._contact_info),
-            ('execute-command', self._execute_command),
-            ('block-contact', self._block_contact),
-            ('remove-contact', self._remove_contact),
+            ('contact-info', self._on_contact_info),
+            ('execute-command', self._on_execute_command),
+            ('block-contact', self._on_block_contact),
+            ('remove-contact', self._on_remove_contact),
         ]
         for action in actions:
             action_name, func = action
@@ -114,7 +114,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             f'show-offline-{self._account}',
             None,
             GLib.Variant.new_boolean(app.settings.get('showoffline')))
-        action.connect('change-state', self._show_offline)
+        action.connect('change-state', self._on_show_offline)
         app.window.add_action(action)
 
     def update_actions(self):
@@ -151,21 +151,21 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_theme_update(self, _event):
         self.redraw()
 
-    def _show_offline(self, action, param):
+    def _on_show_offline(self, action, param):
         action.set_state(param)
         app.settings.set('showoffline', param.get_boolean())
         self._draw_contacts()
 
-    def _contact_info(self, _action, param):
+    def _on_contact_info(self, _action, param):
         app.window.contact_info(self._account, param.get_string())
 
-    def _execute_command(self, _action, param):
+    def _on_execute_command(self, _action, param):
         app.window.execute_command(self._account, param.get_string())
 
-    def _block_contact(self, _action, param):
+    def _on_block_contact(self, _action, param):
         app.window.block_contact(self._account, param.get_string())
 
-    def _remove_contact(self, _action, param):
+    def _on_remove_contact(self, _action, param):
         app.window.remove_contact(self._account, param.get_string())
 
     def _on_roster_row_activated(self, _treeview, path, _column):
@@ -289,7 +289,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._draw_contact(contact)
 
     @event_filter(['account'])
-    def _on_roster_received(self, event):
+    def _on_roster_received(self, _event):
         self._reset()
 
     @event_filter(['account'])
@@ -404,6 +404,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _draw_contact(self, contact):
         for ref in self._contact_refs[contact.jid]:
             self._draw_contact_row(ref, contact)
+        self._roster.expand_all()
 
     def _draw_contact_row(self, ref, contact):
         iter_ = self._get_iter_from_ref(ref)
@@ -490,8 +491,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._group_refs = {}
         self._store.clear()
 
-    def _on_presence_received(self, event):
-        # TODO: self.draw_contacts() if contact changes status
+    def _on_presence_received(self, _event):
         pass
 
     def process_event(self, event):
