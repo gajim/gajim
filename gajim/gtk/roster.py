@@ -193,12 +193,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             return
 
         source_group = model[iter_source_parent][Column.JID_OR_GROUP]
-        delimiter = self._client.get_module('Delimiter').delimiter
-        source_groups = source_group.split(delimiter)
-        if DEFAULT_GROUP in source_groups:
-            source_groups = []
+
         jid = model[iter_source][Column.JID_OR_GROUP]
-        name = model[iter_source][Column.TEXT]
+        # name = model[iter_source][Column.TEXT]
 
         # Destination: the row receiving the drop
         iter_dest = model.get_iter(path_dest)
@@ -209,25 +206,16 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         else:
             dest_group = model[iter_dest_parent][Column.JID_OR_GROUP]
 
-        dest_groups = dest_group.split(delimiter)
-        if DEFAULT_GROUP in dest_groups:
-            # Dropped into DEFAULT_GROUP, remove all groups
-            print('remoing all groups')
-            # self._client.get_module('Roster').update_contact(jid, name, [])
+        if source_group == dest_group:
             return
 
-        print('source groups')
-        print(source_groups)
-        print('dest groups')
-        print(dest_groups)
-        if source_groups == dest_groups:
-            # Dropped into source group
+        if DEFAULT_GROUP == dest_group:
+            self._client.get_module('Roster').set_groups(jid, None)
             return
-        groups = list(set(dest_groups) - set(source_groups))
-        print('final groups')
-        print(groups)
-        print('setting new groups')
-        # self._client.get_module('Roster').update_contact(jid, name, groups)
+
+        self._client.get_module('Roster').change_group(jid,
+                                                       source_group,
+                                                       dest_group)
 
     def _on_show_offline(self, action, param):
         action.set_state(param)
