@@ -80,6 +80,9 @@ sqlite3.register_adapter(DiscoInfo, _adapt_disco_info)
 
 class Encoder(json.JSONEncoder):
     def default(self, obj):
+        if isinstance(obj, set):
+            return list(obj)
+
         if isinstance(obj, JID):
             return {'__type': 'JID', 'value': str(obj)}
 
@@ -99,6 +102,7 @@ def json_decoder(dct):
         return JID.from_string(dct['value'])
     if type_ == 'RosterItem':
         dct.pop('__type')
+        dct['groups'] = set(dct['groups'])
         return RosterItem(**dct)
     return dct
 
