@@ -308,20 +308,24 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         return True
 
-    def set_model(self):
+    def _set_model(self):
         self._roster.set_model(self._modelfilter)
+
+    def _unset_model(self):
+        self._roster.set_model(None)
 
     def redraw(self):
-        self._roster.set_model(None)
-        self._roster.set_model(self._modelfilter)
+        self._unset_model()
+        self._set_model()
         self._roster.expand_all()
 
-    def _reset(self):
-        self._roster.set_model(None)
-        self.enable_sort(False)
+    def _reset_roster(self):
+        self._unset_model()
+        self._enable_sort(False)
+        self._clear()
         self._initial_draw()
 
-    def enable_sort(self, enable):
+    def _enable_sort(self, enable):
         column = Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
         if enable:
             column = Column.TEXT
@@ -333,8 +337,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             self._connect_contact_signals(contact)
             self._add_or_update_contact(contact)
 
-        self.enable_sort(True)
-        self.set_model()
+        self._enable_sort(True)
+        self._set_model()
         self._roster.expand_all()
 
     def _connect_contact_signals(self, contact):
@@ -347,7 +351,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     @event_filter(['account'])
     def _on_roster_received(self, _event):
-        self._reset()
+        self._reset_roster()
 
     @event_filter(['account'])
     def _on_roster_push(self, event):
@@ -560,7 +564,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         group2 = model[iter2][Column.JID_OR_GROUP]
         return -1 if group1 < group2 else 1
 
-    def clear(self):
+    def _clear(self):
         self._contact_refs = {}
         self._group_refs = {}
         self._store.clear()
@@ -573,7 +577,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._remove_actions()
         self._contact_refs = {}
         self._group_refs = {}
-        self._roster.set_model(None)
+        self._unset_model()
         self._roster = None
         self._store.clear()
         self._store.reset_default_sort_func()
