@@ -62,6 +62,9 @@ class Roster(BaseModule):
     def _store_roster(self):
         app.storage.cache.store_roster(self._account, self._roster)
 
+    def get_size(self):
+        return len(self._roster)
+
     def request_roster(self):
         version = app.settings.get_account_setting(self._account,
                                                    'roster_version')

@@ -92,8 +92,14 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             ('roster-push', ged.GUI2, self._on_roster_push),
         ])
 
+        roster_size = self._client.get_module('Roster').get_size()
+        self._high_performance = roster_size > 1000
+
         self._modelfilter = self._store.filter_new()
-        self._modelfilter.set_visible_column(Column.VISIBLE)
+        if self._high_performance:
+            self._modelfilter.set_visible_func(self._visible_func)
+        else:
+            self._modelfilter.set_visible_column(Column.VISIBLE)
         self._filter_enabled = False
         self._filter_string = ''
 
@@ -292,9 +298,18 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         popover.popup()
 
     def set_search_string(self, text):
-        self._filter_string = text
+        self._filter_string = text.lower()
         self._filter_enabled = bool(text)
         self._refilter()
+
+    def _visible_func(self, model, iter_, *_data):
+        if not self._filter_enabled:
+            return True
+
+        if not model[iter_][Column.IS_CONTACT]:
+            return True
+
+        return self._filter_string in model[iter_][Column.TEXT].lower()
 
     def _get_contact_visible(self, contact):
         if self._filter_enabled:
@@ -452,6 +467,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._store[group_iter][Column.TEXT] = group_name
 
     def _refilter(self):
+        if self._high_performance:
+            self._modelfilter.refilter()
+            self._roster.expand_all()
+            return
+
         for group in self._store:
             group_is_visible = False
             for child in group.iterchildren():
