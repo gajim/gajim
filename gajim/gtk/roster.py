@@ -85,6 +85,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self.register_events([
             ('account-connected', ged.CORE, self._on_account_state),
             ('account-disconnected', ged.CORE, self._on_account_state),
+            ('roster-received', ged.CORE, self._on_roster_received),
             ('theme-update', ged.GUI2, self._on_theme_update),
             ('roster-push', ged.GUI2, self._on_roster_push),
         ])
@@ -565,8 +566,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         return -1 if group1 < group2 else 1
 
     def _clear(self):
-        self._contact_refs = {}
-        self._group_refs = {}
+        self._contact_refs.clear()
+        self._group_refs.clear()
         self._store.clear()
 
     def process_event(self, event):
@@ -575,8 +576,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _on_destroy(self, _roster):
         self._remove_actions()
-        self._contact_refs = {}
-        self._group_refs = {}
+        self._contact_refs.clear()
+        self._group_refs.clear()
         self._unset_model()
         self._roster = None
         self._store.clear()
