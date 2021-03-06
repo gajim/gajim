@@ -67,6 +67,19 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         self._roster = self._ui.roster_treeview
 
+        # Drag and Drop
+        entries = [Gtk.TargetEntry.new(
+            'ROSTER_ITEM',
+            Gtk.TargetFlags.SAME_APP,
+            0)]
+        self._roster.enable_model_drag_source(
+            Gdk.ModifierType.BUTTON1_MASK,
+            entries,
+            Gdk.DragAction.MOVE)
+        self._roster.enable_model_drag_dest(entries, Gdk.DragAction.DEFAULT)
+        self._roster.connect('drag-drop', self._on_drag_drop)
+        self._roster.connect('drag-data-received', self._on_drag_data_received)
+
         self._ui.contact_column.set_cell_data_func(self._ui.text_renderer,
                                                    self._text_cell_data_func)
         self.connect('destroy', self._on_destroy)
@@ -141,6 +154,74 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _on_theme_update(self, _event):
         self.redraw()
+
+    @staticmethod
+    def _on_drag_drop(treeview, drag_context, _x_coord, _y_coord,
+                      timestamp):
+        treeview.stop_emission_by_name('drag-drop')
+        target_list = treeview.drag_dest_get_target_list()
+        target = treeview.drag_dest_find_target(drag_context, target_list)
+        treeview.drag_get_data(drag_context, target, timestamp)
+        return True
+
+    def _on_drag_data_received(self, treeview, _drag_context, x_coord,
+                               y_coord, _selection_data, _info, _timestamp):
+        treeview.stop_emission_by_name('drag-data-received')
+        if treeview.get_selection().count_selected_rows() == 0:
+            # No selections, nothing dragged from treeview
+            return
+
+        drop_info = treeview.get_dest_row_at_pos(x_coord, y_coord)
+        if not drop_info:
+            return
+
+        model = treeview.get_model()
+        path_dest, _position = drop_info
+
+        # Source: the row being dragged
+        path_source = treeview.get_selection().get_selected_rows()[1][0]
+        iter_source = model.get_iter(path_source)
+        iter_source_parent = model.iter_parent(iter_source)
+        if iter_source_parent is None:
+            # Dragged a group
+            return
+
+        source_group = model[iter_source_parent][Column.JID_OR_GROUP]
+        delimiter = self._client.get_module('Delimiter').delimiter
+        source_groups = source_group.split(delimiter)
+        if DEFAULT_GROUP in source_groups:
+            source_groups = []
+        jid = model[iter_source][Column.JID_OR_GROUP]
+        name = model[iter_source][Column.TEXT]
+
+        # Destination: the row receiving the drop
+        iter_dest = model.get_iter(path_dest)
+        iter_dest_parent = model.iter_parent(iter_dest)
+        if iter_dest_parent is None:
+            # Dropped on a group
+            dest_group = model[iter_dest][Column.JID_OR_GROUP]
+        else:
+            dest_group = model[iter_dest_parent][Column.JID_OR_GROUP]
+
+        dest_groups = dest_group.split(delimiter)
+        if DEFAULT_GROUP in dest_groups:
+            # Dropped into DEFAULT_GROUP, remove all groups
+            print('remoing all groups')
+            # self._client.get_module('Roster').update_contact(jid, name, [])
+            return
+
+        print('source groups')
+        print(source_groups)
+        print('dest groups')
+        print(dest_groups)
+        if source_groups == dest_groups:
+            # Dropped into source group
+            return
+        groups = list(set(dest_groups) - set(source_groups))
+        print('final groups')
+        print(groups)
+        print('setting new groups')
+        # self._client.get_module('Roster').update_contact(jid, name, groups)
 
     def _on_show_offline(self, action, param):
         action.set_state(param)
