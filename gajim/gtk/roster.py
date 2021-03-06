@@ -80,7 +80,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         ])
 
         self._modelfilter = self._store.filter_new()
-        self._modelfilter.set_visible_func(self._visible_func)
+        self._modelfilter.set_visible_column(Column.VISIBLE)
         self._filter_enabled = False
         self._filter_string = ''
 
@@ -145,7 +145,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_show_offline(self, action, param):
         action.set_state(param)
         app.settings.set('showoffline', param.get_boolean())
-        self._draw_contacts()
+        self._refilter()
 
     def _on_contact_info(self, _action, param):
         app.window.contact_info(self._account, param.get_string())
@@ -213,7 +213,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def set_search_string(self, text):
         self._filter_string = text
         self._filter_enabled = bool(text)
-        self._draw_contacts()
+        self._refilter()
 
     def _get_contact_visible(self, contact):
         if self._filter_enabled:
@@ -226,20 +226,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             return False
 
         return True
-
-    def _visible_func(self, model, iter_, _data):
-        visible = model[iter_][Column.VISIBLE]
-        is_contact = model[iter_][Column.IS_CONTACT]
-        name = model[iter_][Column.TEXT]
-
-        if not is_contact:
-            # Always show groups
-            return True
-
-        if self._filter_enabled:
-            return self._filter_string in name.lower()
-
-        return visible
 
     def set_model(self):
         self._roster.set_model(self._modelfilter)
@@ -260,10 +246,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             column = Column.TEXT
 
         self._store.set_sort_column_id(column, Gtk.SortType.ASCENDING)
-
-    def invalidate_sort(self):
-        self.enable_sort(False)
-        self.enable_sort(True)
 
     def _initial_draw(self):
         for contact in self._client.get_module('Roster').iter_contacts():
@@ -387,11 +369,18 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         group_name += f' ({group_users}/{total_users})'
 
         self._store[group_iter][Column.TEXT] = group_name
-        self._store[group_iter][Column.VISIBLE] = True
 
-    def _draw_contacts(self):
-        for jid in self._contact_refs:
-            self._draw_contact(self._get_contact(jid))
+    def _refilter(self):
+        for group in self._store:
+            group_is_visible = False
+            for child in group.iterchildren():
+                contact = self._get_contact(child[Column.JID_OR_GROUP])
+                is_visible = self._get_contact_visible(contact)
+                child[Column.VISIBLE] = is_visible
+                if is_visible:
+                    group_is_visible = True
+
+            group[Column.VISIBLE] = group_is_visible
         self._roster.expand_all()
 
     def _draw_contact(self, contact):
@@ -406,8 +395,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         if jid_is_blocked(self._account, contact.jid):
             name = f'<span strikethrough="true">{name}</span>'
         self._store[iter_][Column.TEXT] = name
-        visible = self._get_contact_visible(contact)
-        self._store[iter_][Column.VISIBLE] = visible
 
         surface = contact.get_avatar(
             AvatarSize.ROSTER, self.get_scale_factor())
