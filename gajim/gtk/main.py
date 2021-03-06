@@ -485,26 +485,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def block_contact(self, account, jid):
         client = app.get_client(account)
 
-        if jid_is_blocked(account, jid):
+        contact = client.get_module('Contacts').get_contact(jid)
+        if contact.is_blocked:
             client.get_module('Blocking').unblock([jid])
-            roster = self._account_pages[account].get_roster()
-            roster.draw_contact(jid)
             return
 
         # TODO: Keep "confirm_block" setting?
         def _block_contact(report=None):
-            app.events.remove_events(account, jid)
-
-            contact = client.get_module('Contacts').get_contact(jid)
-            client.get_module('Blocking').block([jid], report)
-            if not contact.is_in_roster:
-                self.remove_chat(account, jid)
-                return
-
-            roster = self._account_pages[account].get_roster()
-            roster.draw_contact(jid)
-            # TODO: draw_contact draws too early (not blocked yet)
-            # TODO: Draw ChatList row differently?
+            client.get_module('Blocking').block([contact.jid], report)
+            self.remove_chat(account, contact.jid)
 
         ConfirmationDialog(
             _('Block Contact'),

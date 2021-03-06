@@ -83,6 +83,13 @@ class Contacts(BaseModule):
     def get_group_chat_contact(self, jid):
         return self.get_contact(jid, groupchat=True)
 
+    def get_contacts_with_domain(self, domain):
+        contacts = []
+        for contact in self._contacts.values():
+            if contact.jid.domain == domain:
+                contacts.append(contact)
+        return contacts
+
 
 class CommonContact(Observable):
     def __init__(self, logger, jid, account):
@@ -234,6 +241,16 @@ class BareContact(CommonContact):
     def groups(self):
         return self._get_roster_attr('groups')
 
+    @property
+    def is_blocked(self):
+        return self._module('Blocking').is_blocked(self._jid)
+
+    def set_blocked(self):
+        self.update_presence(UNKNOWN_PRESENCE)
+        self.notify('blocking-update')
+
+    def set_unblocked(self):
+        self.notify('blocking-update')
 
 
 class ResourceContact(CommonContact):

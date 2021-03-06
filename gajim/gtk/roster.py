@@ -330,18 +330,19 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _initial_draw(self):
         for contact in self._client.get_module('Roster').iter_contacts():
-            contact.connect('presence-update', self._on_presence_update)
-            contact.connect('avatar-update', self._on_avatar_update)
+            self._connect_contact_signals(contact)
             self._add_or_update_contact(contact)
 
         self.enable_sort(True)
         self.set_model()
         self._roster.expand_all()
 
-    def _on_presence_update(self, contact, _signal_name):
-        self._draw_contact(contact)
+    def _connect_contact_signals(self, contact):
+        contact.connect('presence-update', self._on_contact_update)
+        contact.connect('avatar-update', self._on_contact_update)
+        contact.connect('blocking-update', self._on_contact_update)
 
-    def _on_avatar_update(self, contact, _signal_name):
+    def _on_contact_update(self, contact, _signal_name):
         self._draw_contact(contact)
 
     @event_filter(['account'])
@@ -353,8 +354,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         contact = self._get_contact(event.item.jid)
 
         if event.item.subscription == 'remove':
+            contact.disconnect(self)
             self._remove_contact(contact)
         else:
+            if contact.jid not in self._contact_refs:
+                self._connect_contact_signals(contact)
             self._add_or_update_contact(contact)
 
     def _get_current_groups(self, jid):
@@ -482,7 +486,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         iter_ = self._get_iter_from_ref(ref)
 
         name = GLib.markup_escape_text(contact.name)
-        if jid_is_blocked(self._account, contact.jid):
+        if contact.is_blocked:
             name = f'<span strikethrough="true">{name}</span>'
         self._store[iter_][Column.TEXT] = name
 
