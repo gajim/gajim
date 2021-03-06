@@ -291,6 +291,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return False
         return self._chat_list_stack.is_chat_active(account, jid)
 
+    def show_chats(self):
+        self._ui.main_stack.set_visible_child_name('chats')
+
     def _add_workspace(self, _action, param):
         workspace_id = param.get_string()
         self.add_workspace(workspace_id)

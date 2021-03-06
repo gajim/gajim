@@ -197,7 +197,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             self._show_contact_menu(jid, treeview, event)
 
         if event.button == 2:  # middle click
-            self.emit('row-activated', jid)
+            app.window.add_chat(self._account, jid, 'contact', select=True)
+            app.window.show_chats()
 
     @staticmethod
     def _on_focus_out(treeview, _param):

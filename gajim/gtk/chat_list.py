@@ -420,7 +420,7 @@ class ChatRow(Gtk.ListBoxRow):
     def _on_close_button_clicked(self, _button):
         app.window.activate_action(
             'remove-chat',
-            GLib.Variant('as', [self.account, self.jid]))
+            GLib.Variant('as', [self.account, str(self.jid)]))
 
     def set_timestamp(self, timestamp):
         self._timestamp = timestamp
