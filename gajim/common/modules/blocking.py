@@ -69,7 +69,7 @@ class Blocking(BaseModule):
 
         raise_if_error(blocking_list)
 
-        self.blocked = blocking_list
+        self.blocked = list(blocking_list)
         app.nec.push_incoming_event(NetworkEvent('blocking',
                                                  conn=self._con,
                                                  changed=self.blocked))
