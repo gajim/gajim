@@ -26,10 +26,7 @@ from .util import get_builder
 log = logging.getLogger('gajim.gui.roster')
 
 
-HANDLED_EVENTS = [
-    'presence-received',
-]
-
+HANDLED_EVENTS = []
 
 DEFAULT_GROUP = _('Contacts')
 
@@ -354,7 +351,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     @event_filter(['account'])
     def _on_roster_push(self, event):
         contact = self._get_contact(event.item.jid)
-        self._add_or_update_contact(contact)
+
+        if event.item.subscription == 'remove':
+            self._remove_contact(contact)
+        else:
+            self._add_or_update_contact(contact)
 
     def _get_current_groups(self, jid):
         groups = set()
@@ -560,17 +561,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._group_refs = {}
         self._store.clear()
 
-    def _on_presence_received(self, _event):
-        pass
-
     def process_event(self, event):
         if event.name not in HANDLED_EVENTS:
             return
-
-        if event.name == 'presence-received':
-            self._on_presence_received(event)
-        else:
-            log.warning('Unhandled Event: %s', event.name)
 
     def _on_destroy(self, _roster):
         self._remove_actions()

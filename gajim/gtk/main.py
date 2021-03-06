@@ -522,18 +522,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             modal=False).show()
 
     def remove_contact(self, account, jid):
+        client = app.get_client(account)
+
         def _remove_contact():
             self.remove_chat(account, jid)
-            roster = self._account_pages[account].get_roster()
-            roster.remove_contact(jid)
+            client.get_module('Roster').delete_item(jid)
 
-        client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
         sec_text = _('You are about to remove %(name)s (%(jid)s) from '
                      'your contact list.\n') % {
                          'name': contact.name,
                          'jid': jid}
-        # TODO: ConfirmationCheckDialog for subscription decision?
+
         ConfirmationDialog(
             _('Remove Contact'),
             _('Remove contact from contact list'),

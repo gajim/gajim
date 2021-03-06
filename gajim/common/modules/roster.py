@@ -116,7 +116,10 @@ class Roster(BaseModule):
         self._log.info('Push received')
 
         item = properties.roster.item
-        self._roster[item.jid] = item
+        if item.subscription == 'remove':
+            self._roster.pop(item.jid)
+        else:
+            self._roster[item.jid] = item
 
         self._store_roster()
 
