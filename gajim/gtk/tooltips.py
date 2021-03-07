@@ -41,83 +41,18 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.gtkgui_helpers import add_css_class
 
+from .avatar import get_show_circle
 from .util import get_builder
-from .util import get_icon_name
 from .util import format_mood
 from .util import format_activity
 from .util import format_tune
 from .util import format_location
 from .util import get_css_show_class
 
-
 log = logging.getLogger('gajim.gui.tooltips')
 
 
-class StatusTable:
-    """
-    Contains methods for creating status table.
-    This is used in the Roster’s tooltip
-    """
-    def __init__(self):
-        self.current_row = 0
-        self.table = None
-        self.text_label = None
-        self.spacer_label = '   '
-
-    def create_table(self):
-        self.table = Gtk.Grid()
-        self.table.insert_column(0)
-        self.table.set_property('column-spacing', 3)
-
-    def add_text_row(self, text, col_inc=0):
-        self.table.insert_row(self.current_row)
-        self.text_label = Gtk.Label()
-        self.text_label.set_line_wrap(True)
-        self.text_label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
-        self.text_label.set_lines(3)
-        self.text_label.set_ellipsize(Pango.EllipsizeMode.END)
-        self.text_label.set_max_width_chars(30)
-        self.text_label.set_halign(Gtk.Align.START)
-        self.text_label.set_valign(Gtk.Align.START)
-        self.text_label.set_xalign(0)
-        self.text_label.set_selectable(False)
-
-        self.text_label.set_text(text)
-        self.table.attach(self.text_label, 1 + col_inc,
-                          self.current_row,
-                          3 - col_inc,
-                          1)
-        self.current_row += 1
-
-    def add_status_row(self, show, str_status, indent=True, transport=None):
-        """
-        Append a new row with status icon to the table
-        """
-        self.table.insert_row(self.current_row)
-        image = Gtk.Image()
-        icon_name = get_icon_name(show, transport=transport)
-        image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
-        spacer = Gtk.Label(label=self.spacer_label)
-        image.set_halign(Gtk.Align.START)
-        image.set_valign(Gtk.Align.CENTER)
-        if indent:
-            self.table.attach(spacer, 1, self.current_row, 1, 1)
-        self.table.attach(image, 2, self.current_row, 1, 1)
-        status_label = Gtk.Label()
-        status_label.set_text(str_status)
-        status_label.set_halign(Gtk.Align.START)
-        status_label.set_valign(Gtk.Align.START)
-        status_label.set_xalign(0)
-        status_label.set_line_wrap(True)
-        status_label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
-        status_label.set_lines(3)
-        status_label.set_ellipsize(Pango.EllipsizeMode.END)
-        status_label.set_max_width_chars(30)
-        self.table.attach(status_label, 3, self.current_row, 1, 1)
-        self.current_row += 1
-
-
-class GCTooltip():
+class GCTooltip:
     def __init__(self):
         self.contact = None
 
@@ -191,198 +126,113 @@ class GCTooltip():
         self._ui.tooltip_grid.destroy()
 
 
-class RosterTooltip(StatusTable):
+class RosterTooltip:
     def __init__(self):
-        StatusTable.__init__(self)
-        self.create_table()
-        self.account = None
-        self.row = None
-        self.contact_jid = None
-        self.prim_contact = None
-        self.last_widget = None
-        self.num_resources = 0
-
-        self._ui = get_builder('tooltip_roster_contact.ui')
+        self._row = None
+        self._ui = get_builder('roster_tooltip.ui')
 
     def clear_tooltip(self):
-        """
-        Hide all Elements of the Tooltip Grid
-        """
-        for child in self._ui.tooltip_grid.get_children():
-            child.hide()
-        status_table = self._ui.tooltip_grid.get_child_at(1, 3)
-        if status_table:
-            status_table.destroy()
-            self.create_table()
-        self.row = None
+        self._row = None
+        for widget in self._ui.resource_grid.get_children():
+            widget.destroy()
+        for widget in self._ui.tooltip_grid.get_children():
+            widget.hide()
 
-    def get_tooltip(self, row, connected_contacts, account, typ):
-        if self.row == row:
+    def get_tooltip(self, row, contact):
+        if self._row == row:
             return True, self._ui.tooltip_grid
 
-        self._populate_grid(connected_contacts, account, typ)
-        self.row = row
+        self._populate_grid(contact)
+        self._row = row
         return False, self._ui.tooltip_grid
 
-    def _populate_grid(self, contacts, account, typ):
-        """
-        Populate the Tooltip Grid with data of from the contact
-        """
-        self.current_row = 0
-        self.account = account
-        if self.last_widget:
-            self.last_widget.set_vexpand(False)
-
+    def _populate_grid(self, contact):
         self.clear_tooltip()
-
-        if account == 'all':
-            # Tooltip for merged accounts row
-            self._show_merged_account_tooltip()
-            return
-
-        if typ == 'account':
-            jid = app.get_jid_from_account(account)
-            contacts = []
-            connection = app.connections[account]
-            # get our current contact info
-
-            nbr_on, nbr_total = app.\
-                contacts.get_nb_online_total_contacts(accounts=[account])
-            account_name = app.get_account_label(account)
-            if app.account_is_available(account):
-                account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
-            contact = app.contacts.create_self_contact(
-                jid=jid,
-                account=account,
-                name=account_name,
-                show=get_connection_status(account),
-                status=connection.status_message,
-                resource=connection.get_own_jid().resource,
-                priority=connection.priority)
-
-            contacts.append(contact)
-
-        # Username/Account/Groupchat
-        self.prim_contact = app.contacts.get_highest_prio_contact_from_contacts(
-            contacts)
-        if self.prim_contact is None:
-            log.error('No contact for Roster tooltip found')
-            log.error('contacts: %s, typ: %s, account: %s',
-                      contacts, typ, account)
-            return
-        self.contact_jid = self.prim_contact.jid
-        name = GLib.markup_escape_text(self.prim_contact.get_shown_name())
-
-        if app.settings.get('mergeaccounts'):
-            name = GLib.markup_escape_text(
-                self.prim_contact.account.name)
-
-        self._ui.name.set_markup(name)
-        self._ui.name.show()
-
-        self.num_resources = 0
-        # put contacts in dict, where key is priority
-        contacts_dict = {}
-        for contact in contacts:
-            if contact.resource:
-                self.num_resources += 1
-                priority = int(contact.priority)
-                if priority in contacts_dict:
-                    contacts_dict[priority].append(contact)
-                else:
-                    contacts_dict[priority] = [contact]
-        if self.num_resources > 1:
-            transport = app.get_transport_name_from_jid(self.prim_contact.jid)
-            if transport == 'jabber':
-                transport = None
-            contact_keys = sorted(contacts_dict.keys())
-            contact_keys.reverse()
-            for priority in contact_keys:
-                for acontact in contacts_dict[priority]:
-                    show = self._get_icon_name_for_tooltip(acontact)
-                    status = acontact.status
-                    resource_line = '%s (%s)' % (acontact.resource,
-                                                 str(acontact.priority))
-                    self.add_status_row(
-                        show, resource_line, transport=transport)
-                    if status:
-                        self.add_text_row(status, 2)
-
-            self._ui.tooltip_grid.attach(self.table, 1, 3, 2, 1)
-            self.table.show_all()
-
-        else:  # only one resource
-            if contact.is_groupchat:
-                disco_info = app.storage.cache.get_last_disco_info(contact.jid)
-                if disco_info is not None:
-                    description = disco_info.muc_description
-                    if description:
-                        self._ui.status.set_text(description)
-                        self._ui.status.show()
-            elif contact.show and contact.status:
-                status = contact.status.strip()
-                if status:
-                    self._ui.status.set_text(status)
-                    self._ui.status.show()
-
-        # PEP Info
-        self._append_pep_info(contact)
-
-        # JID
-        self._ui.jid.set_text(self.prim_contact.jid)
-        self._ui.jid.show()
-
-        # contact has only one resource
-        if self.num_resources == 1 and contact.resource:
-            res = GLib.markup_escape_text(contact.resource)
-            prio = str(contact.priority)
-            self._ui.resource.set_text("{} ({})".format(res, prio))
-            self._ui.resource.show()
-            self._ui.resource_label.show()
-
-        if self.prim_contact.jid not in app.gc_connected[account]:
-            if (account and
-                    self.prim_contact.sub and
-                    self.prim_contact.sub != 'both'):
-                # ('both' is the normal sub so we don't show it)
-                self._ui.sub.set_text(helpers.get_uf_sub(self.prim_contact.sub))
-                self._ui.sub.show()
-                self._ui.sub_label.show()
-
-        self._set_idle_time(contact)
+        scale = self._ui.tooltip_grid.get_scale_factor()
 
         # Avatar
-        scale = self._ui.tooltip_grid.get_scale_factor()
-        surface = app.contacts.get_avatar(
-            account, self.prim_contact.jid, AvatarSize.TOOLTIP, scale)
+        surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)
         self._ui.avatar.set_from_surface(surface)
         self._ui.avatar.show()
 
+        # Name
+        self._ui.name.set_markup(GLib.markup_escape_text(contact.name))
+        self._ui.name.show()
+
+        # JID
+        self._ui.jid.set_text(str(contact.jid))
+        self._ui.jid.show()
+
+        # Resources with show, status, priority
+        resources = contact.get_resources()
+        self._build_resource_grid(resources, scale)
+
+        # Subscription
+        if contact.subscription and contact.subscription != 'both':
+            # 'both' is the normal subscription value, just omit it
+            self._ui.sub.set_text(helpers.get_uf_sub(contact.subscription))
+            self._ui.sub.show()
+            self._ui.sub_label.show()
+
+        # Idle time
+        # TODO
+        # self._set_idle_time(contact)
+
+        # PEP info
+        # TODO
+        # self._append_pep_info(contact)
+
         app.plugin_manager.gui_extension_point(
-            'roster_tooltip_populate', self, contacts, self._ui.tooltip_grid)
+            'roster_tooltip_populate', self, contact, self._ui.tooltip_grid)
 
-        # Sets the Widget that is at the bottom to expand.
-        # This is needed in case the Picture takes more Space than the Labels
-        i = 1
-        while i < 15:
-            if self._ui.tooltip_grid.get_child_at(1, i):
-                if self._ui.tooltip_grid.get_child_at(1, i).get_visible():
-                    self.last_widget = self._ui.tooltip_grid.get_child_at(1, i)
-            i += 1
-        self.last_widget.set_vexpand(True)
+        # This sets the bottom-most widget to expand, in case the avatar
+        # takes more space than the labels
+        row_count = 1
+        while row_count < 9:
+            widget = self._ui.tooltip_grid.get_child_at(1, row_count)
+            if widget and widget.get_visible():
+                last_widget = widget
+                row_count += 1
+            else:
+                break
+        last_widget.set_vexpand(True)
 
-    def _show_merged_account_tooltip(self):
-        accounts = helpers.get_notification_icon_tooltip_dict()
-        self.spacer_label = ''
-        self.fill_table_with_accounts(accounts)
-        self._ui.tooltip_grid.attach(self.table, 1, 3, 2, 1)
-        self.table.show_all()
+    def _build_resource_grid(self, resources, scale):
+        row_num = 0
+        for contact in resources:
+            show_surface = get_show_circle(
+                contact.show, AvatarSize.ROSTER, scale)
+            show_image = Gtk.Image.new_from_surface(show_surface)
+            show_image.set_halign(Gtk.Align.START)
+            show_image.set_valign(Gtk.Align.CENTER)
+            self._ui.resource_grid.attach(show_image, 0, row_num, 1, 1)
+
+            resource_string = GLib.markup_escape_text(contact.jid.resource)
+            resource_label = Gtk.Label()
+            resource_label.set_halign(Gtk.Align.START)
+            resource_label.set_xalign(0)
+            resource_label.set_ellipsize(Pango.EllipsizeMode.END)
+            resource_label.set_max_width_chars(30)
+            resource_label.set_text(f'{resource_string} ({contact.priority})')
+            self._ui.resource_grid.attach(resource_label, 1, row_num, 1, 1)
+
+            if contact.status:
+                row_num += 1
+                status_text = GLib.markup_escape_text(contact.status)
+                status_label = Gtk.Label()
+                status_label.set_halign(Gtk.Align.START)
+                status_label.set_xalign(0)
+                status_label.set_ellipsize(Pango.EllipsizeMode.END)
+                status_label.set_max_width_chars(30)
+                status_label.set_text(status_text)
+                self._ui.resource_grid.attach(
+                    status_label, 1, row_num, 1, 1)
+
+            row_num += 1
+
+        self._ui.resource_grid.show_all()
 
     def _append_pep_info(self, contact):
-        """
-        Append Tune, Mood, Activity, Location information of the
-        specified contact to the given property list.
-        """
         if PEPEventType.MOOD in contact.pep:
             mood = format_mood(*contact.pep[PEPEventType.MOOD])
             self._ui.mood.set_markup(mood)
@@ -421,36 +271,8 @@ class RosterTooltip(StatusTable):
             self._ui.idle_since.show()
             self._ui.idle_since_label.show()
 
-        if contact.show and self.num_resources < 2:
-            show = helpers.get_uf_show(contact.show)
-            # Contact is Groupchat
-            if (self.account and
-                    self.prim_contact.jid in app.gc_connected[self.account]):
-                if app.gc_connected[self.account][self.prim_contact.jid]:
-                    show = _('Connected')
-                else:
-                    show = _('Disconnected')
 
-            colorize_status(self._ui.user_show, contact.show)
-            self._ui.user_show.set_text(show)
-            self._ui.user_show.show()
-
-    @staticmethod
-    def _get_icon_name_for_tooltip(contact):
-        """
-        Helper function used for tooltip contacts/accounts
-
-        Tooltip on account has fake contact with sub == '', in this case we show
-        real status of the account
-        """
-        if contact.ask == 'subscribe':
-            return 'requested'
-        if contact.sub in ('both', 'to', ''):
-            return contact.show
-        return 'not in roster'
-
-
-class FileTransfersTooltip():
+class FileTransfersTooltip:
     def __init__(self):
         self.sid = None
         self.widget = None

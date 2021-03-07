@@ -19,6 +19,7 @@ from gajim.common.i18n import _
 
 from gajim.gui_menu_builder import get_roster_menu
 
+from .tooltips import RosterTooltip
 from .util import EventHelper
 from .util import get_builder
 
@@ -49,6 +50,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._account = account
         self._client = app.get_client(account)
 
+        self._roster_tooltip = RosterTooltip()
+
         self._ui = get_builder('roster.ui')
         self._ui.roster_treeview.set_model(None)
         self.add(self._ui.roster_treeview)
@@ -62,6 +65,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._store.set_sort_func(Column.TEXT, self._tree_compare_iters)
 
         self._roster = self._ui.roster_treeview
+        self._roster.set_has_tooltip(True)
+        self._roster.connect('query-tooltip', self._on_query_tooltip)
 
         # Drag and Drop
         entries = [Gtk.TargetEntry.new(
@@ -213,6 +218,37 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._client.get_module('Roster').change_group(jid,
                                                        source_group,
                                                        dest_group)
+
+    def _on_query_tooltip(self, treeview, x_coord, y_coord, _keyboard_mode,
+                          tooltip):
+        try:
+            path = treeview.get_path_at_pos(x_coord, y_coord)
+            row = path[0]
+        except TypeError:
+            self._roster_tooltip.clear_tooltip()
+            return False
+
+        if not row:
+            self._roster_tooltip.clear_tooltip()
+            return False
+
+        iter_ = None
+        try:
+            model = treeview.get_model()
+            iter_ = model.get_iter(row)
+        except Exception:
+            self._roster_tooltip.clear_tooltip()
+            return False
+
+        if not model[iter_][Column.IS_CONTACT]:
+            # It’s a group
+            self._roster_tooltip.clear_tooltip()
+            return False
+
+        contact = self._get_contact(model[iter_][Column.JID_OR_GROUP])
+        value, widget = self._roster_tooltip.get_tooltip(row, contact)
+        tooltip.set_custom(widget)
+        return value
 
     def _on_show_offline(self, action, param):
         action.set_state(param)
