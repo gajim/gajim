@@ -303,6 +303,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._chat_list_stack.add_chat_list(workspace_id)
         self._workspace_side_bar.activate_workspace(workspace_id)
         self._chat_list_stack.show_chat_list(workspace_id)
+        if self._startup_finished:
+            self._workspace_side_bar.store_workspace_order()
 
     def _edit_workspace(self, _action, _param):
         workspace_id = self.get_active_workspace()

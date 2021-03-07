@@ -104,6 +104,7 @@ class WorkspaceSideBar(Gtk.ListBox):
             pos = len(self.get_children()) - 1
 
         self.insert(row, pos)
+        self.store_workspace_order()
         app.window.activate_workspace(workspace_id)
 
     def _on_drag_leave(self, _widget, _drag_context, _time):
@@ -146,6 +147,11 @@ class WorkspaceSideBar(Gtk.ListBox):
         self._workspaces[workspace_id] = row
         # Insert row before AddWorkspace row
         self.insert(row, len(self.get_children()) - 1)
+
+    def store_workspace_order(self):
+        order = [row.workspace_id for row in self.get_children()]
+        order.remove('add')
+        app.settings.set_app_setting('workspace_order', order)
 
     def remove_workspace(self, workspace_id):
         if len(self._workspaces) == 1:
