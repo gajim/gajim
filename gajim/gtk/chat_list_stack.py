@@ -100,7 +100,7 @@ class ChatListStack(Gtk.Stack):
     def remove_chat_list(self, workspace_id):
         chat_list = self._chat_lists[workspace_id]
         self.remove(chat_list)
-        for account, jid, _ in chat_list.get_open_chats():
+        for account, jid, _, _ in chat_list.get_open_chats():
             self.remove_chat(workspace_id, account, jid)
 
         self._chat_lists.pop(workspace_id)

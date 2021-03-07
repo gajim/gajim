@@ -1363,8 +1363,7 @@ class Interface:
 
         app.window.add_group_chat(account, str(jid), select=True)
 
-    @staticmethod
-    def _on_muc_added(_muc_manger, _signal_name, account, jid):
+    def _on_muc_added(self, _muc_manger, _signal_name, account, jid):
         if app.window.chat_exists(account, jid):
             return
 

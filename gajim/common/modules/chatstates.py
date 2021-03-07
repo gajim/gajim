@@ -120,8 +120,9 @@ class Chatstate(BaseModule):
         self._log.info('Reset chatstate for %s', jid)
 
         contact = self._get_contact(jid)
-        if contact is None:
+        if contact.is_groupchat:
             return
+
         contact.notify('chatstate-update')
 
     def _process_chatstate(self, _con, _stanza, properties):

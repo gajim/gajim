@@ -1294,14 +1294,14 @@ class Observable:
             for qualifier, handlers in qualifiers.items():
                 for handler in list(handlers):
                     func = handler()
-                    if func is None or func.__self__ == object_:
+                    if func is None or func.__self__ is object_:
                         self._callbacks[signal_name][qualifier].remove(handler)
 
     def connect(self, signal_name, func, qualifiers=None):
-        if inspect.ismethod(func):
-            weak_func = weakref.WeakMethod(func)
-        elif inspect.isfunction(func):
-            weak_func = weakref.ref(func)
+        if not inspect.ismethod(func):
+            raise ValueError('Only bound methods allowed')
+
+        weak_func = weakref.WeakMethod(func)
 
         self._callbacks[signal_name][qualifiers].append(weak_func)
 
