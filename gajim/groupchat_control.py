@@ -211,12 +211,6 @@ class GroupchatControl(ChatControlBase):
         self.xml.stack.show_all()
         self.xml.stack.set_visible_child_name('groupchat')
 
-        client = app.get_client(self.account)
-        manager = client.get_module('MUC').get_manager()
-        manager.connect('state-changed',
-                        self._on_muc_state_changed,
-                        qualifiers=(self.account, self.room_jid))
-
         self.update_ui()
         self.widget.show_all()
 
@@ -231,6 +225,7 @@ class GroupchatControl(ChatControlBase):
 
     def _connect_contact_signals(self):
         self.contact.multi_connect({
+            'state-changed': self._on_muc_state_changed,
             'avatar-update': self._on_avatar_update,
             'user-joined': self._on_user_joined,
             'user-left': self._on_user_left,
@@ -254,7 +249,8 @@ class GroupchatControl(ChatControlBase):
             'room-join-failed': self._on_room_join_failed,
         })
 
-    def _on_muc_state_changed(self, _muc_manager, _signal_name, state):
+    def _on_muc_state_changed(self, _contact, _signal_name):
+        state = self.contact.state
         if state == MUCJoinedState.JOINED:
             self.roster.initial_draw()
 
@@ -283,8 +279,7 @@ class GroupchatControl(ChatControlBase):
     @property
     def _muc_data(self):
         client = app.get_client(self.account)
-        manager = client.get_module('MUC').get_manager()
-        return manager.get(self.room_jid)
+        return client.get_module('MUC').get_muc_data(self.room_jid)
 
     @property
     def _nick_completion(self):
@@ -1443,8 +1438,6 @@ class GroupchatControl(ChatControlBase):
         app.settings.disconnect_signals(self)
         self.contact.disconnect(self)
 
-        client = app.get_client(self.account)
-        client.get_module('MUC').get_manager().disconnect(self)
         # PluginSystem: removing GUI extension points connected with
         # GrouphatControl instance object
         app.plugin_manager.remove_gui_extension_point(

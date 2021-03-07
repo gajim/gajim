@@ -46,7 +46,6 @@ class PrivateChatControl(ChatControl):
     def __init__(self, parent_win, jid, account):
         client = app.get_client(account)
         self._room_contact = client.get_module('Contacts').get_contact(jid.bare)
-        self._manager = client.get_module('MUC').get_manager()
 
         ChatControl.__init__(self, parent_win, jid, account, None)
 
@@ -73,7 +72,8 @@ class PrivateChatControl(ChatControl):
         return self._room_contact.name
 
     def get_our_nick(self):
-        muc_data = self._manager.get(self._room_contact.jid)
+        client = app.get_client(self.account)
+        muc_data = client.get_module('MUC').get_muc_data(self._room_contact.jid)
         return muc_data.nick
 
     def _on_user_nickname_changed(self,

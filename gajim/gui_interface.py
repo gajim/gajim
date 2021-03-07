@@ -1363,11 +1363,12 @@ class Interface:
 
         app.window.add_group_chat(account, str(jid), select=True)
 
-    def _on_muc_added(self, _muc_manger, _signal_name, account, jid):
-        if app.window.chat_exists(account, jid):
+    @staticmethod
+    def _on_muc_added(event):
+        if app.window.chat_exists(event.account, event.jid):
             return
 
-        app.window.add_group_chat(account, str(jid))
+        app.window.add_group_chat(event.account, str(event.jid))
 
     def new_private_chat(self, gc_contact, account, session=None):
         conn = app.connections[account]
@@ -1559,8 +1560,8 @@ class Interface:
         app.plugin_manager.register_modules_for_account(
             app.connections[account])
 
-        muc_manager = app.connections[account].get_module('MUC').get_manager()
-        muc_manager.connect('muc-added', self._on_muc_added)
+        app.ged.register_event_handler(
+            'muc-added', ged.CORE, self._on_muc_added)
 
         # update variables
         self.instances[account] = {
@@ -2027,8 +2028,8 @@ class Interface:
                     app.settings.get_account_setting(account, 'active')):
                 client = Client(account)
                 app.connections[account] = client
-                muc_manager = client.get_module('MUC').get_manager()
-                muc_manager.connect('muc-added', self._on_muc_added)
+                app.ged.register_event_handler(
+                    'muc-added', ged.CORE, self._on_muc_added)
 
         self.instances = {}
 

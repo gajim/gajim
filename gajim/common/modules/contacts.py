@@ -303,6 +303,11 @@ class GroupchatContact(CommonContact):
     def is_groupchat(self):
         return True
 
+    @property
+    def state(self):
+        muc_data = self._module('MUC').get_muc_data(self._jid)
+        return muc_data.state
+
     def add_resource(self, resource):
         jid = self._jid.new_with(resource=resource)
         contact = GroupchatParticipant(self._log, jid, self._account)
@@ -344,14 +349,18 @@ class GroupchatContact(CommonContact):
         app.interface.avatar_storage.invalidate_cache(self._jid)
         self.notify('avatar-update')
 
+    @property
+    def is_joined(self):
+        muc_data = self._module('MUC').get_muc_data(self._jid)
+        return muc_data.state.is_joined
+
     def set_not_joined(self):
         for contact in self._resources.values():
             contact.update_presence(UNKNOWN_MUC_PRESENCE, notify=False)
 
     def get_user_nicknames(self):
         client = app.get_client(self._account)
-        manager = client.get_module('MUC').get_manager()
-        return manager.get_joined_users(self._jid)
+        return client.get_module('MUC').get_joined_users(self._jid)
 
 
 class GroupchatParticipant(CommonContact):
@@ -363,7 +372,6 @@ class GroupchatParticipant(CommonContact):
         self._client = app.get_client(self._account)
 
         self._presence = UNKNOWN_MUC_PRESENCE
-        self._muc_manager = self._client.get_module('MUC').get_manager()
 
     @property
     def is_pm_contact(self):

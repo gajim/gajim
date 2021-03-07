@@ -306,7 +306,7 @@ class Client(ConnectionHandlers):
 
     def _on_connected(self, _client, _signal_name):
         self._set_state(ClientState.CONNECTED)
-        self.get_module('MUC').get_manager().reset_state()
+        self.get_module('MUC').reset_state()
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()
         self.get_module('Discovery').discover_server_items()

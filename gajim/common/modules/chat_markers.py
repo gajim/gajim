@@ -45,8 +45,8 @@ class ChatMarkers(BaseModule):
             return
 
         if properties.type.is_groupchat:
-            manager = self._con.get_module('MUC').get_manager()
-            muc_data = manager.get(properties.muc_jid)
+            muc_data = self._con.get_module('MUC').get_muc_data(
+                properties.muc_jid)
             if muc_data is None:
                 return
 

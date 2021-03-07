@@ -102,7 +102,7 @@ class VCardAvatars(BaseModule):
 
         else:
             jid = properties.jid.new_as_bare()
-            muc = self._con.get_module('MUC').get_manager().get(properties.jid)
+            muc = self._con.get_module('MUC').get_muc_data(properties.jid)
             self._process_update(jid,
                                  properties.avatar_state,
                                  properties.avatar_sha,

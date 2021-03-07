@@ -212,8 +212,7 @@ class EntityCapsTask(Task):
             return False
 
         if self._from_muc:
-            muc = client.get_module('MUC').get_manager().get(
-                self.entity.jid.bare)
+            muc = client.get_module('MUC').get_muc_data(self.entity.jid.bare)
 
             if muc is None or not muc.state.is_joined:
                 self.set_obsolete()

@@ -72,7 +72,7 @@ class Presence(BaseModule):
             # MUC occupant presences are already handled in MUC module
             return
 
-        muc = self._con.get_module('MUC').get_manager().get(properties.jid)
+        muc = self._con.get_module('MUC').get_muc_data(properties.jid)
         if muc is not None:
             # Presence from the MUC itself, used for MUC avatar
             # handled in VCardAvatars module
