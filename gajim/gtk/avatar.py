@@ -148,6 +148,36 @@ def add_status_to_avatar(surface, show):
     return context.get_target()
 
 
+@lru_cache(maxsize=8)
+def get_show_circle(show, size, scale):
+    size = size * scale
+    center = size / 2
+    radius = size / 3
+
+    surface = cairo.ImageSurface(cairo.Format.ARGB32, size, size)
+    context = cairo.Context(surface)
+
+    css_color = get_css_show_class(show.value)
+    color = convert_rgb_string_to_float(
+        app.css_config.get_value(css_color, StyleAttr.COLOR))
+
+    context.set_source_rgb(*color)
+    context.set_operator(cairo.Operator.OVER)
+    context.arc(center, center, radius, 0, 2 * pi)
+    context.fill()
+
+    if show.value == 'dnd':
+        line_length = radius * 0.65
+        context.move_to(center - line_length, center)
+        context.line_to(center + line_length, center)
+
+        context.set_source_rgb(255, 255, 255)
+        context.set_line_width(size / 10)
+        context.stroke()
+
+    return context.get_target()
+
+
 def square(surface, size):
     width = surface.get_width()
     height = surface.get_height()
