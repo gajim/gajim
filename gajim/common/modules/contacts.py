@@ -154,9 +154,22 @@ class BareContact(CommonContact):
             contact = self.add_resource(resource)
         return contact
 
+    def get_resources(self):
+        resources = []
+        for contact in self._resources.values():
+            if contact.show != PresenceShowExt.OFFLINE:
+                resources.append(contact)
+        return resources
+
+    def iter_resources(self):
+        for contact in self._resources.values():
+            if contact.show != PresenceShowExt.OFFLINE:
+                yield contact
+
     @property
     def is_available(self):
-        return any([contact.is_available for contact in self._resources.values()])
+        return any([contact.is_available for contact
+                    in self._resources.values()])
 
     @property
     def show(self):
