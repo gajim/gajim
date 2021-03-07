@@ -1466,6 +1466,7 @@ class GroupchatControl(ChatControlBase):
             self.remove_actions()
 
         super(GroupchatControl, self).shutdown()
+        app.check_finalize(self)
 
     def safe_shutdown(self):
         # whether to ask for confirmation before closing muc

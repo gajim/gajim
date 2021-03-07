@@ -1106,6 +1106,7 @@ class ChatControl(ChatControlBase):
         # Remove contact instance if contact has been removed
 
         super(ChatControl, self).shutdown()
+        app.check_finalize(self)
 
     def minimizable(self):
         return False
