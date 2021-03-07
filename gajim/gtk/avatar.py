@@ -148,7 +148,7 @@ def add_status_to_avatar(surface, show):
     return context.get_target()
 
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=128)
 def get_show_circle(show, size, scale):
     size = size * scale
     center = size / 2
