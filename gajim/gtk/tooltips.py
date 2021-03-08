@@ -35,7 +35,6 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.helpers import get_connection_status
 from gajim.common.const import AvatarSize
 from gajim.common.const import PEPEventType
 from gajim.common.i18n import Q_
@@ -56,10 +55,9 @@ log = logging.getLogger('gajim.gui.tooltips')
 
 class StatusTable:
     """
-    Contains methods for creating status table. This is used in Roster and
-    NotificationArea tooltips
+    Contains methods for creating status table.
+    This is used in the Roster’s tooltip
     """
-
     def __init__(self):
         self.current_row = 0
         self.table = None
@@ -117,44 +115,6 @@ class StatusTable:
         status_label.set_max_width_chars(30)
         self.table.attach(status_label, 3, self.current_row, 1, 1)
         self.current_row += 1
-
-    def fill_table_with_accounts(self, accounts):
-        for acct in accounts:
-            message = acct['message']
-            message = helpers.reduce_chars_newlines(message, 100, 1)
-            message = GLib.markup_escape_text(message)
-
-            account_label = GLib.markup_escape_text(acct['account_label'])
-            if message:
-                status = '%s - %s' % (account_label, message)
-            else:
-                status = account_label
-
-            self.add_status_row(acct['show'], status, indent=False)
-
-            for line in acct['event_lines']:
-                self.add_text_row('  ' + line, 1)
-
-
-class NotificationAreaTooltip(StatusTable):
-    """
-    Tooltip that is shown in the notification area
-    """
-
-    def __init__(self):
-        StatusTable.__init__(self)
-
-    def get_tooltip(self):
-        self.create_table()
-
-        accounts = helpers.get_notification_icon_tooltip_dict()
-        self.fill_table_with_accounts(accounts)
-        self.table.set_property('column-spacing', 1)
-
-        hbox = Gtk.HBox()
-        hbox.add(self.table)
-        hbox.show_all()
-        return hbox
 
 
 class GCTooltip():

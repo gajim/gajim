@@ -34,7 +34,6 @@ from .util import get_icon_name
 from .util import restore_roster_position
 from .util import open_window
 from .single_message import SingleMessageWindow
-from .tooltips import NotificationAreaTooltip
 
 
 class StatusIcon:
@@ -53,16 +52,13 @@ class StatusIcon:
         self._ui.connect_signals(self)
         self.popup_menus = []
         self.status_icon = None
-        self.tooltip = NotificationAreaTooltip()
         self._icon_size = '16'
 
     def show_icon(self):
         if not self.status_icon:
             self.status_icon = Gtk.StatusIcon()
-            self.status_icon.set_property('has-tooltip', True)
             self.status_icon.connect('activate', self._on_activate)
             self.status_icon.connect('popup-menu', self._on_popup_menu)
-            self.status_icon.connect('query-tooltip', self._on_query_tooltip)
             self.status_icon.connect('size-changed', self.set_img)
 
         self.set_img()
@@ -108,10 +104,6 @@ class StatusIcon:
         """
         self.set_img()
 
-    def _on_query_tooltip(self, _status_icon, _x, _y, _keyboard_mode, tooltip):
-        tooltip.set_custom(self.tooltip.get_tooltip())
-        return True
-
     def _on_popup_menu(self, _status_icon, button, activate_time):
         if button == 1: # Left click
             self._on_left_click()
@@ -137,7 +129,7 @@ class StatusIcon:
 
     def set_img(self, *args):
         """
-        Apart from image, we also update tooltip text here
+        Update image
         """
         if not app.interface.systray_enabled:
             return
