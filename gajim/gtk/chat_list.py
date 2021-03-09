@@ -111,18 +111,17 @@ class ChatList(Gtk.ListBox):
         return -1 if row1.is_recent else 1
 
     def _set_placeholder(self):
-        icon = Gtk.Image.new_from_icon_name(
-            'go-up-symbolic', Gtk.IconSize.DND)
-        icon.set_halign(Gtk.Align.END)
-        label = Gtk.Label(label=_('Add a chat to get started'))
-        label.set_line_wrap(True)
-        label.set_max_width_chars(20)
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
-        box.get_style_context().add_class('chatlist-placeholder')
-        box.add(icon)
-        box.add(label)
-        box.show_all()
-        self.set_placeholder(box)
+        button = Gtk.Button.new_with_label(_('Start Chat'))
+        button.get_style_context().add_class('suggested-action')
+        button.set_halign(Gtk.Align.CENTER)
+        button.set_valign(Gtk.Align.CENTER)
+        button.connect('clicked', self._on_start_chat_clicked)
+        button.show()
+        self.set_placeholder(button)
+
+    @staticmethod
+    def _on_start_chat_clicked(_widget):
+        app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
     def set_filter_text(self, text):
         self._current_filter_text = text

@@ -164,16 +164,6 @@
 	padding: 12px;
 	background: transparent;
 }
-.chatlist-placeholder {
-    padding: 24px 12px;
-}
-.chatlist-placeholder image {
-    color: alpha(@theme_text_color, 0.3);
-}
-.chatlist-placeholder label {
-    color: alpha(@theme_text_color, 0.5);
-    font-weight: bold;
-}
 .chatlist {
     background: transparent;
 }
