@@ -235,7 +235,7 @@
     border-radius: 10px;
 }
 .header-box label {
-	padding: 0px 18px 0px 18px;
+	padding: 12px 18px 6px 18px;
 	font-weight: bold;
 	color:@insensitive_fg_color;
 	font-size: small;
