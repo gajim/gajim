@@ -24,6 +24,7 @@ class RowHeaderType(IntEnum):
 
 class AvatarSize(IntEnum):
     TAB = 16
+    STATUS_CIRCLE = 24
     ROSTER = 32
     ACCOUNT_SIDE_BAR = 40
     WORKSPACE = 40
@@ -31,7 +32,7 @@ class AvatarSize(IntEnum):
     CHAT = 48
     NOTIFICATION = 48
     GROUP_INFO = 100
-    TOOLTIP = 125
+    TOOLTIP = 100
     VCARD = 200
     PUBLISH = 200
 
