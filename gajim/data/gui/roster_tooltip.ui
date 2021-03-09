@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <!-- n-columns=2 n-rows=9 -->
+  <!-- n-columns=2 n-rows=8 -->
   <object class="GtkGrid" id="tooltip_grid">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -190,32 +190,6 @@
       <packing>
         <property name="left-attach">1</property>
         <property name="top-attach">7</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="idle_since_label">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Idle since:</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">8</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="idle_since">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">8</property>
       </packing>
     </child>
     <child>

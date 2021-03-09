@@ -184,7 +184,7 @@ class RosterTooltip:
         # This sets the bottom-most widget to expand, in case the avatar
         # takes more space than the labels
         row_count = 1
-        while row_count < 9:
+        while row_count < 8:
             widget = self._ui.tooltip_grid.get_child_at(1, row_count)
             if widget and widget.get_visible():
                 last_widget = widget
