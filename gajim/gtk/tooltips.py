@@ -174,10 +174,6 @@ class RosterTooltip:
             self._ui.sub.show()
             self._ui.sub_label.show()
 
-        # Idle time
-        # TODO
-        # self._set_idle_time(contact)
-
         # PEP info
         # TODO
         # self._append_pep_info(contact)
@@ -219,14 +215,29 @@ class RosterTooltip:
             if contact.status:
                 row_num += 1
                 status_text = GLib.markup_escape_text(contact.status)
-                status_label = Gtk.Label()
+                status_label = Gtk.Label(label=status_text)
                 status_label.set_halign(Gtk.Align.START)
                 status_label.set_xalign(0)
                 status_label.set_ellipsize(Pango.EllipsizeMode.END)
                 status_label.set_max_width_chars(30)
-                status_label.set_text(status_text)
                 self._ui.resource_grid.attach(
                     status_label, 1, row_num, 1, 1)
+
+            if contact.idle_time:
+                row_num += 1
+                idle_time = time.localtime(contact.idle_time)
+                idle_time = datetime(*(idle_time[:6]))
+                current = datetime.now()
+                if idle_time.date() == current.date():
+                    formatted = idle_time.strftime('%X')
+                else:
+                    formatted = idle_time.strftime('%c')
+                idle_text = _('Idle since: %s') % formatted
+                idle_label = Gtk.Label(label=idle_text)
+                idle_label.set_halign(Gtk.Align.START)
+                idle_label.set_xalign(0)
+                self._ui.resource_grid.attach(
+                    idle_label, 1, row_num, 1, 1)
 
             row_num += 1
 
@@ -256,20 +267,6 @@ class RosterTooltip:
             self._ui.location.set_markup(location)
             self._ui.location.show()
             self._ui.location_label.show()
-
-    def _set_idle_time(self, contact):
-        if contact.idle_time:
-            idle_time = contact.idle_time
-            idle_time = time.localtime(contact.idle_time)
-            idle_time = datetime(*(idle_time[:6]))
-            current = datetime.now()
-            if idle_time.date() == current.date():
-                formatted = idle_time.strftime('%X')
-            else:
-                formatted = idle_time.strftime('%c')
-            self._ui.idle_since.set_text(formatted)
-            self._ui.idle_since.show()
-            self._ui.idle_since_label.show()
 
 
 class FileTransfersTooltip:
