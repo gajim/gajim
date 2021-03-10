@@ -140,6 +140,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('remove-chat', 'as', self._remove_chat),
             ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
             ('move-chat-to-workspace', 'as', self._move_chat_to_workspace),
+            ('add-to-roster', 'as', self._add_to_roster),
         ]
 
         for action in actions:
@@ -440,6 +441,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             if self.chat_exists_for_workspace(workspace_id, account, jid):
                 self._chat_list_stack.remove_chat(workspace_id, account, jid)
                 return
+
+    @staticmethod
+    def _add_to_roster(_action, param):
+        _workspace, account, jid = param.unpack()
+        open_window('AddNewContactWindow', account=account, contact_jid=jid)
 
     def chat_exists(self, account, jid):
         return self._chat_list_stack.contains_chat(account, jid)
