@@ -818,7 +818,7 @@ def get_roster_menu(account, jid):
 
 def get_chat_list_row_menu(workspace_id, account, jid, pinned):
     client = app.get_client(account)
-    contact = client.get_module('Contact').get_contact(jid)
+    contact = client.get_module('Contacts').get_contact(jid)
 
     toggle_label = _('Unpin Chat') if pinned else _('Pin Chat')
 
@@ -827,7 +827,8 @@ def get_chat_list_row_menu(workspace_id, account, jid, pinned):
         (_('Move Chat'), []),
     ]
 
-    if not contact.is_in_roster():
+
+    if not contact.is_in_roster:
         menu_items.append(('add-to-roster', _('Add to contact list')))
 
     menu = Gio.Menu()
