@@ -8,7 +8,6 @@ from gi.repository import Gio
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.helpers import ask_for_status_message
-from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 
@@ -555,7 +554,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._startup_finished = True
 
-    def _on_start_chat_clicked(self, _button):
+    @staticmethod
+    def _on_start_chat_clicked(_button):
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
     def _on_event(self, event):

@@ -180,7 +180,6 @@
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
                             <property name="receives-default">True</property>
-                            <property name="use-popover">False</property>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
