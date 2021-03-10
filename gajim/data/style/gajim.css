@@ -49,8 +49,7 @@
 
 /* Generic elements */
 .account-identifier-bar {
-	border-top-right-radius: 6px;
-	border-bottom-right-radius: 6px;
+	border-radius: 6px;
 }
 .selection-bar {
     border-top-right-radius: 6px;
