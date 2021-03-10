@@ -20,7 +20,6 @@ from typing import Tuple
 import sys
 import logging
 from importlib import import_module
-from unittest.mock import MagicMock
 
 from gajim.common.types import ConnectionT
 
@@ -91,28 +90,6 @@ _store_publish_modules = [
 ]  # type: List[str]
 
 
-class ModuleMock:
-    def __init__(self, name: str) -> None:
-        self._name = name
-
-        # HTTPUpload, ..
-        self.available = False
-
-        # Blocking
-        self.blocked = []  # type: List[Any]
-
-        # Delimiter
-        self.delimiter = '::'
-
-        # Bookmarks
-        self.bookmarks = {}  # type: Dict[Any, Any]
-
-        # Various Modules
-        self.supported = False
-
-    def __getattr__(self, key: str) -> MagicMock:
-        return MagicMock()
-
 
 def register_modules(con: ConnectionT, *args: Any, **kwargs: Any) -> None:
     if con in _modules:
@@ -153,10 +130,7 @@ def send_stored_publish(account: str) -> None:
 
 
 def get(account: str, name: str) -> Any:
-    try:
-        return _modules[account][name]
-    except KeyError:
-        return ModuleMock(name)
+    return _modules[account][name]
 
 
 def _load_module(name: str, con: ConnectionT, *args: Any, **kwargs: Any) -> Any:
