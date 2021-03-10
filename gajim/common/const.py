@@ -33,6 +33,7 @@ class AvatarSize(IntEnum):
     NOTIFICATION = 48
     GROUP_INFO = 100
     TOOLTIP = 100
+    ACCOUNT_PAGE = 150
     VCARD = 200
     PUBLISH = 200
 

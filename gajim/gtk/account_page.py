@@ -16,6 +16,7 @@ from gi.repository import Gio
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
 from .roster import Roster
@@ -32,13 +33,16 @@ class AccountPage(Gtk.Box):
     def __init__(self, account):
         Gtk.Box.__init__(self)
         self._account = account
+        self._jid = app.get_jid_from_account(account)
+        client = app.get_client(account)
+        self._contact = client.get_module('Contacts').get_contact(self._jid)
 
         self._ui = get_builder('account_page.ui')
         self.add(self._ui.paned)
 
         self._status_selector = StatusSelector()
         self._status_selector.set_halign(Gtk.Align.CENTER)
-        self._ui.account_box.add(self._status_selector)
+        self._ui.account_action_box.add(self._status_selector)
 
         self._roster = Roster(account)
         self._ui.roster_box.add(self._roster)
@@ -55,6 +59,9 @@ class AccountPage(Gtk.Box):
         self.show_all()
 
         self.update()
+
+    def _on_edit_profile(self, _button):
+        open_window('ProfileWindow', account=self._account)
 
     def _on_account_settings(self, _button):
         window = open_window('AccountsWindow')
@@ -78,6 +85,12 @@ class AccountPage(Gtk.Box):
         account_label = app.settings.get_account_setting(
             self._account, 'account_label')
         self._ui.account_label.set_text(account_label)
+
+        surface = self._contact.get_avatar(AvatarSize.ACCOUNT_PAGE,
+                                           self.get_scale_factor(),
+                                           add_show=False)
+        self._ui.avatar_image.set_from_surface(surface)
+
         self._status_selector.update()
 
     def process_event(self, event):
