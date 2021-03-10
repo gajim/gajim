@@ -292,3 +292,5 @@ class WorkspaceAvatar(Gtk.Image):
         surface = app.interface.avatar_storage.get_workspace_surface(
             self._workspace_id, AvatarSize.WORKSPACE, scale)
         self.set_from_surface(surface)
+        name = app.settings.get_workspace_setting(self._workspace_id, 'name')
+        self.set_tooltip_text(name)
