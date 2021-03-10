@@ -271,12 +271,10 @@ class AddWorkspace(CommonWorkspace):
         CommonWorkspace.__init__(self, workspace_id)
         self.set_selectable(False)
         self.set_tooltip_text(_('Add Workspace'))
+        self.get_style_context().add_class('workspace-add')
 
         image = Gtk.Image.new_from_icon_name('list-add-symbolic',
                                              Gtk.IconSize.DND)
-        image.set_halign(Gtk.Align.CENTER)
-        image.set_margin_left(6)
-        image.get_style_context().add_class('workspace-add')
         self.add(image)
         self.show_all()
 

@@ -105,11 +105,16 @@
     border-bottom: 1px solid #4e9a06;
 }
 .workspace-add {
-    padding-left: 3px;
+    padding: 0 0 0 6px;
+    margin: 6px 12px;
+}
+.workspace-add image {
+    margin: 0px;
+    padding: 0px;
     color: alpha(@theme_text_color, 0.7);
     background-color: shade(@theme_base_color, 0.9);
 }
-.workspace-sidebar-item:hover .workspace-add {
+.workspace-add:hover image {
     background-color: shade(@theme_base_color, 0.85);
 }
 
