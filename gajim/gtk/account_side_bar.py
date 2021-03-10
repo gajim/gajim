@@ -52,7 +52,7 @@ class Account(Gtk.ListBoxRow):
         self._account_color_bar.get_style_context().add_class(
             'account-identifier-bar')
 
-        account_box = Gtk.Box(spacing=6)
+        account_box = Gtk.Box(spacing=3)
         account_box.set_tooltip_text(
             _('Account: %s') % app.get_account_label(account))
         account_box.add(self._account_color_bar)

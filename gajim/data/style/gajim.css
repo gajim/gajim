@@ -116,13 +116,13 @@
 
 /* Account sidebar */
 .account-sidebar {
-	background: transparent;
-    margin-right: 12px;
+    background: transparent;
+    margin-right: 6px;
     margin-bottom: 6px;
 }
 .account-sidebar-item {
-    padding-top: 6px;
-	padding-bottom: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 .account-sidebar-item:hover,
 .account-sidebar-item:selected,
@@ -133,10 +133,15 @@
 }
 .account-sidebar-item:selected image,
 .account-sidebar-item:hover image {
-    box-shadow: 0 0 5px @theme_selected_bg_color;
+    background-color: shade(@theme_base_color, 0.8);
 }
 .account-sidebar-item image {
     border-radius: 9px;
+    padding: 3px;
+}
+.account-sidebar-item .account-identifier-bar {
+	padding: 0 3px;
+    margin: 3px 0;
 }
 .account-box > separator {
     background-color: darker(@theme_bg_color);
