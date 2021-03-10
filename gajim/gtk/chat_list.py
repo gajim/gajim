@@ -488,3 +488,4 @@ class PinnedHeader(BaseHeader):
         BaseHeader.__init__(self,
                             RowHeaderType.PINNED,
                             _('Pinned'))
+        self.get_style_context().add_class('header-box-first')
