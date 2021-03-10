@@ -150,6 +150,9 @@ def add_status_to_avatar(surface, show):
 
 @lru_cache(maxsize=128)
 def get_show_circle(show, size, scale):
+    if not isinstance(show, str):
+        show = show.value
+
     size = size * scale
     center = size / 2
     radius = size / 3
@@ -157,7 +160,7 @@ def get_show_circle(show, size, scale):
     surface = cairo.ImageSurface(cairo.Format.ARGB32, size, size)
     context = cairo.Context(surface)
 
-    css_color = get_css_show_class(show.value)
+    css_color = get_css_show_class(show)
     color = convert_rgb_string_to_float(
         app.css_config.get_value(css_color, StyleAttr.COLOR))
 
@@ -166,7 +169,7 @@ def get_show_circle(show, size, scale):
     context.arc(center, center, radius, 0, 2 * pi)
     context.fill()
 
-    if show.value == 'dnd':
+    if show == 'dnd':
         line_length = radius * 0.65
         context.move_to(center - line_length, center)
         context.line_to(center + line_length, center)

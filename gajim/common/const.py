@@ -24,7 +24,7 @@ class RowHeaderType(IntEnum):
 
 class AvatarSize(IntEnum):
     TAB = 16
-    STATUS_CIRCLE = 24
+    SHOW_CIRCLE = 24
     ROSTER = 32
     ACCOUNT_SIDE_BAR = 40
     WORKSPACE = 40

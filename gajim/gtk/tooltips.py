@@ -197,7 +197,7 @@ class RosterTooltip:
         row_num = 0
         for contact in resources:
             show_surface = get_show_circle(
-                contact.show, AvatarSize.STATUS_CIRCLE, scale)
+                contact.show, AvatarSize.SHOW_CIRCLE, scale)
             show_image = Gtk.Image.new_from_surface(show_surface)
             show_image.set_halign(Gtk.Align.START)
             show_image.set_valign(Gtk.Align.CENTER)

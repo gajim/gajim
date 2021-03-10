@@ -17,12 +17,13 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_uf_show
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import statuses_unified
 from gajim.common.i18n import _
 
-from .util import get_icon_name
+from .avatar import get_show_circle
 
 
 class StatusSelector(Gtk.MenuButton):
@@ -33,8 +34,11 @@ class StatusSelector(Gtk.MenuButton):
         self._create_popover()
 
         self._current_show_icon = Gtk.Image()
-        self._current_show_icon.set_from_icon_name(
-            get_icon_name('offline'), Gtk.IconSize.MENU)
+        surface = get_show_circle(
+            'offline',
+            AvatarSize.SHOW_CIRCLE,
+            self.get_scale_factor())
+        self._current_show_icon.set_from_surface(surface)
 
         box = Gtk.Box(spacing=6)
         box.add(self._current_show_icon)
@@ -77,8 +81,9 @@ class StatusSelector(Gtk.MenuButton):
                                              Gtk.IconSize.MENU)
                 show_label.set_text_with_mnemonic(_('_Change Status Message'))
             else:
-                show_icon.set_from_icon_name(get_icon_name(item),
-                                             Gtk.IconSize.MENU)
+                surface = get_show_circle(
+                    item, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
+                show_icon.set_from_surface(surface)
                 show_label.set_text_with_mnemonic(
                     get_uf_show(item, use_mnemonic=True))
 
@@ -118,8 +123,10 @@ class StatusSelector(Gtk.MenuButton):
         # self.show()
         show = get_global_show()
         uf_show = get_uf_show(show)
-        self._current_show_icon.set_from_icon_name(
-            get_icon_name(show), Gtk.IconSize.MENU)
+
+        surface = get_show_circle(
+            show, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
+        self._current_show_icon.set_from_surface(surface)
         if statuses_unified():
             self._current_show_icon.set_tooltip_text(_('Status: %s') % uf_show)
             if not self._compact:
