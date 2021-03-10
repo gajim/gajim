@@ -106,11 +106,12 @@
     border-bottom: 1px solid #4e9a06;
 }
 .workspace-add {
-    padding-left: 6px;
+    padding-left: 3px;
     color: alpha(@theme_text_color, 0.7);
+    background-color: shade(@theme_base_color, 0.9);
 }
 .workspace-sidebar-item:hover .workspace-add {
-    -gtk-icon-shadow: 0 0 3px @theme_selected_bg_color;
+    background-color: shade(@theme_base_color, 0.85);
 }
 
 /* Account sidebar */

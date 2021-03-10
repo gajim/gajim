@@ -275,6 +275,7 @@ class AddWorkspace(CommonWorkspace):
         image = Gtk.Image.new_from_icon_name('list-add-symbolic',
                                              Gtk.IconSize.DND)
         image.set_halign(Gtk.Align.CENTER)
+        image.set_margin_left(6)
         image.get_style_context().add_class('workspace-add')
         self.add(image)
         self.show_all()
