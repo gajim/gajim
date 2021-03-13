@@ -880,15 +880,6 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
         item.set_detailed_action_name(action)
     menu.append(item)
 
-    item = Gtk.MenuItem(label=_('Invite'))
-    if contact.jid is not None:
-        build_invite_submenu(item,
-                             ((contact, account),),
-                             show_bookmarked=True)
-    else:
-        item.set_sensitive(False)
-    menu.append(item)
-
     item = Gtk.MenuItem(label=_('Execute Command…'))
     action = 'win.execute-command-%s::%s' % (control_id, contact.name)
     item.set_detailed_action_name(action)

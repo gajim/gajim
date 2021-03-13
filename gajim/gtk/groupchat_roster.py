@@ -308,10 +308,8 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             self.emit('row-activated', nick)
 
     def _show_contact_menu(self, nick):
-        self_contact = app.contacts.get_gc_contact(
-            self._account, self.room_jid, self._control.nick)
-        contact = app.contacts.get_gc_contact(
-            self._account, self.room_jid, nick)
+        self_contact = self._group_chat_contact.get_resource(self._control.nick)
+        contact = self._group_chat_contact.get_resource(nick)
         menu = get_groupchat_roster_menu(self._account,
                                          self._control_id,
                                          self_contact,
