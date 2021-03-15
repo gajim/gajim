@@ -169,9 +169,6 @@ class Roster(BaseModule):
             self.set_groups(item.jid, new_groups)
 
     def rename_group(self, group, new_group):
-        if new_group in self._groups:
-            return
-
         items = self._get_items_with_group(group)
         for item in items:
             new_groups = item.groups - set([group])
