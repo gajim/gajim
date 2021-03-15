@@ -45,6 +45,9 @@ class Roster(BaseModule):
 
         self._roster = {}
 
+        # Groups cache for performance
+        self._groups = None
+
     def load_roster(self):
         self._log.info('Load from database')
         roster = app.storage.cache.load_roster(self._account)
@@ -105,6 +108,8 @@ class Roster(BaseModule):
 
     def _set_roster_from_data(self, items):
         self._roster.clear()
+        self._groups = None
+
         for item in items:
             self._log.info(item)
             self._con.get_module('Contacts').add_contact(item.jid)
@@ -121,6 +126,7 @@ class Roster(BaseModule):
         else:
             self._roster[item.jid] = item
 
+        self._groups = None
         self._store_roster()
 
         self._log.info('New version: %s', properties.roster.version)
@@ -142,6 +148,16 @@ class Roster(BaseModule):
             groups = set(groups)
         item = self.get_item(jid)
         self._nbxmpp('Roster').set_item(jid, item.name, groups)
+
+    def get_groups(self):
+        if self._groups is not None:
+            return set(self._groups)
+
+        groups = set()
+        for item in self._roster.values():
+            groups.update(item.groups)
+        self._groups = groups
+        return set(groups)
 
     def change_group(self, jid, old_group, new_group):
         item = self.get_item(jid)
