@@ -159,6 +159,25 @@ class Roster(BaseModule):
         self._groups = groups
         return set(groups)
 
+    def _get_items_with_group(self, group):
+        return filter(lambda item: group in item.groups, self._roster.values())
+
+    def remove_group(self, group):
+        items = self._get_items_with_group(group)
+        for item in items:
+            new_groups = item.groups - set([group])
+            self.set_groups(item.jid, new_groups)
+
+    def rename_group(self, group, new_group):
+        if new_group in self._groups:
+            return
+
+        items = self._get_items_with_group(group)
+        for item in items:
+            new_groups = item.groups - set([group])
+            new_groups.add(new_group)
+            self.set_groups(item.jid, new_groups)
+
     def change_group(self, jid, old_group, new_group):
         item = self.get_item(jid)
         groups = set(item.groups)
