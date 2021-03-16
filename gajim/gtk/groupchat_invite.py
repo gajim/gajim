@@ -79,26 +79,19 @@ class GroupChatInvite(Gtk.Box):
         our_jids = app.get_our_jids()
         for account, _label in self._accounts:
             self.new_contact_rows[account] = None
-            participant_jids = []
-            for contact in app.contacts.get_gc_contact_list(
-                    account, self._room_jid):
-                if contact.jid is not None:
-                    participant_jids.append(app.get_jid_without_resource(
-                        contact.jid))
-            for jid in app.contacts.get_jid_list(account):
-                contact = app.contacts.get_contact_with_highest_priority(
-                    account, jid)
+            client = app.get_client(account)
+            for jid, _data in client.get_module('Roster').iter():
+                contact = client.get_module('Contacts').get_contact(jid)
+
                 # Exclude group chats
                 if contact.is_groupchat:
                     continue
-                # Exclude our own jid
+                # Exclude our own jids
                 if jid in our_jids:
                     continue
-                # Exclude group chat participants
-                if jid in participant_jids:
-                    continue
+
                 row = ContactRow(account, contact, jid,
-                                 contact.get_shown_name(), show_account)
+                                 contact.name, show_account)
                 self._ui.contacts_listbox.add(row)
 
     def _on_contacts_row_activated(self, listbox, row):
@@ -286,13 +279,11 @@ class ContactRow(Gtk.ListBoxRow):
         self.name = name
         self.new = jid == ''
 
-        show = contact.show if contact else 'offline'
-
         grid = Gtk.Grid()
         grid.set_column_spacing(12)
         grid.set_size_request(260, -1)
 
-        image = self._get_avatar_image(account, jid, show)
+        image = self._get_avatar_image(contact)
         image.set_size_request(AvatarSize.ROSTER, AvatarSize.ROSTER)
         grid.add(image)
 
@@ -321,8 +312,8 @@ class ContactRow(Gtk.ListBoxRow):
             name_box.add(account_badge)
         box.add(name_box)
 
-        self.jid_label = Gtk.Label(label=jid)
-        self.jid_label.set_tooltip_text(jid)
+        self.jid_label = Gtk.Label(label=str(jid))
+        self.jid_label.set_tooltip_text(str(jid))
         self.jid_label.set_ellipsize(Pango.EllipsizeMode.END)
         self.jid_label.set_xalign(0)
         self.jid_label.set_width_chars(22)
@@ -335,15 +326,14 @@ class ContactRow(Gtk.ListBoxRow):
         self.add(grid)
         self.show_all()
 
-    def _get_avatar_image(self, account, jid, show):
+    def _get_avatar_image(self, contact):
         if self.new:
             icon_name = 'avatar-default'
             return Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DND)
 
         scale = self.get_scale_factor()
-        avatar = app.contacts.get_avatar(
-            account, jid, AvatarSize.ROSTER, scale, show)
-        return Gtk.Image.new_from_surface(avatar)
+        surface = contact.get_avatar(AvatarSize.ROSTER, scale)
+        return Gtk.Image.new_from_surface(surface)
 
     def update_jid(self, jid):
         self.jid = jid
@@ -351,7 +341,7 @@ class ContactRow(Gtk.ListBoxRow):
 
     def get_search_text(self):
         if self.contact is None:
-            return self.jid
+            return str(self.jid)
         if self.show_account:
             return '%s %s %s' % (self.name, self.jid, self.account_label)
         return '%s %s' % (self.name, self.jid)
