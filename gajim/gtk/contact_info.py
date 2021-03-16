@@ -171,6 +171,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         times_complete = self._received_times == set(self._devices.keys())
         if devices_complete and times_complete or self._time == 10000:
             self._ui.devices_spinner.stop()
+            self._update_timeout_id = None
             return False
         return True
 
