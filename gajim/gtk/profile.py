@@ -26,12 +26,12 @@ from gajim.gui.util import scroll_to_end
 log = logging.getLogger('gajim.gui.profile')
 
 MENU_DICT = {
-    'fn': _('Full Name'),
+    'fn': Q_('?profile:Full Name'),
     'bday': _('Birthday'),
-    'gender': _('Gender'),
-    'adr': _('Address'),
+    'gender': Q_('?profile:Gender'),
+    'adr': Q_('?profile:Address'),
     'email': _('Email'),
-    'impp': 'IM Address',
+    'impp': Q_('?profile:IM Address'),
     'tel': _('Phone No.'),
     'org': Q_('?profile:Organisation'),
     'title': Q_('?profile:Title'),
