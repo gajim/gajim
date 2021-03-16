@@ -24,7 +24,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 
@@ -44,8 +43,8 @@ class PrivateChatControl(ChatControl):
     COMMAND_HOST = PrivateChatCommands
 
     def __init__(self, parent_win, jid, account):
-        client = app.get_client(account)
-        self._room_contact = client.get_module('Contacts').get_contact(jid.bare)
+        self._room_contact = self._client.get_module('Contacts').get_contact(
+            jid.bare)
 
         ChatControl.__init__(self, parent_win, jid, account, None)
 
@@ -72,8 +71,8 @@ class PrivateChatControl(ChatControl):
         return self._room_contact.name
 
     def get_our_nick(self):
-        client = app.get_client(self.account)
-        muc_data = client.get_module('MUC').get_muc_data(self._room_contact.jid)
+        muc_data = self._client.get_module('MUC').get_muc_data(
+            self._room_contact.jid)
         return muc_data.nick
 
     def _on_user_nickname_changed(self,

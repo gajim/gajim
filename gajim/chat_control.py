@@ -193,7 +193,7 @@ class ChatControl(ChatControlBase):
         #     # and it's not the same
         #     if not resource:
         #         resource = contact.resource
-        #     session = app.connections[self.account].find_controlless_session(
+        #     session = self._client.find_controlless_session(
         #         self.contact.jid, resource)
 
         # if session:
@@ -267,13 +267,12 @@ class ChatControl(ChatControlBase):
     def update_actions(self):
         win = self.parent_win.window
         online = app.account_is_connected(self.account)
-        con = app.connections[self.account]
 
         # Add to roster
         # TODO
         # if not isinstance(self.contact, GC_Contact) \
         # and _('Not in contact list') in self.contact.groups and \
-        # app.connections[self.account].roster_supported and online:
+        # self._client.roster_supported and online:
         #     win.lookup_action(
         #         'add-to-roster-' + self.control_id).set_enabled(True)
         # else:
@@ -283,7 +282,7 @@ class ChatControl(ChatControlBase):
         # Block contact
         win.lookup_action(
             'block-contact-' + self.control_id).set_enabled(
-                online and con.get_module('Blocking').supported)
+                online and self._client.get_module('Blocking').supported)
 
         # Jingle AV detection
         if (self.contact.supports(Namespace.JINGLE_ICE_UDP) and
@@ -312,7 +311,7 @@ class ChatControl(ChatControlBase):
         httpupload = win.lookup_action(
             'send-file-httpupload-' + self.control_id)
         httpupload.set_enabled(
-            online and con.get_module('HTTPUpload').available)
+            online and self._client.get_module('HTTPUpload').available)
 
         # Send file (Jingle)
         jingle_support = self.contact.supports(Namespace.JINGLE_FILE_TRANSFER_5)
@@ -768,8 +767,7 @@ class ChatControl(ChatControlBase):
             self.xml.incoming_viewport.add(self._video_widget_other)
             self.xml.outgoing_viewport.add(self._video_widget_self)
 
-            con = app.connections[self.account]
-            session = con.get_module('Jingle').get_jingle_session(
+            session = self._client.get_module('Jingle').get_jingle_session(
                 self.contact.get_full_jid(), self.jingle['video'].sid)
             content = session.get_content('video')
             content.do_setup(sink_self, sink_other)
@@ -832,8 +830,7 @@ class ChatControl(ChatControlBase):
         if not jingle.sid:
             return
 
-        con = app.connections[self.account]
-        session = con.get_module('Jingle').get_jingle_session(
+        session = self._client.get_module('Jingle').get_jingle_session(
             self.contact.get_full_jid(), jingle.sid)
         if session:
             content = session.get_content(jingle_type)
@@ -854,11 +851,9 @@ class ChatControl(ChatControlBase):
         self.xml.av_box.hide()
 
     def _on_jingle_button_toggled(self, jingle_types):
-        con = app.connections[self.account]
-
         if all(item in jingle_types for item in ['audio', 'video']):
             # Both 'audio' and 'video' in jingle_types
-            sid = con.get_module('Jingle').start_audio_video(
+            sid = self._client.get_module('Jingle').start_audio_video(
                 self.contact.get_full_jid())
             self.set_jingle_state('audio', JingleState.CONNECTING, sid)
             self.set_jingle_state('video', JingleState.CONNECTING, sid)
@@ -868,7 +863,7 @@ class ChatControl(ChatControlBase):
             if self.jingle['audio'].state != JingleState.NULL:
                 self.close_jingle_content('audio')
             else:
-                sid = con.get_module('Jingle').start_audio(
+                sid = self._client.get_module('Jingle').start_audio(
                     self.contact.get_full_jid())
                 self.set_jingle_state('audio', JingleState.CONNECTING, sid)
 
@@ -876,13 +871,12 @@ class ChatControl(ChatControlBase):
             if self.jingle['video'].state != JingleState.NULL:
                 self.close_jingle_content('video')
             else:
-                sid = con.get_module('Jingle').start_video(
+                sid = self._client.get_module('Jingle').start_video(
                     self.contact.get_full_jid())
                 self.set_jingle_state('video', JingleState.CONNECTING, sid)
 
     def _get_audio_content(self):
-        con = app.connections[self.account]
-        session = con.get_module('Jingle').get_jingle_session(
+        session = self._client.get_module('Jingle').get_jingle_session(
             self.contact.get_full_jid(), self.jingle['audio'].sid)
         return session.get_content('audio')
 
@@ -1087,8 +1081,8 @@ class ChatControl(ChatControlBase):
         self.remove_actions()
 
         # Send 'gone' chatstate
-        con = app.connections[self.account]
-        con.get_module('Chatstate').set_chatstate(self.contact, Chatstate.GONE)
+        self._client.get_module('Chatstate').set_chatstate(
+            self.contact, Chatstate.GONE)
 
         for jingle_type in ('audio', 'video'):
             self.close_jingle_content(jingle_type, shutdown=True)
@@ -1311,8 +1305,7 @@ class ChatControl(ChatControlBase):
             app.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _on_cancel_file_request(self, _widget, file_props):
-        con = app.connections[self.account]
-        con.get_module('Bytestream').send_file_rejection(file_props)
+        self._client.get_module('Bytestream').send_file_rejection(file_props)
         ev = self._get_file_props_event(file_props, 'file-request')
         if ev:
             app.events.remove_events(self.account, self.contact.jid, event=ev)
@@ -1408,8 +1401,7 @@ class ChatControl(ChatControlBase):
         app.events.remove_events(
             self.account, self.contact.jid, types='jingle-incoming')
 
-        con = app.connections[self.account]
-        session = con.get_module('Jingle').get_jingle_session(
+        session = self._client.get_module('Jingle').get_jingle_session(
             event.peerjid, event.sid)
         if not session:
             return
@@ -1424,8 +1416,7 @@ class ChatControl(ChatControlBase):
         app.events.remove_events(
             self.account, self.contact.jid, types='jingle-incoming')
 
-        con = app.connections[self.account]
-        session = con.get_module('Jingle').get_jingle_session(
+        session = self._client.get_module('Jingle').get_jingle_session(
             event.peerjid, event.sid)
         if not session:
             return

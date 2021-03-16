@@ -108,14 +108,15 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.handlers = {}
         self.parent_win = parent_win
 
-        groupchat = self._type != ControlType.CHAT
-        contact = app.get_client(acct).get_module('Contacts').get_contact(
-            jid, groupchat=groupchat)
-        self.contact = contact
-        self._connect_contact_signals()
-
         self.account = acct
         self.resource = resource
+
+        self._client = app.get_client(acct)
+
+        groupchat = self._type != ControlType.CHAT
+        self.contact = self._client.get_module('Contacts').get_contact(
+            jid, groupchat=groupchat)
+        self._connect_contact_signals()
 
         # control_id is a unique id for the control,
         # its used as action name for actions that belong to a control
@@ -246,8 +247,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.sendmessage = True
 
-        con = app.connections[self.account]
-        con.get_module('Chatstate').set_active(self.contact)
+        self._client.get_module('Chatstate').set_active(self.contact)
 
         if parent_win is not None:
             id_ = parent_win.window.connect('motion-notify-event',
@@ -481,10 +481,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.label_selector.pack_start(cell, True)
         # text to show is in in first column of liststore
         self.xml.label_selector.add_attribute(cell, 'text', 0)
-        con = app.connections[self.account]
         jid = self.contact.jid.bare
-        if con.get_module('SecLabels').supported:
-            con.get_module('SecLabels').request_catalog(jid)
+        if self._client.get_module('SecLabels').supported:
+            self._client.get_module('SecLabels').request_catalog(jid)
 
     def _sec_labels_received(self, event):
         if event.account != self.account:
@@ -976,9 +975,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if idx == -1:
             return None
 
-        con = app.connections[self.account]
         jid = self.contact.jid.bare
-        catalog = con.get_module('SecLabels').get_catalog(jid)
+        catalog = self._client.get_module('SecLabels').get_catalog(jid)
         labels, label_list = catalog.labels, catalog.get_label_names()
         lname = label_list[idx]
         label = labels[lname]
@@ -1013,8 +1011,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             correct_id = None
 
-        con = app.connections[self.account]
-        chatstate = con.get_module('Chatstate').get_active_chatstate(
+        chatstate = self._client.get_module('Chatstate').get_active_chatstate(
             self.contact)
 
         message_ = OutgoingMessage(account=self.account,
@@ -1030,7 +1027,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                                    correct_id=correct_id,
                                    xhtml=xhtml)
 
-        con.send_message(message_)
+        self._client.send_message(message_)
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -1053,8 +1050,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         return
         if self.parent_win.get_active_jid() == self.contact.jid:
             # if window is the active one, set last interaction
-            con = app.connections[self.account]
-            con.get_module('Chatstate').set_mouse_activity(
+            self._client.get_module('Chatstate').set_mouse_activity(
                 self.contact, self.msg_textview.has_text())
 
     def _on_message_tv_buffer_changed(self, textbuffer):
@@ -1067,14 +1063,13 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             app.plugin_manager.extension_point(
                 'typing' + self.encryption, self)
 
-        con = app.connections[self.account]
-        con.get_module('Chatstate').set_keyboard_activity(self.contact)
+        self._client.get_module('Chatstate').set_keyboard_activity(self.contact)
         if not has_text:
-            con.get_module('Chatstate').set_chatstate_delayed(self.contact,
-                                                              Chatstate.ACTIVE)
+            self._client.get_module('Chatstate').set_chatstate_delayed(
+                self.contact, Chatstate.ACTIVE)
             return
-        con.get_module('Chatstate').set_chatstate(self.contact,
-                                                  Chatstate.COMPOSING)
+        self._client.get_module('Chatstate').set_chatstate(
+            self.contact, Chatstate.COMPOSING)
 
     def save_message(self, message, msg_type):
         # save the message, so user can scroll though the list with key up/down
@@ -1192,8 +1187,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             #     if (self.parent_win.get_active_control() == self and
             #             self.parent_win.is_active() and
             #             self.has_focus() and end):
-            #         con = app.connections[self.account]
-            #         con.get_module('ChatMarkers').send_displayed_marker(
+            #         self._client.get_module('ChatMarkers').send_displayed_marker(
             #             self.contact,
             #             self.last_msg_id,
             #             self._type)
@@ -1375,7 +1369,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         _on_ok(gc_contact)
 
     def set_control_active(self, state):
-        con = app.connections[self.account]
         if state:
             self.set_emoticon_popover()
             jid = self.contact.jid
@@ -1390,7 +1383,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                     # There were events to remove
                     self.redraw_after_event_removed(jid)
                     # XEP-0333 Send <displayed> marker
-                    con.get_module('ChatMarkers').send_displayed_marker(
+                    self._client.get_module('ChatMarkers').send_displayed_marker(
                         self.contact,
                         self.last_msg_id,
                         self._type)
@@ -1398,14 +1391,14 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             # send chatstate inactive to the one we're leaving
             # and active to the one we visit
             if self.msg_textview.has_text():
-                con.get_module('Chatstate').set_chatstate(self.contact,
-                                                          Chatstate.PAUSED)
+                self._client.get_module('Chatstate').set_chatstate(
+                    self.contact, Chatstate.PAUSED)
             else:
-                con.get_module('Chatstate').set_chatstate(self.contact,
-                                                          Chatstate.ACTIVE)
+                self._client.get_module('Chatstate').set_chatstate(
+                    self.contact, Chatstate.ACTIVE)
         else:
-            con.get_module('Chatstate').set_chatstate(self.contact,
-                                                      Chatstate.INACTIVE)
+            self._client.get_module('Chatstate').set_chatstate(
+                self.contact, Chatstate.INACTIVE)
 
     def scroll_to_end(self, force=False):
         self.conv_textview.scroll_to_end(force)
@@ -1438,8 +1431,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 # There were events to remove
                 self.redraw_after_event_removed(jid)
                 # XEP-0333 Send <displayed> tag
-                con = app.connections[self.account]
-                con.get_module('ChatMarkers').send_displayed_marker(
+                self._client.get_module('ChatMarkers').send_displayed_marker(
                     self.contact,
                     self.last_msg_id,
                     self._type)
