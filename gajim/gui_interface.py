@@ -880,8 +880,7 @@ class Interface:
         FileTransferProgress(transfer)
         con.get_module('HTTPUpload').start_transfer(transfer)
 
-    @staticmethod
-    def _on_http_upload_state_changed(transfer, _signal_name, state):
+    def _on_http_upload_state_changed(self, transfer, _signal_name, state):
         if state.is_finished:
             uri = transfer.get_transformed_uri()
 
@@ -898,8 +897,7 @@ class Interface:
             client = app.get_client(transfer.account)
             client.send_message(message)
 
-    @staticmethod
-    def _on_cancel_upload(transfer, _signal_name):
+    def _on_cancel_upload(self, transfer, _signal_name):
         client = app.get_client(transfer.account)
         client.get_module('HTTPUpload').cancel_transfer(transfer)
 
