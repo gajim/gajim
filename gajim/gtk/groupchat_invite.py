@@ -80,17 +80,16 @@ class GroupChatInvite(Gtk.Box):
         for account, _label in self._accounts:
             self.new_contact_rows[account] = None
             client = app.get_client(account)
-            for jid, _data in client.get_module('Roster').iter():
-                contact = client.get_module('Contacts').get_contact(jid)
+            for contact in client.get_module('Roster').iter_contacts():
 
                 # Exclude group chats
                 if contact.is_groupchat:
                     continue
                 # Exclude our own jids
-                if jid in our_jids:
+                if contact.jid in our_jids:
                     continue
 
-                row = ContactRow(account, contact, jid,
+                row = ContactRow(account, contact, contact.jid,
                                  contact.name, show_account)
                 self._ui.contacts_listbox.add(row)
 
