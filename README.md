@@ -43,6 +43,7 @@
 - [Debian](https://packages.debian.org/stable/gajim)
 - [Fedora](https://apps.fedoraproject.org/packages/gajim)
 - [Ubuntu](https://packages.ubuntu.com/gajim)
+- [FreeBSD](https://www.freshports.org/net-im/gajim/)
 
 #### Flatpak
 
