@@ -76,7 +76,7 @@ class BlockingList(Gtk.ApplicationWindow):
         self._prev_blocked_jids = set(blocking_list)
         self._ui.blocking_store.clear()
         for item in blocking_list:
-            self._ui.blocking_store.append((item,))
+            self._ui.blocking_store.append((str(item),))
 
         self._set_grid_state(True)
         self._disable_spinner()
