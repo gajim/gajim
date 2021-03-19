@@ -268,6 +268,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         app.window.remove_contact(self._account, param.get_string())
 
     def _on_roster_row_activated(self, _treeview, path, _column):
+        path = self._modelfilter.convert_path_to_child_path(path)
         iter_ = self._store.get_iter(path)
         if self._store.iter_parent(iter_) is None:
             # This is a group row
@@ -286,6 +287,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             return
 
         path, _, _, _ = pos
+        path = self._modelfilter.convert_path_to_child_path(path)
         iter_ = self._store.get_iter(path)
         if self._store.iter_parent(iter_) is None:
             # Group row
