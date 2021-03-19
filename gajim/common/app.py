@@ -710,11 +710,11 @@ def check_finalize(obj):
             return False
 
     def check_finalized():
+        gc.collect()
         tup = finalizer.peek()
         if tup is None:
             return
 
-        gc.collect()
         logger.warning('%s not finalized', name)
         logger.warning('References:')
         for ref in gc.get_referrers(tup[0]):
