@@ -128,7 +128,6 @@ WINDOW_MODULES = {
     'Themes': 'gajim.gui.themes',
     'AdvancedConfig': 'gajim.gui.advanced_config',
     'CertificateDialog': 'gajim.gui.dialogs',
-    'SubscriptionRequest': 'gajim.gui.subscription_request',
     'RemoveAccount': 'gajim.gui.remove_account',
     'ChangePassword': 'gajim.gui.change_password',
     'PluginsWindow': 'gajim.plugins.gui',

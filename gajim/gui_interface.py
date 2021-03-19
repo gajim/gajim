@@ -301,25 +301,18 @@ class Interface:
         obj.session.roster_message(obj.jid, msg, obj.time_, obj.conn.name,
             msg_type='error')
 
-    def handle_event_subscribe_presence(self, obj):
-        #('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is JEP-0172
-        account = obj.conn.name
-        if helpers.allow_popup_window(account) or not self.systray_enabled:
-            open_window('SubscriptionRequest',
-                        account=account,
-                        jid=obj.jid,
-                        text=obj.status,
-                        user_nick=obj.user_nick)
-            return
+    def handle_event_subscribe_presence(self, event):
+        # ('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is XEP-0172
+        account = event.conn.name
+        event = events.SubscriptionRequestEvent(event.status, event.user_nick)
 
-        event = events.SubscriptionRequestEvent(obj.status, obj.user_nick)
-        self.add_event(account, obj.jid, event)
+        self.add_event(account, str(event.jid), event)
 
         if helpers.allow_showing_notification(account):
             event_type = _('Subscription request')
             app.notification.popup(
-                event_type, obj.jid, account, 'subscription_request',
-                'gajim-subscription_request', event_type, obj.jid)
+                event_type, str(event.jid), account, 'subscription_request',
+                'gajim-subscription_request', event_type, str(event.jid))
 
     def handle_event_subscribed_presence(self, event):
         bare_jid = event.jid.bare
@@ -1270,11 +1263,7 @@ class Interface:
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            open_window('SubscriptionRequest',
-                        account=account,
-                        jid=jid,
-                        text=event.text,
-                        user_nick=event.nick)
+            # TODO: Show account page
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'unsubscribed':

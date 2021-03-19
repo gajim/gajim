@@ -273,6 +273,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def get_active_jid(self, *args):
         pass
 
+    def get_account_page(self, account):
+        return self._account_pages[account]
+
     def show_account_page(self, account):
         self._account_side_bar.activate_account_page(account)
         self._ui.main_stack.set_visible_child_name(account)

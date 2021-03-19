@@ -16,11 +16,14 @@ from gi.repository import Gio
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.nec import EventHelper
 
 from .roster import Roster
 from .status_selector import StatusSelector
+from .subscription_manager import SubscriptionManager
 from .util import get_builder
 from .util import open_window
 
@@ -29,9 +32,11 @@ ROSTER_MENU_DICT = {
 }
 
 
-class AccountPage(Gtk.Box):
+class AccountPage(Gtk.Box, EventHelper):
     def __init__(self, account):
         Gtk.Box.__init__(self)
+        EventHelper.__init__(self)
+
         self._account = account
         self._jid = app.get_jid_from_account(account)
         client = app.get_client(account)
@@ -43,6 +48,9 @@ class AccountPage(Gtk.Box):
         self._status_selector = StatusSelector()
         self._status_selector.set_halign(Gtk.Align.CENTER)
         self._ui.account_action_box.add(self._status_selector)
+
+        self._subscription_manager = SubscriptionManager(account)
+        self._ui.account_box.add(self._subscription_manager)
 
         self._roster = Roster(account)
         self._ui.roster_box.add(self._roster)
@@ -57,6 +65,10 @@ class AccountPage(Gtk.Box):
 
         self._ui.connect_signals(self)
         self.show_all()
+
+        self.register_events([
+            ('subscribe-presence-received', ged.GUI1, self._on_subscribe_received),
+        ])
 
         self.update()
 
@@ -92,6 +104,10 @@ class AccountPage(Gtk.Box):
         self._ui.avatar_image.set_from_surface(surface)
 
         self._status_selector.update()
+
+    def _on_subscribe_received(self, event):
+        self._subscription_manager.add_request(
+            event.jid, event.status, user_nick=event.user_nick)
 
     def process_event(self, event):
         self._roster.process_event(event)

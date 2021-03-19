@@ -1923,11 +1923,11 @@ class RosterWindow:
             return True
 
         if event.type_ == 'subscription_request':
-            open_window('SubscriptionRequest',
-                        account=account,
-                        jid=jid,
-                        text=event.text,
-                        user_nick=event.nick)
+            # open_window('SubscriptionRequest',
+            #             account=account,
+            #             jid=jid,
+            #             text=event.text,
+            #             user_nick=event.nick)
             app.events.remove_events(account, jid, event)
             return True
 

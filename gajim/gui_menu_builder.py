@@ -816,6 +816,38 @@ def get_roster_menu(account, jid):
     return menu
 
 
+def get_subscription_manager_menu(account, jid):
+    menu = Gio.Menu()
+
+    action_name = 'win.add-chat'
+    add_chat = Gio.MenuItem.new(_('Start Chat'), action_name)
+    dict_ = {
+        'account': GLib.Variant('s', account),
+        'jid': GLib.Variant('s', str(jid)),
+        'type_': GLib.Variant('s', 'contact'),
+        'select': GLib.Variant.new_boolean(True),
+    }
+    variant_dict = GLib.Variant('a{sv}', dict_)
+    add_chat.set_action_and_target_value(action_name, variant_dict)
+    menu.append_item(add_chat)
+
+    menu_items = [
+        ('contact-info', _('Information')),
+        ('subscription-block', _('Block')),
+        ('subscription-report', _('Report')),
+        ('subscription-deny', _('Deny')),
+    ]
+    for item in menu_items:
+        action, label = item
+        action = f'win.{action}-{account}'
+        menuitem = Gio.MenuItem.new(label, action)
+        variant = GLib.Variant('s', str(jid))
+        menuitem.set_action_and_target_value(action, variant)
+        menu.append_item(menuitem)
+
+    return menu
+
+
 def get_chat_list_row_menu(workspace_id, account, jid, pinned):
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
