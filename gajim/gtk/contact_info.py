@@ -38,6 +38,7 @@ from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
 from .sidebar_switcher import SideBarSwitcher
 from .util import get_builder
+from .util import connect_destroy
 from .vcard_grid import VCardGrid
 
 log = logging.getLogger('gajim.gui.contact_info')
@@ -92,13 +93,16 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             self._fill_settings_page()
             self._fill_groups_page()
 
+        self._tasks = []
+
         # pylint: disable=line-too-long
         self.register_events([
-            ('time-result-received', ged.GUI1, self._set_entity_time),
             ('subscribed-presence-received', ged.GUI1, self._on_subscribed_presence_received),
             ('unsubscribed-presence-received', ged.GUI1, self._on_unsubscribed_presence_received),
         ])
         # pylint: enable=line-too-long
+
+        self._load_avatar()
 
         self._ui.contact_name_label.set_text(contact.name)
         if contact.is_pm_contact:
@@ -131,6 +135,16 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
+        connect_destroy(self._ui.tree_selection,
+                        'changed',
+                        self._on_group_selection_changed)
+        connect_destroy(self._ui.toggle_renderer,
+                        'toggled',
+                        self._on_group_toggled)
+        connect_destroy(self._ui.text_renderer,
+                        'edited',
+                        self._on_group_name_edited)
+
         self.add(self._ui.main_grid)
         self.show_all()
 
@@ -145,6 +159,10 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             self._ui.header_revealer.set_reveal_child(True)
 
     def _on_destroy(self, _widget):
+        for task in self._tasks:
+            task.cancel()
+        self._tasks.clear()
+
         if not self.contact.is_pm_contact:
             self._save_annotation()
 
@@ -152,7 +170,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             GLib.source_remove(self._update_timeout_id)
 
         self.unregister_events()
-        app.cancel_tasks(self)
+        app.check_finalize(self)
 
     def _save_annotation(self):
         buffer_ = self._ui.textview_annotation.get_buffer()
@@ -183,7 +201,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             vcard = VCard()
 
         self._vcard_grid.set_vcard(vcard)
-        self._load_avatar()
 
     def _load_avatar(self):
         scale = self.get_scale_factor()
@@ -210,16 +227,21 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         }
         self._rebuild_devices_grid()
 
-        self._client.get_module('SoftwareVersion').request_software_version(
+        task = self._client.get_module('SoftwareVersion').request_software_version(
             contact.jid, callback=self._set_os_info, user_data=contact)
-        self._client.get_module('EntityTime').request_entity_time(
-            str(contact.jid.bare), contact.jid.resource)
+        self._tasks.append(task)
+
+        task = self._client.get_module('EntityTime').request_entity_time(
+            contact.jid, callback=self._set_entity_time, user_data=contact)
+        self._tasks.append(task)
 
     def _set_os_info(self, task):
+        self._tasks.remove(task)
+
         try:
             result = task.finish()
-        except StanzaError as err:
-            log.info('Could not retrieve software version: %s', err)
+        except Exception as err:
+            log.warning('Could not retrieve software version: %s', err)
             return
 
         contact = task.get_user_data()
@@ -230,19 +252,19 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._received_devices.add(contact.jid.resource)
         self._rebuild_devices_grid()
 
-    def _set_entity_time(self, event):
-        if event.conn.name != self.account:
+    def _set_entity_time(self, task):
+        self._tasks.remove(task)
+
+        try:
+            entity_time = task.finish()
+        except Exception as err:
+            log.warning('Could not retrieve entity time: %s', err)
             return
 
-        if self.contact.is_pm_contact:
-            if event.jid != self.contact.jid:
-                return
-        else:
-            if event.jid.bare != self.contact.jid:
-                return
+        contact = task.get_user_data()
 
-        self._devices[event.jid.resource]['time'] = event.time_info
-        self._received_times.add(event.jid.resource)
+        self._devices[contact.jid.resource]['time'] = entity_time
+        self._received_times.add(contact.jid.resource)
         self._rebuild_devices_grid()
 
     def _rebuild_devices_grid(self):

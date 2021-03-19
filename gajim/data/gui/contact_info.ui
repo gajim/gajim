@@ -490,16 +490,13 @@
                                 <property name="model">groups_model</property>
                                 <property name="headers-visible">False</property>
                                 <child internal-child="selection">
-                                  <object class="GtkTreeSelection">
-                                    <signal name="changed" handler="_on_group_selection_changed" swapped="no"/>
-                                  </object>
+                                  <object class="GtkTreeSelection" id="tree_selection"/>
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn">
                                     <child>
-                                      <object class="GtkCellRendererToggle">
+                                      <object class="GtkCellRendererToggle" id="toggle_renderer">
                                         <property name="xpad">12</property>
-                                        <signal name="toggled" handler="_on_group_toggled" swapped="no"/>
                                       </object>
                                       <attributes>
                                         <attribute name="active">0</attribute>
@@ -512,10 +509,9 @@
                                     <property name="title" translatable="yes">column</property>
                                     <property name="sort-column-id">1</property>
                                     <child>
-                                      <object class="GtkCellRendererText">
+                                      <object class="GtkCellRendererText" id="text_renderer">
                                         <property name="height">42</property>
                                         <property name="editable">True</property>
-                                        <signal name="edited" handler="_on_group_name_edited" swapped="no"/>
                                       </object>
                                       <attributes>
                                         <attribute name="text">1</attribute>
