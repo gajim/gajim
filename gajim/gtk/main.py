@@ -132,7 +132,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('edit-workspace', None, self._edit_workspace),
             ('remove-workspace', None, self._remove_workspace),
             ('activate-workspace', 's', self._activate_workspace),
-            ('add-chat', 'as', self._add_chat),
+            ('add-chat', 'a{sv}', self._add_chat),
             ('add-group-chat', 'as', self._add_group_chat),
             ('remove-chat', 'as', self._remove_chat),
             ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
@@ -360,8 +360,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                     select=select)
 
     def _add_chat(self, _action, param):
-        account, jid, type_ = param.unpack()
-        self.add_chat(account, jid, type_)
+        self.add_chat(**param.unpack())
 
     def add_chat(self, account, jid, type_, select=False):
         workspace_id = self._workspace_side_bar.get_active_workspace()
@@ -389,6 +388,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if self.chat_exists(account, jid):
             if select:
                 self._chat_list_stack.select_chat(account, jid)
+                self.show_chats()
             return
 
         if type_ == 'groupchat':
@@ -407,6 +407,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if self._startup_finished:
             if select:
                 self._chat_list_stack.select_chat(account, jid)
+                self.show_chats()
             self._chat_list_stack.store_open_chats(workspace_id)
 
     def _toggle_chat_pinned(self, _action, param):

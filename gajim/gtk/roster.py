@@ -276,7 +276,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         jid = self._store[iter_][Column.JID_OR_GROUP]
         app.window.add_chat(self._account, jid, 'contact', select=True)
-        app.window.show_chats()
 
     def _on_roster_button_press_event(self, treeview, event):
         if event.button not in (2, 3):
@@ -300,7 +299,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         if event.button == 2:  # middle click
             app.window.add_chat(self._account, jid, 'contact', select=True)
-            app.window.show_chats()
 
     @staticmethod
     def _on_focus_out(treeview, _param):
