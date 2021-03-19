@@ -439,6 +439,7 @@ class Client(ConnectionHandlers):
 
         self.get_module('Bookmarks').request_bookmarks()
         self.get_module('SoftwareVersion').set_enabled(True)
+        self.get_module('EntityTime').set_enabled(True)
         self.get_module('LastActivity').set_enabled(True)
         self.get_module('Annotations').request_annotations()
         self.get_module('Blocking').get_blocking_list()
