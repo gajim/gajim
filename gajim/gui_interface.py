@@ -301,53 +301,6 @@ class Interface:
         obj.session.roster_message(obj.jid, msg, obj.time_, obj.conn.name,
             msg_type='error')
 
-    def handle_event_subscribe_presence(self, event):
-        # ('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is XEP-0172
-        account = event.conn.name
-        event = events.SubscriptionRequestEvent(event.status, event.user_nick)
-
-        self.add_event(account, str(event.jid), event)
-
-        if helpers.allow_showing_notification(account):
-            event_type = _('Subscription request')
-            app.notification.popup(
-                event_type, str(event.jid), account, 'subscription_request',
-                'gajim-subscription_request', event_type, str(event.jid))
-
-    def handle_event_subscribed_presence(self, event):
-        bare_jid = event.jid.bare
-        resource = event.jid.resource
-        if bare_jid in app.contacts.get_jid_list(event.account):
-            contact = app.contacts.get_first_contact_from_jid(event.account,
-                                                              bare_jid)
-            contact.resource = resource
-            self.roster.remove_contact_from_groups(contact.jid,
-                                                   event.account,
-                                                   [_('Not in contact list'),
-                                                    _('Observers')],
-                                                   update=False)
-        else:
-            name = event.jid.localpart
-            name = name.split('%', 1)[0]
-            contact = app.contacts.create_contact(jid=bare_jid,
-                                                  account=event.account,
-                                                  name=name,
-                                                  groups=[],
-                                                  show='online',
-                                                  status='online',
-                                                  ask='to',
-                                                  resource=resource)
-            app.contacts.add_contact(event.account, contact)
-            self.roster.add_contact(bare_jid, event.account)
-
-        app.notification.popup(
-            None,
-            bare_jid,
-            event.account,
-            title=_('Authorization accepted'),
-            text=_('The contact "%(jid)s" has authorized you'
-                   ' to see their status.') % {'jid': event.jid})
-
     def show_unsubscribed_dialog(self, account, contact):
         def _remove():
             self.roster.on_req_usub(None, [(contact, account)])
@@ -367,27 +320,6 @@ class Interface:
 
         # FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does
         # not show deny
-
-    def handle_event_unsubscribed_presence(self, obj):
-        #('UNSUBSCRIBED', account, jid)
-        account = obj.conn.name
-        contact = app.contacts.get_first_contact_from_jid(account, obj.jid)
-        if not contact:
-            return
-
-        if helpers.allow_popup_window(account) or not self.systray_enabled:
-            self.show_unsubscribed_dialog(account, contact)
-            return
-
-        event = events.UnsubscribedEvent(contact)
-        self.add_event(account, obj.jid, event)
-
-        if helpers.allow_showing_notification(account):
-            event_type = _('Unsubscribed')
-            app.notification.popup(
-                event_type, obj.jid, account,
-                'unsubscribed', 'gajim-unsubscribed',
-                event_type, obj.jid)
 
     def handle_event_gc_decline(self, event):
         gc_control = self.msg_win_mgr.get_gc_control(str(event.muc),
@@ -1106,12 +1038,6 @@ class Interface:
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
             'signed-in': [self.handle_event_signed_in],
-            'subscribe-presence-received': [
-                self.handle_event_subscribe_presence],
-            'subscribed-presence-received': [
-                self.handle_event_subscribed_presence],
-            'unsubscribed-presence-received': [
-                self.handle_event_unsubscribed_presence],
             'zeroconf-name-conflict': [self.handle_event_zc_name_conflict],
             'read-state-sync': [self.handle_event_read_state_sync],
         }
