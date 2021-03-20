@@ -1132,6 +1132,8 @@ class PresenceShowExt(Enum):
         return self == PresenceShowExt.OFFLINE
 
     def __lt__(self, other):
+        if isinstance(other, PresenceShowExt):
+            return False
         if not isinstance(other, PresenceShow):
             return NotImplemented
         return True
