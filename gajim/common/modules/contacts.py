@@ -391,6 +391,10 @@ class GroupchatParticipant(CommonContact):
         return True
 
     @property
+    def is_in_roster(self):
+        return False
+
+    @property
     def presence(self):
         return self._presence
 

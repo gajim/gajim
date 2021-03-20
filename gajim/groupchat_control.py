@@ -670,8 +670,7 @@ class GroupchatControl(ChatControlBase):
     def _on_contact_information(self, _action, param):
         nick = param.get_string()
         contact = self.contact.get_resource(nick)
-        open_window('ContactInfo', account=self.account, contact=contact,
-                    anonymous=self.is_anonymous)
+        open_window('ContactInfo', account=self.account, contact=contact)
 
     def _on_kick(self, _action, param):
         nick = param.get_string()

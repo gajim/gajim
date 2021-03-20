@@ -50,7 +50,7 @@ class Column(IntEnum):
 
 
 class ContactInfo(Gtk.ApplicationWindow, EventHelper):
-    def __init__(self, account, contact, page=None, anonymous=False):
+    def __init__(self, account, contact, page=None):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
@@ -65,7 +65,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         # Set account and jid for window management
         self.account = account
         self.contact = contact
-        self._anonymous = anonymous
         self._client = app.get_client(account)
 
         self._ui = get_builder('contact_info.ui')
@@ -75,23 +74,22 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.main_grid.attach(side_bar_switcher, 0, 0, 1, 1)
         self._ui.main_stack.connect('notify', self._on_stack_child_changed)
 
-        if contact.is_pm_contact:
+        self._ui.name_entry.set_text(contact.name)
+
+        if contact.is_in_roster:
+            self._ui.edit_name_button.show()
+            self._fill_settings_page()
+            self._fill_groups_page()
+        else:
             side_bar_switcher.hide_row('settings')
             side_bar_switcher.hide_row('groups')
-
-            if anonymous:
-                side_bar_switcher.hide_row('notes')
-        else:
-            self._ui.edit_name_button.show()
-        self._ui.name_entry.set_text(contact.name)
+            side_bar_switcher.hide_row('notes')
+            if not contact.is_pm_contact:
+                side_bar_switcher.hide_row('devices')
 
         if page is not None:
             # Jump to specific page if parameter is supplied
             side_bar_switcher.set_row(page)
-
-        if not contact.is_pm_contact:
-            self._fill_settings_page()
-            self._fill_groups_page()
 
         self._tasks = []
 
@@ -117,19 +115,21 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             jid=contact.jid,
             callback=self._on_vcard_received)
 
-        self._devices = {}
-        self._received_devices = set()
-        self._received_times = set()
-        self._devices_grid = DevicesGrid(self._ui.devices_grid)
-        self._query_devices()
+        self._update_timeout_id = None
+        if contact.is_in_roster:
+            self._devices = {}
+            self._received_devices = set()
+            self._received_times = set()
+            self._devices_grid = DevicesGrid(self._ui.devices_grid)
+            self._query_devices()
 
-        if not anonymous:
+            self._time = 0
+            self._update_timeout_id = GLib.timeout_add(100, self._update_timer)
+
+        if contact.is_in_roster:
             note = self._client.get_module('Annotations').get_note(contact.jid)
             if note is not None:
                 self._ui.textview_annotation.get_buffer().set_text(note.data)
-
-        self._time = 0
-        self._update_timeout_id = GLib.timeout_add(100, self._update_timer)
 
         self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
@@ -163,7 +163,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             task.cancel()
         self._tasks.clear()
 
-        if not self.contact.is_pm_contact:
+        if self.contact.is_in_roster:
             self._save_annotation()
 
         if self._update_timeout_id is not None:
