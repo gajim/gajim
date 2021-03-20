@@ -58,7 +58,7 @@ class Roster(BaseModule):
                     sub=item['subscription'],
                     ask=item['ask'],
                     groups=item['groups'],
-                    avatar_sha=item['avatar_sha']))
+                    avatar_sha=item.get('avatar_sha')))
         else:
             self._log.info('Database empty, reset roster version')
             app.settings.set_account_setting(
