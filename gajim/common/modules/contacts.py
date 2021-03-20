@@ -255,6 +255,10 @@ class BareContact(CommonContact):
         return self._get_roster_attr('groups')
 
     @property
+    def is_subscribed(self):
+        return self.subscription in ('from', 'both')
+
+    @property
     def is_blocked(self):
         return self._module('Blocking').is_blocked(self._jid)
 

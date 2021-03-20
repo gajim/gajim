@@ -32,15 +32,24 @@ class LastActivity(BaseModule):
         BaseModule.__init__(self, con)
 
     def set_enabled(self, enabled):
-        if enabled and app.is_installed('IDLE'):
-            if not app.settings.get_account_setting(self._account,
-                                                    'send_idle_time'):
-                return
-
-            self._nbxmpp('LastActivity').set_idle_func(
-                idle.Monitor.get_idle_sec)
-        else:
+        if not enabled or not app.is_installed('IDLE'):
             self._nbxmpp('LastActivity').disable()
+            return
+
+        if not app.settings.get_account_setting(self._account,
+                                                'send_idle_time'):
+            return
+
+        self._nbxmpp('LastActivity').set_idle_func(idle.Monitor.get_idle_sec)
+        self._nbxmpp('LastActivity').set_allow_reply_func(self._allow_reply)
+
+    def _allow_reply(self, jid):
+        item = self._con.get_module('Roster').get_item(jid.bare)
+        if item is None:
+            return False
+
+        contact = self._get_contact(jid.bare)
+        return contact.is_subscribed
 
 
 def get_instance(*args, **kwargs):

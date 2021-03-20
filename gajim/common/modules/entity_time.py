@@ -37,8 +37,20 @@ class EntityTime(BaseModule):
             self._nbxmpp('EntityTime').disable()
             return
 
-        if app.settings.get_account_setting(self._account, 'send_time_info'):
-            self._nbxmpp('EntityTime').enable()
+        if not app.settings.get_account_setting(self._account,
+                                                'send_time_info'):
+            return
+
+        self._nbxmpp('EntityTime').enable()
+        self._nbxmpp('EntityTime').set_allow_reply_func(self._allow_reply)
+
+    def _allow_reply(self, jid):
+        item = self._con.get_module('Roster').get_item(jid.bare)
+        if item is None:
+            return False
+
+        contact = self._get_contact(jid.bare)
+        return contact.is_subscribed
 
 
 def get_instance(*args, **kwargs):

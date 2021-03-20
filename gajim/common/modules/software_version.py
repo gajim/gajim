@@ -32,14 +32,24 @@ class SoftwareVersion(BaseModule):
         BaseModule.__init__(self, con)
 
     def set_enabled(self, enabled):
-        if enabled:
-            if not app.settings.get_account_setting(self._account,
-                                                    'send_os_info'):
-                return
-            self._nbxmpp('SoftwareVersion').set_software_version(
-                'Gajim', app.version, get_os_info())
-        else:
+        if not enabled:
             self._nbxmpp('SoftwareVersion').disable()
+            return
+
+        if not app.settings.get_account_setting(self._account, 'send_os_info'):
+            return
+
+        self._nbxmpp('SoftwareVersion').set_software_version(
+            'Gajim', app.version, get_os_info())
+        self._nbxmpp('SoftwareVersion').set_allow_reply_func(self._allow_reply)
+
+    def _allow_reply(self, jid):
+        item = self._con.get_module('Roster').get_item(jid.bare)
+        if item is None:
+            return False
+
+        contact = self._get_contact(jid.bare)
+        return contact.is_subscribed
 
 
 def get_instance(*args, **kwargs):
