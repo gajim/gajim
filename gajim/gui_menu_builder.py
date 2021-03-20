@@ -816,7 +816,7 @@ def get_roster_menu(account, jid):
     return menu
 
 
-def get_subscription_manager_menu(account, jid):
+def get_subscription_menu(account, jid):
     menu = Gio.Menu()
 
     action_name = 'win.add-chat'

@@ -20,23 +20,21 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gui_menu_builder import get_subscription_manager_menu
+from gajim.gui_menu_builder import get_subscription_menu
 
 from .add_contact import AddNewContactWindow
 
 
-class SubscriptionManager(Gtk.ScrolledWindow):
+class NotificationManager(Gtk.ScrolledWindow):
     def __init__(self, account):
         Gtk.ScrolledWindow.__init__(self)
         self._account = account
         self._client = app.get_client(account)
 
-        self.set_hexpand(True)
         self.set_size_request(400, 200)
 
         self._listbox = Gtk.ListBox()
         self._listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        self._listbox.get_style_context().add_class('subscription-listbox')
         self._set_placeholder()
 
         self.add(self._listbox)
@@ -88,7 +86,7 @@ class SubscriptionManager(Gtk.ScrolledWindow):
             app.window.remove_action(f'{action}-{self._account}')
 
     def _set_placeholder(self):
-        label = Gtk.Label(label=_('No pending requests.'))
+        label = Gtk.Label(label=_('No Notifications'))
         label.set_valign(Gtk.Align.START)
         label.get_style_context().add_class('dim-label')
         label.show()
@@ -96,7 +94,7 @@ class SubscriptionManager(Gtk.ScrolledWindow):
 
     def _on_subscription_accept(self, _action, param):
         jid = param.get_string()
-        row = self._get_request_row(jid)
+        row = self._get_notification_row(jid)
         self._client.get_module('Presence').subscribed(jid)
         contact = self._client.get_module('Contacts').get_contact(jid)
         if not contact.is_in_roster:
@@ -108,7 +106,7 @@ class SubscriptionManager(Gtk.ScrolledWindow):
         app.events.remove_events(self._account, jid)
         self._deny_request(jid)
         self._client.get_module('Blocking').block([jid])
-        row = self._get_request_row(jid)
+        row = self._get_notification_row(jid)
         self._listbox.remove(row)
 
     def _on_subscription_report(self, _action, param):
@@ -116,81 +114,148 @@ class SubscriptionManager(Gtk.ScrolledWindow):
         app.events.remove_events(self._account, jid)
         self._deny_request(jid)
         self._client.get_module('Blocking').block([jid], report='spam')
-        row = self._get_request_row(jid)
+        row = self._get_notification_row(jid)
         self._listbox.remove(row)
 
     def _on_subscription_deny(self, _action, param):
         jid = param.get_string()
         self._deny_request(jid)
-        row = self._get_request_row(jid)
+        row = self._get_notification_row(jid)
         self._listbox.remove(row)
 
     def _deny_request(self, jid):
         self._client.get_module('Presence').unsubscribed(jid)
 
-    def _get_request_row(self, jid):
+    def _get_notification_row(self, jid):
         for child in self._listbox.get_children():
             if child.jid == jid:
                 return child
         return None
 
-    def add_request(self, jid, text, user_nick=None):
-        if self._get_request_row(jid) is None:
-            self._listbox.add(RequestRow(self._account, jid, text, user_nick))
+    def add_subscription_request(self, jid, text, user_nick=None):
+        row = self._get_notification_row(jid)
+        if row is None:
+            self._listbox.add(SubscriptionRequestRow(
+                self._account, jid, text, user_nick))
+        elif row.type == 'unsubscribed':
+            self._listbox.remove(row)
+
+    def add_unsubscribed(self, jid):
+        row = self._get_notification_row(jid)
+        if row is None:
+            self._listbox.add(UnsubscribedRow(self._account, jid))
+        elif row.type == 'subscribe':
+            self._listbox.remove(row)
 
 
-class RequestRow(Gtk.ListBoxRow):
-    def __init__(self, account, jid, text, user_nick):
+class NotificationRow(Gtk.ListBoxRow):
+    def __init__(self, account, jid):
         Gtk.ListBoxRow.__init__(self)
         self._account = account
+        self._client = app.get_client(account)
         self.jid = jid
-        self.user_nick = user_nick
         self.get_style_context().add_class('padding-6')
 
-        grid = Gtk.Grid(column_spacing=12)
+        self.grid = Gtk.Grid(column_spacing=12)
+        self.add(self.grid)
+
+    @staticmethod
+    def _generate_label():
+        label = Gtk.Label()
+        label.set_halign(Gtk.Align.START)
+        label.set_xalign(0)
+        label.set_ellipsize(Pango.EllipsizeMode.END)
+        label.set_max_width_chars(30)
+        return label
+
+
+class SubscriptionRequestRow(NotificationRow):
+    def __init__(self, account, jid, text, user_nick):
+        NotificationRow.__init__(self, account, jid)
+        self.type = 'subscribe'
+
         image = Gtk.Image.new_from_icon_name(
             'avatar-default-symbolic', Gtk.IconSize.DND)
         image.set_valign(Gtk.Align.CENTER)
-        grid.attach(image, 1, 1, 1, 2)
+        self.grid.attach(image, 1, 1, 1, 2)
 
         if user_nick is not None:
             escaped_nick = GLib.markup_escape_text(user_nick)
             nick_markup = f'<b>{escaped_nick}</b> ({jid})'
         else:
             nick_markup = f'<b>{jid}</b>'
-        nick_label = Gtk.Label()
-        nick_label.set_halign(Gtk.Align.START)
-        nick_label.set_ellipsize(Pango.EllipsizeMode.END)
-        nick_label.set_max_width_chars(30)
+
+        nick_label = self._generate_label()
         nick_label.set_tooltip_markup(nick_markup)
         nick_label.set_markup(nick_markup)
-        grid.attach(nick_label, 2, 1, 1, 1)
+        self.grid.attach(nick_label, 2, 1, 1, 1)
 
         message_text = GLib.markup_escape_text(text)
-        text_label = Gtk.Label(label=message_text)
-        text_label.set_halign(Gtk.Align.START)
-        text_label.set_ellipsize(Pango.EllipsizeMode.END)
-        text_label.set_max_width_chars(30)
+        text_label = self._generate_label()
+        text_label.set_text(message_text)
         text_label.set_tooltip_text(message_text)
         text_label.get_style_context().add_class('dim-label')
-        grid.attach(text_label, 2, 2, 1, 1)
+        self.grid.attach(text_label, 2, 2, 1, 1)
 
         accept_button = Gtk.Button.new_with_label(label=_('Accept'))
         accept_button.set_valign(Gtk.Align.CENTER)
         accept_button.set_action_name(
             f'win.subscription-accept-{self._account}')
         accept_button.set_action_target_value(GLib.Variant('s', str(self.jid)))
-        grid.attach(accept_button, 3, 1, 1, 2)
+        self.grid.attach(accept_button, 3, 1, 1, 2)
 
         more_image = Gtk.Image.new_from_icon_name(
             'view-more-symbolic', Gtk.IconSize.MENU)
         more_button = Gtk.MenuButton()
         more_button.set_valign(Gtk.Align.CENTER)
         more_button.add(more_image)
-        subscription_menu = get_subscription_manager_menu(
-            self._account, self.jid)
+        subscription_menu = get_subscription_menu(self._account, self.jid)
         more_button.set_menu_model(subscription_menu)
-        grid.attach(more_button, 4, 1, 1, 2)
+        self.grid.attach(more_button, 4, 1, 1, 2)
 
-        self.add(grid)
         self.show_all()
+
+
+class UnsubscribedRow(NotificationRow):
+    def __init__(self, account, jid):
+        NotificationRow.__init__(self, account, jid)
+        self.type = 'unsubscribed'
+
+        image = Gtk.Image.new_from_icon_name(
+            'avatar-default-symbolic', Gtk.IconSize.DND)
+        image.set_valign(Gtk.Align.CENTER)
+        self.grid.attach(image, 1, 1, 1, 2)
+
+        contact = self._client.get_module('Contacts').get_contact(jid)
+        nick_markup = f'<b>{contact.name}</b>'
+        nick_label = self._generate_label()
+        nick_label.set_tooltip_markup(nick_markup)
+        nick_label.set_markup(nick_markup)
+        self.grid.attach(nick_label, 2, 1, 1, 1)
+
+        message_text = _('Stopped sharing their status')
+        text_label = self._generate_label()
+        text_label.set_text(message_text)
+        text_label.set_tooltip_text(message_text)
+        text_label.get_style_context().add_class('dim-label')
+        self.grid.attach(text_label, 2, 2, 1, 1)
+
+        remove_button = Gtk.Button.new_with_label(label=_('Remove'))
+        remove_button.set_valign(Gtk.Align.CENTER)
+        remove_button.set_tooltip_text('Remove from contact list')
+        remove_button.set_action_name(
+            f'win.remove-contact-{self._account}')
+        remove_button.set_action_target_value(GLib.Variant('s', str(self.jid)))
+        self.grid.attach(remove_button, 3, 1, 1, 2)
+
+        dismiss_button = Gtk.Button.new_from_icon_name(
+            'window-close-symbolic', Gtk.IconSize.BUTTON)
+        dismiss_button.set_valign(Gtk.Align.CENTER)
+        dismiss_button.set_tooltip_text(_('Remove Notification'))
+        dismiss_button.connect('clicked', self._on_dismiss)
+        self.grid.attach(dismiss_button, 4, 1, 1, 2)
+
+        self.show_all()
+
+    def _on_dismiss(self, _button):
+        self.get_parent().remove(self)

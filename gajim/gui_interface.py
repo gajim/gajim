@@ -301,26 +301,6 @@ class Interface:
         obj.session.roster_message(obj.jid, msg, obj.time_, obj.conn.name,
             msg_type='error')
 
-    def show_unsubscribed_dialog(self, account, contact):
-        def _remove():
-            self.roster.on_req_usub(None, [(contact, account)])
-
-        name = contact.get_shown_name()
-        jid = contact.jid
-        ConfirmationDialog(
-            _('Subscription Removed'),
-            _('%(name)s (%(jid)s) has removed subscription from you') % {
-                'name': name, 'jid': jid},
-            _('You will always see this contact as offline.\n'
-              'Do you want to remove them from your contact list?'),
-            [DialogButton.make('Cancel',
-                               text=_('_No')),
-             DialogButton.make('Remove',
-                               callback=_remove)]).show()
-
-        # FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does
-        # not show deny
-
     def handle_event_gc_decline(self, event):
         gc_control = self.msg_win_mgr.get_gc_control(str(event.muc),
                                                      event.account)
@@ -1191,14 +1171,14 @@ class Interface:
                 return
             # TODO: Show account page
             app.events.remove_events(account, jid, event)
-            self.roster.draw_contact(jid, account)
+            # self.roster.draw_contact(jid, account)
         elif type_ == 'unsubscribed':
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            self.show_unsubscribed_dialog(account, event.contact)
+            # TODO: Show account page
             app.events.remove_events(account, jid, event)
-            self.roster.draw_contact(jid, account)
+            # self.roster.draw_contact(jid, account)
         if w:
             w.set_active_tab(ctrl)
             w.window.present()

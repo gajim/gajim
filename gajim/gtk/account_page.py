@@ -23,7 +23,7 @@ from gajim.common.nec import EventHelper
 
 from .roster import Roster
 from .status_selector import StatusSelector
-from .subscription_manager import SubscriptionManager
+from .notification_manager import NotificationManager
 from .util import get_builder
 from .util import open_window
 
@@ -49,8 +49,8 @@ class AccountPage(Gtk.Box, EventHelper):
         self._status_selector.set_halign(Gtk.Align.CENTER)
         self._ui.account_action_box.add(self._status_selector)
 
-        self._subscription_manager = SubscriptionManager(account)
-        self._ui.account_box.add(self._subscription_manager)
+        self._notification_manager = NotificationManager(account)
+        self._ui.account_box.add(self._notification_manager)
 
         self._roster = Roster(account)
         self._ui.roster_box.add(self._roster)
@@ -66,9 +66,12 @@ class AccountPage(Gtk.Box, EventHelper):
         self._ui.connect_signals(self)
         self.show_all()
 
+        # pylint: disable=line-too-long
         self.register_events([
-            ('subscribe-presence-received', ged.GUI1, self._on_subscribe_received),
+            ('subscribe-presence-received', ged.GUI1, self._subscribe_received),
+            ('unsubscribed-presence-received', ged.GUI1, self._unsubscribed_received),
         ])
+        # pylint: enable=line-too-long
 
         self.update()
 
@@ -105,9 +108,12 @@ class AccountPage(Gtk.Box, EventHelper):
 
         self._status_selector.update()
 
-    def _on_subscribe_received(self, event):
-        self._subscription_manager.add_request(
+    def _subscribe_received(self, event):
+        self._notification_manager.add_subscription_request(
             event.jid, event.status, user_nick=event.user_nick)
+
+    def _unsubscribed_received(self, event):
+        self._notification_manager.add_unsubscribed(event.jid)
 
     def process_event(self, event):
         self._roster.process_event(event)
