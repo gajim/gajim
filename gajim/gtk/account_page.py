@@ -70,6 +70,8 @@ class AccountPage(Gtk.Box, EventHelper):
         self.register_events([
             ('subscribe-presence-received', ged.GUI1, self._subscribe_received),
             ('unsubscribed-presence-received', ged.GUI1, self._unsubscribed_received),
+            ('muc-invitation', ged.GUI1, self._muc_invitation_received),
+            ('muc-decline', ged.GUI1, self._muc_invitation_declined),
         ])
         # pylint: enable=line-too-long
 
@@ -109,11 +111,16 @@ class AccountPage(Gtk.Box, EventHelper):
         self._status_selector.update()
 
     def _subscribe_received(self, event):
-        self._notification_manager.add_subscription_request(
-            event.jid, event.status, user_nick=event.user_nick)
+        self._notification_manager.add_subscription_request(event)
 
     def _unsubscribed_received(self, event):
-        self._notification_manager.add_unsubscribed(event.jid)
+        self._notification_manager.add_unsubscribed(event)
+
+    def _muc_invitation_received(self, event):
+        self._notification_manager.add_invitation_received(event)
+
+    def _muc_invitation_declined(self, event):
+        self._notification_manager.add_invitation_declined(event)
 
     def process_event(self, event):
         self._roster.process_event(event)

@@ -302,6 +302,7 @@ class Interface:
             msg_type='error')
 
     def handle_event_gc_decline(self, event):
+        # TODO: Adapt to new mainwindow
         gc_control = self.msg_win_mgr.get_gc_control(str(event.muc),
                                                      event.account)
         if gc_control:
@@ -317,20 +318,24 @@ class Interface:
     def handle_event_gc_invitation(self, event):
         event = events.GcInvitationtEvent(event)
 
-        if (helpers.allow_popup_window(event.account) or
-                not self.systray_enabled):
-            open_window('GroupChatInvitation',
-                        account=event.account,
-                        event=event)
-            return
+        # TODO: show account page
+        # if (helpers.allow_popup_window(event.account) or
+        #         not self.systray_enabled):
+        #     open_window('GroupChatInvitation',
+        #                 account=event.account,
+        #                 event=event)
+        #     return
 
-        self.add_event(event.account, str(event.from_), event)
+        #self.add_event(event.account, str(event.from_), event)
 
         if helpers.allow_showing_notification(event.account):
-            contact_name = event.get_inviter_name()
+            client = app.get_client(event.account)
+            contact = client.get_module('Contacts').get_contact(
+                event.from_.bare)
             event_type = _('Group Chat Invitation')
             text = _('%(contact)s invited you to %(chat)s') % {
-                'contact': contact_name, 'chat': event.info.muc_name}
+                'contact': contact.name,
+                'chat': event.info.muc_name}
             app.notification.popup(event_type,
                                    str(event.from_),
                                    event.account,
@@ -1160,11 +1165,12 @@ class Interface:
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            open_window('GroupChatInvitation',
-                        account=account,
-                        event=event)
+            # TODO: Show account page
+            # open_window('GroupChatInvitation',
+            #             account=account,
+            #             event=event)
             app.events.remove_events(account, jid, event)
-            self.roster.draw_contact(jid, account)
+            # self.roster.draw_contact(jid, account)
         elif type_ == 'subscription_request':
             event = app.events.get_first_event(account, jid, type_)
             if event is None:

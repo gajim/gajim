@@ -23,6 +23,7 @@ from gajim.common.i18n import _
 from gajim.gui_menu_builder import get_subscription_menu
 
 from .add_contact import AddNewContactWindow
+from .util import open_window
 
 
 class NotificationManager(Gtk.ScrolledWindow):
@@ -132,20 +133,30 @@ class NotificationManager(Gtk.ScrolledWindow):
                 return child
         return None
 
-    def add_subscription_request(self, jid, text, user_nick=None):
-        row = self._get_notification_row(jid)
+    def add_subscription_request(self, event):
+        row = self._get_notification_row(event.jid)
         if row is None:
             self._listbox.add(SubscriptionRequestRow(
-                self._account, jid, text, user_nick))
+                self._account, event.jid, event.status, event.user_nick))
         elif row.type == 'unsubscribed':
             self._listbox.remove(row)
 
-    def add_unsubscribed(self, jid):
-        row = self._get_notification_row(jid)
+    def add_unsubscribed(self, event):
+        row = self._get_notification_row(event.jid)
         if row is None:
-            self._listbox.add(UnsubscribedRow(self._account, jid))
+            self._listbox.add(UnsubscribedRow(self._account, event.jid))
         elif row.type == 'subscribe':
             self._listbox.remove(row)
+
+    def add_invitation_received(self, event):
+        row = self._get_notification_row(event.muc)
+        if row is None:
+            self._listbox.add(InvitationReceivedRow(self._account, event))
+
+    def add_invitation_declined(self, event):
+        row = self._get_notification_row(event.muc)
+        if row is None:
+            self._listbox.add(InvitationDeclinedRow(self._account, event))
 
 
 class NotificationRow(Gtk.ListBoxRow):
@@ -170,7 +181,7 @@ class NotificationRow(Gtk.ListBoxRow):
 
 
 class SubscriptionRequestRow(NotificationRow):
-    def __init__(self, account, jid, text, user_nick):
+    def __init__(self, account, jid, text, user_nick=None):
         NotificationRow.__init__(self, account, jid)
         self.type = 'subscribe'
 
@@ -254,6 +265,100 @@ class UnsubscribedRow(NotificationRow):
         dismiss_button.set_tooltip_text(_('Remove Notification'))
         dismiss_button.connect('clicked', self._on_dismiss)
         self.grid.attach(dismiss_button, 4, 1, 1, 2)
+
+        self.show_all()
+
+    def _on_dismiss(self, _button):
+        self.get_parent().remove(self)
+
+
+class InvitationReceivedRow(NotificationRow):
+    def __init__(self, account, event):
+        NotificationRow.__init__(self, account, event.muc)
+        self.type = 'invitation-received'
+
+        self._event = event
+
+        image = Gtk.Image.new_from_icon_name(
+            'system-users-symbolic', Gtk.IconSize.DND)
+        image.set_valign(Gtk.Align.CENTER)
+        self.grid.attach(image, 1, 1, 1, 2)
+
+        title_label = self._generate_label()
+        title_label.set_text(_('Group Chat Invitation Received'))
+        title_label.get_style_context().add_class('bold')
+        self.grid.attach(title_label, 2, 1, 1, 1)
+
+        contact = self._client.get_module('Contacts').get_contact(
+            event.from_.bare)
+        invitation_text = _('%(contact)s invited you to %(chat)s') % {
+            'contact': contact.name,
+            'chat': event.info.muc_name}
+        text_label = self._generate_label()
+        text_label.set_text(invitation_text)
+        text_label.set_tooltip_text(invitation_text)
+        text_label.get_style_context().add_class('dim-label')
+        self.grid.attach(text_label, 2, 2, 1, 1)
+
+        show_button = Gtk.Button.new_with_label(label=_('Show'))
+        show_button.set_valign(Gtk.Align.CENTER)
+        show_button.set_tooltip_text('Show Invitation')
+        show_button.connect('clicked', self._on_show_invitation)
+        self.grid.attach(show_button, 3, 1, 1, 2)
+
+        decline_button = Gtk.Button.new_with_label(label=_('Decline'))
+        decline_button.set_valign(Gtk.Align.CENTER)
+        decline_button.set_tooltip_text('Decline Invitation')
+        decline_button.connect('clicked', self._on_decline_invitation)
+        self.grid.attach(decline_button, 4, 1, 1, 2)
+
+        self.show_all()
+
+    def _on_show_invitation(self, _button):
+        open_window('GroupChatInvitation',
+                    account=self._account,
+                    event=self._event)
+        self.get_parent().remove(self)
+
+    def _on_decline_invitation(self, _button):
+        self._client.get_module('MUC').decline(
+            self.jid, self._event.from_.bare)
+        self.get_parent().remove(self)
+
+
+class InvitationDeclinedRow(NotificationRow):
+    def __init__(self, account, event):
+        NotificationRow.__init__(self, account, event.muc)
+        self.type = 'invitation-declined'
+
+        image = Gtk.Image.new_from_icon_name(
+            'system-users-symbolic', Gtk.IconSize.DND)
+        image.set_valign(Gtk.Align.CENTER)
+        self.grid.attach(image, 1, 1, 1, 2)
+
+        title_label = self._generate_label()
+        title_label.set_text(_('Group Chat Invitation Declined'))
+        title_label.get_style_context().add_class('bold')
+        self.grid.attach(title_label, 2, 1, 1, 1)
+
+        contact = self._client.get_module('Contacts').get_contact(
+            event.from_.bare)
+        invitation_text = _('%(contact)s declined your invitation '
+                            'to %(chat)s') % {
+                                'contact': contact.name,
+                                'chat': event.info.muc_name}
+        text_label = self._generate_label()
+        text_label.set_text(invitation_text)
+        text_label.set_tooltip_text(invitation_text)
+        text_label.get_style_context().add_class('dim-label')
+        self.grid.attach(text_label, 2, 2, 1, 1)
+
+        dismiss_button = Gtk.Button.new_from_icon_name(
+            'window-close-symbolic', Gtk.IconSize.BUTTON)
+        dismiss_button.set_valign(Gtk.Align.CENTER)
+        dismiss_button.set_tooltip_text(_('Remove Notification'))
+        dismiss_button.connect('clicked', self._on_dismiss)
+        self.grid.attach(dismiss_button, 3, 1, 1, 2)
 
         self.show_all()
 
