@@ -99,7 +99,7 @@ class NotificationManager(Gtk.ScrolledWindow):
         self._client.get_module('Presence').subscribed(jid)
         contact = self._client.get_module('Contacts').get_contact(jid)
         if not contact.is_in_roster:
-            AddNewContactWindow(self._account, jid, row.user_nick)
+            AddNewContactWindow(self._account, jid, contact.name)
         self._listbox.remove(row)
 
     def _on_subscription_block(self, _action, param):

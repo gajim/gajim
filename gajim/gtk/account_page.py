@@ -111,15 +111,23 @@ class AccountPage(Gtk.Box, EventHelper):
         self._status_selector.update()
 
     def _subscribe_received(self, event):
+        if event.account != self._account:
+            return
         self._notification_manager.add_subscription_request(event)
 
     def _unsubscribed_received(self, event):
+        if event.account != self._account:
+            return
         self._notification_manager.add_unsubscribed(event)
 
     def _muc_invitation_received(self, event):
+        if event.account != self._account:
+            return
         self._notification_manager.add_invitation_received(event)
 
     def _muc_invitation_declined(self, event):
+        if event.account != self._account:
+            return
         self._notification_manager.add_invitation_declined(event)
 
     def process_event(self, event):
