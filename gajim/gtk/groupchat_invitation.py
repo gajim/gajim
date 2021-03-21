@@ -35,6 +35,7 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         self.account = account
+        self._client = app.get_client(account)
         self._room_jid = str(event.muc)
         self._from = str(event.from_)
         self._password = event.password
@@ -45,16 +46,20 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
 
         muc_info_box = GroupChatInfoScrolled(account, {'minimal': True})
         muc_info_box.set_from_disco_info(event.info)
-
         main_box.add(muc_info_box)
 
         separator = Gtk.Separator()
-        contact_label = Gtk.Label(label=event.get_inviter_name())
+        main_box.add(separator)
+
+        contact = self._client.get_module('Contacts').get_contact(
+            event.from_.bare)
+        contact_label = Gtk.Label(label=contact.name)
         contact_label.get_style_context().add_class('bold16')
         contact_label.set_line_wrap(True)
         contact_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         contact_box.set_halign(Gtk.Align.CENTER)
         contact_box.add(contact_label)
+        main_box.add(contact_box)
 
         enabled_accounts = app.get_enabled_accounts_with_labels()
         if len(enabled_accounts) > 1:
@@ -69,9 +74,6 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
         invitation_label.set_justify(Gtk.Justification.CENTER)
         invitation_label.set_max_width_chars(50)
         invitation_label.set_line_wrap(True)
-
-        main_box.add(separator)
-        main_box.add(contact_box)
         main_box.add(invitation_label)
 
         decline_button = Gtk.Button.new_with_mnemonic(_('_Decline'))
@@ -115,13 +117,10 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
 
     def _on_join(self, _widget):
         nickname = self._nick_chooser.get_text()
-        app.interface.show_or_join_groupchat(self.account,
-                                             self._room_jid,
-                                             nick=nickname,
-                                             password=self._password)
+        app.interface.show_add_join_groupchat(
+            self.account, self._room_jid, nickname=nickname)
         self.destroy()
 
     def _on_decline(self, _widget):
-        app.connections[self.account].get_module('MUC').decline(
-            self._room_jid, self._from)
+        self._client.get_module('MUC').decline(self._room_jid, self._from)
         self.destroy()
