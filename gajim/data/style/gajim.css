@@ -166,6 +166,13 @@
 .roster treeview {
 	padding: 0 3px;
 }
+/* Notification listbox */
+.notification-listbox {
+    background: transparent;
+}
+.notification-listbox row {
+    padding: 6px;
+}
 
 /*Middle Grid*/
 .middle-grid > scrolledwindow { background: transparent; }

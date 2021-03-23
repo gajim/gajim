@@ -18,6 +18,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
 from gajim.gui_menu_builder import get_subscription_menu
@@ -32,10 +33,12 @@ class NotificationManager(Gtk.ScrolledWindow):
         self._account = account
         self._client = app.get_client(account)
 
-        self.set_size_request(400, 200)
+        self.set_vexpand(True)
 
         self._listbox = Gtk.ListBox()
         self._listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self._listbox.set_halign(Gtk.Align.CENTER)
+        self._listbox.get_style_context().add_class('notification-listbox')
         self._set_placeholder()
 
         self.add(self._listbox)
@@ -165,7 +168,6 @@ class NotificationRow(Gtk.ListBoxRow):
         self._account = account
         self._client = app.get_client(account)
         self.jid = jid
-        self.get_style_context().add_class('padding-6')
 
         self.grid = Gtk.Grid(column_spacing=12)
         self.add(self.grid)
@@ -179,15 +181,21 @@ class NotificationRow(Gtk.ListBoxRow):
         label.set_max_width_chars(30)
         return label
 
+    def _generate_avatar_image(self, jid):
+        contact = self._client.get_module('Contacts').get_contact(jid)
+        surface = contact.get_avatar(
+            AvatarSize.ROSTER, self.get_scale_factor(), add_show=False)
+        image = Gtk.Image.new_from_surface(surface)
+        image.set_valign(Gtk.Align.CENTER)
+        return image
+
 
 class SubscriptionRequestRow(NotificationRow):
     def __init__(self, account, jid, text, user_nick=None):
         NotificationRow.__init__(self, account, jid)
         self.type = 'subscribe'
 
-        image = Gtk.Image.new_from_icon_name(
-            'avatar-default-symbolic', Gtk.IconSize.DND)
-        image.set_valign(Gtk.Align.CENTER)
+        image = self._generate_avatar_image(jid)
         self.grid.attach(image, 1, 1, 1, 2)
 
         if user_nick is not None:
@@ -232,9 +240,7 @@ class UnsubscribedRow(NotificationRow):
         NotificationRow.__init__(self, account, jid)
         self.type = 'unsubscribed'
 
-        image = Gtk.Image.new_from_icon_name(
-            'avatar-default-symbolic', Gtk.IconSize.DND)
-        image.set_valign(Gtk.Align.CENTER)
+        image = self._generate_avatar_image(jid)
         self.grid.attach(image, 1, 1, 1, 2)
 
         contact = self._client.get_module('Contacts').get_contact(jid)
@@ -244,7 +250,7 @@ class UnsubscribedRow(NotificationRow):
         nick_label.set_markup(nick_markup)
         self.grid.attach(nick_label, 2, 1, 1, 1)
 
-        message_text = _('Stopped sharing their status')
+        message_text = _('Stopped sharing their status with you')
         text_label = self._generate_label()
         text_label.set_text(message_text)
         text_label.set_tooltip_text(message_text)
@@ -279,9 +285,7 @@ class InvitationReceivedRow(NotificationRow):
 
         self._event = event
 
-        image = Gtk.Image.new_from_icon_name(
-            'system-users-symbolic', Gtk.IconSize.DND)
-        image.set_valign(Gtk.Align.CENTER)
+        image = self._generate_avatar_image(event.from_)
         self.grid.attach(image, 1, 1, 1, 2)
 
         title_label = self._generate_label()
@@ -331,9 +335,7 @@ class InvitationDeclinedRow(NotificationRow):
         NotificationRow.__init__(self, account, event.muc)
         self.type = 'invitation-declined'
 
-        image = Gtk.Image.new_from_icon_name(
-            'system-users-symbolic', Gtk.IconSize.DND)
-        image.set_valign(Gtk.Align.CENTER)
+        image = self._generate_avatar_image(event.from_)
         self.grid.attach(image, 1, 1, 1, 2)
 
         title_label = self._generate_label()
