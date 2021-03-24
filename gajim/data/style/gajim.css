@@ -261,9 +261,7 @@
 	padding: 0px 18px 6px 18px;
 }
 
-/* VCardWindow */
-.VCard-GtkLinkButton { padding-left: 5px; border-left: none; }
-
+/*  Profile window */
 #NicknameEntry:disabled {
     font-size: 28px;
     font-weight: bold;
@@ -285,7 +283,6 @@
 #ProfileWindow actionbar button {
    margin-top: 12px;
 }
-
 .profile-scrolled {
     border: 1px solid @borders;
     border-radius: 4px;
