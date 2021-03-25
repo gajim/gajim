@@ -237,8 +237,8 @@ class Chatstate(BaseModule):
     def block_chatstates(self, contact: ContactT, block: bool) -> None:
         # Block sending chatstates to a contact
         # Used for example if we cycle through the MUC nick list, which
-        # produces a lot of text-changed signals from the textview. This
-        # Would lead to sending ACTIVE -> COMPOSING -> ACTIVE ...
+        # produces a lot of buffer 'changed' signals from the input textview.
+        # This would lead to sending ACTIVE -> COMPOSING -> ACTIVE ...
         if block:
             self._blocked.append(contact.jid)
         else:
