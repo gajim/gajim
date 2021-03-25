@@ -217,6 +217,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             'set_visible')
 
         self.msg_scrolledwindow = ScrolledWindow()
+        self.msg_scrolledwindow.get_style_context().add_class(
+            'message-input-border')
         self.msg_scrolledwindow.add(self.msg_textview)
 
         self.xml.hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
