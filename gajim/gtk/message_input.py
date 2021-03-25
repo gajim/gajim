@@ -92,6 +92,8 @@ class MessageInputTextView(Gtk.TextView):
         self.end_tags['strike'] = '</span>'
 
         self.connect_after('paste-clipboard', self._after_paste_clipboard)
+        self.connect('focus-in-event', self._on_focus_in)
+        self.connect('focus-out-event', self._on_focus_out)
         self.connect('destroy', self._on_destroy)
 
     def _on_destroy(self, *args):
@@ -104,6 +106,16 @@ class MessageInputTextView(Gtk.TextView):
             Gtk.DestDefaults.ALL,
             None,
             Gdk.DragAction.DEFAULT)
+
+    def _on_focus_in(self, _widget, _event):
+        scrolled = self.get_parent()
+        scrolled.get_style_context().add_class('message-input-focus')
+        return False
+
+    def _on_focus_out(self, _widget, _event):
+        scrolled = self.get_parent()
+        scrolled.get_style_context().remove_class('message-input-focus')
+        return False
 
     def insert_text(self, text):
         self.get_buffer().insert_at_cursor(text)

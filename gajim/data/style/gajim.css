@@ -30,6 +30,14 @@
 
 .chatcontrol-separator {margin-bottom: 5px;}
 
+.message-input-border {
+    border: 2px solid transparent;
+}
+.message-input-focus {
+    border: 2px solid @theme_selected_bg_color;
+    border-radius: 4px;
+}
+
 .link-button { min-height: 0px; }
 
 /* VCardWindow */
