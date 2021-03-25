@@ -20,14 +20,11 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
-from gi.repository import GObject
 from gi.repository import Pango
 
 from nbxmpp.modules.misc import build_xhtml_body
 
 from gajim.common import app
-from gajim.common.i18n import _
-from gajim.common.const import StyleAttr
 from gajim.common.regex import LINK_REGEX
 
 from .util import scroll_to_end
@@ -41,12 +38,7 @@ class MessageInputTextView(Gtk.TextView):
     Class for the message textview (where user writes new messages) for
     chat/groupchat windows
     """
-    __gsignals__ = {
-        'text-changed': (GObject.SignalFlags.RUN_LAST, None, (Gtk.TextBuffer,))
-    }
-
     UNDO_LIMIT = 20
-    PLACEHOLDER = _('Write a message…')
 
     def __init__(self):
         Gtk.TextView.__init__(self)
@@ -70,8 +62,6 @@ class MessageInputTextView(Gtk.TextView):
         # needed to know if we undid something
         self.undo_pressed = False
 
-        buffer_ = self.get_buffer()
-        buffer_.connect('changed', self._on_buffer_changed)
         self._last_text = ''
 
         self.begin_tags = {}
@@ -80,11 +70,7 @@ class MessageInputTextView(Gtk.TextView):
         self.fonts_tags = []
         self.other_tags = {}
 
-        color = app.css_config.get_value(
-            '.gajim-message-placeholder', StyleAttr.COLOR)
-        self.placeholder_tag = buffer_.create_tag('placeholder')
-        self.placeholder_tag.set_property('foreground', color)
-
+        buffer_ = self.get_buffer()
         self.other_tags['bold'] = buffer_.create_tag('bold')
         self.other_tags['bold'].set_property('weight', Pango.Weight.BOLD)
         self.begin_tags['bold'] = '<strong>'
@@ -105,11 +91,7 @@ class MessageInputTextView(Gtk.TextView):
         self.begin_tags['strike'] = strike
         self.end_tags['strike'] = '</span>'
 
-        self.connect('paste-clipboard', self._paste_clipboard)
         self.connect_after('paste-clipboard', self._after_paste_clipboard)
-        self.connect('focus-in-event', self._on_grab_focus)
-        self.connect('grab-focus', self._on_grab_focus)
-        self.connect('focus-out-event', self._on_focus_out)
         self.connect('destroy', self._on_destroy)
 
     def _on_destroy(self, *args):
@@ -122,16 +104,6 @@ class MessageInputTextView(Gtk.TextView):
             Gtk.DestDefaults.ALL,
             None,
             Gdk.DragAction.DEFAULT)
-
-    def _on_buffer_changed(self, *args):
-        text = self.get_text()
-        # Because of inserting and removing PLACEHOLDER text
-        # the signal becomes unreliable when determining if the user
-        # typed in new text. So we send our own signal depending on if
-        # there is real new text that is not the PLACEHOLDER
-        if text != self._last_text:
-            self.emit('text-changed', self.get_buffer())
-            self._last_text = text
 
     def insert_text(self, text):
         self.get_buffer().insert_at_cursor(text)
@@ -148,49 +120,18 @@ class MessageInputTextView(Gtk.TextView):
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         text = buf.get_text(start, end, True)
-        return text not in (self.PLACEHOLDER, '')
+        return text != ''
 
     def get_text(self):
-        # gets the text if its not PLACEHOLDER
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         text = self.get_buffer().get_text(start, end, True)
-        if text == self.PLACEHOLDER:
-            return ''
         return text
-
-    def is_placeholder(self):
-        buf = self.get_buffer()
-        start, end = buf.get_bounds()
-        text = buf.get_text(start, end, True)
-        return text == self.PLACEHOLDER
-
-    def remove_placeholder(self):
-        if self.is_placeholder():
-            self.get_buffer().set_text('')
-        self.toggle_speller(True)
-
-    def _on_grab_focus(self, *args):
-        self.remove_placeholder()
-
-    def _on_focus_out(self, *args):
-        buf = self.get_buffer()
-        start, end = buf.get_bounds()
-        text = buf.get_text(start, end, True)
-        if text == '':
-            buf.insert_with_tags(
-                start, self.PLACEHOLDER, self.placeholder_tag)
-            self.toggle_speller(False)
 
     def toggle_speller(self, activate):
         if app.is_installed('GSPELL') and app.settings.get('use_speller'):
             spell_view = Gspell.TextView.get_from_gtk_text_view(self)
             spell_view.set_inline_spell_checking(activate)
-
-    @staticmethod
-    def _paste_clipboard(textview):
-        if textview.is_placeholder():
-            textview.get_buffer().set_text('')
 
     @staticmethod
     def _after_paste_clipboard(textview):
@@ -429,7 +370,6 @@ class MessageInputTextView(Gtk.TextView):
         buffer_.insert(iter_, new_char)
 
     def insert_emoji(self, codepoint, pixbuf):
-        self.remove_placeholder()
         buffer_ = self.get_buffer()
         if buffer_.get_char_count():
             # buffer contains text

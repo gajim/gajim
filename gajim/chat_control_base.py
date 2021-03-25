@@ -203,8 +203,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                                   self._on_message_textview_key_press_event)
         self.msg_textview.connect('populate-popup',
                                   self.on_msg_textview_populate_popup)
-        self.msg_textview.connect('text-changed',
-                                  self._on_message_tv_buffer_changed)
+        self.msg_textview.get_buffer().connect(
+            'changed', self._on_message_tv_buffer_changed)
 
         # Send message button
         self.xml.send_message_button.set_action_name(
@@ -742,7 +742,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         menu.show_all()
 
     def insert_as_quote(self, text: str) -> None:
-        self.msg_textview.remove_placeholder()
         text = '> ' + text.replace('\n', '\n> ') + '\n'
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.insert_at_cursor(text)
@@ -1060,7 +1059,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             con.get_module('Chatstate').set_mouse_activity(
                 self.contact, self.msg_textview.has_text())
 
-    def _on_message_tv_buffer_changed(self, textview, textbuffer):
+    def _on_message_tv_buffer_changed(self, textbuffer):
         has_text = self.msg_textview.has_text()
         if self.parent_win is not None:
             self.parent_win.window.lookup_action(
@@ -1072,7 +1071,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         con = app.connections[self.account]
         con.get_module('Chatstate').set_keyboard_activity(self.contact)
-        if not textview.has_text():
+        if not has_text:
             con.get_module('Chatstate').set_chatstate_delayed(self.contact,
                                                               Chatstate.ACTIVE)
             return
@@ -1285,7 +1284,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                                           self._on_emoticon_button_clicked)
 
     def _on_emoticon_button_clicked(self, _widget):
-        self.msg_textview.remove_placeholder()
         # Present GTK emoji chooser (not cross platform compatible)
         self.msg_textview.emit('insert-emoji')
         self.xml.emoticons_button.set_property('active', False)

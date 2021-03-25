@@ -41,9 +41,6 @@
 .gajim-state-paused {
     color: rgb(20, 210, 160);
 }
-.gajim-message-placeholder {
-    color: rgb(195, 195, 195);
-}
 .gajim-msg-correcting text {
     background: rgb(100, 100, 50);
 }
