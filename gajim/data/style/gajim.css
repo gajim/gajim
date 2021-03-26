@@ -31,7 +31,8 @@
 .chatcontrol-separator {margin-bottom: 5px;}
 
 .message-input-border {
-    border: 2px solid transparent;
+    border: 2px solid @theme_unfocused_bg_color;
+    border-radius: 4px;
 }
 .message-input-focus {
     border: 2px solid @theme_selected_bg_color;

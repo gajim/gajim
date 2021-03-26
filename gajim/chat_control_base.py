@@ -217,6 +217,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             'set_visible')
 
         self.msg_scrolledwindow = ScrolledWindow()
+        self.msg_scrolledwindow.set_margin_start(3)
+        self.msg_scrolledwindow.set_margin_end(3)
         self.msg_scrolledwindow.get_style_context().add_class(
             'message-input-border')
         self.msg_scrolledwindow.add(self.msg_textview)
