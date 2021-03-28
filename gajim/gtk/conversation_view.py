@@ -556,16 +556,12 @@ class ConversationRow(Gtk.ListBoxRow):
         label.set_selectable(True)
         label.get_style_context().add_class('conversation-nickname')
 
-        # TODO: Maybe set default for 'after_nickname' to empty string
-        before_name = from_one_line(app.settings.get('before_nickname'))
-        after_name = from_one_line(app.settings.get('after_nickname'))
-        new_name = f'{before_name}{GLib.markup_escape_text(name)}{after_name}'
-
+        name = GLib.markup_escape_text(name)
         if is_groupchat:
             rgba = Gdk.RGBA(*text_to_color(name))
             nick_color = convert_rgba_to_hex(rgba)
             label.set_markup(
-                f'<span foreground="{nick_color}">{new_name}</span>')
+                f'<span foreground="{nick_color}">{name}</span>')
         else:
             if kind in ('incoming', 'incoming_queue'):
                 label.get_style_context().add_class(
@@ -573,7 +569,7 @@ class ConversationRow(Gtk.ListBoxRow):
             elif kind == 'outgoing':
                 label.get_style_context().add_class(
                     'gajim-outgoing-nickname')
-            label.set_markup(new_name)
+            label.set_markup(name)
         return label
 
 
