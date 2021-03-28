@@ -190,6 +190,7 @@ APP_SETTINGS = {
     'show_send_message_button': False,
     'workspace_order': [],
     'chat_handle_position': 350,
+    'chat_timestamp_format': '%H:%M',
 }
 
 ACCOUNT_SETTINGS = {
@@ -414,6 +415,7 @@ ADVANCED_SETTINGS = {
         'save-roster-position': _('If enabled, Gajim will save the contact list window position when hiding it, and restore it when showing the contact list window again.'),
         'roster_on_the_right': _('Place the contact list on the right in single window mode'),
         'time_stamp': _('This option lets you customize the timestamp that is printed in conversation. For example \'[%H:%M] \' will show \'[hour:minute] \'. See python doc on strftime for full documentation (https://docs.python.org/3/library/time.html#time.strftime).'),
+        'chat_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',
         'before_nickname': _('Characters that are printed before the nickname in conversations.'),
         'after_nickname': _('Characters that are printed after the nickname in conversations.'),
         'change_roster_title': _('If enabled, Gajim will add * and [n] in contact list window title.'),

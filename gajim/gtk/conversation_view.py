@@ -540,14 +540,13 @@ class ConversationRow(Gtk.ListBoxRow):
 
     @staticmethod
     def create_timestamp_widget(timestamp: datetime) -> Gtk.Label:
-        # TODO: maybe change default to '%H:%M'
-        time_format = from_one_line(app.settings.get('time_stamp'))
+        time_format = from_one_line(app.settings.get('chat_timestamp_format'))
         timestamp_formatted = timestamp.strftime(time_format)
         label = Gtk.Label(label=timestamp_formatted)
         label.set_halign(Gtk.Align.START)
         label.set_valign(Gtk.Align.END)
         label.get_style_context().add_class('conversation-meta')
-        label.set_tooltip_text(timestamp.strftime('%a, %d %b %Y - %H:%M:%S'))
+        label.set_tooltip_text(timestamp.strftime('%a, %d %b %Y - %X'))
         return label
 
     @staticmethod
