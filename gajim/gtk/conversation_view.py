@@ -41,7 +41,7 @@ from .util import convert_rgba_to_hex
 from .util import format_fingerprint
 from .util import scroll_to_end
 from .util import text_to_color
-from .util import get_cursor
+from .util import wrap_with_event_box
 
 log = logging.getLogger('gajim.gui.conversation_view')
 
@@ -928,11 +928,10 @@ class MessageIcons(Gtk.Box):
         self._error_image.set_tooltip_markup(text)
 
 
+@wrap_with_event_box
 class MoreMenuButton(Gtk.MenuButton):
     def __init__(self, row):
         Gtk.MenuButton.__init__(self)
-
-        self.connect_after('realize', self._on_realize)
 
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)
@@ -970,6 +969,3 @@ class MoreMenuButton(Gtk.MenuButton):
         popover = Gtk.PopoverMenu()
         popover.add(menu_box)
         self.set_popover(popover)
-
-    def _on_realize(self, *args):
-        self.get_window().set_cursor(get_cursor('pointer'))

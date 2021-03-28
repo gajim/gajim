@@ -881,3 +881,18 @@ def _connect_destroy(sender, func, detailed_signal, handler, *args, **kwargs):
 
 def connect_destroy(sender, *args, **kwargs):
     return _connect_destroy(sender, sender.connect, *args, **kwargs)
+
+
+def wrap_with_event_box(klass):
+    @wraps(klass)
+    def klass_wrapper(*args, **kwargs):
+        widget = klass(*args, **kwargs)
+        event_box = Gtk.EventBox()
+
+        def _on_realize(*args):
+            event_box.get_window().set_cursor(get_cursor('pointer'))
+
+        event_box.connect_after('realize', _on_realize)
+        event_box.add(widget)
+        return event_box
+    return klass_wrapper
