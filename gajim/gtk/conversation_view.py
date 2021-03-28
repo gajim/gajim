@@ -41,6 +41,7 @@ from .util import convert_rgba_to_hex
 from .util import format_fingerprint
 from .util import scroll_to_end
 from .util import text_to_color
+from .util import get_cursor
 
 log = logging.getLogger('gajim.gui.conversation_view')
 
@@ -707,7 +708,6 @@ class TextMessageRow(ConversationRow):
         self._corrections = []
         self._has_receipt = marker == 'received'
         self._has_displayed = marker == 'displayed'
-        self._button_icon = None
 
         if is_groupchat:
             if other_text_tags and 'marked' in other_text_tags:
@@ -767,51 +767,11 @@ class TextMessageRow(ConversationRow):
 
         bottom_box = Gtk.Box(spacing=6)
         bottom_box.add(self.textview)
-        bottom_box.add(self._create_more_button())
+        bottom_box.add(MoreMenuButton(self))
 
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(bottom_box, 1, 1, 1, 1)
-
-    def _create_more_button(self):
-        more_button = Gtk.MenuButton()
-        more_button.connect(
-            'enter-notify-event', self._on_more_button_enter)
-        more_button.connect(
-            'leave-notify-event', self._on_more_button_leave)
-        more_button.set_valign(Gtk.Align.START)
-        more_button.set_halign(Gtk.Align.END)
-        self._button_icon = Gtk.Image.new_from_icon_name(
-            'view-more-symbolic', Gtk.IconSize.BUTTON)
-        self._button_icon.set_no_show_all(True)
-        more_button.add(self._button_icon)
-        more_button.set_relief(Gtk.ReliefStyle.NONE)
-
-        menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        menu_box.get_style_context().add_class('padding-6')
-
-        quote_button = Gtk.ModelButton()
-        quote_button.set_halign(Gtk.Align.START)
-        quote_button.connect('clicked', self._on_quote_message)
-        quote_button.set_label(_('Quote…'))
-        quote_button.set_image(Gtk.Image.new_from_icon_name(
-            'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
-        menu_box.add(quote_button)
-
-        copy_button = Gtk.ModelButton()
-        copy_button.set_halign(Gtk.Align.START)
-        copy_button.connect('clicked', self._on_copy_message)
-        copy_button.set_label(_('Copy'))
-        copy_button.set_image(Gtk.Image.new_from_icon_name(
-            'edit-copy-symbolic', Gtk.IconSize.MENU))
-        menu_box.add(copy_button)
-
-        menu_box.show_all()
-
-        popover = Gtk.PopoverMenu()
-        popover.add(menu_box)
-        more_button.set_popover(popover)
-        return more_button
 
     def _on_copy_message(self, _widget):
         timestamp = self.timestamp.strftime('%x, %X')
@@ -821,13 +781,6 @@ class TextMessageRow(ConversationRow):
 
     def _on_quote_message(self, _widget):
         self.get_parent().on_quote(self.textview.get_text())
-
-    def _on_more_button_enter(self, _widget, _event):
-        self._button_icon.show()
-
-    def _on_more_button_leave(self, widget, _event):
-        if not widget.get_active():
-            self._button_icon.hide()
 
     def _get_encryption_image(self, additional_data, encryption_enabled=None):
         details = self._get_encryption_details(additional_data)
@@ -971,3 +924,50 @@ class MessageIcons(Gtk.Box):
 
     def set_error_tooltip(self, text):
         self._error_image.set_tooltip_markup(text)
+
+
+class MoreMenuButton(Gtk.MenuButton):
+    def __init__(self, row):
+        Gtk.MenuButton.__init__(self)
+
+        self.connect_after('realize', self._on_realize)
+
+        self.set_valign(Gtk.Align.START)
+        self.set_halign(Gtk.Align.END)
+        self.set_relief(Gtk.ReliefStyle.NONE)
+        image = Gtk.Image.new_from_icon_name(
+            'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
+        self.add(image)
+
+        self._create_popover(row)
+
+        self.get_style_context().add_class('conversation-more-button')
+
+    def _create_popover(self, row):
+        menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        menu_box.get_style_context().add_class('padding-6')
+
+        quote_button = Gtk.ModelButton()
+        quote_button.set_halign(Gtk.Align.START)
+        quote_button.connect('clicked', row._on_quote_message)
+        quote_button.set_label(_('Quote…'))
+        quote_button.set_image(Gtk.Image.new_from_icon_name(
+            'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
+        menu_box.add(quote_button)
+
+        copy_button = Gtk.ModelButton()
+        copy_button.set_halign(Gtk.Align.START)
+        copy_button.connect('clicked', row._on_copy_message)
+        copy_button.set_label(_('Copy'))
+        copy_button.set_image(Gtk.Image.new_from_icon_name(
+            'edit-copy-symbolic', Gtk.IconSize.MENU))
+        menu_box.add(copy_button)
+
+        menu_box.show_all()
+
+        popover = Gtk.PopoverMenu()
+        popover.add(menu_box)
+        self.set_popover(popover)
+
+    def _on_realize(self, *args):
+        self.get_window().set_cursor(get_cursor('pointer'))
