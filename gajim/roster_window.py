@@ -67,7 +67,6 @@ from gajim.gui.dialogs import ConfirmationCheckDialog
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.dialogs import InputDialog
 from gajim.gui.dialogs import InformationDialog
-from gajim.gui.single_message import SingleMessageWindow
 from gajim.gui.add_contact import AddNewContactWindow
 from gajim.gui.service_registration import ServiceRegistration
 from gajim.gui.discovery import ServiceDiscoveryWindow
@@ -1877,9 +1876,10 @@ class RosterWindow:
         ft = app.interface.instances['file_transfers']
         event = app.events.get_first_event(account, jid, event.type_)
         if event.type_ == 'normal':
-            SingleMessageWindow(account, jid,
-                action='receive', from_whom=jid, subject=event.subject,
-                message=event.message, resource=event.resource)
+            # TODO: Should be displayed as normal chat message
+            # SingleMessageWindow(account, jid,
+            #    action='receive', from_whom=jid, subject=event.subject,
+            #    message=event.message, resource=event.resource)
             app.events.remove_events(account, jid, event)
             return True
 
@@ -2670,17 +2670,17 @@ class RosterWindow:
             ctrl.leave()
         self.remove_groupchat(jid, account)
 
-    def on_send_single_message_menuitem_activate(self, widget, account,
+    def on_send_single_message_menuitem_activate(self, _widget, account,
     contact=None):
         if contact is None:
-            SingleMessageWindow(account, action='send')
+            open_window('SingleMessageWindow', account=account)
         elif isinstance(contact, list):
-            SingleMessageWindow(account, contact, 'send')
+            open_window('SingleMessageWindow', account=account,
+                        recipients=contact)
         else:
             jid = contact.jid
-            if contact.jid == app.get_jid_from_account(account):
-                jid += '/' + contact.resource
-            SingleMessageWindow(account, jid, 'send')
+            open_window('SingleMessageWindow', account=account,
+                        recipients=jid)
 
     def on_send_file_menuitem_activate(self, widget, contact, account,
     resource=None):

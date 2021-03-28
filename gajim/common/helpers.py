@@ -442,27 +442,18 @@ def get_account_status(account):
     status = reduce_chars_newlines(account['status_line'], 100, 1)
     return status
 
+
 def get_contact_dict_for_account(account):
     """
-    Create a dict of jid, nick -> contact with all contacts of account.
-
+    Creates a dict of jid -> contact with all contacts of account
     Can be used for completion lists
     """
     contacts_dict = {}
-    for jid in app.contacts.get_jid_list(account):
-        contact = app.contacts.get_contact_with_highest_priority(account, jid)
-        contacts_dict[jid] = contact
-        name = contact.name
-        if name in contacts_dict:
-            contact1 = contacts_dict[name]
-            del contacts_dict[name]
-            contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
-            contacts_dict['%s (%s)' % (name, jid)] = contact
-        elif contact.name:
-            if contact.name == app.get_nick_from_jid(jid):
-                del contacts_dict[jid]
-            contacts_dict[name] = contact
+    client = app.get_client(account)
+    for contact in client.get_module('Roster').iter_contacts():
+        contacts_dict[str(contact.jid)] = contact
     return contacts_dict
+
 
 def play_sound(event):
     if not app.settings.get('sounds_on'):

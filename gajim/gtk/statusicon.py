@@ -33,7 +33,6 @@ from .util import get_builder
 from .util import get_icon_name
 from .util import restore_roster_position
 from .util import open_window
-from .single_message import SingleMessageWindow
 
 
 class StatusIcon:
@@ -150,7 +149,7 @@ class StatusIcon:
 
     @staticmethod
     def _on_single_message(_widget, account):
-        SingleMessageWindow(account, action='send')
+        open_window('SingleMessageWindow', account=account)
 
     @staticmethod
     def _on_new_chat(_widget):

@@ -1,145 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">mail-reply-sender-symbolic</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">mail-send-symbolic</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">mail-send-symbolic</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">user-info-symbolic</property>
-  </object>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkBox" id="box">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">18</property>
+    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
     <child>
-      <object class="GtkGrid" id="send_grid">
+      <!-- n-columns=2 n-rows=4 -->
+      <object class="GtkGrid" id="message_grid">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">12</property>
+        <property name="can-focus">False</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
         <child>
-          <object class="GtkLabel" id="to_label">
+          <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes">_To</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">to_entry</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">recipients_entry</property>
             <style>
               <class name="dim-label"/>
             </style>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="to_entry">
+          <object class="GtkEntry" id="recipients_entry">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
-            <property name="placeholder_text" translatable="yes">user@example.org</property>
+            <property name="placeholder-text" translatable="yes">user@example.org</property>
+            <signal name="changed" handler="_on_changed" swapped="no"/>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="subject_label">
+          <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes">Su_bject</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">subject_entry</property>
-            <property name="single_line_mode">True</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">subject_entry</property>
+            <property name="single-line-mode">True</property>
             <style>
               <class name="dim-label"/>
             </style>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkEntry" id="subject_entry">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="placeholder_text" translatable="yes">Type the subject here...</property>
-            <property name="show_emoji_icon">True</property>
+            <property name="can-focus">True</property>
+            <property name="placeholder-text" translatable="yes">Type the subject here...</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-            <property name="width">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="message_label_send">
+          <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes">_Message</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">message_textview</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">message_textview</property>
             <style>
               <class name="dim-label"/>
             </style>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow" id="message_scrolledwindow">
-            <property name="height_request">100</property>
+            <property name="height-request">100</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="vexpand">True</property>
-            <property name="shadow_type">in</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTextView" id="message_textview">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="wrap_mode">word-char</property>
-                <property name="left_margin">6</property>
-                <property name="right_margin">6</property>
-                <property name="top_margin">6</property>
-                <property name="bottom_margin">6</property>
+                <property name="can-focus">True</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="left-margin">6</property>
+                <property name="right-margin">6</property>
+                <property name="top-margin">6</property>
+                <property name="bottom-margin">6</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
-            <property name="width">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="count_chars_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes">Characters typed: 0</property>
             <style>
@@ -147,24 +125,9 @@
             </style>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-            <property name="width">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="show_contact_info_button">
-            <property name="visible">True</property>
-            <property name="sensitive">False</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Query Contact Info</property>
-            <property name="image">image4</property>
-            <signal name="clicked" handler="_on_contact_info_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
+            <property name="width">2</property>
           </packing>
         </child>
       </object>
@@ -175,205 +138,29 @@
       </packing>
     </child>
     <child>
-      <object class="GtkGrid" id="received_grid">
+      <object class="GtkButton" id="send_button">
+        <property name="label" translatable="yes">_Send</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">12</property>
-        <child>
-          <object class="GtkLabel" id="from_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">_From</property>
-            <property name="use_underline">True</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="subject_from_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Subject</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="from_entry_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label">&lt;user@example.org&gt;</property>
-            <property name="xalign">0</property>
-            <style>
-              <class name="bold"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="subject_from_entry_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label">&lt;from Subject&gt;</property>
-            <property name="wrap">True</property>
-            <property name="max_width_chars">50</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="conversation_scrolledwindow">
-            <property name="height_request">100</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="message_label_received">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Message</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButtonBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_top">12</property>
-        <property name="spacing">12</property>
-        <property name="layout_style">end</property>
-        <child>
-          <object class="GtkButton" id="close_button">
-            <property name="label">_Close</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="receives_default">False</property>
-            <property name="no_show_all">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_close_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="send_button">
-            <property name="label" translatable="yes">Sen_d</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="receives_default">False</property>
-            <property name="no_show_all">True</property>
-            <property name="tooltip_text" translatable="yes">Send message</property>
-            <property name="image">image2</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_send_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="reply_button">
-            <property name="label" translatable="yes">_Reply</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="receives_default">False</property>
-            <property name="no_show_all">True</property>
-            <property name="tooltip_text" translatable="yes">Reply to this message</property>
-            <property name="image">image1</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_reply_clicked" swapped="no"/>
-            <style>
-              <class name="suggested-action"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="send_and_close_button">
-            <property name="label" translatable="yes">_Send &amp; Close</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="receives_default">False</property>
-            <property name="no_show_all">True</property>
-            <property name="tooltip_text" translatable="yes">Send message and close window</property>
-            <property name="image">image3</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_send_and_close_clicked" swapped="no"/>
-            <style>
-              <class name="suggested-action"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
+        <property name="sensitive">False</property>
+        <property name="can-focus">True</property>
+        <property name="can-default">True</property>
+        <property name="receives-default">False</property>
+        <property name="tooltip-text" translatable="yes">Send message and close window</property>
+        <property name="halign">end</property>
+        <property name="use-underline">True</property>
+        <signal name="clicked" handler="_on_send_clicked" swapped="no"/>
+        <style>
+          <class name="suggested-action"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="padding">6</property>
-        <property name="position">4</property>
+        <property name="position">1</property>
       </packing>
     </child>
+    <style>
+      <class name="padding-18"/>
+    </style>
   </object>
 </interface>

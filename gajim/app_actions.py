@@ -24,7 +24,6 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
 
 from gajim.gui.dialogs import ShortcutsWindow
-from gajim.gui.single_message import SingleMessageWindow
 from gajim.gui.about import AboutDialog
 from gajim.gui.history import HistoryWindow
 from gajim.gui.discovery import ServiceDiscoveryWindow
@@ -88,7 +87,7 @@ def on_send_server_message(_action, param):
     account = param.get_string()
     server = app.settings.get_account_setting(account, 'hostname')
     server += '/announce/online'
-    SingleMessageWindow(account, server, 'send')
+    open_window('SingleMessageWindow', account=account, recipients=server)
 
 
 def on_service_disco(_action, param):
@@ -118,7 +117,7 @@ def on_add_contact(_action, param):
 
 def on_single_message(_action, param):
     account = param.get_string()
-    open_window('SingleMessageWindow', account=account, action='send')
+    open_window('SingleMessageWindow', account=account)
 
 
 def on_merge_accounts(action, param):
@@ -190,14 +189,14 @@ def on_set_motd(_action, param):
     account = param.get_string()
     server = app.settings.get_account_setting(account, 'hostname')
     server += '/announce/motd'
-    SingleMessageWindow(account, server, 'send')
+    open_window('SingleMessageWindow', account=account, recipients=server)
 
 
 def on_update_motd(_action, param):
     account = param.get_string()
     server = app.settings.get_account_setting(account, 'hostname')
     server += '/announce/motd/update'
-    SingleMessageWindow(account, server, 'send')
+    open_window('SingleMessageWindow', account=account, recipients=server)
 
 
 def on_delete_motd(_action, param):
