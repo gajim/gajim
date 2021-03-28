@@ -49,7 +49,7 @@ from gajim.common.structs import OutgoingMessage
 
 from gajim import gtkgui_helpers
 
-from gajim.gui.conversation_view import ConversationView
+from gajim.gui.conversation.view import ConversationView
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import PastePreviewDialog

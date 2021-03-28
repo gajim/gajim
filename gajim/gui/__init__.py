@@ -40,22 +40,36 @@ class GUIFinder(MetaPathFinder):
         return spec
 
     def _find_module(self, module_name: str) -> Optional[Path]:
-        module_path = self._path / f'{module_name}.py'
+        base_path = Path(self._path)
+
+        fallback_base_path = None
+        if self._fallback_path is not None:
+            fallback_base_path = Path(self._fallback_path)
+
+        module_path = base_path / module_name
+        if module_path.is_dir():
+            base_path = module_path
+            if fallback_base_path is not None:
+                fallback_base_path = fallback_base_path / module_name
+
+            module_name = '__init__'
+
+        module_path = base_path / f'{module_name}.py'
         if module_path.exists():
             return module_path
 
-        module_path = self._path / f'{module_name}.pyc'
+        module_path = base_path / f'{module_name}.pyc'
         if module_path.exists():
             return module_path
 
-        if self._fallback_path is None:
+        if fallback_base_path is None:
             return None
 
-        module_path = self._fallback_path / f'{module_name}.py'
+        module_path = fallback_base_path / f'{module_name}.py'
         if module_path.exists():
             return module_path
 
-        module_path = self._fallback_path / f'{module_name}.pyc'
+        module_path = fallback_base_path / f'{module_name}.pyc'
         if module_path.exists():
             return module_path
 

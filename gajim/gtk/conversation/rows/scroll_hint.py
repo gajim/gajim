@@ -1,0 +1,45 @@
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+from datetime import datetime
+
+from gi.repository import Gtk
+
+from gajim.common.i18n import _
+
+from .base import BaseRow
+
+
+class ScrollHintRow(BaseRow):
+    def __init__(self, account):
+        BaseRow.__init__(self, account)
+        self.type = 'system'
+        self.timestamp = datetime.fromtimestamp(0)
+        self.get_style_context().add_class('conversation-system-row')
+
+        self._button = Gtk.Button.new_from_icon_name(
+            'go-up-symbolic', Gtk.IconSize.BUTTON)
+        self._button.set_tooltip_text(_('Load more messages'))
+        self._button.connect('clicked', self._on_load_history)
+        self.grid.attach(self._button, 0, 0, 1, 1)
+
+        self.label.set_text(_('Scroll up to load more chat history…'))
+        self.label.set_halign(Gtk.Align.CENTER)
+        self.label.set_hexpand(True)
+        self.label.get_style_context().add_class(
+            'conversation-meta')
+        self.grid.attach(self.label, 0, 1, 1, 1)
+
+    def _on_load_history(self, _button):
+        self.get_parent().emit('load-history', 30)
