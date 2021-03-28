@@ -15,6 +15,7 @@
 import logging
 from urllib.parse import quote
 
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -209,6 +210,11 @@ class ConversationTextview(HtmlTextView):
 
         self.parse_formatting(
             text, text_tags, graphics=graphics, additional_data=additional_data)
+
+        # Queue a widget resize after the Textview has been populated.
+        # This prevents for example large allocations of vertial space (blank
+        # space after the text) for messages containing many line breaks.
+        GLib.idle_add(self.queue_resize)
 
     def parse_formatting(self, text, text_tags, graphics=True,
                          additional_data=None):
