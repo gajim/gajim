@@ -45,8 +45,11 @@
 }
 
 .conversation-row {
-    padding: 2px 3px 3px 6px;
+    padding: 10px 3px 4px 6px;
 }
+
+.merged { padding-top: 1px;}
+
 .conversation-row grid textview {
 	background: transparent;
 }

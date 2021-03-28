@@ -871,11 +871,13 @@ class TextMessageRow(ConversationRow):
 
     def set_merged(self, merged):
         if merged:
+            self.get_style_context().add_class('merged')
             self._avatar_surface.set_no_show_all(True)
             self._avatar_surface.hide()
             self._meta_box.set_no_show_all(True)
             self._meta_box.hide()
         else:
+            self.get_style_context().remove_class('merged')
             self._avatar_surface.set_no_show_all(False)
             self._avatar_surface.show()
             self._meta_box.set_no_show_all(False)
