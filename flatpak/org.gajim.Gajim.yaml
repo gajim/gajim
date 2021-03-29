@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
-runtime-version: '3.38'
+runtime-version: '40'
 sdk: org.gnome.Sdk
 command: gajim-devel
 tags:
@@ -86,8 +86,8 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/66/6a/98e023b3d11537a5521902ac6b50db470c826c682be6a8c661549cb7717a/cffi-1.14.4.tar.gz
-        sha256: 1a465cbe98a7fd391d47dce4b8f7e5b921e6cd805ef421d04f5f66ba8f06086c
+        url: https://files.pythonhosted.org/packages/a8/20/025f59f929bbcaa579704f443a438135918484fffaacfaddba776b374563/cffi-1.14.5.tar.gz
+        sha256: fd78e5fee591709f32ef6edb9a015b4aa1a5022598e36227500c8f4e02328d9c
 
   - name: python3-asn1crypto
     buildsystem: simple
@@ -101,11 +101,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app idna-2.10-py2.py3-none-any.whl
+      - pip3 install --prefix=/app idna-3.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/a2/38/928ddce2273eaa564f6f50de919327bf3a00f091b5baba8dfa9460f3a8a8/idna-2.10-py2.py3-none-any.whl
-        sha256: b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0
+        url: https://files.pythonhosted.org/packages/29/88/c52aae187d3b128a0f13f36a6c987fc0d408d03a678ad9996516925d8495/idna-3.1-py3-none-any.whl
+        sha256: 5205d03e7bcbb919cc9c19885f9920d622ca52448306f2377daede5cf3faac16
 
   - name: python3-cryptography
     buildsystem: simple
@@ -113,8 +113,8 @@ modules:
       - python3 setup.py install --prefix=/app
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/b7/82/f7a4ddc1af185936c1e4fa000942ffa8fb2d98cff26b75afa7b3c63391c4/cryptography-3.3.1.tar.gz
-        sha256: 7e177e4bea2de937a584b13645cab32f25e3d96fc0bc4a4cf99c27dc77682be6
+        url: https://files.pythonhosted.org/packages/d4/85/38715448253404186029c575d559879912eb8a1c5d16ad9f25d35f7c4f4c/cryptography-3.3.2.tar.gz
+        sha256: 5a60d3780149e13b7a6ff7ad6526b38846354d11a15e21068e57073e29e19bed
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -146,31 +146,43 @@ modules:
   - name: python3-secretstorage
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app SecretStorage-3.3.0-py3-none-any.whl
+      - pip3 install --prefix=/app SecretStorage-3.3.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/63/a2/a6d9099b14eb5dbbb04fb722d2b5322688f8f99b471bdf2097e33efa8091/SecretStorage-3.3.0-py3-none-any.whl
-        sha256: 5c36f6537a523ec5f969ef9fad61c98eb9e017bc601d811e53aa25bece64892f
+        url: https://files.pythonhosted.org/packages/d9/1e/29cd69fdac7391aa51510dfd42aa70b4e6a826c8cd019ee2a8ab9ec0777f/SecretStorage-3.3.1-py3-none-any.whl
+        sha256: 422d82c36172d88d6a0ed5afdec956514b189ddbfb72fefab0c8a1cee4eaf71f
 
   - name: python3-zipp
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app zipp-3.4.0-py3-none-any.whl
+      - pip3 install --prefix=/app zipp-3.4.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/41/ad/6a4f1a124b325618a7fb758b885b68ff7b058eec47d9220a12ab38d90b1f/zipp-3.4.0-py3-none-any.whl
-        sha256: 102c24ef8f171fd729d46599845e95c7ab894a4cf45f5de11a44cc7444fb1108
+        url: https://files.pythonhosted.org/packages/0f/8c/715c54e9e34c0c4820f616a913a7de3337d0cd79074dd1bed4dd840f16ae/zipp-3.4.1-py3-none-any.whl
+        sha256: 51cb66cc54621609dd593d1787f286ee42a5c0adbb4b29abea5a63edc3e03098
 
-  - name: python3-keyring
+  # keyring dependency
+  - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-22.0.1-py3-none-any.whl
+      - pip3 install --prefix=/app importlib_metadata-3.9.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/96/17/86e1e5b50dc14e5984a661dde2ed3b7f05efe1fdee32145a77708cf06904/keyring-22.0.1-py3-none-any.whl
-        sha256: 9f44660a5d4931bdc14c08a1d01ef30b18a7a8147380710d8c9f9531e1f6c3c0
+        url: https://files.pythonhosted.org/packages/d9/10/191b97506cd4cceb4b860fb5c75b26feeefbca5a8f7f4687bca71e215cc6/importlib_metadata-3.9.0-py3-none-any.whl
+        sha256: 6fd684b4c6c7bb36d57e93d57fc244b5ffc08faa1c298bcda3dfbbbf19d7550a
+
+  - name: python3-keyring
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=/app keyring-23.0.1-py3-none-any.whl
+    cleanup:
+      - /bin
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/26/f9/41230ac47f738f1ba66676dc8d3b30ca5b1f9eb0230fc204bcd9836c4ae9/keyring-23.0.1-py3-none-any.whl
+        sha256: 8f607d7d1cc502c43a932a275a56fe47db50271904513a379d39df1af277ac48
 
   - name: python3-css-parser
     buildsystem: simple
@@ -184,11 +196,11 @@ modules:
   - name: python3-precis_i18n
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app precis_i18n-1.0.2-py3-none-any.whl
+      - pip3 install --prefix=/app precis_i18n-1.0.3-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/13/f5/3a7485a32dd4422a2a78de744bea4a00126b6001416c677b99c1a6e50e28/precis_i18n-1.0.2-py3-none-any.whl
-        sha256: c7d5a1f5667a6e7cb85db0a5a4ec8e1090eaeb6e189e8131a5ee238492d60445
+        url: https://files.pythonhosted.org/packages/c1/28/0df691ebe7e28a68b839887ce81be07d30cf165b6013c10009184284a303/precis_i18n-1.0.3-py3-none-any.whl
+        sha256: b9a4ff1f2f8c4a762393cb1b80bf4cadfbe861ec299f752068cc42f281322d45
 
   # GSound dependency
   - name: libcanberra
