@@ -37,6 +37,7 @@ class BaseRow(Gtk.ListBoxRow):
         self.kind = None
         self.name = None
         self.message_id = None
+        self.log_line_id = None
         self.text = ''
 
         self.get_style_context().add_class('conversation-row')
@@ -98,8 +99,9 @@ class BaseRow(Gtk.ListBoxRow):
 
 @wrap_with_event_box
 class MoreMenuButton(Gtk.MenuButton):
-    def __init__(self, row):
+    def __init__(self, row, history_mode=False):
         Gtk.MenuButton.__init__(self)
+        self._history_mode = history_mode
 
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)
@@ -116,17 +118,18 @@ class MoreMenuButton(Gtk.MenuButton):
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         menu_box.get_style_context().add_class('padding-6')
 
-        quote_button = Gtk.ModelButton()
-        quote_button.set_halign(Gtk.Align.START)
-        quote_button.connect('clicked', row._on_quote_message)
-        quote_button.set_label(_('Quote…'))
-        quote_button.set_image(Gtk.Image.new_from_icon_name(
-            'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
-        menu_box.add(quote_button)
+        if not self._history_mode:
+            quote_button = Gtk.ModelButton()
+            quote_button.set_halign(Gtk.Align.START)
+            quote_button.connect('clicked', row.on_quote_message)
+            quote_button.set_label(_('Quote…'))
+            quote_button.set_image(Gtk.Image.new_from_icon_name(
+                'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
+            menu_box.add(quote_button)
 
         copy_button = Gtk.ModelButton()
         copy_button.set_halign(Gtk.Align.START)
-        copy_button.connect('clicked', row._on_copy_message)
+        copy_button.connect('clicked', row.on_copy_message)
         copy_button.set_label(_('Copy'))
         copy_button.set_image(Gtk.Image.new_from_icon_name(
             'edit-copy-symbolic', Gtk.IconSize.MENU))

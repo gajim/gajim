@@ -59,6 +59,9 @@
 .conversation-mention-highlight {
     background-color: rgb(255, 215, 194);
 }
+.conversation-search-highlight {
+    background-color: rgb(194, 215, 255);
+}
 .conversation-system-row {
     padding: 18px;
 }

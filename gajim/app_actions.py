@@ -25,10 +25,8 @@ from gajim import dialogs
 
 from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.about import AboutDialog
-from gajim.gui.history import HistoryWindow
 from gajim.gui.discovery import ServiceDiscoveryWindow
 from gajim.gui.util import open_window
-from gajim.gui.util import get_app_window
 
 # General Actions
 
@@ -310,13 +308,7 @@ def on_browse_history(_action, param):
         jid = dict_.get('jid')
         account = dict_.get('account')
 
-    window = get_app_window(HistoryWindow)
-    if window is None:
-        HistoryWindow(jid, account)
-    else:
-        window.present()
-        if jid is not None and account is not None:
-            window.open_history(jid, account)
+    open_window('HistoryWindow', account=account, jid=jid)
 
 
 def on_groupchat_join(_action, param):

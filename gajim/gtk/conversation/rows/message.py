@@ -45,7 +45,8 @@ class MessageRow(BaseRow):
                  marker=None,
                  error=None,
                  encryption_enabled=False,
-                 history_mode=False):
+                 history_mode=False,
+                 log_line_id=None):
 
         # other_tags_for_name contained 'marked', 'bold' and
         # 'muc_nickname_color_', which are now derived from
@@ -58,6 +59,7 @@ class MessageRow(BaseRow):
         self.type = 'chat'
         self.timestamp = timestamp
         self.message_id = message_id
+        self.log_line_id = log_line_id
         self.kind = kind
         self.name = name or ''
         self.text = text
@@ -124,19 +126,19 @@ class MessageRow(BaseRow):
 
         bottom_box = Gtk.Box(spacing=6)
         bottom_box.add(self.textview)
-        bottom_box.add(MoreMenuButton(self))
+        bottom_box.add(MoreMenuButton(self, history_mode=history_mode))
 
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(bottom_box, 1, 1, 1, 1)
 
-    def _on_copy_message(self, _widget):
+    def on_copy_message(self, _widget):
         timestamp = self.timestamp.strftime('%x, %X')
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clip.set_text(
             f'{timestamp} - {self.name}: {self.textview.get_text()}', -1)
 
-    def _on_quote_message(self, _widget):
+    def on_quote_message(self, _widget):
         self.get_parent().on_quote(self.textview.get_text())
 
     def _get_encryption_image(self, additional_data, encryption_enabled=None):

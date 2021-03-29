@@ -22,24 +22,31 @@ from .base import BaseRow
 
 
 class ScrollHintRow(BaseRow):
-    def __init__(self, account):
+    def __init__(self, account, history_mode=False):
         BaseRow.__init__(self, account)
         self.type = 'system'
         self.timestamp = datetime.fromtimestamp(0)
+
         self.get_style_context().add_class('conversation-system-row')
+
+        self.label.set_halign(Gtk.Align.CENTER)
+        self.label.set_hexpand(True)
+        self.label.get_style_context().add_class(
+            'conversation-meta')
+
+        if history_mode:
+            self.label.set_text(_('Use the calendar to select a specific date'))
+            self.grid.attach(self.label, 0, 1, 1, 1)
+            return
+
+        self.label.set_text(_('Scroll up to load more chat history…'))
+        self.grid.attach(self.label, 0, 1, 1, 1)
 
         self._button = Gtk.Button.new_from_icon_name(
             'go-up-symbolic', Gtk.IconSize.BUTTON)
         self._button.set_tooltip_text(_('Load more messages'))
         self._button.connect('clicked', self._on_load_history)
         self.grid.attach(self._button, 0, 0, 1, 1)
-
-        self.label.set_text(_('Scroll up to load more chat history…'))
-        self.label.set_halign(Gtk.Align.CENTER)
-        self.label.set_hexpand(True)
-        self.label.get_style_context().add_class(
-            'conversation-meta')
-        self.grid.attach(self.label, 0, 1, 1, 1)
 
     def _on_load_history(self, _button):
         self.get_parent().emit('load-history', 30)

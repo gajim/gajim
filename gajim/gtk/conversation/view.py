@@ -95,7 +95,7 @@ class ConversationView(Gtk.ListBox):
         self._last_incoming_timestamp = datetime.fromtimestamp(0)
 
         # Insert the very first row, containing the scroll hint and load button
-        self.add(ScrollHintRow(self._account))
+        self.add(ScrollHintRow(self._account, history_mode=self._history_mode))
         self._timestamps_inserted.append(datetime.fromtimestamp(0))
 
     def clear(self):
@@ -121,6 +121,7 @@ class ConversationView(Gtk.ListBox):
                     name,
                     timestamp,
                     other_text_tags=None,
+                    log_line_id=None,
                     message_id=None,
                     correct_id=None,
                     display_marking=None,
@@ -153,7 +154,8 @@ class ConversationView(Gtk.ListBox):
         if other_text_tags is None:
             other_text_tags = []
 
-        if kind in ('status', 'info') or subject:
+        if (kind in ('status', 'info') or
+                (subject and self._contact.is_groupchat)):
             message = InfoMessageRow(
                 self._account,
                 time_,
@@ -191,7 +193,8 @@ class ConversationView(Gtk.ListBox):
                 marker=marker,
                 error=error,
                 encryption_enabled=self.encryption_enabled,
-                history_mode=self._history_mode)
+                history_mode=self._history_mode,
+                log_line_id=log_line_id)
 
         self._insert_message(message, time_, kind, history)
 
@@ -382,11 +385,21 @@ class ConversationView(Gtk.ListBox):
                         self.first_message_timestamp = None
                 self._row_count -= 1
 
-    def _get_row_by_id(self, id_):
+    def _get_row_by_message_id(self, id_):
         for row in self.get_children():
             if row.message_id == id_:
                 return row
         return None
+
+    def get_row_by_log_line_id(self, log_line_id):
+        for row in self.get_children():
+            if row.log_line_id == log_line_id:
+                return row
+        return None
+
+    def iter_rows(self):
+        for row in self.get_children():
+            yield row
 
     def _get_first_chat_row(self):
         for row in self.get_children():
@@ -395,7 +408,7 @@ class ConversationView(Gtk.ListBox):
         return None
 
     def set_read_marker(self, id_):
-        message_row = self._get_row_by_id(id_)
+        message_row = self._get_row_by_message_id(id_)
         if message_row is None:
             return
 
@@ -476,7 +489,7 @@ class ConversationView(Gtk.ListBox):
 
     def correct_message(self, correct_id, message_id, text,
                         other_text_tags, kind, name, additional_data=None):
-        message_row = self._get_row_by_id(correct_id)
+        message_row = self._get_row_by_message_id(correct_id)
         if message_row is not None:
             message_row.set_correction(
                 message_id, text, other_text_tags, kind, name,
@@ -484,12 +497,12 @@ class ConversationView(Gtk.ListBox):
             message_row.set_merged(False)
 
     def show_receipt(self, id_):
-        message_row = self._get_row_by_id(id_)
+        message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
             message_row.set_receipt()
 
     def show_error(self, id_, error):
-        message_row = self._get_row_by_id(id_)
+        message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
             message_row.set_error(to_user_string(error))
             message_row.set_merged(False)

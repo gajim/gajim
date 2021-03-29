@@ -420,7 +420,7 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone()
 
     @timeit
-    def get_conversation_for_date(self, account, jid, date):
+    def get_messages_for_date(self, account, jid, date):
         """
         Load the complete conversation with a given jid on a specific date
 
@@ -435,21 +435,26 @@ class MessageArchiveStorage(SqliteStorage):
         """
 
         jids = self._get_family_jids(account, jid)
+        account_id = self.get_account_id(account)
 
         delta = datetime.timedelta(
             hours=23, minutes=59, seconds=59, microseconds=999999)
+        date_ts = date.timestamp()
+        delta_ts = (date + delta).timestamp()
 
         sql = '''
             SELECT contact_name, time, kind, show, message, subject,
                    additional_data, log_line_id
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
             AND time BETWEEN ? AND ?
-            ORDER BY time, log_line_id
-            '''.format(jids=', '.join('?' * len(jids)))
+            ORDER BY time DESC, log_line_id DESC
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id)
 
-        return self._con.execute(sql, tuple(jids) +
-                                      (date.timestamp(),
-                                      (date + delta).timestamp())).fetchall()
+        return self._con.execute(
+            sql,
+            tuple(jids) + (date_ts, delta_ts)).fetchall()
 
     @timeit
     def search_log(self, account, jid, query, date=None):

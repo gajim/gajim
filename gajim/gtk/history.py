@@ -32,14 +32,13 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import exceptions
 from gajim.common.i18n import _
-from gajim.common.const import ShowConstant
 from gajim.common.const import KindConstant
-from gajim.common.const import StyleAttr
+from gajim.common.exceptions import PysqliteOperationalError
 
-from gajim import conversation_textview
+# from gajim import conversation_textview
 
+from .conversation.view import ConversationView
 from .util import python_month
 from .util import gtk_month
 from .util import resize_window
@@ -50,6 +49,7 @@ from .util import get_builder
 from .util import scroll_to_end
 
 from .dialogs import ErrorDialog
+
 
 @unique
 class InfoColumn(IntEnum):
@@ -71,68 +71,44 @@ class Column(IntEnum):
 
 
 class HistoryWindow(Gtk.ApplicationWindow):
-    def __init__(self, jid=None, account=None):
+    def __init__(self, account=None, jid=None):
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('Conversation History'))
 
-        self._ui = get_builder('history_window.ui')
+        self.account = account
+        self.jid = jid
 
+        self._client = app.get_client(account)
+        self._contact = None
+        if jid is not None:
+            self._contact = self._client.get_module('Contacts').get_contact(
+                jid)
+
+        self._ui = get_builder('history_window.ui')
         self.add(self._ui.history_box)
 
-        self.history_textview = conversation_textview.ConversationTextview(
-            account, used_in_history_window=True)
-        self._ui.scrolledwindow.add(self.history_textview.tv)
-        self.history_buffer = self.history_textview.tv.get_buffer()
-        highlight_color = app.css_config.get_value(
-            '.gajim-search-highlight', StyleAttr.COLOR)
-        self.history_buffer.create_tag('highlight', background=highlight_color)
-        self.history_buffer.create_tag('invisible', invisible=True)
+        self._conversation_view = ConversationView(
+            account, self._contact, history_mode=True)
+        self._ui.scrolledwindow.add(self._conversation_view)
+        self._ui.scrolledwindow.set_focus_vadjustment(Gtk.Adjustment())
 
-        self.clearing_search = False
+        self._clearing_search = False
+        self._first_day = None
+        self._last_day = None
 
-        # jid, contact_name, date, message, time, log_line_id
-        model = Gtk.ListStore(str, str, str, str, str, int)
-        self._ui.results_treeview.set_model(model)
-        col = Gtk.TreeViewColumn(_('Name'))
-        self._ui.results_treeview.append_column(col)
-        renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', Column.CONTACT_NAME)
-        # user can click this header and sort
-        col.set_sort_column_id(Column.CONTACT_NAME)
-        col.set_resizable(True)
-
-        col = Gtk.TreeViewColumn(_('Date'))
-        self._ui.results_treeview.append_column(col)
-        renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', Column.UNIXTIME)
-        # user can click this header and sort
-        col.set_sort_column_id(Column.UNIXTIME)
-        col.set_resizable(True)
-
-        col = Gtk.TreeViewColumn(_('Message'))
-        self._ui.results_treeview.append_column(col)
-        renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', Column.MESSAGE)
-        col.set_resizable(True)
-
-        self.jid = None  # The history we are currently viewing
-        self.account = account
-        self.completion_dict = {}
-        self.accounts_seen_online = []  # Update dict when new accounts connect
-        self.jids_to_search = []
+        self._completion_dict = {}
+        self._accounts_seen_online = []  # Update dict when new accounts connect
+        self._jids_to_search = []
 
         # This will load history too
         task = self._fill_completion_dict()
         GLib.idle_add(next, task)
 
         if jid:
-            self._ui.query_entry.get_child().set_text(jid)
+            self._ui.query_entry.set_text(jid)
         else:
             self._load_history(None)
 
@@ -154,6 +130,38 @@ class HistoryWindow(Gtk.ApplicationWindow):
         app.plugin_manager.gui_extension_point(
             'history_window', self)
 
+    def _on_delete(self, _widget, *args):
+        self._save_state()
+
+    def _on_destroy(self, _widget):
+        app.plugin_manager.remove_gui_extension_point(
+            'history_window', self)
+
+    def _on_key_press(self, _widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            if self._ui.results_scrolledwindow.get_visible():
+                self._ui.results_scrolledwindow.set_visible(False)
+                return
+            self._save_state()
+            self.destroy()
+
+    def _on_jid_entry_match_selected(self, _widget, model, iter_, *args):
+        self._jid_entry_search(model[iter_][1])
+        return True
+
+    def _on_query_combo_changed(self, combo):
+        # only if selected from combobox
+        jid = self._ui.query_entry.get_text()
+        if jid == combo.get_active_id():
+            self._jid_entry_search(jid)
+
+    def _on_jid_entry_activate(self, entry):
+        self._jid_entry_search(entry.get_text())
+
+    def _jid_entry_search(self, jid):
+        self._load_history(jid, self.account)
+        self._ui.results_scrolledwindow.set_visible(False)
+
     def _fill_completion_dict(self):
         """
         Fill completion_dict for key auto completion. Then load history for
@@ -165,23 +173,22 @@ class HistoryWindow(Gtk.ApplicationWindow):
         {key : (jid, account, nick_name, full_completion_name}
         This is a generator and does pseudo-threading via idle_add().
         """
-        liststore = get_completion_liststore(
-            self._ui.query_entry.get_child())
+        liststore = get_completion_liststore(self._ui.query_entry)
         liststore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-        self._ui.query_entry.get_child().get_completion().connect(
-            'match-selected', self.on_jid_entry_match_selected)
+        self._ui.query_entry.get_completion().connect(
+            'match-selected', self._on_jid_entry_match_selected)
 
-        self._ui.query_entry.set_model(liststore)
+        self._ui.query_combo.set_model(liststore)
 
         # Add all jids in logs.db:
         db_jids = app.storage.archive.get_jids_in_db()
         completion_dict = dict.fromkeys(db_jids)
 
-        self.accounts_seen_online = list(app.settings.get_active_accounts())
+        self._accounts_seen_online = list(app.settings.get_active_accounts())
 
         # Enhance contacts of online accounts with contact.
         # Needed for mapping below
-        for account in self.accounts_seen_online:
+        for account in self._accounts_seen_online:
             completion_dict.update(
                 helpers.get_contact_dict_for_account(account))
 
@@ -190,7 +197,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
 
         keys = list(completion_dict.keys())
         # Move the actual jid at first so we load history faster
-        actual_jid = self._ui.query_entry.get_child().get_text()
+        actual_jid = self._ui.query_entry.get_text()
         if actual_jid in keys:
             keys.remove(actual_jid)
             keys.insert(0, actual_jid)
@@ -205,7 +212,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
             completed2 = None
             contact = completion_dict[completed]
             if contact:
-                info_name = contact.get_shown_name()
+                info_name = contact.name
                 info_completion = info_name
                 info_jid = contact.jid
             else:
@@ -233,15 +240,15 @@ class HistoryWindow(Gtk.ApplicationWindow):
             if len(completed) > 70:
                 completed = completed[:70] + '[\u2026]'
             liststore.append((icon, completed))
-            self.completion_dict[key] = (
+            self._completion_dict[key] = (
                 info_jid, info_acc, info_name, info_completion)
-            self.completion_dict[completed] = (
+            self._completion_dict[completed] = (
                 info_jid, info_acc, info_name, info_completion)
             if completed2:
                 if len(completed2) > 70:
                     completed2 = completed2[:70] + '[\u2026]'
                 liststore.append((icon, completed2))
-                self.completion_dict[completed2] = (
+                self._completion_dict[completed2] = (
                     info_jid, info_acc, info_name, info_completion2)
             if key == actual_jid:
                 self._load_history(info_jid, self.account or info_acc)
@@ -249,7 +256,8 @@ class HistoryWindow(Gtk.ApplicationWindow):
         keys.sort()
         yield False
 
-    def _get_account_for_jid(self, jid):
+    @staticmethod
+    def _get_account_for_jid(jid):
         """
         Return the corresponding account of the jid. May be None if an account
         could not be found
@@ -264,49 +272,14 @@ class HistoryWindow(Gtk.ApplicationWindow):
                 break
         return account
 
-    def _on_delete(self, widget, *args):
-        self.save_state()
-
-    def _on_destroy(self, widget):
-        # PluginSystem: removing GUI extension points connected with
-        # HistoryWindow instance object
-        app.plugin_manager.remove_gui_extension_point(
-            'history_window', self)
-        self.history_textview.del_handlers()
-
-    def _on_key_press(self, widget, event):
-        if event.keyval == Gdk.KEY_Escape:
-            if self._ui.results_scrolledwindow.get_visible():
-                self._ui.results_scrolledwindow.set_visible(False)
-                return
-            self.save_state()
-            self.destroy()
-
-    def on_jid_entry_match_selected(self, widget, model, iter_, *args):
-        self._jid_entry_search(model[iter_][1])
-        return True
-
-    def on_jid_entry_changed(self, widget):
-        # only if selected from combobox
-        jid = self._ui.query_entry.get_child().get_text()
-        if jid == self._ui.query_entry.get_active_id():
-            self._jid_entry_search(jid)
-
-    def on_jid_entry_activate(self, widget):
-        self._jid_entry_search(self._ui.query_entry.get_child().get_text())
-
-    def _jid_entry_search(self, jid):
-        self._load_history(jid, self.account)
-        self._ui.results_scrolledwindow.set_visible(False)
-
     def _load_history(self, jid_or_name, account=None):
         """
         Load history for the given jid/name and show it
         """
-        if jid_or_name and jid_or_name in self.completion_dict:
+        if jid_or_name and jid_or_name in self._completion_dict:
             # a full qualified jid or a contact name was entered
-            info_jid, info_account, _info_name, info_completion = self.completion_dict[jid_or_name]
-            self.jids_to_search = [info_jid]
+            info_jid, info_account, _info_name, info_completion = self._completion_dict[jid_or_name]
+            self._jids_to_search = [info_jid]
             self.jid = info_jid
 
             if account:
@@ -317,37 +290,35 @@ class HistoryWindow(Gtk.ApplicationWindow):
                 # We don't know account. Probably a gc not opened or an
                 # account not connected.
                 # Disable possibility to say if we want to log or not
-                self._ui.log_history_checkbutton.set_sensitive(False)
+                self._ui.store_history_switch.set_sensitive(False)
             else:
-                # Are log disabled for account ?
-                if self.account in app.settings.get_account_setting(
-                        self.account, 'no_log_for').split(' '):
-                    self._ui.log_history_checkbutton.set_active(False)
-                    self._ui.log_history_checkbutton.set_sensitive(False)
+                # Are logs disabled for account ?
+                no_log_for = app.settings.get_account_setting(
+                    self.account, 'no_log_for').split(' ')
+                if self.account in no_log_for:
+                    self._ui.store_history_switch.set_active(False)
+                    self._ui.store_history_switch.set_sensitive(False)
                 else:
-                    # Are log disabled for jid ?
-                    log = True
-                    if self.jid in app.settings.get_account_setting(
-                            self.account, 'no_log_for').split(' '):
-                        log = False
-                    self._ui.log_history_checkbutton.set_active(log)
-                    self._ui.log_history_checkbutton.set_sensitive(True)
+                    # Are logs disabled for jid ?
+                    self._ui.store_history_switch.set_active(
+                        str(self.jid) not in no_log_for)
+                    self._ui.store_history_switch.set_sensitive(True)
 
-            self.jids_to_search = [info_jid]
+            self._jids_to_search = [info_jid]
 
             # Get first/last date we have logs with contact
             self.first_log = app.storage.archive.get_first_date_that_has_logs(
                 self.account, self.jid)
-            self.first_day = self._get_date_from_timestamp(self.first_log)
+            self._first_day = self._get_date_from_timestamp(self.first_log)
             self.last_log = app.storage.archive.get_last_date_that_has_logs(
                 self.account, self.jid)
-            self.last_day = self._get_date_from_timestamp(self.last_log)
+            self._last_day = self._get_date_from_timestamp(self.last_log)
 
             # Select logs for last date we have logs with contact
             self._ui.search_menu_button.set_sensitive(True)
-            month = gtk_month(self.last_day.month)
-            self._ui.calendar.select_month(month, self.last_day.year)
-            self._ui.calendar.select_day(self.last_day.day)
+            month = gtk_month(self._last_day.month)
+            self._ui.calendar.select_month(month, self._last_day.year)
+            self._ui.calendar.select_day(self._last_day.day)
 
             self._ui.button_previous_day.set_sensitive(True)
             self._ui.button_next_day.set_sensitive(True)
@@ -357,7 +328,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
             self._ui.search_entry.set_sensitive(True)
             self._ui.search_entry.grab_focus()
 
-            self._ui.query_entry.get_child().set_text(info_completion)
+            self._ui.query_entry.set_text(info_completion)
 
         else:
             # neither a valid jid, nor an existing contact name was entered
@@ -365,10 +336,8 @@ class HistoryWindow(Gtk.ApplicationWindow):
             self.jid = None
             self.account = None
 
-            self.history_buffer.set_text('')  # clear the buffer
             self._ui.search_entry.set_sensitive(False)
-
-            self._ui.log_history_checkbutton.set_sensitive(False)
+            self._ui.store_history_switch.set_sensitive(False)
             self._ui.search_menu_button.set_sensitive(False)
             self._ui.calendar.clear_marks()
             self._ui.button_previous_day.set_sensitive(False)
@@ -378,7 +347,7 @@ class HistoryWindow(Gtk.ApplicationWindow):
 
             self._ui.results_scrolledwindow.set_visible(False)
 
-    def on_calendar_day_selected(self, widget):
+    def _on_day_selected(self, *args):
         if not self.jid:
             return
         year, month, day = self._ui.calendar.get_date()  # integers
@@ -388,102 +357,86 @@ class HistoryWindow(Gtk.ApplicationWindow):
         self._load_conversation(year, month, day)
         GLib.idle_add(scroll_to_end, self._ui.scrolledwindow)
 
-    def on_calendar_month_changed(self, widget):
+    def _on_month_changed(self, calendar):
         """
         Ask for days in this month, if they have logs it bolds them
         (marks them)
         """
         if not self.jid:
             return
-        year, month, _day = widget.get_date()  # integers
-        if year < 1900:
-            widget.select_month(0, 1900)
-            widget.select_day(1)
+        year, month, _day = calendar.get_date()  # integers
+        if year < 2000:
+            calendar.select_month(0, 2000)
+            calendar.select_day(1)
             return
 
-        widget.clear_marks()
+        calendar.clear_marks()
         month = python_month(month)
 
         try:
             log_days = app.storage.archive.get_days_with_logs(
                 self.account, self.jid, year, month)
-        except exceptions.PysqliteOperationalError as error:
-            ErrorDialog(_('Disk Error'), str(error))
+        except PysqliteOperationalError as err:
+            ErrorDialog(_('Disk Error'), str(err))
             return
 
         for date in log_days:
-            widget.mark_day(date.day)
+            calendar.mark_day(date.day)
 
-    def _get_date_from_timestamp(self, timestamp):
+    @staticmethod
+    def _get_date_from_timestamp(timestamp):
         # Conversion from timestamp to date
         log = time.localtime(timestamp)
-        y, m, d = log[0], log[1], log[2]
-        date = datetime.datetime(y, m, d)
+        year, mmonth, day = log[0], log[1], log[2]
+        date = datetime.datetime(year, mmonth, day)
         return date
 
-    def _change_date(self, widget):
-        # Get day selected in calendar
-        y, m, d = self._ui.calendar.get_date()
-        py_m = python_month(m)
-        _date = datetime.datetime(y, py_m, d)
+    def _change_date(self, button):
+        year, month, day = self._ui.calendar.get_date()
+        python_m = python_month(month)
+        date_ = datetime.datetime(year, python_m, day)
 
-        if widget is self._ui.button_first_day:
-            gtk_m = gtk_month(self.first_day.month)
-            self._ui.calendar.select_month(gtk_m, self.first_day.year)
-            self._ui.calendar.select_day(self.first_day.day)
+        if button is self._ui.button_first_day:
+            gtk_m = gtk_month(self._first_day.month)
+            self._ui.calendar.select_month(gtk_m, self._first_day.year)
+            self._ui.calendar.select_day(self._first_day.day)
             return
 
-        if widget is self._ui.button_last_day:
-            gtk_m = gtk_month(
-                self.last_day.month)
-            self._ui.calendar.select_month(gtk_m, self.last_day.year)
-            self._ui.calendar.select_day(self.last_day.day)
+        if button is self._ui.button_last_day:
+            gtk_m = gtk_month(self._last_day.month)
+            self._ui.calendar.select_month(gtk_m, self._last_day.year)
+            self._ui.calendar.select_day(self._last_day.day)
             return
 
-        if widget is self._ui.button_previous_day:
-            end_date = self.first_day
+        if button is self._ui.button_previous_day:
+            end_date = self._first_day
             timedelta = datetime.timedelta(days=-1)
-            if end_date >= _date:
+            if end_date >= date_:
                 return
-        elif widget is self._ui.button_next_day:
-            end_date = self.last_day
+
+        if button is self._ui.button_next_day:
+            end_date = self._last_day
             timedelta = datetime.timedelta(days=1)
-            if end_date <= _date:
+            if end_date <= date_:
                 return
 
         # Iterate through days until log entry found or
         # supplied end_date (first_log / last_log) reached
         logs = None
         while logs is None:
-            _date = _date + timedelta
-            if _date == end_date:
+            date_ = date_ + timedelta
+            if date_ == end_date:
                 break
             try:
                 logs = app.storage.archive.get_date_has_logs(
-                    self.account, self.jid, _date)
-            except exceptions.PysqliteOperationalError as e:
-                ErrorDialog(_('Disk Error'), str(e))
+                    self.account, self.jid, date_)
+            except PysqliteOperationalError as err:
+                ErrorDialog(_('Disk Error'), str(err))
                 return
 
-        gtk_m = gtk_month(_date.month)
-        self._ui.calendar.select_month(gtk_m, _date.year)
-        self._ui.calendar.select_day(_date.day)
-
-    def _get_string_show_from_constant_int(self, show):
-        if show == ShowConstant.ONLINE:
-            show = 'online'
-        elif show == ShowConstant.CHAT:
-            show = 'chat'
-        elif show == ShowConstant.AWAY:
-            show = 'away'
-        elif show == ShowConstant.XA:
-            show = 'xa'
-        elif show == ShowConstant.DND:
-            show = 'dnd'
-        elif show == ShowConstant.OFFLINE:
-            show = 'offline'
-
-        return show
+        gtk_m = gtk_month(date_.month)
+        self._ui.calendar.select_month(gtk_m, date_.year)
+        self._ui.calendar.select_day(date_.day)
 
     def _load_conversation(self, year, month, day):
         """
@@ -491,162 +444,57 @@ class HistoryWindow(Gtk.ApplicationWindow):
         given date into the history textbuffer. Values for `month` and `day`
         are 1-based.
         """
-        self.history_buffer.set_text('')
-        self.last_time_printout = 0
-        show_status = self._ui.show_status_checkbutton.get_active()
+        self._conversation_view.clear()
 
+        show_status = self._ui.show_status_checkbutton.get_active()
         date = datetime.datetime(year, month, day)
 
-        conversation = app.storage.archive.get_conversation_for_date(
+        messages = app.storage.archive.get_messages_for_date(
             self.account, self.jid, date)
-
-        for message in conversation:
-            if not show_status and message.kind in (KindConstant.GCSTATUS,
-                                                    KindConstant.STATUS):
-                continue
-            self._add_message(message)
-
-    def _add_message(self, msg):
-        if not msg.message and msg.kind not in (KindConstant.STATUS,
+        for msg in messages:
+            if not show_status and msg.kind in (KindConstant.STATUS,
                                                 KindConstant.GCSTATUS):
-            return
+                continue
+            if not msg.message and msg.kind not in (KindConstant.STATUS,
+                                                    KindConstant.GCSTATUS):
+                continue
 
-        tim = msg.time
-        kind = msg.kind
-        show = msg.show
-        message = msg.message
-        subject = msg.subject
-        log_line_id = msg.log_line_id
-        contact_name = msg.contact_name
-        additional_data = msg.additional_data
-
-        buf = self.history_buffer
-        end_iter = buf.get_end_iter()
-
-        # Make the beginning of every message searchable by its log_line_id
-        buf.create_mark(str(log_line_id), end_iter, left_gravity=True)
-
-        if app.settings.get('print_time') == 'always':
-            timestamp_str = app.settings.get('time_stamp')
-            timestamp_str = helpers.from_one_line(timestamp_str)
-            tim = time.strftime(timestamp_str, time.localtime(float(tim)))
-            buf.insert(end_iter, tim)
-        elif app.settings.get('print_time') == 'sometimes':
-            every_foo_seconds = 60 * app.settings.get(
-                'print_ichat_every_foo_minutes')
-            seconds_passed = tim - self.last_time_printout
-            if seconds_passed > every_foo_seconds:
-                self.last_time_printout = tim
-                tim = time.strftime('%X ', time.localtime(float(tim)))
-                buf.insert_with_tags_by_name(
-                    end_iter, tim + '\n', 'time_sometimes')
-
-        # print the encryption icon
-        if kind in (KindConstant.CHAT_MSG_SENT,
-                    KindConstant.CHAT_MSG_RECV):
-            self.history_textview.print_encryption_status(
-                end_iter, additional_data)
-
-        tag_name = ''
-        tag_msg = ''
-
-        show = self._get_string_show_from_constant_int(show)
-
-        if kind == KindConstant.GC_MSG:
-            tag_name = 'incoming'
-        elif kind in (KindConstant.SINGLE_MSG_RECV,
-                      KindConstant.CHAT_MSG_RECV):
-            contact_name = self.completion_dict[self.jid][InfoColumn.NAME]
-            tag_name = 'incoming'
-            tag_msg = 'incomingtxt'
-        elif kind in (KindConstant.SINGLE_MSG_SENT,
-                      KindConstant.CHAT_MSG_SENT):
-            if self.account:
+            kind = 'status'
+            contact_name = msg.contact_name
+            if msg.kind in (
+                    KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
+                kind = 'incoming'
+                contact_name = self._contact.name
+            elif msg.kind == KindConstant.GC_MSG:
+                kind = 'incoming'
+            elif msg.kind in (
+                    KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
+                kind = 'outgoing'
                 contact_name = app.nicks[self.account]
-            else:
-                # we don't have roster, we don't know our own nick, use first
-                # account one (urk!)
-                account = list(app.settings.get_active_accounts())[0]
-                contact_name = app.nicks[account]
-            tag_name = 'outgoing'
-            tag_msg = 'outgoingtxt'
-        elif kind == KindConstant.GCSTATUS:
-            # message here (if not None) is status message
-            if message:
-                message = _('%(nick)s is now %(status)s: %(status_msg)s') % {
-                    'nick': contact_name,
-                    'status': helpers.get_uf_show(show),
-                    'status_msg': message}
-            else:
-                message = _('%(nick)s is now %(status)s') % {
-                    'nick': contact_name,
-                    'status': helpers.get_uf_show(show)}
-            tag_msg = 'status'
-        else:  # 'status'
-            # message here (if not None) is status message
-            if show is None:  # it means error
-                if message:
-                    message = _('Error: %s') % message
-                else:
-                    message = _('Error')
-            elif message:
-                message = _('Status is now: %(status)s: %(status_msg)s') % {
-                    'status': helpers.get_uf_show(show),
-                    'status_msg': message}
-            else:
-                message = _('Status is now: %(status)s') % {
-                    'status': helpers.get_uf_show(show)}
-            tag_msg = 'status'
 
-        if message.startswith('/me ') or message.startswith('/me\n'):
-            tag_msg = tag_name
-        else:
-            # do not do this if gcstats, avoid dupping contact_name
-            # eg. nkour: nkour is now Offline
-            if contact_name and kind != KindConstant.GCSTATUS:
-                # add stuff before and after contact name
-                before_str = app.settings.get('before_nickname')
-                before_str = helpers.from_one_line(before_str)
-                after_str = app.settings.get('after_nickname')
-                after_str = helpers.from_one_line(after_str)
-                format_ = before_str + contact_name + after_str + ' '
-                if tag_name:
-                    buf.insert_with_tags_by_name(end_iter, format_, tag_name)
-                else:
-                    buf.insert(end_iter, format_)
-        if subject:
-            message = _('Subject: %s\n') % subject + message
+            self._conversation_view.add_message(
+                msg.message,
+                kind,
+                contact_name,
+                msg.time,
+                subject=msg.subject,
+                additional_data=msg.additional_data,
+                history=True,
+                log_line_id=msg.log_line_id)
 
-        if tag_msg:
-            self.history_textview.print_real_text(
-                message,
-                [tag_msg],
-                name=contact_name,
-                additional_data=additional_data)
-        else:
-            self.history_textview.print_real_text(
-                message,
-                name=contact_name,
-                additional_data=additional_data)
-        self.history_textview.print_real_text('\n', text_tags=['eol'])
-
-    def on_search_complete_history_toggled(self, widget):
+    def _on_search_complete_history(self, _widget):
         self._ui.date_label.get_style_context().remove_class('tagged')
 
-    def on_search_in_date_toggled(self, widget):
+    def _on_search_in_date(self, _widget):
         self._ui.date_label.get_style_context().add_class('tagged')
 
-    def on_search_entry_activate(self, widget):
-        text = self._ui.search_entry.get_text()
+    def _on_search_entry_activate(self, entry):
+        text = entry.get_text()
 
         model = self._ui.results_treeview.get_model()
-        self.clearing_search = True
+        self._clearing_search = True
         model.clear()
-        self.clearing_search = False
-
-        start = self.history_buffer.get_start_iter()
-        end = self.history_buffer.get_end_iter()
-        self.history_buffer.remove_tag_by_name('highlight', start, end)
+        self._clearing_search = False
 
         if text == '':
             self._ui.results_scrolledwindow.set_visible(False)
@@ -655,9 +503,9 @@ class HistoryWindow(Gtk.ApplicationWindow):
         self._ui.results_scrolledwindow.set_visible(True)
 
         # perform search in preselected jids
-        # jids are preselected with the query_entry
-        for jid in self.jids_to_search:
-            account = self.completion_dict[jid][InfoColumn.ACCOUNT]
+        # jids are preselected with the query_combo
+        for jid in self._jids_to_search:
+            account = self._completion_dict[jid][InfoColumn.ACCOUNT]
             if account is None:
                 # We do not know an account. This can only happen if
                 # the contact is offine, or if we browse a groupchat history.
@@ -688,30 +536,30 @@ class HistoryWindow(Gtk.ApplicationWindow):
                     if row.kind == KindConstant.CHAT_MSG_SENT:
                         contact_name = app.nicks[account]
                     else:
-                        contact_name = self.completion_dict[jid][InfoColumn.NAME]
+                        contact_name = self._completion_dict[jid][InfoColumn.NAME]
 
                 local_time = time.localtime(row.time)
                 date = time.strftime('%Y-%m-%d', local_time)
 
                 result_found = True
-                model.append((jid, contact_name, date, row.message,
-                              str(row.time), row.log_line_id))
+                model.append((str(jid), contact_name, date, row.message,
+                              str(row.time), str(row.log_line_id)))
 
             if result_found:
                 self._ui.results_treeview.set_cursor(0)
 
-    def on_results_treeview_cursor_changed(self, *args):
+    def _on_results_cursor_changed(self, treeview):
         """
         A row was selected, get date from row, and select it in calendar
         which results to showing conversation logs for that date
         """
-        if self.clearing_search:
+        if self._clearing_search:
             return
 
         # get currently selected date
         cur_year, cur_month, cur_day = self._ui.calendar.get_date()
         cur_month = python_month(cur_month)
-        model, paths = self._ui.results_treeview.get_selection().get_selected_rows()
+        model, paths = treeview.get_selection().get_selected_rows()
 
         if not paths:
             return
@@ -739,77 +587,41 @@ class HistoryWindow(Gtk.ApplicationWindow):
         self._scroll_to_message_and_highlight(model[path][Column.LOG_LINE_ID])
 
     def _scroll_to_message_and_highlight(self, log_line_id):
-        """
-        Scroll to a message and highlight it
-        """
+        for row in self._conversation_view.iter_rows():
+            row.get_style_context().remove_class(
+                'conversation-search-highlight')
 
-        def iterator_has_mark(iterator, mark_name):
-            for mark in iterator.get_marks():
-                if mark.get_name() == mark_name:
-                    return True
-            return False
+        row = self._conversation_view.get_row_by_log_line_id(int(log_line_id))
+        if row is not None:
+            row.get_style_context().add_class('conversation-search-highlight')
+            # This scrolls the ListBox to the highlighted row
+            row.grab_focus()
+            self._ui.results_treeview.grab_focus()
 
-        # Clear previous search result by removing the highlighting. The scroll
-        # mark is automatically removed when the new one is set.
-        start = self.history_buffer.get_start_iter()
-        end = self.history_buffer.get_end_iter()
-        self.history_buffer.remove_tag_by_name('highlight', start, end)
-
-        log_line_id = str(log_line_id)
-        line = start
-        while not iterator_has_mark(line, log_line_id):
-            if not line.forward_line():
-                return
-
-        match_start = line
-        match_end = match_start.copy()
-        match_end.forward_to_tag_toggle(self.history_buffer.eol_tag)
-
-        self.history_buffer.apply_tag_by_name(
-            'highlight', match_start, match_end)
-        mark = self.history_buffer.create_mark('match', match_start, True)
-        GLib.idle_add(
-            self.history_textview.tv.scroll_to_mark, mark, 0, True, 0.0, 0.5)
-
-    def on_log_history_checkbutton_toggled(self, widget, *args):
-        # log conversation history?
+    def _on_log_history(self, switch, *args):
+        jid = str(self.jid)
         oldlog = True
         no_log_for = app.settings.get_account_setting(
             self.account, 'no_log_for').split()
-        if self.jid in no_log_for:
+        if jid in no_log_for:
             oldlog = False
-        log = widget.get_active()
-        if not log and self.jid not in no_log_for:
-            no_log_for.append(self.jid)
-        if log and self.jid in no_log_for:
-            no_log_for.remove(self.jid)
+        log = switch.get_active()
+        if not log and jid not in no_log_for:
+            no_log_for.append(jid)
+        if log and jid in no_log_for:
+            no_log_for.remove(jid)
         if oldlog != log:
             app.settings.set_account_setting(
                 self.account, 'no_log_for', ' '.join(no_log_for))
 
-    def on_show_status_checkbutton_toggled(self, widget):
-        # reload logs
-        self.on_calendar_day_selected(None)
+    def _on_show_status(self, _widget):
+        # Reload logs
+        self._on_day_selected(None)
 
-    def open_history(self, jid, account):
-        """
-        Load chat history of the specified jid
-        """
-        self._ui.query_entry.get_child().set_text(jid)
-        if account and account not in self.accounts_seen_online:
-            # Update dict to not only show bare jid
-            GLib.idle_add(next, self._fill_completion_dict())
-        else:
-            # Only in that case because it's called by
-            # self._fill_completion_dict() otherwise
-            self._load_history(jid, account)
-        self._ui.results_scrolledwindow.set_visible(False)
-
-    def save_state(self):
-        x, y = self.get_window().get_root_origin()
+    def _save_state(self):
+        x_pos, y_pos = self.get_window().get_root_origin()
         width, height = self.get_size()
-
-        app.settings.set('history_window_x-position', x)
-        app.settings.set('history_window_y-position', y)
+        app.settings.set('history_window_x-position', x_pos)
+        app.settings.set('history_window_y-position', y_pos)
         app.settings.set('history_window_width', width)
         app.settings.set('history_window_height', height)
