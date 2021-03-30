@@ -25,6 +25,7 @@ from gi.repository import GObject
 from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
+from gajim.common.i18n import Q_
 
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
@@ -482,10 +483,16 @@ class AccountRow(Gtk.ListBoxRow):
                                                  Gtk.IconSize.MENU)
         next_icon.get_style_context().add_class('insensitive-fg-color')
 
+        account_enabled = app.settings.get_account_setting(
+            self._account, 'active')
         self._switch = Gtk.Switch()
-        self._switch.set_active(
-            app.settings.get_account_setting(self._account, 'active'))
+        self._switch.set_active(account_enabled)
         self._switch.set_vexpand(False)
+
+        self._switch_state_label = Gtk.Label()
+        self._switch_state_label.set_xalign(1)
+        self._switch_state_label.set_valign(Gtk.Align.CENTER)
+        self._set_label(account_enabled)
 
         if (self._account == app.ZEROCONF_ACC_NAME and
                 not app.is_installed('ZEROCONF')):
@@ -502,6 +509,8 @@ class AccountRow(Gtk.ListBoxRow):
             'state-set', self._on_enable_switch, self._account)
 
         box.add(self._switch)
+        box.add(self._switch_state_label)
+        box.add(Gtk.Separator())
         box.add(self._label)
         box.add(next_icon)
         self.add(box)
@@ -519,12 +528,18 @@ class AccountRow(Gtk.ListBoxRow):
 
     def enable_account(self, state):
         self._switch.set_state(state)
+        self._set_label(state)
+
+    def _set_label(self, active):
+        text = Q_('?switch:On') if active else Q_('?switch:Off')
+        self._switch_state_label.set_text(text)
 
     def _on_enable_switch(self, switch, state, account):
         def _disable():
             app.connections[account].change_status('offline', 'offline')
             app.interface.disable_account(account)
             switch.set_state(state)
+            self._set_label(state)
 
         old_state = app.settings.get_account_setting(account, 'active')
         if old_state == state:
