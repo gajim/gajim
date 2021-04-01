@@ -116,10 +116,6 @@ class Config:
         'pm-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
         'pm-msgwin-width': [opt_int, 480],
         'pm-msgwin-height': [opt_int, 440],
-        'single-msg-x-position': [opt_int, 0],
-        'single-msg-y-position': [opt_int, 0],
-        'single-msg-width': [opt_int, 400],
-        'single-msg-height': [opt_int, 280],
         'save-roster-position': [opt_bool, True, _('If enabled, Gajim will save the contact list window position when hiding it, and restore it when showing the contact list window again.')],
         'roster_x-position': [opt_int, 0],
         'roster_y-position': [opt_int, 0],
