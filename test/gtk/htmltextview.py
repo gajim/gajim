@@ -7,17 +7,22 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import configpaths
 configpaths.init()
-from gajim.common.helpers import AdditionalDataDict
+
 
 from gajim import gui
 gui.init('gtk')
 
+from gajim.common.helpers import AdditionalDataDict
+
 from gajim.conversation_textview import ConversationTextview
 from gajim.gui_interface import Interface
 
+
+app.settings = MagicMock()
 app.plugin_manager = MagicMock()
 app.logger = MagicMock()
 app.cert_store = MagicMock()
+app.storage = MagicMock()
 app.interface = Interface()
 
 
