@@ -52,7 +52,9 @@ class ConversationView(Gtk.ListBox):
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_sort_func(self._sort_func)
         self._account = account
-        self._client = app.get_client(account)
+        self._client = None
+        if account is not None:
+            self._client = app.get_client(account)
         self._contact = contact
         self._history_mode = history_mode
 
@@ -70,8 +72,9 @@ class ConversationView(Gtk.ListBox):
         # message_id -> row mapping
         self._message_id_row_map = {}
 
-        self._read_marker_row = ReadMarkerRow(self._account, self._contact)
-        self.add(self._read_marker_row)
+        if self._contact is not None:
+            self._read_marker_row = ReadMarkerRow(self._account, self._contact)
+            self.add(self._read_marker_row)
 
         self._scroll_hint_row = ScrollHintRow(self._account,
                                               history_mode=self._history_mode)
@@ -133,8 +136,9 @@ class ConversationView(Gtk.ListBox):
         if other_text_tags is None:
             other_text_tags = []
 
-        if (kind in ('status', 'info') or
-                (subject and self._contact.is_groupchat)):
+        muc_subject = bool(subject and self._contact is not None and
+                           self._contact.is_groupchat)
+        if kind in ('status', 'info') or muc_subject:
             message = InfoMessageRow(
                 self._account,
                 timestamp,
@@ -157,6 +161,11 @@ class ConversationView(Gtk.ListBox):
                 return
 
             avatar = self._get_avatar(kind, name)
+
+            is_groupchat = False
+            if self._contact is not None:
+                is_groupchat = self._contact.is_groupchat
+
             message = MessageRow(
                 self._account,
                 message_id,
@@ -166,7 +175,7 @@ class ConversationView(Gtk.ListBox):
                 text,
                 other_text_tags,
                 avatar,
-                self._contact.is_groupchat,
+                is_groupchat,
                 additional_data=additional_data,
                 display_marking=display_marking,
                 marker=marker,
@@ -181,6 +190,9 @@ class ConversationView(Gtk.ListBox):
         self._insert_message(message)
 
     def _get_avatar(self, kind, name):
+        if self._contact is None:
+            return None
+
         scale = self.get_scale_factor()
         if self._contact.is_groupchat:
             contact = self._contact.get_resource(name)

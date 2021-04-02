@@ -184,8 +184,7 @@ class ConversationTextview(HtmlTextView):
                 if (name and (text.startswith('/me ') or
                               text.startswith('/me\n'))):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
-                self.display_html(
-                    xhtml, self, self)
+                self.display_html(xhtml, self)
                 return
             except Exception as err:
                 log.debug('Error processing xhtml: %s', err)
@@ -217,7 +216,7 @@ class ConversationTextview(HtmlTextView):
         GLib.idle_add(self.queue_resize)
 
     def parse_formatting(self, text, text_tags, graphics=True,
-                         additional_data=None):
+                         additional_data=None, iter_=None):
         '''
         Parses message formatting (Emojis, URIs, Styles).
         A regex is used for text matching. Each text fragment gets
@@ -237,10 +236,8 @@ class ConversationTextview(HtmlTextView):
         else:
             insert_tags_func = buffer_.insert
 
-        # TODO: Adapt HtmlHandler.handle_specials()
-        # detect_and_print_special_text() is used by
-        # HtmlHandler.handle_specials() and uses Gtk.TextTag objects,
-        # not strings
+        # parse_formatting() is used by HtmlHandler.handle_specials()
+        # and uses Gtk.TextTag objects, not strings
         if text_tags and isinstance(text_tags[0], Gtk.TextTag):
             insert_tags_func = buffer_.insert_with_tags
 
@@ -273,7 +270,11 @@ class ConversationTextview(HtmlTextView):
                 regex = LINK_REGEX
 
         iterator = regex.finditer(text)
-        end_iter = buffer_.get_end_iter()
+        if iter_:
+            end_iter = iter_
+        else:
+            end_iter = buffer_.get_end_iter()
+
         # TODO: Evaluate limit
         # Too many fragments (emoticons, LaTeX formulas, etc)
         # may cause Gajim to freeze (see #5129).
@@ -285,7 +286,8 @@ class ConversationTextview(HtmlTextView):
             fragment = text[start:end]
             if start > index:
                 text_before_fragment = text[index:start]
-                end_iter = buffer_.get_end_iter()
+                if not iter_:
+                    end_iter = buffer_.get_end_iter()
                 if text_tags:
                     insert_tags_func(
                         end_iter, text_before_fragment, *text_tags)
@@ -296,7 +298,8 @@ class ConversationTextview(HtmlTextView):
             self.apply_formatting(fragment,
                                   text_tags,
                                   graphics=graphics,
-                                  additional_data=additional_data)
+                                  additional_data=additional_data,
+                                  iter_=end_iter)
             fragment_limit += 1
             if fragment_limit <= 0:
                 break
@@ -304,8 +307,10 @@ class ConversationTextview(HtmlTextView):
         # Add remaining text after last match
         insert_tags_func(buffer_.get_end_iter(), text[index:], *text_tags)
 
+        return end_iter
+
     def apply_formatting(self, fragment, text_tags, graphics=True,
-                         additional_data=None):
+                         additional_data=None, iter_=None):
         # TODO: Plugin system GUI extension point
         # self.plugin_modified = False
         # app.plugin_manager.extension_point('print_special_text', self,
@@ -329,7 +334,10 @@ class ConversationTextview(HtmlTextView):
         # Check if we accept this as an uri
         is_valid_uri = fragment.startswith(tuple(URI_SCHEMES))
 
-        end_iter = buffer_.get_end_iter()
+        if iter_:
+            end_iter = iter_
+        else:
+            end_iter = buffer_.get_end_iter()
 
         theme = app.settings.get('emoticons_theme')
         show_emojis = theme and theme != 'font'

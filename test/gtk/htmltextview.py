@@ -8,17 +8,29 @@ from gajim.common import app
 from gajim.common import configpaths
 configpaths.init()
 
+from gajim.common.const import KindConstant
 
 from gajim import gui
 gui.init('gtk')
 
 from gajim.common.helpers import AdditionalDataDict
 
-from gajim.conversation_textview import ConversationTextview
+from gajim.gui.conversation.view import ConversationView
 from gajim.gui_interface import Interface
 
 
+def setting_side_effect(*args, **kwargs):
+    if args[0] == 'chat_timestamp_format':
+        return '%H:%M'
+    if args[0] in ('autoawaytime', 'autoxatime'):
+        return 5
+    if args[0] == 'show_xhtml':
+        return True
+
+
 app.settings = MagicMock()
+app.settings.get.side_effect = setting_side_effect
+
 app.plugin_manager = MagicMock()
 app.logger = MagicMock()
 app.cert_store = MagicMock()
@@ -51,10 +63,6 @@ XHTML = [
     ''',
 
     '''
-    <hr />
-    ''',
-
-    '''
     <body xmlns='http://www.w3.org/1999/xhtml'>
         <p style='font-size:large'>
             <span style='font-style: italic'>O
@@ -63,10 +71,6 @@ XHTML = [
             <span style='font-weight: bold'>envy</span>!
         </p>
     </body>
-    ''',
-
-    '''
-    <hr />
     ''',
 
     '''
@@ -83,10 +87,6 @@ XHTML = [
     ''',
 
     '''
-    <hr />
-    ''',
-
-    '''
     <body xmlns='http://www.w3.org/1999/xhtml'>
         <p style='text-align:center'>
             Hey, are you licensed to <a href='http://www.jabber.org/'>Jabber</a>?
@@ -96,10 +96,6 @@ XHTML = [
                 alt='A License to Jabber' width='50%' height='50%'/>
         </p>
     </body>
-    ''',
-
-    '''
-    <hr />
     ''',
 
     '''
@@ -120,10 +116,6 @@ XHTML = [
     ''',
 
     '''
-    <hr />
-    ''',
-
-    '''
     <body xmlns='http://www.w3.org/1999/xhtml'>
         <ol style='background-color:rgb(120,140,100)'>
             <li> One </li>
@@ -139,10 +131,6 @@ XHTML = [
             <li> Three </li>
         </ol>
     </body>
-    ''',
-
-    '''
-    <hr />
     ''',
 
     '''
@@ -169,10 +157,6 @@ XHTML = [
     ''',
 
     '''
-    <hr />
-    ''',
-
-    '''
     <body xmlns='http://www.w3.org/1999/xhtml'>
         <img src='data:image/png;base64,R0lGODdhMAAwAPAAAAAAAP///ywAAAAAMAAw\
             AAAC8IyPqcvt3wCcDkiLc7C0qwyGHhSWpjQu5yqmCYsapyuvUUlvONmOZtfzgFz\
@@ -183,32 +167,38 @@ XHTML = [
             hhx4dbgYKAAA7' alt='Larry'/>
     </body>
     ''',
-
 ]
 
 
 class TextviewWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Textview Test")
+        Gtk.Window.__init__(self, title='Textview Test')
         self.set_default_size(600, 600)
 
-        self._textview = ConversationTextview(None)
+        self._conversation_view = ConversationView(None, None)
 
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        scrolled.add(self._textview.tv)
+        scrolled.add(self._conversation_view)
         self.add(scrolled)
         self.show()
         self._print_xhtml()
 
     def _print_xhtml(self):
+        timestamp = 1
         for xhtml in XHTML:
             additional_data = AdditionalDataDict()
             additional_data.set_value('gajim', 'xhtml', xhtml)
-            self._textview.print_real_text(None, additional_data=additional_data)
-            self._textview.print_real_text('\n')
+            self._conversation_view.add_message(
+                '',
+                KindConstant.SINGLE_MSG_RECV,
+                'Test Row',
+                timestamp,
+                additional_data=additional_data)
+        timestamp += 1
+
 
 win = TextviewWindow()
-win.connect("destroy", Gtk.main_quit)
+win.connect('destroy', Gtk.main_quit)
 win.show_all()
 Gtk.main()
