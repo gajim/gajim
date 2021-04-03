@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
+
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -57,7 +59,8 @@ class MessageRow(BaseRow):
         BaseRow.__init__(self, account, widget='textview',
                          history_mode=history_mode)
         self.type = 'chat'
-        self.timestamp = timestamp
+        self.timestamp = datetime.fromtimestamp(timestamp)
+        self.db_timestamp = timestamp
         self.message_id = message_id
         self.log_line_id = log_line_id
         self.kind = kind
@@ -84,7 +87,7 @@ class MessageRow(BaseRow):
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.pack_start(
             self.create_name_widget(name, kind, is_groupchat), False, True, 0)
-        timestamp_label = self.create_timestamp_widget(timestamp)
+        timestamp_label = self.create_timestamp_widget(self.timestamp)
         timestamp_label.set_margin_start(6)
         self._meta_box.pack_end(timestamp_label, False, True, 0)
         # TODO: implement app.settings.get('print_time') 'always', 'sometimes'?

@@ -321,15 +321,15 @@ class MessageArchiveStorage(SqliteStorage):
         return None
 
     @timeit
-    def get_conversation_before(self, account, jid, end_timestamp, n_lines):
+    def get_conversation_before(self, account, jid, timestamp, n_lines):
         """
-        Load n_lines lines of conversation with jid before end_timestamp
+        Load n_lines lines of conversation with jid before timestamp
 
         :param account:         The account
 
         :param jid:             The jid for which we request the conversation
 
-        :param end_timestamp:   end timestamp / datetime.datetime instance
+        :param timestamp:       timestamp
 
         returns a list of namedtuples
         """
@@ -351,19 +351,18 @@ class MessageArchiveStorage(SqliteStorage):
 
         return self._con.execute(
             sql,
-            tuple(jids) + (end_timestamp.timestamp(), n_lines)).fetchall()
+            tuple(jids) + (timestamp, n_lines)).fetchall()
 
     @timeit
-    def get_conversation_muc_before(self, account, jid, end_timestamp,
-                                    n_lines):
+    def get_conversation_muc_before(self, account, jid, timestamp, n_lines):
         """
-        Load n_lines lines of conversation with jid before end_timestamp
+        Load n_lines lines of conversation with jid before timestamp
 
         :param account:         The account
 
         :param jid:             The jid for which we request the conversation
 
-        :param end_timestamp:   end timestamp / datetime.datetime instance
+        :param timestamp:       timestamp
 
         returns a list of namedtuples
         """
@@ -386,7 +385,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         return self._con.execute(
             sql,
-            tuple(jids) + (end_timestamp.timestamp(), n_lines)).fetchall()
+            tuple(jids) + (timestamp, n_lines)).fetchall()
 
     @timeit
     def get_last_conversation_line(self, account, jid):

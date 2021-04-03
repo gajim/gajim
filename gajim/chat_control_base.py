@@ -25,7 +25,6 @@
 
 import os
 import sys
-import datetime
 import time
 import uuid
 import tempfile
@@ -189,18 +188,16 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.conversation_scrolledwindow.add(self.conversation_view)
         self._scrolled_old_upper = None
         self._scrolled_old_value = None
-        self._scrolled_previous_value = 0
 
-        self._fetching_history = False
-        self._initial_fetch_done = False
+        self._fetch_start_upper = None
+        self._current_upper = 0
+        self._autoscroll = True
+        self._no_more_messages = False
 
         vadjustment = self.xml.conversation_scrolledwindow.get_vadjustment()
-        vadjustment.connect(
-            'changed', self._on_conversation_vadjustment_changed)
-        vadjustment.connect('value-changed', self._on_scroll_value_changed)
-        vscrollbar = self.xml.conversation_scrolledwindow.get_vscrollbar()
-        vscrollbar.connect('button-release-event',
-                           self._on_scrollbar_button_release)
+
+        vadjustment.connect('notify::upper', self._on_adj_upper_changed)
+        vadjustment.connect('notify::value', self._on_adj_value_changed)
 
         self.msg_textview = MessageInputTextView()
         self.msg_textview.connect('paste-clipboard',
@@ -1413,31 +1410,29 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.fetch_n_lines_history(lines)
 
     def fetch_n_lines_history(self, n_lines):
-        if self._fetching_history:
-            return
-
-        timestamp_end = self.conversation_view.first_message_timestamp
-        if not timestamp_end:
-            timestamp_end = datetime.datetime.now()
-        self._fetching_history = True
-        adjustment = self.xml.conversation_scrolledwindow.get_vadjustment()
-
-        # Store these values so we can restore scroll position later
-        self._scrolled_old_upper = adjustment.get_upper()
-        self._scrolled_old_value = adjustment.get_value()
+        row = self.conversation_view.get_first_message_row()
+        if row is None:
+            timestamp = time.time()
+        else:
+            timestamp = row.db_timestamp
 
         if self.is_groupchat:
             messages = app.storage.archive.get_conversation_muc_before(
                 self.account,
                 self.contact.jid,
-                timestamp_end,
+                timestamp,
                 n_lines)
         else:
             messages = app.storage.archive.get_conversation_before(
                 self.account,
                 self.contact.jid,
-                timestamp_end,
+                timestamp,
                 n_lines)
+
+        if not messages:
+            self._no_more_messages = True
+            print('SET NO MORE')
+            return
 
         for msg in messages:
             if not msg:
@@ -1468,79 +1463,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 error=msg.error,
                 history=True)
 
-    def _on_edge_reached(self, _scrolledwindow, pos):
-        if pos != Gtk.PositionType.BOTTOM:
-            return
-        # Remove all events and set autoscroll True
-        app.log('autoscroll').info('Autoscroll enabled')
-        self.conversation_view.autoscroll = True
-        if self.resource:
-            jid = self.contact.get_full_jid()
-        else:
-            jid = self.contact.jid
-        types_list = []
-        if self._type.is_groupchat:
-            types_list = ['printed_gc_msg', 'gc_msg', 'printed_marked_gc_msg']
-        else:
-            types_list = [f'printed_{self._type}', str(self._type)]
-
-        if not app.events.get_events(self.account, jid, types_list):
-            return
-        if not self.parent_win:
-            return
-        if (self.parent_win.get_active_control() == self and
-                self.parent_win.window.is_active()):
-            # we are at the end
-            if not app.events.remove_events(
-                    self.account, jid, types=types_list):
-                # There were events to remove
-                self.redraw_after_event_removed(jid)
-                # XEP-0333 Send <displayed> tag
-                self._client.get_module('ChatMarkers').send_displayed_marker(
-                    self.contact,
-                    self.last_msg_id,
-                    self._type)
-                self.last_msg_id = None
-
-    def _on_edge_overshot(self, _scrolledwindow, pos):
-        # Fetch messages if we scroll against the top
-        if pos != Gtk.PositionType.TOP:
-            return
-        self.fetch_n_lines_history(30)
-
-    def _on_scroll_value_changed(self, adjustment):
-        if self.conversation_view.clearing or self._fetching_history:
-            return
-
-        value = adjustment.get_value()
-        previous_value = self._scrolled_previous_value
-        self._scrolled_previous_value = value
-
-        if value >= previous_value:
-            return
-
-        # Fetch messages before we reach the top
-        if value <= int(0.1 * adjustment.get_upper()):
-            self.fetch_n_lines_history(10)
-
-    def _on_scroll_realize(self, _widget):
-        # Initial message fetching when ChatControl is first opened
-        if not self._initial_fetch_done:
-            self._initial_fetch_done = True
-            restore_lines = app.settings.get('restore_lines')
-            if restore_lines <= 0:
-                return
-            self.fetch_n_lines_history(restore_lines)
-
-    def _on_scrollbar_button_release(self, scrollbar, event):
-        if event.get_button()[1] != 1:
-            # We want only to catch the left mouse button
-            return
-
-        if not at_the_end(scrollbar.get_parent()):
-            app.log('autoscroll').info('Autoscroll disabled')
-            self.conversation_view.autoscroll = False
-
     def has_focus(self):
         if self.parent_win:
             if self.parent_win.window.get_property('has-toplevel-focus'):
@@ -1548,56 +1470,45 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                     return True
         return False
 
-    def _on_scroll(self, widget, event):
-        if not self.conversation_view.autoscroll:
-            # autoscroll is already disabled
-            return
+    def _on_adj_upper_changed(self, adj, *args):
+        upper = adj.get_upper()
+        diff = upper - self._current_upper
 
-        if widget is None:
-            # call from _on_conversation_view_key_press()
-            # SHIFT + Gdk.KEY_Page_Up
-            if event != Gdk.KEY_Page_Up:
-                return
+        if diff != 0:
+            self._current_upper = upper
+            if self._autoscroll:
+                adj.set_value(adj.get_upper() - adj.get_page_size())
+            else:
+                # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
+                self.xml.conversation_scrolledwindow.set_kinetic_scrolling(True)
+                adj.set_value(adj.get_value() + diff)
+
+        if upper == adj.get_page_size():
+            # There is no scrollbar, load history until there is
+            self.fetch_n_lines_history(30)
+
+    def _on_adj_value_changed(self, adj, *args):
+        bottom = adj.get_upper() - adj.get_page_size()
+        if (bottom - adj.get_value()) < 1:
+            self._autoscroll = True
         else:
-            # On scrolling UP disable autoscroll
-            # get_scroll_direction() sets has_direction only TRUE
-            # if smooth scrolling is deactivated. If we have smooth
-            # smooth scrolling we have to use get_scroll_deltas()
-            has_direction, direction = event.get_scroll_direction()
-            if not has_direction:
-                direction = None
-                smooth, delta_x, delta_y = event.get_scroll_deltas()
-                if smooth:
-                    if delta_y < 0:
-                        direction = Gdk.ScrollDirection.UP
-                    elif delta_y > 0:
-                        direction = Gdk.ScrollDirection.DOWN
-                    elif delta_x < 0:
-                        direction = Gdk.ScrollDirection.LEFT
-                    elif delta_x > 0:
-                        direction = Gdk.ScrollDirection.RIGHT
-                else:
-                    app.log('autoscroll').warning(
-                        'Scroll directions can’t be determined')
+            self._autoscroll = False
 
-            if direction != Gdk.ScrollDirection.UP:
-                return
-        # Check if we have a Scrollbar
-        adjustment = self.xml.conversation_scrolledwindow.get_vadjustment()
-        if adjustment.get_upper() != adjustment.get_page_size():
-            app.log('autoscroll').info('Autoscroll disabled')
-            self.conversation_view.autoscroll = False
-
-    def _on_conversation_vadjustment_changed(self, adjustment):
-        self.scroll_to_end()
-        if self._fetching_history:
-            # Make sure the scroll position is kept
-            new_upper = adjustment.get_upper()
-            diff = new_upper - self._scrolled_old_upper
-            new_value = diff + self._scrolled_old_value
-            adjustment.set_value(new_value)
-            self._fetching_history = False
+        if self._no_more_messages:
+            self._fetch_start_upper = None
             return
+
+        if self._fetch_start_upper == adj.get_upper():
+            return
+
+        self._fetch_start_upper = None
+
+        # Load messages when we are near the top
+        if adj.get_value() < adj.get_page_size() * 2:
+            self._fetch_start_upper = adj.get_upper()
+            # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
+            self.xml.conversation_scrolledwindow.set_kinetic_scrolling(False)
+            self.fetch_n_lines_history(30)
 
     def scroll_messages(self, direction, msg_buf, msg_type):
         if msg_type == 'sent':

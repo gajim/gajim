@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
+
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -34,7 +36,8 @@ class InfoMessageRow(BaseRow):
         BaseRow.__init__(self, account, widget='textview',
                          history_mode=history_mode)
         self.type = 'info'
-        self.timestamp = timestamp
+        self.timestamp = datetime.fromtimestamp(timestamp)
+        self.db_timestamp = timestamp
         self.kind = kind
 
         if subject:
@@ -50,7 +53,7 @@ class InfoMessageRow(BaseRow):
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
-        timestamp_widget = self.create_timestamp_widget(timestamp)
+        timestamp_widget = self.create_timestamp_widget(self.timestamp)
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 2, 0, 1, 1)
 

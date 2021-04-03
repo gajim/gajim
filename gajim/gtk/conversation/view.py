@@ -105,6 +105,12 @@ class ConversationView(Gtk.ListBox):
 
         GLib.idle_add(self._reset_conversation_view)
 
+    def get_first_message_row(self):
+        for row in self.get_children():
+            if isinstance(row, MessageRow):
+                return row
+        return None
+
     def _reset_conversation_view(self):
         self._first_date = None
         self._last_date = None
@@ -149,7 +155,6 @@ class ConversationView(Gtk.ListBox):
 
         if not timestamp:
             timestamp = time.time()
-        time_ = datetime.fromtimestamp(timestamp)
 
         if other_text_tags is None:
             other_text_tags = []
@@ -158,7 +163,7 @@ class ConversationView(Gtk.ListBox):
                 (subject and self._contact.is_groupchat)):
             message = InfoMessageRow(
                 self._account,
-                time_,
+                timestamp,
                 text,
                 other_text_tags,
                 kind,
@@ -181,7 +186,7 @@ class ConversationView(Gtk.ListBox):
             message = MessageRow(
                 self._account,
                 message_id,
-                time_,
+                timestamp,
                 kind,
                 name,
                 text,
@@ -196,11 +201,11 @@ class ConversationView(Gtk.ListBox):
                 history_mode=self._history_mode,
                 log_line_id=log_line_id)
 
-        self._insert_message(message, time_, kind, history)
+        self._insert_message(message, kind, history)
 
         # Check for maximum message count
-        if self.autoscroll and self._row_count > self._max_row_count:
-            self._reduce_message_count()
+        # if self.autoscroll and self._row_count > self._max_row_count:
+        #     self._reduce_message_count()
 
     def _get_avatar(self, kind, name):
         scale = self.get_scale_factor()
@@ -216,20 +221,20 @@ class ConversationView(Gtk.ListBox):
 
         return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
-    def _insert_message(self, message, time_, kind, history):
-        current_date = time_.strftime('%a, %d %b %Y')
+    def _insert_message(self, message, kind, history):
+        current_date = message.timestamp.strftime('%a, %d %b %Y')
 
-        if self._is_out_of_order(time_, history):
-            insertion_point = bisect_left(self._timestamps_inserted, time_)
+        if self._is_out_of_order(message.timestamp, history):
+            insertion_point = bisect_left(self._timestamps_inserted, message.timestamp)
             date_check_point = min(len(
                 self._timestamps_inserted) - 1, insertion_point - 1)
             date_at_dcp = self._timestamps_inserted[date_check_point].strftime(
                 '%a, %d %b %Y')
             if date_at_dcp != current_date:
-                associated_timestamp = time_ - timedelta(
-                    hours=time_.hour,
-                    minutes=time_.minute,
-                    seconds=time_.second)
+                associated_timestamp = message.timestamp - timedelta(
+                    hours=message.timestamp.hour,
+                    minutes=message.timestamp.minute,
+                    seconds=message.timestamp.second)
                 date_row = DateRow(
                     self._account, current_date, associated_timestamp)
                 self.insert(date_row, insertion_point)
@@ -238,18 +243,18 @@ class ConversationView(Gtk.ListBox):
                 self._row_count += 1
                 insertion_point += 1
             if (kind in ('incoming', 'incoming_queue') and
-                    time_ > self._last_incoming_timestamp):
-                self._last_incoming_timestamp = time_
+                    message.timestamp > self._last_incoming_timestamp):
+                self._last_incoming_timestamp = message.timestamp
             self.insert(message, insertion_point)
-            self._timestamps_inserted.insert(insertion_point, time_)
-            current_timestamp = time_
+            self._timestamps_inserted.insert(insertion_point, message.timestamp)
+            current_timestamp = message.timestamp
             self._row_count += 1
         elif history:
             if current_date != self._first_date:
-                associated_timestamp = time_ - timedelta(
-                    hours=time_.hour,
-                    minutes=time_.minute,
-                    seconds=time_.second)
+                associated_timestamp = message.timestamp - timedelta(
+                    hours=message.timestamp.hour,
+                    minutes=message.timestamp.minute,
+                    seconds=message.timestamp.second)
                 date_row = DateRow(
                     self._account, current_date, associated_timestamp)
                 self.insert(date_row, 1)
@@ -257,22 +262,22 @@ class ConversationView(Gtk.ListBox):
                 self._row_count += 1
             self._first_date = current_date
             if kind in ('incoming', 'incoming_queue', 'outgoing'):
-                self.first_message_timestamp = time_
+                self.first_message_timestamp = message.timestamp
             if (kind in ('incoming', 'incoming_queue') and
-                    time_ > self._last_incoming_timestamp):
-                self._last_incoming_timestamp = time_
+                    message.timestamp > self._last_incoming_timestamp):
+                self._last_incoming_timestamp = message.timestamp
             self.insert(message, 2)
-            self._timestamps_inserted.insert(2, time_)
+            self._timestamps_inserted.insert(2, message.timestamp)
             if self._last_date is None:
                 self._last_date = current_date
-            current_timestamp = time_
+            current_timestamp = message.timestamp
             self._row_count += 1
         else:
             if current_date != self._last_date:
-                associated_timestamp = time_ - timedelta(
-                    hours=time_.hour,
-                    minutes=time_.minute,
-                    seconds=time_.second)
+                associated_timestamp = message.timestamp - timedelta(
+                    hours=message.timestamp.hour,
+                    minutes=message.timestamp.minute,
+                    seconds=message.timestamp.second)
                 date_row = DateRow(
                     self._account, current_date, associated_timestamp)
                 self.add(date_row)
@@ -282,14 +287,14 @@ class ConversationView(Gtk.ListBox):
                 self._first_date = current_date
             if (kind in ('incoming', 'incoming_queue', 'outgoing') and not
                     self.first_message_timestamp):
-                self.first_message_timestamp = time_
+                self.first_message_timestamp = message.timestamp
             if (kind in ('incoming', 'incoming_queue') and
-                    time_ > self._last_incoming_timestamp):
-                self._last_incoming_timestamp = time_
+                    message.timestamp > self._last_incoming_timestamp):
+                self._last_incoming_timestamp = message.timestamp
             self._last_date = current_date
             self.add(message)
-            self._timestamps_inserted.append(time_)
-            current_timestamp = time_
+            self._timestamps_inserted.append(message.timestamp)
+            current_timestamp = message.timestamp
             self._row_count += 1
 
         if message.type == 'chat':
