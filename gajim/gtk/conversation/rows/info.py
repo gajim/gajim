@@ -65,3 +65,4 @@ class InfoMessageRow(BaseRow):
             graphics=graphics)
 
         self.grid.attach(self.textview, 1, 0, 1, 1)
+        self.show_all()
