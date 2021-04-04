@@ -28,6 +28,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import to_user_string
+from gajim.common.helpers import get_start_of_day
 
 from .util import scroll_to_end
 from .conversation.rows.read_marker import ReadMarkerRow
@@ -53,6 +54,7 @@ class ConversationView(Gtk.ListBox):
     def __init__(self, account, contact, history_mode=False):
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.set_sort_func(self._sort_func)
         self._account = account
         self._client = app.get_client(account)
         self._contact = contact
@@ -62,29 +64,14 @@ class ConversationView(Gtk.ListBox):
         self.autoscroll = True
         self.clearing = False
 
-        # Both first and last DateRow (datetime)
-        self._first_date = None
-        self._last_date = None
-
         # Keeps track of the number of rows shown in ConversationView
         self._row_count = 0
         self._max_row_count = 100
 
+        self._active_date_rows = set()
+
         # Keeps inserted message IDs to avoid re-inserting the same message
         self._message_ids_inserted = {}
-
-        # We keep a sorted array of all the timestamps we've inserted, which
-        # have a 1-to-1 mapping to the actual child elements of this ListBox
-        # (*all* rows are included).
-        # Binary-searching this array enables us to insert a message with a
-        # discontinuous timestamp (not less than or greater than the first or
-        # last message timestamp in the list), and insert it at the correct
-        # place in the ListBox.
-        self._timestamps_inserted = deque()
-
-        # Stores the timestamp of the first *chat* row inserted
-        # (not a system row or date row)
-        self.first_message_timestamp = None
 
         # Last incoming chat message timestamp (used for ReadMarkerRows)
         self._last_incoming_timestamp = datetime.fromtimestamp(0)
@@ -93,7 +80,6 @@ class ConversationView(Gtk.ListBox):
         self._scroll_hint_row = ScrollHintRow(self._account,
                                               history_mode=self._history_mode)
         self.add(self._scroll_hint_row)
-        self._timestamps_inserted.append(datetime.fromtimestamp(0))
 
     def clear(self):
         self.clearing = True
@@ -112,14 +98,16 @@ class ConversationView(Gtk.ListBox):
         self._scroll_hint_row.set_history_complete(complete)
 
     def _reset_conversation_view(self):
-        self._first_date = None
-        self._last_date = None
         self._message_ids_inserted.clear()
-        self.first_message_timestamp = None
         self._last_incoming_timestamp = datetime.fromtimestamp(0)
         self._timestamps_inserted.clear()
         self._row_count = 0
         self.clearing = False
+
+    def _sort_func(self, row1, row2):
+        if row1.timestamp == row2.timestamp:
+            return 0
+        return -1 if row1.timestamp < row2.timestamp else 1
 
     def add_message(self,
                     text,
@@ -201,7 +189,7 @@ class ConversationView(Gtk.ListBox):
                 history_mode=self._history_mode,
                 log_line_id=log_line_id)
 
-        self._insert_message(message, kind, history)
+        self._insert_message(message)
 
     def _get_avatar(self, kind, name):
         scale = self.get_scale_factor()
@@ -217,128 +205,77 @@ class ConversationView(Gtk.ListBox):
 
         return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
-    def _insert_message(self, message, kind, history):
-        current_date = message.timestamp.strftime('%a, %d %b %Y')
+    def _insert_message(self, message):
+        self.add(message)
+        self._add_date_row(message.timestamp)
+        self._check_for_merge(message)
 
-        if self._is_out_of_order(message.timestamp, history):
-            insertion_point = bisect_left(self._timestamps_inserted, message.timestamp)
-            date_check_point = min(len(
-                self._timestamps_inserted) - 1, insertion_point - 1)
-            date_at_dcp = self._timestamps_inserted[date_check_point].strftime(
-                '%a, %d %b %Y')
-            if date_at_dcp != current_date:
-                associated_timestamp = message.timestamp - timedelta(
-                    hours=message.timestamp.hour,
-                    minutes=message.timestamp.minute,
-                    seconds=message.timestamp.second)
-                date_row = DateRow(
-                    self._account, current_date, associated_timestamp)
-                self.insert(date_row, insertion_point)
-                self._timestamps_inserted.insert(
-                    insertion_point, associated_timestamp)
-                self._row_count += 1
-                insertion_point += 1
-            if (kind in ('incoming', 'incoming_queue') and
-                    message.timestamp > self._last_incoming_timestamp):
-                self._last_incoming_timestamp = message.timestamp
-            self.insert(message, insertion_point)
-            self._timestamps_inserted.insert(insertion_point, message.timestamp)
-            current_timestamp = message.timestamp
-            self._row_count += 1
-        elif history:
-            if current_date != self._first_date:
-                associated_timestamp = message.timestamp - timedelta(
-                    hours=message.timestamp.hour,
-                    minutes=message.timestamp.minute,
-                    seconds=message.timestamp.second)
-                date_row = DateRow(
-                    self._account, current_date, associated_timestamp)
-                self.insert(date_row, 1)
-                self._timestamps_inserted.insert(1, associated_timestamp)
-                self._row_count += 1
-            self._first_date = current_date
-            if kind in ('incoming', 'incoming_queue', 'outgoing'):
-                self.first_message_timestamp = message.timestamp
-            if (kind in ('incoming', 'incoming_queue') and
-                    message.timestamp > self._last_incoming_timestamp):
-                self._last_incoming_timestamp = message.timestamp
-            self.insert(message, 2)
-            self._timestamps_inserted.insert(2, message.timestamp)
-            if self._last_date is None:
-                self._last_date = current_date
-            current_timestamp = message.timestamp
-            self._row_count += 1
-        else:
-            if current_date != self._last_date:
-                associated_timestamp = message.timestamp - timedelta(
-                    hours=message.timestamp.hour,
-                    minutes=message.timestamp.minute,
-                    seconds=message.timestamp.second)
-                date_row = DateRow(
-                    self._account, current_date, associated_timestamp)
-                self.add(date_row)
-                self._timestamps_inserted.append(associated_timestamp)
-                self._row_count += 1
-            if self._first_date is None:
-                self._first_date = current_date
-            if (kind in ('incoming', 'incoming_queue', 'outgoing') and not
-                    self.first_message_timestamp):
-                self.first_message_timestamp = message.timestamp
-            if (kind in ('incoming', 'incoming_queue') and
-                    message.timestamp > self._last_incoming_timestamp):
-                self._last_incoming_timestamp = message.timestamp
-            self._last_date = current_date
-            self.add(message)
-            self._timestamps_inserted.append(message.timestamp)
-            current_timestamp = message.timestamp
-            self._row_count += 1
-
-        if message.type == 'chat':
-            self._merge_message(current_timestamp)
-            self._update_read_marker(current_timestamp)
-
-        self.show_all()
-
-    def _is_out_of_order(self, time_: datetime, history: bool) -> bool:
-        if history:
-            if self.first_message_timestamp:
-                return time_ > self.first_message_timestamp
-            return False
-        if len(self._timestamps_inserted) > 1:
-            return time_ < self._timestamps_inserted[-1]
-        return False
-
-    def _merge_message(self, timestamp):
-        # 'Merge' message rows if they both meet certain conditions
-        # (see _is_mergeable). A merged message row does not display any
-        # avatar or meta info, and makes it look merged with the previous row.
-        if self._contact.is_groupchat:
+    def _add_date_row(self, timestamp):
+        start_of_day = get_start_of_day(timestamp)
+        if start_of_day in self._active_date_rows:
             return
 
-        current_index = self._timestamps_inserted.index(timestamp)
-        previous_row = self.get_row_at_index(current_index - 1)
-        current_row = self.get_row_at_index(current_index)
-        next_row = self.get_row_at_index(current_index + 1)
-        if next_row is not None:
-            if self._is_mergeable(current_row, next_row):
-                next_row.set_merged(True)
+        date_row = DateRow(self._account, start_of_day)
+        self._active_date_rows.add(start_of_day)
+        self.add(date_row)
 
-        if self._is_mergeable(current_row, previous_row):
-            current_row.set_merged(True)
-            if next_row is not None:
-                if self._is_mergeable(current_row, next_row):
-                    next_row.set_merged(True)
+        row = self.get_row_at_index(date_row.get_index() + 1)
+        if row is None:
+            return
 
-    @staticmethod
-    def _is_mergeable(row1, row2):
-        # TODO: Check for same encryption
-        timestamp1 = row1.timestamp.strftime('%H:%M')
-        timestamp2 = row2.timestamp.strftime('%H:%M')
-        kind1 = row1.kind
-        kind2 = row2.kind
-        if timestamp1 == timestamp2 and kind1 == kind2:
-            return True
-        return False
+        if row.type != 'chat':
+            return
+
+        row.set_merged(False)
+
+    def _check_for_merge(self, message):
+        if message.type != 'chat':
+            return
+
+        ancestor = self._find_ancestor(message)
+        if ancestor is None:
+            self._update_descendants(message)
+        else:
+            if message.is_mergeable(ancestor):
+                message.set_merged(True)
+
+    def _find_ancestor(self, message):
+        index = message.get_index()
+        while index != 0:
+            index -= 1
+            row = self.get_row_at_index(index)
+            if row is None:
+                return None
+
+            if row.type != 'chat':
+                return None
+
+            if not message.is_same_sender(row):
+                return None
+
+            if not row.is_merged:
+                return row
+        return None
+
+    def _update_descendants(self, message):
+        index = message.get_index()
+        while True:
+            index += 1
+            row = self.get_row_at_index(index)
+            if row is None:
+                return
+
+            if row.type != 'chat':
+                return
+
+            if message.is_mergeable(row):
+                row.set_merged(True)
+                continue
+
+            if message.is_same_sender(row):
+                row.set_merged(False)
+                self._update_descendants(row)
+            return
 
     def reduce_message_count(self):
         successful = False
@@ -352,8 +289,6 @@ class ConversationView(Gtk.ListBox):
                 # it’s safe to remove the fist row
                 self.remove(row1)
                 successful = True
-                self._timestamps_inserted.remove(row1.timestamp)
-                self._first_date = row2.timestamp.strftime('%a, %d %b %Y')
                 self._row_count -= 1
                 continue
 
@@ -362,14 +297,6 @@ class ConversationView(Gtk.ListBox):
                 # remove the second row instead
                 self.remove(row2)
                 successful = True
-                self._timestamps_inserted.remove(row2.timestamp)
-                if row2.message_id:
-                    self._message_ids_inserted.pop(row2.message_id)
-                chat_row = self._get_first_chat_row()
-                if chat_row is not None:
-                    self.first_message_timestamp = chat_row.timestamp
-                else:
-                    self.first_message_timestamp = None
                 self._row_count -= 1
                 continue
 
@@ -377,17 +304,6 @@ class ConversationView(Gtk.ListBox):
                 # Not a date row, safe to remove
                 self.remove(row1)
                 successful = True
-                self._timestamps_inserted.remove(row1.timestamp)
-                if row1.message_id:
-                    self._message_ids_inserted.pop(row1.message_id)
-                if row2.type == 'chat':
-                    self.first_message_timestamp = row2.timestamp
-                else:
-                    chat_row = self._get_first_chat_row()
-                    if chat_row is not None:
-                        self.first_message_timestamp = chat_row.timestamp
-                    else:
-                        self.first_message_timestamp = None
                 self._row_count -= 1
 
         return successful
@@ -407,12 +323,6 @@ class ConversationView(Gtk.ListBox):
     def iter_rows(self):
         for row in self.get_children():
             yield row
-
-    def _get_first_chat_row(self):
-        for row in self.get_children():
-            if row.type == 'chat':
-                return row
-        return None
 
     def set_read_marker(self, id_):
         message_row = self._get_row_by_message_id(id_)
@@ -516,5 +426,3 @@ class ConversationView(Gtk.ListBox):
 
     def on_quote(self, text):
         self.emit('quote', text)
-
-    # TODO: focus_out_line for group chats

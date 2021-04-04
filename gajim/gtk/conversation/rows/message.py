@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
+from datetime import timedelta
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -29,6 +30,9 @@ from gajim.common.i18n import Q_
 from .base import BaseRow
 from .base import MoreMenuButton
 from ...util import format_fingerprint
+
+
+MERGE_TIMEFRAME = timedelta(seconds=120)
 
 
 class MessageRow(BaseRow):
@@ -135,6 +139,18 @@ class MessageRow(BaseRow):
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(bottom_box, 1, 1, 1, 1)
 
+        self.show_all()
+
+    def is_same_sender(self, message):
+        return message.name == self.name
+
+    def is_mergeable(self, message):
+        if message.type != self.type:
+            return False
+        if not self.is_same_sender(message):
+            return False
+        return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
+
     def on_copy_message(self, _widget):
         timestamp = self.timestamp.strftime('%x, %X')
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
@@ -232,6 +248,7 @@ class MessageRow(BaseRow):
         self._avatar_surface.set_from_surface(avatar)
 
     def set_merged(self, merged):
+        self._merged = merged
         if merged:
             self.get_style_context().add_class('merged')
             self._avatar_surface.set_no_show_all(True)

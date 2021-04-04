@@ -19,7 +19,7 @@ from .base import BaseRow
 
 
 class DateRow(BaseRow):
-    def __init__(self, account, date_string, timestamp):
+    def __init__(self, account, timestamp):
         BaseRow.__init__(self, account)
 
         self.set_selectable(False)
@@ -29,8 +29,10 @@ class DateRow(BaseRow):
         self.timestamp = timestamp
         self.get_style_context().add_class('conversation-date-row')
 
-        self.label.set_text(date_string)
+        self.label.set_text(timestamp.strftime('%a, %d %b %Y'))
         self.label.set_halign(Gtk.Align.CENTER)
         self.label.set_hexpand(True)
         self.label.get_style_context().add_class('conversation-meta')
         self.grid.attach(self.label, 0, 0, 1, 1)
+
+        self.show_all()

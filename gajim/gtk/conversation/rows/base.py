@@ -39,6 +39,7 @@ class BaseRow(Gtk.ListBoxRow):
         self.message_id = None
         self.log_line_id = None
         self.text = ''
+        self._merged = False
 
         self.get_style_context().add_class('conversation-row')
 
@@ -57,6 +58,10 @@ class BaseRow(Gtk.ListBoxRow):
             self.label.set_xalign(0)
             self.label.set_line_wrap_mode(
                 Pango.WrapMode.WORD_CHAR)
+
+    @property
+    def is_merged(self):
+        return self._merged
 
     def update_text_tags(self):
         if self.textview is not None:

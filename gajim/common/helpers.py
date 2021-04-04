@@ -1360,3 +1360,10 @@ def get_muc_context(jid):
     if (disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous):
         return 'private'
     return 'public'
+
+
+def get_start_of_day(date_time):
+    return date_time.replace(hour=0,
+                             minute=0,
+                             second=0,
+                             microsecond=0)
