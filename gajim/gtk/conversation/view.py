@@ -108,8 +108,8 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
-    def set_history_complete(self):
-        self._scroll_hint_row.set_history_complete()
+    def set_history_complete(self, complete):
+        self._scroll_hint_row.set_history_complete(complete)
 
     def _reset_conversation_view(self):
         self._first_date = None
@@ -202,10 +202,6 @@ class ConversationView(Gtk.ListBox):
                 log_line_id=log_line_id)
 
         self._insert_message(message, kind, history)
-
-        # Check for maximum message count
-        # if self.autoscroll and self._row_count > self._max_row_count:
-        #     self._reduce_message_count()
 
     def _get_avatar(self, kind, name):
         scale = self.get_scale_factor()
@@ -344,7 +340,8 @@ class ConversationView(Gtk.ListBox):
             return True
         return False
 
-    def _reduce_message_count(self):
+    def reduce_message_count(self):
+        successful = False
         while self._row_count > self._max_row_count:
             # We want to keep relevant DateRows when removing rows
             row1 = self.get_row_at_index(1)
@@ -354,6 +351,7 @@ class ConversationView(Gtk.ListBox):
                 # First two rows are date rows,
                 # it’s safe to remove the fist row
                 self.remove(row1)
+                successful = True
                 self._timestamps_inserted.remove(row1.timestamp)
                 self._first_date = row2.timestamp.strftime('%a, %d %b %Y')
                 self._row_count -= 1
@@ -363,6 +361,7 @@ class ConversationView(Gtk.ListBox):
                 # First one is a date row, keep it and
                 # remove the second row instead
                 self.remove(row2)
+                successful = True
                 self._timestamps_inserted.remove(row2.timestamp)
                 if row2.message_id:
                     self._message_ids_inserted.pop(row2.message_id)
@@ -377,6 +376,7 @@ class ConversationView(Gtk.ListBox):
             if row1.type != 'date':
                 # Not a date row, safe to remove
                 self.remove(row1)
+                successful = True
                 self._timestamps_inserted.remove(row1.timestamp)
                 if row1.message_id:
                     self._message_ids_inserted.pop(row1.message_id)
@@ -389,6 +389,8 @@ class ConversationView(Gtk.ListBox):
                     else:
                         self.first_message_timestamp = None
                 self._row_count -= 1
+
+        return successful
 
     def _get_row_by_message_id(self, id_):
         for row in self.get_children():

@@ -56,13 +56,15 @@ class ScrolledView(Gtk.ScrolledWindow):
         vadjustment.connect('notify::upper', self._on_adj_upper_changed)
         vadjustment.connect('notify::value', self._on_adj_value_changed)
 
-    @property
-    def autoscroll(self):
+    def get_autoscroll(self):
         return self._autoscroll
 
-    def set_history_complete(self):
-        self._complete = True
-        self.get_child().get_child().set_history_complete()
+    def get_view(self):
+        return self.get_child().get_child()
+
+    def set_history_complete(self, complete):
+        self._complete = complete
+        self.get_view().set_history_complete(complete)
 
     def _on_adj_upper_changed(self, adj, *args):
         upper = adj.get_upper()
@@ -72,6 +74,7 @@ class ScrolledView(Gtk.ScrolledWindow):
             self._current_upper = upper
             if self._autoscroll:
                 adj.set_value(adj.get_upper() - adj.get_page_size())
+
             else:
                 # Workaround
                 # https://gitlab.gnome.org/GNOME/gtk/merge_requests/395

@@ -29,6 +29,7 @@ class ScrollHintRow(BaseRow):
 
         self.type = 'system'
         self.timestamp = datetime.fromtimestamp(0)
+        self._history_mode = history_mode
 
         self.get_style_context().add_class('conversation-system-row')
 
@@ -36,14 +37,16 @@ class ScrollHintRow(BaseRow):
         self.label.set_hexpand(True)
         self.label.get_style_context().add_class(
             'conversation-meta')
-
-        if history_mode:
-            self.label.set_text(_('Use the calendar to select a specific date'))
-            self.grid.attach(self.label, 0, 1, 1, 1)
-            return
-
-        self.label.set_text(_('Scroll up to load more chat history…'))
         self.grid.attach(self.label, 0, 1, 1, 1)
 
-    def set_history_complete(self):
-        self.label.set_text(_('There is no more history'))
+        self.set_history_complete(False)
+
+    def set_history_complete(self, complete):
+        if self._history_mode:
+            self.label.set_text(_('Use the calendar to select a specific date'))
+            return
+
+        if complete:
+            self.label.set_text(_('There is no more history'))
+        else:
+            self.label.set_text(_('Scroll up to load more chat history…'))

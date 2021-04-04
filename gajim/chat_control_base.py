@@ -1412,7 +1412,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 n_lines)
 
         if not messages:
-            self._scrolled_view.set_history_complete()
+            self._scrolled_view.set_history_complete(True)
             return
 
         for msg in messages:
