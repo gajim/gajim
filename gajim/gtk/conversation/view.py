@@ -236,6 +236,9 @@ class ConversationView(Gtk.ListBox):
             if row is None:
                 return None
 
+            if row.type == 'read_marker':
+                continue
+
             if row.type != 'chat':
                 return None
 
@@ -253,6 +256,9 @@ class ConversationView(Gtk.ListBox):
             row = self.get_row_at_index(index)
             if row is None:
                 return
+
+            if row.type == 'read_marker':
+                continue
 
             if row.type != 'chat':
                 return
