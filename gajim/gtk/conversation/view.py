@@ -48,11 +48,6 @@ class ConversationView(Gtk.ListBox):
             None,
             (str, )
         ),
-        'load-history': (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,
-            (str, )
-        )
     }
 
     def __init__(self, account, contact, history_mode=False):
@@ -95,7 +90,8 @@ class ConversationView(Gtk.ListBox):
         self._last_incoming_timestamp = datetime.fromtimestamp(0)
 
         # Insert the very first row, containing the scroll hint and load button
-        self.add(ScrollHintRow(self._account, history_mode=self._history_mode))
+        self._scroll_hint_row = ScrollHintRow(self._account)
+        self.add(self._scroll_hint_row)
         self._timestamps_inserted.append(datetime.fromtimestamp(0))
 
     def clear(self):
@@ -110,6 +106,9 @@ class ConversationView(Gtk.ListBox):
             if isinstance(row, MessageRow):
                 return row
         return None
+
+    def set_history_complete(self):
+        self._scroll_hint_row.set_history_complete()
 
     def _reset_conversation_view(self):
         self._first_date = None

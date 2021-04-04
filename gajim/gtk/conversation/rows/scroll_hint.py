@@ -24,6 +24,9 @@ from .base import BaseRow
 class ScrollHintRow(BaseRow):
     def __init__(self, account, history_mode=False):
         BaseRow.__init__(self, account)
+        self.set_selectable(False)
+        self.set_activatable(False)
+
         self.type = 'system'
         self.timestamp = datetime.fromtimestamp(0)
 
@@ -42,11 +45,5 @@ class ScrollHintRow(BaseRow):
         self.label.set_text(_('Scroll up to load more chat history…'))
         self.grid.attach(self.label, 0, 1, 1, 1)
 
-        self._button = Gtk.Button.new_from_icon_name(
-            'go-up-symbolic', Gtk.IconSize.BUTTON)
-        self._button.set_tooltip_text(_('Load more messages'))
-        self._button.connect('clicked', self._on_load_history)
-        self.grid.attach(self._button, 0, 0, 1, 1)
-
-    def _on_load_history(self, _button):
-        self.get_parent().emit('load-history', 30)
+    def set_history_complete(self):
+        self.label.set_text(_('There is no more history'))

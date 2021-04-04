@@ -21,6 +21,10 @@ from .base import BaseRow
 class DateRow(BaseRow):
     def __init__(self, account, date_string, timestamp):
         BaseRow.__init__(self, account)
+
+        self.set_selectable(False)
+        self.set_activatable(False)
+
         self.type = 'date'
         self.timestamp = timestamp
         self.get_style_context().add_class('conversation-date-row')

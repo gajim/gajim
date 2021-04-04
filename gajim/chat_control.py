@@ -180,8 +180,8 @@ class ChatControl(ChatControlBase):
         content_area.add(self.info_bar_label)
         self.info_bar.set_no_show_all(True)
 
-        self.xml.vbox2.pack_start(self.info_bar, False, True, 5)
-        self.xml.vbox2.reorder_child(self.info_bar, 1)
+        self.xml.textview_box.pack_start(self.info_bar, False, True, 5)
+        self.xml.textview_box.reorder_child(self.info_bar, 1)
 
         # List of waiting infobar messages
         self.info_bar_queue = []

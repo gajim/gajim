@@ -49,6 +49,7 @@ from gajim.common.structs import OutgoingMessage
 from gajim import gtkgui_helpers
 
 from gajim.gui.conversation.view import ConversationView
+from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import PastePreviewDialog
@@ -166,38 +167,18 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         # Create ConversationView and connect signals
         self.conversation_view = ConversationView(self.account, self.contact)
-        id_ = self.conversation_view.connect('quote', self.on_quote)
-        self.handlers[id_] = self.conversation_view
-        id_ = self.conversation_view.connect(
-            'load-history', self._on_load_history)
-        self.handlers[id_] = self.conversation_view
+        self.conversation_view.connect('quote', self.on_quote)
+
         id_ = self.conversation_view.connect(
             'key-press-event', self._on_conversation_view_key_press)
         self.handlers[id_] = self.conversation_view
 
-        # This is a workaround: as soon as a line break occurs in Gtk.TextView
-        # with word-char wrapping enabled, a hyphen character is automatically
-        # inserted before the line break. This triggers the hscrollbar to show,
-        # see: https://gitlab.gnome.org/GNOME/gtk/-/issues/2384
-        # Using set_hscroll_policy(Gtk.Scrollable.Policy.NEVER) would cause bad
-        # performance during resize, and prevent the window from being shrunk
-        # horizontally under certain conditions (applies to GroupchatControl)
-        hscrollbar = self.xml.conversation_scrolledwindow.get_hscrollbar()
-        hscrollbar.hide()
-
-        self.xml.conversation_scrolledwindow.add(self.conversation_view)
-        self._scrolled_old_upper = None
-        self._scrolled_old_value = None
-
-        self._fetch_start_upper = None
-        self._current_upper = 0
-        self._autoscroll = True
-        self._no_more_messages = False
-
-        vadjustment = self.xml.conversation_scrolledwindow.get_vadjustment()
-
-        vadjustment.connect('notify::upper', self._on_adj_upper_changed)
-        vadjustment.connect('notify::value', self._on_adj_value_changed)
+        self._scrolled_view = ScrolledView()
+        self._scrolled_view.add(self.conversation_view)
+        self.xml.textview_box.add(self._scrolled_view)
+        self.xml.textview_box.reorder_child(self._scrolled_view, 2)
+        self._scrolled_view.connect('request-history',
+                                    self.fetch_n_lines_history, 30)
 
         self.msg_textview = MessageInputTextView()
         self.msg_textview.connect('paste-clipboard',
@@ -710,7 +691,11 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 self.handlers[i].disconnect(i)
         self.handlers.clear()
 
+        self.conversation_view.destroy()
+        self._scrolled_view.destroy()
+
         del self.conversation_view
+        del self._scrolled_view
         del self.msg_textview
         del self.msg_scrolledwindow
 
@@ -1406,10 +1391,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def scroll_to_end(self, force=False):
         self.conversation_view.scroll_to_end(force)
 
-    def _on_load_history(self, _button, lines):
-        self.fetch_n_lines_history(lines)
-
-    def fetch_n_lines_history(self, n_lines):
+    def fetch_n_lines_history(self, _scrolled, n_lines):
         row = self.conversation_view.get_first_message_row()
         if row is None:
             timestamp = time.time()
@@ -1430,8 +1412,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 n_lines)
 
         if not messages:
-            self._no_more_messages = True
-            print('SET NO MORE')
+            self._scrolled_view.set_history_complete()
             return
 
         for msg in messages:
@@ -1469,46 +1450,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 if self == self.parent_win.get_active_control():
                     return True
         return False
-
-    def _on_adj_upper_changed(self, adj, *args):
-        upper = adj.get_upper()
-        diff = upper - self._current_upper
-
-        if diff != 0:
-            self._current_upper = upper
-            if self._autoscroll:
-                adj.set_value(adj.get_upper() - adj.get_page_size())
-            else:
-                # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
-                self.xml.conversation_scrolledwindow.set_kinetic_scrolling(True)
-                adj.set_value(adj.get_value() + diff)
-
-        if upper == adj.get_page_size():
-            # There is no scrollbar, load history until there is
-            self.fetch_n_lines_history(30)
-
-    def _on_adj_value_changed(self, adj, *args):
-        bottom = adj.get_upper() - adj.get_page_size()
-        if (bottom - adj.get_value()) < 1:
-            self._autoscroll = True
-        else:
-            self._autoscroll = False
-
-        if self._no_more_messages:
-            self._fetch_start_upper = None
-            return
-
-        if self._fetch_start_upper == adj.get_upper():
-            return
-
-        self._fetch_start_upper = None
-
-        # Load messages when we are near the top
-        if adj.get_value() < adj.get_page_size() * 2:
-            self._fetch_start_upper = adj.get_upper()
-            # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
-            self.xml.conversation_scrolledwindow.set_kinetic_scrolling(False)
-            self.fetch_n_lines_history(30)
 
     def scroll_messages(self, direction, msg_buf, msg_type):
         if msg_type == 'sent':
