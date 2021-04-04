@@ -90,7 +90,8 @@ class ConversationView(Gtk.ListBox):
         self._last_incoming_timestamp = datetime.fromtimestamp(0)
 
         # Insert the very first row, containing the scroll hint and load button
-        self._scroll_hint_row = ScrollHintRow(self._account)
+        self._scroll_hint_row = ScrollHintRow(self._account,
+                                              history_mode=self._history_mode)
         self.add(self._scroll_hint_row)
         self._timestamps_inserted.append(datetime.fromtimestamp(0))
 
