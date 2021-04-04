@@ -15,9 +15,7 @@
 import logging
 import time
 
-from bisect import bisect_left
 from bisect import bisect_right
-from collections import deque
 from datetime import datetime
 from datetime import timedelta
 
@@ -68,15 +66,15 @@ class ConversationView(Gtk.ListBox):
         self._row_count = 0
         self._max_row_count = 100
 
+        # Keeps track of date rows we have added to the list
         self._active_date_rows = set()
 
-        # Keeps inserted message IDs to avoid re-inserting the same message
-        self._message_ids_inserted = {}
+        # message_id -> row mapping
+        self._message_id_row_map = {}
 
-        # Last incoming chat message timestamp (used for ReadMarkerRows)
-        self._last_incoming_timestamp = datetime.fromtimestamp(0)
+        self._read_marker_row = ReadMarkerRow(self._account, self._contact)
+        self.add(self._read_marker_row)
 
-        # Insert the very first row, containing the scroll hint and load button
         self._scroll_hint_row = ScrollHintRow(self._account,
                                               history_mode=self._history_mode)
         self.add(self._scroll_hint_row)
@@ -98,9 +96,7 @@ class ConversationView(Gtk.ListBox):
         self._scroll_hint_row.set_history_complete(complete)
 
     def _reset_conversation_view(self):
-        self._message_ids_inserted.clear()
         self._last_incoming_timestamp = datetime.fromtimestamp(0)
-        self._timestamps_inserted.clear()
         self._row_count = 0
         self.clearing = False
 
@@ -133,13 +129,6 @@ class ConversationView(Gtk.ListBox):
             text, kind, name, timestamp, message_id, correct_id,
             other_text_tags, display_marking, additional_data, subject,
             marker, error, history, graphics)
-
-        if message_id:
-            if message_id in self._message_ids_inserted:
-                log.warning('Rejecting insertion of duplicate message_id %s',
-                            str(message_id))
-                return
-            self._message_ids_inserted[message_id] = True
 
         if not timestamp:
             timestamp = time.time()
@@ -188,6 +177,9 @@ class ConversationView(Gtk.ListBox):
                 encryption_enabled=self.encryption_enabled,
                 history_mode=self._history_mode,
                 log_line_id=log_line_id)
+
+        if message.type == 'chat':
+            self._message_id_row_map[message.message_id] = message
 
         self._insert_message(message)
 
@@ -309,10 +301,7 @@ class ConversationView(Gtk.ListBox):
         return successful
 
     def _get_row_by_message_id(self, id_):
-        for row in self.get_children():
-            if row.message_id == id_:
-                return row
-        return None
+        return self._message_id_row_map.get(id_)
 
     def get_row_by_log_line_id(self, log_line_id):
         for row in self.get_children():
@@ -325,70 +314,14 @@ class ConversationView(Gtk.ListBox):
             yield row
 
     def set_read_marker(self, id_):
-        message_row = self._get_row_by_message_id(id_)
-        if message_row is None:
+        row = self._get_row_by_message_id(id_)
+        if row is None:
             return
 
-        message_row.set_displayed()
-        self._update_read_marker(message_row.timestamp)
+        row.set_displayed()
 
-    def _update_read_marker(self, current_timestamp):
-        marker_shown = False
-
-        for row in self.get_children():
-            if row.type == 'read_marker':
-                # We already have a ReadMarkerRow, decide if we keep it
-                marker_shown = True
-
-                if self._last_incoming_timestamp > row.timestamp:
-                    # Last incoming message is newer than read marker
-                    self.remove(row)
-                    self._timestamps_inserted.remove(row.timestamp)
-                    marker_shown = False
-                    break
-
-                if self._last_incoming_timestamp > current_timestamp:
-                    # Last incoming message is newer than current message
-                    break
-
-                if current_timestamp > row.timestamp:
-                    # Message is newer than current ReadMarkerRow
-                    current_row = self.get_row_at_index(
-                        self._timestamps_inserted.index(current_timestamp))
-                    if current_row.has_displayed:
-                        # Current row has a displayed marker, which means
-                        # that the current ReadMarkerRow is out of date
-                        self.remove(row)
-                        self._timestamps_inserted.remove(row.timestamp)
-                        marker_shown = False
-                        break
-                break
-
-        if self._last_incoming_timestamp >= current_timestamp:
-            # Don’t add ReadMarkerRow if last incoming message is newer
-            return
-
-        if marker_shown:
-            # There is a ReadMarkerRow which has not been removed by previous
-            # rules, thus it’s the most current one (nothing more to do)
-            return
-
-        current_row = self.get_row_at_index(
-            self._timestamps_inserted.index(current_timestamp))
-        if current_row.type != 'chat':
-            return
-
-        if current_row.has_displayed:
-            # Add a new ReadMarkerRow, if there is a marker for the current row
-            self._insert_read_marker(current_timestamp)
-
-    def _insert_read_marker(self, timestamp):
-        insertion_point = bisect_right(
-            self._timestamps_inserted, timestamp)
-        read_marker_row = ReadMarkerRow(
-            self._account, self._contact, timestamp)
-        self.insert(read_marker_row, insertion_point)
-        self._timestamps_inserted.insert(insertion_point, timestamp)
+        timestamp = row.timestamp + timedelta(microseconds=1)
+        self._read_marker_row.set_timestamp(timestamp)
 
     def update_avatars(self):
         for row in self.get_children():

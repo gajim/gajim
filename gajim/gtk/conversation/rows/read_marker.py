@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
 
 from gi.repository import Gtk
 
@@ -19,11 +20,12 @@ from gajim.common.i18n import _
 
 from .base import BaseRow
 
+
 class ReadMarkerRow(BaseRow):
-    def __init__(self, account, contact, timestamp):
+    def __init__(self, account, contact):
         BaseRow.__init__(self, account)
         self.type = 'read_marker'
-        self.timestamp = timestamp
+        self.timestamp = datetime.fromtimestamp(0)
 
         text = _('%s has read up to this point') % contact.name
         self.label.set_text(text)
@@ -32,4 +34,8 @@ class ReadMarkerRow(BaseRow):
         self.label.get_style_context().add_class(
             'conversation-read-marker')
         self.grid.attach(self.label, 0, 0, 1, 1)
+
+    def set_timestamp(self, timestamp):
+        self.timestamp = timestamp
+        self.changed()
         self.show_all()
