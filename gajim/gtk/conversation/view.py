@@ -311,6 +311,10 @@ class ConversationView(Gtk.ListBox):
             yield row
 
     def set_read_marker(self, id_):
+        if id_ is None:
+            self._read_marker_row.hide()
+            return
+
         row = self._get_row_by_message_id(id_)
         if row is None:
             return
