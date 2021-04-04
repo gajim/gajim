@@ -15,8 +15,6 @@
 import logging
 import time
 
-from bisect import bisect_right
-from datetime import datetime
 from datetime import timedelta
 
 from gi.repository import GLib
@@ -96,7 +94,6 @@ class ConversationView(Gtk.ListBox):
         self._scroll_hint_row.set_history_complete(complete)
 
     def _reset_conversation_view(self):
-        self._last_incoming_timestamp = datetime.fromtimestamp(0)
         self._row_count = 0
         self.clearing = False
 
