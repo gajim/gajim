@@ -208,6 +208,9 @@ class MessageArchiveStorage(SqliteStorage):
             self._jid_ids[row.jid] = row
             self._jid_ids_reversed[row.jid_id] = row
 
+    def get_jid_from_id(self, jid_id):
+        return self._jid_ids_reversed[jid_id]
+
     def get_jids_in_db(self):
         return self._jid_ids.keys()
 
@@ -419,6 +422,40 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone()
 
     @timeit
+    def get_conversation_between(self, account, jid, before, after):
+        """
+        Load all lines of conversation with jid between two timestamps
+
+        :param account:         The account
+
+        :param jid:             The jid for which we request the conversation
+
+        :param before:          latest timestamp
+
+        :param after:           earliest timestamp
+
+        returns a list of namedtuples
+        """
+        jids = self._get_family_jids(account, jid)
+        account_id = self.get_account_id(account)
+
+        sql = '''
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id, message_id,
+                   error as "error [common_error]",
+                   marker as "marker [marker]"
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
+            AND time < ? AND time >= ?
+            ORDER BY time DESC, log_line_id DESC
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id)
+
+        return self._con.execute(
+            sql,
+            tuple(jids) + (before, after)).fetchall()
+
+    @timeit
     def get_messages_for_date(self, account, jid, date):
         """
         Load the complete conversation with a given jid on a specific date
@@ -477,6 +514,9 @@ class MessageArchiveStorage(SqliteStorage):
         """
         jids = self._get_family_jids(account, jid)
 
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS])
+
         if date:
             delta = datetime.timedelta(
                 hours=23, minutes=59, seconds=59, microseconds=999999)
@@ -491,11 +531,35 @@ class MessageArchiveStorage(SqliteStorage):
                additional_data, log_line_id
         FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
         AND message LIKE like(?) {date_search}
+        AND kind NOT IN ({kinds})
         ORDER BY time DESC, log_line_id
         '''.format(jids=', '.join('?' * len(jids)),
-                   date_search=between if date else '')
+                   date_search=between if date else '',
+                   kinds=', '.join(kinds))
 
         return self._con.execute(sql, tuple(jids) + (query,)).fetchall()
+
+    @timeit
+    def search_all_logs(self, query):
+        """
+        Search all conversation logs for messages containing the `query`
+        string.
+
+        :param query:   A search string
+
+        returns a list of namedtuples
+        """
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS])
+        sql = '''
+        SELECT account_id, jid_id, contact_name, time, kind, show, message,
+        subject, additional_data, log_line_id
+        FROM logs WHERE message LIKE like(?)
+        AND kind NOT IN ({kinds})
+        ORDER BY time DESC, log_line_id
+        '''.format(kinds=', '.join(kinds))
+
+        return self._con.execute(sql, (query,)).fetchall()
 
     @timeit
     def get_days_with_logs(self, account, jid, year, month):

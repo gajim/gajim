@@ -316,6 +316,20 @@ class ConversationView(Gtk.ListBox):
 
         return successful
 
+    def scroll_to_message_and_highlight(self, log_line_id):
+        highlight_row = None
+        for row in self.get_children():
+            row.get_style_context().remove_class(
+                'conversation-search-highlight')
+            if row.log_line_id == log_line_id:
+                highlight_row = row
+
+        if highlight_row is not None:
+            highlight_row.get_style_context().add_class(
+                'conversation-search-highlight')
+            # This scrolls the ListBox to the highlighted row
+            highlight_row.grab_focus()
+
     def _get_row_by_message_id(self, id_):
         return self._message_id_row_map.get(id_)
 

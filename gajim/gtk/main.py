@@ -13,6 +13,7 @@ from gajim.common.nec import EventHelper
 
 from gajim.gui.account_page import AccountPage
 from gajim.gui.adhoc import AdHocCommand
+from gajim.gui.search_view import SearchView
 from gajim.gui.chat_list_stack import ChatListStack
 from gajim.gui.chat_stack import ChatStack
 from gajim.gui.account_side_bar import AccountSideBar
@@ -57,9 +58,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.app_image.set_from_surface(surface)
 
         self._chat_stack = ChatStack()
-        self._ui.right_grid.add(self._chat_stack)
+        self._ui.right_grid_overlay.add(self._chat_stack)
+
+        self._search_view = SearchView()
+        self._search_view.connect('hide-search', self._on_search_hide)
+
+        self._search_revealer = Gtk.Revealer()
+        self._search_revealer.set_reveal_child(True)
+        self._search_revealer.set_halign(Gtk.Align.END)
+        self._search_revealer.set_no_show_all(True)
+        self._search_revealer.add(self._search_view)
+        self._ui.right_grid_overlay.add_overlay(self._search_revealer)
 
         self._chat_list_stack = ChatListStack(self, self._ui, self._chat_stack)
+        self._chat_list_stack.connect('chat-selected', self._on_chat_selected)
         self._ui.chat_list_scrolled.add(self._chat_list_stack)
 
         self._workspace_side_bar = WorkspaceSideBar(self._chat_list_stack)
@@ -138,6 +150,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
             ('move-chat-to-workspace', 'as', self._move_chat_to_workspace),
             ('add-to-roster', 'as', self._add_to_roster),
+            ('search-history', None, self._on_search_history),
         ]
 
         for action in actions:
@@ -206,6 +219,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         res = control.delegate_action(action)
         if res != Gdk.EVENT_PROPAGATE:
             return res
+
+        if action == 'escape':
+            if self._search_revealer.get_reveal_child():
+                self._search_revealer.hide()
 
         # if action == 'escape' and app.settings.get('escape_key_closes'):
         #     self.remove_tab(control, self.CLOSE_ESC)
@@ -558,6 +575,22 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     @staticmethod
     def _on_start_chat_clicked(_button):
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
+
+    def _on_chat_selected(self, _chat_list_stack, _workspace_id, *args):
+        control = self.get_active_control()
+        if control is not None:
+            self._search_view.set_context(control.account, control.contact.jid)
+
+    def _on_search_history(self, _action, _param):
+        control = self.get_active_control()
+        if control is not None:
+            self._search_view.set_context(control.account, control.contact.jid)
+        self._search_view.clear()
+        self._search_revealer.show()
+        self._search_view.set_focus()
+
+    def _on_search_hide(self, *args):
+        self._search_revealer.hide()
 
     def _on_event(self, event):
         if event.name == 'caps-update':

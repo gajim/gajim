@@ -59,8 +59,15 @@
 .conversation-mention-highlight {
     background-color: rgb(255, 215, 194);
 }
+@keyframes highlight {
+    from { background: rgb(194, 215, 255) }
+    to { background: transparent }
+}
 .conversation-search-highlight {
-    background-color: rgb(194, 215, 255);
+    animation-duration: 3s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+    animation-name: highlight;
 }
 .conversation-system-row {
     padding: 18px;
@@ -301,6 +308,33 @@
 }
 .header-box-first label {
 	padding: 0px 18px 6px 18px;
+}
+
+/* Seach view */
+.search-view {
+    padding: 12px;
+    border-left: 1px solid @borders;
+    background-color: @theme_base_color;
+}
+.search-view-row-grid textview {
+	background: transparent;
+}
+.search-view-row-grid textview text {
+	background: transparent;
+}
+.search-view-row-grid label {
+    font-size: small;
+}
+.search-view-counter label {
+    font-style: italic;
+    color: @insensitive_fg_color;
+}
+.search-view-header {
+    padding: 12px 6px 6px 6px;
+}
+.search-view-header label {
+    font-size: small;
+    color: @insensitive_fg_color;
 }
 
 /*  Profile window */

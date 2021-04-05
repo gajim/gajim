@@ -174,6 +174,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         self._scrolled_view = ScrolledView()
         self._scrolled_view.add(self.conversation_view)
+        self._scrolled_view.set_focus_vadjustment(Gtk.Adjustment())
         self.xml.textview_box.add(self._scrolled_view)
         self.xml.textview_box.reorder_child(self._scrolled_view, 2)
         self._scrolled_view.connect('request-history',
@@ -1143,6 +1144,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             display_marking=displaymarking,
             message_id=message_id,
             correct_id=correct_id,
+            log_line_id=msg_log_id,
             additional_data=additional_data,
             marker=marker,
             error=error)
@@ -1390,6 +1392,25 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def scroll_to_end(self, force=False):
         self.conversation_view.scroll_to_end(force)
 
+    def scroll_to_message(self, log_line_id, timestamp):
+        row = self.conversation_view.get_row_by_log_line_id(log_line_id)
+        if row is None:
+            first_row = self.conversation_view.get_first_message_row()
+            if first_row is None:
+                first_timestamp = time.time()
+            else:
+                first_timestamp = first_row.db_timestamp
+            messages = app.storage.archive.get_conversation_between(
+                self.account, self.contact.jid, first_timestamp, timestamp)
+            if not messages:
+                return
+
+            self.add_messages(messages)
+
+        GLib.idle_add(
+            self.conversation_view.scroll_to_message_and_highlight,
+            log_line_id)
+
     def fetch_n_lines_history(self, _scrolled, n_lines):
         row = self.conversation_view.get_first_message_row()
         if row is None:
@@ -1414,6 +1435,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             self._scrolled_view.set_history_complete(True)
             return
 
+        self.add_messages(messages)
+
+    def add_messages(self, messages):
         for msg in messages:
             if not msg:
                 continue
@@ -1439,6 +1463,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 subject=msg.subject,
                 additional_data=msg.additional_data,
                 message_id=msg.message_id,
+                log_line_id=msg.log_line_id,
                 marker=msg.marker,
                 error=msg.error,
                 history=True)

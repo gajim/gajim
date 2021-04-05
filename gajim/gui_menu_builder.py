@@ -525,6 +525,7 @@ def get_singlechat_menu(control_id, account, jid, type_):
         ('win.start-call-', _('Start Call…')),
         ('win.information-', _('Information')),
         ('app.browse-history', _('History')),
+        ('win.search-history', _('Search…')),
     ]
 
     def build_chatstate_menu():
@@ -549,7 +550,11 @@ def get_singlechat_menu(control_id, account, jid, type_):
                 if action_name == 'win.send-marker-' and type_ == 'pm':
                     continue
 
-                if action_name == 'app.browse-history':
+                if action_name == 'win.search-history':
+                    menuitem = Gio.MenuItem.new(label, action_name)
+                    menuitem.set_action_and_target_value(action_name, None)
+                    menu.append_item(menuitem)
+                elif action_name == 'app.browse-history':
                     menuitem = Gio.MenuItem.new(label, action_name)
                     dict_ = {'account': GLib.Variant('s', account),
                              'jid': GLib.Variant('s', str(jid))}
@@ -581,6 +586,7 @@ def get_groupchat_menu(control_id, account, jid):
         ('win.request-voice-', _('Request Voice')),
         ('win.execute-command-', _('Execute Command…')),
         ('app.browse-history', _('History')),
+        ('win.search-history', _('Search…')),
     ]
 
     def build_menu(preset):
@@ -588,7 +594,12 @@ def get_groupchat_menu(control_id, account, jid):
         for item in preset:
             if isinstance(item[1], str):
                 action_name, label = item
-                if action_name == 'app.browse-history':
+                if action_name == 'win.search-history':
+                    menuitem = Gio.MenuItem.new(label, action_name)
+                    menuitem.set_action_and_target_value(action_name, None)
+                    menu.append_item(menuitem)
+
+                elif action_name == 'app.browse-history':
                     menuitem = Gio.MenuItem.new(label, action_name)
                     dict_ = {'account': GLib.Variant('s', account),
                              'jid': GLib.Variant('s', jid)}
