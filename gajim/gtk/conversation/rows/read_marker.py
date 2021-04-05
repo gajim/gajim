@@ -34,6 +34,7 @@ class ReadMarkerRow(BaseRow):
         self.label.get_style_context().add_class(
             'conversation-read-marker')
         self.grid.attach(self.label, 0, 0, 1, 1)
+        self.set_no_show_all(True)
 
     def set_timestamp(self, timestamp):
         self.timestamp = timestamp
