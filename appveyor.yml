@@ -24,6 +24,7 @@ install:
   - bash -lc "pacman --needed --noconfirm -Syu"
   # This is needed because without killing all processes -Su will fail
   - ps: Get-Process | Where-Object {$_.path -like 'C:\msys64*'} | Stop-Process
+  - bash -lc "pacman -Sydd --noconfirm filesystem"
   - bash -lc "pacman --needed --noconfirm -Su"
 
 build_script:
