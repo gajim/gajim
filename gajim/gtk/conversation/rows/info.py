@@ -19,8 +19,10 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.styling import process
 
 from .base import BaseRow
+from ..message_widget import MessageWidget
 
 
 class InfoMessageRow(BaseRow):
@@ -56,12 +58,9 @@ class InfoMessageRow(BaseRow):
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 2, 0, 1, 1)
 
-        self.textview.set_justification(Gtk.Justification.CENTER)
-        self.textview.print_text(
-            text,
-            other_text_tags=other_text_tags,
-            kind=kind,
-            graphics=graphics)
+        result = process(text)
+        message_widget = MessageWidget(account)
+        message_widget.add_content(result.blocks)
 
-        self.grid.attach(self.textview, 1, 0, 1, 1)
+        self.grid.attach(message_widget, 1, 0, 1, 1)
         self.show_all()
