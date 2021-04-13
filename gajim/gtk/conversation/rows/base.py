@@ -30,7 +30,7 @@ from ...util import wrap_with_event_box
 
 
 class BaseRow(Gtk.ListBoxRow):
-    def __init__(self, account, widget='label', history_mode=False):
+    def __init__(self, account, widget=None, history_mode=False):
         Gtk.ListBoxRow.__init__(self)
         self.type = ''
         self.timestamp = None
@@ -46,18 +46,12 @@ class BaseRow(Gtk.ListBoxRow):
         self.grid = Gtk.Grid(row_spacing=3, column_spacing=12)
         self.add(self.grid)
 
-        if widget == 'textview':
-            self.label = None
-            self.textview = ConversationTextview(
-                account, history_mode=history_mode)
-        else:
-            self.textview = None
+        if widget == 'label':
             self.label = Gtk.Label()
             self.label.set_selectable(True)
             self.label.set_line_wrap(True)
             self.label.set_xalign(0)
-            self.label.set_line_wrap_mode(
-                Pango.WrapMode.WORD_CHAR)
+            self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
     @property
     def is_merged(self):

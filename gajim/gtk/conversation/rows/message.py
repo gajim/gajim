@@ -24,11 +24,13 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import TRUST_SYMBOL_DATA
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
+from gajim.common.styling import process
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
 from .base import BaseRow
 from .base import MoreMenuButton
+from ..message_widget import MessageWidget
 from ...util import format_fingerprint
 
 
@@ -60,8 +62,7 @@ class MessageRow(BaseRow):
 
         # other_tags_for_time were always empty?
 
-        BaseRow.__init__(self, account, widget='textview',
-                         history_mode=history_mode)
+        BaseRow.__init__(self, account, history_mode=history_mode)
         self.type = 'chat'
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
@@ -80,13 +81,9 @@ class MessageRow(BaseRow):
                 self.get_style_context().add_class(
                     'conversation-mention-highlight')
 
-        self.textview.connect('quote', self._on_quote_selection)
-        self.textview.print_text(
-            text,
-            other_text_tags=other_text_tags,
-            kind=kind,
-            name=name,
-            additional_data=additional_data)
+        result = process(text)
+        message_widget = MessageWidget(account)
+        message_widget.add_content(result.blocks)
 
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.pack_start(
@@ -132,7 +129,7 @@ class MessageRow(BaseRow):
         avatar_placeholder.add(self._avatar_surface)
 
         bottom_box = Gtk.Box(spacing=6)
-        bottom_box.add(self.textview)
+        bottom_box.add(message_widget)
         bottom_box.add(MoreMenuButton(self, history_mode=history_mode))
 
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)

@@ -23,7 +23,7 @@ from .base import BaseRow
 
 class ReadMarkerRow(BaseRow):
     def __init__(self, account, contact):
-        BaseRow.__init__(self, account)
+        BaseRow.__init__(self, account, widget='label')
         self.type = 'read_marker'
         self.timestamp = datetime.fromtimestamp(0)
 

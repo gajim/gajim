@@ -210,6 +210,7 @@ class ConversationView(Gtk.ListBox):
         self.add(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
+        GLib.idle_add(message.queue_resize)
 
     def _add_date_row(self, timestamp):
         start_of_day = get_start_of_day(timestamp)

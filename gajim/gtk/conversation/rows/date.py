@@ -20,7 +20,7 @@ from .base import BaseRow
 
 class DateRow(BaseRow):
     def __init__(self, account, timestamp):
-        BaseRow.__init__(self, account)
+        BaseRow.__init__(self, account, widget='label')
 
         self.set_selectable(False)
         self.set_activatable(False)

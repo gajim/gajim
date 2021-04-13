@@ -33,8 +33,7 @@ class InfoMessageRow(BaseRow):
                  subject,
                  graphics,
                  history_mode=False):
-        BaseRow.__init__(self, account, widget='textview',
-                         history_mode=history_mode)
+        BaseRow.__init__(self, account, history_mode=history_mode)
         self.type = 'info'
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp

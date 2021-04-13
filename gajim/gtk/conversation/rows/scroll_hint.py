@@ -23,7 +23,7 @@ from .base import BaseRow
 
 class ScrollHintRow(BaseRow):
     def __init__(self, account, history_mode=False):
-        BaseRow.__init__(self, account)
+        BaseRow.__init__(self, account, widget='label')
         self.set_selectable(False)
         self.set_activatable(False)
 

@@ -54,7 +54,6 @@ from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
-from gajim.gui.util import at_the_end
 from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.util import get_builder
 from gajim.gui.util import generate_account_badge
