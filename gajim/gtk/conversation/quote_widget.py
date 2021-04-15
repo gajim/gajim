@@ -18,8 +18,14 @@ from gi.repository import Gtk
 
 class QuoteWidget(Gtk.Box):
     def __init__(self, account):
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        Gtk.Box.__init__(self)
         self.set_vexpand(True)
+        self.get_style_context().add_class('conversation-quote')
+        quote_bar = Gtk.Box()
+        quote_bar.set_size_request(3, -1)
+        quote_bar.set_margin_right(6)
+        quote_bar.get_style_context().add_class('conversation-quote-bar')
+        self.add(quote_bar)
 
         self._account = account
 

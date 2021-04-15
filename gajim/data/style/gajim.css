@@ -717,7 +717,15 @@ popover.combo scrollbar.vertical {
 
 messagedialog.confirmation-dialog > box { margin-top: 18px; }
 
-
+.conversation-quote {
+    padding-bottom: 6px;
+}
+.conversation-quote textview text {
+    color: alpha(@theme_text_color, 0.6);
+}
+.conversation-quote-bar {
+    background-color: @unfocused_borders;
+}
 .conversation-more-button {
     padding-top: 0px;
     padding-bottom:0px;
