@@ -125,7 +125,7 @@ class MessageTextview(Gtk.TextView):
 
     def print_text_with_styling(self, block):
         buffer_ = self.get_buffer()
-        buffer_.insert(buffer_.get_start_iter(), block.text)
+        buffer_.insert(buffer_.get_start_iter(), block.text.strip())
 
         for span in block.spans:
             start_iter = buffer_.get_iter_at_offset(span.start)
