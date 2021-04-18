@@ -28,12 +28,14 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import modules
 from gajim.common.const import ClientState
+from gajim.common.const import SimpleClientState
 from gajim.common.structs import UNKNOWN_PRESENCE
 from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.helpers import get_resource
 from gajim.common.helpers import get_idle_status_message
+from gajim.common.helpers import Observable
 from gajim.common.idle import Monitor
 from gajim.common.i18n import _
 
@@ -45,8 +47,9 @@ from gajim.gui.util import open_window
 log = logging.getLogger('gajim.client')
 
 
-class Client:
+class Client(Observable):
     def __init__(self, account):
+        Observable.__init__(self, log)
         self._client = None
         self._account = account
         self.name = account
@@ -199,6 +202,8 @@ class Client:
                              account=self._account,
                              show=self._status))
 
+        self.notify('state-changed', SimpleClientState.CONNECTED)
+
     def _set_client_available(self):
         self._set_state(ClientState.AVAILABLE)
         app.nec.push_incoming_event(NetworkEvent('account-connected',
@@ -270,17 +275,17 @@ class Client:
             self._schedule_reconnect()
             app.nec.push_incoming_event(
                 NetworkEvent('our-show', account=self._account, show='error'))
+            self.notify('state-changed', SimpleClientState.RESUME_IN_PREGRESS)
 
         else:
             self.get_module('Chatstate').enabled = False
             app.nec.push_incoming_event(NetworkEvent(
                 'our-show', account=self._account, show='offline'))
             self._after_disconnect()
+            self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
     def _after_disconnect(self):
         self._disable_reconnect_timer()
-
-        self.get_module('VCardAvatars').avatar_advertised = False
 
         app.proxy65_manager.disconnect(self._client)
         self.get_module('Bytestream').remove_all_transfers()
@@ -439,6 +444,8 @@ class Client:
         self.get_module('LastActivity').set_enabled(True)
         self.get_module('Annotations').request_annotations()
         self.get_module('Blocking').get_blocking_list()
+
+        self.notify('state-changed', SimpleClientState.CONNECTED)
 
         # Inform GUI we just signed in
         app.nec.push_incoming_event(NetworkEvent(
@@ -624,6 +631,7 @@ class Client:
         Monitor.set_extended_away(active)
 
     def cleanup(self):
+        self.disconnect_signals()
         self._destroyed = True
         if Monitor.is_available():
             Monitor.disconnect(self._idle_handler_id)
