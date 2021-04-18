@@ -49,6 +49,7 @@ from gajim.common import helpers
 from gajim.common.helpers import event_filter
 from gajim.common.helpers import to_user_string
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
 
 from gajim.common.i18n import _
 from gajim.common.const import MUCJoinedState
@@ -92,6 +93,9 @@ class GroupchatControl(ChatControlBase):
                                  'groupchat_control',
                                  jid,
                                  acct)
+
+        self._client.connect_signal('state-changed',
+                                    self._on_client_state_changed)
 
         self.force_non_minimizable = False
         self.is_anonymous = True
@@ -203,9 +207,7 @@ class GroupchatControl(ChatControlBase):
             ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
         ])
 
-        self.is_connected = False
-        # disable win, we are not connected yet
-        ChatControlBase.got_disconnected(self)
+        self._set_control_inactive()
 
         # Stack
         self.xml.stack.show_all()
@@ -251,31 +253,13 @@ class GroupchatControl(ChatControlBase):
     def _on_muc_state_changed(self, _contact, _signal_name):
         state = self.contact.state
         if state == MUCJoinedState.JOINED:
-            self.roster.initial_draw()
-
-            self.is_connected = True
-            ChatControlBase.got_connected(self)
-
-            self.xml.formattings_button.set_sensitive(True)
-
-            self.conversation_view.update_avatars()
-
-            self.update_actions()
+            self._set_control_active()
 
         elif state == MUCJoinedState.NOT_JOINED:
+            self._set_control_inactive()
 
-            self.xml.formattings_button.set_sensitive(False)
-
-            self.roster.enable_sort(False)
-            self.roster.clear()
-
-            self.is_connected = False
-            ChatControlBase.got_disconnected(self)
-
-            self._client.get_module('Chatstate').remove_delay_timeout(
-                self.contact)
-
-            self.update_actions()
+    def _on_client_state_changed(self, _client, _signal_name, state):
+        pass
 
     @property
     def _muc_data(self):
@@ -978,12 +962,6 @@ class GroupchatControl(ChatControlBase):
         for change in changes:
             self.add_info_message(change)
 
-    def _on_our_show(self, event):
-        client = app.get_client(event.account)
-        if (event.show == 'offline' and
-                not client.state.is_reconnect_scheduled):
-            self.got_disconnected()
-
     @event_filter(['account'])
     def _nec_ping(self, event):
         if not event.contact.is_groupchat:
@@ -1010,14 +988,30 @@ class GroupchatControl(ChatControlBase):
     def is_connected(self, value: bool) -> None:
         app.gc_connected[self.account][self.room_jid] = value
 
-    def got_disconnected(self):
+    def _set_control_active(self):
+        self.xml.formattings_button.set_sensitive(True)
+        self.msg_textview.set_sensitive(True)
+        self.msg_textview.set_editable(True)
+
+        self.roster.initial_draw()
+
+        self.is_connected = True
+
+        self.xml.formattings_button.set_sensitive(True)
+
+        self.conversation_view.update_avatars()
+
+        self.update_actions()
+
+    def _set_control_inactive(self):
         self.xml.formattings_button.set_sensitive(False)
+        self.msg_textview.set_sensitive(False)
+        self.msg_textview.set_editable(False)
 
         self.roster.enable_sort(False)
         self.roster.clear()
 
         self.is_connected = False
-        ChatControlBase.got_disconnected(self)
 
         self._client.get_module('Chatstate').remove_delay_timeout(self.contact)
 
@@ -1062,7 +1056,6 @@ class GroupchatControl(ChatControlBase):
         self.update_actions()
 
     def _on_room_config_finished(self, _contact, _signal_name):
-        self.got_connected()
         self._show_page('groupchat')
         self.add_info_message(_('A new group chat has been created'))
 
@@ -1228,11 +1221,6 @@ class GroupchatControl(ChatControlBase):
             message = message.format(actor=actor, reason=reason)
             self.add_info_message(message)
 
-        self.got_disconnected()
-
-        # Update Actions
-        self.update_actions()
-
     def _on_user_left(self, _contact, _signal_name, user_contact, properties):
         status_codes = properties.muc_status_codes or []
         nick = user_contact.name
@@ -1289,7 +1277,6 @@ class GroupchatControl(ChatControlBase):
             self.add_info_message(message)
 
     def _on_room_joined(self, _contact, _signal_name):
-        self.got_connected()
         self._show_page('groupchat')
 
     def _on_room_password_required(self, _contact, _signal_name, _properties):
@@ -1326,8 +1313,6 @@ class GroupchatControl(ChatControlBase):
             join_message = _('You can join this group chat '
                              'instead: xmpp:%s?join') % str(alternate)
             self.add_info_message(join_message)
-
-        self.got_disconnected()
 
         self._client.get_module('Bookmarks').remove(self.room_jid)
 

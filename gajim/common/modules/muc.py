@@ -107,10 +107,8 @@ class MUC(BaseModule):
                           priority=49)
         ]
 
-        self.register_events([
-            ('account-disconnected', ged.CORE, self._on_account_disconnected),
-            # ('signed-in', ged.GUI1, self._on_signed_in),
-        ])
+        self._con.connect_signal('state-changed',
+                                 self._on_client_state_changed)
 
         self._rejoin_muc = set()
         self._join_timeouts = {}
@@ -461,7 +459,7 @@ class MUC(BaseModule):
             self._remove_join_timeout(room_jid)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             room.set_not_joined()
-            room.notify('destroyed', properties)
+            room.notify('room-destroyed', properties)
             return
 
         if properties.is_nickname_changed:
@@ -517,7 +515,7 @@ class MUC(BaseModule):
         if properties.is_muc_self_presence and properties.is_kicked:
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             room.set_not_joined()
-            room.notify('kicked', properties)
+            room.notify('room-kicked', properties)
             status_codes = properties.muc_status_codes or []
             if StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
                 self._start_rejoin_timeout(room_jid)
@@ -808,13 +806,15 @@ class MUC(BaseModule):
         return self._nbxmpp('MUC').invite(room, jid, reason, password,
                                           continue_, type_)
 
-    @event_filter(['account'])
-    def _on_account_disconnected(self, _event):
-        for room_jid in list(self._rejoin_timeouts.keys()):
-            self._remove_rejoin_timeout(room_jid)
+    def _on_client_state_changed(self, _client, _signal_name, state):
+        if state.is_disconnected:
+            for room_jid in list(self._rejoin_timeouts.keys()):
+                self._remove_rejoin_timeout(room_jid)
 
-        for room_jid in list(self._join_timeouts.keys()):
-            self._remove_join_timeout(room_jid)
+            for room_jid in list(self._join_timeouts.keys()):
+                self._remove_join_timeout(room_jid)
+
+            self.reset_state()
 
 
 def get_instance(*args, **kwargs):

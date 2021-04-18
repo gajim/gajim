@@ -114,6 +114,10 @@ class ChatControl(ChatControlBase):
 
         self.toggle_emoticons()
 
+        if self._type == ControlType.CHAT:
+            self._client.connect_signal('state-changed',
+                                        self._on_client_state_changed)
+
         if not app.settings.get('hide_chat_banner'):
             self.xml.banner_eventbox.set_no_show_all(False)
 
@@ -1183,13 +1187,14 @@ class ChatControl(ChatControlBase):
         """
         dialogs.TransformChatToMUC(self.account, [self.contact.jid])
 
-    def got_connected(self):
-        ChatControlBase.got_connected(self)
-        self.draw_banner()
-        self.update_actions()
+    def _on_client_state_changed(self, _client, _signal_name, state):
+        self.msg_textview.set_sensitive(state.is_connected)
+        self.msg_textview.set_editable(state.is_connected)
 
-    def got_disconnected(self):
-        ChatControlBase.got_disconnected(self)
+        print(state)
+        self._update_avatar()
+        self.update_toolbar()
+        self.draw_banner()
         self.update_actions()
 
     def _on_presence_received(self, event):

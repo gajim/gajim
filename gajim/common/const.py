@@ -274,7 +274,7 @@ class ClientState(IntEnum):
         return self == ClientState.AVAILABLE
 
 
-class SimpleClientState(IntEnum):
+class SimpleClientState(Enum):
     DISCONNECTED = 'disconnected'
     CONNECTED = 'connected'
     RESUME_IN_PREGRESS = 'resume-in-progress'

@@ -90,6 +90,12 @@ class Contacts(BaseModule):
                 contacts.append(contact)
         return contacts
 
+    def reset_presence(self):
+        for contact in self._contacts.values():
+            if contact.is_groupchat or contact.is_pm_contact:
+                continue
+            contact.update_presence(UNKNOWN_PRESENCE)
+
 
 class CommonContact(Observable):
     def __init__(self, logger, jid, account):

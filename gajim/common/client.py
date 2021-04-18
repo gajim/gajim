@@ -282,6 +282,7 @@ class Client(Observable):
             app.nec.push_incoming_event(NetworkEvent(
                 'our-show', account=self._account, show='offline'))
             self._after_disconnect()
+            self.get_module('Contacts').reset_presence()
             self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
     def _after_disconnect(self):
@@ -296,9 +297,6 @@ class Client(Observable):
             self._destroy_client = False
             self._create_client()
 
-        jid = self.get_own_jid()
-        contact = self.get_module('Contacts').get_contact(jid)
-        contact.update_presence(UNKNOWN_PRESENCE)
         app.nec.push_incoming_event(NetworkEvent('account-disconnected',
                                                  account=self._account))
 

@@ -251,7 +251,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         # pylint: disable=line-too-long
         self.register_events([
-            ('our-show', ged.GUI1, self._on_our_show),
             ('ping-sent', ged.GUI1, self._nec_ping),
             ('ping-reply', ged.GUI1, self._nec_ping),
             ('ping-error', ged.GUI1, self._nec_ping),
@@ -447,15 +446,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             return
         self.session.control = None
         self.session = None
-
-    def _on_our_show(self, event):
-        if event.show == 'connecting':
-            return
-
-        if event.show == 'offline':
-            self.got_disconnected()
-        else:
-            self.got_connected()
 
     def _nec_ping(self, obj):
         raise NotImplementedError
@@ -685,6 +675,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         app.plugin_manager.remove_gui_extension_point('chat_control_base', self)
         app.plugin_manager.remove_gui_extension_point(
             'chat_control_base_update_toolbar', self)
+
+        self._client.disconnect_all_from_obj(self)
 
         for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
@@ -1521,18 +1513,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             if self.orig_msg is not None:
                 message = '> %s\n' % message.replace('\n', '\n> ')
         msg_buf.set_text(message)
-
-    def got_connected(self):
-        self.msg_textview.set_sensitive(True)
-        self.msg_textview.set_editable(True)
-        self.update_toolbar()
-
-    def got_disconnected(self):
-        self.msg_textview.set_sensitive(False)
-        self.msg_textview.set_editable(False)
-        self.conversation_view.grab_focus()
-
-        self.update_toolbar()
 
 
 class ScrolledWindow(Gtk.ScrolledWindow):
