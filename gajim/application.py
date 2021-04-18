@@ -526,7 +526,6 @@ class GajimApplication(Gtk.Application):
             'win.change-nickname': ['<Primary><Shift>N'],
             'win.change-subject': ['<Primary><Shift>S'],
             'win.escape': ['Escape'],
-            'win.browse-history': ['<Primary>H'],
             'win.send-file': ['<Primary>F'],
             'win.show-contact-info': ['<Primary>I'],
             'win.show-emoji-chooser': ['<Primary><Shift>M'],
@@ -548,6 +547,7 @@ class GajimApplication(Gtk.Application):
             'win.switch-tab-7': ['<Alt>7', '<Alt>KP_7'],
             'win.switch-tab-8': ['<Alt>8', '<Alt>KP_8'],
             'win.switch-tab-9': ['<Alt>9', '<Alt>KP_9'],
+            'win.search-history': ['<Primary>H'],
         }
 
         for action, accels in shortcuts.items():
