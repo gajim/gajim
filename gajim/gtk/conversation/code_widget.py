@@ -50,7 +50,7 @@ class CodeWidget(Gtk.Box):
         self._textview = CodeTextview()
         self._scrolled = Gtk.ScrolledWindow()
         self._scrolled.set_policy(Gtk.PolicyType.AUTOMATIC,
-                                  Gtk.PolicyType.AUTOMATIC)
+                                  Gtk.PolicyType.NEVER)
         self._scrolled.set_hexpand(True)
         self._scrolled.set_vexpand(True)
         self._scrolled.set_propagate_natural_height(True)

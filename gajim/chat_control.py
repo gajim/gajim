@@ -48,7 +48,6 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import geo_provider_from_location
 from gajim.common.helpers import open_file
-from gajim.common.contacts import GC_Contact
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
@@ -1191,7 +1190,6 @@ class ChatControl(ChatControlBase):
         self.msg_textview.set_sensitive(state.is_connected)
         self.msg_textview.set_editable(state.is_connected)
 
-        print(state)
         self._update_avatar()
         self.update_toolbar()
         self.draw_banner()
