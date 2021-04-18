@@ -59,7 +59,6 @@ from gajim.common.const import PEPEventType, AvatarSize, StyleAttr
 from gajim.common.dbus import location
 
 from gajim.common import ged
-from gajim.message_window import MessageWindowMgr
 
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
