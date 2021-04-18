@@ -24,7 +24,6 @@ import logging
 
 from gajim.common import app
 
-from gajim.common import connection_handlers
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.util import get_eme_message
@@ -36,10 +35,7 @@ from gajim.common.modules.misc import parse_xhtml
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
 
 
-class ConnectionHandlersZeroconf(connection_handlers.ConnectionHandlersBase):
-    def __init__(self):
-        connection_handlers.ConnectionHandlersBase.__init__(self)
-
+class ConnectionHandlersZeroconf:
     def _messageCB(self, con, stanza, properties):
         """
         Called when we receive a message

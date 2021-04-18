@@ -37,7 +37,6 @@ from gajim.common.helpers import get_idle_status_message
 from gajim.common.idle import Monitor
 from gajim.common.i18n import _
 
-from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import MessageSentEvent
 
 from gajim.gui.util import open_window
@@ -46,7 +45,7 @@ from gajim.gui.util import open_window
 log = logging.getLogger('gajim.client')
 
 
-class Client(ConnectionHandlers):
+class Client:
     def __init__(self, account):
         self._client = None
         self._account = account
@@ -90,8 +89,6 @@ class Client(ConnectionHandlers):
                                                     self._idle_state_changed)
             self._screensaver_handler_id = app.app.connect(
                 'notify::screensaver-active', self._screensaver_state_changed)
-
-        ConnectionHandlers.__init__(self)
 
     def _set_state(self, state):
         log.info('State: %s', state)
@@ -286,7 +283,6 @@ class Client(ConnectionHandlers):
         self.get_module('VCardAvatars').avatar_advertised = False
 
         app.proxy65_manager.disconnect(self._client)
-        self.terminate_sessions()
         self.get_module('Bytestream').remove_all_transfers()
 
         if self._destroy_client:

@@ -63,8 +63,6 @@ from gajim.chat_control import ChatControl
 from gajim.groupchat_control import GroupchatControl
 from gajim.privatechat_control import PrivateChatControl
 
-from gajim.session import ChatControlSession
-
 from gajim.common import idle
 from gajim.common.zeroconf import connection_zeroconf
 from gajim.common import proxy65_manager
@@ -1906,7 +1904,6 @@ class Interface:
             self.handle_event_file_progress,
             self.handle_event_file_error)
         app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
-        app.default_session_type = ChatControlSession
 
         # Creating Network Events Controller
         from gajim.common import nec
