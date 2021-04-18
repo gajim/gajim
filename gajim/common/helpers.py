@@ -1182,7 +1182,7 @@ class Observable:
     def disconnect_signals(self):
         self._callbacks = defaultdict(lambda: defaultdict(list))
 
-    def disconnect(self, object_):
+    def disconnect_all_from_obj(self, object_):
         for signal_name, qualifiers in self._callbacks.items():
             for qualifier, handlers in qualifiers.items():
                 for handler in list(handlers):
@@ -1190,7 +1190,10 @@ class Observable:
                     if func is None or func.__self__ is object_:
                         self._callbacks[signal_name][qualifier].remove(handler)
 
-    def connect(self, signal_name, func, qualifiers=None):
+    def disconnect(self, *args):
+        self.disconnect_all_from_obj(*args)
+
+    def connect_signal(self, signal_name, func, qualifiers=None):
         if not inspect.ismethod(func):
             raise ValueError('Only bound methods allowed')
 
@@ -1198,9 +1201,12 @@ class Observable:
 
         self._callbacks[signal_name][qualifiers].append(weak_func)
 
+    def connect(self, *args, **kwargs):
+        self.connect_signal(*args, **kwargs)
+
     def multi_connect(self, signal_dict):
         for signal_name, func in signal_dict.items():
-            self.connect(signal_name, func)
+            self.connect_signal(signal_name, func)
 
     def notify(self, signal_name, *args, qualifiers=None, **kwargs):
         if self._log is not None:
