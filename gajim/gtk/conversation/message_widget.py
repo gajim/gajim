@@ -24,8 +24,15 @@ class MessageWidget(Gtk.Box):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self._account = account
 
-    def add_content(self, blocks):
-        for block in blocks:
+        self._content = None
+
+    def get_content(self):
+        return self._content
+
+    def add_content(self, content):
+        self.clear()
+        self._content = content
+        for block in content.blocks:
             if block.name == 'plain':
                 widget = PlainWidget(self._account)
                 widget.add_content(block)
@@ -40,8 +47,13 @@ class MessageWidget(Gtk.Box):
 
             if block.name == 'quote':
                 message_widget = MessageWidget(self._account)
-                message_widget.add_content(block.blocks)
+                message_widget.add_content(block)
                 widget = QuoteWidget(self._account)
                 widget.attach_message_widget(message_widget)
                 self.add(widget)
                 continue
+
+        self.show_all()
+
+    def clear(self):
+        self.foreach(self.remove)

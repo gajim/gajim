@@ -82,8 +82,8 @@ class MessageRow(BaseRow):
                     'conversation-mention-highlight')
 
         result = process(text)
-        message_widget = MessageWidget(account)
-        message_widget.add_content(result.blocks)
+        self._message_widget = MessageWidget(account)
+        self._message_widget.add_content(result)
 
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.pack_start(
@@ -129,7 +129,7 @@ class MessageRow(BaseRow):
         avatar_placeholder.add(self._avatar_surface)
 
         bottom_box = Gtk.Box(spacing=6)
-        bottom_box.add(message_widget)
+        bottom_box.add(self._message_widget)
         bottom_box.add(MoreMenuButton(self, history_mode=history_mode))
 
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
@@ -214,20 +214,14 @@ class MessageRow(BaseRow):
     def set_displayed(self):
         self._has_displayed = True
 
-    def set_correction(self, message_id, text, other_text_tags, kind, name,
-                       additional_data=None):
-        self._corrections.append(self.textview.get_text())
-        self.textview.clear()
+    def set_correction(self, text, message_id):
+        self._corrections.append(self._message_widget.get_content().text)
+        result = process(text)
+        self._message_widget.add_content(result)
+
         self._has_receipt = False
         self._message_icons.set_receipt_icon_visible(False)
         self._message_icons.set_correction_icon_visible(True)
-
-        self.textview.print_text(
-            text,
-            other_text_tags=other_text_tags,
-            kind=kind,
-            name=name,
-            additional_data=additional_data)
 
         corrections = '\n'.join(line for line in self._corrections)
         corrections = reduce_chars_newlines(

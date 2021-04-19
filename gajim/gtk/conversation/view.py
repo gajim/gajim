@@ -150,14 +150,7 @@ class ConversationView(Gtk.ListBox):
                 history_mode=self._history_mode)
         else:
             if correct_id:
-                self.correct_message(
-                    correct_id,
-                    message_id,
-                    text,
-                    other_text_tags,
-                    kind,
-                    name,
-                    additional_data=additional_data)
+                self.correct_message(correct_id, message_id, text)
                 return
 
             avatar = self._get_avatar(kind, name)
@@ -371,13 +364,10 @@ class ConversationView(Gtk.ListBox):
         if self.autoscroll or force:
             GLib.idle_add(scroll_to_end, self.get_parent().get_parent())
 
-    def correct_message(self, correct_id, message_id, text,
-                        other_text_tags, kind, name, additional_data=None):
+    def correct_message(self, correct_id, message_id, text):
         message_row = self._get_row_by_message_id(correct_id)
         if message_row is not None:
-            message_row.set_correction(
-                message_id, text, other_text_tags, kind, name,
-                additional_data=additional_data)
+            message_row.set_correction(text, message_id)
             message_row.set_merged(False)
 
     def show_receipt(self, id_):

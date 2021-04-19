@@ -127,6 +127,7 @@ SPAN_CLS_DICT = {
 
 @dataclass
 class ParsingResult:
+    text: str
     blocks: list
 
 
@@ -144,7 +145,7 @@ def process(text, nested=False):
             result = process(block.unquote(), nested=True)
             block.blocks = result.blocks
 
-    return ParsingResult(blocks)
+    return ParsingResult(text, blocks)
 
 
 def _parse_blocks(text, nested):

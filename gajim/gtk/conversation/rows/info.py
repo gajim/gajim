@@ -60,7 +60,7 @@ class InfoMessageRow(BaseRow):
 
         result = process(text)
         message_widget = MessageWidget(account)
-        message_widget.add_content(result.blocks)
+        message_widget.add_content(result)
 
         self.grid.attach(message_widget, 1, 0, 1, 1)
         self.show_all()
