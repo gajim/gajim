@@ -68,6 +68,9 @@ class MAM(BaseModule):
         # Holds archive jids where catch up was successful
         self._catch_up_finished = []
 
+        self._con.connect_signal('state-changed', self._on_client_state_changed)
+        self._con.connect_signal('resume-failed', self._on_client_resume_failed)
+
     def pass_disco(self, info):
         if Namespace.MAM_2 not in info.features:
             return
@@ -80,7 +83,14 @@ class MAM(BaseModule):
                          account=self._account,
                          feature=Namespace.MAM_2))
 
-    def reset_state(self):
+    def _on_client_resume_failed(self, _client, _signal_name):
+        self._reset_state()
+
+    def _on_client_state_changed(self, _client, _signal_name, state):
+        if state.is_disconnected:
+            self._reset_state()
+
+    def _reset_state(self):
         self._mam_query_ids.clear()
         self._catch_up_finished.clear()
 

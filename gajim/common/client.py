@@ -182,9 +182,9 @@ class Client(Observable):
 
     def _on_resume_failed(self, _client, _signal_name):
         log.info('Resume failed')
+        self.notify('resume-failed')
         app.nec.push_incoming_event(NetworkEvent(
             'our-show', account=self._account, show='offline'))
-        self.get_module('Chatstate').enabled = False
 
     def _on_resume_successful(self, _client, _signal_name):
         self._set_state(ClientState.CONNECTED)
@@ -278,11 +278,9 @@ class Client(Observable):
             self.notify('state-changed', SimpleClientState.RESUME_IN_PREGRESS)
 
         else:
-            self.get_module('Chatstate').enabled = False
             app.nec.push_incoming_event(NetworkEvent(
                 'our-show', account=self._account, show='offline'))
             self._after_disconnect()
-            self.get_module('Contacts').reset_presence()
             self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
     def _after_disconnect(self):
@@ -305,12 +303,9 @@ class Client(Observable):
 
     def _on_connected(self, _client, _signal_name):
         self._set_state(ClientState.CONNECTED)
-        self.get_module('MUC').reset_state()
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()
         self.get_module('Discovery').discover_server_items()
-        self.get_module('Chatstate').enabled = True
-        self.get_module('MAM').reset_state()
 
     def _on_stanza_sent(self, _client, _signal_name, stanza):
         app.nec.push_incoming_event(NetworkEvent('stanza-sent',

@@ -47,6 +47,15 @@ class Contacts(BaseModule):
         BaseModule.__init__(self, con)
 
         self._contacts = {}
+        self._con.connect_signal('state-changed', self._on_client_state_changed)
+        self._con.connect_signal('resume-failed', self._on_client_resume_failed)
+
+    def _on_client_resume_failed(self, _client, _signal_name):
+        self._reset_presence()
+
+    def _on_client_state_changed(self, _client, _signal_name, state):
+        if state.is_disconnected:
+            self._reset_presence()
 
     def add_contact(self, jid, groupchat=False):
         if isinstance(jid, str):
@@ -90,11 +99,15 @@ class Contacts(BaseModule):
                 contacts.append(contact)
         return contacts
 
-    def reset_presence(self):
+    def _reset_presence(self):
         for contact in self._contacts.values():
             if contact.is_groupchat or contact.is_pm_contact:
                 continue
             contact.update_presence(UNKNOWN_PRESENCE)
+
+    def force_chatstate_update(self):
+        for contact in self._contacts.values():
+            contact.force_chatstate_update()
 
 
 class CommonContact(Observable):
@@ -102,6 +115,8 @@ class CommonContact(Observable):
         Observable.__init__(self, logger)
         self._jid = jid
         self._account = account
+
+        self._resources = {}
 
     def _module(self, name):
         return app.get_client(self._account).get_module(name)
@@ -135,6 +150,10 @@ class CommonContact(Observable):
     def is_pm_contact(self):
         return False
 
+    def force_chatstate_update(self):
+        for contact in self._resources.values():
+            contact.notify('chatstate-update')
+
 
 class BareContact(CommonContact):
     def __init__(self, logger, jid, account):
@@ -142,7 +161,6 @@ class BareContact(CommonContact):
 
         self.settings = ContactSettings(account, str(jid))
 
-        self._resources = {}
         self._avatar_sha = app.storage.cache.get_contact(jid, 'avatar')
 
     def add_resource(self, resource):
@@ -319,8 +337,6 @@ class GroupchatContact(CommonContact):
         CommonContact.__init__(self, logger, jid, account)
 
         self.settings = GroupChatSettings(account, str(jid))
-
-        self._resources = {}
 
     @property
     def is_groupchat(self):

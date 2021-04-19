@@ -30,12 +30,10 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import ged
 from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
-from gajim.common.helpers import event_filter
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.structs import MUCData
 from gajim.common.structs import MUCPresenceData
@@ -109,6 +107,8 @@ class MUC(BaseModule):
 
         self._con.connect_signal('state-changed',
                                  self._on_client_state_changed)
+        self._con.connect_signal('resume-failed',
+                                 self._on_client_resume_failed)
 
         self._rejoin_muc = set()
         self._join_timeouts = {}
@@ -116,6 +116,14 @@ class MUC(BaseModule):
         self._muc_service_jid = None
         self._joined_users = defaultdict(dict)
         self._mucs = {}
+
+
+    def _on_resume_failed(self, _client, _signal_name):
+        self._reset_presence()
+
+    def _on_state_changed(self, _client, _signal_name, state):
+        if state.is_disconnected:
+            self._reset_presence()
 
     @property
     def supported(self):
@@ -158,7 +166,13 @@ class MUC(BaseModule):
         contact = self._get_contact(room_jid, groupchat=True)
         contact.notify('state-changed')
 
-    def reset_state(self):
+    def _reset_state(self):
+        for room_jid in list(self._rejoin_timeouts.keys()):
+            self._remove_rejoin_timeout(room_jid)
+
+        for room_jid in list(self._join_timeouts.keys()):
+            self._remove_join_timeout(room_jid)
+
         for muc in self._mucs.values():
             self._joined_users.pop(muc.jid, None)
             self._set_muc_state(muc.jid, MUCJoinedState.NOT_JOINED)
@@ -808,13 +822,10 @@ class MUC(BaseModule):
 
     def _on_client_state_changed(self, _client, _signal_name, state):
         if state.is_disconnected:
-            for room_jid in list(self._rejoin_timeouts.keys()):
-                self._remove_rejoin_timeout(room_jid)
+            self._reset_state()
 
-            for room_jid in list(self._join_timeouts.keys()):
-                self._remove_join_timeout(room_jid)
-
-            self.reset_state()
+    def _on_client_resume_failed(self, _client, _signal_name):
+        self._reset_state()
 
 
 def get_instance(*args, **kwargs):

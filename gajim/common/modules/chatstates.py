@@ -29,7 +29,6 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.const import Chatstate as State
 from gi.repository import GLib
 
-from gajim.common import app
 from gajim.common.structs import OutgoingMessage
 from gajim.common.modules.base import BaseModule
 
@@ -44,7 +43,7 @@ PAUSED_AFTER = 10
 def ensure_enabled(func):
     @wraps(func)
     def func_wrapper(self, *args, **kwargs):
-        if not self.enabled:
+        if not self._enabled:
             return None
         return func(self, *args, **kwargs)
     return func_wrapper
@@ -76,14 +75,22 @@ class Chatstate(BaseModule):
         self._blocked = []  # type: List[str]
         self._enabled = False
 
-    @property
-    def enabled(self):
-        return self._enabled
+        self._con.connect_signal('state-changed', self._on_client_state_changed)
+        self._con.connect_signal('resume-failed', self._on_client_resume_failed)
 
-    @enabled.setter
-    def enabled(self, value):
+    def _on_client_resume_failed(self, _client, _signal_name):
+        self._set_enabled(False)
+
+    def _on_client_state_changed(self, _client, _signal_name, state):
+        if state.is_disconnected:
+            self._set_enabled(False)
+        elif state.is_connected:
+            self._set_enabled(True)
+
+    def _set_enabled(self, value):
         if self._enabled == value:
             return
+
         self._log.info('Chatstate module %s',
                        'enabled' if value else 'disabled')
         self._enabled = value
@@ -93,10 +100,7 @@ class Chatstate(BaseModule):
                 2, self._check_last_interaction)
         else:
             self.cleanup()
-            self._chatstates = {}
-            self._last_keyboard_activity = {}
-            self._last_mouse_activity = {}
-            self._blocked = []
+            self._con.get_module('Contacts').force_chatstate_update()
 
     @ensure_enabled
     def _presence_received(self,
@@ -171,23 +175,7 @@ class Chatstate(BaseModule):
             if new_chatstate is not None:
                 if self._chatstates.get(jid) != new_chatstate:
                     contact = self._get_contact(jid)
-
-                    # if contact is None:
-                    #     room, nick = app.get_room_and_nick_from_fjid(jid)
-                    #     contact = app.contacts.get_gc_contact(
-                    #         self._account, room, nick)
-                    #     if contact is not None:
-                    #         contact = contact.as_contact()
-                    #     else:
-                    #         # Contact not found, maybe we left the group chat
-                    #         # or the contact was removed from the roster
-                    #         self._log.info(
-                    #             'Contact %s not found, reset chatstate', jid)
-                    #         self._chatstates.pop(jid, None)
-                    #         self._last_mouse_activity.pop(jid, None)
-                    #         self._last_keyboard_activity.pop(jid, None)
-                    #         continue
-                self.set_chatstate(contact, new_chatstate)
+                    self.set_chatstate(contact, new_chatstate)
 
         return GLib.SOURCE_CONTINUE
 
@@ -332,12 +320,19 @@ class Chatstate(BaseModule):
     def remove_all_delay_timeouts(self):
         for timeout in self._delay_timeout_ids.values():
             GLib.source_remove(timeout)
-        self._delay_timeout_ids = {}
+        self._delay_timeout_ids.clear()
 
     def cleanup(self):
         self.remove_all_delay_timeouts()
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)
+            self._timeout_id = None
+
+        self._chatstates.clear()
+        self._remote_chatstate.clear()
+        self._last_keyboard_activity.clear()
+        self._last_mouse_activity.clear()
+        self._blocked = []
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[Chatstate, str]:

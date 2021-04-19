@@ -1209,10 +1209,13 @@ class Observable:
             self.connect_signal(signal_name, func)
 
     def notify(self, signal_name, *args, qualifiers=None, **kwargs):
+        signal_callbacks = self._callbacks.get(signal_name)
+        if signal_callbacks is None:
+            return
+
         if self._log is not None:
             self._log.info('Signal: %s', signal_name)
 
-        signal_callbacks = self._callbacks.get(signal_name, {})
         callbacks = signal_callbacks.get(qualifiers, [])
         for func in list(callbacks):
             if func() is None:
