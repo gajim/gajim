@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">110</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-    <property name="page_size">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+    <property name="page-size">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">110</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-    <property name="page_size">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+    <property name="page-size">10</property>
   </object>
   <object class="GtkBox" id="drop_area">
     <property name="name">DropArea</property>
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="no_show_all">True</property>
-    <property name="opacity">0.9</property>
+    <property name="can-focus">False</property>
+    <property name="no-show-all">True</property>
+    <property name="opacity">0.90</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="orientation">vertical</property>
@@ -27,10 +27,10 @@
     <child>
       <object class="GtkImage">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="valign">end</property>
         <property name="vexpand">True</property>
-        <property name="icon_name">mail-attachment-symbolic</property>
+        <property name="icon-name">mail-attachment-symbolic</property>
         <property name="icon_size">6</property>
       </object>
       <packing>
@@ -42,12 +42,12 @@
     <child>
       <object class="GtkLabel">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="valign">start</property>
         <property name="vexpand">True</property>
         <property name="label" translatable="yes">Drop files or contacts</property>
         <property name="wrap">True</property>
-        <property name="max_width_chars">40</property>
+        <property name="max-width-chars">40</property>
         <style>
           <class name="bold16"/>
         </style>
@@ -60,252 +60,253 @@
     </child>
   </object>
   <object class="GtkPopover" id="dtmf_popover">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
+      <!-- n-columns=3 n-rows=4 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">6</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">6</property>
         <child>
           <object class="GtkButton" id="1_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">center</property>
                 <property name="label" translatable="yes">&lt;b&gt;1&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
                 <property name="xalign">0</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="2_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;2&lt;/b&gt; abc</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="3_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;3&lt;/b&gt; def</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="4_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;4&lt;/b&gt; ghi</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="5_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;5&lt;/b&gt; jkl</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="6_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;6&lt;/b&gt; mno</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="7_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label7">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;7&lt;/b&gt; pqrs</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="8_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;8&lt;/b&gt; tuv</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="9_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label9">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;9&lt;/b&gt; wxyz</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="*_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label10">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;*&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="0_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label11">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;0&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="#_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label12">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;#&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
       </object>
@@ -313,12 +314,12 @@
   </object>
   <object class="GtkMenu" id="formattings_menu">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkCheckMenuItem" id="bold">
         <property name="name">bold</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes">Bold</property>
         <signal name="activate" handler="on_formatting_menuitem_activate" swapped="no"/>
       </object>
@@ -327,7 +328,7 @@
       <object class="GtkCheckMenuItem" id="italic">
         <property name="name">italic</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes">Italic</property>
         <signal name="activate" handler="on_formatting_menuitem_activate" swapped="no"/>
       </object>
@@ -336,7 +337,7 @@
       <object class="GtkCheckMenuItem" id="underline">
         <property name="name">underline</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes">Underline</property>
         <signal name="activate" handler="on_formatting_menuitem_activate" swapped="no"/>
       </object>
@@ -345,7 +346,7 @@
       <object class="GtkCheckMenuItem" id="strike">
         <property name="name">strike</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes">Strike</property>
         <signal name="activate" handler="on_formatting_menuitem_activate" swapped="no"/>
       </object>
@@ -353,13 +354,13 @@
     <child>
       <object class="GtkSeparatorMenuItem">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="color">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes">Color</property>
         <signal name="activate" handler="on_color_menuitem_activate" swapped="no"/>
       </object>
@@ -367,7 +368,7 @@
     <child>
       <object class="GtkMenuItem" id="font">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes">Font</property>
         <signal name="activate" handler="on_font_menuitem_activate" swapped="no"/>
       </object>
@@ -375,60 +376,60 @@
     <child>
       <object class="GtkSeparatorMenuItem">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="clear_formatting">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes">Clear formatting</property>
         <signal name="activate" handler="on_clear_formatting_menuitem_activate" swapped="no"/>
       </object>
     </child>
   </object>
   <object class="GtkBox" id="chat_control_hbox">
-    <property name="can_focus">True</property>
-    <property name="margin_start">7</property>
-    <property name="margin_end">7</property>
-    <property name="margin_top">5</property>
-    <property name="margin_bottom">7</property>
+    <property name="can-focus">True</property>
+    <property name="margin-start">7</property>
+    <property name="margin-end">7</property>
+    <property name="margin-top">5</property>
+    <property name="margin-bottom">7</property>
     <property name="spacing">1</property>
     <child>
       <object class="GtkOverlay" id="overlay">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <child>
           <object class="GtkPaned" id="paned1">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <child>
               <object class="GtkBox" id="textview_box">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkEventBox" id="banner_eventbox">
                     <property name="name">ChatControl-BannerEventBox</property>
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <signal name="button-press-event" handler="_on_banner_eventbox_button_press_event" swapped="no"/>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkEventBox" id="avatar_eventbox">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="visible_window">False</property>
+                            <property name="can-focus">False</property>
+                            <property name="visible-window">False</property>
                             <child>
                               <object class="GtkImage" id="avatar_image">
-                                <property name="width_request">48</property>
-                                <property name="height_request">48</property>
+                                <property name="width-request">48</property>
+                                <property name="height-request">48</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                               </object>
                             </child>
                           </object>
@@ -439,18 +440,19 @@
                           </packing>
                         </child>
                         <child>
+                          <!-- n-columns=3 n-rows=3 -->
                           <object class="GtkGrid">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
-                            <property name="row_spacing">3</property>
-                            <property name="column_spacing">3</property>
+                            <property name="row-spacing">3</property>
+                            <property name="column-spacing">3</property>
                             <child>
                               <object class="GtkLabel" id="banner_name_label">
                                 <property name="name">ChatControl-BannerNameLabel</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="label">Contact name</property>
@@ -461,8 +463,8 @@
                                 </style>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
                                 <property name="width">2</property>
                               </packing>
                             </child>
@@ -470,7 +472,7 @@
                               <object class="GtkLabel" id="banner_label">
                                 <property name="name">ChatControl-BannerLabel</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="label">label</property>
@@ -480,28 +482,28 @@
                                 <signal name="populate-popup" handler="on_banner_label_populate_popup" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkImage" id="phone_image">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="tooltip_text" translatable="yes">The last message was written on a mobile client</property>
+                                <property name="can-focus">False</property>
+                                <property name="no-show-all">True</property>
+                                <property name="tooltip-text" translatable="yes">The last message was written on a mobile client</property>
                                 <property name="halign">start</property>
-                                <property name="margin_end">4</property>
-                                <property name="icon_name">phone-apple-iphone-symbolic</property>
+                                <property name="margin-end">4</property>
+                                <property name="icon-name">phone-apple-iphone-symbolic</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkBox" id="account_badge">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">end</property>
                                 <property name="valign">center</property>
                                 <property name="orientation">vertical</property>
@@ -510,9 +512,18 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">2</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">0</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                             <child>
                               <placeholder/>
@@ -527,12 +538,12 @@
                         <child>
                           <object class="GtkBox" id="hbox2">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="spacing">4</property>
                             <child>
                               <object class="GtkImage" id="mood_image">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="no-show-all">True</property>
                                 <property name="icon_size">1</property>
                               </object>
                               <packing>
@@ -543,8 +554,8 @@
                             </child>
                             <child>
                               <object class="GtkImage" id="activity_image">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="no-show-all">True</property>
                                 <property name="icon_size">1</property>
                               </object>
                               <packing>
@@ -555,8 +566,8 @@
                             </child>
                             <child>
                               <object class="GtkImage" id="tune_image">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="no-show-all">True</property>
                                 <property name="icon_size">1</property>
                               </object>
                               <packing>
@@ -568,12 +579,12 @@
                             <child>
                               <object class="GtkEventBox" id="location_eventbox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="visible_window">False</property>
+                                <property name="can-focus">False</property>
+                                <property name="visible-window">False</property>
                                 <child>
                                   <object class="GtkImage" id="location_image">
-                                    <property name="can_focus">False</property>
-                                    <property name="no_show_all">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="no-show-all">True</property>
                                     <property name="icon_size">1</property>
                                   </object>
                                 </child>
@@ -606,7 +617,7 @@
                 <child>
                   <object class="GtkSeparator">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <style>
                       <class name="chatcontrol-separator-top"/>
                     </style>
@@ -623,7 +634,7 @@
                 <child>
                   <object class="GtkSeparator">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <style>
                       <class name="chatcontrol-separator"/>
                     </style>
@@ -637,20 +648,20 @@
                 <child>
                   <object class="GtkBox" id="hbox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <object class="GtkMenuButton" id="emoticons_button">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Show a list of emojis</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Show a list of emojis</property>
                         <property name="relief">none</property>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">face-smile-symbolic</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">face-smile-symbolic</property>
                           </object>
                         </child>
                         <style>
@@ -666,18 +677,18 @@
                     <child>
                       <object class="GtkMenuButton" id="formattings_button">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="has_tooltip">True</property>
+                        <property name="has-tooltip">True</property>
                         <property name="relief">none</property>
                         <property name="popup">formattings_menu</property>
                         <child>
                           <object class="GtkImage" id="image10">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">format-text-bold-symbolic</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">format-text-bold-symbolic</property>
                             <property name="icon_size">1</property>
                           </object>
                         </child>
@@ -697,7 +708,7 @@
                     <child>
                       <object class="GtkComboBox" id="label_selector">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -708,14 +719,14 @@
                     <child>
                       <object class="GtkMenuButton" id="settings_menu">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
                         <property name="relief">none</property>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">open-menu-symbolic</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">open-menu-symbolic</property>
                           </object>
                         </child>
                         <style>
@@ -725,23 +736,23 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="authentication_button">
-                        <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="no_show_all">True</property>
+                        <property name="no-show-all">True</property>
                         <property name="relief">none</property>
                         <signal name="clicked" handler="_on_authentication_button_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="lock_image">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="icon_size">1</property>
                           </object>
                         </child>
@@ -752,16 +763,16 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="encryption_menu">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Choose encryption</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Choose encryption</property>
                         <property name="relief">none</property>
                         <child>
                           <placeholder/>
@@ -773,23 +784,23 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="sendfile_button">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="relief">none</property>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">mail-attachment-symbolic</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">mail-attachment-symbolic</property>
                             <property name="icon_size">1</property>
                           </object>
                         </child>
@@ -800,23 +811,23 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="send_message_button">
-                        <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">True</property>
-                        <property name="no_show_all">True</property>
-                        <property name="tooltip_text" translatable="yes">Send Message</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="tooltip-text" translatable="yes">Send Message</property>
                         <property name="relief">none</property>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">document-send</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">document-send</property>
                           </object>
                         </child>
                         <style>
@@ -826,7 +837,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">8</property>
                       </packing>
                     </child>
@@ -848,21 +859,21 @@
             </child>
             <child>
               <object class="GtkBox" id="av_box">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkBox" id="video_box">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
-                    <property name="margin_start">6</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="margin-start">6</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkViewport" id="outgoing_viewport">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="shadow_type">none</property>
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="shadow-type">none</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -876,8 +887,8 @@
                     <child>
                       <object class="GtkViewport" id="incoming_viewport">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="shadow_type">none</property>
+                        <property name="can-focus">False</property>
+                        <property name="shadow-type">none</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -898,21 +909,21 @@
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="valign">center</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox" id="av_start_box">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
                         <property name="halign">center</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">18</property>
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Start Call…</property>
                             <style>
                               <class name="bold"/>
@@ -929,8 +940,8 @@
                           <object class="GtkButton" id="av_start_mic_button">
                             <property name="label" translatable="yes">With Microphone</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <signal name="clicked" handler="_on_call_with_mic" swapped="no"/>
                           </object>
                           <packing>
@@ -943,8 +954,8 @@
                           <object class="GtkButton" id="av_start_mic_cam_button">
                             <property name="label" translatable="yes">Microphone &amp; Camera</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <signal name="clicked" handler="_on_call_with_mic_and_cam" swapped="no"/>
                           </object>
                           <packing>
@@ -962,10 +973,10 @@
                     </child>
                     <child>
                       <object class="GtkImage" id="jingle_audio_state">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="pixel_size">100</property>
-                        <property name="icon_name">audio-input-microphone-symbolic</property>
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="pixel-size">100</property>
+                        <property name="icon-name">audio-input-microphone-symbolic</property>
                         <style>
                           <class name="dim-label"/>
                           <class name="audio-mic-animation"/>
@@ -980,10 +991,10 @@
                     <child>
                       <object class="GtkLabel" id="jingle_connection_state">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="valign">end</property>
                         <property name="wrap">True</property>
-                        <property name="max_width_chars">20</property>
+                        <property name="max-width-chars">20</property>
                         <style>
                           <class name="bold"/>
                           <class name="dim-label"/>
@@ -998,7 +1009,7 @@
                     <child>
                       <object class="GtkSpinner" id="jingle_connection_spinner">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -1016,22 +1027,22 @@
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton">
-                        <property name="width_request">70</property>
+                        <property name="width-request">70</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">End call</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">End call</property>
                         <property name="halign">center</property>
                         <signal name="clicked" handler="_on_end_call_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">call-stop</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">call-stop</property>
                           </object>
                         </child>
                       </object>
@@ -1045,14 +1056,14 @@
                       <object class="GtkBox" id="audio_buttons_box">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkVolumeButton" id="mic_hscale">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
-                            <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="focus-on-click">False</property>
+                            <property name="receives-default">True</property>
+                            <property name="has-tooltip">True</property>
                             <property name="relief">none</property>
                             <property name="orientation">vertical</property>
                             <property name="size">menu</property>
@@ -1061,17 +1072,17 @@
 microphone-sensitivity-low-symbolic
 microphone-sensitivity-medium-symbolic
 microphone-sensitivity-high-symbolic</property>
-                            <property name="use_symbolic">False</property>
+                            <property name="use-symbolic">False</property>
                             <child internal-child="plus_button">
                               <object class="GtkButton" id="volumebutton-plus_button2">
-                                <property name="can_focus">False</property>
-                                <property name="receives_default">False</property>
+                                <property name="can-focus">False</property>
+                                <property name="receives-default">False</property>
                               </object>
                             </child>
                             <child internal-child="minus_button">
                               <object class="GtkButton" id="volumebutton-minus_button2">
-                                <property name="can_focus">False</property>
-                                <property name="receives_default">False</property>
+                                <property name="can-focus">False</property>
+                                <property name="receives-default">False</property>
                               </object>
                             </child>
                             <style>
@@ -1087,10 +1098,10 @@ microphone-sensitivity-high-symbolic</property>
                         <child>
                           <object class="GtkVolumeButton" id="sound_hscale">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
-                            <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="focus-on-click">False</property>
+                            <property name="receives-default">True</property>
+                            <property name="has-tooltip">True</property>
                             <property name="relief">none</property>
                             <property name="orientation">vertical</property>
                             <property name="size">menu</property>
@@ -1099,17 +1110,17 @@ microphone-sensitivity-high-symbolic</property>
 audio-volume-low-symbolic
 audio-volume-medium-symbolic
 audio-volume-high-symbolic</property>
-                            <property name="use_symbolic">False</property>
+                            <property name="use-symbolic">False</property>
                             <child internal-child="plus_button">
                               <object class="GtkButton" id="volumebutton-plus_button1">
-                                <property name="can_focus">False</property>
-                                <property name="receives_default">False</property>
+                                <property name="can-focus">False</property>
+                                <property name="receives-default">False</property>
                               </object>
                             </child>
                             <child internal-child="minus_button">
                               <object class="GtkButton" id="volumebutton-minus_button1">
-                                <property name="can_focus">False</property>
-                                <property name="receives_default">False</property>
+                                <property name="can-focus">False</property>
+                                <property name="receives-default">False</property>
                               </object>
                             </child>
                             <style>
@@ -1125,16 +1136,16 @@ audio-volume-high-symbolic</property>
                         <child>
                           <object class="GtkMenuButton" id="dtmf_button">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <property name="relief">none</property>
                             <property name="direction">up</property>
                             <property name="popover">dtmf_popover</property>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="icon_name">input-dialpad-symbolic</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">input-dialpad-symbolic</property>
                                 <property name="icon_size">1</property>
                               </object>
                             </child>
@@ -1152,7 +1163,7 @@ audio-volume-high-symbolic</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -1160,16 +1171,16 @@ audio-volume-high-symbolic</property>
                       <object class="GtkButton" id="av_cam_button">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Turn Camera on</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Turn Camera on</property>
                         <property name="relief">none</property>
                         <signal name="clicked" handler="_on_video" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="av_cam_image">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">feather-camera-symbolic</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">feather-camera-symbolic</property>
                           </object>
                         </child>
                         <style>
@@ -1186,7 +1197,7 @@ audio-volume-high-symbolic</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="pack_type">end</property>
+                    <property name="pack-type">end</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -1208,5 +1219,27 @@ audio-volume-high-symbolic</property>
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkButton" id="jump_to_end_button">
+    <property name="can-focus">True</property>
+    <property name="receives-default">False</property>
+    <property name="no-show-all">True</property>
+    <property name="halign">end</property>
+    <property name="valign">end</property>
+    <property name="margin-end">6</property>
+    <property name="margin-bottom">12</property>
+    <signal name="clicked" handler="_on_jump_to_end" swapped="no"/>
+    <child>
+      <object class="GtkImage">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">4</property>
+        <property name="margin-end">4</property>
+        <property name="icon-name">go-bottom-symbolic</property>
+      </object>
+    </child>
+    <style>
+      <class name="circular"/>
+    </style>
   </object>
 </interface>

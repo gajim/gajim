@@ -175,8 +175,14 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self._scrolled_view = ScrolledView()
         self._scrolled_view.add(self.conversation_view)
         self._scrolled_view.set_focus_vadjustment(Gtk.Adjustment())
-        self.xml.textview_box.add(self._scrolled_view)
-        self.xml.textview_box.reorder_child(self._scrolled_view, 2)
+
+        overlay = Gtk.Overlay()
+        overlay.add(self._scrolled_view)
+        overlay.add_overlay(self.xml.jump_to_end_button)
+        self.xml.textview_box.add(overlay)
+        self.xml.textview_box.reorder_child(overlay, 2)
+        self._scrolled_view.connect('autoscroll-changed',
+                                    self._on_autoscroll_changed)
         self._scrolled_view.connect('request-history',
                                     self.fetch_n_lines_history, 30)
 
@@ -928,6 +934,12 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 return True
 
         return False
+
+    def _on_autoscroll_changed(self, _widget, autoscroll):
+        self.xml.jump_to_end_button.set_visible(not autoscroll)
+
+    def _on_jump_to_end(self, _button):
+        self.scroll_to_end(force=True)
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
                                target_type, timestamp):

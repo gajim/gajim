@@ -23,6 +23,11 @@ class ScrolledView(Gtk.ScrolledWindow):
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             ()
+        ),
+        'autoscroll-changed': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (bool,)
         )
     }
 
@@ -89,8 +94,10 @@ class ScrolledView(Gtk.ScrolledWindow):
         bottom = adj.get_upper() - adj.get_page_size()
         if (bottom - adj.get_value()) < 1:
             self._autoscroll = True
+            self.emit('autoscroll-changed', self._autoscroll)
         else:
             self._autoscroll = False
+            self.emit('autoscroll-changed', self._autoscroll)
 
         if self._complete:
             self._request_history_at_upper = None
