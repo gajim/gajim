@@ -1,3 +1,21 @@
+Gajim 1.3.2 (24 April 2021)
+
+  New
+
+  * Accounts: Add account switch description
+
+  Changes
+
+  * MessageInput: Remove custom placeholder
+  * MessageInput: Add focus borders
+
+  Bug fixes
+
+  * #10010 Only convert domain name to ASCII
+  * #10342 UnicodeDecodeError related to avatars
+  * #10428 Roster: Handle missing avatar_sha
+
+
 Gajim 1.3.1 (01 March 2021)
 
   New
