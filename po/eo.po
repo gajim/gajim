@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-01-20 20:26+0000\n"
+"PO-Revision-Date: 2021-03-18 11:59+0000\n"
 "Last-Translator: Max Muster <c@zp1.net>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/1-3/eo/>"
 "\n"
@@ -182,14 +182,12 @@ msgid "Remote contact stopped transfer"
 msgstr "Forigas kontakton el kontaktlisto"
 
 #: gajim/roster_window.py:1903 gajim/chat_control.py:1690
-#, fuzzy
 msgid "Error opening file"
-msgstr "Eraro dum legado de dosiero:"
+msgstr "Eraro dum malfermo de dosiero"
 
 #: gajim/roster_window.py:1968
-#, fuzzy
 msgid "Authorization sent"
-msgstr "Permeso estas sendita"
+msgstr "Rajtigo sendita"
 
 #: gajim/roster_window.py:1969
 #, fuzzy, python-format
@@ -232,24 +230,21 @@ msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
 
 #: gajim/roster_window.py:2201
 msgid "_Always quit when closing Gajim"
-msgstr ""
+msgstr "_Ciam ĉesu fermi Gajim"
 
 #: gajim/roster_window.py:2204 gajim/roster_window.py:2299
 #: gajim/roster_window.py:2340 gajim/data/gui/application_menu.ui:30
 #: gajim/data/gui/systray_context_menu.ui:83
-#, fuzzy
 msgid "_Quit"
-msgstr "_Eliri"
+msgstr "_Lasu"
 
 #: gajim/roster_window.py:2292
-#, fuzzy
 msgid "Stop File Transfers"
-msgstr "Dosieraj transmetoj"
+msgstr "Stop Dosiero Translokigojn"
 
 #: gajim/roster_window.py:2293
-#, fuzzy
 msgid "You still have running file transfers"
-msgstr "Nuligi dosiertransmeton"
+msgstr "Vi ankoraŭ kurante dosiero translokigoj"
 
 #: gajim/roster_window.py:2294
 msgid ""
@@ -1566,11 +1561,11 @@ msgstr "_Malfari"
 
 #: gajim/chat_control_base.py:723 gajim/conversation_textview.py:417
 msgid "_Clear"
-msgstr ""
+msgstr "_Klara"
 
 #: gajim/chat_control_base.py:728
 msgid "Paste as quote"
-msgstr ""
+msgstr "Algluu kiel citaĵon"
 
 #: gajim/chat_control_base.py:767
 #, fuzzy

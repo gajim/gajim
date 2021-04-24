@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-01-05 13:31+0000\n"
-"Last-Translator: dalek <sleepy@nixnet.email>\n"
+"PO-Revision-Date: 2021-03-24 08:08+0000\n"
+"Last-Translator: Gajim_Translations.Chinese <translate.gajim@x2nj.top>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/1-3/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -32,11 +32,11 @@ msgstr "选项:"
 
 #: gajim/history_manager.py:82
 msgid "Show this help message and exit"
-msgstr ""
+msgstr "显示此帮助信息并退出"
 
 #: gajim/history_manager.py:83
 msgid "Choose folder for logfile"
-msgstr ""
+msgstr "选择保存日志文件的文件夹"
 
 #: gajim/history_manager.py:113
 msgid "Cannot find history logs database"
@@ -657,7 +657,7 @@ msgstr "完全分离配置文件（包括历史数据库和插件）"
 
 #: gajim/application.py:103
 msgid "Print XML stanzas and other debug information"
-msgstr ""
+msgstr "打印XML字段和其他调试信息"
 
 #: gajim/application.py:110
 #, fuzzy
@@ -908,7 +908,7 @@ msgstr "收到消息的昵称颜色。"
 #: gajim/gui_interface.py:990
 #, python-format
 msgid "%s is calling"
-msgstr ""
+msgstr "%s 正在呼叫"
 
 #: gajim/gui_interface.py:1071 gajim/gui_interface.py:1072
 #, fuzzy
@@ -1298,7 +1298,7 @@ msgstr "撤销成员"
 
 #: gajim/gui_menu_builder.py:887
 msgid "Grant Voice"
-msgstr ""
+msgstr "授予麦克风权限"
 
 #: gajim/gui_menu_builder.py:890
 #, fuzzy
@@ -1349,20 +1349,20 @@ msgstr "连接"
 
 #: gajim/chat_control.py:811 gajim/data/gui/chat_control.ui:1185
 msgid "Turn Camera on"
-msgstr ""
+msgstr "打开摄像头"
 
 #: gajim/chat_control.py:822
 msgid "Calling (Video)…"
-msgstr ""
+msgstr "来电 (视频)…"
 
 #: gajim/chat_control.py:826 gajim/chat_control.py:834
 #: gajim/chat_control.py:864
 msgid "Turn Camera off"
-msgstr ""
+msgstr "关闭摄像头"
 
 #: gajim/chat_control.py:832
 msgid "Incoming Call (Video)"
-msgstr ""
+msgstr "来电（视频）"
 
 #: gajim/chat_control.py:1020
 #, python-format
@@ -2436,21 +2436,21 @@ msgstr "缺失的\"联系人 JID\"参数"
 
 #: gajim/command_system/implementation/middleware.py:76
 msgid "Error during command execution!"
-msgstr ""
+msgstr "命令执行过程中出错!"
 
 #: gajim/command_system/implementation/execute.py:60
 msgid "Execute expression inside a shell, show output"
-msgstr ""
+msgstr "在shell中执行表达式，显示输出内容"
 
 #: gajim/command_system/implementation/execute.py:74
 msgid ""
 "Command disabled. This command can be enabled by setting "
 "'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
+msgstr "命令已禁用。 通过在ACE（高级配置编辑器）中设置'command_system_execute'字段为True，即可启用该命令。"
 
 #: gajim/command_system/implementation/execute.py:125
 msgid "Execute expression inside a shell, send output"
-msgstr ""
+msgstr "在shell中执行表达式，发送输出"
 
 #: gajim/command_system/implementation/standard.py:52
 msgid ""
@@ -2468,7 +2468,7 @@ msgstr "发送操作（在第三人称）到当前聊天"
 
 #: gajim/command_system/implementation/standard.py:91
 msgid "Show logged messages which mention given text"
-msgstr ""
+msgstr "显示提到指定文本的日志信息"
 
 #: gajim/command_system/implementation/standard.py:96
 #, python-format
@@ -2477,7 +2477,7 @@ msgstr "%s 未找到"
 
 #: gajim/command_system/implementation/standard.py:102
 msgid "Limit must be an integer"
-msgstr ""
+msgstr "Limit 必须是一个整数"
 
 #: gajim/command_system/implementation/standard.py:127
 msgid ""
@@ -2488,10 +2488,16 @@ msgid ""
 "    online, away, chat, xa, dnd.\n"
 "    "
 msgstr ""
+"\n"
+"    设置当前状态\n"
+"\n"
+"    状态可以是下列选项之一：\n"
+"    在线、离开、聊天、XA、DND。\n"
+"    "
 
 #: gajim/command_system/implementation/standard.py:145
 msgid "Set the current status to away"
-msgstr ""
+msgstr "将当前状态设置为离开"
 
 #: gajim/command_system/implementation/standard.py:148
 #: gajim/common/helpers.py:200 gajim/common/modules/adhoc_commands.py:122
@@ -2500,7 +2506,7 @@ msgstr "离开"
 
 #: gajim/command_system/implementation/standard.py:159
 msgid "Set the current status to online"
-msgstr ""
+msgstr "将当前状态设置为在线"
 
 #: gajim/command_system/implementation/standard.py:162
 msgid "Available"
@@ -2526,11 +2532,11 @@ msgstr "向联系人发送文件"
 #: gajim/command_system/implementation/standard.py:201
 #: gajim/command_system/implementation/standard.py:429
 msgid "Command is not supported for zeroconf accounts"
-msgstr ""
+msgstr "zeroconf 账户不支持该命令"
 
 #: gajim/command_system/implementation/standard.py:205
 msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
+msgstr "通过开放的语音聊天发送 DTMF 序列"
 
 #: gajim/command_system/implementation/standard.py:208
 #, fuzzy
@@ -2544,7 +2550,7 @@ msgstr "%s 不是一个合法的日志级别"
 
 #: gajim/command_system/implementation/standard.py:218
 msgid "Toggle Voice Chat"
-msgstr ""
+msgstr "切换语音聊天"
 
 #: gajim/command_system/implementation/standard.py:221
 #, fuzzy
@@ -2602,7 +2608,7 @@ msgstr "显示或更改聊天室主题"
 
 #: gajim/command_system/implementation/standard.py:318
 msgid "Invite a user to a group chat for a reason"
-msgstr ""
+msgstr "邀请用户参加群聊的原因"
 
 #: gajim/command_system/implementation/standard.py:325
 #, fuzzy
@@ -2612,7 +2618,7 @@ msgstr "加入JID给出的聊天室"
 #: gajim/command_system/implementation/standard.py:335
 msgid ""
 "Leave the group chat, optionally giving a reason, and close tab or window"
-msgstr ""
+msgstr "离开群聊，可选择给出一个理由，并关闭标签或窗口"
 
 #: gajim/command_system/implementation/standard.py:341
 msgid ""
@@ -2622,6 +2628,11 @@ msgid ""
 "    If given nickname is not found it will be treated as a JID.\n"
 "    "
 msgstr ""
+"\n"
+"    通过昵称或 JID 禁止用户进入群聊。\n"
+"\n"
+"    如果给定的昵称没有找到，将被视为JID。\n"
+"    "
 
 #: gajim/command_system/implementation/standard.py:357
 #, fuzzy
@@ -2681,7 +2692,7 @@ msgstr "为联系人 %s 输入新的昵称"
 
 #: gajim/command_system/implementation/custom.py:114
 msgid "The same as using a doc-string, except it supports translation"
-msgstr ""
+msgstr "与使用 doc-string 相同，只是它支持翻译"
 
 #: gajim/gtk/ssl_error_dialog.py:36 gajim/data/gui/ssl_error_dialog.ui:16
 #, fuzzy
@@ -2704,7 +2715,7 @@ msgstr "未知的 SSL 错误: %d"
 
 #: gajim/gtk/avatar_selector.py:84
 msgid "Select a picture or drop it here"
-msgstr ""
+msgstr "选择一张照片或在这里删除它"
 
 #: gajim/gtk/status_change.py:62 gajim/gtk/preferences.py:627
 #: gajim/gtk/preferences.py:655
@@ -2724,7 +2735,7 @@ msgstr "没有选择密钥"
 
 #: gajim/gtk/status_change.py:382
 msgid "No mood"
-msgstr ""
+msgstr "没心情"
 
 #: gajim/gtk/status_change.py:439
 msgid "Overwrite"
@@ -2777,11 +2788,11 @@ msgstr "未激活的"
 
 #: gajim/gtk/advanced_config.py:52
 msgid "?config type:Boolean"
-msgstr ""
+msgstr "?配置类型:布尔"
 
 #: gajim/gtk/advanced_config.py:53
 msgid "?config type:Integer"
-msgstr ""
+msgstr "?配置类型:整数"
 
 #: gajim/gtk/advanced_config.py:54
 msgid "?config type:Text"

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.13\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-02-15 17:22+0000\n"
+"PO-Revision-Date: 2021-04-01 06:04+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/1-3/de/>\n"
 "Language: de\n"
@@ -1213,7 +1213,7 @@ msgstr "Im E-Mail-Programm öffnen"
 
 #: gajim/gui_menu_builder.py:758
 msgid "Copy Location"
-msgstr "Link-Adresse kopieren"
+msgstr "Standort kopieren"
 
 #: gajim/gui_menu_builder.py:759 gajim/gtk/preferences.py:291
 msgid "Show Location"
@@ -2856,7 +2856,7 @@ msgstr "Kontaktbilder anzeigen"
 
 #: gajim/gtk/preferences.py:264 gajim/gtk/preferences.py:353
 msgid "Show Status Message"
-msgstr "Statusnachricht anzeigen"
+msgstr "Statusnachrichten anzeigen"
 
 #: gajim/gtk/preferences.py:270 gajim/gtk/preferences.py:411
 msgid "Sort Contacts by Status"
@@ -5545,7 +5545,7 @@ msgstr "Telefonnr."
 
 #: gajim/gtk/profile.py:35
 msgid "?profile:Organisation"
-msgstr "?profile:Organisation"
+msgstr "Organisation"
 
 #: gajim/gtk/profile.py:36 gajim/gtk/vcard_grid.py:41
 msgid "?profile:Title"
@@ -5649,7 +5649,7 @@ msgstr "Organisation"
 
 #: gajim/gtk/vcard_grid.py:44
 msgid "?profile:Note"
-msgstr "?profile:Notiz"
+msgstr "Notiz"
 
 #: gajim/gtk/vcard_grid.py:51
 msgid "Your public key or authentication certificate"
@@ -5698,11 +5698,11 @@ msgstr "Weiblich"
 
 #: gajim/gtk/vcard_grid.py:113
 msgid "?Gender:Other"
-msgstr "?Gender:Andere"
+msgstr "Andere"
 
 #: gajim/gtk/vcard_grid.py:114
 msgid "?Gender:None"
-msgstr "?Gender:Keins"
+msgstr "Keins"
 
 #: gajim/gtk/vcard_grid.py:121 gajim/gtk/vcard_grid.py:428
 msgid "Home"
