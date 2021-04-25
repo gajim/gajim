@@ -234,7 +234,7 @@ class ResultRow(Gtk.ListBoxRow):
         message_widget = MessageWidget(account)
         self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
         result = process(msg.message)
-        message_widget.add_content(result.blocks)
+        message_widget.add_content(result)
 
         self.show_all()
 
