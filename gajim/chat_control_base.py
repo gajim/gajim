@@ -176,11 +176,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self._scrolled_view.add(self.conversation_view)
         self._scrolled_view.set_focus_vadjustment(Gtk.Adjustment())
 
-        overlay = Gtk.Overlay()
-        overlay.add(self._scrolled_view)
-        overlay.add_overlay(self.xml.jump_to_end_button)
-        self.xml.textview_box.add(overlay)
-        self.xml.textview_box.reorder_child(overlay, 2)
+        self.xml.conv_view_overlay.add(self._scrolled_view)
+        self.xml.conv_view_overlay.add_overlay(self.xml.jump_to_end_button)
+
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
         self._scrolled_view.connect('request-history',

@@ -200,8 +200,10 @@ class GroupchatControl(ChatControlBase):
 
         self.xml.settings_menu.set_menu_model(self.control_menu)
 
-        app.settings.connect_signal('gc_print_join_left_default', self.update_actions)
-        app.settings.connect_signal('gc_print_status_default', self.update_actions)
+        app.settings.connect_signal('gc_print_join_left_default',
+                                    self.update_actions)
+        app.settings.connect_signal('gc_print_status_default',
+                                    self.update_actions)
 
         self.register_events([
             ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
@@ -215,10 +217,6 @@ class GroupchatControl(ChatControlBase):
 
         self.update_ui()
         self.widget.show_all()
-
-        if app.settings.get('hide_groupchat_occupants_list'):
-            # Roster is shown by default, so toggle the roster button to hide it
-            self.show_roster()
 
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
@@ -254,6 +252,7 @@ class GroupchatControl(ChatControlBase):
         state = self.contact.state
         if state == MUCJoinedState.JOINED:
             self._set_control_active()
+            self.show_roster()
 
         elif state == MUCJoinedState.NOT_JOINED:
             self._set_control_inactive()

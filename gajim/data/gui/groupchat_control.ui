@@ -341,7 +341,18 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkOverlay" id="conv_view_overlay">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkSeparator">
@@ -597,7 +608,6 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="transition-type">none</property>
-                    <property name="reveal-child">True</property>
                     <child>
                       <placeholder/>
                     </child>

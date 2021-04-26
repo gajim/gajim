@@ -391,6 +391,8 @@ class GroupchatContact(CommonContact):
     @property
     def is_joined(self):
         muc_data = self._module('MUC').get_muc_data(self._jid)
+        if muc_data is None:
+            return False
         return muc_data.state.is_joined
 
     def set_not_joined(self):
