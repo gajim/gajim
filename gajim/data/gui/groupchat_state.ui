@@ -5,18 +5,19 @@
   <object class="GtkStack" id="groupchat_state">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
+    <property name="margin-bottom">12</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <child>
-          <placeholder/>
-        </child>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Not joined</property>
+            <property name="label" translatable="yes">You left this group chat</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">32</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -26,11 +27,15 @@
         </child>
         <child>
           <object class="GtkButton">
-            <property name="label" translatable="yes">Join Now</property>
+            <property name="label" translatable="yes">Join</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <property name="valign">center</property>
             <signal name="clicked" handler="_on_join_clicked" swapped="no"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -47,11 +52,12 @@
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkSpinner">
+          <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="active">True</property>
+            <property name="label" translatable="yes">Joining…</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -60,10 +66,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkSpinner">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Joining</property>
+            <property name="active">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -77,6 +83,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <property name="valign">center</property>
             <signal name="clicked" handler="_on_abort_clicked" swapped="no"/>
           </object>
           <packing>
@@ -95,10 +102,12 @@
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkSpinner">
+          <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Fetching messages…</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -107,10 +116,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkSpinner">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Fetching</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -124,5 +132,8 @@
         <property name="position">2</property>
       </packing>
     </child>
+    <style>
+      <class name="groupchat-state"/>
+    </style>
   </object>
 </interface>

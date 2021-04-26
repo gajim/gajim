@@ -574,6 +574,18 @@ infobar.error > revealer > box {
 }
 #GroupchatConfig treeview { padding: 5px; }
 
+.groupchat-state box {
+    background-color: alpha(rgb(70, 70, 70), 0.8);
+    padding: 12px;
+    border-radius: 6px;
+}
+.groupchat-state box > label {
+    color: @theme_base_color;
+}
+.groupchat-state box > spinner {
+    color: @theme_base_color;
+}
+
 /* Popover Treeview */
 .popover_treeview { border-radius: 3px; background-color: @theme_bg_color; }
 .popover_treeview { padding: 6px; }
