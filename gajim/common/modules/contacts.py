@@ -69,6 +69,7 @@ class Contacts(BaseModule):
             contact = GroupchatContact(self._log, jid, self._account)
         else:
             contact = BareContact(self._log, jid, self._account)
+
         self._contacts[jid] = contact
         return contact
 
@@ -153,6 +154,9 @@ class CommonContact(Observable):
     def force_chatstate_update(self):
         for contact in self._resources.values():
             contact.notify('chatstate-update')
+
+    def __repr__(self):
+        return f'{self.jid} ({self._account})'
 
 
 class BareContact(CommonContact):

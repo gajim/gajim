@@ -1028,7 +1028,7 @@ class GroupchatControl(ChatControlBase):
         self.update_actions()
 
     def rejoin(self):
-        self._client.get_module('MUC').join(self._muc_data)
+        self._client.get_module('MUC').join(self.room_jid)
 
     # def send_pm(self, nick, message=None):
     #     ctrl = self._start_private_message(nick)
@@ -1789,7 +1789,7 @@ class GroupchatControl(ChatControlBase):
     def _on_password_set_clicked(self, _button):
         password = self.xml.password_entry.get_text()
         self._muc_data.password = password
-        self._client.get_module('MUC').join(self._muc_data)
+        self._client.get_module('MUC').join(self.room_jid)
         self._show_page('groupchat')
 
     def _on_password_changed(self, entry, _param):
@@ -1846,7 +1846,7 @@ class GroupchatControl(ChatControlBase):
         self._close_control()
 
     def _on_captcha_try_again_clicked(self, _button=None):
-        self._client.get_module('MUC').join(self._muc_data)
+        self._client.get_module('MUC').join(self.room_jid)
         self._show_page('groupchat')
 
     def _on_remove_bookmark_button_clicked(self, _button=None):
@@ -1854,7 +1854,7 @@ class GroupchatControl(ChatControlBase):
         self._close_control()
 
     def _on_retry_join_clicked(self, _button=None):
-        self._client.get_module('MUC').join(self._muc_data)
+        self._client.get_module('MUC').join(self.room_jid)
         self._show_page('groupchat')
 
     def _on_page_cancel_clicked(self, _button=None):
@@ -1866,5 +1866,5 @@ class GroupchatControl(ChatControlBase):
     def _on_groupchat_state_abort_clicked(self, _button):
         app.window.lookup_action('disconnect-%s' % self.control_id).activate()
 
-    def _on_groupchat_state_join_clicked(self, groupchat_state):
-        pass
+    def _on_groupchat_state_join_clicked(self, _groupchat_state):
+        self._client.get_module('MUC').join(self.room_jid)

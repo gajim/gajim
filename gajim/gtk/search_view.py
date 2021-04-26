@@ -197,8 +197,6 @@ class ResultRow(Gtk.ListBoxRow):
         self.time = msg.time
         self._client = app.get_client(account)
 
-        self.contact = self._client.get_module('Contacts').get_contact(jid)
-
         self.log_line_id = msg.log_line_id
         self.timestamp = msg.time
         self.kind = msg.kind
@@ -206,6 +204,9 @@ class ResultRow(Gtk.ListBoxRow):
         self.type = 'contact'
         if msg.kind == KindConstant.GC_MSG:
             self.type = 'groupchat'
+
+        self.contact = self._client.get_module('Contacts').get_contact(
+            jid, groupchat=self.type == 'groupchat')
 
         self._ui = get_builder('search_view.ui')
         self.add(self._ui.result_row_grid)
