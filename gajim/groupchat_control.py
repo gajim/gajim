@@ -49,7 +49,6 @@ from gajim.common import helpers
 from gajim.common.helpers import event_filter
 from gajim.common.helpers import to_user_string
 from gajim.common.const import AvatarSize
-from gajim.common.const import SimpleClientState
 
 from gajim.common.i18n import _
 from gajim.common.const import MUCJoinedState
@@ -71,6 +70,7 @@ from gajim.gui.groupchat_info import GroupChatInfoScrolled
 from gajim.gui.groupchat_invite import GroupChatInvite
 from gajim.gui.groupchat_settings import GroupChatSettings
 from gajim.gui.groupchat_roster import GroupchatRoster
+from gajim.gui.groupchat_state import GroupchatState
 from gajim.gui.util import NickCompletionGenerator
 from gajim.gui.util import get_app_window
 from gajim.gui.util import open_window
@@ -158,7 +158,7 @@ class GroupchatControl(ChatControlBase):
 
         # Banner
         self.hide_roster_button = Gtk.Button.new_from_icon_name(
-            'go-next-symbolic', Gtk.IconSize.MENU)
+            'go-previous-symbolic', Gtk.IconSize.MENU)
         self.hide_roster_button.set_valign(Gtk.Align.CENTER)
         self.hide_roster_button.connect('clicked',
                                         lambda *args: self.show_roster())
@@ -211,6 +211,13 @@ class GroupchatControl(ChatControlBase):
 
         self._set_control_inactive()
 
+        self._groupchat_state = GroupchatState()
+        self._groupchat_state.connect('join-clicked',
+                                      self._on_groupchat_state_join_clicked)
+        self._groupchat_state.connect('abort-clicked',
+                                      self._on_groupchat_state_abort_clicked)
+        self.xml.conv_view_overlay.add_overlay(self._groupchat_state)
+
         # Stack
         self.xml.stack.show_all()
         self.xml.stack.set_visible_child_name('groupchat')
@@ -250,9 +257,13 @@ class GroupchatControl(ChatControlBase):
 
     def _on_muc_state_changed(self, _contact, _signal_name):
         state = self.contact.state
+        if state == MUCJoinedState.JOINING:
+            self._groupchat_state.set_joining()
+
         if state == MUCJoinedState.JOINED:
             self._set_control_active()
             self.show_roster()
+            self._groupchat_state.set_joined()
 
         elif state == MUCJoinedState.NOT_JOINED:
             self._set_control_inactive()
@@ -1688,9 +1699,7 @@ class GroupchatControl(ChatControlBase):
     def _on_page_change(self, stack, _param):
         page_name = stack.get_visible_child_name()
         if page_name == 'groupchat':
-            self.xml.progress_spinner.stop()
-        elif page_name == 'progress':
-            self.xml.progress_spinner.start()
+            pass
         elif page_name == 'muc-info':
             self.xml.info_close_button.grab_default()
         elif page_name == 'password':
@@ -1781,7 +1790,7 @@ class GroupchatControl(ChatControlBase):
         password = self.xml.password_entry.get_text()
         self._muc_data.password = password
         self._client.get_module('MUC').join(self._muc_data)
-        self._show_page('progress')
+        self._show_page('groupchat')
 
     def _on_password_changed(self, entry, _param):
         self.xml.password_set_button.set_sensitive(bool(entry.get_text()))
@@ -1829,7 +1838,7 @@ class GroupchatControl(ChatControlBase):
         form_node = self._captcha_request.get_submit_form()
         self._client.get_module('MUC').send_captcha(self.room_jid, form_node)
         self._remove_captcha_request()
-        self._show_page('progress')
+        self._show_page('groupchat')
 
     def _on_captcha_cancel_clicked(self, _button=None):
         self._client.get_module('MUC').cancel_captcha(self.room_jid)
@@ -1838,7 +1847,7 @@ class GroupchatControl(ChatControlBase):
 
     def _on_captcha_try_again_clicked(self, _button=None):
         self._client.get_module('MUC').join(self._muc_data)
-        self._show_page('progress')
+        self._show_page('groupchat')
 
     def _on_remove_bookmark_button_clicked(self, _button=None):
         self._client.get_module('Bookmarks').remove(self.room_jid)
@@ -1846,7 +1855,7 @@ class GroupchatControl(ChatControlBase):
 
     def _on_retry_join_clicked(self, _button=None):
         self._client.get_module('MUC').join(self._muc_data)
-        self._show_page('progress')
+        self._show_page('groupchat')
 
     def _on_page_cancel_clicked(self, _button=None):
         self._show_page('groupchat')
@@ -1854,6 +1863,8 @@ class GroupchatControl(ChatControlBase):
     def _on_page_close_clicked(self, _button=None):
         self._close_control()
 
-    def _on_abort_button_clicked(self, _button):
-        self.parent_win.window.lookup_action(
-            'disconnect-%s' % self.control_id).activate()
+    def _on_groupchat_state_abort_clicked(self, _button):
+        app.window.lookup_action('disconnect-%s' % self.control_id).activate()
+
+    def _on_groupchat_state_join_clicked(self, groupchat_state):
+        pass
