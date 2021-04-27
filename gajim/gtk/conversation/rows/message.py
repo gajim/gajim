@@ -45,7 +45,6 @@ class MessageRow(BaseRow):
                  kind,
                  name,
                  text,
-                 other_text_tags,
                  avatar,
                  is_groupchat,
                  additional_data=None,
@@ -55,12 +54,6 @@ class MessageRow(BaseRow):
                  encryption_enabled=False,
                  history_mode=False,
                  log_line_id=None):
-
-        # other_tags_for_name contained 'marked', 'bold' and
-        # 'muc_nickname_color_', which are now derived from
-        # other_text_tags ('marked')
-
-        # other_tags_for_time were always empty?
 
         BaseRow.__init__(self, account, history_mode=history_mode)
         self.type = 'chat'
@@ -76,10 +69,10 @@ class MessageRow(BaseRow):
         self._has_receipt = marker == 'received'
         self._has_displayed = marker == 'displayed'
 
-        if is_groupchat:
-            if other_text_tags and 'marked' in other_text_tags:
-                self.get_style_context().add_class(
-                    'conversation-mention-highlight')
+        # if is_groupchat:
+        #     if other_text_tags and 'marked' in other_text_tags:
+        #         self.get_style_context().add_class(
+        #             'conversation-mention-highlight')
 
         result = process(text)
         self._message_widget = MessageWidget(account)

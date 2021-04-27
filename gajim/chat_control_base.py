@@ -1074,7 +1074,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def add_info_message(self, text, message_id=None):
         self.conversation_view.add_message(
-            text, 'info', '', None, message_id=message_id, graphics=False)
+            text, 'info', '', None, message_id=message_id)
 
     def add_status_message(self, text):
         self.conversation_view.add_message(
@@ -1085,36 +1085,14 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                     kind,
                     name,
                     tim,
-                    other_tags_for_name=None,
-                    other_tags_for_time=None,
-                    other_tags_for_text=None,
                     restored=False,
-                    subject=None,
-                    old_kind=None,
                     displaymarking=None,
                     msg_log_id=None,
                     message_id=None,
                     stanza_id=None,
                     correct_id=None,
-                    additional_data=None,
-                    marker=None,
-                    error=None):
-        """
-        Print 'chat' type messages
-        correct_id = (message_id, correct_id)
-        """
-        jid = self.contact.jid
-        full_jid = self.contact.jid
-        end = False
-        if self.conversation_view.autoscroll or kind == 'outgoing':
-            end = True
+                    additional_data=None):
 
-        if other_tags_for_name is None:
-            other_tags_for_name = []
-        if other_tags_for_time is None:
-            other_tags_for_time = []
-        if other_tags_for_text is None:
-            other_tags_for_text = []
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
@@ -1123,14 +1101,11 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             kind,
             name,
             tim,
-            other_text_tags=other_tags_for_text,
             display_marking=displaymarking,
             message_id=message_id,
             correct_id=correct_id,
             log_line_id=msg_log_id,
-            additional_data=additional_data,
-            marker=marker,
-            error=error)
+            additional_data=additional_data)
 
         if restored:
             return
@@ -1140,15 +1115,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 self.last_msg_id = stanza_id or message_id
             else:
                 self.last_msg_id = message_id
-
-        if kind == 'incoming':
-            if (not self._type.is_groupchat or
-                    # self.contact.can_notify() or TODO
-                    'marked' in other_tags_for_text):
-                # it's a normal message, or a muc message with want to be
-                # notified about if quitting just after
-                # other_tags_for_text == ['marked'] --> highlighted gc message
-                app.last_message_time[self.account][full_jid] = time.time()
 
         if kind in ('incoming', 'incoming_queue'):
             # Record the history of received messages
@@ -1163,60 +1129,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             #             self.contact,
             #             self.last_msg_id,
             #             self._type)
-
-        # TODO old event Code
-        # if kind in ('incoming', 'incoming_queue', 'error'):
-        #     gc_message = False
-        #     if self._type.is_groupchat:
-        #         gc_message = True
-
-        #     if ((self.parent_win and (not self.parent_win.get_active_control() or \
-        #     self != self.parent_win.get_active_control() or \
-        #     not self.parent_win.is_active() or not end)) or \
-        #     (gc_message and \
-        #     jid in app.interface.minimized_controls[self.account])) and \
-        #     kind in ('incoming', 'incoming_queue', 'error'):
-        #         # we want to have save this message in events list
-        #         # other_tags_for_text == ['marked'] --> highlighted gc message
-        #         if gc_message:
-        #             if 'marked' in other_tags_for_text:
-        #                 event_type = events.PrintedMarkedGcMsgEvent
-        #             else:
-        #                 event_type = events.PrintedGcMsgEvent
-        #             event = 'gc_message_received'
-        #         else:
-        #             if self._type.is_chat:
-        #                 event_type = events.PrintedChatEvent
-        #             else:
-        #                 event_type = events.PrintedPmEvent
-        #             event = 'message_received'
-        #         show_in_roster = get_show_in_roster(event, self.session)
-        #         show_in_systray = get_show_in_systray(
-        #             event_type.type_, self.account, self.contact.jid)
-
-        #         event = event_type(text,
-        #                            subject,
-        #                            self,
-        #                            msg_log_id,
-        #                            message_id=message_id,
-        #                            stanza_id=stanza_id,
-        #                            show_in_roster=show_in_roster,
-        #                            show_in_systray=show_in_systray)
-        #         app.events.add_event(self.account, full_jid, event)
-        #         # We need to redraw contact if we show in roster
-        #         if show_in_roster:
-        #             app.interface.roster.draw_contact(self.contact.jid,
-        #                                               self.account)
-
-        # if (not self.parent_win.get_active_control() or \
-        # self != self.parent_win.get_active_control() or \
-        # not self.parent_win.is_active() or not end) and \
-        # kind in ('incoming', 'incoming_queue', 'error'):
-        #     self.parent_win.redraw_tab(self)
-        #     if not self.parent_win.is_active():
-        #         self.parent_win.show_title(True, self) # Enabled Urgent hint
-        #     else:
-        #         self.parent_win.show_title(False, self) # Disabled Urgent hint
 
     def toggle_emoticons(self):
         """
@@ -1440,13 +1352,11 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 kind,
                 contact_name,
                 msg.time,
-                subject=msg.subject,
                 additional_data=msg.additional_data,
                 message_id=msg.message_id,
                 log_line_id=msg.log_line_id,
                 marker=msg.marker,
-                error=msg.error,
-                history=True)
+                error=msg.error)
 
     def has_focus(self):
         if app.window.get_property('has-toplevel-focus'):

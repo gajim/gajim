@@ -764,9 +764,6 @@ class GroupchatControl(ChatControlBase):
         If contact is not set: it's a message from the server or help.
         """
 
-        other_tags_for_name = []
-        other_tags_for_text = []
-
         if not contact:
             # Message from the server
             kind = 'status'
@@ -779,10 +776,10 @@ class GroupchatControl(ChatControlBase):
         if kind == 'incoming': # it's a message NOT from us
             # highlighting and sounds
             highlight, _sound = self.highlighting_for_message(text, tim)
-            other_tags_for_name.append('muc_nickname_color_%s' % contact)
-            if highlight:
-                other_tags_for_name.append('bold')
-                other_tags_for_text.append('marked')
+            # other_tags_for_name.append('muc_nickname_color_%s' % contact)
+            # if highlight:
+            #     other_tags_for_name.append('bold')
+            #     other_tags_for_text.append('marked')
 
             self._nick_completion.record_message(contact, highlight)
 
@@ -793,9 +790,6 @@ class GroupchatControl(ChatControlBase):
                                     kind,
                                     contact,
                                     tim,
-                                    other_tags_for_name,
-                                    [],
-                                    other_tags_for_text,
                                     displaymarking=displaymarking,
                                     correct_id=correct_id,
                                     message_id=message_id,

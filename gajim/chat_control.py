@@ -935,8 +935,7 @@ class ChatControl(ChatControlBase):
                     msg_log_id=None,
                     correct_id=None,
                     message_id=None,
-                    additional_data=None,
-                    error=None):
+                    additional_data=None):
         """
         Print a line in the conversation
 
@@ -973,14 +972,12 @@ class ChatControl(ChatControlBase):
                                     kind,
                                     name,
                                     tim,
-                                    subject=subject,
-                                    old_kind=self.old_msg_kind,
                                     displaymarking=displaymarking,
                                     msg_log_id=msg_log_id,
                                     message_id=message_id,
                                     correct_id=correct_id,
-                                    additional_data=additional_data,
-                                    error=error)
+                                    additional_data=additional_data)
+
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:

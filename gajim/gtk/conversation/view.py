@@ -110,7 +110,6 @@ class ConversationView(Gtk.ListBox):
                     kind,
                     name,
                     timestamp,
-                    other_text_tags=None,
                     log_line_id=None,
                     message_id=None,
                     correct_id=None,
@@ -118,23 +117,10 @@ class ConversationView(Gtk.ListBox):
                     additional_data=None,
                     subject=None,
                     marker=None,
-                    error=None,
-                    history=False,
-                    graphics=True):
-
-        log.debug(
-            'Adding message: %s, %s, %s, %s, message_id: %s, correct_id: %s, '
-            'other_text_tags: %s, display_marking: %s, additional_data: %s, '
-            'subject: %s, marker: %s, error: %s, history: %s, graphics: %s',
-            text, kind, name, timestamp, message_id, correct_id,
-            other_text_tags, display_marking, additional_data, subject,
-            marker, error, history, graphics)
+                    error=None):
 
         if not timestamp:
             timestamp = time.time()
-
-        if other_text_tags is None:
-            other_text_tags = []
 
         muc_subject = bool(subject and self._contact is not None and
                            self._contact.is_groupchat)
@@ -143,10 +129,8 @@ class ConversationView(Gtk.ListBox):
                 self._account,
                 timestamp,
                 text,
-                other_text_tags,
                 kind,
                 subject,
-                graphics,
                 history_mode=self._history_mode)
         else:
             if correct_id:
@@ -166,7 +150,6 @@ class ConversationView(Gtk.ListBox):
                 kind,
                 name,
                 text,
-                other_text_tags,
                 avatar,
                 is_groupchat,
                 additional_data=additional_data,

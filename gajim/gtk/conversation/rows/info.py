@@ -30,10 +30,8 @@ class InfoMessageRow(BaseRow):
                  account,
                  timestamp,
                  text,
-                 other_text_tags,
                  kind,
                  subject,
-                 graphics,
                  history_mode=False):
         BaseRow.__init__(self, account, history_mode=history_mode)
         self.type = 'info'
@@ -48,8 +46,6 @@ class InfoMessageRow(BaseRow):
                     f'{GLib.markup_escape_text(text)}')
         else:
             text = GLib.markup_escape_text(text)
-
-        other_text_tags.append('status')
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
