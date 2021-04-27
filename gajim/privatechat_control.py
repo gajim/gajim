@@ -161,18 +161,7 @@ class PrivateChatControl(ChatControl):
                                  attention=attention)
 
     def update_ui(self):
-        if not self.contact.is_available:
-            self.got_disconnected()
-        else:
-            self.got_connected()
+        ChatControl.update_ui(self)
 
     def _on_user_avatar_update(self, *args):
         self._update_avatar()
-
-    def got_disconnected(self):
-        ChatControl.got_disconnected(self)
-        ChatControl.update_ui(self)
-
-    def got_connected(self):
-        ChatControl.got_connected(self)
-        ChatControl.update_ui(self)

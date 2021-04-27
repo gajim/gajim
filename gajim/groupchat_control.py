@@ -416,10 +416,6 @@ class GroupchatControl(ChatControlBase):
             return False
         return self.disco_info.muc_subjectmod or False
 
-    def _get_action(self, name):
-        win = app.window
-        return win.lookup_action(name + self.control_id)
-
     def _show_page(self, name):
         transition = Gtk.StackTransitionType.SLIDE_DOWN
         if name == 'groupchat':

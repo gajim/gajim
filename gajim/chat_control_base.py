@@ -267,6 +267,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def _connect_contact_signals(self):
         raise NotImplementedError
 
+    def _get_action(self, name):
+        return app.window.lookup_action(name + self.control_id)
+
     def process_event(self, event):
         method_name = event.name.replace('-', '_')
         method_name = f'_on_{method_name}'

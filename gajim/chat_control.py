@@ -42,7 +42,6 @@ from nbxmpp.const import Chatstate
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import open_uri
@@ -67,7 +66,6 @@ from gajim.gui.util import format_activity
 from gajim.gui.util import format_tune
 from gajim.gui.util import format_location
 from gajim.gui.util import get_activity_icon_name
-from gajim.gui.util import make_href_markup
 from gajim.gui.const import ControlType
 
 from gajim.command_system.implementation.hosts import ChatCommands
@@ -187,20 +185,6 @@ class ChatControl(ChatControlBase):
         # List of waiting infobar messages
         self.info_bar_queue = []
 
-        self.subscribe_events()
-
-        # if not session:
-        #     # Don't use previous session if we want to a specific resource
-        #     # and it's not the same
-        #     if not resource:
-        #         resource = contact.resource
-        #     session = self._client.find_controlless_session(
-        #         self.contact.jid, resource)
-
-        # if session:
-        #     session.control = self
-        #     self.session = session
-
         self.setup_seclabel()
         self.add_actions()
         self.update_ui()
@@ -264,24 +248,15 @@ class ChatControl(ChatControlBase):
         app.window.add_action(act)
 
     def update_actions(self):
-        win = app.window
         online = app.account_is_connected(self.account)
 
-        # Add to roster
-        # TODO
-        # if not isinstance(self.contact, GC_Contact) \
-        # and _('Not in contact list') in self.contact.groups and \
-        # self._client.roster_supported and online:
-        #     win.lookup_action(
-        #         'add-to-roster-' + self.control_id).set_enabled(True)
-        # else:
-        #     win.lookup_action(
-        #         'add-to-roster-' + self.control_id).set_enabled(False)
+        if self.type.is_chat:
+            self._get_action('add-to-roster-').set_enabled(
+                not self.contact.is_in_roster)
 
         # Block contact
-        win.lookup_action(
-            'block-contact-' + self.control_id).set_enabled(
-                online and self._client.get_module('Blocking').supported)
+        self._get_action('block-contact-').set_enabled(
+            online and self._client.get_module('Blocking').supported)
 
         # Jingle AV detection
         if (self.contact.supports(Namespace.JINGLE_ICE_UDP) and
@@ -297,31 +272,28 @@ class ChatControl(ChatControlBase):
             self.jingle['audio'].available = False
             self.jingle['video'].available = False
 
-        win.lookup_action(f'start-call-{self.control_id}').set_enabled(
+        self._get_action(f'start-call-').set_enabled(
             online and (self.jingle['audio'].available or
                         self.jingle['video'].available))
 
         # Send message
         has_text = self.msg_textview.has_text()
-        win.lookup_action(
-            f'send-message-{self.control_id}').set_enabled(online and has_text)
+        self._get_action('send-message-').set_enabled(online and has_text)
 
         # Send file (HTTP File Upload)
-        httpupload = win.lookup_action(
-            'send-file-httpupload-' + self.control_id)
-        httpupload.set_enabled(
-            online and self._client.get_module('HTTPUpload').available)
+        httpupload = self._get_action('send-file-httpupload-')
+        httpupload.set_enabled(online and
+                               self._client.get_module('HTTPUpload').available)
 
         # Send file (Jingle)
         jingle_support = self.contact.supports(Namespace.JINGLE_FILE_TRANSFER_5)
         jingle_conditions = jingle_support and self.contact.is_available
-        jingle = win.lookup_action('send-file-jingle-' + self.control_id)
+        jingle = self._get_action('send-file-jingle-')
         jingle.set_enabled(online and jingle_conditions)
 
         # Send file
-        win.lookup_action(
-            'send-file-' + self.control_id).set_enabled(
-                jingle.get_enabled() or httpupload.get_enabled())
+        self._get_action('send-file-').set_enabled(jingle.get_enabled() or
+                                                   httpupload.get_enabled())
 
         # Set File Transfer Button tooltip
         if online and (httpupload.get_enabled() or jingle.get_enabled()):
@@ -333,24 +305,17 @@ class ChatControl(ChatControlBase):
         # Chat markers
         state = GLib.Variant.new_boolean(
             self.contact.settings.get('send_marker'))
-        win.lookup_action(
-            f'send-marker-{self.control_id}').change_state(state)
+        self._get_action('send-marker-').change_state(state)
 
         # Convert to GC
         if app.settings.get_account_setting(self.account, 'is_zeroconf'):
-            win.lookup_action(
-                'invite-contacts-' + self.control_id).set_enabled(False)
+            self._get_action('invite-contacts-').set_enabled(False)
         else:
-            if self.contact.supports(Namespace.MUC) and online:
-                win.lookup_action(
-                    'invite-contacts-' + self.control_id).set_enabled(True)
-            else:
-                win.lookup_action(
-                    'invite-contacts-' + self.control_id).set_enabled(False)
+            enabled = self.contact.supports(Namespace.MUC) and online
+            self._get_action('invite-contacts-').set_enabled(enabled)
 
         # Information
-        win.lookup_action(
-            'information-' + self.control_id).set_enabled(online)
+        self._get_action('information-').set_enabled(online)
 
     def remove_actions(self):
         super().remove_actions()
@@ -375,8 +340,7 @@ class ChatControl(ChatControlBase):
             return res
 
         if action == 'show-contact-info':
-            app.window.lookup_action(
-                'information-%s' % self.control_id).activate()
+            self._get_action('information-').activate()
             return Gdk.EVENT_STOP
 
         if action == 'send-file':
@@ -385,8 +349,7 @@ class ChatControl(ChatControlBase):
                 app.interface.roster.tree.grab_focus()
                 return Gdk.EVENT_PROPAGATE
 
-            app.window.lookup_action(
-                'send-file-%s' % self.control_id).activate()
+            self._get_action('send-file-').activate()
             return Gdk.EVENT_STOP
 
         return Gdk.EVENT_PROPAGATE
@@ -413,20 +376,6 @@ class ChatControl(ChatControlBase):
     def _on_send_marker(self, action, param):
         action.set_state(param)
         self.contact.settings.set('send_marker', param.get_boolean())
-
-    def subscribe_events(self):
-        """
-        Register listeners to the events class
-        """
-        app.events.event_added_subscribe(self.on_event_added)
-        app.events.event_removed_subscribe(self.on_event_removed)
-
-    def unsubscribe_events(self):
-        """
-        Unregister listeners to the events class
-        """
-        app.events.event_added_unsubscribe(self.on_event_added)
-        app.events.event_removed_unsubscribe(self.on_event_removed)
 
     def _update_toolbar(self):
         # Formatting
@@ -1062,8 +1011,6 @@ class ChatControl(ChatControlBase):
         # instance object
         app.plugin_manager.remove_gui_extension_point('chat_control', self)
 
-        self.unsubscribe_events()
-
         self.remove_actions()
 
         # Send 'gone' chatstate
@@ -1076,12 +1023,6 @@ class ChatControl(ChatControlBase):
 
         super(ChatControl, self).shutdown()
         app.check_finalize(self)
-
-    def minimizable(self):
-        return False
-
-    def safe_shutdown(self):
-        return False
 
     def allow_shutdown(self, method, on_yes, on_no, _on_minimize):
         time_ = app.last_message_time[self.account][self.contact.jid]
@@ -1395,46 +1336,3 @@ class ChatControl(ChatControlBase):
                 _('Connection with peer cannot be established.'))
         elif event.type_ == 'gc-invitation':
             self._get_gc_invitation(event)
-
-    def on_event_removed(self, event_list):
-        """
-        Called when one or more events are removed from the event list
-        """
-        for ev in event_list:
-            if ev.account != self.account:
-                continue
-            if ev.jid != self.contact.jid:
-                continue
-            if ev.type_ not in ('file-request',
-                                'file-completed',
-                                'file-error',
-                                'file-stopped',
-                                'file-request-error',
-                                'file-send-error',
-                                'gc-invitation',
-                                'jingle-incoming'):
-                continue
-            i = 0
-            removed = False
-            for ib_msg in self.info_bar_queue:
-                if ev.type_ == 'gc-invitation':
-                    if ev.muc == ib_msg[2][0]:
-                        self.info_bar_queue.remove(ib_msg)
-                        removed = True
-                elif ev.type_ == 'jingle-incoming':
-                    # TODO: Need to be more specific here?
-                    self.info_bar_queue.remove(ib_msg)
-                    removed = True
-                else: # file-*
-                    if ib_msg[2] == ev.file_props:
-                        self.info_bar_queue.remove(ib_msg)
-                        removed = True
-                if removed:
-                    if i == 0:
-                        # We are removing the one currently displayed
-                        self.info_bar.set_no_show_all(True)
-                        self.info_bar.hide()
-                        # show next one?
-                        GLib.idle_add(self._info_bar_show_message)
-                    break
-                i += 1
