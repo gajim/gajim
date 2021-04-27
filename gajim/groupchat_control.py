@@ -87,12 +87,11 @@ class GroupchatControl(ChatControlBase):
     # will be processed with this command host.
     COMMAND_HOST = GroupChatCommands
 
-    def __init__(self, parent_win, jid, muc_data, acct):
+    def __init__(self, account, jid):
         ChatControlBase.__init__(self,
-                                 parent_win,
                                  'groupchat_control',
-                                 jid,
-                                 acct)
+                                 account,
+                                 jid)
 
         self._client.connect_signal('state-changed',
                                     self._on_client_state_changed)
@@ -120,12 +119,9 @@ class GroupchatControl(ChatControlBase):
         self.xml.roster_revealer.add(self.roster)
         self.roster.connect('row-activated', self._on_roster_row_activated)
 
-        if parent_win is not None:
-            self.add_actions()
-            GLib.idle_add(self.update_actions)
-            self.scale_factor = parent_win.window.get_scale_factor()
-        else:
-            self.scale_factor = app.interface.roster.scale_factor
+        self.add_actions()
+        GLib.idle_add(self.update_actions)
+        self.scale_factor = app.window.get_scale_factor()
 
         if not app.settings.get('hide_groupchat_banner'):
             self.xml.banner_eventbox.set_no_show_all(False)
@@ -256,44 +252,32 @@ class GroupchatControl(ChatControlBase):
         })
 
     def _on_muc_state_changed(self, _contact, _signal_name):
-        state = self.contact.state
-        if state == MUCJoinedState.JOINING:
+        if self.contact.is_joining:
             self._groupchat_state.set_joining()
 
-        if state == MUCJoinedState.JOINED:
+        if self.contact.is_joined:
             self._set_control_active()
             self.show_roster()
             self._groupchat_state.set_joined()
 
-        elif state == MUCJoinedState.NOT_JOINED:
+        elif self.contact.is_not_joined:
             self._set_control_inactive()
 
     def _on_client_state_changed(self, _client, _signal_name, state):
         pass
 
     @property
-    def _muc_data(self):
-        return self._client.get_module('MUC').get_muc_data(self.room_jid)
-
-    @property
     def _nick_completion(self):
         if self.__nick_completion is None:
-            self.__nick_completion = NickCompletionGenerator(self._muc_data.nick)
+            self.__nick_completion = NickCompletionGenerator(
+                self.contact.nickname)
         return self.__nick_completion
-
-    @property
-    def nick(self):
-        return self._muc_data.nick
 
     @property
     def subject(self):
         if self._subject_data is None:
             return ''
         return self._subject_data.subject
-
-    @property
-    def room_name(self):
-        return self.contact.get_shown_name()
 
     @property
     def disco_info(self):
@@ -325,36 +309,35 @@ class GroupchatControl(ChatControlBase):
                 variant = GLib.VariantType.new(variant)
             act = Gio.SimpleAction.new(action_name + self.control_id, variant)
             act.connect("activate", func)
-            self.parent_win.window.add_action(act)
+            app.window.add_action(act)
 
     def update_actions(self, *args):
-        if self._muc_data is None:
-            return
-
-        contact = self.contact.get_resource(self.nick)
+        joined = self.contact.is_joined
+        if joined:
+            contact = self.contact.get_self()
 
         self._get_action('request-voice-').set_enabled(
-            self.is_connected and contact.role.is_visitor)
+            joined and contact.role.is_visitor)
 
         # Change Nick
-        self._get_action('change-nickname-').set_enabled(self.is_connected)
+        self._get_action('change-nickname-').set_enabled(joined)
 
         # Execute command
-        self._get_action('execute-command-').set_enabled(self.is_connected)
+        self._get_action('execute-command-').set_enabled(joined)
 
         # Send message
         has_text = self.msg_textview.has_text()
         self._get_action('send-message-').set_enabled(
-            self.is_connected and has_text)
+            joined and has_text)
 
         # Send file (HTTP File Upload)
         httpupload = self._get_action(
             'send-file-httpupload-')
-        httpupload.set_enabled(self.is_connected and
+        httpupload.set_enabled(joined and
                                self._client.get_module('HTTPUpload').available)
         self._get_action('send-file-').set_enabled(httpupload.get_enabled())
 
-        if self.is_connected and httpupload.get_enabled():
+        if joined and httpupload.get_enabled():
             tooltip_text = _('Send File…')
             max_file_size = self._client.get_module('HTTPUpload').max_file_size
             if max_file_size is not None:
@@ -372,6 +355,7 @@ class GroupchatControl(ChatControlBase):
         vcard_support = False
         if self.disco_info is not None:
             vcard_support = self.disco_info.supports(Namespace.VCARD)
+
             self.xml.muc_name_entry.set_text(self.disco_info.muc_name or '')
             self.xml.muc_description_entry.set_text(
                 self.disco_info.muc_description or '')
@@ -390,13 +374,13 @@ class GroupchatControl(ChatControlBase):
         self.xml.manage_destroy_button.set_sensitive(
             self.is_connected and contact.affiliation.is_owner)
 
-        self._get_action('contact-information-').set_enabled(self.is_connected)
+        self._get_action('contact-information-').set_enabled(joined)
 
-        self._get_action('execute-command-').set_enabled(self.is_connected)
+        self._get_action('execute-command-').set_enabled(joined)
 
-        self._get_action('ban-').set_enabled(self.is_connected)
+        self._get_action('ban-').set_enabled(joined)
 
-        self._get_action('kick-').set_enabled(self.is_connected)
+        self._get_action('kick-').set_enabled(joined)
 
     def remove_actions(self):
         super().remove_actions()
@@ -418,10 +402,13 @@ class GroupchatControl(ChatControlBase):
         ]
 
         for action in actions:
-            self.parent_win.window.remove_action(f'{action}{self.control_id}')
+            app.window.remove_action(f'{action}{self.control_id}')
 
     def _is_subject_change_allowed(self):
-        contact = self.contact.get_resource(self.nick)
+        contact = self.contact.get_self()
+        if contact is None:
+            return False
+
         if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
             return True
 
@@ -430,7 +417,7 @@ class GroupchatControl(ChatControlBase):
         return self.disco_info.muc_subjectmod or False
 
     def _get_action(self, name):
-        win = self.parent_win.window
+        win = app.window
         return win.lookup_action(name + self.control_id)
 
     def _show_page(self, name):
@@ -560,7 +547,7 @@ class GroupchatControl(ChatControlBase):
             win.present()
             return
 
-        contact = self.contact.get_resource(self.nick)
+        contact = self.contact.get_self()
         if contact.affiliation.is_owner:
             self._client.get_module('MUC').request_config(
                 self.room_jid, callback=self._on_configure_form_received)
@@ -610,7 +597,7 @@ class GroupchatControl(ChatControlBase):
                 self._avatar_selector.get_prepared())
 
         AvatarChooserDialog(_on_accept,
-                            transient_for=self.parent_win.window,
+                            transient_for=app.window,
                             modal=True)
 
     def _on_upload_avatar_result(self, task):
@@ -687,23 +674,6 @@ class GroupchatControl(ChatControlBase):
         self.xml.roster_revealer.set_transition_type(transition)
         self.xml.roster_revealer.set_reveal_child(show)
 
-    def on_groupchat_maximize(self):
-        self.roster.enable_tooltips()
-        self.add_actions()
-        self.update_actions()
-        self.set_lock_image()
-        self.draw_banner_text()
-        type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
-        if not app.events.remove_events(self.account,
-                                        self.get_full_jid(),
-                                        types=type_):
-            # XEP-0333 Send <displayed> marker
-            self._client.get_module('ChatMarkers').send_displayed_marker(
-                self.contact,
-                self.last_msg_id,
-                self._type)
-            self.last_msg_id = None
-
     def _on_roster_row_activated(self, _roster, nick):
         muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
         if not self.is_anonymous and muc_prefer_direct_msg:
@@ -746,7 +716,7 @@ class GroupchatControl(ChatControlBase):
             _('Voice Request'),
             _('Voice Request'),
             _('<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice') % {
-                'nick': voice_request.nick, 'room_name': self.room_name},
+                'nick': voice_request.nick, 'room_name': self.contact.name},
             [DialogButton.make('Cancel'),
              DialogButton.make('Accept',
                                text=_('_Approve'),
@@ -773,7 +743,7 @@ class GroupchatControl(ChatControlBase):
                              displaymarking=event.displaymarking,
                              additional_data=event.additional_data)
         else:
-            if event.properties.muc_nickname == self.nick:
+            if event.properties.muc_nickname == self.contact.nickname:
                 self.last_sent_txt = event.msgtxt
             stanza_id = None
             if event.properties.stanza_id:
@@ -804,24 +774,17 @@ class GroupchatControl(ChatControlBase):
         if not contact:
             # Message from the server
             kind = 'status'
-        elif contact == self.nick: # it's us
+        elif contact == self.contact.nickname: # it's us
             kind = 'outgoing'
         else:
             kind = 'incoming'
             # muc-specific chatstate
-            if self.parent_win:
-                self.parent_win.redraw_tab(self, 'newmsg')
 
         if kind == 'incoming': # it's a message NOT from us
             # highlighting and sounds
             highlight, _sound = self.highlighting_for_message(text, tim)
             other_tags_for_name.append('muc_nickname_color_%s' % contact)
             if highlight:
-                # muc-specific chatstate
-                if self.parent_win:
-                    self.parent_win.redraw_tab(self, 'attention')
-                else:
-                    self.attention_flag = True
                 other_tags_for_name.append('bold')
                 other_tags_for_text.append('marked')
 
@@ -892,7 +855,7 @@ class GroupchatControl(ChatControlBase):
         nick) appear
         """
         special_words = app.settings.get('muc_highlight_words').split(';')
-        special_words.append(self.nick)
+        special_words.append(self.contact.nickname)
         special_words.append(self._client.get_own_jid().bare)
         # Strip empties: ''.split(';') == [''] and would highlight everything.
         # Also lowercase everything for case insensitive compare.
@@ -929,7 +892,7 @@ class GroupchatControl(ChatControlBase):
             text = '%s - %s' % (text, date)
 
         if (app.settings.get('show_subject_on_join') or
-                self._muc_data.state != MUCJoinedState.JOINING):
+                not self.contact.is_joining):
             self.add_info_message(text)
 
     def _on_room_config_changed(self, _contact, _signal_name, properties):
@@ -990,22 +953,12 @@ class GroupchatControl(ChatControlBase):
         elif event.name == 'ping-error':
             self.add_info_message(event.error)
 
-    @property
-    def is_connected(self) -> bool:
-        return app.gc_connected[self.account][self.room_jid]
-
-    @is_connected.setter
-    def is_connected(self, value: bool) -> None:
-        app.gc_connected[self.account][self.room_jid] = value
-
     def _set_control_active(self):
         self.xml.formattings_button.set_sensitive(True)
         self.msg_textview.set_sensitive(True)
         self.msg_textview.set_editable(True)
 
         self.roster.initial_draw()
-
-        self.is_connected = True
 
         self.xml.formattings_button.set_sensitive(True)
 
@@ -1020,8 +973,6 @@ class GroupchatControl(ChatControlBase):
 
         self.roster.enable_sort(False)
         self.roster.clear()
-
-        self.is_connected = False
 
         self._client.get_module('Chatstate').remove_delay_timeout(self.contact)
 
@@ -1039,13 +990,14 @@ class GroupchatControl(ChatControlBase):
         nick = user_contact.name
         if not properties.is_muc_self_presence:
 
-            if self.is_connected and self.contact.settings.get('print_join_left'):
+            if (self.contact.is_joined and
+                    self.contact.settings.get('print_join_left')):
                 self.add_info_message(_('%s has joined the group chat') % nick)
             return
 
         status_codes = properties.muc_status_codes or []
 
-        if not self.is_connected:
+        if not self.contact.is_joined:
             # We just joined the room
             self.add_info_message(_('You (%s) joined the group chat') % nick)
 
@@ -1411,21 +1363,20 @@ class GroupchatControl(ChatControlBase):
         # Remove unread events from systray
         app.events.remove_events(self.account, self.room_jid)
 
-        if self.parent_win is not None:
-            self.remove_actions()
+        self.remove_actions()
 
         super(GroupchatControl, self).shutdown()
         app.check_finalize(self)
 
     def safe_shutdown(self):
         # whether to ask for confirmation before closing muc
-        if app.settings.get('confirm_close_muc') and self.is_connected:
+        if app.settings.get('confirm_close_muc') and self.contact.is_joined:
             return False
         return True
 
     def allow_shutdown(self, method, on_yes, on_no):
         # whether to ask for confirmation before closing muc
-        if app.settings.get('confirm_close_muc') and self.is_connected:
+        if app.settings.get('confirm_close_muc') and self.contact.is_joined:
             def on_ok(is_checked):
                 if is_checked:
                     # User does not want to be asked again
@@ -1442,33 +1393,24 @@ class GroupchatControl(ChatControlBase):
                 _('Leave Group Chat'),
                 _('Are you sure you want to leave this group chat?'),
                 _('If you close this window, you will leave '
-                  '\'%s\'.') % self.room_name,
+                  '\'%s\'.') % self.contact.name,
                 _('_Do not ask me again'),
                 [DialogButton.make('Cancel',
                                    callback=on_cancel),
                  DialogButton.make('Accept',
                                    text=_('_Leave'),
                                    callback=on_ok)],
-                transient_for=self.parent_win.window).show()
+                transient_for=app.window).show()
             return
 
         on_yes(self)
 
     def _close_control(self, reason=None):
-        # if self.parent_win is None:
         self.shutdown(reason)
-        # else:
-            # self.parent_win.remove_tab(self, None, reason=reason, force=True)
 
     def set_control_active(self, state):
-        # self.conv_textview.allow_focus_out_line = True
         self.attention_flag = False
         ChatControlBase.set_control_active(self, state)
-        # if not state:
-        #    # add the focus-out line to the tab we are leaving
-        #    self.check_focus_out_line()
-        # Sending active to undo unread state
-        self.parent_win.redraw_tab(self, 'active')
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
                                target_type, timestamp):
@@ -1617,7 +1559,7 @@ class GroupchatControl(ChatControlBase):
 
         if action == 'change-nickname':
             control_action = '%s-%s' % (action, self.control_id)
-            self.parent_win.window.lookup_action(control_action).activate()
+            app.window.lookup_action(control_action).activate()
             return Gdk.EVENT_STOP
 
         if action == 'escape':
@@ -1638,11 +1580,11 @@ class GroupchatControl(ChatControlBase):
 
         if action == 'change-subject':
             control_action = '%s-%s' % (action, self.control_id)
-            self.parent_win.window.lookup_action(control_action).activate()
+            app.window.lookup_action(control_action).activate()
             return Gdk.EVENT_STOP
 
         if action == 'show-contact-info':
-            self.parent_win.window.lookup_action(
+            app.window.lookup_action(
                 'information-%s' % self.control_id).activate()
             return Gdk.EVENT_STOP
 
@@ -1716,14 +1658,14 @@ class GroupchatControl(ChatControlBase):
     def _on_change_nick(self, _action, _param):
         if self._get_current_page() != 'groupchat':
             return
-        self.xml.nickname_entry.set_text(self.nick)
+        self.xml.nickname_entry.set_text(self.contact.nickname)
         self.xml.nickname_entry.grab_focus()
         self.xml.nickname_change_button.grab_default()
         self._show_page('nickname')
 
     def _on_nickname_text_changed(self, entry, _param):
         text = entry.get_text()
-        if not text or text == self.nick:
+        if not text or text == self.contact.nickname:
             self.xml.nickname_change_button.set_sensitive(False)
         else:
             try:
@@ -1741,7 +1683,7 @@ class GroupchatControl(ChatControlBase):
     def _on_rename_groupchat(self, _action, _param):
         if self._get_current_page() != 'groupchat':
             return
-        self.xml.name_entry.set_text(self.room_name)
+        self.xml.name_entry.set_text(self.contact.name)
         self.xml.name_entry.grab_focus()
         self.xml.rename_button.grab_default()
         self._show_page('rename')
@@ -1788,7 +1730,7 @@ class GroupchatControl(ChatControlBase):
 
     def _on_password_set_clicked(self, _button):
         password = self.xml.password_entry.get_text()
-        self._muc_data.password = password
+        self._client.get_module('MUC').set_password(self.room_jid, password)
         self._client.get_module('MUC').join(self.room_jid)
         self._show_page('groupchat')
 
@@ -1809,11 +1751,6 @@ class GroupchatControl(ChatControlBase):
         self._captcha_request.set_valign(Gtk.Align.START)
         self._captcha_request.show_all()
         self.xml.captcha_box.add(self._captcha_request)
-
-        if self.parent_win:
-            self.parent_win.redraw_tab(self, 'attention')
-        else:
-            self.attention_flag = True
 
         self._show_page('captcha')
         self._captcha_request.focus_first_entry()

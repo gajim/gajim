@@ -47,8 +47,7 @@ class ChatStack(Gtk.Stack):
             # Control is already in the Stack
             return
 
-        mw = self.get_toplevel()
-        chat_control = ChatControl(mw, jid, account, None, None)
+        chat_control = ChatControl(account, jid)
         self._controls[(account, jid)] = chat_control
         self.add_named(chat_control.widget, f'{account}:{jid}')
         chat_control.widget.show_all()
@@ -57,21 +56,13 @@ class ChatStack(Gtk.Stack):
         if self._controls.get((account, jid)) is not None:
             return
 
-        # muc_data = self._create_muc_data(account,
-        #                                  room_jid,
-        #                                  nick,
-        #                                  password,
-        #                                  None)
-
-        mw = self.get_toplevel()
-        control = GroupchatControl(mw, jid, None, account)
+        control = GroupchatControl(account, jid)
         self._controls[(account, jid)] = control
         self.add_named(control.widget, f'{account}:{jid}')
         control.widget.show_all()
 
     def add_private_chat(self, account, jid):
-        mw = self.get_toplevel()
-        control = PrivateChatControl(mw, jid, account)
+        control = PrivateChatControl(account, jid)
         self._controls[(account, str(jid))] = control
         self.add_named(control.widget, f'{account}:{jid}')
         control.widget.show_all()

@@ -45,9 +45,11 @@ class ChatMarkers(BaseModule):
             return
 
         if properties.type.is_groupchat:
-            muc_data = self._con.get_module('MUC').get_muc_data(
-                properties.muc_jid)
-            if muc_data is None:
+            contact = self._con.get_module('Contacts').get_contact(
+                properties.muc_jid,
+                groupchat=True)
+            if not contact.is_joined:
+                self._log.warning('Received chat marker while not joined')
                 return
 
             if properties.muc_nickname != muc_data.nick:

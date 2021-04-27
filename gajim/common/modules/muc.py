@@ -116,7 +116,7 @@ class MUC(BaseModule):
         self._muc_service_jid = None
         self._joined_users = defaultdict(dict)
         self._mucs = {}
-
+        self._muc_nicknames = {}
 
     def _on_resume_failed(self, _client, _signal_name):
         self._reset_presence()
@@ -146,6 +146,10 @@ class MUC(BaseModule):
 
     def get_muc_data(self, room_jid):
         return self._mucs.get(room_jid)
+
+    def set_password(self, room_jid, password):
+        muc_data = self.get_muc_data(room_jid)
+        muc_data.password = password
 
     def _get_mucs_with_state(self, states):
         return [muc for muc in self._mucs.values() if muc.state in states]

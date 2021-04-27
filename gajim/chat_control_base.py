@@ -98,20 +98,17 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     _type = None  # type: ControlType
 
-    def __init__(self, parent_win, widget_name, jid, acct,
-                 resource=None):
+    def __init__(self, widget_name, account, jid):
         EventHelper.__init__(self)
         # Undo needs this variable to know if space has been pressed.
         # Initialize it to True so empty textview is saved in undo list
         self.space_pressed = True
 
         self.handlers = {}
-        self.parent_win = parent_win
 
-        self.account = acct
-        self.resource = resource
+        self.account = account
 
-        self._client = app.get_client(acct)
+        self._client = app.get_client(account)
 
         groupchat = self._type != ControlType.CHAT
         self.contact = self._client.get_module('Contacts').get_contact(
@@ -123,7 +120,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.control_id = str(uuid.uuid4())
         self.session = None
 
-        app.last_message_time[self.account][self.get_full_jid()] = 0
+        app.last_message_time[self.account][self.contact.jid] = 0
 
         self.xml = get_builder('%s.ui' % widget_name)
         self.xml.connect_signals(self)
@@ -241,10 +238,10 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
         self._client.get_module('Chatstate').set_active(self.contact)
 
-        if parent_win is not None:
-            id_ = parent_win.window.connect('motion-notify-event',
-                                            self._on_window_motion_notify)
-            self.handlers[id_] = parent_win.window
+        # TODO
+        # id_ = app.window.connect('motion-notify-event',
+        #                          self._on_window_motion_notify)
+        # self.handlers[id_] = app.window
 
         self.encryption = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
@@ -322,12 +319,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def is_groupchat(self):
         return self._type.is_groupchat
 
-    def get_full_jid(self):
-        fjid = self.contact.jid
-        if self.resource:
-            fjid += '/' + self.resource
-        return fjid
-
     def minimizable(self):
         """
         Called to check if control can be minimized
@@ -359,15 +350,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def focus(self):
         raise NotImplementedError
-
-    def get_nb_unread(self):
-        jid = self.contact.jid
-        if self.resource:
-            jid += '/' + self.resource
-        return len(app.events.get_events(
-            self.account,
-            jid,
-            ['printed_%s' % self._type, str(self._type)]))
 
     def draw_banner(self):
         """
@@ -522,7 +504,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             GLib.VariantType.new('s'),
             GLib.Variant('s', self.encryption or 'disabled'))
         action.connect('change-state', self.change_encryption)
-        self.parent_win.window.add_action(action)
+        app.window.add_action(action)
 
         actions = {
             'send-message-%s': self._on_send_message,
@@ -535,7 +517,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             action = Gio.SimpleAction.new(name % self.control_id, None)
             action.connect('activate', func)
             action.set_enabled(False)
-            self.parent_win.window.add_action(action)
+            app.window.add_action(action)
 
     def remove_actions(self):
         actions = [
@@ -547,7 +529,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         ]
 
         for action in actions:
-            self.parent_win.window.remove_action(f'{action}{self.control_id}')
+            app.window.remove_action(f'{action}{self.control_id}')
 
     def change_encryption(self, action, param):
         encryption = param.get_string()
@@ -783,9 +765,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
     def _get_pref_ft_method(self):
         ft_pref = app.settings.get_account_setting(self.account,
                                                    'filetransfer_preference')
-        httpupload = self.parent_win.window.lookup_action(
+        httpupload = app.window.lookup_action(
             'send-file-httpupload-%s' % self.control_id)
-        jingle = self.parent_win.window.lookup_action(
+        jingle = app.window.lookup_action(
             'send-file-jingle-%s' % self.control_id)
 
         if self._type.is_groupchat:
@@ -1037,9 +1019,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         """
         It gets called no matter if it is the active window or not
         """
-        if not self.parent_win:
-            # when a groupchat is minimized there is no parent window
-            return
         # TODO
         return
         if self.parent_win.get_active_jid() == self.contact.jid:
@@ -1049,8 +1028,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
 
     def _on_message_tv_buffer_changed(self, textbuffer):
         has_text = self.msg_textview.has_text()
-        if self.parent_win is not None:
-            self.parent_win.window.lookup_action(
+        app.window.lookup_action(
                 'send-message-' + self.control_id).set_enabled(has_text)
 
         if textbuffer.get_char_count() and self.encryption:
@@ -1123,7 +1101,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         correct_id = (message_id, correct_id)
         """
         jid = self.contact.jid
-        full_jid = self.get_full_jid()
+        full_jid = self.contact.jid
         end = False
         if self.conversation_view.autoscroll or kind == 'outgoing':
             end = True
@@ -1252,9 +1230,6 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         if not app.settings.get('emoticons_theme'):
             return
 
-        if not self.parent_win:
-            return
-
         if sys.platform in ('win32', 'darwin'):
             emoji_chooser.text_widget = self.msg_textview
             self.xml.emoticons_button.set_popover(emoji_chooser)
@@ -1270,13 +1245,13 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.emoticons_button.set_property('active', False)
 
     def on_color_menuitem_activate(self, _widget):
-        color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)
+        color_dialog = Gtk.ColorChooserDialog(None, app.window)
         color_dialog.set_use_alpha(False)
         color_dialog.connect('response', self.msg_textview.color_set)
         color_dialog.show_all()
 
     def on_font_menuitem_activate(self, _widget):
-        font_dialog = Gtk.FontChooserDialog(None, self.parent_win.window)
+        font_dialog = Gtk.FontChooserDialog(None, app.window)
         start, finish = self.msg_textview.get_active_iters()
         font_dialog.connect('response', self.msg_textview.font_set, start, finish)
         font_dialog.show_all()
@@ -1369,7 +1344,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 if self._type.is_groupchat:
                     type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
                 if not app.events.remove_events(self.account,
-                                                self.get_full_jid(),
+                                                self.contact.jid,
                                                 types=type_):
                     # There were events to remove
                     self.redraw_after_event_removed(jid)
@@ -1471,10 +1446,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 history=True)
 
     def has_focus(self):
-        if self.parent_win:
-            if self.parent_win.window.get_property('has-toplevel-focus'):
-                if self == self.parent_win.get_active_control():
-                    return True
+        if app.window.get_property('has-toplevel-focus'):
+            if self == app.window.get_active_control():
+                return True
         return False
 
     def scroll_messages(self, direction, msg_buf, msg_type):

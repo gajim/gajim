@@ -99,13 +99,11 @@ class ChatControl(ChatControlBase):
     # processed with this command host.
     COMMAND_HOST = ChatCommands  # type: ClassVar[Type[CommandHost]]
 
-    def __init__(self, parent_win, jid, acct, session, resource=None):
+    def __init__(self, account, jid):
         ChatControlBase.__init__(self,
-                                 parent_win,
                                  'chat_control',
-                                 jid,
-                                 acct,
-                                 resource)
+                                 account,
+                                 jid)
 
         self.last_recv_message_id = None
         self.last_recv_message_marks = None
@@ -245,7 +243,7 @@ class ChatControl(ChatControlBase):
             action_name, func = action
             act = Gio.SimpleAction.new(action_name + self.control_id, None)
             act.connect('activate', func)
-            self.parent_win.window.add_action(act)
+            app.window.add_action(act)
 
         chatstate = self.contact.settings.get('send_chatstate')
 
@@ -254,7 +252,7 @@ class ChatControl(ChatControlBase):
             GLib.VariantType.new("s"),
             GLib.Variant("s", chatstate))
         act.connect('change-state', self._on_send_chatstate)
-        self.parent_win.window.add_action(act)
+        app.window.add_action(act)
 
         marker = self.contact.settings.get('send_marker')
 
@@ -263,10 +261,10 @@ class ChatControl(ChatControlBase):
             None,
             GLib.Variant.new_boolean(marker))
         act.connect('change-state', self._on_send_marker)
-        self.parent_win.window.add_action(act)
+        app.window.add_action(act)
 
     def update_actions(self):
-        win = self.parent_win.window
+        win = app.window
         online = app.account_is_connected(self.account)
 
         # Add to roster
@@ -366,7 +364,7 @@ class ChatControl(ChatControlBase):
             'send-marker-',
         ]
         for action in actions:
-            self.parent_win.window.remove_action(f'{action}{self.control_id}')
+            app.window.remove_action(f'{action}{self.control_id}')
 
     def focus(self):
         self.msg_textview.grab_focus()
@@ -377,7 +375,7 @@ class ChatControl(ChatControlBase):
             return res
 
         if action == 'show-contact-info':
-            self.parent_win.window.lookup_action(
+            app.window.lookup_action(
                 'information-%s' % self.control_id).activate()
             return Gdk.EVENT_STOP
 
@@ -387,7 +385,7 @@ class ChatControl(ChatControlBase):
                 app.interface.roster.tree.grab_focus()
                 return Gdk.EVENT_PROPAGATE
 
-            self.parent_win.window.lookup_action(
+            app.window.lookup_action(
                 'send-file-%s' % self.control_id).activate()
             return Gdk.EVENT_STOP
 
@@ -499,8 +497,6 @@ class ChatControl(ChatControlBase):
 
     def _on_nickname_received(self, _event):
         self.update_ui()
-        self.parent_win.redraw_tab(self)
-        self.parent_win.show_title()
 
     def _on_update_client_info(self, event):
         contact = app.contacts.get_contact(
@@ -527,7 +523,7 @@ class ChatControl(ChatControlBase):
 
     def _on_mam_message_received(self, event):
         if event.properties.is_muc_pm:
-            if not event.properties.jid == self.contact.get_full_jid():
+            if not event.properties.jid == self.contact.jid:
                 return
         else:
             if not event.properties.jid.bare_match(self.contact.jid):
@@ -607,19 +603,6 @@ class ChatControl(ChatControlBase):
                 _('Pong! (%s seconds)') % event.seconds)
         elif event.name == 'ping-error':
             self.add_info_message(event.error)
-
-    def change_resource(self, resource):
-        old_full_jid = self.get_full_jid()
-        self.resource = resource
-        new_full_jid = self.get_full_jid()
-        # update app.last_message_time
-        if old_full_jid in app.last_message_time[self.account]:
-            app.last_message_time[self.account][new_full_jid] = \
-                    app.last_message_time[self.account][old_full_jid]
-        # update events
-        app.events.change_jid(self.account, old_full_jid, new_full_jid)
-        # update MessageWindow._controls
-        self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
 
     # Jingle AV
     def _on_start_call(self, *args):
@@ -771,7 +754,7 @@ class ChatControl(ChatControlBase):
             self.xml.outgoing_viewport.add(self._video_widget_self)
 
             session = self._client.get_module('Jingle').get_jingle_session(
-                self.contact.get_full_jid(), self.jingle['video'].sid)
+                self.contact.jid, self.jingle['video'].sid)
             content = session.get_content('video')
             content.do_setup(sink_self, sink_other)
 
@@ -834,7 +817,7 @@ class ChatControl(ChatControlBase):
             return
 
         session = self._client.get_module('Jingle').get_jingle_session(
-            self.contact.get_full_jid(), jingle.sid)
+            self.contact.jid, jingle.sid)
         if session:
             content = session.get_content(jingle_type)
             if content:
@@ -857,7 +840,7 @@ class ChatControl(ChatControlBase):
         if all(item in jingle_types for item in ['audio', 'video']):
             # Both 'audio' and 'video' in jingle_types
             sid = self._client.get_module('Jingle').start_audio_video(
-                self.contact.get_full_jid())
+                self.contact.jid)
             self.set_jingle_state('audio', JingleState.CONNECTING, sid)
             self.set_jingle_state('video', JingleState.CONNECTING, sid)
             return
@@ -867,7 +850,7 @@ class ChatControl(ChatControlBase):
                 self.close_jingle_content('audio')
             else:
                 sid = self._client.get_module('Jingle').start_audio(
-                    self.contact.get_full_jid())
+                    self.contact.jid)
                 self.set_jingle_state('audio', JingleState.CONNECTING, sid)
 
         if 'video' in jingle_types:
@@ -875,12 +858,12 @@ class ChatControl(ChatControlBase):
                 self.close_jingle_content('video')
             else:
                 sid = self._client.get_module('Jingle').start_video(
-                    self.contact.get_full_jid())
+                    self.contact.jid)
                 self.set_jingle_state('video', JingleState.CONNECTING, sid)
 
     def _get_audio_content(self):
         session = self._client.get_module('Jingle').get_jingle_session(
-            self.contact.get_full_jid(), self.jingle['audio'].sid)
+            self.contact.jid, self.jingle['audio'].sid)
         return session.get_content('audio')
 
     def on_num_button_pressed(self, _widget, num):
@@ -912,11 +895,11 @@ class ChatControl(ChatControlBase):
         Just moved the mouse so show the cursor
         """
         cursor = get_cursor('default')
-        self.parent_win.window.get_window().set_cursor(cursor)
+        app.window.get_window().set_cursor(cursor)
 
     def on_location_eventbox_enter_notify_event(self, _widget, _event):
         cursor = get_cursor('pointer')
-        self.parent_win.window.get_window().set_cursor(cursor)
+        app.window.get_window().set_cursor(cursor)
 
     def update_ui(self):
         # The name banner is drawn here
@@ -932,14 +915,14 @@ class ChatControl(ChatControlBase):
         """
         contact = self.contact
         name = contact.name
-        if self.resource:
-            name += '/' + self.resource
-        if self._type.is_privatechat:
-            name = i18n.direction_mark + _(
-                '%(nickname)s from group chat %(room_name)s') % \
-                {'nickname': name, 'room_name': self.room_name}
+        # if self.resource:
+        #     name += '/' + self.resource
+        # if self._type.is_privatechat:
+        #     name = i18n.direction_mark + _(
+        #         '%(nickname)s from group chat %(room_name)s') % \
+        #         {'nickname': name, 'room_name': self.room_name}
 
-        name = i18n.direction_mark + GLib.markup_escape_text(name)
+        # name = i18n.direction_mark + GLib.markup_escape_text(name)
 
         cs = self.contact.chatstate
         if cs is not None:
@@ -1091,17 +1074,6 @@ class ChatControl(ChatControlBase):
             self.close_jingle_content(jingle_type, shutdown=True)
         self.jingle.clear()
 
-        # disconnect self from session
-        if self.session:
-            self.session.control = None
-
-        # Clean events
-        app.events.remove_events(
-            self.account,
-            self.get_full_jid(),
-            types=['printed_%s' % self._type, str(self._type)])
-        # Remove contact instance if contact has been removed
-
         super(ChatControl, self).shutdown()
         app.check_finalize(self)
 
@@ -1112,7 +1084,7 @@ class ChatControl(ChatControlBase):
         return False
 
     def allow_shutdown(self, method, on_yes, on_no, _on_minimize):
-        time_ = app.last_message_time[self.account][self.get_full_jid()]
+        time_ = app.last_message_time[self.account][self.contact.jid]
         # 2 seconds
         if time.time() - time_ < 2:
             no_log_for = app.settings.get_account_setting(
@@ -1136,7 +1108,7 @@ class ChatControl(ChatControlBase):
                  DialogButton.make('Remove',
                                    text=_('_Close'),
                                    callback=lambda: on_yes(self))],
-                transient_for=self.parent_win.window).show()
+                transient_for=app.window).show()
             return
         on_yes(self)
 
@@ -1144,7 +1116,7 @@ class ChatControl(ChatControlBase):
         self._update_avatar()
 
     def _update_avatar(self):
-        scale = self.parent_win.window.get_scale_factor()
+        scale = app.window.get_scale_factor()
         surface = self.contact.get_avatar(AvatarSize.CHAT, scale)
         self.xml.avatar_image.set_from_surface(surface)
 
@@ -1200,7 +1172,6 @@ class ChatControl(ChatControlBase):
         name = self.contact.name
 
         self.update_ui()
-        self.parent_win.redraw_tab(self)
 
         if not app.settings.get('print_status_in_chats'):
             return

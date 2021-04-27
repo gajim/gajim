@@ -346,11 +346,6 @@ class GroupchatContact(CommonContact):
     def is_groupchat(self):
         return True
 
-    @property
-    def state(self):
-        muc_data = self._module('MUC').get_muc_data(self._jid)
-        return muc_data.state
-
     def add_resource(self, resource):
         jid = self._jid.new_with(resource=resource)
         contact = GroupchatParticipant(self._log, jid, self._account)
@@ -392,12 +387,46 @@ class GroupchatContact(CommonContact):
         app.interface.avatar_storage.invalidate_cache(self._jid)
         self.notify('avatar-update')
 
+    def get_self(self):
+        nick = self.nickname
+        if nick is None:
+            return None
+        return self.get_resource(nick)
+
+    @property
+    def nickname(self):
+        muc_data = self._module('MUC').get_muc_data(self._jid)
+        if muc_data is None:
+            return None
+        return muc_data.nick
+
+    @property
+    def occupant_jid(self):
+        muc_data = self._module('MUC').get_muc_data(self._jid)
+        if muc_data is None:
+            return None
+        return muc_data.occupant_jid
+
     @property
     def is_joined(self):
         muc_data = self._module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return False
         return muc_data.state.is_joined
+
+    @property
+    def is_joining(self):
+        muc_data = self._module('MUC').get_muc_data(self._jid)
+        if muc_data is None:
+            return False
+        return muc_data.state.is_joining
+
+    @property
+    def is_not_joined(self):
+        muc_data = self._module('MUC').get_muc_data(self._jid)
+        if muc_data is None:
+            return True
+        return muc_data.state.is_not_joined
 
     def set_not_joined(self):
         for contact in self._resources.values():

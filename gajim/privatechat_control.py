@@ -42,11 +42,11 @@ class PrivateChatControl(ChatControl):
     # will be processed with this command host.
     COMMAND_HOST = PrivateChatCommands
 
-    def __init__(self, parent_win, jid, account):
+    def __init__(self, account, jid):
         self._room_contact = self._client.get_module('Contacts').get_contact(
             jid.bare)
 
-        ChatControl.__init__(self, parent_win, jid, account, None)
+        ChatControl.__init__(self, account, jid)
 
         # self.register_events([
         #     ('update-gc-avatar', ged.GUI1, self._on_update_gc_avatar),
