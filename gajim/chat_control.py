@@ -478,7 +478,7 @@ class ChatControl(ChatControlBase):
             if not event.properties.jid.bare_match(self.contact.jid):
                 return
 
-        kind = '' # incoming
+        kind = 'incoming'
         if event.kind == KindConstant.CHAT_MSG_SENT:
             kind = 'outgoing'
 
@@ -493,12 +493,12 @@ class ChatControl(ChatControlBase):
         if not event.msgtxt:
             return
 
-        typ = ''
+        kind = 'incoming'
         if event.properties.is_sent_carbon:
-            typ = 'out'
+            kind = 'outgoing'
 
         self.add_message(event.msgtxt,
-                         typ,
+                         kind,
                          tim=event.properties.timestamp,
                          subject=event.properties.subject,
                          displaymarking=event.displaymarking,
@@ -529,7 +529,7 @@ class ChatControl(ChatControlBase):
                 self.msg_textview, 'gajim-msg-correcting')
 
         self.add_message(event.message,
-                         self.contact.jid,
+                         'outgoing',
                          tim=event.timestamp,
                          displaymarking=displaymarking,
                          message_id=message_id,
@@ -928,7 +928,7 @@ class ChatControl(ChatControlBase):
 
     def add_message(self,
                     text,
-                    frm='',
+                    kind,
                     tim=None,
                     subject=None,
                     displaymarking=None,
@@ -936,36 +936,14 @@ class ChatControl(ChatControlBase):
                     correct_id=None,
                     message_id=None,
                     additional_data=None):
-        """
-        Print a line in the conversation
-
-        If frm is set to status: it's a status message.
-        if frm is set to error: it's an error message. The difference between
-            status and error is mainly that with error, msg count as a new
-            message (in systray and in control).
-        If frm is set to info: it's a information message.
-        If frm is set to print_queue: it is incoming from queue.
-        If frm is set to another value: it's an outgoing message.
-        If frm is not set: it's an incoming message.
-        """
-        contact = self.contact
 
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        if frm == 'error':
-            kind = 'error'
-            name = ''
+        if kind == 'incoming':
+            name = self.contact.name
         else:
-            if not frm:
-                kind = 'incoming'
-                name = contact.name
-            elif frm == 'print_queue':
-                kind = 'incoming_queue'
-                name = contact.name
-            else:
-                kind = 'outgoing'
-                name = self.get_our_nick()
+            name = self.get_our_nick()
 
         ChatControlBase.add_message(self,
                                     text,
@@ -977,11 +955,6 @@ class ChatControl(ChatControlBase):
                                     message_id=message_id,
                                     correct_id=correct_id,
                                     additional_data=additional_data)
-
-        if text.startswith('/me ') or text.startswith('/me\n'):
-            self.old_msg_kind = None
-        else:
-            self.old_msg_kind = kind
 
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """
@@ -1117,7 +1090,7 @@ class ChatControl(ChatControlBase):
         status = '- %s' % event.status if event.status else ''
         status_line = _('%(name)s is now %(show)s %(status)s') % {
             'name': name, 'show': uf_show, 'status': status}
-        self.add_status_message(status_line)
+        self.add_info_message(status_line)
 
     def _info_bar_show_message(self):
         if self.info_bar.get_visible():

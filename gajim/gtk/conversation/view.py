@@ -30,8 +30,9 @@ from .util import scroll_to_end
 from .conversation.rows.read_marker import ReadMarkerRow
 from .conversation.rows.scroll_hint import ScrollHintRow
 from .conversation.rows.message import MessageRow
-from .conversation.rows.info import InfoMessageRow
+from .conversation.rows.info import InfoMessage
 from .conversation.rows.date import DateRow
+from .conversation.rows.muc_subject import MUCSubject
 
 
 log = logging.getLogger('gajim.gui.conversation_view')
@@ -105,6 +106,14 @@ class ConversationView(Gtk.ListBox):
             return 0
         return -1 if row1.timestamp < row2.timestamp else 1
 
+    def add_muc_subject(self, text):
+        subject = MUCSubject(self._account, text)
+        self._insert_message(subject)
+
+    def add_info_message(self, text):
+        message = InfoMessage(self._account, text)
+        self._insert_message(message)
+
     def add_message(self,
                     text,
                     kind,
@@ -122,43 +131,32 @@ class ConversationView(Gtk.ListBox):
         if not timestamp:
             timestamp = time.time()
 
-        muc_subject = bool(subject and self._contact is not None and
-                           self._contact.is_groupchat)
-        if kind in ('status', 'info') or muc_subject:
-            message = InfoMessageRow(
-                self._account,
-                timestamp,
-                text,
-                kind,
-                subject,
-                history_mode=self._history_mode)
-        else:
-            if correct_id:
-                self.correct_message(correct_id, message_id, text)
-                return
+        if correct_id:
+            self.correct_message(correct_id, message_id, text)
+            return
 
-            avatar = self._get_avatar(kind, name)
+        avatar = self._get_avatar(kind, name)
 
-            is_groupchat = False
-            if self._contact is not None:
-                is_groupchat = self._contact.is_groupchat
+        is_groupchat = False
+        if self._contact is not None:
+            is_groupchat = self._contact.is_groupchat
 
-            message = MessageRow(
-                self._account,
-                message_id,
-                timestamp,
-                kind,
-                name,
-                text,
-                avatar,
-                is_groupchat,
-                additional_data=additional_data,
-                display_marking=display_marking,
-                marker=marker,
-                error=error,
-                encryption_enabled=self.encryption_enabled,
-                history_mode=self._history_mode,
-                log_line_id=log_line_id)
+        message = MessageRow(
+            self._account,
+            message_id,
+            timestamp,
+            kind,
+            name,
+            text,
+            avatar,
+            is_groupchat,
+            additional_data=additional_data,
+            display_marking=display_marking,
+            marker=marker,
+            error=error,
+            encryption_enabled=self.encryption_enabled,
+            history_mode=self._history_mode,
+            log_line_id=log_line_id)
 
         if message.type == 'chat':
             self._message_id_row_map[message.message_id] = message

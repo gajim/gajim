@@ -18,28 +18,28 @@ from datetime import datetime
 from gi.repository import GLib
 from gi.repository import Gtk
 
-from gajim.common.const import AvatarSize
 from gajim.common.styling import process
 
 from .base import BaseRow
 from ..message_widget import MessageWidget
 
 
-class InfoMessage(BaseRow):
+class MUCSubject(BaseRow):
+
+    type = 'muc-subject'
+
     def __init__(self, account, text):
         BaseRow.__init__(self, account)
 
-        self.type = 'info'
         timestamp = time.time()
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
-        self.kind = 'info'
 
         text = GLib.markup_escape_text(text)
 
-        avatar_placeholder = Gtk.Box()
-        avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
-        self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
+        # avatar_placeholder = Gtk.Box()
+        # avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
+        # self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
         timestamp_widget = self.create_timestamp_widget(self.timestamp)
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 2, 0, 1, 1)

@@ -116,7 +116,7 @@ class PrivateChatControl(ChatControl):
             message = _('{nick} is now {show}{status}').format(nick=nick,
                                                                show=show,
                                                                status=status)
-        self.add_status_message(message)
+        self.add_info_message(message)
         self.update_ui()
 
     # def _on_disconnected(self, event):

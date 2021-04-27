@@ -1072,13 +1072,8 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             self.received_history_pos = pos
 
-    def add_info_message(self, text, message_id=None):
-        self.conversation_view.add_message(
-            text, 'info', '', None, message_id=message_id)
-
-    def add_status_message(self, text):
-        self.conversation_view.add_message(
-            text, 'status', '', None)
+    def add_info_message(self, text):
+        self.conversation_view.add_info_message(text)
 
     def add_message(self,
                     text,
@@ -1107,16 +1102,13 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
             log_line_id=msg_log_id,
             additional_data=additional_data)
 
-        if restored:
-            return
-
         if message_id:
             if self._type.is_groupchat:
                 self.last_msg_id = stanza_id or message_id
             else:
                 self.last_msg_id = message_id
 
-        if kind in ('incoming', 'incoming_queue'):
+        if kind == 'incoming':
             # Record the history of received messages
             self.save_message(text, 'received')
 
@@ -1333,7 +1325,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         for msg in messages:
             if not msg:
                 continue
-            kind = 'status'
+
             contact_name = msg.contact_name
             if msg.kind in (
                     KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
@@ -1345,6 +1337,9 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                     KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
                 kind = 'outgoing'
                 contact_name = self.get_our_nick()
+            else:
+                raise ValueError('no kind attribute')
+
             if not msg.message:
                 continue
             self.conversation_view.add_message(

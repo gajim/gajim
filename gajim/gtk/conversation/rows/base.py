@@ -23,7 +23,6 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import from_one_line
 
-from ...conversation_textview import ConversationTextview
 from ...util import convert_rgba_to_hex
 from ...util import text_to_color
 from ...util import wrap_with_event_box

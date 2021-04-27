@@ -754,26 +754,23 @@ class GroupchatControl(ChatControlBase):
                              additional_data=event.additional_data)
         event.needs_highlight = self.needs_visual_notification(event.msgtxt)
 
-    def add_message(self, text, contact='', tim=None,
-                    displaymarking=None, correct_id=None, message_id=None,
-                    stanza_id=None, additional_data=None):
-        """
-        Add message to the ConversationsTextview
+    def add_message(self,
+                    text,
+                    contact='',
+                    tim=None,
+                    displaymarking=None,
+                    correct_id=None,
+                    message_id=None,
+                    stanza_id=None,
+                    additional_data=None):
 
-        If contact is set: it's a message from someone
-        If contact is not set: it's a message from the server or help.
-        """
-
-        if not contact:
-            # Message from the server
-            kind = 'status'
-        elif contact == self.contact.nickname: # it's us
+        if contact == self.contact.nickname:
             kind = 'outgoing'
         else:
             kind = 'incoming'
             # muc-specific chatstate
 
-        if kind == 'incoming': # it's a message NOT from us
+        if kind == 'incoming':
             # highlighting and sounds
             highlight, _sound = self.highlighting_for_message(text, tim)
             # other_tags_for_name.append('muc_nickname_color_%s' % contact)
@@ -883,7 +880,7 @@ class GroupchatControl(ChatControlBase):
 
         if (app.settings.get('show_subject_on_join') or
                 not self.contact.is_joining):
-            self.add_info_message(text)
+            self.conversation_view.add_muc_subject(text)
 
     def _on_room_config_changed(self, _contact, _signal_name, properties):
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
@@ -1059,7 +1056,7 @@ class GroupchatControl(ChatControlBase):
             message = _('{nick} is now {show}{status}').format(nick=nick,
                                                                show=show,
                                                                status=status)
-        self.add_status_message(message)
+        self.add_info_message(message)
 
     def _on_user_affiliation_changed(self,
                                      _contact,
