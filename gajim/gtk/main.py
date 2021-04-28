@@ -173,8 +173,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return res
 
         if action == 'escape':
-            if self._search_revealer.get_reveal_child():
-                self._search_revealer.hide()
+            self._chat_page.hide_search()
 
         # if action == 'escape' and app.settings.get('escape_key_closes'):
         #     self.remove_tab(control, self.CLOSE_ESC)

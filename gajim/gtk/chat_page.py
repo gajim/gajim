@@ -59,10 +59,13 @@ class ChatPage(Gtk.Box):
         self._search_revealer.add(self._search_view)
         self._ui.right_grid_overlay.add_overlay(self._search_revealer)
 
-        self._chat_list_stack = ChatListStack(self, self._ui, self._chat_stack)
+        self._chat_list_stack = ChatListStack(app.window, self._ui.search_entry)
         self._chat_list_stack.connect('chat-selected', self._on_chat_selected)
         self._chat_list_stack.connect('chat-unselected',
                                       self._on_chat_unselected)
+        self._chat_list_stack.connect('chat-removed', self._on_chat_removed)
+        self._chat_list_stack.connect('notify::visible-child-name',
+                                      self._on_chat_list_changed)
         self._ui.chat_list_scrolled.add(self._chat_list_stack)
 
         self._ui.start_chat_button.connect('clicked',
@@ -120,6 +123,10 @@ class ChatPage(Gtk.Box):
     def _on_chat_selected(self, _chat_list_stack, workspace_id, account, jid):
         self._chat_stack.show_chat(account, jid)
         self._search_view.set_context(account, jid)
+
+        self._ui.workspace_label.set_text(
+            app.settings.get_workspace_setting(workspace_id, 'name'))
+
         self.emit('chat-selected', workspace_id, account, jid)
 
     def _on_chat_unselected(self, _chat_list_stack):
@@ -135,6 +142,9 @@ class ChatPage(Gtk.Box):
 
     def _on_search_hide(self, *args):
         self._search_revealer.hide()
+
+    def _on_chat_list_changed(self, *args):
+        self._ui.search_entry.set_text('')
 
     def process_event(self, event):
         self._chat_stack.process_event(event)
@@ -219,6 +229,12 @@ class ChatPage(Gtk.Box):
                 self._chat_list_stack.remove_chat(workspace_id, account, jid)
                 return
 
+    def _on_chat_removed(self, _chat_list, account, jid, type_):
+        self._chat_stack.remove_chat(account, jid)
+        if type_ == 'groupchat':
+            client = app.get_client(account)
+            client.get_module('MUC').leave(jid)
+
     def get_control(self, account, jid):
         return self._chat_stack.get_control(account, jid)
 
@@ -230,3 +246,7 @@ class ChatPage(Gtk.Box):
 
     def get_controls(self, account=None):
         return self._chat_stack.get_controls(account)
+
+    def hide_search(self):
+        if self._search_revealer.get_reveal_child():
+            self._search_revealer.hide()

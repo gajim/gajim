@@ -44,16 +44,17 @@ class ChatListStack(Gtk.Stack):
         'chat-unselected': (GObject.SignalFlags.RUN_LAST,
                             None,
                             ()),
+        'chat-removed': (GObject.SignalFlags.RUN_LAST,
+                         None,
+                         (str, str, str)),
     }
 
-    def __init__(self, main_window, ui, chat_stack):
+    def __init__(self, main_window, search_entry):
         Gtk.Stack.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
         self.set_vhomogeneous(False)
 
-        self._ui = ui
-        self._chat_stack = chat_stack
         self._chat_lists = {}
 
         self._last_visible_child_name = 'default'
@@ -61,9 +62,7 @@ class ChatListStack(Gtk.Stack):
         self.add_named(Gtk.Box(), 'default')
 
         self.connect('notify::visible-child-name', self._on_visible_child_name)
-        self._ui.search_entry.connect(
-            'search-changed', self._on_search_changed)
-
+        search_entry.connect('search-changed', self._on_search_changed)
         main_window.connect('notify::is-active', self._on_window_active)
 
         self._add_actions()
@@ -94,7 +93,6 @@ class ChatListStack(Gtk.Stack):
         if self._last_visible_child_name == self.get_visible_child_name():
             return
 
-        self._ui.search_entry.set_text('')
         if self._last_visible_child_name != 'default':
             child = self.get_child_by_name(self._last_visible_child_name)
             child.set_filter_text('')
@@ -157,8 +155,6 @@ class ChatListStack(Gtk.Stack):
         if current_workspace_id != 'default':
             self._chat_lists[current_workspace_id].unselect_all()
 
-        self._ui.workspace_label.set_text(
-            app.settings.get_workspace_setting(workspace_id, 'name'))
         self.set_visible_child_name(workspace_id)
 
     def add_chat(self, workspace_id, account, jid, type_, pinned=False):
@@ -204,12 +200,7 @@ class ChatListStack(Gtk.Stack):
         type_ = chat_list.get_chat_type(account, jid)
         chat_list.remove_chat(account, jid)
         self.store_open_chats(workspace_id)
-
-        if not self.contains_chat(account, jid):
-            self._chat_stack.remove_chat(account, jid)
-            if type_ == 'groupchat':
-                client = app.get_client(account)
-                client.get_module('MUC').leave(jid)
+        self.emit('chat-removed', account, jid, type_)
 
     def _find_chat(self, account, jid):
         for chat_list in self._chat_lists.values():
