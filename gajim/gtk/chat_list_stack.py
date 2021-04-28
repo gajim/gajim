@@ -49,7 +49,7 @@ class ChatListStack(Gtk.Stack):
                          (str, str, str)),
     }
 
-    def __init__(self, main_window, search_entry):
+    def __init__(self, search_entry):
         Gtk.Stack.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -63,7 +63,7 @@ class ChatListStack(Gtk.Stack):
 
         self.connect('notify::visible-child-name', self._on_visible_child_name)
         search_entry.connect('search-changed', self._on_search_changed)
-        main_window.connect('notify::is-active', self._on_window_active)
+        app.window.connect('notify::is-active', self._on_window_active)
 
         self._add_actions()
         self.show_all()

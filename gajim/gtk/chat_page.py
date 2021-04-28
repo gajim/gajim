@@ -59,7 +59,7 @@ class ChatPage(Gtk.Box):
         self._search_revealer.add(self._search_view)
         self._ui.right_grid_overlay.add_overlay(self._search_revealer)
 
-        self._chat_list_stack = ChatListStack(app.window, self._ui.search_entry)
+        self._chat_list_stack = ChatListStack(self._ui.search_entry)
         self._chat_list_stack.connect('chat-selected', self._on_chat_selected)
         self._chat_list_stack.connect('chat-unselected',
                                       self._on_chat_unselected)
