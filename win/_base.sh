@@ -92,7 +92,8 @@ function install_deps {
         mingw-w64-"${ARCH}"-python-pyopenssl \
         mingw-w64-"${ARCH}"-python-certifi \
         mingw-w64-"${ARCH}"-python-six \
-        mingw-w64-"${ARCH}"-python-pygments
+        mingw-w64-"${ARCH}"-python-pygments \
+        mingw-w64-"${ARCH}"-python-gssapi
 
         build_pip install precis-i18n
 
