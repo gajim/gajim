@@ -27,7 +27,7 @@
 from gajim.common import helpers
 from gajim.common.i18n import _
 
-from gajim.chat_control import ChatControl
+from gajim.gui.controls.chat import ChatControl
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 
 from gajim.gui.dialogs import ErrorDialog

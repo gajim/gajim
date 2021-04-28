@@ -727,7 +727,7 @@ class HtmlTextView(Gtk.TextView):
 
     def _on_destroy(self, *args):
         # We restore the TextView’s drag destination to avoid a GTK warning
-        # when closing the control. ChatControlBase.shutdown() calls destroy()
+        # when closing the control. BaseControl.shutdown() calls destroy()
         # on the control’s main box, causing GTK to recursively destroy the
         # child widgets. GTK then tries to set a target list on the TextView,
         # resulting in a warning because the Widget has no drag destination.

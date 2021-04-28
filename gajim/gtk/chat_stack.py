@@ -16,9 +16,9 @@ import logging
 
 from gi.repository import Gtk
 
-from gajim.chat_control import ChatControl
-from gajim.groupchat_control import GroupchatControl
-from gajim.privatechat_control import PrivateChatControl
+from gajim.gui.controls.chat import ChatControl
+from gajim.gui.controls.groupchat import GroupchatControl
+from gajim.gui.controls.private import PrivateChatControl
 
 
 log = logging.getLogger('gajim.gui.chatstack')

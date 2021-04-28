@@ -29,7 +29,7 @@ from gajim.common.multimedia_helpers import AudioInputManager
 from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
 
-from gajim.chat_control_base import ChatControlBase
+from gajim.gui.controls.base import BaseControl
 
 from .const import Setting
 from .const import SettingKind
@@ -395,7 +395,7 @@ class Chats(PreferenceBox):
             gspell_lang = Gspell.language_get_default()
         app.settings.set('speller_language', gspell_lang.get_code())
         for ctrl in get_app_window('Preferences').get_all_controls():
-            if isinstance(ctrl, ChatControlBase):
+            if isinstance(ctrl, BaseControl):
                 ctrl.set_speller()
 
 

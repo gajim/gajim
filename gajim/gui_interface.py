@@ -58,8 +58,8 @@ from gajim.common.dbus import music_track
 from gajim import gui_menu_builder
 from gajim.dialog_messages import get_dialog
 
-from gajim.chat_control_base import ChatControlBase
-from gajim.groupchat_control import GroupchatControl
+from gajim.gui.controls.base import BaseControl
+from gajim.gui.controls.groupchat import GroupchatControl
 
 from gajim.common import idle
 from gajim.common.zeroconf import connection_zeroconf
@@ -1255,7 +1255,7 @@ class Interface:
             w.set_active_tab(ctrl)
             w.window.present()
             # Using isinstance here because we want to catch all derived types
-            if isinstance(ctrl, ChatControlBase):
+            if isinstance(ctrl, BaseControl):
                 ctrl.scroll_to_end()
 
     def show_groupchat(self, account, room_jid):

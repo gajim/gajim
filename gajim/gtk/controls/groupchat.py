@@ -54,7 +54,7 @@ from gajim.common.i18n import _
 from gajim.common.const import MUCJoinedState
 from gajim.common.structs import OutgoingMessage
 
-from gajim.chat_control_base import ChatControlBase
+from gajim.gui.controls.base import BaseControl
 
 from gajim.command_system.implementation.hosts import GroupChatCommands
 
@@ -76,10 +76,10 @@ from gajim.gui.util import get_app_window
 from gajim.gui.util import open_window
 from gajim.gui.const import ControlType
 
-log = logging.getLogger('gajim.groupchat_control')
+log = logging.getLogger('gajim.gui.controls.groupchat')
 
 
-class GroupchatControl(ChatControlBase):
+class GroupchatControl(BaseControl):
 
     _type = ControlType.GROUPCHAT
 
@@ -88,7 +88,7 @@ class GroupchatControl(ChatControlBase):
     COMMAND_HOST = GroupChatCommands
 
     def __init__(self, account, jid):
-        ChatControlBase.__init__(self,
+        BaseControl.__init__(self,
                                  'groupchat_control',
                                  account,
                                  jid)
@@ -782,7 +782,7 @@ class GroupchatControl(ChatControlBase):
 
             # self.check_focus_out_line()
 
-        ChatControlBase.add_message(self,
+        BaseControl.add_message(self,
                                     text,
                                     kind,
                                     contact,
@@ -1397,7 +1397,7 @@ class GroupchatControl(ChatControlBase):
 
     def set_control_active(self, state):
         self.attention_flag = False
-        ChatControlBase.set_control_active(self, state)
+        BaseControl.set_control_active(self, state)
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
                                target_type, timestamp):
@@ -1426,7 +1426,7 @@ class GroupchatControl(ChatControlBase):
         return not helpers.jid_is_blocked(self.account, fjid)
 
     def _on_message_textview_key_press_event(self, widget, event):
-        res = ChatControlBase._on_message_textview_key_press_event(
+        res = BaseControl._on_message_textview_key_press_event(
             self, widget, event)
         if res:
             return True

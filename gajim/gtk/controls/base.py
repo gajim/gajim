@@ -91,7 +91,7 @@ else:
 
 
 ################################################################################
-class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
+class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     """
     A base class containing a banner, ConversationView, MessageInputTextView
     """
@@ -246,7 +246,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.encryption = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
 
-        # PluginSystem: adding GUI extension point for ChatControlBase
+        # PluginSystem: adding GUI extension point for BaseControl
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
         app.plugin_manager.gui_extension_point('chat_control_base', self)
 

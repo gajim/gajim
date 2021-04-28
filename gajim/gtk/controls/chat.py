@@ -70,9 +70,9 @@ from gajim.gui.const import ControlType
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
-from gajim.chat_control_base import ChatControlBase
+from gajim.gui.controls.base import BaseControl
 
-log = logging.getLogger('gajim.chat_control')
+log = logging.getLogger('gajim.gui.controls.chat')
 
 
 class JingleObject:
@@ -86,7 +86,7 @@ class JingleObject:
 
 
 ################################################################################
-class ChatControl(ChatControlBase):
+class ChatControl(BaseControl):
     """
     A control for standard 1-1 chat
     """
@@ -98,7 +98,7 @@ class ChatControl(ChatControlBase):
     COMMAND_HOST = ChatCommands  # type: ClassVar[Type[CommandHost]]
 
     def __init__(self, account, jid):
-        ChatControlBase.__init__(self,
+        BaseControl.__init__(self,
                                  'chat_control',
                                  account,
                                  jid)
@@ -852,7 +852,7 @@ class ChatControl(ChatControlBase):
 
     def update_ui(self):
         # The name banner is drawn here
-        ChatControlBase.update_ui(self)
+        BaseControl.update_ui(self)
         self.update_toolbar()
         self._update_avatar()
         self.update_actions()
@@ -916,7 +916,7 @@ class ChatControl(ChatControlBase):
         if message in ('', None, '\n'):
             return
 
-        ChatControlBase.send_message(self,
+        BaseControl.send_message(self,
                                      message,
                                      type_='chat',
                                      xhtml=xhtml,
@@ -945,7 +945,7 @@ class ChatControl(ChatControlBase):
         else:
             name = self.get_our_nick()
 
-        ChatControlBase.add_message(self,
+        BaseControl.add_message(self,
                                     text,
                                     kind,
                                     name,
