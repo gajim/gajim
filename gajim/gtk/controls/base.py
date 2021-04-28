@@ -477,13 +477,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.label_selector.show_all()
 
     def delegate_action(self, action):
-        if action == 'browse-history':
-            dict_ = {'jid': GLib.Variant('s', str(self.contact.jid)),
-                     'account': GLib.Variant('s', self.account)}
-            variant = GLib.Variant('a{sv}', dict_)
-            app.app.activate_action('browse-history', variant)
-            return Gdk.EVENT_STOP
-
         if action == 'clear-chat':
             self.conversation_view.clear()
             return Gdk.EVENT_STOP

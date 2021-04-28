@@ -301,16 +301,6 @@ def start_chat(_action, param):
     app.interface.new_chat_from_jid(account, jid)
 
 
-def on_browse_history(_action, param):
-    jid, account = None, None
-    if param is not None:
-        dict_ = param.unpack()
-        jid = dict_.get('jid')
-        account = dict_.get('account')
-
-    open_window('HistoryWindow', account=account, jid=jid)
-
-
 def on_groupchat_join(_action, param):
     account, jid = param.get_strv()
     open_window('GroupchatJoin', account=account, jid=jid)

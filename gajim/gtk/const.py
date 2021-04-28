@@ -113,7 +113,6 @@ WINDOW_MODULES = {
     'SingleMessageWindow': 'gajim.gui.single_message',
     'Bookmarks': 'gajim.gui.bookmarks',
     'AccountWizard': 'gajim.gui.account_wizard',
-    'HistoryWindow': 'gajim.gui.history',
     'ManageProxies': 'gajim.gui.proxies',
     'ManageSounds': 'gajim.gui.manage_sounds',
     'ServiceDiscoveryWindow': 'gajim.gui.discovery',

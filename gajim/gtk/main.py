@@ -116,7 +116,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             'change-nickname',
             'change-subject',
             'escape',
-            'browse-history',
             'send-file',
             'show-contact-info',
             'show-emoji-chooser',
@@ -141,7 +140,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         ]
 
         disabled_for_emacs = (
-            'browse-history',
             'send-file',
             'close-tab'
         )

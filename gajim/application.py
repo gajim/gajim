@@ -420,7 +420,6 @@ class GajimApplication(Gtk.Application):
             ('open-link', 'as', app_actions.open_link),
             ('open-mail', 's', app_actions.open_mail),
             ('create-groupchat', 's', app_actions.on_create_gc),
-            ('browse-history', 'a{sv}', app_actions.on_browse_history),
             ('groupchat-join', 'as', app_actions.on_groupchat_join),
         ]
 
