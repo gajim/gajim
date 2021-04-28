@@ -64,7 +64,6 @@ class AccountPage(Gtk.Box, EventHelper):
         self._ui.roster_menu_button.set_menu_model(roster_menu)
 
         self._ui.connect_signals(self)
-        self.show_all()
 
         # pylint: disable=line-too-long
         self.register_events([
@@ -76,6 +75,7 @@ class AccountPage(Gtk.Box, EventHelper):
         # pylint: enable=line-too-long
 
         self.update()
+        self.show_all()
 
     def _on_edit_profile(self, _button):
         open_window('ProfileWindow', account=self._account)

@@ -1,6 +1,21 @@
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
 from gi.repository import GObject
+from gi.repository import Gio
+from gi.repository import GLib
 
 from gajim.common import app
 
@@ -26,6 +41,9 @@ class ChatListStack(Gtk.Stack):
         'chat-selected': (GObject.SignalFlags.RUN_LAST,
                           None,
                           (str, str, str)),
+        'chat-unselected': (GObject.SignalFlags.RUN_LAST,
+                            None,
+                            ()),
     }
 
     def __init__(self, main_window, ui, chat_stack):
@@ -42,12 +60,28 @@ class ChatListStack(Gtk.Stack):
 
         self.add_named(Gtk.Box(), 'default')
 
-        self.show_all()
         self.connect('notify::visible-child-name', self._on_visible_child_name)
         self._ui.search_entry.connect(
             'search-changed', self._on_search_changed)
 
         main_window.connect('notify::is-active', self._on_window_active)
+
+        self._add_actions()
+        self.show_all()
+
+    def _add_actions(self):
+        actions = [
+            ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
+            ('move-chat-to-workspace', 'as', self._move_chat_to_workspace),
+        ]
+
+        for action in actions:
+            action_name, variant, func = action
+            if variant is not None:
+                variant = GLib.VariantType.new(variant)
+            act = Gio.SimpleAction.new(action_name, variant)
+            act.connect('activate', func)
+            app.window.add_action(act)
 
     def _on_window_active(self, window, _param):
         is_active = window.get_property('is-active')
@@ -108,10 +142,9 @@ class ChatListStack(Gtk.Stack):
 
     def _on_row_selected(self, _chat_list, row):
         if row is None:
-            self._chat_stack.clear()
+            self.emit('chat-unselected')
             return
 
-        self._chat_stack.show_chat(row.account, row.jid)
         if row.is_active:
             row.reset_unread()
         self.emit('chat-selected', row.workspace_id, row.account, row.jid)
@@ -148,10 +181,23 @@ class ChatListStack(Gtk.Stack):
         app.settings.set_workspace_setting(
             workspace_id, 'open_chats', open_chats)
 
-    def toggle_chat_pinned(self, workspace_id, account, jid):
+    def _toggle_chat_pinned(self, _action, param):
+        workspace_id, account, jid = param.unpack()
         chat_list = self._chat_lists[workspace_id]
         chat_list.toggle_chat_pinned(account, jid)
         self.store_open_chats(workspace_id)
+
+    def _move_chat_to_workspace(self, _action, param):
+        new_workspace_id, account, jid = param.unpack()
+
+        current_chatlist = self.get_visible_child()
+        type_ = current_chatlist.get_chat_type(account, jid)
+        current_chatlist.remove_chat(account, jid)
+
+        new_chatlist = self.get_chatlist(new_workspace_id)
+        new_chatlist.add_chat(account, jid, type_)
+        self.store_open_chats(current_chatlist.workspace_id)
+        self.store_open_chats(new_workspace_id)
 
     def remove_chat(self, workspace_id, account, jid):
         chat_list = self._chat_lists[workspace_id]

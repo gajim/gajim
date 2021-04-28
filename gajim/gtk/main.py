@@ -11,13 +11,10 @@ from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 
-from gajim.gui.account_page import AccountPage
 from gajim.gui.adhoc import AdHocCommand
-from gajim.gui.search_view import SearchView
-from gajim.gui.chat_list_stack import ChatListStack
-from gajim.gui.chat_stack import ChatStack
 from gajim.gui.account_side_bar import AccountSideBar
 from gajim.gui.workspace_side_bar import WorkspaceSideBar
+from gajim.gui.main_stack import MainStack
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.util import get_builder
@@ -26,11 +23,6 @@ from gajim.gui.util import load_icon
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.main')
-
-WORKSPACE_MENU_DICT = {
-    'edit': _('Edit…'),
-    'remove': _('Remove'),
-}
 
 
 class MainWindow(Gtk.ApplicationWindow, EventHelper):
@@ -46,8 +38,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.window = self
         app.window = self
 
-        self._active_workspace = None
-
         self._startup_finished = False
 
         self._ui = get_builder('main.ui')
@@ -57,43 +47,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         surface = load_icon('org.gajim.Gajim', self, 40)
         self._ui.app_image.set_from_surface(surface)
 
-        self._chat_stack = ChatStack()
-        self._ui.right_grid_overlay.add(self._chat_stack)
+        self._main_stack = MainStack()
+        self._ui.main_grid.add(self._main_stack)
 
-        self._search_view = SearchView()
-        self._search_view.connect('hide-search', self._on_search_hide)
+        self._chat_page = self._main_stack.get_chat_page()
 
-        self._search_revealer = Gtk.Revealer()
-        self._search_revealer.set_reveal_child(True)
-        self._search_revealer.set_halign(Gtk.Align.END)
-        self._search_revealer.set_no_show_all(True)
-        self._search_revealer.add(self._search_view)
-        self._ui.right_grid_overlay.add_overlay(self._search_revealer)
-
-        self._chat_list_stack = ChatListStack(self, self._ui, self._chat_stack)
-        self._chat_list_stack.connect('chat-selected', self._on_chat_selected)
-        self._ui.chat_list_scrolled.add(self._chat_list_stack)
-
-        self._workspace_side_bar = WorkspaceSideBar(self._chat_list_stack)
+        self._workspace_side_bar = WorkspaceSideBar(self._chat_page)
         self._ui.workspace_scrolled.add(self._workspace_side_bar)
 
         self._account_side_bar = AccountSideBar()
         self._ui.account_box.add(self._account_side_bar)
 
-        self._account_pages = {}
-
-        workspace_menu = Gio.Menu()
-        for action, label in WORKSPACE_MENU_DICT.items():
-            workspace_menu.append(label, f'win.{action.lower()}-workspace')
-
-        self._ui.workspace_menu_button.set_menu_model(workspace_menu)
-
-        self._ui.start_chat_button.connect(
-            'clicked', self._on_start_chat_clicked)
         self._ui.connect_signals(self)
-
-        self._ui.paned.set_position(app.settings.get('chat_handle_position'))
-        self._ui.paned.connect('button-release-event', self._on_button_release)
 
         self.register_events([
             ('presence-received', ged.GUI1, self._on_event),
@@ -113,12 +78,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('signed-in', ged.GUI1, self._on_signed_in),
         ])
 
-        self.show_all()
-
         self._load_chats()
-        self._add_accounts()
         self._add_actions()
         self._add_actions2()
+        self.show_all()
 
     @staticmethod
     def _on_our_show(event):
@@ -131,13 +94,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         app.app.set_account_actions_state(event.account, True)
         app.app.update_app_actions_state()
 
-    @staticmethod
-    def _on_button_release(paned, event):
-        if event.window != paned.get_handle_window():
-            return
-        position = paned.get_position()
-        app.settings.set('chat_handle_position', position)
-
     def _add_actions(self):
         actions = [
             ('add-workspace', 's', self._add_workspace),
@@ -146,11 +102,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('activate-workspace', 's', self._activate_workspace),
             ('add-chat', 'a{sv}', self._add_chat),
             ('add-group-chat', 'as', self._add_group_chat),
-            ('remove-chat', 'as', self._remove_chat),
-            ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
-            ('move-chat-to-workspace', 'as', self._move_chat_to_workspace),
             ('add-to-roster', 'as', self._add_to_roster),
-            ('search-history', None, self._on_search_history),
         ]
 
         for action in actions:
@@ -275,6 +227,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         #     self.notebook.set_current_page(number - 1)
         #     return
 
+    def _set_startup_finished(self):
+        self._startup_finished = True
+        self._chat_page.set_startup_finished()
+
     def get_widget(self, name):
         return getattr(self._ui, name)
 
@@ -290,15 +246,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def get_active_jid(self, *args):
         pass
 
-    def get_account_page(self, account):
-        return self._account_pages[account]
-
     def show_account_page(self, account):
         self._account_side_bar.activate_account_page(account)
-        self._ui.main_stack.set_visible_child_name(account)
-
-    def get_workspace_bar(self):
-        return self._workspace_side_bar
+        self._main_stack.show_account(account)
 
     def get_active_workspace(self):
         return self._workspace_side_bar.get_active_workspace()
@@ -306,10 +256,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def is_chat_active(self, account, jid):
         if not self.get_property('has-toplevel-focus'):
             return False
-        return self._chat_list_stack.is_chat_active(account, jid)
-
-    def show_chats(self):
-        self._ui.main_stack.set_visible_child_name('chats')
+        return self._chat_page.is_chat_active(account, jid)
 
     def _add_workspace(self, _action, param):
         workspace_id = param.get_string()
@@ -317,20 +264,16 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def add_workspace(self, workspace_id):
         self._workspace_side_bar.add_workspace(workspace_id)
-        self._chat_list_stack.add_chat_list(workspace_id)
-        self._workspace_side_bar.activate_workspace(workspace_id)
-        self._chat_list_stack.show_chat_list(workspace_id)
+        self._chat_page.add_chat_list(workspace_id)
+
         if self._startup_finished:
+            self.activate_workspace(workspace_id)
             self._workspace_side_bar.store_workspace_order()
 
     def _edit_workspace(self, _action, _param):
         workspace_id = self.get_active_workspace()
         if workspace_id is not None:
-            self.edit_workspace(workspace_id)
-
-    @staticmethod
-    def edit_workspace(workspace_id):
-        open_window('WorkspaceDialog', workspace_id=workspace_id)
+            open_window('WorkspaceDialog', workspace_id=workspace_id)
 
     def _remove_workspace(self, _action, _param):
         workspace_id = self.get_active_workspace()
@@ -346,10 +289,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if was_active:
             new_active_id = self._workspace_side_bar.get_first_workspace()
-            self._workspace_side_bar.activate_workspace(new_active_id)
-            self._chat_list_stack.show_chat_list(new_active_id)
+            self.activate_workspace(new_active_id)
 
-        self._chat_list_stack.remove_chat_list(workspace_id)
+        self._chat_page.remove_chat_list(workspace_id)
         app.settings.remove_workspace(workspace_id)
 
     def _activate_workspace(self, _action, param):
@@ -357,138 +299,59 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.activate_workspace(workspace_id)
 
     def activate_workspace(self, workspace_id):
-        self._ui.main_stack.set_visible_child_name('chats')
+        self._main_stack.show_chats(workspace_id)
         self._workspace_side_bar.activate_workspace(workspace_id)
-        self._chat_list_stack.show_chat_list(workspace_id)
 
     def update_workspace(self, workspace_id):
-        name = app.settings.get_workspace_setting(workspace_id, 'name')
-        self._ui.workspace_label.set_text(name)
-        app.interface.avatar_storage.invalidate_cache(workspace_id)
+        self._chat_page.update_workspace(workspace_id)
         self._workspace_side_bar.update_avatar(workspace_id)
 
     def _add_group_chat(self, _action, param):
-        account, jid = param.unpack()
-        self.add_group_chat(account, jid)
+        self.add_group_chat(**param.unpack())
 
     def add_group_chat(self, account, jid, select=False):
-        workspace_id = self._workspace_side_bar.get_active_workspace()
-        self.add_chat_for_workspace(workspace_id,
-                                    account,
-                                    jid,
-                                    'groupchat',
-                                    select=select)
+        workspace_id = self.get_active_workspace()
+        self._chat_page.add_chat_for_workspace(workspace_id,
+                                               account,
+                                               jid,
+                                               'groupchat',
+                                               select=select)
 
     def _add_chat(self, _action, param):
         self.add_chat(**param.unpack())
 
     def add_chat(self, account, jid, type_, select=False):
-        workspace_id = self._workspace_side_bar.get_active_workspace()
-        self.add_chat_for_workspace(workspace_id,
-                                    account,
-                                    jid,
-                                    type_,
-                                    select=select)
+        workspace_id = self.get_active_workspace()
+        self._chat_page.add_chat_for_workspace(workspace_id,
+                                               account,
+                                               jid,
+                                               type_,
+                                               select=select)
 
     def add_private_chat(self, account, jid, select=False):
-        workspace_id = self._workspace_side_bar.get_active_workspace()
-        self.add_chat_for_workspace(workspace_id,
-                                    account,
-                                    jid,
-                                    'pm',
-                                    select=select)
-
-    def add_chat_for_workspace(self,
-                               workspace_id,
-                               account,
-                               jid,
-                               type_,
-                               pinned=False,
-                               select=False):
-        if self.chat_exists(account, jid):
-            if select:
-                self._chat_list_stack.select_chat(account, jid)
-                self.show_chats()
-            return
-
-        if type_ == 'groupchat':
-            self._chat_stack.add_group_chat(account, jid)
-        elif type_ == 'pm':
-            if not self._startup_finished:
-                # TODO: Currently we cant load private chats at start
-                # because the Contacts dont exist yet
-                return
-            self._chat_stack.add_private_chat(account, jid)
-        else:
-            self._chat_stack.add_chat(account, jid)
-        self._chat_list_stack.add_chat(workspace_id, account, jid, type_,
-                                       pinned)
-
-        if self._startup_finished:
-            if select:
-                self._chat_list_stack.select_chat(account, jid)
-                self.show_chats()
-            self._chat_list_stack.store_open_chats(workspace_id)
-
-    def _toggle_chat_pinned(self, _action, param):
-        workspace_id, account, jid = param.unpack()
-        self.toggle_chat_pinned(workspace_id, account, jid)
-
-    def toggle_chat_pinned(self, workspace_id, account, jid):
-        self._chat_list_stack.toggle_chat_pinned(workspace_id, account, jid)
-
-    def _move_chat_to_workspace(self, _action, param):
-        new_workspace_id, account, jid = param.unpack()
-        self.move_chat_to_workspace(new_workspace_id, account, jid)
-
-    def move_chat_to_workspace(self, new_workspace_id, account, jid):
-        current_chatlist = self._chat_list_stack.get_visible_child()
-        type_ = current_chatlist.get_chat_type(account, jid)
-        current_chatlist.remove_chat(account, jid)
-        new_chatlist = self._chat_list_stack.get_chatlist(new_workspace_id)
-        new_chatlist.add_chat(account, jid, type_)
-        self._chat_list_stack.store_open_chats(current_chatlist.workspace_id)
-        self._chat_list_stack.store_open_chats(new_workspace_id)
-
-    def _remove_chat(self, _action, param):
-        account, jid = param.unpack()
-        self.remove_chat(account, jid)
-
-    def remove_chat(self, account, jid):
-        for workspace_id in app.settings.get_workspaces():
-            if self.chat_exists_for_workspace(workspace_id, account, jid):
-                self._chat_list_stack.remove_chat(workspace_id, account, jid)
-                return
+        workspace_id = self.get_active_workspace()
+        self._chat_page.add_chat_for_workspace(workspace_id,
+                                               account,
+                                               jid,
+                                               'pm',
+                                               select=select)
 
     @staticmethod
     def _add_to_roster(_action, param):
         _workspace, account, jid = param.unpack()
         open_window('AddNewContactWindow', account=account, contact_jid=jid)
 
-    def chat_exists(self, account, jid):
-        return self._chat_list_stack.contains_chat(account, jid)
+    def get_control(self, *args, **kwargs):
+        return self._chat_page.get_control(*args, **kwargs)
 
-    def chat_exists_for_workspace(self, workspace_id, account, jid):
-        return self._chat_list_stack.contains_chat(
-            account, jid, workspace_id=workspace_id)
+    def get_controls(self, *args, **kwargs):
+        return self._chat_page.get_controls(*args, **kwargs)
 
-    def get_control(self, account, jid):
-        return self._chat_stack.get_control(account, jid)
+    def get_active_control(self, *args, **kwargs):
+        return self._chat_page.get_active_control(*args, **kwargs)
 
-    def get_active_control(self):
-        chat = self._chat_list_stack.get_selected_chat()
-        if chat is None:
-            return None
-        return self.get_control(chat.account, chat.jid)
-
-    def get_controls(self, account=None):
-        return self._chat_stack.get_controls(account)
-
-    def _add_accounts(self):
-        for account in list(app.connections.keys()):
-            account_page = AccountPage(account)
-            self._account_pages[account] = account_page
-            self._ui.main_stack.add_named(account_page, account)
+    def chat_exists(self, *args, **kwargs):
+        return self._chat_page.chat_exists(*args, **kwargs)
 
     @staticmethod
     def contact_info(account, jid):
@@ -512,7 +375,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         # TODO: Keep "confirm_block" setting?
         def _block_contact(report=None):
             client.get_module('Blocking').block([contact.jid], report)
-            self.remove_chat(account, contact.jid)
+            self._chat_page.remove_chat(account, contact.jid)
 
         ConfirmationDialog(
             _('Block Contact'),
@@ -533,7 +396,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         client = app.get_client(account)
 
         def _remove_contact():
-            self.remove_chat(account, jid)
+            self._chat_page.remove_chat(account, jid)
             client.get_module('Roster').delete_item(jid)
 
         contact = client.get_module('Contacts').get_contact(jid)
@@ -552,45 +415,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _load_chats(self):
         for workspace_id in app.settings.get_workspaces():
-            self._workspace_side_bar.add_workspace(workspace_id)
-            self._chat_list_stack.add_chat_list(workspace_id)
-            open_chats = app.settings.get_workspace_setting(workspace_id,
-                                                            'open_chats')
+            self.add_workspace(workspace_id)
+            self._chat_page.load_workspace_chats(workspace_id)
 
-            active_accounts = app.settings.get_active_accounts()
-            for account, jid, type_, pinned in open_chats:
-                if account not in active_accounts:
-                    continue
+        workspace_id = self._workspace_side_bar.get_first_workspace()
+        self.activate_workspace(workspace_id)
 
-                self.add_chat_for_workspace(workspace_id, account, jid, type_,
-                                            pinned=pinned)
-
-        for workspace_id in app.settings.get_workspaces():
-            self._workspace_side_bar.activate_workspace(workspace_id)
-            self._chat_list_stack.show_chat_list(workspace_id)
-            break
-
-        self._startup_finished = True
-
-    @staticmethod
-    def _on_start_chat_clicked(_button):
-        app.app.activate_action('start-chat', GLib.Variant('s', ''))
-
-    def _on_chat_selected(self, _chat_list_stack, _workspace_id, *args):
-        control = self.get_active_control()
-        if control is not None:
-            self._search_view.set_context(control.account, control.contact.jid)
-
-    def _on_search_history(self, _action, _param):
-        control = self.get_active_control()
-        if control is not None:
-            self._search_view.set_context(control.account, control.contact.jid)
-        self._search_view.clear()
-        self._search_revealer.show()
-        self._search_view.set_focus()
-
-    def _on_search_hide(self, *args):
-        self._search_revealer.hide()
+        self._set_startup_finished()
 
     def _on_event(self, event):
         if event.name == 'caps-update':
@@ -599,9 +430,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if event.name == 'update-roster-avatar':
             return
-
-        for page in self._account_pages.values():
-            page.process_event(event)
 
         if not self.chat_exists(event.account, event.jid):
             if event.name == 'message-received':
@@ -617,8 +445,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 # No chat is open, dont handle any gui events
                 return
 
-        self._chat_stack.process_event(event)
-        self._chat_list_stack.process_event(event)
+        self._main_stack.process_event(event)
 
     def quit(self):
         accounts = list(app.connections.keys())
