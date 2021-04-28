@@ -59,9 +59,7 @@ from gajim import gui_menu_builder
 from gajim.dialog_messages import get_dialog
 
 from gajim.chat_control_base import ChatControlBase
-from gajim.chat_control import ChatControl
 from gajim.groupchat_control import GroupchatControl
-from gajim.privatechat_control import PrivateChatControl
 
 from gajim.common import idle
 from gajim.common.zeroconf import connection_zeroconf
@@ -74,6 +72,7 @@ from gajim.common.helpers import get_group_chat_nick
 from gajim.common.structs import MUCData
 from gajim.common.structs import OutgoingMessage
 from gajim.common.nec import NetworkEvent
+from gajim.common.nec import NetworkEventsController
 from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.const import Display
@@ -82,7 +81,6 @@ from gajim.common.const import JingleState
 from gajim.common.file_props import FilesProp
 from gajim.common.connection_handlers_events import InformationEvent
 
-from gajim import roster_window
 from gajim.common import ged
 from gajim.common.exceptions import FileError
 
@@ -113,19 +111,94 @@ from gajim.gui.const import ControlType
 log = logging.getLogger('gajim.interface')
 
 class Interface:
+    def __init__(self):
+        app.interface = self
+        app.thread_interface = ThreadInterface
 
-################################################################################
-### Methods handling events from connection
-################################################################################
+        self.pass_dialog = {}
 
-    def handle_event_db_error(self, unused, error):
-        #('DB_ERROR', account, error)
-        if self.db_error_dialog:
-            return
-        self.db_error_dialog = ErrorDialog(_('Database Error'), error)
-        def destroyed(win):
-            self.db_error_dialog = None
-        self.db_error_dialog.connect('destroy', destroyed)
+        self.handlers = {}
+        self.roster = None
+
+        self.avatar_storage = AvatarStorage()
+
+        # Load CSS files
+        app.load_css_config()
+
+        for account in app.settings.get_accounts():
+            if app.settings.get_account_setting(account, 'is_zeroconf'):
+                app.ZEROCONF_ACC_NAME = account
+                break
+
+        app.idlequeue = idlequeue.get_idlequeue()
+        # resolve and keep current record of resolved hosts
+        app.socks5queue = socks5.SocksQueue(
+            app.idlequeue,
+            self.handle_event_file_rcv_completed,
+            self.handle_event_file_progress,
+            self.handle_event_file_error)
+        app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
+
+        app.nec = NetworkEventsController()
+        app.notification = Notification()
+
+        self.create_core_handlers_list()
+        self.register_core_handlers()
+
+        # self.create_zeroconf_default_config()
+        # if app.settings.get_account_setting(app.ZEROCONF_ACC_NAME, 'active') \
+        # and app.is_installed('ZEROCONF'):
+        #     app.connections[app.ZEROCONF_ACC_NAME] = \
+        #         connection_zeroconf.ConnectionZeroconf(app.ZEROCONF_ACC_NAME)
+
+        for account in app.settings.get_accounts():
+            if (not app.settings.get_account_setting(account, 'is_zeroconf') and
+                    app.settings.get_account_setting(account, 'active')):
+                client = Client(account)
+                app.connections[account] = client
+                app.ged.register_event_handler(
+                    'muc-added', ged.CORE, self._on_muc_added)
+
+        self.instances = {}
+
+        for a in app.connections:
+            self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
+                'search': {}, 'sub_request': {}}
+            app.contacts.add_account(a)
+            app.groups[a] = {}
+            app.gc_connected[a] = {}
+            app.automatic_rooms[a] = {}
+            app.newly_added[a] = []
+            app.to_be_removed[a] = []
+            app.nicks[a] = app.settings.get_account_setting(a, 'name')
+            app.block_signed_in_notifications[a] = True
+            app.last_message_time[a] = {}
+
+        if sys.platform not in ('win32', 'darwin'):
+            logind.enable()
+            music_track.enable()
+        else:
+            GLib.timeout_add_seconds(20, self.check_for_updates)
+
+        idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
+                                  app.settings.get('autoxatime') * 60)
+
+        self.systray_enabled = False
+
+        if not app.is_display(Display.WAYLAND):
+            from gajim.gui import statusicon
+            self.systray = statusicon.StatusIcon()
+
+        if sys.platform in ('win32', 'darwin'):
+            from gajim.gui.emoji_chooser import emoji_chooser
+            emoji_chooser.load()
+
+        self.last_ftwindow_update = 0
+
+        self._network_monitor = Gio.NetworkMonitor.get_default()
+        self._network_monitor.connect('notify::network-available',
+                                      self._network_status_changed)
+        self.network_state = self._network_monitor.get_network_available()
 
     @staticmethod
     def handle_event_information(obj):
@@ -992,7 +1065,6 @@ class Interface:
 
     def create_core_handlers_list(self):
         self.handlers = {
-            'DB_ERROR': [self.handle_event_db_error],
             'file-send-error': [self.handle_event_file_send_error],
             'client-cert-passphrase': [
                 self.handle_event_client_cert_passphrase],
@@ -1039,10 +1111,6 @@ class Interface:
                     event_handler = event_handler[0]
                 app.ged.register_event_handler(event_name, prio,
                     event_handler)
-
-################################################################################
-### Methods dealing with app.events
-################################################################################
 
     def add_event(self, account, jid, event):
         """
@@ -1190,10 +1258,6 @@ class Interface:
             if isinstance(ctrl, ChatControlBase):
                 ctrl.scroll_to_end()
 
-################################################################################
-### Methods for opening new messages controls
-################################################################################
-
     def show_groupchat(self, account, room_jid):
         return False
         minimized_control = self.minimized_controls[account].get(room_jid)
@@ -1266,131 +1330,6 @@ class Interface:
             return
 
         app.window.add_group_chat(event.account, str(event.jid))
-
-    def new_private_chat(self, gc_contact, account, session=None):
-        conn = app.connections[account]
-        if not session and gc_contact.get_full_jid() in conn.sessions:
-            sessions = [s for s in conn.sessions[gc_contact.get_full_jid()].\
-                values() if isinstance(s, ChatControlSession)]
-
-            # look for an existing session with a chat control
-            for s in sessions:
-                if s.control:
-                    session = s
-                    break
-            if not session and sessions:
-                # there are no sessions with chat controls, just take the first
-                # one
-                session = sessions[0]
-        if not session:
-            # couldn't find an existing ChatControlSession, just make a new one
-            session = conn.make_new_session(gc_contact.get_full_jid(), None,
-                'pm')
-
-        contact = gc_contact.as_contact()
-        if not session.control:
-            message_window = self.msg_win_mgr.get_window(
-                gc_contact.get_full_jid(), account)
-            if not message_window:
-                message_window = self.msg_win_mgr.create_window(
-                    contact, account, ControlType.PRIVATECHAT)
-
-            session.control = PrivateChatControl(message_window, gc_contact,
-                contact, account, session)
-            message_window.new_tab(session.control)
-
-        if app.events.get_events(account, gc_contact.get_full_jid()):
-            # We call this here to avoid race conditions with widget validation
-            session.control.read_queue()
-
-        return session.control
-
-    def new_chat(self, contact, account, resource=None, session=None):
-        # Get target window, create a control, and associate it with the window
-        fjid = contact.jid
-        if resource:
-            fjid += '/' + resource
-
-        mw = self.msg_win_mgr.get_window(fjid, account)
-        if not mw:
-            mw = self.msg_win_mgr.create_window(
-                contact, account, ControlType.CHAT, resource)
-
-        chat_control = ChatControl(mw, contact, account, session, resource)
-
-        mw.new_tab(chat_control)
-
-        if app.events.get_events(account, fjid):
-            # We call this here to avoid race conditions with widget validation
-            chat_control.read_queue()
-
-        return chat_control
-
-    def new_chat_from_jid(self, account, fjid, message=None):
-        jid, resource = app.get_room_and_nick_from_fjid(fjid)
-        contact = app.contacts.get_contact(account, jid, resource)
-        added_to_roster = False
-        if not contact:
-            added_to_roster = True
-            contact = self.roster.add_to_not_in_the_roster(account, jid,
-                resource=resource)
-
-        ctrl = self.msg_win_mgr.get_control(fjid, account)
-
-        if not ctrl:
-            ctrl = self.new_chat(contact, account,
-                resource=resource)
-            if app.events.get_events(account, fjid):
-                ctrl.read_queue()
-
-        if message:
-            buffer_ = ctrl.msg_textview.get_buffer()
-            buffer_.set_text(message)
-        mw = ctrl.parent_win
-        mw.set_active_tab(ctrl)
-        # For JEP-0172
-        if added_to_roster:
-            ctrl.user_nick = app.nicks[account]
-
-        return ctrl
-
-    def on_open_chat_window(self, widget, contact, account, resource=None,
-    session=None):
-        # Get the window containing the chat
-        fjid = contact.jid
-
-        if resource:
-            fjid += '/' + resource
-
-        ctrl = None
-
-        if session:
-            ctrl = session.control
-        if not ctrl:
-            win = self.msg_win_mgr.get_window(fjid, account)
-
-            if win:
-                ctrl = win.get_control(fjid, account)
-
-        if not ctrl:
-            ctrl = self.new_chat(contact, account, resource=resource,
-                session=session)
-            # last message is long time ago
-            app.last_message_time[account][ctrl.get_full_jid()] = 0
-
-        win = ctrl.parent_win
-
-        win.set_active_tab(ctrl)
-
-        if app.connections[account].is_zeroconf and \
-        app.connections[account].status == 'offline':
-            ctrl = win.get_control(fjid, account)
-            if ctrl:
-                ctrl.got_disconnected()
-
-################################################################################
-### Other Methods
-################################################################################
 
     @staticmethod
     def create_account(account,
@@ -1874,100 +1813,6 @@ class Interface:
                     pass
         GLib.timeout_add_seconds(5, remote_init)
         MainWindow()
-
-    def __init__(self):
-        app.interface = self
-        app.thread_interface = ThreadInterface
-        # This is the manager and factory of message windows set by the module
-        self.msg_win_mgr = None
-        self.minimized_controls = {}
-        self.pass_dialog = {}
-        self.db_error_dialog = None
-
-        self.handlers = {}
-        self.roster = None
-
-        self.avatar_storage = AvatarStorage()
-
-        # Load CSS files
-        app.load_css_config()
-
-        for account in app.settings.get_accounts():
-            if app.settings.get_account_setting(account, 'is_zeroconf'):
-                app.ZEROCONF_ACC_NAME = account
-                break
-
-        app.idlequeue = idlequeue.get_idlequeue()
-        # resolve and keep current record of resolved hosts
-        app.socks5queue = socks5.SocksQueue(app.idlequeue,
-            self.handle_event_file_rcv_completed,
-            self.handle_event_file_progress,
-            self.handle_event_file_error)
-        app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
-
-        # Creating Network Events Controller
-        from gajim.common import nec
-        app.nec = nec.NetworkEventsController()
-        app.notification = Notification()
-
-        self.create_core_handlers_list()
-        self.register_core_handlers()
-
-        # self.create_zeroconf_default_config()
-        # if app.settings.get_account_setting(app.ZEROCONF_ACC_NAME, 'active') \
-        # and app.is_installed('ZEROCONF'):
-        #     app.connections[app.ZEROCONF_ACC_NAME] = \
-        #         connection_zeroconf.ConnectionZeroconf(app.ZEROCONF_ACC_NAME)
-
-        for account in app.settings.get_accounts():
-            if (not app.settings.get_account_setting(account, 'is_zeroconf') and
-                    app.settings.get_account_setting(account, 'active')):
-                client = Client(account)
-                app.connections[account] = client
-                app.ged.register_event_handler(
-                    'muc-added', ged.CORE, self._on_muc_added)
-
-        self.instances = {}
-
-        for a in app.connections:
-            self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
-                'search': {}, 'sub_request': {}}
-            self.minimized_controls[a] = {}
-            app.contacts.add_account(a)
-            app.groups[a] = {}
-            app.gc_connected[a] = {}
-            app.automatic_rooms[a] = {}
-            app.newly_added[a] = []
-            app.to_be_removed[a] = []
-            app.nicks[a] = app.settings.get_account_setting(a, 'name')
-            app.block_signed_in_notifications[a] = True
-            app.last_message_time[a] = {}
-
-        if sys.platform not in ('win32', 'darwin'):
-            logind.enable()
-            music_track.enable()
-        else:
-            GLib.timeout_add_seconds(20, self.check_for_updates)
-
-        idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
-                                  app.settings.get('autoxatime') * 60)
-
-        self.systray_enabled = False
-
-        if not app.is_display(Display.WAYLAND):
-            from gajim.gui import statusicon
-            self.systray = statusicon.StatusIcon()
-
-        if sys.platform in ('win32', 'darwin'):
-            from gajim.gui.emoji_chooser import emoji_chooser
-            emoji_chooser.load()
-
-        self.last_ftwindow_update = 0
-
-        self._network_monitor = Gio.NetworkMonitor.get_default()
-        self._network_monitor.connect('notify::network-available',
-                                     self._network_status_changed)
-        self.network_state = self._network_monitor.get_network_available()
 
 
 class ThreadInterface:

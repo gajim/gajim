@@ -34,8 +34,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_title('Gajim')
         self.set_default_size(1000, 500)
 
-        # Compatibility with ChatControl
-        self.window = self
         app.window = self
 
         self._startup_finished = False
@@ -229,21 +227,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _set_startup_finished(self):
         self._startup_finished = True
         self._chat_page.set_startup_finished()
-
-    def get_widget(self, name):
-        return getattr(self._ui, name)
-
-    def redraw_tab(self, *args):
-        pass
-
-    def remove_tab(self, *args):
-        pass
-
-    def show_title(self, *args):
-        pass
-
-    def get_active_jid(self, *args):
-        pass
 
     def show_account_page(self, account):
         self._account_side_bar.activate_account_page(account)
