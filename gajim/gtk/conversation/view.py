@@ -106,8 +106,8 @@ class ConversationView(Gtk.ListBox):
             return 0
         return -1 if row1.timestamp < row2.timestamp else 1
 
-    def add_muc_subject(self, text):
-        subject = MUCSubject(self._account, text)
+    def add_muc_subject(self, text, nick, date):
+        subject = MUCSubject(self._account, text, nick, date)
         self._insert_message(subject)
 
     def add_info_message(self, text):

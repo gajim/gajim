@@ -75,6 +75,10 @@
 .conversation-date-row {
     padding: 12px;
 }
+.conversation-subject-box {
+    border-radius: 6px;
+    padding: 12px;
+}
 .conversation-meta {
     color: @insensitive_fg_color;
     font-size: small;

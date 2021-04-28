@@ -870,17 +870,15 @@ class GroupchatControl(BaseControl):
 
         self._subject_data = properties
 
-        text = _('%(nick)s has set the subject to %(subject)s') % {
-            'nick': properties.muc_nickname, 'subject': properties.subject}
-
+        date = None
         if properties.user_timestamp:
             date = time.strftime('%c',
                                  time.localtime(properties.user_timestamp))
-            text = '%s - %s' % (text, date)
 
         if (app.settings.get('show_subject_on_join') or
                 not self.contact.is_joining):
-            self.conversation_view.add_muc_subject(text)
+            self.conversation_view.add_muc_subject(
+                properties.subject, properties.muc_nickname, date)
 
     def _on_room_config_changed(self, _contact, _signal_name, properties):
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify

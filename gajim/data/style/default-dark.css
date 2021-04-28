@@ -9,7 +9,8 @@
     color: rgb(200, 200, 200);
 }
 .gajim-status-message {
-    color: rgb(140, 175, 210);
+    color: rgb(205, 225, 255);
+    background: rgb(40, 60, 80);
 }
 .gajim-url {
     color: rgb(60, 135, 220);
