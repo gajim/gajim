@@ -33,7 +33,6 @@ class InfoMessage(BaseRow):
         timestamp = time.time()
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
-        self.kind = 'info'
 
         text = GLib.markup_escape_text(text)
 

@@ -33,6 +33,7 @@ from .conversation.rows.message import MessageRow
 from .conversation.rows.info import InfoMessage
 from .conversation.rows.date import DateRow
 from .conversation.rows.muc_subject import MUCSubject
+from .conversation.rows.muc_join_left import MUCJoinLeft
 
 
 log = logging.getLogger('gajim.gui.conversation_view')
@@ -52,6 +53,7 @@ class ConversationView(Gtk.ListBox):
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_sort_func(self._sort_func)
+        self.set_filter_func(self._filter_func)
         self._account = account
         self._client = None
         if account is not None:
@@ -72,6 +74,11 @@ class ConversationView(Gtk.ListBox):
 
         # message_id -> row mapping
         self._message_id_row_map = {}
+
+        app.settings.connect_signal('print_join_left',
+                                    self._on_contact_setting_changed,
+                                    account=self._account,
+                                    jid=self._contact.jid)
 
         if self._contact is not None:
             self._read_marker_row = ReadMarkerRow(self._account, self._contact)
@@ -106,9 +113,28 @@ class ConversationView(Gtk.ListBox):
             return 0
         return -1 if row1.timestamp < row2.timestamp else 1
 
+    def _filter_func(self, row):
+        if row.type in ('muc-user-joined', 'muc-user-left'):
+            return self._contact.settings.get('print_join_left')
+        return True
+
     def add_muc_subject(self, text, nick, date):
         subject = MUCSubject(self._account, text, nick, date)
         self._insert_message(subject)
+
+    def add_muc_user_left(self, nick, reason, error=False):
+        join_left = MUCJoinLeft('muc-user-left',
+                                self._account,
+                                nick,
+                                reason=reason,
+                                error=error)
+        self._insert_message(join_left)
+
+    def add_muc_user_joined(self, nick):
+        join_left = MUCJoinLeft('muc-user-joined',
+                                self._account,
+                                nick)
+        self._insert_message(join_left)
 
     def add_info_message(self, text):
         message = InfoMessage(self._account, text)
@@ -364,3 +390,6 @@ class ConversationView(Gtk.ListBox):
 
     def on_quote(self, text):
         self.emit('quote', text)
+
+    def _on_contact_setting_changed(self, *args):
+        self.invalidate_filter()

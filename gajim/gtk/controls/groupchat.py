@@ -974,10 +974,8 @@ class GroupchatControl(BaseControl):
     def _on_user_joined(self, _contact, _signal_name, user_contact, properties):
         nick = user_contact.name
         if not properties.is_muc_self_presence:
-
-            if (self.contact.is_joined and
-                    self.contact.settings.get('print_join_left')):
-                self.add_info_message(_('%s has joined the group chat') % nick)
+            if self.contact.is_joined:
+                self.conversation_view.add_muc_user_joined(nick)
             return
 
         status_codes = properties.muc_status_codes or []
@@ -1030,7 +1028,6 @@ class GroupchatControl(BaseControl):
         #     tv.last_received_message_id[new_nick] = \
         #         tv.last_received_message_id[nick]
         #     del tv.last_received_message_id[nick]
-
 
     def _on_user_status_show_changed(self,
                                      _contact,
@@ -1182,15 +1179,10 @@ class GroupchatControl(BaseControl):
         #Group Chat: We have been removed from the room
         message = _('{nick} has been removed from the group chat{by}{reason}')
 
-        print_join_left = self.contact.settings.get('print_join_left')
-
         if StatusCode.REMOVED_ERROR in status_codes:
             # Handle 333 before 307, some MUCs add both
-            if print_join_left:
-                #Group Chat: User was kicked because of an server error: reason
-                message = _('{nick} has left due to '
-                            'an error{reason}').format(nick=nick, reason=reason)
-                self.add_info_message(message)
+            self.conversation_view.add_muc_user_left(
+                nick, properties.muc_user.reason, error=True)
 
         elif StatusCode.REMOVED_KICKED in status_codes:
             #Group Chat: User was kicked by Alice: reason
@@ -1218,10 +1210,9 @@ class GroupchatControl(BaseControl):
             message = message.format(nick=nick, by=actor, reason=reason)
             self.add_info_message(message)
 
-        elif print_join_left:
-            message = _('{nick} has left{reason}').format(nick=nick,
-                                                          reason=reason)
-            self.add_info_message(message)
+        else:
+            self.conversation_view.add_muc_user_left(
+                nick, properties.muc_user.reason)
 
     def _on_room_joined(self, _contact, _signal_name):
         self._show_page('groupchat')
