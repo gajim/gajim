@@ -34,6 +34,7 @@ from .conversation.rows.info import InfoMessage
 from .conversation.rows.date import DateRow
 from .conversation.rows.muc_subject import MUCSubject
 from .conversation.rows.muc_join_left import MUCJoinLeft
+from .conversation.rows.muc_user_status import MUCUserStatus
 
 
 log = logging.getLogger('gajim.gui.conversation_view')
@@ -80,6 +81,11 @@ class ConversationView(Gtk.ListBox):
                                     account=self._account,
                                     jid=self._contact.jid)
 
+        app.settings.connect_signal('print_status',
+                                    self._on_contact_setting_changed,
+                                    account=self._account,
+                                    jid=self._contact.jid)
+
         if self._contact is not None:
             self._read_marker_row = ReadMarkerRow(self._account, self._contact)
             self.add(self._read_marker_row)
@@ -116,6 +122,9 @@ class ConversationView(Gtk.ListBox):
     def _filter_func(self, row):
         if row.type in ('muc-user-joined', 'muc-user-left'):
             return self._contact.settings.get('print_join_left')
+        if row.type == 'muc-user-status':
+            return self._contact.settings.get('print_status')
+
         return True
 
     def add_muc_subject(self, text, nick, date):
@@ -135,6 +144,10 @@ class ConversationView(Gtk.ListBox):
                                 self._account,
                                 nick)
         self._insert_message(join_left)
+
+    def add_muc_user_status(self, user_contact, is_self):
+        user_status = MUCUserStatus(self._account, user_contact, is_self)
+        self._insert_message(user_status)
 
     def add_info_message(self, text):
         message = InfoMessage(self._account, text)

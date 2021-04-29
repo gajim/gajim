@@ -51,7 +51,6 @@ from gajim.common.helpers import to_user_string
 from gajim.common.const import AvatarSize
 
 from gajim.common.i18n import _
-from gajim.common.const import MUCJoinedState
 from gajim.common.structs import OutgoingMessage
 
 from gajim.gui.controls.base import BaseControl
@@ -89,9 +88,9 @@ class GroupchatControl(BaseControl):
 
     def __init__(self, account, jid):
         BaseControl.__init__(self,
-                                 'groupchat_control',
-                                 account,
-                                 jid)
+                             'groupchat_control',
+                             account,
+                             jid)
 
         self._client.connect_signal('state-changed',
                                     self._on_client_state_changed)
@@ -1035,23 +1034,9 @@ class GroupchatControl(BaseControl):
                                      user_contact,
                                      properties):
 
-        if not self.contact.settings.get('print_status'):
-            return
-
-        nick = user_contact.name
-        status = user_contact.status
-        status = '' if status is None else ' - %s' % status
-        show = helpers.get_uf_show(user_contact.show.value)
-
-        if properties.is_muc_self_presence:
-            message = _('You are now {show}{status}').format(show=show,
-                                                             status=status)
-
-        else:
-            message = _('{nick} is now {show}{status}').format(nick=nick,
-                                                               show=show,
-                                                               status=status)
-        self.add_info_message(message)
+        self.conversation_view.add_muc_user_status(
+            user_contact,
+            properties.is_muc_self_presence)
 
     def _on_user_affiliation_changed(self,
                                      _contact,
