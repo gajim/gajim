@@ -9,6 +9,9 @@
     color: rgb(200, 200, 200);
 }
 .gajim-status-message {
+    color: rgb(140, 175, 210);
+}
+.gajim-subject-message {
     color: rgb(205, 225, 255);
     background: rgb(40, 60, 80);
 }
@@ -23,6 +26,12 @@
 }
 .gajim-state-tab-muc-msg {
     color: rgb(80, 95, 230);
+}
+.gajim-user-disconnected {
+    color: rgb(80, 30, 30);
+}
+.gajim-user-connected {
+    color: rgb(30, 80, 50);
 }
 .gajim-roster-disconnected {
     background: rgb(80, 30, 30);

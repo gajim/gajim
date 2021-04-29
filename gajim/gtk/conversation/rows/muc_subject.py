@@ -45,7 +45,7 @@ class MUCSubject(BaseRow):
 
         subject_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         subject_box.get_style_context().add_class('conversation-subject-box')
-        subject_box.get_style_context().add_class('gajim-status-message')
+        subject_box.get_style_context().add_class('gajim-subject-message')
 
         title = Gtk.Label(label=_('Subject'))
         title.set_halign(Gtk.Align.START)
