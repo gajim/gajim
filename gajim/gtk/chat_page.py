@@ -123,10 +123,6 @@ class ChatPage(Gtk.Box):
     def _on_chat_selected(self, _chat_list_stack, workspace_id, account, jid):
         self._chat_stack.show_chat(account, jid)
         self._search_view.set_context(account, jid)
-
-        self._ui.workspace_label.set_text(
-            app.settings.get_workspace_setting(workspace_id, 'name'))
-
         self.emit('chat-selected', workspace_id, account, jid)
 
     def _on_chat_unselected(self, _chat_list_stack):
@@ -143,7 +139,11 @@ class ChatPage(Gtk.Box):
     def _on_search_hide(self, *args):
         self._search_revealer.hide()
 
-    def _on_chat_list_changed(self, *args):
+    def _on_chat_list_changed(self, chat_list_stack, *args):
+        chat_list = chat_list_stack.get_current_chat_list()
+        name = app.settings.get_workspace_setting(chat_list.workspace_id,
+                                                  'name')
+        self._ui.workspace_label.set_text(name)
         self._ui.search_entry.set_text('')
 
     def process_event(self, event):
