@@ -43,6 +43,7 @@ class InfoMessage(BaseRow):
         self.grid.attach(timestamp_widget, 2, 0, 1, 1)
 
         self._label = SimpleLabel()
+        self._label.set_text(text)
 
         self.grid.attach(self._label, 1, 0, 1, 1)
         self.show_all()
