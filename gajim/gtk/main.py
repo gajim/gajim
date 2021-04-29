@@ -74,12 +74,25 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('muc-disco-update', ged.GUI1, self._on_event),
             ('our-show', ged.GUI1, self._on_our_show),
             ('signed-in', ged.GUI1, self._on_signed_in),
+            ('account-enabled', ged.GUI1, self._on_account_enabled),
+            ('account-disabled', ged.GUI1, self._on_account_disabled),
         ])
 
         self._load_chats()
         self._add_actions()
         self._add_actions2()
         self.show_all()
+
+    def _on_account_enabled(self, event):
+        self._account_side_bar.add_account(event.account)
+        self._main_stack.add_account_page(event.account)
+
+    def _on_account_disabled(self, event):
+        workspace_id = self._workspace_side_bar.get_first_workspace()
+        self.activate_workspace(workspace_id)
+        self._account_side_bar.remove_account(event.account)
+        self._main_stack.remove_account_page(event.account)
+        self._main_stack.remove_chats_for_account(event.account)
 
     @staticmethod
     def _on_our_show(event):

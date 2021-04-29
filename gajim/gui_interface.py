@@ -1417,12 +1417,16 @@ class Interface:
                                                                   'name')
         app.block_signed_in_notifications[account] = True
         app.last_message_time[account] = {}
-        # refresh roster
 
-        gui_menu_builder.build_accounts_menu()
-        app.connections[account].change_status('online', '')
         app.settings.set_account_setting(account, 'active', True)
+        gui_menu_builder.build_accounts_menu()
         app.app.update_app_actions_state()
+
+        app.nec.push_incoming_event(NetworkEvent(
+            'account-enabled',
+            account=account))
+
+        app.connections[account].change_status('online', '')
         window = get_app_window('AccountsWindow')
         if window is not None:
             GLib.idle_add(window.enable_account, account, True)
@@ -1434,6 +1438,15 @@ class Interface:
             if type(win).__name__ == 'RemoveAccount':
                 continue
             win.destroy()
+
+        app.settings.set_account_setting(account, 'roster_version', '')
+        app.settings.set_account_setting(account, 'active', False)
+        gui_menu_builder.build_accounts_menu()
+        app.app.update_app_actions_state()
+
+        app.nec.push_incoming_event(NetworkEvent(
+            'account-disabled',
+            account=account))
 
         if account == app.ZEROCONF_ACC_NAME:
             app.connections[account].disable_account()
@@ -1449,11 +1462,6 @@ class Interface:
         del app.to_be_removed[account]
         del app.newly_added[account]
         del app.last_message_time[account]
-
-        app.settings.set_account_setting(account, 'roster_version', '')
-        gui_menu_builder.build_accounts_menu()
-        app.settings.set_account_setting(account, 'active', False)
-        app.app.update_app_actions_state()
 
     def remove_account(self, account):
         if app.settings.get_account_setting(account, 'active'):

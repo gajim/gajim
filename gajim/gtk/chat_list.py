@@ -168,6 +168,12 @@ class ChatList(Gtk.ListBox):
         self.remove(row)
         row.destroy()
 
+    def remove_chats_for_account(self, account):
+        for row_account, jid in list(self._chats.keys()):
+            if row_account != account:
+                continue
+            self.remove_chat(account, jid)
+
     def get_selected_chat(self):
         row = self.get_selected_row()
         if row is None:

@@ -23,6 +23,7 @@ from gi.repository import Pango
 from gi.repository import GObject
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common import passwords
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
@@ -535,9 +536,19 @@ class AccountRow(Gtk.ListBoxRow):
         self._switch_state_label.set_text(text)
 
     def _on_enable_switch(self, switch, state, account):
-        def _disable():
-            app.connections[account].change_status('offline', 'offline')
+        def _on_disconnect(event):
+            if event.account != account:
+                return
+            app.ged.remove_event_handler('account-disconnected',
+                                         ged.CORE,
+                                         _on_disconnect)
             app.interface.disable_account(account)
+
+        def _disable():
+            app.ged.register_event_handler('account-disconnected',
+                                           ged.CORE,
+                                           _on_disconnect)
+            app.connections[account].change_status('offline', 'offline')
             switch.set_state(state)
             self._set_label(state)
 

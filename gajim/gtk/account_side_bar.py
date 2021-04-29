@@ -35,7 +35,10 @@ class AccountSideBar(Gtk.ListBox):
         self.add(Account(account))
 
     def remove_account(self, account):
-        pass
+        for row in self.get_children():
+            if row.account == account:
+                row.destroy()
+                return
 
     @staticmethod
     def _on_row_activated(_listbox, row):
@@ -97,6 +100,7 @@ class AccountAvatar(Gtk.Image):
         self._contact.connect('avatar-update', self._on_avatar_update)
         self._contact.connect('presence-update', self._on_presence_update)
 
+        self.connect('destroy', self._on_destroy)
         self._update_image()
 
     def _on_presence_update(self, _contact, _signal_name):
@@ -110,3 +114,7 @@ class AccountAvatar(Gtk.Image):
                                            self.get_scale_factor(),
                                            style='round-corners')
         self.set_from_surface(surface)
+
+    def _on_destroy(self, *args):
+        self._contact.disconnect_all_from_obj(self)
+        app.check_finalize(self)

@@ -615,8 +615,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._group_refs.clear()
         self._unset_model()
         self._roster = None
+        self._enable_sort(False)
         self._store.clear()
-        self._store.reset_default_sort_func()
         self._store = None
         # self._tooltip.destroy()
         # self._tooltip = None

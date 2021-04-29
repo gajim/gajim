@@ -24,13 +24,25 @@ class MainStack(Gtk.Stack):
     def __init__(self):
         Gtk.Stack.__init__(self)
 
+        self.add_named(Gtk.Box(), 'empty')
+
         self._chat_page = ChatPage()
         self._chat_page.connect('chat-selected', self._on_chat_selected)
         self.add_named(self._chat_page, 'chats')
 
         for account in list(app.connections.keys()):
-            account_page = AccountPage(account)
-            self.add_named(account_page, account)
+            self.add_account_page(account)
+
+    def add_account_page(self, account):
+        account_page = AccountPage(account)
+        self.add_named(account_page, account)
+
+    def remove_account_page(self, account):
+        account_page = self.get_child_by_name(account)
+        account_page.destroy()
+
+    def remove_chats_for_account(self, account):
+        self._chat_page.remove_chats_for_account(account)
 
     def show_chats(self, workspace_id):
         self._chat_page.show_workspace_chats(workspace_id)
@@ -46,7 +58,10 @@ class MainStack(Gtk.Stack):
         return self.get_child_by_name('chats')
 
     def process_event(self, event):
+        empty_box = self.get_child_by_name('empty')
         for page in self.get_children():
+            if page is empty_box:
+                continue
             page.process_event(event)
 
     def _on_chat_selected(self, *args):

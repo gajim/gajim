@@ -102,12 +102,17 @@ class ChatListStack(Gtk.Stack):
         return self._chat_lists[workspace_id]
 
     def get_selected_chat(self):
+        chat_list = self.get_current_chat_list()
+        if chat_list is None:
+            return None
+        return chat_list.get_selected_chat()
+
+    def get_current_chat_list(self):
         workspace_id = self.get_visible_child_name()
         if workspace_id == 'empty':
             return None
 
-        chat_list = self._chat_lists[workspace_id]
-        return chat_list.get_selected_chat()
+        return self._chat_lists[workspace_id]
 
     def is_chat_active(self, account, jid):
         chat = self.get_selected_chat()
@@ -201,6 +206,11 @@ class ChatListStack(Gtk.Stack):
         chat_list.remove_chat(account, jid)
         self.store_open_chats(workspace_id)
         self.emit('chat-removed', account, jid, type_)
+
+    def remove_chats_for_account(self, account):
+        for workspace_id, chat_list in self._chat_lists.items():
+            chat_list.remove_chats_for_account(account)
+            self.store_open_chats(workspace_id)
 
     def _find_chat(self, account, jid):
         for chat_list in self._chat_lists.values():

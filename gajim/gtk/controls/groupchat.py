@@ -1336,12 +1336,6 @@ class GroupchatControl(BaseControl):
         app.plugin_manager.remove_gui_extension_point(
             'groupchat_control', self)
 
-        # They can already be removed by the destroy function
-        # TODO remove
-        if self.room_jid in app.contacts.get_gc_list(self.account):
-            app.contacts.remove_room(self.account, self.room_jid)
-            del app.gc_connected[self.account][self.room_jid]
-
         self.roster.destroy()
         self.roster = None
 

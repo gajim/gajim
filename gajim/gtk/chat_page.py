@@ -235,6 +235,14 @@ class ChatPage(Gtk.Box):
             client = app.get_client(account)
             client.get_module('MUC').leave(jid)
 
+    def remove_chats_for_account(self, account):
+        chat_list = self._chat_list_stack.get_current_chat_list()
+        if chat_list is not None:
+            chat_list.unselect_all()
+
+        self._chat_list_stack.remove_chats_for_account(account)
+        self._chat_stack.remove_chats_for_account(account)
+
     def get_control(self, account, jid):
         return self._chat_stack.get_control(account, jid)
 

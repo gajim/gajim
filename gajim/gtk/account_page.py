@@ -19,13 +19,13 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
-from gajim.common.nec import EventHelper
 
 from .roster import Roster
 from .status_selector import StatusSelector
 from .notification_manager import NotificationManager
 from .util import get_builder
 from .util import open_window
+from .util import EventHelper
 
 ROSTER_MENU_DICT = {
     'show-offline': _('Show Offline Contacts'),

@@ -91,3 +91,9 @@ class ChatStack(Gtk.Stack):
     def process_event(self, event):
         control = self.get_control(event.account, event.jid)
         control.process_event(event)
+
+    def remove_chats_for_account(self, account):
+        for chat_account, jid in list(self._controls.keys()):
+            if chat_account != account:
+                continue
+            self.remove_chat(account, jid)
