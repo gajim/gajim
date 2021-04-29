@@ -16,11 +16,11 @@ import time
 from datetime import datetime
 
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 
+from .widgets import SimpleLabel
 from .base import BaseRow
 
 
@@ -33,11 +33,7 @@ class MUCJoinLeft(BaseRow):
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
 
-        self._label = Gtk.Label()
-        self._label.set_selectable(True)
-        self._label.set_line_wrap(True)
-        self._label.set_xalign(0)
-        self._label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+        self._label = SimpleLabel()
 
         if type_ == 'muc-user-joined':
             text = self._make_join_message(nick)

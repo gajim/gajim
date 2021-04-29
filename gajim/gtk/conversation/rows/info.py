@@ -19,10 +19,9 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
-from gajim.common.styling import process
 
+from .widgets import SimpleLabel
 from .base import BaseRow
-from ..message_widget import MessageWidget
 
 
 class InfoMessage(BaseRow):
@@ -43,9 +42,7 @@ class InfoMessage(BaseRow):
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 2, 0, 1, 1)
 
-        result = process(text)
-        message_widget = MessageWidget(account)
-        message_widget.add_content(result)
+        self._label = SimpleLabel()
 
-        self.grid.attach(message_widget, 1, 0, 1, 1)
+        self.grid.attach(self._label, 1, 0, 1, 1)
         self.show_all()
