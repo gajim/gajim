@@ -284,9 +284,9 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <child>
-                                  <object class="GtkBox" id="account_badge">
-                                    <property name="visible">True</property>
+                                  <object class="GtkBox" id="account_badge_box">
                                     <property name="can-focus">False</property>
+                                    <property name="no-show-all">True</property>
                                     <property name="halign">end</property>
                                     <property name="valign">center</property>
                                     <property name="margin-end">6</property>
@@ -624,9 +624,6 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -749,7 +746,7 @@
               </object>
               <packing>
                 <property name="name">nickname</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -884,7 +881,7 @@
               </object>
               <packing>
                 <property name="name">subject</property>
-                <property name="position">3</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -1010,7 +1007,7 @@
               </object>
               <packing>
                 <property name="name">password</property>
-                <property name="position">4</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -1123,7 +1120,7 @@
               </object>
               <packing>
                 <property name="name">captcha</property>
-                <property name="position">5</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -1286,7 +1283,7 @@
               </object>
               <packing>
                 <property name="name">error</property>
-                <property name="position">6</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child>
@@ -1411,7 +1408,7 @@
               </object>
               <packing>
                 <property name="name">captcha-error</property>
-                <property name="position">7</property>
+                <property name="position">6</property>
               </packing>
             </child>
             <child>
@@ -1521,7 +1518,7 @@
               </object>
               <packing>
                 <property name="name">muc-info</property>
-                <property name="position">8</property>
+                <property name="position">7</property>
               </packing>
             </child>
             <child>
@@ -1672,7 +1669,7 @@
               </object>
               <packing>
                 <property name="name">kick</property>
-                <property name="position">9</property>
+                <property name="position">8</property>
               </packing>
             </child>
             <child>
@@ -1823,7 +1820,7 @@
               </object>
               <packing>
                 <property name="name">ban</property>
-                <property name="position">10</property>
+                <property name="position">9</property>
               </packing>
             </child>
             <child>
@@ -2019,7 +2016,7 @@
               </object>
               <packing>
                 <property name="name">destroy</property>
-                <property name="position">11</property>
+                <property name="position">10</property>
               </packing>
             </child>
             <child>
@@ -2145,7 +2142,7 @@
               </object>
               <packing>
                 <property name="name">rename</property>
-                <property name="position">12</property>
+                <property name="position">11</property>
               </packing>
             </child>
             <child>
@@ -2245,7 +2242,7 @@
               </object>
               <packing>
                 <property name="name">invite</property>
-                <property name="position">13</property>
+                <property name="position">12</property>
               </packing>
             </child>
             <child>
@@ -2374,7 +2371,7 @@
               </object>
               <packing>
                 <property name="name">muc-settings</property>
-                <property name="position">14</property>
+                <property name="position">13</property>
               </packing>
             </child>
             <child>

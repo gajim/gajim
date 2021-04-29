@@ -501,9 +501,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="account_badge">
-                                <property name="visible">True</property>
+                              <object class="GtkBox" id="account_badge_box">
                                 <property name="can-focus">False</property>
+                                <property name="no-show-all">True</property>
                                 <property name="halign">end</property>
                                 <property name="valign">center</property>
                                 <property name="orientation">vertical</property>

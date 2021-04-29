@@ -16,22 +16,31 @@ import logging
 
 from gi.repository import Gtk
 
+from gajim.common import ged
+
 from gajim.gui.controls.chat import ChatControl
 from gajim.gui.controls.groupchat import GroupchatControl
 from gajim.gui.controls.private import PrivateChatControl
 
+from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.chatstack')
 
 
-class ChatStack(Gtk.Stack):
+class ChatStack(Gtk.Stack, EventHelper):
     def __init__(self):
         Gtk.Stack.__init__(self)
+        EventHelper.__init__(self)
 
         self.set_vexpand(True)
         self.set_hexpand(True)
 
         self.add_named(Gtk.Box(), 'empty')
+
+        self.register_events([
+            ('account-enabled', ged.GUI2, self._on_account_changed),
+            ('account-disabled', ged.GUI2, self._on_account_changed),
+        ])
 
         self.show_all()
         self._controls = {}
@@ -97,3 +106,7 @@ class ChatStack(Gtk.Stack):
             if chat_account != account:
                 continue
             self.remove_chat(account, jid)
+
+    def _on_account_changed(self, *args):
+        for control in self._controls.values():
+            control.update_account_badge()

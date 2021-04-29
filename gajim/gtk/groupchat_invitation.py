@@ -21,7 +21,7 @@ from gajim.common.helpers import get_group_chat_nick
 
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
-from .util import generate_account_badge
+from .util import AccountBadge
 
 
 class GroupChatInvitation(Gtk.ApplicationWindow):
@@ -63,9 +63,7 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
 
         enabled_accounts = app.get_enabled_accounts_with_labels()
         if len(enabled_accounts) > 1:
-            account_badge = generate_account_badge(account)
-            account_badge.set_tooltip_text(
-                _('Account: %s') % app.get_account_label(account))
+            account_badge = AccountBadge(account)
             contact_box.add(account_badge)
 
         invitation_label = Gtk.Label(

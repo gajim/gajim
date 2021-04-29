@@ -39,7 +39,7 @@ from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
 from .util import get_builder
 from .util import get_icon_name
-from .util import generate_account_badge
+from .util import AccountBadge
 
 
 class Search(IntEnum):
@@ -646,9 +646,7 @@ class ContactRow(Gtk.ListBoxRow):
         name_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         name_box.add(self.name_label)
         if show_account:
-            account_badge = generate_account_badge(account)
-            account_badge.set_tooltip_text(
-                _('Account: %s') % self.account_label)
+            account_badge = AccountBadge(account)
             account_badge.set_halign(Gtk.Align.END)
             account_badge.set_valign(Gtk.Align.START)
             account_badge.set_hexpand(True)

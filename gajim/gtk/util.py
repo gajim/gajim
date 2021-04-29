@@ -694,19 +694,6 @@ def get_color_for_account(account: str) -> str:
     return rgba.to_string()
 
 
-def generate_account_badge(account):
-    account_label = app.get_account_label(account)
-    badge = Gtk.Label(label=account_label)
-    badge.set_ellipsize(Pango.EllipsizeMode.END)
-    badge.set_max_width_chars(12)
-    badge.set_size_request(50, -1)
-    account_class = app.css_config.get_dynamic_class(account)
-    badge_context = badge.get_style_context()
-    badge_context.add_class(account_class)
-    badge_context.add_class('badge')
-    return badge
-
-
 @lru_cache(maxsize=16)
 def get_css_show_class(show):
     if show in ('online', 'chat'):
@@ -896,3 +883,23 @@ def wrap_with_event_box(klass):
         event_box.add(widget)
         return event_box
     return klass_wrapper
+
+
+class AccountBadge(Gtk.Label):
+    def __init__(self, account):
+        Gtk.Label.__init__(self)
+        self.set_ellipsize(Pango.EllipsizeMode.END)
+        self.set_max_width_chars(12)
+        self.set_size_request(50, -1)
+        self.get_style_context().add_class('badge')
+        self._account = account
+
+        self.refresh()
+        self.show()
+
+    def refresh(self):
+        label = app.get_account_label(self._account)
+        self.set_text(label)
+        account_class = app.css_config.get_dynamic_class(self._account)
+        self.get_style_context().add_class(account_class)
+        self.set_tooltip_text(_('Account: %s') % label)

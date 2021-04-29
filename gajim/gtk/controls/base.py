@@ -56,7 +56,7 @@ from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.util import get_builder
-from gajim.gui.util import generate_account_badge
+from gajim.gui.util import AccountBadge
 from gajim.gui.const import ControlType  # pylint: disable=unused-import
 from gajim.gui.emoji_chooser import emoji_chooser
 
@@ -126,13 +126,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.connect_signals(self)
         self.widget = self.xml.get_object('%s_hbox' % widget_name)
 
-        self._accounts = app.get_enabled_accounts_with_labels()
-        if len(self._accounts) > 1:
-            account_badge = generate_account_badge(self.account)
-            account_badge.set_tooltip_text(
-                _('Account: %s') % app.get_account_label(self.account))
-            self.xml.account_badge.add(account_badge)
-            account_badge.show()
+        self._account_badge = AccountBadge(self.account)
+        self.xml.account_badge_box.add(self._account_badge)
+        show = len(app.settings.get_active_accounts()) > 1
+        self.xml.account_badge_box.set_visible(show)
 
         # Drag and drop
         self.xml.overlay.add_overlay(self.xml.drop_area)
@@ -1398,6 +1395,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if self.orig_msg is not None:
                 message = '> %s\n' % message.replace('\n', '\n> ')
         msg_buf.set_text(message)
+
+    def update_account_badge(self):
+        show = len(app.settings.get_active_accounts()) > 1
+        self.xml.account_badge_box.set_visible(show)
 
 
 class ScrolledWindow(Gtk.ScrolledWindow):

@@ -19,6 +19,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import RowHeaderType
@@ -30,13 +31,15 @@ from gajim.common.helpers import get_uf_relative_time
 from gajim.gui_menu_builder import get_chat_list_row_menu
 
 from .util import get_builder
+from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.chatlist')
 
 
-class ChatList(Gtk.ListBox):
+class ChatList(Gtk.ListBox, EventHelper):
     def __init__(self, workspace_id):
         Gtk.ListBox.__init__(self)
+        EventHelper.__init__(self)
 
         self._chats = {}
         self._current_filter_text = ''
@@ -47,6 +50,11 @@ class ChatList(Gtk.ListBox):
         self.set_header_func(self._header_func)
         self.set_sort_func(self._sort_func)
         self._set_placeholder()
+
+        self.register_events([
+            ('account-enabled', ged.GUI2, self._on_account_changed),
+            ('account-disabled', ged.GUI2, self._on_account_changed),
+        ])
 
         self.connect('destroy', self._on_destroy)
 
@@ -262,6 +270,10 @@ class ChatList(Gtk.ListBox):
 
         row.add_unread()
 
+    def _on_account_changed(self, *args):
+        for row in self.get_children():
+            row.update_account_identifier()
+
 
 class ChatRow(Gtk.ListBoxRow):
     def __init__(self, workspace_id, account, jid, type_, pinned):
@@ -295,16 +307,12 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.eventbox.connect('button-press-event', self._on_button_press)
         self._ui.close_button.connect('clicked', self._on_close_button_clicked)
 
-        account_class = app.css_config.get_dynamic_class(account)
-        self._ui.account_identifier.get_style_context().add_class(account_class)
-        if len(app.get_enabled_accounts_with_labels()) > 1:
-            self._ui.account_identifier.show()
-
         if self.type == 'groupchat':
             self._ui.group_chat_indicator.show()
 
         self.update_avatar()
         self.update_name()
+        self.update_account_identifier()
 
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)
@@ -398,6 +406,12 @@ class ChatRow(Gtk.ListBoxRow):
             return
 
         self._ui.name_label.set_text(self.contact.name)
+
+    def update_account_identifier(self):
+        account_class = app.css_config.get_dynamic_class(self.account)
+        self._ui.account_identifier.get_style_context().add_class(account_class)
+        show = len(app.settings.get_active_accounts()) > 1
+        self._ui.account_identifier.set_visible(show)
 
     def _on_chatstate_update(self, contact, _signal_name):
         if contact.chatstate is None:
