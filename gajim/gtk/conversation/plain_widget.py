@@ -18,6 +18,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import Gdk
+from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import i18n
@@ -42,8 +43,8 @@ class PlainWidget(Gtk.Box):
 
         self._account = account
 
-        self._text_widget = MessageTextview(self._account)
-        # self._text_widget = MessageLabel(self._account)
+        # self._text_widget = MessageTextview(self._account)
+        self._text_widget = MessageLabel(self._account)
         self.add(self._text_widget)
 
     def add_content(self, block):
@@ -58,16 +59,21 @@ class MessageLabel(Gtk.Label):
         self.set_line_wrap(True)
         self.set_xalign(0)
         self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+        self.set_track_visited_links(False)
 
         self._account = account
 
     def print_text_with_styling(self, block):
+        text = GLib.markup_escape_text(block.text.strip())
+        for uri in block.uris:
+            text = text.replace(uri.text, uri.get_markup_string())
+
         attr_list = Pango.AttrList()
         for span in block.spans:
             attr = make_pango_attribute(span.name, span.start, span.end)
             attr_list.insert(attr)
 
-        self.set_text(block.text.strip())
+        self.set_markup(text)
         self.set_attributes(attr_list)
 
 

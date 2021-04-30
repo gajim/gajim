@@ -3,6 +3,8 @@ import re
 from dataclasses import dataclass
 from dataclasses import field
 
+from gi.repository import GLib
+
 PRE = '`'
 STRONG = '*'
 STRIKE = '~'
@@ -41,23 +43,28 @@ class StyleObject:
     text: str
 
 
+class URIMarkup:
+    def get_markup_string(self):
+        return f'<a href="{self.text}">{self.text}</a>'
+
+
 @dataclass
-class Uri(StyleObject):
+class Uri(StyleObject, URIMarkup):
     name: str = field(default='uri', init=False)
 
 
 @dataclass
-class Address(StyleObject):
+class Address(StyleObject, URIMarkup):
     name: str = field(default='address', init=False)
 
 
 @dataclass
-class XMPPAddress(StyleObject):
+class XMPPAddress(StyleObject, URIMarkup):
     name: str = field(default='xmppadr', init=False)
 
 
 @dataclass
-class MailAddress(StyleObject):
+class MailAddress(StyleObject, URIMarkup):
     name: str = field(default='mailadr', init=False)
 
 
@@ -135,7 +142,7 @@ def process(text, nested=False):
     blocks = _parse_blocks(text, nested)
     for block in blocks:
         if isinstance(block, PlainBlock):
-            offset = block.start
+            offset = 0
             for line in block.text.splitlines(keepends=True):
                 block.spans += _parse_line(line, offset)
                 block.uris += _parse_uris(line, offset)
