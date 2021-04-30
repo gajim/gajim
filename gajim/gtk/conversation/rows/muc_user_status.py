@@ -47,7 +47,7 @@ class MUCUserStatus(BaseRow):
         show_icon.set_opacity(0.6)
         surface = get_show_circle(
             user_contact.show.value,
-            AvatarSize.SHOW_CIRCLE,
+            16,
             self.get_scale_factor())
         show_icon.set_from_surface(surface)
         self.grid.attach(show_icon, 1, 0, 1, 1)
