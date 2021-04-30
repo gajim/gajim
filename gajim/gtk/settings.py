@@ -497,7 +497,7 @@ class SpinSetting(GenericSetting):
         self.spin.set_numeric(True)
         self.spin.set_update_policy(Gtk.SpinButtonUpdatePolicy.IF_VALID)
         self.spin.set_value(self.setting_value)
-        self.spin.set_halign(Gtk.Align.END)
+        self.spin.set_halign(Gtk.Align.FILL)
         self.spin.set_valign(Gtk.Align.CENTER)
         self.spin.connect('notify::value', self.on_value_change)
 
