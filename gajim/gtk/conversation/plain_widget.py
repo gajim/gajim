@@ -18,7 +18,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import Gdk
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import i18n
@@ -29,6 +28,7 @@ from gajim.common.helpers import parse_uri
 from gajim.common.i18n import _
 
 from .util import get_cursor
+from .util import make_pango_attribute
 
 
 URI_TAGS = ['uri', 'address', 'xmppadr', 'mailadr']
@@ -42,11 +42,33 @@ class PlainWidget(Gtk.Box):
 
         self._account = account
 
-        self._textview = MessageTextview(self._account)
-        self.add(self._textview)
+        self._text_widget = MessageTextview(self._account)
+        # self._text_widget = MessageLabel(self._account)
+        self.add(self._text_widget)
 
     def add_content(self, block):
-        self._textview.print_text_with_styling(block)
+        self._text_widget.print_text_with_styling(block)
+
+
+class MessageLabel(Gtk.Label):
+    def __init__(self, account):
+        Gtk.Label.__init__(self)
+        self.set_hexpand(True)
+        self.set_selectable(True)
+        self.set_line_wrap(True)
+        self.set_xalign(0)
+        self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+
+        self._account = account
+
+    def print_text_with_styling(self, block):
+        attr_list = Pango.AttrList()
+        for span in block.spans:
+            attr = make_pango_attribute(span.name, span.start, span.end)
+            attr_list.insert(attr)
+
+        self.set_text(block.text.strip())
+        self.set_attributes(attr_list)
 
 
 class MessageTextview(Gtk.TextView):

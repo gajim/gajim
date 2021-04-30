@@ -903,3 +903,21 @@ class AccountBadge(Gtk.Label):
         account_class = app.css_config.get_dynamic_class(self._account)
         self.get_style_context().add_class(account_class)
         self.set_tooltip_text(_('Account: %s') % label)
+
+
+def make_pango_attribute(name, start, end):
+    if name == 'strong':
+        attr = Pango.attr_weight_new(Pango.Weight.BOLD)
+    if name == 'strike':
+        attr = Pango.attr_strikethrough_new(True)
+    if name == 'emphasis':
+        attr = Pango.attr_style_new(Pango.Style.ITALIC)
+    if name == 'pre':
+        attr = Pango.attr_family_new('monospace')
+
+    else:
+        ValueError('unknown attribute %s', name)
+
+    attr.start_index = start
+    attr.end_index = end
+    return attr
