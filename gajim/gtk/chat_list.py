@@ -484,7 +484,7 @@ class ChatRow(Gtk.ListBoxRow):
         self.unread_count = 0
 
     def set_last_message_text(self, nickname, text):
-        self._ui.message_label.set_text(text)
+        self._ui.message_label.set_text(text.replace('\n', ' '))
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(nickname)
 
