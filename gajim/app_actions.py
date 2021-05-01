@@ -234,10 +234,6 @@ def on_file_transfers(_action, _param):
         interface.instances['file_transfers'].window.show_all()
 
 
-def on_history(action, param):
-    on_browse_history(action, param)
-
-
 def on_open_event(_action, param):
     dict_ = param.unpack()
     app.interface.handle_event(

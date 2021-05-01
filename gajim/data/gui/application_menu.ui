@@ -64,10 +64,6 @@
           <attribute name="label" translatable="yes">_File Transfer</attribute>
           <attribute name="action">app.file-transfer</attribute>
         </item>
-        <item>
-          <attribute name="label" translatable="yes">_History</attribute>
-          <attribute name="action">app.history</attribute>
-        </item>
       </section>
     </submenu>
     <submenu>

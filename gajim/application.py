@@ -405,7 +405,6 @@ class GajimApplication(Gtk.Application):
             ('plugins', app_actions.on_plugins),
             ('xml-console', app_actions.on_xml_console),
             ('file-transfer', app_actions.on_file_transfers),
-            ('history', app_actions.on_history),
             ('shortcuts', app_actions.on_keyboard_shortcuts),
             ('features', app_actions.on_features),
             ('content', app_actions.on_contents),

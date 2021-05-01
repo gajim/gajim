@@ -524,7 +524,6 @@ def get_singlechat_menu(control_id, account, jid, type_):
         ('win.block-contact-', _('Block Contact…')),
         ('win.start-call-', _('Start Call…')),
         ('win.information-', _('Information')),
-        ('app.browse-history', _('History')),
         ('win.search-history', _('Search…')),
     ]
 
@@ -585,7 +584,6 @@ def get_groupchat_menu(control_id, account, jid):
         ('win.change-nickname-', _('Change Nickname…')),
         ('win.request-voice-', _('Request Voice')),
         ('win.execute-command-', _('Execute Command…')),
-        ('app.browse-history', _('History')),
         ('win.search-history', _('Search…')),
     ]
 
