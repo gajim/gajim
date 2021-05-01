@@ -46,6 +46,8 @@ class SearchView(Gtk.Box):
 
         self._account = None
         self._jid = None
+        self._results = []
+        self._scope = None
 
         self._ui = get_builder('search_view.ui')
         self._ui.results_listbox.set_header_func(self._header_func)
@@ -93,31 +95,49 @@ class SearchView(Gtk.Box):
         if text == '':
             return
 
-        accounts = self._get_accounts()
         everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
 
         if not context or everywhere:
-            # Global search
-            results = app.storage.archive.search_all_logs(text)
-            results_count = len(results)
-            if results_count:
-                self._ui.results_listbox.add(CounterRow(results_count))
-            for msg in results:
+            self._scope = 'everywhere'
+            self._results = app.storage.archive.search_all_logs(text)
+            self._add_counter()
+            self._add_results()
+        else:
+            self._scope = 'contact'
+            self._results = app.storage.archive.search_log(
+                self._account, self._jid, text)
+            self._add_counter()
+            self._add_results()
+
+    def _add_counter(self):
+        results_count = len(self._results)
+        if results_count:
+            self._ui.results_listbox.add(CounterRow(results_count))
+
+    def _add_results(self):
+        accounts = self._get_accounts()
+        count = 1
+        for msg in self._results:
+            if count == 25:
+                return
+            if self._scope == 'everywhere':
                 result_row = ResultRow(
                     msg,
                     accounts.get(msg.account_id),
                     app.storage.archive.get_jid_from_id(msg.jid_id).jid)
-                self._ui.results_listbox.add(result_row)
-        else:
-            results = app.storage.archive.search_log(
-                self._account, self._jid, text)
-            results_count = len(results)
-            if results_count:
-                self._ui.results_listbox.add(CounterRow(results_count))
-            for msg in results:
+            else:
                 result_row = ResultRow(msg, self._account, self._jid)
-                self._ui.results_listbox.add(result_row)
+
+            self._ui.results_listbox.add(result_row)
+            self._results.pop(0)
+            count += 1
+
+    def _on_edge_reached(self, _scrolledwin, pos):
+        if pos != Gtk.PositionType.BOTTOM:
+            return
+
+        self._add_results()
 
     @staticmethod
     def _get_accounts():
