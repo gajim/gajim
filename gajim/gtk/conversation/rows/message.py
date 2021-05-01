@@ -144,11 +144,11 @@ class MessageRow(BaseRow):
     def on_copy_message(self, _widget):
         timestamp = self.timestamp.strftime('%x, %X')
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clip.set_text(
-            f'{timestamp} - {self.name}: {self.textview.get_text()}', -1)
+        text = self._message_widget.get_content().text
+        clip.set_text(f'{timestamp} - {self.name}: {text}', -1)
 
     def on_quote_message(self, _widget):
-        self.get_parent().on_quote(self.textview.get_text())
+        self.get_parent().on_quote(self._message_widget.get_content().text)
 
     def _get_encryption_image(self, additional_data, encryption_enabled=None):
         details = self._get_encryption_details(additional_data)
