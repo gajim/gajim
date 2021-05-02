@@ -17,6 +17,7 @@ import logging
 from gi.repository import Gtk
 
 from gajim.common import ged
+from gajim.common.i18n import _
 
 from gajim.gui.controls.chat import ChatControl
 from gajim.gui.controls.groupchat import GroupchatControl
@@ -35,7 +36,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self.set_vexpand(True)
         self.set_hexpand(True)
 
-        self.add_named(Gtk.Box(), 'empty')
+        self.add_named(ChatPlaceholderBox(), 'empty')
 
         self.register_events([
             ('account-enabled', ged.GUI2, self._on_account_changed),
@@ -110,3 +111,21 @@ class ChatStack(Gtk.Stack, EventHelper):
     def _on_account_changed(self, *args):
         for control in self._controls.values():
             control.update_account_badge()
+
+
+class ChatPlaceholderBox(Gtk.Box):
+    def __init__(self):
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL,
+                         spacing=18)
+        self.set_valign(Gtk.Align.CENTER)
+        pixbuf = Gtk.IconTheme.load_icon_for_scale(
+            Gtk.IconTheme.get_default(),
+            'org.gajim.Gajim-symbolic',
+            100,
+            self.get_scale_factor(),
+            0)
+        self.add(Gtk.Image.new_from_pixbuf(pixbuf))
+
+        label = Gtk.Label(label=_('Start a Chat'))
+        label.get_style_context().add_class('dim-label')
+        self.add(label)
