@@ -26,7 +26,10 @@ from gajim.common.helpers import to_user_string
 
 from .assistant import Assistant
 from .assistant import Page
+from .assistant import ErrorPage
+from .assistant import SuccessPage
 from .dataform import DataFormWidget
+from .util import ensure_not_destroyed
 
 log = logging.getLogger('gajim.gui.change_password')
 
@@ -36,7 +39,7 @@ class ChangePassword(Assistant):
         Assistant.__init__(self)
 
         self.account = account
-        self._con = app.connections.get(account)
+        self._client = app.get_client(account)
         self._destroyed = False
 
         self.add_button('apply', _('Change'), 'suggested-action',
@@ -45,45 +48,18 @@ class ChangePassword(Assistant):
         self.add_button('back', _('Back'))
 
         self.add_pages({'password': EnterPassword(),
-                        'next_stage': NextStage()})
+                        'next_stage': NextStage(),
+                        'error': Error(),
+                        'success': Success()})
 
         progress = self.add_default_page('progress')
         progress.set_title(_('Changing Password...'))
         progress.set_text(_('Trying to change password...'))
 
-        success = self.add_default_page('success')
-        success.set_title(_('Password Changed'))
-        success.set_heading(_('Password Changed'))
-        success.set_text(_('Your password has successfully been changed.'))
-
-        error = self.add_default_page('error')
-        error.set_title(_('Password Change Failed'))
-        error.set_heading(_('Password Change Failed'))
-        error.set_text(
-            _('An error occurred while trying to change your password.'))
-
-        self.set_button_visible_func(self._visible_func)
-
         self.connect('button-clicked', self._on_button_clicked)
-        self.connect('page-changed', self._on_page_changed)
         self.connect('destroy', self._on_destroy)
 
         self.show_all()
-
-    @staticmethod
-    def _visible_func(_assistant, page_name):
-        if page_name in ('password', 'next_stage'):
-            return ['apply']
-
-        if page_name == 'progress':
-            return None
-
-        if page_name == 'error':
-            return ['back']
-
-        if page_name == 'success':
-            return ['close']
-        raise ValueError('page %s unknown' % page_name)
 
     def _on_button_clicked(self, _assistant, button_name):
         page = self.get_current_page()
@@ -97,28 +73,17 @@ class ChangePassword(Assistant):
         elif button_name == 'close':
             self.destroy()
 
-    def _on_page_changed(self, _assistant, page_name):
-        if page_name in ('password', 'next_stage'):
-            self.set_default_button('apply')
-
-        elif page_name == 'success':
-            password = self.get_page('password').get_password()
-            passwords.save_password(self.account, password)
-            self.set_default_button('close')
-
-        elif page_name == 'error':
-            self.set_default_button('back')
-
     def _on_apply(self, next_stage=False):
         if next_stage:
             form = self.get_page('next_stage').get_submit_form()
-            self._con.get_module('Register').change_password_with_form(
+            self._client.get_module('Register').change_password_with_form(
                 form, callback=self._on_change_password)
         else:
             password = self.get_page('password').get_password()
-            self._con.get_module('Register').change_password(
+            self._client.get_module('Register').change_password(
                 password, callback=self._on_change_password)
 
+    @ensure_not_destroyed
     def _on_change_password(self, task):
         try:
             task.finish()
@@ -132,6 +97,8 @@ class ChangePassword(Assistant):
             self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
 
         else:
+            password = self.get_page('password').get_password()
+            passwords.save_password(self.account, password)
             self.show_page('success')
 
     def _on_destroy(self, *args):
@@ -215,6 +182,9 @@ class EnterPassword(Page):
     def get_password(self):
         return self._password1_entry.get_text()
 
+    def get_visible_buttons(self):
+        return ['apply']
+
 
 class NextStage(Page):
     def __init__(self):
@@ -242,3 +212,29 @@ class NextStage(Page):
 
     def get_submit_form(self):
         return self._current_form.get_submit_form()
+
+    def get_visible_buttons(self):
+        return ['apply']
+
+
+class Error(ErrorPage):
+    def __init__(self):
+        ErrorPage.__init__(self)
+        self.set_title(_('Password Change Failed'))
+        self.set_heading(_('Password Change Failed'))
+        self.set_text(
+            _('An error occurred while trying to change your password.'))
+
+    def get_visible_buttons(self):
+        return ['back']
+
+
+class Success(SuccessPage):
+    def __init__(self):
+        SuccessPage.__init__(self)
+        self.set_title(_('Password Changed'))
+        self.set_heading(_('Password Changed'))
+        self.set_text(_('Your password has successfully been changed.'))
+
+    def get_visible_buttons(self):
+        return ['close']
