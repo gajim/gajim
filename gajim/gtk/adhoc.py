@@ -13,9 +13,9 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from enum import IntEnum
 
 from gi.repository import Gtk
+from gi.repository import GObject
 
 from nbxmpp.const import AdHocAction
 from nbxmpp.modules import dataforms
@@ -27,163 +27,54 @@ from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
 from .dataform import DataFormWidget
-from .util import find_widget
 from .util import MultiLineLabel
+
+from .assistant import Assistant
+from .assistant import Page
+from .assistant import ErrorPage
 
 log = logging.getLogger('gajim.gui.adhoc')
 
 
-class Page(IntEnum):
-    REQUEST = 0
-    EXECUTE = 1
-    COMMANDS = 2
-    STAGE = 3
-    COMPLETED = 4
-    ERROR = 5
-
-
-class AdHocCommand(Gtk.Assistant):
+class AdHocCommand(Assistant):
     def __init__(self, account, jid=None):
-        Gtk.Assistant.__init__(self)
+        Assistant.__init__(self, width=600, height=500)
 
-        self._con = app.connections[account]
-        self._account = account
         self._destroyed = False
 
-        self.set_application(app.app)
-        self.set_resizable(True)
-        self.set_position(Gtk.WindowPosition.CENTER)
+        self._client = app.get_client(account)
+        self._account = account
+        self._jid = jid
 
-        self.set_default_size(600, 400)
-        self.get_style_context().add_class('dialog-margin')
+        self.add_button('complete', _('Complete'), complete=True,
+                        css_class='suggested-action')
+        self.add_button('next', _('Next'), complete=True,
+                        css_class='suggested-action')
+        self.add_button('prev', _('Previous'))
+        self.add_button('cancel', _('Cancel'),
+                        css_class='destructive-action')
+        self.add_button('commands', _('Commands'),
+                        css_class='suggested-action')
+        self.add_button('execute', _('Execute'), css_class='suggested-action')
 
-        self._add_page(Request())
-        self._add_page(ExecuteCommand())
-        self._add_page(Commands())
-        self._add_page(Stage())
-        self._add_page(Completed())
-        self._add_page(Error())
+        self.add_pages({
+            'commands': Commands(),
+            'stage': Stage(),
+            'completed': Completed(),
+            'error': Error()
+        })
 
-        self.connect('prepare', self._on_page_change)
-        self.connect('cancel', self._on_cancel)
-        self.connect('close', self._on_cancel)
+        self._progress = self.add_default_page('progress')
+
+        self.get_page('commands').connect('execute', self._on_execute)
+
+        self.connect('button-clicked', self._on_button_clicked)
         self.connect('destroy', self._on_destroy)
 
-        self._remove_sidebar()
-
-        self._buttons = {}
-        self._add_custom_buttons()
-
-        self.show()
-        self._con.get_module('AdHocCommands').request_command_list(
+        self._client.get_module('AdHocCommands').request_command_list(
             jid, callback=self._received_command_list)
 
-    def _add_custom_buttons(self):
-        action_area = find_widget('action_area', self)
-        for button in list(action_area.get_children()):
-            self.remove_action_widget(button)
-
-        cancel = ActionButton(_('Cancel'), AdHocAction.CANCEL)
-        cancel.connect('clicked', self._abort)
-        self._buttons['cancel'] = cancel
-        self.add_action_widget(cancel)
-
-        complete = ActionButton(_('Finish'), AdHocAction.COMPLETE)
-        complete.connect('clicked', self._execute_action)
-        self._buttons['complete'] = complete
-        self.add_action_widget(complete)
-
-        commands = Gtk.Button(label=_('Commands'))
-        commands.connect('clicked',
-                         lambda *args: self.set_current_page(Page.COMMANDS))
-        self._buttons['commands'] = commands
-        self.add_action_widget(commands)
-
-        next_ = ActionButton(_('Next'), AdHocAction.NEXT)
-        next_.connect('clicked', self._execute_action)
-        self._buttons['next'] = next_
-        self.add_action_widget(next_)
-
-        prev = ActionButton(_('Previous'), AdHocAction.PREV)
-        prev.connect('clicked', self._execute_action)
-        self._buttons['prev'] = prev
-        self.add_action_widget(prev)
-
-        execute = ActionButton(_('Execute'), AdHocAction.EXECUTE)
-        execute.connect('clicked', self._execute_action)
-        self._buttons['execute'] = execute
-        self.add_action_widget(execute)
-
-    def _set_button_visibility(self, page):
-        for action, button in self._buttons.items():
-            button.hide()
-            if action in ('next', 'prev', 'complete'):
-                button.remove_default()
-
-        if page == Page.COMMANDS:
-            self._buttons['execute'].show()
-
-        elif page == Page.STAGE:
-            self._buttons['cancel'].show()
-            stage_page = self.get_nth_page(page)
-            if not stage_page.actions:
-                self._buttons['complete'].show()
-                self._buttons['complete'].make_default()
-            else:
-                for action in stage_page.actions:
-                    button = self._buttons.get(action.value)
-                    if button is not None:
-                        if button.action == stage_page.default:
-                            button.make_default()
-                        button.show()
-
-        elif page == Page.ERROR:
-            error_page = self.get_nth_page(page)
-            if error_page.show_command_button:
-                self._buttons['commands'].show()
-
-        elif page == Page.COMPLETED:
-            self._buttons['commands'].show()
-
-    def _add_page(self, page):
-        self.append_page(page)
-        self.set_page_type(page, page.type_)
-        self.set_page_title(page, page.title)
-        self.set_page_complete(page, page.complete)
-
-    def execute_action(self):
-        self._execute_action(self._buttons['execute'])
-
-    def _execute_action(self, button):
-        action = button.action
-        current_page = self.get_current_page()
-        dataform = None
-        if action == AdHocAction.EXECUTE:
-            command = self.get_nth_page(current_page).get_selected_command()
-            if command is None:
-                # The commands page should not show if there are no commands,
-                # but if for some reason it does don’t fail horribly
-                return
-        else:
-            command, dataform = self.get_nth_page(current_page).stage_data
-            if action == AdHocAction.PREV:
-                dataform = None
-
-        self.set_current_page(Page.EXECUTE)
-        if current_page == Page.STAGE:
-            self.get_nth_page(current_page).clear()
-        self._con.get_module('AdHocCommands').execute_command(
-            command,
-            action=action,
-            dataform=dataform,
-            callback=self._received_stage)
-
-    def _abort(self, *args):
-        if self.get_current_page() == Page.STAGE:
-            command = self.get_nth_page(Page.STAGE).stage_data[0]
-            self._con.get_module('AdHocCommands').execute_command(
-                command, AdHocAction.CANCEL)
-            self.set_current_page(Page.COMMANDS)
+        self.show_all()
 
     def _received_command_list(self, task):
         try:
@@ -196,8 +87,8 @@ class AdHocCommand(Gtk.Assistant):
             self._set_error(_('No commands available'), False)
             return
 
-        self.get_nth_page(Page.COMMANDS).add_commands(commands)
-        self.set_current_page(Page.COMMANDS)
+        self.get_page('commands').add_commands(commands)
+        self.show_page('commands')
 
     def _received_stage(self, task):
         try:
@@ -206,69 +97,84 @@ class AdHocCommand(Gtk.Assistant):
             self._set_error(to_user_string(error), True)
             return
 
-        page = Page.STAGE
+        page_name = 'stage'
         if stage.is_completed:
-            page = Page.COMPLETED
+            page_name = 'completed'
 
-        stage_page = self.get_nth_page(page)
-        stage_page.process_stage(stage)
-        self.set_current_page(page)
+        page = self.get_page(page_name)
+        page.process_stage(stage)
+        self.show_page(page_name)
 
     def _set_error(self, text, show_command_button):
-        self.get_nth_page(Page.ERROR).set_text(text)
-        self.get_nth_page(Page.ERROR).show_command_button = show_command_button
-        self.set_current_page(Page.ERROR)
-
-    def set_stage_complete(self, is_valid):
-        self._buttons['next'].set_sensitive(is_valid)
-        self._buttons['complete'].set_sensitive(is_valid)
-
-    def _remove_sidebar(self):
-        main_box = self.get_children()[0]
-        sidebar = main_box.get_children()[0]
-        main_box.remove(sidebar)
-
-    def _on_page_change(self, _assistant, _page):
-        self._set_button_visibility(self.get_current_page())
-
-    def _on_cancel(self, _widget):
-        self.destroy()
+        self.get_page('error').set_show_commands_button(show_command_button)
+        self.get_page('error').set_text(text)
+        self.show_page('error')
 
     def _on_destroy(self, *args):
-        self._destroyed = True
+        pass
+
+    def _on_button_clicked(self, _assistant, button_name):
+        if button_name == 'commands':
+            self.show_page('commands')
+
+        elif button_name == 'execute':
+            self._on_execute()
+
+        elif button_name in ('prev', 'next', 'complete'):
+            self._on_stage_action(AdHocAction(button_name))
+
+        elif button_name == 'cancel':
+            self._on_cancel()
+
+        else:
+            raise ValueError('Invalid button name: %s' % button_name)
+
+    def _on_stage_action(self, action):
+        command, dataform = self.get_page('stage').stage_data
+        if action == AdHocAction.PREV:
+            dataform = None
+
+        self._client.get_module('AdHocCommands').execute_command(
+            command,
+            action=action,
+            dataform=dataform,
+            callback=self._received_stage)
+
+        self.show_page('progress')
+        self.get_page('stage').clear()
+
+    def _on_execute(self, *args):
+        command = self.get_page('commands').get_selected_command()
+        if command is None:
+            return
+
+        self._client.get_module('AdHocCommands').execute_command(
+            command,
+            action=AdHocAction.EXECUTE,
+            callback=self._received_stage)
+
+        self.show_page('progress')
+
+    def _on_cancel(self):
+        command, _ = self.get_page('stage').stage_data
+        self._client.get_module('AdHocCommands').execute_command(
+            command, AdHocAction.CANCEL)
+        self.show_page('commands')
 
 
-class Request(Gtk.Box):
+class Commands(Page):
 
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Request Command List')
-    complete = False
+    __gsignals__ = {
+        'execute': (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
 
     def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
-        spinner = Gtk.Spinner()
-        self.pack_start(spinner, True, True, 0)
-        spinner.start()
-        self.show_all()
+        Page.__init__(self)
 
+        self.set_valign(Gtk.Align.FILL)
+        self.complete = True
+        self.title = _('Command List')
 
-class ExecuteCommand(Request):
-
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Executing…')
-    complete = False
-
-
-class Commands(Gtk.Box):
-
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Command List')
-    complete = True
-
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
         self._commands = {}
         self._scrolled = Gtk.ScrolledWindow()
         self._scrolled.get_style_context().add_class('adhoc-scrolled')
@@ -299,7 +205,7 @@ class Commands(Gtk.Box):
         return search_text.lower() not in model[iter_][0].lower()
 
     def _on_row_activate(self, _tree_view, _path, _column):
-        self.get_toplevel().execute_action()
+        self.emit('execute')
 
     def add_commands(self, commands):
         self._store.clear()
@@ -311,19 +217,23 @@ class Commands(Gtk.Box):
 
     def get_selected_command(self):
         model, treeiter = self._treeview.get_selection().get_selected()
+        if treeiter is None:
+            return None
         key = model[treeiter][1]
         return self._commands[key]
 
+    def get_visible_buttons(self):
+        return ['execute']
 
-class Stage(Gtk.Box):
 
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Settings')
-    complete = True
-
+class Stage(Page):
     def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
+        Page.__init__(self)
+
+        self.set_valign(Gtk.Align.FILL)
+        self.complete = False
+        self.title = _('Stage')
+
         self._dataform_widget = None
         self._notes = []
         self._last_stage_data = None
@@ -356,7 +266,8 @@ class Stage(Gtk.Box):
         if form is None:
             return
         form = dataforms.extend_form(node=form)
-        self._dataform_widget = DataFormWidget(form)
+        options = {'entry-activates-default': True}
+        self._dataform_widget = DataFormWidget(form, options)
         self._dataform_widget.connect('is-valid', self._on_is_valid)
         self._dataform_widget.validate()
         self._dataform_widget.show_all()
@@ -377,18 +288,29 @@ class Stage(Gtk.Box):
             self.add(label)
 
     def _on_is_valid(self, _widget, is_valid):
-        self.get_toplevel().set_stage_complete(is_valid)
+        self.complete = is_valid
+        self.update_page_complete()
+
+    def get_visible_buttons(self):
+        actions = list(map(lambda action: action.value,
+                           self._last_stage_data.actions))
+        actions.append('cancel')
+        return actions
+
+    def get_default_button(self):
+        if self._last_stage_data.default is None:
+            return None
+        return self._last_stage_data.default.value
 
 
-class Completed(Gtk.Box):
-
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Finished')
-    complete = True
-
+class Completed(Page):
     def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(12)
+        Page.__init__(self)
+
+        self.set_valign(Gtk.Align.FILL)
+        self.complete = True
+        self.title = _('Completed')
+
         self._notes = []
         self._dataform_widget = None
 
@@ -397,7 +319,7 @@ class Completed(Gtk.Box):
         icon.get_style_context().add_class('success-color')
         icon.show()
 
-        label = Gtk.Label(label='Finished')
+        label = Gtk.Label(label='Completed')
         label.show()
 
         self._icon_text = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -448,55 +370,21 @@ class Completed(Gtk.Box):
             self._notes.append(label)
             self.add(label)
 
+    def get_visible_buttons(self):
+        return ['commands']
 
-class Error(Gtk.Box):
 
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Execution failed')
-    complete = True
-
+class Error(ErrorPage):
     def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(12)
-        self.set_homogeneous(True)
-        self._show_command_button = False
+        ErrorPage.__init__(self)
 
-        icon = Gtk.Image.new_from_icon_name('dialog-error-symbolic',
-                                            Gtk.IconSize.DIALOG)
-        icon.get_style_context().add_class('error-color')
-        icon.set_valign(Gtk.Align.END)
-        self._label = Gtk.Label()
-        self._label.get_style_context().add_class('bold16')
-        self._label.set_valign(Gtk.Align.START)
+        self._show_commands_button = False
+        self.set_heading(_('An error occurred'))
 
-        self.add(icon)
-        self.add(self._label)
-        self.show_all()
+    def set_show_commands_button(self, value):
+        self._show_commands_button = value
 
-    def set_text(self, text):
-        self._label.set_text(text)
-
-    @property
-    def show_command_button(self):
-        return self._show_command_button
-
-    @show_command_button.setter
-    def show_command_button(self, value):
-        self._show_command_button = value
-
-
-class ActionButton(Gtk.Button):
-    def __init__(self, label, action):
-        Gtk.Button.__init__(self, label=label)
-        self.action = action
-
-        if action == AdHocAction.CANCEL:
-            self.get_style_context().add_class('destructive-action')
-        if action == AdHocAction.EXECUTE:
-            self.get_style_context().add_class('suggested-action')
-
-    def make_default(self):
-        self.get_style_context().add_class('suggested-action')
-
-    def remove_default(self):
-        self.get_style_context().remove_class('suggested-action')
+    def get_visible_buttons(self):
+        if self._show_commands_button:
+            return ['commands']
+        return None
