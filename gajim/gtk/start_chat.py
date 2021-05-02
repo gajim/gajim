@@ -27,7 +27,6 @@ from nbxmpp.errors import CancelledError
 from gajim.common import app
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
-from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
@@ -131,8 +130,18 @@ class StartChatDialog(Gtk.ApplicationWindow):
             client = app.get_client(account)
             for jid, _data in client.get_module('Roster').iter():
                 contact = client.get_module('Contacts').get_contact(jid)
-                rows.append(ContactRow(account, contact, jid,
-                                       contact.name, show_account))
+                rows.append(ContactRow(account,
+                                       contact,
+                                       jid,
+                                       contact.name,
+                                       show_account))
+            self_contact = client.get_module('Contacts').get_contact(
+                client.get_own_jid().bare)
+            rows.append(ContactRow(account,
+                                   self_contact,
+                                   self_contact.jid,
+                                   _('Note to myself'),
+                                   show_account))
 
     def _add_groupchats(self, rows):
         show_account = len(self._accounts) > 1

@@ -868,7 +868,9 @@ def get_chat_list_row_menu(workspace_id, account, jid, pinned):
         (_('Move Chat'), []),
     ]
 
-    if not contact.is_groupchat and not contact.is_in_roster:
+    is_self_contact = contact.jid.bare == client.get_own_jid().bare
+    if (not contact.is_groupchat and not contact.is_in_roster and
+            not is_self_contact):
         menu_items.append(('add-to-roster', _('Add to contact list')))
 
     menu = Gio.Menu()

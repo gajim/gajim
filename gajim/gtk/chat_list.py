@@ -288,7 +288,8 @@ class ChatRow(Gtk.ListBoxRow):
         self.conversations_label = ConversationsHeader()
         self.pinned_label = PinnedHeader()
 
-        self.contact = app.get_client(account).get_module('Contacts').get_contact(jid)
+        self._client = app.get_client(account)
+        self.contact = self._client.get_module('Contacts').get_contact(jid)
         self.contact.connect('presence-update', self._on_presence_update)
         self.contact.connect('chatstate-update', self._on_chatstate_update)
         self.contact.connect('nickname-update', self._on_nickname_update)
@@ -404,8 +405,11 @@ class ChatRow(Gtk.ListBoxRow):
             muc_name = get_groupchat_name(client, self.jid)
             self._ui.name_label.set_text(f'{self.contact.name} ({muc_name})')
             return
-
-        self._ui.name_label.set_text(self.contact.name)
+        own_jid = self._client.get_own_jid().bare
+        if self.jid == own_jid:
+            self._ui.name_label.set_text(_('Note to myself'))
+        else:
+            self._ui.name_label.set_text(self.contact.name)
 
     def update_account_identifier(self):
         account_class = app.css_config.get_dynamic_class(self.account)
