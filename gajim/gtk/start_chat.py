@@ -283,6 +283,13 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._ui.infobar.set_revealed(False)
             app.settings.set('show_help_start_chat', False)
 
+    def _on_filter_bar_toggled(self, toggle_button):
+        active = toggle_button.get_active()
+        self._ui.filter_bar_revealer.set_reveal_child(active)
+
+    def _on_filter_toggled(self, _toggle_button):
+        self._ui.listbox.invalidate_filter()
+
     def _start_new_chat(self, row):
         if row.new:
             try:
@@ -406,6 +413,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.search_entry.grab_focus()
         image_style_context = button.get_children()[0].get_style_context()
         if button.get_active():
+            self._ui.filter_bar_toggle.set_active(False)
+            self._ui.filter_bar_toggle.set_sensitive(False)
             image_style_context.add_class('selected-color')
             self._set_listbox(self._global_search_listbox)
             if self._ui.search_entry.get_text():
@@ -413,6 +422,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._remove_new_jid_row()
             self._ui.listbox.invalidate_filter()
         else:
+            self._ui.filter_bar_toggle.set_sensitive(True)
             self._ui.search_entry.set_text('')
             image_style_context.remove_class('selected-color')
             self._set_listbox(self._ui.listbox)
@@ -495,6 +505,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
         search_text = self._ui.search_entry.get_text().lower()
         search_text_list = search_text.split()
         row_text = row.get_search_text().lower()
+
+        show_chats = self._ui.filter_chats.get_active()
+        show_groupchats = self._ui.filter_groupchats.get_active()
+        if row.groupchat and not show_groupchats:
+            return False
+        if not row.groupchat and not show_chats:
+            return False
+
         for text in search_text_list:
             if text not in row_text:
                 GLib.timeout_add(50, self.select_first_row)
