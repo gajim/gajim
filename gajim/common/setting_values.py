@@ -275,8 +275,6 @@ ACCOUNT_SETTINGS = {
         'notify_on_all_messages': HAS_APP_DEFAULT,
         'print_status': HAS_APP_DEFAULT,
         'print_join_left': HAS_APP_DEFAULT,
-        'minimize_on_autojoin': True,
-        'minimize_on_close': True,
         'send_chatstate': HAS_ACCOUNT_DEFAULT,
         'send_marker': HAS_ACCOUNT_DEFAULT,
         'encryption': '',

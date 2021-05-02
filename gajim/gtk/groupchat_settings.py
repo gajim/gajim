@@ -54,16 +54,6 @@ class GroupChatSettings(SettingsBox):
                     SettingType.GROUP_CHAT,
                     'notify_on_all_messages'),
 
-            Setting(SettingKind.SWITCH,
-                    _('Minimize on Close'),
-                    SettingType.GROUP_CHAT,
-                    'minimize_on_close'),
-
-            Setting(SettingKind.SWITCH,
-                    _('Minimize When Joining Automatically'),
-                    SettingType.GROUP_CHAT,
-                    'minimize_on_autojoin'),
-
             Setting(SettingKind.POPOVER,
                     _('Send Chat State'),
                     SettingType.GROUP_CHAT,

@@ -337,8 +337,6 @@ class Config:
             'notify_on_all_messages': [opt_bool, False, _('If enabled, a notification is created for every message in this group chat.')],
             'print_status': [opt_bool, False, _('Show a status message for all status changes (away, dnd, etc.) of users in a group chat.')],
             'print_join_left': [opt_bool, False, _('Show a status message for every join or leave in a group chat.')],
-            'minimize_on_autojoin': [opt_bool, True, _('If enabled, the group chat is minimized into the contact list when joining automatically.')],
-            'minimize_on_close': [opt_bool, True, _('If enabled, the group chat is minimized into the contact list when closing it.')],
             'send_chatstate': [opt_str, 'composing_only', _('Chat state notifications that are sent to the group chat. Possible values: \'all\', \'composing_only\' or \'disabled\'.')],
         }, {}),
         'plugins': ({
