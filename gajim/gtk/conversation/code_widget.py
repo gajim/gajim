@@ -91,6 +91,8 @@ class CodeTextview(GtkSource.View):
         self.set_editable(False)
         self.set_cursor_visible(False)
         self.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
+        self.set_top_margin(2)
+        self.set_bottom_margin(2)
 
         self._source_manager = GtkSource.LanguageManager.get_default()
 
