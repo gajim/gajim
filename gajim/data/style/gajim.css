@@ -171,18 +171,14 @@
 .workspace-sidebar-item.drag-hover-bottom {
     border-bottom: 1px solid #4e9a06;
 }
-.workspace-add {
-    padding: 0 0 0 6px;
-    margin: 6px 12px;
+.workspace-add:hover,
+.workspace-add:focus {
+    background: transparent;
+    box-shadow: none;
+    outline: none;
 }
-.workspace-add image {
-    margin: 0px;
-    padding: 0px;
-    color: alpha(@theme_text_color, 0.7);
-    background-color: shade(@theme_base_color, 0.9);
-}
-.workspace-add:hover image {
-    background-color: shade(@theme_base_color, 0.85);
+.workspace-add button {
+    margin: 6px 8px 6px 14px;
 }
 
 /* Account sidebar */

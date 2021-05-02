@@ -206,14 +206,13 @@ class WorkspaceSideBar(Gtk.ListBox):
 class CommonWorkspace(Gtk.ListBoxRow):
     def __init__(self, workspace_id):
         Gtk.ListBoxRow.__init__(self)
-        self.get_style_context().add_class('workspace-sidebar-item')
-
         self.workspace_id = workspace_id
 
 
 class Workspace(CommonWorkspace):
     def __init__(self, workspace_id):
         CommonWorkspace.__init__(self, workspace_id)
+        self.get_style_context().add_class('workspace-sidebar-item')
 
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(
@@ -286,11 +285,15 @@ class AddWorkspace(CommonWorkspace):
         self.set_selectable(False)
         self.set_tooltip_text(_('Add Workspace'))
         self.get_style_context().add_class('workspace-add')
-
-        image = Gtk.Image.new_from_icon_name('list-add-symbolic',
-                                             Gtk.IconSize.DND)
-        self.add(image)
+        button = Gtk.Button.new_from_icon_name('list-add-symbolic',
+                                               Gtk.IconSize.BUTTON)
+        button.connect('clicked', self._on_add_clicked)
+        self.add(button)
         self.show_all()
+
+    @staticmethod
+    def _on_add_clicked(_button):
+        open_window('WorkspaceDialog')
 
 
 class WorkspaceAvatar(Gtk.Image):
