@@ -66,9 +66,6 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
     def show_all(self):
         page_name = self._ui.stack.get_visible_child_name()
-        buttons = self._button_visible_func(self, page_name)
-        self._set_buttons_visible(buttons)
-        self.update_page_complete()
         self.emit('page-changed', page_name)
         Gtk.ApplicationWindow.show_all(self)
 
@@ -76,7 +73,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def update_page_complete(self):
+    def _update_page_complete(self, *args):
         page_widget = self._ui.stack.get_visible_child()
         for button, complete in self._buttons.values():
             if complete:
@@ -84,6 +81,33 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
     def update_title(self):
         self.set_title(self._ui.stack.get_visible_child().title)
+
+    def _hide_buttons(self):
+        for button, _ in self._buttons.values():
+            button.hide()
+
+    def _set_buttons_visible(self):
+        page_name = self._ui.stack.get_visible_child_name()
+        if self._button_visible_func is None:
+            buttons = self.get_page(page_name).get_visible_buttons()
+            if buttons is not None:
+                if len(buttons) == 1:
+                    default = buttons[0]
+                else:
+                    default = self.get_page(page_name).get_default_button()
+
+                self.set_default_button(default)
+        else:
+            buttons = self._button_visible_func(self, page_name)
+
+        self._update_page_complete()
+
+        if buttons is None:
+            return
+
+        for button_name in buttons:
+            button, _ = self._buttons[button_name]
+            button.show()
 
     def set_button_visible_func(self, func):
         self._button_visible_func = func
@@ -105,6 +129,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
     def add_pages(self, pages):
         self._pages = pages
         for name, widget in pages.items():
+            widget.connect('update-page-complete', self._update_page_complete)
             self._ui.stack.add_named(widget, name)
 
     def add_default_page(self, name):
@@ -125,27 +150,20 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         return self._ui.stack.get_visible_child_name()
 
     def show_page(self, name, transition=Gtk.StackTransitionType.NONE):
-        buttons = self._button_visible_func(self, name)
-        self._set_buttons_visible(buttons)
+        if self._ui.stack.get_visible_child_name() == name:
+            return
+        self._hide_buttons()
         self._ui.stack.set_visible_child_full(name, transition)
 
     def get_page(self, name):
         return self._pages[name]
 
-    def _set_buttons_visible(self, buttons):
-        for button, _ in self._buttons.values():
-            button.hide()
-
-        if buttons is None:
-            return
-
-        for button_name in buttons:
-            button, _ = self._buttons[button_name]
-            button.show()
-
     def _on_visible_child_name(self, stack, _param):
+        if stack.get_visible_child_name() is None:
+            # Happens for some reason when adding the first page
+            return
         self.update_title()
-        self.update_page_complete()
+        self._set_buttons_visible()
         self.emit('page-changed', stack.get_visible_child_name())
 
     def __on_button_clicked(self, button):
@@ -161,6 +179,11 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
 
 class Page(Gtk.Box):
+
+    __gsignals__ = {
+        'update-page-complete': (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
+
     def __init__(self):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.set_spacing(18)
@@ -168,6 +191,15 @@ class Page(Gtk.Box):
 
         self.title = ''
         self.complete = True
+
+    def get_visible_buttons(self):
+        return None
+
+    def get_default_button(self):
+        return None
+
+    def update_page_complete(self):
+        self.emit('update-page-complete')
 
 
 class DefaultPage(Page):

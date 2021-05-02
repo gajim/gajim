@@ -210,7 +210,7 @@ class EnterPassword(Page):
 
     def _set_complete(self, state):
         self.complete = state
-        self.get_toplevel().update_page_complete()
+        self.update_page_complete()
 
     def get_password(self):
         return self._password1_entry.get_text()
@@ -228,7 +228,7 @@ class NextStage(Page):
 
     def _on_is_valid(self, _widget, is_valid):
         self.complete = is_valid
-        self.get_toplevel().update_page_complete()
+        self.update_page_complete()
 
     def set_form(self, form):
         if self._current_form is not None:

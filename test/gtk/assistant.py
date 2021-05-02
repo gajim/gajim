@@ -128,7 +128,7 @@ class Start(Page):
 
     def _on_changed(self, entry):
         self.complete = bool(entry.get_text())
-        self.get_toplevel().update_page_complete()
+        self.update_page_complete()
 
 
 win = TestAssistant()
