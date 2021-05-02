@@ -686,7 +686,7 @@ class Signup(Page):
             self.complete = True
             self._ui.visit_server_button.set_visible(True)
 
-        self.get_toplevel().update_page_complete()
+        self.update_page_complete()
 
     def is_anonymous(self):
         return self._ui.sign_up_anonymously.get_active()
@@ -805,7 +805,7 @@ class AdvancedSettings(Page):
         port_valid = self._validate_port()
         host_valid = self._validate_host()
         self.complete = port_valid and host_valid
-        self.get_toplevel().update_page_complete()
+        self.update_page_complete()
 
 
 class SecurityWarning(Page):
@@ -884,7 +884,7 @@ class Form(Page):
 
     def _on_is_valid(self, _widget, is_valid):
         self.complete = is_valid
-        self.get_toplevel().update_page_complete()
+        self.update_page_complete()
 
     def add_form(self, form):
         self.remove_form()
