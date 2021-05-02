@@ -706,6 +706,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         text = '> ' + text.replace('\n', '\n> ') + '\n'
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.insert_at_cursor(text)
+        self.msg_textview.grab_focus()
 
     def paste_clipboard_as_quote(self, _item: Gtk.MenuItem) -> None:
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
