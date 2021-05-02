@@ -32,6 +32,8 @@ from .util import MultiLineLabel
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
+from .assistant import ProgressPage
+
 
 log = logging.getLogger('gajim.gui.adhoc')
 
@@ -58,13 +60,13 @@ class AdHocCommand(Assistant):
         self.add_button('execute', _('Execute'), css_class='suggested-action')
 
         self.add_pages({
+            'request': RequestCommandList(),
             'commands': Commands(),
             'stage': Stage(),
             'completed': Completed(),
-            'error': Error()
+            'error': Error(),
+            'executing': Executing(),
         })
-
-        self._progress = self.add_default_page('progress')
 
         self.get_page('commands').connect('execute', self._on_execute)
 
@@ -73,7 +75,6 @@ class AdHocCommand(Assistant):
 
         self._client.get_module('AdHocCommands').request_command_list(
             jid, callback=self._received_command_list)
-
         self.show_all()
 
     def _received_command_list(self, task):
@@ -140,7 +141,7 @@ class AdHocCommand(Assistant):
             dataform=dataform,
             callback=self._received_stage)
 
-        self.show_page('progress')
+        self.show_page('executing')
         self.get_page('stage').clear()
 
     def _on_execute(self, *args):
@@ -153,7 +154,7 @@ class AdHocCommand(Assistant):
             action=AdHocAction.EXECUTE,
             callback=self._received_stage)
 
-        self.show_page('progress')
+        self.show_page('executing')
 
     def _on_cancel(self):
         command, _ = self.get_page('stage').stage_data
@@ -388,3 +389,17 @@ class Error(ErrorPage):
         if self._show_commands_button:
             return ['commands']
         return None
+
+
+class Executing(ProgressPage):
+    def __init__(self):
+        ProgressPage.__init__(self)
+        self.set_title(_('Executing…'))
+        self.set_text(_('Executing…'))
+
+
+class RequestCommandList(ProgressPage):
+    def __init__(self):
+        ProgressPage.__init__(self)
+        self.set_title(_('Requesting Command List'))
+        self.set_text(_('Requesting Command List'))
