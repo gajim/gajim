@@ -26,6 +26,8 @@ from gajim.common.helpers import event_filter
 
 from .assistant import Assistant
 from .assistant import Page
+from .assistant import ErrorPage
+from .assistant import SuccessPage
 
 log = logging.getLogger('gajim.gui.remove_account')
 
@@ -35,7 +37,12 @@ class RemoveAccount(Assistant):
         Assistant.__init__(self)
 
         self.account = account
-        self._con = app.connections.get(account)
+
+        try:
+            self._client = app.get_client(account)
+        except KeyError:
+            self._client = None
+
         self._destroyed = False
         self._account_removed = False
 
@@ -43,26 +50,15 @@ class RemoveAccount(Assistant):
         self.add_button('close', _('Close'))
         self.add_button('back', _('Back'))
 
-        self.add_pages({'remove_choice': RemoveChoice(account)})
+        self.add_pages({'remove_choice': RemoveChoice(account),
+                        'error': Error(),
+                        'success': Success()})
 
         progress = self.add_default_page('progress')
         progress.set_title(_('Removing Account...'))
         progress.set_text(_('Trying to remove account...'))
 
-        success = self.add_default_page('success')
-        success.set_title(_('Account Removed'))
-        success.set_heading(_('Account Removed'))
-        success.set_text(
-            _('Your account has has been removed successfully.'))
-
-        error = self.add_default_page('error')
-        error.set_title(_('Account Removal Failed'))
-        error.set_heading(_('Account Removal Failed'))
-
-        self.set_button_visible_func(self._visible_func)
-
         self.connect('button-clicked', self._on_button_clicked)
-        self.connect('page-changed', self._on_page_changed)
         self.connect('destroy', self._on_destroy)
 
         self.register_events([
@@ -75,12 +71,12 @@ class RemoveAccount(Assistant):
         self.show_all()
 
     @event_filter(['account'])
-    def _on_account_connected(self, event):
-        self._con = app.connections.get(self.account)
+    def _on_account_connected(self, _event):
+        self._client = app.get_client(self.account)
         self._set_remove_from_server_checkbox()
 
     @event_filter(['account'])
-    def _on_account_disconnected(self, event):
+    def _on_account_disconnected(self, _event):
         self._set_remove_from_server_checkbox()
 
         if self._account_removed:
@@ -88,23 +84,8 @@ class RemoveAccount(Assistant):
             app.interface.remove_account(self.account)
 
     def _set_remove_from_server_checkbox(self):
-        enabled = self._con is not None and self._con.state.is_available
+        enabled = self._client is not None and self._client.state.is_available
         self.get_page('remove_choice').set_remove_from_server(enabled)
-
-    @staticmethod
-    def _visible_func(_assistant, page_name):
-        if page_name == 'remove_choice':
-            return ['remove']
-
-        if page_name == 'progress':
-            return None
-
-        if page_name == 'error':
-            return ['back']
-
-        if page_name == 'success':
-            return ['close']
-        raise ValueError('page %s unknown' % page_name)
 
     def _on_button_clicked(self, _assistant, button_name):
         page = self.get_current_page()
@@ -123,36 +104,26 @@ class RemoveAccount(Assistant):
         if button_name == 'close':
             self.destroy()
 
-    def _on_page_changed(self, _assistant, page_name):
-        if page_name == 'remove_choice':
-            self.set_default_button('remove')
-
-        elif page_name == 'success':
-            self.set_default_button('close')
-
-        elif page_name == 'error':
-            self.set_default_button('back')
-
     def _on_remove(self, *args):
         if self.get_page('remove_choice').remove_from_server:
-            self._con.set_remove_account(True)
-            self._con.get_module('Register').unregister(
+            self._client.set_remove_account(True)
+            self._client.get_module('Register').unregister(
                 callback=self._on_remove_response)
             return
 
-        if self._con is None or self._con.state.is_disconnected:
+        if self._client is None or self._client.state.is_disconnected:
             app.interface.remove_account(self.account)
             self.show_page('success')
             return
 
-        self._con.disconnect(gracefully=True, reconnect=False)
+        self._client.disconnect(gracefully=True, reconnect=False)
         self._account_removed = True
 
     def _on_remove_response(self, task):
         try:
             task.finish()
         except StanzaError as error:
-            self._con.set_remove_account(False)
+            self._client.set_remove_account(False)
 
             error_text = to_user_string(error)
             self.get_page('error').set_text(error_text)
@@ -215,3 +186,28 @@ class RemoveChoice(Page):
         else:
             self._server.set_active(False)
             self._server.set_tooltip_text(_('Account has to be connected'))
+
+    def get_visible_buttons(self):
+        return ['remove']
+
+
+class Error(ErrorPage):
+    def __init__(self):
+        ErrorPage.__init__(self)
+        self.set_title(_('Account Removal Failed'))
+        self.set_heading(_('Account Removal Failed'))
+
+    def get_visible_buttons(self):
+        return ['back']
+
+
+class Success(SuccessPage):
+    def __init__(self):
+        SuccessPage.__init__(self)
+        self.set_title(_('Account Removed'))
+        self.set_heading(_('Account Removed'))
+        self.set_text(
+            _('Your account has has been removed successfully.'))
+
+    def get_visible_buttons(self):
+        return ['close']
