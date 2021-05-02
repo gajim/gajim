@@ -18,6 +18,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gio
+from gi.repository import GObject
 
 from nbxmpp.client import Client
 from nbxmpp.protocol import JID
@@ -44,6 +45,7 @@ from gajim.common.const import GIO_TLS_ERRORS
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import SuccessPage
+from .assistant import ErrorPage
 from .dataform import DataFormWidget
 from .util import get_builder
 from .util import open_window
@@ -66,22 +68,20 @@ class AccountWizard(Assistant):
                         css_class='suggested-action')
         self.add_button('back', _('Back'))
 
-        self.add_pages({'login': Login(self._on_button_clicked),
+        self.add_pages({'login': Login(),
                         'signup': Signup(),
                         'advanced': AdvancedSettings(),
                         'security-warning': SecurityWarning(),
                         'form': Form(),
                         'redirect': Redirect(),
                         'success': Success(),
+                        'error': Error(),
                         })
 
         self._progress = self.add_default_page('progress')
-        self._error = self.add_default_page('error')
-        self._error.set_heading(_('An error occurred during account creation'))
 
-        self.set_button_visible_func(self._visible_func)
-
-        self.connect('button-clicked', self._on_button_clicked)
+        self.get_page('login').connect('clicked', self._on_button_clicked)
+        self.connect('button-clicked', self._on_assistant_button_clicked)
         self.connect('page-changed', self._on_page_changed)
         self.connect('destroy', self._on_destroy)
 
@@ -92,36 +92,25 @@ class AccountWizard(Assistant):
         self._client = None
         self._method = 'login'
 
-    def _visible_func(self, _assistant, page_name):
-        if page_name in ('signup', 'form'):
-            return ['back', 'signup']
+    def get_currenct_method(self):
+        return self._method
 
-        if page_name in ('security-warning', 'advanced'):
-            return ['back', self._method]
+    def _on_button_clicked(self, _page, button_name):
+        if button_name == 'login':
+            if self.get_page('login').is_advanced():
+                self.show_page('advanced',
+                               Gtk.StackTransitionType.SLIDE_LEFT)
+            else:
+                self._test_credentials()
 
-        if page_name in ('login', 'progress'):
-            return None
+        elif button_name == 'signup':
+            self.show_page('signup', Gtk.StackTransitionType.SLIDE_LEFT)
 
-        if page_name in ('error', 'redirect'):
-            return ['back']
-
-        if page_name == 'success':
-            return ['connect']
-
-        raise ValueError('page %s unknown' % page_name)
-
-    def _on_button_clicked(self, _assistant, button_name):
+    def _on_assistant_button_clicked(self, _assistant, button_name):
         page = self.get_current_page()
 
         if button_name == 'login':
-            if page == 'login':
-                if self.get_page('login').is_advanced():
-                    self.show_page('advanced',
-                                   Gtk.StackTransitionType.SLIDE_LEFT)
-                else:
-                    self._test_credentials()
-
-            elif page == 'advanced':
+            if page == 'advanced':
                 self._test_credentials()
 
             elif page == 'security-warning':
@@ -131,10 +120,7 @@ class AccountWizard(Assistant):
                 self._test_credentials(ignore_all_errors=True)
 
         elif button_name == 'signup':
-            if page == 'login':
-                self.show_page('signup', Gtk.StackTransitionType.SLIDE_LEFT)
-
-            elif page == 'signup':
+            if page == 'signup':
                 if self.get_page('signup').is_advanced():
                     self.show_page('advanced',
                                    Gtk.StackTransitionType.SLIDE_LEFT)
@@ -197,27 +183,13 @@ class AccountWizard(Assistant):
         if page_name == 'signup':
             self._method = page_name
             self.get_page('signup').focus()
-            self.set_default_button('signup')
 
         elif page_name == 'login':
             self._method = page_name
             self.get_page('login').focus()
 
-        elif page_name == 'security-warning':
-            self.set_default_button('back')
-
-        elif page_name == 'advanced':
-            self.set_default_button(self._method)
-
-        elif page_name == 'success':
-            self.set_default_button('connect')
-
-        elif page_name in ('error', 'redirect'):
-            self.set_default_button('back')
-
         elif page_name == 'form':
             self.get_page('form').focus()
-            self.set_default_button('signup')
 
     def update_proxy_list(self):
         self.get_page('advanced').update_proxy_list()
@@ -525,10 +497,14 @@ class AccountWizard(Assistant):
 
 
 class Login(Page):
-    def __init__(self, button_callback):
+
+    __gsignals__ = {
+        'clicked': (GObject.SignalFlags.RUN_LAST, None, (str,)),
+    }
+
+    def __init__(self):
         Page.__init__(self)
         self.title = _('Add Account')
-        self._button_callback = button_callback
 
         self._ui = get_builder('account_wizard.ui')
         self._ui.log_in_address_entry.connect(
@@ -551,10 +527,10 @@ class Login(Page):
         self._ui.log_in_address_entry.grab_focus()
 
     def _on_login(self, *args):
-        self._button_callback(self.get_toplevel(), 'login')
+        self.emit('clicked', 'login')
 
     def _on_signup(self, *args):
-        self._button_callback(self.get_toplevel(), 'signup')
+        self.emit('clicked', 'signup')
 
     def _create_server_completion(self):
         # Parse servers.json
@@ -705,6 +681,12 @@ class Signup(Page):
         open_uri(uri)
         return Gdk.EVENT_STOP
 
+    def get_visible_buttons(self):
+        return ['back', 'signup']
+
+    def get_default_button(self):
+        return 'signup'
+
 
 class AdvancedSettings(Page):
     def __init__(self):
@@ -715,6 +697,7 @@ class AdvancedSettings(Page):
         self._ui = get_builder('account_wizard.ui')
         self._ui.manage_proxies_button.connect('clicked',
                                                self._on_proxy_manager)
+        self._ui.proxies_combobox.connect('changed', self._set_complete)
         self._ui.custom_host_entry.connect('changed', self._set_complete)
         self._ui.custom_port_entry.connect('changed', self._set_complete)
         self.pack_start(self._ui.advanced_grid, True, True, 0)
@@ -801,11 +784,31 @@ class AdvancedSettings(Page):
         self._show_port_icon(False)
         return True
 
+    def _is_custom_host_set(self):
+        host = bool(self._ui.custom_host_entry.get_text())
+        port = bool(self._ui.custom_port_entry.get_text())
+        return host or port
+
+    def _is_proxy_set(self):
+        return self._ui.proxies_combobox.get_active() != 0
+
     def _set_complete(self, *args):
-        port_valid = self._validate_port()
-        host_valid = self._validate_host()
-        self.complete = port_valid and host_valid
+        self.complete = False
+        if self._is_proxy_set():
+            self.complete = True
+
+        if self._is_custom_host_set():
+            port_valid = self._validate_port()
+            host_valid = self._validate_host()
+            self.complete = port_valid and host_valid
+
         self.update_page_complete()
+
+    def get_visible_buttons(self):
+        return ['back', self.get_toplevel().get_currenct_method()]
+
+    def get_default_button(self):
+        return self.get_toplevel().get_currenct_method()
 
 
 class SecurityWarning(Page):
@@ -858,6 +861,12 @@ class SecurityWarning(Page):
     @property
     def trust_certificate(self):
         return self._ui.trust_cert_checkbutton.get_active()
+
+    def get_visible_buttons(self):
+        return ['back', self.get_toplevel().get_currenct_method()]
+
+    def get_default_button(self):
+        return 'back'
 
 
 class Form(Page):
@@ -915,6 +924,12 @@ class Form(Page):
     def focus(self):
         self._current_form.focus_first_entry()
 
+    def get_visible_buttons(self):
+        return ['back', 'signup']
+
+    def get_default_button(self):
+        return 'signup'
+
 
 class Redirect(Page):
     def __init__(self):
@@ -936,6 +951,9 @@ class Redirect(Page):
     def _on_link_button(self, _button):
         open_uri(self._link)
 
+    def get_visible_buttons(self):
+        return ['back']
+
 
 class Success(SuccessPage):
     def __init__(self):
@@ -951,3 +969,15 @@ class Success(SuccessPage):
     @property
     def account(self):
         return self._account
+
+    def get_visible_buttons(self):
+        return ['connect']
+
+
+class Error(ErrorPage):
+    def __init__(self):
+        ErrorPage.__init__(self)
+        self.set_heading(_('An error occurred during account creation'))
+
+    def get_visible_buttons(self):
+        return ['back']
