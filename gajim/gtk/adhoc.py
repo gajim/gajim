@@ -26,13 +26,13 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
-from .dataform import DataFormWidget
-from .util import MultiLineLabel
-
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
 from .assistant import ProgressPage
+from .dataform import DataFormWidget
+from .util import MultiLineLabel
+from .util import ensure_not_destroyed
 
 
 log = logging.getLogger('gajim.gui.adhoc')
@@ -77,6 +77,7 @@ class AdHocCommand(Assistant):
             jid, callback=self._received_command_list)
         self.show_all()
 
+    @ensure_not_destroyed
     def _received_command_list(self, task):
         try:
             commands = task.finish()
@@ -91,6 +92,7 @@ class AdHocCommand(Assistant):
         self.get_page('commands').add_commands(commands)
         self.show_page('commands')
 
+    @ensure_not_destroyed
     def _received_stage(self, task):
         try:
             stage = task.finish()
@@ -112,7 +114,7 @@ class AdHocCommand(Assistant):
         self.show_page('error')
 
     def _on_destroy(self, *args):
-        pass
+        self._destroyed = True
 
     def _on_button_clicked(self, _assistant, button_name):
         if button_name == 'commands':
