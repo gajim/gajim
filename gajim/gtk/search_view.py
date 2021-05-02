@@ -101,14 +101,12 @@ class SearchView(Gtk.Box):
         if not context or everywhere:
             self._scope = 'everywhere'
             self._results = app.storage.archive.search_all_logs(text)
-            self._add_counter()
-            self._add_results()
         else:
             self._scope = 'contact'
             self._results = app.storage.archive.search_log(
                 self._account, self._jid, text)
-            self._add_counter()
-            self._add_results()
+        self._add_counter()
+        self._add_results()
 
     def _add_counter(self):
         results_count = len(self._results)
