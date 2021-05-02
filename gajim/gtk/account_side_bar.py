@@ -60,6 +60,11 @@ class Account(Gtk.ListBoxRow):
 
         self.account = account
         self._account_class = None
+
+        selection_bar = Gtk.Box()
+        selection_bar.set_size_request(6, -1)
+        selection_bar.get_style_context().add_class('selection-bar')
+
         self._image = AccountAvatar(account)
 
         self._account_color_bar = Gtk.Box()
@@ -70,8 +75,9 @@ class Account(Gtk.ListBoxRow):
         account_box = Gtk.Box(spacing=3)
         account_box.set_tooltip_text(
             _('Account: %s') % app.get_account_label(account))
-        account_box.add(self._account_color_bar)
+        account_box.add(selection_bar)
         account_box.add(self._image)
+        account_box.add(self._account_color_bar)
         self._update_account_color()
 
         self.add(account_box)

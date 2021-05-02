@@ -121,8 +121,6 @@
 .selection-bar {
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
-    margin-top: 6px;
-    margin-bottom: 6px;
 }
 .small-label {
     font-size: small;
@@ -155,6 +153,10 @@
 	box-shadow: none;
 	outline: none;
 }
+.workspace-sidebar-item .selection-bar {
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
 .workspace-sidebar-item:selected .selection-bar {
     background-color: lighter(@theme_selected_bg_color);
 }
@@ -184,7 +186,6 @@
 /* Account sidebar */
 .account-sidebar {
     background: transparent;
-    margin-right: 6px;
     margin-bottom: 6px;
 }
 .account-sidebar-item {
@@ -198,9 +199,15 @@
     box-shadow: none;
     outline: none;
 }
-.account-sidebar-item:selected image,
-.account-sidebar-item:hover image {
-    background-color: shade(@theme_base_color, 0.8);
+.account-sidebar-item .selection-bar {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.account-sidebar-item:selected .selection-bar {
+    background-color: lighter(@theme_selected_bg_color);
+}
+.account-sidebar-item:hover .selection-bar {
+    background-color: @theme_selected_bg_color;
 }
 .account-sidebar-item image {
     border-radius: 9px;
