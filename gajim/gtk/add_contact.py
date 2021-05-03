@@ -27,16 +27,17 @@ from .util import EventHelper
 from .util import open_window
 
 
-class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
+class AddContact(Gtk.ApplicationWindow, EventHelper):
 
     uid_labels = {'jabber': _('XMPP Address'),
                   'gadu-gadu': _('GG Number'),
                   'icq': _('ICQ Number')}
 
-    def __init__(self, account=None, contact_jid=None, user_nick=None, group=None):
+    def __init__(self, account=None, jid=None, nick=None, group=None):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_resizable(False)
@@ -45,10 +46,11 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         self.connect_after('key-press-event', self._on_key_press)
 
         self.account = account
+        self._group = group
         self.adding_jid = False
 
-        if contact_jid is not None:
-            contact_jid = app.get_jid_without_resource(str(contact_jid))
+        if jid is not None:
+            jid = app.get_jid_without_resource(str(jid))
 
         # fill accounts with active accounts
         accounts = app.get_enabled_accounts_with_labels()
@@ -119,16 +121,16 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.protocol_combobox.set_active(0)
         self._ui.auto_authorize_checkbutton.show()
 
-        if contact_jid:
+        if jid:
             self.jid_escaped = True
-            type_ = app.get_transport_name_from_jid(contact_jid)
+            type_ = app.get_transport_name_from_jid(jid)
             if not type_:
                 type_ = 'jabber'
             if type_ == 'jabber':
-                self._ui.uid_entry.set_text(contact_jid)
+                self._ui.uid_entry.set_text(jid)
                 transport = None
             else:
-                uid, transport = app.get_name_and_server_from_jid(contact_jid)
+                uid, transport = app.get_name_and_server_from_jid(jid)
                 self._ui.uid_entry.set_text(uid.replace('%', '@', 1))
 
             self._ui.show_contact_info_button.set_sensitive(True)
@@ -155,24 +157,14 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
                     break
                 iter_ = model.iter_next(iter_)
                 i += 1
-            if user_nick:
-                self._ui.nickname_entry.set_text(user_nick)
+            if nick:
+                self._ui.nickname_entry.set_text(nick)
             self._ui.nickname_entry.grab_focus()
         else:
             self.jid_escaped = False
             self._ui.uid_entry.grab_focus()
-        group_names = []
-        for acct in accounts:
-            for g in app.groups[acct[0]].keys():
-                if g not in helpers.special_groups and g not in group_names:
-                    group_names.append(g)
-        group_names.sort()
-        i = 0
-        for g in group_names:
-            self._ui.group_comboboxentry.append_text(g)
-            if group == g:
-                self._ui.group_comboboxentry.set_active(i)
-            i += 1
+
+        self._update_groups()
 
         if len(accounts) > 1:
             liststore = self._ui.account_combobox.get_model()
@@ -200,6 +192,16 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
             ('gateway-prompt-received', ged.GUI1, self._nec_gateway_prompt_received),
             ('presence-received', ged.GUI1, self._nec_presence_received),
         ])
+
+    def _update_groups(self):
+        self._ui.group_comboboxentry.get_model().clear()
+        index = 0
+        client = app.get_client(self.account)
+        for item in client.get_module('Roster').get_groups():
+            self._ui.group_comboboxentry.append_text(item)
+            if item == self._group:
+                self._ui.group_comboboxentry.set_active(index)
+            index += 1
 
     def on_uid_entry_changed(self, widget):
         is_empty = bool(not self._ui.uid_entry.get_text() == '')
@@ -339,6 +341,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         message_buffer = self._ui.message_textview.get_buffer()
         message_buffer.set_text(helpers.get_subscription_request_msg(account))
         self.account = account
+        self._update_groups()
 
     def on_protocol_jid_combobox_changed(self, widget):
         model = widget.get_model()

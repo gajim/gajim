@@ -332,7 +332,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     @staticmethod
     def _add_to_roster(_action, param):
         _workspace, account, jid = param.unpack()
-        open_window('AddNewContactWindow', account=account, contact_jid=jid)
+        open_window('AddContact', account=account, jid=jid)
 
     def get_control(self, *args, **kwargs):
         return self._chat_page.get_control(*args, **kwargs)

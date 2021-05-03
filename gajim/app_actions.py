@@ -30,9 +30,10 @@ from gajim.gui.util import open_window
 
 # General Actions
 
+
 def on_add_contact_jid(_action, param):
-    contact_jid = param.get_string()
-    open_window('AddNewContactWindow', account=None, contact_jid=contact_jid)
+    jid = param.get_string()
+    open_window('AddContact', account=None, jid=jid)
 
 
 # Application Menu Actions
@@ -107,10 +108,8 @@ def on_create_gc(_action, param):
 
 
 def on_add_contact(_action, param):
-    account, contact_jid = param.get_strv()
-    if not contact_jid:
-        contact_jid = None
-    open_window('AddNewContactWindow', account=account, contact_jid=contact_jid)
+    account, jid = param.get_strv()
+    open_window('AddContact', account=account, jid=jid or None)
 
 
 def on_single_message(_action, param):

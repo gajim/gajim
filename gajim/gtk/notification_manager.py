@@ -23,7 +23,6 @@ from gajim.common.i18n import _
 
 from gajim.gui_menu_builder import get_subscription_menu
 
-from .add_contact import AddNewContactWindow
 from .util import open_window
 
 
@@ -102,7 +101,8 @@ class NotificationManager(Gtk.ScrolledWindow):
         self._client.get_module('Presence').subscribed(jid)
         contact = self._client.get_module('Contacts').get_contact(jid)
         if not contact.is_in_roster:
-            AddNewContactWindow(self._account, jid, contact.name)
+            open_window('AddContact', account=self._account,
+                        jid=jid, nick=contact.name)
         self._listbox.remove(row)
 
     def _on_subscription_block(self, _action, param):

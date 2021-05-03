@@ -59,13 +59,13 @@ from gajim import dialogs
 from gajim.gui.gstreamer import create_gtk_widget
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.add_contact import AddNewContactWindow
 from gajim.gui.util import get_cursor
 from gajim.gui.util import format_mood
 from gajim.gui.util import format_activity
 from gajim.gui.util import format_tune
 from gajim.gui.util import format_location
 from gajim.gui.util import get_activity_icon_name
+from gajim.gui.util import open_window
 from gajim.gui.const import ControlType
 
 from gajim.command_system.implementation.hosts import ChatCommands
@@ -355,7 +355,8 @@ class ChatControl(BaseControl):
         return Gdk.EVENT_PROPAGATE
 
     def _on_add_to_roster(self, _action, _param):
-        AddNewContactWindow(self.account, self.contact.jid)
+        open_window('AddContact', account=self.account,
+                    jid=self.contact.jid)
 
     def _on_block_contact(self, _action, _param):
         app.window.block_contact(self.account, self.contact.jid)

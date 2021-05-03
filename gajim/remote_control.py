@@ -33,7 +33,7 @@ from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.structs import OutgoingMessage
 
-from gajim.gui.add_contact import AddNewContactWindow
+from gajim.gui.add_contact import AddContact
 
 
 log = logging.getLogger('gajim.remote_control')
@@ -729,13 +729,13 @@ class GajimRemote(Server):
         if account:
             if app.account_is_available(account):
                 # if given account is active, use it
-                AddNewContactWindow(account=account, contact_jid=jid)
+                AddContact(account=account, jid=jid)
             else:
                 # wrong account
                 return False
         else:
             # if account is not given, show account combobox
-            AddNewContactWindow(account=None, contact_jid=jid)
+            AddContact(account=None, jid=jid)
         return True
 
     def remove_contact(self, jid, account):

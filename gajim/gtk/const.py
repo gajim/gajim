@@ -109,7 +109,7 @@ WINDOW_MODULES = {
     'Preferences': 'gajim.gui.preferences',
     'CreateGroupchatWindow': 'gajim.gui.groupchat_creation',
     'StartChatDialog': 'gajim.gui.start_chat',
-    'AddNewContactWindow': 'gajim.gui.add_contact',
+    'AddContact': 'gajim.gui.add_contact',
     'SingleMessageWindow': 'gajim.gui.single_message',
     'Bookmarks': 'gajim.gui.bookmarks',
     'AccountWizard': 'gajim.gui.account_wizard',
