@@ -301,8 +301,6 @@ class Stage(Page):
         return actions
 
     def get_default_button(self):
-        if self._last_stage_data.default is None:
-            return None
         return self._last_stage_data.default.value
 
 
