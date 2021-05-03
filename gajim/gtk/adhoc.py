@@ -297,7 +297,6 @@ class Stage(Page):
     def get_visible_buttons(self):
         actions = list(map(lambda action: action.value,
                            self._last_stage_data.actions))
-        actions.append('cancel')
         return actions
 
     def get_default_button(self):
