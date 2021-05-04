@@ -60,6 +60,7 @@ class MUCUserStatus(BaseRow):
         if user_contact.status is not None:
             result = process(user_contact.status)
             message_widget = MessageWidget(account)
+            message_widget.get_style_context().add_class('gajim-status-message')
             message_widget.add_content(result)
             self.grid.attach(message_widget, 2, 1, 1, 1)
 
