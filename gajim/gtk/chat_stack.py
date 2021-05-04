@@ -124,7 +124,9 @@ class ChatPlaceholderBox(Gtk.Box):
             100,
             self.get_scale_factor(),
             0)
-        self.add(Gtk.Image.new_from_pixbuf(pixbuf))
+        image = Gtk.Image.new_from_pixbuf(pixbuf)
+        image.get_style_context().add_class('dim-label')
+        self.add(image)
 
         label = Gtk.Label(label=_('Start a Chat'))
         label.get_style_context().add_class('dim-label')
