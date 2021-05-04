@@ -586,15 +586,15 @@ infobar.error > revealer > box {
 #GroupchatConfig treeview { padding: 5px; }
 
 .groupchat-state box {
-    background-color: alpha(rgb(70, 70, 70), 0.8);
+    background-color: alpha(rgb(70, 70, 70), 0.9);
     padding: 12px;
     border-radius: 6px;
 }
 .groupchat-state box > label {
-    color: @theme_base_color;
+    color: @theme_text_color;
 }
 .groupchat-state box > spinner {
-    color: @theme_base_color;
+    color: @theme_text_color;
 }
 
 /* Popover Treeview */
