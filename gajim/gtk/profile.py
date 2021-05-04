@@ -125,14 +125,14 @@ class ProfileWindow(Gtk.ApplicationWindow):
         access_model = result == 'open'
 
         if namespace == Namespace.VCARD4_PUBSUB:
-            self._ui.vcard_access.set_active(access_model)
+            self._set_vcard_access_switch(access_model)
         else:
             if self._avatar_nick_public is None:
                 self._avatar_nick_public = access_model
             else:
-                self._avatar_nick_public = (self._avatar_nick_public and
+                self._avatar_nick_public = (self._avatar_nick_public or
                                             access_model)
-            self._ui.avatar_nick_access.set_active(self._avatar_nick_public)
+            self._set_avatar_nick_access_switch(self._avatar_nick_public)
 
     def _on_vcard_received(self, task):
         try:
@@ -324,13 +324,22 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.remove_avatar_button.show()
         self._ui.profile_stack.set_visible_child_name('profile')
 
-    def _access_switch_toggled(self, *args):
-        avatar_nick_access = self._ui.avatar_nick_access.get_active()
-        vcard_access = self._ui.vcard_access.get_active()
-        self._ui.avatar_nick_access_label.set_text(
-            _('Everyone') if avatar_nick_access else _('Contacts'))
+    def _set_vcard_access_switch(self, state):
+        self._ui.vcard_access.set_active(state)
         self._ui.vcard_access_label.set_text(
-            _('Everyone') if vcard_access else _('Contacts'))
+            _('Everyone') if state else _('Contacts'))
+
+    def _set_avatar_nick_access_switch(self, state):
+        self._ui.avatar_nick_access.set_active(state)
+        self._ui.avatar_nick_access_label.set_text(
+            _('Everyone') if state else _('Contacts'))
+
+    def _access_switch_toggled(self, *args):
+        state = self._ui.vcard_access.get_active()
+        self._set_vcard_access_switch(state)
+
+        state = self._ui.avatar_nick_access.get_active()
+        self._set_avatar_nick_access_switch(state)
 
     def _on_save_finished(self, task):
         try:
