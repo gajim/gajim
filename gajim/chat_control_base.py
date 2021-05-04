@@ -965,12 +965,13 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.drop_area.set_no_show_all(False)
         self.xml.drop_area.show_all()
 
-    def drag_data_file_transfer(self, selection):
+    def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
         # we may have more than one file dropped
         uri_splitted = selection.get_uris()
         for uri in uri_splitted:
             path = helpers.get_file_path_from_dnd_dropped_uri(uri)
             if not os.path.isfile(path):  # is it a file?
+                self.add_info_message(_("The following file could not be accessed and was not uploaded: ") + path)
                 continue
 
             self._start_filetransfer(path)

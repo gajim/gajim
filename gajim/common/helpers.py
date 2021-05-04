@@ -352,7 +352,7 @@ def build_command(executable, parameter):
     command = '%s "%s"' % (executable, parameter)
     return command
 
-def get_file_path_from_dnd_dropped_uri(uri):
+def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
     path = urllib.parse.unquote(uri) # escape special chars
     path = path.strip('\r\n\x00') # remove \r\n and NULL
     # get the path to file
