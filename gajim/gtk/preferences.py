@@ -796,7 +796,7 @@ class Server(PreferenceBox):
         settings = [
 
             Setting(SettingKind.USE_STUN_SERVER,
-                    _('Use Stun Server'),
+                    _('Use STUN Server'),
                     SettingType.DIALOG,
                     desc=_('Helps to establish calls through firewalls'),
                     props={'dialog': StunServerDialog}),
@@ -812,7 +812,7 @@ class StunServerDialog(SettingsDialog):
 
         settings = [
             Setting(SettingKind.SWITCH,
-                    _('Use Stun Server'),
+                    _('Use STUN Server'),
                     SettingType.CONFIG,
                     'use_stun_server'),
 
@@ -823,7 +823,7 @@ class StunServerDialog(SettingsDialog):
                     bind='use_stun_server')
             ]
 
-        SettingsDialog.__init__(self, parent, _('Auto Away Settings'),
+        SettingsDialog.__init__(self, parent, _('STUN Server Settings'),
                                 Gtk.DialogFlags.MODAL, settings, account)
 
 
