@@ -1,117 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkPopover" id="privacy_popover">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
+      <!-- n-columns=3 n-rows=4 -->
       <object class="GtkGrid">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">12</property>
+        <property name="can-focus">False</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">Privacy</property>
             <style>
               <class name="bold"/>
             </style>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
             <property name="width">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes">Contact Infos</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes">Picture and Name</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_bottom">6</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">6</property>
             <property name="label" translatable="yes">Make your profile visible for everyone or just for your contacts.</property>
             <property name="wrap">True</property>
-            <property name="max_width_chars">42</property>
+            <property name="max-width-chars">42</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
             <property name="width">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkSwitch" id="avatar_nick_access">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="halign">start</property>
-            <property name="active">False</property>
             <signal name="notify::active" handler="_access_switch_toggled" swapped="no"/>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkSwitch" id="vcard_access">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="halign">start</property>
-            <property name="active">False</property>
             <signal name="notify::active" handler="_access_switch_toggled" swapped="no"/>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="avatar_nick_access_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes">Everyone</property>
+            <property name="label" translatable="yes">Contacts</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="vcard_access_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes">Everyone</property>
+            <property name="label" translatable="yes">Contacts</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <style>
@@ -122,11 +121,11 @@
   </object>
   <object class="GtkStack" id="profile_stack">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkSpinner" id="spinner">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="active">True</property>
       </object>
       <packing>
@@ -136,35 +135,35 @@
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkScrolledWindow" id="scrolled">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="overlay_scrolling">False</property>
+            <property name="can-focus">True</property>
+            <property name="overlay-scrolling">False</property>
             <child>
               <object class="GtkViewport">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkBox" id="profile_box">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkOverlay" id="avatar_overlay">
-                        <property name="width_request">100</property>
-                        <property name="height_request">100</property>
+                        <property name="width-request">100</property>
+                        <property name="height-request">100</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">center</property>
                         <child>
                           <object class="GtkImage" id="avatar_image">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">avatar-default-symbolic</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">avatar-default-symbolic</property>
                             <property name="icon_size">6</property>
                           </object>
                           <packing>
@@ -173,38 +172,38 @@
                         </child>
                         <child type="overlay">
                           <object class="GtkButton" id="remove_avatar_button">
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="tooltip_text" translatable="yes">Remove your profile picture</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="tooltip-text" translatable="yes">Remove your profile picture</property>
                             <property name="halign">start</property>
                             <property name="valign">end</property>
-                            <property name="always_show_image">True</property>
+                            <property name="always-show-image">True</property>
                             <signal name="clicked" handler="_on_remove_avatar" swapped="no"/>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="icon_name">user-trash-symbolic</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">user-trash-symbolic</property>
                               </object>
                             </child>
                           </object>
                         </child>
                         <child type="overlay">
                           <object class="GtkButton" id="edit_avatar_button">
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="tooltip_text" translatable="yes">Change your profile picture</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="tooltip-text" translatable="yes">Change your profile picture</property>
                             <property name="halign">end</property>
                             <property name="valign">end</property>
-                            <property name="always_show_image">True</property>
+                            <property name="always-show-image">True</property>
                             <signal name="clicked" handler="_on_edit_avatar" swapped="no"/>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="icon_name">document-edit-symbolic</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">document-edit-symbolic</property>
                               </object>
                             </child>
                           </object>
@@ -222,14 +221,14 @@
                     <child>
                       <object class="GtkEntry" id="nickname_entry">
                         <property name="name">NicknameEntry</property>
-                        <property name="width_request">250</property>
+                        <property name="width-request">250</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Enter your nickname. This is how your name is displayed to your contacts.</property>
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Enter your nickname. This is how your name is displayed to your contacts.</property>
                         <property name="halign">center</property>
                         <property name="xalign">0.5</property>
-                        <property name="placeholder_text" translatable="yes">Nickname</property>
+                        <property name="placeholder-text" translatable="yes">Nickname</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -254,14 +253,14 @@
         <child>
           <object class="GtkActionBar">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkButton" id="cancel_button">
                 <property name="label" translatable="yes">_Cancel</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">False</property>
-                <property name="no_show_all">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="_on_cancel_clicked" swapped="no"/>
               </object>
               <packing>
@@ -270,20 +269,20 @@
             </child>
             <child type="center">
               <object class="GtkMenuButton" id="add_entry_button">
-                <property name="can_focus">False</property>
-                <property name="receives_default">False</property>
-                <property name="no_show_all">True</property>
-                <property name="use_popover">False</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="use-popover">False</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">list-add-symbolic</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">list-add-symbolic</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -294,7 +293,7 @@
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes">Add Entry</property>
                       </object>
                       <packing>
@@ -312,39 +311,39 @@
             </child>
             <child>
               <object class="GtkMenuButton" id="privacy_button">
-                <property name="can_focus">False</property>
-                <property name="receives_default">False</property>
-                <property name="no_show_all">True</property>
-                <property name="tooltip_text" translatable="yes">Privacy</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes">Privacy</property>
                 <property name="direction">up</property>
                 <property name="popover">privacy_popover</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">preferences-system-privacy-symbolic</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">preferences-system-privacy-symbolic</property>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="save_button">
                 <property name="label" translatable="yes">_Save</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">False</property>
-                <property name="no_show_all">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="_on_save_clicked" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
               </object>
               <packing>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -352,16 +351,16 @@
               <object class="GtkButton" id="edit_button">
                 <property name="label" translatable="yes">_Edit</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="_on_edit_clicked" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
               </object>
               <packing>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -369,7 +368,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -382,21 +381,21 @@
     <child>
       <object class="GtkBox" id="avatar_selector_box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">center</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
                 <signal name="clicked" handler="_on_cancel_update_avatar" swapped="no"/>
               </object>
               <packing>
@@ -409,8 +408,8 @@
               <object class="GtkButton" id="avatar_update_button">
                 <property name="label" translatable="yes">Update</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <signal name="clicked" handler="_on_update_avatar" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
@@ -426,7 +425,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
