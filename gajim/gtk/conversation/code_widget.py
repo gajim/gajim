@@ -21,6 +21,7 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
+from gajim.common import app
 from gajim.common.i18n import _
 
 log = logging.getLogger('gajim.gui.conversation.code_widget')
@@ -95,6 +96,16 @@ class CodeTextview(GtkSource.View):
         self.set_bottom_margin(2)
 
         self._source_manager = GtkSource.LanguageManager.get_default()
+        self._style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
+
+        if app.css_config.prefer_dark:
+            style_scheme = self._style_scheme_manager.get_scheme(
+                'solarized-dark')
+        else:
+            style_scheme = self._style_scheme_manager.get_scheme(
+                'solarized-light')
+        if style_scheme is not None:
+            self.get_buffer().set_style_scheme(style_scheme)
 
     def set_language(self, language_string):
         if language_string is None:
