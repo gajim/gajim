@@ -13,6 +13,7 @@
 - python3-keyring
 - python3-precis-i18n
 - python3-packaging
+- python3-setuptools
 - gir1.2-soup-2.4
 - GLib (>=2.60.0)
 
