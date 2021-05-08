@@ -34,6 +34,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.modules.util import as_task
 
+from .chat_filter import ChatFilter
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
 from .util import get_builder
@@ -102,6 +103,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.info_box.add(self._muc_info_box)
 
         self._ui.infobar.set_revealed(app.settings.get('show_help_start_chat'))
+
+        self._current_filter = 'all'
+        self._chat_filter = ChatFilter()
+        self._chat_filter.connect(
+            'filter-changed', self._on_chat_filter_changed)
+        self._ui.filter_bar_revealer.add(self._chat_filter)
 
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._destroy)
@@ -287,7 +294,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
         active = toggle_button.get_active()
         self._ui.filter_bar_revealer.set_reveal_child(active)
 
-    def _on_filter_toggled(self, _toggle_button):
+    def _on_chat_filter_changed(self, _filter, name):
+        self._current_filter = name
         self._ui.listbox.invalidate_filter()
 
     def _start_new_chat(self, row):
@@ -506,11 +514,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
         search_text_list = search_text.split()
         row_text = row.get_search_text().lower()
 
-        show_chats = self._ui.filter_chats.get_active()
-        show_groupchats = self._ui.filter_groupchats.get_active()
-        if row.groupchat and not show_groupchats:
+        if self._current_filter == 'chats' and row.groupchat:
             return False
-        if not row.groupchat and not show_chats:
+
+        if self._current_filter == 'group_chats' and not row.groupchat:
             return False
 
         for text in search_text_list:
