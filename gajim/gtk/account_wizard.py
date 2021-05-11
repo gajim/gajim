@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+# type: ignore
 import logging
 
 from gi.repository import Gdk
@@ -49,7 +50,6 @@ from .assistant import ErrorPage
 from .dataform import DataFormWidget
 from .util import get_builder
 from .util import open_window
-
 
 log = logging.getLogger('gajim.gui.account_wizard')
 
