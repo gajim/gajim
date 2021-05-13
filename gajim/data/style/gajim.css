@@ -111,6 +111,14 @@
     padding: 0;
 }
 
+.file-transfer {
+    padding: 10px;
+    margin: 5px;
+    background-color: @theme_unfocused_base_color;
+    border: 1px solid @borders;
+    border-radius: 5px;
+}
+
 .link-button { min-height: 0px; }
 
 /* Main Window */

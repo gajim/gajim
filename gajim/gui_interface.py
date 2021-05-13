@@ -96,7 +96,6 @@ from gajim.gui.dialogs import InputDialog
 from gajim.gui.dialogs import PassphraseDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
-from gajim.gui.filetransfer_progress import FileTransferProgress
 from gajim.gui.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gui.main import MainWindow
 from gajim.gui.util import get_show_in_roster
@@ -836,16 +835,16 @@ class Interface:
         accept_cb = partial(self.on_file_dialog_ok, chat_control)
         FileChooserDialog(accept_cb,
                           select_multiple=True,
-                          transient_for=chat_control.parent_win.window)
+                          transient_for=app.window)
 
     def on_file_dialog_ok(self, chat_control, paths):
         for path in paths:
             self._send_httpupload(chat_control, path)
 
     def _send_httpupload(self, chat_control, path):
-        con = app.connections[chat_control.account]
+        client = app.get_client(chat_control.account)
         try:
-            transfer = con.get_module('HTTPUpload').make_transfer(
+            transfer = client.get_module('HTTPUpload').make_transfer(
                 path,
                 chat_control.encryption,
                 chat_control.contact,
@@ -858,8 +857,8 @@ class Interface:
         transfer.connect('cancel', self._on_cancel_upload)
         transfer.connect('state-changed',
                          self._on_http_upload_state_changed)
-        FileTransferProgress(transfer)
-        con.get_module('HTTPUpload').start_transfer(transfer)
+        chat_control.add_file_transfer(transfer)
+        client.get_module('HTTPUpload').start_transfer(transfer)
 
     def _on_http_upload_state_changed(self, transfer, _signal_name, state):
         if state.is_finished:

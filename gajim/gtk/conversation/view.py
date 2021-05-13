@@ -32,6 +32,7 @@ from .conversation.rows.scroll_hint import ScrollHintRow
 from .conversation.rows.message import MessageRow
 from .conversation.rows.info import InfoMessage
 from .conversation.rows.date import DateRow
+from .conversation.rows.file_transfer import FileTransferRow
 from .conversation.rows.muc_subject import MUCSubject
 from .conversation.rows.muc_join_left import MUCJoinLeft
 from .conversation.rows.muc_user_status import MUCUserStatus
@@ -152,6 +153,10 @@ class ConversationView(Gtk.ListBox):
     def add_info_message(self, text):
         message = InfoMessage(self._account, text)
         self._insert_message(message)
+
+    def add_file_transfer(self, transfer):
+        transfer_row = FileTransferRow(self._account, transfer)
+        self._insert_message(transfer_row)
 
     def add_message(self,
                     text,
