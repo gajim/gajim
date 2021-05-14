@@ -180,7 +180,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
 class Page(Gtk.Box):
 
-    __gsignals__ = {
+    __gsignals__: dict = {
         'update-page-complete': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
