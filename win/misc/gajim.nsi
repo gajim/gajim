@@ -2,6 +2,7 @@
 
 Unicode true
 !include "MUI2.nsh"
+!include "LogicLib.nsh"
 
 Name "Gajim"
 OutFile "Gajim.exe"
@@ -210,6 +211,9 @@ Section $(NAME_SecURI) SecURI
 SectionEnd
 
 Section "Uninstall"
+
+	ExecWait "TaskKill /IM gdbus.exe /F"
+
 	RMDir /r "$INSTDIR"
 
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
