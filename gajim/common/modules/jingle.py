@@ -226,10 +226,13 @@ class Jingle(BaseModule):
         jingle.session_type_ft = True
         self._sessions[jingle.sid] = jingle
         file_props.sid = jingle.sid
+
         if contact.supports(Namespace.JINGLE_BYTESTREAM):
             transport = JingleTransportSocks5()
         elif contact.supports(Namespace.JINGLE_IBB):
             transport = JingleTransportIBB()
+        else:
+            transport = None
 
         senders = 'initiator'
         if request:
