@@ -96,7 +96,8 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.connection_type.set_text(address.type.value)
         if address.type.is_plain:
-            self._ui.conection_type.get_style_context().add_class('error-color')
+            self._ui.connection_type.get_style_context().add_class(
+                'error-color')
 
         # Connection proxy
         proxy = address.proxy
