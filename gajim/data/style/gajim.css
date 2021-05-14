@@ -50,10 +50,10 @@
 
 .merged { padding-top: 1px;}
 
-.conversation-row grid textview {
+.conversation-row grid textview:not(.sourceview) {
 	background: transparent;
 }
-.conversation-row grid textview text {
+.conversation-row grid textview:not(.sourceview) text {
 	background: transparent;
 }
 .conversation-mention-highlight {
