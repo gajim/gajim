@@ -14,6 +14,7 @@ SetCompressorDictSize 32
 InstallDir "$PROGRAMFILES\Gajim"
 InstallDirRegKey HKCU "Software\Gajim" ""
 RequestExecutionLevel admin
+BrandingText "Gajim Setup"
 
 Var StartMenuFolder
 
