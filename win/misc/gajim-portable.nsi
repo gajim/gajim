@@ -14,6 +14,7 @@ SetCompressorDictSize 32
 
 InstallDir "$PROFILE\Gajim"
 RequestExecutionLevel user
+BrandingText "Gajim Setup"
 
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
 !define MUI_HEADERIMAGE
