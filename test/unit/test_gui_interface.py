@@ -3,6 +3,9 @@ Some diverse tests covering functionality in the GUI Interface class.
 '''
 import unittest
 
+import gajim.gui
+gajim.gui.init('gtk')
+
 from test import lib
 lib.setup_env()
 
