@@ -55,7 +55,6 @@ from gajim.common.const import StyleAttr
 from gajim.common.const import JIDConstant
 from gajim.common.const import KindConstant
 from gajim.common.const import ShowConstant
-from gajim.common.settings import Settings
 
 
 def is_standalone():
@@ -75,6 +74,8 @@ def init_gtk():
 
 if is_standalone():
     init_gtk()
+
+    from gajim.common.settings import Settings
 
     try:
         shortargs = 'hvsc:l:p:'
@@ -100,6 +101,8 @@ if is_standalone():
     app.settings = Settings()
     app.settings.init()
     app.load_css_config()
+else:
+    from gajim.common.settings import Settings
 
 from gajim.common import helpers
 from gajim.gui.dialogs import ErrorDialog
