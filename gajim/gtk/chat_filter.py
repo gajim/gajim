@@ -34,17 +34,17 @@ class ChatFilter(Gtk.Box):
         if icons:
             toolbar.get_style_context().add_class('chat-filter-icons')
 
-        all_button = Gtk.RadioToolButton.new_from_widget(None)
+        self._all_button = Gtk.RadioToolButton.new_from_widget(None)
         if icons:
-            all_button.set_icon_name('feather-home-symbolic')
-            all_button.set_tooltip_text(_('All'))
+            self._all_button.set_icon_name('feather-home-symbolic')
+            self._all_button.set_tooltip_text(_('All'))
         else:
-            all_button.set_label(_('All'))
-        all_button.set_name('all')
-        all_button.connect('clicked', self._on_button_clicked)
-        toolbar.insert(all_button, 1)
+            self._all_button.set_label(_('All'))
+        self._all_button.set_name('all')
+        self._all_button.connect('clicked', self._on_button_clicked)
+        toolbar.insert(self._all_button, 1)
 
-        chats_button = Gtk.RadioToolButton.new_from_widget(all_button)
+        chats_button = Gtk.RadioToolButton.new_from_widget(self._all_button)
         if icons:
             chats_button.set_icon_name('feather-user-symbolic')
             chats_button.set_tooltip_text(_('Chats'))
@@ -54,7 +54,8 @@ class ChatFilter(Gtk.Box):
         chats_button.connect('clicked', self._on_button_clicked)
         toolbar.insert(chats_button, 2)
 
-        group_chats_button = Gtk.RadioToolButton.new_from_widget(all_button)
+        group_chats_button = Gtk.RadioToolButton.new_from_widget(
+            self._all_button)
         if icons:
             group_chats_button.set_icon_name('feather-users-symbolic')
             group_chats_button.set_tooltip_text(_('Group Chats'))
@@ -70,3 +71,7 @@ class ChatFilter(Gtk.Box):
     def _on_button_clicked(self, button):
         if button.get_active():
             self.emit('filter-changed', button.get_name())
+
+    def reset(self):
+        self._all_button.set_active(True)
+        self.emit('filter-changed', 'all')

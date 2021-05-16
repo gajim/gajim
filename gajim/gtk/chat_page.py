@@ -61,7 +61,9 @@ class ChatPage(Gtk.Box):
         self._ui.right_grid_overlay.add_overlay(self._search_revealer)
 
         self._chat_filter = ChatFilter(icons=True)
-        self._ui.header_bar.attach(self._chat_filter, 0, 1, 1, 1)
+        self._ui.filter_bar.add(self._chat_filter)
+        self._ui.filter_bar_toggle.connect(
+            'toggled', self._on_filter_revealer_toggled)
 
         self._chat_list_stack = ChatListStack(
             self._chat_filter, self._ui.search_entry)
@@ -125,6 +127,11 @@ class ChatPage(Gtk.Box):
         position = paned.get_position()
         app.settings.set('chat_handle_position', position)
 
+    def _on_filter_revealer_toggled(self, toggle_button):
+        active = toggle_button.get_active()
+        self._ui.filter_bar_revealer.set_reveal_child(active)
+        self._chat_filter.reset()
+
     def _on_chat_selected(self, _chat_list_stack, workspace_id, account, jid):
         self._chat_stack.show_chat(account, jid)
         self._search_view.set_context(account, jid)
@@ -160,6 +167,8 @@ class ChatPage(Gtk.Box):
 
     def show_workspace_chats(self, workspace_id):
         self._chat_list_stack.show_chat_list(workspace_id)
+        self._ui.filter_bar_toggle.set_active(False)
+        self._chat_filter.reset()
 
     def update_workspace(self, workspace_id):
         name = app.settings.get_workspace_setting(workspace_id, 'name')
