@@ -103,24 +103,11 @@ class Config:
         'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
         'msgwin-width': [opt_int, 500],
         'msgwin-height': [opt_int, 440],
-        'chat-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
-        'chat-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-        'chat-msgwin-width': [opt_int, 480],
-        'chat-msgwin-height': [opt_int, 440],
-        'gc-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
-        'gc-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-        'gc-msgwin-width': [opt_int, 600],
-        'gc-msgwin-height': [opt_int, 440],
-        'pm-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
-        'pm-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-        'pm-msgwin-width': [opt_int, 480],
-        'pm-msgwin-height': [opt_int, 440],
         'save-roster-position': [opt_bool, True, _('If enabled, Gajim will save the contact list window position when hiding it, and restore it when showing the contact list window again.')],
         'roster_x-position': [opt_int, 0],
         'roster_y-position': [opt_int, 0],
         'roster_width': [opt_int, 200],
         'roster_height': [opt_int, 400],
-        'roster_hpaned_position': [opt_int, 200],
         'roster_on_the_right': [opt_bool, False, _('Place the contact list on the right in single window mode'), True],
         'latest_disco_addresses': [opt_str, ''],
         'time_stamp': [opt_str, '%x | %X  ', _('This option lets you customize the timestamp that is printed in conversation. For example \'[%H:%M] \' will show \'[hour:minute] \'. See python doc on strftime for full documentation (https://docs.python.org/3/library/time.html#time.strftime).')],
