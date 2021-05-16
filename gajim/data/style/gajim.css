@@ -263,6 +263,13 @@
 	padding: 12px;
 	background: transparent;
 }
+.chat-filter-icons {
+    background: transparent;
+}
+.chat-filter-icons button {
+    color: @insensitive_fg_color;
+}
+
 .chatlist {
     background: transparent;
 }

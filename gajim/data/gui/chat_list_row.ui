@@ -64,7 +64,7 @@
                           <object class="GtkImage" id="group_chat_indicator">
                             <property name="can-focus">False</property>
                             <property name="no-show-all">True</property>
-                            <property name="icon-name">system-users-symbolic</property>
+                            <property name="icon-name">feather-users-symbolic</property>
                             <property name="icon_size">1</property>
                             <style>
                               <class name="dim-label"/>

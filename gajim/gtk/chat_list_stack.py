@@ -49,7 +49,7 @@ class ChatListStack(Gtk.Stack):
                          (str, str, str)),
     }
 
-    def __init__(self, search_entry):
+    def __init__(self, chat_filter, search_entry):
         Gtk.Stack.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -63,6 +63,7 @@ class ChatListStack(Gtk.Stack):
 
         self.connect('notify::visible-child-name', self._on_visible_child_name)
         search_entry.connect('search-changed', self._on_search_changed)
+        chat_filter.connect('filter-changed', self._on_filter_changed)
         app.window.connect('notify::is-active', self._on_window_active)
 
         self._add_actions()
@@ -121,6 +122,10 @@ class ChatListStack(Gtk.Stack):
         if chat.account != account or chat.jid != jid:
             return False
         return chat.is_active
+
+    def _on_filter_changed(self, _filter, name):
+        chat_list = self.get_visible_child()
+        chat_list.set_filter(name)
 
     def _on_search_changed(self, search_entry):
         chat_list = self.get_visible_child()

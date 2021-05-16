@@ -22,6 +22,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from .util import get_builder
+from .chat_filter import ChatFilter
 from .chat_list_stack import ChatListStack
 from .chat_stack import ChatStack
 from .search_view import SearchView
@@ -59,7 +60,11 @@ class ChatPage(Gtk.Box):
         self._search_revealer.add(self._search_view)
         self._ui.right_grid_overlay.add_overlay(self._search_revealer)
 
-        self._chat_list_stack = ChatListStack(self._ui.search_entry)
+        self._chat_filter = ChatFilter(icons=True)
+        self._ui.header_bar.attach(self._chat_filter, 0, 1, 1, 1)
+
+        self._chat_list_stack = ChatListStack(
+            self._chat_filter, self._ui.search_entry)
         self._chat_list_stack.connect('chat-selected', self._on_chat_selected)
         self._chat_list_stack.connect('chat-unselected',
                                       self._on_chat_unselected)

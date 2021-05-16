@@ -42,6 +42,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         EventHelper.__init__(self)
 
         self._chats = {}
+        self._current_filter = 'all'
         self._current_filter_text = ''
         self._workspace_id = workspace_id
 
@@ -86,6 +87,13 @@ class ChatList(Gtk.ListBox, EventHelper):
         return True
 
     def _filter_func(self, row):
+        is_groupchat = row.type == 'groupchat'
+        if self._current_filter == 'chats' and is_groupchat:
+            return False
+
+        if self._current_filter == 'group_chats' and not is_groupchat:
+            return False
+
         if not self._current_filter_text:
             return True
         text = self._current_filter_text.lower()
@@ -144,6 +152,10 @@ class ChatList(Gtk.ListBox, EventHelper):
     @staticmethod
     def _on_start_chat_clicked(_widget):
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
+
+    def set_filter(self, name):
+        self._current_filter = name
+        self.invalidate_filter()
 
     def set_filter_text(self, text):
         self._current_filter_text = text
