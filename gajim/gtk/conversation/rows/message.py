@@ -84,7 +84,6 @@ class MessageRow(BaseRow):
         timestamp_label = self.create_timestamp_widget(self.timestamp)
         timestamp_label.set_margin_start(6)
         self._meta_box.pack_end(timestamp_label, False, True, 0)
-        # TODO: implement app.settings.get('print_time') 'always', 'sometimes'?
 
         if kind in ('incoming', 'incoming_queue', 'outgoing'):
             encryption_img = self._get_encryption_image(
