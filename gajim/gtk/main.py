@@ -13,12 +13,12 @@ from gajim.common.nec import EventHelper
 
 from gajim.gui.adhoc import AdHocCommand
 from gajim.gui.account_side_bar import AccountSideBar
+from gajim.gui.app_side_bar import AppSideBar
 from gajim.gui.workspace_side_bar import WorkspaceSideBar
 from gajim.gui.main_stack import MainStack
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.util import get_builder
-from gajim.gui.util import load_icon
 
 from .util import open_window
 
@@ -42,13 +42,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.add(self._ui.main_grid)
 
-        surface = load_icon('org.gajim.Gajim', self, 40)
-        self._ui.app_image.set_from_surface(surface)
-
         self._main_stack = MainStack()
         self._ui.main_grid.add(self._main_stack)
 
         self._chat_page = self._main_stack.get_chat_page()
+
+        self._app_page = self._main_stack.get_app_page()
+        self._app_side_bar = AppSideBar(self._app_page)
+        self._ui.app_box.add(self._app_side_bar)
 
         self._workspace_side_bar = WorkspaceSideBar(self._chat_page)
         self._ui.workspace_scrolled.add(self._workspace_side_bar)
@@ -333,6 +334,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _add_to_roster(_action, param):
         _workspace, account, jid = param.unpack()
         open_window('AddContact', account=account, jid=jid)
+
+    def show_app_page(self):
+        self._main_stack.show_app_page()
+
+    def add_app_message(self, category, message=None):
+        self._app_page.add_app_message(category, message)
 
     def get_control(self, *args, **kwargs):
         return self._chat_page.get_control(*args, **kwargs)

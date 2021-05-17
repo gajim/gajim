@@ -16,6 +16,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 
+from .app_page import AppPage
 from .chat_page import ChatPage
 from .account_page import AccountPage
 
@@ -25,6 +26,9 @@ class MainStack(Gtk.Stack):
         Gtk.Stack.__init__(self)
 
         self.add_named(Gtk.Box(), 'empty')
+
+        self._app_page = AppPage()
+        self.add_named(self._app_page, 'app')
 
         self._chat_page = ChatPage()
         self._chat_page.connect('chat-selected', self._on_chat_selected)
@@ -43,6 +47,12 @@ class MainStack(Gtk.Stack):
 
     def remove_chats_for_account(self, account):
         self._chat_page.remove_chats_for_account(account)
+
+    def show_app_page(self):
+        self.set_visible_child_name('app')
+
+    def get_app_page(self):
+        return self.get_child_by_name('app')
 
     def show_chats(self, workspace_id):
         self._chat_page.show_workspace_chats(workspace_id)

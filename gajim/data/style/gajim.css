@@ -144,9 +144,19 @@
     background: @theme_bg_color;
 }
 
-.app-image-box { margin: 12px 12px 0px 12px; }
-.app-image-box > separator {
+.app-page-box {
+    margin-top: 6px;
+}
+.app-page-box > separator {
     background-color: darker(@theme_bg_color);
+    margin-left: 12px;
+    margin-right: 12px;
+}
+.app-page {
+    padding: 18px;
+}
+.app-message-listbox row {
+    border: 1px solid @borders;
 }
 
 /* Workspace sidebar */

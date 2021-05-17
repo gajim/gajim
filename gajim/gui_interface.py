@@ -91,7 +91,6 @@ from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.dialogs import WarningDialog
 from gajim.gui.dialogs import InformationDialog
 from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.dialogs import ConfirmationCheckDialog
 from gajim.gui.dialogs import InputDialog
 from gajim.gui.dialogs import PassphraseDialog
 from gajim.gui.filechoosers import FileChooserDialog
@@ -1710,35 +1709,21 @@ class Interface:
         now = datetime.now()
         last_check = app.settings.get('last_update_check')
         if not last_check:
-            def _on_cancel():
-                app.settings.set('check_for_update', False)
-
-            def _on_check():
-                self._get_latest_release()
-
-            ConfirmationDialog(
-                _('Update Check'),
-                _('Gajim Update Check'),
-                _('Search for Gajim updates periodically?'),
-                [DialogButton.make('Cancel',
-                                   text=_('_No'),
-                                   callback=_on_cancel),
-                 DialogButton.make('Accept',
-                                   text=_('_Search Periodically'),
-                                   callback=_on_check)]).show()
+            app.window.add_app_message('gajim-update-check')
             return
 
         last_check_time = datetime.strptime(last_check, '%Y-%m-%d %H:%M')
         if (now - last_check_time).days < 7:
             return
 
-        self._get_latest_release()
+        self.get_latest_release()
 
-    def _get_latest_release(self):
+    def get_latest_release(self):
         log.info('Checking for Gajim updates')
         session = Soup.Session()
         session.props.user_agent = 'Gajim %s' % app.version
-        message = Soup.Message.new('GET', 'https://gajim.org/current-version.json')
+        message = Soup.Message.new(
+            'GET', 'https://gajim.org/current-version.json')
         session.queue_message(message, self._on_update_checked)
 
     def _on_update_checked(self, _session, message):
@@ -1754,27 +1739,7 @@ class Interface:
         latest_version = data['current_version']
 
         if V(latest_version) > V(app.version):
-            def _on_cancel(is_checked):
-                if is_checked:
-                    app.settings.set('check_for_update', False)
-
-            def _on_update(is_checked):
-                if is_checked:
-                    app.settings.set('check_for_update', False)
-                helpers.open_uri('https://gajim.org/download')
-
-            ConfirmationCheckDialog(
-                _('Update Available'),
-                _('Gajim Update Available'),
-                _('There is an update available for Gajim '
-                  '(latest version: %s)') % str(latest_version),
-                _('_Do not show again'),
-                [DialogButton.make('Cancel',
-                                    text=_('_Later'),
-                                    callback=_on_cancel),
-                 DialogButton.make('Accept',
-                                    text=_('_Update Now'),
-                                    callback=_on_update)]).show()
+            app.window.add_app_message('gajim-update', latest_version)
         else:
             log.info('Gajim is up to date')
 
