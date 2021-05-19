@@ -104,11 +104,11 @@ class StatusIcon:
         self.set_img()
 
     def _on_popup_menu(self, _status_icon, button, activate_time):
-        if button == 1: # Left click
+        if button == 1:
             self._on_left_click()
-        elif button == 2: # middle click
+        elif button == 2:
             self._on_middle_click()
-        elif button == 3: # right click
+        elif button == 3:
             self._make_menu(button, activate_time)
 
     def _on_activate(self, _status_icon):
@@ -122,7 +122,7 @@ class StatusIcon:
         else:
             self._icon_size = '16'
         if os.environ.get('KDE_FULL_SESSION') == 'true':
-        # detect KDE session. see #5476
+            # detect KDE session. see #5476
             self._icon_size = '32'
         self.set_img()
 
@@ -217,13 +217,12 @@ class StatusIcon:
             for account in app.connections:
                 if app.account_is_available(account) and \
                 not app.settings.get_account_setting(account, 'is_zeroconf'):
-
                     # for single message
                     single_message_menuitem.set_submenu(None)
                     self._single_message_handler_id = single_message_menuitem.\
                             connect('activate',
                                     self._on_single_message, account)
-                    break # No other account connected
+                    break  # No other account connected
         else:
             # 2 or more 'real' accounts are connected, make submenus
             account_menu_for_single_message = Gtk.Menu()
@@ -245,18 +244,17 @@ class StatusIcon:
 
         sounds_mute_menuitem.set_active(not app.settings.get('sounds_on'))
 
-        win = app.interface.roster.window
         if self._show_roster_handler_id:
             show_roster_menuitem.handler_disconnect(
                 self._show_roster_handler_id)
-        if win.get_property('has-toplevel-focus'):
+        if app.window.get_property('has-toplevel-focus'):
             show_roster_menuitem.get_children()[0].set_label(
-                _('Hide _Contact List'))
+                _('Hide _Window'))
             self._show_roster_handler_id = show_roster_menuitem.connect(
                 'activate', self._on_hide_roster)
         else:
             show_roster_menuitem.get_children()[0].set_label(
-                _('Show _Contact List'))
+                _('Show _Window'))
             self._show_roster_handler_id = show_roster_menuitem.connect(
                 'activate', self._on_show_roster)
 
@@ -285,13 +283,11 @@ class StatusIcon:
 
     @staticmethod
     def _on_show_roster(_widget):
-        win = app.interface.roster.window
-        win.present()
+        app.window.present()
 
     @staticmethod
     def _on_hide_roster(_widget):
-        win = app.interface.roster.window
-        win.hide()
+        app.window.hide()
 
     @staticmethod
     def _on_preferences(_widget):
@@ -299,10 +295,10 @@ class StatusIcon:
 
     @staticmethod
     def _on_quit(_widget):
-        app.interface.roster.on_quit_request()
+        app.window.quit()
 
     def _on_left_click(self):
-        win = app.interface.roster.window
+        win = app.window
         if app.events.get_systray_events():
             self._handle_first_event()
             return
@@ -312,9 +308,8 @@ class StatusIcon:
             win.hide()
             return
 
-        visible = win.get_property('visible')
         win.show_all()
-        if not visible:
+        if not win.get_property('visible'):
             # Window was minimized
             restore_roster_position(win)
 
@@ -327,8 +322,8 @@ class StatusIcon:
         account, jid, event = app.events.get_first_systray_event()
         if not event:
             return
-        win = app.interface.roster.window
-        if not win.get_property('visible'):
+        win = app.window
+        if not app.window.get_property('visible'):
             # Needed if we are in one window mode
             restore_roster_position(win)
         app.interface.handle_event(account, jid, event.type_)
@@ -339,7 +334,7 @@ class StatusIcon:
         Middle click raises window to have complete focus (fe. get kbd events)
         but if already raised, it hides it
         """
-        win = app.interface.roster.window
+        win = app.window
         if win.is_active():
             win.hide()
         else:
@@ -351,4 +346,4 @@ class StatusIcon:
 
     @staticmethod
     def _on_change_status(_widget):
-        app.interface.change_status()
+        app.interface.change_status(status=None)
