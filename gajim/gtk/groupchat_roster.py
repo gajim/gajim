@@ -298,7 +298,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             return
 
         nick = self._store[iter_][Column.NICK_OR_GROUP]
-        if self._control.nick == nick:
+        if self._group_chat_contact.nickname == nick:
             return
 
         if event.button == 3: # right click
@@ -308,7 +308,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             self.emit('row-activated', nick)
 
     def _show_contact_menu(self, nick):
-        self_contact = self._group_chat_contact.get_resource(self._control.nick)
+        self_contact = self._group_chat_contact.get_self()
         contact = self._group_chat_contact.get_resource(nick)
         menu = get_groupchat_roster_menu(self._account,
                                          self._control_id,
