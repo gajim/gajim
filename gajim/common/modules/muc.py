@@ -210,6 +210,12 @@ class MUC(BaseModule):
             self._mucs[jid] = muc_data
             self._push_muc_added_event(jid)
 
+        elif nick is not None:
+            # Currently MUCData is never discarded so if it exists it contains 
+            # the nickname of a previous join. The user may chose now on a new
+            # join a different nickname, so update MUCData here.
+            muc_data.nick = nick
+
         if not muc_data.state.is_not_joined:
             self._log.warning('Can’t join MUC %s, state: %s',
                               jid, muc_data.state)
