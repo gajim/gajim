@@ -114,18 +114,6 @@ class StatusIcon:
     def _on_activate(self, _status_icon):
         self._on_left_click()
 
-    def on_status_icon_size_changed(self, _statusicon, size):
-        if size > 31:
-            self._icon_size = '32'
-        elif size > 23:
-            self._icon_size = '24'
-        else:
-            self._icon_size = '16'
-        if os.environ.get('KDE_FULL_SESSION') == 'true':
-            # detect KDE session. see #5476
-            self._icon_size = '32'
-        self.set_img()
-
     def set_img(self, *args):
         """
         Update image
