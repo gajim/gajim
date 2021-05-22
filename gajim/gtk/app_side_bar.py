@@ -55,8 +55,9 @@ class AppRow(Gtk.ListBoxRow):
         self._unread_label.set_halign(Gtk.Align.END)
         self._unread_label.set_valign(Gtk.Align.START)
 
-        surface = load_icon('org.gajim.Gajim', self, 40)
+        surface = load_icon('org.gajim.Gajim', self, 32)
         image = Gtk.Image.new_from_surface(surface)
+        image.get_style_context().add_class('app-sidebar-image')
 
         selection_bar = Gtk.Box()
         selection_bar.set_size_request(6, -1)

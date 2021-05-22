@@ -144,6 +144,10 @@
     background: @theme_bg_color;
 }
 
+.app-sidebar-image {
+    background: @unfocused_borders;
+    padding: 4px;
+}
 .app-page-box {
     margin-top: 6px;
 }
