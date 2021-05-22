@@ -154,6 +154,8 @@ _dependencies = {
     'GSOUND': False,
     'GSPELL': False,
     'IDLE': False,
+    'APPINDICATOR': False,
+    'AYATANA_APPINDICATOR': False,
 }
 
 _tasks = defaultdict(list)  # type: Dict[int, List[Any]]
@@ -290,6 +292,21 @@ def detect_dependencies():
                               lang.get_name(), lang.get_code())
         if langs:
             _dependencies['GSPELL'] = True
+    except (ImportError, ValueError):
+        pass
+
+    # APPINDICATOR
+    try:
+        gi.require_version('AppIndicator3', '0.1')
+        from gi.repository import AppIndicator3
+        _dependencies['APPINDICATOR'] = True
+    except (ImportError, ValueError):
+        pass
+    # AYATANA APPINDICATOR
+    try:
+        gi.require_version('AyatanaAppIndicator3', '0.1')
+        from gi.repository import AyatanaAppIndicator3
+        _dependencies['AYATANA_APPINDICATOR'] = True
     except (ImportError, ValueError):
         pass
 

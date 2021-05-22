@@ -184,8 +184,8 @@ class Interface:
         self.systray_enabled = False
 
         if not app.is_display(Display.WAYLAND):
-            from gajim.gui import statusicon
-            self.systray = statusicon.StatusIcon()
+            from gajim.gui.status_icon import StatusIcon
+            self.systray = StatusIcon()
 
         if sys.platform in ('win32', 'darwin'):
             from gajim.gui.emoji_chooser import emoji_chooser

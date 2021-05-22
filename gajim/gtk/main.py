@@ -97,7 +97,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     @staticmethod
     def _on_our_show(event):
-        app.interface.systray.update_icon()
         if event.show == 'offline':
             app.app.set_account_actions_state(event.account)
             app.app.update_app_actions_state()

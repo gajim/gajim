@@ -87,6 +87,14 @@ class Features(Gtk.ApplicationWindow):
         auto_status_enabled = bool(any(auto_status))
 
         return [
+            Feature(_('App Indicator Icon'),
+                    app.is_installed('APPINDICATOR') or
+                    app.is_installed('AYATANA_APPINDICATOR'),
+                    _('Enables Gajim to provide a system notification area '
+                      'icon'),
+                    _('Requires: libappindicator3'),
+                    _('Feature not available under Windows'),
+                    None),
             Feature(_('Audio / Video'),
                     app.is_installed('AV'),
                     _('Enables Gajim to provide Audio and Video chats'),
