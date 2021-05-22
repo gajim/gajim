@@ -25,8 +25,9 @@ from gi.repository import Gtk
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common.i18n import _
+from gajim.common.helpers import get_global_show
+from gajim.common.helpers import get_uf_show
 from gajim.common.helpers import save_roster_position
 
 from .util import get_builder
@@ -39,42 +40,49 @@ class StatusIcon:
     """
     Class for the notification area icon
     """
-
     def __init__(self):
         self._single_message_handler_id = None
         self._show_roster_handler_id = None
         # click somewhere else does not popdown menu. workaround this.
         self.added_hide_menuitem = False
-        self.status = 'offline'
+
         self._ui = get_builder('systray_context_menu.ui')
         self.systray_context_menu = self._ui.systray_context_menu
         self._ui.connect_signals(self)
         self.popup_menus = []
         self.status_icon = None
-        self._icon_size = '16'
 
     def show_icon(self):
         if not self.status_icon:
             self.status_icon = Gtk.StatusIcon()
             self.status_icon.connect('activate', self._on_activate)
             self.status_icon.connect('popup-menu', self._on_popup_menu)
-            self.status_icon.connect('size-changed', self.set_img)
+            self.status_icon.connect('size-changed', self.update_icon)
 
-        self.set_img()
+        self.update_icon()
         self._subscribe_events()
 
     def hide_icon(self):
         self.status_icon.set_visible(False)
         self._unsubscribe_events()
 
-    def change_status(self, global_status):
-        """
-        Set tray image to 'global_status'
-        """
-        # change image and status, only if it is different
-        if global_status is not None and self.status != global_status:
-            self.status = global_status
-        self.set_img()
+    def update_icon(self, *args):
+        if not app.interface.systray_enabled:
+            return
+        if app.settings.get('trayicon') == 'always':
+            self.status_icon.set_visible(True)
+        if app.events.get_nb_systray_events():
+            self.status_icon.set_visible(True)
+
+            icon_name = get_icon_name('event')
+            self.status_icon.set_from_icon_name(icon_name)
+            return
+
+        if app.settings.get('trayicon') == 'on_event':
+            self.status_icon.set_visible(False)
+
+        icon_name = get_icon_name(get_global_show())
+        self.status_icon.set_from_icon_name(icon_name)
 
     def _subscribe_events(self):
         """
@@ -95,13 +103,13 @@ class StatusIcon:
         Called when an event is added to the event list
         """
         if event.show_in_systray:
-            self.set_img()
+            self.update_icon()
 
     def _on_event_removed(self, _event_list):
         """
         Called when one or more events are removed from the event list
         """
-        self.set_img()
+        self.update_icon()
 
     def _on_popup_menu(self, _status_icon, button, activate_time):
         if button == 1:
@@ -113,27 +121,6 @@ class StatusIcon:
 
     def _on_activate(self, _status_icon):
         self._on_left_click()
-
-    def set_img(self, *args):
-        """
-        Update image
-        """
-        if not app.interface.systray_enabled:
-            return
-        if app.settings.get('trayicon') == 'always':
-            self.status_icon.set_visible(True)
-        if app.events.get_nb_systray_events():
-            self.status_icon.set_visible(True)
-
-            icon_name = get_icon_name('event')
-            self.status_icon.set_from_icon_name(icon_name)
-            return
-
-        if app.settings.get('trayicon') == 'on_event':
-            self.status_icon.set_visible(False)
-
-        icon_name = get_icon_name(self.status)
-        self.status_icon.set_from_icon_name(icon_name)
 
     @staticmethod
     def _on_single_message(_widget, account):
@@ -166,7 +153,7 @@ class StatusIcon:
         status_menuitem.set_submenu(sub_menu)
 
         for show in ('online', 'away', 'xa', 'dnd'):
-            uf_show = helpers.get_uf_show(show, use_mnemonic=True)
+            uf_show = get_uf_show(show, use_mnemonic=True)
             item = Gtk.MenuItem.new_with_mnemonic(uf_show)
             sub_menu.append(item)
             item.connect('activate', self._on_show, show)
@@ -185,7 +172,7 @@ class StatusIcon:
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
+        uf_show = get_uf_show('offline', use_mnemonic=True)
         item = Gtk.MenuItem.new_with_mnemonic(uf_show)
         sub_menu.append(item)
         item.connect('activate', self._on_show, 'offline')
@@ -247,7 +234,7 @@ class StatusIcon:
                 'activate', self._on_show_roster)
 
         if os.name == 'nt':
-            if self.added_hide_menuitem is False:
+            if not self.added_hide_menuitem:
                 self.systray_context_menu.prepend(Gtk.SeparatorMenuItem.new())
                 item = Gtk.MenuItem.new_with_label(
                     _('Hide this menu'))
