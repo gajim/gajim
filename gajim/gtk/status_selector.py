@@ -27,9 +27,10 @@ from .avatar import get_show_circle
 
 
 class StatusSelector(Gtk.MenuButton):
-    def __init__(self, compact=False):
+    def __init__(self, account=None, compact=False):
         Gtk.MenuButton.__init__(self)
         self.set_direction(Gtk.ArrowType.UP)
+        self._account = account
         self._compact = compact
         self._create_popover()
 
@@ -112,7 +113,7 @@ class StatusSelector(Gtk.MenuButton):
         new_status = button.get_name()
         if new_status == 'change_status_message':
             new_status = None
-        app.interface.change_status(status=new_status)
+        app.interface.change_status(status=new_status, account=self._account)
         self.update()
 
     def update(self, *args, **kwargs):
@@ -121,7 +122,11 @@ class StatusSelector(Gtk.MenuButton):
         #     return
 
         # self.show()
-        show = get_global_show()
+        if self._account is not None:
+            client = app.get_client(self._account)
+            show = client.status
+        else:
+            show = get_global_show()
         uf_show = get_uf_show(show)
 
         surface = get_show_circle(

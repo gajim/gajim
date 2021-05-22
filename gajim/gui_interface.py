@@ -1496,7 +1496,7 @@ class Interface:
 
             app.connections[account].change_status(status, status_message)
 
-    def change_status(self, status):
+    def change_status(self, status, account=None):
         ask = ask_for_status_message(status)
 
         if status is None:
@@ -1504,6 +1504,10 @@ class Interface:
 
         if ask:
             open_window('StatusChange', status=status)
+            return
+
+        if account is not None:
+            self._change_status(account, status)
             return
 
         for account in app.connections:

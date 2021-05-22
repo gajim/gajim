@@ -45,7 +45,7 @@ class AccountPage(Gtk.Box, EventHelper):
         self._ui = get_builder('account_page.ui')
         self.add(self._ui.paned)
 
-        self._status_selector = StatusSelector()
+        self._status_selector = StatusSelector(account=account)
         self._status_selector.set_halign(Gtk.Align.CENTER)
         self._ui.account_action_box.add(self._status_selector)
 
