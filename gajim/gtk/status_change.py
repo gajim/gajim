@@ -542,17 +542,14 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
 
     def _send_status_and_message(self, message):
         if self.account is not None:
-            app.interface.roster.send_status(self.account,
-                                             self._status,
-                                             message)
+            app.get_client(self.account).change_status(self._status, message)
             return
 
         for account in app.connections:
             if not app.settings.get_account_setting(
                     account, 'sync_with_global_status'):
                 continue
-
-            app.interface.roster.send_status(account, self._status, message)
+            app.get_client(account).change_status(self._status, message)
 
     def _change_status(self, *args):
         self.stop_timeout()
