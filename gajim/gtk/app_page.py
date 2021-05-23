@@ -19,6 +19,7 @@ from gajim.common import app
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 
+from .status_message_selector import StatusMessageSelector
 from .status_selector import StatusSelector
 from .util import get_builder
 
@@ -38,16 +39,24 @@ class AppPage(Gtk.Box):
         self.get_style_context().add_class('app-page')
         self._unread_count = 0
 
-        gajim_label = Gtk.Label(label=_('Status'))
-        gajim_label.get_style_context().add_class('large-header')
-        self.add(gajim_label)
-        status_label = Gtk.Label(label=_('Status for all accounts'))
+        status_header = Gtk.Label(label=_('Status'))
+        status_header.get_style_context().add_class('large-header')
+        self.add(status_header)
+        status_label = Gtk.Label(
+            label=_('Status and status message for all accounts'))
         status_label.get_style_context().add_class('dim-label')
         self.add(status_label)
 
+        status_box = Gtk.Box(spacing=12)
+        status_box.set_halign(Gtk.Align.CENTER)
         self._status_selector = StatusSelector()
-        self._status_selector.set_halign(Gtk.Align.CENTER)
-        self.add(self._status_selector)
+        status_box.add(self._status_selector)
+
+        self._status_message_selector = StatusMessageSelector()
+        self._status_message_selector.set_halign(Gtk.Align.CENTER)
+        status_box.add(self._status_message_selector)
+
+        self.add(status_box)
 
         update_label = Gtk.Label(label=_('Updates'))
         update_label.get_style_context().add_class('large-header')

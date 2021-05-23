@@ -21,6 +21,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
 from .roster import Roster
+from .status_message_selector import StatusMessageSelector
 from .status_selector import StatusSelector
 from .notification_manager import NotificationManager
 from .util import get_builder
@@ -48,6 +49,10 @@ class AccountPage(Gtk.Box, EventHelper):
         self._status_selector = StatusSelector(account=account)
         self._status_selector.set_halign(Gtk.Align.CENTER)
         self._ui.account_action_box.add(self._status_selector)
+
+        self._status_message_selector = StatusMessageSelector(account=account)
+        self._status_message_selector.set_halign(Gtk.Align.CENTER)
+        self._ui.status_message_box.add(self._status_message_selector)
 
         self._notification_manager = NotificationManager(account)
         self._ui.account_box.add(self._notification_manager)
