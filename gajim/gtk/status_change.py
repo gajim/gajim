@@ -103,10 +103,14 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
 
         self._message_buffer.connect('changed', self.stop_timeout)
         self.connect('key-press-event', self._on_key_press)
+        self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
         self.show_all()
         self.start_timeout()
+
+    def _on_destroy(self, *args):
+        self.stop_timeout()
 
     def on_timeout(self):
         self._change_status()
