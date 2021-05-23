@@ -222,6 +222,8 @@ class BareContact(CommonContact):
         nickname = app.storage.cache.get_contact(self._jid, 'nickname')
         if nickname:
             return nickname
+        if self._jid.is_domain:
+            return self._jid.domain
         return self._jid.localpart
 
     @property
