@@ -438,9 +438,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                           event.properties.jid,
                                           'pm')
                 else:
-                    self.add_chat(event.account,
-                                  event.properties.jid,
-                                  'contact')
+                    jid = event.properties.jid.new_as_bare()
+                    self.add_chat(event.account, jid, 'contact')
             else:
                 # No chat is open, dont handle any gui events
                 return
