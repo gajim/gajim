@@ -30,11 +30,11 @@ from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import get_uf_show
-from gajim.common.helpers import save_roster_position
 from gajim.common.nec import EventHelper
 
 from .util import get_builder
 from .util import get_icon_name
+from .util import save_roster_position
 from .util import restore_roster_position
 from .util import open_window
 
@@ -169,7 +169,7 @@ class StatusIcon(EventHelper):
         if button == 1:
             self._on_activate()
         elif button == 2:
-            self._on_toggle_window()
+            self._on_activate()
         elif button == 3:
             self._build_menu(activate_time)
 
@@ -244,14 +244,7 @@ class StatusIcon(EventHelper):
     def _on_toggle_window(self, *args):
         # When using Gtk.StatusIcon, app.window will never return True for
         # 'has-toplevel-focus' while clicking the menu item
-        GLib.idle_add(self._toggle_window)
-
-    @staticmethod
-    def _toggle_window():
-        if app.window.get_property('has-toplevel-focus'):
-            app.window.hide()
-        else:
-            app.window.present()
+        GLib.idle_add(self._on_activate)
 
     @staticmethod
     def _on_preferences(_widget):
@@ -285,10 +278,8 @@ class StatusIcon(EventHelper):
         account, jid, event = app.events.get_first_systray_event()
         if not event:
             return
-        win = app.window
         if not app.window.get_property('visible'):
-            # Needed if we are in one window mode
-            restore_roster_position(win)
+            restore_roster_position(app.window)
         app.interface.handle_event(account, jid, event.type_)
 
     @staticmethod

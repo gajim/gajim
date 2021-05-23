@@ -333,6 +333,17 @@ def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
     window.move(pos_x, pos_y)
 
 
+def save_roster_position(window):
+    if not app.settings.get('save-roster-position'):
+        return
+    if app.is_display(Display.WAYLAND):
+        return
+    x_pos, y_pos = window.get_position()
+    log.debug('Save roster position: %s %s', x_pos, y_pos)
+    app.settings.set('roster_x-position', x_pos)
+    app.settings.set('roster_y-position', y_pos)
+
+
 def restore_roster_position(window):
     if not app.settings.get('save-roster-position'):
         return

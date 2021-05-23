@@ -871,17 +871,6 @@ class AdditionalDataDict(collections.UserDict):
         return copy.deepcopy(self)
 
 
-def save_roster_position(window):
-    if not app.settings.get('save-roster-position'):
-        return
-    if app.is_display(Display.WAYLAND):
-        return
-    x_pos, y_pos = window.get_position()
-    log.debug('Save roster position: %s %s', x_pos, y_pos)
-    app.settings.set('roster_x-position', x_pos)
-    app.settings.set('roster_y-position', y_pos)
-
-
 class Singleton(type):
     _instances = {}  # type: Dict[Any, Any]
     def __call__(cls, *args, **kwargs):
