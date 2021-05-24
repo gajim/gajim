@@ -67,9 +67,15 @@
 }
 
 .profile-scrolled {
-    border: 1px solid;
+    border: 1px solid @borders;
     border-radius: 4px;
-    border-color: @borders;
+}
+.profile-scrolled-read textview {
+    background: transparent;
+}
+.profile-scrolled-read textview text {
+    background: transparent;
+    color: @theme_text_color;
 }
 
 /* Emoticon Popover */
