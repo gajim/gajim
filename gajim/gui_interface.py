@@ -824,7 +824,7 @@ class Interface:
             location.enable()
 
         if ask_for_status_message(obj.conn.status, signin=True):
-            open_window('StatusChange', status=obj.conn.status)
+            app.window.show_app_page()
 
     def send_httpupload(self, chat_control, path=None):
         if path is not None:
@@ -1503,7 +1503,10 @@ class Interface:
             status = helpers.get_global_show()
 
         if ask:
-            open_window('StatusChange', status=status)
+            if account is None:
+                app.window.show_app_page()
+            else:
+                app.window.show_account_page(account)
             return
 
         if account is not None:
@@ -1525,7 +1528,7 @@ class Interface:
             status = client.status
 
         if ask:
-            open_window('StatusChange', status=status, account=account)
+            app.window.show_account_page(account)
             return
 
         self._change_status(account, status)
@@ -1540,7 +1543,6 @@ class Interface:
                 account,
                 'last_status_msg',
                 helpers.to_one_line(message))
-            # TODO update systray icon
 
         if status == 'offline':
             # TODO delete pep

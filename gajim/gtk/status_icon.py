@@ -207,19 +207,10 @@ class StatusIcon(EventHelper):
 
         sub_menu.append(Gtk.SeparatorMenuItem())
 
-        self._status_change_item = Gtk.MenuItem.new_with_mnemonic(
-            _('_Change Status Message…'))
-        sub_menu.append(self._status_change_item)
-        self._status_change_item.connect(
-            'activate', self._on_change_status)
-
-        sub_menu.append(Gtk.SeparatorMenuItem())
-
         uf_show = get_uf_show('offline', use_mnemonic=True)
         item = Gtk.MenuItem.new_with_mnemonic(uf_show)
-        sub_menu.append(item)
         item.connect('activate', self._on_show, 'offline')
-
+        sub_menu.append(item)
         sub_menu.show_all()
 
         self._popup_menus.append(sub_menu)
@@ -285,7 +276,3 @@ class StatusIcon(EventHelper):
     @staticmethod
     def _on_show(_widget, show):
         app.interface.change_status(status=show)
-
-    @staticmethod
-    def _on_change_status(_widget):
-        app.interface.change_status(status=None)

@@ -131,7 +131,6 @@ WINDOW_MODULES = {
     'ChangePassword': 'gajim.gui.change_password',
     'PluginsWindow': 'gajim.plugins.gui',
     'Features': 'gajim.gui.features',
-    'StatusChange': 'gajim.gui.status_change',
     'GroupChatInvitation': 'gajim.gui.groupchat_invitation',
     'ContactInfo': 'gajim.gui.contact_info',
     'WorkspaceDialog': 'gajim.gui.workspace_dialog',

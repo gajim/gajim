@@ -63,8 +63,6 @@ class StatusSelector(Gtk.MenuButton):
             'xa',
             'dnd',
             'separator',
-            'change_status_message',
-            'separator',
             'offline',
         ]
 
@@ -77,16 +75,11 @@ class StatusSelector(Gtk.MenuButton):
             show_label = Gtk.Label()
             show_label.set_halign(Gtk.Align.START)
 
-            if item == 'change_status_message':
-                show_icon.set_from_icon_name('document-edit-symbolic',
-                                             Gtk.IconSize.MENU)
-                show_label.set_text_with_mnemonic(_('_Change Status Message'))
-            else:
-                surface = get_show_circle(
-                    item, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
-                show_icon.set_from_surface(surface)
-                show_label.set_text_with_mnemonic(
-                    get_uf_show(item, use_mnemonic=True))
+            surface = get_show_circle(
+                item, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
+            show_icon.set_from_surface(surface)
+            show_label.set_text_with_mnemonic(
+                get_uf_show(item, use_mnemonic=True))
 
             show_box = Gtk.Box(spacing=6)
             show_box.add(show_icon)
@@ -97,10 +90,6 @@ class StatusSelector(Gtk.MenuButton):
             button.set_relief(Gtk.ReliefStyle.NONE)
             button.add(show_box)
             button.connect('clicked', self._on_change_status)
-
-            if item == 'change_status_message':
-                self._change_status_message = button
-
             popover_box.add(button)
 
         popover_box.show_all()
@@ -111,8 +100,6 @@ class StatusSelector(Gtk.MenuButton):
     def _on_change_status(self, button):
         self._status_popover.popdown()
         new_status = button.get_name()
-        if new_status == 'change_status_message':
-            new_status = None
         app.interface.change_status(status=new_status, account=self._account)
         self.update()
 
@@ -142,5 +129,3 @@ class StatusSelector(Gtk.MenuButton):
                 _('Status: %s') % show_label)
             if not self._compact:
                 self._current_show_label.set_text(show_label)
-
-        self._change_status_message.set_sensitive(show != 'offline')

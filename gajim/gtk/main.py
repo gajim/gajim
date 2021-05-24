@@ -512,9 +512,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             on_continue2(message)
 
         if get_msg and ask_for_status_message('offline'):
-            open_window('StatusChange',
-                        status='offline',
-                        callback=on_continue,
-                        show_pep=False)
+            print('TODO: Let user choose status message')
+            on_continue('')  # status message here
         else:
             on_continue('')
