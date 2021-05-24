@@ -79,7 +79,7 @@ DEFAULT_KWARGS = {
     'role': {'value': ''},
     'url': {'value': ''},
     'key': {'value': '', 'value_type': 'text'},
-    'note': {'value': ''},
+    'note': {'value': '', 'value_type': 'text'},
 }
 
 
@@ -142,7 +142,7 @@ class VCardGrid(Gtk.Grid):
             'org': TextEntryProperty,
             'url': TextEntryProperty,
             'key': KeyProperty,
-            'note': TextEntryProperty,
+            'note': MultiLineProperty,
         }
 
         self.set_column_spacing(12)
@@ -590,6 +590,41 @@ class TextEntryProperty(VCardProperty):
         else:
             self._prop.value = text
         self._value_label.set_value(text)
+
+
+class MultiLineProperty(VCardProperty):
+    def __init__(self, prop, _account):
+        VCardProperty.__init__(self, prop)
+
+        self._edit_text_view = ValueTextView(prop)
+        self._edit_text_view.show()
+
+        self._edit_scrolled = Gtk.ScrolledWindow()
+        self._edit_scrolled.set_policy(Gtk.PolicyType.NEVER,
+                                       Gtk.PolicyType.AUTOMATIC)
+        self._edit_scrolled.add(self._edit_text_view)
+        self._edit_scrolled.set_valign(Gtk.Align.CENTER)
+        self._edit_scrolled.set_size_request(350, 100)
+        self._edit_scrolled.get_style_context().add_class('profile-scrolled')
+
+        self._read_text_view = ValueTextView(prop)
+        self._read_text_view.set_sensitive(False)
+        self._read_text_view.set_left_margin(0)
+        self._read_text_view.show()
+
+        self._read_scrolled = Gtk.ScrolledWindow()
+        self._read_scrolled.set_policy(Gtk.PolicyType.NEVER,
+                                       Gtk.PolicyType.AUTOMATIC)
+        self._read_scrolled.add(self._read_text_view)
+        self._read_scrolled.set_valign(Gtk.Align.CENTER)
+        self._read_scrolled.set_size_request(350, 100)
+        self._read_scrolled.get_style_context().add_class(
+            'profile-scrolled-read')
+
+        self._edit_widgets.append(self._edit_scrolled)
+        self._read_widgets.append(self._read_scrolled)
+
+        self._third_column = [self._edit_scrolled, self._read_scrolled]
 
 
 class DateProperty(VCardProperty):
