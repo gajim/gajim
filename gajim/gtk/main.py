@@ -32,6 +32,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title('Gajim')
+        self.set_icon_name('org.gajim.Gajim')
         self.set_default_size(1000, 500)
 
         app.window = self
