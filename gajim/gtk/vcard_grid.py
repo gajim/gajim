@@ -79,6 +79,7 @@ DEFAULT_KWARGS = {
     'role': {'value': ''},
     'url': {'value': ''},
     'key': {'value': '', 'value_type': 'text'},
+    'note': {'value': ''},
 }
 
 
@@ -104,6 +105,7 @@ ORDER = [
     'role',
     'url',
     'key',
+    'note',
 ]
 
 
@@ -117,7 +119,7 @@ SEX_VALUES = {
 
 
 TYPE_VALUES = {
-    '-' : None,
+    '-': None,
     'home': _('Home'),
     'work': _('Work')
 }
@@ -140,6 +142,7 @@ class VCardGrid(Gtk.Grid):
             'org': TextEntryProperty,
             'url': TextEntryProperty,
             'key': KeyProperty,
+            'note': TextEntryProperty,
         }
 
         self.set_column_spacing(12)
