@@ -59,7 +59,6 @@ class StatusIcon(EventHelper):
 
         self._popup_menus = []
         self._hide_menuitem_added = False
-        self._status_change_item = None
         self._status_icon = None
 
         self._ui.sounds_mute_menuitem.set_active(
@@ -78,7 +77,6 @@ class StatusIcon(EventHelper):
     def _on_account_state(self, _event):
         account_connected = bool(app.get_number_of_connected_accounts() > 0)
         self._ui.start_chat_menuitem.set_sensitive(account_connected)
-        self._status_change_item.set_sensitive(account_connected)
 
     def show_icon(self):
         if not self._status_icon:
