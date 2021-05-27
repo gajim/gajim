@@ -31,8 +31,8 @@ from gajim.common.i18n import Q_
 from .base import BaseRow
 from .base import MoreMenuButton
 from ..message_widget import MessageWidget
+from ...preview import PreviewWidget
 from ...util import format_fingerprint
-
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
@@ -74,11 +74,19 @@ class MessageRow(BaseRow):
         #         self.get_style_context().add_class(
         #             'conversation-mention-highlight')
 
-        result = process(text)
-        self._message_widget = MessageWidget(account)
-        self._message_widget.add_content(result)
+        is_previewable = app.interface.preview_manager.get_previewable(
+            text, additional_data)
+        if is_previewable:
+            self._message_widget = PreviewWidget(account)
+            app.interface.preview_manager.create_preview(
+                text, self._message_widget)
+        else:
+            result = process(text)
+            self._message_widget = MessageWidget(account)
+            self._message_widget.add_content(result)
 
         self._meta_box = Gtk.Box(spacing=6)
+        self._meta_box.set_hexpand(True)
         self._meta_box.pack_start(
             self.create_name_widget(name, kind, is_groupchat), False, True, 0)
         timestamp_label = self.create_timestamp_widget(self.timestamp)
@@ -122,7 +130,10 @@ class MessageRow(BaseRow):
 
         bottom_box = Gtk.Box(spacing=6)
         bottom_box.add(self._message_widget)
-        bottom_box.add(MoreMenuButton(self, history_mode=history_mode))
+        more_menu_button = MoreMenuButton(self, history_mode=history_mode)
+        more_menu_button.set_hexpand(True)
+        more_menu_button.set_halign(Gtk.Align.END)
+        bottom_box.pack_end(more_menu_button, False, True, 0)
 
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
@@ -143,11 +154,11 @@ class MessageRow(BaseRow):
     def on_copy_message(self, _widget):
         timestamp = self.timestamp.strftime('%x, %X')
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        text = self._message_widget.get_content().text
+        text = self._message_widget.get_text()
         clip.set_text(f'{timestamp} - {self.name}: {text}', -1)
 
     def on_quote_message(self, _widget):
-        self.get_parent().on_quote(self._message_widget.get_content().text)
+        self.get_parent().on_quote(self._message_widget.get_text())
 
     def _get_encryption_image(self, additional_data, encryption_enabled=None):
         details = self._get_encryption_details(additional_data)
@@ -207,7 +218,7 @@ class MessageRow(BaseRow):
         self._has_displayed = True
 
     def set_correction(self, text, message_id):
-        self._corrections.append(self._message_widget.get_content().text)
+        self._corrections.append(self._message_widget.get_text())
         result = process(text)
         self._message_widget.add_content(result)
 

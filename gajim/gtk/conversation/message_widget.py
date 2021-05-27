@@ -29,6 +29,9 @@ class MessageWidget(Gtk.Box):
     def get_content(self):
         return self._content
 
+    def get_text(self):
+        return self._content.text
+
     def add_content(self, content):
         self.clear()
         self._content = content

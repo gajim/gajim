@@ -75,6 +75,7 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkEventsController
 from gajim.common.i18n import _
 from gajim.common.client import Client
+from gajim.common.preview import PreviewManager
 from gajim.common.const import Display
 from gajim.common.const import JingleState
 
@@ -119,6 +120,7 @@ class Interface:
         self.roster = None
 
         self.avatar_storage = AvatarStorage()
+        self.preview_manager = PreviewManager()
 
         # Load CSS files
         app.load_css_config()

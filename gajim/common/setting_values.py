@@ -162,6 +162,12 @@ APP_SETTINGS = {
     'workspace_order': [],
     'chat_handle_position': 350,
     'chat_timestamp_format': '%H:%M',
+    'preview_size': 300,
+    'preview_max_file_size': 10485760,
+    'preview_allow_all_images': False,
+    'preview_leftclick_action': 'open',
+    'preview_verify_https': True,
+    'preview_anonymous_muc': False,
 }
 
 ACCOUNT_SETTINGS = {

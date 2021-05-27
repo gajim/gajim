@@ -119,6 +119,28 @@
     border-radius: 5px;
 }
 
+.preview-box {
+    border: 1px solid;
+    border-color: @borders;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: @theme_unfocused_base_color;
+}
+.preview-image-button,
+.preview-image-button:hover {
+    padding: 0px;
+    border: none;
+    transition: none;
+    -gtk-icon-effect: none;
+    -gtk-icon-shadow: none;
+    background-image: none;
+    text-shadow: none;
+    box-shadow: none;
+}
+.preview-button {
+    border: 1px solid @borders;
+}
+
 .link-button { min-height: 0px; }
 
 /* Main Window */

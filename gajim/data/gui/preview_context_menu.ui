@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkMenu" id="context_menu">
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="download">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Download</property>
+        <property name="use-underline">True</property>
+        <signal name="activate" handler="_on_download" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="open">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Open</property>
+        <property name="use-underline">True</property>
+        <signal name="activate" handler="_on_open" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="save_as">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save as</property>
+        <property name="use-underline">True</property>
+        <signal name="activate" handler="_on_save_as" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="open_folder">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Open _Folder</property>
+        <property name="use-underline">True</property>
+        <signal name="activate" handler="_on_open_folder" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="encryption_separator">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="copy_link_location">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Copy Link</property>
+        <property name="use-underline">True</property>
+        <signal name="activate" handler="_on_copy_link_location" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="open_link_in_browser">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Open Link in _Browser</property>
+        <property name="use-underline">True</property>
+        <signal name="activate" handler="_on_open_link_in_browser" swapped="no"/>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -217,7 +217,9 @@ def detect_dependencies():
 
     try:
         gi.require_version('Gst', '1.0')
+        gi.require_version('GstPbutils', '1.0')
         from gi.repository import Gst
+        from gi.repository import GstPbutils
         _dependencies['GST'] = True
     except Exception:
         pass

@@ -162,6 +162,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.conversation_view = ConversationView(self.account, self.contact)
         self.conversation_view.connect('quote', self.on_quote)
 
+        # TODO: Move to account connect/disconnect logic
+        app.interface.preview_manager.add_session(self.account)
+
         id_ = self.conversation_view.connect(
             'key-press-event', self._on_conversation_view_key_press)
         self.handlers[id_] = self.conversation_view
