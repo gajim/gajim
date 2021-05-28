@@ -102,9 +102,11 @@ class PreviewWidget(Gtk.Box):
 
         if preview.is_previewable and preview.orig_exists():
             self._ui.icon_event_box.hide()
+            self._ui.image_button.show()
             self._ui.save_as_button.show()
             self._ui.open_folder_button.show()
         else:
+            self._ui.image_button.hide()
             self._ui.icon_event_box.show()
             image.set_property('pixel-size', 64)
 
@@ -114,6 +116,7 @@ class PreviewWidget(Gtk.Box):
                     contains_audio_streams(preview.orig_path)):
                 self._ui.save_as_button.show()
                 self._ui.open_folder_button.show()
+                self._ui.image_button.hide()
                 audio_widget = AudioWidget(preview.orig_path)
                 self._ui.right_box.pack_end(audio_widget, False, True, 0)
                 self._ui.right_box.reorder_child(audio_widget, 1)

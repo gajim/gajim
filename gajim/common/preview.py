@@ -134,11 +134,9 @@ class PreviewManager:
         if GLib.mkdir_with_parents(str(self._thumb_dir), 0o700) != 0:
             log.error('Failed to create: %s', self._thumb_dir)
 
-    def add_session(self, account):
+    def _get_session(self, account):
         if account not in self._sessions:
             self._sessions[account] = self._create_session(account)
-
-    def _get_session(self, account):
         return self._sessions[account][0]
 
     @staticmethod
