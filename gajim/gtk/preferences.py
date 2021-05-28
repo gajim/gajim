@@ -80,6 +80,7 @@ class Preferences(Gtk.ApplicationWindow):
             ('contact_list', ContactList),
             ('chats', Chats),
             ('group_chats', GroupChats),
+            ('file_preview', FilePreview),
             ('visual_notifications', VisualNotifications),
             ('sounds', Sounds),
             ('status_message', StatusMessage),
@@ -468,6 +469,63 @@ class GroupChats(PreferenceBox):
     def _reset_print_status(button):
         button.set_sensitive(False)
         app.settings.set_group_chat_settings('print_status', None)
+
+
+class FilePreview(PreferenceBox):
+    def __init__(self, *args):
+        sizes = {
+            262144: '256 KiB',
+            524288: '512 KiB',
+            1048576: '1 MiB',
+            5242880: '5 MiB',
+            10485760: '10 MiB',
+        }
+
+        actions = {
+            'open': _('Open'),
+            'save_as': _('Save As…'),
+            'open_folder': _('Open Folder'),
+            'copy_link_location': _('Copy Link Location'),
+            'open_link_in_browser': _('Open Link in Browser'),
+        }
+
+        settings = [
+            Setting(SettingKind.SPIN,
+                    _('Preview Size'),
+                    SettingType.CONFIG,
+                    'preview_size',
+                    desc=_('Size of preview image'),
+                    props={'range_': (100, 1000)}),
+
+            Setting(SettingKind.POPOVER,
+                    _('Allowed File Size'),
+                    SettingType.CONFIG,
+                    'preview_max_file_size',
+                    desc=_('Maximum file size for preview generation'),
+                    props={'entries': sizes}),
+
+            Setting(SettingKind.SWITCH,
+                    _('Preview all Image URLs'),
+                    SettingType.CONFIG,
+                    'preview_allow_all_images',
+                    desc=_('Generate preview for any URLs containing images '
+                           '(may be unsafe)')),
+
+            Setting(SettingKind.POPOVER,
+                    _('Left Click Action'),
+                    SettingType.CONFIG,
+                    'preview_leftclick_action',
+                    desc=_('Action when left-clicking a preview'),
+                    props={'entries': actions}),
+
+            Setting(SettingKind.SWITCH,
+                    _('HTTPS Verification'),
+                    SettingType.CONFIG,
+                    'preview_verify_https',
+                    desc=_('Whether to check for a valid certificate')),
+        ]
+
+        PreferenceBox.__init__(self, settings)
 
 
 class VisualNotifications(PreferenceBox):
