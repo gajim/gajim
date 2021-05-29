@@ -258,6 +258,12 @@ class MessageArchiveStorage(SqliteStorage):
         jid = app.get_jid_from_account(account)
         return self.get_jid_id(jid, type_=type_)
 
+    def get_active_account_ids(self):
+        account_ids = []
+        for account in app.settings.get_active_accounts():
+            account_ids.append(self.get_account_id(account))
+        return account_ids
+
     @timeit
     def get_jid_id(self, jid, kind=None, type_=None):
         """
@@ -549,15 +555,18 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         """
+        account_ids = self.get_active_account_ids()
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
         sql = '''
         SELECT account_id, jid_id, contact_name, time, kind, show, message,
         subject, additional_data, log_line_id
         FROM logs WHERE message LIKE like(?)
+        AND account_id IN ({account_ids})
         AND kind NOT IN ({kinds})
         ORDER BY time DESC, log_line_id
-        '''.format(kinds=', '.join(kinds))
+        '''.format(account_ids=', '.join(map(str, account_ids)),
+                   kinds=', '.join(kinds))
 
         return self._con.execute(sql, (query,)).fetchall()
 

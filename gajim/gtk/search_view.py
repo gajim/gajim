@@ -20,6 +20,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
@@ -55,11 +56,21 @@ class SearchView(Gtk.Box):
 
         self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
+
+        app.ged.register_event_handler('account-enabled',
+                                       ged.GUI1,
+                                       self._on_account_state)
+        app.ged.register_event_handler('account-disabled',
+                                       ged.GUI1,
+                                       self._on_account_state)
         self.show_all()
 
     def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.emit('hide-search')
+
+    def _on_account_state(self, _event):
+        self.clear()
 
     @staticmethod
     def _header_func(row, before):
