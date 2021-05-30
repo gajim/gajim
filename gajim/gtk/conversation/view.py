@@ -26,17 +26,16 @@ from gajim.common.const import AvatarSize
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
 
-from .util import scroll_to_end
-from .conversation.rows.read_marker import ReadMarkerRow
-from .conversation.rows.scroll_hint import ScrollHintRow
-from .conversation.rows.message import MessageRow
-from .conversation.rows.info import InfoMessage
-from .conversation.rows.date import DateRow
-from .conversation.rows.file_transfer import FileTransferRow
-from .conversation.rows.muc_subject import MUCSubject
-from .conversation.rows.muc_join_left import MUCJoinLeft
-from .conversation.rows.muc_user_status import MUCUserStatus
-
+from .rows.read_marker import ReadMarkerRow
+from .rows.scroll_hint import ScrollHintRow
+from .rows.message import MessageRow
+from .rows.info import InfoMessage
+from .rows.date import DateRow
+from .rows.file_transfer import FileTransferRow
+from .rows.muc_subject import MUCSubject
+from .rows.muc_join_left import MUCJoinLeft
+from .rows.muc_user_status import MUCUserStatus
+from ..util import scroll_to_end
 
 log = logging.getLogger('gajim.gui.conversation_view')
 
@@ -115,7 +114,8 @@ class ConversationView(Gtk.ListBox):
         self._row_count = 0
         self.clearing = False
 
-    def _sort_func(self, row1, row2):
+    @staticmethod
+    def _sort_func(row1, row2):
         if row1.timestamp == row2.timestamp:
             return 0
         return -1 if row1.timestamp < row2.timestamp else 1
