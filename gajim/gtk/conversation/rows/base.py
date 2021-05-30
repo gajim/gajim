@@ -29,7 +29,7 @@ from ...util import wrap_with_event_box
 
 
 class BaseRow(Gtk.ListBoxRow):
-    def __init__(self, account, widget=None, history_mode=False):
+    def __init__(self, account, widget=None):
         Gtk.ListBoxRow.__init__(self)
         self.type = ''
         self.timestamp = None
@@ -97,9 +97,8 @@ class BaseRow(Gtk.ListBoxRow):
 
 @wrap_with_event_box
 class MoreMenuButton(Gtk.MenuButton):
-    def __init__(self, row, history_mode=False):
+    def __init__(self, row):
         Gtk.MenuButton.__init__(self)
-        self._history_mode = history_mode
 
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)
@@ -116,14 +115,13 @@ class MoreMenuButton(Gtk.MenuButton):
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         menu_box.get_style_context().add_class('padding-6')
 
-        if not self._history_mode:
-            quote_button = Gtk.ModelButton()
-            quote_button.set_halign(Gtk.Align.START)
-            quote_button.connect('clicked', row.on_quote_message)
-            quote_button.set_label(_('Quote…'))
-            quote_button.set_image(Gtk.Image.new_from_icon_name(
-                'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
-            menu_box.add(quote_button)
+        quote_button = Gtk.ModelButton()
+        quote_button.set_halign(Gtk.Align.START)
+        quote_button.connect('clicked', row.on_quote_message)
+        quote_button.set_label(_('Quote…'))
+        quote_button.set_image(Gtk.Image.new_from_icon_name(
+            'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
+        menu_box.add(quote_button)
 
         copy_button = Gtk.ModelButton()
         copy_button.set_halign(Gtk.Align.START)

@@ -52,10 +52,9 @@ class MessageRow(BaseRow):
                  marker=None,
                  error=None,
                  encryption_enabled=False,
-                 history_mode=False,
                  log_line_id=None):
 
-        BaseRow.__init__(self, account, history_mode=history_mode)
+        BaseRow.__init__(self, account)
         self.type = 'chat'
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
@@ -130,7 +129,7 @@ class MessageRow(BaseRow):
 
         bottom_box = Gtk.Box(spacing=6)
         bottom_box.add(self._message_widget)
-        more_menu_button = MoreMenuButton(self, history_mode=history_mode)
+        more_menu_button = MoreMenuButton(self)
         more_menu_button.set_hexpand(True)
         more_menu_button.set_halign(Gtk.Align.END)
         bottom_box.pack_end(more_menu_button, False, True, 0)

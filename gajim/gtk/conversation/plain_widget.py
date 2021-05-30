@@ -252,11 +252,10 @@ class MessageTextview(Gtk.TextView):
             menu.show_all()
             return
 
-        if not self._history_mode:
-            item = Gtk.MenuItem.new_with_mnemonic(_('_Quote'))
-            id_ = item.connect('activate', self._on_quote)
-            self.handlers[id_] = item
-            menu.prepend(item)
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Quote'))
+        id_ = item.connect('activate', self._on_quote)
+        self.handlers[id_] = item
+        menu.prepend(item)
 
         selected_text_short = reduce_chars_newlines(
             self._selected_text, 25, 2)

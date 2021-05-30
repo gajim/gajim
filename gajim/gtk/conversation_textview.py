@@ -54,7 +54,7 @@ class ConversationTextview(HtmlTextView):
         ),
     }
 
-    def __init__(self, account, history_mode=False):
+    def __init__(self, account):
         HtmlTextView.__init__(self, account)
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -63,8 +63,6 @@ class ConversationTextview(HtmlTextView):
         self.set_border_width(0)
         self.set_left_margin(0)
         self.set_right_margin(0)
-
-        self._history_mode = history_mode
 
         self.handlers = {}
 
@@ -543,11 +541,10 @@ class ConversationTextview(HtmlTextView):
             menu.show_all()
             return
 
-        if not self._history_mode:
-            item = Gtk.MenuItem.new_with_mnemonic(_('_Quote'))
-            id_ = item.connect('activate', self._on_quote)
-            self.handlers[id_] = item
-            menu.prepend(item)
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Quote'))
+        id_ = item.connect('activate', self._on_quote)
+        self.handlers[id_] = item
+        menu.prepend(item)
 
         selected_text_short = reduce_chars_newlines(
             self._selected_text, 25, 2)

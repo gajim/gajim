@@ -50,7 +50,7 @@ class ConversationView(Gtk.ListBox):
         ),
     }
 
-    def __init__(self, account, contact, history_mode=False):
+    def __init__(self, account, contact):
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_sort_func(self._sort_func)
@@ -60,7 +60,6 @@ class ConversationView(Gtk.ListBox):
         if account is not None:
             self._client = app.get_client(account)
         self._contact = contact
-        self._history_mode = history_mode
 
         self.encryption_enabled = False
         self.autoscroll = True
@@ -90,8 +89,7 @@ class ConversationView(Gtk.ListBox):
             self._read_marker_row = ReadMarkerRow(self._account, self._contact)
             self.add(self._read_marker_row)
 
-        self._scroll_hint_row = ScrollHintRow(self._account,
-                                              history_mode=self._history_mode)
+        self._scroll_hint_row = ScrollHintRow(self._account)
         self.add(self._scroll_hint_row)
 
     def clear(self):
@@ -199,7 +197,6 @@ class ConversationView(Gtk.ListBox):
             marker=marker,
             error=error,
             encryption_enabled=self.encryption_enabled,
-            history_mode=self._history_mode,
             log_line_id=log_line_id)
 
         if message.type == 'chat':

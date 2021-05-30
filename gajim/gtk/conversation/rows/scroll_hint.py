@@ -22,14 +22,13 @@ from .base import BaseRow
 
 
 class ScrollHintRow(BaseRow):
-    def __init__(self, account, history_mode=False):
+    def __init__(self, account):
         BaseRow.__init__(self, account, widget='label')
         self.set_selectable(False)
         self.set_activatable(False)
 
         self.type = 'system'
         self.timestamp = datetime.fromtimestamp(0)
-        self._history_mode = history_mode
 
         self.get_style_context().add_class('conversation-system-row')
 
@@ -42,10 +41,6 @@ class ScrollHintRow(BaseRow):
         self.set_history_complete(False)
 
     def set_history_complete(self, complete):
-        if self._history_mode:
-            self.label.set_text(_('Use the calendar to select a specific date'))
-            return
-
         if complete:
             self.label.set_text(_('There is no more history'))
         else:
