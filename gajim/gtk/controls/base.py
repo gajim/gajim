@@ -821,7 +821,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
             if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
                 self.conversation_view.event(event)
-                self._on_scroll(None, event.keyval)
                 return True
 
         if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
@@ -868,14 +867,14 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.last_key_tabs = False
         if event.keyval == Gdk.KEY_Up:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
-                if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+UP
+                if event_state & Gdk.ModifierType.SHIFT_MASK:  # Ctrl+Shift+UP
                     self.scroll_messages('up', message_buffer, 'received')
                 else:  # Ctrl+UP
                     self.scroll_messages('up', message_buffer, 'sent')
                 return True
         elif event.keyval == Gdk.KEY_Down:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
-                if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+Down
+                if event_state & Gdk.ModifierType.SHIFT_MASK:  # Ctrl+Shift+Down
                     self.scroll_messages('down', message_buffer, 'received')
                 else:  # Ctrl+Down
                     self.scroll_messages('down', message_buffer, 'sent')
