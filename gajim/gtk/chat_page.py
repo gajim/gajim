@@ -28,12 +28,6 @@ from .chat_stack import ChatStack
 from .search_view import SearchView
 
 
-WORKSPACE_MENU_DICT = {
-    'edit': _('Edit…'),
-    'remove': _('Remove'),
-}
-
-
 class ChatPage(Gtk.Box):
 
     __gsignals__ = {
@@ -46,6 +40,7 @@ class ChatPage(Gtk.Box):
         Gtk.Box.__init__(self)
         self._ui = get_builder('chat_paned.ui')
         self.add(self._ui.paned)
+        self._ui.connect_signals(self)
 
         self._chat_stack = ChatStack()
         self._ui.right_grid_overlay.add(self._chat_stack)
@@ -80,12 +75,6 @@ class ChatPage(Gtk.Box):
 
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
-
-        workspace_menu = Gio.Menu()
-        for action, label in WORKSPACE_MENU_DICT.items():
-            workspace_menu.append(label, f'win.{action.lower()}-workspace')
-
-        self._ui.workspace_menu_button.set_menu_model(workspace_menu)
 
         self._startup_finished = False
 
@@ -131,6 +120,10 @@ class ChatPage(Gtk.Box):
         active = toggle_button.get_active()
         self._ui.filter_bar_revealer.set_reveal_child(active)
         self._chat_filter.reset()
+
+    @staticmethod
+    def _on_edit_workspace_clicked(_button):
+        app.window.lookup_action('edit-workspace').activate()
 
     def _on_chat_selected(self, _chat_list_stack, workspace_id, account, jid):
         self._chat_stack.show_chat(account, jid)

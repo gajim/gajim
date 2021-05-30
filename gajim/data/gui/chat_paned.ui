@@ -26,16 +26,17 @@
                 <property name="can-focus">False</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkMenuButton" id="workspace_menu_button">
+                  <object class="GtkButton">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="focus-on-click">False</property>
                     <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes">Edit workspace…</property>
+                    <signal name="clicked" handler="_on_edit_workspace_clicked" swapped="no"/>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="icon-name">document-edit-symbolic</property>
                       </object>
                     </child>
                   </object>
@@ -44,6 +45,22 @@
                     <property name="fill">True</property>
                     <property name="pack-type">end</property>
                     <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="workspace_label">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label">Workspace Label</property>
+                    <property name="ellipsize">end</property>
+                    <style>
+                      <class name="bold16"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -64,22 +81,6 @@
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="pack-type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="workspace_label">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label">Workspace Label</property>
-                    <property name="ellipsize">end</property>
-                    <style>
-                      <class name="bold16"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>

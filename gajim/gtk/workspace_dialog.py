@@ -51,7 +51,9 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         color = None
         avatar_sha = None
 
-        if workspace_id is not None:
+        if workspace_id is None:
+            self._ui.remove_workspace_button.set_sensitive(False)
+        else:
             name = app.settings.get_workspace_setting(
                 workspace_id, 'name')
             color = app.settings.get_workspace_setting(
@@ -72,6 +74,10 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
     def _on_key_press_event(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
+
+    def _on_remove_workspace(self, _button):
+        app.window.remove_workspace(self._workspace_id)
+        self.destroy()
 
     def _on_cancel(self, _button):
         self.destroy()
