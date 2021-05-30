@@ -31,6 +31,7 @@ class ChatFilter(Gtk.Box):
         self.set_halign(Gtk.Align.CENTER)
 
         toolbar = Gtk.Toolbar()
+        toolbar.set_icon_size(Gtk.IconSize.MENU)
         if icons:
             toolbar.get_style_context().add_class('chat-filter-icons')
 
