@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gst
@@ -19,6 +21,8 @@ from gi.repository import Gst
 from gajim.common.i18n import _
 
 from .util import get_cursor
+
+log = logging.getLogger('gajim.gui.preview_audio')
 
 
 class AudioWidget(Gtk.Box):
@@ -66,10 +70,12 @@ class AudioWidget(Gtk.Box):
     def _setup_audio_player(self, file_path):
         self._playbin = Gst.ElementFactory.make('playbin', 'bin')
         if self._playbin is None:
+            log.debug('Could not create GST playbin')
             return
         self._playbin.set_property('uri', f'file://{file_path}')
         state_return = self._playbin.set_state(Gst.State.PAUSED)
         if state_return == Gst.StateChangeReturn.FAILURE:
+            log.debug('Could not setup GST playbin')
             return
 
         self._query = Gst.Query.new_position(Gst.Format.TIME)
