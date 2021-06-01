@@ -52,7 +52,7 @@ class ChatMarkers(BaseModule):
                 self._log.warning('Received chat marker while not joined')
                 return
 
-            if properties.muc_nickname != muc_data.nick:
+            if properties.muc_nickname != contact.nickname:
                 return
 
             self._raise_event('read-state-sync', properties)
