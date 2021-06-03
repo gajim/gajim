@@ -108,11 +108,13 @@ class MessageInputTextView(Gtk.TextView):
             Gdk.DragAction.DEFAULT)
 
     def _on_focus_in(self, _widget, _event):
+        self.toggle_speller(True)
         scrolled = self.get_parent()
         scrolled.get_style_context().add_class('message-input-focus')
         return False
 
     def _on_focus_out(self, _widget, _event):
+        self.toggle_speller(False)
         scrolled = self.get_parent()
         scrolled.get_style_context().remove_class('message-input-focus')
         return False
