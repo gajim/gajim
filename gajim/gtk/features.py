@@ -91,7 +91,8 @@ class Features(Gtk.ApplicationWindow):
                     app.is_installed('AV'),
                     _('Enables Gajim to provide Audio and Video chats'),
                     _('Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, '
-                      'gstreamer1.0-libav, gstreamer1.0-plugins-ugly'),
+                      'gstreamer1.0-plugins-base, gstreamer1.0-plugins-ugly, '
+                      'gstreamer1.0-libav, and gstreamer1.0-gtk3'),
                     _('Feature not available under Windows'),
                     None),
             Feature(_('Automatic Status'),
