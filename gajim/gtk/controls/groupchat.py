@@ -1756,7 +1756,9 @@ class GroupchatControl(BaseControl):
         self._close_control()
 
     def _on_groupchat_state_abort_clicked(self, _button):
-        app.window.lookup_action('disconnect-%s' % self.control_id).activate()
+        app.window.activate_action(
+            'remove-chat',
+            GLib.Variant('as', [self.account, str(self.room_jid)]))
 
     def _on_groupchat_state_join_clicked(self, _groupchat_state):
         self._client.get_module('MUC').join(self.room_jid)
