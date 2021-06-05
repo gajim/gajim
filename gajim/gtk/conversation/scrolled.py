@@ -22,7 +22,7 @@ class ScrolledView(Gtk.ScrolledWindow):
         'request-history': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
-            ()
+            (bool, )
         ),
         'autoscroll-changed': (
             GObject.SignalFlags.RUN_LAST,
@@ -55,7 +55,9 @@ class ScrolledView(Gtk.ScrolledWindow):
         self._current_upper = 0
         self._autoscroll = True
         self._request_history_at_upper = None
-        self._complete = False
+        self._upper_complete = False
+        self._lower_complete = False
+        self._requesting = None
 
         vadjustment = self.get_vadjustment()
         vadjustment.connect('notify::upper', self._on_adj_upper_changed)
@@ -67,9 +69,22 @@ class ScrolledView(Gtk.ScrolledWindow):
     def get_view(self):
         return self.get_child().get_child()
 
-    def set_history_complete(self, complete):
-        self._complete = complete
-        self.get_view().set_history_complete(complete)
+    def reset(self):
+        self._current_upper = 0
+        self._request_history_at_upper = None
+        self._upper_complete = False
+        self._lower_complete = False
+        self._requesting = None
+
+    def set_history_complete(self, before, complete):
+        if before:
+            self._upper_complete = complete
+            self.get_view().set_history_complete(complete)
+        else:
+            self._lower_complete = complete
+
+    def get_lower_complete(self):
+        return self._lower_complete
 
     def _on_adj_upper_changed(self, adj, *args):
         upper = adj.get_upper()
@@ -79,18 +94,22 @@ class ScrolledView(Gtk.ScrolledWindow):
             self._current_upper = upper
             if self._autoscroll:
                 adj.set_value(adj.get_upper() - adj.get_page_size())
-
             else:
                 # Workaround
                 # https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
                 self.set_kinetic_scrolling(True)
-                adj.set_value(adj.get_value() + diff)
+                if self._requesting == 'before':
+                    adj.set_value(adj.get_value() + diff)
 
         if upper == adj.get_page_size():
             # There is no scrollbar, request history until there is
-            self.emit('request-history')
+            self.emit('request-history', True)
+        self._requesting = None
 
     def _on_adj_value_changed(self, adj, *args):
+        if self._requesting is not None:
+            return
+
         bottom = adj.get_upper() - adj.get_page_size()
         if (bottom - adj.get_value()) < 1:
             self._autoscroll = True
@@ -99,9 +118,10 @@ class ScrolledView(Gtk.ScrolledWindow):
             self._autoscroll = False
             self.emit('autoscroll-changed', self._autoscroll)
 
-        if self._complete:
+        if self._upper_complete:
             self._request_history_at_upper = None
-            return
+            if self._lower_complete:
+                return
 
         if self._request_history_at_upper == adj.get_upper():
             # Abort here if we already did a history request and the upper
@@ -111,9 +131,22 @@ class ScrolledView(Gtk.ScrolledWindow):
 
         self._request_history_at_upper = None
 
-        # Load messages when we are near the top
-        if adj.get_value() < adj.get_page_size() * 2:
+        distance = adj.get_page_size()
+        if adj.get_value() < distance:
+            # Load messages when we are near the top
+            if self._upper_complete:
+                return
             self._request_history_at_upper = adj.get_upper()
             # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
             self.set_kinetic_scrolling(False)
-            self.emit('request-history')
+            self.emit('request-history', True)
+            self._requesting = 'before'
+        elif (adj.get_upper() - (adj.get_value() + adj.get_page_size()) <
+                distance):
+            # ..or near the bottom
+            if self._lower_complete:
+                return
+            # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
+            self.set_kinetic_scrolling(False)
+            self.emit('request-history', False)
+            self._requesting = 'after'

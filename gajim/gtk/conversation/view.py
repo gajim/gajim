@@ -63,7 +63,7 @@ class ConversationView(Gtk.ListBox):
 
         self.encryption_enabled = False
         self.autoscroll = True
-        self.clearing = False
+        self.locked = False
 
         # Keeps track of the number of rows shown in ConversationView
         self._row_count = 0
@@ -92,12 +92,21 @@ class ConversationView(Gtk.ListBox):
         self._scroll_hint_row = ScrollHintRow(self._account)
         self.add(self._scroll_hint_row)
 
-    def clear(self):
-        self.clearing = True
-        for row in self.get_children()[1:]:
-            self.remove(row)
+    def lock(self):
+        self.locked = True
 
-        GLib.idle_add(self._reset_conversation_view)
+    def unlock(self):
+        self.locked = False
+
+    def clear(self):
+        for row in self.get_children()[2:]:
+            self.remove(row)
+        self._reset_conversation_view()
+
+    def _reset_conversation_view(self):
+        self._row_count = 0
+        self._active_date_rows = set()
+        self._message_id_row_map = {}
 
     def get_first_message_row(self):
         for row in self.get_children():
@@ -105,12 +114,16 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
+    def get_last_message_row(self):
+        children = self.get_children()
+        children.reverse()
+        for row in children:
+            if isinstance(row, MessageRow):
+                return row
+        return None
+
     def set_history_complete(self, complete):
         self._scroll_hint_row.set_history_complete(complete)
-
-    def _reset_conversation_view(self):
-        self._row_count = 0
-        self.clearing = False
 
     @staticmethod
     def _sort_func(row1, row2):
@@ -300,36 +313,50 @@ class ConversationView(Gtk.ListBox):
                 self._update_descendants(row)
             return
 
-    def reduce_message_count(self):
-        successful = False
-        while self._row_count > self._max_row_count:
-            # We want to keep relevant DateRows when removing rows
-            row1 = self.get_row_at_index(1)
-            row2 = self.get_row_at_index(2)
+    def reduce_message_count(self, before):
+        success = False
+        row_count = len(self.get_children())
+        while row_count > self._max_row_count:
+            if before:
+                if self._reduce_messages_before():
+                    row_count -= 1
+                    success = True
+            else:
+                self._reduce_messages_after()
+                row_count -= 1
+                success = True
 
-            if row1.type == row2.type == 'date':
-                # First two rows are date rows,
-                # it’s safe to remove the fist row
-                self.remove(row1)
-                successful = True
-                self._row_count -= 1
-                continue
+        return success
 
-            if row1.type == 'date' and row2.type != 'date':
-                # First one is a date row, keep it and
-                # remove the second row instead
-                self.remove(row2)
-                successful = True
-                self._row_count -= 1
-                continue
+    def _reduce_messages_before(self):
+        success = False
 
-            if row1.type != 'date':
-                # Not a date row, safe to remove
-                self.remove(row1)
-                successful = True
-                self._row_count -= 1
+        # We want to keep relevant DateRows when removing rows
+        row1 = self.get_row_at_index(2)
+        row2 = self.get_row_at_index(3)
 
-        return successful
+        if row1.type == row2.type == 'date':
+            # First two rows are date rows,
+            # it’s safe to remove the fist row
+            self.remove(row1)
+            success = True
+
+        if row1.type == 'date' and row2.type != 'date':
+            # First one is a date row, keep it and
+            # remove the second row instead
+            self.remove(row2)
+            success = True
+
+        if row1.type != 'date':
+            # Not a date row, safe to remove
+            self.remove(row1)
+            success = True
+
+        return success
+
+    def _reduce_messages_after(self):
+        row = self.get_row_at_index(len(self.get_children()) - 1)
+        self.remove(row)
 
     def scroll_to_message_and_highlight(self, log_line_id):
         highlight_row = None

@@ -176,7 +176,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
         self._scrolled_view.connect('request-history',
-                                    self.fetch_n_lines_history, 30)
+                                    self.fetch_n_lines_history, 20)
 
         self.msg_textview = MessageInputTextView()
         self.msg_textview.connect('paste-clipboard',
@@ -476,6 +476,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def delegate_action(self, action):
         if action == 'clear-chat':
             self.conversation_view.clear()
+            self._scrolled_view.reset()
             return Gdk.EVENT_STOP
 
         if action == 'delete-line':
@@ -1267,52 +1268,70 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.contact, Chatstate.INACTIVE)
 
     def scroll_to_end(self, force=False):
-        self.conversation_view.scroll_to_end(force)
+        if self._scrolled_view.get_lower_complete():
+            self.conversation_view.scroll_to_end(force)
+        else:
+            # Clear view and reload conversation
+            self.conversation_view.clear()
+            self._scrolled_view.reset()
+            self.conversation_view.scroll_to_end(force)
 
     def scroll_to_message(self, log_line_id, timestamp):
         row = self.conversation_view.get_row_by_log_line_id(log_line_id)
         if row is None:
-            first_row = self.conversation_view.get_first_message_row()
-            if first_row is None:
-                first_timestamp = time.time()
-            else:
-                first_timestamp = first_row.db_timestamp
-            messages = app.storage.archive.get_conversation_between(
-                self.account, self.contact.jid, first_timestamp, timestamp)
-            if not messages:
-                return
-
-            self.add_messages(messages)
+            # Clear view and reload conversation around timestamp
+            self.conversation_view.lock()
+            self.conversation_view.clear()
+            self._scrolled_view.reset()
+            before, at_after = app.storage.archive.get_conversation_around(
+                self.account, self.contact.jid, timestamp)
+            self.add_messages(before)
+            self.add_messages(at_after)
 
         GLib.idle_add(
             self.conversation_view.scroll_to_message_and_highlight,
             log_line_id)
+        GLib.idle_add(self.conversation_view.unlock)
 
-    def fetch_n_lines_history(self, _scrolled, n_lines):
-        row = self.conversation_view.get_first_message_row()
+    def fetch_n_lines_history(self, _scrolled, before, n_lines):
+        if self.conversation_view.locked:
+            return
+
+        self.conversation_view.lock()
+        if before:
+            row = self.conversation_view.get_first_message_row()
+        else:
+            row = self.conversation_view.get_last_message_row()
         if row is None:
             timestamp = time.time()
         else:
             timestamp = row.db_timestamp
 
         if self.is_groupchat:
-            messages = app.storage.archive.get_conversation_muc_before(
+            messages = app.storage.archive.get_conversation_muc_before_after(
                 self.account,
                 self.contact.jid,
+                before,
                 timestamp,
                 n_lines)
         else:
-            messages = app.storage.archive.get_conversation_before(
+            messages = app.storage.archive.get_conversation_before_after(
                 self.account,
                 self.contact.jid,
+                before,
                 timestamp,
                 n_lines)
 
         if not messages:
-            self._scrolled_view.set_history_complete(True)
+            self._scrolled_view.set_history_complete(before, True)
+            self.conversation_view.unlock()
             return
 
         self.add_messages(messages)
+        if self.conversation_view.reduce_message_count(not before):
+            self._scrolled_view.set_history_complete(not before, False)
+
+        self.conversation_view.unlock()
 
     def add_messages(self, messages):
         for msg in messages:

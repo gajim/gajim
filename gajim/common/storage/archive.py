@@ -330,13 +330,16 @@ class MessageArchiveStorage(SqliteStorage):
         return None
 
     @timeit
-    def get_conversation_before(self, account, jid, timestamp, n_lines):
+    def get_conversation_before_after(self, account, jid, before, timestamp,
+                                      n_lines):
         """
-        Load n_lines lines of conversation with jid before timestamp
+        Load n_lines lines of conversation with jid before or after timestamp
 
         :param account:         The account
 
         :param jid:             The jid for which we request the conversation
+
+        :param before:          bool for direction (before or after timestamp)
 
         :param timestamp:       timestamp
 
@@ -344,6 +347,10 @@ class MessageArchiveStorage(SqliteStorage):
         """
         jids = self._get_family_jids(account, jid)
         account_id = self.get_account_id(account)
+        if before:
+            time_order = 'AND time < ? ORDER BY time DESC, log_line_id DESC'
+        else:
+            time_order = 'AND time > ? ORDER BY time ASC, log_line_id ASC'
 
         sql = '''
             SELECT contact_name, time, kind, show, message, subject,
@@ -352,30 +359,38 @@ class MessageArchiveStorage(SqliteStorage):
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
-            AND time < ?
-            ORDER BY time DESC, log_line_id DESC
+            {time_order}
             LIMIT ?
             '''.format(jids=', '.join('?' * len(jids)),
-                       account_id=account_id)
+                       account_id=account_id,
+                       time_order=time_order)
 
         return self._con.execute(
             sql,
             tuple(jids) + (timestamp, n_lines)).fetchall()
 
     @timeit
-    def get_conversation_muc_before(self, account, jid, timestamp, n_lines):
+    def get_conversation_muc_before_after(self, account, jid, before,
+                                          timestamp, n_lines):
         """
-        Load n_lines lines of conversation with jid before timestamp
+        Load n_lines lines of conversation with jid before or after timestamp
 
         :param account:         The account
 
         :param jid:             The jid for which we request the conversation
+
+        :param before:          bool for direction (before or after timestamp)
 
         :param timestamp:       timestamp
 
         returns a list of namedtuples
         """
         jids = self._get_family_jids(account, jid)
+        if before:
+            time_order = 'AND time < ? ORDER BY time DESC, log_line_id DESC'
+        else:
+            time_order = 'AND time > ? ORDER BY time ASC, log_line_id ASC'
+
         # TODO: this does not load messages correctly when account_id is set
         # account_id = self.get_account_id(account, type_=JIDConstant.ROOM_TYPE)
 
@@ -386,11 +401,11 @@ class MessageArchiveStorage(SqliteStorage):
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND kind = {kind}
-            AND time < ?
-            ORDER BY time DESC, log_line_id DESC
+            {time_order}
             LIMIT ?
             '''.format(jids=', '.join('?' * len(jids)),
-                       kind=KindConstant.GC_MSG)
+                       kind=KindConstant.GC_MSG,
+                       time_order=time_order)
 
         return self._con.execute(
             sql,
@@ -426,6 +441,55 @@ class MessageArchiveStorage(SqliteStorage):
                        kinds=', '.join(kinds))
 
         return self._con.execute(sql, tuple(jids)).fetchone()
+
+    @timeit
+    def get_conversation_around(self, account, jid, timestamp):
+        """
+        Load all lines of conversation with jid around a specific timestamp
+
+        :param account:         The account
+
+        :param jid:             The jid for which we request the conversation
+
+        :param timestamp:       Timestamp around which to fetch messages
+
+        returns a list of namedtuples
+        """
+        jids = self._get_family_jids(account, jid)
+        account_id = self.get_account_id(account)
+        n_lines = 20
+
+        sql_before = '''
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id, message_id,
+                   error as "error [common_error]",
+                   marker as "marker [marker]"
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
+            AND time < ?
+            ORDER BY time DESC, log_line_id DESC
+            LIMIT ?
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id)
+        sql_at_after = '''
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id, message_id,
+                   error as "error [common_error]",
+                   marker as "marker [marker]"
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
+            AND time >= ?
+            ORDER BY time ASC, log_line_id ASC
+            LIMIT ?
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id)
+        before = self._con.execute(
+            sql_before,
+            tuple(jids) + (timestamp, n_lines)).fetchall()
+        at_after = self._con.execute(
+            sql_at_after,
+            tuple(jids) + (timestamp, n_lines)).fetchall()
+        return before, at_after
 
     @timeit
     def get_conversation_between(self, account, jid, before, after):
