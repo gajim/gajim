@@ -40,13 +40,12 @@ MERGE_TIMEFRAME = timedelta(seconds=120)
 class MessageRow(BaseRow):
     def __init__(self,
                  account,
+                 contact,
                  message_id,
                  timestamp,
                  kind,
                  name,
                  text,
-                 avatar,
-                 is_groupchat,
                  additional_data=None,
                  display_marking=None,
                  marker=None,
@@ -64,6 +63,11 @@ class MessageRow(BaseRow):
         self.name = name or ''
         self.text = text
 
+        self._contact = contact
+        self._is_groupchat = False
+        if contact is not None and contact.is_groupchat:
+            self._is_groupchat = True
+
         self._corrections = []
         self._has_receipt = marker == 'received'
         self._has_displayed = marker == 'displayed'
@@ -78,13 +82,15 @@ class MessageRow(BaseRow):
             result = process(text)
             self._message_widget = MessageWidget(account)
             self._message_widget.add_content(result)
-            if is_groupchat:
-                self._check_for_highlight(result)
+            if self._is_groupchat:
+                self_contact = self._contact.get_self()
+                if self_contact.name != name:
+                    self._check_for_highlight(result)
 
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.set_hexpand(True)
-        self._meta_box.pack_start(
-            self.create_name_widget(name, kind, is_groupchat), False, True, 0)
+        name_widget = self.create_name_widget(name, kind, self._is_groupchat)
+        self._meta_box.pack_start(name_widget, False, True, 0)
         timestamp_label = self.create_timestamp_widget(self.timestamp)
         timestamp_label.set_margin_start(6)
         self._meta_box.pack_end(timestamp_label, False, True, 0)
@@ -117,12 +123,12 @@ class MessageRow(BaseRow):
                 self.set_receipt()
 
         self._meta_box.pack_end(self._message_icons, False, True, 0)
-
-        self._avatar_surface = Gtk.Image.new_from_surface(avatar)
+        avatar = self._get_avatar(kind, name)
+        self._avatar_image = Gtk.Image.new_from_surface(avatar)
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         avatar_placeholder.set_valign(Gtk.Align.START)
-        avatar_placeholder.add(self._avatar_surface)
+        avatar_placeholder.add(self._avatar_image)
 
         bottom_box = Gtk.Box(spacing=6)
         bottom_box.add(self._message_widget)
@@ -139,11 +145,28 @@ class MessageRow(BaseRow):
 
     def _check_for_highlight(self, content):
         highlight_words = app.settings.get('muc_highlight_words').split(';')
-        highlight_words.append(app.nicks[self.account])
+        highlight_words.append(app.nicks[self._account])
         highlight_words = [word.lower() for word in highlight_words if word]
         if any(match in content.text.lower() for match in highlight_words):
             self.get_style_context().add_class(
                 'conversation-mention-highlight')
+
+    def _get_avatar(self, kind, name):
+        if self._contact is None:
+            return None
+
+        scale = self.get_scale_factor()
+        if self._is_groupchat:
+            contact = self._contact.get_resource(name)
+            return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+
+        if kind == 'outgoing':
+            contact = self._client.get_module('Contacts').get_contact(
+                str(self._client.get_own_jid().bare))
+        else:
+            contact = self._contact
+
+        return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
     def is_same_sender(self, message):
         return message.name == self.name
@@ -242,21 +265,22 @@ class MessageRow(BaseRow):
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 
-    def update_avatar(self, avatar):
-        self._avatar_surface.set_from_surface(avatar)
+    def update_avatar(self):
+        avatar = self._get_avatar(self.kind, self.name)
+        self._avatar_image.set_from_surface(avatar)
 
     def set_merged(self, merged):
         self._merged = merged
         if merged:
             self.get_style_context().add_class('merged')
-            self._avatar_surface.set_no_show_all(True)
-            self._avatar_surface.hide()
+            self._avatar_image.set_no_show_all(True)
+            self._avatar_image.hide()
             self._meta_box.set_no_show_all(True)
             self._meta_box.hide()
         else:
             self.get_style_context().remove_class('merged')
-            self._avatar_surface.set_no_show_all(False)
-            self._avatar_surface.show()
+            self._avatar_image.set_no_show_all(False)
+            self._avatar_image.show()
             self._meta_box.set_no_show_all(False)
             self._meta_box.show()
 

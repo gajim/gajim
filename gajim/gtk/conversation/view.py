@@ -22,7 +22,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.const import AvatarSize
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
 
@@ -190,21 +189,14 @@ class ConversationView(Gtk.ListBox):
             self.correct_message(correct_id, message_id, text)
             return
 
-        avatar = self._get_avatar(kind, name)
-
-        is_groupchat = False
-        if self._contact is not None:
-            is_groupchat = self._contact.is_groupchat
-
         message = MessageRow(
             self._account,
+            self._contact,
             message_id,
             timestamp,
             kind,
             name,
             text,
-            avatar,
-            is_groupchat,
             additional_data=additional_data,
             display_marking=display_marking,
             marker=marker,
@@ -216,23 +208,6 @@ class ConversationView(Gtk.ListBox):
             self._message_id_row_map[message.message_id] = message
 
         self._insert_message(message)
-
-    def _get_avatar(self, kind, name):
-        if self._contact is None:
-            return None
-
-        scale = self.get_scale_factor()
-        if self._contact.is_groupchat:
-            contact = self._contact.get_resource(name)
-            return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
-
-        if kind == 'outgoing':
-            contact = self._client.get_module('Contacts').get_contact(
-                str(self._client.get_own_jid().bare))
-        else:
-            contact = self._contact
-
-        return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
     def _insert_message(self, message):
         self.add(message)
@@ -402,8 +377,7 @@ class ConversationView(Gtk.ListBox):
     def update_avatars(self):
         for row in self.get_children():
             if row.type == 'chat':
-                avatar = self._get_avatar(row.kind, row.name)
-                row.update_avatar(avatar)
+                row.update_avatar()
 
     def update_text_tags(self):
         for row in self.get_children():

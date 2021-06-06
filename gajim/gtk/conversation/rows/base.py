@@ -31,7 +31,8 @@ from ...util import wrap_with_event_box
 class BaseRow(Gtk.ListBoxRow):
     def __init__(self, account, widget=None):
         Gtk.ListBoxRow.__init__(self)
-        self.account = account
+        self._account = account
+        self._client = app.get_client(account)
         self.type = ''
         self.timestamp = None
         self.kind = None
