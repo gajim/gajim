@@ -121,8 +121,7 @@ class CSSConfig():
             return settings.get_property('gtk-application-prefer-dark-theme')
         return setting == Theme.DARK
 
-    @staticmethod
-    def set_dark_theme(value=None):
+    def set_dark_theme(self, value=None):
         if value is None:
             value = app.settings.get('dark_theme')
         else:
@@ -134,6 +133,7 @@ class CSSConfig():
             settings.reset_property('gtk-application-prefer-dark-theme')
             return
         settings.set_property('gtk-application-prefer-dark-theme', bool(value))
+        self._load_css()
 
     def _load_css(self):
         self._load_css_from_file('gajim.css', CSSPriority.APPLICATION)
@@ -156,14 +156,16 @@ class CSSConfig():
             return
         self._activate_css(css, priority)
 
-    @staticmethod
-    def _activate_css(css, priority):
+    def _activate_css(self, css, priority):
         try:
             provider = Gtk.CssProvider()
             provider.load_from_data(bytes(css.encode('utf-8')))
             Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
                                                      provider,
                                                      priority)
+            self._load_selected()
+            self._activate_theme()
+
         except Exception:
             log.exception('Error loading application css')
 

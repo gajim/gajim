@@ -719,12 +719,14 @@ class Themes(PreferenceBox):
     def _on_theme_changed(value, *args):
         app.css_config.change_theme(value)
         app.nec.push_incoming_event(NetworkEvent('theme-update'))
+        app.nec.push_incoming_event(NetworkEvent('style-changed'))
         app.interface.roster.repaint_themed_widgets()
         app.interface.roster.change_roster_style(None)
 
     @staticmethod
     def _on_dark_theme(value, *args):
         app.css_config.set_dark_theme(int(value))
+        app.nec.push_incoming_event(NetworkEvent('style-changed'))
 
 
 class Emoji(PreferenceBox):
