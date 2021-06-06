@@ -40,9 +40,10 @@
       <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="wrap">True</property>
+        <property name="wrap_mode">word</property>
         <property name="label" translatable="yes">Add a setting you would like to change</property>
         <style>
-          <class name="bold"/>
           <class name="dim-label"/>
         </style>
       </object>
