@@ -112,10 +112,10 @@ class PreviewWidget(Gtk.Box):
 
         if preview.orig_exists():
             self._ui.download_button.hide()
+            self._ui.open_folder_button.show()
+            self._ui.save_as_button.show()
             if (preview.is_audio and app.is_installed('GST') and
                     contains_audio_streams(preview.orig_path)):
-                self._ui.save_as_button.show()
-                self._ui.open_folder_button.show()
                 self._ui.image_button.hide()
                 audio_widget = AudioWidget(preview.orig_path)
                 self._ui.right_box.pack_end(audio_widget, False, True, 0)
