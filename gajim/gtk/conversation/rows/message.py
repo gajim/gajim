@@ -68,11 +68,6 @@ class MessageRow(BaseRow):
         self._has_receipt = marker == 'received'
         self._has_displayed = marker == 'displayed'
 
-        # if is_groupchat:
-        #     if other_text_tags and 'marked' in other_text_tags:
-        #         self.get_style_context().add_class(
-        #             'conversation-mention-highlight')
-
         is_previewable = app.interface.preview_manager.get_previewable(
             text, additional_data)
         if is_previewable:
@@ -83,6 +78,8 @@ class MessageRow(BaseRow):
             result = process(text)
             self._message_widget = MessageWidget(account)
             self._message_widget.add_content(result)
+            if is_groupchat:
+                self._check_for_highlight(result)
 
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.set_hexpand(True)
@@ -139,6 +136,14 @@ class MessageRow(BaseRow):
         self.grid.attach(bottom_box, 1, 1, 1, 1)
 
         self.show_all()
+
+    def _check_for_highlight(self, content):
+        highlight_words = app.settings.get('muc_highlight_words').split(';')
+        highlight_words.append(app.nicks[self.account])
+        highlight_words = [word.lower() for word in highlight_words if word]
+        if any(match in content.text.lower() for match in highlight_words):
+            self.get_style_context().add_class(
+                'conversation-mention-highlight')
 
     def is_same_sender(self, message):
         return message.name == self.name
