@@ -206,12 +206,16 @@ class Themes(Gtk.ApplicationWindow):
 
         self._fill_choose_listbox()
 
-    def _on_key_press(self, widget, event):
+    def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
     def _get_themes(self):
+        current_theme = app.settings.get('roster_theme')
         for theme in app.css_config.themes:
+            if theme == current_theme:
+                self._ui.theme_store.prepend([theme])
+                continue
             self._ui.theme_store.append([theme])
 
     def _on_theme_name_edit(self, _renderer, path, new_name):
@@ -255,6 +259,8 @@ class Themes(Gtk.ApplicationWindow):
 
         self._ui.remove_theme_button.set_sensitive(True)
         self._load_options()
+        self._apply_theme(theme)
+        app.nec.push_incoming_event(NetworkEvent('style-changed'))
 
     def _load_options(self):
         self._ui.option_listbox.foreach(self._remove_option)
@@ -321,7 +327,8 @@ class Themes(Gtk.ApplicationWindow):
         app.interface.roster.repaint_themed_widgets()
         app.interface.roster.change_roster_style(None)
 
-    def _update_preferences_window(self):
+    @staticmethod
+    def _update_preferences_window():
         window = get_app_window('Preferences')
         if window is not None:
             window.update_theme_list()
@@ -343,6 +350,7 @@ class Themes(Gtk.ApplicationWindow):
         def _remove_theme():
             if theme == app.settings.get('roster_theme'):
                 self._apply_theme('default')
+                app.nec.push_incoming_event(NetworkEvent('style-changed'))
 
             app.css_config.remove_theme(theme)
             self._update_preferences_window()
