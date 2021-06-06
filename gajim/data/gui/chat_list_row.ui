@@ -162,6 +162,17 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkImage" id="message_icon">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkLabel" id="message_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -176,7 +187,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -191,7 +202,7 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="pack-type">end</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>

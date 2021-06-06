@@ -27,6 +27,8 @@ from gajim.common.i18n import _
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_uf_relative_time
+from gajim.common.preview_helpers import filename_from_uri
+from gajim.common.preview_helpers import guess_simple_file_type
 
 from gajim.gui_menu_builder import get_chat_list_row_menu
 
@@ -228,12 +230,12 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _on_message_received(self, event):
         if not event.msgtxt:
             return
-
         row = self._chats.get((event.account, event.jid))
         nick = self._get_nick_for_received_message(event)
-        row.set_last_message_text(nick, event.msgtxt)
+        row.set_nick(nick)
         row.set_timestamp(event.properties.timestamp)
-
+        GLib.idle_add(
+            row.set_message_text, event.msgtxt, event.additional_data)
         self._add_unread(row, event.properties)
 
     def _on_message_sent(self, event):
@@ -249,8 +251,10 @@ class ChatList(Gtk.ListBox, EventHelper):
             nick = ''
         else:
             nick = _('Me: ')
-        row.set_last_message_text(nick, msgtext)
+        row.set_nick(nick)
         row.set_timestamp(event.timestamp)
+        GLib.idle_add(
+            row.set_message_text, event.message, event.additional_data)
 
     @staticmethod
     def _get_nick_for_received_message(event):
@@ -330,8 +334,8 @@ class ChatRow(Gtk.ListBoxRow):
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)
         if line is not None and line.message is not None:
-            one_line = ' '.join(line.message.splitlines())
-            self._ui.message_label.set_text(one_line)
+            GLib.idle_add(
+                self.set_message_text, line.message, line.additional_data)
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
                 self._ui.nick_label.set_text(_('Me:'))
@@ -345,8 +349,6 @@ class ChatRow(Gtk.ListBoxRow):
                     self._ui.nick_label.set_text(_('%(muc_nick)s: ') % {
                         'muc_nick': line.contact_name})
                 self._ui.nick_label.show()
-
-            #  TODO: file transfers have to be displayed differently
 
             self._timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
@@ -499,10 +501,26 @@ class ChatRow(Gtk.ListBoxRow):
             return
         self.unread_count = 0
 
-    def set_last_message_text(self, nickname, text):
-        self._ui.message_label.set_text(text.replace('\n', ' '))
+    def set_nick(self, nickname):
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(nickname)
+
+    def set_message_text(self, text, additional_data):
+        icon = None
+        if app.interface.preview_manager.get_previewable(text, additional_data):
+            file_name = filename_from_uri(text)
+            icon, file_type = guess_simple_file_type(text)
+            text = _('%(file_type)s (%(file_name)s)') % {
+                'file_type': file_type,
+                'file_name': file_name}
+        else:
+            text = text.replace('\n', ' ')
+        self._ui.message_label.set_text(text)
+        if icon is None:
+            self._ui.message_icon.hide()
+        else:
+            self._ui.message_icon.set_from_gicon(icon, Gtk.IconSize.MENU)
+            self._ui.message_icon.show()
 
 
 class BaseHeader(Gtk.Box):

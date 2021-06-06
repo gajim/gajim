@@ -431,7 +431,7 @@ class MessageArchiveStorage(SqliteStorage):
                           KindConstant.ERROR])
 
         sql = '''
-            SELECT contact_name, time, kind, message
+            SELECT contact_name, time, kind, message, additional_data
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})

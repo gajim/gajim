@@ -35,6 +35,8 @@ from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat.primitives.ciphers.modes import GCM
 
+from gajim.common.i18n import _
+
 log = logging.getLogger('gajim.c.preview_helpers')
 
 Coords = namedtuple('Coords', 'location lat lon')
@@ -370,6 +372,22 @@ def guess_mime_type(file_path, data=None):
         mime_type, _ = Gio.content_type_guess(str(file_path), data)
     log.debug('Guessed MIME type: %s', str(mime_type))
     return mime_type
+
+
+def guess_simple_file_type(file_path, data=None):
+    mime_type = guess_mime_type(file_path, data)
+    icon = get_icon_for_mime_type(mime_type)
+    if file_path.startswith('geo:'):
+        return icon, _('Location')
+    if mime_type.startswith('audio/'):
+        return icon, _('Audio File')
+    if mime_type.startswith('image/'):
+        return icon, _('Image')
+    if mime_type.startswith('video/'):
+        return icon, _('Video')
+    if mime_type.startswith('text/'):
+        return icon, _('Text File')
+    return icon, _('File')
 
 
 def get_icon_for_mime_type(mime_type):
