@@ -1074,7 +1074,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                     kind,
                     name,
                     tim,
-                    restored=False,
                     displaymarking=None,
                     msg_log_id=None,
                     message_id=None,
@@ -1335,7 +1334,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def add_messages(self, messages):
         for msg in messages:
-            if not msg:
+            if not msg or not msg.message:
                 continue
 
             contact_name = msg.contact_name
@@ -1352,8 +1351,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             else:
                 raise ValueError('no kind attribute')
 
-            if not msg.message:
-                continue
             self.conversation_view.add_message(
                 msg.message,
                 kind,
