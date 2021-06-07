@@ -143,8 +143,8 @@ class AudioWidget(Gtk.Box):
         minutes = seconds / 60
         hours = minutes / 60
 
-        i_seconds = int(seconds)
-        i_minutes = int(minutes)
+        i_seconds = int(seconds) % 60
+        i_minutes = int(minutes) % 60
         i_hours = int(hours)
 
         if i_hours > 0:
