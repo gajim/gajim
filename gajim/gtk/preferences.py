@@ -505,6 +505,13 @@ class FilePreview(PreferenceBox):
                     props={'entries': sizes}),
 
             Setting(SettingKind.SWITCH,
+                    _('Preview in Public Group Chats'),
+                    SettingType.CONFIG,
+                    'preview_anonymous_muc',
+                    desc=_('Generate preview automatically in public '
+                           'group chats (may disclose your data)')),
+
+            Setting(SettingKind.SWITCH,
                     _('Preview all Image URLs'),
                     SettingType.CONFIG,
                     'preview_allow_all_images',

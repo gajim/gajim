@@ -212,7 +212,7 @@ class PreviewManager:
 
         return True
 
-    def create_preview(self, uri, widget):
+    def create_preview(self, uri, widget, context):
         if uri.startswith('geo:'):
             preview = Preview(uri, None, None, None, 96, widget)
             preview.update_widget()
@@ -221,6 +221,12 @@ class PreviewManager:
         preview = self._process_web_uri(uri, widget)
 
         if not preview.orig_exists():
+            if context is not None:
+                allow_in_public = app.settings.get('preview_anonymous_muc')
+                if context == 'public' and not allow_in_public:
+                    preview.update_widget()
+                    return
+
             self.download_content(preview)
 
         elif not preview.thumb_exists():

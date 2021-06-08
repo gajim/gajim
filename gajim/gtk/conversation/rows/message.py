@@ -22,6 +22,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import TRUST_SYMBOL_DATA
+from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
 from gajim.common.styling import process
@@ -75,9 +76,12 @@ class MessageRow(BaseRow):
         is_previewable = app.interface.preview_manager.get_previewable(
             text, additional_data)
         if is_previewable:
+            context = None
+            if self._is_groupchat:
+                context = get_muc_context(self._contact.jid)
             self._message_widget = PreviewWidget(account)
             app.interface.preview_manager.create_preview(
-                text, self._message_widget)
+                text, self._message_widget, context)
         else:
             result = process(text)
             self._message_widget = MessageWidget(account)
