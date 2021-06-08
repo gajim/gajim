@@ -438,6 +438,9 @@ class GroupchatContact(CommonContact):
         client = app.get_client(self._account)
         return client.get_module('MUC').get_joined_users(self._jid)
 
+    def get_disco(self, max_age=0):
+        return app.storage.cache.get_last_disco_info(self.jid, max_age=max_age)
+
 
 class GroupchatParticipant(CommonContact):
     def __init__(self, logger, jid, account):
