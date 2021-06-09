@@ -114,9 +114,10 @@ class MessageInputTextView(Gtk.TextView):
         return False
 
     def _on_focus_out(self, _widget, _event):
-        self.toggle_speller(False)
         scrolled = self.get_parent()
         scrolled.get_style_context().remove_class('message-input-focus')
+        if not self.has_text():
+            self.toggle_speller(False)
         return False
 
     def insert_text(self, text):
