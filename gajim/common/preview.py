@@ -167,7 +167,6 @@ class PreviewManager:
             return True
 
         if not urlparts.netloc:
-            log.info('No netloc found in URL: %s', uri)
             return False
 
         # aesgcm
