@@ -118,8 +118,12 @@ class ConfigPaths:
             self.cache_root = Path(GLib.get_user_cache_dir()) / 'gajim'
             self.data_root = Path(GLib.get_user_data_dir()) / 'gajim'
 
-        import pkg_resources
-        basedir = Path(pkg_resources.resource_filename("gajim", "."))
+        if sys.version_info < (3, 9):
+            import pkg_resources
+            basedir = Path(pkg_resources.resource_filename("gajim", "."))
+        else:
+            import importlib.resources
+            basedir = importlib.resources.files('gajim')
 
         source_paths = [
             ('DATA', basedir / 'data'),
