@@ -88,7 +88,7 @@ class HTTPUpload(BaseModule):
 
     def make_transfer(self, path, encryption, contact, groupchat=False):
         if not path or not os.path.exists(path):
-            return None
+            raise FileError(_('Could not access file'))
 
         invalid_file = False
         stat = os.stat(path)
