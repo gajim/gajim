@@ -79,7 +79,7 @@ DEFAULT_KWARGS = {
     'role': {'value': ''},
     'url': {'value': ''},
     'key': {'value': '', 'value_type': 'text'},
-    'note': {'value': '', 'value_type': 'text'},
+    'note': {'value': ''},
 }
 
 
