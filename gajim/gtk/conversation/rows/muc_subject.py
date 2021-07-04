@@ -37,8 +37,6 @@ class MUCSubject(BaseRow):
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
 
-        text = GLib.markup_escape_text(text)
-
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
