@@ -50,6 +50,7 @@ from gajim import gtkgui_helpers
 
 from gajim.gui.conversation.view import ConversationView
 from gajim.gui.conversation.scrolled import ScrolledView
+from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import PastePreviewDialog
@@ -171,7 +172,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self._scrolled_view.set_focus_vadjustment(Gtk.Adjustment())
 
         self.xml.conv_view_overlay.add(self._scrolled_view)
-        self.xml.conv_view_overlay.add_overlay(self.xml.jump_to_end_button)
+
+        self._jump_to_end_button = JumpToEndButton()
+        self._jump_to_end_button.connect('clicked', self._on_jump_to_end)
+        self.xml.conv_view_overlay.add_overlay(self._jump_to_end_button)
 
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
@@ -910,10 +914,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         return False
 
     def _on_autoscroll_changed(self, _widget, autoscroll):
-        self.xml.jump_to_end_button.set_visible(not autoscroll)
+        self._jump_to_end_button.toggle(not autoscroll)
 
     def _on_jump_to_end(self, _button):
         self.scroll_to_end(force=True)
+        self._jump_to_end_button.reset_unread_count()
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
                                target_type, timestamp):
@@ -1084,16 +1089,22 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        self.conversation_view.add_message(
-            text,
-            kind,
-            name,
-            tim,
-            display_marking=displaymarking,
-            message_id=message_id,
-            correct_id=correct_id,
-            log_line_id=msg_log_id,
-            additional_data=additional_data)
+        if self._scrolled_view.get_lower_complete():
+            self.conversation_view.add_message(
+                text,
+                kind,
+                name,
+                tim,
+                display_marking=displaymarking,
+                message_id=message_id,
+                correct_id=correct_id,
+                log_line_id=msg_log_id,
+                additional_data=additional_data)
+
+            if not self._scrolled_view.get_autoscroll() and kind != 'outgoing':
+                self._jump_to_end_button.add_unread_count()
+        else:
+            self._jump_to_end_button.add_unread_count()
 
         if message_id:
             if self._type.is_groupchat:
@@ -1267,13 +1278,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.contact, Chatstate.INACTIVE)
 
     def scroll_to_end(self, force=False):
-        if self._scrolled_view.get_lower_complete():
-            self.conversation_view.scroll_to_end(force)
-        else:
-            # Clear view and reload conversation
-            self.conversation_view.clear()
-            self._scrolled_view.reset()
-            self.conversation_view.scroll_to_end(force)
+        # Clear view and reload conversation
+        self.conversation_view.clear()
+        self._scrolled_view.reset()
+        self.conversation_view.scroll_to_end(force)
 
     def scroll_to_message(self, log_line_id, timestamp):
         row = self.conversation_view.get_row_by_log_line_id(log_line_id)
@@ -1327,8 +1335,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return
 
         self.add_messages(messages)
-        if self.conversation_view.reduce_message_count(not before):
-            self._scrolled_view.set_history_complete(not before, False)
+
+        if self._scrolled_view.get_autoscroll():
+            if self.conversation_view.reduce_message_count(before):
+                self._scrolled_view.set_history_complete(before, False)
 
         self.conversation_view.unlock()
 

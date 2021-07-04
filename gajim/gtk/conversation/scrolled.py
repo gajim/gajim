@@ -131,7 +131,7 @@ class ScrolledView(Gtk.ScrolledWindow):
 
         self._request_history_at_upper = None
 
-        distance = adj.get_page_size()
+        distance = adj.get_page_size() * 2
         if adj.get_value() < distance:
             # Load messages when we are near the top
             if self._upper_complete:
