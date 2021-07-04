@@ -1101,8 +1101,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 log_line_id=msg_log_id,
                 additional_data=additional_data)
 
-            if not self._scrolled_view.get_autoscroll() and kind != 'outgoing':
-                self._jump_to_end_button.add_unread_count()
+            if not self._scrolled_view.get_autoscroll():
+                if kind == 'outgoing':
+                    self.scroll_to_end()
+                else:
+                    self._jump_to_end_button.add_unread_count()
         else:
             self._jump_to_end_button.add_unread_count()
 
