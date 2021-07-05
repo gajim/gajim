@@ -87,13 +87,17 @@ class MessageRow(BaseRow):
             self._message_widget = MessageWidget(account)
             self._message_widget.add_content(result)
             if self._is_groupchat:
-                self_contact = self._contact.get_self()
-                if self_contact.name != name:
+                if self._contact.get_self().name != name:
                     self._check_for_highlight(result)
+
+        if self._is_groupchat:
+            is_self = name == self._contact.get_self().name
+        else:
+            is_self = kind == 'outgoing'
+        name_widget = self.create_name_widget(name, is_self)
 
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.set_hexpand(True)
-        name_widget = self.create_name_widget(name, kind, self._is_groupchat)
         self._meta_box.pack_start(name_widget, False, True, 0)
         timestamp_label = self.create_timestamp_widget(self.timestamp)
         timestamp_label.set_margin_start(6)

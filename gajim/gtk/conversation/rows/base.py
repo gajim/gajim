@@ -74,26 +74,16 @@ class BaseRow(Gtk.ListBoxRow):
         return label
 
     @staticmethod
-    def create_name_widget(name: str, kind: str,
-                           is_groupchat: bool) -> Gtk.Label:
+    def create_name_widget(name: str, is_self: bool) -> Gtk.Label:
         label = Gtk.Label()
         label.set_selectable(True)
         label.get_style_context().add_class('conversation-nickname')
+        label.set_markup(GLib.markup_escape_text(name))
 
-        name = GLib.markup_escape_text(name)
-        if is_groupchat:
-            rgba = Gdk.RGBA(*text_to_color(name))
-            nick_color = convert_rgba_to_hex(rgba)
-            label.set_markup(
-                f'<span foreground="{nick_color}">{name}</span>')
+        if is_self:
+            label.get_style_context().add_class('gajim-outgoing-nickname')
         else:
-            if kind in ('incoming', 'incoming_queue'):
-                label.get_style_context().add_class(
-                    'gajim-incoming-nickname')
-            elif kind == 'outgoing':
-                label.get_style_context().add_class(
-                    'gajim-outgoing-nickname')
-            label.set_markup(name)
+            label.get_style_context().add_class('gajim-incoming-nickname')
         return label
 
 
