@@ -138,11 +138,11 @@ def create_thumbnail_with_pixbuf(data, size):
     loader = GdkPixbuf.PixbufLoader()
     try:
         loader.write(data)
+        loader.close()
     except GLib.Error as error:
         log.warning('making pixbuf failed: %s', error)
         return None
 
-    loader.close()
     pixbuf = loader.get_pixbuf()
 
     if size > pixbuf.get_width() and size > pixbuf.get_height():
