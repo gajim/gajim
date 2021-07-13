@@ -169,7 +169,7 @@ APP_SETTINGS = {
     'show_chatstate_in_roster': True,
     'show_chatstate_in_tabs': True,
     'show_chatstate_in_banner': True,
-    'muclumbus_api_jid': 'rodrigo.de.mucobedo@dreckshal.de',
+    'muclumbus_api_jid': 'api@search.jabber.network',
     'muclumbus_api_http_uri': 'https://search.jabber.network/api/1.0/search',
     'muclumbus_api_pref': 'http',
     'command_system_execute': False,
