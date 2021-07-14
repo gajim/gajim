@@ -349,13 +349,18 @@ class AvatarStorage(metaclass=Singleton):
         color = app.settings.get_workspace_setting(workspace_id, 'color')
         avatar_sha = app.settings.get_workspace_setting(
             workspace_id, 'avatar_sha')
-        if not avatar_sha:
-            rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
-            letter = name[:1].upper()
-            surface = make_workspace_avatar(
-                letter, rgba_to_float(rgba), size, scale)
-            self._cache[workspace_id][(size, scale)] = surface
-            return surface
+        if avatar_sha:
+            surface = self._load_surface_from_storage(avatar_sha, size, scale)
+            if surface is None:
+                return None
+            return clip(surface, 'round-corners')
+
+        rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
+        letter = name[:1].upper()
+        surface = make_workspace_avatar(
+            letter, rgba_to_float(rgba), size, scale)
+        self._cache[workspace_id][(size, scale)] = surface
+        return surface
 
     def prepare_for_publish(self, path):
         success, data = self._load_for_publish(path)

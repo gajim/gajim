@@ -49,7 +49,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
 
         name = _('My Workspace')
         color = None
-        avatar_sha = None
+        self._avatar_sha = None
 
         if workspace_id is None:
             self._ui.remove_workspace_button.set_sensitive(False)
@@ -58,8 +58,15 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
                 workspace_id, 'name')
             color = app.settings.get_workspace_setting(
                 workspace_id, 'color')
+            self._avatar_sha = app.settings.get_workspace_setting(
+                workspace_id, 'avatar_sha')
+            if self._avatar_sha == '':
+                self._avatar_sha = None
 
         rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
+        if self._avatar_sha is not None:
+            self._ui.image_switch.set_state(True)
+            self._ui.style_stack.set_visible_child_name('image')
 
         self._ui.entry.set_text(name)
         self._ui.color_chooser.set_rgba(rgba)
@@ -92,25 +99,36 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
     def _on_image_switch_toggled(self, switch, *args):
         if switch.get_active():
             self._ui.style_stack.set_visible_child_name('image')
+            if self._workspace_id is not None:
+                self._avatar_sha = app.settings.get_workspace_setting(
+                    self._workspace_id, 'avatar_sha')
         else:
             self._ui.style_stack.set_visible_child_name('color')
+            self._avatar_sha = None
+        self._update_avatar()
 
     def _update_avatar(self):
         name = self._ui.entry.get_text()
         rgba = self._ui.color_chooser.get_rgba()
         scale = self.get_scale_factor()
-        surface = make_workspace_avatar(
-            name[:1].upper(),
-            rgba_to_float(rgba),
-            AvatarSize.WORKSPACE_EDIT,
-            scale)
+        if self._avatar_sha is not None:
+            surface = app.interface.avatar_storage.get_workspace_surface(
+                self._workspace_id,
+                AvatarSize.WORKSPACE_EDIT,
+                scale)
+        else:
+            surface = make_workspace_avatar(
+                name[:1].upper(),
+                rgba_to_float(rgba),
+                AvatarSize.WORKSPACE_EDIT,
+                scale)
         self._ui.preview.set_from_surface(surface)
 
     def _get_avatar_data(self):
         if not self._avatar_selector.get_prepared():
             return None
 
-        success, data, width, height = self._avatar_selector.get_avatar_bytes()
+        success, data, _wid, _hei = self._avatar_selector.get_avatar_bytes()
         if not success:
             return None
 
@@ -119,15 +137,23 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
     def _on_save(self, _button):
         name = self._ui.entry.get_text()
         rgba = self._ui.color_chooser.get_rgba()
-        # use_image = self._ui.image_switch.get_active()
-        # if use_image:
-        #    avatar = self._get_avatar_data()
+        use_image = self._ui.image_switch.get_active()
+        if use_image:
+            data = self._get_avatar_data()
+            if data is not None:
+                self._avatar_sha = app.interface.save_avatar(data)
 
         if self._workspace_id is not None:
             app.settings.set_workspace_setting(
                 self._workspace_id, 'name', name)
             app.settings.set_workspace_setting(
                 self._workspace_id, 'color', rgba.to_string())
+            if self._avatar_sha is None:
+                app.settings.set_workspace_setting(
+                    self._workspace_id, 'avatar_sha', '')
+            else:
+                app.settings.set_workspace_setting(
+                    self._workspace_id, 'avatar_sha', self._avatar_sha)
 
             app.window.update_workspace(self._workspace_id)
             self.destroy()
@@ -136,6 +162,9 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         workspace_id = app.settings.add_workspace(name)
         app.settings.set_workspace_setting(
             workspace_id, 'color', rgba.to_string())
+        if self._avatar_sha is not None:
+            app.settings.set_workspace_setting(
+                workspace_id, 'avatar_sha', self._avatar_sha)
 
         app.window.add_workspace(workspace_id)
         self.destroy()
