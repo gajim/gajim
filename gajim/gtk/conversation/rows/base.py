@@ -77,6 +77,7 @@ class BaseRow(Gtk.ListBoxRow):
     def create_name_widget(name: str, is_self: bool) -> Gtk.Label:
         label = Gtk.Label()
         label.set_selectable(True)
+        label.set_ellipsize(Pango.EllipsizeMode.END)
         label.get_style_context().add_class('conversation-nickname')
         label.set_markup(GLib.markup_escape_text(name))
 
