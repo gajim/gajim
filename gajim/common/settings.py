@@ -163,6 +163,8 @@ class Settings:
         self._load_settings()
         self._load_account_settings()
         if not self._settings['app']:
+            # ['app'] is empty in a newly created database.
+            # If there is an old config, it gets migrated at this point.
             self._migrate_old_config()
             self._commit()
         self._migrate_database()
@@ -247,7 +249,8 @@ class Settings:
             sql = '''INSERT INTO settings(name, settings)
                      VALUES ('workspaces', ?)'''
             self._con.execute(sql, (json.dumps(INITAL_WORKSPACE),))
-            self._set_user_version(2)
+            self._settings['workspaces'] = INITAL_WORKSPACE
+            self._set_user_version(1)
 
     def _migrate_old_config(self) -> None:
         config_file = configpaths.get('CONFIG_FILE')
