@@ -22,6 +22,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import TRUST_SYMBOL_DATA
+from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
@@ -87,11 +88,14 @@ class MessageRow(BaseRow):
             self._message_widget = MessageWidget(account)
             self._message_widget.add_content(result)
             if self._is_groupchat:
-                if self._contact.get_self().name != name:
+                our_nick = get_group_chat_nick(
+                    self._account, self._contact.jid)
+                if name != our_nick:
                     self._check_for_highlight(result)
 
         if self._is_groupchat:
-            is_self = name == self._contact.get_self().name
+            our_nick = get_group_chat_nick(self._account, self._contact.jid)
+            is_self = name == our_nick
         else:
             is_self = kind == 'outgoing'
         name_widget = self.create_name_widget(name, is_self)
