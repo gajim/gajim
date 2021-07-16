@@ -80,6 +80,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('account-disabled', ged.GUI1, self._on_account_disabled),
         ])
 
+        self._check_for_account()
         self._load_chats()
         self._add_actions()
         self._add_actions2()
@@ -413,6 +414,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             [DialogButton.make('Cancel'),
              DialogButton.make('Remove',
                                callback=_remove_contact)]).show()
+
+    @staticmethod
+    def _check_for_account():
+        accounts = app.settings.get_accounts()
+        if (not accounts or accounts == ['Local'] and
+                not app.settings.get_account_setting('Local', 'active')):
+            # Either no account configured or only disabled Local account
+            def _open_wizard():
+                open_window('AccountWizard')
+
+            GLib.idle_add(_open_wizard)
 
     def _load_chats(self):
         for workspace_id in app.settings.get_workspaces():
