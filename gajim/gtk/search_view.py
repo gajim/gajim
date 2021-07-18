@@ -179,7 +179,7 @@ class SearchView(Gtk.Box):
     def set_context(self, account, jid):
         self._account = account
         self._jid = jid
-        self._ui.search_checkbutton.set_active(False)
+        self._ui.search_checkbutton.set_active(jid is None)
 
 
 class RowHeader(Gtk.Box):
