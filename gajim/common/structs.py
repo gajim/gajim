@@ -214,7 +214,7 @@ class MUCPresenceData:
                    available=properties.type.is_available,
                    affiliation=properties.muc_user.affiliation,
                    role=properties.muc_user.role,
-                   real_jid=properties.jid)
+                   real_jid=properties.muc_user.jid)
 
 
 UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
