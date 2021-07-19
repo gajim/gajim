@@ -416,9 +416,10 @@ class ChatRow(Gtk.ListBoxRow):
     def update_name(self):
         if self.type == 'pm':
             client = app.get_client(self.account)
-            muc_name = get_groupchat_name(client, self.jid)
+            muc_name = get_groupchat_name(client, self.jid.bare)
             self._ui.name_label.set_text(f'{self.contact.name} ({muc_name})')
             return
+
         own_jid = self._client.get_own_jid().bare
         if self.jid == own_jid:
             self._ui.name_label.set_text(_('Note to myself'))

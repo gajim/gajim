@@ -860,40 +860,35 @@ class ChatControl(BaseControl):
 
     def draw_banner_text(self):
         """
-        Draw the text in the fat line at the top of the window that houses the
-        name, jid
+        Draws the chat banner's text (e.g. name, chat state) in the top of the
+        chat window
         """
         contact = self.contact
         name = contact.name
-        # if self.resource:
-        #     name += '/' + self.resource
-        # if self._type.is_privatechat:
-        #     name = i18n.direction_mark + _(
-        #         '%(nickname)s from group chat %(room_name)s') % \
-        #         {'nickname': name, 'room_name': self.room_name}
 
-        # name = i18n.direction_mark + GLib.markup_escape_text(name)
+        if self._type.is_privatechat:
+            name = f'{name} ({self.room_name})'
 
-        cs = self.contact.chatstate
-        if cs is not None:
-            cs = cs.value
+        chatstate = self.contact.chatstate
+        if chatstate is not None:
+            chatstate = chatstate.value
 
         if app.settings.get('show_chatstate_in_banner'):
-            chatstate = helpers.get_uf_chatstate(cs)
+            chatstate = helpers.get_uf_chatstate(chatstate)
 
-            label_text = '<span>%s</span><span size="x-small" weight="light"> %s</span>' % \
-                (name, chatstate)
-            label_tooltip = '%s %s' % (name, chatstate)
+            label_text = f'<span>{name}</span>' \
+                         f'<span size="x-small" weight="light">' \
+                         f'{chatstate}</span>'
+            label_tooltip = f'{name} {chatstate}'
         else:
-            label_text = '<span>%s</span>' % name
+            label_text = f'<span>{name}</span>'
             label_tooltip = name
 
         status_text = ''
         self.xml.banner_label.hide()
         self.xml.banner_label.set_no_show_all(True)
-
         self.xml.banner_label.set_markup(status_text)
-        # setup the label that holds name and jid
+
         self.xml.banner_name_label.set_markup(label_text)
         self.xml.banner_name_label.set_tooltip_text(label_tooltip)
 
