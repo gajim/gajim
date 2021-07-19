@@ -100,7 +100,7 @@ class GCTooltip:
 
         # JID
         if contact.real_jid is not None:
-            self._ui.jid.set_text(str(contact.jid))
+            self._ui.jid.set_text(str(contact.real_jid.bare))
             self._ui.jid.show()
 
         # Affiliation

@@ -24,6 +24,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 
@@ -43,6 +44,7 @@ class PrivateChatControl(ChatControl):
     COMMAND_HOST = PrivateChatCommands
 
     def __init__(self, account, jid):
+        self._client = app.get_client(account)
         self._room_contact = self._client.get_module('Contacts').get_contact(
             jid.bare)
 

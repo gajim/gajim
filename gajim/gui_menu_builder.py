@@ -915,8 +915,8 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
 
     item = Gtk.MenuItem(label=_('Add to Contact List…'))
     action = 'app.{account}-add-contact(["{account}", "{jid}"])'.format(
-        account=account, jid=contact.jid or '')
-    if contact.jid is None:
+        account=account, jid=contact.real_jid or '')
+    if contact.real_jid is None:
         item.set_sensitive(False)
     else:
         item.set_detailed_action_name(action)
@@ -938,7 +938,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu.append(item)
 
     item = Gtk.MenuItem(label=_('Ban'))
-    action = 'win.ban-%s::%s' % (control_id, contact.jid or '')
+    action = 'win.ban-%s::%s' % (control_id, contact.real_jid or '')
     if is_affiliation_change_allowed(self_contact, contact, 'outcast'):
         item.set_detailed_action_name(action)
     else:
@@ -949,7 +949,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
 
     item = Gtk.MenuItem(label=_('Make Owner'))
     action = 'win.change-affiliation-%s(["%s", "owner"])' % (control_id,
-                                                             contact.jid)
+                                                             contact.real_jid)
     if is_affiliation_change_allowed(self_contact, contact, 'owner'):
         item.set_detailed_action_name(action)
     else:
@@ -958,7 +958,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
 
     item = Gtk.MenuItem(label=_('Make Admin'))
     action = 'win.change-affiliation-%s(["%s", "admin"])' % (control_id,
-                                                             contact.jid)
+                                                             contact.real_jid)
     if is_affiliation_change_allowed(self_contact, contact, 'admin'):
         item.set_detailed_action_name(action)
     else:
@@ -967,7 +967,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
 
     item = Gtk.MenuItem(label=_('Make Member'))
     action = 'win.change-affiliation-%s(["%s", "member"])' % (control_id,
-                                                              contact.jid)
+                                                              contact.real_jid)
     if is_affiliation_change_allowed(self_contact, contact, 'member'):
         item.set_detailed_action_name(action)
     else:
@@ -976,7 +976,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
 
     item = Gtk.MenuItem(label=_('Revoke Member'))
     action = 'win.change-affiliation-%s(["%s", "none"])' % (control_id,
-                                                            contact.jid)
+                                                            contact.real_jid)
     if is_affiliation_change_allowed(self_contact, contact, 'none'):
         item.set_detailed_action_name(action)
     else:

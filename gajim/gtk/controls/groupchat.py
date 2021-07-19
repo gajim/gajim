@@ -672,13 +672,14 @@ class GroupchatControl(BaseControl):
     def _on_roster_row_activated(self, _roster, nick):
         muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
         if not self.is_anonymous and muc_prefer_direct_msg:
+            participant = self.contact.get_resource(nick)
             app.window.add_chat(self.account,
-                                self.contact.jid,
+                                participant.real_jid.bare,
                                 'contact',
                                 select=True)
         else:
             contact = self.contact.get_resource(nick)
-            app.window.add_private_chat(self.account, contact.jid)
+            app.window.add_private_chat(self.account, contact.jid, select=True)
 
     def _on_avatar_update(self, _contact, _signal_name):
         self._update_avatar()
