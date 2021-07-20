@@ -498,11 +498,9 @@ class GroupchatControl(BaseControl):
         self._show_page('groupchat')
 
     def invite(self, contact_jid):
-        message_id = self._client.get_module('MUC').invite(
-            self.room_jid, contact_jid)
+        self._client.get_module('MUC').invite(self.room_jid, contact_jid)
         self.add_info_message(
-            _('%s has been invited to this group chat') % contact_jid,
-            message_id=message_id)
+            _('%s has been invited to this group chat') % contact_jid)
 
     def _on_destroy_room(self, _button):
         self.xml.destroy_reason_entry.grab_focus()
