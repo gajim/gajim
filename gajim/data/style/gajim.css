@@ -289,7 +289,8 @@
     background: transparent;
 }
 .notification-listbox row {
-    padding: 6px;
+    padding: 12px;
+    border: 1px solid @borders;
 }
 
 /*Middle Grid*/
