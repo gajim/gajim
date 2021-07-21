@@ -372,20 +372,6 @@ class Interface:
         obj.session.roster_message(obj.jid, msg, obj.time_, obj.conn.name,
             msg_type='error')
 
-    def handle_event_gc_decline(self, event):
-        # TODO: Adapt to new mainwindow
-        gc_control = self.msg_win_mgr.get_gc_control(str(event.muc),
-                                                     event.account)
-        if gc_control:
-            if event.reason:
-                gc_control.add_info_message(
-                    _('%(jid)s declined the invitation: %(reason)s') % {
-                        'jid': event.from_, 'reason': event.reason})
-            else:
-                gc_control.add_info_message(
-                    _('%(jid)s declined the invitation') % {
-                        'jid': event.from_})
-
     def handle_event_gc_invitation(self, event):
         event = events.GcInvitationtEvent(event)
 
@@ -1072,7 +1058,6 @@ class Interface:
             'file-request-error': [self.handle_event_file_request_error],
             'file-request-received': [self.handle_event_file_request],
             'muc-invitation': [self.handle_event_gc_invitation],
-            'muc-decline': [self.handle_event_gc_decline],
             'http-auth-received': [self.handle_event_http_auth],
             'information': [self.handle_event_information],
             'iq-error-received': [self.handle_event_iq_error],

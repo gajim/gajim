@@ -335,7 +335,7 @@ class InvitationDeclinedRow(NotificationRow):
         NotificationRow.__init__(self, account, event.muc)
         self.type = 'invitation-declined'
 
-        image = self._generate_avatar_image(event.from_)
+        image = self._generate_avatar_image(event.from_.bare)
         self.grid.attach(image, 1, 1, 1, 2)
 
         title_label = self._generate_label()
