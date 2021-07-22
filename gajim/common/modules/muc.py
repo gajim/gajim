@@ -485,6 +485,7 @@ class MUC(BaseModule):
             self._log.info('MUC destroyed: %s', room_jid)
             self._remove_join_timeout(room_jid)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+            self._con.get_module('Bookmarks').remove(room_jid)
             room.set_not_joined()
             room.notify('room-destroyed', properties)
             return

@@ -129,9 +129,6 @@ class GroupchatControl(BaseControl):
         # if True, the room has mentioned us
         self.attention_flag = False
 
-        # True if we initiated room destruction
-        self._wait_for_destruction = False
-
         # sorted list of nicks who mentioned us (last at the end)
         self.attention_list = []
         self.nick_hits = []
@@ -528,7 +525,6 @@ class GroupchatControl(BaseControl):
     def _on_destroy_confirm(self, _button):
         reason = self.xml.destroy_reason_entry.get_text()
         jid = self.xml.destroy_alternate_entry.get_text()
-        self._wait_for_destruction = True
         self._client.get_module('MUC').destroy(self.room_jid, reason, jid)
         self._show_page('groupchat')
 
@@ -1235,11 +1231,6 @@ class GroupchatControl(BaseControl):
             join_message = _('You can join this group chat '
                              'instead: xmpp:%s?join') % str(alternate)
             self.add_info_message(join_message)
-
-        self._client.get_module('Bookmarks').remove(self.room_jid)
-
-        if self._wait_for_destruction:
-            self._close_control()
 
     def _on_message_sent(self, event):
         if not event.message:
