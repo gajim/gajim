@@ -20,6 +20,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.helpers import get_groupchat_name
 
 from gajim.gui_menu_builder import get_subscription_menu
 
@@ -345,10 +346,11 @@ class InvitationDeclinedRow(NotificationRow):
 
         contact = self._client.get_module('Contacts').get_contact(
             event.from_.bare)
+        muc_name = get_groupchat_name(self._client, event.from_.bare)
         invitation_text = _('%(contact)s declined your invitation '
                             'to %(chat)s') % {
                                 'contact': contact.name,
-                                'chat': event.info.muc_name}
+                                'chat': muc_name}
         text_label = self._generate_label()
         text_label.set_text(invitation_text)
         text_label.set_tooltip_text(invitation_text)
