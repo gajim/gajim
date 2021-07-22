@@ -231,13 +231,15 @@ class MUC(BaseModule):
         else:
             self._join(muc_data)
 
-    def create(self, muc_data):
+    def create(self, jid, config):
         if not app.account_is_available(self._account):
             return
 
-        self._mucs[muc_data.jid] = muc_data
+        self._con.get_module('Contacts').add_contact(jid, groupchat=True)
+        muc_data = self._create_muc_data(jid, None, None, config)
+        self._mucs[jid] = muc_data
         self._create(muc_data)
-        self._push_muc_added_event(muc_data.jid)
+        self._push_muc_added_event(jid)
 
     def _push_muc_added_event(self, jid):
         app.nec.push_incoming_event(

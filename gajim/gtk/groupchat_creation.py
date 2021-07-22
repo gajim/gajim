@@ -234,7 +234,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         app.interface.create_groupchat(
             self._account,
             str(room_jid),
-            config=config)
+            config)
 
         self.destroy()
 

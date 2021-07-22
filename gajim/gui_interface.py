@@ -1257,50 +1257,14 @@ class Interface:
             return True
         return False
 
-    def create_groupchat_control(self, account, room_jid, muc_data,
-                                 minimize=False):
-        avatar_sha = app.storage.cache.get_avatar_sha(room_jid)
-        contact = app.contacts.create_contact(jid=room_jid,
-                                              account=account,
-                                              groups=[_('Group chats')],
-                                              sub='none',
-                                              avatar_sha=avatar_sha,
-                                              groupchat=True)
-        app.contacts.add_contact(account, contact)
+    def create_groupchat(self, account, room_jid, config):
+        if app.window.chat_exists(account, room_jid):
+            log.error('Trying to create groupchat '
+                      'which is already added as chat')
+            return
 
-        if minimize:
-            control = GroupchatControl(None, contact, muc_data, account)
-            app.interface.minimized_controls[account][room_jid] = control
-            self.roster.add_groupchat(room_jid, account)
-
-        else:
-            mw = self.msg_win_mgr.get_window(room_jid, account)
-            if not mw:
-                mw = self.msg_win_mgr.create_window(contact,
-                                                    account,
-                                                    ControlType.GROUPCHAT)
-            control = GroupchatControl(mw, contact, muc_data, account)
-            mw.new_tab(control)
-            mw.set_active_tab(control)
-
-    @staticmethod
-    def _create_muc_data(account, room_jid, nick, password, config):
-        if not nick:
-            nick = get_group_chat_nick(account, room_jid)
-
-        # Fetch data from bookmarks
         client = app.get_client(account)
-        bookmark = client.get_module('Bookmarks').get_bookmark(room_jid)
-        if bookmark is not None:
-            if bookmark.password is not None:
-                password = bookmark.password
-
-        return MUCData(room_jid, nick, password, config)
-
-    def create_groupchat(self, account, room_jid, config=None):
-        muc_data = self._create_muc_data(account, room_jid, None, None, config)
-        self.create_groupchat_control(account, room_jid, muc_data)
-        app.connections[account].get_module('MUC').create(muc_data)
+        client.get_module('MUC').create(room_jid, config)
 
     def show_add_join_groupchat(self, account, jid, nickname=None):
         if not app.window.chat_exists(account, jid):
