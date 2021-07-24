@@ -162,8 +162,7 @@ def on_blocking_list(_action, param):
 def on_history_sync(_action, param):
     account = param.get_string()
     open_window('HistorySyncAssistant',
-                account=account,
-                parent=interface.roster.window)
+                account=account)
 
 
 def on_server_info(_action, param):

@@ -41,7 +41,7 @@ class Pages(IntEnum):
 
 
 class HistorySyncAssistant(Gtk.Assistant, EventHelper):
-    def __init__(self, account, parent):
+    def __init__(self, account):
         Gtk.Assistant.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
@@ -49,7 +49,7 @@ class HistorySyncAssistant(Gtk.Assistant, EventHelper):
         self.set_name('HistorySyncAssistant')
         self.set_default_size(300, -1)
         self.set_resizable(False)
-        self.set_transient_for(parent)
+        self.set_transient_for(app.window)
 
         self.account = account
         self.con = app.connections[self.account]
