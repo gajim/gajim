@@ -58,11 +58,11 @@ modules:
   - name: python3-packaging
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app packaging-20.9-py2.py3-none-any.whl
+      - pip3 install --prefix=/app packaging-21.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/3e/89/7ea760b4daa42653ece2380531c90f64788d979110a2ab51049d92f408af/packaging-20.9-py2.py3-none-any.whl
-        sha256: 67714da7f7bc052e064859c05c595155bd1ee9f69f76557e21f051443c20947a
+        url: https://files.pythonhosted.org/packages/3c/77/e2362b676dc5008d81be423070dd9577fa03be5da2ba1105811900fda546/packaging-21.0-py3-none-any.whl
+        sha256: c86254f9220d55e31cc94d69bade760f0847da8000def4dfe1c6b872fd14ff14
 
   - name: python3-pycparser
     buildsystem: simple
@@ -79,8 +79,8 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/a8/20/025f59f929bbcaa579704f443a438135918484fffaacfaddba776b374563/cffi-1.14.5.tar.gz
-        sha256: fd78e5fee591709f32ef6edb9a015b4aa1a5022598e36227500c8f4e02328d9c
+        url: https://files.pythonhosted.org/packages/2e/92/87bb61538d7e60da8a7ec247dc048f7671afe17016cd0008b3b710012804/cffi-1.14.6.tar.gz
+        sha256: c9a875ce9d7fe32887784274dd533c57909b7b1dcadcc128a2ac21331a9765dd
 
   - name: python3-asn1crypto
     buildsystem: simple
@@ -94,11 +94,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app idna-3.1-py3-none-any.whl
+      - pip3 install --prefix=/app idna-3.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/29/88/c52aae187d3b128a0f13f36a6c987fc0d408d03a678ad9996516925d8495/idna-3.1-py3-none-any.whl
-        sha256: 5205d03e7bcbb919cc9c19885f9920d622ca52448306f2377daede5cf3faac16
+        url: https://files.pythonhosted.org/packages/d7/77/ff688d1504cdc4db2a938e2b7b9adee5dd52e34efbd2431051efc9984de9/idna-3.2-py3-none-any.whl
+        sha256: 14475042e284991034cb48e06f6851428fb14c4dc953acd9be9a5e95c7b6dd7a
 
   - name: python3-cryptography
     buildsystem: simple
@@ -130,11 +130,11 @@ modules:
   - name: python3-jeepney
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app jeepney-0.6.0-py3-none-any.whl
+      - pip3 install --prefix=/app jeepney-0.7.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/51/b0/a6ea72741aaac3f37fb96d195e4ee576a103c4c04e279bc6b446a70960e1/jeepney-0.6.0-py3-none-any.whl
-        sha256: aec56c0eb1691a841795111e184e13cad504f7703b9a64f63020816afa79a8ae
+        url: https://files.pythonhosted.org/packages/7c/76/5bf3097c2494f8ef38e4149212b20427a0d00c267c4891e2364d77b39373/jeepney-0.7.0-py3-none-any.whl
+        sha256: 71335e7a4e93817982f473f3507bffc2eff7a544119ab9b73e089c8ba1409ba3
 
   - name: python3-secretstorage
     buildsystem: simple
@@ -148,23 +148,23 @@ modules:
   - name: python3-zipp
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app zipp-3.4.1-py3-none-any.whl
+      - pip3 install --prefix=/app zipp-3.5.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/0f/8c/715c54e9e34c0c4820f616a913a7de3337d0cd79074dd1bed4dd840f16ae/zipp-3.4.1-py3-none-any.whl
-        sha256: 51cb66cc54621609dd593d1787f286ee42a5c0adbb4b29abea5a63edc3e03098
+        url: https://files.pythonhosted.org/packages/92/d9/89f433969fb8dc5b9cbdd4b4deb587720ec1aeb59a020cf15002b9593eef/zipp-3.5.0-py3-none-any.whl
+        sha256: 957cfda87797e389580cb8b9e3870841ca991e2125350677b2ca83a0e99390a3
 
   # keyring dependency
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app importlib_metadata-3.9.0-py3-none-any.whl
+      - pip3 install --prefix=/app importlib_metadata-4.6.1-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/d9/10/191b97506cd4cceb4b860fb5c75b26feeefbca5a8f7f4687bca71e215cc6/importlib_metadata-3.9.0-py3-none-any.whl
-        sha256: 6fd684b4c6c7bb36d57e93d57fc244b5ffc08faa1c298bcda3dfbbbf19d7550a
+        url: https://files.pythonhosted.org/packages/3f/e1/e5bba549a033adf77448699a34ecafc7a32adaeeb4369396b35f56d5cc3e/importlib_metadata-4.6.1-py3-none-any.whl
+        sha256: 9f55f560e116f8643ecf2922d9cd3e1c7e8d52e683178fecd9d08f6aa357e11e
 
   - name: python3-keyring
     buildsystem: simple
@@ -232,11 +232,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app nbxmpp-2.0.1-py3-none-any.whl
+      - pip3 install --prefix=/app nbxmpp-2.0.3-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/9c/4e/dcf37c33a67eb2df00a3676deedb707d381815ce94fbb0007f97a82d1664/nbxmpp-2.0.1-py3-none-any.whl
-        sha256: 84edf0e0fe9b751e8796af46b388881f243b80afbf0664f82464cccc0afc417c
+        url: https://files.pythonhosted.org/packages/fd/9d/eeb467154d42632fc6bf136c45c79f3a2c0190ac27fe43c5fb2b23dcfe09/nbxmpp-2.0.3-py3-none-any.whl
+        sha256: 3ab458224e8531e374757b82302b6db746aa306a67090b754910c53abcbb417c
 
   - name: gajim
     buildsystem: simple
