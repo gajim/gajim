@@ -59,6 +59,8 @@ class BaseRow(Gtk.ListBoxRow):
         return self._merged
 
     def update_text_tags(self):
+        return
+        # TODO
         if self.textview is not None:
             self.textview.update_text_tags()
 
