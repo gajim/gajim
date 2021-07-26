@@ -261,7 +261,7 @@ class ResultRow(Gtk.ListBoxRow):
         date = time.strftime('%H:%M', local_time)
         self._ui.row_time_label.set_label(date)
 
-        message_widget = MessageWidget(account)
+        message_widget = MessageWidget(account, selectable=False)
         self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
         result = process(msg.message)
         message_widget.add_content(result)

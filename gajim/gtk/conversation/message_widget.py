@@ -20,9 +20,10 @@ from .plain_widget import PlainWidget
 
 
 class MessageWidget(Gtk.Box):
-    def __init__(self, account):
+    def __init__(self, account, selectable=True):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self._account = account
+        self._selectable = selectable
 
         self._content = None
 
@@ -37,7 +38,7 @@ class MessageWidget(Gtk.Box):
         self._content = content
         for block in content.blocks:
             if block.name == 'plain':
-                widget = PlainWidget(self._account)
+                widget = PlainWidget(self._account, self._selectable)
                 widget.add_content(block)
                 self.add(widget)
                 continue
@@ -49,7 +50,7 @@ class MessageWidget(Gtk.Box):
                 continue
 
             if block.name == 'quote':
-                message_widget = MessageWidget(self._account)
+                message_widget = MessageWidget(self._account, self._selectable)
                 message_widget.add_content(block)
                 widget = QuoteWidget(self._account)
                 widget.attach_message_widget(message_widget)

@@ -37,14 +37,14 @@ STYLE_TAGS = ['strong', 'emphasis', 'strike', 'pre']
 
 
 class PlainWidget(Gtk.Box):
-    def __init__(self, account):
+    def __init__(self, account, selectable):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.set_vexpand(True)
 
         self._account = account
 
         # self._text_widget = MessageTextview(self._account)
-        self._text_widget = MessageLabel(self._account)
+        self._text_widget = MessageLabel(self._account, selectable)
         self.add(self._text_widget)
 
     def add_content(self, block):
@@ -52,10 +52,10 @@ class PlainWidget(Gtk.Box):
 
 
 class MessageLabel(Gtk.Label):
-    def __init__(self, account):
+    def __init__(self, account, selectable):
         Gtk.Label.__init__(self)
         self.set_hexpand(True)
-        self.set_selectable(True)
+        self.set_selectable(selectable)
         self.set_line_wrap(True)
         self.set_xalign(0)
         self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
