@@ -68,6 +68,7 @@ from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common.helpers import ask_for_status_message
+from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.structs import MUCData
 from gajim.common.structs import OutgoingMessage
@@ -372,29 +373,26 @@ class Interface:
         obj.session.roster_message(obj.jid, msg, obj.time_, obj.conn.name,
             msg_type='error')
 
-    def handle_event_gc_invitation(self, event):
+    @staticmethod
+    def handle_event_gc_invitation(event):
         event = events.GcInvitationtEvent(event)
 
         # TODO: show account page
-        # if (helpers.allow_popup_window(event.account) or
-        #         not self.systray_enabled):
-        #     open_window('GroupChatInvitation',
-        #                 account=event.account,
-        #                 event=event)
-        #     return
-
-        #self.add_event(event.account, str(event.from_), event)
+        # self.add_event(event.account, str(event.from_), event)
 
         if helpers.allow_showing_notification(event.account):
             client = app.get_client(event.account)
-            contact = client.get_module('Contacts').get_contact(
-                event.from_.bare)
+            if get_muc_context(event.muc) == 'public':
+                jid = event.from_
+            else:
+                jid = event.from_.bare
+            contact = client.get_module('Contacts').get_contact(jid)
             event_type = _('Group Chat Invitation')
             text = _('%(contact)s invited you to %(chat)s') % {
                 'contact': contact.name,
                 'chat': event.info.muc_name}
             app.notification.popup(event_type,
-                                   str(event.from_),
+                                   str(jid),
                                    event.account,
                                    'gc-invitation',
                                    'gajim-gc_invitation',
