@@ -20,11 +20,11 @@ infobar.error > revealer > box {
 
 /* ConversationView */
 .conversation-mention-highlight {
-    background-color: rgb(251, 151, 97);
-}
-.conversation-mention-highlight:hover {
-    background-color: rgb(251, 151, 97);
+    background-color: rgb(100, 50, 10);
 }
 .conversation-mention-highlight grid textview text {
-	background-color: rgb(251, 151, 97);
+    background-color: rgb(100, 50, 10);
+}
+.conversation-mention-highlight:hover {
+    background-color: rgb(110, 50, 10);
 }
