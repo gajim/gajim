@@ -748,6 +748,11 @@ class AdvancedSettings(Page):
 
     def _validate_host(self):
         host = self._ui.custom_host_entry.get_text()
+        if host.startswith('ws://') or host.startswith('wss://'):
+            # We have no method for validating websocket URIs
+            self._show_host_icon(False)
+            return True
+
         try:
             validate_domainpart(host)
         except Exception:
