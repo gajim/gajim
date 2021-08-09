@@ -1162,9 +1162,8 @@
                         <child>
                           <object class="GtkButton" id="remove_bookmark_button">
                             <property name="label" translatable="yes">_Forget Group Chat</property>
-                            <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
+                            <property name="no-show-all">True</property>
                             <property name="tooltip-text" translatable="yes">Gajim will not try to join this group chat again</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
