@@ -57,6 +57,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.register_events([
             ('account-enabled', ged.GUI2, self._on_account_changed),
             ('account-disabled', ged.GUI2, self._on_account_changed),
+            ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
         ])
 
         self.connect('destroy', self._on_destroy)
@@ -289,6 +290,10 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _on_account_changed(self, *args):
         for row in self.get_children():
             row.update_account_identifier()
+
+    def _on_bookmarks_received(self, _event):
+        for row in self.get_children():
+            row.update_name()
 
 
 class ChatRow(Gtk.ListBoxRow):
