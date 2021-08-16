@@ -787,7 +787,8 @@ class Interface:
                 title=event_type,
                 text=txt)
 
-    def handle_event_signed_in(self, obj):
+    @staticmethod
+    def handle_event_signed_in(obj):
         """
         SIGNED_IN event is emitted when we sign in, so handle it
         """
@@ -845,7 +846,8 @@ class Interface:
         chat_control.add_file_transfer(transfer)
         client.get_module('HTTPUpload').start_transfer(transfer)
 
-    def _on_http_upload_state_changed(self, transfer, _signal_name, state):
+    @staticmethod
+    def _on_http_upload_state_changed(transfer, _signal_name, state):
         if state.is_finished:
             uri = transfer.get_transformed_uri()
 
@@ -862,7 +864,8 @@ class Interface:
             client = app.get_client(transfer.account)
             client.send_message(message)
 
-    def _on_cancel_upload(self, transfer, _signal_name):
+    @staticmethod
+    def _on_cancel_upload(transfer, _signal_name):
         client = app.get_client(transfer.account)
         client.get_module('HTTPUpload').cancel_transfer(transfer)
 
@@ -926,8 +929,8 @@ class Interface:
         notification_event = events.JingleIncomingEvent(
             event.fjid, event.sid, content_types)
 
-        ctrl = (self.msg_win_mgr.get_control(event.fjid, account)
-                or self.msg_win_mgr.get_control(event.jid, account))
+        ctrl = (app.window.get_control(account, event.fjid) or
+                app.window.get_control(account, event.jid))
         if ctrl:
             if 'audio' in content_types:
                 ctrl.set_jingle_state(
@@ -942,8 +945,14 @@ class Interface:
             ctrl.add_call_received_message(notification_event)
 
         if helpers.allow_popup_window(account):
-            app.interface.new_chat_from_jid(account, event.fjid)
-            ctrl.add_call_received_message(notification_event)
+            def _prepare_control():
+                ctrl = app.window.get_control(account, event.jid)
+                ctrl.add_call_received_message(notification_event)
+
+            if not ctrl:
+                app.window.add_chat(
+                    account, event.jid, 'contact', select=True)
+            GLib.idle_add(_prepare_control)
             return
 
         self.add_event(account, event.fjid, notification_event)
@@ -961,12 +970,13 @@ class Interface:
                 title=heading,
                 text=text)
 
-    def handle_event_jingle_connected(self, event):
+    @staticmethod
+    def handle_event_jingle_connected(event):
         # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
         if event.media in ('audio', 'video'):
             account = event.conn.name
-            ctrl = (self.msg_win_mgr.get_control(event.fjid, account)
-                    or self.msg_win_mgr.get_control(event.jid, account))
+            ctrl = (app.window.get_control(account, event.fjid) or
+                    app.window.get_control(account, event.jid))
             if ctrl:
                 con = app.connections[account]
                 session = con.get_module('Jingle').get_jingle_session(
@@ -992,11 +1002,12 @@ class Interface:
                 for content in event.media:
                     session.approve_content(content)
 
-    def handle_event_jingle_disconnected(self, event):
+    @staticmethod
+    def handle_event_jingle_disconnected(event):
         # ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
         account = event.conn.name
-        ctrl = (self.msg_win_mgr.get_control(event.fjid, account)
-                or self.msg_win_mgr.get_control(event.jid, account))
+        ctrl = (app.window.get_control(account, event.fjid) or
+                app.window.get_control(account, event.jid))
         if ctrl:
             if event.media is None:
                 ctrl.stop_jingle(sid=event.sid, reason=event.reason)
@@ -1013,11 +1024,12 @@ class Interface:
                     sid=event.sid,
                     reason=event.reason)
 
-    def handle_event_jingle_error(self, event):
+    @staticmethod
+    def handle_event_jingle_error(event):
         # ('JINGLE_ERROR', account, (peerjid, sid, reason))
         account = event.conn.name
-        ctrl = (self.msg_win_mgr.get_control(event.fjid, account)
-                or self.msg_win_mgr.get_control(event.jid, account))
+        ctrl = (app.window.get_control(account, event.fjid) or
+                app.window.get_control(account, event.jid))
         if ctrl and event.sid == ctrl.jingle['audio'].sid:
             ctrl.set_jingle_state(
                 'audio',
@@ -1030,7 +1042,8 @@ class Interface:
         RosterItemExchangeWindow(obj.conn.name, obj.action,
                                  obj.exchange_items_list, obj.fjid)
 
-    def handle_event_plain_connection(self, event):
+    @staticmethod
+    def handle_event_plain_connection(event):
         ConfirmationDialog(
             _('Insecure Connection'),
             _('Insecure Connection'),
