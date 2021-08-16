@@ -58,6 +58,9 @@ class MainStack(Gtk.Stack):
         self._chat_page.show_workspace_chats(workspace_id)
         self.set_visible_child_name('chats')
 
+    def show_chat_page(self):
+        self.set_visible_child_name('chats')
+
     def show_account(self, account):
         self.set_visible_child_name(account)
 

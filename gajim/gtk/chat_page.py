@@ -174,6 +174,9 @@ class ChatPage(Gtk.Box):
     def chat_exists(self, account, jid):
         return self._chat_list_stack.contains_chat(account, jid)
 
+    def select_chat(self, account, jid):
+        self._chat_list_stack.select_chat(account, jid)
+
     def chat_exists_for_workspace(self, workspace_id, account, jid):
         return self._chat_list_stack.contains_chat(
             account, jid, workspace_id=workspace_id)

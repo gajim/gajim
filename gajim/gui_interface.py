@@ -1241,20 +1241,6 @@ class Interface:
             if isinstance(ctrl, BaseControl):
                 ctrl.scroll_to_end()
 
-    def show_groupchat(self, account, room_jid):
-        return False
-        minimized_control = self.minimized_controls[account].get(room_jid)
-        if minimized_control is not None:
-            self.roster.on_groupchat_maximized(None, room_jid, account)
-            return True
-
-        if self.msg_win_mgr.has_window(room_jid, account):
-            gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
-            # FIXME: Access message window directly
-            gc_ctrl.parent_win.set_active_tab(gc_ctrl)
-            return True
-        return False
-
     def create_groupchat(self, account, room_jid, config):
         if app.window.chat_exists(account, room_jid):
             log.error('Trying to create groupchat '

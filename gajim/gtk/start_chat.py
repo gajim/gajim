@@ -313,7 +313,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 return
 
             self.ready_to_destroy = True
-            if app.interface.show_groupchat(row.account, row.jid):
+            if app.window.chat_exists(row.account, row.jid):
+                app.window.select_chat(row.account, row.jid)
+                self.destroy()
                 return
 
             self.ready_to_destroy = False

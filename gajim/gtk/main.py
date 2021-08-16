@@ -332,6 +332,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                'pm',
                                                select=select)
 
+    def select_chat(self, account, jid):
+        self._main_stack.show_chat_page()
+        self._chat_page.select_chat(account, jid)
+
     @staticmethod
     def _add_to_roster(_action, param):
         _workspace, account, jid = param.unpack()
