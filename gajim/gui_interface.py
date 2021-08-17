@@ -846,8 +846,8 @@ class Interface:
         chat_control.add_file_transfer(transfer)
         client.get_module('HTTPUpload').start_transfer(transfer)
 
-    @staticmethod
-    def _on_http_upload_state_changed(transfer, _signal_name, state):
+    def _on_http_upload_state_changed(self, transfer, _signal_name, state):
+        # Note: This has to be a bound method in order to connect the signal
         if state.is_finished:
             uri = transfer.get_transformed_uri()
 
@@ -864,8 +864,8 @@ class Interface:
             client = app.get_client(transfer.account)
             client.send_message(message)
 
-    @staticmethod
-    def _on_cancel_upload(transfer, _signal_name):
+    def _on_cancel_upload(self, transfer, _signal_name):
+        # Note: This has to be a bound method in order to connect the signal
         client = app.get_client(transfer.account)
         client.get_module('HTTPUpload').cancel_transfer(transfer)
 
