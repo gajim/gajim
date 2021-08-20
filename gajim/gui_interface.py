@@ -1559,18 +1559,6 @@ class Interface:
     def avatar_exists(self, filename):
         return self.avatar_storage.get_avatar_path(filename) is not None
 
-    # does JID exist only within a groupchat?
-    def is_pm_contact(self, fjid, account):
-        bare_jid = app.get_jid_without_resource(fjid)
-
-        gc_ctrl = self.msg_win_mgr.get_gc_control(bare_jid, account)
-
-        if not gc_ctrl and \
-        bare_jid in self.minimized_controls[account]:
-            gc_ctrl = self.minimized_controls[account][bare_jid]
-
-        return gc_ctrl and gc_ctrl.is_groupchat
-
     @staticmethod
     def create_ipython_window():
         # Check if IPython is installed
