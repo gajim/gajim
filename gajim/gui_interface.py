@@ -927,7 +927,9 @@ class Interface:
             return
 
         notification_event = events.JingleIncomingEvent(
-            event.fjid, event.sid, content_types)
+            event.fjid,
+            event.sid,
+            content_types)
 
         ctrl = (app.window.get_control(account, event.fjid) or
                 app.window.get_control(account, event.jid))
@@ -963,7 +965,7 @@ class Interface:
             text = _('%s is calling') % contact
             app.notification.popup(
                 heading,
-                event.fjid,
+                event.jid,
                 account,
                 'jingle-incoming',
                 icon_name='call-start-symbolic',

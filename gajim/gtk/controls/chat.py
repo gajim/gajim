@@ -1201,7 +1201,7 @@ class ChatControl(BaseControl):
 
     def _on_reject_call(self, _button, event):
         app.events.remove_events(
-            self.account, self.contact.jid, types='jingle-incoming')
+            self.account, event.jid, types='jingle-incoming')
 
         session = self._client.get_module('Jingle').get_jingle_session(
             event.peerjid, event.sid)
@@ -1216,7 +1216,7 @@ class ChatControl(BaseControl):
 
     def _on_accept_call(self, _button, event):
         app.events.remove_events(
-            self.account, self.contact.jid, types='jingle-incoming')
+            self.account, event.jid, types='jingle-incoming')
 
         session = self._client.get_module('Jingle').get_jingle_session(
             event.peerjid, event.sid)
