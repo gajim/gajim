@@ -1199,29 +1199,6 @@ class ChatControl(BaseControl):
             file_props,
             Gtk.MessageType.ERROR)
 
-    def _on_accept_gc_invitation(self, _widget, event):
-        app.interface.show_or_join_groupchat(self.account,
-                                             str(event.muc),
-                                             password=event.password)
-        app.events.remove_events(self.account, self.contact.jid, event=event)
-
-    def _on_cancel_gc_invitation(self, _widget, event):
-        app.events.remove_events(self.account, self.contact.jid, event=event)
-
-    def _get_gc_invitation(self, event):
-        markup = '<b>%s</b>\n%s' % (_('Group Chat Invitation'), event.muc)
-        if event.reason:
-            markup += '\n(%s)' % event.reason
-        button_decline = Gtk.Button.new_with_mnemonic(_('_Decline'))
-        button_decline.connect('clicked', self._on_cancel_gc_invitation, event)
-        button_accept = Gtk.Button.new_with_mnemonic(_('_Accept'))
-        button_accept.connect('clicked', self._on_accept_gc_invitation, event)
-        self._add_info_bar_message(
-            markup,
-            [button_decline, button_accept],
-            (event.muc, event.reason),
-            Gtk.MessageType.QUESTION)
-
     def _on_reject_call(self, _button, event):
         app.events.remove_events(
             self.account, self.contact.jid, types='jingle-incoming')
@@ -1300,5 +1277,3 @@ class ChatControl(BaseControl):
                 event.type_,
                 _('File transfer cancelled'),
                 _('Connection with peer cannot be established.'))
-        elif event.type_ == 'gc-invitation':
-            self._get_gc_invitation(event)
