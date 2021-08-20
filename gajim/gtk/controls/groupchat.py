@@ -794,9 +794,7 @@ class GroupchatControl(BaseControl):
         """
         highlight, sound = None, None
 
-        # notify = self.contact.can_notify()
-        # TODO
-        notify = False
+        notify = self.contact.can_notify()
         sound_enabled = app.settings.get_soundevent_settings(
             'muc_message_received')['enabled']
 

@@ -523,11 +523,10 @@ def get_show_in_systray(type_, account, jid):
     Return True if this event must be shown in systray, else False
     """
     if type_ == 'printed_gc_msg':
-        contact = app.contacts.get_groupchat_contact(account, jid)
-        if contact is not None:
-            return contact.can_notify()
-        # it's not an highlighted message, don't show in systray
-        return False
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_group_chat_contact(jid)
+        return contact.can_notify()
+
     return app.settings.get('trayicon_notification_on_events')
 
 

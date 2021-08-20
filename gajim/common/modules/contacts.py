@@ -441,6 +441,11 @@ class GroupchatContact(CommonContact):
     def get_disco(self, max_age=0):
         return app.storage.cache.get_last_disco_info(self.jid, max_age=max_age)
 
+    def can_notify(self):
+        all_ = app.settings.get('notify_on_all_muc_messages')
+        room = self.settings.get('notify_on_all_messages')
+        return all_ or room
+
 
 class GroupchatParticipant(CommonContact):
     def __init__(self, logger, jid, account):
