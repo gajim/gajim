@@ -375,7 +375,7 @@ class Interface:
 
     @staticmethod
     def handle_event_gc_invitation(event):
-        event = events.GcInvitationtEvent(event)
+        event = events.GcInvitationEvent(event)
 
         # TODO: show account page
         # self.add_event(event.account, str(event.from_), event)

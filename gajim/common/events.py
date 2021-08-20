@@ -22,14 +22,8 @@
 
 import time
 
-from gajim.common import app
-
 
 class Event:
-    """
-    Information concerning each event
-    """
-
     def __init__(self, time_=None, show_in_roster=False, show_in_systray=True):
         """
         type_ in chat, normal, file-request, file-error, file-completed,
@@ -38,18 +32,17 @@ class Event:
         gc-invitation, subscription_request, unsubscribedm jingle-incoming
 
         parameters is (per type_):
-                chat, normal, pm: [message, subject, kind, time, encrypted, resource,
-                msg_log_id]
-                        where kind in error, incoming
-                file-*: file_props
-                gc_msg: None
-                printed_chat: [message, subject, control, msg_log_id]
-                printed_*: None
-                        messages that are already printed in chat, but not read
-                gc-invitation: [room_jid, reason, password, jid_from]
-                subscription_request: [text, nick]
-                unsubscribed: contact
-                jingle-incoming: (fulljid, sessionid, content_types)
+            chat, normal, pm: [message, subject, kind, time, encrypted,
+            resource, msg_log_id]
+                    where kind in error, incoming
+            file-*: file_props
+            printed_chat: [message, subject, control, msg_log_id]
+            printed_*: None
+                    messages that are already printed in chat, but not read
+            gc-invitation: [room_jid, reason, password, jid_from]
+            subscription_request: [text, nick]
+            unsubscribed: contact
+            jingle-incoming: (fulljid, sessionid, content_types)
         """
         if time_:
             self.time_ = time_
@@ -61,14 +54,30 @@ class Event:
         self.jid = None
         self.account = None
 
+
 class ChatEvent(Event):
+
     type_ = 'chat'
-    def __init__(self, message, subject, kind, time_, resource,
-    msg_log_id, correct_id=None, message_id=None, session=None,
-    displaymarking=None, sent_forwarded=False, show_in_roster=False,
-    show_in_systray=True, additional_data=None):
-        Event.__init__(self, time_, show_in_roster=show_in_roster,
-            show_in_systray=show_in_systray)
+
+    def __init__(self,
+                 message,
+                 subject,
+                 kind,
+                 time_,
+                 resource,
+                 msg_log_id,
+                 correct_id=None,
+                 message_id=None,
+                 session=None,
+                 displaymarking=None,
+                 sent_forwarded=False,
+                 show_in_roster=False,
+                 show_in_systray=True,
+                 additional_data=None):
+        Event.__init__(self,
+                       time_,
+                       show_in_roster=show_in_roster,
+                       show_in_systray=show_in_systray)
         self.message = message
         self.subject = subject
         self.kind = kind
@@ -82,18 +91,31 @@ class ChatEvent(Event):
         self.sent_forwarded = sent_forwarded
         if additional_data is None:
             from gajim.common.helpers import AdditionalDataDict
-            additional_data = AdditionalDataDict()
-        self.additional_data = additional_data
+        self.additional_data = AdditionalDataDict()
+
 
 class PmEvent(ChatEvent):
+
     type_ = 'pm'
 
+
 class PrintedChatEvent(Event):
+
     type_ = 'printed_chat'
-    def __init__(self, message, subject, control, msg_log_id, time_=None,
-                 message_id=None, stanza_id=None, show_in_roster=False,
+
+    def __init__(self,
+                 message,
+                 subject,
+                 control,
+                 msg_log_id,
+                 time_=None,
+                 message_id=None,
+                 stanza_id=None,
+                 show_in_roster=False,
                  show_in_systray=True):
-        Event.__init__(self, time_, show_in_roster=show_in_roster,
+        Event.__init__(self,
+                       time_,
+                       show_in_roster=show_in_roster,
                        show_in_systray=show_in_systray)
         self.message = message
         self.subject = subject
@@ -102,36 +124,65 @@ class PrintedChatEvent(Event):
         self.message_id = message_id
         self.stanza_id = stanza_id
 
+
 class PrintedGcMsgEvent(PrintedChatEvent):
+
     type_ = 'printed_gc_msg'
 
+
 class PrintedMarkedGcMsgEvent(PrintedChatEvent):
+
     type_ = 'printed_marked_gc_msg'
 
+
 class PrintedPmEvent(PrintedChatEvent):
+
     type_ = 'printed_pm'
 
+
 class SubscriptionRequestEvent(Event):
+
     type_ = 'subscription_request'
-    def __init__(self, text, nick, time_=None, show_in_roster=False,
-    show_in_systray=True):
-        Event.__init__(self, time_, show_in_roster=show_in_roster,
-            show_in_systray=show_in_systray)
+
+    def __init__(self,
+                 text,
+                 nick,
+                 time_=None,
+                 show_in_roster=False,
+                 show_in_systray=True):
+        Event.__init__(self,
+                       time_,
+                       show_in_roster=show_in_roster,
+                       show_in_systray=show_in_systray)
         self.text = text
         self.nick = nick
 
+
 class UnsubscribedEvent(Event):
+
     type_ = 'unsubscribed'
-    def __init__(self, contact, time_=None, show_in_roster=False,
-    show_in_systray=True):
-        Event.__init__(self, time_, show_in_roster=show_in_roster,
-            show_in_systray=show_in_systray)
+
+    def __init__(self,
+                 contact,
+                 time_=None,
+                 show_in_roster=False,
+                 show_in_systray=True):
+        Event.__init__(self,
+                       time_,
+                       show_in_roster=show_in_roster,
+                       show_in_systray=show_in_systray)
         self.contact = contact
 
-class GcInvitationtEvent(Event):
+
+class GcInvitationEvent(Event):
+
     type_ = 'gc-invitation'
+
     def __init__(self, event):
-        Event.__init__(self, None, show_in_roster=False, show_in_systray=True)
+        Event.__init__(self,
+                       None,
+                       show_in_roster=False,
+                       show_in_systray=True)
         for key, value in vars(event).items():
             setattr(self, key, value)
 
@@ -145,47 +196,76 @@ class GcInvitationtEvent(Event):
             return str(self.from_)
         return contact.get_shown_name()
 
+
 class FileRequestEvent(Event):
+
     type_ = 'file-request'
-    def __init__(self, file_props, time_=None, show_in_roster=False, show_in_systray=True):
-        Event.__init__(self, time_, show_in_roster=show_in_roster,
-            show_in_systray=show_in_systray)
+
+    def __init__(self,
+                 file_props,
+                 time_=None,
+                 show_in_roster=False,
+                 show_in_systray=True):
+        Event.__init__(self,
+                       time_,
+                       show_in_roster=show_in_roster,
+                       show_in_systray=show_in_systray)
         self.file_props = file_props
 
+
 class FileSendErrorEvent(FileRequestEvent):
+
     type_ = 'file-send-error'
 
+
 class FileErrorEvent(FileRequestEvent):
+
     type_ = 'file-error'
 
+
 class FileRequestErrorEvent(FileRequestEvent):
+
     type_ = 'file-request-error'
 
+
 class FileCompletedEvent(FileRequestEvent):
+
     type_ = 'file-completed'
 
+
 class FileStoppedEvent(FileRequestEvent):
+
     type_ = 'file-stopped'
 
+
 class FileHashErrorEvent(FileRequestEvent):
+
     type_ = 'file-hash-error'
 
+
 class JingleIncomingEvent(Event):
+
     type_ = 'jingle-incoming'
-    def __init__(self, peerjid, sid, content_types, time_=None, show_in_roster=False, show_in_systray=True):
-        Event.__init__(self, time_, show_in_roster=show_in_roster,
-            show_in_systray=show_in_systray)
+
+    def __init__(self,
+                 peerjid,
+                 sid,
+                 content_types,
+                 time_=None,
+                 show_in_roster=False,
+                 show_in_systray=True):
+        Event.__init__(self,
+                       time_,
+                       show_in_roster=show_in_roster,
+                       show_in_systray=show_in_systray)
         self.peerjid = peerjid
         self.sid = sid
         self.content_types = content_types
 
-class Events:
-    """
-    Information concerning all events
-    """
 
+class Events:
     def __init__(self):
-        self._events = {} # list of events {acct: {jid1: [E1, E2]}, }
+        self._events = {}  # list of events {acct: {jid1: [E1, E2]}, }
         self._event_added_listeners = []
         self._event_removed_listeners = []
 
@@ -193,7 +273,7 @@ class Events:
         """
         Add a listener when an event is added to the queue
         """
-        if not listener in self._event_added_listeners:
+        if listener not in self._event_added_listeners:
             self._event_added_listeners.append(listener)
 
     def event_added_unsubscribe(self, listener):
@@ -207,7 +287,7 @@ class Events:
         """
         Add a listener when an event is removed from the queue
         """
-        if not listener in self._event_removed_listeners:
+        if listener not in self._event_removed_listeners:
             self._event_removed_listeners.append(listener)
 
     def event_removed_unsubscribe(self, listener):
@@ -235,16 +315,16 @@ class Events:
         del self._events[account]
 
     def add_event(self, account, jid, event):
-        # No such account before ?
         if account not in self._events:
             self._events[account] = {jid: [event]}
-        # no such jid before ?
         elif jid not in self._events[account]:
             self._events[account][jid] = [event]
         else:
             self._events[account][jid].append(event)
+
         event.jid = jid
         event.account = account
+
         self.fire_event_added(event)
 
     def remove_events(self, account, jid, event=None, types=None):
@@ -258,18 +338,19 @@ class Events:
             return True
         if jid not in self._events[account]:
             return True
-        if event: # remove only one event
+
+        if event:  # remove only one event
             if event in self._events[account][jid]:
                 if len(self._events[account][jid]) == 1:
                     del self._events[account][jid]
                 else:
                     self._events[account][jid].remove(event)
                 self.fire_event_removed([event])
-                return
+                return False
             return True
         if types:
-            new_list = [] # list of events to keep
-            removed_list = [] # list of removed events
+            new_list = []  # list of events to keep
+            removed_list = []  # list of removed events
             for ev in self._events[account][jid]:
                 if ev.type_ not in types:
                     new_list.append(ev)
@@ -277,12 +358,14 @@ class Events:
                     removed_list.append(ev)
             if len(new_list) == len(self._events[account][jid]):
                 return True
+
             if new_list:
                 self._events[account][jid] = new_list
             else:
                 del self._events[account][jid]
             self.fire_event_removed(removed_list)
-            return
+            return False
+
         # No event nor type given, remove them all
         removed_list = self._events[account][jid]
         del self._events[account][jid]
@@ -306,16 +389,19 @@ class Events:
 
     def get_events(self, account, jid=None, types=None):
         """
-        Return all events from the given account of the form {jid1: [], jid2:
-        []}. If jid is given, returns all events from the given jid in a list: []
+        Return all events from the given account of the form:
+        {jid1: [], jid2: []}.
+        If jid is given, returns all events from the given jid in a list:
+        []
         optionally only from given type
         """
         if types is None:
             types = []
         if account not in self._events:
             return []
+
         if not jid:
-            events_list = {} # list of events
+            events_list = {}
             for jid_ in self._events[account]:
                 events = []
                 for ev in self._events[account][jid_]:
@@ -324,9 +410,11 @@ class Events:
                 if events:
                     events_list[jid_] = events
             return events_list
+
         if jid not in self._events[account]:
             return []
-        events_list = [] # list of events
+
+        events_list = []
         for ev in self._events[account][jid]:
             if not types or ev.type_ in types:
                 events_list.append(ev)
@@ -348,6 +436,7 @@ class Events:
         """
         if not account:
             return self._get_first_event_with_attribute(self._events)
+
         events_list = self.get_events(account, jid, type_)
         # be sure it's bigger than latest event
         first_event_time = time.time() + 1
@@ -358,7 +447,8 @@ class Events:
                 first_event = event
         return first_event
 
-    def _get_nb_events(self, account=None, jid=None, attribute=None, types=None):
+    def _get_nb_events(self, account=None, jid=None, attribute=None,
+                       types=None):
         """
         Return the number of pending events
         """
@@ -382,9 +472,9 @@ class Events:
                 for event in self._events[acct][j]:
                     if types and event.type_ not in types:
                         continue
-                    if not attribute or \
-                    attribute == 'systray' and event.show_in_systray or \
-                    attribute == 'roster' and event.show_in_roster:
+                    if (not attribute or
+                            attribute == 'systray' and event.show_in_systray or
+                            attribute == 'roster' and event.show_in_roster):
                         nb += 1
         return nb
 
@@ -397,6 +487,7 @@ class Events:
             events[account] = {}
             for jid in acc_events:
                 events[account][jid] = []
+
                 for event in acc_events[jid]:
                     if attribute == 'systray' and event.show_in_systray or \
                     attribute == 'roster' and event.show_in_roster:
@@ -407,10 +498,10 @@ class Events:
                 del events[account]
         return events
 
-    def _get_first_event_with_attribute(self, events):
+    @staticmethod
+    def _get_first_event_with_attribute(events):
         """
-        Get the first event
-
+        Get the first event.
         events is in the form {account1: {jid1: [ev1, ev2], },. }
         """
         # be sure it's bigger than latest event
@@ -453,8 +544,10 @@ class Events:
         """
         if types is None:
             types = []
-        return self._get_nb_events(attribute='roster', account=account,
-                jid=jid, types=types)
+        return self._get_nb_events(attribute='roster',
+                                   account=account,
+                                   jid=jid,
+                                   types=types)
 
     def get_roster_events(self):
         """
