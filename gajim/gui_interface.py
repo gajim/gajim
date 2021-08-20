@@ -200,936 +200,35 @@ class Interface:
                                       self._network_status_changed)
         self._network_state = self._network_monitor.get_network_available()
 
-    @staticmethod
-    def handle_event_information(event):
-        if not event.popup:
-            return
-
-        if event.dialog_name is not None:
-            get_dialog(event.dialog_name, *event.args, **event.kwargs)
-            return
-
-        if event.level == 'error':
-            cls = ErrorDialog
-        elif event.level == 'warn':
-            cls = WarningDialog
-        elif event.level == 'info':
-            cls = InformationDialog
-        else:
-            return
-
-        cls(event.pri_txt, GLib.markup_escape_text(event.sec_txt))
-
-    @staticmethod
-    def raise_dialog(name, *args, **kwargs):
-        get_dialog(name, *args, **kwargs)
-
-    @staticmethod
-    def handle_event_http_auth(event):
-        # ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
-        def _response(_account, answer):
-            event.conn.get_module('HTTPAuth').build_http_auth_answer(
-                event.stanza, answer)
-
-        account = event.conn.name
-        message = _('HTTP (%(method)s) Authorization '
-                    'for %(url)s (ID: %(id)s)') % {
-                        'method': event.method,
-                        'url': event.url,
-                        'id': event.iq_id}
-        sec_msg = _('Do you accept this request?')
-        if app.get_number_of_connected_accounts() > 1:
-            sec_msg = _('Do you accept this request (account: %s)?') % account
-        if event.msg:
-            sec_msg = event.msg + '\n' + sec_msg
-        message = message + '\n' + sec_msg
-
-        ConfirmationDialog(
-            _('Authorization Request'),
-            _('HTTP Authorization Request'),
-            message,
-            [DialogButton.make('Cancel',
-                               text=_('_No'),
-                               callback=_response,
-                               args=[event, 'no']),
-             DialogButton.make('Accept',
-                               callback=_response,
-                               args=[event, 'yes'])]).show()
-
-    @staticmethod
-    def handle_event_iq_error(event):
-        ctrl = app.window.get_control(event.account, event.properties.jid.bare)
-        if ctrl and ctrl.is_groupchat:
-            ctrl.add_info_message('Error: %s' % event.properties.error)
-
-    @staticmethod
-    def handle_event_connection_lost(event):
-        # ('CONNECTION_LOST', account, [title, text])
-        account = event.conn.name
-        app.notification.popup(
-            _('Connection Failed'),
-            account,
-            account,
-            'connection-lost',
-            'gajim-connection_lost',
-            event.title,
-            event.msg)
-
-    @staticmethod
-    def _unblock_signed_in_notifications(account):
-        app.block_signed_in_notifications[account] = False
-
-    def handle_event_status(self, event):
-        if event.show in ('offline', 'error'):
-            # TODO: Close all account windows
-            pass
-
-        if event.show == 'offline':
-            app.block_signed_in_notifications[event.account] = True
-        else:
-            # 30 seconds after we change our status to sth else than offline
-            # we stop blocking notifications of any kind
-            # this prevents from getting the roster items as 'just signed in'
-            # contacts. 30 seconds should be enough time
-            GLib.timeout_add_seconds(30,
-                                     self._unblock_signed_in_notifications,
-                                     event.account)
-
-    def handle_event_presence(self, event):
-        # 'NOTIFY' (account, (jid, status, status message, resource,
-        # priority, timestamp))
-        #
-        # Contact changed show
-        account = event.conn.name
-        jid = event.jid
-
-        if app.jid_is_transport(jid):
-            # It must be an agent
-
-            # transport just signed in/out, don't show
-            # popup notifications for 30s
-            account_jid = account + '/' + jid
-            app.block_signed_in_notifications[account_jid] = True
-            GLib.timeout_add_seconds(30, self._unblock_signed_in_notifications,
-                                     account_jid)
-
-        ctrl = app.window.get_control(account, jid)
-        if ctrl and ctrl.session and len(event.contact_list) > 1:
-            ctrl.remove_session(ctrl.session)
-
-    @staticmethod
-    def handle_event_read_state_sync(event):
-        if event.type.is_groupchat:
-            control = app.get_groupchat_control(
-                event.account, event.jid.bare)
-            if control is None:
-                log.warning('Groupchat control not found')
-                return
-
-            jid = event.jid.bare
-            types = ['printed_gc_msg', 'printed_marked_gc_msg']
-
-        else:
-            types = ['chat', 'pm', 'printed_chat', 'printed_pm']
-            jid = event.jid
-
-            control = app.window.get_control(event.account, jid)
-
-        # Compare with control.last_msg_id.
-        events_ = app.events.get_events(event.account, jid, types)
-        if not events_:
-            log.warning('No Events')
-            return
-
-        if event.type.is_groupchat:
-            id_ = events_[-1].stanza_id or events_[-1].message_id
-        else:
-            id_ = events_[-1].message_id
-
-        if id_ != event.marker_id:
-            return
-
-        if not app.events.remove_events(event.account, jid, types=types):
-            # There were events to remove
-            if control is not None:
-                control.redraw_after_event_removed(event.jid)
-
-    @staticmethod
-    def handle_event_msgsent(event):
-        if not event.play_sound:
-            return
-
-        enabled = app.settings.get_soundevent_settings(
-            'message_sent')['enabled']
-        if enabled:
-            if isinstance(event.jid, list) and len(event.jid) > 1:
-                return
-            helpers.play_sound('message_sent')
-
-    @staticmethod
-    def handle_event_msgnotsent(event):
-        # ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-        msg = _('error while sending %(message)s ( %(error)s )') % {
-            'message': event.message,
-            'error': event.error}
-        if not event.session:
-            # No session. This can happen when sending a message from
-            # gajim-remote
-            log.warning(msg)
-            return
-        event.session.roster_message(
-            event.jid,
-            msg,
-            event.time_,
-            event.conn.name,
-            msg_type='error')
-
-    def handle_event_gc_invitation(self, event):
-        event = events.GcInvitationEvent(event)
-
-        client = app.get_client(event.account)
-        if get_muc_context(event.muc) == 'public':
-            jid = event.from_
-        else:
-            jid = event.from_.bare
-
-        self.add_event(event.account, jid, event)
-
-        if helpers.allow_showing_notification(event.account):
-            contact = client.get_module('Contacts').get_contact(jid)
-            event_type = _('Group Chat Invitation')
-            text = _('%(contact)s invited you to %(chat)s') % {
-                'contact': contact.name,
-                'chat': event.info.muc_name}
-            app.notification.popup(event_type,
-                                   str(jid),
-                                   event.account,
-                                   'gc-invitation',
-                                   'gajim-gc_invitation',
-                                   event_type,
-                                   text,
-                                   room_jid=event.muc)
-
-    @staticmethod
-    def handle_event_client_cert_passphrase(event):
-        def _on_ok(passphrase, _checked):
-            event.conn.on_client_cert_passphrase(
-                passphrase,
-                event.con,
-                event.port,
-                event.secure_tuple)
-
-        def _on_cancel():
-            event.conn.on_client_cert_passphrase(
-                '',
-                event.con,
-                event.port,
-                event.secure_tuple)
-
-        PassphraseDialog(_('Certificate Passphrase Required'),
-                         _('Enter the certificate passphrase for '
-                           'account %s') % event.conn.name,
-                         ok_handler=_on_ok,
-                         cancel_handler=_on_cancel)
-
-    def handle_event_password_required(self, event):
-        # ('PASSWORD_REQUIRED', account, None)
-        account = event.conn.name
-        if account in self._passphrase_dialogs:
-            return
-        text = _('Enter your password for account %s') % account
-
-        def _on_ok(passphrase, save):
-            app.settings.set_account_setting(account, 'savepass', save)
-            passwords.save_password(account, passphrase)
-            event.on_password(passphrase)
-            del self._passphrase_dialogs[account]
-
-        def _on_cancel():
-            del self._passphrase_dialogs[account]
-
-        self._passphrase_dialogs[account] = PassphraseDialog(
-            _('Password Required'),
-            text, _('Save password'),
-            ok_handler=_on_ok,
-            cancel_handler=_on_cancel)
-
-    def handle_event_roster_info(self, obj):
-        #('ROSTER_INFO', account, (jid, name, sub, ask, groups))
-        account = obj.conn.name
-        contacts = app.contacts.get_contacts(account, obj.jid)
-        if (not obj.sub or obj.sub == 'none') and \
-        (not obj.ask or obj.ask == 'none') and not obj.nickname and \
-        not obj.groups:
-            # contact removed us.
-            if contacts:
-                self.roster.remove_contact(obj.jid, account, backend=True)
-                return
-        elif not contacts:
-            if obj.sub == 'remove':
-                return
-            # Add new contact to roster
-
-            contact = app.contacts.create_contact(jid=obj.jid,
-                account=account, name=obj.nickname, groups=obj.groups,
-                show='offline', sub=obj.sub, ask=obj.ask,
-                avatar_sha=obj.avatar_sha)
-            app.contacts.add_contact(account, contact)
-            self.roster.add_contact(obj.jid, account)
-        else:
-            # If contact has changed (sub, ask or group) update roster
-            # Mind about observer status changes:
-            #   According to xep 0162, a contact is not an observer anymore when
-            #   we asked for auth, so also remove him if ask changed
-            old_groups = contacts[0].groups
-            if obj.sub == 'remove':
-                # another of our instance removed a contact. Remove it here too
-                self.roster.remove_contact(obj.jid, account, backend=True)
-                return
-            update = False
-            if contacts[0].sub != obj.sub or contacts[0].ask != obj.ask\
-            or old_groups != obj.groups:
-                # c.get_shown_groups() has changed. Reflect that in
-                # roster_window
-                self.roster.remove_contact(obj.jid, account, force=True)
-                update = True
-            for contact in contacts:
-                contact.name = obj.nickname or ''
-                contact.sub = obj.sub
-                contact.ask = obj.ask
-                contact.groups = obj.groups or []
-            if update:
-                self.roster.add_contact(obj.jid, account)
-                # Refilter and update old groups
-                for group in old_groups:
-                    self.roster.draw_group(group, account)
-                self.roster.draw_contact(obj.jid, account)
-        if obj.jid in self.instances[account]['sub_request'] and obj.sub in (
-        'from', 'both'):
-            self.instances[account]['sub_request'][obj.jid].destroy()
-
-    def handle_event_file_send_error(self, event):
-        file_transfers = self.instances['file_transfers']
-        file_transfers.set_status(event.file_props, 'stop')
-
-        if helpers.allow_popup_window(event.account):
-            file_transfers.show_send_error(event.file_props)
-            return
-
-        event = events.FileSendErrorEvent(event.file_props)
-        self.add_event(event.account, event.jid, event)
-
-        if helpers.allow_showing_notification(event.account):
-            event_type = _('File Transfer Error')
-            app.notification.popup(
-                event_type,
-                event.jid,
-                event.account,
-                'file-send-error',
-                'dialog-error',
-                event_type,
-                event.file_props.name)
-
-    def handle_event_file_request_error(self, event):
-        # ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
-        file_transfers = self.instances['file_transfers']
-        file_transfers.set_status(event.file_props, 'stop')
-        errno = event.file_props.error
-        account = event.conn.name
-
-        if helpers.allow_popup_window(account):
-            if errno in (-4, -5):
-                file_transfers.show_stopped(
-                    event.jid, event.file_props, event.error_msg)
-            else:
-                file_transfers.show_request_error(event.file_props)
-            return
-
-        if errno in (-4, -5):
-            event_class = events.FileErrorEvent
-            msg_type = 'file-error'
-        else:
-            event_class = events.FileRequestErrorEvent
-            msg_type = 'file-request-error'
-
-        file_event = event_class(event.file_props)
-        self.add_event(account, event.jid, file_event)
-
-        if helpers.allow_showing_notification(account):
-            # Check if we should be notified
-            event_type = _('File Transfer Error')
-            app.notification.popup(
-                event_type,
-                event.jid,
-                account,
-                msg_type,
-                'dialog-error',
-                title=event_type,
-                text=event.file_props.name)
-
-    def handle_event_file_request(self, event):
-        # TODO
-        account = event.conn.name
-        if event.jid not in app.contacts.get_jid_list(account):
-            contact = app.contacts.create_not_in_roster_contact(
-                jid=event.jid, account=account)
-            app.contacts.add_contact(account, contact)
-            self.roster.add_contact(event.jid, account)
-        contact = app.contacts.get_first_contact_from_jid(account, event.jid)
-        if event.file_props.session_type == 'jingle':
-            request = \
-                event.stanza.getTag('jingle').getTag('content').getTag(
-                    'description').getTag('request')
-            if request:
-                # If we get a request instead
-                self.instances['file_transfers'].add_transfer(
-                    account, contact, event.file_props)
-                return
-        if helpers.allow_popup_window(account):
-            self.instances['file_transfers'].show_file_request(
-                account, contact, event.file_props)
-            return
-        file_event = events.FileRequestEvent(event.file_props)
-        self.add_event(account, event.jid, file_event)
-        if helpers.allow_showing_notification(account):
-            txt = _('%s wants to send you a file.') % app.get_name_from_jid(
-                account, event.jid)
-            event_type = _('File Transfer Request')
-            app.notification.popup(
-                event_type,
-                event.jid,
-                account,
-                'file-request',
-                icon_name='document-send',
-                title=event_type,
-                text=txt)
-
-    @staticmethod
-    def handle_event_file_error(title, message):
-        ErrorDialog(title, message)
-
-    def handle_event_file_progress(self, _account, file_props):
-        if time.time() - self._last_ftwindow_update > 0.5:
-            # Update ft window every 500ms
-            self._last_ftwindow_update = time.time()
-            self.instances['file_transfers'].set_progress(
-                file_props.type_, file_props.sid, file_props.received_len)
-
-    def __compare_hashes(self, account, file_props):
-        client = app.get_client(account)
-        session = client.get_module('Jingle').get_jingle_session(
-            jid=None, sid=file_props.sid)
-        file_transfers = self.instances['file_transfers']
-        hashes = Hashes2()
-        try:
-            file_ = open(file_props.file_name, 'rb')
-        except Exception:
-            return
-        hash_ = hashes.calculateHash(file_props.algo, file_)
-        file_.close()
-        # If the hash we received and the hash of the file are the same,
-        # then the file is not corrupt
-        jid = file_props.sender
-        if file_props.hash_ == hash_:
-            GLib.idle_add(self._popup_ft_result, account, jid, file_props)
-            GLib.idle_add(file_transfers.set_status, file_props, 'ok')
-        else:
-            # Wrong hash, we need to get the file again!
-            file_props.error = -10
-            GLib.idle_add(self._popup_ft_result, account, jid, file_props)
-            GLib.idle_add(file_transfers.set_status, file_props, 'hash_error')
-        # End jingle session
-        if session:
-            session.end_session()
-
-    def handle_event_file_rcv_completed(self, account, file_props):
-        file_transfers = self.instances['file_transfers']
-        if file_props.error == 0:
-            file_transfers.set_progress(
-                file_props.type_, file_props.sid, file_props.received_len)
-            jid = app.get_jid_without_resource(str(file_props.receiver))
-            app.nec.push_incoming_event(
-                NetworkEvent('file-transfer-completed',
-                             file_props=file_props,
-                             jid=jid))
-
-        else:
-            file_transfers.set_status(file_props, 'stop')
-        if (not file_props.completed and (
-                file_props.stalled or file_props.paused)):
-            return
-
-        if file_props.type_ == 'r':  # We receive a file
-            app.socks5queue.remove_receiver(file_props.sid, True, True)
-            if file_props.session_type == 'jingle':
-                if file_props.hash_ and file_props.error == 0:
-                    # We compare hashes in a new thread
-                    self.hashThread = Thread(target=self.__compare_hashes,
-                                             args=(account, file_props))
-                    self.hashThread.start()
-                else:
-                    # We didn't get the hash, sender probably doesn't
-                    # support that
-                    jid = file_props.sender
-                    self._popup_ft_result(account, jid, file_props)
-                    if file_props.error == 0:
-                        file_transfers.set_status(file_props, 'ok')
-                    client = app.get_client(account)
-                    session = client.get_module('Jingle').get_jingle_session(
-                        jid=None, sid=file_props.sid)
-                    # End jingle session
-                    # TODO: Only if there are no other parallel downloads in
-                    # this session
-                    if session:
-                        session.end_session()
-        else:  # We send a file
-            jid = file_props.receiver
-            app.socks5queue.remove_sender(file_props.sid, True, True)
-            self._popup_ft_result(account, jid, file_props)
-
-    def _popup_ft_result(self, account, jid, file_props):
-        file_transfers = self.instances['file_transfers']
-        if helpers.allow_popup_window(account):
-            if file_props.error == 0:
-                if app.settings.get('notify_on_file_complete'):
-                    file_transfers.show_completed(jid, file_props)
-            elif file_props.error == -1:
-                file_transfers.show_stopped(
-                    jid,
-                    file_props,
-                    error_msg=_('Remote Contact Stopped Transfer'))
-            elif file_props.error == -6:
-                file_transfers.show_stopped(
-                    jid,
-                    file_props,
-                    error_msg=_('Error Opening File'))
-            elif file_props.error == -10:
-                file_transfers.show_hash_error(
-                    jid,
-                    file_props,
-                    account)
-            elif file_props.error == -12:
-                file_transfers.show_stopped(
-                    jid,
-                    file_props,
-                    error_msg=_('SSL Certificate Error'))
-            return
-
-        msg_type = ''
-        event_type = ''
-        if (file_props.error == 0 and
-                app.settings.get('notify_on_file_complete')):
-            event_class = events.FileCompletedEvent
-            msg_type = 'file-completed'
-            event_type = _('File Transfer Completed')
-        elif file_props.error in (-1, -6):
-            event_class = events.FileStoppedEvent
-            msg_type = 'file-stopped'
-            event_type = _('File Transfer Stopped')
-        elif file_props.error == -10:
-            event_class = events.FileHashErrorEvent
-            msg_type = 'file-hash-error'
-            event_type = _('File Transfer Failed')
-
-        if event_type == '':
-            # FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
-            # this should never happen but it does. see process_result() in
-            # socks5.py
-            # who calls this func (sth is really wrong unless this func is also
-            # registered as progress_cb
-            return
-
-        if msg_type:
-            event = event_class(file_props)
-            self.add_event(account, jid, event)
-
-        if file_props is not None:
-            if file_props.type_ == 'r':
-                # Get the name of the sender, as it is in the roster
-                sender = file_props.sender.split('/')[0]
-                name = app.contacts.get_first_contact_from_jid(
-                    account, sender).get_shown_name()
-                filename = os.path.basename(file_props.file_name)
-
-                if event_type == _('File Transfer Completed'):
-                    txt = _('%(filename)s received from %(name)s.') % {
-                        'filename': filename,
-                        'name': name}
-                    icon_name = 'emblem-default'
-                elif event_type == _('File Transfer Stopped'):
-                    txt = _('File transfer of %(filename)s from %(name)s '
-                            'stopped.') % {
-                                'filename': filename,
-                                'name': name}
-                    icon_name = 'process-stop'
-                else:  # File transfer hash error
-                    txt = _('File transfer of %(filename)s from %(name)s '
-                            'failed.') % {
-                                'filename': filename,
-                                'name': name}
-                    icon_name = 'process-stop'
-            else:
-                receiver = file_props.receiver
-                if hasattr(receiver, 'jid'):
-                    receiver = receiver.jid
-                receiver = receiver.split('/')[0]
-                # Get the name of the contact, as it is in the roster
-                name = app.contacts.get_first_contact_from_jid(
-                    account, receiver).get_shown_name()
-                filename = os.path.basename(file_props.file_name)
-                if event_type == _('File Transfer Completed'):
-                    txt = _('You successfully sent %(filename)s to '
-                            '%(name)s.') % {
-                                'filename': filename,
-                                'name': name}
-                    icon_name = 'emblem-default'
-                elif event_type == _('File Transfer Stopped'):
-                    txt = _('File transfer of %(filename)s to %(name)s '
-                            'stopped.') % {
-                                'filename': filename,
-                                'name': name}
-                    icon_name = 'process-stop'
-                else:  # File transfer hash error
-                    txt = _('File transfer of %(filename)s to %(name)s '
-                            'failed.') % {
-                                'filename': filename,
-                                'name': name}
-                    icon_name = 'process-stop'
-        else:
-            txt = ''
-            icon_name = None
-
-        if (app.settings.get('notify_on_file_complete') and
-                (app.settings.get('autopopupaway') or
-                 app.connections[account].status in ('online', 'chat'))):
-            # We want to be notified and we are online/chat or we don't mind
-            # to be bugged when away/na/busy
-            app.notification.popup(
-                event_type,
-                jid,
-                account,
-                msg_type,
-                icon_name=icon_name,
-                title=event_type,
-                text=txt)
-
-    @staticmethod
-    def handle_event_signed_in(event):
-        """
-        SIGNED_IN event is emitted when we sign in, so handle it
-        """
-        # ('SIGNED_IN', account, ())
-        # block signed in notifications for 30 seconds
-
-        # Add our own JID into the DB
-        app.storage.archive.insert_jid(event.conn.get_own_jid().bare)
-        account = event.conn.name
-        app.block_signed_in_notifications[account] = True
-
-        pep_supported = event.conn.get_module('PEP').supported
-
-        if event.conn.get_module('MAM').available:
-            event.conn.get_module('MAM').request_archive_on_signin()
-
-        # enable location listener
-        if (pep_supported and app.is_installed('GEOCLUE') and
-                app.settings.get_account_setting(account, 'publish_location')):
-            location.enable()
-
-        if ask_for_status_message(event.conn.status, signin=True):
-            app.window.show_account_page(account)
-
-    def send_httpupload(self, chat_control, path=None):
-        if path is not None:
-            self._send_httpupload(chat_control, path)
-            return
-
-        accept_cb = partial(self._on_file_dialog_ok, chat_control)
-        FileChooserDialog(accept_cb,
-                          select_multiple=True,
-                          transient_for=app.window)
-
-    def _on_file_dialog_ok(self, chat_control, paths):
-        for path in paths:
-            self._send_httpupload(chat_control, path)
-
-    def _send_httpupload(self, chat_control, path):
-        client = app.get_client(chat_control.account)
-        try:
-            transfer = client.get_module('HTTPUpload').make_transfer(
-                path,
-                chat_control.encryption,
-                chat_control.contact,
-                chat_control.is_groupchat)
-        except FileError as error:
-            app.nec.push_incoming_event(
-                InformationEvent(
-                    None,
-                    dialog_name='open-file-error2',
-                    args=error))
-            return
-
-        transfer.connect('cancel', self._on_cancel_upload)
-        transfer.connect('state-changed',
-                         self._on_http_upload_state_changed)
-        chat_control.add_file_transfer(transfer)
-        client.get_module('HTTPUpload').start_transfer(transfer)
-
-    def _on_http_upload_state_changed(self, transfer, _signal_name, state):
-        # Note: This has to be a bound method in order to connect the signal
-        if state.is_finished:
-            uri = transfer.get_transformed_uri()
-
-            type_ = 'chat'
-            if transfer.is_groupchat:
-                type_ = 'groupchat'
-
-            message = OutgoingMessage(account=transfer.account,
-                                      contact=transfer.contact,
-                                      message=uri,
-                                      type_=type_,
-                                      oob_url=uri)
-
-            client = app.get_client(transfer.account)
-            client.send_message(message)
-
-    def _on_cancel_upload(self, transfer, _signal_name):
-        # Note: This has to be a bound method in order to connect the signal
-        client = app.get_client(transfer.account)
-        client.get_module('HTTPUpload').cancel_transfer(transfer)
-
-    @staticmethod
-    def handle_event_metacontacts(obj):
-        # TODO: Remove
-        app.contacts.define_metacontacts(obj.conn.name, obj.meta_list)
-
-    @staticmethod
-    def handle_event_zc_name_conflict(event):
-        def _on_ok(new_name):
-            app.settings.set_account_setting(event.conn.name, 'name', new_name)
-            event.conn.username = new_name
-            event.conn.change_status(
-                event.conn.status, event.conn.status_message)
-
-        def _on_cancel(*args):
-            event.conn.change_status('offline', '')
-
-        InputDialog(
-            _('Username Conflict'),
-            _('Username Conflict'),
-            _('Please enter a new username for your local account'),
-            [DialogButton.make('Cancel',
-                               callback=_on_cancel),
-             DialogButton.make('Accept',
-                               text=_('_OK'),
-                               callback=_on_ok)],
-            input_str=event.alt_name,
-            transient_for=app.window).show()
-
-    def handle_event_jingleft_cancel(self, event):
-        file_transfers = self.instances['file_transfers']
-        file_props = None
-        # get the file_props of our session
-        file_props = FilesProp.getFileProp(event.conn.name, event.sid)
-        if not file_props:
-            return
-        file_transfers.set_status(file_props, 'stop')
-        file_props.error = -4  # is it the right error code?
-        file_transfers.show_stopped(
-            event.jid,
-            file_props,
-            'Peer cancelled the transfer')
-
-    # Jingle AV handling
-    def handle_event_jingle_incoming(self, event):
-        # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
-        # data...))
-        # TODO: conditional blocking if peer is not in roster
-
-        account = event.conn.name
-        content_types = []
-        for item in event.contents:
-            content_types.append(item.media)
-        # check type of jingle session
-        if 'audio' in content_types or 'video' in content_types:
-            # a voip session...
-            # we now handle only voip, so the only thing we will do here is
-            # not to return from function
-            pass
-        else:
-            # unknown session type... it should be declined in common/jingle.py
-            return
-
-        notification_event = events.JingleIncomingEvent(
-            event.fjid,
-            event.sid,
-            content_types)
-
-        ctrl = (app.window.get_control(account, event.fjid) or
-                app.window.get_control(account, event.jid))
-        if ctrl:
-            if 'audio' in content_types:
-                ctrl.set_jingle_state(
-                    'audio',
-                    JingleState.CONNECTION_RECEIVED,
-                    event.sid)
-            if 'video' in content_types:
-                ctrl.set_jingle_state(
-                    'video',
-                    JingleState.CONNECTION_RECEIVED,
-                    event.sid)
-            ctrl.add_call_received_message(notification_event)
-
-        if helpers.allow_popup_window(account):
-            def _prepare_control():
-                ctrl = app.window.get_control(account, event.jid)
-                ctrl.add_call_received_message(notification_event)
-
-            if not ctrl:
-                app.window.add_chat(
-                    account, event.jid, 'contact', select=True)
-            GLib.idle_add(_prepare_control)
-            return
-
-        self.add_event(account, event.fjid, notification_event)
-
-        if helpers.allow_showing_notification(account):
-            heading = _('Incoming Call')
-            contact = app.get_name_from_jid(account, event.jid)
-            text = _('%s is calling') % contact
-            app.notification.popup(
-                heading,
-                event.jid,
-                account,
-                'jingle-incoming',
-                icon_name='call-start-symbolic',
-                title=heading,
-                text=text)
-
-    @staticmethod
-    def handle_event_jingle_connected(event):
-        # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
-        if event.media in ('audio', 'video'):
-            account = event.conn.name
-            ctrl = (app.window.get_control(account, event.fjid) or
-                    app.window.get_control(account, event.jid))
-            if ctrl:
-                con = app.connections[account]
-                session = con.get_module('Jingle').get_jingle_session(
-                    event.fjid, event.sid)
-
-                if event.media == 'audio':
-                    content = session.get_content('audio')
-                    ctrl.set_jingle_state(
-                        'audio',
-                        JingleState.CONNECTED,
-                        event.sid)
-                if event.media == 'video':
-                    content = session.get_content('video')
-                    ctrl.set_jingle_state(
-                        'video',
-                        JingleState.CONNECTED,
-                        event.sid)
-
-                # Now, accept the content/sessions.
-                # This should be done after the chat control is running
-                if not session.accepted:
-                    session.approve_session()
-                for content in event.media:
-                    session.approve_content(content)
-
-    @staticmethod
-    def handle_event_jingle_disconnected(event):
-        # ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
-        account = event.conn.name
-        ctrl = (app.window.get_control(account, event.fjid) or
-                app.window.get_control(account, event.jid))
-        if ctrl:
-            if event.media is None:
-                ctrl.stop_jingle(sid=event.sid, reason=event.reason)
-            if event.media == 'audio':
-                ctrl.set_jingle_state(
-                    'audio',
-                    JingleState.NULL,
-                    sid=event.sid,
-                    reason=event.reason)
-            if event.media == 'video':
-                ctrl.set_jingle_state(
-                    'video',
-                    JingleState.NULL,
-                    sid=event.sid,
-                    reason=event.reason)
-
-    @staticmethod
-    def handle_event_jingle_error(event):
-        # ('JINGLE_ERROR', account, (peerjid, sid, reason))
-        account = event.conn.name
-        ctrl = (app.window.get_control(account, event.fjid) or
-                app.window.get_control(account, event.jid))
-        if ctrl and event.sid == ctrl.jingle['audio'].sid:
-            ctrl.set_jingle_state(
-                'audio',
-                JingleState.ERROR,
-                reason=event.reason)
-
-    @staticmethod
-    def handle_event_roster_item_exchange(event):
-        # data = (action in [add, delete, modify], exchange_list, jid_from)
-        RosterItemExchangeWindow(event.conn.name,
-                                 event.action,
-                                 event.exchange_items_list,
-                                 event.fjid)
-
-    @staticmethod
-    def handle_event_plain_connection(event):
-        ConfirmationDialog(
-            _('Insecure Connection'),
-            _('Insecure Connection'),
-            _('You are about to connect to the account %(account)s '
-              '(%(server)s) using an insecure connection method. This means '
-              'conversations will not be encrypted. Connecting PLAIN is '
-              'strongly discouraged.') % {
-                  'account': event.account,
-                  'server': app.get_hostname_from_account(event.account)},
-            [DialogButton.make('Cancel',
-                               text=_('_Abort'),
-                               callback=event.abort),
-             DialogButton.make('Remove',
-                               text=_('_Connect Anyway'),
-                               callback=event.connect)]).show()
-
     def _create_core_handlers_list(self):
         # pyline: disable=line-too-long
         self.handlers = {
-            'file-send-error': [self.handle_event_file_send_error],
-            'client-cert-passphrase': [
-                self.handle_event_client_cert_passphrase],
-            'connection-lost': [self.handle_event_connection_lost],
-            'file-request-error': [self.handle_event_file_request_error],
-            'file-request-received': [self.handle_event_file_request],
-            'muc-invitation': [self.handle_event_gc_invitation],
-            'http-auth-received': [self.handle_event_http_auth],
             'information': [self.handle_event_information],
             'iq-error-received': [self.handle_event_iq_error],
+            'connection-lost': [self.handle_event_connection_lost],
+            'plain-connection': [self.handle_event_plain_connection],
+            'http-auth-received': [self.handle_event_http_auth],
+            'password-required': [self.handle_event_password_required],
+            'client-cert-passphrase': [self.handle_event_client_cert_passphrase],
+            'zeroconf-name-conflict': [self.handle_event_zc_name_conflict],
+            'signed-in': [self.handle_event_signed_in],
+            'presence-received': [self.handle_event_presence],
+            'our-show': [self.handle_event_status],   
+            'message-sent': [self.handle_event_msgsent],
+            'message-not-sent': [self.handle_event_msgnotsent],
+            'read-state-sync': [self.handle_event_read_state_sync],
+            # 'roster-info': [self.handle_event_roster_info],
+            'metacontacts-received': [self.handle_event_metacontacts],
+            'roster-item-exchange-received': [self.handle_event_roster_item_exchange],
+            'muc-invitation': [self.handle_event_gc_invitation],
+            'file-send-error': [self.handle_event_file_send_error],
+            'file-request-error': [self.handle_event_file_request_error],
+            'file-request-received': [self.handle_event_file_request],
             'jingle-connected-received': [self.handle_event_jingle_connected],
-            'jingle-disconnected-received': [
-                self.handle_event_jingle_disconnected],
+            'jingle-disconnected-received': [self.handle_event_jingle_disconnected],
             'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
             'jingle-ft-cancelled-received': [self.handle_event_jingleft_cancel],
-            'message-not-sent': [self.handle_event_msgnotsent],
-            'message-sent': [self.handle_event_msgsent],
-            'metacontacts-received': [self.handle_event_metacontacts],
-            'our-show': [self.handle_event_status],
-            'password-required': [self.handle_event_password_required],
-            'plain-connection': [self.handle_event_plain_connection],
-            'presence-received': [self.handle_event_presence],
-            # 'roster-info': [self.handle_event_roster_info],
-            'roster-item-exchange-received': \
-                [self.handle_event_roster_item_exchange],
-            'signed-in': [self.handle_event_signed_in],
-            'zeroconf-name-conflict': [self.handle_event_zc_name_conflict],
-            'read-state-sync': [self.handle_event_read_state_sync],
         }
         # pylint: enable=line-too-long
 
@@ -1272,6 +371,905 @@ class Interface:
             file_transfers.show_completed(jid, event.file_props)
             app.events.remove_events(account, jid, event)
             return
+
+    @staticmethod
+    def handle_event_information(event):
+        if not event.popup:
+            return
+
+        if event.dialog_name is not None:
+            get_dialog(event.dialog_name, *event.args, **event.kwargs)
+            return
+
+        if event.level == 'error':
+            cls = ErrorDialog
+        elif event.level == 'warn':
+            cls = WarningDialog
+        elif event.level == 'info':
+            cls = InformationDialog
+        else:
+            return
+
+        cls(event.pri_txt, GLib.markup_escape_text(event.sec_txt))
+
+    @staticmethod
+    def raise_dialog(name, *args, **kwargs):
+        get_dialog(name, *args, **kwargs)
+
+    @staticmethod
+    def handle_event_iq_error(event):
+        ctrl = app.window.get_control(event.account, event.properties.jid.bare)
+        if ctrl and ctrl.is_groupchat:
+            ctrl.add_info_message('Error: %s' % event.properties.error)
+
+    @staticmethod
+    def handle_event_connection_lost(event):
+        # ('CONNECTION_LOST', account, [title, text])
+        account = event.conn.name
+        app.notification.popup(
+            _('Connection Failed'),
+            account,
+            account,
+            'connection-lost',
+            'gajim-connection_lost',
+            event.title,
+            event.msg)
+
+    @staticmethod
+    def handle_event_plain_connection(event):
+        ConfirmationDialog(
+            _('Insecure Connection'),
+            _('Insecure Connection'),
+            _('You are about to connect to the account %(account)s '
+              '(%(server)s) using an insecure connection method. This means '
+              'conversations will not be encrypted. Connecting PLAIN is '
+              'strongly discouraged.') % {
+                  'account': event.account,
+                  'server': app.get_hostname_from_account(event.account)},
+            [DialogButton.make('Cancel',
+                               text=_('_Abort'),
+                               callback=event.abort),
+             DialogButton.make('Remove',
+                               text=_('_Connect Anyway'),
+                               callback=event.connect)]).show()
+
+    @staticmethod
+    def handle_event_http_auth(event):
+        # ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
+        def _response(_account, answer):
+            event.conn.get_module('HTTPAuth').build_http_auth_answer(
+                event.stanza, answer)
+
+        account = event.conn.name
+        message = _('HTTP (%(method)s) Authorization '
+                    'for %(url)s (ID: %(id)s)') % {
+                        'method': event.method,
+                        'url': event.url,
+                        'id': event.iq_id}
+        sec_msg = _('Do you accept this request?')
+        if app.get_number_of_connected_accounts() > 1:
+            sec_msg = _('Do you accept this request (account: %s)?') % account
+        if event.msg:
+            sec_msg = event.msg + '\n' + sec_msg
+        message = message + '\n' + sec_msg
+
+        ConfirmationDialog(
+            _('Authorization Request'),
+            _('HTTP Authorization Request'),
+            message,
+            [DialogButton.make('Cancel',
+                               text=_('_No'),
+                               callback=_response,
+                               args=[event, 'no']),
+             DialogButton.make('Accept',
+                               callback=_response,
+                               args=[event, 'yes'])]).show()
+
+    @staticmethod
+    def handle_event_client_cert_passphrase(event):
+        def _on_ok(passphrase, _checked):
+            event.conn.on_client_cert_passphrase(
+                passphrase,
+                event.con,
+                event.port,
+                event.secure_tuple)
+
+        def _on_cancel():
+            event.conn.on_client_cert_passphrase(
+                '',
+                event.con,
+                event.port,
+                event.secure_tuple)
+
+        PassphraseDialog(_('Certificate Passphrase Required'),
+                         _('Enter the certificate passphrase for '
+                           'account %s') % event.conn.name,
+                         ok_handler=_on_ok,
+                         cancel_handler=_on_cancel)
+
+    def handle_event_password_required(self, event):
+        # ('PASSWORD_REQUIRED', account, None)
+        account = event.conn.name
+        if account in self._passphrase_dialogs:
+            return
+        text = _('Enter your password for account %s') % account
+
+        def _on_ok(passphrase, save):
+            app.settings.set_account_setting(account, 'savepass', save)
+            passwords.save_password(account, passphrase)
+            event.on_password(passphrase)
+            del self._passphrase_dialogs[account]
+
+        def _on_cancel():
+            del self._passphrase_dialogs[account]
+
+        self._passphrase_dialogs[account] = PassphraseDialog(
+            _('Password Required'),
+            text, _('Save password'),
+            ok_handler=_on_ok,
+            cancel_handler=_on_cancel)
+
+    @staticmethod
+    def handle_event_zc_name_conflict(event):
+        def _on_ok(new_name):
+            app.settings.set_account_setting(event.conn.name, 'name', new_name)
+            event.conn.username = new_name
+            event.conn.change_status(
+                event.conn.status, event.conn.status_message)
+
+        def _on_cancel(*args):
+            event.conn.change_status('offline', '')
+
+        InputDialog(
+            _('Username Conflict'),
+            _('Username Conflict'),
+            _('Please enter a new username for your local account'),
+            [DialogButton.make('Cancel',
+                               callback=_on_cancel),
+             DialogButton.make('Accept',
+                               text=_('_OK'),
+                               callback=_on_ok)],
+            input_str=event.alt_name,
+            transient_for=app.window).show()
+
+    @staticmethod
+    def handle_event_signed_in(event):
+        """
+        SIGNED_IN event is emitted when we sign in, so handle it
+        """
+        # ('SIGNED_IN', account, ())
+        # block signed in notifications for 30 seconds
+
+        # Add our own JID into the DB
+        app.storage.archive.insert_jid(event.conn.get_own_jid().bare)
+        account = event.conn.name
+        app.block_signed_in_notifications[account] = True
+
+        pep_supported = event.conn.get_module('PEP').supported
+
+        if event.conn.get_module('MAM').available:
+            event.conn.get_module('MAM').request_archive_on_signin()
+
+        # enable location listener
+        if (pep_supported and app.is_installed('GEOCLUE') and
+                app.settings.get_account_setting(account, 'publish_location')):
+            location.enable()
+
+        if ask_for_status_message(event.conn.status, signin=True):
+            app.window.show_account_page(account)
+
+    def handle_event_presence(self, event):
+        # 'NOTIFY' (account, (jid, status, status message, resource,
+        # priority, timestamp))
+        #
+        # Contact changed show
+        account = event.conn.name
+        jid = event.jid
+
+        if app.jid_is_transport(jid):
+            # It must be an agent
+
+            # transport just signed in/out, don't show
+            # popup notifications for 30s
+            account_jid = account + '/' + jid
+            app.block_signed_in_notifications[account_jid] = True
+            GLib.timeout_add_seconds(30, self._unblock_signed_in_notifications,
+                                     account_jid)
+
+        ctrl = app.window.get_control(account, jid)
+        if ctrl and ctrl.session and len(event.contact_list) > 1:
+            ctrl.remove_session(ctrl.session)
+
+    def handle_event_status(self, event):
+        if event.show in ('offline', 'error'):
+            # TODO: Close all account windows
+            pass
+
+        if event.show == 'offline':
+            app.block_signed_in_notifications[event.account] = True
+        else:
+            # 30 seconds after we change our status to sth else than offline
+            # we stop blocking notifications of any kind
+            # this prevents from getting the roster items as 'just signed in'
+            # contacts. 30 seconds should be enough time
+            GLib.timeout_add_seconds(30,
+                                     self._unblock_signed_in_notifications,
+                                     event.account)
+
+    @staticmethod
+    def _unblock_signed_in_notifications(account):
+        app.block_signed_in_notifications[account] = False
+
+    @staticmethod
+    def handle_event_msgsent(event):
+        if not event.play_sound:
+            return
+
+        enabled = app.settings.get_soundevent_settings(
+            'message_sent')['enabled']
+        if enabled:
+            if isinstance(event.jid, list) and len(event.jid) > 1:
+                return
+            helpers.play_sound('message_sent')
+
+    @staticmethod
+    def handle_event_msgnotsent(event):
+        # ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
+        msg = _('error while sending %(message)s ( %(error)s )') % {
+            'message': event.message,
+            'error': event.error}
+        if not event.session:
+            # No session. This can happen when sending a message from
+            # gajim-remote
+            log.warning(msg)
+            return
+        event.session.roster_message(
+            event.jid,
+            msg,
+            event.time_,
+            event.conn.name,
+            msg_type='error')
+
+    @staticmethod
+    def handle_event_read_state_sync(event):
+        if event.type.is_groupchat:
+            control = app.get_groupchat_control(
+                event.account, event.jid.bare)
+            if control is None:
+                log.warning('Groupchat control not found')
+                return
+
+            jid = event.jid.bare
+            types = ['printed_gc_msg', 'printed_marked_gc_msg']
+
+        else:
+            types = ['chat', 'pm', 'printed_chat', 'printed_pm']
+            jid = event.jid
+
+            control = app.window.get_control(event.account, jid)
+
+        # Compare with control.last_msg_id.
+        events_ = app.events.get_events(event.account, jid, types)
+        if not events_:
+            log.warning('No Events')
+            return
+
+        if event.type.is_groupchat:
+            id_ = events_[-1].stanza_id or events_[-1].message_id
+        else:
+            id_ = events_[-1].message_id
+
+        if id_ != event.marker_id:
+            return
+
+        if not app.events.remove_events(event.account, jid, types=types):
+            # There were events to remove
+            if control is not None:
+                control.redraw_after_event_removed(event.jid)
+
+    def handle_event_roster_info(self, obj):
+        #('ROSTER_INFO', account, (jid, name, sub, ask, groups))
+        account = obj.conn.name
+        contacts = app.contacts.get_contacts(account, obj.jid)
+        if (not obj.sub or obj.sub == 'none') and \
+        (not obj.ask or obj.ask == 'none') and not obj.nickname and \
+        not obj.groups:
+            # contact removed us.
+            if contacts:
+                self.roster.remove_contact(obj.jid, account, backend=True)
+                return
+        elif not contacts:
+            if obj.sub == 'remove':
+                return
+            # Add new contact to roster
+
+            contact = app.contacts.create_contact(jid=obj.jid,
+                account=account, name=obj.nickname, groups=obj.groups,
+                show='offline', sub=obj.sub, ask=obj.ask,
+                avatar_sha=obj.avatar_sha)
+            app.contacts.add_contact(account, contact)
+            self.roster.add_contact(obj.jid, account)
+        else:
+            # If contact has changed (sub, ask or group) update roster
+            # Mind about observer status changes:
+            #   According to xep 0162, a contact is not an observer anymore when
+            #   we asked for auth, so also remove him if ask changed
+            old_groups = contacts[0].groups
+            if obj.sub == 'remove':
+                # another of our instance removed a contact. Remove it here too
+                self.roster.remove_contact(obj.jid, account, backend=True)
+                return
+            update = False
+            if contacts[0].sub != obj.sub or contacts[0].ask != obj.ask\
+            or old_groups != obj.groups:
+                # c.get_shown_groups() has changed. Reflect that in
+                # roster_window
+                self.roster.remove_contact(obj.jid, account, force=True)
+                update = True
+            for contact in contacts:
+                contact.name = obj.nickname or ''
+                contact.sub = obj.sub
+                contact.ask = obj.ask
+                contact.groups = obj.groups or []
+            if update:
+                self.roster.add_contact(obj.jid, account)
+                # Refilter and update old groups
+                for group in old_groups:
+                    self.roster.draw_group(group, account)
+                self.roster.draw_contact(obj.jid, account)
+        if obj.jid in self.instances[account]['sub_request'] and obj.sub in (
+        'from', 'both'):
+            self.instances[account]['sub_request'][obj.jid].destroy()
+
+    @staticmethod
+    def handle_event_metacontacts(obj):
+        # TODO: Remove
+        app.contacts.define_metacontacts(obj.conn.name, obj.meta_list)
+
+    @staticmethod
+    def handle_event_roster_item_exchange(event):
+        # data = (action in [add, delete, modify], exchange_list, jid_from)
+        RosterItemExchangeWindow(event.conn.name,
+                                 event.action,
+                                 event.exchange_items_list,
+                                 event.fjid)
+
+    def handle_event_gc_invitation(self, event):
+        event = events.GcInvitationEvent(event)
+
+        client = app.get_client(event.account)
+        if get_muc_context(event.muc) == 'public':
+            jid = event.from_
+        else:
+            jid = event.from_.bare
+
+        self.add_event(event.account, jid, event)
+
+        if helpers.allow_showing_notification(event.account):
+            contact = client.get_module('Contacts').get_contact(jid)
+            event_type = _('Group Chat Invitation')
+            text = _('%(contact)s invited you to %(chat)s') % {
+                'contact': contact.name,
+                'chat': event.info.muc_name}
+            app.notification.popup(event_type,
+                                   str(jid),
+                                   event.account,
+                                   'gc-invitation',
+                                   'gajim-gc_invitation',
+                                   event_type,
+                                   text,
+                                   room_jid=event.muc)
+
+    # Jingle File Transfer
+    def handle_event_file_send_error(self, event):
+        file_transfers = self.instances['file_transfers']
+        file_transfers.set_status(event.file_props, 'stop')
+
+        if helpers.allow_popup_window(event.account):
+            file_transfers.show_send_error(event.file_props)
+            return
+
+        event = events.FileSendErrorEvent(event.file_props)
+        self.add_event(event.account, event.jid, event)
+
+        if helpers.allow_showing_notification(event.account):
+            event_type = _('File Transfer Error')
+            app.notification.popup(
+                event_type,
+                event.jid,
+                event.account,
+                'file-send-error',
+                'dialog-error',
+                event_type,
+                event.file_props.name)
+
+    def handle_event_file_request_error(self, event):
+        # ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
+        file_transfers = self.instances['file_transfers']
+        file_transfers.set_status(event.file_props, 'stop')
+        errno = event.file_props.error
+        account = event.conn.name
+
+        if helpers.allow_popup_window(account):
+            if errno in (-4, -5):
+                file_transfers.show_stopped(
+                    event.jid, event.file_props, event.error_msg)
+            else:
+                file_transfers.show_request_error(event.file_props)
+            return
+
+        if errno in (-4, -5):
+            event_class = events.FileErrorEvent
+            msg_type = 'file-error'
+        else:
+            event_class = events.FileRequestErrorEvent
+            msg_type = 'file-request-error'
+
+        file_event = event_class(event.file_props)
+        self.add_event(account, event.jid, file_event)
+
+        if helpers.allow_showing_notification(account):
+            # Check if we should be notified
+            event_type = _('File Transfer Error')
+            app.notification.popup(
+                event_type,
+                event.jid,
+                account,
+                msg_type,
+                'dialog-error',
+                title=event_type,
+                text=event.file_props.name)
+
+    def handle_event_file_request(self, event):
+        # TODO
+        account = event.conn.name
+        if event.jid not in app.contacts.get_jid_list(account):
+            contact = app.contacts.create_not_in_roster_contact(
+                jid=event.jid, account=account)
+            app.contacts.add_contact(account, contact)
+            self.roster.add_contact(event.jid, account)
+        contact = app.contacts.get_first_contact_from_jid(account, event.jid)
+        if event.file_props.session_type == 'jingle':
+            request = \
+                event.stanza.getTag('jingle').getTag('content').getTag(
+                    'description').getTag('request')
+            if request:
+                # If we get a request instead
+                self.instances['file_transfers'].add_transfer(
+                    account, contact, event.file_props)
+                return
+        if helpers.allow_popup_window(account):
+            self.instances['file_transfers'].show_file_request(
+                account, contact, event.file_props)
+            return
+        file_event = events.FileRequestEvent(event.file_props)
+        self.add_event(account, event.jid, file_event)
+        if helpers.allow_showing_notification(account):
+            txt = _('%s wants to send you a file.') % app.get_name_from_jid(
+                account, event.jid)
+            event_type = _('File Transfer Request')
+            app.notification.popup(
+                event_type,
+                event.jid,
+                account,
+                'file-request',
+                icon_name='document-send',
+                title=event_type,
+                text=txt)
+
+    @staticmethod
+    def handle_event_file_error(title, message):
+        ErrorDialog(title, message)
+
+    def handle_event_file_progress(self, _account, file_props):
+        if time.time() - self._last_ftwindow_update > 0.5:
+            # Update ft window every 500ms
+            self._last_ftwindow_update = time.time()
+            self.instances['file_transfers'].set_progress(
+                file_props.type_, file_props.sid, file_props.received_len)
+
+    def handle_event_jingleft_cancel(self, event):
+        file_transfers = self.instances['file_transfers']
+        file_props = None
+        # get the file_props of our session
+        file_props = FilesProp.getFileProp(event.conn.name, event.sid)
+        if not file_props:
+            return
+        file_transfers.set_status(file_props, 'stop')
+        file_props.error = -4  # is it the right error code?
+        file_transfers.show_stopped(
+            event.jid,
+            file_props,
+            'Peer cancelled the transfer')
+
+    def handle_event_file_rcv_completed(self, account, file_props):
+        file_transfers = self.instances['file_transfers']
+        if file_props.error == 0:
+            file_transfers.set_progress(
+                file_props.type_, file_props.sid, file_props.received_len)
+            jid = app.get_jid_without_resource(str(file_props.receiver))
+            app.nec.push_incoming_event(
+                NetworkEvent('file-transfer-completed',
+                             file_props=file_props,
+                             jid=jid))
+
+        else:
+            file_transfers.set_status(file_props, 'stop')
+        if (not file_props.completed and (
+                file_props.stalled or file_props.paused)):
+            return
+
+        if file_props.type_ == 'r':  # We receive a file
+            app.socks5queue.remove_receiver(file_props.sid, True, True)
+            if file_props.session_type == 'jingle':
+                if file_props.hash_ and file_props.error == 0:
+                    # We compare hashes in a new thread
+                    self.hashThread = Thread(target=self.__compare_hashes,
+                                             args=(account, file_props))
+                    self.hashThread.start()
+                else:
+                    # We didn't get the hash, sender probably doesn't
+                    # support that
+                    jid = file_props.sender
+                    self._popup_ft_result(account, jid, file_props)
+                    if file_props.error == 0:
+                        file_transfers.set_status(file_props, 'ok')
+                    client = app.get_client(account)
+                    session = client.get_module('Jingle').get_jingle_session(
+                        jid=None, sid=file_props.sid)
+                    # End jingle session
+                    # TODO: Only if there are no other parallel downloads in
+                    # this session
+                    if session:
+                        session.end_session()
+        else:  # We send a file
+            jid = file_props.receiver
+            app.socks5queue.remove_sender(file_props.sid, True, True)
+            self._popup_ft_result(account, jid, file_props)
+
+    def __compare_hashes(self, account, file_props):
+        client = app.get_client(account)
+        session = client.get_module('Jingle').get_jingle_session(
+            jid=None, sid=file_props.sid)
+        file_transfers = self.instances['file_transfers']
+        hashes = Hashes2()
+        try:
+            file_ = open(file_props.file_name, 'rb')
+        except Exception:
+            return
+        hash_ = hashes.calculateHash(file_props.algo, file_)
+        file_.close()
+        # If the hash we received and the hash of the file are the same,
+        # then the file is not corrupt
+        jid = file_props.sender
+        if file_props.hash_ == hash_:
+            GLib.idle_add(self._popup_ft_result, account, jid, file_props)
+            GLib.idle_add(file_transfers.set_status, file_props, 'ok')
+        else:
+            # Wrong hash, we need to get the file again!
+            file_props.error = -10
+            GLib.idle_add(self._popup_ft_result, account, jid, file_props)
+            GLib.idle_add(file_transfers.set_status, file_props, 'hash_error')
+        # End jingle session
+        if session:
+            session.end_session()
+
+    def _popup_ft_result(self, account, jid, file_props):
+        file_transfers = self.instances['file_transfers']
+        if helpers.allow_popup_window(account):
+            if file_props.error == 0:
+                if app.settings.get('notify_on_file_complete'):
+                    file_transfers.show_completed(jid, file_props)
+            elif file_props.error == -1:
+                file_transfers.show_stopped(
+                    jid,
+                    file_props,
+                    error_msg=_('Remote Contact Stopped Transfer'))
+            elif file_props.error == -6:
+                file_transfers.show_stopped(
+                    jid,
+                    file_props,
+                    error_msg=_('Error Opening File'))
+            elif file_props.error == -10:
+                file_transfers.show_hash_error(
+                    jid,
+                    file_props,
+                    account)
+            elif file_props.error == -12:
+                file_transfers.show_stopped(
+                    jid,
+                    file_props,
+                    error_msg=_('SSL Certificate Error'))
+            return
+
+        msg_type = ''
+        event_type = ''
+        if (file_props.error == 0 and
+                app.settings.get('notify_on_file_complete')):
+            event_class = events.FileCompletedEvent
+            msg_type = 'file-completed'
+            event_type = _('File Transfer Completed')
+        elif file_props.error in (-1, -6):
+            event_class = events.FileStoppedEvent
+            msg_type = 'file-stopped'
+            event_type = _('File Transfer Stopped')
+        elif file_props.error == -10:
+            event_class = events.FileHashErrorEvent
+            msg_type = 'file-hash-error'
+            event_type = _('File Transfer Failed')
+
+        if event_type == '':
+            # FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
+            # this should never happen but it does. see process_result() in
+            # socks5.py
+            # who calls this func (sth is really wrong unless this func is also
+            # registered as progress_cb
+            return
+
+        if msg_type:
+            event = event_class(file_props)
+            self.add_event(account, jid, event)
+
+        if file_props is not None:
+            if file_props.type_ == 'r':
+                # Get the name of the sender, as it is in the roster
+                sender = file_props.sender.split('/')[0]
+                name = app.contacts.get_first_contact_from_jid(
+                    account, sender).get_shown_name()
+                filename = os.path.basename(file_props.file_name)
+
+                if event_type == _('File Transfer Completed'):
+                    txt = _('%(filename)s received from %(name)s.') % {
+                        'filename': filename,
+                        'name': name}
+                    icon_name = 'emblem-default'
+                elif event_type == _('File Transfer Stopped'):
+                    txt = _('File transfer of %(filename)s from %(name)s '
+                            'stopped.') % {
+                                'filename': filename,
+                                'name': name}
+                    icon_name = 'process-stop'
+                else:  # File transfer hash error
+                    txt = _('File transfer of %(filename)s from %(name)s '
+                            'failed.') % {
+                                'filename': filename,
+                                'name': name}
+                    icon_name = 'process-stop'
+            else:
+                receiver = file_props.receiver
+                if hasattr(receiver, 'jid'):
+                    receiver = receiver.jid
+                receiver = receiver.split('/')[0]
+                # Get the name of the contact, as it is in the roster
+                name = app.contacts.get_first_contact_from_jid(
+                    account, receiver).get_shown_name()
+                filename = os.path.basename(file_props.file_name)
+                if event_type == _('File Transfer Completed'):
+                    txt = _('You successfully sent %(filename)s to '
+                            '%(name)s.') % {
+                                'filename': filename,
+                                'name': name}
+                    icon_name = 'emblem-default'
+                elif event_type == _('File Transfer Stopped'):
+                    txt = _('File transfer of %(filename)s to %(name)s '
+                            'stopped.') % {
+                                'filename': filename,
+                                'name': name}
+                    icon_name = 'process-stop'
+                else:  # File transfer hash error
+                    txt = _('File transfer of %(filename)s to %(name)s '
+                            'failed.') % {
+                                'filename': filename,
+                                'name': name}
+                    icon_name = 'process-stop'
+        else:
+            txt = ''
+            icon_name = None
+
+        if (app.settings.get('notify_on_file_complete') and
+                (app.settings.get('autopopupaway') or
+                 app.connections[account].status in ('online', 'chat'))):
+            # We want to be notified and we are online/chat or we don't mind
+            # to be bugged when away/na/busy
+            app.notification.popup(
+                event_type,
+                jid,
+                account,
+                msg_type,
+                icon_name=icon_name,
+                title=event_type,
+                text=txt)
+
+    # Jingle AV handling
+    def handle_event_jingle_incoming(self, event):
+        # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
+        # data...))
+        # TODO: conditional blocking if peer is not in roster
+
+        account = event.conn.name
+        content_types = []
+        for item in event.contents:
+            content_types.append(item.media)
+        # check type of jingle session
+        if 'audio' in content_types or 'video' in content_types:
+            # a voip session...
+            # we now handle only voip, so the only thing we will do here is
+            # not to return from function
+            pass
+        else:
+            # unknown session type... it should be declined in common/jingle.py
+            return
+
+        notification_event = events.JingleIncomingEvent(
+            event.fjid,
+            event.sid,
+            content_types)
+
+        ctrl = (app.window.get_control(account, event.fjid) or
+                app.window.get_control(account, event.jid))
+        if ctrl:
+            if 'audio' in content_types:
+                ctrl.set_jingle_state(
+                    'audio',
+                    JingleState.CONNECTION_RECEIVED,
+                    event.sid)
+            if 'video' in content_types:
+                ctrl.set_jingle_state(
+                    'video',
+                    JingleState.CONNECTION_RECEIVED,
+                    event.sid)
+            ctrl.add_call_received_message(notification_event)
+
+        if helpers.allow_popup_window(account):
+            def _prepare_control():
+                ctrl = app.window.get_control(account, event.jid)
+                ctrl.add_call_received_message(notification_event)
+
+            if not ctrl:
+                app.window.add_chat(
+                    account, event.jid, 'contact', select=True)
+            GLib.idle_add(_prepare_control)
+            return
+
+        self.add_event(account, event.fjid, notification_event)
+
+        if helpers.allow_showing_notification(account):
+            heading = _('Incoming Call')
+            contact = app.get_name_from_jid(account, event.jid)
+            text = _('%s is calling') % contact
+            app.notification.popup(
+                heading,
+                event.jid,
+                account,
+                'jingle-incoming',
+                icon_name='call-start-symbolic',
+                title=heading,
+                text=text)
+
+    @staticmethod
+    def handle_event_jingle_connected(event):
+        # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
+        if event.media in ('audio', 'video'):
+            account = event.conn.name
+            ctrl = (app.window.get_control(account, event.fjid) or
+                    app.window.get_control(account, event.jid))
+            if ctrl:
+                con = app.connections[account]
+                session = con.get_module('Jingle').get_jingle_session(
+                    event.fjid, event.sid)
+
+                if event.media == 'audio':
+                    content = session.get_content('audio')
+                    ctrl.set_jingle_state(
+                        'audio',
+                        JingleState.CONNECTED,
+                        event.sid)
+                if event.media == 'video':
+                    content = session.get_content('video')
+                    ctrl.set_jingle_state(
+                        'video',
+                        JingleState.CONNECTED,
+                        event.sid)
+
+                # Now, accept the content/sessions.
+                # This should be done after the chat control is running
+                if not session.accepted:
+                    session.approve_session()
+                for content in event.media:
+                    session.approve_content(content)
+
+    @staticmethod
+    def handle_event_jingle_disconnected(event):
+        # ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
+        account = event.conn.name
+        ctrl = (app.window.get_control(account, event.fjid) or
+                app.window.get_control(account, event.jid))
+        if ctrl:
+            if event.media is None:
+                ctrl.stop_jingle(sid=event.sid, reason=event.reason)
+            if event.media == 'audio':
+                ctrl.set_jingle_state(
+                    'audio',
+                    JingleState.NULL,
+                    sid=event.sid,
+                    reason=event.reason)
+            if event.media == 'video':
+                ctrl.set_jingle_state(
+                    'video',
+                    JingleState.NULL,
+                    sid=event.sid,
+                    reason=event.reason)
+
+    @staticmethod
+    def handle_event_jingle_error(event):
+        # ('JINGLE_ERROR', account, (peerjid, sid, reason))
+        account = event.conn.name
+        ctrl = (app.window.get_control(account, event.fjid) or
+                app.window.get_control(account, event.jid))
+        if ctrl and event.sid == ctrl.jingle['audio'].sid:
+            ctrl.set_jingle_state(
+                'audio',
+                JingleState.ERROR,
+                reason=event.reason)
+
+    def send_httpupload(self, chat_control, path=None):
+        if path is not None:
+            self._send_httpupload(chat_control, path)
+            return
+
+        accept_cb = partial(self._on_file_dialog_ok, chat_control)
+        FileChooserDialog(accept_cb,
+                          select_multiple=True,
+                          transient_for=app.window)
+
+    def _on_file_dialog_ok(self, chat_control, paths):
+        for path in paths:
+            self._send_httpupload(chat_control, path)
+
+    def _send_httpupload(self, chat_control, path):
+        client = app.get_client(chat_control.account)
+        try:
+            transfer = client.get_module('HTTPUpload').make_transfer(
+                path,
+                chat_control.encryption,
+                chat_control.contact,
+                chat_control.is_groupchat)
+        except FileError as error:
+            app.nec.push_incoming_event(
+                InformationEvent(
+                    None,
+                    dialog_name='open-file-error2',
+                    args=error))
+            return
+
+        transfer.connect('cancel', self._on_cancel_upload)
+        transfer.connect('state-changed',
+                         self._on_http_upload_state_changed)
+        chat_control.add_file_transfer(transfer)
+        client.get_module('HTTPUpload').start_transfer(transfer)
+
+    def _on_http_upload_state_changed(self, transfer, _signal_name, state):
+        # Note: This has to be a bound method in order to connect the signal
+        if state.is_finished:
+            uri = transfer.get_transformed_uri()
+
+            type_ = 'chat'
+            if transfer.is_groupchat:
+                type_ = 'groupchat'
+
+            message = OutgoingMessage(account=transfer.account,
+                                      contact=transfer.contact,
+                                      message=uri,
+                                      type_=type_,
+                                      oob_url=uri)
+
+            client = app.get_client(transfer.account)
+            client.send_message(message)
+
+    def _on_cancel_upload(self, transfer, _signal_name):
+        # Note: This has to be a bound method in order to connect the signal
+        client = app.get_client(transfer.account)
+        client.get_module('HTTPUpload').cancel_transfer(transfer)
 
     def create_groupchat(self, account, room_jid, config):
         if app.window.chat_exists(account, room_jid):
