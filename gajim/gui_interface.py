@@ -46,8 +46,10 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import Soup
+
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
+from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import events
@@ -57,8 +59,6 @@ from gajim.common.dbus import music_track
 
 from gajim import gui_menu_builder
 from gajim.dialog_messages import get_dialog
-
-from gajim.gui.controls.base import BaseControl
 
 from gajim.common import idle
 from gajim.common.zeroconf import connection_zeroconf
@@ -96,7 +96,6 @@ from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gui.main import MainWindow
-from gajim.gui.util import get_show_in_roster
 from gajim.gui.util import get_show_in_systray
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
@@ -385,19 +384,18 @@ class Interface:
             event.conn.name,
             msg_type='error')
 
-    @staticmethod
-    def handle_event_gc_invitation(event):
+    def handle_event_gc_invitation(self, event):
         event = events.GcInvitationEvent(event)
 
-        # TODO: show account page
-        # self.add_event(event.account, str(event.from_), event)
+        client = app.get_client(event.account)
+        if get_muc_context(event.muc) == 'public':
+            jid = event.from_
+        else:
+            jid = event.from_.bare
+
+        self.add_event(event.account, jid, event)
 
         if helpers.allow_showing_notification(event.account):
-            client = app.get_client(event.account)
-            if get_muc_context(event.muc) == 'public':
-                jid = event.from_
-            else:
-                jid = event.from_.bare
             contact = client.get_module('Contacts').get_contact(jid)
             event_type = _('Group Chat Invitation')
             text = _('%(contact)s invited you to %(chat)s') % {
@@ -1158,8 +1156,7 @@ class Interface:
         """
         # We add it to the app.events queue
         # Do we have a queue?
-        jid = app.get_jid_without_resource(jid)
-        no_queue = len(app.events.get_events(account, jid)) == 0
+        # has_queue = len(app.events.get_events(account, jid)) > 0
         # event can be in common.events.*
         # event_type can be in advancedNotificationWindow.events_list
         event_types = {
@@ -1167,138 +1164,114 @@ class Interface:
             'file-completed': 'ft_finished'
         }
         event_type = event_types.get(event.type_)
-        show_in_roster = get_show_in_roster(event_type, jid)
+        # show_in_roster = get_show_in_roster(event_type, jid)
         show_in_systray = get_show_in_systray(event_type, account, jid)
-        event.show_in_roster = show_in_roster
+        # event.show_in_roster = show_in_roster
         event.show_in_systray = show_in_systray
         app.events.add_event(account, jid, event)
 
-        self.roster.show_title()
-        if no_queue:  # We didn't have a queue: we change icons
-            if app.contacts.get_contact_with_highest_priority(account, jid):
-                self.roster.draw_contact(jid, account)
-            else:
-                groupchat = event.type_ == 'gc-invitation'
-                self.roster.add_to_not_in_the_roster(
-                    account, jid, groupchat=groupchat)
+        # TODO: set urgency hint; show unread count in window title?
+        # self.roster.show_title()
+        # if not has_queue:  # We didn't have a queue: we change icons
+        #     if app.contacts.get_contact_with_highest_priority(account, jid):
+        #         self.roster.draw_contact(jid, account)
+        #     else:
+        #         groupchat = event.type_ == 'gc-invitation'
+        #         self.roster.add_to_not_in_the_roster(
+        #             account, jid, groupchat=groupchat)
 
-        # Select the big brother contact in roster, it's visible because it has
-        # events.
-        family = app.contacts.get_metacontacts_family(account, jid)
-        if family:
-            _nearby_family, bb_jid, bb_account = \
-                app.contacts.get_nearby_family_and_big_brother(family,
-                account)
-        else:
-            bb_jid, bb_account = jid, account
-        self.roster.select_contact(bb_jid, bb_account)
+    def handle_event(self, account, jid, type_):
+        jid = JID.from_string(jid)
+        file_event_types = [
+            'file-request',
+            'file-request-error',
+            'file-send-error',
+            'file-error',
+            'file-stopped',
+            'file-completed',
+            'file-hash-error'
+        ]
 
-    def handle_event(self, account, fjid, type_):
         if type_ in ('connection-lost', 'connection-failed'):
-            app.interface.roster.window.present()
-            return
-
-        w = None
-        ctrl = None
-
-        resource = app.get_resource_from_jid(fjid)
-        jid = app.get_jid_without_resource(fjid)
-
-        if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
-            w = self.msg_win_mgr.get_window(jid, account)
-            if jid in self.minimized_controls[account]:
-                self.roster.on_groupchat_maximized(None, jid, account)
-                return
-            ctrl = self.msg_win_mgr.get_gc_control(jid, account)
-
+            app.window.show_account_page(account)
+            app.events.remove_events(account, jid, types=type_)
+        elif type_ in (
+                'gc_msg',
+                'printed_gc_msg',
+                'printed_marked_gc_msg',
+                'pm',
+                'printed_pm'):
+            app.window.select_chat(account, jid.bare)
+            app.events.remove_events(account, jid, types=type_)
         elif type_ in ('printed_chat', 'chat', ''):
             # '' is for log in/out notifications
-
-            ctrl = self.msg_win_mgr.search_control(jid, account, resource)
-
-            if not ctrl:
-                highest_contact = app.contacts.\
-                    get_contact_with_highest_priority(account, jid)
-                # jid can have a window if this resource was lower when he sent
-                # message and is now higher because the other one is offline
-                if resource and highest_contact.resource == resource and \
-                not self.msg_win_mgr.has_window(jid, account):
-                    # remove resource of events too
-                    app.events.change_jid(account, fjid, jid)
-                    resource = None
-                    fjid = jid
-
-                contact = None
-                if resource:
-                    contact = app.contacts.get_contact(account, jid, resource)
-                if not contact:
-                    contact = highest_contact
-                if not contact:
-                    # Maybe we deleted the contact from the roster
-                    return
-
-                ctrl = self.new_chat(contact, account, resource=resource)
-
-                app.last_message_time[account][jid] = 0 # long time ago
-
-            w = ctrl.parent_win
-        elif type_ in ('printed_pm', 'pm'):
-
-            ctrl = self.msg_win_mgr.get_control(fjid, account)
-
-            if not ctrl:
-                room_jid = jid
-                nick = resource
-                gc_contact = app.contacts.get_gc_contact(
-                    account, room_jid, nick)
-                ctrl = self.new_private_chat(gc_contact, account)
-
-            w = ctrl.parent_win
-        elif type_ in ('file-request', 'file-request-error',
-        'file-send-error', 'file-error', 'file-stopped', 'file-completed',
-        'file-hash-error', 'jingle-incoming'):
-            # Get the first single message event
-            event = app.events.get_first_event(account, fjid, type_)
-            if not event:
-                # default to jid without resource
-                event = app.events.get_first_event(account, jid, type_)
-                if not event:
-                    return
-                # Open the window
-                self.roster.open_event(account, jid, event)
-            else:
-                # Open the window
-                self.roster.open_event(account, fjid, event)
+            app.window.select_chat(account, jid.bare)
+            app.last_message_time[account][jid] = 0  # long time ago
+            app.events.remove_events(account, jid, types=type_)
+        elif type_ == 'jingle-incoming':
+            app.window.select_chat(account, jid.bare)
+        elif type_ in file_event_types:
+            self._handle_event_jingle_file(account, jid, type_)
         elif type_ == 'gc-invitation':
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            # TODO: Show account page
-            # open_window('GroupChatInvitation',
-            #             account=account,
-            #             event=event)
+            app.window.show_account_page(account)
             app.events.remove_events(account, jid, event)
-            # self.roster.draw_contact(jid, account)
         elif type_ == 'subscription_request':
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            # TODO: Show account page
+            app.window.show_account_page(account)
             app.events.remove_events(account, jid, event)
-            # self.roster.draw_contact(jid, account)
         elif type_ == 'unsubscribed':
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            # TODO: Show account page
+            app.window.show_account_page(account)
             app.events.remove_events(account, jid, event)
-            # self.roster.draw_contact(jid, account)
-        if w:
-            w.set_active_tab(ctrl)
-            w.window.present()
-            # Using isinstance here because we want to catch all derived types
-            if isinstance(ctrl, BaseControl):
-                ctrl.scroll_to_end()
+
+        app.window.present()
+
+    @staticmethod
+    def _handle_event_jingle_file(account, jid, type_):
+        event = app.events.get_first_event(account, jid, type_)
+        if not event:
+            return
+
+        file_transfers = app.interface.instances['file_transfers']
+        if event.type_ == 'file-request':
+            client = app.get_client(account)
+            contact = client.get_module('Contacts').get_contact(jid)
+            file_transfers.show_file_request(account, contact, event.file_props)
+            app.events.remove_events(account, jid, event)
+            return
+
+        if event.type_ in ('file-request-error', 'file-send-error'):
+            file_transfers.show_send_error(event.file_props)
+            app.events.remove_events(account, jid, event)
+            return
+
+        if event.type_ in ('file-error', 'file-stopped'):
+            msg_err = ''
+            if event.file_props.error == -1:
+                msg_err = _('Remote contact stopped transfer')
+            elif event.file_props.error == -6:
+                msg_err = _('Error opening file')
+            file_transfers.show_stopped(
+                jid, event.file_props, error_msg=msg_err)
+            app.events.remove_events(account, jid, event)
+            return
+
+        if event.type_ == 'file-hash-error':
+            file_transfers.show_hash_error(jid, event.file_props, account)
+            app.events.remove_events(account, jid, event)
+            return
+
+        if event.type_ == 'file-completed':
+            file_transfers.show_completed(jid, event.file_props)
+            app.events.remove_events(account, jid, event)
+            return
 
     def create_groupchat(self, account, room_jid, config):
         if app.window.chat_exists(account, room_jid):
