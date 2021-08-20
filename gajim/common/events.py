@@ -186,16 +186,6 @@ class GcInvitationEvent(Event):
         for key, value in vars(event).items():
             setattr(self, key, value)
 
-    def get_inviter_name(self):
-        if self.from_.bare_match(self.muc):
-            return self.from_.resource
-
-        contact = app.contacts.get_first_contact_from_jid(
-            self.account, self.from_.bare)
-        if contact is None:
-            return str(self.from_)
-        return contact.get_shown_name()
-
 
 class FileRequestEvent(Event):
 
