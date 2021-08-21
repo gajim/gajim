@@ -1120,14 +1120,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self.save_message(text, 'received')
 
             # Send chat marker if we’re actively following the chat
-            # if self.parent_win and self.contact.settings.get('send_marker'):
-            #     if (self.parent_win.get_active_control() == self and
-            #             self.parent_win.is_active() and
-            #             self.has_focus() and end):
-            #         self._client.get_module('ChatMarkers').send_displayed_marker(
-            #             self.contact,
-            #             self.last_msg_id,
-            #             self._type)
+            if app.window.is_chat_active(self.account, self.contact.jid):
+                if not self._scrolled_view.get_autoscroll():
+                    return
+                self._client.get_module('ChatMarkers').send_displayed_marker(
+                    self.contact,
+                    self.last_msg_id,
+                    self._type)
 
     def toggle_emoticons(self):
         """
