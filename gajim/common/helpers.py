@@ -677,6 +677,35 @@ def get_os_info():
             info = platform.system()
     return info
 
+
+def message_needs_highlight(text, nickname, own_jid):
+    """
+    Check text to see whether any of the words in (muc_highlight_words and
+    nick) appear
+    """
+    special_words = app.settings.get('muc_highlight_words').split(';')
+    special_words.append(nickname)
+    special_words.append(own_jid)
+    # Strip empties: ''.split(';') == [''] and would highlight everything.
+    # Also lowercase everything for case insensitive compare.
+    special_words = [word.lower() for word in special_words if word]
+    text = text.lower()
+
+    for special_word in special_words:
+        found_here = text.find(special_word)
+        while found_here > -1:
+            end_here = found_here + len(special_word)
+            if ((found_here == 0 or not text[found_here - 1].isalpha()) and
+                    (end_here == len(text) or not text[end_here].isalpha())):
+                # It is beginning of text or char before is not alpha AND
+                # it is end of text or char after is not alpha
+                return True
+            # continue searching
+            start = found_here + 1
+            found_here = text.find(special_word, start)
+    return False
+
+
 def allow_showing_notification(account):
     if not app.settings.get('show_notifications'):
         return False

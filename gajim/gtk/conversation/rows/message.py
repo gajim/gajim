@@ -24,6 +24,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import TRUST_SYMBOL_DATA
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_muc_context
+from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
 from gajim.common.styling import process
@@ -156,10 +157,11 @@ class MessageRow(BaseRow):
         self.show_all()
 
     def _check_for_highlight(self, content):
-        highlight_words = app.settings.get('muc_highlight_words').split(';')
-        highlight_words.append(app.nicks[self._account])
-        highlight_words = [word.lower() for word in highlight_words if word]
-        if any(match in content.text.lower() for match in highlight_words):
+        needs_highlight = message_needs_highlight(
+            content.text,
+            self._contact.nickname,
+            self._client.get_own_jid().bare)
+        if needs_highlight:
             self.get_style_context().add_class(
                 'conversation-mention-highlight')
 

@@ -746,7 +746,10 @@ class GroupchatControl(BaseControl):
                              message_id=event.properties.id,
                              stanza_id=stanza_id,
                              additional_data=event.additional_data)
-        event.needs_highlight = self.needs_visual_notification(event.msgtxt)
+        event.needs_highlight = helpers.message_needs_highlight(
+            event.msgtxt,
+            self.contact.nickname,
+            self._client.get_own_jid().bare)
 
     def add_message(self,
                     text,
@@ -765,56 +768,23 @@ class GroupchatControl(BaseControl):
             # muc-specific chatstate
 
         if kind == 'incoming':
-            # highlighting and sounds
-            highlight, _sound = self.highlighting_for_message(text, tim)
-            # other_tags_for_name.append('muc_nickname_color_%s' % contact)
-            # if highlight:
-            #     other_tags_for_name.append('bold')
-            #     other_tags_for_text.append('marked')
+            highlight = helpers.message_needs_highlight(
+                text, self.contact.nickname, self._client.get_own_jid().bare)
 
             self._nick_completion.record_message(contact, highlight)
 
             # self.check_focus_out_line()
 
         BaseControl.add_message(self,
-                                    text,
-                                    kind,
-                                    contact,
-                                    tim,
-                                    displaymarking=displaymarking,
-                                    correct_id=correct_id,
-                                    message_id=message_id,
-                                    stanza_id=stanza_id,
-                                    additional_data=additional_data)
-
-    def highlighting_for_message(self, text, tim):
-        """
-        Returns a 2-Tuple. The first says whether or not to highlight the text,
-        the second, what sound to play
-        """
-        highlight, sound = None, None
-
-        notify = self.contact.can_notify()
-        sound_enabled = app.settings.get_soundevent_settings(
-            'muc_message_received')['enabled']
-
-        # Are any of the defined highlighting words in the text?
-        if self.needs_visual_notification(text):
-            highlight = True
-            sound_settings = app.settings.get_soundevent_settings(
-                'muc_message_highlight')
-            if sound_settings['enabled']:
-                sound = 'highlight'
-
-        # Do we play a sound on every muc message?
-        elif notify and sound_enabled:
-            sound = 'received'
-
-        # Is it a history message? Don't want sound-floods when we join.
-        if tim is not None and time.mktime(time.localtime()) - tim > 1:
-            sound = None
-
-        return highlight, sound
+                                text,
+                                kind,
+                                contact,
+                                tim,
+                                displaymarking=displaymarking,
+                                correct_id=correct_id,
+                                message_id=message_id,
+                                stanza_id=stanza_id,
+                                additional_data=additional_data)
 
     def check_focus_out_line(self):
         """
@@ -827,33 +797,6 @@ class GroupchatControl(BaseControl):
             return
 
         # self.conv_textview.show_focus_out_line()
-
-    def needs_visual_notification(self, text):
-        """
-        Check text to see whether any of the words in (muc_highlight_words and
-        nick) appear
-        """
-        special_words = app.settings.get('muc_highlight_words').split(';')
-        special_words.append(self.contact.nickname)
-        special_words.append(self._client.get_own_jid().bare)
-        # Strip empties: ''.split(';') == [''] and would highlight everything.
-        # Also lowercase everything for case insensitive compare.
-        special_words = [word.lower() for word in special_words if word]
-        text = text.lower()
-
-        for special_word in special_words:
-            found_here = text.find(special_word)
-            while found_here > -1:
-                end_here = found_here + len(special_word)
-                if (found_here == 0 or not text[found_here - 1].isalpha()) and \
-                (end_here == len(text) or not text[end_here].isalpha()):
-                    # It is beginning of text or char before is not alpha AND
-                    # it is end of text or char after is not alpha
-                    return True
-                # continue searching
-                start = found_here + 1
-                found_here = text.find(special_word, start)
-        return False
 
     def _on_room_subject(self, _contact, _signal_name, properties):
         if self.subject == properties.subject:
