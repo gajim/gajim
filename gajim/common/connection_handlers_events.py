@@ -130,7 +130,31 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
         self.file_props.transfered_size = []
         return True
 
+
 class NotificationEvent(nec.NetworkIncomingEvent):
+
+    name = 'notification'
+
+    def init(self):
+        self.account = None
+        self.contact = None
+
+        self.notif_type = 'msg'
+
+        self.popup_enabled = False
+        self.popup_event_type = ''
+        self.popup_msg_type = ''
+        self.popup_title = ''
+        self.popup_text = ''
+        self.icon_name = None
+
+        self.sound_file = ''  # Used by Triggers plugin only
+        self.sound_event = ''
+
+        self.command = ''  # Used by Triggers plugin only
+
+
+class NotificationEventOld(nec.NetworkIncomingEvent):
     name = 'notification'
     base_network_events = ['gc-message-received',
                            'presence-received']

@@ -96,25 +96,30 @@ class Notification(EventHelper):
                                   None,
                                   on_proxy_ready)
 
-    def _nec_notification(self, obj):
-        if obj.do_popup:
-            icon_name = self._get_icon_name(obj)
-            self.popup(obj.popup_event_type, str(obj.jid), obj.conn.name,
-                       obj.popup_msg_type, icon_name=icon_name,
-                       title=obj.popup_title, text=obj.popup_text,
-                       timeout=obj.popup_timeout)
+    def _nec_notification(self, event):
+        if event.popup_enabled and app.settings.get('show_notifications'):
+            icon_name = self._get_icon_name(event)
+            self.popup(
+                event.popup_event_type,
+                str(event.jid),
+                event.account,
+                event.popup_msg_type,
+                icon_name=icon_name,
+                title=event.popup_title,
+                text=event.popup_text)
 
-        if obj.do_sound:
-            if obj.sound_file:
-                helpers.play_sound_file(obj.sound_file)
-            elif obj.sound_event:
-                helpers.play_sound(obj.sound_event)
-
-        if obj.do_command:
+        if event.command:
+            # Used by Triggers plugin
             try:
-                helpers.exec_command(obj.command, use_shell=True)
+                helpers.exec_command(event.command, use_shell=True)
             except Exception:
                 pass
+
+        if event.sound_file:
+            # Allow override here, used by Triggers plugin
+            helpers.play_sound_file(event.sound_file)
+        elif event.sound_event:
+            helpers.play_sound(event.sound_event, event.account)
 
     def _on_notification(self, event):
         self.popup(event.type_,
@@ -137,15 +142,14 @@ class Notification(EventHelper):
             self._withdraw('connection-failed', event.account)
 
     @staticmethod
-    def _get_icon_name(obj):
-        if obj.notif_type == 'msg':
-            if obj.base_event.properties.is_muc_pm:
-                return 'gajim-priv_msg_recv'
+    def _get_icon_name(event):
+        if event.notif_type == 'msg':
+            return 'gajim-chat_msg_recv'
 
-        elif obj.notif_type == 'pres':
-            if obj.transport_name is not None:
-                return '%s-%s' % (obj.transport_name, obj.show)
-            return get_icon_name(obj.show)
+        if event.notif_type == 'pres':
+            if event.transport_name is not None:
+                return '%s-%s' % (event.transport_name, event.show)
+            return get_icon_name(event.show)
         return None
 
     def popup(self, event_type, jid, account, type_='', icon_name=None,

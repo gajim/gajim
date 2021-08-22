@@ -131,7 +131,7 @@ class ManageSounds(Gtk.ApplicationWindow):
     def _on_play(self, *args):
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
         snd_event_config_name = model[iter_][3]
-        play_sound(snd_event_config_name)
+        play_sound(snd_event_config_name, None, force=True)
 
     def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:

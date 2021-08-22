@@ -610,7 +610,7 @@ class Interface:
         if enabled:
             if isinstance(event.jid, list) and len(event.jid) > 1:
                 return
-            helpers.play_sound('message_sent')
+            helpers.play_sound('message_sent', event.account)
 
     @staticmethod
     def handle_event_msgnotsent(event):

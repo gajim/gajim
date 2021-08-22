@@ -455,10 +455,11 @@ def get_contact_dict_for_account(account):
     return contacts_dict
 
 
-def play_sound(event):
-    if not app.settings.get('sounds_on'):
-        return
-    play_sound_file(app.settings.get_soundevent_settings(event)['path'])
+def play_sound(sound_event, account, force=False):
+    if force or allow_sound_notification(account, sound_event):
+        play_sound_file(
+            app.settings.get_soundevent_settings(sound_event)['path'])
+
 
 def check_soundfile_path(file_, dirs=None):
     """
@@ -715,23 +716,29 @@ def allow_showing_notification(account):
         return True
     return False
 
+
 def allow_popup_window(account):
     """
     Is it allowed to popup windows?
     """
     autopopup = app.settings.get('autopopup')
     autopopupaway = app.settings.get('autopopupaway')
-    if autopopup and (autopopupaway or \
-    app.connections[account].status in ('online', 'chat')):
+    client = app.get_client(account)
+    if autopopup and (autopopupaway or client.status == 'online'):
         return True
     return False
 
+
 def allow_sound_notification(account, sound_event):
-    if (app.settings.get('sounddnd') or
-            app.connections[account].status != 'dnd' and
-            app.settings.get_soundevent_settings(sound_event)['enabled']):
+    if not app.settings.get('sounds_on'):
+        return False
+    client = app.get_client(account)
+    if client.status != 'online' and not app.settings.get('sounddnd'):
+        return False
+    if app.settings.get_soundevent_settings(sound_event)['enabled']:
         return True
     return False
+
 
 def get_current_show(account):
     if account not in app.connections:
