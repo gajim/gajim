@@ -1021,7 +1021,8 @@ class LoginDialog(SettingsDialog):
                     bind='account::savepass'),
 
             Setting(SettingKind.SWITCH, _('Save Password'),
-                    SettingType.ACCOUNT_CONFIG, 'savepass'),
+                    SettingType.ACCOUNT_CONFIG, 'savepass',
+                    enabled_func=lambda: not app.settings.get('use_keyring') or passwords.KEYRING_AVAILABLE),
 
             Setting(SettingKind.CHANGEPASSWORD, _('Change Password'),
                     SettingType.DIALOG, callback=self.on_password_change,
