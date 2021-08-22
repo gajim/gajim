@@ -37,8 +37,7 @@ for backend in backends:
 keyring_backend = keyring.get_keyring()
 log.info('Select %s backend', keyring_backend)
 
-KEYRING_AVAILABLE = any(keyring.core.recommended(backend)
-                        for backend in backends)
+KEYRING_AVAILABLE = keyring.core.recommended(keyring_backend)
 
 
 class SecretPasswordStorage:

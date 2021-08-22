@@ -157,9 +157,8 @@ class Features(Gtk.ApplicationWindow):
 
     @staticmethod
     def _some_keyring_available():
-        import keyring
-        backends = keyring.backend.get_all_keyring()
-        return any(keyring.core.recommended(backend) for backend in backends)
+        from gajim.common import passwords
+        return passwords.KEYRING_AVAILABLE
 
     @staticmethod
     def _idle_available():
