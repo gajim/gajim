@@ -37,6 +37,7 @@ from gi.repository import GLib
 from gi.repository import Gio
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
@@ -58,6 +59,7 @@ from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.util import get_builder
+from gajim.gui.util import get_show_in_systray
 from gajim.gui.util import AccountBadge
 from gajim.gui.const import ControlType  # pylint: disable=unused-import
 from gajim.gui.emoji_chooser import emoji_chooser
@@ -1123,10 +1125,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             # Issue notification
             self._notify(name, text, tim)
 
+            # Add message event
+            self._add_message_event(text, msg_log_id, message_id, stanza_id)
+
             # Send chat marker if we’re actively following the chat
-            if app.window.is_chat_active(self.account, self.contact.jid):
-                if not self._scrolled_view.get_autoscroll():
-                    return
+            chat_active = app.window.is_chat_active(
+                self.account, self.contact.jid)
+            if chat_active and self._scrolled_view.get_autoscroll():
                 self._client.get_module('ChatMarkers').send_displayed_marker(
                     self.contact,
                     self.last_msg_id,
@@ -1192,6 +1197,37 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             popup_enabled=popup_enabled,
             sound_event=sound_event)
         app.nec.push_incoming_event(event)
+
+    def _add_message_event(self, text, msg_log_id, message_id, stanza_id):
+        if app.window.is_chat_active(self.account, self.contact.jid):
+            if self._scrolled_view.get_autoscroll():
+                return
+
+        if self.is_groupchat:
+            needs_highlight = helpers.message_needs_highlight(
+                text, self.contact.nickname, self._client.get_own_jid().bare)
+            if needs_highlight:
+                event_type = events.PrintedMarkedGcMsgEvent
+            else:
+                event_type = events.PrintedGcMsgEvent
+            event = 'gc_message_received'
+        else:
+            if self.is_chat:
+                event_type = events.PrintedChatEvent
+            else:
+                event_type = events.PrintedPmEvent
+            event = 'message_received'
+        show_in_systray = get_show_in_systray(
+            event_type.type_, self.account, self.contact.jid)
+
+        event = event_type(text,
+                           '',
+                           self,
+                           msg_log_id,
+                           message_id=message_id,
+                           stanza_id=stanza_id,
+                           show_in_systray=show_in_systray)
+        app.events.add_event(self.account, str(self.contact.jid), event)
 
     def toggle_emoticons(self):
         """
