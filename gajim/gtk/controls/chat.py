@@ -878,7 +878,7 @@ class ChatControl(BaseControl):
 
             label_text = f'<span>{name}</span>' \
                          f'<span size="x-small" weight="light">' \
-                         f'{chatstate}</span>'
+                         f' {chatstate}</span>'
             label_tooltip = f'{name} {chatstate}'
         else:
             label_text = f'<span>{name}</span>'
