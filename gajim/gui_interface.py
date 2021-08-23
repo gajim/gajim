@@ -317,13 +317,7 @@ class Interface:
                 return
             app.window.show_account_page(account)
             app.events.remove_events(account, jid, event)
-        elif type_ == 'subscription_request':
-            event = app.events.get_first_event(account, jid, type_)
-            if event is None:
-                return
-            app.window.show_account_page(account)
-            app.events.remove_events(account, jid, event)
-        elif type_ == 'unsubscribed':
+        elif type_ in ('subscription-request', 'unsubscribed'):
             app.window.show_account_page(account)
 
         app.window.present()

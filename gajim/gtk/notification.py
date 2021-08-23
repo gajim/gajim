@@ -190,7 +190,7 @@ class Notification(EventHelper):
                 _('Contact Changed Status'), _('File Transfer Request'),
                 _('File Transfer Error'), _('File Transfer Completed'),
                 _('File Transfer Stopped'), _('Group Chat Invitation'),
-                _('Connection Failed'), _('Subscription request'),
+                _('Connection Failed'), _('Subscription Request'),
                 _('Contact Unsubscribed'), _('Incoming Call')):
             if 'actions' in self._daemon_capabilities:
                 # Create Variant Dict

@@ -104,7 +104,6 @@ class NotificationManager(Gtk.ListBox):
 
     def _on_subscription_block(self, _action, param):
         jid = param.get_string()
-        app.events.remove_events(self._account, jid)
         self._deny_request(jid)
         self._client.get_module('Blocking').block([jid])
         row = self._get_notification_row(jid)
@@ -112,7 +111,6 @@ class NotificationManager(Gtk.ListBox):
 
     def _on_subscription_report(self, _action, param):
         jid = param.get_string()
-        app.events.remove_events(self._account, jid)
         self._deny_request(jid)
         self._client.get_module('Blocking').block([jid], report='spam')
         row = self._get_notification_row(jid)
@@ -138,6 +136,21 @@ class NotificationManager(Gtk.ListBox):
         if row is None:
             self.add(SubscriptionRequestRow(
                 self._account, event.jid, event.status, event.user_nick))
+
+            if allow_showing_notification(self._account):
+                event_type = _('Subscription Request')
+                contact = self._client.get_module('Contacts').get_contact(
+                    event.jid)
+                text = _('%s asks you to share your status') % contact.name
+                app.notification.popup(
+                    event_type,
+                    event.jid,
+                    self._account,
+                    'subscription-request',
+                    'gajim-subscription_request',
+                    event_type,
+                    text)
+
         elif row.type == 'unsubscribed':
             self.remove(row)
 
