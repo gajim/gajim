@@ -324,11 +324,7 @@ class Interface:
             app.window.show_account_page(account)
             app.events.remove_events(account, jid, event)
         elif type_ == 'unsubscribed':
-            event = app.events.get_first_event(account, jid, type_)
-            if event is None:
-                return
             app.window.show_account_page(account)
-            app.events.remove_events(account, jid, event)
 
         app.window.present()
 

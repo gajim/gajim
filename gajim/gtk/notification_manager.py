@@ -20,6 +20,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.helpers import allow_showing_notification
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_muc_context
 
@@ -144,6 +145,20 @@ class NotificationManager(Gtk.ListBox):
         row = self._get_notification_row(event.jid)
         if row is None:
             self.add(UnsubscribedRow(self._account, event.jid))
+
+            if allow_showing_notification(self._account):
+                event_type = _('Contact Unsubscribed')
+                contact = self._client.get_module('Contacts').get_contact(
+                    event.jid)
+                text = _('%s stopped sharing their status') % contact.name
+                app.notification.popup(
+                    event_type,
+                    event.jid,
+                    self._account,
+                    'unsubscribed',
+                    'gajim-unsubscribed',
+                    event_type,
+                    text)
         elif row.type == 'subscribe':
             self.remove(row)
 

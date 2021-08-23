@@ -191,7 +191,7 @@ class Notification(EventHelper):
                 _('File Transfer Error'), _('File Transfer Completed'),
                 _('File Transfer Stopped'), _('Group Chat Invitation'),
                 _('Connection Failed'), _('Subscription request'),
-                _('Unsubscribed'), _('Incoming Call')):
+                _('Contact Unsubscribed'), _('Incoming Call')):
             if 'actions' in self._daemon_capabilities:
                 # Create Variant Dict
                 dict_ = {'account': GLib.Variant('s', account),

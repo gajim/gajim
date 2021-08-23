@@ -29,7 +29,7 @@ class Event:
         type_ in chat, normal, file-request, file-error, file-completed,
         file-request-error, file-send-error, file-stopped, gc_msg, pm,
         printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm,
-        gc-invitation, subscription_request, unsubscribedm jingle-incoming
+        gc-invitation, subscription_request, jingle-incoming
 
         parameters is (per type_):
             chat, normal, pm: [message, subject, kind, time, encrypted,
@@ -41,7 +41,6 @@ class Event:
                     messages that are already printed in chat, but not read
             gc-invitation: [room_jid, reason, password, jid_from]
             subscription_request: [text, nick]
-            unsubscribed: contact
             jingle-incoming: (fulljid, sessionid, content_types)
         """
         if time_:
@@ -156,22 +155,6 @@ class SubscriptionRequestEvent(Event):
                        show_in_systray=show_in_systray)
         self.text = text
         self.nick = nick
-
-
-class UnsubscribedEvent(Event):
-
-    type_ = 'unsubscribed'
-
-    def __init__(self,
-                 contact,
-                 time_=None,
-                 show_in_roster=False,
-                 show_in_systray=True):
-        Event.__init__(self,
-                       time_,
-                       show_in_roster=show_in_roster,
-                       show_in_systray=show_in_systray)
-        self.contact = contact
 
 
 class GcInvitationEvent(Event):
