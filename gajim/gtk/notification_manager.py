@@ -180,6 +180,26 @@ class NotificationManager(Gtk.ListBox):
         if row is None:
             self.add(InvitationReceivedRow(self._account, event))
 
+            if allow_showing_notification(self._account):
+                if get_muc_context(event.muc) == 'public':
+                    jid = event.from_
+                else:
+                    jid = event.from_.bare
+                contact = self._client.get_module('Contacts').get_contact(jid)
+                event_type = _('Group Chat Invitation')
+                text = _('%(contact)s invited you to %(chat)s') % {
+                    'contact': contact.name,
+                    'chat': event.info.muc_name}
+                app.notification.popup(
+                    event_type,
+                    str(jid),
+                    self._account,
+                    'gc-invitation',
+                    'gajim-gc_invitation',
+                    event_type,
+                    text,
+                    room_jid=event.muc)
+
     def add_invitation_declined(self, event):
         row = self._get_notification_row(event.muc)
         if row is None:

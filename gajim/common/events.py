@@ -29,7 +29,7 @@ class Event:
         type_ in chat, normal, file-request, file-error, file-completed,
         file-request-error, file-send-error, file-stopped, gc_msg, pm,
         printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm,
-        gc-invitation, jingle-incoming
+        jingle-incoming
 
         parameters is (per type_):
             chat, normal, pm: [message, subject, kind, time, encrypted,
@@ -39,7 +39,6 @@ class Event:
             printed_chat: [message, subject, control, msg_log_id]
             printed_*: None
                     messages that are already printed in chat, but not read
-            gc-invitation: [room_jid, reason, password, jid_from]
             jingle-incoming: (fulljid, sessionid, content_types)
         """
         if time_:
@@ -136,19 +135,6 @@ class PrintedMarkedGcMsgEvent(PrintedChatEvent):
 class PrintedPmEvent(PrintedChatEvent):
 
     type_ = 'printed_pm'
-
-
-class GcInvitationEvent(Event):
-
-    type_ = 'gc-invitation'
-
-    def __init__(self, event):
-        Event.__init__(self,
-                       None,
-                       show_in_roster=False,
-                       show_in_systray=True)
-        for key, value in vars(event).items():
-            setattr(self, key, value)
 
 
 class FileRequestEvent(Event):

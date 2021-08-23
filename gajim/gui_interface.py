@@ -220,7 +220,6 @@ class Interface:
             # 'roster-info': [self.handle_event_roster_info],
             'metacontacts-received': [self.handle_event_metacontacts],
             'roster-item-exchange-received': [self.handle_event_roster_item_exchange],
-            'muc-invitation': [self.handle_event_gc_invitation],
             'file-send-error': [self.handle_event_file_send_error],
             'file-request-error': [self.handle_event_file_request_error],
             'file-request-received': [self.handle_event_file_request],
@@ -274,10 +273,6 @@ class Interface:
         # if not has_queue:  # We didn't have a queue: we change icons
         #     if app.contacts.get_contact_with_highest_priority(account, jid):
         #         self.roster.draw_contact(jid, account)
-        #     else:
-        #         groupchat = event.type_ == 'gc-invitation'
-        #         self.roster.add_to_not_in_the_roster(
-        #             account, jid, groupchat=groupchat)
 
     def handle_event(self, account, jid, type_):
         jid = JID.from_string(jid)
@@ -311,13 +306,9 @@ class Interface:
             app.window.select_chat(account, jid.bare)
         elif type_ in file_event_types:
             self._handle_event_jingle_file(account, jid, type_)
-        elif type_ == 'gc-invitation':
-            event = app.events.get_first_event(account, jid, type_)
-            if event is None:
-                return
-            app.window.show_account_page(account)
-            app.events.remove_events(account, jid, event)
-        elif type_ in ('subscription-request', 'unsubscribed'):
+        elif type_ in ('subscription-request',
+                       'unsubscribed',
+                       'gc-invitation'):
             app.window.show_account_page(account)
 
         app.window.present()
@@ -723,32 +714,6 @@ class Interface:
                                  event.action,
                                  event.exchange_items_list,
                                  event.fjid)
-
-    def handle_event_gc_invitation(self, event):
-        event = events.GcInvitationEvent(event)
-
-        client = app.get_client(event.account)
-        if get_muc_context(event.muc) == 'public':
-            jid = event.from_
-        else:
-            jid = event.from_.bare
-
-        self.add_event(event.account, jid, event)
-
-        if helpers.allow_showing_notification(event.account):
-            contact = client.get_module('Contacts').get_contact(jid)
-            event_type = _('Group Chat Invitation')
-            text = _('%(contact)s invited you to %(chat)s') % {
-                'contact': contact.name,
-                'chat': event.info.muc_name}
-            app.notification.popup(event_type,
-                                   str(jid),
-                                   event.account,
-                                   'gc-invitation',
-                                   'gajim-gc_invitation',
-                                   event_type,
-                                   text,
-                                   room_jid=event.muc)
 
     # Jingle File Transfer
     def handle_event_file_send_error(self, event):

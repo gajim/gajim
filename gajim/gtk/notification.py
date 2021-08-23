@@ -130,8 +130,6 @@ class Notification(EventHelper):
 
     def _on_event_removed(self, event_list):
         for event in event_list:
-            if event.type_ == 'gc-invitation':
-                self._withdraw('gc-invitation', event.account, event.muc)
             if event.type_ in ('normal', 'printed_chat', 'chat',
                                'printed_pm', 'pm', 'printed_marked_gc_msg',
                                'printed_gc_msg', 'jingle-incoming'):
@@ -215,8 +213,6 @@ class Notification(EventHelper):
             # Only one notification per JID
             if event_type == _('Contact Changed Status'):
                 notif_id = self._make_id('contact-status-changed', account, jid)
-            elif event_type == _('Group Chat Invitation'):
-                notif_id = self._make_id('gc-invitation', account, room_jid)
             elif event_type == _('Connection Failed'):
                 notif_id = self._make_id('connection-failed', account)
             elif event_type in (_('New Message'),
