@@ -164,13 +164,6 @@ class PreferenceBox(SettingsBox):
 
 class WindowBehaviour(PreferenceBox):
     def __init__(self, *args):
-        win_layout_items = {
-            'never': _('Detached contact list with detached chats'),
-            'always': _('Detached contact list with single chat'),
-            'always_with_roster': _('Single window for everything'),
-            'peracct': _('Detached contact list with chats grouped by account'),
-            'pertype': _('Detached contact list with chats grouped by type'),
-        }
 
         roster_on_startup_items = {
             'always': _('Always'),
@@ -178,21 +171,7 @@ class WindowBehaviour(PreferenceBox):
             'last_state': _('Restore last state'),
         }
 
-        tab_position_items = {
-            'top': _('Top'),
-            'bottom': _('Bottom'),
-            'left': _('Left'),
-            'Right': _('Right'),
-        }
-
         settings = [
-            Setting(SettingKind.POPOVER,
-                    _('Window Layout'),
-                    SettingType.CONFIG,
-                    'one_message_window',
-                    props={'entries': win_layout_items},
-                    callback=self._on_win_layout_changed),
-
             Setting(SettingKind.POPOVER,
                     _('Contact List on Startup'),
                     SettingType.CONFIG,
@@ -205,21 +184,9 @@ class WindowBehaviour(PreferenceBox):
                     SettingType.CONFIG,
                     'quit_on_roster_x_button',
                     desc=_('Quit when closing contact list')),
-
-            Setting(SettingKind.POPOVER,
-                    _('Tab Position'),
-                    SettingType.CONFIG,
-                    'tabs_position',
-                    props={'entries': tab_position_items},
-                    desc=_('Placement of chat window tabs'),
-                    callback=self._on_win_layout_changed),
         ]
 
         PreferenceBox.__init__(self, settings)
-
-    @staticmethod
-    def _on_win_layout_changed(*args):
-        app.interface.msg_win_mgr.reconfig()
 
 
 class ContactList(PreferenceBox):
