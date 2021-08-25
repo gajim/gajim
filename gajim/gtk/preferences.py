@@ -29,12 +29,9 @@ from gajim.common.multimedia_helpers import AudioInputManager
 from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
 
-from gajim.gui.controls.base import BaseControl
-
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
-from .const import ControlType
 from .emoji_chooser import emoji_chooser
 from .settings import SettingsBox
 from .settings import SettingsDialog
@@ -142,23 +139,6 @@ class Preferences(Gtk.ApplicationWindow):
 
     def update_proxy_list(self):
         self._prefs['miscellaneous'].update_proxy_list()
-
-    @staticmethod
-    def get_all_controls():
-        for ctrl in app.interface.msg_win_mgr.get_controls():
-            yield ctrl
-        for account in app.connections:
-            for ctrl in app.interface.minimized_controls[account].values():
-                yield ctrl
-
-    @staticmethod
-    def get_all_muc_controls():
-        for ctrl in app.interface.msg_win_mgr.get_controls(
-                ControlType.GROUPCHAT):
-            yield ctrl
-        for account in app.connections:
-            for ctrl in app.interface.minimized_controls[account].values():
-                yield ctrl
 
     @staticmethod
     def _check_emoji_theme():
@@ -309,9 +289,10 @@ class ContactList(PreferenceBox):
     @staticmethod
     def _on_show_status_in_roster(*args):
         app.interface.roster.setup_and_draw_roster()
-        controls = get_app_window('Preferences').get_all_muc_controls()
-        for ctrl in controls:
-            ctrl.roster.draw_contacts()
+
+        for ctrl in app.window.get_controls():
+            if ctrl.is_groupchat:
+                ctrl.roster.draw_contacts()
 
     @staticmethod
     def _on_sort_by_show_in_roster(*args):
@@ -395,9 +376,8 @@ class Chats(PreferenceBox):
         if gspell_lang is None:
             gspell_lang = Gspell.language_get_default()
         app.settings.set('speller_language', gspell_lang.get_code())
-        for ctrl in get_app_window('Preferences').get_all_controls():
-            if isinstance(ctrl, BaseControl):
-                ctrl.set_speller()
+        for ctrl in app.window.get_controls():
+            ctrl.set_speller()
 
 
 class GroupChats(PreferenceBox):
@@ -457,8 +437,9 @@ class GroupChats(PreferenceBox):
 
     @staticmethod
     def _on_sort_by_show_in_muc(*args):
-        for ctrl in get_app_window('Preferences').get_all_muc_controls():
-            ctrl.roster.invalidate_sort()
+        for ctrl in app.window.get_controls():
+            if ctrl.is_groupchat:
+                ctrl.roster.invalidate_sort()
 
     @staticmethod
     def _reset_join_left(button):
@@ -822,8 +803,7 @@ class Emoji(PreferenceBox):
 
     @staticmethod
     def _toggle_emoticons():
-        controls = get_app_window('Preferences').get_all_controls()
-        for ctrl in controls:
+        for ctrl in app.window.get_controls():
             ctrl.toggle_emoticons()
 
 

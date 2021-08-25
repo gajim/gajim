@@ -799,7 +799,7 @@ class PrivacyPage(GenericSettingPage):
         app.settings.set_contact_settings('send_marker', None)
         app.settings.set_group_chat_settings(
             'send_marker', None, context='private')
-        for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
+        for ctrl in app.window.get_controls(account=self._account):
             ctrl.update_actions()
 
 
