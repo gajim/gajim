@@ -316,8 +316,8 @@ class StandardGroupChatCommands(CommandContainer):
 
     @command(raw=True, empty=True)
     @doc(_("Invite a user to a group chat for a reason"))
-    def invite(self, jid, reason):
-        control = app.get_groupchat_control(self.account, self.room_jid)
+    def invite(self, jid, _reason):
+        control = app.window.get_control(self.account, self.room_jid)
         if control is not None:
             control.invite(jid)
 

@@ -607,22 +607,18 @@ class Interface:
     @staticmethod
     def handle_event_read_state_sync(event):
         if event.type.is_groupchat:
-            control = app.get_groupchat_control(
-                event.account, event.jid.bare)
-            if control is None:
-                log.warning('Groupchat control not found')
-                return
-
             jid = event.jid.bare
             types = ['group-chat-message']
 
         else:
-            types = ['chat-message', 'private-chat-message']
             jid = event.jid
+            types = ['chat-message', 'private-chat-message']
 
-            control = app.window.get_control(event.account, jid)
+        control = app.window.get_control(event.account, jid)
+        if control is None:
+            log.warning('No ChatControl found')
+            return
 
-        # Compare with control.last_msg_id.
         events_ = app.events.get_events(event.account, jid, types)
         if not events_:
             log.warning('No Events')
@@ -636,10 +632,7 @@ class Interface:
         if id_ != event.marker_id:
             return
 
-        if not app.events.remove_events(event.account, jid, types=types):
-            # There were events to remove
-            if control is not None:
-                control.redraw_after_event_removed(event.jid)
+        app.events.remove_events(event.account, jid, types=types)
 
     def handle_event_roster_info(self, obj):
         #('ROSTER_INFO', account, (jid, name, sub, ask, groups))

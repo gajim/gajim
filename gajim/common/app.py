@@ -681,15 +681,6 @@ def get_stored_bob_data(algo_hash: str) -> Optional[bytes]:
             return data
     return None
 
-def get_groupchat_control(account, jid):
-    control = app.interface.msg_win_mgr.get_gc_control(jid, account)
-    if control is not None:
-        return control
-    try:
-        return app.interface.minimized_controls[account][jid]
-    except Exception:
-        return None
-
 
 def register_task(self, task):
     _tasks[id(self)].append(task)
