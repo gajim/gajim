@@ -37,10 +37,12 @@ from gi.repository import GLib
 from gi.repository import Gio
 
 from gajim.common import app
-from gajim.common import events
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
+from gajim.common.events import ChatMsgEvent
+from gajim.common.events import GroupChatMsgEvent
+from gajim.common.events import PrivateChatMsgEvent
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
@@ -1204,18 +1206,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 return
 
         if self.is_groupchat:
-            needs_highlight = helpers.message_needs_highlight(
-                text, self.contact.nickname, self._client.get_own_jid().bare)
-            if needs_highlight:
-                event_type = events.PrintedMarkedGcMsgEvent
-            else:
-                event_type = events.PrintedGcMsgEvent
+            event_type = GroupChatMsgEvent
             event = 'gc_message_received'
         else:
             if self.is_chat:
-                event_type = events.PrintedChatEvent
+                event_type = ChatMsgEvent
             else:
-                event_type = events.PrintedPmEvent
+                event_type = PrivateChatMsgEvent
             event = 'message_received'
         show_in_systray = get_show_in_systray(
             event_type.type_, self.account, self.contact.jid)
@@ -1354,9 +1351,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             jid = self.contact.jid
             if self.conversation_view.autoscroll:
                 # we are at the end
-                type_ = [f'printed_{self._type}']
-                if self._type.is_groupchat:
-                    type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
+                type_ = ['chat-message']
+                if self.is_groupchat:
+                    type_ = ['group-chat-message']
+                if self.is_privatechat:
+                    type_ = ['private-chat-message']
                 if not app.events.remove_events(self.account,
                                                 self.contact.jid,
                                                 types=type_):

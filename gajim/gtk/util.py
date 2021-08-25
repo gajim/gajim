@@ -506,23 +506,11 @@ def get_metacontact_surface(icon_name, expanded, scale):
     return state_surface
 
 
-def get_show_in_roster(event, session=None):
-    """
-    Return True if this event must be shown in roster, else False
-    """
-    if event == 'gc_message_received':
-        return True
-    if event == 'message_received':
-        if session and session.control:
-            return False
-    return True
-
-
 def get_show_in_systray(type_, account, jid):
     """
     Return True if this event must be shown in systray, else False
     """
-    if type_ == 'printed_gc_msg':
+    if type_ == 'group-chat-message':
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_group_chat_contact(jid)
         return contact.can_notify()

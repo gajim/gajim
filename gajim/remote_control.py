@@ -822,7 +822,7 @@ class GajimRemote(Server):
 
     def get_unread_msgs_number(self):
         unread = app.events.get_nb_events()
-        for event in app.events.get_all_events(['printed_gc_msg']):
+        for event in app.events.get_all_events(['group-chat-message']):
             contact = app.contacts.get_groupchat_contact(event.account,
                                                          event.jid)
             if contact is None or not contact.can_notify():

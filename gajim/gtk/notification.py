@@ -130,9 +130,10 @@ class Notification(EventHelper):
 
     def _on_event_removed(self, event_list):
         for event in event_list:
-            if event.type_ in ('normal', 'printed_chat', 'chat',
-                               'printed_pm', 'pm', 'printed_marked_gc_msg',
-                               'printed_gc_msg', 'jingle-incoming'):
+            if event.type_ in ('chat-message',
+                               'group-chat-message',
+                               'private-chat-message',
+                               'jingle-incoming'):
                 self._withdraw('new-message', event.account, event.jid)
 
     def _nec_our_status(self, event):

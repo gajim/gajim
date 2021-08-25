@@ -601,11 +601,6 @@ def get_icon_name_to_show(contact, account=None):
     """
     Get the icon name to show in online, away, requested, etc
     """
-    if account and app.events.get_nb_roster_events(account, contact.jid):
-        return 'event'
-    if account and app.events.get_nb_roster_events(account,
-                                                   contact.get_full_jid()):
-        return 'event'
     if account and account in app.interface.minimized_controls and \
     contact.jid in app.interface.minimized_controls[account] and app.interface.\
             minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:

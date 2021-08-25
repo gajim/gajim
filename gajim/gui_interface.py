@@ -262,9 +262,7 @@ class Interface:
             'file-completed': 'ft_finished'
         }
         event_type = event_types.get(event.type_)
-        # show_in_roster = get_show_in_roster(event_type, jid)
         show_in_systray = get_show_in_systray(event_type, account, jid)
-        # event.show_in_roster = show_in_roster
         event.show_in_systray = show_in_systray
         app.events.add_event(account, jid, event)
 
@@ -289,15 +287,10 @@ class Interface:
         if type_ in ('connection-lost', 'connection-failed'):
             app.window.show_account_page(account)
             app.events.remove_events(account, jid, types=type_)
-        elif type_ in (
-                'gc_msg',
-                'printed_gc_msg',
-                'printed_marked_gc_msg',
-                'pm',
-                'printed_pm'):
+        elif type_ in ('group-chat-message', 'private-chat-message'):
             app.window.select_chat(account, jid.bare)
             app.events.remove_events(account, jid, types=type_)
-        elif type_ in ('printed_chat', 'chat', ''):
+        elif type_ in ('chat-message', ''):
             # '' is for log in/out notifications
             app.window.select_chat(account, jid.bare)
             app.last_message_time[account][jid] = 0  # long time ago
@@ -621,10 +614,10 @@ class Interface:
                 return
 
             jid = event.jid.bare
-            types = ['printed_gc_msg', 'printed_marked_gc_msg']
+            types = ['group-chat-message']
 
         else:
-            types = ['chat', 'pm', 'printed_chat', 'printed_pm']
+            types = ['chat-message', 'private-chat-message']
             jid = event.jid
 
             control = app.window.get_control(event.account, jid)

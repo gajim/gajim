@@ -24,7 +24,7 @@ import time
 
 
 class Event:
-    def __init__(self, time_=None, show_in_roster=False, show_in_systray=True):
+    def __init__(self, time_=None, show_in_systray=True):
         """
         type_ in chat, normal, file-request, file-error, file-completed,
         file-request-error, file-send-error, file-stopped, gc_msg, pm,
@@ -32,9 +32,6 @@ class Event:
         jingle-incoming
 
         parameters is (per type_):
-            chat, normal, pm: [message, subject, kind, time, encrypted,
-            resource, msg_log_id]
-                    where kind in error, incoming
             file-*: file_props
             printed_chat: [message, subject, control, msg_log_id]
             printed_*: None
@@ -45,60 +42,15 @@ class Event:
             self.time_ = time_
         else:
             self.time_ = time.time()
-        self.show_in_roster = show_in_roster
         self.show_in_systray = show_in_systray
         # Set when adding the event
         self.jid = None
         self.account = None
 
 
-class ChatEvent(Event):
+class ChatMsgEvent(Event):
 
-    type_ = 'chat'
-
-    def __init__(self,
-                 message,
-                 subject,
-                 kind,
-                 time_,
-                 resource,
-                 msg_log_id,
-                 correct_id=None,
-                 message_id=None,
-                 session=None,
-                 displaymarking=None,
-                 sent_forwarded=False,
-                 show_in_roster=False,
-                 show_in_systray=True,
-                 additional_data=None):
-        Event.__init__(self,
-                       time_,
-                       show_in_roster=show_in_roster,
-                       show_in_systray=show_in_systray)
-        self.message = message
-        self.subject = subject
-        self.kind = kind
-        self.time = time_
-        self.resource = resource
-        self.msg_log_id = msg_log_id
-        self.message_id = message_id
-        self.correct_id = correct_id
-        self.session = session
-        self.displaymarking = displaymarking
-        self.sent_forwarded = sent_forwarded
-        if additional_data is None:
-            from gajim.common.helpers import AdditionalDataDict
-        self.additional_data = AdditionalDataDict()
-
-
-class PmEvent(ChatEvent):
-
-    type_ = 'pm'
-
-
-class PrintedChatEvent(Event):
-
-    type_ = 'printed_chat'
+    type_ = 'chat-message'
 
     def __init__(self,
                  message,
@@ -108,11 +60,9 @@ class PrintedChatEvent(Event):
                  time_=None,
                  message_id=None,
                  stanza_id=None,
-                 show_in_roster=False,
                  show_in_systray=True):
         Event.__init__(self,
                        time_,
-                       show_in_roster=show_in_roster,
                        show_in_systray=show_in_systray)
         self.message = message
         self.subject = subject
@@ -122,19 +72,14 @@ class PrintedChatEvent(Event):
         self.stanza_id = stanza_id
 
 
-class PrintedGcMsgEvent(PrintedChatEvent):
+class GroupChatMsgEvent(ChatMsgEvent):
 
-    type_ = 'printed_gc_msg'
-
-
-class PrintedMarkedGcMsgEvent(PrintedChatEvent):
-
-    type_ = 'printed_marked_gc_msg'
+    type_ = 'group-chat-message'
 
 
-class PrintedPmEvent(PrintedChatEvent):
+class PrivateChatMsgEvent(ChatMsgEvent):
 
-    type_ = 'printed_pm'
+    type_ = 'private-chat-message'
 
 
 class FileRequestEvent(Event):
@@ -144,11 +89,9 @@ class FileRequestEvent(Event):
     def __init__(self,
                  file_props,
                  time_=None,
-                 show_in_roster=False,
                  show_in_systray=True):
         Event.__init__(self,
                        time_,
-                       show_in_roster=show_in_roster,
                        show_in_systray=show_in_systray)
         self.file_props = file_props
 
@@ -192,11 +135,9 @@ class JingleIncomingEvent(Event):
                  sid,
                  content_types,
                  time_=None,
-                 show_in_roster=False,
                  show_in_systray=True):
         Event.__init__(self,
                        time_,
-                       show_in_roster=show_in_roster,
                        show_in_systray=show_in_systray)
         self.peerjid = peerjid
         self.sid = sid
@@ -412,9 +353,8 @@ class Events:
                 for event in self._events[acct][j]:
                     if types and event.type_ not in types:
                         continue
-                    if (not attribute or
-                            attribute == 'systray' and event.show_in_systray or
-                            attribute == 'roster' and event.show_in_roster):
+                    if (not attribute or attribute == 'systray' and
+                            event.show_in_systray):
                         nb += 1
         return nb
 
@@ -461,7 +401,7 @@ class Events:
 
     def get_nb_systray_events(self, types=None):
         """
-        Return the number of events displayed in roster
+        Return the number of events displayed in systray
         """
         if types is None:
             types = []
@@ -477,21 +417,3 @@ class Events:
     def get_first_systray_event(self):
         events = self.get_systray_events()
         return self._get_first_event_with_attribute(events)
-
-    def get_nb_roster_events(self, account=None, jid=None, types=None):
-        """
-        Return the number of events displayed in roster
-        """
-        if types is None:
-            types = []
-        return self._get_nb_events(attribute='roster',
-                                   account=account,
-                                   jid=jid,
-                                   types=types)
-
-    def get_roster_events(self):
-        """
-        Return all events that must be displayed in roster:
-                {account1: {jid1: [ev1, ev2], },. }
-        """
-        return self._get_some_events('roster')
