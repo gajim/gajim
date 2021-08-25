@@ -192,6 +192,8 @@ class WindowBehaviour(PreferenceBox):
 class ContactList(PreferenceBox):
     def __init__(self, *args):
 
+        # TODO: Evaluate settings (and connect them)
+
         settings = [
             Setting(SettingKind.SWITCH,
                     _('Enable Metacontacts'),
@@ -308,13 +310,6 @@ class Chats(PreferenceBox):
                     'show_chatstate_in_banner',
                     desc=_('Show the contact’s chat state (e.g. typing) in '
                            'the chats tab’s banner')),
-
-            Setting(SettingKind.SWITCH,
-                    _('Display Chat State In Contact List'),
-                    SettingType.CONFIG,
-                    'show_chatstate_in_roster',
-                    desc=_('Show the contact’s chat state (e.g. typing) in '
-                           'the contact list')),
         ]
 
         PreferenceBox.__init__(self, settings)
@@ -371,7 +366,7 @@ class GroupChats(PreferenceBox):
                     SettingType.CONFIG,
                     'gc_print_join_left_default',
                     desc=_('Default for new group chats'),
-                    props={'button-text':_('Reset'),
+                    props={'button-text': _('Reset'),
                            'button-tooltip': _('Reset all group chats to the '
                                                'current default value'),
                            'button-style': 'destructive-action',
@@ -382,7 +377,7 @@ class GroupChats(PreferenceBox):
                     SettingType.CONFIG,
                     'gc_print_status_default',
                     desc=_('Default for new group chats'),
-                    props={'button-text':_('Reset'),
+                    props={'button-text': _('Reset'),
                            'button-tooltip': _('Reset all group chats to the '
                                                'current default value'),
                            'button-style': 'destructive-action',
@@ -531,7 +526,7 @@ class NotificationsDialog(SettingsDialog):
                     desc=_('Show notifications even if you are Away, '
                            'Busy, etc.'),
                     bind='show_notifications'),
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('Notifications'),
                                 Gtk.DialogFlags.MODAL, settings, account)
@@ -639,7 +634,7 @@ class AutoAwayDialog(SettingsDialog):
                     SettingType.CONFIG,
                     'autoaway_message',
                     bind='autoaway'),
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('Auto Away Settings'),
                                 Gtk.DialogFlags.MODAL, settings, account)
@@ -667,7 +662,7 @@ class AutoExtendedAwayDialog(SettingsDialog):
                     SettingType.CONFIG,
                     'autoxa_message',
                     bind='autoxa'),
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('Auto Extended Away Settings'),
                                 Gtk.DialogFlags.MODAL, settings, account)
@@ -723,8 +718,6 @@ class Themes(PreferenceBox):
         app.css_config.change_theme(value)
         app.nec.push_incoming_event(NetworkEvent('theme-update'))
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
-        app.interface.roster.repaint_themed_widgets()
-        app.interface.roster.change_roster_style(None)
 
     @staticmethod
     def _on_dark_theme(value, *args):
@@ -766,6 +759,8 @@ class Emoji(PreferenceBox):
 
 class StatusIcon(PreferenceBox):
     def __init__(self, *args):
+
+        # TODO: Remove this section completely?
 
         iconset_items = []
         for _index, iconset_name in enumerate(get_available_iconsets()):
@@ -825,7 +820,7 @@ class StunServerDialog(SettingsDialog):
                     SettingType.CONFIG,
                     'stun_server',
                     bind='use_stun_server')
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('STUN Server Settings'),
                                 Gtk.DialogFlags.MODAL, settings, account)
@@ -943,7 +938,7 @@ class Video(PreferenceBox):
         self.set_sensitive(deps_installed)
 
     @staticmethod
-    def _on_video_input_changed(value, *args):
+    def _on_video_input_changed(_value, *args):
         preview = get_app_window('Preferences').get_video_preview()
         if preview is None or not preview.is_active:
             # changed signal gets triggered when we fill the combobox

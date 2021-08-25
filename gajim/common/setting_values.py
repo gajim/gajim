@@ -137,7 +137,6 @@ APP_SETTINGS = {
     'gc_sync_threshold_public_default': 1,
     'gc_sync_threshold_private_default': 0,
     'show_subject_on_join': True,
-    'show_chatstate_in_roster': True,
     'show_chatstate_in_tabs': True,
     'show_chatstate_in_banner': True,
     'muclumbus_api_jid': 'api@search.jabber.network',
