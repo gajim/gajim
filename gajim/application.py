@@ -389,13 +389,6 @@ class GajimApplication(Gtk.Application):
         from gajim import app_actions
 
         # General Stateful Actions
-
-        act = Gio.SimpleAction.new_stateful(
-            'merge', None,
-            GLib.Variant.new_boolean(app.settings.get('mergeaccounts')))
-        act.connect('change-state', app_actions.on_merge_accounts)
-        self.add_action(act)
-
         actions = [
             ('quit', app_actions.on_quit),
             ('add-account', app_actions.on_add_account),

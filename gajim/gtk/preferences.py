@@ -227,12 +227,6 @@ class ContactList(PreferenceBox):
 
         settings = [
             Setting(SettingKind.SWITCH,
-                    _('Merge Accounts'),
-                    SettingType.CONFIG,
-                    'mergeaccounts',
-                    callback=self._on_merge_accounts),
-
-            Setting(SettingKind.SWITCH,
                     _('Enable Metacontacts'),
                     SettingType.CONFIG,
                     'metacontacts_enabled'),
@@ -277,10 +271,6 @@ class ContactList(PreferenceBox):
         ]
 
         PreferenceBox.__init__(self, settings)
-
-    @staticmethod
-    def _on_merge_accounts(*args):
-        app.app.activate_action('merge')
 
     @staticmethod
     def _on_show_avatar_in_roster_changed(*args):

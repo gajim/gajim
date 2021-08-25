@@ -117,18 +117,6 @@ def on_single_message(_action, param):
     open_window('SingleMessageWindow', account=account)
 
 
-def on_merge_accounts(action, param):
-    action.set_state(param)
-    value = param.get_boolean()
-    app.settings.set('mergeaccounts', value)
-    # Do not merge accounts if only one active
-    if len(app.connections) >= 2:
-        app.interface.roster.regroup = value
-    else:
-        app.interface.roster.regroup = False
-    app.interface.roster.setup_and_draw_roster()
-
-
 def on_add_account(action, _param):
     open_window('AccountWizard')
 

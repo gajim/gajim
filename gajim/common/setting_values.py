@@ -36,7 +36,6 @@ APP_SETTINGS = {
     'use_transports_iconsets': True,
     'collapsed_rows': '',
     'roster_theme': 'default',
-    'mergeaccounts': False,
     'sort_by_show_in_roster': True,
     'sort_by_show_in_muc': False,
     'use_speller': False,
