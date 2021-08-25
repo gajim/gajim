@@ -213,6 +213,8 @@ class ConversationView(Gtk.ListBox):
         self.add(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
+        if message.kind == 'incoming':
+            self.set_read_marker(None)
         GLib.idle_add(message.queue_resize)
 
     def _add_date_row(self, timestamp):

@@ -39,4 +39,5 @@ class ReadMarkerRow(BaseRow):
     def set_timestamp(self, timestamp):
         self.timestamp = timestamp
         self.changed()
+        self.set_no_show_all(False)
         self.show_all()

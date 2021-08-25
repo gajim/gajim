@@ -920,6 +920,24 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def _on_autoscroll_changed(self, _widget, autoscroll):
         self._jump_to_end_button.toggle(not autoscroll)
+        if not autoscroll:
+            return
+
+        # Check for unread messages and sendXEP-0333 Send <displayed> marker
+        type_ = ['chat-message', 'private-chat-message']
+        jid = self.contact.jid
+        if self.is_groupchat:
+            type_ = ['group-chat-message']
+            jid = self.contact.jid.bare
+        if not app.events.remove_events(self.account,
+                                        jid,
+                                        types=type_):
+            # There were events to remove
+            self._client.get_module('ChatMarkers').send_displayed_marker(
+                self.contact,
+                self.last_msg_id,
+                self._type)
+            self.last_msg_id = None
 
     def _on_jump_to_end(self, _button):
         self.scroll_to_end(force=True)
