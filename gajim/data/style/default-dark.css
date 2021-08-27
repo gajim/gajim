@@ -15,6 +15,10 @@
     color: rgb(205, 225, 255);
     background: rgb(40, 60, 80);
 }
+.gajim-call-message {
+    color: rgb(205, 225, 255);
+    background: rgb(40, 60, 80);
+}
 .gajim-url {
     color: rgb(60, 135, 220);
 }

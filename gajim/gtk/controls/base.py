@@ -1097,6 +1097,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def add_file_transfer(self, transfer):
         self.conversation_view.add_file_transfer(transfer)
 
+    def add_call_message(self, timestamp, text, event=None):
+        self.conversation_view.add_call_message(timestamp, text, event)
+
     def add_message(self,
                     text,
                     kind,

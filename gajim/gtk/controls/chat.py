@@ -136,6 +136,7 @@ class ChatControl(BaseControl):
         }
         self._video_widget_other = None
         self._video_widget_self = None
+        self.conversation_view.connect('call-answered', self._on_call_answered)
 
         self.update_toolbar()
         self.update_all_pep_types()
@@ -831,6 +832,44 @@ class ChatControl(BaseControl):
         self._get_audio_content().set_out_volume(value / 100)
         app.settings.set('audio_output_volume', int(value))
 
+    def _on_call_answered(self, _view, action, event):
+        if action == 'accept':
+            session = self._client.get_module('Jingle').get_jingle_session(
+                event.fjid, event.sid)
+            if not session:
+                return
+
+            audio = session.get_content('audio')
+            video = session.get_content('video')
+
+            if audio and not audio.negotiated:
+                self.set_jingle_state(
+                    'audio', JingleState.CONNECTING, event.sid)
+            if video and not video.negotiated:
+                self.set_jingle_state(
+                    'video', JingleState.CONNECTING, event.sid)
+
+            if not session.accepted:
+                session.approve_session()
+
+            for item in event.contents:
+                session.approve_content(item.media)
+
+        if action == 'reject':
+            session = self._client.get_module('Jingle').get_jingle_session(
+                event.fjid, event.sid)
+            if not session:
+                return
+
+            if not session.accepted:
+                session.decline_session()
+            else:
+                for item in event.contents:
+                    session.reject_content(item.media)
+
+    def add_incoming_call(self, event):
+        self.add_call_message(time.time(), '', event=event)
+
     def on_location_eventbox_button_release_event(self, _widget, _event):
         return
         # TODO
@@ -1199,61 +1238,6 @@ class ChatControl(BaseControl):
             [button],
             file_props,
             Gtk.MessageType.ERROR)
-
-    def _on_reject_call(self, _button, event):
-        app.events.remove_events(
-            self.account, event.jid, types='jingle-incoming')
-
-        session = self._client.get_module('Jingle').get_jingle_session(
-            event.peerjid, event.sid)
-        if not session:
-            return
-
-        if not session.accepted:
-            session.decline_session()
-        else:
-            for content in event.content_types:
-                session.reject_content(content)
-
-    def _on_accept_call(self, _button, event):
-        app.events.remove_events(
-            self.account, event.jid, types='jingle-incoming')
-
-        session = self._client.get_module('Jingle').get_jingle_session(
-            event.peerjid, event.sid)
-        if not session:
-            return
-
-        audio = session.get_content('audio')
-        video = session.get_content('video')
-
-        if audio and not audio.negotiated:
-            self.set_jingle_state('audio', JingleState.CONNECTING, event.sid)
-        if video and not video.negotiated:
-            self.set_jingle_state('video', JingleState.CONNECTING, event.sid)
-
-        if not session.accepted:
-            session.approve_session()
-
-        for content in event.content_types:
-            session.approve_content(content)
-
-    def add_call_received_message(self, event):
-        markup = '<b>%s</b>' % (_('Incoming Call'))
-        if 'video' in event.content_types:
-            markup += _('\nVideo Call')
-        else:
-            markup += _('\nVoice Call')
-
-        button_reject = Gtk.Button.new_with_mnemonic(_('_Reject'))
-        button_reject.connect('clicked', self._on_reject_call, event)
-        button_accept = Gtk.Button.new_with_mnemonic(_('_Accept'))
-        button_accept.connect('clicked', self._on_accept_call, event)
-        self._add_info_bar_message(
-            markup,
-            [button_reject, button_accept],
-            event,
-            Gtk.MessageType.QUESTION)
 
     def on_event_added(self, event):
         if event.account != self.account:

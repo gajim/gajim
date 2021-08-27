@@ -1022,32 +1022,22 @@ class Interface:
                 text=txt)
 
     # Jingle AV handling
-    def handle_event_jingle_incoming(self, event):
-        # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
-        # data...))
+    @staticmethod
+    def handle_event_jingle_incoming(event):
+        # ('JINGLE_INCOMING', conn, fjid, sid, resource, jingle session,
+        # tuple-of-contents==(type, data...))
         # TODO: conditional blocking if peer is not in roster
 
         account = event.conn.name
+
         content_types = []
         for item in event.contents:
             content_types.append(item.media)
-        # check type of jingle session
-        if 'audio' in content_types or 'video' in content_types:
-            # a voip session...
-            # we now handle only voip, so the only thing we will do here is
-            # not to return from function
-            pass
-        else:
-            # unknown session type... it should be declined in common/jingle.py
+
+        if 'audio' not in content_types and 'video' not in content_types:
             return
 
-        notification_event = events.JingleIncomingEvent(
-            event.fjid,
-            event.sid,
-            content_types)
-
-        ctrl = (app.window.get_control(account, event.fjid) or
-                app.window.get_control(account, event.jid))
+        ctrl = app.window.get_control(account, event.jid)
         if ctrl:
             if 'audio' in content_types:
                 ctrl.set_jingle_state(
@@ -1059,25 +1049,24 @@ class Interface:
                     'video',
                     JingleState.CONNECTION_RECEIVED,
                     event.sid)
-            ctrl.add_call_received_message(notification_event)
+            ctrl.add_incoming_call(event)
 
         if helpers.allow_popup_window(account):
             def _prepare_control():
                 ctrl = app.window.get_control(account, event.jid)
-                ctrl.add_call_received_message(notification_event)
+                ctrl.add_incoming_call(event)
 
             if not ctrl:
                 app.window.add_chat(
                     account, event.jid, 'contact', select=True)
-            GLib.idle_add(_prepare_control)
-            return
-
-        self.add_event(account, event.fjid, notification_event)
+                GLib.idle_add(_prepare_control)
+                return
 
         if helpers.allow_showing_notification(account):
             heading = _('Incoming Call')
-            contact = app.get_name_from_jid(account, event.jid)
-            text = _('%s is calling') % contact
+            client = app.get_client(account)
+            contact = client.get_module('Contacts').get_contact(event.jid)
+            text = _('%s is calling') % contact.name
             app.notification.popup(
                 heading,
                 event.jid,
@@ -1092,11 +1081,10 @@ class Interface:
         # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
         if event.media in ('audio', 'video'):
             account = event.conn.name
-            ctrl = (app.window.get_control(account, event.fjid) or
-                    app.window.get_control(account, event.jid))
+            ctrl = app.window.get_control(account, event.jid)
             if ctrl:
-                con = app.connections[account]
-                session = con.get_module('Jingle').get_jingle_session(
+                client = app.get_client(account)
+                session = client.get_module('Jingle').get_jingle_session(
                     event.fjid, event.sid)
 
                 if event.media == 'audio':
@@ -1123,8 +1111,7 @@ class Interface:
     def handle_event_jingle_disconnected(event):
         # ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
         account = event.conn.name
-        ctrl = (app.window.get_control(account, event.fjid) or
-                app.window.get_control(account, event.jid))
+        ctrl = app.window.get_control(account, event.jid)
         if ctrl:
             if event.media is None:
                 ctrl.stop_jingle(sid=event.sid, reason=event.reason)
@@ -1145,8 +1132,7 @@ class Interface:
     def handle_event_jingle_error(event):
         # ('JINGLE_ERROR', account, (peerjid, sid, reason))
         account = event.conn.name
-        ctrl = (app.window.get_control(account, event.fjid) or
-                app.window.get_control(account, event.jid))
+        ctrl = app.window.get_control(account, event.jid)
         if ctrl and event.sid == ctrl.jingle['audio'].sid:
             ctrl.set_jingle_state(
                 'audio',

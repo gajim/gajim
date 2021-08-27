@@ -29,6 +29,7 @@ from .rows.read_marker import ReadMarkerRow
 from .rows.scroll_hint import ScrollHintRow
 from .rows.message import MessageRow
 from .rows.info import InfoMessage
+from .rows.call import CallRow
 from .rows.date import DateRow
 from .rows.file_transfer import FileTransferRow
 from .rows.muc_subject import MUCSubject
@@ -46,6 +47,11 @@ class ConversationView(Gtk.ListBox):
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (str, )
+        ),
+        'call-answered': (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (str, object)
         ),
     }
 
@@ -167,6 +173,14 @@ class ConversationView(Gtk.ListBox):
     def add_file_transfer(self, transfer):
         transfer_row = FileTransferRow(self._account, transfer)
         self._insert_message(transfer_row)
+
+    def add_call_message(self, timestamp, text, event):
+        call_row = CallRow(self._account,
+                           self._contact,
+                           timestamp,
+                           text,
+                           event)
+        self._insert_message(call_row)
 
     def add_message(self,
                     text,
@@ -408,6 +422,9 @@ class ConversationView(Gtk.ListBox):
 
     def on_quote(self, text):
         self.emit('quote', text)
+
+    def on_call_answered(self, action, event):
+        self.emit('call-answered', action, event)
 
     def _on_contact_setting_changed(self, *args):
         self.invalidate_filter()

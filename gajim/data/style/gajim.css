@@ -82,7 +82,8 @@
 .conversation-date-row {
     padding: 12px;
 }
-.conversation-subject-box {
+.conversation-subject-box,
+.conversation-call-box {
     border-radius: 6px;
     padding: 12px;
 }
