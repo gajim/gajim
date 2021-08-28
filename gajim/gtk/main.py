@@ -74,6 +74,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('muc-self-presence', ged.GUI1, self._on_event),
             ('muc-voice-request', ged.GUI1, self._on_event),
             ('muc-disco-update', ged.GUI1, self._on_event),
+            ('jingle-request-received', ged.GUI1, self._on_event),
+            ('jingle-connected-received', ged.GUI1, self._on_event),
+            ('jingle-disconnected-received', ged.GUI1, self._on_event),
+            ('jingle-error-received', ged.GUI1, self._on_event),
             ('our-show', ged.GUI1, self._on_our_show),
             ('signed-in', ged.GUI1, self._on_signed_in),
             ('account-enabled', ged.GUI1, self._on_account_enabled),
@@ -442,7 +446,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_event(self, event):
         if event.name == 'caps-update':
-            #TODO
+            # TODO
             return
 
         if event.name == 'update-roster-avatar':
@@ -457,6 +461,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 else:
                     jid = event.properties.jid.new_as_bare()
                     self.add_chat(event.account, jid, 'contact')
+            elif event.name == 'jingle-request-received':
+                content_types = []
+                for item in event.contents:
+                    content_types.append(item.media)
+                if 'audio' in content_types or 'video' in content_types:
+                    # AV Call received, open chat control
+                    self.add_chat(event.account, event.jid, 'contact')                
             else:
                 # No chat is open, dont handle any gui events
                 return

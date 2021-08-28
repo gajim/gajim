@@ -834,10 +834,12 @@ class JingleSession:
         self.state = JingleStates.ACTIVE
 
     def _raise_event(self, name, **kwargs):
-        jid, resource = app.get_room_and_nick_from_fjid(self.peerjid)
+        jid, resource = app.get_room_and_nick_from_fjid(
+            str(self.peerjid))
         app.nec.push_incoming_event(
             NetworkEvent(name,
                          conn=self.connection,
+                         account=self.connection.name,
                          fjid=self.peerjid,
                          jid=jid,
                          sid=self.sid,

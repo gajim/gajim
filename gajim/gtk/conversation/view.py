@@ -48,10 +48,15 @@ class ConversationView(Gtk.ListBox):
             None,
             (str, )
         ),
-        'call-answered': (
+        'accept-call': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
-            (str, object)
+            (object, )
+        ),
+        'reject-call': (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (object, )
         ),
     }
 
@@ -376,6 +381,11 @@ class ConversationView(Gtk.ListBox):
         for row in self.get_children():
             yield row
 
+    def update_call_rows(self):
+        for row in self.get_children():
+            if row.type == 'call':
+                row.update()
+
     def set_read_marker(self, id_):
         if id_ is None:
             self._read_marker_row.hide()
@@ -423,8 +433,11 @@ class ConversationView(Gtk.ListBox):
     def on_quote(self, text):
         self.emit('quote', text)
 
-    def on_call_answered(self, action, event):
-        self.emit('call-answered', action, event)
+    def accept_call(self, event):
+        self.emit('accept-call', event)
+
+    def reject_call(self, event):
+        self.emit('reject-call', event)
 
     def _on_contact_setting_changed(self, *args):
         self.invalidate_filter()

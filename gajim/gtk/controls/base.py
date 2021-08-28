@@ -277,6 +277,23 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         return app.window.lookup_action(name + self.control_id)
 
     def process_event(self, event):
+        if event.account != self.account:
+            return
+
+        jid = self.contact.jid.bare
+        if event.jid != jid:
+            return
+
+        jingle_av_events = [
+            'jingle-request-received',
+            'jingle-connected-received',
+            'jingle-disconnected-received',
+            'jingle-error-received'
+        ]
+        if self.is_chat and event.name in jingle_av_events:
+            self._process_jingle_av_event(event)
+            return
+
         method_name = event.name.replace('-', '_')
         method_name = f'_on_{method_name}'
         getattr(self, method_name)(event)

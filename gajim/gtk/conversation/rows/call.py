@@ -45,9 +45,10 @@ class CallRow(BaseRow):
                                                 Gtk.IconSize.MENU)
             self.grid.attach(icon, 1, 0, 1, 1)
 
-            self._label = SimpleLabel()
-            self._label.set_text(text)
-            self.grid.attach(self._label, 2, 0, 1, 1)
+            label = SimpleLabel()
+            label.get_style_context().add_class('dim-label')
+            label.set_text(text)
+            self.grid.attach(label, 2, 0, 1, 1)
         else:
             self._prepare_incoming_call()
 
@@ -59,21 +60,40 @@ class CallRow(BaseRow):
 
         self.show_all()
 
+    def update(self):
+        if self._event is None:
+            return
+
+        self._call_box.destroy()
+
+        icon = Gtk.Image.new_from_icon_name('call-start-symbolic',
+                                            Gtk.IconSize.MENU)
+        self.grid.attach(icon, 1, 0, 1, 1)
+
+        label = SimpleLabel()
+        label.get_style_context().add_class('dim-label')
+        text = _('%s called you') % self._contact.name
+        label.set_text(text)
+        self.grid.attach(label, 2, 0, 1, 1)
+        self.show_all()
+        self._event = None
+
     def _on_accept(self, button):
         button.set_sensitive(False)
         self._reject_button.set_sensitive(False)
-        self.get_parent().on_call_answered('accept', self._event)
+        self.get_parent().accept_call(self._event)
 
     def _on_reject(self, button):
         button.set_sensitive(False)
         self._accept_button.set_sensitive(False)
-        self.get_parent().on_call_answered('reject', self._event)
+        self.get_parent().reject_call(self._event)
 
     def _prepare_incoming_call(self):
-        call_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        call_box.set_size_request(350, -1)
-        call_box.get_style_context().add_class('conversation-call-box')
-        call_box.get_style_context().add_class('gajim-call-message')
+        self._call_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self._call_box.set_size_request(350, -1)
+        self._call_box.get_style_context().add_class('conversation-call-box')
+        self._call_box.get_style_context().add_class('gajim-call-message')
 
         scale = self.get_scale_factor()
         avatar = self._contact.get_avatar(
@@ -81,7 +101,7 @@ class CallRow(BaseRow):
             scale,
             add_show=False)
         avatar_image = Gtk.Image.new_from_surface(avatar)
-        call_box.add(avatar_image)
+        self._call_box.add(avatar_image)
 
         content_types = []
         for item in self._event.contents:
@@ -95,7 +115,7 @@ class CallRow(BaseRow):
         label.get_style_context().add_class('bold')
         label.set_max_width_chars(40)
         label.set_line_wrap(True)
-        call_box.add(label)
+        self._call_box.add(label)
 
         self._accept_button = Gtk.Button.new_with_label(_('Accept Call'))
         self._accept_button.connect('clicked', self._on_accept)
@@ -107,6 +127,6 @@ class CallRow(BaseRow):
         button_box.set_halign(Gtk.Align.CENTER)
         button_box.add(self._accept_button)
         button_box.add(self._reject_button)
-        call_box.add(button_box)
+        self._call_box.add(button_box)
 
-        self.grid.attach(call_box, 1, 0, 1, 1)
+        self.grid.attach(self._call_box, 1, 0, 1, 1)

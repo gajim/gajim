@@ -126,24 +126,6 @@ class FileHashErrorEvent(FileRequestEvent):
     type_ = 'file-hash-error'
 
 
-class JingleIncomingEvent(Event):
-
-    type_ = 'jingle-incoming'
-
-    def __init__(self,
-                 peerjid,
-                 sid,
-                 content_types,
-                 time_=None,
-                 show_in_systray=True):
-        Event.__init__(self,
-                       time_,
-                       show_in_systray=show_in_systray)
-        self.peerjid = peerjid
-        self.sid = sid
-        self.content_types = content_types
-
-
 class Events:
     def __init__(self):
         self._events = {}  # list of events {acct: {jid1: [E1, E2]}, }

@@ -223,10 +223,6 @@ class Interface:
             'file-send-error': [self.handle_event_file_send_error],
             'file-request-error': [self.handle_event_file_request_error],
             'file-request-received': [self.handle_event_file_request],
-            'jingle-connected-received': [self.handle_event_jingle_connected],
-            'jingle-disconnected-received': [self.handle_event_jingle_disconnected],
-            'jingle-error-received': [self.handle_event_jingle_error],
-            'jingle-request-received': [self.handle_event_jingle_incoming],
             'jingle-ft-cancelled-received': [self.handle_event_jingleft_cancel],
         }
         # pylint: enable=line-too-long
@@ -1020,124 +1016,6 @@ class Interface:
                 icon_name=icon_name,
                 title=event_type,
                 text=txt)
-
-    # Jingle AV handling
-    @staticmethod
-    def handle_event_jingle_incoming(event):
-        # ('JINGLE_INCOMING', conn, fjid, sid, resource, jingle session,
-        # tuple-of-contents==(type, data...))
-        # TODO: conditional blocking if peer is not in roster
-
-        account = event.conn.name
-
-        content_types = []
-        for item in event.contents:
-            content_types.append(item.media)
-
-        if 'audio' not in content_types and 'video' not in content_types:
-            return
-
-        ctrl = app.window.get_control(account, event.jid)
-        if ctrl:
-            if 'audio' in content_types:
-                ctrl.set_jingle_state(
-                    'audio',
-                    JingleState.CONNECTION_RECEIVED,
-                    event.sid)
-            if 'video' in content_types:
-                ctrl.set_jingle_state(
-                    'video',
-                    JingleState.CONNECTION_RECEIVED,
-                    event.sid)
-            ctrl.add_incoming_call(event)
-
-        if helpers.allow_popup_window(account):
-            def _prepare_control():
-                ctrl = app.window.get_control(account, event.jid)
-                ctrl.add_incoming_call(event)
-
-            if not ctrl:
-                app.window.add_chat(
-                    account, event.jid, 'contact', select=True)
-                GLib.idle_add(_prepare_control)
-                return
-
-        if helpers.allow_showing_notification(account):
-            heading = _('Incoming Call')
-            client = app.get_client(account)
-            contact = client.get_module('Contacts').get_contact(event.jid)
-            text = _('%s is calling') % contact.name
-            app.notification.popup(
-                heading,
-                event.jid,
-                account,
-                'jingle-incoming',
-                icon_name='call-start-symbolic',
-                title=heading,
-                text=text)
-
-    @staticmethod
-    def handle_event_jingle_connected(event):
-        # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
-        if event.media in ('audio', 'video'):
-            account = event.conn.name
-            ctrl = app.window.get_control(account, event.jid)
-            if ctrl:
-                client = app.get_client(account)
-                session = client.get_module('Jingle').get_jingle_session(
-                    event.fjid, event.sid)
-
-                if event.media == 'audio':
-                    content = session.get_content('audio')
-                    ctrl.set_jingle_state(
-                        'audio',
-                        JingleState.CONNECTED,
-                        event.sid)
-                if event.media == 'video':
-                    content = session.get_content('video')
-                    ctrl.set_jingle_state(
-                        'video',
-                        JingleState.CONNECTED,
-                        event.sid)
-
-                # Now, accept the content/sessions.
-                # This should be done after the chat control is running
-                if not session.accepted:
-                    session.approve_session()
-                for content in event.media:
-                    session.approve_content(content)
-
-    @staticmethod
-    def handle_event_jingle_disconnected(event):
-        # ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
-        account = event.conn.name
-        ctrl = app.window.get_control(account, event.jid)
-        if ctrl:
-            if event.media is None:
-                ctrl.stop_jingle(sid=event.sid, reason=event.reason)
-            if event.media == 'audio':
-                ctrl.set_jingle_state(
-                    'audio',
-                    JingleState.NULL,
-                    sid=event.sid,
-                    reason=event.reason)
-            if event.media == 'video':
-                ctrl.set_jingle_state(
-                    'video',
-                    JingleState.NULL,
-                    sid=event.sid,
-                    reason=event.reason)
-
-    @staticmethod
-    def handle_event_jingle_error(event):
-        # ('JINGLE_ERROR', account, (peerjid, sid, reason))
-        account = event.conn.name
-        ctrl = app.window.get_control(account, event.jid)
-        if ctrl and event.sid == ctrl.jingle['audio'].sid:
-            ctrl.set_jingle_state(
-                'audio',
-                JingleState.ERROR,
-                reason=event.reason)
 
     def send_httpupload(self, chat_control, path=None):
         if path is not None:
