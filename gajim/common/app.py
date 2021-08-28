@@ -357,37 +357,8 @@ def get_room_and_nick_from_fjid(jid):
         l.append('')
     return l
 
-def get_real_jid_from_fjid(account, fjid):
-    """
-    Return real jid or returns None, if we don't know the real jid
-    """
-    room_jid, nick = get_room_and_nick_from_fjid(fjid)
-    if not nick: # It's not a fake_jid, it is a real jid
-        return fjid # we return the real jid
-    real_jid = fjid
-    if interface.msg_win_mgr.get_gc_control(room_jid, account):
-        # It's a pm, so if we have real jid it's in contact.jid
-        gc_contact = contacts.get_gc_contact(account, room_jid, nick)
-        if not gc_contact:
-            return
-        # gc_contact.jid is None when it's not a real jid (we don't know real jid)
-        real_jid = gc_contact.jid
-    return real_jid
-
-def get_room_from_fjid(jid):
-    return get_room_and_nick_from_fjid(jid)[0]
-
-def get_contact_name_from_jid(account, jid):
-    c = contacts.get_first_contact_from_jid(account, jid)
-    return c.name
-
 def get_jid_without_resource(jid):
     return jid.split('/')[0]
-
-def construct_fjid(room_jid, nick):
-    # fake jid is the jid for a contact in a room
-    # gaim@conference.jabber.org/nick
-    return room_jid + '/' + nick
 
 def get_resource_from_jid(jid):
     jids = jid.split('/', 1)
