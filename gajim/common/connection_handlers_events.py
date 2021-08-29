@@ -34,26 +34,37 @@ log = logging.getLogger('gajim.c.connection_handlers_events')
 
 
 class PresenceReceivedEvent(nec.NetworkIncomingEvent):
+
     name = 'presence-received'
 
+
 class OurShowEvent(nec.NetworkIncomingEvent):
+
     name = 'our-show'
 
     def init(self):
         self.reconnect = False
 
+
 class MessageSentEvent(nec.NetworkIncomingEvent):
+
     name = 'message-sent'
 
+
 class ConnectionLostEvent(nec.NetworkIncomingEvent):
+
     name = 'connection-lost'
 
     def generate(self):
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
+        app.nec.push_incoming_event(OurShowEvent(
+            None,
+            conn=self.conn,
             show='offline'))
         return True
 
+
 class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
+
     name = 'file-request-received'
 
     def init(self):
@@ -62,7 +73,8 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.id_ = self.stanza.getID()
-        self.fjid = self.conn.get_module('Bytestream')._ft_get_from(self.stanza)
+        self.fjid = self.conn.get_module('Bytestream')._ft_get_from(
+            self.stanza)
         self.jid = app.get_jid_without_resource(self.fjid)
         if not self.jingle_content:
             return
@@ -84,7 +96,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
         self.FT_content.file_props = self.file_props
         self.FT_content.transport.set_file_props(self.file_props)
         self.file_props.streamhosts.extend(
-                self.FT_content.transport.remote_candidates)
+            self.FT_content.transport.remote_candidates)
         for host in self.file_props.streamhosts:
             host['initiator'] = self.FT_content.session.initiator
             host['target'] = self.FT_content.session.responder
@@ -97,13 +109,13 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
             self.file_props.receiver = self.conn.get_own_jid()
         else:
             file_tag = desc.getTag('file')
-            h = file_tag.getTag('hash')
-            h = h.getData() if h else None
-            n = file_tag.getTag('name')
-            n = n.getData() if n else None
+            hash_ = file_tag.getTag('hash')
+            hash_ = hash_.getData() if hash_ else None
+            file_name = file_tag.getTag('name')
+            file_name = file_name.getData() if file_name else None
             pjid = app.get_jid_without_resource(self.fjid)
             file_info = self.conn.get_module('Jingle').get_file_info(
-                pjid, hash_=h, name=n, account=self.conn.name)
+                pjid, hash_=hash_, name=file_name, account=self.conn.name)
             self.file_props.file_name = file_info['file-name']
             self.file_props.sender = self.conn.get_own_jid()
             self.file_props.receiver = self.fjid
@@ -155,6 +167,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
 
 class NotificationEventOld(nec.NetworkIncomingEvent):
+
     name = 'notification'
     base_network_events = ['gc-message-received',
                            'presence-received']
@@ -171,7 +184,7 @@ class NotificationEventOld(nec.NetworkIncomingEvent):
         # For output
         self.do_sound = False
         self.sound_file = ''
-        self.sound_event = '' # gajim sound played if not sound_file is set
+        self.sound_event = ''  # gajim sound played if not sound_file is set
         self.show_popup = False
 
         self.do_popup = False
@@ -190,93 +203,18 @@ class NotificationEventOld(nec.NetworkIncomingEvent):
         self.show_in_notification_area = False
         self.show_in_roster = False
 
-        self.detect_type()
-
-        if self.notif_type == 'msg':
-            self.handle_incoming_msg_event(self.base_event)
-        elif self.notif_type == 'gc-msg':
-            self.handle_incoming_gc_msg_event(self.base_event)
-        elif self.notif_type == 'pres':
-            self.handle_incoming_pres_event(self.base_event)
+        self.handle_incoming_pres_event(self.base_event)
         return True
 
-    def detect_type(self):
-        if self.base_event.name == 'decrypted-message-received':
-            self.notif_type = 'msg'
-        if self.base_event.name == 'gc-message-received':
-            self.notif_type = 'gc-msg'
-        if self.base_event.name == 'presence-received':
-            self.notif_type = 'pres'
-
     def handle_incoming_msg_event(self, msg_obj):
+        # TODO: implement attention handling and remove this
+
         # don't alert for carbon copied messages from ourselves
         if msg_obj.properties.is_sent_carbon:
             return
-        if not msg_obj.msgtxt:
-            return
-        self.jid = msg_obj.jid
-        if msg_obj.properties.is_muc_pm:
-            self.jid = msg_obj.fjid
-
-        self.control = app.interface.msg_win_mgr.search_control(
-            msg_obj.jid, self.account, msg_obj.resource)
-
-        if self.control is None:
-            event_type = msg_obj.properties.type.value
-            if msg_obj.properties.is_muc_pm:
-                event_type = 'pm'
-            if len(app.events.get_events(
-                    self.account, msg_obj.jid, [event_type])) <= 1:
-                self.first_unread = True
-        else:
-            self.control_focused = self.control.has_focus()
-
-        if msg_obj.properties.is_muc_pm:
-            nick = msg_obj.resource
-        else:
-            nick = app.get_name_from_jid(self.conn.name, self.jid)
-
-        if self.first_unread:
-            self.sound_event = 'first_message_received'
-        elif self.control_focused:
-            self.sound_event = 'next_message_received_focused'
-        else:
-            self.sound_event = 'next_message_received_unfocused'
-
-        if app.settings.get('notification_preview_message'):
-            self.popup_text = msg_obj.msgtxt
-            if self.popup_text and (self.popup_text.startswith('/me ') or \
-            self.popup_text.startswith('/me\n')):
-                self.popup_text = '* ' + nick + self.popup_text[3:]
-        else:
-            # We don't want message preview, do_preview = False
-            self.popup_text = ''
-
-        if msg_obj.properties.is_muc_pm:
-            self.popup_msg_type = 'pm'
-            self.popup_event_type = _('New Private Message')
-        else: # chat message
-            self.popup_msg_type = 'chat'
-            self.popup_event_type = _('New Message')
-
-        num_unread = len(app.events.get_events(self.conn.name, self.jid,
-            ['printed_' + self.popup_msg_type, self.popup_msg_type]))
-        self.popup_title = i18n.ngettext(
-            'New message from %(nickname)s',
-            '%(n_msgs)i unread messages from %(nickname)s',
-            num_unread) % {'nickname': nick, 'n_msgs': num_unread}
-
-        if app.settings.get('show_notifications'):
-            if self.first_unread or not self.control_focused:
-                if app.settings.get('autopopupaway'):
-                    # always show notification
-                    self.do_popup = True
-                if app.connections[self.conn.name].status in ('online', 'chat'):
-                    # we're online or chat
-                    self.do_popup = True
 
         if msg_obj.properties.attention and not app.settings.get(
-        'ignore_incoming_attention'):
+                'ignore_incoming_attention'):
             self.popup_timeout = 0
             self.do_popup = True
         else:
@@ -285,88 +223,9 @@ class NotificationEventOld(nec.NetworkIncomingEvent):
         sound = app.settings.get_soundevent_settings('attention_received')
 
         if msg_obj.properties.attention and not app.settings.get(
-        'ignore_incoming_attention') and sound['enabled']:
+                'ignore_incoming_attention') and sound['enabled']:
             self.sound_event = 'attention_received'
             self.do_sound = True
-        elif self.first_unread and helpers.allow_sound_notification(
-        self.conn.name, 'first_message_received'):
-            self.do_sound = True
-        elif not self.first_unread and self.control_focused and \
-        helpers.allow_sound_notification(self.conn.name,
-        'next_message_received_focused'):
-            self.do_sound = True
-        elif not self.first_unread and not self.control_focused and \
-        helpers.allow_sound_notification(self.conn.name,
-        'next_message_received_unfocused'):
-            self.do_sound = True
-
-    def handle_incoming_gc_msg_event(self, msg_obj):
-        if not msg_obj.gc_control:
-            # we got a message from a room we're not in? ignore it
-            return
-        self.jid = msg_obj.jid
-        sound = msg_obj.gc_control.highlighting_for_message(
-            msg_obj.msgtxt, msg_obj.properties.timestamp)[1]
-
-        nick = msg_obj.properties.muc_nickname
-
-        if nick == msg_obj.gc_control.nick:
-            # A message from ourself
-            return
-
-        self.do_sound = True
-        if sound == 'received':
-            self.sound_event = 'muc_message_received'
-        elif sound == 'highlight':
-            self.sound_event = 'muc_message_highlight'
-        else:
-            self.do_sound = False
-
-        self.control = app.interface.msg_win_mgr.search_control(
-            msg_obj.jid, self.account)
-
-        if self.control is not None:
-            self.control_focused = self.control.has_focus()
-
-        if app.settings.get('show_notifications'):
-            contact = app.contacts.get_groupchat_contact(self.account,
-                                                         self.jid)
-            notify_for_muc = sound == 'highlight' or contact.can_notify()
-
-            if not notify_for_muc:
-                self.do_popup = False
-
-            elif self.control_focused:
-                self.do_popup = False
-
-            elif app.settings.get('autopopupaway'):
-                # always show notification
-                self.do_popup = True
-
-            elif app.connections[self.conn.name].status in ('online', 'chat'):
-                # we're online or chat
-                self.do_popup = True
-
-        self.popup_msg_type = 'gc_msg'
-        self.popup_event_type = _('New Group Chat Message')
-
-        if app.settings.get('notification_preview_message'):
-            self.popup_text = msg_obj.msgtxt
-            if self.popup_text and (self.popup_text.startswith('/me ') or
-                                    self.popup_text.startswith('/me\n')):
-                self.popup_text = '* ' + nick + self.popup_text[3:]
-
-        type_events = ['printed_marked_gc_msg', 'printed_gc_msg']
-        count = len(app.events.get_events(self.account, self.jid, type_events))
-
-        contact = app.contacts.get_contact(self.account, self.jid)
-
-        self.popup_title = i18n.ngettext(
-            'New message from %(nickname)s',
-            '%(n_msgs)i unread messages in %(groupchat_name)s',
-            count) % {'nickname': nick,
-                      'n_msgs': count,
-                      'groupchat_name': contact.get_shown_name()}
 
     def handle_incoming_pres_event(self, pres_obj):
         return
@@ -402,21 +261,24 @@ class NotificationEventOld(nec.NetworkIncomingEvent):
             server = app.get_server_from_jid(self.jid)
             account_server = account + '/' + server
             block_transport = False
-            if account_server in app.block_signed_in_notifications and \
-            app.block_signed_in_notifications[account_server]:
+            if (account_server in app.block_signed_in_notifications and
+                    app.block_signed_in_notifications[account_server]):
                 block_transport = True
 
             sound = app.settings.get_soundevent_settings('contact_connected')
-            if sound['enabled'] and not app.block_signed_in_notifications[account] and\
-            not block_transport and helpers.allow_sound_notification(account,
-            'contact_connected'):
+            if (sound['enabled'] and
+                    not app.block_signed_in_notifications[account] and
+                    not block_transport and helpers.allow_sound_notification(
+                        account, 'contact_connected')):
                 self.sound_event = event
                 self.do_sound = True
 
         elif pres_obj.old_show > 1 and pres_obj.new_show < 2:
             event = 'contact_disconnected'
-            sound = app.settings.get_soundevent_settings('contact_disconnected')
-            if sound['enabled'] and helpers.allow_sound_notification(account, event):
+            sound = app.settings.get_soundevent_settings(
+                'contact_disconnected')
+            if sound['enabled'] and helpers.allow_sound_notification(
+                    account, event):
                 self.sound_event = event
                 self.do_sound = True
         # Status change (not connected/disconnected or error (<1))
@@ -444,6 +306,7 @@ class NotificationEventOld(nec.NetworkIncomingEvent):
 
 
 class InformationEvent(nec.NetworkIncomingEvent):
+
     name = 'information'
 
     def init(self):
