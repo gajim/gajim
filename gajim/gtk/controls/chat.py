@@ -414,6 +414,7 @@ class ChatControl(BaseControl):
         self.draw_banner_text()
 
     def _on_presence_update(self, _contact, _signal_name):
+        self.update_actions()
         self._update_avatar()
 
     def _on_caps_update(self, event):
