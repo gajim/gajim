@@ -773,8 +773,6 @@ class GroupchatControl(BaseControl):
 
             self._nick_completion.record_message(contact, highlight)
 
-            # self.check_focus_out_line()
-
         BaseControl.add_message(self,
                                 text,
                                 kind,
@@ -785,18 +783,6 @@ class GroupchatControl(BaseControl):
                                 message_id=message_id,
                                 stanza_id=stanza_id,
                                 additional_data=additional_data)
-
-    def check_focus_out_line(self):
-        """
-        Check and possibly add focus out line for room_jid if it needs it and
-        does not already have it as last event. If it goes to add this line
-        - remove previous line first
-        """
-
-        if app.window.is_chat_active(self.account, self.room_jid):
-            return
-
-        # self.conv_textview.show_focus_out_line()
 
     def _on_room_subject(self, _contact, _signal_name, properties):
         if self.subject == properties.subject:
@@ -944,7 +930,8 @@ class GroupchatControl(BaseControl):
         self.xml.error_label.set_text(to_user_string(error))
         self._show_page('error')
 
-    def _on_user_nickname_changed(self, _contact, _signal_name, user_contact, properties):
+    def _on_user_nickname_changed(self, _contact, _signal_name, user_contact,
+                                  properties):
         nick = user_contact.name
         new_nick = properties.muc_user.nick
         if properties.is_muc_self_presence:
@@ -985,7 +972,7 @@ class GroupchatControl(BaseControl):
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
 
         actor = properties.muc_user.actor
-        #Group Chat: You have been kicked by Alice
+        # Group Chat: You have been kicked by Alice
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
         if properties.is_muc_self_presence:
@@ -1016,7 +1003,7 @@ class GroupchatControl(BaseControl):
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
 
         actor = properties.muc_user.actor
-        #Group Chat: You have been kicked by Alice
+        # Group Chat: You have been kicked by Alice
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
         if properties.is_muc_self_presence:
@@ -1041,47 +1028,47 @@ class GroupchatControl(BaseControl):
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
 
         actor = properties.muc_user.actor
-        #Group Chat: You have been kicked by Alice
+        # Group Chat: You have been kicked by Alice
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
-        #Group Chat: We have been removed from the room by Alice: reason
+        # Group Chat: We have been removed from the room by Alice: reason
         message = _('You have been removed from the group chat{actor}{reason}')
 
         if StatusCode.REMOVED_ERROR in status_codes:
             # Handle 333 before 307, some MUCs add both
-            #Group Chat: Server kicked us because of an server error
+            # Group Chat: Server kicked us because of an server error
             message = _('You have left due '
                         'to an error{reason}').format(reason=reason)
             self.add_info_message(message)
 
         elif StatusCode.REMOVED_KICKED in status_codes:
-            #Group Chat: We have been kicked by Alice: reason
+            # Group Chat: We have been kicked by Alice: reason
             message = _('You have been '
                         'kicked{actor}{reason}').format(actor=actor,
                                                         reason=reason)
             self.add_info_message(message)
 
         elif StatusCode.REMOVED_BANNED in status_codes:
-            #Group Chat: We have been banned by Alice: reason
+            # Group Chat: We have been banned by Alice: reason
             message = _('You have been '
                         'banned{actor}{reason}').format(actor=actor,
                                                         reason=reason)
             self.add_info_message(message)
 
         elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
-            #Group Chat: We were removed because of an affiliation change
+            # Group Chat: We were removed because of an affiliation change
             reason = _(': Affiliation changed')
             message = message.format(actor=actor, reason=reason)
             self.add_info_message(message)
 
         elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
-            #Group Chat: Room configuration changed
+            # Group Chat: Room configuration changed
             reason = _(': Group chat configuration changed to members-only')
             message = message.format(actor=actor, reason=reason)
             self.add_info_message(message)
 
         elif StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
-            #Group Chat: Kicked because of server shutdown
+            # Group Chat: Kicked because of server shutdown
             reason = ': System shutdown'
             message = message.format(actor=actor, reason=reason)
             self.add_info_message(message)
@@ -1094,10 +1081,10 @@ class GroupchatControl(BaseControl):
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
 
         actor = properties.muc_user.actor
-        #Group Chat: You have been kicked by Alice
+        # Group Chat: You have been kicked by Alice
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
-        #Group Chat: We have been removed from the room
+        # Group Chat: We have been removed from the room
         message = _('{nick} has been removed from the group chat{by}{reason}')
 
         if StatusCode.REMOVED_ERROR in status_codes:
@@ -1106,7 +1093,7 @@ class GroupchatControl(BaseControl):
                 nick, properties.muc_user.reason, error=True)
 
         elif StatusCode.REMOVED_KICKED in status_codes:
-            #Group Chat: User was kicked by Alice: reason
+            # Group Chat: User was kicked by Alice: reason
             message = _('{nick} has been '
                         'kicked{actor}{reason}').format(nick=nick,
                                                         actor=actor,
@@ -1114,7 +1101,7 @@ class GroupchatControl(BaseControl):
             self.add_info_message(message)
 
         elif StatusCode.REMOVED_BANNED in status_codes:
-            #Group Chat: User was banned by Alice: reason
+            # Group Chat: User was banned by Alice: reason
             message = _('{nick} has been '
                         'banned{actor}{reason}').format(nick=nick,
                                                         actor=actor,
@@ -1260,7 +1247,7 @@ class GroupchatControl(BaseControl):
             return False
         return True
 
-    def allow_shutdown(self, method, on_yes, on_no):
+    def allow_shutdown(self, _method, on_yes, on_no):
         # whether to ask for confirmation before closing muc
         if app.settings.get('confirm_close_muc') and self.contact.is_joined:
             def on_ok(is_checked):
@@ -1300,8 +1287,8 @@ class GroupchatControl(BaseControl):
         self.attention_flag = False
         BaseControl.set_control_active(self, state)
 
-    def _on_drag_data_received(self, widget, context, x, y, selection,
-                               target_type, timestamp):
+    def _on_drag_data_received(self, _widget, _context, _x_coord, _y_coord,
+                               selection, target_type, _timestamp):
         if not selection.get_data():
             return
 
@@ -1332,7 +1319,7 @@ class GroupchatControl(BaseControl):
         if res:
             return True
 
-        if event.keyval == Gdk.KEY_Tab: # TAB
+        if event.keyval == Gdk.KEY_Tab:  # TAB
             message_buffer = widget.get_buffer()
             start_iter, end_iter = message_buffer.get_bounds()
             cursor_position = message_buffer.get_insert()
@@ -1344,13 +1331,13 @@ class GroupchatControl(BaseControl):
             # nick completion
             # check if tab is pressed with empty message
             if splitted_text:  # if there are any words
-                begin = splitted_text[-1] # last word we typed
+                begin = splitted_text[-1]  # last word we typed
             else:
                 begin = ''
 
             gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
             with_refer_to_nick_char = False
-            after_nick_len = 1 # the space that is printed after we type [Tab]
+            after_nick_len = 1  # the space that is printed after we type [Tab]
 
             # first part of this if : works fine even if refer_to_nick_char
             if (gc_refer_to_nick_char and
@@ -1394,8 +1381,8 @@ class GroupchatControl(BaseControl):
                       not app.settings.get('shell_like_completion')):
                     # have to accommodate for the added space from last
                     # completion
-                    start_iter.backward_chars(len(begin) + \
-                                              len(gc_refer_to_nick_char))
+                    start_iter.backward_chars(
+                        len(begin) + len(gc_refer_to_nick_char))
                 else:
                     start_iter.backward_chars(len(begin))
 
@@ -1406,13 +1393,13 @@ class GroupchatControl(BaseControl):
                 # get a shell-like completion
                 # if there's more than one nick for this completion, complete
                 # only the part that all these nicks have in common
-                if app.settings.get('shell_like_completion') and \
-                len(self.nick_hits) > 1:
+                if (app.settings.get('shell_like_completion') and
+                        len(self.nick_hits) > 1):
                     end = False
                     completion = ''
-                    add = "" # if nick is not complete, don't add anything
+                    add = ""  # if nick is not complete, don't add anything
                     while not end and len(completion) < len(self.nick_hits[0]):
-                        completion = self.nick_hits[0][:len(completion)+1]
+                        completion = self.nick_hits[0][:len(completion) + 1]
                         for nick in self.nick_hits:
                             if completion.lower() not in nick.lower():
                                 end = True
@@ -1504,7 +1491,7 @@ class GroupchatControl(BaseControl):
         end_iter = message_buffer.get_iter_at_mark(cursor_position)
         text = message_buffer.get_text(start_iter, end_iter, False)
         start = ''
-        if text: # Cursor is not at first position
+        if text:  # Cursor is not at first position
             if not text[-1] in (' ', '\n', '\t'):
                 start = ' '
             add = ' '
