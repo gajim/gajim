@@ -345,14 +345,6 @@ DEFAULT_SOUNDEVENT_SETTINGS = {
         'enabled': True,
         'path': 'message1.wav'
     },
-    'next_message_received_focused': {
-        'enabled': True,
-        'path': 'message2.wav'
-    },
-    'next_message_received_unfocused': {
-        'enabled': True,
-        'path': 'message2.wav'
-    },
     'contact_connected': {
         'enabled': False,
         'path': 'connected.wav'

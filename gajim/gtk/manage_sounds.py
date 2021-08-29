@@ -83,9 +83,7 @@ class ManageSounds(Gtk.ApplicationWindow):
         # pylint: disable=line-too-long
         sounds_dict = {
             'attention_received': _('Attention Message Received'),
-            'first_message_received': _('First Message Received'),
-            'next_message_received_focused': _('Next Message Received Focused'),
-            'next_message_received_unfocused': _('Next Message Received Unfocused'),
+            'first_message_received': _('Message Received'),
             'contact_connected': _('Contact Connected'),
             'contact_disconnected': _('Contact Disconnected'),
             'message_sent': _('Message Sent'),
