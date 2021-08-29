@@ -134,4 +134,5 @@ WINDOW_MODULES = {
     'GroupChatInvitation': 'gajim.gui.groupchat_invitation',
     'ContactInfo': 'gajim.gui.contact_info',
     'WorkspaceDialog': 'gajim.gui.workspace_dialog',
+    'RosterItemExchange': 'gajim.gui.roster_item_exchange',
 }

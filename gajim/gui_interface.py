@@ -67,7 +67,6 @@ from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common.helpers import ask_for_status_message
-from gajim.common.helpers import get_muc_context
 from gajim.common.structs import OutgoingMessage
 from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkEventsController
@@ -75,7 +74,6 @@ from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.preview import PreviewManager
 from gajim.common.const import Display
-from gajim.common.const import JingleState
 
 from gajim.common.file_props import FilesProp
 from gajim.common.connection_handlers_events import InformationEvent
@@ -94,12 +92,12 @@ from gajim.gui.dialogs import InputDialog
 from gajim.gui.dialogs import PassphraseDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
-from gajim.gui.roster_item_exchange import RosterItemExchangeWindow
 from gajim.gui.main import MainWindow
 from gajim.gui.util import get_show_in_systray
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import get_color_for_account
+from gajim.gui.util import open_window
 
 log = logging.getLogger('gajim.interface')
 
@@ -692,10 +690,11 @@ class Interface:
     @staticmethod
     def handle_event_roster_item_exchange(event):
         # data = (action in [add, delete, modify], exchange_list, jid_from)
-        RosterItemExchangeWindow(event.conn.name,
-                                 event.action,
-                                 event.exchange_items_list,
-                                 event.fjid)
+        open_window('RosterItemExchange',
+                    account=event.conn.name,
+                    action=event.action,
+                    exchange_list=event.exchange_items_list,
+                    jid_from=event.fjid)
 
     # Jingle File Transfer
     def handle_event_file_send_error(self, event):
