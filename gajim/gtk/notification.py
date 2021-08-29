@@ -231,9 +231,8 @@ class Notification(EventHelper):
     @staticmethod
     def _get_avatar_for_notification(account, jid):
         scale = get_monitor_scale_factor()
-        contact = app.contacts.get_contact(account, jid)
-        if contact is None:
-            return None
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
         return app.interface.get_avatar(contact, 32, scale, pixbuf=True)
 
     def _on_popup_destroy(self, *args):
