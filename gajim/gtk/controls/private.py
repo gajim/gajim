@@ -151,10 +151,10 @@ class PrivateChatControl(ChatControl):
         if not self.contact.is_available:
             ErrorDialog(
                 _('Sending private message failed'),
-                #in second %s code replaces with nickname
-                _('You are no longer in group chat "%(room)s" or '
-                  '"%(nick)s" has left.') % {
-                      'room': self.room_name, 'nick': self.contact.name})
+                _('You are no longer joined "%(room)s" or '
+                  '"%(nick)s" has left the chat.') % {
+                      'room': self.room_name,
+                      'nick': self.contact.name})
             return
 
         ChatControl.send_message(self, message,
