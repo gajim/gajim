@@ -52,7 +52,8 @@ from gajim.common.const import PEPEventType
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
-from gajim import dialogs
+
+from gajim.dialogs import TransformChatToMUC
 
 from gajim.gui.call_widget import CallWidget
 from gajim.gui.dialogs import DialogButton
@@ -78,7 +79,7 @@ class ChatControl(BaseControl):
     A control for standard 1-1 chat
     """
     _type = ControlType.CHAT
-    old_msg_kind = None # last kind of the printed message
+    old_msg_kind = None  # last kind of the printed message
 
     # Set a command host to bound to. Every command given through a chat will be
     # processed with this command host.
@@ -86,9 +87,9 @@ class ChatControl(BaseControl):
 
     def __init__(self, account, jid):
         BaseControl.__init__(self,
-                                 'chat_control',
-                                 account,
-                                 jid)
+                             'chat_control',
+                             account,
+                             jid)
 
         self.last_recv_message_id = None
         self.last_recv_message_marks = None
@@ -300,11 +301,6 @@ class ChatControl(BaseControl):
             return Gdk.EVENT_STOP
 
         if action == 'send-file':
-            if app.interface.msg_win_mgr.mode == \
-            app.interface.msg_win_mgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
-                app.interface.roster.tree.grab_focus()
-                return Gdk.EVENT_PROPAGATE
-
             self._get_action('send-file-').activate()
             return Gdk.EVENT_STOP
 
@@ -324,7 +320,7 @@ class ChatControl(BaseControl):
         """
         User wants to invite some friends to chat
         """
-        dialogs.TransformChatToMUC(self.account, [self.contact.jid])
+        TransformChatToMUC(self.account, [self.contact.jid])
 
     def _on_send_chatstate(self, action, param):
         action.set_state(param)
@@ -613,11 +609,11 @@ class ChatControl(BaseControl):
             return
 
         BaseControl.send_message(self,
-                                     message,
-                                     type_='chat',
-                                     xhtml=xhtml,
-                                     process_commands=process_commands,
-                                     attention=attention)
+                                 message,
+                                 type_='chat',
+                                 xhtml=xhtml,
+                                 process_commands=process_commands,
+                                 attention=attention)
 
     def get_our_nick(self):
         return app.nicks[self.account]
@@ -642,15 +638,15 @@ class ChatControl(BaseControl):
             name = self.get_our_nick()
 
         BaseControl.add_message(self,
-                                    text,
-                                    kind,
-                                    name,
-                                    tim,
-                                    displaymarking=displaymarking,
-                                    msg_log_id=msg_log_id,
-                                    message_id=message_id,
-                                    correct_id=correct_id,
-                                    additional_data=additional_data)
+                                text,
+                                kind,
+                                name,
+                                tim,
+                                displaymarking=displaymarking,
+                                msg_log_id=msg_log_id,
+                                message_id=message_id,
+                                correct_id=correct_id,
+                                additional_data=additional_data)
 
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """
@@ -686,7 +682,7 @@ class ChatControl(BaseControl):
         super(ChatControl, self).shutdown()
         app.check_finalize(self)
 
-    def allow_shutdown(self, method, on_yes, on_no, _on_minimize):
+    def allow_shutdown(self, _method, on_yes, on_no, _on_minimize):
         time_ = app.last_message_time[self.account][self.contact.jid]
         # 2 seconds
         if time.time() - time_ < 2:
@@ -723,8 +719,8 @@ class ChatControl(BaseControl):
         surface = self.contact.get_avatar(AvatarSize.CHAT, scale)
         self.xml.avatar_image.set_from_surface(surface)
 
-    def _on_drag_data_received(self, widget, context, x, y, selection,
-                               target_type, timestamp):
+    def _on_drag_data_received(self, _widget, _context, _x_coord, _y_coord,
+                               selection, target_type, _timestamp):
         if not selection.get_data():
             return
 
@@ -749,17 +745,15 @@ class ChatControl(BaseControl):
             dropped_transport = app.get_transport_name_from_jid(dropped_jid)
             c_transport = app.get_transport_name_from_jid(self.contact.jid)
             if dropped_transport or c_transport:
-                return # transport contacts cannot be invited
+                return  # transport contacts cannot be invited
 
-            dialogs.TransformChatToMUC(self.account,
-                                       [self.contact.jid],
-                                       [dropped_jid])
+            TransformChatToMUC(self.account, [self.contact.jid], [dropped_jid])
 
     def _on_convert_to_gc_menuitem_activate(self, _widget):
         """
         User wants to invite some friends to chat
         """
-        dialogs.TransformChatToMUC(self.account, [self.contact.jid])
+        TransformChatToMUC(self.account, [self.contact.jid])
 
     def _on_client_state_changed(self, _client, _signal_name, state):
         self.msg_textview.set_sensitive(state.is_connected)
