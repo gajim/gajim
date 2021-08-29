@@ -134,10 +134,11 @@ class CommonContact(Observable):
         self.notify(signal_name, *args, **kwargs)
 
     def supports(self, requested_feature):
-        if not self.is_available:
-            return False
+        return self._supports(self._jid, requested_feature)
 
-        disco_info = app.storage.cache.get_last_disco_info(self._jid)
+    @staticmethod
+    def _supports(jid, requested_feature):
+        disco_info = app.storage.cache.get_last_disco_info(jid)
         if disco_info is None:
             return False
 
@@ -167,6 +168,12 @@ class BareContact(CommonContact):
 
         self._avatar_sha = app.storage.cache.get_contact(jid, 'avatar')
 
+    def supports(self, requested_feature):
+        for resource in self.iter_resources():
+            if resource.supports(requested_feature):
+                return True
+        return False
+
     def add_resource(self, resource):
         jid = self._jid.new_with(resource=resource)
         contact = ResourceContact(self._log, jid, self._account)
@@ -185,13 +192,13 @@ class BareContact(CommonContact):
     def get_resources(self):
         resources = []
         for contact in self._resources.values():
-            if contact.show != PresenceShowExt.OFFLINE:
+            if contact.is_available:
                 resources.append(contact)
         return resources
 
     def iter_resources(self):
         for contact in self._resources.values():
-            if contact.show != PresenceShowExt.OFFLINE:
+            if contact.is_available:
                 yield contact
 
     @property
@@ -305,6 +312,11 @@ class ResourceContact(CommonContact):
         CommonContact.__init__(self, logger, jid, account)
 
         self._presence = UNKNOWN_PRESENCE
+
+    def supports(self, requested_feature):
+        if not self.is_available:
+            return False
+        return CommonContact.supports(self, requested_feature)
 
     @property
     def is_available(self):
@@ -456,6 +468,11 @@ class GroupchatParticipant(CommonContact):
         self._client = app.get_client(self._account)
 
         self._presence = UNKNOWN_MUC_PRESENCE
+
+    def supports(self, requested_feature):
+        if not self.is_available:
+            return False
+        return CommonContact.supports(self, requested_feature)
 
     @property
     def is_pm_contact(self):
