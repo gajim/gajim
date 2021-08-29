@@ -256,7 +256,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
         app.plugin_manager.gui_extension_point('chat_control_base', self)
 
-        # pylint: disable=line-too-long
         self.register_events([
             ('ping-sent', ged.GUI1, self._nec_ping),
             ('ping-reply', ged.GUI1, self._nec_ping),
@@ -264,7 +263,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             ('sec-catalog-received', ged.GUI1, self._sec_labels_received),
             ('style-changed', ged.GUI1, self._style_changed),
         ])
-        # pylint: enable=line-too-long
 
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
@@ -363,7 +361,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         return True
 
     def allow_shutdown(self, method, on_response_yes, on_response_no,
-                    on_response_minimize):
+                       on_response_minimize):
         """
         Called to check is a control is allowed to shutdown.
         If a control is not in a suitable shutdown state this method
@@ -426,10 +424,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         """
         # Return a markup'd label and optional Gtk.Color in a tuple like:
         # return (label_str, None)
-
-    def get_tab_image(self):
-        # Return a suitable tab image for display.
-        return None
 
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """
@@ -627,7 +621,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                                      Gtk.IconSize.MENU)
 
     def set_speller(self):
-        if not app.is_installed('GSPELL') or not app.settings.get('use_speller'):
+        if (not app.is_installed('GSPELL') or
+                not app.settings.get('use_speller')):
             return
 
         gspell_lang = self.get_speller_language()
@@ -751,6 +746,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         If right-clicked, show popup
         """
         if event.button == 3:  # right click
+            # TODO:
             self.parent_win.popup_menu(event)
 
     def _on_message_textview_paste_event(self, _texview):
@@ -822,9 +818,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if event.keyval == Gdk.KEY_space:
             self.space_pressed = True
 
-        elif (self.space_pressed or self.msg_textview.undo_pressed) and \
-        event.keyval not in (Gdk.KEY_Control_L, Gdk.KEY_Control_R) and \
-        not (event.keyval == Gdk.KEY_z and event.get_state() & Gdk.ModifierType.CONTROL_MASK):
+        elif ((self.space_pressed or self.msg_textview.undo_pressed) and
+                event.keyval not in (Gdk.KEY_Control_L, Gdk.KEY_Control_R) and
+                not (event.keyval == Gdk.KEY_z and
+                     event.get_state() & Gdk.ModifierType.CONTROL_MASK)):
             # If the space key has been pressed and now it hasn't,
             # we save the buffer into the undo list. But be careful we're not
             # pressing Control again (as in ctrl+z)
@@ -841,8 +838,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.last_key_tabs = False
 
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
-            if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
-                            event.keyval == Gdk.KEY_ISO_Left_Tab:
+            if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
+                    event.keyval == Gdk.KEY_ISO_Left_Tab):
+                # TODO:
                 self.parent_win.move_to_next_unread_tab(False)
                 return True
 
@@ -852,6 +850,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab:
+                # TODO
                 self.parent_win.move_to_next_unread_tab(True)
                 return True
 
@@ -886,8 +885,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
                 if self.command_hits:
                     message_buffer.delete(start, end)
-                    message_buffer.insert_at_cursor(self.COMMAND_PREFIX + \
-                        self.command_hits[0] + ' ')
+                    message_buffer.insert_at_cursor(
+                        self.COMMAND_PREFIX + self.command_hits[0] + ' ')
                     self.last_key_tabs = True
                 return True
             if not self._type.is_groupchat:
@@ -928,7 +927,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._on_send_message()
             return True
 
-        elif event.keyval == Gdk.KEY_z: # CTRL+z
+        elif event.keyval == Gdk.KEY_z:  # CTRL+z
             if event_state & Gdk.ModifierType.CONTROL_MASK:
                 self.msg_textview.undo()
                 return True
@@ -960,8 +959,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.scroll_to_end(force=True)
         self._jump_to_end_button.reset_unread_count()
 
-    def _on_drag_data_received(self, widget, context, x, y, selection,
-                               target_type, timestamp):
+    def _on_drag_data_received(self, widget, context, x_coord, y_coord,
+                               selection, target_type, timestamp):
         """
         Derived types SHOULD implement this
         """
@@ -1052,13 +1051,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         # Clear msg input
         message_buffer = self.msg_textview.get_buffer()
-        message_buffer.set_text('') # clear message buffer (and tv of course)
+        message_buffer.set_text('')  # clear message buffer (and tv of course)
 
     def _on_window_motion_notify(self, *args):
         """
         It gets called no matter if it is the active window or not
         """
-        # TODO
+        # TODO:
         return
         if self.parent_win.get_active_jid() == self.contact.jid:
             # if window is the active one, set last interaction
@@ -1068,7 +1067,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _on_message_tv_buffer_changed(self, textbuffer):
         has_text = self.msg_textview.has_text()
         app.window.lookup_action(
-                'send-message-' + self.control_id).set_enabled(has_text)
+            f'send-message-{self.control_id}').set_enabled(has_text)
 
         if textbuffer.get_char_count() and self.encryption:
             app.plugin_manager.extension_point(
@@ -1302,7 +1301,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def on_font_menuitem_activate(self, _widget):
         font_dialog = Gtk.FontChooserDialog(None, app.window)
         start, finish = self.msg_textview.get_active_iters()
-        font_dialog.connect('response', self.msg_textview.font_set, start, finish)
+        font_dialog.connect(
+            'response', self.msg_textview.font_set, start, finish)
         font_dialog.show_all()
 
     def on_formatting_menuitem_activate(self, widget):
@@ -1343,45 +1343,34 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             self._on_send_file_jingle()
 
-    def _on_send_file_jingle(self, gc_contact=None):
-        """
-        gc_contact can be set when we are in a groupchat control
-        """
-        def _on_ok(_contact):
+    def _on_send_file_jingle(self):
+        def _on_send():
             app.interface.instances['file_transfers'].show_file_send_request(
-                self.account, _contact)
+                self.account, self.contact)
 
-        if self._type.is_privatechat:
-            gc_contact = self.gc_contact
+        if self.is_privatechat:
+            gc_control = app.window.get_control(
+                self.account, self._room_contact.jid)
+            self_contact = self._room_contact.get_self()
 
-        if not gc_contact:
-            _on_ok(self.contact)
-            return
-
-        # gc or pm
-        gc_control = app.interface.msg_win_mgr.get_gc_control(
-            gc_contact.room_jid, self.account)
-        self_contact = app.contacts.get_gc_contact(self.account,
-                                                   gc_control.room_jid,
-                                                   gc_control.nick)
-        if (gc_control.is_anonymous and
-                gc_contact.affiliation.value not in ['admin', 'owner'] and
-                self_contact.affiliation.value in ['admin', 'owner']):
-            contact = app.contacts.get_contact(self.account, gc_contact.jid)
-            if not contact or contact.sub not in ('both', 'to'):
-
+            if (gc_control.is_anonymous and
+                    self.contact.affiliation.value not
+                    in ['admin', 'owner'] and
+                    self_contact.affiliation.value in ['admin', 'owner']):
+                # Show a warning if we're trying to send a file to a PM contact
+                # which is not Admin/Owner, and thus cannot normally see our JID
                 ConfirmationDialog(
                     _('Privacy'),
                     _('Warning'),
                     _('If you send a file to <b>%s</b>, your real XMPP '
-                      'address will be revealed.') % gc_contact.name,
+                      'address will be revealed.') % self.contact.name,
                     [DialogButton.make('Cancel'),
                      DialogButton.make(
                          'OK',
-                         text=_('_Continue'),
-                         callback=lambda: _on_ok(gc_contact))]).show()
+                         text=_('_Send Anyway'),
+                         callback=_on_send)]).show()
                 return
-        _on_ok(gc_contact)
+        _on_send()
 
     def set_control_active(self, state):
         if state:
@@ -1537,9 +1526,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             start_iter = msg_buf.get_start_iter()
             end_iter = msg_buf.get_end_iter()
             self.orig_msg = msg_buf.get_text(start_iter, end_iter, False)
-        if pos == size and size > 0 and direction == 'up' and \
-        msg_type == 'sent' and not self.correcting and (not \
-        history[pos - 1].startswith('/') or history[pos - 1].startswith('/me')):
+        if (pos == size and size > 0 and direction == 'up' and
+                msg_type == 'sent' and not self.correcting and (
+                    not history[pos - 1].startswith('/') or
+                    history[pos - 1].startswith('/me'))):
             self.correcting = True
             gtkgui_helpers.add_css_class(
                 self.msg_textview, 'gajim-msg-correcting')
