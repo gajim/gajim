@@ -109,11 +109,9 @@ class Caps(BaseModule):
 
         jid = str(properties.jid)
         app.storage.cache.set_last_disco_info(jid, disco_info, cache_only=True)
-        app.nec.push_incoming_event(
-            NetworkEvent('caps-update',
-                         account=self._account,
-                         fjid=jid,
-                         jid=properties.jid.bare))
+
+        contact = self._con.get_module('Contacts').get_contact(properties.jid)
+        contact.notify('caps-update')
 
     def _execute_task(self, task):
         self._log.info('Request %s from %s', task.entity.hash, task.entity.jid)
@@ -160,11 +158,9 @@ class Caps(BaseModule):
         for task in tasks:
             self._remove_task(task)
             self._log.info('Update %s', task.entity.jid)
-            app.nec.push_incoming_event(
-                NetworkEvent('caps-update',
-                             account=self._account,
-                             fjid=str(task.entity.jid),
-                             jid=task.entity.jid.bare))
+            contact = self._con.get_module('Contacts').get_contact(
+                task.entity.jid)
+            contact.notify('caps-update')
 
     def update_caps(self):
         if not app.account_is_connected(self._account):

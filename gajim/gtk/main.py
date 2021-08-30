@@ -62,7 +62,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.register_events([
             ('presence-received', ged.GUI1, self._on_event),
-            ('caps-update', ged.GUI1, self._on_event),
             ('message-sent', ged.OUT_POSTCORE, self._on_event),
             ('message-received', ged.CORE, self._on_event),
             ('mam-message-received', ged.CORE, self._on_event),
@@ -445,10 +444,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._set_startup_finished()
 
     def _on_event(self, event):
-        if event.name == 'caps-update':
-            # TODO
-            return
-
         if event.name == 'update-roster-avatar':
             return
 

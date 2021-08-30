@@ -181,6 +181,7 @@ class BareContact(CommonContact):
         contact.connect('presence-update', self._on_signal)
         contact.connect('chatstate-update', self._on_signal)
         contact.connect('nickname-update', self._on_signal)
+        contact.connect('caps-update', self._on_signal)
         return contact
 
     def get_resource(self, resource):

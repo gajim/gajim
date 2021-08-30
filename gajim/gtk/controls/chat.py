@@ -176,6 +176,7 @@ class ChatControl(BaseControl):
             'chatstate-update': self._on_chatstate_update,
             'nickname-update': self._on_nickname_update,
             'avatar-update': self._on_avatar_update,
+            'caps-update': self._on_caps_update,
         })
 
     @property
@@ -414,14 +415,9 @@ class ChatControl(BaseControl):
         self.draw_banner_text()
 
     def _on_presence_update(self, _contact, _signal_name):
-        self.update_actions()
         self._update_avatar()
 
-    def _on_caps_update(self, event):
-        if self._type.is_chat and event.jid != self.contact.jid:
-            return
-        if self._type.is_privatechat and event.fjid != self.contact.jid:
-            return
+    def _on_caps_update(self, _contact, _signal_name):
         self.update_ui()
 
     def _on_mam_message_received(self, event):

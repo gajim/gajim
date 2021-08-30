@@ -253,11 +253,9 @@ class Discovery(BaseModule):
                                               result,
                                               cache_only=True)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('caps-update',
-                         account=self._account,
-                         fjid=fjid,
-                         jid=contact.jid))
+
+        contact = self._con.get_module('Contacts').get_contact(result.jid)
+        contact.notify('caps-update')
 
 
 def get_instance(*args, **kwargs):
