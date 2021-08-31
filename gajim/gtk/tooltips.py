@@ -33,6 +33,8 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
 
+from nbxmpp import JID
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import AvatarSize
@@ -304,20 +306,19 @@ class FileTransfersTooltip:
             file_name = file_props.name
         properties.append((_('File Name: '),
                            GLib.markup_escape_text(file_name)))
+
+        client = app.get_client(file_props.tt_account)
         if file_props.type_ == 'r':
             type_ = Q_('?Noun:Download')
             actor = _('Sender: ')
-            sender = file_props.sender.split('/')[0]
-            name = app.contacts.get_first_contact_from_jid(
-                file_props.tt_account, sender).get_shown_name()
+            sender = JID.from_string(file_props.sender)
+            name = client.get_module('Contacts').get_contact(sender.bare).name
         else:
             type_ = Q_('?Noun:Upload')
             actor = _('Recipient: ')
-            receiver = file_props.receiver
-            if hasattr(receiver, 'name'):
-                name = receiver.get_shown_name()
-            else:
-                name = receiver.split('/')[0]
+            receiver = JID.from_string(file_props.receiver)
+            name = client.get_module('Contacts').get_contact(
+                receiver.bare).name
         properties.append((Q_('?transfer type:Type: '), type_))
         properties.append((actor, GLib.markup_escape_text(name)))
 
