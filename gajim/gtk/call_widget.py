@@ -184,6 +184,9 @@ class CallWidget(Gtk.Box):
         content_types = []
         for item in event.contents:
             content_types.append(item.media)
+        if not any(item in ('audio', 'video') for item in content_types):
+            return
+
         if 'audio' in content_types:
             self._set_jingle_state(
                 'audio',
