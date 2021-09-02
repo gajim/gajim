@@ -426,6 +426,11 @@
     color: @insensitive_fg_color;
 }
 
+.resource-selector list row {
+    padding: 6px;
+    border-bottom: 1px solid @borders;
+}
+
 /*  Profile window */
 #NicknameEntry:disabled {
     font-size: 28px;
