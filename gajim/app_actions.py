@@ -21,11 +21,11 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
-from gajim import dialogs
 
 from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.about import AboutDialog
 from gajim.gui.discovery import ServiceDiscoveryWindow
+from gajim.gui.synchronise_contacts import SynchroniseSelectAccountDialog
 from gajim.gui.util import open_window
 
 # General Actions
@@ -127,7 +127,7 @@ def on_import_contacts(_action, param):
         app.interface.instances['import_contacts'].dialog.present()
     else:
         app.interface.instances['import_contacts'] = \
-            dialogs.SynchroniseSelectAccountDialog(account)
+            SynchroniseSelectAccountDialog(account)
 
 
 # Advanced Actions
