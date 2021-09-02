@@ -245,7 +245,9 @@ class ChatControl(BaseControl):
 
         # Send file (Jingle)
         jingle_support = self.contact.supports(Namespace.JINGLE_FILE_TRANSFER_5)
-        jingle_conditions = jingle_support and self.contact.is_available
+        jingle_conditions = bool(jingle_support and
+                                 self.contact.is_available and
+                                 not self.contact.is_pm_contact)
         jingle = self._get_action('send-file-jingle-')
         jingle.set_enabled(online and jingle_conditions)
 

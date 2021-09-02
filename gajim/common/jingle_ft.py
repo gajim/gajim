@@ -101,13 +101,6 @@ class JingleFileTransfer(JingleContent):
         self.session = session
         self.media = 'file'
         self.nominated_cand = {}
-        if app.contacts.is_gc_contact(session.connection.name,
-                                        session.peerjid):
-            roomjid = session.peerjid.split('/')[0]
-            dstaddr = hashlib.sha1(('%s%s%s' % (self.file_props.sid,
-                                                session.ourjid, roomjid))
-                                   .encode('utf-8')).hexdigest()
-            self.file_props.dstaddr = dstaddr
         self.state = State.NOT_STARTED
         self.states = {
             State.INITIALIZED   : StateInitialized(self),

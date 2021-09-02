@@ -207,16 +207,7 @@ class Jingle(BaseModule):
 
     def start_file_transfer(self, jid, file_props, request=False):
         logger.info("start file transfer with file: %s", file_props)
-        contact = app.contacts.get_contact_with_highest_priority(
-            self._account, app.get_jid_without_resource(jid))
-        if app.contacts.is_gc_contact(self._account, jid):
-            gcc = jid.split('/')
-            if len(gcc) == 2:
-                contact = app.contacts.get_gc_contact(self._account,
-                                                      gcc[0],
-                                                      gcc[1])
-        if contact is None:
-            return None
+        contact = self._con.get_module('Contacts').get_contact(jid)
         use_security = contact.supports(Namespace.JINGLE_XTLS)
         jingle = JingleSession(self._con,
                                weinitiate=True,
