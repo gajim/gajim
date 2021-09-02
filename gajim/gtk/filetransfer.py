@@ -21,7 +21,6 @@ import os
 import time
 import logging
 from functools import partial
-from pathlib import Path
 from enum import IntEnum, unique
 from datetime import datetime
 
@@ -29,6 +28,8 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Pango
+
+from nbxmpp import JID
 
 from gajim import gtkgui_helpers
 
@@ -47,7 +48,7 @@ from .dialogs import HigDialog
 from .dialogs import InformationDialog
 from .dialogs import ErrorDialog
 from .filechoosers import FileSaveDialog
-from .filechoosers import FileChooserDialog
+from .file_transfer_send import SendFileDialog
 from .tooltips import FileTransfersTooltip
 from .util import get_builder
 
@@ -228,10 +229,11 @@ class FileTransfersWindow:
         sectext = _('File name: %s') % GLib.markup_escape_text(file_name)
         sectext += '\n' + _('Size: %s') % GLib.format_size_full(
             file_props.size, self.units)
+        client = app.get_client(file_props.tt_account)
         if file_props.type_ == 'r':
-            jid = file_props.sender.split('/')[0]
-            sender_name = app.contacts.get_first_contact_from_jid(
-                file_props.tt_account, jid).get_shown_name()
+            jid = JID.from_string(file_props.sender)
+            sender_name = client.get_module('Contacts').get_contact(
+                jid.bare).name
             sender = sender_name
         else:
             # You is a reply of who sent a file
@@ -239,9 +241,9 @@ class FileTransfersWindow:
         sectext += '\n' + _('Sender: %s') % sender
         sectext += '\n' + _('Recipient: ')
         if file_props.type_ == 's':
-            jid = file_props.receiver.split('/')[0]
-            receiver_name = app.contacts.get_first_contact_from_jid(
-                file_props.tt_account, jid).get_shown_name()
+            jid = JID.from_string(file_props.receiver)
+            receiver_name = client.get_module('Contacts').get_contact(
+                jid.bare).name
             recipient = receiver_name
         else:
             # You is a reply of who received a file
@@ -250,7 +252,7 @@ class FileTransfersWindow:
         if file_props.type_ == 'r':
             sectext += '\n' + _('Saved in: %s') % file_path
 
-        dialog = HigDialog(app.interface.roster.window,
+        dialog = HigDialog(app.window,
                            Gtk.MessageType.INFO,
                            Gtk.ButtonsType.NONE,
                            _('File transfer completed'),
@@ -298,17 +300,10 @@ class FileTransfersWindow:
         self._ui.transfers_list.get_selection().unselect_all()
 
     def show_hash_error(self, jid, file_props, account):
-
-        def on_yes(dummy, fjid, file_props, account):
+        def _on_yes():
             # Delete old file
             os.remove(file_props.file_name)
-            jid, resource = app.get_room_and_nick_from_fjid(fjid)
-            if resource:
-                contact = app.contacts.get_contact(account, jid, resource)
-            else:
-                contact = app.contacts.get_contact_with_highest_priority(
-                    account, jid)
-                fjid = contact.get_full_jid()
+
             # Request the file to the sender
             sid = helpers.get_random_string()
             new_file_props = FilesProp.getNewFileProp(account, sid)
@@ -319,11 +314,14 @@ class FileTransfersWindow:
             new_file_props.date = file_props.date
             new_file_props.hash_ = file_props.hash_
             new_file_props.type_ = 'r'
-            tsid = app.connections[account].get_module(
-                'Jingle').start_file_transfer(fjid, new_file_props, True)
+            tsid = client.get_module('Jingle').start_file_transfer(
+                jid, new_file_props, True)
 
             new_file_props.transport_sid = tsid
             self.add_transfer(account, contact, new_file_props)
+
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
 
         if file_props.type_ == 'r':
             file_name = os.path.basename(file_props.file_name)
@@ -339,16 +337,14 @@ class FileTransfersWindow:
                                text=_('_No')),
              DialogButton.make('Accept',
                                text=_('_Download Again'),
-                               callback=on_yes,
-                               args=[jid,
-                                     file_props,
-                                     account])]).show()
+                               callback=_on_yes)]).show()
 
     def show_file_send_request(self, account, contact):
         send_callback = partial(self.send_file, account, contact)
-        SendFileDialog(send_callback, self.window)
+        SendFileDialog(contact, send_callback, self.window)
 
-    def send_file(self, account, contact, file_path, file_desc=''):
+    def send_file(self, account, contact, resource_jid, file_path,
+                  file_desc=''):
         """
         Start the real transfer(upload) of the file
         """
@@ -358,20 +354,15 @@ class FileTransfersWindow:
             ErrorDialog(pritext, sextext)
             return
 
-        if isinstance(contact, str):
-            if contact.find('/') == -1:
-                return
-            (jid, resource) = contact.split('/', 1)
-            contact = app.contacts.create_contact(jid=jid, account=account,
-                                                  resource=resource)
         file_name = os.path.split(file_path)[1]
         file_props = self.get_send_file_props(account, contact, file_path,
                                               file_name, file_desc)
         if file_props is None:
             return False
 
-        app.connections[account].get_module('Jingle').start_file_transfer(
-            contact.get_full_jid(), file_props)
+        client = app.get_client(account)
+        client.get_module('Jingle').start_file_transfer(
+            str(resource_jid), file_props)
         self.add_transfer(account, contact, file_props)
 
         return True
@@ -383,8 +374,8 @@ class FileTransfersWindow:
         file_props.file_name = file_path
         file_props.type_ = 'r'
         self.add_transfer(account, contact, file_props)
-        app.connections[account].get_module('Bytestream').send_file_approval(
-            file_props)
+        client = app.get_client(account)
+        client.get_module('Bytestream').send_file_approval(file_props)
 
     def on_file_request_accepted(self, account, contact, file_props):
         def _on_accepted(account, contact, file_props, file_path):
@@ -417,7 +408,7 @@ class FileTransfersWindow:
                         file_path, account, contact, file_props)
 
                 def _on_cancel():
-                    con.get_module('Bytestream').send_file_rejection(
+                    client.get_module('Bytestream').send_file_rejection(
                         file_props)
 
                 ConfirmationDialog(
@@ -447,10 +438,10 @@ class FileTransfersWindow:
             self._start_receive(file_path, account, contact, file_props)
 
         # Show file save as dialog
-        con = app.connections[account]
+        client = app.get_client(account)
         accept_cb = partial(_on_accepted, account, contact, file_props)
-        cancel_cb = partial(con.get_module('Bytestream').send_file_rejection,
-                            file_props)
+        cancel_cb = partial(
+            client.get_module('Bytestream').send_file_rejection, file_props)
         FileSaveDialog(accept_cb,
                        cancel_cb,
                        path=app.settings.get('last_save_dir'),
@@ -478,12 +469,12 @@ class FileTransfersWindow:
             self.on_file_request_accepted(account, contact, file_props)
 
         def _on_cancel():
-            app.connections[account].get_module(
+            app.get_client(account).get_module(
                 'Bytestream').send_file_rejection(file_props)
 
         ConfirmationDialog(
             _('File Transfer Request'),
-            _('%s wants to send you a file') % contact.get_shown_name(),
+            _('%s wants to send you a file') % contact.name,
             sectext,
             [DialogButton.make('Cancel',
                                callback=_on_cancel),
@@ -518,13 +509,13 @@ class FileTransfersWindow:
             text += received_size + '/' + full_size
             self.model.set(iter_, Column.PROGRESS, text)
 
-            def pulse():
-                p = self.model.get(iter_, Column.PULSE)[0]
-                if p == GLib.MAXINT32:
+            def _pulse():
+                pulse_value = self.model.get(iter_, Column.PULSE)[0]
+                if pulse_value == GLib.MAXINT32:
                     return False
-                self.model.set(iter_, Column.PULSE, p + 1)
+                self.model.set(iter_, Column.PULSE, pulse_value + 1)
                 return True
-            GLib.timeout_add(100, pulse)
+            GLib.timeout_add(100, _pulse)
         elif status == 'hash_error':
             text = _('File error') + '\n'
             received_size = GLib.format_size_full(
@@ -569,6 +560,9 @@ class FileTransfersWindow:
         if not file_props.transfered_size:
             return 0., 0.
 
+        if file_props.elapsed_time == 0:
+            return 0., 0.
+
         if len(file_props.transfered_size) == 1:
             speed = round(float(transfered_size) / file_props.elapsed_time)
         else:
@@ -595,7 +589,7 @@ class FileTransfersWindow:
             account = file_props.tt_account
             if account in app.connections:
                 # there is a connection to the account
-                app.connections[account].get_module(
+                app.get_client(account).get_module(
                     'Bytestream').remove_transfer(file_props)
             if file_props.type_ == 'r':  # we receive a file
                 other = file_props.sender
@@ -611,8 +605,7 @@ class FileTransfersWindow:
                 for event in app.events.get_events(account, jid, [ev_type]):
                     if event.file_props.sid == file_props.sid:
                         app.events.remove_events(account, jid, event)
-                        app.interface.roster.draw_contact(jid, account)
-                        app.interface.roster.show_title()
+
         FilesProp.deleteFileProp(file_props)
         del file_props
 
@@ -678,8 +671,9 @@ class FileTransfersWindow:
             self.model.set(iter_, 0, self.icons[status])
             if transfered_size == full_size:
                 # If we are receiver and this is a jingle session
-                if file_props.type_ == 'r' and  \
-                file_props.session_type == 'jingle' and file_props.hash_:
+                if (file_props.type_ == 'r' and
+                        file_props.session_type == 'jingle' and
+                        file_props.hash_):
                     # Show that we are computing the hash
                     self.set_status(file_props, 'computing')
                 else:
@@ -753,7 +747,7 @@ class FileTransfersWindow:
         else:
             file_name = file_props.name
         text_props = GLib.markup_escape_text(file_name) + '\n'
-        text_props += contact.get_shown_name()
+        text_props += contact.name
         self.model.set(iter_,
                        1,
                        text_labels,
@@ -916,11 +910,11 @@ class FileTransfersWindow:
         account = file_props.tt_account
         if account not in app.connections:
             return
-        con = app.connections[account]
+        client = app.get_client(account)
         # Check if we are in a IBB transfer
         if file_props.direction:
-            con.get_module('IBB').send_close(file_props)
-        con.get_module('Bytestream').disconnect_transfer(file_props)
+            client.get_module('IBB').send_close(file_props)
+        client.get_module('Bytestream').disconnect_transfer(file_props)
         self.set_status(file_props, 'stop')
 
     def _on_notify_ft_complete_toggled(self, widget, *args):
@@ -1028,70 +1022,3 @@ class FileTransfersWindow:
     def _on_file_transfers_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:  # ESCAPE
             self.window.hide()
-
-
-class SendFileDialog(Gtk.ApplicationWindow):
-    def __init__(self, send_callback, transient_for):
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('SendFileDialog')
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_resizable(True)
-        self.set_default_size(500, 350)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        self.set_transient_for(transient_for)
-        self.set_title(_('Choose a File to Send…'))
-        self.set_destroy_with_parent(True)
-
-        self._send_callback = send_callback
-
-        self._ui = get_builder('filetransfers_send_file_dialog.ui')
-        self.add(self._ui.send_file_grid)
-        self.connect('key-press-event', self._key_press_event)
-        self._ui.connect_signals(self)
-        self.show_all()
-
-    def _send(self, button):
-        for file in self._ui.listbox.get_children():
-            self._send_callback(str(file.path), self._get_description())
-        self.destroy()
-
-    def _select_files(self, button):
-        FileChooserDialog(self._set_files,
-                          select_multiple=True,
-                          transient_for=self,
-                          path=app.settings.get('last_send_dir'))
-
-    def _remove_files(self, button):
-        selected = self._ui.listbox.get_selected_rows()
-        for item in selected:
-            self._ui.listbox.remove(item)
-
-    def _set_files(self, filenames):
-        for file in filenames:
-            row = FileRow(file)
-            if row.path.is_dir():
-                continue
-            last_dir = row.path.parent
-            self._ui.listbox.add(row)
-        self._ui.listbox.show_all()
-        app.settings.set('last_send_dir', str(last_dir))
-
-    def _get_description(self):
-        buffer_ = self._ui.description.get_buffer()
-        start, end = buffer_.get_bounds()
-        return buffer_.get_text(start, end, False)
-
-    def _key_press_event(self, widget, event):
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
-
-
-class FileRow(Gtk.ListBoxRow):
-    def __init__(self, path):
-        Gtk.ListBoxRow.__init__(self)
-        self.path = Path(path)
-        label = Gtk.Label(label=self.path.name)
-        label.set_ellipsize(Pango.EllipsizeMode.END)
-        label.set_xalign(0)
-        self.add(label)
