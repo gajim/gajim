@@ -757,14 +757,10 @@ class Interface:
                 text=event.file_props.name)
 
     def handle_event_file_request(self, event):
-        # TODO
         account = event.conn.name
-        if event.jid not in app.contacts.get_jid_list(account):
-            contact = app.contacts.create_not_in_roster_contact(
-                jid=event.jid, account=account)
-            app.contacts.add_contact(account, contact)
-            self.roster.add_contact(event.jid, account)
-        contact = app.contacts.get_first_contact_from_jid(account, event.jid)
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(event.jid)
+
         if event.file_props.session_type == 'jingle':
             request = \
                 event.stanza.getTag('jingle').getTag('content').getTag(
@@ -781,8 +777,7 @@ class Interface:
         file_event = events.FileRequestEvent(event.file_props)
         self.add_event(account, event.jid, file_event)
         if helpers.allow_showing_notification(account):
-            txt = _('%s wants to send you a file.') % app.get_name_from_jid(
-                account, event.jid)
+            txt = _('%s wants to send you a file.') % contact.name
             event_type = _('File Transfer Request')
             app.notification.popup(
                 event_type,
@@ -823,11 +818,11 @@ class Interface:
         if file_props.error == 0:
             file_transfers.set_progress(
                 file_props.type_, file_props.sid, file_props.received_len)
-            jid = app.get_jid_without_resource(str(file_props.receiver))
+            jid = JID.from_string(file_props.receiver)
             app.nec.push_incoming_event(
                 NetworkEvent('file-transfer-completed',
                              file_props=file_props,
-                             jid=jid))
+                             jid=jid.bare))
 
         else:
             file_transfers.set_status(file_props, 'stop')
@@ -947,56 +942,55 @@ class Interface:
             self.add_event(account, jid, event)
 
         if file_props is not None:
+            client = app.get_client(account)
+
             if file_props.type_ == 'r':
-                # Get the name of the sender, as it is in the roster
-                sender = file_props.sender.split('/')[0]
-                name = app.contacts.get_first_contact_from_jid(
-                    account, sender).get_shown_name()
+                jid = JID.from_string(file_props.sender)
+                contact = client.get_module('contacts').get_contact(jid.bare)
                 filename = os.path.basename(file_props.file_name)
 
                 if event_type == _('File Transfer Completed'):
                     txt = _('%(filename)s received from %(name)s.') % {
                         'filename': filename,
-                        'name': name}
+                        'name': contact.name}
                     icon_name = 'emblem-default'
                 elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s from %(name)s '
                             'stopped.') % {
                                 'filename': filename,
-                                'name': name}
+                                'name': contact.name}
                     icon_name = 'process-stop'
                 else:  # File transfer hash error
                     txt = _('File transfer of %(filename)s from %(name)s '
                             'failed.') % {
                                 'filename': filename,
-                                'name': name}
+                                'name': contact.name}
                     icon_name = 'process-stop'
             else:
                 receiver = file_props.receiver
                 if hasattr(receiver, 'jid'):
                     receiver = receiver.jid
-                receiver = receiver.split('/')[0]
-                # Get the name of the contact, as it is in the roster
-                name = app.contacts.get_first_contact_from_jid(
-                    account, receiver).get_shown_name()
+
+                jid = JID.from_string(receiver)
+                contact = client.get_module('contacts').get_contact(jid.bare)
                 filename = os.path.basename(file_props.file_name)
                 if event_type == _('File Transfer Completed'):
                     txt = _('You successfully sent %(filename)s to '
                             '%(name)s.') % {
                                 'filename': filename,
-                                'name': name}
+                                'name': contact.name}
                     icon_name = 'emblem-default'
                 elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s to %(name)s '
                             'stopped.') % {
                                 'filename': filename,
-                                'name': name}
+                                'name': contact.name}
                     icon_name = 'process-stop'
                 else:  # File transfer hash error
                     txt = _('File transfer of %(filename)s to %(name)s '
                             'failed.') % {
                                 'filename': filename,
-                                'name': name}
+                                'name': contact.name}
                     icon_name = 'process-stop'
         else:
             txt = ''
