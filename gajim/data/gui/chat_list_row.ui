@@ -230,14 +230,14 @@
             <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="transition-type">crossfade</property>
-            <property name="transition-duration">100</property>
+            <property name="transition-duration">50</property>
             <child>
               <object class="GtkButton" id="close_button">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="valign">center</property>
-                <property name="margin-end">3</property>
+                <property name="margin-end">6</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
