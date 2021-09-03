@@ -53,8 +53,7 @@ from gajim.common.const import PEPEventType
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 
-from gajim.dialogs import TransformChatToMUC
-
+from gajim.gui.adhoc_muc import AdhocMUC
 from gajim.gui.call_widget import CallWidget
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
@@ -323,7 +322,7 @@ class ChatControl(BaseControl):
         """
         User wants to invite some friends to chat
         """
-        TransformChatToMUC(self.account, [self.contact.jid])
+        AdhocMUC(self.account, [self.contact.jid])
 
     def _on_send_chatstate(self, action, param):
         action.set_state(param)
@@ -746,13 +745,13 @@ class ChatControl(BaseControl):
             if dropped_transport or c_transport:
                 return  # transport contacts cannot be invited
 
-            TransformChatToMUC(self.account, [self.contact.jid], [dropped_jid])
+            AdhocMUC(self.account, [self.contact.jid], [dropped_jid])
 
     def _on_convert_to_gc_menuitem_activate(self, _widget):
         """
         User wants to invite some friends to chat
         """
-        TransformChatToMUC(self.account, [self.contact.jid])
+        AdhocMUC(self.account, [self.contact.jid])
 
     def _on_client_state_changed(self, _client, _signal_name, state):
         self.msg_textview.set_sensitive(state.is_connected)
