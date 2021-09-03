@@ -14,10 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Gio, GLib
-from nbxmpp.namespaces import Namespace
+from gi.repository import Gtk
+from gi.repository import Gio
+from gi.repository import GLib
 
-from gajim import gtkgui_helpers
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import is_affiliation_change_allowed
@@ -25,33 +25,11 @@ from gajim.common.helpers import is_role_change_allowed
 from gajim.common.i18n import _
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
-
-from gajim.gui.util import get_builder
-
-
-def build_resources_submenu(contacts, account, action, cap=None):
-    """
-    Build a submenu with contact's resources.
-    """
-    sub_menu = Gtk.Menu()
-
-    for resource_contact in contacts:
-        item = Gtk.MenuItem.new_with_label(resource_contact.resource)
-        sub_menu.append(item)
-        item.connect(
-            'activate',
-            action,
-            resource_contact,
-            account,
-            resource_contact.resource)
-
-        if cap and not resource_contact.supports(cap):
-            item.set_sensitive(False)
-
-    return sub_menu
+from gajim.gtkgui_helpers import destroy_widget
 
 
 def get_transport_menu(contact, account):
+    # TODO:
     roster = app.interface.roster
     jid = contact.jid
 
@@ -60,7 +38,7 @@ def get_transport_menu(contact, account):
     # Send single message
     item = Gtk.MenuItem.new_with_mnemonic(_('Send Single _Message…'))
     item.connect('activate', roster.on_send_single_message_menuitem_activate,
-        account, contact)
+                 account, contact)
     menu.append(item)
     if app.account_is_disconnected(account):
         item.set_sensitive(False)
@@ -69,14 +47,14 @@ def get_transport_menu(contact, account):
     if helpers.jid_is_blocked(account, jid):
         blocked = True
 
-    item = Gtk.SeparatorMenuItem.new() # separator
+    item = Gtk.SeparatorMenuItem.new()
     menu.append(item)
 
     # Execute Command
     item = Gtk.MenuItem.new_with_mnemonic(_('E_xecute Command…'))
     menu.append(item)
     item.connect('activate', roster.on_execute_command, contact, account,
-        contact.resource)
+                 contact.resource)
     if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
@@ -100,7 +78,7 @@ def get_transport_menu(contact, account):
     if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
-    item = Gtk.SeparatorMenuItem.new() # separator
+    item = Gtk.SeparatorMenuItem.new()
     manage_transport_submenu.append(item)
 
     # Block
@@ -122,7 +100,7 @@ def get_transport_menu(contact, account):
     if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
-    item = Gtk.SeparatorMenuItem.new() # separator
+    item = Gtk.SeparatorMenuItem.new()
     menu.append(item)
 
     # Information
@@ -132,7 +110,7 @@ def get_transport_menu(contact, account):
     if app.account_is_disconnected(account):
         information_menuitem.set_sensitive(False)
 
-    menu.connect('selection-done', gtkgui_helpers.destroy_widget)
+    menu.connect('selection-done', destroy_widget)
     menu.show_all()
     return menu
 
