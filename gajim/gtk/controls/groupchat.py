@@ -712,6 +712,10 @@ class GroupchatControl(BaseControl):
                                callback=on_approve)],
             modal=False).show()
 
+    def _on_message_received(self, event):
+        if not event.msgtxt:
+            return
+
     def _on_mam_message_received(self, event):
         if not event.properties.type.is_groupchat:
             return

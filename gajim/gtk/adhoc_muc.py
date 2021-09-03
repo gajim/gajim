@@ -31,7 +31,7 @@ from .util import get_builder
 log = logging.getLogger('gajim.gui.adhoc_muc')
 
 
-class AdhocMUC(Gtk.ApplicationWindow):
+class AdhocMUC:
 
     # Keep a reference on windows so garbage collector don't restroy them
     instances = []  # type: List[AdhocMUC]
@@ -141,12 +141,14 @@ class AdhocMUC(Gtk.ApplicationWindow):
             'muc#roomconfig_membersonly': True,
             'muc#roomconfig_whois': 'anyone',
             'muc#roomconfig_changesubject': True,
+            'muc#roomconfig_persistentroom': False,
 
             # Ejabberd options
             'public_list': False,
         }
 
         app.interface.create_groupchat(self.account, room_jid, config)
+        app.window.select_chat(self.account, room_jid)
         self.window.destroy()
 
     def on_cancel_button_clicked(self, _widget):
