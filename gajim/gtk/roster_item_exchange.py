@@ -201,10 +201,13 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                     if app.jid_is_transport(self._jid_from):
                         self._client.get_module('Presence').automatically_added.append(
                             jid)
-                    # TODO:
-                    app.interface.roster.req_sub(
-                        self, jid, message, self.account, groups=groups,
-                        nickname=model[iter_][2], auto_auth=True)
+
+                    self._client.get_module('Presence').subscribe(
+                        jid,
+                        msg=message,
+                        name=model[iter_][2],
+                        groups=groups,
+                        auto_auth=True)
                 iter_ = model.iter_next(iter_)
             InformationDialog(i18n.ngettext('Added %d contact',
                                             'Added %d contacts',
@@ -220,15 +223,10 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                     groups = model[iter_][3].split(', ')
                     if groups == ['']:
                         groups = []
-                    # TODO:
-                    for contact in app.contacts.get_contact(self.account, jid):
-                        contact.name = model[iter_][2]
-                    self._client.get_module('Roster').update_contact(
+                    self._client.get_module('Roster').set_item(
                         jid, model[iter_][2], groups)
-                    self._client.get_module('Roster').draw_contact(
-                        jid, self.account)
+
                     # Update opened chats
-                    # TODO:
                     ctrl = app.window.get_control(self.account, jid)
                     if ctrl:
                         ctrl.update_ui()
@@ -242,9 +240,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                     # It is selected
                     jid = model[iter_][1]
                     self._client.get_module('Presence').unsubscribe(jid)
-                    # TODO:
-                    app.interface.roster.remove_contact(jid, self.account)
-                    app.contacts.remove_jid(self.account, jid)
+                    self._client.get_module('Roster').delete_item(jid)
                 iter_ = model.iter_next(iter_)
             InformationDialog(i18n.ngettext('Removed %d contact',
                                             'Removed %d contacts',
