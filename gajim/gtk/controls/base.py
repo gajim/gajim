@@ -781,8 +781,29 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             app.interface.send_httpupload(self, path)
 
         else:
-            ft = app.interface.instances['file_transfers']
-            ft.send_file(self.account, self.contact, path)
+            app.interface.instances['file_transfers'].send_file(
+                self.account, self.contact, path)
+
+    def _on_send_file(self, action, _param):
+        name = action.get_name()
+        if 'httpupload' in name:
+            app.interface.send_httpupload(self)
+            return
+
+        if 'jingle' in name:
+            app.interface.instances['file_transfers'].show_file_send_request(
+                self.account, self.contact)
+            return
+
+        method = self._get_pref_ft_method()
+        if method is None:
+            return
+
+        if method == 'httpupload':
+            app.interface.send_httpupload(self)
+        else:
+            app.interface.instances['file_transfers'].show_file_send_request(
+                self.account, self.contact)
 
     def _on_message_textview_key_press_event(self, textview, event):
         if event.keyval == Gdk.KEY_space:
@@ -1293,54 +1314,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         buffer_ = tv.get_buffer()
         start, end = buffer_.get_bounds()
         buffer_.delete(start, end)
-
-    def _on_send_file(self, action, _param):
-        name = action.get_name()
-        if 'httpupload' in name:
-            app.interface.send_httpupload(self)
-            return
-
-        if 'jingle' in name:
-            self._on_send_file_jingle()
-            return
-
-        method = self._get_pref_ft_method()
-        if method is None:
-            return
-
-        if method == 'httpupload':
-            app.interface.send_httpupload(self)
-        else:
-            self._on_send_file_jingle()
-
-    def _on_send_file_jingle(self):
-        def _on_send():
-            app.interface.instances['file_transfers'].show_file_send_request(
-                self.account, self.contact)
-
-        if self.is_privatechat:
-            gc_control = app.window.get_control(
-                self.account, self._room_contact.jid)
-            self_contact = self._room_contact.get_self()
-
-            if (gc_control.is_anonymous and
-                    self.contact.affiliation.value not
-                    in ['admin', 'owner'] and
-                    self_contact.affiliation.value in ['admin', 'owner']):
-                # Show a warning if we're trying to send a file to a PM contact
-                # which is not Admin/Owner, and thus cannot normally see our JID
-                ConfirmationDialog(
-                    _('Privacy'),
-                    _('Warning'),
-                    _('If you send a file to <b>%s</b>, your real XMPP '
-                      'address will be revealed.') % self.contact.name,
-                    [DialogButton.make('Cancel'),
-                     DialogButton.make(
-                         'OK',
-                         text=_('_Send Anyway'),
-                         callback=_on_send)]).show()
-                return
-        _on_send()
 
     def set_control_active(self, state):
         if state:
