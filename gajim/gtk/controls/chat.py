@@ -50,7 +50,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
 
-from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 
 from gajim.gui.adhoc_muc import AdhocMUC
@@ -477,8 +476,8 @@ class ChatControl(BaseControl):
             displaymarking = None
         if self.correcting:
             self.correcting = False
-            gtkgui_helpers.remove_css_class(
-                self.msg_textview, 'gajim-msg-correcting')
+            self.msg_textview.get_style_context().remove_class(
+                'gajim-msg-correcting')
 
         self.add_message(event.message,
                          'outgoing',

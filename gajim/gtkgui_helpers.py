@@ -181,37 +181,9 @@ def __label_size_allocate(widget, allocation):
 def get_action(action):
     return app.app.lookup_action(action)
 
-def add_css_class(widget, class_name, prefix=None):
-    if class_name and prefix:
-        class_name = prefix + class_name
-
-    style = widget.get_style_context()
-    if prefix is not None:
-        # Remove all css classes with prefix
-        for css_cls in style.list_classes():
-            if css_cls.startswith(prefix):
-                style.remove_class(css_cls)
-
-    if class_name is not None:
-        style.add_class(class_name)
-
 def add_css_to_widget(widget, css):
     provider = Gtk.CssProvider()
     provider.load_from_data(bytes(css.encode()))
     context = widget.get_style_context()
     context.add_provider(provider,
                          Gtk.STYLE_PROVIDER_PRIORITY_USER)
-
-def remove_css_class(widget, class_name):
-    style = widget.get_style_context()
-    style.remove_class(class_name)
-
-def pango_to_css_weight(number):
-    # Pango allows for weight values between 100 and 1000
-    # CSS allows only full hundred numbers like 100, 200 ..
-    number = int(number)
-    if number < 100:
-        return 100
-    if number > 900:
-        return 900
-    return int(math.ceil(number / 100.0)) * 100

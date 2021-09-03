@@ -41,7 +41,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import PEPEventType
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
-from gajim.gtkgui_helpers import add_css_class
 
 from .avatar import get_show_circle
 from .util import get_builder
@@ -375,4 +374,9 @@ def colorize_status(widget, show):
     Colorize the status message inside the tooltip by it's semantics.
     """
     css_class = get_css_show_class(show)[14:]
-    add_css_class(widget, css_class, prefix='gajim-status-')
+    style = widget.get_style_context()
+    # Remove all css classes with gajim-status- prefix
+    for css_cls in style.list_classes():
+        if css_cls.startswith('gajim-status-'):
+            style.remove_class(css_cls)
+    style.add_class(f'gajim-status-{css_class}')

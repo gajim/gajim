@@ -40,7 +40,6 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
 
-from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 
 from gajim.common import app
@@ -1168,8 +1167,8 @@ class GroupchatControl(BaseControl):
         self.last_sent_msg = event.message_id
         if self.correcting:
             self.correcting = False
-            gtkgui_helpers.remove_css_class(
-                self.msg_textview, 'gajim-msg-correcting')
+            self.msg_textview.get_style_context().remove_class(
+                'gajim-msg-correcting')
 
     def send_message(self, message, xhtml=None, process_commands=True):
         """

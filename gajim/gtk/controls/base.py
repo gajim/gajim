@@ -50,8 +50,6 @@ from gajim.common.const import KindConstant
 from gajim.common.structs import OutgoingMessage
 from gajim.common.connection_handlers_events import NotificationEvent
 
-from gajim import gtkgui_helpers
-
 from gajim.gui.conversation.view import ConversationView
 from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
@@ -1531,15 +1529,15 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                     not history[pos - 1].startswith('/') or
                     history[pos - 1].startswith('/me'))):
             self.correcting = True
-            gtkgui_helpers.add_css_class(
-                self.msg_textview, 'gajim-msg-correcting')
+            self.msg_textview.get_style_context().add_class(
+                'gajim-msg-correcting')
             message = history[pos - 1]
             msg_buf.set_text(message)
             return
         if self.correcting:
             # We were previously correcting
-            gtkgui_helpers.remove_css_class(
-                self.msg_textview, 'gajim-msg-correcting')
+            self.msg_textview.get_style_context().remove_class(
+                'gajim-msg-correcting')
         self.correcting = False
         pos += -1 if direction == 'up' else +1
         if pos == -1:
