@@ -269,6 +269,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _connect_contact_signals(self):
         raise NotImplementedError
 
+    def _process_jingle_av_event(self):
+        raise NotImplementedError
+
     def _get_action(self, name):
         return app.window.lookup_action(name + self.control_id)
 
@@ -422,12 +425,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         """
         # Return a markup'd label and optional Gtk.Color in a tuple like:
         # return (label_str, None)
-
-    def prepare_context_menu(self, hide_buttonbar_items=False):
-        """
-        Derived classes SHOULD implement this
-        """
-        return None
 
     def set_session(self, session):
         oldsession = None
@@ -650,22 +647,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         gspell_lang = checker.get_language()
         self.contact.settings.set('speller_language', gspell_lang.get_code())
 
-    def on_banner_label_populate_popup(self, _label, menu):
-        """
-        Override the default context menu and add our own menuitems
-        """
-        item = Gtk.SeparatorMenuItem.new()
-        menu.prepend(item)
-
-        menu2 = self.prepare_context_menu()  # pylint: disable=assignment-from-none
-        i = 0
-        for item in menu2:
-            menu2.remove(item)
-            menu.prepend(item)
-            menu.reorder_child(item, i)
-            i += 1
-        menu.show_all()
-
     def shutdown(self):
         # remove_gui_extension_point() is called on shutdown, but also when
         # a plugin is getting disabled. Plugins don’t know the difference.
@@ -737,15 +718,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def on_quote(self, _widget, text):
         self.insert_as_quote(text)
-
-    # moved from ChatControl
-    def _on_banner_eventbox_button_press_event(self, _widget, event):
-        """
-        If right-clicked, show popup
-        """
-        if event.button == 3:  # right click
-            # TODO:
-            self.parent_win.popup_menu(event)
 
     def _on_message_textview_paste_event(self, _texview):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)

@@ -318,9 +318,6 @@ class ChatControl(BaseControl):
         app.window.contact_info(self.account, self.contact.jid)
 
     def _on_invite_contacts(self, _action, _param):
-        """
-        User wants to invite some friends to chat
-        """
         AdhocMUC(self.account, [self.contact.jid])
 
     def _on_send_chatstate(self, action, param):
@@ -402,6 +399,7 @@ class ChatControl(BaseControl):
         self.update_ui()
 
     def _on_update_client_info(self, event):
+        # TODO:
         contact = app.contacts.get_contact(
             self.account, event.jid, event.resource)
         if contact is None:
@@ -645,26 +643,6 @@ class ChatControl(BaseControl):
                                 correct_id=correct_id,
                                 additional_data=additional_data)
 
-    def prepare_context_menu(self, hide_buttonbar_items=False):
-        """
-        Set compact view menuitem active state sets active and sensitivity state
-        for history_menuitem (False for tranasports) and file_transfer_menuitem
-        and hide()/show() for add_to_roster_menuitem
-        """
-        if app.jid_is_transport(self.contact.jid):
-            menu = gui_menu_builder.get_transport_menu(self.contact,
-                                                       self.account)
-        else:
-            menu = gui_menu_builder.get_contact_menu(
-                self.contact,
-                self.account,
-                use_multiple_contacts=False,
-                show_start_chat=False,
-                show_encryption=True,
-                control=self,
-                show_buttonbar_items=not hide_buttonbar_items)
-        return menu
-
     def shutdown(self):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
@@ -745,12 +723,6 @@ class ChatControl(BaseControl):
                 return  # transport contacts cannot be invited
 
             AdhocMUC(self.account, [self.contact.jid], [dropped_jid])
-
-    def _on_convert_to_gc_menuitem_activate(self, _widget):
-        """
-        User wants to invite some friends to chat
-        """
-        AdhocMUC(self.account, [self.contact.jid])
 
     def _on_client_state_changed(self, _client, _signal_name, state):
         self.msg_textview.set_sensitive(state.is_connected)

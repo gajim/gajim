@@ -148,7 +148,6 @@
                     <property name="name">ChatControl-BannerEventBox</property>
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
-                    <signal name="button-press-event" handler="_on_banner_eventbox_button_press_event" swapped="no"/>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
@@ -214,7 +213,6 @@
                                 <property name="selectable">True</property>
                                 <property name="ellipsize">end</property>
                                 <property name="xalign">0</property>
-                                <signal name="populate-popup" handler="on_banner_label_populate_popup" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
