@@ -280,13 +280,6 @@ class Chats(PreferenceBox):
                     desc=_('For example: "Julia is now online"')),
 
             Setting(SettingKind.SWITCH,
-                    _('Show Chat State In Tabs'),
-                    SettingType.CONFIG,
-                    'show_chatstate_in_tabs',
-                    desc=_('Show the contact’s chat state (e.g. typing) in '
-                           'the chat’s tab')),
-
-            Setting(SettingKind.SWITCH,
                     _('Show Chat State In Banner'),
                     SettingType.CONFIG,
                     'show_chatstate_in_banner',
