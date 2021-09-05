@@ -339,6 +339,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
 
+    def select_next_chat(self, forwards):
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        chat_list = chat_list_stack.get_current_chat_list()
+        if chat_list is not None:
+            chat_list.select_next_chat(forwards)
+
     @staticmethod
     def _add_to_roster(_action, param):
         _workspace, account, jid = param.unpack()

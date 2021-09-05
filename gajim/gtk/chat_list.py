@@ -181,6 +181,57 @@ class ChatList(Gtk.ListBox, EventHelper):
         row = self._chats[(account, jid)]
         self.select_row(row)
 
+    def select_next_chat(self, forwards):
+        # Selects the next chat, but prioritizes chats with unread messages.
+        # Direction is forwards (True) or backwards (False)
+        row = self.get_selected_chat()
+        if row is None:
+            row = self.get_row_at_index(0)
+            if row is not None:
+                self.select_chat(row.account, row.jid)
+                return
+
+        index = row.get_index()
+        current = index
+        unread_found = False
+        # Loop until finding a chat with unread count or completing a cycle
+        while True:
+            if forwards:
+                index += 1
+                if index >= len(self.get_children()):
+                    index = 0
+            else:
+                index -= 1
+                if index < 0:
+                    index = len(self.get_children()) - 1
+
+            row = self.get_row_at_index(index)
+            if row.unread_count > 0:
+                unread_found = True
+                break
+            if index == current:
+                break
+
+        if unread_found:
+            self.select_chat(row.account, row.jid)
+            return
+
+        index = row.get_index()
+        if forwards:
+            next_row = self.get_row_at_index(index + 1)
+        else:
+            next_row = self.get_row_at_index(index - 1)
+        if next_row is None:
+            if forwards:
+                next_row = self.get_row_at_index(0)
+            else:
+                last = len(self.get_children()) - 1
+                next_row = self.get_row_at_index(last)
+            self.select_chat(next_row.account, next_row.jid)
+            return
+
+        self.select_chat(next_row.account, next_row.jid)
+
     def toggle_chat_pinned(self, account, jid):
         row = self._chats[(account, jid)]
         row.toggle_pinned()

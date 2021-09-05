@@ -14,6 +14,7 @@
 
 import logging
 
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import ged
@@ -94,6 +95,8 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def show_chat(self, account, jid):
         self.set_visible_child_name(f'{account}:{jid}')
+        control = self.get_control(account, jid)
+        GLib.idle_add(control.focus)
 
     def clear(self):
         self.set_visible_child_name('empty')
