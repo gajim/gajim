@@ -19,7 +19,10 @@ from gajim.common.i18n import _
 
 from gajim.gui_menu_builder import get_roster_menu
 
+from .dialogs import ConfirmationDialog
+from .dialogs import DialogButton
 from .tooltips import RosterTooltip
+from .service_registration import ServiceRegistration
 from .util import EventHelper
 from .util import get_builder
 
@@ -111,6 +114,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _add_actions(self):
         actions = [
             ('contact-info', self._on_contact_info),
+            ('modify-transport', self._on_modify_transport),
             ('execute-command', self._on_execute_command),
             ('block-contact', self._on_block_contact),
             ('remove-contact', self._on_remove_contact),
@@ -136,6 +140,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         app.window.lookup_action(
             f'contact-info-{self._account}').set_enabled(online)
         app.window.lookup_action(
+            f'modify-transport-{self._account}').set_enabled(online)
+        app.window.lookup_action(
             f'execute-command-{self._account}').set_enabled(online)
         app.window.lookup_action(
             f'block-contact-{self._account}').set_enabled(
@@ -146,6 +152,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _remove_actions(self):
         actions = [
             'contact-info',
+            'modify-transport',
             'execute-command',
             'block-contact',
             'remove-contact',
@@ -258,6 +265,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_contact_info(self, _action, param):
         app.window.contact_info(self._account, param.get_string())
 
+    def _on_modify_transport(self, _action, param):
+        ServiceRegistration(self._account, param.get_string())
+
     def _on_execute_command(self, _action, param):
         app.window.execute_command(self._account, param.get_string())
 
@@ -265,7 +275,37 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         app.window.block_contact(self._account, param.get_string())
 
     def _on_remove_contact(self, _action, param):
-        app.window.remove_contact(self._account, param.get_string())
+        jid = param.get_string()
+        selected_contact = self._client.get_module('Contacts').get_contact(jid)
+        if selected_contact.is_transport:
+            # Check for transport users in roster and warn about removing the
+            # transport if there are any
+            has_transport_contacts = False
+            for contact in self._client.get_module('Roster').iter_contacts():
+                if contact.jid.domain == selected_contact.jid.domain:
+                    has_transport_contacts = True
+                    break
+            if has_transport_contacts:
+                def _on_remove():
+                    self._client.get_module('Gateway').unsubscribe(
+                        selected_contact.jid)
+                    app.window.remove_contact(self._account, jid)
+
+                ConfirmationDialog(
+                    _('Remove Transport'),
+                    _('Transport \'%s\' will be '
+                      'removed') % selected_contact.name,
+                    _('You will no longer be able to send and receive '
+                      'messages from and to contacts using this transport.'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       callback=_on_remove)],
+                    transient_for=app.window).show()
+            else:
+                _on_remove()
+            return
+
+        app.window.remove_contact(self._account, jid)
 
     def _on_roster_row_activated(self, _treeview, path, _column):
         path = self._modelfilter.convert_path_to_child_path(path)
@@ -305,7 +345,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         treeview.get_selection().unselect_all()
 
     def _show_contact_menu(self, jid, treeview, event):
-        menu = get_roster_menu(self._account, jid)
+        contact = self._client.get_module('Contacts').get_contact(jid)
+        menu = get_roster_menu(
+            self._account, jid, transport=contact.is_transport)
 
         rectangle = Gdk.Rectangle()
         rectangle.x = event.x
@@ -379,6 +421,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _connect_contact_signals(self, contact):
         contact.connect('presence-update', self._on_contact_update)
+        contact.connect('caps-update', self._on_contact_update)
         contact.connect('avatar-update', self._on_contact_update)
         contact.connect('blocking-update', self._on_contact_update)
 
@@ -531,7 +574,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._store[iter_][Column.TEXT] = name
 
         surface = contact.get_avatar(
-            AvatarSize.ROSTER, self.get_scale_factor())
+            AvatarSize.ROSTER,
+            self.get_scale_factor(),
+            add_show=bool(not contact.is_transport))
         self._store[iter_][Column.AVATAR] = surface
 
     def _get_total_user_count(self):

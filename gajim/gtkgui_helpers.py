@@ -122,8 +122,6 @@ def get_possible_button_event(event):
     # BUTTON_PRESS event, so pass event.button
     return event.button
 
-def destroy_widget(widget):
-    widget.destroy()
 
 def scale_with_ratio(size, width, height):
     if height == width:

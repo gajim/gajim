@@ -25,94 +25,6 @@ from gajim.common.helpers import is_role_change_allowed
 from gajim.common.i18n import _
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
-from gajim.gtkgui_helpers import destroy_widget
-
-
-def get_transport_menu(contact, account):
-    # TODO:
-    roster = app.interface.roster
-    jid = contact.jid
-
-    menu = Gtk.Menu()
-
-    # Send single message
-    item = Gtk.MenuItem.new_with_mnemonic(_('Send Single _Message…'))
-    item.connect('activate', roster.on_send_single_message_menuitem_activate,
-                 account, contact)
-    menu.append(item)
-    if app.account_is_disconnected(account):
-        item.set_sensitive(False)
-
-    blocked = False
-    if helpers.jid_is_blocked(account, jid):
-        blocked = True
-
-    item = Gtk.SeparatorMenuItem.new()
-    menu.append(item)
-
-    # Execute Command
-    item = Gtk.MenuItem.new_with_mnemonic(_('E_xecute Command…'))
-    menu.append(item)
-    item.connect('activate', roster.on_execute_command, contact, account,
-                 contact.resource)
-    if app.account_is_disconnected(account):
-        item.set_sensitive(False)
-
-    # Manage Transport submenu
-    item = Gtk.MenuItem.new_with_mnemonic(_('_Manage Transport'))
-    manage_transport_submenu = Gtk.Menu()
-    item.set_submenu(manage_transport_submenu)
-    menu.append(item)
-
-    # Modify Transport
-    item = Gtk.MenuItem.new_with_mnemonic(_('_Modify Transport'))
-    manage_transport_submenu.append(item)
-    item.connect('activate', roster.on_edit_agent, contact, account)
-    if app.account_is_disconnected(account):
-        item.set_sensitive(False)
-
-    # Rename
-    item = Gtk.MenuItem.new_with_mnemonic(_('_Rename…'))
-    manage_transport_submenu.append(item)
-    item.connect('activate', roster.on_rename, 'agent', jid, account)
-    if app.account_is_disconnected(account):
-        item.set_sensitive(False)
-
-    item = Gtk.SeparatorMenuItem.new()
-    manage_transport_submenu.append(item)
-
-    # Block
-    if blocked:
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Unblock'))
-        item.connect('activate', roster.on_unblock, [(contact, account)])
-    else:
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Block'))
-        item.connect('activate', roster.on_block, [(contact, account)])
-
-    manage_transport_submenu.append(item)
-    if app.account_is_disconnected(account):
-        item.set_sensitive(False)
-
-    # Remove
-    item = Gtk.MenuItem.new_with_mnemonic(_('Remo_ve'))
-    manage_transport_submenu.append(item)
-    item.connect('activate', roster.on_remove_agent, [(contact, account)])
-    if app.account_is_disconnected(account):
-        item.set_sensitive(False)
-
-    item = Gtk.SeparatorMenuItem.new()
-    menu.append(item)
-
-    # Information
-    information_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Information'))
-    menu.append(information_menuitem)
-    information_menuitem.connect('activate', roster.on_info, contact, account)
-    if app.account_is_disconnected(account):
-        information_menuitem.set_sensitive(False)
-
-    menu.connect('selection-done', destroy_widget)
-    menu.show_all()
-    return menu
 
 
 def get_singlechat_menu(control_id, account, jid, type_):
@@ -405,7 +317,7 @@ def get_conv_context_menu(account, uri):
     return menu
 
 
-def get_roster_menu(account, jid):
+def get_roster_menu(account, jid, transport=False):
     if helpers.jid_is_blocked(account, jid):
         block_label = _('Unblock')
     else:
@@ -416,6 +328,8 @@ def get_roster_menu(account, jid):
         ('block-contact', block_label),
         ('remove-contact', _('Remove…')),
     ]
+    if transport:
+        menu_items.insert(1, ('modify-transport', _('Modify Transport…')))
 
     menu = Gio.Menu()
     for item in menu_items:

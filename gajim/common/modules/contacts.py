@@ -281,6 +281,16 @@ class BareContact(CommonContact):
         return item is not None
 
     @property
+    def is_transport(self):
+        disco_info = app.storage.cache.get_last_disco_info(self._jid)
+        if disco_info is None:
+            return False
+        for identity in disco_info.identities:
+            if identity.category == 'gateway':
+                return True
+        return False
+
+    @property
     def ask(self):
         return self._get_roster_attr('ask')
 
