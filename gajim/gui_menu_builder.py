@@ -19,9 +19,9 @@ from gi.repository import Gio
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.helpers import is_role_change_allowed
+from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
@@ -318,7 +318,7 @@ def get_conv_context_menu(account, uri):
 
 
 def get_roster_menu(account, jid, transport=False):
-    if helpers.jid_is_blocked(account, jid):
+    if jid_is_blocked(account, jid):
         block_label = _('Unblock')
     else:
         block_label = _('Block…')
