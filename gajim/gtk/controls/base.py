@@ -825,7 +825,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
             if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
                     event.keyval == Gdk.KEY_ISO_Left_Tab):
-                app.window.select_next_chat(False)
+                app.window.select_next_chat(False, unread_first=True)
                 return True
 
             if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
@@ -834,7 +834,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab:
-                app.window.select_next_chat(True)
+                app.window.select_next_chat(True, unread_first=True)
                 return True
 
         message_buffer = self.msg_textview.get_buffer()

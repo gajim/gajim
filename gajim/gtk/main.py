@@ -192,13 +192,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if action == 'escape':
             self._chat_page.hide_search()
 
-        # if action == 'escape' and app.settings.get('escape_key_closes'):
-        #     self.remove_tab(control, self.CLOSE_ESC)
-        #     return
+        if action == 'escape' and app.settings.get('escape_key_closes'):
+            self._chat_page.remove_chat(control.account, control.contact.jid)
+            return
 
-        # if action == 'close-tab':
-        #     self.remove_tab(control, self.CLOSE_CTRL_KEY)
-        #     return
+        if action == 'close-tab':
+            self._chat_page.remove_chat(control.account, control.contact.jid)
+            return
 
         # if action == 'move-tab-up':
         #     old_position = self.notebook.get_current_page()
@@ -216,32 +216,26 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         #                                     old_position + 1)
         #     return
 
-        # if action == 'switch-next-tab':
-        #     new = self.notebook.get_current_page() + 1
-        #     if new >= self.notebook.get_n_pages():
-        #         new = 0
-        #     self.notebook.set_current_page(new)
-        #     return
+        if action == 'switch-next-tab':
+            self.select_next_chat(True)
+            return
 
-        # if action == 'switch-prev-tab':
-        #     new = self.notebook.get_current_page() - 1
-        #     if new < 0:
-        #         new = self.notebook.get_n_pages() - 1
-        #     self.notebook.set_current_page(new)
-        #     return
+        if action == 'switch-prev-tab':
+            self.select_next_chat(False)
+            return
 
-        # if action == 'switch-next-unread-tab-right':
-        #     self.move_to_next_unread_tab(True)
-        #     return
+        if action == 'switch-next-unread-tab-right':
+            self.select_next_chat(True, unread_first=True)
+            return
 
-        # if action == 'switch-next-unread-tab-left':
-        #     self.move_to_next_unread_tab(False)
-        #     return
+        if action == 'switch-next-unread-tab-left':
+            self.select_next_chat(False, unread_first=True)
+            return
 
-        # if action.startswith('switch-tab-'):
-        #     number = int(action[-1])
-        #     self.notebook.set_current_page(number - 1)
-        #     return
+        if action.startswith('switch-tab-'):
+            number = int(action[-1]) - 1
+            self.select_chat_number(number)
+            return
 
     def _on_window_motion_notify(self, _widget, _event):
         control = self.get_active_control()
@@ -351,11 +345,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
 
-    def select_next_chat(self, forwards):
+    def select_next_chat(self, forwards, unread_first=False):
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list = chat_list_stack.get_current_chat_list()
         if chat_list is not None:
-            chat_list.select_next_chat(forwards)
+            chat_list.select_next_chat(forwards, unread_first)
+
+    def select_chat_number(self, number):
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        chat_list = chat_list_stack.get_current_chat_list()
+        if chat_list is not None:
+            chat_list.select_chat_number(number)
 
     @staticmethod
     def _add_to_roster(_action, param):
