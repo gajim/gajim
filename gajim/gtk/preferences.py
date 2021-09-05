@@ -165,7 +165,7 @@ class PreferenceBox(SettingsBox):
 class WindowBehaviour(PreferenceBox):
     def __init__(self, *args):
 
-        roster_on_startup_items = {
+        main_window_on_startup_items = {
             'always': _('Always'),
             'never': _('Never'),
             'last_state': _('Restore last state'),
@@ -173,11 +173,11 @@ class WindowBehaviour(PreferenceBox):
 
         settings = [
             Setting(SettingKind.POPOVER,
-                    _('Contact List on Startup'),
+                    _('Show Gajim on Startup'),
                     SettingType.CONFIG,
-                    'show_roster_on_startup',
-                    props={'entries': roster_on_startup_items},
-                    desc=_('Show contact list when starting Gajim')),
+                    'show_main_window_on_startup',
+                    props={'entries': main_window_on_startup_items},
+                    desc=_('Show window when starting Gajim')),
 
             Setting(SettingKind.SWITCH,
                     _('Quit on Close'),

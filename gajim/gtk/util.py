@@ -312,6 +312,7 @@ def resize_window(window: Gtk.Window, width: int, height: int) -> None:
     screen_w, screen_h = get_total_screen_geometry()
     if not width or not height:
         return
+
     width = min(width, screen_w)
     height = min(height, screen_h)
     window.resize(abs(width), abs(height))
@@ -333,25 +334,25 @@ def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
     window.move(pos_x, pos_y)
 
 
-def save_roster_position(window):
-    if not app.settings.get('save-roster-position'):
+def save_main_window_position() -> None:
+    if not app.settings.get('save_main_window_position'):
         return
     if app.is_display(Display.WAYLAND):
         return
-    x_pos, y_pos = window.get_position()
-    log.debug('Save roster position: %s %s', x_pos, y_pos)
-    app.settings.set('roster_x-position', x_pos)
-    app.settings.set('roster_y-position', y_pos)
+    x_pos, y_pos = app.window.get_position()
+    log.debug('Saving main window position: %s %s', x_pos, y_pos)
+    app.settings.set('mainwin_x_position', x_pos)
+    app.settings.set('mainwin_y_position', y_pos)
 
 
-def restore_roster_position(window):
-    if not app.settings.get('save-roster-position'):
+def restore_main_window_position() -> None:
+    if not app.settings.get('save_main_window_position'):
         return
     if app.is_display(Display.WAYLAND):
         return
-    move_window(window,
-                app.settings.get('roster_x-position'),
-                app.settings.get('roster_y-position'))
+    move_window(app.window,
+                app.settings.get('mainwin_x_position'),
+                app.settings.get('mainwin_y_position'))
 
 
 def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:

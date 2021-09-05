@@ -11,15 +11,17 @@ from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 
-from gajim.gui.adhoc import AdHocCommand
-from gajim.gui.account_side_bar import AccountSideBar
-from gajim.gui.app_side_bar import AppSideBar
-from gajim.gui.workspace_side_bar import WorkspaceSideBar
-from gajim.gui.main_stack import MainStack
-from gajim.gui.dialogs import DialogButton
-from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.util import get_builder
-
+from .adhoc import AdHocCommand
+from .account_side_bar import AccountSideBar
+from .app_side_bar import AppSideBar
+from .workspace_side_bar import WorkspaceSideBar
+from .main_stack import MainStack
+from .dialogs import DialogButton
+from .dialogs import ConfirmationDialog
+from .util import get_builder
+from .util import resize_window
+from .util import restore_main_window_position
+from .util import save_main_window_position
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.main')
@@ -30,10 +32,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title('Gajim')
         self.set_default_icon_name('org.gajim.Gajim')
-        self.set_default_size(1000, 500)
 
         app.window = self
 
@@ -89,7 +89,23 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._load_chats()
         self._add_actions()
         self._add_actions2()
-        self.show_all()
+
+        restore_main_window_position()
+        window_width = app.settings.get('mainwin_width')
+        window_height = app.settings.get('mainwin_height')
+        resize_window(self, window_width, window_height)
+
+        if app.settings.get('show_main_window_on_startup') == 'always':
+            self.show_all()
+        elif app.settings.get('show_main_window_on_startup') == 'never':
+            if app.settings.get('trayicon') != 'always':
+                # Without trayicon, we have to show the main window
+                self.show_all()
+                app.settings.set('last_main_window_visible', True)
+        else:
+            if (app.settings.get('last_main_window_visible') or
+                    app.settings.get('trayicon') != 'always'):
+                self.show_all()
 
     def _on_account_enabled(self, event):
         self._account_side_bar.add_account(event.account)
@@ -494,6 +510,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             if app.account_is_available(acct):
                 get_msg = True
                 break
+
+        save_main_window_position()
+        window_width, window_height = self.get_size()
+        app.settings.set('mainwin_width', window_width)
+        app.settings.set('mainwin_height', window_height)
+        app.settings.set(
+            'last_main_window_visible', self.get_property('visible'))
+        app.settings.save()
 
         def on_continue2(message):
             if 'file_transfers' not in app.interface.instances:

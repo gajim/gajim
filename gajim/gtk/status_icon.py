@@ -34,8 +34,8 @@ from gajim.common.nec import EventHelper
 
 from .util import get_builder
 from .util import get_icon_name
-from .util import save_roster_position
-from .util import restore_roster_position
+from .util import save_main_window_position
+from .util import restore_main_window_position
 from .util import open_window
 
 HAS_INDICATOR = False
@@ -249,14 +249,14 @@ class StatusIcon(EventHelper):
             return
 
         if app.window.get_property('has-toplevel-focus'):
-            save_roster_position(app.window)
+            save_main_window_position()
             app.window.hide()
             return
 
         app.window.show_all()
         if not app.window.get_property('visible'):
             # Window was minimized
-            restore_roster_position(app.window)
+            restore_main_window_position()
 
         if not app.settings.get('roster_window_skip_taskbar'):
             app.window.set_property('skip-taskbar-hint', False)
@@ -268,7 +268,7 @@ class StatusIcon(EventHelper):
         if not event:
             return
         if not app.window.get_property('visible'):
-            restore_roster_position(app.window)
+            restore_main_window_position()
         app.interface.handle_event(account, jid, event.type_)
 
     @staticmethod
