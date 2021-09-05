@@ -196,11 +196,6 @@ class ContactList(PreferenceBox):
 
         settings = [
             Setting(SettingKind.SWITCH,
-                    _('Enable Metacontacts'),
-                    SettingType.CONFIG,
-                    'metacontacts_enabled'),
-
-            Setting(SettingKind.SWITCH,
                     _('Show Avatars'),
                     SettingType.CONFIG,
                     'show_avatars_in_roster',

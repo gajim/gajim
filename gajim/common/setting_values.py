@@ -102,7 +102,7 @@ APP_SETTINGS = {
     'hide_groupchat_occupants_list': False,
     'chat_merge_consecutive_nickname': False,
     'ctrl_tab_go_to_next_composing': True,
-    'metacontacts_enabled': True,
+    'metacontacts_enabled': False,
     'confirm_metacontacts': '',
     'confirm_block': '',
     'enable_negative_priority': False,
