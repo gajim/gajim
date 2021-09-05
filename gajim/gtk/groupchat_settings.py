@@ -47,7 +47,8 @@ class GroupChatSettings(SettingsBox):
             Setting(SettingKind.SWITCH,
                     _('Show Status Changes'),
                     SettingType.GROUP_CHAT,
-                    'print_status'),
+                    'print_status',
+                    desc=_('For example: "Julia is now online"')),
 
             Setting(SettingKind.SWITCH,
                     _('Notify on all Messages'),
