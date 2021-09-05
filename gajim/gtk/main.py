@@ -1,4 +1,5 @@
 import logging
+import os
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -18,6 +19,7 @@ from .workspace_side_bar import WorkspaceSideBar
 from .main_stack import MainStack
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
+from .dialogs import ConfirmationCheckDialog
 from .util import get_builder
 from .util import resize_window
 from .util import restore_main_window_position
@@ -59,6 +61,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.account_box.add(self._account_side_bar)
 
         self.connect('motion-notify-event', self._on_window_motion_notify)
+        self.connect('delete-event', self._on_window_delete)
 
         self._ui.connect_signals(self)
 
@@ -89,6 +92,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._load_chats()
         self._add_actions()
         self._add_actions2()
+
+        self._prepare_window()
+
+    def _prepare_window(self):
+        if app.settings.get('main_window_skip_taskbar'):
+            self.set_property('skip-taskbar-hint', True)
 
         restore_main_window_position()
         window_width = app.settings.get('mainwin_width')
@@ -262,6 +271,36 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             client = app.get_client(control.account)
             client.get_module('Chatstate').set_mouse_activity(
                 control.contact, control.msg_textview.has_text())
+
+    def _on_window_delete(self, _widget, _event):
+        # Main window X button was clicked
+        if (not app.settings.get('quit_on_main_window_x_button') and
+                ((app.interface.systray_enabled and
+                 app.settings.get('trayicon') != 'on_event') or
+                 app.settings.get('allow_hide_roster'))):
+            save_main_window_position()
+            if (os.name == 'nt' or
+                    app.settings.get('hide_on_main_window_x_button')):
+                self.hide()
+            else:
+                self.iconify()
+        elif app.settings.get('quit_on_main_window_x_button'):
+            self.quit()
+        else:
+            def _on_ok(is_checked):
+                if is_checked:
+                    app.settings.set('quit_on_main_window_x_button', True)
+                self.quit()
+            ConfirmationCheckDialog(
+                _('Quit Gajim'),
+                _('You are about to quit Gajim'),
+                _('Are you sure you want to quit Gajim?'),
+                _('_Always quit when closing Gajim'),
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('Remove',
+                                   text=_('_Quit'),
+                                   callback=_on_ok)]).show()
+        return True
 
     def _set_startup_finished(self):
         self._startup_finished = True

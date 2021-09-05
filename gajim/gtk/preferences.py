@@ -180,10 +180,10 @@ class WindowBehaviour(PreferenceBox):
                     desc=_('Show window when starting Gajim')),
 
             Setting(SettingKind.SWITCH,
-                    _('Quit on Close'),
+                    _('Quit Gajim on Close'),
                     SettingType.CONFIG,
-                    'quit_on_roster_x_button',
-                    desc=_('Quit when closing contact list')),
+                    'quit_on_main_window_x_button',
+                    desc=_('Quit when closing Gajim’s window')),
         ]
 
         PreferenceBox.__init__(self, settings)
