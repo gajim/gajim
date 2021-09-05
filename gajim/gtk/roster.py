@@ -289,7 +289,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                 def _on_remove():
                     self._client.get_module('Gateway').unsubscribe(
                         selected_contact.jid)
-                    app.window.remove_contact(self._account, jid)
 
                 ConfirmationDialog(
                     _('Remove Transport'),

@@ -34,7 +34,7 @@ class Gateway(BaseModule):
 
         self._con.connection.SendAndCallForResponse(
             iq, self._on_unsubscribe_result)
-        self._con.get_module('Roster').del_item(agent)
+        self._con.get_module('Roster').delete_item(agent)
 
     def _on_unsubscribe_result(self, _nbxmpp_client, stanza):
         if not nbxmpp.isResultNode(stanza):
@@ -43,16 +43,19 @@ class Gateway(BaseModule):
 
         agent = stanza.getFrom().bare
         jid_list = []
-        for jid in app.contacts.get_jid_list(self._account):
-            if jid.endswith('@' + agent):
-                jid_list.append(jid)
-                self._log.info('Removing contact %s due to'
-                               ' unregistered transport %s', jid, agent)
-                self._con.get_module('Presence').unsubscribe(jid)
+        for contact in self._client.get_module('Roster').iter_contacts:
+            if contact.jid.domain == agent:
+                jid_list.append(contact.jid)
+                self._log.info(
+                    'Removing contact %s due to unregistered transport %s',
+                    contact.jid,
+                    agent)
+                self._con.get_module('Presence').unsubscribe(contact.jid)
+
                 # Transport contacts can't have 2 resources
-                if jid in app.to_be_removed[self._account]:
+                if contact.jid in app.to_be_removed[self._account]:
                     # This way we'll really remove it
-                    app.to_be_removed[self._account].remove(jid)
+                    app.to_be_removed[self._account].remove(contact.jid)
 
         app.nec.push_incoming_event(
             NetworkEvent('agent-removed',
