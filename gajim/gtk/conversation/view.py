@@ -258,6 +258,9 @@ class ConversationView(Gtk.ListBox):
         if message.type != 'chat':
             return
 
+        if not app.settings.get('chat_merge_consecutive_nickname'):
+            return
+
         ancestor = self._find_ancestor(message)
         if ancestor is None:
             self._update_descendants(message)
