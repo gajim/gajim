@@ -58,6 +58,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._account_side_bar = AccountSideBar()
         self._ui.account_box.add(self._account_side_bar)
 
+        self.connect('motion-notify-event', self._on_window_motion_notify)
+
         self._ui.connect_signals(self)
 
         self.register_events([
@@ -240,6 +242,16 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         #     number = int(action[-1])
         #     self.notebook.set_current_page(number - 1)
         #     return
+
+    def _on_window_motion_notify(self, _widget, _event):
+        control = self.get_active_control()
+        if control is None:
+            return
+
+        if self.get_property('has-toplevel-focus'):
+            client = app.get_client(control.account)
+            client.get_module('Chatstate').set_mouse_activity(
+                control.contact, control.msg_textview.has_text())
 
     def _set_startup_finished(self):
         self._startup_finished = True

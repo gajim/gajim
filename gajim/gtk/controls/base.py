@@ -54,7 +54,6 @@ from gajim.gui.conversation.view import ConversationView
 from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.dialogs import DialogButton
-from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import get_hardware_key_codes
@@ -241,11 +240,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.sendmessage = True
 
         self._client.get_module('Chatstate').set_active(self.contact)
-
-        # TODO
-        # id_ = app.window.connect('motion-notify-event',
-        #                          self._on_window_motion_notify)
-        # self.handlers[id_] = app.window
 
         self.encryption = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
@@ -1041,17 +1035,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # Clear msg input
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.set_text('')  # clear message buffer (and tv of course)
-
-    def _on_window_motion_notify(self, *args):
-        """
-        It gets called no matter if it is the active window or not
-        """
-        # TODO:
-        return
-        if self.parent_win.get_active_jid() == self.contact.jid:
-            # if window is the active one, set last interaction
-            self._client.get_module('Chatstate').set_mouse_activity(
-                self.contact, self.msg_textview.has_text())
 
     def _on_message_tv_buffer_changed(self, textbuffer):
         has_text = self.msg_textview.has_text()
