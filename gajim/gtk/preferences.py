@@ -207,12 +207,6 @@ class ContactList(PreferenceBox):
                     callback=self._on_show_avatar_in_roster_changed),
 
             Setting(SettingKind.SWITCH,
-                    _('Show Status Message'),
-                    SettingType.CONFIG,
-                    'show_status_msgs_in_roster',
-                    callback=self._on_show_status_in_roster),
-
-            Setting(SettingKind.SWITCH,
                     _('Sort Contacts by Status'),
                     SettingType.CONFIG,
                     'sort_by_show_in_roster',
@@ -244,14 +238,6 @@ class ContactList(PreferenceBox):
     @staticmethod
     def _on_show_avatar_in_roster_changed(*args):
         app.interface.roster.setup_and_draw_roster()
-
-    @staticmethod
-    def _on_show_status_in_roster(*args):
-        app.interface.roster.setup_and_draw_roster()
-
-        for ctrl in app.window.get_controls():
-            if ctrl.is_groupchat:
-                ctrl.roster.draw_contacts()
 
     @staticmethod
     def _on_sort_by_show_in_roster(*args):
@@ -293,9 +279,10 @@ class Chats(PreferenceBox):
                     'show_send_message_button'),
 
             Setting(SettingKind.SWITCH,
-                    _('Show Status Message'),
+                    _('Show Status Changes'),
                     SettingType.CONFIG,
-                    'print_status_in_chats'),
+                    'print_status_in_chats',
+                    desc=_('For example: "Julia is now online"')),
 
             Setting(SettingKind.SWITCH,
                     _('Show Chat State In Tabs'),
@@ -336,18 +323,6 @@ class GroupChats(PreferenceBox):
     def __init__(self, *args):
 
         settings = [
-
-            Setting(SettingKind.SWITCH,
-                    _('Show Subject'),
-                    SettingType.CONFIG,
-                    'show_subject_on_join'),
-
-            Setting(SettingKind.SWITCH,
-                    _('Sort Contacts by Status'),
-                    SettingType.CONFIG,
-                    'sort_by_show_in_muc',
-                    callback=self._on_sort_by_show_in_muc),
-
             Setting(SettingKind.POPOVER,
                     _('Default Sync Threshold'),
                     SettingType.CONFIG,
@@ -360,6 +335,23 @@ class GroupChats(PreferenceBox):
                     SettingType.CONFIG,
                     'muc_prefer_direct_msg',
                     desc=_('Prefer direct messages in private group chats ')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Sort Participant List by Status'),
+                    SettingType.CONFIG,
+                    'sort_by_show_in_muc',
+                    callback=self._on_sort_by_show_in_muc),
+
+            Setting(SettingKind.SWITCH,
+                    _('Status Messages in Participants List'),
+                    SettingType.CONFIG,
+                    'show_status_msgs_in_roster',
+                    callback=self._on_show_status_in_roster),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Subject'),
+                    SettingType.CONFIG,
+                    'show_subject_on_join'),
 
             Setting(SettingKind.SWITCH,
                     _('Show Joined / Left'),
@@ -382,7 +374,6 @@ class GroupChats(PreferenceBox):
                                                'current default value'),
                            'button-style': 'destructive-action',
                            'button-callback': self._reset_print_status}),
-
         ]
 
         PreferenceBox.__init__(self, settings)
@@ -392,6 +383,12 @@ class GroupChats(PreferenceBox):
         for ctrl in app.window.get_controls():
             if ctrl.is_groupchat:
                 ctrl.roster.invalidate_sort()
+
+    @staticmethod
+    def _on_show_status_in_roster(*args):
+        for ctrl in app.window.get_controls():
+            if ctrl.is_groupchat:
+                ctrl.roster.draw_contacts()
 
     @staticmethod
     def _reset_join_left(button):
