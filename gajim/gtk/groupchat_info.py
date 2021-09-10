@@ -161,9 +161,10 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.name.set_visible(True)
 
         # Set avatar
-        surface = app.interface.avatar_storage.get_muc_surface(
-            self._account,
-            info.jid,
+        client = app.get_client(self._account)
+        contact = client.get_module('Contacts').get_contact(
+            info.jid, groupchat=True)
+        surface = contact.get_avatar(
             AvatarSize.GROUP_INFO,
             self.get_scale_factor())
         self._ui.avatar_image.set_from_surface(surface)

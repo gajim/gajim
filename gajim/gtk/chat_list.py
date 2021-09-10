@@ -372,6 +372,7 @@ class ChatRow(Gtk.ListBoxRow):
         self.contact.connect('presence-update', self._on_presence_update)
         self.contact.connect('chatstate-update', self._on_chatstate_update)
         self.contact.connect('nickname-update', self._on_nickname_update)
+        self.contact.connect('caps-update', self._on_avatar_update)
         self.contact.connect('avatar-update', self._on_avatar_update)
 
         self._timestamp = None

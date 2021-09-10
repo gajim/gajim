@@ -79,7 +79,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         if contact.is_in_roster:
             self._ui.edit_name_button.show()
             self._fill_groups_page()
-            if contact.is_transport:
+            if contact.is_gateway:
                 side_bar_switcher.hide_row('settings')
                 side_bar_switcher.hide_row('devices')
             else:

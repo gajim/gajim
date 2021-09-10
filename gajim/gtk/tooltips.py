@@ -152,10 +152,7 @@ class RosterTooltip:
         scale = self._ui.tooltip_grid.get_scale_factor()
 
         # Avatar
-        surface = contact.get_avatar(
-            AvatarSize.TOOLTIP,
-            scale,
-            add_show=bool(not contact.is_transport))
+        surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)
         self._ui.avatar.set_from_surface(surface)
         self._ui.avatar.show()
 

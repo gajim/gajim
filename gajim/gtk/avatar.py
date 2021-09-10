@@ -31,6 +31,7 @@ from gajim.common.const import StyleAttr
 
 from .const import DEFAULT_WORKSPACE_COLOR
 from .util import load_pixbuf
+from .util import load_icon
 from .util import text_to_color
 from .util import scale_with_ratio
 from .util import get_css_show_class
@@ -144,6 +145,27 @@ def add_status_to_avatar(surface, show):
         context.set_source_rgb(255, 255, 255)
         context.set_line_width(clip_radius / 4)
         context.stroke()
+
+    return context.get_target()
+
+
+def get_icon_avatar(size, scale, icon_name):
+    if scale is not None:
+        size = size * scale
+
+    width = size
+    height = size
+
+    surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+    context = cairo.Context(surface)
+
+    pixbuf = load_icon(icon_name, scale=scale, size=size, pixbuf=True)
+    Gdk.cairo_set_source_pixbuf(
+        context,
+        pixbuf,
+        0,
+        0)
+    context.paint()
 
     return context.get_target()
 
@@ -276,8 +298,10 @@ class AvatarStorage(metaclass=Singleton):
                    scale,
                    show=None,
                    default=False,
+                   transport_icon=None,
                    style='circle'):
-        surface = self.get_surface(contact, size, scale, show, default, style)
+        surface = self.get_surface(
+            contact, size, scale, show, default, transport_icon, style)
         return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
     def get_surface(self,
@@ -286,9 +310,18 @@ class AvatarStorage(metaclass=Singleton):
                     scale,
                     show=None,
                     default=False,
+                    transport_icon=None,
                     style='circle'):
 
         jid = contact.jid
+
+        if transport_icon is not None:
+            surface = get_icon_avatar(size, scale, transport_icon)
+            if show is not None:
+                surface = add_status_to_avatar(surface, show)
+            self._cache[jid][(size, scale, show)] = surface
+            return surface
+
         if not default:
             surface = self._cache[jid].get((size, scale, show))
             if surface is not None:
@@ -318,7 +351,14 @@ class AvatarStorage(metaclass=Singleton):
                         size,
                         scale,
                         default=False,
+                        transport_icon=None,
                         style='circle'):
+
+        if transport_icon is not None:
+            surface = get_icon_avatar(size, scale, transport_icon)
+            self._cache[jid][(size, scale)] = surface
+            return surface
+
         if not default:
             surface = self._cache[jid].get((size, scale))
             if surface is not None:

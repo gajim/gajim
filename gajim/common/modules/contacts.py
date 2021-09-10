@@ -248,11 +248,37 @@ class BareContact(CommonContact):
 
         show = self.show if add_show else None
 
+        transport_icon = None
+        if self.is_gateway:
+            show = None
+            disco_info = app.storage.cache.get_last_disco_info(self._jid)
+            if disco_info.gateway_type == 'sms':
+                transport_icon = 'gajim-agent-sms'
+            if disco_info.gateway_type == 'irc':
+                transport_icon = 'gajim-agent-irc'
+        else:
+            for resource_contact in self.iter_resources():
+                if resource_contact.identity_type == 'sms':
+                    transport_icon = 'gajim-agent-sms'
+                    break
+
         if pixbuf:
             return app.interface.avatar_storage.get_pixbuf(
-                self, size, scale, show, default=default, style=style)
+                self,
+                size,
+                scale,
+                show,
+                default=default,
+                transport_icon=transport_icon,
+                style=style)
         return app.interface.avatar_storage.get_surface(
-            self, size, scale, show, default=default, style=style)
+            self,
+            size,
+            scale,
+            show,
+            default=default,
+            transport_icon=transport_icon,
+            style=style)
 
     def update_presence(self, presence_data):
         for contact in self._resources.values():
@@ -281,14 +307,11 @@ class BareContact(CommonContact):
         return item is not None
 
     @property
-    def is_transport(self):
+    def is_gateway(self):
         disco_info = app.storage.cache.get_last_disco_info(self._jid)
         if disco_info is None:
             return False
-        for identity in disco_info.identities:
-            if identity.category == 'gateway':
-                return True
-        return False
+        return disco_info.is_gateway
 
     @property
     def ask(self):
@@ -328,6 +351,18 @@ class ResourceContact(CommonContact):
         if not self.is_available:
             return False
         return CommonContact.supports(self, requested_feature)
+
+    @property
+    def identity_type(self):
+        disco_info = app.storage.cache.get_last_disco_info(self._jid)
+        if disco_info is None:
+            return None
+
+        for identity in disco_info.identities:
+            if identity.type is not None:
+                return identity.type
+
+        return None
 
     @property
     def is_available(self):
@@ -399,11 +434,19 @@ class GroupchatContact(CommonContact):
         return app.storage.cache.get_muc(self._jid, 'avatar')
 
     def get_avatar(self, size, scale):
+        transport_icon = None
+        disco_info = self.get_disco()
+        if disco_info is not None:
+            for identity in disco_info.identities:
+                if identity.type == 'irc':
+                    transport_icon = 'gajim-agent-irc'
+                break
         return app.interface.avatar_storage.get_muc_surface(
             self._account,
             self._jid,
             size,
-            scale)
+            scale,
+            transport_icon=transport_icon)
 
     def _on_user_signal(self, contact, signal_name, *args):
         self.notify(signal_name, contact, *args)

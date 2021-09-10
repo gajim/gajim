@@ -277,7 +277,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_remove_contact(self, _action, param):
         jid = param.get_string()
         selected_contact = self._client.get_module('Contacts').get_contact(jid)
-        if selected_contact.is_transport:
+        if selected_contact.is_gateway:
             # Check for transport users in roster and warn about removing the
             # transport if there are any
             has_transport_contacts = False
@@ -346,7 +346,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _show_contact_menu(self, jid, treeview, event):
         contact = self._client.get_module('Contacts').get_contact(jid)
         menu = get_roster_menu(
-            self._account, jid, transport=contact.is_transport)
+            self._account, jid, transport=contact.is_gateway)
 
         rectangle = Gdk.Rectangle()
         rectangle.x = event.x
@@ -573,9 +573,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._store[iter_][Column.TEXT] = name
 
         surface = contact.get_avatar(
-            AvatarSize.ROSTER,
-            self.get_scale_factor(),
-            add_show=bool(not contact.is_transport))
+            AvatarSize.ROSTER, self.get_scale_factor())
         self._store[iter_][Column.AVATAR] = surface
 
     def _get_total_user_count(self):
