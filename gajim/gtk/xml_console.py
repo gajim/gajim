@@ -154,6 +154,11 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 '<iq to="" type="" xmlns="jabber:client">\n'
                 '<query xmlns=""></query>\n'
                 '</iq>')
+        elif text == 'Disco Info':
+            input_text = (
+                '<iq to="" type="get" xmlns="jabber:client">\n'
+                '<query xmlns="http://jabber.org/protocol/disco#info"></query>\n'
+                '</iq>')
 
         if input_text is not None:
             buffer_ = self._ui.input_entry.get_buffer()

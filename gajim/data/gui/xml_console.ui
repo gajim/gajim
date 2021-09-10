@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkHeaderBar" id="headerbar">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">XML Console</property>
-    <property name="show_close_button">True</property>
+    <property name="show-close-button">True</property>
     <child>
       <object class="GtkImage">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="icon_name">utilities-terminal-symbolic</property>
+        <property name="can-focus">False</property>
+        <property name="icon-name">utilities-terminal-symbolic</property>
       </object>
     </child>
     <child>
       <object class="GtkToggleButton" id="search_toggle">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="margin_start">6</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="margin-start">6</property>
         <signal name="toggled" handler="_on_search_toggled" swapped="no"/>
         <child>
           <object class="GtkImage">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">system-search-symbolic</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">system-search-symbolic</property>
           </object>
         </child>
       </object>
@@ -35,22 +35,22 @@
     </child>
   </object>
   <object class="GtkPopover" id="popover">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="valign">start</property>
     <child>
       <object class="GtkListBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="selection_mode">none</property>
+        <property name="can-focus">False</property>
+        <property name="selection-mode">none</property>
         <signal name="row-activated" handler="_on_row_activated" swapped="no"/>
         <child>
           <object class="GtkListBoxRow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label">Message</property>
               </object>
             </child>
@@ -59,11 +59,11 @@
         <child>
           <object class="GtkListBoxRow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label">Presence</property>
               </object>
             </child>
@@ -72,12 +72,25 @@
         <child>
           <object class="GtkListBoxRow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label">Iq</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label">Disco Info</property>
               </object>
             </child>
           </object>
@@ -90,45 +103,45 @@
   </object>
   <object class="GtkBox" id="box">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkPaned" id="paned">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkRevealer" id="search_revealer">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="transition_type">none</property>
-                <property name="transition_duration">100</property>
+                <property name="can-focus">False</property>
+                <property name="transition-type">none</property>
+                <property name="transition-duration">100</property>
                 <child>
                   <object class="GtkToolbar">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">center</property>
-                    <property name="show_arrow">False</property>
+                    <property name="show-arrow">False</property>
                     <property name="icon_size">2</property>
                     <child>
                       <object class="GtkToolItem">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_end">6</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-end">6</property>
                         <child>
                           <object class="GtkSearchEntry" id="search_entry">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="primary_icon_name">edit-find-symbolic</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="primary_icon_sensitive">False</property>
-                            <property name="placeholder_text" translatable="yes">Start Search...</property>
+                            <property name="can-focus">True</property>
+                            <property name="primary-icon-name">edit-find-symbolic</property>
+                            <property name="primary-icon-activatable">False</property>
+                            <property name="primary-icon-sensitive">False</property>
+                            <property name="placeholder-text" translatable="yes">Start Search...</property>
                             <signal name="activate" handler="_on_search_activate" swapped="no"/>
                           </object>
                         </child>
@@ -141,9 +154,9 @@
                     <child>
                       <object class="GtkToolButton" id="search_forward">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_name">go-down-symbolic</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">go-down-symbolic</property>
                         <signal name="clicked" handler="_on_search_clicked" swapped="no"/>
                       </object>
                       <packing>
@@ -154,9 +167,9 @@
                     <child>
                       <object class="GtkToolButton" id="search_backward">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_name">go-up-symbolic</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">go-up-symbolic</property>
                         <signal name="clicked" handler="_on_search_clicked" swapped="no"/>
                       </object>
                       <packing>
@@ -175,19 +188,19 @@
             </child>
             <child>
               <object class="GtkScrolledWindow" id="scrolled">
-                <property name="height_request">400</property>
+                <property name="height-request">400</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="shadow_type">in</property>
+                <property name="can-focus">True</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTextView" id="textview">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="editable">False</property>
-                    <property name="left_margin">6</property>
-                    <property name="right_margin">6</property>
-                    <property name="top_margin">6</property>
-                    <property name="bottom_margin">6</property>
+                    <property name="left-margin">6</property>
+                    <property name="right-margin">6</property>
+                    <property name="top-margin">6</property>
+                    <property name="bottom-margin">6</property>
                   </object>
                 </child>
               </object>
@@ -205,14 +218,14 @@
         </child>
         <child>
           <object class="GtkScrolledWindow" id="scrolled_input">
-            <property name="height_request">150</property>
-            <property name="can_focus">True</property>
-            <property name="no_show_all">True</property>
-            <property name="shadow_type">in</property>
+            <property name="height-request">150</property>
+            <property name="can-focus">True</property>
+            <property name="no-show-all">True</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTextView" id="input_entry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
               </object>
             </child>
           </object>
@@ -232,19 +245,19 @@
       <object class="GtkActionBar" id="actionbar">
         <property name="name">actionbar</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <child>
           <object class="GtkButton">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Filter</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Filter</property>
             <signal name="clicked" handler="_on_filter_options" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">applications-system-symbolic</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">applications-system-symbolic</property>
               </object>
             </child>
           </object>
@@ -255,15 +268,15 @@
         <child>
           <object class="GtkButton">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Clear</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Clear</property>
             <signal name="clicked" handler="_on_clear" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">edit-clear-all-symbolic</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">edit-clear-all-symbolic</property>
               </object>
             </child>
           </object>
@@ -274,14 +287,14 @@
         <child>
           <object class="GtkToggleButton">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <signal name="toggled" handler="_on_input" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">document-edit-symbolic</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">document-edit-symbolic</property>
               </object>
             </child>
           </object>
@@ -291,16 +304,16 @@
         </child>
         <child>
           <object class="GtkButton" id="paste">
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="no_show_all">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
             <signal name="clicked" handler="_on_paste_last" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Paste Last Input</property>
-                <property name="icon_name">insert-text-symbolic</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes">Paste Last Input</property>
+                <property name="icon-name">insert-text-symbolic</property>
               </object>
             </child>
           </object>
@@ -310,10 +323,10 @@
         </child>
         <child>
           <object class="GtkMenuButton" id="menubutton">
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="no_show_all">True</property>
-            <property name="tooltip_text" translatable="yes">Presets</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
+            <property name="tooltip-text" translatable="yes">Presets</property>
             <property name="popover">popover</property>
             <child>
               <placeholder/>
@@ -332,14 +345,14 @@
         <child>
           <object class="GtkButton" id="send">
             <property name="label" translatable="yes">_Send</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="no_show_all">True</property>
-            <property name="use_underline">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
+            <property name="use-underline">True</property>
             <signal name="clicked" handler="_on_send" swapped="no"/>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -347,7 +360,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="pack_type">end</property>
+        <property name="pack-type">end</property>
         <property name="position">1</property>
       </packing>
     </child>
