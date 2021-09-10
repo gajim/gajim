@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
@@ -28,6 +30,8 @@ from gajim.common.const import MUC_DISCO_ERRORS
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
 from .util import ensure_not_destroyed
+
+log = logging.getLogger('gajim.gui.groupchat_join')
 
 
 class GroupchatJoin(Gtk.ApplicationWindow):
@@ -86,8 +90,8 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self.add(self._main_box)
         self.show_all()
 
-        con = app.connections[self.account]
-        con.get_module('Discovery').disco_muc(
+        client = app.get_client(self.account)
+        client.get_module('Discovery').disco_muc(
             jid,
             allow_redirect=True,
             request_vcard=True,
@@ -103,7 +107,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         try:
             result = task.finish()
         except StanzaError as error:
-            self._log.info('Disco %s failed: %s', error.jid, error.get_text())
+            log.info('Disco %s failed: %s', error.jid, error.get_text())
             self._set_error(error)
             return
 
@@ -137,8 +141,9 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
     def _on_join(self, *args):
         nickname = self._nick_chooser.get_text()
-        app.interface.show_or_join_groupchat(
-            self.account, self.jid, nick=nickname)
+
+        app.interface.show_add_join_groupchat(
+            self.account, self.jid, nickname=nickname)
         self.destroy()
 
     def _on_destroy(self, *args):
