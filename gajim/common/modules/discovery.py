@@ -241,18 +241,15 @@ class Discovery(BaseModule):
     def disco_contact(self, contact):
         _task = yield
 
-        fjid = contact.get_full_jid()
-
-        result = yield self.disco_info(fjid)
+        result = yield self.disco_info(contact.jid)
         if is_error(result):
             raise result
 
-        self._log.info('Disco Info received: %s', fjid)
+        self._log.info('Disco Info received: %s', contact.jid)
 
         app.storage.cache.set_last_disco_info(result.jid,
                                               result,
                                               cache_only=True)
-
 
         contact = self._con.get_module('Contacts').get_contact(result.jid)
         contact.notify('caps-update')
