@@ -61,6 +61,7 @@ from gajim.gui.util import get_builder
 from gajim.gui.util import get_show_in_systray
 from gajim.gui.util import AccountBadge
 from gajim.gui.const import ControlType  # pylint: disable=unused-import
+from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
@@ -142,11 +143,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.overlay.connect('drag-motion', self._on_drag_motion)
         self.xml.overlay.connect('drag-leave', self._on_drag_leave)
 
-        self.TARGET_TYPE_URI_LIST = 80
         uri_entry = Gtk.TargetEntry.new(
             'text/uri-list',
             Gtk.TargetFlags.OTHER_APP,
-            self.TARGET_TYPE_URI_LIST)
+            TARGET_TYPE_URI_LIST)
         dst_targets = Gtk.TargetList.new([uri_entry])
         dst_targets.add_text_targets(0)
         self._dnd_list = [uri_entry,

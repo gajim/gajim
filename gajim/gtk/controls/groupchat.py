@@ -56,6 +56,8 @@ from gajim.gui.controls.base import BaseControl
 
 from gajim.command_system.implementation.hosts import GroupChatCommands
 
+from gajim.gui.const import ControlType
+from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationCheckDialog
 from gajim.gui.dialogs import ConfirmationDialog
@@ -72,7 +74,6 @@ from gajim.gui.groupchat_state import GroupchatState
 from gajim.gui.util import NickCompletionGenerator
 from gajim.gui.util import get_app_window
 from gajim.gui.util import open_window
-from gajim.gui.const import ControlType
 
 log = logging.getLogger('gajim.gui.controls.groupchat')
 
@@ -1294,22 +1295,12 @@ class GroupchatControl(BaseControl):
         if not selection.get_data():
             return
 
-        if target_type == self.TARGET_TYPE_URI_LIST:
+        log.debug('Drop received: %s, %s', selection.get_data(), target_type)
+
+        # TODO: Contact drag and drop for Invitations
+        if target_type == TARGET_TYPE_URI_LIST:
             # File drag and drop (handled in chat_control_base)
             self.drag_data_file_transfer(selection)
-        else:
-            # Invite contact to groupchat
-            treeview = app.interface.roster.tree
-            model = treeview.get_model()
-            data = selection.get_data().decode()
-            path = treeview.get_selection().get_selected_rows()[1][0]
-            iter_ = model.get_iter(path)
-            type_ = model[iter_][2]
-            if type_ != 'contact':  # Source is not a contact
-                return
-            contact_jid = data
-
-            self.invite(contact_jid)
 
     def _jid_not_blocked(self, bare_jid: str) -> bool:
         fjid = self.room_jid + '/' + bare_jid

@@ -28,6 +28,9 @@ Setting.__new__.__defaults__ = (None,) * len(Setting._fields)  # type: ignore
 
 DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'
 
+# Drag and drop target type URI list (for dropped files)
+TARGET_TYPE_URI_LIST = 80
+
 
 @unique
 class Theme(IntEnum):

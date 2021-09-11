@@ -54,6 +54,8 @@ from gajim import gui_menu_builder
 
 from gajim.gui.adhoc_muc import AdhocMUC
 from gajim.gui.call_widget import CallWidget
+from gajim.gui.const import TARGET_TYPE_URI_LIST
+from gajim.gui.const import ControlType
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.util import get_cursor
@@ -63,7 +65,6 @@ from gajim.gui.util import format_tune
 from gajim.gui.util import format_location
 from gajim.gui.util import get_activity_icon_name
 from gajim.gui.util import open_window
-from gajim.gui.const import ControlType
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
@@ -699,30 +700,12 @@ class ChatControl(BaseControl):
         if not selection.get_data():
             return
 
-        if target_type == self.TARGET_TYPE_URI_LIST:
+        log.debug('Drop received: %s, %s', selection.get_data(), target_type)
+
+        # TODO: Contact drag and drop for AdHocMUC
+        if target_type == TARGET_TYPE_URI_LIST:
             # File drag and drop (handled in chat_control_base)
             self.drag_data_file_transfer(selection)
-        else:
-            # Convert single chat to MUC
-            treeview = app.interface.roster.tree
-            model = treeview.get_model()
-            data = selection.get_data().decode()
-            tree_selection = treeview.get_selection()
-            if tree_selection.count_selected_rows() == 0:
-                return
-            path = tree_selection.get_selected_rows()[1][0]
-            iter_ = model.get_iter(path)
-            type_ = model[iter_][2]
-            if type_ != 'contact':  # Source is not a contact
-                return
-            dropped_jid = data
-
-            dropped_transport = app.get_transport_name_from_jid(dropped_jid)
-            c_transport = app.get_transport_name_from_jid(self.contact.jid)
-            if dropped_transport or c_transport:
-                return  # transport contacts cannot be invited
-
-            AdhocMUC(self.account, [self.contact.jid], [dropped_jid])
 
     def _on_client_state_changed(self, _client, _signal_name, state):
         self.msg_textview.set_sensitive(state.is_connected)
