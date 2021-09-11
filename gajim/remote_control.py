@@ -617,7 +617,7 @@ class GajimRemote(Server):
                 if account not in app.connections:
                     return False
                 status = app.connections[account].status
-            GLib.idle_add(app.interface.roster.send_status, account, status,
+            GLib.idle_add(app.connections[account].change_status, status,
                           message)
         else:
             # account not specified, so change the status of all accounts
@@ -631,7 +631,7 @@ class GajimRemote(Server):
                     if acc not in app.connections:
                         continue
                     status_ = app.connections[acc].status
-                GLib.idle_add(app.interface.roster.send_status, acc, status_,
+                GLib.idle_add(app.connections[acc].change_status, status_,
                               message)
         return False
 

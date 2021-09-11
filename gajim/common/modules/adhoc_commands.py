@@ -175,8 +175,8 @@ class ChangeStatusCommand(AdHocCommand):
                                         now=presencetype == 'offline')
 
         # send new status
-        app.interface.roster.send_status(
-            self.connection.name, presencetype, presencedesc)
+        app.get_client(self.connection.name).change_status(
+            presencetype, presencedesc)
 
         return False    # finish the session
 

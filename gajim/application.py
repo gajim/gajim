@@ -300,9 +300,6 @@ class GajimApplication(Gtk.Application):
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
-        # Shutdown GUI and save config
-        if hasattr(self.interface, 'roster') and self.interface.roster:
-            self.interface.roster.prepare_quit()
 
         # Commit any outstanding SQL transactions
         app.storage.cache.shutdown()
