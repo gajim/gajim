@@ -392,22 +392,31 @@ class Gateway(Page):
                 icon_name = 'gajim-agent-irc'
             self._ui.gateway_image.set_from_icon_name(
                 icon_name, Gtk.IconSize.DIALOG)
-            self._ui.gateway_label.set_text(_('%(name)s (%(type)s)') % {
-                'name': result.gateway_name,
-                'type': result.gateway_type.upper()})
+            gateway_name = result.gateway_name or self._result.jid
+            if not result.gateway_type:
+                self._ui.gateway_label.set_text(gateway_name)
+            else:
+                self._ui.gateway_label.set_text(
+                    f'{gateway_name} ({result.gateway_type.upper()})')
         else:
+            identity_name = ''
+            identity_type = ''
             for identity in result.identities:
-                identity_name = identity.name
-                identity_type = identity.type
                 if identity.type == 'sms':
                     icon_name = 'gajim-agent-sms'
+                    identity_name = identity.name or self._result.jid
+                    identity_type = identity.type
                 if identity.type == 'irc':
                     icon_name = 'gajim-agent-irc'
+                    identity_name = identity.name or self._result.jid
+                    identity_type = identity.type
             self._ui.gateway_image.set_from_icon_name(
                 icon_name, Gtk.IconSize.DIALOG)
-            self._ui.gateway_label.set_text(_('%(name)s (%(type)s)') % {
-                'name': identity_name,
-                'type': identity_type.upper()})
+            if not identity_type:
+                self._ui.gateway_label.set_text(identity_name)
+            else:
+                self._ui.gateway_label.set_text(
+                    f'{identity_name} ({identity_type.upper()})')
 
         if result.supports(Namespace.REGISTER):
             self._ui.register_button.set_sensitive(True)
