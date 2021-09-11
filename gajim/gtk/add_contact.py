@@ -72,6 +72,7 @@ class AddContact(Assistant):
 
     def _on_button_clicked(self, _assistant, button_name):
         page = self.get_current_page()
+        account, _ = self.get_page('address').get_account_and_jid()
 
         if button_name == 'next':
             self._start_disco()
@@ -84,7 +85,7 @@ class AddContact(Assistant):
             return
 
         if button_name == 'add':
-            client = app.get_client(self.account)
+            client = app.get_client(account)
             if page == 'contact':
                 data = self.get_page('contact').get_subscription_data()
                 client.get_module('Presence').subscribe(
@@ -97,13 +98,13 @@ class AddContact(Assistant):
                     self._result.jid,
                     name=self._result.gateway_name,
                     auto_auth=True)
-            app.window.show_account_page(self.account)
+            app.window.show_account_page(account)
             self.destroy()
             return
 
         if button_name == 'join':
             _, jid = self.get_page('address').get_account_and_jid()
-            open_window('GroupchatJoin', account=self.account, jid=jid)
+            open_window('GroupchatJoin', account=account, jid=jid)
             self.destroy()
 
     def _start_disco(self):
@@ -192,10 +193,6 @@ class Address(Page):
         self._account = account
         self._jid = jid
 
-        self._client = None
-        if account is not None:
-            self._client = app.get_client(account)
-
         self._ui = get_builder('add_contact.ui')
         self.add(self._ui.address_box)
 
@@ -203,16 +200,20 @@ class Address(Page):
         self._ui.address_entry.connect('changed', self._set_complete)
 
         accounts = app.get_enabled_accounts_with_labels()
+        liststore = self._ui.account_combo.get_model()
+        for acc in accounts:
+            liststore.append(acc)
+
         if len(accounts) > 1:
-            liststore = self._ui.account_combo.get_model()
-            for acc in accounts:
-                liststore.append(acc)
             self._ui.account_box.show()
 
             if self._account is not None:
                 self._ui.account_combo.set_active_id(account)
             else:
                 self._ui.account_combo.set_active(0)
+        else:
+            # Set to first (and only) item; sets self._account as well
+            self._ui.account_combo.set_active(0)
 
         if jid is not None:
             self._ui.address_entry.set_text(str(jid))
