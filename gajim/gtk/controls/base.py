@@ -338,14 +338,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def is_groupchat(self):
         return self._type.is_groupchat
 
-    def minimizable(self):
-        """
-        Called to check if control can be minimized
-
-        Derived classes MAY implement this.
-        """
-        return False
-
     def safe_shutdown(self):
         """
         Called to check if control can be closed without losing data.
@@ -355,13 +347,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         """
         return True
 
-    def allow_shutdown(self, method, on_response_yes, on_response_no,
-                       on_response_minimize):
+    def allow_shutdown(self, method, on_response_yes, on_response_no):
         """
         Called to check is a control is allowed to shutdown.
         If a control is not in a suitable shutdown state this method
         should call on_response_no, else on_response_yes or
-        on_response_minimize
 
         Derived classes MAY implement this.
         """

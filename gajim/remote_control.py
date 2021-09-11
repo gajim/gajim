@@ -566,7 +566,6 @@ class GajimRemote(Server):
             # Jid is not conform, ignore it
             return False
 
-        minimized_control = None
         if account:
             accounts = [account]
         else:
@@ -583,8 +582,6 @@ class GajimRemote(Server):
                     break
                 # jid is in roster
                 if contact:
-                    minimized_control = \
-                        jid in app.interface.minimized_controls[acct]
                     connected_account = acct
                     break
                 # we send the message to jid not in roster, because account is
@@ -597,10 +594,6 @@ class GajimRemote(Server):
         # if jid is not a contact, open-chat with first connected account
         if connected_account is None and first_connected_acct:
             connected_account = first_connected_acct
-
-        if minimized_control:
-            app.interface.roster.on_groupchat_maximized(
-                None, jid, connected_account)
 
         if connected_account:
             app.interface.new_chat_from_jid(connected_account, jid, message)

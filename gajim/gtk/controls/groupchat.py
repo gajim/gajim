@@ -94,7 +94,6 @@ class GroupchatControl(BaseControl):
         self._client.connect_signal('state-changed',
                                     self._on_client_state_changed)
 
-        self.force_non_minimizable = False
         self.is_anonymous = True
 
         self.toggle_emoticons()

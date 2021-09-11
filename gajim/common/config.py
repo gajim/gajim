@@ -124,7 +124,7 @@ class Config:
         'remote_control': [opt_bool, False, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
         'confirm_paste_image': [opt_bool, True, _('Ask before pasting an image.')],
         'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
-        'confirm_close_multiple_tabs': [opt_bool, True, _('Ask before closing tabbed chat window if there are chats that can lose data (chat, private chat, group chat that will not be minimized).')],
+        'confirm_close_multiple_tabs': [opt_bool, True, _('Ask before closing tabbed chat window if there are chats that can lose data (chat, private chat).')],
         'notify_on_file_complete': [opt_bool, True],
         'file_transfers_port': [opt_int, 28011],
         'ft_add_hosts_to_send': [opt_str, '', _('List of send hosts (comma separated) in addition to local interfaces for file transfers (in case of address translation/port forwarding).')],

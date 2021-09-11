@@ -371,7 +371,7 @@ ADVANCED_SETTINGS = {
         'remote_control': _('If checked, Gajim can be controlled remotely using gajim-remote.'),
         'confirm_paste_image': _('Ask before pasting an image.'),
         'confirm_close_muc': _('Ask before closing a group chat tab/window.'),
-        'confirm_close_multiple_tabs': _('Ask before closing tabbed chat window if there are chats that can lose data (chat, private chat, group chat that will not be minimized).'),
+        'confirm_close_multiple_tabs': _('Ask before closing tabbed chat window if there are chats that can lose data (chat, private chat).'),
         'file_transfers_port': '',
         'ft_add_hosts_to_send': _('List of send hosts (comma separated) in addition to local interfaces for file transfers (in case of address translation/port forwarding).'),
         'use_kib_mib': _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.'),

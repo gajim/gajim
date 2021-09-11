@@ -657,7 +657,7 @@ class ChatControl(BaseControl):
         super(ChatControl, self).shutdown()
         app.check_finalize(self)
 
-    def allow_shutdown(self, _method, on_yes, on_no, _on_minimize):
+    def allow_shutdown(self, _method, on_yes, on_no):
         time_ = app.last_message_time[self.account][self.contact.jid]
         # 2 seconds
         if time.time() - time_ < 2:
