@@ -149,7 +149,17 @@ class AddContact(Assistant):
 
         if result.is_muc:
             for identity in result.identities:
+                if identity.type == 'text' and result.jid.is_domain:
+                    # It's a group chat component advertising
+                    # category 'conference'
+                    self.get_page('error').set_text(
+                        _('This address does not seem to offer any gateway '
+                          'service.'))
+                    self.show_page('error')
+                    return
+
                 if identity.type == 'irc' and result.jid.is_domain:
+                    # It's an IRC gateway advertising category 'conference'
                     self.get_page('gateway').prepare(account, result)
                     self.show_page(
                         'gateway', Gtk.StackTransitionType.SLIDE_LEFT)
@@ -167,6 +177,11 @@ class AddContact(Assistant):
         if result.has_category('client'):
             self.get_page('contact').prepare(account, result)
             self.show_page('contact', Gtk.StackTransitionType.SLIDE_LEFT)
+            return
+
+        self.get_page('error').set_text(
+            _('This address does not seem to offer any gateway service.'))
+        self.show_page('error')
 
 
 class Address(Page):
@@ -355,7 +370,7 @@ class Gateway(Page):
         self.add(self._ui.gateway_box)
 
         self._ui.register_button.connect('clicked', self._on_register_clicked)
-        self._ui.command_button.connect('clicked', self._on_command_clicked)
+        self._ui.commands_button.connect('clicked', self._on_command_clicked)
 
         self.show_all()
 
@@ -403,11 +418,11 @@ class Gateway(Page):
                 _('This gateway does not support direct registering.'))
 
         if result.supports(Namespace.COMMANDS):
-            self._ui.command_button.set_sensitive(True)
-            self._ui.command_button.set_tooltip_text('')
+            self._ui.commands_button.set_sensitive(True)
+            self._ui.commands_button.set_tooltip_text('')
         else:
-            self._ui.command_button.set_sensitive(False)
-            self._ui.command_button.set_tooltip_text(
+            self._ui.commands_button.set_sensitive(False)
+            self._ui.commands_button.set_tooltip_text(
                 _('This gateway does not support Ad-Hoc Commands.'))
 
     def _on_register_clicked(self, _button):
