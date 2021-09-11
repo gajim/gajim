@@ -392,6 +392,7 @@ class GajimApplication(Gtk.Application):
         actions = [
             ('quit', app_actions.on_quit),
             ('add-account', app_actions.on_add_account),
+            ('add-contact', app_actions.on_add_contact),
             ('manage-proxies', app_actions.on_manage_proxies),
             ('history-manager', app_actions.on_history_manager),
             ('preferences', app_actions.on_preferences),

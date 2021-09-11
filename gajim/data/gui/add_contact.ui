@@ -139,7 +139,7 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Publish Status</property>
+        <property name="label" translatable="yes">Share Status</property>
         <style>
           <class name="dim-label"/>
         </style>

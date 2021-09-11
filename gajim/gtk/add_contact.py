@@ -193,6 +193,8 @@ class Address(Page):
         self._jid = jid
 
         self._client = None
+        if account is not None:
+            self._client = app.get_client(account)
 
         self._ui = get_builder('add_contact.ui')
         self.add(self._ui.address_box)
@@ -207,12 +209,13 @@ class Address(Page):
                 liststore.append(acc)
             self._ui.account_box.show()
 
-        if self._account is not None:
-            self._client = app.get_client(self._account)
-            self._ui.account_combo.set_active_id(self._account)
+            if self._account is not None:
+                self._ui.account_combo.set_active_id(account)
+            else:
+                self._ui.account_combo.set_active(0)
 
-        if self._jid is not None:
-            self._ui.address_entry.set_text(self._jid)
+        if jid is not None:
+            self._ui.address_entry.set_text(str(jid))
 
         self._set_complete()
 

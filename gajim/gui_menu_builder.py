@@ -147,7 +147,6 @@ def get_account_menu(account):
         sub menu: list
     '''
     account_menu = [
-        ('-add-contact', _('Add Contact…')),
         ('-profile', _('Profile')),
         ('-start-single-chat', _('Send Single Message…')),
         ('-services', _('Discover Services…')),
@@ -176,10 +175,7 @@ def get_account_menu(account):
                 action, label = item
                 action = 'app.{}{}'.format(account, action)
                 menuitem = Gio.MenuItem.new(label, action)
-                if 'add-contact' in action:
-                    variant = GLib.Variant('as', [account, ''])
-                else:
-                    variant = GLib.Variant('s', account)
+                variant = GLib.Variant('s', account)
                 menuitem.set_action_and_target_value(action, variant)
                 menu.append_item(menuitem)
             else:
@@ -202,15 +198,18 @@ def build_accounts_menu():
 
     accounts_list = sorted(app.settings.get_active_accounts())
     if not accounts_list:
-        modify_account_item = Gio.MenuItem.new(_('_Add Account…'),
-                                               'app.accounts::')
-        acc_menu.append_item(modify_account_item)
+        add_account_item = Gio.MenuItem.new(_('_Add Account…'),
+                                            'app.accounts::')
+        acc_menu.append_item(add_account_item)
         return
 
     if len(accounts_list) > 1:
-        modify_account_item = Gio.MenuItem.new(_('_Modify Accounts…'),
-                                               'app.accounts::')
-        acc_menu.append_item(modify_account_item)
+        modify_accounts_item = Gio.MenuItem.new(_('_Modify Accounts…'),
+                                                'app.accounts::')
+        acc_menu.append_item(modify_accounts_item)
+        add_contact_item = Gio.MenuItem.new(_('Add _Contact…'),
+                                            'app.add-contact::')
+        acc_menu.append_item(add_contact_item)
         for acc in accounts_list:
             label = escape_mnemonic(app.get_account_label(acc))
             if acc != 'Local':
@@ -221,6 +220,9 @@ def build_accounts_menu():
         modify_account_item = Gio.MenuItem.new(_('_Modify Account…'),
                                                'app.accounts::')
         acc_menu.insert_item(0, modify_account_item)
+        add_contact_item = Gio.MenuItem.new(_('Add _Contact…'),
+                                            'app.add-contact::')
+        acc_menu.insert_item(1, add_contact_item)
         menubar.remove(menu_position)
         menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
 
@@ -389,7 +391,7 @@ def get_chat_list_row_menu(workspace_id, account, jid, pinned):
     is_self_contact = contact.jid.bare == client.get_own_jid().bare
     if (not contact.is_groupchat and not contact.is_in_roster and
             not is_self_contact):
-        menu_items.append(('add-to-roster', _('Add to contact list')))
+        menu_items.append(('add-to-roster', _('Add to Contact List…')))
 
     menu = Gio.Menu()
     for item in menu_items:

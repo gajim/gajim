@@ -102,6 +102,7 @@ def on_service_disco(_action, param):
         except GajimGeneralException:
             pass
 
+
 def on_create_gc(_action, param):
     account = param.get_string()
     open_window('CreateGroupchatWindow', account=account or None)
@@ -109,7 +110,7 @@ def on_create_gc(_action, param):
 
 def on_add_contact(_action, param):
     account, jid = param.get_strv()
-    open_window('AddContact', account=account, jid=jid or None)
+    open_window('AddContact', account=account or None, jid=jid or None)
 
 
 def on_single_message(_action, param):
@@ -117,7 +118,7 @@ def on_single_message(_action, param):
     open_window('SingleMessageWindow', account=account)
 
 
-def on_add_account(action, _param):
+def on_add_account(_action, _param):
     open_window('AccountWizard')
 
 
@@ -238,6 +239,7 @@ def on_remove_event(_action, param):
     #     win.show_title()
 
 # Other Actions
+
 
 def toggle_ipython(_action, _param):
     """
