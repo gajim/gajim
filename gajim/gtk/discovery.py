@@ -61,9 +61,9 @@ from gajim.common.const import StyleAttr
 from .adhoc import AdHocCommand
 from .dialogs import ErrorDialog
 from .search import Search
-from .service_registration import ServiceRegistration
 from .util import icon_exists
 from .util import get_builder
+from .util import open_window
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),
@@ -1345,7 +1345,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             return
         jid = model[iter_][0]
         if jid:
-            ServiceRegistration(self.account, jid)
+            open_window(
+                'ServiceRegistration', account=self.account, address=jid)
 
     def _on_join_button_clicked(self, widget):
         """

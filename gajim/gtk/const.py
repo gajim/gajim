@@ -135,4 +135,5 @@ WINDOW_MODULES = {
     'ContactInfo': 'gajim.gui.contact_info',
     'WorkspaceDialog': 'gajim.gui.workspace_dialog',
     'RosterItemExchange': 'gajim.gui.roster_item_exchange',
+    'ServiceRegistration': 'gajim.gui.service_registration',
 }

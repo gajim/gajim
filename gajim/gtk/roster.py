@@ -24,9 +24,9 @@ from gajim.gui_menu_builder import get_roster_menu
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
 from .tooltips import RosterTooltip
-from .service_registration import ServiceRegistration
 from .util import EventHelper
 from .util import get_builder
+from .util import open_window
 
 log = logging.getLogger('gajim.gui.roster')
 
@@ -268,7 +268,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         app.window.contact_info(self._account, param.get_string())
 
     def _on_modify_gateway(self, _action, param):
-        ServiceRegistration(self._account, param.get_string())
+        open_window(
+            'ServiceRegistration',
+            account=self._account,
+            address=param.get_string())
 
     def _on_execute_command(self, _action, param):
         app.window.execute_command(self._account, param.get_string())

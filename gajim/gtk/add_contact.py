@@ -30,7 +30,6 @@ from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
 from .groupchat_info import GroupChatInfoScrolled
-from .service_registration import ServiceRegistration
 from .util import get_builder
 from .util import open_window
 
@@ -439,7 +438,10 @@ class Gateway(Page):
                 _('This gateway does not support Ad-Hoc Commands.'))
 
     def _on_register_clicked(self, _button):
-        ServiceRegistration(self._account, self._result.jid)
+        open_window(
+            'ServiceRegistration',
+            account=self._account,
+            address=self._result.jid)
 
     def _on_command_clicked(self, _button):
         AdHocCommand(self._account, self._result.jid)
