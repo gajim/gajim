@@ -9,6 +9,8 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 
+from nbxmpp import Namespace
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
@@ -114,7 +116,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _add_actions(self):
         actions = [
             ('contact-info', self._on_contact_info),
-            ('modify-transport', self._on_modify_transport),
+            ('modify-gateway', self._on_modify_gateway),
             ('execute-command', self._on_execute_command),
             ('block-contact', self._on_block_contact),
             ('remove-contact', self._on_remove_contact),
@@ -140,7 +142,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         app.window.lookup_action(
             f'contact-info-{self._account}').set_enabled(online)
         app.window.lookup_action(
-            f'modify-transport-{self._account}').set_enabled(online)
+            f'modify-gateway-{self._account}').set_enabled(online)
         app.window.lookup_action(
             f'execute-command-{self._account}').set_enabled(online)
         app.window.lookup_action(
@@ -152,7 +154,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _remove_actions(self):
         actions = [
             'contact-info',
-            'modify-transport',
+            'modify-gateway',
             'execute-command',
             'block-contact',
             'remove-contact',
@@ -265,7 +267,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_contact_info(self, _action, param):
         app.window.contact_info(self._account, param.get_string())
 
-    def _on_modify_transport(self, _action, param):
+    def _on_modify_gateway(self, _action, param):
         ServiceRegistration(self._account, param.get_string())
 
     def _on_execute_command(self, _action, param):
@@ -345,8 +347,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _show_contact_menu(self, jid, treeview, event):
         contact = self._client.get_module('Contacts').get_contact(jid)
+        gateway_register = contact.is_gateway and contact.supports(
+            Namespace.REGISTER)
         menu = get_roster_menu(
-            self._account, jid, transport=contact.is_gateway)
+            self._account, jid, gateway=gateway_register)
 
         rectangle = Gdk.Rectangle()
         rectangle.x = event.x

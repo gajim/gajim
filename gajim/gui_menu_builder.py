@@ -319,7 +319,7 @@ def get_conv_context_menu(account, uri):
     return menu
 
 
-def get_roster_menu(account, jid, transport=False):
+def get_roster_menu(account, jid, gateway=False):
     if jid_is_blocked(account, jid):
         block_label = _('Unblock')
     else:
@@ -330,8 +330,8 @@ def get_roster_menu(account, jid, transport=False):
         ('block-contact', block_label),
         ('remove-contact', _('Remove…')),
     ]
-    if transport:
-        menu_items.insert(1, ('modify-transport', _('Modify Transport…')))
+    if gateway:
+        menu_items.insert(1, ('modify-gateway', _('Modify Gateway…')))
 
     menu = Gio.Menu()
     for item in menu_items:
