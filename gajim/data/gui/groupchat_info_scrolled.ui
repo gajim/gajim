@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
+  <!-- n-columns=3 n-rows=10 -->
   <object class="GtkGrid" id="info_grid">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="halign">center</property>
-    <property name="row_spacing">6</property>
-    <property name="column_spacing">12</property>
+    <property name="row-spacing">6</property>
+    <property name="column-spacing">12</property>
     <child>
       <object class="GtkLabel" id="address_label">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="label" translatable="yes">Address</property>
         <style>
@@ -19,14 +20,14 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="description_label">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Description</property>
@@ -35,14 +36,14 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="subject_label">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Topic</property>
@@ -51,14 +52,14 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="author_label">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Author</property>
@@ -67,55 +68,55 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">5</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="description">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="use_markup">True</property>
+        <property name="use-markup">True</property>
         <property name="wrap">True</property>
-        <property name="wrap_mode">word-char</property>
+        <property name="wrap-mode">word-char</property>
         <property name="selectable">True</property>
         <property name="xalign">0</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">3</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="author">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">5</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="users">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">9</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">9</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="contact_label">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Contact</property>
@@ -124,14 +125,14 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">7</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">7</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="logs_label">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Discussion Logs</property>
@@ -140,28 +141,28 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">6</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">6</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="lang">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">8</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">8</property>
       </packing>
     </child>
     <child>
       <object class="GtkLinkButton" id="logs">
         <property name="label" translatable="yes">button</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
         <property name="relief">none</property>
@@ -171,48 +172,48 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">6</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">6</property>
       </packing>
     </child>
     <child>
       <object class="GtkImage" id="users_image">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="tooltip_text" translatable="yes">Participants</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="tooltip-text" translatable="yes">Participants</property>
         <property name="halign">end</property>
         <property name="valign">center</property>
-        <property name="icon_name">system-users-symbolic</property>
+        <property name="icon-name">system-users-symbolic</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">9</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">9</property>
       </packing>
     </child>
     <child>
       <object class="GtkImage" id="lang_image">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="tooltip_text" translatable="yes">Group Chat Language</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="tooltip-text" translatable="yes">Group Chat Language</property>
         <property name="halign">end</property>
         <property name="valign">center</property>
-        <property name="icon_name">preferences-desktop-locale-symbolic</property>
+        <property name="icon-name">preferences-desktop-locale-symbolic</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">8</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">8</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="contact_box">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
         <property name="orientation">vertical</property>
@@ -222,72 +223,75 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">7</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">7</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="subject">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="use_markup">True</property>
+        <property name="use-markup">True</property>
         <property name="wrap">True</property>
-        <property name="wrap_mode">word-char</property>
+        <property name="wrap-mode">word-char</property>
         <property name="selectable">True</property>
         <property name="xalign">0</property>
         <signal name="activate-link" handler="_on_activate_subject_link" swapped="no"/>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">4</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="name">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="halign">center</property>
         <property name="valign">start</property>
         <property name="selectable">True</property>
         <property name="ellipsize">end</property>
-        <property name="single_line_mode">True</property>
-        <property name="max_width_chars">40</property>
+        <property name="single-line-mode">True</property>
+        <property name="max-width-chars">40</property>
         <style>
           <class name="large-header"/>
         </style>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
         <property name="width">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkImage" id="avatar_image">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_bottom">12</property>
+        <property name="can-focus">False</property>
+        <property name="margin-bottom">12</property>
         <property name="icon_size">6</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
         <property name="width">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="address">
+            <property name="width-request">240</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="selectable">True</property>
+            <property name="ellipsize">end</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -298,19 +302,22 @@
         <child>
           <object class="GtkButton">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Copy Address</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Copy Address</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
             <signal name="clicked" handler="_on_copy_address" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">edit-copy-symbolic</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">edit-copy-symbolic</property>
               </object>
             </child>
+            <style>
+              <class name="flat"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -320,9 +327,39 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
     </child>
   </object>
 </interface>

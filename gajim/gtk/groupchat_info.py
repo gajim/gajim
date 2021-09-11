@@ -177,6 +177,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
         # Set address
         self._ui.address.set_text(str(info.jid))
+        self._ui.address.set_tooltip_text(str(info.jid))
 
         if self._minimal:
             return
