@@ -41,7 +41,7 @@ class AddContact(Assistant):
     def __init__(self, account=None, jid=None, nick=None):
         Assistant.__init__(self)
         self.account = account
-        self._jid = jid
+        self.jid = jid
         self._nick = nick
 
         self._result = None
