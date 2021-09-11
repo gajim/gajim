@@ -78,7 +78,6 @@ from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.const import ShowConstant
-from gajim.common.const import Display
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.const import GIO_TLS_ERRORS
@@ -89,11 +88,6 @@ from gajim.common.structs import URI
 
 
 log = logging.getLogger('gajim.c.helpers')
-
-special_groups = (_('Transports'),
-                  _('Not in contact list'),
-                  _('Observers'),
-                  _('Group chats'))
 
 URL_REGEX = re.compile(
     r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
@@ -438,10 +432,6 @@ def reduce_chars_newlines(text, max_chars=0, max_lines=0):
         reduced_text = ''
     return reduced_text
 
-def get_account_status(account):
-    status = reduce_chars_newlines(account['status_line'], 100, 1)
-    return status
-
 
 def get_contact_dict_for_account(account):
     """
@@ -710,11 +700,6 @@ def allow_sound_notification(account, sound_event):
         return True
     return False
 
-
-def get_current_show(account):
-    if account not in app.connections:
-        return 'offline'
-    return app.connections[account].status
 
 def get_optional_features(account):
     features = []
