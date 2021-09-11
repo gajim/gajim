@@ -248,6 +248,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         row = self._chats.pop((account, jid))
         self.remove(row)
         row.destroy()
+        self.emit_unread_changed()
 
     def remove_chats_for_account(self, account):
         for row_account, jid in list(self._chats.keys()):
