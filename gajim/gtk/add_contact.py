@@ -130,7 +130,11 @@ class AddContact(Assistant):
         log.debug('Error received: %s', result)
         self._result = result
 
-        if result.condition == 'service-unavailable':
+        contact_conditions = [
+            'service-unavailable',  # Prosody
+            'subscription-required'  # ejabberd
+        ]
+        if result.condition in contact_conditions:
             # It seems to be a contact
             self.get_page('contact').prepare(account, result)
             self.show_page('contact', Gtk.StackTransitionType.SLIDE_LEFT)
