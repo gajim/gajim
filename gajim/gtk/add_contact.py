@@ -16,6 +16,7 @@ import logging
 
 from gi.repository import Gtk
 
+from nbxmpp import Namespace
 from nbxmpp.errors import is_error
 
 from gajim.common import app
@@ -392,6 +393,22 @@ class Gateway(Page):
             self._ui.gateway_label.set_text(_('%(name)s (%(type)s)') % {
                 'name': identity_name,
                 'type': identity_type.upper()})
+
+        if result.supports(Namespace.REGISTER):
+            self._ui.register_button.set_sensitive(True)
+            self._ui.register_button.set_tooltip_text('')
+        else:
+            self._ui.register_button.set_sensitive(False)
+            self._ui.register_button.set_tooltip_text(
+                _('This gateway does not support direct registering.'))
+
+        if result.supports(Namespace.COMMANDS):
+            self._ui.command_button.set_sensitive(True)
+            self._ui.command_button.set_tooltip_text('')
+        else:
+            self._ui.command_button.set_sensitive(False)
+            self._ui.command_button.set_tooltip_text(
+                _('This gateway does not support Ad-Hoc Commands.'))
 
     def _on_register_clicked(self, _button):
         ServiceRegistration(self._account, self._result.jid)
