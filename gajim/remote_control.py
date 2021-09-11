@@ -858,9 +858,9 @@ class GajimRemote(Server):
             # zeroconf not support groupchats
             return
 
-        app.interface.show_or_join_groupchat(account,
-                                             room_jid,
-                                             password=password)
+        app.interface.show_add_join_groupchat(account,
+                                              room_jid,
+                                              password=password)
 
     def Introspect(self):
         return self.__doc__

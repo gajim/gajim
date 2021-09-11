@@ -1078,10 +1078,12 @@ class Interface:
         client = app.get_client(account)
         client.get_module('MUC').create(room_jid, config)
 
-    def show_add_join_groupchat(self, account, jid, nickname=None):
+    def show_add_join_groupchat(self, account, jid, nickname=None,
+                                password=None):
         if not app.window.chat_exists(account, jid):
             client = app.get_client(account)
-            client.get_module('MUC').join(jid, nick=nickname)
+            client.get_module('MUC').join(
+                jid, nick=nickname, password=password)
 
         app.window.add_group_chat(account, str(jid), select=True)
 
