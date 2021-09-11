@@ -758,13 +758,6 @@ class StatusIcon(PreferenceBox):
                     'iconset',
                     props={'entries': iconset_items},
                     callback=self._on_iconset_changed),
-
-            Setting(SettingKind.SWITCH,
-                    _('Use Transport Icons'),
-                    SettingType.CONFIG,
-                    'use_transports_iconsets',
-                    desc=_('Display protocol-specific status icons '
-                           '(ICQ, ..)')),
         ]
 
         PreferenceBox.__init__(self, settings)

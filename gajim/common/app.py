@@ -478,10 +478,12 @@ def get_transport_name_from_jid(jid, use_config_setting=True):
 
     If JID is not from transport returns None.
     """
+    # TODO: Rewrite/remove
+
     #FIXME: jid can be None! one TB I saw had this problem:
     # in the code block # it is a groupchat presence in handle_event_notify
     # jid was None. Yann why?
-    if not jid or (use_config_setting and not config.get('use_transports_iconsets')):
+    if not jid:
         return
 
     host = get_server_from_jid(jid)
