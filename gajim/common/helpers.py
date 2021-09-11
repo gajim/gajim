@@ -597,30 +597,6 @@ def statuses_unified():
             return False
     return True
 
-def get_icon_name_to_show(contact, account=None):
-    """
-    Get the icon name to show in online, away, requested, etc
-    """
-    if account and account in app.interface.minimized_controls and \
-    contact.jid in app.interface.minimized_controls[account] and app.interface.\
-            minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
-        return 'event'
-    if account and contact.jid in app.gc_connected[account]:
-        if app.gc_connected[account][contact.jid]:
-            return 'muc-active'
-        return 'muc-inactive'
-    if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
-        return contact.show
-    if contact.sub in ('both', 'to'):
-        return contact.show
-    if contact.ask == 'subscribe':
-        return 'requested'
-    transport = app.get_transport_name_from_jid(contact.jid)
-    if transport:
-        return contact.show
-    if contact.show in SHOW_LIST:
-        return contact.show
-    return 'notinroster'
 
 def get_full_jid_from_iq(iq_obj):
     """
