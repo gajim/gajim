@@ -1413,12 +1413,10 @@ class ToplevelAgentBrowser(AgentBrowser):
                 jid != self.jid):
             # We can register this agent
             registered_transports = []
-            jid_list = app.contacts.get_jid_list(self.account)
-            for jid_ in jid_list:
-                contact = app.contacts.get_first_contact_from_jid(
-                    self.account, jid_)
-                if _('Transports') in contact.groups:
-                    registered_transports.append(jid_)
+            client = app.get_client(self.account)
+            for contact in client.get_module('Roster').iter_contacts():
+                if contact.is_gateway:
+                    registered_transports.append(contact.jid)
             registered_transports.append(self.jid)
             if jid in registered_transports:
                 self.register_button.set_label(_('_Edit'))
