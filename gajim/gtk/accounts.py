@@ -723,6 +723,11 @@ class PrivacyPage(GenericSettingPage):
                     desc=_('Disclose information about the client '
                            'and operating system you currently use')),
 
+            Setting(SettingKind.SWITCH, _('Media Playback'),
+                    SettingType.ACCOUNT_CONFIG, 'publish_tune',
+                    desc=_('Disclose information about media that is '
+                           'currently being played on your system.')),
+
             Setting(SettingKind.SWITCH, _('Ignore Unknown Contacts'),
                     SettingType.ACCOUNT_CONFIG, 'ignore_unknown_contacts',
                     desc=_('Ignore everything from contacts not in your '
