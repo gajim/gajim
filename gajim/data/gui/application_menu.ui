@@ -39,20 +39,12 @@
       <attribute name="label" translatable="yes">_View</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">Show _Contact List</attribute>
-          <attribute name="action">win.show-roster</attribute>
-        </item>
-        <item>
           <attribute name="label" translatable="yes">Show _Offline Contacts</attribute>
           <attribute name="action">win.show-offline</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Show _Active Contacts</attribute>
           <attribute name="action">win.show-active</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Show _Transports</attribute>
-          <attribute name="action">win.show-transports</attribute>
         </item>
       </section>
       <section>

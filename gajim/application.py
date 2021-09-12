@@ -509,7 +509,6 @@ class GajimApplication(Gtk.Application):
             'app.ipython': ['<Primary><Alt>I'],
             'app.start-chat::': ['<Primary>N'],
             'app.create-groupchat::': ['<Primary>G'],
-            'win.show-roster': ['<Primary>R'],
             'win.show-offline': ['<Primary>O'],
             'win.show-active': ['<Primary>Y'],
             'win.change-nickname': ['<Primary><Shift>N'],
