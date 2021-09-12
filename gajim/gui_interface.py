@@ -521,7 +521,8 @@ class Interface:
         # enable location listener
         if (pep_supported and app.is_installed('GEOCLUE') and
                 app.settings.get_account_setting(account, 'publish_location')):
-            location.enable()
+            pass
+            # location.enable()
 
         if ask_for_status_message(event.conn.status, signin=True):
             app.window.show_account_page(account)
