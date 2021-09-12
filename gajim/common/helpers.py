@@ -801,15 +801,18 @@ def load_json(path, key=None, default=None):
         return json_dict
     return json_dict.get(key, default)
 
+
 def ignore_contact(account, jid):
-    jid = str(jid)
-    known_contact = app.contacts.get_contacts(account, jid)
-    ignore = app.settings.get_account_setting(account,
-                                              'ignore_unknown_contacts')
-    if ignore and not known_contact:
-        log.info('Ignore unknown contact %s', jid)
+    client = app.get_client(account)
+    contact = client.get_module('Contact').get_contact(jid)
+
+    ignore_unknown = app.settings.get_account_setting(
+        account, 'ignore_unknown_contacts')
+    if ignore_unknown and not contact.is_in_roster:
+        log.info('Ignore unknown contact %s', str(jid))
         return True
     return False
+
 
 class AdditionalDataDict(collections.UserDict):
     def __init__(self, initialdata=None):
