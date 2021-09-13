@@ -64,6 +64,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._search_stopped = False
         self._redirected = False
         self._source_id = None
+        self._skip_disco = False
 
         self._ui = get_builder('start_chat_dialog.ui')
         self.add(self._ui.stack)
@@ -305,6 +306,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 return
 
             self._disco_info(row)
+            GLib.timeout_add_seconds(10, self._continue_without_disco, row)
             return
 
         if row.groupchat:
@@ -329,12 +331,23 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self.destroy()
 
     def _disco_info(self, row):
+        if not app.account_is_available(row.account):
+            # Account is disconnected: start a 1:1 chat
+            self._continue_without_disco(row)
+            return
+
+        # Reset self._skip_disco and start a disco info
+        self._skip_disco = False
         self._ui.stack.set_visible_child_name('progress')
         client = app.get_client(row.account)
         client.get_module('Discovery').disco_info(
             row.jid, callback=self._disco_info_received, user_data=row)
 
     def _disco_info_received(self, task):
+        if self._skip_disco:
+            # Stop here if disco time limit has been exceeded
+            return
+
         row = task.get_user_data()
         try:
             result = task.finish()
@@ -355,6 +368,18 @@ class StartChatDialog(Gtk.ApplicationWindow):
             row.update_chat_type(groupchat=True)
         else:
             row.update_chat_type()
+        self._start_new_chat(row)
+
+    def _continue_without_disco(self, row):
+        current_page = self._ui.stack.get_visible_child_name()
+        if current_page not in ('progress', 'search'):
+            # Stop here if disco info already succeeded
+            return
+
+        # Disco time limit has been exceeded, chat type is unknown:
+        # start a 1:1 chat
+        self._skip_disco = True
+        row.update_chat_type()
         self._start_new_chat(row)
 
     def _disco_muc(self, account, jid, request_vcard):
