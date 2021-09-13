@@ -283,7 +283,7 @@ def copy_text(_action, param):
 
 def start_chat(_action, param):
     account, jid = param.get_strv()
-    app.interface.new_chat_from_jid(account, jid)
+    app.interface.start_chat_from_jid(account, jid)
 
 
 def on_groupchat_join(_action, param):

@@ -1088,6 +1088,16 @@ class Interface:
 
         app.window.add_group_chat(account, str(jid), select=True)
 
+    def start_chat_from_jid(self, account, jid, message=None):
+        if app.window.chat_exists(account, jid):
+            app.window.select_chat(account, jid)
+            control = app.window.get_control(account, jid)
+            control.msg_textview.insert_text(message)
+            return
+
+        # TODO: handle message arg in StartChat
+        app.app.activate_action('start-chat', GLib.Variant('s', jid))
+
     @staticmethod
     def _on_muc_added(event):
         if app.window.chat_exists(event.account, event.jid):

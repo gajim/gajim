@@ -596,12 +596,10 @@ class GajimRemote(Server):
             connected_account = first_connected_acct
 
         if connected_account:
-            app.interface.new_chat_from_jid(connected_account, jid, message)
+            app.interface.start_chat_from_jid(connected_account, jid, message)
             # preserve the 'steal focus preservation'
-            win = app.interface.msg_win_mgr.get_window(
-                jid, connected_account).window
-            if win.get_property('visible'):
-                win.window.present()
+            if app.window.get_property('visible'):
+                app.window.present()
             return True
         return False
 

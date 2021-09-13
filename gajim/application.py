@@ -293,10 +293,7 @@ class GajimApplication(Gtk.Application):
                     except Exception:
                         app.log('uri_handler').error('Invalid URI: %s', cmd)
 
-                if len(accounts) == 1:
-                    app.interface.new_chat_from_jid(accounts[0], jid, message)
-                else:
-                    self.activate_action('start-chat', GLib.Variant('s', jid))
+                app.interface.start_chat_from_jid(accounts[0], jid, message)
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
