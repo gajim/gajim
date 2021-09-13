@@ -73,7 +73,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         self.new_contact_row_visible = False
         self.new_contact_rows = {}
-        self.new_groupchat_rows = {}
         self._accounts = app.get_enabled_accounts_with_labels()
 
         rows = []
@@ -153,7 +152,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _add_groupchats(self, rows):
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
-            self.new_groupchat_rows[account] = None
             client = app.get_client(account)
             bookmarks = client.get_module('Bookmarks').bookmarks
             for bookmark in bookmarks:
@@ -306,6 +304,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 self._show_error_page(error)
                 return
 
+            self._disco_info(row)
+            return
+
         if row.groupchat:
             if not app.account_is_available(row.account):
                 self._show_error_page(_('You can not join a group chat '
@@ -327,17 +328,46 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self.ready_to_destroy = True
             self.destroy()
 
+    def _disco_info(self, row):
+        self._ui.stack.set_visible_child_name('progress')
+        client = app.get_client(row.account)
+        client.get_module('Discovery').disco_info(
+            row.jid, callback=self._disco_info_received, user_data=row)
+
+    def _disco_info_received(self, task):
+        row = task.get_user_data()
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            contact_conditions = [
+                'service-unavailable',  # Prosody
+                'subscription-required'  # ejabberd
+            ]
+            if error.condition in contact_conditions:
+                row.update_chat_type()
+                self._start_new_chat(row)
+                return
+
+            self._show_error_page(error.get_text())
+            return
+
+        if result.is_muc:
+            row.update_chat_type(groupchat=True)
+        else:
+            row.update_chat_type()
+        self._start_new_chat(row)
+
     def _disco_muc(self, account, jid, request_vcard):
         self._ui.stack.set_visible_child_name('progress')
-        con = app.connections[account]
-        con.get_module('Discovery').disco_muc(
+        client = app.get_client(account)
+        client.get_module('Discovery').disco_muc(
             jid,
             request_vcard=request_vcard,
             allow_redirect=True,
-            callback=self._disco_info_received,
+            callback=self._muc_disco_info_received,
             user_data=account)
 
-    def _disco_info_received(self, task):
+    def _muc_disco_info_received(self, task):
         try:
             result = task.finish()
         except StanzaError as error:
@@ -457,27 +487,22 @@ class StartChatDialog(Gtk.ApplicationWindow):
             show_account = len(self._accounts) > 1
             row = ContactRow(account, None, '', None, show_account)
             self.new_contact_rows[account] = row
-            group_row = ContactRow(account, None, '', None, show_account,
-                                   groupchat=True)
-            self.new_groupchat_rows[account] = group_row
             self._ui.listbox.add(row)
-            self._ui.listbox.add(group_row)
             row.get_parent().show_all()
         self.new_contact_row_visible = True
 
     def _remove_new_jid_row(self):
         if not self.new_contact_row_visible:
             return
-        for account, row in self.new_contact_rows.items():
-            self._ui.listbox.remove(row)
+
+        for account in self.new_contact_rows:
             self._ui.listbox.remove(
-                self.new_groupchat_rows[account])
+                self.new_contact_rows[account])
         self.new_contact_row_visible = False
 
     def _update_new_jid_rows(self, search_text):
-        for account, row in self.new_contact_rows.items():
-            row.update_jid(search_text)
-            self.new_groupchat_rows[account].update_jid(search_text)
+        for account in self.new_contact_rows:
+            self.new_contact_rows[account].update_jid(search_text)
 
     def _select_new_match(self, _entry, direction):
         selected_row = self._ui.listbox.get_selected_row()
@@ -717,6 +742,10 @@ class ContactRow(Gtk.ListBoxRow):
     def update_jid(self, jid):
         self.jid = jid
         self.jid_label.set_text(jid)
+
+    def update_chat_type(self, groupchat=False):
+        self.new = False
+        self.groupchat = groupchat
 
     def get_search_text(self):
         if self.contact is None and not self.groupchat:
