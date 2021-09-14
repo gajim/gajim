@@ -121,7 +121,7 @@ class PrivateChatControl(ChatControl):
         self.update_ui()
 
     # def _on_disconnected(self, event):
-    #     if event.properties.jid != self.gc_contact.get_full_jid():
+    #     if event.properties.jid != self.contact.jid:
     #         return
     #     self.got_disconnected()
 
