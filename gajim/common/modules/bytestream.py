@@ -209,7 +209,7 @@ class Bytestream(BaseModule):
             if is_transfer_stopped(file_props):
                 continue
             receiver_jid = file_props.receiver
-            if contact.get_full_jid() == receiver_jid:
+            if contact.jid == receiver_jid:
                 file_props.error = -5
                 self.remove_transfer(file_props)
                 app.nec.push_incoming_event(
@@ -219,7 +219,7 @@ class Bytestream(BaseModule):
                                  file_props=file_props,
                                  error_msg=''))
             sender_jid = file_props.sender
-            if contact.get_full_jid() == sender_jid:
+            if contact.jid == sender_jid:
                 file_props.error = -3
                 self.remove_transfer(file_props)
 
