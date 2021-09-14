@@ -232,11 +232,7 @@ def on_remove_event(_action, param):
     account, jid, type_ = dict_['account'], dict_['jid'], dict_['type_']
     event = app.events.get_first_event(account, jid, type_)
     app.events.remove_events(account, jid, event)
-    # TODO reset unread counter, urgency hint, etc.
-    # win = app.interface.msg_win_mgr.get_window(jid, account)
-    # if win:
-    #     win.redraw_tab(win.get_control(jid, account))
-    #     win.show_title()
+    # TODO reset unread counter, set window urgency hint, etc.
 
 # Other Actions
 
