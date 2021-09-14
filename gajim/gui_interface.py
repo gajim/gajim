@@ -261,10 +261,6 @@ class Interface:
         app.events.add_event(account, jid, event)
 
         # TODO: set urgency hint; show unread count in window title?
-        # self.roster.show_title()
-        # if not has_queue:  # We didn't have a queue: we change icons
-        #     if app.contacts.get_contact_with_highest_priority(account, jid):
-        #         self.roster.draw_contact(jid, account)
 
     def handle_event(self, account, jid, type_):
         jid = JID.from_string(jid)
@@ -630,7 +626,8 @@ class Interface:
         app.events.remove_events(event.account, jid, types=types)
 
     def handle_event_roster_info(self, obj):
-        #('ROSTER_INFO', account, (jid, name, sub, ask, groups))
+        # TODO:
+        # ('ROSTER_INFO', account, (jid, name, sub, ask, groups))
         account = obj.conn.name
         contacts = app.contacts.get_contacts(account, obj.jid)
         if (not obj.sub or obj.sub == 'none') and \
@@ -1519,20 +1516,13 @@ class Interface:
         if app.settings.get('trayicon') != 'never':
             self.show_systray()
 
-        # self.roster = roster_window.RosterWindow(application)
-        # if self.msg_win_mgr.mode == \
-        # MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
-        #     self.msg_win_mgr.create_window(None, None, None)
-
         # Creating plugin manager
         from gajim import plugins
         app.plugin_manager = plugins.PluginManager()
         app.plugin_manager.init_plugins()
 
-        # self.roster._before_fill()
         for con in app.connections.values():
             con.get_module('Roster').load_roster()
-        # self.roster._after_fill()
 
         # get instances for windows/dialogs that will show_all()/hide()
         self.instances['file_transfers'] = FileTransfersWindow()
