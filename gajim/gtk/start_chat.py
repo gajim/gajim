@@ -334,10 +334,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _disco_info(self, row):
         if not app.account_is_available(row.account):
-           # Account is disconnected: offer to open 1:1 chat anyway
-           self._new_chat_row = row
-           self._ui.stack.set_visible_child_name('no-disco')
-           return
+            # Account is disconnected: offer to open 1:1 chat anyway
+            self._new_chat_row = row
+            self._ui.stack.set_visible_child_name('no-disco')
+            return
 
         self._ui.stack.set_visible_child_name('progress')
         client = app.get_client(row.account)
