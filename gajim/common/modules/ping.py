@@ -49,9 +49,9 @@ class Ping(BaseModule):
         if not app.account_is_available(self._account):
             return
 
-        jid = contact.get_full_jid()
+        jid = contact.jid
 
-        self._log.info('Send ping to %s', jid)
+        self._log.info('Send ping to %s', str(jid))
 
         app.nec.push_incoming_event(NetworkEvent('ping-sent',
                                                  account=self._account,
