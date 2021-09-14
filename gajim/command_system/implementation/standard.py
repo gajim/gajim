@@ -289,7 +289,10 @@ class StandardGroupChatCommands(CommandContainer):
     @command('query', raw=True)
     @doc(_("Open a private chat window with a specified participant"))
     def chat(self, nick):
-        nicks = app.contacts.get_nick_list(self.account, self.room_jid)
+        client = app.get_client(self.account)
+        groupchat_contact = client.get_module('Contacts').get_contact(
+            self.room_jid, groupchat=True)
+        nicks = groupchat_contact.get_user_nicknames()
         if nick in nicks:
             self.send_pm(nick)
         else:
@@ -299,7 +302,10 @@ class StandardGroupChatCommands(CommandContainer):
     @doc(_("Open a private chat window with a specified participant and send "
            "him a message"))
     def message(self, nick, message):
-        nicks = app.contacts.get_nick_list(self.account, self.room_jid)
+        client = app.get_client(self.account)
+        groupchat_contact = client.get_module('Contacts').get_contact(
+            self.room_jid, groupchat=True)
+        nicks = groupchat_contact.get_user_nicknames()
         if nick in nicks:
             self.send_pm(nick, message)
         else:
@@ -344,9 +350,12 @@ class StandardGroupChatCommands(CommandContainer):
     If given nickname is not found it will be treated as a JID.
     """))
     def ban(self, who, reason=''):
-        if who in app.contacts.get_nick_list(self.account, self.room_jid):
-            contact = app.contacts.get_gc_contact(
-                self.account, self.room_jid, who)
+        client = app.get_client(self.account)
+        groupchat_contact = client.get_module('Contacts').get_contact(
+            self.room_jid, groupchat=True)
+        nick_list = groupchat_contact.get_user_nicknames()
+        if who in nicks:
+            contact = groupchat_contact.get_resource(who)
             who = contact.jid
         self.connection.get_module('MUC').set_affiliation(
             self.room_jid,
@@ -356,7 +365,11 @@ class StandardGroupChatCommands(CommandContainer):
     @command(raw=True, empty=True)
     @doc(_("Kick user from group chat by nickname"))
     def kick(self, who, reason):
-        if who not in app.contacts.get_nick_list(self.account, self.room_jid):
+        client = app.get_client(self.account)
+        groupchat_contact = client.get_module('Contacts').get_contact(
+            self.room_jid, groupchat=True)
+        nick_list = groupchat_contact.get_user_nicknames()
+        if who not in nick_list:
             raise CommandError(_("Nickname not found"))
         self.connection.get_module('MUC').set_role(
             self.room_jid, who, 'none', reason)
@@ -369,7 +382,11 @@ class StandardGroupChatCommands(CommandContainer):
     def role(self, who, role):
         if role not in ('moderator', 'participant', 'visitor', 'none'):
             raise CommandError(_("Invalid role given"))
-        if who not in app.contacts.get_nick_list(self.account, self.room_jid):
+        client = app.get_client(self.account)
+        groupchat_contact = client.get_module('Contacts').get_contact(
+            self.room_jid, groupchat=True)
+        nick_list = groupchat_contact.get_user_nicknames()
+        if who not in nick_list:
             raise CommandError(_("Nickname not found"))
         self.connection.get_module('MUC').set_role(self.room_jid, who, role)
 
@@ -381,9 +398,14 @@ class StandardGroupChatCommands(CommandContainer):
     def affiliate(self, who, affiliation):
         if affiliation not in ('owner', 'admin', 'member', 'outcast', 'none'):
             raise CommandError(_("Invalid affiliation given"))
-        if who not in app.contacts.get_nick_list(self.account, self.room_jid):
+        client = app.get_client(self.account)
+        groupchat_contact = client.get_module('Contacts').get_contact(
+            self.room_jid, groupchat=True)
+        nick_list = groupchat_contact.get_user_nicknames()
+        if who not in nick_list:
             raise CommandError(_("Nickname not found"))
-        contact = app.contacts.get_gc_contact(self.account, self.room_jid, who)
+
+        contact = groupchat_contact.get_resource(who)
 
         self.connection.get_module('MUC').set_affiliation(
             self.room_jid,
@@ -392,12 +414,17 @@ class StandardGroupChatCommands(CommandContainer):
     @command
     @doc(_("Display names of all group chat participants"))
     def names(self, verbose=False):
-        ggc = app.contacts.get_gc_contact
-        gnl = app.contacts.get_nick_list
+        client = app.get_client(self.account)
+        groupchat_contact = client.get_module('Contacts').get_contact(
+            self.room_jid, groupchat=True)
 
-        get_contact = lambda nick: ggc(self.account, self.room_jid, nick)
-        get_role = lambda nick: get_contact(nick).role
-        nicks = gnl(self.account, self.room_jid)
+        def get_contact(nick):
+            return groupchat_contact.get_resource(nick)
+
+        def get_role(nick):
+            return get_contact(nick).role
+
+        nicks = groupchat_contact.get_user_nicknames()
 
         nicks = sorted(nicks)
         nicks = sorted(nicks, key=get_role)
@@ -427,7 +454,13 @@ class StandardGroupChatCommands(CommandContainer):
         if self.account == app.ZEROCONF_ACC_NAME:
             raise CommandError(
                 _('Command is not supported for zeroconf accounts'))
-        gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
-        if gc_c is None:
+
+        client = app.get_client(self.account)
+        groupchat_contact = client.get_module('Contacts').get_contact(
+            self.room_jid, groupchat=True)
+        nick_list = groupchat_contact.get_user_nicknames()
+        if nick not in nick_list:
             raise CommandError(_("Unknown nickname"))
-        app.connections[self.account].get_module('Ping').send_ping(gc_c)
+
+        client.get_module('Ping').send_ping(
+            groupchat_contact.get_resource(nick))
