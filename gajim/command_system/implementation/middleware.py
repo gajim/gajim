@@ -196,4 +196,4 @@ class CommandTools:
         """
         Get a full JID of the contact.
         """
-        return self.contact.get_full_jid()
+        return self.contact.jid
