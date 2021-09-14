@@ -323,10 +323,6 @@ class Themes(Gtk.ApplicationWindow):
         app.css_config.change_theme(theme)
         app.nec.push_incoming_event(NetworkEvent('theme-update'))
 
-        # Begin repainting themed widgets throughout
-        app.interface.roster.repaint_themed_widgets()
-        app.interface.roster.change_roster_style(None)
-
     @staticmethod
     def _update_preferences_window():
         window = get_app_window('Preferences')

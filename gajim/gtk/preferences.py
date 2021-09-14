@@ -232,11 +232,15 @@ class ContactList(PreferenceBox):
 
     @staticmethod
     def _on_show_avatar_in_roster_changed(*args):
-        app.interface.roster.setup_and_draw_roster()
+        # TODO
+        # app.interface.roster.setup_and_draw_roster()
+        pass
 
     @staticmethod
     def _on_sort_by_show_in_roster(*args):
-        app.interface.roster.setup_and_draw_roster()
+        # TODO
+        # app.interface.roster.setup_and_draw_roster()
+        pass
 
 
 class Chats(PreferenceBox):
@@ -764,7 +768,9 @@ class StatusIcon(PreferenceBox):
 
     @staticmethod
     def _on_iconset_changed(*args):
-        app.interface.roster.update_icons()
+        # TODO:
+        # app.interface.roster.update_icons()
+        pass
 
 
 class Server(PreferenceBox):

@@ -110,7 +110,6 @@ class Interface:
         self._passphrase_dialogs = {}
 
         self.handlers = {}
-        self.roster = None
 
         self.avatar_storage = AvatarStorage()
         self.preview_manager = PreviewManager()
