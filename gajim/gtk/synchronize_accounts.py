@@ -24,43 +24,73 @@ from .util import get_app_window
 from .util import get_builder
 
 
-class SynchroniseSelectAccountDialog:
+class SynchronizeAccounts(Gtk.ApplicationWindow):
     def __init__(self, account):
-        # 'account' can be None if we are about to create our first one
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_show_menubar(False)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+        self.set_default_size(400, 550)
+        self.set_resizable(True)
+        self.set_title(_('Synchronize Accounts'))
+        self.set_transient_for(get_app_window('AccountsWindow'))
+
         if not app.account_is_available(account):
             ErrorDialog(
                 _('You are not connected to the server'),
                 _('You cannot synchronize with an account unless it is '
                   'connected.'))
             raise GajimGeneralException('You are not connected to the server')
+
         self.account = account
-        self.xml = get_builder('synchronise_select_account_dialog.ui')
-        self.dialog = self.xml.get_object('synchronise_select_account_dialog')
-        self.dialog.set_transient_for(get_app_window('AccountsWindow'))
-        self.accounts_treeview = self.xml.get_object('accounts_treeview')
+        self._local_client = app.get_client(account)
+
+        self._remote_account = None
+        self._remote_client = None
+
+        self._ui = get_builder('synchronize_accounts.ui')
+        self.add(self._ui.stack)
+
+        # Accounts
         model = Gtk.ListStore(str, str, bool)
-        self.accounts_treeview.set_model(model)
-        # columns
+        self._ui.accounts_treeview.set_model(model)
         renderer = Gtk.CellRendererText()
-        self.accounts_treeview.insert_column_with_attributes(
+        self._ui.accounts_treeview.insert_column_with_attributes(
             -1, _('Name'), renderer, text=0)
         renderer = Gtk.CellRendererText()
-        self.accounts_treeview.insert_column_with_attributes(
+        self._ui.accounts_treeview.insert_column_with_attributes(
             -1, _('Server'), renderer, text=1)
 
-        self.xml.connect_signals(self)
-        self.init_accounts()
-        self.dialog.show_all()
+        # Contacts
+        model = Gtk.ListStore(bool, str)
+        self._ui.contacts_treeview.set_model(model)
+        # columns
+        renderer1 = Gtk.CellRendererToggle()
+        renderer1.set_property('activatable', True)
+        renderer1.connect('toggled', self._on_sync_toggled)
+        self._ui.contacts_treeview.insert_column_with_attributes(
+            -1, _('Synchronise'), renderer1, active=0)
+        renderer2 = Gtk.CellRendererText()
+        self._ui.contacts_treeview.insert_column_with_attributes(
+            -1, _('Name'), renderer2, text=1)
 
-    def on_accounts_window_key_press_event(self, _widget, event):
+        self._ui.connect_signals(self)
+        self.connect('key-press-event', self._on_key_press)
+
+        self._init_accounts()
+
+        self.show_all()
+
+    def _on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
-            self.window.destroy()
+            self.destroy()
 
-    def init_accounts(self):
+    def _init_accounts(self):
         """
         Initialize listStore with existing accounts
         """
-        model = self.accounts_treeview.get_model()
+        model = self._ui.accounts_treeview.get_model()
         model.clear()
         for remote_account in app.connections:
             if remote_account == self.account:
@@ -74,75 +104,32 @@ class SynchroniseSelectAccountDialog:
                 1,
                 app.get_hostname_from_account(remote_account))
 
-    def on_cancel_button_clicked(self, _widget):
-        self.dialog.destroy()
-
-    def on_ok_button_clicked(self, _widget):
-        sel = self.accounts_treeview.get_selection()
-        (model, iter_) = sel.get_selected()
+    def _on_next_clicked(self, _widget):
+        selection = self._ui.accounts_treeview.get_selection()
+        (model, iter_) = selection.get_selected()
         if not iter_:
             return
-        remote_account = model.get_value(iter_, 0)
 
-        if not app.account_is_available(remote_account):
+        self._remote_account = model.get_value(iter_, 0)
+        self._remote_client = app.get_client(self._remote_account)
+
+        if not app.account_is_available(self._remote_account):
             ErrorDialog(
                 _('This account is not connected to the server'),
                 _('You cannot synchronize with an account unless it is '
                   'connected.'))
             return
 
-        try:
-            SynchroniseSelectContactsDialog(self.account, remote_account)
-        except GajimGeneralException:
-            # if we showed ErrorDialog, there will not be dialog instance
-            return
-        self.dialog.destroy()
+        self._init_contacts()
+        self._ui.stack.set_visible_child_full(
+            'contacts', Gtk.StackTransitionType.SLIDE_LEFT)
 
-    @staticmethod
-    def on_destroy(_widget):
-        del app.interface.instances['import_contacts']
+    def _on_back_clicked(self, _button):
+        self._ui.stack.set_visible_child_full(
+            'accounts', Gtk.StackTransitionType.SLIDE_RIGHT)
 
-
-class SynchroniseSelectContactsDialog:
-    def __init__(self, local_account, remote_account):
-        self._remote_account = remote_account
-
-        self._local_client = app.get_client(local_account)
-        self._remote_client = app.get_client(remote_account)
-
-        self.xml = get_builder('synchronise_select_contacts_dialog.ui')
-        self.dialog = self.xml.get_object('synchronise_select_contacts_dialog')
-        self.contacts_treeview = self.xml.get_object('contacts_treeview')
-        model = Gtk.ListStore(bool, str)
-        self.contacts_treeview.set_model(model)
-        # columns
-        renderer1 = Gtk.CellRendererToggle()
-        renderer1.set_property('activatable', True)
-        renderer1.connect('toggled', self.toggled_callback)
-        self.contacts_treeview.insert_column_with_attributes(
-            -1, _('Synchronise'), renderer1, active=0)
-        renderer2 = Gtk.CellRendererText()
-        self.contacts_treeview.insert_column_with_attributes(
-            -1, _('Name'), renderer2, text=1)
-
-        self.xml.connect_signals(self)
-        self.init_contacts()
-        self.dialog.show_all()
-
-    def toggled_callback(self, cell, path):
-        model = self.contacts_treeview.get_model()
-        iter_ = model.get_iter(path)
-        model[iter_][0] = not cell.get_active()
-
-    def on_contacts_window_key_press_event(self, _widget, event):
-        if event.keyval == Gdk.KEY_Escape:
-            self.window.destroy()
-
-    def init_contacts(self):
-        """
-        Initialize listStore with existing accounts
-        """
-        model = self.contacts_treeview.get_model()
+    def _init_contacts(self):
+        model = self._ui.contacts_treeview.get_model()
         model.clear()
 
         # recover local contacts
@@ -159,11 +146,13 @@ class SynchroniseSelectContactsDialog:
                 iter_ = model.append()
                 model.set(iter_, 0, True, 1, remote_jid)
 
-    def on_cancel_button_clicked(self, _widget):
-        self.dialog.destroy()
+    def _on_sync_toggled(self, cell, path):
+        model = self._ui.contacts_treeview.get_model()
+        iter_ = model.get_iter(path)
+        model[iter_][0] = not cell.get_active()
 
-    def on_ok_button_clicked(self, _widget):
-        model = self.contacts_treeview.get_model()
+    def _on_sync_clicked(self, _widget):
+        model = self._ui.contacts_treeview.get_model()
         iter_ = model.get_iter_first()
         while iter_:
             if model[iter_][0]:
@@ -185,4 +174,4 @@ class SynchroniseSelectContactsDialog:
                     auto_auth=True)
 
             iter_ = model.iter_next(iter_)
-        self.dialog.destroy()
+        self.destroy()

@@ -139,4 +139,5 @@ WINDOW_MODULES = {
     'WorkspaceDialog': 'gajim.gui.workspace_dialog',
     'RosterItemExchange': 'gajim.gui.roster_item_exchange',
     'ServiceRegistration': 'gajim.gui.service_registration',
+    'SynchronizeAccounts': 'gajim.gui.synchronize_accounts'
 }
