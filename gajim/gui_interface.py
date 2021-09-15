@@ -157,8 +157,6 @@ class Interface:
             self.instances[a] = {
                 'infos': {},
                 'disco': {},
-                'gc_config': {},
-                'search': {},
                 'sub_request': {}
             }
             app.contacts.add_account(a)
@@ -1171,8 +1169,10 @@ class Interface:
 
         # update variables
         self.instances[account] = {
-            'infos': {}, 'disco': {}, 'gc_config': {}, 'search': {},
-            'sub_request': {}}
+            'infos': {},
+            'disco': {},
+            'sub_request': {}
+        }
 
         app.groups[account] = {}
         app.contacts.add_account(account)
