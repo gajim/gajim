@@ -12,10 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict  # pylint: disable=unused-import
-from typing import List  # pylint: disable=unused-import
-from typing import Tuple  # pylint: disable=unused-import
-
 import uuid
 import logging
 
@@ -31,104 +27,114 @@ from .util import get_builder
 log = logging.getLogger('gajim.gui.adhoc_muc')
 
 
-class AdhocMUC:
-
-    # Keep a reference on windows so garbage collector don't restroy them
-    instances = []  # type: List[AdhocMUC]
-
-    def __init__(self, account, jids, preselected=None):
+class AdhocMUC(Gtk.ApplicationWindow):
+    def __init__(self, account, contact, preselected=None):
         """
         This window is used to transform a one-to-one chat to a MUC. We do 2
         things: first select the server and then make a guests list
         """
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+        self.set_show_menubar(False)
+        self.set_title(_('Adhoc Group Chat'))
+        self.set_default_size(500, 400)
+        self.set_resizable(True)
 
-        self.instances.append(self)
         self.account = account
-        self.auto_jids = jids
-        self.preselected_jids = preselected
-
-        self.xml = get_builder('adhoc_muc.ui')
-        self.window = self.xml.get_object('adhoc_muc_window')
-
-        server_list = []
-        self.servers = Gtk.ListStore(str)
-        self.xml.server_list_comboboxentry.set_model(self.servers)
-        cell = Gtk.CellRendererText()
-        self.xml.server_list_comboboxentry.pack_start(cell, True)
-        self.xml.server_list_comboboxentry.add_attribute(cell, 'text', 0)
-
-        # get the muc server of our server
+        self.jid = contact.jid
+        self._preselected_jids = preselected
         self._client = app.get_client(account)
-        service_jid = self._client.get_module('MUC').service_jid
-        if service_jid is not None:
-            server_list.append(str(service_jid))
 
-        # add servers or recently joined groupchats
-        recent_groupchats = app.settings.get_account_setting(
-            account, 'recent_groupchats').split()
-        for group_chat in recent_groupchats:
-            server = app.get_server_from_jid(group_chat)
-            if server not in server_list and not server.startswith('irc'):
-                server_list.append(server)
-        # add a default server
-        if not server_list:
-            server_list.append('conference.jabber.org')
+        self._ui = get_builder('adhoc_muc.ui')
+        self.add(self._ui.adhoc_box)
 
-        for serv in server_list:
-            self.servers.append([serv])
+        self._ui.description_label.set_text(
+            _('Invite someone to your chat with %s') % contact.name)
 
-        self.xml.server_list_comboboxentry.set_active(0)
-
-        # set treeview
-        # name, jid
-
-        self.xml.guests_store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-        self.xml.guests_treeview.get_selection().set_mode(
+        # Setup treeview: name, jid
+        self._ui.guests_store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+        self._ui.guests_treeview.get_selection().set_mode(
             Gtk.SelectionMode.MULTIPLE)
 
+        self._add_possible_invitees()
+        self._fill_server_list()
+
+        self.connect('key-press-event', self._on_key_press)
+        self._ui.connect_signals(self)
+        self.show_all()
+
+    def _on_key_press(self, _widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
+
+    def _add_possible_invitees(self):
         for acc in app.settings.get_active_accounts():
             client = app.get_client(acc)
             if client.is_zeroconf:
                 continue
             for contact in client.get_module('Roster').iter_contacts():
                 jid = str(contact.jid)
-                if (jid not in self.auto_jids and
-                        jid != str(self._client.get_own_jid().bare)):
+                # Add contact if it can be invited
+                if self._is_invitable(contact):
                     icon = get_icon_name(contact.show.value)
-                    iter_ = self.xml.guests_store.append(
+                    iter_ = self._ui.guests_store.append(
                         [icon, contact.name, jid])
                     # preselect treeview rows
-                    if self.preselected_jids and jid in self.preselected_jids:
-                        path = self.xml.guests_store.get_path(iter_)
-                        self.xml.guests_treeview.get_selection().select_path(
+                    if (self._preselected_jids and
+                            jid in self._preselected_jids):
+                        path = self._ui.guests_store.get_path(iter_)
+                        self._ui.guests_treeview.get_selection().select_path(
                             path)
 
-        # show all
-        self.window.show_all()
+    def _is_invitable(self, contact):
+        # All contacts BUT the following can be invited:
+        # ourself, gateway contacts, zeroconf contacts
+        return (str(contact.jid) != str(self.jid) and
+                contact.jid != str(self._client.get_own_jid().bare) and
+                str(contact.jid) != app.get_jid_from_account(self.account) and
+                contact.show.value != 'error' and
+                not contact.is_gateway)
 
-        self.xml.connect_signals(self)
+    def _fill_server_list(self):
+        servers = []
 
-    def on_chat_to_muc_window_destroy(self, _widget):
-        self.instances.remove(self)
+        # Add own server to combobox
+        service_jid = self._client.get_module('MUC').service_jid
+        if service_jid is not None:
+            servers.append(str(service_jid))
 
-    def on_chat_to_muc_window_key_press_event(self, _widget, event):
-        if event.keyval == Gdk.KEY_Escape:
-            self.window.destroy()
+        # Add servers or recently joined groupchats
+        recent_groupchats = app.get_recent_groupchats(self.account)
+        for groupchat in recent_groupchats:
+            if (groupchat.server not in servers and
+                    not groupchat.server.startswith('irc')):
+                servers.append(groupchat.server)
 
-    def on_invite_button_clicked(self, _widget):
-        row = self.xml.server_list_comboboxentry.get_child().get_displayed_row()
-        model = self.xml.server_list_comboboxentry.get_model()
-        server = model[row][0].strip()
-        if server == '':
-            return
+        # Add a default server (necessary?)
+        if not servers:
+            servers.append('conference.jabber.org')
 
+        for server in servers:
+            self._ui.server_store.append([server])
+
+        self._ui.server_combobox.set_active(0)
+
+    def _on_server_combobox_entry_changed(self, _widget):
+        server = self._ui.server_entry.get_text()
+        self._ui.invite_button.set_sensitive(server != '')
+
+    def _on_invite_clicked(self, _widget):
+        server = self._ui.server_entry.get_text()
         guest_list = []
-        guests = self.xml.guests_treeview.get_selection().get_selected_rows()
+        guests = self._ui.guests_treeview.get_selection().get_selected_rows()
         for guest in guests[1]:
-            iter_ = self.xml.guests_store.get_iter(guest)
-            guest_list.append(self.xml.guests_store[iter_][2])
-        for guest in self.auto_jids:
-            guest_list.append(guest)
+            iter_ = self._ui.guests_store.get_iter(guest)
+            guest_list.append(self._ui.guests_store[iter_][2])
+        guest_list.append(self.jid)
+
+        # Build group chat JID
         room_jid = f'{uuid.uuid4()}@{server}'
         app.automatic_rooms[self.account][room_jid] = {}
         app.automatic_rooms[self.account][room_jid]['invities'] = guest_list
@@ -149,7 +155,4 @@ class AdhocMUC:
 
         app.interface.create_groupchat(self.account, room_jid, config)
         app.window.select_chat(self.account, room_jid)
-        self.window.destroy()
-
-    def on_cancel_button_clicked(self, _widget):
-        self.window.destroy()
+        self.destroy()

@@ -12,184 +12,180 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkWindow" id="adhoc_muc_window">
+  <object class="GtkListStore" id="server_store">
+    <columns>
+      <!-- column-name server -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkBox" id="adhoc_box">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="border-width">5</property>
-    <property name="title" translatable="yes">Invite Friends!</property>
-    <property name="type-hint">dialog</property>
-    <signal name="destroy" handler="on_chat_to_muc_window_destroy" swapped="no"/>
-    <signal name="key-press-event" handler="on_chat_to_muc_window_key_press_event" swapped="no"/>
+    <property name="border-width">18</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="label" translatable="yes">Group Chat Invitation</property>
+        <style>
+          <class name="large-header"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="description_label">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="justify">center</property>
+        <property name="wrap">True</property>
+        <property name="max-width-chars">40</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="padding">4</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="shadow-type">in</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkTreeView" id="guests_treeview">
+            <property name="height-request">300</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="model">guests_store</property>
+            <property name="headers-visible">False</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">column</property>
+                <child>
+                  <object class="GtkCellRendererPixbuf"/>
+                  <attributes>
+                    <attribute name="icon-name">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">column</property>
+                <child>
+                  <object class="GtkCellRendererText"/>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="padding">4</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkExpander">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <child>
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="label" translatable="yes">You are now entering a group chat.
-Select the contacts you want to invite</property>
-            <property name="justify">center</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">4</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="guests_scrolledwindow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
+            <property name="margin-top">6</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkTreeView" id="guests_treeview">
-                <property name="height-request">300</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="model">guests_store</property>
-                <property name="headers-visible">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">column</property>
-                    <child>
-                      <object class="GtkCellRendererPixbuf"/>
-                      <attributes>
-                        <attribute name="icon-name">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">column</property>
-                    <child>
-                      <object class="GtkCellRendererText"/>
-                      <attributes>
-                        <attribute name="text">1</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="padding">4</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkExpander">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="server_select_label">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Please select a group chat server.</property>
-                    <property name="justify">center</property>
-                    <property name="wrap">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">4</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="server_list_comboboxentry">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="label">
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Group chat server</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButtonBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="spacing">6</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="cancel_button">
-                <property name="label">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="on_cancel_button_clicked" swapped="no"/>
+                <property name="label" translatable="yes">Server</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">3</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="invite_button">
-                <property name="label" translatable="yes">Invite</property>
+              <object class="GtkComboBox" id="server_combobox">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="on_invite_button_clicked" swapped="no"/>
+                <property name="can-focus">False</property>
+                <property name="model">server_store</property>
+                <property name="active">0</property>
+                <property name="has-entry">True</property>
+                <property name="entry-text-column">0</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="server_entry">
+                    <property name="can-focus">True</property>
+                    <signal name="changed" handler="_on_server_combobox_entry_changed" swapped="no"/>
+                  </object>
+                </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">3</property>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
+        </child>
+        <child type="label">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Advanced</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="invite_button">
+        <property name="label" translatable="yes">_Invite</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="halign">end</property>
+        <property name="use-underline">True</property>
+        <signal name="clicked" handler="_on_invite_clicked" swapped="no"/>
+        <style>
+          <class name="suggested-action"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="padding">3</property>
+        <property name="position">4</property>
+      </packing>
     </child>
   </object>
 </interface>

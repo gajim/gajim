@@ -52,7 +52,6 @@ from gajim.common.const import PEPEventType
 
 from gajim import gui_menu_builder
 
-from gajim.gui.adhoc_muc import AdhocMUC
 from gajim.gui.call_widget import CallWidget
 from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.const import ControlType
@@ -319,7 +318,7 @@ class ChatControl(BaseControl):
         app.window.contact_info(self.account, self.contact.jid)
 
     def _on_invite_contacts(self, _action, _param):
-        AdhocMUC(self.account, [self.contact.jid])
+        open_window('AdhocMUC', account=self.account, contact=self.contact)
 
     def _on_send_chatstate(self, action, param):
         action.set_state(param)
