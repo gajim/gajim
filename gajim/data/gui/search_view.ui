@@ -221,6 +221,7 @@
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
+        <signal name="edge-reached" handler="_on_edge_reached" swapped="no"/>
         <child>
           <object class="GtkViewport">
             <property name="visible">True</property>
