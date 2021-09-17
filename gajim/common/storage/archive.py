@@ -39,7 +39,6 @@ from gajim.common.const import JIDConstant
 from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
 
-
 CURRENT_USER_VERSION = 6
 
 ARCHIVE_SQL_STATEMENT = '''
@@ -77,7 +76,6 @@ ARCHIVE_SQL_STATEMENT = '''
     CREATE INDEX idx_logs_message_id ON logs (message_id);
     PRAGMA user_version=%s;
     ''' % CURRENT_USER_VERSION
-
 
 log = logging.getLogger('gajim.c.storage.archive')
 
@@ -563,7 +561,8 @@ class MessageArchiveStorage(SqliteStorage):
             tuple(jids) + (date_ts, delta_ts)).fetchall()
 
     @timeit
-    def search_log(self, account, jid, query, date=None):
+    def search_log(self, account, jid, query, from_users=None, before=None,
+                   after=None):
         """
         Search the conversation log for messages containing the `query` string.
 
@@ -573,12 +572,15 @@ class MessageArchiveStorage(SqliteStorage):
 
         :param account: The account
 
-        :param jid:     The jid for which we request the conversation
+        :param jid: The jid for which we request the conversation
 
-        :param query:   A search string
+        :param query: A search string
 
-        :param date:    datetime.datetime instance
-                        example: datetime.datetime(year, month, day)
+        :param from_users: A list of usernames or None
+
+        :param before: A datetime.datetime instance or None
+
+        :param after: A datetime.datetime instance or None
 
         returns a list of namedtuples
         """
@@ -587,52 +589,97 @@ class MessageArchiveStorage(SqliteStorage):
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
 
-        if date:
-            delta = datetime.timedelta(
-                hours=23, minutes=59, seconds=59, microseconds=999999)
+        if before is None:
+            before_ts = datetime.datetime.now().timestamp()
+        else:
+            before_ts = before.timestamp()
 
-            between = '''
-                AND time BETWEEN {start} AND {end}
-                '''.format(start=date.timestamp(),
-                           end=(date + delta).timestamp())
+        if after is None:
+            after_ts = datetime.datetime(1900, 1, 1).timestamp()
+        else:
+            after_ts = after.timestamp()
+
+        if from_users is None:
+            users_query_string = ''
+        else:
+            users_query_string = 'AND UPPER(contact_name) IN (?)'
 
         sql = '''
-        SELECT contact_name, time, kind, show, message, subject,
-               additional_data, log_line_id
-        FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
-        AND message LIKE like(?) {date_search}
-        AND kind NOT IN ({kinds})
-        ORDER BY time DESC, log_line_id
-        '''.format(jids=', '.join('?' * len(jids)),
-                   date_search=between if date else '',
-                   kinds=', '.join(kinds))
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND message LIKE like(?)
+            AND kind NOT IN ({kinds})
+            {users_query}
+            AND time BETWEEN ? AND ?
+            ORDER BY time DESC, log_line_id
+            '''.format(jids=', '.join('?' * len(jids)),
+                       kinds=', '.join(kinds),
+                       users_query=users_query_string)
 
-        return self._con.execute(sql, tuple(jids) + (query,)).fetchall()
+        if from_users is None:
+            return self._con.execute(
+                sql, tuple(jids) + (query, after_ts, before_ts)).fetchall()
+        else:
+            users = ','.join([user.upper() for user in from_users])
+            return self._con.execute(sql, tuple(jids) + (
+                query, users, after_ts, before_ts)).fetchall()
 
     @timeit
-    def search_all_logs(self, query):
+    def search_all_logs(self, query, from_users=None, before=None, after=None):
         """
         Search all conversation logs for messages containing the `query`
         string.
 
-        :param query:   A search string
+        :param query: A search string
+
+        :param from_users: A list of usernames or None
+
+        :param before: A datetime.datetime instance or None
+
+        :param after: A datetime.datetime instance or None
 
         returns a list of namedtuples
         """
         account_ids = self.get_active_account_ids()
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
-        sql = '''
-        SELECT account_id, jid_id, contact_name, time, kind, show, message,
-        subject, additional_data, log_line_id
-        FROM logs WHERE message LIKE like(?)
-        AND account_id IN ({account_ids})
-        AND kind NOT IN ({kinds})
-        ORDER BY time DESC, log_line_id
-        '''.format(account_ids=', '.join(map(str, account_ids)),
-                   kinds=', '.join(kinds))
 
-        return self._con.execute(sql, (query,)).fetchall()
+        if before is None:
+            before_ts = datetime.datetime.now().timestamp()
+        else:
+            before_ts = before.timestamp()
+
+        if after is None:
+            after_ts = datetime.datetime(1900, 1, 1).timestamp()
+        else:
+            after_ts = after.timestamp()
+
+        if from_users is None:
+            users_query_string = ''
+        else:
+            users_query_string = 'AND UPPER(contact_name) IN (?)'
+
+        sql = '''
+            SELECT account_id, jid_id, contact_name, time, kind, show, message,
+                   subject, additional_data, log_line_id
+            FROM logs WHERE message LIKE like(?)
+            AND account_id IN ({account_ids})
+            AND kind NOT IN ({kinds})
+            {users_query}
+            AND time BETWEEN ? AND ?
+            ORDER BY time DESC, log_line_id
+            '''.format(account_ids=', '.join(map(str, account_ids)),
+                       kinds=', '.join(kinds),
+                       users_query=users_query_string)
+
+        if from_users is None:
+            return self._con.execute(
+                sql, (query, after_ts, before_ts)).fetchall()
+        else:
+            users = ','.join([user.upper() for user in from_users])
+            return self._con.execute(
+                sql, (query, users, after_ts, before_ts)).fetchall()
 
     @timeit
     def get_days_with_logs(self, account, jid, year, month):

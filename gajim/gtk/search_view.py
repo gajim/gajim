@@ -11,11 +11,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
-
+import datetime
 import logging
 import time
+import re
 
-from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -23,6 +23,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
+from gajim.common.const import FILE_CATEGORIES
 from gajim.common.i18n import _
 from gajim.common.styling import process
 
@@ -33,7 +34,6 @@ log = logging.getLogger('gajim.gui.search_view')
 
 
 class SearchView(Gtk.Box):
-
     __gsignals__ = {
         'hide-search': (
             GObject.SignalFlags.RUN_FIRST,
@@ -97,22 +97,117 @@ class SearchView(Gtk.Box):
 
     def _on_search(self, entry):
         self._clear_results()
+        self._ui.date_hint.hide()
         text = entry.get_text()
-        if text == '':
+        if not text:
             return
+
+        # from:user
+        # This works only for MUC, because contact_name is not
+        # available for single contacts in logs.db.
+        text, from_filters = self._strip_filters(text, 'from')
+
+        # before:date
+        text, before_filters = self._strip_filters(text, 'before')
+        if before_filters is not None:
+            try:
+                before_filters = min([datetime.datetime.fromisoformat(date) for
+                                      date in before_filters])
+            except ValueError:
+                self._ui.date_hint.show()
+                return
+
+        # after:date
+        text, after_filters = self._strip_filters(text, 'after')
+        if after_filters is not None:
+            try:
+                after_filters = min([datetime.datetime.fromisoformat(date) for
+                                     date in after_filters])
+                # if only the day is specified, we want to look after the
+                # end of that day.
+                # if precision is increased,we do want to look during the
+                # day as well.
+                if after_filters.hour == after_filters.minute == 0:
+                    after_filters += datetime.timedelta(days=1)
+            except ValueError:
+                self._ui.date_hint.show()
+                return
+
+        # has:'file'|'img'|'video'|filetype
+        text, has_filters = self._strip_filters(text, 'has')
 
         everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
 
         if not context or everywhere:
             self._scope = 'everywhere'
-            self._results = app.storage.archive.search_all_logs(text)
+            self._results = app.storage.archive.search_all_logs(
+                text,
+                from_users=from_filters,
+                before=before_filters,
+                after=after_filters)
         else:
             self._scope = 'contact'
             self._results = app.storage.archive.search_log(
-                self._account, self._jid, text)
+                self._account,
+                self._jid,
+                text,
+                from_users=from_filters,
+                before=before_filters,
+                after=after_filters)
+
+        if has_filters is not None:
+            filetypes = []
+            for filetype in has_filters:
+                filetypes.append(FILE_CATEGORIES.get(filetype, filetype))
+
+            filetypes = self._flatten(filetypes)
+            self._filter_results_for_files(filetypes)
+
         self._add_counter()
         self._add_results()
+
+    def _filter_results_for_files(self, filetypes):
+        if 'file' in filetypes:
+            results = []
+            for result in self._results:
+                if result.additional_data.get_value('gajim', 'oob_url'):
+                    results.append(result)
+            self._results = results
+        else:
+            results = []
+            for result in self._results:
+                url = result.additional_data.get_value('gajim', 'oob_url')
+                if url is None:
+                    continue
+                extension = str(url).rsplit('.', maxsplit=1)[-1]
+                if extension in filetypes:
+                    results.append(result)
+            self._results = results
+
+    @staticmethod
+    def _strip_filters(text, filter_name):
+        filters = []
+        start = 0
+        new_text = ''
+        for search_filter in re.finditer(filter_name + r':(\S+)\s?', text):
+            end, new_start = search_filter.span()
+            new_text += text[start:end]
+            filters.append(search_filter.group(1))
+            start = new_start
+        new_text += text[start:]
+        return new_text, filters or None
+
+    @staticmethod
+    def _flatten(to_flatten):
+        nlist = []
+        for element in to_flatten:
+            if isinstance(element, list):
+                for sub_element in element:
+                    nlist.append(sub_element)
+            else:
+                nlist.append(element)
+        return nlist
 
     def _add_counter(self):
         results_count = len(self._results)

@@ -207,6 +207,23 @@
       </packing>
     </child>
     <child>
+      <object class="GtkLabel" id="date_hint">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="label" translatable="yes">Please use yyyy-mm-dd</property>
+        <property name="wrap">True</property>
+        <property name="max-width-chars">22</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkSeparator">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -214,7 +231,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">3</property>
+        <property name="position">4</property>
       </packing>
     </child>
     <child>
@@ -280,7 +297,7 @@
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">4</property>
+        <property name="position">5</property>
       </packing>
     </child>
     <style>
