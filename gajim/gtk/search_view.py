@@ -121,10 +121,7 @@ class SearchView(Gtk.Box):
 
     def _add_results(self):
         accounts = self._get_accounts()
-        count = 1
-        for msg in self._results:
-            if count == 25:
-                return
+        for msg in self._results[:25]:
             if self._scope == 'everywhere':
                 result_row = ResultRow(
                     msg,
@@ -134,8 +131,7 @@ class SearchView(Gtk.Box):
                 result_row = ResultRow(msg, self._account, self._jid)
 
             self._ui.results_listbox.add(result_row)
-            self._results.pop(0)
-            count += 1
+        self._results = self._results[25:]
 
     def _on_edge_reached(self, _scrolledwin, pos):
         if pos != Gtk.PositionType.BOTTOM:
