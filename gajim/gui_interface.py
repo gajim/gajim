@@ -1085,8 +1085,9 @@ class Interface:
     def start_chat_from_jid(self, account, jid, message=None):
         if app.window.chat_exists(account, jid):
             app.window.select_chat(account, jid)
-            control = app.window.get_control(account, jid)
-            control.msg_textview.insert_text(message)
+            if message is not None:
+                control = app.window.get_control(account, jid)
+                control.msg_textview.insert_text(message)
             return
 
         # TODO: handle message arg in StartChat
