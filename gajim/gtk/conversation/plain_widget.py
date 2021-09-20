@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 from urllib.parse import quote
 
 from gi.repository import GObject
@@ -28,9 +29,12 @@ from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import parse_uri
 from gajim.common.i18n import _
 
-from .util import get_cursor
-from .util import make_pango_attribute
+from gajim.gui_menu_builder import get_conv_context_menu
 
+from ..util import get_cursor
+from ..util import make_pango_attribute
+
+log = logging.getLogger('gajim.gui.conversaion.plain_widget')
 
 URI_TAGS = ['uri', 'address', 'xmppadr', 'mailadr']
 STYLE_TAGS = ['strong', 'emphasis', 'strike', 'pre']
@@ -43,6 +47,7 @@ class PlainWidget(Gtk.Box):
 
         self._account = account
 
+        # TODO: Window/Linux handling
         # self._text_widget = MessageTextview(self._account)
         self._text_widget = MessageLabel(self._account, selectable)
         self.add(self._text_widget)
@@ -100,9 +105,14 @@ class MessageTextview(Gtk.TextView):
         self.set_cursor_visible(False)
         self.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
 
-        self.connect('query-tooltip', self._query_tooltip)
-        self.connect('button-press-event', self._on_button_press)
-        self.connect('populate-popup', self._on_populate_popup)
+        self._handlers = {}
+
+        id_ = self.connect('query-tooltip', self._query_tooltip)
+        self._handlers[id_] = self
+        id_ = self.connect('button-press-event', self._on_button_press)
+        self._handlers[id_] = self
+        id_ = self.connect('populate-popup', self._on_populate_popup)
+        self._handlers[id_] = self
 
         self._account = account
 
@@ -124,7 +134,10 @@ class MessageTextview(Gtk.TextView):
         self.connect('destroy', self._on_destroy)
 
     def _on_destroy(self, *args):
-        pass
+        for id_, widget in self._handlers.items():
+            if widget.handler_is_connected(id_):
+                widget.disconnect(id_)
+        self._handlers.clear()
 
     def _create_url_tags(self):
         color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
@@ -252,11 +265,6 @@ class MessageTextview(Gtk.TextView):
             menu.show_all()
             return
 
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Quote'))
-        id_ = item.connect('activate', self._on_quote)
-        self.handlers[id_] = item
-        menu.prepend(item)
-
         selected_text_short = reduce_chars_newlines(
             self._selected_text, 25, 2)
         item = Gtk.MenuItem.new_with_mnemonic(
@@ -274,7 +282,7 @@ class MessageTextview(Gtk.TextView):
                    f'wiki/Special:Search?search={uri_text}')
         item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
         id_ = item.connect('activate', self._visit_uri, uri)
-        self.handlers[id_] = item
+        self._handlers[id_] = item
         submenu.append(item)
 
         item = Gtk.MenuItem.new_with_mnemonic(
@@ -289,7 +297,7 @@ class MessageTextview(Gtk.TextView):
                 uri = (f'https://{i18n.get_short_lang_code()}.wiktionary.org/'
                        f'wiki/Special:Search?search={uri_text}')
             id_ = item.connect('activate', self._visit_uri, uri)
-            self.handlers[id_] = item
+            self._handlers[id_] = item
         else:
             if dict_link.find('%s') == -1:
                 # There has to be a '%s' in the url if it’s not WIKTIONARY
@@ -299,7 +307,7 @@ class MessageTextview(Gtk.TextView):
             else:
                 uri = dict_link % uri_text
                 id_ = item.connect('activate', self._visit_uri, uri)
-                self.handlers[id_] = item
+                self._handlers[id_] = item
         submenu.append(item)
 
         search_link = app.settings.get('search_engine')
@@ -312,12 +320,12 @@ class MessageTextview(Gtk.TextView):
             item = Gtk.MenuItem.new_with_mnemonic(_('Web _Search for it'))
             uri = search_link % uri_text
             id_ = item.connect('activate', self._visit_uri, uri)
-            self.handlers[id_] = item
+            self._handlers[id_] = item
         submenu.append(item)
 
         item = Gtk.MenuItem.new_with_mnemonic(_('Open as _Link'))
         id_ = item.connect('activate', self._visit_uri, uri)
-        self.handlers[id_] = item
+        self._handlers[id_] = item
         submenu.append(item)
 
         menu.show_all()
@@ -341,8 +349,8 @@ class MessageTextview(Gtk.TextView):
             word = self.get_buffer().get_text(begin_iter, end_iter, True)
 
         uri = parse_uri(word)
-        if event.button.button == 3: # right click
-            self.show_context_menu(uri)
+        if event.button.button == 3:  # right click
+            self._show_context_menu(uri)
             return Gdk.EVENT_STOP
 
         # self.plugin_modified = False
@@ -354,8 +362,20 @@ class MessageTextview(Gtk.TextView):
         open_uri(uri, account=self._account)
         return Gdk.EVENT_STOP
 
-    def _on_quote(self, _widget):
-        self.emit('quote', self._selected_text)
+    def _show_context_menu(self, uri):
+        menu = get_conv_context_menu(self._account, uri)
+        if menu is None:
+            log.warning('No handler for URI type: %s', uri)
+            return
+
+        def destroy(menu, _pspec):
+            visible = menu.get_property('visible')
+            if not visible:
+                GLib.idle_add(menu.destroy)
+
+        menu.attach_to_widget(self, None)
+        menu.connect('notify::visible', destroy)
+        menu.popup_at_pointer()
 
     @staticmethod
     def _visit_uri(_widget, uri):
