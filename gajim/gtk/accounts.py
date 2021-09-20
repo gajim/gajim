@@ -841,7 +841,7 @@ class ConnectionPage(GenericSettingPage):
                     'confirm_unencrypted_connection',
                     desc=_('Show a confirmation dialog before connecting '
                            'unencrypted')),
-            ]
+        ]
         GenericSettingPage.__init__(self, account, settings)
 
     @staticmethod
@@ -877,8 +877,12 @@ class AdvancedPage(GenericSettingPage):
                     props={'entries': {'httpupload': _('Upload Files'),
                                        'jingle': _('Send Files Directly')}},
                     desc=_('Preferred file transfer mechanism for '
-                           'file drag&drop on a chat window'))
-            ]
+                           'file drag&drop on a chat window')),
+            Setting(SettingKind.SWITCH, _('Security Labels'),
+                    SettingType.ACCOUNT_CONFIG, 'enable_security_labels',
+                    desc=_('Show labels describing confidentiality of '
+                           'messages, if the server supports XEP-0258'))
+        ]
         GenericSettingPage.__init__(self, account, settings)
 
 
@@ -905,7 +909,7 @@ class ZeroConfPage(GenericSettingPage):
             Setting(SettingKind.SWITCH, _('Global Status'),
                     SettingType.ACCOUNT_CONFIG, 'sync_with_global_status',
                     desc=_('Synchronize the status of all accounts')),
-            ]
+        ]
 
         GenericSettingPage.__init__(self, account, settings)
 
@@ -925,7 +929,7 @@ class ZeroconfProfileDialog(SettingsDialog):
 
             Setting(SettingKind.ENTRY, _('Email'),
                     SettingType.ACCOUNT_CONFIG, 'zeroconf_email'),
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('Profile'),
                                 Gtk.DialogFlags.MODAL, settings, account)
@@ -951,7 +955,7 @@ class PriorityDialog(SettingsDialog):
                     bind='account::adjust_priority_with_status',
                     inverted=True,
                     props={'range_': range_}),
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('Priority'),
                                 Gtk.DialogFlags.MODAL, settings, account)
@@ -990,7 +994,7 @@ class CutstomHostnameDialog(SettingsDialog):
                     SettingType.ACCOUNT_CONFIG, 'custom_type',
                     bind='account::use_custom_host',
                     props={'combo_items': type_values}),
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('Connection Settings'),
                                 Gtk.DialogFlags.MODAL, settings, account)
@@ -1006,7 +1010,7 @@ class CertificateDialog(SettingsDialog):
 
             Setting(SettingKind.SWITCH, _('Encrypted Certificate'),
                     SettingType.ACCOUNT_CONFIG, 'client_cert_encrypted'),
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('Certificate Settings'),
                                 Gtk.DialogFlags.MODAL, settings, account)
@@ -1029,7 +1033,7 @@ class LoginDialog(SettingsDialog):
 
             Setting(SettingKind.SWITCH, _('Use GSSAPI'),
                     SettingType.ACCOUNT_CONFIG, 'enable_gssapi'),
-            ]
+        ]
 
         SettingsDialog.__init__(self, parent, _('Login Settings'),
                                 Gtk.DialogFlags.MODAL, settings, account)

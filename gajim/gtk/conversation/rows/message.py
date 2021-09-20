@@ -114,7 +114,8 @@ class MessageRow(BaseRow):
             if encryption_img:
                 self._meta_box.pack_end(encryption_img, False, True, 0)
 
-        if display_marking:
+        if display_marking and app.settings.get_account_setting(
+                account, 'enable_security_labels'):
             label_text = GLib.markup_escape_text(display_marking.name)
             if label_text:
                 bgcolor = display_marking.bgcolor

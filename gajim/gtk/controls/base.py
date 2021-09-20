@@ -457,6 +457,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         if event.jid != jid:
             return
+
+        if not app.settings.get_account_setting(
+                event.account, 'enable_security_labels'):
+            return
+
         model = self.xml.label_selector.get_model()
         model.clear()
 
