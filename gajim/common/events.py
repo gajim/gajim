@@ -190,6 +190,14 @@ class Events:
 
         self.fire_event_added(event)
 
+    def remove_account_events(self, account):
+        if account not in self._events:
+            return
+
+        account_events = self.get_events(account)
+        for jid, _events in account_events.items():
+            self.remove_events(account, jid)
+
     def remove_events(self, account, jid, event=None, types=None):
         """
         If event is not specified, remove all events from this jid, optionally
