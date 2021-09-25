@@ -77,10 +77,8 @@ Replace install path `~/Gajim/gajim_flatpak` with an install path of your choice
 *Note: Remove `--user` if you want a system-wide installation.*
 
 ```bash
-flatpak --user remote-add --from gnome https://sdk.gnome.org/gnome.flatpakrepo
-flatpak --user install gnome org.gnome.Platform//3.34
-flatpak --user install gnome org.gnome.Sdk//3.34
-flatpak-builder --repo=gajim_flatpak_repo ~/Gajim/gajim_flatpak ~/Gajim/flatpak/org.gajim.Gajim.yaml
+flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak-builder --repo=gajim_flatpak_repo --install-deps-from=flathub --force-clean ~/Gajim/gajim_flatpak ~/Gajim/flatpak/org.gajim.Gajim.yaml
 flatpak --user remote-add --no-gpg-verify gajim_flatpak_repo gajim_flatpak_repo
 flatpak --user install gajim_flatpak_repo org.gajim.Gajim
 flatpak run org.gajim.Gajim
@@ -101,16 +99,10 @@ cd ~/Gajim
 git pull --rebase
 ```
 
-### Remove previous Flatpak directory
-
-```bash
-rm -r ~/Gajim/gajim_flatpak
-```
-
 ### Install and update Gajim
 
 ```bash
-flatpak-builder --repo=gajim_flatpak_repo ~/Gajim/gajim_flatpak ~/Gajim/flatpak/org.gajim.Gajim.yaml
+flatpak-builder --repo=gajim_flatpak_repo --force-clean ~/Gajim/gajim_flatpak ~/Gajim/flatpak/org.gajim.Gajim.yaml
 flatpak --user update
 flatpak run org.gajim.Gajim
 ```
