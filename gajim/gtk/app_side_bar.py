@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -22,8 +23,8 @@ from gajim.gui.util import load_icon
 class AppSideBar(Gtk.ListBox):
     def __init__(self, app_page):
         Gtk.ListBox.__init__(self)
-        self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_valign(Gtk.Align.START)
+        self.set_selection_mode(Gtk.SelectionMode.SINGLE)
         self.get_style_context().add_class('workspace-sidebar')
 
         self.connect('row-activated', self._on_app_row_activated)
@@ -34,6 +35,9 @@ class AppSideBar(Gtk.ListBox):
         self.add(self._app_row)
 
         self.show_all()
+
+        # Use idle_add to unselect listbox selection on startup
+        GLib.idle_add(self.unselect_all)
 
     @staticmethod
     def _on_app_row_activated(_listbox, _row):

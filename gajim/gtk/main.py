@@ -307,6 +307,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._chat_page.set_startup_finished()
 
     def show_account_page(self, account):
+        self._app_side_bar.unselect_all()
+        self._workspace_side_bar.unselect_all()
         self._account_side_bar.activate_account_page(account)
         self._main_stack.show_account(account)
 
@@ -359,6 +361,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.activate_workspace(workspace_id)
 
     def activate_workspace(self, workspace_id):
+        self._app_side_bar.unselect_all()
+        self._account_side_bar.unselect_all()
         self._main_stack.show_chats(workspace_id)
         self._workspace_side_bar.activate_workspace(workspace_id)
 
@@ -397,6 +401,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                select=select)
 
     def select_chat(self, account, jid):
+        self._app_side_bar.unselect_all()
+        self._account_side_bar.unselect_all()
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
 
@@ -418,6 +424,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         open_window('AddContact', account=account, jid=jid)
 
     def show_app_page(self):
+        self._account_side_bar.unselect_all()
+        self._workspace_side_bar.unselect_all()
         self._main_stack.show_app_page()
 
     def add_app_message(self, category, message=None):

@@ -24,6 +24,7 @@ class AccountSideBar(Gtk.ListBox):
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
         self.set_valign(Gtk.Align.END)
+        self.set_selection_mode(Gtk.SelectionMode.SINGLE)
         self.get_style_context().add_class('account-sidebar')
         self.connect('row-activated', self._on_row_activated)
 
@@ -56,7 +57,6 @@ class Account(Gtk.ListBoxRow):
     def __init__(self, account):
         Gtk.ListBoxRow.__init__(self)
         self.get_style_context().add_class('account-sidebar-item')
-        self.set_selectable(False)
 
         self.account = account
         self._account_class = None
