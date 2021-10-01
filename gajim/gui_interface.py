@@ -212,7 +212,6 @@ class Interface:
             'message-sent': [self.handle_event_msgsent],
             'message-not-sent': [self.handle_event_msgnotsent],
             'read-state-sync': [self.handle_event_read_state_sync],
-            # 'roster-info': [self.handle_event_roster_info],
             'metacontacts-received': [self.handle_event_metacontacts],
             'roster-item-exchange-received': [self.handle_event_roster_item_exchange],
             'file-send-error': [self.handle_event_file_send_error],
@@ -621,61 +620,6 @@ class Interface:
             return
 
         app.events.remove_events(event.account, jid, types=types)
-
-    def handle_event_roster_info(self, obj):
-        # TODO:
-        # ('ROSTER_INFO', account, (jid, name, sub, ask, groups))
-        account = obj.conn.name
-        contacts = app.contacts.get_contacts(account, obj.jid)
-        if (not obj.sub or obj.sub == 'none') and \
-        (not obj.ask or obj.ask == 'none') and not obj.nickname and \
-        not obj.groups:
-            # contact removed us.
-            if contacts:
-                self.roster.remove_contact(obj.jid, account, backend=True)
-                return
-        elif not contacts:
-            if obj.sub == 'remove':
-                return
-            # Add new contact to roster
-
-            contact = app.contacts.create_contact(jid=obj.jid,
-                account=account, name=obj.nickname, groups=obj.groups,
-                show='offline', sub=obj.sub, ask=obj.ask,
-                avatar_sha=obj.avatar_sha)
-            app.contacts.add_contact(account, contact)
-            self.roster.add_contact(obj.jid, account)
-        else:
-            # If contact has changed (sub, ask or group) update roster
-            # Mind about observer status changes:
-            #   According to xep 0162, a contact is not an observer anymore when
-            #   we asked for auth, so also remove him if ask changed
-            old_groups = contacts[0].groups
-            if obj.sub == 'remove':
-                # another of our instance removed a contact. Remove it here too
-                self.roster.remove_contact(obj.jid, account, backend=True)
-                return
-            update = False
-            if contacts[0].sub != obj.sub or contacts[0].ask != obj.ask\
-            or old_groups != obj.groups:
-                # c.get_shown_groups() has changed. Reflect that in
-                # roster_window
-                self.roster.remove_contact(obj.jid, account, force=True)
-                update = True
-            for contact in contacts:
-                contact.name = obj.nickname or ''
-                contact.sub = obj.sub
-                contact.ask = obj.ask
-                contact.groups = obj.groups or []
-            if update:
-                self.roster.add_contact(obj.jid, account)
-                # Refilter and update old groups
-                for group in old_groups:
-                    self.roster.draw_group(group, account)
-                self.roster.draw_contact(obj.jid, account)
-        if obj.jid in self.instances[account]['sub_request'] and obj.sub in (
-        'from', 'both'):
-            self.instances[account]['sub_request'][obj.jid].destroy()
 
     @staticmethod
     def handle_event_metacontacts(obj):
