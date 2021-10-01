@@ -215,7 +215,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return res
 
         if action == 'escape':
-            self._chat_page.hide_search()
+            if self._chat_page.hide_search():
+                return
 
         if action == 'escape' and app.settings.get('escape_key_closes'):
             self._chat_page.remove_chat(control.account, control.contact.jid)

@@ -19,7 +19,6 @@ from gi.repository import Gio
 from gi.repository import GObject
 
 from gajim.common import app
-from gajim.common.i18n import _
 
 from .util import get_builder
 from .chat_filter import ChatFilter
@@ -49,9 +48,10 @@ class ChatPage(Gtk.Box):
         self._search_view.connect('hide-search', self._on_search_hide)
 
         self._search_revealer = Gtk.Revealer()
-        self._search_revealer.set_reveal_child(True)
+        self._search_revealer.set_reveal_child(False)
+        self._search_revealer.set_transition_type(
+            Gtk.RevealerTransitionType.SLIDE_LEFT)
         self._search_revealer.set_halign(Gtk.Align.END)
-        self._search_revealer.set_no_show_all(True)
         self._search_revealer.add(self._search_view)
         self._ui.right_grid_overlay.add_overlay(self._search_revealer)
 
@@ -139,11 +139,11 @@ class ChatPage(Gtk.Box):
         if control is not None:
             self._search_view.set_context(control.account, control.contact.jid)
         self._search_view.clear()
-        self._search_revealer.show()
+        self._search_revealer.set_reveal_child(True)
         self._search_view.set_focus()
 
     def _on_search_hide(self, *args):
-        self._search_revealer.hide()
+        self._search_revealer.set_reveal_child(False)
 
     def _on_chat_list_changed(self, chat_list_stack, *args):
         chat_list = chat_list_stack.get_current_chat_list()
@@ -268,4 +268,6 @@ class ChatPage(Gtk.Box):
 
     def hide_search(self):
         if self._search_revealer.get_reveal_child():
-            self._search_revealer.hide()
+            self._search_revealer.set_reveal_child(False)
+            return True
+        return False

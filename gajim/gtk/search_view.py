@@ -55,7 +55,6 @@ class SearchView(Gtk.Box):
         self.add(self._ui.search_box)
 
         self._ui.connect_signals(self)
-        self.connect('key-press-event', self._on_key_press)
 
         app.ged.register_event_handler('account-enabled',
                                        ged.GUI1,
@@ -64,10 +63,6 @@ class SearchView(Gtk.Box):
                                        ged.GUI1,
                                        self._on_account_state)
         self.show_all()
-
-    def _on_key_press(self, _widget, event):
-        if event.keyval == Gdk.KEY_Escape:
-            self.emit('hide-search')
 
     def _on_account_state(self, _event):
         self.clear()
