@@ -1219,7 +1219,7 @@ class Interface:
             'account-disabled',
             account=account))
 
-        # app.events.remove_account_events(account)
+        app.events.remove_account_events(account)
 
         if account == app.ZEROCONF_ACC_NAME:
             app.connections[account].disable_account()
