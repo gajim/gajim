@@ -156,8 +156,7 @@ class Interface:
         for a in app.connections:
             self.instances[a] = {
                 'infos': {},
-                'disco': {},
-                'sub_request': {}
+                'disco': {}
             }
             app.contacts.add_account(a)
             app.groups[a] = {}
@@ -1115,8 +1114,7 @@ class Interface:
         # update variables
         self.instances[account] = {
             'infos': {},
-            'disco': {},
-            'sub_request': {}
+            'disco': {}
         }
 
         app.groups[account] = {}

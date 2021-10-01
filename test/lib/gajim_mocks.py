@@ -23,8 +23,10 @@ class MockConnection(Mock, ConnectionHandlers):
         self.sessions = {}
         self.server_resource = 'Gajim'
 
-        app.interface.instances[account] = {'infos': {}, 'disco': {},
-                'gc_config': {}, 'search': {}, 'sub_request': {}}
+        app.interface.instances[account] = {
+            'infos': {},
+            'disco': {}
+        }
         app.interface.minimized_controls[account] = {}
         app.contacts.add_account(account)
         app.groups[account] = {}
