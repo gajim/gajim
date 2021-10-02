@@ -53,7 +53,6 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import events
-from gajim.common.dbus import location
 from gajim.common.dbus import logind
 from gajim.common.dbus import music_track
 
@@ -207,7 +206,7 @@ class Interface:
             'zeroconf-name-conflict': [self.handle_event_zc_name_conflict],
             'signed-in': [self.handle_event_signed_in],
             'presence-received': [self.handle_event_presence],
-            'our-show': [self.handle_event_status],   
+            'our-show': [self.handle_event_status],
             'message-sent': [self.handle_event_msgsent],
             'message-not-sent': [self.handle_event_msgnotsent],
             'read-state-sync': [self.handle_event_read_state_sync],
@@ -359,7 +358,7 @@ class Interface:
     def handle_event_iq_error(event):
         ctrl = app.window.get_control(event.account, event.properties.jid.bare)
         if ctrl and ctrl.is_groupchat:
-            ctrl.add_info_message('Error: %s' % event.properties.error)
+            ctrl.add_info_message(f'Error: {event.properties.error}')
 
     @staticmethod
     def handle_event_connection_lost(event):
@@ -519,6 +518,7 @@ class Interface:
             app.window.show_account_page(account)
 
     def handle_event_presence(self, event):
+        # TODO:
         # 'NOTIFY' (account, (jid, status, status message, resource,
         # priority, timestamp))
         #
@@ -1456,7 +1456,7 @@ class Interface:
         else:
             log.info('Gajim is up to date')
 
-    def run(self, application):
+    def run(self, _application):
         if app.settings.get('trayicon') != 'never':
             self.show_systray()
 
