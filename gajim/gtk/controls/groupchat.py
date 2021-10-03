@@ -633,9 +633,9 @@ class GroupchatControl(BaseControl):
 
     def _on_ban(self, _action, param):
         jid = param.get_string()
+        contact = self._client.get_module('Contacts').get_contact(jid)
         self._ban_jid = jid
-        nick = app.get_nick_from_jid(jid)
-        self.xml.ban_label.set_text(_('Ban %s') % nick)
+        self.xml.ban_label.set_text(_('Ban %s') % contact.name)
         self.xml.ban_reason_entry.grab_focus()
         self.xml.ban_participant_button.grab_default()
         self._show_page('ban')

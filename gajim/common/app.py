@@ -335,9 +335,6 @@ desktop_env = detect_desktop_env()
 def get_an_id():
     return str(uuid.uuid4())
 
-def get_nick_from_jid(jid):
-    pos = jid.find('@')
-    return jid[:pos]
 
 def get_server_from_jid(jid):
     pos = jid.find('@') + 1 # after @
