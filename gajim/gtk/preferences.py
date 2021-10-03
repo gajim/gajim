@@ -37,7 +37,6 @@ from .settings import SettingsBox
 from .settings import SettingsDialog
 from .sidebar_switcher import SideBarSwitcher
 from .video_preview import VideoPreview
-from .util import get_available_iconsets
 from .util import open_window
 from .util import get_app_window
 from .util import get_builder
@@ -84,7 +83,6 @@ class Preferences(Gtk.ApplicationWindow):
             ('automatic_status', AutomaticStatus),
             ('themes', Themes),
             ('emoji', Emoji),
-            ('status_icon', StatusIcon),
             ('server', Server),
             ('audio', Audio),
             ('video', Video),
@@ -712,33 +710,6 @@ class Emoji(PreferenceBox):
     def _toggle_emoticons():
         for ctrl in app.window.get_controls():
             ctrl.toggle_emoticons()
-
-
-class StatusIcon(PreferenceBox):
-    def __init__(self, *args):
-
-        # TODO: Remove this section completely?
-
-        iconset_items = []
-        for _index, iconset_name in enumerate(get_available_iconsets()):
-            iconset_items.append(iconset_name)
-
-        settings = [
-            Setting(SettingKind.POPOVER,
-                    _('Status Icon Set'),
-                    SettingType.CONFIG,
-                    'iconset',
-                    props={'entries': iconset_items},
-                    callback=self._on_iconset_changed),
-        ]
-
-        PreferenceBox.__init__(self, settings)
-
-    @staticmethod
-    def _on_iconset_changed(*args):
-        # TODO:
-        # app.interface.roster.update_icons()
-        pass
 
 
 class Server(PreferenceBox):
