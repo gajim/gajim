@@ -123,16 +123,6 @@ def get_possible_button_event(event):
     return event.button
 
 
-def scale_with_ratio(size, width, height):
-    if height == width:
-        return size, size
-    if height > width:
-        ratio = height / float(width)
-        return int(size / ratio), size
-
-    ratio = width / float(height)
-    return size, int(size / ratio)
-
 def scale_pixbuf(pixbuf, size):
     width, height = scale_with_ratio(size,
                                      pixbuf.get_width(),
