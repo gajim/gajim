@@ -202,12 +202,6 @@ class ContactList(PreferenceBox):
                     callback=self._on_show_avatar_in_roster_changed),
 
             Setting(SettingKind.SWITCH,
-                    _('Sort Contacts by Status'),
-                    SettingType.CONFIG,
-                    'sort_by_show_in_roster',
-                    callback=self._on_sort_by_show_in_roster),
-
-            Setting(SettingKind.SWITCH,
                     _('Show Mood'),
                     SettingType.CONFIG,
                     'show_mood_in_roster'),
@@ -232,12 +226,6 @@ class ContactList(PreferenceBox):
 
     @staticmethod
     def _on_show_avatar_in_roster_changed(*args):
-        # TODO
-        # app.interface.roster.setup_and_draw_roster()
-        pass
-
-    @staticmethod
-    def _on_sort_by_show_in_roster(*args):
         # TODO
         # app.interface.roster.setup_and_draw_roster()
         pass

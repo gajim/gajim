@@ -30,6 +30,7 @@ from .util import EventHelper
 
 ROSTER_MENU_DICT = {
     'show-offline': _('Show Offline Contacts'),
+    'sort-by-show': _('Sort by Status'),
 }
 
 

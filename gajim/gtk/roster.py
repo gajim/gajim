@@ -134,6 +134,13 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             GLib.Variant.new_boolean(app.settings.get('showoffline')))
         action.connect('change-state', self._on_show_offline)
         app.window.add_action(action)
+        action = Gio.SimpleAction.new_stateful(
+            f'sort-by-show-{self._account}',
+            None,
+            GLib.Variant.new_boolean(
+                app.settings.get('sort_by_show_in_roster')))
+        action.connect('change-state', self._on_sort_by_show)
+        app.window.add_action(action)
 
     def update_actions(self):
         online = app.account_is_connected(self._account)
@@ -262,6 +269,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_show_offline(self, action, param):
         action.set_state(param)
         app.settings.set('showoffline', param.get_boolean())
+        self._refilter()
+
+    def _on_sort_by_show(self, action, param):
+        action.set_state(param)
+        app.settings.set('sort_by_show_in_roster', param.get_boolean())
         self._refilter()
 
     def _on_contact_info(self, _action, param):
