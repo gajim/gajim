@@ -200,26 +200,6 @@ class ContactList(PreferenceBox):
                     SettingType.CONFIG,
                     'show_avatars_in_roster',
                     callback=self._on_show_avatar_in_roster_changed),
-
-            Setting(SettingKind.SWITCH,
-                    _('Show Mood'),
-                    SettingType.CONFIG,
-                    'show_mood_in_roster'),
-
-            Setting(SettingKind.SWITCH,
-                    _('Show Activity'),
-                    SettingType.CONFIG,
-                    'show_activity_in_roster'),
-
-            Setting(SettingKind.SWITCH,
-                    _('Show Tune'),
-                    SettingType.CONFIG,
-                    'show_tunes_in_roster'),
-
-            Setting(SettingKind.SWITCH,
-                    _('Show Location'),
-                    SettingType.CONFIG,
-                    'show_location_in_roster'),
         ]
 
         PreferenceBox.__init__(self, settings)
