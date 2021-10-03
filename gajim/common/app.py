@@ -343,10 +343,6 @@ def get_server_from_jid(jid):
     pos = jid.find('@') + 1 # after @
     return jid[pos:]
 
-def get_name_and_server_from_jid(jid):
-    name = get_nick_from_jid(jid)
-    server = get_server_from_jid(jid)
-    return name, server
 
 def get_room_and_nick_from_fjid(jid):
     # fake jid is the jid for a contact in a room
