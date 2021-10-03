@@ -268,6 +268,8 @@ class PopupNotification(Gtk.Window):
         self._ui = get_builder('popup_notification_window.ui')
         self.add(self._ui.eventbox)
 
+        client = app.get_client(account)
+
         if event_type in (_('New Message'),
                           _('New Private Message'),
                           _('New E-mail')):
@@ -300,12 +302,13 @@ class PopupNotification(Gtk.Window):
         gtkgui_helpers.add_css_to_widget(self._ui.color_bar, bar_class)
         self._ui.color_bar.get_style_context().add_class('popup-bar')
 
-        if not title:
+        if title is None:
             title = ''
         self._ui.event_type_label.set_markup(title)
 
-        if not text:
-            text = app.get_name_from_jid(account, jid)  # default value of text
+        if text is None:
+            contact = client.get_module('Contacts').get_contact(jid)
+            text = contact.name  # default value of text
         escaped_text = GLib.markup_escape_text(text)
         self._ui.event_description_label.set_markup(escaped_text)
 

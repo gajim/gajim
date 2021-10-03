@@ -556,17 +556,6 @@ def get_notification_image_prefix(jid):
         prefix = 'jabber'
     return prefix
 
-def get_name_from_jid(account, jid):
-    """
-    Return from JID's shown name and if no contact returns jids
-    """
-    contact = contacts.get_first_contact_from_jid(account, jid)
-    if contact:
-        actor = contact.get_shown_name()
-    else:
-        actor = jid
-    return actor
-
 
 def get_recent_groupchats(account):
     recent_groupchats = settings.get_account_setting(

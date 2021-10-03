@@ -233,6 +233,7 @@ class NotificationEventOld(nec.NetworkIncomingEvent):
         if app.jid_is_transport(pres_obj.jid):
             return True
         account = pres_obj.conn.name
+        client = app.get_client(account)
         self.jid = pres_obj.jid
         resource = pres_obj.resource or ''
         # It isn't an agent
@@ -294,7 +295,8 @@ class NotificationEventOld(nec.NetworkIncomingEvent):
 
         self.popup_timeout = app.settings.get('notification_timeout')
 
-        nick = i18n.direction_mark + app.get_name_from_jid(account, self.jid)
+        contact = client.get_module('Contacts').get_contact(self.jid)
+        nick = i18n.direction_mark + contact.name
         if event == 'status_change':
             self.popup_title = _('%(nick)s Changed Status') % \
                 {'nick': nick}
