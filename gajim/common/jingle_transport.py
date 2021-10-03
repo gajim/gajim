@@ -21,6 +21,7 @@ from typing import Dict  # pylint: disable=unused-import
 
 import logging
 import socket
+import uuid
 from enum import IntEnum, unique
 
 import nbxmpp
@@ -436,7 +437,7 @@ class JingleTransportICEUDP(JingleTransport):
             'network': '0',
             'port': candidate.port,
             'priority': int(candidate.priority), # hack
-            'id': app.get_an_id()
+            'id': str(uuid.uuid4())
         }
         if candidate.type in types:
             attrs['type'] = types[candidate.type]
