@@ -76,7 +76,6 @@ class GroupChatInvite(Gtk.Box):
 
     def _add_contacts(self):
         show_account = len(self._accounts) > 1
-        our_jids = app.get_our_jids()
         for account, _label in self._accounts:
             self.new_contact_rows[account] = None
             client = app.get_client(account)
@@ -85,8 +84,8 @@ class GroupChatInvite(Gtk.Box):
                 # Exclude group chats
                 if contact.is_groupchat:
                     continue
-                # Exclude our own jids
-                if contact.jid in our_jids:
+                # Exclude our own jid
+                if contact.jid == client.get_own_jid().bare:
                     continue
 
                 row = ContactRow(account, contact, contact.jid,

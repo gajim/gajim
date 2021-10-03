@@ -526,15 +526,6 @@ def get_account_from_jid(jid):
         if jid == get_jid_from_account(account):
             return account
 
-def get_our_jids():
-    """
-    Returns a list of the jids we use in our accounts
-    """
-    our_jids = []
-    for account in contacts.get_accounts():
-        our_jids.append(get_jid_from_account(account))
-    return our_jids
-
 def get_hostname_from_account(account_name, use_srv=False):
     """
     Returns hostname (if custom hostname is used, that is returned)
