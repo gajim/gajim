@@ -24,20 +24,11 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import math
 import logging
-from io import BytesIO
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
-from gi.repository import GLib
 from gi.repository import Pango
-
-try:
-    from PIL import Image
-except Exception:
-    pass
 
 from gajim.common import app
 
@@ -52,34 +43,6 @@ if os.name == 'nt':
 
 log = logging.getLogger('gajim.gtkgui_helpers')
 
-
-def get_pixbuf_from_data(file_data):
-    """
-    Get image data and returns GdkPixbuf.Pixbuf
-    """
-    pixbufloader = GdkPixbuf.PixbufLoader()
-    try:
-        pixbufloader.write(file_data)
-        pixbufloader.close()
-        pixbuf = pixbufloader.get_pixbuf()
-    except GLib.GError:
-        pixbufloader.close()
-
-        log.warning('loading avatar using pixbufloader failed, trying to '
-                    'convert avatar image using pillow')
-        try:
-            avatar = Image.open(BytesIO(file_data)).convert("RGBA")
-            array = GLib.Bytes.new(avatar.tobytes())
-            width, height = avatar.size
-            pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
-                array, GdkPixbuf.Colorspace.RGB,
-                True, 8, width, height, width * 4)
-        except Exception:
-            log.warning('Could not use pillow to convert avatar image, '
-                        'image cannot be displayed', exc_info=True)
-            return
-
-    return pixbuf
 
 def file_is_locked(path_to_file):
     """
@@ -122,17 +85,6 @@ def get_possible_button_event(event):
     # BUTTON_PRESS event, so pass event.button
     return event.button
 
-
-def scale_pixbuf(pixbuf, size):
-    width, height = scale_with_ratio(size,
-                                     pixbuf.get_width(),
-                                     pixbuf.get_height())
-    return pixbuf.scale_simple(width, height,
-                               GdkPixbuf.InterpType.BILINEAR)
-
-def scale_pixbuf_from_data(data, size):
-    pixbuf = get_pixbuf_from_data(data)
-    return scale_pixbuf(pixbuf, size)
 
 def label_set_autowrap(widget):
     """

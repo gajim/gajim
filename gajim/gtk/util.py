@@ -25,6 +25,7 @@ import logging
 import math
 import textwrap
 import functools
+from io import BytesIO
 from importlib import import_module
 import xml.etree.ElementTree as ET
 from functools import wraps
@@ -112,7 +113,6 @@ class NickCompletionGenerator:
                 if contact == contact_old:
                     lst[idx] = contact_new
 
-
     def generate_suggestions(self, nicks: List[str],
                              beginning: str) -> List[str]:
         """
@@ -187,7 +187,6 @@ class Builder:
             return ET.tostring(tree.getroot(),
                                encoding='unicode',
                                method='xml')
-
 
         file = Gio.File.new_for_path(file_path)
         content = file.load_contents(None)
@@ -705,6 +704,36 @@ def get_css_show_class(show):
     return '.gajim-status-offline'
 
 
+def get_pixbuf_from_data(file_data):
+    # TODO: This already exists in preview_helpery pixbuf_from_data
+    """
+    Get image data and returns GdkPixbuf.Pixbuf
+    """
+    pixbufloader = GdkPixbuf.PixbufLoader()
+    try:
+        pixbufloader.write(file_data)
+        pixbufloader.close()
+        pixbuf = pixbufloader.get_pixbuf()
+    except GLib.GError:
+        pixbufloader.close()
+
+        log.warning('loading avatar using pixbufloader failed, trying to '
+                    'convert avatar image using pillow')
+        try:
+            avatar = Image.open(BytesIO(file_data)).convert("RGBA")
+            array = GLib.Bytes.new(avatar.tobytes())
+            width, height = avatar.size
+            pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
+                array, GdkPixbuf.Colorspace.RGB,
+                True, 8, width, height, width * 4)
+        except Exception:
+            log.warning('Could not use pillow to convert avatar image, '
+                        'image cannot be displayed', exc_info=True)
+            return
+
+    return pixbuf
+
+
 def scale_with_ratio(size, width, height):
     if height == width:
         return size, size
@@ -714,6 +743,19 @@ def scale_with_ratio(size, width, height):
 
     ratio = width / float(height)
     return size, int(size / ratio)
+
+
+def scale_pixbuf(pixbuf, size):
+    width, height = scale_with_ratio(size,
+                                     pixbuf.get_width(),
+                                     pixbuf.get_height())
+    return pixbuf.scale_simple(width, height,
+                               GdkPixbuf.InterpType.BILINEAR)
+
+
+def scale_pixbuf_from_data(data, size):
+    pixbuf = get_pixbuf_from_data(data)
+    return scale_pixbuf(pixbuf, size)
 
 
 def load_pixbuf(path, size=None):
