@@ -31,13 +31,12 @@ from gi.repository import Pango
 
 from nbxmpp import JID
 
-from gajim import gtkgui_helpers
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.file_props import FilesProp
 from gajim.common.helpers import open_file
+from gajim.common.helpers import file_is_locked
 from gajim.common.modules.bytestream import (is_transfer_active,
                                              is_transfer_paused,
                                              is_transfer_stopped)
@@ -348,7 +347,7 @@ class FileTransfersWindow:
         """
         Start the real transfer(upload) of the file
         """
-        if gtkgui_helpers.file_is_locked(file_path):
+        if file_is_locked(file_path):
             pritext = _('Gajim can not read this file')
             sextext = _('Another process is using this file.')
             ErrorDialog(pritext, sextext)
@@ -930,7 +929,11 @@ class FileTransfersWindow:
             path = self.model.get_path(iter_)
             self._set_buttons_sensitive(path, True)
 
-        event_button = gtkgui_helpers.get_possible_button_event(event)
+        if event.type == Gdk.EventType.KEY_PRESS:
+            event_button = 0
+        else:
+            event_button = event.button
+
         self._ui.file_transfers_menu.show_all()
         self._ui.file_transfers_menu.popup(
             None,

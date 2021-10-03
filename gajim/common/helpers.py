@@ -86,6 +86,15 @@ from gajim.common.regex import INVALID_XML_CHARS_REGEX
 from gajim.common.regex import STH_AT_STH_DOT_STH_REGEX
 from gajim.common.structs import URI
 
+HAS_PYWIN32 = False
+if os.name == 'nt':
+    try:
+        import win32file
+        import win32con
+        import pywintypes
+        HAS_PYWIN32 = True
+    except ImportError:
+        pass
 
 log = logging.getLogger('gajim.c.helpers')
 
@@ -1047,6 +1056,37 @@ def open_file(path):
         if not path.startswith('file://'):
             path = 'file://' + path
         Gio.AppInfo.launch_default_for_uri(path)
+
+
+def file_is_locked(path_to_file):
+    """
+    Return True if file is locked
+    NOTE: Windows only.
+    """
+    if os.name != 'nt':
+        return False
+
+    if not HAS_PYWIN32:
+        return False
+
+    secur_att = pywintypes.SECURITY_ATTRIBUTES()
+    secur_att.Initialize()
+
+    try:
+        # try create a handle for READING the file
+        hfile = win32file.CreateFile(
+            path_to_file,
+            win32con.GENERIC_READ,  # open for reading
+            0,  # do not share with other proc
+            secur_att,
+            win32con.OPEN_EXISTING,  # existing file only
+            win32con.FILE_ATTRIBUTE_NORMAL,  # normal file
+            0)  # no attr. template
+    except pywintypes.error:
+        return True
+    else:  # in case all went ok, close file handle
+        hfile.Close()
+        return False
 
 
 def geo_provider_from_location(lat, lon):

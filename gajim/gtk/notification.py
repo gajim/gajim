@@ -32,7 +32,6 @@ from gi.repository import Gio
 from gi.repository import Gdk
 from gi.repository import Gtk
 
-from gajim import gtkgui_helpers
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
@@ -40,6 +39,7 @@ from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 
+from .util import add_css_to_widget
 from .util import get_builder
 from .util import get_icon_name
 from .util import get_monitor_scale_factor
@@ -299,7 +299,7 @@ class PopupNotification(Gtk.Window):
             .popup-bar {
                 background-color: %s
             }''' % bg_color
-        gtkgui_helpers.add_css_to_widget(self._ui.color_bar, bar_class)
+        add_css_to_widget(self._ui.color_bar, bar_class)
         self._ui.color_bar.get_style_context().add_class('popup-bar')
 
         if title is None:

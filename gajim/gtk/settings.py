@@ -24,8 +24,6 @@ from gajim.common import passwords
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
-from gajim import gtkgui_helpers
-
 from .util import get_image_button
 from .util import MaxWidthComboBoxText
 from .util import open_window
@@ -600,7 +598,7 @@ class ActionSetting(GenericSetting):
     def __init__(self, *args, account):
         GenericSetting.__init__(self, *args)
         action_name = '%s%s' % (account, self.value)
-        self.action = gtkgui_helpers.get_action(action_name)
+        self.action = app.app.lookup_action(action_name)
         self.variant = GLib.Variant.new_string(account)
         self.on_enable()
 

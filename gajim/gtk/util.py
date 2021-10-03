@@ -704,6 +704,14 @@ def get_css_show_class(show):
     return '.gajim-status-offline'
 
 
+def add_css_to_widget(widget, css):
+    provider = Gtk.CssProvider()
+    provider.load_from_data(bytes(css.encode()))
+    context = widget.get_style_context()
+    context.add_provider(provider,
+                         Gtk.STYLE_PROVIDER_PRIORITY_USER)
+
+
 def get_pixbuf_from_data(file_data):
     # TODO: This already exists in preview_helpery pixbuf_from_data
     """
