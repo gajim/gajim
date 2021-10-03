@@ -85,7 +85,6 @@ APP_SETTINGS = {
     'muc_highlight_words': '',
     'muc_prefer_direct_msg': True,
     'show_status_msgs_in_roster': True,
-    'show_avatars_in_roster': True,
     'avatar_position_in_roster': 'right',
     'print_status_in_chats': False,
     'log_contact_status_changes': False,

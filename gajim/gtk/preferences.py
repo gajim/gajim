@@ -73,7 +73,6 @@ class Preferences(Gtk.ApplicationWindow):
 
         prefs = [
             ('window_behaviour', WindowBehaviour),
-            ('contact_list', ContactList),
             ('chats', Chats),
             ('group_chats', GroupChats),
             ('file_preview', FilePreview),
@@ -185,28 +184,6 @@ class WindowBehaviour(PreferenceBox):
         ]
 
         PreferenceBox.__init__(self, settings)
-
-
-class ContactList(PreferenceBox):
-    def __init__(self, *args):
-
-        # TODO: Evaluate settings (and connect them)
-
-        settings = [
-            Setting(SettingKind.SWITCH,
-                    _('Show Avatars'),
-                    SettingType.CONFIG,
-                    'show_avatars_in_roster',
-                    callback=self._on_show_avatar_in_roster_changed),
-        ]
-
-        PreferenceBox.__init__(self, settings)
-
-    @staticmethod
-    def _on_show_avatar_in_roster_changed(*args):
-        # TODO
-        # app.interface.roster.setup_and_draw_roster()
-        pass
 
 
 class Chats(PreferenceBox):
