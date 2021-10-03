@@ -360,11 +360,6 @@ def get_room_and_nick_from_fjid(jid):
 def get_jid_without_resource(jid):
     return jid.split('/')[0]
 
-def get_resource_from_jid(jid):
-    jids = jid.split('/', 1)
-    if len(jids) > 1:
-        return jids[1] # abc@doremi.org/res/res-continued
-    return ''
 
 def get_number_of_accounts():
     """
