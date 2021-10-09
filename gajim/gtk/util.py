@@ -506,18 +506,6 @@ def get_metacontact_surface(icon_name, expanded, scale):
     return state_surface
 
 
-def get_show_in_systray(type_, account, jid):
-    """
-    Return True if this event must be shown in systray, else False
-    """
-    if type_ == 'group-chat-message':
-        client = app.get_client(account)
-        contact = client.get_module('Contacts').get_group_chat_contact(jid)
-        return contact.can_notify()
-
-    return app.settings.get('trayicon_notification_on_events')
-
-
 def get_primary_accel_mod():
     """
     Returns the primary Gdk.ModifierType modifier.

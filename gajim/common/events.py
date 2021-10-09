@@ -24,25 +24,20 @@ import time
 
 
 class Event:
-    def __init__(self, time_=None, show_in_systray=True):
+    def __init__(self, time_=None):
         """
-        type_ in chat, normal, file-request, file-error, file-completed,
-        file-request-error, file-send-error, file-stopped, gc_msg, pm,
-        printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm,
-        jingle-incoming
+        type_ in chat-message, group-chat-message, private-chat-message,
+        file-request, file-request-error, file-error, file-completed,
+        file-send-error, file-stopped,
 
         parameters is (per type_):
             file-*: file_props
-            printed_chat: [message, subject, control, msg_log_id]
-            printed_*: None
-                    messages that are already printed in chat, but not read
-            jingle-incoming: (fulljid, sessionid, content_types)
+            *-chat-message: [message, subject, control, msg_log_id]
         """
         if time_:
             self.time_ = time_
         else:
             self.time_ = time.time()
-        self.show_in_systray = show_in_systray
         # Set when adding the event
         self.jid = None
         self.account = None
@@ -59,11 +54,8 @@ class ChatMsgEvent(Event):
                  msg_log_id,
                  time_=None,
                  message_id=None,
-                 stanza_id=None,
-                 show_in_systray=True):
-        Event.__init__(self,
-                       time_,
-                       show_in_systray=show_in_systray)
+                 stanza_id=None):
+        Event.__init__(self, time_)
         self.message = message
         self.subject = subject
         self.control = control
@@ -88,11 +80,8 @@ class FileRequestEvent(Event):
 
     def __init__(self,
                  file_props,
-                 time_=None,
-                 show_in_systray=True):
-        Event.__init__(self,
-                       time_,
-                       show_in_systray=show_in_systray)
+                 time_=None):
+        Event.__init__(self, time_)
         self.file_props = file_props
 
 
@@ -253,11 +242,6 @@ class Events:
             self._events[account][new_jid] = self._events[account][old_jid]
         del self._events[account][old_jid]
 
-    def get_nb_events(self, types=None, account=None):
-        if types is None:
-            types = []
-        return self._get_nb_events(types=types, account=account)
-
     def get_events(self, account, jid=None, types=None):
         """
         Return all events from the given account of the form:
@@ -318,56 +302,6 @@ class Events:
                 first_event = event
         return first_event
 
-    def _get_nb_events(self, account=None, jid=None, attribute=None,
-                       types=None):
-        """
-        Return the number of pending events
-        """
-        if types is None:
-            types = []
-        nb = 0
-        if account:
-            accounts = [account]
-        else:
-            accounts = self._events.keys()
-        for acct in accounts:
-            if acct not in self._events:
-                continue
-            if jid:
-                jids = [jid]
-            else:
-                jids = self._events[acct].keys()
-            for j in jids:
-                if j not in self._events[acct]:
-                    continue
-                for event in self._events[acct][j]:
-                    if types and event.type_ not in types:
-                        continue
-                    if (not attribute or attribute == 'systray' and
-                            event.show_in_systray):
-                        nb += 1
-        return nb
-
-    def _get_some_events(self, attribute):
-        """
-        Attribute in systray, roster
-        """
-        events = {}
-        for account, acc_events in self._events.items():
-            events[account] = {}
-            for jid in acc_events:
-                events[account][jid] = []
-
-                for event in acc_events[jid]:
-                    if attribute == 'systray' and event.show_in_systray or \
-                    attribute == 'roster' and event.show_in_roster:
-                        events[account][jid].append(event)
-                if not events[account][jid]:
-                    del events[account][jid]
-            if not events[account]:
-                del events[account]
-        return events
-
     @staticmethod
     def _get_first_event_with_attribute(events):
         """
@@ -388,22 +322,3 @@ class Events:
                         first_jid = jid
                         first_event = event
         return first_account, first_jid, first_event
-
-    def get_nb_systray_events(self, types=None):
-        """
-        Return the number of events displayed in systray
-        """
-        if types is None:
-            types = []
-        return self._get_nb_events(attribute='systray', types=types)
-
-    def get_systray_events(self):
-        """
-        Return all events that must be displayed in systray:
-                {account1: {jid1: [ev1, ev2], },. }
-        """
-        return self._get_some_events('systray')
-
-    def get_first_systray_event(self):
-        events = self.get_systray_events()
-        return self._get_first_event_with_attribute(events)

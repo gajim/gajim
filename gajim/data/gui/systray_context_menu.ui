@@ -29,15 +29,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="show_all_events_menuitem">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Show All Pending _Events</property>
-        <property name="use-underline">True</property>
-        <signal name="activate" handler="_on_show_all_events" swapped="no"/>
-      </object>
-    </child>
-    <child>
       <object class="GtkCheckMenuItem" id="sounds_mute_menuitem">
         <property name="visible">True</property>
         <property name="can-focus">False</property>

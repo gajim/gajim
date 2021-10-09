@@ -233,6 +233,12 @@ class ChatListStack(Gtk.Stack):
         chat_list = self._chat_lists[workspace_id]
         return chat_list.contains_chat(account, jid)
 
+    def get_total_unread_count(self):
+        count = 0
+        for chat_list in self._chat_lists.values():
+            count += chat_list.get_unread_count()
+        return count
+
     def process_event(self, event):
         if event.name not in HANDLED_EVENTS:
             return

@@ -204,7 +204,6 @@ class GajimRemote(Server):
                 <arg name='prio' type='s' />
                 <arg name='account' type='s' />
             </method>
-            <method name='show_next_pending_event' />
             <method name='show_roster' />
             <method name='start_chat'>
                 <arg name='jid' type='s' />
@@ -650,16 +649,6 @@ class GajimRemote(Server):
                 status = app.connections[acc].status_message
                 GLib.idle_add(app.connections[acc].change_status, show, status)
 
-    def show_next_pending_event(self):
-        """
-        Show the window(s) with next pending event in tabbed/group chats
-        """
-        if app.events.get_nb_events():
-            account, jid, event = app.events.get_first_systray_event()
-            if not event:
-                return
-            app.interface.handle_event(account, jid, event.type_)
-
     def list_accounts(self):
         """
         List register accounts
@@ -795,6 +784,9 @@ class GajimRemote(Server):
         return contact_dict
 
     def get_unread_msgs_number(self):
+        # TODO:
+        return 0
+
         unread = app.events.get_nb_events()
         for event in app.events.get_all_events(['group-chat-message']):
             client = app.get_client(event.account)

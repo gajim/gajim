@@ -46,6 +46,7 @@ from gajim.common.events import PrivateChatMsgEvent
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import allow_showing_notification
 from gajim.common.const import KindConstant
 from gajim.common.structs import OutgoingMessage
 from gajim.common.connection_handlers_events import NotificationEvent
@@ -58,7 +59,6 @@ from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.util import get_builder
-from gajim.gui.util import get_show_in_systray
 from gajim.gui.util import AccountBadge
 from gajim.gui.const import ControlType  # pylint: disable=unused-import
 from gajim.gui.const import TARGET_TYPE_URI_LIST
@@ -1153,11 +1153,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         needs_highlight = False
 
         if self.is_chat:
-            popup_msg_type = 'chat'
+            popup_msg_type = 'chat-message'
             sound_event = 'first_message_received'
 
         if self.is_groupchat:
-            popup_msg_type = 'gc_msg'
+            popup_msg_type = 'group-chat-message'
             popup_title += f' ({self.contact.name})'
             needs_highlight = helpers.message_needs_highlight(
                 text, self.contact.nickname, self._client.get_own_jid().bare)
@@ -1169,7 +1169,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 sound_event = None
 
         if self.is_privatechat:
-            popup_msg_type = 'pm'
+            popup_msg_type = 'private-chat-message'
             popup_title += f' (private in {self.room_name})'
             sound_event = 'first_message_received'
 
@@ -1184,11 +1184,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             else:
                 popup_text = text
 
-        popup_enabled = False
-        if app.settings.get('autopopupaway'):
-            popup_enabled = True
-        if self._client.status == 'online':
-            popup_enabled = True
+        popup_enabled = allow_showing_notification(self.account)
         if self.is_groupchat and not self.contact.can_notify():
             popup_enabled = False
 
@@ -1218,16 +1214,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             else:
                 event_type = PrivateChatMsgEvent
             event = 'message_received'
-        show_in_systray = get_show_in_systray(
-            event_type.type_, self.account, self.contact.jid)
 
         event = event_type(text,
                            '',
                            self,
                            msg_log_id,
                            message_id=message_id,
-                           stanza_id=stanza_id,
-                           show_in_systray=show_in_systray)
+                           stanza_id=stanza_id)
         app.events.add_event(self.account, str(self.contact.jid), event)
 
     def toggle_emoticons(self):

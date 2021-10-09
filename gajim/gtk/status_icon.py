@@ -71,6 +71,12 @@ class StatusIcon(EventHelper):
             ('account-disconnected', ged.CORE, self._on_account_state),
         ])
 
+    def connect_unread_changed(self, chat_list_stack):
+        # We trigger the signal connection from the main window because it
+        # is not yet available when initializing StatusIcon
+        chat_list_stack.connect(
+            'unread-count-changed', self._on_unread_count_changed)
+
     def _on_our_show(self, _event):
         self.update_icon()
 
@@ -104,16 +110,19 @@ class StatusIcon(EventHelper):
                     'size-changed', self.update_icon)
 
         self.update_icon()
-        self._subscribe_events()
 
     def hide_icon(self):
         if HAS_INDICATOR:
             self._status_icon.set_status(appindicator.IndicatorStatus.PASSIVE)
         else:
             self._status_icon.set_visible(False)
-        self._unsubscribe_events()
 
-    def update_icon(self, *args):
+    def _on_unread_count_changed(self, _chat_list_stack, _workspace_id, _count):
+        if app.settings.get('trayicon_notification_on_events'):
+            count = app.window.get_total_unread_count()
+            self.update_icon(count=count)
+
+    def update_icon(self, count=0):
         if not app.interface.systray_enabled:
             return
         if app.settings.get('trayicon') == 'always':
@@ -122,7 +131,7 @@ class StatusIcon(EventHelper):
                     appindicator.IndicatorStatus.ACTIVE)
             else:
                 self._status_icon.set_visible(True)
-        if app.events.get_nb_systray_events():
+        if count > 0:
             icon_name = get_icon_name('event')
             if HAS_INDICATOR:
                 self._status_icon.set_icon_full(icon_name, _('Pending Event'))
@@ -147,21 +156,6 @@ class StatusIcon(EventHelper):
             self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
         else:
             self._status_icon.set_from_icon_name(icon_name)
-
-    def _subscribe_events(self):
-        app.events.event_added_subscribe(self._on_event_added)
-        app.events.event_removed_subscribe(self._on_event_removed)
-
-    def _unsubscribe_events(self):
-        app.events.event_added_unsubscribe(self._on_event_added)
-        app.events.event_removed_unsubscribe(self._on_event_removed)
-
-    def _on_event_added(self, event):
-        if event.show_in_systray:
-            self.update_icon()
-
-    def _on_event_removed(self, _event_list):
-        self.update_icon()
 
     def _on_popup_menu(self, _status_icon, button, activate_time):
         if button == 1:
@@ -219,14 +213,6 @@ class StatusIcon(EventHelper):
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
     @staticmethod
-    def _on_show_all_events(_widget):
-        events = app.events.get_systray_events()
-        for account in events:
-            for jid in events[account]:
-                for event in events[account][jid]:
-                    app.interface.handle_event(account, jid, event.type_)
-
-    @staticmethod
     def _on_sounds_mute(widget):
         app.settings.set('sounds_on', not widget.get_active())
 
@@ -244,10 +230,6 @@ class StatusIcon(EventHelper):
         app.window.quit()
 
     def _on_activate(self, *args):
-        if app.events.get_systray_events():
-            self._handle_first_event()
-            return
-
         if app.window.get_property('has-toplevel-focus'):
             save_main_window_position()
             app.window.hide()
@@ -261,15 +243,6 @@ class StatusIcon(EventHelper):
         if not app.settings.get('main_window_skip_taskbar'):
             app.window.set_property('skip-taskbar-hint', False)
         app.window.present_with_time(Gtk.get_current_event_time())
-
-    @staticmethod
-    def _handle_first_event():
-        account, jid, event = app.events.get_first_systray_event()
-        if not event:
-            return
-        if not app.window.get_property('visible'):
-            restore_main_window_position()
-        app.interface.handle_event(account, jid, event.type_)
 
     @staticmethod
     def _on_show(_widget, show):

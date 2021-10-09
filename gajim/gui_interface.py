@@ -92,7 +92,6 @@ from gajim.gui.dialogs import PassphraseDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.main import MainWindow
-from gajim.gui.util import get_show_in_systray
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import get_color_for_account
@@ -240,18 +239,6 @@ class Interface:
         """
         Add an event to the app.events var
         """
-        # We add it to the app.events queue
-        # Do we have a queue?
-        # has_queue = len(app.events.get_events(account, jid)) > 0
-        # event can be in common.events.*
-        # event_type can be in advancedNotificationWindow.events_list
-        event_types = {
-            'file-request': 'ft_request',
-            'file-completed': 'ft_finished'
-        }
-        event_type = event_types.get(event.type_)
-        show_in_systray = get_show_in_systray(event_type, account, jid)
-        event.show_in_systray = show_in_systray
         app.events.add_event(account, jid, event)
 
         # TODO: set urgency hint; show unread count in window title?
@@ -935,8 +922,7 @@ class Interface:
             icon_name = None
 
         if (app.settings.get('notify_on_file_complete') and
-                (app.settings.get('autopopupaway') or
-                 app.connections[account].status in ('online', 'chat'))):
+                helpers.allow_showing_notification(account)):
             # We want to be notified and we are online/chat or we don't mind
             # to be bugged when away/na/busy
             app.notification.popup(

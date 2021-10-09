@@ -242,17 +242,6 @@ def toggle_ipython(_action, _param):
         app.interface.create_ipython_window()
 
 
-def show_next_pending_event(_action, _param):
-    """
-    Show the window(s) with next pending event in tabbed/group chats
-    """
-    if app.events.get_nb_events():
-        account, jid, event = app.events.get_first_systray_event()
-        if not event:
-            return
-        app.interface.handle_event(account, jid, event.type_)
-
-
 def open_mail(_action, param):
     uri = param.get_string()
     if not uri.startswith('mailto:'):

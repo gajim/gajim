@@ -8,6 +8,7 @@ from gi.repository import Gio
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.const import Display
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
@@ -94,6 +95,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._add_actions2()
 
         self._prepare_window()
+
+        if not app.is_display(Display.WAYLAND):
+            app.interface.systray.connect_unread_changed(
+                self._chat_page.get_chat_list_stack())
 
     def _prepare_window(self):
         if app.settings.get('main_window_skip_taskbar'):
@@ -444,6 +449,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def chat_exists(self, *args, **kwargs):
         return self._chat_page.chat_exists(*args, **kwargs)
 
+    def get_total_unread_count(self):
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        return chat_list_stack.get_total_unread_count()
+
     @staticmethod
     def contact_info(account, jid):
         client = app.get_client(account)
@@ -602,6 +611,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 # user pressed Cancel to change status message dialog
                 return
             # check if we have unread messages
+            # TODO:
             # unread = app.events.get_nb_events()
 
             # for event in app.events.get_all_events(['group-chat-message']):
