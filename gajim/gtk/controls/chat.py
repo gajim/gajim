@@ -77,7 +77,6 @@ class ChatControl(BaseControl):
     A control for standard 1-1 chat
     """
     _type = ControlType.CHAT
-    old_msg_kind = None  # last kind of the printed message
 
     # Set a command host to bound to. Every command given through a chat will be
     # processed with this command host.
