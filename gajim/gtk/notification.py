@@ -33,10 +33,13 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common import ged
 from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
+from gajim.common.helpers import allow_showing_notification
+from gajim.common.helpers import exec_command
+from gajim.common.helpers import play_sound
+from gajim.common.helpers import play_sound_file
 from gajim.common.nec import EventHelper
 
 from .util import add_css_to_widget
@@ -97,7 +100,7 @@ class Notification(EventHelper):
                                   on_proxy_ready)
 
     def _nec_notification(self, event):
-        if event.popup_enabled and app.settings.get('show_notifications'):
+        if event.popup_enabled and allow_showing_notification(event.account):
             icon_name = self._get_icon_name(event)
             self.popup(
                 event.popup_event_type,
@@ -111,15 +114,15 @@ class Notification(EventHelper):
         if event.command:
             # Used by Triggers plugin
             try:
-                helpers.exec_command(event.command, use_shell=True)
+                exec_command(event.command, use_shell=True)
             except Exception:
                 pass
 
         if event.sound_file:
             # Allow override here, used by Triggers plugin
-            helpers.play_sound_file(event.sound_file)
+            play_sound_file(event.sound_file)
         elif event.sound_event:
-            helpers.play_sound(event.sound_event, event.account)
+            play_sound(event.sound_event, event.account)
 
     def _on_notification(self, event):
         self.popup(event.type_,

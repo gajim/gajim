@@ -680,7 +680,7 @@ def message_needs_highlight(text, nickname, own_jid):
 def allow_showing_notification(account):
     if not app.settings.get('show_notifications'):
         return False
-    if app.settings.get('autopopupaway'):
+    if app.settings.get('show_notifications_away'):
         return True
     if app.account_is_available(account):
         return True

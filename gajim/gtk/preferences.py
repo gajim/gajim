@@ -416,6 +416,7 @@ class VisualNotifications(PreferenceBox):
                     props={'entries': trayicon_items},
                     callback=self._on_trayicon),
 
+            # TODO:
             Setting(SettingKind.SWITCH,
                     _('Open Events'),
                     SettingType.CONFIG,
@@ -454,7 +455,7 @@ class NotificationsDialog(SettingsDialog):
             Setting(SettingKind.SWITCH,
                     _('Notifications When Away'),
                     SettingType.CONFIG,
-                    'autopopupaway',
+                    'show_notifications_away',
                     desc=_('Show notifications even if you are Away, '
                            'Busy, etc.'),
                     bind='show_notifications'),

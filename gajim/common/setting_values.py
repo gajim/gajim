@@ -17,6 +17,7 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 APP_SETTINGS = {
     'autopopup': False,
     'show_notifications': True,
+    'show_notifications_away': False,
     'autopopupaway': False,
     'sounddnd': False,
     'showoffline': True,
