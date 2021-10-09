@@ -1,4 +1,4 @@
-Gajim 1.3.3 (TBA)
+Gajim 1.3.3 (10 October 2021)
 
   New
 
@@ -13,16 +13,17 @@ Gajim 1.3.3 (TBA)
 
   Bug fixes
 
-  * #10558 Fix spell checking
-  * #10441 Reload CSS after switching dark/light theme
+  * #10638 Depend on nbxmpp>=2.0.4 (CVE-2021-41055)
   * #10560 HTTPUpload: Raise FileError if path is not accessible
-  * #10545 Jingle: Fix UnboundLocalError for transports variable
+  * #10558 Fix spell checking
   * #10551 Check for gstreamer GTK plugin for AV support
-  * #10150 Dead key improvements
-  * #10478 Fix test_gui_interface testsuite
+  * #10545 Jingle: Fix UnboundLocalError for transports variable
   * #10540 Windows: Add GSSAPI dependency
-  * #10477 Migration routine for portable installer
   * #10539 Stop gdbus.exe when running uninstaller
+  * #10478 Fix test_gui_interface testsuite
+  * #10477 Migration routine for portable installer
+  * #10441 Reload CSS after switching dark/light theme
+  * #10150 Dead key improvements
   * Fix starting History Manager in standalone mode
 
 Gajim 1.3.2 (24 April 2021)
