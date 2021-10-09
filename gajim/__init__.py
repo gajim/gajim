@@ -2,7 +2,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-__version__ = "1.3.2"
+__version__ = "1.3.3"
 
 IS_FLATPAK = Path('/app/share/run-as-flatpak').exists()
 
