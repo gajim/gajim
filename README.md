@@ -7,7 +7,7 @@
 - python3-gi
 - python3-gi-cairo
 - gir1.2-gtk-3.0 (>=3.22)
-- python3-nbxmpp (>=2.0.3)
+- python3-nbxmpp (>=2.0.4)
 - python3-openssl (>=16.2)
 - python3-css-parser
 - python3-keyring
