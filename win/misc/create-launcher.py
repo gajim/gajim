@@ -72,7 +72,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     int result;
     LPWSTR *szArglist;
     int nArgs;
-    int i;
 
     szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
     if( NULL == szArglist )
