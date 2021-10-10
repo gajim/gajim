@@ -12,9 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any  # pylint: disable=unused-import
-from typing import Dict  # pylint: disable=unused-import
-from typing import List  # pylint: disable=unused-import
+from typing import Any
+from typing import Dict
+from typing import List
 
 import logging
 from functools import partial
@@ -38,9 +38,9 @@ class BaseModule(EventHelper):
         self._con = con
         self._account = con.name
         self._log = self._set_logger(plugin)
-        self._nbxmpp_callbacks = {}  # type: Dict[str, Any]
+        self._nbxmpp_callbacks: Dict[str, Any] = {}
         self._stored_publish = None  # type: Callable
-        self.handlers = []  # type: List[str]
+        self.handlers: List[StanzaHandler] = []
 
     def _set_logger(self, plugin):
         logger_name = 'gajim.c.m.%s'

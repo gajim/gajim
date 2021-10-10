@@ -15,8 +15,9 @@
 # XEP-0145: Annotations
 
 from typing import Any
-from typing import Dict  # pylint: disable=unused-import
+from typing import Dict
 from typing import Tuple
+from typing import Optional
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
@@ -37,7 +38,7 @@ class Annotations(BaseModule):
     def __init__(self, con: ConnectionT) -> None:
         BaseModule.__init__(self, con)
 
-        self._annotations = {}  # type: Dict[str, AnnotationNote]
+        self._annotations: Dict[str, AnnotationNote] = {}
 
     def request_annotations(self) -> None:
         self._nbxmpp('Annotations').request_annotations(
@@ -54,7 +55,7 @@ class Annotations(BaseModule):
         for note in annotations:
             self._annotations[note.jid] = note
 
-    def get_note(self, jid: str) -> AnnotationNote:
+    def get_note(self, jid: str) -> Optional[AnnotationNote]:
         return self._annotations.get(jid)
 
     def set_note(self, note: AnnotationNote) -> None:

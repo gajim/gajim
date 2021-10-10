@@ -38,6 +38,7 @@ from collections import namedtuple
 from collections import defaultdict
 
 import nbxmpp
+from nbxmpp.idlequeue import IdleQueue
 from gi.repository import Gdk
 
 import gajim
@@ -131,7 +132,7 @@ task_manager = None
 ZEROCONF_ACC_NAME = 'Local'
 
 # These will be set in app.gui_interface.
-idlequeue = None  # type: nbxmpp.idlequeue.IdleQueue
+idlequeue = cast(IdleQueue, None)
 socks5queue = None
 
 gupnp_igd = None
