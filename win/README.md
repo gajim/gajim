@@ -3,6 +3,7 @@
 We use [msys2](https://www.msys2.org/) for creating the Windows installer
 and development on Windows.
 
+Please note that Windows 7 support has been dropped.
 
 ## Development
 
