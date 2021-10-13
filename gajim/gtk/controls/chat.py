@@ -26,13 +26,11 @@
 from typing import ClassVar  # pylint: disable=unused-import
 from typing import Type  # pylint: disable=unused-import
 
-import os
 import time
 import logging
 
 from gi.repository import Gtk
 from gi.repository import Gio
-from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gdk
 
@@ -45,7 +43,6 @@ from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import geo_provider_from_location
-from gajim.common.helpers import open_file
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
@@ -134,22 +131,6 @@ class ChatControl(BaseControl):
         id_ = widget.connect('leave-notify-event',
                              self.on_location_eventbox_leave_notify_event)
         self.handlers[id_] = widget
-
-        self.info_bar = Gtk.InfoBar()
-        content_area = self.info_bar.get_content_area()
-        self.info_bar_label = Gtk.Label()
-        self.info_bar_label.set_use_markup(True)
-        self.info_bar_label.set_halign(Gtk.Align.START)
-        self.info_bar_label.set_valign(Gtk.Align.START)
-        self.info_bar_label.set_ellipsize(Pango.EllipsizeMode.END)
-        content_area.add(self.info_bar_label)
-        self.info_bar.set_no_show_all(True)
-
-        self.xml.textview_box.pack_start(self.info_bar, False, True, 5)
-        self.xml.textview_box.reorder_child(self.info_bar, 1)
-
-        # List of waiting infobar messages
-        self.info_bar_queue = []
 
         self.setup_seclabel()
         self.add_actions()
@@ -727,138 +708,3 @@ class ChatControl(BaseControl):
         status_line = _('%(name)s is now %(show)s %(status)s') % {
             'name': name, 'show': uf_show, 'status': status}
         self.add_info_message(status_line)
-
-    def _info_bar_show_message(self):
-        if self.info_bar.get_visible():
-            # A message is already shown
-            return
-        if not self.info_bar_queue:
-            return
-        markup, buttons, _args, type_ = self.info_bar_queue[0]
-        self.info_bar_label.set_markup(markup)
-
-        # Remove old buttons
-        area = self.info_bar.get_action_area()
-        for button in area.get_children():
-            area.remove(button)
-
-        # Add new buttons
-        for button in buttons:
-            self.info_bar.add_action_widget(button, 0)
-
-        self.info_bar.set_message_type(type_)
-        self.info_bar.set_no_show_all(False)
-        self.info_bar.show_all()
-
-    def _add_info_bar_message(self, markup, buttons, args,
-                              type_=Gtk.MessageType.INFO):
-        self.info_bar_queue.append((markup, buttons, args, type_))
-        self._info_bar_show_message()
-
-    def _get_file_props_event(self, file_props, type_):
-        evs = app.events.get_events(self.account, self.contact.jid, [type_])
-        for ev in evs:
-            if ev.file_props == file_props:
-                return ev
-        return None
-
-    def _on_accept_file_request(self, _widget, file_props):
-        app.interface.instances['file_transfers'].on_file_request_accepted(
-            self.account, self.contact, file_props)
-        ev = self._get_file_props_event(file_props, 'file-request')
-        if ev:
-            app.events.remove_events(self.account, self.contact.jid, event=ev)
-
-    def _on_cancel_file_request(self, _widget, file_props):
-        self._client.get_module('Bytestream').send_file_rejection(file_props)
-        ev = self._get_file_props_event(file_props, 'file-request')
-        if ev:
-            app.events.remove_events(self.account, self.contact.jid, event=ev)
-
-    def _got_file_request(self, file_props):
-        """
-        Show an InfoBar on top of control
-        """
-        if app.settings.get('use_kib_mib'):
-            units = GLib.FormatSizeFlags.IEC_UNITS
-        else:
-            units = GLib.FormatSizeFlags.DEFAULT
-
-        markup = '<b>%s</b>\n%s' % (_('File Transfer'), file_props.name)
-        if file_props.desc:
-            markup += '\n(%s)' % file_props.desc
-        markup += '\n%s: %s' % (
-            _('Size'),
-            GLib.format_size_full(file_props.size, units))
-        button_decline = Gtk.Button.new_with_mnemonic(_('_Decline'))
-        button_decline.connect(
-            'clicked', self._on_cancel_file_request, file_props)
-        button_accept = Gtk.Button.new_with_mnemonic(_('_Accept'))
-        button_accept.connect(
-            'clicked', self._on_accept_file_request, file_props)
-        self._add_info_bar_message(
-            markup,
-            [button_decline, button_accept],
-            file_props,
-            Gtk.MessageType.QUESTION)
-
-    def _on_open_ft_folder(self, _widget, file_props):
-        path = os.path.split(file_props.file_name)[0]
-        if os.path.exists(path) and os.path.isdir(path):
-            open_file(path)
-        ev = self._get_file_props_event(file_props, 'file-completed')
-        if ev:
-            app.events.remove_events(self.account, self.contact.jid, event=ev)
-
-    def _on_ok(self, _widget, file_props, type_):
-        ev = self._get_file_props_event(file_props, type_)
-        if ev:
-            app.events.remove_events(self.account, self.contact.jid, event=ev)
-
-    def _got_file_completed(self, file_props):
-        markup = '<b>%s</b>\n%s' % (_('File Transfer Completed'),
-                                    file_props.name)
-        if file_props.desc:
-            markup += '\n(%s)' % file_props.desc
-        b1 = Gtk.Button.new_with_mnemonic(_('Open _Folder'))
-        b1.connect('clicked', self._on_open_ft_folder, file_props)
-        b2 = Gtk.Button.new_with_mnemonic(_('_Close'))
-        b2.connect('clicked', self._on_ok, file_props, 'file-completed')
-        self._add_info_bar_message(
-            markup,
-            [b1, b2],
-            file_props)
-
-    def _got_file_error(self, file_props, type_, pri_txt, sec_txt):
-        markup = '<b>%s</b>\n%s' % (pri_txt, sec_txt)
-        button = Gtk.Button.new_with_mnemonic(_('_Close'))
-        button.connect('clicked', self._on_ok, file_props, type_)
-        self._add_info_bar_message(
-            markup,
-            [button],
-            file_props,
-            Gtk.MessageType.ERROR)
-
-    def on_event_added(self, event):
-        if event.account != self.account:
-            return
-        if event.jid != self.contact.jid:
-            return
-        if event.type_ == 'file-request':
-            self._got_file_request(event.file_props)
-        elif event.type_ == 'file-completed':
-            self._got_file_completed(event.file_props)
-        elif event.type_ in ('file-error', 'file-stopped'):
-            msg_err = ''
-            if event.file_props.error == -1:
-                msg_err = _('Remote contact stopped transfer')
-            elif event.file_props.error == -6:
-                msg_err = _('Error opening file')
-            self._got_file_error(event.file_props, event.type_,
-                                 _('File transfer stopped'), msg_err)
-        elif event.type_ in ('file-request-error', 'file-send-error'):
-            self._got_file_error(
-                event.file_props,
-                event.type_,
-                _('File transfer cancelled'),
-                _('Connection with peer cannot be established.'))
