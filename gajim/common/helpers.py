@@ -687,18 +687,6 @@ def allow_showing_notification(account):
     return False
 
 
-def allow_popup_window(account):
-    """
-    Is it allowed to popup windows?
-    """
-    autopopup = app.settings.get('autopopup')
-    autopopupaway = app.settings.get('autopopupaway')
-    client = app.get_client(account)
-    if autopopup and (autopopupaway or client.status == 'online'):
-        return True
-    return False
-
-
 def allow_sound_notification(account, sound_event):
     if not app.settings.get('sounds_on'):
         return False

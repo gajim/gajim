@@ -416,19 +416,10 @@ class VisualNotifications(PreferenceBox):
                     props={'entries': trayicon_items},
                     callback=self._on_trayicon),
 
-            # TODO:
-            Setting(SettingKind.SWITCH,
-                    _('Open Events'),
-                    SettingType.CONFIG,
-                    'autopopup',
-                    desc=_('Open events instead of showing a notification '
-                           'in the contact list')),
-
             Setting(SettingKind.NOTIFICATIONS,
                     _('Show Notifications'),
                     SettingType.DIALOG,
                     props={'dialog': NotificationsDialog}),
-
         ]
 
         PreferenceBox.__init__(self, settings)

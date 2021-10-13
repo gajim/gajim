@@ -15,10 +15,8 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 # pylint: disable=line-too-long
 
 APP_SETTINGS = {
-    'autopopup': False,
     'show_notifications': True,
     'show_notifications_away': False,
-    'autopopupaway': False,
     'sounddnd': False,
     'showoffline': True,
     'show_only_chat_and_online': False,
