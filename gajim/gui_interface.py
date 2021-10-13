@@ -52,7 +52,6 @@ from nbxmpp import Hashes2
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common import events
 from gajim.common.dbus import logind
 from gajim.common.dbus import music_track
 
@@ -74,7 +73,6 @@ from gajim.common.client import Client
 from gajim.common.preview import PreviewManager
 from gajim.common.const import Display
 
-from gajim.common.file_props import FilesProp
 from gajim.common.connection_handlers_events import InformationEvent
 
 from gajim.common import ged
@@ -127,6 +125,9 @@ class Interface:
             self.handle_event_file_rcv_completed,
             self.handle_event_file_progress,
             self.handle_event_file_error)
+
+        self._last_ft_progress_update = 0
+
         app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
 
         app.nec = NetworkEventsController()
@@ -185,8 +186,6 @@ class Interface:
             from gajim.gui.emoji_chooser import emoji_chooser
             emoji_chooser.load()
 
-        self._last_ftwindow_update = 0
-
         self._network_monitor = Gio.NetworkMonitor.get_default()
         self._network_monitor.connect('notify::network-available',
                                       self._network_status_changed)
@@ -211,10 +210,6 @@ class Interface:
             'read-state-sync': [self.handle_event_read_state_sync],
             'metacontacts-received': [self.handle_event_metacontacts],
             'roster-item-exchange-received': [self.handle_event_roster_item_exchange],
-            'file-send-error': [self.handle_event_file_send_error],
-            'file-request-error': [self.handle_event_file_request_error],
-            'file-request-received': [self.handle_event_file_request],
-            'jingle-ft-cancelled-received': [self.handle_event_jingleft_cancel],
         }
         # pylint: enable=line-too-long
 
@@ -235,25 +230,8 @@ class Interface:
                     prio,
                     event_handler)
 
-    def add_event(self, account, jid, event):
-        """
-        Add an event to the app.events var
-        """
-        app.events.add_event(account, jid, event)
-
-        # TODO: set urgency hint; show unread count in window title?
-
     def handle_event(self, account, jid, type_):
         jid = JID.from_string(jid)
-        file_event_types = [
-            'file-request',
-            'file-request-error',
-            'file-send-error',
-            'file-error',
-            'file-stopped',
-            'file-completed',
-            'file-hash-error'
-        ]
 
         if type_ in ('connection-lost', 'connection-failed'):
             app.window.show_account_page(account)
@@ -268,54 +246,12 @@ class Interface:
             app.events.remove_events(account, jid, types=type_)
         elif type_ == 'jingle-incoming':
             app.window.select_chat(account, jid.bare)
-        elif type_ in file_event_types:
-            self._handle_event_jingle_file(account, jid, type_)
         elif type_ in ('subscription-request',
                        'unsubscribed',
                        'gc-invitation'):
             app.window.show_account_page(account)
 
         app.window.present()
-
-    @staticmethod
-    def _handle_event_jingle_file(account, jid, type_):
-        event = app.events.get_first_event(account, jid, type_)
-        if not event:
-            return
-
-        file_transfers = app.interface.instances['file_transfers']
-        if event.type_ == 'file-request':
-            client = app.get_client(account)
-            contact = client.get_module('Contacts').get_contact(jid)
-            file_transfers.show_file_request(account, contact, event.file_props)
-            app.events.remove_events(account, jid, event)
-            return
-
-        if event.type_ in ('file-request-error', 'file-send-error'):
-            file_transfers.show_send_error(event.file_props)
-            app.events.remove_events(account, jid, event)
-            return
-
-        if event.type_ in ('file-error', 'file-stopped'):
-            msg_err = ''
-            if event.file_props.error == -1:
-                msg_err = _('Remote contact stopped transfer')
-            elif event.file_props.error == -6:
-                msg_err = _('Error opening file')
-            file_transfers.show_stopped(
-                jid, event.file_props, error_msg=msg_err)
-            app.events.remove_events(account, jid, event)
-            return
-
-        if event.type_ == 'file-hash-error':
-            file_transfers.show_hash_error(jid, event.file_props, account)
-            app.events.remove_events(account, jid, event)
-            return
-
-        if event.type_ == 'file-completed':
-            file_transfers.show_completed(jid, event.file_props)
-            app.events.remove_events(account, jid, event)
-            return
 
     @staticmethod
     def handle_event_information(event):
@@ -622,317 +558,103 @@ class Interface:
                     jid_from=event.fjid)
 
     # Jingle File Transfer
-    def handle_event_file_send_error(self, event):
-        file_transfers = self.instances['file_transfers']
-        file_transfers.set_status(event.file_props, 'stop')
-
-        if helpers.allow_popup_window(event.account):
-            file_transfers.show_send_error(event.file_props)
-            return
-
-        event = events.FileSendErrorEvent(event.file_props)
-        self.add_event(event.account, event.jid, event)
-
-        if helpers.allow_showing_notification(event.account):
-            event_type = _('File Transfer Error')
-            app.notification.popup(
-                event_type,
-                event.jid,
-                event.account,
-                'file-send-error',
-                'dialog-error',
-                event_type,
-                event.file_props.name)
-
-    def handle_event_file_request_error(self, event):
-        # ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
-        file_transfers = self.instances['file_transfers']
-        file_transfers.set_status(event.file_props, 'stop')
-        errno = event.file_props.error
-        account = event.conn.name
-
-        if helpers.allow_popup_window(account):
-            if errno in (-4, -5):
-                file_transfers.show_stopped(
-                    event.jid, event.file_props, event.error_msg)
-            else:
-                file_transfers.show_request_error(event.file_props)
-            return
-
-        if errno in (-4, -5):
-            event_class = events.FileErrorEvent
-            msg_type = 'file-error'
-        else:
-            event_class = events.FileRequestErrorEvent
-            msg_type = 'file-request-error'
-
-        file_event = event_class(event.file_props)
-        self.add_event(account, event.jid, file_event)
-
-        if helpers.allow_showing_notification(account):
-            # Check if we should be notified
-            event_type = _('File Transfer Error')
-            app.notification.popup(
-                event_type,
-                event.jid,
-                account,
-                msg_type,
-                'dialog-error',
-                title=event_type,
-                text=event.file_props.name)
-
-    def handle_event_file_request(self, event):
-        account = event.conn.name
-        client = app.get_client(account)
-        contact = client.get_module('Contacts').get_contact(event.jid)
-
-        if event.file_props.session_type == 'jingle':
-            request = \
-                event.stanza.getTag('jingle').getTag('content').getTag(
-                    'description').getTag('request')
-            if request:
-                # If we get a request instead
-                self.instances['file_transfers'].add_transfer(
-                    account, contact, event.file_props)
-                return
-        if helpers.allow_popup_window(account):
-            self.instances['file_transfers'].show_file_request(
-                account, contact, event.file_props)
-            return
-        file_event = events.FileRequestEvent(event.file_props)
-        self.add_event(account, event.jid, file_event)
-        if helpers.allow_showing_notification(account):
-            txt = _('%s wants to send you a file.') % contact.name
-            event_type = _('File Transfer Request')
-            app.notification.popup(
-                event_type,
-                event.jid,
-                account,
-                'file-request',
-                icon_name='document-send',
-                title=event_type,
-                text=txt)
-
     @staticmethod
     def handle_event_file_error(title, message):
+        # TODO: integrate this better
         ErrorDialog(title, message)
 
     def handle_event_file_progress(self, _account, file_props):
-        if time.time() - self._last_ftwindow_update > 0.5:
-            # Update ft window every 500ms
-            self._last_ftwindow_update = time.time()
-            self.instances['file_transfers'].set_progress(
-                file_props.type_, file_props.sid, file_props.received_len)
-
-    def handle_event_jingleft_cancel(self, event):
-        file_transfers = self.instances['file_transfers']
-        file_props = None
-        # get the file_props of our session
-        file_props = FilesProp.getFileProp(event.conn.name, event.sid)
-        if not file_props:
+        if time.time() - self._last_ft_progress_update < 0.5:
+            # Update progress every 500ms only
             return
-        file_transfers.set_status(file_props, 'stop')
-        file_props.error = -4  # is it the right error code?
-        file_transfers.show_stopped(
-            event.jid,
-            file_props,
-            'Peer cancelled the transfer')
+
+        self._last_ft_progress_update = time.time()
+        app.nec.push_incoming_event(
+            NetworkEvent('file-progress', file_props=file_props))
 
     def handle_event_file_rcv_completed(self, account, file_props):
-        file_transfers = self.instances['file_transfers']
-        if file_props.error == 0:
-            file_transfers.set_progress(
-                file_props.type_, file_props.sid, file_props.received_len)
-            jid = JID.from_string(file_props.receiver)
-            app.nec.push_incoming_event(
-                NetworkEvent('file-transfer-completed',
-                             file_props=file_props,
-                             jid=jid.bare))
+        jid = JID.from_string(file_props.receiver)
+        if file_props.error != 0:
+            self.instances['file_transfers'].set_status(file_props, 'stop')
 
-        else:
-            file_transfers.set_status(file_props, 'stop')
         if (not file_props.completed and (
                 file_props.stalled or file_props.paused)):
             return
 
         if file_props.type_ == 'r':  # We receive a file
             app.socks5queue.remove_receiver(file_props.sid, True, True)
-            if file_props.session_type == 'jingle':
-                if file_props.hash_ and file_props.error == 0:
-                    # We compare hashes in a new thread
-                    self.hashThread = Thread(target=self.__compare_hashes,
-                                             args=(account, file_props))
-                    self.hashThread.start()
+            if file_props.session_type != 'jingle':
+                return
+
+            if file_props.hash_ and file_props.error == 0:
+                # We compare hashes in a new thread
+                self.hashThread = Thread(
+                    target=self.__compare_hashes,
+                    args=(account, file_props))
+                self.hashThread.start()
+            else:
+                # We didn't get the hash, sender probably doesn't support that
+                if file_props.error == 0:
+                    app.nec.push_incoming_event(
+                        NetworkEvent('file-completed',
+                                     file_props=file_props,
+                                     jid=jid.bare))
                 else:
-                    # We didn't get the hash, sender probably doesn't
-                    # support that
-                    jid = file_props.sender
-                    self._popup_ft_result(account, jid, file_props)
-                    if file_props.error == 0:
-                        file_transfers.set_status(file_props, 'ok')
-                    client = app.get_client(account)
-                    session = client.get_module('Jingle').get_jingle_session(
-                        jid=None, sid=file_props.sid)
-                    # End jingle session
-                    # TODO: Only if there are no other parallel downloads in
-                    # this session
-                    if session:
-                        session.end_session()
+                    app.nec.push_incoming_event(
+                        NetworkEvent('file-error',
+                                     file_props=file_props,
+                                     jid=jid.bare))
+
+                # End jingle session
+                # TODO: Only if there are no other parallel downloads in
+                # this session
+                client = app.get_client(account)
+                session = client.get_module('Jingle').get_jingle_session(
+                    jid=None, sid=file_props.sid)
+                if session:
+                    session.end_session()
         else:  # We send a file
-            jid = file_props.receiver
             app.socks5queue.remove_sender(file_props.sid, True, True)
-            self._popup_ft_result(account, jid, file_props)
+            if file_props.error == 0:
+                app.nec.push_incoming_event(
+                    NetworkEvent('file-completed',
+                                 file_props=file_props,
+                                 jid=jid.bare))
+            else:
+                app.nec.push_incoming_event(
+                    NetworkEvent('file-error',
+                                 file_props=file_props,
+                                 jid=jid.bare))
 
     def __compare_hashes(self, account, file_props):
-        client = app.get_client(account)
-        session = client.get_module('Jingle').get_jingle_session(
-            jid=None, sid=file_props.sid)
-        file_transfers = self.instances['file_transfers']
         hashes = Hashes2()
         try:
             file_ = open(file_props.file_name, 'rb')
         except Exception:
             return
+        log.debug('Computing file hash')
         hash_ = hashes.calculateHash(file_props.algo, file_)
         file_.close()
-        # If the hash we received and the hash of the file are the same,
-        # then the file is not corrupt
-        jid = file_props.sender
+        # File is corrupt if the calculated hash differs from the received hash
         if file_props.hash_ == hash_:
-            GLib.idle_add(self._popup_ft_result, account, jid, file_props)
-            GLib.idle_add(file_transfers.set_status, file_props, 'ok')
+            app.nec.push_incoming_event(
+                NetworkEvent('file-completed',
+                             file_props=file_props))
         else:
             # Wrong hash, we need to get the file again!
             file_props.error = -10
-            GLib.idle_add(self._popup_ft_result, account, jid, file_props)
-            GLib.idle_add(file_transfers.set_status, file_props, 'hash_error')
+            jid = JID.from_string(file_props.sender)
+            app.nec.push_incoming_event(
+                NetworkEvent('file-hash-error',
+                             file_props=file_props,
+                             jid=jid.bare,
+                             account=account))
         # End jingle session
+        client = app.get_client(account)
+        session = client.get_module('Jingle').get_jingle_session(
+            jid=None, sid=file_props.sid)
         if session:
             session.end_session()
-
-    def _popup_ft_result(self, account, jid, file_props):
-        file_transfers = self.instances['file_transfers']
-        if helpers.allow_popup_window(account):
-            if file_props.error == 0:
-                if app.settings.get('notify_on_file_complete'):
-                    file_transfers.show_completed(jid, file_props)
-            elif file_props.error == -1:
-                file_transfers.show_stopped(
-                    jid,
-                    file_props,
-                    error_msg=_('Remote Contact Stopped Transfer'))
-            elif file_props.error == -6:
-                file_transfers.show_stopped(
-                    jid,
-                    file_props,
-                    error_msg=_('Error Opening File'))
-            elif file_props.error == -10:
-                file_transfers.show_hash_error(
-                    jid,
-                    file_props,
-                    account)
-            elif file_props.error == -12:
-                file_transfers.show_stopped(
-                    jid,
-                    file_props,
-                    error_msg=_('SSL Certificate Error'))
-            return
-
-        msg_type = ''
-        event_type = ''
-        if (file_props.error == 0 and
-                app.settings.get('notify_on_file_complete')):
-            event_class = events.FileCompletedEvent
-            msg_type = 'file-completed'
-            event_type = _('File Transfer Completed')
-        elif file_props.error in (-1, -6):
-            event_class = events.FileStoppedEvent
-            msg_type = 'file-stopped'
-            event_type = _('File Transfer Stopped')
-        elif file_props.error == -10:
-            event_class = events.FileHashErrorEvent
-            msg_type = 'file-hash-error'
-            event_type = _('File Transfer Failed')
-
-        if event_type == '':
-            # FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
-            # this should never happen but it does. see process_result() in
-            # socks5.py
-            # who calls this func (sth is really wrong unless this func is also
-            # registered as progress_cb
-            return
-
-        if msg_type:
-            event = event_class(file_props)
-            self.add_event(account, jid, event)
-
-        if file_props is not None:
-            client = app.get_client(account)
-
-            if file_props.type_ == 'r':
-                jid = JID.from_string(file_props.sender)
-                contact = client.get_module('contacts').get_contact(jid.bare)
-                filename = os.path.basename(file_props.file_name)
-
-                if event_type == _('File Transfer Completed'):
-                    txt = _('%(filename)s received from %(name)s.') % {
-                        'filename': filename,
-                        'name': contact.name}
-                    icon_name = 'emblem-default'
-                elif event_type == _('File Transfer Stopped'):
-                    txt = _('File transfer of %(filename)s from %(name)s '
-                            'stopped.') % {
-                                'filename': filename,
-                                'name': contact.name}
-                    icon_name = 'process-stop'
-                else:  # File transfer hash error
-                    txt = _('File transfer of %(filename)s from %(name)s '
-                            'failed.') % {
-                                'filename': filename,
-                                'name': contact.name}
-                    icon_name = 'process-stop'
-            else:
-                receiver = file_props.receiver
-                if hasattr(receiver, 'jid'):
-                    receiver = receiver.jid
-
-                jid = JID.from_string(receiver)
-                contact = client.get_module('contacts').get_contact(jid.bare)
-                filename = os.path.basename(file_props.file_name)
-                if event_type == _('File Transfer Completed'):
-                    txt = _('You successfully sent %(filename)s to '
-                            '%(name)s.') % {
-                                'filename': filename,
-                                'name': contact.name}
-                    icon_name = 'emblem-default'
-                elif event_type == _('File Transfer Stopped'):
-                    txt = _('File transfer of %(filename)s to %(name)s '
-                            'stopped.') % {
-                                'filename': filename,
-                                'name': contact.name}
-                    icon_name = 'process-stop'
-                else:  # File transfer hash error
-                    txt = _('File transfer of %(filename)s to %(name)s '
-                            'failed.') % {
-                                'filename': filename,
-                                'name': contact.name}
-                    icon_name = 'process-stop'
-        else:
-            txt = ''
-            icon_name = None
-
-        if (app.settings.get('notify_on_file_complete') and
-                helpers.allow_showing_notification(account)):
-            # We want to be notified and we are online/chat or we don't mind
-            # to be bugged when away/na/busy
-            app.notification.popup(
-                event_type,
-                jid,
-                account,
-                msg_type,
-                icon_name=icon_name,
-                title=event_type,
-                text=txt)
 
     def send_httpupload(self, chat_control, path=None):
         if path is not None:

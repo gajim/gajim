@@ -83,6 +83,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('jingle-connected-received', ged.GUI1, self._on_event),
             ('jingle-disconnected-received', ged.GUI1, self._on_event),
             ('jingle-error-received', ged.GUI1, self._on_event),
+            ('file-request-received', ged.GUI1, self._on_event),
+            ('file-request-sent', ged.GUI1, self._on_event),
             ('our-show', ged.GUI1, self._on_our_show),
             ('signed-in', ged.GUI1, self._on_signed_in),
             ('account-enabled', ged.GUI1, self._on_account_enabled),
@@ -553,7 +555,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     content_types.append(item.media)
                 if 'audio' in content_types or 'video' in content_types:
                     # AV Call received, open chat control
-                    self.add_chat(event.account, event.jid, 'contact')                
+                    self.add_chat(event.account, event.jid, 'contact')
+            elif event.name == 'file-request-received':
+                # Jingle file transfer, open chat control
+                self.add_chat(event.account, event.jid, 'contact')
             else:
                 # No chat is open, dont handle any gui events
                 return

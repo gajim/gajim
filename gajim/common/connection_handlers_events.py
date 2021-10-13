@@ -75,6 +75,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
         self.id_ = self.stanza.getID()
         self.fjid = self.conn.get_module('Bytestream')._ft_get_from(
             self.stanza)
+        self.account = self.conn.name
         self.jid = app.get_jid_without_resource(self.fjid)
         if not self.jingle_content:
             return

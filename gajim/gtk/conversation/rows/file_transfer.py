@@ -27,6 +27,7 @@ from .base import BaseRow
 from ...dialogs import ErrorDialog
 from ...util import EventHelper
 from ...util import get_builder
+from ...util import format_eta
 
 
 class FileTransferRow(BaseRow, EventHelper):
@@ -126,7 +127,7 @@ class FileTransferRow(BaseRow, EventHelper):
         if bytes_sec == 0:
             eta = '∞'
         else:
-            eta = self._format_eta(round(
+            eta = format_eta(round(
                 (transfer.size - transfer.seen) / bytes_sec))
 
         progress = float(transfer.seen) / transfer.size
@@ -136,14 +137,3 @@ class FileTransferRow(BaseRow, EventHelper):
                 'time': eta})
 
         self._ui.progress_bar.set_fraction(progress)
-
-    @staticmethod
-    def _format_eta(time_):
-        times = {'minutes': 0, 'seconds': 0}
-        time_ = int(time_)
-        times['seconds'] = time_ % 60
-        if time_ >= 60:
-            time_ /= 60
-            times['minutes'] = round(time_ % 60)
-            return _('%(minutes)s min %(seconds)s sec') % times
-        return _('%s sec') % times['seconds']

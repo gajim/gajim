@@ -618,6 +618,17 @@ def get_account_location_icon_name(account):
     return None if location is None else 'applications-internet'
 
 
+def format_eta(time_):
+    times = {'minutes': 0, 'seconds': 0}
+    time_ = int(time_)
+    times['seconds'] = time_ % 60
+    if time_ >= 60:
+        time_ /= 60
+        times['minutes'] = round(time_ % 60)
+        return _('%(minutes)s min %(seconds)s s') % times
+    return _('%s s') % times['seconds']
+
+
 def format_fingerprint(fingerprint):
     fplen = len(fingerprint)
     wordsize = fplen // 8

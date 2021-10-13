@@ -283,9 +283,14 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             'jingle-disconnected-received',
             'jingle-error-received'
         ]
-        if self.is_chat and event.name in jingle_av_events:
-            self._process_jingle_av_event(event)
-            return
+
+        if self.is_chat:
+            if event.name in jingle_av_events:
+                self._process_jingle_av_event(event)
+                return
+            if event.name in ('file-request-received', 'file-request-sent'):
+                self.add_jingle_file_transfer(event)
+                return
 
         method_name = event.name.replace('-', '_')
         method_name = f'_on_{method_name}'
@@ -1079,6 +1084,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def add_file_transfer(self, transfer):
         self.conversation_view.add_file_transfer(transfer)
+
+    def add_jingle_file_transfer(self, event):
+        self.conversation_view.add_jingle_file_transfer(event)
 
     def add_call_message(self, timestamp, text, event=None):
         self.conversation_view.add_call_message(timestamp, text, event)

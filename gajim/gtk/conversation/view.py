@@ -32,6 +32,7 @@ from .rows.info import InfoMessage
 from .rows.call import CallRow
 from .rows.date import DateRow
 from .rows.file_transfer import FileTransferRow
+from .rows.file_transfer_jingle import FileTransferJingleRow
 from .rows.muc_subject import MUCSubject
 from .rows.muc_join_left import MUCJoinLeft
 from .rows.muc_user_status import MUCUserStatus
@@ -178,6 +179,11 @@ class ConversationView(Gtk.ListBox):
     def add_file_transfer(self, transfer):
         transfer_row = FileTransferRow(self._account, transfer)
         self._insert_message(transfer_row)
+
+    def add_jingle_file_transfer(self, event):
+        jingle_transfer_row = FileTransferJingleRow(
+            self._account, self._contact, event)
+        self._insert_message(jingle_transfer_row)
 
     def add_call_message(self, timestamp, text, event):
         call_row = CallRow(self._account,
