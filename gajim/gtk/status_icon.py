@@ -122,7 +122,7 @@ class StatusIcon(EventHelper):
             count = app.window.get_total_unread_count()
             self.update_icon(count=count)
 
-    def update_icon(self, count=0):
+    def update_icon(self, *args, count=0):
         if not app.interface.systray_enabled:
             return
         if app.settings.get('trayicon') == 'always':
