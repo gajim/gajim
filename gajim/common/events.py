@@ -27,11 +27,8 @@ class Event:
     def __init__(self, time_=None):
         """
         type_ in chat-message, group-chat-message, private-chat-message,
-        file-request, file-request-error, file-error, file-completed,
-        file-send-error, file-stopped,
 
         parameters is (per type_):
-            file-*: file_props
             *-chat-message: [message, subject, control, msg_log_id]
         """
         if time_:
@@ -72,47 +69,6 @@ class GroupChatMsgEvent(ChatMsgEvent):
 class PrivateChatMsgEvent(ChatMsgEvent):
 
     type_ = 'private-chat-message'
-
-
-class FileRequestEvent(Event):
-
-    type_ = 'file-request'
-
-    def __init__(self,
-                 file_props,
-                 time_=None):
-        Event.__init__(self, time_)
-        self.file_props = file_props
-
-
-class FileSendErrorEvent(FileRequestEvent):
-
-    type_ = 'file-send-error'
-
-
-class FileErrorEvent(FileRequestEvent):
-
-    type_ = 'file-error'
-
-
-class FileRequestErrorEvent(FileRequestEvent):
-
-    type_ = 'file-request-error'
-
-
-class FileCompletedEvent(FileRequestEvent):
-
-    type_ = 'file-completed'
-
-
-class FileStoppedEvent(FileRequestEvent):
-
-    type_ = 'file-stopped'
-
-
-class FileHashErrorEvent(FileRequestEvent):
-
-    type_ = 'file-hash-error'
 
 
 class Events:
