@@ -73,6 +73,18 @@ class ChatList(Gtk.ListBox, EventHelper):
     def get_unread_count(self):
         return sum([chats.unread_count for chats in self._chats.values()])
 
+    def get_chat_unread_count(self, account, jid):
+        chat = self._chats.get((account, jid))
+        if chat is not None:
+            return chat.unread_count
+        return None
+
+    def mark_as_read(self, account, jid):
+        chat = self._chats.get((account, jid))
+        if chat is not None:
+            chat.reset_unread()
+            self.emit_unread_changed()
+
     def emit_unread_changed(self):
         count = self.get_unread_count()
         self.get_parent().emit('unread-count-changed',
@@ -556,7 +568,8 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.unread_label.set_visible(bool(self._unread_count))
 
     def add_unread(self):
-        if self.is_active:
+        control = app.window.get_control(self.account, self.jid)
+        if self.is_active and control.get_autoscroll():
             return
         self.unread_count += 1
         if self.unread_count == 1:

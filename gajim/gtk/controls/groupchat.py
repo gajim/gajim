@@ -1236,9 +1236,6 @@ class GroupchatControl(BaseControl):
         self.roster.destroy()
         self.roster = None
 
-        # Remove unread events from systray
-        app.events.remove_events(self.account, self.room_jid)
-
         self.remove_actions()
 
         super(GroupchatControl, self).shutdown()

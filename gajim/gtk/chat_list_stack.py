@@ -153,8 +153,6 @@ class ChatListStack(Gtk.Stack):
             self.emit('chat-unselected')
             return
 
-        if row.is_active:
-            row.reset_unread()
         self.emit('chat-selected', row.workspace_id, row.account, row.jid)
 
     def show_chat_list(self, workspace_id):
@@ -238,6 +236,17 @@ class ChatListStack(Gtk.Stack):
         for chat_list in self._chat_lists.values():
             count += chat_list.get_unread_count()
         return count
+
+    def get_chat_unread_count(self, account, jid):
+        for chat_list in self._chat_lists.values():
+            count = chat_list.get_chat_unread_count(account, jid)
+            if count is not None:
+                return count
+        return None
+
+    def mark_as_read(self, account, jid):
+        for chat_list in self._chat_lists.values():
+            chat_list.mark_as_read(account, jid)
 
     def process_event(self, event):
         if event.name not in HANDLED_EVENTS:

@@ -187,8 +187,7 @@ class Notification(EventHelper):
             notification.set_body(text)
         notif_id = None
         if event_type in (
-                _('New Message'), _('New Private Message'),
-                _('New Group Chat Message'),
+                _('New Message'),
                 _('Contact Changed Status'), _('File Transfer Request'),
                 _('File Transfer Error'), _('File Transfer Completed'),
                 _('File Transfer Stopped'), _('Group Chat Invitation'),
@@ -206,11 +205,8 @@ class Notification(EventHelper):
                     _('Open'), action, variant_dict)
                 notification.set_default_action_and_target(
                     action, variant_dict)
-                if event_type in (
-                        _('New Message'),
-                        _('New Private Message'),
-                        _('New Group Chat Message')):
-                    action = 'app.{}-remove-event'.format(account)
+                if event_type == _('New Message'):
+                    action = 'app.{}-mark-as-read'.format(account)
                     notification.add_button_with_target(
                         _('Mark as Read'), action, variant_dict)
 
@@ -219,9 +215,7 @@ class Notification(EventHelper):
                 notif_id = self._make_id('contact-status-changed', account, jid)
             elif event_type == _('Connection Failed'):
                 notif_id = self._make_id('connection-failed', account)
-            elif event_type in (_('New Message'),
-                                _('New Private Message'),
-                                _('New Group Chat Message')):
+            elif event_type == _('New Message'):
                 if app.desktop_env == 'gnome':
                     icon = self._get_avatar_for_notification(account, jid)
                 notif_id = self._make_id('new-message', account, jid)

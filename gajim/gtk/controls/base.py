@@ -534,6 +534,16 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         for action in actions:
             app.window.remove_action(f'{action}{self.control_id}')
 
+    def mark_as_read(self):
+        self._jump_to_end_button.reset_unread_count()
+
+        # XEP-0333 Send <displayed> marker
+        self._client.get_module('ChatMarkers').send_displayed_marker(
+            self.contact,
+            self.last_msg_id,
+            self._type)
+        self.last_msg_id = None
+
     def change_encryption(self, action, param):
         encryption = param.get_string()
         if encryption == 'disabled':
@@ -918,25 +928,14 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         return False
 
     def _on_autoscroll_changed(self, _widget, autoscroll):
-        self._jump_to_end_button.toggle(not autoscroll)
         if not autoscroll:
+            self._jump_to_end_button.toggle(True)
             return
 
-        # Check for unread messages and sendXEP-0333 Send <displayed> marker
-        type_ = ['chat-message', 'private-chat-message']
-        jid = self.contact.jid
-        if self.is_groupchat:
-            type_ = ['group-chat-message']
-            jid = self.contact.jid.bare
-        if not app.events.remove_events(self.account,
-                                        jid,
-                                        types=type_):
-            # There were events to remove
-            self._client.get_module('ChatMarkers').send_displayed_marker(
-                self.contact,
-                self.last_msg_id,
-                self._type)
-            self.last_msg_id = None
+        if app.window.get_chat_unread_count(self.account, self.contact.jid) > 0:
+            app.window.mark_as_read(self.account, self.contact.jid)
+
+        self._jump_to_end_button.toggle(False)
 
     def _on_jump_to_end(self, _button):
         self.scroll_to_end(force=True)
@@ -1146,10 +1145,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             chat_active = app.window.is_chat_active(
                 self.account, self.contact.jid)
             if chat_active and self._scrolled_view.get_autoscroll():
-                self._client.get_module('ChatMarkers').send_displayed_marker(
-                    self.contact,
-                    self.last_msg_id,
-                    self._type)
+                app.window.mark_as_read(self.account, self.contact.jid)
 
     def _notify(self, name, text, tim):
         if app.window.is_chat_active(self.account, self.contact.jid):
@@ -1298,22 +1294,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             jid = self.contact.jid
             if self.conversation_view.autoscroll:
                 # we are at the end
-                type_ = ['chat-message']
-                if self.is_groupchat:
-                    type_ = ['group-chat-message']
-                if self.is_privatechat:
-                    type_ = ['private-chat-message']
-                if not app.events.remove_events(self.account,
-                                                self.contact.jid,
-                                                types=type_):
-                    # There were events to remove
+                if app.window.get_chat_unread_count(
+                        self.account, self.contact.jid) > 0:
                     self.redraw_after_event_removed(jid)
-                    # XEP-0333 Send <displayed> marker
-                    self._client.get_module('ChatMarkers').send_displayed_marker(
-                        self.contact,
-                        self.last_msg_id,
-                        self._type)
-                    self.last_msg_id = None
+                    app.window.mark_as_read(self.account, self.contact.jid)
+
             # send chatstate inactive to the one we're leaving
             # and active to the one we visit
             if self.msg_textview.has_text():
@@ -1325,6 +1310,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             self._client.get_module('Chatstate').set_chatstate(
                 self.contact, Chatstate.INACTIVE)
+
+    def get_autoscroll(self):
+        return self._scrolled_view.get_autoscroll()
 
     def scroll_to_end(self, force=False):
         # Clear view and reload conversation

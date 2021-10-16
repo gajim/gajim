@@ -221,12 +221,10 @@ def on_open_event(_action, param):
         dict_['account'], dict_['jid'], dict_['type_'])
 
 
-def on_remove_event(_action, param):
+def on_mark_as_read(_action, param):
     dict_ = param.unpack()
-    account, jid, type_ = dict_['account'], dict_['jid'], dict_['type_']
-    event = app.events.get_first_event(account, jid, type_)
-    app.events.remove_events(account, jid, event)
-    # TODO reset unread counter, set window urgency hint, etc.
+    account, jid, _ = dict_['account'], dict_['jid'], dict_['type_']
+    app.window.mark_as_read(account, jid)
 
 # Other Actions
 
