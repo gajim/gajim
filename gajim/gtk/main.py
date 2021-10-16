@@ -460,13 +460,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         count = chat_list_stack.get_chat_unread_count(account, jid)
         return count or 0
 
-    def mark_as_read(self, account, jid):
+    def mark_as_read(self, account, jid, send_marker=True):
         # TODO set window urgency hint, etc.
         control = self.get_control(account, jid)
         if control is not None:
             # Send displayed marker and
             # reset jump to bottom button unread counter
-            control.mark_as_read()
+            control.mark_as_read(send_marker=send_marker)
         # Reset chat list unread counter (emits unread-count-changed)
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list_stack.mark_as_read(account, jid)

@@ -534,15 +534,16 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         for action in actions:
             app.window.remove_action(f'{action}{self.control_id}')
 
-    def mark_as_read(self):
+    def mark_as_read(self, send_marker=True):
         self._jump_to_end_button.reset_unread_count()
 
-        # XEP-0333 Send <displayed> marker
-        self._client.get_module('ChatMarkers').send_displayed_marker(
-            self.contact,
-            self.last_msg_id,
-            self._type)
-        self.last_msg_id = None
+        if send_marker:
+            # XEP-0333 Send <displayed> marker
+            self._client.get_module('ChatMarkers').send_displayed_marker(
+                self.contact,
+                self.last_msg_id,
+                self._type)
+            self.last_msg_id = None
 
     def change_encryption(self, action, param):
         encryption = param.get_string()

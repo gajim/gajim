@@ -517,31 +517,18 @@ class Interface:
     def handle_event_read_state_sync(event):
         if event.type.is_groupchat:
             jid = event.jid.bare
-            types = ['group-chat-message']
-
         else:
             jid = event.jid
-            types = ['chat-message', 'private-chat-message']
 
         control = app.window.get_control(event.account, jid)
         if control is None:
             log.warning('No ChatControl found')
             return
 
-        events_ = app.events.get_events(event.account, jid, types)
-        if not events_:
-            log.warning('No Events')
+        if event.marker_id != control.last_msg_id:
             return
 
-        if event.type.is_groupchat:
-            id_ = events_[-1].stanza_id or events_[-1].message_id
-        else:
-            id_ = events_[-1].message_id
-
-        if id_ != event.marker_id:
-            return
-
-        app.events.remove_events(event.account, jid, types=types)
+        app.window.mark_as_read(event.account, jid, send_marker=False)
 
     @staticmethod
     def handle_event_metacontacts(obj):
