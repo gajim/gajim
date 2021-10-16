@@ -64,9 +64,9 @@ class Notification(EventHelper):
         self._detect_dbus_caps()
 
         self.register_events([
-            ('notification', ged.GUI2, self._nec_notification),
+            ('notification', ged.GUI2, self._on_notification),
             ('simple-notification', ged.GUI2, self._on_notification),
-            ('our-show', ged.GUI2, self._nec_our_status),
+            ('our-show', ged.GUI2, self._on_our_show),
         ])
 
     def _detect_dbus_caps(self):
@@ -97,55 +97,59 @@ class Notification(EventHelper):
                                   None,
                                   on_proxy_ready)
 
-    def _nec_notification(self, event):
-        if event.popup_enabled and allow_showing_notification(event.account):
-            icon_name = self._get_icon_name(event)
-            self.popup(
-                event.popup_event_type,
-                str(event.jid),
-                event.account,
-                event.popup_msg_type,
-                icon_name=icon_name,
-                title=event.popup_title,
-                text=event.popup_text)
-
-        if event.command:
+    def _on_notification(self, event):
+        if hasattr(event, 'command'):
             # Used by Triggers plugin
             try:
                 exec_command(event.command, use_shell=True)
             except Exception:
                 pass
 
-        if event.sound_file:
+        if hasattr(event, 'sound_file'):
             # Allow override here, used by Triggers plugin
             play_sound_file(event.sound_file)
-        elif event.sound_event:
-            play_sound(event.sound_event, event.account)
+        elif event.sound:
+            play_sound(event.sound, event.account)
 
-    def _on_notification(self, event):
+        if not allow_showing_notification(event.account):
+            return
+
+        self.popup(event.type_,
+                   str(event.jid),
+                   event.account,
+                   type_=event.msg_type,
+                   icon_name=self._get_icon_name(event),
+                   title=event.title,
+                   text=event.text)
+
+    def _on_simple_notification(self, event):
+        if not allow_showing_notification(event.account):
+            return
+
         self.popup(event.type_,
                    None,
                    event.account,
                    title=event.title,
                    text=event.text)
 
-    def _nec_our_status(self, event):
+    def _on_our_show(self, event):
         if app.account_is_connected(event.account):
             self._withdraw('connection-failed', event.account)
 
     @staticmethod
     def _get_icon_name(event):
-        if event.notif_type == 'msg':
+        if event.type_ == 'incoming-message':
             return 'gajim-chat_msg_recv'
 
-        if event.notif_type == 'pres':
+        if event.type_ == 'pres':
+            # TODO:
             if event.transport_name is not None:
                 return '%s-%s' % (event.transport_name, event.show)
             return get_icon_name(event.show)
         return None
 
-    def popup(self, event_type, jid, account, type_='', icon_name=None,
-              title=None, text=None, timeout=-1, room_jid=None):
+    def popup(self, event_type, jid, account,
+              type_='', icon_name=None, title=None, text=None, timeout=-1):
         """
         Notify a user of an event using GNotification and GApplication under
         Linux, Use PopupNotificationWindow under Windows
@@ -160,8 +164,14 @@ class Notification(EventHelper):
         if sys.platform == 'win32':
             self._withdraw()
             self._win32_active_popup = PopupNotification(
-                event_type, jid, account, type_,
-                icon_name, title, text, timeout)
+                event_type,
+                jid,
+                account,
+                type_,
+                icon_name,
+                title,
+                text,
+                timeout)
             self._win32_active_popup.connect('destroy', self._on_popup_destroy)
             return
 
@@ -177,7 +187,7 @@ class Notification(EventHelper):
             notification.set_body(text)
         notif_id = None
         if event_type in (
-                _('New Message'),
+                'incoming-message',
                 _('Contact Changed Status'), _('File Transfer Request'),
                 _('File Transfer Error'), _('File Transfer Completed'),
                 _('File Transfer Stopped'), _('Group Chat Invitation'),
@@ -195,7 +205,7 @@ class Notification(EventHelper):
                     _('Open'), action, variant_dict)
                 notification.set_default_action_and_target(
                     action, variant_dict)
-                if event_type == _('New Message'):
+                if event_type == 'incoming-message':
                     action = 'app.{}-mark-as-read'.format(account)
                     notification.add_button_with_target(
                         _('Mark as Read'), action, variant_dict)
@@ -205,7 +215,7 @@ class Notification(EventHelper):
                 notif_id = self._make_id('contact-status-changed', account, jid)
             elif event_type == _('Connection Failed'):
                 notif_id = self._make_id('connection-failed', account)
-            elif event_type == _('New Message'):
+            elif event_type == 'incoming-message':
                 if app.desktop_env == 'gnome':
                     icon = self._get_avatar_for_notification(account, jid)
                 notif_id = self._make_id('new-message', account, jid)
@@ -257,9 +267,7 @@ class PopupNotification(Gtk.Window):
 
         client = app.get_client(account)
 
-        if event_type in (_('New Message'),
-                          _('New Private Message'),
-                          _('New E-mail')):
+        if event_type == 'incoming-message':
             bg_color = app.css_config.get_value('.gajim-notify-message',
                                                 StyleAttr.COLOR)
         elif event_type == _('File Transfer Request'):

@@ -197,8 +197,7 @@ class NotificationManager(Gtk.ListBox):
                     'gc-invitation',
                     'gajim-gc_invitation',
                     event_type,
-                    text,
-                    room_jid=event.muc)
+                    text)
 
     def add_invitation_declined(self, event):
         row = self._get_notification_row(event.muc)

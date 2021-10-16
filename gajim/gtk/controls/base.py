@@ -42,11 +42,10 @@ from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
+from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import allow_showing_notification
 from gajim.common.const import KindConstant
 from gajim.common.structs import OutgoingMessage
-from gajim.common.connection_handlers_events import NotificationEvent
 
 from gajim.gui.conversation.view import ConversationView
 from gajim.gui.conversation.scrolled import ScrolledView
@@ -1145,57 +1144,49 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if self._scrolled_view.get_autoscroll():
                 return
 
-        popup_event_type = _('New Message')
-        popup_title = _('New message from %s') % name
-        needs_highlight = False
+        title = _('New message from %s') % name
 
         if self.is_chat:
-            popup_msg_type = 'chat-message'
-            sound_event = 'first_message_received'
+            msg_type = 'chat-message'
+            sound = 'first_message_received'
 
         if self.is_groupchat:
-            popup_msg_type = 'group-chat-message'
-            popup_title += f' ({self.contact.name})'
+            msg_type = 'group-chat-message'
+            title += f' ({self.contact.name})'
             needs_highlight = helpers.message_needs_highlight(
                 text, self.contact.nickname, self._client.get_own_jid().bare)
             if needs_highlight:
-                sound_event = 'muc_message_highlight'
+                sound = 'muc_message_highlight'
             else:
-                sound_event = 'muc_message_received'
+                sound = 'muc_message_received'
             if not self.contact.can_notify():
-                sound_event = None
+                sound = None
 
         if self.is_privatechat:
-            popup_msg_type = 'private-chat-message'
-            popup_title += f' (private in {self.room_name})'
-            sound_event = 'first_message_received'
+            msg_type = 'private-chat-message'
+            title += f' (private in {self.room_name})'
+            sound = 'first_message_received'
 
         # Is it a history message? Don't want sound-floods when we join.
         if tim is not None and time.mktime(time.localtime()) - tim > 1:
-            sound_event = None
+            sound = None
 
-        popup_text = ''
         if app.settings.get('notification_preview_message'):
             if text.startswith('/me') or text.startswith('/me\n'):
-                popup_text = f'* {name} {text[3:]}'
-            else:
-                popup_text = text
+                text = f'* {name} {text[3:]}'
 
-        popup_enabled = allow_showing_notification(self.account)
         if self.is_groupchat and not self.contact.can_notify():
-            popup_enabled = False
+            return
 
-        event = NotificationEvent(
-            None,
-            account=self.account,
-            jid=self.contact.jid,
-            popup_event_type=popup_event_type,
-            popup_msg_type=popup_msg_type,
-            popup_title=popup_title,
-            popup_text=popup_text,
-            popup_enabled=popup_enabled,
-            sound_event=sound_event)
-        app.nec.push_incoming_event(event)
+        app.nec.push_incoming_event(
+            NetworkEvent('notification',
+                         account=self.account,
+                         jid=self.contact.jid,
+                         type_='incoming-message',
+                         msg_type=msg_type,
+                         title=title,
+                         text=text,
+                         sound=sound))
 
     def toggle_emoticons(self):
         """
