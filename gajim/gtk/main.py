@@ -282,23 +282,25 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_window_delete(self, _widget, _event):
         # Main window X button was clicked
-        if (not app.settings.get('quit_on_main_window_x_button') and
-                ((app.interface.systray_enabled and
-                 app.settings.get('trayicon') != 'on_event') or
-                 app.settings.get('allow_hide_roster'))):
-            save_main_window_position()
-            if (os.name == 'nt' or
-                    app.settings.get('hide_on_main_window_x_button')):
-                self.hide()
-            else:
-                self.iconify()
-        elif app.settings.get('quit_on_main_window_x_button'):
+        if app.settings.get('quit_on_main_window_x_button'):
             self.quit()
         else:
+            if (app.settings.get('allow_hide_roster') or
+                    (app.interface.systray_enabled and
+                     app.settings.get('trayicon') != 'on_event')):
+                save_main_window_position()
+                if (os.name == 'nt' or
+                        app.settings.get('hide_on_main_window_x_button')):
+                    self.hide()
+                else:
+                    self.iconify()
+                return True
+
             def _on_ok(is_checked):
                 if is_checked:
                     app.settings.set('quit_on_main_window_x_button', True)
                 self.quit()
+
             ConfirmationCheckDialog(
                 _('Quit Gajim'),
                 _('You are about to quit Gajim'),
