@@ -363,7 +363,10 @@ class AccountWizard(Assistant):
             # by the server. This ignores all stream errors if we already
             # know that we succeeded.
             if self.get_current_page() != 'success':
-                self._show_error_page(_('Error'), _('Error'), error)
+                self._show_error_page(_('Error'), _('Error'), text or error)
+
+        else:
+            self._show_error_page(_('Error'), _('Error'), text or error)
 
         self.get_page('form').remove_form()
         self._client.destroy()
