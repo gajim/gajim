@@ -51,7 +51,6 @@ from gajim.common import configpaths
 from gajim.common import ged as ged_module
 from gajim.common.i18n import LANG
 from gajim.common.const import Display
-from gajim.common.events import Events
 from gajim.common.types import NetworkEventsControllerT  # pylint: disable=unused-import
 from gajim.common.types import InterfaceT  # pylint: disable=unused-import
 from gajim.common.types import ConnectionT  # pylint: disable=unused-import
@@ -110,8 +109,6 @@ newly_added = {}  # type: Dict[str, List[str]]
 
 # list of contacts that has just signed out
 to_be_removed = {}  # type: Dict[str, List[str]]
-
-events = Events()
 
 notification = None
 
