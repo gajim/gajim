@@ -69,8 +69,6 @@ class Notification(EventHelper):
             ('our-show', ged.GUI2, self._nec_our_status),
         ])
 
-        app.events.event_removed_subscribe(self._on_event_removed)
-
     def _detect_dbus_caps(self):
         if sys.platform in ('win32', 'darwin'):
             return
@@ -130,14 +128,6 @@ class Notification(EventHelper):
                    event.account,
                    title=event.title,
                    text=event.text)
-
-    def _on_event_removed(self, event_list):
-        for event in event_list:
-            if event.type_ in ('chat-message',
-                               'group-chat-message',
-                               'private-chat-message',
-                               'jingle-incoming'):
-                self._withdraw('new-message', event.account, event.jid)
 
     def _nec_our_status(self, event):
         if app.account_is_connected(event.account):

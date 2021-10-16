@@ -40,9 +40,6 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
-from gajim.common.events import ChatMsgEvent
-from gajim.common.events import GroupChatMsgEvent
-from gajim.common.events import PrivateChatMsgEvent
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.helpers import AdditionalDataDict
@@ -1139,9 +1136,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             # Issue notification
             self._notify(name, text, tim)
 
-            # Add message event
-            self._add_message_event(text, msg_log_id, message_id, stanza_id)
-
             # Send chat marker if we’re actively following the chat
             chat_active = app.window.is_chat_active(
                 self.account, self.contact.jid)
@@ -1204,29 +1198,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             popup_enabled=popup_enabled,
             sound_event=sound_event)
         app.nec.push_incoming_event(event)
-
-    def _add_message_event(self, text, msg_log_id, message_id, stanza_id):
-        if app.window.is_chat_active(self.account, self.contact.jid):
-            if self._scrolled_view.get_autoscroll():
-                return
-
-        if self.is_groupchat:
-            event_type = GroupChatMsgEvent
-            event = 'gc_message_received'
-        else:
-            if self.is_chat:
-                event_type = ChatMsgEvent
-            else:
-                event_type = PrivateChatMsgEvent
-            event = 'message_received'
-
-        event = event_type(text,
-                           '',
-                           self,
-                           msg_log_id,
-                           message_id=message_id,
-                           stanza_id=stanza_id)
-        app.events.add_event(self.account, str(self.contact.jid), event)
 
     def toggle_emoticons(self):
         """

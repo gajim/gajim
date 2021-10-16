@@ -784,20 +784,7 @@ class GajimRemote(Server):
         return contact_dict
 
     def get_unread_msgs_number(self):
-        # TODO:
-        return 0
-
-        unread = app.events.get_nb_events()
-        for event in app.events.get_all_events(['group-chat-message']):
-            client = app.get_client(event.account)
-            contact = client.get_module('Contacts').get_contact(
-                event.jid, groupchat=True)
-
-            if not contact.can_notify():
-                unread -= 1
-                continue
-
-        return str(unread)
+        return str(app.window.get_total_unread_count())
 
     def start_chat(self, jid=''):
         app.app.activate_action('start-chat', GLib.Variant('s', jid))

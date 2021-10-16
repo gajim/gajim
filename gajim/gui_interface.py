@@ -235,15 +235,12 @@ class Interface:
 
         if type_ in ('connection-lost', 'connection-failed'):
             app.window.show_account_page(account)
-            app.events.remove_events(account, jid, types=type_)
         elif type_ in ('group-chat-message', 'private-chat-message'):
             app.window.select_chat(account, jid.bare)
-            app.events.remove_events(account, jid, types=type_)
         elif type_ in ('chat-message', ''):
             # '' is for log in/out notifications
             app.window.select_chat(account, jid.bare)
             app.last_message_time[account][jid] = 0  # long time ago
-            app.events.remove_events(account, jid, types=type_)
         elif type_ == 'jingle-incoming':
             app.window.select_chat(account, jid.bare)
         elif type_ in ('subscription-request',
@@ -855,8 +852,6 @@ class Interface:
         app.nec.push_incoming_event(NetworkEvent(
             'account-disabled',
             account=account))
-
-        app.events.remove_account_events(account)
 
         if account == app.ZEROCONF_ACC_NAME:
             app.connections[account].disable_account()

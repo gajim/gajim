@@ -147,10 +147,6 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
     @staticmethod
     def on_remove_account(account):
-        if app.events.get_events(account):
-            app.interface.raise_dialog('unread-events-on-remove-account')
-            return
-
         if app.settings.get_account_setting(account, 'is_zeroconf'):
             # Should never happen as button is insensitive
             return

@@ -631,28 +631,21 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             if message is None:
                 # user pressed Cancel to change status message dialog
                 return
-            # check if we have unread messages
-            # TODO:
-            # unread = app.events.get_nb_events()
 
-            # for event in app.events.get_all_events(['group-chat-message']):
-            #     contact = app.contacts.get_groupchat_contact(event.jid)
-            #     if contact is None or not contact.can_notify():
-            #         unread -= 1
-
-            # if unread:
-            #     ConfirmationDialog(
-            #         _('Unread Messages'),
-            #         _('You still have unread messages'),
-            #         _('Messages will only be available for reading them later '
-            #           'if storing chat history is enabled and if the contact '
-            #           'is in your contact list.'),
-            #         [DialogButton.make('Cancel'),
-            #          DialogButton.make('Remove',
-            #                            text=_('_Quit'),
-            #                            callback=on_continue2,
-            #                            args=[message])]).show()
-            #     return
+            # Check for unread messages
+            if self.get_total_unread_count():
+                ConfirmationDialog(
+                    _('Unread Messages'),
+                    _('You still have unread messages'),
+                    _('Messages will only be available for reading them later '
+                      'if storing chat history is enabled and if the contact '
+                      'is in your contact list.'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       text=_('_Quit'),
+                                       callback=on_continue2,
+                                       args=[message])]).show()
+                return
             on_continue2(message)
 
         if get_msg and ask_for_status_message('offline'):
