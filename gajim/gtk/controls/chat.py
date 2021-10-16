@@ -87,7 +87,6 @@ class ChatControl(BaseControl):
 
         self.last_recv_message_id = None
         self.last_recv_message_marks = None
-        self.last_message_timestamp = None
 
         self.toggle_emoticons()
 
@@ -638,10 +637,13 @@ class ChatControl(BaseControl):
         app.check_finalize(self)
 
     def allow_shutdown(self, _method, on_yes, on_no):
-        # TODO: app.last_message_time is not set anywhere
-        time_ = app.last_message_time[self.account][self.contact.jid]
-        # 2 seconds
-        if time.time() - time_ < 2:
+        row = self.conversation_view.get_last_message_row()
+        if row is None:
+            on_yes(self)
+            return
+
+        if time.time() - row.timestamp < 2:
+            # Under 2 seconds since last message
             no_log_for = app.settings.get_account_setting(
                 self.account, 'no_log_for').split()
             more = ''

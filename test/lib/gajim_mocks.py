@@ -36,7 +36,6 @@ class MockConnection(Mock, ConnectionHandlers):
         app.to_be_removed[account] = []
         app.nicks[account] = app.settings.get_account_setting(account, 'name')
         app.block_signed_in_notifications[account] = True
-        app.last_message_time[account] = {}
 
         app.connections[account] = self
 

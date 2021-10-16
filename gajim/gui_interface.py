@@ -165,7 +165,6 @@ class Interface:
             app.to_be_removed[a] = []
             app.nicks[a] = app.settings.get_account_setting(a, 'name')
             app.block_signed_in_notifications[a] = True
-            app.last_message_time[a] = {}
 
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
@@ -240,7 +239,6 @@ class Interface:
         elif type_ in ('chat-message', ''):
             # '' is for log in/out notifications
             app.window.select_chat(account, jid.bare)
-            app.last_message_time[account][jid] = 0  # long time ago
         elif type_ == 'jingle-incoming':
             app.window.select_chat(account, jid.bare)
         elif type_ in ('subscription-request',
@@ -821,7 +819,6 @@ class Interface:
             app.nicks[account] = app.settings.get_account_setting(account,
                                                                   'name')
         app.block_signed_in_notifications[account] = True
-        app.last_message_time[account] = {}
 
         app.settings.set_account_setting(account, 'active', True)
         gui_menu_builder.build_accounts_menu()
@@ -866,7 +863,6 @@ class Interface:
         del app.automatic_rooms[account]
         del app.to_be_removed[account]
         del app.newly_added[account]
-        del app.last_message_time[account]
 
     def remove_account(self, account):
         if app.settings.get_account_setting(account, 'active'):

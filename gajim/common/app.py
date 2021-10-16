@@ -86,10 +86,6 @@ css_config = cast(CSSConfigT, None)
 
 transport_type = {}  # type: Dict[str, str]
 
-# dict of time of the latest incoming message per jid
-# {acct1: {jid1: time1, jid2: time2}, }
-last_message_time = {}  # type: Dict[str, Dict[str, float]]
-
 contacts = cast(LegacyContactsAPIT, None)
 
 # tell if we are connected to the room or not

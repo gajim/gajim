@@ -121,8 +121,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.control_id = str(uuid.uuid4())
         self.session = None
 
-        app.last_message_time[self.account][self.contact.jid] = 0
-
         self.xml = get_builder('%s.ui' % widget_name)
         self.xml.connect_signals(self)
         self.widget = self.xml.get_object('%s_hbox' % widget_name)
