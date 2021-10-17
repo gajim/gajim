@@ -1182,8 +1182,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             NetworkEvent('notification',
                          account=self.account,
                          jid=self.contact.jid,
-                         type_='incoming-message',
-                         msg_type=msg_type,
+                         notif_type='incoming-message',
+                         notif_detail=msg_type,
                          title=title,
                          text=text,
                          sound=sound))

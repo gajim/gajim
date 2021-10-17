@@ -23,8 +23,8 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import JingleState
-from gajim.common.helpers import allow_showing_notification
 from gajim.common.i18n import _
+from gajim.common.nec import NetworkEvent
 
 from .gstreamer import create_gtk_widget
 from .util import get_builder
@@ -206,19 +206,16 @@ class CallWidget(Gtk.Box):
             # There is no voice call running running yet
             self.emit('incoming-call', event)
 
-            if allow_showing_notification(self._account):
-                heading = _('Incoming Call')
-                contact = self._client.get_module('Contacts').get_contact(
-                    event.jid)
-                text = _('%s is calling') % contact.name
-                app.notification.popup(
-                    heading,
-                    event.jid,
-                    self._account,
-                    'jingle-incoming',
-                    icon_name='call-start-symbolic',
-                    title=heading,
-                    text=text)
+            contact = self._client.get_module('Contacts').get_contact(
+                event.jid)
+
+            app.nec.push_incoming_event(
+                NetworkEvent('notification',
+                             account=self.account,
+                             jid=self.contact.jid,
+                             notif_type='jingle-incoming',
+                             title=_('Incoming Call'),
+                             text=_('%s is calling') % contact.name))
 
     def _on_jingle_connected(self, event):
         session = self._client.get_module('Jingle').get_jingle_session(

@@ -70,19 +70,13 @@
 .gajim-notify-signout {
     color: rgb(134, 22, 22);
 }
-.gajim-notify-status {
-    color: rgb(170, 170, 170);
-}
 .gajim-notify-invite {
     color: rgb(224, 145, 42);
 }
-.gajim-notify-ft-request {
-    color: rgb(240, 230, 140);
-}
-.gajim-notify-ft-error {
+.gajim-notify-error {
     color: rgb(226, 33, 33);
 }
-.gajim-notify-ft-complete {
+.gajim-notify-success {
     color: rgb(139, 185, 48);
 }
 .gajim-notify-other {

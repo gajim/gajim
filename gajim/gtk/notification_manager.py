@@ -20,7 +20,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
-from gajim.common.helpers import allow_showing_notification
+from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_muc_context
 
@@ -137,20 +137,17 @@ class NotificationManager(Gtk.ListBox):
             self.add(SubscriptionRequestRow(
                 self._account, event.jid, event.status, event.user_nick))
 
-            if allow_showing_notification(self._account):
-                event_type = _('Subscription Request')
-                contact = self._client.get_module('Contacts').get_contact(
-                    event.jid)
-                text = _('%s asks you to share your status') % contact.name
-                app.notification.popup(
-                    event_type,
-                    event.jid,
-                    self._account,
-                    'subscription-request',
-                    'gajim-subscription_request',
-                    event_type,
-                    text)
+            contact = self._client.get_module('Contacts').get_contact(
+                event.jid)
+            text = _('%s asks you to share your status') % contact.name
 
+            app.nec.push_incoming_event(
+                NetworkEvent('notification',
+                             account=self.account,
+                             jid=self.contact.jid,
+                             notif_type='subscription-request',
+                             title=_('Subscription Request'),
+                             text=text))
         elif row.type == 'unsubscribed':
             self.remove(row)
 
@@ -159,19 +156,17 @@ class NotificationManager(Gtk.ListBox):
         if row is None:
             self.add(UnsubscribedRow(self._account, event.jid))
 
-            if allow_showing_notification(self._account):
-                event_type = _('Contact Unsubscribed')
-                contact = self._client.get_module('Contacts').get_contact(
-                    event.jid)
-                text = _('%s stopped sharing their status') % contact.name
-                app.notification.popup(
-                    event_type,
-                    event.jid,
-                    self._account,
-                    'unsubscribed',
-                    'gajim-unsubscribed',
-                    event_type,
-                    text)
+            contact = self._client.get_module('Contacts').get_contact(
+                event.jid)
+            text = _('%s stopped sharing their status') % contact.name
+
+            app.nec.push_incoming_event(
+                NetworkEvent('notification',
+                             account=self.account,
+                             jid=self.contact.jid,
+                             notif_type='unsubscribed',
+                             title=_('Contact Unsubscribed'),
+                             text=text))
         elif row.type == 'subscribe':
             self.remove(row)
 
@@ -180,24 +175,22 @@ class NotificationManager(Gtk.ListBox):
         if row is None:
             self.add(InvitationReceivedRow(self._account, event))
 
-            if allow_showing_notification(self._account):
-                if get_muc_context(event.muc) == 'public':
-                    jid = event.from_
-                else:
-                    jid = event.from_.bare
-                contact = self._client.get_module('Contacts').get_contact(jid)
-                event_type = _('Group Chat Invitation')
-                text = _('%(contact)s invited you to %(chat)s') % {
-                    'contact': contact.name,
-                    'chat': event.info.muc_name}
-                app.notification.popup(
-                    event_type,
-                    str(jid),
-                    self._account,
-                    'gc-invitation',
-                    'gajim-gc_invitation',
-                    event_type,
-                    text)
+            if get_muc_context(event.muc) == 'public':
+                jid = event.from_
+            else:
+                jid = event.from_.bare
+            contact = self._client.get_module('Contacts').get_contact(jid)
+            text = _('%(contact)s invited you to %(chat)s') % {
+                'contact': contact.name,
+                'chat': event.info.muc_name}
+
+            app.nec.push_incoming_event(
+                NetworkEvent('notification',
+                             account=self.account,
+                             jid=self.contact.jid,
+                             notif_type='group-chat-invitation',
+                             title=_('Group Chat Invitation'),
+                             text=text))
 
     def add_invitation_declined(self, event):
         row = self._get_notification_row(event.muc)

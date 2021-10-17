@@ -44,11 +44,20 @@ from gajim.common.nec import EventHelper
 
 from .util import add_css_to_widget
 from .util import get_builder
-from .util import get_icon_name
 from .util import get_monitor_scale_factor
 from .util import get_total_screen_geometry
 
 log = logging.getLogger('gajim.gui.notification')
+
+NOTIFICATION_ICONS = {
+    'incoming-message': 'gajim-chat_msg_recv',
+    'group-chat-invitation': 'gajim-gc_invitation',
+    'jingle-incoming': 'call-start-symbolic',
+    'subscription_request': 'gajim-subscription_request',
+    'unsubscribed': 'gajim-unsubscribed',
+    'file-request-received': 'document-send',
+    'file-send-error': 'dialog-error',
+}
 
 
 class Notification(EventHelper):
@@ -67,6 +76,7 @@ class Notification(EventHelper):
             ('notification', ged.GUI2, self._on_notification),
             ('simple-notification', ged.GUI2, self._on_notification),
             ('our-show', ged.GUI2, self._on_our_show),
+            ('connection-lost', ged.GUI2, self._on_connection_lost)
         ])
 
     def _detect_dbus_caps(self):
@@ -108,48 +118,68 @@ class Notification(EventHelper):
         if hasattr(event, 'sound_file'):
             # Allow override here, used by Triggers plugin
             play_sound_file(event.sound_file)
-        elif event.sound:
+        elif hasattr(event, 'sound'):
             play_sound(event.sound, event.account)
 
         if not allow_showing_notification(event.account):
             return
 
-        self.popup(event.type_,
-                   str(event.jid),
-                   event.account,
-                   type_=event.msg_type,
-                   icon_name=self._get_icon_name(event),
-                   title=event.title,
-                   text=event.text)
+        if hasattr(event, 'notif_detail'):
+            notif_detail = event.notif_detail
+        else:
+            notif_detail = event.notif_type
+
+        if hasattr(event, 'icon_name'):
+            icon_name = event.icon_name
+        else:
+            icon_name = NOTIFICATION_ICONS.get(
+                event.notif_detail, 'mail-message-new')
+
+        self._issue_notification(
+            event.notif_type,
+            event.account,
+            str(event.jid),
+            notif_detail=notif_detail,
+            title=event.title,
+            text=event.text,
+            icon_name=icon_name)
 
     def _on_simple_notification(self, event):
         if not allow_showing_notification(event.account):
             return
 
-        self.popup(event.type_,
-                   None,
-                   event.account,
-                   title=event.title,
-                   text=event.text)
+        self._issue_notification(
+            event.notif_type,
+            event.account,
+            None,
+            title=event.title,
+            text=event.text)
 
     def _on_our_show(self, event):
         if app.account_is_connected(event.account):
             self._withdraw('connection-failed', event.account)
 
-    @staticmethod
-    def _get_icon_name(event):
-        if event.type_ == 'incoming-message':
-            return 'gajim-chat_msg_recv'
+    def _on_connection_lost(self, event):
+        if not allow_showing_notification(event.conn.name):
+            return
 
-        if event.type_ == 'pres':
-            # TODO:
-            if event.transport_name is not None:
-                return '%s-%s' % (event.transport_name, event.show)
-            return get_icon_name(event.show)
-        return None
+        self._issue_notification(
+            'connection-lost',
+            event.conn.name,
+            None,
+            title=event.title,
+            text=event.msg,
+            icon_name='gajim-connection_lost')
 
-    def popup(self, event_type, jid, account,
-              type_='', icon_name=None, title=None, text=None, timeout=-1):
+    def _issue_notification(self,
+                            notif_type,
+                            account,
+                            jid,
+                            notif_detail='',
+                            title='',
+                            text='',
+                            icon_name=None,
+                            timeout=-1):
         """
         Notify a user of an event using GNotification and GApplication under
         Linux, Use PopupNotificationWindow under Windows
@@ -164,13 +194,13 @@ class Notification(EventHelper):
         if sys.platform == 'win32':
             self._withdraw()
             self._win32_active_popup = PopupNotification(
-                event_type,
-                jid,
+                notif_type,
                 account,
-                type_,
-                icon_name,
+                jid,
+                notif_detail,
                 title,
                 text,
+                icon_name,
                 timeout)
             self._win32_active_popup.connect('destroy', self._on_popup_destroy)
             return
@@ -186,36 +216,38 @@ class Notification(EventHelper):
         if text is not None:
             notification.set_body(text)
         notif_id = None
-        if event_type in (
+        if notif_type in (
                 'incoming-message',
-                _('Contact Changed Status'), _('File Transfer Request'),
-                _('File Transfer Error'), _('File Transfer Completed'),
-                _('File Transfer Stopped'), _('Group Chat Invitation'),
-                _('Connection Failed'), _('Subscription Request'),
-                _('Contact Unsubscribed'), _('Incoming Call')):
+                'file-transfer',
+                'group-chat-invitation',
+                'subscription-request',
+                'unsubscribed',
+                'incoming-call',
+                'connection-failed'):
             if 'actions' in self._daemon_capabilities:
                 # Create Variant Dict
                 dict_ = {'account': GLib.Variant('s', account),
                          'jid': GLib.Variant('s', jid),
-                         'type_': GLib.Variant('s', type_)}
+                         'notif_detail': GLib.Variant('s', notif_detail)}
                 variant_dict = GLib.Variant('a{sv}', dict_)
-                action = 'app.{}-open-event'.format(account)
-                # Notification button
+
+                # Add 'Open' action button to notification
+                action = f'app.{account}-open-event'
                 notification.add_button_with_target(
                     _('Open'), action, variant_dict)
                 notification.set_default_action_and_target(
                     action, variant_dict)
-                if event_type == 'incoming-message':
-                    action = 'app.{}-mark-as-read'.format(account)
+
+                if notif_type == 'incoming-message':
+                    # Add 'Mark as Read' action button to notification
+                    action = f'app.{account}-mark-as-read'
                     notification.add_button_with_target(
                         _('Mark as Read'), action, variant_dict)
 
             # Only one notification per JID
-            if event_type == _('Contact Changed Status'):
-                notif_id = self._make_id('contact-status-changed', account, jid)
-            elif event_type == _('Connection Failed'):
+            if notif_type == 'connection-failed':
                 notif_id = self._make_id('connection-failed', account)
-            elif event_type == 'incoming-message':
+            elif notif_type == 'incoming-message':
                 if app.desktop_env == 'gnome':
                     icon = self._get_avatar_for_notification(account, jid)
                 notif_id = self._make_id('new-message', account, jid)
@@ -248,8 +280,15 @@ class Notification(EventHelper):
 
 
 class PopupNotification(Gtk.Window):
-    def __init__(self, event_type, jid, account, msg_type='',
-                 icon_name=None, title=None, text=None, timeout=-1):
+    def __init__(self,
+                 notif_type,
+                 account,
+                 jid,
+                 notif_detail,
+                 title,
+                 text,
+                 icon_name,
+                 timeout):
         Gtk.Window.__init__(self)
         self.set_type_hint(Gdk.WindowTypeHint.NOTIFICATION)
         self.set_focus_on_map(False)
@@ -258,35 +297,28 @@ class PopupNotification(Gtk.Window):
         self.set_decorated(False)
 
         self._timeout_id = None
-        self.account = account
-        self.jid = jid
-        self.msg_type = msg_type
+        self._account = account
+        self._jid = jid
+        self._notif_type = notif_type
 
         self._ui = get_builder('popup_notification_window.ui')
         self.add(self._ui.eventbox)
 
-        client = app.get_client(account)
-
-        if event_type == 'incoming-message':
+        if notif_detail == 'incoming-message':
             bg_color = app.css_config.get_value('.gajim-notify-message',
                                                 StyleAttr.COLOR)
-        elif event_type == _('File Transfer Request'):
-            bg_color = app.css_config.get_value('.gajim-notify-ft-request',
+        elif notif_detail in ('file-error',
+                              'file-send-error',
+                              'file-request-error'):
+            bg_color = app.css_config.get_value('.gajim-notify-error',
                                                 StyleAttr.COLOR)
-        elif event_type == _('File Transfer Error'):
-            bg_color = app.css_config.get_value('.gajim-notify-ft-error',
+        elif notif_detail in ('file-completed', 'file-stopped'):
+            bg_color = app.css_config.get_value('.gajim-notify-success',
                                                 StyleAttr.COLOR)
-        elif event_type in (_('File Transfer Completed'),
-                            _('File Transfer Stopped')):
-            bg_color = app.css_config.get_value('.gajim-notify-ft-complete',
-                                                StyleAttr.COLOR)
-        elif event_type == _('Group Chat Invitation'):
+        elif notif_detail == 'group-chat-invitation':
             bg_color = app.css_config.get_value('.gajim-notify-invite',
                                                 StyleAttr.COLOR)
-        elif event_type == _('Contact Changed Status'):
-            bg_color = app.css_config.get_value('.gajim-notify-status',
-                                                StyleAttr.COLOR)
-        else:  # Unknown event (shouldn't happen, but deal with it)
+        else:
             bg_color = app.css_config.get_value('.gajim-notify-other',
                                                 StyleAttr.COLOR)
 
@@ -302,8 +334,9 @@ class PopupNotification(Gtk.Window):
         self._ui.event_type_label.set_markup(title)
 
         if text is None:
+            client = app.get_client(account)
             contact = client.get_module('Contacts').get_contact(jid)
-            text = contact.name  # default value of text
+            text = contact.name
         escaped_text = GLib.markup_escape_text(text)
         self._ui.event_description_label.set_markup(escaped_text)
 
@@ -334,7 +367,8 @@ class PopupNotification(Gtk.Window):
 
     def _on_button_press(self, _widget, event):
         if event.button == 1:
-            app.interface.handle_event(self.account, self.jid, self.msg_type)
+            app.interface.handle_event(
+                self._account, self._jid, self._notif_type)
         self.destroy()
 
     def _on_destroy(self, *args):

@@ -218,12 +218,12 @@ def on_file_transfers(_action, _param):
 def on_open_event(_action, param):
     dict_ = param.unpack()
     app.interface.handle_event(
-        dict_['account'], dict_['jid'], dict_['type_'])
+        dict_['account'], dict_['jid'], dict_['notif_detail'])
 
 
 def on_mark_as_read(_action, param):
     dict_ = param.unpack()
-    account, jid, _ = dict_['account'], dict_['jid'], dict_['type_']
+    account, jid = dict_['account'], dict_['jid']
     app.window.mark_as_read(account, jid)
 
 # Other Actions

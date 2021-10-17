@@ -266,7 +266,7 @@ class Client(Observable):
             app.nec.push_incoming_event(
                 NetworkEvent('simple-notification',
                              account=self._account,
-                             type_='connection-failed',
+                             notif_type='connection-failed',
                              title=_('Authentication failed'),
                              text=text or error))
 

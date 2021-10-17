@@ -74,8 +74,8 @@ class FileTransfersWindow:
 
         self._ui = get_builder('filetransfers.ui')
         self.window = self._ui.file_transfers_window
-        show_notification = app.settings.get('notify_on_file_complete')
-        self._ui.notify_ft_complete.set_active(show_notification)
+        self._ui.notify_ft_complete.set_active(
+            app.settings.get('notify_on_file_complete'))
         self.model = Gtk.ListStore(str, str, str, str, str, int, int, str)
         self._ui.transfers_list.set_model(self.model)
         col = Gtk.TreeViewColumn()
@@ -178,6 +178,18 @@ class FileTransfersWindow:
             event.file_props.sid,
             event.file_props.received_len)
 
+        if not app.settings.get('notify_on_file_complete'):
+            return
+
+        app.nec.push_incoming_event(
+            NetworkEvent('notification',
+                         account=event.account,
+                         jid=event.jid,
+                         notif_type='file-transfer',
+                         notif_detail='file-completed',
+                         title=_('File Transfer Completed'),
+                         text=_('File: %s') % event.file_props.name))
+
     def _file_error(self, event):
         self.set_status(event.file_props, 'stop')
 
@@ -189,17 +201,17 @@ class FileTransfersWindow:
     def _file_send_error(self, event):
         self.set_status(event.file_props, 'stop')
 
-        if helpers.allow_showing_notification(event.account):
-            if app.window.is_chat_active(event.account, event.jid):
-                return
-            app.notification.popup(
-                _('File Transfer Error'),
-                event.jid,
-                event.account,
-                'file-send-error',
-                'dialog-error',
-                _('File Transfer Error'),
-                event.file_props.name)
+        if app.window.is_chat_active(event.account, event.jid):
+            return
+
+        app.nec.push_incoming_event(
+            NetworkEvent('notification',
+                         account=event.account,
+                         jid=event.jid,
+                         notif_type='file-transfer',
+                         notif_detail='file-send-error',
+                         title=_('File Transfer Failed'),
+                         text=_('File: %s') % event.file_props.name))
 
     def _file_request_error(self, event):
         self.set_status(event.file_props, 'stop')
@@ -212,21 +224,22 @@ class FileTransfersWindow:
             return
 
         if errno in (-4, -5):
-            msg_type = 'file-error'
+            notif_detail = 'file-error'
         else:
-            msg_type = 'file-request-error'
+            notif_detail = 'file-request-error'
 
-        if helpers.allow_showing_notification(account):
-            if app.window.is_chat_active(account, event.jid):
-                return
-            app.notification.popup(
-                _('File Transfer Error'),
-                event.jid,
-                account,
-                msg_type,
-                'dialog-error',
-                title=_('File Transfer Error'),
-                text=event.file_props.name)
+        if app.window.is_chat_active(account, event.jid):
+            return
+
+        text = _('File: %s') % event.file_props.name
+        app.nec.push_incoming_event(
+            NetworkEvent('notification',
+                         account=account,
+                         jid=event.jid,
+                         notif_type='file-transfer',
+                         notif_detail=notif_detail,
+                         title=_('File Transfer Failed'),
+                         text=text))
 
     def _file_request_received(self, event):
         account = event.conn.name
@@ -243,17 +256,18 @@ class FileTransfersWindow:
                 self.add_transfer(account, contact, event.file_props)
                 return
 
-        if helpers.allow_showing_notification(account):
-            if app.window.is_chat_active(event.account, event.jid):
-                return
-            app.notification.popup(
-                _('File Transfer Request'),
-                event.jid,
-                account,
-                'file-request-received',
-                icon_name='document-send',
-                title=_('File Transfer Request'),
-                text=_('%s wants to send you a file') % contact.name)
+        if app.window.is_chat_active(event.account, event.jid):
+            return
+
+        text = _('%s wants to send you a file') % contact.name
+        app.nec.push_incoming_event(
+            NetworkEvent('notification',
+                         account=account,
+                         jid=event.jid,
+                         notif_type='file-transfer',
+                         notif_detail='file-request-received',
+                         title=_('File Offered'),
+                         text=text))
 
     def _file_transfer_cancelled(self, event):
         file_props = None

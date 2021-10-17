@@ -195,7 +195,6 @@ class Interface:
         self.handlers = {
             'information': [self.handle_event_information],
             'iq-error-received': [self.handle_event_iq_error],
-            'connection-lost': [self.handle_event_connection_lost],
             'plain-connection': [self.handle_event_plain_connection],
             'http-auth-received': [self.handle_event_http_auth],
             'password-required': [self.handle_event_password_required],
@@ -229,21 +228,22 @@ class Interface:
                     prio,
                     event_handler)
 
-    def handle_event(self, account, jid, type_):
+    def handle_event(self, account, jid, notif_detail):
         jid = JID.from_string(jid)
 
-        if type_ in ('connection-lost', 'connection-failed'):
+        if notif_detail in ('connection-lost', 'connection-failed'):
             app.window.show_account_page(account)
-        elif type_ in ('group-chat-message', 'private-chat-message'):
+        elif notif_detail == 'private-chat-message':
+            app.window.select_chat(account, jid)
+        elif notif_detail in ('chat-message', 'group-chat-message'):
             app.window.select_chat(account, jid.bare)
-        elif type_ in ('chat-message', ''):
-            # '' is for log in/out notifications
+        elif notif_detail == 'jingle-incoming':
             app.window.select_chat(account, jid.bare)
-        elif type_ == 'jingle-incoming':
+        elif notif_detail == 'file-request-received':
             app.window.select_chat(account, jid.bare)
-        elif type_ in ('subscription-request',
-                       'unsubscribed',
-                       'gc-invitation'):
+        elif notif_detail in ('subscription-request',
+                              'unsubscribed',
+                              'group-chat-invitation'):
             app.window.show_account_page(account)
 
         app.window.present()
@@ -277,19 +277,6 @@ class Interface:
         ctrl = app.window.get_control(event.account, event.properties.jid.bare)
         if ctrl and ctrl.is_groupchat:
             ctrl.add_info_message(f'Error: {event.properties.error}')
-
-    @staticmethod
-    def handle_event_connection_lost(event):
-        # ('CONNECTION_LOST', account, [title, text])
-        account = event.conn.name
-        app.notification.popup(
-            _('Connection Failed'),
-            account,
-            account,
-            'connection-lost',
-            'gajim-connection_lost',
-            event.title,
-            event.msg)
 
     @staticmethod
     def handle_event_plain_connection(event):
@@ -580,11 +567,13 @@ class Interface:
                     app.nec.push_incoming_event(
                         NetworkEvent('file-completed',
                                      file_props=file_props,
+                                     account=account,
                                      jid=jid.bare))
                 else:
                     app.nec.push_incoming_event(
                         NetworkEvent('file-error',
                                      file_props=file_props,
+                                     account=account,
                                      jid=jid.bare))
 
                 # End jingle session
@@ -601,11 +590,13 @@ class Interface:
                 app.nec.push_incoming_event(
                     NetworkEvent('file-completed',
                                  file_props=file_props,
+                                 account=account,
                                  jid=jid.bare))
             else:
                 app.nec.push_incoming_event(
                     NetworkEvent('file-error',
                                  file_props=file_props,
+                                 account=account,
                                  jid=jid.bare))
 
     def __compare_hashes(self, account, file_props):
@@ -618,19 +609,21 @@ class Interface:
         hash_ = hashes.calculateHash(file_props.algo, file_)
         file_.close()
         # File is corrupt if the calculated hash differs from the received hash
+        jid = JID.from_string(file_props.sender)
         if file_props.hash_ == hash_:
             app.nec.push_incoming_event(
                 NetworkEvent('file-completed',
-                             file_props=file_props))
+                             file_props=file_props,
+                             account=account,
+                             jid=jid.bare))
         else:
             # Wrong hash, we need to get the file again!
             file_props.error = -10
-            jid = JID.from_string(file_props.sender)
             app.nec.push_incoming_event(
                 NetworkEvent('file-hash-error',
                              file_props=file_props,
-                             jid=jid.bare,
-                             account=account))
+                             account=account,
+                             jid=jid.bare))
         # End jingle session
         client = app.get_client(account)
         session = client.get_module('Jingle').get_jingle_session(
