@@ -146,9 +146,9 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-url',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Highlight Message Color'),
-                '.gajim-highlight-message',
-                StyleAttr.COLOR),
+    StyleOption(_('Highlight Message Background'),
+                '.gajim-mention-highlight',
+                StyleAttr.BACKGROUND),
 
     StyleOption(_('Message Correcting'),
                 '.gajim-msg-correcting text',

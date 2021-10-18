@@ -19,11 +19,11 @@
     color: rgb(205, 225, 255);
     background: rgb(40, 60, 80);
 }
+.gajim-mention-highlight {
+    background: rgb(100, 50, 10);
+}
 .gajim-url {
     color: rgb(60, 135, 220);
-}
-.gajim-highlight-message {
-    color: rgb(210, 70, 30);
 }
 .gajim-state-tab-muc-directed-msg {
     color: rgb(210, 70, 30);

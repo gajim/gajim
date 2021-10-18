@@ -163,8 +163,9 @@ class MessageRow(BaseRow):
             self._contact.nickname,
             self._client.get_own_jid().bare)
         if needs_highlight:
+            # TODO: add class to textview text (if message widget is TextView)
             self.get_style_context().add_class(
-                'conversation-mention-highlight')
+                'gajim-mention-highlight')
 
     def _get_avatar(self, kind, name):
         if self._contact is None:

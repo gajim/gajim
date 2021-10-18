@@ -56,15 +56,6 @@
 .conversation-row grid textview:not(.sourceview) text {
 	background: transparent;
 }
-.conversation-mention-highlight {
-    background-color: rgb(255, 215, 194);
-}
-.conversation-mention-highlight grid textview text {
-    background-color: rgb(255, 215, 194);
-}
-.conversation-mention-highlight:hover {
-    background-color: rgb(255, 205, 184);
-}
 
 @keyframes highlight {
     from { background: rgb(194, 215, 255) }
