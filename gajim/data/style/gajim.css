@@ -58,8 +58,8 @@
 }
 
 @keyframes highlight {
-    from { background: rgb(194, 215, 255) }
-    to { background: transparent }
+    from { background: rgb(140, 160, 180); }
+    to { background: transparent; }
 }
 .conversation-search-highlight {
     animation-duration: 3s;

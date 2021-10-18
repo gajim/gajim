@@ -58,9 +58,6 @@
 .gajim-msg-correcting text {
     background: rgb(100, 100, 50);
 }
-.gajim-search-highlight {
-    color: rgb(30, 80, 80);
-}
 .gajim-notify-message {
     color: rgb(30, 144, 255);
 }
