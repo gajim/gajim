@@ -455,6 +455,8 @@ def get_contact_dict_for_account(account):
 
 
 def play_sound(sound_event, account, force=False):
+    if sound_event is None:
+        return
     if force or allow_sound_notification(account, sound_event):
         play_sound_file(
             app.settings.get_soundevent_settings(sound_event)['path'])
