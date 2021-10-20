@@ -20,9 +20,3 @@ Exec=gajim --start-chat
 Name=Start a new chat
 #Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 Icon=org.gajim.Gajim
-
-[Desktop Action ShowNextPendingEvent]
-Exec=gajim --show-next-pending-event
-Name=Show next pending event
-#Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-Icon=org.gajim.Gajim
