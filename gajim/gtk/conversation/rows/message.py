@@ -66,6 +66,8 @@ class MessageRow(BaseRow):
         self.name = name or ''
         self.text = text
 
+        self.additional_data = additional_data
+
         self._contact = contact
         self._is_groupchat = False
         if contact is not None and contact.is_groupchat:
@@ -187,10 +189,25 @@ class MessageRow(BaseRow):
     def is_same_sender(self, message):
         return message.name == self.name
 
+    def is_same_encryption(self, message):
+        message_details = self._get_encryption_details(message.additional_data)
+        own_details = self._get_encryption_details(self.additional_data)
+        if message_details is None and own_details is None:
+            return True
+        if message_details is not None and own_details is not None:
+            # *_details contains encryption method's name, fingerprint, trust
+            m_name, _, m_trust = message_details
+            o_name, _, o_trust = own_details
+            if m_name == o_name and m_trust == o_trust:
+                return True
+        return False
+
     def is_mergeable(self, message):
         if message.type != self.type:
             return False
         if not self.is_same_sender(message):
+            return False
+        if not self.is_same_encryption(message):
             return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
