@@ -46,6 +46,7 @@
 
 .conversation-row {
     padding: 10px 3px 4px 6px;
+    border-radius: 4px;
 }
 
 .merged { padding-top: 1px;}
