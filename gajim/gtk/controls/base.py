@@ -267,8 +267,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if event.account != self.account:
             return
 
-        jid = self.contact.jid.bare
-        if event.jid != jid:
+        if event.jid not in (self.contact.jid, self.contact.jid.bare):
             return
 
         jingle_av_events = [
