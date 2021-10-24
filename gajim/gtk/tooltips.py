@@ -48,29 +48,28 @@ from .util import format_mood
 from .util import format_activity
 from .util import format_tune
 from .util import format_location
-from .util import get_css_show_class
 
 log = logging.getLogger('gajim.gui.tooltips')
 
 
 class GCTooltip:
     def __init__(self):
-        self.contact = None
+        self._contact = None
 
-        self._ui = get_builder('tooltip_gc_contact.ui')
+        self._ui = get_builder('groupchat_roster_tooltip.ui')
 
     def clear_tooltip(self):
-        self.contact = None
+        self._contact = None
 
     def get_tooltip(self, contact):
-        if self.contact == contact:
+        if self._contact == contact:
             return True, self._ui.tooltip_grid
 
         self._populate_grid(contact)
-        self.contact = contact
+        self._contact = contact
         return False, self._ui.tooltip_grid
 
-    def _hide_grid_childs(self):
+    def _hide_grid_children(self):
         """
         Hide all Elements of the Tooltip Grid
         """
@@ -81,7 +80,7 @@ class GCTooltip:
         """
         Populate the Tooltip Grid with data of from the contact
         """
-        self._hide_grid_childs()
+        self._hide_grid_children()
 
         self._ui.nick.set_text(contact.name)
         self._ui.nick.show()
@@ -92,12 +91,6 @@ class GCTooltip:
             if status != '':
                 self._ui.status.set_text(status)
                 self._ui.status.show()
-
-        # Status
-        show = helpers.get_uf_show(contact.show.value)
-        self._ui.user_show.set_text(show)
-        colorize_status(self._ui.user_show, contact.show.value)
-        self._ui.user_show.show()
 
         # JID
         if contact.real_jid is not None:
@@ -373,16 +366,3 @@ class FileTransfersTooltip:
                 return Q_('?transfer status:Transferring')
             return Q_('?transfer status:Not started')
         return Q_('?transfer status:Not started')
-
-
-def colorize_status(widget, show):
-    """
-    Colorize the status message inside the tooltip by it's semantics.
-    """
-    css_class = get_css_show_class(show)[14:]
-    style = widget.get_style_context()
-    # Remove all css classes with gajim-status- prefix
-    for css_cls in style.list_classes():
-        if css_cls.startswith('gajim-status-'):
-            style.remove_class(css_cls)
-    style.add_class(f'gajim-status-{css_class}')

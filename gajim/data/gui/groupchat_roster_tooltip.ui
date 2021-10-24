@@ -1,49 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk+" version="3.24"/>
+  <!-- n-columns=3 n-rows=6 -->
   <object class="GtkGrid" id="tooltip_grid">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="column_spacing">6</property>
+    <property name="can-focus">False</property>
+    <property name="column-spacing">6</property>
     <child>
       <object class="GtkImage" id="avatar">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
+        <property name="valign">start</property>
+        <property name="icon-name">image-missing</property>
+        <property name="icon_size">6</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
         <property name="height">6</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="jid">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="hexpand">True</property>
         <property name="ellipsize">end</property>
-        <property name="single_line_mode">True</property>
-        <property name="max_width_chars">36</property>
+        <property name="single-line-mode">True</property>
+        <property name="max-width-chars">36</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="nick">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
         <property name="ellipsize">end</property>
-        <property name="single_line_mode">True</property>
-        <property name="max_width_chars">25</property>
+        <property name="single-line-mode">True</property>
+        <property name="max-width-chars">25</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -52,44 +56,32 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="user_show">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">3</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="fillelement">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="vexpand">True</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">5</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="status">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
         <property name="wrap">True</property>
-        <property name="wrap_mode">word-char</property>
+        <property name="wrap-mode">word-char</property>
         <property name="ellipsize">end</property>
-        <property name="max_width_chars">40</property>
+        <property name="max-width-chars">40</property>
         <property name="lines">3</property>
         <property name="xalign">0</property>
         <attributes>
@@ -97,21 +89,42 @@
         </attributes>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">4</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="affiliation">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
     </child>
   </object>
 </interface>
