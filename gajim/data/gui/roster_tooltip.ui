@@ -193,15 +193,12 @@
       </packing>
     </child>
     <child>
-      <!-- n-columns=2 n-rows=1 -->
-      <object class="GtkGrid" id="resource_grid">
+      <object class="GtkBox" id="resources_box">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <child>
-          <placeholder/>
-        </child>
+        <property name="orientation">vertical</property>
         <child>
           <placeholder/>
         </child>

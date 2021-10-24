@@ -134,7 +134,7 @@ class RosterTooltip:
 
     def clear_tooltip(self):
         self._row = None
-        for widget in self._ui.resource_grid.get_children():
+        for widget in self._ui.resources_box.get_children():
             widget.destroy()
         for widget in self._ui.tooltip_grid.get_children():
             widget.hide()
@@ -165,8 +165,7 @@ class RosterTooltip:
         self._ui.jid.show()
 
         # Resources with show, status, priority
-        resources = contact.get_resources()
-        self._build_resource_grid(resources, scale)
+        self._add_resources(contact)
 
         # Subscription
         if contact.subscription and contact.subscription != 'both':
@@ -180,7 +179,7 @@ class RosterTooltip:
         # self._append_pep_info(contact)
 
         app.plugin_manager.gui_extension_point(
-            'roster_tooltip_populate', self, contact, self._ui.tooltip_grid)
+            'roster_tooltip_populate', self, contact)
 
         # This sets the bottom-most widget to expand, in case the avatar
         # takes more space than the labels
@@ -194,39 +193,42 @@ class RosterTooltip:
                 break
         last_widget.set_vexpand(True)
 
-    def _build_resource_grid(self, resources, scale):
-        row_num = 0
-        for contact in resources:
+    def _add_resources(self, contact):
+        for resource in contact.iter_resources():
+            resource_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+
             show_surface = get_show_circle(
-                contact.show, AvatarSize.SHOW_CIRCLE, scale)
+                resource.show,
+                AvatarSize.SHOW_CIRCLE,
+                self._ui.tooltip_grid.get_scale_factor())
             show_image = Gtk.Image.new_from_surface(show_surface)
             show_image.set_halign(Gtk.Align.START)
             show_image.set_valign(Gtk.Align.CENTER)
-            self._ui.resource_grid.attach(show_image, 0, row_num, 1, 1)
 
-            resource_string = GLib.markup_escape_text(contact.jid.resource)
+            resource_string = GLib.markup_escape_text(resource.jid.resource)
             resource_label = Gtk.Label()
             resource_label.set_halign(Gtk.Align.START)
             resource_label.set_xalign(0)
             resource_label.set_ellipsize(Pango.EllipsizeMode.END)
             resource_label.set_max_width_chars(30)
-            resource_label.set_text(f'{resource_string} ({contact.priority})')
-            self._ui.resource_grid.attach(resource_label, 1, row_num, 1, 1)
+            resource_label.set_text(f'{resource_string} ({resource.priority})')
 
-            if contact.status:
-                row_num += 1
-                status_text = GLib.markup_escape_text(contact.status)
+            base_box = Gtk.Box(spacing=6)
+            base_box.add(show_image)
+            base_box.add(resource_label)
+            resource_box.add(base_box)
+
+            if resource.status:
+                status_text = GLib.markup_escape_text(resource.status)
                 status_label = Gtk.Label(label=status_text)
                 status_label.set_halign(Gtk.Align.START)
                 status_label.set_xalign(0)
                 status_label.set_ellipsize(Pango.EllipsizeMode.END)
                 status_label.set_max_width_chars(30)
-                self._ui.resource_grid.attach(
-                    status_label, 1, row_num, 1, 1)
+                resource_box.add(status_label)
 
-            if contact.idle_time:
-                row_num += 1
-                idle_time = time.localtime(contact.idle_time)
+            if resource.idle_time:
+                idle_time = time.localtime(resource.idle_time)
                 idle_time = datetime(*(idle_time[:6]))
                 current = datetime.now()
                 if idle_time.date() == current.date():
@@ -237,12 +239,16 @@ class RosterTooltip:
                 idle_label = Gtk.Label(label=idle_text)
                 idle_label.set_halign(Gtk.Align.START)
                 idle_label.set_xalign(0)
-                self._ui.resource_grid.attach(
-                    idle_label, 1, row_num, 1, 1)
+                resource_box.add(idle_label)
 
-            row_num += 1
+            app.plugin_manager.gui_extension_point(
+                'roster_tooltip_resource_populate',
+                resource_box,
+                resource)
 
-        self._ui.resource_grid.show_all()
+            self._ui.resources_box.add(resource_box)
+
+        self._ui.resources_box.show_all()
 
     def _append_pep_info(self, contact):
         if PEPEventType.MOOD in contact.pep:
