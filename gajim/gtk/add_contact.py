@@ -323,8 +323,6 @@ class Contact(Page):
         self.show_all()
 
     def get_visible_buttons(self):
-        if self._contact.is_in_roster:
-            return ['back']
         return ['back', 'add']
 
     def get_default_button(self):
