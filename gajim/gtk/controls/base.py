@@ -158,6 +158,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # Create ConversationView and connect signals
         self.conversation_view = ConversationView(self.account, self.contact)
         self.conversation_view.connect('quote', self.on_quote)
+        self.conversation_view.connect('mention', self.on_mention)
 
         id_ = self.conversation_view.connect(
             'key-press-event', self._on_conversation_view_key_press)
@@ -716,6 +717,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def on_quote(self, _widget, text):
         self.insert_as_quote(text)
+
+    def on_mention(self, _widget, name):
+        gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
+        text = f'{name}{gc_refer_to_nick_char} '
+        message_buffer = self.msg_textview.get_buffer()
+        message_buffer.insert_at_cursor(text)
 
     def _on_message_textview_paste_event(self, _texview):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)

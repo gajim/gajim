@@ -49,6 +49,11 @@ class ConversationView(Gtk.ListBox):
             None,
             (str, )
         ),
+        'mention': (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (str, )
+        ),
         'accept-call': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
@@ -441,6 +446,9 @@ class ConversationView(Gtk.ListBox):
 
     def on_quote(self, text):
         self.emit('quote', text)
+
+    def on_mention(self, name):
+        self.emit('mention', name)
 
     def accept_call(self, event):
         self.emit('accept-call', event)

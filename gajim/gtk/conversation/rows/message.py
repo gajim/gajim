@@ -36,6 +36,7 @@ from .base import MoreMenuButton
 from ..message_widget import MessageWidget
 from ...preview import PreviewWidget
 from ...util import format_fingerprint
+from ...util import get_cursor
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
@@ -141,7 +142,14 @@ class MessageRow(BaseRow):
         self._meta_box.pack_end(self._message_icons, False, True, 0)
         avatar = self._get_avatar(kind, name)
         self._avatar_image = Gtk.Image.new_from_surface(avatar)
-        avatar_placeholder = Gtk.Box()
+
+        if self._is_groupchat:
+            avatar_placeholder = Gtk.EventBox()
+            avatar_placeholder.connect(
+                'button-press-event', self._on_avatar_clicked, name)
+            avatar_placeholder.connect('realize', self._on_realize)
+        else:
+            avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         avatar_placeholder.set_valign(Gtk.Align.START)
         avatar_placeholder.add(self._avatar_image)
@@ -185,6 +193,14 @@ class MessageRow(BaseRow):
             contact = self._contact
 
         return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+
+    def _on_avatar_clicked(self, _widget, event, name):
+        if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 1:
+            self.get_parent().on_mention(name)
+
+    @staticmethod
+    def _on_realize(event_box):
+        event_box.get_window().set_cursor(get_cursor('pointer'))
 
     def is_same_sender(self, message):
         return message.name == self.name
