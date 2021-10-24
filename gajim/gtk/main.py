@@ -560,6 +560,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if not self.chat_exists(event.account, event.jid):
             if event.name == 'message-received':
+                if not event.properties.body:
+                    # Don’t open control on chatstate etc.
+                    return
                 if event.properties.is_muc_pm:
                     self.add_private_chat(event.account,
                                           event.properties.jid,
