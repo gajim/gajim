@@ -143,8 +143,8 @@ class NotificationManager(Gtk.ListBox):
 
             app.nec.push_incoming_event(
                 NetworkEvent('notification',
-                             account=self.account,
-                             jid=self.contact.jid,
+                             account=self._account,
+                             jid=event.jid,
                              notif_type='subscription-request',
                              title=_('Subscription Request'),
                              text=text))
@@ -162,8 +162,8 @@ class NotificationManager(Gtk.ListBox):
 
             app.nec.push_incoming_event(
                 NetworkEvent('notification',
-                             account=self.account,
-                             jid=self.contact.jid,
+                             account=self._account,
+                             jid=event.jid,
                              notif_type='unsubscribed',
                              title=_('Contact Unsubscribed'),
                              text=text))
@@ -186,8 +186,8 @@ class NotificationManager(Gtk.ListBox):
 
             app.nec.push_incoming_event(
                 NetworkEvent('notification',
-                             account=self.account,
-                             jid=self.contact.jid,
+                             account=self._account,
+                             jid=jid,
                              notif_type='group-chat-invitation',
                              title=_('Group Chat Invitation'),
                              text=text))
