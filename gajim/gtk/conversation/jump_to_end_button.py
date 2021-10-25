@@ -57,13 +57,14 @@ class JumpToEndButton(Gtk.Overlay):
         self.show_all()
 
         self._count = 0
+        self.set_no_show_all(True)
 
     def _on_jump_clicked(self, _button):
         self.emit('clicked')
 
     def toggle(self, visible):
         if visible:
-            self.show_all()
+            self.show()
         else:
             self.hide()
             self.reset_unread_count()
