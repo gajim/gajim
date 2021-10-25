@@ -396,6 +396,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def add_chat(self, account, jid, type_, select=False):
         workspace_id = self.get_active_workspace()
+        if workspace_id is None:
+            workspace_id = self._workspace_side_bar.get_first_workspace()
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,
                                                jid,
