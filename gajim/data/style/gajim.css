@@ -74,9 +74,10 @@
 .conversation-date-row {
     padding: 12px;
 }
-.conversation-command-row {
-    color: rgb(170, 184, 198);
-    background-color: rgb(7, 34, 76);
+.conversation-command-row label {
+    border-radius: 6px;
+    padding: 12px;
+    font-size: small;
 }
 .conversation-subject-box,
 .conversation-call-box {

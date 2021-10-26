@@ -48,7 +48,7 @@ class CommandOutputRow(BaseRow):
         self._label = SimpleLabel()
         if is_error:
             self._label.get_style_context().add_class('gajim-command-error')
-        else:    
+        else:
             self._label.get_style_context().add_class('gajim-command-output')
         self._label.set_markup(markup)
         self.grid.attach(self._label, 1, 0, 1, 1)
