@@ -121,8 +121,13 @@ class Notification(EventHelper):
         elif hasattr(event, 'sound'):
             play_sound(event.sound, event.account)
 
-        if not allow_showing_notification(event.account):
-            return
+        if hasattr(event, 'show_notification'):
+            # Allow override here, used by Triggers plugin
+            if not event.show_notification:
+                return
+        else:
+            if not allow_showing_notification(event.account):
+                return
 
         if hasattr(event, 'notif_detail'):
             notif_detail = event.notif_detail
