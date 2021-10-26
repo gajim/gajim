@@ -22,13 +22,9 @@ import logging
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import nec
-from gajim.common import helpers
 from gajim.common import app
-from gajim.common import i18n
-from gajim.common.i18n import _
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
-
 
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
@@ -142,147 +138,6 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
             self.file_props.desc = file_desc_tag.getData()
         self.file_props.transfered_size = []
         return True
-
-
-class NotificationEventOld(nec.NetworkIncomingEvent):
-
-    name = 'notification'
-    base_network_events = ['gc-message-received',
-                           'presence-received']
-
-    def generate(self):
-        # what's needed to compute output
-        self.account = self.base_event.conn.name
-        self.conn = self.base_event.conn
-        self.jid = ''
-        self.control = None
-        self.control_focused = False
-        self.first_unread = False
-
-        # For output
-        self.do_sound = False
-        self.sound_file = ''
-        self.sound_event = ''  # gajim sound played if not sound_file is set
-        self.show_popup = False
-
-        self.do_popup = False
-        self.popup_title = ''
-        self.popup_text = ''
-        self.popup_event_type = ''
-        self.popup_msg_type = ''
-        self.icon_name = None
-        self.transport_name = None
-        self.show = None
-        self.popup_timeout = -1
-
-        self.do_command = False
-        self.command = ''
-
-        self.show_in_notification_area = False
-        self.show_in_roster = False
-
-        self.handle_incoming_pres_event(self.base_event)
-        return True
-
-    def handle_incoming_msg_event(self, msg_obj):
-        # TODO: implement attention handling and remove this
-
-        # don't alert for carbon copied messages from ourselves
-        if msg_obj.properties.is_sent_carbon:
-            return
-
-        if msg_obj.properties.attention and not app.settings.get(
-                'ignore_incoming_attention'):
-            self.popup_timeout = 0
-            self.do_popup = True
-        else:
-            self.popup_timeout = app.settings.get('notification_timeout')
-
-        sound = app.settings.get_soundevent_settings('attention_received')
-
-        if msg_obj.properties.attention and not app.settings.get(
-                'ignore_incoming_attention') and sound['enabled']:
-            self.sound_event = 'attention_received'
-            self.do_sound = True
-
-    def handle_incoming_pres_event(self, pres_obj):
-        return
-        # TODO
-        if app.jid_is_transport(pres_obj.jid):
-            return True
-        account = pres_obj.conn.name
-        client = app.get_client(account)
-        self.jid = pres_obj.jid
-        resource = pres_obj.resource or ''
-        # It isn't an agent
-        for c in pres_obj.contact_list:
-            if c.resource == resource:
-                # we look for other connected resources
-                continue
-            if c.show not in ('offline', 'error'):
-                return True
-
-        # no other resource is connected, let's look in metacontacts
-        family = app.contacts.get_metacontacts_family(account, self.jid)
-        for info in family:
-            acct_ = info['account']
-            jid_ = info['jid']
-            c_ = app.contacts.get_contact_with_highest_priority(acct_, jid_)
-            if not c_:
-                continue
-            if c_.jid == self.jid:
-                continue
-            if c_.show not in ('offline', 'error'):
-                return True
-
-        if pres_obj.old_show < 2 and pres_obj.new_show > 1:
-            event = 'contact_connected'
-            server = app.get_server_from_jid(self.jid)
-            account_server = account + '/' + server
-            block_transport = False
-            if (account_server in app.block_signed_in_notifications and
-                    app.block_signed_in_notifications[account_server]):
-                block_transport = True
-
-            sound = app.settings.get_soundevent_settings('contact_connected')
-            if (sound['enabled'] and
-                    not app.block_signed_in_notifications[account] and
-                    not block_transport and helpers.allow_sound_notification(
-                        account, 'contact_connected')):
-                self.sound_event = event
-                self.do_sound = True
-
-        elif pres_obj.old_show > 1 and pres_obj.new_show < 2:
-            event = 'contact_disconnected'
-            sound = app.settings.get_soundevent_settings(
-                'contact_disconnected')
-            if sound['enabled'] and helpers.allow_sound_notification(
-                    account, event):
-                self.sound_event = event
-                self.do_sound = True
-        # Status change (not connected/disconnected or error (<1))
-        elif pres_obj.new_show > 1:
-            event = 'status_change'
-        else:
-            return True
-
-        if app.jid_is_transport(self.jid):
-            self.transport_name = app.get_transport_name_from_jid(self.jid)
-
-        self.show = pres_obj.show
-
-        self.popup_timeout = app.settings.get('notification_timeout')
-
-        contact = client.get_module('Contacts').get_contact(self.jid)
-        nick = i18n.direction_mark + contact.name
-        if event == 'status_change':
-            self.popup_title = _('%(nick)s Changed Status') % \
-                {'nick': nick}
-            self.popup_text = _('%(nick)s is now %(status)s') % \
-                {'nick': nick, 'status': helpers.get_uf_show(pres_obj.show)}
-            if pres_obj.status:
-                self.popup_text = self.popup_text + " : " + pres_obj.status
-            self.popup_event_type = _('Contact Changed Status')
 
 
 class InformationEvent(nec.NetworkIncomingEvent):
