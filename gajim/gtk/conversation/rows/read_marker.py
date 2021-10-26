@@ -27,6 +27,8 @@ class ReadMarkerRow(BaseRow):
         self.type = 'read_marker'
         self.timestamp = datetime.fromtimestamp(0)
 
+        contact.connect('nickname-update', self._on_nickname_update)
+
         text = _('%s has read up to this point') % contact.name
         self.label.set_text(text)
         self.label.set_halign(Gtk.Align.CENTER)
@@ -35,6 +37,10 @@ class ReadMarkerRow(BaseRow):
             'conversation-read-marker')
         self.grid.attach(self.label, 0, 0, 1, 1)
         self.set_no_show_all(True)
+
+    def _on_nickname_update(self, contact, _signal_name):
+        text = _('%s has read up to this point') % contact.name
+        self.label.set_text(text)
 
     def set_timestamp(self, timestamp):
         self.timestamp = timestamp
