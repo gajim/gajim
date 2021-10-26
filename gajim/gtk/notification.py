@@ -133,7 +133,7 @@ class Notification(EventHelper):
             icon_name = event.icon_name
         else:
             icon_name = NOTIFICATION_ICONS.get(
-                notif_detail, 'mail-message-new')
+                notif_detail, 'mail-unread')
 
         self._issue_notification(
             event.notif_type,
