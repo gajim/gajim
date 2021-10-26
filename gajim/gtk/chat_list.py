@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import time
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -53,6 +54,10 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.set_header_func(self._header_func)
         self.set_sort_func(self._sort_func)
         self._set_placeholder()
+
+        self._mouseover = False
+        self.connect('enter-notify-event', self._on_mouse_focus_changed)
+        self.connect('leave-notify-event', self._on_mouse_focus_changed)
 
         self.register_events([
             ('account-enabled', ged.GUI2, self._on_account_changed),
@@ -141,19 +146,35 @@ class ChatList(Gtk.ListBox, EventHelper):
                 else:
                     row.header = None
 
-    @staticmethod
-    def _sort_func(row1, row2):
-        if row1.is_pinned and row2.is_pinned:
-            # Don’t move pinned rows to top
+    def _sort_func(self, row1, row2):
+        if self._mouseover:
+            log.debug('Mouseover active, don’t sort rows')
             return 0
+
+        # Don’t sort pinned rows themselves
+        if row1.is_pinned and row2.is_pinned:
+            return 0
+
+        # Sort pinned rows to top
         if row1.is_pinned > row2.is_pinned:
             return -1
         if row2.is_pinned > row1.is_pinned:
             return 1
 
-        if row1.is_recent == row2.is_recent:
-            return 0
-        return -1 if row1.is_recent else 1
+        # Sort by timestamp
+        if row1.timestamp > row2.timestamp:
+            return -1
+        if row2.timestamp > row1.timestamp:
+            return 1
+
+    def _on_mouse_focus_changed(self, _widget, event):
+        if event.type == Gdk.EventType.ENTER_NOTIFY:
+            self._mouseover = True
+
+        if event.type == Gdk.EventType.LEAVE_NOTIFY:
+            if event.detail != Gdk.NotifyType.INFERIOR:
+                # Not hovering a Gtk.ListBoxRow (row is INFERIOR)
+                self._mouseover = False
 
     def _set_placeholder(self):
         button = Gtk.Button.new_with_label(_('Start Chat'))
@@ -309,6 +330,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         GLib.idle_add(
             row.set_message_text, event.msgtxt, event.additional_data)
         self._add_unread(row, event.properties)
+        self.invalidate_sort()
 
     def _on_message_sent(self, event):
         msgtext = event.message
@@ -324,9 +346,12 @@ class ChatList(Gtk.ListBox, EventHelper):
         else:
             nick = _('Me: ')
         row.set_nick(nick)
-        row.set_timestamp(event.timestamp)
+
+        # Set timestamp if it's None (outgoing MUC messages)
+        row.set_timestamp(event.timestamp or time.time())
         GLib.idle_add(
             row.set_message_text, event.message, event.additional_data)
+        self.invalidate_sort()
 
     @staticmethod
     def _get_nick_for_received_message(event):
@@ -389,7 +414,7 @@ class ChatRow(Gtk.ListBoxRow):
         self.contact.connect('avatar-update', self._on_avatar_update)
 
         self.contact_name = self.contact.name
-        self._timestamp = None
+        self.timestamp = 0
         self._unread_count = 0
         self._pinned = pinned
 
@@ -428,7 +453,7 @@ class ChatRow(Gtk.ListBoxRow):
                         'muc_nick': line.contact_name})
                 self._ui.nick_label.show()
 
-            self._timestamp = line.time
+            self.timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
             self._ui.timestamp_label.set_text(uf_timestamp)
 
@@ -552,13 +577,12 @@ class ChatRow(Gtk.ListBoxRow):
             GLib.Variant('as', [self.account, str(self.jid)]))
 
     def set_timestamp(self, timestamp):
-        self._timestamp = timestamp
+        self.timestamp = timestamp
         self.update_time()
 
     def update_time(self):
-        if self._timestamp is not None:
-            self._ui.timestamp_label.set_text(
-                get_uf_relative_time(self._timestamp))
+        self._ui.timestamp_label.set_text(
+            get_uf_relative_time(self.timestamp))
 
     def _update_unread(self):
         if self._unread_count < 1000:
