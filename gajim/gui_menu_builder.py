@@ -389,8 +389,9 @@ def get_chat_list_row_menu(workspace_id, account, jid, pinned):
     ]
 
     is_self_contact = contact.jid.bare == client.get_own_jid().bare
+    pm_with_jid = contact.is_pm_contact and contact.real_jid is not None
     if (not contact.is_groupchat and not contact.is_in_roster and
-            not is_self_contact):
+            not is_self_contact and pm_with_jid):
         menu_items.append(('add-to-roster', _('Add to Contact List…')))
 
     menu = Gio.Menu()
