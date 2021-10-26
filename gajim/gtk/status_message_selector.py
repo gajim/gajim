@@ -65,6 +65,9 @@ class StatusMessageSelector(Gtk.Box):
         if self._account is None:
             message = get_global_status_message()
         else:
+            if self._account not in app.connections:
+                return
             client = app.get_client(self._account)
             message = client.status_message
+
         self._entry.set_text(message)

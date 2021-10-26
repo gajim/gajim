@@ -104,21 +104,19 @@ class StatusSelector(Gtk.MenuButton):
         self.update()
 
     def update(self, *args, **kwargs):
-        # if not app.connections:
-        #     self.hide()
-        #     return
-
-        # self.show()
-        if self._account is not None:
+        if self._account is None:
+            show = get_global_show()
+        else:
+            if self._account not in app.connections:
+                return
             client = app.get_client(self._account)
             show = client.status
-        else:
-            show = get_global_show()
-        uf_show = get_uf_show(show)
 
         surface = get_show_circle(
             show, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
         self._current_show_icon.set_from_surface(surface)
+
+        uf_show = get_uf_show(show)
         if statuses_unified():
             self._current_show_icon.set_tooltip_text(_('Status: %s') % uf_show)
             if not self._compact:
