@@ -19,6 +19,12 @@
     color: rgb(40, 70, 100);
     background: rgb(225, 235, 250);
 }
+.gajim-command-error {
+    color: rgb(210, 70, 70);
+}
+.gajim-command-output {
+    color: rgb(100, 150, 220);
+}
 .gajim-mention-highlight {
     background: rgb(255, 215, 194);
 }

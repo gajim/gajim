@@ -191,7 +191,7 @@ class StandardCommonChatCommands(CommandContainer):
     @command
     @doc(_("Clear the text window"))
     def clear(self):
-        self.conv_textview.clear()
+        self.conversation_view.clear()
 
     @command
     @doc(_("Send a ping to the contact"))
@@ -272,7 +272,7 @@ class StandardGroupChatCommands(CommandContainer):
     @command
     @doc(_("Clear the text window"))
     def clear(self):
-        self.conv_textview.clear()
+        self.conversation_view.clear()
 
     @command(raw=True)
     @doc(_("Change your nickname in a group chat"))
@@ -354,7 +354,7 @@ class StandardGroupChatCommands(CommandContainer):
         groupchat_contact = client.get_module('Contacts').get_contact(
             self.room_jid, groupchat=True)
         nick_list = groupchat_contact.get_user_nicknames()
-        if who in nicks:
+        if who in nick_list:
             contact = groupchat_contact.get_resource(who)
             who = contact.jid
         self.connection.get_module('MUC').set_affiliation(

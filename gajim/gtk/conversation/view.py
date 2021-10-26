@@ -30,6 +30,7 @@ from .rows.scroll_hint import ScrollHintRow
 from .rows.message import MessageRow
 from .rows.info import InfoMessage
 from .rows.call import CallRow
+from .rows.command_output import CommandOutputRow
 from .rows.date import DateRow
 from .rows.file_transfer import FileTransferRow
 from .rows.file_transfer_jingle import FileTransferJingleRow
@@ -197,6 +198,10 @@ class ConversationView(Gtk.ListBox):
                            text,
                            event)
         self._insert_message(call_row)
+
+    def add_command_output(self, text, is_error):
+        command_output_row = CommandOutputRow(self._account, text, is_error)
+        self._insert_message(command_output_row)
 
     def add_message(self,
                     text,
