@@ -17,6 +17,8 @@ from gi.repository import GObject
 from gi.repository import Gio
 from gi.repository import GLib
 
+from nbxmpp import JID
+
 from gajim.common import app
 
 from gajim.gui.chat_list import ChatList
@@ -193,6 +195,7 @@ class ChatListStack(Gtk.Stack):
 
     def _move_chat_to_workspace(self, _action, param):
         new_workspace_id, account, jid = param.unpack()
+        jid = JID.from_string(jid)
 
         current_chatlist = self.get_visible_child()
         type_ = current_chatlist.get_chat_type(account, jid)
