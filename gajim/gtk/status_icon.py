@@ -94,7 +94,7 @@ class StatusIcon(EventHelper):
                 self._status_icon.set_icon_theme_path(
                     str(configpaths.get('ICONS')))
                 self._status_icon.set_attention_icon_full(
-                    'mail-unread', 'New Message')
+                    'dcraven-message-new', 'New Message')
                 self._status_icon.set_status(
                     appindicator.IndicatorStatus.ACTIVE)
                 self._status_icon.set_menu(self._ui.systray_context_menu)
@@ -132,11 +132,9 @@ class StatusIcon(EventHelper):
             else:
                 self._status_icon.set_visible(True)
         if count > 0:
-            icon_name = get_icon_name('event')
+            icon_name = 'dcraven-message-new'
             if HAS_INDICATOR:
                 self._status_icon.set_icon_full(icon_name, _('Pending Event'))
-                self._status_icon.set_status(
-                    appindicator.IndicatorStatus.ATTENTION)
             else:
                 self._status_icon.set_visible(True)
                 self._status_icon.set_from_icon_name(icon_name)
