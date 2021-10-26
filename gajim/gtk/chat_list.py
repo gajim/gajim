@@ -112,7 +112,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         if not self._current_filter_text:
             return True
         text = self._current_filter_text.lower()
-        return text in row.contact.name.lower()
+        return text in row.contact_name.lower()
 
     @staticmethod
     def _header_func(row, before):
@@ -388,6 +388,7 @@ class ChatRow(Gtk.ListBoxRow):
         self.contact.connect('caps-update', self._on_avatar_update)
         self.contact.connect('avatar-update', self._on_avatar_update)
 
+        self.contact_name = self.contact.name
         self._timestamp = None
         self._unread_count = 0
         self._pinned = pinned
@@ -497,11 +498,10 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.name_label.set_text(f'{self.contact.name} ({muc_name})')
             return
 
-        own_jid = self._client.get_own_jid().bare
-        if self.jid == own_jid:
-            self._ui.name_label.set_text(_('Note to myself'))
-        else:
-            self._ui.name_label.set_text(self.contact.name)
+        self.contact_name = self.contact.name
+        if self.jid == self._client.get_own_jid().bare:
+            self.contact_name = _('Note to myself')
+        self._ui.name_label.set_text(self.contact_name)
 
     def update_account_identifier(self):
         account_class = app.css_config.get_dynamic_class(self.account)
