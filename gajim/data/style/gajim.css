@@ -40,6 +40,8 @@
     border-radius: 4px;
 }
 
+row:backdrop { transition: none; }
+
 .conversation-row:hover button {
     opacity: 1;
 }
