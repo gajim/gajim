@@ -330,8 +330,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.set_timestamp(event.properties.mam.timestamp)
         else:
             row.set_timestamp(event.properties.timestamp)
-        GLib.idle_add(
-            row.set_message_text, event.msgtxt, event.additional_data)
+        row.set_message_text(event.msgtxt, event.additional_data)
         self._add_unread(row, event.properties)
         self.invalidate_sort()
 
@@ -352,8 +351,7 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         # Set timestamp if it's None (outgoing MUC messages)
         row.set_timestamp(event.timestamp or time.time())
-        GLib.idle_add(
-            row.set_message_text, event.message, event.additional_data)
+        row.set_message_text(event.message, event.additional_data)
         self.invalidate_sort()
 
     @staticmethod
@@ -440,8 +438,7 @@ class ChatRow(Gtk.ListBoxRow):
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)
         if line is not None and line.message is not None:
-            GLib.idle_add(
-                self.set_message_text, line.message, line.additional_data)
+            self.set_message_text(line.message, line.additional_data)
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
                 self._ui.nick_label.set_text(_('Me:'))
