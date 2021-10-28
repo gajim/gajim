@@ -326,7 +326,10 @@ class ChatList(Gtk.ListBox, EventHelper):
         row = self._chats.get((event.account, event.jid))
         nick = self._get_nick_for_received_message(event)
         row.set_nick(nick)
-        row.set_timestamp(event.properties.timestamp)
+        if event.name == 'mam-message-received':
+            row.set_timestamp(event.properties.mam.timestamp)
+        else:
+            row.set_timestamp(event.properties.timestamp)
         GLib.idle_add(
             row.set_message_text, event.msgtxt, event.additional_data)
         self._add_unread(row, event.properties)
