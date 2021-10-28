@@ -233,7 +233,6 @@ class StatusIcon(EventHelper):
             app.window.hide()
             return
 
-        app.window.show_all()
         if not app.window.get_property('visible'):
             # Window was minimized
             restore_main_window_position()
