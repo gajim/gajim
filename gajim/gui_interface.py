@@ -86,7 +86,6 @@ from gajim.gui.dialogs import WarningDialog
 from gajim.gui.dialogs import InformationDialog
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import InputDialog
-from gajim.gui.dialogs import PassphraseDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.main import MainWindow
@@ -102,8 +101,6 @@ class Interface:
     def __init__(self):
         app.interface = self
         app.thread_interface = ThreadInterface
-
-        self._passphrase_dialogs = {}
 
         self.handlers = {}
 
@@ -330,47 +327,11 @@ class Interface:
 
     @staticmethod
     def handle_event_client_cert_passphrase(event):
-        def _on_ok(passphrase, _checked):
-            event.conn.on_client_cert_passphrase(
-                passphrase,
-                event.con,
-                event.port,
-                event.secure_tuple)
+        open_window('PasswordDialog', account=event.conn.name, event=event)
 
-        def _on_cancel():
-            event.conn.on_client_cert_passphrase(
-                '',
-                event.con,
-                event.port,
-                event.secure_tuple)
-
-        PassphraseDialog(_('Certificate Passphrase Required'),
-                         _('Enter the certificate passphrase for '
-                           'account %s') % event.conn.name,
-                         ok_handler=_on_ok,
-                         cancel_handler=_on_cancel)
-
-    def handle_event_password_required(self, event):
-        # ('PASSWORD_REQUIRED', account, None)
-        account = event.conn.name
-        if account in self._passphrase_dialogs:
-            return
-        text = _('Enter your password for account %s') % account
-
-        def _on_ok(passphrase, save):
-            app.settings.set_account_setting(account, 'savepass', save)
-            passwords.save_password(account, passphrase)
-            event.on_password(passphrase)
-            del self._passphrase_dialogs[account]
-
-        def _on_cancel():
-            del self._passphrase_dialogs[account]
-
-        self._passphrase_dialogs[account] = PassphraseDialog(
-            _('Password Required'),
-            text, _('Save password'),
-            ok_handler=_on_ok,
-            cancel_handler=_on_cancel)
+    @staticmethod
+    def handle_event_password_required(event):
+        open_window('PasswordDialog', account=event.conn.name, event=event)
 
     @staticmethod
     def handle_event_zc_name_conflict(event):

@@ -141,4 +141,5 @@ WINDOW_MODULES = {
     'ServiceRegistration': 'gajim.gui.service_registration',
     'SynchronizeAccounts': 'gajim.gui.synchronize_accounts',
     'AdhocMUC': 'gajim.gui.adhoc_muc',
+    'PasswordDialog': 'gajim.gui.password_dialog',
 }
