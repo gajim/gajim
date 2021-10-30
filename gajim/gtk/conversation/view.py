@@ -243,17 +243,24 @@ class ConversationView(Gtk.ListBox):
 
         if message.type == 'chat':
             self._message_id_row_map[message_id] = message
+
+            if kind == 'incoming':
+                self._read_marker_row.set_last_incoming_timestamp(
+                    message.timestamp)
             if marker is not None and marker == 'displayed':
                 self.set_read_marker(message_id)
+
         self._insert_message(message)
 
     def _insert_message(self, message):
         self.add(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
+
         if message.kind == 'incoming':
             if message.timestamp > self._read_marker_row.timestamp:
                 self._read_marker_row.hide()
+
         GLib.idle_add(message.queue_resize)
 
     def _add_date_row(self, timestamp):

@@ -26,6 +26,7 @@ class ReadMarkerRow(BaseRow):
         BaseRow.__init__(self, account, widget='label')
         self.type = 'read_marker'
         self.timestamp = datetime.fromtimestamp(0)
+        self._last_incoming_timestamp = datetime.fromtimestamp(0)
 
         contact.connect('nickname-update', self._on_nickname_update)
 
@@ -43,7 +44,15 @@ class ReadMarkerRow(BaseRow):
         self.label.set_text(text)
 
     def set_timestamp(self, timestamp):
+        if timestamp < self._last_incoming_timestamp:
+            return
+
         self.timestamp = timestamp
+
         self.changed()
         self.set_no_show_all(False)
         self.show_all()
+
+    def set_last_incoming_timestamp(self, timestamp):
+        if timestamp > self._last_incoming_timestamp:
+            self._last_incoming_timestamp = timestamp
