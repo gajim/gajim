@@ -91,6 +91,8 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def remove_chat(self, account, jid):
         control = self._controls.pop((account, jid))
+        if control == self._active_control:
+            self._active_control = None
         self.remove(control.widget)
         control.shutdown()
 
