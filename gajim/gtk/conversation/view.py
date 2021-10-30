@@ -117,6 +117,8 @@ class ConversationView(Gtk.ListBox):
 
     def clear(self):
         for row in self.get_children()[2:]:
+            if row.type == 'read_marker':
+                continue
             self.remove(row)
         self._reset_conversation_view()
 
@@ -240,8 +242,9 @@ class ConversationView(Gtk.ListBox):
             log_line_id=log_line_id)
 
         if message.type == 'chat':
-            self._message_id_row_map[message.message_id] = message
-
+            self._message_id_row_map[message_id] = message
+            if marker is not None and marker == 'displayed':
+                self.set_read_marker(message_id)
         self._insert_message(message)
 
     def _insert_message(self, message):
@@ -249,7 +252,8 @@ class ConversationView(Gtk.ListBox):
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
         if message.kind == 'incoming':
-            self.set_read_marker(None)
+            if message.timestamp > self._read_marker_row.timestamp:
+                self._read_marker_row.hide()
         GLib.idle_add(message.queue_resize)
 
     def _add_date_row(self, timestamp):
@@ -407,7 +411,6 @@ class ConversationView(Gtk.ListBox):
 
     def set_read_marker(self, id_):
         if id_ is None:
-            self._read_marker_row.hide()
             return
 
         row = self._get_row_by_message_id(id_)
@@ -417,6 +420,9 @@ class ConversationView(Gtk.ListBox):
         row.set_displayed()
 
         timestamp = row.timestamp + timedelta(microseconds=1)
+        if self._read_marker_row.timestamp > timestamp:
+            return
+
         self._read_marker_row.set_timestamp(timestamp)
 
     def update_avatars(self):
