@@ -46,6 +46,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self.show_all()
         self._controls = {}
+        self._active_control = None
 
     def get_control(self, account, jid):
         try:
@@ -96,6 +97,10 @@ class ChatStack(Gtk.Stack, EventHelper):
     def show_chat(self, account, jid):
         self.set_visible_child_name(f'{account}:{jid}')
         control = self.get_control(account, jid)
+        if control != self._active_control:
+            if self._active_control is not None:
+                self._active_control.reset_view()
+        self._active_control = control
         GLib.idle_add(control.focus)
 
     def clear(self):

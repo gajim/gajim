@@ -1106,7 +1106,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        if self._scrolled_view.get_lower_complete():
+        chat_active = app.window.is_chat_active(
+            self.account, self.contact.jid)
+
+        if self._scrolled_view.get_lower_complete() and chat_active:
             self.conversation_view.add_message(
                 text,
                 kind,
@@ -1140,8 +1143,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._notify(name, text, tim)
 
             # Send chat marker if we’re actively following the chat
-            chat_active = app.window.is_chat_active(
-                self.account, self.contact.jid)
             if chat_active and self._scrolled_view.get_autoscroll():
                 app.window.mark_as_read(self.account, self.contact.jid)
 
@@ -1277,6 +1278,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             self._client.get_module('Chatstate').set_chatstate(
                 self.contact, Chatstate.INACTIVE)
+
+    def reset_view(self):
+        self.conversation_view.clear()
 
     def get_autoscroll(self):
         return self._scrolled_view.get_autoscroll()
