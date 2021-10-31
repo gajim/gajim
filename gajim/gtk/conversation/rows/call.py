@@ -48,8 +48,8 @@ class CallRow(BaseRow):
 
         if is_from_db:
             sid = db_message.additional_data.get_value('gajim', 'sid')
-            self._session = self._client.get_module('Jingle').get_jingle_session(
-                self._contact.jid, sid)
+            module = self._client.get_module('Jingle')
+            self._session = module.get_jingle_session(self._contact.jid, sid)
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
@@ -76,7 +76,7 @@ class CallRow(BaseRow):
         self.show_all()
 
     def update(self):
-        if self._event is None:
+        if self._event is None and self._session is None:
             return
 
         self._call_box.destroy()
@@ -87,8 +87,7 @@ class CallRow(BaseRow):
 
         label = SimpleLabel()
         label.get_style_context().add_class('dim-label')
-        text = _('%s called you') % self._contact.name
-        label.set_text(text)
+        label.set_text(_('Call'))
         self.grid.attach(label, 2, 0, 1, 1)
         self.show_all()
         self._event = None
@@ -112,6 +111,7 @@ class CallRow(BaseRow):
             self.get_parent().reject_call(session)
         else:
             self.get_parent().reject_call(self._session)
+        self._session = None
 
     def _prepare_incoming_call(self):
         self._call_box = Gtk.Box(
