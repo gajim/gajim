@@ -385,8 +385,11 @@ def get_chat_list_row_menu(workspace_id, account, jid, pinned):
 
     menu_items = [
         ('toggle-chat-pinned', toggle_label),
-        (_('Move Chat'), []),
     ]
+
+    workspaces = app.settings.get_workspaces()
+    if len(workspaces) > 1:
+        menu_items.append((_('Move Chat'), []))
 
     is_self_contact = contact.jid.bare == client.get_own_jid().bare
     pm_with_jid = contact.is_pm_contact and contact.real_jid is not None
@@ -406,8 +409,10 @@ def get_chat_list_row_menu(workspace_id, account, jid, pinned):
             menu.append_item(menuitem)
         else:
             # This is a submenu
-            submenu = build_workspaces_submenu(workspace_id, account, str(jid))
-            menu.append_submenu(item[0], submenu)
+            if len(workspaces) > 1:
+                submenu = build_workspaces_submenu(
+                    workspace_id, account, str(jid))
+                menu.append_submenu(item[0], submenu)
 
     return menu
 
