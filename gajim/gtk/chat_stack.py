@@ -105,6 +105,10 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._active_control = control
         GLib.idle_add(control.focus)
 
+    def reset_active_control(self):
+        self._active_control.reset_view()
+        self._active_control = None
+
     def clear(self):
         self.set_visible_child_name('empty')
 
