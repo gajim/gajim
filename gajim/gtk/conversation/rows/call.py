@@ -91,6 +91,7 @@ class CallRow(BaseRow):
         self.grid.attach(label, 2, 0, 1, 1)
         self.show_all()
         self._event = None
+        self._session = None
 
     def _on_accept(self, button):
         button.set_sensitive(False)
