@@ -234,7 +234,7 @@ class Interface:
             app.window.select_chat(account, jid)
         elif notif_detail in ('chat-message', 'group-chat-message'):
             app.window.select_chat(account, jid.bare)
-        elif notif_detail == 'jingle-incoming':
+        elif notif_detail == 'incoming-call':
             app.window.select_chat(account, jid.bare)
         elif notif_detail == 'file-request-received':
             app.window.select_chat(account, jid.bare)

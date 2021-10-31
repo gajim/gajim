@@ -52,7 +52,7 @@ log = logging.getLogger('gajim.gui.notification')
 NOTIFICATION_ICONS = {
     'incoming-message': 'gajim-chat_msg_recv',
     'group-chat-invitation': 'gajim-gc_invitation',
-    'jingle-incoming': 'call-start-symbolic',
+    'incoming-call': 'call-start-symbolic',
     'subscription_request': 'gajim-subscription_request',
     'unsubscribed': 'gajim-unsubscribed',
     'file-request-received': 'document-send',

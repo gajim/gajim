@@ -206,16 +206,13 @@ class CallWidget(Gtk.Box):
             # There is no voice call running running yet
             self.emit('incoming-call', event)
 
-            contact = self._client.get_module('Contacts').get_contact(
-                event.jid)
-
             app.nec.push_incoming_event(
                 NetworkEvent('notification',
-                             account=self.account,
-                             jid=self.contact.jid,
-                             notif_type='jingle-incoming',
+                             account=self._account,
+                             jid=self._contact.jid,
+                             notif_type='incoming-call',
                              title=_('Incoming Call'),
-                             text=_('%s is calling') % contact.name))
+                             text=_('%s is calling') % self._contact.name))
 
     def _on_jingle_connected(self, event):
         session = self._client.get_module('Jingle').get_jingle_session(
