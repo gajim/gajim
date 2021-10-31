@@ -188,9 +188,9 @@ class ConversationView(Gtk.ListBox):
         transfer_row = FileTransferRow(self._account, transfer)
         self._insert_message(transfer_row)
 
-    def add_jingle_file_transfer(self, event):
+    def add_jingle_file_transfer(self, event=None, db_message=None):
         jingle_transfer_row = FileTransferJingleRow(
-            self._account, self._contact, event)
+            self._account, self._contact, event=event, db_message=db_message)
         self._insert_message(jingle_transfer_row)
 
     def add_call_message(self, timestamp, text, event):

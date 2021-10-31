@@ -437,7 +437,12 @@ class ChatRow(Gtk.ListBoxRow):
 
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)
-        if line is not None and line.message is not None:
+
+        if line is None:
+            self.show_all()
+            return
+
+        if line.message is not None:
             self.set_message_text(line.message, line.additional_data)
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
@@ -453,6 +458,12 @@ class ChatRow(Gtk.ListBoxRow):
                         'muc_nick': line.contact_name})
                 self._ui.nick_label.show()
 
+            self.timestamp = line.time
+            uf_timestamp = get_uf_relative_time(line.time)
+            self._ui.timestamp_label.set_text(uf_timestamp)
+
+        if line.kind == KindConstant.FILE_TRANSFER:
+            self._ui.message_label.set_text(_('File Transfer'))
             self.timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
             self._ui.timestamp_label.set_text(uf_timestamp)
@@ -613,7 +624,7 @@ class ChatRow(Gtk.ListBoxRow):
         if app.interface.preview_manager.get_previewable(text, additional_data):
             file_name = filename_from_uri(text)
             icon, file_type = guess_simple_file_type(text)
-            text = _('%(file_type)s (%(file_name)s)') % {
+            text = '%(file_type)s (%(file_name)s)' % {
                 'file_type': file_type,
                 'file_name': file_name}
         else:

@@ -32,10 +32,12 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
+from gajim.common.const import KindConstant
 from gajim.common.i18n import _
 from gajim.common.file_props import FilesProp
 from gajim.common.helpers import open_file
 from gajim.common.helpers import file_is_locked
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
@@ -403,6 +405,17 @@ class FileTransfersWindow:
                                               file_name, file_desc)
         if file_props is None:
             return False
+
+        # Insert file request into DB
+        additional_data = AdditionalDataDict()
+        additional_data.set_value('gajim', 'type', 'jingle')
+        additional_data.set_value('gajim', 'sid', file_props.sid)
+        app.storage.archive.insert_into_logs(
+            account,
+            contact.jid.bare,
+            time.time(),
+            KindConstant.FILE_TRANSFER,
+            additional_data=additional_data)
 
         client = app.get_client(account)
         client.get_module('Jingle').start_file_transfer(

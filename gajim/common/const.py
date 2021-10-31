@@ -69,6 +69,7 @@ class KindConstant(IntEnum):
     SINGLE_MSG_SENT = 5
     CHAT_MSG_SENT = 6
     ERROR = 7
+    FILE_TRANSFER = 8
 
     def __str__(self):
         return str(self.value)

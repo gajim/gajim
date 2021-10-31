@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import os
 import time
 from datetime import datetime
@@ -22,6 +23,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.file_props import FilesProp
 from gajim.common.helpers import open_file
 from gajim.common.i18n import _
 
@@ -29,18 +31,33 @@ from .base import BaseRow
 from ...util import get_builder
 from ...util import format_eta
 
+log = logging.getLogger('gajim.gui.conversation.rows.file_transfer_jingle')
+
 
 class FileTransferJingleRow(BaseRow):
-    def __init__(self, account, contact, event):
+    def __init__(self, account, contact, event=None, db_message=None):
         BaseRow.__init__(self, account)
 
         self.type = 'file-transfer'
-        timestamp = time.time()
+
+        is_from_db = bool(db_message is not None)
+
+        if is_from_db:
+            timestamp = db_message.time
+        else:
+            timestamp = time.time()
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
 
         self._contact = contact
-        self._file_props = event.file_props
+
+        if is_from_db:
+            sid = db_message.additional_data.get_value('gajim', 'sid')
+            self._file_props = FilesProp.getFilePropBySid(sid)
+            if self._file_props is None:
+                log.debug('File props not found for SID: %s', sid)
+        else:
+            self._file_props = event.file_props
         self._start_time = 0
 
         if app.settings.get('use_kib_mib'):
@@ -63,6 +80,16 @@ class FileTransferJingleRow(BaseRow):
 
         self._ui.connect_signals(self)
 
+        self.show_all()
+
+        if is_from_db:
+            self._reconstruct_transfer()
+        else:
+            self._display_transfer_info(event.name)
+
+        if self._file_props is None:
+            return
+
         # pylint: disable=line-too-long
         app.ged.register_event_handler('file-completed', ged.GUI1, self.process_event)
         app.ged.register_event_handler('file-hash-error', ged.GUI1, self.process_event)
@@ -74,16 +101,44 @@ class FileTransferJingleRow(BaseRow):
         app.ged.register_event_handler('jingle-ft-cancelled-received', ged.GUI1, self.process_event)
         # pylint: enable=line-too-long
 
-        self.show_all()
+    def _reconstruct_transfer(self):
+        self._show_file_infos()
+        if self._file_props is None:
+            self._ui.transfer_action.set_text(_('File Transfer'))
+            self._ui.error_label.set_text(_('No info available'))
+            self._ui.action_stack.set_visible_child_name('error')
+            return
 
-        self._display_transfer_info(event)
+        if self._file_props.completed:
+            self._show_completed()
+            return
 
-    def _display_transfer_info(self, event):
-        if event.name == 'file-request-sent':
+        if self._file_props.stopped:
+            self._ui.action_stack.set_visible_child_name('error')
+            self._ui.transfer_action.set_text(_('File Transfer Stopped'))
+            self._ui.error_label.set_text('')
+            return
+
+        if self._file_props.error is not None:
+            self._show_error(self._file_props)
+            return
+
+        self._ui.transfer_action.set_text(_('File Offered…'))
+
+    def _display_transfer_info(self, event_name):
+        if event_name == 'file-request-sent':
             self._ui.action_stack.set_visible_child_name('progress')
             self._ui.progress_label.set_text(_('Waiting…'))
 
         self._ui.transfer_action.set_text(_('File Offered…'))
+        self._show_file_infos()
+
+    def _show_file_infos(self):
+        if self._file_props is None:
+            self._ui.file_name.hide()
+            self._ui.file_description.hide()
+            self._ui.file_size.hide()
+            return
 
         file_name = GLib.markup_escape_text(self._file_props.name)
         if self._file_props.mime_type:
@@ -127,7 +182,7 @@ class FileTransferJingleRow(BaseRow):
         if event.name == 'file-completed':
             self._show_completed()
         elif event.name == 'file-error':
-            self._show_error(event)
+            self._show_error(event.file_props)
         elif event.name == 'file-hash-error':
             self._ui.action_stack.set_visible_child_name('hash-error')
             self._ui.transfer_action.set_text(_('File Verification Failed'))
@@ -153,7 +208,10 @@ class FileTransferJingleRow(BaseRow):
         if file_props.type_ == 's':
             # We're sending a file
             if self._start_time == 0:
-                self._start_time = time.time()
+                self._start_time = time_now
+                return
+            if not file_props.transfered_size:
+                return
             transferred_size = file_props.transfered_size[-1][1]
         else:
             # We're receiving a file
@@ -180,15 +238,15 @@ class FileTransferJingleRow(BaseRow):
 
         self._ui.progress_bar.set_fraction(progress)
 
-    def _show_error(self, event):
+    def _show_error(self, file_props):
         self._ui.action_stack.set_visible_child_name('error')
         self._ui.transfer_action.set_text(_('File Transfer Stopped'))
-        if event.file_props.error == -1:
+        if file_props.error == -1:
             self._ui.error_label.set_text(
                 _('%s stopped the transfer') % self._contact.name)
-        elif event.file_props.error == -6:
+        elif file_props.error == -6:
             self._ui.error_label.set_text(_('Error opening file'))
-        elif event.file_props.error == -12:
+        elif file_props.error == -12:
             self._ui.error_label.set_text(_('SSL certificate error'))
         else:
             self._ui.error_label.set_text(_('An error occurred'))
@@ -205,6 +263,7 @@ class FileTransferJingleRow(BaseRow):
     def _on_reject_file_request(self, _widget):
         self._client.get_module('Bytestream').send_file_rejection(
             self._file_props)
+        self._file_props.stopped = True
         self._ui.action_stack.set_visible_child_name('rejected')
         self._ui.transfer_action.set_text(_('File Transfer Cancelled'))
 

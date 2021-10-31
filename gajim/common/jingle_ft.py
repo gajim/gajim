@@ -16,20 +16,23 @@
 Handles  Jingle File Transfer (XEP 0234)
 """
 
-import hashlib
 import logging
 import threading
+import time
 from enum import IntEnum, unique
 
 import nbxmpp
+from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.const import KindConstant
 from gajim.common import jingle_xtls
 from gajim.common.jingle_content import contents, JingleContent
 from gajim.common.jingle_transport import JingleTransportSocks5, TransportType
 from gajim.common import helpers
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.connection_handlers_events import FileRequestReceivedEvent
 from gajim.common.jingle_ftstates import (
     StateInitialized, StateCandSent, StateCandReceived, StateTransfering,
@@ -128,11 +131,29 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_initiate(self, stanza, content, error, action):
         log.debug("Jingle FT request received")
-        app.nec.push_incoming_event(FileRequestReceivedEvent(None,
-                                                               conn=self.session.connection,
-                                                               stanza=stanza,
-                                                               jingle_content=content,
-                                                               FT_content=self))
+        app.nec.push_incoming_event(
+            FileRequestReceivedEvent(None,
+                                     conn=self.session.connection,
+                                     stanza=stanza,
+                                     jingle_content=content,
+                                     FT_content=self))
+
+        account = self.session.connection.name
+        jid = self.session.connection.get_module('Bytestream')._ft_get_from(
+            stanza)
+        jid = JID.from_string(jid)
+        sid = stanza.getTag('jingle').getAttr('sid')
+        timestamp = time.time()
+        additional_data = AdditionalDataDict()
+        additional_data.set_value('gajim', 'type', 'jingle')
+        additional_data.set_value('gajim', 'sid', sid)
+        app.storage.archive.insert_into_logs(
+            account,
+            jid.bare,
+            timestamp,
+            KindConstant.FILE_TRANSFER,
+            additional_data=additional_data)
+
         if self.session.request:
             # accept the request
             self.session.approve_content(self.media, self.name)

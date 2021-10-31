@@ -283,7 +283,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self._process_jingle_av_event(event)
                 return
             if event.name in ('file-request-received', 'file-request-sent'):
-                self.add_jingle_file_transfer(event)
+                self.add_jingle_file_transfer(event=event)
                 return
 
         method_name = event.name.replace('-', '_')
@@ -1086,7 +1086,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.conversation_view.add_file_transfer(transfer)
 
     def add_jingle_file_transfer(self, event):
-        self.conversation_view.add_jingle_file_transfer(event)
+        control_selected = bool(self == app.window.get_active_control())
+        if self._scrolled_view.get_lower_complete() and control_selected:
+            self.conversation_view.add_jingle_file_transfer(event)
 
     def add_call_message(self, timestamp, text, event=None):
         self.conversation_view.add_call_message(timestamp, text, event)
@@ -1106,10 +1108,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        chat_active = app.window.is_chat_active(
-            self.account, self.contact.jid)
-
-        if self._scrolled_view.get_lower_complete() and chat_active:
+        control_selected = bool(self == app.window.get_active_control())
+        if self._scrolled_view.get_lower_complete() and control_selected:
             self.conversation_view.add_message(
                 text,
                 kind,
@@ -1143,6 +1143,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._notify(name, text, tim)
 
             # Send chat marker if we’re actively following the chat
+            chat_active = app.window.is_chat_active(
+                self.account, self.contact.jid)
             if chat_active and self._scrolled_view.get_autoscroll():
                 app.window.mark_as_read(self.account, self.contact.jid)
 
@@ -1355,7 +1357,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def add_messages(self, messages):
         for msg in messages:
-            if not msg or not msg.message:
+            if msg.kind == KindConstant.FILE_TRANSFER:
+                if msg.additional_data.get_value('gajim', 'type') == 'jingle':
+                    self.conversation_view.add_jingle_file_transfer(
+                        db_message=msg)
+                continue
+
+            if not msg.message:
                 continue
 
             contact_name = msg.contact_name
