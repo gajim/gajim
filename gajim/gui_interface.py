@@ -243,7 +243,7 @@ class Interface:
                               'group-chat-invitation'):
             app.window.show_account_page(account)
 
-        app.window.present()
+        app.window.present_with_time(Gtk.get_current_event_time())
 
     @staticmethod
     def handle_event_information(event):
