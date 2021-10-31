@@ -271,9 +271,7 @@ class CallWidget(Gtk.Box):
                 self._jingle['video'].available)
             self._ui.av_cam_button.set_sensitive(False)
 
-    def accept_call(self, event):
-        session = self._client.get_module('Jingle').get_jingle_session(
-            event.fjid, event.sid)
+    def accept_call(self, session):
         if not session:
             return
 
@@ -282,28 +280,33 @@ class CallWidget(Gtk.Box):
 
         if audio and not audio.negotiated:
             self._set_jingle_state(
-                'audio', JingleState.CONNECTING, event.sid)
+                'audio', JingleState.CONNECTING, session.sid)
         if video and not video.negotiated:
             self._set_jingle_state(
-                'video', JingleState.CONNECTING, event.sid)
+                'video', JingleState.CONNECTING, session.sid)
 
         if not session.accepted:
             session.approve_session()
 
-        for item in event.contents:
-            session.approve_content(item.media)
+        if audio is not None:
+            session.approve_content('audio')
+        if video is not None:
+            session.approve_content('video')
 
-    def reject_call(self, event):
-        session = self._client.get_module('Jingle').get_jingle_session(
-            event.fjid, event.sid)
+    def reject_call(self, session):
         if not session:
             return
+
+        audio = session.get_content('audio')
+        video = session.get_content('video')
 
         if not session.accepted:
             session.decline_session()
         else:
-            for item in event.contents:
-                session.reject_content(item.media)
+            if audio is not None:
+                session.reject_content('audio')
+            if video is not None:
+                session.reject_content('video')
 
     def _update_audio(self):
         audio_state = self._jingle['audio'].state

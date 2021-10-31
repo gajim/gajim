@@ -27,14 +27,18 @@ Handles Jingle sessions (XEP 0166)
 #   - Tie-breaking
 # * timeout
 
+import time
 import logging
 from enum import Enum, unique
 
 import nbxmpp
+from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
 
 from gajim.common import app
+from gajim.common.const import KindConstant
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.jingle_transport import get_jingle_transport
 from gajim.common.jingle_transport import JingleTransportIBB
 from gajim.common.jingle_content import get_jingle_content
@@ -580,6 +584,25 @@ class JingleSession:
         self.state = JingleStates.PENDING
         # Send event about starting a session
         self._raise_event('jingle-request-received', contents=contents)
+
+        # Check if it's an A/V call and add it to the archive
+        content_types = []
+        for item in contents:
+            content_types.append(item.media)
+        if not any(item in ('audio', 'video') for item in content_types):
+            return
+
+        account = self.connection.name
+        jid = JID.from_string(self.peerjid)
+        timestamp = time.time()
+        additional_data = AdditionalDataDict()
+        additional_data.set_value('gajim', 'sid', self.sid)
+        app.storage.archive.insert_into_logs(
+            account,
+            jid.bare,
+            timestamp,
+            KindConstant.CALL,
+            additional_data=additional_data)
 
     def __broadcast(self, stanza, jingle, error, action):
         """

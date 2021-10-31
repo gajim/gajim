@@ -1090,8 +1090,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if self._scrolled_view.get_lower_complete() and control_selected:
             self.conversation_view.add_jingle_file_transfer(event)
 
-    def add_call_message(self, timestamp, text, event=None):
-        self.conversation_view.add_call_message(timestamp, text, event)
+    def add_call_message(self, event):
+        control_selected = bool(self == app.window.get_active_control())
+        if self._scrolled_view.get_lower_complete() and control_selected:
+            self.conversation_view.add_call_message(event=event)
 
     def add_message(self,
                     text,
@@ -1361,6 +1363,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 if msg.additional_data.get_value('gajim', 'type') == 'jingle':
                     self.conversation_view.add_jingle_file_transfer(
                         db_message=msg)
+                continue
+
+            if msg.kind == KindConstant.CALL:
+                self.conversation_view.add_call_message(db_message=msg)
                 continue
 
             if not msg.message:

@@ -193,12 +193,9 @@ class ConversationView(Gtk.ListBox):
             self._account, self._contact, event=event, db_message=db_message)
         self._insert_message(jingle_transfer_row)
 
-    def add_call_message(self, timestamp, text, event):
-        call_row = CallRow(self._account,
-                           self._contact,
-                           timestamp,
-                           text,
-                           event)
+    def add_call_message(self, event=None, db_message=None):
+        call_row = CallRow(
+            self._account, self._contact, event=event, db_message=db_message)
         self._insert_message(call_row)
 
     def add_command_output(self, text, is_error):

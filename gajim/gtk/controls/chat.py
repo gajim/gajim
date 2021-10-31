@@ -488,17 +488,17 @@ class ChatControl(BaseControl):
     def _process_jingle_av_event(self, event):
         self._call_widget.process_event(event)
 
-    def _on_accept_call(self, _view, event):
-        self._call_widget.accept_call(event)
+    def _on_accept_call(self, _view, session):
+        self._call_widget.accept_call(session)
 
-    def _on_reject_call(self, _view, event):
-        self._call_widget.reject_call(event)
+    def _on_reject_call(self, _view, session):
+        self._call_widget.reject_call(session)
 
     def _on_call_ended(self, _call_widget):
         self.conversation_view.update_call_rows()
 
     def _add_incoming_call(self, _call_widget, event):
-        self.add_call_message(time.time(), '', event=event)
+        self.add_call_message(event)
 
     def on_location_eventbox_button_release_event(self, _widget, _event):
         return

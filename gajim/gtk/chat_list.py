@@ -470,6 +470,12 @@ class ChatRow(Gtk.ListBoxRow):
             uf_timestamp = get_uf_relative_time(line.time)
             self._ui.timestamp_label.set_text(uf_timestamp)
 
+        if line.kind == KindConstant.CALL:
+            self._ui.message_label.set_text(_('Call'))
+            self.timestamp = line.time
+            uf_timestamp = get_uf_relative_time(line.time)
+            self._ui.timestamp_label.set_text(uf_timestamp)
+
         self.show_all()
 
     @property
