@@ -380,6 +380,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._chat_page.update_workspace(workspace_id)
         self._workspace_side_bar.update_avatar(workspace_id)
 
+    def get_chat_list(self, workspace_id):
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        return chat_list_stack.get_chatlist(workspace_id)
+
     def _add_group_chat(self, _action, param):
         self.add_group_chat(**param.unpack())
 

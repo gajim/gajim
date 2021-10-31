@@ -209,7 +209,7 @@ class ChatListStack(Gtk.Stack):
     def remove_chat(self, workspace_id, account, jid):
         chat_list = self._chat_lists[workspace_id]
         type_ = chat_list.get_chat_type(account, jid)
-        chat_list.remove_chat(account, jid)
+        chat_list.remove_chat(account, jid, emit_unread=False)
         self.store_open_chats(workspace_id)
         self.emit('chat-removed', account, jid, type_)
 

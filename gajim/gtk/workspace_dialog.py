@@ -21,6 +21,8 @@ from gajim.common.i18n import _
 
 from .avatar import make_workspace_avatar
 from .avatar_selector import AvatarSelector
+from .dialogs import ConfirmationDialog
+from .dialogs import DialogButton
 from .util import get_builder
 from .util import rgba_to_float
 from .util import make_rgba
@@ -83,8 +85,24 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
             self.destroy()
 
     def _on_remove_workspace(self, _button):
-        app.window.remove_workspace(self._workspace_id)
-        self.destroy()
+        def _on_remove():
+            app.window.remove_workspace(self._workspace_id)
+            self.destroy()
+
+        chat_list = app.window.get_chat_list(self._workspace_id)
+        open_chats = chat_list.get_open_chats()
+        if len(open_chats) > 0:
+            ConfirmationDialog(
+                _('Remove Workspace'),
+                _('Remove Workspace'),
+                _('This workspace contains chats. Remove anyway?'),
+                [DialogButton.make('Cancel',
+                                   text=_('_No')),
+                 DialogButton.make('Remove',
+                                   callback=_on_remove)]).show()
+            return
+        # No chats in chat list, it is save to remove workspace
+        _on_remove()
 
     def _on_cancel(self, _button):
         self.destroy()

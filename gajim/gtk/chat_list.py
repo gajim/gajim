@@ -277,17 +277,19 @@ class ChatList(Gtk.ListBox, EventHelper):
         row.toggle_pinned()
         self.invalidate_sort()
 
-    def remove_chat(self, account, jid):
+    def remove_chat(self, account, jid, emit_unread=True):
         row = self._chats.pop((account, jid))
         self.remove(row)
         row.destroy()
-        self.emit_unread_changed()
+        if emit_unread:
+            self.emit_unread_changed()
 
     def remove_chats_for_account(self, account):
         for row_account, jid in list(self._chats.keys()):
             if row_account != account:
                 continue
             self.remove_chat(account, jid)
+        self.emit_unread_changed()
 
     def get_selected_chat(self):
         row = self.get_selected_row()
