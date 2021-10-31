@@ -132,7 +132,6 @@ class ChatPage(Gtk.Box):
 
     def _on_chat_unselected(self, _chat_list_stack):
         self._chat_stack.clear()
-        self._chat_stack.reset_active_control()
         self._search_view.set_context(None, None)
 
     def _on_search_history(self, _action, _param):
