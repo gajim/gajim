@@ -23,6 +23,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.const import KindConstant
 from gajim.common.file_props import FilesProp
 from gajim.common.helpers import open_file
 from gajim.common.i18n import _
@@ -67,7 +68,35 @@ class FileTransferJingleRow(BaseRow):
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
+        avatar_placeholder.set_valign(Gtk.Align.START)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
+
+        if is_from_db:
+            if db_message.kind == KindConstant.FILE_TRANSFER_INCOMING:
+                contact = self._contact
+                is_self = True
+            else:
+                contact = self._client.get_module('Contacts').get_contact(
+                    str(self._client.get_own_jid().bare))
+                is_self = False
+        else:
+            if event.name == 'file-request-sent':
+                contact = self._client.get_module('Contacts').get_contact(
+                    str(self._client.get_own_jid().bare))
+                is_self = False
+            else:
+                contact = self._contact
+                is_self = True
+
+        scale = self.get_scale_factor()
+        avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+        avatar_image = Gtk.Image.new_from_surface(avatar)
+        avatar_placeholder.add(avatar_image)
+
+        name_widget = self.create_name_widget(contact.name, is_self)
+        name_widget.set_halign(Gtk.Align.START)
+        name_widget.set_valign(Gtk.Align.START)
+        self.grid.attach(name_widget, 1, 0, 1, 1)
 
         timestamp_widget = self.create_timestamp_widget(self.timestamp)
         timestamp_widget.set_hexpand(True)
@@ -76,7 +105,7 @@ class FileTransferJingleRow(BaseRow):
         self.grid.attach(timestamp_widget, 2, 0, 1, 1)
 
         self._ui = get_builder('file_transfer_jingle.ui')
-        self.grid.attach(self._ui.transfer_box, 1, 0, 1, 1)
+        self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
 
         self._ui.connect_signals(self)
 
