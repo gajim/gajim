@@ -60,6 +60,7 @@ class ChatPage(Gtk.Box):
         self._ui.filter_bar_toggle.connect(
             'toggled', self._on_filter_revealer_toggled)
 
+        self._active_control = None
         self._chat_list_stack = ChatListStack(
             self._chat_filter, self._ui.search_entry)
         self._chat_list_stack.connect('chat-selected', self._on_chat_selected)
@@ -129,6 +130,13 @@ class ChatPage(Gtk.Box):
         self._chat_stack.show_chat(account, jid)
         self._search_view.set_context(account, jid)
         self.emit('chat-selected', workspace_id, account, jid)
+
+        control = self.get_control(account, jid)
+        if self._active_control != control:
+            if self._active_control is not None:
+                self._active_control.set_control_active(False)
+            control.set_control_active(True)
+        self._active_control = control
 
     def _on_chat_unselected(self, _chat_list_stack):
         self._chat_stack.clear()

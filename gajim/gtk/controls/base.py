@@ -1263,16 +1263,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def set_control_active(self, state):
         if state:
             self.set_emoticon_popover()
-            jid = self.contact.jid
-            if self.conversation_view.autoscroll:
-                # we are at the end
-                if app.window.get_chat_unread_count(
-                        self.account, self.contact.jid) > 0:
-                    self.redraw_after_event_removed(jid)
-                    app.window.mark_as_read(self.account, self.contact.jid)
 
-            # send chatstate inactive to the one we're leaving
-            # and active to the one we visit
             if self.msg_textview.has_text():
                 self._client.get_module('Chatstate').set_chatstate(
                     self.contact, Chatstate.PAUSED)
