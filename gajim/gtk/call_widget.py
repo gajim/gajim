@@ -309,7 +309,7 @@ class CallWidget(Gtk.Box):
         if video is not None:
             session.approve_content('video')
 
-    def reject_call(self, session):
+    def decline_call(self, session):
         if not session:
             return
 

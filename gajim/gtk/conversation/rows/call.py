@@ -19,6 +19,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
+from gajim.common.const import KindConstant
 from gajim.common.i18n import _
 
 from .widgets import SimpleLabel
@@ -44,6 +45,7 @@ class CallRow(BaseRow):
 
         self._contact = contact
         self._event = event
+        self._db_message = db_message
         self._session = None
 
         if is_from_db:
@@ -51,21 +53,14 @@ class CallRow(BaseRow):
             module = self._client.get_module('Jingle')
             self._session = module.get_jingle_session(self._contact.jid, sid)
 
-        avatar_placeholder = Gtk.Box()
-        avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
-        self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
+        self._avatar_placeholder = Gtk.Box()
+        self._avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
+        self.grid.attach(self._avatar_placeholder, 0, 0, 1, 1)
 
         if event is None and self._session is None:
-            icon = Gtk.Image.new_from_icon_name('call-start-symbolic',
-                                                Gtk.IconSize.MENU)
-            self.grid.attach(icon, 1, 0, 1, 1)
-
-            label = SimpleLabel()
-            label.get_style_context().add_class('dim-label')
-            label.set_text(_('Call'))
-            self.grid.attach(label, 2, 0, 1, 1)
+            self._add_history_call_widget()
         else:
-            self._prepare_incoming_call()
+            self._add_incoming_call_widget()
 
         timestamp_widget = self.create_timestamp_widget(self.timestamp)
         timestamp_widget.set_hexpand(True)
@@ -80,22 +75,14 @@ class CallRow(BaseRow):
             return
 
         self._call_box.destroy()
+        self._add_history_call_widget()
 
-        icon = Gtk.Image.new_from_icon_name('call-start-symbolic',
-                                            Gtk.IconSize.MENU)
-        self.grid.attach(icon, 1, 0, 1, 1)
-
-        label = SimpleLabel()
-        label.get_style_context().add_class('dim-label')
-        label.set_text(_('Call'))
-        self.grid.attach(label, 2, 0, 1, 1)
-        self.show_all()
         self._event = None
         self._session = None
 
     def _on_accept(self, button):
         button.set_sensitive(False)
-        self._reject_button.set_sensitive(False)
+        self._decline_button.set_sensitive(False)
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
@@ -103,18 +90,58 @@ class CallRow(BaseRow):
         else:
             self.get_parent().accept_call(self._session)
 
-    def _on_reject(self, button):
-        button.set_sensitive(False)
-        self._accept_button.set_sensitive(False)
+    def _on_decline(self, button):
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
-            self.get_parent().reject_call(session)
+            self.get_parent().decline_call(session)
         else:
-            self.get_parent().reject_call(self._session)
+            self.get_parent().decline_call(self._session)
         self._session = None
 
-    def _prepare_incoming_call(self):
+    def _add_history_call_widget(self):
+        if self._db_message is not None:
+            if self._db_message.kind == KindConstant.CALL_INCOMING:
+                contact = self._contact
+                is_self = True
+            else:
+                contact = self._client.get_module('Contacts').get_contact(
+                    str(self._client.get_own_jid().bare))
+                is_self = False
+
+        if self._event is not None:
+            if self._event == 'incoming-call':
+                contact = self._client.get_module('Contacts').get_contact(
+                    str(self._client.get_own_jid().bare))
+                is_self = False
+            else:
+                contact = self._contact
+                is_self = True
+
+        scale = self.get_scale_factor()
+        avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+        avatar_image = Gtk.Image.new_from_surface(avatar)
+        self._avatar_placeholder.add(avatar_image)
+
+        name_widget = self.create_name_widget(contact.name, is_self)
+        name_widget.set_halign(Gtk.Align.START)
+        name_widget.set_valign(Gtk.Align.START)
+        self.grid.attach(name_widget, 1, 0, 1, 1)
+
+        icon = Gtk.Image.new_from_icon_name('call-start-symbolic',
+                                            Gtk.IconSize.MENU)
+
+        label = SimpleLabel()
+        label.get_style_context().add_class('dim-label')
+        label.set_text(_('Call'))
+
+        content_box = Gtk.Box(spacing=12)
+        content_box.add(icon)
+        content_box.add(label)
+        self.grid.attach(content_box, 1, 1, 1, 1)
+        self.show_all()
+
+    def _add_incoming_call_widget(self):
         self._call_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self._call_box.set_size_request(350, -1)
@@ -150,17 +177,38 @@ class CallRow(BaseRow):
         label.set_line_wrap(True)
         self._call_box.add(label)
 
-        self._accept_button = Gtk.Button.new_with_label(_('Accept Call'))
-        self._accept_button.get_style_context().add_class('suggested-action')
+        self._decline_button = Gtk.Button()
+        if self._session is not None:
+            self._decline_button.set_sensitive(not self._session.accepted)
+        self._decline_button.get_style_context().add_class(
+            'destructive-action')
+        self._decline_button.connect('clicked', self._on_decline)
+        decline_icon = Gtk.Image.new_from_icon_name(
+            'call-stop-symbolic', Gtk.IconSize.DND)
+        self._decline_button.add(decline_icon)
+        decline_label = Gtk.Label(label=_('Decline'))
+        decline_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
+        decline_box.add(self._decline_button)
+        decline_box.add(decline_label)
+
+        self._accept_button = Gtk.Button()
+        if self._session is not None:
+            self._accept_button.set_sensitive(not self._session.accepted)
+        self._accept_button.get_style_context().add_class(
+            'suggested-action')
         self._accept_button.connect('clicked', self._on_accept)
+        accept_icon = Gtk.Image.new_from_icon_name(
+            'call-start-symbolic', Gtk.IconSize.DND)
+        self._accept_button.add(accept_icon)
+        accept_label = Gtk.Label(label=_('Accept'))
+        accept_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
+        accept_box.add(self._accept_button)
+        accept_box.add(accept_label)
 
-        self._reject_button = Gtk.Button.new_with_label(_('Reject'))
-        self._reject_button.connect('clicked', self._on_reject)
-
-        button_box = Gtk.Box(spacing=12)
+        button_box = Gtk.Box(spacing=50)
         button_box.set_halign(Gtk.Align.CENTER)
-        button_box.add(self._reject_button)
-        button_box.add(self._accept_button)
+        button_box.add(decline_box)
+        button_box.add(accept_box)
         self._call_box.add(button_box)
 
         self.grid.attach(self._call_box, 1, 0, 1, 1)

@@ -106,7 +106,7 @@ class ChatControl(BaseControl):
         self.xml.paned1.add2(self._call_widget)
 
         self.conversation_view.connect('accept-call', self._on_accept_call)
-        self.conversation_view.connect('reject-call', self._on_reject_call)
+        self.conversation_view.connect('decline-call', self._on_decline_call)
 
         # Menu for the HeaderBar
         self.control_menu = gui_menu_builder.get_singlechat_menu(
@@ -491,8 +491,8 @@ class ChatControl(BaseControl):
     def _on_accept_call(self, _view, session):
         self._call_widget.accept_call(session)
 
-    def _on_reject_call(self, _view, session):
-        self._call_widget.reject_call(session)
+    def _on_decline_call(self, _view, session):
+        self._call_widget.decline_call(session)
 
     def _on_call_ended(self, _call_widget):
         self.conversation_view.update_call_rows()

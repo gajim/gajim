@@ -86,6 +86,9 @@ row:backdrop { transition: none; }
     border-radius: 6px;
     padding: 12px;
 }
+.conversation-call-box label {
+    font-size: small;
+}
 .conversation-meta {
     color: @insensitive_fg_color;
     font-size: small;

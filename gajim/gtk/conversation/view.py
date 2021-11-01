@@ -60,7 +60,7 @@ class ConversationView(Gtk.ListBox):
             None,
             (object, )
         ),
-        'reject-call': (
+        'decline-call': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (object, )
@@ -468,8 +468,8 @@ class ConversationView(Gtk.ListBox):
     def accept_call(self, event):
         self.emit('accept-call', event)
 
-    def reject_call(self, event):
-        self.emit('reject-call', event)
+    def decline_call(self, event):
+        self.emit('decline-call', event)
 
     def _on_contact_setting_changed(self, *args):
         self.invalidate_filter()
