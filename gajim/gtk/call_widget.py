@@ -15,6 +15,7 @@
 from typing import Optional  # pylint: disable=unused-import
 
 import logging
+import time
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -23,6 +24,8 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import JingleState
+from gajim.common.const import KindConstant
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 
@@ -138,6 +141,7 @@ class CallWidget(Gtk.Box):
                 self._contact.jid)
             self._set_jingle_state('audio', JingleState.CONNECTING, sid)
             self._set_jingle_state('video', JingleState.CONNECTING, sid)
+            self._store_outgoing_call(sid)
             return
 
         if 'audio' in jingle_types:
@@ -147,6 +151,7 @@ class CallWidget(Gtk.Box):
                 sid = self._client.get_module('Jingle').start_audio(
                     self._contact.jid)
                 self._set_jingle_state('audio', JingleState.CONNECTING, sid)
+                self._store_outgoing_call(sid)
 
         if 'video' in jingle_types:
             if self._jingle['video'].state != JingleState.NULL:
@@ -155,6 +160,17 @@ class CallWidget(Gtk.Box):
                 sid = self._client.get_module('Jingle').start_video(
                     self._contact.jid)
                 self._set_jingle_state('video', JingleState.CONNECTING, sid)
+                self._store_outgoing_call(sid)
+
+    def _store_outgoing_call(self, sid):
+        additional_data = AdditionalDataDict()
+        additional_data.set_value('gajim', 'sid', sid)
+        app.storage.archive.insert_into_logs(
+            self._account,
+            self._contact.jid.bare,
+            time.time(),
+            KindConstant.CALL_OUTGOING,
+            additional_data=additional_data)
 
     def _on_num_button_pressed(self, _widget, num):
         self._get_audio_content().start_dtmf(num)

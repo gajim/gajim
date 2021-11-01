@@ -414,7 +414,7 @@ class FileTransfersWindow:
             account,
             contact.jid.bare,
             time.time(),
-            KindConstant.FILE_TRANSFER,
+            KindConstant.FILE_TRANSFER_OUTGOING,
             additional_data=additional_data)
 
         client = app.get_client(account)

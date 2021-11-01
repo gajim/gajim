@@ -151,7 +151,7 @@ class JingleFileTransfer(JingleContent):
             account,
             jid.bare,
             timestamp,
-            KindConstant.FILE_TRANSFER,
+            KindConstant.FILE_TRANSFER_INCOMING,
             additional_data=additional_data)
 
         if self.session.request:

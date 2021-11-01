@@ -1359,13 +1359,15 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def add_messages(self, messages):
         for msg in messages:
-            if msg.kind == KindConstant.FILE_TRANSFER:
+            if msg.kind in (KindConstant.FILE_TRANSFER_INCOMING,
+                            KindConstant.FILE_TRANSFER_OUTGOING):
                 if msg.additional_data.get_value('gajim', 'type') == 'jingle':
                     self.conversation_view.add_jingle_file_transfer(
                         db_message=msg)
                 continue
 
-            if msg.kind == KindConstant.CALL:
+            if msg.kind in (KindConstant.CALL_INCOMING,
+                            KindConstant.CALL_OUTGOING):
                 self.conversation_view.add_call_message(db_message=msg)
                 continue
 

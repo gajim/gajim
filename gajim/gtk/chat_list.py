@@ -464,13 +464,15 @@ class ChatRow(Gtk.ListBoxRow):
             uf_timestamp = get_uf_relative_time(line.time)
             self._ui.timestamp_label.set_text(uf_timestamp)
 
-        if line.kind == KindConstant.FILE_TRANSFER:
+        if line.kind in (KindConstant.FILE_TRANSFER_INCOMING,
+                         KindConstant.FILE_TRANSFER_OUTGOING):
             self._ui.message_label.set_text(_('File Transfer'))
             self.timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
             self._ui.timestamp_label.set_text(uf_timestamp)
 
-        if line.kind == KindConstant.CALL:
+        if line.kind in (KindConstant.CALL_INCOMING,
+                         KindConstant.CALL_OUTGOING):
             self._ui.message_label.set_text(_('Call'))
             self.timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)

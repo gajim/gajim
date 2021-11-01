@@ -601,7 +601,7 @@ class JingleSession:
             account,
             jid.bare,
             timestamp,
-            KindConstant.CALL,
+            KindConstant.CALL_INCOMING,
             additional_data=additional_data)
 
     def __broadcast(self, stanza, jingle, error, action):
