@@ -15,6 +15,7 @@
 import logging
 import time
 
+from gi.repository import Gio
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -319,6 +320,10 @@ class ChatList(Gtk.ListBox, EventHelper):
             self._on_presence_received(event)
         elif event.name == 'message-sent':
             self._on_message_sent(event)
+        elif event.name == 'jingle-request-received':
+            self._on_jingle_request_received(event)
+        elif event.name == 'file-request-received':
+            self._on_file_request_received(event)
         else:
             log.warning('Unhandled Event: %s', event.name)
 
@@ -332,7 +337,8 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.set_timestamp(event.properties.mam.timestamp)
         else:
             row.set_timestamp(event.properties.timestamp)
-        row.set_message_text(event.msgtxt, event.additional_data)
+        row.set_message_text(
+            event.msgtxt, additional_data=event.additional_data)
         self._add_unread(row, event.properties)
         self.invalidate_sort()
 
@@ -353,7 +359,8 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         # Set timestamp if it's None (outgoing MUC messages)
         row.set_timestamp(event.timestamp or time.time())
-        row.set_message_text(event.message, event.additional_data)
+        row.set_message_text(
+            event.message, additional_data=event.additional_data)
         self.invalidate_sort()
 
     @staticmethod
@@ -375,6 +382,25 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _on_presence_received(self, event):
         row = self._chats.get((event.account, event.jid))
         row.update_avatar()
+
+    def _on_jingle_request_received(self, event):
+        content_types = []
+        for item in event.contents:
+            content_types.append(item.media)
+        if 'audio' in content_types or 'video' in content_types:
+            # AV Call received
+            row = self._chats.get((event.account, event.jid))
+            row.set_timestamp(time.time())
+            row.set_nick('')
+            row.set_message_text(
+                _('Call'), icon_name='call-start-symbolic')
+
+    def _on_file_request_received(self, event):
+        row = self._chats.get((event.account, event.jid))
+        row.set_timestamp(time.time())
+        row.set_nick('')
+        row.set_message_text(
+            _('File'), icon_name='text-x-generic-symbolic')
 
     @staticmethod
     def _add_unread(row, properties):
@@ -445,7 +471,8 @@ class ChatRow(Gtk.ListBoxRow):
             return
 
         if line.message is not None:
-            self.set_message_text(line.message, line.additional_data)
+            self.set_message_text(
+                line.message, additional_data=line.additional_data)
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
                 self._ui.nick_label.set_text(_('Me:'))
@@ -466,14 +493,16 @@ class ChatRow(Gtk.ListBoxRow):
 
         if line.kind in (KindConstant.FILE_TRANSFER_INCOMING,
                          KindConstant.FILE_TRANSFER_OUTGOING):
-            self._ui.message_label.set_text(_('File Transfer'))
+            self.set_message_text(
+                _('File'), icon_name='text-x-generic-symbolic')
             self.timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
             self._ui.timestamp_label.set_text(uf_timestamp)
 
         if line.kind in (KindConstant.CALL_INCOMING,
                          KindConstant.CALL_OUTGOING):
-            self._ui.message_label.set_text(_('Call'))
+            self.set_message_text(
+                _('Call'), icon_name='call-start-symbolic')
             self.timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
             self._ui.timestamp_label.set_text(uf_timestamp)
@@ -629,14 +658,18 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(nickname)
 
-    def set_message_text(self, text, additional_data):
+    def set_message_text(self, text, icon_name=None, additional_data=None):
         icon = None
-        if app.interface.preview_manager.get_previewable(text, additional_data):
-            file_name = filename_from_uri(text)
-            icon, file_type = guess_simple_file_type(text)
-            text = '%(file_type)s (%(file_name)s)' % {
-                'file_type': file_type,
-                'file_name': file_name}
+        if icon_name is not None:
+            icon = Gio.Icon.new_for_string(icon_name)
+        if additional_data is not None:
+            if app.interface.preview_manager.get_previewable(
+                    text, additional_data):
+                file_name = filename_from_uri(text)
+                icon, file_type = guess_simple_file_type(text)
+                text = '%(file_type)s (%(file_name)s)' % {
+                    'file_type': file_type,
+                    'file_name': file_name}
         else:
             text = text.replace('\n', ' ')
         self._ui.message_label.set_text(text)

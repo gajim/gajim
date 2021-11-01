@@ -31,6 +31,8 @@ HANDLED_EVENTS = [
     'presence-received',
     'message-sent',
     'chatstate-received',
+    'jingle-request-received',
+    'file-request-received'
 ]
 
 
