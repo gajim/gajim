@@ -13,7 +13,7 @@ X-GNOME-UsesNotifications=true
 Terminal=false
 Type=Application
 MimeType=x-scheme-handler/xmpp;
-Actions=StartChat;ShowNextPendingEvent;
+Actions=StartChat;
 
 [Desktop Action StartChat]
 Exec=gajim --start-chat
