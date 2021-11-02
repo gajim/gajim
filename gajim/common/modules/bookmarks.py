@@ -223,22 +223,6 @@ class Bookmarks(BaseModule):
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
 
-    def store_difference(self, bookmarks: List) -> None:
-        if self.nativ_bookmarks_used:
-            retract, add_or_modify = self._determine_changed_bookmarks(
-                bookmarks, self._bookmarks)
-
-            for bookmark in retract:
-                self.remove(bookmark.jid)
-
-            if add_or_modify:
-                self.store_bookmarks(add_or_modify)
-            self._bookmarks = self._convert_to_dict(bookmarks)
-
-        else:
-            self._bookmarks = self._convert_to_dict(bookmarks)
-            self.store_bookmarks()
-
     def store_bookmarks(self, bookmarks: list = None) -> None:
         if not app.account_is_available(self._account):
             return
@@ -310,27 +294,6 @@ class Bookmarks(BaseModule):
                 self._nbxmpp('NativeBookmarks').retract_bookmark(str(jid))
             else:
                 self.store_bookmarks()
-
-    @staticmethod
-    def _determine_changed_bookmarks(
-            new_bookmarks: List[BookmarkData],
-            old_bookmarks: Dict[str, BookmarkData]) -> Tuple[
-                List[BookmarkData], List[BookmarkData]]:
-
-        new_jids = [bookmark.jid for bookmark in new_bookmarks]
-        new_bookmarks = set(new_bookmarks)
-        old_bookmarks = set(old_bookmarks.values())
-
-        retract = []
-        add_or_modify = []
-        changed_bookmarks = new_bookmarks.symmetric_difference(old_bookmarks)
-
-        for bookmark in changed_bookmarks:
-            if bookmark.jid not in new_jids:
-                retract.append(bookmark)
-            if bookmark in new_bookmarks:
-                add_or_modify.append(bookmark)
-        return retract, add_or_modify
 
     def get_name_from_bookmark(self, jid: str) -> str:
         bookmark = self._bookmarks.get(jid)
