@@ -175,6 +175,7 @@ APP_SETTINGS = {
     'command_system_execute': False,
     'groupchat_roster_width': 210,
     'dev_force_bookmark_2': False,
+    'developer_modus': False,
     'show_help_start_chat': True,
     'gc_notify_on_all_messages_private_default': True,
     'gc_notify_on_all_messages_public_default': False,
@@ -461,6 +462,7 @@ ADVANCED_SETTINGS = {
         'gc_notify_on_all_messages_private_default': '',
         'gc_notify_on_all_messages_public_default': '',
         'metacontacts_enabled': '',
+        'developer_modus': '',
     },
 }
 

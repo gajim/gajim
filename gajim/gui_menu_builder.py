@@ -636,7 +636,6 @@ def get_account_menu(account):
         (_('Advanced'), [
             ('-archive', _('Archiving Preferences')),
             ('-blocking', _('Blocking List')),
-            ('-bookmarks', _('Bookmarks')),
             ('-pep-config', _('PEP Configuration')),
             ('-sync-history', _('Synchronise History…')),
         ]),
@@ -647,6 +646,9 @@ def get_account_menu(account):
             ('-delete-motd', _('Delete MOTD…'))
         ]),
     ]
+
+    if app.settings.get('developer_modus'):
+        account_menu[5][1].append(('-bookmarks', _('Bookmarks')))
 
     def build_menu(preset):
         menu = Gio.Menu()
