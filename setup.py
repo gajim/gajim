@@ -3,8 +3,8 @@
 import os
 import sys
 
-if sys.version_info < (3, 7):
-    sys.exit('Gajim needs Python 3.7+')
+if sys.version_info < (3, 9):
+    sys.exit('Gajim needs Python 3.9+')
 
 from setuptools import setup, find_packages
 from setuptools import Command
