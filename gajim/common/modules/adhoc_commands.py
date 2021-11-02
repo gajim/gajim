@@ -350,12 +350,12 @@ class AdHocCommands(BaseModule):
             else:
                 # action is wrong. stop the session, send error
                 raise AttributeError
-        except AttributeError:
+        except AttributeError as error:
             # the command probably doesn't handle invoked action...
             # stop the session, return error
             del self._sessions[magictuple]
             self._log.warning('Wrong action %s %s', node, jid)
-            raise nbxmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed from error
 
         # delete the session if rc is False
         if not rc:

@@ -564,7 +564,7 @@ class Bytestream(BaseModule):
                          error_msg=''))
         raise nbxmpp.NodeProcessed
 
-    def _on_bytestream_set(self, con, iq_obj, _properties):
+    def _on_bytestream_set(self, _con, iq_obj, _properties):
         target = iq_obj.getAttr('to')
         id_ = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
@@ -640,7 +640,7 @@ class Bytestream(BaseModule):
                     app.socks5queue.activate_proxy(host['idx'])
                     raise nbxmpp.NodeProcessed
 
-    def _on_bytestream_result(self, con, iq_obj, _properties):
+    def _on_bytestream_result(self, _con, iq_obj, _properties):
         frm = self._ft_get_from(iq_obj)
         real_id = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')

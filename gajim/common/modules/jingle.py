@@ -122,7 +122,7 @@ class Jingle(BaseModule):
             logger.warning('Invalid JID: %s, ignoring it', stanza.getFrom())
             return
         id_ = stanza.getID()
-        if (jid, id_) in self.__iq_responses.keys():
+        if (jid, id_) in self.__iq_responses:
             self.__iq_responses[(jid, id_)].on_stanza(stanza)
             del self.__iq_responses[(jid, id_)]
             raise nbxmpp.NodeProcessed

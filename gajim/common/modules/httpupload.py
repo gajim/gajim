@@ -376,7 +376,7 @@ class HTTPFileTransfer(FileTransfer):
     def get_chunk(self):
         if self._stream is None:
             if self._encryption is None:
-                self._stream = open(self._path, 'rb')
+                self._stream = open(self._path, 'rb')  # pylint: disable=consider-using-with
             else:
                 self._stream = io.BytesIO(self._data)
 

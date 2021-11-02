@@ -16,7 +16,6 @@
 
 from typing import Any
 from typing import List
-from typing import Dict
 from typing import Set
 from typing import Tuple
 from typing import Union
@@ -159,7 +158,8 @@ class Bookmarks(BaseModule):
             return 'PEPBookmarks'
         return 'PrivateBookmarks'
 
-    def _act_on_changed_bookmarks(self, current_bookmarks: BookmarksDict) -> None:
+    def _act_on_changed_bookmarks(self,
+                                  current_bookmarks: BookmarksDict) -> None:
         new_bookmarks = self._convert_to_set(self._bookmarks)
         old_bookmarks = self._convert_to_set(current_bookmarks)
         changed = new_bookmarks - old_bookmarks
@@ -189,7 +189,8 @@ class Bookmarks(BaseModule):
         return set_
 
     @staticmethod
-    def _convert_to_dict(bookmarks: Optional[List[BookmarkData]]) -> BookmarksDict:
+    def _convert_to_dict(
+            bookmarks: Optional[List[BookmarkData]]) -> BookmarksDict:
         _dict: BookmarksDict = {}
         if not bookmarks:
             return _dict
