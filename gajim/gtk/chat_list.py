@@ -408,6 +408,8 @@ class ChatList(Gtk.ListBox, EventHelper):
             return
 
         if properties.is_from_us():
+            # Last message was from us, reset counter
+            row.reset_unread()
             return
 
         row.add_unread()
@@ -635,16 +637,21 @@ class ChatRow(Gtk.ListBoxRow):
             get_uf_relative_time(self.timestamp))
 
     def _update_unread(self):
-        if self._unread_count < 1000:
-            self._ui.unread_label.set_text(str(self._unread_count))
-        else:
-            self._ui.unread_label.set_text('999+')
+        unread_count = self._get_unread_string(self._unread_count)
+        self._ui.unread_label.set_text(unread_count)
         self._ui.unread_label.set_visible(bool(self._unread_count))
+
+    @staticmethod
+    def _get_unread_string(count: int) -> str:
+        if count < 1000:
+            return str(count)
+        return '999+'
 
     def add_unread(self):
         control = app.window.get_control(self.account, self.jid)
         if self.is_active and control.get_autoscroll():
             return
+
         self.unread_count += 1
         if self.unread_count == 1:
             self.changed()
