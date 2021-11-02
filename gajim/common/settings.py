@@ -29,6 +29,7 @@ from collections import namedtuple
 from collections import defaultdict
 
 from gi.repository import GLib
+from nbxmpp.protocol import JID
 
 from gajim import IS_PORTABLE
 from gajim.common import app
