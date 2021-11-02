@@ -633,6 +633,8 @@ class ChatRow(Gtk.ListBoxRow):
         self.update_time()
 
     def update_time(self):
+        if self.timestamp == 0:
+            return
         self._ui.timestamp_label.set_text(
             get_uf_relative_time(self.timestamp))
 
