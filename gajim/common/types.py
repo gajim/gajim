@@ -24,6 +24,8 @@ from typing import TYPE_CHECKING
 
 from pathlib import Path
 import nbxmpp
+from nbxmpp.protocol import JID
+from nbxmpp.structs import BookmarkData
 
 from gajim.common.const import PathType, PathLocation
 
@@ -63,3 +65,5 @@ EventHandlersDict = Dict[str, Tuple[int, Callable[['NetworkEvent'], Optional[boo
 PluginEvents = List['NetworkEvent']
 
 SettingsT = Union['Settings']
+
+BookmarksDict = Dict[JID, BookmarkData]

@@ -28,6 +28,7 @@ from collections import namedtuple
 from collections import defaultdict
 
 from gi.repository import GLib
+from nbxmpp.protocol import JID
 
 from gajim import IS_PORTABLE
 from gajim.common import app
@@ -600,7 +601,7 @@ class Settings:
 
     def get_group_chat_setting(self,
                                account: str,
-                               jid: str,
+                               jid: Union[str, JID],
                                setting: str) -> SETTING_TYPE:
 
         if account not in self._account_settings:
