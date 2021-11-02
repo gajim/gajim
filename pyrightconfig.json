@@ -1,0 +1,13 @@
+{
+    "ignore": [
+        "setup.py",
+        "test",
+        ".gitlab"
+        "data",
+        "flatpak",
+        "mac",
+        "scripts",
+        "win",
+    ],
+    "typeCheckingMode": "strict",
+}
