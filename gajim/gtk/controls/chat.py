@@ -47,7 +47,8 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
 
-from gajim import gui_menu_builder
+from gajim.gui_menu_builder import get_encryption_menu
+from gajim.gui_menu_builder import get_singlechat_menu
 
 from gajim.gui.call_widget import CallWidget
 from gajim.gui.const import TARGET_TYPE_URI_LIST
@@ -109,7 +110,7 @@ class ChatControl(BaseControl):
         self.conversation_view.connect('decline-call', self._on_decline_call)
 
         # Menu for the HeaderBar
-        self.control_menu = gui_menu_builder.get_singlechat_menu(
+        self.control_menu = get_singlechat_menu(
             self.control_id, self.account, self.contact.jid, self._type)
 
         # Settings menu
@@ -136,9 +137,8 @@ class ChatControl(BaseControl):
         self.update_ui()
         self.set_lock_image()
 
-        self.xml.encryption_menu.set_menu_model(
-            gui_menu_builder.get_encryption_menu(
-                self.control_id, self._type, self.account == 'Local'))
+        self.xml.encryption_menu.set_menu_model(get_encryption_menu(
+            self.control_id, self._type, self.account == 'Local'))
         self.set_encryption_menu_icon()
         self.msg_textview.grab_focus()
 
@@ -535,6 +535,9 @@ class ChatControl(BaseControl):
         """
         contact = self.contact
         name = contact.name
+
+        if self.jid == self._client.get_own_jid().bare:
+            name = _('Note to myself')
 
         if self._type.is_privatechat:
             name = f'{name} ({self.room_name})'

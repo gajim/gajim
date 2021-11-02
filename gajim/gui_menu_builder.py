@@ -28,20 +28,32 @@ from gajim.common.const import URIAction
 
 
 def get_singlechat_menu(control_id, account, jid, type_):
+    client = app.get_client(account)
+    is_self_contact = jid.bare == client.get_own_jid().bare
+
     singlechat_menu = [
         (_('Send File'), [
             ('win.send-file-httpupload-', _('Upload File…')),
-            ('win.send-file-jingle-', _('Send File Directly…')),
-        ]),
+            ('win.send-file-jingle-', _('Send File Directly…'))
+        ])
+    ]
+
+    additional_menu = [
         ('win.send-marker-', _('Send Read Markers')),
         (_('Send Chatstate'), ['chatstate']),
         ('win.invite-contacts-', _('Invite Contacts…')),
         ('win.add-to-roster-', _('Add to Contact List…')),
         ('win.block-contact-', _('Block Contact…')),
         ('win.start-call-', _('Start Call…')),
-        ('win.information-', _('Information')),
-        ('win.search-history', _('Search…')),
+        ('win.information-', _('Information'))
     ]
+
+    if is_self_contact:
+        singlechat_menu.append(('profile', _('Profile')))
+    else:
+        singlechat_menu.extend(additional_menu)
+
+    singlechat_menu.append(('win.search-history', _('Search…')))
 
     def build_chatstate_menu():
         menu = Gio.Menu()
@@ -68,6 +80,12 @@ def get_singlechat_menu(control_id, account, jid, type_):
                 if action_name == 'win.search-history':
                     menuitem = Gio.MenuItem.new(label, action_name)
                     menuitem.set_action_and_target_value(action_name, None)
+                    menu.append_item(menuitem)
+                elif action_name == 'profile':
+                    action = f'app.{account}-{action_name}'
+                    menuitem = Gio.MenuItem.new(label, action)
+                    variant = GLib.Variant('s', account)
+                    menuitem.set_action_and_target_value(action, variant)
                     menu.append_item(menuitem)
                 elif action_name == 'app.browse-history':
                     menuitem = Gio.MenuItem.new(label, action_name)

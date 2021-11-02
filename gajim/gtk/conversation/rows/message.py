@@ -102,6 +102,10 @@ class MessageRow(BaseRow):
             is_self = name == our_nick
         else:
             is_self = kind == 'outgoing'
+
+        if self._contact.jid == self._client.get_own_jid().bare:
+            name = _('Me')
+
         name_widget = self.create_name_widget(name, is_self)
 
         self._meta_box = Gtk.Box(spacing=6)
