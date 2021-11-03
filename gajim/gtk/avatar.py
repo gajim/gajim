@@ -203,6 +203,29 @@ def get_show_circle(show, size, scale):
     return context.get_target()
 
 
+def fit(surface: cairo.Surface, size: int) -> cairo.Surface:
+    width = surface.get_width()
+    height = surface.get_height()
+    if width == height:
+        return surface
+
+    # Fit any non-square image by:
+    # 1. cutting a square from the original surface
+    # 2. scaling the square to the desired size
+    min_size = min(width, height)
+    factor = size / min_size
+
+    square_surface = square(surface, min_size)
+
+    new_surface = cairo.ImageSurface(cairo.Format.ARGB32, size, size)
+    new_surface.set_device_scale(*surface.get_device_scale())
+    context = cairo.Context(new_surface)
+    context.scale(factor, factor)
+    context.set_source_surface(square_surface, 0, 0)
+    context.paint()
+    return context.get_target()
+
+
 def square(surface, size):
     width = surface.get_width()
     height = surface.get_height()
@@ -469,7 +492,7 @@ class AvatarStorage(metaclass=Singleton):
             return None
 
         surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
-        return square(surface, size)
+        return fit(surface, size)
 
     def _load_surface_from_storage(self, filename, size, scale):
         size = size * scale
@@ -481,7 +504,7 @@ class AvatarStorage(metaclass=Singleton):
         if pixbuf is None:
             return None
         surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
-        return square(surface, size)
+        return fit(surface, size)
 
     def _get_avatar_from_storage(self, contact, size, scale, style):
         avatar_sha = contact.avatar_sha
