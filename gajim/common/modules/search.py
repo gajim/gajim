@@ -47,7 +47,8 @@ class Search(BaseModule):
                 is_dataform = True
             else:
                 data = {}
-                for i in stanza.getQueryPayload():
+                query = stanza.getQuery()
+                for i in query.getChildren():
                     data[i.getName()] = i.getData()
         else:
             self._log.info('Error: %s', stanza.getError())
