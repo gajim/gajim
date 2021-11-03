@@ -439,8 +439,8 @@ class JingleSession:
 
     def __on_session_info(self, stanza, jingle, error, action):
         # TODO: active, (un)hold, (un)mute
-        payload = jingle.getPayload()
-        if payload[0].getName() == 'ringing':
+        ringing = jingle.getTag('ringing')
+        if ringing is not None:
             # ignore ringing
             raise nbxmpp.NodeProcessed
         if self.state != JingleStates.ACTIVE:

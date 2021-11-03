@@ -87,7 +87,7 @@ class Search(BaseModule):
                 for item in tag.getTags('item'):
                     # We also show attributes. jid is there
                     field = item.attrs
-                    for i in item.getPayload():
+                    for i in item.getChildren():
                         field[i.getName()] = i.getData()
                     data.append(field)
         else:
