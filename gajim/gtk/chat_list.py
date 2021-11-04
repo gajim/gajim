@@ -14,6 +14,7 @@
 
 import logging
 import time
+from typing import Optional
 
 from gi.repository import Gio
 from gi.repository import Gdk
@@ -29,6 +30,7 @@ from gajim.common.i18n import _
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_uf_relative_time
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
 
@@ -667,7 +669,9 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(nickname)
 
-    def set_message_text(self, text, icon_name=None, additional_data=None):
+    def set_message_text(self, text: str, icon_name: Optional[str] = None,
+                         additional_data: Optional[AdditionalDataDict] = None
+                         ) -> None:
         icon = None
         if icon_name is not None:
             icon = Gio.Icon.new_for_string(icon_name)
@@ -676,12 +680,13 @@ class ChatRow(Gtk.ListBoxRow):
                     text, additional_data):
                 file_name = filename_from_uri(text)
                 icon, file_type = guess_simple_file_type(text)
-                text = '%(file_type)s (%(file_name)s)' % {
-                    'file_type': file_type,
-                    'file_name': file_name}
-        else:
-            text = text.replace('\n', ' ')
+                text = f'{file_type} ({file_name})'
+
+        # Split by newline and display last line
+        lines = text.split('\n')
+        text = lines[-1]
         self._ui.message_label.set_text(text)
+
         if icon is None:
             self._ui.message_icon.hide()
         else:
