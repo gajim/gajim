@@ -19,6 +19,7 @@ from typing import Any
 from typing import List
 from typing import Tuple
 from typing import Optional
+from typing import Union
 
 import sys
 import logging
@@ -70,8 +71,8 @@ log = logging.getLogger('gajim.gui.util')
 class NickCompletionGenerator:
     def __init__(self, self_nick: str) -> None:
         self.nick = self_nick
-        self.sender_list = []  # type: List[str]
-        self.attention_list = []  # type: List[str]
+        self.sender_list: List[str] = []
+        self.attention_list: List[str] = []
 
     def change_nick(self, new_nick: str) -> None:
         self.nick = new_nick
@@ -419,7 +420,8 @@ def at_the_end(widget: Gtk.ScrolledWindow) -> bool:
     return adj_v.get_value() == max_scroll_pos
 
 
-def get_image_button(icon_name, tooltip, toggle=False):
+def get_image_button(icon_name: str, tooltip: str,
+                     toggle: Optional[bool] = False) -> Gtk.Button:
     if toggle:
         button = Gtk.ToggleButton()
         image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
@@ -465,11 +467,11 @@ def convert_rgb_string_to_float(rgb_string: str) -> Tuple[float, float, float]:
     return (rgba.red, rgba.green, rgba.blue)
 
 
-def rgba_to_float(rgba):
+def rgba_to_float(rgba: Gdk.RGBA) -> Tuple[float, float, float]:
     return (rgba.red, rgba.green, rgba.blue)
 
 
-def make_rgba(color_string):
+def make_rgba(color_string: str) -> Gdk.RGBA:
     rgba = Gdk.RGBA()
     rgba.parse(color_string)
     return rgba
@@ -506,7 +508,7 @@ def get_metacontact_surface(icon_name, expanded, scale):
     return state_surface
 
 
-def get_primary_accel_mod():
+def get_primary_accel_mod() -> Optional[Gdk.ModifierType]:
     """
     Returns the primary Gdk.ModifierType modifier.
     cmd on osx, ctrl everywhere else.
@@ -514,7 +516,7 @@ def get_primary_accel_mod():
     return Gtk.accelerator_parse("<Primary>")[1]
 
 
-def get_hardware_key_codes(keyval):
+def get_hardware_key_codes(keyval: int) -> List[int]:
     keymap = Gdk.Keymap.get_for_display(Gdk.Display.get_default())
 
     valid, key_map_keys = keymap.get_entries_for_keyval(keyval)
@@ -618,7 +620,7 @@ def get_account_location_icon_name(account):
     return None if location is None else 'applications-internet'
 
 
-def format_eta(time_):
+def format_eta(time_: Union[int, float]) -> str:
     times = {'minutes': 0, 'seconds': 0}
     time_ = int(time_)
     times['seconds'] = time_ % 60
@@ -629,7 +631,7 @@ def format_eta(time_):
     return _('%s s') % times['seconds']
 
 
-def format_fingerprint(fingerprint):
+def format_fingerprint(fingerprint: str) -> str:
     fplen = len(fingerprint)
     wordsize = fplen // 8
     buf = ''
@@ -677,7 +679,7 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
         return minimum_width, natural_width
 
 
-def text_to_color(text):
+def text_to_color(text: str) -> Tuple[float, float, float]:
     if app.css_config.prefer_dark:
         background = (0, 0, 0)  # RGB (0, 0, 0) black
     else:
@@ -692,7 +694,7 @@ def get_color_for_account(account: str) -> str:
 
 
 @lru_cache(maxsize=16)
-def get_css_show_class(show):
+def get_css_show_class(show: str) -> str:
     if show in ('online', 'chat'):
         return '.gajim-status-online'
     if show == 'away':
@@ -741,7 +743,7 @@ def get_pixbuf_from_data(file_data):
     return pixbuf
 
 
-def scale_with_ratio(size, width, height):
+def scale_with_ratio(size: int, width: int, height: int) -> Tuple[int, int]:
     if height == width:
         return size, size
     if height > width:
@@ -752,7 +754,8 @@ def scale_with_ratio(size, width, height):
     return size, int(size / ratio)
 
 
-def scale_pixbuf(pixbuf, size):
+def scale_pixbuf(pixbuf: GdkPixbuf.Pixbuf,
+                 size: int) -> Optional[GdkPixbuf.Pixbuf]:
     width, height = scale_with_ratio(size,
                                      pixbuf.get_width(),
                                      pixbuf.get_height())
@@ -799,7 +802,7 @@ def load_pixbuf(path, size=None):
         return None
 
 
-def get_thumbnail_size(pixbuf, size):
+def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> Tuple[int, int]:
     # Calculates the new thumbnail size while preserving the aspect ratio
     image_width = pixbuf.get_width()
     image_height = pixbuf.get_height()
@@ -832,7 +835,7 @@ def make_href_markup(string):
     return URL_REGEX.sub(_to_href, string)
 
 
-def get_app_windows(account):
+def get_app_windows(account: str) -> List[Gtk.Window]:
     windows = []
     for win in app.app.get_windows():
         if hasattr(win, 'account'):
@@ -934,7 +937,7 @@ def wrap_with_event_box(klass):
 
 
 class AccountBadge(Gtk.Label):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.Label.__init__(self)
         self.set_ellipsize(Pango.EllipsizeMode.END)
         self.set_max_width_chars(12)
@@ -945,7 +948,7 @@ class AccountBadge(Gtk.Label):
         self.refresh()
         self.show()
 
-    def refresh(self):
+    def refresh(self) -> None:
         label = app.get_account_label(self._account)
         self.set_text(label)
         account_class = app.css_config.get_dynamic_class(self._account)
@@ -953,7 +956,7 @@ class AccountBadge(Gtk.Label):
         self.set_tooltip_text(_('Account: %s') % label)
 
 
-def make_pango_attribute(name, start, end):
+def make_pango_attribute(name: str, start: int, end: int) -> Pango.Attribute:
     if name == 'strong':
         attr = Pango.attr_weight_new(Pango.Weight.BOLD)
     if name == 'strike':
