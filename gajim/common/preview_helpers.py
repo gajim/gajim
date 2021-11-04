@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List
+from typing import Tuple
+from typing import Optional
 import math
 import logging
 import binascii
@@ -127,14 +130,14 @@ def extract_and_resize_frames(image, resize_to):
     return frames, result
 
 
-def create_thumbnail(data, size):
+def create_thumbnail(data: bytes, size:int) -> Optional[bytes]:
     thumbnail = create_thumbnail_with_pil(data, size)
     if thumbnail is not None:
         return thumbnail
     return create_thumbnail_with_pixbuf(data, size)
 
 
-def create_thumbnail_with_pixbuf(data, size):
+def create_thumbnail_with_pixbuf(data: bytes, size: int) -> Optional[bytes]:
     loader = GdkPixbuf.PixbufLoader()
     try:
         loader.write(data)
@@ -160,7 +163,7 @@ def create_thumbnail_with_pixbuf(data, size):
     return bytes_
 
 
-def create_thumbnail_with_pil(data, size):
+def create_thumbnail_with_pil(data: bytes, size: int) -> Optional[bytes]:
     input_file = BytesIO(data)
     output_file = BytesIO()
     try:
@@ -170,7 +173,7 @@ def create_thumbnail_with_pil(data, size):
         log.warning('fallback to pixbuf')
         input_file.close()
         output_file.close()
-        return
+        return None
 
     image_width, image_height = image.size
     if size > image_width and size > image_height:
@@ -197,7 +200,7 @@ def create_thumbnail_with_pil(data, size):
     return bytes_
 
 
-def get_thumbnail_size(pixbuf, size):
+def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> Tuple[int, int]:
     # Calculates the new thumbnail size while preserving the aspect ratio
     image_width = pixbuf.get_width()
     image_height = pixbuf.get_height()
@@ -214,7 +217,7 @@ def get_thumbnail_size(pixbuf, size):
     return image_width, image_height
 
 
-def pixbuf_from_data(data):
+def pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf:
     loader = GdkPixbuf.PixbufLoader()
     try:
         loader.write(data)
@@ -286,7 +289,7 @@ def get_image_paths(uri, urlparts, size, orig_dir, thumb_dir):
     return orig_path, thumb_path
 
 
-def split_geo_uri(uri):
+def split_geo_uri(uri: str) -> Coords:
     # Example:
     # geo:37.786971,-122.399677,122.3;CRS=epsg:32718;U=20;mapcolors=abc
     # Assumption is all coordinates are CRS=WGS-84
@@ -318,7 +321,7 @@ def split_geo_uri(uri):
     return Coords(location=location, lat=lat, lon=lon)
 
 
-def filename_from_uri(uri):
+def filename_from_uri(uri: str) -> str:
     urlparts = urlparse(unquote(uri))
     path = Path(urlparts.path)
     return path.name
@@ -365,7 +368,9 @@ def get_previewable_mime_types():
     ))
 
 
-def guess_mime_type(file_path, data=None):
+def guess_mime_type(file_path: str,
+                    data: Optional[bytes] = None
+                    ) -> str:
     mime_type, _ = mimetypes.MimeTypes().guess_type(str(file_path))
     if mime_type is None:
         # Try to guess MIME type by file name
@@ -374,7 +379,9 @@ def guess_mime_type(file_path, data=None):
     return mime_type
 
 
-def guess_simple_file_type(file_path, data=None):
+def guess_simple_file_type(file_path: str,
+                           data: Optional[bytes] = None
+                           ) -> Tuple[Gio.Icon, str]:
     mime_type = guess_mime_type(file_path, data)
     icon = get_icon_for_mime_type(mime_type)
     if file_path.startswith('geo:'):
@@ -390,7 +397,7 @@ def guess_simple_file_type(file_path, data=None):
     return icon, _('File')
 
 
-def get_icon_for_mime_type(mime_type):
+def get_icon_for_mime_type(mime_type: str) -> Gio.Icon:
     if mime_type is None:
         return Gio.Icon.new_for_string('mail-attachment')
     return Gio.content_type_get_icon(mime_type)
