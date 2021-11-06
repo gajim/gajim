@@ -34,22 +34,6 @@ from .util import get_app_window
 StyleOption = namedtuple('StyleOption', 'label selector attr')
 
 CSS_STYLE_OPTIONS = [
-    StyleOption(_('Chatstate Composing'),
-                '.gajim-state-composing',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Chatstate Inactive'),
-                '.gajim-state-inactive',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Chatstate Gone'),
-                '.gajim-state-gone',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Chatstate Paused'),
-                '.gajim-state-paused',
-                StyleAttr.COLOR),
-
     StyleOption(_('Group Chat Tab New Directed Message'),
                 '.gajim-state-tab-muc-directed-msg',
                 StyleAttr.COLOR),

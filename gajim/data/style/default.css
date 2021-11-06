@@ -51,18 +51,6 @@
 .gajim-roster-connected {
     background: rgb(160, 200, 170);
 }
-.gajim-state-composing {
-    color: rgb(40, 140, 40);
-}
-.gajim-state-inactive {
-    color: rgb(158, 158, 158);
-}
-.gajim-state-gone {
-    color: rgb(128, 128, 128);
-}
-.gajim-state-paused {
-    color: rgb(20, 160, 120);
-}
 .gajim-msg-correcting text {
     background: rgb(240, 230, 170);
 }
