@@ -12,9 +12,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Optional
+
 import math
 import logging
 import binascii
@@ -45,7 +48,8 @@ log = logging.getLogger('gajim.c.preview_helpers')
 Coords = namedtuple('Coords', 'location lat lon')
 
 
-def resize_gif(image, output_file, resize_to):
+def resize_gif(image: Image, output_file: BytesIO,
+               resize_to: Tuple[int, int]) -> None:
     frames, result = extract_and_resize_frames(image, resize_to)
 
     frames[0].save(output_file,
@@ -57,7 +61,7 @@ def resize_gif(image, output_file, resize_to):
                    loop=1000)
 
 
-def analyse_image(image):
+def analyse_image(image: Image) -> Tuple[Image, Dict[str, Any]]:
     '''
     Pre-process pass over the image to determine the mode (full or additive).
     Necessary as assessing single frames isn't reliable. Need to know the mode
@@ -85,7 +89,8 @@ def analyse_image(image):
     return image, result
 
 
-def extract_and_resize_frames(image, resize_to):
+def extract_and_resize_frames(image: Image, resize_to: Tuple[int, int]
+                              ) -> Tuple[List[Image], Dict[str, Any]]:
     image, result = analyse_image(image)
 
     i = 0
@@ -242,7 +247,7 @@ def pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf:
     return loader.get_pixbuf().apply_embedded_orientation()
 
 
-def parse_fragment(fragment):
+def parse_fragment(fragment: str) -> Tuple[bytes, bytes]:
     if not fragment:
         raise ValueError('Invalid fragment')
 
