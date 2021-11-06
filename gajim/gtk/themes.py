@@ -114,14 +114,6 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-msg-correcting text',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Contact Disconnected Background'),
-                '.gajim-roster-disconnected',
-                StyleAttr.BACKGROUND),
-
-    StyleOption(_('Contact Connected Background '),
-                '.gajim-roster-connected',
-                StyleAttr.BACKGROUND),
-
     StyleOption(_('Status: Online Color'),
                 '.gajim-status-online',
                 StyleAttr.COLOR),

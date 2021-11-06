@@ -37,12 +37,6 @@
 .gajim-user-connected {
     color: rgb(160, 200, 170);
 }
-.gajim-roster-disconnected {
-    background: rgb(80, 30, 30);
-}
-.gajim-roster-connected {
-    background: rgb(30, 80, 50);
-}
 .gajim-msg-correcting text {
     background: rgb(100, 100, 50);
 }
