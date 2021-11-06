@@ -14,12 +14,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Tuple
+from typing import List
+from typing import Union
+from typing import Any
+
 from urllib.parse import quote
 
 from gi.repository import Gtk
 from gi.repository import Gio
 from gi.repository import GLib
+
+from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common.helpers import is_affiliation_change_allowed
@@ -35,11 +41,12 @@ from gajim.common.structs import URI
 from gajim.gui.const import ControlType
 
 
-def get_singlechat_menu(control_id, account, jid, type_):
+def get_singlechat_menu(control_id: str, account: str, jid: JID,
+                        type_: ControlType) -> Gio.Menu:
     client = app.get_client(account)
     is_self_contact = jid.bare == client.get_own_jid().bare
 
-    singlechat_menu = [
+    singlechat_menu: List[Any] = [
         (_('Send File'), [
             ('win.send-file-httpupload-', _('Upload File…')),
             ('win.send-file-jingle-', _('Send File Directly…'))
@@ -117,7 +124,7 @@ def get_singlechat_menu(control_id, account, jid, type_):
     return build_menu(singlechat_menu)
 
 
-def get_groupchat_menu(control_id, account, jid):
+def get_groupchat_menu(control_id: str, account: str, jid: str) -> Gio.Menu:
     groupchat_menu = [
         ('win.information-', _('Information')),
         ('win.groupchat-settings-', _('Settings…')),
@@ -214,7 +221,7 @@ def get_account_menu(account: str) -> Gio.Menu:
     return build_menu(account_menu)
 
 
-def build_accounts_menu():
+def build_accounts_menu() -> None:
     menubar = app.app.get_menubar()
     # Accounts Submenu
     menu_position = 1
@@ -254,7 +261,7 @@ def build_accounts_menu():
 
 
 def get_encryption_menu(control_id: str, control_type: ControlType,
-                        zeroconf: Optional[bool] = False) -> Gio.Menu:
+                        zeroconf: bool = False) -> Gio.Menu:
     menu = Gio.Menu()
     menu.append(
         _('Disabled'), f'win.set-encryption-{control_id}::disabled')
@@ -400,7 +407,10 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Gtk.Menu:
 
         data = uri.data
         if uri.type == URIType.XMPP:
-            data = uri.data['jid']
+            if isinstance(uri.data, dict):
+                data = uri.data['jid']
+            else:
+                data = ''
 
         if action in ('app.open-mail', 'app.copy-text'):
             value = GLib.Variant.new_string(data)
@@ -412,7 +422,7 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Gtk.Menu:
     return menu
 
 
-def get_roster_menu(account, jid, gateway=False):
+def get_roster_menu(account: str, jid: str, gateway: bool = False) -> Gio.Menu:
     if jid_is_blocked(account, jid):
         block_label = _('Unblock')
     else:
@@ -431,14 +441,14 @@ def get_roster_menu(account, jid, gateway=False):
         action, label = item
         action = f'win.{action}-{account}'
         menuitem = Gio.MenuItem.new(label, action)
-        variant = GLib.Variant('s', str(jid))
+        variant = GLib.Variant('s', jid)
         menuitem.set_action_and_target_value(action, variant)
         menu.append_item(menuitem)
 
     return menu
 
 
-def get_subscription_menu(account, jid):
+def get_subscription_menu(account: str, jid: str) -> Gio.Menu:
     menu = Gio.Menu()
 
     action_name = 'win.add-chat'
@@ -470,13 +480,15 @@ def get_subscription_menu(account, jid):
     return menu
 
 
-def get_chat_list_row_menu(workspace_id, account, jid, pinned):
+def get_chat_list_row_menu(workspace_id: str, account: str,
+                           jid: Union[JID, str], pinned: bool) -> Gio.Menu:
+    jid = str(jid)
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
 
     toggle_label = _('Unpin Chat') if pinned else _('Pin Chat')
 
-    menu_items = [
+    menu_items: List[Any] = [
         ('toggle-chat-pinned', toggle_label),
     ]
 
@@ -497,20 +509,21 @@ def get_chat_list_row_menu(workspace_id, account, jid, pinned):
             action = f'win.{action}'
             menuitem = Gio.MenuItem.new(label, action)
             variant_list = GLib.Variant(
-                'as', [workspace_id, account, str(jid)])
+                'as', [workspace_id, account, jid])
             menuitem.set_action_and_target_value(action, variant_list)
             menu.append_item(menuitem)
         else:
             # This is a submenu
             if len(workspaces) > 1:
                 submenu = build_workspaces_submenu(
-                    workspace_id, account, str(jid))
+                    workspace_id, account, jid)
                 menu.append_submenu(item[0], submenu)
 
     return menu
 
 
-def build_workspaces_submenu(current_workspace_id, account, jid):
+def build_workspaces_submenu(current_workspace_id: str, account: str,
+                             jid: str) -> Gio.Menu:
     submenu = Gio.Menu()
     for workspace_id in app.settings.get_workspaces():
         if workspace_id == current_workspace_id:
