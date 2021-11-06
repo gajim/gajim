@@ -58,15 +58,15 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-state-tab-muc-msg',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Banner Foreground Color'),
+    StyleOption(_('Chat Banner: Foreground Color'),
                 '.gajim-banner',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Banner Background Color'),
+    StyleOption(_('Chat Banner: Background Color'),
                 '.gajim-banner',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Banner Font'),
+    StyleOption(_('Chat Banner: Text Font'),
                 '.gajim-banner',
                 StyleAttr.FONT),
 
@@ -78,7 +78,7 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-group-row',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Contact List: Group Row Font'),
+    StyleOption(_('Contact List: Group Font'),
                 '.gajim-group-row',
                 StyleAttr.FONT),
 
@@ -94,39 +94,39 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-contact-row',
                 StyleAttr.FONT),
 
-    StyleOption(_('Conversation Font'),
+    StyleOption(_('Conversation: Text Font'),
                 '.gajim-conversation-text',
                 StyleAttr.FONT),
 
-    StyleOption(_('Conversation Text Color'),
+    StyleOption(_('Conversation: Text Color'),
                 '.gajim-conversation-text',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Incoming Nickname Color'),
-                '.gajim-incoming-nickname',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Outgoing Nickname Color'),
-                '.gajim-outgoing-nickname',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Status Message Color'),
-                '.gajim-status-message',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Status Message Font'),
-                '.gajim-status-message',
-                StyleAttr.FONT),
-
-    StyleOption(_('URL Color'),
+    StyleOption(_('Conversation: URL Color'),
                 '.gajim-url',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Highlight Message Background'),
+    StyleOption(_('Conversation: Nickname Color (Incoming)'),
+                '.gajim-incoming-nickname',
+                StyleAttr.COLOR),
+
+    StyleOption(_('Conversation: Nickname Color (Outgoing)'),
+                '.gajim-outgoing-nickname',
+                StyleAttr.COLOR),
+
+    StyleOption(_('Mention: Message Background Color'),
                 '.gajim-mention-highlight',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Message Correcting'),
+    StyleOption(_('Status Message: Text Color'),
+                '.gajim-status-message',
+                StyleAttr.COLOR),
+
+    StyleOption(_('Status Message: Text Font'),
+                '.gajim-status-message',
+                StyleAttr.FONT),
+
+    StyleOption(_('Message Correction: Background Color'),
                 '.gajim-msg-correcting text',
                 StyleAttr.BACKGROUND),
 
@@ -138,19 +138,19 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-roster-connected',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Status Online Color'),
+    StyleOption(_('Status: Online Color'),
                 '.gajim-status-online',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Status Away Color'),
+    StyleOption(_('Status: Away Color'),
                 '.gajim-status-away',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Status DND Color'),
+    StyleOption(_('Status: DND Color'),
                 '.gajim-status-dnd',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Status Offline Color'),
+    StyleOption(_('Status: Offline Color'),
                 '.gajim-status-offline',
                 StyleAttr.COLOR),
 ]
