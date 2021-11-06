@@ -17,6 +17,7 @@ from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Optional
+from typing import Union
 
 import math
 import logging
@@ -28,6 +29,7 @@ from collections import namedtuple
 from pathlib import Path
 from urllib.parse import urlparse
 from urllib.parse import unquote
+from urllib.parse import ParseResult
 
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
@@ -48,7 +50,7 @@ log = logging.getLogger('gajim.c.preview_helpers')
 Coords = namedtuple('Coords', 'location lat lon')
 
 
-def resize_gif(image: Image, output_file: BytesIO,
+def resize_gif(image: Image.Image, output_file: BytesIO,
                resize_to: Tuple[int, int]) -> None:
     frames, result = extract_and_resize_frames(image, resize_to)
 
@@ -61,7 +63,7 @@ def resize_gif(image: Image, output_file: BytesIO,
                    loop=1000)
 
 
-def analyse_image(image: Image) -> Tuple[Image, Dict[str, Any]]:
+def analyse_image(image: Image.Image) -> Tuple[Image.Image, Dict[str, Any]]:
     '''
     Pre-process pass over the image to determine the mode (full or additive).
     Necessary as assessing single frames isn't reliable. Need to know the mode
@@ -89,8 +91,8 @@ def analyse_image(image: Image) -> Tuple[Image, Dict[str, Any]]:
     return image, result
 
 
-def extract_and_resize_frames(image: Image, resize_to: Tuple[int, int]
-                              ) -> Tuple[List[Image], Dict[str, Any]]:
+def extract_and_resize_frames(image: Image.Image, resize_to: Tuple[int, int]
+                              ) -> Tuple[List[Image.Image], Dict[str, Any]]:
     image, result = analyse_image(image)
 
     i = 0
@@ -268,7 +270,8 @@ def parse_fragment(fragment: str) -> Tuple[bytes, bytes]:
     return key, iv
 
 
-def get_image_paths(uri, urlparts, size, orig_dir, thumb_dir):
+def get_image_paths(uri: str, urlparts: ParseResult, size: int, orig_dir: Path,
+                    thumb_dir: Path) -> Tuple[Path, Path]:
     path = Path(unquote(urlparts.path))
     web_stem = path.stem
     extension = path.suffix
@@ -332,18 +335,17 @@ def filename_from_uri(uri: str) -> str:
     return path.name
 
 
-def aes_decrypt(preview, payload):
+def aes_decrypt(key: bytes, iv: bytes, payload: bytes) -> bytes:
     # Use AES128 GCM with the given key and iv to decrypt the payload
     data = payload[:-16]
     tag = payload[-16:]
-    decryptor = Cipher(
-        algorithms.AES(preview.key),
-        GCM(preview.iv, tag=tag),
-        backend=default_backend()).decryptor()
+    decryptor = Cipher(algorithms.AES(key),
+                       GCM(iv, tag=tag),
+                       backend=default_backend()).decryptor()
     return decryptor.update(data) + decryptor.finalize()
 
 
-def contains_audio_streams(file_path):
+def contains_audio_streams(file_path: Path) -> bool:
     # Check if it is really an audio file
     has_audio = False
     discoverer = GstPbutils.Discoverer()
@@ -373,14 +375,15 @@ def get_previewable_mime_types():
     ))
 
 
-def guess_mime_type(file_path: str,
+def guess_mime_type(file_path: Union[Path, str],
                     data: Optional[bytes] = None
                     ) -> str:
-    mime_type, _ = mimetypes.MimeTypes().guess_type(str(file_path))
+    file_path = str(file_path)
+    mime_type, _ = mimetypes.MimeTypes().guess_type(file_path)
     if mime_type is None:
         # Try to guess MIME type by file name
-        mime_type, _ = Gio.content_type_guess(str(file_path), data)
-    log.debug('Guessed MIME type: %s', str(mime_type))
+        mime_type, _ = Gio.content_type_guess(file_path, data)
+    log.debug('Guessed MIME type: %s', mime_type)
     return mime_type
 
 
