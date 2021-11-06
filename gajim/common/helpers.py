@@ -27,6 +27,10 @@
 
 from typing import Any  # pylint: disable=unused-import
 from typing import Dict  # pylint: disable=unused-import
+from typing import Optional
+from typing import List
+from typing import Tuple
+from typing import Union
 
 import sys
 import re
@@ -62,6 +66,8 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.const import Role
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
+from nbxmpp.const import Affiliation
+from nbxmpp.const import Role
 from nbxmpp.structs import ProxyData
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
@@ -163,12 +169,13 @@ def parse_resource(resource):
     except UnicodeError:
         raise InvalidFormat('Invalid character in resource.')
 
-def windowsify(word):
+def windowsify(word: str) -> str:
     if os.name == 'nt':
         return word.capitalize()
     return word
 
-def get_uf_show(show, use_mnemonic=False):
+def get_uf_show(show: Union[ShowConstant, str],
+                use_mnemonic: bool = False) -> str:
     """
     Return a userfriendly string for dnd/xa/chat and make all strings
     translatable
@@ -219,7 +226,7 @@ def get_uf_show(show, use_mnemonic=False):
         uf_show = Q_('?contact has status:Has errors')
     return uf_show
 
-def get_uf_sub(sub):
+def get_uf_sub(sub: str) -> str:
     if sub == 'none':
         uf_sub = Q_('?Subscription we already have:None')
     elif sub == 'to':
@@ -233,7 +240,7 @@ def get_uf_sub(sub):
 
     return uf_sub
 
-def get_uf_ask(ask):
+def get_uf_ask(ask: Union[str, None]) -> str:
     if ask is None:
         uf_ask = Q_('?Ask (for Subscription):None')
     elif ask == 'subscribe':
@@ -243,7 +250,7 @@ def get_uf_ask(ask):
 
     return uf_ask
 
-def get_uf_role(role, plural=False):
+def get_uf_role(role: Union[Role, str], plural: bool = False) -> str:
     ''' plural determines if you get Moderators or Moderator'''
     if not isinstance(role, str):
         role = role.value
@@ -267,7 +274,8 @@ def get_uf_role(role, plural=False):
             role_name = _('Visitor')
     return role_name
 
-def get_uf_affiliation(affiliation, plural=False):
+def get_uf_affiliation(affiliation: Union[Affiliation, str],
+                       plural: bool = False) -> str:
     '''Get a nice and translated affilition for muc'''
     if not isinstance(affiliation, str):
         affiliation = affiliation.value
@@ -319,7 +327,7 @@ def get_sorted_keys(adict):
     keys = sorted(adict.keys())
     return keys
 
-def to_one_line(msg):
+def to_one_line(msg: str) -> str:
     msg = msg.replace('\\', '\\\\')
     msg = msg.replace('\n', '\\n')
     # s1 = 'test\ntest\\ntest'
@@ -329,7 +337,7 @@ def to_one_line(msg):
     # 'test\\ntest\\\\ntest'
     return msg
 
-def from_one_line(msg):
+def from_one_line(msg: str) -> str:
     # (?<!\\) is a lookbehind assertion which asks anything but '\'
     # to match the regexp that follows it
 
@@ -344,7 +352,7 @@ def from_one_line(msg):
     # 'test\ntest\\ntest'
     return msg
 
-def get_uf_chatstate(chatstate):
+def get_uf_chatstate(chatstate: str) -> str:
     """
     Remove chatstate jargon and returns user friendly messages
     """
@@ -393,7 +401,7 @@ def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
         path = path[5:] # 5 is len('file:')
     return path
 
-def sanitize_filename(filename):
+def sanitize_filename(filename: str) -> str:
     """
     Make sure the filename we will write does contain only acceptable and latin
     characters, and is not too long (in that case hash it)
@@ -413,7 +421,8 @@ def sanitize_filename(filename):
 
     return filename
 
-def reduce_chars_newlines(text, max_chars=0, max_lines=0):
+def reduce_chars_newlines(text: str, max_chars: int = 0,
+                          max_lines: int = 0) -> str:
     """
     Cut the chars after 'max_chars' on each line and show only the first
     'max_lines'
@@ -454,7 +463,8 @@ def get_contact_dict_for_account(account):
     return contacts_dict
 
 
-def play_sound(sound_event, account, force=False):
+def play_sound(sound_event: str, account: str,
+               force: bool = False) -> None:
     if sound_event is None:
         return
     if force or allow_sound_notification(account, sound_event):
@@ -547,7 +557,7 @@ def play_sound_file(path_to_soundfile):
         except GLib.Error as error:
             log.error('Could not play sound: %s', error.message)
 
-def get_connection_status(account):
+def get_connection_status(account: str) -> str:
     con = app.connections[account]
     if con.state.is_reconnect_scheduled:
         return 'error'
@@ -559,7 +569,7 @@ def get_connection_status(account):
         return 'offline'
     return con.status
 
-def get_global_show():
+def get_global_show() -> str:
     maxi = 0
     for account in app.connections:
         if not app.settings.get_account_setting(account,
@@ -571,7 +581,7 @@ def get_global_show():
             maxi = index
     return SHOW_LIST[maxi]
 
-def get_global_status_message():
+def get_global_status_message() -> str:
     maxi = 0
     for account, con in app.connections.items():
         if not app.settings.get_account_setting(account,
@@ -583,7 +593,7 @@ def get_global_status_message():
             status_message = con.status_message
     return status_message
 
-def statuses_unified():
+def statuses_unified() -> bool:
     """
     Test if all statuses are the same
     """
@@ -627,7 +637,7 @@ def remove_invalid_xml_chars(string_):
         string_ = re.sub(INVALID_XML_CHARS_REGEX, '', string_)
     return string_
 
-def get_random_string(count=16):
+def get_random_string(count: int = 16) -> str:
     """
     Create random string of count length
 
@@ -637,7 +647,7 @@ def get_random_string(count=16):
     return ''.join(random.choice(allowed) for char in range(count))
 
 @functools.lru_cache(maxsize=1)
-def get_os_info():
+def get_os_info() -> str:
     info = 'N/A'
     if sys.platform in ('win32', 'darwin'):
         info = f'{platform.system()} {platform.release()}'
@@ -679,7 +689,7 @@ def message_needs_highlight(text, nickname, own_jid):
     return False
 
 
-def allow_showing_notification(account):
+def allow_showing_notification(account: str) -> bool:
     if not app.settings.get('show_notifications'):
         return False
     if app.settings.get('show_notifications_away'):
@@ -689,7 +699,7 @@ def allow_showing_notification(account):
     return False
 
 
-def allow_sound_notification(account, sound_event):
+def allow_sound_notification(account: str, sound_event: str) -> bool:
     if not app.settings.get('sounds_on'):
         return False
     client = app.get_client(account)
@@ -729,23 +739,25 @@ def jid_is_blocked(account, jid):
     con = app.connections[account]
     return jid in con.get_module('Blocking').blocked
 
-def get_subscription_request_msg(account=None):
-    s = app.settings.get_account_setting(account, 'subscription_request_msg')
-    if s:
-        return s
-    s = _('I would like to add you to my contact list.')
-    if account:
-        s = _('Hello, I am $name.') + ' ' + s
-        s = Template(s).safe_substitute({'name': app.nicks[account]})
-        return s
+def get_subscription_request_msg(account: Optional[str] = None) -> str:
+    message = _('I would like to add you to my contact list.')
+    if account is None:
+        return message
+    
+    message = app.settings.get_account_setting(account, 'subscription_request_msg')
+    if message:
+        return message
 
-def get_user_proxy(account):
+    message = _('Hello, I am $name. %s') % message
+    return Template(message).safe_substitute({'name': app.nicks[account]})
+
+def get_user_proxy(account: str) -> Optional[ProxyData]:
     proxy_name = app.settings.get_account_setting(account, 'proxy')
     if not proxy_name:
         return None
     return get_proxy(proxy_name)
 
-def get_proxy(proxy_name):
+def get_proxy(proxy_name: str) -> Optional[ProxyData]:
     try:
         settings = app.settings.get_proxy_settings(proxy_name)
     except ValueError:
@@ -925,7 +937,7 @@ def catch_exceptions(func):
     return func_wrapper
 
 
-def parse_uri_actions(uri):
+def parse_uri_actions(uri: str) -> Tuple[str, Dict[str, str]]:
     uri = uri[5:]
     if '?' not in uri:
         return 'message', {'jid': uri}
@@ -947,7 +959,7 @@ def parse_uri_actions(uri):
     return action, data
 
 
-def parse_uri(uri):
+def parse_uri(uri: str) -> URI:
     if uri.startswith('xmpp:'):
         action, data = parse_uri_actions(uri)
         try:
@@ -989,7 +1001,7 @@ def parse_uri(uri):
 
 
 @catch_exceptions
-def open_uri(uri, account=None):
+def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
     if not isinstance(uri, URI):
         uri = parse_uri(uri)
 
@@ -1022,13 +1034,17 @@ def open_uri(uri, account=None):
             log.warning('Account must be specified to open XMPP uri')
             return
 
+        if isinstance(uri.data, dict):
+            jid = uri.data['jid']
+            message = uri.data.get('body')
+        else:
+            log.warning('Cant open URI: %s', uri)
         if uri.action == URIAction.JOIN:
             app.app.activate_action(
                 'groupchat-join',
-                GLib.Variant('as', [account, uri.data['jid']]))
+                GLib.Variant('as', [account, jid]))
         elif uri.action == URIAction.MESSAGE:
-            app.interface.start_chat_from_jid(account, uri.data['jid'],
-                                              message=uri.data.get('body'))
+            app.interface.start_chat_from_jid(account, jid, message=message)
         else:
             log.warning('Cant open URI: %s', uri)
 
@@ -1079,9 +1095,8 @@ def file_is_locked(path_to_file):
         return False
 
 
-def geo_provider_from_location(lat, lon):
-    return ('https://www.openstreetmap.org/?'
-            'mlat=%s&mlon=%s&zoom=16') % (lat, lon)
+def geo_provider_from_location(lat: str, lon: str) -> str:
+    return f'https://www.openstreetmap.org/?mlat={lat}&mlon={lon}&zoom=16'
 
 
 def get_resource(account):
@@ -1096,7 +1111,7 @@ def get_resource(account):
     return resource
 
 
-def get_default_muc_config():
+def get_default_muc_config() -> Dict[str, Union[bool, str]]:
     return {
         # XEP-0045 options
         'muc#roomconfig_allowinvites': True,
@@ -1181,10 +1196,10 @@ def is_role_change_allowed(self_contact, contact):
     return self_contact.affiliation >= contact.affiliation
 
 
-def get_tls_error_phrase(tls_error):
+def get_tls_error_phrase(tls_error: Gio.TlsCertificateFlags) -> str:
     phrase = GIO_TLS_ERRORS.get(tls_error)
     if phrase is None:
-        return GIO_TLS_ERRORS.get(Gio.TlsCertificateFlags.GENERIC_ERROR)
+        return GIO_TLS_ERRORS[Gio.TlsCertificateFlags.GENERIC_ERROR]
     return phrase
 
 
@@ -1295,7 +1310,8 @@ def convert_gio_to_openssl_cert(cert):
     return cert
 
 
-def get_custom_host(account):
+def get_custom_host(account: str
+                    ) -> Optional[Tuple[str, ConnectionProtocol, str]]:
     if not app.settings.get_account_setting(account, 'use_custom_host'):
         return None
     host = app.settings.get_account_setting(account, 'custom_host')
@@ -1311,7 +1327,9 @@ def get_custom_host(account):
     return (host, protocol, ConnectionType(type_))
 
 
-def warn_about_plain_connection(account, connection_types):
+def warn_about_plain_connection(account: str,
+                                connection_types: List[ConnectionType]
+                                ) -> bool:
     warn = app.settings.get_account_setting(
         account, 'confirm_unencrypted_connection')
     for type_ in connection_types:
@@ -1320,7 +1338,7 @@ def warn_about_plain_connection(account, connection_types):
     return False
 
 
-def get_idle_status_message(state, status_message):
+def get_idle_status_message(state: str, status_message: str) -> str:
     message = app.settings.get(f'auto{state}_message')
     if not message:
         message = status_message
@@ -1348,7 +1366,7 @@ def should_log(account, jid):
     return (account not in no_log_for) and (jid not in no_log_for)
 
 
-def ask_for_status_message(status, signin=False):
+def ask_for_status_message(status: str, signin: bool = False) -> bool:
     if status is None:
         # We try to change the message
         return True
