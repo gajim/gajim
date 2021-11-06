@@ -5,6 +5,9 @@
 .gajim-outgoing-nickname {
     color: rgb(40, 140, 210);
 }
+.gajim-conversation-text text {
+    color: inherit;
+}
 .gajim-outgoing-message-text {
     color: rgb(200, 200, 200);
 }

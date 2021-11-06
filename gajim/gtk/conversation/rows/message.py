@@ -171,13 +171,15 @@ class MessageRow(BaseRow):
 
         self.show_all()
 
+    def update_text_tags(self):
+        self._message_widget.update_text_tags()
+
     def _check_for_highlight(self, content):
         needs_highlight = message_needs_highlight(
             content.text,
             self._contact.nickname,
             self._client.get_own_jid().bare)
         if needs_highlight:
-            # TODO: add class to textview text (if message widget is TextView)
             self.get_style_context().add_class(
                 'gajim-mention-highlight')
 
@@ -258,10 +260,10 @@ class MessageRow(BaseRow):
                 color = 'encrypted-color'
             else:
                 icon, trust_tooltip, color = TRUST_SYMBOL_DATA[trust]
-                tooltip = '%s\n%s' % (tooltip, trust_tooltip)
+                tooltip = f'{tooltip}\n{trust_tooltip}'
             if fingerprint is not None:
                 fingerprint = format_fingerprint(fingerprint)
-                tooltip = '%s\n<tt>%s</tt>' % (tooltip, fingerprint)
+                tooltip = f'{tooltip}\n<tt>{fingerprint}</tt>'
 
         image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
         image.set_tooltip_markup(tooltip)
@@ -278,9 +280,6 @@ class MessageRow(BaseRow):
         fingerprint = additional_data.get_value('encrypted', 'fingerprint')
         trust = additional_data.get_value('encrypted', 'trust')
         return name, fingerprint, trust
-
-    def _on_quote_selection(self, _widget, text):
-        self.get_parent().on_quote(text)
 
     @property
     def has_receipt(self):

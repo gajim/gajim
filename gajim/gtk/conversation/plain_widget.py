@@ -15,7 +15,6 @@
 import logging
 from urllib.parse import quote
 
-from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import Gdk
@@ -55,6 +54,9 @@ class PlainWidget(Gtk.Box):
     def add_content(self, block):
         self._text_widget.print_text_with_styling(block)
 
+    def update_text_tags(self):
+        self._text_widget.update_text_tags()
+
 
 class MessageLabel(Gtk.Label):
     def __init__(self, account, selectable):
@@ -67,6 +69,8 @@ class MessageLabel(Gtk.Label):
         self.set_track_visited_links(False)
 
         self._account = account
+
+        self.get_style_context().add_class('gajim-conversation-text')
 
     def print_text_with_styling(self, block):
         text = GLib.markup_escape_text(block.text.strip())
@@ -81,17 +85,11 @@ class MessageLabel(Gtk.Label):
         self.set_markup(text)
         self.set_attributes(attr_list)
 
+    def update_text_tags(self):
+        pass
+
 
 class MessageTextview(Gtk.TextView):
-
-    __gsignals__ = {
-        'quote': (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,
-            (str, )
-        ),
-    }
-
     def __init__(self, account):
         Gtk.TextView.__init__(self)
         self.set_hexpand(True)
@@ -122,7 +120,7 @@ class MessageTextview(Gtk.TextView):
         # Keeps text selections for quoting and search actions
         self._selected_text = ''
 
-        self.get_style_context().add_class('gajim-conversation-font')
+        self.get_style_context().add_class('gajim-conversation-text')
 
         # Create Tags
         self._create_url_tags()
@@ -147,12 +145,11 @@ class MessageTextview(Gtk.TextView):
                                                underline=Pango.Underline.SINGLE)
             tag.connect('event', self._on_uri_clicked, tag)
 
-    def update_tags(self):
+    def update_text_tags(self):
         tag_table = self.get_buffer().get_tag_table()
-        color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
-
+        url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
         for tag in URI_TAGS:
-            tag_table.lookup(tag).set_property('foreground', color)
+            tag_table.lookup(tag).set_property('foreground', url_color)
 
     def clear(self):
         buffer_ = self.get_buffer()
@@ -229,8 +226,7 @@ class MessageTextview(Gtk.TextView):
         if tags:
             # A tagged text fragment has been clicked
             for tag in tags:
-                tag_name = tag.get_property('name')
-                if tag_name in URI_TAGS:
+                if tag.get_property('name') in URI_TAGS:
                     # Block regular context menu
                     return True
 
@@ -353,6 +349,7 @@ class MessageTextview(Gtk.TextView):
             self._show_context_menu(uri)
             return Gdk.EVENT_STOP
 
+        # TODO:
         # self.plugin_modified = False
         # app.plugin_manager.extension_point(
         #     'hyperlink_handler', uri, self, self.get_toplevel())

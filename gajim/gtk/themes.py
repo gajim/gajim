@@ -107,8 +107,12 @@ CSS_STYLE_OPTIONS = [
                 StyleAttr.FONT),
 
     StyleOption(_('Conversation Font'),
-                '.gajim-conversation-font',
+                '.gajim-conversation-text',
                 StyleAttr.FONT),
+
+    StyleOption(_('Conversation Text Color'),
+                '.gajim-conversation-text',
+                StyleAttr.COLOR),
 
     StyleOption(_('Incoming Nickname Color'),
                 '.gajim-incoming-nickname',

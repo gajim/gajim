@@ -14,7 +14,6 @@
 
 from datetime import datetime
 
-from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -23,8 +22,6 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import from_one_line
 
-from ...util import convert_rgba_to_hex
-from ...util import text_to_color
 from ...util import wrap_with_event_box
 
 
@@ -59,10 +56,7 @@ class BaseRow(Gtk.ListBoxRow):
         return self._merged
 
     def update_text_tags(self):
-        return
-        # TODO
-        if self.textview is not None:
-            self.textview.update_text_tags()
+        pass
 
     @staticmethod
     def create_timestamp_widget(timestamp: datetime) -> Gtk.Label:

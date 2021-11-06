@@ -1249,9 +1249,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.msg_textview.clear_tags()
 
     def _style_changed(self, *args):
-        self.update_tags()
+        self.update_text_tags()
 
-    def update_tags(self):
+    def update_text_tags(self):
         self.conversation_view.update_text_tags()
 
     @staticmethod
