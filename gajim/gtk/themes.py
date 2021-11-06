@@ -34,42 +34,6 @@ from .util import get_app_window
 StyleOption = namedtuple('StyleOption', 'label selector attr')
 
 CSS_STYLE_OPTIONS = [
-    StyleOption(_('Chat Banner: Foreground Color'),
-                '.gajim-banner',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Chat Banner: Background Color'),
-                '.gajim-banner',
-                StyleAttr.BACKGROUND),
-
-    StyleOption(_('Chat Banner: Text Font'),
-                '.gajim-banner',
-                StyleAttr.FONT),
-
-    StyleOption(_('Contact List: Group Foreground Color'),
-                '.gajim-group-row',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Contact List: Group Background Color'),
-                '.gajim-group-row',
-                StyleAttr.BACKGROUND),
-
-    StyleOption(_('Contact List: Group Font'),
-                '.gajim-group-row',
-                StyleAttr.FONT),
-
-    StyleOption(_('Contact List: Contact Foreground Color'),
-                '.gajim-contact-row',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Contact List: Contact Background Color'),
-                '.gajim-contact-row',
-                StyleAttr.BACKGROUND),
-
-    StyleOption(_('Contact List: Contact Font'),
-                '.gajim-contact-row',
-                StyleAttr.FONT),
-
     StyleOption(_('Conversation: Text Font'),
                 '.gajim-conversation-text',
                 StyleAttr.FONT),
@@ -105,6 +69,42 @@ CSS_STYLE_OPTIONS = [
     StyleOption(_('Message Correction: Background Color'),
                 '.gajim-msg-correcting text',
                 StyleAttr.BACKGROUND),
+
+    StyleOption(_('Chat Banner: Foreground Color'),
+                '.gajim-banner',
+                StyleAttr.COLOR),
+
+    StyleOption(_('Chat Banner: Background Color'),
+                '.gajim-banner',
+                StyleAttr.BACKGROUND),
+
+    StyleOption(_('Chat Banner: Text Font'),
+                '.gajim-banner',
+                StyleAttr.FONT),
+
+    StyleOption(_('Contact List: Group Foreground Color'),
+                '.gajim-group-row',
+                StyleAttr.COLOR),
+
+    StyleOption(_('Contact List: Group Background Color'),
+                '.gajim-group-row',
+                StyleAttr.BACKGROUND),
+
+    StyleOption(_('Contact List: Group Font'),
+                '.gajim-group-row',
+                StyleAttr.FONT),
+
+    StyleOption(_('Contact List: Contact Foreground Color'),
+                '.gajim-contact-row',
+                StyleAttr.COLOR),
+
+    StyleOption(_('Contact List: Contact Background Color'),
+                '.gajim-contact-row',
+                StyleAttr.BACKGROUND),
+
+    StyleOption(_('Contact List: Contact Font'),
+                '.gajim-contact-row',
+                StyleAttr.FONT),
 
     StyleOption(_('Status: Online Color'),
                 '.gajim-status-online',
