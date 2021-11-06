@@ -34,14 +34,6 @@ from .util import get_app_window
 StyleOption = namedtuple('StyleOption', 'label selector attr')
 
 CSS_STYLE_OPTIONS = [
-    StyleOption(_('Group Chat Tab New Directed Message'),
-                '.gajim-state-tab-muc-directed-msg',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Group Chat Tab New Message'),
-                '.gajim-state-tab-muc-msg',
-                StyleAttr.COLOR),
-
     StyleOption(_('Chat Banner: Foreground Color'),
                 '.gajim-banner',
                 StyleAttr.COLOR),

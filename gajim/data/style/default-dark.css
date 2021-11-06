@@ -25,12 +25,6 @@
 .gajim-url {
     color: rgb(60, 135, 220);
 }
-.gajim-state-tab-muc-directed-msg {
-    color: rgb(210, 70, 30);
-}
-.gajim-state-tab-muc-msg {
-    color: rgb(80, 95, 230);
-}
 .gajim-user-disconnected {
     color: rgb(230, 170, 170);
 }
