@@ -44,6 +44,7 @@ from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GdkPixbuf
 import nbxmpp
+from nbxmpp.structs import LocationData
 import cairo
 
 from gajim.common import app
@@ -263,7 +264,7 @@ def get_icon_name(name: str,
     return '%s-%s' % (iconset, name)
 
 
-def load_user_iconsets():
+def load_user_iconsets() -> None:
     iconsets_path = configpaths.get('MY_ICONSETS')
     if not iconsets_path.exists():
         return
@@ -275,7 +276,7 @@ def load_user_iconsets():
         _icon_theme.append_search_path(str(path))
 
 
-def get_available_iconsets():
+def get_available_iconsets() -> List[str]:
     iconsets = []
     for iconset in GajimIconSet:
         iconsets.append(iconset.value)
@@ -421,7 +422,7 @@ def at_the_end(widget: Gtk.ScrolledWindow) -> bool:
 
 
 def get_image_button(icon_name: str, tooltip: str,
-                     toggle: Optional[bool] = False) -> Gtk.Button:
+                     toggle: bool = False) -> Gtk.Button:
     if toggle:
         button = Gtk.ToggleButton()
         image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
@@ -534,7 +535,7 @@ def ensure_not_destroyed(func):
     return func_wrapper
 
 
-def format_mood(mood, text):
+def format_mood(mood: str, text: str) -> str:
     if mood is None:
         return ''
     mood = MOODS[mood]
@@ -544,13 +545,13 @@ def format_mood(mood, text):
     return markuptext
 
 
-def get_account_mood_icon_name(account):
+def get_account_mood_icon_name(account: str) -> Optional[str]:
     client = app.get_client(account)
     mood = client.get_module('UserMood').get_current_mood()
     return f'mood-{mood.mood}' if mood is not None else mood
 
 
-def format_activity(activity, subactivity, text):
+def format_activity(activity: str, subactivity: str, text: str) -> str:
     if subactivity in ACTIVITIES[activity]:
         subactivity = ACTIVITIES[activity][subactivity]
     activity = ACTIVITIES[activity]['category']
@@ -564,14 +565,15 @@ def format_activity(activity, subactivity, text):
     return markuptext
 
 
-def get_activity_icon_name(activity, subactivity=None):
+def get_activity_icon_name(activity: str,
+                           subactivity: Optional[str] = None) -> str:
     icon_name = 'activity-%s' % activity.replace('_', '-')
     if subactivity is not None:
         icon_name += '-%s' % subactivity.replace('_', '-')
     return icon_name
 
 
-def get_account_activity_icon_name(account):
+def get_account_activity_icon_name(account: str) -> Optional[str]:
     client = app.get_client(account)
     activity = client.get_module('UserActivity').get_current_activity()
     if activity is None:
@@ -579,7 +581,8 @@ def get_account_activity_icon_name(account):
     return get_activity_icon_name(activity.activity, activity.subactivity)
 
 
-def format_tune(artist, _length, _rating, source, title, _track, _uri):
+def format_tune(artist: str, _length: str, _rating: str, source: str,
+                title: str, _track: str, _uri: str) -> str:
     artist = GLib.markup_escape_text(artist or _('Unknown Artist'))
     title = GLib.markup_escape_text(title or _('Unknown Title'))
     source = GLib.markup_escape_text(source or _('Unknown Source'))
@@ -591,13 +594,13 @@ def format_tune(artist, _length, _rating, source, title, _track, _uri):
     return tune_string
 
 
-def get_account_tune_icon_name(account):
+def get_account_tune_icon_name(account: str) -> Optional[str]:
     client = app.get_client(account)
     tune = client.get_module('UserTune').get_current_tune()
     return None if tune is None else 'audio-x-generic'
 
 
-def format_location(location):
+def format_location(location: LocationData) -> str:
     location = location._asdict()
     location_string = ''
     for attr, value in location.items():
@@ -614,7 +617,7 @@ def format_location(location):
     return location_string.strip()
 
 
-def get_account_location_icon_name(account):
+def get_account_location_icon_name(account: str) -> Optional[str]:
     client = app.get_client(account)
     location = client.get_module('UserLocation').get_current_location()
     return None if location is None else 'applications-internet'
@@ -625,7 +628,7 @@ def format_eta(time_: Union[int, float]) -> str:
     time_ = int(time_)
     times['seconds'] = time_ % 60
     if time_ >= 60:
-        time_ /= 60
+        time_ = int(time_ / 60)
         times['minutes'] = round(time_ % 60)
         return _('%(minutes)s min %(seconds)s s') % times
     return _('%s s') % times['seconds']
@@ -705,7 +708,7 @@ def get_css_show_class(show: str) -> str:
     return '.gajim-status-offline'
 
 
-def add_css_to_widget(widget, css):
+def add_css_to_widget(widget: Any, css: str) -> None:
     provider = Gtk.CssProvider()
     provider.load_from_data(bytes(css.encode()))
     context = widget.get_style_context()
@@ -713,7 +716,7 @@ def add_css_to_widget(widget, css):
                          Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
 
-def get_pixbuf_from_data(file_data):
+def get_pixbuf_from_data(file_data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
     # TODO: This already exists in preview_helpery pixbuf_from_data
     """
     Get image data and returns GdkPixbuf.Pixbuf
@@ -738,7 +741,7 @@ def get_pixbuf_from_data(file_data):
         except Exception:
             log.warning('Could not use pillow to convert avatar image, '
                         'image cannot be displayed', exc_info=True)
-            return
+            return None
 
     return pixbuf
 
@@ -763,7 +766,7 @@ def scale_pixbuf(pixbuf: GdkPixbuf.Pixbuf,
                                GdkPixbuf.InterpType.BILINEAR)
 
 
-def scale_pixbuf_from_data(data, size):
+def scale_pixbuf_from_data(data: bytes, size: int) -> Optional[GdkPixbuf.Pixbuf]:
     pixbuf = get_pixbuf_from_data(data)
     return scale_pixbuf(pixbuf, size)
 
@@ -821,7 +824,7 @@ def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> Tuple[int, int]:
     return image_width, image_height
 
 
-def make_href_markup(string):
+def make_href_markup(string: str) -> str:
     url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
     color = convert_rgb_to_hex(url_color)
 
