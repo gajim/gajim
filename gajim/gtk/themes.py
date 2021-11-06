@@ -122,22 +122,6 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-outgoing-nickname',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Incoming Message Text Color'),
-                '.gajim-incoming-message-text',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Incoming Message Text Font'),
-                '.gajim-incoming-message-text',
-                StyleAttr.FONT),
-
-    StyleOption(_('Outgoing Message Text Color'),
-                '.gajim-outgoing-message-text',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Outgoing Message Text Font'),
-                '.gajim-outgoing-message-text',
-                StyleAttr.FONT),
-
     StyleOption(_('Status Message Color'),
                 '.gajim-status-message',
                 StyleAttr.COLOR),
