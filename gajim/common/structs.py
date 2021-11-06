@@ -12,8 +12,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict
+from typing import NamedTuple
+from typing import Optional
+from typing import Tuple
+from typing import Union
+from typing import Any
+
 import time
-from collections import namedtuple
 from dataclasses import dataclass
 
 from nbxmpp.protocol import JID
@@ -23,9 +29,14 @@ from nbxmpp.const import Affiliation
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import KindConstant
 from gajim.common.const import PresenceShowExt
+from gajim.common.const import URIType
+from gajim.common.const import URIAction
 
-URI = namedtuple('URI', 'type action data')
-URI.__new__.__defaults__ = (None, None)  # type: ignore
+
+class URI(NamedTuple):
+    type: URIType
+    action: Optional[URIAction] = None
+    data: Optional[Union[Dict[str, str], str]] = None
 
 
 class MUCData:
