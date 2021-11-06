@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from urllib.parse import quote
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -21,14 +20,13 @@ from gi.repository import Gdk
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import i18n
 from gajim.common.const import StyleAttr
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import parse_uri
-from gajim.common.i18n import _
 
-from gajim.gui_menu_builder import get_conv_context_menu
+from gajim.gui_menu_builder import get_conv_action_context_menu
+from gajim.gui_menu_builder import get_conv_uri_context_menu
 
 from ..util import get_cursor
 from ..util import make_pango_attribute
@@ -71,6 +69,20 @@ class MessageLabel(Gtk.Label):
         self._account = account
 
         self.get_style_context().add_class('gajim-conversation-text')
+
+        self.connect('populate-popup', self._on_populate_popup)
+
+    def _on_populate_popup(self, label, menu):
+        selected, start, end = label.get_selection_bounds()
+        if not selected:
+            menu.show_all()
+            return
+
+        selected_text = label.get_text()[start:end]
+        action_menu_item = get_conv_action_context_menu(
+            self._account, selected_text)
+        menu.prepend(action_menu_item)
+        menu.show_all()
 
     def print_text_with_styling(self, block):
         text = GLib.markup_escape_text(block.text.strip())
@@ -261,69 +273,9 @@ class MessageTextview(Gtk.TextView):
             menu.show_all()
             return
 
-        selected_text_short = reduce_chars_newlines(
-            self._selected_text, 25, 2)
-        item = Gtk.MenuItem.new_with_mnemonic(
-            _('_Actions for "%s"') % selected_text_short)
-        menu.prepend(item)
-        submenu = Gtk.Menu()
-        item.set_submenu(submenu)
-        uri_text = quote(self._selected_text.encode('utf-8'))
-
-        if app.settings.get('always_english_wikipedia'):
-            uri = (f'https://en.wikipedia.org/wiki/'
-                   f'Special:Search?search={uri_text}')
-        else:
-            uri = (f'https://{i18n.get_short_lang_code()}.wikipedia.org/'
-                   f'wiki/Special:Search?search={uri_text}')
-        item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
-        id_ = item.connect('activate', self._visit_uri, uri)
-        self._handlers[id_] = item
-        submenu.append(item)
-
-        item = Gtk.MenuItem.new_with_mnemonic(
-            _('Look it up in _Dictionary'))
-        dict_link = app.settings.get('dictionary_url')
-        if dict_link == 'WIKTIONARY':
-            # Default is wikitionary.org
-            if app.settings.get('always_english_wiktionary'):
-                uri = (f'https://en.wiktionary.org/wiki/'
-                       f'Special:Search?search={uri_text}')
-            else:
-                uri = (f'https://{i18n.get_short_lang_code()}.wiktionary.org/'
-                       f'wiki/Special:Search?search={uri_text}')
-            id_ = item.connect('activate', self._visit_uri, uri)
-            self._handlers[id_] = item
-        else:
-            if dict_link.find('%s') == -1:
-                # There has to be a '%s' in the url if it’s not WIKTIONARY
-                item = Gtk.MenuItem.new_with_label(
-                    _('Dictionary URL is missing a "%s"'))
-                item.set_sensitive(False)
-            else:
-                uri = dict_link % uri_text
-                id_ = item.connect('activate', self._visit_uri, uri)
-                self._handlers[id_] = item
-        submenu.append(item)
-
-        search_link = app.settings.get('search_engine')
-        if search_link.find('%s') == -1:
-            # There has to be a '%s' in the url
-            item = Gtk.MenuItem.new_with_label(
-                _('Web Search URL is missing a "%s"'))
-            item.set_sensitive(False)
-        else:
-            item = Gtk.MenuItem.new_with_mnemonic(_('Web _Search for it'))
-            uri = search_link % uri_text
-            id_ = item.connect('activate', self._visit_uri, uri)
-            self._handlers[id_] = item
-        submenu.append(item)
-
-        item = Gtk.MenuItem.new_with_mnemonic(_('Open as _Link'))
-        id_ = item.connect('activate', self._visit_uri, uri)
-        self._handlers[id_] = item
-        submenu.append(item)
-
+        action_menu_item = get_conv_action_context_menu(
+            self._account, self._selected_text)
+        menu.prepend(action_menu_item)
         menu.show_all()
 
     def _on_uri_clicked(self, texttag, _widget, event, iter_, _kind):
@@ -346,7 +298,7 @@ class MessageTextview(Gtk.TextView):
 
         uri = parse_uri(word)
         if event.button.button == 3:  # right click
-            self._show_context_menu(uri)
+            self._show_uri_context_menu(uri)
             return Gdk.EVENT_STOP
 
         # TODO:
@@ -359,8 +311,8 @@ class MessageTextview(Gtk.TextView):
         open_uri(uri, account=self._account)
         return Gdk.EVENT_STOP
 
-    def _show_context_menu(self, uri):
-        menu = get_conv_context_menu(self._account, uri)
+    def _show_uri_context_menu(self, uri):
+        menu = get_conv_uri_context_menu(self._account, uri)
         if menu is None:
             log.warning('No handler for URI type: %s', uri)
             return
@@ -373,7 +325,3 @@ class MessageTextview(Gtk.TextView):
         menu.attach_to_widget(self, None)
         menu.connect('notify::visible', destroy)
         menu.popup_at_pointer()
-
-    @staticmethod
-    def _visit_uri(_widget, uri):
-        open_uri(uri)

@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from urllib.parse import quote
+
 from gi.repository import Gtk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -22,7 +24,9 @@ from gajim.common import app
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import jid_is_blocked
+from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.i18n import _
+from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
 
@@ -268,7 +272,75 @@ def get_encryption_menu(control_id, control_type, zeroconf=False):
     return menu
 
 
-def get_conv_context_menu(account, uri):
+def get_conv_action_context_menu(account: str, selected_text: str) -> Gtk.Menu:
+    selected_text_short = reduce_chars_newlines(selected_text, 10, 1)
+
+    action_menu_item = Gtk.MenuItem.new_with_mnemonic(
+            _('_Actions for "%s"') % selected_text_short)
+    submenu = Gtk.Menu()
+    action_menu_item.set_submenu(submenu)
+
+    uri_text = quote(selected_text.encode('utf-8'))
+
+    if app.settings.get('always_english_wikipedia'):
+        uri = (f'https://en.wikipedia.org/wiki/'
+               f'Special:Search?search={uri_text}')
+    else:
+        uri = (f'https://{get_short_lang_code()}.wikipedia.org/'
+               f'wiki/Special:Search?search={uri_text}')
+    item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
+    value = GLib.Variant.new_strv([account, uri])
+    item.set_action_target_value(value)
+    submenu.append(item)
+
+    item = Gtk.MenuItem.new_with_mnemonic(
+        _('Look it up in _Dictionary'))
+    dict_link = app.settings.get('dictionary_url')
+    if dict_link == 'WIKTIONARY':
+        # Default is wikitionary.org
+        if app.settings.get('always_english_wiktionary'):
+            uri = (f'https://en.wiktionary.org/wiki/'
+                   f'Special:Search?search={uri_text}')
+        else:
+            uri = (f'https://{get_short_lang_code()}.wiktionary.org/'
+                   f'wiki/Special:Search?search={uri_text}')
+    else:
+        if dict_link.find('%s') == -1:
+            # There has to be a '%s' in the url if it’s not WIKTIONARY
+            item = Gtk.MenuItem.new_with_label(
+                _('Dictionary URL is missing a "%s"'))
+            item.set_sensitive(False)
+        else:
+            uri = dict_link % uri_text
+    value = GLib.Variant.new_strv([account, uri])
+    item.set_action_target_value(value)
+    submenu.append(item)
+
+    search_link = app.settings.get('search_engine')
+    if search_link.find('%s') == -1:
+        # There has to be a '%s' in the url
+        item = Gtk.MenuItem.new_with_label(
+            _('Web Search URL is missing a "%s"'))
+        item.set_sensitive(False)
+    else:
+        item = Gtk.MenuItem.new_with_mnemonic(_('Web _Search for it'))
+        uri = search_link % uri_text
+    value = GLib.Variant.new_strv([account, uri])
+    item.set_action_target_value(value)
+    submenu.append(item)
+
+    item = Gtk.MenuItem.new_with_mnemonic(_('Open as _Link'))
+    value = GLib.Variant.new_strv([account, uri_text])
+    item.set_action_target_value(value)
+    submenu.append(item)
+
+    for item in submenu:
+        item.set_action_name('app.open-link')
+
+    return action_menu_item
+
+
+def get_conv_uri_context_menu(account, uri):
     if uri.type == URIType.XMPP:
         if uri.action == URIAction.JOIN:
             context_menu = [
