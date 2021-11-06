@@ -12,17 +12,26 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Tuple
+
 import logging
 import os
 from pathlib import Path
 from urllib.parse import urlparse
+from urllib.parse import ParseResult
 
+from gi.repository import GdkPixbuf
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Soup
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import MIME_TYPES
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.helpers import get_tls_error_phrase
@@ -46,7 +55,13 @@ ALLOWED_MIME_TYPES = mime_types.union(PREVIEWABLE_MIME_TYPES)
 
 
 class Preview:
-    def __init__(self, uri, urlparts, orig_path, thumb_path, size, widget):
+    def __init__(self, 
+                 uri: str,
+                 urlparts: Optional[ParseResult],
+                 orig_path: Optional[Path],
+                 thumb_path: Optional[Path],
+                 size: int,
+                 widget: Any) -> None:
         self._uri = uri
         self._urlparts = urlparts
         self._filename = filename_from_uri(uri)
@@ -57,41 +72,44 @@ class Preview:
         self.thumb_path = thumb_path
         self.size = size
 
-        self.thumbnail = None
-        self.mime_type = None
-        self.file_size = 0
+        self.thumbnail: Optional[bytes] = None
+        self.mime_type: str = ''
+        self.file_size: int = 0
 
-        self.key, self.iv = None, None
-        if self.is_aes_encrypted:
+        self.key: Optional[bytes] = None
+        self.iv: Optional[bytes] = None
+        if self.is_aes_encrypted and urlparts is not None:
             self.key, self.iv = parse_fragment(urlparts.fragment)
 
     @property
-    def is_geo_uri(self):
+    def is_geo_uri(self) -> bool:
         return self._uri.startswith('geo:')
 
     @property
-    def is_web_uri(self):
+    def is_web_uri(self) -> bool:
         return not self.is_geo_uri
 
     @property
-    def is_previewable(self):
+    def is_previewable(self) -> bool:
         return self.mime_type in PREVIEWABLE_MIME_TYPES
 
     @property
-    def is_audio(self):
+    def is_audio(self) -> bool:
         is_allowed = bool(self.mime_type in ALLOWED_MIME_TYPES)
         return is_allowed and self.mime_type.startswith('audio/')
 
     @property
-    def uri(self):
+    def uri(self) -> str:
         return self._uri
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         return self._filename
 
     @property
-    def request_uri(self):
+    def request_uri(self) -> Optional[str]:
+        if self._urlparts is None:
+            return ''
         if self.is_aes_encrypted:
             # Remove fragments so we dont transmit it to the server
             urlparts = self._urlparts._replace(scheme='https', fragment='')
@@ -99,31 +117,37 @@ class Preview:
         return self._urlparts.geturl()
 
     @property
-    def is_aes_encrypted(self):
+    def is_aes_encrypted(self) -> bool:
         if self._urlparts is None:
             return False
         return self._urlparts.scheme == 'aesgcm'
 
-    def thumb_exists(self):
+    def thumb_exists(self) -> bool:
+        if self.thumb_path is None:
+            return False
         return self.thumb_path.exists()
 
-    def orig_exists(self):
+    def orig_exists(self) -> bool:
+        if self.orig_path is None:
+            return False
         return self.orig_path.exists()
 
-    def create_thumbnail(self, data):
+    def create_thumbnail(self, data: bytes) -> bool:
         self.thumbnail = create_thumbnail(data, self.size)
         if self.thumbnail is None:
             log.warning('Creating thumbnail failed for: %s', self.orig_path)
             return False
         return True
 
-    def update_widget(self, data=None):
+    def update_widget(self, data: Optional[GdkPixbuf.Pixbuf] = None) -> None:
         self._widget.update(self, data)
 
 
 class PreviewManager:
-    def __init__(self):
-        self._sessions = {}
+    def __init__(self) -> None:
+        self._sessions: Dict[
+            str,
+            Tuple[Soup.Session, Optional[Gio.SimpleProxyResolver]]] = {}
 
         self._orig_dir = Path(configpaths.get('MY_DATA')) / 'downloads'
         self._thumb_dir = Path(configpaths.get('MY_CACHE')) / 'downloads.thumb'
@@ -134,13 +158,14 @@ class PreviewManager:
         if GLib.mkdir_with_parents(str(self._thumb_dir), 0o700) != 0:
             log.error('Failed to create: %s', self._thumb_dir)
 
-    def _get_session(self, account):
+    def _get_session(self, account: str) -> Soup.Session:
         if account not in self._sessions:
             self._sessions[account] = self._create_session(account)
         return self._sessions[account][0]
 
     @staticmethod
-    def _create_session(account):
+    def _create_session(account: str) -> Tuple[
+            Soup.Session, Optional[Gio.SimpleProxyResolver]]:
         session = Soup.Session()
         session.add_feature_by_type(Soup.ContentSniffer)
         session.props.https_aliases = ['aesgcm']
@@ -156,7 +181,9 @@ class PreviewManager:
         return session, resolver
 
     @staticmethod
-    def _accept_uri(urlparts, uri, additional_data):
+    def _accept_uri(urlparts: ParseResult,
+                    uri: str,
+                    additional_data: AdditionalDataDict) -> bool:
         try:
             oob_url = additional_data['gajim']['oob_url']
         except (KeyError, AttributeError):
@@ -190,7 +217,9 @@ class PreviewManager:
         log.info('Unsupported URI scheme: %s', uri)
         return False
 
-    def get_previewable(self, text, additional_data):
+    def get_previewable(self, 
+                        text: str, 
+                        additional_data: AdditionalDataDict) -> bool:
         if len(text.split(' ')) > 1:
             # urlparse doesn't recognise spaces as URL delimiter
             log.debug('Text is not an uri: %s...', text[:15])
@@ -211,7 +240,7 @@ class PreviewManager:
 
         return True
 
-    def create_preview(self, uri, widget, context):
+    def create_preview(self, uri: str, widget: Any, context: str) -> None:
         if uri.startswith('geo:'):
             preview = Preview(uri, None, None, None, 96, widget)
             preview.update_widget()
@@ -238,7 +267,7 @@ class PreviewManager:
                             self._on_thumb_load_finished,
                             preview)
 
-    def _process_web_uri(self, uri, widget):
+    def _process_web_uri(self, uri: str, widget: Any) -> Preview:
         urlparts = urlparse(uri)
         size = app.settings.get('preview_size')
         orig_path, thumb_path = get_image_paths(uri,
@@ -253,7 +282,13 @@ class PreviewManager:
                        size,
                        widget)
 
-    def _on_orig_load_finished(self, data, error, preview):
+    def _on_orig_load_finished(self,
+                               data: Optional[bytes],
+                               error: Gio.AsyncResult,
+                               preview: Preview) -> None:
+        if preview.thumb_path is None or preview.orig_path is None:
+            return
+
         if data is None:
             log.error('%s: %s', preview.orig_path.name, error)
             return
@@ -270,7 +305,12 @@ class PreviewManager:
             preview.update_widget()
 
     @staticmethod
-    def _on_thumb_load_finished(data, error, preview):
+    def _on_thumb_load_finished(data: Optional[bytes],
+                                error: Gio.AsyncResult,
+                                preview: Preview) -> None:
+        if preview.thumb_path is None or preview.orig_path is None:
+            return
+
         if data is None:
             log.error('%s: %s', preview.thumb_path.name, error)
             return
@@ -288,7 +328,9 @@ class PreviewManager:
             return
         preview.update_widget(data=pixbuf)
 
-    def download_content(self, preview, force=False):
+    def download_content(self, 
+                         preview: Preview,
+                         force: bool = False) -> None:
         if preview.account is None:
             # History Window can be opened without account context
             # This means we can not apply proxy settings
@@ -302,7 +344,9 @@ class PreviewManager:
         session = self._get_session(preview.account)
         session.queue_message(message, self._on_finished, preview)
 
-    def _check_certificate(self, message, preview):
+    def _check_certificate(self, 
+                           message: Soup.Message,
+                           preview: Preview) -> None:
         _https_used, _tls_certificate, tls_errors = message.get_https_status()
 
         if not app.settings.get('preview_verify_https'):
@@ -315,7 +359,12 @@ class PreviewManager:
             session.cancel_message(message, Soup.Status.CANCELLED)
             return
 
-    def _on_content_sniffed(self, message, type_, _params, preview, force):
+    def _on_content_sniffed(self, 
+                            message: Soup.Message,
+                            type_: str,
+                            _params: GLib.HashTable,
+                            preview: Preview,
+                            force: bool) -> None:
         file_size = message.props.response_headers.get_content_length()
         uri = message.props.uri.to_string(False)
         session = self._get_session(preview.account)
@@ -337,7 +386,10 @@ class PreviewManager:
 
         preview.update_widget()
 
-    def _on_finished(self, _session, message, preview):
+    def _on_finished(self,
+                     _session: Soup.Session,
+                     message: Soup.Message,
+                     preview: Preview) -> None:
         if message.status_code != Soup.Status.OK:
             log.warning('Download failed: %s', preview.request_uri)
             log.warning(Soup.Status.get_phrase(message.status_code))
@@ -349,10 +401,12 @@ class PreviewManager:
             return
 
         if preview.is_aes_encrypted:
-            data = aes_decrypt(preview, data)
+            if preview.key is not None and preview.iv is not None:
+                data = aes_decrypt(preview.key, preview.iv, data)
 
         if preview.mime_type == 'application/octet-stream':
-            preview.mime_type = guess_mime_type(preview.orig_path, data)
+            if preview.orig_path is not None:
+                preview.mime_type = guess_mime_type(preview.orig_path, data)
 
         write_file_async(preview.orig_path,
                          data,
@@ -367,7 +421,12 @@ class PreviewManager:
                                  preview)
 
     @staticmethod
-    def _on_orig_write_finished(_result, error, preview):
+    def _on_orig_write_finished(_result: bool,
+                                error: GLib.Error,
+                                preview: Preview) -> None:
+        if preview.orig_path is None:
+            return
+
         if error is not None:
             log.error('%s: %s', preview.orig_path.name, error)
             return
@@ -380,12 +439,20 @@ class PreviewManager:
             preview.update_widget()
 
     @staticmethod
-    def _on_thumb_write_finished(_result, error, preview):
+    def _on_thumb_write_finished(_result: bool,
+                                 error: GLib.Error,
+                                 preview: Preview) -> None:
+        if preview.thumb_path is None:
+            return
+
         if error is not None:
             log.error('%s: %s', preview.thumb_path.name, error)
             return
 
         log.info('Thumbnail stored: %s ', preview.thumb_path.name)
+
+        if preview.thumbnail is None:
+            return
 
         try:
             pixbuf = pixbuf_from_data(preview.thumbnail)
