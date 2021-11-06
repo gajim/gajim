@@ -70,39 +70,27 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-banner',
                 StyleAttr.FONT),
 
-    StyleOption(_('Account Row Foreground Color'),
-                '.gajim-account-row',
-                StyleAttr.COLOR),
-
-    StyleOption(_('Account Row Background Color'),
-                '.gajim-account-row',
-                StyleAttr.BACKGROUND),
-
-    StyleOption(_('Account Row Font'),
-                '.gajim-account-row',
-                StyleAttr.FONT),
-
-    StyleOption(_('Group Row Foreground Color'),
+    StyleOption(_('Contact List: Group Foreground Color'),
                 '.gajim-group-row',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Group Row Background Color'),
+    StyleOption(_('Contact List: Group Background Color'),
                 '.gajim-group-row',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Group Row Font'),
+    StyleOption(_('Contact List: Group Row Font'),
                 '.gajim-group-row',
                 StyleAttr.FONT),
 
-    StyleOption(_('Contact Row Foreground Color'),
+    StyleOption(_('Contact List: Contact Foreground Color'),
                 '.gajim-contact-row',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Contact Row Background Color'),
+    StyleOption(_('Contact List: Contact Background Color'),
                 '.gajim-contact-row',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Contact Row Font'),
+    StyleOption(_('Contact List: Contact Font'),
                 '.gajim-contact-row',
                 StyleAttr.FONT),
 
@@ -149,15 +137,19 @@ CSS_STYLE_OPTIONS = [
     StyleOption(_('Contact Connected Background '),
                 '.gajim-roster-connected',
                 StyleAttr.BACKGROUND),
+
     StyleOption(_('Status Online Color'),
                 '.gajim-status-online',
                 StyleAttr.COLOR),
+
     StyleOption(_('Status Away Color'),
                 '.gajim-status-away',
                 StyleAttr.COLOR),
+
     StyleOption(_('Status DND Color'),
                 '.gajim-status-dnd',
                 StyleAttr.COLOR),
+
     StyleOption(_('Status Offline Color'),
                 '.gajim-status-offline',
                 StyleAttr.COLOR),
@@ -305,6 +297,14 @@ class Themes(Gtk.ApplicationWindow):
         self._select_theme_row(iter_)
         self._apply_theme(name)
 
+    def reload_roster_theme(self):
+        tree_selection = self._ui.theme_treeview.get_selection()
+        store, iter_ = tree_selection.get_selected()
+        if iter_ is None:
+            return
+        theme = store[iter_][Column.THEME]
+        self._apply_theme(theme)
+
     @staticmethod
     def _apply_theme(theme):
         app.settings.set('roster_theme', theme)
@@ -411,11 +411,13 @@ class Option(Gtk.ListBoxRow):
         app.css_config.set_value(
             self.option.selector, self.option.attr, color_string, pre=True)
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
+        self.get_toplevel().reload_roster_theme()
 
     def _on_font_set(self, font_button):
         desc = font_button.get_font_desc()
         app.css_config.set_font(self.option.selector, desc, pre=True)
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
+        self.get_toplevel().reload_roster_theme()
 
     def _on_remove(self, *args):
         self.get_parent().remove(self)
