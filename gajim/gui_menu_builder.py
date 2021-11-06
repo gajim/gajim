@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 from urllib.parse import quote
 
 from gi.repository import Gtk
@@ -29,6 +30,9 @@ from gajim.common.i18n import _
 from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
+from gajim.common.structs import URI
+
+from gajim.gui.const import ControlType
 
 
 def get_singlechat_menu(control_id, account, jid, type_):
@@ -161,7 +165,7 @@ def get_groupchat_menu(control_id, account, jid):
     return build_menu(groupchat_menu)
 
 
-def get_account_menu(account):
+def get_account_menu(account: str) -> Gio.Menu:
     '''
     [(action, label/sub_menu)]
         action: string
@@ -249,7 +253,8 @@ def build_accounts_menu():
         menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
 
 
-def get_encryption_menu(control_id, control_type, zeroconf=False):
+def get_encryption_menu(control_id: str, control_type: ControlType,
+                        zeroconf: Optional[bool] = False) -> Gio.Menu:
     menu = Gio.Menu()
     menu.append(
         _('Disabled'), f'win.set-encryption-{control_id}::disabled')
@@ -274,7 +279,7 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gtk.Menu:
     selected_text_short = reduce_chars_newlines(selected_text, 10, 1)
 
     action_menu_item = Gtk.MenuItem.new_with_mnemonic(
-            _('_Actions for "%s"') % selected_text_short)
+        _('_Actions for "%s"') % selected_text_short)
     submenu = Gtk.Menu()
     action_menu_item.set_submenu(submenu)
 
@@ -338,7 +343,7 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gtk.Menu:
     return action_menu_item
 
 
-def get_conv_uri_context_menu(account, uri):
+def get_conv_uri_context_menu(account: str, uri: URI) -> Gtk.Menu:
     if uri.type == URIType.XMPP:
         if uri.action == URIAction.JOIN:
             context_menu = [
