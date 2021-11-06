@@ -69,7 +69,7 @@ def get_singlechat_menu(control_id, account, jid, type_):
 
         for entry in entries:
             label, setting = entry
-            action = 'win.send-chatstate-%s::%s' % (control_id, setting)
+            action = f'win.send-chatstate-{control_id}::{setting}'
             menu.append(label, action)
         return menu
 
@@ -195,7 +195,7 @@ def get_account_menu(account):
         for item in preset:
             if isinstance(item[1], str):
                 action, label = item
-                action = 'app.{}{}'.format(account, action)
+                action = f'app.{account}{action}'
                 menuitem = Gio.MenuItem.new(label, action)
                 variant = GLib.Variant('s', account)
                 menuitem.set_action_and_target_value(action, variant)
@@ -252,8 +252,7 @@ def build_accounts_menu():
 def get_encryption_menu(control_id, control_type, zeroconf=False):
     menu = Gio.Menu()
     menu.append(
-        _('Disabled'),
-        'win.set-encryption-{}::{}'.format(control_id, 'disabled'))
+        _('Disabled'), f'win.set-encryption-{control_id}::disabled')
     for name, plugin in app.plugin_manager.encryption_plugins.items():
         if control_type.is_groupchat:
             if not hasattr(plugin, 'allow_groupchat'):
@@ -264,8 +263,7 @@ def get_encryption_menu(control_id, control_type, zeroconf=False):
         if zeroconf:
             if not hasattr(plugin, 'allow_zeroconf'):
                 continue
-        menu_action = 'win.set-encryption-{}::{}'.format(
-            control_id, name)
+        menu_action = f'win.set-encryption-{control_id}::{name}'
         menu.append(name, menu_action)
     if menu.get_n_items() == 1:
         return None
@@ -390,9 +388,9 @@ def get_conv_uri_context_menu(account, uri):
         menuitem.set_label(label)
 
         if action.startswith('-'):
-            action = 'app.%s%s' % (account, action)
+            action = f'app.{account}{action}'
         else:
-            action = 'app.%s' % action
+            action = f'app.{action}'
         menuitem.set_action_name(action)
 
         data = uri.data
@@ -523,15 +521,15 @@ def build_workspaces_submenu(current_workspace_id, account, jid):
 
 def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu = Gtk.Menu()
+    real_jid = contact.real_jid or ''
 
     item = Gtk.MenuItem(label=_('Information'))
-    action = 'win.contact-information-%s::%s' % (control_id, contact.name)
+    action = f'win.contact-information-{control_id}::{contact.name}'
     item.set_detailed_action_name(action)
     menu.append(item)
 
     item = Gtk.MenuItem(label=_('Add to Contact List…'))
-    action = 'app.{account}-add-contact(["{account}", "{jid}"])'.format(
-        account=account, jid=contact.real_jid or '')
+    action = f'app.{account}-add-contact(["{account}", "{real_jid}"])'
     if contact.real_jid is None:
         item.set_sensitive(False)
     else:
@@ -539,14 +537,14 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu.append(item)
 
     item = Gtk.MenuItem(label=_('Execute Command…'))
-    action = 'win.execute-command-%s::%s' % (control_id, contact.name)
+    action = f'win.execute-command-{control_id}::{contact.name}'
     item.set_detailed_action_name(action)
     menu.append(item)
 
     menu.append(Gtk.SeparatorMenuItem())
 
     item = Gtk.MenuItem(label=_('Kick'))
-    action = 'win.kick-%s::%s' % (control_id, contact.name)
+    action = f'win.kick-{control_id}::{contact.name}'
     if is_role_change_allowed(self_contact, contact):
         item.set_detailed_action_name(action)
     else:
@@ -554,7 +552,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu.append(item)
 
     item = Gtk.MenuItem(label=_('Ban'))
-    action = 'win.ban-%s::%s' % (control_id, contact.real_jid or '')
+    action = f'win.ban-{control_id}::{real_jid}'
     if is_affiliation_change_allowed(self_contact, contact, 'outcast'):
         item.set_detailed_action_name(action)
     else:
@@ -564,8 +562,8 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu.append(Gtk.SeparatorMenuItem())
 
     item = Gtk.MenuItem(label=_('Make Owner'))
-    action = 'win.change-affiliation-%s(["%s", "owner"])' % (control_id,
-                                                             contact.real_jid)
+    action = (f'win.change-affiliation-{control_id}'
+              f'(["{contact.real_jid}", "owner"])')
     if is_affiliation_change_allowed(self_contact, contact, 'owner'):
         item.set_detailed_action_name(action)
     else:
@@ -573,8 +571,8 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu.append(item)
 
     item = Gtk.MenuItem(label=_('Make Admin'))
-    action = 'win.change-affiliation-%s(["%s", "admin"])' % (control_id,
-                                                             contact.real_jid)
+    action = (f'win.change-affiliation-{control_id}'
+              f'(["{contact.real_jid}", "admin"])')
     if is_affiliation_change_allowed(self_contact, contact, 'admin'):
         item.set_detailed_action_name(action)
     else:
@@ -582,8 +580,8 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu.append(item)
 
     item = Gtk.MenuItem(label=_('Make Member'))
-    action = 'win.change-affiliation-%s(["%s", "member"])' % (control_id,
-                                                              contact.real_jid)
+    action = (f'win.change-affiliation-{control_id}'
+              f'(["{contact.real_jid}", "member"])')
     if is_affiliation_change_allowed(self_contact, contact, 'member'):
         item.set_detailed_action_name(action)
     else:
@@ -591,8 +589,8 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu.append(item)
 
     item = Gtk.MenuItem(label=_('Revoke Member'))
-    action = 'win.change-affiliation-%s(["%s", "none"])' % (control_id,
-                                                            contact.real_jid)
+    action = (f'win.change-affiliation-{control_id}'
+              f'(["{contact.real_jid}", "none"])')
     if is_affiliation_change_allowed(self_contact, contact, 'none'):
         item.set_detailed_action_name(action)
     else:
@@ -607,9 +605,8 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
         role = 'visitor'
 
     item = Gtk.MenuItem(label=label)
-    action = 'win.change-role-%s(["%s", "%s"])' % (control_id,
-                                                   contact.name,
-                                                   role)
+    action = (f'win.change-role-{control_id}'
+              f'(["{contact.name}", "{role}"])')
     if is_role_change_allowed(self_contact, contact):
         item.set_detailed_action_name(action)
     else:
