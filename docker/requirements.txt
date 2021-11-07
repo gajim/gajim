@@ -1,0 +1,13 @@
+git+https://dev.gajim.org/gajim/python-nbxmpp.git@nbxmpp_2.0
+PyGObject
+mypy
+pylint
+codespell
+coverage
+css-parser
+keyring
+packaging
+precis-i18n
+pyOpenSSL
+types-pkg_resources
+requests
