@@ -2229,8 +2229,8 @@ class RosterWindow:
 
         app.settings.set('collapsed_rows', '\t'.join(self.collapsed_rows))
         app.interface.save_config()
-        for account in app.connections:
-            app.connections[account].quit(True)
+        for account, con in app.connections.items():
+            con.quit(True)
             self.close_all(account)
         if app.interface.systray_enabled:
             app.interface.hide_systray()
@@ -4912,9 +4912,8 @@ class RosterWindow:
                 col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers properties
-        for renderer in self.renderers_propertys:
-            renderer.set_property(self.renderers_propertys[renderer][0],
-                self.renderers_propertys[renderer][1])
+        for renderer, props in self.renderers_propertys.items():
+            renderer.set_property(props[0], props[1])
 
     def query_tooltip(self, widget, x_pos, y_pos, _keyboard_mode, tooltip):
         try:

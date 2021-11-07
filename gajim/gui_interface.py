@@ -1546,8 +1546,8 @@ class Interface:
             config['custom_type'] = type_.value
 
         app.settings.add_account(account)
-        for opt in config:
-            app.settings.set_account_setting(account, opt, config[opt])
+        for opt, value in config.items():
+            app.settings.set_account_setting(account, opt, value)
 
         # Password module depends on existing config
         passwords.save_password(account, password)
@@ -1968,8 +1968,8 @@ class Interface:
         app.plugin_manager.init_plugins()
 
         self.roster._before_fill()
-        for account in app.connections:
-            app.connections[account].get_module('Roster').load_roster()
+        for con in app.connections.values():
+            con.get_module('Roster').load_roster()
         self.roster._after_fill()
 
         # get instances for windows/dialogs that will show_all()/hide()

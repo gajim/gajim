@@ -284,13 +284,13 @@ class Settings:
         # Migrate deprecated settings
         value = app_settings.pop('send_chatstate_muc_default', None)
         if value is not None:
-            for account in self._account_settings:
-                self._account_settings[account]['account']['gc_send_chatstate_default'] = value
+            for account, settings in self._account_settings.items():
+                settings['account']['gc_send_chatstate_default'] = value
 
         value = app_settings.pop('send_chatstate_default', None)
         if value is not None:
-            for account in self._account_settings:
-                self._account_settings[account]['account']['send_chatstate_default'] = value
+            for account, settings in self._account_settings.items():
+                settings['account']['send_chatstate_default'] = value
 
         value = app_settings.pop('print_join_left_default', None)
         if value is not None:
@@ -664,11 +664,8 @@ class Settings:
             if default is HAS_ACCOUNT_DEFAULT:
                 default_store = ACCOUNT_SETTINGS['account']
 
-            context_default_setting = f'gc_{setting}_{context}_default'
-            if context_default_setting in default_store:
-                default = default_store[context_default_setting]
-            else:
-                default = default_store[f'gc_{setting}_default']
+            default = default_store.get(f'gc_{setting}_{context}_default',
+                                        f'gc_{setting}_default')
 
         if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f'Invalid type for {setting}: '
@@ -698,8 +695,8 @@ class Settings:
                                 value: SETTING_TYPE,
                                 context: str = None) -> None:
 
-        for account in self._account_settings:
-            for jid in self._account_settings[account]['group_chat']:
+        for account, acc_settings in self._account_settings.items():
+            for jid in acc_settings['group_chat']:
                 if context is not None:
                     if get_muc_context(jid) != context:
                         continue
@@ -776,8 +773,8 @@ class Settings:
                              setting: str,
                              value: SETTING_TYPE) -> None:
 
-        for account in self._account_settings:
-            for jid in self._account_settings[account]['contact']:
+        for account, acc_settings in self._account_settings.items():
+            for jid in acc_settings['contact']:
                 self.set_contact_setting(account, jid, setting, value)
 
     def set_soundevent_setting(self,

@@ -170,8 +170,8 @@ class EditGroupsDialog:
                 groups[g] += 1
         group_list = []
         # Remove special groups if they are empty
-        for group in groups:
-            if group not in helpers.special_groups or groups[group] > 0:
+        for group, c_num in groups.items():
+            if group not in helpers.special_groups or c_num > 0:
                 group_list.append(group)
         group_list.sort()
         for group in group_list:

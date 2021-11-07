@@ -725,12 +725,10 @@ def get_notification_icon_tooltip_dict():
                                 total_messages)
                 account['event_lines'].append(text)
             else:
-                for jid in messages:
+                for jid, msg in messages.items():
                     text = ngettext('%d message pending',
                                     '%d messages pending',
-                                    messages[jid],
-                                    messages[jid],
-                                    messages[jid])
+                                    msg, msg, msg)
                     contact = app.contacts.get_first_contact_from_jid(
                         account['name'], jid)
                     text += ' '
@@ -753,12 +751,10 @@ def get_notification_icon_tooltip_dict():
                                 total_non_messages)
                 account['event_lines'].append(text)
             else:
-                for jid in non_messages:
+                for jid, msg in non_messages.items():
                     text = ngettext('%d event pending',
                                     '%d events pending',
-                                    non_messages[jid],
-                                    non_messages[jid],
-                                    non_messages[jid])
+                                    msg, msg, msg)
                     text += ' ' + _('from user %s') % (jid)
                     account[account]['event_lines'].append(text)
 
@@ -1268,7 +1264,7 @@ class Observable:
         self._callbacks = defaultdict(list)
 
     def disconnect(self, object_):
-        for signal_name, handlers in self._callbacks.items():
+        for handlers in self._callbacks.values():
             for handler in list(handlers):
                 func = handler()
                 if func is None or func.__self__ == object_:
