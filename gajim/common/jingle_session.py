@@ -810,9 +810,6 @@ class JingleSession:
                           media=content.media,
                           reason='rejected')
 
-    def __content_modify(self):
-        assert self.state != JingleStates.ENDED
-
     def __content_remove(self, content, reason=None):
         assert self.state != JingleStates.ENDED
         if self.connection.connection and self.connection.state.is_available:
