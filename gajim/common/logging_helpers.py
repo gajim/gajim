@@ -78,7 +78,6 @@ def parseAndSetLogLevels(arg):
 
 
 class colors:
-    # pylint: disable=C0326
     NONE         = chr(27) + "[0m"
     BLACk        = chr(27) + "[30m"
     RED          = chr(27) + "[31m"
