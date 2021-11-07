@@ -429,7 +429,7 @@ class GajimApplication(Gtk.Application):
                 action_name, func = action
                 variant = None
             else:
-                action_name, variant, func = action
+                action_name, variant, func = action  # pylint: disable=unbalanced-tuple-unpacking
                 variant = GLib.VariantType.new(variant)
 
             act = Gio.SimpleAction.new(action_name, variant)
