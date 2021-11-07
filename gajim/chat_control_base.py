@@ -922,9 +922,7 @@ class ChatControlBase(ChatCommandProcessor, CommandTools, EventHelper):
                 else:  # Ctrl+Down
                     self.scroll_messages('down', message_buffer, 'sent')
                 return True
-        elif (event.keyval == Gdk.KEY_Return or
-              event.keyval == Gdk.KEY_KP_Enter):  # ENTER
-
+        elif event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):  # ENTER
             if event_state & Gdk.ModifierType.SHIFT_MASK:
                 textview.insert_newline()
                 return True
