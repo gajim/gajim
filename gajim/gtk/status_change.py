@@ -227,11 +227,11 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
     def _init_activities(self):
         group = None
 
-        for category in ACTIVITIES:
+        for category, activity_dict in ACTIVITIES.items():
             icon_name = get_activity_icon_name(category)
             item = self._ui.get_object(category + '_image')
             item.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
-            item.set_tooltip_text(ACTIVITIES[category]['category'])
+            item.set_tooltip_text(activity_dict['category'])
 
             category_box = self._ui.get_object(category + '_box')
 
@@ -248,7 +248,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                                spacing=6)
             icon_box.pack_start(icon, False, False, 0)
             label = Gtk.Label(
-                label='<b>%s</b>' % ACTIVITIES[category]['category'])
+                label='<b>%s</b>' % activity_dict['category'])
             label.set_use_markup(True)
             icon_box.pack_start(label, False, False, 0)
             self._activity_btns[act].add(icon_box)
@@ -257,7 +257,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 'toggled', self._on_activity_toggled, [category, 'other'])
             category_box.pack_start(self._activity_btns[act], False, False, 0)
 
-            activities = list(ACTIVITIES[category].keys())
+            activities = list(activity_dict.keys())
             activities.sort()
             for activity in activities:
                 if activity == 'category':
@@ -274,7 +274,7 @@ class StatusChange(Gtk.ApplicationWindow, TimeoutWindow):
                 icon_name = get_activity_icon_name(category, activity)
                 icon = Gtk.Image.new_from_icon_name(
                     icon_name, Gtk.IconSize.MENU)
-                label = Gtk.Label(label=ACTIVITIES[category][activity])
+                label = Gtk.Label(label=activity_dict[activity])
                 icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
                                    spacing=6)
                 icon_box.pack_start(icon, False, False, 0)

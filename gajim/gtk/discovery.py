@@ -775,7 +775,7 @@ class ServiceDiscoveryWindow:
             self.browser.update_actions()
 
     def _on_entry_key_press_event(self, widget, event):
-        if event.keyval == Gdk.KEY_Return or event.keyval == Gdk.KEY_KP_Enter:
+        if event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
             self._on_go_button_clicked(widget)
 
 

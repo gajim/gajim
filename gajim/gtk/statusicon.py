@@ -283,9 +283,9 @@ class StatusIcon:
     @staticmethod
     def _on_show_all_events(_widget):
         events = app.events.get_systray_events()
-        for account in events:
-            for jid in events[account]:
-                for event in events[account][jid]:
+        for account, acc_events in events.items():
+            for jid in acc_events:
+                for event in acc_events[jid]:
                     app.interface.handle_event(account, jid, event.type_)
 
     @staticmethod

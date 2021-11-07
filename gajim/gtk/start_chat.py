@@ -434,16 +434,15 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _remove_new_jid_row(self):
         if not self.new_contact_row_visible:
             return
-        for account in self.new_contact_rows:
-            self._ui.listbox.remove(
-                self.new_contact_rows[account])
+        for account, row in self.new_contact_rows.items():
+            self._ui.listbox.remove(row)
             self._ui.listbox.remove(
                 self.new_groupchat_rows[account])
         self.new_contact_row_visible = False
 
     def _update_new_jid_rows(self, search_text):
-        for account in self.new_contact_rows:
-            self.new_contact_rows[account].update_jid(search_text)
+        for account, row in self.new_contact_rows.items():
+            row.update_jid(search_text)
             self.new_groupchat_rows[account].update_jid(search_text)
 
     def _select_new_match(self, _entry, direction):

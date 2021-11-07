@@ -112,7 +112,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
         # Jabber as first
         liststore = self.protocol_combobox.get_model()
         liststore.append(['XMPP', 'xmpp', 'jabber'])
-        for type_ in self.agents:
+        for type_, services in self.agents.items():
             if type_ == 'jabber':
                 continue
             if type_ in uf_type:
@@ -121,7 +121,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow, EventHelper):
                 liststore.append([type_, type_ + '-online', type_])
 
             if account:
-                for service in self.agents[type_]:
+                for service in services:
                     con = app.connections[account]
                     con.get_module('Gateway').request_gateway_prompt(service)
         self.protocol_combobox.set_active(0)

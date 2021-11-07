@@ -97,10 +97,10 @@ class AccountsWindow(Gtk.ApplicationWindow):
             self._settings.update_proxy_list(account)
 
     def _check_relogin(self):
-        for account in self._need_relogin:
+        for account, r_settings in self._need_relogin.items():
             settings = self._get_relogin_settings(account)
             active = app.settings.get_account_setting(account, 'active')
-            if settings != self._need_relogin[account]:
+            if settings != r_settings:
                 self._need_relogin[account] = settings
                 if active:
                     self._relog(account)

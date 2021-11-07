@@ -181,7 +181,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
             if category != 'app':
                 continue
 
-            for setting, description in settings.items():
+            for setting in settings:
                 value = app.settings.get(setting)
                 if isinstance(value, bool):
                     value = BOOL_DICT[value]
