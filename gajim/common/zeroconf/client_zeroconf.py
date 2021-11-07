@@ -725,13 +725,13 @@ class ClientZeroconf:
     def remove_connection(self, sock_hash):
         if sock_hash in self.connections:
             del self.connections[sock_hash]
-        for i in self.recipient_to_hash:
-            if self.recipient_to_hash[i] == sock_hash:
-                del self.recipient_to_hash[i]
+        for i, v in self.recipient_to_hash.items():
+            if v == sock_hash:
+                self.recipient_to_hash.pop(i)
                 break
-        for i in self.ip_to_hash:
-            if self.ip_to_hash[i] == sock_hash:
-                del self.ip_to_hash[i]
+        for i, v in self.ip_to_hash:
+            if v == sock_hash:
+                self.ip_to_hash.pop(i)
                 break
         if sock_hash in self.hash_to_port:
             del self.hash_to_port[sock_hash]

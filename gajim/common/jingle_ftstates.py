@@ -175,15 +175,15 @@ class StateTransfering(JingleFileTransferStates):
                     'initiator']
             if self.jft.file_props.type_ == 's':
                 s = app.socks5queue.senders
-                for sender in s:
-                    if s[sender].host == streamhost_used['host'] and \
-                    s[sender].connected:
+                for v in s.values():
+                    if v.host == streamhost_used['host'] and \
+                    v.connected:
                         return
             elif self.jft.file_props.type_ == 'r':
                 r = app.socks5queue.readers
-                for reader in r:
-                    if r[reader].host == streamhost_used['host'] and \
-                    r[reader].connected:
+                for v in r.values():
+                    if v.host == streamhost_used['host'] and \
+                    v.connected:
                         return
             else:
                 raise TypeError

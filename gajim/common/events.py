@@ -393,11 +393,11 @@ class Events:
         Attribute in systray, roster
         """
         events = {}
-        for account in self._events:
+        for account, acc_events in self._events.items():
             events[account] = {}
-            for jid in self._events[account]:
+            for jid in acc_events:
                 events[account][jid] = []
-                for event in self._events[account][jid]:
+                for event in acc_events[jid]:
                     if attribute == 'systray' and event.show_in_systray or \
                     attribute == 'roster' and event.show_in_roster:
                         events[account][jid].append(event)

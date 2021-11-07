@@ -37,8 +37,7 @@ class FilesProp:
 
     @classmethod
     def getFileProp(cls, account, sid):
-        if (account, sid) in cls._files_props.keys():
-            return cls._files_props[account, sid]
+        return cls._files_props.get(account, sid)
 
     @classmethod
     def getFilePropByAccount(cls, account):

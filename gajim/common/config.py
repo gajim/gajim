@@ -379,13 +379,13 @@ class Config:
     def foreach(self, cb, data=None):
         for opt in self.__options[1]:
             cb(data, opt, None, self.__options[1][opt])
-        for opt in self.__options_per_key:
+        for opt, value in self.__options_per_key.items():
             cb(data, opt, None, None)
-            dict_ = self.__options_per_key[opt][1]
-            for opt2 in dict_.keys():
+            dict_2 = value[1]
+            for opt2, dict_3 in dict_2.items():
                 cb(data, opt2, [opt], None)
-                for opt3 in dict_[opt2]:
-                    cb(data, opt3, [opt, opt2], dict_[opt2][opt3])
+                for opt3, v in dict_3.items():
+                    cb(data, opt3, [opt, opt2], v)
 
     def get_children(self, node=None):
         """
@@ -636,8 +636,7 @@ class Config:
         #init default values
         self._init_options()
         self.save_timeout_id = None
-        for event in self.soundevents_default:
-            default = self.soundevents_default[event]
+        for event, default in self.soundevents_default.items():
             self.add_per('soundevents', event)
             self.set_per('soundevents', event, 'enabled', default[0])
             self.set_per('soundevents', event, 'path', default[1])

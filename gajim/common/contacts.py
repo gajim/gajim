@@ -902,12 +902,12 @@ class MetacontactManager():
         Return all jid for the given tag in the form {acct: [jid1, jid2],.}
         """
         answers = {}
-        for account in self._metacontacts_tags:
-            if tag in self._metacontacts_tags[account]:
+        for account, tags in self._metacontacts_tags.items():
+            if tag in tags:
                 if account not in accounts:
                     continue
                 answers[account] = []
-                for data in self._metacontacts_tags[account][tag]:
+                for data in tags[tag]:
                     answers[account].append(data['jid'])
         return answers
 

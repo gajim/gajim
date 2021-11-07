@@ -370,9 +370,9 @@ class ConsoleView(Gtk.TextView):
             'scroll_mark',
             self.text_buffer.get_end_iter(),
             False)
-        for code in self.ANSI_COLORS:
+        for code, color in self.ANSI_COLORS.items():
             self.text_buffer.create_tag(code,
-                                        foreground=self.ANSI_COLORS[code],
+                                        foreground=color,
                                         weight=700)
         self.text_buffer.create_tag('0')
         self.text_buffer.create_tag('notouch', editable=False)
