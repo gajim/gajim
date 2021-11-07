@@ -1,7 +1,7 @@
 git+https://dev.gajim.org/gajim/python-nbxmpp.git@nbxmpp_2.0
 PyGObject
 mypy
-pylint
+pylint==2.4.4
 codespell
 coverage
 css-parser
