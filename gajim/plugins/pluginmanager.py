@@ -723,7 +723,7 @@ class PluginManager(metaclass=Singleton):
 
     def delete_plugin_files(self, plugin_path):
         def on_error(func, path, error):
-            if func == os.path.islink:
+            if func is os.path.islink:
             # if symlink
                 os.unlink(path)
                 return
