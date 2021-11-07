@@ -390,14 +390,10 @@ class CropArea(Gtk.DrawingArea):
             top += delta_y
             bottom += delta_y
 
-            if left < 0:
-                left = 0
-            if top < 0:
-                top = 0
-            if right > pb_width:
-                right = pb_width
-            if bottom > pb_height:
-                bottom = pb_height
+            left = max(left, 0)
+            top = max(top, 0)
+            right = min(right, pb_width)
+            bottom = min(bottom, pb_height)
 
             adj_width = int(right - left + 1)
             adj_height = int(bottom - top + 1)
@@ -501,14 +497,10 @@ class CropArea(Gtk.DrawingArea):
         width = right - left + 1
         height = bottom - top + 1
         if self._aspect < 0:
-            if left < 0:
-                left = 0
-            if top < 0:
-                top = 0
-            if right > pb_width:
-                right = pb_width
-            if bottom > pb_height:
-                bottom = pb_height
+            left = max(left, 0)
+            top = max(top, 0)
+            right = min(right, pb_width)
+            bottom = min(bottom, pb_height)
 
             width = right - left + 1
             height = bottom - top + 1

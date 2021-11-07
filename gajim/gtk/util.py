@@ -313,10 +313,8 @@ def resize_window(window: Gtk.Window, width: int, height: int) -> None:
     screen_w, screen_h = get_total_screen_geometry()
     if not width or not height:
         return
-    if width > screen_w:
-        width = screen_w
-    if height > screen_h:
-        height = screen_h
+    width = min(width, screen_w)
+    height = min(height, screen_h)
     window.resize(abs(width), abs(height))
 
 
@@ -325,10 +323,9 @@ def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
     Move the window, but also check if out of screen
     """
     screen_w, screen_h = get_total_screen_geometry()
-    if pos_x < 0:
-        pos_x = 0
-    if pos_y < 0:
-        pos_y = 0
+    pos_x = max(pos_x, 0)
+    pos_y = max(pos_y, 0)
+
     width, height = window.get_size()
     if pos_x + width > screen_w:
         pos_x = screen_w - width
