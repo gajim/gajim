@@ -350,7 +350,7 @@ class Zeroconf:
             try:
                 self._entrygroup.call_sync('Commit', None,
                                            Gio.DBusCallFlags.NONE, -1, None)
-            except GLib.Error as error:
+            except GLib.Error:
                 pass
 
             return True
