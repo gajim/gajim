@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import os
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -44,9 +45,13 @@ class PlainWidget(Gtk.Box):
 
         self._account = account
 
-        # TODO: Window/Linux handling
-        # self._text_widget = MessageTextview(self._account)
-        self._text_widget = MessageLabel(self._account, selectable)
+        # We use a Gtk.Textview on Windows, since there is no support for
+        # rendering color fonts (Emojis) on Windows yet, see:
+        # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/244
+        if os.name == 'nt':
+            self._text_widget = MessageTextview(self._account)
+        else:
+            self._text_widget = MessageLabel(self._account, selectable)
         self.add(self._text_widget)
 
     def add_content(self, block):
