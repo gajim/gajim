@@ -1,12 +1,12 @@
 # Welcome to Gajim
 
-
 ### Runtime Requirements
 
 - python3.9 or higher
 - python3-gi
 - python3-gi-cairo
 - gir1.2-gtk-3.0 (>=3.22)
+- gir1.2-gtksource-4
 - python3-nbxmpp (>=2.99.0)
 - python3-openssl (>=16.2)
 - python3-css-parser
@@ -34,7 +34,6 @@
 
 - python3-setuptools
 - gettext
-
 
 ### Installation Procedure
 
@@ -86,14 +85,11 @@ Execute gajim with `--verbose`
 - [FAQ](https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq)
 - [Wiki](https://dev.gajim.org/gajim/gajim/wikis/home)
 
-
-
 That is all, **enjoy**!
 
 (C) 2003-2021
 The Gajim Team
 [https://gajim.org](https://gajim.org)
-
 
 We use original art and parts of sounds and other art from Psi, Gossip, Gnomebaker, Gaim
 and some icons from various gnome-icons (mostly Dropline Etiquette) we found at art.gnome.org.

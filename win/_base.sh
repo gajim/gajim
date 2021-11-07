@@ -78,6 +78,7 @@ function create_root {
 function install_deps {
     build_pacman --noconfirm -S mingw-w64-"${ARCH}"-python \
         mingw-w64-"${ARCH}"-python-gobject \
+        mingw-w64-"${ARCH}"-gtksourceview4 \
         mingw-w64-"${ARCH}"-python-pip \
         mingw-w64-"${ARCH}"-adwaita-icon-theme \
         mingw-w64-"${ARCH}"-libwebp \
