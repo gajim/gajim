@@ -55,7 +55,7 @@ def load_cert_file(cert_path, cert_store=None):
     if not cert_path.is_file():
         return None
     try:
-        f = open(cert_path)
+        f = open(cert_path, 'r', encoding='utf8')
     except IOError as e:
         log.warning('Unable to open certificate file %s: %s', cert_path,
                     str(e))
@@ -108,13 +108,13 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     # First try user DH parameters, if this fails load the default DH parameters
     dh_params_name = configpaths.get('MY_CERT') / DH_PARAMS
     try:
-        with open(dh_params_name, "r"):
+        with open(dh_params_name, "r", encoding='utf8'):
             ctx.load_tmp_dh(dh_params_name.encode('utf-8'))
     except FileNotFoundError as err:
         default_dh_params_name = (configpaths.get('DATA') / 'other' /
                                   DEFAULT_DH_PARAMS)
         try:
-            with open(default_dh_params_name, "r"):
+            with open(default_dh_params_name, "r", encoding='utf8'):
                 ctx.load_tmp_dh(str(default_dh_params_name).encode('utf-8'))
         except FileNotFoundError as err:
             log.error('Unable to load default DH parameter file: %s, %s',
@@ -133,7 +133,7 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
 
 def read_cert(certpath):
     certificate = ''
-    with open(certpath, 'r') as certfile:
+    with open(certpath, 'r', encoding='utf8') as certfile:
         for line in certfile.readlines():
             if not line.startswith('-'):
                 certificate += line
@@ -167,7 +167,7 @@ def handle_new_cert(con, obj, jid_from):
 
     cert = x509cert.getData()
 
-    f = open(certpath, 'w')
+    f = open(certpath, 'w', encoding='utf8')
     f.write('-----BEGIN CERTIFICATE-----\n')
     f.write(cert)
     f.write('-----END CERTIFICATE-----\n')

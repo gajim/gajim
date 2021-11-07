@@ -194,7 +194,7 @@ def _redirect_output():
     debug_folder = configpaths.get('DEBUG')
     date = datetime.today().strftime('%d%m%Y-%H%M%S')
     filename = '%s-debug.log' % date
-    fd = open(debug_folder / filename, 'a')
+    fd = open(debug_folder / filename, 'a', encoding='utf8')
     sys.stderr = sys.stdout = fd
 
 
