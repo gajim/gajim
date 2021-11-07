@@ -1,0 +1,12 @@
+PyGObject
+mypy
+pylint
+codespell
+coverage
+css-parser
+keyring
+packaging
+precis-i18n
+pyOpenSSL
+types-pkg_resources
+requests
