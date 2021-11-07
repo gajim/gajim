@@ -633,16 +633,19 @@ class GroupchatControl(BaseControl):
     def _on_kick(self, _action, param):
         nick = param.get_string()
         self._kick_nick = nick
-        self.xml.kick_label.set_text(_('Kick %s') % nick)
+        text = _('Kick %s') % nick
+        self.xml.kick_label.set_text(text)
+        self.xml.kick_label.set_tooltip_text(text)
         self.xml.kick_reason_entry.grab_focus()
         self.xml.kick_participant_button.grab_default()
         self._show_page('kick')
 
     def _on_ban(self, _action, param):
         jid = param.get_string()
-        contact = self._client.get_module('Contacts').get_contact(jid)
         self._ban_jid = jid
-        self.xml.ban_label.set_text(_('Ban %s') % contact.name)
+        text = _('Ban %s') % jid
+        self.xml.ban_label.set_text(text)
+        self.xml.ban_label.set_tooltip_text(text)
         self.xml.ban_reason_entry.grab_focus()
         self.xml.ban_participant_button.grab_default()
         self._show_page('ban')
