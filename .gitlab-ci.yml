@@ -1,3 +1,5 @@
+image: ci-gajim:master
+
 include:
 - project: 'gajim/ci'
   ref: master
