@@ -445,7 +445,7 @@ class JingleSession:
             raise nbxmpp.NodeProcessed
         if self.state != JingleStates.ACTIVE:
             raise OutOfOrder
-        for child in payload:
+        for child in jingle.getChildren():
             if child.getName() == 'checksum':
                 hash_ = child.getTag('file').getTag(name='hash',
                                                     namespace=Namespace.HASHES_2)
