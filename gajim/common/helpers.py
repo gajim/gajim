@@ -569,7 +569,7 @@ def statuses_unified():
     Test if all statuses are the same
     """
     reference = None
-    for con, account in app.connections.items():
+    for account, con in app.connections.items():
         if not app.settings.get_account_setting(account,
                                                 'sync_with_global_status'):
             continue
