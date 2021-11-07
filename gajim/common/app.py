@@ -534,7 +534,7 @@ def get_our_jids():
     """
     Returns a list of the jids we use in our accounts
     """
-    our_jids = list()
+    our_jids = []
     for account in contacts.get_accounts():
         our_jids.append(get_jid_from_account(account))
     return our_jids
