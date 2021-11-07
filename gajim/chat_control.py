@@ -1233,7 +1233,7 @@ class ChatControl(ChatControlBase):
         roster = app.interface.roster
         has_pending = roster.contact_has_pending_roster_events(self.contact,
                                                                self.account)
-        if key in roster.contacts_to_be_removed.keys() and not has_pending:
+        if key in roster.contacts_to_be_removed and not has_pending:
             backend = roster.contacts_to_be_removed[key]['backend']
             del roster.contacts_to_be_removed[key]
             roster.remove_contact(self.contact.jid,
