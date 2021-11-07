@@ -554,15 +554,14 @@ def get_global_show():
 
 def get_global_status_message():
     maxi = 0
-    for account in app.connections:
+    for account, con in app.connections.items():
         if not app.settings.get_account_setting(account,
                                                 'sync_with_global_status'):
             continue
-        status = app.connections[account].status
-        index = SHOW_LIST.index(status)
+        index = SHOW_LIST.index(con.status)
         if index > maxi:
             maxi = index
-            status_message = app.connections[account].status_message
+            status_message = con.status_message
     return status_message
 
 def statuses_unified():
@@ -570,13 +569,13 @@ def statuses_unified():
     Test if all statuses are the same
     """
     reference = None
-    for account in app.connections:
+    for con, account in app.connections.items():
         if not app.settings.get_account_setting(account,
                                                 'sync_with_global_status'):
             continue
         if reference is None:
-            reference = app.connections[account].status
-        elif reference != app.connections[account].status:
+            reference = con.status
+        elif reference != con.status:
             return False
     return True
 
@@ -1273,7 +1272,7 @@ class Observable:
             for handler in list(handlers):
                 func = handler()
                 if func is None or func.__self__ == object_:
-                    self._callbacks[signal_name].remove(handler)
+                    handlers.remove(handler)
 
     def connect(self, signal_name, func):
         if inspect.ismethod(func):
