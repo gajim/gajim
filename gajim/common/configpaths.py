@@ -53,11 +53,12 @@ def get_plugin_dirs() -> List[Path]:
 
 
 def get_paths(type_: PathType) -> Generator[Path, None, None]:
-    for value in _paths.values():
+    # pylint: disable=unnecessary-dict-index-lookup
+    for key, value in _paths.items():
         path_type = value[2]
         if type_ != path_type:
             continue
-        yield value
+        yield _paths[key]
 
 
 def override_path(*args, **kwargs):
