@@ -1,3 +1,4 @@
+git+https://dev.gajim.org/gajim/python-nbxmpp.git@master
 PyGObject
 mypy
 pylint
