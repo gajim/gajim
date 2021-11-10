@@ -121,9 +121,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.control_id = str(uuid.uuid4())
         self.session = None
 
-        self.xml = get_builder('%s.ui' % widget_name)
+        self.xml = get_builder(f'{widget_name}.ui')
         self.xml.connect_signals(self)
-        self.widget = self.xml.get_object('%s_hbox' % widget_name)
+        self.widget = self.xml.get_object(f'{widget_name}_hbox')
 
         self._account_badge = AccountBadge(self.account)
         self.xml.account_badge_box.add(self._account_badge)
@@ -192,7 +192,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         # Send message button
         self.xml.send_message_button.set_action_name(
-            'win.send-message-%s' % self.control_id)
+            f'win.send-message-{self.control_id}')
         self.xml.send_message_button.set_visible(
             app.settings.get('show_send_message_button'))
         app.settings.bind_signal(
@@ -507,7 +507,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def add_actions(self):
         action = Gio.SimpleAction.new_stateful(
-            'set-encryption-%s' % self.control_id,
+            f'set-encryption-{self.control_id}',
             GLib.VariantType.new('s'),
             GLib.Variant('s', self.encryption or 'disabled'))
         action.connect('change-state', self.change_encryption)
@@ -759,7 +759,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             app.settings.set('confirm_paste_image', False)
 
         dir_ = tempfile.gettempdir()
-        path = os.path.join(dir_, '%s.png' % str(uuid.uuid4()))
+        path = os.path.join(dir_, f'{uuid.uuid4()}.png')
         image.savev(path, 'png', [], [])
 
         self._start_filetransfer(path)
@@ -768,9 +768,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         ft_pref = app.settings.get_account_setting(self.account,
                                                    'filetransfer_preference')
         httpupload = app.window.lookup_action(
-            'send-file-httpupload-%s' % self.control_id)
+            f'send-file-httpupload-{self.control_id}')
         jingle = app.window.lookup_action(
-            'send-file-jingle-%s' % self.control_id)
+            f'send-file-jingle-{self.control_id}')
 
         if self._type.is_groupchat:
             if httpupload.get_enabled():
