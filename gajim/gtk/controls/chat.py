@@ -99,7 +99,7 @@ class ChatControl(BaseControl):
             self.xml.banner_eventbox.set_no_show_all(False)
 
         self.xml.sendfile_button.set_action_name(
-            'win.send-file-%s' % self.control_id)
+            f'win.send-file-{self.control_id}')
 
         self._call_widget = CallWidget(self.account, self.contact)
         self._call_widget.connect('incoming-call', self._add_incoming_call)
@@ -335,7 +335,7 @@ class ChatControl(BaseControl):
             return
 
         if type_ == PEPEventType.MOOD:
-            icon = 'mood-%s' % data.mood
+            icon = f'mood-{data.mood}'
             formated_text = format_mood(*data)
         elif type_ == PEPEventType.ACTIVITY:
             icon = get_activity_icon_name(data.activity, data.subactivity)
@@ -428,7 +428,6 @@ class ChatControl(BaseControl):
         self.add_message(event.msgtxt,
                          kind,
                          tim=event.properties.timestamp,
-                         subject=event.properties.subject,
                          displaymarking=event.displaymarking,
                          msg_log_id=event.msg_log_id,
                          message_id=event.properties.id,
@@ -601,7 +600,6 @@ class ChatControl(BaseControl):
                     text,
                     kind,
                     tim=None,
-                    subject=None,
                     displaymarking=None,
                     msg_log_id=None,
                     stanza_id=None,

@@ -215,7 +215,6 @@ class ConversationView(Gtk.ListBox):
                     correct_id=None,
                     display_marking=None,
                     additional_data=None,
-                    subject=None,
                     marker=None,
                     error=None):
 
