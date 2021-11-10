@@ -414,6 +414,7 @@ class ChatControl(BaseControl):
                          tim=event.properties.mam.timestamp,
                          correct_id=event.correct_id,
                          message_id=event.properties.id,
+                         stanza_id=event.stanza_id,
                          additional_data=event.additional_data)
 
     def _on_message_received(self, event):
@@ -431,6 +432,7 @@ class ChatControl(BaseControl):
                          displaymarking=event.displaymarking,
                          msg_log_id=event.msg_log_id,
                          message_id=event.properties.id,
+                         stanza_id=event.stanza_id,
                          correct_id=event.correct_id,
                          additional_data=event.additional_data)
 
@@ -602,6 +604,7 @@ class ChatControl(BaseControl):
                     subject=None,
                     displaymarking=None,
                     msg_log_id=None,
+                    stanza_id=None,
                     correct_id=None,
                     message_id=None,
                     additional_data=None):
@@ -622,6 +625,7 @@ class ChatControl(BaseControl):
                                 displaymarking=displaymarking,
                                 msg_log_id=msg_log_id,
                                 message_id=message_id,
+                                stanza_id=stanza_id,
                                 correct_id=correct_id,
                                 additional_data=additional_data)
 

@@ -63,7 +63,8 @@ class MUC(BaseModule):
         'request_voice',
         'approve_voice_request',
         'destroy',
-        'request_disco_info'
+        'request_disco_info',
+        'retract_message'
     ]
 
     def __init__(self, con):
@@ -80,6 +81,10 @@ class MUC(BaseModule):
                           priority=49),
             StanzaHandler(name='message',
                           callback=self._on_subject_change,
+                          typ='groupchat',
+                          priority=49),
+            StanzaHandler(name='message',
+                          callback=self._on_update_message,
                           typ='groupchat',
                           priority=49),
             StanzaHandler(name='message',
@@ -667,6 +672,19 @@ class MUC(BaseModule):
             room.notify('room-joined')
 
         raise nbxmpp.NodeProcessed
+
+    def _on_update_message(self, _con, _stanza, properties):
+        if properties.is_moderation:
+            app.storage.archive.update_additional_data(
+                self._account, properties.moderation.stanza_id, properties)
+
+            app.nec.push_incoming_event(
+                NetworkEvent('message-updated',
+                            account=self._account,
+                            jid=properties.jid,
+                            properties=properties))
+
+            raise nbxmpp.NodeProcessed
 
     def _fake_subject_change(self, room_jid):
         # This is for servers which don’t send empty subjects as part of the

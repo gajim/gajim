@@ -29,6 +29,8 @@ import logging
 import sqlite3 as sqlite
 from collections import namedtuple
 
+from nbxmpp.structs import MessageProperties
+
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import AdditionalDataDict
@@ -352,7 +354,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         sql = '''
             SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id,
+                   additional_data, log_line_id, message_id, stanza_id,
                    error as "error [common_error]",
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
@@ -394,7 +396,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         sql = '''
             SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id,
+                   additional_data, log_line_id, message_id, stanza_id,
                    error as "error [common_error]",
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
@@ -429,7 +431,8 @@ class MessageArchiveStorage(SqliteStorage):
                           KindConstant.ERROR])
 
         sql = '''
-            SELECT contact_name, time, kind, message, additional_data
+            SELECT contact_name, time, kind, message, stanza_id,
+            additional_data
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -919,6 +922,84 @@ class MessageArchiveStorage(SqliteStorage):
                      'archive-jid: %s, account: %s', stanza_id, origin_id, archive_jid, account_id)
             return True
         return False
+
+    @timeit
+    def update_additional_data(self,
+                               account: str,
+                               stanza_id: str,
+                               properties: MessageProperties) -> None:
+        is_groupchat = properties.type.is_groupchat
+        type_ = JIDConstant.NORMAL_TYPE
+        if is_groupchat:
+            type_ = JIDConstant.ROOM_TYPE
+
+        archive_id = self.get_jid_id(str(properties.jid.bare), type_=type_)
+        account_id = self.get_account_id(account)
+
+        if is_groupchat:
+            # Stanza ID is only unique within a specific archive.
+            # So a Stanza ID could be repeated in different MUCs, so we
+            # filter also for the archive JID which is the bare MUC jid.
+
+            # Use Unary-"+" operator for "jid_id", otherwise the
+            # idx_logs_jid_id_time index is used instead of the much better
+            # idx_logs_stanza_id index
+            sql = '''
+                SELECT additional_data FROM logs
+                WHERE stanza_id = ?
+                AND +jid_id = ?
+                AND account_id = ?
+                LIMIT 1
+                '''
+            result = self._con.execute(
+                sql, (stanza_id, archive_id, account_id)).fetchone()
+        else:
+            sql = '''
+                SELECT additional_data FROM logs
+                WHERE stanza_id = ?
+                AND account_id = ?
+                AND kind != ?
+                LIMIT 1
+                '''
+            result = self._con.execute(
+                sql, (stanza_id, account_id, KindConstant.GC_MSG)).fetchone()
+
+        if result is None:
+            return
+
+        if result.additional_data is None:
+            additional_data = AdditionalDataDict()
+        else:
+            additional_data = result.additional_data
+
+        if properties.is_moderation:
+            additional_data.set_value(
+                'retracted', 'by', properties.moderation.moderator_jid)
+            additional_data.set_value(
+                'retracted', 'timestamp', properties.moderation.timestamp)
+            additional_data.set_value(
+                'retracted', 'reason', properties.moderation.reason)
+        serialized_dict = json.dumps(additional_data.data)
+
+        if is_groupchat:
+            sql = '''
+                UPDATE logs SET additional_data = ?
+                WHERE stanza_id = ?
+                AND account_id = ?
+                AND +jid_id = ?
+                '''
+            self._con.execute(
+                sql, (serialized_dict, stanza_id, account_id, archive_id))
+        else:
+            sql = '''
+                UPDATE logs SET additional_data = ?
+                WHERE stanza_id = ?
+                AND account_id = ?
+                AND kind != ?
+                '''
+            self._con.execute(
+                sql, (serialized_dict, stanza_id, account_id,
+                      KindConstant.GC_MSG))
 
     def insert_jid(self, jid, kind=None, type_=JIDConstant.NORMAL_TYPE):
         """

@@ -1025,6 +1025,7 @@ COMMON_FEATURES = [
     Namespace.JINGLE_BYTESTREAM,
     Namespace.JINGLE_IBB,
     Namespace.AVATAR_METADATA + '+notify',
+    Namespace.MESSAGE_MODERATE
 ]
 
 

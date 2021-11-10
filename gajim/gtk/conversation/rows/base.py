@@ -21,6 +21,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import from_one_line
+from gajim.common.helpers import is_retraction_allowed
 
 from ...util import wrap_with_event_box
 
@@ -87,27 +88,44 @@ class BaseRow(Gtk.ListBoxRow):
 
 @wrap_with_event_box
 class MoreMenuButton(Gtk.MenuButton):
-    def __init__(self, row):
+    def __init__(self, row, contact, name):
         Gtk.MenuButton.__init__(self)
-
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)
         self.set_relief(Gtk.ReliefStyle.NONE)
-        image = Gtk.Image.new_from_icon_name(
-            'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
-        self.add(image)
-
-        self._create_popover(row)
 
         self.get_style_context().add_class('conversation-more-button')
 
-    def _create_popover(self, row):
+        self._row = row
+        self._contact = contact
+        self._name = name
+
+        image = Gtk.Image.new_from_icon_name(
+            'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
+        self.add(image)
+        self._create_popover()
+
+        self.connect('clicked', self._on_click)
+
+    def _on_click(self, _button):
+        show_retract = False
+        if self._contact.is_groupchat:
+            disco_info = app.storage.cache.get_last_disco_info(
+                self._contact.jid)
+            contact = self._contact.get_resource(self._name)
+            self_contact = self._contact.get_self()
+            is_allowed = is_retraction_allowed(self_contact, contact)
+            if disco_info.has_message_moderation and is_allowed:
+                show_retract = True
+        self._retract_button.set_visible(show_retract)
+
+    def _create_popover(self):
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         menu_box.get_style_context().add_class('padding-6')
 
         quote_button = Gtk.ModelButton()
         quote_button.set_halign(Gtk.Align.START)
-        quote_button.connect('clicked', row.on_quote_message)
+        quote_button.connect('clicked', self._row.on_quote_message)
         quote_button.set_label(_('Quote…'))
         quote_button.set_image(Gtk.Image.new_from_icon_name(
             'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
@@ -115,11 +133,20 @@ class MoreMenuButton(Gtk.MenuButton):
 
         copy_button = Gtk.ModelButton()
         copy_button.set_halign(Gtk.Align.START)
-        copy_button.connect('clicked', row.on_copy_message)
+        copy_button.connect('clicked', self._row.on_copy_message)
         copy_button.set_label(_('Copy'))
         copy_button.set_image(Gtk.Image.new_from_icon_name(
             'edit-copy-symbolic', Gtk.IconSize.MENU))
         menu_box.add(copy_button)
+
+        self._retract_button = Gtk.ModelButton()
+        self._retract_button.set_halign(Gtk.Align.START)
+        self._retract_button.connect(
+            'clicked', self._row.on_retract_message)
+        self._retract_button.set_label(_('Retract'))
+        self._retract_button.set_image(Gtk.Image.new_from_icon_name(
+            'edit-undo-symbolic', Gtk.IconSize.MENU))
+        menu_box.add(self._retract_button)
 
         menu_box.show_all()
 

@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import logging
 import time
 
@@ -209,6 +211,7 @@ class ConversationView(Gtk.ListBox):
                     timestamp,
                     log_line_id=None,
                     message_id=None,
+                    stanza_id=None,
                     correct_id=None,
                     display_marking=None,
                     additional_data=None,
@@ -227,6 +230,7 @@ class ConversationView(Gtk.ListBox):
             self._account,
             self._contact,
             message_id,
+            stanza_id,
             timestamp,
             kind,
             name,
@@ -404,6 +408,14 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
+    def get_row_by_stanza_id(self, stanza_id: str) -> Optional[MessageRow]:
+        for row in self.get_children():
+            if row.type != 'chat':
+                continue
+            if row.stanza_id == stanza_id:
+                return row
+        return None
+
     def iter_rows(self):
         for row in self.get_children():
             yield row
@@ -447,6 +459,11 @@ class ConversationView(Gtk.ListBox):
         if message_row is not None:
             message_row.set_correction(text, message_id)
             message_row.set_merged(False)
+
+    def show_message_retraction(self, stanza_id: str, text: str) -> None:
+        message_row = self.get_row_by_stanza_id(stanza_id)
+        if message_row is not None:
+            message_row.set_retracted(text)
 
     def show_receipt(self, id_):
         message_row = self._get_row_by_message_id(id_)

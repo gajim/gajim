@@ -34,6 +34,7 @@ from gajim.common.const import ArchiveState
 from gajim.common.const import KindConstant
 from gajim.common.const import SyncThreshold
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import get_retraction_text
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.util import get_eme_message
@@ -226,6 +227,19 @@ class MAM(BaseModule):
             if properties.eme is not None:
                 msgtxt = get_eme_message(properties.eme)
 
+        if properties.is_moderation:
+            additional_data.set_value(
+                'retracted', 'by', properties.moderation.moderator_jid)
+            additional_data.set_value(
+                'retracted', 'timestamp', properties.moderation.timestamp)
+            additional_data.set_value(
+                'retracted', 'reason', properties.moderation.reason)
+
+            msgtxt = get_retraction_text(
+                self._account,
+                properties.moderation.moderator_jid,
+                properties.moderation.reason)
+
         if not msgtxt:
             # For example Chatstates, Receipts, Chatmarkers
             self._log.debug(stanza.getProperties())
@@ -259,6 +273,7 @@ class MAM(BaseModule):
                          account=self._account,
                          additional_data=additional_data,
                          correct_id=parse_correction(properties),
+                         stanza_id=stanza_id,
                          archive_jid=properties.mam.archive,
                          msgtxt=properties.body,
                          properties=properties,

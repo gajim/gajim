@@ -751,6 +751,16 @@ def get_subscription_request_msg(account: Optional[str] = None) -> str:
     message = _('Hello, I am $name. %s') % message
     return Template(message).safe_substitute({'name': app.nicks[account]})
 
+def get_retraction_text(account: str, moderator_jid: str,
+                        reason: Optional[str]) -> str:
+    client = app.get_client(account)
+    contact = client.get_module('Contacts').get_contact(
+        moderator_jid, groupchat=True)
+    text = _('This message has been retracted by %s.') % contact.name
+    if reason is not None:
+        text += ' ' + _('Reason: %s') % reason
+    return text
+
 def get_user_proxy(account: str) -> Optional[ProxyData]:
     proxy_name = app.settings.get_account_setting(account, 'proxy')
     if not proxy_name:
@@ -1191,6 +1201,12 @@ def is_affiliation_change_allowed(self_contact, contact, target_aff):
 
 
 def is_role_change_allowed(self_contact, contact):
+    if self_contact.role < Role.MODERATOR:
+        return False
+    return self_contact.affiliation >= contact.affiliation
+
+
+def is_retraction_allowed(self_contact, contact):
     if self_contact.role < Role.MODERATOR:
         return False
     return self_contact.affiliation >= contact.affiliation

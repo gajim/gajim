@@ -59,7 +59,9 @@ row:backdrop { transition: none; }
 .conversation-row grid textview:not(.sourceview) text {
 	background: transparent;
 }
-
+.retracted-message {
+    opacity: 0.4;
+}
 @keyframes highlight {
     from { background: rgb(140, 160, 180); }
     to { background: transparent; }

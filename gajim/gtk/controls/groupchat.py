@@ -736,6 +736,7 @@ class GroupchatControl(BaseControl):
                          tim=event.properties.mam.timestamp,
                          correct_id=event.correct_id,
                          message_id=event.properties.id,
+                         stanza_id=event.stanza_id,
                          additional_data=event.additional_data)
 
     def _on_gc_message_received(self, event):

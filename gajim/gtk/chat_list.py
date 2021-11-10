@@ -29,6 +29,7 @@ from gajim.common.const import RowHeaderType
 from gajim.common.i18n import _
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
+from gajim.common.helpers import get_retraction_text
 from gajim.common.helpers import get_uf_relative_time
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.preview_helpers import filename_from_uri
@@ -318,6 +319,8 @@ class ChatList(Gtk.ListBox, EventHelper):
                           'mam-message-received',
                           'gc-message-received'):
             self._on_message_received(event)
+        elif event.name == 'message-updated':
+            self._on_message_updated(event)
         elif event.name == 'presence-received':
             self._on_presence_received(event)
         elif event.name == 'message-sent':
@@ -341,8 +344,22 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.set_timestamp(event.properties.timestamp)
         row.set_message_text(
             event.msgtxt, additional_data=event.additional_data)
+        row.set_stanza_id(event.properties.stanza_id.id)
         self._add_unread(row, event.properties)
         self.invalidate_sort()
+
+    def _on_message_updated(self, event):
+        row = self._chats.get((event.account, event.jid))
+        if row is None:
+            return
+
+        if event.properties.is_moderation:
+            if event.properties.moderation.stanza_id == row.stanza_id:
+                text = get_retraction_text(
+                    event.account,
+                    event.properties.moderation.moderator_jid,
+                    event.properties.moderation.reason)
+                row.set_message_text(text)
 
     def _on_message_sent(self, event):
         msgtext = event.message
@@ -448,6 +465,7 @@ class ChatRow(Gtk.ListBoxRow):
 
         self.contact_name = self.contact.name
         self.timestamp = 0
+        self.stanza_id: Optional[str] = None
         self._unread_count = 0
         self._pinned = pinned
 
@@ -475,8 +493,19 @@ class ChatRow(Gtk.ListBoxRow):
             return
 
         if line.message is not None:
+            message_text = line.message
+
+            if line.additional_data is not None:
+                retracted_by = line.additional_data.get_value(
+                    'retracted', 'by')
+                if retracted_by is not None:
+                    reason = line.additional_data.get_value(
+                        'retracted', 'reason')
+                    message_text = get_retraction_text(
+                        self.account, retracted_by, reason)
+
             self.set_message_text(
-                line.message, additional_data=line.additional_data)
+                message_text, additional_data=line.additional_data)
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
                 self._ui.nick_label.set_text(_('Me:'))
@@ -494,6 +523,8 @@ class ChatRow(Gtk.ListBoxRow):
             self.timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
             self._ui.timestamp_label.set_text(uf_timestamp)
+
+            self.stanza_id = line.stanza_id
 
         if line.kind in (KindConstant.FILE_TRANSFER_INCOMING,
                          KindConstant.FILE_TRANSFER_OUTGOING):
@@ -633,6 +664,9 @@ class ChatRow(Gtk.ListBoxRow):
     def set_timestamp(self, timestamp):
         self.timestamp = timestamp
         self.update_time()
+
+    def set_stanza_id(self, stanza_id: str) -> None:
+        self.stanza_id = stanza_id
 
     def update_time(self):
         if self.timestamp == 0:

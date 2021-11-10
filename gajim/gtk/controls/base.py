@@ -44,6 +44,7 @@ from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import get_retraction_text
 from gajim.common.const import KindConstant
 from gajim.common.structs import OutgoingMessage
 
@@ -289,6 +290,15 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         method_name = event.name.replace('-', '_')
         method_name = f'_on_{method_name}'
         getattr(self, method_name)(event)
+
+    def _on_message_updated(self, event):
+        if event.properties.is_moderation:
+            text = get_retraction_text(
+                self.account,
+                event.properties.moderation.moderator_jid,
+                event.properties.moderation.reason)
+            self.conversation_view.show_message_retraction(
+                event.properties.moderation.stanza_id, text)
 
     def _on_conversation_view_key_press(self, _listbox, event):
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
@@ -1119,6 +1129,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 tim,
                 display_marking=displaymarking,
                 message_id=message_id,
+                stanza_id=stanza_id,
                 correct_id=correct_id,
                 log_line_id=msg_log_id,
                 additional_data=additional_data)
@@ -1365,6 +1376,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if not msg.message:
                 continue
 
+            message_text = msg.message
+
             contact_name = msg.contact_name
             if msg.kind in (
                     KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
@@ -1379,13 +1392,22 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             else:
                 raise ValueError('no kind attribute')
 
+            if msg.additional_data is not None:
+                retracted_by = msg.additional_data.get_value('retracted', 'by')
+                if retracted_by is not None:
+                    reason = msg.additional_data.get_value(
+                        'retracted', 'reason')
+                    message_text = get_retraction_text(
+                        self.account, retracted_by, reason)
+
             self.conversation_view.add_message(
-                msg.message,
+                message_text,
                 kind,
                 contact_name,
                 msg.time,
                 additional_data=msg.additional_data,
                 message_id=msg.message_id,
+                stanza_id=msg.stanza_id,
                 log_line_id=msg.log_line_id,
                 marker=msg.marker,
                 error=msg.error)

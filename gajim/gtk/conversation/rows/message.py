@@ -34,6 +34,8 @@ from gajim.common.i18n import Q_
 from .base import BaseRow
 from .base import MoreMenuButton
 from ..message_widget import MessageWidget
+from ...dialogs import InputDialog
+from ...dialogs import DialogButton
 from ...preview import PreviewWidget
 from ...util import format_fingerprint
 from ...util import get_cursor
@@ -46,6 +48,7 @@ class MessageRow(BaseRow):
                  account,
                  contact,
                  message_id,
+                 stanza_id,
                  timestamp,
                  kind,
                  name,
@@ -62,6 +65,7 @@ class MessageRow(BaseRow):
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
         self.message_id = message_id
+        self.stanza_id = stanza_id
         self.log_line_id = log_line_id
         self.kind = kind
         self.name = name or ''
@@ -77,6 +81,10 @@ class MessageRow(BaseRow):
         self._corrections = []
         self._has_receipt = marker == 'received'
         self._has_displayed = marker == 'displayed'
+
+        if additional_data is not None:
+            if additional_data.get_value('retracted', 'by') is not None:
+                self.get_style_context().add_class('retracted-message')
 
         is_previewable = app.interface.preview_manager.get_previewable(
             text, additional_data)
@@ -160,7 +168,8 @@ class MessageRow(BaseRow):
 
         bottom_box = Gtk.Box(spacing=6)
         bottom_box.add(self._message_widget)
-        more_menu_button = MoreMenuButton(self)
+
+        more_menu_button = MoreMenuButton(self, self._contact, name)
         more_menu_button.set_hexpand(True)
         more_menu_button.set_halign(Gtk.Align.END)
         bottom_box.pack_end(more_menu_button, False, True, 0)
@@ -242,6 +251,22 @@ class MessageRow(BaseRow):
     def on_quote_message(self, _widget):
         self.get_parent().on_quote(self._message_widget.get_text())
 
+    def on_retract_message(self, _widget):
+        def _on_retract(reason):
+            self._client.get_module('MUC').retract_message(
+                self._contact.jid, self.stanza_id, reason or None)
+
+        InputDialog(
+            _('Retract Message'),
+            _('Retract message?'),
+            _('Why do you want to retract this message?'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               text=_('_Retract'),
+                               callback=_on_retract)],
+            input_str=_('Spam'),
+            transient_for=app.window).show()
+
     def _get_encryption_image(self, additional_data, encryption_enabled=None):
         details = self._get_encryption_details(additional_data)
         if details is None:
@@ -295,6 +320,10 @@ class MessageRow(BaseRow):
 
     def set_displayed(self):
         self._has_displayed = True
+
+    def set_retracted(self, text: str) -> None:
+        self._message_widget.add_content(process(text))
+        self.get_style_context().add_class('retracted-message')
 
     def set_correction(self, text, message_id):
         self._corrections.append(self._message_widget.get_text())

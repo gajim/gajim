@@ -28,6 +28,7 @@ HANDLED_EVENTS = [
     'message-received',
     'mam-message-received',
     'gc-message-received',
+    'message-updated',
     'presence-received',
     'message-sent',
     'chatstate-received',
