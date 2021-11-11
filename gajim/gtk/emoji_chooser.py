@@ -265,7 +265,6 @@ class EmojiChooser(Gtk.Popover):
 
         self.connect('key-press-event', self._key_press)
         self._builder.connect_signals(self)
-        self.show_all()
 
     @property
     def text_widget(self):
