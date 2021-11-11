@@ -462,7 +462,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         sql_before = '''
             SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id,
+                   additional_data, log_line_id, message_id, stanza_id,
                    error as "error [common_error]",
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
