@@ -415,7 +415,8 @@ class ChatControl(BaseControl):
                          correct_id=event.correct_id,
                          message_id=event.properties.id,
                          stanza_id=event.stanza_id,
-                         additional_data=event.additional_data)
+                         additional_data=event.additional_data,
+                         notify=False)
 
     def _on_message_received(self, event):
         if not event.msgtxt:
@@ -605,7 +606,8 @@ class ChatControl(BaseControl):
                     stanza_id=None,
                     correct_id=None,
                     message_id=None,
-                    additional_data=None):
+                    additional_data=None,
+                    notify=True):
 
         if additional_data is None:
             additional_data = AdditionalDataDict()
@@ -620,6 +622,7 @@ class ChatControl(BaseControl):
                                 kind,
                                 name,
                                 tim,
+                                notify,
                                 displaymarking=displaymarking,
                                 msg_log_id=msg_log_id,
                                 message_id=message_id,

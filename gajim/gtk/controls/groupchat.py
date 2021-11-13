@@ -737,7 +737,8 @@ class GroupchatControl(BaseControl):
                          correct_id=event.correct_id,
                          message_id=event.properties.id,
                          stanza_id=event.stanza_id,
-                         additional_data=event.additional_data)
+                         additional_data=event.additional_data,
+                         notify=False)
 
     def _on_gc_message_received(self, event):
         if event.properties.muc_nickname is None:
@@ -773,7 +774,8 @@ class GroupchatControl(BaseControl):
                     correct_id=None,
                     message_id=None,
                     stanza_id=None,
-                    additional_data=None):
+                    additional_data=None,
+                    notify=True):
 
         if contact == self.contact.nickname:
             kind = 'outgoing'
@@ -792,6 +794,7 @@ class GroupchatControl(BaseControl):
                                 kind,
                                 contact,
                                 tim,
+                                notify,
                                 displaymarking=displaymarking,
                                 correct_id=correct_id,
                                 message_id=message_id,

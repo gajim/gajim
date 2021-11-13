@@ -1110,6 +1110,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                     kind,
                     name,
                     tim,
+                    notify,
                     displaymarking=None,
                     msg_log_id=None,
                     message_id=None,
@@ -1153,7 +1154,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self.save_message(text, 'received')
 
             # Issue notification
-            self._notify(name, text, tim)
+            if notify:
+                self._notify(name, text, tim)
 
             # Send chat marker if we’re actively following the chat
             chat_active = app.window.is_chat_active(
