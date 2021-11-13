@@ -340,11 +340,13 @@ class ChatList(Gtk.ListBox, EventHelper):
         row.set_nick(nick)
         if event.name == 'mam-message-received':
             row.set_timestamp(event.properties.mam.timestamp)
+            row.set_stanza_id(event.stanza_id)
         else:
             row.set_timestamp(event.properties.timestamp)
+            row.set_stanza_id(event.properties.stanza_id.id)
         row.set_message_text(
             event.msgtxt, additional_data=event.additional_data)
-        row.set_stanza_id(event.properties.stanza_id.id)
+
         self._add_unread(row, event.properties)
         self.invalidate_sort()
 
