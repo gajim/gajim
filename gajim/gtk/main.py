@@ -1,3 +1,5 @@
+from typing import Optional
+
 import logging
 import os
 
@@ -16,6 +18,7 @@ from gajim.common.nec import EventHelper
 from .adhoc import AdHocCommand
 from .account_side_bar import AccountSideBar
 from .app_side_bar import AppSideBar
+from .workspace_side_bar import Workspace
 from .workspace_side_bar import WorkspaceSideBar
 from .main_stack import MainStack
 from .dialogs import DialogButton
@@ -323,7 +326,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._account_side_bar.activate_account_page(account)
         self._main_stack.show_account(account)
 
-    def get_active_workspace(self):
+    def get_active_workspace(self) -> Optional[Workspace]:
         return self._workspace_side_bar.get_active_workspace()
 
     def is_chat_active(self, account, jid):
@@ -390,6 +393,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def add_group_chat(self, account, jid, select=False):
         workspace_id = self.get_active_workspace()
+        if workspace_id is None:
+            workspace_id = self._workspace_side_bar.get_first_workspace()
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,
                                                jid,
@@ -411,6 +416,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def add_private_chat(self, account, jid, select=False):
         workspace_id = self.get_active_workspace()
+        if workspace_id is None:
+            workspace_id = self._workspace_side_bar.get_first_workspace()
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,
                                                jid,
