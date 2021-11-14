@@ -480,6 +480,22 @@ def get_subscription_menu(account: str, jid: str) -> Gio.Menu:
     return menu
 
 
+def get_start_chat_row_menu(account: str, jid: Union[JID, str]) -> Gio.Menu:
+    jid = str(jid)
+    menu_items: List[Tuple[str, str]] = [
+        ('forget-groupchat', _('Forget this Group Chat')),
+    ]
+    menu = Gio.Menu()
+    for item in menu_items:
+        action, label = item
+        action = f'app.{action}'
+        menuitem = Gio.MenuItem.new(label, action)
+        variant_list = GLib.Variant('as', [account, jid])
+        menuitem.set_action_and_target_value(action, variant_list)
+        menu.append_item(menuitem)
+    return menu
+
+
 def get_chat_list_row_menu(workspace_id: str, account: str,
                            jid: Union[JID, str], pinned: bool) -> Gio.Menu:
     jid = str(jid)

@@ -17,6 +17,8 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+from nbxmpp import JID
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.app import interface
@@ -262,6 +264,12 @@ def start_chat(_action, param):
     account, jid = param.get_strv()
     app.interface.start_chat_from_jid(account, jid)
 
+def forget_groupchat(_action, param):
+    account, jid = param.unpack()
+    client = app.get_client(account)
+    client.get_module('Bookmarks').remove(JID.from_string(jid))
+    window = open_window('StartChatDialog')
+    window.remove_row(account, jid)
 
 def on_groupchat_join(_action, param):
     account, jid = param.get_strv()

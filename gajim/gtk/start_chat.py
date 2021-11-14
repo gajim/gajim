@@ -35,6 +35,8 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.modules.util import as_task
 
+from gajim.gui_menu_builder import get_start_chat_row_menu
+
 from .chat_filter import ChatFilter
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
@@ -125,6 +127,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def set_search_text(self, text):
         self._ui.search_entry.set_text(text)
+
+    def remove_row(self, account: str, jid: str) -> None:
+        for row in self._ui.listbox.get_children():
+            if row.account == account and row.jid == jid:
+                row.destroy()
+                return
 
     def _global_search_active(self):
         return self._ui.global_search_toggle.get_active()
@@ -748,8 +756,31 @@ class ContactRow(Gtk.ListBoxRow):
 
         grid.add(box)
 
-        self.add(grid)
+        eventbox = Gtk.EventBox()
+        eventbox.connect('button-press-event', self._popup_menu)
+        eventbox.add(grid)
+        self.add(eventbox)
         self.show_all()
+
+    def _popup_menu(self, _widget, event):
+        if not self.groupchat:
+            return
+
+        if event.button != 3:  # right click
+            return
+
+        menu = get_start_chat_row_menu(self.account, self.jid)
+
+        rectangle = Gdk.Rectangle()
+        rectangle.x = event.x
+        rectangle.y = event.y
+        rectangle.width = rectangle.height = 1
+
+        popover = Gtk.Popover.new_from_model(self, menu)
+        popover.set_relative_to(self)
+        popover.set_position(Gtk.PositionType.RIGHT)
+        popover.set_pointing_to(rectangle)
+        popover.popup()
 
     def _get_avatar_image(self, contact):
         if self.new:
