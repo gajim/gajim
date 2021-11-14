@@ -18,6 +18,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.helpers import get_connection_status
 from gajim.common.helpers import get_uf_show
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import statuses_unified
@@ -101,16 +102,12 @@ class StatusSelector(Gtk.MenuButton):
         self._status_popover.popdown()
         new_status = button.get_name()
         app.interface.change_status(status=new_status, account=self._account)
-        self.update()
 
     def update(self, *args, **kwargs):
         if self._account is None:
             show = get_global_show()
         else:
-            if self._account not in app.connections:
-                return
-            client = app.get_client(self._account)
-            show = client.status
+            show = get_connection_status(self._account)
 
         surface = get_show_circle(
             show, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
