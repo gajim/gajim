@@ -39,16 +39,6 @@
       <attribute name="label" translatable="yes">_View</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">Show _Offline Contacts</attribute>
-          <attribute name="action">win.show-offline</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Show _Active Contacts</attribute>
-          <attribute name="action">win.show-active</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
           <attribute name="label" translatable="yes">_XML Console</attribute>
           <attribute name="action">app.xml-console</attribute>
         </item>
