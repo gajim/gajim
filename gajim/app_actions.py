@@ -28,6 +28,7 @@ from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.about import AboutDialog
 from gajim.gui.discovery import ServiceDiscoveryWindow
 from gajim.gui.util import open_window
+from gajim.gui.util import get_app_window
 
 # General Actions
 
@@ -266,10 +267,16 @@ def start_chat(_action, param):
 
 def forget_groupchat(_action, param):
     account, jid = param.unpack()
+    room_jid = JID.from_string(jid)
+    window = get_app_window('StartChatDialog')
+    window.remove_row(account, str(room_jid))
+
     client = app.get_client(account)
-    client.get_module('Bookmarks').remove(JID.from_string(jid))
-    window = open_window('StartChatDialog')
-    window.remove_row(account, jid)
+    client.get_module('MUC').leave(room_jid)
+    client.get_module('Bookmarks').remove(room_jid)
+
+    app.storage.archive.remove_chat_history(
+        account, str(room_jid), groupchat=True)
 
 def on_groupchat_join(_action, param):
     account, jid = param.get_strv()
