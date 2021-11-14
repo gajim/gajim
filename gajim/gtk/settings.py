@@ -615,7 +615,6 @@ class ActionSetting(GenericSetting):
 class LoginSetting(DialogSetting):
     def __init__(self, *args, **kwargs):
         DialogSetting.__init__(self, *args, **kwargs)
-        self.setting_value.set_selectable(True)
 
     def get_setting_value(self):
         jid = app.get_jid_from_account(self.account)
