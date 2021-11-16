@@ -23,6 +23,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import os
 import sys
 import time
@@ -46,6 +48,8 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
 from gajim.common.const import KindConstant
+from gajim.common.preview_helpers import filename_from_uri
+from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.structs import OutgoingMessage
 
 from gajim.gui.conversation.view import ConversationView
@@ -1155,7 +1159,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
             # Issue notification
             if notify:
-                self._notify(name, text, tim)
+                self._notify(name, text, tim, additional_data)
 
             # Send chat marker if we’re actively following the chat
             chat_active = app.window.is_chat_active(
@@ -1163,12 +1167,23 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if chat_active and self._scrolled_view.get_autoscroll():
                 app.window.mark_as_read(self.account, self.contact.jid)
 
-    def _notify(self, name, text, tim):
+    def _notify(self, name: str, text: str, tim: Optional[int],
+                additional_data: AdditionalDataDict) -> None:
         if app.window.is_chat_active(self.account, self.contact.jid):
             if self._scrolled_view.get_autoscroll():
                 return
 
         title = _('New message from %s') % name
+
+        is_previewable = app.interface.preview_manager.get_previewable(
+            text, additional_data)
+        if is_previewable:
+            if text.startswith('geo:'):
+                text = _('Location')
+            else:
+                file_name = filename_from_uri(text)
+                _icon, file_type = guess_simple_file_type(text)
+                text = f'{file_type} ({file_name})'
 
         if self.is_chat:
             msg_type = 'chat-message'
