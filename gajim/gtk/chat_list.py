@@ -343,7 +343,10 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.set_stanza_id(event.stanza_id)
         else:
             row.set_timestamp(event.properties.timestamp)
-            row.set_stanza_id(event.properties.stanza_id.id)
+            stanza_id = None
+            if event.properties.stanza_id:
+                stanza_id = event.properties.stanza_id.id
+            row.set_stanza_id(stanza_id)
         row.set_message_text(
             event.msgtxt, additional_data=event.additional_data)
 
