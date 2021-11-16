@@ -198,6 +198,9 @@ row:backdrop { transition: none; }
 }
 
 /* Workspace sidebar */
+.workspace-scrolled {
+    background: transparent;
+}
 .workspace-sidebar {
 	background: transparent;
 	margin-right: 6px;

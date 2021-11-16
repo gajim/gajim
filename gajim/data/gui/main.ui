@@ -59,6 +59,7 @@
             </child>
             <style>
               <class name="no-border"/>
+              <class name="workspace-scrolled"/>
             </style>
           </object>
           <packing>
