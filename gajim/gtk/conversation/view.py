@@ -221,8 +221,8 @@ class ConversationView(Gtk.ListBox):
         if not timestamp:
             timestamp = time.time()
 
-        if correct_id:
-            self.correct_message(correct_id, message_id, text)
+        if correct_id is not None:
+            self.correct_message(correct_id, text)
             return
 
         message = MessageRow(
@@ -453,10 +453,10 @@ class ConversationView(Gtk.ListBox):
         if self.autoscroll or force:
             GLib.idle_add(scroll_to_end, self.get_parent().get_parent())
 
-    def correct_message(self, correct_id, message_id, text):
+    def correct_message(self, correct_id: str, text: str) -> None:
         message_row = self._get_row_by_message_id(correct_id)
         if message_row is not None:
-            message_row.set_correction(text, message_id)
+            message_row.set_correction(text)
             message_row.set_merged(False)
 
     def show_message_retraction(self, stanza_id: str, text: str) -> None:

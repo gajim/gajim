@@ -1175,7 +1175,8 @@ class GroupchatControl(BaseControl):
             return
         # we'll save sent message text when we'll receive it in
         # _nec_gc_message_received
-        self.last_sent_msg = event.message_id
+        if event.correct_id is None:
+            self.last_sent_msg = event.message_id
         if self.correcting:
             self.correcting = False
             self.msg_textview.get_style_context().remove_class(

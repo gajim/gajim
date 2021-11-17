@@ -325,7 +325,7 @@ class MessageRow(BaseRow):
         self._message_widget.add_content(process(text))
         self.get_style_context().add_class('retracted-message')
 
-    def set_correction(self, text, message_id):
+    def set_correction(self, text: str) -> None:
         self._corrections.append(self._message_widget.get_text())
         result = process(text)
         self._message_widget.add_content(result)
@@ -339,8 +339,6 @@ class MessageRow(BaseRow):
             corrections, max_chars=150, max_lines=10)
         self._message_icons.set_correction_tooltip(
             _('Message corrected. Original message:\n%s') % corrections)
-        # Update message_id for this row
-        self.message_id = message_id
 
     def set_error(self, tooltip):
         self._message_icons.set_error_icon_visible(True)

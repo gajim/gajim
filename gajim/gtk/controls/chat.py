@@ -446,7 +446,9 @@ class ChatControl(BaseControl):
         if not event.message:
             return
 
-        self.last_sent_msg = event.message_id
+        if event.correct_id is None:
+            self.last_sent_msg = event.message_id
+
         message_id = event.message_id
 
         if event.label:
