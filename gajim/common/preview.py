@@ -217,9 +217,9 @@ class PreviewManager:
         log.info('Unsupported URI scheme: %s', uri)
         return False
 
-    def get_previewable(self, 
-                        text: str, 
-                        additional_data: AdditionalDataDict) -> bool:
+    def is_previewable(self,
+                       text: str,
+                       additional_data: AdditionalDataDict) -> bool:
         if len(text.split(' ')) > 1:
             # urlparse doesn't recognise spaces as URL delimiter
             log.debug('Text is not an uri: %s...', text[:15])
@@ -328,7 +328,7 @@ class PreviewManager:
             return
         preview.update_widget(data=pixbuf)
 
-    def download_content(self, 
+    def download_content(self,
                          preview: Preview,
                          force: bool = False) -> None:
         if preview.account is None:
@@ -344,7 +344,7 @@ class PreviewManager:
         session = self._get_session(preview.account)
         session.queue_message(message, self._on_finished, preview)
 
-    def _check_certificate(self, 
+    def _check_certificate(self,
                            message: Soup.Message,
                            preview: Preview) -> None:
         _https_used, _tls_certificate, tls_errors = message.get_https_status()
@@ -359,7 +359,7 @@ class PreviewManager:
             session.cancel_message(message, Soup.Status.CANCELLED)
             return
 
-    def _on_content_sniffed(self, 
+    def _on_content_sniffed(self,
                             message: Soup.Message,
                             type_: str,
                             _params: GLib.HashTable,

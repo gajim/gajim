@@ -715,7 +715,7 @@ class ChatRow(Gtk.ListBoxRow):
         if icon_name is not None:
             icon = Gio.Icon.new_for_string(icon_name)
         if additional_data is not None:
-            if app.interface.preview_manager.get_previewable(
+            if app.interface.preview_manager.is_previewable(
                     text, additional_data):
                 file_name = filename_from_uri(text)
                 icon, file_type = guess_simple_file_type(text)

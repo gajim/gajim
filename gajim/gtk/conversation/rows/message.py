@@ -86,7 +86,7 @@ class MessageRow(BaseRow):
             if additional_data.get_value('retracted', 'by') is not None:
                 self.get_style_context().add_class('retracted-message')
 
-        is_previewable = app.interface.preview_manager.get_previewable(
+        is_previewable = app.interface.preview_manager.is_previewable(
             text, additional_data)
         if is_previewable:
             context = None

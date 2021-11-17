@@ -1175,7 +1175,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         title = _('New message from %s') % name
 
-        is_previewable = app.interface.preview_manager.get_previewable(
+        is_previewable = app.interface.preview_manager.is_previewable(
             text, additional_data)
         if is_previewable:
             if text.startswith('geo:'):
