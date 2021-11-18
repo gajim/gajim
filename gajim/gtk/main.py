@@ -8,12 +8,15 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
 
+from nbxmpp import JID
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Display
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
+from gajim.common.modules.bytestream import is_transfer_active
 
 from .adhoc import AdHocCommand
 from .account_side_bar import AccountSideBar
@@ -21,6 +24,7 @@ from .app_side_bar import AppSideBar
 from .workspace_side_bar import Workspace
 from .workspace_side_bar import WorkspaceSideBar
 from .main_stack import MainStack
+from .chat_list import ChatList
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
@@ -214,7 +218,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_action(self, action, _param):
         control = self.get_active_control()
         if control is None:
-            return
+            return None
 
         log.info('Activate action: %s, active control: %s',
                  action.get_name(), control.contact.jid)
@@ -227,21 +231,21 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if action == 'escape':
             if self._chat_page.hide_search():
-                return
+                return None
 
         if action == 'escape' and app.settings.get('escape_key_closes'):
             self._chat_page.remove_chat(control.account, control.contact.jid)
-            return
+            return None
 
         if action == 'close-tab':
             self._chat_page.remove_chat(control.account, control.contact.jid)
-            return
+            return None
 
         # if action == 'move-tab-up':
         #     old_position = self.notebook.get_current_page()
         #     self.notebook.reorder_child(control.widget,
         #                                 old_position - 1)
-        #     return
+        #     return None
 
         # if action == 'move-tab-down':
         #     old_position = self.notebook.get_current_page()
@@ -251,28 +255,28 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         #     else:
         #         self.notebook.reorder_child(control.widget,
         #                                     old_position + 1)
-        #     return
+        #     return None
 
         if action == 'switch-next-tab':
             self.select_next_chat(True)
-            return
+            return None
 
         if action == 'switch-prev-tab':
             self.select_next_chat(False)
-            return
+            return None
 
         if action == 'switch-next-unread-tab-right':
             self.select_next_chat(True, unread_first=True)
-            return
+            return None
 
         if action == 'switch-next-unread-tab-left':
             self.select_next_chat(False, unread_first=True)
-            return
+            return None
 
         if action.startswith('switch-tab-'):
             number = int(action[-1]) - 1
             self.select_chat_number(number)
-            return
+            return None
 
     def _on_window_motion_notify(self, _widget, _event):
         control = self.get_active_control()
@@ -320,7 +324,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._startup_finished = True
         self._chat_page.set_startup_finished()
 
-    def show_account_page(self, account):
+    def show_account_page(self, account: str) -> None:
         self._app_side_bar.unselect_all()
         self._workspace_side_bar.unselect_all()
         self._account_side_bar.activate_account_page(account)
@@ -329,16 +333,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def get_active_workspace(self) -> Optional[Workspace]:
         return self._workspace_side_bar.get_active_workspace()
 
-    def is_chat_active(self, account, jid):
+    def is_chat_active(self, account: str, jid: JID) -> bool:
         if not self.get_property('has-toplevel-focus'):
             return False
         return self._chat_page.is_chat_active(account, jid)
 
     def _add_workspace(self, _action, param):
         workspace_id = param.get_string()
-        self.add_workspace(workspace_id)
+        if workspace_id is not None:
+            self.add_workspace(workspace_id)
 
-    def add_workspace(self, workspace_id):
+    def add_workspace(self, workspace_id: str) -> None:
         self._workspace_side_bar.add_workspace(workspace_id)
         self._chat_page.add_chat_list(workspace_id)
 
@@ -356,7 +361,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if workspace_id is not None:
             self.remove_workspace(workspace_id)
 
-    def remove_workspace(self, workspace_id):
+    def remove_workspace(self, workspace_id: str) -> None:
         was_active = self.get_active_workspace() == workspace_id
 
         success = self._workspace_side_bar.remove_workspace(workspace_id)
@@ -372,26 +377,29 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _activate_workspace(self, _action, param):
         workspace_id = param.get_string()
-        self.activate_workspace(workspace_id)
+        if workspace_id is not None:
+            self.activate_workspace(workspace_id)
 
-    def activate_workspace(self, workspace_id):
+    def activate_workspace(self, workspace_id: str) -> None:
         self._app_side_bar.unselect_all()
         self._account_side_bar.unselect_all()
         self._main_stack.show_chats(workspace_id)
         self._workspace_side_bar.activate_workspace(workspace_id)
 
-    def update_workspace(self, workspace_id):
+    def update_workspace(self, workspace_id: str) -> None:
         self._chat_page.update_workspace(workspace_id)
         self._workspace_side_bar.update_avatar(workspace_id)
 
-    def get_chat_list(self, workspace_id):
+    def get_chat_list(self, workspace_id: str) -> ChatList:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         return chat_list_stack.get_chatlist(workspace_id)
 
     def _add_group_chat(self, _action, param):
-        self.add_group_chat(**param.unpack())
+        account, jid, select = param.unpack()
+        self.add_group_chat(account, JID.from_string(jid), select)
 
-    def add_group_chat(self, account, jid, select=False):
+    def add_group_chat(self, account: str, jid: JID,
+                       select: bool = False) -> None:
         workspace_id = self.get_active_workspace()
         if workspace_id is None:
             workspace_id = self._workspace_side_bar.get_first_workspace()
@@ -402,9 +410,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                select=select)
 
     def _add_chat(self, _action, param):
-        self.add_chat(**param.unpack())
+        account, jid, type_, select = param.unpack()
+        self.add_chat(account, JID.from_string(jid), type_, select)
 
-    def add_chat(self, account, jid, type_, select=False):
+    def add_chat(self, account: str, jid: JID, type_: str,
+                 select: bool = False) -> None:
         workspace_id = self.get_active_workspace()
         if workspace_id is None:
             workspace_id = self._workspace_side_bar.get_first_workspace()
@@ -414,7 +424,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                type_,
                                                select=select)
 
-    def add_private_chat(self, account, jid, select=False):
+    def add_private_chat(self, account: str, jid: JID,
+                         select: bool = False) -> None:
         workspace_id = self.get_active_workspace()
         if workspace_id is None:
             workspace_id = self._workspace_side_bar.get_first_workspace()
@@ -424,19 +435,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                'pm',
                                                select=select)
 
-    def select_chat(self, account, jid):
+    def select_chat(self, account: str, jid: JID) -> None:
         self._app_side_bar.unselect_all()
         self._account_side_bar.unselect_all()
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
 
-    def select_next_chat(self, forwards, unread_first=False):
+    def select_next_chat(self, forwards: bool,
+                         unread_first: bool = False) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list = chat_list_stack.get_current_chat_list()
         if chat_list is not None:
             chat_list.select_next_chat(forwards, unread_first)
 
-    def select_chat_number(self, number):
+    def select_chat_number(self, number: int) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list = chat_list_stack.get_current_chat_list()
         if chat_list is not None:
@@ -447,12 +459,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         _workspace, account, jid = param.unpack()
         open_window('AddContact', account=account, jid=jid)
 
-    def show_app_page(self):
+    def show_app_page(self) -> None:
         self._account_side_bar.unselect_all()
         self._workspace_side_bar.unselect_all()
         self._main_stack.show_app_page()
 
-    def add_app_message(self, category, message=None):
+    def add_app_message(self, category: str,
+                        message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 
     def get_control(self, *args, **kwargs):
@@ -467,16 +480,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def chat_exists(self, *args, **kwargs):
         return self._chat_page.chat_exists(*args, **kwargs)
 
-    def get_total_unread_count(self):
+    def get_total_unread_count(self) -> int:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         return chat_list_stack.get_total_unread_count()
 
-    def get_chat_unread_count(self, account, jid):
+    def get_chat_unread_count(self, account: str, jid: JID) -> int:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         count = chat_list_stack.get_chat_unread_count(account, jid)
         return count or 0
 
-    def mark_as_read(self, account, jid, send_marker=True):
+    def mark_as_read(self, account: str, jid: JID,
+                     send_marker: bool = True) -> None:
         # TODO set window urgency hint, etc.
         control = self.get_control(account, jid)
         if control is not None:
@@ -526,7 +540,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                callback=_block_contact)],
             modal=False).show()
 
-    def remove_contact(self, account, jid):
+    def remove_contact(self, account: str, jid: JID) -> None:
         client = app.get_client(account)
 
         def _remove_contact():
@@ -548,7 +562,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                callback=_remove_contact)]).show()
 
     @staticmethod
-    def _check_for_account():
+    def _check_for_account() -> None:
         accounts = app.settings.get_accounts()
         if (not accounts or accounts == ['Local'] and
                 not app.settings.get_account_setting('Local', 'active')):
@@ -558,7 +572,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
             GLib.idle_add(_open_wizard)
 
-    def _load_chats(self):
+    def _load_chats(self) -> None:
         for workspace_id in app.settings.get_workspaces():
             self.add_workspace(workspace_id)
             self._chat_page.load_workspace_chats(workspace_id)
@@ -621,7 +635,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 app.app.start_shutdown(message=message)
                 return
             # check if there is an active file transfer
-            from gajim.common.modules.bytestream import is_transfer_active
             files_props = app.interface.instances['file_transfers'].\
                 files_props
             transfer_active = False
