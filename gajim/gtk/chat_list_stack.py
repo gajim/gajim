@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict
+from typing import Optional
+
 from gi.repository import Gtk
 from gi.repository import GObject
 from gi.repository import Gio
@@ -21,7 +24,8 @@ from nbxmpp import JID
 
 from gajim.common import app
 
-from gajim.gui.chat_list import ChatList
+from .chat_list import ChatList
+from .chat_list import ChatRow
 
 
 HANDLED_EVENTS = [
@@ -45,13 +49,13 @@ class ChatListStack(Gtk.Stack):
                                  (str, int)),
         'chat-selected': (GObject.SignalFlags.RUN_LAST,
                           None,
-                          (str, str, str)),
+                          (str, str, object)),
         'chat-unselected': (GObject.SignalFlags.RUN_LAST,
                             None,
                             ()),
         'chat-removed': (GObject.SignalFlags.RUN_LAST,
                          None,
-                         (str, str, str)),
+                         (str, object, str)),
     }
 
     def __init__(self, chat_filter, search_entry):
@@ -60,9 +64,9 @@ class ChatListStack(Gtk.Stack):
         self.set_vexpand(True)
         self.set_vhomogeneous(False)
 
-        self._chat_lists = {}
+        self._chat_lists: Dict[str, ChatList] = {}
 
-        self._last_visible_child_name = 'default'
+        self._last_visible_child_name: str = 'default'
 
         self.add_named(Gtk.Box(), 'default')
 
@@ -104,23 +108,23 @@ class ChatListStack(Gtk.Stack):
             child.set_filter_text('')
         self._last_visible_child_name = self.get_visible_child_name()
 
-    def get_chatlist(self, workspace_id):
+    def get_chatlist(self, workspace_id: str) -> ChatList:
         return self._chat_lists[workspace_id]
 
-    def get_selected_chat(self):
+    def get_selected_chat(self) -> Optional[ChatRow]:
         chat_list = self.get_current_chat_list()
         if chat_list is None:
             return None
         return chat_list.get_selected_chat()
 
-    def get_current_chat_list(self):
+    def get_current_chat_list(self) -> Optional[ChatList]:
         workspace_id = self.get_visible_child_name()
         if workspace_id == 'empty':
             return None
 
         return self._chat_lists[workspace_id]
 
-    def is_chat_active(self, account, jid):
+    def is_chat_active(self, account: str, jid: JID) -> bool:
         chat = self.get_selected_chat()
         if chat is None:
             return False
@@ -136,7 +140,7 @@ class ChatListStack(Gtk.Stack):
         chat_list = self.get_visible_child()
         chat_list.set_filter_text(search_entry.get_text())
 
-    def add_chat_list(self, workspace_id):
+    def add_chat_list(self, workspace_id: str) -> ChatList:
         chat_list = ChatList(workspace_id)
         chat_list.connect('row-selected', self._on_row_selected)
 
@@ -144,7 +148,7 @@ class ChatListStack(Gtk.Stack):
         self.add_named(chat_list, workspace_id)
         return chat_list
 
-    def remove_chat_list(self, workspace_id):
+    def remove_chat_list(self, workspace_id: str) -> None:
         chat_list = self._chat_lists[workspace_id]
         self.remove(chat_list)
         for account, jid, _, _ in chat_list.get_open_chats():
@@ -160,7 +164,7 @@ class ChatListStack(Gtk.Stack):
 
         self.emit('chat-selected', row.workspace_id, row.account, row.jid)
 
-    def show_chat_list(self, workspace_id):
+    def show_chat_list(self, workspace_id: str) -> None:
         current_workspace_id = self.get_visible_child_name()
         if current_workspace_id == workspace_id:
             return
@@ -170,13 +174,14 @@ class ChatListStack(Gtk.Stack):
 
         self.set_visible_child_name(workspace_id)
 
-    def add_chat(self, workspace_id, account, jid, type_, pinned=False):
+    def add_chat(self, workspace_id: str, account: str, jid: JID, type_: str,
+                 pinned: bool = False) -> None:
         chat_list = self._chat_lists.get(workspace_id)
         if chat_list is None:
             chat_list = self.add_chat_list(workspace_id)
         chat_list.add_chat(account, jid, type_, pinned)
 
-    def select_chat(self, account, jid):
+    def select_chat(self, account: str, jid: JID) -> None:
         chat_list = self._find_chat(account, jid)
         if chat_list is None:
             return
@@ -184,7 +189,7 @@ class ChatListStack(Gtk.Stack):
         self.show_chat_list(chat_list.workspace_id)
         chat_list.select_chat(account, jid)
 
-    def store_open_chats(self, workspace_id):
+    def store_open_chats(self, workspace_id: str) -> None:
         chat_list = self._chat_lists[workspace_id]
         open_chats = chat_list.get_open_chats()
         app.settings.set_workspace_setting(
@@ -192,6 +197,8 @@ class ChatListStack(Gtk.Stack):
 
     def _toggle_chat_pinned(self, _action, param):
         workspace_id, account, jid = param.unpack()
+        jid = JID.from_string(jid)
+
         chat_list = self._chat_lists[workspace_id]
         chat_list.toggle_chat_pinned(account, jid)
         self.store_open_chats(workspace_id)
@@ -209,25 +216,26 @@ class ChatListStack(Gtk.Stack):
         self.store_open_chats(current_chatlist.workspace_id)
         self.store_open_chats(new_workspace_id)
 
-    def remove_chat(self, workspace_id, account, jid):
+    def remove_chat(self, workspace_id: str, account: str, jid: JID) -> None:
         chat_list = self._chat_lists[workspace_id]
         type_ = chat_list.get_chat_type(account, jid)
         chat_list.remove_chat(account, jid, emit_unread=False)
         self.store_open_chats(workspace_id)
         self.emit('chat-removed', account, jid, type_)
 
-    def remove_chats_for_account(self, account):
+    def remove_chats_for_account(self, account: str) -> None:
         for workspace_id, chat_list in self._chat_lists.items():
             chat_list.remove_chats_for_account(account)
             self.store_open_chats(workspace_id)
 
-    def _find_chat(self, account, jid):
+    def _find_chat(self, account: str, jid: JID) -> Optional[ChatList]:
         for chat_list in self._chat_lists.values():
             if chat_list.contains_chat(account, jid):
                 return chat_list
         return None
 
-    def contains_chat(self, account, jid, workspace_id=None):
+    def contains_chat(self, account: str, jid: JID,
+                      workspace_id: Optional[str] = None) -> bool:
         if workspace_id is None:
             for chat_list in self._chat_lists.values():
                 if chat_list.contains_chat(account, jid):
@@ -237,20 +245,20 @@ class ChatListStack(Gtk.Stack):
         chat_list = self._chat_lists[workspace_id]
         return chat_list.contains_chat(account, jid)
 
-    def get_total_unread_count(self):
+    def get_total_unread_count(self) -> int:
         count = 0
         for chat_list in self._chat_lists.values():
             count += chat_list.get_unread_count()
         return count
 
-    def get_chat_unread_count(self, account, jid):
+    def get_chat_unread_count(self, account: str, jid: JID) -> Optional[int]:
         for chat_list in self._chat_lists.values():
             count = chat_list.get_chat_unread_count(account, jid)
             if count is not None:
                 return count
         return None
 
-    def mark_as_read(self, account, jid):
+    def mark_as_read(self, account: str, jid: JID) -> None:
         for chat_list in self._chat_lists.values():
             chat_list.mark_as_read(account, jid)
 
