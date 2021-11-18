@@ -12,14 +12,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict
+from typing import Tuple
+from typing import Optional
+from typing import Any
+
 import logging
 import time
-from typing import Optional
 
 from gi.repository import Gio
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
+
+from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import ged
@@ -48,10 +54,10 @@ class ChatList(Gtk.ListBox, EventHelper):
         Gtk.ListBox.__init__(self)
         EventHelper.__init__(self)
 
-        self._chats = {}
-        self._current_filter = 'all'
-        self._current_filter_text = ''
-        self._workspace_id = workspace_id
+        self._chats: Dict[Tuple[str, JID], Any] = {}
+        self._current_filter: str = 'all'
+        self._current_filter_text: str = ''
+        self._workspace_id: str = workspace_id
 
         self.get_style_context().add_class('chatlist')
         self.set_filter_func(self._filter_func)
@@ -59,7 +65,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.set_sort_func(self._sort_func)
         self._set_placeholder()
 
-        self._mouseover = False
+        self._mouseover: bool = False
         self.connect('enter-notify-event', self._on_mouse_focus_changed)
         self.connect('leave-notify-event', self._on_mouse_focus_changed)
 
@@ -76,37 +82,37 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.show_all()
 
     @property
-    def workspace_id(self):
+    def workspace_id(self) -> str:
         return self._workspace_id
 
-    def get_unread_count(self):
+    def get_unread_count(self) -> int:
         return sum([chats.unread_count for chats in self._chats.values()])
 
-    def get_chat_unread_count(self, account, jid):
+    def get_chat_unread_count(self, account: str, jid: JID) -> Optional[int]:
         chat = self._chats.get((account, jid))
         if chat is not None:
             return chat.unread_count
         return None
 
-    def mark_as_read(self, account, jid):
+    def mark_as_read(self, account: str, jid: JID) -> None:
         chat = self._chats.get((account, jid))
         if chat is not None:
             chat.reset_unread()
             self.emit_unread_changed()
 
-    def emit_unread_changed(self):
+    def emit_unread_changed(self) -> None:
         count = self.get_unread_count()
         self.get_parent().emit('unread-count-changed',
                                self._workspace_id,
                                count)
 
-    def is_visible(self):
+    def is_visible(self) -> bool:
         return self.get_parent().get_property('child-widget') == self
 
     def _on_destroy(self, *args):
         GLib.source_remove(self._timer_id)
 
-    def _update_timer(self):
+    def _update_timer(self) -> bool:
         self.update_time()
         return True
 
@@ -166,10 +172,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             return 1
 
         # Sort by timestamp
-        if row1.timestamp > row2.timestamp:
-            return -1
-        if row2.timestamp > row1.timestamp:
-            return 1
+        return -1 if row1.timestamp > row2.timestamp else 1
 
     def _on_mouse_focus_changed(self, _widget, event):
         if event.type == Gdk.EventType.ENTER_NOTIFY:
@@ -180,7 +183,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                 # Not hovering a Gtk.ListBoxRow (row is INFERIOR)
                 self._mouseover = False
 
-    def _set_placeholder(self):
+    def _set_placeholder(self) -> None:
         button = Gtk.Button.new_with_label(_('Start Chat'))
         button.get_style_context().add_class('suggested-action')
         button.set_halign(Gtk.Align.CENTER)
@@ -193,19 +196,22 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _on_start_chat_clicked(_widget):
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
-    def set_filter(self, name):
+    def set_filter(self, name: str) -> None:
         self._current_filter = name
         self.invalidate_filter()
 
-    def set_filter_text(self, text):
+    def set_filter_text(self, text: str) -> None:
         self._current_filter_text = text
         self.invalidate_filter()
 
-    def get_chat_type(self, account, jid):
+    def get_chat_type(self, account: str, jid: JID) -> Optional[str]:
         row = self._chats.get((account, jid))
-        return row.type
+        if row is not None:
+            return row.type
+        return None
 
-    def add_chat(self, account, jid, type_, pinned=False):
+    def add_chat(self, account: str, jid: JID, type_: str,
+                 pinned: bool = False) -> None:
         if self._chats.get((account, jid)) is not None:
             # Chat is already in the List
             return
@@ -214,19 +220,21 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._chats[(account, jid)] = row
         self.add(row)
 
-    def select_chat(self, account, jid):
+    def select_chat(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]
         self.select_row(row)
 
-    def select_next_chat(self, forwards, unread_first=False):
+    def select_next_chat(self, forwards: bool,
+                         unread_first: bool = False) -> None:
         # Selects the next chat, but prioritizes chats with unread messages.
         # Direction is forwards (True) or backwards (False)
         row = self.get_selected_chat()
         if row is None:
             row = self.get_row_at_index(0)
-            if row is not None:
-                self.select_chat(row.account, row.jid)
+            if row is None:
                 return
+            self.select_chat(row.account, row.jid)
+            return
 
         unread_found = False
         if unread_first:
@@ -245,6 +253,8 @@ class ChatList(Gtk.ListBox, EventHelper):
                         index = len(self.get_children()) - 1
 
                 row = self.get_row_at_index(index)
+                if row is None:
+                    return
                 if row.unread_count > 0:
                     unread_found = True
                     break
@@ -271,37 +281,38 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         self.select_chat(next_row.account, next_row.jid)
 
-    def select_chat_number(self, number):
+    def select_chat_number(self, number: int) -> None:
         row = self.get_row_at_index(number)
         if row is not None:
             self.select_chat(row.account, row.jid)
 
-    def toggle_chat_pinned(self, account, jid):
+    def toggle_chat_pinned(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]
         row.toggle_pinned()
         self.invalidate_sort()
 
-    def remove_chat(self, account, jid, emit_unread=True):
+    def remove_chat(self, account: str, jid: JID,
+                    emit_unread: bool = True) -> None:
         row = self._chats.pop((account, jid))
         self.remove(row)
         row.destroy()
         if emit_unread:
             self.emit_unread_changed()
 
-    def remove_chats_for_account(self, account):
+    def remove_chats_for_account(self, account: str) -> None:
         for row_account, jid in list(self._chats.keys()):
             if row_account != account:
                 continue
             self.remove_chat(account, jid)
         self.emit_unread_changed()
 
-    def get_selected_chat(self):
+    def get_selected_chat(self) -> Optional[Any]:
         row = self.get_selected_row()
         if row is None:
             return None
         return row
 
-    def contains_chat(self, account, jid):
+    def contains_chat(self, account: str, jid: JID) -> bool:
         return self._chats.get((account, jid)) is not None
 
     def get_open_chats(self):
@@ -310,7 +321,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             open_chats.append(key + (value.type, value.is_pinned))
         return open_chats
 
-    def update_time(self):
+    def update_time(self) -> None:
         for _key, row in self._chats.items():
             row.update_time()
 
@@ -448,7 +459,8 @@ class ChatList(Gtk.ListBox, EventHelper):
 
 
 class ChatRow(Gtk.ListBoxRow):
-    def __init__(self, workspace_id, account, jid, type_, pinned):
+    def __init__(self, workspace_id: str, account: str, jid: JID, type_: str,
+                 pinned: bool) -> None:
         Gtk.ListBoxRow.__init__(self)
 
         self.account = account
@@ -468,11 +480,11 @@ class ChatRow(Gtk.ListBoxRow):
         self.contact.connect('caps-update', self._on_avatar_update)
         self.contact.connect('avatar-update', self._on_avatar_update)
 
-        self.contact_name = self.contact.name
-        self.timestamp = 0
+        self.contact_name: str = self.contact.name
+        self.timestamp: int = 0
         self.stanza_id: Optional[str] = None
-        self._unread_count = 0
-        self._pinned = pinned
+        self._unread_count: int = 0
+        self._pinned: bool = pinned
 
         self.get_style_context().add_class('chatlist-row')
 
@@ -550,14 +562,14 @@ class ChatRow(Gtk.ListBoxRow):
         self.show_all()
 
     @property
-    def header(self):
+    def header(self) -> Optional[RowHeaderType]:
         header = self.get_header()
         if header is None:
             return None
         return header.type
 
     @header.setter
-    def header(self, type_):
+    def header(self, type_: RowHeaderType) -> None:
         if type_ == self.header:
             return
         if type_ is None:
@@ -570,7 +582,7 @@ class ChatRow(Gtk.ListBoxRow):
             self.set_header(self.conversations_label)
 
     @property
-    def is_pinned(self):
+    def is_pinned(self) -> bool:
         return self._pinned
 
     def _on_button_press(self, _widget, event):
@@ -592,7 +604,7 @@ class ChatRow(Gtk.ListBoxRow):
         popover.set_pointing_to(rectangle)
         popover.popup()
 
-    def toggle_pinned(self):
+    def toggle_pinned(self) -> None:
         self._pinned = not self._pinned
 
     def _on_presence_update(self, _contact, _signal_name):
@@ -601,12 +613,12 @@ class ChatRow(Gtk.ListBoxRow):
     def _on_avatar_update(self, _contact, _signal_name):
         self.update_avatar()
 
-    def update_avatar(self):
+    def update_avatar(self) -> None:
         scale = self.get_scale_factor()
         surface = self.contact.get_avatar(AvatarSize.ROSTER, scale)
         self._ui.avatar_image.set_from_surface(surface)
 
-    def update_name(self):
+    def update_name(self) -> None:
         if self.type == 'pm':
             client = app.get_client(self.account)
             muc_name = get_groupchat_name(client, self.jid.bare)
@@ -618,7 +630,7 @@ class ChatRow(Gtk.ListBoxRow):
             self.contact_name = _('Note to myself')
         self._ui.name_label.set_text(self.contact_name)
 
-    def update_account_identifier(self):
+    def update_account_identifier(self) -> None:
         account_class = app.css_config.get_dynamic_class(self.account)
         self._ui.account_identifier.get_style_context().add_class(account_class)
         show = len(app.settings.get_active_accounts()) > 1
@@ -634,22 +646,22 @@ class ChatRow(Gtk.ListBoxRow):
         self.update_name()
 
     @property
-    def unread_count(self):
+    def unread_count(self) -> int:
         return self._unread_count
 
     @unread_count.setter
-    def unread_count(self, value):
+    def unread_count(self, value: int) -> None:
         self._unread_count = value
         self._update_unread()
         self.get_parent().emit_unread_changed()
 
     @property
-    def is_active(self):
+    def is_active(self) -> bool:
         return (self.is_selected() and
                 self.get_toplevel().get_property('is-active'))
 
     @property
-    def is_recent(self):
+    def is_recent(self) -> bool:
         if self._unread_count:
             return True
         return False
@@ -666,20 +678,20 @@ class ChatRow(Gtk.ListBoxRow):
             'remove-chat',
             GLib.Variant('as', [self.account, str(self.jid)]))
 
-    def set_timestamp(self, timestamp):
+    def set_timestamp(self, timestamp: int) -> None:
         self.timestamp = timestamp
         self.update_time()
 
     def set_stanza_id(self, stanza_id: str) -> None:
         self.stanza_id = stanza_id
 
-    def update_time(self):
+    def update_time(self) -> None:
         if self.timestamp == 0:
             return
         self._ui.timestamp_label.set_text(
             get_uf_relative_time(self.timestamp))
 
-    def _update_unread(self):
+    def _update_unread(self) -> None:
         unread_count = self._get_unread_string(self._unread_count)
         self._ui.unread_label.set_text(unread_count)
         self._ui.unread_label.set_visible(bool(self._unread_count))
@@ -690,7 +702,7 @@ class ChatRow(Gtk.ListBoxRow):
             return str(count)
         return '999+'
 
-    def add_unread(self):
+    def add_unread(self) -> None:
         control = app.window.get_control(self.account, self.jid)
         if self.is_active and control.get_autoscroll():
             return
@@ -699,12 +711,12 @@ class ChatRow(Gtk.ListBoxRow):
         if self.unread_count == 1:
             self.changed()
 
-    def reset_unread(self):
+    def reset_unread(self) -> None:
         if not self.unread_count:
             return
         self.unread_count = 0
 
-    def set_nick(self, nickname):
+    def set_nick(self, nickname: str) -> None:
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(nickname)
 
@@ -734,7 +746,7 @@ class ChatRow(Gtk.ListBoxRow):
 
 
 class BaseHeader(Gtk.Box):
-    def __init__(self, row_type, text):
+    def __init__(self, row_type: RowHeaderType, text: str) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.type = row_type
         label = Gtk.Label(label=text)
