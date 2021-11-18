@@ -37,37 +37,37 @@ class MainStack(Gtk.Stack):
         for account in list(app.connections.keys()):
             self.add_account_page(account)
 
-    def add_account_page(self, account):
+    def add_account_page(self, account: str) -> None:
         account_page = AccountPage(account)
         self.add_named(account_page, account)
 
-    def remove_account_page(self, account):
+    def remove_account_page(self, account: str) -> None:
         account_page = self.get_child_by_name(account)
         account_page.destroy()
 
-    def remove_chats_for_account(self, account):
+    def remove_chats_for_account(self, account: str) -> None:
         self._chat_page.remove_chats_for_account(account)
 
-    def show_app_page(self):
+    def show_app_page(self) -> None:
         self.set_visible_child_name('app')
 
-    def get_app_page(self):
+    def get_app_page(self) -> AppPage:
         return self.get_child_by_name('app')
 
-    def show_chats(self, workspace_id):
+    def show_chats(self, workspace_id: str) -> None:
         self._chat_page.show_workspace_chats(workspace_id)
         self.set_visible_child_name('chats')
 
-    def show_chat_page(self):
+    def show_chat_page(self) -> None:
         self.set_visible_child_name('chats')
 
-    def show_account(self, account):
+    def show_account(self, account: str) -> None:
         self.set_visible_child_name(account)
 
-    def get_account_page(self, account):
+    def get_account_page(self, account: str) -> AccountPage:
         return self.get_child_by_name(account)
 
-    def get_chat_page(self):
+    def get_chat_page(self) -> ChatPage:
         return self.get_child_by_name('chats')
 
     def process_event(self, event):
