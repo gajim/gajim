@@ -9,6 +9,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 
+from nbxmpp import JID
 from nbxmpp import Namespace
 
 from gajim.common import app
@@ -292,7 +293,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         app.window.block_contact(self._account, param.get_string())
 
     def _on_remove_contact(self, _action, param):
-        jid = param.get_string()
+        jid = JID.from_string(param.get_string())
         selected_contact = self._client.get_module('Contacts').get_contact(jid)
         if selected_contact.is_gateway:
             # Check for transport users in roster and warn about removing the
@@ -330,7 +331,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             # This is a group row
             return
 
-        jid = self._store[iter_][Column.JID_OR_GROUP]
+        jid = JID.from_string(self._store[iter_][Column.JID_OR_GROUP])
         app.window.add_chat(self._account, jid, 'contact', select=True)
 
     def _on_roster_button_press_event(self, treeview, event):
@@ -353,6 +354,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         if event.button == 3:  # right click
             self._show_contact_menu(jid, treeview, event)
 
+        jid = JID.from_string(jid)
         if event.button == 2:  # middle click
             app.window.add_chat(self._account, jid, 'contact', select=True)
 

@@ -18,6 +18,8 @@ import logging
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+from nbxmpp import JID
+
 from gajim.common import app
 from gajim.common.i18n import _
 
@@ -154,5 +156,5 @@ class AdhocMUC(Gtk.ApplicationWindow):
         }
 
         app.interface.create_groupchat(self.account, room_jid, config)
-        app.window.select_chat(self.account, room_jid)
+        app.window.select_chat(self.account, JID.from_string(room_jid))
         self.destroy()

@@ -19,6 +19,8 @@ import re
 from gi.repository import GObject
 from gi.repository import Gtk
 
+from nbxmpp import JID
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
@@ -255,7 +257,8 @@ class SearchView(Gtk.Box):
 
         # Wrong chat or no control opened
         # TODO: type 'pm' is KindConstant.CHAT_MSG_RECV, too
-        app.window.add_chat(row.account, row.jid, row.type, select=True)
+        jid = JID.from_string(row.jid)
+        app.window.add_chat(row.account, jid, row.type, select=True)
         control = app.window.get_active_control()
         control.scroll_to_message(row.log_line_id, row.timestamp)
 

@@ -227,7 +227,7 @@ def on_open_event(_action, param):
 def on_mark_as_read(_action, param):
     dict_ = param.unpack()
     account, jid = dict_['account'], dict_['jid']
-    app.window.mark_as_read(account, jid)
+    app.window.mark_as_read(account, JID.from_string(jid))
 
 # Other Actions
 

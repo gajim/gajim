@@ -667,11 +667,11 @@ class Interface:
             client.get_module('MUC').join(
                 jid, nick=nickname, password=password)
 
-        app.window.add_group_chat(account, str(jid), select=True)
+        app.window.add_group_chat(account, jid, select=True)
 
     def start_chat_from_jid(self, account, jid, message=None):
         if app.window.chat_exists(account, jid):
-            app.window.select_chat(account, jid)
+            app.window.select_chat(account, JID.from_string(jid))
             if message is not None:
                 control = app.window.get_control(account, jid)
                 control.msg_textview.insert_text(message)
@@ -685,7 +685,7 @@ class Interface:
         if app.window.chat_exists(event.account, event.jid):
             return
 
-        app.window.add_group_chat(event.account, str(event.jid))
+        app.window.add_group_chat(event.account, event.jid)
 
     @staticmethod
     def create_account(account,

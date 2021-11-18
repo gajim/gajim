@@ -20,6 +20,7 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
 
+from nbxmpp import JID
 from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import TimeoutStanzaError
@@ -319,6 +320,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._disco_info(row)
             return
 
+        jid = JID.from_string(row.jid)
         if row.groupchat:
             if not app.account_is_available(row.account):
                 self._show_error_page(_('You can not join a group chat '
@@ -326,17 +328,17 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 return
 
             self.ready_to_destroy = True
-            if app.window.chat_exists(row.account, row.jid):
-                app.window.select_chat(row.account, row.jid)
+            if app.window.chat_exists(row.account, jid):
+                app.window.select_chat(row.account, jid)
                 self.destroy()
                 return
 
             self.ready_to_destroy = False
             self._redirected = False
-            self._disco_muc(row.account, row.jid, request_vcard=row.new)
+            self._disco_muc(row.account, jid, request_vcard=row.new)
 
         else:
-            app.window.add_chat(row.account, row.jid, 'contact', select=True)
+            app.window.add_chat(row.account, jid, 'contact', select=True)
             self.ready_to_destroy = True
             self.destroy()
 
