@@ -459,7 +459,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     @staticmethod
     def _add_to_roster(_action, param):
         _workspace, account, jid = param.unpack()
-        open_window('AddContact', account=account, jid=jid)
+        open_window('AddContact', account=account, jid=JID.from_string(jid))
 
     def show_app_page(self) -> None:
         self._account_side_bar.unselect_all()

@@ -12,10 +12,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Tuple
+from typing import Optional
+from typing import Any
+
 import logging
 
 from gi.repository import Gtk
 
+from nbxmpp import JID
 from nbxmpp import Namespace
 from nbxmpp.errors import is_error
 
@@ -37,7 +42,10 @@ log = logging.getLogger('gajim.gui.add_contact')
 
 
 class AddContact(Assistant):
-    def __init__(self, account=None, jid=None, nick=None):
+    def __init__(self,
+                 account: Optional[str] = None,
+                 jid: Optional[JID] = None,
+                 nick: str = None):
         Assistant.__init__(self)
         self.account = account
         self.jid = jid
@@ -106,7 +114,7 @@ class AddContact(Assistant):
             open_window('GroupchatJoin', account=account, jid=jid)
             self.destroy()
 
-    def _start_disco(self):
+    def _start_disco(self) -> None:
         self._result = None
         self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
 
@@ -185,7 +193,7 @@ class AddContact(Assistant):
 
 
 class Address(Page):
-    def __init__(self, account, jid):
+    def __init__(self, account: Optional[str], jid: Optional[JID]) -> None:
         Page.__init__(self)
         self.title = _('Add Contact')
 
@@ -227,10 +235,10 @@ class Address(Page):
     def get_default_button(self):
         return 'next'
 
-    def get_account_and_jid(self):
+    def get_account_and_jid(self) -> Tuple[Optional[str], Any]:
         return self._account, self._ui.address_entry.get_text()
 
-    def focus(self):
+    def focus(self) -> None:
         self._ui.address_entry.grab_focus()
 
     def _on_account_changed(self, combobox):
@@ -274,7 +282,7 @@ class Address(Page):
         self.complete = self._validate_address(address)
         self.update_page_complete()
 
-    def _validate_address(self, address):
+    def _validate_address(self, address: str) -> bool:
         if not address:
             self._show_icon(False)
             return False
@@ -339,7 +347,7 @@ class Contact(Page):
         self._ui.message_entry.set_text(get_subscription_request_msg(account))
         self._ui.contact_grid.set_sensitive(True)
 
-    def _update_groups(self, account):
+    def _update_groups(self, account: str) -> None:
         self._ui.group_combo.get_model().clear()
         client = app.get_client(account)
         for group in client.get_module('Roster').get_groups():

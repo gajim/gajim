@@ -34,7 +34,7 @@ from gajim.gui.util import get_app_window
 
 
 def on_add_contact_jid(_action, param):
-    jid = param.get_string()
+    jid = JID.from_string(param.get_string())
     open_window('AddContact', account=None, jid=jid)
 
 
@@ -112,6 +112,8 @@ def on_create_gc(_action, param):
 
 def on_add_contact(_action, param):
     account, jid = param.get_strv()
+    if jid is not None:
+        jid = JID.from_string(jid)
     open_window('AddContact', account=account or None, jid=jid or None)
 
 

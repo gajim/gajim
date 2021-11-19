@@ -17,6 +17,8 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
+from nbxmpp import JID
+
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
@@ -96,6 +98,7 @@ class NotificationManager(Gtk.ListBox):
         jid = param.get_string()
         row = self._get_notification_row(jid)
         self._client.get_module('Presence').subscribed(jid)
+        jid = JID.from_string(jid)
         contact = self._client.get_module('Contacts').get_contact(jid)
         if not contact.is_in_roster:
             open_window('AddContact', account=self._account,
