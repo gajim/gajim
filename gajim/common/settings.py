@@ -964,14 +964,14 @@ class Settings:
         except KeyError:
             return WORKSPACE_SETTINGS[setting]
 
-    def get_workspaces(self) -> None:
+    def get_workspaces(self) -> List[str]:
         workspace_order = app.settings.get_app_setting('workspace_order')
 
         def sort_workspaces(workspace_id):
             try:
                 return workspace_order.index(workspace_id)
             except ValueError:
-                # Handle the case that a workflow id is for some reason not
+                # Handle the case that a workspace id is for some reason not
                 # in the workspace order list
                 return 10000
 
@@ -979,7 +979,7 @@ class Settings:
         workspaces.sort(key=sort_workspaces)
         return workspaces
 
-    def add_workspace(self, name: str) -> None:
+    def add_workspace(self, name: str) -> str:
         id_ = str(uuid.uuid4())
         self._settings['workspaces'][id_] = {
             'name': name,
