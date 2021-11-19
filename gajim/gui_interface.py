@@ -674,6 +674,8 @@ class Interface:
             app.window.select_chat(account, JID.from_string(jid))
             if message is not None:
                 control = app.window.get_control(account, jid)
+                if control is None:
+                    return
                 control.msg_textview.insert_text(message)
             return
 

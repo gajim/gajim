@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+from typing import Generator
+
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gio
@@ -21,6 +24,7 @@ from nbxmpp import JID
 
 from gajim.common import app
 
+from .controls.base import BaseControl
 from .util import get_builder
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
@@ -62,7 +66,6 @@ class ChatPage(Gtk.Box):
         self._ui.filter_bar_toggle.connect(
             'toggled', self._on_filter_revealer_toggled)
 
-        self._active_control = None
         self._chat_list_stack = ChatListStack(
             self._chat_filter, self._ui.search_entry)
         self._chat_list_stack.connect('chat-selected', self._on_chat_selected)
@@ -79,6 +82,7 @@ class ChatPage(Gtk.Box):
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
+        self._active_control: Optional[BaseControl] = None
         self._startup_finished: bool = False
 
         self._add_actions()
@@ -136,6 +140,8 @@ class ChatPage(Gtk.Box):
         self.emit('chat-selected', workspace_id, account, jid)
 
         control = self.get_control(account, jid)
+        if control is None:
+            return
         if self._active_control != control:
             if self._active_control is not None:
                 self._active_control.set_control_active(False)
@@ -269,16 +275,17 @@ class ChatPage(Gtk.Box):
         self._chat_list_stack.remove_chats_for_account(account)
         self._chat_stack.remove_chats_for_account(account)
 
-    def get_control(self, account, jid):
+    def get_control(self, account: str, jid: JID) -> Optional[BaseControl]:
         return self._chat_stack.get_control(account, jid)
 
-    def get_active_control(self):
+    def get_active_control(self) -> Optional[BaseControl]:
         chat = self._chat_list_stack.get_selected_chat()
         if chat is None:
             return None
         return self.get_control(chat.account, chat.jid)
 
-    def get_controls(self, account=None):
+    def get_controls(self, account: Optional[str]
+                     ) -> Generator[BaseControl, None, None]:
         return self._chat_stack.get_controls(account)
 
     def hide_search(self) -> bool:

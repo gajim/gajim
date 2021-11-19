@@ -1,4 +1,5 @@
 from typing import Optional
+from typing import Generator
 
 import logging
 import os
@@ -18,6 +19,7 @@ from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.modules.bytestream import is_transfer_active
 
+from .controls.base import BaseControl
 from .adhoc import AdHocCommand
 from .account_side_bar import AccountSideBar
 from .app_side_bar import AppSideBar
@@ -47,7 +49,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         app.window = self
 
-        self._startup_finished = False
+        self._startup_finished: bool = False
 
         self._ui = get_builder('main.ui')
 
@@ -110,7 +112,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             app.interface.systray.connect_unread_changed(
                 self._chat_page.get_chat_list_stack())
 
-    def _prepare_window(self):
+    def _prepare_window(self) -> None:
         if app.settings.get('main_window_skip_taskbar'):
             self.set_property('skip-taskbar-hint', True)
 
@@ -468,17 +470,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 
-    def get_control(self, *args, **kwargs):
-        return self._chat_page.get_control(*args, **kwargs)
+    def get_control(self, account: str, jid: JID) -> Optional[BaseControl]:
+        return self._chat_page.get_control(account, jid)
 
-    def get_controls(self, *args, **kwargs):
-        return self._chat_page.get_controls(*args, **kwargs)
+    def get_controls(self, account: Optional[str] = None
+                     ) -> Generator[BaseControl, None, None]:
+        return self._chat_page.get_controls(account)
 
-    def get_active_control(self, *args, **kwargs):
-        return self._chat_page.get_active_control(*args, **kwargs)
+    def get_active_control(self) -> Optional[BaseControl]:
+        return self._chat_page.get_active_control()
 
-    def chat_exists(self, *args, **kwargs):
-        return self._chat_page.chat_exists(*args, **kwargs)
+    def chat_exists(self, account: str, jid: JID) -> bool:
+        return self._chat_page.chat_exists(account, jid)
 
     def get_total_unread_count(self) -> int:
         chat_list_stack = self._chat_page.get_chat_list_stack()

@@ -260,7 +260,8 @@ class SearchView(Gtk.Box):
         jid = JID.from_string(row.jid)
         app.window.add_chat(row.account, jid, row.type, select=True)
         control = app.window.get_active_control()
-        control.scroll_to_message(row.log_line_id, row.timestamp)
+        if control is not None:
+            control.scroll_to_message(row.log_line_id, row.timestamp)
 
     def set_focus(self):
         self._ui.search_entry.grab_focus()
