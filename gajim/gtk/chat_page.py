@@ -82,7 +82,7 @@ class ChatPage(Gtk.Box):
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
-        self._active_control: Optional[BaseControl] = None
+        self._currently_loaded_control: Optional[BaseControl] = None
         self._startup_finished: bool = False
 
         self._add_actions()
@@ -142,11 +142,11 @@ class ChatPage(Gtk.Box):
         control = self.get_control(account, jid)
         if control is None:
             return
-        if self._active_control != control:
-            if self._active_control is not None:
-                self._active_control.set_control_active(False)
+        if self._currently_loaded_control != control:
+            if self._currently_loaded_control is not None:
+                self._currently_loaded_control.set_control_active(False)
             control.set_control_active(True)
-        self._active_control = control
+        self._currently_loaded_control = control
 
     def _on_chat_unselected(self, _chat_list_stack):
         self._chat_stack.clear()
@@ -283,6 +283,9 @@ class ChatPage(Gtk.Box):
         if chat is None:
             return None
         return self.get_control(chat.account, chat.jid)
+
+    def get_currently_loaded_control(self) -> Optional[BaseControl]:
+        return self._currently_loaded_control
 
     def get_controls(self, account: Optional[str]
                      ) -> Generator[BaseControl, None, None]:

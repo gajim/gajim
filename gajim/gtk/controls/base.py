@@ -1100,12 +1100,14 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.conversation_view.add_file_transfer(transfer)
 
     def add_jingle_file_transfer(self, event):
-        control_selected = bool(self == app.window.get_active_control())
+        control_selected = bool(
+            self == app.window.get_currently_loaded_control())
         if self._scrolled_view.get_lower_complete() and control_selected:
             self.conversation_view.add_jingle_file_transfer(event)
 
     def add_call_message(self, event):
-        control_selected = bool(self == app.window.get_active_control())
+        control_selected = bool(
+            self == app.window.get_currently_loaded_control())
         if self._scrolled_view.get_lower_complete() and control_selected:
             self.conversation_view.add_call_message(event=event)
 
@@ -1125,7 +1127,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        control_selected = bool(self == app.window.get_active_control())
+        control_selected = bool(
+            self == app.window.get_currently_loaded_control())
         if self._scrolled_view.get_lower_complete() and control_selected:
             self.conversation_view.add_message(
                 text,
