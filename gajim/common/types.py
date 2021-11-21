@@ -23,6 +23,9 @@ from typing import Union
 from typing import TYPE_CHECKING
 
 from pathlib import Path
+
+from gi.repository import GdkPixbuf
+
 import nbxmpp
 from nbxmpp.protocol import JID
 from nbxmpp.structs import BookmarkData
@@ -63,9 +66,12 @@ PathTuple = Tuple[Optional[PathLocation], Path, Optional[PathType]]
 # Plugins
 PluginExtensionPoints = Dict[str, Tuple[Optional[Callable[..., None]],
                                         Optional[Callable[..., None]]]]
-EventHandlersDict = Dict[str, Tuple[int, Callable[['NetworkEvent'], Optional[bool]]]]
+EventHandlersDict = Dict[
+    str, Tuple[int, Callable[['NetworkEvent'], Optional[bool]]]]
 PluginEvents = List['NetworkEvent']
 
 SettingsT = Union['Settings']
 
 BookmarksDict = Dict[JID, BookmarkData]
+
+GdkPixbufType = Union[GdkPixbuf.Pixbuf, GdkPixbuf.PixbufAnimation]

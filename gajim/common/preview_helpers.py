@@ -285,12 +285,9 @@ def get_image_paths(uri: str, urlparts: ParseResult, size: int, orig_dir: Path,
 
     name_hash = hashlib.sha1(str(uri).encode()).hexdigest()
 
-    orig_filename = '%s_%s%s' % (web_stem, name_hash, extension)
+    orig_filename = f'{web_stem}_{name_hash}{extension}'
 
-    thumb_filename = '%s_%s_thumb_%s%s' % (web_stem,
-                                           name_hash,
-                                           size,
-                                           extension)
+    thumb_filename = f'{web_stem}_{name_hash}_thumb_{size}{extension}'
 
     orig_path = orig_dir / orig_filename
     thumb_path = thumb_dir / thumb_filename

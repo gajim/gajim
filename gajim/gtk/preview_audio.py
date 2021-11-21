@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from pathlib import Path
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -26,12 +27,18 @@ log = logging.getLogger('gajim.gui.preview_audio')
 
 
 class AudioWidget(Gtk.Box):
-    def __init__(self, file_path):
+    def __init__(self, file_path: Path) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL,
                          spacing=6)
-        self._playbin = None
-        self._query = None
-        self._has_timeout = False
+        self._playbin = Gst.ElementFactory.make('playbin', 'bin')
+        if self._playbin is None:
+            label = Gtk.Label(label=_('Audio preview is not available'))
+            self.add(label)
+            log.debug('Could not create GST playbin')
+            return
+
+        self._query = Gst.Query.new_position(Gst.Format.TIME)
+        self._has_timeout: bool = False
 
         self._build_audio_widget()
         self._setup_audio_player(file_path)
@@ -67,18 +74,13 @@ class AudioWidget(Gtk.Box):
         self.connect('destroy', self._on_destroy)
         self.show_all()
 
-    def _setup_audio_player(self, file_path):
-        self._playbin = Gst.ElementFactory.make('playbin', 'bin')
-        if self._playbin is None:
-            log.debug('Could not create GST playbin')
-            return
+    def _setup_audio_player(self, file_path: Path) -> None:
         self._playbin.set_property('uri', f'file://{file_path}')
         state_return = self._playbin.set_state(Gst.State.PAUSED)
         if state_return == Gst.StateChangeReturn.FAILURE:
             log.debug('Could not setup GST playbin')
             return
 
-        self._query = Gst.Query.new_position(Gst.Format.TIME)
         bus = self._playbin.get_bus()
         bus.add_signal_watch()
         bus.connect('message', self._on_bus_message)
@@ -111,11 +113,11 @@ class AudioWidget(Gtk.Box):
     def _on_destroy(self, _widget):
         self._playbin.set_state(Gst.State.NULL)
 
-    def _get_paused(self):
+    def _get_paused(self) -> bool:
         _, state, _ = self._playbin.get_state(20)
         return state == Gst.State.PAUSED
 
-    def _set_pause(self, paused):
+    def _set_pause(self, paused: bool) -> None:
         if paused:
             self._playbin.set_state(Gst.State.PAUSED)
             self._play_icon.set_from_icon_name(
@@ -127,7 +129,7 @@ class AudioWidget(Gtk.Box):
                 'media-playback-pause-symbolic',
                 Gtk.IconSize.BUTTON)
 
-    def _update_seek_bar(self):
+    def _update_seek_bar(self) -> bool:
         if self._get_paused():
             self._has_timeout = False
             return False
@@ -138,7 +140,7 @@ class AudioWidget(Gtk.Box):
         return True
 
     @staticmethod
-    def _format_audio_timestamp(_widget, ns):
+    def _format_audio_timestamp(_widget: Gtk.Widget, ns: int) -> str:
         seconds = ns / 1000000000
         minutes = seconds / 60
         hours = minutes / 60

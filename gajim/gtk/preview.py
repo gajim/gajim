@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import logging
 import shutil
 import os
@@ -26,9 +28,11 @@ from gajim.common import app
 from gajim.common.helpers import open_file
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
+from gajim.common.preview import Preview
 from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.preview_helpers import contains_audio_streams
 from gajim.common.preview_helpers import get_icon_for_mime_type
+from gajim.common.types import GdkPixbufType
 
 from .dialogs import ErrorDialog
 from .filechoosers import FileSaveDialog
@@ -42,10 +46,10 @@ log = logging.getLogger('gajim.gui.preview')
 
 
 class PreviewWidget(Gtk.Box):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self)
         self.account = account
-        self._preview = None
+        self._preview: Optional[Preview] = None
 
         if app.settings.get('use_kib_mib'):
             self._units = GLib.FormatSizeFlags.IEC_UNITS
@@ -57,12 +61,12 @@ class PreviewWidget(Gtk.Box):
         self.add(self._ui.preview_box)
         self.show_all()
 
-    def get_text(self):
+    def get_text(self) -> str:
         if self._preview is None:
             return ''
         return self._preview.uri
 
-    def update(self, preview, data):
+    def update(self, preview: Preview, data: Optional[GdkPixbufType]) -> None:
         self._preview = preview
 
         if preview.is_geo_uri:
@@ -114,7 +118,8 @@ class PreviewWidget(Gtk.Box):
             self._ui.download_button.hide()
             self._ui.open_folder_button.show()
             self._ui.save_as_button.show()
-            if (preview.is_audio and app.is_installed('GST') and
+            if (preview.orig_path is not None and preview.is_audio and
+                    app.is_installed('GST') and
                     contains_audio_streams(preview.orig_path)):
                 self._ui.image_button.hide()
                 audio_widget = AudioWidget(preview.orig_path)
@@ -223,7 +228,7 @@ class PreviewWidget(Gtk.Box):
 
     def _on_content_button_clicked(self, _button):
         action = app.settings.get('preview_leftclick_action')
-        method = getattr(self, '_on_%s' % action)
+        method = getattr(self, f'_on_{action}')
         method(None)
 
     def _on_button_press_event(self, _button, event):

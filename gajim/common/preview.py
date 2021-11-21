@@ -23,7 +23,6 @@ from pathlib import Path
 from urllib.parse import urlparse
 from urllib.parse import ParseResult
 
-from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Soup
@@ -45,6 +44,7 @@ from gajim.common.preview_helpers import get_previewable_mime_types
 from gajim.common.preview_helpers import get_image_paths
 from gajim.common.preview_helpers import guess_mime_type
 from gajim.common.preview_helpers import pixbuf_from_data
+from gajim.common.types import GdkPixbufType
 
 log = logging.getLogger('gajim.c.preview')
 
@@ -55,7 +55,7 @@ ALLOWED_MIME_TYPES = mime_types.union(PREVIEWABLE_MIME_TYPES)
 
 
 class Preview:
-    def __init__(self, 
+    def __init__(self,
                  uri: str,
                  urlparts: Optional[ParseResult],
                  orig_path: Optional[Path],
@@ -139,7 +139,7 @@ class Preview:
             return False
         return True
 
-    def update_widget(self, data: Optional[GdkPixbuf.Pixbuf] = None) -> None:
+    def update_widget(self, data: Optional[GdkPixbufType] = None) -> None:
         self._widget.update(self, data)
 
 
