@@ -60,6 +60,7 @@ class StatusIcon(EventHelper):
         self._popup_menus = []
         self._hide_menuitem_added = False
         self._status_icon = None
+        self._use_libappindicator = app.settings.get('use_libappindicator')
 
         self._ui.sounds_mute_menuitem.set_active(
             not app.settings.get('sounds_on'))
@@ -86,7 +87,7 @@ class StatusIcon(EventHelper):
 
     def show_icon(self):
         if not self._status_icon:
-            if HAS_INDICATOR:
+            if HAS_INDICATOR and self._use_libappindicator:
                 self._status_icon = appindicator.Indicator.new(
                     'Gajim',
                     'dcraven-online',
@@ -112,7 +113,7 @@ class StatusIcon(EventHelper):
         self.update_icon()
 
     def hide_icon(self):
-        if HAS_INDICATOR:
+        if HAS_INDICATOR and self._use_libappindicator:
             self._status_icon.set_status(appindicator.IndicatorStatus.PASSIVE)
         else:
             self._status_icon.set_visible(False)
@@ -126,14 +127,14 @@ class StatusIcon(EventHelper):
         if not app.interface.systray_enabled:
             return
         if app.settings.get('trayicon') == 'always':
-            if HAS_INDICATOR:
+            if HAS_INDICATOR and self._use_libappindicator:
                 self._status_icon.set_status(
                     appindicator.IndicatorStatus.ACTIVE)
             else:
                 self._status_icon.set_visible(True)
         if count > 0:
             icon_name = 'dcraven-message-new'
-            if HAS_INDICATOR:
+            if HAS_INDICATOR and self._use_libappindicator:
                 self._status_icon.set_icon_full(icon_name, _('Pending Event'))
             else:
                 self._status_icon.set_visible(True)
@@ -141,7 +142,7 @@ class StatusIcon(EventHelper):
             return
 
         if app.settings.get('trayicon') == 'on_event':
-            if HAS_INDICATOR:
+            if HAS_INDICATOR and self._use_libappindicator:
                 self._status_icon.set_status(
                     appindicator.IndicatorStatus.PASSIVE)
             else:
@@ -149,7 +150,7 @@ class StatusIcon(EventHelper):
 
         show = get_global_show()
         icon_name = get_icon_name(show)
-        if HAS_INDICATOR:
+        if HAS_INDICATOR and self._use_libappindicator:
             self._status_icon.set_icon_full(icon_name, show)
             self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
         else:
