@@ -1017,7 +1017,7 @@ class Success(SuccessPage):
         self._save_config()
 
     def _set_badge_color(self, color):
-        css = '.badge { background-color: %s }' % color
+        css = '.badge { background-color: %s; font-size: 100%%; }' % color
         self._provider.load_from_data(bytes(css.encode()))
 
     def _save_config(self):
