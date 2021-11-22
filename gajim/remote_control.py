@@ -348,6 +348,7 @@ class GajimRemote(Server):
 
     def on_gc_message_received(self, obj):
         if not hasattr(obj, 'needs_highlight'):
+            # TODO:
             # event has not been handled at GUI level
             return
         self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
