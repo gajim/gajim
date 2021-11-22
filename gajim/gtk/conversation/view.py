@@ -212,7 +212,6 @@ class ConversationView(Gtk.ListBox):
                     log_line_id=None,
                     message_id=None,
                     stanza_id=None,
-                    correct_id=None,
                     display_marking=None,
                     additional_data=None,
                     marker=None,
@@ -220,10 +219,6 @@ class ConversationView(Gtk.ListBox):
 
         if not timestamp:
             timestamp = time.time()
-
-        if correct_id is not None:
-            self.correct_message(correct_id, text)
-            return
 
         message = MessageRow(
             self._account,

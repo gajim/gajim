@@ -734,7 +734,6 @@ class GroupchatControl(BaseControl):
         self.add_message(event.msgtxt,
                          contact=event.properties.muc_nickname,
                          tim=event.properties.mam.timestamp,
-                         correct_id=event.correct_id,
                          message_id=event.properties.id,
                          stanza_id=event.stanza_id,
                          additional_data=event.additional_data,
@@ -757,7 +756,6 @@ class GroupchatControl(BaseControl):
                              contact=event.properties.muc_nickname,
                              tim=event.properties.timestamp,
                              displaymarking=event.displaymarking,
-                             correct_id=event.correct_id,
                              message_id=event.properties.id,
                              stanza_id=stanza_id,
                              additional_data=event.additional_data)
@@ -771,7 +769,6 @@ class GroupchatControl(BaseControl):
                     contact='',
                     tim=None,
                     displaymarking=None,
-                    correct_id=None,
                     message_id=None,
                     stanza_id=None,
                     additional_data=None,
@@ -796,7 +793,6 @@ class GroupchatControl(BaseControl):
                                 tim,
                                 notify,
                                 displaymarking=displaymarking,
-                                correct_id=correct_id,
                                 message_id=message_id,
                                 stanza_id=stanza_id,
                                 additional_data=additional_data)

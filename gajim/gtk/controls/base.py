@@ -296,6 +296,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         getattr(self, method_name)(event)
 
     def _on_message_updated(self, event):
+        if hasattr(event, 'correct_id'):
+            self.conversation_view.correct_message(
+                event.correct_id, event.msgtxt)
+            return
+
         if event.properties.is_moderation:
             text = get_retraction_text(
                 self.account,
@@ -1121,7 +1126,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                     msg_log_id=None,
                     message_id=None,
                     stanza_id=None,
-                    correct_id=None,
                     additional_data=None):
 
         if additional_data is None:
@@ -1138,7 +1142,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 display_marking=displaymarking,
                 message_id=message_id,
                 stanza_id=stanza_id,
-                correct_id=correct_id,
                 log_line_id=msg_log_id,
                 additional_data=additional_data)
 

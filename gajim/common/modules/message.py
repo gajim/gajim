@@ -180,16 +180,29 @@ class Message(BaseModule):
             'resource': resource,
             'stanza_id': stanza_id,
             'unique_id': stanza_id or message_id,
-            'correct_id': parse_correction(properties),
             'msgtxt': msgtxt,
             'session': session,
             'delayed': properties.user_timestamp is not None,
-            'gc_control': None,
-            'popup': False,
             'msg_log_id': None,
             'displaymarking': displaymarking,
             'properties': properties,
         }
+
+        correct_id = parse_correction(properties)
+        if correct_id is not None:
+            event_attr.update({
+                'correct_id': correct_id,
+            })
+            event = NetworkEvent('message-updated', **event_attr)
+            if should_log(self._account, jid):
+                app.storage.archive.store_message_correction(
+                    self._account,
+                    jid,
+                    correct_id,
+                    msgtxt,
+                    properties.type.is_groupchat)
+            app.nec.push_incoming_event(event)
+            return
 
         if type_.is_groupchat:
             if not msgtxt:
@@ -379,6 +392,15 @@ class Message(BaseModule):
             return
 
         if message.message is None:
+            return
+
+        if message.correct_id is not None:
+            app.storage.archive.store_message_correction(
+                self._account,
+                message.jid,
+                message.correct_id,
+                message.message,
+                message.is_groupchat)
             return
 
         app.storage.archive.insert_into_logs(

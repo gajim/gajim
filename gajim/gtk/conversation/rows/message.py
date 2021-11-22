@@ -70,7 +70,6 @@ class MessageRow(BaseRow):
         self.kind = kind
         self.name = name or ''
         self.text = text
-
         self.additional_data = additional_data
 
         self._contact = contact
@@ -78,13 +77,11 @@ class MessageRow(BaseRow):
         if contact is not None and contact.is_groupchat:
             self._is_groupchat = True
 
-        self._corrections = []
         self._has_receipt = marker == 'received'
         self._has_displayed = marker == 'displayed'
 
-        if additional_data is not None:
-            if additional_data.get_value('retracted', 'by') is not None:
-                self.get_style_context().add_class('retracted-message')
+        # Keep original text for message correction
+        self._original_text: str = text
 
         is_previewable = app.interface.preview_manager.is_previewable(
             text, additional_data)
@@ -143,6 +140,21 @@ class MessageRow(BaseRow):
                 self._meta_box.add(display_marking_label)
 
         self._message_icons = MessageIcons()
+
+        if additional_data is not None:
+            if additional_data.get_value('retracted', 'by') is not None:
+                self.get_style_context().add_class('retracted-message')
+
+            correction_original = additional_data.get_value(
+                'corrected', 'original_text')
+            if correction_original is not None:
+                self._original_text = correction_original
+                self._message_icons.set_correction_icon_visible(True)
+                original_text = reduce_chars_newlines(
+                    correction_original, max_chars=150, max_lines=10)
+                self._message_icons.set_correction_tooltip(
+                    _('Message corrected. Original message:'
+                      '\n%s') % original_text)
 
         if error is not None:
             self.set_error(to_user_string(error))
@@ -326,7 +338,6 @@ class MessageRow(BaseRow):
         self.get_style_context().add_class('retracted-message')
 
     def set_correction(self, text: str) -> None:
-        self._corrections.append(self._message_widget.get_text())
         result = process(text)
         self._message_widget.add_content(result)
 
@@ -334,11 +345,10 @@ class MessageRow(BaseRow):
         self._message_icons.set_receipt_icon_visible(False)
         self._message_icons.set_correction_icon_visible(True)
 
-        corrections = '\n'.join(line for line in self._corrections)
-        corrections = reduce_chars_newlines(
-            corrections, max_chars=150, max_lines=10)
+        original_text = reduce_chars_newlines(
+            self._original_text, max_chars=150, max_lines=10)
         self._message_icons.set_correction_tooltip(
-            _('Message corrected. Original message:\n%s') % corrections)
+            _('Message corrected. Original message:\n%s') % original_text)
 
     def set_error(self, tooltip):
         self._message_icons.set_error_icon_visible(True)

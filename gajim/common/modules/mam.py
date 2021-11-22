@@ -257,6 +257,33 @@ class MAM(BaseModule):
                 return
             stanza_id = message_id
 
+        event_attr = {
+            'account': self._account,
+            'jid': str(properties.jid.bare),
+            'msgtxt': properties.body,
+            'properties': properties,
+            'additional_data': additional_data,
+            'unique_id': properties.id,
+            'stanza_id': stanza_id,
+            'archive_jid': properties.mam.archive,
+            'kind': kind,
+        }
+
+        correct_id = parse_correction(properties)
+        if correct_id is not None:
+            event_attr.update({
+                'correct_id': correct_id,
+            })
+            app.nec.push_incoming_event(
+                NetworkEvent('message-updated', **event_attr))
+            app.storage.archive.store_message_correction(
+                self._account,
+                properties.jid.bare,
+                correct_id,
+                properties.body,
+                properties.type.is_groupchat)
+            return
+
         app.storage.archive.insert_into_logs(
             self._account,
             with_,
@@ -269,18 +296,7 @@ class MAM(BaseModule):
             message_id=properties.id)
 
         app.nec.push_incoming_event(
-            NetworkEvent('mam-message-received',
-                         account=self._account,
-                         additional_data=additional_data,
-                         correct_id=parse_correction(properties),
-                         stanza_id=stanza_id,
-                         archive_jid=properties.mam.archive,
-                         msgtxt=properties.body,
-                         properties=properties,
-                         kind=kind,
-                         jid=str(properties.jid.bare)
-                         )
-        )
+            NetworkEvent('mam-message-received', **event_attr))
 
     def _is_valid_request(self, properties):
         valid_id = self._mam_query_ids.get(properties.mam.archive, None)

@@ -29,6 +29,7 @@ import logging
 import sqlite3 as sqlite
 from collections import namedtuple
 
+from nbxmpp import JID
 from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
@@ -431,7 +432,7 @@ class MessageArchiveStorage(SqliteStorage):
                           KindConstant.ERROR])
 
         sql = '''
-            SELECT contact_name, time, kind, message, stanza_id,
+            SELECT contact_name, time, kind, message, stanza_id, message_id,
             additional_data
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
@@ -922,6 +923,51 @@ class MessageArchiveStorage(SqliteStorage):
                      'archive-jid: %s, account: %s', stanza_id, origin_id, archive_jid, account_id)
             return True
         return False
+
+    @timeit
+    def store_message_correction(self,
+                                 account: str,
+                                 jid: JID,
+                                 correct_id: str,
+                                 corrected_text: str,
+                                 is_groupchat: bool) -> None:
+        type_ = JIDConstant.NORMAL_TYPE
+        if is_groupchat:
+            type_ = JIDConstant.ROOM_TYPE
+
+        jid_id = self.get_jid_id(str(jid), type_=type_)
+        account_id = self.get_account_id(account)
+        sql = '''
+            SELECT log_line_id, message, additional_data
+            FROM logs
+            WHERE +jid_id = ?
+            AND account_id = ?
+            AND message_id = ?
+            '''
+        row = self._con.execute(
+            sql, (jid_id, account_id, correct_id)).fetchone()
+        if row is None:
+            return
+
+        if row.additional_data is None:
+            additional_data = AdditionalDataDict()
+        else:
+            additional_data = row.additional_data
+
+        original_text = additional_data.get_value(
+            'corrected', 'original_text')
+        if original_text is None:
+            # Only set original_text for the first correction
+            additional_data.set_value(
+                'corrected', 'original_text', row.message)
+        serialized_dict = json.dumps(additional_data.data)
+
+        sql = '''
+            UPDATE logs SET message = ?, additional_data = ?
+            WHERE log_line_id = ?
+            '''
+        self._con.execute(
+            sql, (corrected_text, serialized_dict, row.log_line_id))
 
     @timeit
     def update_additional_data(self,

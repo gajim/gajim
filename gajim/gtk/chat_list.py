@@ -358,6 +358,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             if event.properties.stanza_id:
                 stanza_id = event.properties.stanza_id.id
             row.set_stanza_id(stanza_id)
+        row.set_message_id(event.unique_id)
         row.set_message_text(
             event.msgtxt, additional_data=event.additional_data)
 
@@ -368,6 +369,10 @@ class ChatList(Gtk.ListBox, EventHelper):
         row = self._chats.get((event.account, event.jid))
         if row is None:
             return
+
+        if hasattr(event, 'correct_id'):
+            if event.correct_id == row.message_id:
+                row.set_message_text(event.msgtxt)
 
         if event.properties.is_moderation:
             if event.properties.moderation.stanza_id == row.stanza_id:
@@ -483,6 +488,7 @@ class ChatRow(Gtk.ListBoxRow):
         self.contact_name: str = self.contact.name
         self.timestamp: int = 0
         self.stanza_id: Optional[str] = None
+        self.message_id: Optional[str] = None
         self._unread_count: int = 0
         self._pinned: bool = pinned
 
@@ -542,6 +548,7 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.timestamp_label.set_text(uf_timestamp)
 
             self.stanza_id = line.stanza_id
+            self.message_id = line.message_id
 
         if line.kind in (KindConstant.FILE_TRANSFER_INCOMING,
                          KindConstant.FILE_TRANSFER_OUTGOING):
@@ -684,6 +691,9 @@ class ChatRow(Gtk.ListBoxRow):
 
     def set_stanza_id(self, stanza_id: str) -> None:
         self.stanza_id = stanza_id
+
+    def set_message_id(self, message_id: str) -> None:
+        self.message_id = message_id
 
     def update_time(self) -> None:
         if self.timestamp == 0:

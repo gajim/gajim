@@ -412,7 +412,6 @@ class ChatControl(BaseControl):
         self.add_message(event.msgtxt,
                          kind,
                          tim=event.properties.mam.timestamp,
-                         correct_id=event.correct_id,
                          message_id=event.properties.id,
                          stanza_id=event.stanza_id,
                          additional_data=event.additional_data,
@@ -433,7 +432,6 @@ class ChatControl(BaseControl):
                          msg_log_id=event.msg_log_id,
                          message_id=event.properties.id,
                          stanza_id=event.stanza_id,
-                         correct_id=event.correct_id,
                          additional_data=event.additional_data)
 
         if kind == 'outgoing':
@@ -460,12 +458,16 @@ class ChatControl(BaseControl):
             self.msg_textview.get_style_context().remove_class(
                 'gajim-msg-correcting')
 
+        if event.correct_id:
+            self.conversation_view.correct_message(
+                event.correct_id, event.message)
+            return
+
         self.add_message(event.message,
                          'outgoing',
                          tim=event.timestamp,
                          displaymarking=displaymarking,
                          message_id=message_id,
-                         correct_id=event.correct_id,
                          additional_data=event.additional_data)
 
     def _on_receipt_received(self, event):
@@ -606,7 +608,6 @@ class ChatControl(BaseControl):
                     displaymarking=None,
                     msg_log_id=None,
                     stanza_id=None,
-                    correct_id=None,
                     message_id=None,
                     additional_data=None,
                     notify=True):
@@ -629,7 +630,6 @@ class ChatControl(BaseControl):
                                 msg_log_id=msg_log_id,
                                 message_id=message_id,
                                 stanza_id=stanza_id,
-                                correct_id=correct_id,
                                 additional_data=additional_data)
 
     def shutdown(self):
