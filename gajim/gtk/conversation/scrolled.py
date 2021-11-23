@@ -12,8 +12,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from gi.repository import Gtk
 from gi.repository import GObject
+
+from .view import ConversationView
 
 
 class ScrolledView(Gtk.ScrolledWindow):
@@ -52,24 +56,24 @@ class ScrolledView(Gtk.ScrolledWindow):
         # horizontally under certain conditions (applies to GroupchatControl)
         self.get_hscrollbar().hide()
 
-        self._current_upper = 0
-        self._autoscroll = True
-        self._request_history_at_upper = None
-        self._upper_complete = False
-        self._lower_complete = False
-        self._requesting = None
+        self._current_upper: int = 0
+        self._autoscroll: bool = True
+        self._request_history_at_upper: Optional[float] = None
+        self._upper_complete: bool = False
+        self._lower_complete: bool = False
+        self._requesting: Optional[str] = None
 
         vadjustment = self.get_vadjustment()
         vadjustment.connect('notify::upper', self._on_adj_upper_changed)
         vadjustment.connect('notify::value', self._on_adj_value_changed)
 
-    def get_autoscroll(self):
+    def get_autoscroll(self) -> bool:
         return self._autoscroll
 
-    def get_view(self):
+    def get_view(self) -> ConversationView:
         return self.get_child().get_child()
 
-    def reset(self):
+    def reset(self) -> None:
         self._current_upper = 0
         self._request_history_at_upper = None
         self._upper_complete = False
@@ -77,14 +81,14 @@ class ScrolledView(Gtk.ScrolledWindow):
         self._requesting = None
         self.set_history_complete(True, False)
 
-    def set_history_complete(self, before, complete):
+    def set_history_complete(self, before: bool, complete: bool) -> None:
         if before:
             self._upper_complete = complete
             self.get_view().set_history_complete(complete)
         else:
             self._lower_complete = complete
 
-    def get_lower_complete(self):
+    def get_lower_complete(self) -> bool:
         return self._lower_complete
 
     def _on_adj_upper_changed(self, adj, *args):
