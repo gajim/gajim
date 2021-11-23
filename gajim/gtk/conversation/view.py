@@ -12,20 +12,31 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict
+from typing import Set
 from typing import Optional
+from typing import Generator
 
 import logging
 import time
 
+from datetime import datetime
 from datetime import timedelta
 
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 
+from nbxmpp.errors import StanzaError
+from nbxmpp.modules.security_labels import Displaymarking
+
 from gajim.common import app
+from gajim.common.client import Client
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from .rows.read_marker import ReadMarkerRow
 from .rows.scroll_hint import ScrollHintRow
@@ -39,6 +50,8 @@ from .rows.file_transfer_jingle import FileTransferJingleRow
 from .rows.muc_subject import MUCSubject
 from .rows.muc_join_left import MUCJoinLeft
 from .rows.muc_user_status import MUCUserStatus
+
+from ..types import ConversationRowType
 from ..util import scroll_to_end
 
 log = logging.getLogger('gajim.gui.conversation_view')
@@ -75,24 +88,24 @@ class ConversationView(Gtk.ListBox):
         self.set_sort_func(self._sort_func)
         self.set_filter_func(self._filter_func)
         self._account = account
-        self._client = None
+        self._client: Optional[Client] = None
         if account is not None:
             self._client = app.get_client(account)
         self._contact = contact
 
-        self.encryption_enabled = False
-        self.autoscroll = True
-        self.locked = False
+        self.encryption_enabled: bool = False
+        self.autoscroll: bool = True
+        self.locked: bool = False
 
         # Keeps track of the number of rows shown in ConversationView
-        self._row_count = 0
-        self._max_row_count = 100
+        self._row_count: int = 0
+        self._max_row_count: int = 100
 
         # Keeps track of date rows we have added to the list
-        self._active_date_rows = set()
+        self._active_date_rows: Set[datetime] = set()
 
         # message_id -> row mapping
-        self._message_id_row_map = {}
+        self._message_id_row_map: Dict[str, MessageRow] = {}
 
         app.settings.connect_signal('print_join_left',
                                     self._on_contact_setting_changed,
@@ -111,31 +124,31 @@ class ConversationView(Gtk.ListBox):
         self._scroll_hint_row = ScrollHintRow(self._account)
         self.add(self._scroll_hint_row)
 
-    def lock(self):
+    def lock(self) -> None:
         self.locked = True
 
-    def unlock(self):
+    def unlock(self) -> None:
         self.locked = False
 
-    def clear(self):
+    def clear(self) -> None:
         for row in self.get_children()[2:]:
             if row.type == 'read_marker':
                 continue
             self.remove(row)
         self._reset_conversation_view()
 
-    def _reset_conversation_view(self):
+    def _reset_conversation_view(self) -> None:
         self._row_count = 0
         self._active_date_rows = set()
         self._message_id_row_map = {}
 
-    def get_first_message_row(self):
+    def get_first_message_row(self) -> Optional[MessageRow]:
         for row in self.get_children():
             if isinstance(row, MessageRow):
                 return row
         return None
 
-    def get_last_message_row(self):
+    def get_last_message_row(self) -> Optional[MessageRow]:
         children = self.get_children()
         children.reverse()
         for row in children:
@@ -143,7 +156,7 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
-    def set_history_complete(self, complete):
+    def set_history_complete(self, complete: bool) -> None:
         self._scroll_hint_row.set_history_complete(complete)
 
     @staticmethod
@@ -160,11 +173,12 @@ class ConversationView(Gtk.ListBox):
 
         return True
 
-    def add_muc_subject(self, text, nick, date):
+    def add_muc_subject(self, text: str, nick: str, date: str) -> None:
         subject = MUCSubject(self._account, text, nick, date)
         self._insert_message(subject)
 
-    def add_muc_user_left(self, nick, reason, error=False):
+    def add_muc_user_left(self, nick: str, reason: str,
+                          error: bool = False) -> None:
         join_left = MUCJoinLeft('muc-user-left',
                                 self._account,
                                 nick,
@@ -172,21 +186,22 @@ class ConversationView(Gtk.ListBox):
                                 error=error)
         self._insert_message(join_left)
 
-    def add_muc_user_joined(self, nick):
+    def add_muc_user_joined(self, nick: str) -> None:
         join_left = MUCJoinLeft('muc-user-joined',
                                 self._account,
                                 nick)
         self._insert_message(join_left)
 
-    def add_muc_user_status(self, user_contact, is_self):
+    def add_muc_user_status(self, user_contact: GroupchatParticipant,
+                            is_self: bool) -> None:
         user_status = MUCUserStatus(self._account, user_contact, is_self)
         self._insert_message(user_status)
 
-    def add_info_message(self, text):
+    def add_info_message(self, text: str) -> None:
         message = InfoMessage(self._account, text)
         self._insert_message(message)
 
-    def add_file_transfer(self, transfer):
+    def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
         transfer_row = FileTransferRow(self._account, transfer)
         self._insert_message(transfer_row)
 
@@ -200,22 +215,22 @@ class ConversationView(Gtk.ListBox):
             self._account, self._contact, event=event, db_message=db_message)
         self._insert_message(call_row)
 
-    def add_command_output(self, text, is_error):
+    def add_command_output(self, text: str, is_error: bool) -> None:
         command_output_row = CommandOutputRow(self._account, text, is_error)
         self._insert_message(command_output_row)
 
     def add_message(self,
-                    text,
-                    kind,
-                    name,
-                    timestamp,
-                    log_line_id=None,
-                    message_id=None,
-                    stanza_id=None,
-                    display_marking=None,
-                    additional_data=None,
-                    marker=None,
-                    error=None):
+                    text: str,
+                    kind: str,
+                    name: str,
+                    timestamp: float,
+                    log_line_id: Optional[str] = None,
+                    message_id: Optional[str] = None,
+                    stanza_id: Optional[str] = None,
+                    display_marking: Optional[Displaymarking] = None,
+                    additional_data: Optional[AdditionalDataDict] = None,
+                    marker: Optional[str] = None,
+                    error: Optional[StanzaError] = None) -> None:
 
         if not timestamp:
             timestamp = time.time()
@@ -237,17 +252,19 @@ class ConversationView(Gtk.ListBox):
             log_line_id=log_line_id)
 
         if message.type == 'chat':
-            self._message_id_row_map[message_id] = message
+            if message_id is not None:
+                self._message_id_row_map[message_id] = message
 
             if kind == 'incoming':
                 self._read_marker_row.set_last_incoming_timestamp(
                     message.timestamp)
-            if marker is not None and marker == 'displayed':
+            if (marker is not None and marker == 'displayed'
+                    and message_id is not None):
                 self.set_read_marker(message_id)
 
         self._insert_message(message)
 
-    def _insert_message(self, message):
+    def _insert_message(self, message: MessageRow) -> None:
         self.add(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
@@ -258,7 +275,7 @@ class ConversationView(Gtk.ListBox):
 
         GLib.idle_add(message.queue_resize)
 
-    def _add_date_row(self, timestamp):
+    def _add_date_row(self, timestamp: datetime) -> None:
         start_of_day = get_start_of_day(timestamp)
         if start_of_day in self._active_date_rows:
             return
@@ -276,7 +293,7 @@ class ConversationView(Gtk.ListBox):
 
         row.set_merged(False)
 
-    def _check_for_merge(self, message):
+    def _check_for_merge(self, message: ConversationRowType) -> None:
         if message.type != 'chat':
             return
 
@@ -290,7 +307,7 @@ class ConversationView(Gtk.ListBox):
             if message.is_mergeable(ancestor):
                 message.set_merged(True)
 
-    def _find_ancestor(self, message):
+    def _find_ancestor(self, message: MessageRow) -> Optional[MessageRow]:
         index = message.get_index()
         while index != 0:
             index -= 1
@@ -311,7 +328,7 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
-    def _update_descendants(self, message):
+    def _update_descendants(self, message: MessageRow) -> None:
         index = message.get_index()
         while True:
             index += 1
@@ -334,7 +351,7 @@ class ConversationView(Gtk.ListBox):
                 self._update_descendants(row)
             return
 
-    def reduce_message_count(self, before):
+    def reduce_message_count(self, before: bool) -> bool:
         success = False
         row_count = len(self.get_children())
         while row_count > self._max_row_count:
@@ -349,7 +366,7 @@ class ConversationView(Gtk.ListBox):
 
         return success
 
-    def _reduce_messages_before(self):
+    def _reduce_messages_before(self) -> bool:
         success = False
 
         # We want to keep relevant DateRows when removing rows
@@ -375,11 +392,11 @@ class ConversationView(Gtk.ListBox):
 
         return success
 
-    def _reduce_messages_after(self):
+    def _reduce_messages_after(self) -> None:
         row = self.get_row_at_index(len(self.get_children()) - 1)
         self.remove(row)
 
-    def scroll_to_message_and_highlight(self, log_line_id):
+    def scroll_to_message_and_highlight(self, log_line_id: str) -> None:
         highlight_row = None
         for row in self.get_children():
             row.get_style_context().remove_class(
@@ -393,10 +410,10 @@ class ConversationView(Gtk.ListBox):
             # This scrolls the ListBox to the highlighted row
             highlight_row.grab_focus()
 
-    def _get_row_by_message_id(self, id_):
+    def _get_row_by_message_id(self, id_: str) -> Optional[MessageRow]:
         return self._message_id_row_map.get(id_)
 
-    def get_row_by_log_line_id(self, log_line_id):
+    def get_row_by_log_line_id(self, log_line_id: str) -> Optional[MessageRow]:
         for row in self.get_children():
             if row.log_line_id == log_line_id:
                 return row
@@ -410,16 +427,16 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
-    def iter_rows(self):
+    def iter_rows(self) -> Generator[ConversationRowType, None, None]:
         for row in self.get_children():
             yield row
 
-    def update_call_rows(self):
+    def update_call_rows(self) -> None:
         for row in self.get_children():
             if row.type == 'call':
                 row.update()
 
-    def set_read_marker(self, id_):
+    def set_read_marker(self, id_: str) -> None:
         if id_ is None:
             return
 
@@ -435,16 +452,16 @@ class ConversationView(Gtk.ListBox):
 
         self._read_marker_row.set_timestamp(timestamp)
 
-    def update_avatars(self):
+    def update_avatars(self) -> None:
         for row in self.get_children():
             if row.type == 'chat':
                 row.update_avatar()
 
-    def update_text_tags(self):
+    def update_text_tags(self) -> None:
         for row in self.get_children():
             row.update_text_tags()
 
-    def scroll_to_end(self, force=False):
+    def scroll_to_end(self, force: bool = False) -> None:
         if self.autoscroll or force:
             GLib.idle_add(scroll_to_end, self.get_parent().get_parent())
 
@@ -459,21 +476,21 @@ class ConversationView(Gtk.ListBox):
         if message_row is not None:
             message_row.set_retracted(text)
 
-    def show_receipt(self, id_):
+    def show_receipt(self, id_: str) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
             message_row.set_receipt()
 
-    def show_error(self, id_, error):
+    def show_error(self, id_: str, error: StanzaError) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
             message_row.set_error(to_user_string(error))
             message_row.set_merged(False)
 
-    def on_quote(self, text):
+    def on_quote(self, text: str) -> None:
         self.emit('quote', text)
 
-    def on_mention(self, name):
+    def on_mention(self, name: str) -> None:
         self.emit('mention', name)
 
     def accept_call(self, event):
