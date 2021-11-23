@@ -20,7 +20,7 @@ from .plain_widget import PlainWidget
 
 
 class MessageWidget(Gtk.Box):
-    def __init__(self, account, selectable=True):
+    def __init__(self, account: str, selectable: bool = True) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self._account = account
         self._selectable = selectable
@@ -59,7 +59,7 @@ class MessageWidget(Gtk.Box):
 
         self.show_all()
 
-    def clear(self):
+    def clear(self) -> None:
         self.foreach(self.remove)
 
     def update_text_tags(self, *args):

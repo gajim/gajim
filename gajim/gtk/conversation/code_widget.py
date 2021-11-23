@@ -28,7 +28,7 @@ log = logging.getLogger('gajim.gui.conversation.code_widget')
 
 
 class CodeWidget(Gtk.Box):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.set_vexpand(True)
         self.get_style_context().add_class('code-widget')
@@ -76,7 +76,7 @@ class CodeWidget(Gtk.Box):
         self._textview.print_code(code)
 
     @staticmethod
-    def _prepare_code(text):
+    def _prepare_code(text: str) -> Tuple[str, str]:
         code_start = text.partition('\n')[0]
         lang = None
         if len(code_start) > 3:
@@ -87,7 +87,7 @@ class CodeWidget(Gtk.Box):
 
 
 class CodeTextview(GtkSource.View):
-    def __init__(self):
+    def __init__(self) -> None:
         GtkSource.View.__init__(self)
         self.set_editable(False)
         self.set_cursor_visible(False)
@@ -107,7 +107,7 @@ class CodeTextview(GtkSource.View):
         if style_scheme is not None:
             self.get_buffer().set_style_scheme(style_scheme)
 
-    def set_language(self, language_string):
+    def set_language(self, language_string: Optional[str]) -> None:
         if language_string is None:
             lang = self._source_manager.get_language('python3')
         else:
@@ -116,12 +116,12 @@ class CodeTextview(GtkSource.View):
         self.get_buffer().set_language(lang)
         return lang.get_name()
 
-    def get_code(self):
+    def get_code(self) -> str:
         buffer_ = self.get_buffer()
         start, end = buffer_.get_bounds()
         return buffer_.get_text(start, end, False)
 
-    def print_code(self, code):
+    def print_code(self, code: str) -> None:
         self.set_show_line_numbers(True)
         buffer_ = self.get_buffer()
         buffer_.insert(buffer_.get_start_iter(), code)

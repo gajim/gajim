@@ -12,12 +12,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 
 from gi.repository import Gtk
 
+from .message_widget import MessageWidget
+
 
 class QuoteWidget(Gtk.Box):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self)
         self.set_vexpand(True)
         self.get_style_context().add_class('conversation-quote')
@@ -29,11 +32,12 @@ class QuoteWidget(Gtk.Box):
 
         self._account = account
 
-        self._message_widget = None
+        self._message_widget: Optional[MessageWidget] = None
 
-    def attach_message_widget(self, message_widget):
+    def attach_message_widget(self, message_widget: MessageWidget) -> None:
         # Purpose of this method is to prevent circular imports
         if self._message_widget is not None:
-            raise ValueError('QuoteWidget already has a MessageWidget attached')
+            raise ValueError(
+                'QuoteWidget already has a MessageWidget attached')
         self._message_widget = message_widget
         self.add(message_widget)
