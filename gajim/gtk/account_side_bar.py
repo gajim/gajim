@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List
+from typing import Optional
+
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
@@ -20,7 +23,7 @@ from gajim.common.i18n import _
 
 
 class AccountSideBar(Gtk.ListBox):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
         self.set_valign(Gtk.Align.END)
@@ -28,14 +31,14 @@ class AccountSideBar(Gtk.ListBox):
         self.get_style_context().add_class('account-sidebar')
         self.connect('row-activated', self._on_row_activated)
 
-        self._accounts = list(app.connections.keys())
+        self._accounts: List[str] = list(app.connections.keys())
         for account in self._accounts:
             self.add_account(account)
 
-    def add_account(self, account):
+    def add_account(self, account: str) -> None:
         self.add(Account(account))
 
-    def remove_account(self, account):
+    def remove_account(self, account: str) -> None:
         for row in self.get_children():
             if row.account == account:
                 row.destroy()
@@ -45,7 +48,7 @@ class AccountSideBar(Gtk.ListBox):
     def _on_row_activated(_listbox, row):
         app.window.show_account_page(row.account)
 
-    def activate_account_page(self, account):
+    def activate_account_page(self, account: str) -> None:
         row = self.get_selected_row()
         if row is not None and row.account == account:
             return
@@ -54,12 +57,12 @@ class AccountSideBar(Gtk.ListBox):
 
 
 class Account(Gtk.ListBoxRow):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.get_style_context().add_class('account-sidebar-item')
 
         self.account = account
-        self._account_class = None
+        self._account_class: Optional[str] = None
 
         selection_bar = Gtk.Box()
         selection_bar.set_size_request(6, -1)
@@ -83,7 +86,7 @@ class Account(Gtk.ListBoxRow):
         self.add(account_box)
         self.show_all()
 
-    def _update_account_color(self):
+    def _update_account_color(self) -> None:
         context = self._account_color_bar.get_style_context()
         if self._account_class is not None:
             context.remove_class(self._account_class)
@@ -91,12 +94,12 @@ class Account(Gtk.ListBoxRow):
         self._account_class = app.css_config.get_dynamic_class(self.account)
         context.add_class(self._account_class)
 
-    def update(self):
+    def update(self) -> None:
         self._update_account_color()
 
 
 class AccountAvatar(Gtk.Image):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.Image.__init__(self)
         self._account = account
 
@@ -115,7 +118,7 @@ class AccountAvatar(Gtk.Image):
     def _on_avatar_update(self, _contact, _signal_name):
         self._update_image()
 
-    def _update_image(self):
+    def _update_image(self) -> None:
         surface = self._contact.get_avatar(AvatarSize.ACCOUNT_SIDE_BAR,
                                            self.get_scale_factor(),
                                            style='round-corners')
