@@ -24,6 +24,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
+from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
 from gajim.common.helpers import open_file
 from gajim.common.i18n import _
@@ -130,7 +131,7 @@ class FileTransferJingleRow(BaseRow):
         app.ged.register_event_handler('jingle-ft-cancelled-received', ged.GUI1, self.process_event)
         # pylint: enable=line-too-long
 
-    def _reconstruct_transfer(self):
+    def _reconstruct_transfer(self) -> None:
         self._show_file_infos()
         if self._file_props is None:
             self._ui.transfer_action.set_text(_('File Transfer'))
@@ -154,7 +155,7 @@ class FileTransferJingleRow(BaseRow):
 
         self._ui.transfer_action.set_text(_('File Offered…'))
 
-    def _display_transfer_info(self, event_name):
+    def _display_transfer_info(self, event_name: str) -> None:
         if event_name == 'file-request-sent':
             self._ui.action_stack.set_visible_child_name('progress')
             self._ui.progress_label.set_text(_('Waiting…'))
@@ -162,7 +163,7 @@ class FileTransferJingleRow(BaseRow):
         self._ui.transfer_action.set_text(_('File Offered…'))
         self._show_file_infos()
 
-    def _show_file_infos(self):
+    def _show_file_infos(self) -> None:
         if self._file_props is None:
             self._ui.file_name.hide()
             self._ui.file_description.hide()
@@ -227,7 +228,7 @@ class FileTransferJingleRow(BaseRow):
         elif event.name == 'file-progress':
             self._update_progress(event.file_props)
 
-    def _update_progress(self, file_props):
+    def _update_progress(self, file_props: FileProp) -> None:
         self._ui.action_stack.set_visible_child_name('progress')
         self._ui.transfer_action.set_text(_('Transferring File…'))
 
@@ -267,7 +268,7 @@ class FileTransferJingleRow(BaseRow):
 
         self._ui.progress_bar.set_fraction(progress)
 
-    def _show_error(self, file_props):
+    def _show_error(self, file_props: FileProp) -> None:
         self._ui.action_stack.set_visible_child_name('error')
         self._ui.transfer_action.set_text(_('File Transfer Stopped'))
         if file_props.error == -1:
@@ -280,7 +281,7 @@ class FileTransferJingleRow(BaseRow):
         else:
             self._ui.error_label.set_text(_('An error occurred'))
 
-    def _show_completed(self):
+    def _show_completed(self) -> None:
         self._ui.action_stack.set_visible_child_name('complete')
         self._ui.transfer_action.set_text(_('File Transfer Completed'))
 

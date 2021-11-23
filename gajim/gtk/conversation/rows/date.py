@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
 
 from gi.repository import Gtk
 
@@ -19,7 +20,7 @@ from .base import BaseRow
 
 
 class DateRow(BaseRow):
-    def __init__(self, account, timestamp):
+    def __init__(self, account: str, timestamp: datetime) -> None:
         BaseRow.__init__(self, account, widget='label')
 
         self.set_selectable(False)

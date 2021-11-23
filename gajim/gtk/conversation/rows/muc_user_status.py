@@ -17,9 +17,10 @@ from datetime import datetime
 
 from gi.repository import Gtk
 
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
-from gajim.common import helpers
+from gajim.common.helpers import get_uf_show
 from gajim.common.styling import process
 
 from .widgets import SimpleLabel
@@ -31,7 +32,8 @@ from ...avatar import get_show_circle
 
 
 class MUCUserStatus(BaseRow):
-    def __init__(self, account, user_contact, is_self):
+    def __init__(self, account: str, user_contact: GroupchatParticipant,
+                 is_self: bool) -> None:
         BaseRow.__init__(self, account)
 
         self.type = 'muc-user-status'
@@ -73,9 +75,10 @@ class MUCUserStatus(BaseRow):
         self.show_all()
 
     @staticmethod
-    def _make_show_text(user_contact, is_self):
+    def _make_show_text(user_contact: GroupchatParticipant,
+                        is_self: bool) -> str:
         nick = user_contact.name
-        show = helpers.get_uf_show(user_contact.show.value)
+        show = get_uf_show(user_contact.show.value)
 
         if is_self:
             message = _('You are now {show}').format(show=show)

@@ -15,7 +15,6 @@
 import time
 from datetime import datetime
 
-from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
@@ -30,7 +29,7 @@ class MUCSubject(BaseRow):
 
     type = 'muc-subject'
 
-    def __init__(self, account, text, nick, date):
+    def __init__(self, account: str, text: str, nick: str, date: str) -> None:
         BaseRow.__init__(self, account)
 
         timestamp = time.time()

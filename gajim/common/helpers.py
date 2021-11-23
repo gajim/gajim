@@ -1159,7 +1159,7 @@ def validate_jid(jid, type_=None):
     raise ValueError('Not a %s JID' % type_)
 
 
-def to_user_string(error):
+def to_user_string(error: StanzaError) -> str:
     text = error.get_text(get_rfc5646_lang())
     if text:
         return text
@@ -1419,7 +1419,7 @@ def get_muc_context(jid):
     return 'public'
 
 
-def get_start_of_day(date_time):
+def get_start_of_day(date_time: datetime) -> datetime:
     return date_time.replace(hour=0,
                              minute=0,
                              second=0,

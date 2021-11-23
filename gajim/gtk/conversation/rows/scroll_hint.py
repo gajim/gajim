@@ -22,7 +22,7 @@ from .base import BaseRow
 
 
 class ScrollHintRow(BaseRow):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         BaseRow.__init__(self, account, widget='label')
         self.set_selectable(False)
         self.set_activatable(False)
@@ -40,7 +40,7 @@ class ScrollHintRow(BaseRow):
 
         self.set_history_complete(False)
 
-    def set_history_complete(self, complete):
+    def set_history_complete(self, complete: bool) -> None:
         if complete:
             self.label.set_text(_('There is no more history'))
         else:

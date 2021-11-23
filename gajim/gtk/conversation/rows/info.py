@@ -25,7 +25,7 @@ from .base import BaseRow
 
 
 class InfoMessage(BaseRow):
-    def __init__(self, account, text):
+    def __init__(self, account: str, text: str) -> None:
         BaseRow.__init__(self, account)
 
         self.type = 'info'

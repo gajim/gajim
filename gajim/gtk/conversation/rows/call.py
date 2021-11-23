@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import time
 from datetime import datetime
 
@@ -21,6 +23,7 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
+from gajim.common.jingle_session import JingleSession
 
 from .widgets import SimpleLabel
 from .base import BaseRow
@@ -46,7 +49,8 @@ class CallRow(BaseRow):
         self._contact = contact
         self._event = event
         self._db_message = db_message
-        self._session = None
+
+        self._session: Optional[JingleSession] = None
 
         if is_from_db:
             sid = db_message.additional_data.get_value('gajim', 'sid')
@@ -70,7 +74,7 @@ class CallRow(BaseRow):
 
         self.show_all()
 
-    def update(self):
+    def update(self) -> None:
         if self._event is None and self._session is None:
             return
 
@@ -90,7 +94,7 @@ class CallRow(BaseRow):
         else:
             self.get_parent().accept_call(self._session)
 
-    def _on_decline(self, button):
+    def _on_decline(self, _button):
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
@@ -99,7 +103,7 @@ class CallRow(BaseRow):
             self.get_parent().decline_call(self._session)
         self._session = None
 
-    def _add_history_call_widget(self):
+    def _add_history_call_widget(self) -> None:
         if self._db_message is not None:
             if self._db_message.kind == KindConstant.CALL_INCOMING:
                 contact = self._contact
@@ -141,7 +145,7 @@ class CallRow(BaseRow):
         self.grid.attach(content_box, 1, 1, 1, 1)
         self.show_all()
 
-    def _add_incoming_call_widget(self):
+    def _add_incoming_call_widget(self) -> None:
         self._call_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self._call_box.set_size_request(350, -1)

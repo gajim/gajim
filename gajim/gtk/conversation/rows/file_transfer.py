@@ -21,6 +21,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from .base import BaseRow
 
@@ -31,7 +32,7 @@ from ...util import format_eta
 
 
 class FileTransferRow(BaseRow, EventHelper):
-    def __init__(self, account, transfer):
+    def __init__(self, account: str, transfer: HTTPFileTransfer) -> None:
         BaseRow.__init__(self, account)
         EventHelper.__init__(self)
 
@@ -40,7 +41,7 @@ class FileTransferRow(BaseRow, EventHelper):
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
 
-        self._destroyed = False
+        self._destroyed: bool = False
 
         if app.settings.get('use_kib_mib'):
             self._units = GLib.FormatSizeFlags.IEC_UNITS

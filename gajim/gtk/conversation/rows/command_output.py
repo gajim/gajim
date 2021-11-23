@@ -25,7 +25,7 @@ from .base import BaseRow
 
 
 class CommandOutputRow(BaseRow):
-    def __init__(self, account, text, is_error):
+    def __init__(self, account: str, text: str, is_error: bool) -> None:
         BaseRow.__init__(self, account)
 
         self.type = 'command_output'

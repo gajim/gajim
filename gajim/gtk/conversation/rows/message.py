@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+from typing import Union
+
 from datetime import datetime
 from datetime import timedelta
 
@@ -19,15 +22,25 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
+import cairo
+
+from nbxmpp.errors import StanzaError
+from nbxmpp.modules.security_labels import Displaymarking
+
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import TRUST_SYMBOL_DATA
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.styling import process
+from gajim.common.styling import ParsingResult
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
@@ -37,28 +50,32 @@ from ..message_widget import MessageWidget
 from ...dialogs import InputDialog
 from ...dialogs import DialogButton
 from ...preview import PreviewWidget
+from ...types import ConversationRowType
 from ...util import format_fingerprint
 from ...util import get_cursor
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
+# TODO:
+ContactType = Union[BareContact, GroupchatContact, GroupchatParticipant]
+
 
 class MessageRow(BaseRow):
     def __init__(self,
-                 account,
-                 contact,
-                 message_id,
-                 stanza_id,
-                 timestamp,
-                 kind,
-                 name,
-                 text,
-                 additional_data=None,
-                 display_marking=None,
-                 marker=None,
-                 error=None,
-                 encryption_enabled=False,
-                 log_line_id=None):
+                 account: str,
+                 contact: ContactType,
+                 message_id: Optional[str],
+                 stanza_id: Optional[str],
+                 timestamp: float,
+                 kind: str,
+                 name: str,
+                 text: str,
+                 additional_data: Optional[AdditionalDataDict] = None,
+                 display_marking: Optional[Displaymarking] = None,
+                 marker: Optional[str] = None,
+                 error: Optional[StanzaError] = None,
+                 encryption_enabled: bool =False,
+                 log_line_id: Optional[str] = None) -> None:
 
         BaseRow.__init__(self, account)
         self.type = 'chat'
@@ -73,12 +90,13 @@ class MessageRow(BaseRow):
         self.additional_data = additional_data
 
         self._contact = contact
-        self._is_groupchat = False
+
+        self._is_groupchat: bool = False
         if contact is not None and contact.is_groupchat:
             self._is_groupchat = True
 
-        self._has_receipt = marker == 'received'
-        self._has_displayed = marker == 'displayed'
+        self._has_receipt: bool = marker == 'received'
+        self._has_displayed: bool = marker == 'displayed'
 
         # Keep original text for message correction
         self._original_text: str = text
@@ -192,10 +210,10 @@ class MessageRow(BaseRow):
 
         self.show_all()
 
-    def update_text_tags(self):
+    def update_text_tags(self) -> None:
         self._message_widget.update_text_tags()
 
-    def _check_for_highlight(self, content):
+    def _check_for_highlight(self, content: ParsingResult) -> None:
         needs_highlight = message_needs_highlight(
             content.text,
             self._contact.nickname,
@@ -204,7 +222,7 @@ class MessageRow(BaseRow):
             self.get_style_context().add_class(
                 'gajim-mention-highlight')
 
-    def _get_avatar(self, kind, name):
+    def _get_avatar(self, kind: str, name: str) -> Optional[cairo.Surface]:
         if self._contact is None:
             return None
 
@@ -229,10 +247,10 @@ class MessageRow(BaseRow):
     def _on_realize(event_box):
         event_box.get_window().set_cursor(get_cursor('pointer'))
 
-    def is_same_sender(self, message):
+    def is_same_sender(self, message: MessageRow) -> bool:
         return message.name == self.name
 
-    def is_same_encryption(self, message):
+    def is_same_encryption(self, message: MessageRow) -> bool:
         message_details = self._get_encryption_details(message.additional_data)
         own_details = self._get_encryption_details(self.additional_data)
         if message_details is None and own_details is None:
@@ -245,7 +263,7 @@ class MessageRow(BaseRow):
                 return True
         return False
 
-    def is_mergeable(self, message):
+    def is_mergeable(self, message: ConversationRowType) -> bool:
         if message.type != self.type:
             return False
         if not self.is_same_sender(message):

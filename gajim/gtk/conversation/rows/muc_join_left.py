@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import time
 from datetime import datetime
 
@@ -25,7 +27,9 @@ from .base import BaseRow
 
 
 class MUCJoinLeft(BaseRow):
-    def __init__(self, type_, account, nick, reason=None, error=False):
+    def __init__(self, type_: str, account: str, nick: str,
+                 reason: Optional[str] = None,
+                 error: bool = False):
         BaseRow.__init__(self, account)
 
         self.type = type_
@@ -64,8 +68,9 @@ class MUCJoinLeft(BaseRow):
         self.show_all()
 
     @staticmethod
-    def _make_left_message(nick, reason, error):
-        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+    def _make_left_message(nick: str, reason: Optional[str],
+                           error: bool) -> str:
+        reason = '' if reason is None else f': {reason}'
 
         if error:
             # Group Chat: User was kicked because of an server error: reason
@@ -78,5 +83,5 @@ class MUCJoinLeft(BaseRow):
         return message
 
     @staticmethod
-    def _make_join_message(nick):
+    def _make_join_message(nick: str) -> str:
         return _('%s has joined') % nick

@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from datetime import datetime
 
 from gi.repository import GLib
@@ -27,18 +29,18 @@ from ...util import wrap_with_event_box
 
 
 class BaseRow(Gtk.ListBoxRow):
-    def __init__(self, account, widget=None):
+    def __init__(self, account: str, widget: Optional[str] = None) -> None:
         Gtk.ListBoxRow.__init__(self)
         self._account = account
         self._client = app.get_client(account)
-        self.type = ''
-        self.timestamp = None
-        self.kind = None
-        self.name = None
-        self.message_id = None
-        self.log_line_id = None
-        self.text = ''
-        self._merged = False
+        self.type: str = ''
+        self.timestamp: datetime = datetime.fromtimestamp(0)
+        self.kind: Optional[str] = None
+        self.name: Optional[str] = None
+        self.message_id: Optional[str] = None
+        self.log_line_id: Optional[str] = None
+        self.text: str = ''
+        self._merged: bool = False
 
         self.get_style_context().add_class('conversation-row')
 
@@ -53,10 +55,10 @@ class BaseRow(Gtk.ListBoxRow):
             self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
     @property
-    def is_merged(self):
+    def is_merged(self) -> bool:
         return self._merged
 
-    def update_text_tags(self):
+    def update_text_tags(self) -> None:
         pass
 
     @staticmethod

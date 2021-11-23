@@ -43,7 +43,7 @@ class ReadMarkerRow(BaseRow):
         text = _('%s has read up to this point') % contact.name
         self.label.set_text(text)
 
-    def set_timestamp(self, timestamp):
+    def set_timestamp(self, timestamp: datetime) -> None:
         if timestamp < self._last_incoming_timestamp:
             return
 
@@ -53,6 +53,6 @@ class ReadMarkerRow(BaseRow):
         self.set_no_show_all(False)
         self.show_all()
 
-    def set_last_incoming_timestamp(self, timestamp):
+    def set_last_incoming_timestamp(self, timestamp: datetime) -> None:
         if timestamp > self._last_incoming_timestamp:
             self._last_incoming_timestamp = timestamp
