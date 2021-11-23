@@ -19,7 +19,6 @@ from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.modules.bytestream import is_transfer_active
 
-from .controls.base import BaseControl
 from .adhoc import AdHocCommand
 from .account_side_bar import AccountSideBar
 from .app_side_bar import AppSideBar
@@ -30,6 +29,7 @@ from .chat_list import ChatList
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
+from .types import ControlType
 from .util import get_builder
 from .util import resize_window
 from .util import restore_main_window_position
@@ -470,17 +470,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 
-    def get_control(self, account: str, jid: JID) -> Optional[BaseControl]:
+    def get_control(self, account: str, jid: JID) -> Optional[ControlType]:
         return self._chat_page.get_control(account, jid)
 
     def get_controls(self, account: Optional[str] = None
-                     ) -> Generator[BaseControl, None, None]:
+                     ) -> Generator[ControlType, None, None]:
         return self._chat_page.get_controls(account)
 
-    def get_active_control(self) -> Optional[BaseControl]:
+    def get_active_control(self) -> Optional[ControlType]:
         return self._chat_page.get_active_control()
 
-    def get_currently_loaded_control(self) -> Optional[BaseControl]:
+    def get_currently_loaded_control(self) -> Optional[ControlType]:
         return self._chat_page.get_currently_loaded_control()
 
     def chat_exists(self, account: str, jid: JID) -> bool:

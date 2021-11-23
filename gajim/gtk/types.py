@@ -16,6 +16,9 @@
 
 from typing import Union
 
+from .controls.chat import ChatControl
+from .controls.private import PrivateChatControl
+from .controls.groupchat import GroupchatControl
 from .conversation.rows.call import CallRow
 from .conversation.rows.command_output import CommandOutputRow
 from .conversation.rows.date import DateRow
@@ -43,4 +46,10 @@ ConversationRowType = Union[
     MUCUserStatus,
     ReadMarkerRow,
     ScrollHintRow
+]
+
+ControlType = Union [
+    ChatControl,
+    PrivateChatControl,
+    GroupchatControl
 ]

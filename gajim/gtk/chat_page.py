@@ -24,13 +24,13 @@ from nbxmpp import JID
 
 from gajim.common import app
 
-from .controls.base import BaseControl
 from .util import get_builder
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list_stack import ChatListStack
 from .chat_stack import ChatStack
 from .search_view import SearchView
+from .types import ControlType
 
 
 class ChatPage(Gtk.Box):
@@ -82,7 +82,7 @@ class ChatPage(Gtk.Box):
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
-        self._currently_loaded_control: Optional[BaseControl] = None
+        self._currently_loaded_control: Optional[ControlType] = None
         self._startup_finished: bool = False
 
         self._add_actions()
@@ -275,20 +275,20 @@ class ChatPage(Gtk.Box):
         self._chat_list_stack.remove_chats_for_account(account)
         self._chat_stack.remove_chats_for_account(account)
 
-    def get_control(self, account: str, jid: JID) -> Optional[BaseControl]:
+    def get_control(self, account: str, jid: JID) -> Optional[ControlType]:
         return self._chat_stack.get_control(account, jid)
 
-    def get_active_control(self) -> Optional[BaseControl]:
+    def get_active_control(self) -> Optional[ControlType]:
         chat = self._chat_list_stack.get_selected_chat()
         if chat is None:
             return None
         return self.get_control(chat.account, chat.jid)
 
-    def get_currently_loaded_control(self) -> Optional[BaseControl]:
+    def get_currently_loaded_control(self) -> Optional[ControlType]:
         return self._currently_loaded_control
 
     def get_controls(self, account: Optional[str]
-                     ) -> Generator[BaseControl, None, None]:
+                     ) -> Generator[ControlType, None, None]:
         return self._chat_stack.get_controls(account)
 
     def hide_search(self) -> bool:

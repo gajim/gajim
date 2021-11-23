@@ -27,11 +27,11 @@ from nbxmpp import JID
 from gajim.common import ged
 from gajim.common.i18n import _
 
-from .controls.base import BaseControl
 from .controls.chat import ChatControl
 from .controls.groupchat import GroupchatControl
 from .controls.private import PrivateChatControl
 
+from .types import ControlType
 from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.chatstack')
@@ -53,17 +53,17 @@ class ChatStack(Gtk.Stack, EventHelper):
         ])
 
         self.show_all()
-        self._controls: Dict[Tuple[str, JID], BaseControl] = {}
-        self._active_control: Optional[BaseControl] = None
+        self._controls: Dict[Tuple[str, JID], ControlType] = {}
+        self._active_control: Optional[ControlType] = None
 
-    def get_control(self, account: str, jid: JID) -> Optional[BaseControl]:
+    def get_control(self, account: str, jid: JID) -> Optional[ControlType]:
         try:
             return self._controls[(account, jid)]
         except KeyError:
             return None
 
     def get_controls(self, account: Optional[str]
-                     ) -> Generator[BaseControl, None, None]:
+                     ) -> Generator[ControlType, None, None]:
         if account is None:
             for control in self._controls.values():
                 yield control
