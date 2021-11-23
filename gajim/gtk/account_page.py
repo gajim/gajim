@@ -35,7 +35,7 @@ ROSTER_MENU_DICT = {
 
 
 class AccountPage(Gtk.Box, EventHelper):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
 
@@ -101,10 +101,10 @@ class AccountPage(Gtk.Box, EventHelper):
         position = paned.get_position()
         app.settings.set('chat_handle_position', position)
 
-    def get_roster(self):
+    def get_roster(self) -> Roster:
         return self._roster
 
-    def update(self):
+    def update(self) -> None:
         account_label = app.settings.get_account_setting(
             self._account, 'account_label')
         self._ui.account_label.set_text(account_label)
