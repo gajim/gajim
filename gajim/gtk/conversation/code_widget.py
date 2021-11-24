@@ -12,11 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Tuple
+from typing import Optional
+
 import logging
 
 import gi
 gi.require_version('GtkSource', '4')
-from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GtkSource
@@ -76,7 +78,7 @@ class CodeWidget(Gtk.Box):
         self._textview.print_code(code)
 
     @staticmethod
-    def _prepare_code(text: str) -> Tuple[str, str]:
+    def _prepare_code(text: str) -> Tuple[str, Optional[str]]:
         code_start = text.partition('\n')[0]
         lang = None
         if len(code_start) > 3:
