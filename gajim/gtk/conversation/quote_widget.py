@@ -12,11 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
-
 from gi.repository import Gtk
-
-from .message_widget import MessageWidget
 
 
 class QuoteWidget(Gtk.Box):
@@ -32,9 +28,9 @@ class QuoteWidget(Gtk.Box):
 
         self._account = account
 
-        self._message_widget: Optional[MessageWidget] = None
+        self._message_widget = None
 
-    def attach_message_widget(self, message_widget: MessageWidget) -> None:
+    def attach_message_widget(self, message_widget):
         # Purpose of this method is to prevent circular imports
         if self._message_widget is not None:
             raise ValueError(
