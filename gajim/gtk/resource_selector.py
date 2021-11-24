@@ -12,14 +12,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List
+from typing import Optional
+from typing import Tuple
+
 import locale
 import logging
 
 from gi.repository import GObject
 from gi.repository import Gtk
 
+from nbxmpp import JID
+from nbxmpp.namespaces import _Namespaces
+from nbxmpp.structs import DiscoInfo
+
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import ResourceContact
 
 log = logging.getLogger('gajim.gui.resource_selector')
 
@@ -33,7 +43,8 @@ class ResourceSelector(Gtk.ScrolledWindow):
             (bool, )),
     }
 
-    def __init__(self, contact, constraints=None):
+    def __init__(self, contact: BareContact,
+                 constraints: List[_Namespaces] = None) -> None:
         Gtk.ScrolledWindow.__init__(self)
         self.set_shadow_type(Gtk.ShadowType.IN)
         self.set_size_request(-1, 200)
@@ -65,7 +76,7 @@ class ResourceSelector(Gtk.ScrolledWindow):
         state = bool(row is not None)
         self.emit('selection-changed', state)
 
-    def _set_placeholder(self):
+    def _set_placeholder(self) -> None:
         image = Gtk.Image.new_from_icon_name(
             'dialog-warning-symbolic', Gtk.IconSize.DND)
         label = Gtk.Label(label=_('No devices online'))
@@ -77,7 +88,7 @@ class ResourceSelector(Gtk.ScrolledWindow):
         box.show_all()
         self._listbox.set_placeholder(box)
 
-    def _add_entries(self):
+    def _add_entries(self) -> None:
         for resource in self._contact.iter_resources():
             self._listbox.add(ResourceRow(resource, self._constraints))
 
@@ -86,12 +97,13 @@ class ResourceSelector(Gtk.ScrolledWindow):
             self._listbox.remove(child)
         self._add_entries()
 
-    def get_jid(self):
+    def get_jid(self) -> JID:
         return self._listbox.get_selected_row().jid
 
 
 class ResourceRow(Gtk.ListBoxRow):
-    def __init__(self, resource_contact, constraints):
+    def __init__(self, resource_contact: ResourceContact,
+                 constraints: List[_Namespaces]) -> None:
         Gtk.ListBoxRow.__init__(self)
 
         self.jid = resource_contact.jid
@@ -131,8 +143,9 @@ class ResourceRow(Gtk.ListBoxRow):
         self.show_all()
 
     @staticmethod
-    def _get_client_identity(disco_info):
+    def _get_client_identity(disco_info: DiscoInfo
+                             ) -> Tuple[Optional[str], Optional[str]]:
         for identity in disco_info.identities:
             if identity.category == 'client':
                 return identity.name, identity.type
-            return None, None
+        return None, None
