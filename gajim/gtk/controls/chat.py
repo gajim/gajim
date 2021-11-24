@@ -717,7 +717,7 @@ class ChatControl(BaseControl):
         if not app.settings.get('print_status_in_chats'):
             return
 
-        status = '- %s' % event.status if event.status else ''
+        status = f'- {event.status}' if event.status else ''
         status_line = _('%(name)s is now %(show)s %(status)s') % {
             'name': name, 'show': uf_show, 'status': status}
         self.add_info_message(status_line)

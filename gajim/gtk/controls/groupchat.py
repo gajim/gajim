@@ -139,7 +139,7 @@ class GroupchatControl(BaseControl):
 
         # Send file
         self.xml.sendfile_button.set_action_name(
-            'win.send-file-%s' % self.control_id)
+            f'win.send-file-{self.control_id}')
 
         # Encryption
         self.set_lock_image()
@@ -175,7 +175,7 @@ class GroupchatControl(BaseControl):
 
         # Groupchat invite
         self.xml.quick_invite_button.set_action_name(
-            'win.invite-%s' % self.control_id)
+            f'win.invite-{self.control_id}')
 
         self._invite_box = GroupChatInvite(self.room_jid)
         self.xml.invite_grid.attach(self._invite_box, 0, 0, 1, 1)
@@ -975,7 +975,7 @@ class GroupchatControl(BaseControl):
         affiliation = helpers.get_uf_affiliation(user_contact.affiliation)
         nick = user_contact.name
         reason = properties.muc_user.reason
-        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+        reason = '' if reason is None else f': {reason}'
 
         actor = properties.muc_user.actor
         # Group Chat: You have been kicked by Alice
@@ -1006,7 +1006,7 @@ class GroupchatControl(BaseControl):
         role = helpers.get_uf_role(user_contact.role)
         nick = user_contact.name
         reason = properties.muc_user.reason
-        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+        reason = '' if reason is None else f': {reason}'
 
         actor = properties.muc_user.actor
         # Group Chat: You have been kicked by Alice
@@ -1031,7 +1031,7 @@ class GroupchatControl(BaseControl):
         status_codes = properties.muc_status_codes or []
 
         reason = properties.muc_user.reason
-        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+        reason = '' if reason is None else f': {reason}'
 
         actor = properties.muc_user.actor
         # Group Chat: You have been kicked by Alice
@@ -1084,7 +1084,7 @@ class GroupchatControl(BaseControl):
         nick = user_contact.name
 
         reason = properties.muc_user.reason
-        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+        reason = '' if reason is None else f': {reason}'
 
         actor = properties.muc_user.actor
         # Group Chat: You have been kicked by Alice
@@ -1149,13 +1149,13 @@ class GroupchatControl(BaseControl):
 
     def _on_room_presence_error(self, _contact, _signal_name, properties):
         error_message = to_user_string(properties.error)
-        self.add_info_message('Error: %s' % error_message)
+        self.add_info_message(_('Error: %s') % error_message)
 
     def _on_room_destroyed(self, _contact, _signal_name, properties):
         destroyed = properties.muc_destroyed
 
         reason = destroyed.reason
-        reason = '' if reason is None else ': %s' % reason
+        reason = '' if reason is None else f': {reason}'
 
         message = _('Group chat has been destroyed')
         self.add_info_message(message)
@@ -1427,7 +1427,7 @@ class GroupchatControl(BaseControl):
             return res
 
         if action == 'change-nickname':
-            control_action = '%s-%s' % (action, self.control_id)
+            control_action = f'{action}-{self.control_id}'
             app.window.lookup_action(control_action).activate()
             return Gdk.EVENT_STOP
 
@@ -1448,13 +1448,13 @@ class GroupchatControl(BaseControl):
             return Gdk.EVENT_STOP
 
         if action == 'change-subject':
-            control_action = '%s-%s' % (action, self.control_id)
+            control_action = f'{action}-{self.control_id}'
             app.window.lookup_action(control_action).activate()
             return Gdk.EVENT_STOP
 
         if action == 'show-contact-info':
             app.window.lookup_action(
-                'information-%s' % self.control_id).activate()
+                f'information-{self.control_id}').activate()
             return Gdk.EVENT_STOP
 
         return Gdk.EVENT_PROPAGATE

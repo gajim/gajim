@@ -102,7 +102,7 @@ class PrivateChatControl(ChatControl):
                                      properties):
         nick = properties.muc_nickname
         status = properties.status
-        status = '' if status is None else ' - %s' % status
+        status = '' if status is None else f' - {status}'
         show = helpers.get_uf_show(properties.show.value)
 
         if not self._room_contact.settings.get('print_status'):
