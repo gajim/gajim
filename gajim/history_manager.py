@@ -677,6 +677,9 @@ class HistoryManager:
                 break
             iter_ = self.logs_liststore.iter_next(iter_)
 
+        if iter_ is None:
+            return
+
         path = self.logs_liststore.get_path(iter_)
         self._ui.logs_listview.scroll_to_cell(path)
         self._ui.logs_listview.get_selection().select_path(path)
