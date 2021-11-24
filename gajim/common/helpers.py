@@ -67,7 +67,7 @@ from nbxmpp.const import Role
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.const import Affiliation
-from nbxmpp.const import Role
+from nbxmpp.errors import StanzaError
 from nbxmpp.structs import ProxyData
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
@@ -376,7 +376,7 @@ def exec_command(command, use_shell=False, posix=True):
     is executed.
     """
     if use_shell:
-        subprocess.Popen('%s &' % command, shell=True).wait()
+        subprocess.Popen(f'{command} &', shell=True).wait()
     else:
         args = shlex.split(command, posix=posix)
         process = subprocess.Popen(args)
@@ -386,7 +386,7 @@ def build_command(executable, parameter):
     # we add to the parameter (can hold path with spaces)
     # "" so we have good parsing from shell
     parameter = parameter.replace('"', '\\"') # but first escape "
-    command = '%s "%s"' % (executable, parameter)
+    command = f'{executable} "{parameter}"'
     return command
 
 def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
@@ -629,8 +629,8 @@ def get_auth_sha(sid, initiator, target):
     """
     Return sha of sid + initiator + target used for proxy auth
     """
-    return hashlib.sha1(("%s%s%s" % (sid, initiator, target)).encode('utf-8')).\
-        hexdigest()
+    return hashlib.sha1(
+        (f'{sid}{initiator}{target}').encode('utf-8')).hexdigest()
 
 def remove_invalid_xml_chars(string_):
     if string_:
@@ -743,8 +743,9 @@ def get_subscription_request_msg(account: Optional[str] = None) -> str:
     message = _('I would like to add you to my contact list.')
     if account is None:
         return message
-    
-    message = app.settings.get_account_setting(account, 'subscription_request_msg')
+
+    message = app.settings.get_account_setting(
+        account, 'subscription_request_msg')
     if message:
         return message
 
@@ -927,7 +928,7 @@ def event_filter(filter_):
                     if getattr(event, attr1) != getattr(self, attr2):
                         return None
                 except AttributeError:
-                    if getattr(event, attr1) != getattr(self, '_%s' % attr2):
+                    if getattr(event, attr1) != getattr(self, f'_{attr2}'):
                         return None
 
             return func(self, event, *args, **kwargs)
@@ -1166,7 +1167,7 @@ def to_user_string(error: StanzaError) -> str:
 
     condition = error.condition
     if error.app_condition is not None:
-        return '%s (%s)' % (condition, error.app_condition)
+        return f'{condition} ({error.app_condition})'
     return condition
 
 
