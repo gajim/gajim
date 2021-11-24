@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+from typing import Tuple
+
 import os
 import logging
 from enum import IntEnum
@@ -60,7 +63,7 @@ class Range(IntEnum):
 
 
 class AvatarSelector(Gtk.Box):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL,
                          spacing=12)
         self.get_style_context().add_class('padding-18')
@@ -99,7 +102,7 @@ class AvatarSelector(Gtk.Box):
 
         self.show_all()
 
-    def prepare_crop_area(self, path):
+    def prepare_crop_area(self, path: str) -> None:
         pixbuf = self._get_pixbuf_from_path(path)
         self._crop_area.set_pixbuf(pixbuf)
         self._load_button.hide()
@@ -127,7 +130,7 @@ class AvatarSelector(Gtk.Box):
             self.prepare_crop_area(path)
 
     @staticmethod
-    def _get_pixbuf_from_path(path):
+    def _get_pixbuf_from_path(path: str) -> Optional[GdkPixbuf.Pixbuf]:
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
             return pixbuf
@@ -135,11 +138,12 @@ class AvatarSelector(Gtk.Box):
             log.error('Unable to load file %s: %s', path, str(err))
             return None
 
-    def get_prepared(self):
+    def get_prepared(self) -> bool:
         return bool(self._crop_area.get_pixbuf())
 
     @staticmethod
-    def _scale_for_publish(pixbuf):
+    def _scale_for_publish(pixbuf: GdkPixbuf.Pixbuf
+                           ) -> Tuple[GdkPixbuf.Pixbuf, int, int]:
         width = pixbuf.get_width()
         height = pixbuf.get_height()
         if width > AvatarSize.PUBLISH or height > AvatarSize.PUBLISH:
@@ -150,7 +154,7 @@ class AvatarSelector(Gtk.Box):
                                          GdkPixbuf.InterpType.BILINEAR)
         return pixbuf, width, height
 
-    def get_avatar_surface(self):
+    def get_avatar_surface(self) -> Optional[Tuple[cairo.Surface, int, int]]:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return None
@@ -159,7 +163,7 @@ class AvatarSelector(Gtk.Box):
         return Gdk.cairo_surface_create_from_pixbuf(
             scaled, self.get_scale_factor()), width, height
 
-    def get_avatar_bytes(self):
+    def get_avatar_bytes(self) -> Tuple[bool, Optional[bytes], int, int]:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return False, None, 0, 0
@@ -170,7 +174,7 @@ class AvatarSelector(Gtk.Box):
 
 
 class CropArea(Gtk.DrawingArea):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.DrawingArea.__init__(self)
         self.set_no_show_all(True)
         self.add_events(
@@ -204,7 +208,7 @@ class CropArea(Gtk.DrawingArea):
         self.connect('button-release-event', self._on_button_release)
         self.connect('motion-notify-event', self._on_motion_notify)
 
-    def set_min_size(self, width, height):
+    def set_min_size(self, width: int, height: int) -> None:
         self._base_width = width
         self._base_height = height
         self.set_size_request(self._base_width, self._base_height)
@@ -212,13 +216,13 @@ class CropArea(Gtk.DrawingArea):
         if self._aspect > 0:
             self._aspect = self._base_width / self._base_height
 
-    def set_contstrain_aspect(self, constrain):
+    def set_contstrain_aspect(self, constrain: bool) -> None:
         if constrain:
             self._aspect = self._base_width / self._base_height
         else:
             self._aspect = -1
 
-    def set_pixbuf(self, pixbuf):
+    def set_pixbuf(self, pixbuf: GdkPixbuf.Pixbuf) -> None:
         if pixbuf:
             self._browse_pixbuf = pixbuf
             width = pixbuf.get_width()
@@ -240,7 +244,7 @@ class CropArea(Gtk.DrawingArea):
 
         self.queue_draw()
 
-    def get_pixbuf(self):
+    def get_pixbuf(self) -> Optional[GdkPixbuf.Pixbuf]:
         if self._browse_pixbuf is None:
             return None
 
