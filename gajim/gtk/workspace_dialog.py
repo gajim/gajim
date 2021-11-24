@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -30,7 +32,7 @@ from .const import DEFAULT_WORKSPACE_COLOR
 
 
 class WorkspaceDialog(Gtk.ApplicationWindow):
-    def __init__(self, workspace_id=None):
+    def __init__(self, workspace_id: str = None) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('WorkspaceDialog')
         self.set_application(app.app)
@@ -49,9 +51,9 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self._avatar_selector.set_size_request(200, 200)
         self._ui.image_box.add(self._avatar_selector)
 
-        name = _('My Workspace')
-        color = None
-        self._avatar_sha = None
+        name: str = _('My Workspace')
+        color: Optional[str] = None
+        self._avatar_sha: Optional[str] = None
 
         if workspace_id is None:
             self._ui.remove_workspace_button.set_sensitive(False)
@@ -125,7 +127,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
             self._avatar_sha = None
         self._update_avatar()
 
-    def _update_avatar(self):
+    def _update_avatar(self) -> None:
         name = self._ui.entry.get_text()
         rgba = self._ui.color_chooser.get_rgba()
         scale = self.get_scale_factor()
@@ -142,7 +144,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
                 scale)
         self._ui.preview.set_from_surface(surface)
 
-    def _get_avatar_data(self):
+    def _get_avatar_data(self) -> Optional[bytes]:
         if not self._avatar_selector.get_prepared():
             return None
 
