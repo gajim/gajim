@@ -25,6 +25,8 @@
 # that abstracts db connections and helpers on it
 # the same can be said for history.py
 
+from typing import List
+
 import os
 import sys
 import time
@@ -57,7 +59,7 @@ from gajim.common.const import KindConstant
 from gajim.common.const import ShowConstant
 
 
-def is_standalone():
+def is_standalone() -> bool:
     # Determine if we are in standalone mode
     if Gio.Application.get_default() is None:
         return True
@@ -66,7 +68,7 @@ def is_standalone():
     return False
 
 
-def init_gtk():
+def init_gtk() -> None:
     gajim.gui.init('gtk')
     from gajim.gui import exception
     exception.init()
@@ -92,7 +94,8 @@ if is_standalone():
                 _('Options:') + \
                 '\n  -h, --help         ' + \
                     _('Show this help message and exit') + \
-                '\n  -c, --config-path  ' + _('Choose folder for logfile') + '\n')
+                '\n  -c, --config-path  ' + _('Choose folder for logfile') + \
+                '\n')
             sys.exit()
         elif o in ('-c', '--config-path'):
             configpaths.set_config_root(a)
@@ -123,7 +126,7 @@ class Column(IntEnum):
 
 
 class HistoryManager:
-    def __init__(self):
+    def __init__(self) -> None:
         log_db_path = configpaths.get('LOG_DB')
         if not log_db_path.exists():
             ErrorDialog(_('Cannot find history logs database'),
@@ -134,7 +137,8 @@ class HistoryManager:
         Gtk.Window.set_default_icon_list(get_app_icon_list(
             self._ui.history_manager_window))
 
-        self.jids_already_in = []  # holds jids that we already have in DB
+        # holds jids that we already have in DB
+        self.jids_already_in: List[str] = []
         self.AT_LEAST_ONE_DELETION_DONE = False
 
         self.con = sqlite3.connect(
@@ -154,10 +158,11 @@ class HistoryManager:
 
         self._ui.connect_signals(self)
 
-    def _init_jids_listview(self):
+    def _init_jids_listview(self) -> None:
         self.jids_liststore = Gtk.ListStore(str, str)  # jid, jid_id
         self._ui.jids_listview.set_model(self.jids_liststore)
-        self._ui.jids_listview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
+        self._ui.jids_listview.get_selection().set_mode(
+            Gtk.SelectionMode.MULTIPLE)
 
         renderer_text = Gtk.CellRendererText()  # holds jid
         col = Gtk.TreeViewColumn(_('XMPP Address'), renderer_text, text=0)
@@ -166,21 +171,24 @@ class HistoryManager:
         self._ui.jids_listview.get_selection().connect('changed',
                 self.on_jids_listview_selection_changed)
 
-    def _init_logs_listview(self):
+    def _init_logs_listview(self) -> None:
         # log_line_id(HIDDEN), jid_id(HIDDEN), time, message, subject, nickname
         self.logs_liststore = Gtk.ListStore(str, str, str, str, str, str)
         self._ui.logs_listview.set_model(self.logs_liststore)
-        self._ui.logs_listview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
+        self._ui.logs_listview.get_selection().set_mode(
+            Gtk.SelectionMode.MULTIPLE)
 
         renderer_text = Gtk.CellRendererText()  # holds time
-        col = Gtk.TreeViewColumn(_('Date'), renderer_text, text=Column.UNIXTIME)
+        col = Gtk.TreeViewColumn(
+            _('Date'), renderer_text, text=Column.UNIXTIME)
         # user can click this header and sort
         col.set_sort_column_id(Column.UNIXTIME)
         col.set_resizable(True)
         self._ui.logs_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds nickname
-        col = Gtk.TreeViewColumn(_('Nickname'), renderer_text, text=Column.NICKNAME)
+        col = Gtk.TreeViewColumn(
+            _('Nickname'), renderer_text, text=Column.NICKNAME)
         # user can click this header and sort
         col.set_sort_column_id(Column.NICKNAME)
         col.set_resizable(True)
@@ -191,7 +199,8 @@ class HistoryManager:
         renderer_text = Gtk.CellRendererText()  # holds message
         renderer_text.set_property('width_chars', 60)
         renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
-        col = Gtk.TreeViewColumn(_('Message'), renderer_text, markup=Column.MESSAGE)
+        col = Gtk.TreeViewColumn(
+            _('Message'), renderer_text, markup=Column.MESSAGE)
         # user can click this header and sort
         col.set_sort_column_id(Column.MESSAGE)
         col.set_resizable(True)
@@ -199,7 +208,8 @@ class HistoryManager:
         self._ui.logs_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds subject
-        col = Gtk.TreeViewColumn(_('Subject'), renderer_text, text=Column.SUBJECT)
+        col = Gtk.TreeViewColumn(
+            _('Subject'), renderer_text, text=Column.SUBJECT)
         # user can click this header and sort
         col.set_sort_column_id(Column.SUBJECT)
         col.set_resizable(True)
@@ -207,11 +217,12 @@ class HistoryManager:
         self.subject_col_for_logs = col
         self._ui.logs_listview.append_column(col)
 
-    def _init_search_results_listview(self):
+    def _init_search_results_listview(self) -> None:
         # log_line_id (HIDDEN), jid, time, message, subject, nickname
-        self.search_results_liststore = Gtk.ListStore(int, str, str, str, str,
-            str)
-        self._ui.search_results_listview.set_model(self.search_results_liststore)
+        self.search_results_liststore = Gtk.ListStore(
+            int, str, str, str, str, str)
+        self._ui.search_results_listview.set_model(
+            self.search_results_liststore)
 
         renderer_text = Gtk.CellRendererText()  # holds JID (who said this)
         col = Gtk.TreeViewColumn(_('XMPP Address'), renderer_text, text=1)
@@ -221,7 +232,8 @@ class HistoryManager:
         self._ui.search_results_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds time
-        col = Gtk.TreeViewColumn(_('Date'), renderer_text, text=Column.UNIXTIME)
+        col = Gtk.TreeViewColumn(
+            _('Date'), renderer_text, text=Column.UNIXTIME)
         # user can click this header and sort
         col.set_sort_column_id(Column.UNIXTIME)
         col.set_resizable(True)
@@ -230,27 +242,30 @@ class HistoryManager:
         renderer_text = Gtk.CellRendererText()  # holds message
         renderer_text.set_property('width_chars', 60)
         renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
-        col = Gtk.TreeViewColumn(_('Message'), renderer_text, text=Column.MESSAGE)
+        col = Gtk.TreeViewColumn(
+            _('Message'), renderer_text, text=Column.MESSAGE)
         # user can click this header and sort
         col.set_sort_column_id(Column.MESSAGE)
         col.set_resizable(True)
         self._ui.search_results_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds subject
-        col = Gtk.TreeViewColumn(_('Subject'), renderer_text, text=Column.SUBJECT)
+        col = Gtk.TreeViewColumn(
+            _('Subject'), renderer_text, text=Column.SUBJECT)
         # user can click this header and sort
         col.set_sort_column_id(Column.SUBJECT)
         col.set_resizable(True)
         self._ui.search_results_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds nickname
-        col = Gtk.TreeViewColumn(_('Nickname'), renderer_text, text=Column.NICKNAME)
+        col = Gtk.TreeViewColumn(
+            _('Nickname'), renderer_text, text=Column.NICKNAME)
         # user can click this header and sort
         col.set_sort_column_id(Column.NICKNAME)
         col.set_resizable(True)
         self._ui.search_results_listview.append_column(col)
 
-    def on_history_manager_window_delete_event(self, widget, event):
+    def on_history_manager_window_delete_event(self, _widget, _event):
         if not self.AT_LEAST_ONE_DELETION_DONE:
             if is_standalone():
                 Gtk.main_quit()
@@ -278,7 +293,7 @@ class HistoryManager:
                                text=_('_Cleanup'),
                                callback=_on_yes)]).show()
 
-    def _fill_jids_listview(self):
+    def _fill_jids_listview(self) -> None:
         # get those jids that have at least one entry in logs
         self.cur.execute('SELECT jid, jid_id FROM jids WHERE jid_id IN ('
                 'SELECT distinct logs.jid_id FROM logs) ORDER BY jid')
@@ -288,9 +303,9 @@ class HistoryManager:
             self.jids_already_in.append(row[0])  # jid
             self.jids_liststore.append([row[0], str(row[1])])  # jid, jid_id
 
-    def on_jids_listview_selection_changed(self, widget, data=None):
-        liststore, list_of_paths = self._ui.jids_listview.get_selection()\
-                .get_selected_rows()
+    def on_jids_listview_selection_changed(self, _widget):
+        selection = self._ui.jids_listview.get_selection()
+        liststore, list_of_paths = selection.get_selected_rows()
 
         self.logs_liststore.clear()
         if not list_of_paths:
@@ -311,7 +326,7 @@ class HistoryManager:
             jid = liststore[path][0]  # jid
             self._fill_logs_listview(jid)
 
-    def _get_jid_id(self, jid):
+    def _get_jid_id(self, jid: str) -> str:
         """
         jids table has jid and jid_id
         logs table has log_id, jid_id, contact_name, time, kind, show, message
@@ -327,7 +342,7 @@ class HistoryManager:
         jid_id = self.cur.fetchone()[0]
         return str(jid_id)
 
-    def _get_jid_from_jid_id(self, jid_id):
+    def _get_jid_from_jid_id(self, jid_id: str) -> str:
         """
         jids table has jid and jid_id
 
@@ -337,7 +352,7 @@ class HistoryManager:
         jid = self.cur.fetchone()[0]
         return jid
 
-    def _jid_is_from_pm(self, jid):
+    def _jid_is_from_pm(self, jid: str) -> bool:
         """
         If jid is gajim@conf/nkour it's likely a pm one, how we know gajim@conf
         is not a normal guy and nkour is not his resource? We ask if gajim@conf
@@ -355,7 +370,7 @@ class HistoryManager:
             return False
         return True
 
-    def _jid_is_room_type(self, jid):
+    def _jid_is_room_type(self, jid: str) -> bool:
         """
         Return True/False if given id is room type or not eg. if it is room
         """
@@ -363,7 +378,7 @@ class HistoryManager:
         row = self.cur.fetchone()
         return row[0] == JIDConstant.ROOM_TYPE
 
-    def _fill_logs_listview(self, jid):
+    def _fill_logs_listview(self, jid: str) -> None:
         """
         Fill the listview with all messages that user sent to or received from
         JID
@@ -424,13 +439,13 @@ class HistoryManager:
 
                 message_ = '<span'
                 if color:
-                    message_ += ' foreground="%s"' % convert_rgb_to_hex(color)
-                message_ += '>%s</span>' % GLib.markup_escape_text(message)
+                    message_ += f' foreground="{convert_rgb_to_hex(color)}"'
+                message_ += f'>{GLib.markup_escape_text(message)}</span>'
                 self.logs_liststore.append(
                     (str(log_line_id), str(jid_id),
                      time_, message_, subject, nickname))
 
-    def _fill_search_results_listview(self, text):
+    def _fill_search_results_listview(self, text: str) -> None:
         """
         Ask db and fill listview with results that match text
         """
@@ -461,7 +476,7 @@ class HistoryManager:
                 self.search_results_liststore.append((log_line_id, jid, time_,
                         message, subject, nickname))
 
-    def on_logs_listview_key_press_event(self, widget, event):
+    def on_logs_listview_key_press_event(self, _widget, event):
         liststore, list_of_paths = self._ui.logs_listview.get_selection()\
                 .get_selected_rows()
         if event.keyval == Gdk.KEY_Delete:
@@ -480,17 +495,17 @@ class HistoryManager:
                     event.button, event.time)
             return True
 
-    def on_export_menuitem_activate(self, widget):
+    def on_export_menuitem_activate(self, _widget):
         FileSaveDialog(self._on_export,
                        transient_for=self._ui.history_manager_window,
                        modal=True)
 
-    def _on_export(self, filename):
-        liststore, list_of_paths = self._ui.jids_listview.get_selection()\
-                .get_selected_rows()
+    def _on_export(self, filename: str) -> None:
+        selection = self._ui.jids_listview.get_selection()
+        liststore, list_of_paths = selection.get_selected_rows()
         self._export_jids_logs_to_file(liststore, list_of_paths, filename)
 
-    def on_delete_menuitem_activate(self, widget, listview):
+    def on_delete_menuitem_activate(self, _widget, listview):
         widget_name = Gtk.Buildable.get_name(listview)
         liststore, list_of_paths = listview.get_selection().get_selected_rows()
         if widget_name == 'jids_listview':
@@ -500,7 +515,7 @@ class HistoryManager:
         else:  # Huh ? We don't know this widget
             return
 
-    def on_jids_listview_key_press_event(self, widget, event):
+    def on_jids_listview_key_press_event(self, _widget, event):
         liststore, list_of_paths = self._ui.jids_listview.get_selection()\
                 .get_selected_rows()
         if event.keyval == Gdk.KEY_Delete:
@@ -530,30 +545,31 @@ class HistoryManager:
         # AT THIS TIME FIRST EXECUTE IS LOST! WTH!!!!!
         results = self.cur.fetchall()
         #print results[0]
-        file_ = open(path_to_file, 'w', encoding='utf-8')
-        for row in results:
-            # in store: time, kind, message, contact_name FROM logs
-            # in text: JID or You or nickname (if it's gc_msg), time, message
-            time_, kind, message, nickname = row
-            if kind in (KindConstant.SINGLE_MSG_RECV,
-                    KindConstant.CHAT_MSG_RECV):
-                who = self._get_jid_from_jid_id(jid_id)
-            elif kind in (KindConstant.SINGLE_MSG_SENT,
-                    KindConstant.CHAT_MSG_SENT):
-                who = _('You')
-            elif kind == KindConstant.GC_MSG:
-                who = nickname
-            else:  # status or gc_status. do not save
-                #print kind
-                continue
+        with open(path_to_file, 'w', encoding='utf-8') as file_:
+            for row in results:
+                # in store: time, kind, message, contact_name FROM logs
+                # in text: JID or You or nickname (if it's gc_msg), time,
+                # message
+                time_, kind, message, nickname = row
+                if kind in (KindConstant.SINGLE_MSG_RECV,
+                        KindConstant.CHAT_MSG_RECV):
+                    who = self._get_jid_from_jid_id(jid_id)
+                elif kind in (KindConstant.SINGLE_MSG_SENT,
+                        KindConstant.CHAT_MSG_SENT):
+                    who = _('You')
+                elif kind == KindConstant.GC_MSG:
+                    who = nickname
+                else:  # status or gc_status. do not save
+                    #print kind
+                    continue
 
-            try:
-                time_ = time.strftime('%c', time.localtime(float(time_)))
-            except ValueError:
-                pass
+                try:
+                    time_ = time.strftime('%c', time.localtime(float(time_)))
+                except ValueError:
+                    pass
 
-            file_.write(_('%(who)s on %(time)s said: %(message)s\n') % {
-                'who': who, 'time': time_, 'message': message})
+                file_.write(_('%(who)s on %(time)s said: %(message)s\n') % {
+                    'who': who, 'time': time_, 'message': message})
 
     def _delete_jid_logs(self, liststore, list_of_paths):
         paths_len = len(list_of_paths)
@@ -564,7 +580,8 @@ class HistoryManager:
             # delete all rows from db that match jid_id
             list_of_rowrefs = []
             for path in list_of_paths:  # make them treerowrefs (it's needed)
-                list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
+                list_of_rowrefs.append(Gtk.TreeRowReference.new(
+                    liststore, path))
 
             for rowref in list_of_rowrefs:
                 path = rowref.get_path()
@@ -609,7 +626,8 @@ class HistoryManager:
             # delete rows from db that match log_line_id
             list_of_rowrefs = []
             for path in list_of_paths:  # make them treerowrefs (it's needed)
-                list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
+                list_of_rowrefs.append(Gtk.TreeRowReference.new(
+                    liststore, path))
 
             for rowref in list_of_rowrefs:
                 path = rowref.get_path()
@@ -638,7 +656,7 @@ class HistoryManager:
                                callback=on_ok)],
             transient_for=self._ui.history_manager_window).show()
 
-    def on_search_db_button_clicked(self, widget):
+    def on_search_db_button_clicked(self, _widget):
         text = self._ui.search_entry.get_text()
         if not text:
             return
@@ -649,7 +667,7 @@ class HistoryManager:
 
         self._fill_search_results_listview(text)
 
-    def on_search_results_listview_row_activated(self, widget, path, column):
+    def on_search_results_listview_row_activated(self, _widget, path, _column):
         # get log_line_id, jid_id from row we double clicked
         log_line_id = str(self.search_results_liststore[path][0])
         jid = self.search_results_liststore[path][1]
@@ -685,7 +703,7 @@ class HistoryManager:
         self._ui.logs_listview.get_selection().select_path(path)
 
 
-def main():
+def main() -> None:
     if sys.platform != 'win32':
         if os.geteuid() == 0:
             sys.exit("You must not launch gajim as root, it is insecure.")
