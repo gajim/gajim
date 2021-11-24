@@ -247,10 +247,10 @@ class MessageRow(BaseRow):
     def _on_realize(event_box):
         event_box.get_window().set_cursor(get_cursor('pointer'))
 
-    def is_same_sender(self, message: MessageRow) -> bool:
+    def is_same_sender(self, message):
         return message.name == self.name
 
-    def is_same_encryption(self, message: MessageRow) -> bool:
+    def is_same_encryption(self, message):
         message_details = self._get_encryption_details(message.additional_data)
         own_details = self._get_encryption_details(self.additional_data)
         if message_details is None and own_details is None:
