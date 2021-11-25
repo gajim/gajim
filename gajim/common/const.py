@@ -186,6 +186,11 @@ class Trust(IntEnum):
     VERIFIED = 3
 
 
+class Direction(IntEnum):
+    NEXT = 0
+    PREV = 1
+
+
 class Display(Enum):
     X11 = 'X11Display'
     WAYLAND = 'GdkWaylandDisplay'

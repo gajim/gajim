@@ -14,6 +14,7 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Display
+from gajim.common.const import Direction
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
@@ -260,19 +261,19 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         #     return None
 
         if action == 'switch-next-tab':
-            self.select_next_chat(True)
+            self.select_next_chat(Direction.NEXT)
             return None
 
         if action == 'switch-prev-tab':
-            self.select_next_chat(False)
+            self.select_next_chat(Direction.PREV)
             return None
 
         if action == 'switch-next-unread-tab-right':
-            self.select_next_chat(True, unread_first=True)
+            self.select_next_chat(Direction.NEXT, unread_first=True)
             return None
 
         if action == 'switch-next-unread-tab-left':
-            self.select_next_chat(False, unread_first=True)
+            self.select_next_chat(Direction.PREV, unread_first=True)
             return None
 
         if action.startswith('switch-tab-'):
@@ -443,12 +444,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
 
-    def select_next_chat(self, forwards: bool,
+    def select_next_chat(self, direction: Direction,
                          unread_first: bool = False) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list = chat_list_stack.get_current_chat_list()
         if chat_list is not None:
-            chat_list.select_next_chat(forwards, unread_first)
+            chat_list.select_next_chat(direction, unread_first)
 
     def select_chat_number(self, number: int) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()

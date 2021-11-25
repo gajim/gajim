@@ -30,6 +30,7 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.const import Direction
 from gajim.common.const import KindConstant
 from gajim.common.const import RowHeaderType
 from gajim.common.i18n import _
@@ -224,10 +225,9 @@ class ChatList(Gtk.ListBox, EventHelper):
         row = self._chats[(account, jid)]
         self.select_row(row)
 
-    def select_next_chat(self, forwards: bool,
+    def select_next_chat(self, direction: Direction,
                          unread_first: bool = False) -> None:
         # Selects the next chat, but prioritizes chats with unread messages.
-        # Direction is forwards (True) or backwards (False)
         row = self.get_selected_chat()
         if row is None:
             row = self.get_row_at_index(0)
@@ -243,7 +243,7 @@ class ChatList(Gtk.ListBox, EventHelper):
 
             # Loop until finding a chat with unread count or completing a cycle
             while True:
-                if forwards:
+                if direction == Direction.NEXT:
                     index += 1
                     if index >= len(self.get_children()):
                         index = 0
@@ -266,12 +266,12 @@ class ChatList(Gtk.ListBox, EventHelper):
             return
 
         index = row.get_index()
-        if forwards:
+        if direction == Direction.NEXT:
             next_row = self.get_row_at_index(index + 1)
         else:
             next_row = self.get_row_at_index(index - 1)
         if next_row is None:
-            if forwards:
+            if direction == Direction.NEXT:
                 next_row = self.get_row_at_index(0)
             else:
                 last = len(self.get_children()) - 1
