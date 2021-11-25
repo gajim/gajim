@@ -23,6 +23,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Dict
+from typing import List
 from typing import Optional
 
 import os
@@ -31,12 +34,15 @@ import time
 import uuid
 import tempfile
 
-from nbxmpp.const import Chatstate
-
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gio
+
+from nbxmpp import JID
+from nbxmpp.const import Chatstate
+from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
 from gajim.common import helpers
@@ -48,6 +54,7 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
 from gajim.common.const import KindConstant
+from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.structs import OutgoingMessage
@@ -103,13 +110,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     _type = None  # type: ControlType
 
-    def __init__(self, widget_name, account, jid):
+    def __init__(self, widget_name: str, account: str, jid: JID) -> None:
         EventHelper.__init__(self)
         # Undo needs this variable to know if space has been pressed.
         # Initialize it to True so empty textview is saved in undo list
-        self.space_pressed = True
+        self.space_pressed: bool = True
 
-        self.handlers = {}
+        self.handlers: Dict[str, Any] = {}
 
         self.account = account
 
@@ -122,7 +129,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         # control_id is a unique id for the control,
         # its used as action name for actions that belong to a control
-        self.control_id = str(uuid.uuid4())
+        self.control_id: str = str(uuid.uuid4())
         self.session = None
 
         self.xml = get_builder(f'{widget_name}.ui')
@@ -131,8 +138,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self._account_badge = AccountBadge(self.account)
         self.xml.account_badge_box.add(self._account_badge)
-        show = len(app.settings.get_active_accounts()) > 1
-        self.xml.account_badge_box.set_visible(show)
+        show_account_badge = len(app.settings.get_active_accounts()) > 1
+        self.xml.account_badge_box.set_visible(show_account_badge)
 
         # Drag and drop
         self.xml.overlay.add_overlay(self.xml.drop_area)
@@ -214,30 +221,32 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
 
         # the following vars are used to keep history of user's messages
-        self.sent_history = []
-        self.sent_history_pos = 0
-        self.received_history = []
-        self.received_history_pos = 0
-        self.orig_msg = None
+        self.sent_history: List[str] = []
+        self.sent_history_pos: int = 0
+        self.received_history: List[str] = []
+        self.received_history_pos: int = 0
+        self.orig_msg: Optional[str] = None
 
-        # For XEP-0333
-        self.last_msg_id = None
+        # XEP-0333 Chat Markers
+        self.last_msg_id: Optional[str] = None
 
-        self.correcting = False
-        self.last_sent_msg = None
+        # XEP-0308 Message Correction
+        self.correcting: bool = False
+        self.last_sent_msg: Optional[str] = None
 
         self.set_emoticon_popover()
 
         # Attach speller
         self.set_speller()
 
-        # For XEP-0172
+        # XEP-0172 User Nickname
+        # TODO:
         self.user_nick = None
 
-        self.command_hits = []
-        self.last_key_tabs = False
+        self.command_hits: List[str] = []
+        self.last_key_tabs: bool = False
 
-        self.sendmessage = True
+        self.sendmessage: bool = True
 
         self._client.get_module('Chatstate').set_active(self.contact)
 
@@ -263,11 +272,17 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _connect_contact_signals(self):
         raise NotImplementedError
 
-    def _process_jingle_av_event(self):
+    def _process_jingle_av_event(self, *args):
         raise NotImplementedError
 
-    def _get_action(self, name):
-        return app.window.lookup_action(name + self.control_id)
+    def get_our_nick(self):
+        raise NotImplementedError
+
+    def room_name(self):
+        raise NotImplementedError
+
+    def _get_action(self, name: str) -> Gio.Action:
+        return app.window.lookup_action(f'{name}{self.control_id}')
 
     def process_event(self, event):
         if event.account != self.account:
@@ -341,22 +356,22 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         return Gdk.EVENT_STOP
 
     @property
-    def type(self):
+    def type(self) -> ControlType:
         return self._type
 
     @property
-    def is_chat(self):
+    def is_chat(self) -> bool:
         return self._type.is_chat
 
     @property
-    def is_privatechat(self):
+    def is_privatechat(self) -> bool:
         return self._type.is_privatechat
 
     @property
-    def is_groupchat(self):
+    def is_groupchat(self) -> bool:
         return self._type.is_groupchat
 
-    def safe_shutdown(self):
+    def safe_shutdown(self) -> bool:
         """
         Called to check if control can be closed without losing data.
         returns True if control can be closed safely else False
@@ -378,7 +393,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def focus(self):
         raise NotImplementedError
 
-    def draw_banner(self):
+    def draw_banner(self) -> None:
         """
         Draw the fat line at the top of the window
         that houses the icon, jid, etc
@@ -387,7 +402,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         """
         self.draw_banner_text()
 
-    def update_toolbar(self):
+    def update_toolbar(self) -> None:
         """
         update state of buttons in toolbar
         """
@@ -395,18 +410,18 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         app.plugin_manager.gui_extension_point(
             'chat_control_base_update_toolbar', self)
 
-    def draw_banner_text(self):
+    def draw_banner_text(self) -> None:
         """
         Derived types SHOULD implement this
         """
 
-    def update_ui(self):
+    def update_ui(self) -> None:
         """
         Derived types SHOULD implement this
         """
         self.draw_banner()
 
-    def repaint_themed_widgets(self):
+    def repaint_themed_widgets(self) -> None:
         """
         Derived types MAY implement this
         """
@@ -453,7 +468,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _nec_ping(self, obj):
         raise NotImplementedError
 
-    def setup_seclabel(self):
+    def setup_seclabel(self) -> None:
         self.xml.label_selector.hide()
         self.xml.label_selector.set_no_show_all(True)
         lb = Gtk.ListStore(str)
@@ -502,7 +517,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return Gdk.EVENT_STOP
 
         if action == 'delete-line':
-            self.clear(self.msg_textview)
+            self.msg_textview.clear()
             return Gdk.EVENT_STOP
 
         if action == 'show-emoji-chooser':
@@ -514,7 +529,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         return Gdk.EVENT_PROPAGATE
 
-    def add_actions(self):
+    def add_actions(self) -> None:
         action = Gio.SimpleAction.new_stateful(
             f'set-encryption-{self.control_id}',
             GLib.VariantType.new('s'),
@@ -535,7 +550,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             action.set_enabled(False)
             app.window.add_action(action)
 
-    def remove_actions(self):
+    def remove_actions(self) -> None:
         actions = [
             'send-message-',
             'set-encryption-',
@@ -547,7 +562,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         for action in actions:
             app.window.remove_action(f'{action}{self.control_id}')
 
-    def mark_as_read(self, send_marker=True):
+    def mark_as_read(self, send_marker: bool = True) -> None:
         self._jump_to_end_button.reset_unread_count()
 
         if send_marker:
@@ -576,7 +591,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.set_encryption_menu_icon()
         self.set_lock_image()
 
-    def set_lock_image(self):
+    def set_lock_image(self) -> None:
         encryption_state = {'visible': self.encryption is not None,
                             'enc_type': self.encryption,
                             'authenticated': False}
@@ -621,7 +636,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return None
         return state
 
-    def set_encryption_menu_icon(self):
+    def set_encryption_menu_icon(self) -> None:
         image = self.xml.encryption_menu.get_image()
         if image is None:
             image = Gtk.Image()
@@ -633,7 +648,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             image.set_from_icon_name('channel-secure-symbolic',
                                      Gtk.IconSize.MENU)
 
-    def set_speller(self):
+    def set_speller(self) -> None:
         if (not app.is_installed('GSPELL') or
                 not app.settings.get('use_speller')):
             return
@@ -649,7 +664,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         spell_checker.connect('notify::language', self.on_language_changed)
 
-    def get_speller_language(self):
+    def get_speller_language(self) -> Optional[Gspell.Language]:
         lang = self.contact.settings.get('speller_language')
         if not lang:
             # use the default one
@@ -665,7 +680,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         gspell_lang = checker.get_language()
         self.contact.settings.set('speller_language', gspell_lang.get_code())
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         # remove_gui_extension_point() is called on shutdown, but also when
         # a plugin is getting disabled. Plugins don’t know the difference.
         # Plugins might want to remove their widgets on
@@ -763,17 +778,24 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                                    callback=self._paste_event_confirmed,
                                    args=[image])]).show()
 
-    def _paste_event_confirmed(self, is_checked, image):
+    def _paste_event_confirmed(self,
+                               is_checked: bool,
+                               image: Optional[GdkPixbuf.Pixbuf]
+                               ) -> None:
         if is_checked:
             app.settings.set('confirm_paste_image', False)
 
         dir_ = tempfile.gettempdir()
         path = os.path.join(dir_, f'{uuid.uuid4()}.png')
+        if image is None:
+            self.add_info_message(_('Error: Could not process image'))
+            return
+
         image.savev(path, 'png', [], [])
 
         self._start_filetransfer(path)
 
-    def _get_pref_ft_method(self):
+    def _get_pref_ft_method(self) -> Optional[str]:
         ft_pref = app.settings.get_account_setting(self.account,
                                                    'filetransfer_preference')
         httpupload = app.window.lookup_action(
@@ -1005,12 +1027,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.send_message(message, xhtml=xhtml)
 
     def send_message(self,
-                     message,
-                     type_='chat',
-                     resource=None,
-                     xhtml=None,
-                     process_commands=True,
-                     attention=False):
+                     message: str,
+                     type_: str = 'chat',
+                     resource: Optional[str] = None,
+                     xhtml: Optional[str] = None,
+                     process_commands: bool = True,
+                     attention: bool = False
+                     ) -> None:
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -1022,6 +1045,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         label = self.get_seclabel()
 
+        correct_id: Optional[str] = None
         if self.correcting and self.last_sent_msg:
             correct_id = self.last_sent_msg
         else:
@@ -1072,7 +1096,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self._client.get_module('Chatstate').set_chatstate(
             self.contact, Chatstate.COMPOSING)
 
-    def save_message(self, message, msg_type):
+    def save_message(self, message: str, msg_type: str) -> None:
         # save the message, so user can scroll though the list with key up/down
         if msg_type == 'sent':
             history = self.sent_history
@@ -1098,10 +1122,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             self.received_history_pos = pos
 
-    def add_info_message(self, text):
+    def add_info_message(self, text: str) -> None:
         self.conversation_view.add_info_message(text)
 
-    def add_file_transfer(self, transfer):
+    def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
         self.conversation_view.add_file_transfer(transfer)
 
     def add_jingle_file_transfer(self, event):
@@ -1117,16 +1141,17 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self.conversation_view.add_call_message(event=event)
 
     def add_message(self,
-                    text,
-                    kind,
-                    name,
-                    tim,
-                    notify,
-                    displaymarking=None,
-                    msg_log_id=None,
-                    message_id=None,
-                    stanza_id=None,
-                    additional_data=None):
+                    text: str,
+                    kind: str,
+                    name: str,
+                    tim: float,
+                    notify: bool,
+                    displaymarking: Optional[Displaymarking] = None,
+                    msg_log_id: Optional[str] = None,
+                    message_id: Optional[str] = None,
+                    stanza_id: Optional[str]  =None,
+                    additional_data: Optional[AdditionalDataDict] = None
+                    ) -> None:
 
         if additional_data is None:
             additional_data = AdditionalDataDict()
@@ -1173,8 +1198,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if chat_active and self._scrolled_view.get_autoscroll():
                 app.window.mark_as_read(self.account, self.contact.jid)
 
-    def _notify(self, name: str, text: str, tim: Optional[int],
-                additional_data: AdditionalDataDict) -> None:
+    def _notify(self,
+                name: str,
+                text: str,
+                tim: Optional[float],
+                additional_data: AdditionalDataDict
+                ) -> None:
         if app.window.is_chat_active(self.account, self.contact.jid):
             if self._scrolled_view.get_autoscroll():
                 return
@@ -1191,6 +1220,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 _icon, file_type = guess_simple_file_type(text)
                 text = f'{file_type} ({file_name})'
 
+        sound: Optional[str] = None
         if self.is_chat:
             msg_type = 'chat-message'
             sound = 'first_message_received'
@@ -1204,6 +1234,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 sound = 'muc_message_highlight'
             else:
                 sound = 'muc_message_received'
+
             if not self.contact.can_notify():
                 sound = None
 
@@ -1233,7 +1264,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                          text=text,
                          sound=sound))
 
-    def toggle_emoticons(self):
+    def toggle_emoticons(self) -> None:
         """
         Hide show emoticons_button
         """
@@ -1244,7 +1275,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self.xml.emoticons_button.set_no_show_all(True)
             self.xml.emoticons_button.hide()
 
-    def set_emoticon_popover(self):
+    def set_emoticon_popover(self) -> None:
         if not app.settings.get('emoticons_theme'):
             return
 
@@ -1294,7 +1325,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         start, end = buffer_.get_bounds()
         buffer_.delete(start, end)
 
-    def set_control_active(self, state):
+    def set_control_active(self, state: bool) -> None:
         if state:
             self.set_emoticon_popover()
 
@@ -1308,19 +1339,19 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._client.get_module('Chatstate').set_chatstate(
                 self.contact, Chatstate.INACTIVE)
 
-    def reset_view(self):
+    def reset_view(self) -> None:
         self.conversation_view.clear()
 
-    def get_autoscroll(self):
+    def get_autoscroll(self) -> bool:
         return self._scrolled_view.get_autoscroll()
 
-    def scroll_to_end(self, force=False):
+    def scroll_to_end(self, force: bool = False) -> None:
         # Clear view and reload conversation
         self.conversation_view.clear()
         self._scrolled_view.reset()
         self.conversation_view.scroll_to_end(force)
 
-    def scroll_to_message(self, log_line_id, timestamp):
+    def scroll_to_message(self, log_line_id: str, timestamp: float) -> None:
         row = self.conversation_view.get_row_by_log_line_id(log_line_id)
         if row is None:
             # Clear view and reload conversation around timestamp
@@ -1337,7 +1368,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             log_line_id)
         GLib.idle_add(self.conversation_view.unlock)
 
-    def fetch_n_lines_history(self, _scrolled, before, n_lines):
+    def fetch_n_lines_history(self,
+                              _scrolled: Gtk.ScrolledWindow,
+                              before: bool,
+                              n_lines: int
+                              ) -> None:
         if self.conversation_view.locked:
             return
 
@@ -1435,13 +1470,17 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 marker=msg.marker,
                 error=msg.error)
 
-    def has_focus(self):
+    def has_focus(self) -> bool:
         if app.window.get_property('has-toplevel-focus'):
             if self == app.window.get_active_control():
                 return True
         return False
 
-    def scroll_messages(self, direction, msg_buf, msg_type):
+    def scroll_messages(self,
+                        direction: str,
+                        msg_buf: Gtk.TextBuffer,
+                        msg_type: str,
+                        ) -> None:
         if msg_type == 'sent':
             history = self.sent_history
             pos = self.sent_history_pos
@@ -1489,7 +1528,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 message = '> %s\n' % message.replace('\n', '\n> ')
         msg_buf.set_text(message)
 
-    def update_account_badge(self):
+    def update_account_badge(self) -> None:
         show = len(app.settings.get_active_accounts()) > 1
         self.xml.account_badge_box.set_visible(show)
 
