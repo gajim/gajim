@@ -1319,12 +1319,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def update_text_tags(self):
         self.conversation_view.update_text_tags()
 
-    @staticmethod
-    def clear(tv):
-        buffer_ = tv.get_buffer()
-        start, end = buffer_.get_bounds()
-        buffer_.delete(start, end)
-
     def set_control_active(self, state: bool) -> None:
         if state:
             self.set_emoticon_popover()
