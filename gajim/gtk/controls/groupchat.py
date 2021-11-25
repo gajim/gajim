@@ -24,15 +24,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import List
+from typing import Optional
+
 import time
 import logging
 
+from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
 from nbxmpp.const import Affiliation
 from nbxmpp.errors import StanzaError
+from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.modules.vcard_temp import VCard
 
 from gi.repository import Gtk
@@ -46,6 +52,7 @@ from gajim.gui_menu_builder import get_groupchat_menu
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import event_filter
 from gajim.common.helpers import to_user_string
 from gajim.common.const import AvatarSize
@@ -87,7 +94,7 @@ class GroupchatControl(BaseControl):
     # will be processed with this command host.
     COMMAND_HOST = GroupChatCommands
 
-    def __init__(self, account, jid):
+    def __init__(self, account: str, jid: JID) -> None:
         BaseControl.__init__(self,
                              'groupchat_control',
                              account,
@@ -96,23 +103,27 @@ class GroupchatControl(BaseControl):
         self._client.connect_signal('state-changed',
                                     self._on_client_state_changed)
 
-        self.is_anonymous = True
+        self.is_anonymous: bool = True
 
         self.toggle_emoticons()
 
-        self.room_jid = str(self.contact.jid)
+        self.room_jid: str = str(self.contact.jid)
 
         # Stores nickname we want to kick
-        self._kick_nick = None
+        self._kick_nick: Optional[str] = None
 
         # Stores nickname we want to ban
-        self._ban_jid = None
+        self._ban_jid: Optional[str] = None
 
         # Last sent message text
-        self.last_sent_txt = ''
+        self.last_sent_txt: str = ''
 
         # Attribute, encryption plugins use to signal the message can be sent
-        self.sendmessage = False
+        self.sendmessage: bool = False
+
+        # XEP-0308 Message Correction
+        self.correcting: bool = False
+        self.last_sent_msg: Optional[str] = None
 
         self.roster = GroupchatRoster(self.account, self.room_jid, self)
         self.xml.roster_revealer.add(self.roster)
@@ -127,13 +138,13 @@ class GroupchatControl(BaseControl):
 
         # muc attention flag (when we are mentioned in a muc)
         # if True, the room has mentioned us
-        self.attention_flag = False
+        self.attention_flag: bool = False
 
         # sorted list of nicks who mentioned us (last at the end)
-        self.attention_list = []
-        self.nick_hits = []
-        self.__nick_completion = None
-        self.last_key_tabs = False
+        self.attention_list: List[str] = []
+        self.nick_hits: List[str] = []
+        self.__nick_completion: Optional[NickCompletionGenerator] = None
+        self.last_key_tabs: bool = False
 
         self.setup_seclabel()
 
@@ -159,7 +170,7 @@ class GroupchatControl(BaseControl):
         self._update_avatar()
 
         # Holds CaptchaRequest widget
-        self._captcha_request = None
+        self._captcha_request: Optional[DataFormWidget] = None
 
         # MUC Info
         self._subject_data = None
@@ -167,7 +178,7 @@ class GroupchatControl(BaseControl):
         self.xml.info_box.add(self._muc_info_box)
 
         # Groupchat settings
-        self._groupchat_settings_box = None
+        self._groupchat_settings_box: Optional[GroupChatSettings] = None
 
         # Holds the room’s config form, which is requested when managing
         # the room
@@ -221,7 +232,7 @@ class GroupchatControl(BaseControl):
         # instance object
         app.plugin_manager.gui_extension_point('groupchat_control', self)
 
-    def _connect_contact_signals(self):
+    def _connect_contact_signals(self) -> None:
         self.contact.multi_connect({
             'state-changed': self._on_muc_state_changed,
             'avatar-update': self._on_avatar_update,
@@ -270,7 +281,7 @@ class GroupchatControl(BaseControl):
         return self.__nick_completion
 
     @property
-    def subject(self):
+    def subject(self) -> str:
         if self._subject_data is None:
             return ''
         return self._subject_data.subject
@@ -279,7 +290,7 @@ class GroupchatControl(BaseControl):
     def disco_info(self):
         return app.storage.cache.get_last_disco_info(self.contact.jid)
 
-    def add_actions(self):
+    def add_actions(self) -> None:
         super().add_actions()
         actions = [
             ('groupchat-settings-', None, self._on_groupchat_settings),
@@ -379,7 +390,7 @@ class GroupchatControl(BaseControl):
 
         self._get_action('kick-').set_enabled(joined)
 
-    def remove_actions(self):
+    def remove_actions(self) -> None:
         super().remove_actions()
         actions = [
             'groupchat-settings-',
@@ -406,7 +417,7 @@ class GroupchatControl(BaseControl):
             return False
         return self.disco_info.is_irc
 
-    def _is_subject_change_allowed(self):
+    def _is_subject_change_allowed(self) -> Optional[Any]:
         contact = self.contact.get_self()
         if contact is None:
             return False
@@ -418,7 +429,7 @@ class GroupchatControl(BaseControl):
             return False
         return self.disco_info.muc_subjectmod or False
 
-    def _show_page(self, name):
+    def _show_page(self, name: str) -> None:
         transition = Gtk.StackTransitionType.SLIDE_DOWN
         if name == 'groupchat':
             transition = Gtk.StackTransitionType.SLIDE_UP
@@ -430,7 +441,7 @@ class GroupchatControl(BaseControl):
             self.xml.info_close_button.grab_focus()
         self.xml.stack.set_visible_child_full(name, transition)
 
-    def _get_current_page(self):
+    def _get_current_page(self) -> str:
         return self.xml.stack.get_visible_child_name()
 
     def _on_muc_disco_update(self, _event):
@@ -687,11 +698,11 @@ class GroupchatControl(BaseControl):
     def _on_avatar_update(self, _contact, _signal_name):
         self._update_avatar()
 
-    def _update_avatar(self):
+    def _update_avatar(self) -> None:
         surface = self.contact.get_avatar(AvatarSize.CHAT, self.scale_factor)
         self.xml.avatar_image.set_from_surface(surface)
 
-    def draw_banner_text(self):
+    def draw_banner_text(self) -> None:
         """
         Draw the text in the fat line at the top of the window that houses the
         room jid
@@ -765,14 +776,15 @@ class GroupchatControl(BaseControl):
             self._client.get_own_jid().bare)
 
     def add_message(self,
-                    text,
-                    contact='',
-                    tim=None,
-                    displaymarking=None,
-                    message_id=None,
-                    stanza_id=None,
-                    additional_data=None,
-                    notify=True):
+                    text: str,
+                    contact: str = '',
+                    tim: Optional[float] = None,
+                    displaymarking: Optional[Displaymarking] = None,
+                    message_id: Optional[str] = None,
+                    stanza_id: Optional[str] = None,
+                    additional_data: Optional[AdditionalDataDict] = None,
+                    notify: bool = True
+                    ) -> None:
 
         if contact == self.contact.nickname:
             kind = 'outgoing'
@@ -872,7 +884,7 @@ class GroupchatControl(BaseControl):
         elif event.name == 'ping-error':
             self.add_info_message(event.error)
 
-    def _set_control_active(self):
+    def _set_control_active(self) -> None:
         self.xml.formattings_button.set_sensitive(True)
         self.msg_textview.set_sensitive(True)
         self.msg_textview.set_editable(True)
@@ -885,7 +897,7 @@ class GroupchatControl(BaseControl):
 
         self.update_actions()
 
-    def _set_control_inactive(self):
+    def _set_control_inactive(self) -> None:
         self.xml.formattings_button.set_sensitive(False)
         self.msg_textview.set_sensitive(False)
         self.msg_textview.set_editable(False)
@@ -897,7 +909,7 @@ class GroupchatControl(BaseControl):
 
         self.update_actions()
 
-    def rejoin(self):
+    def rejoin(self) -> None:
         self._client.get_module('MUC').join(self.room_jid)
 
     # def send_pm(self, nick, message=None):
@@ -1178,7 +1190,11 @@ class GroupchatControl(BaseControl):
             self.msg_textview.get_style_context().remove_class(
                 'gajim-msg-correcting')
 
-    def send_message(self, message, xhtml=None, process_commands=True):
+    def send_message(self,
+                     message: str,
+                     xhtml: Optional[str] = None,
+                     process_commands: bool = True
+                     ) -> None:
         """
         Call this function to send our message
         """
@@ -1245,7 +1261,7 @@ class GroupchatControl(BaseControl):
         super(GroupchatControl, self).shutdown()
         app.check_finalize(self)
 
-    def safe_shutdown(self):
+    def safe_shutdown(self) -> bool:
         # whether to ask for confirmation before closing muc
         if app.settings.get('confirm_close_muc') and self.contact.is_joined:
             return False
@@ -1282,12 +1298,12 @@ class GroupchatControl(BaseControl):
 
         on_yes(self)
 
-    def _close_control(self):
+    def _close_control(self) -> None:
         app.window.activate_action(
             'remove-chat',
             GLib.Variant('as', [self.account, str(self.room_jid)]))
 
-    def set_control_active(self, state):
+    def set_control_active(self, state: bool) -> None:
         self.attention_flag = False
         BaseControl.set_control_active(self, state)
 
@@ -1459,7 +1475,7 @@ class GroupchatControl(BaseControl):
 
         return Gdk.EVENT_PROPAGATE
 
-    def focus(self):
+    def focus(self) -> None:
         page_name = self._get_current_page()
         if page_name == 'groupchat':
             self.msg_textview.grab_focus()
@@ -1629,7 +1645,7 @@ class GroupchatControl(BaseControl):
         self.xml.captcha_error_label.set_text(error_text)
         self._show_page('captcha-error')
 
-    def _remove_captcha_request(self):
+    def _remove_captcha_request(self) -> None:
         if self._captcha_request is None:
             return
         if self._captcha_request in self.xml.captcha_box.get_children():
