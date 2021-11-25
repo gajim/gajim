@@ -25,6 +25,7 @@
 
 from typing import ClassVar  # pylint: disable=unused-import
 from typing import Type  # pylint: disable=unused-import
+from typing import Optional
 
 import time
 import logging
@@ -34,8 +35,10 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gdk
 
-from nbxmpp.namespaces import Namespace
+from nbxmpp import JID
 from nbxmpp.const import Chatstate
+from nbxmpp.modules.security_labels import Displaymarking
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import helpers
@@ -80,14 +83,17 @@ class ChatControl(BaseControl):
     # processed with this command host.
     COMMAND_HOST = ChatCommands  # type: ClassVar[Type[CommandHost]]
 
-    def __init__(self, account, jid):
+    def __init__(self, account: str, jid: JID) -> None:
         BaseControl.__init__(self,
                              'chat_control',
                              account,
                              jid)
 
-        self.last_recv_message_id = None
-        self.last_recv_message_marks = None
+        self.sendmessage: bool = True
+
+        # XEP-0308 Message Correction
+        self.correcting: bool = False
+        self.last_sent_msg: Optional[str] = None
 
         self.toggle_emoticons()
 
@@ -147,7 +153,7 @@ class ChatControl(BaseControl):
         app.plugin_manager.gui_extension_point('chat_control', self)
         self.update_actions()
 
-    def _connect_contact_signals(self):
+    def _connect_contact_signals(self) -> None:
         self.contact.multi_connect({
             'presence-update': self._on_presence_update,
             'chatstate-update': self._on_chatstate_update,
@@ -157,10 +163,10 @@ class ChatControl(BaseControl):
         })
 
     @property
-    def jid(self):
+    def jid(self) -> JID:
         return self.contact.jid
 
-    def add_actions(self):
+    def add_actions(self) -> None:
         super().add_actions()
         actions = [
             ('invite-contacts-', self._on_invite_contacts),
@@ -194,7 +200,7 @@ class ChatControl(BaseControl):
         act.connect('change-state', self._on_send_marker)
         app.window.add_action(act)
 
-    def update_actions(self):
+    def update_actions(self) -> None:
         online = app.account_is_connected(self.account)
 
         if self.type.is_chat:
@@ -254,7 +260,7 @@ class ChatControl(BaseControl):
         # Information
         self._get_action('information-').set_enabled(online)
 
-    def remove_actions(self):
+    def remove_actions(self) -> None:
         super().remove_actions()
         actions = [
             'invite-contacts-',
@@ -268,7 +274,7 @@ class ChatControl(BaseControl):
         for action in actions:
             app.window.remove_action(f'{action}{self.control_id}')
 
-    def focus(self):
+    def focus(self) -> None:
         self.msg_textview.grab_focus()
 
     def delegate_action(self, action):
@@ -307,7 +313,7 @@ class ChatControl(BaseControl):
         action.set_state(param)
         self.contact.settings.set('send_marker', param.get_boolean())
 
-    def _update_toolbar(self):
+    def _update_toolbar(self) -> None:
         # Formatting
         # TODO: find out what encryption allows for xhtml and which not
         if self.contact.supports(Namespace.XHTML_IM):
@@ -319,13 +325,13 @@ class ChatControl(BaseControl):
             self.xml.formattings_button.set_tooltip_text(
                 _('This contact does not support HTML'))
 
-    def update_all_pep_types(self):
+    def update_all_pep_types(self) -> None:
         self._update_pep(PEPEventType.LOCATION)
         self._update_pep(PEPEventType.MOOD)
         self._update_pep(PEPEventType.ACTIVITY)
         self._update_pep(PEPEventType.TUNE)
 
-    def _update_pep(self, type_):
+    def _update_pep(self, type_: PEPEventType) -> None:
         return
         # TODO
         image = self._get_pep_widget(type_)
@@ -351,7 +357,7 @@ class ChatControl(BaseControl):
         image.set_tooltip_markup(formated_text)
         image.show()
 
-    def _get_pep_widget(self, type_):
+    def _get_pep_widget(self, type_: PEPEventType) -> Optional[Gtk.Image]:
         if type_ == PEPEventType.MOOD:
             return self.xml.mood_image
         if type_ == PEPEventType.ACTIVITY:
@@ -488,7 +494,7 @@ class ChatControl(BaseControl):
             self.add_info_message(event.error)
 
     # Jingle AV calls
-    def _on_start_call(self):
+    def _on_start_call(self) -> None:
         self._call_widget.start_call()
 
     def _process_jingle_av_event(self, event):
@@ -527,14 +533,14 @@ class ChatControl(BaseControl):
         cursor = get_cursor('pointer')
         app.window.get_window().set_cursor(cursor)
 
-    def update_ui(self):
+    def update_ui(self) -> None:
         # The name banner is drawn here
         BaseControl.update_ui(self)
         self.update_toolbar()
         self._update_avatar()
         self.update_actions()
 
-    def draw_banner_text(self):
+    def draw_banner_text(self) -> None:
         """
         Draws the chat banner's text (e.g. name, chat state) in the top of the
         chat window
@@ -572,10 +578,11 @@ class ChatControl(BaseControl):
         self.xml.banner_name_label.set_tooltip_text(label_tooltip)
 
     def send_message(self,
-                     message,
-                     xhtml=None,
-                     process_commands=True,
-                     attention=False):
+                     message: str,
+                     xhtml: Optional[str] = None,
+                     process_commands: bool = True,
+                     attention: bool = False
+                     ) -> None:
         """
         Send a message to contact
         """
@@ -598,19 +605,20 @@ class ChatControl(BaseControl):
                                  process_commands=process_commands,
                                  attention=attention)
 
-    def get_our_nick(self):
+    def get_our_nick(self) -> str:
         return app.nicks[self.account]
 
     def add_message(self,
-                    text,
-                    kind,
-                    tim=None,
-                    displaymarking=None,
-                    msg_log_id=None,
-                    stanza_id=None,
-                    message_id=None,
-                    additional_data=None,
-                    notify=True):
+                    text: str,
+                    kind: str,
+                    tim: Optional[float] = None,
+                    displaymarking: Optional[Displaymarking] = None,
+                    msg_log_id: Optional[str] = None,
+                    stanza_id: Optional[str] = None,
+                    message_id: Optional[str] = None,
+                    additional_data: Optional[AdditionalDataDict] = None,
+                    notify: bool = True
+                    ) -> None:
 
         if additional_data is None:
             additional_data = AdditionalDataDict()
@@ -632,7 +640,7 @@ class ChatControl(BaseControl):
                                 stanza_id=stanza_id,
                                 additional_data=additional_data)
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
         app.plugin_manager.remove_gui_extension_point('chat_control', self)
@@ -682,7 +690,7 @@ class ChatControl(BaseControl):
     def _on_avatar_update(self, _contact, _signal_name):
         self._update_avatar()
 
-    def _update_avatar(self):
+    def _update_avatar(self) -> None:
         scale = app.window.get_scale_factor()
         surface = self.contact.get_avatar(AvatarSize.CHAT, scale)
         self.xml.avatar_image.set_from_surface(surface)
