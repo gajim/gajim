@@ -24,6 +24,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
+from nbxmpp import JID
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
@@ -43,7 +47,7 @@ class PrivateChatControl(ChatControl):
     # will be processed with this command host.
     COMMAND_HOST = PrivateChatCommands
 
-    def __init__(self, account, jid):
+    def __init__(self, account: str, jid: JID) -> None:
         self._client = app.get_client(account)
         self._room_contact = self._client.get_module('Contacts').get_contact(
             jid.bare)
@@ -53,7 +57,7 @@ class PrivateChatControl(ChatControl):
         # self.register_events([
         #     ('update-gc-avatar', ged.GUI1, self._on_update_gc_avatar),
 
-    def _connect_contact_signals(self):
+    def _connect_contact_signals(self) -> None:
         self.contact.multi_connect({
             'user-avatar-update': self._on_user_avatar_update,
             'user-joined': self._on_user_joined,
@@ -68,10 +72,10 @@ class PrivateChatControl(ChatControl):
         })
 
     @property
-    def room_name(self):
+    def room_name(self) -> str:
         return self._room_contact.name
 
-    def get_our_nick(self):
+    def get_our_nick(self) -> str:
         muc_data = self._client.get_module('MUC').get_muc_data(
             self._room_contact.jid)
         return muc_data.nick
@@ -136,8 +140,12 @@ class PrivateChatControl(ChatControl):
             return
         self.got_connected()
 
-    def send_message(self, message, xhtml=None, process_commands=True,
-                     attention=False):
+    def send_message(self,
+                     message: str,
+                     xhtml: Optional[str] = None,
+                     process_commands: bool = True,
+                     attention: bool = False
+                     ) -> None:
         """
         Call this method to send the message
         """
@@ -161,7 +169,7 @@ class PrivateChatControl(ChatControl):
                                  process_commands=process_commands,
                                  attention=attention)
 
-    def update_ui(self):
+    def update_ui(self) -> None:
         ChatControl.update_ui(self)
 
     def _on_user_avatar_update(self, *args):
