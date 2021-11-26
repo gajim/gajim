@@ -12,6 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict
+from typing import List
+from typing import Optional
+
 from datetime import datetime
 from collections import namedtuple
 
@@ -295,8 +299,14 @@ class CertificateDialog(Gtk.ApplicationWindow):
 
 
 class ConfirmationDialog(Gtk.MessageDialog):
-    def __init__(self, title, text, sec_text, buttons,
-                 modal=True, transient_for=None):
+    def __init__(self,
+                 title: str,
+                 text: str,
+                 sec_text: str,
+                 buttons: List[DialogButton],
+                 modal: bool = True,
+                 transient_for: Optional[Gtk.Window] = None
+                 ) -> None:
         if transient_for is None:
             transient_for = app.app.get_active_window()
         Gtk.MessageDialog.__init__(self,
@@ -308,7 +318,7 @@ class ConfirmationDialog(Gtk.MessageDialog):
 
         self.get_style_context().add_class('confirmation-dialog')
 
-        self._buttons = {}
+        self._buttons: Dict[Gtk.ResponseType, DialogButton] = {}
 
         for button in buttons:
             self._buttons[button.response] = button
@@ -323,7 +333,10 @@ class ConfirmationDialog(Gtk.MessageDialog):
 
         self.connect('response', self._on_response)
 
-    def _on_response(self, _dialog, response):
+    def _on_response(self,
+                     _dialog: Gtk.MessageDialog,
+                     response: Gtk.ResponseType
+                     ) -> None:
         if response == Gtk.ResponseType.DELETE_EVENT:
             # Look if DELETE_EVENT is mapped to another response
             response = self._buttons.get(response, None)
@@ -340,7 +353,7 @@ class ConfirmationDialog(Gtk.MessageDialog):
             button.callback(*button.args, **button.kwargs)
         self.destroy()
 
-    def show(self):
+    def show(self) -> None:
         self.show_all()
 
 
@@ -348,8 +361,15 @@ NewConfirmationDialog = ConfirmationDialog
 
 
 class ConfirmationCheckDialog(ConfirmationDialog):
-    def __init__(self, title, text, sec_text, check_text,
-                 buttons, modal=True, transient_for=None):
+    def __init__(self,
+                 title: str,
+                 text: str,
+                 sec_text: str,
+                 check_text: str,
+                 buttons: List[DialogButton],
+                 modal: bool = True,
+                 transient_for: Optional[Gtk.Window] = None
+                 ) -> None:
         ConfirmationDialog.__init__(self,
                                     title,
                                     text,
@@ -371,7 +391,10 @@ class ConfirmationCheckDialog(ConfirmationDialog):
 
         self.get_content_area().add(self._checkbutton)
 
-    def _on_response(self, _dialog, response):
+    def _on_response(self,
+                     _dialog: Gtk.MessageDialog,
+                     response: Gtk.ResponseType
+                     ) -> None:
         button = self._buttons.get(response)
         if button is not None:
             button.args.insert(0, self._checkbutton.get_active())
@@ -382,8 +405,16 @@ NewConfirmationCheckDialog = ConfirmationCheckDialog
 
 
 class PastePreviewDialog(ConfirmationCheckDialog):
-    def __init__(self, title, text, sec_text, check_text, image,
-                 buttons, modal=True, transient_for=None):
+    def __init__(self,
+                 title: str,
+                 text: str,
+                 sec_text: str,
+                 check_text: str,
+                 image: GdkPixbuf.Pixbuf,
+                 buttons: List[DialogButton],
+                 modal: bool = True,
+                 transient_for: Optional[Gtk.Window] = None
+                 ) -> None:
         ConfirmationCheckDialog.__init__(self,
                                          title,
                                          text,
@@ -414,8 +445,15 @@ class PastePreviewDialog(ConfirmationCheckDialog):
 
 
 class InputDialog(ConfirmationDialog):
-    def __init__(self, title, text, sec_text, buttons, input_str=None,
-                 transient_for=None, modal=True):
+    def __init__(self,
+                 title: str,
+                 text: str,
+                 sec_text: str,
+                 buttons: List[DialogButton],
+                 input_str: Optional[str] = None,
+                 modal: bool = True,
+                 transient_for: Optional[Gtk.Window] = None,
+                 ) -> None:
         ConfirmationDialog.__init__(self,
                                     title,
                                     text,
@@ -435,7 +473,10 @@ class InputDialog(ConfirmationDialog):
 
         self.get_content_area().add(self._entry)
 
-    def _on_response(self, _dialog, response):
+    def _on_response(self,
+                     _dialog: Gtk.MessageDialog,
+                     response: Gtk.ResponseType
+                     ) -> None:
         button = self._buttons.get(response)
         if button is not None:
             button.args.insert(0, self._entry.get_text())
