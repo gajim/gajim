@@ -70,8 +70,7 @@ LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "Creates a shortcut for Gajim on 
 LangString DESC_SecAutostart ${LANG_ENGLISH} "Starts Gajim automatically when starting Windows."
 LangString DESC_SecURI ${LANG_ENGLISH} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
 LangString STR_Installed ${LANG_ENGLISH} "Apparently, Gajim is already installed. Uninstall it?"
-LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently running.$\n\
-		Please quit Gajim and restart the uninstaller."
+LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently running.$\nPlease quit Gajim and retry."
 
 ; French
 LangString NAME_Emoticons ${LANG_FRENCH} "Emoticônes"
@@ -87,8 +86,7 @@ LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionné, un raccourci pou
 LangString DESC_SecAutostart ${LANG_FRENCH} "Si activé, Gajim sera automatiquement lancé au démarrage de Windows."
 LangString DESC_SecURI ${LANG_FRENCH} "Permet à Gajim d’ouvrir les liens xmpp (par exemple le lien vers un salon sur un site web)."
 LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement déjà installé. Lancer la désinstallation ?"
-LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancé.$\n\
-		Fermez-le et redémarrez le désinstallateur."
+LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancé.$\nPlease quit Gajim and retry."
 
 ; German
 LangString NAME_Emoticons ${LANG_GERMAN} "Emojis"
@@ -104,8 +102,7 @@ LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Erstellt ein Icon für Gajim auf 
 LangString DESC_SecAutostart ${LANG_GERMAN} "Startet Gajim automatisch zusammen mit Windows."
 LangString DESC_SecURI ${LANG_GERMAN} "Ermöglicht Gajim das Öffnen von xmpp-Links (z.B. verlinkter Gruppenchat auf einer Website)."
 LangString STR_Installed ${LANG_GERMAN} "Gajim ist anscheinend bereits installiert. Wollen Sie Gajim deinstallieren?"
-LangString STR_Running ${LANG_GERMAN} "Gajim läuft zurzeit.$\n\
-		Bitte beenden Sie Gajim und starten Sie das Setup erneut."
+LangString STR_Running ${LANG_GERMAN} "Gajim läuft zurzeit.$\nBitte beenden Sie Gajim und versuchen es erneut."
 
 ; Italian
 LangString NAME_Emoticons ${LANG_ITALIAN} "Emoticons"
@@ -121,8 +118,7 @@ LangString DESC_SecDesktopIcon ${LANG_ITALIAN} "Se selezionato, un'icona verrà 
 LangString DESC_SecAutostart ${LANG_ITALIAN} "Se selezionato, Gajim sarà eseguito all'avvio di Windows."
 LangString DESC_SecURI ${LANG_ITALIAN} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
 LangString STR_Installed ${LANG_ITALIAN} "Gajim is apparently already installed. Uninstall it?"
-LangString STR_Running ${LANG_ITALIAN} "It appears that Gajim is currently running.$\n\
-		Close it and restart uninstaller."
+LangString STR_Running ${LANG_ITALIAN} "It appears that Gajim is currently running.$\nPlease quit Gajim and retry."
 
 ; Russian
 LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
@@ -138,8 +134,7 @@ LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Если отмечено, на 
 LangString DESC_SecAutostart ${LANG_RUSSIAN} "Если отмечено, Gajim будет автоматически запускаться при загрузке Windows."
 LangString DESC_SecURI ${LANG_RUSSIAN} "Позволяет Gajim открывать xmpp-ссылки, например, адреса конференций на веб-странице."
 LangString STR_Installed ${LANG_RUSSIAN} "Похоже, Gajim уже установлен. Деинсталлировать установленную версию?"
-LangString STR_Running ${LANG_RUSSIAN} "Похоже, Gajim уже запущен.$\n\
-		Закройте его и запустите деинсталлятор снова."
+LangString STR_Running ${LANG_RUSSIAN} "Похоже, Gajim уже запущен.$\nPlease quit Gajim and retry."
 
 ; Hebrew
 LangString NAME_Emoticons ${LANG_HEBREW} "רגשונים"
@@ -155,8 +150,7 @@ LangString DESC_SecDesktopIcon ${LANG_HEBREW} "במידה ונקבעת, קיצו
 LangString DESC_SecAutostart ${LANG_HEBREW} "במידה ונקבעת, Gajim יופעל אוטומטית כאשר Windows מתחיל."
 LangString DESC_SecURI ${LANG_HEBREW} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
 LangString STR_Installed ${LANG_HEBREW} "כפי הנראה, Gajim כבר מותקן. להסיר אותו?"
-LangString STR_Running ${LANG_HEBREW} "נראה שהתוכנית Gajim מורצת כעת.$\n\
-        אנא צא מן Gajim ואתחל את מסיר ההתקנה."
+LangString STR_Running ${LANG_HEBREW} "נראה שהתוכנית Gajim מורצת כעת.$\nPlease quit Gajim and retry."
 
 Section "Gajim" SecGajim
 	SectionIn RO
@@ -244,10 +238,18 @@ SectionEnd
 Function un.onInit
 ;	Check that Gajim is not running before uninstalling
 	FindWindow $0 "gdkWindowToplevel" "Gajim"
-	StrCmp $0 0 Remove
-	MessageBox MB_ICONSTOP|MB_OK $(STR_Running)
-	Quit
-Remove:
+	StrCmp $0 0 StartUninstall
+	IfSilent ForceQuitGajim
+	MessageBox MB_ICONEXCLAMATION|MB_RETRYCANCEL $(STR_Running) IDCANCEL Cancel IDRETRY -3
+
+Cancel:
+	Abort
+
+ForceQuitGajim:
+	ExecWait "TaskKill /IM gajim.exe /F"
+	!insertmacro MUI_UNGETLANGUAGE
+
+StartUninstall:
 	!insertmacro MUI_UNGETLANGUAGE
 FunctionEnd
 
@@ -291,5 +293,5 @@ Quit:
 	Quit
  
 ReallyNotInstalled:
-	!insertmacro MUI_LANGDLL_DISPLAY
+	!insertmacro MUI_LANGDLL_DISPLAY  ; Open the language selection window
 FunctionEnd
