@@ -79,6 +79,10 @@ function install_deps {
     build_pacman --noconfirm -S mingw-w64-"${ARCH}"-python \
         mingw-w64-"${ARCH}"-python-gobject \
         mingw-w64-"${ARCH}"-gtksourceview4 \
+        mingw-w64-"${ARCH}"-gstreamer \
+        mingw-w64-"${ARCH}"-gst-plugins-base \
+        mingw-w64-"${ARCH}"-gst-libav \
+        mingw-w64-"${ARCH}"-gst-python \
         mingw-w64-"${ARCH}"-python-pip \
         mingw-w64-"${ARCH}"-adwaita-icon-theme \
         mingw-w64-"${ARCH}"-libwebp \
@@ -221,13 +225,12 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/share/gdb
     rm -Rf "${MINGW_ROOT}"/share/libcaca
     rm -Rf "${MINGW_ROOT}"/share/gettext
-    rm -Rf "${MINGW_ROOT}"/share/gst-plugins-base
     rm -Rf "${MINGW_ROOT}"/share/gtk-3.0
     rm -Rf "${MINGW_ROOT}"/share/nghttp2
     rm -Rf "${MINGW_ROOT}"/share/fontconfig
     rm -Rf "${MINGW_ROOT}"/share/gettext-*
-    rm -Rf "${MINGW_ROOT}"/share/gstreamer-1.0
     rm -Rf "${MINGW_ROOT}"/share/terminfo
+    rm -Rf "${MINGW_ROOT}"/share/OGRE
 
     find "${MINGW_ROOT}"/share/glib-2.0 -type f ! \
         -name "*.compiled" -exec rm -f {} \;
@@ -251,12 +254,8 @@ function cleanup_install {
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstdvdread.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstopenal.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstopenexr.dll
-    rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstopenh264.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstresindvd.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstassrender.dll
-    rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstx265.dll
-    rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstwebp.dll
-    rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstopengl.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstmxf.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstfaac.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstschro.dll
