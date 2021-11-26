@@ -17,6 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -27,23 +32,22 @@ from nbxmpp.modules.misc import build_xhtml_body
 from gajim.common import app
 from gajim.common.regex import LINK_REGEX
 
+from .util import convert_rgba_to_hex
 from .util import scroll_to_end
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
+UNDO_LIMIT: int = 20
+
 
 class MessageInputTextView(Gtk.TextView):
     """
-    Class for the message textview (where user writes new messages) for
-    chat/groupchat windows
+    A Gtk.Textview for chat message input
     """
-    UNDO_LIMIT = 20
-
     def __init__(self):
         Gtk.TextView.__init__(self)
 
-        # set properties
         self.set_border_width(3)
         self.set_accepts_tab(True)
         self.set_editable(True)
@@ -57,18 +61,14 @@ class MessageInputTextView(Gtk.TextView):
 
         self.drag_dest_unset()
 
-        # set undo list
-        self.undo_list = []
-        # needed to know if we undid something
-        self.undo_pressed = False
+        self.undo_list: List[str] = []
+        self.undo_pressed: bool = False
 
-        self._last_text = ''
-
-        self.begin_tags = {}
-        self.end_tags = {}
-        self.color_tags = []
-        self.fonts_tags = []
-        self.other_tags = {}
+        self.begin_tags: Dict[str, str] = {}
+        self.end_tags: Dict[str, str] = {}
+        self.color_tags: List[str] = []
+        self.fonts_tags: List[str] = []
+        self.other_tags: Dict[str, Gtk.TextTag] = {}
 
         buffer_ = self.get_buffer()
         self.other_tags['bold'] = buffer_.create_tag('bold')
@@ -80,8 +80,8 @@ class MessageInputTextView(Gtk.TextView):
         self.begin_tags['italic'] = '<em>'
         self.end_tags['italic'] = '</em>'
         self.other_tags['underline'] = buffer_.create_tag('underline')
-        self.other_tags['underline'].set_property('underline',
-                                                  Pango.Underline.SINGLE)
+        self.other_tags['underline'].set_property(
+            'underline', Pango.Underline.SINGLE)
         underline = '<span style="text-decoration: underline;">'
         self.begin_tags['underline'] = underline
         self.end_tags['underline'] = '</span>'
@@ -120,10 +120,10 @@ class MessageInputTextView(Gtk.TextView):
             self.toggle_speller(False)
         return False
 
-    def insert_text(self, text):
+    def insert_text(self, text: str) -> None:
         self.get_buffer().insert_at_cursor(text)
 
-    def insert_newline(self):
+    def insert_newline(self) -> None:
         buffer_ = self.get_buffer()
         buffer_.insert_at_cursor('\n')
         mark = buffer_.get_insert()
@@ -131,19 +131,19 @@ class MessageInputTextView(Gtk.TextView):
         if buffer_.get_end_iter().equal(iter_):
             GLib.idle_add(scroll_to_end, self.get_parent())
 
-    def has_text(self):
+    def has_text(self) -> bool:
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         text = buf.get_text(start, end, True)
         return text != ''
 
-    def get_text(self):
+    def get_text(self) -> str:
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         text = self.get_buffer().get_text(start, end, True)
         return text
 
-    def toggle_speller(self, activate):
+    def toggle_speller(self, activate: bool) -> None:
         if app.is_installed('GSPELL') and app.settings.get('use_speller'):
             spell_view = Gspell.TextView.get_from_gtk_text_view(self)
             spell_view.set_inline_spell_checking(activate)
@@ -156,7 +156,7 @@ class MessageInputTextView(Gtk.TextView):
         if iter_.get_offset() == buffer_.get_end_iter().get_offset():
             GLib.idle_add(scroll_to_end, textview.get_parent())
 
-    def make_clickable_urls(self, text):
+    def make_clickable_urls(self, text: str) -> str:
         _buffer = self.get_buffer()
 
         start = 0
@@ -173,24 +173,22 @@ class MessageInputTextView(Gtk.TextView):
             else:
                 text_before_special_text = ''
             # we insert normal text
-            new_text += text_before_special_text + \
-            '<a href="'+ url +'">' + url + '</a>'
-
-            index = end # update index
+            new_text += f'{text_before_special_text}<a href="{url}">{url}</a>'
+            index = end  # update index
 
         if end < len(text):
             new_text += text[end:]
 
-        return new_text # the position after *last* special text
+        return new_text  # the position after *last* special text
 
-    def get_active_tags(self):
+    def get_active_tags(self) -> List[str]:
         start = self.get_active_iters()[0]
         active_tags = []
         for tag in start.get_tags():
             active_tags.append(tag.get_property('name'))
         return active_tags
 
-    def get_active_iters(self):
+    def get_active_iters(self) -> Tuple[Gtk.TextIter, Gtk.TextIter]:
         _buffer = self.get_buffer()
         return_val = _buffer.get_selection_bounds()
         if return_val: # if sth was selected
@@ -199,7 +197,7 @@ class MessageInputTextView(Gtk.TextView):
             start, finish = _buffer.get_bounds()
         return (start, finish)
 
-    def set_tag(self, tag):
+    def set_tag(self, tag: str) -> None:
         _buffer = self.get_buffer()
         start, finish = self.get_active_iters()
         if start.has_tag(self.other_tags[tag]):
@@ -211,7 +209,7 @@ class MessageInputTextView(Gtk.TextView):
                 _buffer.remove_tag_by_name('underline', start, finish)
             _buffer.apply_tag_by_name(tag, start, finish)
 
-    def clear_tags(self):
+    def clear_tags(self) -> None:
         _buffer = self.get_buffer()
         start, finish = self.get_active_iters()
         _buffer.remove_all_tags(start, finish)
@@ -224,16 +222,13 @@ class MessageInputTextView(Gtk.TextView):
         color = widget.get_property('rgba')
         widget.destroy()
         _buffer = self.get_buffer()
-        # Create #aabbcc color string from rgba color
-        color_string = '#%02X%02X%02X' % (round(color.red*255),
-                                          round(color.green*255),
-                                          round(color.blue*255))
 
+        color_string = convert_rgba_to_hex(color)
         tag_name = 'color' + color_string
         if not tag_name in self.color_tags:
             tag_color = _buffer.create_tag(tag_name)
             tag_color.set_property('foreground', color_string)
-            begin = '<span style="color: %s;">' % color_string
+            begin = f'<span style="color: {color_string};">'
             self.begin_tags[tag_name] = begin
             self.end_tags[tag_name] = '</span>'
             self.color_tags.append(tag_name)
@@ -265,10 +260,9 @@ class MessageInputTextView(Gtk.TextView):
         tag_name = 'font' + font
         if not tag_name in self.fonts_tags:
             tag_font = _buffer.create_tag(tag_name)
-            tag_font.set_property('font', family + ' ' + str(size))
-            self.begin_tags[tag_name] = \
-                    '<span style="font-family: ' + family + '; ' + \
-                    'font-size: ' + str(size) + 'px">'
+            tag_font.set_property('font', f'{family} {size}')
+            beg = f'<span style="font-family: {family}; font-size: {size}px">'
+            self.begin_tags[tag_name] = beg
             self.end_tags[tag_name] = '</span>'
             self.fonts_tags.append(tag_name)
 
@@ -287,7 +281,7 @@ class MessageInputTextView(Gtk.TextView):
         else:
             _buffer.remove_tag_by_name('italic', start, finish)
 
-    def get_xhtml(self):
+    def get_xhtml(self) -> Optional[str]:
         _buffer = self.get_buffer()
         old = _buffer.get_start_iter()
         tags = {}
@@ -353,11 +347,11 @@ class MessageInputTextView(Gtk.TextView):
             text += self.end_tags[tag_name]
 
         if modified:
-            wrapped_text = '<p>%s</p>' % self.make_clickable_urls(text)
+            wrapped_text = f'<p>{self.make_clickable_urls(text)}</p>'
             return build_xhtml_body(wrapped_text)
         return None
 
-    def replace_emojis(self):
+    def replace_emojis(self) -> None:
         theme = app.settings.get('emoticons_theme')
         if not theme or theme == 'font':
             return
@@ -403,7 +397,7 @@ class MessageInputTextView(Gtk.TextView):
             self.add_child_at_anchor(image, anchor)
         buffer_.insert_at_cursor(' ')
 
-    def clear(self, _widget=None):
+    def clear(self, *args):
         """
         Clear text in the textview
         """
@@ -411,13 +405,13 @@ class MessageInputTextView(Gtk.TextView):
         start, end = _buffer.get_bounds()
         _buffer.delete(start, end)
 
-    def save_undo(self, text):
+    def save_undo(self, text: str) -> None:
         self.undo_list.append(text)
-        if len(self.undo_list) > self.UNDO_LIMIT:
+        if len(self.undo_list) > UNDO_LIMIT:
             del self.undo_list[0]
         self.undo_pressed = False
 
-    def undo(self, _widget=None):
+    def undo(self, *args):
         """
         Undo text in the textview
         """
