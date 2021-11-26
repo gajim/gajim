@@ -664,7 +664,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         spell_checker.connect('notify::language', self.on_language_changed)
 
-    def get_speller_language(self) -> Optional[Gspell.Language]:
+    def get_speller_language(self):
         lang = self.contact.settings.get('speller_language')
         if not lang:
             # use the default one
