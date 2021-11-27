@@ -222,7 +222,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         control = self.get_active_control()
         if control is None:
             return None
-
         log.info('Activate action: %s, active control: %s',
                  action.get_name(), control.contact.jid)
 
@@ -280,6 +279,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             number = int(action[-1]) - 1
             self.select_chat_number(number)
             return None
+
+        return None
 
     def _on_window_motion_notify(self, _widget, _event):
         control = self.get_active_control()
