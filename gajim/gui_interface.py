@@ -31,6 +31,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict
+from typing import Optional
+from typing import Union
+
 import os
 import sys
 import time
@@ -72,6 +76,7 @@ from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.preview import PreviewManager
 from gajim.common.const import Display
+from gajim.common.file_props import FileProp
 
 from gajim.common.connection_handlers_events import InformationEvent
 
@@ -123,7 +128,7 @@ class Interface:
             self.handle_event_file_progress,
             self.handle_event_file_error)
 
-        self._last_ft_progress_update = 0
+        self._last_ft_progress_update: float = 0
 
         app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
 
@@ -149,19 +154,19 @@ class Interface:
 
         self.instances = {}
 
-        for a in app.connections:
-            self.instances[a] = {
+        for acc in app.connections:
+            self.instances[acc] = {
                 'infos': {},
                 'disco': {}
             }
-            app.contacts.add_account(a)
-            app.groups[a] = {}
-            app.gc_connected[a] = {}
-            app.automatic_rooms[a] = {}
-            app.newly_added[a] = []
-            app.to_be_removed[a] = []
-            app.nicks[a] = app.settings.get_account_setting(a, 'name')
-            app.block_signed_in_notifications[a] = True
+            app.contacts.add_account(acc)
+            app.groups[acc] = {}
+            app.gc_connected[acc] = {}
+            app.automatic_rooms[acc] = {}
+            app.newly_added[acc] = []
+            app.to_be_removed[acc] = []
+            app.nicks[acc] = app.settings.get_account_setting(acc, 'name')
+            app.block_signed_in_notifications[acc] = True
 
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
@@ -172,7 +177,7 @@ class Interface:
         idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
                                   app.settings.get('autoxatime') * 60)
 
-        self.systray_enabled = False
+        self.systray_enabled: bool = False
 
         if not app.is_display(Display.WAYLAND):
             from gajim.gui.status_icon import StatusIcon
@@ -185,10 +190,10 @@ class Interface:
         self._network_monitor = Gio.NetworkMonitor.get_default()
         self._network_monitor.connect('notify::network-available',
                                       self._network_status_changed)
-        self._network_state = self._network_monitor.get_network_available()
+        self._network_state: bool = self._network_monitor.get_network_available()
 
     def _create_core_handlers_list(self):
-        # pyline: disable=line-too-long
+        # pylint: disable=line-too-long
         self.handlers = {
             'information': [self.handle_event_information],
             'iq-error-received': [self.handle_event_iq_error],
@@ -225,7 +230,7 @@ class Interface:
                     prio,
                     event_handler)
 
-    def handle_event(self, account, jid, notif_detail):
+    def handle_event(self, account: str, jid: str, notif_detail: str) -> None:
         jid = JID.from_string(jid)
 
         if notif_detail in ('connection-lost', 'connection-failed'):
@@ -423,7 +428,7 @@ class Interface:
                                      event.account)
 
     @staticmethod
-    def _unblock_signed_in_notifications(account):
+    def _unblock_signed_in_notifications(account: str) -> None:
         app.block_signed_in_notifications[account] = False
 
     @staticmethod
@@ -489,11 +494,14 @@ class Interface:
 
     # Jingle File Transfer
     @staticmethod
-    def handle_event_file_error(title, message):
+    def handle_event_file_error(title: str, message: str) -> None:
         # TODO: integrate this better
         ErrorDialog(title, message)
 
-    def handle_event_file_progress(self, _account, file_props):
+    def handle_event_file_progress(self,
+                                   _account: str,
+                                   file_props: FileProp
+                                   ) -> None:
         if time.time() - self._last_ft_progress_update < 0.5:
             # Update progress every 500ms only
             return
@@ -502,7 +510,10 @@ class Interface:
         app.nec.push_incoming_event(
             NetworkEvent('file-progress', file_props=file_props))
 
-    def handle_event_file_rcv_completed(self, account, file_props):
+    def handle_event_file_rcv_completed(self,
+                                        account: str,
+                                        file_props: FileProp
+                                        ) -> None:
         jid = JID.from_string(file_props.receiver)
         if file_props.error != 0:
             self.instances['file_transfers'].set_status(file_props, 'stop')
@@ -560,7 +571,8 @@ class Interface:
                                  account=account,
                                  jid=jid.bare))
 
-    def __compare_hashes(self, account, file_props):
+    @staticmethod
+    def __compare_hashes(account: str, file_props: FileProp) -> None:
         hashes = Hashes2()
         try:
             file_ = open(file_props.file_name, 'rb')
@@ -651,7 +663,11 @@ class Interface:
         client = app.get_client(transfer.account)
         client.get_module('HTTPUpload').cancel_transfer(transfer)
 
-    def create_groupchat(self, account, room_jid, config):
+    @staticmethod
+    def create_groupchat(account: str,
+                         room_jid: str,
+                         config: Dict[str, Union[str, bool]]
+                         ) -> None:
         if app.window.chat_exists(account, room_jid):
             log.error('Trying to create groupchat '
                       'which is already added as chat')
@@ -660,18 +676,27 @@ class Interface:
         client = app.get_client(account)
         client.get_module('MUC').create(room_jid, config)
 
-    def show_add_join_groupchat(self, account, jid, nickname=None,
-                                password=None):
-        if not app.window.chat_exists(account, jid):
+    @staticmethod
+    def show_add_join_groupchat(account: str,
+                                jid: str,
+                                nickname: Optional[str] = None,
+                                password: Optional[str] = None
+                                ) -> None:
+        if not app.window.chat_exists(account, JID.from_string(jid)):
             client = app.get_client(account)
             client.get_module('MUC').join(
                 jid, nick=nickname, password=password)
 
         app.window.add_group_chat(account, jid, select=True)
 
-    def start_chat_from_jid(self, account, jid, message=None):
+    @staticmethod
+    def start_chat_from_jid(account: str,
+                            jid: str,
+                            message: Optional[str] = None
+                            ) -> None:
+        jid = JID.from_string(jid)
         if app.window.chat_exists(account, jid):
-            app.window.select_chat(account, JID.from_string(jid))
+            app.window.select_chat(account, jid)
             if message is not None:
                 control = app.window.get_control(account, jid)
                 if control is None:
@@ -680,7 +705,7 @@ class Interface:
             return
 
         # TODO: handle message arg in StartChat
-        app.app.activate_action('start-chat', GLib.Variant('s', jid))
+        app.app.activate_action('start-chat', GLib.Variant('s', str(jid)))
 
     @staticmethod
     def _on_muc_added(event):
@@ -690,13 +715,14 @@ class Interface:
         app.window.add_group_chat(event.account, event.jid)
 
     @staticmethod
-    def create_account(account,
-                       username,
-                       domain,
-                       password,
-                       proxy_name,
-                       custom_host,
-                       anonymous=False):
+    def create_account(account: str,
+                       username: str,
+                       domain: str,
+                       password: str,
+                       proxy_name: str,
+                       custom_host: str,
+                       anonymous:bool = False
+                       ) -> None:
 
         account_label = f'{username}@{domain}'
         if anonymous:
@@ -706,10 +732,9 @@ class Interface:
         config = {}
         config['active'] = False
         config['name'] = username
-        config['resource'] = 'gajim.%s' % helpers.get_random_string(8)
+        config['resource'] = f'gajim.{helpers.get_random_string(8)}'
         config['account_label'] = account_label
-        config['account_color'] = get_color_for_account(
-            '%s@%s' % (username, domain))
+        config['account_color'] = get_color_for_account(f'{username}@{domain}')
         config['hostname'] = domain
         config['savepass'] = True
         config['anonymous_auth'] = anonymous
@@ -744,7 +769,7 @@ class Interface:
         if window is not None:
             window.add_account(account)
 
-    def enable_account(self, account):
+    def enable_account(self, account: str) -> None:
         if account == app.ZEROCONF_ACC_NAME:
             app.connections[account] = connection_zeroconf.ConnectionZeroconf(
                 account)
@@ -789,7 +814,7 @@ class Interface:
         if window is not None:
             GLib.idle_add(window.enable_account, account, True)
 
-    def disable_account(self, account):
+    def disable_account(self, account: str) -> None:
         for win in get_app_windows(account):
             # Close all account specific windows, except the RemoveAccount
             # dialog. It shows if the removal was successful.
@@ -820,7 +845,7 @@ class Interface:
         del app.to_be_removed[account]
         del app.newly_added[account]
 
-    def remove_account(self, account):
+    def remove_account(self, account: str) -> None:
         if app.settings.get_account_setting(account, 'active'):
             self.disable_account(account)
 
@@ -835,7 +860,7 @@ class Interface:
         if window is not None:
             window.remove_account(account)
 
-    def autoconnect(self):
+    def autoconnect(self) -> None:
         """
         Auto connect at startup
         """
@@ -856,7 +881,10 @@ class Interface:
 
             app.connections[account].change_status(status, status_message)
 
-    def change_status(self, status, account=None):
+    def change_status(self,
+                      status: str,
+                      account: Optional[str] = None
+                      ) -> None:
         ask = ask_for_status_message(status)
 
         if status is None:
@@ -880,7 +908,7 @@ class Interface:
 
             self._change_status(acc, status)
 
-    def change_account_status(self, account, status):
+    def change_account_status(self, account: str, status: str) -> None:
         ask = ask_for_status_message(status)
 
         client = app.get_client(account)
@@ -894,7 +922,7 @@ class Interface:
         self._change_status(account, status)
 
     @staticmethod
-    def _change_status(account, status):
+    def _change_status(account: str, status: str) -> None:
         client = app.get_client(account)
         message = client.status_message
         if status != 'offline':
@@ -911,17 +939,17 @@ class Interface:
 
         client.change_status(status, message)
 
-    def show_systray(self):
+    def show_systray(self) -> None:
         if not app.is_display(Display.WAYLAND):
             self.systray_enabled = True
             self.systray.show_icon()
 
-    def hide_systray(self):
+    def hide_systray(self) -> None:
         if not app.is_display(Display.WAYLAND):
             self.systray_enabled = False
             self.systray.hide_icon()
 
-    def process_connections(self):
+    def process_connections(self) -> bool:
         """
         Called each foo (200) milliseconds. Check for idlequeue timeouts
         """
@@ -949,10 +977,10 @@ class Interface:
         return True  # renew timeout (loop for ever)
 
     @staticmethod
-    def save_config():
+    def save_config() -> None:
         app.settings.save()
 
-    def save_avatar(self, data):
+    def save_avatar(self, data: bytes) -> Optional[str]:
         return self.avatar_storage.save_avatar(data)
 
     def get_avatar(self,
@@ -968,11 +996,11 @@ class Interface:
         return self.avatar_storage.get_surface(
             contact, size, scale, show, style=style)
 
-    def avatar_exists(self, filename):
+    def avatar_exists(self, filename: str) -> bool:
         return self.avatar_storage.get_avatar_path(filename) is not None
 
     @staticmethod
-    def create_ipython_window():
+    def create_ipython_window() -> None:
         # Check if IPython is installed
         ipython = find_spec('IPython')
         is_installed = ipython is not None
@@ -1027,7 +1055,7 @@ class Interface:
                         connection.state.is_available):
                     connection.disconnect(gracefully=False, reconnect=True)
 
-    def create_zeroconf_default_config(self):
+    def create_zeroconf_default_config(self) -> None:
         if app.settings.get_account_setting(app.ZEROCONF_ACC_NAME, 'name'):
             return
         log.info('Creating zeroconf account')
@@ -1057,7 +1085,7 @@ class Interface:
                                          'active',
                                          False)
 
-    def check_for_updates(self):
+    def check_for_updates(self) -> None:
         if not app.settings.get('check_for_update'):
             return
 
@@ -1073,10 +1101,10 @@ class Interface:
 
         self.get_latest_release()
 
-    def get_latest_release(self):
+    def get_latest_release(self) -> None:
         log.info('Checking for Gajim updates')
         session = Soup.Session()
-        session.props.user_agent = 'Gajim %s' % app.version
+        session.props.user_agent = f'Gajim {app.version}'
         message = Soup.Message.new(
             'GET', 'https://gajim.org/current-version.json')
         session.queue_message(message, self._on_update_checked)
