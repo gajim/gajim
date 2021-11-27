@@ -129,7 +129,7 @@ WINDOW_MODULES = {
     'SSLErrorDialog': 'gajim.gui.ssl_error_dialog',
     'Themes': 'gajim.gui.themes',
     'AdvancedConfig': 'gajim.gui.advanced_config',
-    'CertificateDialog': 'gajim.gui.dialogs',
+    'CertificateDialog': 'gajim.gui.certificate_dialog',
     'RemoveAccount': 'gajim.gui.remove_account',
     'ChangePassword': 'gajim.gui.change_password',
     'PluginsWindow': 'gajim.plugins.gui',
