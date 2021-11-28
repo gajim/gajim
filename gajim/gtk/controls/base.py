@@ -182,7 +182,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.xml.conv_view_overlay.add(self._scrolled_view)
 
-        self._jump_to_end_button = JumpToEndButton()
+        self._jump_to_end_button = JumpToEndButton(self.contact)
         self._jump_to_end_button.connect('clicked', self._on_jump_to_end)
         self.xml.conv_view_overlay.add_overlay(self._jump_to_end_button)
 

@@ -73,7 +73,6 @@ class ChatListStack(Gtk.Stack):
         self.connect('notify::visible-child-name', self._on_visible_child_name)
         search_entry.connect('search-changed', self._on_search_changed)
         chat_filter.connect('filter-changed', self._on_filter_changed)
-        app.window.connect('notify::is-active', self._on_window_active)
 
         self._add_actions()
         self.show_all()
@@ -91,13 +90,6 @@ class ChatListStack(Gtk.Stack):
             act = Gio.SimpleAction.new(action_name, variant)
             act.connect('activate', func)
             app.window.add_action(act)
-
-    def _on_window_active(self, window, _param):
-        is_active = window.get_property('is-active')
-        if is_active:
-            chat = self.get_selected_chat()
-            if chat is not None:
-                chat.reset_unread()
 
     def _on_visible_child_name(self, _stack, _param):
         if self._last_visible_child_name == self.get_visible_child_name():

@@ -86,6 +86,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.account_box.add(self._account_side_bar)
 
         self.connect('motion-notify-event', self._on_window_motion_notify)
+        self.connect('notify::is-active', self._on_window_active)
         self.connect('delete-event', self._on_window_delete)
 
         self._ui.connect_signals(self)
@@ -522,6 +523,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         # Reset chat list unread counter (emits unread-count-changed)
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list_stack.mark_as_read(account, jid)
+
+    def _on_window_active(self, window, _param):
+        is_active = window.get_property('is-active')
+        if not is_active:
+            return
+
+        control = self.get_active_control()
+        if control is None:
+            return
+
+        if control.get_autoscroll():
+            self.mark_as_read(control.account, control.jid)
 
     @staticmethod
     def contact_info(account, jid):

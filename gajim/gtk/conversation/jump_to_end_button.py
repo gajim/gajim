@@ -25,13 +25,14 @@ class JumpToEndButton(Gtk.Overlay):
             ()),
     }
 
-    def __init__(self):
+    def __init__(self, contact):
         Gtk.Overlay.__init__(self)
-
         self.set_halign(Gtk.Align.END)
         self.set_valign(Gtk.Align.END)
         self.set_margin_end(6)
         self.set_margin_bottom(12)
+
+        self._contact = contact
 
         icon = Gtk.Image.new_from_icon_name(
             'go-bottom-symbolic', Gtk.IconSize.BUTTON)
@@ -49,6 +50,11 @@ class JumpToEndButton(Gtk.Overlay):
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(
             'unread-counter')
+
+        if contact.is_groupchat and not contact.can_notify():
+            self._unread_label.get_style_context().add_class(
+                'unread-counter-silent')
+
         self._unread_label.set_no_show_all(True)
         self._unread_label.set_halign(Gtk.Align.END)
         self._unread_label.set_valign(Gtk.Align.START)
@@ -62,18 +68,18 @@ class JumpToEndButton(Gtk.Overlay):
     def _on_jump_clicked(self, _button):
         self.emit('clicked')
 
-    def toggle(self, visible):
+    def toggle(self, visible: bool) -> None:
         if visible:
             self.show()
         else:
             self.hide()
             self.reset_unread_count()
 
-    def reset_unread_count(self):
+    def reset_unread_count(self) -> None:
         self._count = 0
         self._unread_label.hide()
 
-    def add_unread_count(self):
+    def add_unread_count(self) -> None:
         self._count += 1
         if self._count > 0:
             self._unread_label.set_text(str(self._count))
