@@ -393,6 +393,9 @@ row:backdrop { transition: none; }
     padding-right: 6px;
     border-radius: 10px;
 }
+.unread-counter-silent {
+    background-color: rgb(95, 95, 95);
+}
 .header-box label {
 	padding: 12px 18px 6px 18px;
 	font-weight: bold;

@@ -565,7 +565,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def mark_as_read(self, send_marker: bool = True) -> None:
         self._jump_to_end_button.reset_unread_count()
 
-        if send_marker:
+        if send_marker and self.last_msg_id is not None:
             # XEP-0333 Send <displayed> marker
             self._client.get_module('ChatMarkers').send_displayed_marker(
                 self.contact,
@@ -974,10 +974,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._jump_to_end_button.toggle(True)
             return
 
-        if app.window.get_chat_unread_count(self.account, self.contact.jid) > 0:
-            app.window.mark_as_read(self.account, self.contact.jid)
-
         self._jump_to_end_button.toggle(False)
+        app.window.mark_as_read(self.account, self.contact.jid)
 
     def _on_jump_to_end(self, _button):
         self.scroll_to_end(force=True)

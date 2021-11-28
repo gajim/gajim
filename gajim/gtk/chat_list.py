@@ -99,7 +99,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         chat = self._chats.get((account, jid))
         if chat is not None:
             chat.reset_unread()
-            self.emit_unread_changed()
 
     def emit_unread_changed(self) -> None:
         count = self.get_unread_count()
@@ -508,6 +507,10 @@ class ChatRow(Gtk.ListBoxRow):
         self.update_name()
         self.update_account_identifier()
 
+        if self.contact.is_groupchat and not self.contact.can_notify():
+            self._ui.unread_label.get_style_context().add_class(
+               'unread-counter-silent')
+
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)
 
@@ -654,11 +657,38 @@ class ChatRow(Gtk.ListBoxRow):
 
     @property
     def unread_count(self) -> int:
+        if self.contact.is_groupchat and not self.contact.can_notify():
+            return 0
         return self._unread_count
 
     @unread_count.setter
     def unread_count(self, value: int) -> None:
         self._unread_count = value
+        self._update_unread()
+        self.get_parent().emit_unread_changed()
+
+    def _update_unread(self) -> None:
+        unread_count = self._get_unread_string(self._unread_count)
+        self._ui.unread_label.set_text(unread_count)
+        self._ui.unread_label.set_visible(bool(self._unread_count))
+
+    @staticmethod
+    def _get_unread_string(count: int) -> str:
+        if count < 1000:
+            return str(count)
+        return '999+'
+
+    def add_unread(self) -> None:
+        control = app.window.get_control(self.account, self.jid)
+        if self.is_active and control.get_autoscroll():
+            return
+
+        self._unread_count += 1
+        self._update_unread()
+        self.get_parent().emit_unread_changed()
+
+    def reset_unread(self) -> None:
+        self._unread_count = 0
         self._update_unread()
         self.get_parent().emit_unread_changed()
 
@@ -700,31 +730,6 @@ class ChatRow(Gtk.ListBoxRow):
             return
         self._ui.timestamp_label.set_text(
             get_uf_relative_time(self.timestamp))
-
-    def _update_unread(self) -> None:
-        unread_count = self._get_unread_string(self._unread_count)
-        self._ui.unread_label.set_text(unread_count)
-        self._ui.unread_label.set_visible(bool(self._unread_count))
-
-    @staticmethod
-    def _get_unread_string(count: int) -> str:
-        if count < 1000:
-            return str(count)
-        return '999+'
-
-    def add_unread(self) -> None:
-        control = app.window.get_control(self.account, self.jid)
-        if self.is_active and control.get_autoscroll():
-            return
-
-        self.unread_count += 1
-        if self.unread_count == 1:
-            self.changed()
-
-    def reset_unread(self) -> None:
-        if not self.unread_count:
-            return
-        self.unread_count = 0
 
     def set_nick(self, nickname: str) -> None:
         self._ui.nick_label.set_visible(bool(nickname))
