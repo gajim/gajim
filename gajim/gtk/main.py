@@ -534,7 +534,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         if control.get_autoscroll():
-            self.mark_as_read(control.account, control.jid)
+            self.mark_as_read(control.account, control.contact.jid)
 
     @staticmethod
     def contact_info(account, jid):
