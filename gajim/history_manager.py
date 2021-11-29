@@ -70,7 +70,7 @@ def is_standalone() -> bool:
 
 def init_gtk() -> None:
     gajim.gui.init('gtk')
-    from gajim.gui import exception
+    from gajim.gtk import exception
     exception.init()
 
 

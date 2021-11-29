@@ -41,6 +41,7 @@ if TYPE_CHECKING:
 
     from gajim.gui_interface import Interface
     from gajim.common.settings import Settings
+    from gajim.gtk.css_config import CSSConfig
 
 
 NetworkEventsControllerT = Union['NetworkEventsController']
@@ -50,6 +51,7 @@ ConnectionT = Union['Client', 'ConnectionZeroconf']
 ContactsT = Union['Contact', 'GC_Contact']
 ContactT = Union['Contact']
 LegacyContactsAPIT = Union['LegacyContactsAPI']
+CSSConfigT = Union['CSSConfig']
 
 # PEP
 PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]

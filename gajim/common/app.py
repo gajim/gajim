@@ -24,6 +24,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any  # pylint: disable=unused-import
 from typing import Dict  # pylint: disable=unused-import
 from typing import List  # pylint: disable=unused-import
@@ -53,6 +55,8 @@ from gajim.common.types import InterfaceT  # pylint: disable=unused-import
 from gajim.common.types import ConnectionT  # pylint: disable=unused-import
 from gajim.common.types import LegacyContactsAPIT  # pylint: disable=unused-import
 from gajim.common.types import SettingsT  # pylint: disable=unused-import
+from gajim.common.types import CSSConfigT  # pylint: disable=unused-import
+
 
 interface = cast(InterfaceT, None)
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
@@ -76,7 +80,7 @@ class Storage:
 
 storage = Storage()
 
-css_config = None
+css_config = cast(CSSConfigT, None)
 
 transport_type = {}  # type: Dict[str, str]
 
