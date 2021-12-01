@@ -16,7 +16,7 @@ InstallDir "$PROFILE\Gajim"
 RequestExecutionLevel user
 BrandingText "Gajim Setup"
 
-!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
+!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-install-alt.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "..\misc\nsis_header.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
@@ -115,6 +115,8 @@ Section "Gajim" SecGajim
         MessageBox MB_YESNO $(INST_NotEmpty) IDYES cleanup
         Abort
     cleanup:
+        ExecWait "TaskKill /IM gajim.exe /F"
+        ExecWait "TaskKill /IM gajim-debug.exe /F"
         RMDir /r "$InstDir\bin"
         RMDir /r "$InstDir\etc"
         RMDir /r "$InstDir\lib"
