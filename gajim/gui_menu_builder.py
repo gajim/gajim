@@ -515,8 +515,12 @@ def get_chat_list_row_menu(workspace_id: str, account: str,
     is_self_contact = contact.jid.bare == client.get_own_jid().bare
     pm_with_jid = contact.is_pm_contact and contact.real_jid is not None
     if (not contact.is_groupchat and not contact.is_in_roster and
-            not is_self_contact and pm_with_jid):
-        menu_items.append(('add-to-roster', _('Add to Contact List…')))
+            not is_self_contact):
+        if contact.is_pm_contact:
+            if contact.real_jid is not None:
+                menu_items.append(('add-to-roster', _('Add to Contact List…')))
+        else:
+            menu_items.append(('add-to-roster', _('Add to Contact List…')))
 
     menu = Gio.Menu()
     for item in menu_items:
@@ -555,7 +559,7 @@ def build_workspaces_submenu(current_workspace_id: str, account: str,
 
 def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu = Gtk.Menu()
-    real_jid = contact.real_jid or ''
+    real_jid = contact.real_jid.bare or ''
 
     item = Gtk.MenuItem(label=_('Information'))
     action = f'win.contact-information-{control_id}::{contact.name}'
