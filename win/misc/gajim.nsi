@@ -3,6 +3,7 @@
 Unicode true
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
+!include "nsDialogs.nsh"
 
 Name "Gajim"
 OutFile "Gajim.exe"
@@ -18,13 +19,12 @@ BrandingText "Gajim Setup"
 
 Var StartMenuFolder
 
-!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
+!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-install-alt.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-uninstall.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "..\misc\nsis_header.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
-;!define MUI_COMPONENTSPAGE_CHECKBITMAP "${NSISDIR}\Contrib\Graphics\Checks\colorful.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
 
@@ -36,6 +36,7 @@ Var StartMenuFolder
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Gajim"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
+Page custom CheckForUpgrade StartUpgrade /ENABLECANCEL
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_RUN "$INSTDIR\bin\Gajim.exe"
 !insertmacro MUI_PAGE_FINISH
@@ -69,8 +70,10 @@ LangString DESC_SecGajim ${LANG_ENGLISH} "Installs the main Gajim files."
 LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "Creates a shortcut for Gajim on your desktop."
 LangString DESC_SecAutostart ${LANG_ENGLISH} "Starts Gajim automatically when starting Windows."
 LangString DESC_SecURI ${LANG_ENGLISH} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
-LangString STR_Installed ${LANG_ENGLISH} "Apparently, Gajim is already installed. Uninstall it?"
-LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently running.$\nPlease quit Gajim and retry."
+LangString STR_Installed_Title ${LANG_ENGLISH} "Upgrade"
+LangString STR_Installed_Text ${LANG_ENGLISH} "Upgrade Gajim"
+LangString STR_Installed_Desc ${LANG_ENGLISH} "Gajim is already installed. Do you want to upgrade Gajim?"
+LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently running.$\nPlease quit Gajim and try again."
 
 ; French
 LangString NAME_Emoticons ${LANG_FRENCH} "Emoticônes"
@@ -85,8 +88,10 @@ LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Ga
 LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionné, un raccourci pour Gajim sera créé sur le bureau."
 LangString DESC_SecAutostart ${LANG_FRENCH} "Si activé, Gajim sera automatiquement lancé au démarrage de Windows."
 LangString DESC_SecURI ${LANG_FRENCH} "Permet à Gajim d’ouvrir les liens xmpp (par exemple le lien vers un salon sur un site web)."
-LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement déjà installé. Lancer la désinstallation ?"
-LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancé.$\nPlease quit Gajim and retry."
+LangString STR_Installed_Title ${LANG_FRENCH} "Upgrade"
+LangString STR_Installed_Text ${LANG_FRENCH} "Upgrade Gajim"
+LangString STR_Installed_Desc ${LANG_FRENCH} "Gajim is already installed. Do you want to upgrade Gajim?"
+LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancé.$\nPlease quit Gajim and try again."
 
 ; German
 LangString NAME_Emoticons ${LANG_GERMAN} "Emojis"
@@ -101,7 +106,9 @@ LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim.
 LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Erstellt ein Icon für Gajim auf dem Desktop."
 LangString DESC_SecAutostart ${LANG_GERMAN} "Startet Gajim automatisch zusammen mit Windows."
 LangString DESC_SecURI ${LANG_GERMAN} "Ermöglicht Gajim das Öffnen von xmpp-Links (z.B. verlinkter Gruppenchat auf einer Website)."
-LangString STR_Installed ${LANG_GERMAN} "Gajim ist anscheinend bereits installiert. Wollen Sie Gajim deinstallieren?"
+LangString STR_Installed_Title ${LANG_GERMAN} "Aktualisieren"
+LangString STR_Installed_Text ${LANG_GERMAN} "Gajim aktualisieren"
+LangString STR_Installed_Desc ${LANG_GERMAN} "Gajim ist bereits installiert. Wollen sie Gajim aktualisieren?"
 LangString STR_Running ${LANG_GERMAN} "Gajim läuft zurzeit.$\nBitte beenden Sie Gajim und versuchen es erneut."
 
 ; Italian
@@ -117,8 +124,10 @@ LangString DESC_SecGajim ${LANG_ITALIAN} "Installa i file principali di Gajim."
 LangString DESC_SecDesktopIcon ${LANG_ITALIAN} "Se selezionato, un'icona verrà creata sul desktop."
 LangString DESC_SecAutostart ${LANG_ITALIAN} "Se selezionato, Gajim sarà eseguito all'avvio di Windows."
 LangString DESC_SecURI ${LANG_ITALIAN} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
-LangString STR_Installed ${LANG_ITALIAN} "Gajim is apparently already installed. Uninstall it?"
-LangString STR_Running ${LANG_ITALIAN} "It appears that Gajim is currently running.$\nPlease quit Gajim and retry."
+LangString STR_Installed_Title ${LANG_ITALIAN} "Upgrade"
+LangString STR_Installed_Text ${LANG_ITALIAN} "Upgrade Gajim"
+LangString STR_Installed_Desc ${LANG_ITALIAN} "Gajim is already installed. Do you want to upgrade Gajim?"
+LangString STR_Running ${LANG_ITALIAN} "It appears that Gajim is currently running.$\nPlease quit Gajim and try again."
 
 ; Russian
 LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
@@ -133,8 +142,10 @@ LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных ф
 LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Если отмечено, на рабочем столе будет создан ярлык Gajim."
 LangString DESC_SecAutostart ${LANG_RUSSIAN} "Если отмечено, Gajim будет автоматически запускаться при загрузке Windows."
 LangString DESC_SecURI ${LANG_RUSSIAN} "Позволяет Gajim открывать xmpp-ссылки, например, адреса конференций на веб-странице."
-LangString STR_Installed ${LANG_RUSSIAN} "Похоже, Gajim уже установлен. Деинсталлировать установленную версию?"
-LangString STR_Running ${LANG_RUSSIAN} "Похоже, Gajim уже запущен.$\nPlease quit Gajim and retry."
+LangString STR_Installed_Title ${LANG_RUSSIAN} "Upgrade"
+LangString STR_Installed_Text ${LANG_RUSSIAN} "Upgrade Gajim"
+LangString STR_Installed_Desc ${LANG_RUSSIAN} "Gajim is already installed. Do you want to upgrade Gajim?"
+LangString STR_Running ${LANG_RUSSIAN} "Похоже, Gajim уже запущен.$\nPlease quit Gajim and try again."
 
 ; Hebrew
 LangString NAME_Emoticons ${LANG_HEBREW} "רגשונים"
@@ -149,8 +160,10 @@ LangString DESC_SecGajim ${LANG_HEBREW} "מתקין קבצי Gajim עיקריי�
 LangString DESC_SecDesktopIcon ${LANG_HEBREW} "במידה ונקבעת, קיצור דרך עבור Gajim יושם על שולחן העבודה."
 LangString DESC_SecAutostart ${LANG_HEBREW} "במידה ונקבעת, Gajim יופעל אוטומטית כאשר Windows מתחיל."
 LangString DESC_SecURI ${LANG_HEBREW} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
-LangString STR_Installed ${LANG_HEBREW} "כפי הנראה, Gajim כבר מותקן. להסיר אותו?"
-LangString STR_Running ${LANG_HEBREW} "נראה שהתוכנית Gajim מורצת כעת.$\nPlease quit Gajim and retry."
+LangString STR_Installed_Title ${LANG_HEBREW} "Upgrade"
+LangString STR_Installed_Text ${LANG_HEBREW} "Upgrade Gajim"
+LangString STR_Installed_Desc ${LANG_HEBREW} "Gajim is already installed. Do you want to upgrade Gajim?"
+LangString STR_Running ${LANG_HEBREW} "נראה שהתוכנית Gajim מורצת כעת.$\nPlease quit Gajim and try again."
 
 Section "Gajim" SecGajim
 	SectionIn RO
@@ -181,7 +194,6 @@ Section "Gajim" SecGajim
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
 	!insertmacro MUI_STARTMENU_WRITE_END
-
 SectionEnd
 
 Section $(NAME_SecDesktopIcon) SecDesktopIcon
@@ -235,6 +247,57 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecURI} $(DESC_SecURI)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
+; Installer
+Function StartUpgrade
+	; Run uninstaller in silent mode
+	ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
+	ExecWait '"$R3" /S _?=$INSTDIR'
+FunctionEnd
+
+Function CheckForUpgrade
+	; Check if Gajim is already installed
+	ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
+	; Show upgrade page only if Gajim is already installed
+	${IfNot} ${FileExists} $R3
+		Abort
+	${EndIf}
+
+	!insertmacro MUI_HEADER_TEXT $(STR_Installed_Title) $(STR_Installed_Text)
+
+	nsDialogs::Create 1018
+	Pop $0
+
+	${NSD_CreateLabel} 0 10% 100% 12u "$(STR_Installed_Desc)"
+	Pop $0
+
+	; Change Next Button text
+	GetDlgItem $0 $HWNDPARENT 1
+	${NSD_SetText} $0 "$(STR_Installed_Title)"
+	Pop $0
+
+	nsDialogs::Show
+FunctionEnd
+
+Function .onInit
+	BringToFront
+;	Check if already running
+;	If so don't open another but bring to front
+	System::Call "kernel32::CreateMutexA(i 0, i 0, t '$(^Name)') i .r0 ?e"
+	Pop $0
+	StrCmp $0 0 StartInstall
+	StrLen $0 "$(^Name)"
+	IntOp $0 $0 + 1
+	FindWindow $1 '#32770' '' 0 $1
+	IntCmp $1 0 +3
+	System::Call "user32::ShowWindow(i r1,i 9) i."         ; If minimized then maximize
+	System::Call "user32::SetForegroundWindow(i r1) i."    ; Bring to front
+	Abort
+
+StartInstall:
+	!insertmacro MUI_LANGDLL_DISPLAY  ; Open the language selection window
+FunctionEnd
+
+; Uninstaller
 Function un.onInit
 ;	Check that Gajim is not running before uninstalling
 	FindWindow $0 "gdkWindowToplevel" "Gajim"
@@ -246,52 +309,11 @@ Cancel:
 	Abort
 
 ForceQuitGajim:
+	; Hint: Gajim setup should not be named gajim.exe
 	ExecWait "TaskKill /IM gajim.exe /F"
+	ExecWait "TaskKill /IM gajim-debug.exe /F"
 	!insertmacro MUI_UNGETLANGUAGE
 
 StartUninstall:
-	!insertmacro MUI_UNGETLANGUAGE
-FunctionEnd
-
-Function .onInit
-	BringToFront
-;	Check if already running
-;	If so don't open another but bring to front
-	System::Call "kernel32::CreateMutexA(i 0, i 0, t '$(^Name)') i .r0 ?e"
-	Pop $0
-	StrCmp $0 0 launch
-	StrLen $0 "$(^Name)"
-	IntOp $0 $0 + 1
-	FindWindow $1 '#32770' '' 0 $1
-	IntCmp $1 0 +3
-	System::Call "user32::ShowWindow(i r1,i 9) i."         ; If minimized then maximize
-	System::Call "user32::SetForegroundWindow(i r1) i."    ; Bring to front
-	Abort
-
-launch:
-;	Check to see if old install (inno setup) is already installed
-	ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim_is1" "UninstallString"
-;	remove first and last " char
-	StrLen $0 $R0
-	IntOp $0 $0 - 2
-	strcpy $1 $R0 $0 1
-	IfFileExists $1 +1 NotInstalled
-	MessageBox MB_YESNO|MB_DEFBUTTON2|MB_TOPMOST $(STR_Installed) IDNO Quit
-	StrCmp $R1 2 Quit +1
-	ExecWait '$R0 _?=$INSTDIR' $R2
-	StrCmp $R2 0 +1 Quit
-
-NotInstalled:	
-;	Check to see if new installer (NSIS)already installed
-	ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
-	IfFileExists $R3 +1 ReallyNotInstalled
-	MessageBox MB_YESNO|MB_DEFBUTTON2|MB_TOPMOST $(STR_Installed) IDNO Quit
-	StrCmp $R4 2 Quit +1
-	ExecWait '$R3 _?=$INSTDIR' $R5
-	StrCmp $R5 0 ReallyNotInstalled Quit
-Quit:
-	Quit
- 
-ReallyNotInstalled:
-	!insertmacro MUI_LANGDLL_DISPLAY  ; Open the language selection window
+	!insertmacro MUI_UNGETLANGUAGE  ; Open the language selection window
 FunctionEnd
