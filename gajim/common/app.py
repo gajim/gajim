@@ -211,7 +211,7 @@ def detect_dependencies():
         gi.require_version('Gst', '1.0')
         gi.require_version('GstPbutils', '1.0')
         from gi.repository import Gst
-        from gi.repository import GstPbutils
+        from gi.repository import GstPbutils  # pylint: disable=unused-import
         _dependencies['GST'] = True
     except Exception:
         pass
@@ -264,7 +264,6 @@ def detect_dependencies():
     # GSOUND
     try:
         gi.require_version('GSound', '1.0')
-        from gi.repository import GLib
         from gi.repository import GSound
         global gsound_ctx
         gsound_ctx = GSound.Context()
@@ -292,14 +291,14 @@ def detect_dependencies():
     # APPINDICATOR
     try:
         gi.require_version('AppIndicator3', '0.1')
-        from gi.repository import AppIndicator3
+        from gi.repository import AppIndicator3  # pylint: disable=unused-import
         _dependencies['APPINDICATOR'] = True
     except (ImportError, ValueError):
         pass
     # AYATANA APPINDICATOR
     try:
         gi.require_version('AyatanaAppIndicator3', '0.1')
-        from gi.repository import AyatanaAppIndicator3
+        from gi.repository import AyatanaAppIndicator3  # pylint: disable=unused-import
         _dependencies['AYATANA_APPINDICATOR'] = True
     except (ImportError, ValueError):
         pass

@@ -29,7 +29,6 @@ from gajim.common import helpers
 from gajim.common import modules
 from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
-from gajim.common.structs import UNKNOWN_PRESENCE
 from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_user_proxy
 from gajim.common.helpers import warn_about_plain_connection

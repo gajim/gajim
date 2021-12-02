@@ -3,8 +3,6 @@ import re
 from dataclasses import dataclass
 from dataclasses import field
 
-from gi.repository import GLib
-
 PRE = '`'
 STRONG = '*'
 STRIKE = '~'

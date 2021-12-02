@@ -19,8 +19,6 @@ import logging
 from collections import namedtuple
 from collections import defaultdict
 
-from nbxmpp.protocol import JID
-
 from gajim.common import configpaths
 from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit

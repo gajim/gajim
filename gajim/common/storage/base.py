@@ -17,7 +17,6 @@ import math
 import time
 import sqlite3
 import json
-import dataclasses
 
 from gi.repository import GLib
 
