@@ -496,7 +496,6 @@ class Client(Observable):
 
         for jid in jids:
             message = message.copy()
-            message.contact = app.contacts.create_contact(jid, message.account)
             stanza = self.get_module('Message').build_message_stanza(message)
             message.stanza = stanza
             self._send_message(message)

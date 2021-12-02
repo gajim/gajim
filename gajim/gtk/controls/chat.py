@@ -384,9 +384,8 @@ class ChatControl(BaseControl):
         self.update_ui()
 
     def _on_update_client_info(self, event):
-        # TODO:
-        contact = app.contacts.get_contact(
-            self.account, event.jid, event.resource)
+        # TODO: Test if this works
+        contact = self._client.get_module('Contacts').get_contact(event.jid)
         if contact is None:
             return
         self.xml.phone_image.set_visible(contact.uses_phone)

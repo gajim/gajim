@@ -159,7 +159,6 @@ class Interface:
                 'infos': {},
                 'disco': {}
             }
-            app.contacts.add_account(acc)
             app.groups[acc] = {}
             app.gc_connected[acc] = {}
             app.automatic_rooms[acc] = {}
@@ -481,7 +480,7 @@ class Interface:
     @staticmethod
     def handle_event_metacontacts(obj):
         # TODO: Remove
-        app.contacts.define_metacontacts(obj.conn.name, obj.meta_list)
+        pass
 
     @staticmethod
     def handle_event_roster_item_exchange(event):
@@ -789,7 +788,6 @@ class Interface:
         }
 
         app.groups[account] = {}
-        app.contacts.add_account(account)
         app.gc_connected[account] = {}
         app.automatic_rooms[account] = {}
         app.newly_added[account] = []
@@ -839,7 +837,6 @@ class Interface:
         del app.nicks[account]
         del app.block_signed_in_notifications[account]
         del app.groups[account]
-        app.contacts.remove_account(account)
         del app.gc_connected[account]
         del app.automatic_rooms[account]
         del app.to_be_removed[account]

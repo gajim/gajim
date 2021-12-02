@@ -479,8 +479,7 @@ class GroupchatControl(BaseControl):
         self._show_page('muc-manage')
         self.xml.manage_save_button.grab_default()
 
-        contact = app.contacts.get_gc_contact(
-            self.account, self.room_jid, self.nick)
+        contact = self.contact.get_self()
         if contact.affiliation.is_owner:
             con = app.connections[self.account]
             con.get_module('MUC').request_config(

@@ -49,9 +49,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
-from gajim.common import exceptions
 from gajim.common.i18n import _
-from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.task_manager import TaskManager
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.archive import MessageArchiveStorage
@@ -192,21 +190,6 @@ class GajimApplication(Gtk.Application):
 
         app.storage.archive = MessageArchiveStorage()
         app.storage.archive.init()
-
-        try:
-            app.contacts = LegacyContactsAPI()
-        except exceptions.DatabaseMalformed as error:
-            dlg = Gtk.MessageDialog(
-                transient_for=None,
-                destroy_with_parent=True,
-                modal=True,
-                message_type=Gtk.MessageType.ERROR,
-                buttons=Gtk.ButtonsType.OK,
-                text=_('Database Error'))
-            dlg.format_secondary_text(str(error))
-            dlg.run()
-            dlg.destroy()
-            sys.exit()
 
         from gajim.gui.util import load_user_iconsets
         load_user_iconsets()
