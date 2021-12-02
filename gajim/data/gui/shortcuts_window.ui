@@ -48,13 +48,6 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;s</property>
-                <property name="title" translatable="yes">Set the status message</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;x</property>
                 <property name="title" translatable="yes">Show XML console</property>
               </object>
@@ -71,60 +64,12 @@
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">1</property>
-            <property name="title" translatable="yes">Appearance</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;o</property>
-                <property name="title" translatable="yes">Show offline contacts</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;y</property>
-                <property name="title" translatable="yes">Show only active contacts</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;k</property>
-                <property name="title" translatable="yes">Enable contact list filtering</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;r</property>
-                <property name="title" translatable="yes">Show / hide contact list</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
             <property name="title" translatable="yes">Contacts</property>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;i</property>
                 <property name="title" translatable="yes">Contact information</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">F2</property>
-                <property name="title" translatable="yes">Rename contact</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">Delete</property>
-                <property name="title" translatable="yes">Delete contact</property>
               </object>
             </child>
           </object>
@@ -234,7 +179,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;h</property>
-                <property name="title" translatable="yes">Show chat history</property>
+                <property name="title" translatable="yes">Open search bar</property>
               </object>
             </child>
           </object>
@@ -276,20 +221,6 @@
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Tab</property>
                 <property name="title" translatable="yes">Switch to the next unread tab</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Page_Up</property>
-                <property name="title" translatable="yes">Move tab to the left</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Page_Down</property>
-                <property name="title" translatable="yes">Move tab to the right</property>
               </object>
             </child>
             <child>
