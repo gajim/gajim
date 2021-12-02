@@ -207,7 +207,6 @@ class Interface:
             'message-sent': [self.handle_event_msgsent],
             'message-not-sent': [self.handle_event_msgnotsent],
             'read-state-sync': [self.handle_event_read_state_sync],
-            'metacontacts-received': [self.handle_event_metacontacts],
             'roster-item-exchange-received': [self.handle_event_roster_item_exchange],
         }
         # pylint: enable=line-too-long
@@ -476,11 +475,6 @@ class Interface:
             return
 
         app.window.mark_as_read(event.account, jid, send_marker=False)
-
-    @staticmethod
-    def handle_event_metacontacts(obj):
-        # TODO: Remove
-        pass
 
     @staticmethod
     def handle_event_roster_item_exchange(event):

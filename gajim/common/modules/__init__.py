@@ -52,7 +52,6 @@ MODULES = [
     'last_activity',
     'mam',
     'message',
-    'metacontacts',
     'muc',
     'pep',
     'ping',

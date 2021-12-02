@@ -168,7 +168,6 @@ class Config:
         'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the group chat participants list in a group chat window.')],
         'chat_merge_consecutive_nickname': [opt_bool, False, _('In a chat, show the nickname at the beginning of a line only when it\'s not the same person talking as in the previous message.')],
         'ctrl_tab_go_to_next_composing': [opt_bool, True, _('Ctrl+Tab switches to the next composing tab when there are no tabs with messages pending.')],
-        'confirm_metacontacts': [opt_str, '', _('Show a confirmation dialog to create metacontacts? Empty string means never show the dialog.')],
         'confirm_block': [opt_str, '', _('Show a confirmation dialog to block a contact? Empty string means never show the dialog.')],
         'enable_negative_priority': [opt_bool, False, _('If enabled, you will be able to set a negative priority to your account in the Accounts window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server.')],
         'show_contacts_number': [opt_bool, True, _('If enabled, Gajim will show both the number of online and total contacts in account rows as well as in group rows.')],

@@ -239,22 +239,6 @@ class MessageArchiveStorage(SqliteStorage):
             return None
         return jid_.type == JIDConstant.ROOM_TYPE
 
-    @staticmethod
-    def _get_family_jids(account, jid):
-        """
-        Get all jids of the metacontacts family
-
-        :param account: The account
-
-        :param jid:     The JID
-
-        returns a list of JIDs'
-        """
-        family = app.contacts.get_metacontacts_family(account, jid)
-        if family:
-            return [user['jid'] for user in family]
-        return [jid]
-
     def get_account_id(self, account, type_=JIDConstant.NORMAL_TYPE):
         jid = app.get_jid_from_account(account)
         return self.get_jid_id(jid, type_=type_)
@@ -346,7 +330,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
         account_id = self.get_account_id(account)
         if before:
             time_order = 'AND time < ? ORDER BY time DESC, log_line_id DESC'
@@ -386,7 +370,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
         if before:
             time_order = 'AND time < ? ORDER BY time DESC, log_line_id DESC'
         else:
@@ -424,7 +408,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
         account_id = self.get_account_id(account)
 
         kinds = map(str, [KindConstant.STATUS,
@@ -457,7 +441,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
         account_id = self.get_account_id(account)
         n_lines = 20
 
@@ -508,7 +492,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
         account_id = self.get_account_id(account)
 
         sql = '''
@@ -542,7 +526,7 @@ class MessageArchiveStorage(SqliteStorage):
         returns a list of namedtuples
         """
 
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
         account_id = self.get_account_id(account)
 
         delta = datetime.timedelta(
@@ -588,7 +572,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
 
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
@@ -701,7 +685,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
 
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
@@ -737,7 +721,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a timestamp or None
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
 
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
@@ -764,7 +748,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a timestamp or None
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
 
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
@@ -795,7 +779,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a timestamp or None
         """
-        jids = self._get_family_jids(account, jid)
+        jids = [jid]
 
         delta = datetime.timedelta(
             hours=23, minutes=59, seconds=59, microseconds=999999)
