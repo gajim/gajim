@@ -35,7 +35,7 @@ class AppPage(Gtk.Box):
     def __init__(self):
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.VERTICAL,
-                         spacing=6)
+                         spacing=18)
         self.get_style_context().add_class('app-page')
         self._unread_count = 0
 
@@ -47,16 +47,13 @@ class AppPage(Gtk.Box):
         status_label.get_style_context().add_class('dim-label')
         self.add(status_label)
 
-        status_box = Gtk.Box(spacing=12)
-        status_box.set_halign(Gtk.Align.CENTER)
         self._status_selector = StatusSelector()
-        status_box.add(self._status_selector)
+        self._status_selector.set_halign(Gtk.Align.CENTER)
+        self.add(self._status_selector)
 
         self._status_message_selector = StatusMessageSelector()
         self._status_message_selector.set_halign(Gtk.Align.CENTER)
-        status_box.add(self._status_message_selector)
-
-        self.add(status_box)
+        self.add(self._status_message_selector)
 
         update_label = Gtk.Label(label=_('Updates'))
         update_label.get_style_context().add_class('large-header')
