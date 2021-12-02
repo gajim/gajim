@@ -604,7 +604,7 @@ class MultiLineProperty(VCardProperty):
                                        Gtk.PolicyType.AUTOMATIC)
         self._edit_scrolled.add(self._edit_text_view)
         self._edit_scrolled.set_valign(Gtk.Align.CENTER)
-        self._edit_scrolled.set_size_request(350, 100)
+        self._edit_scrolled.set_size_request(-1, 100)
         self._edit_scrolled.get_style_context().add_class('profile-scrolled')
 
         self._read_text_view = ValueTextView(prop)
@@ -617,7 +617,7 @@ class MultiLineProperty(VCardProperty):
                                        Gtk.PolicyType.AUTOMATIC)
         self._read_scrolled.add(self._read_text_view)
         self._read_scrolled.set_valign(Gtk.Align.CENTER)
-        self._read_scrolled.set_size_request(350, 100)
+        self._read_scrolled.set_size_request(-1, 100)
         self._read_scrolled.get_style_context().add_class(
             'profile-scrolled-read')
 
