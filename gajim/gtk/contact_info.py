@@ -107,7 +107,15 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._load_avatar()
 
         self._ui.contact_name_label.set_text(contact.name)
+        self._ui.contact_jid_label.set_text(str(contact.jid))
+        self._ui.contact_jid_label.set_tooltip_text(str(contact.jid))
+
         if contact.is_pm_contact:
+            if contact.real_jid is not None:
+                self._ui.contact_jid_label.set_text(
+                    str(contact.real_jid.bare))
+                self._ui.contact_jid_label.set_tooltip_text(
+                    str(contact.real_jid.bare))
             self._ui.role_label.set_text(get_uf_role(contact.role))
             self._ui.affiliation_label.set_text(
                 get_uf_affiliation(contact.affiliation))
