@@ -357,8 +357,8 @@ class GroupchatControl(BaseControl):
 
         # Manage chat
         self._get_action('groupchat-manage-').set_enabled(
-            self.is_connected and contact.affiliation in (Affiliation.ADMIN,
-                                                          Affiliation.OWNER))
+            joined and contact.affiliation in (Affiliation.ADMIN,
+                                               Affiliation.OWNER))
 
         vcard_support = False
         if self.disco_info is not None:
@@ -368,19 +368,19 @@ class GroupchatControl(BaseControl):
             self.xml.muc_description_entry.set_text(
                 self.disco_info.muc_description or '')
 
-        if (self.is_connected and vcard_support and
+        if (joined and vcard_support and
                 contact.affiliation.is_owner):
             self.xml.avatar_select_button.show()
 
         self.xml.manage_change_subject_button.set_sensitive(
-            self.is_connected and self._is_subject_change_allowed())
+            joined and self._is_subject_change_allowed())
 
         self.xml.manage_advanced_button.set_sensitive(
-            self.is_connected and contact.affiliation in (Affiliation.ADMIN,
-                                                          Affiliation.OWNER))
+            joined and contact.affiliation in (Affiliation.ADMIN,
+                                               Affiliation.OWNER))
 
         self.xml.manage_destroy_button.set_sensitive(
-            self.is_connected and contact.affiliation.is_owner)
+            joined and contact.affiliation.is_owner)
 
         self._get_action('contact-information-').set_enabled(joined)
 
@@ -593,7 +593,7 @@ class GroupchatControl(BaseControl):
             self.xml.avatar_update_button.grab_default()
 
         AvatarChooserDialog(_on_accept,
-                            transient_for=self.parent_win.window,
+                            transient_for=app.window,
                             modal=True)
 
     def _on_avatar_select_file_clicked(self, _button):
