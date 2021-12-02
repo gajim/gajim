@@ -852,6 +852,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.account, self.contact)
 
     def _on_message_textview_key_press_event(self, textview, event):
+        # pylint: disable=too-many-nested-blocks
         if event.keyval == Gdk.KEY_space:
             self.space_pressed = True
 
@@ -1473,6 +1474,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                         msg_buf: Gtk.TextBuffer,
                         msg_type: str,
                         ) -> None:
+        # pylint: disable=too-many-boolean-expressions
         if msg_type == 'sent':
             history = self.sent_history
             pos = self.sent_history_pos

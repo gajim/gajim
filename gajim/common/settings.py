@@ -573,7 +573,7 @@ class Settings:
 
     def get_active_accounts(self) -> List[str]:
         active = []
-        for account, settings in self._account_settings.items():
+        for account in self._account_settings:
             if self.get_account_setting(account, 'active'):
                 active.append(account)
         return active

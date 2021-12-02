@@ -1323,6 +1323,7 @@ class GroupchatControl(BaseControl):
         return not helpers.jid_is_blocked(self.account, fjid)
 
     def _on_message_textview_key_press_event(self, widget, event):
+        # pylint: disable=too-many-nested-blocks
         res = BaseControl._on_message_textview_key_press_event(
             self, widget, event)
         if res:

@@ -1229,12 +1229,12 @@ class Observable:
         self._callbacks = defaultdict(lambda: defaultdict(list))
 
     def disconnect_all_from_obj(self, object_):
-        for signal_name, qualifiers in self._callbacks.items():
-            for qualifier, handlers in qualifiers.items():
+        for qualifiers in self._callbacks.values():
+            for handlers in qualifiers.values():
                 for handler in list(handlers):
                     func = handler()
                     if func is None or func.__self__ is object_:
-                        self._callbacks[signal_name][qualifier].remove(handler)
+                        handlers.remove(handler)
 
     def disconnect(self, *args):
         self.disconnect_all_from_obj(*args)

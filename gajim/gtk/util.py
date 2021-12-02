@@ -45,7 +45,6 @@ from gi.repository import Pango
 from gi.repository import GdkPixbuf
 import nbxmpp
 from nbxmpp.structs import LocationData
-import cairo
 
 from gajim.common import app
 from gajim.common import configpaths

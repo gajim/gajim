@@ -856,7 +856,7 @@ class Interface:
         Auto connect at startup
         """
 
-        for account in app.connections:
+        for account, con in app.connections.items():
             if not app.settings.get_account_setting(account, 'autoconnect'):
                 continue
 
@@ -870,7 +870,7 @@ class Interface:
                     account, 'last_status_msg')
                 status_message = helpers.from_one_line(status_message)
 
-            app.connections[account].change_status(status, status_message)
+            con.change_status(status, status_message)
 
     def change_status(self,
                       status: str,

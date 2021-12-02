@@ -35,7 +35,6 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import helpers
-from gajim.common import app
 from gajim.common import jingle_xtls
 from gajim.common.modules.base import BaseModule
 

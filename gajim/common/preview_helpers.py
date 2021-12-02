@@ -103,22 +103,20 @@ def extract_and_resize_frames(image: Image.Image, resize_to: Tuple[int, int]
 
     try:
         while True:
-            '''
-            If the GIF uses local colour tables,
-            each frame will have its own palette.
-            If not, we need to apply the global palette to the new frame.
-            '''
+            # If the GIF uses local colour tables,
+            # each frame will have its own palette.
+            # If not, we need to apply the global palette to the new frame.
+
             if not image.getpalette():
                 image.putpalette(palette)
 
             new_frame = Image.new('RGBA', image.size)
 
-            '''
-            Is this file a "partial"-mode GIF where frames update a region
-            of a different size to the entire image?
-            If so, we need to construct the new frame by
-            pasting it on top of the preceding frames.
-            '''
+            # Is this file a "partial"-mode GIF where frames update a region
+            # of a different size to the entire image?
+            # If so, we need to construct the new frame by
+            # pasting it on top of the preceding frames.
+
             if result['mode'] == 'partial':
                 new_frame.paste(last_frame)
 

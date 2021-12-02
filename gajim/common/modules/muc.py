@@ -216,7 +216,7 @@ class MUC(BaseModule):
             self._push_muc_added_event(jid)
 
         elif nick is not None:
-            # Currently MUCData is never discarded so if it exists it contains 
+            # Currently MUCData is never discarded so if it exists it contains
             # the nickname of a previous join. The user may chose now on a new
             # join a different nickname, so update MUCData here.
             muc_data.nick = nick

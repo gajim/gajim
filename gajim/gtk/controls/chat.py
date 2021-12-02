@@ -44,8 +44,6 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import open_uri
-from gajim.common.helpers import geo_provider_from_location
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
@@ -59,11 +57,6 @@ from gajim.gui.const import ControlType
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.util import get_cursor
-from gajim.gui.util import format_mood
-from gajim.gui.util import format_activity
-from gajim.gui.util import format_tune
-from gajim.gui.util import format_location
-from gajim.gui.util import get_activity_icon_name
 from gajim.gui.util import open_window
 
 from gajim.command_system.implementation.hosts import ChatCommands
@@ -334,28 +327,28 @@ class ChatControl(BaseControl):
     def _update_pep(self, type_: PEPEventType) -> None:
         return
         # TODO
-        image = self._get_pep_widget(type_)
-        data = self.contact.pep.get(type_)
-        if data is None:
-            image.hide()
-            return
+        # image = self._get_pep_widget(type_)
+        # data = self.contact.pep.get(type_)
+        # if data is None:
+        #     image.hide()
+        #     return
 
-        if type_ == PEPEventType.MOOD:
-            icon = f'mood-{data.mood}'
-            formated_text = format_mood(*data)
-        elif type_ == PEPEventType.ACTIVITY:
-            icon = get_activity_icon_name(data.activity, data.subactivity)
-            formated_text = format_activity(*data)
-        elif type_ == PEPEventType.TUNE:
-            icon = 'audio-x-generic'
-            formated_text = format_tune(*data)
-        elif type_ == PEPEventType.LOCATION:
-            icon = 'applications-internet'
-            formated_text = format_location(data)
+        # if type_ == PEPEventType.MOOD:
+        #     icon = f'mood-{data.mood}'
+        #     formated_text = format_mood(*data)
+        # elif type_ == PEPEventType.ACTIVITY:
+        #     icon = get_activity_icon_name(data.activity, data.subactivity)
+        #     formated_text = format_activity(*data)
+        # elif type_ == PEPEventType.TUNE:
+        #     icon = 'audio-x-generic'
+        #     formated_text = format_tune(*data)
+        # elif type_ == PEPEventType.LOCATION:
+        #     icon = 'applications-internet'
+        #     formated_text = format_location(data)
 
-        image.set_from_icon_name(icon, Gtk.IconSize.MENU)
-        image.set_tooltip_markup(formated_text)
-        image.show()
+        # image.set_from_icon_name(icon, Gtk.IconSize.MENU)
+        # image.set_tooltip_markup(formated_text)
+        # image.show()
 
     def _get_pep_widget(self, type_: PEPEventType) -> Optional[Gtk.Image]:
         if type_ == PEPEventType.MOOD:
@@ -514,12 +507,12 @@ class ChatControl(BaseControl):
     def on_location_eventbox_button_release_event(self, _widget, _event):
         return
         # TODO
-        if 'geoloc' in self.contact.pep:
-            location = self.contact.pep['geoloc'].data
-            if 'lat' in location and 'lon' in location:
-                uri = geo_provider_from_location(location['lat'],
-                                                 location['lon'])
-                open_uri(uri)
+        # if 'geoloc' in self.contact.pep:
+        #     location = self.contact.pep['geoloc'].data
+        #     if 'lat' in location and 'lon' in location:
+        #         uri = geo_provider_from_location(location['lat'],
+        #                                          location['lon'])
+        #         open_uri(uri)
 
     def on_location_eventbox_leave_notify_event(self, _widget, _event):
         """

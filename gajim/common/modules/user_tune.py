@@ -25,7 +25,6 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
-from gajim.common.const import PEPEventType
 from gajim.common.dbus.music_track import MusicTrackListener
 from gajim.common.helpers import event_filter
 

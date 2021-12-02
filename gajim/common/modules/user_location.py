@@ -21,7 +21,6 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
-from gajim.common.const import PEPEventType
 
 
 class UserLocation(BaseModule):

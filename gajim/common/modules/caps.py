@@ -30,7 +30,6 @@ from gajim.common import app
 from gajim.common.const import COMMON_FEATURES
 from gajim.common.const import Entity
 from gajim.common.helpers import get_optional_features
-from gajim.common.nec import NetworkEvent
 from gajim.common.task_manager import Task
 from gajim.common.modules.base import BaseModule
 

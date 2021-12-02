@@ -43,6 +43,7 @@ PAUSED_AFTER = 10
 def ensure_enabled(func):
     @wraps(func)
     def func_wrapper(self, *args, **kwargs):
+        # pylint: disable=protected-access
         if not self._enabled:
             return None
         return func(self, *args, **kwargs)

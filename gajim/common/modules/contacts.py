@@ -204,6 +204,7 @@ class BareContact(CommonContact):
 
     @property
     def is_available(self):
+        # pylint: disable=R1729
         return any([contact.is_available for contact
                     in self._resources.values()])
 

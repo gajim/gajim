@@ -492,11 +492,11 @@ class Client(Observable):
             log.warning('Trying to send message while offline')
             return
 
-        for jid in jids:
-            message = message.copy()
-            stanza = self.get_module('Message').build_message_stanza(message)
-            message.stanza = stanza
-            self._send_message(message)
+        # for jid in jids:
+        #     message = message.copy()
+        #     stanza = self.get_module('Message').build_message_stanza(message)
+        #     message.stanza = stanza
+        #     self._send_message(message)
 
     def _prepare_for_connect(self):
         custom_host = get_custom_host(self._account)

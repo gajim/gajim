@@ -40,10 +40,10 @@ from .util import open_window
 
 HAS_INDICATOR = False
 if app.is_installed('APPINDICATOR'):
-    from gi.repository import AppIndicator3 as appindicator
+    from gi.repository import AppIndicator3 as appindicator  # pylint: disable=ungrouped-imports
     HAS_INDICATOR = True
 elif app.is_installed('AYATANA_APPINDICATOR'):
-    from gi.repository import AyatanaAppIndicator3 as appindicator
+    from gi.repository import AyatanaAppIndicator3 as appindicator  # pylint: disable=ungrouped-imports
     HAS_INDICATOR = True
 
 

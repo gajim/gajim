@@ -608,10 +608,10 @@ class MessageArchiveStorage(SqliteStorage):
         if from_users is None:
             return self._con.execute(
                 sql, tuple(jids) + (query, after_ts, before_ts)).fetchall()
-        else:
-            users = ','.join([user.upper() for user in from_users])
-            return self._con.execute(sql, tuple(jids) + (
-                query, users, after_ts, before_ts)).fetchall()
+
+        users = ','.join([user.upper() for user in from_users])
+        return self._con.execute(sql, tuple(jids) + (
+            query, users, after_ts, before_ts)).fetchall()
 
     @timeit
     def search_all_logs(self, query, from_users=None, before=None, after=None):
@@ -664,10 +664,10 @@ class MessageArchiveStorage(SqliteStorage):
         if from_users is None:
             return self._con.execute(
                 sql, (query, after_ts, before_ts)).fetchall()
-        else:
-            users = ','.join([user.upper() for user in from_users])
-            return self._con.execute(
-                sql, (query, users, after_ts, before_ts)).fetchall()
+
+        users = ','.join([user.upper() for user in from_users])
+        return self._con.execute(
+            sql, (query, users, after_ts, before_ts)).fetchall()
 
     @timeit
     def get_days_with_logs(self, account, jid, year, month):

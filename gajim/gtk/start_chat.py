@@ -531,14 +531,13 @@ class StartChatDialog(Gtk.ApplicationWindow):
         if not self.new_contact_row_visible:
             return
 
-        for account in self.new_contact_rows:
-            self._ui.listbox.remove(
-                self.new_contact_rows[account])
+        for row in self.new_contact_rows.values():
+            self._ui.listbox.remove(row)
         self.new_contact_row_visible = False
 
     def _update_new_jid_rows(self, search_text):
-        for account in self.new_contact_rows:
-            self.new_contact_rows[account].update_jid(search_text)
+        for row in self.new_contact_rows.values():
+            row.update_jid(search_text)
 
     def _select_new_match(self, _entry, direction):
         selected_row = self._ui.listbox.get_selected_row()

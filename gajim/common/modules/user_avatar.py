@@ -76,11 +76,6 @@ class UserAvatar(BaseModule):
                               contact.jid, sha)
             return
 
-        if avatar is None:
-            self._log.warning('%s advertised %s but data node is empty',
-                              jid, avatar_info.id)
-            return
-
         if is_error(avatar):
             self._log.warning(avatar)
             return
