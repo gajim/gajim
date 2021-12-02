@@ -201,8 +201,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             'clear-chat',
             'delete-line',
             'close-tab',
-            'move-tab-up',
-            'move-tab-down',
             'switch-next-tab',
             'switch-prev-tab',
             'switch-next-unread-tab-right'
@@ -257,22 +255,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if action == 'close-tab':
             self._chat_page.remove_chat(control.account, control.contact.jid)
             return None
-
-        # if action == 'move-tab-up':
-        #     old_position = self.notebook.get_current_page()
-        #     self.notebook.reorder_child(control.widget,
-        #                                 old_position - 1)
-        #     return None
-
-        # if action == 'move-tab-down':
-        #     old_position = self.notebook.get_current_page()
-        #     total_pages = self.notebook.get_n_pages()
-        #     if old_position == total_pages - 1:
-        #         self.notebook.reorder_child(control.widget, 0)
-        #     else:
-        #         self.notebook.reorder_child(control.widget,
-        #                                     old_position + 1)
-        #     return None
 
         if action == 'switch-next-tab':
             self.select_next_chat(Direction.NEXT)

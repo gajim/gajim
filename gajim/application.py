@@ -507,8 +507,6 @@ class GajimApplication(Gtk.Application):
             'win.clear-chat': ['<Primary>L'],
             'win.delete-line': ['<Primary>U'],
             'win.close-tab': ['<Primary>W'],
-            'win.move-tab-up': ['<Primary><Shift>Page_Up'],
-            'win.move-tab-down': ['<Primary><Shift>Page_Down'],
             'win.switch-next-tab': ['<Primary>Page_Down'],
             'win.switch-prev-tab': ['<Primary>Page_Up'],
             'win.switch-next-unread-tab-right': ['<Primary>Tab'],
