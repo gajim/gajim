@@ -559,7 +559,9 @@ def build_workspaces_submenu(current_workspace_id: str, account: str,
 
 def get_groupchat_roster_menu(account, control_id, self_contact, contact):
     menu = Gtk.Menu()
-    real_jid = contact.real_jid.bare or ''
+    real_jid = ''
+    if contact.real_jid is not None:
+        real_jid = contact.real_jid.bare
 
     item = Gtk.MenuItem(label=_('Information'))
     action = f'win.contact-information-{control_id}::{contact.name}'
