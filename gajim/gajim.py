@@ -58,7 +58,7 @@ def _check_required_deps():
         gi.require_versions({'GLib': '2.0',
                              'Gio': '2.0',
                              'Gtk': '3.0',
-                             'GtkSource': '4.0',
+                             'GtkSource': '4',
                              'GObject': '2.0',
                              'Pango': '1.0',
                              'Soup': '2.4'})
