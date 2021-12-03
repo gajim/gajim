@@ -1234,8 +1234,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             else:
                 sound = 'muc_message_received'
 
-            if not self.contact.can_notify():
-                sound = None
+            if not self.contact.can_notify() and not needs_highlight:
+                return
 
         if self.is_privatechat:
             msg_type = 'private-chat-message'
@@ -1249,9 +1249,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if app.settings.get('notification_preview_message'):
             if text.startswith('/me') or text.startswith('/me\n'):
                 text = f'* {name} {text[3:]}'
-
-        if self.is_groupchat and not self.contact.can_notify():
-            return
 
         app.nec.push_incoming_event(
             NetworkEvent('notification',
