@@ -38,6 +38,7 @@ from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_retraction_text
 from gajim.common.helpers import get_uf_relative_time
+from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
@@ -361,7 +362,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         row.set_message_text(
             event.msgtxt, additional_data=event.additional_data)
 
-        self._add_unread(row, event.properties)
+        self._add_unread(row, event.properties, event.msgtxt)
         self.invalidate_sort()
 
     def _on_message_updated(self, event):
@@ -442,7 +443,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             _('File'), icon_name='text-x-generic-symbolic')
 
     @staticmethod
-    def _add_unread(row, properties):
+    def _add_unread(row, properties, text):
         if properties.is_carbon_message and properties.carbon.is_sent:
             return
 
@@ -451,7 +452,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.reset_unread()
             return
 
-        row.add_unread()
+        row.add_unread(text)
 
     def _on_account_changed(self, *args):
         for row in self.get_children():
@@ -678,7 +679,7 @@ class ChatRow(Gtk.ListBoxRow):
             return str(count)
         return '999+'
 
-    def add_unread(self) -> None:
+    def add_unread(self, text: str) -> None:
         control = app.window.get_control(self.account, self.jid)
         if self.is_active and control.get_autoscroll():
             return
@@ -687,10 +688,23 @@ class ChatRow(Gtk.ListBoxRow):
         self._update_unread()
         self.get_parent().emit_unread_changed()
 
+        needs_highlight = message_needs_highlight(
+            text,
+            self.contact.nickname,
+            self._client.get_own_jid().bare)
+        if needs_highlight:
+            self._ui.unread_label.get_style_context().remove_class(
+                'unread-counter-silent')
+
     def reset_unread(self) -> None:
         self._unread_count = 0
         self._update_unread()
         self.get_parent().emit_unread_changed()
+
+        # Add class again in case we were mentioned previously
+        if self.contact.is_groupchat and not self.contact.can_notify():
+            self._ui.unread_label.get_style_context().add_class(
+                'unread-counter-silent')
 
     @property
     def is_active(self) -> bool:
