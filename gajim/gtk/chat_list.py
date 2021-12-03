@@ -688,13 +688,14 @@ class ChatRow(Gtk.ListBoxRow):
         self._update_unread()
         self.get_parent().emit_unread_changed()
 
-        needs_highlight = message_needs_highlight(
-            text,
-            self.contact.nickname,
-            self._client.get_own_jid().bare)
-        if needs_highlight:
-            self._ui.unread_label.get_style_context().remove_class(
-                'unread-counter-silent')
+        if self.contact.is_groupchat:
+            needs_highlight = message_needs_highlight(
+                text,
+                self.contact.nickname,
+                self._client.get_own_jid().bare)
+            if needs_highlight:
+                self._ui.unread_label.get_style_context().remove_class(
+                    'unread-counter-silent')
 
     def reset_unread(self) -> None:
         self._unread_count = 0
