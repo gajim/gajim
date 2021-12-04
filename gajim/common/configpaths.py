@@ -19,11 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict  # pylint: disable=unused-import
-from typing import List
 from typing import Generator
-from typing import Optional  # pylint: disable=unused-import
-from typing import Tuple
+from typing import Optional
+from typing import Union
 from typing import cast
 
 import os
@@ -36,7 +34,8 @@ from gi.repository import GLib
 
 import gajim
 from gajim.common.i18n import _
-from gajim.common.const import PathType, PathLocation
+from gajim.common.const import PathType
+from gajim.common.const import PathLocation
 from gajim.common.types import PathTuple
 
 
@@ -44,7 +43,7 @@ def get(key: str) -> Path:
     return _paths[key]
 
 
-def get_plugin_dirs() -> List[Path]:
+def get_plugin_dirs() -> list[Path]:
     if gajim.IS_FLATPAK:
         return [Path(_paths['PLUGINS_BASE']),
                 Path('/app/plugins')]
@@ -102,10 +101,10 @@ def create_paths() -> None:
 
 class ConfigPaths:
     def __init__(self) -> None:
-        self._paths = {}  # type: Dict[str, PathTuple]
+        self._paths: dict[str, PathTuple] = {}
         self.profile = ''
         self.profile_separation = False
-        self.custom_config_root = None  # type: Optional[Path]
+        self.custom_config_root: Optional[Path] = None
 
         if os.name == 'nt':
             if gajim.IS_PORTABLE:
@@ -146,7 +145,7 @@ class ConfigPaths:
             return self.data_root / path
         return path
 
-    def items(self) -> Generator[Tuple[str, PathTuple], None, None]:
+    def items(self) -> Generator[tuple[str, PathTuple], None, None]:
         for key, value in self._paths.items():
             yield (key, value)
 
@@ -160,10 +159,13 @@ class ConfigPaths:
 
     def add(self,
             name: str,
-            path: Path,
-            location: PathLocation = None,
-            path_type: PathType = None,
+            path: Union[Path, str],
+            location: Optional[PathLocation] = None,
+            path_type: Optional[PathType] = None,
             unique: bool = False) -> None:
+
+        path = Path(path)
+
         if location is not None:
             path = self._prepare(path, unique)
         self._paths[name] = (location, path, path_type)
