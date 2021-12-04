@@ -13,9 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Tuple
+from typing import NamedTuple
 from typing import Optional
 from typing import Union
 
@@ -25,7 +23,6 @@ import binascii
 import hashlib
 import mimetypes
 from io import BytesIO
-from collections import namedtuple
 from pathlib import Path
 from urllib.parse import urlparse
 from urllib.parse import unquote
@@ -47,11 +44,16 @@ from gajim.common.i18n import _
 
 log = logging.getLogger('gajim.c.preview_helpers')
 
-Coords = namedtuple('Coords', 'location lat lon')
+
+class Coords(NamedTuple):
+    location: str
+    lat: str
+    lon: str
 
 
-def resize_gif(image: Image.Image, output_file: BytesIO,
-               resize_to: Tuple[int, int]) -> None:
+def resize_gif(image: Image.Image,
+               output_file: BytesIO,
+               resize_to: tuple[int, int]) -> None:
     frames, result = extract_and_resize_frames(image, resize_to)
 
     frames[0].save(output_file,
@@ -63,7 +65,7 @@ def resize_gif(image: Image.Image, output_file: BytesIO,
                    loop=1000)
 
 
-def analyse_image(image: Image.Image) -> Tuple[Image.Image, Dict[str, Any]]:
+def analyse_image(image: Image.Image) -> tuple[Image.Image, dict[str, Any]]:
     '''
     Pre-process pass over the image to determine the mode (full or additive).
     Necessary as assessing single frames isn't reliable. Need to know the mode
@@ -91,8 +93,10 @@ def analyse_image(image: Image.Image) -> Tuple[Image.Image, Dict[str, Any]]:
     return image, result
 
 
-def extract_and_resize_frames(image: Image.Image, resize_to: Tuple[int, int]
-                              ) -> Tuple[List[Image.Image], Dict[str, Any]]:
+def extract_and_resize_frames(image: Image.Image,
+                              resize_to: tuple[int, int]
+                              ) -> tuple[list[Image.Image], dict[str, Any]]:
+
     image, result = analyse_image(image)
 
     i = 0
@@ -148,10 +152,13 @@ def create_thumbnail_with_pixbuf(data: bytes, size: int) -> Optional[bytes]:
         loader.write(data)
         loader.close()
     except GLib.Error as error:
-        log.warning('making pixbuf failed: %s', error)
+        log.warning('Loading pixbuf failed: %s', error)
         return None
 
     pixbuf = loader.get_pixbuf()
+    if pixbuf is None:
+        log.warning('Loading pixbuf failed')
+        return None
 
     if size > pixbuf.get_width() and size > pixbuf.get_height():
         return data
@@ -160,6 +167,10 @@ def create_thumbnail_with_pixbuf(data: bytes, size: int) -> Optional[bytes]:
     thumbnail = pixbuf.scale_simple(width,
                                     height,
                                     GdkPixbuf.InterpType.BILINEAR)
+    if thumbnail is None:
+        log.warning('scale_simple() returned None')
+        return None
+
     try:
         _error, bytes_ = thumbnail.save_to_bufferv('png', [], [])
     except GLib.Error as err:
@@ -205,7 +216,7 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> Optional[bytes]:
     return bytes_
 
 
-def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> Tuple[int, int]:
+def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> tuple[int, int]:
     # Calculates the new thumbnail size while preserving the aspect ratio
     image_width = pixbuf.get_width()
     image_height = pixbuf.get_height()
@@ -222,7 +233,7 @@ def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> Tuple[int, int]:
     return image_width, image_height
 
 
-def pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf:
+def pixbuf_from_data(data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
     loader = GdkPixbuf.PixbufLoader()
     try:
         loader.write(data)
@@ -244,14 +255,22 @@ def pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf:
         input_file.close()
         return pixbuf
 
-    return loader.get_pixbuf().apply_embedded_orientation()
+    pixbuf = loader.get_pixbuf()
+    if pixbuf is None:
+        return None
+
+    pixbuf = pixbuf.apply_embedded_orientation()
+    if pixbuf is None:
+        return pixbuf
+
+    return pixbuf
 
 
-def parse_fragment(fragment: str) -> Tuple[bytes, bytes]:
-    if not fragment:
+def parse_fragment(fragment_string: str) -> tuple[bytes, bytes]:
+    if not fragment_string:
         raise ValueError('Invalid fragment')
 
-    fragment = binascii.unhexlify(fragment)
+    fragment = binascii.unhexlify(fragment_string)
     size = len(fragment)
     # Clients started out with using a 16 byte IV but long term
     # want to switch to the more performant 12 byte IV
@@ -268,8 +287,12 @@ def parse_fragment(fragment: str) -> Tuple[bytes, bytes]:
     return key, iv
 
 
-def get_image_paths(uri: str, urlparts: ParseResult, size: int, orig_dir: Path,
-                    thumb_dir: Path) -> Tuple[Path, Path]:
+def get_image_paths(uri: str,
+                    urlparts: ParseResult,
+                    size: int,
+                    orig_dir: Path,
+                    thumb_dir: Path) -> tuple[Path, Path]:
+
     path = Path(unquote(urlparts.path))
     web_stem = path.stem
     extension = path.suffix
@@ -355,8 +378,8 @@ def contains_audio_streams(file_path: Path) -> bool:
     return has_audio
 
 
-def get_previewable_mime_types():
-    previewable_mime_types = set()
+def get_previewable_mime_types() -> tuple[str, ...]:
+    previewable_mime_types: set[str] = set()
     for fmt in GdkPixbuf.Pixbuf.get_formats():
         for mime_type in fmt.get_mime_types():
             previewable_mime_types.add(mime_type.lower())
@@ -384,7 +407,7 @@ def guess_mime_type(file_path: Union[Path, str],
 
 def guess_simple_file_type(file_path: str,
                            data: Optional[bytes] = None
-                           ) -> Tuple[Gio.Icon, str]:
+                           ) -> tuple[Gio.Icon, str]:
     mime_type = guess_mime_type(file_path, data)
     icon = get_icon_for_mime_type(mime_type)
     if file_path.startswith('geo:'):

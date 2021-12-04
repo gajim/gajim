@@ -308,6 +308,7 @@ class PreviewManager:
     def _on_thumb_load_finished(data: Optional[bytes],
                                 error: Gio.AsyncResult,
                                 preview: Preview) -> None:
+
         if preview.thumb_path is None or preview.orig_path is None:
             return
 
@@ -326,6 +327,11 @@ class PreviewManager:
                       preview.thumb_path.name,
                       err)
             return
+
+        if pixbuf is None:
+            log.error('Unable to load pixbuf')
+            return
+
         preview.update_widget(data=pixbuf)
 
     def download_content(self,
@@ -461,4 +467,9 @@ class PreviewManager:
                       preview.thumb_path.name,
                       err)
             return
+
+        if pixbuf is None:
+            log.error('Unable to load pixbuf')
+            return
+
         preview.update_widget(data=pixbuf)
