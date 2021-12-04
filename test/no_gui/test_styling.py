@@ -8,8 +8,8 @@ from gajim.common.styling import PreTextSpan
 from gajim.common.styling import StrongSpan
 from gajim.common.styling import EmphasisSpan
 from gajim.common.styling import StrikeSpan
-from gajim.common.styling import Url
-from gajim.common.styling import URL_RX
+from gajim.common.styling import Uri
+from gajim.common.styling import URI_RX
 from gajim.common.styling import ADDRESS_RX
 
 
@@ -135,7 +135,7 @@ STYLING = {
     'pre block with closing': {
         'input': '```\npre *fmt* ```\n```\nplain',
         'tokens': [
-            PreBlock(start=0, end=22, text='```\npre *fmt* ```\n```\n', spans=[]),
+            PreBlock(start=0, end=22, text='```\npre *fmt* ```\n```\n'),
             PlainBlock(start=22, end=27, text='plain', spans=[])
         ]
     },
@@ -143,7 +143,7 @@ STYLING = {
     'pre block EOF': {
         'input': '````\na\n```',
         'tokens': [
-            PreBlock(start=0, end=10, text='````\na\n```', spans=[])
+            PreBlock(start=0, end=10, text='````\na\n```')
         ]
     },
 
@@ -164,7 +164,7 @@ STYLING = {
     'single level block quote': {
         'input': '>  quoted\nnot quoted',
         'tokens': [
-            QuoteBlock(start=0, end=10, text='>  quoted\n', spans=[], blocks=[
+            QuoteBlock(start=0, end=10, text='>  quoted\n', blocks=[
                 PlainBlock(start=0, end=8, text=' quoted\n', spans=[])
             ]),
             PlainBlock(start=10, end=20, text='not quoted', spans=[])
@@ -174,9 +174,9 @@ STYLING = {
     'multi level block quote': {
         'input': '>  quoted\n>>   quote > 2\n>quote 1\n\nnot quoted',
         'tokens': [
-            QuoteBlock(start=0, end=34, text='>  quoted\n>>   quote > 2\n>quote 1\n', spans=[], blocks=[
+            QuoteBlock(start=0, end=34, text='>  quoted\n>>   quote > 2\n>quote 1\n', blocks=[
                 PlainBlock(start=0, end=8, text=' quoted\n', spans=[]),
-                QuoteBlock(start=8, end=22, text='>   quote > 2\n', spans=[], blocks=[
+                QuoteBlock(start=8, end=22, text='>   quote > 2\n', blocks=[
                     PlainBlock(start=0, end=12, text='  quote > 2\n', spans=[])
                 ]),
                 PlainBlock(start=22, end=30, text='quote 1\n', spans=[])
@@ -188,15 +188,15 @@ STYLING = {
     'quote start then EOF': {
         'input': '> ',
         'tokens': [
-            QuoteBlock(start=0, end=2, text='> ', spans=[], blocks=[])
+            QuoteBlock(start=0, end=2, text='> ', blocks=[])
         ]
     },
 
     'quote with children': {
         'input': '> ```\n> pre\n> ```\n> not pre',
         'tokens': [
-            QuoteBlock(start=0, end=27, text='> ```\n> pre\n> ```\n> not pre', spans=[], blocks=[
-                PreBlock(start=0, end=12, text='```\npre\n```\n', spans=[]),
+            QuoteBlock(start=0, end=27, text='> ```\n> pre\n> ```\n> not pre', blocks=[
+                PreBlock(start=0, end=12, text='```\npre\n```\n'),
                 PlainBlock(start=12, end=19, text='not pre', spans=[])
             ])
         ]
@@ -205,8 +205,8 @@ STYLING = {
     'pre end of parent': {
         'input': '> ``` \n> pre\nplain',
         'tokens': [
-            QuoteBlock(start=0, end=13, text='> ``` \n> pre\n', spans=[], blocks=[
-                PreBlock(start=0, end=9, text='``` \npre\n', spans=[])
+            QuoteBlock(start=0, end=13, text='> ``` \n> pre\n', blocks=[
+                PreBlock(start=0, end=9, text='``` \npre\n')
             ]),
             PlainBlock(start=13, end=18, text='plain', spans=[])
         ]
@@ -223,7 +223,7 @@ STYLING = {
         'input': 'some kind of link http://foo.com/blah_blah',
         'tokens': [
             PlainBlock(start=0, end=42, text='some kind of link http://foo.com/blah_blah', spans=[], uris=[
-                Url(start=18, end=42, text='http://foo.com/blah_blah')
+                Uri(start=18, end=42, text='http://foo.com/blah_blah')
             ])
         ]
     },
@@ -232,7 +232,7 @@ STYLING = {
         'input': 'some kind of link http://foo.com/blah_blah,',
         'tokens': [
             PlainBlock(start=0, end=43, text='some kind of link http://foo.com/blah_blah,', spans=[], uris=[
-                Url(start=18, end=42, text='http://foo.com/blah_blah')
+                Uri(start=18, end=42, text='http://foo.com/blah_blah')
             ])
         ]
     },
@@ -243,7 +243,7 @@ STYLING = {
             PlainBlock(start=0, end=44, text='some *kind* of link http://foo.com/blah_blah', spans=[
                 StrongSpan(start=5, end=11, text='*kind*')
             ], uris=[
-                Url(start=20, end=44, text='http://foo.com/blah_blah')
+                Uri(start=20, end=44, text='http://foo.com/blah_blah')
             ])
         ]
     },
@@ -316,7 +316,7 @@ class Test(unittest.TestCase):
 
     def test_urls(self):
         for url in URLS:
-            match = URL_RX.search(url)
+            match = URI_RX.search(url)
             self.assertIsNotNone(match)
             start = match.start()
             end = match.end()
@@ -332,7 +332,7 @@ class Test(unittest.TestCase):
 
     def test_url_with_text(self):
         for text, result in URL_WITH_TEXT:
-            match = URL_RX.search(text)
+            match = URI_RX.search(text)
             self.assertIsNotNone(match)
             start = match.start()
             end = match.end()
