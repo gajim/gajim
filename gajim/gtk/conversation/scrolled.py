@@ -134,7 +134,7 @@ class ScrolledView(Gtk.ScrolledWindow):
         if self._request_history_at_upper == adj.get_upper():
             # Abort here if we already did a history request and the upper
             # did not change. This can happen if we scroll very fast and the
-            # value changes while the request has not been fullfilled.
+            # value changes while the request has not been fulfilled.
             return
 
         self._request_history_at_upper = None

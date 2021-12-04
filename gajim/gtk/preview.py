@@ -233,7 +233,7 @@ class PreviewWidget(Gtk.Box):
 
     def _on_button_press_event(self, _button, event):
         if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 3:
-            # Right klick
+            # Right click
             menu = self._get_context_menu()
             menu.popup_at_pointer(event)
 

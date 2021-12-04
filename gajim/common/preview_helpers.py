@@ -254,7 +254,7 @@ def parse_fragment(fragment: str) -> Tuple[bytes, bytes]:
     fragment = binascii.unhexlify(fragment)
     size = len(fragment)
     # Clients started out with using a 16 byte IV but long term
-    # want to swtich to the more performant 12 byte IV
+    # want to switch to the more performant 12 byte IV
     # We have to support both
     if size == 48:
         key = fragment[16:]

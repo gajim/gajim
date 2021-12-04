@@ -406,7 +406,7 @@ row:backdrop { transition: none; }
 	padding: 0px 18px 6px 18px;
 }
 
-/* Seach view */
+/* Search view */
 .search-view {
     padding: 12px;
     border-left: 1px solid @borders;

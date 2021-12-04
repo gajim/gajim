@@ -332,7 +332,7 @@ def _is_valid_span_end(line, index):
     '''
     https://xmpp.org/extensions/xep-0393.html#span
 
-    ... and the closing styling directive MUST NOT be preceeded
+    ... and the closing styling directive MUST NOT be preceded
     by a whitespace character ...
     '''
 

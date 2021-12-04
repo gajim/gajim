@@ -216,7 +216,7 @@ class ChatPage(Gtk.Box):
             self._chat_stack.add_group_chat(account, jid)
         elif type_ == 'pm':
             if not self._startup_finished:
-                # TODO: Currently we cant load private chats at start
+                # TODO: Currently we can’t load private chats at start
                 # because the Contacts dont exist yet
                 return
             self._chat_stack.add_private_chat(account, jid)
