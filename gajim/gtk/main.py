@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
 from typing import Generator
 
@@ -231,7 +233,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             act.connect('activate', self._on_action)
             self.add_action(act)
 
-    def _on_action(self, action, _param):
+    def _on_action(self,
+                   action: Gio.SimpleAction,
+                   _param: Optional[GLib.Variant]) -> None:
+
         control = self.get_active_control()
         if control is None:
             return None
@@ -339,7 +344,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return False
         return self._chat_page.is_chat_active(account, jid)
 
-    def _add_workspace(self, _action, param):
+    def _add_workspace(self,
+                       _action: Gio.SimpleAction,
+                       param: Optional[GLib.Variant]) -> None:
+
         workspace_id = param.get_string()
         if workspace_id is not None:
             self.add_workspace(workspace_id)
@@ -352,12 +360,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.activate_workspace(workspace_id)
             self._workspace_side_bar.store_workspace_order()
 
-    def _edit_workspace(self, _action, _param):
+    def _edit_workspace(self,
+                        _action: Gio.SimpleAction,
+                        _param: Optional[GLib.Variant]) -> None:
+
         workspace_id = self.get_active_workspace()
         if workspace_id is not None:
             open_window('WorkspaceDialog', workspace_id=workspace_id)
 
-    def _remove_workspace(self, _action, _param):
+    def _remove_workspace(self,
+                          _action: Gio.SimpleAction,
+                          _param: Optional[GLib.Variant]) -> None:
+
         workspace_id = self.get_active_workspace()
         if workspace_id is not None:
             self.remove_workspace(workspace_id)
@@ -376,7 +390,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._chat_page.remove_chat_list(workspace_id)
         app.settings.remove_workspace(workspace_id)
 
-    def _activate_workspace(self, _action, param):
+    def _activate_workspace(self,
+                            _action: Gio.SimpleAction,
+                            param: Optional[GLib.Variant]) -> None:
+
         workspace_id = param.get_string()
         if workspace_id is not None:
             self.activate_workspace(workspace_id)
@@ -395,7 +412,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         chat_list_stack = self._chat_page.get_chat_list_stack()
         return chat_list_stack.get_chatlist(workspace_id)
 
-    def _add_group_chat(self, _action, param):
+    def _add_group_chat(self,
+                        _action: Gio.SimpleAction,
+                        param: Optional[GLib.Variant]) -> None:
+
         account, jid, select = param.unpack()
         self.add_group_chat(account, JID.from_string(jid), select)
 
@@ -410,7 +430,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                'groupchat',
                                                select=select)
 
-    def _add_chat(self, _action, param):
+    def _add_chat(self,
+                  _action: Gio.SimpleAction,
+                  param: Optional[GLib.Variant]) -> None:
+
         account, jid, type_, select = param.unpack()
         self.add_chat(account, JID.from_string(jid), type_, select)
 
@@ -456,7 +479,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             chat_list.select_chat_number(number)
 
     @staticmethod
-    def _add_to_roster(_action, param):
+    def _add_to_roster(_action: Gio.SimpleAction,
+                       param: Optional[GLib.Variant]) -> None:
+
         _workspace, account, jid = param.unpack()
         open_window('AddContact', account=account, jid=JID.from_string(jid))
 
