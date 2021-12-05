@@ -203,8 +203,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             'close-tab',
             'switch-next-tab',
             'switch-prev-tab',
-            'switch-next-unread-tab-right'
-            'switch-next-unread-tab-left',
+            'switch-next-unread-tab'
+            'switch-prev-unread-tab',
             'switch-tab-1',
             'switch-tab-2',
             'switch-tab-3',
@@ -264,11 +264,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.select_next_chat(Direction.PREV)
             return None
 
-        if action == 'switch-next-unread-tab-right':
+        if action == 'switch-next-unread-tab':
             self.select_next_chat(Direction.NEXT, unread_first=True)
             return None
 
-        if action == 'switch-next-unread-tab-left':
+        if action == 'switch-prev-unread-tab':
             self.select_next_chat(Direction.PREV, unread_first=True)
             return None
 
