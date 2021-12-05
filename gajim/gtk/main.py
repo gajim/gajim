@@ -243,44 +243,39 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         log.info('Activate action: %s, active control: %s',
                  action.get_name(), control.contact.jid)
 
-        action = action.get_name()
+        action_name = action.get_name()
 
         res = control.delegate_action(action)
         if res != Gdk.EVENT_PROPAGATE:
             return res
 
-        if action == 'escape':
+        if action_name == 'escape':
             if self._chat_page.hide_search():
                 return None
 
-        if action == 'escape' and app.settings.get('escape_key_closes'):
-            self._chat_page.remove_chat(control.account, control.contact.jid)
-            return None
+            if app.settings.get('escape_key_closes'):
+                self._chat_page.remove_chat(control.account,
+                                            control.contact.jid)
+                return None
 
-        if action == 'close-tab':
+        elif action_name == 'close-tab':
             self._chat_page.remove_chat(control.account, control.contact.jid)
-            return None
 
-        if action == 'switch-next-tab':
+        elif action_name == 'switch-next-tab':
             self.select_next_chat(Direction.NEXT)
-            return None
 
-        if action == 'switch-prev-tab':
+        elif action_name == 'switch-prev-tab':
             self.select_next_chat(Direction.PREV)
-            return None
 
-        if action == 'switch-next-unread-tab':
+        elif action_name == 'switch-next-unread-tab':
             self.select_next_chat(Direction.NEXT, unread_first=True)
-            return None
 
-        if action == 'switch-prev-unread-tab':
+        elif action_name == 'switch-prev-unread-tab':
             self.select_next_chat(Direction.PREV, unread_first=True)
-            return None
 
-        if action.startswith('switch-tab-'):
-            number = int(action[-1]) - 1
+        elif action_name.startswith('switch-tab-'):
+            number = int(action_name[-1]) - 1
             self.select_chat_number(number)
-            return None
 
         return None
 
