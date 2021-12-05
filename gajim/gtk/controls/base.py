@@ -690,6 +690,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             'chat_control_base_update_toolbar', self)
 
         self._client.disconnect_all_from_obj(self)
+        self.contact.disconnect_all_from_obj(self)
 
         for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
