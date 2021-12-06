@@ -121,7 +121,7 @@ class AccountAvatar(Gtk.Image):
     def _update_image(self) -> None:
         surface = self._contact.get_avatar(AvatarSize.ACCOUNT_SIDE_BAR,
                                            self.get_scale_factor(),
-                                           style='round-corners')
+                                           style='circle')
         self.set_from_surface(surface)
 
     def _on_destroy(self, *args):
