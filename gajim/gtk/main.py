@@ -509,9 +509,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         chat_list_stack = self._chat_page.get_chat_list_stack()
         return chat_list_stack.get_total_unread_count()
 
-    def get_chat_unread_count(self, account: str, jid: JID) -> int:
+    def get_chat_unread_count(self,
+                              account: str,
+                              jid: JID,
+                              include_silent: bool = False
+                              ) -> int:
         chat_list_stack = self._chat_page.get_chat_list_stack()
-        count = chat_list_stack.get_chat_unread_count(account, jid)
+        count = chat_list_stack.get_chat_unread_count(
+            account, jid, include_silent)
         return count or 0
 
     def mark_as_read(self, account: str, jid: JID,

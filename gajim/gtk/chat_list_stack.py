@@ -81,6 +81,7 @@ class ChatListStack(Gtk.Stack):
         actions = [
             ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
             ('move-chat-to-workspace', 'as', self._move_chat_to_workspace),
+            ('mark-as-read', 'as', self._mark_as_read),
         ]
 
         for action in actions:
@@ -208,6 +209,10 @@ class ChatListStack(Gtk.Stack):
         self.store_open_chats(current_chatlist.workspace_id)
         self.store_open_chats(new_workspace_id)
 
+    def _mark_as_read(self, _action, param):
+        _workspace_id, account, jid = param.unpack()
+        self.mark_as_read(account, JID.from_string(jid))
+
     def remove_chat(self, workspace_id: str, account: str, jid: JID) -> None:
         chat_list = self._chat_lists[workspace_id]
         type_ = chat_list.get_chat_type(account, jid)
@@ -243,9 +248,14 @@ class ChatListStack(Gtk.Stack):
             count += chat_list.get_unread_count()
         return count
 
-    def get_chat_unread_count(self, account: str, jid: JID) -> Optional[int]:
+    def get_chat_unread_count(self,
+                              account: str,
+                              jid: JID,
+                              include_silent: bool = False
+                              ) -> Optional[int]:
         for chat_list in self._chat_lists.values():
-            count = chat_list.get_chat_unread_count(account, jid)
+            count = chat_list.get_chat_unread_count(
+                account, jid, include_silent)
             if count is not None:
                 return count
         return None

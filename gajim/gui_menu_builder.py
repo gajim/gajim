@@ -521,6 +521,11 @@ def get_chat_list_row_menu(workspace_id: str, account: str,
         else:
             menu_items.append(('add-to-roster', _('Add to Contact List…')))
 
+    unread_count = app.window.get_chat_unread_count(
+        account, jid, include_silent=True)
+    if unread_count is not None and unread_count > 0:
+        menu_items.append(('mark-as-read', _('Mark as read')))
+
     menu = Gio.Menu()
     for item in menu_items:
         if isinstance(item[1], str):

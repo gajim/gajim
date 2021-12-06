@@ -90,9 +90,15 @@ class ChatList(Gtk.ListBox, EventHelper):
     def get_unread_count(self) -> int:
         return sum([chats.unread_count for chats in self._chats.values()])
 
-    def get_chat_unread_count(self, account: str, jid: JID) -> Optional[int]:
+    def get_chat_unread_count(self,
+                              account: str,
+                              jid: JID,
+                              include_silent: bool = False
+                              ) -> Optional[int]:
         chat = self._chats.get((account, jid))
         if chat is not None:
+            if include_silent:
+                return chat.get_real_unread_count()
             return chat.unread_count
         return None
 
@@ -655,6 +661,9 @@ class ChatRow(Gtk.ListBoxRow):
 
     def _on_nickname_update(self, _contact, _signal_name):
         self.update_name()
+
+    def get_real_unread_count(self) -> int:
+        return self._unread_count
 
     @property
     def unread_count(self) -> int:
