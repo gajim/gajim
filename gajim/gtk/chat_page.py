@@ -263,6 +263,7 @@ class ChatPage(Gtk.Box):
     def _on_chat_removed(self, _chat_list: ChatList, account: str, jid: JID,
                          type_: str) -> None:
         self._chat_stack.remove_chat(account, jid)
+        self._currently_loaded_control = None
         if type_ == 'groupchat':
             client = app.get_client(account)
             client.get_module('MUC').leave(jid)
