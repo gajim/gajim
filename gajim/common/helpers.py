@@ -25,8 +25,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any  # pylint: disable=unused-import
-from typing import Dict  # pylint: disable=unused-import
+from __future__ import annotations
+
+from typing import Any
+from typing import Dict
 from typing import Optional
 from typing import List
 from typing import Tuple
@@ -91,6 +93,7 @@ from gajim.common.const import SHOW_LIST
 from gajim.common.regex import INVALID_XML_CHARS_REGEX
 from gajim.common.regex import STH_AT_STH_DOT_STH_REGEX
 from gajim.common.structs import URI
+from gajim.common import types
 
 HAS_PYWIN32 = False
 if os.name == 'nt':
@@ -1221,24 +1224,26 @@ def get_tls_error_phrase(tls_error: Gio.TlsCertificateFlags) -> str:
 
 
 class Observable:
-    def __init__(self, log_=None):
+    def __init__(self, log_: Optional[logging.Logger] = None):
         self._log = log_
+        self._callbacks: types.ObservableCbDict = defaultdict(list)
+
+    def disconnect_signals(self) -> None:
         self._callbacks = defaultdict(list)
 
-    def disconnect_signals(self):
-        self._callbacks = defaultdict(list)
-
-    def disconnect_all_from_obj(self, object_):
+    def disconnect_all_from_obj(self, obj: Any) -> None:
         for handlers in self._callbacks.values():
             for handler in list(handlers):
                 func = handler()
-                if func is None or func.__self__ is object_:
+                if func is None or func.__self__ is obj:
                     handlers.remove(handler)
 
-    def disconnect(self, *args):
-        self.disconnect_all_from_obj(*args)
+    def disconnect(self, obj: Any) -> None:
+        self.disconnect_all_from_obj(obj)
 
-    def connect_signal(self, signal_name, func):
+    def connect_signal(self,
+                       signal_name: str,
+                       func: types.AnyCallableT) -> None:
         if not inspect.ismethod(func):
             raise ValueError('Only bound methods allowed')
 
@@ -1246,14 +1251,16 @@ class Observable:
 
         self._callbacks[signal_name].append(weak_func)
 
-    def connect(self, *args, **kwargs):
-        self.connect_signal(*args, **kwargs)
+    def connect(self,
+                signal_name: str,
+                func: types.AnyCallableT) -> None:
+        self.connect_signal(signal_name, func)
 
-    def multi_connect(self, signal_dict):
+    def multi_connect(self, signal_dict: dict[str, types.AnyCallableT]):
         for signal_name, func in signal_dict.items():
             self.connect_signal(signal_name, func)
 
-    def notify(self, signal_name, *args, **kwargs):
+    def notify(self, signal_name: str, *args: Any, **kwargs: Any):
         signal_callbacks = self._callbacks.get(signal_name)
         if not signal_callbacks:
             return
@@ -1261,11 +1268,12 @@ class Observable:
         if self._log is not None:
             self._log.info('Signal: %s', signal_name)
 
-        for func in list(signal_callbacks):
-            if func() is None:
-                self._callbacks[signal_name].remove(func)
+        for weak_method in list(signal_callbacks):
+            func = weak_method()
+            if func is None:
+                self._callbacks[signal_name].remove(weak_method)
                 continue
-            func()(self, signal_name, *args, **kwargs)
+            func(self, signal_name, *args, **kwargs)
 
 
 def write_file_async(path, data, callback, user_data=None):

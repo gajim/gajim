@@ -14,6 +14,7 @@
 
 # Types for typechecking
 
+from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import List
@@ -23,6 +24,7 @@ from typing import Union
 from typing import TYPE_CHECKING
 
 from pathlib import Path
+import weakref
 
 from gi.repository import GdkPixbuf
 
@@ -75,3 +77,6 @@ SettingsT = Union['Settings']
 BookmarksDict = Dict[JID, BookmarkData]
 
 GdkPixbufType = Union[GdkPixbuf.Pixbuf, GdkPixbuf.PixbufAnimation]
+
+AnyCallableT = Callable[..., Any]
+ObservableCbDict = dict[str, list[weakref.WeakMethod[AnyCallableT]]]
