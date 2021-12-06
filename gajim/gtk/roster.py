@@ -167,6 +167,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             'block-contact',
             'remove-contact',
             'show-offline',
+            'sort-by-show',
         ]
         for action in actions:
             app.window.remove_action(f'{action}-{self._account}')
