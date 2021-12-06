@@ -123,6 +123,11 @@ class ConversationView(Gtk.ListBox):
 
         self._scroll_hint_row = ScrollHintRow(self._account)
         self.add(self._scroll_hint_row)
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, *args):
+        self.set_filter_func(None)
+        app.check_finalize(self)
 
     def lock(self) -> None:
         self.locked = True
