@@ -117,6 +117,11 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press_event)
 
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, *args):
+        app.check_finalize(self)
+
     def _on_access_model_received(self, task):
         namespace = task.get_user_data()
 

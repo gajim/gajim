@@ -76,6 +76,10 @@ class AddContact(Assistant):
         self.connect('button-clicked', self._on_button_clicked)
 
         self.show_all()
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, *args):
+        app.check_finalize(self)
 
     def _on_button_clicked(self, _assistant, button_name):
         page = self.get_current_page()

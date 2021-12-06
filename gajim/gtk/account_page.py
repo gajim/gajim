@@ -82,6 +82,10 @@ class AccountPage(Gtk.Box, EventHelper):
 
         self.update()
         self.show_all()
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, *args):
+        app.check_finalize(self)
 
     def _on_edit_profile(self, _button):
         open_window('ProfileWindow', account=self._account)
