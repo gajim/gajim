@@ -123,8 +123,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             if contact.real_jid is not None:
                 self._devices_grid = DevicesGrid(self._ui.devices_grid)
                 self._query_devices()
-                self._update_timeout_id = GLib.timeout_add(
-                    100, self._update_timer)
 
                 self._ui.contact_jid_label.set_text(
                     str(contact.real_jid.bare))
@@ -144,9 +142,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         if contact.is_in_roster:
             self._devices_grid = DevicesGrid(self._ui.devices_grid)
             self._query_devices()
-            self._update_timeout_id = GLib.timeout_add(100, self._update_timer)
 
-        if contact.is_in_roster:
             note = self._client.get_module('Annotations').get_note(contact.jid)
             if note is not None:
                 self._ui.textview_annotation.get_buffer().set_text(note.data)
@@ -234,6 +230,8 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.header_image.set_from_surface(surface_2)
 
     def _query_devices(self):
+        self._update_timeout_id = GLib.timeout_add(100, self._update_timer)
+
         if self.contact.is_pm_contact:
             self._query_device(self.contact)
         else:
