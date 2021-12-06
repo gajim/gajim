@@ -1223,29 +1223,28 @@ def get_tls_error_phrase(tls_error: Gio.TlsCertificateFlags) -> str:
 class Observable:
     def __init__(self, log_=None):
         self._log = log_
-        self._callbacks = defaultdict(lambda: defaultdict(list))
+        self._callbacks = defaultdict(list)
 
     def disconnect_signals(self):
-        self._callbacks = defaultdict(lambda: defaultdict(list))
+        self._callbacks = defaultdict(list)
 
     def disconnect_all_from_obj(self, object_):
-        for qualifiers in self._callbacks.values():
-            for handlers in qualifiers.values():
-                for handler in list(handlers):
-                    func = handler()
-                    if func is None or func.__self__ is object_:
-                        handlers.remove(handler)
+        for handlers in self._callbacks.values():
+            for handler in list(handlers):
+                func = handler()
+                if func is None or func.__self__ is object_:
+                    handlers.remove(handler)
 
     def disconnect(self, *args):
         self.disconnect_all_from_obj(*args)
 
-    def connect_signal(self, signal_name, func, qualifiers=None):
+    def connect_signal(self, signal_name, func):
         if not inspect.ismethod(func):
             raise ValueError('Only bound methods allowed')
 
         weak_func = weakref.WeakMethod(func)
 
-        self._callbacks[signal_name][qualifiers].append(weak_func)
+        self._callbacks[signal_name].append(weak_func)
 
     def connect(self, *args, **kwargs):
         self.connect_signal(*args, **kwargs)
@@ -1254,18 +1253,17 @@ class Observable:
         for signal_name, func in signal_dict.items():
             self.connect_signal(signal_name, func)
 
-    def notify(self, signal_name, *args, qualifiers=None, **kwargs):
+    def notify(self, signal_name, *args, **kwargs):
         signal_callbacks = self._callbacks.get(signal_name)
-        if signal_callbacks is None:
+        if not signal_callbacks:
             return
 
         if self._log is not None:
             self._log.info('Signal: %s', signal_name)
 
-        callbacks = signal_callbacks.get(qualifiers, [])
-        for func in list(callbacks):
+        for func in list(signal_callbacks):
             if func() is None:
-                self._callbacks[signal_name][qualifiers].remove(func)
+                self._callbacks[signal_name].remove(func)
                 continue
             func()(self, signal_name, *args, **kwargs)
 
