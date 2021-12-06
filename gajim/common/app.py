@@ -28,7 +28,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import NamedTuple
-from typing import Union
 from typing import Optional
 from typing import cast
 
@@ -44,7 +43,6 @@ import nbxmpp
 from nbxmpp.idlequeue import IdleQueue
 from gi.repository import Gdk
 from gi.repository import GLib
-from nbxmpp.protocol import JID
 
 import gajim
 from gajim.common import types
