@@ -37,6 +37,7 @@ import os
 import sys
 import logging
 import weakref
+import pprint
 from collections import namedtuple
 from collections import defaultdict
 
@@ -659,6 +660,9 @@ def check_finalize(obj):
         for ref in gc.get_referrers(tup[0]):
             if is_finalizer_ref(ref):
                 continue
-            logger.warning(ref)
+            if isinstance(ref, dict):
+                logger.warning('\n' + pprint.pformat(ref))
+            else:
+                logger.warning(ref)
 
     GLib.timeout_add_seconds(2, check_finalized)
