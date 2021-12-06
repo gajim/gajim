@@ -55,7 +55,6 @@ InterfaceT = Union['Interface']
 ConnectionT = Union['Client', 'ConnectionZeroconf']
 ContactsT = Union['Contact', 'GC_Contact']
 ContactT = Union['Contact']
-LegacyContactsAPIT = Union['LegacyContactsAPI']
 CSSConfigT = Union['CSSConfig']
 
 # PEP

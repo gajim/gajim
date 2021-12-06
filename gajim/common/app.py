@@ -82,19 +82,10 @@ css_config = cast(types.CSSConfigT, None)
 
 transport_type: dict[str, str] = {}
 
-contacts = cast(types.LegacyContactsAPIT, None)
-
-# tell if we are connected to the room or not
-# {acct: {room_jid: True}}
-gc_connected: dict[str, dict[str, bool]] = {}
-
 # dict of rooms that must be automatically configured
 # and for which we have a list of invities
 # {account: {room_jid: {'invities': []}}}
 automatic_rooms: dict[str, dict[str, dict[str, list[str]]]] = {}
-
- # dict of groups, holds if they are expanded or not
-groups: dict[str, dict[str, dict[str, bool]]] = {}
 
 # list of contacts that has just signed in
 newly_added: dict[str, list[str]] = {}
@@ -463,13 +454,6 @@ def account_is_disconnected(account: str) -> bool:
 def zeroconf_is_connected() -> bool:
     return account_is_connected(ZEROCONF_ACC_NAME) and \
             settings.get_account_setting(ZEROCONF_ACC_NAME, 'is_zeroconf')
-
-
-def in_groupchat(account: str, room_jid: Union[str, JID]) -> bool:
-    room_jid = str(room_jid)
-    if room_jid not in gc_connected[account]:
-        return False
-    return gc_connected[account][room_jid]
 
 
 def get_transport_name_from_jid(

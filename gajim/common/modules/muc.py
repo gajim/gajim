@@ -814,7 +814,8 @@ class MUC(BaseModule):
 
             self._log.info('Invite from: %s, to: %s', data.from_, data.muc)
 
-            if app.in_groupchat(self._account, data.muc):
+            contact = self._get_contact(data.muc, groupchat=True)
+            if contact.is_joined:
                 # We are already in groupchat. Ignore invitation
                 self._log.info('We are already in this room')
                 raise nbxmpp.NodeProcessed
