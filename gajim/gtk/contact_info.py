@@ -88,7 +88,10 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             side_bar_switcher.hide_row('settings')
             side_bar_switcher.hide_row('groups')
             side_bar_switcher.hide_row('notes')
-            if not contact.is_pm_contact:
+            if contact.is_pm_contact:
+                if contact.real_jid is None:
+                    side_bar_switcher.hide_row('devices')
+            else:
                 side_bar_switcher.hide_row('devices')
 
         if page is not None:
@@ -110,8 +113,19 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.contact_jid_label.set_text(str(contact.jid))
         self._ui.contact_jid_label.set_tooltip_text(str(contact.jid))
 
+        self._update_timeout_id = None
+        self._time = 0
+        self._devices = {}
+        self._received_devices = set()
+        self._received_times = set()
+
         if contact.is_pm_contact:
             if contact.real_jid is not None:
+                self._devices_grid = DevicesGrid(self._ui.devices_grid)
+                self._query_devices()
+                self._update_timeout_id = GLib.timeout_add(
+                    100, self._update_timer)
+
                 self._ui.contact_jid_label.set_text(
                     str(contact.real_jid.bare))
                 self._ui.contact_jid_label.set_tooltip_text(
@@ -127,15 +141,9 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             jid=contact.jid,
             callback=self._on_vcard_received)
 
-        self._update_timeout_id = None
         if contact.is_in_roster:
-            self._devices = {}
-            self._received_devices = set()
-            self._received_times = set()
             self._devices_grid = DevicesGrid(self._ui.devices_grid)
             self._query_devices()
-
-            self._time = 0
             self._update_timeout_id = GLib.timeout_add(100, self._update_timer)
 
         if contact.is_in_roster:
@@ -239,12 +247,16 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         }
         self._rebuild_devices_grid()
 
+        jid = contact.jid
+        if contact.is_pm_contact and contact.real_jid is not None:
+            jid = contact.real_jid
+
         task = self._client.get_module('SoftwareVersion').request_software_version(
-            contact.jid, callback=self._set_os_info, user_data=contact)
+            jid, callback=self._set_os_info, user_data=contact)
         self._tasks.append(task)
 
         task = self._client.get_module('EntityTime').request_entity_time(
-            contact.jid, callback=self._set_entity_time, user_data=contact)
+            jid, callback=self._set_entity_time, user_data=contact)
         self._tasks.append(task)
 
     def _set_os_info(self, task):
