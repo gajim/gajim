@@ -24,6 +24,7 @@ from gi.repository import Gtk
 
 from nbxmpp import JID
 
+from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 
@@ -150,6 +151,10 @@ class ChatPlaceholderBox(Gtk.Box):
         image.get_style_context().add_class('dim-label')
         self.add(image)
 
-        label = Gtk.Label(label=_('Start a Chat'))
-        label.get_style_context().add_class('dim-label')
-        self.add(label)
+        button = Gtk.Button(label=_('Start Chatting…'))
+        button.set_halign(Gtk.Align.CENTER)
+        button.connect('clicked', self._on_start_chatting)
+        self.add(button)
+
+    def _on_start_chatting(self, _button):
+        app.app.activate_action('start-chat', GLib.Variant('s', ''))
