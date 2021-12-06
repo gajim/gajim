@@ -661,7 +661,7 @@ def check_finalize(obj):
             if is_finalizer_ref(ref):
                 continue
             if isinstance(ref, dict):
-                logger.warning('\n' + pprint.pformat(ref))
+                logger.warning('\n%s', pprint.pformat(ref))
             else:
                 logger.warning(ref)
 
