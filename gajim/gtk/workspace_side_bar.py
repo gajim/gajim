@@ -12,7 +12,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import List
+
 from gi.repository import Gdk
+from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -214,6 +219,8 @@ class Workspace(CommonWorkspace):
         CommonWorkspace.__init__(self, workspace_id)
         self.get_style_context().add_class('workspace-sidebar-item')
 
+        self._workspace_id = workspace_id
+
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(
             'unread-counter')
@@ -248,10 +255,41 @@ class Workspace(CommonWorkspace):
             Gdk.DragAction.MOVE)
         eventbox.connect('drag-begin', self._on_drag_begin)
         eventbox.connect('drag-data-get', self._on_drag_data_get)
+        eventbox.connect('button-press-event', self._popup_menu)
         eventbox.add(overlay)
-
         self.add(eventbox)
         self.show_all()
+
+    def _popup_menu(self, _widget, event):
+        if event.button != 3:  # right click
+            return
+
+        menu = self._get_workspace_menu()
+
+        rectangle = Gdk.Rectangle()
+        rectangle.x = event.x
+        rectangle.y = event.y
+        rectangle.width = rectangle.height = 1
+
+        popover = Gtk.Popover.new_from_model(self, menu)
+        popover.set_relative_to(self)
+        popover.set_position(Gtk.PositionType.RIGHT)
+        popover.set_pointing_to(rectangle)
+        popover.popup()
+
+    def _get_workspace_menu(self) -> Gio.Menu:
+        menu_items: List[Any] = [
+            ('edit-workspace', _('Edit…')),
+        ]
+        menu = Gio.Menu()
+        for item in menu_items:
+            action, label = item
+            action = f'win.{action}'
+            menuitem = Gio.MenuItem.new(label, action)
+            variant = GLib.Variant('s', self._workspace_id)
+            menuitem.set_action_and_target_value(action, variant)
+            menu.append_item(menuitem)
+        return menu
 
     def update_avatar(self):
         self._image.update()

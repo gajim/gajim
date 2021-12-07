@@ -32,7 +32,7 @@ from .const import DEFAULT_WORKSPACE_COLOR
 
 
 class WorkspaceDialog(Gtk.ApplicationWindow):
-    def __init__(self, workspace_id: str = None) -> None:
+    def __init__(self, workspace_id: Optional[str] = None) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('WorkspaceDialog')
         self.set_application(app.app)

@@ -130,7 +130,7 @@ class ChatPage(Gtk.Box):
 
     @staticmethod
     def _on_edit_workspace_clicked(_button):
-        app.window.lookup_action('edit-workspace').activate()
+        app.window.activate_action('edit-workspace', GLib.Variant('s', ''))
 
     def _on_chat_selected(self, _chat_list_stack: ChatListStack,
                           workspace_id: str, account: str,
