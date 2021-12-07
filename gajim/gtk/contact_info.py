@@ -243,6 +243,10 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             'status': contact.show,
             'message': contact.status
         }
+        if not contact.is_pm_contact:
+            self._devices[contact.jid.resource]['priority'] = str(
+                contact.priority)
+
         self._rebuild_devices_grid()
 
         jid = contact.jid
@@ -293,8 +297,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.devices_stack.set_visible_child_name('devices')
         self._devices_grid.clear()
         for key, client in self._devices.items():
-            if not self.contact.is_pm_contact:
-                self._devices_grid.add_header(_('Device "%s"') % key)
+            self._devices_grid.add_header(_('Device "%s"') % key)
 
             if client.get('status'):
                 self._devices_grid.add_value(
@@ -302,6 +305,9 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             if client.get('message'):
                 self._devices_grid.add_value(
                     _('Status Message'), client['message'])
+            if client.get('priority'):
+                self._devices_grid.add_value(
+                    _('Priority'), client['priority'])
             if client.get('client'):
                 self._devices_grid.add_value(
                     _('Software'), client['client'])
