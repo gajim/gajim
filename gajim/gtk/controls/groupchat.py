@@ -562,6 +562,7 @@ class GroupchatControl(BaseControl):
             GroupchatConfig(self.account,
                             self.room_jid,
                             contact.affiliation.value)
+        self._show_page('groupchat')
 
     def _on_configure_form_received(self, task):
         try:
