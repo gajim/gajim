@@ -140,6 +140,8 @@ class ConversationView(Gtk.ListBox):
             if row.type == 'read_marker':
                 continue
             self.remove(row)
+            row.destroy()
+
         self._reset_conversation_view()
 
     def _reset_conversation_view(self) -> None:

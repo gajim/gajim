@@ -54,6 +54,8 @@ class BaseRow(Gtk.ListBoxRow):
             self.label.set_xalign(0)
             self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
+        self.connect('destroy', self.__destroy)
+
     @property
     def is_merged(self) -> bool:
         return self._merged
@@ -86,6 +88,10 @@ class BaseRow(Gtk.ListBoxRow):
         else:
             label.get_style_context().add_class('gajim-incoming-nickname')
         return label
+
+    @staticmethod
+    def __destroy(widget: Gtk.Widget) -> None:
+        app.check_finalize(widget)
 
 
 @wrap_with_event_box
