@@ -332,6 +332,8 @@ class MessageArchiveStorage(SqliteStorage):
         """
         jids = [jid]
         account_id = self.get_account_id(account)
+        kinds = map(str, [KindConstant.ERROR])
+
         if before:
             time_order = 'AND time < ? ORDER BY time DESC, log_line_id DESC'
         else:
@@ -344,10 +346,12 @@ class MessageArchiveStorage(SqliteStorage):
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
+            AND kind NOT IN ({kinds})
             {time_order}
             LIMIT ?
             '''.format(jids=', '.join('?' * len(jids)),
                        account_id=account_id,
+                       kinds=', '.join(kinds),
                        time_order=time_order)
 
         return self._con.execute(
@@ -443,6 +447,7 @@ class MessageArchiveStorage(SqliteStorage):
         """
         jids = [jid]
         account_id = self.get_account_id(account)
+        kinds = map(str, [KindConstant.ERROR])
         n_lines = 20
 
         sql_before = '''
@@ -452,11 +457,13 @@ class MessageArchiveStorage(SqliteStorage):
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
+            AND kind NOT IN ({kinds})
             AND time < ?
             ORDER BY time DESC, log_line_id DESC
             LIMIT ?
             '''.format(jids=', '.join('?' * len(jids)),
-                       account_id=account_id)
+                       account_id=account_id,
+                       kinds=', '.join(kinds))
         sql_at_after = '''
             SELECT contact_name, time, kind, show, message, subject,
                    additional_data, log_line_id, message_id, stanza_id,
@@ -464,11 +471,13 @@ class MessageArchiveStorage(SqliteStorage):
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
+            AND kind NOT IN ({kinds})
             AND time >= ?
             ORDER BY time ASC, log_line_id ASC
             LIMIT ?
             '''.format(jids=', '.join('?' * len(jids)),
-                       account_id=account_id)
+                       account_id=account_id,
+                       kinds=', '.join(kinds))
         before = self._con.execute(
             sql_before,
             tuple(jids) + (timestamp, n_lines)).fetchall()
@@ -494,6 +503,7 @@ class MessageArchiveStorage(SqliteStorage):
         """
         jids = [jid]
         account_id = self.get_account_id(account)
+        kinds = map(str, [KindConstant.ERROR])
 
         sql = '''
             SELECT contact_name, time, kind, show, message, subject,
@@ -502,10 +512,12 @@ class MessageArchiveStorage(SqliteStorage):
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
+            AND kind NOT IN ({kinds})
             AND time < ? AND time >= ?
             ORDER BY time DESC, log_line_id DESC
             '''.format(jids=', '.join('?' * len(jids)),
-                       account_id=account_id)
+                       account_id=account_id,
+                       kinds=', '.join(kinds))
 
         return self._con.execute(
             sql,
