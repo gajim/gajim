@@ -204,7 +204,7 @@ class RosterTooltip:
             resource_label.set_xalign(0)
             resource_label.set_ellipsize(Pango.EllipsizeMode.END)
             resource_label.set_max_width_chars(30)
-            resource_label.set_text(f'{resource_string} ({resource.priority})')
+            resource_label.set_text(resource_string)
 
             base_box = Gtk.Box(spacing=6)
             base_box.add(show_image)
