@@ -29,6 +29,7 @@ from typing import List
 from typing import Optional
 
 import os
+import logging
 import sys
 import time
 import uuid
@@ -100,6 +101,8 @@ if sys.platform == 'darwin':
 else:
     COPY_MODIFIER = Gdk.ModifierType.CONTROL_MASK
     COPY_MODIFIER_KEYS = (Gdk.KEY_Control_L, Gdk.KEY_Control_R)
+
+log = logging.getLogger('gajim.gui.controls.base')
 
 
 ################################################################################
@@ -1422,6 +1425,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.conversation_view.add_call_message(db_message=msg)
                 continue
 
+            if msg.kind in (KindConstant.STATUS,
+                            KindConstant.GCSTATUS):
+                self.conversation_view.add_info_message(msg.message)
+                continue
+
             if not msg.message:
                 continue
 
@@ -1439,7 +1447,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 kind = 'outgoing'
                 contact_name = self.get_our_nick()
             else:
-                raise ValueError('no kind attribute')
+                log.warning('kind attribute could not be processed'
+                            'while adding message')
 
             if msg.additional_data is not None:
                 retracted_by = msg.additional_data.get_value('retracted', 'by')
