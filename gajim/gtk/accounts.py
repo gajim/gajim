@@ -864,8 +864,7 @@ class AdvancedPage(GenericSettingPage):
         settings = [
             Setting(SettingKind.SWITCH, _('Contact Information'),
                     SettingType.ACCOUNT_CONFIG, 'request_user_data',
-                    desc=_('Request contact information '
-                           '(Mood, Activity, Tune, Location)')),
+                    desc=_('Request contact information (Tune, Location)')),
 
             Setting(SettingKind.SWITCH, _('Accept all Contact Requests'),
                     SettingType.ACCOUNT_CONFIG, 'autoauth',
