@@ -81,9 +81,11 @@ function install_deps {
         mingw-w64-"${ARCH}"-gtksourceview4 \
         mingw-w64-"${ARCH}"-gstreamer \
         mingw-w64-"${ARCH}"-gst-plugins-base \
+        mingw-w64-"${ARCH}"-gst-plugins-good \
         mingw-w64-"${ARCH}"-gst-libav \
         mingw-w64-"${ARCH}"-gst-python \
         mingw-w64-"${ARCH}"-farstream \
+        mingw-w64-"${ARCH}"-libnice \
         mingw-w64-"${ARCH}"-python-pip \
         mingw-w64-"${ARCH}"-adwaita-icon-theme \
         mingw-w64-"${ARCH}"-libwebp \
