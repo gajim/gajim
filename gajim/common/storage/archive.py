@@ -459,7 +459,7 @@ class MessageArchiveStorage(SqliteStorage):
                        account_id=account_id)
         sql_at_after = '''
             SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id,
+                   additional_data, log_line_id, message_id, stanza_id,
                    error as "error [common_error]",
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
@@ -497,7 +497,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         sql = '''
             SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id,
+                   additional_data, log_line_id, message_id, stanza_id,
                    error as "error [common_error]",
                    marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
