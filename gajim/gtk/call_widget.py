@@ -73,8 +73,6 @@ class CallWidget(Gtk.Box):
         self._video_widget_other = None
         self._video_widget_self = None
 
-        self._detect_av()
-
         self._ui = get_builder('call_widget.ui')
         self.add(self._ui.av_box)
         self.connect('destroy', self._on_destroy)
@@ -92,9 +90,9 @@ class CallWidget(Gtk.Box):
             self._close_jingle_content(jingle_type, shutdown=True)
         self._jingle.clear()
 
-    def _detect_av(self):
+    def detect_av(self):
         if (self._contact.supports(Namespace.JINGLE_ICE_UDP) and
-                app.is_installed('FARSTREAM') and self._contact.jid.resource):
+                app.is_installed('FARSTREAM')):
             self._jingle['audio'].available = self._contact.supports(
                 Namespace.JINGLE_RTP_AUDIO)
             self._jingle['video'].available = self._contact.supports(

@@ -205,6 +205,7 @@ class ChatControl(BaseControl):
             online and self._client.get_module('Blocking').supported)
 
         # Jingle AV
+        self._call_widget.detect_av()
         audio_available = self._call_widget.get_jingle_available('audio')
         video_available = self._call_widget.get_jingle_available('video')
         self._get_action('start-call-').set_enabled(
@@ -486,7 +487,10 @@ class ChatControl(BaseControl):
             self.add_info_message(event.error)
 
     # Jingle AV calls
-    def _on_start_call(self) -> None:
+    def _on_start_call(self,
+                       _action: Gio.SimpleAction,
+                       _param: Optional[GLib.Variant]
+                       ) -> None:
         self._call_widget.start_call()
 
     def _process_jingle_av_event(self, event):
