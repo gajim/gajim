@@ -475,17 +475,6 @@ class AvatarStorage(metaclass=Singleton):
         self._cache[workspace_id][(size, scale)] = surface
         return surface
 
-    def prepare_for_publish(self, path: str) -> tuple[Optional[bytes],
-                                                      Optional[str]]:
-        success, data = self._load_for_publish(path)
-        if not success:
-            return None, None
-
-        sha = self.save_avatar(data)
-        if sha is None:
-            return None, None
-        return data, sha
-
     @staticmethod
     def _load_for_publish(path: str) -> Optional[tuple[bool, bytes]]:
         pixbuf = load_pixbuf(path)
