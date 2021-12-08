@@ -34,3 +34,6 @@ syntax: regexp
 ^scripts\/gajim.*
 
 !MANIFEST.in
+
+gajim/gui/*
+!gajim/gui/__init__.py
