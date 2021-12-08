@@ -74,8 +74,6 @@ class AboutDialog(Gtk.AboutDialog):
 
         self.show()
         self.connect('activate-link', self._on_activate_link)
-        # See https://gitlab.gnome.org/GNOME/gtk/issues/1561
-        self._connect_link_handler(self)
 
     @staticmethod
     def _on_activate_link(_label, uri):
@@ -83,15 +81,3 @@ class AboutDialog(Gtk.AboutDialog):
         # is not cross-platform compatible
         open_uri(uri)
         return Gdk.EVENT_STOP
-
-    def _connect_link_handler(self, parent):
-        def _find_child(parent_):
-            if not hasattr(parent_, 'get_children'):
-                return
-
-            for child in parent_.get_children():
-                if isinstance(child, Gtk.Label):
-                    if 'href' in child.get_label():
-                        child.connect('activate-link', self._on_activate_link)
-                _find_child(child)
-        _find_child(parent)
