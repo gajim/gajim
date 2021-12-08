@@ -96,6 +96,7 @@ class SearchView(Gtk.Box):
     def _clear_results(self):
         for row in self._ui.results_listbox.get_children():
             self._ui.results_listbox.remove(row)
+            row.destroy()
 
     def _on_search(self, entry):
         self._clear_results()
