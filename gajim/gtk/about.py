@@ -47,7 +47,7 @@ class AboutDialog(Gtk.AboutDialog):
                                       GLib.MINOR_VERSION,
                                       GLib.MICRO_VERSION]))
 
-        comments = []
+        comments: list[str] = []
         comments.append(_('A GTK XMPP client'))
         comments.append(_('GTK Version: %s') % gtk_ver)
         comments.append(_('GLib Version: %s') % glib_ver)
@@ -76,7 +76,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.connect('activate-link', self._on_activate_link)
 
     @staticmethod
-    def _on_activate_link(_label, uri):
+    def _on_activate_link(_label: Gtk.Label, uri: str) -> int:
         # We have to use this, because the default GTK handler
         # is not cross-platform compatible
         open_uri(uri)
