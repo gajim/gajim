@@ -1174,8 +1174,8 @@ def to_user_string(error: StanzaError) -> str:
     return condition
 
 
-def get_groupchat_name(con, jid):
-    name = con.get_module('Bookmarks').get_name_from_bookmark(jid)
+def get_groupchat_name(client: types.Client, jid: Union[str, JID]) -> str:
+    name = client.get_module('Bookmarks').get_name_from_bookmark(jid)
     if name:
         return name
 
