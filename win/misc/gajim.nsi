@@ -249,6 +249,9 @@ SectionEnd
 
 ; Installer
 Function StartUpgrade
+	; Hint: Gajim setup should not be named gajim.exe
+	ExecWait "TaskKill /IM gajim.exe /F"
+	ExecWait "TaskKill /IM gajim-debug.exe /F"
 	; Run uninstaller in silent mode
 	ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
 	ExecWait '"$R3" /S _?=$INSTDIR'
