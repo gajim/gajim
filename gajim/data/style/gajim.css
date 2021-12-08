@@ -230,12 +230,6 @@ row:backdrop { transition: none; }
 	border-radius: 9px;
 	margin: 6px;
 }
-.workspace-sidebar-item.drag-hover-top {
-    border-top: 1px solid #4e9a06;
-}
-.workspace-sidebar-item.drag-hover-bottom {
-    border-bottom: 1px solid #4e9a06;
-}
 .workspace-add:hover,
 .workspace-add:focus {
     background: transparent;

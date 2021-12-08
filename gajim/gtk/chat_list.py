@@ -24,6 +24,7 @@ from gi.repository import Gio
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
+import cairo
 
 from nbxmpp import JID
 
@@ -70,6 +71,16 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._mouseover: bool = False
         self.connect('enter-notify-event', self._on_mouse_focus_changed)
         self.connect('leave-notify-event', self._on_mouse_focus_changed)
+
+        # Drag and Drop
+        entries = [Gtk.TargetEntry.new(
+            'CHAT_LIST_ITEM',
+            Gtk.TargetFlags.SAME_APP,
+            0)]
+        self.drag_dest_set(
+            Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP,
+            entries,
+            Gdk.DragAction.MOVE)
 
         self.register_events([
             ('account-enabled', ged.GUI2, self._on_account_changed),
@@ -507,6 +518,18 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.eventbox.connect('button-press-event', self._on_button_press)
         self._ui.close_button.connect('clicked', self._on_close_button_clicked)
 
+        # Drag and Drop
+        entries = [Gtk.TargetEntry.new(
+            'CHAT_LIST_ITEM',
+            Gtk.TargetFlags.SAME_APP,
+            0)]
+        self._ui.eventbox.drag_source_set(
+            Gdk.ModifierType.BUTTON1_MASK,
+            entries,
+            Gdk.DragAction.MOVE)
+        self._ui.eventbox.connect('drag-begin', self._on_drag_begin)
+        self._ui.eventbox.connect('drag-data-get', self._on_drag_data_get)
+
         if self.type == 'groupchat':
             self._ui.group_chat_indicator.show()
 
@@ -620,6 +643,31 @@ class ChatRow(Gtk.ListBoxRow):
         popover.set_position(Gtk.PositionType.RIGHT)
         popover.set_pointing_to(rectangle)
         popover.popup()
+
+    def _on_drag_begin(self,
+                       widget: Gtk.Widget,
+                       drag_context: Gdk.DragContext
+                       ) -> None:
+        # Use rendered ChatListRow as drag icon
+        alloc = self.get_allocation()
+        surface = cairo.ImageSurface(
+            cairo.Format.ARGB32, alloc.width, alloc.height)
+        context = cairo.Context(surface)
+        self.draw(context)
+        dest_x, dest_y = widget.translate_coordinates(self, 0, 0)
+        surface.set_device_offset(-dest_x, -dest_y)
+        Gtk.drag_set_icon_surface(drag_context, surface)
+
+    def _on_drag_data_get(self,
+                          _widget: Gtk.Widget,
+                          _drag_context: Gdk.DragContext,
+                          selection_data: Gtk.SelectionData,
+                          _info: int,
+                          _time: int
+                          ) -> None:
+        drop_type = Gdk.Atom.intern_static_string('CHAT_LIST_ITEM')
+        data = f'{self.account} {self.jid}'.encode('utf-8')
+        selection_data.set(drop_type, 32, data)
 
     def toggle_pinned(self) -> None:
         self._pinned = not self._pinned

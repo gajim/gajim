@@ -15,6 +15,8 @@
 from typing import Any
 from typing import List
 
+import logging
+
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -26,6 +28,8 @@ from gajim.common.i18n import _
 
 from .util import open_window
 
+log = logging.getLogger('gajim.gui.workspace_sidebar')
+
 
 class WorkspaceSideBar(Gtk.ListBox):
     def __init__(self, chat_page):
@@ -35,10 +39,16 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.get_style_context().add_class('workspace-sidebar')
 
         # Drag and Drop
-        entries = [Gtk.TargetEntry.new(
-            'WORKSPACE_SIDEBAR_ITEM',
-            Gtk.TargetFlags.SAME_APP,
-            0)]
+        entries = [
+            Gtk.TargetEntry.new(
+                'WORKSPACE_SIDEBAR_ITEM',
+                Gtk.TargetFlags.SAME_APP,
+                0),
+            Gtk.TargetEntry.new(
+                'CHAT_LIST_ITEM',
+                Gtk.TargetFlags.SAME_APP,
+                0)
+        ]
         self.drag_dest_set(
             Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP,
             entries,
@@ -50,8 +60,6 @@ class WorkspaceSideBar(Gtk.ListBox):
 
         self.connect('drag-motion', self._on_drag_motion)
         self.connect('drag-data-received', self._on_drag_data_received)
-        self.connect('drag-leave', self._on_drag_leave)
-
         self.connect('row-activated', self._on_row_activated)
 
         self.add(AddWorkspace('add'))
@@ -63,16 +71,14 @@ class WorkspaceSideBar(Gtk.ListBox):
                                 self._on_chat_selected)
         self._workspaces = {}
 
-    def _on_drag_motion(self, _widget, _drag_context, _x_coord, y_coord,
-                        _time):
+    def _on_drag_motion(self,
+                        _widget: Gtk.Widget,
+                        _drag_context: Gdk.DragContext,
+                        _x_coord: int,
+                        y_coord: int,
+                        _time: int
+                        ) -> None:
         row = self.get_row_at_y(y_coord)
-
-        if self.row_before:
-            self.row_before.get_style_context().remove_class(
-                'drag-hover-bottom')
-        if self.row_after:
-            self.row_after.get_style_context().remove_class(
-                'drag-hover-top')
 
         if row:
             alloc = row.get_allocation()
@@ -91,23 +97,27 @@ class WorkspaceSideBar(Gtk.ListBox):
         if self.drag_row in (self.row_before, self.row_after):
             return False
 
-        if self.row_before and self.row_before.workspace_id != 'add':
-            self.row_before.get_style_context().add_class('drag-hover-bottom')
-        if self.row_after:
-            self.row_after.get_style_context().add_class('drag-hover-top')
         return True
 
-    def _on_drag_data_received(self, _widget, _drag_context, _x_coord,
-                               _y_coord, selection_data, _info, _time):
-        if self.row_before:
-            self.row_before.get_style_context().remove_class(
-                'drag-hover-bottom')
-        if self.row_after:
-            self.row_after.get_style_context().remove_class(
-                'drag-hover-top')
+    def _on_drag_data_received(self,
+                               _widget: Gtk.Widget,
+                               _drag_context: Gdk.DragContext,
+                               _x_coord: int,
+                               y_coord: int,
+                               selection_data: Gtk.SelectionData,
+                               _info: int,
+                               _time: int
+                               ) -> None:
+        data = selection_data.get_data().decode('utf-8')
+        item_type = selection_data.get_data_type().name()
+        if item_type == 'WORKSPACE_SIDEBAR_ITEM':
+            self._process_workspace_drop(data)
+        elif item_type == 'CHAT_LIST_ITEM':
+            self._process_chat_list_drop(data, y_coord)
+        else:
+            log.debug('Unknown item type dropped')
 
-        data = selection_data.get_data()
-        workspace_id = data.decode('utf-8')
+    def _process_workspace_drop(self, workspace_id: str) -> None:
         row = self.get_workspace_by_id(workspace_id)
 
         if row in (self.row_after, None):
@@ -126,13 +136,15 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.store_workspace_order()
         app.window.activate_workspace(workspace_id)
 
-    def _on_drag_leave(self, _widget, _drag_context, _time):
-        if self.row_before:
-            self.row_before.get_style_context().remove_class(
-                'drag-hover-bottom')
-        if self.row_after:
-            self.row_after.get_style_context().remove_class(
-                'drag-hover-top')
+    def _process_chat_list_drop(self, identifier: str, y_coord: int) -> None:
+        account, jid = identifier.split()
+        workspace_row = self.get_row_at_y(y_coord)
+        if workspace_row.workspace_id == 'add':
+            return
+
+        app.window.activate_action(
+            'move-chat-to-workspace',
+            GLib.Variant('as', [workspace_row.workspace_id, account, jid]))
 
     def _get_row_before(self, row):
         return self.get_row_at_index(row.get_index() - 1)
@@ -141,7 +153,7 @@ class WorkspaceSideBar(Gtk.ListBox):
         return self.get_row_at_index(row.get_index() + 1)
 
     def _get_last_workspace_row(self):
-        # len(children) would include AddWorkspace
+        # Calling len(children) would include AddWorkspace
         return self.get_row_at_index(len(self.get_children()) - 1)
 
     def set_drag_row(self, row):
@@ -219,8 +231,6 @@ class Workspace(CommonWorkspace):
         CommonWorkspace.__init__(self, workspace_id)
         self.get_style_context().add_class('workspace-sidebar-item')
 
-        self._workspace_id = workspace_id
-
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(
             'unread-counter')
@@ -286,7 +296,7 @@ class Workspace(CommonWorkspace):
             action, label = item
             action = f'win.{action}'
             menuitem = Gio.MenuItem.new(label, action)
-            variant = GLib.Variant('s', self._workspace_id)
+            variant = GLib.Variant('s', self.workspace_id)
             menuitem.set_action_and_target_value(action, variant)
             menu.append_item(menuitem)
         return menu
