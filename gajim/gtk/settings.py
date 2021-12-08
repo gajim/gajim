@@ -724,6 +724,7 @@ class PopoverSetting(GenericSetting):
         self._add_menu_entries()
 
     def _on_destroy(self, *args):
+        self._popover.destroy()
         app.settings.disconnect_signals(self)
 
 
