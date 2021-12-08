@@ -32,7 +32,6 @@ from gi.repository import GLib
 from gajim.common.structs import OutgoingMessage
 from gajim.common.modules.base import BaseModule
 
-from gajim.common.types import ContactT
 from gajim.common.types import ConnectionT
 
 
@@ -184,13 +183,13 @@ class Chatstate(BaseModule):
         return self._remote_chatstate.get(jid)
 
     @ensure_enabled
-    def set_active(self, contact: ContactT) -> None:
+    def set_active(self, contact) -> None:
         if contact.settings.get('send_chatstate') == 'disabled':
             return
         self._last_mouse_activity[contact.jid] = time.time()
         self._chatstates[contact.jid] = State.ACTIVE
 
-    def get_active_chatstate(self, contact: ContactT) -> Optional[str]:
+    def get_active_chatstate(self, contact) -> Optional[str]:
         # determines if we add 'active' on outgoing messages
         if contact.settings.get('send_chatstate') == 'disabled':
             return None
@@ -207,7 +206,7 @@ class Chatstate(BaseModule):
         return 'active'
 
     @ensure_enabled
-    def block_chatstates(self, contact: ContactT, block: bool) -> None:
+    def block_chatstates(self, contact, block: bool) -> None:
         # Block sending chatstates to a contact
         # Used for example if we cycle through the MUC nick list, which
         # produces a lot of buffer 'changed' signals from the input textview.
@@ -218,7 +217,7 @@ class Chatstate(BaseModule):
             self._blocked.remove(contact.jid)
 
     @ensure_enabled
-    def set_chatstate_delayed(self, contact: ContactT, state: State) -> None:
+    def set_chatstate_delayed(self, contact, state: State) -> None:
         # Used when we go from Composing -> Active after deleting all text
         # from the Textview. We delay the Active state because maybe the
         # User starts writing again.
@@ -227,7 +226,7 @@ class Chatstate(BaseModule):
             2, self.set_chatstate, contact, state)
 
     @ensure_enabled
-    def set_chatstate(self, contact: ContactT, state: State) -> None:
+    def set_chatstate(self, contact, state: State) -> None:
         # Don’t send chatstates to ourself
         if self._con.get_own_jid().bare_match(contact.jid):
             return
@@ -298,7 +297,7 @@ class Chatstate(BaseModule):
         self._con.send_message(message)
 
     @ensure_enabled
-    def set_mouse_activity(self, contact: ContactT, was_paused: bool) -> None:
+    def set_mouse_activity(self, contact, was_paused: bool) -> None:
         if contact.settings.get('send_chatstate') == 'disabled':
             return
         self._last_mouse_activity[contact.jid] = time.time()
@@ -309,7 +308,7 @@ class Chatstate(BaseModule):
                 self.set_chatstate(contact, State.ACTIVE)
 
     @ensure_enabled
-    def set_keyboard_activity(self, contact: ContactT) -> None:
+    def set_keyboard_activity(self, contact) -> None:
         self._last_keyboard_activity[contact.jid] = time.time()
 
     def remove_delay_timeout(self, contact):

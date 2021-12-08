@@ -38,9 +38,6 @@ if TYPE_CHECKING:
     # pylint: disable=unused-import
     from gajim.common.client import Client
     from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
-    from gajim.common.contacts import Contact
-    from gajim.common.contacts import GC_Contact
-    from gajim.common.contacts import LegacyContactsAPI
     from gajim.common.modules.contacts import CommonContact
     from gajim.common.modules.contacts import BareContact
     from gajim.common.modules.contacts import ResourceContact
@@ -58,8 +55,6 @@ NetworkEventsControllerT = Union['NetworkEventsController']
 InterfaceT = Union['Interface']
 
 ConnectionT = Union['Client', 'ConnectionZeroconf']
-ContactsT = Union['Contact', 'GC_Contact']
-ContactT = Union['Contact']
 CSSConfigT = Union['CSSConfig']
 
 # PEP

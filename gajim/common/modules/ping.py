@@ -25,7 +25,6 @@ from nbxmpp.errors import is_error
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.types import ConnectionT
-from gajim.common.types import ContactsT
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
 
@@ -43,7 +42,7 @@ class Ping(BaseModule):
         self.handlers = []
 
     @as_task
-    def send_ping(self, contact: ContactsT) -> Generator:
+    def send_ping(self, contact) -> Generator:
         _task = yield
 
         if not app.account_is_available(self._account):
