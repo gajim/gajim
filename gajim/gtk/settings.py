@@ -104,6 +104,13 @@ class SettingsBox(Gtk.ListBox):
                 self.map[setting] = callback
 
         self.connect('row-activated', self.on_row_activated)
+        self.connect('destroy', self.__on_destroy)
+
+    @staticmethod
+    def __on_destroy(widget):
+        app.check_finalize(widget)
+        for row in widget.get_children():
+            app.check_finalize(row)
 
     @staticmethod
     def on_row_activated(_listbox, row):
