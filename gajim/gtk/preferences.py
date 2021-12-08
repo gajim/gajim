@@ -95,6 +95,7 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.audio_video_info_bar.set_revealed(not app.is_installed('AV'))
 
         self.connect('key-press-event', self._on_key_press)
+        self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
         self.show_all()
@@ -144,6 +145,10 @@ class Preferences(Gtk.ApplicationWindow):
         settings_theme = app.settings.get('emoticons_theme')
         if settings_theme not in emoji_themes:
             app.settings.set('emoticons_theme', 'font')
+
+    def _on_destroy(self, _widget):
+        self._prefs.clear()
+        app.check_finalize(self)
 
 
 class PreferenceBox(SettingsBox):
