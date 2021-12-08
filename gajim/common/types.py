@@ -41,6 +41,11 @@ if TYPE_CHECKING:
     from gajim.common.contacts import Contact
     from gajim.common.contacts import GC_Contact
     from gajim.common.contacts import LegacyContactsAPI
+    from gajim.common.modules.contacts import CommonContact
+    from gajim.common.modules.contacts import BareContact
+    from gajim.common.modules.contacts import ResourceContact
+    from gajim.common.modules.contacts import GroupchatContact
+    from gajim.common.modules.contacts import GroupchatParticipant
     from gajim.common.nec import NetworkEvent
     from gajim.common.nec import NetworkEventsController
 

@@ -12,22 +12,28 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional, Union
+
 import logging
 import hashlib
 from math import pi
 from functools import lru_cache
 from collections import defaultdict
+from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 import cairo
+from nbxmpp.protocol import JID
 
+from gajim.common import types
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import Singleton
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
+from gajim.common.modules.contacts import Contacts
 
 from .const import DEFAULT_WORKSPACE_COLOR
 from .util import load_pixbuf
@@ -42,7 +48,18 @@ from .util import make_rgba
 log = logging.getLogger('gajim.gui.avatar')
 
 
-def generate_avatar(letters, color, size, scale):
+AvatarCacheT = dict[JID, dict[tuple[int, int, Optional[str]],
+                              cairo.ImageSurface]]
+
+ContactT = Union[types.BareContact,
+                 types.GroupchatContact,
+                 types.GroupchatParticipant]
+
+def generate_avatar(letters: str,
+                    color: tuple[float, float, float],
+                    size: int,
+                    scale: int) -> cairo.ImageSurface:
+
     # Get color for nickname with XEP-0392
     color_r, color_g, color_b = color
 
@@ -84,7 +101,12 @@ def generate_avatar(letters, color, size, scale):
 
 
 @lru_cache(maxsize=None)
-def generate_default_avatar(letter, color_string, size, scale, style='circle'):
+def generate_default_avatar(letter: str,
+                            color_string: str,
+                            size: int,
+                            scale: int,
+                            style: str = 'circle') -> cairo.ImageSurface:
+
     color = text_to_color(color_string)
     surface = generate_avatar(letter, color, size, scale)
     surface = clip(surface, style)
@@ -93,14 +115,21 @@ def generate_default_avatar(letter, color_string, size, scale, style='circle'):
 
 
 @lru_cache(maxsize=None)
-def make_workspace_avatar(letter, color, size, scale, style='round-corners'):
+def make_workspace_avatar(letter: str,
+                          color: tuple[float, float, float],
+                          size: int,
+                          scale: int,
+                          style: str = 'round-corners') -> cairo.ImageSurface:
+
     surface = generate_avatar(letter, color, size, scale)
     surface = clip(surface, style)
     surface.set_device_scale(scale, scale)
     return surface
 
 
-def add_status_to_avatar(surface, show):
+def add_status_to_avatar(surface: cairo.ImageSurface,
+                         show) -> cairo.ImageSurface:
+
     width = surface.get_width()
     height = surface.get_height()
 
@@ -149,7 +178,10 @@ def add_status_to_avatar(surface, show):
     return context.get_target()
 
 
-def get_icon_avatar(size, scale, icon_name):
+def get_icon_avatar(size: int,
+                    scale: int,
+                    icon_name: str) -> cairo.ImageSurface:
+
     if scale is not None:
         size = size * scale
 
@@ -171,7 +203,7 @@ def get_icon_avatar(size, scale, icon_name):
 
 
 @lru_cache(maxsize=128)
-def get_show_circle(show, size, scale):
+def get_show_circle(show, size: int, scale: int) -> cairo.ImageSurface:
     if not isinstance(show, str):
         show = show.value
 
@@ -203,7 +235,7 @@ def get_show_circle(show, size, scale):
     return context.get_target()
 
 
-def fit(surface: cairo.Surface, size: int) -> cairo.Surface:
+def fit(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
     width = surface.get_width()
     height = surface.get_height()
     if width == height:
@@ -226,7 +258,7 @@ def fit(surface: cairo.Surface, size: int) -> cairo.Surface:
     return context.get_target()
 
 
-def square(surface, size):
+def square(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
     width = surface.get_width()
     height = surface.get_height()
     if width == height:
@@ -250,7 +282,7 @@ def square(surface, size):
     return context.get_target()
 
 
-def clip(surface, mode):
+def clip(surface: cairo.ImageSurface, mode: str) -> cairo.ImageSurface:
     if mode == 'circle':
         return clip_circle(surface)
     if mode == 'round-corners':
@@ -258,7 +290,7 @@ def clip(surface, mode):
     raise ValueError('clip mode unknown: %s' % mode)
 
 
-def clip_circle(surface):
+def clip_circle(surface: cairo.ImageSurface) -> cairo.ImageSurface:
     new_surface = cairo.ImageSurface(cairo.Format.ARGB32,
                                      surface.get_width(),
                                      surface.get_height())
@@ -280,7 +312,7 @@ def clip_circle(surface):
     return context.get_target()
 
 
-def round_corners(surface):
+def round_corners(surface: cairo.ImageSurface) -> cairo.ImageSurface:
     new_surface = cairo.ImageSurface(cairo.Format.ARGB32,
                                      surface.get_width(),
                                      surface.get_height())
@@ -308,7 +340,7 @@ def round_corners(surface):
     return context.get_target()
 
 
-def convert_to_greyscale(surface):
+def convert_to_greyscale(surface: cairo.ImageSurface) -> cairo.ImageSurface:
     context = cairo.Context(surface)
     context.set_operator(cairo.Operator.HSL_COLOR)
     context.set_source_rgb(1, 1, 1)
@@ -323,31 +355,32 @@ def convert_to_greyscale(surface):
 
 class AvatarStorage(metaclass=Singleton):
     def __init__(self):
-        self._cache = defaultdict(dict)
+        self._cache: AvatarCacheT = defaultdict(dict)
 
-    def invalidate_cache(self, jid):
+    def invalidate_cache(self, jid: JID) -> None:
         self._cache.pop(jid, None)
 
     def get_pixbuf(self,
-                   contact,
-                   size,
-                   scale,
-                   show=None,
-                   default=False,
-                   transport_icon=None,
-                   style='circle'):
+                   contact: ContactT,
+                   size: int,
+                   scale: int,
+                   show: Optional[str] = None,
+                   default: bool = False,
+                   transport_icon: Optional[str] = None,
+                   style: str = 'circle') -> cairo.ImageSurface:
+
         surface = self.get_surface(
             contact, size, scale, show, default, transport_icon, style)
         return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
     def get_surface(self,
-                    contact,
-                    size,
-                    scale,
-                    show=None,
-                    default=False,
-                    transport_icon=None,
-                    style='circle'):
+                    contact: ContactT,
+                    size: int,
+                    scale: int,
+                    show: Optional[str] = None,
+                    default: bool = False,
+                    transport_icon: Optional[str] = None,
+                    style: str = 'circle') -> cairo.ImageSurface:
 
         jid = contact.jid
 
@@ -382,13 +415,13 @@ class AvatarStorage(metaclass=Singleton):
         return surface
 
     def get_muc_surface(self,
-                        account,
-                        jid,
-                        size,
-                        scale,
-                        default=False,
-                        transport_icon=None,
-                        style='circle'):
+                        account: str,
+                        jid: JID,
+                        size: int,
+                        scale: int,
+                        default: bool = False,
+                        transport_icon: Optional[str] = None,
+                        style: str = 'circle') -> Optional[cairo.ImageSurface]:
 
         if transport_icon is not None:
             surface = get_icon_avatar(size, scale, transport_icon)
@@ -416,7 +449,11 @@ class AvatarStorage(metaclass=Singleton):
         self._cache[jid][(size, scale)] = surface
         return surface
 
-    def get_workspace_surface(self, workspace_id, size, scale):
+    def get_workspace_surface(self,
+                              workspace_id: str,
+                              size: int,
+                              scale: int) -> Optional[cairo.ImageSurface]:
+
         surface = self._cache[workspace_id].get((size, scale))
         if surface is not None:
             return surface
@@ -438,7 +475,8 @@ class AvatarStorage(metaclass=Singleton):
         self._cache[workspace_id][(size, scale)] = surface
         return surface
 
-    def prepare_for_publish(self, path):
+    def prepare_for_publish(self, path: str) -> tuple[Optional[bytes],
+                                                      Optional[str]]:
         success, data = self._load_for_publish(path)
         if not success:
             return None, None
@@ -449,7 +487,7 @@ class AvatarStorage(metaclass=Singleton):
         return data, sha
 
     @staticmethod
-    def _load_for_publish(path):
+    def _load_for_publish(path: str) -> Optional[tuple[bool, bytes]]:
         pixbuf = load_pixbuf(path)
         if pixbuf is None:
             return None
@@ -466,7 +504,7 @@ class AvatarStorage(metaclass=Singleton):
         return pixbuf.save_to_bufferv('png', [], [])
 
     @staticmethod
-    def save_avatar(data):
+    def save_avatar(data: bytes) -> Optional[str]:
         """
         Save an avatar to the harddisk
 
@@ -488,13 +526,17 @@ class AvatarStorage(metaclass=Singleton):
         return sha
 
     @staticmethod
-    def get_avatar_path(filename):
+    def get_avatar_path(filename: str) -> Optional[Path]:
         path = configpaths.get('AVATAR') / filename
         if not path.is_file():
             return None
         return path
 
-    def surface_from_filename(self, filename, size, scale):
+    def surface_from_filename(self,
+                              filename: str,
+                              size: int,
+                              scale: int) -> Optional[cairo.ImageSurface]:
+
         size = size * scale
         path = self.get_avatar_path(filename)
         if path is None:
@@ -507,7 +549,11 @@ class AvatarStorage(metaclass=Singleton):
         surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
         return fit(surface, size)
 
-    def _load_surface_from_storage(self, filename, size, scale):
+    def _load_surface_from_storage(self,
+                                   filename: str,
+                                   size: int,
+                                   scale: int) -> Optional[cairo.ImageSurface]:
+
         size = size * scale
         path = self.get_avatar_path(filename)
         if path is None:
@@ -519,7 +565,12 @@ class AvatarStorage(metaclass=Singleton):
         surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
         return fit(surface, size)
 
-    def _get_avatar_from_storage(self, contact, size, scale, style):
+    def _get_avatar_from_storage(self,
+                                 contact: ContactT,
+                                 size: int,
+                                 scale: int,
+                                 style: str) -> Optional[cairo.ImageSurface]:
+
         avatar_sha = contact.avatar_sha
         if avatar_sha is None:
             return None
@@ -530,7 +581,7 @@ class AvatarStorage(metaclass=Singleton):
         return clip(surface, style)
 
     @staticmethod
-    def _generate_letter(name):
+    def _generate_letter(name: str) -> str:
         for letter in name:
             if letter.isalpha():
                 return letter.capitalize()
