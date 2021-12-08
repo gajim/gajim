@@ -69,11 +69,8 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_translator_credits(_('translator-credits'))
         self.set_logo_icon_name('org.gajim.Gajim')
 
-        self.connect(
-            'response', lambda dialog, *args: Gtk.AboutDialog.do_close(dialog))
-
-        self.show()
         self.connect('activate-link', self._on_activate_link)
+        self.show()
 
     @staticmethod
     def _on_activate_link(_label: Gtk.Label, uri: str) -> int:
