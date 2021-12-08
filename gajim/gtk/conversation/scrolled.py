@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
 
 from gi.repository import Gtk
@@ -35,8 +37,8 @@ class ScrolledView(Gtk.ScrolledWindow):
         )
     }
 
-    def __init__(self, *args, **kwargs):
-        Gtk.ScrolledWindow.__init__(self, *args, **kwargs)
+    def __init__(self) -> None:
+        Gtk.ScrolledWindow.__init__(self)
 
         self.set_overlay_scrolling(False)
         self.get_style_context().add_class('scrolled-no-border')
@@ -56,7 +58,7 @@ class ScrolledView(Gtk.ScrolledWindow):
         # horizontally under certain conditions (applies to GroupchatControl)
         self.get_hscrollbar().hide()
 
-        self._current_upper: int = 0
+        self._current_upper: float = 0
         self._autoscroll: bool = True
         self._request_history_at_upper: Optional[float] = None
         self._upper_complete: bool = False
@@ -91,7 +93,10 @@ class ScrolledView(Gtk.ScrolledWindow):
     def get_lower_complete(self) -> bool:
         return self._lower_complete
 
-    def _on_adj_upper_changed(self, adj, *args):
+    def _on_adj_upper_changed(self,
+                              adj: Gtk.Adjustment,
+                              _pspec: GObject.ParamSpec) -> None:
+
         upper = adj.get_upper()
         diff = upper - self._current_upper
 
@@ -114,7 +119,10 @@ class ScrolledView(Gtk.ScrolledWindow):
             self.emit('autoscroll-changed', self._autoscroll)
         self._requesting = None
 
-    def _on_adj_value_changed(self, adj, *args):
+    def _on_adj_value_changed(self,
+                              adj: Gtk.Adjustment,
+                              _pspec: GObject.ParamSpec) -> None:
+
         if self._requesting is not None:
             return
 
