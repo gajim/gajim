@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any, Optional
+
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -28,7 +30,7 @@ from .avatar import get_show_circle
 
 
 class StatusSelector(Gtk.MenuButton):
-    def __init__(self, account=None, compact=False):
+    def __init__(self, account: Optional[str] = None, compact: bool = False):
         Gtk.MenuButton.__init__(self)
         self.set_direction(Gtk.ArrowType.UP)
         self._account = account
@@ -55,7 +57,7 @@ class StatusSelector(Gtk.MenuButton):
 
         app.ged.register_event_handler('our-show', ged.POSTGUI, self.update)
 
-    def _create_popover(self):
+    def _create_popover(self) -> None:
         popover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         popover_box.get_style_context().add_class('margin-3')
         popover_items = [
@@ -98,12 +100,12 @@ class StatusSelector(Gtk.MenuButton):
         self._status_popover.add(popover_box)
         self.set_popover(self._status_popover)
 
-    def _on_change_status(self, button):
+    def _on_change_status(self, button: Gtk.Button) -> None:
         self._status_popover.popdown()
         new_status = button.get_name()
         app.interface.change_status(status=new_status, account=self._account)
 
-    def update(self, *args, **kwargs):
+    def update(self, *args: Any, **kwargs: Any) -> None:
         if self._account is None:
             show = get_global_show()
         else:
