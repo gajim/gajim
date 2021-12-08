@@ -33,7 +33,6 @@ from gajim.common.helpers import Singleton
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
-from gajim.common.modules.contacts import Contacts
 
 from .const import DEFAULT_WORKSPACE_COLOR
 from .util import load_pixbuf
@@ -367,7 +366,7 @@ class AvatarStorage(metaclass=Singleton):
                    show: Optional[str] = None,
                    default: bool = False,
                    transport_icon: Optional[str] = None,
-                   style: str = 'circle') -> cairo.ImageSurface:
+                   style: str = 'circle') -> Optional[GdkPixbuf.Pixbuf]:
 
         surface = self.get_surface(
             contact, size, scale, show, default, transport_icon, style)
