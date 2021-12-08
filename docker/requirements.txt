@@ -1,5 +1,5 @@
-git+https://dev.gajim.org/gajim/python-nbxmpp.git@master
 PyGObject
+pycairo>=1.20
 mypy
 pylint
 codespell
