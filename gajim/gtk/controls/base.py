@@ -46,9 +46,10 @@ from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
+from gajim.common.helpers import message_needs_highlight
+from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.i18n import _
 from gajim.common.nec import EventHelper
 from gajim.common.nec import NetworkEvent
@@ -68,6 +69,7 @@ from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.util import get_builder
+from gajim.gui.util import set_urgency_hint
 from gajim.gui.util import AccountBadge
 from gajim.gui.const import ControlType  # pylint: disable=unused-import
 from gajim.gui.const import TARGET_TYPE_URI_LIST
@@ -798,7 +800,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         jingle = app.window.lookup_action(
             f'send-file-jingle-{self.control_id}')
 
-        if self._type.is_groupchat:
+        if self.is_groupchat:
             if httpupload.get_enabled():
                 return 'httpupload'
             return None
@@ -866,7 +868,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self.space_pressed = False
 
         # Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
-        if self._type.is_groupchat:
+        if self.is_groupchat:
             if event.keyval not in (Gdk.KEY_ISO_Left_Tab, Gdk.KEY_Tab):
                 self.last_key_tabs = False
 
@@ -920,7 +922,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                         self.COMMAND_PREFIX + self.command_hits[0] + ' ')
                     self.last_key_tabs = True
                 return True
-            if not self._type.is_groupchat:
+            if not self.is_groupchat:
                 self.last_key_tabs = False
         if event.keyval == Gdk.KEY_Up:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
@@ -995,7 +997,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # we may have more than one file dropped
         uri_splitted = selection.get_uris()
         for uri in uri_splitted:
-            path = helpers.get_file_path_from_dnd_dropped_uri(uri)
+            path = get_file_path_from_dnd_dropped_uri(uri)
             if not os.path.isfile(path):  # is it a file?
                 self.add_info_message(_("The following file could not be accessed and was not uploaded: ") + path)
                 continue
@@ -1173,7 +1175,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._jump_to_end_button.add_unread_count()
 
         if message_id:
-            if self._type.is_groupchat:
+            if self.is_groupchat:
                 self.last_msg_id = stanza_id or message_id
             else:
                 self.last_msg_id = message_id
@@ -1186,10 +1188,22 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if notify:
                 self._notify(name, text, tim, additional_data)
 
-            # Send chat marker if we’re actively following the chat
             chat_active = app.window.is_chat_active(
                 self.account, self.contact.jid)
+
+            if not chat_active:
+                if self.is_groupchat:
+                    needs_highlight = message_needs_highlight(
+                        text,
+                        self.contact.nickname,
+                        self._client.get_own_jid().bare)
+                    if needs_highlight or self.contact.can_notify():
+                        set_urgency_hint(app.window, True)
+                else:
+                    set_urgency_hint(app.window, True)
+
             if chat_active and self._scrolled_view.get_autoscroll():
+                # Send chat marker if we’re actively following the chat
                 app.window.mark_as_read(self.account, self.contact.jid)
 
     def _notify(self,
@@ -1222,7 +1236,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if self.is_groupchat:
             msg_type = 'group-chat-message'
             title += f' ({self.contact.name})'
-            needs_highlight = helpers.message_needs_highlight(
+            needs_highlight = message_needs_highlight(
                 text, self.contact.nickname, self._client.get_own_jid().bare)
             if needs_highlight:
                 sound = 'muc_message_highlight'

@@ -52,6 +52,7 @@ from .util import resize_window
 from .util import restore_main_window_position
 from .util import save_main_window_position
 from .util import open_window
+from .util import set_urgency_hint
 
 log = logging.getLogger('gajim.gui.main')
 
@@ -521,7 +522,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def mark_as_read(self, account: str, jid: JID,
                      send_marker: bool = True) -> None:
-        # TODO set window urgency hint, etc.
+        set_urgency_hint(self, False)
         control = self.get_control(account, jid)
         if control is not None:
             # Send displayed marker and
@@ -536,6 +537,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if not is_active:
             return
 
+        set_urgency_hint(self, False)
         control = self.get_active_control()
         if control is None:
             return
