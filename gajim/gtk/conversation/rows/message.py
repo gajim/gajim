@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
 from typing import Union
 
@@ -28,6 +30,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import TRUST_SYMBOL_DATA
 from gajim.common.helpers import AdditionalDataDict
@@ -36,9 +39,6 @@ from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
-from gajim.common.modules.contacts import BareContact
-from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.styling import process
 from gajim.common.styling import ParsingResult
 from gajim.common.i18n import _
@@ -56,14 +56,13 @@ from ...util import get_cursor
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
-# TODO:
-ContactType = Union[BareContact, GroupchatContact, GroupchatParticipant]
-
 
 class MessageRow(BaseRow):
     def __init__(self,
                  account: str,
-                 contact: ContactType,
+                 contact: Union[types.BareContact,
+                                types.GroupchatContact,
+                                types.GroupchatParticipant],
                  message_id: Optional[str],
                  stanza_id: Optional[str],
                  timestamp: float,
