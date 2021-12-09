@@ -64,10 +64,8 @@ MODULES = [
     'search',
     'security_labels',
     'software_version',
-    'user_activity',
     'user_avatar',
     'user_location',
-    'user_mood',
     'user_nickname',
     'user_tune',
     'vcard4',
@@ -82,8 +80,6 @@ MODULES = [
 _imported_modules = []  # type: List[tuple]
 _modules = {}  # type: Dict[str, Dict[str, Any]]
 _store_publish_modules = [
-    'UserMood',
-    'UserActivity',
     'UserLocation',
     'UserTune',
 ]  # type: List[str]

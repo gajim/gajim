@@ -252,41 +252,27 @@ PLUGIN_SETTINGS = {
 
 STATUS_PRESET_SETTINGS = {
     'message': '',
-    'activity': '',
-    'subactivity': '',
-    'mood': '',
 }
 
 
 STATUS_PRESET_EXAMPLES = {
     _('Sleeping'): {
-        'message': _('ZZZZzzzzzZZZZZ'),
-        'activity': 'inactive',
-        'subactivity': 'sleeping',
-        'mood': 'sleepy'
+        'message': _('ZZZZzzzzzZZZZZ')
     },
     _('Back soon'): {
         'message': _('Back in some minutes.')
     },
     _('Eating'): {
-        'message': _('I’m eating.'),
-        'activity': 'eating',
-        'subactivity': 'other'
+        'message': _('I’m eating.')
     },
     _('Movie'): {
-        'message': _('I’m watching a movie.'),
-        'activity': 'relaxing',
-        'subactivity': 'watching_a_movie'
+        'message': _('I’m watching a movie.')
     },
     _('Working'): {
-        'message': _('I’m working.'),
-        'activity': 'working',
-        'subactivity': 'other'
+        'message': _('I’m working.')
     },
     _('Out'): {
-        'message': _('I’m out enjoying life.'),
-        'activity': 'relaxing',
-        'subactivity': 'going_out'
+        'message': _('I’m out enjoying life.')
     }
 }
 

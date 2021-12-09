@@ -717,8 +717,6 @@ def get_optional_features(account):
     features = []
 
     if app.settings.get_account_setting(account, 'request_user_data'):
-        features.append(Namespace.MOOD + '+notify')
-        features.append(Namespace.ACTIVITY + '+notify')
         features.append(Namespace.TUNE + '+notify')
         features.append(Namespace.LOCATION + '+notify')
 

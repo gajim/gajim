@@ -321,8 +321,6 @@ class ChatControl(BaseControl):
 
     def update_all_pep_types(self) -> None:
         self._update_pep(PEPEventType.LOCATION)
-        self._update_pep(PEPEventType.MOOD)
-        self._update_pep(PEPEventType.ACTIVITY)
         self._update_pep(PEPEventType.TUNE)
 
     def _update_pep(self, type_: PEPEventType) -> None:
@@ -334,13 +332,7 @@ class ChatControl(BaseControl):
         #     image.hide()
         #     return
 
-        # if type_ == PEPEventType.MOOD:
-        #     icon = f'mood-{data.mood}'
-        #     formated_text = format_mood(*data)
-        # elif type_ == PEPEventType.ACTIVITY:
-        #     icon = get_activity_icon_name(data.activity, data.subactivity)
-        #     formated_text = format_activity(*data)
-        # elif type_ == PEPEventType.TUNE:
+        # if type_ == PEPEventType.TUNE:
         #     icon = 'audio-x-generic'
         #     formated_text = format_tune(*data)
         # elif type_ == PEPEventType.LOCATION:
@@ -352,21 +344,11 @@ class ChatControl(BaseControl):
         # image.show()
 
     def _get_pep_widget(self, type_: PEPEventType) -> Optional[Gtk.Image]:
-        if type_ == PEPEventType.MOOD:
-            return self.xml.mood_image
-        if type_ == PEPEventType.ACTIVITY:
-            return self.xml.activity_image
         if type_ == PEPEventType.TUNE:
             return self.xml.tune_image
         if type_ == PEPEventType.LOCATION:
             return self.xml.location_image
         return None
-
-    def _on_mood_received(self, _event):
-        self._update_pep(PEPEventType.MOOD)
-
-    def _on_activity_received(self, _event):
-        self._update_pep(PEPEventType.ACTIVITY)
 
     def _on_tune_received(self, _event):
         self._update_pep(PEPEventType.TUNE)

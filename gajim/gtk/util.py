@@ -51,8 +51,6 @@ from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import URL_REGEX
-from gajim.common.const import MOODS
-from gajim.common.const import ACTIVITIES
 from gajim.common.const import LOCATION_DATA
 from gajim.common.const import Display
 from gajim.common.const import StyleAttr
@@ -510,52 +508,6 @@ def ensure_not_destroyed(func):
             return None
         return func(self, *args, **kwargs)
     return func_wrapper
-
-
-def format_mood(mood: str, text: str) -> str:
-    if mood is None:
-        return ''
-    mood = MOODS[mood]
-    markuptext = '<b>%s</b>' % GLib.markup_escape_text(mood)
-    if text is not None:
-        markuptext += ' (%s)' % GLib.markup_escape_text(text)
-    return markuptext
-
-
-def get_account_mood_icon_name(account: str) -> Optional[str]:
-    client = app.get_client(account)
-    mood = client.get_module('UserMood').get_current_mood()
-    return f'mood-{mood.mood}' if mood is not None else mood
-
-
-def format_activity(activity: str, subactivity: str, text: str) -> str:
-    if subactivity in ACTIVITIES[activity]:
-        subactivity = ACTIVITIES[activity][subactivity]
-    activity = ACTIVITIES[activity]['category']
-
-    markuptext = '<b>' + GLib.markup_escape_text(activity)
-    if subactivity:
-        markuptext += ': ' + GLib.markup_escape_text(subactivity)
-    markuptext += '</b>'
-    if text:
-        markuptext += ' (%s)' % GLib.markup_escape_text(text)
-    return markuptext
-
-
-def get_activity_icon_name(activity: str,
-                           subactivity: Optional[str] = None) -> str:
-    icon_name = 'activity-%s' % activity.replace('_', '-')
-    if subactivity is not None:
-        icon_name += '-%s' % subactivity.replace('_', '-')
-    return icon_name
-
-
-def get_account_activity_icon_name(account: str) -> Optional[str]:
-    client = app.get_client(account)
-    activity = client.get_module('UserActivity').get_current_activity()
-    if activity is None:
-        return None
-    return get_activity_icon_name(activity.activity, activity.subactivity)
 
 
 def format_tune(artist: str, _length: str, _rating: str, source: str,

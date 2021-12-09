@@ -44,8 +44,6 @@ from gajim.common.i18n import _
 
 from .avatar import get_show_circle
 from .util import get_builder
-from .util import format_mood
-from .util import format_activity
 from .util import format_tune
 from .util import format_location
 
@@ -177,7 +175,7 @@ class RosterTooltip:
         # This sets the bottom-most widget to expand, in case the avatar
         # takes more space than the labels
         row_count = 1
-        while row_count < 8:
+        while row_count < 6:
             widget = self._ui.tooltip_grid.get_child_at(1, row_count)
             if widget and widget.get_visible():
                 last_widget = widget
@@ -244,18 +242,6 @@ class RosterTooltip:
         self._ui.resources_box.show_all()
 
     def _append_pep_info(self, contact):
-        if PEPEventType.MOOD in contact.pep:
-            mood = format_mood(*contact.pep[PEPEventType.MOOD])
-            self._ui.mood.set_markup(mood)
-            self._ui.mood.show()
-            self._ui.mood_label.show()
-
-        if PEPEventType.ACTIVITY in contact.pep:
-            activity = format_activity(*contact.pep[PEPEventType.ACTIVITY])
-            self._ui.activity.set_markup(activity)
-            self._ui.activity.show()
-            self._ui.activity_label.show()
-
         if PEPEventType.TUNE in contact.pep:
             tune = format_tune(*contact.pep[PEPEventType.TUNE])
             self._ui.tune.set_markup(tune)

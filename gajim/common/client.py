@@ -367,8 +367,6 @@ class Client(Observable):
 
         # We are connected
         if show == 'offline':
-            self.set_user_activity(None)
-            self.set_user_mood(None)
             self.set_user_tune(None)
             self.set_user_location(None)
             presence = self.get_module('Presence').get_presence(
@@ -395,12 +393,6 @@ class Client(Observable):
 
         if include_muc:
             self.get_module('MUC').update_presence()
-
-    def set_user_activity(self, activity):
-        self.get_module('UserActivity').set_activity(activity)
-
-    def set_user_mood(self, mood):
-        self.get_module('UserMood').set_mood(mood)
 
     def set_user_tune(self, tune):
         self.get_module('UserTune').set_tune(tune)

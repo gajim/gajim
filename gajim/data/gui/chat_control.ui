@@ -274,30 +274,6 @@
                             <property name="can-focus">False</property>
                             <property name="spacing">4</property>
                             <child>
-                              <object class="GtkImage" id="mood_image">
-                                <property name="can-focus">False</property>
-                                <property name="no-show-all">True</property>
-                                <property name="icon_size">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkImage" id="activity_image">
-                                <property name="can-focus">False</property>
-                                <property name="no-show-all">True</property>
-                                <property name="icon_size">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkImage" id="tune_image">
                                 <property name="can-focus">False</property>
                                 <property name="no-show-all">True</property>
