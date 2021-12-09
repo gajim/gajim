@@ -275,15 +275,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _connect_contact_signals(self):
         raise NotImplementedError
 
-    def _process_jingle_av_event(self, *args):
-        raise NotImplementedError
-
-    def get_our_nick(self):
-        raise NotImplementedError
-
-    def room_name(self):
-        raise NotImplementedError
-
     def _get_action(self, name: str) -> Gio.Action:
         return app.window.lookup_action(f'{name}{self.control_id}')
 

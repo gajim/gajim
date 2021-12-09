@@ -303,7 +303,7 @@ class AdHocCommands(BaseModule):
         if sessionid is None:
             # we start a new command session
             # only if we are visible for the jid and command exist
-            if node not in self._commands.keys():
+            if node not in self._commands:
                 self._con.connection.send(
                     nbxmpp.Error(
                         stanza, Namespace.STANZAS + ' item-not-found'))

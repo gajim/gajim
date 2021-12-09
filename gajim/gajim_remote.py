@@ -211,7 +211,7 @@ class GajimRemote:
                 }
 
         self.sbus = None
-        if self.argv_len < 2 or sys.argv[1] not in self.commands.keys():
+        if self.argv_len < 2 or sys.argv[1] not in self.commands:
             # no args or bad args
             send_error(self.compose_help())
         self.command = sys.argv[1]

@@ -85,7 +85,7 @@ class SocksQueue:
         log.debug('Start listening for socks5 connection')
         sid = file_props.sid
         self.sha_handlers[sha_str] = (sha_handler, sid)
-        if self.listener is None or self.listener.connections == []:
+        if self.listener is None or not self.listener.connections:
             self.listener = Socks5Listener(self.idlequeue, port, file_props,
                 fingerprint=fingerprint)
             self.listener.queue = self
