@@ -4,8 +4,8 @@
     <child>
       <object class="GtkShortcutsSection">
         <property name="visible">1</property>
-        <property name="section-name">roster</property>
-        <property name="title" translatable="yes">Contact List</property>
+        <property name="section-name">window</property>
+        <property name="title" translatable="yes">Gajim</property>
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">1</property>
@@ -57,19 +57,6 @@
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;q</property>
                 <property name="title" translatable="yes">Quit Gajim</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">Contacts</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;i</property>
-                <property name="title" translatable="yes">Contact information</property>
               </object>
             </child>
           </object>
@@ -248,6 +235,19 @@
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;s</property>
                 <property name="title" translatable="yes">Change Subject</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">1</property>
+            <property name="title" translatable="yes">Contacts</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;primary&gt;i</property>
+                <property name="title" translatable="yes">Contact information</property>
               </object>
             </child>
           </object>
