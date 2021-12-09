@@ -1416,12 +1416,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.conversation_view.add_call_message(db_message=msg)
                 continue
 
+            if not msg.message:
+                continue
+
             if msg.kind in (KindConstant.STATUS,
                             KindConstant.GCSTATUS):
                 self.conversation_view.add_info_message(msg.message)
-                continue
-
-            if not msg.message:
                 continue
 
             message_text = msg.message
