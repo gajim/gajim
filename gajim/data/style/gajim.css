@@ -1,10 +1,10 @@
 /* Gajim Application CSS File */
 
-.chatcontrol-actionbar-button { 
+.chatcontrol-actionbar-button {
 	padding: 0px 5px 0px 5px;
 	background-color: @theme_base_color; 
 	border: none;
-	}
+}
 
 .no-border { border: none; }
 .scrolled-no-border { border: none; }
@@ -12,14 +12,6 @@
 .scrollbar-style scrollbar trough {background-color:@theme_base_color; }
 .scrollbar-style scrollbar {border:none; }
 .one-line-scrollbar scrollbar.vertical slider { min-height: 20px; }
-
-.actionbar-no-border box { border: none; }
-.actionbar-no-border button { 
-	padding: 0px;
-	background-color: @theme_base_color; 
-	border: none;
-	background-image: none;
-	}
 
 .dialog-margin > box { margin: 18px;}
 

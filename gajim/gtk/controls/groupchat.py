@@ -159,14 +159,6 @@ class GroupchatControl(BaseControl):
             self.control_id, self._type))
         self.set_encryption_menu_icon()
 
-        # Banner
-        self.hide_roster_button = Gtk.Button.new_from_icon_name(
-            'go-previous-symbolic', Gtk.IconSize.MENU)
-        self.hide_roster_button.set_valign(Gtk.Align.CENTER)
-        self.hide_roster_button.connect('clicked',
-                                        lambda *args: self.show_roster())
-        self.xml.banner_actionbar.pack_end(self.hide_roster_button)
-
         self._update_avatar()
 
         # Holds CaptchaRequest widget
@@ -264,7 +256,7 @@ class GroupchatControl(BaseControl):
 
         if self.contact.is_joined:
             self._set_control_active()
-            self.show_roster()
+            self._show_roster()
             self._groupchat_state.set_joined()
 
         elif self.contact.is_not_joined:
@@ -672,11 +664,11 @@ class GroupchatControl(BaseControl):
             self.room_jid,
             {jid: {'affiliation': affiliation}})
 
-    def show_roster(self):
+    def _show_roster(self, *args):
         show = not self.xml.roster_revealer.get_reveal_child()
         icon = 'go-next-symbolic' if show else 'go-previous-symbolic'
-        image = self.hide_roster_button.get_image()
-        image.set_from_icon_name(icon, Gtk.IconSize.MENU)
+        self.xml.toggle_roster_image.set_from_icon_name(
+            icon, Gtk.IconSize.BUTTON)
 
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
         if show:
