@@ -1016,6 +1016,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         label = labels[lname]
         return label
 
+    def get_our_nick(self) -> str:
+        return app.nicks[self.account]
+
     def _on_send_message(self, *args):
         self.msg_textview.replace_emojis()
         message = self.msg_textview.get_text()

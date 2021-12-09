@@ -583,9 +583,6 @@ class ChatControl(BaseControl):
                                  process_commands=process_commands,
                                  attention=attention)
 
-    def get_our_nick(self) -> str:
-        return app.nicks[self.account]
-
     def add_message(self,
                     text: str,
                     kind: str,
