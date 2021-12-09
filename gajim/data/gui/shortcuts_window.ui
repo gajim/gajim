@@ -130,14 +130,14 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;&lt;alt&gt;Up</property>
+                <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Up</property>
                 <property name="title" translatable="yes">Quote previous message</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;&lt;alt&gt;Down</property>
+                <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Down</property>
                 <property name="title" translatable="yes">Quote next message</property>
               </object>
             </child>
