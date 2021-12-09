@@ -999,7 +999,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         for uri in uri_splitted:
             path = get_file_path_from_dnd_dropped_uri(uri)
             if not os.path.isfile(path):  # is it a file?
-                self.add_info_message(_("The following file could not be accessed and was not uploaded: ") + path)
+                self.add_info_message(
+                    _('The following file could not be accessed and was '
+                      'not uploaded: %s') % path)
                 continue
 
             self._start_filetransfer(path)
