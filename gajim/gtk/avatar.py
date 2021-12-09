@@ -12,7 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import Optional
+from typing import Union
 
 import logging
 import hashlib
@@ -50,9 +53,6 @@ log = logging.getLogger('gajim.gui.avatar')
 AvatarCacheT = dict[JID, dict[tuple[int, int, Optional[str]],
                               cairo.ImageSurface]]
 
-ContactT = Union[types.BareContact,
-                 types.GroupchatContact,
-                 types.GroupchatParticipant]
 
 def generate_avatar(letters: str,
                     color: tuple[float, float, float],
@@ -360,7 +360,9 @@ class AvatarStorage(metaclass=Singleton):
         self._cache.pop(jid, None)
 
     def get_pixbuf(self,
-                   contact: ContactT,
+                   contact: Union[types.BareContact,
+                                  types.GroupchatContact,
+                                  types.GroupchatParticipant],
                    size: int,
                    scale: int,
                    show: Optional[str] = None,
@@ -373,7 +375,9 @@ class AvatarStorage(metaclass=Singleton):
         return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
     def get_surface(self,
-                    contact: ContactT,
+                    contact: Union[types.BareContact,
+                                   types.GroupchatContact,
+                                   types.GroupchatParticipant],
                     size: int,
                     scale: int,
                     show: Optional[str] = None,
@@ -554,7 +558,9 @@ class AvatarStorage(metaclass=Singleton):
         return fit(surface, size)
 
     def _get_avatar_from_storage(self,
-                                 contact: ContactT,
+                                 contact: Union[types.BareContact,
+                                                types.GroupchatContact,
+                                                types.GroupchatParticipant],
                                  size: int,
                                  scale: int,
                                  style: str) -> Optional[cairo.ImageSurface]:
