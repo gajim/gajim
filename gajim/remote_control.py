@@ -569,7 +569,7 @@ class GajimRemote(Server):
         for acct in accounts:
             if app.account_is_available(acct):  # account is  online
                 client = app.get_client(acct)
-                contact = client.get_module('Contact').get_contact(jid)
+                contact = client.get_module('Contacts').get_contact(jid)
                 control = app.window.get_control(acct, jid)
                 if control is not None:
                     connected_account = acct
@@ -723,7 +723,7 @@ class GajimRemote(Server):
         contact_exists = False
         for account_ in accounts:
             client = app.get_client(account_)
-            contact = client.get_module('Contact').get_contact(jid)
+            contact = client.get_module('Contacts').get_contact(jid)
             if contact.is_in_roster:
                 client.get_module('Presence').unsubscribe(jid)
                 client.get_module('Roster').delete_item(jid)

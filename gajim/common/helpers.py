@@ -827,7 +827,7 @@ def load_json(path, key=None, default=None):
 
 def ignore_contact(account, jid):
     client = app.get_client(account)
-    contact = client.get_module('Contact').get_contact(jid)
+    contact = client.get_module('Contacts').get_contact(jid)
 
     ignore_unknown = app.settings.get_account_setting(
         account, 'ignore_unknown_contacts')
