@@ -24,6 +24,7 @@ from .base import BaseRow
 class ReadMarkerRow(BaseRow):
     def __init__(self, account, contact):
         BaseRow.__init__(self, account, widget='label')
+        self.set_activatable(False)
         self.type = 'read_marker'
         self.timestamp = datetime.fromtimestamp(0)
         self._last_incoming_timestamp = datetime.fromtimestamp(0)
@@ -34,6 +35,7 @@ class ReadMarkerRow(BaseRow):
         self.label.set_text(text)
         self.label.set_halign(Gtk.Align.CENTER)
         self.label.set_hexpand(True)
+        self.label.set_sensitive(False)
         self.label.get_style_context().add_class(
             'conversation-read-marker')
         self.grid.attach(self.label, 0, 0, 1, 1)
