@@ -55,7 +55,6 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self.show_all()
         self._controls: Dict[Tuple[str, JID], ControlType] = {}
-        self._active_control: Optional[ControlType] = None
 
     def get_control(self, account: str, jid: JID) -> Optional[ControlType]:
         try:
@@ -101,8 +100,6 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def remove_chat(self, account: str, jid: JID) -> None:
         control = self._controls.pop((account, jid))
-        if control == self._active_control:
-            self._active_control = None
         self.remove(control.widget)
         control.shutdown()
 
@@ -112,11 +109,14 @@ class ChatStack(Gtk.Stack, EventHelper):
         if control is None:
             log.warning('No Control found for %s, %s', account, jid)
             return
-        if control != self._active_control:
-            if self._active_control is not None:
-                self._active_control.reset_view()
-        self._active_control = control
+
         GLib.idle_add(control.focus)
+
+    def unload_chat(self, account: str, jid: JID) -> None:
+        control = self.get_control(account, jid)
+        if control is None:
+            return
+        control.reset_view()
 
     def clear(self) -> None:
         self.set_visible_child_name('empty')

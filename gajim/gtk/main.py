@@ -53,6 +53,7 @@ from .util import restore_main_window_position
 from .util import save_main_window_position
 from .util import open_window
 from .util import set_urgency_hint
+from .const import UNLOAD_CHAT_TIME
 
 log = logging.getLogger('gajim.gui.main')
 
@@ -126,10 +127,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._add_actions2()
 
         self._prepare_window()
+        self._start_timers()
 
         if not app.is_display(Display.WAYLAND):
             app.interface.systray.connect_unread_changed(
                 self._chat_page.get_chat_list_stack())
+
+    def _start_timers(self):
+        GLib.timeout_add_seconds(UNLOAD_CHAT_TIME,
+                                 self._chat_page.unload_idle_chats)
 
     def _prepare_window(self) -> None:
         if app.settings.get('main_window_skip_taskbar'):
