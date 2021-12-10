@@ -812,7 +812,9 @@ def call_counter(func):
         return func(self)
     return helper
 
-def load_json(path, key=None, default=None):
+def load_json(path: Path,
+              key: Optional[str] = None,
+              default: Optional[Any] = None) -> Any:
     try:
         with path.open('r') as file:
             json_dict = json.loads(file.read())

@@ -200,6 +200,7 @@ class ConfigPaths:
             ('PLUGINS_CONFIG_DIR',
              'pluginsconfig', PathLocation.CONFIG, PathType.FOLDER),
             ('MY_CERT', 'localcerts', PathLocation.CONFIG, PathType.FOLDER),
+            ('MY_SHORTCUTS', 'shortcuts.json', PathLocation.CONFIG, PathType.FILE),
         ]
 
         for path in unique_profile_paths:

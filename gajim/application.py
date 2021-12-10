@@ -55,6 +55,7 @@ from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.archive import MessageArchiveStorage
 from gajim.common.settings import Settings
 from gajim.common.settings import LegacyConfig
+from gajim.common.helpers import load_json
 
 
 class GajimApplication(Gtk.Application):
@@ -209,7 +210,7 @@ class GajimApplication(Gtk.Application):
         self.interface = Interface()
         self.interface.run(self)
         self.add_actions()
-        self._set_shortcuts()
+        self._load_shortcuts()
         from gajim import gui_menu_builder
         gui_menu_builder.build_accounts_menu()
         self.update_app_actions_state()
@@ -470,41 +471,18 @@ class GajimApplication(Gtk.Application):
         enabled_accounts = app.settings.get_active_accounts()
         self.lookup_action('start-chat').set_enabled(enabled_accounts)
 
-    def _set_shortcuts(self):
-        shortcuts = {
-            'app.quit': ['<Primary>Q'],
-            'app.shortcuts': ['<Primary>question'],
-            'app.preferences': ['<Primary>P'],
-            'app.plugins': ['<Primary>E'],
-            'app.xml-console': ['<Primary><Shift>X'],
-            'app.file-transfer': ['<Primary>T'],
-            'app.ipython': ['<Primary><Alt>I'],
-            'app.start-chat::': ['<Primary>N'],
-            'app.create-groupchat::': ['<Primary>G'],
-            'win.change-nickname': ['<Primary><Shift>N'],
-            'win.change-subject': ['<Primary><Shift>S'],
-            'win.escape': ['Escape'],
-            'win.send-file': ['<Primary>F'],
-            'win.show-contact-info': ['<Primary>I'],
-            'win.show-emoji-chooser': ['<Primary><Shift>M'],
-            'win.clear-chat': ['<Primary>L'],
-            'win.delete-line': ['<Primary>U'],
-            'win.close-tab': ['<Primary>W'],
-            'win.switch-next-tab': ['<Primary>Page_Down'],
-            'win.switch-prev-tab': ['<Primary>Page_Up'],
-            'win.switch-next-unread-tab': ['<Primary>Tab'],
-            'win.switch-prev-unread-tab': ['<Primary>ISO_Left_Tab'],
-            'win.switch-tab-1': ['<Alt>1', '<Alt>KP_1'],
-            'win.switch-tab-2': ['<Alt>2', '<Alt>KP_2'],
-            'win.switch-tab-3': ['<Alt>3', '<Alt>KP_3'],
-            'win.switch-tab-4': ['<Alt>4', '<Alt>KP_4'],
-            'win.switch-tab-5': ['<Alt>5', '<Alt>KP_5'],
-            'win.switch-tab-6': ['<Alt>6', '<Alt>KP_6'],
-            'win.switch-tab-7': ['<Alt>7', '<Alt>KP_7'],
-            'win.switch-tab-8': ['<Alt>8', '<Alt>KP_8'],
-            'win.switch-tab-9': ['<Alt>9', '<Alt>KP_9'],
-            'win.search-history': ['<Primary>H'],
-        }
+    def _load_shortcuts(self):
+        default_path = configpaths.get('DATA') / 'other' / 'shortcuts.json'
+        shortcuts = load_json(default_path)
+        assert shortcuts is not None
+
+        user_path = configpaths.get('MY_SHORTCUTS')
+        user_shortcuts = {}
+        if user_path.exists():
+            app.log('app').info('Load user shortcuts')
+            user_shortcuts = load_json(user_path, default={})
+
+        shortcuts.update(user_shortcuts)
 
         for action, accels in shortcuts.items():
             self.set_accels_for_action(action, accels)
