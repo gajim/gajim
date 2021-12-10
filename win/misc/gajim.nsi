@@ -249,9 +249,13 @@ SectionEnd
 
 ; Installer
 Function StartUpgrade
-	; Disable 'Upgrade' button to avoid further clicks
+	; Disable 'Upgrade', 'Cancel', and 'Back' buttons to avoid further clicks
 	GetDlgItem $1 $HWNDPARENT 1
 	EnableWindow $1 0
+	GetDlgItem $2 $HWNDPARENT 2
+	EnableWindow $2 0
+	GetDlgItem $3 $HWNDPARENT 3
+	EnableWindow $3 0
 
 	; Hint: Gajim setup should not be named gajim.exe
 	ExecWait "TaskKill /IM gajim.exe /F"
