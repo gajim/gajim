@@ -506,8 +506,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def get_active_control(self) -> Optional[ControlType]:
         return self._chat_page.get_active_control()
 
-    def get_currently_loaded_control(self) -> Optional[ControlType]:
-        return self._chat_page.get_currently_loaded_control()
+    def is_chat_idle(self, account: str, jid: JID) -> bool:
+        return self._chat_page.is_chat_idle(account, jid)
 
     def chat_exists(self, account: str, jid: JID) -> bool:
         return self._chat_page.chat_exists(account, jid)

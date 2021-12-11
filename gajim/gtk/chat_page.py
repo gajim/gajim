@@ -92,7 +92,7 @@ class ChatPage(Gtk.Box):
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
-        self._currently_loaded_control: Optional[ControlType] = None
+        self._last_control: Optional[ControlType] = None
         self._startup_finished: bool = False
 
         self._add_actions()
@@ -168,7 +168,7 @@ class ChatPage(Gtk.Box):
         return True
 
     def _on_chat_selected(self,
-                          chat_list_stack: ChatListStack,
+                          _chat_list_stack: ChatListStack,
                           workspace_id: str,
                           account: str,
                           jid: JID) -> None:
@@ -181,11 +181,12 @@ class ChatPage(Gtk.Box):
         control = self.get_control(account, jid)
         if control is None:
             return
-        if self._currently_loaded_control != control:
-            if self._currently_loaded_control is not None:
-                self._currently_loaded_control.set_control_active(False)
+
+        if control != self._last_control:
+            if self._last_control is not None:
+                self._last_control.set_control_active(False)
             control.set_control_active(True)
-        self._currently_loaded_control = control
+        self._last_control = control
 
     def _on_chat_unselected(self, _chat_list_stack):
         self._chat_stack.clear()
@@ -302,7 +303,7 @@ class ChatPage(Gtk.Box):
     def _on_chat_removed(self, _chat_list: ChatList, account: str, jid: JID,
                          type_: str) -> None:
         self._chat_stack.remove_chat(account, jid)
-        self._currently_loaded_control = None
+        self._last_control = None
         if type_ == 'groupchat':
             client = app.get_client(account)
             client.get_module('MUC').leave(jid)
@@ -324,8 +325,9 @@ class ChatPage(Gtk.Box):
             return None
         return self.get_control(chat.account, chat.jid)
 
-    def get_currently_loaded_control(self) -> Optional[ControlType]:
-        return self._currently_loaded_control
+    def is_chat_idle(self, account: str, jid: JID) -> bool:
+        entry = self._chat_idle_time.get((account, jid))
+        return entry is not None
 
     def get_controls(self, account: Optional[str]
                      ) -> Generator[ControlType, None, None]:

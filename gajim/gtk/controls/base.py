@@ -1123,6 +1123,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             self.received_history_pos = pos
 
+    def _allow_add_message(self) -> bool:
+        lower_complete = self._scrolled_view.get_lower_complete()
+        chat_idle = app.window.is_chat_idle(self.account, self.contact.jid)
+        chat_selected = bool(app.window.get_active_control() is not None)
+        return lower_complete and chat_idle or chat_selected
+
     def add_info_message(self, text: str) -> None:
         self.conversation_view.add_info_message(text)
 
@@ -1130,15 +1136,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.conversation_view.add_file_transfer(transfer)
 
     def add_jingle_file_transfer(self, event):
-        control_selected = bool(
-            self == app.window.get_currently_loaded_control())
-        if self._scrolled_view.get_lower_complete() and control_selected:
+        if self._allow_add_message():
             self.conversation_view.add_jingle_file_transfer(event)
 
     def add_call_message(self, event):
-        control_selected = bool(
-            self == app.window.get_currently_loaded_control())
-        if self._scrolled_view.get_lower_complete() and control_selected:
+        if self._allow_add_message():
             self.conversation_view.add_call_message(event=event)
 
     def add_message(self,
@@ -1157,9 +1159,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
-        control_selected = bool(
-            self == app.window.get_currently_loaded_control())
-        if self._scrolled_view.get_lower_complete() and control_selected:
+        if self._allow_add_message():
             self.conversation_view.add_message(
                 text,
                 kind,
