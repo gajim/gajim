@@ -1127,7 +1127,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         lower_complete = self._scrolled_view.get_lower_complete()
         chat_idle = app.window.is_chat_idle(self.account, self.contact.jid)
         chat_selected = bool(app.window.get_active_control() is not None)
-        return lower_complete and chat_idle or chat_selected
+        return lower_complete and (chat_idle or chat_selected)
 
     def add_info_message(self, text: str) -> None:
         self.conversation_view.add_info_message(text)
