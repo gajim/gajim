@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
+from datetime import timedelta
 
 from gi.repository import Gtk
 
@@ -46,7 +47,7 @@ class ReadMarkerRow(BaseRow):
         self.label.set_text(text)
 
     def set_timestamp(self, timestamp: datetime) -> None:
-        if timestamp < self._last_incoming_timestamp:
+        if timestamp <= self._last_incoming_timestamp:
             return
 
         self.timestamp = timestamp
@@ -57,4 +58,5 @@ class ReadMarkerRow(BaseRow):
 
     def set_last_incoming_timestamp(self, timestamp: datetime) -> None:
         if timestamp > self._last_incoming_timestamp:
-            self._last_incoming_timestamp = timestamp
+            self._last_incoming_timestamp = timestamp + timedelta(
+                microseconds=1)
