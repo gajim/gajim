@@ -23,10 +23,10 @@ from gi.repository import GtkSource
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
-from gajim.common.const import StyleAttr
 
-from . import util
 from .util import get_builder
+from .util import at_the_end
+from .util import scroll_to_end
 from .util import MaxWidthComboBoxText
 from .util import EventHelper
 from .dialogs import ErrorDialog
@@ -384,7 +384,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         if not stanza:
             return
 
-        at_the_end = util.at_the_end(self._ui.scrolled)
+        is_at_the_end = at_the_end(self._ui.scrolled)
 
         buffer_ = self._ui.sourceview.get_buffer()
         end_iter = buffer_.get_end_iter()
@@ -406,5 +406,5 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             stanza=stanza)
         buffer_.insert_with_tags_by_name(end_iter, stanza, type_, kind)
 
-        if at_the_end:
-            GLib.idle_add(util.scroll_to_end, self._ui.scrolled)
+        if is_at_the_end:
+            GLib.idle_add(scroll_to_end, self._ui.scrolled)
