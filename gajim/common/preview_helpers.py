@@ -34,6 +34,7 @@ from gi.repository import Gio
 from gi.repository import GstPbutils
 
 from PIL import Image
+from PIL import ImageFile
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher
@@ -43,6 +44,8 @@ from cryptography.hazmat.primitives.ciphers.modes import GCM
 from gajim.common.i18n import _
 
 log = logging.getLogger('gajim.c.preview_helpers')
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 class Coords(NamedTuple):
