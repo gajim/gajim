@@ -126,6 +126,7 @@ class PreviewWidget(Gtk.Box):
                 self._ui.right_box.pack_end(audio_widget, False, True, 0)
                 self._ui.right_box.reorder_child(audio_widget, 1)
         else:
+            self._ui.download_button.show()
             self._ui.save_as_button.hide()
             self._ui.open_folder_button.hide()
 
@@ -138,7 +139,7 @@ class PreviewWidget(Gtk.Box):
         self._ui.file_name.set_text(preview.filename)
         self._ui.file_name.set_tooltip_text(preview.filename)
 
-    def _get_context_menu(self):
+    def _get_context_menu(self) -> Gtk.Menu:
         def _destroy(menu, _pspec):
             visible = menu.get_property('visible')
             if not visible:
@@ -167,12 +168,17 @@ class PreviewWidget(Gtk.Box):
 
         return menu.context_menu
 
-    def _on_download(self, _menu):
+    def _on_download(self, _menu: Gtk.Menu) -> None:
+        if self._preview is None:
+            return
         if not self._preview.orig_exists():
             app.interface.preview_manager.download_content(
                 self._preview, force=True)
 
-    def _on_open(self, _menu):
+    def _on_open(self, _menu: Gtk.Menu) -> None:
+        if self._preview is None:
+            return
+
         if self._preview.is_geo_uri:
             open_uri(self._preview.uri)
             return
@@ -184,7 +190,7 @@ class PreviewWidget(Gtk.Box):
 
         open_file(self._preview.orig_path)
 
-    def _on_save_as(self, _menu):
+    def _on_save_as(self, _menu: Gtk.Menu) -> None:
         def _on_ok(target_path):
             dirname = Path(target_path).parent
             if not os.access(dirname, os.W_OK):
@@ -206,18 +212,18 @@ class PreviewWidget(Gtk.Box):
                        file_name=self._preview.filename,
                        transient_for=app.app.get_active_window())
 
-    def _on_open_folder(self, _menu):
+    def _on_open_folder(self, _menu: Gtk.Menu) -> None:
         if not self._preview.orig_exists():
             app.interface.preview_manager.download_content(
                 self._preview, force=True)
             return
         open_file(self._preview.orig_path.parent)
 
-    def _on_copy_link_location(self, _menu):
+    def _on_copy_link_location(self, _menu: Gtk.Menu) -> None:
         clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
         clipboard.set_text(self._preview.uri, -1)
 
-    def _on_open_link_in_browser(self, _menu):
+    def _on_open_link_in_browser(self, _menu: Gtk.Menu) -> None:
         if self._preview.is_aes_encrypted:
             if self._preview.is_geo_uri:
                 open_uri(self._preview.uri)
@@ -226,17 +232,20 @@ class PreviewWidget(Gtk.Box):
         else:
             open_uri(self._preview.uri)
 
-    def _on_content_button_clicked(self, _button):
+    def _on_content_button_clicked(self, _button: Gtk.Button) -> None:
         action = app.settings.get('preview_leftclick_action')
         method = getattr(self, f'_on_{action}')
         method(None)
 
-    def _on_button_press_event(self, _button, event):
+    def _on_button_press_event(self,
+                               _button: Gtk.Button,
+                               event: Gdk.EventButton
+                               ) -> None:
         if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 3:
             # Right click
             menu = self._get_context_menu()
             menu.popup_at_pointer(event)
 
     @staticmethod
-    def _on_realize(event_box):
+    def _on_realize(event_box: Gtk.EventBox) -> None:
         event_box.get_window().set_cursor(get_cursor('pointer'))

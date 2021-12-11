@@ -55,7 +55,6 @@
                 <signal name="realize" handler="_on_realize" swapped="no"/>
                 <child>
                   <object class="GtkButton" id="download_button">
-                    <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="no-show-all">True</property>
@@ -91,7 +90,6 @@
                 <signal name="realize" handler="_on_realize" swapped="no"/>
                 <child>
                   <object class="GtkButton" id="save_as_button">
-                    <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="no-show-all">True</property>
@@ -126,7 +124,6 @@
                 <signal name="realize" handler="_on_realize" swapped="no"/>
                 <child>
                   <object class="GtkButton" id="open_folder_button">
-                    <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="no-show-all">True</property>
