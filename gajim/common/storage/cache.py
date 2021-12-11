@@ -318,6 +318,11 @@ class CacheStorage(SqliteStorage):
             return value
 
     @timeit
+    def get_unread(self):
+        sql = 'SELECT * FROM unread'
+        return self._con.execute(sql).fetchall()
+
+    @timeit
     def get_unread_count(self, account, jid):
         sql = '''SELECT count, message_id, timestamp FROM unread
                  WHERE account = ? AND jid = ?'''
@@ -325,10 +330,14 @@ class CacheStorage(SqliteStorage):
 
     @timeit
     def set_unread_count(self, account, jid, count, message_id, timestamp):
-        sql = '''INSERT INTO unread (account, jid, count, message_id, timestamp)
-                 VALUES (?, ?, ?, ?, ?)'''
-        self._con.execute(sql, (account, jid, count, message_id, timestamp))
-        self._delayed_commit()
+        if self.get_unread_count(account, jid) is not None:
+            self.update_unread_count(account, jid, count)
+        else:
+            sql = '''INSERT INTO unread
+                     (account, jid, count, message_id, timestamp)
+                     VALUES (?, ?, ?, ?, ?)'''
+            self._con.execute(sql, (account, jid, count, message_id, timestamp))
+            self._delayed_commit()
 
     @timeit
     def update_unread_count(self, account, jid, count):

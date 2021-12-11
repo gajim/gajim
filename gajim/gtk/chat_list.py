@@ -113,6 +113,15 @@ class ChatList(Gtk.ListBox, EventHelper):
             return chat.unread_count
         return None
 
+    def set_chat_unread_count(self,
+                              account: str,
+                              jid: JID,
+                              count: int
+                              ) -> None:
+        chat = self._chats.get((account, jid))
+        if chat is not None:
+            chat.unread_count = count
+
     def mark_as_read(self, account: str, jid: JID) -> None:
         chat = self._chats.get((account, jid))
         if chat is not None:
@@ -744,6 +753,12 @@ class ChatRow(Gtk.ListBoxRow):
         self._unread_count += 1
         self._update_unread()
         self.get_parent().emit_unread_changed()
+        app.storage.cache.set_unread_count(
+            self.account,
+            self.jid,
+            self.get_real_unread_count(),
+            self.message_id,
+            self.timestamp)
 
         if self.contact.is_groupchat:
             needs_highlight = message_needs_highlight(
@@ -758,6 +773,7 @@ class ChatRow(Gtk.ListBoxRow):
         self._unread_count = 0
         self._update_unread()
         self.get_parent().emit_unread_changed()
+        app.storage.cache.reset_unread_count(self.account, self.jid)
 
         # Add class again in case we were mentioned previously
         if self.contact.is_groupchat and not self.contact.can_notify():

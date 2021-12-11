@@ -123,6 +123,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._check_for_account()
         self._load_chats()
+        self._load_unread_counts()
         self._add_actions()
         self._add_actions2()
 
@@ -331,6 +332,16 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _set_startup_finished(self):
         self._startup_finished = True
         self._chat_page.set_startup_finished()
+
+    def _load_unread_counts(self) -> None:
+        chats = app.storage.cache.get_unread()
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+
+        for chat in chats:
+            chat_list_stack.set_chat_unread_count(
+                chat.account,
+                chat.jid,
+                chat.count)
 
     def show_account_page(self, account: str) -> None:
         self._app_side_bar.unselect_all()

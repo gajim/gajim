@@ -260,6 +260,14 @@ class ChatListStack(Gtk.Stack):
                 return count
         return None
 
+    def set_chat_unread_count(self,
+                              account: str,
+                              jid: JID,
+                              count: int
+                              ) -> None:
+        for chat_list in self._chat_lists.values():
+            chat_list.set_chat_unread_count(account, jid, count)
+
     def mark_as_read(self, account: str, jid: JID) -> None:
         for chat_list in self._chat_lists.values():
             chat_list.mark_as_read(account, jid)
