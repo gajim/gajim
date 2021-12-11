@@ -18,6 +18,7 @@ import nbxmpp
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import GtkSource
 
 from gajim.common import app
 from gajim.common import ged
@@ -41,7 +42,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_default_size(600, 600)
+        self.set_default_size(800, 600)
         self.set_resizable(True)
         self.set_show_menubar(False)
         self.set_name('XMLConsoleWindow')
@@ -77,6 +78,16 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.actionbar.pack_end(self._combo)
 
         self._create_tags()
+
+        source_manager = GtkSource.LanguageManager.get_default()
+        lang = source_manager.get_language('xml')
+        self._ui.sourceview.get_buffer().set_language(lang)
+
+        self._style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
+        style_scheme = self._get_style_scheme()
+        if style_scheme is not None:
+            self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
+
         self.show_all()
 
         self.connect('key_press_event', self._on_key_press_event)
@@ -85,7 +96,22 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.register_events([
             ('stanza-received', ged.GUI1, self._nec_stanza_received),
             ('stanza-sent', ged.GUI1, self._nec_stanza_sent),
+            ('style-changed', ged.GUI1, self._on_style_changed)
         ])
+
+    def _get_style_scheme(self):
+        if app.css_config.prefer_dark:
+            style_scheme = self._style_scheme_manager.get_scheme(
+                'solarized-dark')
+        else:
+            style_scheme = self._style_scheme_manager.get_scheme(
+                'solarized-light')
+        return style_scheme
+
+    def _on_style_changed(self, *args):
+        style_scheme = self._get_style_scheme()
+        if style_scheme is not None:
+            self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
 
     def _on_value_change(self, combo):
         self._selected_send_account = combo.get_active_id()
@@ -98,21 +124,16 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.headerbar.set_subtitle(title)
 
     def _create_tags(self):
-        buffer_ = self._ui.textview.get_buffer()
-        in_color = app.css_config.get_value(
-            '.gajim-incoming-nickname', StyleAttr.COLOR)
-        out_color = app.css_config.get_value(
-            '.gajim-outgoing-nickname', StyleAttr.COLOR)
-
-        tags = ['presence', 'message', 'stream', 'iq']
-
-        tag = buffer_.create_tag('incoming')
-        tag.set_property('foreground', in_color)
-        tag = buffer_.create_tag('outgoing')
-        tag.set_property('foreground', out_color)
-
+        tags = [
+            'incoming',
+            'outgoing',
+            'presence',
+            'message',
+            'stream',
+            'iq'
+        ]
         for tag_name in tags:
-            buffer_.create_tag(tag_name)
+            self._ui.sourceview.get_buffer().create_tag(tag_name)
 
     def _on_key_press_event(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -230,7 +251,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _find(self, forward):
         search_str = self._ui.search_entry.get_text()
-        textbuffer = self._ui.textview.get_buffer()
+        textbuffer = self._ui.sourceview.get_buffer()
         cursor_mark = textbuffer.get_insert()
         current_pos = textbuffer.get_iter_at_mark(cursor_mark)
 
@@ -262,7 +283,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             match_start, match_end = match
             textbuffer.select_range(match_start, match_end)
             mark = textbuffer.create_mark('last_pos', match_end, True)
-            self._ui.textview.scroll_to_mark(mark, 0, True, 0.5, 0.5)
+            self._ui.sourceview.scroll_to_mark(mark, 0, True, 0.5, 0.5)
         self.last_search = search_str
 
     @staticmethod
@@ -320,7 +341,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.filter_dialog = None
 
     def _on_clear(self, *args):
-        self._ui.textview.get_buffer().set_text('')
+        self._ui.sourceview.get_buffer().set_text('')
 
     def _set_account(self, value, _data):
         self.selected_account = value
@@ -329,7 +350,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_setting(self, value, data):
         setattr(self, data, value)
         value = not value
-        table = self._ui.textview.get_buffer().get_tag_table()
+        table = self._ui.sourceview.get_buffer().get_tag_table()
         tag = table.lookup(data)
         if data in ('incoming', 'outgoing'):
             if value:
@@ -365,7 +386,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         at_the_end = util.at_the_end(self._ui.scrolled)
 
-        buffer_ = self._ui.textview.get_buffer()
+        buffer_ = self._ui.sourceview.get_buffer()
         end_iter = buffer_.get_end_iter()
 
         type_ = kind

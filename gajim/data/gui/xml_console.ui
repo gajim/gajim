@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtksourceview" version="4.0"/>
   <object class="GtkHeaderBar" id="headerbar">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -193,7 +194,7 @@
                 <property name="can-focus">True</property>
                 <property name="shadow-type">in</property>
                 <child>
-                  <object class="GtkTextView" id="textview">
+                  <object class="GtkSourceView" id="sourceview">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="editable">False</property>
@@ -201,6 +202,7 @@
                     <property name="right-margin">6</property>
                     <property name="top-margin">6</property>
                     <property name="bottom-margin">6</property>
+                    <property name="monospace">True</property>
                   </object>
                 </child>
               </object>
