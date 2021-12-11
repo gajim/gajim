@@ -689,8 +689,9 @@ class Settings:
             if default is HAS_ACCOUNT_DEFAULT:
                 default_store = ACCOUNT_SETTINGS['account']
 
-            default = default_store.get(f'gc_{setting}_{context}_default',
-                                        f'gc_{setting}_default')
+            default = default_store.get(f'gc_{setting}_{context}_default')
+            if default is None:
+                default = default_store.get(f'gc_{setting}_default')
 
         if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f'Invalid type for {setting}: '
