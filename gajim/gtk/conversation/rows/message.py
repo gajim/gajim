@@ -210,7 +210,8 @@ class MessageRow(BaseRow):
         self.show_all()
 
     def update_text_tags(self) -> None:
-        self._message_widget.update_text_tags()
+        if isinstance(self._message_widget, MessageWidget):
+            self._message_widget.update_text_tags()
 
     def _check_for_highlight(self, content: ParsingResult) -> None:
         needs_highlight = message_needs_highlight(
