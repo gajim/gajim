@@ -61,11 +61,14 @@ class Preview:
                  orig_path: Optional[Path],
                  thumb_path: Optional[Path],
                  size: int,
-                 widget: Any) -> None:
+                 widget: Any,
+                 context: Optional[str] = None
+                 ) -> None:
         self._uri = uri
         self._urlparts = urlparts
         self._filename = filename_from_uri(uri)
         self._widget = widget
+        self._context = context
 
         self.account = widget.account
         self.orig_path = orig_path
@@ -101,6 +104,10 @@ class Preview:
     @property
     def uri(self) -> str:
         return self._uri
+
+    @property
+    def context(self) -> Optional[str]:
+        return self._context
 
     @property
     def filename(self) -> str:
@@ -240,13 +247,17 @@ class PreviewManager:
 
         return True
 
-    def create_preview(self, uri: str, widget: Any, context: str) -> None:
+    def create_preview(self,
+                       uri: str,
+                       widget: Any,
+                       context: Optional[str] = None
+                       ) -> None:
         if uri.startswith('geo:'):
             preview = Preview(uri, None, None, None, 96, widget)
             preview.update_widget()
             return
 
-        preview = self._process_web_uri(uri, widget)
+        preview = self._process_web_uri(uri, widget, context)
 
         if not preview.orig_exists():
             if context is not None:
@@ -267,7 +278,11 @@ class PreviewManager:
                             self._on_thumb_load_finished,
                             preview)
 
-    def _process_web_uri(self, uri: str, widget: Any) -> Preview:
+    def _process_web_uri(self,
+                         uri: str,
+                         widget: Any,
+                         context: Optional[str] = None
+                         ) -> Preview:
         urlparts = urlparse(uri)
         size = app.settings.get('preview_size')
         orig_path, thumb_path = get_image_paths(uri,
@@ -280,7 +295,8 @@ class PreviewManager:
                        orig_path,
                        thumb_path,
                        size,
-                       widget)
+                       widget,
+                       context=context)
 
     def _on_orig_load_finished(self,
                                data: Optional[bytes],

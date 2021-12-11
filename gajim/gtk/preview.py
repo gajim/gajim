@@ -114,6 +114,11 @@ class PreviewWidget(Gtk.Box):
             self._ui.icon_event_box.show()
             image.set_property('pixel-size', 64)
 
+        file_size_string = _('File size unknown')
+        if preview.file_size != 0:
+            file_size_string = GLib.format_size_full(
+                preview.file_size, self._units)
+
         if preview.orig_exists():
             self._ui.download_button.hide()
             self._ui.open_folder_button.show()
@@ -129,13 +134,14 @@ class PreviewWidget(Gtk.Box):
             self._ui.download_button.show()
             self._ui.save_as_button.hide()
             self._ui.open_folder_button.hide()
+            allow_in_public = app.settings.get('preview_anonymous_muc')
+            if preview.context == 'public' and not allow_in_public:
+                image = Gtk.Image.new_from_icon_name(
+                    'dialog-question', Gtk.IconSize.DIALOG)
+                self._ui.icon_button.set_image(image)
+                file_size_string = _('Automatic preview disabled')
 
-        file_size_string = _('File size unknown')
-        if preview.file_size != 0:
-            file_size_string = GLib.format_size_full(
-                preview.file_size, self._units)
         self._ui.file_size.set_text(file_size_string)
-
         self._ui.file_name.set_text(preview.filename)
         self._ui.file_name.set_tooltip_text(preview.filename)
 
