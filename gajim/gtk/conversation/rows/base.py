@@ -95,9 +95,9 @@ class BaseRow(Gtk.ListBoxRow):
 
 
 @wrap_with_event_box
-class MoreMenuButton(Gtk.MenuButton):
+class MoreMenuButton(Gtk.Button):
     def __init__(self, row, contact, name):
-        Gtk.MenuButton.__init__(self)
+        Gtk.Button.__init__(self)
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)
         self.set_relief(Gtk.ReliefStyle.NONE)
@@ -111,11 +111,9 @@ class MoreMenuButton(Gtk.MenuButton):
         image = Gtk.Image.new_from_icon_name(
             'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
         self.add(image)
-        self._create_popover()
-
         self.connect('clicked', self._on_click)
 
-    def _on_click(self, _button):
+    def _on_click(self, _button: Gtk.Button) -> None:
         show_retract = False
         if self._contact.is_groupchat:
             disco_info = app.storage.cache.get_last_disco_info(
@@ -125,9 +123,9 @@ class MoreMenuButton(Gtk.MenuButton):
             is_allowed = is_retraction_allowed(self_contact, contact)
             if disco_info.has_message_moderation and is_allowed:
                 show_retract = True
-        self._retract_button.set_visible(show_retract)
+        self._create_popover(show_retract)
 
-    def _create_popover(self):
+    def _create_popover(self, show_retract: bool) -> None:
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         menu_box.get_style_context().add_class('padding-6')
 
@@ -147,17 +145,25 @@ class MoreMenuButton(Gtk.MenuButton):
             'edit-copy-symbolic', Gtk.IconSize.MENU))
         menu_box.add(copy_button)
 
-        self._retract_button = Gtk.ModelButton()
-        self._retract_button.set_halign(Gtk.Align.START)
-        self._retract_button.connect(
-            'clicked', self._row.on_retract_message)
-        self._retract_button.set_label(_('Retract'))
-        self._retract_button.set_image(Gtk.Image.new_from_icon_name(
-            'edit-undo-symbolic', Gtk.IconSize.MENU))
-        menu_box.add(self._retract_button)
+        if show_retract:
+            retract_button = Gtk.ModelButton()
+            retract_button.set_halign(Gtk.Align.START)
+            retract_button.connect(
+                'clicked', self._row.on_retract_message)
+            retract_button.set_label(_('Retract'))
+            retract_button.set_image(Gtk.Image.new_from_icon_name(
+                'edit-undo-symbolic', Gtk.IconSize.MENU))
+            menu_box.add(retract_button)
 
         menu_box.show_all()
 
         popover = Gtk.PopoverMenu()
         popover.add(menu_box)
-        self.set_popover(popover)
+        popover.set_relative_to(self)
+        popover.set_position(Gtk.PositionType.BOTTOM)
+        popover.connect('closed', self._on_closed)
+        popover.popup()
+
+    @staticmethod
+    def _on_closed(popover: Gtk.Popover) -> None:
+        GLib.idle_add(popover.destroy)
