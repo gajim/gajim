@@ -19,9 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import NamedTuple
+from typing import List
+
 import os
 import sys
-from collections import namedtuple
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -30,8 +32,17 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 
+class Feature(NamedTuple):
+    name: str
+    available: bool
+    tooltip: str
+    dependency_u: str
+    dependency_w: str
+    enabled: bool
+
+
 class Features(Gtk.ApplicationWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -64,24 +75,21 @@ class Features(Gtk.ApplicationWindow):
 
         self.show_all()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self,
+                      _widget: Gtk.Widget,
+                      event: Gdk.EventButton) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _add_feature(self, feature):
+    def _add_feature(self, feature: Feature) -> None:
         item = FeatureItem(feature)
         self.feature_listbox.add(item)
-        item.get_parent().set_tooltip_text(item.tooltip)
 
-    def _get_features(self):
-        Feature = namedtuple('Feature',
-                             ['name', 'available', 'tooltip',
-                              'dependency_u', 'dependency_w', 'enabled'])
-
-        notification_sounds_available = (
+    def _get_features(self) -> List[Feature]:
+        notification_sounds_available: bool = (
             app.is_installed('GSOUND') or sys.platform in ('win32', 'darwin'))
-        notification_sounds_enabled = app.settings.get('sounds_on')
-        spell_check_enabled = app.settings.get('use_speller')
+        notification_sounds_enabled: bool = app.settings.get('sounds_on')
+        spell_check_enabled: bool = app.settings.get('use_speller')
 
         auto_status = [app.settings.get('autoaway'), app.settings.get('autoxa')]
         auto_status_enabled = bool(any(auto_status))
@@ -156,77 +164,67 @@ class Features(Gtk.ApplicationWindow):
         ]
 
     @staticmethod
-    def _some_keyring_available():
+    def _some_keyring_available() -> bool:
         from gajim.common import passwords
         return passwords.KEYRING_AVAILABLE
 
     @staticmethod
-    def _idle_available():
+    def _idle_available() -> bool:
         from gajim.common import idle
         return idle.Monitor.is_available()
 
 
 class FeatureItem(Gtk.Grid):
-    def __init__(self, feature):
-        super().__init__()
+    def __init__(self, feature: Feature) -> None:
+        Gtk.Grid.__init__(self)
         self.set_column_spacing(12)
 
-        self.tooltip = feature.tooltip
-        self.feature_dependency_u_text = feature.dependency_u
-        self.feature_dependency_w_text = feature.dependency_w
+        feature_label = Gtk.Label(label=feature.name)
+        feature_label.set_halign(Gtk.Align.START)
+        self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self._box.pack_start(feature_label, True, True, 0)
+        self._box.set_tooltip_text(feature.tooltip)
 
-        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self.feature_label = Gtk.Label(label=feature.name)
-        self.feature_label.set_halign(Gtk.Align.START)
-        self.box.pack_start(self.feature_label, True, True, 0)
+        feature_dependency = Gtk.Label(label=feature.dependency_u)
+        feature_dependency.get_style_context().add_class('dim-label')
 
-        self.feature_dependency_u = Gtk.Label(label=feature.dependency_u)
-        self.feature_dependency_u.get_style_context().add_class('dim-label')
-        self.feature_dependency_w = Gtk.Label(label=feature.dependency_w)
-        self.feature_dependency_w.get_style_context().add_class('dim-label')
+        if os.name == 'nt':
+            feature_dependency.set_label(feature.dependency_w)
+        else:
+            feature_dependency.set_label(feature.dependency_u)
 
         if not feature.available:
-            self.feature_dependency_u.set_halign(Gtk.Align.START)
-            self.feature_dependency_u.set_xalign(0.0)
-            self.feature_dependency_u.set_yalign(0.0)
-            self.feature_dependency_u.set_line_wrap(True)
-            self.feature_dependency_u.set_max_width_chars(50)
-            self.feature_dependency_u.set_selectable(True)
-            self.feature_dependency_w.set_halign(Gtk.Align.START)
-            self.feature_dependency_w.set_xalign(0.0)
-            self.feature_dependency_w.set_yalign(0.0)
-            self.feature_dependency_w.set_line_wrap(True)
-            self.feature_dependency_w.set_max_width_chars(50)
-            self.feature_dependency_w.set_selectable(True)
+            feature_dependency.set_halign(Gtk.Align.START)
+            feature_dependency.set_xalign(0.0)
+            feature_dependency.set_yalign(0.0)
+            feature_dependency.set_line_wrap(True)
+            feature_dependency.set_max_width_chars(50)
+            feature_dependency.set_selectable(True)
+            self._box.pack_start(feature_dependency, True, True, 0)
 
-            if os.name == 'nt':
-                self.box.pack_start(self.feature_dependency_w, True, True, 0)
-            else:
-                self.box.pack_start(self.feature_dependency_u, True, True, 0)
+        self._icon = Gtk.Image()
+        self._label_disabled = Gtk.Label(label=_('Disabled in Preferences'))
+        self._label_disabled.get_style_context().add_class('dim-label')
+        self._set_feature(feature.available, feature.enabled)
 
-        self.icon = Gtk.Image()
-        self.label_disabled = Gtk.Label(label=_('Disabled in Preferences'))
-        self.label_disabled.get_style_context().add_class('dim-label')
-        self.set_feature(feature.available, feature.enabled)
+        self.add(self._icon)
+        self.add(self._box)
 
-        self.add(self.icon)
-        self.add(self.box)
-
-    def set_feature(self, available, enabled):
-        self.icon.get_style_context().remove_class('error-color')
-        self.icon.get_style_context().remove_class('warning-color')
-        self.icon.get_style_context().remove_class('success-color')
+    def _set_feature(self, available: bool, enabled: bool) -> None:
+        self._icon.get_style_context().remove_class('error-color')
+        self._icon.get_style_context().remove_class('warning-color')
+        self._icon.get_style_context().remove_class('success-color')
 
         if not available:
-            self.icon.set_from_icon_name('window-close-symbolic',
-                                         Gtk.IconSize.MENU)
-            self.icon.get_style_context().add_class('error-color')
+            self._icon.set_from_icon_name(
+                'window-close-symbolic', Gtk.IconSize.MENU)
+            self._icon.get_style_context().add_class('error-color')
         elif enabled is False:
-            self.icon.set_from_icon_name('dialog-warning-symbolic',
-                                         Gtk.IconSize.MENU)
-            self.box.pack_start(self.label_disabled, True, True, 0)
-            self.icon.get_style_context().add_class('warning-color')
+            self._icon.set_from_icon_name(
+                'dialog-warning-symbolic', Gtk.IconSize.MENU)
+            self._box.pack_start(self._label_disabled, True, True, 0)
+            self._icon.get_style_context().add_class('warning-color')
         else:
-            self.icon.set_from_icon_name('emblem-ok-symbolic',
-                                         Gtk.IconSize.MENU)
-            self.icon.get_style_context().add_class('success-color')
+            self._icon.set_from_icon_name(
+                'emblem-ok-symbolic', Gtk.IconSize.MENU)
+            self._icon.get_style_context().add_class('success-color')
