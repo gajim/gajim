@@ -13,40 +13,41 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Dict
+from typing import Optional
 
 from gajim.common.helpers import Observable
 from gajim.common.const import FTState
 
 class FileTransfer(Observable):
 
-    _state_descriptions = {}  # type: Dict[FTState, str]
+    _state_descriptions: Dict[FTState, str] = {}
 
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Observable.__init__(self)
 
         self._account = account
 
-        self._seen = 0
-        self.size = 0
+        self._seen: int = 0
+        self.size: int = 0
 
-        self._state = None
-        self._error_text = ''
-        self._error_domain = None
+        self._state: Optional[FTState] = None
+        self._error_text: str = ''
+        self._error_domain: Optional[str] = None
 
     @property
-    def account(self):
+    def account(self) -> str:
         return self._account
 
     @property
-    def state(self):
+    def state(self) -> Optional[FTState]:
         return self._state
 
     @property
-    def seen(self):
+    def seen(self) -> int:
         return self._seen
 
     @property
-    def is_complete(self):
+    def is_complete(self) -> bool:
         if self.size == 0:
             return False
         return self._seen >= self.size
@@ -56,55 +57,55 @@ class FileTransfer(Observable):
         raise NotImplementedError
 
     @property
-    def error_text(self):
+    def error_text(self) -> str:
         return self._error_text
 
     @property
-    def error_domain(self):
+    def error_domain(self) -> Optional[str]:
         return self._error_domain
 
-    def get_state_description(self):
+    def get_state_description(self) -> str:
         return self._state_descriptions.get(self._state, '')
 
-    def set_preparing(self):
+    def set_preparing(self) -> None:
         self._state = FTState.PREPARING
         self.notify('state-changed', FTState.PREPARING)
 
-    def set_encrypting(self):
+    def set_encrypting(self) -> None:
         self._state = FTState.ENCRYPTING
         self.notify('state-changed', FTState.ENCRYPTING)
 
-    def set_decrypting(self):
+    def set_decrypting(self) -> None:
         self._state = FTState.DECRYPTING
         self.notify('state-changed', FTState.DECRYPTING)
 
-    def set_started(self):
+    def set_started(self) -> None:
         self._state = FTState.STARTED
         self.notify('state-changed', FTState.STARTED)
 
-    def set_error(self, domain, text=''):
+    def set_error(self, domain: str, text: str = '') -> None:
         self._error_text = text
         self._error_domain = domain
         self._state = FTState.ERROR
         self.notify('state-changed', FTState.ERROR)
         self.disconnect_signals()
 
-    def set_cancelled(self):
+    def set_cancelled(self) -> None:
         self._state = FTState.CANCELLED
         self.notify('state-changed', FTState.CANCELLED)
         self.disconnect_signals()
 
-    def set_in_progress(self):
+    def set_in_progress(self) -> None:
         self._state = FTState.IN_PROGRESS
         self.notify('state-changed', FTState.IN_PROGRESS)
 
-    def set_finished(self):
+    def set_finished(self) -> None:
         self._state = FTState.FINISHED
         self.notify('state-changed', FTState.FINISHED)
         self.disconnect_signals()
 
-    def update_progress(self):
+    def update_progress(self) -> None:
         self.notify('progress')
 
-    def cancel(self):
+    def cancel(self) -> None:
         self.notify('cancel')
