@@ -26,7 +26,7 @@ class ChatFilter(Gtk.Box):
                            (str, )),
     }
 
-    def __init__(self, icons=False):
+    def __init__(self, icons: bool = False) -> None:
         Gtk.Box.__init__(self)
         self.set_halign(Gtk.Align.CENTER)
 
@@ -69,10 +69,10 @@ class ChatFilter(Gtk.Box):
         self.add(toolbar)
         self.show_all()
 
-    def _on_button_clicked(self, button):
+    def _on_button_clicked(self, button: Gtk.Button) -> None:
         if button.get_active():
             self.emit('filter-changed', button.get_name())
 
-    def reset(self):
+    def reset(self) -> None:
         self._all_button.set_active(True)
         self.emit('filter-changed', 'all')
