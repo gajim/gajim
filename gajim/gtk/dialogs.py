@@ -149,7 +149,11 @@ class WarningDialog(HigDialog):
     HIG compliant warning dialog
     """
 
-    def __init__(self, pritext, sectext='', transient_for=None):
+    def __init__(self,
+                 pritext: str,
+                 sectext: str = '',
+                 transient_for: Optional[Gtk.Window] = None
+                 ) -> None:
         if transient_for is None:
             transient_for = app.app.get_active_window()
         HigDialog.__init__(self,
@@ -167,7 +171,11 @@ class InformationDialog(HigDialog):
     HIG compliant info dialog
     """
 
-    def __init__(self, pritext, sectext='', transient_for=None):
+    def __init__(self,
+                 pritext: str,
+                 sectext: str = '',
+                 transient_for: Optional[Gtk.Window] = None
+                 ) -> None:
         if transient_for is None:
             transient_for = app.app.get_active_window()
         HigDialog.__init__(self,
