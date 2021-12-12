@@ -24,13 +24,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict
+from typing import Optional
+from typing import Tuple
+
 import sys
 import logging
 
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import Gtk
+from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import ged
@@ -49,7 +55,7 @@ from .util import get_total_screen_geometry
 
 log = logging.getLogger('gajim.gui.notification')
 
-NOTIFICATION_ICONS = {
+NOTIFICATION_ICONS: Dict[str, str] = {
     'incoming-message': 'gajim-chat_msg_recv',
     'group-chat-invitation': 'gajim-gc_invitation',
     'incoming-call': 'call-start-symbolic',
@@ -64,9 +70,9 @@ class Notification(EventHelper):
     """
     Handle notifications
     """
-    def __init__(self):
+    def __init__(self) -> None:
         EventHelper.__init__(self)
-        self._dbus_available = False
+        self._dbus_available: bool = False
         self._daemon_capabilities = ['actions']
         self._win32_active_popup = None
 
@@ -79,7 +85,7 @@ class Notification(EventHelper):
             ('connection-lost', ged.GUI2, self._on_connection_lost)
         ])
 
-    def _detect_dbus_caps(self):
+    def _detect_dbus_caps(self) -> None:
         if sys.platform in ('win32', 'darwin'):
             return
 
@@ -87,7 +93,10 @@ class Notification(EventHelper):
             self._dbus_available = True
             return
 
-        def on_proxy_ready(_source, res, _data=None):
+        def on_proxy_ready(_source: GObject.Object,
+                           res: Gio.AsyncResult,
+                           _data: Optional[object] = None
+                           ) -> None:
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
                 self._daemon_capabilities = proxy.GetCapabilities()
@@ -177,14 +186,15 @@ class Notification(EventHelper):
             icon_name='gajim-connection_lost')
 
     def _issue_notification(self,
-                            notif_type,
-                            account,
-                            jid,
-                            notif_detail='',
-                            title='',
-                            text='',
-                            icon_name=None,
-                            timeout=-1):
+                            notif_type: str,
+                            account: str,
+                            jid: Optional[str],
+                            notif_detail: str = '',
+                            title: str = '',
+                            text: str = '',
+                            icon_name: Optional[str] = None,
+                            timeout: int = -1
+                            ) -> None:
         """
         Notify a user of an event using GNotification and GApplication under
         Linux, Use PopupNotificationWindow under Windows
@@ -263,7 +273,9 @@ class Notification(EventHelper):
         app.app.send_notification(notif_id, notification)
 
     @staticmethod
-    def _get_avatar_for_notification(account, jid):
+    def _get_avatar_for_notification(account: str,
+                                     jid: str
+                                     ) -> GdkPixbuf.Pixbuf:
         scale = get_monitor_scale_factor()
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
@@ -286,14 +298,15 @@ class Notification(EventHelper):
 
 class PopupNotification(Gtk.Window):
     def __init__(self,
-                 notif_type,
-                 account,
-                 jid,
-                 notif_detail,
-                 title,
-                 text,
-                 icon_name,
-                 timeout):
+                 notif_type: str,
+                 account: str,
+                 jid: Optional[str],
+                 notif_detail: str,
+                 title: str,
+                 text: str,
+                 icon_name: str,
+                 timeout: int
+                 ) -> None:
         Gtk.Window.__init__(self)
         self.set_type_hint(Gdk.WindowTypeHint.NOTIFICATION)
         self.set_focus_on_map(False)
@@ -301,7 +314,7 @@ class PopupNotification(Gtk.Window):
         self.set_skip_taskbar_hint(True)
         self.set_decorated(False)
 
-        self._timeout_id = None
+        self._timeout_id: Optional[int] = None
         self._account = account
         self._jid = jid
         self._notif_type = notif_type
@@ -334,11 +347,9 @@ class PopupNotification(Gtk.Window):
         add_css_to_widget(self._ui.color_bar, bar_class)
         self._ui.color_bar.get_style_context().add_class('popup-bar')
 
-        if title is None:
-            title = ''
         self._ui.event_type_label.set_markup(title)
 
-        if text is None:
+        if not text:
             client = app.get_client(account)
             contact = client.get_module('Contacts').get_contact(jid)
             text = contact.name
@@ -357,7 +368,7 @@ class PopupNotification(Gtk.Window):
             self._timeout_id = GLib.timeout_add_seconds(timeout, self.destroy)
 
     @staticmethod
-    def _get_window_pos():
+    def _get_window_pos() -> Tuple[int, int]:
         pos_x = app.settings.get('notification_position_x')
         screen_w, screen_h = get_total_screen_geometry()
         if pos_x < 0:
@@ -367,10 +378,13 @@ class PopupNotification(Gtk.Window):
             pos_y = screen_h - 95 - 80 + pos_y + 1
         return pos_x, pos_y
 
-    def _on_close_button_clicked(self, _widget):
+    def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
         self.destroy()
 
-    def _on_button_press(self, _widget, event):
+    def _on_button_press(self,
+                         _widget: Gtk.Widget,
+                         event: Gdk.EventButton
+                         ) -> None:
         if event.button == 1:
             app.interface.handle_event(
                 self._account, self._jid, self._notif_type)
