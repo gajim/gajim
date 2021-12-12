@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -32,12 +34,12 @@ class AppPage(Gtk.Box):
                                  (int, )),
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.VERTICAL,
                          spacing=18)
         self.get_style_context().add_class('app-page')
-        self._unread_count = 0
+        self._unread_count: int = 0
 
         status_header = Gtk.Label(label=_('Status'))
         status_header.get_style_context().add_class('large-header')
@@ -65,13 +67,13 @@ class AppPage(Gtk.Box):
 
         self.show_all()
 
-    def add_app_message(self, category, message):
+    def add_app_message(self, category: str, message: Optional[str]) -> None:
         self._app_message_listbox.add_app_message(category, message)
 
         self._unread_count += 1
         self.emit('unread-count-changed', self._unread_count)
 
-    def remove_app_message(self):
+    def remove_app_message(self) -> None:
         self._unread_count -= 1
         self.emit('unread-count-changed', self._unread_count)
 
@@ -80,7 +82,7 @@ class AppPage(Gtk.Box):
 
 
 class AppMessageListBox(Gtk.ListBox):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_halign(Gtk.Align.CENTER)
@@ -94,17 +96,17 @@ class AppMessageListBox(Gtk.ListBox):
 
         self.show_all()
 
-    def add_app_message(self, category, message):
+    def add_app_message(self, category: str, message: Optional[str]) -> None:
         row = AppMessageRow(category, message)
         self.add(row)
 
-    def remove_app_message(self, row):
+    def remove_app_message(self, row: Gtk.ListBoxRow) -> None:
         self.remove(row)
         self.get_parent().remove_app_message()
 
 
 class AppMessageRow(Gtk.ListBoxRow):
-    def __init__(self, category, message=None):
+    def __init__(self, category: str, message: Optional[str] = None) -> None:
         Gtk.ListBoxRow.__init__(self)
         self._ui = get_builder('app_page.ui')
 
@@ -119,17 +121,17 @@ class AppMessageRow(Gtk.ListBoxRow):
         self._ui.connect_signals(self)
         self.show_all()
 
-    def _on_check_clicked(self, _button):
+    def _on_check_clicked(self, _button: Gtk.Button) -> None:
         app.interface.get_latest_release()
         self.get_parent().remove_app_message(self)
 
-    def _on_dismiss_check_clicked(self, _button):
+    def _on_dismiss_check_clicked(self, _button: Gtk.Button) -> None:
         app.settings.set('check_for_update', False)
         self.get_parent().remove_app_message(self)
 
-    def _on_visit_website_clicked(self, _button):
+    def _on_visit_website_clicked(self, _button: Gtk.Button) -> None:
         open_uri('https://gajim.org/download')
         self.get_parent().remove_app_message(self)
 
-    def _on_dismiss_update_clicked(self, _button):
+    def _on_dismiss_update_clicked(self, _button: Gtk.Button) -> None:
         self.get_parent().remove_app_message(self)
