@@ -11,13 +11,21 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+
 import datetime
 import logging
 import time
 import re
+from collections import namedtuple
 
 from gi.repository import GObject
 from gi.repository import Gtk
+import cairo
 
 from nbxmpp import JID
 
@@ -43,14 +51,14 @@ class SearchView(Gtk.Box):
             ()),
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Box.__init__(self)
         self.set_size_request(300, -1)
 
-        self._account = None
-        self._jid = None
-        self._results = []
-        self._scope = None
+        self._account: Optional[str] = None
+        self._jid: Optional[JID] = None
+        self._results: List[str] = []
+        self._scope: Optional[str] = None
 
         self._ui = get_builder('search_view.ui')
         self._ui.results_listbox.set_header_func(self._header_func)
@@ -86,19 +94,19 @@ class SearchView(Gtk.Box):
             else:
                 row.set_header(None)
 
-    def _on_hide_clicked(self, _button):
+    def _on_hide_clicked(self, _button: Gtk.Button) -> None:
         self.emit('hide-search')
 
-    def clear(self):
+    def clear(self) -> None:
         self._ui.search_entry.set_text('')
         self._clear_results()
 
-    def _clear_results(self):
+    def _clear_results(self) -> None:
         for row in self._ui.results_listbox.get_children():
             self._ui.results_listbox.remove(row)
             row.destroy()
 
-    def _on_search(self, entry):
+    def _on_search(self, entry: Gtk.Entry) -> None:
         self._clear_results()
         self._ui.date_hint.hide()
         text = entry.get_text()
@@ -162,15 +170,20 @@ class SearchView(Gtk.Box):
         if has_filters is not None:
             filetypes = []
             for filetype in has_filters:
-                filetypes.append(FILE_CATEGORIES.get(filetype, filetype))
-
-            filetypes = self._flatten(filetypes)
+                types = FILE_CATEGORIES.get(filetype)
+                if types is None:
+                    filetypes.append(filetype)
+                else:
+                    for type_ in types:
+                        filetypes.append(type_)
             self._filter_results_for_files(filetypes)
 
         self._add_counter()
         self._add_results()
 
-    def _filter_results_for_files(self, filetypes):
+    def _filter_results_for_files(self,
+                                  filetypes: List[str]
+                                  ) -> None:
         if 'file' in filetypes:
             results = []
             for result in self._results:
@@ -189,7 +202,9 @@ class SearchView(Gtk.Box):
             self._results = results
 
     @staticmethod
-    def _strip_filters(text, filter_name):
+    def _strip_filters(text: str,
+                       filter_name: str
+                       ) -> Tuple[str, Optional[List[str]]]:
         filters = []
         start = 0
         new_text = ''
@@ -201,23 +216,12 @@ class SearchView(Gtk.Box):
         new_text += text[start:]
         return new_text, filters or None
 
-    @staticmethod
-    def _flatten(to_flatten):
-        nlist = []
-        for element in to_flatten:
-            if isinstance(element, list):
-                for sub_element in element:
-                    nlist.append(sub_element)
-            else:
-                nlist.append(element)
-        return nlist
-
-    def _add_counter(self):
+    def _add_counter(self) -> None:
         results_count = len(self._results)
         if results_count:
             self._ui.results_listbox.add(CounterRow(results_count))
 
-    def _add_results(self):
+    def _add_results(self) -> None:
         accounts = self._get_accounts()
         for msg in self._results[:25]:
             if self._scope == 'everywhere':
@@ -231,14 +235,17 @@ class SearchView(Gtk.Box):
             self._ui.results_listbox.add(result_row)
         self._results = self._results[25:]
 
-    def _on_edge_reached(self, _scrolledwin, pos):
+    def _on_edge_reached(self,
+                         _scrolledwin: Gtk.ScrolledWindow,
+                         pos: Gtk.PositionType
+                         ) -> None:
         if pos != Gtk.PositionType.BOTTOM:
             return
 
         self._add_results()
 
     @staticmethod
-    def _get_accounts():
+    def _get_accounts() -> Dict[str, str]:
         accounts = {}
         for account in app.settings.get_accounts():
             account_id = app.storage.archive.get_account_id(account)
@@ -246,7 +253,7 @@ class SearchView(Gtk.Box):
         return accounts
 
     @staticmethod
-    def _on_row_activated(_listbox, row):
+    def _on_row_activated(_listbox: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
         if row.type == 'counter':
             return
 
@@ -264,17 +271,17 @@ class SearchView(Gtk.Box):
         if control is not None:
             control.scroll_to_message(row.log_line_id, row.timestamp)
 
-    def set_focus(self):
+    def set_focus(self) -> None:
         self._ui.search_entry.grab_focus()
 
-    def set_context(self, account, jid):
+    def set_context(self, account: str, jid: JID) -> None:
         self._account = account
         self._jid = jid
         self._ui.search_checkbutton.set_active(jid is None)
 
 
 class RowHeader(Gtk.Box):
-    def __init__(self, account, jid, timestamp):
+    def __init__(self, account: str, jid: JID, timestamp: float) -> None:
         Gtk.Box.__init__(self)
         self.set_hexpand(True)
 
@@ -293,11 +300,11 @@ class RowHeader(Gtk.Box):
 
 
 class CounterRow(Gtk.ListBoxRow):
-    def __init__(self, count):
+    def __init__(self, count: int) -> None:
         Gtk.ListBoxRow.__init__(self)
-        self.type = 'counter'
-        self.jid = ''
-        self.time = 0
+        self.type: str = 'counter'
+        self.jid = None
+        self.time: float = 0.0
         self.get_style_context().add_class('search-view-counter')
 
         if count == 1:
@@ -310,7 +317,7 @@ class CounterRow(Gtk.ListBoxRow):
 
 
 class ResultRow(Gtk.ListBoxRow):
-    def __init__(self, msg, account, jid):
+    def __init__(self, msg: namedtuple, account: str, jid: JID) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.account = account
         self.jid = jid
@@ -359,7 +366,10 @@ class ResultRow(Gtk.ListBoxRow):
 
         self.show_all()
 
-    def _get_avatar(self, kind, name):
+    def _get_avatar(self,
+                    kind: str,
+                    name: str
+                    ) -> Optional[cairo.ImageSurface]:
         scale = self.get_scale_factor()
         if self.contact.is_groupchat:
             contact = self.contact.get_resource(name)
