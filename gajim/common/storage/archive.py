@@ -21,6 +21,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import List
+from typing import Optional
+
 import time
 import datetime
 import calendar
@@ -125,7 +129,7 @@ class MessageArchiveStorage(SqliteStorage):
                 named_row = named_row._replace(account=jid)
         return named_row
 
-    def _migrate(self):
+    def _migrate(self) -> None:
         user_version = self.user_version
         if user_version == 0:
             # All migrations from 0.16.9 until 1.0.0
@@ -183,7 +187,7 @@ class MessageArchiveStorage(SqliteStorage):
         app.ged.raise_event(event, None, str(error))
 
     @staticmethod
-    def _get_timeout():
+    def _get_timeout() -> int:
         """
         returns the timeout in epoch
         """
@@ -195,11 +199,11 @@ class MessageArchiveStorage(SqliteStorage):
         return timeout
 
     @staticmethod
-    def _like(search_str):
-        return '%{}%'.format(search_str)
+    def _like(search_str: str) -> str:
+        return f'%{search_str}%'
 
     @timeit
-    def _get_jid_ids_from_db(self):
+    def _get_jid_ids_from_db(self) -> None:
         """
         Load all jid/jid_id tuples into a dict for faster access
         """
@@ -215,7 +219,7 @@ class MessageArchiveStorage(SqliteStorage):
     def get_jids_in_db(self):
         return self._jid_ids.keys()
 
-    def jid_is_from_pm(self, jid):
+    def jid_is_from_pm(self, jid: str) -> bool:
         """
         If jid is gajim@conf/nkour it's likely a pm one, how we know gajim@conf
         is not a normal guy and nkour is not his resource?  we ask if gajim@conf
@@ -230,7 +234,7 @@ class MessageArchiveStorage(SqliteStorage):
         # it's not a full jid, so it's not a pm one
         return False
 
-    def jid_is_room_jid(self, jid):
+    def jid_is_room_jid(self, jid: str) -> bool:
         """
         Return True if it's a room jid, False if it's not, None if we don't know
         """
@@ -239,18 +243,25 @@ class MessageArchiveStorage(SqliteStorage):
             return None
         return jid_.type == JIDConstant.ROOM_TYPE
 
-    def get_account_id(self, account, type_=JIDConstant.NORMAL_TYPE):
+    def get_account_id(self,
+                       account: str,
+                       type_: JIDConstant = JIDConstant.NORMAL_TYPE
+                       ) -> int:
         jid = app.get_jid_from_account(account)
         return self.get_jid_id(jid, type_=type_)
 
-    def get_active_account_ids(self):
+    def get_active_account_ids(self) -> List[int]:
         account_ids = []
         for account in app.settings.get_active_accounts():
             account_ids.append(self.get_account_id(account))
         return account_ids
 
     @timeit
-    def get_jid_id(self, jid, kind=None, type_=None):
+    def get_jid_id(self,
+                   jid: JID,
+                   kind: Optional[KindConstant] = None,
+                   type_: Optional[JIDConstant] = None
+                   ) -> int:
         """
         Get the jid id from a jid.
         In case the jid id is not found create a new one.
@@ -291,7 +302,8 @@ class MessageArchiveStorage(SqliteStorage):
         return lastrowid
 
     @staticmethod
-    def convert_show_values_to_db_api_values(show):
+    def convert_show_values_to_db_api_values(show: Optional[str]
+                                             ) -> Optional[ShowConstant]:
         """
         Convert from string style to constant ints for db
         """
@@ -315,8 +327,13 @@ class MessageArchiveStorage(SqliteStorage):
         return None
 
     @timeit
-    def get_conversation_before_after(self, account, jid, before, timestamp,
-                                      n_lines):
+    def get_conversation_before_after(self,
+                                      account: str,
+                                      jid: JID,
+                                      before: bool,
+                                      timestamp: float,
+                                      n_lines: int
+                                      ) -> List[namedtuple]:
         """
         Load n_lines lines of conversation with jid before or after timestamp
 
@@ -359,8 +376,13 @@ class MessageArchiveStorage(SqliteStorage):
             tuple(jids) + (timestamp, n_lines)).fetchall()
 
     @timeit
-    def get_conversation_muc_before_after(self, account, jid, before,
-                                          timestamp, n_lines):
+    def get_conversation_muc_before_after(self,
+                                          _account: str,
+                                          jid: JID,
+                                          before: bool,
+                                          timestamp: float,
+                                          n_lines: int
+                                          ) -> List[namedtuple]:
         """
         Load n_lines lines of conversation with jid before or after timestamp
 
@@ -401,7 +423,10 @@ class MessageArchiveStorage(SqliteStorage):
             tuple(jids) + (timestamp, n_lines)).fetchall()
 
     @timeit
-    def get_last_conversation_line(self, account, jid):
+    def get_last_conversation_line(self,
+                                   account: str,
+                                   jid: JID
+                                   ) -> List[namedtuple]:
         """
         Load the last line of a conversation with jid for account.
         Loads messages, but no status messages or error messages.
@@ -433,7 +458,11 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone()
 
     @timeit
-    def get_conversation_around(self, account, jid, timestamp):
+    def get_conversation_around(self,
+                                account: str,
+                                jid: JID,
+                                timestamp: float
+                                ) -> List[namedtuple]:
         """
         Load all lines of conversation with jid around a specific timestamp
 
@@ -561,8 +590,14 @@ class MessageArchiveStorage(SqliteStorage):
             tuple(jids) + (date_ts, delta_ts)).fetchall()
 
     @timeit
-    def search_log(self, account, jid, query, from_users=None, before=None,
-                   after=None):
+    def search_log(self,
+                   _account: str,
+                   jid: JID,
+                   query: str,
+                   from_users: Optional[List[str]] = None,
+                   before: Optional[datetime.datetime] = None,
+                   after: Optional[datetime.datetime] = None
+                   ) -> List[namedtuple]:
         """
         Search the conversation log for messages containing the `query` string.
 
@@ -626,7 +661,12 @@ class MessageArchiveStorage(SqliteStorage):
             query, users, after_ts, before_ts)).fetchall()
 
     @timeit
-    def search_all_logs(self, query, from_users=None, before=None, after=None):
+    def search_all_logs(self,
+                        query: str,
+                        from_users: Optional[List[str]] = None,
+                        before: Optional[datetime.datetime] = None,
+                        after: Optional[datetime.datetime] = None
+                        ) -> List[namedtuple]:
         """
         Search all conversation logs for messages containing the `query`
         string.
@@ -682,7 +722,7 @@ class MessageArchiveStorage(SqliteStorage):
             sql, (query, users, after_ts, before_ts)).fetchall()
 
     @timeit
-    def get_days_with_logs(self, account, jid, year, month):
+    def get_days_with_logs(self, _account, jid, year, month):
         """
         Request the days in a month where we received messages
         for a given `jid`.
@@ -723,7 +763,7 @@ class MessageArchiveStorage(SqliteStorage):
                                       (date + delta).timestamp())).fetchall()
 
     @timeit
-    def get_last_date_that_has_logs(self, account, jid):
+    def get_last_date_that_has_logs(self, _account, jid):
         """
         Get the timestamp of the last message we received for the jid.
 
@@ -750,7 +790,7 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone().time
 
     @timeit
-    def get_first_date_that_has_logs(self, account, jid):
+    def get_first_date_that_has_logs(self, _account, jid):
         """
         Get the timestamp of the first message we received for the jid.
 
@@ -777,7 +817,7 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone().time
 
     @timeit
-    def get_date_has_logs(self, account, jid, date):
+    def get_date_has_logs(self, _account, jid, date):
         """
         Get single timestamp of a message we received for the jid
         in the time range of one day.
@@ -809,8 +849,13 @@ class MessageArchiveStorage(SqliteStorage):
             sql, tuple(jids) + (start, end)).fetchone()
 
     @timeit
-    def deduplicate_muc_message(self, account, jid, resource,
-                                timestamp, message_id):
+    def deduplicate_muc_message(self,
+                                account: str,
+                                jid: str,
+                                resource: str,
+                                timestamp: float,
+                                message_id: str
+                                ) -> bool:
         """
         Check if a message is already in the `logs` table
 
@@ -857,8 +902,13 @@ class MessageArchiveStorage(SqliteStorage):
         return False
 
     @timeit
-    def find_stanza_id(self, account, archive_jid, stanza_id, origin_id=None,
-                       groupchat=False):
+    def find_stanza_id(self,
+                       account: str,
+                       archive_jid: str,
+                       stanza_id: str,
+                       origin_id: Optional[str] = None,
+                       groupchat: bool = False
+                       ) -> bool:
         """
         Checks if a stanza-id is already in the `logs` table
 
@@ -916,7 +966,8 @@ class MessageArchiveStorage(SqliteStorage):
 
         if result is not None:
             log.info('Found duplicated message, stanza-id: %s, origin-id: %s, '
-                     'archive-jid: %s, account: %s', stanza_id, origin_id, archive_jid, account_id)
+                     'archive-jid: %s, account: %s', stanza_id, origin_id,
+                     archive_jid, account_id)
             return True
         return False
 
@@ -1043,7 +1094,11 @@ class MessageArchiveStorage(SqliteStorage):
                 sql, (serialized_dict, stanza_id, account_id,
                       KindConstant.GC_MSG))
 
-    def insert_jid(self, jid, kind=None, type_=JIDConstant.NORMAL_TYPE):
+    def insert_jid(self,
+                   jid: str,
+                   kind: Optional[KindConstant] = None,
+                   type_: JIDConstant = JIDConstant.NORMAL_TYPE
+                   ) -> int:
         """
         Insert a new jid into the `jids` table.
         This is an alias of get_jid_id() for better readablility.
@@ -1057,7 +1112,13 @@ class MessageArchiveStorage(SqliteStorage):
         return self.get_jid_id(jid, kind, type_)
 
     @timeit
-    def insert_into_logs(self, account, jid, time_, kind, **kwargs):
+    def insert_into_logs(self,
+                         account: str,
+                         jid: str,
+                         time_: float,
+                         kind: KindConstant,
+                         **kwargs: Any
+                         ) -> int:
         """
         Insert a new message into the `logs` table
 
@@ -1100,7 +1161,12 @@ class MessageArchiveStorage(SqliteStorage):
         return lastrowid
 
     @timeit
-    def set_message_error(self, account_jid, jid, message_id, error):
+    def set_message_error(self,
+                          account_jid: str,
+                          jid: JID,
+                          message_id: str,
+                          error: str
+                          ) -> None:
         """
         Update the corresponding message with the error
 
@@ -1129,7 +1195,12 @@ class MessageArchiveStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def set_marker(self, account_jid, jid, message_id, state):
+    def set_marker(self,
+                   account_jid: str,
+                   jid: str,
+                   message_id: str,
+                   state: str
+                   ) -> None:
         """
         Update the marker state of the corresponding message
 
@@ -1234,8 +1305,11 @@ class MessageArchiveStorage(SqliteStorage):
         log.info('Reset message archive info: %s', jid)
         self._delayed_commit()
 
-    def remove_chat_history(self, account: str, jid: str,
-                            groupchat: bool = False) -> None:
+    def remove_chat_history(self,
+                            account: str,
+                            jid: str,
+                            groupchat: bool = False
+                            ) -> None:
         """
         Remove chat history for a specific chat.
         If it's a group chat, remove last MAM ID as well.
@@ -1255,7 +1329,7 @@ class MessageArchiveStorage(SqliteStorage):
         self._delayed_commit()
         log.info('Removed chat history for: %s', jid)
 
-    def _cleanup_chat_history(self):
+    def _cleanup_chat_history(self) -> None:
         """
         Remove messages from account where messages are older than max_age
         """
