@@ -12,13 +12,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+
 import time
 
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
+from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import DiscoInfo
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -97,7 +104,10 @@ MUC_FEATURES = {
 
 
 class GroupChatInfoScrolled(Gtk.ScrolledWindow):
-    def __init__(self, account=None, options=None):
+    def __init__(self,
+                 account: Optional[str] = None,
+                 options: Optional[Dict[str, Any]] = None
+                 ) -> None:
         Gtk.ScrolledWindow.__init__(self)
         if options is None:
             options = {}
@@ -116,23 +126,26 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                             Gtk.PolicyType.AUTOMATIC)
 
         self._account = account
-        self._info = None
+        self._info: Optional[DiscoInfo] = None
 
         self._ui = get_builder('groupchat_info_scrolled.ui')
         self.add(self._ui.info_grid)
         self._ui.connect_signals(self)
         self.show_all()
 
-    def get_account(self):
+    def get_account(self) -> str:
         return self._account
 
-    def set_account(self, account):
+    def set_account(self, account: str) -> None:
         self._account = account
 
-    def get_jid(self):
+    def get_jid(self) -> Optional[JID]:
         return self._info.jid
 
-    def set_author(self, author, epoch_timestamp=None):
+    def set_author(self,
+                   author: Optional[str],
+                   epoch_timestamp: Optional[float] = None
+                   ) -> None:
         has_author = bool(author)
         if has_author and epoch_timestamp is not None:
             time_ = time.strftime('%c', time.localtime(epoch_timestamp))
@@ -142,14 +155,14 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.author.set_visible(has_author)
         self._ui.author_label.set_visible(has_author)
 
-    def set_subject(self, subject):
+    def set_subject(self, subject: str) -> None:
         has_subject = bool(subject)
         subject = GLib.markup_escape_text(subject or '')
         self._ui.subject.set_markup(make_href_markup(subject))
         self._ui.subject.set_visible(has_subject)
         self._ui.subject_label.set_visible(has_subject)
 
-    def set_from_disco_info(self, info):
+    def set_from_disco_info(self, info: DiscoInfo) -> None:
         self._info = info
         # Set name
         if self._account is None:
@@ -219,7 +232,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
         self._add_features(info.features)
 
-    def _add_features(self, features):
+    def _add_features(self, features: List[str]) -> None:
         grid = self._ui.info_grid
         for row in range(30, 9, -1):
             # Remove everything from row 30 to 10
@@ -244,7 +257,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                 row += 1
         grid.show_all()
 
-    def _on_copy_address(self, _button):
+    def _on_copy_address(self, _button: Gtk.Button) -> None:
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_text(f'xmpp:{self._info.jid}?join', -1)
 
@@ -265,7 +278,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         return Gdk.EVENT_STOP
 
     @staticmethod
-    def _get_feature_icon(icon, tooltip):
+    def _get_feature_icon(icon, tooltip: str) -> Gtk.Image:
         image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
         image.set_valign(Gtk.Align.CENTER)
         image.set_halign(Gtk.Align.END)
@@ -273,13 +286,13 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         return image
 
     @staticmethod
-    def _get_feature_label(text):
+    def _get_feature_label(text: str) -> Gtk.Label:
         label = Gtk.Label(label=text, use_markup=True)
         label.set_halign(Gtk.Align.START)
         label.set_valign(Gtk.Align.START)
         return label
 
-    def _get_contact_button(self, contact):
+    def _get_contact_button(self, contact: str) -> Gtk.Button:
         button = Gtk.LinkButton.new(contact)
         button.set_halign(Gtk.Align.START)
         button.get_style_context().add_class('link-button')
