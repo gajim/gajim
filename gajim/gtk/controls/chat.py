@@ -271,7 +271,7 @@ class ChatControl(BaseControl):
     def focus(self) -> None:
         self.msg_textview.grab_focus()
 
-    def delegate_action(self, action):
+    def delegate_action(self, action: str) -> int:
         res = super().delegate_action(action)
         if res == Gdk.EVENT_STOP:
             return res

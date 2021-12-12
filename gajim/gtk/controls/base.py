@@ -506,7 +506,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.label_selector.set_no_show_all(False)
         self.xml.label_selector.show_all()
 
-    def delegate_action(self, action):
+    def delegate_action(self, action: str) -> int:
         if action == 'clear-chat':
             self.conversation_view.clear()
             self._scrolled_view.reset()

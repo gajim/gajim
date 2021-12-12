@@ -1431,7 +1431,7 @@ class GroupchatControl(BaseControl):
             self.last_key_tabs = False
         return None
 
-    def delegate_action(self, action):
+    def delegate_action(self, action: str) -> int:
         res = super().delegate_action(action)
         if res == Gdk.EVENT_STOP:
             return res

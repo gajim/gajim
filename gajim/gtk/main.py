@@ -253,7 +253,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         action_name = action.get_name()
 
-        res = control.delegate_action(action)
+        res = control.delegate_action(action_name)
         if res != Gdk.EVENT_PROPAGATE:
             return res
 
