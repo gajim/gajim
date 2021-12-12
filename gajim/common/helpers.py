@@ -697,7 +697,8 @@ def allow_showing_notification(account: str) -> bool:
         return False
     if app.settings.get('show_notifications_away'):
         return True
-    if app.account_is_available(account):
+    client = app.get_client(account)
+    if client.status == 'online':
         return True
     return False
 
