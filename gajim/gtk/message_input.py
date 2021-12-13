@@ -101,11 +101,17 @@ class MessageInputTextView(Gtk.TextView):
             self.toggle_speller(False)
         return False
 
-    def _on_text_changed(self, buffer_):
+    def _clear_tags(self) -> None:
+        _buffer = self.get_buffer()
+        start, end = _buffer.get_bounds()
+        _buffer.remove_all_tags(start, end)
+
+    def _on_text_changed(self, buffer_: Gtk.TextBuffer) -> None:
         text = self.get_text()
         if not text:
             return
 
+        self._clear_tags()
         result = process(text)
         for block in result.blocks:
             if block.name == 'plain':
