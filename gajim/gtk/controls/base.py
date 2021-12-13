@@ -1024,14 +1024,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _on_send_message(self, *args):
         self.msg_textview.replace_emojis()
         message = self.msg_textview.get_text()
-        xhtml = self.msg_textview.get_xhtml()
-        self.send_message(message, xhtml=xhtml)
+        self.send_message(message)
 
     def send_message(self,
                      message: str,
                      type_: str = 'chat',
                      resource: Optional[str] = None,
-                     xhtml: Optional[str] = None,
                      process_commands: bool = True,
                      attention: bool = False
                      ) -> None:
@@ -1065,8 +1063,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                                    label=label,
                                    control=self,
                                    attention=attention,
-                                   correct_id=correct_id,
-                                   xhtml=xhtml)
+                                   correct_id=correct_id)
 
         self._client.send_message(message_)
 
@@ -1076,9 +1073,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # Be sure to send user nickname only once according to JEP-0172
         self.user_nick = None
 
-        # Clear msg input
-        message_buffer = self.msg_textview.get_buffer()
-        message_buffer.set_text('')  # clear message buffer (and tv of course)
+        self.msg_textview.clear()
 
     def _on_message_tv_buffer_changed(self, textbuffer):
         has_text = self.msg_textview.has_text()
