@@ -307,18 +307,6 @@ class ChatControl(BaseControl):
         action.set_state(param)
         self.contact.settings.set('send_marker', param.get_boolean())
 
-    def _update_toolbar(self) -> None:
-        # Formatting
-        # TODO: find out what encryption allows for xhtml and which not
-        if self.contact.supports(Namespace.XHTML_IM):
-            self.xml.formattings_button.set_sensitive(True)
-            self.xml.formattings_button.set_tooltip_text(_(
-                'Show a list of formattings'))
-        else:
-            self.xml.formattings_button.set_sensitive(False)
-            self.xml.formattings_button.set_tooltip_text(
-                _('This contact does not support HTML'))
-
     def update_all_pep_types(self) -> None:
         self._update_pep(PEPEventType.LOCATION)
         self._update_pep(PEPEventType.TUNE)

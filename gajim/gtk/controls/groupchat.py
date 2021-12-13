@@ -883,9 +883,6 @@ class GroupchatControl(BaseControl):
         self.msg_textview.set_editable(True)
 
         self.roster.initial_draw()
-
-        self.xml.formattings_button.set_sensitive(True)
-
         self.conversation_view.update_avatars()
 
         self.update_actions()

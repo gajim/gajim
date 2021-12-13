@@ -32,7 +32,6 @@ from nbxmpp.modules.misc import build_xhtml_body
 from gajim.common import app
 from gajim.common.regex import LINK_REGEX
 
-from .util import convert_rgba_to_hex
 from .util import scroll_to_end
 
 if app.is_installed('GSPELL'):
@@ -40,14 +39,19 @@ if app.is_installed('GSPELL'):
 
 UNDO_LIMIT: int = 20
 
+FORMAT_CHARS: Dict[str, str] = {
+    'bold': '*',
+    'italic': '_',
+    'strike': '~',
+}
+
 
 class MessageInputTextView(Gtk.TextView):
     """
     A Gtk.Textview for chat message input
     """
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.TextView.__init__(self)
-
         self.set_border_width(3)
         self.set_accepts_tab(True)
         self.set_editable(True)
@@ -61,35 +65,27 @@ class MessageInputTextView(Gtk.TextView):
 
         self.drag_dest_unset()
 
-        self.undo_list: List[str] = []
+        self._undo_list: List[str] = []
         self.undo_pressed: bool = False
 
-        self.begin_tags: Dict[str, str] = {}
-        self.end_tags: Dict[str, str] = {}
-        self.color_tags: List[str] = []
-        self.fonts_tags: List[str] = []
-        self.other_tags: Dict[str, Gtk.TextTag] = {}
+        self._begin_tags: Dict[str, str] = {}
+        self._end_tags: Dict[str, str] = {}
+        self._format_tags: Dict[str, Gtk.TextTag] = {}
 
         buffer_ = self.get_buffer()
-        self.other_tags['bold'] = buffer_.create_tag('bold')
-        self.other_tags['bold'].set_property('weight', Pango.Weight.BOLD)
-        self.begin_tags['bold'] = '<strong>'
-        self.end_tags['bold'] = '</strong>'
-        self.other_tags['italic'] = buffer_.create_tag('italic')
-        self.other_tags['italic'].set_property('style', Pango.Style.ITALIC)
-        self.begin_tags['italic'] = '<em>'
-        self.end_tags['italic'] = '</em>'
-        self.other_tags['underline'] = buffer_.create_tag('underline')
-        self.other_tags['underline'].set_property(
-            'underline', Pango.Underline.SINGLE)
-        underline = '<span style="text-decoration: underline;">'
-        self.begin_tags['underline'] = underline
-        self.end_tags['underline'] = '</span>'
-        self.other_tags['strike'] = buffer_.create_tag('strike')
-        self.other_tags['strike'].set_property('strikethrough', True)
+        self._format_tags['bold'] = buffer_.create_tag('bold')
+        self._format_tags['bold'].set_property('weight', Pango.Weight.BOLD)
+        self._begin_tags['bold'] = '<strong>'
+        self._end_tags['bold'] = '</strong>'
+        self._format_tags['italic'] = buffer_.create_tag('italic')
+        self._format_tags['italic'].set_property('style', Pango.Style.ITALIC)
+        self._begin_tags['italic'] = '<em>'
+        self._end_tags['italic'] = '</em>'
+        self._format_tags['strike'] = buffer_.create_tag('strike')
+        self._format_tags['strike'].set_property('strikethrough', True)
         strike = '<span style="text-decoration: line-through;">'
-        self.begin_tags['strike'] = strike
-        self.end_tags['strike'] = '</span>'
+        self._begin_tags['strike'] = strike
+        self._end_tags['strike'] = '</span>'
 
         self.connect_after('paste-clipboard', self._after_paste_clipboard)
         self.connect('focus-in-event', self._on_focus_in)
@@ -149,12 +145,146 @@ class MessageInputTextView(Gtk.TextView):
             spell_view.set_inline_spell_checking(activate)
 
     @staticmethod
-    def _after_paste_clipboard(textview):
+    def _after_paste_clipboard(textview: Gtk.TextView) -> None:
         buffer_ = textview.get_buffer()
         mark = buffer_.get_insert()
         iter_ = buffer_.get_iter_at_mark(mark)
         if iter_.get_offset() == buffer_.get_end_iter().get_offset():
             GLib.idle_add(scroll_to_end, textview.get_parent())
+
+    def get_active_tags(self) -> List[str]:
+        start = self._get_active_iters()[0]
+        active_tags = []
+        for tag in start.get_tags():
+            active_tags.append(tag.get_property('name'))
+        return active_tags
+
+    def _get_active_iters(self) -> Tuple[Gtk.TextIter, Gtk.TextIter]:
+        _buffer = self.get_buffer()
+        return_val = _buffer.get_selection_bounds()
+        if return_val:  # if something is selected
+            start, end = return_val[0], return_val[1]
+        else:
+            start, end = _buffer.get_bounds()
+        return (start, end)
+
+    def apply_formatting(self, formatting: str) -> None:
+        format_char = FORMAT_CHARS[formatting]
+
+        _buffer = self.get_buffer()
+        start, end = self._get_active_iters()
+        start_offset = start.get_offset()
+        end_offset = end.get_offset()
+
+        text = _buffer.get_text(start, end, True)
+        if text.startswith(format_char) and text.endswith(format_char):
+            # (Selected) text begins and ends with formatting chars
+            # -> remove them
+            _buffer.delete(
+                start,
+                _buffer.get_iter_at_offset(start_offset + 1))
+            _buffer.delete(
+                _buffer.get_iter_at_offset(end_offset - 2),
+                _buffer.get_iter_at_offset(end_offset - 1))
+            return
+
+        ext_start = _buffer.get_iter_at_offset(start_offset - 1)
+        ext_end = _buffer.get_iter_at_offset(end_offset + 1)
+        ext_text = _buffer.get_text(ext_start, ext_end, True)
+        if ext_text.startswith(format_char) and ext_text.endswith(format_char):
+            # (Selected) text is surrounded by formatting chars -> remove them
+            _buffer.delete(
+                ext_start,
+                _buffer.get_iter_at_offset(start_offset))
+            _buffer.delete(
+                _buffer.get_iter_at_offset(end_offset - 1),
+                _buffer.get_iter_at_offset(end_offset))
+            return
+
+        # No formatting chars found at start/end or surrounding -> add them
+        _buffer.insert(start, format_char, -1)
+        _buffer.insert(
+            _buffer.get_iter_at_offset(end_offset + 1),
+            format_char,
+            -1)
+        _buffer.select_range(
+            _buffer.get_iter_at_offset(start_offset),
+            _buffer.get_iter_at_offset(end_offset + 2))
+
+    def clear_tags(self) -> None:
+        _buffer = self.get_buffer()
+        start, end = self._get_active_iters()
+        _buffer.remove_all_tags(start, end)
+
+    def get_xhtml(self) -> Optional[str]:
+        _buffer = self.get_buffer()
+        old = _buffer.get_start_iter()
+        tags = {}
+        tags['bold'] = False
+        iter_ = _buffer.get_start_iter()
+        old = _buffer.get_start_iter()
+        text = ''
+        modified = False
+
+        def xhtml_special(text: str) -> str:
+            text = text.replace('<', '&lt;')
+            text = text.replace('>', '&gt;')
+            text = text.replace('&', '&amp;')
+            text = text.replace('\n', '<br />')
+            return text
+
+        for tag in iter_.get_toggled_tags(True):
+            tag_name = tag.get_property('name')
+            if tag_name not in self._begin_tags:
+                continue
+            text += self._begin_tags[tag_name]
+            modified = True
+        while (iter_.forward_to_tag_toggle(None) and not iter_.is_end()):
+            text += xhtml_special(_buffer.get_text(old, iter_, True))
+            old.forward_to_tag_toggle(None)
+            new_tags, old_tags, end_tags = [], [], []
+            for tag in iter_.get_toggled_tags(True):
+                tag_name = tag.get_property('name')
+                if tag_name not in self._begin_tags:
+                    continue
+                new_tags.append(tag_name)
+                modified = True
+
+            for tag in iter_.get_tags():
+                tag_name = tag.get_property('name')
+                if (tag_name not in self._begin_tags or
+                        tag_name not in self._end_tags):
+                    continue
+                if tag_name not in new_tags:
+                    old_tags.append(tag_name)
+
+            for tag in iter_.get_toggled_tags(False):
+                tag_name = tag.get_property('name')
+                if tag_name not in self._end_tags:
+                    continue
+                end_tags.append(tag_name)
+
+            for tag in old_tags:
+                text += self._end_tags[tag]
+            for tag in end_tags:
+                text += self._end_tags[tag]
+            for tag in new_tags:
+                text += self._begin_tags[tag]
+            for tag in old_tags:
+                text += self._begin_tags[tag]
+
+        buffer_text = _buffer.get_text(old, _buffer.get_end_iter(), True)
+        text += xhtml_special(buffer_text)
+        for tag in iter_.get_toggled_tags(False):
+            tag_name = tag.get_property('name')
+            if tag_name not in self._end_tags:
+                continue
+            text += self._end_tags[tag_name]
+
+        if modified:
+            wrapped_text = f'<p>{self.make_clickable_urls(text)}</p>'
+            return build_xhtml_body(wrapped_text)
+        return None
 
     def make_clickable_urls(self, text: str) -> str:
         _buffer = self.get_buffer()
@@ -180,176 +310,6 @@ class MessageInputTextView(Gtk.TextView):
             new_text += text[end:]
 
         return new_text  # the position after *last* special text
-
-    def get_active_tags(self) -> List[str]:
-        start = self.get_active_iters()[0]
-        active_tags = []
-        for tag in start.get_tags():
-            active_tags.append(tag.get_property('name'))
-        return active_tags
-
-    def get_active_iters(self) -> Tuple[Gtk.TextIter, Gtk.TextIter]:
-        _buffer = self.get_buffer()
-        return_val = _buffer.get_selection_bounds()
-        if return_val: # if sth was selected
-            start, finish = return_val[0], return_val[1]
-        else:
-            start, finish = _buffer.get_bounds()
-        return (start, finish)
-
-    def set_tag(self, tag: str) -> None:
-        _buffer = self.get_buffer()
-        start, finish = self.get_active_iters()
-        if start.has_tag(self.other_tags[tag]):
-            _buffer.remove_tag_by_name(tag, start, finish)
-        else:
-            if tag == 'underline':
-                _buffer.remove_tag_by_name('strike', start, finish)
-            elif tag == 'strike':
-                _buffer.remove_tag_by_name('underline', start, finish)
-            _buffer.apply_tag_by_name(tag, start, finish)
-
-    def clear_tags(self) -> None:
-        _buffer = self.get_buffer()
-        start, finish = self.get_active_iters()
-        _buffer.remove_all_tags(start, finish)
-
-    def color_set(self, widget, response):
-        if response in (-6, -4):
-            widget.destroy()
-            return
-
-        color = widget.get_property('rgba')
-        widget.destroy()
-        _buffer = self.get_buffer()
-
-        color_string = convert_rgba_to_hex(color)
-        tag_name = 'color' + color_string
-        if not tag_name in self.color_tags:
-            tag_color = _buffer.create_tag(tag_name)
-            tag_color.set_property('foreground', color_string)
-            begin = f'<span style="color: {color_string};">'
-            self.begin_tags[tag_name] = begin
-            self.end_tags[tag_name] = '</span>'
-            self.color_tags.append(tag_name)
-
-        start, finish = self.get_active_iters()
-
-        for tag in self.color_tags:
-            _buffer.remove_tag_by_name(tag, start, finish)
-
-        _buffer.apply_tag_by_name(tag_name, start, finish)
-
-    def font_set(self, widget, response, start, finish):
-        if response in (-6, -4):
-            widget.destroy()
-            return
-
-        font = widget.get_font()
-        font_desc = widget.get_font_desc()
-        family = font_desc.get_family()
-        size = font_desc.get_size()
-        size = size / Pango.SCALE
-        weight = font_desc.get_weight()
-        style = font_desc.get_style()
-
-        widget.destroy()
-
-        _buffer = self.get_buffer()
-
-        tag_name = 'font' + font
-        if not tag_name in self.fonts_tags:
-            tag_font = _buffer.create_tag(tag_name)
-            tag_font.set_property('font', f'{family} {size}')
-            beg = f'<span style="font-family: {family}; font-size: {size}px">'
-            self.begin_tags[tag_name] = beg
-            self.end_tags[tag_name] = '</span>'
-            self.fonts_tags.append(tag_name)
-
-        for tag in self.fonts_tags:
-            _buffer.remove_tag_by_name(tag, start, finish)
-
-        _buffer.apply_tag_by_name(tag_name, start, finish)
-
-        if weight == Pango.Weight.BOLD:
-            _buffer.apply_tag_by_name('bold', start, finish)
-        else:
-            _buffer.remove_tag_by_name('bold', start, finish)
-
-        if style == Pango.Style.ITALIC:
-            _buffer.apply_tag_by_name('italic', start, finish)
-        else:
-            _buffer.remove_tag_by_name('italic', start, finish)
-
-    def get_xhtml(self) -> Optional[str]:
-        _buffer = self.get_buffer()
-        old = _buffer.get_start_iter()
-        tags = {}
-        tags['bold'] = False
-        iter_ = _buffer.get_start_iter()
-        old = _buffer.get_start_iter()
-        text = ''
-        modified = False
-
-        def xhtml_special(text):
-            text = text.replace('<', '&lt;')
-            text = text.replace('>', '&gt;')
-            text = text.replace('&', '&amp;')
-            text = text.replace('\n', '<br />')
-            return text
-
-        for tag in iter_.get_toggled_tags(True):
-            tag_name = tag.get_property('name')
-            if tag_name not in self.begin_tags:
-                continue
-            text += self.begin_tags[tag_name]
-            modified = True
-        while (iter_.forward_to_tag_toggle(None) and not iter_.is_end()):
-            text += xhtml_special(_buffer.get_text(old, iter_, True))
-            old.forward_to_tag_toggle(None)
-            new_tags, old_tags, end_tags = [], [], []
-            for tag in iter_.get_toggled_tags(True):
-                tag_name = tag.get_property('name')
-                if tag_name not in self.begin_tags:
-                    continue
-                new_tags.append(tag_name)
-                modified = True
-
-            for tag in iter_.get_tags():
-                tag_name = tag.get_property('name')
-                if (tag_name not in self.begin_tags or
-                        tag_name not in self.end_tags):
-                    continue
-                if tag_name not in new_tags:
-                    old_tags.append(tag_name)
-
-            for tag in iter_.get_toggled_tags(False):
-                tag_name = tag.get_property('name')
-                if tag_name not in self.end_tags:
-                    continue
-                end_tags.append(tag_name)
-
-            for tag in old_tags:
-                text += self.end_tags[tag]
-            for tag in end_tags:
-                text += self.end_tags[tag]
-            for tag in new_tags:
-                text += self.begin_tags[tag]
-            for tag in old_tags:
-                text += self.begin_tags[tag]
-
-        buffer_text = _buffer.get_text(old, _buffer.get_end_iter(), True)
-        text += xhtml_special(buffer_text)
-        for tag in iter_.get_toggled_tags(False):
-            tag_name = tag.get_property('name')
-            if tag_name not in self.end_tags:
-                continue
-            text += self.end_tags[tag_name]
-
-        if modified:
-            wrapped_text = f'<p>{self.make_clickable_urls(text)}</p>'
-            return build_xhtml_body(wrapped_text)
-        return None
 
     def replace_emojis(self) -> None:
         theme = app.settings.get('emoticons_theme')
@@ -406,9 +366,9 @@ class MessageInputTextView(Gtk.TextView):
         _buffer.delete(start, end)
 
     def save_undo(self, text: str) -> None:
-        self.undo_list.append(text)
-        if len(self.undo_list) > UNDO_LIMIT:
-            del self.undo_list[0]
+        self._undo_list.append(text)
+        if len(self._undo_list) > UNDO_LIMIT:
+            del self._undo_list[0]
         self.undo_pressed = False
 
     def undo(self, *args):
@@ -416,6 +376,6 @@ class MessageInputTextView(Gtk.TextView):
         Undo text in the textview
         """
         _buffer = self.get_buffer()
-        if self.undo_list:
-            _buffer.set_text(self.undo_list.pop())
+        if self._undo_list:
+            _buffer.set_text(self._undo_list.pop())
         self.undo_pressed = True

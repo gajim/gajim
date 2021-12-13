@@ -1303,25 +1303,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.msg_textview.emit('insert-emoji')
         self.xml.emoticons_button.set_property('active', False)
 
-    def on_color_menuitem_activate(self, _widget):
-        color_dialog = Gtk.ColorChooserDialog(None, app.window)
-        color_dialog.set_use_alpha(False)
-        color_dialog.connect('response', self.msg_textview.color_set)
-        color_dialog.show_all()
-
-    def on_font_menuitem_activate(self, _widget):
-        font_dialog = Gtk.FontChooserDialog(None, app.window)
-        start, finish = self.msg_textview.get_active_iters()
-        font_dialog.connect(
-            'response', self.msg_textview.font_set, start, finish)
-        font_dialog.show_all()
-
-    def on_formatting_menuitem_activate(self, widget):
-        tag = widget.get_name()
-        self.msg_textview.set_tag(tag)
-
-    def on_clear_formatting_menuitem_activate(self, _widget):
-        self.msg_textview.clear_tags()
+    def _on_formatting_menuitem_activate(self,
+                                         menu_item: Gtk.CheckMenuItem
+                                         ) -> None:
+        formatting = menu_item.get_name()
+        self.msg_textview.apply_formatting(formatting)
 
     def _style_changed(self, *args):
         self.update_text_tags()
