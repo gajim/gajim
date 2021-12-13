@@ -24,8 +24,10 @@ from typing import Tuple
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common.styling import process
 
 from .util import scroll_to_end
 
@@ -38,6 +40,7 @@ FORMAT_CHARS: Dict[str, str] = {
     'bold': '*',
     'italic': '_',
     'strike': '~',
+    'pre': '`',
 }
 
 
@@ -63,6 +66,12 @@ class MessageInputTextView(Gtk.TextView):
         self._undo_list: List[str] = []
         self.undo_pressed: bool = False
 
+        self.get_buffer().create_tag('strong', weight=Pango.Weight.BOLD)
+        self.get_buffer().create_tag('emphasis', style=Pango.Style.ITALIC)
+        self.get_buffer().create_tag('strike', strikethrough=True)
+        self.get_buffer().create_tag('pre', family='monospace')
+
+        self.get_buffer().connect('changed', self._on_text_changed)
         self.connect_after('paste-clipboard', self._after_paste_clipboard)
         self.connect('focus-in-event', self._on_focus_in)
         self.connect('focus-out-event', self._on_focus_out)
@@ -91,6 +100,18 @@ class MessageInputTextView(Gtk.TextView):
         if not self.has_text():
             self.toggle_speller(False)
         return False
+
+    def _on_text_changed(self, buffer_):
+        text = self.get_text()
+        if not text:
+            return
+
+        result = process(text)
+        for block in result.blocks:
+            for span in block.spans:
+                start_iter = buffer_.get_iter_at_offset(span.start)
+                end_iter = buffer_.get_iter_at_offset(span.end)
+                buffer_.apply_tag_by_name(span.name, start_iter, end_iter)
 
     def insert_text(self, text: str) -> None:
         self.get_buffer().insert_at_cursor(text)
