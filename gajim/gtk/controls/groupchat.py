@@ -1182,7 +1182,6 @@ class GroupchatControl(BaseControl):
 
     def send_message(self,
                      message: str,
-                     xhtml: Optional[str] = None,
                      process_commands: bool = True
                      ) -> None:
         """
@@ -1225,7 +1224,6 @@ class GroupchatControl(BaseControl):
                                        label=label,
                                        chatstate=chatstate,
                                        correct_id=correct_id)
-            message_.additional_data.set_value('gajim', 'xhtml', xhtml)
             self._client.send_message(message_)
 
             self.msg_textview.get_buffer().set_text('')

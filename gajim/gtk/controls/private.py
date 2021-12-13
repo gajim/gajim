@@ -24,8 +24,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
-
 from nbxmpp import JID
 
 from gajim.common import app
@@ -142,7 +140,6 @@ class PrivateChatControl(ChatControl):
 
     def send_message(self,
                      message: str,
-                     xhtml: Optional[str] = None,
                      process_commands: bool = True,
                      attention: bool = False
                      ) -> None:
@@ -165,7 +162,6 @@ class PrivateChatControl(ChatControl):
             return
 
         ChatControl.send_message(self, message,
-                                 xhtml=xhtml,
                                  process_commands=process_commands,
                                  attention=attention)
 

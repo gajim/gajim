@@ -545,7 +545,6 @@ class ChatControl(BaseControl):
 
     def send_message(self,
                      message: str,
-                     xhtml: Optional[str] = None,
                      process_commands: bool = True,
                      attention: bool = False
                      ) -> None:
@@ -567,7 +566,6 @@ class ChatControl(BaseControl):
         BaseControl.send_message(self,
                                  message,
                                  type_='chat',
-                                 xhtml=xhtml,
                                  process_commands=process_commands,
                                  attention=attention)
 
