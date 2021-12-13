@@ -561,6 +561,8 @@ def play_sound_file(path_to_soundfile):
             log.error('Could not play sound: %s', error.message)
 
 def get_connection_status(account: str) -> str:
+    if not app.account_is_available(account):
+        return 'error'
     con = app.connections[account]
     if con.state.is_reconnect_scheduled:
         return 'error'
