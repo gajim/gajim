@@ -754,6 +754,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         text = f'{name}{gc_refer_to_nick_char} '
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.insert_at_cursor(text)
+        GLib.idle_add(self.msg_textview.grab_focus)
 
     def _on_message_textview_paste_event(self, _texview):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)

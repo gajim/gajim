@@ -242,6 +242,7 @@ class MessageRow(BaseRow):
     def _on_avatar_clicked(self, _widget, event, name):
         if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 1:
             self.get_parent().on_mention(name)
+        return Gdk.EVENT_STOP
 
     @staticmethod
     def _on_realize(event_box):
