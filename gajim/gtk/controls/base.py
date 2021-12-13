@@ -1333,6 +1333,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.contact, Chatstate.INACTIVE)
 
     def reset_view(self) -> None:
+        self._initial_fetch_finished = False
         self.conversation_view.clear()
 
     def get_autoscroll(self) -> bool:
