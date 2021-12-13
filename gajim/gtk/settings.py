@@ -610,7 +610,12 @@ class ActionSetting(GenericSetting):
         self.on_enable()
 
         self.show_all()
-        self.action.connect('notify::enabled', self.on_enable)
+        self._handler_id = self.action.connect(
+            'notify::enabled', self.on_enable)
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, *args):
+        self.action.disconnect(self._handler_id)
 
     def on_enable(self, *args):
         self.set_sensitive(self.action.get_enabled())
