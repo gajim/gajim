@@ -225,6 +225,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.xml.hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
 
+        # Used for initial message row fetching in ConversationView
+        self._initial_fetch_finished: bool = False
+
         # the following vars are used to keep history of user's messages
         self.sent_history: List[str] = []
         self.sent_history_pos: int = 0
@@ -1312,6 +1315,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.conversation_view.update_text_tags()
 
     def set_control_active(self, state: bool) -> None:
+        if not self._initial_fetch_finished:
+            self.fetch_n_lines_history(self._scrolled_view, True, 20)
+            self._initial_fetch_finished = True
+
         if state:
             self.set_emoticon_popover()
 
