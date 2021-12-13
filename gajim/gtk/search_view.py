@@ -302,8 +302,9 @@ class RowHeader(Gtk.Box):
 class CounterRow(Gtk.ListBoxRow):
     def __init__(self, count: int) -> None:
         Gtk.ListBoxRow.__init__(self)
+        self.set_activatable(False)
         self.type: str = 'counter'
-        self.jid = None
+        self.jid: str = ''  # Has to be there for header_func
         self.time: float = 0.0
         self.get_style_context().add_class('search-view-counter')
 
