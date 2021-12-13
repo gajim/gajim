@@ -108,10 +108,11 @@ class MessageInputTextView(Gtk.TextView):
 
         result = process(text)
         for block in result.blocks:
-            for span in block.spans:
-                start_iter = buffer_.get_iter_at_offset(span.start)
-                end_iter = buffer_.get_iter_at_offset(span.end)
-                buffer_.apply_tag_by_name(span.name, start_iter, end_iter)
+            if block.name == 'plain':
+                for span in block.spans:
+                    start_iter = buffer_.get_iter_at_offset(span.start)
+                    end_iter = buffer_.get_iter_at_offset(span.end)
+                    buffer_.apply_tag_by_name(span.name, start_iter, end_iter)
 
     def insert_text(self, text: str) -> None:
         self.get_buffer().insert_at_cursor(text)
