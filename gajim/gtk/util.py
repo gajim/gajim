@@ -55,6 +55,7 @@ from gajim.common.const import LOCATION_DATA
 from gajim.common.const import Display
 from gajim.common.const import StyleAttr
 from gajim.common.nec import EventHelper as CommonEventHelper
+from gajim.common.styling import PlainBlock
 
 from .const import GajimIconSet
 from .const import WINDOW_MODULES
@@ -888,19 +889,27 @@ class AccountBadge(Gtk.Label):
         self.set_tooltip_text(_('Account: %s') % label)
 
 
-def make_pango_attribute(name: str, start: int, end: int) -> Pango.Attribute:
+def make_pango_attributes(block: PlainBlock) -> Pango.AttrList:
+    attrlist = Pango.AttrList()
+    for span in block.spans:
+        attr = get_style_attribute_with_name(span.name)
+        attr.start_index = span.start_byte
+        attr.end_index = span.end_byte
+        attrlist.insert(attr)
+    return attrlist
+
+
+def get_style_attribute_with_name(name: str) -> Pango.Attribute:
     if name == 'strong':
-        attr = Pango.attr_weight_new(Pango.Weight.BOLD)
+        return Pango.attr_weight_new(Pango.Weight.BOLD)
+
     if name == 'strike':
-        attr = Pango.attr_strikethrough_new(True)
+        return Pango.attr_strikethrough_new(True)
+
     if name == 'emphasis':
-        attr = Pango.attr_style_new(Pango.Style.ITALIC)
+        return Pango.attr_style_new(Pango.Style.ITALIC)
+
     if name == 'pre':
-        attr = Pango.attr_family_new('monospace')
+        return Pango.attr_family_new('monospace')
 
-    else:
-        ValueError('unknown attribute %s', name)
-
-    attr.start_index = start
-    attr.end_index = end
-    return attr
+    raise ValueError('unknown attribute %s' % name)

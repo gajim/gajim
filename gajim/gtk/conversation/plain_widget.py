@@ -35,7 +35,7 @@ from gajim.gui_menu_builder import get_conv_action_context_menu
 from gajim.gui_menu_builder import get_conv_uri_context_menu
 
 from ..util import get_cursor
-from ..util import make_pango_attribute
+from ..util import make_pango_attributes
 
 log = logging.getLogger('gajim.gui.conversaion.plain_widget')
 
@@ -95,17 +95,17 @@ class MessageLabel(Gtk.Label):
         menu.show_all()
 
     def print_text_with_styling(self, block: PlainBlock) -> None:
-        text = GLib.markup_escape_text(block.text.strip())
+        text = ''
+        after = GLib.markup_escape_text(block.text.strip())
         for uri in block.uris:
-            text = text.replace(uri.text, uri.get_markup_string())
-
-        attr_list = Pango.AttrList()
-        for span in block.spans:
-            attr = make_pango_attribute(span.name, span.start, span.end)
-            attr_list.insert(attr)
+            uri_escaped = GLib.markup_escape_text(uri.text)
+            before, _, after = after.partition(uri_escaped)
+            text += before
+            text += uri.get_markup_string()
+        text += after
 
         self.set_markup(text)
-        self.set_attributes(attr_list)
+        self.set_attributes(make_pango_attributes(block))
 
     def update_text_tags(self) -> None:
         pass

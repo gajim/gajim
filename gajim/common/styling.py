@@ -1,23 +1,37 @@
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+from __future__ import annotations
+
+from typing import Union
+from typing import Match
+
 import string
 import re
 from dataclasses import dataclass
 from dataclasses import field
+
+from gi.repository import GLib
 
 PRE = '`'
 STRONG = '*'
 STRIKE = '~'
 EMPH = '_'
 
-QUOTE = '> '
-PRE_TEXT = '```'
-
 WHITESPACE = set(string.whitespace)
-BLOCK_DIRS = set([QUOTE, PRE_TEXT])
 SPAN_DIRS = set([PRE, STRONG, STRIKE, EMPH])
 VALID_SPAN_START = WHITESPACE | SPAN_DIRS
-
-SD = 0
-SD_POS = 1
 
 PRE_RX = r'(?P<pre>^```.+?(^```$(.|\Z)))'
 PRE_NESTED_RX = r'(?P<pre>^```.+?((^```$(.|\Z))|\Z))'
@@ -34,6 +48,10 @@ ADDRESS_RX = r'(\b(?P<protocol>(xmpp|mailto)+:)?[\w-]*@(.*?\.)+[\w]+([\?].*?(?=(
 ADDRESS_RX = re.compile(ADDRESS_RX)
 
 
+SD = 0
+SD_POS = 1
+
+
 @dataclass
 class StyleObject:
     start: int
@@ -41,28 +59,34 @@ class StyleObject:
     text: str
 
 
-class URIMarkup:
-    def get_markup_string(self):
-        return f'<a href="{self.text}">{self.text}</a>'
+@dataclass
+class BaseUri(StyleObject):
+
+    start_byte: int
+    end_byte: int
+
+    def get_markup_string(self) -> str:
+        text = GLib.markup_escape_text(self.text)
+        return f'<a href="{text}">{text}</a>'
 
 
 @dataclass
-class Uri(StyleObject, URIMarkup):
+class Uri(BaseUri):
     name: str = field(default='uri', init=False)
 
 
 @dataclass
-class Address(StyleObject, URIMarkup):
+class Address(BaseUri):
     name: str = field(default='address', init=False)
 
 
 @dataclass
-class XMPPAddress(StyleObject, URIMarkup):
+class XMPPAddress(BaseUri):
     name: str = field(default='xmppadr', init=False)
 
 
 @dataclass
-class MailAddress(StyleObject, URIMarkup):
+class MailAddress(BaseUri):
     name: str = field(default='mailadr', init=False)
 
 
@@ -70,17 +94,17 @@ class MailAddress(StyleObject, URIMarkup):
 class Block(StyleObject):
 
     @classmethod
-    def from_match(cls, match):
+    def from_match(cls, match: Match[str]) -> Block:
         return cls(start=match.start(),
                    end=match.end(),
-                   text=str(match.group(cls.name)))
+                   text=match.group(cls.name))
 
 
 @dataclass
 class PlainBlock(Block):
     name: str = field(default='plain', init=False)
-    spans: list = field(default_factory=list)
-    uris: list = field(default_factory=list)
+    spans: list[Span] = field(default_factory=list)
+    uris: list[BaseUri] = field(default_factory=list)
 
 
 @dataclass
@@ -91,34 +115,41 @@ class PreBlock(Block):
 @dataclass
 class QuoteBlock(Block):
     name: str = field(default='quote', init=False)
-    blocks: list = field(default_factory=list)
+    blocks: list[Block] = field(default_factory=list)
 
-    def unquote(self):
+    def unquote(self) -> str:
         return UNQUOTE_RX.sub('', self.text)
 
 
 @dataclass
-class PlainSpan(StyleObject):
+class Span(StyleObject):
+    start_byte: int
+    end_byte: int
+    name: str
+
+
+@dataclass
+class PlainSpan(Span):
     name: str = field(default='plain', init=False)
 
 
 @dataclass
-class StrongSpan(StyleObject):
+class StrongSpan(Span):
     name: str = field(default='strong', init=False)
 
 
 @dataclass
-class EmphasisSpan(StyleObject):
+class EmphasisSpan(Span):
     name: str = field(default='emphasis', init=False)
 
 
 @dataclass
-class PreTextSpan(StyleObject):
+class PreTextSpan(Span):
     name: str = field(default='pre', init=False)
 
 
 @dataclass
-class StrikeSpan(StyleObject):
+class StrikeSpan(Span):
     name: str = field(default='strike', init=False)
 
 
@@ -133,18 +164,33 @@ SPAN_CLS_DICT = {
 @dataclass
 class ParsingResult:
     text: str
-    blocks: list
+    blocks: list[Block]
 
 
-def process(text, nested=False):
+def find_byte_index(text: str, index: int):
+    byte_index = -1
+    for index_, c in enumerate(text):
+        byte_index += len(c.encode())
+        if index == index_:
+            return byte_index
+
+    raise ValueError('index not in string: %s, %s' % (text, index))
+
+
+def process(text: Union[str, bytes], nested: bool = False) -> ParsingResult:
+    if isinstance(text, bytes):
+        text = text.decode()
+
     blocks = _parse_blocks(text, nested)
     for block in blocks:
         if isinstance(block, PlainBlock):
             offset = 0
+            offset_bytes = 0
             for line in block.text.splitlines(keepends=True):
-                block.spans += _parse_line(line, offset)
-                block.uris += _parse_uris(line, offset)
+                block.spans += _parse_line(line, offset, offset_bytes)
+                block.uris += _parse_uris(line, offset, offset_bytes)
                 offset += len(line)
+                offset_bytes += len(line.encode())
 
         if isinstance(block, QuoteBlock):
             result = process(block.unquote(), nested=True)
@@ -153,8 +199,8 @@ def process(text, nested=False):
     return ParsingResult(text, blocks)
 
 
-def _parse_blocks(text, nested):
-    blocks = []
+def _parse_blocks(text: str, nested: bool) -> list[Block]:
+    blocks: list[Block] = []
     text_len = len(text)
     last_end_pos = 0
 
@@ -162,9 +208,10 @@ def _parse_blocks(text, nested):
 
     for match in rx.finditer(text):
         if match.start() != last_end_pos:
-            blocks.append(PlainBlock(start=last_end_pos,
-                                     end=match.start(),
-                                     text=text[last_end_pos:match.start()]))
+            blocks.append(PlainBlock(
+                start=last_end_pos,
+                end=match.start(),
+                text=text[last_end_pos:match.start()]))
 
         last_end_pos = match.end()
         group_dict = match.groupdict()
@@ -176,17 +223,19 @@ def _parse_blocks(text, nested):
             blocks.append(PreBlock.from_match(match))
 
     if last_end_pos != text_len:
-        blocks.append(PlainBlock(start=last_end_pos,
-                                 end=text_len,
-                                 text=text[last_end_pos:]))
+        blocks.append(PlainBlock(
+            start=last_end_pos,
+            end=text_len,
+            text=text[last_end_pos:]))
+
     return blocks
 
 
-def _parse_line(line, offset):
-    index = 0
+def _parse_line(line: str, offset: int, offset_bytes: int) -> list[Span]:
+    index: int = 0
     length = len(line)
-    stack = []
-    spans = []
+    stack: list[tuple[str, int]] = []
+    spans: list[Span] = []
 
     while index < length:
         sd = line[index]
@@ -204,7 +253,11 @@ def _parse_line(line, offset):
 
         if is_valid_start:
             if sd == PRE:
-                index = _handle_pre_span(line, index, offset, spans)
+                index = _handle_pre_span(line,
+                                         index,
+                                         offset,
+                                         offset_bytes,
+                                         spans)
                 continue
 
             stack.append((sd, index))
@@ -222,27 +275,46 @@ def _parse_line(line, offset):
                 continue
 
             start_pos = _find_span_start_position(sd, stack)
-            spans.append(_make_span(line, sd, start_pos, index, offset))
+            spans.append(_make_span(line,
+                                    sd,
+                                    start_pos,
+                                    index,
+                                    offset,
+                                    offset_bytes))
 
         index += 1
 
     return spans
 
 
-def _parse_uris(line, offset):
-    uris = []
+def _parse_uris(line: str, offset: int, offset_bytes: int) -> list[BaseUri]:
+    uris: list[BaseUri] = []
+
+    def make(match: Match[str], is_address: bool) -> BaseUri:
+        return _make_link(line,
+                          match.start(),
+                          match.end() - 1,
+                          offset,
+                          offset_bytes,
+                          is_address)
+
     for match in URI_RX.finditer(line):
-        uri = _make_uri(line, match.start(), match.end(), offset)
+        uri = make(match, False)
         uris.append(uri)
 
     for match in ADDRESS_RX.finditer(line):
-        uri = _make_address(line, match.start(), match.end(), offset)
+        uri = make(match, True)
         uris.append(uri)
 
     return uris
 
 
-def _handle_pre_span(line, index, offset, spans):
+def _handle_pre_span(line: str,
+                     index: int,
+                     offset: int,
+                     offset_bytes: int,
+                     spans: list[Span]) -> int:
+
     # Scan ahead for the end
     end = line.find(PRE, index + 1)
     if end == -1:
@@ -252,40 +324,69 @@ def _handle_pre_span(line, index, offset, spans):
         # empty span
         return index + 1
 
-    spans.append(_make_span(line, PRE, index, end, offset))
+    spans.append(_make_span(line, PRE, index, end, offset, offset_bytes))
     return end + 1
 
 
-def _make_span(line, sd, start, end, offset):
+def _make_span(line: str,
+               sd: str,
+               start: int,
+               end: int,
+               offset: int,
+               offset_bytes: int) -> Span:
+
     text = line[start:end + 1]
+
+    start_byte = find_byte_index(line, start) + offset_bytes
+    end_byte = find_byte_index(line, end) + offset_bytes + 1
+
     start += offset
     end += offset + 1
     span_class = SPAN_CLS_DICT.get(sd)
-    return span_class(start=start, end=end, text=text)
+    assert span_class is not None
+
+    return span_class(start=start,
+                      start_byte=start_byte,
+                      end=end,
+                      end_byte=end_byte,
+                      text=text)
 
 
-def _make_uri(line, start, end, offset):
-    text = line[start:end]
+def _make_link(line: str,
+               start: int,
+               end: int,
+               offset: int,
+               offset_bytes: int,
+               is_address: bool) -> BaseUri:
+
+    text = line[start:end + 1]
+
+    start_byte = find_byte_index(line, start) + offset_bytes
+    end_byte = find_byte_index(line, end) + offset_bytes + 1
+
     start += offset
-    end += offset
-    return Uri(start=start, end=end, text=text)
+    end += offset + 1
+
+    if not is_address:
+        cls_ = Uri
+
+    elif text.startswith('xmpp'):
+        cls_ = XMPPAddress
+
+    elif text.startswith('mailto'):
+        cls_ = MailAddress
+
+    else:
+        cls_ = Address
+
+    return cls_(start=start,
+                start_byte=start_byte,
+                end=end,
+                end_byte=end_byte,
+                text=text)
 
 
-def _make_address(line, start, end, offset):
-    text = line[start:end]
-    start += offset
-    end += offset
-
-    if text.startswith('xmpp'):
-        return XMPPAddress(start=start, end=end, text=text)
-
-    if text.startswith('mailto'):
-        return MailAddress(start=start, end=end, text=text)
-
-    return Address(start=start, end=end, text=text)
-
-
-def _is_span_empty(sd, index, stack):
+def _is_span_empty(sd: str, index: int, stack: list[tuple[str, int]]) -> bool:
     start_sd = stack[-1][SD]
     if start_sd != sd:
         return False
@@ -294,7 +395,7 @@ def _is_span_empty(sd, index, stack):
     return pos == index - 1
 
 
-def _find_span_start_position(sd, stack):
+def _find_span_start_position(sd: str, stack: list[tuple[str, int]]) -> int:
     while stack:
         start_sd, pos = stack.pop()
         if start_sd == sd:
@@ -303,7 +404,7 @@ def _find_span_start_position(sd, stack):
     raise ValueError('Unable to find opening span')
 
 
-def _is_valid_span_start(line, index):
+def _is_valid_span_start(line: str, index: int) -> bool:
     '''
     https://xmpp.org/extensions/xep-0393.html#span
 
@@ -328,7 +429,7 @@ def _is_valid_span_start(line, index):
     return char in VALID_SPAN_START
 
 
-def _is_valid_span_end(line, index):
+def _is_valid_span_end(line: str, index: int) -> bool:
     '''
     https://xmpp.org/extensions/xep-0393.html#span
 

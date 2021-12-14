@@ -18,8 +18,8 @@ STYLING = {
         'input': '_no pre `with *children*`_',
         'tokens': [
             PlainBlock(start=0, end=26, text='_no pre `with *children*`_', spans=[
-                PreTextSpan(start=8, end=25, text='`with *children*`'),
-                EmphasisSpan(start=0, end=26, text='_no pre `with *children*`_')
+                PreTextSpan(start=8, start_byte=8, end=25, end_byte=25, text='`with *children*`'),
+                EmphasisSpan(start=0, start_byte=0, end=26, end_byte=26, text='_no pre `with *children*`_')
             ])
         ]
     },
@@ -28,9 +28,9 @@ STYLING = {
         'input': '_*~children~*_',
         'tokens': [
             PlainBlock(start=0, end=14, text='_*~children~*_', spans=[
-                StrikeSpan(start=2, end=12, text='~children~'),
-                StrongSpan(start=1, end=13, text='*~children~*'),
-                EmphasisSpan(start=0, end=14, text='_*~children~*_'),
+                StrikeSpan(start=2, start_byte=2, end=12, end_byte=12, text='~children~'),
+                StrongSpan(start=1, start_byte=1, end=13, end_byte=13, text='*~children~*'),
+                EmphasisSpan(start=0, start_byte=0, end=14, end_byte=14, text='_*~children~*_'),
             ])
         ]
     },
@@ -39,10 +39,10 @@ STYLING = {
         'input': '*strong* _emph_~strike~  `pre`',
         'tokens': [
             PlainBlock(start=0, end=30, text='*strong* _emph_~strike~  `pre`', spans=[
-                StrongSpan(start=0, end=8, text='*strong*'),
-                EmphasisSpan(start=9, end=15, text='_emph_'),
-                StrikeSpan(start=15, end=23, text='~strike~'),
-                PreTextSpan(start=25, end=30, text='`pre`')
+                StrongSpan(start=0, start_byte=0, end=8, end_byte=8, text='*strong*'),
+                EmphasisSpan(start=9, start_byte=9, end=15, end_byte=15, text='_emph_'),
+                StrikeSpan(start=15, start_byte=15, end=23, end_byte=23, text='~strike~'),
+                PreTextSpan(start=25, start_byte=25, end=30, end_byte=30, text='`pre`')
             ])
         ]
     },
@@ -51,7 +51,7 @@ STYLING = {
         'input': '*strong*plain*',
         'tokens': [
             PlainBlock(start=0, end=14, text='*strong*plain*', spans=[
-                StrongSpan(start=0, end=8, text='*strong*')
+                StrongSpan(start=0, start_byte=0, end=8, end_byte=8, text='*strong*')
             ])
         ]
     },
@@ -60,6 +60,26 @@ STYLING = {
         'input': '*not strong',
         'tokens': [
             PlainBlock(start=0, end=11, text='*not strong', spans=[])
+        ]
+    },
+
+    'byte pos is different': {
+        'input': '*ö* *öö*',
+        'tokens': [
+            PlainBlock(start=0, end=8, text='*ö* *öö*', spans=[
+                StrongSpan(start=0, start_byte=0, end=3, end_byte=4, text='*ö*'),
+                StrongSpan(start=4, start_byte=5, end=8, end_byte=11, text='*öö*')
+            ])
+        ]
+    },
+
+    'byte pos is different with multiple blocks': {
+        'input': '```\npre\n```\n*pláin*',
+        'tokens': [
+            PreBlock(start=0, end=12, text='```\npre\n```\n'),
+            PlainBlock(start=12, end=19, text='*pláin*', spans=[
+                StrongSpan(start=0, start_byte=0, end=7, end_byte=8, text='*pláin*')
+            ])
         ]
     },
 
@@ -102,7 +122,7 @@ STYLING = {
         'input': '* plain *strong*',
         'tokens': [
             PlainBlock(start=0, end=16, text='* plain *strong*', spans=[
-                StrongSpan(start=8, end=16, text='*strong*')
+                StrongSpan(start=8, start_byte=8, end=16, end_byte=16, text='*strong*')
             ])
         ]
     },
@@ -111,7 +131,7 @@ STYLING = {
         'input': '*this is *uneven*',
         'tokens': [
             PlainBlock(start=0, end=17, text='*this is *uneven*', spans=[
-                StrongSpan(start=9, end=17, text='*uneven*')
+                StrongSpan(start=9, start_byte=9, end=17, end_byte=17, text='*uneven*')
             ])
         ]
     },
@@ -120,7 +140,7 @@ STYLING = {
         'input': '*this cannot _overlap*_',
         'tokens': [
             PlainBlock(start=0, end=23, text='*this cannot _overlap*_', spans=[
-                StrongSpan(start=0, end=22, text='*this cannot _overlap*')
+                StrongSpan(start=0, start_byte=0, end=22, end_byte=22, text='*this cannot _overlap*')
             ])
         ]
     },
@@ -223,7 +243,7 @@ STYLING = {
         'input': 'some kind of link http://foo.com/blah_blah',
         'tokens': [
             PlainBlock(start=0, end=42, text='some kind of link http://foo.com/blah_blah', spans=[], uris=[
-                Uri(start=18, end=42, text='http://foo.com/blah_blah')
+                Uri(start=18, start_byte=18, end=42, end_byte=42, text='http://foo.com/blah_blah')
             ])
         ]
     },
@@ -232,7 +252,7 @@ STYLING = {
         'input': 'some kind of link http://foo.com/blah_blah,',
         'tokens': [
             PlainBlock(start=0, end=43, text='some kind of link http://foo.com/blah_blah,', spans=[], uris=[
-                Uri(start=18, end=42, text='http://foo.com/blah_blah')
+                Uri(start=18, start_byte=18, end=42, end_byte=42, text='http://foo.com/blah_blah')
             ])
         ]
     },
@@ -241,9 +261,19 @@ STYLING = {
         'input': 'some *kind* of link http://foo.com/blah_blah',
         'tokens': [
             PlainBlock(start=0, end=44, text='some *kind* of link http://foo.com/blah_blah', spans=[
-                StrongSpan(start=5, end=11, text='*kind*')
+                StrongSpan(start=5, start_byte=5, end=11, end_byte=11, text='*kind*')
             ], uris=[
-                Uri(start=20, end=44, text='http://foo.com/blah_blah')
+                Uri(start=20, start_byte=20, end=44, end_byte=44, text='http://foo.com/blah_blah')
+            ])
+        ]
+    },
+
+    'plain with multiple uris': {
+        'input': 'some http://foo.com/blah_blah and http://foo.com/blah_blah/123',
+        'tokens': [
+            PlainBlock(start=0, end=62, text='some http://foo.com/blah_blah and http://foo.com/blah_blah/123', spans=[], uris=[
+                Uri(start=5, start_byte=5, end=29, end_byte=29, text='http://foo.com/blah_blah'),
+                Uri(start=34, start_byte=34, end=62, end_byte=62, text='http://foo.com/blah_blah/123')
             ])
         ]
     },
