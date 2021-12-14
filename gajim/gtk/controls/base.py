@@ -225,8 +225,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.xml.hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
 
-        # Used for initial message row fetching in ConversationView
-        self._initial_fetch_finished: bool = False
+        # Keeps track of whether the ConversationView is populated
+        self._chat_loaded: bool = False
 
         # the following vars are used to keep history of user's messages
         self.sent_history: List[str] = []
@@ -511,8 +511,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def delegate_action(self, action: str) -> int:
         if action == 'clear-chat':
-            self.conversation_view.clear()
-            self._scrolled_view.reset()
+            self.reset_view()
             return Gdk.EVENT_STOP
 
         if action == 'delete-line':
@@ -1123,10 +1122,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self.received_history_pos = pos
 
     def _allow_add_message(self) -> bool:
+        # Only add messages if the view is already populated
+        chat_loaded = app.window.is_chat_loaded(self.account, self.contact.jid)
         lower_complete = self._scrolled_view.get_lower_complete()
-        chat_idle = app.window.is_chat_idle(self.account, self.contact.jid)
-        chat_selected = bool(app.window.get_active_control() is not None)
-        return lower_complete and (chat_idle or chat_selected)
+        return chat_loaded and lower_complete
 
     def add_info_message(self, text: str) -> None:
         self.conversation_view.add_info_message(text)
@@ -1315,9 +1314,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.conversation_view.update_text_tags()
 
     def set_control_active(self, state: bool) -> None:
-        if not self._initial_fetch_finished:
+        if not self._chat_loaded:
             self.fetch_n_lines_history(self._scrolled_view, True, 20)
-            self._initial_fetch_finished = True
+            self._chat_loaded = True
 
         if state:
             self.set_emoticon_popover()
@@ -1332,17 +1331,21 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._client.get_module('Chatstate').set_chatstate(
                 self.contact, Chatstate.INACTIVE)
 
+    @property
+    def is_chat_loaded(self) -> bool:
+        return self._chat_loaded
+
     def reset_view(self) -> None:
-        self._initial_fetch_finished = False
+        self._chat_loaded = False
         self.conversation_view.clear()
+        self._scrolled_view.reset()
 
     def get_autoscroll(self) -> bool:
         return self._scrolled_view.get_autoscroll()
 
     def scroll_to_end(self, force: bool = False) -> None:
         # Clear view and reload conversation
-        self.conversation_view.clear()
-        self._scrolled_view.reset()
+        self.reset_view()
         self.conversation_view.scroll_to_end(force)
 
     def scroll_to_message(self, log_line_id: str, timestamp: float) -> None:
@@ -1350,8 +1353,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if row is None:
             # Clear view and reload conversation around timestamp
             self.conversation_view.lock()
-            self.conversation_view.clear()
-            self._scrolled_view.reset()
+            self.reset_view()
             before, at_after = app.storage.archive.get_conversation_around(
                 self.account, self.contact.jid, timestamp)
             self.add_messages(before)

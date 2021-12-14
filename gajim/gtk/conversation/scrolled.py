@@ -111,9 +111,12 @@ class ScrolledView(Gtk.ScrolledWindow):
                 if self._requesting == 'before':
                     adj.set_value(adj.get_value() + diff)
 
-        self._lower_complete = True
-        self._autoscroll = True
-        self.emit('autoscroll-changed', self._autoscroll)
+        if upper == adj.get_page_size():
+            # There is no scrollbar
+            self.emit('request-history', True)
+            self._lower_complete = True
+            self._autoscroll = True
+            self.emit('autoscroll-changed', self._autoscroll)
 
         self._requesting = None
 

@@ -112,6 +112,12 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         GLib.idle_add(control.focus)
 
+    def is_chat_loaded(self, account, jid) -> bool:
+        control = self.get_control(account, jid)
+        if control is None:
+            return False
+        return control.is_chat_loaded
+
     def unload_chat(self, account: str, jid: JID) -> None:
         control = self.get_control(account, jid)
         if control is None:

@@ -325,9 +325,8 @@ class ChatPage(Gtk.Box):
             return None
         return self.get_control(chat.account, chat.jid)
 
-    def is_chat_idle(self, account: str, jid: JID) -> bool:
-        entry = self._chat_idle_time.get((account, jid))
-        return entry is not None
+    def is_chat_loaded(self, account: str, jid: JID) -> bool:
+        return self._chat_stack.is_chat_loaded(account, jid)
 
     def get_controls(self, account: Optional[str]
                      ) -> Generator[ControlType, None, None]:
