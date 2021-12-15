@@ -516,7 +516,17 @@ class JingleSession:
         """
         if self.state != JingleStates.ENDED:
             raise OutOfOrder
-        self.initiator = jingle['initiator']
+
+        # In "session-initiate", the <jingle/> element SHOULD possess an
+        # 'initiator' attribute. If it differs from the JID 'from', jingle
+        # 'initiator' SHOULD be ignored.
+        if jingle['initiator'] is None:
+            self.initiator = str(stanza['from'])
+        elif str(jingle['initiator']) != str(stanza['from']):
+            self.initiator = str(stanza['from'])
+        else:
+            self.initiator = str(jingle['initiator'])
+
         self.responder = self.ourjid
         self.peerjid = self.initiator
         self.accepted = False   # user did not accept this session yet
