@@ -39,7 +39,6 @@ from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
-from gajim.common.styling import ParsingResult
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
