@@ -110,12 +110,12 @@ class MessageRow(BaseRow):
                 text, self._message_widget, context)
         else:
             self._message_widget = MessageWidget(account)
-            self._message_widget.add_with_styling(text)
+            self._message_widget.add_with_styling(text, nickname=name)
             if self._is_groupchat:
                 our_nick = get_group_chat_nick(
                     self._account, self._contact.jid)
                 if name != our_nick:
-                    self._check_for_highlight(self._message_widget.content)
+                    self._check_for_highlight(text)
 
         if self._is_groupchat:
             our_nick = get_group_chat_nick(self._account, self._contact.jid)
@@ -211,9 +211,9 @@ class MessageRow(BaseRow):
         if isinstance(self._message_widget, MessageWidget):
             self._message_widget.update_text_tags()
 
-    def _check_for_highlight(self, content: ParsingResult) -> None:
+    def _check_for_highlight(self, text: str) -> None:
         needs_highlight = message_needs_highlight(
-            content.text,
+            text,
             self._contact.nickname,
             self._client.get_own_jid().bare)
         if needs_highlight:

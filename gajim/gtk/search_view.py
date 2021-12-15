@@ -360,7 +360,7 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui.row_time_label.set_label(date)
 
         message_widget = MessageWidget(account, selectable=False)
-        message_widget.add_with_styling(msg.message_widget)
+        message_widget.add_with_styling(msg.message, nickname=contact_name)
         self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
 
         self.show_all()

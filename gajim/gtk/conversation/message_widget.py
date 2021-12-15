@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Optional
 from typing import Union
 from typing import cast
 
@@ -46,9 +47,22 @@ class MessageWidget(Gtk.Box):
     def get_text(self) -> str:
         return self._content.text
 
-    def add_with_styling(self, text: str) -> None:
+    def add_with_styling(self,
+                         text: str,
+                         nickname: Optional[str] = None) -> None:
+
+        if text.startswith('/me') and nickname is not None:
+            self._add_action_phrase(text, nickname)
+            return
+
         result = process(text)
         self.add_content(result)
+
+    def _add_action_phrase(self, text: str, nickname: str):
+        widget = PlainWidget(self._account, self._selectable)
+        widget.add_action_phrase(text, nickname)
+        self.add(widget)
+        return
 
     def add_content(self, content: ContentT) -> None:
         self.clear()

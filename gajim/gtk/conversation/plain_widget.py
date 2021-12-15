@@ -62,6 +62,11 @@ class PlainWidget(Gtk.Box):
     def add_content(self, block: PlainBlock) -> None:
         self._text_widget.print_text_with_styling(block)
 
+    def add_action_phrase(self, text: str, nickname: str) -> None:
+        text = text.replace('/me', '* %s' % nickname, 1)
+        text = GLib.markup_escape_text(text)
+        self._text_widget.add_action_phrase(text)
+
     def update_text_tags(self) -> None:
         self._text_widget.update_text_tags()
 
@@ -106,6 +111,9 @@ class MessageLabel(Gtk.Label):
 
         self.set_markup(text)
         self.set_attributes(make_pango_attributes(block))
+
+    def add_action_phrase(self, text: str) -> None:
+        self.set_markup(f'<i>{text}</i>')
 
     def update_text_tags(self) -> None:
         pass
@@ -196,6 +204,14 @@ class MessageTextview(Gtk.TextView):
             start_iter = buffer_.get_iter_at_offset(uri.start)
             end_iter = buffer_.get_iter_at_offset(uri.end)
             buffer_.apply_tag_by_name(uri.name, start_iter, end_iter)
+
+    def add_action_phrase(self, text: str) -> None:
+        buffer_ = self.get_buffer()
+        buffer_.insert(buffer_.get_start_iter(), text.strip())
+
+        start_iter = buffer_.get_start_iter()
+        end_iter = buffer_.get_end_iter()
+        buffer_.apply_tag_by_name('emphasis', start_iter, end_iter)
 
     def _query_tooltip(self, widget: Any, x_pos: int, y_pos: int,
                        _keyboard_mode: bool, tooltip: Gtk.Tooltip) -> bool:
