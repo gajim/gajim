@@ -39,7 +39,6 @@ from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
-from gajim.common.styling import process
 from gajim.common.styling import ParsingResult
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
@@ -110,14 +109,13 @@ class MessageRow(BaseRow):
             app.interface.preview_manager.create_preview(
                 text, self._message_widget, context)
         else:
-            result = process(text)
             self._message_widget = MessageWidget(account)
-            self._message_widget.add_content(result)
+            self._message_widget.add_with_styling(text)
             if self._is_groupchat:
                 our_nick = get_group_chat_nick(
                     self._account, self._contact.jid)
                 if name != our_nick:
-                    self._check_for_highlight(result)
+                    self._check_for_highlight(self._message_widget.content)
 
         if self._is_groupchat:
             our_nick = get_group_chat_nick(self._account, self._contact.jid)
@@ -353,12 +351,11 @@ class MessageRow(BaseRow):
         self._has_displayed = True
 
     def set_retracted(self, text: str) -> None:
-        self._message_widget.add_content(process(text))
+        self._message_widget.add_with_styling(text)
         self.get_style_context().add_class('retracted-message')
 
     def set_correction(self, text: str) -> None:
-        result = process(text)
-        self._message_widget.add_content(result)
+        self._message_widget.add_with_styling(text)
 
         self._has_receipt = False
         self._message_icons.set_receipt_icon_visible(False)

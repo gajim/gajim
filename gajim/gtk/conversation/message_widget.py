@@ -12,11 +12,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Union
+from typing import cast
+
 from gi.repository import Gtk
+
+from gajim.common.styling import process
+from gajim.common.styling import ParsingResult
+from gajim.common.styling import QuoteBlock
 
 from .code_widget import CodeWidget
 from .quote_widget import QuoteWidget
 from .plain_widget import PlainWidget
+
+
+ContentT = Union[ParsingResult, QuoteBlock]
 
 
 class MessageWidget(Gtk.Box):
@@ -25,15 +38,19 @@ class MessageWidget(Gtk.Box):
         self._account = account
         self._selectable = selectable
 
-        self._content = None
+        self._content = cast(ContentT, None)
 
-    def get_content(self):
+    def get_content(self) -> ContentT:
         return self._content
 
-    def get_text(self):
+    def get_text(self) -> str:
         return self._content.text
 
-    def add_content(self, content):
+    def add_with_styling(self, text: str) -> None:
+        result = process(text)
+        self.add_content(result)
+
+    def add_content(self, content: ContentT) -> None:
         self.clear()
         self._content = content
         for block in content.blocks:
@@ -62,7 +79,7 @@ class MessageWidget(Gtk.Box):
     def clear(self) -> None:
         self.foreach(self.remove)
 
-    def update_text_tags(self, *args):
+    def update_text_tags(self, *args: Any) -> None:
         for widget in self.get_children():
             if not isinstance(widget, CodeWidget):
                 widget.update_text_tags()

@@ -21,7 +21,6 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_uf_show
-from gajim.common.styling import process
 
 from .widgets import SimpleLabel
 from .base import BaseRow
@@ -60,10 +59,9 @@ class MUCUserStatus(BaseRow):
         self.grid.attach(self._label, 2, 0, 1, 1)
 
         if user_contact.status is not None:
-            result = process(user_contact.status)
             message_widget = MessageWidget(account)
             message_widget.get_style_context().add_class('gajim-status-message')
-            message_widget.add_content(result)
+            message_widget.add_with_styling(user_contact.status)
             self.grid.attach(message_widget, 2, 1, 1, 1)
 
         timestamp_widget = self.create_timestamp_widget(self.timestamp)

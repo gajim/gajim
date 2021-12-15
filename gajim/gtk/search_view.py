@@ -35,7 +35,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import FILE_CATEGORIES
 from gajim.common.i18n import _
-from gajim.common.styling import process
 
 from .conversation.message_widget import MessageWidget
 from .util import get_builder
@@ -361,9 +360,8 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui.row_time_label.set_label(date)
 
         message_widget = MessageWidget(account, selectable=False)
+        message_widget.add_with_styling(msg.message_widget)
         self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
-        result = process(msg.message)
-        message_widget.add_content(result)
 
         self.show_all()
 

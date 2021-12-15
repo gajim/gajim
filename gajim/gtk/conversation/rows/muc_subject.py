@@ -19,7 +19,6 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
-from gajim.common.styling import process
 
 from .base import BaseRow
 from ..message_widget import MessageWidget
@@ -57,9 +56,8 @@ class MUCSubject(BaseRow):
         meta.get_style_context().add_class('small-label')
         subject_box.add(meta)
 
-        result = process(text)
         message_widget = MessageWidget(account)
-        message_widget.add_content(result)
+        message_widget.add_with_styling(text)
         subject_box.add(message_widget)
         self.grid.attach(subject_box, 1, 0, 1, 1)
 
