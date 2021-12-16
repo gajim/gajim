@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
 from typing import Tuple
 from typing import Optional
 
@@ -24,6 +25,8 @@ from gi.repository import GtkSource
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
+
+from gajim.common.styling import PreBlock
 
 log = logging.getLogger('gajim.gui.conversation.code_widget')
 
@@ -61,12 +64,12 @@ class CodeWidget(Gtk.Box):
 
         self.add(self._scrolled)
 
-    def _on_copy(self, _button):
+    def _on_copy(self, _button: Gtk.Button) -> None:
         text = self._textview.get_code()
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_text(text, -1)
 
-    def add_content(self, block):
+    def add_content(self, block: PreBlock):
         code, lang = self._prepare_code(block.text)
         lang_name = self._textview.set_language(lang)
         if lang is None:
@@ -107,7 +110,7 @@ class CodeTextview(GtkSource.View):
         if style_scheme is not None:
             self.get_buffer().set_style_scheme(style_scheme)
 
-    def _get_style_scheme(self):
+    def _get_style_scheme(self) -> Optional[GtkSource.StyleScheme]:
         if app.css_config.prefer_dark:
             style_scheme = self._style_scheme_manager.get_scheme(
                 'solarized-dark')
@@ -116,18 +119,20 @@ class CodeTextview(GtkSource.View):
                 'solarized-light')
         return style_scheme
 
-    def _on_style_changed(self, *args):
+    def _on_style_changed(self, *args: Any) -> None:
         style_scheme = self._get_style_scheme()
         if style_scheme is not None:
             self.get_buffer().set_style_scheme(style_scheme)
 
-    def set_language(self, language_string: Optional[str]) -> None:
+    def set_language(self, language_string: Optional[str]) -> str:
         if language_string is None:
             language_string = 'python3'
 
         lang = self._source_manager.get_language(language_string)
         if lang is None:
             lang = self._source_manager.get_language('python3')
+
+        assert lang is not None
 
         log.debug('Code snippet lang: %s', lang.get_name())
         self.get_buffer().set_language(lang)
