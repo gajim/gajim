@@ -21,14 +21,11 @@ from typing import Tuple
 from typing import Optional
 from typing import Union
 
-import sys
 import logging
 import math
 import textwrap
-import functools
 from io import BytesIO
 from importlib import import_module
-import xml.etree.ElementTree as ET
 from functools import wraps
 from functools import lru_cache
 
@@ -40,7 +37,6 @@ except Exception:
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
-from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GdkPixbuf
 import nbxmpp
@@ -48,7 +44,6 @@ from nbxmpp.structs import LocationData
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import URL_REGEX
 from gajim.common.const import LOCATION_DATA
@@ -59,10 +54,12 @@ from gajim.common.styling import PlainBlock
 
 from .const import GajimIconSet
 from .const import WINDOW_MODULES
+from .builder import Builder
 
 _icon_theme = Gtk.IconTheme.get_default()
 if _icon_theme is not None:
     _icon_theme.append_search_path(str(configpaths.get('ICONS')))
+
 
 log = logging.getLogger('gajim.gui.util')
 
@@ -148,55 +145,6 @@ class NickCompletionGenerator:
         log.debug('Other matches: %s', other_nicks)
 
         return matches + other_nicks
-
-
-class Builder:
-    def __init__(self,
-                 filename: str,
-                 widgets: List[str] = None,
-                 domain: str = None,
-                 gettext_: Any = None) -> None:
-        self._builder = Gtk.Builder()
-
-        if domain is None:
-            domain = i18n.DOMAIN
-        self._builder.set_translation_domain(domain)
-
-        if gettext_ is None:
-            gettext_ = _
-
-        xml_text = self._load_string_from_filename(filename, gettext_)
-
-        if widgets is not None:
-            self._builder.add_objects_from_string(xml_text, widgets)
-        else:
-            self._builder.add_from_string(xml_text)
-
-    @staticmethod
-    @functools.lru_cache(maxsize=None)
-    def _load_string_from_filename(filename, gettext_):
-        file_path = str(configpaths.get('GUI') / filename)
-
-        if sys.platform == "win32":
-            # This is a workaround for non working translation on Windows
-            tree = ET.parse(file_path)
-            for node in tree.iter():
-                if 'translatable' in node.attrib and node.text is not None:
-                    node.text = gettext_(node.text)
-
-            return ET.tostring(tree.getroot(),
-                               encoding='unicode',
-                               method='xml')
-
-        file = Gio.File.new_for_path(file_path)
-        content = file.load_contents(None)
-        return content[1].decode()
-
-    def __getattr__(self, name):
-        try:
-            return getattr(self._builder, name)
-        except AttributeError:
-            return self._builder.get_object(name)
 
 
 def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
