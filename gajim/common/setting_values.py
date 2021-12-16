@@ -200,7 +200,6 @@ ACCOUNT_SETTINGS = {
         'roster_version': '',
         'subscription_request_msg': '',
         'ft_send_local_ips': True,
-        'opened_chat_controls': '',
         'recent_groupchats': '',
         'filetransfer_preference': 'httpupload',
         'send_chatstate_default': 'composing_only',
