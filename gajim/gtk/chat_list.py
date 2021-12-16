@@ -581,7 +581,7 @@ class ChatRow(Gtk.ListBoxRow):
                 if line.contact_name == our_nick:
                     self._ui.nick_label.set_text(_('Me:'))
                 else:
-                    self._ui.nick_label.set_text(_('%(muc_nick)s: ') % {
+                    self._ui.nick_label.set_text(_('%(muc_nick)s:') % {
                         'muc_nick': line.contact_name})
                 self._ui.nick_label.show()
 
