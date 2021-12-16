@@ -41,7 +41,6 @@ APP_SETTINGS = {
     'speller_language': '',
     'emoticons_theme': 'noto-emoticons',
     'ascii_formatting': True,
-    'show_ascii_formatting_chars': True,
     'sounds_on': True,
     'gc_refer_to_nick_char': ',',
     'mainwin_x_position': 0,
@@ -332,7 +331,6 @@ ADVANCED_SETTINGS = {
     'app': {
         'allow_hide_roster': _('Allow to hide the contact list window even if the notification area icon is not shown.'),
         'ascii_formatting': _('Treat * / _ pairs as possible formatting characters.'),
-        'show_ascii_formatting_chars': _('If enabled, do not remove */_ . So *abc* will be bold but with * * not removed.'),
         'gc_refer_to_nick_char': _('Character to add after nickname when using nickname completion (tab) in group chat.'),
         'save_main_window_position': _('If enabled, Gajim will save the main window position when hiding it, and restore it when showing the window again.'),
         'time_stamp': _('This option lets you customize the timestamp that is printed in conversation. For example \'[%H:%M] \' will show \'[hour:minute] \'. See python doc on strftime for full documentation (https://docs.python.org/3/library/time.html#time.strftime).'),
