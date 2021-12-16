@@ -32,7 +32,6 @@ APP_SETTINGS = {
     'trayicon': 'always',
     'allow_hide_roster': False,
     'iconset': 'dcraven',
-    'collapsed_rows': '',
     'roster_theme': 'default',
     'sort_by_show_in_roster': True,
     'sort_by_show_in_muc': False,
