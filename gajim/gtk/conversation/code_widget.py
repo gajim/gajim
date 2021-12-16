@@ -123,9 +123,12 @@ class CodeTextview(GtkSource.View):
 
     def set_language(self, language_string: Optional[str]) -> None:
         if language_string is None:
+            language_string = 'python3'
+
+        lang = self._source_manager.get_language(language_string)
+        if lang is None:
             lang = self._source_manager.get_language('python3')
-        else:
-            lang = self._source_manager.get_language(language_string)
+
         log.debug('Code snippet lang: %s', lang.get_name())
         self.get_buffer().set_language(lang)
         return lang.get_name()
