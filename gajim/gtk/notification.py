@@ -206,6 +206,9 @@ class Notification(EventHelper):
         if timeout < 0:
             timeout = app.settings.get('notification_timeout')
 
+        title = GLib.markup_escape_text(title)
+        text = GLib.markup_escape_text(text)
+
         if sys.platform == 'win32':
             self._withdraw()
             self._win32_active_popup = PopupNotification(
