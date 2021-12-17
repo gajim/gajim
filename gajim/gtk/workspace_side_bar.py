@@ -12,8 +12,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
 from typing import List
+from typing import Optional
 
 import logging
 
@@ -26,13 +29,15 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
+from .chat_list_stack import ChatListStack
+from .chat_page import ChatPage
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.workspace_sidebar')
 
 
 class WorkspaceSideBar(Gtk.ListBox):
-    def __init__(self, chat_page):
+    def __init__(self, chat_page: ChatPage) -> None:
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
         self.set_valign(Gtk.Align.START)
@@ -54,7 +59,7 @@ class WorkspaceSideBar(Gtk.ListBox):
             entries,
             Gdk.DragAction.MOVE)
 
-        self.drag_row = None
+        self.drag_row: Optional[Workspace] = None
         self.row_before = None
         self.row_after = None
 
@@ -152,14 +157,18 @@ class WorkspaceSideBar(Gtk.ListBox):
     def _get_row_after(self, row):
         return self.get_row_at_index(row.get_index() + 1)
 
-    def _get_last_workspace_row(self):
+    def _get_last_workspace_row(self) -> Workspace:
         # Calling len(children) would include AddWorkspace
         return self.get_row_at_index(len(self.get_children()) - 1)
 
-    def set_drag_row(self, row):
+    def set_drag_row(self, row: Workspace) -> None:
         self.drag_row = row
 
-    def _on_unread_count_changed(self, _chat_list_stack, workspace_id, count):
+    def _on_unread_count_changed(self,
+                                 _chat_list_stack: ChatListStack,
+                                 workspace_id: str,
+                                 count: int
+                                 ) -> None:
         workspace = self._workspaces[workspace_id]
         workspace.set_unread_count(count)
 
@@ -173,25 +182,25 @@ class WorkspaceSideBar(Gtk.ListBox):
         else:
             app.window.activate_workspace(row.workspace_id)
 
-    def add_workspace(self, workspace_id):
+    def add_workspace(self, workspace_id: str) -> None:
         row = Workspace(workspace_id)
         self._workspaces[workspace_id] = row
         # Insert row before AddWorkspace row
         self.insert(row, len(self.get_children()) - 1)
 
-    def store_workspace_order(self):
+    def store_workspace_order(self) -> None:
         order = [row.workspace_id for row in self.get_children()]
         order.remove('add')
         app.settings.set_app_setting('workspace_order', order)
 
-    def remove_workspace(self, workspace_id):
+    def remove_workspace(self, workspace_id: str) -> bool:
         if len(self._workspaces) == 1:
             return False
         row = self._workspaces.pop(workspace_id)
         self.remove(row)
         return True
 
-    def activate_workspace(self, workspace_id):
+    def activate_workspace(self, workspace_id: str) -> None:
         row = self.get_selected_row()
         if row is not None and row.workspace_id == workspace_id:
             return
@@ -199,23 +208,23 @@ class WorkspaceSideBar(Gtk.ListBox):
         row = self._workspaces[workspace_id]
         self.select_row(row)
 
-    def get_active_workspace(self):
+    def get_active_workspace(self) -> str:
         row = self.get_selected_row()
         if row is None:
             return None
         return row.workspace_id
 
-    def get_first_workspace(self):
+    def get_first_workspace(self) -> str:
         for row in self.get_children():
             return row.workspace_id
 
-    def get_workspace_by_id(self, workspace_id):
+    def get_workspace_by_id(self, workspace_id: str) -> Optional[Workspace]:
         for row in self.get_children():
             if row.workspace_id == workspace_id:
                 return row
         return None
 
-    def update_avatar(self, workspace_id):
+    def update_avatar(self, workspace_id: str) -> None:
         row = self._workspaces[workspace_id]
         row.update_avatar()
 
@@ -227,7 +236,7 @@ class CommonWorkspace(Gtk.ListBoxRow):
 
 
 class Workspace(CommonWorkspace):
-    def __init__(self, workspace_id):
+    def __init__(self, workspace_id: str) -> None:
         CommonWorkspace.__init__(self, workspace_id)
         self.get_style_context().add_class('workspace-sidebar-item')
 
@@ -270,7 +279,7 @@ class Workspace(CommonWorkspace):
         self.add(eventbox)
         self.show_all()
 
-    def _popup_menu(self, _widget, event):
+    def _popup_menu(self, _widget: Gtk.Widget, event: Gdk.EventButton) -> None:
         if event.button != 3:  # right click
             return
 
@@ -301,17 +310,20 @@ class Workspace(CommonWorkspace):
             menu.append_item(menuitem)
         return menu
 
-    def update_avatar(self):
+    def update_avatar(self) -> None:
         self._image.update()
 
-    def set_unread_count(self, count):
+    def set_unread_count(self, count: int) -> None:
         if count < 1000:
             self._unread_label.set_text(str(count))
         else:
             self._unread_label.set_text('999+')
         self._unread_label.set_visible(bool(count))
 
-    def _on_drag_begin(self, _widget, drag_context):
+    def _on_drag_begin(self,
+                       _widget: Gtk.Widget,
+                       drag_context: Gdk.DragContext
+                       ) -> None:
         scale = self.get_scale_factor()
         surface = app.interface.avatar_storage.get_workspace_surface(
             self.workspace_id, AvatarSize.WORKSPACE, scale)
@@ -320,15 +332,20 @@ class Workspace(CommonWorkspace):
         listbox = self.get_parent()
         listbox.set_drag_row(self)
 
-    def _on_drag_data_get(self, _widget, _drag_context, selection_data,
-                          _info, _time):
+    def _on_drag_data_get(self,
+                          _widget: Gtk.Widget,
+                          _drag_context: Gdk.DragContext,
+                          selection_data: Gtk.SelectionData,
+                          _info: int,
+                          _time: int
+                          ) -> None:
         drop_type = Gdk.Atom.intern_static_string('WORKSPACE_SIDEBAR_ITEM')
         data = self.workspace_id.encode('utf-8')
         selection_data.set(drop_type, 32, data)
 
 
 class AddWorkspace(CommonWorkspace):
-    def __init__(self, workspace_id):
+    def __init__(self, workspace_id: str) -> None:
         CommonWorkspace.__init__(self, workspace_id)
         self.set_selectable(False)
         self.set_tooltip_text(_('Add Workspace'))
@@ -340,17 +357,17 @@ class AddWorkspace(CommonWorkspace):
         self.show_all()
 
     @staticmethod
-    def _on_add_clicked(_button):
+    def _on_add_clicked(_button: Gtk.Button) -> None:
         open_window('WorkspaceDialog')
 
 
 class WorkspaceAvatar(Gtk.Image):
-    def __init__(self, workspace_id):
+    def __init__(self, workspace_id: str) -> None:
         Gtk.Image.__init__(self)
         self._workspace_id = workspace_id
         self.update()
 
-    def update(self):
+    def update(self) -> None:
         app.interface.avatar_storage.invalidate_cache(self._workspace_id)
         scale = self.get_scale_factor()
         surface = app.interface.avatar_storage.get_workspace_surface(
