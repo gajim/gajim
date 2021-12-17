@@ -117,6 +117,10 @@ class Notification(EventHelper):
                                   on_proxy_ready)
 
     def _on_notification(self, event):
+        if hasattr(event, 'jid'):
+            jid = str(event.jid)
+        else:
+            jid = None
         if hasattr(event, 'command'):
             # Used by Triggers plugin
             try:
@@ -152,7 +156,7 @@ class Notification(EventHelper):
         self._issue_notification(
             event.notif_type,
             event.account,
-            str(event.jid),
+            jid,
             notif_detail=notif_detail,
             title=event.title,
             text=event.text,
