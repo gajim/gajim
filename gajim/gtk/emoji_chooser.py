@@ -400,6 +400,7 @@ class EmojiChooser(Gtk.Popover):
         GLib.timeout_add(100, flowbox.unselect_child, child)
         codepoint, pixbuf = child.get_emoji()
         self._text_widget().insert_emoji(codepoint, pixbuf)
+        self._text_widget().grab_focus()
 
     def do_destroy(self):
         # Remove the references we hold to other objects
