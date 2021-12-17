@@ -206,7 +206,8 @@ def detect_dependencies() -> None:
         gi.require_version('GstPbutils', '1.0')
         from gi.repository import Gst
         from gi.repository import GstPbutils  # pylint: disable=unused-import
-        _dependencies['GST'] = True
+        success, _argv = Gst.init_check(None)
+        _dependencies['GST'] = success
     except Exception:
         pass
 
