@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import logging
 from pathlib import Path
 
@@ -28,22 +30,24 @@ log = logging.getLogger('gajim.gui.preview_audio')
 
 class AudioWidget(Gtk.Box):
     def __init__(self, file_path: Path) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL,
+        Gtk.Box.__init__(self,
+                         orientation=Gtk.Orientation.HORIZONTAL,
                          spacing=6)
-        self._playbin = Gst.ElementFactory.make('playbin', 'bin')
+        self._playbin: Optional[Gst.Element] = Gst.ElementFactory.make(
+            'playbin', 'bin')
         if self._playbin is None:
             label = Gtk.Label(label=_('Audio preview is not available'))
             self.add(label)
             log.debug('Could not create GST playbin')
             return
 
-        self._query = Gst.Query.new_position(Gst.Format.TIME)
+        self._query: Gst.Query = Gst.Query.new_position(Gst.Format.TIME)
         self._has_timeout: bool = False
 
         self._build_audio_widget()
         self._setup_audio_player(file_path)
 
-    def _build_audio_widget(self):
+    def _build_audio_widget(self) -> None:
         play_button = Gtk.Button()
         play_button.get_style_context().add_class('flat')
         play_button.get_style_context().add_class('preview-button')
@@ -81,11 +85,14 @@ class AudioWidget(Gtk.Box):
             log.debug('Could not setup GST playbin')
             return
 
-        bus = self._playbin.get_bus()
+        bus: Optional[Gst.Bus] = self._playbin.get_bus()
+        if bus is None:
+            log.debug('Could not get GST Bus')
+            return
         bus.add_signal_watch()
         bus.connect('message', self._on_bus_message)
 
-    def _on_bus_message(self, _bus, message):
+    def _on_bus_message(self, _bus: Gst.Bus, message: Gst.Message) -> None:
         if message.type == Gst.MessageType.EOS:
             self._set_pause(True)
             self._playbin.seek_simple(
@@ -102,12 +109,16 @@ class AudioWidget(Gtk.Box):
                 GLib.timeout_add(500, self._update_seek_bar)
                 self._has_timeout = True
 
-    def _on_seek(self, _range, _scroll, value):
+    def _on_seek(self,
+                 _range: Gtk.Range,
+                 _scroll: Gtk.ScrollType,
+                 value: float
+                 ) -> bool:
         self._playbin.seek_simple(
             Gst.Format.TIME, Gst.SeekFlags.FLUSH, value)
         return False
 
-    def _on_play_clicked(self, _button):
+    def _on_play_clicked(self, _button: Gtk.Button) -> None:
         self._set_pause(not self._get_paused())
 
     def _on_destroy(self, _widget):
@@ -140,7 +151,7 @@ class AudioWidget(Gtk.Box):
         return True
 
     @staticmethod
-    def _format_audio_timestamp(_widget: Gtk.Widget, ns: int) -> str:
+    def _format_audio_timestamp(_widget: Gtk.Scale, ns: float) -> str:
         seconds = ns / 1000000000
         minutes = seconds / 60
         hours = minutes / 60
@@ -154,5 +165,5 @@ class AudioWidget(Gtk.Box):
         return f'{i_minutes:d}:{i_seconds:02d}'
 
     @staticmethod
-    def _on_realize(event_box):
+    def _on_realize(event_box: Gtk.EventBox) -> None:
         event_box.get_window().set_cursor(get_cursor('pointer'))
