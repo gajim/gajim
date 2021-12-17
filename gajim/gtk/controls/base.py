@@ -137,6 +137,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.control_id: str = str(uuid.uuid4())
         self.session = None
 
+        if app.settings.get('use_kib_mib'):
+            self._units = GLib.FormatSizeFlags.IEC_UNITS
+        else:
+            self._units = GLib.FormatSizeFlags.DEFAULT
+
         self.xml = get_builder(f'{widget_name}.ui')
         self.xml.connect_signals(self)
         self.widget = self.xml.get_object(f'{widget_name}_hbox')
