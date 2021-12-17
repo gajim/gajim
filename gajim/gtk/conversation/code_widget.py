@@ -98,6 +98,7 @@ class CodeTextview(GtkSource.View):
         self.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
         self.set_top_margin(2)
         self.set_bottom_margin(2)
+        self.set_monospace(True)
 
         self._source_manager = GtkSource.LanguageManager.get_default()
         self._style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
