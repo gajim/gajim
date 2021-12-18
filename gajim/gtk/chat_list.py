@@ -53,14 +53,14 @@ log = logging.getLogger('gajim.gui.chatlist')
 
 
 class ChatList(Gtk.ListBox, EventHelper):
-    def __init__(self, workspace_id):
+    def __init__(self, workspace_id: str) -> None:
         Gtk.ListBox.__init__(self)
         EventHelper.__init__(self)
+        self._workspace_id = workspace_id
 
         self._chats: Dict[Tuple[str, JID], Any] = {}
         self._current_filter: str = 'all'
         self._current_filter_text: str = ''
-        self._workspace_id: str = workspace_id
 
         self.get_style_context().add_class('chatlist')
         self.set_filter_func(self._filter_func)
@@ -386,7 +386,9 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.set_stanza_id(stanza_id)
         row.set_message_id(event.unique_id)
         row.set_message_text(
-            event.msgtxt, additional_data=event.additional_data)
+            event.msgtxt,
+            nickname=nick,
+            additional_data=event.additional_data)
 
         self._add_unread(row, event.properties, event.msgtxt)
         self.invalidate_sort()
@@ -420,23 +422,25 @@ class ChatList(Gtk.ListBox, EventHelper):
         if own_jid.bare_match(event.jid):
             nick = ''
         else:
-            nick = _('Me: ')
+            nick = _('Me')
         row.set_nick(nick)
 
         # Set timestamp if it's None (outgoing MUC messages)
         row.set_timestamp(event.timestamp or time.time())
         row.set_message_text(
-            event.message, additional_data=event.additional_data)
+            event.message,
+            nickname=app.nicks[event.account],
+            additional_data=event.additional_data)
         self.invalidate_sort()
 
     @staticmethod
     def _get_nick_for_received_message(event):
-        nick = _('Me: ')
+        nick = _('Me')
         if event.properties.type.is_groupchat:
             event_nick = event.properties.muc_nickname
             our_nick = get_group_chat_nick(event.account, event.jid)
             if event_nick != our_nick:
-                nick = _('%(incoming_nick)s: ') % {'incoming_nick': event_nick}
+                nick = event_nick
         else:
             con = app.get_client(event.account)
             own_jid = con.get_own_jid()
@@ -569,21 +573,24 @@ class ChatRow(Gtk.ListBoxRow):
                     message_text = get_retraction_text(
                         self.account, retracted_by, reason)
 
-            self.set_message_text(
-                message_text, additional_data=line.additional_data)
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
-                self._ui.nick_label.set_text(_('Me:'))
-                self._ui.nick_label.show()
+                self.set_nick(_('Me'))
+                me_nickname = app.nicks[account]
 
             if line.kind == KindConstant.GC_MSG:
                 our_nick = get_group_chat_nick(account, jid)
                 if line.contact_name == our_nick:
-                    self._ui.nick_label.set_text(_('Me:'))
+                    self.set_nick(_('Me'))
+                    me_nickname = our_nick
                 else:
-                    self._ui.nick_label.set_text(_('%(muc_nick)s:') % {
-                        'muc_nick': line.contact_name})
-                self._ui.nick_label.show()
+                    self.set_nick(line.contact_name)
+                    me_nickname = line.contact_name
+
+            self.set_message_text(
+                message_text,
+                nickname=me_nickname,
+                additional_data=line.additional_data)
 
             self.timestamp = line.time
             uf_timestamp = get_uf_relative_time(line.time)
@@ -821,9 +828,13 @@ class ChatRow(Gtk.ListBoxRow):
 
     def set_nick(self, nickname: str) -> None:
         self._ui.nick_label.set_visible(bool(nickname))
-        self._ui.nick_label.set_text(nickname)
+        self._ui.nick_label.set_text(
+            _('%(nickname)s:') % {'nickname': nickname})
 
-    def set_message_text(self, text: str, icon_name: Optional[str] = None,
+    def set_message_text(self,
+                         text: str,
+                         nickname: Optional[str] = None,
+                         icon_name: Optional[str] = None,
                          additional_data: Optional[AdditionalDataDict] = None
                          ) -> None:
         icon = None
@@ -836,10 +847,16 @@ class ChatRow(Gtk.ListBoxRow):
                 icon, file_type = guess_simple_file_type(text)
                 text = f'{file_type} ({file_name})'
 
+        text = GLib.markup_escape_text(text)
+        if text.startswith('/me') and nickname is not None:
+            nickname = GLib.markup_escape_text(nickname)
+            text = text.replace('/me', f'* {nickname}', 1)
+            text = f'<i>{text}</i>'
+
         # Split by newline and display last line
         lines = text.split('\n')
         text = lines[-1]
-        self._ui.message_label.set_text(text)
+        self._ui.message_label.set_markup(text)
 
         if icon is None:
             self._ui.message_icon.hide()
