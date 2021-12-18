@@ -86,5 +86,5 @@ class Builder:
         return self._builder.get_object(name)
 
 
-class SearchViewBuilder(Builder):
-    filename = 'search_view.ui'
+def get_builder(file_name, widgets=None):
+    return Builder(file_name, widgets)
