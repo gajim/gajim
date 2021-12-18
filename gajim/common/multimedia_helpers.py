@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+from typing import Dict
+from typing import Optional
+
 import logging
 
 try:
@@ -27,23 +31,25 @@ log = logging.getLogger('gajim.c.multimedia_helpers')
 
 
 class DeviceManager:
-    def __init__(self):
+    def __init__(self) -> None:
+        self.devices: Dict[str, str] = {}
+
+    def detect(self) -> None:
         self.devices = {}
 
-    def detect(self):
-        self.devices = {}
-
-    def get_devices(self):
+    def get_devices(self) -> Dict[str, str]:
         if not self.devices:
             self.detect()
         return self.devices
 
-    def detect_element(self, name, text, pipe='%s'):
+    def detect_element(self, name: str, text: str, pipe: str = '%s') -> None:
         if Gst.ElementFactory.find(name):
-            element = Gst.ElementFactory.make(name, '%spresencetest' % name)
+            element: Optional[Gst.Element] = Gst.ElementFactory.make(
+                name, f'{name}presencetest')
             if element is None:
                 log.warning('could not create %spresencetest', name)
                 return
+
             if hasattr(element.props, 'device'):
                 element.set_state(Gst.State.READY)
                 devices = element.get_properties('device')
@@ -57,7 +63,7 @@ class DeviceManager:
                         element.set_state(Gst.State.READY)
                         device_name = element.get_property('device-name')
                         self.devices[text % device_name] = pipe % \
-                            '%s device=%s' % (name, device)
+                            f'{name} device={device}'
                 element.set_state(Gst.State.NULL)
             else:
                 self.devices[text] = pipe % name
@@ -66,8 +72,8 @@ class DeviceManager:
 
 
 class AudioInputManager(DeviceManager):
-    def detect(self):
-        self.devices = {}
+    def detect(self) -> None:
+        self.devices: Dict[str, str] = {}
         # Test src
         self.detect_element('audiotestsrc', _('Audio test'),
             '%s is-live=true name=gajim_vol')
@@ -83,8 +89,8 @@ class AudioInputManager(DeviceManager):
 
 
 class AudioOutputManager(DeviceManager):
-    def detect(self):
-        self.devices = {}
+    def detect(self) -> None:
+        self.devices: Dict[str, str] = {}
         # Fake sink
         self.detect_element('fakesink', _('Fake audio output'))
         # Auto sink
@@ -96,8 +102,8 @@ class AudioOutputManager(DeviceManager):
 
 
 class VideoInputManager(DeviceManager):
-    def detect(self):
-        self.devices = {}
+    def detect(self) -> None:
+        self.devices: Dict[str, str] = {}
         # Test src
         self.detect_element('videotestsrc', _('Video test'),
             '%s is-live=true ! video/x-raw,framerate=10/1 ! videoconvert')
