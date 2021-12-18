@@ -229,7 +229,6 @@ class PreviewManager:
                        additional_data: AdditionalDataDict) -> bool:
         if len(text.split(' ')) > 1:
             # urlparse doesn't recognise spaces as URL delimiter
-            log.debug('Text is not an uri: %s...', text[:15])
             return False
 
         uri = text
