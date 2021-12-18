@@ -573,6 +573,7 @@ class ChatRow(Gtk.ListBoxRow):
                     message_text = get_retraction_text(
                         self.account, retracted_by, reason)
 
+            me_nickname = None
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
                 self.set_nick(_('Me'))
