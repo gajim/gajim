@@ -78,6 +78,7 @@ class Preview:
         self.thumbnail: Optional[bytes] = None
         self.mime_type: str = ''
         self.file_size: int = 0
+        self._received_size: int = 0
 
         self.key: Optional[bytes] = None
         self.iv: Optional[bytes] = None
@@ -148,6 +149,14 @@ class Preview:
 
     def update_widget(self, data: Optional[GdkPixbufType] = None) -> None:
         self._widget.update(self, data)
+
+    def update_progress(self, size: int) -> None:
+        self._received_size += size
+        if self.file_size == 0 or self._received_size == 0:
+            return
+
+        progress = self._received_size / self.file_size
+        self._widget.update_progress(self, progress)
 
 
 class PreviewManager:
@@ -361,6 +370,7 @@ class PreviewManager:
         message.connect('starting', self._check_certificate, preview)
         message.connect(
             'content-sniffed', self._on_content_sniffed, preview, force)
+        message.connect('got-chunk', self._on_got_chunk, preview)
 
         session = self._get_session(preview.account)
         session.queue_message(message, self._on_finished, preview)
@@ -406,6 +416,13 @@ class PreviewManager:
                 session.cancel_message(message, Soup.Status.CANCELLED)
 
         preview.update_widget()
+
+    def _on_got_chunk(self,
+                      _message: Soup.Message,
+                      chunk: Soup.Buffer,
+                      preview: Preview
+                      ) -> None:
+        preview.update_progress(len(chunk.get_data()))
 
     def _on_finished(self,
                      _session: Soup.Session,

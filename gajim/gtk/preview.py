@@ -66,8 +66,13 @@ class PreviewWidget(Gtk.Box):
             return ''
         return self._preview.uri
 
+    def update_progress(self, _preview: Preview, progress: float) -> None:
+        self._ui.progressbar.show()
+        self._ui.progressbar.set_fraction(progress)
+
     def update(self, preview: Preview, data: Optional[GdkPixbufType]) -> None:
         self._preview = preview
+        self._ui.progressbar.hide()
 
         if preview.is_geo_uri:
             data = load_icon('map',
