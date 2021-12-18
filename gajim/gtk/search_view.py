@@ -37,7 +37,7 @@ from gajim.common.const import FILE_CATEGORIES
 from gajim.common.i18n import _
 
 from .conversation.message_widget import MessageWidget
-from .builder import SearchViewBuilder
+from .builder import get_builder
 
 log = logging.getLogger('gajim.gui.search_view')
 
@@ -59,7 +59,7 @@ class SearchView(Gtk.Box):
         self._results: list[str] = []
         self._scope: Optional[str] = None
 
-        self._ui = SearchViewBuilder()
+        self._ui = get_builder('search_view.ui')
         self._ui.get('results_listbox').set_header_func(self._header_func)
         self.add(self._ui.get('search_box'))
 
@@ -279,7 +279,7 @@ class RowHeader(Gtk.Box):
         Gtk.Box.__init__(self)
         self.set_hexpand(True)
 
-        self._ui = SearchViewBuilder()
+        self._ui = get_builder('search_view.ui')
         self.add(self._ui.get('header_box'))
 
         client = app.get_client(account)
@@ -330,7 +330,7 @@ class ResultRow(Gtk.ListBoxRow):
         self.contact = self._client.get_module('Contacts').get_contact(
             jid, groupchat=self.type == 'groupchat')
 
-        self._ui = SearchViewBuilder()
+        self._ui = get_builder('search_view.ui')
         self.add(self._ui.get('result_row_grid'))
 
         kind = 'status'
