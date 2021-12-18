@@ -32,7 +32,7 @@ from gajim.common.const import StyleAttr
 
 from gajim.gui_menu_builder import get_groupchat_roster_menu
 from .tooltips import GCTooltip
-from .util import get_builder
+from .builder import get_builder
 from .util import EventHelper
 
 

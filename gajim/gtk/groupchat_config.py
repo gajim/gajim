@@ -25,7 +25,7 @@ from gajim.common.const import MUCUser
 
 from .dialogs import ErrorDialog
 from .dataform import DataFormWidget
-from .util import get_builder
+from .builder import get_builder
 
 log = logging.getLogger('gajim.gui.groupchat_config')
 

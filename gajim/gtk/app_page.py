@@ -23,7 +23,7 @@ from gajim.common.i18n import _
 
 from .status_message_selector import StatusMessageSelector
 from .status_selector import StatusSelector
-from .util import get_builder
+from .builder import get_builder
 
 
 class AppPage(Gtk.Box):

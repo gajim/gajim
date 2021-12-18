@@ -24,7 +24,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 
-from .util import get_builder
+from .builder import get_builder
 from .util import at_the_end
 from .util import scroll_to_end
 from .util import MaxWidthComboBoxText

@@ -19,7 +19,7 @@ from gajim.gui.avatar import clip_circle
 from gajim.gui.avatar_selector import AvatarSelector
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.filechoosers import AvatarChooserDialog
-from gajim.gui.util import get_builder
+from gajim.gui.builder import get_builder
 from gajim.gui.vcard_grid import VCardGrid
 from gajim.gui.util import scroll_to_end
 

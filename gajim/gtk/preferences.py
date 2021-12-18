@@ -39,7 +39,7 @@ from .sidebar_switcher import SideBarSwitcher
 from .video_preview import VideoPreview
 from .util import open_window
 from .util import get_app_window
-from .util import get_builder
+from .builder import get_builder
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports

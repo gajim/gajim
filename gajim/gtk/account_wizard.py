@@ -52,7 +52,7 @@ from .assistant import Page
 from .assistant import SuccessPage
 from .assistant import ErrorPage
 from .dataform import DataFormWidget
-from .util import get_builder
+from .builder import get_builder
 from .util import open_window
 from .util import get_color_for_account
 from .util import get_app_window

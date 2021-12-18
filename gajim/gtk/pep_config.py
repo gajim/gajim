@@ -25,7 +25,7 @@ from gajim.common.helpers import to_user_string
 from .dialogs import ErrorDialog
 from .dialogs import WarningDialog
 from .dataform import DataFormDialog
-from .util import get_builder
+from .builder import get_builder
 
 
 log = logging.getLogger('gajim.gui.pep')

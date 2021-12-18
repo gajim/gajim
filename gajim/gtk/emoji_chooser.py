@@ -25,7 +25,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import configpaths
 
-from .util import get_builder
+from .builder import get_builder
 from .emoji_data import emoji_data
 from .emoji_data import emoji_pixbufs
 from .emoji_data import Emoji

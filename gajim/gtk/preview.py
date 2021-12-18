@@ -37,7 +37,7 @@ from gajim.common.types import GdkPixbufType
 from .dialogs import ErrorDialog
 from .filechoosers import FileSaveDialog
 from .preview_audio import AudioWidget
-from .util import get_builder
+from .builder import get_builder
 from .util import get_cursor
 from .util import get_monitor_scale_factor
 from .util import load_icon

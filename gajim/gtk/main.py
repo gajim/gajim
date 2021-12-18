@@ -47,7 +47,7 @@ from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
 from .types import ControlType
-from .util import get_builder
+from .builder import get_builder
 from .util import resize_window
 from .util import restore_main_window_position
 from .util import save_main_window_position

@@ -19,7 +19,7 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gui.util import get_builder
+from gajim.gui.builder import get_builder
 
 
 class ZeroconfVcardWindow:

@@ -23,7 +23,7 @@ from nbxmpp.errors import StanzaError
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .util import get_builder
+from .builder import get_builder
 from .util import EventHelper
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog

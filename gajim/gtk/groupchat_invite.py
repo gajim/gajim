@@ -25,7 +25,7 @@ from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import validate_jid
 
-from .util import get_builder
+from .builder import get_builder
 from .util import AccountBadge
 
 

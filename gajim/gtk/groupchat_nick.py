@@ -17,7 +17,7 @@ from gi.repository import Gtk
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 
-from .util import get_builder
+from .builder import get_builder
 
 
 class NickChooser(Gtk.MenuButton):

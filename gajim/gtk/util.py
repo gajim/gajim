@@ -54,7 +54,6 @@ from gajim.common.styling import PlainBlock
 
 from .const import GajimIconSet
 from .const import WINDOW_MODULES
-from .builder import Builder
 
 _icon_theme = Gtk.IconTheme.get_default()
 if _icon_theme is not None:
@@ -145,10 +144,6 @@ class NickCompletionGenerator:
         log.debug('Other matches: %s', other_nicks)
 
         return matches + other_nicks
-
-
-def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
-    return Builder(file_name, widgets)
 
 
 def set_urgency_hint(window: Any, setting: bool) -> None:

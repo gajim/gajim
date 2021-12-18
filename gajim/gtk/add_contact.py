@@ -35,7 +35,7 @@ from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
 from .groupchat_info import GroupChatInfoScrolled
-from .util import get_builder
+from .builder import get_builder
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.add_contact')

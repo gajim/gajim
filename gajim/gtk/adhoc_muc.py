@@ -24,7 +24,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from .util import get_icon_name
-from .util import get_builder
+from .builder import get_builder
 
 log = logging.getLogger('gajim.gui.adhoc_muc')
 

@@ -35,7 +35,7 @@ from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
 from gajim.common.const import AvatarSize
 
-from .util import get_builder
+from .builder import get_builder
 from .util import make_href_markup
 
 

@@ -16,7 +16,7 @@
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from gajim.gui.util import get_builder
+from gajim.gui.builder import get_builder
 
 
 class GroupchatState(Gtk.Box):

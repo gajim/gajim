@@ -49,7 +49,7 @@ from .dialogs import ErrorDialog
 from .filechoosers import FileSaveDialog
 from .file_transfer_send import SendFileDialog
 from .tooltips import FileTransfersTooltip
-from .util import get_builder
+from .builder import get_builder
 from .util import format_eta
 
 log = logging.getLogger('gajim.gui.filetransfer')

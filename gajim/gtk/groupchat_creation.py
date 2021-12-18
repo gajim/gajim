@@ -28,7 +28,7 @@ from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
 
 from .dialogs import ErrorDialog
-from .util import get_builder
+from .builder import get_builder
 from .util import ensure_not_destroyed
 
 log = logging.getLogger('gajim.gui.groupchat_creation')

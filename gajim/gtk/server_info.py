@@ -28,7 +28,7 @@ from gajim.common import ged
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 
-from .util import get_builder
+from .builder import get_builder
 from .util import EventHelper
 from .util import open_window
 

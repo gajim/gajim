@@ -30,7 +30,7 @@ from gajim.common.i18n import _
 
 from .filechoosers import FileChooserDialog
 from .resource_selector import ResourceSelector
-from .util import get_builder
+from .builder import get_builder
 
 
 class SendFileDialog(Gtk.ApplicationWindow):

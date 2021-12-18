@@ -43,7 +43,7 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 
 from .avatar import get_show_circle
-from .util import get_builder
+from .builder import get_builder
 from .util import format_tune
 from .util import format_location
 

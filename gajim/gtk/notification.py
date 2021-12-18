@@ -49,7 +49,7 @@ from gajim.common.helpers import play_sound_file
 from gajim.common.nec import EventHelper
 
 from .util import add_css_to_widget
-from .util import get_builder
+from .builder import get_builder
 from .util import get_monitor_scale_factor
 from .util import get_total_screen_geometry
 

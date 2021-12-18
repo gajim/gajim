@@ -68,7 +68,7 @@ from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import get_hardware_key_codes
-from gajim.gui.util import get_builder
+from gajim.gui.builder import get_builder
 from gajim.gui.util import set_urgency_hint
 from gajim.gui.util import AccountBadge
 from gajim.gui.const import ControlType  # pylint: disable=unused-import

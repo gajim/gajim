@@ -42,7 +42,7 @@ from gajim.gui.dialogs import WarningDialog
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.filechoosers import ArchiveChooserDialog
-from gajim.gui.util import get_builder
+from gajim.gui.builder import get_builder
 from gajim.gui.util import load_icon
 
 

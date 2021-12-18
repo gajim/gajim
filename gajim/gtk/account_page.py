@@ -24,7 +24,7 @@ from .roster import Roster
 from .status_message_selector import StatusMessageSelector
 from .status_selector import StatusSelector
 from .notification_manager import NotificationManager
-from .util import get_builder
+from .builder import get_builder
 from .util import open_window
 from .util import EventHelper
 

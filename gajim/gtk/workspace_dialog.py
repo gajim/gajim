@@ -25,7 +25,7 @@ from .avatar import make_workspace_avatar
 from .avatar_selector import AvatarSelector
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
-from .util import get_builder
+from .builder import get_builder
 from .util import rgba_to_float
 from .util import make_rgba
 from .const import DEFAULT_WORKSPACE_COLOR

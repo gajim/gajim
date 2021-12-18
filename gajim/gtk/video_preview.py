@@ -20,7 +20,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from . import gstreamer
-from .util import get_builder
+from .builder import get_builder
 
 try:
     from gi.repository import Gst  # pylint: disable=ungrouped-imports

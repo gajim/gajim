@@ -22,7 +22,7 @@ from gajim.common.i18n import _
 from gajim.common.structs import OutgoingMessage
 
 from .dialogs import ErrorDialog
-from .util import get_builder
+from .builder import get_builder
 from .util import get_completion_liststore
 from .util import get_icon_name
 

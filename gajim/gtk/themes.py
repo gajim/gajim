@@ -28,7 +28,7 @@ from gajim.common.const import StyleAttr
 from .dialogs import ErrorDialog
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
-from .util import get_builder
+from .builder import get_builder
 from .util import get_app_window
 
 StyleOption = namedtuple('StyleOption', 'label selector attr')

@@ -27,7 +27,7 @@ from .base import BaseRow
 
 from ...dialogs import ErrorDialog
 from ...util import EventHelper
-from ...util import get_builder
+from ...builder import get_builder
 from ...util import format_eta
 
 

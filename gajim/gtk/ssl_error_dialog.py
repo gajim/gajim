@@ -21,7 +21,7 @@ from gajim.common.client import Client
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import _
 
-from .util import get_builder
+from .builder import get_builder
 from .util import open_window
 
 

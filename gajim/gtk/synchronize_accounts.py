@@ -21,7 +21,7 @@ from gajim.common.i18n import _
 
 from .dialogs import ErrorDialog
 from .util import get_app_window
-from .util import get_builder
+from .builder import get_builder
 
 
 class SynchronizeAccounts(Gtk.ApplicationWindow):

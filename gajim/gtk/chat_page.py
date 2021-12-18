@@ -27,7 +27,7 @@ from nbxmpp import JID
 
 from gajim.common import app
 
-from .util import get_builder
+from .builder import get_builder
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list_stack import ChatListStack

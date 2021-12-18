@@ -26,7 +26,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.const import ButtonAction
 
-from .util import get_builder
+from .builder import get_builder
 from .util import get_thumbnail_size
 
 

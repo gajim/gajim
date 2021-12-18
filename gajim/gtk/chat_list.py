@@ -46,7 +46,7 @@ from gajim.common.preview_helpers import guess_simple_file_type
 
 from gajim.gui_menu_builder import get_chat_list_row_menu
 
-from .util import get_builder
+from .builder import get_builder
 from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.chatlist')

@@ -23,7 +23,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
-from .util import get_builder
+from .builder import get_builder
 from .dialogs import HigDialog
 
 log = logging.getLogger('gajim.gui.blocking_list')

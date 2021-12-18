@@ -201,7 +201,7 @@ class GajimApplication(Gtk.Application):
 
         # Set Application Menu
         app.app = self
-        from gajim.gui.util import get_builder
+        from gajim.gui.builder import get_builder
         builder = get_builder('application_menu.ui')
         menubar = builder.get_object("menubar")
         self.set_menubar(menubar)

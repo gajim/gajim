@@ -20,7 +20,7 @@ from gi.repository import Gdk
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .util import get_builder
+from .builder import get_builder
 
 
 log = logging.getLogger('gajim.gui.bookmarks')

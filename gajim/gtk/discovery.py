@@ -62,7 +62,7 @@ from .adhoc import AdHocCommand
 from .dialogs import ErrorDialog
 from .search import Search
 from .util import icon_exists
-from .util import get_builder
+from .builder import get_builder
 from .util import open_window
 
 LABELS = {

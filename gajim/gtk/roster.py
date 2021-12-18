@@ -26,7 +26,7 @@ from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
 from .tooltips import RosterTooltip
 from .util import EventHelper
-from .util import get_builder
+from .builder import get_builder
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.roster')

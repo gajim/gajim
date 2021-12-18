@@ -37,7 +37,7 @@ from gajim.common.nec import EventHelper
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
 from .sidebar_switcher import SideBarSwitcher
-from .util import get_builder
+from .builder import get_builder
 from .util import connect_destroy
 from .vcard_grid import VCardGrid
 

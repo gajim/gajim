@@ -22,7 +22,7 @@ from gajim.common import app
 from gajim.common.helpers import convert_gio_to_openssl_cert
 from gajim.common.i18n import _
 
-from .util import get_builder
+from .builder import get_builder
 
 
 class CertificateDialog(Gtk.ApplicationWindow):

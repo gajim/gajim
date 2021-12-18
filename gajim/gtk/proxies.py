@@ -18,7 +18,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .util import get_builder
+from .builder import get_builder
 from .util import get_app_window
 
 

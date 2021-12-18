@@ -32,7 +32,7 @@ from gajim.common.helpers import get_global_show
 from gajim.common.helpers import get_uf_show
 from gajim.common.nec import EventHelper
 
-from .util import get_builder
+from .builder import get_builder
 from .util import get_icon_name
 from .util import save_main_window_position
 from .util import restore_main_window_position

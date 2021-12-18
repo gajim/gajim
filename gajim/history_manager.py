@@ -113,7 +113,7 @@ from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.filechoosers import FileSaveDialog
 from gajim.gui.util import convert_rgb_to_hex
-from gajim.gui.util import get_builder
+from gajim.gui.builder import get_builder
 from gajim.gui.util import get_app_icon_list
 # pylint: enable=C0413
 

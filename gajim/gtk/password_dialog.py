@@ -22,7 +22,7 @@ from gajim.common.i18n import _
 from gajim.common.passwords import save_password
 from gajim.common.passwords import KEYRING_AVAILABLE
 
-from .util import get_builder
+from .builder import get_builder
 
 log = logging.getLogger('gajim.gui.pass_dialog')
 

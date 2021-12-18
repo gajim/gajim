@@ -30,7 +30,7 @@ from gajim.common.helpers import open_file
 from gajim.common.i18n import _
 
 from .base import BaseRow
-from ...util import get_builder
+from ...builder import get_builder
 from ...util import format_eta
 
 log = logging.getLogger('gajim.gui.conversation.rows.file_transfer_jingle')

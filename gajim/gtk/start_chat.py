@@ -41,7 +41,7 @@ from gajim.gui_menu_builder import get_start_chat_row_menu
 from .chat_filter import ChatFilter
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
-from .util import get_builder
+from .builder import get_builder
 from .util import get_icon_name
 from .util import AccountBadge
 

@@ -17,7 +17,7 @@ from gi.repository import Gtk
 from gi.repository import Gio
 from gi.repository import GObject
 
-from .util import get_builder
+from .builder import get_builder
 from .util import EventHelper
 
 
