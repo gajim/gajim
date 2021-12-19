@@ -8,6 +8,7 @@ include:
 pyright:
   stage: test
   script:
+    - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git@$NBXMPP_BRANCH
     - pip3 install -I git+https://dev.gajim.org/gajim/gi-stubs.git
     - npm install pyright
     - python3 -V
