@@ -31,23 +31,13 @@ from typing import overload
 from gi.repository import Atk
 from gi.repository import Gtk
 from gi.repository import GtkSource
-from gi.repository import GObject
 
 
 class Builder: ...
 '''
 
-CLASS_DEF = '''
-class %s(Builder):
-'''
-
-OVERLOAD = '''
-    @overload
-    def get(self, name: Literal['%s']) -> %s: ...'''
-
-METHOD = '''
-    def get(self, name: str) -> GObject.Object: ...'''
-
+CLASS_DEF = '\nclass %s(Builder):'
+ATTR = '\n    %s: %s'
 
 GET_BUILDER_OVERLOAD = '''
 @overload
@@ -66,8 +56,7 @@ def make_class_name(path):
 
 def parse(path, file):
     print('read', path)
-    klass_name = make_class_name(path)
-    file.write(CLASS_DEF % klass_name)
+    lines = []
     tree = ET.parse(path)
     for node in tree.iter(tag='object'):
         id_ = node.attrib.get('id')
@@ -80,8 +69,17 @@ def parse(path, file):
             klass = f'Atk.{klass.removeprefix("Atk")}'
         else:
             klass = f'Gtk.{klass.removeprefix("Gtk")}'
-        file.write(OVERLOAD % (id_, klass))
-    file.write(METHOD)
+
+        lines.append(ATTR % (id_.replace('-', '_'), klass))
+
+    klass_name = make_class_name(path)
+    file.write(CLASS_DEF % klass_name)
+
+    if not lines:
+        file.write('\n    pass')
+    else:
+        for line in lines:
+            file.write(line)
     file.write('\n\n')
     return klass_name
 
