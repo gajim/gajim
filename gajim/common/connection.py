@@ -113,12 +113,6 @@ class CommonConnection:
             con.UnregisterHandler(*handler)
         self.handlers_registered = False
 
-    def dispatch(self, event, data):
-        """
-        Always passes account name as first param
-        """
-        app.ged.raise_event(event, self.name, data)
-
     def get_module(self, name):
         return modules.get(self.name, name)
 

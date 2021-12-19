@@ -183,10 +183,6 @@ class MessageArchiveStorage(SqliteStorage):
             self._execute_multiple(statements)
 
     @staticmethod
-    def dispatch(event, error):
-        app.ged.raise_event(event, None, str(error))
-
-    @staticmethod
     def _get_timeout() -> int:
         """
         returns the timeout in epoch
