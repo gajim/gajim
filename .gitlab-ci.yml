@@ -5,6 +5,17 @@ include:
   ref: master
   file: '.gajim-ci.yml'
 
+pyright:
+  stage: test
+  script:
+    - pip3 install -I git+https://dev.gajim.org/gajim/gi-stubs.git
+    - sudo npm install pyright
+    - python3 -V
+    - pyright --version
+    - pyright
+  interruptible: true
+  allow_failure: false
+
 variables:
   NBXMPP_BRANCH: master
   PLUGINS_BRANCH: master
