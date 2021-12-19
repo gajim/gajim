@@ -28,6 +28,7 @@ from io import BytesIO
 from importlib import import_module
 from functools import wraps
 from functools import lru_cache
+from pathlib import Path
 
 try:
     from PIL import Image
@@ -39,7 +40,9 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
 from gi.repository import GdkPixbuf
+import cairo
 import nbxmpp
+from nbxmpp import JID
 from nbxmpp.structs import LocationData
 
 from gajim.common import app
@@ -155,8 +158,13 @@ def icon_exists(name: str) -> bool:
     return _icon_theme.has_icon(name)
 
 
-def load_icon(icon_name, widget=None, size=16, pixbuf=False,
-              scale=None, flags=Gtk.IconLookupFlags.FORCE_SIZE):
+def load_icon(icon_name: str,
+              widget: Optional[Any] = None,
+              size: int = 16,
+              pixbuf: bool = False,
+              scale: Optional[int] = None,
+              flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
+              ) -> Optional[Union[GdkPixbuf.Pixbuf, cairo.Surface]]:
 
     if widget is not None:
         scale = widget.get_scale_factor()
@@ -170,15 +178,16 @@ def load_icon(icon_name, widget=None, size=16, pixbuf=False,
             icon_name, size, scale, flags)
         if iconinfo is None:
             log.info('No icon found for %s', icon_name)
-            return
+            return None
         if pixbuf:
             return iconinfo.load_icon()
         return iconinfo.load_surface(None)
     except GLib.GError as error:
         log.error('Unable to load icon %s: %s', icon_name, str(error))
+    return None
 
 
-def get_app_icon_list(scale_widget):
+def get_app_icon_list(scale_widget: Any) -> List[GdkPixbuf.Pixbuf]:
     pixbufs = []
     for size in (16, 32, 48, 64, 128):
         pixbuf = load_icon('org.gajim.Gajim', scale_widget, size, pixbuf=True)
@@ -194,15 +203,15 @@ def get_icon_name(name: str,
         name = 'notinroster'
 
     if iconset is not None:
-        return '%s-%s' % (iconset, name)
+        return f'{iconset}-{name}'
 
     if transport is not None:
-        return '%s-%s' % (transport, name)
+        return f'{transport}-{name}'
 
     iconset = app.settings.get('iconset')
     if not iconset:
         iconset = 'dcraven'
-    return '%s-%s' % (iconset, name)
+    return f'{iconset}-{name}'
 
 
 def load_user_iconsets() -> None:
@@ -517,7 +526,7 @@ def format_fingerprint(fingerprint: str) -> str:
     return buf.rstrip().upper()
 
 
-def find_widget(name, container):
+def find_widget(name: str, container: Gtk.Widget) -> Optional[Gtk.Widget]:
     for child in container.get_children():
         if Gtk.Buildable.get_name(child) == name:
             return child
@@ -527,7 +536,7 @@ def find_widget(name, container):
 
 
 class MultiLineLabel(Gtk.Label):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: any) -> None:
         Gtk.Label.__init__(self, *args, **kwargs)
         self.set_line_wrap(True)
         self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
@@ -535,16 +544,16 @@ class MultiLineLabel(Gtk.Label):
 
 
 class MaxWidthComboBoxText(Gtk.ComboBoxText):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         Gtk.ComboBoxText.__init__(self, *args, **kwargs)
-        self._max_width = 100
+        self._max_width: int = 100
         text_renderer = self.get_cells()[0]
         text_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
 
-    def set_max_size(self, size):
+    def set_max_size(self, size: int) -> None:
         self._max_width = size
 
-    def do_get_preferred_width(self):
+    def do_get_preferred_width(self) -> Tuple[int, int]:
         minimum_width, natural_width = Gtk.ComboBoxText.do_get_preferred_width(
             self)
 
@@ -639,12 +648,16 @@ def scale_pixbuf(pixbuf: GdkPixbuf.Pixbuf,
                                GdkPixbuf.InterpType.BILINEAR)
 
 
-def scale_pixbuf_from_data(data: bytes, size: int) -> Optional[GdkPixbuf.Pixbuf]:
+def scale_pixbuf_from_data(data: bytes,
+                           size: int
+                           ) -> Optional[GdkPixbuf.Pixbuf]:
     pixbuf = get_pixbuf_from_data(data)
     return scale_pixbuf(pixbuf, size)
 
 
-def load_pixbuf(path, size=None):
+def load_pixbuf(path: Union[str, Path],
+                size: Optional[int] = None
+                ) -> Optional[GdkPixbuf.Pixbuf]:
     try:
         if size is None:
             return GdkPixbuf.Pixbuf.new_from_file(str(path))
@@ -720,7 +733,10 @@ def get_app_windows(account: str) -> List[Gtk.Window]:
     return windows
 
 
-def get_app_window(name, account=None, jid=None):
+def get_app_window(name: str,
+                   account: Optional[str] = None,
+                   jid: Optional[Union[str, JID]] = None
+                   ) -> Optional[Gtk.Window]:
     for win in app.app.get_windows():
         if type(win).__name__ != name:
             continue
@@ -736,7 +752,7 @@ def get_app_window(name, account=None, jid=None):
     return None
 
 
-def open_window(name, **kwargs):
+def open_window(name: str, **kwargs: Any) -> Gtk.Window:
     window = get_app_window(name,
                             kwargs.get('account'),
                             kwargs.get('jid'))
