@@ -22,11 +22,18 @@ Global Events Dispatcher module.
 :license: GPL
 '''
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Callable
+
 import logging
 import traceback
 import inspect
 
 from nbxmpp import NodeProcessed
+
+from gajim.common.nec import NetworkEvent
 
 log = logging.getLogger('gajim.c.ged')
 
@@ -54,12 +61,20 @@ OUT_PRECORE = 90
 OUT_CORE = 100
 OUT_POSTCORE = 110
 
+
+HandlerFuncT = Callable[[NetworkEvent], Any]
+
+
 class GlobalEventsDispatcher:
 
     def __init__(self):
-        self.handlers = {}
+        self.handlers: dict[str, list[tuple[int, HandlerFuncT]]] = {}
 
-    def register_event_handler(self, event_name, priority, handler):
+    def register_event_handler(self,
+                               event_name: str,
+                               priority: int,
+                               handler: HandlerFuncT) -> None:
+
         if event_name in self.handlers:
             handlers_list = self.handlers[event_name]
             i = 0
@@ -74,7 +89,11 @@ class GlobalEventsDispatcher:
         else:
             self.handlers[event_name] = [(priority, handler)]
 
-    def remove_event_handler(self, event_name, priority, handler):
+    def remove_event_handler(self,
+                             event_name: str,
+                             priority: int,
+                             handler: HandlerFuncT) -> None:
+
         if event_name in self.handlers:
             try:
                 self.handlers[event_name].remove((priority, handler))
@@ -84,7 +103,8 @@ class GlobalEventsDispatcher:
                     registered as handler of event "%s". Couldn\'t remove.
                     Error: %s''', handler, priority, event_name, error)
 
-    def raise_event(self, event_name, *args, **kwargs):
+    def raise_event(self, event_name: str, event_obj: NetworkEvent) -> Any:
+
         log.debug('Raise event: %s', event_name)
         if event_name in self.handlers:
             node_processed = False
@@ -98,7 +118,7 @@ class GlobalEventsDispatcher:
                                   handler.__self__)
                     else:
                         log.debug('Call handler %s', handler.__name__)
-                    if handler(*args, **kwargs):
+                    if handler(event_obj):
                         return True
                 except NodeProcessed:
                     node_processed = True
