@@ -23,13 +23,15 @@
         <property name="can-focus">False</property>
         <property name="border-width">6</property>
         <child>
-          <object class="GtkButton" id="1_button">
+          <object class="GtkButton" id="button_1">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">center</property>
@@ -45,13 +47,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="2_button">
+          <object class="GtkButton" id="button_2">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;2&lt;/b&gt; abc</property>
@@ -65,13 +69,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="3_button">
+          <object class="GtkButton" id="button_3">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label3">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;3&lt;/b&gt; def</property>
@@ -85,13 +91,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="4_button">
+          <object class="GtkButton" id="button_4">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;4&lt;/b&gt; ghi</property>
@@ -105,13 +113,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="5_button">
+          <object class="GtkButton" id="button_5">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label5">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;5&lt;/b&gt; jkl</property>
@@ -125,13 +135,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="6_button">
+          <object class="GtkButton" id="button_6">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label6">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;6&lt;/b&gt; mno</property>
@@ -145,13 +157,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="7_button">
+          <object class="GtkButton" id="button_7">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label7">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;7&lt;/b&gt; pqrs</property>
@@ -165,13 +179,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="8_button">
+          <object class="GtkButton" id="button_8">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label8">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;8&lt;/b&gt; tuv</property>
@@ -185,13 +201,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="9_button">
+          <object class="GtkButton" id="button_9">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label9">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;9&lt;/b&gt; wxyz</property>
@@ -205,13 +223,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="*_button">
+          <object class="GtkButton" id="button_star">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label10">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;*&lt;/b&gt;</property>
@@ -225,13 +245,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="0_button">
+          <object class="GtkButton" id="button_0">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label11">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;0&lt;/b&gt;</property>
@@ -245,13 +267,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="#_button">
+          <object class="GtkButton" id="button_pound">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
+            <signal name="pressed" handler="_on_num_button_press" swapped="no"/>
+            <signal name="released" handler="_on_num_button_release" swapped="no"/>
             <child>
-              <object class="GtkLabel" id="label12">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;#&lt;/b&gt;</property>

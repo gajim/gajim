@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import Any
 from typing import List
 from typing import Optional
@@ -21,7 +22,6 @@ import logging
 import time
 
 from gi.repository import GObject
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from nbxmpp.namespaces import Namespace
@@ -68,7 +68,7 @@ class CallWidget(Gtk.Box):
         # having to show a new call row
         self._incoming_video_event = None
 
-        self._jingle: dict(str, JingleObject) = {
+        self._jingle: dict[str, JingleObject] = {
             'audio': JingleObject(
                 JingleState.NULL,
                 self._update_audio),
@@ -82,14 +82,6 @@ class CallWidget(Gtk.Box):
         self._ui = get_builder('call_widget.ui')
         self.add(self._ui.av_box)
         self.connect('destroy', self._on_destroy)
-
-        dtmf: list(str) = [
-            '1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#']
-        for key in dtmf:
-            button = self._ui.get_object(key + '_button')
-            button.connect(
-                'button-press-event', self._on_num_button_press, key)
-            button.connect('button-release-event', self._on_num_button_release)
 
         self._ui.connect_signals(self)
 
@@ -178,17 +170,12 @@ class CallWidget(Gtk.Box):
             KindConstant.CALL_OUTGOING,
             additional_data=additional_data)
 
-    def _on_num_button_press(self,
-                             _button: Gtk.Button,
-                             _event: Gdk.EventButton,
-                             num: int
-                             ) -> None:
-        self._get_audio_content().start_dtmf(num)
+    def _on_num_button_press(self, button: Gtk.Button) -> None:
+        button_id = Gtk.Buildable.get_name(button)
+        key = button_id.split('_')[1]
+        self._get_audio_content().start_dtmf(key)
 
-    def _on_num_button_release(self,
-                               _button: Gtk.Button,
-                               _event: Gdk.EventButton
-                               ) -> None:
+    def _on_num_button_release(self, _button: Gtk.Button) -> None:
         self._get_audio_content().stop_dtmf()
 
     def _on_mic_volume_changed(self,

@@ -274,30 +274,18 @@ class CallWidgetBuilder(Builder):
     adjustment2: Gtk.Adjustment
     dtmf_popover: Gtk.Popover
     grid1: Gtk.Grid
-    1_button: Gtk.Button
-    label1: Gtk.Label
-    2_button: Gtk.Button
-    label2: Gtk.Label
-    3_button: Gtk.Button
-    label3: Gtk.Label
-    4_button: Gtk.Button
-    label4: Gtk.Label
-    5_button: Gtk.Button
-    label5: Gtk.Label
-    6_button: Gtk.Button
-    label6: Gtk.Label
-    7_button: Gtk.Button
-    label7: Gtk.Label
-    8_button: Gtk.Button
-    label8: Gtk.Label
-    9_button: Gtk.Button
-    label9: Gtk.Label
-    *_button: Gtk.Button
-    label10: Gtk.Label
-    0_button: Gtk.Button
-    label11: Gtk.Label
-    #_button: Gtk.Button
-    label12: Gtk.Label
+    button_1: Gtk.Button
+    button_2: Gtk.Button
+    button_3: Gtk.Button
+    button_4: Gtk.Button
+    button_5: Gtk.Button
+    button_6: Gtk.Button
+    button_7: Gtk.Button
+    button_8: Gtk.Button
+    button_9: Gtk.Button
+    button_star: Gtk.Button
+    button_0: Gtk.Button
+    button_pound: Gtk.Button
     av_box: Gtk.Box
     video_box: Gtk.Box
     outgoing_viewport: Gtk.Viewport

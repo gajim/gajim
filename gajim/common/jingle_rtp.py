@@ -165,12 +165,13 @@ class JingleRTPContent(JingleContent):
         else:
             self._dtmf_running = False
 
-    def start_dtmf(self, event):
-        if event in ('*', '#'):
-            event = {'*': Farstream.DTMFEvent.STAR,
-                     '#': Farstream.DTMFEvent.POUND}[event]
+    def start_dtmf(self, key):
+        if key == 'star':
+            event = Farstream.DTMFEvent.STAR
+        elif key == 'pound':
+            event = Farstream.DTMFEvent.POUND
         else:
-            event = int(event)
+            event = int(key)
         self.p2psession.start_telephony_event(event, 2)
 
     def stop_dtmf(self):
