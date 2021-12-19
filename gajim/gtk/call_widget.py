@@ -12,21 +12,27 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional  # pylint: disable=unused-import
+from __future__ import annotations
+from typing import Any
+from typing import List
+from typing import Optional
 
 import logging
 import time
 
 from gi.repository import GObject
+from gi.repository import Gdk
 from gi.repository import Gtk
 
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.const import JingleState
 from gajim.common.const import KindConstant
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.i18n import _
+from gajim.common.jingle_rtp import JingleAudio
 from gajim.common.nec import NetworkEvent
 
 from .gstreamer import create_gtk_widget
@@ -50,7 +56,7 @@ class CallWidget(Gtk.Box):
         ),
     }
 
-    def __init__(self, account, contact):
+    def __init__(self, account: str, contact: types.BareContact) -> None:
         Gtk.Box.__init__(self)
         self.set_no_show_all(True)
 
@@ -62,7 +68,7 @@ class CallWidget(Gtk.Box):
         # having to show a new call row
         self._incoming_video_event = None
 
-        self._jingle = {
+        self._jingle: dict(str, JingleObject) = {
             'audio': JingleObject(
                 JingleState.NULL,
                 self._update_audio),
@@ -77,20 +83,22 @@ class CallWidget(Gtk.Box):
         self.add(self._ui.av_box)
         self.connect('destroy', self._on_destroy)
 
-        dtmf = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#']
+        dtmf: list(str) = [
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#']
         for key in dtmf:
             button = self._ui.get_object(key + '_button')
-            button.connect('pressed', self._on_num_button_pressed, key)
-            button.connect('released', self._on_num_button_released)
+            button.connect(
+                'button-press-event', self._on_num_button_press, key)
+            button.connect('button-release-event', self._on_num_button_release)
 
         self._ui.connect_signals(self)
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, *args: Any) -> None:
         for jingle_type in ('audio', 'video'):
             self._close_jingle_content(jingle_type, shutdown=True)
         self._jingle.clear()
 
-    def detect_av(self):
+    def detect_av(self) -> None:
         if (self._contact.supports(Namespace.JINGLE_ICE_UDP) and
                 app.is_installed('FARSTREAM')):
             self._jingle['audio'].available = self._contact.supports(
@@ -104,23 +112,23 @@ class CallWidget(Gtk.Box):
             self._jingle['audio'].available = False
             self._jingle['video'].available = False
 
-    def get_jingle_available(self, content_type):
+    def get_jingle_available(self, content_type: str) -> bool:
         return self._jingle[content_type].available
 
-    def _on_call_with_mic(self, _button):
+    def _on_call_with_mic(self, _button: Gtk.Button) -> None:
         self._on_jingle_button_toggled(['audio'])
         self._ui.av_start_box.hide()
 
-    def _on_call_with_mic_and_cam(self, _button):
+    def _on_call_with_mic_and_cam(self, _button: Gtk.Button) -> None:
         self._on_jingle_button_toggled(['audio', 'video'])
         self._ui.av_start_box.hide()
 
-    def _on_answer_video_clicked(self, button):
+    def _on_answer_video_clicked(self, button: Gtk.Button) -> None:
         self.accept_call(self._incoming_video_event)
         self._incoming_video_event = None
         button.hide()
 
-    def _on_end_call_clicked(self, _widget):
+    def _on_end_call_clicked(self, _button: Gtk.Button) -> None:
         self._close_jingle_content('audio')
         self._close_jingle_content('video')
         self._ui.jingle_audio_state.set_no_show_all(True)
@@ -129,10 +137,10 @@ class CallWidget(Gtk.Box):
         self.hide()
         self.emit('call-ended')
 
-    def _on_video(self, *args):
+    def _on_video(self, _button: Gtk.Button) -> None:
         self._on_jingle_button_toggled(['video'])
 
-    def _on_jingle_button_toggled(self, jingle_types):
+    def _on_jingle_button_toggled(self, jingle_types: List[str]) -> None:
         if all(item in jingle_types for item in ['audio', 'video']):
             # Both 'audio' and 'video' in jingle_types
             sid = self._client.get_module('Jingle').start_audio_video(
@@ -160,7 +168,7 @@ class CallWidget(Gtk.Box):
                 self._set_jingle_state('video', JingleState.CONNECTING, sid)
                 self._store_outgoing_call(sid)
 
-    def _store_outgoing_call(self, sid):
+    def _store_outgoing_call(self, sid: str) -> None:
         additional_data = AdditionalDataDict()
         additional_data.set_value('gajim', 'sid', sid)
         app.storage.archive.insert_into_logs(
@@ -170,17 +178,30 @@ class CallWidget(Gtk.Box):
             KindConstant.CALL_OUTGOING,
             additional_data=additional_data)
 
-    def _on_num_button_pressed(self, _widget, num):
+    def _on_num_button_press(self,
+                             _button: Gtk.Button,
+                             _event: Gdk.EventButton,
+                             num: int
+                             ) -> None:
         self._get_audio_content().start_dtmf(num)
 
-    def _on_num_button_released(self, _released):
+    def _on_num_button_release(self,
+                               _button: Gtk.Button,
+                               _event: Gdk.EventButton
+                               ) -> None:
         self._get_audio_content().stop_dtmf()
 
-    def _on_mic_volume_changed(self, _widget, value):
+    def _on_mic_volume_changed(self,
+                               _button: Gtk.VolumeButton,
+                               value: float
+                               ) -> None:
         self._get_audio_content().set_mic_volume(value / 100)
         app.settings.set('audio_input_volume', int(value))
 
-    def _on_output_volume_changed(self, _widget, value):
+    def _on_output_volume_changed(self,
+                                  _button: Gtk.VolumeButton,
+                                  value: float
+                                  ) -> None:
         self._get_audio_content().set_out_volume(value / 100)
         app.settings.set('audio_output_volume', int(value))
 
@@ -195,7 +216,7 @@ class CallWidget(Gtk.Box):
             self._on_jingle_error(event)
 
     def _on_jingle_request(self, event):
-        content_types = []
+        content_types: list(str) = []
         for item in event.contents:
             content_types.append(item.media)
         if not any(item in ('audio', 'video') for item in content_types):
@@ -273,7 +294,7 @@ class CallWidget(Gtk.Box):
                 JingleState.ERROR,
                 reason=event.reason)
 
-    def start_call(self):
+    def start_call(self) -> None:
         audio_state = self._jingle['audio'].state
         video_state = self._jingle['video'].state
         if audio_state == JingleState.NULL and video_state == JingleState.NULL:
@@ -307,7 +328,8 @@ class CallWidget(Gtk.Box):
         if video is not None:
             session.approve_content('video')
 
-    def decline_call(self, session):
+    @staticmethod
+    def decline_call(session):
         if not session:
             return
 
@@ -322,7 +344,7 @@ class CallWidget(Gtk.Box):
             if video is not None:
                 session.reject_content('video')
 
-    def _update_audio(self):
+    def _update_audio(self) -> None:
         audio_state = self._jingle['audio'].state
         video_state = self._jingle['video'].state
         if self._jingle['video'].available:
@@ -381,7 +403,7 @@ class CallWidget(Gtk.Box):
         if not self._jingle['audio'].sid:
             self._ui.audio_buttons_box.set_sensitive(False)
 
-    def _update_video(self):
+    def _update_video(self) -> None:
         audio_state = self._jingle['audio'].state
         video_state = self._jingle['video'].state
 
@@ -494,7 +516,10 @@ class CallWidget(Gtk.Box):
         jingle.sid = new_sid
         jingle.update()
 
-    def _stop_jingle(self, sid=None, reason=None):
+    def _stop_jingle(self,
+                     sid: Optional[str] = None,
+                     reason: Optional[str] = None
+                     ) -> None:
         audio_sid = self._jingle['audio'].sid
         video_sid = self._jingle['video'].sid
         if audio_sid and sid in (audio_sid, None):
@@ -502,8 +527,10 @@ class CallWidget(Gtk.Box):
         if video_sid and sid in (video_sid, None):
             self._close_jingle_content('video')
 
-    def _close_jingle_content(self, jingle_type: str,
-                              shutdown: Optional[bool] = False) -> None:
+    def _close_jingle_content(self,
+                              jingle_type: str,
+                              shutdown: Optional[bool] = False
+                              ) -> None:
         jingle = self._jingle[jingle_type]
         if not jingle.sid:
             return
@@ -520,7 +547,7 @@ class CallWidget(Gtk.Box):
             jingle.state = JingleState.NULL
             jingle.update()
 
-    def _get_audio_content(self):
+    def _get_audio_content(self) -> Optional[JingleAudio]:
         session = self._client.get_module('Jingle').get_jingle_session(
             self._contact.jid, self._jingle['audio'].sid)
         return session.get_content('audio')
