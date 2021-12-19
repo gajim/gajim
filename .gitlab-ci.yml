@@ -9,10 +9,10 @@ pyright:
   stage: test
   script:
     - pip3 install -I git+https://dev.gajim.org/gajim/gi-stubs.git
-    - sudo npm install pyright
+    - npm install pyright
     - python3 -V
-    - pyright --version
-    - pyright
+    - $(npm bin)/pyright --version
+    - $(npm bin)/pyright
   interruptible: true
   allow_failure: false
 
