@@ -13,13 +13,19 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from typing import Any
+from typing import Optional
 
 import nbxmpp
 from nbxmpp.client import Client as NBXMPPClient
+from nbxmpp.protocol import JID
 from nbxmpp.const import StreamError
 from nbxmpp.const import ConnectionType
 
 from gi.repository import GLib
+from gi.repository import Gio
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from gajim.common import passwords
 from gajim.common.nec import NetworkEvent
@@ -46,8 +52,11 @@ from gajim.gui.util import open_window
 log = logging.getLogger('gajim.client')
 
 
+IgnoredTlsErrorsT = Optional[set[Gio.TlsCertificateFlags]]
+
+
 class Client(Observable):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Observable.__init__(self, log)
         self._client = None
         self._account = account
@@ -92,30 +101,30 @@ class Client(Observable):
             self._screensaver_handler_id = app.app.connect(
                 'notify::screensaver-active', self._screensaver_state_changed)
 
-    def _set_state(self, state):
+    def _set_state(self, state: ClientState) -> None:
         log.info('State: %s', state)
         self._state = state
 
     @property
-    def state(self):
+    def state(self) -> ClientState:
         return self._state
 
     @property
-    def account(self):
+    def account(self) -> str:
         return self._account
 
     @property
-    def status(self):
+    def status(self) -> str:
         return self._status
 
     @property
-    def status_message(self):
+    def status_message(self) -> str:
         if self._idle_status_active():
             return self._idle_status_message
         return self._status_message
 
     @property
-    def priority(self):
+    def priority(self) -> int:
         return self._priority
 
     @property
@@ -127,19 +136,19 @@ class Client(Observable):
         return self._client.features
 
     @property
-    def local_address(self):
+    def local_address(self) -> Optional[str]:
         address = self._client.local_address
         if address is not None:
             return address.to_string().split(':')[0]
         return None
 
-    def set_remove_account(self, value):
+    def set_remove_account(self, value: bool) -> None:
         # Used by the RemoveAccount Assistant to make the Client
         # not react to any stream errors that happen while the
         # account is removed by the server and the connection is killed
         self._remove_account = value
 
-    def _create_client(self):
+    def _create_client(self) -> None:
         if self._destroyed:
             # If we disable an account cleanup() is called and all
             # modules are unregistered. Because disable_account() does not wait
@@ -179,13 +188,19 @@ class Client(Observable):
         for handler in modules.get_handlers(self):
             self._client.register_handler(handler)
 
-    def _on_resume_failed(self, _client, _signal_name):
+    def _on_resume_failed(self,
+                          _client: NBXMPPClient,
+                          _signal_name: str) -> None:
+
         log.info('Resume failed')
         self.notify('resume-failed')
         app.nec.push_incoming_event(NetworkEvent(
             'our-show', account=self._account, show='offline'))
 
-    def _on_resume_successful(self, _client, _signal_name):
+    def _on_resume_successful(self,
+                              _client: NBXMPPClient,
+                              _signal_name: str) -> None:
+
         self._set_state(ClientState.CONNECTED)
         self._set_client_available()
 
@@ -203,12 +218,16 @@ class Client(Observable):
 
         self.notify('state-changed', SimpleClientState.CONNECTED)
 
-    def _set_client_available(self):
+    def _set_client_available(self) -> None:
         self._set_state(ClientState.AVAILABLE)
         app.nec.push_incoming_event(NetworkEvent('account-connected',
                                                  account=self._account))
 
-    def disconnect(self, gracefully, reconnect, destroy_client=False):
+    def disconnect(self,
+                   gracefully: bool,
+                   reconnect: bool,
+                   destroy_client: bool = False) -> None:
+
         if self._state.is_disconnecting:
             log.warning('Disconnect already in progress')
             return
@@ -220,7 +239,10 @@ class Client(Observable):
         log.info('Starting to disconnect %s', self._account)
         self._client.disconnect(immediate=not gracefully)
 
-    def _on_disconnected(self, _client, _signal_name):
+    def _on_disconnected(self,
+                         _client: NBXMPPClient,
+                         _signal_name: str) -> None:
+
         log.info('Disconnect %s', self._account)
         self._set_state(ClientState.DISCONNECTED)
 
@@ -282,7 +304,7 @@ class Client(Observable):
             self._after_disconnect()
             self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
-    def _after_disconnect(self):
+    def _after_disconnect(self) -> None:
         self._disable_reconnect_timer()
 
         app.proxy65_manager.disconnect(self._client)
@@ -297,25 +319,38 @@ class Client(Observable):
         app.nec.push_incoming_event(NetworkEvent('account-disconnected',
                                                  account=self._account))
 
-    def _on_connection_failed(self, _client, _signal_name):
+    def _on_connection_failed(self,
+                              _client: NBXMPPClient,
+                              _signal_name: str) -> None:
         self._schedule_reconnect()
 
-    def _on_connected(self, _client, _signal_name):
+    def _on_connected(self,
+                      _client: NBXMPPClient,
+                      _signal_name: str) -> None:
+
         self._set_state(ClientState.CONNECTED)
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()
         self.get_module('Discovery').discover_server_items()
 
-    def _on_stanza_sent(self, _client, _signal_name, stanza):
+    def _on_stanza_sent(self,
+                        _client: NBXMPPClient,
+                        _signal_name: str,
+                        stanza: Any) -> None:
+
         app.nec.push_incoming_event(NetworkEvent('stanza-sent',
                                                  account=self._account,
                                                  stanza=stanza))
 
-    def _on_stanza_received(self, _client, _signal_name, stanza):
+    def _on_stanza_received(self,
+                            _client: NBXMPPClient,
+                            _signal_name: str,
+                            stanza: Any) -> None:
+
         app.nec.push_incoming_event(NetworkEvent('stanza-received',
                                                  account=self._account,
                                                  stanza=stanza))
-    def get_own_jid(self):
+    def get_own_jid(self) -> JID:
         """
         Return the last full JID we received on a bind event.
         In case we were never connected it returns the bare JID from config.
@@ -382,7 +417,7 @@ class Client(Observable):
 
         self.update_presence()
 
-    def update_presence(self, include_muc=True):
+    def update_presence(self, include_muc: bool = True) -> None:
         status, message, idle = self.get_presence_state()
         self._priority = app.get_priority(self._account, status)
         self.get_module('Presence').send_presence(
@@ -400,11 +435,11 @@ class Client(Observable):
     def set_user_location(self, location):
         self.get_module('UserLocation').set_location(location)
 
-    def get_module(self, name):
+    def get_module(self, name: str):
         return modules.get(self._account, name)
 
     @helpers.call_counter
-    def connect_machine(self):
+    def connect_machine(self) -> None:
         log.info('Connect machine state: %s', self._connect_machine_calls)
         if self._connect_machine_calls == 1:
             self.get_module('Delimiter').get_roster_delimiter()
@@ -413,7 +448,7 @@ class Client(Observable):
         elif self._connect_machine_calls == 3:
             self._finish_connect()
 
-    def _finish_connect(self):
+    def _finish_connect(self) -> None:
         self._status_sync_on_resume = False
         self._set_client_available()
 
@@ -490,7 +525,7 @@ class Client(Observable):
         #     message.stanza = stanza
         #     self._send_message(message)
 
-    def _prepare_for_connect(self):
+    def _prepare_for_connect(self) -> None:
         custom_host = get_custom_host(self._account)
         if custom_host is not None:
             self._client.set_custom_host(*custom_host)
@@ -515,7 +550,7 @@ class Client(Observable):
 
         self.connect()
 
-    def connect(self, ignored_tls_errors=None):
+    def connect(self, ignored_tls_errors: IgnoredTlsErrorsT = None) -> None:
         if self._state not in (ClientState.DISCONNECTED,
                                ClientState.RECONNECT_SCHEDULED):
             # Do not try to reco while we are already trying
@@ -539,13 +574,13 @@ class Client(Observable):
 
         self._client.connect()
 
-    def _schedule_reconnect(self):
+    def _schedule_reconnect(self) -> None:
         self._set_state(ClientState.RECONNECT_SCHEDULED)
         log.info("Reconnect to %s in 3s", self._account)
         self._reconnect_timer_source = GLib.timeout_add_seconds(
             3, self._prepare_for_connect)
 
-    def _abort_reconnect(self):
+    def _abort_reconnect(self) -> None:
         self._set_state(ClientState.DISCONNECTED)
         self._disable_reconnect_timer()
         app.nec.push_incoming_event(
@@ -557,7 +592,7 @@ class Client(Observable):
             self._destroy_client = False
             self._create_client()
 
-    def _disable_reconnect_timer(self):
+    def _disable_reconnect_timer(self) -> None:
         if self._reconnect_timer_source is not None:
             GLib.source_remove(self._reconnect_timer_source)
             self._reconnect_timer_source = None
@@ -582,7 +617,7 @@ class Client(Observable):
                 state, self._status_message)
             self._update_status()
 
-    def _update_status(self):
+    def _update_status(self) -> None:
         if not self._idle_status_enabled:
             return
 
@@ -592,7 +627,7 @@ class Client(Observable):
         else:
             self._status_sync_on_resume = True
 
-    def _idle_status_active(self):
+    def _idle_status_active(self) -> bool:
         if not Monitor.is_available():
             return False
 
@@ -601,17 +636,18 @@ class Client(Observable):
 
         return self._idle_status != 'online'
 
-    def get_presence_state(self):
+    def get_presence_state(self) -> tuple[str, str, bool]:
         if self._idle_status_active():
             return self._idle_status, self._idle_status_message, True
         return self._status, self._status_message, False
 
     @staticmethod
-    def _screensaver_state_changed(application, _param):
+    def _screensaver_state_changed(application: Gtk.Application,
+                                   _param: GObject.ParamSpec) -> None:
         active = application.get_property('screensaver-active')
         Monitor.set_extended_away(active)
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         self.disconnect_signals()
         self._destroyed = True
         if Monitor.is_available():
@@ -626,7 +662,7 @@ class Client(Observable):
                 self._client.unregister_handler(handler)
         modules.unregister_modules(self)
 
-    def quit(self, kill_core):
+    def quit(self, kill_core: bool) -> None:
         if kill_core and self._state in (ClientState.CONNECTING,
                                          ClientState.CONNECTED,
                                          ClientState.AVAILABLE):
