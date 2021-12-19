@@ -10,4 +10,7 @@
         "win",
     ],
     "typeCheckingMode": "strict",
+    "include": [
+        "gajim/gtk/chat_page.py"
+    ],
 }
