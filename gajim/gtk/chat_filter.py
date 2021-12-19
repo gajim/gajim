@@ -69,7 +69,7 @@ class ChatFilter(Gtk.Box):
         self.add(toolbar)
         self.show_all()
 
-    def _on_button_clicked(self, button: Gtk.Button) -> None:
+    def _on_button_clicked(self, button: Gtk.RadioToolButton) -> None:
         if button.get_active():
             self.emit('filter-changed', button.get_name())
 
