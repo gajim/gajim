@@ -12,13 +12,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+from typing import Tuple
+
+from gi.repository import Gtk
 try:
     from gi.repository import Gst
 except Exception:
     pass
 
 
-def create_gtk_widget():
+def create_gtk_widget() -> Tuple[Optional[Gst.Element],
+                                 Optional[Gtk.Widget],
+                                 Optional[str]]:
     gtkglsink = Gst.ElementFactory.make('gtkglsink', None)
     if gtkglsink is not None:
         glsinkbin = Gst.ElementFactory.make('glsinkbin', None)
