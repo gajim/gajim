@@ -13,9 +13,11 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
+from typing import Optional
 from typing import Dict
 from typing import List
 from typing import Union
+from typing import overload
 
 import sys
 import json
@@ -50,8 +52,16 @@ from gajim.common.setting_values import STATUS_PRESET_SETTINGS
 from gajim.common.setting_values import STATUS_PRESET_EXAMPLES
 from gajim.common.setting_values import HAS_APP_DEFAULT
 from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
+from gajim.common.setting_values import AllSettingsT
+from gajim.common.setting_values import IntSettings
+from gajim.common.setting_values import IntAccountSettings
+from gajim.common.setting_values import StringSettings
+from gajim.common.setting_values import StringAccountSettings
+from gajim.common.setting_values import BoolSettings
+from gajim.common.setting_values import BoolAccountSettings
 
 SETTING_TYPE = Union[bool, int, str, object, list]
+
 
 log = logging.getLogger('gajim.c.settings')
 
@@ -470,7 +480,13 @@ class Settings:
 
         self._commit(schedule=schedule)
 
-    def get_app_setting(self, setting: str) -> SETTING_TYPE:
+    @overload
+    def get_app_setting(self, setting: BoolSettings) -> bool: ...
+    @overload
+    def get_app_setting(self, setting: StringSettings) -> str: ...
+    @overload
+    def get_app_setting(self, setting: IntSettings) -> int: ...
+    def get_app_setting(self, setting: str) -> AllSettingsT:
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
 
@@ -481,7 +497,13 @@ class Settings:
 
     get = get_app_setting
 
-    def set_app_setting(self, setting: str, value: SETTING_TYPE) -> None:
+    @overload
+    def set_app_setting(self, setting: BoolSettings, value: Optional[bool]) -> None: ...
+    @overload
+    def set_app_setting(self, setting: StringSettings, value: Optional[str]) -> None: ...
+    @overload
+    def set_app_setting(self, setting: IntSettings, value: Optional[int]) -> None: ...
+    def set_app_setting(self, setting: str, value: Optional[AllSettingsT]) -> None:
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
 
@@ -578,9 +600,21 @@ class Settings:
                 active.append(account)
         return active
 
+    @overload
     def get_account_setting(self,
                             account: str,
-                            setting: str) -> SETTING_TYPE:
+                            setting: StringAccountSettings) -> str: ...
+    @overload
+    def get_account_setting(self,
+                            account: str,
+                            setting: IntAccountSettings) -> int: ...
+    @overload
+    def get_account_setting(self,
+                            account: str,
+                            setting: BoolAccountSettings) -> bool: ...
+    def get_account_setting(self,
+                            account: str,
+                            setting: str) -> AllSettingsT:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -593,10 +627,26 @@ class Settings:
         except KeyError:
             return ACCOUNT_SETTINGS['account'][setting]
 
+    @overload
+    def set_account_setting(self,
+                            account: str,
+                            setting: StringAccountSettings,
+                            value: Optional[str]) -> None: ...
+    @overload
+    def set_account_setting(self,
+                            account: str,
+                            setting: IntAccountSettings,
+                            value: Optional[int]) -> None: ...
+    @overload
+    def set_account_setting(self,
+                            account: str,
+                            setting: BoolAccountSettings,
+                            value: Optional[bool]) -> None: ...
+
     def set_account_setting(self,
                             account: str,
                             setting: str,
-                            value: SETTING_TYPE) -> None:
+                            value: Optional[AllSettingsT]) -> None:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
