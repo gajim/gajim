@@ -11,6 +11,6 @@
     ],
     "typeCheckingMode": "strict",
     "include": [
-        "gajim/gtk/chat_page.py"
+        "gajim/gtk/chat_filter.py"
     ],
 }
