@@ -12,12 +12,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Literal
 from typing import Optional
 from typing import Generator
 
 import time
 import logging
 
+from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gio
@@ -123,23 +126,24 @@ class ChatPage(Gtk.Box):
         return self._chat_stack
 
     @staticmethod
-    def _on_start_chat_clicked(_button):
+    def _on_start_chat_clicked(_button: Gtk.Button) -> None:
         app.app.activate_action('start-chat', GLib.Variant('s', ''))
 
     @staticmethod
-    def _on_button_release(paned, event):
+    def _on_button_release(paned: Gtk.Paned, event: Gdk.EventButton) -> None:
         if event.window != paned.get_handle_window():
             return
         position = paned.get_position()
         app.settings.set('chat_handle_position', position)
 
-    def _on_filter_revealer_toggled(self, toggle_button):
+    def _on_filter_revealer_toggled(self,
+                                    toggle_button: Gtk.ToggleButton) -> None:
         active = toggle_button.get_active()
         self._ui.filter_bar_revealer.set_reveal_child(active)
         self._chat_filter.reset()
 
     @staticmethod
-    def _on_edit_workspace_clicked(_button):
+    def _on_edit_workspace_clicked(_button: Gtk.Button) -> None:
         app.window.activate_action('edit-workspace', GLib.Variant('s', ''))
 
     def _reset_chat_idle_time(self, account: str, jid: JID) -> None:
@@ -188,11 +192,14 @@ class ChatPage(Gtk.Box):
             control.set_control_active(True)
         self._last_control = control
 
-    def _on_chat_unselected(self, _chat_list_stack):
+    def _on_chat_unselected(self, _chat_list_stack: ChatListStack) -> None:
         self._chat_stack.clear()
         self._search_view.set_context(None, None)
 
-    def _on_search_history(self, _action, _param):
+    def _on_search_history(self,
+                           _action: Gio.SimpleAction,
+                           _param: Literal[None]) -> None:
+
         control = self.get_active_control()
         if control is not None:
             self._search_view.set_context(control.account, control.contact.jid)
@@ -200,10 +207,13 @@ class ChatPage(Gtk.Box):
         self._search_revealer.set_reveal_child(True)
         self._search_view.set_focus()
 
-    def _on_search_hide(self, *args):
+    def _on_search_hide(self, *args: Any) -> None:
         self._search_revealer.set_reveal_child(False)
 
-    def _on_chat_list_changed(self, chat_list_stack, *args):
+    def _on_chat_list_changed(self,
+                              chat_list_stack: ChatListStack,
+                              *args: Any) -> None:
+
         chat_list = chat_list_stack.get_current_chat_list()
         name = app.settings.get_workspace_setting(chat_list.workspace_id,
                                                   'name')
@@ -235,8 +245,11 @@ class ChatPage(Gtk.Box):
     def select_chat(self, account: str, jid: JID) -> None:
         self._chat_list_stack.select_chat(account, jid)
 
-    def chat_exists_for_workspace(self, workspace_id: str, account: str,
+    def chat_exists_for_workspace(self,
+                                  workspace_id: str,
+                                  account: str,
                                   jid: JID) -> bool:
+
         return self._chat_list_stack.contains_chat(
             account, jid, workspace_id=workspace_id)
 
@@ -288,7 +301,10 @@ class ChatPage(Gtk.Box):
     def is_chat_active(self, account: str, jid: JID) -> bool:
         return self._chat_list_stack.is_chat_active(account, jid)
 
-    def _remove_chat(self, _action, param):
+    def _remove_chat(self,
+                     _action: Gio.SimpleAction,
+                     param: GLib.Variant) -> None:
+
         account, jid = param.unpack()
         jid = JID.from_string(jid)
 
