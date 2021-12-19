@@ -268,7 +268,7 @@ class SearchView(Gtk.Box):
     def set_focus(self) -> None:
         self._ui.search_entry.grab_focus()
 
-    def set_context(self, account: str, jid: JID) -> None:
+    def set_context(self, account: Optional[str], jid: Optional[JID]) -> None:
         self._account = account
         self._jid = jid
         self._ui.search_checkbutton.set_active(jid is None)
