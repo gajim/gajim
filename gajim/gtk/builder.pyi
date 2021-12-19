@@ -7,7 +7,7 @@ from gi.repository import Gtk
 from gi.repository import GtkSource
 
 
-class Builder: ...
+class Builder(Gtk.Builder): ...
 
 class CertificateDialogBuilder(Builder):
     certificate_box: Gtk.Box
