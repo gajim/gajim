@@ -60,8 +60,8 @@ class SearchView(Gtk.Box):
         self._scope: Optional[str] = None
 
         self._ui = get_builder('search_view.ui')
-        self._ui.get('results_listbox').set_header_func(self._header_func)
-        self.add(self._ui.get('search_box'))
+        self._ui.results_listbox.set_header_func(self._header_func)
+        self.add(self._ui.search_box)
 
         self._ui.connect_signals(self)
 
@@ -99,17 +99,17 @@ class SearchView(Gtk.Box):
         self.emit('hide-search')
 
     def clear(self) -> None:
-        self._ui.get('search_entry').set_text('')
+        self._ui.search_entry.set_text('')
         self._clear_results()
 
     def _clear_results(self) -> None:
-        for row in self._ui.get('results_listbox').get_children():
-            self._ui.get('results_listbox').remove(row)
+        for row in self._ui.results_listbox.get_children():
+            self._ui.results_listbox.remove(row)
             row.destroy()
 
     def _on_search(self, entry: Gtk.Entry) -> None:
         self._clear_results()
-        self._ui.get('date_hint').hide()
+        self._ui.date_hint.hide()
         text = entry.get_text()
         if not text:
             return
@@ -126,7 +126,7 @@ class SearchView(Gtk.Box):
                 before_filters = min([datetime.datetime.fromisoformat(date) for
                                       date in before_filters])
             except ValueError:
-                self._ui.get('date_hint').show()
+                self._ui.date_hint.show()
                 return
 
         # after:date
@@ -142,13 +142,13 @@ class SearchView(Gtk.Box):
                 if after_filters.hour == after_filters.minute == 0:
                     after_filters += datetime.timedelta(days=1)
             except ValueError:
-                self._ui.get('date_hint').show()
+                self._ui.date_hint.show()
                 return
 
         # has:'file'|'img'|'video'|filetype
         text, has_filters = self._strip_filters(text, 'has')
 
-        everywhere = self._ui.get('search_checkbutton').get_active()
+        everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
 
         if not context or everywhere:
@@ -217,7 +217,7 @@ class SearchView(Gtk.Box):
     def _add_counter(self) -> None:
         results_count = len(self._results)
         if results_count:
-            self._ui.get('results_listbox').add(CounterRow(results_count))
+            self._ui.results_listbox.add(CounterRow(results_count))
 
     def _add_results(self) -> None:
         accounts = self._get_accounts()
@@ -230,7 +230,7 @@ class SearchView(Gtk.Box):
             else:
                 result_row = ResultRow(msg, self._account, self._jid)
 
-            self._ui.get('results_listbox').add(result_row)
+            self._ui.results_listbox.add(result_row)
         self._results = self._results[25:]
 
     def _on_edge_reached(self,
@@ -266,12 +266,12 @@ class SearchView(Gtk.Box):
             control.scroll_to_message(row.log_line_id, row.timestamp)
 
     def set_focus(self) -> None:
-        self._ui.get('search_entry').grab_focus()
+        self._ui.search_entry.grab_focus()
 
     def set_context(self, account: str, jid: JID) -> None:
         self._account = account
         self._jid = jid
-        self._ui.get('search_checkbutton').set_active(jid is None)
+        self._ui.search_checkbutton.set_active(jid is None)
 
 
 class RowHeader(Gtk.Box):
@@ -280,15 +280,15 @@ class RowHeader(Gtk.Box):
         self.set_hexpand(True)
 
         self._ui = get_builder('search_view.ui')
-        self.add(self._ui.get('header_box'))
+        self.add(self._ui.header_box)
 
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
-        self._ui.get('header_name_label').set_text(contact.name or '')
+        self._ui.header_name_label.set_text(contact.name or '')
 
         local_time = time.localtime(timestamp)
         date = time.strftime('%x', local_time)
-        self._ui.get('header_date_label').set_text(date)
+        self._ui.header_date_label.set_text(date)
 
         self.show_all()
 
@@ -331,7 +331,7 @@ class ResultRow(Gtk.ListBoxRow):
             jid, groupchat=self.type == 'groupchat')
 
         self._ui = get_builder('search_view.ui')
-        self.add(self._ui.get('result_row_grid'))
+        self.add(self._ui.result_row_grid)
 
         kind = 'status'
         contact_name = msg.contact_name
@@ -345,18 +345,18 @@ class ResultRow(Gtk.ListBoxRow):
                 KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
             kind = 'outgoing'
             contact_name = app.nicks[account]
-        self._ui.get('row_name_label').set_text(contact_name)
+        self._ui.row_name_label.set_text(contact_name)
 
         avatar = self._get_avatar(kind, contact_name)
-        self._ui.get('row_avatar').set_from_surface(avatar)
+        self._ui.row_avatar.set_from_surface(avatar)
 
         local_time = time.localtime(msg.time)
         date = time.strftime('%H:%M', local_time)
-        self._ui.get('row_time_label').set_label(date)
+        self._ui.row_time_label.set_label(date)
 
         message_widget = MessageWidget(account, selectable=False)
         message_widget.add_with_styling(msg.message, nickname=contact_name)
-        self._ui.get('result_row_grid').attach(message_widget, 1, 1, 2, 1)
+        self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
 
         self.show_all()
 
