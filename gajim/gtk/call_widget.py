@@ -22,6 +22,7 @@ import logging
 import time
 
 from gi.repository import GObject
+from gi.repository import Gdk
 from gi.repository import Gtk
 
 from nbxmpp.namespaces import Namespace
@@ -174,12 +175,18 @@ class CallWidget(Gtk.Box):
             KindConstant.CALL_OUTGOING,
             additional_data=additional_data)
 
-    def _on_num_button_press(self, button: Gtk.Button) -> None:
+    def _on_num_button_press(self,
+                             button: Gtk.Button,
+                             _event: Gdk.EventButton
+                             ) -> None:
         button_id = Gtk.Buildable.get_name(button)
         key = button_id.split('_')[1]
         self._get_audio_content().start_dtmf(key)
 
-    def _on_num_button_release(self, _button: Gtk.Button) -> None:
+    def _on_num_button_release(self,
+                               _button: Gtk.Button,
+                               _event: Gdk.EventButton
+                               ) -> None:
         self._get_audio_content().stop_dtmf()
 
     def _on_mic_volume_changed(self,
@@ -543,7 +550,7 @@ class CallWidget(Gtk.Box):
             self._contact.jid, self._jingle['audio'].sid)
         return session.get_content('audio')
 
-    def _get_call_resources(self) -> List[ResourceContact]:
+    def _get_call_resources(self) -> List[types.ResourceContact]:
         resource_list = []
         for resource_contact in self._contact.iter_resources():
             if resource_contact.supports(Namespace.JINGLE_RTP):
