@@ -79,7 +79,3 @@ class PubSub(BaseModule):
         pb.addChild('unsubscribe', {'node': node, 'jid': our_jid})
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
-
-
-def get_instance(*args, **kwargs):
-    return PubSub(*args, **kwargs), 'PubSub'

@@ -413,7 +413,3 @@ class Message(BaseModule):
             additional_data=message.additional_data,
             message_id=message.message_id,
             stanza_id=message.message_id)
-
-
-def get_instance(*args, **kwargs):
-    return Message(*args, **kwargs), 'Message'

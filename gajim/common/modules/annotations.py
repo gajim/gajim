@@ -16,7 +16,6 @@
 
 from typing import Any
 from typing import Dict
-from typing import Tuple
 from typing import Union
 from typing import Optional
 
@@ -63,7 +62,3 @@ class Annotations(BaseModule):
     def set_note(self, note: AnnotationNote) -> None:
         self._annotations[note.jid] = note
         self.set_annotations(self._annotations.values())
-
-
-def get_instance(*args: Any, **kwargs: Any) -> Tuple[Annotations, str]:
-    return Annotations(*args, **kwargs), 'Annotations'

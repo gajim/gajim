@@ -122,7 +122,3 @@ class RosterItemExchange(BaseModule):
 
 class RosterItemExchangeEvent(NetworkIncomingEvent):
     name = 'roster-item-exchange-received'
-
-
-def get_instance(*args, **kwargs):
-    return RosterItemExchange(*args, **kwargs), 'RosterItemExchange'

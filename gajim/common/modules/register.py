@@ -38,7 +38,3 @@ class Register(BaseModule):
 
     def pass_disco(self, info):
         self.supported = Namespace.REGISTER in info.features
-
-
-def get_instance(*args, **kwargs):
-    return Register(*args, **kwargs), 'Register'

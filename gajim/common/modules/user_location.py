@@ -63,7 +63,3 @@ class UserLocation(BaseModule):
         self._current_location = location
         self._log.info('Send %s', location)
         self._nbxmpp('Location').set_location(location)
-
-
-def get_instance(*args, **kwargs):
-    return UserLocation(*args, **kwargs), 'UserLocation'

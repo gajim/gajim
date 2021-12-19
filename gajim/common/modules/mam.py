@@ -542,7 +542,3 @@ class MAM(BaseModule):
                                           end_date,
                                           result.rsm.last,
                                           queryid)
-
-
-def get_instance(*args, **kwargs):
-    return MAM(*args, **kwargs), 'MAM'

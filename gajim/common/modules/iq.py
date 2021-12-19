@@ -82,7 +82,3 @@ class Iq(BaseModule):
         if len(id_) > 3 and id_[2] == '_':
             sid = id_[3:]
         return sid
-
-
-def get_instance(*args, **kwargs):
-    return Iq(*args, **kwargs), 'Iq'

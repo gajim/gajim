@@ -83,7 +83,3 @@ class UserAvatar(BaseModule):
         self._log.info('Received Avatar: %s %s', contact.jid, avatar.sha)
         app.interface.save_avatar(avatar.data)
         contact.update_avatar(avatar.sha)
-
-
-def get_instance(*args, **kwargs):
-    return UserAvatar(*args, **kwargs), 'UserAvatar'

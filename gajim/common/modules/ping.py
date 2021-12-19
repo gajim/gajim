@@ -14,8 +14,6 @@
 
 # XEP-0199: XMPP Ping
 
-from typing import Any
-from typing import Tuple
 from typing import Generator
 
 import time
@@ -75,7 +73,3 @@ class Ping(BaseModule):
                                                  account=self._account,
                                                  contact=contact,
                                                  seconds=diff))
-
-
-def get_instance(*args: Any, **kwargs: Any) -> Tuple[Ping, str]:
-    return Ping(*args, **kwargs), 'Ping'

@@ -199,7 +199,3 @@ def store_bob_data(bob_data):
 
     log.info('BoB data stored: %s', algo_hash)
     return filepath
-
-
-def get_instance(*args, **kwargs):
-    return BitsOfBinary(*args, **kwargs), 'BitsOfBinary'

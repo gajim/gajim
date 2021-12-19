@@ -859,7 +859,3 @@ class MUC(BaseModule):
 
     def _on_client_resume_failed(self, _client, _signal_name):
         self._reset_state()
-
-
-def get_instance(*args, **kwargs):
-    return MUC(*args, **kwargs), 'MUC'

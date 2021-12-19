@@ -14,9 +14,6 @@
 
 # XEP-0163: Personal Eventing Protocol
 
-from typing import Any
-from typing import Tuple
-
 from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
 
@@ -33,7 +30,3 @@ class PEP(BaseModule):
                 if identity.type == 'pep':
                     self._log.info('Discovered PEP support: %s', info.jid)
                     self.supported = True
-
-
-def get_instance(*args: Any, **kwargs: Any) -> Tuple[PEP, str]:
-    return PEP(*args, **kwargs), 'PEP'

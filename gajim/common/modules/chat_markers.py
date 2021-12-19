@@ -119,7 +119,3 @@ class ChatMarkers(BaseModule):
 
     def send_displayed_marker(self, contact, id_, type_):
         self._send_marker(contact, 'displayed', id_, str(type_))
-
-
-def get_instance(*args, **kwargs):
-    return ChatMarkers(*args, **kwargs), 'ChatMarkers'

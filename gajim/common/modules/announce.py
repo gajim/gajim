@@ -31,7 +31,3 @@ class Announce(BaseModule):
     def set_announce(self, jid, subject=None, body=None):
         message = nbxmpp.Message(to=jid, body=body, subject=subject)
         self._nbxmpp().send(message)
-
-
-def get_instance(*args, **kwargs):
-    return Announce(*args, **kwargs), 'Announce'

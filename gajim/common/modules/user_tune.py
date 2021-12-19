@@ -14,9 +14,6 @@
 
 # XEP-0118: User Tune
 
-from typing import Any
-from typing import Tuple
-
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
@@ -109,7 +106,3 @@ class UserTune(BaseModule):
             return
 
         self.set_tune(event.info)
-
-
-def get_instance(*args: Any, **kwargs: Any) -> Tuple[UserTune, str]:
-    return UserTune(*args, **kwargs), 'UserTune'

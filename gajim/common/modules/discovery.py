@@ -253,7 +253,3 @@ class Discovery(BaseModule):
 
         contact = self._con.get_module('Contacts').get_contact(result.jid)
         contact.notify('caps-update')
-
-
-def get_instance(*args, **kwargs):
-    return Discovery(*args, **kwargs), 'Discovery'

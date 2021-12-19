@@ -193,7 +193,3 @@ class VCardAvatars(BaseModule):
 
             else:
                 self._log.info('Avatar already known: %s', nick)
-
-
-def get_instance(*args, **kwargs):
-    return VCardAvatars(*args, **kwargs), 'VCardAvatars'

@@ -50,7 +50,3 @@ class LastActivity(BaseModule):
 
         contact = self._get_contact(jid.bare)
         return contact.is_subscribed
-
-
-def get_instance(*args, **kwargs):
-    return LastActivity(*args, **kwargs), 'LastActivity'

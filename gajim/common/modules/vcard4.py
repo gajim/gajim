@@ -27,7 +27,3 @@ class VCard4(BaseModule):
 
     def __init__(self, con):
         BaseModule.__init__(self, con)
-
-
-def get_instance(*args, **kwargs):
-    return VCard4(*args, **kwargs), 'VCard4'

@@ -50,7 +50,3 @@ class Delimiter(BaseModule):
         self.delimiter = delimiter
         self.available = True
         self._con.connect_machine()
-
-
-def get_instance(*args, **kwargs):
-    return Delimiter(*args, **kwargs), 'Delimiter'

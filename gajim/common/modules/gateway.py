@@ -98,7 +98,3 @@ class Gateway(BaseModule):
                          prompt=prompt,
                          prompt_jid=prompt_jid,
                          stanza=stanza))
-
-
-def get_instance(*args, **kwargs):
-    return Gateway(*args, **kwargs), 'Gateway'

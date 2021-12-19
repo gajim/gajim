@@ -49,6 +49,10 @@ class BaseModule(EventHelper):
         self._stored_publish: Optional[types.AnyCallableT] = None
         self.handlers: list[StanzaHandler] = []
 
+    @classmethod
+    def get_instance(cls, client: types.Client) -> BaseModule:
+        return cls(client)
+
     def _set_logger(self, plugin: bool) -> LogAdapter:
         logger_name = 'gajim.c.m.%s'
         if plugin:

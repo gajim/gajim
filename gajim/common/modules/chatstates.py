@@ -18,7 +18,6 @@ from typing import Any
 from typing import Dict  # pylint: disable=unused-import
 from typing import List  # pylint: disable=unused-import
 from typing import Optional
-from typing import Tuple
 
 import time
 from functools import wraps
@@ -333,7 +332,3 @@ class Chatstate(BaseModule):
         self._last_keyboard_activity.clear()
         self._last_mouse_activity.clear()
         self._blocked = []
-
-
-def get_instance(*args: Any, **kwargs: Any) -> Tuple[Chatstate, str]:
-    return Chatstate(*args, **kwargs), 'Chatstate'

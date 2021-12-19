@@ -713,7 +713,3 @@ class Bytestream(BaseModule):
             app.socks5queue.send_file(file_props, self._account, 'server')
 
         raise nbxmpp.NodeProcessed
-
-
-def get_instance(*args, **kwargs):
-    return Bytestream(*args, **kwargs), 'Bytestream'

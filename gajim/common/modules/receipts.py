@@ -102,7 +102,3 @@ class Receipts(BaseModule):
         if contact.subscription not in ('to', 'none'):
             return True
         return False
-
-
-def get_instance(*args, **kwargs):
-    return Receipts(*args, **kwargs), 'Receipts'

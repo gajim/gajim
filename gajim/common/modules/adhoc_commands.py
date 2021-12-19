@@ -428,7 +428,3 @@ class AdHocCommandError(NetworkIncomingEvent):
 
 class AdHocCommandActionResponse(NetworkIncomingEvent):
     name = 'adhoc-command-action-response'
-
-
-def get_instance(*args, **kwargs):
-    return AdHocCommands(*args, **kwargs), 'AdHocCommands'

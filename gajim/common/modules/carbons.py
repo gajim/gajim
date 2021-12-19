@@ -37,8 +37,3 @@ class Carbons(BaseModule):
         iq.setTag('enable', namespace=Namespace.CARBONS)
         self._log.info('Activate')
         self._con.connection.send(iq)
-
-
-
-def get_instance(*args, **kwargs):
-    return Carbons(*args, **kwargs), 'Carbons'

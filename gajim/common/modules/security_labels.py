@@ -64,7 +64,3 @@ class SecLabels(BaseModule):
 
     def get_catalog(self, jid):
         return self._catalogs.get(jid)
-
-
-def get_instance(*args, **kwargs):
-    return SecLabels(*args, **kwargs), 'SecLabels'

@@ -146,7 +146,3 @@ class Blocking(BaseModule):
         # Send a presence Probe to get the current Status
         probe = nbxmpp.Presence(jid, 'probe', frm=self._con.get_own_jid())
         self._nbxmpp().send(probe)
-
-
-def get_instance(*args, **kwargs):
-    return Blocking(*args, **kwargs), 'Blocking'

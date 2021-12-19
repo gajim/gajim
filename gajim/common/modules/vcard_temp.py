@@ -39,7 +39,3 @@ class VCardTemp(BaseModule):
 
         self.supported = True
         self._log.info('Discovered vcard-temp: %s', info.jid)
-
-
-def get_instance(*args, **kwargs):
-    return VCardTemp(*args, **kwargs), 'VCardTemp'

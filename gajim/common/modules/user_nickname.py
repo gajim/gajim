@@ -14,9 +14,6 @@
 
 # XEP-0172: User Nickname
 
-from typing import Any
-from typing import Tuple
-
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
@@ -57,7 +54,3 @@ class UserNickname(BaseModule):
             return
 
         contact.notify('nickname-update')
-
-
-def get_instance(*args: Any, **kwargs: Any) -> Tuple[UserNickname, str]:
-    return UserNickname(*args, **kwargs), 'UserNickname'

@@ -285,7 +285,3 @@ class Presence(BaseModule):
             'send-presence', self._account, presence)
         self._log.debug('Send presence:\n%s', presence)
         self._con.connection.send(presence)
-
-
-def get_instance(*args, **kwargs):
-    return Presence(*args, **kwargs), 'Presence'

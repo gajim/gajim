@@ -398,7 +398,3 @@ class HTTPFileTransfer(FileTransfer):
         self.put_uri = result.put_uri
         self.get_uri = result.get_uri
         self._headers = result.headers
-
-
-def get_instance(*args, **kwargs):
-    return HTTPUpload(*args, **kwargs), 'HTTPUpload'

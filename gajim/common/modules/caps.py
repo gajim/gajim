@@ -222,7 +222,3 @@ class EntityCapsTask(Task):
 
     def __hash__(self):
         return hash(self.entity)
-
-
-def get_instance(*args, **kwargs):
-    return Caps(*args, **kwargs), 'Caps'

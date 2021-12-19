@@ -72,7 +72,3 @@ class HTTPAuth(BaseModule):
             self._log.info('Auth request denied')
             err = nbxmpp.Error(stanza, nbxmpp.protocol.ERR_NOT_AUTHORIZED)
             self._con.connection.send(err)
-
-
-def get_instance(*args, **kwargs):
-    return HTTPAuth(*args, **kwargs), 'HTTPAuth'
