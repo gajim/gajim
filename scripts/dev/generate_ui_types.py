@@ -33,7 +33,7 @@ from gi.repository import Gtk
 from gi.repository import GtkSource
 
 
-class Builder: ...
+class Builder(Gtk.Builder): ...
 '''
 
 CLASS_DEF = '\nclass %s(Builder):'
