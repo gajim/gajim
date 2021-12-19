@@ -68,7 +68,7 @@ class CallWidget(Gtk.Box):
         # having to show a new call row
         self._incoming_video_event = None
 
-        self._jingle: dict[str, JingleObject] = {
+        self._jingle: dict(str, JingleObject) = {
             'audio': JingleObject(
                 JingleState.NULL,
                 self._update_audio),
@@ -133,10 +133,16 @@ class CallWidget(Gtk.Box):
         self._on_jingle_button_toggled(['video'])
 
     def _on_jingle_button_toggled(self, jingle_types: List[str]) -> None:
+        call_resources = self._get_call_resources()
+        if not call_resources:
+            return
+
+        # TODO: Resource priority
+        full_jid = call_resources[0].jid
+
         if all(item in jingle_types for item in ['audio', 'video']):
             # Both 'audio' and 'video' in jingle_types
-            sid = self._client.get_module('Jingle').start_audio_video(
-                self._contact.jid)
+            sid = self._client.get_module('Jingle').start_audio_video(full_jid)
             self._set_jingle_state('audio', JingleState.CONNECTING, sid)
             self._set_jingle_state('video', JingleState.CONNECTING, sid)
             self._store_outgoing_call(sid)
@@ -146,8 +152,7 @@ class CallWidget(Gtk.Box):
             if self._jingle['audio'].state != JingleState.NULL:
                 self._close_jingle_content('audio')
             else:
-                sid = self._client.get_module('Jingle').start_audio(
-                    self._contact.jid)
+                sid = self._client.get_module('Jingle').start_audio(full_jid)
                 self._set_jingle_state('audio', JingleState.CONNECTING, sid)
                 self._store_outgoing_call(sid)
 
@@ -155,8 +160,7 @@ class CallWidget(Gtk.Box):
             if self._jingle['video'].state != JingleState.NULL:
                 self._close_jingle_content('video')
             else:
-                sid = self._client.get_module('Jingle').start_video(
-                    self._contact.jid)
+                sid = self._client.get_module('Jingle').start_video(full_jid)
                 self._set_jingle_state('video', JingleState.CONNECTING, sid)
                 self._store_outgoing_call(sid)
 
@@ -539,6 +543,12 @@ class CallWidget(Gtk.Box):
             self._contact.jid, self._jingle['audio'].sid)
         return session.get_content('audio')
 
+    def _get_call_resources(self) -> List[ResourceContact]:
+        resource_list = []
+        for resource_contact in self._contact.iter_resources():
+            if resource_contact.supports(Namespace.JINGLE_RTP):
+                resource_list.append(resource_contact)
+        return resource_list
 
 class JingleObject:
     __slots__ = ('sid', 'state', 'available', 'update')
