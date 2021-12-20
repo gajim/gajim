@@ -37,10 +37,11 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import modules
+from gajim.common import helpers
+from gajim.common import idle
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.const import ClientState
-from gajim.common.connection import CommonConnection
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
 from gajim.common.zeroconf.connection_handlers_zeroconf import ConnectionHandlersZeroconf
@@ -52,7 +53,7 @@ from gajim.common.connection_handlers_events import MessageSentEvent
 log = logging.getLogger('gajim.c.connection_zeroconf')
 
 
-class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
+class ConnectionZeroconf(ConnectionHandlersZeroconf):
     def __init__(self, name):
         ConnectionHandlersZeroconf.__init__(self)
         # system username
@@ -64,11 +65,134 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         self.autoconnect = False
         self.httpupload = False
 
-        CommonConnection.__init__(self, name)
+        self.name = name
+        self._modules = {}
+        self.connection = None # xmpppy ClientCommon instance
+        self.is_zeroconf = False
+        self.password = None
+        self.server_resource = helpers.get_resource(self.name)
+        self.priority = app.get_priority(name, 'offline')
+        self.time_to_reconnect = None
+        self._reconnect_timer_source = None
+
+        self._state = ClientState.DISCONNECTED
+        self._status = 'offline'
+        self._status_message = ''
+
+        # If handlers have been registered
+        self.handlers_registered = False
+
+        self.pep = {}
+
+        self.roster_supported = True
+
+        self._stun_servers = [] # STUN servers of our jabber server
+
+        # Tracks the calls of the connect_machine() method
+        self._connect_machine_calls = 0
+
+        self.get_config_values_or_default()
+
         self.is_zeroconf = True
 
         # Register all modules
         modules.register_modules(self)
+
+    def _set_state(self, state):
+        log.info('State: %s', state)
+        self._state = state
+
+    @property
+    def state(self):
+        return self._state
+
+    @property
+    def status(self):
+        return self._status
+
+    @property
+    def status_message(self):
+        return self._status_message
+
+    def _register_new_handlers(self, con):
+        for handler in modules.get_handlers(self):
+            if len(handler) == 5:
+                name, func, typ, ns, priority = handler
+                con.RegisterHandler(name, func, typ, ns, priority=priority)
+            else:
+                con.RegisterHandler(*handler)
+        self.handlers_registered = True
+
+    def _unregister_new_handlers(self, con):
+        if not con:
+            return
+        for handler in modules.get_handlers(self):
+            if len(handler) > 4:
+                handler = handler[:4]
+            con.UnregisterHandler(*handler)
+        self.handlers_registered = False
+
+    def get_module(self, name):
+        return modules.get(self.name, name)
+
+    def quit(self, kill_core):
+        if kill_core and app.account_is_connected(self.name):
+            self.disconnect(reconnect=False)
+
+    def new_account(self, name, config, sync=False):
+        """
+        To be implemented by derived classes
+        """
+        raise NotImplementedError
+
+    def _on_new_account(self, con=None, con_type=None):
+        """
+        To be implemented by derived classes
+        """
+        raise NotImplementedError
+
+    def change_status(self, show, msg, auto=False):
+        if not msg:
+            msg = ''
+
+        self._status = show
+        self._status_message = msg
+
+        if self._state.is_disconnected:
+            if show == 'offline':
+                return
+
+            self.server_resource = helpers.get_resource(self.name)
+            self.connect_and_init(show, msg)
+            return
+
+        if self._state.is_connecting or self._state.is_reconnect_scheduled:
+            if show == 'offline':
+                self.disconnect(reconnect=False)
+            elif self._state.is_reconnect_scheduled:
+                self.reconnect()
+            return
+
+        # We are connected
+        if show == 'offline':
+            presence = self.get_module('Presence').get_presence(
+                typ='unavailable',
+                status=msg,
+                caps=False)
+
+            self.connection.send(presence, now=True)
+            self.disconnect(reconnect=False)
+            return
+
+        idle_time = None
+        if auto:
+            if app.is_installed('IDLE') and app.settings.get('autoaway'):
+                idle_sec = idle.Monitor.get_idle_sec()
+                idle_time = time.strftime(
+                    '%Y-%m-%dT%H:%M:%SZ',
+                    time.gmtime(time.time() - idle_sec))
+
+        self._update_status(show, msg, idle_time=idle_time)
 
     def get_config_values_or_default(self):
         """
@@ -433,8 +557,18 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         self.connection.send(stanza)
 
     def _event_dispatcher(self, realm, event, data):
-        CommonConnection._event_dispatcher(self, realm, event, data)
         if realm == '':
+            if event == 'STANZA RECEIVED':
+                app.nec.push_incoming_event(
+                    NetworkEvent('stanza-received',
+                                 conn=self,
+                                 stanza_str=str(data)))
+            elif event == 'DATA SENT':
+                app.nec.push_incoming_event(
+                    NetworkEvent('stanza-sent',
+                                 conn=self,
+                                 stanza_str=str(data)))
+
             if event == nbxmpp.transports.DATA_ERROR:
                 frm = data[0]
                 error_message = _(
