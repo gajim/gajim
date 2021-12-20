@@ -44,8 +44,6 @@ from gajim.common.helpers import Observable
 from gajim.common.idle import Monitor
 from gajim.common.i18n import _
 
-from gajim.common.connection_handlers_events import MessageSentEvent
-
 from gajim.gui.util import open_window
 
 
@@ -507,7 +505,7 @@ class Client(Observable):
         message.message_id = self.send_stanza(message.stanza)
 
         app.nec.push_incoming_event(
-            MessageSentEvent(None, jid=message.jid, **vars(message)))
+            NetworkEvent('message-sent', jid=message.jid, **vars(message)))
 
         if message.is_groupchat:
             return

@@ -29,36 +29,6 @@ from gajim.common.file_props import FilesProp
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
 
-class PresenceReceivedEvent(nec.NetworkIncomingEvent):
-
-    name = 'presence-received'
-
-
-class OurShowEvent(nec.NetworkIncomingEvent):
-
-    name = 'our-show'
-
-    def init(self):
-        self.reconnect = False
-
-
-class MessageSentEvent(nec.NetworkIncomingEvent):
-
-    name = 'message-sent'
-
-
-class ConnectionLostEvent(nec.NetworkIncomingEvent):
-
-    name = 'connection-lost'
-
-    def generate(self):
-        app.nec.push_incoming_event(OurShowEvent(
-            None,
-            conn=self.conn,
-            show='offline'))
-        return True
-
-
 class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
 
     name = 'file-request-received'

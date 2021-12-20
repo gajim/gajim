@@ -39,18 +39,36 @@ from gajim.common import app
 from gajim.common import modules
 from gajim.common import helpers
 from gajim.common import idle
+from gajim.common import nec
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.const import ClientState
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
 from gajim.common.zeroconf.connection_handlers_zeroconf import ConnectionHandlersZeroconf
-from gajim.common.connection_handlers_events import OurShowEvent
 from gajim.common.connection_handlers_events import InformationEvent
-from gajim.common.connection_handlers_events import ConnectionLostEvent
-from gajim.common.connection_handlers_events import MessageSentEvent
 
 log = logging.getLogger('gajim.c.connection_zeroconf')
+
+
+class OurShowEvent(nec.NetworkIncomingEvent):
+
+    name = 'our-show'
+
+    def init(self):
+        self.reconnect = False
+
+
+class ConnectionLostEvent(nec.NetworkIncomingEvent):
+
+    name = 'connection-lost'
+
+    def generate(self):
+        app.nec.push_incoming_event(OurShowEvent(
+            None,
+            conn=self.conn,
+            show='offline'))
+        return True
 
 
 class ConnectionZeroconf(ConnectionHandlersZeroconf):
@@ -521,7 +539,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
     def _send_message(self, message):
         def on_send_ok(stanza_id):
             app.nec.push_incoming_event(
-                MessageSentEvent(None, jid=message.jid, **vars(message)))
+                    NetworkEvent('messasge-sent',
+                                 jid=message.jid,
+                                 **vars(message)))
             self.get_module('Message').log_message(message)
 
         def on_send_not_ok(reason):
