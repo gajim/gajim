@@ -390,7 +390,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             nickname=nick,
             additional_data=event.additional_data)
 
-        self._add_unread(row, event.properties, event.msgtxt)
+        self._add_unread(row, event)
         self.invalidate_sort()
 
     def _on_message_updated(self, event):
@@ -473,16 +473,23 @@ class ChatList(Gtk.ListBox, EventHelper):
             _('File'), icon_name='text-x-generic-symbolic')
 
     @staticmethod
-    def _add_unread(row, properties, text):
-        if properties.is_carbon_message and properties.carbon.is_sent:
-            return
+    def _add_unread(row, event):
+        if event.properties.is_carbon_message:
+            if event.properties.carbon.is_sent:
+                return
 
-        if properties.is_from_us():
-            # Last message was from us, reset counter
+        if event.properties.is_from_us():
+            # Last message was from us (1:1), reset counter
             row.reset_unread()
             return
 
-        row.add_unread(text)
+        our_nick = get_group_chat_nick(event.account, event.jid)
+        if event.properties.muc_nickname == our_nick:
+            # Last message was from us (MUC), reset counter
+            row.reset_unread()
+            return
+
+        row.add_unread(event.msgtxt)
 
     def _on_account_changed(self, *args):
         for row in self.get_children():
