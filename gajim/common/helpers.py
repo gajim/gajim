@@ -534,31 +534,8 @@ def play_sound_file(path_to_soundfile):
     if path_to_soundfile is None:
         return
 
-    path_to_soundfile = str(path_to_soundfile)
-    if sys.platform == 'win32':
-        import winsound
-        try:
-            winsound.PlaySound(path_to_soundfile,
-                               winsound.SND_FILENAME|winsound.SND_ASYNC)
-        except Exception:
-            log.exception('Sound Playback Error')
-
-    elif sys.platform == 'darwin':
-        try:
-            from AppKit import NSSound
-        except ImportError:
-            log.exception('Sound Playback Error')
-            return
-
-        sound = NSSound.alloc()
-        sound.initWithContentsOfFile_byReference_(path_to_soundfile, True)
-        sound.play()
-
-    elif app.is_installed('GSOUND'):
-        try:
-            app.gsound_ctx.play_simple({'media.filename' : path_to_soundfile})
-        except GLib.Error as error:
-            log.error('Could not play sound: %s', error.message)
+    from gajim.common import sound
+    sound.play(path_to_soundfile)
 
 def get_connection_status(account: str) -> str:
     if not app.account_is_available(account):
