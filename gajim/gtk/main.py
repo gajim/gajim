@@ -450,10 +450,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         account, jid, type_, select = param.unpack()
         self.add_chat(account, JID.from_string(jid), type_, select)
 
-    def add_chat(self, account: str, jid: JID, type_: str,
-                 select: bool = False) -> None:
-        workspace_id = self.get_active_workspace()
-        if workspace_id is None:
+    def add_chat(self,
+                 account: str,
+                 jid: JID,
+                 type_: str,
+                 select: bool = False,
+                 workspace: str = 'default') -> None:
+        if workspace == 'current':
+            workspace_id = self.get_active_workspace()
+        else:
             workspace_id = self._workspace_side_bar.get_first_workspace()
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,

@@ -338,7 +338,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._disco_muc(row.account, jid, request_vcard=row.new)
 
         else:
-            app.window.add_chat(row.account, jid, 'contact', select=True)
+            app.window.add_chat(
+                row.account,
+                jid,
+                'contact',
+                select=True,
+                workspace='current')
             self.ready_to_destroy = True
             self.destroy()
 

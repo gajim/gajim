@@ -683,7 +683,8 @@ class GroupchatControl(BaseControl):
             app.window.add_chat(self.account,
                                 participant.real_jid.bare,
                                 'contact',
-                                select=True)
+                                select=True,
+                                workspace='current')
         else:
             contact = self.contact.get_resource(nick)
             app.window.add_private_chat(self.account, contact.jid, select=True)
