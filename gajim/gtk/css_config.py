@@ -15,8 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+from typing import Optional
+from typing import Union
+from typing import Tuple
+
 import math
 import logging
+from pathlib import Path
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -33,8 +39,8 @@ log = logging.getLogger('gajim.gui.css')
 settings = Gtk.Settings.get_default()
 
 
-class CSSConfig():
-    def __init__(self):
+class CSSConfig:
+    def __init__(self) -> None:
         """
         CSSConfig handles loading and storing of all relevant Gajim style files
 
@@ -69,24 +75,24 @@ class CSSConfig():
         css_parser.ser.prefs.keepEmptyRules = False
 
         # Holds the currently selected theme in the Theme Editor
-        self._pre_css = None
-        self._pre_css_path = None
+        self._pre_css: Optional[css_parser.css.CSSStyleSheet] = None
+        self._pre_css_path: Optional[Path] = None
 
         # Holds the default theme, its used if values are not found
         # in the selected theme
-        self._default_css = None
-        self._default_css_path = None
+        self._default_css: Optional[css_parser.css.CSSStyleSheet] = None
+        self._default_css_path: Optional[Path] = None
 
         # Holds the currently selected theme
-        self._css = None
-        self._css_path = None
+        self._css: Optional[css_parser.css.CSSStyleSheet] = None
+        self._css_path: Optional[Path] = None
 
         # User Theme CSS Provider
         self._provider = Gtk.CssProvider()
 
         # Used for dynamic classes like account colors
         self._dynamic_provider = Gtk.CssProvider()
-        self._dynamic_dict = {}
+        self._dynamic_dict: dict[str, str] = {}
         self.refresh()
 
         Gtk.StyleContext.add_provider_for_screen(
@@ -95,10 +101,10 @@ class CSSConfig():
             CSSPriority.APPLICATION)
 
         # Cache of recently requested values
-        self._cache = {}
+        self._cache: dict[str, Union[str, Pango.FontDescription, None]] = {}
 
         # Holds all currently available themes
-        self.themes = []
+        self.themes: list[str] = []
 
         self.set_dark_theme()
         self._load_css()
@@ -113,7 +119,7 @@ class CSSConfig():
             CSSPriority.USER_THEME)
 
     @property
-    def prefer_dark(self):
+    def prefer_dark(self) -> bool:
         setting = app.settings.get('dark_theme')
         if setting == Theme.SYSTEM:
             if settings is None:
@@ -121,7 +127,7 @@ class CSSConfig():
             return settings.get_property('gtk-application-prefer-dark-theme')
         return setting == Theme.DARK
 
-    def set_dark_theme(self, value=None):
+    def set_dark_theme(self, value: Optional[int] = None) -> None:
         if value is None:
             value = app.settings.get('dark_theme')
         else:
@@ -135,7 +141,7 @@ class CSSConfig():
         settings.set_property('gtk-application-prefer-dark-theme', bool(value))
         self._load_css()
 
-    def _load_css(self):
+    def _load_css(self) -> None:
         self._load_css_from_file('gajim.css', CSSPriority.APPLICATION)
         if self.prefer_dark:
             self._load_css_from_file('gajim-dark.css',
@@ -146,7 +152,10 @@ class CSSConfig():
             self._load_css_from_file('default-dark.css',
                                      CSSPriority.DEFAULT_THEME_DARK)
 
-    def _load_css_from_file(self, filename, priority):
+    def _load_css_from_file(self,
+                            filename: str,
+                            priority: CSSPriority
+                            ) -> None:
         path = configpaths.get('STYLE') / filename
         try:
             with open(path, "r", encoding='utf8') as file_:
@@ -156,7 +165,7 @@ class CSSConfig():
             return
         self._activate_css(css, priority)
 
-    def _activate_css(self, css, priority):
+    def _activate_css(self, css: str, priority: CSSPriority) -> None:
         try:
             provider = Gtk.CssProvider()
             provider.load_from_data(bytes(css.encode('utf-8')))
@@ -170,7 +179,7 @@ class CSSConfig():
             log.exception('Error loading application css')
 
     @staticmethod
-    def _pango_to_css_weight(number):
+    def _pango_to_css_weight(number: str) -> int:
         # Pango allows for weight values between 100 and 1000
         # CSS allows only full hundred numbers like 100, 200 ..
         number = int(number)
@@ -180,14 +189,14 @@ class CSSConfig():
             return 900
         return int(math.ceil(number / 100.0)) * 100
 
-    def _gather_available_themes(self):
+    def _gather_available_themes(self) -> None:
         files = configpaths.get('MY_THEME').iterdir()
         self.themes = [file.stem for file in files if file.suffix == '.css']
         if 'default' in self.themes:
             # Ignore user created themes that are named 'default'
             self.themes.remove('default')
 
-    def get_theme_path(self, theme, user=True):
+    def get_theme_path(self, theme: str, user: bool = True) -> Path:
         if theme == 'default' and self.prefer_dark:
             theme = 'default-dark'
 
@@ -195,7 +204,7 @@ class CSSConfig():
             return configpaths.get('MY_THEME') / f'{theme}.css'
         return configpaths.get('STYLE') / f'{theme}.css'
 
-    def _determine_theme_path(self):
+    def _determine_theme_path(self) -> Path:
         # Gets the path of the currently active theme.
         # If it does not exist, it falls back to the default theme
         theme = app.settings.get('roster_theme')
@@ -211,23 +220,23 @@ class CSSConfig():
         log.info('Use Theme: %s', theme)
         return theme_path
 
-    def _load_selected(self, new_path=None):
+    def _load_selected(self, new_path: Optional[Path] = None) -> None:
         if new_path is None:
             self._css_path = self._determine_theme_path()
         else:
             self._css_path = new_path
         self._css = css_parser.parseFile(self._css_path)
 
-    def _load_default(self):
+    def _load_default(self) -> None:
         self._default_css_path = self.get_theme_path('default', user=False)
         self._default_css = css_parser.parseFile(self._default_css_path)
 
-    def _load_pre(self, theme):
+    def _load_pre(self, theme: str) -> None:
         log.info('Preload theme %s', theme)
         self._pre_css_path = self.get_theme_path(theme)
         self._pre_css = css_parser.parseFile(self._pre_css_path)
 
-    def _write(self, pre):
+    def _write(self, pre: bool) -> None:
         path = self._css_path
         css = self._css
         if pre:
@@ -241,10 +250,16 @@ class CSSConfig():
             self._load_selected()
             self._activate_theme()
 
-    def set_value(self, selector, attr, value, pre=False):
+    def set_value(self,
+                  selector: str,
+                  attr: StyleAttr,
+                  value: Union[str, Pango.FontDescription],
+                  pre: bool = False
+                  ) -> None:
         if attr == StyleAttr.FONT:
             # forward to set_font() for convenience
-            return self.set_font(selector, value, pre)
+            self.set_font(selector, value, pre)
+            return
 
         if isinstance(attr, StyleAttr):
             attr = attr.value
@@ -261,7 +276,7 @@ class CSSConfig():
                 if not pre:
                     self._add_to_cache(selector, attr, value)
                 self._write(pre)
-                return None
+                return
 
         # The rule was not found, so we add it to this theme
         log.info('Set %s %s %s', selector, attr, value)
@@ -269,9 +284,12 @@ class CSSConfig():
         rule.style[attr] = value
         css.add(rule)
         self._write(pre)
-        return None
 
-    def set_font(self, selector, description, pre=False):
+    def set_font(self,
+                 selector: str,
+                 description: Pango.FontDescription,
+                 pre: bool = False
+                 ) -> None:
         css = self._css
         if pre:
             css = self._pre_css
@@ -285,7 +303,7 @@ class CSSConfig():
                          selector, family, size, style, weight)
                 rule.style['font-family'] = family
                 rule.style['font-style'] = style
-                rule.style['font-size'] = '%spt' % size
+                rule.style['font-size'] = f'{size}pt'
                 rule.style['font-weight'] = weight
 
                 if not pre:
@@ -300,19 +318,24 @@ class CSSConfig():
         rule = css_parser.css.CSSStyleRule(selectorText=selector)
         rule.style['font-family'] = family
         rule.style['font-style'] = style
-        rule.style['font-size'] = '%spt' % size
+        rule.style['font-size'] = f'{size}pt'
         rule.style['font-weight'] = weight
         css.add(rule)
         self._write(pre)
 
-    def _get_attr_from_description(self, description):
+    def _get_attr_from_description(self,
+                                   description: Pango.FontDescription
+                                   ) -> Tuple[Optional[str], int, str, int]:
         size = description.get_size() / Pango.SCALE
         style = self._get_string_from_pango_style(description.get_style())
-        weight = self._pango_to_css_weight(int(description.get_weight()))
+        weight = self._pango_to_css_weight(description.get_weight())
         family = description.get_family()
         return family, size, style, weight
 
-    def _get_default_rule(self, selector, _attr):
+    def _get_default_rule(self,
+                          selector: str,
+                          _attr: StyleAttr
+                          ) -> Optional[css_parser.css.CSSStyleRule]:
         for rule in self._default_css:
             if rule.type != rule.STYLE_RULE:
                 continue
@@ -321,7 +344,10 @@ class CSSConfig():
                 return rule
         return None
 
-    def get_font(self, selector, pre=False):
+    def get_font(self,
+                 selector: str,
+                 pre: bool = False
+                 ) -> Optional[Pango.FontDescription]:
         if pre:
             css = self._pre_css
         else:
@@ -353,7 +379,12 @@ class CSSConfig():
         self._add_to_cache(selector, 'fontdescription', None)
         return None
 
-    def _get_description_from_css(self, family, size, style, weight):
+    def _get_description_from_css(self,
+                                  family: Optional[str],
+                                  size: Optional[str],
+                                  style: Optional[str],
+                                  weight: Optional[str]
+                                  ) -> Optional[Pango.FontDescription]:
         if family is None:
             return None
         desc = Pango.FontDescription()
@@ -367,7 +398,7 @@ class CSSConfig():
         return desc
 
     @staticmethod
-    def _get_pango_style_from_string(style: str) -> int:
+    def _get_pango_style_from_string(style: str) -> Pango.Style:
         if style == 'normal':
             return Pango.Style(0)
         if style == 'oblique':
@@ -384,7 +415,11 @@ class CSSConfig():
         # Pango.Style.OBLIQUE:
         return 'oblique'
 
-    def get_value(self, selector, attr, pre=False):
+    def get_value(self,
+                  selector: str,
+                  attr: StyleAttr,
+                  pre: bool = False
+                  ) -> Union[str, Pango.FontDescription, None]:
         if attr == StyleAttr.FONT:
             # forward to get_font() for convenience
             return self.get_font(selector, pre)
@@ -422,10 +457,15 @@ class CSSConfig():
             return value
         return None
 
-    def remove_value(self, selector, attr, pre=False):
+    def remove_value(self,
+                     selector: str,
+                     attr: StyleAttr,
+                     pre: bool = False
+                     ) -> None:
         if attr == StyleAttr.FONT:
             # forward to remove_font() for convenience
-            return self.remove_font(selector, pre)
+            self.remove_font(selector, pre)
+            return
 
         if isinstance(attr, StyleAttr):
             attr = attr.value
@@ -441,9 +481,8 @@ class CSSConfig():
                 rule.style.removeProperty(attr)
                 break
         self._write(pre)
-        return None
 
-    def remove_font(self, selector, pre=False):
+    def remove_font(self, selector: str, pre: bool = False) -> None:
         css = self._css
         if pre:
             css = self._pre_css
@@ -460,7 +499,7 @@ class CSSConfig():
                 break
         self._write(pre)
 
-    def change_theme(self, theme):
+    def change_theme(self, theme: str) -> bool:
         user = not theme == 'default'
         theme_path = self.get_theme_path(theme, user=user)
         if not theme_path.exists():
@@ -472,7 +511,7 @@ class CSSConfig():
         log.info('Change Theme: Successful switched to %s', theme)
         return True
 
-    def change_preload_theme(self, theme):
+    def change_preload_theme(self, theme: str) -> bool:
         theme_path = self.get_theme_path(theme)
         if not theme_path.exists():
             log.error('Change Preload Theme: Theme %s does not exist',
@@ -482,7 +521,7 @@ class CSSConfig():
         log.info('Successful switched to %s', theme)
         return True
 
-    def rename_theme(self, old_theme, new_theme):
+    def rename_theme(self, old_theme: str, new_theme: str) -> bool:
         if old_theme not in self.themes:
             log.error('Rename Theme: Old theme %s not found', old_theme)
             return False
@@ -501,12 +540,12 @@ class CSSConfig():
                  old_theme, new_theme)
         return True
 
-    def _activate_theme(self):
+    def _activate_theme(self) -> None:
         log.info('Activate theme')
         self._invalidate_cache()
         self._provider.load_from_data(self._css.cssText)
 
-    def add_new_theme(self, theme):
+    def add_new_theme(self, theme: str) -> bool:
         theme_path = self.get_theme_path(theme)
         if theme_path.exists():
             log.error('Add Theme: %s exists already', theme_path)
@@ -517,32 +556,39 @@ class CSSConfig():
         log.info('Add Theme: Successful added theme %s', theme)
         return True
 
-    def remove_theme(self, theme):
+    def remove_theme(self, theme: str) -> None:
         theme_path = self.get_theme_path(theme)
         if theme_path.exists():
             theme_path.unlink()
             self.themes.remove(theme)
         log.info('Remove Theme: Successful removed theme %s', theme)
 
-    def _add_to_cache(self, selector, attr, value):
+    def _add_to_cache(self,
+                      selector: str,
+                      attr: StyleAttr,
+                      value: Union[str, Pango.FontDescription, None]
+                      ) -> None:
         self._cache[selector + attr] = value
 
-    def _get_from_cache(self, selector, attr):
+    def _get_from_cache(self,
+                        selector: str,
+                        attr: StyleAttr
+                        ) -> Union[str, Pango.FontDescription, None]:
         return self._cache[selector + attr]
 
-    def _invalidate_cache(self):
+    def _invalidate_cache(self) -> None:
         self._cache = {}
 
-    def refresh(self):
+    def refresh(self) -> None:
         css = ''
         accounts = app.settings.get_accounts()
         for index, account in enumerate(accounts):
             color = app.settings.get_account_setting(account, 'account_color')
-            css_class = 'gajim_class_%s' % index
+            css_class = f'gajim_class_{index}'
             css += '.%s { background-color: %s }\n' % (css_class, color)
             self._dynamic_dict[account] = css_class
 
         self._dynamic_provider.load_from_data(css.encode())
 
-    def get_dynamic_class(self, name):
+    def get_dynamic_class(self, name: str) -> str:
         return self._dynamic_dict[name]
