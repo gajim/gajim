@@ -1128,9 +1128,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def _allow_add_message(self) -> bool:
         # Only add messages if the view is already populated
-        chat_loaded = app.window.is_chat_loaded(self.account, self.contact.jid)
-        lower_complete = self._scrolled_view.get_lower_complete()
-        return chat_loaded and lower_complete
+        return self.is_chat_loaded and self._scrolled_view.get_lower_complete()
 
     def add_info_message(self, text: str) -> None:
         self.conversation_view.add_info_message(text)
@@ -1321,7 +1319,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def set_control_active(self, state: bool) -> None:
         if not self._chat_loaded:
             self.fetch_n_lines_history(self._scrolled_view, True, 20)
-            self._chat_loaded = True
 
         if state:
             self.set_emoticon_popover()
@@ -1401,6 +1398,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 before,
                 timestamp,
                 n_lines)
+
+        self._chat_loaded = True
 
         if not messages:
             self._scrolled_view.set_history_complete(before, True)
