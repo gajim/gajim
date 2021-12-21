@@ -508,3 +508,7 @@ class ConversationView(Gtk.ListBox):
 
     def _on_contact_setting_changed(self, *args):
         self.invalidate_filter()
+
+    def remove(self, widget: Gtk.Widget) -> None:
+        super().remove(widget)
+        widget.destroy()
