@@ -44,14 +44,24 @@ class PlaySound:
     def stop(self) -> None:
         raise NotImplementedError
 
+    def loop_in_progress(self) -> bool:
+        raise NotImplementedError
+
 
 class PlatformWindows(PlaySound):
 
+    def __init__(self) -> None:
+        self._loop_in_progress = False
+
     def play(self, path: Path, loop: bool = False) -> None:
+        if self._loop_in_progress:
+            return
+
         flags = (winsound.SND_FILENAME |
                  winsound.SND_ASYNC |
                  winsound.SND_NODEFAULT)
         if loop:
+            self._loop_in_progress = True
             flags = flags | winsound.SND_LOOP
 
         try:
@@ -64,6 +74,10 @@ class PlatformWindows(PlaySound):
             winsound.PlaySound(None, 0)
         except Exception:
             log.exception('Sound Playback Error')
+        self._loop_in_progress = False
+
+    def loop_in_progress(self) -> bool:
+        return self._loop_in_progress
 
 
 class PlatformMacOS(PlaySound):
@@ -76,6 +90,9 @@ class PlatformMacOS(PlaySound):
     def stop(self) -> None:
         pass
 
+    def loop_in_progress(self) -> bool:
+        return False
+
 
 class PlatformUnix(PlaySound):
 
@@ -86,8 +103,10 @@ class PlatformUnix(PlaySound):
         if not app.is_installed('GSOUND'):
             return
 
+        if self.loop_in_progress():
+            return
+
         attrs = {'media.filename': str(path)}
-        self._cancellable = Gio.Cancellable()
 
         if loop:
             self._play_loop(attrs)
@@ -99,6 +118,7 @@ class PlatformUnix(PlaySound):
                 self._cancellable = None
 
     def _play_loop(self, attrs: dict[str, str]) -> None:
+        self._cancellable = Gio.Cancellable()
         try:
             app.gsound_ctx.play_full(attrs,
                                      self._cancellable,
@@ -117,6 +137,7 @@ class PlatformUnix(PlaySound):
         except GLib.Error as error:
             quark = GLib.quark_try_string('g-io-error-quark')
             if error.matches(quark, Gio.IOErrorEnum.CANCELLED):
+                self._cancellable = None
                 return
             log.error('Could not play sound: %s', error.message)
 
@@ -127,6 +148,9 @@ class PlatformUnix(PlaySound):
             return
         self._cancellable.cancel()
         self._cancellable = None
+
+    def loop_in_progress(self) -> bool:
+        return self._cancellable is not None
 
 
 def _init_platform() -> PlaySound:
