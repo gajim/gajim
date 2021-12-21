@@ -12,8 +12,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
 
 import logging
+from pathlib import Path
+from typing import Optional
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -30,18 +33,18 @@ log = logging.getLogger('gajim.c.cert_store')
 class CertificateStore:
     def __init__(self):
         self._path = configpaths.get('CERT_STORE')
-        self._certs = []
+        self._certs: list[Gio.TlsCertificate] = []
 
         self._load_certificates()
 
-    def _get_random_path(self):
+    def _get_random_path(self) -> Path:
         filename = get_random_string()
         path = self._path / filename
         if path.exists():
             return self._get_random_path()
         return path
 
-    def _load_certificates(self):
+    def _load_certificates(self) -> None:
         for path in self._path.iterdir():
             if path.is_dir():
                 continue
@@ -59,7 +62,7 @@ class CertificateStore:
     def get_certificates(self):
         return list(self._certs)
 
-    def add_certificate(self, certificate):
+    def add_certificate(self, certificate: Gio.TlsCertificate) -> None:
         log.info('Add certificate to trust store')
         self._certs.append(certificate)
         pem = certificate.props.certificate_pem
@@ -69,7 +72,10 @@ class CertificateStore:
                          self._on_certificate_write_finished,
                          path)
 
-    def verify(self, certificate, tls_errors):
+    def verify(self,
+               certificate: Gio.TlsCertificate,
+               tls_errors: set[Gio.TlsCertificateFlags]):
+
         if Gio.TlsCertificateFlags.UNKNOWN_CA in tls_errors:
             for trusted_certificate in self._certs:
                 if trusted_certificate.is_same(certificate):
@@ -81,9 +87,11 @@ class CertificateStore:
         return False
 
     @staticmethod
-    def _on_certificate_write_finished(data, error, path):
-        if data is None:
-            log.error('Can\'t store certificate: %s', error)
+    def _on_certificate_write_finished(_successful: bool,
+                                       error: Optional[GLib.Error],
+                                       path: Path):
+        if error is not None:
+            log.error('Can\'t store certificate: %s', error.message)
             return
 
         log.info('Certificate stored: %s', path)

@@ -28,6 +28,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Callable
 from typing import Dict
 from typing import Optional
 from typing import List
@@ -1256,7 +1257,12 @@ class Observable:
             func(self, signal_name, *args, **kwargs)
 
 
-def write_file_async(path, data, callback, user_data=None):
+def write_file_async(
+        path: Path,
+        data: bytes,
+        callback: Callable[[bool, Optional[GLib.Error], Any], Any],
+        user_data: Optional[Any] = None):
+
     file = Gio.File.new_for_path(str(path))
     file.create_async(Gio.FileCreateFlags.PRIVATE,
                       GLib.PRIORITY_DEFAULT,
