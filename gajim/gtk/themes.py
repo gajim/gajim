@@ -14,11 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from collections import namedtuple
+from __future__ import annotations
+from typing import NamedTuple
+from typing import Any
+from typing import Union
+
 from enum import IntEnum
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -31,9 +36,14 @@ from .dialogs import ConfirmationDialog
 from .builder import get_builder
 from .util import get_app_window
 
-StyleOption = namedtuple('StyleOption', 'label selector attr')
 
-CSS_STYLE_OPTIONS = [
+class StyleOption(NamedTuple):
+    label: str
+    selector: str
+    attr: StyleAttr
+
+
+CSS_STYLE_OPTIONS: list[StyleOption] = [
     StyleOption(_('Conversation: Text Font'),
                 '.gajim-conversation-text',
                 StyleAttr.FONT),
@@ -129,7 +139,7 @@ class Column(IntEnum):
 
 
 class Themes(Gtk.ApplicationWindow):
-    def __init__(self, transient):
+    def __init__(self, transient: Gtk.Window) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_title(_('Gajim Themes'))
@@ -154,11 +164,14 @@ class Themes(Gtk.ApplicationWindow):
 
         self._fill_choose_listbox()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self,
+                      _widget: Gtk.Widget,
+                      event: Gdk.EventKey
+                      ) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _get_themes(self):
+    def _get_themes(self) -> None:
         current_theme = app.settings.get('roster_theme')
         for theme in app.css_config.themes:
             if theme == current_theme:
@@ -166,7 +179,10 @@ class Themes(Gtk.ApplicationWindow):
                 continue
             self._ui.theme_store.append([theme])
 
-    def _on_theme_name_edit(self, _renderer, path, new_name):
+    def _on_theme_name_edit(self,
+                            _renderer: Gtk.CellRendererText,
+                            path: str,
+                            new_name: str) -> None:
         iter_ = self._ui.theme_store.get_iter(path)
         old_name = self._ui.theme_store[iter_][Column.THEME]
 
@@ -194,10 +210,10 @@ class Themes(Gtk.ApplicationWindow):
         app.settings.set('roster_theme', new_name)
         self._ui.theme_store.set_value(iter_, Column.THEME, new_name)
 
-    def _select_theme_row(self, iter_):
+    def _select_theme_row(self, iter_: Gtk.TreeIter) -> None:
         self._ui.theme_treeview.get_selection().select_iter(iter_)
 
-    def _on_theme_selected(self, tree_selection):
+    def _on_theme_selected(self, tree_selection: Gtk.TreeSelection) -> None:
         store, iter_ = tree_selection.get_selected()
         if iter_ is None:
             self._clear_options()
@@ -210,7 +226,7 @@ class Themes(Gtk.ApplicationWindow):
         self._apply_theme(theme)
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
 
-    def _load_options(self):
+    def _load_options(self) -> None:
         self._ui.option_listbox.foreach(self._remove_option)
         for option in CSS_STYLE_OPTIONS:
             value = app.css_config.get_value(
@@ -222,7 +238,7 @@ class Themes(Gtk.ApplicationWindow):
             row = Option(option, value)
             self._ui.option_listbox.add(row)
 
-    def _add_option(self, _listbox, row):
+    def _add_option(self, _listbox: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
         # Add theme if there is none
         store, _ = self._ui.theme_treeview.get_selection().get_selected()
         first = store.get_iter_first()
@@ -242,18 +258,18 @@ class Themes(Gtk.ApplicationWindow):
         self._ui.option_listbox.add(row)
         self._ui.option_popover.popdown()
 
-    def _clear_options(self):
+    def _clear_options(self) -> None:
         self._ui.option_listbox.foreach(self._remove_option)
 
-    def _fill_choose_listbox(self):
+    def _fill_choose_listbox(self) -> None:
         for option in CSS_STYLE_OPTIONS:
             self._ui.choose_option_listbox.add(ChooseOption(option))
 
-    def _remove_option(self, row):
+    def _remove_option(self, row: Gtk.ListBoxRow) -> None:
         self._ui.option_listbox.remove(row)
         row.destroy()
 
-    def _on_add_new_theme(self, *args):
+    def _on_add_new_theme(self, *args: Any) -> None:
         name = self._create_theme_name()
         if not app.css_config.add_new_theme(name):
             return
@@ -265,7 +281,7 @@ class Themes(Gtk.ApplicationWindow):
         self._select_theme_row(iter_)
         self._apply_theme(name)
 
-    def reload_roster_theme(self):
+    def reload_roster_theme(self) -> None:
         tree_selection = self._ui.theme_treeview.get_selection()
         store, iter_ = tree_selection.get_selected()
         if iter_ is None:
@@ -274,25 +290,25 @@ class Themes(Gtk.ApplicationWindow):
         self._apply_theme(theme)
 
     @staticmethod
-    def _apply_theme(theme):
+    def _apply_theme(theme: str) -> None:
         app.settings.set('roster_theme', theme)
         app.css_config.change_theme(theme)
         app.nec.push_incoming_event(NetworkEvent('theme-update'))
 
     @staticmethod
-    def _update_preferences_window():
+    def _update_preferences_window() -> None:
         window = get_app_window('Preferences')
         if window is not None:
             window.update_theme_list()
 
     @staticmethod
-    def _create_theme_name():
-        i = 0
-        while 'newtheme%s' % i in app.css_config.themes:
-            i += 1
-        return 'newtheme%s' % i
+    def _create_theme_name() -> str:
+        index = 0
+        while f'newtheme{index}' in app.css_config.themes:
+            index += 1
+        return f'newtheme{index}'
 
-    def _on_remove_theme(self, *args):
+    def _on_remove_theme(self, *args: Any) -> None:
         store, iter_ = self._ui.theme_treeview.get_selection().get_selected()
         if iter_ is None:
             return
@@ -329,7 +345,10 @@ class Themes(Gtk.ApplicationWindow):
 
 
 class Option(Gtk.ListBoxRow):
-    def __init__(self, option, value):
+    def __init__(self,
+                 option: StyleOption,
+                 value: Union[str, Pango.FontDescription, None]
+                 ) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.option = option
         self._box = Gtk.Box(spacing=12)
@@ -355,7 +374,7 @@ class Option(Gtk.ListBoxRow):
         self.add(self._box)
         self.show_all()
 
-    def _init_color(self, color):
+    def _init_color(self, color: str) -> None:
         color_button = Gtk.ColorButton()
         if color is not None:
             rgba = Gdk.RGBA()
@@ -365,7 +384,7 @@ class Option(Gtk.ListBoxRow):
         color_button.connect('color-set', self._on_color_set)
         self._box.add(color_button)
 
-    def _init_font(self, desc):
+    def _init_font(self, desc: Pango.FontDescription) -> None:
         font_button = Gtk.FontButton()
         if desc is not None:
             font_button.set_font_desc(desc)
@@ -373,7 +392,7 @@ class Option(Gtk.ListBoxRow):
         font_button.connect('font-set', self._on_font_set)
         self._box.add(font_button)
 
-    def _on_color_set(self, color_button):
+    def _on_color_set(self, color_button: Gtk.ColorButton) -> None:
         color = color_button.get_rgba()
         color_string = color.to_string()
         app.css_config.set_value(
@@ -381,13 +400,13 @@ class Option(Gtk.ListBoxRow):
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
         self.get_toplevel().reload_roster_theme()
 
-    def _on_font_set(self, font_button):
+    def _on_font_set(self, font_button: Gtk.FontButton) -> None:
         desc = font_button.get_font_desc()
         app.css_config.set_font(self.option.selector, desc, pre=True)
         app.nec.push_incoming_event(NetworkEvent('style-changed'))
         self.get_toplevel().reload_roster_theme()
 
-    def _on_remove(self, *args):
+    def _on_remove(self, *args: Any) -> None:
         self.get_parent().remove(self)
         app.css_config.remove_value(
             self.option.selector, self.option.attr, pre=True)
@@ -401,7 +420,7 @@ class Option(Gtk.ListBoxRow):
 
 
 class ChooseOption(Gtk.ListBoxRow):
-    def __init__(self, option):
+    def __init__(self, option: StyleOption) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.option = option
         label = Gtk.Label(label=option.label)
