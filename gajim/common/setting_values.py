@@ -108,7 +108,7 @@ IntSettings = Literal[
     'mainwin_y_position',
     'notification_position_x',
     'notification_position_y',
-    'preview_max_file_size'
+    'preview_max_file_size',
     'preview_size',
     'restore_timeout',
 ]
@@ -134,7 +134,7 @@ StringSettings = Literal[
     'muclumbus_api_http_uri',
     'muclumbus_api_jid',
     'muclumbus_api_pref',
-    'preview_leftclick_action'
+    'preview_leftclick_action',
     'roster_theme',
     'search_engine',
     'show_main_window_on_startup',
