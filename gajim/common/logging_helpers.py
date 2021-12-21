@@ -163,7 +163,7 @@ def init():
     root_log.propagate = False
 
     root_log = logging.getLogger('nbxmpp')
-    root_log.setLevel(logging.WARNING)
+    root_log.setLevel(logging.CRITICAL)
     root_log.addHandler(consoleloghandler)
     root_log.propagate = False
 

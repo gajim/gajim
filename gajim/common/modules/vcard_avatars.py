@@ -60,7 +60,7 @@ class VCardAvatars(BaseModule):
 
         avatar, avatar_sha = vcard.get_avatar()
         if avatar is None:
-            self._log.warning('Avatar missing: %s %s', jid, expected_sha)
+            self._log.info('Avatar missing: %s %s', jid, expected_sha)
             return
 
         if expected_sha != avatar_sha:
