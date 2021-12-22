@@ -26,6 +26,7 @@
 
 from __future__ import annotations
 
+import typing
 from typing import Any
 from typing import NamedTuple
 from typing import Optional
@@ -52,6 +53,10 @@ from gajim.common import ged as ged_module
 from gajim.common.i18n import LANG
 from gajim.common.const import Display
 
+if typing.TYPE_CHECKING:
+    from gajim.gui.main import MainWindow
+    from gajim.application import GajimApplication
+
 
 interface = cast(types.InterfaceT, None)
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
@@ -62,8 +67,8 @@ connections: dict[str, types.Client] = {}
 avatar_cache: dict[str, dict[str, Any]] = {}
 bob_cache: dict[str, bytes] = {}
 ipython_window = None
-app = None  # Gtk.Application
-window = None # MainWindow
+app = None # type: GajimApplication
+window = None # type: MainWindow
 
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = cast(types.NetworkEventsControllerT, None)
