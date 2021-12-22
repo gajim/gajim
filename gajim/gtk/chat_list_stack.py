@@ -24,9 +24,9 @@ from nbxmpp import JID
 
 from gajim.common import app
 
+from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list import ChatRow
-
 
 HANDLED_EVENTS = [
     'message-received',
@@ -58,7 +58,10 @@ class ChatListStack(Gtk.Stack):
                          (str, object, str)),
     }
 
-    def __init__(self, chat_filter, search_entry):
+    def __init__(self,
+                 chat_filter: ChatFilter,
+                 search_entry: Gtk.SearchEntry
+                 ) -> None:
         Gtk.Stack.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -77,7 +80,7 @@ class ChatListStack(Gtk.Stack):
         self._add_actions()
         self.show_all()
 
-    def _add_actions(self):
+    def _add_actions(self) -> None:
         actions = [
             ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
             ('move-chat-to-workspace', 'as', self._move_chat_to_workspace),
@@ -92,7 +95,7 @@ class ChatListStack(Gtk.Stack):
             act.connect('activate', func)
             app.window.add_action(act)
 
-    def _on_visible_child_name(self, _stack, _param):
+    def _on_visible_child_name(self, _stack: Gtk.Stack, _param: str) -> None:
         if self._last_visible_child_name == self.get_visible_child_name():
             return
 
@@ -125,11 +128,11 @@ class ChatListStack(Gtk.Stack):
             return False
         return chat.is_active
 
-    def _on_filter_changed(self, _filter, name):
+    def _on_filter_changed(self, _filter: ChatFilter, name: str) -> None:
         chat_list = self.get_visible_child()
         chat_list.set_filter(name)
 
-    def _on_search_changed(self, search_entry):
+    def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
         chat_list = self.get_visible_child()
         chat_list.set_filter_text(search_entry.get_text())
 
@@ -150,7 +153,10 @@ class ChatListStack(Gtk.Stack):
         self._chat_lists.pop(workspace_id)
         chat_list.destroy()
 
-    def _on_row_selected(self, _chat_list, row):
+    def _on_row_selected(self,
+                         _chat_list: ChatList,
+                         row: Optional[ChatRow]
+                         ) -> None:
         if row is None:
             self.emit('chat-unselected')
             return
@@ -188,7 +194,10 @@ class ChatListStack(Gtk.Stack):
         app.settings.set_workspace_setting(
             workspace_id, 'open_chats', open_chats)
 
-    def _toggle_chat_pinned(self, _action, param):
+    def _toggle_chat_pinned(self,
+                            _action: Gio.SimpleAction,
+                            param: GLib.Variant
+                            ) -> None:
         workspace_id, account, jid = param.unpack()
         jid = JID.from_string(jid)
 
@@ -196,7 +205,10 @@ class ChatListStack(Gtk.Stack):
         chat_list.toggle_chat_pinned(account, jid)
         self.store_open_chats(workspace_id)
 
-    def _move_chat_to_workspace(self, _action, param):
+    def _move_chat_to_workspace(self,
+                                _action: Gio.SimpleAction,
+                                param: GLib.Variant
+                                ) -> None:
         new_workspace_id, account, jid = param.unpack()
         jid = JID.from_string(jid)
 
@@ -209,7 +221,10 @@ class ChatListStack(Gtk.Stack):
         self.store_open_chats(current_chatlist.workspace_id)
         self.store_open_chats(new_workspace_id)
 
-    def _mark_as_read(self, _action, param):
+    def _mark_as_read(self,
+                      _action: Gio.SimpleAction,
+                      param: GLib.Variant
+                      ) -> None:
         _workspace_id, account, jid = param.unpack()
         self.mark_as_read(account, JID.from_string(jid))
 
