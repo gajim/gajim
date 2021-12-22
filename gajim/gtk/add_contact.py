@@ -93,6 +93,7 @@ class AddContact(Assistant):
                            ) -> None:
         page = self.get_current_page()
         account, _ = self.get_page('address').get_account_and_jid()
+        assert account is not None
 
         if button_name == 'next':
             self._start_disco()
@@ -132,6 +133,7 @@ class AddContact(Assistant):
         self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
 
         account, jid = self.get_page('address').get_account_and_jid()
+        assert account is not None
         self._disco_info(account, jid)
 
     @as_task
@@ -213,7 +215,7 @@ class Address(Page):
         self._ui.account_combo.connect('changed', self._on_account_changed)
         self._ui.address_entry.connect('changed', self._set_complete)
 
-        accounts = app.get_enabled_accounts_with_labels()
+        accounts = app.get_enabled_accounts_with_labels(connected_only=True)
         liststore = self._ui.account_combo.get_model()
         for acc in accounts:
             liststore.append(acc)
