@@ -414,7 +414,11 @@ class ChatControl(BaseControl):
             return
 
         if event.correct_id is None:
-            self.last_sent_msg = event.message_id
+            oob_url = event.additional_data.get_value('gajim', 'oob_url')
+            if oob_url == event.message:
+                self.last_sent_msg = None
+            else:
+                self.last_sent_msg = event.message_id
 
         message_id = event.message_id
 

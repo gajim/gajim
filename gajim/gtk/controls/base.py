@@ -1507,12 +1507,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 msg_type == 'sent' and not self.correcting and (
                     not history[pos - 1].startswith('/') or
                     history[pos - 1].startswith('/me'))):
-            self.correcting = True
-            self.msg_textview.get_style_context().add_class(
-                'gajim-msg-correcting')
-            message = history[pos - 1]
-            msg_buf.set_text(message)
-            return
+            if self.last_sent_msg is not None:
+                self.correcting = True
+                self.msg_textview.get_style_context().add_class(
+                    'gajim-msg-correcting')
+                message = history[pos - 1]
+                msg_buf.set_text(message)
+                return
         if self.correcting:
             # We were previously correcting
             self.msg_textview.get_style_context().remove_class(
