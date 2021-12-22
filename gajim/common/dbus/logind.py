@@ -94,17 +94,24 @@ class LogindListener:
             log.warning('Trying to obtain a sleep inhibitor '
                         'while already holding one.')
 
-        ret, ret_fdlist = connection.call_with_unix_fd_list_sync(
-            'org.freedesktop.login1',
-            '/org/freedesktop/login1',
-            'org.freedesktop.login1.Manager',
-            'Inhibit',
-            GLib.Variant('(ssss)', (
-                'sleep', 'org.gajim.Gajim', _('Disconnect from the network'),
-                'delay' # Inhibitor will delay but not block sleep
-                )),
-            GLib.VariantType.new('(h)'),
-            Gio.DBusCallFlags.NONE, -1, None, None)
+        try:
+            ret, ret_fdlist = connection.call_with_unix_fd_list_sync(
+                'org.freedesktop.login1',
+                '/org/freedesktop/login1',
+                'org.freedesktop.login1.Manager',
+                'Inhibit',
+                GLib.Variant('(ssss)', (
+                    'sleep',
+                    'org.gajim.Gajim',
+                    _('Disconnect from the network'),
+                    'delay' # Inhibitor will delay but not block sleep
+                    )),
+                GLib.VariantType.new('(h)'),
+                Gio.DBusCallFlags.NONE, -1, None, None)
+        except GLib.Error as error:
+            log.warning(
+                'Cannot obtain a sleep delay inhibitor from logind: %s', error)
+            return
 
         log.info('Inhibit sleep')
         self._inhibit_fd = ret_fdlist.get(ret.unpack()[0])
