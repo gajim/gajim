@@ -195,14 +195,8 @@ class AddContact(Assistant):
             self.show_page('gateway', Gtk.StackTransitionType.SLIDE_LEFT)
             return
 
-        if result.has_category('client'):
-            self.get_page('contact').prepare(account, result)
-            self.show_page('contact', Gtk.StackTransitionType.SLIDE_LEFT)
-            return
-
-        self.get_page('error').set_text(
-            _('This address does not seem to offer any gateway service.'))
-        self.show_page('error')
+        self.get_page('contact').prepare(account, result)
+        self.show_page('contact', Gtk.StackTransitionType.SLIDE_LEFT)
 
 
 class Address(Page):
