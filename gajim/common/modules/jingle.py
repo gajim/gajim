@@ -295,7 +295,3 @@ class Jingle(BaseModule):
                 if session.peerjid == jid and session.get_content(media):
                     return session
         return None
-
-
-def get_instance(*args, **kwargs):
-    return Jingle(*args, **kwargs), 'Jingle'

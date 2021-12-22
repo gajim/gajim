@@ -296,7 +296,3 @@ class Bookmarks(BaseModule):
 
     def cleanup(self):
         self._remove_timeouts()
-
-
-def get_instance(*args, **kwargs):
-    return Bookmarks(*args, **kwargs), 'Bookmarks'

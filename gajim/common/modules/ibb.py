@@ -233,7 +233,3 @@ class IBB(BaseModule):
 
         file_props = task.get_user_data()
         self.send_data(file_props)
-
-
-def get_instance(*args, **kwargs):
-    return IBB(*args, **kwargs), 'IBB'

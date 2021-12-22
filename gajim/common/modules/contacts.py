@@ -18,7 +18,6 @@ from typing import Any
 from typing import Iterator
 from typing import Optional
 from typing import Union
-from typing import Tuple
 
 import logging
 from functools import partial
@@ -669,7 +668,3 @@ class GroupchatParticipant(CommonContact):
     def update_avatar(self, *args) -> None:
         app.interface.avatar_storage.invalidate_cache(self._jid)
         self.notify('user-avatar-update')
-
-
-def get_instance(*args: Any, **kwargs: Any) -> Tuple[Contacts, str]:
-    return Contacts(*args, **kwargs), 'Contacts'
