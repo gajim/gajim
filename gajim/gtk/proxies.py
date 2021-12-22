@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+
 from gi.repository import Gdk
 from gi.repository import Gtk
 
@@ -23,7 +25,7 @@ from .util import get_app_window
 
 
 class ManageProxies(Gtk.ApplicationWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('ManageProxies')
         self.set_application(app.app)
@@ -45,12 +47,12 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
         self.show_all()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
     @staticmethod
-    def _on_destroy(*args):
+    def _on_destroy(*args: Any) -> None:
         # Window callbacks for updating proxy comboboxes
         window_pref = get_app_window('Preferences')
         window_accounts = get_app_window('AccountsWindow')
@@ -62,14 +64,14 @@ class ManageProxies(Gtk.ApplicationWindow):
         if window_account_wizard is not None:
             window_account_wizard.update_proxy_list()
 
-    def _fill_proxies_treeview(self):
+    def _fill_proxies_treeview(self) -> None:
         model = self._ui.proxies_treeview.get_model()
         model.clear()
         for proxy in app.settings.get_proxies():
             iter_ = model.append()
             model.set(iter_, 0, proxy)
 
-    def _init_list(self):
+    def _init_list(self) -> None:
         self._ui.remove_proxy_button.set_sensitive(False)
         self._ui.settings_grid.set_sensitive(False)
         model = Gtk.ListStore(str)
@@ -82,7 +84,7 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._fill_proxies_treeview()
         self._ui.proxytype_combobox.set_active(0)
 
-    def _on_add_proxy_button_clicked(self, _widget):
+    def _on_add_proxy_button_clicked(self, _button: Gtk.Button) -> None:
         model = self._ui.proxies_treeview.get_model()
         proxies = app.settings.get_proxies()
         i = 1
@@ -95,7 +97,7 @@ class ManageProxies(Gtk.ApplicationWindow):
         model.set(iter_, 0, proxy_name)
         self._ui.proxies_treeview.set_cursor(model.get_path(iter_))
 
-    def _on_remove_proxy_button_clicked(self, _widget):
+    def _on_remove_proxy_button_clicked(self, _button: Gtk.Button) -> None:
         sel = self._ui.proxies_treeview.get_selection()
         if not sel:
             return
@@ -110,23 +112,25 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._on_proxies_treeview_cursor_changed(self._ui.proxies_treeview)
         self._block_signal = False
 
-    def _on_useauth_toggled(self, widget):
+    def _on_useauth_toggled(self, checkbutton: Gtk.CheckButton) -> None:
         if self._block_signal:
             return
-        act = widget.get_active()
+        act = checkbutton.get_active()
         proxy = self._ui.proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, 'useauth', act)
         self._ui.proxyuser_entry.set_sensitive(act)
         self._ui.proxypass_entry.set_sensitive(act)
 
-    def _on_proxies_treeview_cursor_changed(self, widget):
+    def _on_proxies_treeview_cursor_changed(self,
+                                            treeview: Gtk.TreeView
+                                            ) -> None:
         self._block_signal = True
         self._ui.proxyhost_entry.set_text('')
         self._ui.proxyport_entry.set_text('')
         self._ui.proxyuser_entry.set_text('')
         self._ui.proxypass_entry.set_text('')
 
-        sel = widget.get_selection()
+        sel = treeview.get_selection()
         if sel:
             (model, iter_) = sel.get_selected()
         else:
@@ -162,11 +166,14 @@ class ManageProxies(Gtk.ApplicationWindow):
 
         self._block_signal = False
 
-    def _on_proxies_treeview_key_press_event(self, widget, event):
+    def _on_proxies_treeview_key_press_event(self,
+                                             widget: Gtk.Widget,
+                                             event: Gdk.EventKey
+                                             ) -> None:
         if event.keyval == Gdk.KEY_Delete:
             self._on_remove_proxy_button_clicked(widget)
 
-    def _on_proxyname_entry_changed(self, widget):
+    def _on_proxyname_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
         sel = self._ui.proxies_treeview.get_selection()
@@ -176,7 +183,7 @@ class ManageProxies(Gtk.ApplicationWindow):
         if not iter_:
             return
         old_name = model.get_value(iter_, 0)
-        new_name = widget.get_text()
+        new_name = entry.get_text()
         if new_name == '':
             return
         if new_name == old_name:
@@ -185,7 +192,7 @@ class ManageProxies(Gtk.ApplicationWindow):
         app.settings.rename_proxy(old_name, new_name)
         model.set_value(iter_, 0, new_name)
 
-    def _on_proxytype_combobox_changed(self, _widget):
+    def _on_proxytype_combobox_changed(self, _combobox: Gtk.ComboBox) -> None:
         if self._block_signal:
             return
         types = ['http', 'socks5']
@@ -195,14 +202,14 @@ class ManageProxies(Gtk.ApplicationWindow):
         proxy = self._ui.proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, 'type', types[type_])
 
-    def _on_proxyhost_entry_changed(self, entry):
+    def _on_proxyhost_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
         value = entry.get_text()
         proxy = self._ui.proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, 'host', value)
 
-    def _on_proxyport_entry_changed(self, entry):
+    def _on_proxyport_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
         value = entry.get_text()
@@ -213,14 +220,14 @@ class ManageProxies(Gtk.ApplicationWindow):
         proxy = self._ui.proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, 'port', value)
 
-    def _on_proxyuser_entry_changed(self, entry):
+    def _on_proxyuser_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
         value = entry.get_text()
         proxy = self._ui.proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, 'user', value)
 
-    def _on_proxypass_entry_changed(self, entry):
+    def _on_proxypass_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
         value = entry.get_text()
