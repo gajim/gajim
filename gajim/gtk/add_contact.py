@@ -12,9 +12,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Tuple
-from typing import Optional
 from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 import logging
 
@@ -23,8 +26,11 @@ from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp import Namespace
 from nbxmpp.errors import is_error
+from nbxmpp.errors import StanzaError
+from nbxmpp.structs import DiscoInfo
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.helpers import get_subscription_request_msg
 from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
@@ -45,13 +51,13 @@ class AddContact(Assistant):
     def __init__(self,
                  account: Optional[str] = None,
                  jid: Optional[JID] = None,
-                 nick: str = None):
+                 nick: Optional[str] = None):
         Assistant.__init__(self)
         self.account = account
         self.jid = jid
         self._nick = nick
 
-        self._result = None
+        self._result: Union[DiscoInfo, StanzaError, None] = None
 
         self.add_button('next', _('Next'), complete=True,
                         css_class='suggested-action')
@@ -74,14 +80,17 @@ class AddContact(Assistant):
         progress.set_text(_('Trying to gather information on this address…'))
 
         self.connect('button-clicked', self._on_button_clicked)
-
-        self.show_all()
         self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, *args):
+        self.show_all()
+
+    def _on_destroy(self, *args: Any) -> None:
         app.check_finalize(self)
 
-    def _on_button_clicked(self, _assistant, button_name):
+    def _on_button_clicked(self,
+                           _assistant: Assistant,
+                           button_name: str
+                           ) -> None:
         page = self.get_current_page()
         account, _ = self.get_page('address').get_account_and_jid()
 
@@ -126,7 +135,7 @@ class AddContact(Assistant):
         self._disco_info(account, jid)
 
     @as_task
-    def _disco_info(self, account, address):
+    def _disco_info(self, account: str, address: str) -> None:
         _task = yield
 
         client = app.get_client(account)
@@ -139,7 +148,7 @@ class AddContact(Assistant):
         log.info('Disco Info received: %s', address)
         self._process_info(account, result)
 
-    def _process_error(self, account, result):
+    def _process_error(self, account: str, result: StanzaError) -> None:
         log.debug('Error received: %s', result)
         self._result = result
 
@@ -155,7 +164,7 @@ class AddContact(Assistant):
             self.get_page('error').set_text(result.get_text())
             self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
 
-    def _process_info(self, account, result):
+    def _process_info(self, account: str, result: DiscoInfo) -> None:
         log.debug('Info received: %s', result)
         self._result = result
 
@@ -218,12 +227,12 @@ class Address(Page):
         if len(accounts) > 1:
             self._ui.account_box.show()
 
-            if self._account is not None:
+            if account is not None:
                 self._ui.account_combo.set_active_id(account)
             else:
                 self._ui.account_combo.set_active(0)
         else:
-            # Set to first (and only) item; sets self._account as well
+            # Set to first (and only) item; sets self._account automatically
             self._ui.account_combo.set_active(0)
 
         if jid is not None:
@@ -233,29 +242,29 @@ class Address(Page):
 
         self.show_all()
 
-    def get_visible_buttons(self):
+    def get_visible_buttons(self) -> List[str]:
         return ['next']
 
-    def get_default_button(self):
+    def get_default_button(self) -> str:
         return 'next'
 
-    def get_account_and_jid(self) -> Tuple[Optional[str], Any]:
+    def get_account_and_jid(self) -> Tuple[str, str]:
         return self._account, self._ui.address_entry.get_text()
 
     def focus(self) -> None:
         self._ui.address_entry.grab_focus()
 
-    def _on_account_changed(self, combobox):
+    def _on_account_changed(self, combobox: Gtk.ComboBox) -> None:
         account = combobox.get_active_id()
         self._account = account
         self._set_complete()
 
-    def _show_icon(self, show):
+    def _show_icon(self, show: bool) -> None:
         icon = 'dialog-warning-symbolic' if show else None
         self._ui.address_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon)
 
-    def _set_complete(self, *args):
+    def _set_complete(self, *args: Any) -> None:
         if self._account is None:
             self.complete = False
             self.update_page_complete()
@@ -306,26 +315,26 @@ class Address(Page):
 
 
 class Error(ErrorPage):
-    def __init__(self):
+    def __init__(self) -> None:
         ErrorPage.__init__(self)
         self.set_title(_('Add Contact'))
         self.set_heading(_('An Error Occurred'))
 
-    def get_visible_buttons(self):
+    def get_visible_buttons(self) -> List[str]:
         return ['back']
 
-    def get_default_button(self):
+    def get_default_button(self) -> str:
         return 'back'
 
 
 class Contact(Page):
-    def __init__(self):
+    def __init__(self) -> None:
         Page.__init__(self)
         self.title = _('Add Contact')
 
-        self._result = None
-        self._account = None
-        self._contact = None
+        self._result: Union[DiscoInfo, StanzaError, None] = None
+        self._account: Optional[str] = None
+        self._contact: Optional[types.BareContact] = None
 
         self._ui = get_builder('add_contact.ui')
         self.add(self._ui.contact_grid)
@@ -334,13 +343,13 @@ class Contact(Page):
 
         self.show_all()
 
-    def get_visible_buttons(self):
+    def get_visible_buttons(self) -> List[str]:
         return ['back', 'add']
 
-    def get_default_button(self):
+    def get_default_button(self) -> str:
         return 'add'
 
-    def prepare(self, account, result):
+    def prepare(self, account: str, result: Union[DiscoInfo, StanzaError]):
         self._result = result
         self._account = account
 
@@ -357,11 +366,11 @@ class Contact(Page):
         for group in client.get_module('Roster').get_groups():
             self._ui.group_combo.append_text(group)
 
-    def _on_info_clicked(self, _button):
+    def _on_info_clicked(self, _button: Gtk.Button) -> None:
         open_window(
             'ContactInfo', account=self._account, contact=self._contact)
 
-    def get_subscription_data(self):
+    def get_subscription_data(self) -> Dict[str, Union[str, List[str], bool]]:
         group = self._ui.group_combo.get_child().get_text()
         groups = [group] if group else []
         return {
@@ -372,12 +381,12 @@ class Contact(Page):
 
 
 class Gateway(Page):
-    def __init__(self):
+    def __init__(self) -> None:
         Page.__init__(self)
         self.title = _('Service Gateway')
 
-        self._account = None
-        self._result = None
+        self._account: Optional[str] = None
+        self._result: Optional[DiscoInfo] = None
 
         self._ui = get_builder('add_contact.ui')
         self.add(self._ui.gateway_box)
@@ -387,13 +396,13 @@ class Gateway(Page):
 
         self.show_all()
 
-    def get_visible_buttons(self):
+    def get_visible_buttons(self) -> List[str]:
         return ['back', 'add']
 
-    def get_default_button(self):
+    def get_default_button(self) -> str:
         return 'add'
 
-    def prepare(self, account, result):
+    def prepare(self, account: str, result: DiscoInfo) -> None:
         self._account = account
         self._result = result
 
@@ -447,22 +456,22 @@ class Gateway(Page):
             self._ui.commands_button.set_tooltip_text(
                 _('This gateway does not support Ad-Hoc Commands.'))
 
-    def _on_register_clicked(self, _button):
+    def _on_register_clicked(self, _button: Gtk.Button) -> None:
         open_window(
             'ServiceRegistration',
             account=self._account,
             address=self._result.jid)
 
-    def _on_command_clicked(self, _button):
+    def _on_command_clicked(self, _button: Gtk.Button) -> None:
         AdHocCommand(self._account, self._result.jid)
 
 
 class GroupChat(Page):
-    def __init__(self):
+    def __init__(self) -> None:
         Page.__init__(self)
         self.title = _('Join Group Chat?')
 
-        self._result = None
+        self._result: Optional[DiscoInfo] = None
 
         heading = Gtk.Label(label=_('Join Group Chat?'))
         heading.get_style_context().add_class('large-header')
@@ -477,13 +486,13 @@ class GroupChat(Page):
 
         self.show_all()
 
-    def get_visible_buttons(self):
+    def get_visible_buttons(self) -> List[str]:
         return ['back', 'join']
 
-    def get_default_button(self):
+    def get_default_button(self) -> str:
         return 'join'
 
-    def prepare(self, account, result):
+    def prepare(self, account: str, result: DiscoInfo) -> None:
         self._result = result
 
         self._info_box.set_account(account)

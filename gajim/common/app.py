@@ -399,12 +399,12 @@ def get_accounts_sorted() -> list[str]:
 def get_enabled_accounts_with_labels(
         exclude_local: bool = True,
         connected_only: bool = False,
-        private_storage_only: bool = False) -> list[str]:
+        private_storage_only: bool = False) -> list[list[str]]:
     """
     Returns a list with [account, account_label] entries.
     Order by account_label
     """
-    accounts: list[str] = []
+    accounts = []
     for acc in connections:
         if exclude_local and account_is_zeroconf(acc):
             continue
