@@ -27,7 +27,7 @@ from .builder import get_builder
 
 
 class ManageSounds(Gtk.ApplicationWindow):
-    def __init__(self, transient_for):
+    def __init__(self, transient_for: Gtk.Window) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -61,7 +61,10 @@ class ManageSounds(Gtk.ApplicationWindow):
         self.show_all()
 
     @staticmethod
-    def _on_row_changed(model, path, iter_):
+    def _on_row_changed(model: Gtk.TreeModel,
+                        path: Gtk.TreePath,
+                        iter_: Gtk.TreeIter
+                        ) -> None:
         sound_event = model[iter_][3]
         app.settings.set_soundevent_setting(sound_event,
                                             'enabled',
@@ -70,17 +73,19 @@ class ManageSounds(Gtk.ApplicationWindow):
                                             'path',
                                             model[iter_][2])
 
-    def _on_toggle(self, _cell, path):
+    def _on_toggle(self,
+                   _cell: Gtk.CellRendererToggle,
+                   path: Gtk.TreePath
+                   ) -> None:
         if self._ui.filechooser.get_filename() is None:
             return
         model = self._ui.sounds_treeview.get_model()
         model[path][0] = not model[path][0]
 
-    def _fill_sound_treeview(self):
+    def _fill_sound_treeview(self) -> None:
         model = self._ui.sounds_treeview.get_model()
         model.clear()
 
-        # pylint: disable=line-too-long
         sounds_dict = {
             'attention_received': _('Attention Message Received'),
             'first_message_received': _('Message Received'),
@@ -90,7 +95,6 @@ class ManageSounds(Gtk.ApplicationWindow):
             'muc_message_highlight': _('Group Chat Message Highlight'),
             'muc_message_received': _('Group Chat Message Received'),
         }
-        # pylint: enable=line-too-long
 
         for sound_event, sound_name in sounds_dict.items():
             settings = app.settings.get_soundevent_settings(sound_event)
@@ -99,7 +103,7 @@ class ManageSounds(Gtk.ApplicationWindow):
                           settings['path'],
                           sound_event))
 
-    def _on_cursor_changed(self, treeview):
+    def _on_cursor_changed(self, treeview: Gtk.TreeView) -> None:
         model, iter_ = treeview.get_selection().get_selected()
         path_to_snd_file = check_soundfile_path(model[iter_][2])
         if path_to_snd_file is None:
@@ -107,7 +111,7 @@ class ManageSounds(Gtk.ApplicationWindow):
         else:
             self._ui.filechooser.set_filename(str(path_to_snd_file))
 
-    def _on_file_set(self, button):
+    def _on_file_set(self, button: Gtk.FileChooserButton) -> None:
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
 
         filename = button.get_filename()
@@ -120,17 +124,17 @@ class ManageSounds(Gtk.ApplicationWindow):
         # set the sound to enabled
         model[iter_][0] = True
 
-    def _on_clear(self, *args):
+    def _on_clear(self, _button: Gtk.Button) -> None:
         self._ui.filechooser.unselect_all()
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
         model[iter_][2] = ''
         model[iter_][0] = False
 
-    def _on_play(self, *args):
+    def _on_play(self, _button: Gtk.Button) -> None:
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
         snd_event_config_name = model[iter_][3]
         play_sound(snd_event_config_name, None, force=True)
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
