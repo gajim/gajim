@@ -12,7 +12,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import cast
+
 import os
+from enum import IntEnum
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -24,6 +29,24 @@ from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
 from .builder import get_builder
+
+
+SOUNDS = {
+    'attention_received': _('Attention Message Received'),
+    'first_message_received': _('Message Received'),
+    'contact_connected': _('Contact Connected'),
+    'contact_disconnected': _('Contact Disconnected'),
+    'message_sent': _('Message Sent'),
+    'muc_message_highlight': _('Group Chat Message Highlight'),
+    'muc_message_received': _('Group Chat Message Received'),
+}
+
+
+class Column(IntEnum):
+    ENABLED = 0
+    NAME = 1
+    PATH = 2
+    CONFIG = 3
 
 
 class ManageSounds(Gtk.ApplicationWindow):
@@ -65,47 +88,44 @@ class ManageSounds(Gtk.ApplicationWindow):
                         path: Gtk.TreePath,
                         iter_: Gtk.TreeIter
                         ) -> None:
-        sound_event = model[iter_][3]
+
+        sound_event = model[iter_][Column.CONFIG]
         app.settings.set_soundevent_setting(sound_event,
                                             'enabled',
-                                            bool(model[path][0]))
+                                            model[path][Column.ENABLED])
         app.settings.set_soundevent_setting(sound_event,
                                             'path',
-                                            model[iter_][2])
+                                            model[iter_][Column.PATH])
 
     def _on_toggle(self,
                    _cell: Gtk.CellRendererToggle,
                    path: Gtk.TreePath
                    ) -> None:
+
         if self._ui.filechooser.get_filename() is None:
             return
+
         model = self._ui.sounds_treeview.get_model()
-        model[path][0] = not model[path][0]
+        assert model is not None
+
+        model[path][Column.ENABLED] = not model[path][Column.ENABLED]
 
     def _fill_sound_treeview(self) -> None:
-        model = self._ui.sounds_treeview.get_model()
+        model = cast(Gtk.ListStore, self._ui.sounds_treeview.get_model())
         model.clear()
 
-        sounds_dict = {
-            'attention_received': _('Attention Message Received'),
-            'first_message_received': _('Message Received'),
-            'contact_connected': _('Contact Connected'),
-            'contact_disconnected': _('Contact Disconnected'),
-            'message_sent': _('Message Sent'),
-            'muc_message_highlight': _('Group Chat Message Highlight'),
-            'muc_message_received': _('Group Chat Message Received'),
-        }
-
-        for sound_event, sound_name in sounds_dict.items():
+        for sound_event, sound_name in SOUNDS.items():
             settings = app.settings.get_soundevent_settings(sound_event)
-            model.append((settings['enabled'],
+            model.append([settings['enabled'],
                           sound_name,
                           settings['path'],
-                          sound_event))
+                          sound_event])
 
     def _on_cursor_changed(self, treeview: Gtk.TreeView) -> None:
         model, iter_ = treeview.get_selection().get_selected()
-        path_to_snd_file = check_soundfile_path(model[iter_][2])
+        assert iter_ is not None
+
+        path_to_snd_file = check_soundfile_path(model[iter_][Column.PATH])
         if path_to_snd_file is None:
             self._ui.filechooser.unselect_all()
         else:
@@ -113,26 +133,31 @@ class ManageSounds(Gtk.ApplicationWindow):
 
     def _on_file_set(self, button: Gtk.FileChooserButton) -> None:
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
+        assert iter_ is not None
 
         filename = button.get_filename()
+        assert filename is not None
+
         directory = os.path.dirname(filename)
         app.settings.set('last_sounds_dir', directory)
         path_to_snd_file = strip_soundfile_path(filename)
 
-        # set new path to sounds_model
-        model[iter_][2] = str(path_to_snd_file)
-        # set the sound to enabled
-        model[iter_][0] = True
+        model[iter_][Column.PATH] = str(path_to_snd_file)
+        model[iter_][Column.ENABLED] = True
 
     def _on_clear(self, _button: Gtk.Button) -> None:
         self._ui.filechooser.unselect_all()
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
-        model[iter_][2] = ''
-        model[iter_][0] = False
+        assert iter_ is not None
+
+        model[iter_][Column.PATH] = ''
+        model[iter_][Column.ENABLED] = False
 
     def _on_play(self, _button: Gtk.Button) -> None:
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
-        snd_event_config_name = model[iter_][3]
+        assert iter_ is not None
+
+        snd_event_config_name = model[iter_][Column.CONFIG]
         play_sound(snd_event_config_name, None, force=True)
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
