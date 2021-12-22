@@ -45,7 +45,10 @@ def register_modules(client: Client) -> None:
     _modules[client.account] = {}
 
     path = Path(__file__).parent
-    for module in path.glob('*.py'):
+    for module in path.iterdir():
+        if module.suffix not in ['.py', '.pyc']:
+            continue
+
         if module.name.startswith('__'):
             continue
 
