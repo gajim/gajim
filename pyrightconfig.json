@@ -12,6 +12,7 @@
     "typeCheckingMode": "strict",
     "include": [
         "gajim/gtk/chat_filter.py",
+        "gajim/gtk/app_side_bar.py",
         "gajim/common/cert_store.py"
     ],
 }
