@@ -109,7 +109,7 @@ class AvatarSelector(Gtk.Box):
         self._helper_label.hide()
         self._crop_area.show()
 
-    def _on_load_clicked(self, _button):
+    def _on_load_clicked(self, _button: Gtk.Button) -> None:
         def _on_file_selected(path):
             self.prepare_crop_area(path)
 
@@ -117,8 +117,15 @@ class AvatarSelector(Gtk.Box):
                             transient_for=self.get_toplevel(),
                             modal=True)
 
-    def _on_drag_data_received(self, _widget, _context, _x_coord, _y_coord,
-                               selection, target_type, _timestamp):
+    def _on_drag_data_received(self,
+                               _widget: Gtk.Widget,
+                               _context: Gdk.DragContext,
+                               _x_coord: int,
+                               _y_coord: int,
+                               selection: Gtk.SelectionData,
+                               target_type: int,
+                               _timestamp: int
+                               ) -> None:
         if not selection.get_data():
             return
 
@@ -184,10 +191,10 @@ class CropArea(Gtk.DrawingArea):
 
         self._image = Gdk.Rectangle()
         self._crop = Gdk.Rectangle()
-        self._pixbuf = None
-        self._browse_pixbuf = None
-        self._color_shifted_pixbuf = None
-        self._current_cursor = None
+        self._pixbuf: Optional[GdkPixbuf.Pixbuf] = None
+        self._browse_pixbuf: Optional[GdkPixbuf.Pixbuf] = None
+        self._color_shifted_pixbuf: Optional[GdkPixbuf.Pixbuf] = None
+        self._current_cursor: Optional[Gdk.CursorType] = None
 
         self._scale = float(0.0)
         self._image.x = 0
@@ -259,7 +266,7 @@ class CropArea(Gtk.DrawingArea):
         return GdkPixbuf.Pixbuf.new_subpixbuf(
             self._browse_pixbuf, self._crop.x, self._crop.y, width, height)
 
-    def _on_draw(self, _widget, context):
+    def _on_draw(self, _widget: Gtk.Widget, context: cairo.Context) -> bool:
         if self._browse_pixbuf is None:
             return False
 
@@ -342,7 +349,10 @@ class CropArea(Gtk.DrawingArea):
 
         return False
 
-    def _on_button_press(self, _widget, event):
+    def _on_button_press(self,
+                         _widget: Gtk.Widget,
+                         event: Gdk.EventButton
+                         ) -> bool:
         if self._browse_pixbuf is None:
             return False
 
@@ -357,7 +367,10 @@ class CropArea(Gtk.DrawingArea):
 
         return False
 
-    def _on_button_release(self, _widget, _event):
+    def _on_button_release(self,
+                           _widget: Gtk.Widget,
+                           _event: Gdk.EventButton
+                           ) -> bool:
         if self._browse_pixbuf is None:
             return False
 
@@ -371,7 +384,10 @@ class CropArea(Gtk.DrawingArea):
 
         return False
 
-    def _on_motion_notify(self, _widget, event):
+    def _on_motion_notify(self,
+                          _widget: Gtk.Widget,
+                          event: Gdk.EventMotion
+                          ) -> bool:
         # pylint: disable=too-many-boolean-expressions
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
@@ -565,7 +581,7 @@ class CropArea(Gtk.DrawingArea):
 
         return False
 
-    def _update_pixbufs(self):
+    def _update_pixbufs(self) -> None:
         allocation = self.get_allocation()
         width = self._browse_pixbuf.get_width()
         height = self._browse_pixbuf.get_height()
@@ -625,7 +641,7 @@ class CropArea(Gtk.DrawingArea):
             self._image.width = dest_width
             self._image.height = dest_height
 
-    def _crop_to_widget(self):
+    def _crop_to_widget(self) -> Gdk.Rectangle:
         crop = Gdk.Rectangle()
         crop.x = self._image.x + self._crop.x * self._scale
         crop.y = self._image.y + self._crop.y * self._scale
@@ -633,7 +649,7 @@ class CropArea(Gtk.DrawingArea):
         crop.height = self._crop.height * self._scale
         return crop
 
-    def _update_cursor(self, x_coord, y_coord):
+    def _update_cursor(self, x_coord: float, y_coord: float) -> None:
         region = self._active_region
         if self._active_region == Loc.OUTSIDE:
             crop = self._crop_to_widget()
@@ -668,7 +684,12 @@ class CropArea(Gtk.DrawingArea):
             self._current_cursor = cursor_type
 
     @staticmethod
-    def _eval_radial_line(center_x, center_y, bounds_x, bounds_y, user_x):
+    def _eval_radial_line(center_x: float,
+                          center_y: float,
+                          bounds_x: int,
+                          bounds_y: int,
+                          user_x: int
+                          ) -> int:
         slope_y = float(bounds_y - center_y)
         slope_x = bounds_x - center_x
         if slope_y == 0 or slope_x == 0:
@@ -679,7 +700,11 @@ class CropArea(Gtk.DrawingArea):
         decision_intercept = - float(decision_slope * bounds_x)
         return int(decision_slope * user_x + decision_intercept)
 
-    def _find_location(self, rect, x_coord, y_coord):
+    def _find_location(self,
+                       rect: Gdk.Rectangle,
+                       x_coord: float,
+                       y_coord: float
+                       ) -> Loc:
         # pylint: disable=line-too-long
         location = [
             [Loc.OUTSIDE, Loc.OUTSIDE, Loc.OUTSIDE, Loc.OUTSIDE, Loc.OUTSIDE],
@@ -696,7 +721,7 @@ class CropArea(Gtk.DrawingArea):
         return location[y_range][x_range]
 
     @staticmethod
-    def _find_range(coord, min_v, max_v):
+    def _find_range(coord: float, min_v: int, max_v: int) -> Range:
         tolerance = 12
         if coord < min_v - tolerance:
             return Range.BELOW
@@ -708,7 +733,7 @@ class CropArea(Gtk.DrawingArea):
             return Range.UPPER
         return Range.ABOVE
 
-    def _generate_color_shifted_pixbuf(self):
+    def _generate_color_shifted_pixbuf(self) -> None:
         # pylint: disable=no-member
         surface = cairo.ImageSurface(
             cairo.Format.ARGB32,
