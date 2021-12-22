@@ -12,11 +12,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import List
+
 import logging
 
 from gi.repository import Gtk
 
 from nbxmpp.errors import StanzaError
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
@@ -33,7 +37,7 @@ log = logging.getLogger('gajim.gui.remove_account')
 
 
 class RemoveAccount(Assistant):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Assistant.__init__(self)
 
         self.account = account
@@ -83,11 +87,14 @@ class RemoveAccount(Assistant):
             self.show_page('success')
             app.interface.remove_account(self.account)
 
-    def _set_remove_from_server_checkbox(self):
+    def _set_remove_from_server_checkbox(self) -> None:
         enabled = self._client is not None and self._client.state.is_available
         self.get_page('remove_choice').set_remove_from_server(enabled)
 
-    def _on_button_clicked(self, _assistant, button_name):
+    def _on_button_clicked(self,
+                           _assistant: Assistant,
+                           button_name: str
+                           ) -> None:
         page = self.get_current_page()
         if button_name == 'remove':
             if page == 'remove_choice':
@@ -104,7 +111,7 @@ class RemoveAccount(Assistant):
         if button_name == 'close':
             self.destroy()
 
-    def _on_remove(self, *args):
+    def _on_remove(self, *args: Any) -> None:
         if self.get_page('remove_choice').remove_from_server:
             self._client.set_remove_account(True)
             self._client.get_module('Register').unregister(
@@ -119,7 +126,7 @@ class RemoveAccount(Assistant):
         self._client.disconnect(gracefully=True, reconnect=False)
         self._account_removed = True
 
-    def _on_remove_response(self, task):
+    def _on_remove_response(self, task: Task) -> None:
         try:
             task.finish()
         except StanzaError as error:
@@ -132,12 +139,12 @@ class RemoveAccount(Assistant):
 
         self._account_removed = True
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, *args: Any) -> None:
         self._destroyed = True
 
 
 class RemoveChoice(Page):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Page.__init__(self)
         self.title = _('Remove Account')
 
@@ -176,10 +183,10 @@ class RemoveChoice(Page):
         self.show_all()
 
     @property
-    def remove_from_server(self):
+    def remove_from_server(self) -> bool:
         return self._server.get_active()
 
-    def set_remove_from_server(self, enabled):
+    def set_remove_from_server(self, enabled: bool) -> None:
         self._server.set_sensitive(enabled)
         if enabled:
             self._server.set_tooltip_text('')
@@ -187,27 +194,27 @@ class RemoveChoice(Page):
             self._server.set_active(False)
             self._server.set_tooltip_text(_('Account has to be connected'))
 
-    def get_visible_buttons(self):
+    def get_visible_buttons(self) -> List[str]:
         return ['remove']
 
 
 class Error(ErrorPage):
-    def __init__(self):
+    def __init__(self) -> None:
         ErrorPage.__init__(self)
         self.set_title(_('Account Removal Failed'))
         self.set_heading(_('Account Removal Failed'))
 
-    def get_visible_buttons(self):
+    def get_visible_buttons(self) -> List[str]:
         return ['back']
 
 
 class Success(SuccessPage):
-    def __init__(self):
+    def __init__(self) -> None:
         SuccessPage.__init__(self)
         self.set_title(_('Account Removed'))
         self.set_heading(_('Account Removed'))
         self.set_text(
             _('Your account has has been removed successfully.'))
 
-    def get_visible_buttons(self):
+    def get_visible_buttons(self) -> List[str]:
         return ['close']
