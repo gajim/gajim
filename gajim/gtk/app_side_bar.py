@@ -17,11 +17,12 @@ from gi.repository import Gtk
 
 from gajim.common import app
 
-from gajim.gui.util import load_icon
+from .app_page import AppPage
+from .util import load_icon
 
 
 class AppSideBar(Gtk.ListBox):
-    def __init__(self, app_page):
+    def __init__(self, app_page: AppPage) -> None:
         Gtk.ListBox.__init__(self)
         self.set_valign(Gtk.Align.START)
         self.set_selection_mode(Gtk.SelectionMode.SINGLE)
@@ -40,15 +41,17 @@ class AppSideBar(Gtk.ListBox):
         GLib.idle_add(self.unselect_all)
 
     @staticmethod
-    def _on_app_row_activated(_listbox, _row):
+    def _on_app_row_activated(_listbox: Gtk.ListBox,
+                              _row: Gtk.ListBoxRow
+                              ) -> None:
         app.window.show_app_page()
 
-    def _on_unread_count_changed(self, _app_page, count):
+    def _on_unread_count_changed(self, _app_page: AppPage, count: int) -> None:
         self._app_row.set_unread_count(count)
 
 
 class AppRow(Gtk.ListBoxRow):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.get_style_context().add_class('workspace-sidebar-item')
 
@@ -78,7 +81,7 @@ class AppRow(Gtk.ListBoxRow):
         self.add(overlay)
         self.show_all()
 
-    def set_unread_count(self, count):
+    def set_unread_count(self, count: int) -> None:
         if count < 1000:
             self._unread_label.set_text(str(count))
         else:
