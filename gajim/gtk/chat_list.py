@@ -861,9 +861,9 @@ class ChatRow(Gtk.ListBoxRow):
             text = text.replace('/me', f'* {nickname}', 1)
             text = f'<i>{text}</i>'
 
-        # Split by newline and display last line
+        # Split by newline and display last line (or first, if last is newline)
         lines = text.split('\n')
-        text = lines[-1]
+        text = lines[-1] or lines[0]
         self._ui.message_label.set_markup(text)
 
         if icon is None:
