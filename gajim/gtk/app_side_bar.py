@@ -18,7 +18,7 @@ from gi.repository import Gtk
 from gajim.common import app
 
 from .app_page import AppPage
-from .util import load_icon
+from .util import load_icon_surface
 
 
 class AppSideBar(Gtk.ListBox):
@@ -62,7 +62,7 @@ class AppRow(Gtk.ListBoxRow):
         self._unread_label.set_halign(Gtk.Align.END)
         self._unread_label.set_valign(Gtk.Align.START)
 
-        surface = load_icon('org.gajim.Gajim', self, 32)
+        surface = load_icon_surface('org.gajim.Gajim', 32)
         image = Gtk.Image.new_from_surface(surface)
         image.get_style_context().add_class('app-sidebar-image')
 

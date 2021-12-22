@@ -39,7 +39,7 @@ from gajim.common.const import StyleAttr
 
 from .const import DEFAULT_WORKSPACE_COLOR
 from .util import load_pixbuf
-from .util import load_icon
+from .util import load_icon_pixbuf
 from .util import text_to_color
 from .util import scale_with_ratio
 from .util import get_css_show_class
@@ -190,7 +190,7 @@ def get_icon_avatar(size: int,
     surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
     context = cairo.Context(surface)
 
-    pixbuf = load_icon(icon_name, scale=scale, size=size, pixbuf=True)
+    pixbuf = load_icon_pixbuf(icon_name, size=size, scale=scale)
     Gdk.cairo_set_source_pixbuf(
         context,
         pixbuf,

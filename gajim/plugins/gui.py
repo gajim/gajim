@@ -43,7 +43,7 @@ from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.filechoosers import ArchiveChooserDialog
 from gajim.gui.builder import get_builder
-from gajim.gui.util import load_icon
+from gajim.gui.util import load_icon_pixbuf
 
 
 @unique
@@ -96,7 +96,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                                  activatable=Column.ACTIVATABLE)
         self._ui.installed_plugins_treeview.append_column(col)
 
-        self.def_icon = load_icon('preferences-desktop', self, pixbuf=True)
+        self.def_icon = load_icon_pixbuf('preferences-desktop')
 
         # connect signal for selection change
         selection = self._ui.installed_plugins_treeview.get_selection()

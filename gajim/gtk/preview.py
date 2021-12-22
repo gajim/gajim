@@ -39,8 +39,7 @@ from .filechoosers import FileSaveDialog
 from .preview_audio import AudioWidget
 from .builder import get_builder
 from .util import get_cursor
-from .util import get_monitor_scale_factor
-from .util import load_icon
+from .util import load_icon_pixbuf
 
 log = logging.getLogger('gajim.gui.preview')
 
@@ -75,10 +74,7 @@ class PreviewWidget(Gtk.Box):
         self._ui.progressbar.hide()
 
         if preview.is_geo_uri:
-            data = load_icon('map',
-                             size=preview.size,
-                             scale=get_monitor_scale_factor(),
-                             pixbuf=True)
+            data = load_icon_pixbuf('map', size=preview.size)
 
         if isinstance(data, GdkPixbuf.PixbufAnimation):
             image = Gtk.Image.new_from_animation(data)

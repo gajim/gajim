@@ -158,16 +158,13 @@ def icon_exists(name: str) -> bool:
     return _icon_theme.has_icon(name)
 
 
-def load_icon(icon_name: str,
-              widget: Optional[Any] = None,
-              size: int = 16,
-              pixbuf: bool = False,
-              scale: Optional[int] = None,
-              flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
-              ) -> Optional[Union[GdkPixbuf.Pixbuf, cairo.Surface]]:
+def load_icon_info(icon_name: str,
+                   size: int,
+                   scale: Optional[int],
+                   flags: Gtk.IconLookupFlags) -> Optional[Gtk.IconInfo]:
 
-    if widget is not None:
-        scale = widget.get_scale_factor()
+    if scale is None:
+        scale = app.window.get_scale_factor()
 
     if not scale:
         log.warning('Could not determine scale factor')
@@ -179,18 +176,42 @@ def load_icon(icon_name: str,
         if iconinfo is None:
             log.info('No icon found for %s', icon_name)
             return None
-        if pixbuf:
-            return iconinfo.load_icon()
-        return iconinfo.load_surface(None)
+        return iconinfo
     except GLib.GError as error:
         log.error('Unable to load icon %s: %s', icon_name, str(error))
     return None
 
 
+def load_icon_surface(
+        icon_name: str,
+        size: int = 16,
+        scale: Optional[int] = None,
+        flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE,
+        ) -> Optional[cairo.Surface]:
+
+    icon_info = load_icon_info(icon_name, size, scale, flags)
+    if icon_info is None:
+        return None
+    return icon_info.load_surface(None)
+
+
+def load_icon_pixbuf(icon_name: str,
+                     size: int = 16,
+                     scale: Optional[int] = None,
+                     flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE,
+                     ) -> Optional[GdkPixbuf.Pixbuf]:
+
+    icon_info = load_icon_info(icon_name, size, scale, flags)
+    if icon_info is None:
+        return None
+    return icon_info.load_icon()
+
+
 def get_app_icon_list(scale_widget: Any) -> List[GdkPixbuf.Pixbuf]:
+    scale = scale_widget.get_scale_factor()
     pixbufs = []
     for size in (16, 32, 48, 64, 128):
-        pixbuf = load_icon('org.gajim.Gajim', scale_widget, size, pixbuf=True)
+        pixbuf = load_icon_pixbuf('org.gajim.Gajim', size=size, scale=scale)
         if pixbuf is not None:
             pixbufs.append(pixbuf)
     return pixbufs
