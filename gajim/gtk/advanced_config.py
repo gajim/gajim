@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from enum import IntEnum
 from enum import unique
 
@@ -32,6 +34,7 @@ from gajim.common.i18n import Q_
 
 from gajim.common.setting_values import ADVANCED_SETTINGS
 from gajim.common.setting_values import APP_SETTINGS
+
 from .builder import get_builder
 
 
@@ -56,7 +59,7 @@ SETTING_TYPES = {
 
 
 class AdvancedConfig(Gtk.ApplicationWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -107,7 +110,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
         self.show_all()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval != Gdk.KEY_Escape:
             return
 
@@ -117,11 +120,18 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         self.destroy()
 
-    def _value_column_data_callback(self, _col, cell, model, iter_, _data):
+    def _value_column_data_callback(self,
+                                    _col: Gtk.TreeViewColumn,
+                                    cell: Gtk.CellRenderer,
+                                    model: Gtk.TreeModel,
+                                    iter_: Gtk.TreeIter,
+                                    _data: Optional[object]):
         opttype = model[iter_][Column.TYPE]
         cell.set_property('editable', opttype != SETTING_TYPES[bool])
 
-    def _on_treeview_selection_changed(self, treeselection):
+    def _on_treeview_selection_changed(self,
+                                       treeselection: Gtk.TreeSelection
+                                       ) -> None:
         model, iter_ = treeselection.get_selected()
         if not iter_:
             self._ui.reset_button.set_sensitive(False)
@@ -133,7 +143,11 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         self._ui.description.set_text(desc or Q_('?config description:None'))
         self._ui.reset_button.set_sensitive(True)
 
-    def _on_treeview_row_activated(self, _treeview, path, _column):
+    def _on_treeview_row_activated(self,
+                                   _treeview: Gtk.TreeView,
+                                   path: Gtk.TreePath,
+                                   _column: Gtk.TreeViewColumn
+                                   ) -> None:
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
         setting = modelrow[Column.NAME]
@@ -147,7 +161,11 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         app.settings.set(setting, setting_value)
         modelrow[Column.VALUE] = column_value
 
-    def _on_config_edited(self, _cell, path, text):
+    def _on_config_edited(self,
+                          _cell: Gtk.CellRendererText,
+                          path: str,
+                          text: str
+                          ) -> None:
         path = Gtk.TreePath.new_from_string(path)
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
@@ -160,7 +178,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         app.settings.set(setting, value)
         modelrow[Column.VALUE] = text
 
-    def _on_reset_button_clicked(self, button):
+    def _on_reset_button_clicked(self, button: Gtk.Button) -> None:
         model, iter_ = self.treeview.get_selection().get_selected()
         if not iter_:
             return
@@ -176,7 +194,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         app.settings.set(setting, default)
         button.set_sensitive(False)
 
-    def _fill_model(self, node=None, parent=None):
+    def _fill_model(self, parent=None) -> None:
         for category, settings in ADVANCED_SETTINGS.items():
             if category != 'app':
                 continue
@@ -199,7 +217,11 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
                 self.model.append(parent, [setting, value, type_])
 
-    def _visible_func(self, model, treeiter, _data):
+    def _visible_func(self,
+                      model: Gtk.TreeModel,
+                      treeiter: Gtk.TreeIter,
+                      _data: Optional[object]
+                      ) -> bool:
         search_string = self._ui.search_entry.get_text().lower()
         if not search_string:
             return True
@@ -211,5 +233,5 @@ class AdvancedConfig(Gtk.ApplicationWindow):
             return True
         return False
 
-    def _on_search_entry_changed(self, _widget):
+    def _on_search_entry_changed(self, _entry: Gtk.SearchEntry) -> None:
         self.modelfilter.refilter()
