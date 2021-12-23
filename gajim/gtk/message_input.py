@@ -102,11 +102,11 @@ class MessageInputTextView(Gtk.TextView):
         return False
 
     def _clear_tags(self) -> None:
-        _buffer = self.get_buffer()
-        start, end = _buffer.get_bounds()
-        _buffer.remove_all_tags(start, end)
+        buf = self.get_buffer()
+        start, end = buf.get_bounds()
+        buf.remove_all_tags(start, end)
 
-    def _on_text_changed(self, buffer_: Gtk.TextBuffer) -> None:
+    def _on_text_changed(self, buf: Gtk.TextBuffer) -> None:
         text = self.get_text()
         if not text:
             return
@@ -116,19 +116,19 @@ class MessageInputTextView(Gtk.TextView):
         for block in result.blocks:
             if block.name == 'plain':
                 for span in block.spans:
-                    start_iter = buffer_.get_iter_at_offset(span.start)
-                    end_iter = buffer_.get_iter_at_offset(span.end)
-                    buffer_.apply_tag_by_name(span.name, start_iter, end_iter)
+                    start_iter = buf.get_iter_at_offset(span.start)
+                    end_iter = buf.get_iter_at_offset(span.end)
+                    buf.apply_tag_by_name(span.name, start_iter, end_iter)
 
     def insert_text(self, text: str) -> None:
         self.get_buffer().insert_at_cursor(text)
 
     def insert_newline(self) -> None:
-        buffer_ = self.get_buffer()
-        buffer_.insert_at_cursor('\n')
-        mark = buffer_.get_insert()
-        iter_ = buffer_.get_iter_at_mark(mark)
-        if buffer_.get_end_iter().equal(iter_):
+        buf = self.get_buffer()
+        buf.insert_at_cursor('\n')
+        mark = buf.get_insert()
+        iter_ = buf.get_iter_at_mark(mark)
+        if buf.get_end_iter().equal(iter_):
             GLib.idle_add(scroll_to_end, self.get_parent())
 
     def has_text(self) -> bool:
@@ -150,63 +150,63 @@ class MessageInputTextView(Gtk.TextView):
 
     @staticmethod
     def _after_paste_clipboard(textview: Gtk.TextView) -> None:
-        buffer_ = textview.get_buffer()
-        mark = buffer_.get_insert()
-        iter_ = buffer_.get_iter_at_mark(mark)
-        if iter_.get_offset() == buffer_.get_end_iter().get_offset():
+        buf = textview.get_buffer()
+        mark = buf.get_insert()
+        iter_ = buf.get_iter_at_mark(mark)
+        if iter_.get_offset() == buf.get_end_iter().get_offset():
             GLib.idle_add(scroll_to_end, textview.get_parent())
 
     def _get_active_iters(self) -> Tuple[Gtk.TextIter, Gtk.TextIter]:
-        _buffer = self.get_buffer()
-        return_val = _buffer.get_selection_bounds()
+        buf = self.get_buffer()
+        return_val = buf.get_selection_bounds()
         if return_val:  # if something is selected
             start, end = return_val[0], return_val[1]
         else:
-            start, end = _buffer.get_bounds()
+            start, end = buf.get_bounds()
         return (start, end)
 
     def apply_formatting(self, formatting: str) -> None:
         format_char = FORMAT_CHARS[formatting]
 
-        _buffer = self.get_buffer()
+        buf = self.get_buffer()
         start, end = self._get_active_iters()
         start_offset = start.get_offset()
         end_offset = end.get_offset()
 
-        text = _buffer.get_text(start, end, True)
+        text = buf.get_text(start, end, True)
         if text.startswith(format_char) and text.endswith(format_char):
             # (Selected) text begins and ends with formatting chars
             # -> remove them
-            _buffer.delete(
+            buf.delete(
                 start,
-                _buffer.get_iter_at_offset(start_offset + 1))
-            _buffer.delete(
-                _buffer.get_iter_at_offset(end_offset - 2),
-                _buffer.get_iter_at_offset(end_offset - 1))
+                buf.get_iter_at_offset(start_offset + 1))
+            buf.delete(
+                buf.get_iter_at_offset(end_offset - 2),
+                buf.get_iter_at_offset(end_offset - 1))
             return
 
-        ext_start = _buffer.get_iter_at_offset(start_offset - 1)
-        ext_end = _buffer.get_iter_at_offset(end_offset + 1)
-        ext_text = _buffer.get_text(ext_start, ext_end, True)
+        ext_start = buf.get_iter_at_offset(start_offset - 1)
+        ext_end = buf.get_iter_at_offset(end_offset + 1)
+        ext_text = buf.get_text(ext_start, ext_end, True)
         if ext_text.startswith(format_char) and ext_text.endswith(format_char):
             # (Selected) text is surrounded by formatting chars -> remove them
-            _buffer.delete(
+            buf.delete(
                 ext_start,
-                _buffer.get_iter_at_offset(start_offset))
-            _buffer.delete(
-                _buffer.get_iter_at_offset(end_offset - 1),
-                _buffer.get_iter_at_offset(end_offset))
+                buf.get_iter_at_offset(start_offset))
+            buf.delete(
+                buf.get_iter_at_offset(end_offset - 1),
+                buf.get_iter_at_offset(end_offset))
             return
 
         # No formatting chars found at start/end or surrounding -> add them
-        _buffer.insert(start, format_char, -1)
-        _buffer.insert(
-            _buffer.get_iter_at_offset(end_offset + 1),
+        buf.insert(start, format_char, -1)
+        buf.insert(
+            buf.get_iter_at_offset(end_offset + 1),
             format_char,
             -1)
-        _buffer.select_range(
-            _buffer.get_iter_at_offset(start_offset),
-            _buffer.get_iter_at_offset(end_offset + 2))
+        buf.select_range(
+            buf.get_iter_at_offset(start_offset),
+            buf.get_iter_at_offset(end_offset + 2))
 
     def replace_emojis(self) -> None:
         theme = app.settings.get('emoticons_theme')
@@ -229,35 +229,35 @@ class MessageInputTextView(Gtk.TextView):
             _replace(iter_.get_child_anchor())
 
     def _replace_char_at_iter(self, iter_, new_char):
-        buffer_ = self.get_buffer()
+        buf = self.get_buffer()
         iter_2 = iter_.copy()
         iter_2.forward_char()
-        buffer_.delete(iter_, iter_2)
-        buffer_.insert(iter_, new_char)
+        buf.delete(iter_, iter_2)
+        buf.insert(iter_, new_char)
 
     def insert_emoji(self, codepoint, pixbuf):
-        buffer_ = self.get_buffer()
-        if buffer_.get_char_count():
+        buf = self.get_buffer()
+        if buf.get_char_count():
             # buffer contains text
-            buffer_.insert_at_cursor(' ')
+            buf.insert_at_cursor(' ')
 
-        insert_mark = buffer_.get_insert()
-        insert_iter = buffer_.get_iter_at_mark(insert_mark)
+        insert_mark = buf.get_insert()
+        insert_iter = buf.get_iter_at_mark(insert_mark)
 
         if pixbuf is None:
-            buffer_.insert(insert_iter, codepoint)
+            buf.insert(insert_iter, codepoint)
         else:
-            anchor = buffer_.create_child_anchor(insert_iter)
+            anchor = buf.create_child_anchor(insert_iter)
             image = Gtk.Image.new_from_pixbuf(pixbuf)
             image.codepoint = codepoint
             image.show()
             self.add_child_at_anchor(image, anchor)
-        buffer_.insert_at_cursor(' ')
+        buf.insert_at_cursor(' ')
 
     def clear(self, *args):
-        _buffer = self.get_buffer()
-        start, end = _buffer.get_bounds()
-        _buffer.delete(start, end)
+        buf = self.get_buffer()
+        start, end = buf.get_bounds()
+        buf.delete(start, end)
 
     def save_undo(self, text: str) -> None:
         self._undo_list.append(text)
@@ -266,7 +266,7 @@ class MessageInputTextView(Gtk.TextView):
         self.undo_pressed = False
 
     def undo(self, *args):
-        _buffer = self.get_buffer()
+        buf = self.get_buffer()
         if self._undo_list:
-            _buffer.set_text(self._undo_list.pop())
+            buf.set_text(self._undo_list.pop())
         self.undo_pressed = True
