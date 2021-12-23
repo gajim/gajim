@@ -199,7 +199,7 @@ def process(text: Union[str, bytes], nested: bool = False) -> ParsingResult:
             for line in block.text.splitlines(keepends=True):
                 block.spans += _parse_line(line, offset, offset_bytes)
                 block.uris += _parse_uris(line, offset, offset_bytes)
-                block.emojis += _parse_emojis(line, offset, offset_bytes)
+                block.emojis += _parse_emojis(line, offset)
                 offset += len(line)
                 offset_bytes += len(line.encode())
 
@@ -320,20 +320,19 @@ def _parse_uris(line: str, offset: int, offset_bytes: int) -> list[BaseUri]:
     return uris
 
 
-def _parse_emojis(line: str, offset: int, offset_bytes: int) -> list[Emoji]:
+def _parse_emojis(line: str, offset: int) -> list[Emoji]:
     emojis: list[Emoji] = []
 
     def make(match: Match[str]) -> Emoji:
         return _make_emoji(line,
                            match.start(),
                            match.end() - 1,
-                           offset,
-                           offset_bytes)
-    
+                           offset)
+
     for match in EMOJI_RX.finditer(line):
         emoji = make(match)
         emojis.append(emoji)
-    
+
     return emojis
 
 
@@ -417,8 +416,7 @@ def _make_link(line: str,
 def _make_emoji(line: str,
                 start: int,
                 end: int,
-                offset: int,
-                offset_bytes: int) -> Emoji:
+                offset: int) -> Emoji:
     text = line[start:end + 1]
     start += offset
     end += offset + 1
