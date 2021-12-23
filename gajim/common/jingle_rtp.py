@@ -413,12 +413,19 @@ class JingleAudio(JingleRTPContent):
         # TODO: Add queues?
         self.src_bin = self.make_bin_from_config(
             'audio_input_device',
-            '%s ! audioconvert',
+            '''%s
+            ! webrtcdsp
+                echo-suppression-level=high
+                noise-suppression-level=very-high
+                voice-detection=true
+            ! audioconvert ''',
             _('audio input'))
 
+        # setting name=webrtcechoprobe0 is needed because lingering probes
+        # cause a bug in subsequent calls
         self.sink = self.make_bin_from_config(
             'audio_output_device',
-            'audioconvert ! volume name=gajim_out_vol ! %s',
+            'audioconvert ! volume name=gajim_out_vol ! webrtcechoprobe name=webrtcechoprobe0 ! %s',
             _('audio output'))
 
         self.mic_volume = self.src_bin.get_by_name('gajim_vol')
