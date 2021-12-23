@@ -31,6 +31,9 @@ from gajim.common.helpers import parse_uri
 from gajim.common.structs import URI
 from gajim.common.styling import PlainBlock
 
+from gajim.gui.emoji_data import emoji_pixbufs
+from gajim.gui.emoji_data import get_emoji_pixbuf
+
 from gajim.gui_menu_builder import get_conv_action_context_menu
 from gajim.gui_menu_builder import get_conv_uri_context_menu
 
@@ -204,6 +207,33 @@ class MessageTextview(Gtk.TextView):
             start_iter = buffer_.get_iter_at_offset(uri.start)
             end_iter = buffer_.get_iter_at_offset(uri.end)
             buffer_.apply_tag_by_name(uri.name, start_iter, end_iter)
+
+        for emoji in block.emojis:
+            start_iter = buffer_.get_iter_at_offset(emoji.start)
+            end_iter = buffer_.get_iter_at_offset(emoji.end)
+            if emoji_pixbufs.complete:
+                # Only search for pixbuf if loading is completed
+                pixbuf = get_emoji_pixbuf(emoji.text)
+                if pixbuf is None:
+                    buffer_.insert(end_iter, emoji.text)
+                else:
+                    pixbuf = pixbuf.copy()
+                    anchor = buffer_.create_child_anchor(end_iter)
+                    anchor.plaintext = emoji.text
+                    img = Gtk.Image.new_from_pixbuf(pixbuf)
+                    img.show()
+                    self.add_child_at_anchor(img, anchor)
+                    buffer_.delete(
+                        buffer_.get_iter_at_offset(emoji.start),
+                        buffer_.get_iter_at_offset(emoji.end))
+            else:
+                # Set marks and save them so we can replace emojis
+                # once loading is complete
+                start_mark = buffer_.create_mark(None, end_iter, True)
+                buffer_.insert(end_iter, emoji.text)
+                end_mark = buffer_.create_mark(None, end_iter, True)
+                emoji_pixbufs.append_marks(
+                    self, start_mark, end_mark, emoji.text)
 
     def add_action_phrase(self, text: str) -> None:
         buffer_ = self.get_buffer()

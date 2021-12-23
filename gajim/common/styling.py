@@ -24,6 +24,8 @@ from dataclasses import field
 
 from gi.repository import GLib
 
+from gajim.gui.emoji_data import emoji_data
+
 PRE = '`'
 STRONG = '*'
 STRIKE = '~'
@@ -47,6 +49,8 @@ URI_RX = re.compile(URI_RX)
 ADDRESS_RX = r'(\b(?P<protocol>(xmpp|mailto)+:)?[\w-]*@(.*?\.)+[\w]+([\?].*?(?=([\s\),]|$)))?)'
 ADDRESS_RX = re.compile(ADDRESS_RX)
 
+EMOJI_RX = emoji_data.get_regex()
+EMOJI_RX = re.compile(EMOJI_RX)
 
 SD = 0
 SD_POS = 1
@@ -91,6 +95,11 @@ class MailAddress(BaseUri):
 
 
 @dataclass
+class Emoji(StyleObject):
+    name: str = field(default='emoji', init=False)
+
+
+@dataclass
 class Block(StyleObject):
 
     @classmethod
@@ -105,6 +114,7 @@ class PlainBlock(Block):
     name: str = field(default='plain', init=False)
     spans: list[Span] = field(default_factory=list)
     uris: list[BaseUri] = field(default_factory=list)
+    emojis: list[Emoji] = field(default_factory=list)
 
 
 @dataclass
@@ -189,6 +199,7 @@ def process(text: Union[str, bytes], nested: bool = False) -> ParsingResult:
             for line in block.text.splitlines(keepends=True):
                 block.spans += _parse_line(line, offset, offset_bytes)
                 block.uris += _parse_uris(line, offset, offset_bytes)
+                block.emojis += _parse_emojis(line, offset, offset_bytes)
                 offset += len(line)
                 offset_bytes += len(line.encode())
 
@@ -309,6 +320,23 @@ def _parse_uris(line: str, offset: int, offset_bytes: int) -> list[BaseUri]:
     return uris
 
 
+def _parse_emojis(line: str, offset: int, offset_bytes: int) -> list[Emoji]:
+    emojis: list[Emoji] = []
+
+    def make(match: Match[str]) -> Emoji:
+        return _make_emoji(line,
+                           match.start(),
+                           match.end() - 1,
+                           offset,
+                           offset_bytes)
+    
+    for match in EMOJI_RX.finditer(line):
+        emoji = make(match)
+        emojis.append(emoji)
+    
+    return emojis
+
+
 def _handle_pre_span(line: str,
                      index: int,
                      offset: int,
@@ -384,6 +412,19 @@ def _make_link(line: str,
                 end=end,
                 end_byte=end_byte,
                 text=text)
+
+
+def _make_emoji(line: str,
+                start: int,
+                end: int,
+                offset: int,
+                offset_bytes: int) -> Emoji:
+    text = line[start:end + 1]
+    start += offset
+    end += offset + 1
+    return Emoji(start=start,
+                 end=end,
+                 text=text)
 
 
 def _is_span_empty(sd: str, index: int, stack: list[tuple[str, int]]) -> bool:
