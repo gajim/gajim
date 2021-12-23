@@ -635,6 +635,20 @@ infobar.error > revealer > box {
 .start-chat-row:not(.activatable) label { color: @insensitive_fg_color; }
 .start-chat-row:focus { outline: none; }
 
+/* ContactFlowBox */
+.contact-flowbox-item {
+    background-color: alpha(@borders, 0.4);
+    border-radius: 12px;
+    padding: 6px;
+}
+.contact-flowbox-item button {
+    background: none;
+    border: 1px solid alpha(@borders, 0.4);
+}
+.contact-flowbox-item button:hover {
+    border: 1px solid @borders;
+}
+
 /* GroupChatRoster */
 .groupchat-roster { border-left: 1px solid;
                     border-color: @borders; }

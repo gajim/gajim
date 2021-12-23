@@ -75,7 +75,7 @@ from gajim.gui.adhoc import AdHocCommand
 from gajim.gui.avatar_selector import AvatarSelector
 from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_info import GroupChatInfoScrolled
-from gajim.gui.groupchat_invite import GroupChatInvite
+from gajim.gui.groupchat_inviter import GroupChatInviter
 from gajim.gui.groupchat_settings import GroupChatSettings
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
@@ -180,7 +180,7 @@ class GroupchatControl(BaseControl):
         self.xml.quick_invite_button.set_action_name(
             f'win.invite-{self.control_id}')
 
-        self._invite_box = GroupChatInvite(self.room_jid)
+        self._invite_box = GroupChatInviter(self.room_jid)
         self.xml.invite_grid.attach(self._invite_box, 0, 0, 1, 1)
         self._invite_box.connect('listbox-changed', self._on_invite_ready)
 
