@@ -100,7 +100,7 @@ class GroupchatInfo(Gtk.ApplicationWindow):
                                  spacing=18)
         self._main_box.set_valign(Gtk.Align.FILL)
 
-        self._muc_info_box = GroupChatInfoScrolled(None)
+        self._muc_info_box = GroupChatInfoScrolled()
         self._muc_info_box.set_vexpand(True)
 
         self._main_box.add(self._muc_info_box)

@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <!-- n-columns=3 n-rows=10 -->
+  <!-- n-columns=2 n-rows=10 -->
   <object class="GtkGrid" id="info_grid">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -82,6 +82,7 @@
         <property name="wrap">True</property>
         <property name="wrap-mode">word-char</property>
         <property name="selectable">True</property>
+        <property name="max-width-chars">40</property>
         <property name="xalign">0</property>
       </object>
       <packing>
@@ -95,6 +96,10 @@
         <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
+        <property name="wrap">True</property>
+        <property name="wrap-mode">word-char</property>
+        <property name="max-width-chars">40</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -151,6 +156,9 @@
         <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
+        <property name="wrap">True</property>
+        <property name="max-width-chars">40</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -159,7 +167,6 @@
     </child>
     <child>
       <object class="GtkLinkButton" id="logs">
-        <property name="label" translatable="yes">button</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
         <property name="no-show-all">True</property>
@@ -237,6 +244,7 @@
         <property name="wrap">True</property>
         <property name="wrap-mode">word-char</property>
         <property name="selectable">True</property>
+        <property name="max-width-chars">40</property>
         <property name="xalign">0</property>
         <signal name="activate-link" handler="_on_activate_subject_link" swapped="no"/>
       </object>
@@ -254,7 +262,7 @@
         <property name="selectable">True</property>
         <property name="ellipsize">end</property>
         <property name="single-line-mode">True</property>
-        <property name="max-width-chars">40</property>
+        <property name="max-width-chars">30</property>
         <style>
           <class name="large-header"/>
         </style>
@@ -285,12 +293,13 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="address">
-            <property name="width-request">240</property>
+            <property name="width-request">200</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="selectable">True</property>
             <property name="ellipsize">middle</property>
+            <property name="single-line-mode">True</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
           </object>
@@ -331,36 +340,6 @@
         <property name="left-attach">1</property>
         <property name="top-attach">2</property>
       </packing>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
     </child>
   </object>
 </interface>

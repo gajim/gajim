@@ -12,8 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any
-from typing import Dict
 from typing import List
 from typing import Optional
 
@@ -106,21 +104,21 @@ MUC_FEATURES = {
 class GroupChatInfoScrolled(Gtk.ScrolledWindow):
     def __init__(self,
                  account: Optional[str] = None,
-                 options: Optional[Dict[str, Any]] = None
+                 width: Optional[int] = 300,
+                 minimal: Optional[bool] = False
                  ) -> None:
         Gtk.ScrolledWindow.__init__(self)
-        if options is None:
-            options = {}
-
-        self._minimal = options.get('minimal', False)
-
-        self.set_size_request(options.get('width', 400), -1)
+        self.set_size_request(width, -1)
         self.set_halign(Gtk.Align.CENTER)
 
-        if self._minimal:
+        self._minimal = minimal
+
+        if minimal:
             self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
         else:
             self.set_vexpand(True)
+            self.set_hexpand(True)
+            self.set_propagate_natural_width(True)
             self.set_min_content_height(400)
             self.set_policy(Gtk.PolicyType.NEVER,
                             Gtk.PolicyType.AUTOMATIC)

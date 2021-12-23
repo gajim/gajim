@@ -477,7 +477,7 @@ class GroupChat(Page):
         heading.set_justify(Gtk.Justification.CENTER)
         self.pack_start(heading, False, True, 0)
 
-        self._info_box = GroupChatInfoScrolled(options={'minimal': True})
+        self._info_box = GroupChatInfoScrolled(minimal=True)
         self.pack_start(self._info_box, True, True, 0)
 
         self.show_all()
