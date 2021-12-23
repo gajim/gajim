@@ -9,6 +9,8 @@
         "scripts",
         "win",
     ],
+    "pythonPlatform": "All",
+    "pythonVersion": "3.9",
     "typeCheckingMode": "strict",
     "include": [
         "gajim/gtk/chat_filter.py",
