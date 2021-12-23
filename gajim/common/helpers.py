@@ -467,13 +467,16 @@ def get_contact_dict_for_account(account):
     return contacts_dict
 
 
-def play_sound(sound_event: str, account: str,
-               force: bool = False) -> None:
+def play_sound(sound_event: str,
+               account: str,
+               force: bool = False,
+               loop: bool = False) -> None:
+
     if sound_event is None:
         return
     if force or allow_sound_notification(account, sound_event):
         play_sound_file(
-            app.settings.get_soundevent_settings(sound_event)['path'])
+            app.settings.get_soundevent_settings(sound_event)['path'], loop)
 
 
 def check_soundfile_path(file_, dirs=None):
@@ -530,13 +533,13 @@ def strip_soundfile_path(file_, dirs=None, abs_=True):
             return name
     return file_
 
-def play_sound_file(path_to_soundfile):
+def play_sound_file(path_to_soundfile: str, loop: bool = False):
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
 
     from gajim.common import sound
-    sound.play(path_to_soundfile)
+    sound.play(path_to_soundfile, loop)
 
 def get_connection_status(account: str) -> str:
     if not app.account_is_available(account):

@@ -24,6 +24,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
 from gajim.common.jingle_session import JingleSession
+from gajim.common import sound
 
 from .widgets import SimpleLabel
 from .base import BaseRow
@@ -95,6 +96,7 @@ class CallRow(BaseRow):
             self.get_parent().accept_call(self._session)
 
     def _on_decline(self, _button):
+        sound.stop() # dialing/ringing
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)

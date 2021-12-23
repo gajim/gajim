@@ -39,6 +39,8 @@ SOUNDS = {
     'message_sent': _('Message Sent'),
     'muc_message_highlight': _('Group Chat Message Highlight'),
     'muc_message_received': _('Group Chat Message Received'),
+    'incoming-call-sound': _('Call Incoming'),
+    'outgoing-call-sound': _('Call Outgoing'),
 }
 
 

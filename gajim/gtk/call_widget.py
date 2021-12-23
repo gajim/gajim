@@ -35,6 +35,8 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.i18n import _
 from gajim.common.jingle_rtp import JingleAudio
 from gajim.common.nec import NetworkEvent
+from gajim.common.helpers import play_sound
+from gajim.common import sound
 
 from .gstreamer import create_gtk_widget
 from .builder import get_builder
@@ -109,10 +111,12 @@ class CallWidget(Gtk.Box):
         return self._jingle[content_type].available
 
     def _on_call_with_mic(self, _button: Gtk.Button) -> None:
+        play_sound('outgoing-call-sound', self._account, force=True, loop=True)
         self._on_jingle_button_toggled(['audio'])
         self._ui.av_start_box.hide()
 
     def _on_call_with_mic_and_cam(self, _button: Gtk.Button) -> None:
+        play_sound('outgoing-call-sound', self._account, force=True, loop=True)
         self._on_jingle_button_toggled(['audio', 'video'])
         self._ui.av_start_box.hide()
 
@@ -237,8 +241,9 @@ class CallWidget(Gtk.Box):
             self._incoming_video_event = event
         else:
             # There is no voice call running running yet
-            self.emit('incoming-call', event)
+            play_sound('incoming-call-sound', self._account, loop=True)
 
+            self.emit('incoming-call', event)
             app.nec.push_incoming_event(
                 NetworkEvent('notification',
                              account=self._account,
@@ -268,6 +273,7 @@ class CallWidget(Gtk.Box):
             session.approve_session()
         for content in event.media:
             session.approve_content(content)
+        sound.stop() # dialing/ringing
 
     def _on_jingle_disconnected(self, event):
         if event.media is None:
@@ -284,6 +290,7 @@ class CallWidget(Gtk.Box):
                 JingleState.NULL,
                 sid=event.sid,
                 reason=event.reason)
+        sound.stop() # dialing/ringing
 
     def _on_jingle_error(self, event):
         if event.sid == self._jingle['audio'].sid:
@@ -291,6 +298,7 @@ class CallWidget(Gtk.Box):
                 'audio',
                 JingleState.ERROR,
                 reason=event.reason)
+        sound.stop() # dialing/ringing
 
     def start_call(self) -> None:
         audio_state = self._jingle['audio'].state
@@ -305,6 +313,8 @@ class CallWidget(Gtk.Box):
             self._ui.av_cam_button.set_sensitive(False)
 
     def accept_call(self, session):
+        sound.stop() # dialing/ringing
+
         if not session:
             return
 
@@ -328,6 +338,8 @@ class CallWidget(Gtk.Box):
 
     @staticmethod
     def decline_call(session):
+        sound.stop() # dialing/ringing
+
         if not session:
             return
 

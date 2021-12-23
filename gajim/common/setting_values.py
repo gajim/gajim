@@ -538,6 +538,14 @@ DEFAULT_SOUNDEVENT_SETTINGS = {
     'muc_message_received': {
         'enabled': True,
         'path': 'message2.wav'
+    },
+    'incoming-call-sound': {
+        'enabled': True,
+        'path': 'call_incoming.wav'
+    },
+    'outgoing-call-sound': {
+        'enabled': True,
+        'path': 'call_outgoing.wav'
     }
 }
 
