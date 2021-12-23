@@ -373,7 +373,10 @@ def get_uf_chatstate(chatstate: str) -> str:
         return _('has closed the chat window or tab')
     return ''
 
-def exec_command(command, use_shell=False, posix=True):
+def exec_command(command: str,
+                 use_shell: bool = False,
+                 posix: bool = True
+                 ) -> None:
     """
     execute a command. if use_shell is True, we run the command as is it was
     typed in a console. So it may be dangerous if you are not sure about what
@@ -455,7 +458,7 @@ def reduce_chars_newlines(text: str, max_chars: int = 0,
     return reduced_text
 
 
-def get_contact_dict_for_account(account):
+def get_contact_dict_for_account(account: str) -> Dict[str, types.BareContact]:
     """
     Creates a dict of jid -> contact with all contacts of account
     Can be used for completion lists
@@ -533,7 +536,7 @@ def strip_soundfile_path(file_, dirs=None, abs_=True):
             return name
     return file_
 
-def play_sound_file(path_to_soundfile: str, loop: bool = False):
+def play_sound_file(path_to_soundfile: str, loop: bool = False) -> None:
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
@@ -647,7 +650,7 @@ def get_os_info() -> str:
     return info
 
 
-def message_needs_highlight(text, nickname, own_jid):
+def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
     """
     Check text to see whether any of the words in (muc_highlight_words and
     nick) appear
@@ -697,7 +700,7 @@ def allow_sound_notification(account: str, sound_event: str) -> bool:
     return False
 
 
-def get_optional_features(account):
+def get_optional_features(account: str) -> List[Namespace]:
     features = []
 
     if app.settings.get_account_setting(account, 'request_user_data'):
@@ -720,7 +723,7 @@ def get_optional_features(account):
     app.plugin_manager.extension_point('update_caps', account, features)
     return features
 
-def jid_is_blocked(account, jid):
+def jid_is_blocked(account: str, jid: str) -> bool:
     con = app.connections[account]
     return jid in con.get_module('Blocking').blocked
 
@@ -773,7 +776,7 @@ def version_condition(current_version, required_version):
         return False
     return True
 
-def get_available_emoticon_themes():
+def get_available_emoticon_themes() -> List[str]:
     files = []
     for folder in configpaths.get('EMOTICONS').iterdir():
         if not folder.is_dir():
@@ -811,7 +814,7 @@ def load_json(path: Path,
     return json_dict.get(key, default)
 
 
-def ignore_contact(account, jid):
+def ignore_contact(account: str, jid: JID) -> bool:
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
 
@@ -1097,7 +1100,7 @@ def geo_provider_from_location(lat: str, lon: str) -> str:
     return f'https://www.openstreetmap.org/?mlat={lat}&mlon={lon}&zoom=16'
 
 
-def get_resource(account):
+def get_resource(account: str) -> Optional[str]:
     resource = app.settings.get_account_setting(account, 'resource')
     if not resource:
         return None
@@ -1129,7 +1132,7 @@ def get_default_muc_config() -> Dict[str, Union[bool, str]]:
     }
 
 
-def validate_jid(jid, type_=None):
+def validate_jid(jid: Union[str, JID], type_: Optional[str] = None) -> JID:
     try:
         jid = JID.from_string(str(jid))
     except InvalidJid as error:
