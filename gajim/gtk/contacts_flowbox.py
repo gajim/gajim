@@ -23,25 +23,32 @@ from gajim.common.i18n import _
 
 
 class ContactItem(Gtk.FlowBoxChild):
-    def __init__(self, account: str, jid: str) -> None:
+    def __init__(self, account: str, jid: str, is_new: bool = False) -> None:
         Gtk.FlowBoxChild.__init__(self)
         self.set_size_request(150, -1)
 
         self.account = account
         self.jid = jid
+        self.is_new = is_new
 
-        client = app.get_client(account)
-        contact = client.get_module('Contacts').get_contact(jid)
-
-        surface = contact.get_avatar(
-            AvatarSize.ROSTER, self.get_scale_factor())
-        avatar_image = Gtk.Image.new_from_surface(surface)
-
-        name_label = Gtk.Label(label=contact.name)
-        name_label.set_tooltip_text(contact.name)
+        name_label = Gtk.Label()
         name_label.set_ellipsize(Pango.EllipsizeMode.END)
         name_label.set_max_width_chars(12)
         name_label.get_style_context().add_class('bold')
+
+        if is_new:
+            avatar_image =  Gtk.Image.new_from_icon_name(
+                'avatar-default', Gtk.IconSize.DND)
+            name_label.set_text(jid)
+            name_label.set_tooltip_text(jid)
+        else:
+            client = app.get_client(account)
+            contact = client.get_module('Contacts').get_contact(jid)
+            surface = contact.get_avatar(
+                AvatarSize.ROSTER, self.get_scale_factor())
+            avatar_image = Gtk.Image.new_from_surface(surface)
+            name_label.set_text(contact.name)
+            name_label.set_tooltip_text(contact.name)
 
         remove_button = Gtk.Button.new_from_icon_name(
             'window-close', Gtk.IconSize.BUTTON)
@@ -68,7 +75,11 @@ class ContactItem(Gtk.FlowBoxChild):
 class ContactsFlowBox(Gtk.FlowBox):
 
     __gsignals__ = {
-        'contact-removed': (GObject.SignalFlags.RUN_LAST, None, (str, str))
+        'contact-removed': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (str, str, bool)
+        )
     }
 
     def __init__(self) -> None:
@@ -85,8 +96,12 @@ class ContactsFlowBox(Gtk.FlowBox):
             item.destroy()
         self.foreach(_remove)
 
-    def add_contact(self, account: str, jid: str) -> None:
-        contact_item = ContactItem(account, jid)
+    def add_contact(self,
+                    account: str,
+                    jid: str,
+                    is_new: bool = False
+                    ) -> None:
+        contact_item = ContactItem(account, jid, is_new=is_new)
         self.add(contact_item)
 
     def has_contacts(self) -> bool:
@@ -101,5 +116,6 @@ class ContactsFlowBox(Gtk.FlowBox):
     def on_contact_removed(self, row: ContactItem) -> None:
         account = row.account
         jid = row.jid
+        is_new = row.is_new
         row.destroy()
-        self.emit('contact-removed', account, jid)
+        self.emit('contact-removed', account, jid, is_new)

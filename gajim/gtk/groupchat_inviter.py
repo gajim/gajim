@@ -101,8 +101,10 @@ class ContactRow(Gtk.ListBoxRow):
         self.add(grid)
         self.show_all()
 
-    def _get_avatar_image(self, contact: types.BareContact) -> Gtk.Image:
-        if self.is_new:
+    def _get_avatar_image(self,
+                          contact: Optional[types.BareContact]
+                          ) -> Gtk.Image:
+        if contact is None:
             icon_name = 'avatar-default'
             return Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DND)
 
@@ -189,7 +191,7 @@ class GroupChatInviter(Gtk.Box):
 
     def _on_contacts_row_activated(self,
                                    listbox: Gtk.ListBox,
-                                   row: Gtk.ListBoxRow
+                                   row: ContactRow
                                    ) -> None:
         if row.is_new:
             jid = row.jid
@@ -207,7 +209,7 @@ class GroupChatInviter(Gtk.Box):
                 Gtk.EntryIconPosition.SECONDARY, None)
             self._remove_new_contact_row()
 
-        self._invitees_box.add_contact(row.account, row.jid)
+        self._invitees_box.add_contact(row.account, row.jid, is_new=row.is_new)
 
         if not row.is_new:
             listbox.remove(row)
@@ -223,17 +225,19 @@ class GroupChatInviter(Gtk.Box):
     def _on_invitee_removed(self,
                             flowbox: ContactsFlowBox,
                             account: str,
-                            jid: str
+                            jid: str,
+                            is_new: bool
                             ) -> None:
-        show_account = len(self._accounts) > 1
-        client = app.get_client(account)
-        contact = client.get_module('Contacts').get_contact(jid)
-        row = ContactRow(account,
-                         contact,
-                         str(contact.jid),
-                         contact.name,
-                         show_account)
-        self._ui.contacts_listbox.add(row)
+        if not is_new:
+            show_account = len(self._accounts) > 1
+            client = app.get_client(account)
+            contact = client.get_module('Contacts').get_contact(jid)
+            row = ContactRow(account,
+                            contact,
+                            str(contact.jid),
+                            contact.name,
+                            show_account)
+            self._ui.contacts_listbox.add(row)
         self._ui.search_entry.grab_focus()
         self.emit('listbox-changed', flowbox.has_contacts())
 
@@ -279,11 +283,10 @@ class GroupChatInviter(Gtk.Box):
             row = ContactRow(account,
                              None,
                              '',
-                             None,
+                             _('New Contact'),
                              show_account)
             self._new_contact_rows[account] = row
             self._ui.contacts_listbox.add(row)
-            row.get_parent().show_all()
         self._new_contact_row_visible = True
 
     def _remove_new_contact_row(self) -> None:
