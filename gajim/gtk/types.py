@@ -55,3 +55,5 @@ ControlType = Union [
     'PrivateChatControl',
     'GroupchatControl'
 ]
+
+GroupchatControlType = Union['GroupchatControl']
