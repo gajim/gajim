@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Optional
+
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -22,7 +25,7 @@ from gajim.common.i18n import _
 
 
 class StatusMessageSelector(Gtk.Box):
-    def __init__(self, account=None):
+    def __init__(self, account: Optional[str] = None) -> None:
         Gtk.Box.__init__(self)
         self.get_style_context().add_class('linked')
         self._account = account
@@ -43,10 +46,10 @@ class StatusMessageSelector(Gtk.Box):
         self.show_all()
         app.ged.register_event_handler('our-show', ged.POSTGUI, self.update)
 
-    def _on_changed(self, _entry):
+    def _on_changed(self, _entry: Gtk.Entry) -> None:
         self._button.set_sensitive(True)
 
-    def _set_status_message(self, *args):
+    def _set_status_message(self, *args: Any) -> None:
         self._button.set_sensitive(False)
         message = self._entry.get_text()
         message = to_one_line(message)
@@ -61,7 +64,7 @@ class StatusMessageSelector(Gtk.Box):
                 client = app.get_client(account)
                 client.change_status(client.status, message)
 
-    def update(self, *args):
+    def update(self, *args: Any) -> None:
         if self._account is None:
             message = get_global_status_message()
         else:
