@@ -417,6 +417,8 @@ def guess_simple_file_type(file_path: str,
                            data: Optional[bytes] = None
                            ) -> tuple[Gio.Icon, str]:
     mime_type = guess_mime_type(file_path, data)
+    if mime_type == 'application/octet-stream':
+        mime_type = ''
     icon = get_icon_for_mime_type(mime_type)
     if file_path.startswith('geo:'):
         return icon, _('Location')
@@ -432,6 +434,6 @@ def guess_simple_file_type(file_path: str,
 
 
 def get_icon_for_mime_type(mime_type: str) -> Gio.Icon:
-    if mime_type is None:
+    if mime_type == '':
         return Gio.Icon.new_for_string('mail-attachment')
     return Gio.content_type_get_icon(mime_type)
