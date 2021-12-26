@@ -31,6 +31,7 @@ from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
 from gajim.common.structs import UNKNOWN_PRESENCE
 from gajim.common.structs import UNKNOWN_MUC_PRESENCE
+from gajim.common.structs import MUCPresenceData
 from gajim.common.helpers import Observable
 from gajim.common.modules.base import BaseModule
 from gajim.common.helpers import get_groupchat_name
@@ -573,10 +574,10 @@ class GroupchatParticipant(CommonContact):
         return False
 
     @property
-    def presence(self):
+    def presence(self) -> MUCPresenceData:
         return self._presence
 
-    def set_presence(self, presence):
+    def set_presence(self, presence: MUCPresenceData) -> None:
         self._presence = presence
 
     @property
@@ -631,7 +632,10 @@ class GroupchatParticipant(CommonContact):
         return app.interface.avatar_storage.get_surface(
             self, size, scale, show, style=style)
 
-    def update_presence(self, presence, *args, notify: bool = True) -> None:
+    def update_presence(self,
+                        presence: MUCPresenceData,
+                        *args: Any,
+                        notify: bool = True) -> None:
         if not notify:
             self._presence = presence
             return
@@ -661,7 +665,7 @@ class GroupchatParticipant(CommonContact):
         for signal in signals:
             self.notify(signal, *args)
 
-    def set_state(self, state, presence) -> None:
+    def set_state(self, state, presence: MUCPresenceData) -> None:
         self._presence = presence
         self.notify(state)
 
