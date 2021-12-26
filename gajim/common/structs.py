@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from nbxmpp.protocol import JID
 from nbxmpp.const import Role
 from nbxmpp.const import Affiliation
+from nbxmpp.const import PresenceShow
 
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import KindConstant
@@ -207,13 +208,13 @@ UNKNOWN_PRESENCE = PresenceData(show=PresenceShowExt.OFFLINE,
 
 @dataclass(frozen=True)
 class MUCPresenceData:
-    show: str
+    show: PresenceShow
     status: str
-    idle_time: str
+    idle_time: Optional[float]
     available: bool
-    affiliation: str
-    role: str
-    real_jid: JID
+    affiliation: Affiliation
+    role: Role
+    real_jid: Optional[JID]
 
     @classmethod
     def from_presence(cls, properties):
