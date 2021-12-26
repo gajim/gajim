@@ -1,28 +1,21 @@
 #!/usr/bin/env python3
 
-import sys
-from pathlib import Path
+# Reads all .ui files and creates builder.pyi
+# Excecute this script from the repo root dir
 
+from pathlib import Path
 from xml.etree import ElementTree as ET
 
-try:
-    path = sys.argv[1]
-except Exception:
-    print('path to file/folder missing')
-    exit()
 
-path = Path(path)
+cwd = Path.cwd()
 
-if path.is_dir():
-    paths = list(path.iterdir())
+if cwd.name != 'gajim':
+    exit('Script needs to be excecuted from gajim repository root directory')
 
-elif path.is_file():
-    paths = [path]
+in_path = cwd / 'gajim' / 'data' / 'gui'
+out_path = cwd / 'gajim' / 'gtk' / 'builder.pyi'
 
-else:
-    print('Path must be folder or file:', path)
-    exit()
-
+paths = list(in_path.iterdir())
 
 IMPORTS = '''
 from typing import Literal
@@ -86,8 +79,7 @@ def parse(path, file):
 
 builder_names = []
 
-current_dir = Path('./builder.pyi')
-with current_dir.open(mode='w') as file:
+with out_path.open(mode='w') as file:
     file.write(IMPORTS)
     for path in paths:
         if path.name.endswith('~'):
