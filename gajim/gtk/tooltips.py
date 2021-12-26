@@ -24,6 +24,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import os
 import time
 import logging
@@ -35,7 +37,8 @@ from gi.repository import Pango
 
 from nbxmpp import JID
 
-from gajim.common import app, types
+from gajim.common import app
+from gajim.common import types
 from gajim.common import helpers
 from gajim.common.const import AvatarSize
 from gajim.common.const import PEPEventType
