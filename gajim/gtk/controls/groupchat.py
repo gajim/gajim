@@ -703,9 +703,6 @@ class GroupchatControl(BaseControl):
         """
         self.xml.banner_name_label.set_text(self.contact.name)
 
-    def _on_update_gc_avatar(self, event):
-        self.roster.process_avatar_update(event)
-
     def _on_bookmarks_received(self, _event):
         self.draw_banner_text()
 

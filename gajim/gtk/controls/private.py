@@ -52,9 +52,6 @@ class PrivateChatControl(ChatControl):
 
         ChatControl.__init__(self, account, jid)
 
-        # self.register_events([
-        #     ('update-gc-avatar', ged.GUI1, self._on_update_gc_avatar),
-
     def _connect_contact_signals(self) -> None:
         self.contact.multi_connect({
             'user-avatar-update': self._on_user_avatar_update,
