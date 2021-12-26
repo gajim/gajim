@@ -339,18 +339,6 @@ class FiletransfersBuilder(Builder):
     file_transfers_window_atkobject: Atk.Object
 
 
-class GroupchatInviteBuilder(Builder):
-    account_store: Gtk.ListStore
-    contacts_placeholder: Gtk.Box
-    invite_grid: Gtk.Grid
-    invitees: Gtk.ScrolledWindow
-    invitees_listbox: Gtk.ListBox
-    search_entry: Gtk.SearchEntry
-    scrolledwindow: Gtk.ScrolledWindow
-    contacts_listbox: Gtk.ListBox
-    invitees_placeholder: Gtk.Box
-
-
 class PreviewBuilder(Builder):
     preview_box: Gtk.Box
     icon_event_box: Gtk.EventBox
@@ -663,6 +651,16 @@ class GroupchatInfoScrolledBuilder(Builder):
     name: Gtk.Label
     avatar_image: Gtk.Image
     address: Gtk.Label
+
+
+class GroupchatInviterBuilder(Builder):
+    account_store: Gtk.ListStore
+    invite_box: Gtk.Box
+    search_entry: Gtk.SearchEntry
+    scrolledwindow: Gtk.ScrolledWindow
+    contacts_listbox: Gtk.ListBox
+    contacts_placeholder: Gtk.Box
+    invitees_scrolled: Gtk.ScrolledWindow
 
 
 class GroupchatControlBuilder(Builder):
@@ -1021,8 +1019,6 @@ def get_builder(file_name: Literal['workspace_dialog.ui'], widgets: list[str] = 
 @overload
 def get_builder(file_name: Literal['filetransfers.ui'], widgets: list[str] = ...) -> FiletransfersBuilder: ...
 @overload
-def get_builder(file_name: Literal['groupchat_invite.ui'], widgets: list[str] = ...) -> GroupchatInviteBuilder: ...
-@overload
 def get_builder(file_name: Literal['preview.ui'], widgets: list[str] = ...) -> PreviewBuilder: ...
 @overload
 def get_builder(file_name: Literal['exception_dialog.ui'], widgets: list[str] = ...) -> ExceptionDialogBuilder: ...
@@ -1062,6 +1058,8 @@ def get_builder(file_name: Literal['chat_paned.ui'], widgets: list[str] = ...) -
 def get_builder(file_name: Literal['contact_info.ui'], widgets: list[str] = ...) -> ContactInfoBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_info_scrolled.ui'], widgets: list[str] = ...) -> GroupchatInfoScrolledBuilder: ...
+@overload
+def get_builder(file_name: Literal['groupchat_inviter.ui'], widgets: list[str] = ...) -> GroupchatInviterBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_control.ui'], widgets: list[str] = ...) -> GroupchatControlBuilder: ...
 @overload
