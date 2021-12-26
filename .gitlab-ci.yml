@@ -12,7 +12,7 @@ pyright:
     - pip3 install -I git+https://dev.gajim.org/gajim/gi-stubs.git
     - npm install pyright
     - python3 -V
-    - scripts/ci/link-gtk.sh
+    - python3 scripts/ci/link-gtk.py
     - $(npm bin)/pyright --version
     - $(npm bin)/pyright
   interruptible: true
