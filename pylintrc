@@ -50,9 +50,12 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
+#
+# Most errors here are disabled because they are covered by pyright
 # C0111 missing-docstring
 # W0511 fix-me
-disable=C0111,W0511
+# 
+disable=C0111,W0511,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1140,E1141,E1142,I1101,W0212,W1113,W1114,W1115,W1116
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
