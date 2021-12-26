@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any
 from typing import List
 from typing import Optional
+from typing import Union
 
 import logging
 
@@ -60,8 +61,8 @@ class WorkspaceSideBar(Gtk.ListBox):
             Gdk.DragAction.MOVE)
 
         self.drag_row: Optional[Workspace] = None
-        self.row_before = None
-        self.row_after = None
+        self.row_before: Optional[Workspace] = None
+        self.row_after: Union[Workspace, AddWorkspace, None] = None
 
         self.connect('drag-motion', self._on_drag_motion)
         self.connect('drag-data-received', self._on_drag_data_received)
@@ -74,7 +75,7 @@ class WorkspaceSideBar(Gtk.ListBox):
                                 self._on_unread_count_changed)
         chat_list_stack.connect('chat-selected',
                                 self._on_chat_selected)
-        self._workspaces = {}
+        self._workspaces: dict[str, Workspace] = {}
 
     def _on_drag_motion(self,
                         _widget: Gtk.Widget,
@@ -82,7 +83,7 @@ class WorkspaceSideBar(Gtk.ListBox):
                         _x_coord: int,
                         y_coord: int,
                         _time: int
-                        ) -> None:
+                        ) -> bool:
         row = self.get_row_at_y(y_coord)
 
         if row:
@@ -172,11 +173,16 @@ class WorkspaceSideBar(Gtk.ListBox):
         workspace = self._workspaces[workspace_id]
         workspace.set_unread_count(count)
 
-    def _on_chat_selected(self, _chat_list_stack, workspace_id, *args):
+    def _on_chat_selected(self,
+                          _chat_list_stack: ChatListStack,
+                          workspace_id: str,
+                          *args: Any) -> None:
         self.activate_workspace(workspace_id)
 
     @staticmethod
-    def _on_row_activated(_listbox, row):
+    def _on_row_activated(_listbox: Gtk.ListBox,
+                          row: Union[Workspace, AddWorkspace]
+                          ) -> None:
         if row.workspace_id == 'add':
             open_window('WorkspaceDialog')
         else:
@@ -208,7 +214,7 @@ class WorkspaceSideBar(Gtk.ListBox):
         row = self._workspaces[workspace_id]
         self.select_row(row)
 
-    def get_active_workspace(self) -> str:
+    def get_active_workspace(self) -> Optional[str]:
         row = self.get_selected_row()
         if row is None:
             return None
@@ -230,7 +236,7 @@ class WorkspaceSideBar(Gtk.ListBox):
 
 
 class CommonWorkspace(Gtk.ListBoxRow):
-    def __init__(self, workspace_id):
+    def __init__(self, workspace_id: str) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.workspace_id = workspace_id
 
