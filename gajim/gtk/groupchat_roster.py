@@ -37,6 +37,7 @@ from gajim.common.helpers import jid_is_blocked
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.nec import NetworkEvent
+from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gui_menu_builder import get_groupchat_roster_menu
 from .tooltips import GCTooltip
@@ -85,7 +86,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self._control = control
         self._control_id = control.control_id
         self._tooltip = GCTooltip()
-        self._group_chat_contact = cast(types.GroupchatContact, control.contact)
+        self._group_chat_contact = cast(GroupchatContact, control.contact)
         self._group_chat_contact.connect(
             'user-avatar-update', self._on_user_avatar_update)
         self._group_chat_contact.connect('user-joined', self._on_user_joined)
