@@ -35,7 +35,7 @@ from gi.repository import Pango
 
 from nbxmpp import JID
 
-from gajim.common import app
+from gajim.common import app, types
 from gajim.common import helpers
 from gajim.common.const import AvatarSize
 from gajim.common.const import PEPEventType
@@ -51,15 +51,18 @@ log = logging.getLogger('gajim.gui.tooltips')
 
 
 class GCTooltip:
-    def __init__(self):
+    def __init__(self) -> None:
         self._contact = None
 
         self._ui = get_builder('groupchat_roster_tooltip.ui')
 
-    def clear_tooltip(self):
+    def clear_tooltip(self) -> None:
         self._contact = None
 
-    def get_tooltip(self, contact):
+    def get_tooltip(self,
+                    contact: types.GroupchatParticipant
+                    ) -> tuple[bool, Gtk.Grid]:
+
         if self._contact == contact:
             return True, self._ui.tooltip_grid
 
@@ -67,14 +70,14 @@ class GCTooltip:
         self._contact = contact
         return False, self._ui.tooltip_grid
 
-    def _hide_grid_children(self):
+    def _hide_grid_children(self) -> None:
         """
         Hide all Elements of the Tooltip Grid
         """
         for child in self._ui.tooltip_grid.get_children():
             child.hide()
 
-    def _populate_grid(self, contact):
+    def _populate_grid(self, contact: types.GroupchatParticipant) -> None:
         """
         Populate the Tooltip Grid with data of from the contact
         """
@@ -119,18 +122,20 @@ class GCTooltip:
 
 
 class RosterTooltip:
-    def __init__(self):
+    def __init__(self) -> None:
         self._row = None
         self._ui = get_builder('roster_tooltip.ui')
 
-    def clear_tooltip(self):
+    def clear_tooltip(self) -> None:
         self._row = None
         for widget in self._ui.resources_box.get_children():
             widget.destroy()
         for widget in self._ui.tooltip_grid.get_children():
             widget.hide()
 
-    def get_tooltip(self, row, contact):
+    def get_tooltip(self,
+                    row: Gtk.TreePath,
+                    contact: types.BareContact) -> tuple[bool, Gtk.Grid]:
         if self._row == row:
             return True, self._ui.tooltip_grid
 
@@ -138,7 +143,7 @@ class RosterTooltip:
         self._row = row
         return False, self._ui.tooltip_grid
 
-    def _populate_grid(self, contact):
+    def _populate_grid(self, contact: types.BareContact) -> None:
         self.clear_tooltip()
         scale = self._ui.tooltip_grid.get_scale_factor()
 
@@ -184,7 +189,7 @@ class RosterTooltip:
                 break
         last_widget.set_vexpand(True)
 
-    def _add_resources(self, contact):
+    def _add_resources(self, contact: types.BareContact) -> None:
         for resource in contact.iter_resources():
             resource_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
@@ -241,7 +246,7 @@ class RosterTooltip:
 
         self._ui.resources_box.show_all()
 
-    def _append_pep_info(self, contact):
+    def _append_pep_info(self, contact: types.BareContact) -> None:
         if PEPEventType.TUNE in contact.pep:
             tune = format_tune(*contact.pep[PEPEventType.TUNE])
             self._ui.tune.set_markup(tune)
@@ -256,7 +261,7 @@ class RosterTooltip:
 
 
 class FileTransfersTooltip:
-    def __init__(self):
+    def __init__(self) -> None:
         self.sid = None
         self.widget = None
         if app.settings.get('use_kib_mib'):
@@ -264,11 +269,11 @@ class FileTransfersTooltip:
         else:
             self.units = GLib.FormatSizeFlags.DEFAULT
 
-    def clear_tooltip(self):
+    def clear_tooltip(self) -> None:
         self.sid = None
         self.widget = None
 
-    def get_tooltip(self, file_props, sid):
+    def get_tooltip(self, file_props, sid) -> tuple[bool, Gtk.Widget]:
         if self.sid == sid:
             return True, self.widget
 
@@ -276,7 +281,7 @@ class FileTransfersTooltip:
         self.sid = sid
         return False, self.widget
 
-    def _create_tooltip(self, file_props, _sid):
+    def _create_tooltip(self, file_props, _sid) -> None:
         ft_grid = Gtk.Grid.new()
         ft_grid.insert_column(0)
         ft_grid.set_row_spacing(6)
@@ -336,7 +341,7 @@ class FileTransfersTooltip:
         return ft_grid
 
     @staticmethod
-    def _get_current_status(file_props):
+    def _get_current_status(file_props) -> None:
         if file_props.stopped:
             return Q_('?transfer status:Aborted')
         if file_props.completed:
