@@ -115,13 +115,13 @@ class AudioWidget(Gtk.Box):
                  value: float
                  ) -> bool:
         self._playbin.seek_simple(
-            Gst.Format.TIME, Gst.SeekFlags.FLUSH, value)
+            Gst.Format.TIME, Gst.SeekFlags.FLUSH, int(value))
         return False
 
     def _on_play_clicked(self, _button: Gtk.Button) -> None:
         self._set_pause(not self._get_paused())
 
-    def _on_destroy(self, _widget):
+    def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._playbin.set_state(Gst.State.NULL)
 
     def _get_paused(self) -> bool:
@@ -147,7 +147,8 @@ class AudioWidget(Gtk.Box):
 
         if self._playbin.query(self._query):
             _fmt, cur_pos = self._query.parse_position()
-            self._seek_bar.set_value(cur_pos)
+            if cur_pos is not None:
+                self._seek_bar.set_value(cur_pos)
         return True
 
     @staticmethod
