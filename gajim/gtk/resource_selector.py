@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
+from __future__ import annotations
 from typing import Optional
 from typing import Tuple
 
@@ -27,6 +27,7 @@ from nbxmpp.namespaces import _Namespaces
 from nbxmpp.structs import DiscoInfo
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
@@ -43,8 +44,9 @@ class ResourceSelector(Gtk.ScrolledWindow):
             (bool, )),
     }
 
-    def __init__(self, contact: BareContact,
-                 constraints: List[_Namespaces] = None) -> None:
+    def __init__(self,
+                 contact: BareContact,
+                 constraints: Optional[list[_Namespaces]] = None) -> None:
         Gtk.ScrolledWindow.__init__(self)
         self.set_shadow_type(Gtk.ShadowType.IN)
         self.set_size_request(-1, 200)
@@ -68,11 +70,14 @@ class ResourceSelector(Gtk.ScrolledWindow):
         self.show_all()
 
     @staticmethod
-    def _sort_func(row1, row2):
+    def _sort_func(row1: ResourceRow, row2: ResourceRow) -> int:
         return locale.strcoll(
             row1.device_text.lower(), row2.device_text.lower())
 
-    def _on_row_selected(self, _listbox, row):
+    def _on_row_selected(self,
+                         _listbox: Gtk.ListBox,
+                         row: ResourceRow
+                         ) -> None:
         state = bool(row is not None)
         self.emit('selection-changed', state)
 
@@ -92,7 +97,10 @@ class ResourceSelector(Gtk.ScrolledWindow):
         for resource in self._contact.iter_resources():
             self._listbox.add(ResourceRow(resource, self._constraints))
 
-    def _on_update(self, _contact, _signal_name):
+    def _on_update(self,
+                   _contact: types.ResourceContact,
+                   _signal_name: str
+                   ) -> None:
         for child in self._listbox.get_children():
             self._listbox.remove(child)
         self._add_entries()
@@ -102,15 +110,17 @@ class ResourceSelector(Gtk.ScrolledWindow):
 
 
 class ResourceRow(Gtk.ListBoxRow):
-    def __init__(self, resource_contact: ResourceContact,
-                 constraints: List[_Namespaces]) -> None:
+    def __init__(self,
+                 resource_contact: ResourceContact,
+                 constraints: list[_Namespaces]
+                 ) -> None:
         Gtk.ListBoxRow.__init__(self)
 
         self.jid = resource_contact.jid
 
         icon_name = 'computer-symbolic'
         tooltip_text = _('Computer')
-        self.device_text = resource_contact.jid.resource
+        self.device_text = resource_contact.jid.resource or ''
 
         disco_info = app.storage.cache.get_last_disco_info(
             resource_contact.jid)
@@ -135,7 +145,7 @@ class ResourceRow(Gtk.ListBoxRow):
         box.add(name_label)
 
         for constraint in constraints:
-            if not resource_contact.supports(constraint):
+            if not resource_contact.supports(str(constraint)):
                 self.set_sensitive(False)
                 self.set_tooltip_text(_('This devices is not compatible.'))
 
