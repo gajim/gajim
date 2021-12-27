@@ -23,7 +23,6 @@ from typing import Tuple
 from typing import Union
 from typing import TYPE_CHECKING
 
-from pathlib import Path
 import weakref
 
 from gi.repository import GdkPixbuf
@@ -31,8 +30,6 @@ from gi.repository import GdkPixbuf
 import nbxmpp
 from nbxmpp.protocol import JID
 from nbxmpp.structs import BookmarkData
-
-from gajim.common.const import PathType, PathLocation
 
 if TYPE_CHECKING:
     # pylint: disable=unused-import
