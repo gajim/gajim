@@ -61,9 +61,6 @@ CSSConfigT = Union['CSSConfig']
 PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]
 PEPHandlersDict = Dict[str, List[PEPNotifyCallback]]
 
-# Configpaths
-PathTuple = Tuple[Optional[PathLocation], Path, Optional[PathType]]
-
 # Plugins
 PluginExtensionPoints = Dict[str, Tuple[Optional[Callable[..., None]],
                                         Optional[Callable[..., None]]]]

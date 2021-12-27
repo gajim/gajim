@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Generator
 from typing import Optional
 from typing import Union
@@ -36,7 +38,9 @@ import gajim
 from gajim.common.i18n import _
 from gajim.common.const import PathType
 from gajim.common.const import PathLocation
-from gajim.common.types import PathTuple
+
+
+PathTupleT = tuple[Optional[PathLocation], Path, Optional[PathType]]
 
 
 def get(key: str) -> Path:
@@ -58,10 +62,6 @@ def get_paths(type_: PathType) -> Generator[Path, None, None]:
         if type_ != path_type:
             continue
         yield _paths[key]
-
-
-def override_path(*args, **kwargs):
-    _paths.add(*args, **kwargs)
 
 
 def set_separation(active: bool) -> None:
@@ -101,7 +101,7 @@ def create_paths() -> None:
 
 class ConfigPaths:
     def __init__(self) -> None:
-        self._paths: dict[str, PathTuple] = {}
+        self._paths: dict[str, PathTupleT] = {}
         self.profile = ''
         self.profile_separation = False
         self.custom_config_root: Optional[Path] = None
@@ -145,7 +145,7 @@ class ConfigPaths:
             return self.data_root / path
         return path
 
-    def items(self) -> Generator[tuple[str, PathTuple], None, None]:
+    def items(self) -> Generator[tuple[str, PathTupleT], None, None]:
         for key, value in self._paths.items():
             yield (key, value)
 
@@ -176,7 +176,7 @@ class ConfigPaths:
             self.cache_root = self.data_root = self.custom_config_root
 
         user_dir_paths = [
-            ('TMP', Path(tempfile.gettempdir())),
+            ('TMP', Path(tempfile.gettempdir()), None, None),
             ('MY_CONFIG', Path(), PathLocation.CONFIG, PathType.FOLDER),
             ('MY_CACHE', Path(), PathLocation.CACHE, PathType.FOLDER),
             ('MY_DATA', Path(), PathLocation.DATA, PathType.FOLDER),
