@@ -12,11 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
 from typing import Dict
+from typing import NamedTuple
 from typing import List
 from typing import Optional
-
-from collections import namedtuple
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
@@ -30,12 +32,20 @@ from .builder import get_builder
 from .util import get_thumbnail_size
 
 
-class DialogButton(namedtuple('DialogButton', ('response text callback args '
-                                               'kwargs action is_default'))):
+class DialogButton(NamedTuple):
+    response: Gtk.ResponseType
+    text: str
+    callback: Any
+    args: Any
+    kwargs: Any
+    action: ButtonAction
+    is_default: bool
+
+
     @classmethod
-    def make(cls, type_=None, **kwargs):
+    def make(cls, type_: Optional[str] = None, **kwargs: Any) -> DialogButton:
         # Defaults
-        default_kwargs = {
+        default_kwargs: dict[str, Any] = {
             'response': None,
             'text': None,
             'callback': None,
