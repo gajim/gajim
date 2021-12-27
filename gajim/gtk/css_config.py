@@ -179,10 +179,9 @@ class CSSConfig:
             log.exception('Error loading application css')
 
     @staticmethod
-    def _pango_to_css_weight(number: str) -> int:
+    def _pango_to_css_weight(number: int) -> int:
         # Pango allows for weight values between 100 and 1000
         # CSS allows only full hundred numbers like 100, 200 ..
-        number = int(number)
         if number < 100:
             return 100
         if number > 900:
@@ -325,10 +324,10 @@ class CSSConfig:
 
     def _get_attr_from_description(self,
                                    description: Pango.FontDescription
-                                   ) -> Tuple[Optional[str], int, str, int]:
+                                   ) -> Tuple[Optional[str], float, str, int]:
         size = description.get_size() / Pango.SCALE
         style = self._get_string_from_pango_style(description.get_style())
-        weight = self._pango_to_css_weight(description.get_weight())
+        weight = self._pango_to_css_weight(int(description.get_weight()))
         family = description.get_family()
         return family, size, style, weight
 
