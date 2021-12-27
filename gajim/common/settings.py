@@ -40,7 +40,11 @@ from gajim.common import optparser
 from gajim.common.helpers import get_muc_context
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
-from gajim.common.setting_values import APP_SETTINGS, AllWorkspaceSettings, AllWorkspaceSettingsT, ListWorkspaceSettings, OpenChatSettingT, StringWorkspaceSettings
+from gajim.common.setting_values import APP_SETTINGS
+from gajim.common.setting_values import AllWorkspaceSettings
+from gajim.common.setting_values import AllWorkspaceSettingsT
+from gajim.common.setting_values import OpenChatSettingT
+from gajim.common.setting_values import StringWorkspaceSettings
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import PROXY_SETTINGS
 from gajim.common.setting_values import PROXY_EXAMPLES
