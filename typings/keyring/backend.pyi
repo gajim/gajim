@@ -1,0 +1,13 @@
+
+
+from typing import Optional
+
+
+class KeyringBackend:
+
+    def get_password(self, service: str, username: str) -> Optional[str]: ...
+    def set_password(self, service: str, username: str, password: str) -> None: ...
+    def delete_password(self, service: str, username: str) -> None: ...
+
+
+def get_all_keyring() -> list[KeyringBackend]: ...
