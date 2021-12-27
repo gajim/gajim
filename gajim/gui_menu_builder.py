@@ -286,7 +286,7 @@ def get_encryption_menu(control_id: str,
     return menu
 
 
-def get_conv_action_context_menu(account: str, selected_text: str) -> Gtk.Menu:
+def get_conv_action_context_menu(account: str, selected_text: str) -> Gtk.MenuItem:
     selected_text_short = reduce_chars_newlines(selected_text, 10, 1)
 
     action_menu_item = Gtk.MenuItem.new_with_mnemonic(

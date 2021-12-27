@@ -181,8 +181,10 @@ class MessageTextview(Gtk.TextView):
     def update_text_tags(self) -> None:
         tag_table = self.get_buffer().get_tag_table()
         url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
-        for tag in URI_TAGS:
-            tag_table.lookup(tag).set_property('foreground', url_color)
+        for tag_name in URI_TAGS:
+            tag = tag_table.lookup(tag_name)
+            assert tag is not None
+            tag.set_property('foreground', url_color)
 
     def clear(self) -> None:
         buffer_ = self.get_buffer()
@@ -250,22 +252,15 @@ class MessageTextview(Gtk.TextView):
                        _keyboard_mode: bool,
                        tooltip: Gtk.Tooltip
                        ) -> bool:
+
         window = widget.get_window(Gtk.TextWindowType.TEXT)
+        assert window is not None
         x_pos, y_pos = self.window_to_buffer_coords(
             Gtk.TextWindowType.TEXT, x_pos, y_pos)
 
         iter_ = self.get_iter_at_position(x_pos, y_pos)[1]
         for tag in iter_.get_tags():
             tag_name = tag.get_property('name')
-            if getattr(tag, 'is_anchor', False):
-                text = getattr(tag, 'title', False)
-                if text:
-                    if len(text) > 50:
-                        text = reduce_chars_newlines(text, 47, 1)
-                    tooltip.set_text(text)
-                    window.set_cursor(get_cursor('pointer'))
-                    self._cursor_changed = True
-                    return True
             if tag_name in URI_TAGS:
                 window.set_cursor(get_cursor('pointer'))
                 self._cursor_changed = True
@@ -292,9 +287,7 @@ class MessageTextview(Gtk.TextView):
             Gtk.TextWindowType.TEXT,
             int(event.x),
             int(event.y))
-        iter_ = self.get_iter_at_location(x_pos, y_pos)
-        if isinstance(iter_, tuple):
-            iter_ = iter_[1]
+        _, iter_ = self.get_iter_at_location(x_pos, y_pos)
         tags = iter_.get_tags()
 
         if tags:
