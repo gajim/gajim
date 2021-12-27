@@ -12,7 +12,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from gi.repository import Gtk
+
+from .. import types
 
 
 class QuoteWidget(Gtk.Box):
@@ -30,7 +34,9 @@ class QuoteWidget(Gtk.Box):
 
         self._message_widget = None
 
-    def attach_message_widget(self, message_widget):
+    def attach_message_widget(self,
+                              message_widget: types.MessageWidget) -> None:
+
         # Purpose of this method is to prevent circular imports
         if self._message_widget is not None:
             raise ValueError(

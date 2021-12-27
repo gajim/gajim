@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from .controls.chat import ChatControl
     from .controls.private import PrivateChatControl
     from .controls.groupchat import GroupchatControl
+    from .conversation.message_widget import MessageWidget
     from .conversation.rows.call import CallRow
     from .conversation.rows.command_output import CommandOutputRow
     from .conversation.rows.date import DateRow
