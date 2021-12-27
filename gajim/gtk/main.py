@@ -568,17 +568,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.mark_as_read(control.account, control.contact.jid)
 
     @staticmethod
-    def contact_info(account, jid):
+    def contact_info(account: str, jid: str) -> None:
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
         open_window('ContactInfo', account=account, contact=contact)
 
     @staticmethod
-    def execute_command(account, jid):
+    def execute_command(account: str, jid: str) -> None:
         # TODO: Resource?
         AdHocCommand(account, jid)
 
-    def block_contact(self, account, jid):
+    def block_contact(self, account: str, jid: str) -> None:
         client = app.get_client(account)
 
         contact = client.get_module('Contacts').get_contact(jid)
