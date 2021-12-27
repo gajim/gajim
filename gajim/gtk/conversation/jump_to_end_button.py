@@ -12,8 +12,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Union
+
 from gi.repository import GObject
 from gi.repository import Gtk
+
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import BareContact
+
+
+ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
 
 class JumpToEndButton(Gtk.Overlay):
@@ -25,7 +36,7 @@ class JumpToEndButton(Gtk.Overlay):
             ()),
     }
 
-    def __init__(self, contact):
+    def __init__(self, contact: ContactT) -> None:
         Gtk.Overlay.__init__(self)
         self.set_halign(Gtk.Align.END)
         self.set_valign(Gtk.Align.END)
@@ -51,7 +62,7 @@ class JumpToEndButton(Gtk.Overlay):
         self._unread_label.get_style_context().add_class(
             'unread-counter')
 
-        if contact.is_groupchat and not contact.can_notify():
+        if isinstance(contact, GroupchatContact) and not contact.can_notify():
             self._unread_label.get_style_context().add_class(
                 'unread-counter-silent')
 
@@ -65,7 +76,7 @@ class JumpToEndButton(Gtk.Overlay):
         self._count = 0
         self.set_no_show_all(True)
 
-    def _on_jump_clicked(self, _button):
+    def _on_jump_clicked(self, _button: Gtk.Button) -> None:
         self.emit('clicked')
 
     def toggle(self, visible: bool) -> None:
