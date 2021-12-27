@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
 from typing import Optional
 
 from datetime import datetime
@@ -21,11 +22,13 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.i18n import _
 from gajim.common.helpers import from_one_line
 from gajim.common.helpers import is_retraction_allowed
 
 from ...util import wrap_with_event_box
+from ...types import MessageRowType
 
 
 class BaseRow(Gtk.ListBoxRow):
@@ -96,7 +99,11 @@ class BaseRow(Gtk.ListBoxRow):
 
 @wrap_with_event_box
 class MoreMenuButton(Gtk.Button):
-    def __init__(self, row, contact, name):
+    def __init__(self,
+                 row: MessageRowType,
+                 contact: types.BareContact,
+                 name: str
+                 ) -> None:
         Gtk.Button.__init__(self)
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)

@@ -51,6 +51,8 @@ ConversationRowType = Union[
     'ScrollHintRow'
 ]
 
+MessageRowType = Union['MessageRow']
+
 ControlType = Union [
     'ChatControl',
     'PrivateChatControl',

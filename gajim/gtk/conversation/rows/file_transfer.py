@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+
 import time
 from datetime import datetime
 
@@ -20,6 +22,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
+from gajim.common.const import FTState
 from gajim.common.i18n import _
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
@@ -74,7 +77,7 @@ class FileTransferRow(BaseRow, EventHelper):
 
         self.show_all()
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, *args: Any) -> None:
         self._destroyed = True
 
         if self._transfer.state.is_active:
@@ -84,10 +87,13 @@ class FileTransferRow(BaseRow, EventHelper):
         if self._pulse is not None:
             GLib.source_remove(self._pulse)
 
-    def _on_cancel_clicked(self, _button):
+    def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
         self.destroy()
 
-    def _on_transfer_state_change(self, transfer, _signal_name, state):
+    def _on_transfer_state_change(self,
+                                  transfer: HTTPFileTransfer,
+                                  _signal_name: str,
+                                  state: FTState) -> None:
         if self._destroyed:
             return
 
@@ -109,7 +115,10 @@ class FileTransferRow(BaseRow, EventHelper):
         self._ui.progress_bar.pulse()
         return True
 
-    def _on_transfer_progress(self, transfer, _signal_name):
+    def _on_transfer_progress(self,
+                              transfer: HTTPFileTransfer,
+                              _signal_name: str
+                              ) -> None:
         if self._destroyed:
             return
         if self._pulse is not None:
@@ -121,7 +130,7 @@ class FileTransferRow(BaseRow, EventHelper):
         size_total = GLib.format_size_full(transfer.size, self._units)
         self._ui.file_size.set_text(size_total)
 
-        bytes_sec = round(transfer.seen / (time_now - self._start_time), 1)
+        bytes_sec = int(round(transfer.seen / (time_now - self._start_time), 1))
         speed = f'{GLib.format_size_full(bytes_sec, self._units)}/s'
         self._ui.transfer_progress.set_tooltip_text(_('Speed: %s') % speed)
 

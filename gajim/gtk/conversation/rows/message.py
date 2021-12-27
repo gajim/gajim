@@ -32,6 +32,7 @@ from nbxmpp.modules.security_labels import Displaymarking
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import AvatarSize
+from gajim.common.const import Trust
 from gajim.common.const import TRUST_SYMBOL_DATA
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_group_chat_nick
@@ -49,6 +50,7 @@ from ...dialogs import InputDialog
 from ...dialogs import DialogButton
 from ...preview import PreviewWidget
 from ...types import ConversationRowType
+from ...types import MessageRowType
 from ...util import format_fingerprint
 from ...util import get_cursor
 
@@ -71,7 +73,7 @@ class MessageRow(BaseRow):
                  display_marking: Optional[Displaymarking] = None,
                  marker: Optional[str] = None,
                  error: Optional[StanzaError] = None,
-                 encryption_enabled: bool =False,
+                 encryption_enabled: bool = False,
                  log_line_id: Optional[str] = None) -> None:
 
         BaseRow.__init__(self, account)
@@ -99,8 +101,10 @@ class MessageRow(BaseRow):
         # Keep original text for message correction
         self._original_text: str = text
 
-        is_previewable = app.interface.preview_manager.is_previewable(
-            text, additional_data)
+        is_previewable = False
+        if additional_data is not None:
+            is_previewable = app.interface.preview_manager.is_previewable(
+                text, additional_data)
         if is_previewable:
             context = None
             if self._is_groupchat:
@@ -136,10 +140,11 @@ class MessageRow(BaseRow):
         self._meta_box.pack_end(timestamp_label, False, True, 0)
 
         if kind in ('incoming', 'incoming_queue', 'outgoing'):
-            encryption_img = self._get_encryption_image(
-                additional_data, encryption_enabled)
-            if encryption_img:
-                self._meta_box.pack_end(encryption_img, False, True, 0)
+            if additional_data is not None:
+                encryption_img = self._get_encryption_image(
+                    additional_data, encryption_enabled)
+                if encryption_img:
+                    self._meta_box.pack_end(encryption_img, False, True, 0)
 
         if display_marking and app.settings.get_account_setting(
                 account, 'enable_security_labels'):
@@ -237,19 +242,23 @@ class MessageRow(BaseRow):
 
         return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
-    def _on_avatar_clicked(self, _widget, event, name):
+    def _on_avatar_clicked(self,
+                           _widget: Gtk.Widget,
+                           event: Gdk.EventButton,
+                           name: str
+                           ) -> int:
         if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 1:
             self.get_parent().on_mention(name)
         return Gdk.EVENT_STOP
 
     @staticmethod
-    def _on_realize(event_box):
+    def _on_realize(event_box: Gtk.EventBox) -> None:
         event_box.get_window().set_cursor(get_cursor('pointer'))
 
-    def is_same_sender(self, message):
+    def is_same_sender(self, message: MessageRowType) -> bool:
         return message.name == self.name
 
-    def is_same_encryption(self, message):
+    def is_same_encryption(self, message: MessageRowType) -> bool:
         message_details = self._get_encryption_details(message.additional_data)
         own_details = self._get_encryption_details(self.additional_data)
         if message_details is None and own_details is None:
@@ -271,17 +280,17 @@ class MessageRow(BaseRow):
             return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
-    def on_copy_message(self, _widget):
+    def on_copy_message(self, _widget: Gtk.Widget) -> None:
         timestamp = self.timestamp.strftime('%x, %X')
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         text = self._message_widget.get_text()
         clip.set_text(f'{timestamp} - {self.name}: {text}', -1)
 
-    def on_quote_message(self, _widget):
+    def on_quote_message(self, _widget: Gtk.Widget) -> None:
         self.get_parent().on_quote(self._message_widget.get_text())
 
-    def on_retract_message(self, _widget):
-        def _on_retract(reason):
+    def on_retract_message(self, _widget: Gtk.Widget) -> None:
+        def _on_retract(reason: str) -> None:
             self._client.get_module('MUC').retract_message(
                 self._contact.jid, self.stanza_id, reason or None)
 
@@ -296,7 +305,10 @@ class MessageRow(BaseRow):
             input_str=_('Spam'),
             transient_for=app.window).show()
 
-    def _get_encryption_image(self, additional_data, encryption_enabled=None):
+    def _get_encryption_image(self,
+                              additional_data: AdditionalDataDict,
+                              encryption_enabled: bool = False
+                              ) -> Optional[Gtk.Image]:
         details = self._get_encryption_details(additional_data)
         if details is None:
             # Message was not encrypted
@@ -326,7 +338,8 @@ class MessageRow(BaseRow):
         return image
 
     @staticmethod
-    def _get_encryption_details(additional_data):
+    def _get_encryption_details(additional_data: AdditionalDataDict
+                                ) -> Optional[tuple[str, str, Trust]]:
         name = additional_data.get_value('encrypted', 'name')
         if name is None:
             return None
@@ -336,18 +349,18 @@ class MessageRow(BaseRow):
         return name, fingerprint, trust
 
     @property
-    def has_receipt(self):
+    def has_receipt(self) -> bool:
         return self._has_receipt
 
     @property
-    def has_displayed(self):
+    def has_displayed(self) -> bool:
         return self._has_displayed
 
-    def set_receipt(self):
+    def set_receipt(self) -> None:
         self._has_receipt = True
         self._message_icons.set_receipt_icon_visible(True)
 
-    def set_displayed(self):
+    def set_displayed(self) -> None:
         self._has_displayed = True
 
     def set_retracted(self, text: str) -> None:
@@ -371,15 +384,15 @@ class MessageRow(BaseRow):
         self._message_icons.set_correction_tooltip(
             _('Message corrected. Original message:\n%s') % original_text)
 
-    def set_error(self, tooltip):
+    def set_error(self, tooltip: str) -> None:
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 
-    def update_avatar(self):
+    def update_avatar(self) -> None:
         avatar = self._get_avatar(self.kind, self.name)
         self._avatar_image.set_from_surface(avatar)
 
-    def set_merged(self, merged):
+    def set_merged(self, merged: bool) -> None:
         self._merged = merged
         if merged:
             self.get_style_context().add_class('merged')
@@ -396,7 +409,7 @@ class MessageRow(BaseRow):
 
 
 class MessageIcons(Gtk.Box):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
 
         self._correction_image = Gtk.Image.new_from_icon_name(
@@ -418,7 +431,7 @@ class MessageIcons(Gtk.Box):
         self.add(self._error_image)
         self.show_all()
 
-    def set_receipt_icon_visible(self, visible):
+    def set_receipt_icon_visible(self, visible: bool) -> None:
         if not app.settings.get('positive_184_ack'):
             return
         self._marker_image.set_visible(visible)
@@ -426,14 +439,14 @@ class MessageIcons(Gtk.Box):
             'feather-check-symbolic', Gtk.IconSize.MENU)
         self._marker_image.set_tooltip_text(Q_('?Message state:Received'))
 
-    def set_correction_icon_visible(self, visible):
+    def set_correction_icon_visible(self, visible: bool) -> None:
         self._correction_image.set_visible(visible)
 
-    def set_correction_tooltip(self, text):
+    def set_correction_tooltip(self, text: str) -> None:
         self._correction_image.set_tooltip_markup(text)
 
-    def set_error_icon_visible(self, visible):
+    def set_error_icon_visible(self, visible: bool) -> None:
         self._error_image.set_visible(visible)
 
-    def set_error_tooltip(self, text):
+    def set_error_tooltip(self, text: str) -> None:
         self._error_image.set_tooltip_markup(text)

@@ -84,7 +84,7 @@ class CallRow(BaseRow):
         self._event = None
         self._session = None
 
-    def _on_accept(self, button):
+    def _on_accept(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
         self._decline_button.set_sensitive(False)
         if self._event is not None:
@@ -94,7 +94,7 @@ class CallRow(BaseRow):
         else:
             self.get_parent().accept_call(self._session)
 
-    def _on_decline(self, _button):
+    def _on_decline(self, _button: Gtk.Button) -> None:
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)

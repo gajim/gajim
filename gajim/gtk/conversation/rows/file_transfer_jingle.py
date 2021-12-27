@@ -250,7 +250,8 @@ class FileTransferJingleRow(BaseRow):
         if full_size == 0:
             return
 
-        bytes_sec = round(transferred_size / (time_now - self._start_time), 1)
+        bytes_sec = int(
+            round(transferred_size / (time_now - self._start_time), 1))
         speed = f'{GLib.format_size_full(bytes_sec, self._units)}/s'
         self._ui.progress_label.set_tooltip_text(_('Speed: %s') % speed)
 
@@ -285,38 +286,38 @@ class FileTransferJingleRow(BaseRow):
         self._ui.action_stack.set_visible_child_name('complete')
         self._ui.transfer_action.set_text(_('File Transfer Completed'))
 
-    def _on_accept_file_request(self, _widget):
+    def _on_accept_file_request(self, _button: Gtk.Button) -> None:
         app.interface.instances['file_transfers'].on_file_request_accepted(
             self._account, self._contact, self._file_props)
         self._start_time = time.time()
 
-    def _on_reject_file_request(self, _widget):
+    def _on_reject_file_request(self, _button: Gtk.Button) -> None:
         self._client.get_module('Bytestream').send_file_rejection(
             self._file_props)
         self._file_props.stopped = True
         self._ui.action_stack.set_visible_child_name('rejected')
         self._ui.transfer_action.set_text(_('File Transfer Cancelled'))
 
-    def _on_open_file(self, _widget):
+    def _on_open_file(self, _button: Gtk.Button) -> None:
         if os.path.exists(self._file_props.file_name):
             open_file(self._file_props.file_name)
 
-    def _on_open_folder(self, _widget):
+    def _on_open_folder(self, _button: Gtk.Button) -> None:
         path = os.path.split(self._file_props.file_name)[0]
         if os.path.exists(path) and os.path.isdir(path):
             open_file(path)
 
-    def _on_bad_hash_retry(self, _widget):
+    def _on_bad_hash_retry(self, _button: Gtk.Button) -> None:
         app.interface.instances['file_transfers'].show_hash_error(
             self._contact.jid,
             self._file_props,
             self._account)
 
-    def _on_cancel_transfer(self, _widget):
+    def _on_cancel_transfer(self, _button: Gtk.Button) -> None:
         app.interface.instances['file_transfers'].cancel_transfer(
             self._file_props)
 
-    def _on_show_transfers(self, _widget):
+    def _on_show_transfers(self, _button: Gtk.Button) -> None:
         file_transfers = app.interface.instances['file_transfers']
         if file_transfers.window.get_property('visible'):
             file_transfers.window.present()

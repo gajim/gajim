@@ -12,18 +12,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from datetime import datetime
 from datetime import timedelta
 
 from gi.repository import Gtk
 
+from gajim.common import types
 from gajim.common.i18n import _
 
 from .base import BaseRow
 
 
 class ReadMarkerRow(BaseRow):
-    def __init__(self, account, contact):
+    def __init__(self, account: str, contact: types.BareContact) -> None:
         BaseRow.__init__(self, account, widget='label')
         self.set_activatable(False)
         self.type = 'read_marker'
@@ -42,7 +45,10 @@ class ReadMarkerRow(BaseRow):
         self.grid.attach(self.label, 0, 0, 1, 1)
         self.set_no_show_all(True)
 
-    def _on_nickname_update(self, contact, _signal_name):
+    def _on_nickname_update(self,
+                            contact: types.BareContact,
+                            _signal_name: str
+                            ) -> None:
         text = _('%s has read up to this point') % contact.name
         self.label.set_text(text)
 

@@ -17,7 +17,7 @@ from gi.repository import Pango
 
 
 class SimpleLabel(Gtk.Label):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Label.__init__(self)
         self.set_selectable(True)
         self.set_line_wrap(True)
