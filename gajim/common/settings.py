@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any
+from typing import Any, Literal
 from typing import Optional
 from typing import Dict
 from typing import List
@@ -40,7 +40,7 @@ from gajim.common import optparser
 from gajim.common.helpers import get_muc_context
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
-from gajim.common.setting_values import APP_SETTINGS
+from gajim.common.setting_values import APP_SETTINGS, AllWorkspaceSettings, AllWorkspaceSettingsT, ListWorkspaceSettings, OpenChatSettingT, StringWorkspaceSettings
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import PROXY_SETTINGS
 from gajim.common.setting_values import PROXY_EXAMPLES
@@ -981,10 +981,21 @@ class Settings:
             if self.get_account_setting(account, 'proxy') == proxy_name:
                 self.set_account_setting(account, 'proxy', None)
 
+    @overload
     def set_workspace_setting(self,
                               workspace_id: str,
-                              setting: str,
-                              value: SETTING_TYPE) -> None:
+                              setting: StringWorkspaceSettings,
+                              value: str) -> None: ...
+    @overload
+    def set_workspace_setting(self,
+                              workspace_id: str,
+                              setting: Literal['open_chats'],
+                              value: list[tuple[str, JID, str, bool]]
+                              ) -> None: ...
+    def set_workspace_setting(self,
+                              workspace_id: str,
+                              setting: AllWorkspaceSettings,
+                              value: AllWorkspaceSettingsT) -> None:
 
         if setting not in WORKSPACE_SETTINGS:
             raise ValueError(f'Invalid workspace setting: {setting}')
@@ -1000,9 +1011,19 @@ class Settings:
         self._settings['workspaces'][workspace_id][setting] = value
         self._commit_settings('workspaces')
 
+    @overload
     def get_workspace_setting(self,
                               workspace_id: str,
-                              setting: str) -> SETTING_TYPE:
+                              setting: Literal['open_chats']
+                              ) -> OpenChatSettingT: ...
+    @overload
+    def get_workspace_setting(self,
+                              workspace_id: str,
+                              setting: StringWorkspaceSettings) -> str: ...
+    def get_workspace_setting(self,
+                              workspace_id: str,
+                              setting: AllWorkspaceSettings
+                              ) -> AllWorkspaceSettingsT:
 
         if setting not in WORKSPACE_SETTINGS:
             raise ValueError(f'Invalid workspace setting: {setting}')

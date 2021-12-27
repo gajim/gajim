@@ -1,8 +1,11 @@
 
 from typing import Literal
+from typing import TypedDict
 from typing import Union
 
 import uuid
+
+from nbxmpp.protocol import JID
 
 from gajim.common.i18n import _
 
@@ -447,8 +450,25 @@ ACCOUNT_SETTINGS = {
     },
 }
 
+StringWorkspaceSettings = Literal[
+    'name',
+    'color',
+    'avatar_sha'
+]
 
-WORKSPACE_SETTINGS = {
+AllWorkspaceSettings = Literal[StringWorkspaceSettings, 'open_chats']
+
+OpenChatSettingT = list[tuple[str, JID, str, bool]]
+AllWorkspaceSettingsT = Union[str, OpenChatSettingT]
+
+class WorkspaceSettings(TypedDict):
+    name: str
+    color: str
+    avatar_sha: str
+    open_chats: OpenChatSettingT
+
+
+WORKSPACE_SETTINGS: WorkspaceSettings = {
     'name': _('My Workspace'),
     'color': '',
     'avatar_sha': '',
