@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
 from typing import Tuple
 from typing import List
 from typing import Union
 from typing import Any
+from typing import Optional
 
 from urllib.parse import quote
 
@@ -28,6 +30,7 @@ from gi.repository import GLib
 from nbxmpp import JID
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import jid_is_blocked
@@ -41,8 +44,11 @@ from gajim.common.structs import URI
 from gajim.gui.const import ControlType
 
 
-def get_singlechat_menu(control_id: str, account: str, jid: JID,
-                        type_: ControlType) -> Gio.Menu:
+def get_singlechat_menu(control_id: str,
+                        account: str,
+                        jid: JID,
+                        type_: ControlType
+                        ) -> Gio.Menu:
     client = app.get_client(account)
     is_self_contact = jid.bare == client.get_own_jid().bare
 
@@ -70,7 +76,7 @@ def get_singlechat_menu(control_id: str, account: str, jid: JID,
 
     singlechat_menu.append(('win.search-history', _('Search…')))
 
-    def build_chatstate_menu():
+    def build_chatstate_menu() -> Gio.Menu:
         menu = Gio.Menu()
         entries = [
             (_('Disabled'), 'disabled'),
@@ -136,37 +142,33 @@ def get_groupchat_menu(control_id: str, account: str, jid: str) -> Gio.Menu:
         ('win.search-history', _('Search…')),
     ]
 
-    def build_menu(preset):
+    def build_menu(preset: list[tuple[str, str]]) -> Gio.Menu:
         menu = Gio.Menu()
         for item in preset:
-            if isinstance(item[1], str):
-                action_name, label = item
-                if action_name == 'win.search-history':
-                    menuitem = Gio.MenuItem.new(label, action_name)
-                    menuitem.set_action_and_target_value(action_name, None)
-                    menu.append_item(menuitem)
+            action_name, label = item
+            if action_name == 'win.search-history':
+                menuitem = Gio.MenuItem.new(label, action_name)
+                menuitem.set_action_and_target_value(action_name, None)
+                menu.append_item(menuitem)
 
-                elif action_name == 'app.browse-history':
-                    menuitem = Gio.MenuItem.new(label, action_name)
-                    dict_ = {'account': GLib.Variant('s', account),
-                             'jid': GLib.Variant('s', jid)}
-                    variant_dict = GLib.Variant('a{sv}', dict_)
-                    menuitem.set_action_and_target_value(action_name,
-                                                         variant_dict)
-                    menu.append_item(menuitem)
+            elif action_name == 'app.browse-history':
+                menuitem = Gio.MenuItem.new(label, action_name)
+                dict_ = {'account': GLib.Variant('s', account),
+                            'jid': GLib.Variant('s', jid)}
+                variant_dict = GLib.Variant('a{sv}', dict_)
+                menuitem.set_action_and_target_value(
+                    action_name, variant_dict)
+                menu.append_item(menuitem)
 
-                elif action_name == 'win.execute-command-':
-                    action_name = action_name + control_id
-                    menuitem = Gio.MenuItem.new(label, action_name)
-                    menuitem.set_action_and_target_value(action_name,
-                                                         GLib.Variant('s', ''))
-                    menu.append_item(menuitem)
-                else:
-                    menu.append(label, action_name + control_id)
+            elif action_name == 'win.execute-command-':
+                action_name = action_name + control_id
+                menuitem = Gio.MenuItem.new(label, action_name)
+                menuitem.set_action_and_target_value(
+                    action_name, GLib.Variant('s', ''))
+                menu.append_item(menuitem)
             else:
-                label, sub_menu = item
-                submenu = build_menu(sub_menu)
-                menu.append_submenu(label, submenu)
+                menu.append(label, action_name + control_id)
+
         return menu
 
     return build_menu(groupchat_menu)
@@ -179,7 +181,7 @@ def get_account_menu(account: str) -> Gio.Menu:
         label: string
         sub menu: list
     '''
-    account_menu = [
+    account_menu: list[tuple[str, Union[str, list[tuple[str, str]]]]] = [
         ('-profile', _('Profile')),
         ('-start-single-chat', _('Send Single Message…')),
         ('-services', _('Discover Services…')),
@@ -201,7 +203,7 @@ def get_account_menu(account: str) -> Gio.Menu:
     if app.settings.get('developer_modus'):
         account_menu[5][1].append(('-bookmarks', _('Bookmarks')))
 
-    def build_menu(preset):
+    def build_menu(preset: list[tuple[str, Union[str, list[tuple[str, str]]]]]):
         menu = Gio.Menu()
         for item in preset:
             if isinstance(item[1], str):
@@ -260,8 +262,10 @@ def build_accounts_menu() -> None:
         menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
 
 
-def get_encryption_menu(control_id: str, control_type: ControlType,
-                        zeroconf: bool = False) -> Gio.Menu:
+def get_encryption_menu(control_id: str,
+                        control_type: ControlType,
+                        zeroconf: bool = False
+                        ) -> Optional[Gio.Menu]:
     menu = Gio.Menu()
     menu.append(
         _('Disabled'), f'win.set-encryption-{control_id}::disabled')
@@ -350,7 +354,7 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gtk.Menu:
     return action_menu_item
 
 
-def get_conv_uri_context_menu(account: str, uri: URI) -> Gtk.Menu:
+def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
     if uri.type == URIType.XMPP:
         if uri.action == URIAction.JOIN:
             context_menu = [
@@ -411,6 +415,7 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Gtk.Menu:
                 data = uri.data['jid']
             else:
                 data = ''
+        assert isinstance(data, str)
 
         if action in ('app.open-mail', 'app.copy-text'):
             value = GLib.Variant.new_string(data)
@@ -480,7 +485,9 @@ def get_subscription_menu(account: str, jid: str) -> Gio.Menu:
     return menu
 
 
-def get_start_chat_row_menu(account: str, jid: Union[JID, str]) -> Gio.Menu:
+def get_start_chat_row_menu(account: str,
+                            jid: Union[JID, str]
+                            ) -> Gio.Menu:
     jid = str(jid)
     menu_items: List[Tuple[str, str]] = [
         ('forget-groupchat', _('Forget this Group Chat')),
@@ -496,8 +503,11 @@ def get_start_chat_row_menu(account: str, jid: Union[JID, str]) -> Gio.Menu:
     return menu
 
 
-def get_chat_list_row_menu(workspace_id: str, account: str,
-                           jid: Union[JID, str], pinned: bool) -> Gio.Menu:
+def get_chat_list_row_menu(workspace_id: str,
+                           account: str,
+                           jid: Union[JID, str],
+                           pinned: bool
+                           ) -> Gio.Menu:
     jid = str(jid)
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
@@ -546,8 +556,10 @@ def get_chat_list_row_menu(workspace_id: str, account: str,
     return menu
 
 
-def build_workspaces_submenu(current_workspace_id: str, account: str,
-                             jid: str) -> Gio.Menu:
+def build_workspaces_submenu(current_workspace_id: str,
+                             account: str,
+                             jid: str
+                             ) -> Gio.Menu:
     submenu = Gio.Menu()
     for workspace_id in app.settings.get_workspaces():
         if workspace_id == current_workspace_id:
@@ -561,7 +573,11 @@ def build_workspaces_submenu(current_workspace_id: str, account: str,
     return submenu
 
 
-def get_groupchat_roster_menu(account, control_id, self_contact, contact):
+def get_groupchat_roster_menu(account: str,
+                              control_id: str,
+                              self_contact: types.GroupchatParticipant,
+                              contact: types.GroupchatParticipant
+                              ) -> Gtk.Menu:
     menu = Gtk.Menu()
     real_jid = ''
     if contact.real_jid is not None:
@@ -662,7 +678,7 @@ def get_groupchat_roster_menu(account, control_id, self_contact, contact):
 
 
 class SearchMenu(Gtk.Menu):
-    def __init__(self, treeview):
+    def __init__(self, treeview: Gtk.TreeView) -> None:
         Gtk.Menu.__init__(self)
         self._copy_item = Gtk.MenuItem(label=_('Copy'))
         self._copy_item.set_action_name('app.copy-text')
@@ -671,13 +687,13 @@ class SearchMenu(Gtk.Menu):
         self.append(self._copy_item)
         self.attach_to_widget(treeview, None)
 
-    def set_copy_text(self, text):
+    def set_copy_text(self, text: str) -> None:
         self._copy_item.set_action_target_value(GLib.Variant('s', text))
 
 
-def escape_mnemonic(label):
+def escape_mnemonic(label: Optional[str]) -> Optional[str]:
     if label is None:
-        return
+        return None
     # Underscore inside a label means the next letter is a keyboard
     # shortcut. To show an underscore we have to use double underscore
     return label.replace('_', '__')
