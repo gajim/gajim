@@ -20,33 +20,6 @@
 from gajim.common.i18n import _
 
 
-class PysqliteOperationalError(Exception):
-    """
-    Sqlite2 raised pysqlite2.dbapi2.OperationalError
-    """
-
-    def __init__(self, text=''):
-        Exception.__init__(self)
-        self.text = text
-
-    def __str__(self):
-        return self.text
-
-class DatabaseMalformed(Exception):
-    """
-    The database can't be read
-    """
-
-    def __init__(self, path=''):
-        Exception.__init__(self)
-        self.path = path
-
-    def __str__(self):
-        return _('The database file (%s) cannot be read. '
-                 'Try to repair it (see '
-                 'https://dev.gajim.org/gajim/gajim/wikis/help/DatabaseBackup)'
-                 ' or remove it (all history will be lost).') % self.path
-
 class ServiceNotAvailable(Exception):
     """
     This exception is raised when we cannot use Gajim remotely'
@@ -58,16 +31,6 @@ class ServiceNotAvailable(Exception):
     def __str__(self):
         return _('Service not available: Gajim is not running, or remote_control is False')
 
-class DbusNotSupported(Exception):
-    """
-    D-Bus is not installed or python bindings are missing
-    """
-
-    def __init__(self):
-        Exception.__init__(self)
-
-    def __str__(self):
-        return _('D-Bus is not present on this machine or python module is missing')
 
 class SessionBusNotPresent(Exception):
     """
@@ -81,39 +44,6 @@ class SessionBusNotPresent(Exception):
         return _('Session bus is not available.\nTry reading %(url)s') % \
                 {'url': 'https://dev.gajim.org/gajim/gajim/wikis/help/GajimDBus'}
 
-class SystemBusNotPresent(Exception):
-    """
-    This exception indicates that there is no session daemon
-    """
-
-    def __init__(self):
-        Exception.__init__(self)
-
-    def __str__(self):
-        return _('System bus is not available.\nTry reading %(url)s') % \
-                {'url': 'https://dev.gajim.org/gajim/gajim/wikis/help/GajimDBus'}
-
-class NegotiationError(Exception):
-    """
-    A session negotiation failed
-    """
-
-class Cancelled(Exception):
-    """
-    The user cancelled an operation
-    """
-
-class LatexError(Exception):
-    """
-    LaTeX processing failed for some reason
-    """
-
-    def __init__(self, text=''):
-        Exception.__init__(self)
-        self.text = text
-
-    def __str__(self):
-        return self.text
 
 class GajimGeneralException(Exception):
     """
@@ -127,6 +57,7 @@ class GajimGeneralException(Exception):
     def __str__(self):
         return self.text
 
+
 class PluginsystemError(Exception):
     """
     Error in the pluginsystem
@@ -138,19 +69,6 @@ class PluginsystemError(Exception):
 
     def __str__(self):
         return self.text
-
-class StanzaMalformed(Exception):
-    """
-    Malfromed Stanza
-    """
-    def __init__(self, message, stanza=''):
-        Exception.__init__(self, message, stanza)
-        self._msg = '{}\n{}'.format(message, stanza)
-    def __str__(self):
-        return self._msg
-
-class SendMessageError(Exception):
-    pass
 
 
 class FileError(Exception):
