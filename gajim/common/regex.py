@@ -54,7 +54,7 @@ def _get_basic_pattern():
         r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
     return basic_pattern + formatting
 
-def _get_emot_and_basic_pattern(use_ascii_formatting=True):
+def _get_emot_and_basic_pattern(use_ascii_formatting: bool = True) -> str:
     from gajim.gui.emoji_data import emoji_data
     # because emoticons match later (in the string) they need to be after
     # basic matches that may occur earlier
