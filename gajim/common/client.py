@@ -12,9 +12,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
+from __future__ import annotations
+
 from typing import Any
 from typing import Optional
+
+import logging
 
 import nbxmpp
 from nbxmpp.client import Client as NBXMPPClient
@@ -27,12 +30,11 @@ from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Gtk
 
-from gajim.common import passwords
-from gajim.common.nec import NetworkEvent
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import modules
+from gajim.common import passwords
+from gajim.common.nec import NetworkEvent
 from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
 from gajim.common.helpers import get_custom_host
@@ -42,6 +44,7 @@ from gajim.common.helpers import get_resource
 from gajim.common.helpers import get_idle_status_message
 from gajim.common.helpers import Observable
 from gajim.common.idle import Monitor
+from gajim.common.idle import IdleMonitorManager
 from gajim.common.i18n import _
 
 from gajim.gui.util import open_window
@@ -274,7 +277,7 @@ class Client(Observable):
             self._destroy_client = True
 
             if error in ('not-authorized', 'no-password'):
-                def _on_password(password):
+                def _on_password(password: str) -> None:
                     self.password = password
                     self._client.set_password(password)
                     self._prepare_for_connect()
@@ -400,8 +403,8 @@ class Client(Observable):
 
         # We are connected
         if show == 'offline':
-            self.set_user_tune(None)
-            self.set_user_location(None)
+            self.get_module('UserTune').set_tune(None)
+            self.get_module('UserLocation').set_location(None)
             presence = self.get_module('Presence').get_presence(
                 typ='unavailable',
                 status=message,
@@ -426,12 +429,6 @@ class Client(Observable):
 
         if include_muc:
             self.get_module('MUC').update_presence()
-
-    def set_user_tune(self, tune):
-        self.get_module('UserTune').set_tune(tune)
-
-    def set_user_location(self, location):
-        self.get_module('UserLocation').set_location(location)
 
     def get_module(self, name: str):
         return modules.get(self._account, name)
@@ -595,7 +592,7 @@ class Client(Observable):
             GLib.source_remove(self._reconnect_timer_source)
             self._reconnect_timer_source = None
 
-    def _idle_state_changed(self, monitor):
+    def _idle_state_changed(self, monitor: IdleMonitorManager) -> None:
         state = monitor.state.value
 
         if monitor.is_awake():
