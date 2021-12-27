@@ -19,11 +19,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Optional
+from typing import cast
+
 import sys
 import time
 import ctypes
 import ctypes.util
 import logging
+
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -35,13 +41,27 @@ from gajim.common.const import IdleState
 log = logging.getLogger('gajim.c.idle')
 
 
-class DBusFreedesktopIdleMonitor:
-
+class IdleMonitor:
     def __init__(self):
-        self.last_idle_time = 0
         self._extended_away = False
 
-        log.debug('Connecting to D-Bus')
+    def get_idle_sec(self) -> int:
+        raise NotImplementedError
+
+    def set_extended_away(self, state: bool) -> None:
+        self._extended_away = state
+
+    def is_extended_away(self) -> bool:
+        return self._extended_away
+
+
+class DBusFreedesktop(IdleMonitor):
+
+    def __init__(self) -> None:
+        IdleMonitor.__init__(self)
+        self.last_idle_time = 0
+
+        log.debug('Connecting to org.freedesktop.ScreenSaver')
         self.dbus_proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
@@ -51,25 +71,25 @@ class DBusFreedesktopIdleMonitor:
             'org.freedesktop.ScreenSaver',
             None
         )
-        log.debug('D-Bus connected')
+        log.debug('Connected')
 
         # Only the following call will trigger exceptions if the D-Bus
         # interface/method/... does not exist. Using the failing method
         # for class init to allow other idle monitors to be used on failure.
         self._get_idle_sec_fail()
-        log.debug('D-Bus call test successful')
+        log.debug('Test successful')
 
-    def _get_idle_sec_fail(self):
-        (idle_time,) = self.dbus_proxy.call_sync(
+    def _get_idle_sec_fail(self) -> int:
+        (idle_time,) = cast(tuple[int], self.dbus_proxy.call_sync(
             'GetSessionIdleTime',
             None,
             Gio.DBusCallFlags.NO_AUTO_START,
             -1,
-            None
-        )
-        return idle_time//1000
+            None))
 
-    def get_idle_sec(self):
+        return idle_time // 1000
+
+    def get_idle_sec(self) -> int:
         try:
             self.last_idle_time = self._get_idle_sec_fail()
         except GLib.Error as error:
@@ -79,20 +99,17 @@ class DBusFreedesktopIdleMonitor:
 
         return self.last_idle_time
 
-    def set_extended_away(self, state):
-        self._extended_away = state
-
-    def is_extended_away(self):
+    def is_extended_away(self) -> bool:
         return self._extended_away
 
 
-class DBusGnomeIdleMonitor:
+class DBusGnome(IdleMonitor):
 
-    def __init__(self):
+    def __init__(self) -> None:
+        IdleMonitor.__init__(self)
         self.last_idle_time = 0
-        self._extended_away = False
 
-        log.debug('Connecting to D-Bus')
+        log.debug('Connecting to org.gnome.Mutter.IdleMonitor')
         self.dbus_gnome_proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
@@ -102,25 +119,25 @@ class DBusGnomeIdleMonitor:
             'org.gnome.Mutter.IdleMonitor',
             None
         )
-        log.debug('D-Bus connected')
+        log.debug('Connected')
 
         # Only the following call will trigger exceptions if the D-Bus
         # interface/method/... does not exist. Using the failing method
         # for class init to allow other idle monitors to be used on failure.
         self._get_idle_sec_fail()
-        log.debug('D-Bus call test successful')
+        log.debug('Test successful')
 
-    def _get_idle_sec_fail(self):
-        (idle_time,) = self.dbus_gnome_proxy.call_sync(
+    def _get_idle_sec_fail(self) -> int:
+        (idle_time,) = cast(tuple[int], self.dbus_gnome_proxy.call_sync(
             'GetIdletime',
             None,
             Gio.DBusCallFlags.NO_AUTO_START,
             -1,
-            None
-        )
-        return int(idle_time / 1000)
+            None))
 
-    def get_idle_sec(self):
+        return idle_time // 1000
+
+    def get_idle_sec(self) -> int:
         try:
             self.last_idle_time = self._get_idle_sec_fail()
         except GLib.Error as error:
@@ -130,17 +147,10 @@ class DBusGnomeIdleMonitor:
 
         return self.last_idle_time
 
-    def set_extended_away(self, state):
-        self._extended_away = state
 
-    def is_extended_away(self):
-        return self._extended_away
-
-
-class XssIdleMonitor:
-    def __init__(self):
-
-        self._extended_away = False
+class Xss(IdleMonitor):
+    def __init__(self) -> None:
+        IdleMonitor.__init__(self)
 
         class XScreenSaverInfo(ctypes.Structure):
             _fields_ = [
@@ -193,22 +203,19 @@ class XssIdleMonitor:
 
         self.rootwindow = libX11.XDefaultRootWindow(self.dpy_p)
 
-    def get_idle_sec(self):
+    def get_idle_sec(self) -> int:
         info = self.libXss.XScreenSaverQueryInfo(
             self.dpy_p, self.rootwindow, self.xss_info_p)
         if info == 0:
             return info
-        return int(self.xss_info_p.contents.idle / 1000)
+        return self.xss_info_p.contents.idle // 1000
 
-    def set_extended_away(self, state):
-        self._extended_away = state
-
-    def is_extended_away(self):
-        return False
+    def set_extended_away(self, state: bool) -> None:
+        raise NotImplementedError
 
 
-class WindowsIdleMonitor:
-    def __init__(self):
+class Windows(IdleMonitor):
+    def __init__(self) -> None:
         self.OpenInputDesktop = ctypes.windll.user32.OpenInputDesktop
         self.CloseDesktop = ctypes.windll.user32.CloseDesktop
         self.SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
@@ -217,17 +224,23 @@ class WindowsIdleMonitor:
 
         self._locked_time = None
 
-        class LASTINPUTINFO(ctypes.Structure):
-            _fields_ = [('cbSize', ctypes.c_uint), ('dwTime', ctypes.c_uint)]
+        class LastInputInfo(ctypes.Structure):
+            _fields_ = [
+                ('cbSize', ctypes.c_uint),
+                ('dwTime', ctypes.c_uint)
+            ]
 
-        self.lastInputInfo = LASTINPUTINFO()
+        self.lastInputInfo = LastInputInfo()  # type: ignore
         self.lastInputInfo.cbSize = ctypes.sizeof(self.lastInputInfo)
 
-    def get_idle_sec(self):
+    def get_idle_sec(self) -> int:
         self.GetLastInputInfo(ctypes.byref(self.lastInputInfo))
-        return float(self.GetTickCount() - self.lastInputInfo.dwTime) / 1000
+        return int(self.GetTickCount() - self.lastInputInfo.dwTime) // 1000  # type: ignore
 
-    def is_extended_away(self):
+    def set_extended_away(self, state: bool) -> None:
+        raise NotImplementedError
+
+    def is_extended_away(self) -> bool:
         # Check if Screen Saver is running
         # 0x72 is SPI_GETSCREENSAVERRUNNING
         saver_runing = ctypes.c_int(0)
@@ -254,9 +267,10 @@ class WindowsIdleMonitor:
         threshold = time.time() - 10
         if threshold > self._locked_time:
             return True
+        return False
 
 
-class IdleMonitor(GObject.GObject):
+class IdleMonitorManager(GObject.Object):
 
     __gsignals__ = {
         'state-changed': (
@@ -266,7 +280,7 @@ class IdleMonitor(GObject.GObject):
         )}
 
     def __init__(self):
-        GObject.GObject.__init__(self)
+        GObject.Object.__init__(self)
         self.set_interval()
         self._state = IdleState.AWAKE
         self._idle_monitor = self._get_idle_monitor()
@@ -274,66 +288,80 @@ class IdleMonitor(GObject.GObject):
         if self.is_available():
             GLib.timeout_add_seconds(1, self._poll)
 
-    def set_interval(self, away_interval=60, xa_interval=120):
+    def set_interval(self,
+                     away_interval: int = 60,
+                     xa_interval: int = 120) -> None:
+
         log.info('Set interval: away: %s, xa: %s',
                  away_interval, xa_interval)
         self._away_interval = away_interval
         self._xa_interval = xa_interval
 
-    def set_extended_away(self, state):
+    def set_extended_away(self, state: bool) -> None:
+        if self._idle_monitor is None:
+            raise ValueError('No idle monitor available')
+
         self._idle_monitor.set_extended_away(state)
 
-    def is_available(self):
+    def is_available(self) -> bool:
         return self._idle_monitor is not None
 
     @property
-    def state(self):
+    def state(self) -> IdleState:
         if not self.is_available():
             return IdleState.UNKNOWN
         return self._state
 
-    def is_xa(self):
+    def is_xa(self) -> bool:
         return self.state == IdleState.XA
 
-    def is_away(self):
+    def is_away(self) -> bool:
         return self.state == IdleState.AWAY
 
-    def is_awake(self):
+    def is_awake(self) -> bool:
         return self.state == IdleState.AWAKE
 
-    def is_unknown(self):
+    def is_unknown(self) -> bool:
         return self.state == IdleState.UNKNOWN
 
     @staticmethod
-    def _get_idle_monitor():
+    def _get_idle_monitor() -> Optional[IdleMonitor]:
         if sys.platform == 'win32':
-            return WindowsIdleMonitor()
+            return Windows()
 
         try:
-            return DBusFreedesktopIdleMonitor()
+            return DBusFreedesktop()
         except GLib.Error as error:
-            log.info('Idle time via D-Bus not available: %s', error)
+            log.info('Idle time via org.freedesktop.Screensaver '
+                     'not available: %s', error)
 
         try:
-            return DBusGnomeIdleMonitor()
+            return DBusGnome()
         except GLib.Error as error:
-            log.info('Idle time via D-Bus (GNOME) not available: %s', error)
+            log.info('Idle time via org.gnome.Mutter.IdleMonitor '
+                     'not available: %s', error)
 
         if app.is_display(Display.WAYLAND):
-            return
+            return None
 
         try:
-            return XssIdleMonitor()
+            return Xss()
         except OSError as error:
             log.info('Idle time via XScreenSaverInfo not available: %s', error)
 
-    def get_idle_sec(self):
+        return None
+
+    def get_idle_sec(self) -> int:
+        if self._idle_monitor is None:
+            raise ValueError('No idle monitor available')
         return self._idle_monitor.get_idle_sec()
 
-    def _poll(self):
+    def _poll(self) -> bool:
         """
         Check to see if we should change state
         """
+        assert self._idle_monitor is not None
+
         if self._idle_monitor.is_extended_away():
             log.info('Extended Away: Screensaver or Locked Screen')
             self._set_state(IdleState.XA)
@@ -350,7 +378,7 @@ class IdleMonitor(GObject.GObject):
             self._set_state(IdleState.AWAKE)
         return True
 
-    def _set_state(self, state):
+    def _set_state(self, state: IdleState) -> None:
         if self._state == state:
             return
 
@@ -359,4 +387,4 @@ class IdleMonitor(GObject.GObject):
         self.emit('state-changed')
 
 
-Monitor = IdleMonitor()
+Monitor = IdleMonitorManager()

@@ -19,6 +19,7 @@
         "gajim/common/exceptions.py",
         "gajim/common/ged.py",
         "gajim/common/i18n.py",
+        "gajim/common/idle.py",
         "gajim/common/logging_helpers.py",
         "gajim/common/nec.py",
         "gajim/common/passwords.py",
