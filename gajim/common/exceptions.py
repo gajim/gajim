@@ -25,10 +25,10 @@ class ServiceNotAvailable(Exception):
     This exception is raised when we cannot use Gajim remotely'
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         Exception.__init__(self)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return _('Service not available: Gajim is not running, or remote_control is False')
 
 
@@ -37,10 +37,10 @@ class SessionBusNotPresent(Exception):
     This exception indicates that there is no session daemon
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         Exception.__init__(self)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return _('Session bus is not available.\nTry reading %(url)s') % \
                 {'url': 'https://dev.gajim.org/gajim/gajim/wikis/help/GajimDBus'}
 
@@ -50,11 +50,11 @@ class GajimGeneralException(Exception):
     This exception is our general exception
     """
 
-    def __init__(self, text=''):
+    def __init__(self, text: str = '') -> None:
         Exception.__init__(self)
         self.text = text
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.text
 
 
@@ -63,11 +63,11 @@ class PluginsystemError(Exception):
     Error in the pluginsystem
     """
 
-    def __init__(self, text=''):
+    def __init__(self, text: str = '') -> None:
         Exception.__init__(self)
         self.text = text
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.text
 
 
