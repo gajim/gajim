@@ -86,6 +86,7 @@ class MessageRow(BaseRow):
         self.text = text
         self.additional_data = additional_data
 
+        self._account = account
         self._contact = contact
 
         self._is_groupchat: bool = False
@@ -192,17 +193,17 @@ class MessageRow(BaseRow):
         avatar_placeholder.set_valign(Gtk.Align.START)
         avatar_placeholder.add(self._avatar_image)
 
-        bottom_box = Gtk.Box(spacing=6)
-        bottom_box.add(self._message_widget)
+        self._bottom_box = Gtk.Box(spacing=6)
+        self._bottom_box.add(self._message_widget)
 
         more_menu_button = MoreMenuButton(self, self._contact, name)
         more_menu_button.set_hexpand(True)
         more_menu_button.set_halign(Gtk.Align.END)
-        bottom_box.pack_end(more_menu_button, False, True, 0)
+        self._bottom_box.pack_end(more_menu_button, False, True, 0)
 
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
-        self.grid.attach(bottom_box, 1, 1, 1, 1)
+        self.grid.attach(self._bottom_box, 1, 1, 1, 1)
 
         self.show_all()
 
@@ -350,11 +351,16 @@ class MessageRow(BaseRow):
         self._has_displayed = True
 
     def set_retracted(self, text: str) -> None:
+        if isinstance(self._message_widget, PreviewWidget):
+            self._message_widget.destroy()
+            self._message_widget = MessageWidget(self._account)
+            self._bottom_box.pack_start(self._message_widget, True, True, 0)
         self._message_widget.add_with_styling(text)
         self.get_style_context().add_class('retracted-message')
 
     def set_correction(self, text: str) -> None:
-        self._message_widget.add_with_styling(text)
+        if not isinstance(self._message_widget, PreviewWidget):
+            self._message_widget.add_with_styling(text)
 
         self._has_receipt = False
         self._message_icons.set_receipt_icon_visible(False)
