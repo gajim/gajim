@@ -16,6 +16,7 @@
         "gajim/common/cert_store.py",
         "gajim/gtk/app_side_bar.py",
         "gajim/gtk/chat_filter.py",
+        "gajim/gtk/chat_page.py",
         "gajim/gtk/conversation/code_widget.py",
         "gajim/gtk/conversation/jump_to_end_button.py",
         "gajim/gtk/conversation/quote_widget.py",
