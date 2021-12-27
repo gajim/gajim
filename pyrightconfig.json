@@ -37,6 +37,7 @@
         "gajim/gtk/conversation/rows/muc_join_left.py",
         "gajim/gtk/conversation/rows/muc_subject.py",
         "gajim/gtk/conversation/rows/muc_user_status.py",
+        "gajim/gtk/conversation/rows/read_marker.py",
         "gajim/gtk/conversation/rows/scroll_hint.py",
         "gajim/gtk/conversation/rows/widgets.py",
         "gajim/gtk/conversation/scrolled.py",
