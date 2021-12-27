@@ -18,6 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Iterator
+from typing import Optional
+
 import os
 import sys
 import locale
@@ -27,13 +32,12 @@ from pathlib import Path
 from gi.repository import GLib
 
 DOMAIN = 'gajim'
-LANG = 'en'
 direction_mark = '\u200E'
 _translation = gettext.NullTranslations()
 
 
-def get_locale_dirs():
-    if os.name == 'nt':
+def get_locale_dirs() -> Optional[list[Path]]:
+    if sys.platform == 'win32':
         return
 
     path = gettext.find(DOMAIN)
@@ -50,7 +54,7 @@ def get_locale_dirs():
     return [Path(dir_) for dir_ in data_dirs]
 
 
-def iter_locale_dirs():
+def iter_locale_dirs() -> Iterator[Optional[str]]:
     locale_dirs = get_locale_dirs()
     if locale_dirs is None:
         yield None
@@ -59,7 +63,7 @@ def iter_locale_dirs():
     # gettext fallback
     locale_dirs.append(Path(sys.base_prefix) / 'share')
 
-    found_paths = []
+    found_paths: list[Path] = []
     for path in locale_dirs:
         locale_dir = path / 'locale'
         if locale_dir in found_paths:
@@ -69,34 +73,42 @@ def iter_locale_dirs():
             yield str(locale_dir)
 
 
-def get_default_lang():
-    if os.name == "nt":
-        import ctypes
-        windll = ctypes.windll.kernel32
-        return locale.windows_locale[windll.GetUserDefaultUILanguage()]
+def get_win32_default_lang() -> str:
+    import ctypes
+    windll = ctypes.windll.kernel32
+    return locale.windows_locale[windll.GetUserDefaultUILanguage()]
+
+
+def get_darwin_default_lang() -> str:
+    from AppKit import NSLocale
+    # FIXME: This returns a two letter language code (en, de, fr)
+    # We need a way to get en_US, de_DE etc.
+    return NSLocale.currentLocale().languageCode()
+
+
+def get_default_lang() -> str:
+    if sys.platform == "win32":
+        return get_win32_default_lang()
 
     if sys.platform == "darwin":
-        from AppKit import NSLocale
-        # FIXME: This returns a two letter language code (en, de, fr)
-        # We need a way to get en_US, de_DE etc.
-        return NSLocale.currentLocale().languageCode()
+        return get_darwin_default_lang()
 
     return locale.getdefaultlocale()[0] or 'en'
 
 
-def get_rfc5646_lang(lang=None):
+def get_rfc5646_lang(lang: Optional[str] = None) -> str:
     if lang is None:
         lang = LANG
     return lang.replace('_', '-')
 
 
-def get_short_lang_code(lang=None):
+def get_short_lang_code(lang: Optional[str] = None) -> str:
     if lang is None:
         lang = LANG
     return lang[:2]
 
 
-def initialize_direction_mark():
+def initialize_direction_mark() -> None:
     from gi.repository import Gtk
 
     global direction_mark
@@ -105,7 +117,7 @@ def initialize_direction_mark():
         direction_mark = '\u200F'
 
 
-def paragraph_direction_mark(text):
+def paragraph_direction_mark(text: str) -> str:
     """
     Determine paragraph writing direction according to
     http://www.unicode.org/reports/tr9/#The_Paragraph_Level
@@ -122,7 +134,7 @@ def paragraph_direction_mark(text):
     return '\u200E'
 
 
-def Q_(text):
+def Q_(text: str) -> str:
     """
     Translate the given text, optionally qualified with a special
     construction, which will help translators to disambiguate between
@@ -143,7 +155,11 @@ def Q_(text):
     return text
 
 
-def ngettext(s_sing, s_plural, n, replace_sing=None, replace_plural=None):
+def ngettext(s_sing: str,
+             s_plural: str,
+             n: int,
+             replace_sing: Optional[str] = None,
+             replace_plural: Optional[str] = None) -> str:
     """
     Use as:
         i18n.ngettext(
@@ -164,18 +180,13 @@ try:
 except locale.Error as error:
     print(error, file=sys.stderr)
 
-try:
-    LANG = get_default_lang()
-    if os.name == 'nt':
-        # Set the env var on Windows because gettext.find() uses it to
-        # find the translation
-        # Use LANGUAGE instead of LANG, LANG sets LC_ALL and thus
-        # doesn't retain other region settings like LC_TIME
-        os.environ['LANGUAGE'] = LANG
-except Exception as error:
-    print('Failed to determine default language', file=sys.stderr)
-    import traceback
-    traceback.print_exc()
+LANG = get_default_lang()
+if sys.platform == 'win32':
+    # Set the env var on Windows because gettext.find() uses it to
+    # find the translation
+    # Use LANGUAGE instead of LANG, LANG sets LC_ALL and thus
+    # doesn't retain other region settings like LC_TIME
+    os.environ['LANGUAGE'] = LANG
 
 # Search for the translation in all locale dirs
 for dir_ in iter_locale_dirs():
