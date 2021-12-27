@@ -14,6 +14,7 @@
     "typeCheckingMode": "strict",
     "include": [
         "gajim/common/cert_store.py",
+        "gajim/common/const.py",
         "gajim/common/ged.py",
         "gajim/common/i18n.py",
         "gajim/common/nec.py",

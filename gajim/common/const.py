@@ -1,19 +1,46 @@
-from enum import IntEnum, Enum, unique
-from collections import namedtuple
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+from __future__ import annotations
+
+from typing import Any, Union
+from typing import NamedTuple
+
+from enum import IntEnum
+from enum import Enum
+from enum import unique
 from functools import total_ordering
 
 from gi.repository import Gio
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.const import PresenceShow
+from nbxmpp.protocol import JID
 
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
-EncryptionData = namedtuple('EncryptionData', 'additional_data')
-EncryptionData.__new__.__defaults__ = (None,)  # type: ignore
 
-Entity = namedtuple('Entity', 'jid node hash method')
+class EncryptionData(NamedTuple):
+    additional_data: Any = None
+
+
+class Entity(NamedTuple):
+    jid: JID
+    node: str
+    hash: str
+    method: str
 
 
 class RowHeaderType(IntEnum):
@@ -1167,7 +1194,7 @@ class PresenceShowExt(Enum):
     def is_offline(self):
         return self == PresenceShowExt.OFFLINE
 
-    def __lt__(self, other):
+    def __lt__(self, other: Union[PresenceShowExt, PresenceShow]) -> bool:
         if isinstance(other, PresenceShowExt):
             return False
         if not isinstance(other, PresenceShow):
