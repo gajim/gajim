@@ -27,6 +27,7 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
+from gajim.common.nec import NetworkEvent
 
 from .controls.chat import ChatControl
 from .controls.groupchat import GroupchatControl
@@ -112,7 +113,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         GLib.idle_add(control.focus)
 
-    def is_chat_loaded(self, account, jid) -> bool:
+    def is_chat_loaded(self, account: str, jid: JID) -> bool:
         control = self.get_control(account, jid)
         if control is None:
             return False
@@ -127,7 +128,7 @@ class ChatStack(Gtk.Stack, EventHelper):
     def clear(self) -> None:
         self.set_visible_child_name('empty')
 
-    def process_event(self, event):
+    def process_event(self, event: NetworkEvent) -> None:
         control = self.get_control(event.account, event.jid)
         control.process_event(event)
 
