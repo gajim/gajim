@@ -1,6 +1,26 @@
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+from __future__ import annotations
+
+from typing import Any
+from typing import Literal
+from typing import Optional
+
 import locale
 import logging
-from typing import Optional
+
 from enum import IntEnum
 from collections import defaultdict
 
@@ -14,11 +34,13 @@ from nbxmpp import Namespace
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.const import PresenceShowExt
 from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
+from gajim.common.nec import NetworkEvent
 
 from gajim.gui_menu_builder import get_roster_menu
 
@@ -46,7 +68,7 @@ class Column(IntEnum):
 
 
 class Roster(Gtk.ScrolledWindow, EventHelper):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.ScrolledWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_size_request(200, -1)
@@ -62,10 +84,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._ui.roster_treeview.set_model(None)
         self.add(self._ui.roster_treeview)
 
-        # Holds the Gtk.TreeRowReference for each contact
-        self._contact_refs = defaultdict(list)
-        # Holds the Gtk.TreeRowReference for each group
-        self._group_refs = {}
+        self._contact_refs: dict[JID, list[Gtk.TreeRowReference]] = defaultdict(list)
+        self._group_refs: dict[str, Gtk.TreeRowReference] = {}
 
         self._store = self._ui.contact_store
         self._store.set_sort_func(Column.TEXT, self._tree_compare_iters)
@@ -135,6 +155,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             GLib.Variant.new_boolean(app.settings.get('showoffline')))
         action.connect('change-state', self._on_show_offline)
         app.window.add_action(action)
+
         action = Gio.SimpleAction.new_stateful(
             f'sort-by-show-{self._account}',
             None,
@@ -147,17 +168,16 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         online = app.account_is_connected(self._account)
         blocking_support = self._client.get_module('Blocking').supported
 
-        app.window.lookup_action(
-            f'contact-info-{self._account}').set_enabled(online)
-        app.window.lookup_action(
-            f'modify-gateway-{self._account}').set_enabled(online)
-        app.window.lookup_action(
-            f'execute-command-{self._account}').set_enabled(online)
-        app.window.lookup_action(
-            f'block-contact-{self._account}').set_enabled(
-                online and blocking_support)
-        app.window.lookup_action(
-            f'remove-contact-{self._account}').set_enabled(online)
+        actions = [('contact-info', online),
+                   ('modify-gateway', online),
+                   ('execute-command', online),
+                   ('block-contact', online and blocking_support),
+                   ('remove-contact', online)]
+
+        for action, enabled in actions:
+            act = app.window.lookup_action(f'{action}-{self._account}')
+            assert act is not None
+            act.set_enabled(enabled)
 
     def _remove_actions(self):
         actions = [
@@ -172,26 +192,37 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         for action in actions:
             app.window.remove_action(f'{action}-{self._account}')
 
-    def _get_contact(self, jid):
+    def _get_contact(self, jid: str) -> types.BareContact:
         return self._client.get_module('Contacts').get_contact(jid)
 
-    def _on_account_state(self, _event):
+    def _on_account_state(self, _event: NetworkEvent) -> None:
         self.update_actions()
 
-    def _on_theme_update(self, _event):
+    def _on_theme_update(self, _event: NetworkEvent) -> None:
         self.redraw()
 
     @staticmethod
-    def _on_drag_drop(treeview, drag_context, _x_coord, _y_coord,
-                      timestamp):
+    def _on_drag_drop(treeview: Gtk.TreeView,
+                      drag_context: Gdk.DragContext,
+                      _x_coord: int,
+                      _y_coord: int,
+                      timestamp: int) -> bool:
+
         treeview.stop_emission_by_name('drag-drop')
         target_list = treeview.drag_dest_get_target_list()
         target = treeview.drag_dest_find_target(drag_context, target_list)
         treeview.drag_get_data(drag_context, target, timestamp)
         return True
 
-    def _on_drag_data_received(self, treeview, _drag_context, x_coord,
-                               y_coord, _selection_data, _info, _timestamp):
+    def _on_drag_data_received(self,
+                               treeview: Gtk.TreeView,
+                               _drag_context: Gdk.DragContext,
+                               x_coord: int,
+                               y_coord: int,
+                               _selection_data: Gtk.SelectionData,
+                               _info: int,
+                               _timestamp: int) -> None:
+
         treeview.stop_emission_by_name('drag-data-received')
         if treeview.get_selection().count_selected_rows() == 0:
             # No selections, nothing dragged from treeview
@@ -201,11 +232,13 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         if not drop_info:
             return
 
-        model = treeview.get_model()
-        path_dest, _position = drop_info
+        path_dest, _ = drop_info
 
         # Source: the row being dragged
-        path_source = treeview.get_selection().get_selected_rows()[1][0]
+        rows = treeview.get_selection().get_selected_rows()
+        assert rows is not None
+        model, paths = rows
+        path_source = paths[0]
         iter_source = model.get_iter(path_source)
         iter_source_parent = model.iter_parent(iter_source)
         if iter_source_parent is None:
@@ -215,7 +248,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         source_group = model[iter_source_parent][Column.JID_OR_GROUP]
 
         jid = model[iter_source][Column.JID_OR_GROUP]
-        # name = model[iter_source][Column.TEXT]
 
         # Destination: the row receiving the drop
         iter_dest = model.get_iter(path_dest)
@@ -237,63 +269,86 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                                                        source_group,
                                                        dest_group)
 
-    def _on_query_tooltip(self, treeview, x_coord, y_coord, _keyboard_mode,
-                          tooltip):
-        try:
-            path = treeview.get_path_at_pos(x_coord, y_coord)
-            row = path[0]
-        except TypeError:
+    def _on_query_tooltip(self,
+                          treeview: Gtk.TreeView,
+                          x_coord: int,
+                          y_coord: int,
+                          _keyboard_mode: bool,
+                          tooltip: Gtk.Tooltip) -> bool:
+
+        row = treeview.get_path_at_pos(x_coord, y_coord)
+        if row is None:
             self._roster_tooltip.clear_tooltip()
             return False
 
-        if not row:
+        path = row[0]
+        if path is None:
             self._roster_tooltip.clear_tooltip()
             return False
 
-        iter_ = None
-        try:
-            model = treeview.get_model()
-            iter_ = model.get_iter(row)
-        except Exception:
+        model = treeview.get_model()
+        if model is None:
             self._roster_tooltip.clear_tooltip()
             return False
 
+        iter_ = model.get_iter(path)
         if not model[iter_][Column.IS_CONTACT]:
             # It’s a group
             self._roster_tooltip.clear_tooltip()
             return False
 
         contact = self._get_contact(model[iter_][Column.JID_OR_GROUP])
-        value, widget = self._roster_tooltip.get_tooltip(row, contact)
+        value, widget = self._roster_tooltip.get_tooltip(path, contact)
         tooltip.set_custom(widget)
         return value
 
-    def _on_show_offline(self, action, param):
-        action.set_state(param)
-        app.settings.set('showoffline', param.get_boolean())
+    def _on_show_offline(self,
+                         action: Gio.SimpleAction,
+                         value: Optional[GLib.Variant]) -> None:
+
+        assert value is not None
+        action.set_state(value)
+        app.settings.set('showoffline', value.get_boolean())
         self._refilter()
 
-    def _on_sort_by_show(self, action, param):
-        action.set_state(param)
-        app.settings.set('sort_by_show_in_roster', param.get_boolean())
+    def _on_sort_by_show(self,
+                         action: Gio.SimpleAction,
+                         value: GLib.Variant) -> None:
+        action.set_state(value)
+        app.settings.set('sort_by_show_in_roster', value.get_boolean())
         self._refilter()
 
-    def _on_contact_info(self, _action, param):
+    def _on_contact_info(self,
+                         _action: Gio.SimpleAction,
+                         param: GLib.Variant) -> None:
+
         app.window.contact_info(self._account, param.get_string())
 
-    def _on_modify_gateway(self, _action, param):
+    def _on_modify_gateway(self,
+                           _action: Gio.SimpleAction,
+                           param: GLib.Variant) -> None:
+
         open_window(
             'ServiceRegistration',
             account=self._account,
             address=param.get_string())
 
-    def _on_execute_command(self, _action, param):
+    def _on_execute_command(self,
+                            _action: Gio.SimpleAction,
+                            param: GLib.Variant) -> None:
+
         app.window.execute_command(self._account, param.get_string())
 
-    def _on_block_contact(self, _action, param):
+    def _on_block_contact(self,
+                          _action: Gio.SimpleAction,
+                          param: GLib.Variant):
+
         app.window.block_contact(self._account, param.get_string())
 
-    def _on_remove_contact(self, _action, param):
+    def _on_remove_contact(self,
+                           _action: Gio.SimpleAction,
+                           param: GLib.Variant):
+
         jid = JID.from_string(param.get_string())
         selected_contact = self._client.get_module('Contacts').get_contact(jid)
         if selected_contact.is_gateway:
@@ -325,9 +380,14 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         app.window.remove_contact(self._account, jid)
 
-    def _on_roster_row_activated(self, _treeview, path, _column):
-        path = self._modelfilter.convert_path_to_child_path(path)
-        iter_ = self._store.get_iter(path)
+    def _on_roster_row_activated(self,
+                                 _treeview: Gtk.TreeView,
+                                 path: Gtk.TreePath,
+                                 _column: Gtk.TreeViewColumn) -> None:
+
+        converted_path = self._modelfilter.convert_path_to_child_path(path)
+        assert converted_path is not None
+        iter_ = self._store.get_iter(converted_path)
         if self._store.iter_parent(iter_) is None:
             # This is a group row
             return
@@ -335,7 +395,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         jid = JID.from_string(self._store[iter_][Column.JID_OR_GROUP])
         app.window.add_chat(self._account, jid, 'contact', select=True)
 
-    def _on_roster_button_press_event(self, treeview, event):
+    def _on_roster_button_press_event(self,
+                                      treeview: Gtk.TreeView,
+                                      event: Gdk.EventButton) -> None:
+
         if event.button not in (2, 3):
             return
 
@@ -345,6 +408,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         path, _, _, _ = pos
         path = self._modelfilter.convert_path_to_child_path(path)
+        assert path is not None
         iter_ = self._store.get_iter(path)
         if self._store.iter_parent(iter_) is None:
             # Group row
@@ -360,10 +424,14 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             app.window.add_chat(self._account, jid, 'contact', select=True)
 
     @staticmethod
-    def _on_focus_out(treeview, _param):
+    def _on_focus_out(treeview: Gtk.TreeView, _event: Gdk.EventFocus) -> None:
         treeview.get_selection().unselect_all()
 
-    def _show_contact_menu(self, jid, treeview, event):
+    def _show_contact_menu(self,
+                           jid: str,
+                           treeview: Gtk.TreeView,
+                           event: Gdk.EventButton) -> None:
+
         contact = self._client.get_module('Contacts').get_contact(jid)
         gateway_register = contact.is_gateway and contact.supports(
             Namespace.REGISTER)
@@ -371,8 +439,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             self._account, jid, gateway=gateway_register)
 
         rectangle = Gdk.Rectangle()
-        rectangle.x = event.x
-        rectangle.y = event.y
+        rectangle.x = int(event.x)
+        rectangle.y = int(event.y)
         rectangle.width = rectangle.height = 1
 
         popover = Gtk.Popover.new_from_model(self, menu)
@@ -381,12 +449,16 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         popover.set_pointing_to(rectangle)
         popover.popup()
 
-    def set_search_string(self, text):
+    def set_search_string(self, text: str) -> None:
         self._filter_string = text.lower()
         self._filter_enabled = bool(text)
         self._refilter()
 
-    def _visible_func(self, model, iter_, *_data):
+    def _visible_func(self,
+                      model: Gtk.TreeModelFilter,
+                      iter_: Gtk.TreeIter,
+                      *_data: Any) -> bool:
+
         if not self._filter_enabled:
             return True
 
@@ -395,7 +467,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         return self._filter_string in model[iter_][Column.TEXT].lower()
 
-    def _get_contact_visible(self, contact):
+    def _get_contact_visible(self, contact: types.BareContact) -> bool:
         if self._filter_enabled:
             return self._filter_string in contact.name.lower()
 
@@ -407,31 +479,31 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         return True
 
-    def _set_model(self):
+    def _set_model(self) -> None:
         self._roster.set_model(self._modelfilter)
 
-    def _unset_model(self):
+    def _unset_model(self) -> None:
         self._roster.set_model(None)
 
-    def redraw(self):
+    def redraw(self) -> None:
         self._unset_model()
         self._set_model()
         self._roster.expand_all()
 
-    def _reset_roster(self):
+    def _reset_roster(self) -> None:
         self._unset_model()
         self._enable_sort(False)
         self._clear()
         self._initial_draw()
 
-    def _enable_sort(self, enable):
+    def _enable_sort(self, enable: bool) -> None:
         column = Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
         if enable:
             column = Column.TEXT
 
         self._store.set_sort_column_id(column, Gtk.SortType.ASCENDING)
 
-    def _initial_draw(self):
+    def _initial_draw(self) -> None:
         for contact in self._client.get_module('Roster').iter_contacts():
             self._connect_contact_signals(contact)
             self._add_or_update_contact(contact)
@@ -440,21 +512,24 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._set_model()
         self._roster.expand_all()
 
-    def _connect_contact_signals(self, contact):
+    def _connect_contact_signals(self, contact: types.BareContact) -> None:
         contact.connect('presence-update', self._on_contact_update)
         contact.connect('caps-update', self._on_contact_update)
         contact.connect('avatar-update', self._on_contact_update)
         contact.connect('blocking-update', self._on_contact_update)
 
-    def _on_contact_update(self, contact, _signal_name):
+    def _on_contact_update(self,
+                           contact: types.BareContact,
+                           _signal_name: str) -> None:
+
         self._draw_contact(contact)
 
     @event_filter(['account'])
-    def _on_roster_received(self, _event):
+    def _on_roster_received(self, _event: NetworkEvent) -> None:
         self._reset_roster()
 
     @event_filter(['account'])
-    def _on_roster_push(self, event):
+    def _on_roster_push(self, event: NetworkEvent) -> None:
         contact = self._get_contact(event.item.jid)
 
         if event.item.subscription == 'remove':
@@ -465,40 +540,48 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                 self._connect_contact_signals(contact)
             self._add_or_update_contact(contact)
 
-    def _get_current_groups(self, jid):
-        groups = set()
+    def _get_current_groups(self, jid: JID) -> set[str]:
+        groups: set[str] = set()
         for ref in self._contact_refs[jid]:
             iter_ = self._get_iter_from_ref(ref)
             group_iter = self._store.iter_parent(iter_)
+            assert group_iter is not None
             groups.add(self._store[group_iter][Column.JID_OR_GROUP])
         return groups
 
-    def _add_group(self, group_name):
+    def _add_group(self, group_name: str) -> Gtk.TreeIter:
         group_iter = self._get_group_iter(group_name)
         if group_iter is not None:
             return group_iter
 
         group_iter = self._store.append(
-            None, (None, group_name, False, group_name, True))
+            None, [None, group_name, False, group_name, True])
         group_path = self._store.get_path(group_iter)
         group_ref = Gtk.TreeRowReference(self._store, group_path)
         self._group_refs[group_name] = group_ref
         return group_iter
 
-    def _add_contact_to_group(self, contact, group):
+    def _add_contact_to_group(self,
+                              contact: types.BareContact,
+                              group: str) -> None:
+
         group_iter = self._add_group(group)
         iter_ = self._store.append(
             group_iter,
-            (None, contact.name, True, str(contact.jid), True))
+            [None, contact.name, True, str(contact.jid), True])
 
         ref = Gtk.TreeRowReference(self._store, self._store.get_path(iter_))
         self._contact_refs[contact.jid].append(ref)
 
-    def _add_contact_to_groups(self, contact, groups):
+    def _add_contact_to_groups(self,
+                               contact: types.BareContact,
+                               groups: set[str]) -> None:
         for group in groups:
             self._add_contact_to_group(contact, group)
 
-    def _remove_contact_from_groups(self, contact, groups):
+    def _remove_contact_from_groups(self,
+                                    contact: types.BareContact,
+                                    groups: set[str]) -> None:
         if not groups:
             return
 
@@ -506,15 +589,18 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         for ref in refs:
             iter_ = self._get_iter_from_ref(ref)
             group_iter = self._store.iter_parent(iter_)
+            assert group_iter is not None
             group = self._store[group_iter][Column.JID_OR_GROUP]
             if group in groups:
-                iter_ = self._store.get_iter(ref.get_path())
+                path = ref.get_path()
+                assert path is not None
+                iter_ = self._store.get_iter(path)
                 self._store.remove(iter_)
                 self._contact_refs[contact.jid].remove(ref)
 
         self._check_for_empty_groups()
 
-    def _remove_contact(self, contact):
+    def _remove_contact(self, contact: types.BareContact) -> None:
         refs = self._contact_refs.pop(contact.jid)
         for ref in refs:
             iter_ = self._get_iter_from_ref(ref)
@@ -522,7 +608,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         self._check_for_empty_groups()
 
-    def _check_for_empty_groups(self):
+    def _check_for_empty_groups(self) -> None:
         for ref in list(self._group_refs.values()):
             group_iter = self._get_iter_from_ref(ref)
             if self._store.iter_has_child(group_iter):
@@ -531,7 +617,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             self._store.remove(group_iter)
             del self._group_refs[group]
 
-    def _add_or_update_contact(self, contact):
+    def _add_or_update_contact(self, contact: types.BareContact) -> None:
         new_groups = set(contact.groups or [DEFAULT_GROUP])
         groups = self._get_current_groups(contact.jid)
 
@@ -544,11 +630,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._draw_groups()
         self._draw_contact(contact)
 
-    def _draw_groups(self):
+    def _draw_groups(self) -> None:
         for group in self._group_refs:
             self._draw_group(group)
 
-    def _draw_group(self, group_name):
+    def _draw_group(self, group_name: str) -> None:
         group_iter = self._get_group_iter(group_name)
         if not group_iter:
             return
@@ -563,7 +649,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         self._store[group_iter][Column.TEXT] = group_name
 
-    def _refilter(self):
+    def _refilter(self) -> None:
         if self._high_performance:
             self._modelfilter.refilter()
             self._roster.expand_all()
@@ -581,12 +667,15 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             group[Column.VISIBLE] = group_is_visible
         self._roster.expand_all()
 
-    def _draw_contact(self, contact):
+    def _draw_contact(self, contact: types.BareContact) -> None:
         for ref in self._contact_refs[contact.jid]:
             self._draw_contact_row(ref, contact)
         self._roster.expand_all()
 
-    def _draw_contact_row(self, ref, contact):
+    def _draw_contact_row(self,
+                          ref: Gtk.TreeRowReference,
+                          contact: types.BareContact):
+
         iter_ = self._get_iter_from_ref(ref)
 
         name = GLib.markup_escape_text(contact.name)
@@ -598,14 +687,16 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             AvatarSize.ROSTER, self.get_scale_factor())
         self._store[iter_][Column.AVATAR] = surface
 
-    def _get_total_user_count(self):
+    def _get_total_user_count(self) -> int:
         count = 0
         for group_row in self._store:
             count += self._store.iter_n_children(group_row.iter)
         return count
 
-    def _get_iter_from_ref(self, ref):
-        return self._store.get_iter(ref.get_path())
+    def _get_iter_from_ref(self, ref: Gtk.TreeRowReference) -> Gtk.TreeIter:
+        path = ref.get_path()
+        assert path is not None
+        return self._store.get_iter(path)
 
     def _get_group_iter(self, group_name: str) -> Optional[Gtk.TreeIter]:
         try:
@@ -619,7 +710,12 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         return self._store.get_iter(path)
 
     @staticmethod
-    def _text_cell_data_func(_column, renderer, model, iter_, _user_data):
+    def _text_cell_data_func(_column: Gtk.TreeViewColumn,
+                             renderer: Gtk.CellRenderer,
+                             model: Gtk.TreeModel,
+                             iter_: Gtk.TreeIter,
+                             _user_data: Literal[None]) -> None:
+
         has_parent = bool(model.iter_parent(iter_))
         style = 'contact' if has_parent else 'group'
 
@@ -638,7 +734,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             renderer.set_property('weight', 600)
             renderer.set_property('ypad', 6)
 
-    def _tree_compare_iters(self, model, iter1, iter2, _user_data):
+    def _tree_compare_iters(self,
+                            model: Gtk.TreeModel,
+                            iter1: Gtk.TreeIter,
+                            iter2: Gtk.TreeIter,
+                            _user_data: Literal[None]):
         """
         Compare two iterators to sort them
         """
@@ -669,19 +769,19 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._group_refs.clear()
         self._store.clear()
 
-    def process_event(self, event):
+    def process_event(self, event: NetworkEvent) -> None:
         if event.name not in HANDLED_EVENTS:
             return
 
-    def _on_destroy(self, _roster):
+    def _on_destroy(self, _roster: Roster) -> None:
         self._remove_actions()
         self._contact_refs.clear()
         self._group_refs.clear()
         self._unset_model()
-        self._roster = None
         self._enable_sort(False)
         self._store.clear()
-        self._store = None
-        # self._tooltip.destroy()
-        # self._tooltip = None
+        self._roster_tooltip.destroy()
+        del self._roster
+        del self._store
+        del self._roster_tooltip
         app.check_finalize(self)

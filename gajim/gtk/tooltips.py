@@ -262,6 +262,9 @@ class RosterTooltip:
             self._ui.location.show()
             self._ui.location_label.show()
 
+    def destroy(self):
+        self.clear_tooltip()
+
 
 class FileTransfersTooltip:
     def __init__(self) -> None:
