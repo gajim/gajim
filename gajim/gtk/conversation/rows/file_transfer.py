@@ -83,7 +83,7 @@ class FileTransferRow(BaseRow, EventHelper):
         if self._transfer.state.is_active:
             self._transfer.cancel()
 
-        self._transfer = None
+        del self._transfer
         if self._pulse is not None:
             GLib.source_remove(self._pulse)
 

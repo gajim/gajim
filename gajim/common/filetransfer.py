@@ -12,15 +12,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict
 from typing import Optional
 
 from gajim.common.helpers import Observable
 from gajim.common.const import FTState
 
+
 class FileTransfer(Observable):
 
-    _state_descriptions: Dict[FTState, str] = {}
+    _state_descriptions: dict[FTState, str] = {}
 
     def __init__(self, account: str) -> None:
         Observable.__init__(self)
@@ -30,7 +30,7 @@ class FileTransfer(Observable):
         self._seen: int = 0
         self.size: int = 0
 
-        self._state: Optional[FTState] = None
+        self._state = FTState.INIT
         self._error_text: str = ''
         self._error_domain: Optional[str] = None
 
@@ -39,7 +39,7 @@ class FileTransfer(Observable):
         return self._account
 
     @property
-    def state(self) -> Optional[FTState]:
+    def state(self) -> FTState:
         return self._state
 
     @property
@@ -53,7 +53,7 @@ class FileTransfer(Observable):
         return self._seen >= self.size
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         raise NotImplementedError
 
     @property
@@ -65,6 +65,8 @@ class FileTransfer(Observable):
         return self._error_domain
 
     def get_state_description(self) -> str:
+        if self._state is None:
+            return ''
         return self._state_descriptions.get(self._state, '')
 
     def set_preparing(self) -> None:

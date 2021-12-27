@@ -781,6 +781,7 @@ GIO_TLS_ERRORS = {
 
 
 class FTState(Enum):
+    INIT = 'init'
     PREPARING = 'prepare'
     ENCRYPTING = 'encrypting'
     DECRYPTING = 'decrypting'

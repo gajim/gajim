@@ -351,7 +351,7 @@ class HTTPFileTransfer(FileTransfer):
         self._uri_transform_func = func
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         return os.path.basename(self._path)
 
     def set_error(self, domain, text=''):
