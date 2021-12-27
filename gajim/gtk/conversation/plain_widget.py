@@ -22,6 +22,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common.const import StyleAttr
@@ -31,12 +32,11 @@ from gajim.common.helpers import parse_uri
 from gajim.common.structs import URI
 from gajim.common.styling import PlainBlock
 
-from gajim.gui.emoji_data import emoji_pixbufs
-from gajim.gui.emoji_data import get_emoji_pixbuf
-
 from gajim.gui_menu_builder import get_conv_action_context_menu
 from gajim.gui_menu_builder import get_conv_uri_context_menu
 
+from ..emoji_data import emoji_pixbufs
+from ..emoji_data import get_emoji_pixbuf
 from ..util import get_cursor
 from ..util import make_pango_attributes
 
@@ -136,7 +136,7 @@ class MessageTextview(Gtk.TextView):
         self.set_cursor_visible(False)
         self.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
 
-        self._handlers: Dict[str, MessageTextview] = {}
+        self._handlers: Dict[int, MessageTextview] = {}
 
         id_ = self.connect('query-tooltip', self._query_tooltip)
         self._handlers[id_] = self
@@ -164,7 +164,7 @@ class MessageTextview(Gtk.TextView):
 
         self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, *args: Any) -> None:
         for id_, widget in self._handlers.items():
             if widget.handler_is_connected(id_):
                 widget.disconnect(id_)
@@ -243,8 +243,13 @@ class MessageTextview(Gtk.TextView):
         end_iter = buffer_.get_end_iter()
         buffer_.apply_tag_by_name('emphasis', start_iter, end_iter)
 
-    def _query_tooltip(self, widget: Any, x_pos: int, y_pos: int,
-                       _keyboard_mode: bool, tooltip: Gtk.Tooltip) -> bool:
+    def _query_tooltip(self,
+                       widget: Gtk.TextView,
+                       x_pos: int,
+                       y_pos: int,
+                       _keyboard_mode: bool,
+                       tooltip: Gtk.Tooltip
+                       ) -> bool:
         window = widget.get_window(Gtk.TextWindowType.TEXT)
         x_pos, y_pos = self.window_to_buffer_coords(
             Gtk.TextWindowType.TEXT, x_pos, y_pos)
@@ -320,8 +325,10 @@ class MessageTextview(Gtk.TextView):
                 start_sel, finish_sel, True)
         return False
 
-    def _on_populate_popup(self, _textview: Gtk.TextView,
-                           menu: Gtk.Menu) -> None:
+    def _on_populate_popup(self,
+                           _textview: Gtk.TextView,
+                           menu: Gtk.Menu
+                           ) -> None:
         '''
         Overrides the default context menu.
         If text is selected, a submenu with actions on the selection is added.
@@ -336,9 +343,13 @@ class MessageTextview(Gtk.TextView):
         menu.prepend(action_menu_item)
         menu.show_all()
 
-    def _on_uri_clicked(self, texttag: Gtk.TextTag, _widget: Any,
-                        event: Gdk.Event, iter_: Gtk.TextIter,
-                        _kind: Gtk.TextTag) -> int:
+    def _on_uri_clicked(self,
+                        texttag: Gtk.TextTag,
+                        _widget: Any,
+                        event: Gdk.Event,
+                        iter_: Gtk.TextIter,
+                        _kind: Gtk.TextTag
+                        ) -> int:
         if event.type != Gdk.EventType.BUTTON_PRESS:
             return Gdk.EVENT_PROPAGATE
 
@@ -377,11 +388,11 @@ class MessageTextview(Gtk.TextView):
             log.warning('No handler for URI type: %s', uri)
             return
 
-        def destroy(menu, _pspec):
+        def _destroy(menu: Gtk.Menu, _pspec: GObject.ParamSpec) -> None:
             visible = menu.get_property('visible')
             if not visible:
                 GLib.idle_add(menu.destroy)
 
         menu.attach_to_widget(self, None)
-        menu.connect('notify::visible', destroy)
+        menu.connect('notify::visible', _destroy)
         menu.popup_at_pointer()
