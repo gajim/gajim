@@ -14,9 +14,12 @@
 
 from __future__ import annotations
 
+import typing
+
 from gi.repository import Gtk
 
-from .. import types
+if typing.TYPE_CHECKING:
+    from .message_widget import MessageWidget
 
 
 class QuoteWidget(Gtk.Box):
@@ -34,8 +37,7 @@ class QuoteWidget(Gtk.Box):
 
         self._message_widget = None
 
-    def attach_message_widget(self,
-                              message_widget: types.MessageWidget) -> None:
+    def attach_message_widget(self, message_widget: MessageWidget) -> None:
 
         # Purpose of this method is to prevent circular imports
         if self._message_widget is not None:

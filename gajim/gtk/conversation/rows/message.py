@@ -44,15 +44,14 @@ from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
 from .base import BaseRow
-from .base import MoreMenuButton
+from .widgets import MoreMenuButton
 from ..message_widget import MessageWidget
 from ...dialogs import InputDialog
 from ...dialogs import DialogButton
 from ...preview import PreviewWidget
-from ...types import ConversationRowType
-from ...types import MessageRowType
 from ...util import format_fingerprint
 from ...util import get_cursor
+
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
@@ -255,10 +254,10 @@ class MessageRow(BaseRow):
     def _on_realize(event_box: Gtk.EventBox) -> None:
         event_box.get_window().set_cursor(get_cursor('pointer'))
 
-    def is_same_sender(self, message: MessageRowType) -> bool:
+    def is_same_sender(self, message: MessageRow) -> bool:
         return message.name == self.name
 
-    def is_same_encryption(self, message: MessageRowType) -> bool:
+    def is_same_encryption(self, message: MessageRow) -> bool:
         message_details = self._get_encryption_details(message.additional_data)
         own_details = self._get_encryption_details(self.additional_data)
         if message_details is None and own_details is None:
@@ -271,7 +270,7 @@ class MessageRow(BaseRow):
                 return True
         return False
 
-    def is_mergeable(self, message: ConversationRowType) -> bool:
+    def is_mergeable(self, message: BaseRow) -> bool:
         if message.type != self.type:
             return False
         if not self.is_same_sender(message):

@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Dict
 from typing import Set
 from typing import Optional
@@ -38,6 +40,7 @@ from gajim.common.helpers import get_start_of_day
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
+from .rows.base import BaseRow
 from .rows.read_marker import ReadMarkerRow
 from .rows.scroll_hint import ScrollHintRow
 from .rows.message import MessageRow
@@ -51,7 +54,6 @@ from .rows.muc_subject import MUCSubject
 from .rows.muc_join_left import MUCJoinLeft
 from .rows.muc_user_status import MUCUserStatus
 
-from ..types import ConversationRowType
 from ..util import scroll_to_end
 
 log = logging.getLogger('gajim.gui.conversation_view')
@@ -300,7 +302,7 @@ class ConversationView(Gtk.ListBox):
 
         row.set_merged(False)
 
-    def _check_for_merge(self, message: ConversationRowType) -> None:
+    def _check_for_merge(self, message: BaseRow) -> None:
         if message.type != 'chat':
             return
 
@@ -434,7 +436,7 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
-    def iter_rows(self) -> Generator[ConversationRowType, None, None]:
+    def iter_rows(self) -> Generator[BaseRow, None, None]:
         for row in self.get_children():
             yield row
 

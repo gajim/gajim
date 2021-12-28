@@ -36,22 +36,6 @@ if TYPE_CHECKING:
     from .conversation.rows.scroll_hint import ScrollHintRow
 
 
-ConversationRowType = Union[
-    'CallRow',
-    'CommandOutputRow',
-    'DateRow',
-    'FileTransferJingleRow',
-    'FileTransferRow',
-    'InfoMessage',
-    'MessageRow',
-    'MUCJoinLeft',
-    'MUCSubject',
-    'MUCUserStatus',
-    'ReadMarkerRow',
-    'ScrollHintRow'
-]
-
-MessageRowType = Union['MessageRow']
 
 ControlType = Union [
     'ChatControl',
