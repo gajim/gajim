@@ -16,6 +16,7 @@ from enum import IntEnum
 from collections import OrderedDict
 
 from gi.repository import GdkPixbuf
+from gi.repository import Gtk
 
 class Emoji(IntEnum):
     ...
@@ -27,10 +28,17 @@ class EmojiData(OrderedDict):
     def get_regex(self) -> str: ...
 
 class EmojiPixbufs(dict):
-    ...
+    @property
+    def complete(self) -> bool: ...
+    @complete.setter
+    def complete(self, value: bool) -> None: ...
+    def clear(self) -> None: ...
+    def append_marks(self,
+                     textview: Gtk.TextView,
+                     start: Gtk.TextMark,
+                     end: Gtk.TextMark,
+                     codepoint: str) -> None: ...
 
-emoji_pixbufs = EmojiPixbufs()
-
+emoji_pixbufs: EmojiPixbufs
 emoji_ascii_data: dict[str, str]
-
-emoji_data = EmojiData()
+emoji_data: EmojiData
