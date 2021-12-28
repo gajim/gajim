@@ -1174,7 +1174,10 @@ def get_groupchat_name(client: types.Client, jid: Union[str, JID]) -> str:
     return jid.localpart
 
 
-def is_affiliation_change_allowed(self_contact, contact, target_aff):
+def is_affiliation_change_allowed(self_contact: types.GroupchatParticipant,
+                                  contact: types.GroupchatParticipant,
+                                  target_aff: Affiliation) -> bool:
+
     if contact.affiliation.value == target_aff:
         # Contact has already the target affiliation
         return False
@@ -1191,13 +1194,17 @@ def is_affiliation_change_allowed(self_contact, contact, target_aff):
     return self_contact.affiliation > contact.affiliation
 
 
-def is_role_change_allowed(self_contact, contact):
+def is_role_change_allowed(self_contact: types.GroupchatParticipant,
+                           contact: types.GroupchatParticipant) -> bool:
+
     if self_contact.role < Role.MODERATOR:
         return False
     return self_contact.affiliation >= contact.affiliation
 
 
-def is_retraction_allowed(self_contact, contact):
+def is_retraction_allowed(self_contact: types.GroupchatParticipant,
+                          contact: types.GroupchatParticipant) -> bool:
+
     if self_contact.role < Role.MODERATOR:
         return False
     return self_contact.affiliation >= contact.affiliation
@@ -1367,7 +1374,7 @@ def get_idle_status_message(state: str, status_message: str) -> str:
     return message
 
 
-def should_log(account, jid):
+def should_log(account: str, jid: str) -> bool:
     """
     Should conversations between a local account and a remote jid be logged?
     """
@@ -1395,7 +1402,7 @@ def ask_for_status_message(status: str, signin: bool = False) -> bool:
     return app.settings.get('always_ask_for_status_message')
 
 
-def get_group_chat_nick(account, room_jid):
+def get_group_chat_nick(account: str, room_jid: str) -> str:
     nick = app.nicks[account]
 
     client = app.get_client(account)
@@ -1408,7 +1415,7 @@ def get_group_chat_nick(account, room_jid):
     return nick
 
 
-def get_muc_context(jid):
+def get_muc_context(jid: str) -> str:
     disco_info = app.storage.cache.get_last_disco_info(jid)
     if disco_info is None:
         return None
