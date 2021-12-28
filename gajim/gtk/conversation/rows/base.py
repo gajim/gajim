@@ -13,7 +13,9 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import Optional
+from typing import Union
 
 from datetime import datetime
 
@@ -22,13 +24,18 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common import types
 from gajim.common.i18n import _
 from gajim.common.helpers import from_one_line
 from gajim.common.helpers import is_retraction_allowed
 
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
+
 from ...util import wrap_with_event_box
 from ...types import MessageRowType
+
+ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
 
 class BaseRow(Gtk.ListBoxRow):
@@ -101,9 +108,10 @@ class BaseRow(Gtk.ListBoxRow):
 class MoreMenuButton(Gtk.Button):
     def __init__(self,
                  row: MessageRowType,
-                 contact: types.BareContact,
+                 contact: ContactT,
                  name: str
                  ) -> None:
+
         Gtk.Button.__init__(self)
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)
@@ -122,11 +130,12 @@ class MoreMenuButton(Gtk.Button):
 
     def _on_click(self, _button: Gtk.Button) -> None:
         show_retract = False
-        if self._contact.is_groupchat:
+        if isinstance(self._contact, GroupchatContact):
             disco_info = app.storage.cache.get_last_disco_info(
                 self._contact.jid)
             contact = self._contact.get_resource(self._name)
             self_contact = self._contact.get_self()
+            assert self_contact is not None
             is_allowed = is_retraction_allowed(self_contact, contact)
             if disco_info.has_message_moderation and is_allowed:
                 show_retract = True
