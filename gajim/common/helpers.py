@@ -1276,38 +1276,32 @@ def write_file_async(
         callback: Callable[[bool, Optional[GLib.Error], Any], Any],
         user_data: Optional[Any] = None):
 
+    def _on_write_finished(outputstream: Gio.OutputStream,
+                           result: Gio.AsyncResult) -> None:
+        try:
+            successful, _bytes_written = outputstream.write_all_finish(result)
+        except GLib.Error as error:
+            callback(False, error, user_data)
+        else:
+            callback(successful, None, user_data)
+
+    def _on_file_created(file: Gio.File, result: Gio.AsyncResult) -> None:
+        try:
+            outputstream = file.create_finish(result)
+        except GLib.Error as error:
+            callback(False, error, user_data)
+            return
+
+        outputstream.write_all_async(data,
+                                     GLib.PRIORITY_DEFAULT,
+                                     None,
+                                     _on_write_finished)
+
     file = Gio.File.new_for_path(str(path))
     file.create_async(Gio.FileCreateFlags.PRIVATE,
                       GLib.PRIORITY_DEFAULT,
                       None,
-                      _on_file_created,
-                      (callback, data, user_data))
-
-def _on_file_created(file, result, user_data):
-    callback, data, user_data = user_data
-    try:
-        outputstream = file.create_finish(result)
-    except GLib.Error as error:
-        callback(False, error, user_data)
-        return
-
-    # Pass data as user_data to the callback, because
-    # write_all_async() takes not reference to the data
-    # and python gc collects it before the data are written
-    outputstream.write_all_async(data,
-                                 GLib.PRIORITY_DEFAULT,
-                                 None,
-                                 _on_write_finished,
-                                 (callback, data, user_data))
-
-def _on_write_finished(outputstream, result, user_data):
-    callback, _data, user_data = user_data
-    try:
-        successful, _bytes_written = outputstream.write_all_finish(result)
-    except GLib.Error as error:
-        callback(False, error, user_data)
-    else:
-        callback(successful, None, user_data)
+                      _on_file_created)
 
 
 def load_file_async(path, callback, user_data=None):
