@@ -1304,21 +1304,24 @@ def write_file_async(
                       _on_file_created)
 
 
-def load_file_async(path, callback, user_data=None):
+def load_file_async(path: Path,
+                    callback: Callable[[Optional[bytes],
+                                        Optional[GLib.Error],
+                                        Optional[Any]], Any],
+                    user_data: Optional[Any] = None) -> None:
+
+    def _on_load_finished(file: Gio.File,
+                          result: Gio.AsyncResult) -> None:
+
+        try:
+            _, contents, _ = file.load_contents_finish(result)
+        except GLib.Error as error:
+            callback(None, error, user_data)
+        else:
+            callback(contents, None, user_data)
+
     file = Gio.File.new_for_path(str(path))
-    file.load_contents_async(None,
-                             _on_load_finished,
-                             (callback, user_data))
-
-
-def _on_load_finished(file, result, user_data):
-    callback, user_data = user_data
-    try:
-        _successful, contents, _etag = file.load_contents_finish(result)
-    except GLib.Error as error:
-        callback(None, error, user_data)
-    else:
-        callback(contents, None, user_data)
+    file.load_contents_async(None, _on_load_finished)
 
 
 def convert_gio_to_openssl_cert(cert):
