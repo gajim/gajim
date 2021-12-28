@@ -23,6 +23,8 @@ import logging
 from functools import partial
 
 import cairo
+from nbxmpp.const import Affiliation
+from nbxmpp.const import Role
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -30,6 +32,7 @@ from gajim.common import types
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
 from gajim.common.structs import UNKNOWN_PRESENCE
+from gajim.common.structs import PresenceData
 from gajim.common.structs import UNKNOWN_MUC_PRESENCE
 from gajim.common.structs import MUCPresenceData
 from gajim.common.helpers import Observable
@@ -195,7 +198,7 @@ class CommonContact(Observable):
 
 
 class BareContact(CommonContact):
-    def __init__(self, logger, jid, account):
+    def __init__(self, logger: logging.Logger, jid: JID, account: str) -> None:
         CommonContact.__init__(self, logger, jid, account)
 
         self.settings = ContactSettings(account, str(jid))
@@ -315,7 +318,7 @@ class BareContact(CommonContact):
             transport_icon=transport_icon,
             style=style)
 
-    def update_presence(self, presence_data) -> None:
+    def update_presence(self, presence_data: PresenceData) -> None:
         for contact in self._resources.values():
             contact.update_presence(presence_data, notify=False)
         self.notify('presence-update')
@@ -388,7 +391,7 @@ class ResourceContact(CommonContact):
         return CommonContact.supports(self, requested_feature)
 
     @property
-    def identity_type(self):
+    def identity_type(self) -> Optional[str]:
         disco_info = app.storage.cache.get_last_disco_info(self._jid)
         if disco_info is None:
             return None
@@ -410,22 +413,24 @@ class ResourceContact(CommonContact):
         return self._presence.show
 
     @property
-    def status(self):
+    def status(self) -> str:
         return self._presence.status
 
     @property
-    def priority(self):
+    def priority(self) -> int:
         return self._presence.priority
 
     @property
-    def idle_time(self):
+    def idle_time(self) -> Optional[float]:
         return self._presence.idle_time
 
     @property
     def chatstate(self):
         return self._module('Chatstate').get_remote_chatstate(self._jid)
 
-    def update_presence(self, presence_data, notify: bool = True) -> None:
+    def update_presence(self,
+                        presence_data: PresenceData,
+                        notify: bool = True) -> None:
         self._presence = presence_data
         if notify:
             self.notify('presence-update')
@@ -438,7 +443,7 @@ class GroupchatContact(CommonContact):
         self.settings = GroupChatSettings(account, str(jid))
 
     @property
-    def is_groupchat(self):
+    def is_groupchat(self) -> bool:
         return True
 
     def add_resource(self, resource: str) -> GroupchatParticipant:
@@ -591,11 +596,11 @@ class GroupchatParticipant(CommonContact):
         return self._presence.show
 
     @property
-    def status(self):
+    def status(self) -> str:
         return self._presence.status
 
     @property
-    def idle_time(self):
+    def idle_time(self) -> Optional[float]:
         return self._presence.idle_time
 
     @property
@@ -603,15 +608,15 @@ class GroupchatParticipant(CommonContact):
         return self._jid.resource
 
     @property
-    def real_jid(self):
+    def real_jid(self) -> Optional[JID]:
         return self._presence.real_jid
 
     @property
-    def affiliation(self):
+    def affiliation(self) -> Affiliation:
         return self._presence.affiliation
 
     @property
-    def role(self):
+    def role(self) -> Role:
         return self._presence.role
 
     @property

@@ -187,7 +187,7 @@ class PresenceData:
     show: str
     status: str
     priority: int
-    idle_time: str
+    idle_time: Optional[float]
     available: bool
 
     @classmethod
