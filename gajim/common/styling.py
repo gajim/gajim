@@ -65,7 +65,7 @@ class StyleObject:
 
 @dataclass
 class BaseUri(StyleObject):
-
+    name: str
     start_byte: int
     end_byte: int
 
