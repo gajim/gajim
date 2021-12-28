@@ -1,14 +1,4 @@
 {
-    "ignore": [
-        "setup.py",
-        "test",
-        ".gitlab"
-        "data",
-        "flatpak",
-        "mac",
-        "scripts",
-        "win",
-    ],
     "pythonPlatform": "All",
     "pythonVersion": "3.9",
     "typeCheckingMode": "strict",
@@ -31,6 +21,7 @@
         "gajim/gtk/chat_page.py",
         "gajim/gtk/conversation/code_widget.py",
         "gajim/gtk/conversation/jump_to_end_button.py",
+        "gajim/gtk/conversation/plain_widget.py",
         "gajim/gtk/conversation/quote_widget.py",
         "gajim/gtk/conversation/rows/command_output.py",
         "gajim/gtk/conversation/rows/date.py",

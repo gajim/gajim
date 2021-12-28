@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Dict
 
 import logging
 import os
@@ -27,7 +26,6 @@ from gi.repository import GObject
 from gajim.common import app
 from gajim.common.const import StyleAttr
 from gajim.common.helpers import open_uri
-from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import parse_uri
 from gajim.common.structs import URI
 from gajim.common.styling import PlainBlock
@@ -136,7 +134,7 @@ class MessageTextview(Gtk.TextView):
         self.set_cursor_visible(False)
         self.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
 
-        self._handlers: Dict[int, MessageTextview] = {}
+        self._handlers: dict[int, MessageTextview] = {}
 
         id_ = self.connect('query-tooltip', self._query_tooltip)
         self._handlers[id_] = self
@@ -221,7 +219,7 @@ class MessageTextview(Gtk.TextView):
                 else:
                     pixbuf = pixbuf.copy()
                     anchor = buffer_.create_child_anchor(end_iter)
-                    anchor.plaintext = emoji.text
+                    anchor.plaintext = emoji.text  # type: ignore
                     img = Gtk.Image.new_from_pixbuf(pixbuf)
                     img.show()
                     self.add_child_at_anchor(img, anchor)
