@@ -22,7 +22,8 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import List
+from typing import KeysView
+from typing import NamedTuple
 from typing import Optional
 
 import time
@@ -34,6 +35,7 @@ import sqlite3 as sqlite
 from collections import namedtuple
 
 from nbxmpp import JID
+from nbxmpp.structs import CommonError
 from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
@@ -87,6 +89,55 @@ ARCHIVE_SQL_STATEMENT = '''
 log = logging.getLogger('gajim.c.storage.archive')
 
 
+class JidsTableRow(NamedTuple):
+    jid_id: int
+    jid: JID
+    type: str
+
+
+class ConversationRow(NamedTuple):
+    contact_name: str
+    time: float
+    kind: int
+    show: int
+    message: str
+    subject: str
+    additional_data: AdditionalDataDict
+    log_line_id: int
+    message_id: str
+    stanza_id: str
+    error: CommonError
+    marker: str
+
+
+class LastConversationRow(NamedTuple):
+    contact_name: str
+    time: float
+    kind: int
+    message: str
+    additional_data: AdditionalDataDict
+    message_id: str
+    stanza_id: str
+
+
+class SearchLogRow(NamedTuple):
+    contact_name: str
+    time: float
+    kind: int
+    show: int
+    message: str
+    subject: str
+    additional_data: AdditionalDataDict
+    log_line_id: int
+
+
+class LastArchiveMessageRow(NamedTuple):
+    id: int
+    last_mam_id: str
+    oldest_mam_timestamp: str
+    last_muc_timestamp: str
+
+
 class MessageArchiveStorage(SqliteStorage):
     def __init__(self):
         SqliteStorage.__init__(self,
@@ -94,10 +145,10 @@ class MessageArchiveStorage(SqliteStorage):
                                configpaths.get('LOG_DB'),
                                ARCHIVE_SQL_STATEMENT)
 
-        self._jid_ids = {}
-        self._jid_ids_reversed = {}
+        self._jid_ids: dict[JID, JidsTableRow] = {}
+        self._jid_ids_reversed: dict[int, JidsTableRow] = {}
 
-    def init(self, **kwargs):
+    def init(self, **kwargs: Any) -> None:
         SqliteStorage.init(self,
                            detect_types=sqlite.PARSE_COLNAMES)
 
@@ -112,9 +163,12 @@ class MessageArchiveStorage(SqliteStorage):
         self._get_jid_ids_from_db()
         self._cleanup_chat_history()
 
-    def _namedtuple_factory(self, cursor, row):
+    def _namedtuple_factory(self,
+                            cursor: sqlite.Cursor,
+                            row: tuple[Any, ...]) -> NamedTuple:
+
         fields = [col[0] for col in cursor.description]
-        Row = namedtuple("Row", fields)
+        Row = namedtuple("Row", fields)  # type: ignore
         named_row = Row(*row)
         if 'additional_data' in fields:
             _dict = json.loads(named_row.additional_data or '{}')
@@ -209,10 +263,10 @@ class MessageArchiveStorage(SqliteStorage):
             self._jid_ids[row.jid] = row
             self._jid_ids_reversed[row.jid_id] = row
 
-    def get_jid_from_id(self, jid_id):
+    def get_jid_from_id(self, jid_id: int) -> JidsTableRow:
         return self._jid_ids_reversed[jid_id]
 
-    def get_jids_in_db(self):
+    def get_jids_in_db(self) -> KeysView[JID]:
         return self._jid_ids.keys()
 
     def jid_is_from_pm(self, jid: str) -> bool:
@@ -230,7 +284,7 @@ class MessageArchiveStorage(SqliteStorage):
         # it's not a full jid, so it's not a pm one
         return False
 
-    def jid_is_room_jid(self, jid: str) -> bool:
+    def jid_is_room_jid(self, jid: str) -> Optional[bool]:
         """
         Return True if it's a room jid, False if it's not, None if we don't know
         """
@@ -246,8 +300,8 @@ class MessageArchiveStorage(SqliteStorage):
         jid = app.get_jid_from_account(account)
         return self.get_jid_id(jid, type_=type_)
 
-    def get_active_account_ids(self) -> List[int]:
-        account_ids = []
+    def get_active_account_ids(self) -> list[int]:
+        account_ids: list[int] = []
         for account in app.settings.get_active_accounts():
             account_ids.append(self.get_account_id(account))
         return account_ids
@@ -329,7 +383,7 @@ class MessageArchiveStorage(SqliteStorage):
                                       before: bool,
                                       timestamp: float,
                                       n_lines: int
-                                      ) -> List[namedtuple]:
+                                      ) -> list[ConversationRow]:
         """
         Load n_lines lines of conversation with jid before or after timestamp
 
@@ -378,7 +432,7 @@ class MessageArchiveStorage(SqliteStorage):
                                           before: bool,
                                           timestamp: float,
                                           n_lines: int
-                                          ) -> List[namedtuple]:
+                                          ) -> list[ConversationRow]:
         """
         Load n_lines lines of conversation with jid before or after timestamp
 
@@ -422,7 +476,7 @@ class MessageArchiveStorage(SqliteStorage):
     def get_last_conversation_line(self,
                                    account: str,
                                    jid: JID
-                                   ) -> List[namedtuple]:
+                                   ) -> list[LastConversationRow]:
         """
         Load the last line of a conversation with jid for account.
         Loads messages, but no status messages or error messages.
@@ -458,7 +512,8 @@ class MessageArchiveStorage(SqliteStorage):
                                 account: str,
                                 jid: JID,
                                 timestamp: float
-                                ) -> List[namedtuple]:
+                                ) -> tuple[list[ConversationRow],
+                                           list[ConversationRow]]:
         """
         Load all lines of conversation with jid around a specific timestamp
 
@@ -512,7 +567,11 @@ class MessageArchiveStorage(SqliteStorage):
         return before, at_after
 
     @timeit
-    def get_conversation_between(self, account, jid, before, after):
+    def get_conversation_between(self,
+                                 account: str,
+                                 jid: str,
+                                 before: float,
+                                 after: float) -> list[ConversationRow]:
         """
         Load all lines of conversation with jid between two timestamps
 
@@ -549,7 +608,10 @@ class MessageArchiveStorage(SqliteStorage):
             tuple(jids) + (before, after)).fetchall()
 
     @timeit
-    def get_messages_for_date(self, account, jid, date):
+    def get_messages_for_date(self,
+                              account: str,
+                              jid: str,
+                              date: datetime.datetime):
         """
         Load the complete conversation with a given jid on a specific date
 
@@ -590,10 +652,10 @@ class MessageArchiveStorage(SqliteStorage):
                    _account: str,
                    jid: JID,
                    query: str,
-                   from_users: Optional[List[str]] = None,
+                   from_users: Optional[list[str]] = None,
                    before: Optional[datetime.datetime] = None,
                    after: Optional[datetime.datetime] = None
-                   ) -> List[namedtuple]:
+                   ) -> list[SearchLogRow]:
         """
         Search the conversation log for messages containing the `query` string.
 
@@ -659,10 +721,10 @@ class MessageArchiveStorage(SqliteStorage):
     @timeit
     def search_all_logs(self,
                         query: str,
-                        from_users: Optional[List[str]] = None,
+                        from_users: Optional[list[str]] = None,
                         before: Optional[datetime.datetime] = None,
                         after: Optional[datetime.datetime] = None
-                        ) -> List[namedtuple]:
+                        ) -> list[SearchLogRow]:
         """
         Search all conversation logs for messages containing the `query`
         string.
@@ -718,7 +780,11 @@ class MessageArchiveStorage(SqliteStorage):
             sql, (query, users, after_ts, before_ts)).fetchall()
 
     @timeit
-    def get_days_with_logs(self, _account, jid, year, month):
+    def get_days_with_logs(self,
+                           _account: str,
+                           jid: str,
+                           year: int,
+                           month: int) -> Any:
         """
         Request the days in a month where we received messages
         for a given `jid`.
@@ -759,7 +825,7 @@ class MessageArchiveStorage(SqliteStorage):
                                       (date + delta).timestamp())).fetchall()
 
     @timeit
-    def get_last_date_that_has_logs(self, _account, jid):
+    def get_last_date_that_has_logs(self, _account: str, jid: str) -> Any:
         """
         Get the timestamp of the last message we received for the jid.
 
@@ -786,7 +852,7 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone().time
 
     @timeit
-    def get_first_date_that_has_logs(self, _account, jid):
+    def get_first_date_that_has_logs(self, _account: str, jid: str) -> Any:
         """
         Get the timestamp of the first message we received for the jid.
 
@@ -813,7 +879,10 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone().time
 
     @timeit
-    def get_date_has_logs(self, _account, jid, date):
+    def get_date_has_logs(self,
+                          _account: str,
+                          jid: str,
+                          date: datetime.datetime) -> Any:
         """
         Get single timestamp of a message we received for the jid
         in the time range of one day.
@@ -921,7 +990,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         return True if the stanza-id was found
         """
-        ids = []
+        ids: list[str] = []
         if stanza_id is not None:
             ids.append(stanza_id)
         if origin_id is not None:
@@ -1219,17 +1288,17 @@ class MessageArchiveStorage(SqliteStorage):
             # Unknown JID
             return
 
-        state = 0 if state == 'received' else 1
+        state_int = 0 if state == 'received' else 1
 
         sql = '''
             UPDATE logs SET marker = ?
             WHERE account_id = ? AND jid_id = ? AND message_id = ?
             '''
-        self._con.execute(sql, (state, account_id, jid_id, message_id))
+        self._con.execute(sql, (state_int, account_id, jid_id, message_id))
         self._delayed_commit()
 
     @timeit
-    def get_archive_infos(self, jid):
+    def get_archive_infos(self, jid: str) -> Optional[LastArchiveMessageRow]:
         """
         Get the archive infos
 
@@ -1241,7 +1310,7 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, (jid_id,)).fetchone()
 
     @timeit
-    def set_archive_infos(self, jid, **kwargs):
+    def set_archive_infos(self, jid: str, **kwargs: Any) -> None:
         """
         Set archive infos
 
@@ -1285,7 +1354,7 @@ class MessageArchiveStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def reset_archive_infos(self, jid):
+    def reset_archive_infos(self, jid: str) -> None:
         """
         Set archive infos
 

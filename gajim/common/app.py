@@ -56,6 +56,8 @@ from gajim.common.const import Display
 if typing.TYPE_CHECKING:
     from gajim.gui.main import MainWindow
     from gajim.application import GajimApplication
+    from gajim.common.storage.cache import CacheStorage
+    from gajim.common.storage.archive import MessageArchiveStorage
 
 
 interface = cast(types.InterfaceT, None)
@@ -76,8 +78,8 @@ plugin_manager = None # Plugins Manager
 
 class Storage:
     def __init__(self):
-        self.cache = None
-        self.archive = None
+        self.cache: CacheStorage = None
+        self.archive: MessageArchiveStorage = None
 
 storage = Storage()
 

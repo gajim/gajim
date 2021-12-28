@@ -12,12 +12,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import NamedTuple
+from typing import Optional
+from typing import Union
+
 import json
 import time
 import sqlite3
 import logging
-from collections import namedtuple
 from collections import defaultdict
+from collections import namedtuple
+
+from nbxmpp.protocol import JID
+from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import RosterItem
 
 from gajim.common import configpaths
 from gajim.common.storage.base import SqliteStorage
@@ -74,6 +85,14 @@ CACHE_SQL_STATEMENT = '''
 log = logging.getLogger('gajim.c.storage.cache')
 
 
+class UnreadTableRow(NamedTuple):
+    account: str
+    jid: JID
+    count: int  # type: ignore
+    message_id: str
+    timestamp: float
+
+
 class CacheStorage(SqliteStorage):
     def __init__(self):
         SqliteStorage.__init__(self,
@@ -81,12 +100,12 @@ class CacheStorage(SqliteStorage):
                                configpaths.get('CACHE_DB'),
                                CACHE_SQL_STATEMENT)
 
-        self._entity_caps_cache = {}
-        self._disco_info_cache = {}
-        self._muc_cache = defaultdict(dict)
-        self._contact_cache = defaultdict(dict)
+        self._entity_caps_cache: dict[tuple[str, str], DiscoInfo] = {}
+        self._disco_info_cache: dict[Union[JID, str], DiscoInfo] = {}
+        self._muc_cache: dict[JID, dict[str, Any]] = defaultdict(dict)
+        self._contact_cache: dict[JID, dict[str, Any]] = defaultdict(dict)
 
-    def init(self, **kwargs):
+    def init(self, **kwargs: Any) -> None:
         SqliteStorage.init(self,
                            detect_types=sqlite3.PARSE_COLNAMES)
         self._set_journal_mode('WAL')
@@ -97,12 +116,13 @@ class CacheStorage(SqliteStorage):
         self._load_caps_data()
 
     @staticmethod
-    def _namedtuple_factory(cursor, row):
+    def _namedtuple_factory(cursor: sqlite3.Cursor,
+                            row: tuple[Any, ...]) -> NamedTuple:
         fields = [col[0] for col in cursor.description]
-        Row = namedtuple('Row', fields)
+        Row = namedtuple('Row', fields)  # type: ignore
         return Row(*row)
 
-    def _migrate(self):
+    def _migrate(self) -> None:
         user_version = self.user_version
         if user_version > CURRENT_USER_VERSION:
             # Gajim was downgraded, reinit the storage
@@ -114,7 +134,7 @@ class CacheStorage(SqliteStorage):
             return
 
     @timeit
-    def _load_caps_data(self):
+    def _load_caps_data(self) -> None:
         rows = self._con.execute(
             'SELECT hash_method, hash, data as "data [disco_info]" '
             'FROM caps_cache')
@@ -123,7 +143,11 @@ class CacheStorage(SqliteStorage):
             self._entity_caps_cache[(row.hash_method, row.hash)] = row.data
 
     @timeit
-    def add_caps_entry(self, jid, hash_method, hash_, caps_data):
+    def add_caps_entry(self,
+                       jid: JID,
+                       hash_method: str,
+                       hash_: str,
+                       caps_data: DiscoInfo) -> None:
         self._entity_caps_cache[(hash_method, hash_)] = caps_data
 
         self._disco_info_cache[jid] = caps_data
@@ -134,18 +158,18 @@ class CacheStorage(SqliteStorage):
             ''', (hash_method, hash_, caps_data, int(time.time())))
         self._delayed_commit()
 
-    def get_caps_entry(self, hash_method, hash_):
+    def get_caps_entry(self, hash_method: str, hash_: str):
         return self._entity_caps_cache.get((hash_method, hash_))
 
     @timeit
-    def update_caps_time(self, method, hash_):
+    def update_caps_time(self, method: str, hash_: str) -> None:
         sql = '''UPDATE caps_cache SET last_seen = ?
                  WHERE hash_method = ? and hash = ?'''
         self._con.execute(sql, (int(time.time()), method, hash_))
         self._delayed_commit()
 
     @timeit
-    def _clean_caps_table(self):
+    def _clean_caps_table(self) -> None:
         """
         Remove caps which was not seen for 3 months
         """
@@ -155,7 +179,7 @@ class CacheStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def _fill_disco_info_cache(self):
+    def _fill_disco_info_cache(self) -> None:
         sql = '''SELECT disco_info as "disco_info [disco_info]",
                  jid, last_seen FROM
                  last_seen_disco_info'''
@@ -165,7 +189,9 @@ class CacheStorage(SqliteStorage):
             self._disco_info_cache[row.jid] = disco_info
         log.info('%d DiscoInfo entries loaded', len(rows))
 
-    def get_last_disco_info(self, jid, max_age=0):
+    def get_last_disco_info(self,
+                            jid: Union[str, JID],
+                            max_age: int = 0) -> Optional[DiscoInfo]:
         """
         Get last disco info from jid
 
@@ -178,12 +204,15 @@ class CacheStorage(SqliteStorage):
         disco_info = self._disco_info_cache.get(jid)
         if disco_info is not None:
             max_timestamp = time.time() - max_age if max_age else 0
-            if max_timestamp > disco_info.timestamp:
+            if max_timestamp > disco_info.timestamp:  # type: ignore
                 return None
         return disco_info
 
     @timeit
-    def set_last_disco_info(self, jid, disco_info, cache_only=False):
+    def set_last_disco_info(self,
+                            jid: Union[str, JID],
+                            disco_info: DiscoInfo,
+                            cache_only: bool = False) -> None:
         """
         Get last disco info from jid
 
@@ -218,12 +247,7 @@ class CacheStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def store_roster(self, account, roster):
-        # encoded_roster = {}
-        # for jid, data in roster.items():
-        #     encoded_roster[str(jid)] = data
-
-
+    def store_roster(self, account: str, roster: dict[JID, RosterItem]) -> None:
         serialized = json.dumps(list(roster.values()), cls=Encoder)
 
         insert_sql = 'INSERT INTO roster(account, roster) VALUES(?, ?)'
@@ -237,27 +261,26 @@ class CacheStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def load_roster(self, account):
+    def load_roster(self, account: str) -> Optional[dict[JID, RosterItem]]:
         select_sql = 'SELECT roster FROM roster WHERE account = ?'
         result = self._con.execute(select_sql, (account,)).fetchone()
         if result is None:
             return None
 
-        roster = {}
+        roster: dict[JID, RosterItem] = {}
         data = json.loads(result.roster, object_hook=json_decoder)
         for item in data:
             roster[item.jid] = item
-            # roster[JID.from_string(jid)] = data
         return roster
 
     @timeit
-    def remove_roster(self, account):
+    def remove_roster(self, account: str) -> None:
         delete_sql = 'DELETE FROM roster WHERE account = ?'
         self._con.execute(delete_sql, (account,))
         self._commit()
 
     @timeit
-    def set_muc(self, jid, prop, value):
+    def set_muc(self, jid: JID, prop: str, value: Any) -> None:
         sql = f'''INSERT INTO muc (jid, {prop}) VALUES (?, ?)'''
 
         try:
@@ -271,7 +294,7 @@ class CacheStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def get_muc(self, jid, prop):
+    def get_muc(self, jid: JID, prop: str) -> Any:
         try:
             return self._muc_cache[jid][prop]
         except KeyError:
@@ -284,7 +307,7 @@ class CacheStorage(SqliteStorage):
             return value
 
     @timeit
-    def set_contact(self, jid, prop, value):
+    def set_contact(self, jid: JID, prop: str, value: Any) -> None:
         sql = f'INSERT INTO contact (jid, {prop}, {prop}_ts) VALUES (?, ?, ?)'
 
         prop_ts = time.time()
@@ -300,7 +323,7 @@ class CacheStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def get_contact(self, jid, prop):
+    def get_contact(self, jid: JID, prop: str) -> Any:
         try:
             value, prop_ts = self._contact_cache[jid][prop]
         except KeyError:
@@ -318,18 +341,24 @@ class CacheStorage(SqliteStorage):
             return value
 
     @timeit
-    def get_unread(self):
+    def get_unread(self) -> list[UnreadTableRow]:
         sql = 'SELECT * FROM unread'
         return self._con.execute(sql).fetchall()
 
     @timeit
-    def get_unread_count(self, account, jid):
+    def get_unread_count(self, account: str, jid: JID) -> int:
         sql = '''SELECT count, message_id, timestamp FROM unread
                  WHERE account = ? AND jid = ?'''
         return self._con.execute(sql, (account, jid)).fetchone()
 
     @timeit
-    def set_unread_count(self, account, jid, count, message_id, timestamp):
+    def set_unread_count(self,
+                         account: str,
+                         jid: JID,
+                         count: int,
+                         message_id: str,
+                         timestamp: float) -> None:
+
         if self.get_unread_count(account, jid) is not None:
             self.update_unread_count(account, jid, count)
         else:
@@ -340,13 +369,13 @@ class CacheStorage(SqliteStorage):
             self._delayed_commit()
 
     @timeit
-    def update_unread_count(self, account, jid, count):
+    def update_unread_count(self, account: str, jid: JID, count: int) -> None:
         sql = 'UPDATE unread SET count = ? WHERE account = ? AND jid = ?'
         self._con.execute(sql, (count, account, jid))
         self._delayed_commit()
 
     @timeit
-    def reset_unread_count(self, account, jid):
+    def reset_unread_count(self, account: str, jid: JID) -> None:
         sql = 'DELETE FROM unread WHERE account = ? AND jid = ?'
         self._con.execute(sql, (account, jid))
         self._delayed_commit()
