@@ -827,17 +827,16 @@ def ignore_contact(account: str, jid: JID) -> bool:
 
 
 class AdditionalDataDict(collections.UserDict):
-    def __init__(self, initialdata=None):
-        collections.UserDict.__init__(self, initialdata)
+    data: dict[str, Any]
 
     @staticmethod
-    def _get_path_childs(full_path):
+    def _get_path_childs(full_path: str) -> list[str]:
         path_childs = [full_path]
         if ':' in full_path:
             path_childs = full_path.split(':')
         return path_childs
 
-    def set_value(self, full_path, key, value):
+    def set_value(self, full_path: str, key: str, value: str) -> None:
         path_childs = self._get_path_childs(full_path)
         _dict = self.data
         for path in path_childs:
@@ -848,7 +847,11 @@ class AdditionalDataDict(collections.UserDict):
                 _dict = _dict[path]
         _dict[key] = value
 
-    def get_value(self, full_path, key, default=None):
+    def get_value(self,
+                  full_path: str,
+                  key: str,
+                  default: Optional[str] = None) -> Optional[str]:
+
         path_childs = self._get_path_childs(full_path)
         _dict = self.data
         for path in path_childs:
@@ -861,7 +864,7 @@ class AdditionalDataDict(collections.UserDict):
         except KeyError:
             return default
 
-    def remove_value(self, full_path, key):
+    def remove_value(self, full_path: str, key: str) -> None:
         path_childs = self._get_path_childs(full_path)
         _dict = self.data
         for path in path_childs:
@@ -874,7 +877,7 @@ class AdditionalDataDict(collections.UserDict):
         except KeyError:
             return
 
-    def copy(self):
+    def copy(self) -> AdditionalDataDict:
         return copy.deepcopy(self)
 
 
@@ -1054,7 +1057,7 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
 
 
 @catch_exceptions
-def open_file(path):
+def open_file(path: str) -> None:
     if os.name == 'nt':
         os.startfile(path)
     else:
@@ -1329,8 +1332,9 @@ def convert_gio_to_openssl_cert(cert):
     return cert
 
 
-def get_custom_host(account: str
-                    ) -> Optional[Tuple[str, ConnectionProtocol, str]]:
+def get_custom_host(account: str) -> Optional[Tuple[str,
+                                                    ConnectionProtocol,
+                                                    ConnectionType]]:
     if not app.settings.get_account_setting(account, 'use_custom_host'):
         return None
     host = app.settings.get_account_setting(account, 'custom_host')
